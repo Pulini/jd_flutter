@@ -2,10 +2,11 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:jd_flutter/login/user_info_entity.dart';
+import 'package:flutter/services.dart';
 import 'package:jd_flutter/utils.dart';
 import 'package:jd_flutter/web_api.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 /// File Name : login
 /// Created by : PanZX on 2023/02/27
@@ -14,7 +15,6 @@ import 'package:jd_flutter/widget/dialogs.dart';
 /// Remark：
 class Login extends StatelessWidget {
   Login({Key? key}) : super(key: key);
-
   final TextEditingController _account = TextEditingController();
   final TextEditingController _password = TextEditingController();
   final TextEditingController _verificationCode = TextEditingController();
@@ -41,7 +41,7 @@ class Login extends StatelessWidget {
             password: _password,
             verificationCode: _verificationCode,
           ),
-          const SizedBox(height: 30),
+          const SizedBox(height: 20),
           ElevatedButton(
               style: ElevatedButton.styleFrom(
                   minimumSize: const Size(320, 50),
@@ -64,9 +64,9 @@ class Login extends StatelessWidget {
                   Navigator.pop(context);
                   logger.e(msg);
                   if (code == resultSuccess) {
-                    var userInfo = UserInfoEntity.fromJson(jsonDecode(data));
-                    informationDialog(context, "登录成功",
-                        "${userInfo.name} ${userInfo.departmentName} ${userInfo.position}");
+                    // var userInfo = UserInfoEntity.fromJson(jsonDecode(data));
+                    // informationDialog(context, "登录成功",
+                    //     "${userInfo.name} ${userInfo.departmentName} ${userInfo.position}");
                   } else {
                     errorDialog(context, "登录失败", msg ?? "登录失败");
                   }
@@ -77,7 +77,6 @@ class Login extends StatelessWidget {
     );
   }
 }
-
 
 class PhoneLogin extends StatefulWidget {
   const PhoneLogin(
@@ -102,12 +101,30 @@ class _PhoneLoginState extends State<PhoneLogin> {
   var buttonName = "获取验证码";
   late Timer _timer;
   var countTimer = 0;
+  static const platform = MethodChannel('com.jd.pzx.jd_flutter');
+
+  _face() async {
+    String batteryLevel;
+    try {
+      if (await Permission.camera.request().isGranted) {
+        batteryLevel = await platform.invokeMethod('startDetect');
+      } else {
+        batteryLevel = "没有相机权限";
+      }
+    } on PlatformException catch (e) {
+      batteryLevel = "启动失败";
+    }
+
+    setState(() {
+      buttonName = batteryLevel;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Column(mainAxisSize: MainAxisSize.min, children: [
       Image.asset("lib/res/images/ic_logo.png", width: 200, height: 200),
-      const SizedBox(height: 200),
+      const SizedBox(height: 20),
       SizedBox(
         width: 340.0,
         height: 270.0,
@@ -182,6 +199,8 @@ class _PhoneLoginState extends State<PhoneLogin> {
                                   : Colors.grey.shade400,
                             ),
                             onPressed: () {
+                              // _face();
+
                               if (buttonName != "获取验证码") {
                                 return;
                               }
@@ -190,6 +209,7 @@ class _PhoneLoginState extends State<PhoneLogin> {
                                 errorDialog(context, "错误", "请输入账号");
                                 return;
                               }
+
                               loadingDialog(context, "正在发送验证码...");
 
                               DoHttp(webApiVerificationCode, query: {
