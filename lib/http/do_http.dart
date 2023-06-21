@@ -1,10 +1,11 @@
 import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
+import 'package:jd_flutter/generated/l10n.dart';
+import 'package:jd_flutter/http/web_api.dart';
 import 'package:jd_flutter/login/User_info.dart';
 import 'package:jd_flutter/utils.dart';
-import 'package:jd_flutter/http/web_api.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
-import 'package:jd_flutter/generated/l10n.dart';
 
 /// 手机号码登录
 phoneLogin(BuildContext context, String phone, String password, String code,

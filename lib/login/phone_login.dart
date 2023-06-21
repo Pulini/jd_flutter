@@ -1,10 +1,11 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:jd_flutter/http/do_http.dart';
-import '../widget/dialogs.dart';
 import 'package:jd_flutter/generated/l10n.dart';
+import 'package:jd_flutter/http/do_http.dart';
 
 import '../widget/custom_widget.dart';
+import '../widget/dialogs.dart';
 
 class PhoneLogin extends StatefulWidget {
   const PhoneLogin({Key? key}) : super(key: key);
