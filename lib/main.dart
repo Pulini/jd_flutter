@@ -26,7 +26,7 @@ class _MyAppState extends State<MyApp> {
     setState(() {
       _locale = value;
       saveLanguage(_locale!.languageCode);
-      print("setState: ${value?.languageCode}");
+      logger.e("setState: ${value?.languageCode}");
     });
   }
 

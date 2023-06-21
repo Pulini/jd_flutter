@@ -140,6 +140,26 @@ class S {
     );
   }
 
+  /// `Machine number`
+  String get login_hint_machine {
+    return Intl.message(
+      'Machine number',
+      name: 'login_hint_machine',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Work number`
+  String get login_hint_work_number {
+    return Intl.message(
+      'Work number',
+      name: 'login_hint_work_number',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Password`
   String get login_hint_password {
     return Intl.message(
@@ -165,6 +185,26 @@ class S {
     return Intl.message(
       'Please enter your phone number',
       name: 'login_tips_phone',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter the machine account`
+  String get login_tips_machine {
+    return Intl.message(
+      'Please enter the machine account',
+      name: 'login_tips_machine',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter the work number`
+  String get login_tips_work_number {
+    return Intl.message(
+      'Please enter the work number',
+      name: 'login_tips_work_number',
       desc: '',
       args: [],
     );

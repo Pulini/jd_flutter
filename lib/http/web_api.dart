@@ -4,6 +4,7 @@ import 'package:jd_flutter/http/base_data.dart';
 import 'package:logger/logger.dart';
 import 'package:dio/dio.dart';
 import 'package:path_provider/path_provider.dart';
+// import 'package:path_provider/path_provider.dart';
 
 ///网络异常
 const resultNetworkException = -1;
@@ -32,8 +33,8 @@ var logger = Logger();
 ///初始化dio
 var _dio = Dio(BaseOptions(
   baseUrl: testUrlForMES,
-  connectTimeout: const Duration(seconds: 10),
-  receiveTimeout: const Duration(seconds: 10),
+  connectTimeout: const Duration(minutes: 2),
+  receiveTimeout: const Duration(minutes: 2),
 ))
   ..interceptors.add(InterceptorsWrapper(onRequest: (options, handler) {
     logger.i(
@@ -42,7 +43,7 @@ var _dio = Dio(BaseOptions(
   }, onResponse: (response, handler) {
     logger.i('response：$response');
     handler.next(response);
-  }, onError: (DioError e, handler) {
+  }, onError: (DioException e, handler) {
     logger.e('error:${e.message}');
     handler.next(e);
   }));
@@ -100,7 +101,7 @@ _doHttp(bool isPost, String method,
       logger.e("网络异常");
       callBack.call(resultNetworkException, null, "网络异常");
     }
-  } on DioError catch (e) {
+  } on DioException catch (e) {
     logger.e('error:${e.message}');
     callBack.call(0, null, "服务器接口异常：${e.message}");
   } on Exception catch (e) {
@@ -113,13 +114,14 @@ _doHttp(bool isPost, String method,
 download(
   String url, {
   required cancel,
-  required Function(int, int) progress,
-  required Function(String) completed,
-  required Function(String) error,
+  required Function(int count, int total) progress,
+  required Function(String filePath) completed,
+  required Function(String message) error,
 }) async {
   try {
     var fileName = url.substring(url.lastIndexOf("/") + 1);
-    var savePath = "${(await getTemporaryDirectory()).path}/$fileName" ;
+    var temporary = await getTemporaryDirectory();
+    var savePath = "${temporary.path}/$fileName";
     logger.i("savePath：$savePath\nfileName：$fileName");
     await _dio.download(url, savePath,
         cancelToken: cancel,
@@ -127,13 +129,11 @@ download(
         onReceiveProgress: (int count, int total) {
       progress.call(count, total);
     }).then((value) {
-      var file = File(savePath);
-      logger.i(file.path);
       completed.call(savePath);
     });
-  } on DioError catch (e) {
+  } on DioException catch (e) {
     logger.e("error:$e");
-    if (e.type != DioErrorType.cancel) {
+    if (e.type != DioExceptionType.cancel) {
       error.call("下载异常：$e");
     }
   } on Exception catch (e) {

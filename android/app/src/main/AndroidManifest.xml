@@ -1,6 +1,4 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <!-- 相机权限 -->
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
@@ -41,8 +39,14 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+
+        <activity
+            android:name=".LivenFaceVerificationActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="true" />
         <meta-data
             android:name="com.huawei.hms.ml.DEPENDENCY"
             android:value= "face"/>
+
     </application>
 </manifest>

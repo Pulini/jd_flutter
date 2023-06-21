@@ -44,13 +44,17 @@ class MessageLookup extends MessageLookupByLibrary {
         "logging": MessageLookupByLibrary.simpleMessage("正在登录..."),
         "login": MessageLookupByLibrary.simpleMessage("登录"),
         "login_failed": MessageLookupByLibrary.simpleMessage("登录失败"),
+        "login_hint_machine": MessageLookupByLibrary.simpleMessage("机台号"),
         "login_hint_password": MessageLookupByLibrary.simpleMessage("密码"),
         "login_hint_phone": MessageLookupByLibrary.simpleMessage("手机号"),
         "login_hint_verify_code": MessageLookupByLibrary.simpleMessage("验证码"),
+        "login_hint_work_number": MessageLookupByLibrary.simpleMessage("工号"),
+        "login_tips_machine": MessageLookupByLibrary.simpleMessage("请输入机台账号"),
         "login_tips_password": MessageLookupByLibrary.simpleMessage("请输入密码"),
         "login_tips_phone": MessageLookupByLibrary.simpleMessage("请输入手机号"),
         "login_tips_verify_code":
             MessageLookupByLibrary.simpleMessage("请输入验证码"),
+        "login_tips_work_number": MessageLookupByLibrary.simpleMessage("请输入工号"),
         "phone_login_get_verify_code_failed":
             MessageLookupByLibrary.simpleMessage("验证码发送失败"),
         "phone_login_get_verify_code_success":

@@ -27,6 +27,7 @@ apply plugin: 'com.huawei.agconnect'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
+    namespace "com.jd.pzx.jd_flutter"
     compileSdkVersion flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 
@@ -48,7 +49,8 @@ android {
         applicationId "com.jd.pzx.jd_flutter"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdkVersion 21
+//        minSdkVersion flutter.minSdkVersion
+        minSdkVersion 19
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
@@ -61,7 +63,6 @@ android {
             signingConfig signingConfigs.debug
         }
     }
-    namespace 'com.jd.pzx.jd_flutter'
 }
 
 flutter {
@@ -70,12 +71,10 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-
     implementation 'com.huawei.agconnect:agconnect-core:1.7.3.302'
     implementation 'com.huawei.hms:ml-computer-vision-livenessdetection:3.11.0.301'
     implementation 'com.huawei.hms:ml-computer-vision-faceverify:3.6.0.304'
     implementation 'com.huawei.hms:ml-computer-vision-faceverify-model:3.6.0.304'
-//    implementation 'androidx.activity:activity-ktx:1.7.1'
-//    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.1'
-//    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1'
+    implementation 'androidx.activity:activity-ktx:1.7.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 }

@@ -1,6 +1,6 @@
 # jd_flutter
 
-A new Flutter project.
+金帝ERP
 
 ## Getting Started
 

@@ -10,24 +10,33 @@ import '../widget/custom_widget.dart';
 class FaceLogin extends StatefulWidget {
   const FaceLogin({Key? key}) : super(key: key);
 
+  static const faceVerifySuccess = 1;
+  static const faceVerifyFailNotLive = 2;
+  static const faceVerifyFailNotMe = 3;
+  static const faceVerifyFailError = 4;
+
   @override
   State<FaceLogin> createState() => _FaceLoginState();
 }
 
+
 class _FaceLoginState extends State<FaceLogin> {
   TextEditingController phone = TextEditingController();
   static const platform = MethodChannel('com.jd.pzx.jd_flutter');
-
   double progress = 0.0;
 
   _face(String filePath) async {
     try {
       Permission.camera.request().isGranted.then((value) async {
         if (value) {
-          bool isMe = await platform.invokeMethod('startDetect', filePath);
-          if(isMe){
-            logger.d("人脸验证成功");
-          }
+          await platform.invokeMethod('startDetect', filePath).then((value) {
+            logger.i(value);
+            faceLogin(context, phone.text, back: (userInfo) {
+
+            });
+          }).catchError((e) {
+            logger.i(e);
+          });
         } else {
           errorDialog(context,
               content: S.current.face_login_no_camera_permission);
@@ -59,7 +68,7 @@ class _FaceLoginState extends State<FaceLogin> {
                         hintText: S.current.login_hint_phone,
                         hintStyle: const TextStyle(color: Colors.white),
                         counterStyle: const TextStyle(color: Colors.white),
-                        prefixIcon: const Icon(Icons.account_circle_outlined,
+                        prefixIcon: const Icon(Icons.phone_android,
                             color: Colors.white),
                         suffixIcon: IconButton(
                           icon: const Icon(Icons.close, color: Colors.white),
@@ -77,8 +86,8 @@ class _FaceLoginState extends State<FaceLogin> {
         const SizedBox(height: 20),
         LoginButton(onPressed: () {
           getUserPhotoPath(context, phone.text.trim(), (url) {
-            downloadDialog(context, url, (path) {
-              _face(path);
+            downloadDialog(context, url, (filePath) {
+              _face(filePath);
             });
           });
         }),

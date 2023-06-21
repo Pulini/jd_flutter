@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:jd_flutter/login/phone_login.dart';
-import 'package:jd_flutter/generated/l10n.dart';
+import 'package:jd_flutter/login/work_number_login.dart';
 import 'package:jd_flutter/utils.dart';
 
 import '../main.dart';
 import 'face_login.dart';
+import 'machine_login.dart';
 
 /// File Name : login
 /// Created by : PanZX on 2023/02/27
 /// Email : 644173944@qq.com
 /// Github : https://github.com/Pulini
 /// Remark：
-
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
 
@@ -135,12 +135,8 @@ class _LoginPageState extends State<LoginPage>
             children: const <Widget>[
               PhoneLogin(),
               FaceLogin(),
-              Center(
-                child: Text("It's sunny here"),
-              ),
-              Center(
-                child: Text("It's sunny here"),
-              ),
+              MachineLogin(),
+              WorkNumberLogin(),
             ],
           ),
         ));

@@ -47,17 +47,25 @@ class MessageLookup extends MessageLookupByLibrary {
         "logging": MessageLookupByLibrary.simpleMessage("Logging..."),
         "login": MessageLookupByLibrary.simpleMessage("Login"),
         "login_failed": MessageLookupByLibrary.simpleMessage("Login failed"),
+        "login_hint_machine":
+            MessageLookupByLibrary.simpleMessage("Machine number"),
         "login_hint_password": MessageLookupByLibrary.simpleMessage("Password"),
         "login_hint_phone":
             MessageLookupByLibrary.simpleMessage("Phone number"),
         "login_hint_verify_code":
             MessageLookupByLibrary.simpleMessage("verify code"),
+        "login_hint_work_number":
+            MessageLookupByLibrary.simpleMessage("Work number"),
+        "login_tips_machine": MessageLookupByLibrary.simpleMessage(
+            "Please enter the machine account"),
         "login_tips_password":
             MessageLookupByLibrary.simpleMessage("Please enter your password"),
         "login_tips_phone": MessageLookupByLibrary.simpleMessage(
             "Please enter your phone number"),
         "login_tips_verify_code": MessageLookupByLibrary.simpleMessage(
             "Please enter your verify code"),
+        "login_tips_work_number": MessageLookupByLibrary.simpleMessage(
+            "Please enter the work number"),
         "phone_login_get_verify_code_failed":
             MessageLookupByLibrary.simpleMessage("Verify code sending failed"),
         "phone_login_get_verify_code_success":

@@ -70,8 +70,8 @@ class _PhoneLoginState extends State<PhoneLogin> {
                         hintText: S.current.login_hint_phone,
                         hintStyle: const TextStyle(color: Colors.white),
                         counterStyle: const TextStyle(color: Colors.white),
-                        prefixIcon: const Icon(Icons.account_circle_outlined,
-                            color: Colors.white),
+                        prefixIcon:
+                            const Icon(Icons.phone, color: Colors.white),
                         suffixIcon: IconButton(
                           icon: const Icon(Icons.close, color: Colors.white),
                           onPressed: () {

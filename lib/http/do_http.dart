@@ -9,6 +9,7 @@ import 'package:jd_flutter/generated/l10n.dart';
 /// 手机号码登录
 phoneLogin(BuildContext context, String phone, String password, String code,
     {required Function(UserInfo) back}) async {
+  hideKeyBoard();
   if (phone.isEmpty) {
     errorDialog(context, content: S.current.login_tips_phone);
     return;
@@ -21,8 +22,6 @@ phoneLogin(BuildContext context, String phone, String password, String code,
     errorDialog(context, content: S.current.login_tips_verify_code);
     return;
   }
-
-  hideKeyBoard();
   loadingDialog(context, S.current.logging);
   httpPost(webApiLogin, query: {
     "JiGuangID": "",
@@ -30,7 +29,6 @@ phoneLogin(BuildContext context, String phone, String password, String code,
     "Password": password,
     "VCode": code,
     "Type": 0,
-    "FaceLogin": false,
   }, callBack: (code, data, msg) {
     Navigator.pop(context);
     if (code == resultSuccess) {
@@ -70,6 +68,80 @@ getUserPhotoPath(BuildContext context, String phone, Function(String) url) {
     } else {
       errorDialog(context,
           content: msg ?? S.current.face_login_get_photo_path_failed);
+    }
+  });
+}
+
+///人脸登录
+faceLogin(BuildContext context, String phone,
+    {required Function(UserInfo) back}) async {
+  loadingDialog(context, S.current.logging);
+  httpPost(webApiLogin, query: {
+    "JiGuangID": "",
+    "Phone": phone,
+    "Type": 2,
+  }, callBack: (code, data, msg) {
+    Navigator.pop(context);
+    if (code == resultSuccess) {
+      back.call(UserInfo.fromJson(jsonDecode(data)));
+    } else {
+      errorDialog(context, content: msg ?? S.current.login_failed);
+    }
+  });
+}
+
+///机台账号登录
+machineLogin(BuildContext context, String machineNumber, String password,
+    {required Function(UserInfo) back}) async {
+  hideKeyBoard();
+  if (machineNumber.isEmpty) {
+    errorDialog(context, content: S.current.login_tips_machine);
+    return;
+  }
+  if (password.isEmpty) {
+    errorDialog(context, content: S.current.login_tips_password);
+    return;
+  }
+  loadingDialog(context, S.current.logging);
+  httpPost(webApiLogin, query: {
+    "JiGuangID": "",
+    "Phone": machineNumber,
+    "Password": password,
+    "Type": 1,
+  }, callBack: (code, data, msg) {
+    Navigator.pop(context);
+    if (code == resultSuccess) {
+      back.call(UserInfo.fromJson(jsonDecode(data)));
+    } else {
+      errorDialog(context, content: msg ?? S.current.login_failed);
+    }
+  });
+}
+
+///工号登录
+workNumberLogin(BuildContext context, String workNumber, String password,
+    {required Function(UserInfo) back}) async {
+  hideKeyBoard();
+  if (workNumber.isEmpty) {
+    errorDialog(context, content: S.current.login_tips_work_number);
+    return;
+  }
+  if (password.isEmpty) {
+    errorDialog(context, content: S.current.login_tips_password);
+    return;
+  }
+  loadingDialog(context, S.current.logging);
+  httpPost(webApiLogin, query: {
+    "JiGuangID": "",
+    "Phone": workNumber,
+    "Password": password,
+    "Type": 3,
+  }, callBack: (code, data, msg) {
+    Navigator.pop(context);
+    if (code == resultSuccess) {
+      back.call(UserInfo.fromJson(jsonDecode(data)));
+    } else {
+      errorDialog(context, content: msg ?? S.current.login_failed);
     }
   });
 }
