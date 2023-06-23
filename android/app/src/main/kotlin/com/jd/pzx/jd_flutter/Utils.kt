@@ -6,6 +6,7 @@ import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.util.Base64
 import android.util.DisplayMetrics
+import android.view.View
 import java.io.ByteArrayOutputStream
 
 const val CHANNEL = "com.jd.pzx.jd_flutter"
@@ -21,9 +22,31 @@ fun bitmapToBase64(bitmap: Bitmap): String = Base64.encodeToString(
         close()
     }.toByteArray(), Base64.DEFAULT
 )
+
 fun Activity.display() = DisplayMetrics().apply {
     windowManager.defaultDisplay.getMetrics(this)
 }
+
 fun Context.dp2px(dp: Float) = (dp * resources.displayMetrics.density + 0.5).toInt()
+
 fun Context.isPad()=
     ((resources.configuration.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_LARGE)
+
+infix fun View.setDelayClickListener(clickAction: () -> Unit) {
+    var hash = 0
+    var lastClickTime = 0L
+    val spaceTime = 1000L
+    setOnClickListener {
+        if (this.hashCode() != hash) {
+            hash = this.hashCode()
+            lastClickTime = System.currentTimeMillis()
+            clickAction()
+        } else {
+            val currentTime = System.currentTimeMillis()
+            if (currentTime - lastClickTime > spaceTime) {
+                lastClickTime = System.currentTimeMillis()
+                clickAction()
+            }
+        }
+    }
+}

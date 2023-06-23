@@ -80,6 +80,8 @@ faceLogin(BuildContext context, String phone,
   httpPost(webApiLogin, query: {
     "JiGuangID": "",
     "Phone": phone,
+    "Password": "",
+    "VCode": "",
     "Type": 2,
   }, callBack: (code, data, msg) {
     Navigator.pop(context);
@@ -108,6 +110,7 @@ machineLogin(BuildContext context, String machineNumber, String password,
     "JiGuangID": "",
     "Phone": machineNumber,
     "Password": password,
+    "VCode": "",
     "Type": 1,
   }, callBack: (code, data, msg) {
     Navigator.pop(context);
@@ -136,6 +139,7 @@ workNumberLogin(BuildContext context, String workNumber, String password,
     "JiGuangID": "",
     "Phone": workNumber,
     "Password": password,
+    "VCode": "",
     "Type": 3,
   }, callBack: (code, data, msg) {
     Navigator.pop(context);
