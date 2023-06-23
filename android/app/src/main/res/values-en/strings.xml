@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="dialog_cancel">Cancel</string>
+    <string name="dialog_confirm">Confirm</string>
+    <string name="dialog_tips">Tips</string>
+    <string name="liven_detection_validation_failed">Validation failed</string>
+    <string name="liven_detection_retry">Retry</string>
+    <string name="liven_detection_liven_fail">Liven detection failed</string>
+    <string name="liven_detection_liven_error">Liven verification failed:&#12288;%1$d</string>
+    <string name="liven_detection_face_verification_successful">Face verification successful</string>
+    <string name="liven_detection_living_verification_successful">Living verification succeeded</string>
+    <string name="liven_detection_photo_not_me">The photo doesn\'t match me</string>
+    <string name="liven_detection_similarity">Similarity:&#12288;%1$s</string>
+    <string name="dialog_got_it">Got it</string>
+</resources>
