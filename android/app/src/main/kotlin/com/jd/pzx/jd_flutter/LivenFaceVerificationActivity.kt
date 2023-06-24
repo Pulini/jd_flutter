@@ -5,7 +5,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
-import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Rect
@@ -13,6 +12,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.FrameLayout
 import android.widget.ImageView
+import androidx.core.view.postDelayed
 import com.huawei.hms.mlsdk.common.MLFrame
 import com.huawei.hms.mlsdk.faceverify.MLFaceVerificationAnalyzerFactory
 import com.huawei.hms.mlsdk.faceverify.MLFaceVerificationAnalyzerSetting
@@ -82,7 +82,7 @@ class LivenFaceVerificationActivity : Activity() {
     //活体检测结果bitmap
     private var faceBitmap: Bitmap? = null
 
-
+    private var errorCode=FACE_VERIFY_SUCCESS
 
     @SuppressLint("SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -99,20 +99,30 @@ class LivenFaceVerificationActivity : Activity() {
             setContentView(R.layout.activity_liveness_custom_detection_phone)
         }
         ivBack.setOnClickListener { finish() }
-        startFaceVerification()
+        previewContainer.postDelayed(300) {
+            //预览界面加载存在位置偏移bug,需要延迟加载预览界面
+            startFaceVerification()
+        }
     }
 
     private fun startFaceVerification() {
         intent.extras?.run {
             if (getBoolean("isLivingVerification")) {
-                initLivingDetectView { a, b -> verifyResult.invoke(a, b) }.onResume()
+                initLivingDetectView { a, b ->
+                    TipsDialog(this@LivenFaceVerificationActivity).show(
+                        getString(R.string.liven_detection_living_verification_successful)
+                    ) {
+                        verifyResult.invoke(a, b)
+                        finish()
+                    }
+                }.onResume()
             } else {
                 imageBitmap = BitmapFactory.decodeStream(FileInputStream(getString("image")))
                 //设置人事档案照片到界面上
                 image.setImageBitmap(imageBitmap)
                 //设置活体验证
                 initLivingDetectView { code, bitmap ->
-                    if (code==FACE_VERIFY_SUCCESS){
+                    if (code == FACE_VERIFY_SUCCESS) {
                         faceBitmap = bitmap
                         face.setImageBitmap(faceBitmap)
                         compare(verifyResult)
@@ -126,6 +136,7 @@ class LivenFaceVerificationActivity : Activity() {
 
 
     private fun initLivingDetectView(callback: (Int, Bitmap?) -> Unit): MLLivenessDetectView {
+        val display = display()
         return MLLivenessDetectView.Builder()
             .setContext(this)
             .setOptions(MLLivenessDetectView.DETECT_MASK)
@@ -134,26 +145,30 @@ class LivenFaceVerificationActivity : Activity() {
                 Rect(
                     0,
                     0,
-                    display().widthPixels,
-                    if (isPad()) display().heightPixels else dp2px( 480f)
+                    display.widthPixels,
+                    if (isPad()) display.heightPixels else dp2px(480f)
                 )
             )
             .setDetectCallback(object : OnMLLivenessDetectCallback {
                 //活体检测完成
                 override fun onCompleted(result: MLLivenessCaptureResult) {
-                    if(result.isLive){
+                    if (result.isLive) {
                         //活体检测成功
                         callback.invoke(FACE_VERIFY_SUCCESS, result.bitmap)
-                    }else{
+                    } else {
+                        errorCode=FACE_VERIFY_FAIL_NOT_LIVE
                         //活体检测失败
-                        callback.invoke(FACE_VERIFY_FAIL_NOT_LIVE, null)
+                        showFailDialog(getString(R.string.liven_detection_liven_fail))
                     }
                 }
 
                 //活体检测异常
                 override fun onError(error: Int) {
                     Log.e("Pan", "活体检测异常：$error")
-                    callback.invoke(FACE_VERIFY_FAIL_NOT_ME, null)
+                    errorCode=FACE_VERIFY_FAIL_ERROR
+                    showFailDialog(
+                        String.format(getString(R.string.liven_detection_liven_error), error)
+                    )
                 }
 
                 override fun onInfo(infoCode: Int, bundle: Bundle) {}
@@ -196,19 +211,47 @@ class LivenFaceVerificationActivity : Activity() {
 
             analyzer.asyncAnalyseFrame(face2)
                 .addOnSuccessListener { mlCompareList ->
-                    if(mlCompareList[0].similarity > 0.75){
-                        callback.invoke(FACE_VERIFY_SUCCESS,  faceBitmap!!)
-                    }else{
-                        callback.invoke(FACE_VERIFY_FAIL_NOT_ME, null)
+                    if (mlCompareList[0].similarity > 0.75) {
+                        callback.invoke(FACE_VERIFY_SUCCESS, faceBitmap!!)
+                        TipsDialog(this@LivenFaceVerificationActivity).show(
+                            R.string.liven_detection_face_verification_successful
+                        ) {
+                            callback.invoke(FACE_VERIFY_SUCCESS, faceBitmap!!)
+                            finish()
+                        }
+                    } else {
+                        errorCode= FACE_VERIFY_FAIL_NOT_ME
+                        showFailDialog(getString(R.string.liven_detection_photo_not_me))
                     }
                     finish()
                 }.addOnFailureListener {
                     Log.e("Pan", it.toString())
-                    callback.invoke(FACE_VERIFY_FAIL_ERROR, null)
+                    errorCode= FACE_VERIFY_FAIL_NOT_ME
+                    showFailDialog(getString(R.string.liven_detection_photo_not_me))
                 }
         } catch (e: RuntimeException) {
             Log.e("Pan", e.toString())
             callback.invoke(FACE_VERIFY_FAIL_ERROR, null)
+        }
+    }
+
+    private fun showFailDialog(msg: String, retry: Boolean = true) {
+        if (retry) {
+            InquiryDialog(this@LivenFaceVerificationActivity).show {
+                title(R.string.liven_detection_validation_failed)
+                msg(msg)
+                confirm(R.string.liven_detection_retry) {
+                    startFaceVerification()
+                }
+                cancel {
+                    verifyResult.invoke(errorCode, null)
+                    finish()
+                }
+            }
+        } else {
+            TipsDialog(this@LivenFaceVerificationActivity).show(msg) {
+                finish()
+            }
         }
     }
 

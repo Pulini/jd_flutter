@@ -17,7 +17,7 @@
             android:name=".MainActivity"
             android:exported="true"
             android:launchMode="singleTop"
-            android:theme="@style/LaunchTheme"
+            android:theme="@style/TranslucentTheme"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true"
             android:windowSoftInputMode="adjustResize">
@@ -42,6 +42,7 @@
 
         <activity
             android:name=".LivenFaceVerificationActivity"
+            android:theme="@style/NoActionBar"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true" />
         <meta-data

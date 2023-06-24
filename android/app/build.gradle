@@ -50,10 +50,11 @@ android {
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
 //        minSdkVersion flutter.minSdkVersion
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+
     }
 
     buildTypes {
@@ -75,6 +76,6 @@ dependencies {
     implementation 'com.huawei.hms:ml-computer-vision-livenessdetection:3.11.0.301'
     implementation 'com.huawei.hms:ml-computer-vision-faceverify:3.6.0.304'
     implementation 'com.huawei.hms:ml-computer-vision-faceverify-model:3.6.0.304'
-    implementation 'androidx.activity:activity-ktx:1.7.1'
+    implementation 'androidx.activity:activity-ktx:1.7.2'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 }

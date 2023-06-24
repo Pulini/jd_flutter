@@ -32,7 +32,7 @@ var logger = Logger();
 
 ///初始化dio
 var _dio = Dio(BaseOptions(
-  baseUrl: testUrlForMES,
+  baseUrl: baseUrlForMES,
   connectTimeout: const Duration(minutes: 2),
   receiveTimeout: const Duration(minutes: 2),
 ))

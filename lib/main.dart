@@ -42,7 +42,6 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
       onGenerateTitle: (context) => S.of(context).app_name,
       debugShowCheckedModeBanner: false,
