@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:jd_flutter/generated/l10n.dart';
 import 'package:jd_flutter/http/do_http.dart';
 
-import '../widget/custom_widget.dart';
+import '../widget/number_text_field.dart';
 
 class WorkNumberLogin extends StatefulWidget {
   const WorkNumberLogin({Key? key}) : super(key: key);
@@ -29,24 +29,23 @@ class _WorkNumberLoginState extends State<WorkNumberLogin> {
                 padding: const EdgeInsets.all(20),
                 child: Column(
                   children: [
-                    TextField(
-                      controller: workNumber,
-                      style: const TextStyle(color: Colors.white),
-                      decoration: InputDecoration(
-                        hintText: S.current.login_hint_work_number,
-                        hintStyle: const TextStyle(color: Colors.white),
-                        counterStyle: const TextStyle(color: Colors.white),
-                        prefixIcon: const Icon(Icons.account_circle_outlined,
-                            color: Colors.white),
-                        suffixIcon: IconButton(
-                          icon: const Icon(Icons.close, color: Colors.white),
-                          onPressed: () {
-                            workNumber.clear();
-                          },
-                        ),
-                      ),
-                      maxLength: 6,
-                    ),
+                    NumberTextField(
+                        numberController: workNumber,
+                        maxLength: 6,
+                        textStyle: const TextStyle(color: Colors.white),
+                        decoration: InputDecoration(
+                          hintText: S.current.login_hint_work_number,
+                          hintStyle: const TextStyle(color: Colors.white),
+                          counterStyle: const TextStyle(color: Colors.white),
+                          prefixIcon: const Icon(Icons.account_circle_outlined,
+                              color: Colors.white),
+                          suffixIcon: IconButton(
+                            icon: const Icon(Icons.close, color: Colors.white),
+                            onPressed: () {
+                              workNumber.clear();
+                            },
+                          ),
+                        )),
                     TextField(
                       obscureText: true,
                       controller: password,
@@ -70,10 +69,15 @@ class _WorkNumberLoginState extends State<WorkNumberLogin> {
                 ))),
       ),
       const SizedBox(height: 20),
-      LoginButton(onPressed: () {
-        workNumberLogin(context, workNumber.text, password.text,
-            back: (userInfo) {});
-      })
+      ElevatedButton(
+          style: ElevatedButton.styleFrom(
+              minimumSize: const Size(320, 50),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(25))),
+          onPressed: () => workNumberLogin(
+              context, workNumber.text, password.text,
+              back: (userInfo) {}),
+          child: Text(S.current.login, style: const TextStyle(fontSize: 20)))
     ]);
   }
 }

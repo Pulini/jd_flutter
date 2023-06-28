@@ -1,6 +1,7 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
 import 'intl/messages_all.dart';
 
 // **************************************************************************
@@ -55,6 +56,16 @@ class S {
     return Intl.message(
       'Gold Emperor',
       name: 'app_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Done`
+  String get key_board_done {
+    return Intl.message(
+      'Done',
+      name: 'key_board_done',
       desc: '',
       args: [],
     );

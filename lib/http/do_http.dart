@@ -60,6 +60,10 @@ getVerifyCode(BuildContext context, String account,
 
 ///根据手机号码获取用户头像
 getUserPhotoPath(BuildContext context, String phone, Function(String) url) {
+  if (phone.isEmpty) {
+    errorDialog(context, content: S.current.login_tips_phone);
+    return;
+  }
   loadingDialog(context, S.current.face_login_getting_photo_path);
   httpGet(webApiGetUserPhoto, query: {"Phone": phone},
       callBack: (code, data, msg) {

@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:jd_flutter/generated/l10n.dart';
 import 'package:jd_flutter/http/do_http.dart';
 
-import '../widget/custom_widget.dart';
-
 class MachineLogin extends StatefulWidget {
   const MachineLogin({Key? key}) : super(key: key);
 
@@ -12,7 +10,6 @@ class MachineLogin extends StatefulWidget {
 }
 
 class _MachineLoginState extends State<MachineLogin> {
-
   TextEditingController machine = TextEditingController();
   TextEditingController password = TextEditingController();
 
@@ -71,11 +68,14 @@ class _MachineLoginState extends State<MachineLogin> {
                 ))),
       ),
       const SizedBox(height: 20),
-      LoginButton(onPressed: () {
-        machineLogin(context, machine.text, password.text, back: (userInfo){
-
-        });
-      })
+      ElevatedButton(
+          style: ElevatedButton.styleFrom(
+              minimumSize: const Size(320, 50),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(25))),
+          onPressed: () => machineLogin(context, machine.text, password.text,
+              back: (userInfo) {}),
+          child: Text(S.current.login, style: const TextStyle(fontSize: 20)))
     ]);
   }
 }

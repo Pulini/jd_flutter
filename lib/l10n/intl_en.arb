@@ -1,5 +1,6 @@
 {
   "app_name": "Gold Emperor",
+  "key_board_done": "Done",
   "dialog_default_title_information": "Tips",
   "dialog_default_title_error": "Error",
   "dialog_default_tip_loading": "Loading...",

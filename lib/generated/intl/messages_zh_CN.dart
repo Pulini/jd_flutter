@@ -40,6 +40,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "face_login_no_camera_permission":
             MessageLookupByLibrary.simpleMessage("没有相机权限"),
         "get_verify_code": MessageLookupByLibrary.simpleMessage("获取验证码"),
+        "key_board_done": MessageLookupByLibrary.simpleMessage("完成"),
         "language": MessageLookupByLibrary.simpleMessage("语言:"),
         "logging": MessageLookupByLibrary.simpleMessage("正在登录..."),
         "login": MessageLookupByLibrary.simpleMessage("登录"),

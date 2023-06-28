@@ -1,5 +1,6 @@
 {
   "app_name": "金帝集团",
+  "key_board_done": "完成",
   "dialog_default_title_information": "温馨提示",
   "dialog_default_title_error": "错误提示",
   "dialog_default_tip_loading": "正在加载...",

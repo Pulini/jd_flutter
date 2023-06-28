@@ -1,9 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:jd_flutter/login/phone_login.dart';
 import 'package:jd_flutter/login/work_number_login.dart';
 import 'package:jd_flutter/utils.dart';
 
-import '../main.dart';
 import 'face_login.dart';
 import 'machine_login.dart';
 
@@ -11,7 +12,7 @@ import 'machine_login.dart';
 /// Created by : PanZX on 2023/02/27
 /// Email : 644173944@qq.com
 /// Github : https://github.com/Pulini
-/// Remark：
+/// Remark：登录页面
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
 
@@ -22,123 +23,137 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-        decoration: const BoxDecoration(
-            gradient: LinearGradient(
-          // colors: [Color(0xFFf54b64), Color(0xFFf78361)],
-          colors: [Colors.lightBlueAccent, Colors.blueAccent],
-          begin: Alignment.bottomLeft,
-          end: Alignment.topRight,
-        )),
-        child: Stack(
-          children: [
-            Positioned(
-                key:GlobalKey(),
-                left: 0,
-                right: 0,
-                top: 0,
-                bottom: 0,
-                child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Column(
-                        children: [
-                          Image.asset("lib/res/images/ic_logo.png",
-                              width: 130, height: 130),
-                          const Text("Gold Emperor",
-                              style: TextStyle(
-                                  fontSize: 40,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  decoration: TextDecoration.none))
-                        ],
-                      ),
-                      const LoginPage(),
-                    ])),
-            Positioned(
-              left: 10,
-              bottom: 10,
-              child: TextButton(
-                onPressed: () {
-                  Locale local = Localizations.localeOf(context) == languageZh
-                      ? languageEn
-                      : languageZh;
-                  MyApp.of(context).locale = local;
-
-                  // setState(() {
-                  //   var local=Localizations.localeOf(context) == languageZh? languageEn : languageZh;
-                  //   print("local:$local");
-                  //   S.load(local);
-                  // });
-                },
-                child: Text(
-                    Localizations.localeOf(context) == languageZh
-                        ? "English"
-                        : "中文",
-                    style: const TextStyle(color: Colors.white)),
-              ),
-            ),
-          ],
-        ));
+    return Scaffold(
+      body: Container(
+          //设置背景
+          decoration: const BoxDecoration(
+              gradient: LinearGradient(
+            // colors: [Color(0xFFf54b64), Color(0xFFf78361)],
+            colors: [Colors.lightBlueAccent, Colors.blueAccent],
+            begin: Alignment.bottomLeft,
+            end: Alignment.topRight,
+          )),
+          child: ListView(
+              //添加登录UI
+              children: const [
+                SizedBox(height: 50),
+                Logo(),
+                SizedBox(height: 40),
+                Page(),
+              ])),
+    );
   }
 }
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+class Logo extends StatelessWidget {
+  const Logo({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Image.asset("lib/res/images/ic_logo.png", width: 130, height: 130),
+        const Text("Gold Emperor",
+            style: TextStyle(
+                fontSize: 40,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                decoration: TextDecoration.none))
+      ],
+    );
+  }
 }
 
-class _LoginPageState extends State<LoginPage>
-    with SingleTickerProviderStateMixin {
-  late TabController tabController;
+class Page extends StatefulWidget {
+  const Page({super.key});
+
+  @override
+  State<Page> createState() => _PageState();
+}
+
+class _PageState extends State<Page> with TickerProviderStateMixin {
+  late final TabController _tabController;
+
+  var tabs = <Tab>[];
+  var tabViews = <Widget>[];
 
   @override
   void initState() {
     super.initState();
-    tabController = TabController(length: 4, vsync: this);
+
+    if (Platform.isIOS) {
+      tabs.add(const Tab(icon: Icon(Icons.phone)));
+      tabs.add(const Tab(icon: Icon(Icons.assignment_ind_outlined)));
+      tabViews.add(const PhoneLogin());
+      tabViews.add(const WorkNumberLogin());
+    } else if (Platform.isAndroid) {
+      if (context.isLargeScreen()) {
+        tabs.add(const Tab(icon: Icon(Icons.precision_manufacturing)));
+        tabs.add(const Tab(icon: Icon(Icons.assignment_ind_outlined)));
+        tabViews.add(const MachineLogin());
+        tabViews.add(const WorkNumberLogin());
+      }
+      if (context.isMediumScreen()) {
+        tabs.add(const Tab(icon: Icon(Icons.phone)));
+        tabs.add(const Tab(icon: Icon(Icons.precision_manufacturing)));
+        tabs.add(const Tab(icon: Icon(Icons.assignment_ind_outlined)));
+        tabViews.add(const PhoneLogin());
+        tabViews.add(const MachineLogin());
+        tabViews.add(const WorkNumberLogin());
+      }
+      if (context.isSmallScreen()) {
+        tabs.add(const Tab(icon: Icon(Icons.phone)));
+        tabs.add(const Tab(icon: Icon(Icons.account_circle_outlined)));
+        tabs.add(const Tab(icon: Icon(Icons.assignment_ind_outlined)));
+        tabViews.add(const PhoneLogin());
+        tabViews.add(const FaceLogin());
+        tabViews.add(const WorkNumberLogin());
+      }
+    } else {
+      tabs.add(const Tab(icon: Icon(Icons.phone)));
+      tabs.add(const Tab(icon: Icon(Icons.precision_manufacturing)));
+      tabs.add(const Tab(icon: Icon(Icons.assignment_ind_outlined)));
+      tabViews.add(const PhoneLogin());
+      tabViews.add(const MachineLogin());
+      tabViews.add(const WorkNumberLogin());
+    }
+    _tabController = TabController(length: tabs.length, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-        height: 400,
-        width: 350,
-        child: Scaffold(
-          resizeToAvoidBottomInset: false,
-          backgroundColor: Colors.transparent,
-          appBar: TabBar(
-              controller: tabController,
+      height: 500,
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          SizedBox(
+            width: 340,
+            child: TabBar(
+              controller: _tabController,
               dividerColor: Colors.transparent,
               indicatorColor: Colors.greenAccent,
               labelColor: Colors.greenAccent,
               unselectedLabelColor: Colors.white,
               overlayColor: MaterialStateProperty.all(Colors.transparent),
-              tabs: const <Widget>[
-                Tab(
-                  icon: Icon(Icons.phone),
-                ),
-                Tab(
-                  icon: Icon(Icons.assignment_ind_outlined),
-                ),
-                Tab(
-                  icon: Icon(Icons.precision_manufacturing),
-                ),
-                Tab(
-                  icon: Icon(Icons.account_circle_outlined),
-                ),
-              ]),
-          body: TabBarView(
-            controller: tabController,
-            children: const <Widget>[
-              PhoneLogin(),
-              FaceLogin(),
-              MachineLogin(),
-              WorkNumberLogin(),
-            ],
+              tabs: tabs,
+            ),
           ),
-        ));
+          SizedBox(
+            height: 400,
+            child: TabBarView(
+              controller: _tabController,
+              children: tabViews,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

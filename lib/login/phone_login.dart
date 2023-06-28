@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:jd_flutter/generated/l10n.dart';
 import 'package:jd_flutter/http/do_http.dart';
+import 'package:jd_flutter/widget/number_text_field.dart';
 
-import '../widget/custom_widget.dart';
 import '../widget/dialogs.dart';
 
 class PhoneLogin extends StatefulWidget {
@@ -57,8 +57,6 @@ class _PhoneLoginState extends State<PhoneLogin> {
         width: 340.0,
         height: 270.0,
         child: Card(
-            // color: const Color.fromARGB(255, 213, 41, 42),
-            // color: const Color(0xFF242A38),
             color: Colors.blueAccent,
             child: Padding(
                 padding: const EdgeInsets.all(20),
@@ -106,21 +104,19 @@ class _PhoneLoginState extends State<PhoneLogin> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Expanded(
-                          child: TextField(
-                            style: const TextStyle(color: Colors.white),
-                            keyboardType: TextInputType.number,
-                            controller: verificationCode,
-                            decoration: InputDecoration(
-                              hintText: S.current.login_hint_verify_code,
-                              hintStyle: const TextStyle(color: Colors.white),
-                              counterStyle:
-                                  const TextStyle(color: Colors.white),
-                              prefixIcon: const Icon(Icons.email_outlined,
-                                  color: Colors.white),
-                            ),
-                            maxLength: 6,
-                          ),
-                        ),
+                            child: NumberTextField(
+                                numberController: verificationCode,
+                                maxLength: 6,
+                                textStyle: const TextStyle(color: Colors.white),
+                                decoration: InputDecoration(
+                                  hintText: S.current.login_hint_verify_code,
+                                  hintStyle:
+                                      const TextStyle(color: Colors.white),
+                                  counterStyle:
+                                      const TextStyle(color: Colors.white),
+                                  prefixIcon: const Icon(Icons.email_outlined,
+                                      color: Colors.white),
+                                ))),
                         const SizedBox(width: 20),
                         ElevatedButton(
                             style: ElevatedButton.styleFrom(
@@ -139,10 +135,15 @@ class _PhoneLoginState extends State<PhoneLogin> {
                 ))),
       ),
       const SizedBox(height: 20),
-      LoginButton(onPressed: () {
-        phoneLogin(context, phone.text, password.text, verificationCode.text,
-            back: (dynamic) {});
-      })
+      ElevatedButton(
+          style: ElevatedButton.styleFrom(
+              minimumSize: const Size(320, 50),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(25))),
+          onPressed: () => phoneLogin(
+              context, phone.text, password.text, verificationCode.text,
+              back: (dynamic) {}),
+          child: Text(S.current.login, style: const TextStyle(fontSize: 20)))
     ]);
   }
 }
