@@ -38,9 +38,11 @@ dependencies:
   dio: ^5.2.1+1
   logger: ^1.4.0
   permission_handler: ^10.3.0
-  flutter_localization: ^0.1.12
   path_provider: ^2.0.15
   shared_preferences: ^2.1.2
+  flutter_localizations:
+    sdk: flutter
+  intl: any
 
 dev_dependencies:
   flutter_test:
@@ -94,5 +96,3 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
-flutter_intl:
-  enabled: true
