@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-
-
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
 
@@ -11,9 +9,10 @@ class Home extends StatefulWidget {
 
 class _Home extends State<Home> {
   int _selectedIndex = 0;
-  static const TextStyle optionStyle =
-  TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  static const List<Widget> _widgetOptions = <Widget>[
+  TextStyle optionStyle =
+      const TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+
+  late final List<Widget> _widgetOptions = <Widget>[
     Text(
       'Index 0: Home',
       style: optionStyle,
@@ -37,9 +36,6 @@ class _Home extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('BottomNavigationBar Sample'),
-      ),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),

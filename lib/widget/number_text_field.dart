@@ -1,7 +1,6 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:universal_platform/universal_platform.dart';
 
 import '../generated/l10n.dart';
 
@@ -74,7 +73,7 @@ class _NumberTextFieldState extends State<NumberTextField> {
   void initState() {
     super.initState();
 
-    if (Platform.isIOS) {
+    if (UniversalPlatform.isIOS) {
       //ios 端添加监听
       _numberFocusNode.addListener(() {
         if (_numberFocusNode.hasFocus) {

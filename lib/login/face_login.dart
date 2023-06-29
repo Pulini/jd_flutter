@@ -5,6 +5,7 @@ import 'package:jd_flutter/http/web_api.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import '../home/home.dart';
 import '../http/do_http.dart';
 import '../widget/number_text_field.dart';
 
@@ -31,7 +32,14 @@ class _FaceLoginState extends State<FaceLogin> {
         if (value) {
           await platform.invokeMethod('startDetect', filePath).then((value) {
             logger.i(value);
-            faceLogin(context, phone.text, back: (userInfo) {});
+            faceLogin(context, phone.text, back: (userInfo) {
+              Navigator.pop(context);
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const Home(),
+                ),
+              );
+            });
           }).catchError((e) {
             logger.i(e);
           });

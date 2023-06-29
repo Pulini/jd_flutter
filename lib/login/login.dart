@@ -1,9 +1,7 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:jd_flutter/login/phone_login.dart';
 import 'package:jd_flutter/login/work_number_login.dart';
-import 'package:jd_flutter/utils.dart';
+import 'package:universal_platform/universal_platform.dart';
 
 import 'face_login.dart';
 import 'machine_login.dart';
@@ -80,43 +78,16 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-
-    if (Platform.isIOS) {
-      tabs.add(const Tab(icon: Icon(Icons.phone)));
-      tabs.add(const Tab(icon: Icon(Icons.assignment_ind_outlined)));
-      tabViews.add(const PhoneLogin());
-      tabViews.add(const WorkNumberLogin());
-    } else if (Platform.isAndroid) {
-      if (context.isLargeScreen()) {
-        tabs.add(const Tab(icon: Icon(Icons.precision_manufacturing)));
-        tabs.add(const Tab(icon: Icon(Icons.assignment_ind_outlined)));
-        tabViews.add(const MachineLogin());
-        tabViews.add(const WorkNumberLogin());
-      }
-      if (context.isMediumScreen()) {
-        tabs.add(const Tab(icon: Icon(Icons.phone)));
-        tabs.add(const Tab(icon: Icon(Icons.precision_manufacturing)));
-        tabs.add(const Tab(icon: Icon(Icons.assignment_ind_outlined)));
-        tabViews.add(const PhoneLogin());
-        tabViews.add(const MachineLogin());
-        tabViews.add(const WorkNumberLogin());
-      }
-      if (context.isSmallScreen()) {
-        tabs.add(const Tab(icon: Icon(Icons.phone)));
-        tabs.add(const Tab(icon: Icon(Icons.account_circle_outlined)));
-        tabs.add(const Tab(icon: Icon(Icons.assignment_ind_outlined)));
-        tabViews.add(const PhoneLogin());
-        tabViews.add(const FaceLogin());
-        tabViews.add(const WorkNumberLogin());
-      }
-    } else {
-      tabs.add(const Tab(icon: Icon(Icons.phone)));
-      tabs.add(const Tab(icon: Icon(Icons.precision_manufacturing)));
-      tabs.add(const Tab(icon: Icon(Icons.assignment_ind_outlined)));
-      tabViews.add(const PhoneLogin());
-      tabViews.add(const MachineLogin());
-      tabViews.add(const WorkNumberLogin());
+    tabs.add(const Tab(icon: Icon(Icons.phone)));
+    tabViews.add(const PhoneLogin());
+    if (UniversalPlatform.isAndroid){
+      tabs.add(const Tab(icon: Icon(Icons.account_circle_outlined)));
+      tabViews.add(const FaceLogin());
     }
+    tabs.add(const Tab(icon: Icon(Icons.precision_manufacturing)));
+    tabs.add(const Tab(icon: Icon(Icons.assignment_ind_outlined)));
+    tabViews.add(const MachineLogin());
+    tabViews.add(const WorkNumberLogin());
     _tabController = TabController(length: tabs.length, vsync: this);
   }
 

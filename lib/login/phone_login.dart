@@ -5,6 +5,7 @@ import 'package:jd_flutter/generated/l10n.dart';
 import 'package:jd_flutter/http/do_http.dart';
 import 'package:jd_flutter/widget/number_text_field.dart';
 
+import '../home/home.dart';
 import '../widget/dialogs.dart';
 
 class PhoneLogin extends StatefulWidget {
@@ -142,7 +143,14 @@ class _PhoneLoginState extends State<PhoneLogin> {
                   borderRadius: BorderRadius.circular(25))),
           onPressed: () => phoneLogin(
               context, phone.text, password.text, verificationCode.text,
-              back: (dynamic) {}),
+              back: (dynamic) {
+                Navigator.pop(context);
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const Home(),
+                  ),
+                );
+              }),
           child: Text(S.current.login, style: const TextStyle(fontSize: 20)))
     ]);
   }

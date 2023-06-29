@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:jd_flutter/generated/l10n.dart';
 import 'package:jd_flutter/http/do_http.dart';
 
+import '../home/home.dart';
 import '../widget/number_text_field.dart';
 
 class WorkNumberLogin extends StatefulWidget {
@@ -76,7 +77,14 @@ class _WorkNumberLoginState extends State<WorkNumberLogin> {
                   borderRadius: BorderRadius.circular(25))),
           onPressed: () => workNumberLogin(
               context, workNumber.text, password.text,
-              back: (userInfo) {}),
+              back: (userInfo) {
+                Navigator.pop(context);
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const Home(),
+                  ),
+                );
+              }),
           child: Text(S.current.login, style: const TextStyle(fontSize: 20)))
     ]);
   }
