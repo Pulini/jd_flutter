@@ -1,39 +1,54 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:jd_flutter/constant.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'http/web_api.dart';
+import 'login/User_info.dart';
 
 ///隐藏键盘而不丢失文本字段焦点：
 void hideKeyBoard() {
   SystemChannels.textInput.invokeMethod('TextInput.hide');
 }
 
-const languageZh = Locale("zh", "CN");
-const languageEn = Locale("en");
-
-///获取当前语言信息
-Future<Locale> getLanguage() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String? language = prefs.get("language") as String?;
-  if (language == null) {
-    return languageZh;
+/// 保存SP数据
+spSave(String key, Object value) async {
+  SharedPreferences sp = await SharedPreferences.getInstance();
+  if (value is String) {
+    sp.setString(key, value);
+    logger.d("save\nclass:${value.runtimeType}\nkey:$key\nvalue:$value");
+  } else if (value is int) {
+    sp.setInt(key, value);
+    logger.d("save\nclass:${value.runtimeType}\nkey:$key\nvalue:$value");
+  } else if (value is double) {
+    sp.setDouble(key, value);
+    logger.d("save\nclass:${value.runtimeType}\nkey:$key\nvalue:$value");
+  } else if (value is bool) {
+    sp.setBool(key, value);
+    logger.d("save\nclass:${value.runtimeType}\nkey:$key\nvalue:$value");
   } else {
-    switch (language) {
-      case "zh":
-        return languageZh;
-      case "en":
-        return languageEn;
-      default:
-        return languageZh;
-    }
+    logger.e("error\nclass:${value.runtimeType}");
   }
 }
 
-///保存语言设置
-saveLanguage(String language) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  prefs.setString("language", language);
+/// 获取SP数据
+dynamic spGet(String key) async {
+  SharedPreferences sp = await SharedPreferences.getInstance();
+  var value = sp.get(key);
+  logger.d("read\nclass:${value.runtimeType}\nkey:$key\nvalue:$value");
+  return value;
 }
+
+///获取用户数据
+Future<UserInfo> userInfo() async {
+  SharedPreferences sp = await SharedPreferences.getInstance();
+  var user = sp.get(spSaveUserInfo) as String;
+  return UserInfo.fromJson(jsonDecode(user));
+}
+
 
 ///屏幕适配工具
 class ScreenUtil {

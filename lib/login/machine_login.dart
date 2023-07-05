@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/generated/l10n.dart';
 import 'package:jd_flutter/http/do_http.dart';
 
 import '../home/home.dart';
+import '../utils.dart';
 
 class MachineLogin extends StatefulWidget {
   const MachineLogin({Key? key}) : super(key: key);
@@ -14,6 +16,14 @@ class MachineLogin extends StatefulWidget {
 class _MachineLoginState extends State<MachineLogin> {
   TextEditingController machine = TextEditingController();
   TextEditingController password = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    spGet(spSaveLoginMachine).then((value) {
+      machine.text = value ?? "";
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +86,7 @@ class _MachineLoginState extends State<MachineLogin> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(25))),
           onPressed: () => machineLogin(context, machine.text, password.text,
-              back: (userInfo) {
+                  back: (userInfo) {
                 Navigator.pop(context);
                 Navigator.of(context).push(
                   MaterialPageRoute(

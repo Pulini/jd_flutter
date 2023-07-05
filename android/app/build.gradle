@@ -78,4 +78,5 @@ dependencies {
     implementation 'com.huawei.hms:ml-computer-vision-faceverify-model:3.6.0.304'
     implementation 'androidx.activity:activity-ktx:1.7.2'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+
 }

@@ -43,6 +43,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "face_login_no_camera_permission":
             MessageLookupByLibrary.simpleMessage("No camera permissions"),
         "get_verify_code": MessageLookupByLibrary.simpleMessage("Get verify"),
+        "home_bottom_bar_manage":
+            MessageLookupByLibrary.simpleMessage("Manage"),
+        "home_bottom_bar_produce":
+            MessageLookupByLibrary.simpleMessage("Produce"),
+        "home_bottom_bar_warehouse":
+            MessageLookupByLibrary.simpleMessage("Warehouse"),
         "key_board_done": MessageLookupByLibrary.simpleMessage("Done"),
         "language": MessageLookupByLibrary.simpleMessage("Language:"),
         "logging": MessageLookupByLibrary.simpleMessage("Logging..."),

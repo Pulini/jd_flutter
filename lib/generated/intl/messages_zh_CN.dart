@@ -40,6 +40,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "face_login_no_camera_permission":
             MessageLookupByLibrary.simpleMessage("没有相机权限"),
         "get_verify_code": MessageLookupByLibrary.simpleMessage("获取验证码"),
+        "home_bottom_bar_manage": MessageLookupByLibrary.simpleMessage("管理"),
+        "home_bottom_bar_produce": MessageLookupByLibrary.simpleMessage("生产"),
+        "home_bottom_bar_warehouse": MessageLookupByLibrary.simpleMessage("仓库"),
         "key_board_done": MessageLookupByLibrary.simpleMessage("完成"),
         "language": MessageLookupByLibrary.simpleMessage("语言:"),
         "logging": MessageLookupByLibrary.simpleMessage("正在登录..."),

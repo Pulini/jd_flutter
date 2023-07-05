@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/generated/l10n.dart';
 import 'package:jd_flutter/http/do_http.dart';
+import 'package:jd_flutter/utils.dart';
 
 import '../home/home.dart';
 import '../widget/number_text_field.dart';
@@ -15,6 +17,14 @@ class WorkNumberLogin extends StatefulWidget {
 class _WorkNumberLoginState extends State<WorkNumberLogin> {
   TextEditingController workNumber = TextEditingController();
   TextEditingController password = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    spGet(spSaveLoginWork).then((value) {
+      workNumber.text = value ?? "";
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +48,7 @@ class _WorkNumberLoginState extends State<WorkNumberLogin> {
                           hintText: S.current.login_hint_work_number,
                           hintStyle: const TextStyle(color: Colors.white),
                           counterStyle: const TextStyle(color: Colors.white),
-                          prefixIcon: const Icon(Icons.account_circle_outlined,
+                          prefixIcon: const Icon(Icons.badge_outlined,
                               color: Colors.white),
                           suffixIcon: IconButton(
                             icon: const Icon(Icons.close, color: Colors.white),
@@ -76,8 +86,7 @@ class _WorkNumberLoginState extends State<WorkNumberLogin> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(25))),
           onPressed: () => workNumberLogin(
-              context, workNumber.text, password.text,
-              back: (userInfo) {
+                  context, workNumber.text, password.text, back: (userInfo) {
                 Navigator.pop(context);
                 Navigator.of(context).push(
                   MaterialPageRoute(

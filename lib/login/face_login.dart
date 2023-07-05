@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/generated/l10n.dart';
 import 'package:jd_flutter/http/web_api.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
@@ -7,6 +8,7 @@ import 'package:permission_handler/permission_handler.dart';
 
 import '../home/home.dart';
 import '../http/do_http.dart';
+import '../utils.dart';
 import '../widget/number_text_field.dart';
 
 class FaceLogin extends StatefulWidget {
@@ -23,6 +25,7 @@ class FaceLogin extends StatefulWidget {
 
 class _FaceLoginState extends State<FaceLogin> {
   TextEditingController phone = TextEditingController();
+
   static const platform = MethodChannel('com.jd.pzx.jd_flutter');
   double progress = 0.0;
 
@@ -51,6 +54,14 @@ class _FaceLoginState extends State<FaceLogin> {
     } on PlatformException {
       errorDialog(context, content: S.current.face_login_failed);
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    spGet(spSaveLoginFace).then((value) {
+      phone.text = value ?? "";
+    });
   }
 
   @override

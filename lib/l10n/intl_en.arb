@@ -28,5 +28,8 @@
   "face_login_no_camera_permission": "No camera permissions",
   "face_login_failed": "Failed to start facial recognition",
   "face_login_getting_photo_path": "Getting photo information...",
-  "face_login_get_photo_path_failed": "Get photo information failed"
+  "face_login_get_photo_path_failed": "Get photo information failed",
+  "home_bottom_bar_produce":"Produce",
+  "home_bottom_bar_warehouse":"Warehouse",
+  "home_bottom_bar_manage":"Manage"
 }

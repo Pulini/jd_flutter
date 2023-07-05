@@ -3,9 +3,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:jd_flutter/generated/l10n.dart';
 import 'package:jd_flutter/http/do_http.dart';
+import 'package:jd_flutter/utils.dart';
 import 'package:jd_flutter/widget/number_text_field.dart';
 
+import '../constant.dart';
 import '../home/home.dart';
+import '../http/web_api.dart';
 import '../widget/dialogs.dart';
 
 class PhoneLogin extends StatefulWidget {
@@ -21,8 +24,16 @@ class _PhoneLoginState extends State<PhoneLogin> {
   var countTimer = 0;
 
   TextEditingController phone = TextEditingController();
-  TextEditingController password = TextEditingController();
-  TextEditingController verificationCode = TextEditingController();
+  TextEditingController password = TextEditingController()..text = '123456';
+  TextEditingController vCode = TextEditingController()..text = '507032';
+
+  @override
+  void initState() {
+    super.initState();
+    spGet(spSaveLoginPhone).then((value) {
+      phone.text = value ?? "";
+    });
+  }
 
   _verifyCode() {
     //按钮名称不是获取验证码，直接返回
@@ -106,7 +117,7 @@ class _PhoneLoginState extends State<PhoneLogin> {
                       children: [
                         Expanded(
                             child: NumberTextField(
-                                numberController: verificationCode,
+                                numberController: vCode,
                                 maxLength: 6,
                                 textStyle: const TextStyle(color: Colors.white),
                                 decoration: InputDecoration(
@@ -141,9 +152,9 @@ class _PhoneLoginState extends State<PhoneLogin> {
               minimumSize: const Size(320, 50),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(25))),
-          onPressed: () => phoneLogin(
-              context, phone.text, password.text, verificationCode.text,
-              back: (dynamic) {
+          onPressed: () =>
+              phoneLogin(context, phone.text, password.text, vCode.text,
+                  back: (userInfo) {
                 Navigator.pop(context);
                 Navigator.of(context).push(
                   MaterialPageRoute(

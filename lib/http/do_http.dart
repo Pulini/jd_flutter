@@ -7,6 +7,8 @@ import 'package:jd_flutter/login/User_info.dart';
 import 'package:jd_flutter/utils.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
+import '../constant.dart';
+
 /// 手机号码登录
 phoneLogin(BuildContext context, String phone, String password, String code,
     {required Function(UserInfo) back}) async {
@@ -33,6 +35,8 @@ phoneLogin(BuildContext context, String phone, String password, String code,
   }, callBack: (code, data, msg) {
     Navigator.pop(context);
     if (code == resultSuccess) {
+      spSave(spSaveLoginPhone, phone);
+      spSave(spSaveUserInfo, data.toString());
       back.call(UserInfo.fromJson(jsonDecode(data)));
     } else {
       errorDialog(context, content: msg ?? S.current.login_failed);
@@ -90,6 +94,8 @@ faceLogin(BuildContext context, String phone,
   }, callBack: (code, data, msg) {
     Navigator.pop(context);
     if (code == resultSuccess) {
+      spSave(spSaveLoginFace, phone);
+      spSave(spSaveUserInfo, data.toString());
       back.call(UserInfo.fromJson(jsonDecode(data)));
     } else {
       errorDialog(context, content: msg ?? S.current.login_failed);
@@ -119,6 +125,8 @@ machineLogin(BuildContext context, String machineNumber, String password,
   }, callBack: (code, data, msg) {
     Navigator.pop(context);
     if (code == resultSuccess) {
+      spSave(spSaveLoginMachine, machineNumber);
+      spSave(spSaveUserInfo, data.toString());
       back.call(UserInfo.fromJson(jsonDecode(data)));
     } else {
       errorDialog(context, content: msg ?? S.current.login_failed);
@@ -148,6 +156,8 @@ workNumberLogin(BuildContext context, String workNumber, String password,
   }, callBack: (code, data, msg) {
     Navigator.pop(context);
     if (code == resultSuccess) {
+      spSave(spSaveLoginWork, workNumber);
+      spSave(spSaveUserInfo, data.toString());
       back.call(UserInfo.fromJson(jsonDecode(data)));
     } else {
       errorDialog(context, content: msg ?? S.current.login_failed);

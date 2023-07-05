@@ -1,7 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
 import 'intl/messages_all.dart';
 
 // **************************************************************************
@@ -346,6 +345,36 @@ class S {
     return Intl.message(
       'Get photo information failed',
       name: 'face_login_get_photo_path_failed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Produce`
+  String get home_bottom_bar_produce {
+    return Intl.message(
+      'Produce',
+      name: 'home_bottom_bar_produce',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Warehouse`
+  String get home_bottom_bar_warehouse {
+    return Intl.message(
+      'Warehouse',
+      name: 'home_bottom_bar_warehouse',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Manage`
+  String get home_bottom_bar_manage {
+    return Intl.message(
+      'Manage',
+      name: 'home_bottom_bar_manage',
       desc: '',
       args: [],
     );

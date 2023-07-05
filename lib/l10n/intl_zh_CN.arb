@@ -28,7 +28,8 @@
   "face_login_no_camera_permission": "没有相机权限",
   "face_login_failed": "启动人脸识别失败",
   "face_login_getting_photo_path": "正在获取照片信息...",
-  "face_login_get_photo_path_failed": "获取照片信息失败"
-
-
+  "face_login_get_photo_path_failed": "获取照片信息失败",
+  "home_bottom_bar_produce":"生产",
+  "home_bottom_bar_warehouse":"仓库",
+  "home_bottom_bar_manage":"管理"
 }
