@@ -8,3 +8,4 @@ const loginTypePhone = "login_type_phone";
 const loginTypeFace = "login_type_face";
 const loginTypeWorkNumber = "login_type_work_number";
 const loginTypeMachine = "login_type_machine";
+const androidPackageName = "com.jd.pzx.jd_flutter";

@@ -55,11 +55,11 @@ Future<dynamic> spGet(String key) async {
 ///获取用户数据
 Future<UserInfo> userInfo() async {
   SharedPreferences sp = await SharedPreferences.getInstance();
-  var user = sp.get(spSaveUserInfo) as String;
-  if (user.isEmpty) {
+  try {
+    return UserInfo.fromJson(jsonDecode(sp.get(spSaveUserInfo) as String));
+  } on Error catch (e) {
+    logger.e(e);
     return UserInfo();
-  } else {
-    return UserInfo.fromJson(jsonDecode(user));
   }
 }
 

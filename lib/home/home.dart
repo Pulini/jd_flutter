@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:jd_flutter/home/user_setting.dart';
 import 'package:jd_flutter/utils.dart';
 
+import '../constant.dart';
 import '../generated/l10n.dart';
 import '../http/response/user_info.dart';
+import '../http/web_api.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -48,6 +51,21 @@ class _Home extends State<Home> {
           userImage = ClipOval(child: Image.network(user!.picUrl!));
         }
       });
+    });
+    _initJPushListener();
+  }
+
+  _initJPushListener() {
+    const MethodChannel(androidPackageName).setMethodCallHandler((call) {
+      logger.wtf("JMessage：$call");
+      switch (call.method) {
+        case "JMessage":
+          {
+            String msg = call.arguments["json"];
+          }
+          break;
+      }
+      return Future.value(null);
     });
   }
 

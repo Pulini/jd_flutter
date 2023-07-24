@@ -26,7 +26,7 @@ class FaceLogin extends StatefulWidget {
 class _FaceLoginState extends State<FaceLogin> {
   TextEditingController phone = TextEditingController();
 
-  static const platform = MethodChannel('com.jd.pzx.jd_flutter');
+  static const platform = MethodChannel(androidPackageName);
   double progress = 0.0;
 
   _face(String filePath) async {

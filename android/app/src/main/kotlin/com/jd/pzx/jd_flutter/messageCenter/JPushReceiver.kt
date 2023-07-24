@@ -26,7 +26,7 @@ class JPushReceiver : JPushMessageReceiver() {
         JSONObject(message.notificationExtras).let { json ->
             when (json.getString("doType")) {
                 UpGrade, ReLogin -> {
-                    goLogin(context)
+//                    goLogin(context)
                 }
 
                 else -> {}
@@ -48,7 +48,7 @@ class JPushReceiver : JPushMessageReceiver() {
 
     }
 
-    private fun goLogin(context: Context) {
+//    private fun goLogin(context: Context) {
 //        try {
 //            context.startActivity(Intent(context, LoginActivity::class.java).apply {
 //                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
@@ -56,5 +56,5 @@ class JPushReceiver : JPushMessageReceiver() {
 //        } catch (throwable: Throwable) {
 //            Log.e("Pan","打开登录页面失败")
 //        }
-    }
+//    }
 }

@@ -2,6 +2,7 @@ package com.jd.pzx.jd_flutter
 
 import android.os.Bundle
 import android.util.Log
+import com.google.gson.Gson
 import com.jd.pzx.jd_flutter.LivenFaceVerificationActivity.Companion.startOneselfFaceVerification
 import com.jd.pzx.jd_flutter.messageCenter.JMessage
 import com.jd.pzx.jd_flutter.messageCenter.JMessage.Companion.ReLogin
@@ -49,20 +50,17 @@ class MainActivity : FlutterActivity() {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onJPushMessageEvent(event: JMessage) {
-        when (event.doSomething) {
-            UpGrade -> {
-
-            }
-
-            ReLogin -> {
-
-            }
-
-            else -> {
-                Log.e("Pan", "do:${this}")
-            }
+        Log.e("Pan", "do:${event.doSomething}\ncontent:${event.content}")
+        flutterEngine?.dartExecutor?.binaryMessenger?.let { messenger ->
+            MethodChannel(messenger, CHANNEL).invokeMethod(
+                "JMessage",
+                HashMap<String, String>().also {
+                    it["json"] = Gson().toJson(event)
+                }
+            )
         }
     }
+
     /*
 
         private fun startDetect(
