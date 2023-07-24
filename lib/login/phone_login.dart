@@ -8,7 +8,6 @@ import 'package:jd_flutter/widget/number_text_field.dart';
 
 import '../constant.dart';
 import '../home/home.dart';
-import '../http/web_api.dart';
 import '../widget/dialogs.dart';
 
 class PhoneLogin extends StatefulWidget {
@@ -25,13 +24,13 @@ class _PhoneLoginState extends State<PhoneLogin> {
 
   TextEditingController phone = TextEditingController();
   TextEditingController password = TextEditingController()..text = '123456';
-  TextEditingController vCode = TextEditingController()..text = '507032';
+  TextEditingController vCode = TextEditingController()..text = '127032';
 
   @override
   void initState() {
     super.initState();
     spGet(spSaveLoginPhone).then((value) {
-      phone.text = value ?? "";
+      phone.text = value;
     });
   }
 

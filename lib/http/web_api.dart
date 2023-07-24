@@ -1,10 +1,10 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:jd_flutter/http/base_data.dart';
+import 'package:jd_flutter/http/response/base_data.dart';
+import 'package:jd_flutter/utils.dart';
 import 'package:logger/logger.dart';
 import 'package:path_provider/path_provider.dart';
-// import 'package:path_provider/path_provider.dart';
 
 ///网络异常
 const resultNetworkException = -1;
@@ -29,6 +29,9 @@ const testUrlForMES = "https://geapptest.goldemperor.com:1224/";
 
 /// 日志工具
 var logger = Logger();
+
+///当前语言
+var language = "zh";
 
 ///初始化dio
 var _dio = Dio(BaseOptions(
@@ -75,16 +78,18 @@ _doHttp(bool isPost, String method,
   if (queryStr.isNotEmpty) {
     queryStr = "?${queryStr.substring(0, queryStr.length - 1)}";
   }
+  var user = await userInfo();
 
   ///拼接post请求的uri
   var uri = Uri.parse(testUrlForMES + method + queryStr);
 
   ///设置请求的headers
   var options = Options(headers: {
+    "Content-Type": "application/json",
     "FunctionID": "",
     "Version": "",
     "Language": "",
-    "Token": "",
+    "Token": user.token ?? "",
   });
 
   try {
@@ -94,7 +99,9 @@ _doHttp(bool isPost, String method,
         : await _dio.getUri(uri, data: body, options: options);
 
     if (response.statusCode == 200) {
-      var baseData = BaseData.fromJson(response.data);
+      var baseData = BaseData.fromJson(response.data.runtimeType == String
+          ? jsonDecode(response.data)
+          : response.data);
       callBack.call(
           baseData.resultCode!, jsonEncode(baseData.data), baseData.message);
     } else {
@@ -107,6 +114,9 @@ _doHttp(bool isPost, String method,
   } on Exception catch (e) {
     logger.e('error:${e.toString()}');
     callBack.call(0, null, "发生错误：${e.toString()}");
+  } on Error catch (e) {
+    logger.e('error:${e.toString()}');
+    callBack.call(0, null, "发生异常：${e.toString()}");
   }
 }
 
@@ -139,6 +149,9 @@ download(
   } on Exception catch (e) {
     logger.e("error:${e.toString()}");
     error.call("发生错误：$e");
+  } on Error catch (e) {
+    logger.e('error:${e.toString()}');
+    error.call("发生异常：${e.toString()}");
   }
 }
 
@@ -150,3 +163,15 @@ const webApiGetUserPhoto = "api/User/GetEmpPhotoByPhone";
 
 ///获取验证码接口
 const webApiVerificationCode = "api/User/SendVerificationCode";
+
+///修改头像接口
+const webApiChangeUserAvatar = "api/User/UploadEmpPicture";
+
+///修改密码接口
+const webApiChangePassword = "api/User/ChangePassWord";
+
+///获取部门组别列表接口
+const webApiGetDepartment = "api/User/GetDepListByEmpID";
+
+///修改部门组别接口
+const webApiChangeDepartment = "api/User/GetLoginInfo";

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <paths>
+        <!-- Environment.getExternalStorageDirectory() -->
+        <external-path
+                name="files_root"
+                path="Android/data/com.pzx.jd/"/>
+        <root-path
+                name="camera_photos"
+                path=""/>
+    </paths>
+</resources>

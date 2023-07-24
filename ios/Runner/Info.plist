@@ -48,15 +48,23 @@
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 
-	 <key>NSBluetoothAlwaysUsageDescription</key>
-    	    <string>Need BLE permission</string>
-    	    <key>NSBluetoothPeripheralUsageDescription</key>
-    	    <string>Need BLE permission</string>
-    	    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-    	    <string>Need Location permission</string>
-    	    <key>NSLocationAlwaysUsageDescription</key>
-    	    <string>Need Location permission</string>
-    	    <key>NSLocationWhenInUseUsageDescription</key>
-    	    <string>Need Location permission</string>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+    <string>我们需要使用你的蓝牙设备</string>
+    <key>NSBluetoothPeripheralUsageDescription</key>
+    <string>们需要使用你的蓝牙设备</string>
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>们需要使用定位服务以便使用蓝牙搜索</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>们需要使用定位服务以便使用蓝牙搜索</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>们需要使用定位服务以便使用蓝牙搜索</string>
+
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>我们需要访问你的相册来选择图片。</string>
+    <key>NSCameraUsageDescription</key>
+    <string>我们需要访问你的相机来拍摄新的照片。</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>我们需要访问你的麦克风来录制视频。</string>
+
 </dict>
 </plist>

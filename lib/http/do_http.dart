@@ -2,8 +2,11 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:jd_flutter/generated/l10n.dart';
+import 'package:jd_flutter/http/request/user_avatar_entity.dart';
+import 'package:jd_flutter/http/response/department_entity.dart';
+import 'package:jd_flutter/http/response/group_entity.dart';
+import 'package:jd_flutter/http/response/user_info.dart';
 import 'package:jd_flutter/http/web_api.dart';
-import 'package:jd_flutter/login/User_info.dart';
 import 'package:jd_flutter/utils.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
@@ -35,6 +38,7 @@ phoneLogin(BuildContext context, String phone, String password, String code,
   }, callBack: (code, data, msg) {
     Navigator.pop(context);
     if (code == resultSuccess) {
+      spSave(spSaveLoginType, loginTypePhone);
       spSave(spSaveLoginPhone, phone);
       spSave(spSaveUserInfo, data.toString());
       back.call(UserInfo.fromJson(jsonDecode(data)));
@@ -94,6 +98,7 @@ faceLogin(BuildContext context, String phone,
   }, callBack: (code, data, msg) {
     Navigator.pop(context);
     if (code == resultSuccess) {
+      spSave(spSaveLoginType, loginTypeFace);
       spSave(spSaveLoginFace, phone);
       spSave(spSaveUserInfo, data.toString());
       back.call(UserInfo.fromJson(jsonDecode(data)));
@@ -125,6 +130,7 @@ machineLogin(BuildContext context, String machineNumber, String password,
   }, callBack: (code, data, msg) {
     Navigator.pop(context);
     if (code == resultSuccess) {
+      spSave(spSaveLoginType, loginTypeMachine);
       spSave(spSaveLoginMachine, machineNumber);
       spSave(spSaveUserInfo, data.toString());
       back.call(UserInfo.fromJson(jsonDecode(data)));
@@ -156,6 +162,7 @@ workNumberLogin(BuildContext context, String workNumber, String password,
   }, callBack: (code, data, msg) {
     Navigator.pop(context);
     if (code == resultSuccess) {
+      spSave(spSaveLoginType, loginTypeMachine);
       spSave(spSaveLoginWork, workNumber);
       spSave(spSaveUserInfo, data.toString());
       back.call(UserInfo.fromJson(jsonDecode(data)));
@@ -163,4 +170,93 @@ workNumberLogin(BuildContext context, String workNumber, String password,
       errorDialog(context, content: msg ?? S.current.login_failed);
     }
   });
+}
+
+///修改头像
+changeUserAvatar(BuildContext context, String photoBase64,
+    {required Function(String) back}) async {
+  loadingDialog(context, S.current.home_user_setting_avatar_photo_submitting);
+  userInfo().then((user) {
+    var body = UserAvatarEntity()
+      ..empID = user.empID!
+      ..userID = user.userID!
+      ..imageBase64 = photoBase64;
+    httpPost(webApiChangeUserAvatar, body: body, callBack: (code, data, msg) {
+      Navigator.pop(context);
+      if (code == resultSuccess) {
+        back.call(data.toString());
+      } else {
+        errorDialog(context, content: msg);
+      }
+    });
+  });
+}
+
+///修改密码
+changePassword(BuildContext context, String oldPassword, String newPassword,
+    {required Function(String) back}) async {
+  loadingDialog(context, S.current.change_password_dialog_submitting);
+  var phone = "";
+  String type = await spGet(spSaveLoginType);
+  switch (type) {
+    case loginTypePhone:
+      phone = await spGet(spSaveLoginPhone);
+      break;
+    case loginTypeFace:
+      phone = await spGet(spSaveLoginFace);
+      break;
+  }
+  httpPost(webApiChangePassword, query: {
+    "OldPassWord": oldPassword,
+    "NewPassWord": newPassword,
+    "PhoneNumber": phone
+  }, callBack: (code, data, msg) {
+    Navigator.pop(context);
+    if (code == resultSuccess) {
+      back.call(data.toString());
+    } else {
+      errorDialog(context, content: msg);
+    }
+  });
+}
+
+///获取部门组别列表
+getDepartmentGroupList(BuildContext context,
+    {required Function(List<GroupEntity>) back}) async {
+  loadingDialog(context, S.current.getting_group);
+  userInfo().then((user) => httpGet(webApiGetDepartment,
+          query: {"EmpID": user.empID}, callBack: (code, data, msg) {
+        Navigator.pop(context);
+        if (code == resultSuccess) {
+          List<GroupEntity> list = [];
+          for (var item in jsonDecode(data)) {
+            list.add(GroupEntity.fromJson(item));
+          }
+          back.call(list);
+        } else {
+          errorDialog(context, content: msg);
+        }
+      }));
+}
+
+///修改部门组别
+changeDepartmentGroup(BuildContext context, String departmentID,
+    {required Function() back}) async {
+  loadingDialog(context, S.current.modifying_group);
+  userInfo().then((user) => httpGet(webApiChangeDepartment, query: {
+        "EmpID": user.empID,
+        "OrganizeID": user.organizeID,
+        "DeptmentID": departmentID
+      }, callBack: (code, data, msg) {
+        Navigator.pop(context);
+        if (code == resultSuccess) {
+          back.call();
+          var department = DepartmentEntity.fromJson(jsonDecode(data));
+          user.departmentID = department.deptmentID;
+          user.departmentName = department.deptmentName;
+          spSave(spSaveUserInfo, jsonEncode(user));
+        } else {
+          errorDialog(context, content: msg);
+        }
+      }));
 }

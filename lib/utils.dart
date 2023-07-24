@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -6,8 +7,8 @@ import 'package:flutter/services.dart';
 import 'package:jd_flutter/constant.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'http/response/user_info.dart';
 import 'http/web_api.dart';
-import 'login/User_info.dart';
 
 ///隐藏键盘而不丢失文本字段焦点：
 void hideKeyBoard() {
@@ -35,18 +36,31 @@ spSave(String key, Object value) async {
 }
 
 /// 获取SP数据
-dynamic spGet(String key) async {
+Future<dynamic> spGet(String key) async {
   SharedPreferences sp = await SharedPreferences.getInstance();
   var value = sp.get(key);
   logger.d("read\nclass:${value.runtimeType}\nkey:$key\nvalue:$value");
-  return value;
+  switch (value.runtimeType) {
+    case String:
+      return value ?? "";
+    case int:
+      return value ?? 0;
+    case double:
+      return value ?? 0.0;
+    case bool:
+      return value ?? false;
+  }
 }
 
 ///获取用户数据
 Future<UserInfo> userInfo() async {
   SharedPreferences sp = await SharedPreferences.getInstance();
   var user = sp.get(spSaveUserInfo) as String;
-  return UserInfo.fromJson(jsonDecode(user));
+  if (user.isEmpty) {
+    return UserInfo();
+  } else {
+    return UserInfo.fromJson(jsonDecode(user));
+  }
 }
 
 
@@ -140,12 +154,34 @@ class ScreenUtil {
       : setWidth(fontSize) / _textScaleFactor;
 }
 
+///BuildContext扩展
 extension ContextExt on BuildContext {
+  ///是否是大屏幕
   bool isLargeScreen() => MediaQuery.of(this).size.width > 768;
 
+  ///是否是中屏幕
   bool isMediumScreen() =>
       MediaQuery.of(this).size.width > 425 &&
       MediaQuery.of(this).size.width < 1200;
 
+  ///是否是小屏幕
   bool isSmallScreen() => MediaQuery.of(this).size.width < 768;
+}
+
+///app 背景渐变色
+backgroundColor() => const BoxDecoration(
+        gradient: LinearGradient(
+      colors: [
+        Color.fromARGB(0xff, 0xe4, 0xe8, 0xda),
+        Color.fromARGB(0xff, 0xba, 0xe9, 0xed)
+      ],
+      begin: Alignment.bottomLeft,
+      end: Alignment.topRight,
+    ));
+
+///图片转 base64
+Future<String> imageToBase64(File file) async {
+  List<int> imageBytes = await file.readAsBytes();
+  logger.i('图片大小:${imageBytes.length}');
+  return base64Encode(imageBytes);
 }

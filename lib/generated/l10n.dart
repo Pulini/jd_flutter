@@ -379,6 +379,216 @@ class S {
       args: [],
     );
   }
+
+  /// `Logout`
+  String get home_user_setting_logout {
+    return Intl.message(
+      'Logout',
+      name: 'home_user_setting_logout',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Password change`
+  String get home_user_setting_password_change {
+    return Intl.message(
+      'Password change',
+      name: 'home_user_setting_password_change',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Check version`
+  String get home_user_setting_check_version {
+    return Intl.message(
+      'Check version',
+      name: 'home_user_setting_check_version',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Factory:`
+  String get home_user_setting_factory {
+    return Intl.message(
+      'Factory:',
+      name: 'home_user_setting_factory',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Department:`
+  String get home_user_setting_department {
+    return Intl.message(
+      'Department:',
+      name: 'home_user_setting_department',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Position:`
+  String get home_user_setting_position {
+    return Intl.message(
+      'Position:',
+      name: 'home_user_setting_position',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Change avatar`
+  String get home_user_setting_avatar_photo_sheet_title {
+    return Intl.message(
+      'Change avatar',
+      name: 'home_user_setting_avatar_photo_sheet_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please select the image source`
+  String get home_user_setting_avatar_photo_sheet_message {
+    return Intl.message(
+      'Please select the image source',
+      name: 'home_user_setting_avatar_photo_sheet_message',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Take photo`
+  String get home_user_setting_avatar_photo_sheet_take_photo {
+    return Intl.message(
+      'Take photo',
+      name: 'home_user_setting_avatar_photo_sheet_take_photo',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select from album`
+  String get home_user_setting_avatar_photo_sheet_select_photo {
+    return Intl.message(
+      'Select from album',
+      name: 'home_user_setting_avatar_photo_sheet_select_photo',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Crop Picture`
+  String get cropper_title {
+    return Intl.message(
+      'Crop Picture',
+      name: 'cropper_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cancel`
+  String get cropper_cancel {
+    return Intl.message(
+      'Cancel',
+      name: 'cropper_cancel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Done`
+  String get cropper_confirm {
+    return Intl.message(
+      'Done',
+      name: 'cropper_confirm',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Photo submitting...`
+  String get home_user_setting_avatar_photo_submitting {
+    return Intl.message(
+      'Photo submitting...',
+      name: 'home_user_setting_avatar_photo_submitting',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Modify password`
+  String get change_password_dialog_title {
+    return Intl.message(
+      'Modify password',
+      name: 'change_password_dialog_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter the original password`
+  String get change_password_dialog_old_password {
+    return Intl.message(
+      'Please enter the original password',
+      name: 'change_password_dialog_old_password',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter a new password`
+  String get change_password_dialog_new_password {
+    return Intl.message(
+      'Please enter a new password',
+      name: 'change_password_dialog_new_password',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Modify`
+  String get change_password_dialog_submit {
+    return Intl.message(
+      'Modify',
+      name: 'change_password_dialog_submit',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Password modification in progress...`
+  String get change_password_dialog_submitting {
+    return Intl.message(
+      'Password modification in progress...',
+      name: 'change_password_dialog_submitting',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Obtaining department group information...`
+  String get getting_group {
+    return Intl.message(
+      'Obtaining department group information...',
+      name: 'getting_group',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ` Modifying group...`
+  String get modifying_group {
+    return Intl.message(
+      ' Modifying group...',
+      name: 'modifying_group',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

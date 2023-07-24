@@ -31,12 +31,16 @@ class _MyAppState extends State<MyApp> {
       supportedLocales: S.delegate.supportedLocales,
       localeListResolutionCallback: (locales, supportedLocales) {
         logger.i("当前语音：$locales");
+        language = locales?.first.languageCode ?? "zh";
         return null;
       },
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent),
         useMaterial3: true,
       ),
+      routes: {
+        "/login": (context) => const Login(),
+      },
       home: const Login(),
     );
   }

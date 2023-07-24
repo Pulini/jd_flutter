@@ -1,14 +1,16 @@
 class BaseData {
   BaseData({
-      this.resultCode, 
-      this.data, 
-      this.message,});
+    this.resultCode,
+    this.data,
+    this.message,
+  });
 
   BaseData.fromJson(dynamic json) {
     resultCode = json['ResultCode'];
-    data = json['Data'];
+    data = json['Data'] ?? "";
     message = json['Message'];
   }
+
   int? resultCode;
   dynamic data;
   String? message;
@@ -20,5 +22,4 @@ class BaseData {
     map['Message'] = message;
     return map;
   }
-
 }

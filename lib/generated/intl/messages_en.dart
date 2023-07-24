@@ -23,6 +23,21 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "app_name": MessageLookupByLibrary.simpleMessage("Gold Emperor"),
+        "change_password_dialog_new_password":
+            MessageLookupByLibrary.simpleMessage("Please enter a new password"),
+        "change_password_dialog_old_password":
+            MessageLookupByLibrary.simpleMessage(
+                "Please enter the original password"),
+        "change_password_dialog_submit":
+            MessageLookupByLibrary.simpleMessage("Modify"),
+        "change_password_dialog_submitting":
+            MessageLookupByLibrary.simpleMessage(
+                "Password modification in progress..."),
+        "change_password_dialog_title":
+            MessageLookupByLibrary.simpleMessage("Modify password"),
+        "cropper_cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
+        "cropper_confirm": MessageLookupByLibrary.simpleMessage("Done"),
+        "cropper_title": MessageLookupByLibrary.simpleMessage("Crop Picture"),
         "dialog_default_cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
         "dialog_default_confirm":
             MessageLookupByLibrary.simpleMessage("Confirm"),
@@ -43,12 +58,37 @@ class MessageLookup extends MessageLookupByLibrary {
         "face_login_no_camera_permission":
             MessageLookupByLibrary.simpleMessage("No camera permissions"),
         "get_verify_code": MessageLookupByLibrary.simpleMessage("Get verify"),
+        "getting_group": MessageLookupByLibrary.simpleMessage(
+            "Obtaining department group information..."),
         "home_bottom_bar_manage":
             MessageLookupByLibrary.simpleMessage("Manage"),
         "home_bottom_bar_produce":
             MessageLookupByLibrary.simpleMessage("Produce"),
         "home_bottom_bar_warehouse":
             MessageLookupByLibrary.simpleMessage("Warehouse"),
+        "home_user_setting_avatar_photo_sheet_message":
+            MessageLookupByLibrary.simpleMessage(
+                "Please select the image source"),
+        "home_user_setting_avatar_photo_sheet_select_photo":
+            MessageLookupByLibrary.simpleMessage("Select from album"),
+        "home_user_setting_avatar_photo_sheet_take_photo":
+            MessageLookupByLibrary.simpleMessage("Take photo"),
+        "home_user_setting_avatar_photo_sheet_title":
+            MessageLookupByLibrary.simpleMessage("Change avatar"),
+        "home_user_setting_avatar_photo_submitting":
+            MessageLookupByLibrary.simpleMessage("Photo submitting..."),
+        "home_user_setting_check_version":
+            MessageLookupByLibrary.simpleMessage("Check version"),
+        "home_user_setting_department":
+            MessageLookupByLibrary.simpleMessage("Department:"),
+        "home_user_setting_factory":
+            MessageLookupByLibrary.simpleMessage("Factory:"),
+        "home_user_setting_logout":
+            MessageLookupByLibrary.simpleMessage("Logout"),
+        "home_user_setting_password_change":
+            MessageLookupByLibrary.simpleMessage("Password change"),
+        "home_user_setting_position":
+            MessageLookupByLibrary.simpleMessage("Position:"),
         "key_board_done": MessageLookupByLibrary.simpleMessage("Done"),
         "language": MessageLookupByLibrary.simpleMessage("Language:"),
         "logging": MessageLookupByLibrary.simpleMessage("Logging..."),
@@ -73,6 +113,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Please enter your verify code"),
         "login_tips_work_number": MessageLookupByLibrary.simpleMessage(
             "Please enter the work number"),
+        "modifying_group":
+            MessageLookupByLibrary.simpleMessage(" Modifying group..."),
         "phone_login_get_verify_code_failed":
             MessageLookupByLibrary.simpleMessage("Verify code sending failed"),
         "phone_login_get_verify_code_success":
