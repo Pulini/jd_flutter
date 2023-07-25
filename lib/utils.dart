@@ -58,7 +58,10 @@ Future<UserInfo> userInfo() async {
   try {
     return UserInfo.fromJson(jsonDecode(sp.get(spSaveUserInfo) as String));
   } on Error catch (e) {
-    logger.e(e);
+    logger.e(e.toString());
+    return UserInfo();
+  } on FormatException catch (e) {
+    logger.e(e.toString());
     return UserInfo();
   }
 }

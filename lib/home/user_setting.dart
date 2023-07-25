@@ -10,6 +10,7 @@ import '../generated/l10n.dart';
 import '../http/do_http.dart';
 import '../http/response/user_info.dart';
 import '../utils.dart';
+import '../widget/bluetooth.dart';
 import '../widget/dialogs.dart';
 
 class UserSetting extends StatefulWidget {
@@ -423,7 +424,7 @@ class _UserSettingState extends State<UserSetting> {
           ),
           GestureDetector(
             onTap: () {
-              Navigator.pop(context);
+              bluetoothDialog(context);
             },
             child: const Row(
               children: [

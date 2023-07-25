@@ -44,9 +44,9 @@ dependencies:
     sdk: flutter
   intl: any
   universal_platform: ^1.0.0+1
-  flutter_blue: ^0.8.0
   image_picker: ^1.0.1
   image_cropper: ^5.0.0
+  flutter_blue_plus: ^1.9.5
 
 dev_dependencies:
   flutter_test:

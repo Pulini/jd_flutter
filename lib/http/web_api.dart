@@ -47,7 +47,7 @@ var _dio = Dio(BaseOptions(
     logger.i('response：$response');
     handler.next(response);
   }, onError: (DioException e, handler) {
-    logger.e('error:${e.message}');
+    logger.e('error:$e');
     handler.next(e);
   }));
 
@@ -109,8 +109,8 @@ _doHttp(bool isPost, String method,
       callBack.call(resultNetworkException, null, "网络异常");
     }
   } on DioException catch (e) {
-    logger.e('error:${e.message}');
-    callBack.call(0, null, "服务器接口异常：${e.message}");
+    logger.e('error:${e.toString()}');
+    callBack.call(0, null, "服务器接口异常：${e.toString()}");
   } on Exception catch (e) {
     logger.e('error:${e.toString()}');
     callBack.call(0, null, "发生错误：${e.toString()}");
