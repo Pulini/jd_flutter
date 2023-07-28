@@ -1,10 +1,13 @@
-package com.jd.pzx.jd_flutter
+package com.jd.pzx.jd_flutter.dialogs
 
 import android.app.Dialog
 import android.content.Context
 import android.view.WindowManager
 import android.widget.TextView
 import androidx.annotation.StringRes
+import com.jd.pzx.jd_flutter.R
+import com.jd.pzx.jd_flutter.dp2px
+import com.jd.pzx.jd_flutter.setDelayClickListener
 
 /**
  * File Name : InquiryDialog

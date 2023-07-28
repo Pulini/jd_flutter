@@ -424,7 +424,10 @@ class _UserSettingState extends State<UserSetting> {
           ),
           GestureDetector(
             onTap: () {
-              bluetoothDialog(context);
+              showDialog<String>(
+                  barrierDismissible: false,
+                  context: context,
+                  builder: (BuildContext context) => const BluetoothDialog());
             },
             child: const Row(
               children: [

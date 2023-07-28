@@ -6,6 +6,7 @@ import 'generated/l10n.dart';
 import 'login/login.dart';
 
 void main() {
+
   runApp(const MyApp());
 }
 

@@ -33,7 +33,7 @@ class _FaceLoginState extends State<FaceLogin> {
     try {
       Permission.camera.request().isGranted.then((value) async {
         if (value) {
-          await platform.invokeMethod('startDetect', filePath).then((value) {
+          await platform.invokeMethod('StartDetect', filePath).then((value) {
             logger.i(value);
             faceLogin(context, phone.text, back: (userInfo) {
               Navigator.pop(context);

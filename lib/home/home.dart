@@ -57,7 +57,7 @@ class _Home extends State<Home> {
 
   _initJPushListener() {
     const MethodChannel(androidPackageName).setMethodCallHandler((call) {
-      logger.wtf("JMessage：$call");
+      logger.f("JMessage：$call");
       switch (call.method) {
         case "JMessage":
           {

@@ -19,6 +19,8 @@ import com.huawei.hms.mlsdk.faceverify.MLFaceVerificationAnalyzerSetting
 import com.huawei.hms.mlsdk.livenessdetection.MLLivenessCaptureResult
 import com.huawei.hms.mlsdk.livenessdetection.MLLivenessDetectView
 import com.huawei.hms.mlsdk.livenessdetection.OnMLLivenessDetectCallback
+import com.jd.pzx.jd_flutter.dialogs.InquiryDialog
+import com.jd.pzx.jd_flutter.dialogs.TipsDialog
 import java.io.FileInputStream
 
 
@@ -82,7 +84,7 @@ class LivenFaceVerificationActivity : Activity() {
     //活体检测结果bitmap
     private var faceBitmap: Bitmap? = null
 
-    private var errorCode=FACE_VERIFY_SUCCESS
+    private var errorCode= FACE_VERIFY_SUCCESS
 
     @SuppressLint("SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -156,7 +158,7 @@ class LivenFaceVerificationActivity : Activity() {
                         //活体检测成功
                         callback.invoke(FACE_VERIFY_SUCCESS, result.bitmap)
                     } else {
-                        errorCode=FACE_VERIFY_FAIL_NOT_LIVE
+                        errorCode= FACE_VERIFY_FAIL_NOT_LIVE
                         //活体检测失败
                         showFailDialog(getString(R.string.liven_detection_liven_fail))
                     }
@@ -165,7 +167,7 @@ class LivenFaceVerificationActivity : Activity() {
                 //活体检测异常
                 override fun onError(error: Int) {
                     Log.e("Pan", "活体检测异常：$error")
-                    errorCode=FACE_VERIFY_FAIL_ERROR
+                    errorCode= FACE_VERIFY_FAIL_ERROR
                     showFailDialog(
                         String.format(getString(R.string.liven_detection_liven_error), error)
                     )

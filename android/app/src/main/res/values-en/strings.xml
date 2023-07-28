@@ -10,6 +10,23 @@
     <string name="liven_detection_face_verification_successful">Face verification successful</string>
     <string name="liven_detection_living_verification_successful">Living verification succeeded</string>
     <string name="liven_detection_photo_not_me">The photo doesn\'t match me</string>
-    <string name="liven_detection_similarity">Similarity:&#12288;%1$s</string>
     <string name="dialog_got_it">Got it</string>
+
+    <string name="bluetooth_error_1">Ready</string>
+    <string name="bluetooth_error_2">Print head on</string>
+    <string name="bluetooth_error_3">Paper jam</string>
+    <string name="bluetooth_error_4">Print head on and paper jam</string>
+    <string name="bluetooth_error_5">Paper missing</string>
+    <string name="bluetooth_error_6">Print head on and paper out</string>
+    <string name="bluetooth_error_7">No carbon belt</string>
+    <string name="bluetooth_error_8">Print head on and no carbon tape</string>
+    <string name="bluetooth_error_9">Paper jam and no carbon tape</string>
+    <string name="bluetooth_error_10">Print head on, paper jam and no carbon tape</string>
+    <string name="bluetooth_error_11">Paper is missing and no carbon tape</string>
+    <string name="bluetooth_error_12">Print head open, paper missing and no carbon tape</string>
+    <string name="bluetooth_error_13">suspend</string>
+    <string name="bluetooth_error_14">Printing</string>
+    <string name="bluetooth_error_15">other</string>
+    <string name="bluetooth_error_16">Unknown state</string>
+
 </resources>

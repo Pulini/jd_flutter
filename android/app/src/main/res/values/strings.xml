@@ -10,7 +10,24 @@
     <string name="liven_detection_face_verification_successful">人脸验证成功</string>
     <string name="liven_detection_living_verification_successful">活体验证成功</string>
     <string name="liven_detection_photo_not_me">照片与本人不符</string>
-    <string name="liven_detection_similarity">对比相似度:&#12288;%1$s</string>
     <string name="dialog_got_it">知道了</string>
+
+    <string name="bluetooth_error_1">准备就绪</string>
+    <string name="bluetooth_error_2">打印头开启</string>
+    <string name="bluetooth_error_3">纸张卡纸</string>
+    <string name="bluetooth_error_4">打印头开启并且纸张卡纸</string>
+    <string name="bluetooth_error_5">纸张缺纸</string>
+    <string name="bluetooth_error_6">打印头开启并且纸张缺纸</string>
+    <string name="bluetooth_error_7">无碳带</string>
+    <string name="bluetooth_error_8">打印头开启并且无碳带</string>
+    <string name="bluetooth_error_9">纸张卡纸并且无碳带</string>
+    <string name="bluetooth_error_10">打印头开启、纸张卡纸并且无碳带</string>
+    <string name="bluetooth_error_11">纸张缺纸并且无碳带</string>
+    <string name="bluetooth_error_12">打印头开启、纸张缺纸并且无碳带</string>
+    <string name="bluetooth_error_13">暂停</string>
+    <string name="bluetooth_error_14">打印中</string>
+    <string name="bluetooth_error_15">其它</string>
+    <string name="bluetooth_error_16">未知状态</string>
+
 
 </resources>

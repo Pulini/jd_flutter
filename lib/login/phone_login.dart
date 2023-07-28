@@ -22,9 +22,9 @@ class _PhoneLoginState extends State<PhoneLogin> {
   late Timer _timer;
   var countTimer = 0;
 
-  TextEditingController phone = TextEditingController();
+  TextEditingController phone = TextEditingController()..text = '15868587600';
   TextEditingController password = TextEditingController()..text = '123456';
-  TextEditingController vCode = TextEditingController()..text = '527032';
+  TextEditingController vCode = TextEditingController()..text = '827032';
 
   @override
   void initState() {
