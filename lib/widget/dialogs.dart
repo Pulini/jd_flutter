@@ -13,41 +13,76 @@ informationDialog(BuildContext context,
   showDialog<String>(
     barrierDismissible: false,
     context: context,
-    builder: (BuildContext context) => AlertDialog(
-      title: Text(
-          title.isEmpty ? S.current.dialog_default_title_information : title,
-          style: const TextStyle(color: Colors.green)),
-      content: Text(content ?? ""),
-      actions: <Widget>[
-        TextButton(
-          onPressed: () {
-            Navigator.pop(context);
-            back?.call();
-          },
-          child: Text(S.current.dialog_default_got_it),
+    builder: (BuildContext context) =>
+        AlertDialog(
+          title: Text(
+              title.isEmpty
+                  ? S.current.dialog_default_title_information
+                  : title,
+              style: const TextStyle(color: Colors.orange)),
+          content: Text(content ?? ""),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                back?.call();
+              },
+              child: Text(S.current.dialog_default_got_it),
+            ),
+          ],
         ),
-      ],
-    ),
+  );
+}
+
+/// 提示弹窗
+successDialog(BuildContext context,
+    {String title = "", required String? content, Function()? back}) {
+  showDialog<String>(
+    barrierDismissible: false,
+    context: context,
+    builder: (BuildContext context) =>
+        AlertDialog(
+          title: Text(
+              title.isEmpty
+                  ? S.current.dialog_default_title_success
+                  : title,
+              style: const TextStyle(color: Colors.green)),
+          content: Text(content ?? ""),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                back?.call();
+              },
+              child: Text(S.current.dialog_default_got_it),
+            ),
+          ],
+        ),
   );
 }
 
 ///错误弹窗
 errorDialog(BuildContext context,
-    {String title = "", required String? content}) {
+    {String title = "", required String? content, Function()? back}) {
   showDialog<String>(
     barrierDismissible: false,
     context: context,
-    builder: (BuildContext context) => AlertDialog(
-      title: Text(title.isEmpty ? S.current.dialog_default_title_error : title,
-          style: const TextStyle(color: Colors.red)),
-      content: Text(content ?? ""),
-      actions: <Widget>[
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: Text(S.current.dialog_default_got_it),
+    builder: (BuildContext context) =>
+        AlertDialog(
+          title: Text(
+              title.isEmpty ? S.current.dialog_default_title_error : title,
+              style: const TextStyle(color: Colors.red)),
+          content: Text(content ?? ""),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                back?.call();
+              },
+              child: Text(S.current.dialog_default_got_it),
+            ),
+          ],
         ),
-      ],
-    ),
   );
 }
 
@@ -56,7 +91,8 @@ loadingDialog(BuildContext context, String? content) {
   showDialog<String>(
       barrierDismissible: false,
       context: context,
-      builder: (BuildContext context) => Dialog(
+      builder: (BuildContext context) =>
+          Dialog(
             backgroundColor: Colors.white,
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 20),
@@ -76,11 +112,12 @@ downloadDialog(BuildContext context, String url, Function(String) completed) {
   showDialog<String>(
       barrierDismissible: false,
       context: context,
-      builder: (BuildContext context) => ProgressDialog(
-          url: url,
-          completed: (path) {
-            completed.call(path);
-          }));
+      builder: (BuildContext context) =>
+          ProgressDialog(
+              url: url,
+              completed: (path) {
+                completed.call(path);
+              }));
 }
 
 ///下载器
@@ -143,7 +180,8 @@ class _ProgressDialogState extends State<ProgressDialog> {
               mainAxisSize: MainAxisSize.max,
               children: [
                 Text(
-                    "正在下载<${widget.url.substring(widget.url.lastIndexOf("/") + 1)}>..."),
+                    "正在下载<${widget.url.substring(
+                        widget.url.lastIndexOf("/") + 1)}>..."),
                 const SizedBox(height: 15),
                 Row(
                   children: [
@@ -178,81 +216,82 @@ void changePasswordDialog(BuildContext context) {
     TextEditingController newPassword = TextEditingController();
     showCupertinoModalPopup<void>(
       context: context,
-      builder: (BuildContext context) => AlertDialog(
-        title: Text(S.current.change_password_dialog_title),
-        content: SizedBox(
-          height: 150,
-          child: Column(
-            children: [
-              TextField(
-                controller: oldPassword,
-                style: const TextStyle(color: Colors.grey),
-                decoration: InputDecoration(
-                  hintText: S.current.change_password_dialog_old_password,
-                  hintStyle: const TextStyle(color: Colors.grey),
-                  counterStyle: const TextStyle(color: Colors.grey),
-                  prefixIcon:
+      builder: (BuildContext context) =>
+          AlertDialog(
+            title: Text(S.current.change_password_dialog_title),
+            content: SizedBox(
+              height: 150,
+              child: Column(
+                children: [
+                  TextField(
+                    controller: oldPassword,
+                    style: const TextStyle(color: Colors.grey),
+                    decoration: InputDecoration(
+                      hintText: S.current.change_password_dialog_old_password,
+                      hintStyle: const TextStyle(color: Colors.grey),
+                      counterStyle: const TextStyle(color: Colors.grey),
+                      prefixIcon:
                       const Icon(Icons.lock_outline, color: Colors.grey),
-                  suffixIcon: IconButton(
-                    icon: const Icon(Icons.close, color: Colors.grey),
-                    onPressed: () {
-                      oldPassword.clear();
-                    },
+                      suffixIcon: IconButton(
+                        icon: const Icon(Icons.close, color: Colors.grey),
+                        onPressed: () {
+                          oldPassword.clear();
+                        },
+                      ),
+                    ),
+                    maxLength: 10,
                   ),
-                ),
-                maxLength: 10,
+                  TextField(
+                    controller: newPassword,
+                    style: const TextStyle(color: Colors.grey),
+                    decoration: InputDecoration(
+                      hintText: S.current.change_password_dialog_new_password,
+                      hintStyle: const TextStyle(color: Colors.grey),
+                      counterStyle: const TextStyle(color: Colors.grey),
+                      prefixIcon:
+                      const Icon(Icons.lock_outline, color: Colors.grey),
+                      suffixIcon: IconButton(
+                        icon: const Icon(Icons.close, color: Colors.grey),
+                        onPressed: () {
+                          newPassword.clear();
+                        },
+                      ),
+                    ),
+                    maxLength: 10,
+                  ),
+                ],
               ),
-              TextField(
-                controller: newPassword,
-                style: const TextStyle(color: Colors.grey),
-                decoration: InputDecoration(
-                  hintText: S.current.change_password_dialog_new_password,
-                  hintStyle: const TextStyle(color: Colors.grey),
-                  counterStyle: const TextStyle(color: Colors.grey),
-                  prefixIcon:
-                      const Icon(Icons.lock_outline, color: Colors.grey),
-                  suffixIcon: IconButton(
-                    icon: const Icon(Icons.close, color: Colors.grey),
-                    onPressed: () {
-                      newPassword.clear();
-                    },
-                  ),
-                ),
-                maxLength: 10,
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text(S.current.dialog_default_cancel),
+              ),
+              TextButton(
+                onPressed: () {
+                  if (oldPassword.text.isEmpty) {
+                    errorDialog(context,
+                        content: S.current.change_password_dialog_old_password);
+                    return;
+                  }
+                  if (newPassword.text.isEmpty) {
+                    errorDialog(context,
+                        content: S.current.change_password_dialog_new_password);
+                    return;
+                  }
+                  changePassword(context, oldPassword.text, newPassword.text,
+                      back: (msg) {
+                        informationDialog(context, content: msg, back: () {
+                          Navigator.pop(context);
+                        });
+                      });
+                },
+                child: Text(S.current.change_password_dialog_submit),
               ),
             ],
           ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: Text(S.current.dialog_default_cancel),
-          ),
-          TextButton(
-            onPressed: () {
-              if (oldPassword.text.isEmpty) {
-                errorDialog(context,
-                    content: S.current.change_password_dialog_old_password);
-                return;
-              }
-              if (newPassword.text.isEmpty) {
-                errorDialog(context,
-                    content: S.current.change_password_dialog_new_password);
-                return;
-              }
-              changePassword(context, oldPassword.text, newPassword.text,
-                  back: (msg) {
-                informationDialog(context, content: msg, back: () {
-                  Navigator.pop(context);
-                });
-              });
-            },
-            child: Text(S.current.change_password_dialog_submit),
-          ),
-        ],
-      ),
     );
   });
 }

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -405,7 +406,6 @@ class _UserSettingState extends State<UserSetting> {
       ),
     );
   }
-
   ///检查版本更新
   checkVersion() {
     return SizedBox(
@@ -427,7 +427,7 @@ class _UserSettingState extends State<UserSetting> {
               showDialog<String>(
                   barrierDismissible: false,
                   context: context,
-                  builder: (BuildContext context) => const BluetoothDialog());
+                  builder: (BuildContext context) => BluetoothDialog(connected:(v){}));
             },
             child: const Row(
               children: [

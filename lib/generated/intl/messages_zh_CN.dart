@@ -21,6 +21,7 @@ class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'zh_CN';
 
   final messages = _notInlinedMessages(_notInlinedMessages);
+
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "app_name": MessageLookupByLibrary.simpleMessage("金帝集团"),
         "change_password_dialog_new_password":
@@ -41,6 +42,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "dialog_default_got_it": MessageLookupByLibrary.simpleMessage("知道了"),
         "dialog_default_tip_loading":
             MessageLookupByLibrary.simpleMessage("正在加载..."),
+        "dialog_default_title_success":
+            MessageLookupByLibrary.simpleMessage("操作成功"),
         "dialog_default_title_error":
             MessageLookupByLibrary.simpleMessage("错误提示"),
         "dialog_default_title_information":

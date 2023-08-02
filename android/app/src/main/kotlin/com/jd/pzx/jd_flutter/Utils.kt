@@ -15,7 +15,8 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-const val CHANNEL = "com.jd.pzx.jd_flutter"
+const val CHANNEL_ANDROID_SEND = "com.jd.pzx.jd_flutter_android_send"
+const val CHANNEL_FLUTTER_SEND = "com.jd.pzx.jd_flutter_flutter_send"
 const val FACE_VERIFY_SUCCESS = 1
 const val FACE_VERIFY_FAIL_NOT_LIVE = 2
 const val FACE_VERIFY_FAIL_NOT_ME = 3

@@ -8,6 +8,7 @@ import 'package:permission_handler/permission_handler.dart';
 
 import '../home/home.dart';
 import '../http/do_http.dart';
+import '../main.dart';
 import '../utils.dart';
 import '../widget/number_text_field.dart';
 
@@ -26,14 +27,15 @@ class FaceLogin extends StatefulWidget {
 class _FaceLoginState extends State<FaceLogin> {
   TextEditingController phone = TextEditingController();
 
-  static const platform = MethodChannel(androidPackageName);
   double progress = 0.0;
 
   _face(String filePath) async {
     try {
-      Permission.camera.request().isGranted.then((value) async {
-        if (value) {
-          await platform.invokeMethod('StartDetect', filePath).then((value) {
+      Permission.camera.request().isGranted.then((permission) async {
+        if (permission) {
+          const MethodChannel(channelFlutterSend)
+              .invokeMethod('StartDetect', filePath)
+              .then((value) {
             logger.i(value);
             faceLogin(context, phone.text, back: (userInfo) {
               Navigator.pop(context);

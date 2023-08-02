@@ -31,7 +31,7 @@ class _Home extends State<Home> {
       context,
       MaterialPageRoute(builder: (context) => UserSetting(user: user!)),
     ).then((path) => {
-          if (path.isNotEmpty)
+          if (path?.isNotEmpty)
             setState(() {
               userImage = Image.asset(path);
             })
@@ -56,8 +56,7 @@ class _Home extends State<Home> {
   }
 
   _initJPushListener() {
-    const MethodChannel(androidPackageName).setMethodCallHandler((call) {
-      logger.f("JMessage：$call");
+    const MethodChannel(channelAndroidSend).setMethodCallHandler((call) {
       switch (call.method) {
         case "JMessage":
           {

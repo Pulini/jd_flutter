@@ -49,6 +49,8 @@ Future<dynamic> spGet(String key) async {
       return value ?? 0.0;
     case bool:
       return value ?? false;
+    default:
+      return value;
   }
 }
 
@@ -65,7 +67,6 @@ Future<UserInfo> userInfo() async {
     return UserInfo();
   }
 }
-
 
 ///屏幕适配工具
 class ScreenUtil {

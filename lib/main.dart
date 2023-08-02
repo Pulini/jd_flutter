@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:jd_flutter/http/web_api.dart';
 
+import 'constant.dart';
 import 'generated/l10n.dart';
 import 'login/login.dart';
 
 void main() {
-
   runApp(const MyApp());
 }
 

@@ -80,6 +80,15 @@ class S {
     );
   }
 
+  /// `Success`
+  String get dialog_default_title_success {
+    return Intl.message(
+      'Success',
+      name: 'dialog_default_title_success',
+      desc: '',
+      args: [],
+    );
+  }
   /// `Error`
   String get dialog_default_title_error {
     return Intl.message(

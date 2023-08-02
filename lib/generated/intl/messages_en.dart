@@ -21,6 +21,7 @@ class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
   final messages = _notInlinedMessages(_notInlinedMessages);
+
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "app_name": MessageLookupByLibrary.simpleMessage("Gold Emperor"),
         "change_password_dialog_new_password":
@@ -44,6 +45,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "dialog_default_got_it": MessageLookupByLibrary.simpleMessage("Got it"),
         "dialog_default_tip_loading":
             MessageLookupByLibrary.simpleMessage("Loading..."),
+        "dialog_default_title_success":
+            MessageLookupByLibrary.simpleMessage("Success"),
         "dialog_default_title_error":
             MessageLookupByLibrary.simpleMessage("Error"),
         "dialog_default_title_information":

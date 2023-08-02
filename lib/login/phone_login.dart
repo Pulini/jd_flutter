@@ -24,13 +24,13 @@ class _PhoneLoginState extends State<PhoneLogin> {
 
   TextEditingController phone = TextEditingController()..text = '15868587600';
   TextEditingController password = TextEditingController()..text = '123456';
-  TextEditingController vCode = TextEditingController()..text = '827032';
+  TextEditingController vCode = TextEditingController()..text = '208032';
 
   @override
   void initState() {
     super.initState();
     spGet(spSaveLoginPhone).then((value) {
-      phone.text = value;
+      if (value != null) phone.text = value;
     });
   }
 
