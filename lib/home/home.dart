@@ -68,7 +68,7 @@ class _Home extends State<Home> {
                   ),
                 ),
                 onPressed: () {
-                  Get.to(const UserSetting());
+                  Get.to(() => const UserSetting());
                 },
               )
             ]),

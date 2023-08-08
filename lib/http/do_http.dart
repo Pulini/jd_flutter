@@ -273,8 +273,8 @@ changeDepartmentGroup(BuildContext context, String departmentID) {
   });
 }
 
-///检查版本更新
-checkVersion(BuildContext context, bool isShowLoading,
+///获取服务器版本信息
+getVersionInfo(BuildContext context, bool isShowLoading,
     {Function()? noUpdate, required Function(VersionInfoEntity) needUpdate}) {
   if (isShowLoading) loadingDialog(context, 'checking_version'.tr);
   httpGet(webApiCheckVersion, callBack: (code, data, msg) {
@@ -283,6 +283,8 @@ checkVersion(BuildContext context, bool isShowLoading,
       PackageInfo.fromPlatform().then((value) {
         logger.f(value);
         var versionInfo = VersionInfoEntity.fromJson(jsonDecode(data));
+        versionInfo.versionName = "2.0.0";
+        versionInfo.force = false;
         if (value.version == versionInfo.versionName) {
           noUpdate?.call();
         } else {

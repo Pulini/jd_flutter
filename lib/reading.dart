@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
-import 'package:jd_flutter/widget/update_dialog.dart';
 
-import 'constant.dart';
 import 'home/home.dart';
 import 'http/do_http.dart';
 import 'http/response/user_info.dart';
-import 'http/web_api.dart';
 import 'login/login.dart';
 
 class Loading extends StatefulWidget {
@@ -27,82 +23,30 @@ class UserController extends GetxController {
   }
 }
 
-class _LoadingState extends State<Loading> {
-  _goNextWidget() {
-    if (userController.user.value!.token != null) {
-      Get.off(const Home());
-    } else {
-      Get.to(const Login());
-    }
+_goNextWidget() {
+  if (userController.user.value!.token != null) {
+    Get.off(() => const Home());
+  } else {
+    Get.to(() => const Login());
   }
+}
 
-  _checkVersion() {
-    WidgetsBinding.instance.addPostFrameCallback(
-      (_) => checkVersion(
-        context,
-        false,
-        noUpdate: _goNextWidget,
-        needUpdate: (version) {
-          UpdateDialog.showUpdate(
-            context,
-            title: "发现新版本",
-            updateContent: version.description!,
-            isForce: true,
-            updateButtonText: '升级',
-            ignoreButtonText: '忽略此版本',
-            enableIgnore: version.force! ? false : true,
-            onIgnore: _goNextWidget,
-            onUpdate: () {
-              if (GetPlatform.isAndroid) {
-                logger.f("Android_Update");
-                downloadDialog(
-                  context,
-                  version.url!,
-                  (path) => const MethodChannel(channelFlutterSend)
-                      .invokeMethod('OpenFile', path),
-                );
-                return;
-              }
-              if (GetPlatform.isIOS) {
-                logger.f("IOS_Update");
-                return;
-              }
-              if (GetPlatform.isWeb) {
-                logger.f("Web_Update");
-                return;
-              }
-              if (GetPlatform.isWindows) {
-                logger.f("Windows_Update");
-                return;
-              }
-              if (GetPlatform.isLinux) {
-                logger.f("Linux_Update");
-                return;
-              }
-              if (GetPlatform.isMacOS) {
-                logger.f("MacOS_Update");
-                return;
-              }
-              if (GetPlatform.isFuchsia) {
-                logger.f("Fuchsia_Update");
-                return;
-              }
-            },
-          );
-        },
-      ),
+class _LoadingState extends State<Loading> {
+  @override
+  void initState() {
+    super.initState();
+    getVersionInfo(
+      context,
+      false,
+      noUpdate: _goNextWidget,
+      needUpdate: (versionInfo) {
+        doUpdate(context, versionInfo, _goNextWidget);
+      },
     );
   }
 
   @override
-  void initState() {
-    super.initState();
-    _checkVersion();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    logger.f("build--------------");
     return Container(
       //设置背景
       decoration: const BoxDecoration(

@@ -1,10 +1,14 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/utils.dart';
+import 'package:jd_flutter/widget/update_dialog.dart';
 
+import '../constant.dart';
 import '../http/do_http.dart';
+import '../http/response/version_info_entity.dart';
 import '../http/web_api.dart';
 
 /// 提示弹窗
@@ -259,7 +263,8 @@ void changePasswordDialog(BuildContext context) {
                   content: 'change_password_dialog_old_password'.tr);
               return;
             }
-            if(md5Encode(oldPassword.text).toUpperCase()!=userController.user.value!.passWord){
+            if (md5Encode(oldPassword.text).toUpperCase() !=
+                userController.user.value!.passWord) {
               errorDialog(context,
                   content: 'change_password_dialog_old_password_error'.tr);
               return;
@@ -280,5 +285,54 @@ void changePasswordDialog(BuildContext context) {
         ),
       ],
     ),
+  );
+}
+
+doUpdate(BuildContext context, VersionInfoEntity version, Function() ignore) {
+  UpdateDialog.showUpdate(
+    context,
+    title: "发现新版本",
+    updateContent: version.description!,
+    isForce: true,
+    updateButtonText: '升级',
+    ignoreButtonText: '忽略此版本',
+    enableIgnore: version.force! ? false : true,
+    onIgnore: ignore,
+    onUpdate: () {
+      if (GetPlatform.isAndroid) {
+        logger.f("Android_Update");
+        downloadDialog(
+          context,
+          version.url!,
+          (path) => const MethodChannel(channelFlutterSend)
+              .invokeMethod('OpenFile', path),
+        );
+        return;
+      }
+      if (GetPlatform.isIOS) {
+        logger.f("IOS_Update");
+        return;
+      }
+      if (GetPlatform.isWeb) {
+        logger.f("Web_Update");
+        return;
+      }
+      if (GetPlatform.isWindows) {
+        logger.f("Windows_Update");
+        return;
+      }
+      if (GetPlatform.isLinux) {
+        logger.f("Linux_Update");
+        return;
+      }
+      if (GetPlatform.isMacOS) {
+        logger.f("MacOS_Update");
+        return;
+      }
+      if (GetPlatform.isFuchsia) {
+        logger.f("Fuchsia_Update");
+        return;
+      }
+    },
   );
 }

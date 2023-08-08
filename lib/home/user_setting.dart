@@ -12,7 +12,6 @@ import '../http/web_api.dart';
 import '../login/login.dart';
 import '../reading.dart';
 import '../utils.dart';
-import '../widget/bluetooth.dart';
 import '../widget/dialogs.dart';
 
 class UserSetting extends StatefulWidget {
@@ -410,10 +409,19 @@ class _UserSettingState extends State<UserSetting> {
           ),
           GestureDetector(
             onTap: () {
-              showDialog<String>(
-                  barrierDismissible: false,
-                  context: context,
-                  builder: (BuildContext context) => const BluetoothDialog());
+              logger.f("checkVersionDialog");
+              getVersionInfo(
+                context,
+                false,
+                noUpdate: () {},
+                needUpdate: (versionInfo) {
+                  doUpdate(context, versionInfo, () {});
+                },
+              );
+              // showDialog<String>(
+              //     barrierDismissible: false,
+              //     context: context,
+              //     builder: (BuildContext context) => const BluetoothDialog());
             },
             child: const Row(
               children: [
