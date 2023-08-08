@@ -276,7 +276,7 @@ class _BluetoothDialogState extends State<BluetoothDialog> {
                   Expanded(
                     flex: 1,
                     child: ElevatedButton(
-                      onPressed: () => Navigator.pop(context),
+                      onPressed: () => Get.back(),
                       child: const Text(
                         "返回",
                         style: TextStyle(color: Colors.grey),

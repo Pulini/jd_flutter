@@ -6,7 +6,6 @@ import 'package:jd_flutter/http/response/base_data.dart';
 import 'package:logger/logger.dart';
 import 'package:path_provider/path_provider.dart';
 
-import '../main.dart';
 import '../reading.dart';
 
 ///网络异常

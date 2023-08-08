@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import 'number_progress.dart';
 
@@ -79,7 +80,7 @@ class UpdateDialog {
     try {
       if (_isShowing) {
         _isShowing = false;
-        Navigator.pop(_context);
+        Get.back();
         return Future<bool>.value(true);
       } else {
         return Future<bool>.value(false);

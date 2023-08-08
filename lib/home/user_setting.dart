@@ -9,6 +9,7 @@ import 'package:image_picker/image_picker.dart';
 import '../constant.dart';
 import '../http/do_http.dart';
 import '../http/web_api.dart';
+import '../login/login.dart';
 import '../reading.dart';
 import '../utils.dart';
 import '../widget/bluetooth.dart';
@@ -244,7 +245,9 @@ class _UserSettingState extends State<UserSetting> {
                         ),
                         TextButton(
                           onPressed: () {
-                            Navigator.pop(context, controller.selectedItem);
+                            changeDepartmentGroup(
+                                context, list[controller.selectedItem].itemID);
+                            Get.back();
                           },
                           child: Text(
                             'dialog_default_confirm'.tr,
@@ -285,11 +288,7 @@ class _UserSettingState extends State<UserSetting> {
                 ],
               ),
             );
-          }).then((index) {
-        if (index != selected && index != null) {
-          changeDepartmentGroup(context, list[index].itemID);
-        }
-      });
+          });
     });
   }
 
@@ -446,8 +445,7 @@ class _UserSettingState extends State<UserSetting> {
                   borderRadius: BorderRadius.circular(25))),
           onPressed: () {
             spSave(spSaveUserInfo, "");
-            Navigator.pushNamedAndRemoveUntil(
-                context, "/login", (route) => false);
+            Get.offAll(const Login());
           },
           child: Text('home_user_setting_logout'.tr,
               style: const TextStyle(fontSize: 20))),

@@ -43,15 +43,16 @@ dependencies:
   #权限工具
   permission_handler: ^10.4.3
   #文件地址工具
-  path_provider: ^2.0.15
+  path_provider: ^2.1.0
   #shared存储工具
   shared_preferences: ^2.2.0
   #图片选择器工具
-  image_picker: ^1.0.1
+  image_picker: ^1.0.2
   #图片裁剪工具
   image_cropper: ^5.0.0
   #获取app基础信息
   package_info_plus: ^4.1.0
+  #加密工具
   crypto: ^3.0.3
 
 
