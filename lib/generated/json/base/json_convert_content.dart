@@ -8,6 +8,7 @@ import 'package:jd_flutter/bean/bluetooth_entity.dart';
 import 'package:jd_flutter/http/request/user_avatar_entity.dart';
 import 'package:jd_flutter/http/response/department_entity.dart';
 import 'package:jd_flutter/http/response/group_entity.dart';
+import 'package:jd_flutter/http/response/version_info_entity.dart';
 
 JsonConvert jsonConvert = JsonConvert();
 typedef JsonConvertFunction<T> = T Function(Map<String, dynamic> json);
@@ -19,6 +20,7 @@ class JsonConvert {
 		(UserAvatarEntity).toString(): UserAvatarEntity.fromJson,
 		(DepartmentEntity).toString(): DepartmentEntity.fromJson,
 		(GroupEntity).toString(): GroupEntity.fromJson,
+		(VersionInfoEntity).toString(): VersionInfoEntity.fromJson,
 	};
 
   T? convert<T>(dynamic value, {EnumConvertFunction? enumConvert}) {
@@ -111,6 +113,9 @@ List<T>? convertListNotNull<T>(dynamic value, {EnumConvertFunction? enumConvert}
 		}
 		if(<GroupEntity>[] is M){
 			return data.map<GroupEntity>((Map<String, dynamic> e) => GroupEntity.fromJson(e)).toList() as M;
+		}
+		if(<VersionInfoEntity>[] is M){
+			return data.map<VersionInfoEntity>((Map<String, dynamic> e) => VersionInfoEntity.fromJson(e)).toList() as M;
 		}
 
 		debugPrint("${M.toString()} not found");

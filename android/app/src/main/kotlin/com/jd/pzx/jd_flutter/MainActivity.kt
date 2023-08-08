@@ -23,7 +23,7 @@ import com.jd.pzx.jd_flutter.bluetooth.BLUETOOTH_ADAPTER_STATE_OFF
 import com.jd.pzx.jd_flutter.bluetooth.BLUETOOTH_ADAPTER_STATE_ON
 import com.jd.pzx.jd_flutter.bluetooth.PRINTER_UUID
 import com.jd.pzx.jd_flutter.bluetooth.REQUEST_ENABLE_BT
-import com.jd.pzx.jd_flutter.bluetooth.REQUEST_PERMISSIONS
+import com.jd.pzx.jd_flutter.bluetooth.REQUEST_BLUETOOTH_PERMISSIONS
 import com.jd.pzx.jd_flutter.messageCenter.JMessage
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
@@ -31,6 +31,7 @@ import io.flutter.plugin.common.MethodChannel
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
+import java.io.File
 import java.io.IOException
 import java.util.UUID
 
@@ -45,6 +46,7 @@ class MainActivity : FlutterActivity() {
     private var connectedDevice: BluetoothDevice? = null
     private var isScanning = false
     private val devices = mutableListOf<BluetoothDevice>()
+    private var temporaryFile: File? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,6 +72,11 @@ class MainActivity : FlutterActivity() {
                                 result.error(code.toString(), null, null)
                             }
                         }
+                    }
+
+                    "OpenFile" -> {
+                        temporaryFile= File(call.arguments.toString())
+                        openFile(this, temporaryFile!!)
                     }
 
                     "IsEnable" -> result.success(isEnable())
@@ -137,7 +144,7 @@ class MainActivity : FlutterActivity() {
                 ActivityCompat.requestPermissions(
                     this,
                     request.toTypedArray(),
-                    REQUEST_PERMISSIONS
+                    REQUEST_BLUETOOTH_PERMISSIONS
                 )
             } else {
                 openBluetooth()
@@ -348,7 +355,7 @@ class MainActivity : FlutterActivity() {
                         Log.e("Pan", "蓝牙设备已连接:${device.address}")
                         HashMap<String, String>().let {
                             it["MAC"] = device.address
-                            sendFlutter(CHANNEL_FLUTTER_SEND, "connected", it)
+                            sendFlutter(CHANNEL_FLUTTER_SEND, "Connected", it)
                         }
                     }
 
@@ -364,12 +371,12 @@ class MainActivity : FlutterActivity() {
                         intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
                     }?.let { device ->
                         bluetoothSocket?.close()
-                        bluetoothSocket=null
+                        bluetoothSocket = null
                         connectedDevice = null
                         Log.e("Pan", "蓝牙设备已断开:${device.address}")
                         HashMap<String, String>().let {
                             it["MAC"] = device.address
-                            sendFlutter(CHANNEL_FLUTTER_SEND, "disconnected", it)
+                            sendFlutter(CHANNEL_FLUTTER_SEND, "Disconnected", it)
                         }
                     }
                 }
@@ -399,20 +406,24 @@ class MainActivity : FlutterActivity() {
     ) {
         // 这里是用户授予或拒绝权限后回调的地方
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == REQUEST_PERMISSIONS) {
-            var p = 0
-            grantResults.forEach {
-                Log.e("Pan", "onRequestPermissionsResult: $it")
-                if (it == PackageManager.PERMISSION_GRANTED) p++
+        when (requestCode) {
+            REQUEST_BLUETOOTH_PERMISSIONS -> {
+                var p = 0
+                grantResults.forEach {
+                    Log.e("Pan", "onRequestPermissionsResult: $it")
+                    if (it == PackageManager.PERMISSION_GRANTED) p++
+                }
+                if (p == permissions.size) {
+                    Toast.makeText(this, "用户授权完成", Toast.LENGTH_LONG).show()
+                    openBluetooth()
+                } else {
+                    sendFlutter(CHANNEL_FLUTTER_SEND, "Bluetooth", 2)
+                    Toast.makeText(this, "用户拒绝授权", Toast.LENGTH_LONG).show()
+                }
             }
-            if (p == permissions.size) {
-                Toast.makeText(this, "用户授权完成", Toast.LENGTH_LONG).show()
-                openBluetooth()
-            } else {
-                sendFlutter(CHANNEL_FLUTTER_SEND, "Bluetooth", 2)
-                Toast.makeText(this, "用户拒绝授权", Toast.LENGTH_LONG).show()
-            }
+
         }
+
     }
 
     private fun openBluetooth() {

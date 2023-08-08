@@ -1,10 +1,13 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:get/get.dart';
 import 'package:jd_flutter/http/response/base_data.dart';
-import 'package:jd_flutter/utils.dart';
 import 'package:logger/logger.dart';
 import 'package:path_provider/path_provider.dart';
+
+import '../main.dart';
+import '../reading.dart';
 
 ///网络异常
 const resultNetworkException = -1;
@@ -78,18 +81,17 @@ _doHttp(bool isPost, String method,
   if (queryStr.isNotEmpty) {
     queryStr = "?${queryStr.substring(0, queryStr.length - 1)}";
   }
-  var user = await userInfo();
 
   ///拼接post请求的uri
   var uri = Uri.parse(testUrlForMES + method + queryStr);
-
+  UserController userController=Get.find();
   ///设置请求的headers
   var options = Options(headers: {
     "Content-Type": "application/json",
     "FunctionID": "",
     "Version": "",
     "Language": "",
-    "Token": user.token ?? "",
+    "Token": userController.user.value!.token ?? "",
   });
 
   try {
@@ -175,3 +177,6 @@ const webApiGetDepartment = "api/User/GetDepListByEmpID";
 
 ///修改部门组别接口
 const webApiChangeDepartment = "api/User/GetLoginInfo";
+
+///检查版本更新接口
+const webApiCheckVersion = "api/Public/VersionUpgrade";

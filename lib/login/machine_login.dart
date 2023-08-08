@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:jd_flutter/constant.dart';
-import 'package:jd_flutter/generated/l10n.dart';
 import 'package:jd_flutter/http/do_http.dart';
 
 import '../home/home.dart';
@@ -20,9 +20,7 @@ class _MachineLoginState extends State<MachineLogin> {
   @override
   void initState() {
     super.initState();
-    spGet(spSaveLoginMachine).then((value) {
-      machine.text = value ?? "";
-    });
+    machine.text = spGet(spSaveLoginMachine) ?? "";
   }
 
   @override
@@ -43,7 +41,7 @@ class _MachineLoginState extends State<MachineLogin> {
                       controller: machine,
                       style: const TextStyle(color: Colors.white),
                       decoration: InputDecoration(
-                        hintText: S.current.login_hint_machine,
+                        hintText: 'login_hint_machine'.tr,
                         hintStyle: const TextStyle(color: Colors.white),
                         counterStyle: const TextStyle(color: Colors.white),
                         prefixIcon: const Icon(Icons.precision_manufacturing,
@@ -62,7 +60,7 @@ class _MachineLoginState extends State<MachineLogin> {
                       controller: password,
                       style: const TextStyle(color: Colors.white),
                       decoration: InputDecoration(
-                        hintText: S.current.login_hint_password,
+                        hintText: 'login_hint_password'.tr,
                         hintStyle: const TextStyle(color: Colors.white),
                         counterStyle: const TextStyle(color: Colors.white),
                         prefixIcon:
@@ -86,15 +84,8 @@ class _MachineLoginState extends State<MachineLogin> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(25))),
           onPressed: () => machineLogin(context, machine.text, password.text,
-                  back: (userInfo) {
-                Navigator.pop(context);
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => const Home(),
-                  ),
-                );
-              }),
-          child: Text(S.current.login, style: const TextStyle(fontSize: 20)))
+              back: (userInfo) => Get.offAll(const Home())),
+          child: Text('login'.tr, style: const TextStyle(fontSize: 20)))
     ]);
   }
 }

@@ -4,7 +4,7 @@
         <!-- Environment.getExternalStorageDirectory() -->
         <external-path
                 name="files_root"
-                path="Android/data/com.pzx.jd/"/>
+                path="Android/data/com.jd.pzx.jd_flutter/"/>
         <root-path
                 name="camera_photos"
                 path=""/>

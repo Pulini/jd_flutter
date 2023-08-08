@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:jd_flutter/constant.dart';
-import 'package:jd_flutter/generated/l10n.dart';
 import 'package:jd_flutter/http/do_http.dart';
 import 'package:jd_flutter/utils.dart';
 
@@ -21,9 +21,7 @@ class _WorkNumberLoginState extends State<WorkNumberLogin> {
   @override
   void initState() {
     super.initState();
-    spGet(spSaveLoginWork).then((value) {
-      workNumber.text = value ?? "";
-    });
+    workNumber.text = spGet(spSaveLoginWork) ?? "";
   }
 
   @override
@@ -45,7 +43,7 @@ class _WorkNumberLoginState extends State<WorkNumberLogin> {
                         maxLength: 6,
                         textStyle: const TextStyle(color: Colors.white),
                         decoration: InputDecoration(
-                          hintText: S.current.login_hint_work_number,
+                          hintText: 'login_hint_work_number'.tr,
                           hintStyle: const TextStyle(color: Colors.white),
                           counterStyle: const TextStyle(color: Colors.white),
                           prefixIcon: const Icon(Icons.badge_outlined,
@@ -62,7 +60,7 @@ class _WorkNumberLoginState extends State<WorkNumberLogin> {
                       controller: password,
                       style: const TextStyle(color: Colors.white),
                       decoration: InputDecoration(
-                        hintText: S.current.login_hint_password,
+                        hintText: 'login_hint_password'.tr,
                         hintStyle: const TextStyle(color: Colors.white),
                         counterStyle: const TextStyle(color: Colors.white),
                         prefixIcon:
@@ -86,15 +84,9 @@ class _WorkNumberLoginState extends State<WorkNumberLogin> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(25))),
           onPressed: () => workNumberLogin(
-                  context, workNumber.text, password.text, back: (userInfo) {
-                Navigator.pop(context);
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => const Home(),
-                  ),
-                );
-              }),
-          child: Text(S.current.login, style: const TextStyle(fontSize: 20)))
+              context, workNumber.text, password.text,
+              back: (userInfo) => Get.offAll(const Home())),
+          child: Text('login'.tr, style: const TextStyle(fontSize: 20)))
     ]);
   }
 }

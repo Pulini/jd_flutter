@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_utils/src/platform/platform.dart';
 import 'package:jd_flutter/login/phone_login.dart';
 import 'package:jd_flutter/login/work_number_login.dart';
-import 'package:universal_platform/universal_platform.dart';
 
+import '../reading.dart';
 import 'face_login.dart';
 import 'machine_login.dart';
 
@@ -19,6 +20,8 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,7 +38,7 @@ class _LoginState extends State<Login> {
               //添加登录UI
               children: const [
                 SizedBox(height: 50),
-                Logo(),
+                Hero(tag: "logo", child: Logo()),
                 SizedBox(height: 40),
                 Page(),
               ])),
@@ -43,24 +46,6 @@ class _LoginState extends State<Login> {
   }
 }
 
-class Logo extends StatelessWidget {
-  const Logo({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Image.asset("lib/res/images/ic_logo.png", width: 130, height: 130),
-        const Text("Gold Emperor",
-            style: TextStyle(
-                fontSize: 40,
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                decoration: TextDecoration.none))
-      ],
-    );
-  }
-}
 
 class Page extends StatefulWidget {
   const Page({super.key});
@@ -80,7 +65,7 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
     super.initState();
     tabs.add(const Tab(icon: Icon(Icons.phone)));
     tabViews.add(const PhoneLogin());
-    if (UniversalPlatform.isAndroid){
+    if (GetPlatform.isAndroid) {
       tabs.add(const Tab(icon: Icon(Icons.account_circle_outlined)));
       tabViews.add(const FaceLogin());
     }

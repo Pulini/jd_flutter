@@ -1,6 +1,5 @@
 package com.jd.pzx.jd_flutter.bluetooth
 
-import android.Manifest
 import android.bluetooth.BluetoothSocket
 import android.content.Context
 import android.graphics.*
@@ -14,7 +13,6 @@ import com.jd.pzx.jd_flutter.mul
 import com.jd.pzx.jd_flutter.removeDecimalZero
 import com.jd.pzx.jd_flutter.toDoubleTry
 import io.flutter.Log
-import java.util.UUID
 import kotlin.experimental.xor
 import kotlin.math.ceil
 
@@ -25,7 +23,7 @@ import kotlin.math.ceil
  * Github : https://github.com/Pulini
  * Remark :
  */
-const val REQUEST_PERMISSIONS = 1223
+const val REQUEST_BLUETOOTH_PERMISSIONS = 1223
 const val REQUEST_ENABLE_BT = 1224
 const val BLUETOOTH_ADAPTER_STATE_OFF = "android.bluetooth.BluetoothAdapter.STATE_OFF"
 const val BLUETOOTH_ADAPTER_STATE_ON = "android.bluetooth.BluetoothAdapter.STATE_ON"

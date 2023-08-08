@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:universal_platform/universal_platform.dart';
-
-import '../generated/l10n.dart';
+import 'package:get/get.dart';
 
 ///数字输入框 ios端添加 done 按钮
 class NumberTextField extends StatefulWidget {
@@ -44,7 +42,7 @@ class _NumberTextFieldState extends State<NumberTextField> {
                 onPressed: () {
                   FocusScope.of(context).requestFocus(FocusNode());
                 },
-                child: Text(S.current.key_board_done,
+                child: Text('key_board_done'.tr,
                     style: const TextStyle(
                         color: Colors.blueAccent, fontWeight: FontWeight.bold)),
               ),
@@ -73,7 +71,7 @@ class _NumberTextFieldState extends State<NumberTextField> {
   void initState() {
     super.initState();
 
-    if (UniversalPlatform.isIOS) {
+    if (GetPlatform.isIOS) {
       //ios 端添加监听
       _numberFocusNode.addListener(() {
         if (_numberFocusNode.hasFocus) {

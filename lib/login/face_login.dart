@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:jd_flutter/constant.dart';
-import 'package:jd_flutter/generated/l10n.dart';
 import 'package:jd_flutter/http/web_api.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../home/home.dart';
 import '../http/do_http.dart';
-import '../main.dart';
 import '../utils.dart';
 import '../widget/number_text_field.dart';
 
@@ -37,33 +36,24 @@ class _FaceLoginState extends State<FaceLogin> {
               .invokeMethod('StartDetect', filePath)
               .then((value) {
             logger.i(value);
-            faceLogin(context, phone.text, back: (userInfo) {
-              Navigator.pop(context);
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => const Home(),
-                ),
-              );
-            });
+            faceLogin(context, phone.text,
+                back: (userInfo) => Get.offAll(const Home()));
           }).catchError((e) {
             logger.i(e);
           });
         } else {
-          errorDialog(context,
-              content: S.current.face_login_no_camera_permission);
+          errorDialog(context, content: 'face_login_no_camera_permission'.tr);
         }
       });
     } on PlatformException {
-      errorDialog(context, content: S.current.face_login_failed);
+      errorDialog(context, content: 'face_login_failed'.tr);
     }
   }
 
   @override
   void initState() {
     super.initState();
-    spGet(spSaveLoginFace).then((value) {
-      phone.text = value ?? "";
-    });
+    phone.text = spGet(spSaveLoginFace) ?? "";
   }
 
   @override
@@ -84,7 +74,7 @@ class _FaceLoginState extends State<FaceLogin> {
                         maxLength: 11,
                         textStyle: const TextStyle(color: Colors.white),
                         decoration: InputDecoration(
-                          hintText: S.current.login_hint_phone,
+                          hintText: 'login_hint_phone'.tr,
                           hintStyle: const TextStyle(color: Colors.white),
                           counterStyle: const TextStyle(color: Colors.white),
                           prefixIcon: const Icon(Icons.phone_android,
@@ -112,7 +102,7 @@ class _FaceLoginState extends State<FaceLogin> {
                     _face(filePath);
                   });
                 }),
-            child: Text(S.current.login, style: const TextStyle(fontSize: 20)))
+            child: Text('login'.tr, style: const TextStyle(fontSize: 20)))
       ],
     );
   }

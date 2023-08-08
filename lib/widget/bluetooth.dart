@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/http/web_api.dart';
 
@@ -15,9 +16,7 @@ isConnected(Function(bool) connected) {
 }
 
 class BluetoothDialog extends StatefulWidget {
-  const BluetoothDialog({super.key, required this.connected});
-
-  final Function(dynamic) connected;
+  const BluetoothDialog({super.key});
 
   @override
   State<BluetoothDialog> createState() => _BluetoothDialogState();
@@ -54,7 +53,7 @@ class _BluetoothDialogState extends State<BluetoothDialog> {
     channel
         .invokeMethod('ConnectBluetooth', deviceList[index].deviceMAC)
         .then((value) {
-      Navigator.pop(context);
+      Get.back();
       switch (value) {
         case 0:
           {
@@ -156,7 +155,7 @@ class _BluetoothDialogState extends State<BluetoothDialog> {
             }
             break;
           }
-        case "connected":
+        case "Connected":
           {
             setState(() {
               deviceList
@@ -166,7 +165,7 @@ class _BluetoothDialogState extends State<BluetoothDialog> {
             });
             break;
           }
-        case "disconnected":
+        case "Disconnected":
           {
             setState(() {
               deviceList

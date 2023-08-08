@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:jd_flutter/home/user_setting.dart';
 import 'package:jd_flutter/utils.dart';
 
 import '../constant.dart';
-import '../generated/l10n.dart';
-import '../http/response/user_info.dart';
-import '../http/web_api.dart';
+import '../reading.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -17,41 +16,17 @@ class Home extends StatefulWidget {
 
 class _Home extends State<Home> {
   int _selectedIndex = 0;
-
+  UserController userController = Get.find();
   final _widgetOptions = [
-    Text(S.current.home_bottom_bar_produce),
-    Text(S.current.home_bottom_bar_warehouse),
-    Text(S.current.home_bottom_bar_manage),
+    Text('home_bottom_bar_produce'.tr),
+    Text('home_bottom_bar_warehouse'.tr),
+    Text('home_bottom_bar_manage'.tr),
   ];
 
-  // Widget userImage = const Icon(Icons.flutter_dash, color: Colors.white);
-
-  void _gotoDetailsPage(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => UserSetting(user: user!)),
-    ).then((path) => {
-          if (path?.isNotEmpty)
-            setState(() {
-              userImage = Image.asset(path);
-            })
-        });
-  }
-
-  UserInfo? user;
-  late Widget userImage = const Icon(Icons.flutter_dash, color: Colors.white);
 
   @override
   void initState() {
     super.initState();
-    userInfo().then((value) {
-      setState(() {
-        user = value;
-        if (user!.picUrl?.isNotEmpty == true) {
-          userImage = ClipOval(child: Image.network(user!.picUrl!));
-        }
-      });
-    });
     _initJPushListener();
   }
 
@@ -83,10 +58,17 @@ class _Home extends State<Home> {
               IconButton(
                 icon: Hero(
                   tag: "user",
-                  child: userImage,
+                  child: Obx(
+                    () => userController.user.value!.picUrl == null
+                        ? const Icon(Icons.flutter_dash, color: Colors.white)
+                        : ClipOval(
+                            child: Image.network(
+                                userController.user.value!.picUrl!),
+                          ),
+                  ),
                 ),
                 onPressed: () {
-                  _gotoDetailsPage(context);
+                  Get.to(const UserSetting());
                 },
               )
             ]),
@@ -98,15 +80,15 @@ class _Home extends State<Home> {
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
                 icon: const Icon(Icons.display_settings),
-                label: S.current.home_bottom_bar_produce,
+                label: 'home_bottom_bar_produce'.tr,
                 backgroundColor: const Color.fromARGB(0xff, 0x99, 0xcc, 0x66)),
             BottomNavigationBarItem(
                 icon: const Icon(Icons.factory_outlined),
-                label: S.current.home_bottom_bar_warehouse,
+                label: 'home_bottom_bar_warehouse'.tr,
                 backgroundColor: const Color.fromARGB(0xff, 0xff, 0x66, 0x66)),
             BottomNavigationBarItem(
                 icon: const Icon(Icons.assignment_outlined),
-                label: S.current.home_bottom_bar_manage,
+                label: 'home_bottom_bar_manage'.tr,
                 backgroundColor: const Color.fromARGB(0xff, 0x00, 0x99, 0xcc)),
           ],
           currentIndex: _selectedIndex,

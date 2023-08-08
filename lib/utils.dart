@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:crypto/crypto.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,20 +16,21 @@ void hideKeyBoard() {
   SystemChannels.textInput.invokeMethod('TextInput.hide');
 }
 
+late SharedPreferences sharedPreferences;
+
 /// 保存SP数据
-spSave(String key, Object value) async {
-  SharedPreferences sp = await SharedPreferences.getInstance();
+spSave(String key, Object value) {
   if (value is String) {
-    sp.setString(key, value);
+    sharedPreferences.setString(key, value);
     logger.d("save\nclass:${value.runtimeType}\nkey:$key\nvalue:$value");
   } else if (value is int) {
-    sp.setInt(key, value);
+    sharedPreferences.setInt(key, value);
     logger.d("save\nclass:${value.runtimeType}\nkey:$key\nvalue:$value");
   } else if (value is double) {
-    sp.setDouble(key, value);
+    sharedPreferences.setDouble(key, value);
     logger.d("save\nclass:${value.runtimeType}\nkey:$key\nvalue:$value");
   } else if (value is bool) {
-    sp.setBool(key, value);
+    sharedPreferences.setBool(key, value);
     logger.d("save\nclass:${value.runtimeType}\nkey:$key\nvalue:$value");
   } else {
     logger.e("error\nclass:${value.runtimeType}");
@@ -36,9 +38,8 @@ spSave(String key, Object value) async {
 }
 
 /// 获取SP数据
-Future<dynamic> spGet(String key) async {
-  SharedPreferences sp = await SharedPreferences.getInstance();
-  var value = sp.get(key);
+dynamic spGet(String key) {
+  var value = sharedPreferences.get(key);
   logger.d("read\nclass:${value.runtimeType}\nkey:$key\nvalue:$value");
   switch (value.runtimeType) {
     case String:
@@ -55,17 +56,18 @@ Future<dynamic> spGet(String key) async {
 }
 
 ///获取用户数据
-Future<UserInfo> userInfo() async {
-  SharedPreferences sp = await SharedPreferences.getInstance();
+UserInfo? userInfo() {
   try {
-    return UserInfo.fromJson(jsonDecode(sp.get(spSaveUserInfo) as String));
+    var spUserInfo = sharedPreferences.get(spSaveUserInfo) as String?;
+    if (spUserInfo != null) {
+      return UserInfo.fromJson(jsonDecode(spUserInfo));
+    }
   } on Error catch (e) {
-    logger.e(e.toString());
-    return UserInfo();
-  } on FormatException catch (e) {
-    logger.e(e.toString());
-    return UserInfo();
+    logger.e(e.runtimeType);
+  } on Exception catch (e) {
+    logger.e(e.runtimeType);
   }
+  return null;
 }
 
 ///屏幕适配工具
@@ -188,4 +190,8 @@ Future<String> imageToBase64(File file) async {
   List<int> imageBytes = await file.readAsBytes();
   logger.i('图片大小:${imageBytes.length}');
   return base64Encode(imageBytes);
+}
+
+String md5Encode(String data) {
+  return md5.convert(const Utf8Encoder().convert(data)).toString();
 }

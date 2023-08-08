@@ -2,22 +2,20 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../constant.dart';
-import '../generated/l10n.dart';
 import '../http/do_http.dart';
-import '../http/response/user_info.dart';
+import '../http/web_api.dart';
+import '../reading.dart';
 import '../utils.dart';
 import '../widget/bluetooth.dart';
 import '../widget/dialogs.dart';
 
 class UserSetting extends StatefulWidget {
-  const UserSetting({super.key, required this.user});
-
-  final UserInfo user;
+  const UserSetting({super.key});
 
   @override
   State<UserSetting> createState() => _UserSettingState();
@@ -25,11 +23,11 @@ class UserSetting extends StatefulWidget {
 
 class _UserSettingState extends State<UserSetting> {
   late Widget image;
-  late String path;
+  UserController userController = Get.find();
 
   ///获取照片
   Future<void> takePhoto(bool isGallery) async {
-    Navigator.pop(context);
+    Get.back();
     //获取照片
     ImagePicker()
         .pickImage(
@@ -45,16 +43,16 @@ class _UserSettingState extends State<UserSetting> {
             aspectRatioPresets: [CropAspectRatioPreset.square],
             uiSettings: [
               AndroidUiSettings(
-                toolbarTitle: S.current.cropper_title,
+                toolbarTitle: 'cropper_title'.tr,
                 toolbarColor: Colors.blueAccent,
                 toolbarWidgetColor: Colors.white,
                 initAspectRatio: CropAspectRatioPreset.square,
                 lockAspectRatio: true,
               ),
               IOSUiSettings(
-                title: S.current.cropper_title,
-                cancelButtonTitle: S.current.cropper_cancel,
-                doneButtonTitle: S.current.cropper_confirm,
+                title: 'cropper_title'.tr,
+                cancelButtonTitle: 'cropper_cancel'.tr,
+                doneButtonTitle: 'cropper_confirm'.tr,
                 aspectRatioPickerButtonHidden: true,
                 resetAspectRatioEnabled: false,
                 aspectRatioLockEnabled: true,
@@ -67,10 +65,10 @@ class _UserSettingState extends State<UserSetting> {
                 changeUserAvatar(
                   context,
                   base64,
-                  back: (path) => setState(() {
-                    this.path = path;
+                  back: () => setState(() {
+                    userController.user.update((val) => userController.user);
                     image = ClipOval(
-                      child: Image.asset(this.path, fit: BoxFit.fitWidth),
+                      child: Image.asset(cFile.path, fit: BoxFit.fitWidth),
                     );
                   }),
                 );
@@ -85,29 +83,29 @@ class _UserSettingState extends State<UserSetting> {
     showCupertinoModalPopup<void>(
       context: context,
       builder: (BuildContext context) => CupertinoActionSheet(
-        title: Text(S.current.home_user_setting_avatar_photo_sheet_title),
-        message: Text(S.current.home_user_setting_avatar_photo_sheet_message),
+        title: Text('home_user_setting_avatar_photo_sheet_title'.tr),
+        message: Text('home_user_setting_avatar_photo_sheet_message'.tr),
         actions: <CupertinoActionSheetAction>[
           CupertinoActionSheetAction(
             isDefaultAction: true,
             onPressed: () => takePhoto(false),
             child: Text(
-              S.current.home_user_setting_avatar_photo_sheet_take_photo,
+              'home_user_setting_avatar_photo_sheet_take_photo'.tr,
             ),
           ),
           CupertinoActionSheetAction(
             isDefaultAction: true,
             onPressed: () => takePhoto(true),
             child: Text(
-              S.current.home_user_setting_avatar_photo_sheet_select_photo,
+              'home_user_setting_avatar_photo_sheet_select_photo'.tr,
             ),
           ),
           CupertinoActionSheetAction(
             isDestructiveAction: true,
             onPressed: () {
-              Navigator.pop(context);
+              Get.back();
             },
-            child: Text(S.current.dialog_default_cancel),
+            child: Text('dialog_default_cancel'.tr),
           ),
         ],
       ),
@@ -121,7 +119,7 @@ class _UserSettingState extends State<UserSetting> {
       left: 20,
       child: GestureDetector(
         onTap: () {
-          Navigator.pop(context);
+          Get.back();
         },
         child: const Icon(
           Icons.arrow_back_ios,
@@ -167,14 +165,14 @@ class _UserSettingState extends State<UserSetting> {
 
   ///名字
   name() {
-    return Text(
-      "${widget.user.name!}(${widget.user.number!})",
-      style: const TextStyle(
-          fontSize: 24,
-          fontWeight: FontWeight.bold,
-          decoration: TextDecoration.none,
-          color: Colors.black),
-    );
+    return Obx(() => Text(
+          "${userController.user.value?.name!}(${userController.user.value?.number!})",
+          style: const TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              decoration: TextDecoration.none,
+              color: Colors.black),
+        ));
   }
 
   ///工厂
@@ -186,21 +184,21 @@ class _UserSettingState extends State<UserSetting> {
         mainAxisSize: MainAxisSize.max,
         children: [
           Text(
-            S.current.home_user_setting_factory,
+            'home_user_setting_factory'.tr,
             style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
                 decoration: TextDecoration.none,
                 color: Colors.black54),
           ),
-          Text(
-            widget.user.factory!,
-            style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                decoration: TextDecoration.none,
-                color: Colors.black54),
-          )
+          Obx(() => Text(
+                userController.user.value!.factory!,
+                style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    decoration: TextDecoration.none,
+                    color: Colors.black54),
+              ))
         ],
       ),
     );
@@ -212,7 +210,7 @@ class _UserSettingState extends State<UserSetting> {
       List pickerChildren = [];
       int selected = 0;
       for (var group in list) {
-        if (widget.user.departmentName == group.name) {
+        if (userController.user.value?.departmentName == group.name) {
           selected = list.indexOf(group);
         }
         pickerChildren.add(group.name);
@@ -234,10 +232,10 @@ class _UserSettingState extends State<UserSetting> {
                       children: <Widget>[
                         TextButton(
                           onPressed: () {
-                            Navigator.pop(context);
+                            Get.back();
                           },
                           child: Text(
-                            S.current.dialog_default_cancel,
+                            'dialog_default_cancel'.tr,
                             style: const TextStyle(
                               color: Colors.grey,
                               fontSize: 20,
@@ -249,7 +247,7 @@ class _UserSettingState extends State<UserSetting> {
                             Navigator.pop(context, controller.selectedItem);
                           },
                           child: Text(
-                            S.current.dialog_default_confirm,
+                            'dialog_default_confirm'.tr,
                             style: const TextStyle(
                               color: Colors.blueAccent,
                               fontSize: 20,
@@ -275,7 +273,7 @@ class _UserSettingState extends State<UserSetting> {
                           useMagnifier: true,
                           itemExtent: 32,
                           onSelectedItemChanged: (value) {
-                            print(pickerChildren[value]);
+                            logger.i(pickerChildren[value]);
                           },
                           children: pickerChildren.map((data) {
                             return Center(child: Text(data));
@@ -288,24 +286,12 @@ class _UserSettingState extends State<UserSetting> {
               ),
             );
           }).then((index) {
-        print(index);
         if (index != selected && index != null) {
-          changeDepartmentGroup(context, list[index].itemID, back: () {
-            userInfo().then((newUser) {
-              setState(() {
-                selected = index;
-                widget.user.departmentID = newUser.departmentID;
-                widget.user.departmentName = newUser.departmentName;
-                departmentName = widget.user.departmentName ?? "";
-              });
-            });
-          });
+          changeDepartmentGroup(context, list[index].itemID);
         }
       });
     });
   }
-
-  var departmentName = "";
 
   ///部门
   department() {
@@ -316,7 +302,7 @@ class _UserSettingState extends State<UserSetting> {
         mainAxisSize: MainAxisSize.max,
         children: [
           Text(
-            S.current.home_user_setting_department,
+            'home_user_setting_department'.tr,
             style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
@@ -327,14 +313,14 @@ class _UserSettingState extends State<UserSetting> {
             onTap: () => _changeDepartment(),
             child: Row(
               children: [
-                Text(
-                  departmentName,
-                  style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      decoration: TextDecoration.none,
-                      color: Colors.blueAccent),
-                ),
+                Obx(() => Text(
+                      userController.user.value!.departmentName!,
+                      style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          decoration: TextDecoration.none,
+                          color: Colors.blueAccent),
+                    )),
                 const Icon(Icons.arrow_drop_down, color: Colors.black45)
               ],
             ),
@@ -353,7 +339,7 @@ class _UserSettingState extends State<UserSetting> {
         mainAxisSize: MainAxisSize.max,
         children: [
           Text(
-            S.current.home_user_setting_position,
+            'home_user_setting_position'.tr,
             style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
@@ -361,7 +347,7 @@ class _UserSettingState extends State<UserSetting> {
                 color: Colors.black54),
           ),
           Text(
-            widget.user.position!,
+            userController.user.value!.position!,
             style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
@@ -382,7 +368,7 @@ class _UserSettingState extends State<UserSetting> {
         mainAxisSize: MainAxisSize.max,
         children: [
           Text(
-            S.current.home_user_setting_password_change,
+            'home_user_setting_password_change'.tr,
             style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
@@ -406,6 +392,7 @@ class _UserSettingState extends State<UserSetting> {
       ),
     );
   }
+
   ///检查版本更新
   checkVersion() {
     return SizedBox(
@@ -415,7 +402,7 @@ class _UserSettingState extends State<UserSetting> {
         mainAxisSize: MainAxisSize.max,
         children: [
           Text(
-            S.current.home_user_setting_check_version,
+            'home_user_setting_check_version'.tr,
             style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
@@ -427,7 +414,7 @@ class _UserSettingState extends State<UserSetting> {
               showDialog<String>(
                   barrierDismissible: false,
                   context: context,
-                  builder: (BuildContext context) => BluetoothDialog(connected:(v){}));
+                  builder: (BuildContext context) => const BluetoothDialog());
             },
             child: const Row(
               children: [
@@ -462,7 +449,7 @@ class _UserSettingState extends State<UserSetting> {
             Navigator.pushNamedAndRemoveUntil(
                 context, "/login", (route) => false);
           },
-          child: Text(S.current.home_user_setting_logout,
+          child: Text('home_user_setting_logout'.tr,
               style: const TextStyle(fontSize: 20))),
     );
   }
@@ -471,7 +458,6 @@ class _UserSettingState extends State<UserSetting> {
   settingMenu() {
     return Positioned(
       top: 320,
-      bottom: 200,
       child: Column(
         children: [
           name(),
@@ -494,9 +480,9 @@ class _UserSettingState extends State<UserSetting> {
   void initState() {
     super.initState();
     image = ClipOval(
-      child: Image.network(widget.user.picUrl!, fit: BoxFit.fitWidth),
+      child: Image.network(userController.user.value!.picUrl!,
+          fit: BoxFit.fitWidth),
     );
-    departmentName = widget.user.departmentName ?? "";
   }
 
   @override
