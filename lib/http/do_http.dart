@@ -13,9 +13,7 @@ import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import '../constant.dart';
-import '../reading.dart';
 
-UserController userController = Get.find();
 
 /// 手机号码登录
 phoneLogin(BuildContext context, String phone, String password, String code,
@@ -283,8 +281,8 @@ getVersionInfo(BuildContext context, bool isShowLoading,
       PackageInfo.fromPlatform().then((value) {
         logger.f(value);
         var versionInfo = VersionInfoEntity.fromJson(jsonDecode(data));
-        versionInfo.versionName = "2.0.0";
-        versionInfo.force = false;
+        // versionInfo.versionName = "2.0.0";
+        // versionInfo.force = false;
         if (value.version == versionInfo.versionName) {
           noUpdate?.call();
         } else {

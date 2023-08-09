@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get/get_utils/src/platform/platform.dart';
 import 'package:jd_flutter/login/phone_login.dart';
 import 'package:jd_flutter/login/work_number_login.dart';
 
-import '../reading.dart';
+import '../http/do_http.dart';
+import '../widget/dialogs.dart';
 import 'face_login.dart';
 import 'machine_login.dart';
 
@@ -20,7 +22,19 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      getVersionInfo(
+        context,
+        true,
+        needUpdate: (versionInfo) {
+          doUpdate(context, versionInfo);
+        },
+      );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,16 +51,34 @@ class _LoginState extends State<Login> {
           child: ListView(
               //添加登录UI
               children: const [
-                SizedBox(height: 50),
-                Hero(tag: "logo", child: Logo()),
-                SizedBox(height: 40),
+                SizedBox(height: 30),
+                Logo(),
+                SizedBox(height: 30),
                 Page(),
               ])),
     );
   }
 }
+class Logo extends StatelessWidget {
+  const Logo({super.key});
 
-
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Image.asset("lib/res/images/ic_logo.png", width: 130, height: 130),
+        const Text("Gold Emperor",
+            style: TextStyle(
+                fontSize: 40,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                decoration: TextDecoration.none))
+      ],
+    );
+  }
+}
 class Page extends StatefulWidget {
   const Page({super.key});
 

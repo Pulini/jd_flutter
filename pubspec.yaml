@@ -54,6 +54,8 @@ dependencies:
   package_info_plus: ^4.1.0
   #加密工具
   crypto: ^3.0.3
+  #白屏启动页工具
+  flutter_native_splash: ^2.3.1
 
 
 
@@ -109,4 +111,3 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
-

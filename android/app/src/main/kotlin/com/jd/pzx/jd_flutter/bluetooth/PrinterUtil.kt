@@ -6,12 +6,8 @@ import android.graphics.*
 import android.text.Layout
 import android.text.StaticLayout
 import android.text.TextPaint
+import com.jd.pzx.jd_flutter.*
 import com.jd.pzx.jd_flutter.R
-import com.jd.pzx.jd_flutter.averageAssign
-import com.jd.pzx.jd_flutter.getFormatDate
-import com.jd.pzx.jd_flutter.mul
-import com.jd.pzx.jd_flutter.removeDecimalZero
-import com.jd.pzx.jd_flutter.toDoubleTry
 import io.flutter.Log
 import kotlin.experimental.xor
 import kotlin.math.ceil

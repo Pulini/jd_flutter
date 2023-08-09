@@ -6,7 +6,7 @@ import 'package:jd_flutter/http/response/base_data.dart';
 import 'package:logger/logger.dart';
 import 'package:path_provider/path_provider.dart';
 
-import '../reading.dart';
+import '../main.dart';
 
 ///网络异常
 const resultNetworkException = -1;
@@ -34,6 +34,8 @@ var logger = Logger();
 
 ///当前语言
 var language = "zh";
+
+UserController userController = Get.find();
 
 ///初始化dio
 var _dio = Dio(BaseOptions(
@@ -83,7 +85,7 @@ _doHttp(bool isPost, String method,
 
   ///拼接post请求的uri
   var uri = Uri.parse(testUrlForMES + method + queryStr);
-  UserController userController=Get.find();
+
   ///设置请求的headers
   var options = Options(headers: {
     "Content-Type": "application/json",
@@ -110,8 +112,8 @@ _doHttp(bool isPost, String method,
       callBack.call(resultNetworkException, null, "网络异常");
     }
   } on DioException catch (e) {
-    logger.e('error:${e.toString()}');
-    callBack.call(0, null, "服务器接口异常：${e.toString()}");
+    logger.e('error:${e.error}');
+    callBack.call(0, null, "链接服务器失败：${e.error}");
   } on Exception catch (e) {
     logger.e('error:${e.toString()}');
     callBack.call(0, null, "发生错误：${e.toString()}");

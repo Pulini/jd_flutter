@@ -1,6 +1,7 @@
+import 'dart:convert';
+
 import 'package:jd_flutter/generated/json/base/json_field.dart';
 import 'package:jd_flutter/generated/json/bluetooth_entity.g.dart';
-import 'dart:convert';
 
 @JsonSerializable()
 class BluetoothEntity {

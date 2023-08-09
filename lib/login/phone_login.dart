@@ -24,7 +24,7 @@ class _PhoneLoginState extends State<PhoneLogin> {
 
   TextEditingController phone = TextEditingController()..text = '15868587600';
   TextEditingController password = TextEditingController()..text = '123456';
-  TextEditingController vCode = TextEditingController()..text = '808032';
+  TextEditingController vCode = TextEditingController()..text = '908032';
 
   @override
   void initState() {

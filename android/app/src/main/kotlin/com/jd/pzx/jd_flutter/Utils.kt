@@ -18,8 +18,7 @@ import java.math.BigDecimal
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import java.util.*
 
 const val CHANNEL_ANDROID_SEND = "com.jd.pzx.jd_flutter_android_send"
 const val CHANNEL_FLUTTER_SEND = "com.jd.pzx.jd_flutter_flutter_send"

@@ -1,5 +1,5 @@
-import 'package:jd_flutter/generated/json/base/json_convert_content.dart';
 import 'package:jd_flutter/bean/bluetooth_entity.dart';
+import 'package:jd_flutter/generated/json/base/json_convert_content.dart';
 
 BluetoothEntity $BluetoothEntityFromJson(Map<String, dynamic> json) {
 	final BluetoothEntity bluetoothEntity = BluetoothEntity();

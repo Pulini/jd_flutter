@@ -10,7 +10,6 @@ import '../constant.dart';
 import '../http/do_http.dart';
 import '../http/web_api.dart';
 import '../login/login.dart';
-import '../reading.dart';
 import '../utils.dart';
 import '../widget/dialogs.dart';
 
@@ -23,7 +22,6 @@ class UserSetting extends StatefulWidget {
 
 class _UserSettingState extends State<UserSetting> {
   late Widget image;
-  UserController userController = Get.find();
 
   ///获取照片
   Future<void> takePhoto(bool isGallery) async {
@@ -413,9 +411,16 @@ class _UserSettingState extends State<UserSetting> {
               getVersionInfo(
                 context,
                 false,
-                noUpdate: () {},
+                noUpdate: () {
+                  logger.f("noUpdate");
+                  Get.snackbar("检查更新",
+                      "当前版本已是最新版本！",
+                      snackPosition: SnackPosition.BOTTOM,
+                      backgroundColor: Colors.blueAccent,
+                      colorText: Colors.white);
+                },
                 needUpdate: (versionInfo) {
-                  doUpdate(context, versionInfo, () {});
+                  doUpdate(context, versionInfo);
                 },
               );
               // showDialog<String>(

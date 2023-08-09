@@ -5,7 +5,7 @@ import 'package:jd_flutter/home/user_setting.dart';
 import 'package:jd_flutter/utils.dart';
 
 import '../constant.dart';
-import '../reading.dart';
+import '../http/web_api.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -16,7 +16,6 @@ class Home extends StatefulWidget {
 
 class _Home extends State<Home> {
   int _selectedIndex = 0;
-  UserController userController = Get.find();
   final _widgetOptions = [
     Text('home_bottom_bar_produce'.tr),
     Text('home_bottom_bar_warehouse'.tr),

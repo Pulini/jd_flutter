@@ -19,11 +19,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.gson.Gson
 import com.jd.pzx.jd_flutter.LivenFaceVerificationActivity.Companion.startOneselfFaceVerification
-import com.jd.pzx.jd_flutter.bluetooth.BLUETOOTH_ADAPTER_STATE_OFF
-import com.jd.pzx.jd_flutter.bluetooth.BLUETOOTH_ADAPTER_STATE_ON
-import com.jd.pzx.jd_flutter.bluetooth.PRINTER_UUID
-import com.jd.pzx.jd_flutter.bluetooth.REQUEST_ENABLE_BT
-import com.jd.pzx.jd_flutter.bluetooth.REQUEST_BLUETOOTH_PERMISSIONS
+import com.jd.pzx.jd_flutter.bluetooth.*
 import com.jd.pzx.jd_flutter.messageCenter.JMessage
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
@@ -33,7 +29,7 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import java.io.File
 import java.io.IOException
-import java.util.UUID
+import java.util.*
 
 
 @SuppressLint("MissingPermission")

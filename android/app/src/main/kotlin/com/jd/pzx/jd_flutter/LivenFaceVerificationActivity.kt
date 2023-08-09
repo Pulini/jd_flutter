@@ -12,7 +12,6 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.FrameLayout
 import android.widget.ImageView
-import androidx.core.view.postDelayed
 import com.huawei.hms.mlsdk.common.MLFrame
 import com.huawei.hms.mlsdk.faceverify.MLFaceVerificationAnalyzerFactory
 import com.huawei.hms.mlsdk.faceverify.MLFaceVerificationAnalyzerSetting

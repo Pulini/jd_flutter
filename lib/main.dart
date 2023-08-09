@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jd_flutter/reading.dart';
 import 'package:jd_flutter/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import 'home/home.dart';
+import 'http/response/user_info.dart';
 import 'http/web_api.dart';
-import 'translation.dart';
 import 'login/login.dart';
+import 'translation.dart';
 
 main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,6 +19,14 @@ main() async {
   }
   runApp(const MyApp());
 }
+class UserController extends GetxController {
+  Rx<UserInfo?> user = UserInfo().obs;
+
+  init(UserInfo userInfo) {
+    user = userInfo.obs;
+    update();
+  }
+}
 
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -28,8 +37,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   static final appRoutes = [
-    GetPage(name: "/", page: () => const Loading()),
-    GetPage(name: "/home", page: () => const Home(),transition: Transition.fadeIn),
+    GetPage(name: "/", page: () => const Home(),transition: Transition.fadeIn),
     GetPage(name: "/login", page: () => const Login()),
   ];
   var localeChinese = const Locale('zh', 'CN');
@@ -52,6 +60,7 @@ class _MyAppState extends State<MyApp> {
         useMaterial3: true,
       ),
       getPages: appRoutes,
+      home:userController.user.value!.token != null?const Home():const Login(),
       // home:FutureBuilder<UserInfo>(
       //     future: userInfo(),
       //     builder: (context, AsyncSnapshot<UserInfo> snapshot) {

@@ -288,7 +288,7 @@ void changePasswordDialog(BuildContext context) {
   );
 }
 
-doUpdate(BuildContext context, VersionInfoEntity version, Function() ignore) {
+doUpdate(BuildContext context, VersionInfoEntity version,{Function()? ignore} ) {
   UpdateDialog.showUpdate(
     context,
     title: "发现新版本",
