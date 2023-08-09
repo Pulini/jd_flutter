@@ -410,11 +410,11 @@ class _UserSettingState extends State<UserSetting> {
               logger.f("checkVersionDialog");
               getVersionInfo(
                 context,
-                false,
+                true,
                 noUpdate: () {
                   logger.f("noUpdate");
-                  Get.snackbar("检查更新",
-                      "当前版本已是最新版本！",
+                  Get.snackbar('home_user_setting_check_version'.tr,
+                      'is_already_latest_version'.tr,
                       snackPosition: SnackPosition.BOTTOM,
                       backgroundColor: Colors.blueAccent,
                       colorText: Colors.white);
