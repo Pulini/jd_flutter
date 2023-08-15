@@ -3,10 +3,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/bean/bluetooth_device.dart';
 import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/http/web_api.dart';
 
-import '../bean/bluetooth_entity.dart';
 import 'dialogs.dart';
 
 isConnected(Function(bool) connected) {
@@ -182,7 +182,7 @@ class _BluetoothDialogState extends State<BluetoothDialog> {
               var deviceMAC = call.arguments["DeviceMAC"];
               var deviceBondState = call.arguments["DeviceBondState"] == 12;
               var deviceIsConnected = call.arguments["DeviceIsConnected"];
-              deviceList.add(BluetoothEntity.fromJson(<String, dynamic>{}
+              deviceList.add(BluetoothDevice.fromJson(<String, dynamic>{}
                 ..["DeviceName"] = deviceName
                 ..["DeviceMAC"] = deviceMAC
                 ..["DeviceIsBonded"] = deviceBondState
@@ -195,7 +195,7 @@ class _BluetoothDialogState extends State<BluetoothDialog> {
     });
   }
 
-  var deviceList = <BluetoothEntity>[];
+  var deviceList = <BluetoothDevice>[];
   var streamIsScanning = StreamController<bool>();
 
   @override
@@ -228,7 +228,7 @@ class _BluetoothDialogState extends State<BluetoothDialog> {
                             Icons.bluetooth,
                             color: Colors.blueAccent,
                           ),
-                          title: deviceList[index].deviceIsBonded
+                          title: deviceList[index].deviceIsBonded!
                               ? Text.rich(
                                   TextSpan(
                                     children: [
@@ -241,9 +241,9 @@ class _BluetoothDialogState extends State<BluetoothDialog> {
                                     ],
                                   ),
                                 )
-                              : Text(deviceList[index].deviceName),
-                          subtitle: Text(deviceList[index].deviceMAC),
-                          trailing: deviceList[index].deviceIsConnected
+                              : Text(deviceList[index].deviceName!),
+                          subtitle: Text(deviceList[index].deviceMAC!),
+                          trailing: deviceList[index].deviceIsConnected!
                               ? TextButton(
                                   onPressed: () => _closeBluetooth(index),
                                   child: const Text.rich(

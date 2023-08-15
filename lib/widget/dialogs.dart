@@ -1,14 +1,11 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:jd_flutter/utils.dart';
 import 'package:jd_flutter/widget/update_dialog.dart';
 
 import '../constant.dart';
-import '../http/do_http.dart';
-import '../http/response/version_info_entity.dart';
+import '../http/response/version_info.dart';
 import '../http/web_api.dart';
 
 /// 提示弹窗
@@ -83,33 +80,42 @@ errorDialog(BuildContext context,
 ///加载中弹窗
 loadingDialog(BuildContext context, String? content) {
   showDialog<String>(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) => Dialog(
-            backgroundColor: Colors.white,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const CircularProgressIndicator(),
-                  const SizedBox(height: 15),
-                  Text(content ?? "")
-                ],
-              ),
-            ),
-          ));
+    barrierDismissible: false,
+    context: context,
+    builder: (BuildContext context) => WillPopScope(
+      onWillPop: () async => false,
+      child: Dialog(
+        backgroundColor: Colors.white,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const CircularProgressIndicator(),
+              const SizedBox(height: 15),
+              Text(content ?? "")
+            ],
+          ),
+        ),
+      ),
+    ),
+  );
 }
 
 downloadDialog(BuildContext context, String url, Function(String) completed) {
   showDialog<String>(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) => ProgressDialog(
-          url: url,
-          completed: (path) {
-            completed.call(path);
-          }));
+    barrierDismissible: false,
+    context: context,
+    builder: (BuildContext context) => WillPopScope(
+      onWillPop: () async => false,
+      child: ProgressDialog(
+        url: url,
+        completed: (path) {
+          completed.call(path);
+        },
+      ),
+    ),
+  );
 }
 
 ///下载器
@@ -200,95 +206,10 @@ class _ProgressDialogState extends State<ProgressDialog> {
   }
 }
 
-///修改密码弹窗
-void changePasswordDialog(BuildContext context) {
-  TextEditingController oldPassword = TextEditingController();
-  TextEditingController newPassword = TextEditingController();
-  showCupertinoModalPopup<void>(
-    context: context,
-    builder: (BuildContext context) => AlertDialog(
-      title: Text('change_password_dialog_title'.tr),
-      content: SizedBox(
-        height: 150,
-        child: Column(
-          children: [
-            TextField(
-              controller: oldPassword,
-              style: const TextStyle(color: Colors.grey),
-              decoration: InputDecoration(
-                hintText: 'change_password_dialog_old_password'.tr,
-                hintStyle: const TextStyle(color: Colors.grey),
-                counterStyle: const TextStyle(color: Colors.grey),
-                prefixIcon: const Icon(Icons.lock_outline, color: Colors.grey),
-                suffixIcon: IconButton(
-                  icon: const Icon(Icons.close, color: Colors.grey),
-                  onPressed: () {
-                    oldPassword.clear();
-                  },
-                ),
-              ),
-              maxLength: 10,
-            ),
-            TextField(
-              controller: newPassword,
-              style: const TextStyle(color: Colors.grey),
-              decoration: InputDecoration(
-                hintText: 'change_password_dialog_new_password'.tr,
-                hintStyle: const TextStyle(color: Colors.grey),
-                counterStyle: const TextStyle(color: Colors.grey),
-                prefixIcon: const Icon(Icons.lock_outline, color: Colors.grey),
-                suffixIcon: IconButton(
-                  icon: const Icon(Icons.close, color: Colors.grey),
-                  onPressed: () {
-                    newPassword.clear();
-                  },
-                ),
-              ),
-              maxLength: 10,
-            ),
-          ],
-        ),
-      ),
-      actions: [
-        TextButton(
-          onPressed: () {
-            Get.back();
-          },
-          child: Text('dialog_default_cancel'.tr),
-        ),
-        TextButton(
-          onPressed: () {
-            if (oldPassword.text.isEmpty) {
-              errorDialog(context,
-                  content: 'change_password_dialog_old_password'.tr);
-              return;
-            }
-            if (md5Encode(oldPassword.text).toUpperCase() !=
-                userController.user.value!.passWord) {
-              errorDialog(context,
-                  content: 'change_password_dialog_old_password_error'.tr);
-              return;
-            }
-            if (newPassword.text.isEmpty) {
-              errorDialog(context,
-                  content: 'change_password_dialog_new_password'.tr);
-              return;
-            }
-            changePassword(context, oldPassword.text, newPassword.text,
-                back: (msg) {
-              informationDialog(context, content: msg, back: () {
-                Get.back();
-              });
-            });
-          },
-          child: Text('change_password_dialog_submit'.tr),
-        ),
-      ],
-    ),
-  );
-}
 
-doUpdate(BuildContext context, VersionInfoEntity version,{Function()? ignore} ) {
+
+doUpdate(BuildContext context, VersionInfo version,
+    {Function()? ignore}) {
   UpdateDialog.showUpdate(
     context,
     title: "发现新版本",
