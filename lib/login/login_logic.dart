@@ -43,7 +43,7 @@ class LoginLogic extends GetxController with GetSingleTickerProviderStateMixin {
 
   ///手机登录验证码输入框控制器
   TextEditingController phoneLoginVCodeController = TextEditingController()
-    ..text = '518032';
+    ..text = '618032';
 
   ///工号登录工号输入框控制器
   TextEditingController workLoginWorkNumberController = TextEditingController()

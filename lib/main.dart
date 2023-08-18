@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get_navigation/src/router_report.dart';
+import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/utils.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -27,7 +29,6 @@ main() async {
   //         .e("form:${result?.scanTypeForm} value:${result?.value}")
   //   },
   // );
-
 }
 
 class UserController extends GetxController {
@@ -39,6 +40,19 @@ class UserController extends GetxController {
   }
 }
 
+///路由感知 用于释放GetXController
+class GetXRouterObserver extends NavigatorObserver {
+  @override
+  void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    RouterReportManager.reportCurrentRoute(route);
+  }
+
+  @override
+  void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) async {
+    RouterReportManager.reportRouteDispose(route);
+  }
+}
+
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 
@@ -47,10 +61,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  static final appRoutes = [
-    GetPage(name: "/", page: () => const Home(), transition: Transition.fadeIn),
-    GetPage(name: "/login", page: () => const Login()),
-  ];
+
   var localeChinese = const Locale('zh', 'CN');
   var localeEnglish = const Locale('en', 'US');
 
@@ -60,6 +71,7 @@ class _MyAppState extends State<MyApp> {
       onGenerateTitle: (context) => 'app_name'.tr,
       debugShowCheckedModeBanner: false,
       translations: Translation(),
+      navigatorObservers: [GetXRouterObserver()],
       locale: View.of(context).platformDispatcher.locale,
       localeListResolutionCallback: (locales, supportedLocales) {
         logL("当前语音：$locales");
@@ -70,7 +82,7 @@ class _MyAppState extends State<MyApp> {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent),
         useMaterial3: true,
       ),
-      getPages: appRoutes,
+      getPages: RouteConfig.appRoutes,
       home: userController.user.value!.token != null
           ? const Home()
           : const Login(),

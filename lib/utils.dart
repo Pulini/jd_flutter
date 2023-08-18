@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:crypto/crypto.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -11,6 +12,8 @@ import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'http/response/picker_item.dart';
+import 'http/response/picker_supplier.dart';
 import 'http/response/user_info.dart';
 import 'http/response/version_info.dart';
 import 'http/web_api.dart';
@@ -140,9 +143,39 @@ getVersionInfo(bool showLoading,
 ///显示SnackBar
 showSnackBar({required String title, required String message}) {
   Get.snackbar(title, message,
+      margin: const EdgeInsets.all(10),
       snackPosition: SnackPosition.BOTTOM,
       backgroundColor: Colors.blueAccent,
       colorText: Colors.white);
+}
+
+getCupertinoPicker(List<Widget> items, FixedExtentScrollController controller) {
+  return CupertinoPicker(
+    scrollController: controller,
+    diameterRatio: 1.5,
+    magnification: 1.2,
+    squeeze: 1.2,
+    useMagnifier: true,
+    itemExtent: 32,
+    onSelectedItemChanged: (value) {},
+    children: items,
+  );
+}
+
+showPopup(Widget widget,{double? height}) {
+  showCupertinoModalPopup(
+    context: Get.overlayContext!,
+    builder: (BuildContext context) {
+      return AnimatedPadding(
+          padding: MediaQuery.of(context).viewInsets,
+          duration: const Duration(milliseconds: 100),
+          child: Container(
+            height: height??260,
+            color: Colors.grey[200],
+            child: widget,
+          ));
+    },
+  );
 }
 
 class TapUtil {
@@ -164,18 +197,27 @@ class TapUtil {
 }
 
 logL(String msg) {
-    const logMaxLength = 2000;
-    var strLength = msg.length;
-    var start = 0;
-    var end = logMaxLength;
-    for (int i1 = 0; i1 < logMaxLength; i1++) {
-      if (strLength > end) {
-        print(msg.substring(start, end));
-        start = end;
-        end += logMaxLength;
-      } else {
-        print(msg.substring(start, strLength));
-        break;
-      }
+  const logMaxLength = 2000;
+  var strLength = msg.length;
+  var start = 0;
+  var end = logMaxLength;
+  for (int i1 = 0; i1 < logMaxLength; i1++) {
+    if (strLength > end) {
+      print(msg.substring(start, end));
+      start = end;
+      end += logMaxLength;
+    } else {
+      print(msg.substring(start, strLength));
+      break;
     }
+  }
+}
+
+Future<List<PickerItem>> getSapSuppliers() async {
+  var response = await httpGet(method: webApiGetSapSuppliers);
+  List<PickerItem> list = [];
+  for (var item in jsonDecode(response.data)) {
+    list.add(PickerSupplier.fromJson(item));
+  }
+  return list;
 }

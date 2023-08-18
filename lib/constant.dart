@@ -4,6 +4,7 @@ const spSaveLoginMachine = "login_machine";
 const spSaveLoginWork = "login_work";
 const spSaveUserInfo = "user_info";
 const spSaveLoginType = "login_type";
+const spSavePickerSupplier = "pick_supplier";
 const loginTypePhone = "login_type_phone";
 const loginTypeFace = "login_type_face";
 const loginTypeWorkNumber = "login_type_work_number";

@@ -8,6 +8,7 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:jd_flutter/utils.dart';
 
+import '../bean/home_button.dart';
 import '../constant.dart';
 import '../http/request/user_avatar.dart';
 import '../http/response/department.dart';
@@ -17,6 +18,29 @@ import 'home_state.dart';
 
 class HomeLogic extends GetxController {
   final HomeState state = HomeState();
+
+  refreshButton() {
+    state.buttons.clear();
+    state.buttons.addAll(
+      state.buttonList.where(
+        (element) {
+          if (state.search.isEmpty) {
+            return element.classify == state.navigationBarIndex.value;
+          } else {
+            if (element is HomeButtonGroup) {
+              return element.functionGroup.any((e2) {
+                return e2.name.contains(state.search) ||
+                    e2.description.contains(state.search);
+              });
+            } else {
+              return element.name.contains(state.search) ||
+                  element.description.contains(state.search);
+            }
+          }
+        },
+      ),
+    );
+  }
 
   ///用户头像
   var userAvatar = Obx(
@@ -188,54 +212,28 @@ class HomeLogic extends GetxController {
         ),
       );
       //创建底部弹窗
-      showCupertinoModalPopup(
-        context: Get.overlayContext!,
-        builder: (BuildContext context) {
-          return Container(
-            height: 250,
+      showPopup(Column(
+        children: <Widget>[
+          //选择器顶部按钮
+          Container(
+            height: 45,
             color: Colors.grey[200],
-            child: Column(
-              children: <Widget>[
-                //选择器顶部按钮
-                Container(
-                  height: 45,
-                  color: Colors.grey[200],
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [cancel, confirm],
-                  ),
-                ),
-                //选择器主体
-                Expanded(
-                  child: DefaultTextStyle(
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 22,
-                    ),
-                    child: SizedBox(
-                      height: 200,
-                      child: CupertinoPicker(
-                        scrollController: controller,
-                        diameterRatio: 1.5,
-                        magnification: 1.22,
-                        squeeze: 1.2,
-                        useMagnifier: true,
-                        itemExtent: 32,
-                        onSelectedItemChanged: (value) {
-                          logger.i(list[value]);
-                        },
-                        children: list.map((data) {
-                          return Center(child: Text(data.name!));
-                        }).toList(),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [cancel, confirm],
             ),
-          );
-        },
-      );
+          ),
+          //选择器主体
+          Expanded(
+            child: getCupertinoPicker(
+              list.map((data) {
+                return Center(child: Text(data.name!));
+              }).toList(),
+              controller,
+            ),
+          )
+        ],
+      ));
     } else {
       errorDialog(Get.overlayContext!, content: departmentCallback.message);
     }

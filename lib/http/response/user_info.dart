@@ -27,32 +27,33 @@
 
 class UserInfo {
   UserInfo({
-      this.token, 
-      this.departmentID, 
-      this.dutyID, 
-      this.empID, 
-      this.number, 
-      this.organizeID, 
-      this.name, 
-      this.sex, 
-      this.userID, 
-      this.departmentName, 
-      this.position, 
-      this.factory, 
-      this.defaultStockID, 
-      this.defaultStockName, 
-      this.defaultStockNumber, 
-      this.diningRoomID, 
-      this.picUrl, 
-      this.passWord, 
-      this.empPassWord, 
-      this.quickLoginType, 
-      this.isAppAutoLock, 
-      this.sAPRole, 
-      this.sAPLineNumber, 
-      this.sAPFactory, 
-      this.jurisdictionList, 
-      this.reportDeptmentID,});
+    this.token,
+    this.departmentID,
+    this.dutyID,
+    this.empID,
+    this.number,
+    this.organizeID,
+    this.name,
+    this.sex,
+    this.userID,
+    this.departmentName,
+    this.position,
+    this.factory,
+    this.defaultStockID,
+    this.defaultStockName,
+    this.defaultStockNumber,
+    this.diningRoomID,
+    this.picUrl,
+    this.passWord,
+    this.empPassWord,
+    this.quickLoginType,
+    this.isAppAutoLock,
+    this.sAPRole,
+    this.sAPLineNumber,
+    this.sAPFactory,
+    this.jurisdictionList,
+    this.reportDeptmentID,
+  });
 
   UserInfo.fromJson(dynamic json) {
     token = json['Token'];
@@ -87,6 +88,7 @@ class UserInfo {
     }
     reportDeptmentID = json['ReportDeptmentID'];
   }
+
   String? token;
   int? departmentID;
   int? dutyID;
@@ -141,23 +143,25 @@ class UserInfo {
     map['SAPLineNumber'] = sAPLineNumber;
     map['SAPFactory'] = sAPFactory;
     if (jurisdictionList != null) {
-      map['JurisdictionList'] = jurisdictionList?.map((v) => v.toJson()).toList();
+      map['JurisdictionList'] =
+          jurisdictionList?.map((v) => v.toJson()).toList();
     }
     map['ReportDeptmentID'] = reportDeptmentID;
     return map;
   }
-
 }
 
 /// JID : "1050101"
 
 class JurisdictionList {
   JurisdictionList({
-      this.jid,});
+    this.jid,
+  });
 
   JurisdictionList.fromJson(dynamic json) {
     jid = json['JID'];
   }
+
   String? jid;
 
   Map<String, dynamic> toJson() {
@@ -165,5 +169,4 @@ class JurisdictionList {
     map['JID'] = jid;
     return map;
   }
-
 }

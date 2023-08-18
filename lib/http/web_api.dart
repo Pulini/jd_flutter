@@ -82,7 +82,7 @@ Future<BaseData> httpGet({
 ///初始化网络请求
 Future<BaseData> _doHttp(bool isPost, String method,
     {String? loading, Map<String, dynamic>? query, Object? body}) async {
-  if (loading?.isNotEmpty ?? true) loadingDialog(Get.overlayContext!, loading);
+  if (loading!=null&& loading.isNotEmpty) loadingDialog(Get.context!, loading);
 
   ///拼接post请求的query
   String queryStr = "";
@@ -133,7 +133,7 @@ Future<BaseData> _doHttp(bool isPost, String method,
     logger.e('error:${e.toString()}');
     message = "发生异常：${e.toString()}";
   }
-  if (loading?.isNotEmpty ?? true) Get.back();
+  if (loading!=null&& loading.isNotEmpty) Get.back();
   return BaseData(resultCode: resultCode, data: json, message: message);
 }
 
@@ -195,3 +195,7 @@ const webApiChangeDepartment = "api/User/GetLoginInfo";
 
 ///检查版本更新接口
 const webApiCheckVersion = "api/Public/VersionUpgrade";
+
+///获取sap供应商列表接口
+const webApiGetSapSuppliers = "api/Supplier/GetSAPSupplierMessageNew";
+
