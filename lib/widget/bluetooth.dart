@@ -49,7 +49,7 @@ class _BluetoothDialogState extends State<BluetoothDialog> {
   }
 
   _connectBluetooth(int index) {
-    loadingDialog(context, "正在连接蓝牙...");
+    loadingDialog('正在连接蓝牙...');
     channel
         .invokeMethod('ConnectBluetooth', deviceList[index].deviceMAC)
         .then((value) {
@@ -64,17 +64,17 @@ class _BluetoothDialogState extends State<BluetoothDialog> {
           }
         case 1:
           {
-            errorDialog(context, content: "连接失败");
+            errorDialog( content: '连接失败');
             break;
           }
         case 2:
           {
-            errorDialog(context, content: "未找到设备");
+            errorDialog( content: '未找到设备');
             break;
           }
         case 3:
           {
-            errorDialog(context, content: "创建通道失败");
+            errorDialog( content: '创建通道失败');
             break;
           }
       }
@@ -91,102 +91,102 @@ class _BluetoothDialogState extends State<BluetoothDialog> {
           deviceList[index].deviceIsConnected = false;
         });
       } else {
-        errorDialog(context, content: "断开失败");
+        errorDialog( content: '断开失败');
       }
     });
   }
 
   _bluetoothListener() {
     channel.setMethodCallHandler((call) {
-      logger.f("method：${call.method}  arguments:${call.arguments}");
+      logger.f('method：${call.method}  arguments:${call.arguments}');
       switch (call.method) {
-        case "Bluetooth":
+        case 'Bluetooth':
           {
             switch (call.arguments) {
               case 1:
                 {
-                  logger.f("设备不支持蓝牙");
-                  errorDialog(context, content: "设备不支持蓝牙");
+                  logger.f('设备不支持蓝牙');
+                  errorDialog(content: '设备不支持蓝牙');
                   break;
                 }
               case 2:
                 {
-                  logger.f("权限被拒绝");
-                  errorDialog(context, content: "权限被拒绝");
+                  logger.f('权限被拒绝');
+                  errorDialog( content: '权限被拒绝');
                   break;
                 }
               case 3:
                 {
-                  logger.f("蓝牙打开");
-                  informationDialog(context, content: "蓝牙打开");
+                  logger.f('蓝牙打开');
+                  informationDialog( content: '蓝牙打开');
                   break;
                 }
               case 4:
                 {
-                  logger.f("蓝牙关闭");
+                  logger.f('蓝牙关闭');
                   setState(() {
                     deviceList.clear();
                   });
-                  informationDialog(context, content: "蓝牙关闭");
+                  informationDialog( content: '蓝牙关闭');
                   break;
                 }
               case 5:
                 {
-                  logger.f("开始扫描");
+                  logger.f('开始扫描');
                   streamIsScanning.sink.add(true);
                   break;
                 }
               case 6:
                 {
-                  logger.f("结束扫描");
+                  logger.f('结束扫描');
                   streamIsScanning.sink.add(false);
                   break;
                 }
               case 7:
                 {
-                  logger.f("CONNECTED");
+                  logger.f('CONNECTED');
                   break;
                 }
               case 8:
                 {
-                  logger.f("DISCONNECTED");
+                  logger.f('DISCONNECTED');
                   break;
                 }
             }
             break;
           }
-        case "Connected":
+        case 'Connected':
           {
             setState(() {
               deviceList
                   .singleWhere(
-                      (element) => element.deviceMAC == call.arguments["MAC"])
+                      (element) => element.deviceMAC == call.arguments['MAC'])
                   .deviceIsConnected = true;
             });
             break;
           }
-        case "Disconnected":
+        case 'Disconnected':
           {
             setState(() {
               deviceList
                   .singleWhere(
-                      (element) => element.deviceMAC == call.arguments["MAC"])
+                      (element) => element.deviceMAC == call.arguments['MAC'])
                   .deviceIsConnected = false;
             });
             break;
           }
-        case "FindBluetooth":
+        case 'FindBluetooth':
           {
             setState(() {
-              var deviceName = call.arguments["DeviceName"];
-              var deviceMAC = call.arguments["DeviceMAC"];
-              var deviceBondState = call.arguments["DeviceBondState"] == 12;
-              var deviceIsConnected = call.arguments["DeviceIsConnected"];
+              var deviceName = call.arguments['DeviceName'];
+              var deviceMAC = call.arguments['DeviceMAC'];
+              var deviceBondState = call.arguments['DeviceBondState'] == 12;
+              var deviceIsConnected = call.arguments['DeviceIsConnected'];
               deviceList.add(BluetoothDevice.fromJson(<String, dynamic>{}
-                ..["DeviceName"] = deviceName
-                ..["DeviceMAC"] = deviceMAC
-                ..["DeviceIsBonded"] = deviceBondState
-                ..["DeviceIsConnected"] = deviceIsConnected));
+                ..['DeviceName'] = deviceName
+                ..['DeviceMAC'] = deviceMAC
+                ..['DeviceIsBonded'] = deviceBondState
+                ..['DeviceIsConnected'] = deviceIsConnected));
             });
             break;
           }
@@ -235,7 +235,7 @@ class _BluetoothDialogState extends State<BluetoothDialog> {
                                       TextSpan(
                                           text: deviceList[index].deviceName),
                                       const TextSpan(
-                                        text: " (已配对)",
+                                        text: ' (已配对)',
                                         style: TextStyle(color: Colors.green),
                                       ),
                                     ],
@@ -258,13 +258,13 @@ class _BluetoothDialogState extends State<BluetoothDialog> {
                                           alignment:
                                               PlaceholderAlignment.middle,
                                         ),
-                                        TextSpan(text: "断开链接"),
+                                        TextSpan(text: '断开链接'),
                                       ],
                                     ),
                                   ))
                               : TextButton(
                                   onPressed: () => _connectBluetooth(index),
-                                  child: const Text("连接"),
+                                  child: const Text('连接'),
                                 ),
                         ),
                       );
@@ -278,7 +278,7 @@ class _BluetoothDialogState extends State<BluetoothDialog> {
                     child: ElevatedButton(
                       onPressed: () => Get.back(),
                       child: const Text(
-                        "返回",
+                        '返回',
                         style: TextStyle(color: Colors.grey),
                       ),
                     ),
@@ -304,7 +304,7 @@ class _BluetoothDialogState extends State<BluetoothDialog> {
                                     ),
                                     alignment: PlaceholderAlignment.middle,
                                   ),
-                                  TextSpan(text: "停止"),
+                                  TextSpan(text: '停止'),
                                 ],
                               ),
                             ),
@@ -324,7 +324,7 @@ class _BluetoothDialogState extends State<BluetoothDialog> {
                                     ),
                                     alignment: PlaceholderAlignment.middle,
                                   ),
-                                  TextSpan(text: "扫描"),
+                                  TextSpan(text: '扫描'),
                                 ],
                               ),
                             ),

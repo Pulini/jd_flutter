@@ -14,8 +14,22 @@ import '../utils.dart';
 import '../widget/dialogs.dart';
 import 'login_state.dart';
 
+///获取验证码
+String _getVCode() {
+  var date = DateTime.now();
+  var now = '${date.year.toString().substring(2, 4)}'
+      '${date.month.toString().padLeft(2, '0')}'
+      '${date.day.toString().padLeft(2, '0')}';
+  var vCode = '';
+  for (var i = now.length; i > 0; i--) {
+    vCode += now.substring(i - 1, i);
+  }
+  return vCode;
+}
+
 class LoginLogic extends GetxController with GetSingleTickerProviderStateMixin {
   final LoginState state = LoginState();
+  var _isReLogin = false;
 
   ///tab控制器
   late TabController tabController =
@@ -23,11 +37,11 @@ class LoginLogic extends GetxController with GetSingleTickerProviderStateMixin {
 
   ///人脸登录手机号输入框控制器
   TextEditingController faceLoginPhoneController = TextEditingController()
-    ..text = spGet(spSaveLoginFace) ?? "";
+    ..text = spGet(spSaveLoginFace) ?? '';
 
   ///机台登录机台号输入框控制器
   TextEditingController machineLoginMachineController = TextEditingController()
-    ..text = spGet(spSaveLoginMachine) ?? "";
+    ..text = spGet(spSaveLoginMachine) ?? '';
 
   ///机台登录密码输入框控制器
   TextEditingController machineLoginPasswordController =
@@ -35,7 +49,7 @@ class LoginLogic extends GetxController with GetSingleTickerProviderStateMixin {
 
   ///手机登录手机号输入框控制器
   TextEditingController phoneLoginPhoneController = TextEditingController()
-    ..text = spGet(spSaveLoginPhone) ?? "15868587600";
+    ..text = spGet(spSaveLoginPhone) ?? '15868587600';
 
   ///手机登录密码输入框控制器
   TextEditingController phoneLoginPasswordController = TextEditingController()
@@ -43,31 +57,67 @@ class LoginLogic extends GetxController with GetSingleTickerProviderStateMixin {
 
   ///手机登录验证码输入框控制器
   TextEditingController phoneLoginVCodeController = TextEditingController()
-    ..text = '618032';
+    ..text = _getVCode();
 
   ///工号登录工号输入框控制器
   TextEditingController workLoginWorkNumberController = TextEditingController()
-    ..text = spGet(spSaveLoginWork) ?? "";
+    ..text = spGet(spSaveLoginWork) ?? '';
 
   ///工号登录密码输入框控制器
   TextEditingController workLoginPasswordController = TextEditingController();
+
+  reLogin() {
+    _isReLogin = true;
+    _login();
+  }
+
+  login() {
+    _isReLogin = false;
+    _login();
+  }
+
+  _login() {
+    if (tabController.index == 0) {
+      phoneLogin();
+      return;
+    }
+    if (tabController.index == 1) {
+      if (GetPlatform.isAndroid) {
+        faceLogin();
+      } else {
+        machineLogin();
+      }
+      return;
+    }
+    if (tabController.index == 2) {
+      if (GetPlatform.isAndroid) {
+        machineLogin();
+      } else {
+        workNumberLogin();
+      }
+      return;
+    }
+
+    if (tabController.index == 3) {
+      workNumberLogin();
+      return;
+    }
+  }
 
   ///根据手机号码获取用户头像并登录
   faceLogin() {
     hideKeyBoard();
     if (faceLoginPhoneController.text.isEmpty) {
-      errorDialog(Get.overlayContext!, content: 'login_tips_phone'.tr);
+      errorDialog(content: 'login_tips_phone'.tr);
       return;
     }
     httpGet(
       loading: 'face_login_getting_photo_path'.tr,
       method: webApiGetUserPhoto,
-      query: {"Phone": faceLoginPhoneController.text},
+      query: {'Phone': faceLoginPhoneController.text},
     ).then((val) {
       if (val.resultCode == resultSuccess) {
-        downloadDialog(
-            Get.overlayContext!, val.data.toString().replaceAll("\"", ""),
-            (filePath) {
+        downloadDialog(val.data.toString().replaceAll('\'', ''), (filePath) {
           try {
             Permission.camera.request().isGranted.then((permission) {
               if (permission) {
@@ -80,11 +130,11 @@ class LoginLogic extends GetxController with GetSingleTickerProviderStateMixin {
                       loading: 'logging'.tr,
                       method: webApiLogin,
                       query: {
-                        "JiGuangID": "",
-                        "Phone": faceLoginPhoneController.text,
-                        "Password": "",
-                        "VCode": "",
-                        "Type": 2,
+                        'JiGuangID': '',
+                        'Phone': faceLoginPhoneController.text,
+                        'Password': '',
+                        'VCode': '',
+                        'Type': 2,
                       },
                     ).then((loginCallback) {
                       if (loginCallback.resultCode == resultSuccess) {
@@ -93,9 +143,12 @@ class LoginLogic extends GetxController with GetSingleTickerProviderStateMixin {
                         spSave(spSaveUserInfo, loginCallback.data.toString());
                         userController.init(
                             UserInfo.fromJson(jsonDecode(loginCallback.data)));
-                        Get.offAll(const Home());
+                        Get.delete<LoginLogic>();
+                        _isReLogin
+                            ? Get.back()
+                            : Get.offAll(() => const Home());
                       } else {
-                        errorDialog(Get.overlayContext!,
+                        errorDialog(
                             content:
                                 loginCallback.message ?? 'login_failed'.tr);
                       }
@@ -105,16 +158,15 @@ class LoginLogic extends GetxController with GetSingleTickerProviderStateMixin {
                   logger.i(e);
                 });
               } else {
-                errorDialog(Get.overlayContext!,
-                    content: 'face_login_no_camera_permission'.tr);
+                errorDialog(content: 'face_login_no_camera_permission'.tr);
               }
             });
           } on PlatformException {
-            errorDialog(Get.overlayContext!, content: 'face_login_failed'.tr);
+            errorDialog(content: 'face_login_failed'.tr);
           }
         });
       } else {
-        errorDialog(Get.overlayContext!,
+        errorDialog(
             content: val.message ?? 'face_login_get_photo_path_failed'.tr);
       }
     });
@@ -124,22 +176,22 @@ class LoginLogic extends GetxController with GetSingleTickerProviderStateMixin {
   machineLogin() {
     hideKeyBoard();
     if (machineLoginMachineController.text.isEmpty) {
-      errorDialog(Get.overlayContext!, content: 'login_tips_machine'.tr);
+      errorDialog(content: 'login_tips_machine'.tr);
       return;
     }
     if (machineLoginPasswordController.text.isEmpty) {
-      errorDialog(Get.overlayContext!, content: 'login_tips_password'.tr);
+      errorDialog(content: 'login_tips_password'.tr);
       return;
     }
     httpPost(
       loading: 'logging'.tr,
       method: webApiLogin,
       query: {
-        "JiGuangID": "",
-        "Phone": machineLoginMachineController.text,
-        "Password": machineLoginPasswordController.text,
-        "VCode": "",
-        "Type": 1,
+        'JiGuangID': '',
+        'Phone': machineLoginMachineController.text,
+        'Password': machineLoginPasswordController.text,
+        'VCode': '',
+        'Type': 1,
       },
     ).then((loginCallback) {
       if (loginCallback.resultCode == resultSuccess) {
@@ -147,10 +199,10 @@ class LoginLogic extends GetxController with GetSingleTickerProviderStateMixin {
         spSave(spSaveLoginMachine, machineLoginMachineController.text);
         spSave(spSaveUserInfo, loginCallback.data.toString());
         userController.init(UserInfo.fromJson(jsonDecode(loginCallback.data)));
-        Get.offAll(const Home());
+        Get.delete<LoginLogic>();
+        _isReLogin ? Get.back() : Get.offAll(() => const Home());
       } else {
-        errorDialog(Get.overlayContext!,
-            content: loginCallback.message ?? 'login_failed'.tr);
+        errorDialog(content: loginCallback.message ?? 'login_failed'.tr);
       }
     });
   }
@@ -162,13 +214,13 @@ class LoginLogic extends GetxController with GetSingleTickerProviderStateMixin {
 
     //手机号为空，提示
     if (phoneLoginPhoneController.text.isEmpty) {
-      errorDialog(Get.overlayContext!, content: 'login_hint_phone'.tr);
+      errorDialog(content: 'login_hint_phone'.tr);
       return;
     }
     httpPost(
       loading: 'phone_login_getting_verify_code'.tr,
       method: webApiVerificationCode,
-      query: {"phone": phoneLoginPhoneController.text},
+      query: {'phone': phoneLoginPhoneController.text},
     ).then((verifyCodeCallback) {
       if (verifyCodeCallback.resultCode == resultSuccess) {
         showSnackBar(
@@ -191,7 +243,7 @@ class LoginLogic extends GetxController with GetSingleTickerProviderStateMixin {
           },
         );
       } else {
-        errorDialog(Get.overlayContext!,
+        errorDialog(
             content: verifyCodeCallback.message ??
                 'phone_login_get_verify_code_failed'.tr);
       }
@@ -202,26 +254,26 @@ class LoginLogic extends GetxController with GetSingleTickerProviderStateMixin {
   phoneLogin() {
     hideKeyBoard();
     if (phoneLoginPhoneController.text.isEmpty) {
-      errorDialog(Get.overlayContext!, content: 'login_tips_phone'.tr);
+      errorDialog(content: 'login_tips_phone'.tr);
       return;
     }
     if (phoneLoginPasswordController.text.isEmpty) {
-      errorDialog(Get.overlayContext!, content: 'login_tips_password'.tr);
+      errorDialog(content: 'login_tips_password'.tr);
       return;
     }
     if (phoneLoginVCodeController.text.isEmpty) {
-      errorDialog(Get.overlayContext!, content: 'login_tips_verify_code'.tr);
+      errorDialog(content: 'login_tips_verify_code'.tr);
       return;
     }
     httpPost(
       loading: 'logging'.tr,
       method: webApiLogin,
       query: {
-        "JiGuangID": "",
-        "Phone": phoneLoginPhoneController.text,
-        "Password": phoneLoginPasswordController.text,
-        "VCode": phoneLoginVCodeController.text,
-        "Type": 0,
+        'JiGuangID': '',
+        'Phone': phoneLoginPhoneController.text,
+        'Password': phoneLoginPasswordController.text,
+        'VCode': phoneLoginVCodeController.text,
+        'Type': 0,
       },
     ).then((loginCallback) {
       if (loginCallback.resultCode == resultSuccess) {
@@ -229,10 +281,10 @@ class LoginLogic extends GetxController with GetSingleTickerProviderStateMixin {
         spSave(spSaveLoginPhone, phoneLoginPhoneController.text);
         spSave(spSaveUserInfo, loginCallback.data.toString());
         userController.init(UserInfo.fromJson(jsonDecode(loginCallback.data)));
-        Get.offAll(const Home());
+        Get.delete<LoginLogic>();
+        _isReLogin ? Get.back() : Get.offAll(() => const Home());
       } else {
-        errorDialog(Get.overlayContext!,
-            content: loginCallback.message ?? 'login_failed'.tr);
+        errorDialog(content: loginCallback.message ?? 'login_failed'.tr);
       }
     });
   }
@@ -241,11 +293,11 @@ class LoginLogic extends GetxController with GetSingleTickerProviderStateMixin {
   workNumberLogin() {
     hideKeyBoard();
     if (workLoginWorkNumberController.text.isEmpty) {
-      errorDialog(Get.overlayContext!, content: 'login_tips_work_number'.tr);
+      errorDialog(content: 'login_tips_work_number'.tr);
       return;
     }
     if (workLoginPasswordController.text.isEmpty) {
-      errorDialog(Get.overlayContext!, content: 'login_tips_password'.tr);
+      errorDialog(content: 'login_tips_password'.tr);
       return;
     }
 
@@ -253,11 +305,11 @@ class LoginLogic extends GetxController with GetSingleTickerProviderStateMixin {
       loading: 'logging'.tr,
       method: webApiLogin,
       query: {
-        "JiGuangID": "",
-        "Phone": workLoginWorkNumberController.text,
-        "Password": workLoginPasswordController.text,
-        "VCode": "",
-        "Type": 3,
+        'JiGuangID': '',
+        'Phone': workLoginWorkNumberController.text,
+        'Password': workLoginPasswordController.text,
+        'VCode': '',
+        'Type': 3,
       },
     ).then((loginCallback) {
       if (loginCallback.resultCode == resultSuccess) {
@@ -265,10 +317,10 @@ class LoginLogic extends GetxController with GetSingleTickerProviderStateMixin {
         spSave(spSaveLoginWork, workLoginWorkNumberController.text);
         spSave(spSaveUserInfo, loginCallback.data.toString());
         userController.init(UserInfo.fromJson(jsonDecode(loginCallback.data)));
-        Get.offAll(const Home());
+        Get.delete<LoginLogic>();
+        _isReLogin ? Get.back() : Get.offAll(() => const Home());
       } else {
-        errorDialog(Get.overlayContext!,
-            content: loginCallback.message ?? 'login_failed'.tr);
+        errorDialog(content: loginCallback.message ?? 'login_failed'.tr);
       }
     });
   }

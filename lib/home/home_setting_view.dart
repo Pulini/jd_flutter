@@ -70,7 +70,7 @@ class _UserSettingState extends State<UserSetting> {
         child: GestureDetector(
           onTap: () => logic.takePhoto(),
           child: Hero(
-            tag: "user",
+            tag: 'user',
             child: logic.userAvatar,
           ),
         ),
@@ -82,7 +82,7 @@ class _UserSettingState extends State<UserSetting> {
   name() {
     return Obx(
       () => Text(
-        "${userController.user.value?.name!}(${userController.user.value?.number!})",
+        '${userController.user.value?.name!}(${userController.user.value?.number!})',
         style: const TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,
@@ -221,7 +221,7 @@ class _UserSettingState extends State<UserSetting> {
                   );
                 },
                 needUpdate: (versionInfo) {
-                  doUpdate(context, versionInfo);
+                  doUpdate(versionInfo);
                 },
               );
             },
@@ -250,8 +250,8 @@ class _UserSettingState extends State<UserSetting> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(25))),
           onPressed: () {
-            spSave(spSaveUserInfo, "");
-            Get.offAll(const Login());
+            spSave(spSaveUserInfo, '');
+            Get.offAll(()=>const Login());
           },
           child: Text('home_user_setting_logout'.tr,
               style: const TextStyle(fontSize: 20))),

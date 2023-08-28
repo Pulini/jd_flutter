@@ -38,7 +38,7 @@ class _HomeState extends State<Home> {
           color: Colors.white54,
           borderRadius: BorderRadius.circular(20),
         ),
-        placeholder: '快速查找功能',
+        placeholder: 'home_top_search'.tr,
         onChanged: (String value) {
           state.search = value;
           logic.refreshButton();
@@ -47,33 +47,57 @@ class _HomeState extends State<Home> {
       backgroundColor: Colors.transparent,
       actions: [
         IconButton(
-          icon: Hero(tag: "user", child: logic.userAvatar),
+          icon: Hero(tag: 'user', child: logic.userAvatar),
           onPressed: () => Get.to(() => const UserSetting()),
         )
       ],
     );
   }
 
+  Color _color(HomeButton item) {
+    return item.hasUpdate
+        ? Colors.green[200]!
+        : item.lock
+            ? Colors.blueAccent
+            : Colors.grey;
+  }
+
   _listTile(bool isGroup, HomeButton item) {
     return ListTile(
-      onTap: () => item.route.isEmpty
-          ? showSnackBar(title: '无路由', message: '该功能暂未开放')
-          : Get.toNamed(item.route),
-      enabled: item.lock,
+      onTap: () => item.hasUpdate
+          ? upData()
+          : item.route.isEmpty
+              ? showSnackBar(title: '无路由', message: '该功能暂未开放')
+              : Get.toNamed(item.route),
+      enabled: item.hasUpdate ? true : item.lock,
       leading: Image.asset(
         item.icon,
-        color: item.lock ? Colors.red : Colors.grey,
+        color:Colors.red,
         width: isGroup ? 30 : 40,
         height: isGroup ? 30 : 40,
       ),
-      title: Text(item.name),
-      subtitle: Text(item.description),
-      trailing: item.lock
-          ? const Icon(
-              Icons.arrow_forward_ios,
-              size: 15,
+      title: Text(
+        item.name
+      ),
+      subtitle: Text(
+        item.description,
+      ),
+      trailing: item.hasUpdate
+          ? Wrap(
+              crossAxisAlignment: WrapCrossAlignment.center,
+              direction: Axis.vertical,
+              children: [
+                Icon(Icons.cloud_upload, color: Colors.green[200]),
+                Text('home_button_has_update'.tr,
+                    style: TextStyle(
+                      color:_color(item),
+                      fontSize: 10,
+                    )),
+              ],
             )
-          : const Text('无权限'),
+          : item.lock
+              ? const Icon(Icons.arrow_forward_ios, size: 15)
+              : Text('home_button_no_permission'.tr),
     );
   }
 
@@ -82,8 +106,6 @@ class _HomeState extends State<Home> {
       child: item is HomeButton
           ? _listTile(false, item)
           : ExpansionTile(
-              collapsedTextColor: Colors.blueAccent,
-              textColor: Colors.grey,
               shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10)),
               ),
@@ -142,10 +164,10 @@ class _HomeState extends State<Home> {
   _methodChannel() {
     const MethodChannel(channelAndroidSend).setMethodCallHandler((call) {
       switch (call.method) {
-        case "JMessage":
+        case 'JMessage':
           {
-            switch (call.arguments["json"]) {
-              case "UpDate":
+            switch (call.arguments['json']) {
+              case 'UpDate':
                 {}
                 break;
             }
@@ -162,7 +184,7 @@ class _HomeState extends State<Home> {
     getVersionInfo(
       false,
       noUpdate: () {},
-      needUpdate: (versionInfo) => doUpdate(context, versionInfo),
+      needUpdate: (versionInfo) => doUpdate( versionInfo),
     );
     _methodChannel();
   }

@@ -1,75 +1,115 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/utils.dart';
+import 'package:jd_flutter/widget/picker/picker_controller.dart';
 
 import '../../http/response/picker_item.dart';
 
-class Picker extends StatefulWidget {
-  const Picker({
+class DatePicker extends StatelessWidget {
+  const DatePicker({
     Key? key,
     this.saveKey,
-    required this.buttonName,
-    required this.controller,
-    required this.getDataList,
+    this.buttonName,
+    this.firstDate,
+    this.lastDate,
+    required this.pickerController,
   }) : super(key: key);
   final String? saveKey;
-  final String buttonName;
-  final PickerController controller;
-  final Function getDataList;
+  final DateTime? firstDate;
+  final DateTime? lastDate;
+  final DatePickerController pickerController;
+  final String? buttonName;
+
+  _showOptions() {
+    var now = DateTime.now();
+    showDatePicker(
+      locale: View.of(Get.overlayContext!).platformDispatcher.locale,
+      context: Get.overlayContext!,
+      initialDate: pickerController.pickDate.value,
+      //起始时间
+      firstDate: firstDate ?? DateTime(now.year - 1, now.month, now.day),
+      //最小可以选日期
+      lastDate: DateTime(now.year, now.month, now.day + 7), //最大可选日期
+    ).then((date) {
+      if (date != null) {
+        pickerController.select(saveKey, date);
+      }
+    });
+  }
 
   @override
-  State<Picker> createState() => _PickerState();
-}
-
-class PickerController {
-  var selectedName = ''.obs;
-  var selectedId = ''.obs;
-  var enable = true.obs;
-  List<PickerItem> pickerData = [];
-  RxList<PickerItem> pickerItems = <PickerItem>[].obs;
-
-  select(PickerItem item) {
-    selectedName.value = item.pickerName();
-    selectedId.value = item.pickerId();
-  }
-
-  search(String text) {
-    if (text.trim().isEmpty) {
-      pickerItems.value = pickerData;
-    } else {
-      pickerItems.value = pickerData
-          .where((element) => element.pickerName().contains(text))
-          .toList();
+  Widget build(BuildContext context) {
+    if (saveKey != null) {
+      pickerController.pickDate.value = pickerController.getSave(saveKey);
     }
+    return Container(
+      margin: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+      padding: const EdgeInsets.only(left: 15, right: 5),
+      decoration: BoxDecoration(
+        color: Colors.grey[300],
+        borderRadius: BorderRadius.circular(25),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Obx(() => Text(
+                pickerController.getDateFormatYMD(),
+                style: const TextStyle(color: Colors.black),
+              )),
+          Obx(() => ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor:
+                      pickerController.enable.value ? Colors.blue : Colors.grey,
+                  foregroundColor: Colors.greenAccent,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
+                onPressed: () => _showOptions(),
+                child: Text(
+                  buttonName ?? pickerController.getButtonName(),
+                  style: const TextStyle(color: Colors.white),
+                ),
+              ))
+        ],
+      ),
+    );
   }
 }
 
-class _PickerState extends State<Picker> {
-  _showOptions() {
-    if (widget.controller.enable.value == false) return;
-    if (widget.controller.pickerItems.isNotEmpty) {
-      var initialItem = 0;
-      if (widget.saveKey != null && widget.saveKey!.isNotEmpty) {
-        var find = widget.controller.pickerItems.indexWhere(
-          (element) => element.pickerId() == spGet(widget.saveKey!),
-        );
-        if (find >= 0) initialItem = find;
-      }
-      //创建选择器控制器
-      var controller = FixedExtentScrollController(initialItem: initialItem);
+var _titleButtonCancel = TextButton(
+  onPressed: () => Get.back(),
+  child: Text(
+    'dialog_default_cancel'.tr,
+    style: const TextStyle(
+      color: Colors.grey,
+      fontSize: 20,
+    ),
+  ),
+);
 
-      var titleButtonCancel = TextButton(
-        onPressed: () {
-          Get.back();
-        },
-        child: Text(
-          'dialog_default_cancel'.tr,
-          style: const TextStyle(
-            color: Colors.grey,
-            fontSize: 20,
-          ),
-        ),
+class OptionsPicker extends StatelessWidget {
+  const OptionsPicker({
+    Key? key,
+    this.saveKey,
+    this.buttonName,
+    this.getDataList,
+    required this.pickerController,
+  }) : super(key: key);
+
+  final String? saveKey;
+  final OptionsPickerController pickerController;
+  final String? buttonName;
+  final Function? getDataList;
+
+  _showOptions() {
+    if (pickerController.enable.value == false) return;
+    if (pickerController.pickerItems.isNotEmpty) {
+      //创建选择器控制器
+      var controller = FixedExtentScrollController(
+        initialItem: pickerController.getSave(saveKey),
       );
 
       var titleSearch = Expanded(
@@ -78,18 +118,15 @@ class _PickerState extends State<Picker> {
             color: Colors.white54,
             borderRadius: BorderRadius.circular(20),
           ),
-          placeholder: '输入名称快速定位',
-          onChanged: (String value) => widget.controller.search(value),
+          placeholder: 'picker_search'.tr,
+          onChanged: (String value) => pickerController.search(value),
         ),
       );
 
       var titleButtonConfirm = TextButton(
         onPressed: () {
-          var select = widget.controller.pickerItems[controller.selectedItem];
-          widget.controller.select(select);
-          if (widget.saveKey != null && widget.saveKey!.isNotEmpty) {
-            spSave(widget.saveKey!, select.pickerId());
-          }
+          if (pickerController.pickerItems.isEmpty) return;
+          pickerController.select(saveKey, controller.selectedItem);
           Get.back();
         },
         child: Text(
@@ -110,7 +147,7 @@ class _PickerState extends State<Picker> {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  titleButtonCancel,
+                  _titleButtonCancel,
                   titleSearch,
                   titleButtonConfirm,
                 ],
@@ -118,7 +155,7 @@ class _PickerState extends State<Picker> {
             ),
             Obx(() => Expanded(
                   child: getCupertinoPicker(
-                    widget.controller.pickerItems.map((data) {
+                    pickerController.pickerItems.map((data) {
                       return Center(child: Text(data.pickerName()));
                     }).toList(),
                     controller,
@@ -128,81 +165,220 @@ class _PickerState extends State<Picker> {
         ),
       );
     } else {
-      _getData();
+      pickerController.getData(saveKey, getDataList);
     }
-  }
-
-  _getData() {
-    if (widget.controller.pickerItems.isEmpty) {
-      widget.getDataList().then((value) {
-        if (value.isNotEmpty) {
-          widget.controller.pickerData = value;
-          widget.controller.pickerItems.value = value;
-          var select = value[0];
-          if (widget.saveKey != null && widget.saveKey!.isNotEmpty) {
-            var save = spGet(widget.saveKey!);
-            widget.controller.select(
-              select = widget.controller.pickerItems.firstWhere(
-                (element) => element.pickerId() == save,
-                orElse: () => select,
-              ),
-            );
-          }
-          widget.controller.select(select);
-        }
-      });
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _getData();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 10, right: 10),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.grey[300],
-          borderRadius: BorderRadius.circular(25),
+    pickerController.search('');
+    pickerController.getData(saveKey, getDataList);
+    return Container(
+      margin: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+      padding: const EdgeInsets.only(left: 15, right: 5),
+      decoration: BoxDecoration(
+        color: Colors.grey[300],
+        borderRadius: BorderRadius.circular(25),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Obx(() => Expanded(
+                child: AutoSizeText(
+                  pickerController.loadingError.isEmpty
+                      ? pickerController.selectedName.value
+                      : pickerController.loadingError.value,
+                  style: const TextStyle(color: Colors.black),
+                  maxLines: 2,
+                  minFontSize: 8,
+                  maxFontSize: 16,
+                ),
+              )),
+          Obx(() => ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: pickerController.pickerItems.isEmpty
+                      ? Colors.red
+                      : pickerController.enable.value
+                          ? Colors.blue
+                          : Colors.grey,
+                  foregroundColor: pickerController.pickerItems.isEmpty
+                      ? Colors.orange
+                      : Colors.greenAccent,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
+                onPressed: () => _showOptions(),
+                child: Text(
+                  pickerController.pickerItems.isNotEmpty
+                      ? buttonName??pickerController.getButtonName()
+                      : 'picker_refresh'.tr,
+                  style: const TextStyle(color: Colors.white),
+                ),
+              ))
+        ],
+      ),
+    );
+  }
+}
+
+class LinkOptionsPicker extends StatelessWidget {
+  const LinkOptionsPicker({
+    Key? key,
+    this.saveKey,
+    this.buttonName,
+    this.getDataList,
+    required this.pickerController,
+  }) : super(key: key);
+
+  final String? saveKey;
+  final LinkOptionsPickerController pickerController;
+  final String? buttonName;
+  final Function? getDataList;
+
+  Widget _pickerText(PickerItem data) {
+    return Text(
+      data.pickerName(),
+      style: TextStyle(fontSize: data.pickerName().length > 10 ? 12 : 16),
+    );
+  }
+
+  _showOptions() {
+    if (pickerController.enable.value == false) return;
+    if (pickerController.pickerItems1.isNotEmpty) {
+      var select = pickerController.getSave(saveKey);
+      //创建选择器控制器
+      var controller1 = FixedExtentScrollController(initialItem: select[0]);
+      var controller2 = FixedExtentScrollController(initialItem: select[1]);
+
+      var titleSearch = Expanded(
+        child: CupertinoSearchTextField(
+          decoration: BoxDecoration(
+            color: Colors.white54,
+            borderRadius: BorderRadius.circular(20),
+          ),
+          placeholder: 'picker_search'.tr,
+          onChanged: (String value) => pickerController.search(value),
         ),
-        child: Padding(
-          padding: const EdgeInsets.only(left: 15, right: 5),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Obx(() => Text(
-                    widget.controller.selectedName.value,
-                    style: const TextStyle(color: Colors.black),
-                  )),
-              Obx(() => ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: widget.controller.pickerItems.isEmpty
-                          ? Colors.red
-                          : widget.controller.enable.value
-                              ? Colors.blue
-                              : Colors.grey,
-                      foregroundColor: widget.controller.pickerItems.isEmpty
-                          ? Colors.orange
-                          : Colors.greenAccent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                    ),
-                    onPressed: () => _showOptions(),
-                    child: Text(
-                      widget.controller.pickerItems.isNotEmpty
-                          ? widget.buttonName
-                          : '刷新',
-                      style: const TextStyle(color: Colors.white),
-                    ),
-                  ))
-            ],
+      );
+
+      var titleButtonConfirm = TextButton(
+        onPressed: () {
+          if (pickerController.pickerItems1.isEmpty) return;
+          pickerController.select(
+              saveKey, controller1.selectedItem, controller2.selectedItem);
+          Get.back();
+        },
+        child: Text(
+          'dialog_default_confirm'.tr,
+          style: const TextStyle(
+            color: Colors.blueAccent,
+            fontSize: 20,
           ),
         ),
+      );
+
+      showPopup(
+        Column(
+          children: [
+            Container(
+              height: 80,
+              color: Colors.grey[200],
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _titleButtonCancel,
+                  titleSearch,
+                  titleButtonConfirm,
+                ],
+              ),
+            ),
+            Obx(() => Expanded(
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: CupertinoPicker(
+                          scrollController: controller1,
+                          onSelectedItemChanged: (value) {
+                            pickerController.refreshItem2(value);
+                            controller2.jumpToItem(0);
+                          },
+                          itemExtent: 22,
+                          squeeze: 1.2,
+                          children: pickerController.pickerItems1.map((data) {
+                            return _pickerText(data);
+                          }).toList(),
+                        ),
+                      ),
+                      Expanded(
+                          child: CupertinoPicker(
+                        scrollController: controller2,
+                        onSelectedItemChanged: (value) {},
+                        itemExtent: 22,
+                        squeeze: 1.2,
+                        children: pickerController.pickerItems2.map((data) {
+                          return _pickerText(data);
+                        }).toList(),
+                      )),
+                    ],
+                  ),
+                )),
+          ],
+        ),
+      );
+    } else {
+      pickerController.getData(saveKey, getDataList);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    pickerController.search('');
+    pickerController.getData(saveKey, getDataList);
+    return Container(
+      margin: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+      padding: const EdgeInsets.only(left: 15, right: 5),
+      decoration: BoxDecoration(
+        color: Colors.grey[300],
+        borderRadius: BorderRadius.circular(25),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Obx(() => Expanded(
+                child: AutoSizeText(
+                  pickerController.loadingError.isEmpty
+                      ? pickerController.selectedName.value
+                      : pickerController.loadingError.value,
+                  style: const TextStyle(color: Colors.black),
+                  maxLines: 2,
+                  minFontSize: 8,
+                  maxFontSize: 16,
+                ),
+              )),
+          Obx(() => ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: pickerController.pickerItems2.isEmpty
+                      ? Colors.red
+                      : pickerController.enable.value
+                          ? Colors.blue
+                          : Colors.grey,
+                  foregroundColor: pickerController.pickerItems2.isEmpty
+                      ? Colors.orange
+                      : Colors.greenAccent,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
+                onPressed: () => _showOptions(),
+                child: Text(
+                  pickerController.pickerItems2.isNotEmpty
+                      ? buttonName??pickerController.getButtonName()
+                      : 'picker_refresh'.tr,
+                  style: const TextStyle(color: Colors.white),
+                ),
+              ))
+        ],
       ),
     );
   }

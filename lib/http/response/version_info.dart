@@ -1,7 +1,9 @@
-/// Description : "检测到最新版本，请及时更新！"
+import 'dart:ffi';
+
+/// Description : '检测到最新版本，请及时更新！'
 /// Force : true
-/// Url : "http://geapp.goldemperor.com:8020/AndroidUpdate/GoldEmperor/GE1.0.apk"
-/// VersionName : "1.0.0"
+/// Url : 'http://geapp.goldemperor.com:8020/AndroidUpdate/GoldEmperor/GE1.0.apk'
+/// VersionName : '1.0.0'
 /// VersionCode : 1
 
 class VersionInfo {
@@ -34,6 +36,25 @@ class VersionInfo {
     map['Url'] = url;
     map['VersionName'] = versionName;
     map['VersionCode'] = versionCode;
+    return map;
+  }
+}
+
+class FunctionVersion {
+  FunctionVersion.fromJson(dynamic json) {
+    id = json['ID'];
+    version = int.parse(json['Version']);
+  }
+
+  int? id;
+  int? version;
+
+  FunctionVersion({this.id, this.version});
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['ID'] = id;
+    map['Version'] = version;
     return map;
   }
 }

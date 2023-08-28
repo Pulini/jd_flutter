@@ -7,7 +7,7 @@ class BaseData {
 
   BaseData.fromJson(dynamic json) {
     resultCode = json['ResultCode'];
-    data = json['Data'] ?? "";
+    data = json['Data'] ?? '';
     message = json['Message'];
   }
 

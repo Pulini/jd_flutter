@@ -12,41 +12,41 @@ import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'http/response/picker_item.dart';
-import 'http/response/picker_supplier.dart';
 import 'http/response/user_info.dart';
 import 'http/response/version_info.dart';
 import 'http/web_api.dart';
 
 late SharedPreferences sharedPreferences;
 late PackageInfo packageInfo;
+var localeChinese = const Locale('zh', 'Hans_CN');
+var localeEnglish = const Locale('en', 'US');
 
 /// 保存SP数据
 spSave(String key, Object value) {
   if (value is String) {
     sharedPreferences.setString(key, value);
-    logger.d("save\nclass:${value.runtimeType}\nkey:$key\nvalue:$value");
+    logger.d('save\nclass:${value.runtimeType}\nkey:$key\nvalue:$value');
   } else if (value is int) {
     sharedPreferences.setInt(key, value);
-    logger.d("save\nclass:${value.runtimeType}\nkey:$key\nvalue:$value");
+    logger.d('save\nclass:${value.runtimeType}\nkey:$key\nvalue:$value');
   } else if (value is double) {
     sharedPreferences.setDouble(key, value);
-    logger.d("save\nclass:${value.runtimeType}\nkey:$key\nvalue:$value");
+    logger.d('save\nclass:${value.runtimeType}\nkey:$key\nvalue:$value');
   } else if (value is bool) {
     sharedPreferences.setBool(key, value);
-    logger.d("save\nclass:${value.runtimeType}\nkey:$key\nvalue:$value");
+    logger.d('save\nclass:${value.runtimeType}\nkey:$key\nvalue:$value');
   } else {
-    logger.e("error\nclass:${value.runtimeType}");
+    logger.e('error\nclass:${value.runtimeType}');
   }
 }
 
 /// 获取SP数据
 dynamic spGet(String key) {
   var value = sharedPreferences.get(key);
-  logger.d("read\nclass:${value.runtimeType}\nkey:$key\nvalue:$value");
+  logger.d('read\nclass:${value.runtimeType}\nkey:$key\nvalue:$value');
   switch (value.runtimeType) {
     case String:
-      return value ?? "";
+      return value ?? '';
     case int:
       return value ?? 0;
     case double:
@@ -117,17 +117,20 @@ extension StringExt on String {
 }
 
 ///获取服务器版本信息
-getVersionInfo(bool showLoading,
-    {required Function noUpdate, required Function(VersionInfo) needUpdate}) {
+getVersionInfo(
+  bool showLoading, {
+  required Function noUpdate,
+  required Function(VersionInfo) needUpdate,
+}) {
   httpGet(
     method: webApiCheckVersion,
-    loading: showLoading ? 'checking_version'.tr : "",
+    loading: showLoading ? 'checking_version'.tr : '',
   ).then((versionInfoCallback) {
     if (versionInfoCallback.resultCode == resultSuccess) {
       logger.f(packageInfo);
       var versionInfo =
           VersionInfo.fromJson(jsonDecode(versionInfoCallback.data));
-      // versionInfo.versionName = "2.0.0";
+      // versionInfo.versionName = '2.0.0';
       // versionInfo.force = false;
       if (packageInfo.version == versionInfo.versionName) {
         noUpdate.call();
@@ -135,7 +138,22 @@ getVersionInfo(bool showLoading,
         needUpdate.call(versionInfo);
       }
     } else {
-      errorDialog(Get.overlayContext!, content: versionInfoCallback.message);
+      errorDialog(content: versionInfoCallback.message);
+    }
+  });
+}
+
+///更新app
+upData() {
+  httpGet(
+    method: webApiCheckVersion,
+    loading: 'checking_version'.tr,
+  ).then((versionInfoCallback) {
+    if (versionInfoCallback.resultCode == resultSuccess) {
+      logger.f(packageInfo);
+      doUpdate(VersionInfo.fromJson(jsonDecode(versionInfoCallback.data)));
+    } else {
+      errorDialog(content: versionInfoCallback.message);
     }
   });
 }
@@ -162,7 +180,7 @@ getCupertinoPicker(List<Widget> items, FixedExtentScrollController controller) {
   );
 }
 
-showPopup(Widget widget,{double? height}) {
+showPopup(Widget widget, {double? height}) {
   showCupertinoModalPopup(
     context: Get.overlayContext!,
     builder: (BuildContext context) {
@@ -170,7 +188,7 @@ showPopup(Widget widget,{double? height}) {
           padding: MediaQuery.of(context).viewInsets,
           duration: const Duration(milliseconds: 100),
           child: Container(
-            height: height??260,
+            height: height ?? 260,
             color: Colors.grey[200],
             child: widget,
           ));
@@ -211,13 +229,4 @@ logL(String msg) {
       break;
     }
   }
-}
-
-Future<List<PickerItem>> getSapSuppliers() async {
-  var response = await httpGet(method: webApiGetSapSuppliers);
-  List<PickerItem> list = [];
-  for (var item in jsonDecode(response.data)) {
-    list.add(PickerSupplier.fromJson(item));
-  }
-  return list;
 }

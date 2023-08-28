@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/router_report.dart';
 import 'package:jd_flutter/route.dart';
@@ -26,7 +27,7 @@ main() async {
   // FlutterHmsScanKit.scan.then(
   //       (result) => {
   //     logger
-  //         .e("form:${result?.scanTypeForm} value:${result?.value}")
+  //         .e('form:${result?.scanTypeForm} value:${result?.value}')
   //   },
   // );
 }
@@ -62,8 +63,6 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
 
-  var localeChinese = const Locale('zh', 'CN');
-  var localeEnglish = const Locale('en', 'US');
 
   @override
   Widget build(BuildContext context) {
@@ -74,10 +73,14 @@ class _MyAppState extends State<MyApp> {
       navigatorObservers: [GetXRouterObserver()],
       locale: View.of(context).platformDispatcher.locale,
       localeListResolutionCallback: (locales, supportedLocales) {
-        logL("当前语音：$locales");
-        language = locales?.first.languageCode ?? "zh";
+        language = locales?.first.languageCode==localeChinese.languageCode?'zh':'en';
+        logL('当前语音：$locales');
         return null;
       },
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent),
         useMaterial3: true,
@@ -91,10 +94,10 @@ class _MyAppState extends State<MyApp> {
       //     builder: (context, AsyncSnapshot<UserInfo> snapshot) {
       //       if (snapshot.hasData) {
       //         userController.init(snapshot.requireData);
-      //         logger.f("----------1-----------");
+      //         logger.f('----------1-----------');
       //         return const Home();
       //       } else {
-      //         logger.f("----------2-----------");
+      //         logger.f('----------2-----------');
       //         return const Login();
       //       }
       //     }

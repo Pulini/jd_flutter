@@ -12,6 +12,7 @@ import '../bean/home_button.dart';
 import '../constant.dart';
 import '../http/request/user_avatar.dart';
 import '../http/response/department.dart';
+import '../http/response/version_info.dart';
 import '../http/web_api.dart';
 import '../widget/dialogs.dart';
 import 'home_state.dart';
@@ -22,7 +23,7 @@ class HomeLogic extends GetxController {
   refreshButton() {
     state.buttons.clear();
     state.buttons.addAll(
-      state.buttonList.where(
+      appButtonList.where(
         (element) {
           if (state.search.isEmpty) {
             return element.classify == state.navigationBarIndex.value;
@@ -41,6 +42,7 @@ class HomeLogic extends GetxController {
       ),
     );
   }
+
 
   ///用户头像
   var userAvatar = Obx(
@@ -132,8 +134,7 @@ class HomeLogic extends GetxController {
           );
           userController.user.update((val) => userController.user);
         } else {
-          errorDialog(Get.overlayContext!,
-              content: changeAvatarCallback.message);
+          errorDialog(content: changeAvatarCallback.message);
         }
       });
     }
@@ -145,7 +146,7 @@ class HomeLogic extends GetxController {
     var departmentCallback = await httpGet(
       loading: 'getting_group'.tr,
       method: webApiGetDepartment,
-      query: {"EmpID": userController.user.value!.empID},
+      query: {'EmpID': userController.user.value!.empID},
     );
     if (departmentCallback.resultCode == resultSuccess) {
       //创建部门列表数据
@@ -183,21 +184,20 @@ class HomeLogic extends GetxController {
             loading: 'modifying_group'.tr,
             method: webApiChangeDepartment,
             query: {
-              "EmpID": userController.user.value!.empID,
-              "OrganizeID": userController.user.value!.organizeID,
-              "DeptmentID": list[controller.selectedItem].itemID,
+              'EmpID': userController.user.value!.empID,
+              'OrganizeID': userController.user.value!.organizeID,
+              'DeptmentID': list[controller.selectedItem].itemID,
             },
           ).then((changeDepartmentCallback) {
             if (changeDepartmentCallback.resultCode == resultSuccess) {
               var json = jsonDecode(changeDepartmentCallback.data);
               //修改用户数据中的部门数据
-              userController.user.value!.departmentID = json["DeptmentID"];
-              userController.user.value!.departmentName = json["DeptmentName"];
+              userController.user.value!.departmentID = json['DeptmentID'];
+              userController.user.value!.departmentName = json['DeptmentName'];
               userController.user.update((val) => userController.user.value!);
               spSave(spSaveUserInfo, jsonEncode(userController.user.value));
             } else {
               errorDialog(
-                Get.overlayContext!,
                 content: changeDepartmentCallback.message,
               );
             }
@@ -235,7 +235,7 @@ class HomeLogic extends GetxController {
         ],
       ));
     } else {
-      errorDialog(Get.overlayContext!, content: departmentCallback.message);
+      errorDialog(content: departmentCallback.message);
     }
   }
 
@@ -300,23 +300,21 @@ class HomeLogic extends GetxController {
           TextButton(
             onPressed: () {
               if (oldPassword.text.isEmpty) {
-                errorDialog(context,
-                    content: 'change_password_dialog_old_password'.tr);
+                errorDialog(content: 'change_password_dialog_old_password'.tr);
                 return;
               }
               if (oldPassword.text.md5Encode().toUpperCase() !=
                   userController.user.value!.passWord) {
-                errorDialog(context,
+                errorDialog(
                     content: 'change_password_dialog_old_password_error'.tr);
                 return;
               }
               if (newPassword.text.isEmpty) {
-                errorDialog(context,
-                    content: 'change_password_dialog_new_password'.tr);
+                errorDialog(content: 'change_password_dialog_new_password'.tr);
                 return;
               }
 
-              var phone = "";
+              var phone = '';
               switch (spGet(spSaveLoginType)) {
                 case loginTypePhone:
                   phone = spGet(spSaveLoginPhone);
@@ -329,19 +327,19 @@ class HomeLogic extends GetxController {
                 loading: 'change_password_dialog_submitting'.tr,
                 method: webApiChangePassword,
                 query: {
-                  "OldPassWord": oldPassword,
-                  "NewPassWord": newPassword,
-                  "PhoneNumber": phone
+                  'OldPassWord': oldPassword,
+                  'NewPassWord': newPassword,
+                  'PhoneNumber': phone
                 },
               ).then((changePasswordCallback) {
                 if (changePasswordCallback.resultCode == resultSuccess) {
-                  informationDialog(context,
-                      content: changePasswordCallback.message, back: () {
-                    Get.back();
-                  });
+                  informationDialog(
+                      content: changePasswordCallback.message,
+                      back: () {
+                        Get.back();
+                      });
                 } else {
-                  errorDialog(Get.overlayContext!,
-                      content: changePasswordCallback.message);
+                  errorDialog(content: changePasswordCallback.message);
                 }
               });
             },
