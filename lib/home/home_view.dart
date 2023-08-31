@@ -41,7 +41,7 @@ class _HomeState extends State<Home> {
         placeholder: 'home_top_search'.tr,
         onChanged: (String value) {
           state.search = value;
-          logic.refreshButton();
+          state.refreshButton();
         },
       ),
       backgroundColor: Colors.transparent,
@@ -72,13 +72,11 @@ class _HomeState extends State<Home> {
       enabled: item.hasUpdate ? true : item.lock,
       leading: Image.asset(
         item.icon,
-        color:Colors.red,
+        color: _color(item),
         width: isGroup ? 30 : 40,
         height: isGroup ? 30 : 40,
       ),
-      title: Text(
-        item.name
-      ),
+      title: Text(item.name),
       subtitle: Text(
         item.description,
       ),
@@ -90,7 +88,7 @@ class _HomeState extends State<Home> {
                 Icon(Icons.cloud_upload, color: Colors.green[200]),
                 Text('home_button_has_update'.tr,
                     style: TextStyle(
-                      color:_color(item),
+                      color: _color(item),
                       fontSize: 10,
                     )),
               ],
@@ -103,9 +101,11 @@ class _HomeState extends State<Home> {
 
   _item(ButtonItem item, int index) {
     return Card(
+      color: item is HomeButton ? Colors.white : Colors.blue.shade50,
       child: item is HomeButton
           ? _listTile(false, item)
           : ExpansionTile(
+              backgroundColor: Colors.white,
               shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10)),
               ),
@@ -155,7 +155,7 @@ class _HomeState extends State<Home> {
         selectedItemColor: const Color.fromARGB(0xff, 0xff, 0xff, 0x66),
         onTap: (index) {
           state.navigationBarIndex.value = index;
-          logic.refreshButton();
+          state.refreshButton();
         },
       ),
     );
@@ -184,7 +184,7 @@ class _HomeState extends State<Home> {
     getVersionInfo(
       false,
       noUpdate: () {},
-      needUpdate: (versionInfo) => doUpdate( versionInfo),
+      needUpdate: (versionInfo) => doUpdate(versionInfo),
     );
     _methodChannel();
   }

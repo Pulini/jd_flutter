@@ -4,7 +4,6 @@ import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/http/response/base_data.dart';
 import 'package:logger/logger.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 
 import '../constant.dart';
@@ -61,19 +60,13 @@ Future<BaseData> httpGet({
 
 ///接口拦截器
 var _interceptors = InterceptorsWrapper(onRequest: (options, handler) {
-  logger.i('''
-type：${options.method}
-baseUrl:${options.baseUrl}
-path：${options.path}
-headers：${options.headers}
-''');
-  logL('请求时间:${DateTime.now()}\nbody：${options.data}');
+  options.print();
   handler.next(options);
 }, onResponse: (response, handler) {
-  logL('响应时间:${DateTime.now()}\nbody：${response.data}');
   var baseData = BaseData.fromJson(response.data.runtimeType == String
       ? jsonDecode(response.data)
       : response.data);
+  baseData.print();
   if (baseData.resultCode == 2) {
     logger.e('需要重新登录');
     spSave(spSaveUserInfo, '');
@@ -135,8 +128,8 @@ Future<BaseData> _doHttp(bool isPost, String method,
 
     ///发起post/get请求
     var response = isPost
-        ? await dio.postUri(uri, data: body, options: options)
-        : await dio.getUri(uri, data: body, options: options);
+        ? await dio.post(method,queryParameters: query, data: body, options: options)
+        : await dio.get(method,queryParameters: query, data: body, options: options);
     if (response.statusCode == 200) {
       var baseData = BaseData.fromJson(response.data.runtimeType == String
           ? jsonDecode(response.data)
@@ -160,45 +153,6 @@ Future<BaseData> _doHttp(bool isPost, String method,
   }
   if (loading != null && loading.isNotEmpty) Get.back();
   return base;
-}
-
-///下載文件
-download(
-  String url, {
-  required cancel,
-  required Function(int count, int total) progress,
-  required Function(String filePath) completed,
-  required Function(String message) error,
-}) async {
-  try {
-    var fileName = url.substring(url.lastIndexOf('/') + 1);
-    var temporary = await getTemporaryDirectory();
-    var savePath = '${temporary.path}/$fileName';
-    logger.i('url:$url \nsavePath：$savePath\nfileName：$fileName');
-
-    await Dio().download(
-      url,
-      savePath,
-      cancelToken: cancel,
-      options: Options(receiveTimeout: const Duration(minutes: 2)),
-      onReceiveProgress: (int count, int total) {
-        progress.call(count, total);
-      },
-    ).then((value) {
-      completed.call(savePath);
-    });
-  } on DioException catch (e) {
-    logger.e('error:$e');
-    if (e.type != DioExceptionType.cancel) {
-      error.call('下载异常：$e');
-    }
-  } on Exception catch (e) {
-    logger.e('error:${e.toString()}');
-    error.call('发生错误：$e');
-  } on Error catch (e) {
-    logger.e('error:${e.toString()}');
-    error.call('发生异常：${e.toString()}');
-  }
 }
 
 ///登录接口

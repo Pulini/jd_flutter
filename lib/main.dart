@@ -74,7 +74,7 @@ class _MyAppState extends State<MyApp> {
       locale: View.of(context).platformDispatcher.locale,
       localeListResolutionCallback: (locales, supportedLocales) {
         language = locales?.first.languageCode==localeChinese.languageCode?'zh':'en';
-        logL('当前语音：$locales');
+        log('当前语音：$locales');
         return null;
       },
       localizationsDelegates: const [

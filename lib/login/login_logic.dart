@@ -12,6 +12,7 @@ import '../http/response/user_info.dart';
 import '../http/web_api.dart';
 import '../utils.dart';
 import '../widget/dialogs.dart';
+import '../widget/downloader.dart';
 import 'login_state.dart';
 
 ///获取验证码
@@ -117,54 +118,58 @@ class LoginLogic extends GetxController with GetSingleTickerProviderStateMixin {
       query: {'Phone': faceLoginPhoneController.text},
     ).then((val) {
       if (val.resultCode == resultSuccess) {
-        downloadDialog(val.data.toString().replaceAll('\'', ''), (filePath) {
-          try {
-            Permission.camera.request().isGranted.then((permission) {
-              if (permission) {
-                const MethodChannel(channelFlutterSend)
-                    .invokeMethod('StartDetect', filePath)
-                    .then(
-                  (detectCallback) {
-                    logger.i(detectCallback);
-                    httpPost(
-                      loading: 'logging'.tr,
-                      method: webApiLogin,
-                      query: {
-                        'JiGuangID': '',
-                        'Phone': faceLoginPhoneController.text,
-                        'Password': '',
-                        'VCode': '',
-                        'Type': 2,
+        Downloader(
+            url: val.data.toString().replaceAll('\'', ''),
+            completed: (filePath) {
+              try {
+                Permission.camera.request().isGranted.then((permission) {
+                  if (permission) {
+                    const MethodChannel(channelFlutterSend)
+                        .invokeMethod('StartDetect', filePath)
+                        .then(
+                      (detectCallback) {
+                        logger.i(detectCallback);
+                        httpPost(
+                          loading: 'logging'.tr,
+                          method: webApiLogin,
+                          query: {
+                            'JiGuangID': '',
+                            'Phone': faceLoginPhoneController.text,
+                            'Password': '',
+                            'VCode': '',
+                            'Type': 2,
+                          },
+                        ).then((loginCallback) {
+                          if (loginCallback.resultCode == resultSuccess) {
+                            spSave(spSaveLoginType, loginTypeFace);
+                            spSave(
+                                spSaveLoginFace, faceLoginPhoneController.text);
+                            spSave(
+                                spSaveUserInfo, loginCallback.data.toString());
+                            userController.init(UserInfo.fromJson(
+                                jsonDecode(loginCallback.data)));
+                            Get.delete<LoginLogic>();
+                            _isReLogin
+                                ? Get.back()
+                                : Get.offAll(() => const Home());
+                          } else {
+                            errorDialog(
+                                content:
+                                    loginCallback.message ?? 'login_failed'.tr);
+                          }
+                        });
                       },
-                    ).then((loginCallback) {
-                      if (loginCallback.resultCode == resultSuccess) {
-                        spSave(spSaveLoginType, loginTypeFace);
-                        spSave(spSaveLoginFace, faceLoginPhoneController.text);
-                        spSave(spSaveUserInfo, loginCallback.data.toString());
-                        userController.init(
-                            UserInfo.fromJson(jsonDecode(loginCallback.data)));
-                        Get.delete<LoginLogic>();
-                        _isReLogin
-                            ? Get.back()
-                            : Get.offAll(() => const Home());
-                      } else {
-                        errorDialog(
-                            content:
-                                loginCallback.message ?? 'login_failed'.tr);
-                      }
+                    ).catchError((e) {
+                      logger.i(e);
                     });
-                  },
-                ).catchError((e) {
-                  logger.i(e);
+                  } else {
+                    errorDialog(content: 'face_login_no_camera_permission'.tr);
+                  }
                 });
-              } else {
-                errorDialog(content: 'face_login_no_camera_permission'.tr);
+              } on PlatformException {
+                errorDialog(content: 'face_login_failed'.tr);
               }
             });
-          } on PlatformException {
-            errorDialog(content: 'face_login_failed'.tr);
-          }
-        });
       } else {
         errorDialog(
             content: val.message ?? 'face_login_get_photo_path_failed'.tr);

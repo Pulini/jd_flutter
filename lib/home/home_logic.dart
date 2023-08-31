@@ -8,11 +8,9 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:jd_flutter/utils.dart';
 
-import '../bean/home_button.dart';
 import '../constant.dart';
 import '../http/request/user_avatar.dart';
 import '../http/response/department.dart';
-import '../http/response/version_info.dart';
 import '../http/web_api.dart';
 import '../widget/dialogs.dart';
 import 'home_state.dart';
@@ -20,28 +18,7 @@ import 'home_state.dart';
 class HomeLogic extends GetxController {
   final HomeState state = HomeState();
 
-  refreshButton() {
-    state.buttons.clear();
-    state.buttons.addAll(
-      appButtonList.where(
-        (element) {
-          if (state.search.isEmpty) {
-            return element.classify == state.navigationBarIndex.value;
-          } else {
-            if (element is HomeButtonGroup) {
-              return element.functionGroup.any((e2) {
-                return e2.name.contains(state.search) ||
-                    e2.description.contains(state.search);
-              });
-            } else {
-              return element.name.contains(state.search) ||
-                  element.description.contains(state.search);
-            }
-          }
-        },
-      ),
-    );
-  }
+
 
 
   ///用户头像

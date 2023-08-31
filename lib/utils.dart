@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:crypto/crypto.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -116,6 +117,20 @@ extension StringExt on String {
       md5.convert(const Utf8Encoder().convert(this)).toString();
 }
 
+extension RequestOptionsExt on RequestOptions {
+  print() {
+    Map<String, dynamic> map = <String, dynamic>{};
+    map['RequestTime'] = DateTime.now();
+    map['Method'] = method;
+    map['BaseUrl'] = baseUrl;
+    map['Path'] = path;
+    map['Headers'] = headers;
+    map['QueryParameters'] = queryParameters;
+    logger.f(map);
+  }
+}
+
+
 ///获取服务器版本信息
 getVersionInfo(
   bool showLoading, {
@@ -127,11 +142,13 @@ getVersionInfo(
     loading: showLoading ? 'checking_version'.tr : '',
   ).then((versionInfoCallback) {
     if (versionInfoCallback.resultCode == resultSuccess) {
-      logger.f(packageInfo);
+      logger.i(packageInfo);
       var versionInfo =
           VersionInfo.fromJson(jsonDecode(versionInfoCallback.data));
       // versionInfo.versionName = '2.0.0';
       // versionInfo.force = false;
+      // versionInfo.url =
+      //     'https://geapp.goldemperor.com:8021/AndroidUpdate/GoldEmperor/GE1.0.73.apk';
       if (packageInfo.version == versionInfo.versionName) {
         noUpdate.call();
       } else {
@@ -150,7 +167,7 @@ upData() {
     loading: 'checking_version'.tr,
   ).then((versionInfoCallback) {
     if (versionInfoCallback.resultCode == resultSuccess) {
-      logger.f(packageInfo);
+      logger.i(packageInfo);
       doUpdate(VersionInfo.fromJson(jsonDecode(versionInfoCallback.data)));
     } else {
       errorDialog(content: versionInfoCallback.message);
@@ -214,19 +231,22 @@ class TapUtil {
   }
 }
 
-logL(String msg) {
-  const logMaxLength = 2000;
+log(String msg) {
   var strLength = msg.length;
   var start = 0;
-  var end = logMaxLength;
-  for (int i1 = 0; i1 < logMaxLength; i1++) {
+  var end = 2000;
+  var printText = '';
+  for (int i = 0; i < 999; i++) {
     if (strLength > end) {
-      print(msg.substring(start, end));
+      printText += '${msg.substring(start, end)}\n';
+      debugPrint(msg.substring(start, end));
       start = end;
-      end += logMaxLength;
+      end += 2000;
     } else {
-      print(msg.substring(start, strLength));
+      debugPrint(msg.substring(start, strLength));
+      printText += '${msg.substring(start, strLength)}\n';
       break;
     }
   }
+  logger.f(printText);
 }

@@ -1,3 +1,5 @@
+import '../web_api.dart';
+
 class BaseData {
   BaseData({
     this.resultCode,
@@ -21,5 +23,13 @@ class BaseData {
     map['Data'] = data;
     map['Message'] = message;
     return map;
+  }
+  print(){
+    Map<String, dynamic> map = <String, dynamic>{};
+    map['ResponseTime'] = DateTime.now();
+    map['ResultCode'] = resultCode;
+    map['Data'] = data;
+    map['Message'] = message;
+    logger.f(map);
   }
 }

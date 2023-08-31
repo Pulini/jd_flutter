@@ -1,14 +1,16 @@
-import 'package:dio/dio.dart';
+import 'dart:math';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:jd_flutter/widget/update_dialog.dart';
 
 import '../constant.dart';
 import '../http/response/version_info.dart';
 import '../http/web_api.dart';
 import '../login/login_logic.dart';
 import '../login/login_view.dart';
+import 'downloader.dart';
 
 /// 提示弹窗
 informationDialog({
@@ -113,155 +115,151 @@ loadingDialog(String? content) {
   );
 }
 
-downloadDialog(String url, Function(String) completed) {
-  showDialog<String>(
-    barrierDismissible: false,
-    context: Get.overlayContext!,
-    builder: (BuildContext context) => WillPopScope(
-      onWillPop: () async => false,
-      child: ProgressDialog(
-        url: url,
-        completed: (path) {
-          completed.call(path);
-        },
+doUpdate(VersionInfo version) {
+  var height = MediaQuery.of(Get.overlayContext!).size.height;
+  var width = MediaQuery.of(Get.overlayContext!).size.width;
+  final double dialogWidth = min(height, width) * 0.618;
+  update() {
+    if (GetPlatform.isAndroid) {
+      logger.f('Android_Update');
+      Downloader(
+        url: version.url!,
+        completed: (path) => const MethodChannel(channelFlutterSend)
+            .invokeMethod('OpenFile', path),
+      );
+      return;
+    }
+    if (GetPlatform.isIOS) {
+      logger.f('IOS_Update');
+      return;
+    }
+    if (GetPlatform.isWeb) {
+      logger.f('Web_Update');
+      return;
+    }
+    if (GetPlatform.isWindows) {
+      logger.f('Windows_Update');
+      return;
+    }
+    if (GetPlatform.isLinux) {
+      logger.f('Linux_Update');
+      return;
+    }
+    if (GetPlatform.isMacOS) {
+      logger.f('MacOS_Update');
+      return;
+    }
+    if (GetPlatform.isFuchsia) {
+      logger.f('Fuchsia_Update');
+      return;
+    }
+  }
+
+  var dialog = Material(
+    type: MaterialType.transparency,
+    child: SizedBox(
+      width: dialogWidth,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          SizedBox(
+            width: dialogWidth,
+            child: Image.asset(
+              'lib/res/images/bg_update_top.png',
+              fit: BoxFit.fill,
+            ),
+          ),
+          Container(
+            width: dialogWidth,
+            alignment: Alignment.center,
+            padding: const EdgeInsets.only(left: 16, right: 16, bottom: 8),
+            decoration: const ShapeDecoration(
+              color: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(8),
+                  bottomRight: Radius.circular(8),
+                ),
+              ),
+            ),
+            child: SingleChildScrollView(
+                child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  'update_dialog_title'.tr,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: Colors.black,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  child: Text(
+                    version.description ?? '',
+                    style: const TextStyle(color: Colors.grey),
+                  ),
+                ),
+                FractionallySizedBox(
+                  widthFactor: 1,
+                  child: ElevatedButton(
+                    style: ButtonStyle(
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      textStyle: MaterialStateProperty.all(
+                        const TextStyle(fontSize: 14),
+                      ),
+                      foregroundColor: MaterialStateProperty.all(Colors.white),
+                      shape: MaterialStateProperty.all(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                      ),
+                      elevation: MaterialStateProperty.all(5),
+                      backgroundColor: MaterialStateProperty.all(Colors.red),
+                    ),
+                    onPressed: update,
+                    child: Text('update_dialog_confirm'.tr),
+                  ),
+                ),
+                if ((version.force ?? false) == false)
+                  FractionallySizedBox(
+                    widthFactor: 1,
+                    child: TextButton(
+                      style: ButtonStyle(
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        textStyle: MaterialStateProperty.all(
+                          const TextStyle(fontSize: 14),
+                        ),
+                        foregroundColor: MaterialStateProperty.all(
+                          Colors.grey[600],
+                        ),
+                        shape: MaterialStateProperty.all(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                        ),
+                      ),
+                      onPressed: () => Get.back(),
+                      child: Text('update_dialog_cancel'.tr),
+                    ),
+                  )
+              ],
+            )),
+          ),
+        ],
       ),
     ),
   );
-}
 
-///下载器
-class ProgressDialog extends StatefulWidget {
-  const ProgressDialog({
-    Key? key,
-    required this.url,
-    required this.completed,
-  }) : super(key: key);
-  final String url;
-  final Function(dynamic) completed;
-
-  @override
-  State<ProgressDialog> createState() => _ProgressDialogState();
-}
-
-class _ProgressDialogState extends State<ProgressDialog> {
-  var _progress = 0.0;
-  var _text = '0%';
-  final cancelToken = CancelToken();
-
-  downloading() {
-    download(
-      widget.url,
-      cancel: cancelToken,
-      progress: (count, total) {
-        setState(() {
-          _progress = (count / total);
-          _text = '${((_progress * 1000).ceil() / 10)}%';
-        });
-      },
-      completed: (path) {
-        Get.back();
-        widget.completed.call(path);
-      },
-      error: (msg) {
-        Get.back();
-        errorDialog(content: msg);
-      },
-    );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    downloading();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Dialog(
-        backgroundColor: Colors.white,
-        child: SizedBox(
-          width: 200,
-          height: 160,
-          child: Padding(
-            padding: const EdgeInsets.all(15),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Text(
-                    '正在下载<${widget.url.substring(widget.url.lastIndexOf('/') + 1)}>...'),
-                const SizedBox(height: 15),
-                Row(
-                  children: [
-                    Expanded(
-                        flex: 1,
-                        child: LinearProgressIndicator(
-                          backgroundColor: Colors.blue.shade200,
-                          color: Colors.greenAccent,
-                          value: _progress,
-                        )),
-                    const SizedBox(width: 10),
-                    Text(_text),
-                  ],
-                ),
-                TextButton(
-                    onPressed: () {
-                      cancelToken.cancel();
-                      Get.back();
-                    },
-                    child: const Text('取消')),
-              ],
-            ),
-          ),
-        ));
-  }
-}
-
-doUpdate( VersionInfo version, {Function()? ignore}) {
-  UpdateDialog.showUpdate(
-    Get.overlayContext!,
-    title: '发现新版本',
-    updateContent: version.description!,
-    isForce: true,
-    updateButtonText: '升级',
-    ignoreButtonText: '忽略此版本',
-    enableIgnore: version.force! ? false : true,
-    onIgnore: ignore,
-    onUpdate: () {
-      if (GetPlatform.isAndroid) {
-        logger.f('Android_Update');
-        Get.back();
-        downloadDialog(
-          version.url!,
-          (path) => const MethodChannel(channelFlutterSend)
-              .invokeMethod('OpenFile', path),
-        );
-        return;
-      }
-      if (GetPlatform.isIOS) {
-        logger.f('IOS_Update');
-        return;
-      }
-      if (GetPlatform.isWeb) {
-        logger.f('Web_Update');
-        return;
-      }
-      if (GetPlatform.isWindows) {
-        logger.f('Windows_Update');
-        return;
-      }
-      if (GetPlatform.isLinux) {
-        logger.f('Linux_Update');
-        return;
-      }
-      if (GetPlatform.isMacOS) {
-        logger.f('MacOS_Update');
-        return;
-      }
-      if (GetPlatform.isFuchsia) {
-        logger.f('Fuchsia_Update');
-        return;
-      }
+  showDialog<bool>(
+    context: Get.overlayContext!,
+    barrierDismissible: false,
+    builder: (BuildContext context) {
+      return WillPopScope(
+        onWillPop: () => Future<bool>.value(false),
+        child: dialog,
+      );
     },
   );
 }
@@ -282,52 +280,54 @@ reLoginDialog() {
       style: const TextStyle(fontSize: 20),
     ),
   );
-  var dialog = UnconstrainedBox(
-    child: SizedBox(
-      width: 380,
-      height: 460,
-      child: Container(
-        padding: const EdgeInsets.all(8.0),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          gradient: const LinearGradient(
-            colors: [Colors.lightBlueAccent, Colors.blueAccent],
-            begin: Alignment.bottomLeft,
-            end: Alignment.topRight,
-          ),
-        ),
-        child: Wrap(
-          alignment: WrapAlignment.center,
-          children: [
-            Center(
-              child: Text(
-                're_login'.tr,
-                style: const TextStyle(
-                    fontSize: 22,
-                    color: Colors.white,
-                    decoration: TextDecoration.none),
-              ),
-            ),
-            const SizedBox(height: 50),
-            Container(
-              width: 500,
-              height: 330,
-              padding: const EdgeInsets.only(left: 20, right: 20),
-              child: LoginInlet(logic: logic, state: state),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 30, right: 30),
-              child: button,
-            )
-          ],
-        ),
+  var popup = Container(
+    padding: const EdgeInsets.all(8.0),
+    decoration: const BoxDecoration(
+      borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(20),
+        topRight: Radius.circular(20),
+      ),
+      gradient: LinearGradient(
+        colors: [Colors.lightBlueAccent, Colors.blueAccent],
+        begin: Alignment.bottomLeft,
+        end: Alignment.topRight,
       ),
     ),
+    child: Wrap(
+      alignment: WrapAlignment.center,
+      children: [
+        Center(
+          child: Text(
+            're_login'.tr,
+            style: const TextStyle(
+                fontSize: 22,
+                color: Colors.white,
+                decoration: TextDecoration.none),
+          ),
+        ),
+        const SizedBox(height: 50),
+        Container(
+          width: 360,
+          height: 330,
+          padding: const EdgeInsets.only(left: 20, right: 20),
+          child: LoginInlet(logic: logic, state: state),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 30, right: 30),
+          child: button,
+        )
+      ],
+    ),
   );
-
-  showDialog<String>(
-    barrierDismissible: false,
+  showCupertinoModalPopup(
     context: Get.overlayContext!,
-    builder: (BuildContext context) => dialog,
+    barrierDismissible: false,
+    builder: (BuildContext context) => SingleChildScrollView(
+      primary: true,
+      padding: EdgeInsets.only(
+        bottom: MediaQuery.of(context).viewInsets.bottom,
+      ),
+      child: popup,
+    ),
   );
 }

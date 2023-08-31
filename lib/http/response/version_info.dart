@@ -1,4 +1,3 @@
-import 'dart:ffi';
 
 /// Description : '检测到最新版本，请及时更新！'
 /// Force : true

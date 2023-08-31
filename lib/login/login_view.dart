@@ -12,42 +12,49 @@ class Login extends StatelessWidget {
   Widget build(BuildContext context) {
     var logic = Get.put(LoginLogic());
     var state = Get.find<LoginLogic>().state;
-    return Scaffold(
-      body: Container(
-        alignment: Alignment.center,
-        //设置背景
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.lightBlueAccent, Colors.blueAccent],
-            begin: Alignment.bottomLeft,
-            end: Alignment.topRight,
-          ),
+    return Container(
+      alignment: Alignment.center,
+      //设置背景
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Colors.lightBlueAccent, Colors.blueAccent],
+          begin: Alignment.bottomLeft,
+          end: Alignment.topRight,
         ),
-        child: Column(
-          //添加登录UI
-          children: [
-            const SizedBox(height: 30),
-            Image.asset(
-              'lib/res/images/ic_logo.png',
-              width: 130,
-              height: 130,
+      ),
+      padding:
+          EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+      child: ListView(
+        //添加登录UI
+        children: [
+          const SizedBox(height: 30),
+          Image.asset(
+            'lib/res/images/ic_logo.png',
+            width: 130,
+            height: 130,
+          ),
+          const Center(
+              child: Text(
+            'Gold Emperor',
+            style: TextStyle(
+              fontSize: 40,
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              decoration: TextDecoration.none,
             ),
-            const Text(
-              'Gold Emperor',
-              style: TextStyle(
-                fontSize: 40,
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                decoration: TextDecoration.none,
-              ),
-            ),
-            SizedBox(
+          )),
+          Container(
+            alignment: Alignment.center,
+            child: SizedBox(
               width: 320,
               height: 320,
               child: LoginInlet(logic: logic, state: state),
             ),
-            const Expanded(child: SizedBox()),
-            ElevatedButton(
+          ),
+          const SizedBox(height: 20),
+          Container(
+            alignment: Alignment.center,
+            child: ElevatedButton(
               style: ElevatedButton.styleFrom(
                 minimumSize: const Size(280, 50),
                 shape: RoundedRectangleBorder(
@@ -60,9 +67,9 @@ class Login extends StatelessWidget {
                 style: const TextStyle(fontSize: 20),
               ),
             ),
-            const SizedBox(height: 40),
-          ],
-        ),
+          ),
+          const SizedBox(height: 40),
+        ],
       ),
     );
   }
@@ -297,6 +304,7 @@ class LoginInlet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.transparent,
       appBar: _tabBar(),
       body: TabBarView(
