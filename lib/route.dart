@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:jd_flutter/report/daily_report/daily_report_view.dart';
+import 'package:jd_flutter/production/report/daily_report/daily_report_view.dart';
 
 import 'bean/home_button.dart';
 import 'home/home_view.dart';

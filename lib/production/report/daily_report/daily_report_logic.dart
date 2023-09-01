@@ -4,8 +4,8 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/http/response/daily_report_data.dart';
 import 'package:jd_flutter/http/web_api.dart';
 
-import '../../widget/dialogs.dart';
-import '../../widget/picker/picker_controller.dart';
+import '../../../widget/dialogs.dart';
+import '../../../widget/picker/picker_controller.dart';
 import 'daily_report_state.dart';
 
 class DailyReportLogic extends GetxController {
