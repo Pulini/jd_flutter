@@ -18,8 +18,24 @@ import 'home_state.dart';
 class HomeLogic extends GetxController {
   final HomeState state = HomeState();
 
+  @override
+  onReady() {
+    super.onReady();
+    getFunList();
+  }
 
-
+  getFunList() {
+    httpGet(
+      method: webApiGetMenuFunction,
+      loading: 'checking_version'.tr,
+      query: {'empID': userController.user.value?.empID ?? 0},
+    ).then((versionInfoCallback) {
+      if (versionInfoCallback.resultCode == resultSuccess) {
+      } else {
+        errorDialog(content: versionInfoCallback.message);
+      }
+    });
+  }
 
   ///用户头像
   var userAvatar = Obx(

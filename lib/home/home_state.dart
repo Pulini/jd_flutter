@@ -82,10 +82,9 @@ class HomeState {
   }
 
   HomeState() {
-
     buttons.addAll(productionButton);
     refreshButtonPermission();
-    getVersionList();
+    // getVersionList();
   }
 
   refreshButtonPermission() {

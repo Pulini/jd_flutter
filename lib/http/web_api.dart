@@ -116,7 +116,8 @@ Future<BaseData> _doHttp(
   try {
     ///创建dio对象
     var dio = Dio(BaseOptions(
-      baseUrl: baseUrlForMES,
+      baseUrl: testUrlForMES,
+      // baseUrl: baseUrlForMES,
       connectTimeout: const Duration(minutes: 2),
       receiveTimeout: const Duration(minutes: 2),
     ))
@@ -161,6 +162,9 @@ const webApiGetUserPhoto = 'api/User/GetEmpPhotoByPhone';
 
 ///获取验证码接口
 const webApiVerificationCode = 'api/User/SendVerificationCode';
+
+///获取主页入口列表
+const webApiGetMenuFunction = 'api/AppMenuFunction/GetAppMenuFunction';
 
 ///修改头像接口
 const webApiChangeUserAvatar = 'api/User/UploadEmpPicture';

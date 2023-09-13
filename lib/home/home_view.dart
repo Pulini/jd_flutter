@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 
 import '../bean/home_button.dart';
 import '../constant.dart';
+import '../http/web_api.dart';
 import '../utils.dart';
 import '../widget/dialogs.dart';
 import 'home_logic.dart';
@@ -178,14 +179,17 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+
+
   @override
   void initState() {
     super.initState();
-    getVersionInfo(
-      false,
-      noUpdate: () {},
-      needUpdate: (versionInfo) => doUpdate(versionInfo),
-    );
+
+    // getVersionInfo(
+    //   false,
+    //   noUpdate: () => _getFunList(),
+    //   needUpdate: (versionInfo) => doUpdate(versionInfo),
+    // );
     _methodChannel();
   }
 
