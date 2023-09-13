@@ -3,25 +3,25 @@ import 'package:get/get.dart';
 
 import '../../../utils.dart';
 import '../../../widget/picker/picker_view.dart';
-import 'production_summary_table_logic.dart';
+import 'production_summary_report_logic.dart';
 
-class ProductionSummaryTablePage extends StatefulWidget {
-  const ProductionSummaryTablePage({Key? key}) : super(key: key);
+class ProductionSummaryReportPage extends StatefulWidget {
+  const ProductionSummaryReportPage({Key? key}) : super(key: key);
 
   @override
-  State<ProductionSummaryTablePage> createState() =>
-      _ProductionSummaryTablePageState();
+  State<ProductionSummaryReportPage> createState() =>
+      _ProductionSummaryReportPageState();
 }
 
-class _ProductionSummaryTablePageState
-    extends State<ProductionSummaryTablePage> {
-  final logic = Get.put(ProductionSummaryTableLogic());
-  final state = Get.find<ProductionSummaryTableLogic>().state;
+class _ProductionSummaryReportPageState
+    extends State<ProductionSummaryReportPage> {
+  final logic = Get.put(ProductionSummaryReportLogic());
+  final state = Get.find<ProductionSummaryReportLogic>().state;
 
   @override
   Widget build(BuildContext context) {
     return titleWithDrawer(
-      title: '产量汇总表',
+      title: 'production_summary_report_title'.tr,
       children: [
         Spinner(controller: logic.spinnerControllerWorkShop),
         DatePicker(pickerController: logic.pickerControllerDate),
@@ -48,7 +48,7 @@ class _ProductionSummaryTablePageState
 
   @override
   void dispose() {
-    Get.delete<ProductionSummaryTableLogic>();
+    Get.delete<ProductionSummaryReportLogic>();
     super.dispose();
   }
 }

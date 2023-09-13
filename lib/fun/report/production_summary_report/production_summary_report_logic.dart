@@ -8,10 +8,10 @@ import '../../../http/response/production_summary_info.dart';
 import '../../../http/web_api.dart';
 import '../../../widget/dialogs.dart';
 import '../../../widget/picker/picker_controller.dart';
-import 'production_summary_table_state.dart';
+import 'production_summary_report_state.dart';
 
-class ProductionSummaryTableLogic extends GetxController {
-  final ProductionSummaryTableState state = ProductionSummaryTableState();
+class ProductionSummaryReportLogic extends GetxController {
+  final ProductionSummaryReportState state = ProductionSummaryReportState();
 
   ///日期选择器的控制器
   var pickerControllerDate = DatePickerController(
@@ -20,17 +20,24 @@ class ProductionSummaryTableLogic extends GetxController {
   );
   var spinnerControllerWorkShop = SpinnerController(
     saveKey: RouteConfig.productionSummaryTable,
-    dataList:['裁断车间', '针车车间', '成型车间', '印业车间', '其他'],
+    dataList: [
+      'spinner_work_shop_hint1'.tr,
+      'spinner_work_shop_hint2'.tr,
+      'spinner_work_shop_hint3'.tr,
+      'spinner_work_shop_hint4'.tr,
+      'spinner_work_shop_hint5'.tr
+    ],
   );
 
   ///获取产量汇总表接口
   query() {
     httpGet(
-      loading: '正在查询产量实时汇总报表...',
+      loading: 'production_summary_report_querying'.tr,
       method: webApiGetPrdShopDayReport,
       query: {
         'ExecTodayDateTime': pickerControllerDate.getDateFormatYMD(),
-        'ExecWhere': 'where t.FWorkShopID = ${spinnerControllerWorkShop.selectIndex+1}',
+        'ExecWhere':
+            'where t.FWorkShopID = ${spinnerControllerWorkShop.selectIndex + 1}',
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
@@ -41,7 +48,8 @@ class ProductionSummaryTableLogic extends GetxController {
           for (var item in jsonDecode(response.data)) {
             var data = ProductionSummaryInfo.fromJson(item);
             state.tableData.add(data);
-            list.add(state.createDataRow(data,index.isEven?Colors.transparent:Colors.grey.shade100));
+            list.add(state.createDataRow(data,
+                index.isEven ? Colors.transparent : Colors.grey.shade100));
             index++;
           }
           state.tableDataRows.value = list;
@@ -51,10 +59,8 @@ class ProductionSummaryTableLogic extends GetxController {
           errorDialog(content: 'json_format_error'.tr);
         }
       } else {
-        errorDialog(content: response.message ?? '查询失败');
+        errorDialog(content: response.message ?? 'query_default_error'.tr);
       }
     });
   }
-
-
 }

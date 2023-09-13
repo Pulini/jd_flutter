@@ -49,7 +49,7 @@ class _BluetoothDialogState extends State<BluetoothDialog> {
   }
 
   _connectBluetooth(int index) {
-    loadingDialog('正在连接蓝牙...');
+    loadingDialog('bluetooth_connecting'.tr);
     channel
         .invokeMethod('ConnectBluetooth', deviceList[index].deviceMAC)
         .then((value) {
@@ -64,17 +64,20 @@ class _BluetoothDialogState extends State<BluetoothDialog> {
           }
         case 1:
           {
-            errorDialog( content: '连接失败');
+            logger.f('连接失败');
+            errorDialog(content: 'bluetooth_connect_error_type1'.tr);
             break;
           }
         case 2:
           {
-            errorDialog( content: '未找到设备');
+            logger.f('未找到设备');
+            errorDialog(content: 'bluetooth_connect_error_type2'.tr);
             break;
           }
         case 3:
           {
-            errorDialog( content: '创建通道失败');
+            logger.f('创建通道失败');
+            errorDialog(content: 'bluetooth_connect_error_type3'.tr);
             break;
           }
       }
@@ -91,7 +94,7 @@ class _BluetoothDialogState extends State<BluetoothDialog> {
           deviceList[index].deviceIsConnected = false;
         });
       } else {
-        errorDialog( content: '断开失败');
+        errorDialog(content: 'bluetooth_close_error'.tr);
       }
     });
   }
@@ -106,19 +109,19 @@ class _BluetoothDialogState extends State<BluetoothDialog> {
               case 1:
                 {
                   logger.f('设备不支持蓝牙');
-                  errorDialog(content: '设备不支持蓝牙');
+                  errorDialog(content: 'bluetooth_no_device'.tr);
                   break;
                 }
               case 2:
                 {
                   logger.f('权限被拒绝');
-                  errorDialog( content: '权限被拒绝');
+                  errorDialog(content: 'bluetooth_no_permission'.tr);
                   break;
                 }
               case 3:
                 {
                   logger.f('蓝牙打开');
-                  informationDialog( content: '蓝牙打开');
+                  informationDialog(content: 'bluetooth_open_device'.tr);
                   break;
                 }
               case 4:
@@ -127,7 +130,7 @@ class _BluetoothDialogState extends State<BluetoothDialog> {
                   setState(() {
                     deviceList.clear();
                   });
-                  informationDialog( content: '蓝牙关闭');
+                  informationDialog(content: 'bluetooth_close_device'.tr);
                   break;
                 }
               case 5:
@@ -233,10 +236,13 @@ class _BluetoothDialogState extends State<BluetoothDialog> {
                                   TextSpan(
                                     children: [
                                       TextSpan(
-                                          text: deviceList[index].deviceName),
-                                      const TextSpan(
-                                        text: ' (已配对)',
-                                        style: TextStyle(color: Colors.green),
+                                        text: deviceList[index].deviceName,
+                                      ),
+                                      TextSpan(
+                                        text: 'bluetooth_connected'.tr,
+                                        style: const TextStyle(
+                                          color: Colors.green,
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -246,11 +252,11 @@ class _BluetoothDialogState extends State<BluetoothDialog> {
                           trailing: deviceList[index].deviceIsConnected!
                               ? TextButton(
                                   onPressed: () => _closeBluetooth(index),
-                                  child: const Text.rich(
+                                  child: Text.rich(
                                     TextSpan(
-                                      style: TextStyle(color: Colors.red),
+                                      style: const TextStyle(color: Colors.red),
                                       children: [
-                                        WidgetSpan(
+                                        const WidgetSpan(
                                           child: Icon(
                                             Icons.square,
                                             color: Colors.red,
@@ -258,13 +264,14 @@ class _BluetoothDialogState extends State<BluetoothDialog> {
                                           alignment:
                                               PlaceholderAlignment.middle,
                                         ),
-                                        TextSpan(text: '断开链接'),
+                                        TextSpan(
+                                            text: 'bluetooth_disconnect'.tr),
                                       ],
                                     ),
                                   ))
                               : TextButton(
                                   onPressed: () => _connectBluetooth(index),
-                                  child: const Text('连接'),
+                                  child: Text('bluetooth_connect'.tr),
                                 ),
                         ),
                       );
@@ -277,9 +284,9 @@ class _BluetoothDialogState extends State<BluetoothDialog> {
                     flex: 1,
                     child: ElevatedButton(
                       onPressed: () => Get.back(),
-                      child: const Text(
-                        '返回',
-                        style: TextStyle(color: Colors.grey),
+                      child: Text(
+                        'bluetooth_back'.tr,
+                        style: const TextStyle(color: Colors.grey),
                       ),
                     ),
                   ),
@@ -293,18 +300,18 @@ class _BluetoothDialogState extends State<BluetoothDialog> {
                         if (snapshot.data!) {
                           return ElevatedButton(
                             onPressed: () => _endScanBluetooth(),
-                            child: const Text.rich(
+                            child: Text.rich(
                               TextSpan(
-                                style: TextStyle(color: Colors.red),
+                                style: const TextStyle(color: Colors.red),
                                 children: [
-                                  WidgetSpan(
+                                  const WidgetSpan(
                                     child: Icon(
                                       Icons.square,
                                       color: Colors.red,
                                     ),
                                     alignment: PlaceholderAlignment.middle,
                                   ),
-                                  TextSpan(text: '停止'),
+                                  TextSpan(text: 'bluetooth_stop'.tr),
                                 ],
                               ),
                             ),
@@ -313,18 +320,18 @@ class _BluetoothDialogState extends State<BluetoothDialog> {
                           return ElevatedButton(
                             onPressed: () => _isEnable((enable) =>
                                 enable ? _scanBluetooth() : _openBluetooth()),
-                            child: const Text.rich(
+                            child: Text.rich(
                               TextSpan(
-                                style: TextStyle(color: Colors.green),
+                                style: const TextStyle(color: Colors.green),
                                 children: [
-                                  WidgetSpan(
+                                  const WidgetSpan(
                                     child: Icon(
                                       Icons.play_arrow,
                                       color: Colors.green,
                                     ),
                                     alignment: PlaceholderAlignment.middle,
                                   ),
-                                  TextSpan(text: '扫描'),
+                                  TextSpan(text: 'bluetooth_scan'.tr),
                                 ],
                               ),
                             ),

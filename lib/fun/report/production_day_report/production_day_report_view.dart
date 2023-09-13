@@ -20,7 +20,7 @@ class _ProductionDayReportPageState extends State<ProductionDayReportPage> {
   @override
   Widget build(BuildContext context) {
     return titleWithDrawer(
-      title: '日生产报表',
+      title: 'page_production_day_report_title'.tr,
       children: [
         Spinner(controller: logic.spinnerControllerWorkShop),
         DatePicker(pickerController: logic.pickerControllerDate),

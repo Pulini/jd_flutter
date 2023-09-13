@@ -39,7 +39,7 @@ class _DailyReportPageState extends State<DailyReportPage> {
   @override
   Widget build(BuildContext context) {
     return titleWithDrawer(
-      title: '扫码日产量报表',
+      title: 'page_daily_report_title'.tr,
       children: [
         OptionsPicker(pickerController: logic.pickerControllerDepartment),
         DatePicker(pickerController: logic.pickerControllerDate),

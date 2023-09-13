@@ -40,7 +40,13 @@ class ProductionDayReportLogic extends GetxController {
     );
     spinnerControllerWorkShop = SpinnerController(
       saveKey: RouteConfig.productionDayReport,
-      dataList: ['裁断车间', '针车车间', '成型车间', '印业车间', '其他'],
+      dataList: [
+        'spinner_work_shop_hint1'.tr,
+        'spinner_work_shop_hint2'.tr,
+        'spinner_work_shop_hint3'.tr,
+        'spinner_work_shop_hint4'.tr,
+        'spinner_work_shop_hint5'.tr
+      ],
       onChanged: (index) => query(),
     );
     reasonDateController = DatePickerController(
@@ -49,10 +55,22 @@ class ProductionDayReportLogic extends GetxController {
       lastDate: today,
     );
     reasonTitle = [
-      getText('组别', userController.user.value?.departmentName ?? ''),
-      getText('工号', userController.user.value?.number ?? ''),
-      getText('姓名', userController.user.value?.name ?? ''),
-      getText('职位', userController.user.value?.position ?? ''),
+      getText(
+        'page_production_day_report_reason_dialog_hint1'.tr,
+        userController.user.value?.departmentName ?? '',
+      ),
+      getText(
+        'page_production_day_report_reason_dialog_hint2'.tr,
+        userController.user.value?.number ?? '',
+      ),
+      getText(
+        'page_production_day_report_reason_dialog_hint3'.tr,
+        userController.user.value?.name ?? '',
+      ),
+      getText(
+        'page_production_day_report_reason_dialog_hint4'.tr,
+        userController.user.value?.position ?? '',
+      ),
       DatePicker(pickerController: reasonDateController),
     ];
     super.onInit();
@@ -80,7 +98,7 @@ class ProductionDayReportLogic extends GetxController {
   ///获取产量汇总表接口
   query() {
     httpGet(
-      loading: '正在查询产量实时汇总报表...',
+      loading: 'page_production_day_report_querying'.tr,
       method: webApiGetPrdDayReport,
       query: {
         'Date': pickerControllerDate.getDateFormatYMD(),
@@ -112,7 +130,7 @@ class ProductionDayReportLogic extends GetxController {
           errorDialog(content: 'json_format_error'.tr);
         }
       } else {
-        errorDialog(content: response.message ?? '查询失败');
+        errorDialog(content: response.message ?? 'query_default_error'.tr);
       }
     });
   }
@@ -145,13 +163,13 @@ class ProductionDayReportLogic extends GetxController {
         },
       );
     } else {
-      errorDialog(content: '每天数据次日9点之后不能修改');
+      errorDialog(content: 'page_production_day_report_reason_dialog_error'.tr);
     }
   }
 
   submitReason(String date, String reason) {
     httpPost(
-      loading: '正在保存...',
+      loading: 'page_production_day_report_reason_dialog_save'.tr,
       method: webApiSubmitDayReportReason,
       query: {
         'Date': date,
@@ -163,7 +181,10 @@ class ProductionDayReportLogic extends GetxController {
       if (response.resultCode == resultSuccess) {
         successDialog(content: response.message, back: () => query());
       } else {
-        errorDialog(content: response.message ?? '保存失败');
+        errorDialog(
+          content: response.message ??
+              'page_production_day_report_reason_dialog_save_error'.tr,
+        );
       }
     });
   }

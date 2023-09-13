@@ -26,12 +26,8 @@ class DailyReportLogic extends GetxController {
 
   ///获取扫码日产量接口
   query() {
-    if (pickerControllerDepartment.selectedId.value.isEmpty) {
-      errorDialog(content: '请选择部门');
-      return;
-    }
     httpGet(
-      loading: '正在查询日产量报表...',
+      loading: 'page_daily_report_querying'.tr,
       method: webApiGetDayOutput,
       query: {
         'DepartmentID': pickerControllerDepartment.selectedId.value,
@@ -43,10 +39,10 @@ class DailyReportLogic extends GetxController {
           var list = <DailyReportData>[
             DailyReportData(
               type: 0,
-              materialName: '物料名称',
-              size: '尺码',
-              processName: '工序',
-              qty: '报工数',
+              materialName: 'page_daily_report_table_title_hint1'.tr,
+              size: 'page_daily_report_table_title_hint2'.tr,
+              processName: 'page_daily_report_table_title_hint3'.tr,
+              qty: 'page_daily_report_table_title_hint4'.tr,
             )
           ];
           for (var item in jsonDecode(response.data)) {
@@ -59,7 +55,7 @@ class DailyReportLogic extends GetxController {
           errorDialog(content: 'json_format_error'.tr);
         }
       } else {
-        errorDialog(content: response.message ?? '查询失败');
+        errorDialog(content: response.message ?? 'query_default_error'.tr);
       }
     });
   }

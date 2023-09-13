@@ -8,22 +8,53 @@ class ProductionDayReportState {
   List<ProductionDayReportInfo> tableData = <ProductionDayReportInfo>[];
   RxList<DataRow> tableDataRows = <DataRow>[].obs;
   List<DataColumn> tableDataColumn = const <DataColumn>[
-    DataColumn(label: Text('部门名称')),
-    DataColumn(label: Text('负责人')),
-    DataColumn(label: Text('今日目标产量'), numeric: true),
-    DataColumn(label: Text('今日实际产量'), numeric: true),
-    DataColumn(label: Text('今日完成率'), numeric: true),
-    DataColumn(label: Text('今日未完成产量'), numeric: true),
-    DataColumn(label: Text('月目标产量'), numeric: true),
-    DataColumn(label: Text('月累计产量'), numeric: true),
-    DataColumn(label: Text('月累计达成率'), numeric: true),
-    DataColumn(label: Text('月累计未完成产量'), numeric: true),
-    DataColumn(label: Text('应到人数'), numeric: true),
-    DataColumn(label: Text('实际人数'), numeric: true),
-    DataColumn(label: Text('未达成原因分析')),
+    DataColumn(label: Text('page_production_day_report_table_title_hint1')),
+    DataColumn(label: Text('page_production_day_report_table_title_hint2')),
+    DataColumn(
+      label: Text('page_production_day_report_table_title_hint3'),
+      numeric: true,
+    ),
+    DataColumn(
+      label: Text('page_production_day_report_table_title_hint4'),
+      numeric: true,
+    ),
+    DataColumn(
+      label: Text('page_production_day_report_table_title_hint5'),
+      numeric: true,
+    ),
+    DataColumn(
+      label: Text('page_production_day_report_table_title_hint6'),
+      numeric: true,
+    ),
+    DataColumn(
+      label: Text('page_production_day_report_table_title_hint7'),
+      numeric: true,
+    ),
+    DataColumn(
+      label: Text('page_production_day_report_table_title_hint8'),
+      numeric: true,
+    ),
+    DataColumn(
+      label: Text('page_production_day_report_table_title_hint9'),
+      numeric: true,
+    ),
+    DataColumn(
+      label: Text('page_production_day_report_table_title_hint10'),
+      numeric: true,
+    ),
+    DataColumn(
+      label: Text('page_production_day_report_table_title_hint11'),
+      numeric: true,
+    ),
+    DataColumn(
+      label: Text('page_production_day_report_table_title_hint12'),
+      numeric: true,
+    ),
+    DataColumn(label: Text('page_production_day_report_table_title_hint13')),
   ];
 
-  createDataRow(ProductionDayReportInfo data, Color color,Function modifyReason) {
+  createDataRow(
+      ProductionDayReportInfo data, Color color, Function modifyReason) {
     bool isParty = data.number == userController.user.value?.number;
     return DataRow(
       color: MaterialStateProperty.resolveWith<Color?>(
@@ -32,7 +63,7 @@ class ProductionDayReportState {
         },
       ),
       onSelectChanged: (selected) {
-        if(isParty){
+        if (isParty) {
           modifyReason.call();
         }
       },

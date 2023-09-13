@@ -3,7 +3,7 @@ import 'package:jd_flutter/fun/report/production_day_report/production_day_repor
 
 import 'bean/home_button.dart';
 import 'fun/report/daily_report/daily_report_view.dart';
-import 'fun/report/production_summary_table/production_summary_table_view.dart';
+import 'fun/report/production_summary_report/production_summary_report_view.dart';
 import 'home/home_view.dart';
 import 'http/web_api.dart';
 import 'login/login_view.dart';
@@ -23,7 +23,7 @@ class RouteConfig {
     ),
     GetPage(name: login, page: () => const LoginPage()),
     GetPage(name: dailyReport, page: () => const DailyReportPage()),
-    GetPage(name: productionSummaryTable, page: () => const ProductionSummaryTablePage()),
+    GetPage(name: productionSummaryTable, page: () => const ProductionSummaryReportPage()),
     GetPage(name: productionDayReport, page: () => const ProductionDayReportPage()),
   ];
 }
