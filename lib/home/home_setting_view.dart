@@ -251,7 +251,7 @@ class _UserSettingState extends State<UserSetting> {
                   borderRadius: BorderRadius.circular(25))),
           onPressed: () {
             spSave(spSaveUserInfo, '');
-            Get.offAll(()=>const Login());
+            Get.offAll(()=>const LoginPage());
           },
           child: Text('home_user_setting_logout'.tr,
               style: const TextStyle(fontSize: 20))),

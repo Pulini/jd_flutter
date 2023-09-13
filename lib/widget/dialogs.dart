@@ -264,7 +264,7 @@ doUpdate(VersionInfo version) {
   );
 }
 
-reLoginDialog() {
+reLoginPopup() {
   var logic = Get.put(LoginLogic());
   var state = Get.find<LoginLogic>().state;
   var button = ElevatedButton(
@@ -322,6 +322,90 @@ reLoginDialog() {
   showCupertinoModalPopup(
     context: Get.overlayContext!,
     barrierDismissible: false,
+    builder: (BuildContext context) => SingleChildScrollView(
+      primary: true,
+      padding: EdgeInsets.only(
+        bottom: MediaQuery.of(context).viewInsets.bottom,
+      ),
+      child: popup,
+    ),
+  );
+}
+
+reasonInputPopup(
+    {required List<Widget> title, required Function(String reason) confirm}) {
+  TextEditingController reasonController = TextEditingController();
+  var popup = Card(
+    margin: const EdgeInsets.all(0),
+    color: Colors.transparent,
+    shadowColor: Colors.transparent,
+    child: Container(
+      padding: const EdgeInsets.all(8.0),
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
+        ),
+        gradient: LinearGradient(
+          colors: [Colors.lightBlueAccent, Colors.blueAccent],
+          begin: Alignment.bottomLeft,
+          end: Alignment.topRight,
+        ),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ...title,
+          const SizedBox(height: 10),
+          TextField(
+            maxLines: 3,
+            controller: reasonController,
+            decoration: InputDecoration(
+              suffixIcon: IconButton(
+                icon: const Icon(Icons.close),
+                onPressed: () {
+                  reasonController.clear();
+                },
+              ),
+              contentPadding: const EdgeInsets.all(10),
+              hintText: 'dialog_reason_hint'.tr,
+              fillColor: Colors.white,
+              filled: true,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+              ),
+            ),
+          ),
+          const SizedBox(height: 50),
+          FractionallySizedBox(
+            widthFactor: 1,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(25),
+                ),
+              ),
+              onPressed: () {
+                var reason = reasonController.text;
+                if (reason.trim().isEmpty) {
+                  errorDialog(content:'dialog_reason_hint'.tr);
+                } else {
+                  confirm.call(reason);
+                }
+              },
+              child: Text(
+                'dialog_reason_submit'.tr,
+                style: const TextStyle(fontSize: 20),
+              ),
+            ),
+          )
+        ],
+      ),
+    ),
+  );
+  showCupertinoModalPopup(
+    context: Get.overlayContext!,
     builder: (BuildContext context) => SingleChildScrollView(
       primary: true,
       padding: EdgeInsets.only(

@@ -1,7 +1,9 @@
 import 'package:get/get.dart';
-import 'package:jd_flutter/production/report/daily_report/daily_report_view.dart';
+import 'package:jd_flutter/fun/report/production_day_report/production_day_report_view.dart';
 
 import 'bean/home_button.dart';
+import 'fun/report/daily_report/daily_report_view.dart';
+import 'fun/report/production_summary_table/production_summary_table_view.dart';
 import 'home/home_view.dart';
 import 'http/web_api.dart';
 import 'login/login_view.dart';
@@ -10,15 +12,19 @@ class RouteConfig {
   static const String main = '/';
   static const String login = '/login';
   static const String dailyReport = '/daily_report';
+  static const String productionSummaryTable = '/production_summary_table';
+  static const String productionDayReport = '/production_day_report';
 
   static List<GetPage> appRoutes = [
     GetPage(
       name: main,
-      page: () => const Home(),
+      page: () => const HomePage(),
       transition: Transition.fadeIn,
     ),
-    GetPage(name: login, page: () => const Login()),
-    GetPage(name: dailyReport, page: () => const DailyReport()),
+    GetPage(name: login, page: () => const LoginPage()),
+    GetPage(name: dailyReport, page: () => const DailyReportPage()),
+    GetPage(name: productionSummaryTable, page: () => const ProductionSummaryTablePage()),
+    GetPage(name: productionDayReport, page: () => const ProductionDayReportPage()),
   ];
 }
 

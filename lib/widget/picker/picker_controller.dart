@@ -113,19 +113,33 @@ class OptionsPickerController extends PickerController {
   var selectedId = ''.obs;
   var loadingError = ''.obs;
   var enable = true.obs;
+  final String? saveKey;
+  final String? buttonName;
+  final Function? dataList;
   List<PickerItem> pickerData = [];
   RxList<PickerItem> pickerItems = <PickerItem>[].obs;
   var selectItem = 0;
+  final Function(int)? onChanged;
+  final Function(int)? onSelected;
 
-  OptionsPickerController(super.pickerType);
+  OptionsPickerController(
+    super.pickerType, {
+    this.saveKey,
+    this.buttonName,
+    this.dataList,
+    this.onChanged,
+    this.onSelected,
+  });
 
-  select(String? saveKey, int item) {
+  select(int item) {
     selectedName.value = pickerItems[item].pickerName();
     selectedId.value = pickerItems[item].pickerId();
-    selectItem = item;
-    if (saveKey != null && saveKey.isNotEmpty) {
-      spSave(saveKey, pickerItems[item].pickerId());
+    selectItem = pickerData.indexWhere((v) => v.pickerId() == selectedId.value);
+    if (saveKey != null && saveKey!.isNotEmpty) {
+      spSave(saveKey!, pickerItems[item].pickerId());
     }
+    onSelected?.call(selectItem);
+    onChanged?.call(selectItem);
   }
 
   search(String text) {
@@ -133,15 +147,17 @@ class OptionsPickerController extends PickerController {
       pickerItems.value = pickerData;
     } else {
       pickerItems.value = pickerData
-          .where((element) => element.pickerName().contains(text))
+          .where(
+            (v) => v.pickerName().toUpperCase().contains(text.toUpperCase()),
+          )
           .toList();
     }
   }
 
-  getSave(String? saveKey) {
+  int getSave() {
     var select = selectItem;
-    if (saveKey != null && saveKey.isNotEmpty) {
-      var save = spGet(saveKey);
+    if (saveKey != null && saveKey!.isNotEmpty) {
+      var save = spGet(saveKey!);
       if (save != null && save.isNotEmpty) {
         var find1 =
             pickerItems.indexWhere((element) => element.pickerId() == save);
@@ -153,10 +169,10 @@ class OptionsPickerController extends PickerController {
     return select;
   }
 
-  getData(String? saveKey, Function? getDataList) {
+  getData() {
     if (pickerItems.isEmpty) {
       loadingError.value = 'picker_loading'.tr;
-      Function fun = getDataList ?? this.getDataList();
+      Function fun = dataList ?? getDataList();
       fun().then((value) {
         if (value is List<PickerItem>) {
           loadingError.value = '';
@@ -164,10 +180,13 @@ class OptionsPickerController extends PickerController {
           pickerItems.value = value;
           if (value.length > 1) {
             var save = 0;
-            if (saveKey != null && saveKey.isNotEmpty) {
-              save = getSave(saveKey);
+            if (saveKey != null && saveKey!.isNotEmpty) {
+              save = getSave();
             }
-            select(null, save);
+            selectedName.value = pickerItems[save].pickerName();
+            selectedId.value = pickerItems[save].pickerId();
+            selectItem = save;
+            onSelected?.call(selectItem);
           }
         } else {
           loadingError.value = value as String;
@@ -182,51 +201,76 @@ class LinkOptionsPickerController extends PickerController {
   var selectedId = ''.obs;
   var loadingError = ''.obs;
   var enable = true.obs;
-  List<PickerItem> pickerData = [];
+  List<LinkPickerItem> pickerData = [];
   RxList<PickerItem> pickerItems1 = <PickerItem>[].obs;
   RxList<PickerItem> pickerItems2 = <PickerItem>[].obs;
-
+  String searchText = '';
   var selectItem1 = 0;
   var selectItem2 = 0;
 
-  LinkOptionsPickerController(super.pickerType);
+  final String? saveKey;
+  final String? buttonName;
+  final Function? dataList;
+  final Function(int, int)? onChanged;
+  final Function(int, int)? onSelected;
 
-  select(String? saveKey, int item1, int item2) {
+  LinkOptionsPickerController(
+    super.pickerType, {
+    this.saveKey,
+    this.buttonName,
+    this.dataList,
+    this.onChanged,
+    this.onSelected,
+  });
+
+  select(int item1, int item2) {
     if (pickerItems1.isEmpty) return;
-    selectedName.value =
-        '${pickerItems1[item1].pickerName()}-${pickerItems2[item2].pickerName()}';
+    var pick1 = pickerItems1[item1];
+    var pick2 = pickerItems2[item2];
+    selectedName.value = '${pick1.pickerName()}-${pick2.pickerName()}';
     selectedId.value = pickerItems2[item2].pickerId();
-    selectItem1 = item1;
-    selectItem2 = item2;
-    if (saveKey != null && saveKey.isNotEmpty) {
-      spSave(saveKey,
-          '${pickerItems1[item1].pickerId()}@@@${pickerItems2[item2].pickerId()}');
+    selectItem1 =
+        pickerData.indexWhere((v) => v.pickerId() == pick1.pickerId());
+    selectItem2 = pickerData[selectItem1]
+        .subList()
+        .indexWhere((v) => v.pickerId() == pick2.pickerId());
+    if (saveKey != null && saveKey!.isNotEmpty) {
+      spSave(saveKey!, '${pick1.pickerId()}@@@${pick2.pickerId()}');
     }
+    onSelected?.call(selectItem1, selectItem2);
+    onChanged?.call(selectItem1, selectItem2);
   }
 
   refreshItem2(int index) {
-    pickerItems2.value = (pickerItems1[index] as PickerSapFactoryAndWarehouse)
-        .warehouseList as List<PickerItem>;
+    if (searchText.isNotEmpty) {
+      pickerItems2.value = (pickerItems1[index] as LinkPickerItem)
+          .subList()
+          .where((element) => element
+              .pickerName()
+              .toUpperCase()
+              .contains(searchText.toUpperCase()))
+          .toList();
+    } else {
+      pickerItems2.value = (pickerItems1[index] as LinkPickerItem).subList();
+    }
   }
 
-  getSave(String? saveKey) {
+  List<int> getSave() {
     var select1 = selectItem1;
     var select2 = selectItem2;
-    if (saveKey != null && saveKey.isNotEmpty) {
-      String? key = spGet(saveKey);
+    if (saveKey != null && saveKey!.isNotEmpty) {
+      String? key = spGet(saveKey!);
       if (key != null && key.contains('@@@')) {
         var save = key.split('@@@');
         if (save.length == 2) {
-          var find1 = pickerItems1
-              .indexWhere((element) => element.pickerId() == save[0]);
+          var find1 =
+              pickerData.indexWhere((element) => element.pickerId() == save[0]);
           if (find1 >= 0) {
             select1 = find1;
-            pickerItems2.value =
-                (pickerItems1[find1] as PickerSapFactoryAndWarehouse)
-                    .warehouseList as List<PickerItem>;
-            if (pickerItems2.isNotEmpty) {
-              var find2 = pickerItems2
-                  .indexWhere((element) => element.pickerId() == save[1]);
+            var list = pickerData[find1].subList();
+            if (list.isNotEmpty) {
+              var find2 =
+                  list.indexWhere((element) => element.pickerId() == save[1]);
               if (find2 >= 0) {
                 select2 = find2;
               }
@@ -238,20 +282,25 @@ class LinkOptionsPickerController extends PickerController {
     return [select1, select2];
   }
 
-  getData(String? saveKey, Function? getDataList) {
+  getData() {
     if (pickerItems1.isEmpty && pickerItems2.isEmpty) {
       loadingError.value = 'picker_loading'.tr;
-      Function fun = getDataList ?? this.getDataList();
+      Function fun = dataList ?? getDataList();
       fun().then((value) {
-        if (value is List<PickerItem>) {
+        if (value is List<LinkPickerItem>) {
           loadingError.value = '';
           pickerData = value;
-          pickerItems1.value = value;
-          if (value.length > 1) {
-            pickerItems2.value = (value[0] as PickerSapFactoryAndWarehouse)
-                .warehouseList as List<PickerItem>;
-            var save = getSave(saveKey);
-            select(null, save[0], save[1]);
+          pickerItems1.value = pickerData;
+          if (pickerData.length > 1) {
+            var save = getSave();
+            selectItem1 = save[0];
+            selectItem2 = save[1];
+            var pick1 = pickerItems1[selectItem1];
+            pickerItems2.value = pickerData[selectItem1].subList();
+            var pick2 = pickerItems2[selectItem2];
+            selectedName.value = '${pick1.pickerName()}-${pick2.pickerName()}';
+            selectedId.value = pick2.pickerId();
+            onSelected?.call(selectItem1, selectItem2);
           }
         } else {
           loadingError.value = value as String;
@@ -261,29 +310,19 @@ class LinkOptionsPickerController extends PickerController {
   }
 
   search(String text) {
-    if (text.trim().isEmpty) {
+    searchText = text;
+    if (text.trim().isEmpty && pickerData.isNotEmpty) {
       pickerItems1.value = pickerData;
-      pickerItems2.value =
-          (pickerData[selectItem2] as PickerSapFactoryAndWarehouse)
-              .warehouseList as List<PickerItem>;
+      pickerItems2.value = pickerData[selectItem1].subList();
     } else {
       pickerItems1.value = pickerData
-          .where((element) =>
-              element.pickerName().contains(text) ||
-              (element as PickerSapFactoryAndWarehouse)
-                  .warehouseList!
-                  .any((element) => element.pickerName().contains(text)))
+          .where(
+            (v1) => v1.subList().any((v2) =>
+                v2.pickerName().toUpperCase().contains(text.toUpperCase())),
+          )
           .toList();
       if (pickerItems1.isNotEmpty) {
-        for (var item1 in pickerItems1) {
-          var newList = (item1 as PickerSapFactoryAndWarehouse)
-              .warehouseList
-              ?.where((element) => element.pickerName().contains(text))
-              .toList();
-          item1.warehouseList = newList;
-        }
-        pickerItems2.value = (pickerItems1[0] as PickerSapFactoryAndWarehouse)
-            .warehouseList as List<PickerItem>;
+        pickerItems2.value = (pickerItems1[0] as LinkPickerItem).subList();
       } else {
         pickerItems2.value = [];
       }
@@ -294,20 +333,39 @@ class LinkOptionsPickerController extends PickerController {
 class DatePickerController extends PickerController {
   Rx<DateTime> pickDate = DateTime.now().obs;
   var enable = true.obs;
+  final String? saveKey;
+  final DateTime? firstDate;
+  final DateTime? lastDate;
+  final String? buttonName;
+  final Function(DateTime)? onChanged;
+  final Function(DateTime)? onSelected;
 
-  DatePickerController(super.pickerType);
-
-  select(String? saveKey, DateTime date) {
-    pickDate.value = date;
-    if (saveKey != null && saveKey.isNotEmpty) {
-      spSave(saveKey, date.millisecondsSinceEpoch);
-    }
+  DatePickerController(
+    super.pickerType, {
+    this.saveKey,
+    this.firstDate,
+    this.lastDate,
+    this.buttonName,
+    this.onChanged,
+    this.onSelected,
+  }) {
+    pickDate.value = getSave();
+    onSelected?.call(pickDate.value);
   }
 
-  getSave(String? saveKey) {
-    DateTime time = DateTime.now();
-    if (saveKey != null && saveKey.isNotEmpty) {
-      int? save = spGet(saveKey);
+  select(DateTime date) {
+    pickDate.value = date;
+    if (saveKey != null && saveKey!.isNotEmpty) {
+      spSave(saveKey!, date.millisecondsSinceEpoch);
+    }
+    onSelected?.call(date);
+    onChanged?.call(date);
+  }
+
+  DateTime getSave() {
+    DateTime time = pickDate.value;
+    if (saveKey != null && saveKey!.isNotEmpty) {
+      int? save = spGet(saveKey!);
       if (save != null) {
         time = DateTime.fromMillisecondsSinceEpoch(save);
       }
@@ -317,6 +375,50 @@ class DatePickerController extends PickerController {
 
   String getDateFormatYMD() {
     return '${pickDate.value.year}-${pickDate.value.month}-${pickDate.value.day}';
+  }
+}
+
+class SpinnerController {
+  var select = ''.obs;
+  var selectIndex = 0;
+  String? saveKey;
+  var dataList = <String>[];
+  final Function(int)? onChanged;
+  final Function(int)? onSelected;
+
+  SpinnerController({
+    this.saveKey,
+    required this.dataList,
+    this.onChanged,
+    this.onSelected,
+  }) {
+    selectIndex = getSave();
+    select.value = dataList[selectIndex];
+    onSelected?.call(selectIndex);
+  }
+
+  int getSave() {
+    var select = selectIndex;
+    if (saveKey != null && saveKey!.isNotEmpty) {
+      var save = spGet(saveKey!);
+      if (save != null && save.isNotEmpty) {
+        var index = dataList.indexOf(save);
+        if (index != -1) select = index;
+      }
+    }
+    return select;
+  }
+
+  changeSelected(String? value) {
+    if (value != null && value.isNotEmpty) {
+      select.value = value;
+      var index = dataList.indexOf(value);
+      if (index != -1) {
+        selectIndex = index;
+        spSave(saveKey!, value);
+      }
+      onChanged?.call(selectIndex);
+    }
   }
 }
 
@@ -591,7 +693,7 @@ Future getSapFactoryAndWarehouse() async {
   var response = await httpGet(method: webApiPickerSapFactoryAndWarehouse);
   if (response.resultCode == resultSuccess) {
     try {
-      List<PickerItem> list = [];
+      List<LinkPickerItem> list = [];
       for (var item in jsonDecode(response.data)) {
         list.add(PickerSapFactoryAndWarehouse.fromJson(item));
       }

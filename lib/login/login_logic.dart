@@ -151,7 +151,7 @@ class LoginLogic extends GetxController with GetSingleTickerProviderStateMixin {
                             Get.delete<LoginLogic>();
                             _isReLogin
                                 ? Get.back()
-                                : Get.offAll(() => const Home());
+                                : Get.offAll(() => const HomePage());
                           } else {
                             errorDialog(
                                 content:
@@ -205,7 +205,7 @@ class LoginLogic extends GetxController with GetSingleTickerProviderStateMixin {
         spSave(spSaveUserInfo, loginCallback.data.toString());
         userController.init(UserInfo.fromJson(jsonDecode(loginCallback.data)));
         Get.delete<LoginLogic>();
-        _isReLogin ? Get.back() : Get.offAll(() => const Home());
+        _isReLogin ? Get.back() : Get.offAll(() => const HomePage());
       } else {
         errorDialog(content: loginCallback.message ?? 'login_failed'.tr);
       }
@@ -287,7 +287,7 @@ class LoginLogic extends GetxController with GetSingleTickerProviderStateMixin {
         spSave(spSaveUserInfo, loginCallback.data.toString());
         userController.init(UserInfo.fromJson(jsonDecode(loginCallback.data)));
         Get.delete<LoginLogic>();
-        _isReLogin ? Get.back() : Get.offAll(() => const Home());
+        _isReLogin ? Get.back() : Get.offAll(() => const HomePage());
       } else {
         errorDialog(content: loginCallback.message ?? 'login_failed'.tr);
       }
@@ -323,7 +323,7 @@ class LoginLogic extends GetxController with GetSingleTickerProviderStateMixin {
         spSave(spSaveUserInfo, loginCallback.data.toString());
         userController.init(UserInfo.fromJson(jsonDecode(loginCallback.data)));
         Get.delete<LoginLogic>();
-        _isReLogin ? Get.back() : Get.offAll(() => const Home());
+        _isReLogin ? Get.back() : Get.offAll(() => const HomePage());
       } else {
         errorDialog(content: loginCallback.message ?? 'login_failed'.tr);
       }

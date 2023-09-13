@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/http/response/daily_report_data.dart';
 import 'package:jd_flutter/http/web_api.dart';
 
+import '../../../route.dart';
 import '../../../widget/dialogs.dart';
 import '../../../widget/picker/picker_controller.dart';
 import 'daily_report_state.dart';
@@ -12,11 +13,16 @@ class DailyReportLogic extends GetxController {
   final DailyReportState state = DailyReportState();
 
   ///部门选择器的控制器
-  var pickerControllerDepartment =
-      OptionsPickerController(PickerType.mesDepartment);
+  var pickerControllerDepartment = OptionsPickerController(
+    PickerType.mesDepartment,
+    saveKey: '${RouteConfig.dailyReport}${PickerType.mesDepartment}',
+  );
 
   ///日期选择器的控制器
-  var pickerControllerDate = DatePickerController(PickerType.date);
+  late DatePickerController pickerControllerDate = DatePickerController(
+    PickerType.date,
+    saveKey: '${RouteConfig.dailyReport}${PickerType.date}',
+  );
 
   ///获取扫码日产量接口
   query() {
@@ -47,12 +53,13 @@ class DailyReportLogic extends GetxController {
             list.add(DailyReportData.fromJson(item));
           }
           state.dataList.value = list;
+          Get.back();
         } on Error catch (e) {
           logger.e(e);
-          errorDialog( content: 'json_format_error'.tr);
+          errorDialog(content: 'json_format_error'.tr);
         }
       } else {
-        errorDialog( content: response.message ?? '查询失败');
+        errorDialog(content: response.message ?? '查询失败');
       }
     });
   }

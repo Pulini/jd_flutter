@@ -5,8 +5,8 @@ import 'package:jd_flutter/login/login_state.dart';
 import '../widget/number_text_field.dart';
 import 'login_logic.dart';
 
-class Login extends StatelessWidget {
-  const Login({Key? key}) : super(key: key);
+class LoginPage extends StatelessWidget {
+  const LoginPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

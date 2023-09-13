@@ -126,10 +126,10 @@ extension RequestOptionsExt on RequestOptions {
     map['Path'] = path;
     map['Headers'] = headers;
     map['QueryParameters'] = queryParameters;
+    map['data'] = data;
     logger.f(map);
   }
 }
-
 
 ///获取服务器版本信息
 getVersionInfo(
@@ -210,6 +210,64 @@ showPopup(Widget widget, {double? height}) {
             child: widget,
           ));
     },
+  );
+}
+
+titleWithDrawer({
+  required String title,
+  required List<Widget> children,
+  required Function query,
+  required Widget body,
+}) {
+  return Container(
+    decoration: backgroundColor,
+    child: Scaffold(
+      backgroundColor: Colors.transparent,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        title: Text(title),
+        actions: [
+          Builder(
+            //不加buriler会导致openDrawer崩溃
+            builder: (context) => IconButton(
+              icon: const Icon(Icons.search),
+              onPressed: () {
+                Scaffold.of(context).openEndDrawer();
+              },
+            ),
+          )
+        ],
+      ),
+      endDrawer: Drawer(
+        child: ListView(children: [
+          const SizedBox(height: 30),
+          ...children,
+          const SizedBox(height: 30),
+          Padding(
+            padding: const EdgeInsets.all(10),
+            child: SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blueAccent,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                ),
+                onPressed: () {
+                  query.call();
+                },
+                child: Text(
+                  'page_title_with_drawer_query'.tr,
+                  style: const TextStyle(color: Colors.white),
+                ),
+              ),
+            ),
+          ),
+        ]),
+      ),
+      body: body,
+    ),
   );
 }
 

@@ -4,6 +4,10 @@ abstract class PickerItem {
   String pickerId();
 }
 
+abstract class LinkPickerItem extends PickerItem{
+  List<PickerItem> subList();
+}
+
 class PickerSapSupplier extends PickerItem {
   PickerSapSupplier({
     required this.name,
@@ -353,7 +357,7 @@ class PickerSapGroup extends PickerItem {
   }
 }
 
-class PickerSapFactoryAndWarehouse extends PickerItem {
+class PickerSapFactoryAndWarehouse extends LinkPickerItem {
   PickerSapFactoryAndWarehouse({
     required this.name,
     required this.number,
@@ -383,6 +387,11 @@ class PickerSapFactoryAndWarehouse extends PickerItem {
   @override
   String pickerName() {
     return name ?? '';
+  }
+
+  @override
+  List<PickerItem> subList() {
+    return warehouseList??[];
   }
 }
 

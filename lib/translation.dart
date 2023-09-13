@@ -15,6 +15,8 @@ class Translation extends Translations {
           'dialog_default_confirm': '确定',
           'dialog_default_got_it': '知道了',
           'dialog_default_cancel': '取消',
+          'dialog_reason_hint': '请输入原因',
+          'dialog_reason_submit': '保存',
           'language': '语言:',
           'login_hint_phone': '手机号',
           'login_hint_machine': '机台号',
@@ -92,6 +94,7 @@ class Translation extends Translations {
           'picker_type_start_date': '起始日期',
           'picker_type_end_date': '截至日期',
           'picker_type_error': '无此类型',
+          'page_title_with_drawer_query':'查询',
         },
         localeEnglish.toString(): {
           'app_name': 'Gold Emperor',
@@ -104,6 +107,8 @@ class Translation extends Translations {
           'dialog_default_confirm': 'Confirm',
           'dialog_default_got_it': 'Got it',
           'dialog_default_cancel': 'Cancel',
+          'dialog_reason_hint': 'Please enter the reason',
+          'dialog_reason_submit': 'Save',
           'language': 'Language:',
           'login_hint_phone': 'Phone number',
           'login_hint_machine': 'Machine number',
@@ -188,6 +193,7 @@ class Translation extends Translations {
           'picker_type_start_date': 'Start date',
           'picker_type_end_date': 'End date',
           'picker_type_error': 'Error Type',
+          'page_title_with_drawer_query':'Query',
         }
       };
 }

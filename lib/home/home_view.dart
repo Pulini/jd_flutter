@@ -10,14 +10,14 @@ import '../widget/dialogs.dart';
 import 'home_logic.dart';
 import 'home_setting_view.dart';
 
-class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+class HomePage extends StatefulWidget {
+  const HomePage({Key? key}) : super(key: key);
 
   @override
-  State<Home> createState() => _HomeState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _HomeState extends State<Home> {
+class _HomePageState extends State<HomePage> {
   final logic = Get.put(HomeLogic());
   final state = Get.find<HomeLogic>().state;
 

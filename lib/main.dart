@@ -87,8 +87,8 @@ class _MyAppState extends State<MyApp> {
       ),
       getPages: RouteConfig.appRoutes,
       home: userController.user.value!.token != null
-          ? const Home()
-          : const Login(),
+          ? const HomePage()
+          : const LoginPage(),
       // home:FutureBuilder<UserInfo>(
       //     future: userInfo(),
       //     builder: (context, AsyncSnapshot<UserInfo> snapshot) {

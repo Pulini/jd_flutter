@@ -69,37 +69,33 @@ var _interceptors = InterceptorsWrapper(onRequest: (options, handler) {
   baseData.print();
   if (baseData.resultCode == 2) {
     logger.e('需要重新登录');
+    Get.back();
     spSave(spSaveUserInfo, '');
-    reLoginDialog();
-  }
-  if (baseData.resultCode == 3) {
+    reLoginPopup();
+  } else if (baseData.resultCode == 3) {
+    Get.back();
     logger.e('需要更新版本');
     upData();
+  } else {
+    handler.next(response);
   }
-  handler.next(response);
 }, onError: (DioException e, handler) {
   logger.e('error:$e');
   handler.next(e);
 });
 
 ///初始化网络请求
-Future<BaseData> _doHttp(bool isPost, String method,
-    {String? loading, Map<String, dynamic>? query, Object? body}) async {
+Future<BaseData> _doHttp(
+  bool isPost,
+  String method, {
+  String? loading,
+  Map<String, dynamic>? query,
+  Object? body,
+}) async {
+
   if (loading != null && loading.isNotEmpty) {
     loadingDialog(loading);
   }
-
-  ///拼接post请求的query
-  String queryStr = '';
-  query?.forEach((key, value) {
-    queryStr += '$key=$value&';
-  });
-  if (queryStr.isNotEmpty) {
-    queryStr = '?${queryStr.substring(0, queryStr.length - 1)}';
-  }
-
-  ///拼接post请求的uri
-  var uri = Uri.parse(method + queryStr);
 
   ///根据路由获取当前所在的功能
   var nowFunction = getNowFunction();
@@ -120,7 +116,7 @@ Future<BaseData> _doHttp(bool isPost, String method,
   try {
     ///创建dio对象
     var dio = Dio(BaseOptions(
-      baseUrl: testUrlForMES,
+      baseUrl: baseUrlForMES,
       connectTimeout: const Duration(minutes: 2),
       receiveTimeout: const Duration(minutes: 2),
     ))
@@ -128,8 +124,10 @@ Future<BaseData> _doHttp(bool isPost, String method,
 
     ///发起post/get请求
     var response = isPost
-        ? await dio.post(method,queryParameters: query, data: body, options: options)
-        : await dio.get(method,queryParameters: query, data: body, options: options);
+        ? await dio.post(method,
+            queryParameters: query, data: body, options: options)
+        : await dio.get(method,
+            queryParameters: query, data: body, options: options);
     if (response.statusCode == 200) {
       var baseData = BaseData.fromJson(response.data.runtimeType == String
           ? jsonDecode(response.data)
@@ -226,3 +224,12 @@ const webApiPickerSapFactoryAndWarehouse = 'api/Stock/GetSAPFactoryStockInfo';
 
 ///获取扫码日产量接口
 const webApiGetDayOutput = 'api/Piecework/GetDayOutput';
+
+///获取实时产量汇总表接口
+const webApiGetPrdShopDayReport = 'api/ProductionReport/GetPrdShopDayReport';
+
+///获取生产日报表
+const webApiGetPrdDayReport = 'api/ProductionReport/GetPrdDayReport';
+
+///提交生产日报表未达标原因
+const webApiSubmitDayReportReason = 'api/WorkCard/Submit2PrdDayReportNote';

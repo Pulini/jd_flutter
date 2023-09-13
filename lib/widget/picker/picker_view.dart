@@ -10,17 +10,9 @@ import '../../http/response/picker_item.dart';
 class DatePicker extends StatelessWidget {
   const DatePicker({
     Key? key,
-    this.saveKey,
-    this.buttonName,
-    this.firstDate,
-    this.lastDate,
     required this.pickerController,
   }) : super(key: key);
-  final String? saveKey;
-  final DateTime? firstDate;
-  final DateTime? lastDate;
   final DatePickerController pickerController;
-  final String? buttonName;
 
   _showOptions() {
     var now = DateTime.now();
@@ -29,21 +21,20 @@ class DatePicker extends StatelessWidget {
       context: Get.overlayContext!,
       initialDate: pickerController.pickDate.value,
       //起始时间
-      firstDate: firstDate ?? DateTime(now.year - 1, now.month, now.day),
+      firstDate: pickerController.firstDate ??
+          DateTime(now.year - 1, now.month, now.day),
       //最小可以选日期
-      lastDate: DateTime(now.year, now.month, now.day + 7), //最大可选日期
+      lastDate: pickerController.lastDate ??
+          DateTime(now.year, now.month, now.day + 7), //最大可选日期
     ).then((date) {
       if (date != null) {
-        pickerController.select(saveKey, date);
+        pickerController.select(date);
       }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    if (saveKey != null) {
-      pickerController.pickDate.value = pickerController.getSave(saveKey);
-    }
     return Container(
       margin: const EdgeInsets.fromLTRB(10, 5, 10, 5),
       padding: const EdgeInsets.only(left: 15, right: 5),
@@ -51,14 +42,14 @@ class DatePicker extends StatelessWidget {
         color: Colors.grey[300],
         borderRadius: BorderRadius.circular(25),
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Obx(() => Text(
+      child: Obx(() => Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
                 pickerController.getDateFormatYMD(),
                 style: const TextStyle(color: Colors.black),
-              )),
-          Obx(() => ElevatedButton(
+              ),
+              ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor:
                       pickerController.enable.value ? Colors.blue : Colors.grey,
@@ -69,12 +60,13 @@ class DatePicker extends StatelessWidget {
                 ),
                 onPressed: () => _showOptions(),
                 child: Text(
-                  buttonName ?? pickerController.getButtonName(),
+                  pickerController.buttonName ??
+                      pickerController.getButtonName(),
                   style: const TextStyle(color: Colors.white),
                 ),
-              ))
-        ],
-      ),
+              )
+            ],
+          )),
     );
   }
 }
@@ -93,23 +85,17 @@ var _titleButtonCancel = TextButton(
 class OptionsPicker extends StatelessWidget {
   const OptionsPicker({
     Key? key,
-    this.saveKey,
-    this.buttonName,
-    this.getDataList,
     required this.pickerController,
   }) : super(key: key);
 
-  final String? saveKey;
   final OptionsPickerController pickerController;
-  final String? buttonName;
-  final Function? getDataList;
 
   _showOptions() {
     if (pickerController.enable.value == false) return;
     if (pickerController.pickerItems.isNotEmpty) {
       //创建选择器控制器
       var controller = FixedExtentScrollController(
-        initialItem: pickerController.getSave(saveKey),
+        initialItem: pickerController.getSave(),
       );
 
       var titleSearch = Expanded(
@@ -126,7 +112,7 @@ class OptionsPicker extends StatelessWidget {
       var titleButtonConfirm = TextButton(
         onPressed: () {
           if (pickerController.pickerItems.isEmpty) return;
-          pickerController.select(saveKey, controller.selectedItem);
+          pickerController.select(controller.selectedItem);
           Get.back();
         },
         child: Text(
@@ -165,14 +151,14 @@ class OptionsPicker extends StatelessWidget {
         ),
       );
     } else {
-      pickerController.getData(saveKey, getDataList);
+      pickerController.getData();
     }
   }
 
   @override
   Widget build(BuildContext context) {
     pickerController.search('');
-    pickerController.getData(saveKey, getDataList);
+    pickerController.getData();
     return Container(
       margin: const EdgeInsets.fromLTRB(10, 5, 10, 5),
       padding: const EdgeInsets.only(left: 15, right: 5),
@@ -211,7 +197,8 @@ class OptionsPicker extends StatelessWidget {
                 onPressed: () => _showOptions(),
                 child: Text(
                   pickerController.pickerItems.isNotEmpty
-                      ? buttonName??pickerController.getButtonName()
+                      ? pickerController.buttonName ??
+                          pickerController.getButtonName()
                       : 'picker_refresh'.tr,
                   style: const TextStyle(color: Colors.white),
                 ),
@@ -225,16 +212,9 @@ class OptionsPicker extends StatelessWidget {
 class LinkOptionsPicker extends StatelessWidget {
   const LinkOptionsPicker({
     Key? key,
-    this.saveKey,
-    this.buttonName,
-    this.getDataList,
     required this.pickerController,
   }) : super(key: key);
-
-  final String? saveKey;
   final LinkOptionsPickerController pickerController;
-  final String? buttonName;
-  final Function? getDataList;
 
   Widget _pickerText(PickerItem data) {
     return Text(
@@ -246,7 +226,7 @@ class LinkOptionsPicker extends StatelessWidget {
   _showOptions() {
     if (pickerController.enable.value == false) return;
     if (pickerController.pickerItems1.isNotEmpty) {
-      var select = pickerController.getSave(saveKey);
+      var select = pickerController.getSave();
       //创建选择器控制器
       var controller1 = FixedExtentScrollController(initialItem: select[0]);
       var controller2 = FixedExtentScrollController(initialItem: select[1]);
@@ -266,7 +246,7 @@ class LinkOptionsPicker extends StatelessWidget {
         onPressed: () {
           if (pickerController.pickerItems1.isEmpty) return;
           pickerController.select(
-              saveKey, controller1.selectedItem, controller2.selectedItem);
+              controller1.selectedItem, controller2.selectedItem);
           Get.back();
         },
         child: Text(
@@ -327,14 +307,14 @@ class LinkOptionsPicker extends StatelessWidget {
         ),
       );
     } else {
-      pickerController.getData(saveKey, getDataList);
+      pickerController.getData();
     }
   }
 
   @override
   Widget build(BuildContext context) {
     pickerController.search('');
-    pickerController.getData(saveKey, getDataList);
+    pickerController.getData();
     return Container(
       margin: const EdgeInsets.fromLTRB(10, 5, 10, 5),
       padding: const EdgeInsets.only(left: 15, right: 5),
@@ -373,13 +353,45 @@ class LinkOptionsPicker extends StatelessWidget {
                 onPressed: () => _showOptions(),
                 child: Text(
                   pickerController.pickerItems2.isNotEmpty
-                      ? buttonName??pickerController.getButtonName()
+                      ? pickerController.buttonName ??
+                          pickerController.getButtonName()
                       : 'picker_refresh'.tr,
                   style: const TextStyle(color: Colors.white),
                 ),
               ))
         ],
       ),
+    );
+  }
+}
+
+class Spinner extends StatelessWidget {
+  final SpinnerController controller;
+
+  const Spinner({
+    super.key,
+    required this.controller,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+      padding: const EdgeInsets.only(left: 15, right: 5),
+      decoration: BoxDecoration(
+        color: Colors.grey[300],
+        borderRadius: BorderRadius.circular(25),
+      ),
+      child: Obx(() => DropdownButton<String>(
+            isExpanded: true,
+            value: controller.select.value,
+            underline: Container(height: 0),
+            onChanged: (String? value) => controller.changeSelected(value),
+            items: controller.dataList
+                .map<DropdownMenuItem<String>>((String value) =>
+                    DropdownMenuItem<String>(value: value, child: Text(value)))
+                .toList(),
+          )),
     );
   }
 }

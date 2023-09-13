@@ -258,7 +258,7 @@ List<ButtonItem> productionButton = <ButtonItem>[
     functionGroup: [
       HomeButton(
           name: '供应商合格率报表',
-          description: '无纸化入库质量分析报表',
+          description: '近2年无使用记录',
           classify: 0,
           id: 44,
           version: 1,
@@ -267,7 +267,7 @@ List<ButtonItem> productionButton = <ButtonItem>[
           jid: '1051701'),
       HomeButton(
           name: '供应商质量分析表',
-          description: '无纸化入库质量分析报表',
+          description: '近2年无使用记录',
           classify: 0,
           id: 45,
           version: 1,
@@ -276,7 +276,7 @@ List<ButtonItem> productionButton = <ButtonItem>[
           jid: '1051701'),
       HomeButton(
           name: '战情室扫码查询',
-          description: '',
+          description: '近2年无使用记录',
           classify: 0,
           id: 47,
           version: 1,
@@ -299,7 +299,7 @@ List<ButtonItem> productionButton = <ButtonItem>[
           id: 40,
           version: 1,
           icon: 'lib/res/images/ic_logo.png',
-          route: '',
+          route: RouteConfig.productionSummaryTable,
           jid: '1051701'),
       HomeButton(
           name: '生产日报表',
@@ -308,7 +308,7 @@ List<ButtonItem> productionButton = <ButtonItem>[
           id: 42,
           version: 1,
           icon: 'lib/res/images/ic_logo.png',
-          route: '',
+          route: RouteConfig.productionDayReport,
           jid: '1051701'),
       HomeButton(
           name: '车间生产日报表',
