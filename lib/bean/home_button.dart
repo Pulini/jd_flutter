@@ -4,7 +4,7 @@ abstract class ButtonItem {
   late String name;
   late String description;
   late String icon;
-  late int classify;
+  late String classify;
 
   ButtonItem({
     required this.name,
@@ -18,9 +18,9 @@ class HomeButton extends ButtonItem {
   late int id;
   late int version;
   late String route;
-  late String jid;
-  bool lock = false;
-  bool hasUpdate = false;
+  late bool hasPermission;
+
+  late bool hasUpdate = true;
 
   HomeButton({
     required super.name,
@@ -30,8 +30,15 @@ class HomeButton extends ButtonItem {
     required this.id,
     required this.version,
     required this.route,
-    required this.jid,
-  });
+    required this.hasPermission,
+  }) {
+    for(var r in RouteConfig.routeList){
+      if(r.name==route){
+        hasUpdate = version > r.version;
+        break;
+      }
+    }
+  }
 }
 
 class HomeButtonGroup extends ButtonItem {
@@ -46,6 +53,7 @@ class HomeButtonGroup extends ButtonItem {
   });
 }
 
+/*
 List<ButtonItem> appButtonList = <ButtonItem>[
   ...productionButton,
   ...warehouseButton,
@@ -945,3 +953,4 @@ List<ButtonItem> manageButton = <ButtonItem>[
       route: '',
       jid: ''),
 ];
+*/

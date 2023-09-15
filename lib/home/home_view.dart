@@ -5,9 +5,7 @@ import 'package:get/get.dart';
 
 import '../bean/home_button.dart';
 import '../constant.dart';
-import '../http/web_api.dart';
 import '../utils.dart';
-import '../widget/dialogs.dart';
 import 'home_logic.dart';
 import 'home_setting_view.dart';
 
@@ -58,7 +56,7 @@ class _HomePageState extends State<HomePage> {
   Color _color(HomeButton item) {
     return item.hasUpdate
         ? Colors.green[200]!
-        : item.lock
+        : item.hasPermission
             ? Colors.blueAccent
             : Colors.grey;
   }
@@ -70,17 +68,21 @@ class _HomePageState extends State<HomePage> {
           : item.route.isEmpty
               ? showSnackBar(title: '无路由', message: '该功能暂未开放')
               : Get.toNamed(item.route),
-      enabled: item.hasUpdate ? true : item.lock,
-      leading: Image.asset(
+      enabled: item.hasUpdate ? true : item.hasPermission,
+      leading: Image.network(
         item.icon,
-        color: _color(item),
         width: isGroup ? 30 : 40,
         height: isGroup ? 30 : 40,
+        color: _color(item),
+        errorBuilder: (ctx, err, stackTrace) => Image.asset(
+          'lib/res/images/ic_logo.png',
+          width: isGroup ? 30 : 40,
+          height: isGroup ? 30 : 40,
+          color: _color(item),
+        ),
       ),
       title: Text(item.name),
-      subtitle: Text(
-        item.description,
-      ),
+      subtitle: Text(item.description),
       trailing: item.hasUpdate
           ? Wrap(
               crossAxisAlignment: WrapCrossAlignment.center,
@@ -94,7 +96,7 @@ class _HomePageState extends State<HomePage> {
                     )),
               ],
             )
-          : item.lock
+          : item.hasPermission
               ? const Icon(Icons.arrow_forward_ios, size: 15)
               : Text('home_button_no_permission'.tr),
     );
@@ -110,11 +112,17 @@ class _HomePageState extends State<HomePage> {
               shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10)),
               ),
-              leading: Image.asset(
+              leading: Image.network(
                 (item as HomeButtonGroup).icon,
-                color: Colors.blueAccent,
                 width: 50,
                 height: 50,
+                color: Colors.blueAccent,
+                errorBuilder: (ctx, err, stackTrace) => Image.asset(
+                  'lib/res/images/ic_logo.png',
+                  height: 30,
+                  width: 30,
+                  color: Colors.blueAccent,
+                ),
               ),
               title: Text(item.name),
               subtitle: Text(item.description),
@@ -128,37 +136,6 @@ class _HomePageState extends State<HomePage> {
                   )
               ],
             ),
-    );
-  }
-
-  _bottomNavigationBar() {
-    return Obx(
-      () => BottomNavigationBar(
-        type: BottomNavigationBarType.shifting,
-        items: [
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.display_settings),
-            label: 'home_bottom_bar_produce'.tr,
-            backgroundColor: const Color.fromARGB(0xff, 0x99, 0xcc, 0x66),
-          ),
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.factory_outlined),
-            label: 'home_bottom_bar_warehouse'.tr,
-            backgroundColor: const Color.fromARGB(0xff, 0xff, 0x66, 0x66),
-          ),
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.assignment_outlined),
-            label: 'home_bottom_bar_manage'.tr,
-            backgroundColor: const Color.fromARGB(0xff, 0x00, 0x99, 0xcc),
-          ),
-        ],
-        currentIndex: state.navigationBarIndex.value,
-        selectedItemColor: const Color.fromARGB(0xff, 0xff, 0xff, 0x66),
-        onTap: (index) {
-          state.navigationBarIndex.value = index;
-          state.refreshButton();
-        },
-      ),
     );
   }
 
@@ -179,17 +156,9 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-
-
   @override
   void initState() {
     super.initState();
-
-    // getVersionInfo(
-    //   false,
-    //   noUpdate: () => _getFunList(),
-    //   needUpdate: (versionInfo) => doUpdate(versionInfo),
-    // );
     _methodChannel();
   }
 
@@ -197,18 +166,30 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Container(
       decoration: backgroundColor,
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        appBar: _appBar(),
-        body: Obx(
-          () => ListView.builder(
+      child: Obx(
+        () => Scaffold(
+          backgroundColor: Colors.transparent,
+          appBar: _appBar(),
+          body: ListView.builder(
             padding: const EdgeInsets.all(8),
             itemCount: state.buttons.length,
             itemBuilder: (BuildContext context, int index) =>
                 _item(state.buttons[index], index),
           ),
+          bottomNavigationBar: state.navigationBar.isEmpty
+              ? null
+              : BottomNavigationBar(
+                  // type: BottomNavigationBarType.fixed,
+                  type: BottomNavigationBarType.shifting,
+                  items: state.navigationBar,
+                  currentIndex: state.navigationBarIndex,
+                  selectedItemColor: state.selectedItemColor,
+                  onTap: (index) {
+                    state.navigationBarIndex = index;
+                    state.refreshButton();
+                  },
+                ),
         ),
-        bottomNavigationBar: _bottomNavigationBar(),
       ),
     );
   }

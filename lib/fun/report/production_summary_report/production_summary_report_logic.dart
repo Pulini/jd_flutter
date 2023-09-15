@@ -16,10 +16,10 @@ class ProductionSummaryReportLogic extends GetxController {
   ///日期选择器的控制器
   var pickerControllerDate = DatePickerController(
     PickerType.date,
-    saveKey: '${RouteConfig.productionSummaryTable}${PickerType.date}',
+    saveKey: '${RouteConfig.productionSummaryTable.name}${PickerType.date}',
   );
   var spinnerControllerWorkShop = SpinnerController(
-    saveKey: RouteConfig.productionSummaryTable,
+    saveKey: RouteConfig.productionSummaryTable.name,
     dataList: [
       'spinner_work_shop_hint1'.tr,
       'spinner_work_shop_hint2'.tr,

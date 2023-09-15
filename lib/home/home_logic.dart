@@ -11,6 +11,7 @@ import 'package:jd_flutter/utils.dart';
 import '../constant.dart';
 import '../http/request/user_avatar.dart';
 import '../http/response/department.dart';
+import '../http/response/home_function_info.dart';
 import '../http/web_api.dart';
 import '../widget/dialogs.dart';
 import 'home_state.dart';
@@ -22,6 +23,11 @@ class HomeLogic extends GetxController {
   onReady() {
     super.onReady();
     getFunList();
+    // getVersionInfo(
+    //   false,
+    //   noUpdate: () => getFunList(),
+    //   needUpdate: (versionInfo) => doUpdate(versionInfo),
+    // );
   }
 
   getFunList() {
@@ -29,10 +35,15 @@ class HomeLogic extends GetxController {
       method: webApiGetMenuFunction,
       loading: 'checking_version'.tr,
       query: {'empID': userController.user.value?.empID ?? 0},
-    ).then((versionInfoCallback) {
-      if (versionInfoCallback.resultCode == resultSuccess) {
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        var list=<HomeFunctions>[];
+        for (var item in jsonDecode(response.data)) {
+          list.add(HomeFunctions.fromJson(item));
+        }
+        state.refreshFunctions(list);
       } else {
-        errorDialog(content: versionInfoCallback.message);
+        errorDialog(content: response.message);
       }
     });
   }

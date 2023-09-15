@@ -15,13 +15,13 @@ class DailyReportLogic extends GetxController {
   ///部门选择器的控制器
   var pickerControllerDepartment = OptionsPickerController(
     PickerType.mesDepartment,
-    saveKey: '${RouteConfig.dailyReport}${PickerType.mesDepartment}',
+    saveKey: '${RouteConfig.dailyReport.name}${PickerType.mesDepartment}',
   );
 
   ///日期选择器的控制器
   late DatePickerController pickerControllerDate = DatePickerController(
     PickerType.date,
-    saveKey: '${RouteConfig.dailyReport}${PickerType.date}',
+    saveKey: '${RouteConfig.dailyReport.name}${PickerType.date}',
   );
 
   ///获取扫码日产量接口

@@ -33,13 +33,13 @@ class ProductionDayReportLogic extends GetxController {
     yesterday = DateTime(today.year, today.month, today.day - 1);
     pickerControllerDate = DatePickerController(
       PickerType.date,
-      saveKey: '${RouteConfig.productionDayReport}${PickerType.date}',
+      saveKey: '${RouteConfig.productionDayReport.name}${PickerType.date}',
       firstDate: lastWeek,
       lastDate: today,
       onChanged: (index) => query(),
     );
     spinnerControllerWorkShop = SpinnerController(
-      saveKey: RouteConfig.productionDayReport,
+      saveKey: RouteConfig.productionDayReport.name,
       dataList: [
         'spinner_work_shop_hint1'.tr,
         'spinner_work_shop_hint2'.tr,

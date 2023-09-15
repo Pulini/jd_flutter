@@ -181,8 +181,6 @@ const webApiChangeDepartment = 'api/User/GetLoginInfo';
 ///检查版本更新接口
 const webApiCheckVersion = 'api/Public/VersionUpgrade';
 
-///获取功能列表信息
-const webApiGetVersionList = 'api/Public/GetVersionList';
 
 ///获取sap供应商列表接口
 const webApiPickerSapSupplier = 'api/Supplier/GetSAPSupplierMessageNew';

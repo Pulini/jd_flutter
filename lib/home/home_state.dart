@@ -1,108 +1,108 @@
-import 'dart:convert';
-
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jd_flutter/http/web_api.dart';
 
 import '../bean/home_button.dart';
-import '../http/response/version_info.dart';
-import '../widget/dialogs.dart';
+import '../http/response/home_function_info.dart';
+import '../route.dart';
 
 class HomeState {
   String search = '';
-  var navigationBarIndex = 0.obs;
+  var navigationBarIndex = 0;
   RxList<ButtonItem> buttons = <ButtonItem>[].obs;
+  var navigationBar = <BottomNavigationBarItem>[];
+  var selectedItemColor = const Color(0xffffffff);
+
+  void refreshFunctions(List<HomeFunctions> list) {
+    navigationBarIndex = 0;
+    var nBar = <BottomNavigationBarItem>[];
+
+    for (var navigation in list) {
+      nBar.add(BottomNavigationBarItem(
+        icon: Image.network(
+          navigation.icon ?? '',
+          width: 30,
+          height: 30,
+          color: Color(navigation.fontColor ?? 0xffffffff),
+          errorBuilder: (ctx, err, stackTrace) => Image.asset(
+            'lib/res/images/ic_logo.png',
+            height: 30,
+            width: 30,
+            color: Color(navigation.fontColor ?? 0xffffffff),
+          ),
+        ),
+        label: navigation.className ?? 'Fun',
+        backgroundColor: Color(navigation.backGroundColor!),
+      ));
+
+      var list = <ButtonItem>[];
+      if (navigation.subFunctions != null) {
+        for (var fun in navigation.subFunctions!) {
+          if (fun.functionGroup != null && fun.functionGroup!.length > 1) {
+            var subList = <HomeButton>[];
+            for (var sub in fun.functionGroup!) {
+              subList.add(HomeButton(
+                name: sub.name ?? '',
+                description: sub.description ?? '',
+                classify: navigation.className ?? '',
+                icon: sub.icon ?? '',
+                id: sub.id ?? 0,
+                version: sub.version ?? 0,
+                route: sub.routeSrc ?? '',
+                hasPermission: sub.hasPermission ?? false,
+              ));
+            }
+            list.add(HomeButtonGroup(
+                name: fun.name ?? '',
+                description: fun.description ?? '',
+                classify: navigation.className ?? '',
+                icon: fun.icon ?? '',
+                functionGroup: subList));
+          } else {
+            list.add(HomeButton(
+              name: fun.functionGroup![0].name ?? '',
+              description: fun.functionGroup![0].description ?? '',
+              classify: navigation.className ?? '',
+              icon: fun.functionGroup![0].icon ?? '',
+              id: fun.functionGroup![0].id ?? 0,
+              version: fun.functionGroup![0].version ?? 0,
+              route: fun.functionGroup![0].routeSrc ?? '',
+              hasPermission: fun.functionGroup![0].hasPermission ?? false,
+            ));
+          }
+        }
+      }
+      functions.addAll(list);
+    }
+
+    navigationBar = nBar;
+    if (nBar.isNotEmpty) {
+      selectedItemColor = Color(list[0].fontColor ?? 0xffffffff);
+    }
+    refreshButton();
+  }
+
 
   refreshButton() {
     buttons.clear();
-    buttons.addAll(
-      appButtonList.where(
-        (element) {
-          if (search.isEmpty) {
-            return element.classify == navigationBarIndex.value;
-          } else {
-            if (element is HomeButtonGroup) {
-              return element.functionGroup.any((e2) {
-                return e2.name.toUpperCase().contains(search.toUpperCase()) ||
-                    e2.description.toUpperCase().contains(search.toUpperCase());
-              });
-            } else {
-              return element.name
-                      .toUpperCase()
-                      .contains(search.toUpperCase()) ||
-                  element.description
-                      .toUpperCase()
-                      .contains(search.toUpperCase());
-            }
-          }
-        },
-      ),
-    );
-  }
-
-  getVersionList() {
-    httpGet(method: webApiGetVersionList).then((version) {
-      if (version.resultCode == resultSuccess) {
-        List<FunctionVersion> list = [];
-        for (var item in jsonDecode(version.data)) {
-          list.add(FunctionVersion.fromJson(item));
-        }
-        var noJid=<HomeButton>[];
-        var noDescription=<HomeButton>[];
-        for (var bt in appButtonList) {
-          if (bt is HomeButton) {
-            if(bt.jid.isEmpty)noJid.add(bt);
-            if(bt.description.isEmpty)noDescription.add(bt);
-            var v = list.singleWhere((version) => version.id == bt.id);
-            bt.hasUpdate = v.version! > bt.version;
-          }
-          if (bt is HomeButtonGroup) {
-            for (var gbt in bt.functionGroup) {
-              if(gbt.jid.isEmpty)noJid.add(gbt);
-              if(gbt.description.isEmpty)noDescription.add(gbt);
-              var v = list.singleWhere((version) => version.id == gbt.id);
-              gbt.hasUpdate = v.version! > gbt.version;
-            }
-          }
-        }
-        var jidText='无权限码功能:${noJid.length}\n';
-        var descriptionText='无描述功能:${noDescription.length}\n';
-        noJid.map((e) =>e.name).forEach((element) {
-          jidText+='功能名称：$element\n';
-        });
-        noDescription.map((e) =>e.name).forEach((element) {
-          descriptionText+='功能名称：$element\n';
-        });
-        logger.f(jidText);
-        logger.f(descriptionText);
-        refreshButton();
-      } else {
-        errorDialog(content: version.message);
-      }
-    });
-  }
-
-  HomeState() {
-    buttons.addAll(productionButton);
-    refreshButtonPermission();
-    // getVersionList();
-  }
-
-  refreshButtonPermission() {
-    for (var bt in appButtonList) {
-      if (bt is HomeButton) {
-        bt.lock = hasPermission(bt.jid);
-      }
-      if (bt is HomeButtonGroup) {
-        for (var gbt in bt.functionGroup) {
-          gbt.lock = hasPermission(gbt.jid);
+    if (search.isEmpty) {
+      buttons.addAll(
+        functions.where((element) =>
+            element.classify == navigationBar[navigationBarIndex].label),
+      );
+    } else {
+      var list = <ButtonItem>[];
+      for (var fun in functions) {
+        if (fun is HomeButtonGroup) {
+          list.addAll(fun.functionGroup);
+        } else {
+          list.add(fun);
         }
       }
+      buttons.addAll(
+        list.where((element) =>
+            element.name.toUpperCase().contains(search.toUpperCase()) ||
+            element.description.toUpperCase().contains(search.toUpperCase())),
+      );
     }
-  }
-
-  hasPermission(String jid) {
-    return userController.user.value?.jurisdictionList
-            ?.any((v) => jid == v.jid) ??
-        false;
   }
 }

@@ -7,7 +7,6 @@ import '../../../widget/picker/picker_view.dart';
 import 'daily_report_logic.dart';
 
 class DailyReportPage extends StatefulWidget {
-  static const version = '12';
 
   const DailyReportPage({Key? key}) : super(key: key);
 

@@ -38,22 +38,3 @@ class VersionInfo {
     return map;
   }
 }
-
-class FunctionVersion {
-  FunctionVersion.fromJson(dynamic json) {
-    id = json['ID'];
-    version = int.parse(json['Version']);
-  }
-
-  int? id;
-  int? version;
-
-  FunctionVersion({this.id, this.version});
-
-  Map<String, dynamic> toJson() {
-    final map = <String, dynamic>{};
-    map['ID'] = id;
-    map['Version'] = version;
-    return map;
-  }
-}
