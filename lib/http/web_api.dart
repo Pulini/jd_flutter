@@ -235,3 +235,9 @@ const webApiGetPrdDayReport = 'api/ProductionReport/GetPrdDayReport';
 
 ///提交生产日报表未达标原因
 const webApiSubmitDayReportReason = 'api/WorkCard/Submit2PrdDayReportNote';
+
+///获取车间生产日报表汇总数据
+const webApiGetWorkshopProductionDailySummary= 'api/ProductionReport/GetEarlyWarningInfoReportOne';
+
+///获取车间生产日报表明细数据
+const webApiGetWorkshopProductionDailyDetail= 'api/ProductionReport/GetEarlyWarningInfoReportTwo';
