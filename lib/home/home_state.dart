@@ -13,6 +13,7 @@ class HomeState {
   var selectedItemColor = const Color(0xffffffff);
 
   void refreshFunctions(List<HomeFunctions> list) {
+    functions.clear();
     navigationBarIndex = 0;
     var nBar = <BottomNavigationBarItem>[];
 
@@ -38,8 +39,10 @@ class HomeState {
       if (navigation.subFunctions != null) {
         for (var fun in navigation.subFunctions!) {
           if (fun.functionGroup != null && fun.functionGroup!.length > 1) {
+
             var subList = <HomeButton>[];
             for (var sub in fun.functionGroup!) {
+              if(sub.name=='查看指令明细')sub.routeSrc='/view_instruction_details';
               subList.add(HomeButton(
                 name: sub.name ?? '',
                 description: sub.description ?? '',
@@ -48,7 +51,8 @@ class HomeState {
                 id: sub.id ?? 0,
                 version: sub.version ?? 0,
                 route: sub.routeSrc ?? '',
-                hasPermission: sub.hasPermission ?? false,
+                // hasPermission: sub.hasPermission ?? false,
+                hasPermission: true,
               ));
             }
             list.add(HomeButtonGroup(
@@ -66,7 +70,8 @@ class HomeState {
               id: fun.functionGroup![0].id ?? 0,
               version: fun.functionGroup![0].version ?? 0,
               route: fun.functionGroup![0].routeSrc ?? '',
-              hasPermission: fun.functionGroup![0].hasPermission ?? false,
+              // hasPermission: fun.functionGroup![0].hasPermission ?? false,
+              hasPermission: true,
             ));
           }
         }

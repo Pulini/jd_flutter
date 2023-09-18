@@ -5,6 +5,7 @@ import 'bean/routes.dart';
 import 'fun/report/daily_report/daily_report_view.dart';
 import 'fun/report/production_day_report/production_day_report_view.dart';
 import 'fun/report/production_summary_report/production_summary_report_view.dart';
+import 'fun/report/view_instruction_details/view_instruction_details_view.dart';
 import 'fun/report/workshop_production_daily_report/workshop_production_daily_report_view.dart';
 import 'home/home_view.dart';
 import 'http/web_api.dart';
@@ -42,12 +43,20 @@ class RouteConfig {
     const WorkshopProductionDailyReportPage(),
   );
 
+  ///查看指令明细
+  static Routes viewInstructionDetails = Routes(
+    '/view_instruction_details',
+    1,
+    const ViewInstructionDetailsPage(),
+  );
+
   ///本地功能入口列表
   static List<Routes> routeList = [
     dailyReport,
     productionSummaryTable,
     productionDayReport,
     workshopProductionDailyReport,
+    viewInstructionDetails,
   ];
 
   static List<GetPage> appRoutes = [
@@ -75,6 +84,10 @@ class RouteConfig {
     GetPage(
       name: workshopProductionDailyReport.name,
       page: () => workshopProductionDailyReport.page,
+    ),
+    GetPage(
+      name: viewInstructionDetails.name,
+      page: () => viewInstructionDetails.page,
     ),
   ];
 }

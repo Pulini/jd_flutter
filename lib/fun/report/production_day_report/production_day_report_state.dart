@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 
 import '../../../http/response/production_day_report_info.dart';
@@ -7,50 +8,50 @@ import '../../../http/web_api.dart';
 class ProductionDayReportState {
   List<ProductionDayReportInfo> tableData = <ProductionDayReportInfo>[];
   RxList<DataRow> tableDataRows = <DataRow>[].obs;
-  List<DataColumn> tableDataColumn = const <DataColumn>[
-    DataColumn(label: Text('page_production_day_report_table_title_hint1')),
-    DataColumn(label: Text('page_production_day_report_table_title_hint2')),
+  List<DataColumn> tableDataColumn =  <DataColumn>[
+    DataColumn(label: Text('page_production_day_report_table_title_hint1'.tr)),
+    DataColumn(label: Text('page_production_day_report_table_title_hint2'.tr)),
     DataColumn(
-      label: Text('page_production_day_report_table_title_hint3'),
+      label: Text('page_production_day_report_table_title_hint3'.tr),
       numeric: true,
     ),
     DataColumn(
-      label: Text('page_production_day_report_table_title_hint4'),
+      label: Text('page_production_day_report_table_title_hint4'.tr),
       numeric: true,
     ),
     DataColumn(
-      label: Text('page_production_day_report_table_title_hint5'),
+      label: Text('page_production_day_report_table_title_hint5'.tr),
       numeric: true,
     ),
     DataColumn(
-      label: Text('page_production_day_report_table_title_hint6'),
+      label: Text('page_production_day_report_table_title_hint6'.tr),
       numeric: true,
     ),
     DataColumn(
-      label: Text('page_production_day_report_table_title_hint7'),
+      label: Text('page_production_day_report_table_title_hint7'.tr),
       numeric: true,
     ),
     DataColumn(
-      label: Text('page_production_day_report_table_title_hint8'),
+      label: Text('page_production_day_report_table_title_hint8'.tr),
       numeric: true,
     ),
     DataColumn(
-      label: Text('page_production_day_report_table_title_hint9'),
+      label: Text('page_production_day_report_table_title_hint9'.tr),
       numeric: true,
     ),
     DataColumn(
-      label: Text('page_production_day_report_table_title_hint10'),
+      label: Text('page_production_day_report_table_title_hint10'.tr),
       numeric: true,
     ),
     DataColumn(
-      label: Text('page_production_day_report_table_title_hint11'),
+      label: Text('page_production_day_report_table_title_hint11'.tr),
       numeric: true,
     ),
     DataColumn(
-      label: Text('page_production_day_report_table_title_hint12'),
+      label: Text('page_production_day_report_table_title_hint12'.tr),
       numeric: true,
     ),
-    DataColumn(label: Text('page_production_day_report_table_title_hint13')),
+    DataColumn(label: Text('page_production_day_report_table_title_hint13'.tr)),
   ];
 
   createDataRow(

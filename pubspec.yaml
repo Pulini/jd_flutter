@@ -57,14 +57,16 @@ dependencies:
   #白屏启动页工具
   flutter_native_splash: ^2.3.2
   #华为hms扫码库
-  flutter_hms_scan_kit: ^1.1.1
+  flutter_hms_scan_kit: ^1.1.2
   #国际化 时间选择器需要此包来显示汉化文本
   flutter_localizations:
     sdk: flutter
   #自适应字体大小
   auto_size_text: ^3.0.0
   #UUID
-  uuid: ^3.0.7
+  uuid: ^4.0.0
+  #webview控件
+  webview_flutter: ^4.2.4
   #隔离区子线程
 #  flutter_isolate: ^2.0.4
 

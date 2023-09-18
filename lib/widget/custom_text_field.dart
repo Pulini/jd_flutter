@@ -101,3 +101,45 @@ class _NumberTextFieldState extends State<NumberTextField> {
     );
   }
 }
+
+class EditText extends StatelessWidget {
+  const EditText({super.key, required this.hint,required this.controller});
+  final String hint;
+  final TextEditingController controller ;
+
+  @override
+  Widget build(BuildContext context) {
+
+    return Padding(
+      padding: const EdgeInsets.only(left: 10, right: 10),
+      child: TextField(
+        controller: controller,
+        decoration: InputDecoration(
+          contentPadding: const EdgeInsets.only(
+            top: 0,
+            bottom: 0,
+            left: 10,
+            right: 10,
+          ),
+          filled: true,
+          fillColor: Colors.grey[300],
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(30),
+            borderSide: const BorderSide(
+              color: Colors.transparent,
+            ),
+          ),
+          border: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(30)),
+          ),
+          hintText: hint,
+          hintStyle: const TextStyle(color: Colors.grey),
+          suffixIcon: IconButton(
+            icon: const Icon(Icons.close, color: Colors.grey),
+            onPressed: () => controller.clear(),
+          ),
+        ),
+      ),
+    );
+  }
+}

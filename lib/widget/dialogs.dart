@@ -18,23 +18,27 @@ informationDialog({
   required String? content,
   Function()? back,
 }) {
-  showDialog<String>(
-    barrierDismissible: false,
-    context: Get.overlayContext!,
-    builder: (BuildContext context) => AlertDialog(
-      title: Text(title.isEmpty ? 'dialog_default_title_information'.tr : title,
-          style: const TextStyle(color: Colors.orange)),
-      content: Text(content ?? ''),
-      actions: <Widget>[
-        TextButton(
-          onPressed: () {
-            Get.back();
-            back?.call();
-          },
-          child: Text('dialog_default_got_it'.tr),
-        ),
-      ],
+  Get.dialog(
+    WillPopScope(
+      //拦截返回键
+      onWillPop: () async => false,
+      child: AlertDialog(
+        title: Text(
+            title.isEmpty ? 'dialog_default_title_information'.tr : title,
+            style: const TextStyle(color: Colors.orange)),
+        content: Text(content ?? ''),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Get.back();
+              back?.call();
+            },
+            child: Text('dialog_default_got_it'.tr),
+          ),
+        ],
+      ),
     ),
+    barrierDismissible: false, //拦截dialog外部点击
   );
 }
 
@@ -44,23 +48,26 @@ successDialog({
   required String? content,
   Function()? back,
 }) {
-  showDialog<String>(
-    barrierDismissible: false,
-    context: Get.overlayContext!,
-    builder: (BuildContext context) => AlertDialog(
-      title: Text(title.isEmpty ? 'dialog_default_title_success'.tr : title,
-          style: const TextStyle(color: Colors.green)),
-      content: Text(content ?? ''),
-      actions: <Widget>[
-        TextButton(
-          onPressed: () {
-            Get.back();
-            back?.call();
-          },
-          child: Text('dialog_default_got_it'.tr),
-        ),
-      ],
+  Get.dialog(
+    WillPopScope(
+      //拦截返回键
+      onWillPop: () async => false,
+      child: AlertDialog(
+        title: Text(title.isEmpty ? 'dialog_default_title_success'.tr : title,
+            style: const TextStyle(color: Colors.green)),
+        content: Text(content ?? ''),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Get.back();
+              back?.call();
+            },
+            child: Text('dialog_default_got_it'.tr),
+          ),
+        ],
+      ),
     ),
+    barrierDismissible: false, //拦截dialog外部点击
   );
 }
 
@@ -70,32 +77,34 @@ errorDialog({
   required String? content,
   Function()? back,
 }) {
-  showDialog<String>(
-    barrierDismissible: false,
-    context: Get.overlayContext!,
-    builder: (BuildContext context) => AlertDialog(
-      title: Text(title.isEmpty ? 'dialog_default_title_error'.tr : title,
-          style: const TextStyle(color: Colors.red)),
-      content: Text(content ?? ''),
-      actions: <Widget>[
-        TextButton(
-          onPressed: () {
-            Get.back();
-            back?.call();
-          },
-          child: Text('dialog_default_got_it'.tr),
-        ),
-      ],
+  Get.dialog(
+    WillPopScope(
+      //拦截返回键
+      onWillPop: () async => false,
+      child: AlertDialog(
+        title: Text(title.isEmpty ? 'dialog_default_title_error'.tr : title,
+            style: const TextStyle(color: Colors.red)),
+        content: Text(content ?? ''),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Get.back();
+              back?.call();
+            },
+            child: Text('dialog_default_got_it'.tr),
+          ),
+        ],
+      ),
     ),
+    barrierDismissible: false, //拦截dialog外部点击
   );
 }
 
 ///加载中弹窗
 loadingDialog(String? content) {
-  showDialog<String>(
-    barrierDismissible: false,
-    context: Get.overlayContext!,
-    builder: (BuildContext context) => WillPopScope(
+  Get.dialog(
+    WillPopScope(
+      //拦截返回键
       onWillPop: () async => false,
       child: Dialog(
         backgroundColor: Colors.white,
@@ -112,6 +121,7 @@ loadingDialog(String? content) {
         ),
       ),
     ),
+    barrierDismissible: false, //拦截dialog外部点击
   );
 }
 
@@ -251,16 +261,13 @@ doUpdate(VersionInfo version) {
       ),
     ),
   );
-
-  showDialog<bool>(
-    context: Get.overlayContext!,
-    barrierDismissible: false,
-    builder: (BuildContext context) {
-      return WillPopScope(
-        onWillPop: () => Future<bool>.value(false),
-        child: dialog,
-      );
-    },
+  Get.dialog(
+    WillPopScope(
+      //拦截返回键
+      onWillPop: () async => false,
+      child: dialog,
+    ),
+    barrierDismissible: false, //拦截dialog外部点击
   );
 }
 
@@ -293,8 +300,7 @@ reLoginPopup() {
         end: Alignment.topRight,
       ),
     ),
-    child: Wrap(
-      alignment: WrapAlignment.center,
+    child: Column(
       children: [
         Center(
           child: Text(
@@ -319,15 +325,20 @@ reLoginPopup() {
       ],
     ),
   );
+
   showCupertinoModalPopup(
     context: Get.overlayContext!,
     barrierDismissible: false,
-    builder: (BuildContext context) => SingleChildScrollView(
-      primary: true,
-      padding: EdgeInsets.only(
-        bottom: MediaQuery.of(context).viewInsets.bottom,
+    builder: (BuildContext context) => WillPopScope(
+      //拦截返回键
+      onWillPop: () async => false,
+      child: SingleChildScrollView(
+        primary: true,
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+        ),
+        child: popup,
       ),
-      child: popup,
     ),
   );
 }
@@ -389,7 +400,7 @@ reasonInputPopup(
               onPressed: () {
                 var reason = reasonController.text;
                 if (reason.trim().isEmpty) {
-                  errorDialog(content:'dialog_reason_hint'.tr);
+                  errorDialog(content: 'dialog_reason_hint'.tr);
                 } else {
                   confirm.call(reason);
                 }
@@ -406,12 +417,16 @@ reasonInputPopup(
   );
   showCupertinoModalPopup(
     context: Get.overlayContext!,
-    builder: (BuildContext context) => SingleChildScrollView(
-      primary: true,
-      padding: EdgeInsets.only(
-        bottom: MediaQuery.of(context).viewInsets.bottom,
+    builder: (BuildContext context) => WillPopScope(
+      //拦截返回键
+      onWillPop: () async => false,
+      child: SingleChildScrollView(
+        primary: true,
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+        ),
+        child: popup,
       ),
-      child: popup,
     ),
   );
 }

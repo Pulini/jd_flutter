@@ -308,3 +308,5 @@ log(String msg) {
   }
   logger.f(printText);
 }
+
+
