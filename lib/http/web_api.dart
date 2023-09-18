@@ -116,8 +116,8 @@ Future<BaseData> _doHttp(
   try {
     ///创建dio对象
     var dio = Dio(BaseOptions(
-      baseUrl: testUrlForMES,
-      // baseUrl: baseUrlForMES,
+      // baseUrl: testUrlForMES,
+      baseUrl: baseUrlForMES,
       connectTimeout: const Duration(minutes: 2),
       receiveTimeout: const Duration(minutes: 2),
     ))
