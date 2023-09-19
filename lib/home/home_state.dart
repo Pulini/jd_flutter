@@ -43,6 +43,7 @@ class HomeState {
             var subList = <HomeButton>[];
             for (var sub in fun.functionGroup!) {
               if(sub.name=='查看指令明细')sub.routeSrc='/view_instruction_details';
+              if(sub.name=='员工计件产量查询')sub.routeSrc='/worker_production_report';
               subList.add(HomeButton(
                 name: sub.name ?? '',
                 description: sub.description ?? '',

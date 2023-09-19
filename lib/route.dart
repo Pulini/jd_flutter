@@ -6,6 +6,7 @@ import 'fun/report/daily_report/daily_report_view.dart';
 import 'fun/report/production_day_report/production_day_report_view.dart';
 import 'fun/report/production_summary_report/production_summary_report_view.dart';
 import 'fun/report/view_instruction_details/view_instruction_details_view.dart';
+import 'fun/report/worker_production_report/worker_production_report_view.dart';
 import 'fun/report/workshop_production_daily_report/workshop_production_daily_report_view.dart';
 import 'home/home_view.dart';
 import 'http/web_api.dart';
@@ -50,6 +51,13 @@ class RouteConfig {
     const ViewInstructionDetailsPage(),
   );
 
+  ///员工计件产量查询
+  static Routes workerProductionReport = Routes(
+    '/worker_production_report',
+    1,
+    const WorkerProductionReportPage(),
+  );
+
   ///本地功能入口列表
   static List<Routes> routeList = [
     dailyReport,
@@ -57,6 +65,7 @@ class RouteConfig {
     productionDayReport,
     workshopProductionDailyReport,
     viewInstructionDetails,
+    workerProductionReport,
   ];
 
   static List<GetPage> appRoutes = [
@@ -88,6 +97,10 @@ class RouteConfig {
     GetPage(
       name: viewInstructionDetails.name,
       page: () => viewInstructionDetails.page,
+    ),
+    GetPage(
+      name: workerProductionReport.name,
+      page: () => workerProductionReport.page,
     ),
   ];
 }

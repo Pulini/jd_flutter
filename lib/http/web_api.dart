@@ -244,3 +244,6 @@ const webApiGetWorkshopProductionDailyDetail= 'api/ProductionReport/GetEarlyWarn
 
 ///根据指令号和制程查询指令pdf在线文档
 const webApiGetInstructionDetailsFile= 'api/Package/GetPreviewFileByMoNo';
+
+///获取员工计件产量报表
+const webApiGetWorkerProductionReport= 'api/Piecework/GetDayWorkDataByDepartmentID';

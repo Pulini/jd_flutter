@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:crypto/crypto.dart';
+import 'package:decimal/decimal.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -104,6 +105,19 @@ extension ContextExt on BuildContext {
   ///是否是小屏幕
   bool isSmallScreen() => MediaQuery.of(this).size.width < 768;
 }
+
+///Double扩展方法
+extension DoubleExt on double? {
+  ///double转string并去除小数点后为0的位数，非0不去除
+  String toShowString() {
+    if (this == null) {
+      return '0';
+    } else {
+      return Decimal.parse(toString()).toString();
+    }
+  }
+}
+
 
 ///File扩展方法
 extension FileExt on File {
@@ -308,5 +322,3 @@ log(String msg) {
   }
   logger.f(printText);
 }
-
-

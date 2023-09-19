@@ -11,7 +11,7 @@ class WorkshopProductionDailyReportState {
     if (isDetail.value) {
       isDetail.value = false;
       buttonName.value = '明细';
-      tableDataColumn.value = [
+      tableDataColumn.value =const [
         DataColumn(label: Text('车间')),
         DataColumn(label: Text('区域')),
         DataColumn(label: Text('今日目标'), numeric: true),
@@ -24,7 +24,7 @@ class WorkshopProductionDailyReportState {
     } else {
       isDetail.value = true;
       buttonName.value = '汇总';
-      tableDataColumn.value = [
+      tableDataColumn.value =const [
         DataColumn(label: Text('车间')),
         DataColumn(label: Text('区域')),
         DataColumn(label: Text('所属课')),

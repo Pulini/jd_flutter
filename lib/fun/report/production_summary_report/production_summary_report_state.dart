@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/utils.dart';
 
 import '../../../http/response/production_summary_info.dart';
 
@@ -51,11 +52,11 @@ class ProductionSummaryReportState {
         DataCell(Text(data.workshopLocation ?? '')),
         DataCell(Text(data.group ?? '')),
         DataCell(Text(data.lineLeader ?? '')),
-        DataCell(Text((data.todayTargetProduction ?? 0).toString())),
-        DataCell(Text((data.todayProduction ?? 0).toString())),
+        DataCell(Text(data.todayTargetProduction.toShowString())),
+        DataCell(Text(data.todayProduction.toShowString())),
         DataCell(Text(data.completionRate ?? '')),
-        DataCell(Text((data.monthlyTargetProduction ?? 0).toString())),
-        DataCell(Text((data.monthlyProduction ?? 0).toString())),
+        DataCell(Text(data.monthlyTargetProduction.toShowString())),
+        DataCell(Text(data.monthlyProduction.toShowString())),
         DataCell(Text(data.monthlyCompletionRate ?? '')),
         DataCell(Text((data.actualPeopleNumber ?? 0).toString())),
       ],

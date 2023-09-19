@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_rx/src/rx_types/rx_types.dart';
+import 'package:jd_flutter/utils.dart';
 
 import '../../../http/response/production_day_report_info.dart';
 import '../../../http/web_api.dart';
@@ -8,7 +8,7 @@ import '../../../http/web_api.dart';
 class ProductionDayReportState {
   List<ProductionDayReportInfo> tableData = <ProductionDayReportInfo>[];
   RxList<DataRow> tableDataRows = <DataRow>[].obs;
-  List<DataColumn> tableDataColumn =  <DataColumn>[
+  List<DataColumn> tableDataColumn = <DataColumn>[
     DataColumn(label: Text('page_production_day_report_table_title_hint1'.tr)),
     DataColumn(label: Text('page_production_day_report_table_title_hint2'.tr)),
     DataColumn(
@@ -71,16 +71,16 @@ class ProductionDayReportState {
       cells: [
         DataCell(Text(data.depName ?? '')),
         DataCell(Text(data.manager ?? '')),
-        DataCell(Text((data.toDayMustQty ?? 0).toString())),
-        DataCell(Text((data.toDayQty ?? 0).toString())),
+        DataCell(Text(data.toDayMustQty.toShowString())),
+        DataCell(Text(data.toDayQty.toShowString())),
         DataCell(Text(data.toDayFinishRate ?? '')),
-        DataCell(Text((data.noToDayQty ?? 0).toString())),
-        DataCell(Text((data.monthMustQty ?? 0).toString())),
-        DataCell(Text((data.monthQty ?? 0).toString())),
+        DataCell(Text(data.noToDayQty.toShowString())),
+        DataCell(Text(data.monthMustQty.toShowString())),
+        DataCell(Text(data.monthQty.toShowString())),
         DataCell(Text(data.monthFinishRate ?? '')),
-        DataCell(Text((data.noMonthQty ?? 0).toString())),
-        DataCell(Text((data.mustPeopleCount ?? 0).toString())),
-        DataCell(Text((data.peopleCount ?? 0).toString())),
+        DataCell(Text(data.noMonthQty.toShowString())),
+        DataCell(Text(data.mustPeopleCount.toShowString())),
+        DataCell(Text(data.peopleCount.toShowString())),
         DataCell(
           Text(data.noDoingReason ?? ''),
           showEditIcon: isParty,

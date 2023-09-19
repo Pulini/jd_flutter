@@ -67,6 +67,8 @@ dependencies:
   uuid: ^4.0.0
   #webview控件
   webview_flutter: ^4.2.4
+  #高精度小数计算
+  decimal: ^2.3.3
   #隔离区子线程
 #  flutter_isolate: ^2.0.4
 

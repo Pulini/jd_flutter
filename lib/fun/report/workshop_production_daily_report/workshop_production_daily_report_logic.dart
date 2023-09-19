@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/http/response/workshop_production_daily_report_info.dart';
+import 'package:jd_flutter/utils.dart';
 
 import '../../../http/web_api.dart';
 import '../../../widget/dialogs.dart';
@@ -50,11 +51,11 @@ class WorkshopProductionDailyReportLogic extends GetxController
             cells: [
               DataCell(Text(data.workShopName ?? '')),
               DataCell(Text(data.organizeName ?? '')),
-              DataCell(Text((data.toDayMustQty ?? 0).toString())),
-              DataCell(Text((data.toDayQty ?? 0).toString())),
-              DataCell(Text((data.noToDayQty ?? 0).toString())),
+              DataCell(Text(data.toDayMustQty.toShowString())),
+              DataCell(Text(data.toDayQty.toShowString())),
+              DataCell(Text(data.noToDayQty.toShowString())),
               DataCell(Text(data.toDayFinishRate ?? '')),
-              DataCell(Text((data.lJQty ?? 0).toString())),
+              DataCell(Text(data.lJQty.toShowString())),
               DataCell(Text(data.noDoingReason ?? '')),
             ],
           ));
