@@ -21,6 +21,7 @@ enum PickerType {
   mesDepartment,
   mesOrganization,
   mesProcessFlow,
+  mesProductionReportType,
   date,
   startDate,
   endDate,
@@ -61,6 +62,8 @@ abstract class PickerController {
         return 'picker_type_mes_organization'.tr;
       case PickerType.mesProcessFlow:
         return 'picker_type_mes_process_flow'.tr;
+      case PickerType.mesProductionReportType:
+        return 'picker_type_mes_production_report_type'.tr;
       case PickerType.date:
         return 'picker_type_date'.tr;
       case PickerType.startDate:
@@ -102,6 +105,8 @@ abstract class PickerController {
         return getMesOrganization;
       case PickerType.mesProcessFlow:
         return getMesProcessFlow;
+      case PickerType.mesProductionReportType:
+        return getMesProductionReportType;
       default:
         return getDataListError;
     }
@@ -608,6 +613,28 @@ Future getMesProcessFlow() async {
       List<PickerItem> list = [];
       for (var item in jsonDecode(response.data)) {
         list.add(PickerMesProcessFlow.fromJson(item));
+      }
+      return list;
+    } on Error catch (e) {
+      logger.e(e);
+      return 'json_format_error'.tr;
+    }
+  } else {
+    return response.message;
+  }
+}
+
+///获取Mes生产计件报表类型
+Future getMesProductionReportType() async {
+  var response = await httpGet(
+    method: webApiGetProductionReportType,
+    query: {'SearchType': 'app'},
+  );
+  if (response.resultCode == resultSuccess) {
+    try {
+      List<PickerItem> list = [];
+      for (var item in jsonDecode(response.data)) {
+        list.add(PickerMesProductionReportType.fromJson(item));
       }
       return list;
     } on Error catch (e) {

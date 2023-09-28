@@ -103,13 +103,13 @@ class _NumberTextFieldState extends State<NumberTextField> {
 }
 
 class EditText extends StatelessWidget {
-  const EditText({super.key, required this.hint,required this.controller});
+  const EditText({super.key, required this.hint, required this.controller});
+
   final String hint;
-  final TextEditingController controller ;
+  final TextEditingController controller;
 
   @override
   Widget build(BuildContext context) {
-
     return Padding(
       padding: const EdgeInsets.only(left: 10, right: 10),
       child: TextField(
@@ -140,6 +140,38 @@ class EditText extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class TextContainer extends StatelessWidget {
+  const TextContainer({
+    super.key,
+    required this.text,
+    this.borderColor,
+    this.backgroundColor,
+    this.width,
+    this.height,
+  });
+
+  final Widget text;
+  final Color? borderColor;
+  final Color? backgroundColor;
+  final double? width;
+  final double? height;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: width,
+      height: height,
+      padding: const EdgeInsets.only(left: 15, right: 15),
+      decoration: BoxDecoration(
+        border: Border.all(color: borderColor ?? Colors.grey),
+        color: backgroundColor ?? Colors.transparent,
+      ),
+      alignment: Alignment.centerLeft,
+      child: text,
     );
   }
 }

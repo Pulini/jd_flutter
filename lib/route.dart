@@ -6,6 +6,7 @@ import 'fun/report/daily_report/daily_report_view.dart';
 import 'fun/report/production_day_report/production_day_report_view.dart';
 import 'fun/report/production_summary_report/production_summary_report_view.dart';
 import 'fun/report/view_instruction_details/view_instruction_details_view.dart';
+import 'fun/report/worker_production_detail/worker_production_detail_view.dart';
 import 'fun/report/worker_production_report/worker_production_report_view.dart';
 import 'fun/report/workshop_production_daily_report/workshop_production_daily_report_view.dart';
 import 'home/home_view.dart';
@@ -19,43 +20,50 @@ class RouteConfig {
   ///扫码日产量报表
   static Routes dailyReport = Routes(
     '/daily_report',
-    1,
+    99,
     const DailyReportPage(),
   );
 
   ///产量汇总表
   static Routes productionSummaryTable = Routes(
     '/production_summary_table',
-    1,
+    99,
     const ProductionSummaryReportPage(),
   );
 
   ///日生产报表
   static Routes productionDayReport = Routes(
     '/production_day_report',
-    1,
+    99,
     const ProductionDayReportPage(),
   );
 
   ///车间生产日报表
   static Routes workshopProductionDailyReport = Routes(
     '/workshop_production_daily_report',
-    1,
+    99,
     const WorkshopProductionDailyReportPage(),
   );
 
   ///查看指令明细
   static Routes viewInstructionDetails = Routes(
     '/view_instruction_details',
-    1,
+    99,
     const ViewInstructionDetailsPage(),
   );
 
   ///员工计件产量查询
   static Routes workerProductionReport = Routes(
     '/worker_production_report',
-    1,
+    99,
     const WorkerProductionReportPage(),
+  );
+
+  ///员工计件明细
+  static Routes workerProductionDetail = Routes(
+    '/worker_production_detail',
+    99,
+    const WorkerProductionDetailPage(),
   );
 
   ///本地功能入口列表
@@ -66,6 +74,7 @@ class RouteConfig {
     workshopProductionDailyReport,
     viewInstructionDetails,
     workerProductionReport,
+    workerProductionDetail,
   ];
 
   static List<GetPage> appRoutes = [
@@ -101,6 +110,10 @@ class RouteConfig {
     GetPage(
       name: workerProductionReport.name,
       page: () => workerProductionReport.page,
+    ),
+    GetPage(
+      name: workerProductionDetail.name,
+      page: () => workerProductionDetail.page,
     ),
   ];
 }

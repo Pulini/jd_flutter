@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:jd_flutter/utils.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../constant.dart';
 import '../http/request/user_avatar.dart';
@@ -18,11 +19,13 @@ import 'home_state.dart';
 
 class HomeLogic extends GetxController {
   final HomeState state = HomeState();
+  RefreshController refreshController =
+      RefreshController(initialRefresh: false);
 
   @override
   onReady() {
     super.onReady();
-    getFunList();
+    refreshFunList();
     // getVersionInfo(
     //   false,
     //   noUpdate: () => getFunList(),
@@ -30,14 +33,15 @@ class HomeLogic extends GetxController {
     // );
   }
 
-  getFunList() {
+  refreshFunList() {
     httpGet(
       method: webApiGetMenuFunction,
       loading: 'checking_version'.tr,
       query: {'empID': userController.user.value?.empID ?? 0},
     ).then((response) {
+      refreshController.refreshCompleted();
       if (response.resultCode == resultSuccess) {
-        var list=<HomeFunctions>[];
+        var list = <HomeFunctions>[];
         for (var item in jsonDecode(response.data)) {
           list.add(HomeFunctions.fromJson(item));
         }

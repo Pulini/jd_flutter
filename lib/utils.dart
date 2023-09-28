@@ -242,7 +242,7 @@ titleWithDrawer({
         title: Text(title),
         actions: [
           Builder(
-            //不加buriler会导致openDrawer崩溃
+            //不加builder会导致openDrawer崩溃
             builder: (context) => IconButton(
               icon: const Icon(Icons.search),
               onPressed: () {
@@ -321,4 +321,7 @@ log(String msg) {
     }
   }
   logger.f(printText);
+}
+bool checkUserPermission(String code){
+ return userController.user.value?.jurisdictionList?.any((v) => v.jid==code)??false;
 }

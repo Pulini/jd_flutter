@@ -4,7 +4,7 @@ abstract class PickerItem {
   String pickerId();
 }
 
-abstract class LinkPickerItem extends PickerItem{
+abstract class LinkPickerItem extends PickerItem {
   List<PickerItem> subList();
 }
 
@@ -391,7 +391,7 @@ class PickerSapFactoryAndWarehouse extends LinkPickerItem {
 
   @override
   List<PickerItem> subList() {
-    return warehouseList??[];
+    return warehouseList ?? [];
   }
 }
 
@@ -420,5 +420,30 @@ class PickerSapWarehouse extends PickerItem {
   @override
   String pickerName() {
     return warehouseName ?? '';
+  }
+}
+
+class PickerMesProductionReportType extends PickerItem {
+  PickerMesProductionReportType({
+    required this.itemID,
+    required this.itemName,
+  });
+
+  PickerMesProductionReportType.fromJson(dynamic json) {
+    itemID = json['ItemID'];
+    itemName = json['ItemName'];
+  }
+
+  int? itemID;
+  String? itemName;
+
+  @override
+  String pickerId() {
+    return (itemID ?? 0).toString();
+  }
+
+  @override
+  String pickerName() {
+    return itemName ?? '';
   }
 }

@@ -108,12 +108,10 @@ class ProductionDayReportLogic extends GetxController {
     ).then((response) {
       if (response.resultCode == resultSuccess) {
         try {
-          state.tableData.clear();
           var list = <DataRow>[];
           var index = 0;
           for (var item in jsonDecode(response.data)) {
             var data = ProductionDayReportInfo.fromJson(item);
-            state.tableData.add(data);
             list.add(
               state.createDataRow(
                 data,

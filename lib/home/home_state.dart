@@ -39,18 +39,17 @@ class HomeState {
       if (navigation.subFunctions != null) {
         for (var fun in navigation.subFunctions!) {
           if (fun.functionGroup != null && fun.functionGroup!.length > 1) {
-
             var subList = <HomeButton>[];
             for (var sub in fun.functionGroup!) {
-              if(sub.name=='查看指令明细')sub.routeSrc='/view_instruction_details';
-              if(sub.name=='员工计件产量查询')sub.routeSrc='/worker_production_report';
+
               subList.add(HomeButton(
                 name: sub.name ?? '',
                 description: sub.description ?? '',
                 classify: navigation.className ?? '',
                 icon: sub.icon ?? '',
                 id: sub.id ?? 0,
-                version: sub.version ?? 0,
+                // version: sub.version ?? 0,
+                version: 99,
                 route: sub.routeSrc ?? '',
                 // hasPermission: sub.hasPermission ?? false,
                 hasPermission: true,
@@ -69,7 +68,8 @@ class HomeState {
               classify: navigation.className ?? '',
               icon: fun.functionGroup![0].icon ?? '',
               id: fun.functionGroup![0].id ?? 0,
-              version: fun.functionGroup![0].version ?? 0,
+              // version: fun.functionGroup![0].version ?? 0,
+              version: 99,
               route: fun.functionGroup![0].routeSrc ?? '',
               // hasPermission: fun.functionGroup![0].hasPermission ?? false,
               hasPermission: true,

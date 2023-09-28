@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/login/login_state.dart';
 
-import '../widget/custom_text_field.dart';
+import '../widget/custom_text.dart';
 import 'login_logic.dart';
 
 class LoginPage extends StatelessWidget {

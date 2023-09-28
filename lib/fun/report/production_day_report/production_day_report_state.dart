@@ -6,7 +6,6 @@ import '../../../http/response/production_day_report_info.dart';
 import '../../../http/web_api.dart';
 
 class ProductionDayReportState {
-  List<ProductionDayReportInfo> tableData = <ProductionDayReportInfo>[];
   RxList<DataRow> tableDataRows = <DataRow>[].obs;
   List<DataColumn> tableDataColumn = <DataColumn>[
     DataColumn(label: Text('page_production_day_report_table_title_hint1'.tr)),

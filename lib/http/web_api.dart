@@ -247,3 +247,10 @@ const webApiGetInstructionDetailsFile= 'api/Package/GetPreviewFileByMoNo';
 
 ///获取员工计件产量报表
 const webApiGetWorkerProductionReport= 'api/Piecework/GetDayWorkDataByDepartmentID';
+
+///获取员工计件明细报表类型
+const webApiGetProductionReportType= 'api/WorkCard/GetProcessOutputReport';
+
+///获取员工计件明细报表
+const webApiProductionReport= 'api/WorkCard/GetProcessOutputReportDetail';
+

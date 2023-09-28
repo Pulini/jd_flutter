@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../bean/home_button.dart';
 import '../constant.dart';
@@ -170,11 +171,17 @@ class _HomePageState extends State<HomePage> {
         () => Scaffold(
           backgroundColor: Colors.transparent,
           appBar: _appBar(),
-          body: ListView.builder(
-            padding: const EdgeInsets.all(8),
-            itemCount: state.buttons.length,
-            itemBuilder: (BuildContext context, int index) =>
-                _item(state.buttons[index], index),
+          body: SmartRefresher(
+            controller: logic.refreshController,
+            enablePullDown: true,
+            onRefresh:()=> logic.refreshFunList(),
+            header: const WaterDropHeader(),
+            child: ListView.builder(
+              padding: const EdgeInsets.all(8),
+              itemCount: state.buttons.length,
+              itemBuilder: (BuildContext context, int index) =>
+                  _item(state.buttons[index], index),
+            ),
           ),
           bottomNavigationBar: state.navigationBar.isEmpty
               ? null
