@@ -39,7 +39,7 @@ dependencies:
   #网络请求
   dio: ^5.3.3
   #log工具
-  logger: ^2.0.2
+  logger: ^2.0.2+1
   #权限工具
   permission_handler: ^11.0.0
   #文件地址工具
@@ -64,7 +64,7 @@ dependencies:
   #自适应字体大小
   auto_size_text: ^3.0.0
   #UUID
-  uuid: ^4.0.0
+  uuid: ^4.1.0
   #webview控件
   webview_flutter: ^4.2.4
   #高精度小数计算
