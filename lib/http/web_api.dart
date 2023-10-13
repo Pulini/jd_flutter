@@ -116,8 +116,8 @@ Future<BaseData> _doHttp(
   try {
     ///创建dio对象
     var dio = Dio(BaseOptions(
-      // baseUrl: testUrlForMES,
-      baseUrl: baseUrlForMES,
+      baseUrl: testUrlForMES,
+      // baseUrl: baseUrlForMES,
       connectTimeout: const Duration(minutes: 2),
       receiveTimeout: const Duration(minutes: 2),
     ))
@@ -224,6 +224,9 @@ const webApiPickerSapGroup = 'api/User/GetDepListByEmpID';
 ///获取sap工厂及仓库列表接口
 const webApiPickerSapFactoryAndWarehouse = 'api/Stock/GetSAPFactoryStockInfo';
 
+///获取mes包装区域列表
+const webApiGetPickerMesMoldingPackArea = 'api/BaseInfo/GetMoldingPackAreaInfo';
+
 ///获取扫码日产量接口
 const webApiGetDayOutput = 'api/Piecework/GetDayOutput';
 
@@ -253,4 +256,19 @@ const webApiGetProductionReportType= 'api/WorkCard/GetProcessOutputReport';
 
 ///获取员工计件明细报表
 const webApiProductionReport= 'api/WorkCard/GetProcessOutputReportDetail';
+
+///获取指定型体的工艺说明书列表
+const webApiGetProcessSpecificationList= 'api/NeedleCartDispatch/GetManufactureInstructionsByProduct';
+
+///检查设备是否授权查看PDF
+const webApiCheckAuthorize= 'api/User/CheckAuthorize';
+
+///申请授权
+const webApiAuthorizedApplication= 'api/User/AuthorizedApplication';
+
+///获取包装区报表
+const webApiGetMoldingPackAreaReport = 'api/Package/GetMoldingPackAreaReport';
+
+///获取包装区报表明细
+const webApiGetMoldingPackAreaReportDetail = 'api/Package/GetMoldingPackAreaPODetail';
 

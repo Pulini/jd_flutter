@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:get/get.dart';
 
-import '../../http/response/picker_item.dart';
+import 'picker_item.dart';
 import '../../http/web_api.dart';
 import '../../utils.dart';
 
@@ -22,6 +22,7 @@ enum PickerType {
   mesOrganization,
   mesProcessFlow,
   mesProductionReportType,
+  mesMoldingPackAreaReportType,
   date,
   startDate,
   endDate,
@@ -64,6 +65,8 @@ abstract class PickerController {
         return 'picker_type_mes_process_flow'.tr;
       case PickerType.mesProductionReportType:
         return 'picker_type_mes_production_report_type'.tr;
+      case PickerType.mesMoldingPackAreaReportType:
+        return 'picker_type_mes_molding_pack_area_report_type'.tr;
       case PickerType.date:
         return 'picker_type_date'.tr;
       case PickerType.startDate:
@@ -107,6 +110,8 @@ abstract class PickerController {
         return getMesProcessFlow;
       case PickerType.mesProductionReportType:
         return getMesProductionReportType;
+      case PickerType.mesMoldingPackAreaReportType:
+        return getMesMoldingPackArea;
       default:
         return getDataListError;
     }
@@ -380,6 +385,110 @@ class DatePickerController extends PickerController {
 
   String getDateFormatYMD() {
     return '${pickDate.value.year}-${pickDate.value.month}-${pickDate.value.day}';
+  }
+}
+
+class CheckBoxController extends PickerController {
+  var isSelectAll = false.obs;
+  var selectedText = ''.obs;
+  var selectedIds = <String>[];
+  var loadingError = ''.obs;
+  var enable = true.obs;
+  var checkboxData = <PickerItem>[];
+  var checkboxItems = <PickerItem>[].obs;
+
+  final String? saveKey;
+  final String? buttonName;
+  final Function? dataList;
+  final Function(List<String>)? onChanged;
+  final Function(List<String>)? onSelected;
+
+  CheckBoxController(
+    super.pickerType, {
+    this.saveKey,
+    this.buttonName,
+    this.dataList,
+    this.onChanged,
+    this.onSelected,
+  });
+
+  // select(int item) {
+  // selectedName.value = checkboxItems[item].pickerName();
+  // selectedId.value = pickerItems[item].pickerId();
+  // selectItem = pickerData.indexWhere((v) => v.pickerId() == selectedId.value);
+  // if (saveKey != null && saveKey!.isNotEmpty) {
+  //   spSave(saveKey!, pickerItems[item].pickerId());
+  // }
+  // onSelected?.call(selectItem);
+  // onChanged?.call(selectItem);
+  // }
+
+  search(String text) {
+    if (text.trim().isEmpty) {
+      checkboxItems.value = checkboxData;
+    } else {
+      checkboxItems.value = checkboxData
+          .where(
+            (v) => v.pickerName().toUpperCase().contains(text.toUpperCase()),
+          )
+          .toList();
+    }
+    refreshCheckedAll();
+  }
+
+  refreshCheckedAll() {
+    isSelectAll.value =
+        checkboxItems.every((v) => (v as PickerMesMoldingPackArea).isChecked);
+  }
+
+  refreshCheckedList(bool checked) {
+    isSelectAll.value = checked;
+    for (var v in checkboxItems) {
+      (v as PickerMesMoldingPackArea).isChecked = checked;
+    }
+    checkboxItems.refresh();
+  }
+
+  List<PickerItem> getSave() {
+    var list = <PickerItem>[];
+    if (saveKey != null && saveKey!.isNotEmpty) {
+      List<String> save = spGet(saveKey!);
+      for (var s in save) {
+        var item = checkboxData.firstWhereOrNull((e) => e.pickerId() == s);
+        if (item != null) {
+          list.add(item);
+        }
+      }
+    }else{
+      list.add(checkboxData[0]);
+    }
+    return list;
+  }
+
+  getData() {
+    if (checkboxItems.isEmpty) {
+      loadingError.value = 'picker_loading'.tr;
+      Function fun = dataList ?? getDataList();
+      fun().then((value) {
+        if (value is List<PickerItem>) {
+          loadingError.value = '';
+          checkboxData = value;
+          checkboxItems.value = value;
+          if (value.length > 1) {
+            var text = '';
+            selectedIds.clear();
+            for (var s in getSave()) {
+              text += '${s.pickerName()}_';
+              selectedIds.add(s.pickerId());
+            }
+            selectedText.value = text.substring(0, text.length - 1);
+            onSelected?.call(selectedIds);
+          }
+        } else {
+          loadingError.value = value as String;
+        }
+      });
+    }
   }
 }
 
@@ -723,6 +832,25 @@ Future getSapFactoryAndWarehouse() async {
       List<LinkPickerItem> list = [];
       for (var item in jsonDecode(response.data)) {
         list.add(PickerSapFactoryAndWarehouse.fromJson(item));
+      }
+      return list;
+    } on Error catch (e) {
+      logger.e(e);
+      return 'json_format_error'.tr;
+    }
+  } else {
+    return response.message;
+  }
+}
+
+///获取Mes包装区域列表
+Future getMesMoldingPackArea() async {
+  var response = await httpGet(method: webApiGetPickerMesMoldingPackArea);
+  if (response.resultCode == resultSuccess) {
+    try {
+      List<PickerItem> list = [];
+      for (var item in jsonDecode(response.data)) {
+        list.add(PickerMesMoldingPackArea.fromJson(item));
       }
       return list;
     } on Error catch (e) {

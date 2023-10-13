@@ -32,7 +32,7 @@ class ProductionSummaryReportLogic extends GetxController {
   ///获取产量汇总表接口
   query() {
     httpGet(
-      loading: 'production_summary_report_querying'.tr,
+      loading: 'page_production_summary_report_querying'.tr,
       method: webApiGetPrdShopDayReport,
       query: {
         'ExecTodayDateTime': pickerControllerDate.getDateFormatYMD(),

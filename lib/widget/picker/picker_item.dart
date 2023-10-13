@@ -447,3 +447,28 @@ class PickerMesProductionReportType extends PickerItem {
     return itemName ?? '';
   }
 }
+
+class PickerMesMoldingPackArea extends PickerItem {
+  PickerMesMoldingPackArea({
+    required this.id,
+    required this.name,
+  });
+
+  PickerMesMoldingPackArea.fromJson(dynamic json) {
+    id = json['InterID'];
+    name = json['Name'];
+  }
+  int? id;
+  String? name;
+  bool isChecked=false;
+
+  @override
+  String pickerId() {
+    return (id ?? 0).toString();
+  }
+
+  @override
+  String pickerName() {
+    return name?.trim() ?? '';
+  }
+}

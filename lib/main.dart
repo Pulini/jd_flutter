@@ -1,3 +1,4 @@
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
@@ -17,6 +18,7 @@ main() async {
   WidgetsFlutterBinding.ensureInitialized();
   sharedPreferences = await SharedPreferences.getInstance();
   packageInfo = await PackageInfo.fromPlatform();
+  deviceInfo = await DeviceInfoPlugin().deviceInfo;
   var userController = Get.put(UserController());
   var user = userInfo();
   if (user != null) {

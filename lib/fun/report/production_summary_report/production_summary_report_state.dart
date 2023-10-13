@@ -8,35 +8,35 @@ class ProductionSummaryReportState {
   List<ProductionSummaryInfo> tableData = <ProductionSummaryInfo>[];
   RxList<DataRow> tableDataRows = <DataRow>[].obs;
   List<DataColumn> tableDataColumn = <DataColumn>[
-    DataColumn(label: Text('production_summary_report_table_title_hint1'.tr)),
-    DataColumn(label: Text('production_summary_report_table_title_hint2'.tr)),
-    DataColumn(label: Text('production_summary_report_table_title_hint3'.tr)),
+    DataColumn(label: Text('page_production_summary_report_table_title_hint1'.tr)),
+    DataColumn(label: Text('page_production_summary_report_table_title_hint2'.tr)),
+    DataColumn(label: Text('page_production_summary_report_table_title_hint3'.tr)),
     DataColumn(
-      label: Text('production_summary_report_table_title_hint4'.tr),
+      label: Text('page_production_summary_report_table_title_hint4'.tr),
       numeric: true,
     ),
     DataColumn(
-      label: Text('production_summary_report_table_title_hint5'.tr),
+      label: Text('page_production_summary_report_table_title_hint5'.tr),
       numeric: true,
     ),
     DataColumn(
-      label: Text('production_summary_report_table_title_hint6'.tr),
+      label: Text('page_production_summary_report_table_title_hint6'.tr),
       numeric: true,
     ),
     DataColumn(
-      label: Text('production_summary_report_table_title_hint7'.tr),
+      label: Text('page_production_summary_report_table_title_hint7'.tr),
       numeric: true,
     ),
     DataColumn(
-      label: Text('production_summary_report_table_title_hint8'.tr),
+      label: Text('page_production_summary_report_table_title_hint8'.tr),
       numeric: true,
     ),
     DataColumn(
-      label: Text('production_summary_report_table_title_hint9'.tr),
+      label: Text('page_production_summary_report_table_title_hint9'.tr),
       numeric: true,
     ),
     DataColumn(
-      label: Text('production_summary_report_table_title_hint10'.tr),
+      label: Text('page_production_summary_report_table_title_hint10'.tr),
       numeric: true,
     ),
   ];

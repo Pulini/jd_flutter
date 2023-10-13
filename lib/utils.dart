@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:crypto/crypto.dart';
 import 'package:decimal/decimal.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +21,7 @@ import 'http/web_api.dart';
 
 late SharedPreferences sharedPreferences;
 late PackageInfo packageInfo;
+late BaseDeviceInfo deviceInfo;
 var localeChinese = const Locale('zh', 'Hans_CN');
 var localeEnglish = const Locale('en', 'US');
 
@@ -36,6 +38,9 @@ spSave(String key, Object value) {
     logger.d('save\nclass:${value.runtimeType}\nkey:$key\nvalue:$value');
   } else if (value is bool) {
     sharedPreferences.setBool(key, value);
+    logger.d('save\nclass:${value.runtimeType}\nkey:$key\nvalue:$value');
+  } else if (value is List<String>) {
+    sharedPreferences.setStringList(key, value);
     logger.d('save\nclass:${value.runtimeType}\nkey:$key\nvalue:$value');
   } else {
     logger.e('error\nclass:${value.runtimeType}');
@@ -55,6 +60,8 @@ dynamic spGet(String key) {
       return value ?? 0.0;
     case bool:
       return value ?? false;
+    case const (List<String>):
+      return value ?? [];
     default:
       return value;
   }
@@ -73,6 +80,52 @@ UserInfo? userInfo() {
     logger.e(e.runtimeType);
   }
   return null;
+}
+
+///获取设备唯一码
+String getDeviceID() {
+  if (GetPlatform.isAndroid) {
+    return (deviceInfo as AndroidDeviceInfo).id;
+  }
+  if (GetPlatform.isIOS) {
+    return (deviceInfo as IosDeviceInfo).identifierForVendor ?? '';
+  }
+  if (GetPlatform.isWeb) {
+    return (deviceInfo as WebBrowserInfo).userAgent ?? '';
+  }
+  if (GetPlatform.isWindows) {
+    return (deviceInfo as WindowsDeviceInfo).productId;
+  }
+  if (GetPlatform.isLinux) {
+    return (deviceInfo as LinuxDeviceInfo).machineId ?? '';
+  }
+  if (GetPlatform.isMacOS) {
+    return (deviceInfo as MacOsDeviceInfo).systemGUID ?? '';
+  }
+  return '';
+}
+
+///获取设备名称
+String getDeviceName() {
+  if (GetPlatform.isAndroid) {
+    return (deviceInfo as AndroidDeviceInfo).model;
+  }
+  if (GetPlatform.isIOS) {
+    return (deviceInfo as IosDeviceInfo).model;
+  }
+  if (GetPlatform.isWeb) {
+    return (deviceInfo as WebBrowserInfo).vendor ?? '';
+  }
+  if (GetPlatform.isWindows) {
+    return (deviceInfo as WindowsDeviceInfo).deviceId;
+  }
+  if (GetPlatform.isLinux) {
+    return (deviceInfo as LinuxDeviceInfo).name;
+  }
+  if (GetPlatform.isMacOS) {
+    return (deviceInfo as MacOsDeviceInfo).computerName;
+  }
+  return '';
 }
 
 ///隐藏键盘而不丢失文本字段焦点：
@@ -117,7 +170,6 @@ extension DoubleExt on double? {
     }
   }
 }
-
 
 ///File扩展方法
 extension FileExt on File {
@@ -322,6 +374,9 @@ log(String msg) {
   }
   logger.f(printText);
 }
-bool checkUserPermission(String code){
- return userController.user.value?.jurisdictionList?.any((v) => v.jid==code)??false;
+
+bool checkUserPermission(String code) {
+  return userController.user.value?.jurisdictionList
+          ?.any((v) => v.jid == code) ??
+      false;
 }

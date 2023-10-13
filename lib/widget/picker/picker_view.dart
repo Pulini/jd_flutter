@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/utils.dart';
 import 'package:jd_flutter/widget/picker/picker_controller.dart';
+import 'package:marquee/marquee.dart';
 
-import '../../http/response/picker_item.dart';
+import 'picker_item.dart';
 
 class DatePicker extends StatelessWidget {
   const DatePicker({
@@ -355,6 +356,161 @@ class LinkOptionsPicker extends StatelessWidget {
                   pickerController.pickerItems2.isNotEmpty
                       ? pickerController.buttonName ??
                           pickerController.getButtonName()
+                      : 'picker_refresh'.tr,
+                  style: const TextStyle(color: Colors.white),
+                ),
+              ))
+        ],
+      ),
+    );
+  }
+}
+
+class CheckBox extends StatelessWidget {
+  final CheckBoxController checkBoxController;
+
+  const CheckBox({
+    super.key,
+    required this.checkBoxController,
+  });
+
+  _showCheckBoxList() {
+    if (checkBoxController.enable.value == false) return;
+    if (checkBoxController.checkboxItems.isNotEmpty) {
+      checkBoxController.refreshCheckedAll();
+      var titleSearch = Expanded(
+        child: CupertinoSearchTextField(
+          decoration: BoxDecoration(
+            color: Colors.white54,
+            borderRadius: BorderRadius.circular(20),
+          ),
+          placeholder: 'picker_search'.tr,
+          onChanged: (String value) => checkBoxController.search(value),
+        ),
+      );
+
+      var titleButtonConfirm = TextButton(
+        onPressed: () {
+          if (checkBoxController.checkboxItems.isEmpty) return;
+          // checkBoxController.select(controller.selectedItem);
+          Get.back();
+        },
+        child: Text(
+          'dialog_default_confirm'.tr,
+          style: const TextStyle(
+            color: Colors.blueAccent,
+            fontSize: 20,
+          ),
+        ),
+      );
+
+      var selectAll = Card(
+        child: Obx(() => Checkbox(
+              value: checkBoxController.isSelectAll.value,
+              onChanged: (checked) =>
+                  checkBoxController.refreshCheckedList(checked!),
+            )),
+      );
+
+      showPopup(
+          Column(
+            children: [
+              Container(
+                height: 80,
+                color: Colors.grey[200],
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _titleButtonCancel,
+                    titleSearch,
+                    titleButtonConfirm,
+                    selectAll
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Obx(() => ListView.builder(
+                      padding: const EdgeInsets.all(8),
+                      itemCount: checkBoxController.checkboxItems.length,
+                      itemBuilder: (BuildContext context, int index) => Card(
+                        child: CheckboxListTile(
+                          title: Text(checkBoxController.checkboxItems[index]
+                              .pickerName()),
+                          value: (checkBoxController.checkboxItems[index]
+                                  as PickerMesMoldingPackArea)
+                              .isChecked,
+                          onChanged: (bool? value) {
+                            (checkBoxController.checkboxItems[index]
+                                    as PickerMesMoldingPackArea)
+                                .isChecked = value!;
+                            checkBoxController.checkboxItems.refresh();
+                            checkBoxController.refreshCheckedAll();
+                          },
+                        ),
+                      ),
+                    )),
+              )
+            ],
+          ),
+          height: 300);
+    } else {
+      checkBoxController.getData();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    checkBoxController.search('');
+    checkBoxController.getData();
+    return Container(
+      margin: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+      padding: const EdgeInsets.only(left: 15, right: 5),
+      decoration: BoxDecoration(
+        color: Colors.grey[300],
+        borderRadius: BorderRadius.circular(25),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Obx(() => Expanded(
+                child: SizedBox(
+                  height: 40,
+                  child: Marquee(
+                    text: checkBoxController.loadingError.isEmpty
+                        ? checkBoxController.selectedText.value
+                        : checkBoxController.loadingError.value,
+                    scrollAxis: Axis.horizontal,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    blankSpace: 20.0,
+                    velocity: 100.0,
+                    pauseAfterRound: const Duration(seconds: 1),
+                    startPadding: 10.0,
+                    accelerationDuration: const Duration(seconds: 1),
+                    accelerationCurve: Curves.linear,
+                    decelerationDuration: const Duration(milliseconds: 500),
+                    decelerationCurve: Curves.easeOut,
+                  ),
+                ),
+              )),
+          Obx(() => ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: checkBoxController.checkboxItems.isEmpty
+                      ? Colors.red
+                      : checkBoxController.enable.value
+                          ? Colors.blue
+                          : Colors.grey,
+                  foregroundColor: checkBoxController.checkboxItems.isEmpty
+                      ? Colors.orange
+                      : Colors.greenAccent,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
+                onPressed: () => _showCheckBoxList(),
+                child: Text(
+                  checkBoxController.checkboxItems.isNotEmpty
+                      ? checkBoxController.buttonName ??
+                          checkBoxController.getButtonName()
                       : 'picker_refresh'.tr,
                   style: const TextStyle(color: Colors.white),
                 ),

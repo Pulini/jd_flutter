@@ -108,6 +108,7 @@ class Translation extends Translations {
           'picker_type_mes_organization': 'MES组织',
           'picker_type_mes_process_flow': 'MES制程',
           'picker_type_mes_production_report_type': 'MES报表类型',
+          'picker_type_mes_molding_pack_area_report_type': 'MES打包区',
           'picker_type_date': '日期',
           'picker_type_start_date': '起始日期',
           'picker_type_end_date': '截至日期',
@@ -144,17 +145,17 @@ class Translation extends Translations {
           'page_production_day_report_reason_dialog_error': '每天数据次日9点之后不能修改!',
           'page_production_day_report_reason_dialog_save': '正在保存...',
           'page_production_day_report_reason_dialog_save_error': '保存失败',
-          'production_summary_report_querying': '正在查询产量实时汇总报表...',
-          'production_summary_report_table_title_hint1': '车间地点',
-          'production_summary_report_table_title_hint2': '组别',
-          'production_summary_report_table_title_hint3': '带线干部',
-          'production_summary_report_table_title_hint4': '今日目标产量',
-          'production_summary_report_table_title_hint5': '今日产量',
-          'production_summary_report_table_title_hint6': '完成率',
-          'production_summary_report_table_title_hint7': '月累计目标产量',
-          'production_summary_report_table_title_hint8': '月累计产量',
-          'production_summary_report_table_title_hint9': '月完成率',
-          'production_summary_report_table_title_hint10': '实际人数',
+          'page_production_summary_report_querying': '正在查询产量实时汇总报表...',
+          'page_production_summary_report_table_title_hint1': '车间地点',
+          'page_production_summary_report_table_title_hint2': '组别',
+          'page_production_summary_report_table_title_hint3': '带线干部',
+          'page_production_summary_report_table_title_hint4': '今日目标产量',
+          'page_production_summary_report_table_title_hint5': '今日产量',
+          'page_production_summary_report_table_title_hint6': '完成率',
+          'page_production_summary_report_table_title_hint7': '月累计目标产量',
+          'page_production_summary_report_table_title_hint8': '月累计产量',
+          'page_production_summary_report_table_title_hint9': '月完成率',
+          'page_production_summary_report_table_title_hint10': '实际人数',
         },
         localeEnglish.toString(): {
           'app_name': 'Gold Emperor',
@@ -252,6 +253,7 @@ class Translation extends Translations {
           'picker_type_mes_organization': 'MES Organization',
           'picker_type_mes_process_flow': 'MES Process Flow',
           'picker_type_mes_production_report_type': 'MES Report Type',
+          'picker_type_mes_molding_pack_area_report_type': 'MES Pack area',
           'picker_type_date': 'Date',
           'picker_type_start_date': 'Start date',
           'picker_type_end_date': 'End date',
@@ -297,22 +299,22 @@ class Translation extends Translations {
               'Daily data cannot be modified after 9:00 am the next day !',
           'page_production_day_report_reason_dialog_save': 'Saving...',
           'page_production_day_report_reason_dialog_save_error': 'Save failed',
-          'production_summary_report_querying':
+          'page_production_summary_report_querying':
               'Querying real-time production summary report...',
-          'production_summary_report_table_title_hint1': 'Workshop',
-          'production_summary_report_table_title_hint2': 'Group',
-          'production_summary_report_table_title_hint3': 'Cadres',
-          'production_summary_report_table_title_hint4':
+          'page_production_summary_report_table_title_hint1': 'Workshop',
+          'page_production_summary_report_table_title_hint2': 'Group',
+          'page_production_summary_report_table_title_hint3': 'Cadres',
+          'page_production_summary_report_table_title_hint4':
               'Today target production',
-          'production_summary_report_table_title_hint5': 'Today production',
-          'production_summary_report_table_title_hint6': 'Completion rate',
-          'production_summary_report_table_title_hint7':
+          'page_production_summary_report_table_title_hint5': 'Today production',
+          'page_production_summary_report_table_title_hint6': 'Completion rate',
+          'page_production_summary_report_table_title_hint7':
               'Monthly target production',
-          'production_summary_report_table_title_hint8':
+          'page_production_summary_report_table_title_hint8':
               'Monthly cumulative output',
-          'production_summary_report_table_title_hint9':
+          'page_production_summary_report_table_title_hint9':
               'Monthly cumulative rate',
-          'production_summary_report_table_title_hint10': 'Actual workers',
+          'page_production_summary_report_table_title_hint10': 'Actual workers',
         }
       };
 }

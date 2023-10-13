@@ -343,8 +343,13 @@ reLoginPopup() {
   );
 }
 
-reasonInputPopup(
-    {required List<Widget> title, required Function(String reason) confirm}) {
+reasonInputPopup({
+  String? hintText,
+  String? confirmText,
+  bool isCanCancel = false,
+  required List<Widget> title,
+  required Function(String reason) confirm,
+}) {
   TextEditingController reasonController = TextEditingController();
   var popup = Card(
     margin: const EdgeInsets.all(0),
@@ -380,7 +385,7 @@ reasonInputPopup(
                 },
               ),
               contentPadding: const EdgeInsets.all(10),
-              hintText: 'dialog_reason_hint'.tr,
+              hintText: hintText ?? 'dialog_reason_hint'.tr,
               fillColor: Colors.white,
               filled: true,
               border: OutlineInputBorder(
@@ -400,17 +405,34 @@ reasonInputPopup(
               onPressed: () {
                 var reason = reasonController.text;
                 if (reason.trim().isEmpty) {
-                  errorDialog(content: 'dialog_reason_hint'.tr);
+                  errorDialog(content: hintText ?? 'dialog_reason_hint'.tr);
                 } else {
                   confirm.call(reason);
                 }
               },
               child: Text(
-                'dialog_reason_submit'.tr,
+                confirmText ?? 'dialog_default_confirm'.tr,
                 style: const TextStyle(fontSize: 20),
               ),
             ),
-          )
+          ),
+          if (isCanCancel) const SizedBox(height: 10),
+          if (isCanCancel)
+            FractionallySizedBox(
+              widthFactor: 1,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                ),
+                onPressed: () => Get.back(),
+                child: Text(
+                  'dialog_default_cancel'.tr,
+                  style: const TextStyle(fontSize: 20, color: Colors.grey),
+                ),
+              ),
+            )
         ],
       ),
     ),

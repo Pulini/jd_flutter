@@ -3,9 +3,11 @@ import 'package:get/get.dart';
 import 'bean/home_button.dart';
 import 'bean/routes.dart';
 import 'fun/report/daily_report/daily_report_view.dart';
+import 'fun/report/molding_pack_area_report/molding_pack_area_report_view.dart';
 import 'fun/report/production_day_report/production_day_report_view.dart';
 import 'fun/report/production_summary_report/production_summary_report_view.dart';
 import 'fun/report/view_instruction_details/view_instruction_details_view.dart';
+import 'fun/report/view_process_specification/view_process_specification_view.dart';
 import 'fun/report/worker_production_detail/worker_production_detail_view.dart';
 import 'fun/report/worker_production_report/worker_production_report_view.dart';
 import 'fun/report/workshop_production_daily_report/workshop_production_daily_report_view.dart';
@@ -66,6 +68,20 @@ class RouteConfig {
     const WorkerProductionDetailPage(),
   );
 
+  ///查看工艺说明书
+  static Routes viewProcessSpecification = Routes(
+    '/view_process_specification',
+    99,
+    const ViewProcessSpecificationPage(),
+  );
+
+  ///打包区报表
+  static Routes moldingPackAreaReport = Routes(
+    '/molding_pack_area_report',
+    99,
+    const MoldingPackAreaReportPage(),
+  );
+
   ///本地功能入口列表
   static List<Routes> routeList = [
     dailyReport,
@@ -75,6 +91,8 @@ class RouteConfig {
     viewInstructionDetails,
     workerProductionReport,
     workerProductionDetail,
+    viewProcessSpecification,
+    moldingPackAreaReport,
   ];
 
   static List<GetPage> appRoutes = [
@@ -114,6 +132,14 @@ class RouteConfig {
     GetPage(
       name: workerProductionDetail.name,
       page: () => workerProductionDetail.page,
+    ),
+    GetPage(
+      name: viewProcessSpecification.name,
+      page: () => viewProcessSpecification.page,
+    ),
+    GetPage(
+      name: moldingPackAreaReport.name,
+      page: () => moldingPackAreaReport.page,
     ),
   ];
 }

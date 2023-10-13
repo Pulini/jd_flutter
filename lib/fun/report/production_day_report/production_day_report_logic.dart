@@ -153,6 +153,8 @@ class ProductionDayReportLogic extends GetxController {
       reasonDateController.pickDate.value = DateTime.now();
       reasonInputPopup(
         title: reasonTitle,
+        hintText:'dialog_reason_hint'.tr ,
+        confirmText: 'dialog_reason_submit'.tr,
         confirm: (reason) {
           submitReason(
             reasonDateController.getDateFormatYMD(),

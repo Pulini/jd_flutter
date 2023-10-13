@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import '../../../route.dart';
 import '../../../utils.dart';
 import '../../../widget/custom_text.dart';
+import '../../../widget/web_page.dart';
 import 'view_process_specification_logic.dart';
 
 class ViewProcessSpecificationPage extends StatefulWidget {
@@ -28,21 +29,51 @@ class _ViewProcessSpecificationPageState
         EditText(hint: '请输入型体', controller: logic.textControllerTypeBody),
       ],
       query: () => logic.queryProcessSpecification(),
-      body: Text('data')
-      // body: Obx(() => ListView.builder(
-      //       padding: const EdgeInsets.all(8),
-      //       itemCount: state.dataList.length,
-      //       itemBuilder: (BuildContext context, int index) => ListTile(
-      //         title: Text(
-      //           '物料：${item.materialName}',
-      //           style: const TextStyle(color: Colors.grey),
-      //         ),
-      //         subtitle: Text(
-      //           '数量：${item.empFinishQty.toShowString()}',
-      //           style: const TextStyle(color: Colors.grey),
-      //         ),
-      //       ),
-      //     )),
+      body: Obx(
+        () => ListView.builder(
+            padding: const EdgeInsets.all(8),
+            itemCount: state.pdfList.length,
+            itemBuilder: (BuildContext context, int index) => Card(
+                  child: ListTile(
+                    onTap: () => Get.to(
+                      () => WebPage(
+                        title: '',
+                        url: state.pdfList[index].fullName ?? '',
+                      ),
+                    ),
+                    title: Text.rich(
+                      TextSpan(
+                        children: [
+                          const TextSpan(
+                            text: '型体：',
+                            style: TextStyle(
+                              color: Colors.blueAccent,
+                            ),
+                          ),
+                          TextSpan(
+                            text: state.pdfList[index].name,
+                          ),
+                        ],
+                      ),
+                    ),
+                    subtitle: Text.rich(
+                      TextSpan(
+                        children: [
+                          const TextSpan(
+                            text: '分类：',
+                            style: TextStyle(
+                              color: Colors.blueAccent,
+                            ),
+                          ),
+                          TextSpan(
+                            text: state.pdfList[index].typeName,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                )),
+      ),
     );
   }
 
