@@ -60,8 +60,8 @@ dynamic spGet(String key) {
       return value ?? 0.0;
     case bool:
       return value ?? false;
-    case const (List<String>):
-      return value ?? [];
+    case const (List<Object?>):
+      return sharedPreferences.getStringList(key)??[];
     default:
       return value;
   }

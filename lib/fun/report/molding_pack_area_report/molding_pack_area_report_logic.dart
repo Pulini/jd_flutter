@@ -8,8 +8,11 @@ import '../../../http/response/molding_pack_area_report_info.dart';
 import '../../../http/web_api.dart';
 import '../../../route.dart';
 import '../../../widget/dialogs.dart';
+import 'molding_pack_area_report_state.dart';
 
 class MoldingPackAreaReportPageLogic extends GetxController {
+  final MoldingPackAreaReportPageState state = MoldingPackAreaReportPageState();
+
   var textControllerInstruction = TextEditingController();
   var textControllerOrderNumber = TextEditingController();
   var textControllerTypeBody = TextEditingController();
@@ -18,16 +21,9 @@ class MoldingPackAreaReportPageLogic extends GetxController {
   late DatePickerController dateControllerEnd;
   var checkBoxController = CheckBoxController(
     PickerType.mesMoldingPackAreaReportType,
+    saveKey:
+        '${RouteConfig.moldingPackAreaReport.name}${PickerType.mesMoldingPackAreaReportType}',
   );
-
-  RxList<DataRow> tableDataRows = <DataRow>[].obs;
-  List<DataColumn> tableDataColumn = <DataColumn>[
-    DataColumn(label: Text('page_production_day_report_table_title_hint2'.tr)),
-    DataColumn(
-      label: Text('page_production_day_report_table_title_hint3'.tr),
-      numeric: true,
-    ),
-  ];
 
   @override
   void onInit() {
@@ -67,18 +63,26 @@ class MoldingPackAreaReportPageLogic extends GetxController {
         method: webApiGetMoldingPackAreaReport,
         loading: '正在查询区域报表...',
         query: {
-          'startDate': '',
-          'endDate': '',
-          'factoryType': '',
-          'billNO': '',
-          'clientOrderNumber': '',
-          'packAreaIDs': ['1', '2', '3'],
+          'startDate': dateControllerStart.getDateFormatYMD(),
+          'endDate': dateControllerEnd.getDateFormatYMD(),
+          'factoryType': textControllerTypeBody.text,
+          'billNO': textControllerInstruction.text,
+          'clientOrderNumber': textControllerOrderNumber.text,
+          'packAreaIDs': checkBoxController.selectedIds,
         }).then((response) {
       if (response.resultCode == resultSuccess) {
-        var list = <MoldingPackAreaReportInfo>[];
-        for (var item in jsonDecode(response.data)) {
-          list.add(MoldingPackAreaReportInfo.fromJson(item));
+        var jsonList = jsonDecode(response.data);
+        var list = <DataRow>[];
+        for (var i = 0; i < jsonList.length; ++i) {
+          list.add(
+            state.createTableDataRow(
+              MoldingPackAreaReportInfo.fromJson(jsonList[i]),
+              i.isEven ? Colors.transparent : Colors.grey.shade100,
+              (interID, clientOrderNumber) => getDetails,
+            ),
+          );
         }
+        state.tableDataRows.value = list;
       } else {
         errorDialog(content: response.message);
       }

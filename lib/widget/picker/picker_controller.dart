@@ -390,7 +390,7 @@ class DatePickerController extends PickerController {
 
 class CheckBoxController extends PickerController {
   var isSelectAll = false.obs;
-  var selectedText = ''.obs;
+  var selectedText = 'CheckBox'.obs;
   var selectedIds = <String>[];
   var loadingError = ''.obs;
   var enable = true.obs;
@@ -412,16 +412,23 @@ class CheckBoxController extends PickerController {
     this.onSelected,
   });
 
-  // select(int item) {
-  // selectedName.value = checkboxItems[item].pickerName();
-  // selectedId.value = pickerItems[item].pickerId();
-  // selectItem = pickerData.indexWhere((v) => v.pickerId() == selectedId.value);
-  // if (saveKey != null && saveKey!.isNotEmpty) {
-  //   spSave(saveKey!, pickerItems[item].pickerId());
-  // }
-  // onSelected?.call(selectItem);
-  // onChanged?.call(selectItem);
-  // }
+  select() {
+    var list = checkboxItems
+        .where((v) => (v as PickerMesMoldingPackArea).isChecked)
+        .toList();
+    var text = '';
+    selectedIds.clear();
+    for (var s in list) {
+      text += '${s.pickerName()}  ';
+      selectedIds.add(s.pickerId());
+    }
+    selectedText.value = text.substring(0, text.length - 1);
+    if (saveKey != null && saveKey!.isNotEmpty) {
+      spSave(saveKey!, selectedIds);
+    }
+    onSelected?.call(selectedIds);
+    onChanged?.call(selectedIds);
+  }
 
   search(String text) {
     if (text.trim().isEmpty) {
@@ -449,20 +456,37 @@ class CheckBoxController extends PickerController {
     checkboxItems.refresh();
   }
 
+  refreshCheckedItem(int index, bool checked) {
+    (checkboxItems[index] as PickerMesMoldingPackArea).isChecked = checked;
+    checkboxItems.refresh();
+    refreshCheckedAll();
+  }
+
   List<PickerItem> getSave() {
     var list = <PickerItem>[];
     if (saveKey != null && saveKey!.isNotEmpty) {
-      List<String> save = spGet(saveKey!);
+      List<String> save = spGet(saveKey!) ?? <String>[];
       for (var s in save) {
         var item = checkboxData.firstWhereOrNull((e) => e.pickerId() == s);
         if (item != null) {
           list.add(item);
         }
       }
-    }else{
-      list.add(checkboxData[0]);
     }
     return list;
+  }
+
+  initSelectState() {
+    for (var s in checkboxItems) {
+      (s as PickerMesMoldingPackArea).isChecked = false;
+    }
+    for (var s in getSave()) {
+      (checkboxItems.firstWhere((v) => v.pickerId() == s.pickerId())
+              as PickerMesMoldingPackArea)
+          .isChecked = true;
+    }
+    checkboxItems.refresh();
+    refreshCheckedAll();
   }
 
   getData() {
@@ -475,11 +499,19 @@ class CheckBoxController extends PickerController {
           checkboxData = value;
           checkboxItems.value = value;
           if (value.length > 1) {
+            var save = getSave();
+            if (save.isEmpty) {
+              (checkboxItems[0] as PickerMesMoldingPackArea).isChecked = true;
+              save.add(checkboxItems[0]);
+            }
             var text = '';
             selectedIds.clear();
-            for (var s in getSave()) {
-              text += '${s.pickerName()}_';
+            for (var s in save) {
+              text += '${s.pickerName()}  ';
               selectedIds.add(s.pickerId());
+              (checkboxItems.firstWhere((v) => v.pickerId() == s.pickerId())
+                      as PickerMesMoldingPackArea)
+                  .isChecked = true;
             }
             selectedText.value = text.substring(0, text.length - 1);
             onSelected?.call(selectedIds);
@@ -488,6 +520,8 @@ class CheckBoxController extends PickerController {
           loadingError.value = value as String;
         }
       });
+    } else {
+      initSelectState();
     }
   }
 }

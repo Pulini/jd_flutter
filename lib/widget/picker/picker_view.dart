@@ -377,7 +377,9 @@ class CheckBox extends StatelessWidget {
   _showCheckBoxList() {
     if (checkBoxController.enable.value == false) return;
     if (checkBoxController.checkboxItems.isNotEmpty) {
-      checkBoxController.refreshCheckedAll();
+      checkBoxController.initSelectState();
+
+
       var titleSearch = Expanded(
         child: CupertinoSearchTextField(
           decoration: BoxDecoration(
@@ -391,9 +393,13 @@ class CheckBox extends StatelessWidget {
 
       var titleButtonConfirm = TextButton(
         onPressed: () {
-          if (checkBoxController.checkboxItems.isEmpty) return;
-          // checkBoxController.select(controller.selectedItem);
-          Get.back();
+         var checked=checkBoxController.checkboxItems.where((v) => (v as PickerMesMoldingPackArea).isChecked);
+          if(checked.isEmpty){
+            showSnackBar(title:checkBoxController.getButtonName(), message: '请至少勾选一条选项');
+          }else{
+            checkBoxController.select();
+            Get.back();
+          }
         },
         child: Text(
           'dialog_default_confirm'.tr,
@@ -424,7 +430,7 @@ class CheckBox extends StatelessWidget {
                     _titleButtonCancel,
                     titleSearch,
                     titleButtonConfirm,
-                    selectAll
+                    selectAll,
                   ],
                 ),
               ),
@@ -439,13 +445,8 @@ class CheckBox extends StatelessWidget {
                           value: (checkBoxController.checkboxItems[index]
                                   as PickerMesMoldingPackArea)
                               .isChecked,
-                          onChanged: (bool? value) {
-                            (checkBoxController.checkboxItems[index]
-                                    as PickerMesMoldingPackArea)
-                                .isChecked = value!;
-                            checkBoxController.checkboxItems.refresh();
-                            checkBoxController.refreshCheckedAll();
-                          },
+                          onChanged: (checked) => checkBoxController
+                              .refreshCheckedItem(index, checked!),
                         ),
                       ),
                     )),
@@ -482,13 +483,7 @@ class CheckBox extends StatelessWidget {
                     scrollAxis: Axis.horizontal,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     blankSpace: 20.0,
-                    velocity: 100.0,
-                    pauseAfterRound: const Duration(seconds: 1),
-                    startPadding: 10.0,
-                    accelerationDuration: const Duration(seconds: 1),
-                    accelerationCurve: Curves.linear,
-                    decelerationDuration: const Duration(milliseconds: 500),
-                    decelerationCurve: Curves.easeOut,
+                    // pauseAfterRound: const Duration(seconds: 1),
                   ),
                 ),
               )),
