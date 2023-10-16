@@ -26,17 +26,17 @@ class _MoldingPackAreaReportPageState extends State<MoldingPackAreaReportPage> {
       title: getFunctionTitle(),
       children: [
         EditText(
-          hint: '请输入指令单号',
+          hint: 'page_molding_pack_area_report_query_instruction'.tr,
           controller: logic.textControllerInstruction,
         ),
         const SizedBox(height: 10),
         EditText(
-          hint: '请输入采购订单号',
+          hint: 'page_molding_pack_area_report_query_order_number'.tr,
           controller: logic.textControllerOrderNumber,
         ),
         const SizedBox(height: 10),
         EditText(
-          hint: '请输入型体',
+          hint: 'page_molding_pack_area_report_query_type_body'.tr,
           controller: logic.textControllerTypeBody,
         ),
         DatePicker(pickerController: logic.dateControllerStart),
