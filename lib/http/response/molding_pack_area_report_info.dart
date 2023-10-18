@@ -3,7 +3,7 @@ class MoldingPackAreaReportInfo {
   int? type;
 
   /// 线别
-  int? departmentName;
+  String? departmentName;
 
   /// 指令ID
   int? interID;
@@ -32,8 +32,8 @@ class MoldingPackAreaReportInfo {
   /// 入包装区双数
   double? inPackAreaQty;
 
-  /// 入包装区件数
-  double? inPackAreaPiece;
+  /// 未入包装区双数
+  double? notInPackAreaQty;
 
   /// 可配箱双数
   double? distributedQty;
@@ -68,7 +68,7 @@ class MoldingPackAreaReportInfo {
     this.orderPiece,
     this.orderQty,
     this.inPackAreaQty,
-    this.inPackAreaPiece,
+    this.notInPackAreaQty,
     this.distributedQty,
     this.distributedPiece,
     this.remainQty,
@@ -90,7 +90,7 @@ class MoldingPackAreaReportInfo {
     orderPiece = json['OrderPiece'];
     orderQty = json['OrderQty'];
     inPackAreaQty = json['InPackAreaQty'];
-    inPackAreaPiece = json['InPackAreaPiece'];
+    notInPackAreaQty = json['NotInPackAreaQty'];
     distributedQty = json['DistributedQty'];
     distributedPiece = json['DistributedPiece'];
     remainQty = json['RemainQty'];
@@ -106,7 +106,7 @@ class MoldingPackAreaReportDetailInfo {
   String? clientOrderNumber;
 
   /// 订单行号
-  int? clientOrderIndex;
+  String? clientOrderIndex;
 
   /// 尺码
   String? size;

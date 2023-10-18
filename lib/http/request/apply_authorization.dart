@@ -1,13 +1,12 @@
-import 'package:jd_flutter/http/web_api.dart';
 import 'package:jd_flutter/utils.dart';
 
 class ApplyAuthorization {
   ApplyAuthorization({
     this.reason,
   }){
-    requestUser=userController.user.value?.userID;
-    empNumber=userController.user.value?.number;
-    empName=userController.user.value?.name;
+    requestUser=userInfo?.userID;
+    empNumber=userInfo?.number;
+    empName=userInfo?.name;
     code=getDeviceID();
     requestMachineName=getDeviceName();
     requestNotes='';

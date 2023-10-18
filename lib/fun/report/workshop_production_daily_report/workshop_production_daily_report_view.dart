@@ -34,11 +34,12 @@ class _WorkshopProductionDailyReportPageState
                 ))
           ],
         ),
-        body: Obx(() => ListView(
-              children: [
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: DataTable(
+        body: ListView(
+          children: [
+            SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Obx(
+                  () => DataTable(
                     headingRowColor: MaterialStateProperty.resolveWith<Color?>(
                       (Set<MaterialState> states) {
                         return Colors.blueAccent.shade100;
@@ -47,9 +48,9 @@ class _WorkshopProductionDailyReportPageState
                     columns: state.tableDataColumn,
                     rows: state.tableDataRows,
                   ),
-                )
-              ],
-            )),
+                )),
+          ],
+        ),
       ),
     );
   }

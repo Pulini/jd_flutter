@@ -8,6 +8,7 @@ import '../../../http/response/molding_pack_area_report_info.dart';
 import '../../../http/web_api.dart';
 import '../../../route.dart';
 import '../../../widget/dialogs.dart';
+import 'molding_pack_area_detail_report_view.dart';
 import 'molding_pack_area_report_state.dart';
 
 class MoldingPackAreaReportPageLogic extends GetxController {
@@ -72,17 +73,12 @@ class MoldingPackAreaReportPageLogic extends GetxController {
         }).then((response) {
       if (response.resultCode == resultSuccess) {
         var jsonList = jsonDecode(response.data);
-        var list = <DataRow>[];
+        var list = <MoldingPackAreaReportInfo>[];
         for (var i = 0; i < jsonList.length; ++i) {
-          list.add(
-            state.createTableDataRow(
-              MoldingPackAreaReportInfo.fromJson(jsonList[i]),
-              i.isEven ? Colors.transparent : Colors.grey.shade100,
-              (interID, clientOrderNumber) => getDetails,
-            ),
-          );
+          list.add( MoldingPackAreaReportInfo.fromJson(jsonList[i]));
         }
-        state.tableDataRows.value = list;
+        state.tableData.value=list;
+        if (list.isNotEmpty) Get.back();
       } else {
         errorDialog(content: response.message);
       }
@@ -91,19 +87,22 @@ class MoldingPackAreaReportPageLogic extends GetxController {
 
   // string MoID,
   // string clientOrderNumber
-  getDetails(String interID, String clientOrderNumber) {
+  getDetails(int interID, String clientOrderNumber) {
     httpGet(
         method: webApiGetMoldingPackAreaReportDetail,
         loading: '正在获取报表明细...',
         query: {
-          'MoID': interID,
+          'interID': interID,
           'clientOrderNumber': clientOrderNumber,
         }).then((response) {
       if (response.resultCode == resultSuccess) {
+        var jsonList = jsonDecode(response.data);
         var list = <MoldingPackAreaReportDetailInfo>[];
-        for (var item in jsonDecode(response.data)) {
-          list.add(MoldingPackAreaReportDetailInfo.fromJson(item));
+        for (var i = 0; i < jsonList.length; ++i) {
+          list.add( MoldingPackAreaReportDetailInfo.fromJson(jsonList[i]));
         }
+        state.detailTableData.value = list;
+        Get.to(() => const MoldingPackAreaDetailReportPage());
       } else {
         errorDialog(content: response.message);
       }

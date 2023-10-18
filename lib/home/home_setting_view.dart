@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../constant.dart';
-import '../http/web_api.dart';
 import '../login/login_view.dart';
 import '../utils.dart';
 import '../widget/dialogs.dart';
@@ -80,15 +79,13 @@ class _UserSettingState extends State<UserSetting> {
 
   ///名字
   name() {
-    return Obx(
-      () => Text(
-        '${userController.user.value?.name!}(${userController.user.value?.number!})',
+    return Text(
+        '${userInfo?.name??''}(${userInfo?.number??''})',
         style: const TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,
             decoration: TextDecoration.none,
             color: Colors.black),
-      ),
     );
   }
 
@@ -105,7 +102,7 @@ class _UserSettingState extends State<UserSetting> {
             style: hintTextStyle,
           ),
           Text(
-            userController.user.value!.factory!,
+            userInfo?.factory??'',
             style: hintTextStyle,
           ),
         ],
@@ -133,7 +130,7 @@ class _UserSettingState extends State<UserSetting> {
               children: [
                 Obx(
                   () => Text(
-                    userController.user.value!.departmentName!,
+                    state.departmentName.value,
                     style: clickTextStyle,
                   ),
                 ),
@@ -159,7 +156,7 @@ class _UserSettingState extends State<UserSetting> {
             style: hintTextStyle,
           ),
           Text(
-            userController.user.value!.position!,
+            userInfo?.position??'',
             style: hintTextStyle,
           )
         ],

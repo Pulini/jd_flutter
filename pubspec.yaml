@@ -67,6 +67,7 @@ dependencies:
   uuid: ^4.1.0
   #webview控件
   webview_flutter: ^4.4.1
+  webview_flutter_web: ^0.2.2+3
   #高精度小数计算
   decimal: ^2.3.3
   #下拉刷新控件
@@ -75,7 +76,10 @@ dependencies:
 #  flutter_isolate: ^2.0.4
   #获取设备信息
   device_info_plus: ^9.0.3
+  #跑马灯文本
   marquee: ^2.2.3
+  url_launcher: ^6.1.14
+
 
 
 dev_dependencies:

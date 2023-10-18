@@ -7,7 +7,6 @@ import 'package:logger/logger.dart';
 import 'package:uuid/uuid.dart';
 
 import '../constant.dart';
-import '../main.dart';
 import '../route.dart';
 import '../utils.dart';
 import '../widget/dialogs.dart';
@@ -35,8 +34,6 @@ var logger = Logger();
 
 ///当前语言
 var language = 'zh';
-
-UserController userController = Get.find();
 
 ///post请求
 Future<BaseData> httpPost({
@@ -92,7 +89,7 @@ Future<BaseData> _doHttp(
   Map<String, dynamic>? query,
   Object? body,
 }) async {
-
+  snackbarController?.close(withAnimations: false);
   if (loading != null && loading.isNotEmpty) {
     loadingDialog(loading);
   }
@@ -102,11 +99,11 @@ Future<BaseData> _doHttp(
 
   ///设置请求的headers
   var options = Options(headers: {
-    'Content-Type': 'application/json',
-    'FunctionID': nowFunction?.id,
-    'Version': nowFunction?.version,
+    // 'Content-Type': 'application/json',
+    'FunctionID': nowFunction?.id??'0',
+    'Version': nowFunction?.version??0,
     'Language': language,
-    'Token': userController.user.value!.token ?? '',
+    'Token': userInfo?.token ?? '',
     'GUID': const Uuid().v1(),
   });
 
@@ -150,7 +147,7 @@ Future<BaseData> _doHttp(
     logger.e('error:${e.toString()}');
     base.message = '发生异常：${e.toString()}';
   }
-  if (loading != null && loading.isNotEmpty) Get.back();
+  if (loading != null && loading.isNotEmpty )Get.back();
   return base;
 }
 
@@ -180,7 +177,6 @@ const webApiChangeDepartment = 'api/User/GetLoginInfo';
 
 ///检查版本更新接口
 const webApiCheckVersion = 'api/Public/VersionUpgrade';
-
 
 ///获取sap供应商列表接口
 const webApiPickerSapSupplier = 'api/Supplier/GetSAPSupplierMessageNew';
@@ -240,35 +236,39 @@ const webApiGetPrdDayReport = 'api/ProductionReport/GetPrdDayReport';
 const webApiSubmitDayReportReason = 'api/WorkCard/Submit2PrdDayReportNote';
 
 ///获取车间生产日报表汇总数据
-const webApiGetWorkshopProductionDailySummary= 'api/ProductionReport/GetEarlyWarningInfoReportOne';
+const webApiGetWorkshopProductionDailySummary =
+    'api/ProductionReport/GetEarlyWarningInfoReportOne';
 
 ///获取车间生产日报表明细数据
-const webApiGetWorkshopProductionDailyDetail= 'api/ProductionReport/GetEarlyWarningInfoReportTwo';
+const webApiGetWorkshopProductionDailyDetail =
+    'api/ProductionReport/GetEarlyWarningInfoReportTwo';
 
 ///根据指令号和制程查询指令pdf在线文档
-const webApiGetInstructionDetailsFile= 'api/Package/GetPreviewFileByMoNo';
+const webApiGetInstructionDetailsFile = 'api/Package/GetPreviewFileByMoNo';
 
 ///获取员工计件产量报表
-const webApiGetWorkerProductionReport= 'api/Piecework/GetDayWorkDataByDepartmentID';
+const webApiGetWorkerProductionReport =
+    'api/Piecework/GetDayWorkDataByDepartmentID';
 
 ///获取员工计件明细报表类型
-const webApiGetProductionReportType= 'api/WorkCard/GetProcessOutputReport';
+const webApiGetProductionReportType = 'api/WorkCard/GetProcessOutputReport';
 
 ///获取员工计件明细报表
-const webApiProductionReport= 'api/WorkCard/GetProcessOutputReportDetail';
+const webApiProductionReport = 'api/WorkCard/GetProcessOutputReportDetail';
 
 ///获取指定型体的工艺说明书列表
-const webApiGetProcessSpecificationList= 'api/NeedleCartDispatch/GetManufactureInstructionsByProduct';
+const webApiGetProcessSpecificationList =
+    'api/NeedleCartDispatch/GetManufactureInstructionsByProduct';
 
 ///检查设备是否授权查看PDF
-const webApiCheckAuthorize= 'api/User/CheckAuthorize';
+const webApiCheckAuthorize = 'api/User/CheckAuthorize';
 
 ///申请授权
-const webApiAuthorizedApplication= 'api/User/AuthorizedApplication';
+const webApiAuthorizedApplication = 'api/User/AuthorizedApplication';
 
 ///获取包装区报表
 const webApiGetMoldingPackAreaReport = 'api/Package/GetMoldingPackAreaReport';
 
 ///获取包装区报表明细
-const webApiGetMoldingPackAreaReportDetail = 'api/Package/GetMoldingPackAreaPODetail';
-
+const webApiGetMoldingPackAreaReportDetail =
+    'api/Package/GetMoldingPackAreaPODetail';

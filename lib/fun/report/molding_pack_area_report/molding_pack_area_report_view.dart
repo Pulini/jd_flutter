@@ -6,7 +6,7 @@ import '../../../utils.dart';
 import '../../../widget/custom_text.dart';
 import '../../../widget/picker/picker_view.dart';
 import 'molding_pack_area_report_logic.dart';
-
+///开发中-------------------------------------------------------------------------------------------------------------------------------------
 class MoldingPackAreaReportPage extends StatefulWidget {
   const MoldingPackAreaReportPage({Key? key}) : super(key: key);
 
@@ -44,22 +44,13 @@ class _MoldingPackAreaReportPageState extends State<MoldingPackAreaReportPage> {
         CheckBox(checkBoxController: logic.checkBoxController)
       ],
       query: () => logic.query(),
-      body: Obx(() => ListView(
-            children: [
-              Expanded(
-                  child: Row(
-                children: [
-                  Text('page_molding_pack_area_report_detail_line'.tr),
-                  Text(state.line.value, style: textColor),
-                  Text('page_molding_pack_area_report_detail_type_body'.tr),
-                  Text(state.typeBody.value, style: textColor),
-                  Text('page_molding_pack_area_report_detail_color'.tr),
-                  Text(state.color.value, style: textColor),
-                ],
-              )),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: DataTable(
+      body: ListView(
+        padding: const EdgeInsets.only(left: 10, right: 10),
+        children: [
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Obx(() => DataTable(
+                  border: TableBorder.all(color: Colors.black, width: 1),
                   showCheckboxColumn: false,
                   headingRowColor: MaterialStateProperty.resolveWith<Color?>(
                     (Set<MaterialState> states) {
@@ -67,11 +58,18 @@ class _MoldingPackAreaReportPageState extends State<MoldingPackAreaReportPage> {
                     },
                   ),
                   columns: state.tableDataColumn,
-                  rows: state.tableDataRows,
-                ),
-              )
-            ],
-          )),
+                  rows: [
+                    for (var i = 0; i < state.tableData.length; ++i)
+                      state.createTableDataRow(
+                        state.tableData[i],
+                        i.isEven ? Colors.transparent : Colors.grey.shade100,
+                        (id, no) => logic.getDetails(id, no),
+                      )
+                  ],
+                )),
+          )
+        ],
+      ),
     );
   }
 

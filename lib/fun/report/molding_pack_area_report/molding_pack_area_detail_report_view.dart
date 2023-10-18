@@ -25,11 +25,14 @@ class _MoldingPackAreaDetailReportPageState
         appBar: AppBar(
           backgroundColor: Colors.transparent,
         ),
-        body: Obx(() => ListView(
-              children: [
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: DataTable(
+        body: ListView(
+          padding: const EdgeInsets.only(left: 10, right: 10),
+          children: [
+            SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Obx(
+                  () => DataTable(
+                    border: TableBorder.all(color: Colors.black, width: 1),
                     showCheckboxColumn: false,
                     headingRowColor: MaterialStateProperty.resolveWith<Color?>(
                       (Set<MaterialState> states) {
@@ -37,18 +40,18 @@ class _MoldingPackAreaDetailReportPageState
                       },
                     ),
                     columns: state.detailTableDataColumn,
-                    rows: state.detailTableDataRows,
+                    rows: [
+                      for (var i = 0; i < state.detailTableData.length; ++i)
+                        state.createDetailTableDataRow(
+                          state.detailTableData[i],
+                          i.isEven ? Colors.transparent : Colors.grey.shade100,
+                        )
+                    ],
                   ),
-                )
-              ],
-            )),
+                )),
+          ],
+        ),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    Get.delete<MoldingPackAreaReportPageLogic>();
-    super.dispose();
   }
 }

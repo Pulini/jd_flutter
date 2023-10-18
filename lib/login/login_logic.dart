@@ -146,8 +146,8 @@ class LoginLogic extends GetxController with GetSingleTickerProviderStateMixin {
                                 spSaveLoginFace, faceLoginPhoneController.text);
                             spSave(
                                 spSaveUserInfo, loginCallback.data.toString());
-                            userController.init(UserInfo.fromJson(
-                                jsonDecode(loginCallback.data)));
+                            userInfo = UserInfo.fromJson(
+                                jsonDecode(loginCallback.data));
                             Get.delete<LoginLogic>();
                             _isReLogin
                                 ? Get.back()
@@ -203,7 +203,7 @@ class LoginLogic extends GetxController with GetSingleTickerProviderStateMixin {
         spSave(spSaveLoginType, loginTypeMachine);
         spSave(spSaveLoginMachine, machineLoginMachineController.text);
         spSave(spSaveUserInfo, loginCallback.data.toString());
-        userController.init(UserInfo.fromJson(jsonDecode(loginCallback.data)));
+        userInfo=UserInfo.fromJson(jsonDecode(loginCallback.data));
         Get.delete<LoginLogic>();
         _isReLogin ? Get.back() : Get.offAll(() => const HomePage());
       } else {
@@ -285,7 +285,7 @@ class LoginLogic extends GetxController with GetSingleTickerProviderStateMixin {
         spSave(spSaveLoginType, loginTypePhone);
         spSave(spSaveLoginPhone, phoneLoginPhoneController.text);
         spSave(spSaveUserInfo, loginCallback.data.toString());
-        userController.init(UserInfo.fromJson(jsonDecode(loginCallback.data)));
+        userInfo=UserInfo.fromJson(jsonDecode(loginCallback.data));
         Get.delete<LoginLogic>();
         _isReLogin ? Get.back() : Get.offAll(() => const HomePage());
       } else {
@@ -321,7 +321,7 @@ class LoginLogic extends GetxController with GetSingleTickerProviderStateMixin {
         spSave(spSaveLoginType, loginTypeMachine);
         spSave(spSaveLoginWork, workLoginWorkNumberController.text);
         spSave(spSaveUserInfo, loginCallback.data.toString());
-        userController.init(UserInfo.fromJson(jsonDecode(loginCallback.data)));
+        userInfo=UserInfo.fromJson(jsonDecode(loginCallback.data));
         Get.delete<LoginLogic>();
         _isReLogin ? Get.back() : Get.offAll(() => const HomePage());
       } else {

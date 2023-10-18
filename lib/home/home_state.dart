@@ -4,13 +4,21 @@ import 'package:get/get.dart';
 import '../bean/home_button.dart';
 import '../http/response/home_function_info.dart';
 import '../route.dart';
+import '../utils.dart';
 
 class HomeState {
+  var userPicUrl = ''.obs;
+  var departmentName = ''.obs;
   String search = '';
   var navigationBarIndex = 0;
   RxList<ButtonItem> buttons = <ButtonItem>[].obs;
   var navigationBar = <BottomNavigationBarItem>[];
   var selectedItemColor = const Color(0xffffffff);
+
+  HomeState() {
+    userPicUrl.value = userInfo?.picUrl ?? '';
+    departmentName.value = userInfo?.departmentName ?? '';
+  }
 
   void refreshFunctions(List<HomeFunctions> list) {
     functions.clear();
@@ -41,7 +49,6 @@ class HomeState {
           if (fun.functionGroup != null && fun.functionGroup!.length > 1) {
             var subList = <HomeButton>[];
             for (var sub in fun.functionGroup!) {
-
               subList.add(HomeButton(
                 name: sub.name ?? '',
                 description: sub.description ?? '',
@@ -86,7 +93,6 @@ class HomeState {
     }
     refreshButton();
   }
-
 
   refreshButton() {
     buttons.clear();

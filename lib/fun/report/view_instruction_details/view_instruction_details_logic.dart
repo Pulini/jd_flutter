@@ -6,6 +6,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 import '../../../http/web_api.dart';
 import '../../../route.dart';
+import '../../../utils.dart';
 
 class ViewInstructionDetailsLogic extends GetxController {
   TextEditingController textControllerInstruction = TextEditingController();
@@ -16,31 +17,41 @@ class ViewInstructionDetailsLogic extends GetxController {
         '${RouteConfig.viewInstructionDetails.name}${PickerType.mesProcessFlow}',
   );
 
-  var webViewController = WebViewController()
-    ..setJavaScriptMode(JavaScriptMode.unrestricted)
-    ..setBackgroundColor(Colors.transparent)
-    ..setNavigationDelegate(
-      NavigationDelegate(
-        onPageStarted: (String url) {
-          logger.f('onPageStarted------$url');
-          loadingDialog('加載中');
-        },
-        onPageFinished: (String url) {
-          logger.f('${Get.isDialogOpen}  onPageFinished------$url');
-          if (Get.isDialogOpen == true) Get.back();
-        },
-        onWebResourceError: (WebResourceError error) {
-          logger.f(
-              '${Get.isDialogOpen}  onWebResourceError------${error.toString()}');
-          if (Get.isDialogOpen == true) Get.back();
-        },
-      ),
-    );
+  late WebViewController webViewController;
+
+  @override
+  void onInit() {
+    super.onInit();
+    if (GetPlatform.isAndroid || GetPlatform.isIOS) {
+      webViewController = WebViewController()
+        ..setJavaScriptMode(JavaScriptMode.unrestricted)
+        ..setBackgroundColor(Colors.transparent)
+        ..setNavigationDelegate(
+          NavigationDelegate(
+            onPageStarted: (String url) {
+              logger.f('onPageStarted------$url');
+              loadingDialog('加載中');
+            },
+            onPageFinished: (String url) {
+              logger.f('${Get.isDialogOpen}  onPageFinished------$url');
+              if (Get.isDialogOpen == true) Get.back();
+            },
+            onWebResourceError: (WebResourceError error) {
+              logger.f(
+                  '${Get.isDialogOpen}  onWebResourceError------${error.toString()}');
+              if (Get.isDialogOpen == true) Get.back();
+            },
+          ),
+        );
+    }
+  }
 
   @override
   void onClose() {
     super.onClose();
-    webViewController.clearLocalStorage();
+    if (GetPlatform.isAndroid || GetPlatform.isIOS) {
+      webViewController.clearLocalStorage();
+    }
   }
 
   queryPDF() {
@@ -58,8 +69,12 @@ class ViewInstructionDetailsLogic extends GetxController {
     ).then((response) {
       if (response.resultCode == resultSuccess) {
         Get.back();
-        webViewController.clearCache();
-        webViewController.loadRequest(Uri.parse(response.data));
+        if (GetPlatform.isAndroid || GetPlatform.isIOS) {
+          webViewController.clearCache();
+          webViewController.loadRequest(Uri.parse(response.data));
+        }else{
+          goLaunch(Uri.parse(response.data));
+        }
       } else {
         errorDialog(content: response.message ?? 'query_default_error'.tr);
       }

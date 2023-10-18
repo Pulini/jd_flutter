@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/utils.dart';
 
 import '../../../http/response/production_day_report_info.dart';
-import '../../../http/web_api.dart';
 
 class ProductionDayReportState {
   RxList<DataRow> tableDataRows = <DataRow>[].obs;
@@ -55,7 +54,7 @@ class ProductionDayReportState {
 
   createDataRow(
       ProductionDayReportInfo data, Color color, Function modifyReason) {
-    bool isParty = data.number == userController.user.value?.number;
+    bool isParty = data.number == userInfo?.number;
     return DataRow(
       color: MaterialStateProperty.resolveWith<Color?>(
         (Set<MaterialState> states) {

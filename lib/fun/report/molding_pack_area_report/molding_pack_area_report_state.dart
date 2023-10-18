@@ -5,8 +5,8 @@ import 'package:jd_flutter/utils.dart';
 import '../../../http/response/molding_pack_area_report_info.dart';
 
 class MoldingPackAreaReportPageState {
-  RxList<DataRow> tableDataRows = <DataRow>[].obs;
-  List<DataColumn> tableDataColumn = <DataColumn>[
+  var tableData = <MoldingPackAreaReportInfo>[].obs;
+  var tableDataColumn = <DataColumn>[
     DataColumn(label: Text('page_molding_pack_area_report_table_hint1'.tr)),
     DataColumn(label: Text('page_molding_pack_area_report_table_hint2'.tr)),
     DataColumn(label: Text('page_molding_pack_area_report_table_hint3'.tr)),
@@ -59,11 +59,10 @@ class MoldingPackAreaReportPageState {
     ),
   ];
 
-  var line=''.obs;
-  var typeBody=''.obs;
-  var color=''.obs;
-
-  RxList<DataRow> detailTableDataRows = <DataRow>[].obs;
+  var line = ''.obs;
+  var typeBody = ''.obs;
+  var color = ''.obs;
+  var detailTableData = <MoldingPackAreaReportDetailInfo>[].obs;
   List<DataColumn> detailTableDataColumn = <DataColumn>[
     DataColumn(
         label: Text('page_molding_pack_area_report_detail_table_hint1'.tr)),
@@ -114,7 +113,7 @@ class MoldingPackAreaReportPageState {
         DataCell(Text(data.orderQty.toShowString())),
         DataCell(Text(data.orderPiece.toShowString())),
         DataCell(Text(data.inPackAreaQty.toShowString())),
-        DataCell(Text(data.inPackAreaPiece.toShowString())),
+        DataCell(Text(data.notInPackAreaQty.toShowString())),
         DataCell(Text(data.distributedQty.toShowString())),
         DataCell(Text(data.distributedPiece.toShowString())),
         DataCell(Text(data.remainQty.toShowString())),
@@ -122,6 +121,29 @@ class MoldingPackAreaReportPageState {
         DataCell(Text(data.sapFinishPiece.toShowString())),
         DataCell(Text(data.sapUnFinishQty.toShowString())),
         DataCell(Text(data.sapUnFinishPiece.toShowString())),
+      ],
+    );
+  }
+
+  createDetailTableDataRow(
+    MoldingPackAreaReportDetailInfo data,
+    Color color,
+  ) {
+    return DataRow(
+      color: MaterialStateProperty.resolveWith<Color?>(
+        (Set<MaterialState> states) {
+          return color;
+        },
+      ),
+      cells: [
+        DataCell(Text(data.clientOrderNumber ?? '')),
+        DataCell(Text(data.clientOrderIndex ?? '')),
+        DataCell(Text(data.size ?? '')),
+        DataCell(Text(data.orderQty.toShowString())),
+        DataCell(Text(data.orderPiece.toShowString())),
+        DataCell(Text(data.distributedQty.toShowString())),
+        DataCell(Text(data.distributedPiece.toShowString())),
+        DataCell(Text(data.remainQty.toShowString())),
       ],
     );
   }

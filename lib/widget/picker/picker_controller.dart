@@ -692,7 +692,7 @@ Future getMesWorkShop() async {
 Future getMesDepartment() async {
   var response = await httpGet(
     method: webApiPickerMesDepartment,
-    query: {'OrganizeID': userController.user.value!.organizeID ?? -1},
+    query: {'OrganizeID': userInfo?.organizeID ?? -1},
   );
   if (response.resultCode == resultSuccess) {
     try {
@@ -793,7 +793,7 @@ Future getMesProductionReportType() async {
 Future getSapMachine() async {
   var response = await httpGet(
     method: webApiPickerSapMachine,
-    query: {'EmpID': userController.user.value?.empID ?? 0},
+    query: {'EmpID':userInfo?.empID ?? 0},
   );
   if (response.resultCode == resultSuccess) {
     try {
@@ -817,7 +817,7 @@ Future getSapWorkCenterNew() async {
     method: webApiPickerSapWorkCenterNew,
     query: {
       'ShowType': 10,
-      'UserID': userController.user.value?.userID ?? 0,
+      'UserID': userInfo?.userID ?? 0,
     },
   );
   if (response.resultCode == resultSuccess) {
@@ -840,7 +840,7 @@ Future getSapWorkCenterNew() async {
 Future getSapGroup() async {
   var response = await httpGet(
     method: webApiPickerSapGroup,
-    query: {'EmpID': userController.user.value?.empID ?? 0},
+    query: {'EmpID': userInfo?.empID ?? 0},
   );
   if (response.resultCode == resultSuccess) {
     try {

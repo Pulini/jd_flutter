@@ -29,7 +29,9 @@ class _ViewInstructionDetailsPageState
         OptionsPicker(pickerController: logic.pickerControllerProcessFlow),
       ],
       query: () => logic.queryPDF(),
-      body: WebViewWidget(controller: logic.webViewController),
+      body: GetPlatform.isAndroid || GetPlatform.isIOS
+          ? WebViewWidget(controller: logic.webViewController)
+          : null,
     );
   }
 

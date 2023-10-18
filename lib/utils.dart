@@ -14,6 +14,7 @@ import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'http/response/user_info.dart';
 import 'http/response/version_info.dart';
@@ -24,6 +25,8 @@ late PackageInfo packageInfo;
 late BaseDeviceInfo deviceInfo;
 var localeChinese = const Locale('zh', 'Hans_CN');
 var localeEnglish = const Locale('en', 'US');
+SnackbarController? snackbarController;
+UserInfo? userInfo;
 
 /// 保存SP数据
 spSave(String key, Object value) {
@@ -61,14 +64,14 @@ dynamic spGet(String key) {
     case bool:
       return value ?? false;
     case const (List<Object?>):
-      return sharedPreferences.getStringList(key)??[];
+      return sharedPreferences.getStringList(key) ?? [];
     default:
       return value;
   }
 }
 
 ///获取用户数据
-UserInfo? userInfo() {
+UserInfo? getUserInfo() {
   try {
     var spUserInfo = sharedPreferences.get(spSaveUserInfo) as String?;
     if (spUserInfo != null) {
@@ -243,11 +246,13 @@ upData() {
 
 ///显示SnackBar
 showSnackBar({required String title, required String message}) {
-  Get.snackbar(title, message,
+  snackbarController = Get.snackbar(title, message,
       margin: const EdgeInsets.all(10),
       snackPosition: SnackPosition.BOTTOM,
       backgroundColor: Colors.blueAccent,
-      colorText: Colors.white);
+      colorText: Colors.white, snackbarStatus: (state) {
+    if (state == SnackbarStatus.CLOSED) snackbarController = null;
+  });
 }
 
 getCupertinoPicker(List<Widget> items, FixedExtentScrollController controller) {
@@ -283,7 +288,7 @@ titleWithDrawer({
   required String title,
   required List<Widget> children,
   required Function query,
-  required Widget body,
+  required Widget? body,
 }) {
   return Container(
     decoration: backgroundColor,
@@ -376,7 +381,10 @@ log(String msg) {
 }
 
 bool checkUserPermission(String code) {
-  return userController.user.value?.jurisdictionList
-          ?.any((v) => v.jid == code) ??
-      false;
+  return userInfo?.jurisdictionList?.any((v) => v.jid == code) ?? false;
+}
+Future<void> goLaunch(Uri uri) async {
+  if (!await launchUrl(uri)) {
+    throw Exception('Could not launch $uri');
+  }
 }

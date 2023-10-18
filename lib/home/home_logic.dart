@@ -22,22 +22,34 @@ class HomeLogic extends GetxController {
   RefreshController refreshController =
       RefreshController(initialRefresh: false);
 
+  ///用户头像
+  late Widget userAvatar;
+
+  @override
+  void onInit() {
+    super.onInit();
+    userAvatar = Obx(
+      () => state.userPicUrl.value.isEmpty
+          ? const Icon(Icons.flutter_dash, color: Colors.white)
+          : ClipOval(child: Image.network(userInfo!.picUrl!)),
+    );
+  }
+
   @override
   onReady() {
     super.onReady();
-    refreshFunList();
-    // getVersionInfo(
-    //   false,
-    //   noUpdate: () => getFunList(),
-    //   needUpdate: (versionInfo) => doUpdate(versionInfo),
-    // );
+    getVersionInfo(
+      false,
+      noUpdate: () => refreshFunList(),
+      needUpdate: (versionInfo) => doUpdate(versionInfo),
+    );
   }
 
   refreshFunList() {
     httpGet(
       method: webApiGetMenuFunction,
       loading: 'checking_version'.tr,
-      query: {'empID': userController.user.value?.empID ?? 0},
+      query: {'empID': userInfo?.empID ?? 0},
     ).then((response) {
       refreshController.refreshCompleted();
       if (response.resultCode == resultSuccess) {
@@ -51,13 +63,6 @@ class HomeLogic extends GetxController {
       }
     });
   }
-
-  ///用户头像
-  var userAvatar = Obx(
-    () => userController.user.value!.picUrl == null
-        ? const Icon(Icons.flutter_dash, color: Colors.white)
-        : ClipOval(child: Image.network(userController.user.value!.picUrl!)),
-  );
 
   ///底部弹窗
   takePhoto() {
@@ -131,8 +136,8 @@ class HomeLogic extends GetxController {
         method: webApiChangeUserAvatar,
         body: UserAvatar(
           imageBase64: File(cFile.path).toBase64(),
-          empID: userController.user.value!.empID!,
-          userID: userController.user.value!.userID!,
+          empID: userInfo!.empID!,
+          userID: userInfo!.userID!,
         ),
       ).then((changeAvatarCallback) {
         if (changeAvatarCallback.resultCode == resultSuccess) {
@@ -140,7 +145,6 @@ class HomeLogic extends GetxController {
             title: 'home_user_setting_avatar_photo_sheet_title'.tr,
             message: changeAvatarCallback.message!,
           );
-          userController.user.update((val) => userController.user);
         } else {
           errorDialog(content: changeAvatarCallback.message);
         }
@@ -154,7 +158,7 @@ class HomeLogic extends GetxController {
     var departmentCallback = await httpGet(
       loading: 'getting_group'.tr,
       method: webApiGetDepartment,
-      query: {'EmpID': userController.user.value!.empID},
+      query: {'EmpID': userInfo!.empID},
     );
     if (departmentCallback.resultCode == resultSuccess) {
       //创建部门列表数据
@@ -164,7 +168,7 @@ class HomeLogic extends GetxController {
       }
       //查询当前部门下标
       int selected = list.indexWhere((element) {
-        return element.name == userController.user.value?.departmentName;
+        return element.name == userInfo?.departmentName;
       });
       //创建选择器控制器
       var controller = FixedExtentScrollController(
@@ -192,18 +196,18 @@ class HomeLogic extends GetxController {
             loading: 'modifying_group'.tr,
             method: webApiChangeDepartment,
             query: {
-              'EmpID': userController.user.value!.empID,
-              'OrganizeID': userController.user.value!.organizeID,
+              'EmpID': userInfo!.empID,
+              'OrganizeID': userInfo!.organizeID,
               'DeptmentID': list[controller.selectedItem].itemID,
             },
           ).then((changeDepartmentCallback) {
             if (changeDepartmentCallback.resultCode == resultSuccess) {
               var json = jsonDecode(changeDepartmentCallback.data);
               //修改用户数据中的部门数据
-              userController.user.value!.departmentID = json['DeptmentID'];
-              userController.user.value!.departmentName = json['DeptmentName'];
-              userController.user.update((val) => userController.user.value!);
-              spSave(spSaveUserInfo, jsonEncode(userController.user.value));
+              userInfo?.departmentID = json['DeptmentID'];
+              userInfo?.departmentName = json['DeptmentName'];
+              spSave(spSaveUserInfo, jsonEncode(userInfo));
+              state.departmentName.value= userInfo?.departmentName??'';
             } else {
               errorDialog(
                 content: changeDepartmentCallback.message,
@@ -312,7 +316,7 @@ class HomeLogic extends GetxController {
                 return;
               }
               if (oldPassword.text.md5Encode().toUpperCase() !=
-                  userController.user.value!.passWord) {
+                  userInfo!.passWord) {
                 errorDialog(
                     content: 'change_password_dialog_old_password_error'.tr);
                 return;

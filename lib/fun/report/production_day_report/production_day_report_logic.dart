@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import '../../../http/response/production_day_report_info.dart';
 import '../../../http/web_api.dart';
 import '../../../route.dart';
+import '../../../utils.dart';
 import '../../../widget/dialogs.dart';
 import '../../../widget/picker/picker_controller.dart';
 import '../../../widget/picker/picker_view.dart';
@@ -57,19 +58,19 @@ class ProductionDayReportLogic extends GetxController {
     reasonTitle = [
       getText(
         'page_production_day_report_reason_dialog_hint1'.tr,
-        userController.user.value?.departmentName ?? '',
+        userInfo?.departmentName ?? '',
       ),
       getText(
         'page_production_day_report_reason_dialog_hint2'.tr,
-        userController.user.value?.number ?? '',
+        userInfo?.number ?? '',
       ),
       getText(
         'page_production_day_report_reason_dialog_hint3'.tr,
-        userController.user.value?.name ?? '',
+        userInfo?.name ?? '',
       ),
       getText(
         'page_production_day_report_reason_dialog_hint4'.tr,
-        userController.user.value?.position ?? '',
+        userInfo?.position ?? '',
       ),
       DatePicker(pickerController: reasonDateController),
     ];
@@ -103,7 +104,7 @@ class ProductionDayReportLogic extends GetxController {
       query: {
         'Date': pickerControllerDate.getDateFormatYMD(),
         'WorkShopID': spinnerControllerWorkShop.selectIndex + 1,
-        'OrganizeID': userController.user.value!.organizeID ?? 0,
+        'OrganizeID': userInfo!.organizeID ?? 0,
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
@@ -174,8 +175,8 @@ class ProductionDayReportLogic extends GetxController {
       query: {
         'Date': date,
         'Value': reason,
-        'DeptID': userController.user.value!.departmentID ?? 0,
-        'Number': userController.user.value!.number ?? '',
+        'DeptID': userInfo!.departmentID ?? 0,
+        'Number': userInfo!.number ?? '',
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
