@@ -35,14 +35,10 @@ class _ViewProcessSpecificationPageState
             itemCount: state.pdfList.length,
             itemBuilder: (BuildContext context, int index) => Card(
                   child: ListTile(
-                    onTap: () => GetPlatform.isAndroid || GetPlatform.isIOS
-                        ? Get.to(
-                            () => WebPage(
-                              title: '',
-                              url: state.pdfList[index].fullName ?? '',
-                            ),
-                          )
-                        : goLaunch(Uri.parse(state.pdfList[index].fullName!)),
+                    onTap: () => Get.to(WebPage(
+                      title: '',
+                      url: state.pdfList[index].fullName ?? '',
+                    )),
                     title: Text.rich(
                       TextSpan(
                         children: [

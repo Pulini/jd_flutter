@@ -272,3 +272,9 @@ const webApiGetMoldingPackAreaReport = 'api/Package/GetMoldingPackAreaReport';
 ///获取包装区报表明细
 const webApiGetMoldingPackAreaReportDetail =
     'api/Package/GetMoldingPackAreaPODetail';
+
+///获取成型后段扫码看板
+const webApiGetMoldingScanBulletinReport = 'api/Package/GetProductionOrderST';
+
+///提交成型后段扫码工单排序
+const webApiSubmitNewSort = 'api/Package/SubmitWorkCardPriority';

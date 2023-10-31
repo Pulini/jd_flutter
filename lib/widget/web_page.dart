@@ -13,65 +13,51 @@ class WebPage extends StatelessWidget {
   final String url;
   final String title;
 
-  final webViewController = WebViewController()
-    ..setJavaScriptMode(JavaScriptMode.unrestricted)
-    ..setBackgroundColor(Colors.transparent)
-    ..setNavigationDelegate(
-      NavigationDelegate(
-        onPageStarted: (String url) {
-          logger.f('onPageStarted------$url');
-          loadingDialog('加載中');
-        },
-        onPageFinished: (String url) {
-          logger.f('${Get.isDialogOpen}  onPageFinished------$url');
-          if (Get.isDialogOpen == true) Get.back();
-        },
-        onWebResourceError: (WebResourceError error) {
-          logger.f(
-              '${Get.isDialogOpen}  onWebResourceError------${error.toString()}');
-          if (Get.isDialogOpen == true) Get.back();
-        },
-      ),
-    );
+  final webViewController = WebViewController();
 
   checkAuthorize() {
     httpPost(
       loading: '正在查询授权信息...',
       method: webApiCheckAuthorize,
       query: {'androidID': getDeviceID()},
-    ).then(
-      (response) {
-        if (response.resultCode == resultSuccess) {
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        if (GetPlatform.isAndroid || GetPlatform.isIOS) {
           webViewController.clearCache();
           webViewController.loadRequest(Uri.parse(url));
         } else {
-          if (response.data == '0') {
-            reasonInputPopup(
-              title: [
-                const Center(
-                  child: Text(
-                    '授权申请',
-                    style: TextStyle(fontSize: 20, color: Colors.white),
-                  ),
-                )
-              ],
-              hintText: '请填写授权申请',
-              isCanCancel: true,
-              confirm: applyAuthorization,
-            );
-          } else {
-            errorDialog(content: response.message ?? '查询失败',back: ()=>Get.back());
-          }
+          Get.back();
+          goLaunch(Uri.parse(url));
         }
-      },
-    );
+      } else {
+        if (response.data == '0') {
+          reasonInputPopup(
+            title: [
+              const Center(
+                child: Text(
+                  '授权申请',
+                  style: TextStyle(fontSize: 20, color: Colors.white),
+                ),
+              )
+            ],
+            hintText: '请填写授权申请',
+            isCanCancel: true,
+            confirm: applyAuthorization,
+            cancel: () => Get.back(),
+          );
+        } else {
+          errorDialog(
+              content: response.message ?? '查询失败', back: () => Get.back());
+        }
+      }
+    });
   }
 
   applyAuthorization(String reason) {
     httpPost(
       loading: '正在提交授权申请...',
       method: webApiAuthorizedApplication,
-      body: ApplyAuthorization(reason: reason),
+      body: ApplyAuthorization(reason: reason).toJson(),
     ).then(
       (response) {
         if (response.resultCode == resultSuccess) {
@@ -85,7 +71,29 @@ class WebPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
+    if (GetPlatform.isAndroid || GetPlatform.isIOS) {
+      webViewController
+        ..setJavaScriptMode(JavaScriptMode.unrestricted)
+        ..setBackgroundColor(Colors.transparent)
+        ..setNavigationDelegate(
+          NavigationDelegate(
+            onPageStarted: (String url) {
+              logger.f('onPageStarted------$url');
+              loadingDialog('加載中');
+            },
+            onPageFinished: (String url) {
+              logger.f('${Get.isDialogOpen}  onPageFinished------$url');
+              if (Get.isDialogOpen == true) Get.back();
+            },
+            onWebResourceError: (WebResourceError error) {
+              logger.f(
+                  '${Get.isDialogOpen}  onWebResourceError------${error.toString()}');
+              if (Get.isDialogOpen == true) Get.back();
+            },
+          ),
+        );
+    }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       checkAuthorize();
     });
     return Container(
@@ -96,7 +104,9 @@ class WebPage extends StatelessWidget {
           backgroundColor: Colors.transparent,
           title: Text(title),
         ),
-        body: WebViewWidget(controller: webViewController),
+        body: GetPlatform.isAndroid || GetPlatform.isIOS
+            ? WebViewWidget(controller: webViewController)
+            : null,
       ),
     );
   }

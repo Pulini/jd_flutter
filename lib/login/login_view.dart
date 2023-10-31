@@ -234,7 +234,7 @@ class LoginInlet extends StatelessWidget {
                   },
                 ),
               ),
-              maxLength: 5,
+              maxLength: 10,
             ),
             TextField(
               obscureText: true,

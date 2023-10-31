@@ -349,6 +349,7 @@ reasonInputPopup({
   bool isCanCancel = false,
   required List<Widget> title,
   required Function(String reason) confirm,
+  Function()? cancel,
 }) {
   TextEditingController reasonController = TextEditingController();
   var popup = Card(
@@ -426,7 +427,10 @@ reasonInputPopup({
                     borderRadius: BorderRadius.circular(25),
                   ),
                 ),
-                onPressed: () => Get.back(),
+                onPressed: () {
+                  Get.back();
+                  cancel?.call();
+                },
                 child: Text(
                   'dialog_default_cancel'.tr,
                   style: const TextStyle(fontSize: 20, color: Colors.grey),
