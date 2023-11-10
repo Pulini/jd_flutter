@@ -22,42 +22,126 @@ class _MoldingScanBulletinReportPageState
   final logic = Get.put(MoldingScanBulletinReportLogic());
   final state = Get.find<MoldingScanBulletinReportLogic>().state;
 
+  Widget circleButton(Widget child, Color background, Function onTap) {
+    return Container(
+      width: 40,
+      height: 40,
+      padding: const EdgeInsets.all(5),
+      child: ElevatedButton(
+          style: ButtonStyle(
+              minimumSize: MaterialStateProperty.all(const Size(1, 1)),
+              padding: MaterialStateProperty.all(EdgeInsets.zero),
+              backgroundColor: MaterialStateProperty.all(background)),
+          child: Center(
+            child: child,
+          ),
+          onPressed: () => onTap.call()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: backgroundColor,
       child: Scaffold(
-        backgroundColor: Colors.transparent,
-        appBar: AppBar(
           backgroundColor: Colors.transparent,
-          title: Text(getFunctionTitle()),
-          actions: [
-            IconButton(
-                onPressed: () => logic.query(),
-                icon: const Icon(Icons.refresh, color: Colors.blueAccent))
-          ],
-        ),
-        body: Obx(() => Row(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (state.reportInfo.isNotEmpty)
-                  Padding(
-                    padding: const EdgeInsets.all(40),
-                    child: tableCard(
-                      data: state.reportInfo[0],
-                      key: const Key('mainTable'),
-                      color: Colors.greenAccent,
-                    ),
-                  ),
-                Expanded(
-                    child: TableList(
-                  reportInfo: state.reportInfo,
-                  changeSort: () => logic.changeSort(),
-                )),
-              ],
-            )),
-      ),
+          appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            title: Text(getFunctionTitle()),
+            actions: [
+              const Text('刷新间隔(秒)：<'),
+              Obx(() => circleButton(
+                    const Text('3'),
+                    logic.refreshDuration.value == 3
+                        ? Colors.greenAccent
+                        : Colors.white,
+                    () => logic.setRefresh(3),
+                  )),
+              Obx(() => circleButton(
+                    const Text('4'),
+                    logic.refreshDuration.value == 4
+                        ? Colors.greenAccent
+                        : Colors.white,
+                    () => logic.setRefresh(4),
+                  )),
+              Obx(() => circleButton(
+                    const Text('5'),
+                    logic.refreshDuration.value == 5
+                        ? Colors.greenAccent
+                        : Colors.white,
+                    () => logic.setRefresh(5),
+                  )),
+              Obx(() => circleButton(
+                    const Text('6'),
+                    logic.refreshDuration.value == 6
+                        ? Colors.greenAccent
+                        : Colors.white,
+                    () => logic.setRefresh(6),
+                  )),
+              Obx(() => circleButton(
+                    const Text('7'),
+                    logic.refreshDuration.value == 7
+                        ? Colors.greenAccent
+                        : Colors.white,
+                    () => logic.setRefresh(7),
+                  )),
+              Obx(() => circleButton(
+                    const Text('8'),
+                    logic.refreshDuration.value == 8
+                        ? Colors.greenAccent
+                        : Colors.white,
+                    () => logic.setRefresh(8),
+                  )),
+              Obx(() => circleButton(
+                    const Text('9'),
+                    logic.refreshDuration.value == 9
+                        ? Colors.greenAccent
+                        : Colors.white,
+                    () => logic.setRefresh(9),
+                  )),
+              Obx(() => circleButton(
+                    const Text('10'),
+                    logic.refreshDuration.value == 10
+                        ? Colors.greenAccent
+                        : Colors.white,
+                    () => logic.setRefresh(10),
+                  )),
+              const Text('>'),
+              const SizedBox(width: 50),
+              circleButton(
+                const Icon(
+                  Icons.refresh,
+                  color: Colors.white,
+                ),
+                Colors.blueAccent,
+                () => logic.query(),
+              ),
+            ],
+          ),
+          // body: Obx(() => Row(
+          //       mainAxisSize: MainAxisSize.min,
+          //       crossAxisAlignment: CrossAxisAlignment.start,
+          //       children: [
+          //         if (state.reportInfo.isNotEmpty)
+          //           Padding(
+          //             padding: const EdgeInsets.all(40),
+          //             child: tableCard(
+          //               data: state.reportInfo[0],
+          //               key: const Key('mainTable'),
+          //               color: Colors.greenAccent,
+          //             ),
+          //           ),
+          //         Expanded(
+          //             child: TableList(
+          //           reportInfo: state.reportInfo,
+          //           changeSort: () => logic.changeSort(),
+          //         )),
+          //       ],
+          //     )),
+          body: Obx(() => TableList(
+                reportInfo: state.reportInfo.toList(),
+                changeSort: () => logic.changeSort(),
+              ))),
     );
   }
 

@@ -1,3 +1,4 @@
+import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/utils.dart';
@@ -107,7 +108,9 @@ tableCard({
 
 createTableCardDataRow(ScWorkCardSizeInfos data, Color color) {
   var owe = data.qty! - data.scannedQty! - data.todayReportQty!;
-  var completionRate = owe / data.qty! * 100;
+  var completionRate = "${Decimal.parse(
+    ((1 - owe / data.qty!) * 100).toStringAsFixed(2),
+  )}%";
   return DataRow(
     color: MaterialStateProperty.resolveWith<Color?>(
       (Set<MaterialState> states) {
@@ -120,7 +123,7 @@ createTableCardDataRow(ScWorkCardSizeInfos data, Color color) {
       DataCell(Text(data.todayReportQty.toShowString())),
       DataCell(Text(data.scannedQty.toShowString())),
       DataCell(Text(owe.toShowString())),
-      DataCell(Text('${completionRate.toShowString()}%')),
+      DataCell(Text(completionRate)),
     ],
   );
 }

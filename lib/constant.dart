@@ -11,3 +11,5 @@ const loginTypeWorkNumber = 'login_type_work_number';
 const loginTypeMachine = 'login_type_machine';
 const channelAndroidSend = 'com.jd.pzx.jd_flutter_android_send';
 const channelFlutterSend = 'com.jd.pzx.jd_flutter_flutter_send';
+const spSaveMoldingScanBulletinReportTimeDuration =
+    'molding_scan_bulletin_report_time_duration';
