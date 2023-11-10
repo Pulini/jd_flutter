@@ -38,11 +38,15 @@ class HomeLogic extends GetxController {
   @override
   onReady() {
     super.onReady();
-    getVersionInfo(
-      false,
-      noUpdate: () => refreshFunList(),
-      needUpdate: (versionInfo) => doUpdate(versionInfo),
-    );
+    if (GetPlatform.isWeb) {
+      refreshFunList();
+    } else {
+      getVersionInfo(
+        false,
+        noUpdate: () => refreshFunList(),
+        needUpdate: (versionInfo) => doUpdate(versionInfo),
+      );
+    }
   }
 
   refreshFunList() {
@@ -207,7 +211,7 @@ class HomeLogic extends GetxController {
               userInfo?.departmentID = json['DeptmentID'];
               userInfo?.departmentName = json['DeptmentName'];
               spSave(spSaveUserInfo, jsonEncode(userInfo));
-              state.departmentName.value= userInfo?.departmentName??'';
+              state.departmentName.value = userInfo?.departmentName ?? '';
             } else {
               errorDialog(
                 content: changeDepartmentCallback.message,

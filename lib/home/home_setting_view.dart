@@ -80,12 +80,12 @@ class _UserSettingState extends State<UserSetting> {
   ///名字
   name() {
     return Text(
-        '${userInfo?.name??''}(${userInfo?.number??''})',
-        style: const TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            decoration: TextDecoration.none,
-            color: Colors.black),
+      '${userInfo?.name ?? ''}(${userInfo?.number ?? ''})',
+      style: const TextStyle(
+          fontSize: 24,
+          fontWeight: FontWeight.bold,
+          decoration: TextDecoration.none,
+          color: Colors.black),
     );
   }
 
@@ -102,15 +102,13 @@ class _UserSettingState extends State<UserSetting> {
             style: hintTextStyle,
           ),
           Text(
-            userInfo?.factory??'',
+            userInfo?.factory ?? '',
             style: hintTextStyle,
           ),
         ],
       ),
     );
   }
-
-
 
   ///部门
   department() {
@@ -156,7 +154,7 @@ class _UserSettingState extends State<UserSetting> {
             style: hintTextStyle,
           ),
           Text(
-            userInfo?.position??'',
+            userInfo?.position ?? '',
             style: hintTextStyle,
           )
         ],
@@ -209,18 +207,20 @@ class _UserSettingState extends State<UserSetting> {
           ),
           GestureDetector(
             onTap: () {
-              getVersionInfo(
-                true,
-                noUpdate: () {
-                  showSnackBar(
-                    title: 'home_user_setting_check_version'.tr,
-                    message: 'is_already_latest_version'.tr,
-                  );
-                },
-                needUpdate: (versionInfo) {
-                  doUpdate(versionInfo);
-                },
-              );
+              if (!GetPlatform.isWeb) {
+                getVersionInfo(
+                  true,
+                  noUpdate: () {
+                    showSnackBar(
+                      title: 'home_user_setting_check_version'.tr,
+                      message: 'is_already_latest_version'.tr,
+                    );
+                  },
+                  needUpdate: (versionInfo) {
+                    doUpdate(versionInfo);
+                  },
+                );
+              }
             },
             child: Row(
               children: [
@@ -248,7 +248,7 @@ class _UserSettingState extends State<UserSetting> {
                   borderRadius: BorderRadius.circular(25))),
           onPressed: () {
             spSave(spSaveUserInfo, '');
-            Get.offAll(()=>const LoginPage());
+            Get.offAll(() => const LoginPage());
           },
           child: Text('home_user_setting_logout'.tr,
               style: const TextStyle(fontSize: 20))),
