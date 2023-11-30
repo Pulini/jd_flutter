@@ -1,4 +1,5 @@
-import 'dart:ui';
+import 'package:decimal/decimal.dart';
+import 'package:get/get.dart';
 
 /// DeptID : "554744"
 /// WorkCardInterID : "213249"
@@ -27,7 +28,7 @@ class MoldingScanBulletinReportInfo {
     this.color,
     this.priorityLevel,
     this.entryFID,
-    this.scWorkCardSizeInfos,
+    this.sizeInfo,
     this.sizeRelations,
   });
 
@@ -44,10 +45,26 @@ class MoldingScanBulletinReportInfo {
     priorityLevel = json['PriorityLevel'];
     entryFID = json['EntryFID'];
     if (json['ScWorkCardSizeInfos'] != null) {
-      scWorkCardSizeInfos = [];
+      sizeInfo = [];
       json['ScWorkCardSizeInfos'].forEach((v) {
-        scWorkCardSizeInfos?.add(ScWorkCardSizeInfos.fromJson(v));
+        sizeInfo?.add(ScWorkCardSizeInfos.fromJson(v));
       });
+      if (sizeInfo!.isNotEmpty) {
+        double totalQty = 0;
+        double totalTodayReportQty = 0;
+        double totalScannedQty = 0;
+        sizeInfo?.forEach((e) {
+          totalQty += e.qty ?? 0;
+          totalTodayReportQty += e.todayReportQty ?? 0;
+          totalScannedQty += e.scannedQty ?? 0;
+        });
+        sizeInfo?.add(ScWorkCardSizeInfos(
+          size: 'molding_scan_bulletin_report_table_hint7'.tr,
+          qty: totalQty,
+          todayReportQty: totalTodayReportQty,
+          scannedQty: totalScannedQty,
+        ));
+      }
     }
     if (json['SizeRelations'] != null) {
       sizeRelations = [];
@@ -68,10 +85,8 @@ class MoldingScanBulletinReportInfo {
   String? color; //型体颜色
   String? priorityLevel; //派工单优先级
   String? entryFID; //
-  List<ScWorkCardSizeInfos>? scWorkCardSizeInfos;
+  List<ScWorkCardSizeInfos>? sizeInfo;
   List<SizeRelations>? sizeRelations;
-
-  Color? itemColor; //item背景色
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -86,9 +101,8 @@ class MoldingScanBulletinReportInfo {
     map['Color'] = color;
     map['PriorityLevel'] = priorityLevel;
     map['EntryFID'] = entryFID;
-    if (scWorkCardSizeInfos != null) {
-      map['ScWorkCardSizeInfos'] =
-          scWorkCardSizeInfos?.map((v) => v.toJson()).toList();
+    if (sizeInfo != null) {
+      map['ScWorkCardSizeInfos'] = sizeInfo?.map((v) => v.toJson()).toList();
     }
     if (sizeRelations != null) {
       map['SizeRelations'] = sizeRelations?.map((v) => v.toJson()).toList();
@@ -154,5 +168,14 @@ class ScWorkCardSizeInfos {
     map['TodayReportQty'] = todayReportQty;
     map['ScannedQty'] = scannedQty;
     return map;
+  }
+
+  double getOwe() {
+    return qty! - scannedQty!;
+  }
+
+  String getCompletionRate() {
+    var completionRate = (1 - getOwe() / qty!) * 100;
+    return "${Decimal.parse(completionRate.toStringAsFixed(2))}%";
   }
 }

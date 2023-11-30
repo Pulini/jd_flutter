@@ -163,6 +163,7 @@ class _HomePageState extends State<HomePage> {
     _methodChannel();
   }
 
+  var key = const Key('SmartRefresher');
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -172,6 +173,7 @@ class _HomePageState extends State<HomePage> {
           backgroundColor: Colors.transparent,
           appBar: _appBar(),
           body: SmartRefresher(
+            key: key,
             controller: logic.refreshController,
             enablePullDown: true,
             onRefresh:()=> logic.refreshFunList(),

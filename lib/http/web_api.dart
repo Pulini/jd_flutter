@@ -66,12 +66,12 @@ var _interceptors = InterceptorsWrapper(onRequest: (options, handler) {
   baseData.print();
   if (baseData.resultCode == 2) {
     logger.e('需要重新登录');
-    Get.back();
+    if (Get.isDialogOpen == true) Get.back();
     spSave(spSaveUserInfo, '');
     reLoginPopup();
   } else if (baseData.resultCode == 3) {
-    Get.back();
     logger.e('需要更新版本');
+    if (Get.isDialogOpen == true) Get.back();
     upData();
   } else {
     handler.next(response);
@@ -113,8 +113,8 @@ Future<BaseData> _doHttp(
   try {
     ///创建dio对象
     var dio = Dio(BaseOptions(
-      baseUrl: testUrlForMES,
-      // baseUrl: baseUrlForMES,
+      // baseUrl: testUrlForMES,
+      baseUrl: baseUrlForMES,
       connectTimeout: const Duration(minutes: 2),
       receiveTimeout: const Duration(minutes: 2),
     ))

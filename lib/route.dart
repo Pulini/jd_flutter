@@ -4,6 +4,7 @@ import 'bean/home_button.dart';
 import 'bean/routes.dart';
 import 'fun/report/daily_report/daily_report_view.dart';
 import 'fun/report/molding_pack_area_report/molding_pack_area_report_view.dart';
+import 'fun/report/molding_scan_bulletin_report/molding_scan_bulletin_report_maximize_view.dart';
 import 'fun/report/molding_scan_bulletin_report/molding_scan_bulletin_report_view.dart';
 import 'fun/report/production_day_report/production_day_report_view.dart';
 import 'fun/report/production_summary_report/production_summary_report_view.dart';
@@ -153,6 +154,10 @@ class RouteConfig {
     GetPage(
       name: moldingScanBulletinReportPage.name,
       page: () => moldingScanBulletinReportPage.page,
+    ),
+    GetPage(
+      name: '/MoldingScanBulletinReportMaximize',
+      page: () => const MoldingScanBulletinReportMaximize(),
     ),
   ];
 }

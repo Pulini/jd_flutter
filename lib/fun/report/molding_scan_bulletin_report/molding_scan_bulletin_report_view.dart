@@ -4,10 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/route.dart';
 
-import '../../../http/response/molding_scan_bulletin_report_info.dart';
 import '../../../utils.dart';
 import 'molding_scan_bulletin_report_logic.dart';
-import 'molding_scan_bulletin_report_state.dart';
 
 class MoldingScanBulletinReportPage extends StatefulWidget {
   const MoldingScanBulletinReportPage({super.key});
@@ -138,10 +136,44 @@ class _MoldingScanBulletinReportPageState
           //         )),
           //       ],
           //     )),
-          body: Obx(() => TableList(
-                reportInfo: state.reportInfo.toList(),
-                changeSort: () => logic.changeSort(),
-              ))),
+          body: Obx(() {
+            final List<Card> cards = <Card>[
+              for (int i = 0; i < state.reportInfo.length; i += 1)
+                state.tableCard(
+                    data: state.reportInfo[i], key: Key('$i'), isFirst: i == 0),
+            ];
+            return ReorderableListView(
+              shrinkWrap: true,
+              padding: const EdgeInsets.symmetric(vertical: 40),
+              proxyDecorator: (child, index, animation) => AnimatedBuilder(
+                animation: animation,
+                builder: (BuildContext context, Widget? child) {
+                  var animValue = Curves.easeInOut.transform(animation.value);
+                  return Transform.scale(
+                    scale: lerpDouble(1, 1.05, animValue),
+                    child: Card(
+                      elevation: lerpDouble(1, 1.5, animValue),
+                      color: cards[index].color,
+                      child: cards[index].child,
+                    ),
+                  );
+                },
+                child: child,
+              ),
+              scrollDirection: Axis.horizontal,
+              onReorder: (int oldIndex, int newIndex) {
+                setState(() {
+                  if (oldIndex < newIndex) {
+                    newIndex -= 1;
+                  }
+                  var item = state.reportInfo.removeAt(oldIndex);
+                  state.reportInfo.insert(newIndex, item);
+                  logic.changeSort();
+                });
+              },
+              children: cards,
+            );
+          })),
     );
   }
 
@@ -149,61 +181,5 @@ class _MoldingScanBulletinReportPageState
   void dispose() {
     Get.delete<MoldingScanBulletinReportLogic>();
     super.dispose();
-  }
-}
-
-class TableList extends StatefulWidget {
-  const TableList(
-      {super.key, required this.reportInfo, required this.changeSort});
-
-  final List<MoldingScanBulletinReportInfo> reportInfo;
-  final Function changeSort;
-
-  @override
-  State<TableList> createState() => _TableListState();
-}
-
-class _TableListState extends State<TableList> {
-  @override
-  Widget build(BuildContext context) {
-    final List<Card> cards = <Card>[
-      for (int i = 0; i < widget.reportInfo.length; i += 1)
-        tableCard(
-          data: widget.reportInfo[i],
-          key: Key('$i'),
-          color: widget.reportInfo[i].itemColor ?? Colors.blueAccent,
-        ),
-    ];
-    return ReorderableListView(
-      shrinkWrap: true,
-      padding: const EdgeInsets.symmetric(vertical: 40),
-      proxyDecorator: (child, index, animation) => AnimatedBuilder(
-        animation: animation,
-        builder: (BuildContext context, Widget? child) {
-          var animValue = Curves.easeInOut.transform(animation.value);
-          return Transform.scale(
-            scale: lerpDouble(1, 1.05, animValue),
-            child: Card(
-              elevation: lerpDouble(1, 1.5, animValue),
-              color: cards[index].color,
-              child: cards[index].child,
-            ),
-          );
-        },
-        child: child,
-      ),
-      scrollDirection: Axis.horizontal,
-      onReorder: (int oldIndex, int newIndex) {
-        setState(() {
-          if (oldIndex < newIndex) {
-            newIndex -= 1;
-          }
-          var item = widget.reportInfo.removeAt(oldIndex);
-          widget.reportInfo.insert(newIndex, item);
-          widget.changeSort.call();
-        });
-      },
-      children: cards,
-    );
   }
 }

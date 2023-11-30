@@ -191,11 +191,14 @@ class Translation extends Translations {
           'molding_scan_bulletin_report_table_hint4': '累计',
           'molding_scan_bulletin_report_table_hint5': '欠数',
           'molding_scan_bulletin_report_table_hint6': '完成率',
+          'molding_scan_bulletin_report_table_hint7': '合计',
           'molding_scan_bulletin_report_hint1': '工厂型体：',
           'molding_scan_bulletin_report_hint2': '销售订单：',
           'molding_scan_bulletin_report_hint3': '客户单号：',
           'molding_scan_bulletin_report_hint4': '当前组别：',
           'molding_scan_bulletin_report_sort': '工单排序',
+          'molding_scan_bulletin_report_querying': '正在查询报表...',
+          'molding_scan_bulletin_report_submitting': '正在提交排序...',
         },
         localeEnglish.toString(): {
           'app_name': 'Gold Emperor',
@@ -387,14 +390,17 @@ class Translation extends Translations {
           'molding_scan_bulletin_report_table_hint1': 'Size',
           'molding_scan_bulletin_report_table_hint2': 'Instructions',
           'molding_scan_bulletin_report_table_hint3': 'Report',
-          'molding_scan_bulletin_report_table_hint4': 'Total',
+          'molding_scan_bulletin_report_table_hint4': 'Accumulate',
           'molding_scan_bulletin_report_table_hint5': 'Owe',
           'molding_scan_bulletin_report_table_hint6': 'Completion rate',
+          'molding_scan_bulletin_report_table_hint7': 'Total',
           'molding_scan_bulletin_report_hint1': 'Type body:',
           'molding_scan_bulletin_report_hint2': 'Sales No:',
           'molding_scan_bulletin_report_hint3': 'Customer No:',
           'molding_scan_bulletin_report_hint4': 'Department:',
           'molding_scan_bulletin_report_sort': 'Order Sort',
+          'molding_scan_bulletin_report_querying': 'Querying report...',
+          'molding_scan_bulletin_report_submitting': 'Submitting sorting...',
         }
       };
 }

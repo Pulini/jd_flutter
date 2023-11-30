@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/utils.dart';
 
@@ -9,6 +8,7 @@ import '../../../constant.dart';
 import '../../../http/request/molding_scan_bulletin_sort.dart';
 import '../../../http/response/molding_scan_bulletin_report_info.dart';
 import '../../../http/web_api.dart';
+import '../../../route.dart';
 import '../../../widget/dialogs.dart';
 import 'molding_scan_bulletin_report_state.dart';
 
@@ -23,18 +23,14 @@ class MoldingScanBulletinReportLogic extends GetxController {
     timer = null;
     httpGet(
       method: webApiGetMoldingScanBulletinReport,
-      loading: '正在查询报表...',
-      query: {'departmentID': userInfo?.departmentID},
+      loading: 'molding_scan_bulletin_report_querying'.tr,
+      query: {'departmentID': userInfo?.departmentID, 'IsGetAllList': true},
     ).then((response) {
       if (response.resultCode == resultSuccess) {
         var jsonList = jsonDecode(response.data);
         var list = <MoldingScanBulletinReportInfo>[];
         for (var i = 0; i < jsonList.length; ++i) {
-          list.add(MoldingScanBulletinReportInfo.fromJson(jsonList[i])
-                ..itemColor =
-                    i == 0 ? Colors.greenAccent.shade400 : Colors.lime.shade100
-              // i.isOdd ? Colors.lime.shade100 : Colors.deepPurple.shade100,
-              );
+          list.add(MoldingScanBulletinReportInfo.fromJson(jsonList[i]));
         }
         state.reportInfo.value = list;
       } else {
@@ -57,16 +53,26 @@ class MoldingScanBulletinReportLogic extends GetxController {
     timer = null;
     httpGet(
       method: webApiGetMoldingScanBulletinReport,
-      query: {'departmentID': userInfo?.departmentID},
+      query: {
+        'departmentID': userInfo?.departmentID,
+        'IsGetAllList':
+            Get.currentRoute == RouteConfig.moldingScanBulletinReportPage.name
+      },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        var jsonList = jsonDecode(response.data);
-        var list = <MoldingScanBulletinReportInfo>[];
-        for (var i = 0; i < jsonList.length; ++i) {
-          list.add(MoldingScanBulletinReportInfo.fromJson(jsonList[i])
-            ..itemColor = i == 0 ? Colors.greenAccent : Colors.lime.shade100);
+        if (Get.currentRoute ==
+            RouteConfig.moldingScanBulletinReportPage.name) {
+          var jsonList = jsonDecode(response.data);
+          var list = <MoldingScanBulletinReportInfo>[];
+          for (var i = 0; i < jsonList.length; ++i) {
+            list.add(MoldingScanBulletinReportInfo.fromJson(jsonList[i]));
+          }
+          state.reportInfo.value = list;
+        } else {
+          var json = jsonDecode(response.data)[0];
+          var data = MoldingScanBulletinReportInfo.fromJson(json);
+          state.reportInfo[0] = data;
         }
-        state.reportInfo.value = list;
       } else {
         showSnackBar(title: "", message: response.message!);
       }
@@ -91,7 +97,7 @@ class MoldingScanBulletinReportLogic extends GetxController {
 
     httpPost(
       method: webApiSubmitNewSort,
-      loading: '正在提交排序...',
+      loading: 'molding_scan_bulletin_report_submitting'.tr,
       body: json.encode(body),
     ).then((response) {
       if (response.resultCode == resultSuccess) {
