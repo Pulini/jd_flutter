@@ -60,18 +60,6 @@ class ProductionDispatchLogic extends GetxController {
     );
   }
 
-  @override
-  void onReady() {
-    // TODO: implement onClose
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    // TODO: implement onClose
-    super.onClose();
-  }
-
   query() {
     httpGet(
       method: webApiGetWorkCardCombinedSizeList,
