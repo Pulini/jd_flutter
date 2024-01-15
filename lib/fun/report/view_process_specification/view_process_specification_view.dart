@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 
 import '../../../route.dart';
 import '../../../utils.dart';
-import '../../../widget/custom_text.dart';
+import '../../../widget/custom_widget.dart';
 import '../../../widget/web_page.dart';
 import 'view_process_specification_logic.dart';
 
@@ -23,7 +23,7 @@ class _ViewProcessSpecificationPageState
   @override
   Widget build(BuildContext context) {
     // WebViewWidget(controller: logic.webViewController)
-    return titleWithDrawer(
+    return pageBody(
       title: getFunctionTitle(),
       children: [
         EditText(hint: '请输入型体', controller: logic.textControllerTypeBody),

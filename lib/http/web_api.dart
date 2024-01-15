@@ -113,8 +113,8 @@ Future<BaseData> _doHttp(
   try {
     ///创建dio对象
     var dio = Dio(BaseOptions(
-      // baseUrl: testUrlForMES,
-      baseUrl: baseUrlForMES,
+      baseUrl: testUrlForMES,
+      // baseUrl: baseUrlForMES,
       connectTimeout: const Duration(minutes: 2),
       receiveTimeout: const Duration(minutes: 2),
     ))
@@ -278,3 +278,11 @@ const webApiGetMoldingScanBulletinReport = 'api/Package/GetProductionOrderST';
 
 ///提交成型后段扫码工单排序
 const webApiSubmitNewSort = 'api/Package/SubmitWorkCardPriority';
+
+///根据时间和部门信息获得生产派工单列表信息
+const webApiGetWorkCardCombinedSizeList =
+    'api/WorkCard/GetWorkCardCombinedSizeList';
+
+///生产派工单下推
+const webApiPushProductionOrder =
+    'api/NeedleCartDispatch/GetProcessWorkCardForWorkCard';

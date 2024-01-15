@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 
 import 'bean/home_button.dart';
 import 'bean/routes.dart';
+import 'fun/dispatching/production_dispatch/production_dispatch_view.dart';
 import 'fun/report/daily_report/daily_report_view.dart';
 import 'fun/report/molding_pack_area_report/molding_pack_area_report_view.dart';
 import 'fun/report/molding_scan_bulletin_report/molding_scan_bulletin_report_maximize_view.dart';
@@ -91,6 +92,20 @@ class RouteConfig {
     const MoldingScanBulletinReportPage(),
   );
 
+  ///成型后段扫描看板最大化
+  static Routes moldingScanBulletinReportMaximize = Routes(
+    '/molding_scan_bulletin_report_maximize',
+    99,
+    const MoldingScanBulletinReportMaximize(),
+  );
+
+  ///生产派工
+  static Routes productionDispatchPage = Routes(
+    '/production_dispatch',
+    99,
+    const ProductionDispatchPage(),
+  );
+
   ///本地功能入口列表
   static List<Routes> routeList = [
     dailyReport,
@@ -103,6 +118,7 @@ class RouteConfig {
     viewProcessSpecification,
     moldingPackAreaReport,
     moldingScanBulletinReportPage,
+    productionDispatchPage,
   ];
 
   static List<GetPage> appRoutes = [
@@ -156,8 +172,12 @@ class RouteConfig {
       page: () => moldingScanBulletinReportPage.page,
     ),
     GetPage(
-      name: '/MoldingScanBulletinReportMaximize',
-      page: () => const MoldingScanBulletinReportMaximize(),
+      name: moldingScanBulletinReportMaximize.name,
+      page: () => moldingScanBulletinReportMaximize.page,
+    ),
+    GetPage(
+      name: productionDispatchPage.name,
+      page: () => productionDispatchPage.page,
     ),
   ];
 }

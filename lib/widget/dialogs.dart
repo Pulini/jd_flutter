@@ -19,9 +19,9 @@ informationDialog({
   Function()? back,
 }) {
   Get.dialog(
-    WillPopScope(
+    PopScope(
       //拦截返回键
-      onWillPop: () async => false,
+      canPop: false,
       child: AlertDialog(
         title: Text(
             title.isEmpty ? 'dialog_default_title_information'.tr : title,
@@ -49,9 +49,9 @@ successDialog({
   Function()? back,
 }) {
   Get.dialog(
-    WillPopScope(
+    PopScope(
       //拦截返回键
-      onWillPop: () async => false,
+      canPop: false,
       child: AlertDialog(
         title: Text(title.isEmpty ? 'dialog_default_title_success'.tr : title,
             style: const TextStyle(color: Colors.green)),
@@ -78,9 +78,9 @@ errorDialog({
   Function()? back,
 }) {
   Get.dialog(
-    WillPopScope(
+    PopScope(
       //拦截返回键
-      onWillPop: () async => false,
+      canPop: false,
       child: AlertDialog(
         title: Text(title.isEmpty ? 'dialog_default_title_error'.tr : title,
             style: const TextStyle(color: Colors.red)),
@@ -103,9 +103,9 @@ errorDialog({
 ///加载中弹窗
 loadingDialog(String? content) {
   Get.dialog(
-    WillPopScope(
+    PopScope(
       //拦截返回键
-      onWillPop: () async => false,
+      canPop: false,
       child: Dialog(
         backgroundColor: Colors.white,
         child: Padding(
@@ -262,9 +262,9 @@ doUpdate(VersionInfo version) {
     ),
   );
   Get.dialog(
-    WillPopScope(
+    PopScope(
       //拦截返回键
-      onWillPop: () async => false,
+      canPop: false,
       child: dialog,
     ),
     barrierDismissible: false, //拦截dialog外部点击
@@ -329,9 +329,9 @@ reLoginPopup() {
   showCupertinoModalPopup(
     context: Get.overlayContext!,
     barrierDismissible: false,
-    builder: (BuildContext context) => WillPopScope(
+    builder: (BuildContext context) => PopScope(
       //拦截返回键
-      onWillPop: () async => false,
+      canPop: false,
       child: SingleChildScrollView(
         primary: true,
         padding: EdgeInsets.only(
@@ -443,9 +443,9 @@ reasonInputPopup({
   );
   showCupertinoModalPopup(
     context: Get.overlayContext!,
-    builder: (BuildContext context) => WillPopScope(
+    builder: (BuildContext context) => PopScope(
       //拦截返回键
-      onWillPop: () async => false,
+      canPop: false,
       child: SingleChildScrollView(
         primary: true,
         padding: EdgeInsets.only(

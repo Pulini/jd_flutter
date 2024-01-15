@@ -20,7 +20,7 @@ class _ProductionDayReportPageState extends State<ProductionDayReportPage> {
 
   @override
   Widget build(BuildContext context) {
-    return titleWithDrawer(
+    return pageBody(
       title:getFunctionTitle(),
       children: [
         Spinner(controller: logic.spinnerControllerWorkShop),

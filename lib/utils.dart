@@ -255,6 +255,7 @@ showSnackBar({required String title, required String message}) {
   });
 }
 
+///选择器
 getCupertinoPicker(List<Widget> items, FixedExtentScrollController controller) {
   return CupertinoPicker(
     scrollController: controller,
@@ -268,6 +269,7 @@ getCupertinoPicker(List<Widget> items, FixedExtentScrollController controller) {
   );
 }
 
+///popup工具
 showPopup(Widget widget, {double? height}) {
   showCupertinoModalPopup(
     context: Get.overlayContext!,
@@ -284,8 +286,16 @@ showPopup(Widget widget, {double? height}) {
   );
 }
 
-titleWithDrawer({
+pageBodyNoDrawer({
   required String title,
+  List<Widget>? actions,
+  required Widget? body,
+}) {}
+
+///页面简单框架
+pageBody({
+  required String title,
+  List<Widget>? actions,
   required List<Widget> children,
   required Function query,
   required Widget? body,
@@ -298,6 +308,7 @@ titleWithDrawer({
         backgroundColor: Colors.transparent,
         title: Text(title),
         actions: [
+          ...?actions,
           Builder(
             //不加builder会导致openDrawer崩溃
             builder: (context) => IconButton(
@@ -360,6 +371,7 @@ class TapUtil {
   }
 }
 
+///Log日志工具
 log(String msg) {
   var strLength = msg.length;
   var start = 0;
@@ -380,9 +392,12 @@ log(String msg) {
   logger.f(printText);
 }
 
+/// 权限检查
 bool checkUserPermission(String code) {
   return userInfo?.jurisdictionList?.any((v) => v.jid == code) ?? false;
 }
+
+///Launch启动器
 Future<void> goLaunch(Uri uri) async {
   if (!await launchUrl(uri)) {
     throw Exception('Could not launch $uri');

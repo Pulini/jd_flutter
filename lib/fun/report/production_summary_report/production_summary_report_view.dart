@@ -21,7 +21,7 @@ class _ProductionSummaryReportPageState
 
   @override
   Widget build(BuildContext context) {
-    return titleWithDrawer(
+    return pageBody(
       title: getFunctionTitle(),
       children: [
         Spinner(controller: logic.spinnerControllerWorkShop),

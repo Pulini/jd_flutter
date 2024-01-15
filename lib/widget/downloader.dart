@@ -26,8 +26,9 @@ class Downloader {
       context: Get.overlayContext!,
       barrierDismissible: false,
       builder: (BuildContext context) {
-        return WillPopScope(
-          onWillPop: () => Future<bool>.value(false),
+        return PopScope(
+          //拦截返回键
+          canPop: false,
           child: Dialog(
             child: SizedBox(
               width: widgetWidth,
@@ -58,13 +59,14 @@ class Downloader {
                     Obx(() => Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            if (!isDownloading.value) TextButton(
-                              onPressed: () => startDownload(),
-                              child: const Text(
-                                '重试',
-                                style: TextStyle(color: Colors.green),
+                            if (!isDownloading.value)
+                              TextButton(
+                                onPressed: () => startDownload(),
+                                child: const Text(
+                                  '重试',
+                                  style: TextStyle(color: Colors.green),
+                                ),
                               ),
-                            ),
                             TextButton(
                               onPressed: () {
                                 if (isDownloading.value) cancel.cancel();
@@ -90,7 +92,7 @@ class Downloader {
 
   ///下載文件
   startDownload() async {
-    isDownloading.value=true;
+    isDownloading.value = true;
     progress.value = 0.0;
     try {
       var fileName = url.substring(url.lastIndexOf('/') + 1);
@@ -107,21 +109,21 @@ class Downloader {
           progress.value = count / total;
         },
       ).then((value) {
-        isDownloading.value=false;
+        isDownloading.value = false;
         completed.call(savePath);
       });
     } on DioException catch (e) {
-      isDownloading.value=false;
+      isDownloading.value = false;
       logger.e('error:$e');
       if (e.type != DioExceptionType.cancel) {
         errorDialog(content: '下载异常：$e');
       }
     } on Exception catch (e) {
-      isDownloading.value=false;
+      isDownloading.value = false;
       logger.e('error:${e.toString()}');
       errorDialog(content: '发生错误：$e');
     } on Error catch (e) {
-      isDownloading.value=false;
+      isDownloading.value = false;
       logger.e('error:${e.toString()}');
       errorDialog(content: '发生异常：${e.toString()}');
     }

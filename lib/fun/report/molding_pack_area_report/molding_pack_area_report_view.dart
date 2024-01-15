@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/route.dart';
 
 import '../../../utils.dart';
-import '../../../widget/custom_text.dart';
+import '../../../widget/custom_widget.dart';
 import '../../../widget/picker/picker_view.dart';
 import 'molding_pack_area_report_logic.dart';
 ///开发中-------------------------------------------------------------------------------------------------------------------------------------
@@ -22,7 +22,7 @@ class _MoldingPackAreaReportPageState extends State<MoldingPackAreaReportPage> {
 
   @override
   Widget build(BuildContext context) {
-    return titleWithDrawer(
+    return pageBody(
       title: getFunctionTitle(),
       children: [
         EditText(

@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:get/get.dart';
 
-import 'picker_item.dart';
 import '../../http/web_api.dart';
 import '../../utils.dart';
+import 'picker_item.dart';
 
 enum PickerType {
   sapSupplier,
@@ -570,6 +570,43 @@ class SpinnerController {
   }
 }
 
+class SwitchButtonController {
+  Rx<bool> isChecked = false.obs;
+  final bool? def;
+  var enable = true.obs;
+  final String? saveKey;
+  String buttonName;
+  final Function(bool)? onSelected;
+
+  SwitchButtonController(
+      {this.saveKey, this.def, required this.buttonName, this.onSelected}) {
+    if (saveKey == null || saveKey?.isEmpty == true) {
+      isChecked.value = def ?? false;
+    } else {
+      isChecked.value = getSave();
+    }
+    onSelected?.call(isChecked.value);
+  }
+
+  select(bool checked) {
+    isChecked.value = checked;
+    if (saveKey != null && saveKey!.isNotEmpty) {
+      spSave(saveKey!, checked);
+    }
+    onSelected?.call(isChecked.value);
+  }
+
+  bool getSave() {
+    if (saveKey != null && saveKey!.isNotEmpty) {
+      bool? save = spGet(saveKey!);
+      if (save != null) {
+        return save;
+      }
+    }
+    return false;
+  }
+}
+
 Future getDataListError() async {
   return 'picker_type_error'.tr;
 }
@@ -793,7 +830,7 @@ Future getMesProductionReportType() async {
 Future getSapMachine() async {
   var response = await httpGet(
     method: webApiPickerSapMachine,
-    query: {'EmpID':userInfo?.empID ?? 0},
+    query: {'EmpID': userInfo?.empID ?? 0},
   );
   if (response.resultCode == resultSuccess) {
     try {

@@ -50,18 +50,17 @@ class LoginLogic extends GetxController with GetSingleTickerProviderStateMixin {
 
   ///手机登录手机号输入框控制器
   TextEditingController phoneLoginPhoneController = TextEditingController()
-    // ..text = spGet(spSaveLoginPhone) ?? '15868587600';
-    ..text = spGet(spSaveLoginPhone) ?? '';
+    ..text = spGet(spSaveLoginPhone) ?? '15868587600';
+
+  // ..text = spGet(spSaveLoginPhone) ?? '';
 
   ///手机登录密码输入框控制器
-  TextEditingController phoneLoginPasswordController = TextEditingController();
-
-  // ..text = '123456';
+  TextEditingController phoneLoginPasswordController = TextEditingController()
+    ..text = '123456';
 
   ///手机登录验证码输入框控制器
-  TextEditingController phoneLoginVCodeController = TextEditingController();
-
-  // ..text = _getVCode();
+  TextEditingController phoneLoginVCodeController = TextEditingController()
+    ..text = _getVCode();
 
   ///工号登录工号输入框控制器
   TextEditingController workLoginWorkNumberController = TextEditingController()

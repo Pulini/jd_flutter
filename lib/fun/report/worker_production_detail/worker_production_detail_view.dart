@@ -5,7 +5,7 @@ import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/utils.dart';
 import 'package:jd_flutter/widget/picker/picker_view.dart';
 
-import '../../../widget/custom_text.dart';
+import '../../../widget/custom_widget.dart';
 import 'worker_production_detail_logic.dart';
 
 class WorkerProductionDetailPage extends StatefulWidget {
@@ -23,7 +23,7 @@ class _WorkerProductionDetailPageState
 
   @override
   Widget build(BuildContext context) {
-    return titleWithDrawer(
+    return pageBody(
       title: getFunctionTitle(),
       children: [
         DatePicker(pickerController: logic.pickerControllerStartDate),

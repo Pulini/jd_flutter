@@ -38,7 +38,7 @@ class DatePicker extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-      padding: const EdgeInsets.only(left: 15, right: 5),
+      padding: const EdgeInsets.only(left: 15, top: 5, right: 5, bottom: 5),
       decoration: BoxDecoration(
         color: Colors.grey[300],
         borderRadius: BorderRadius.circular(25),
@@ -379,7 +379,6 @@ class CheckBox extends StatelessWidget {
     if (checkBoxController.checkboxItems.isNotEmpty) {
       checkBoxController.initSelectState();
 
-
       var titleSearch = Expanded(
         child: CupertinoSearchTextField(
           decoration: BoxDecoration(
@@ -393,10 +392,13 @@ class CheckBox extends StatelessWidget {
 
       var titleButtonConfirm = TextButton(
         onPressed: () {
-         var checked=checkBoxController.checkboxItems.where((v) => (v as PickerMesMoldingPackArea).isChecked);
-          if(checked.isEmpty){
-            showSnackBar(title:checkBoxController.getButtonName(), message: '请至少勾选一条选项');
-          }else{
+          var checked = checkBoxController.checkboxItems
+              .where((v) => (v as PickerMesMoldingPackArea).isChecked);
+          if (checked.isEmpty) {
+            showSnackBar(
+                title: checkBoxController.getButtonName(),
+                message: '请至少勾选一条选项');
+          } else {
             checkBoxController.select();
             Get.back();
           }
@@ -543,6 +545,47 @@ class Spinner extends StatelessWidget {
                     DropdownMenuItem<String>(value: value, child: Text(value)))
                 .toList(),
           )),
+    );
+  }
+}
+
+class SwitchButton extends StatelessWidget {
+  const SwitchButton({super.key, required this.switchController});
+
+  final SwitchButtonController switchController;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+      padding: const EdgeInsets.only(left: 15),
+      decoration: BoxDecoration(
+        color: Colors.grey[300],
+        borderRadius: BorderRadius.circular(25),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            switchController.buttonName,
+            style: const TextStyle(color: Colors.black),
+          ),
+          Obx(() => Switch(
+                thumbIcon: MaterialStateProperty.resolveWith<Icon>(
+                  (Set<MaterialState> states) {
+                    if (states.contains(MaterialState.selected)) {
+                      return const Icon(Icons.check);
+                    }
+                    return const Icon(Icons.close);
+                  },
+                ),
+                value: switchController.isChecked.value,
+                onChanged: (bool value) {
+                  switchController.select(value);
+                },
+              )),
+        ],
+      ),
     );
   }
 }
