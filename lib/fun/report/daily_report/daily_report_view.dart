@@ -38,7 +38,7 @@ class _DailyReportPageState extends State<DailyReportPage> {
 
   @override
   Widget build(BuildContext context) {
-    return pageBody(
+    return pageBodyWithDrawer(
       title: getFunctionTitle(),
       children: [
         OptionsPicker(pickerController: logic.pickerControllerDepartment),

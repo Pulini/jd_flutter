@@ -100,8 +100,8 @@ Future<BaseData> _doHttp(
   ///设置请求的headers
   var options = Options(headers: {
     // 'Content-Type': 'application/json',
-    'FunctionID': nowFunction?.id??'0',
-    'Version': nowFunction?.version??0,
+    'FunctionID': nowFunction?.id ?? '0',
+    'Version': nowFunction?.version ?? 0,
     'Language': language,
     'Token': userInfo?.token ?? '',
     'GUID': const Uuid().v1(),
@@ -113,8 +113,8 @@ Future<BaseData> _doHttp(
   try {
     ///创建dio对象
     var dio = Dio(BaseOptions(
-      baseUrl: testUrlForMES,
-      // baseUrl: baseUrlForMES,
+      // baseUrl: testUrlForMES,
+      baseUrl: baseUrlForMES,
       connectTimeout: const Duration(minutes: 2),
       receiveTimeout: const Duration(minutes: 2),
     ))
@@ -147,7 +147,7 @@ Future<BaseData> _doHttp(
     logger.e('error:${e.toString()}');
     base.message = '发生异常：${e.toString()}';
   }
-  if (loading != null && loading.isNotEmpty )Get.back();
+  if (loading != null && loading.isNotEmpty) Get.back();
   return base;
 }
 
@@ -286,3 +286,6 @@ const webApiGetWorkCardCombinedSizeList =
 ///生产派工单下推
 const webApiPushProductionOrder =
     'api/NeedleCartDispatch/GetProcessWorkCardForWorkCard';
+
+///查询财产审核列表
+const webApiQueryProperty = 'api/FixedAsset/SearchUnnumberedProperty';

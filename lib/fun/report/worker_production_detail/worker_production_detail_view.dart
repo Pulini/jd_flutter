@@ -23,7 +23,7 @@ class _WorkerProductionDetailPageState
 
   @override
   Widget build(BuildContext context) {
-    return pageBody(
+    return pageBodyWithDrawer(
       title: getFunctionTitle(),
       children: [
         DatePicker(pickerController: logic.pickerControllerStartDate),

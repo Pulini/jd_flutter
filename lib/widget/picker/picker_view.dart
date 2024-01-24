@@ -37,11 +37,12 @@ class DatePicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: 50,
       margin: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-      padding: const EdgeInsets.only(left: 15, top: 5, right: 5, bottom: 5),
+      padding: const EdgeInsets.only(left: 15, right: 5),
       decoration: BoxDecoration(
         color: Colors.grey[300],
-        borderRadius: BorderRadius.circular(25),
+        borderRadius: BorderRadius.circular(30),
       ),
       child: Obx(() => Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -56,7 +57,7 @@ class DatePicker extends StatelessWidget {
                       pickerController.enable.value ? Colors.blue : Colors.grey,
                   foregroundColor: Colors.greenAccent,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(30),
                   ),
                 ),
                 onPressed: () => _showOptions(),
@@ -161,6 +162,7 @@ class OptionsPicker extends StatelessWidget {
     pickerController.search('');
     pickerController.getData();
     return Container(
+      height: 50,
       margin: const EdgeInsets.fromLTRB(10, 5, 10, 5),
       padding: const EdgeInsets.only(left: 15, right: 5),
       decoration: BoxDecoration(
@@ -317,6 +319,7 @@ class LinkOptionsPicker extends StatelessWidget {
     pickerController.search('');
     pickerController.getData();
     return Container(
+      height: 50,
       margin: const EdgeInsets.fromLTRB(10, 5, 10, 5),
       padding: const EdgeInsets.only(left: 15, right: 5),
       decoration: BoxDecoration(
@@ -466,6 +469,7 @@ class CheckBox extends StatelessWidget {
     checkBoxController.search('');
     checkBoxController.getData();
     return Container(
+      height: 50,
       margin: const EdgeInsets.fromLTRB(10, 5, 10, 5),
       padding: const EdgeInsets.only(left: 15, right: 5),
       decoration: BoxDecoration(
@@ -529,6 +533,7 @@ class Spinner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: 50,
       margin: const EdgeInsets.fromLTRB(10, 5, 10, 5),
       padding: const EdgeInsets.only(left: 15, right: 5),
       decoration: BoxDecoration(

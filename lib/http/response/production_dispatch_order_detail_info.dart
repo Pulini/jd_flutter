@@ -63,13 +63,13 @@ class WorkCardTitle {
     dispatchingNumber = json['DispatchingNumber'];
   }
 
-  int? fQtyPass;
-  int? fQtyProcessPass;
-  int? dayWorkCardPlanQty;
+  double? fQtyPass;
+  double? fQtyProcessPass;
+  double? dayWorkCardPlanQty;
   int? fCardNoReportStatus;
   String? plantBody;
   String? processBillNumber;
-  int? dispatchingNumber;
+  double? dispatchingNumber;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -156,11 +156,11 @@ class WorkCardList {
   int? empID;
   String? workerCode;
   String? workerName;
-  int? sourceQty;
-  int? mustQty;
-  int? preSchedulingQty;
-  int? qty;
-  int? finishQty;
+  double? sourceQty;
+  double? mustQty;
+  double? preSchedulingQty;
+  double? qty;
+  double? finishQty;
   int? sourceEntryID;
   int? sourceInterID;
   int? sourceEntryFID;

@@ -22,7 +22,7 @@ class _ViewInstructionDetailsPageState
 
   @override
   Widget build(BuildContext context) {
-    return pageBody(
+    return pageBodyWithDrawer(
       title: getFunctionTitle(),
       children: [
         EditText(hint: '请输入指令单号', controller: logic.textControllerInstruction),

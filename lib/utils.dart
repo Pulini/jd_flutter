@@ -286,14 +286,130 @@ showPopup(Widget widget, {double? height}) {
   );
 }
 
-pageBodyNoDrawer({
+pageBody({
   required String title,
   List<Widget>? actions,
   required Widget? body,
-}) {}
+}) {
+  return Container(
+    decoration: backgroundColor,
+    child: Scaffold(
+      backgroundColor: Colors.transparent,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        title: Text(title),
+        actions: [
+          ...?actions,
+        ],
+      ),
+      body: body,
+    ),
+  );
+}
+
+pageBodyWithBottomSheet({
+  required String title,
+  List<Widget>? actions,
+  required List<Widget> bottomSheet,
+  required Function query,
+  required Widget? body,
+}) {
+  return Container(
+    decoration: backgroundColor,
+    child: Scaffold(
+      backgroundColor: Colors.transparent,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        title: Text(title),
+        actions: [
+          ...?actions,
+          Builder(
+            //不加builder会导致openDrawer崩溃
+            builder: (context) => IconButton(
+              icon: const Icon(Icons.search),
+              onPressed: () {
+                showSheet(
+                  context,
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const SizedBox(height: 30),
+                      ...bottomSheet,
+                      const SizedBox(height: 30),
+                      Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.blueAccent,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(25),
+                              ),
+                            ),
+                            onPressed: () {
+                              Navigator.pop(context);
+                              query.call();
+                            },
+                            child: Text(
+                              'page_title_with_drawer_query'.tr,
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  scrollControlled: true,
+                );
+              },
+            ),
+          )
+        ],
+      ),
+      body: body,
+    ),
+  );
+}
+
+Future<T?> showSheet<T>(
+  BuildContext context,
+  Widget body, {
+  bool scrollControlled = false,
+  Color bodyColor = Colors.white,
+  EdgeInsets? bodyPadding,
+  BorderRadius? borderRadius,
+}) {
+  const radius = Radius.circular(16);
+  borderRadius ??= const BorderRadius.only(topLeft: radius, topRight: radius);
+  bodyPadding ??= const EdgeInsets.all(20);
+  return showModalBottomSheet(
+      context: context,
+      elevation: 0,
+      backgroundColor: bodyColor,
+      shape: RoundedRectangleBorder(borderRadius: borderRadius),
+      barrierColor: Colors.black.withOpacity(0.25),
+      // A处
+      constraints: BoxConstraints(
+          maxHeight: MediaQuery.of(context).size.height -
+              MediaQuery.of(context).viewPadding.top),
+      isScrollControlled: scrollControlled,
+      builder: (ctx) => Padding(
+            padding: EdgeInsets.only(
+              left: bodyPadding!.left,
+              top: bodyPadding.top,
+              right: bodyPadding.right,
+              // B处
+              bottom:
+                  bodyPadding.bottom + MediaQuery.of(ctx).viewPadding.bottom,
+            ),
+            child: body,
+          ));
+}
 
 ///页面简单框架
-pageBody({
+pageBodyWithDrawer({
   required String title,
   List<Widget>? actions,
   required List<Widget> children,

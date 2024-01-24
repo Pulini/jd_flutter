@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'bean/home_button.dart';
 import 'bean/routes.dart';
 import 'fun/dispatching/production_dispatch/production_dispatch_view.dart';
+import 'fun/management/property/property_view.dart';
 import 'fun/report/daily_report/daily_report_view.dart';
 import 'fun/report/molding_pack_area_report/molding_pack_area_report_view.dart';
 import 'fun/report/molding_scan_bulletin_report/molding_scan_bulletin_report_maximize_view.dart';
@@ -106,6 +107,13 @@ class RouteConfig {
     const ProductionDispatchPage(),
   );
 
+  ///财产管理
+  static Routes propertyPage = Routes(
+    '/property',
+    99,
+    const PropertyPage(),
+  );
+
   ///本地功能入口列表
   static List<Routes> routeList = [
     dailyReport,
@@ -119,6 +127,7 @@ class RouteConfig {
     moldingPackAreaReport,
     moldingScanBulletinReportPage,
     productionDispatchPage,
+    propertyPage,
   ];
 
   static List<GetPage> appRoutes = [
@@ -178,6 +187,10 @@ class RouteConfig {
     GetPage(
       name: productionDispatchPage.name,
       page: () => productionDispatchPage.page,
+    ),
+    GetPage(
+      name: propertyPage.name,
+      page: () => propertyPage.page,
     ),
   ];
 }

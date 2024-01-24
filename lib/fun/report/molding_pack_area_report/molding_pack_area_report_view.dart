@@ -22,7 +22,7 @@ class _MoldingPackAreaReportPageState extends State<MoldingPackAreaReportPage> {
 
   @override
   Widget build(BuildContext context) {
-    return pageBody(
+    return pageBodyWithDrawer(
       title: getFunctionTitle(),
       children: [
         EditText(

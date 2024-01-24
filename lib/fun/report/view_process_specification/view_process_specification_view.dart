@@ -23,7 +23,7 @@ class _ViewProcessSpecificationPageState
   @override
   Widget build(BuildContext context) {
     // WebViewWidget(controller: logic.webViewController)
-    return pageBody(
+    return pageBodyWithDrawer(
       title: getFunctionTitle(),
       children: [
         EditText(hint: '请输入型体', controller: logic.textControllerTypeBody),

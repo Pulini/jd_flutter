@@ -38,15 +38,16 @@ class HomeLogic extends GetxController {
   @override
   onReady() {
     super.onReady();
-    if (GetPlatform.isWeb) {
-      refreshFunList();
-    } else {
-      getVersionInfo(
-        false,
-        noUpdate: () => refreshFunList(),
-        needUpdate: (versionInfo) => doUpdate(versionInfo),
-      );
-    }
+    refreshFunList();
+    // if (GetPlatform.isWeb) {
+    //   refreshFunList();
+    // } else {
+    //   getVersionInfo(
+    //     false,
+    //     noUpdate: () => refreshFunList(),
+    //     needUpdate: (versionInfo) => doUpdate(versionInfo),
+    //   );
+    // }
   }
 
   refreshFunList() {

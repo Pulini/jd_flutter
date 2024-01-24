@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/fun/dispatching/production_dispatch/production_dispatch_detail_view.dart';
 import 'package:jd_flutter/http/web_api.dart';
 import 'package:jd_flutter/utils.dart';
 
@@ -134,7 +135,7 @@ class ProductionDispatchLogic extends GetxController {
         if (response.resultCode == resultSuccess) {
           state.detailInfo = ProductionDispatchOrderDetailInfo.fromJson(
               jsonDecode(response.data));
-          // Get.to(() => const MoldingPackAreaDetailReportPage());
+          Get.to(() => const ProductionDispatchDetailPage());
         } else {
           errorDialog(content: response.message);
         }

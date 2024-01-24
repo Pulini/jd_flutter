@@ -523,7 +523,7 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
 
   @override
   Widget build(BuildContext context) {
-    return pageBody(
+    return pageBodyWithDrawer(
       title: getFunctionTitle(),
       children: _queryWidgets(),
       query: () => logic.query(),

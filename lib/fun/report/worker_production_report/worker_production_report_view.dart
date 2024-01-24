@@ -22,7 +22,7 @@ class _WorkerProductionReportPageState
 
   @override
   Widget build(BuildContext context) {
-    return pageBody(
+    return pageBodyWithDrawer(
       title: getFunctionTitle(),
       children: [
         OptionsPicker(pickerController: logic.pickerControllerDepartment),

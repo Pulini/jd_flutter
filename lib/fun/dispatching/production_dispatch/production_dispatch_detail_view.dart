@@ -15,7 +15,7 @@ class ProductionDispatchDetailPage extends StatefulWidget {
 
 class _ProductionDispatchDetailPageState
     extends State<ProductionDispatchDetailPage> {
-  final logic = Get.put(ProductionDispatchLogic());
+  final logic = Get.find<ProductionDispatchLogic>();
   final state = Get.find<ProductionDispatchLogic>().state;
 
   _bottomButtons() {
@@ -146,7 +146,7 @@ class _ProductionDispatchDetailPageState
 
   @override
   Widget build(BuildContext context) {
-    return pageBodyNoDrawer(
+    return pageBody(
       title: getFunctionTitle(),
       body: Column(
         children: [
@@ -175,9 +175,4 @@ class _ProductionDispatchDetailPageState
     );
   }
 
-  @override
-  void dispose() {
-    Get.delete<ProductionDispatchLogic>();
-    super.dispose();
-  }
 }
