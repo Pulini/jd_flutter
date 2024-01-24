@@ -41,11 +41,6 @@ class PropertyLogic extends GetxController
     queryProperty();
   }
 
-  @override
-  void onClose() {
-    // TODO: implement onClose
-    super.onClose();
-  }
 
   queryProperty() {
     httpGet(
