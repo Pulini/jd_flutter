@@ -22,7 +22,7 @@ class _ProductionMaterialsReportPageState
 
   @override
   Widget build(BuildContext context) {
-    return pageBody(
+    return pageBodyWithDrawer(
       title: getFunctionTitle(),
       children: [
         EditText(

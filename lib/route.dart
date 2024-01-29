@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'bean/home_button.dart';
 import 'bean/routes.dart';
 import 'fun/dispatching/production_dispatch/production_dispatch_view.dart';
+import 'fun/management/property/property_view.dart';
 import 'fun/report/daily_report/daily_report_view.dart';
 import 'fun/report/molding_pack_area_report/molding_pack_area_report_view.dart';
 import 'fun/report/molding_scan_bulletin_report/molding_scan_bulletin_report_maximize_view.dart';
