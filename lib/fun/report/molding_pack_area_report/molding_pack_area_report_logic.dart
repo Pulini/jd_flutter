@@ -20,7 +20,7 @@ class MoldingPackAreaReportPageLogic extends GetxController {
 
   late DatePickerController dateControllerStart;
   late DatePickerController dateControllerEnd;
-  var checkBoxController = CheckBoxController(
+  var checkBoxController = CheckBoxPickerController(
     PickerType.mesMoldingPackAreaReportType,
     saveKey:
         '${RouteConfig.moldingPackAreaReport.name}${PickerType.mesMoldingPackAreaReportType}',

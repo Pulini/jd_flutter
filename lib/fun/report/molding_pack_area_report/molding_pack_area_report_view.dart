@@ -41,7 +41,7 @@ class _MoldingPackAreaReportPageState extends State<MoldingPackAreaReportPage> {
         ),
         DatePicker(pickerController: logic.dateControllerStart),
         DatePicker(pickerController: logic.dateControllerEnd),
-        CheckBox(checkBoxController: logic.checkBoxController)
+        CheckBoxPicker(checkBoxController: logic.checkBoxController)
       ],
       query: () => logic.query(),
       body: ListView(

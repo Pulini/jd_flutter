@@ -8,6 +8,7 @@ import 'fun/report/molding_pack_area_report/molding_pack_area_report_view.dart';
 import 'fun/report/molding_scan_bulletin_report/molding_scan_bulletin_report_maximize_view.dart';
 import 'fun/report/molding_scan_bulletin_report/molding_scan_bulletin_report_view.dart';
 import 'fun/report/production_day_report/production_day_report_view.dart';
+import 'fun/report/production_materials_report/production_materials_report_view.dart';
 import 'fun/report/production_summary_report/production_summary_report_view.dart';
 import 'fun/report/view_instruction_details/view_instruction_details_view.dart';
 import 'fun/report/view_process_specification/view_process_specification_view.dart';
@@ -106,6 +107,13 @@ class RouteConfig {
     const ProductionDispatchPage(),
   );
 
+  ///生产订单用料表
+  static Routes productionMaterialsReportPage = Routes(
+    '/production_materials_report',
+    99,
+    const ProductionMaterialsReportPage(),
+  );
+
   ///本地功能入口列表
   static List<Routes> routeList = [
     dailyReport,
@@ -119,6 +127,7 @@ class RouteConfig {
     moldingPackAreaReport,
     moldingScanBulletinReportPage,
     productionDispatchPage,
+    productionMaterialsReportPage,
   ];
 
   static List<GetPage> appRoutes = [
@@ -178,6 +187,10 @@ class RouteConfig {
     GetPage(
       name: productionDispatchPage.name,
       page: () => productionDispatchPage.page,
+    ),
+    GetPage(
+      name: productionMaterialsReportPage.name,
+      page: () => productionMaterialsReportPage.page,
     ),
   ];
 }
