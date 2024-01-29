@@ -1,49 +1,51 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/route.dart';
+import 'package:jd_flutter/utils.dart';
 
-import '../../../utils.dart';
 import '../../../widget/custom_widget.dart';
 import '../../../widget/picker/picker_view.dart';
-import 'molding_pack_area_report_logic.dart';
-///开发中-------------------------------------------------------------------------------------------------------------------------------------
-class MoldingPackAreaReportPage extends StatefulWidget {
-  const MoldingPackAreaReportPage({Key? key}) : super(key: key);
+import 'production_materials_report_logic.dart';
+
+class ProductionMaterialsReportPage extends StatefulWidget {
+  const ProductionMaterialsReportPage({super.key});
 
   @override
-  State<MoldingPackAreaReportPage> createState() =>
-      _MoldingPackAreaReportPageState();
+  State<ProductionMaterialsReportPage> createState() =>
+      _ProductionMaterialsReportPageState();
 }
 
-class _MoldingPackAreaReportPageState extends State<MoldingPackAreaReportPage> {
-  final logic = Get.put(MoldingPackAreaReportPageLogic());
-  final state = Get.find<MoldingPackAreaReportPageLogic>().state;
-  var textColor = const TextStyle(color: Colors.blueAccent);
+class _ProductionMaterialsReportPageState
+    extends State<ProductionMaterialsReportPage> {
+  final logic = Get.put(ProductionMaterialsReportLogic());
+  final state = Get.find<ProductionMaterialsReportLogic>().state;
 
   @override
   Widget build(BuildContext context) {
-    return pageBodyWithDrawer(
+    return pageBody(
       title: getFunctionTitle(),
       children: [
         EditText(
-          hint: 'page_molding_pack_area_report_query_instruction'.tr,
+          hint: '型体',
           controller: logic.textControllerInstruction,
         ),
-        const SizedBox(height: 10),
         EditText(
-          hint: 'page_molding_pack_area_report_query_order_number'.tr,
+          hint: '指令',
           controller: logic.textControllerOrderNumber,
         ),
-        const SizedBox(height: 10),
         EditText(
-          hint: 'page_molding_pack_area_report_query_type_body'.tr,
+          hint: '生产订单号',
           controller: logic.textControllerTypeBody,
         ),
-        DatePicker(pickerController: logic.dateControllerStart),
-        DatePicker(pickerController: logic.dateControllerEnd),
-        CheckBoxPicker(checkBoxController: logic.checkBoxController)
+        EditText(
+          hint: '尺码生产订单号',
+          controller: logic.textControllerTypeBody,
+        ),
+        OptionsPicker(pickerController: logic.pickerControllerSapProcessFlow),
+        SwitchButton(
+            switchController: logic.switchControllerPickingMaterialCompleted),
       ],
-      query: () => logic.query(),
+      query: () => logic.queryProductionMaterials(),
       body: ListView(
         padding: const EdgeInsets.only(left: 10, right: 10),
         children: [
@@ -63,7 +65,7 @@ class _MoldingPackAreaReportPageState extends State<MoldingPackAreaReportPage> {
                       state.createTableDataRow(
                         state.tableData[i],
                         i.isEven ? Colors.transparent : Colors.grey.shade100,
-                        (id, no) => logic.getDetails(id, no),
+                        (id, no) => {},
                       )
                   ],
                 )),
@@ -75,7 +77,7 @@ class _MoldingPackAreaReportPageState extends State<MoldingPackAreaReportPage> {
 
   @override
   void dispose() {
-    Get.delete<MoldingPackAreaReportPageLogic>();
+    Get.delete<ProductionMaterialsReportLogic>();
     super.dispose();
   }
 }

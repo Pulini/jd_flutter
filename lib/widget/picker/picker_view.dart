@@ -369,10 +369,10 @@ class LinkOptionsPicker extends StatelessWidget {
   }
 }
 
-class CheckBox extends StatelessWidget {
-  final CheckBoxController checkBoxController;
+class CheckBoxPicker extends StatelessWidget {
+  final CheckBoxPickerController checkBoxController;
 
-  const CheckBox({
+  const CheckBoxPicker({
     super.key,
     required this.checkBoxController,
   });

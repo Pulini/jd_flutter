@@ -388,7 +388,7 @@ class DatePickerController extends PickerController {
   }
 }
 
-class CheckBoxController extends PickerController {
+class CheckBoxPickerController extends PickerController {
   var isSelectAll = false.obs;
   var selectedText = 'CheckBox'.obs;
   var selectedIds = <String>[];
@@ -403,7 +403,7 @@ class CheckBoxController extends PickerController {
   final Function(List<String>)? onChanged;
   final Function(List<String>)? onSelected;
 
-  CheckBoxController(
+  CheckBoxPickerController(
     super.pickerType, {
     this.saveKey,
     this.buttonName,
