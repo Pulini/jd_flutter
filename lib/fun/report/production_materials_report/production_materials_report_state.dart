@@ -1,60 +1,59 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jd_flutter/utils.dart';
 
 import '../../../http/response/molding_pack_area_report_info.dart';
 
 class ProductionMaterialsReportState {
   var tableData = <MoldingPackAreaReportInfo>[].obs;
+
   var tableDataColumn = <DataColumn>[
-    DataColumn(label: Text('page_molding_pack_area_report_table_hint1'.tr)),
-    DataColumn(label: Text('page_molding_pack_area_report_table_hint2'.tr)),
-    DataColumn(label: Text('page_molding_pack_area_report_table_hint3'.tr)),
-    DataColumn(label: Text('page_molding_pack_area_report_table_hint4'.tr)),
-    DataColumn(label: Text('page_molding_pack_area_report_table_hint5'.tr)),
-    DataColumn(label: Text('page_molding_pack_area_report_table_hint6'.tr)),
+    DataColumn(label: Text('销售订单号')),
+    DataColumn(label: Text('生产订单编号')),
+    DataColumn(label: Text('订单类型')),
+    DataColumn(label: Text('产品编码')),
+    DataColumn(label: Text('产品名称')),
+    DataColumn(label: Text('订单交期')),
+    DataColumn(label: Text('计划开工日期')),
+    DataColumn(label: Text('计划完工日期')),
+    DataColumn(label: Text('尺码')),
+    DataColumn(label: Text('BOM号')),
+    DataColumn(label: Text('BOM版本')),
+    DataColumn(label: Text('单位')),
     DataColumn(
-      label: Text('page_molding_pack_area_report_table_hint7'.tr),
+      label: Text('生产数量'),
       numeric: true,
     ),
     DataColumn(
-      label: Text('page_molding_pack_area_report_table_hint8'.tr),
+      label: Text('已派工数量'),
+      numeric: true,
+    ),
+    DataColumn(label: Text('部位')),
+    DataColumn(label: Text('外发工序')),
+    DataColumn(label: Text('子项物料编码')),
+    DataColumn(label: Text('子项物料名称')),
+    DataColumn(label: Text('规格型号')),
+    DataColumn(label: Text('子项单位')),
+    DataColumn(label: Text('子项尺码')),
+    DataColumn(label: Text('物料需求日期')),
+    DataColumn(
+      label: Text('最新BOM需求数量'),
+      numeric: true,
+    ),
+    DataColumn(label: Text('批次')),
+    DataColumn(
+      label: Text('需求数量'),
       numeric: true,
     ),
     DataColumn(
-      label: Text('page_molding_pack_area_report_table_hint9'.tr),
+      label: Text('已领数量'),
       numeric: true,
     ),
     DataColumn(
-      label: Text('page_molding_pack_area_report_table_hint10'.tr),
+      label: Text('未领数量'),
       numeric: true,
     ),
     DataColumn(
-      label: Text('page_molding_pack_area_report_table_hint11'.tr),
-      numeric: true,
-    ),
-    DataColumn(
-      label: Text('page_molding_pack_area_report_table_hint12'.tr),
-      numeric: true,
-    ),
-    DataColumn(
-      label: Text('page_molding_pack_area_report_table_hint13'.tr),
-      numeric: true,
-    ),
-    DataColumn(
-      label: Text('page_molding_pack_area_report_table_hint14'.tr),
-      numeric: true,
-    ),
-    DataColumn(
-      label: Text('page_molding_pack_area_report_table_hint15'.tr),
-      numeric: true,
-    ),
-    DataColumn(
-      label: Text('page_molding_pack_area_report_table_hint16'.tr),
-      numeric: true,
-    ),
-    DataColumn(
-      label: Text('page_molding_pack_area_report_table_hint17'.tr),
+      label: Text('补单数量'),
       numeric: true,
     ),
   ];
@@ -80,21 +79,6 @@ class ProductionMaterialsReportState {
       cells: [
         DataCell(Text(data.departmentName.toString())),
         DataCell(Text(data.orderNo ?? '')),
-        DataCell(Text(data.clientOrderNumber ?? '')),
-        DataCell(Text(data.fetchDate ?? '')),
-        DataCell(Text(data.factoryType ?? '')),
-        DataCell(Text(data.color ?? '')),
-        DataCell(Text(data.orderQty.toShowString())),
-        DataCell(Text(data.orderPiece.toShowString())),
-        DataCell(Text(data.inPackAreaQty.toShowString())),
-        DataCell(Text(data.notInPackAreaQty.toShowString())),
-        DataCell(Text(data.distributedQty.toShowString())),
-        DataCell(Text(data.distributedPiece.toShowString())),
-        DataCell(Text(data.remainQty.toShowString())),
-        DataCell(Text(data.sapFinishQty.toShowString())),
-        DataCell(Text(data.sapFinishPiece.toShowString())),
-        DataCell(Text(data.sapUnFinishQty.toShowString())),
-        DataCell(Text(data.sapUnFinishPiece.toShowString())),
       ],
     );
   }
