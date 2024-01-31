@@ -22,6 +22,7 @@ class PropertyInfo {
       this.processStatus, 
       this.labelPrintQty, 
       this.sapCgOrderNo,
+      this.sapInvoiceNo,
       this.visitedNum,});
 
   PropertyInfo.fromJson(dynamic json) {
@@ -35,6 +36,7 @@ class PropertyInfo {
     processStatus = json['ProcessStatus'];
     labelPrintQty = json['LabelPrintQty'];
     sapCgOrderNo = json['SAPCgOrderNo'];
+    sapInvoiceNo = json['SAPINVOICENO'];
     visitedNum = json['VisitedNum'];
   }
   bool isChecked=false;
@@ -48,6 +50,7 @@ class PropertyInfo {
   String? processStatus;//0未审核 1审核中 2已审核
   int? labelPrintQty;
   String? sapCgOrderNo;
+  String? sapInvoiceNo;
   int? visitedNum;
 
   Map<String, dynamic> toJson() {
@@ -62,6 +65,7 @@ class PropertyInfo {
     map['ProcessStatus'] = processStatus;
     map['LabelPrintQty'] = labelPrintQty;
     map['SAPCgOrderNo'] = sapCgOrderNo;
+    map['SAPINVOICENO'] = sapInvoiceNo;
     map['VisitedNum'] = visitedNum;
     return map;
   }

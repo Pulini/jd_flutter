@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/route.dart';
 
-import '../../../utils.dart';
 import '../../../widget/custom_widget.dart';
 import '../../../widget/picker/picker_view.dart';
 import 'molding_pack_area_report_logic.dart';

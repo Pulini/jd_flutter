@@ -7,6 +7,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import '../bean/home_button.dart';
 import '../constant.dart';
 import '../utils.dart';
+import '../widget/custom_widget.dart';
 import 'home_logic.dart';
 import 'home_setting_view.dart';
 

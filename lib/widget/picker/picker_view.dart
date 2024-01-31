@@ -6,6 +6,7 @@ import 'package:jd_flutter/utils.dart';
 import 'package:jd_flutter/widget/picker/picker_controller.dart';
 import 'package:marquee/marquee.dart';
 
+import '../custom_widget.dart';
 import 'picker_item.dart';
 
 class DatePicker extends StatelessWidget {
@@ -48,7 +49,7 @@ class DatePicker extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                pickerController.getDateFormatYMD(),
+                getDateYMD(time: pickerController.pickDate.value),
                 style: const TextStyle(color: Colors.black),
               ),
               ElevatedButton(

@@ -4,8 +4,6 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:image_cropper/image_cropper.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:jd_flutter/utils.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -14,6 +12,7 @@ import '../http/request/user_avatar.dart';
 import '../http/response/department.dart';
 import '../http/response/home_function_info.dart';
 import '../http/web_api.dart';
+import '../widget/custom_widget.dart';
 import '../widget/dialogs.dart';
 import 'home_state.dart';
 
@@ -70,77 +69,13 @@ class HomeLogic extends GetxController {
   }
 
   ///底部弹窗
-  takePhoto() {
-    showCupertinoModalPopup(
-      context: Get.overlayContext!,
-      builder: (BuildContext context) => CupertinoActionSheet(
-        title: Text('home_user_setting_avatar_photo_sheet_title'.tr),
-        message: Text('home_user_setting_avatar_photo_sheet_message'.tr),
-        actions: <CupertinoActionSheetAction>[
-          CupertinoActionSheetAction(
-            isDefaultAction: true,
-            onPressed: () {
-              Get.back();
-              changeUserAvatar(false);
-            },
-            child: Text('home_user_setting_avatar_photo_sheet_take_photo'.tr),
-          ),
-          CupertinoActionSheetAction(
-            isDefaultAction: true,
-            onPressed: () {
-              Get.back();
-              changeUserAvatar(true);
-            },
-            child: Text('home_user_setting_avatar_photo_sheet_select_photo'.tr),
-          ),
-          CupertinoActionSheetAction(
-            isDefaultAction: true,
-            onPressed: () => Get.back(),
-            child: Text('dialog_default_cancel'.tr),
-          ),
-        ],
-      ),
-    );
-  }
-
-  ///获取照片
-  changeUserAvatar(bool isGallery) async {
-    //获取照片
-    var xFile = await ImagePicker().pickImage(
-      imageQuality: 75,
-      maxWidth: 700,
-      maxHeight: 700,
-      source: isGallery ? ImageSource.gallery : ImageSource.camera,
-    );
-    var cFile = await ImageCropper().cropImage(
-      sourcePath: xFile!.path,
-      aspectRatio: const CropAspectRatio(ratioX: 1, ratioY: 1),
-      aspectRatioPresets: [CropAspectRatioPreset.square],
-      uiSettings: [
-        AndroidUiSettings(
-          toolbarTitle: 'cropper_title'.tr,
-          toolbarColor: Colors.blueAccent,
-          toolbarWidgetColor: Colors.white,
-          initAspectRatio: CropAspectRatioPreset.square,
-          lockAspectRatio: true,
-        ),
-        IOSUiSettings(
-          title: 'cropper_title'.tr,
-          cancelButtonTitle: 'cropper_cancel'.tr,
-          doneButtonTitle: 'cropper_confirm'.tr,
-          aspectRatioPickerButtonHidden: true,
-          resetAspectRatioEnabled: false,
-          aspectRatioLockEnabled: true,
-        ),
-        WebUiSettings(context: Get.overlayContext!),
-      ],
-    );
-    if (cFile != null) {
+  takeAvatarPhoto() {
+    takePhoto((f) {
       httpPost(
         loading: 'home_user_setting_avatar_photo_submitting'.tr,
         method: webApiChangeUserAvatar,
         body: UserAvatar(
-          imageBase64: File(cFile.path).toBase64(),
+          imageBase64: File(f.path).toBase64(),
           empID: userInfo!.empID!,
           userID: userInfo!.userID!,
         ),
@@ -154,7 +89,7 @@ class HomeLogic extends GetxController {
           errorDialog(content: changeAvatarCallback.message);
         }
       });
-    }
+    }, title: 'home_user_setting_avatar_photo_sheet_title'.tr);
   }
 
   ///部门列表弹窗

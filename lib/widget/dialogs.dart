@@ -42,6 +42,46 @@ informationDialog({
   );
 }
 
+///  咨询弹窗
+askDialog({
+  String title = '',
+  required String? content,
+  Function()? confirm,
+  Function()? cancel,
+}) {
+  Get.dialog(
+    PopScope(
+      //拦截返回键
+      canPop: false,
+      child: AlertDialog(
+        title: Text(title.isEmpty ? 'dialog_default_title'.tr : title,
+            style: const TextStyle(color: Colors.black)),
+        content: Text(content ?? ''),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Get.back();
+              confirm?.call();
+            },
+            child: Text('dialog_default_confirm'.tr),
+          ),
+          TextButton(
+            onPressed: () {
+              Get.back();
+              cancel?.call();
+            },
+            child: Text(
+              'dialog_default_cancel'.tr,
+              style: const TextStyle(color: Colors.grey),
+            ),
+          ),
+        ],
+      ),
+    ),
+    barrierDismissible: false, //拦截dialog外部点击
+  );
+}
+
 /// 提示弹窗
 successDialog({
   String title = '',

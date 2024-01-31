@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import '../constant.dart';
 import '../login/login_view.dart';
 import '../utils.dart';
+import '../widget/custom_widget.dart';
 import '../widget/dialogs.dart';
 import 'home_logic.dart';
 
@@ -67,7 +68,7 @@ class _UserSettingState extends State<UserSetting> {
         width: 200,
         height: 200,
         child: GestureDetector(
-          onTap: () => logic.takePhoto(),
+          onTap: () => logic.takeAvatarPhoto(),
           child: Hero(
             tag: 'user',
             child: logic.userAvatar,

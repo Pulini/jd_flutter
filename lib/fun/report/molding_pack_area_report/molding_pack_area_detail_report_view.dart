@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../utils.dart';
+import '../../../widget/custom_widget.dart';
 import 'molding_pack_area_report_logic.dart';
 
 class MoldingPackAreaDetailReportPage extends StatefulWidget {

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../route.dart';
-import '../../../utils.dart';
+import '../../../widget/custom_widget.dart';
 import 'workshop_production_daily_report_logic.dart';
 
 class WorkshopProductionDailyReportPage extends StatefulWidget {

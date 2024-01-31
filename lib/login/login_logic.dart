@@ -11,6 +11,7 @@ import '../home/home_view.dart';
 import '../http/response/user_info.dart';
 import '../http/web_api.dart';
 import '../utils.dart';
+import '../widget/custom_widget.dart';
 import '../widget/dialogs.dart';
 import '../widget/downloader.dart';
 import 'login_state.dart';

@@ -9,6 +9,7 @@ import '../../../http/request/molding_scan_bulletin_sort.dart';
 import '../../../http/response/molding_scan_bulletin_report_info.dart';
 import '../../../http/web_api.dart';
 import '../../../route.dart';
+import '../../../widget/custom_widget.dart';
 import '../../../widget/dialogs.dart';
 import 'molding_scan_bulletin_report_state.dart';
 

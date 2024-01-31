@@ -1,6 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
+
+import '../utils.dart';
 
 ///数字输入框 ios端添加 done 按钮
 class NumberTextField extends StatefulWidget {
@@ -176,4 +182,334 @@ class TextContainer extends StatelessWidget {
     );
   }
 }
+///app 背景渐变色
+var backgroundColor = const BoxDecoration(
+  gradient: LinearGradient(
+    colors: [
+      Color.fromARGB(0xff, 0xe4, 0xe8, 0xda),
+      Color.fromARGB(0xff, 0xba, 0xe9, 0xed)
+    ],
+    begin: Alignment.bottomLeft,
+    end: Alignment.topRight,
+  ),
+);
 
+pageBody({
+  required String title,
+  List<Widget>? actions,
+  required Widget? body,
+}) {
+  return Container(
+    decoration: backgroundColor,
+    child: Scaffold(
+      backgroundColor: Colors.transparent,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        title: Text(title),
+        actions: [
+          ...?actions,
+        ],
+      ),
+      body: body,
+    ),
+  );
+}
+
+pageBodyWithBottomSheet({
+  required String title,
+  List<Widget>? actions,
+  required List<Widget> bottomSheet,
+  required Function query,
+  required Widget? body,
+}) {
+  return Container(
+    decoration: backgroundColor,
+    child: Scaffold(
+      backgroundColor: Colors.transparent,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        title: Text(title),
+        actions: [
+          ...?actions,
+          Builder(
+            //不加builder会导致openDrawer崩溃
+            builder: (context) => IconButton(
+              icon: const Icon(Icons.search),
+              onPressed: () {
+                showSheet(
+                  context,
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const SizedBox(height: 30),
+                      ...bottomSheet,
+                      const SizedBox(height: 30),
+                      Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.blueAccent,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(25),
+                              ),
+                            ),
+                            onPressed: () {
+                              Navigator.pop(context);
+                              query.call();
+                            },
+                            child: Text(
+                              'page_title_with_drawer_query'.tr,
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  scrollControlled: true,
+                );
+              },
+            ),
+          )
+        ],
+      ),
+      body: body,
+    ),
+  );
+}
+
+
+///页面简单框架
+pageBodyWithDrawer({
+  required String title,
+  List<Widget>? actions,
+  required List<Widget> children,
+  required Function query,
+  required Widget? body,
+}) {
+  return Container(
+    decoration: backgroundColor,
+    child: Scaffold(
+      backgroundColor: Colors.transparent,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        title: Text(title),
+        actions: [
+          ...?actions,
+          Builder(
+            //不加builder会导致openDrawer崩溃
+            builder: (context) => IconButton(
+              icon: const Icon(Icons.search),
+              onPressed: () {
+                Scaffold.of(context).openEndDrawer();
+              },
+            ),
+          )
+        ],
+      ),
+      endDrawer: Drawer(
+        child: ListView(children: [
+          const SizedBox(height: 30),
+          ...children,
+          const SizedBox(height: 30),
+          Padding(
+            padding: const EdgeInsets.all(10),
+            child: SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blueAccent,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                ),
+                onPressed: () {
+                  query.call();
+                },
+                child: Text(
+                  'page_title_with_drawer_query'.tr,
+                  style: const TextStyle(color: Colors.white),
+                ),
+              ),
+            ),
+          ),
+        ]),
+      ),
+      body: body,
+    ),
+  );
+}
+
+takePhoto(Function(File) callback, {String? title}) {
+  showCupertinoModalPopup(
+    context: Get.overlayContext!,
+    builder: (BuildContext context) => CupertinoActionSheet(
+      title: title != null
+          ? Text('home_user_setting_avatar_photo_sheet_title'.tr)
+          : null,
+      message: Text('take_photo_sheet_message'.tr),
+      actions: <CupertinoActionSheetAction>[
+        CupertinoActionSheetAction(
+          isDefaultAction: true,
+          onPressed: () {
+            Get.back();
+            _takePhoto(false, callback);
+          },
+          child: Text('take_photo_photo_sheet_take_photo'.tr),
+        ),
+        CupertinoActionSheetAction(
+          isDefaultAction: true,
+          onPressed: () {
+            Get.back();
+            _takePhoto(true, callback);
+          },
+          child: Text('take_photo_photo_sheet_select_photo'.tr),
+        ),
+        CupertinoActionSheetAction(
+          isDefaultAction: true,
+          onPressed: () => Get.back(),
+          child: Text('dialog_default_cancel'.tr),
+        ),
+      ],
+    ),
+  );
+}
+
+///获取照片
+_takePhoto(bool isGallery, Function(File) callback) async {
+  //获取照片
+  var xFile = await ImagePicker().pickImage(
+    imageQuality: 75,
+    maxWidth: 700,
+    maxHeight: 700,
+    source: isGallery ? ImageSource.gallery : ImageSource.camera,
+  );
+  var cFile = await ImageCropper().cropImage(
+    sourcePath: xFile!.path,
+    aspectRatio: const CropAspectRatio(ratioX: 1, ratioY: 1),
+    aspectRatioPresets: [CropAspectRatioPreset.square],
+    uiSettings: [
+      AndroidUiSettings(
+        toolbarTitle: 'cropper_title'.tr,
+        toolbarColor: Colors.blueAccent,
+        toolbarWidgetColor: Colors.white,
+        initAspectRatio: CropAspectRatioPreset.square,
+        lockAspectRatio: true,
+      ),
+      IOSUiSettings(
+        title: 'cropper_title'.tr,
+        cancelButtonTitle: 'cropper_cancel'.tr,
+        doneButtonTitle: 'cropper_confirm'.tr,
+        aspectRatioPickerButtonHidden: true,
+        resetAspectRatioEnabled: false,
+        aspectRatioLockEnabled: true,
+      ),
+      WebUiSettings(context: Get.overlayContext!),
+    ],
+  );
+  if (cFile != null) callback.call(File(cFile.path));
+}
+
+///显示SnackBar
+showSnackBar({required String title, required String message}) {
+  snackbarController = Get.snackbar(title, message,
+      margin: const EdgeInsets.all(10),
+      snackPosition: SnackPosition.BOTTOM,
+      backgroundColor: Colors.blueAccent,
+      colorText: Colors.white, snackbarStatus: (state) {
+        if (state == SnackbarStatus.CLOSED) snackbarController = null;
+      });
+}
+
+///选择器
+getCupertinoPicker(List<Widget> items, FixedExtentScrollController controller) {
+  return CupertinoPicker(
+    scrollController: controller,
+    diameterRatio: 1.5,
+    magnification: 1.2,
+    squeeze: 1.2,
+    useMagnifier: true,
+    itemExtent: 32,
+    onSelectedItemChanged: (value) {},
+    children: items,
+  );
+}
+
+///popup工具
+showPopup(Widget widget, {double? height}) {
+  showCupertinoModalPopup(
+    context: Get.overlayContext!,
+    builder: (BuildContext context) {
+      return AnimatedPadding(
+          padding: MediaQuery.of(context).viewInsets,
+          duration: const Duration(milliseconds: 100),
+          child: Container(
+            height: height ?? 260,
+            color: Colors.grey[200],
+            child: widget,
+          ));
+    },
+  );
+}
+
+Future<T?> showSheet<T>(
+    BuildContext context,
+    Widget body, {
+      bool scrollControlled = false,
+      Color bodyColor = Colors.white,
+      EdgeInsets? bodyPadding,
+      BorderRadius? borderRadius,
+    }) {
+  const radius = Radius.circular(16);
+  borderRadius ??= const BorderRadius.only(topLeft: radius, topRight: radius);
+  bodyPadding ??= const EdgeInsets.all(20);
+  return showModalBottomSheet(
+      context: context,
+      elevation: 0,
+      backgroundColor: bodyColor,
+      shape: RoundedRectangleBorder(borderRadius: borderRadius),
+      barrierColor: Colors.black.withOpacity(0.25),
+      // A处
+      constraints: BoxConstraints(
+          maxHeight: MediaQuery.of(context).size.height -
+              MediaQuery.of(context).viewPadding.top),
+      isScrollControlled: scrollControlled,
+      builder: (ctx) => Padding(
+        padding: EdgeInsets.only(
+          left: bodyPadding!.left,
+          top: bodyPadding.top,
+          right: bodyPadding.right,
+          // B处
+          bottom:
+          bodyPadding.bottom + MediaQuery.of(ctx).viewPadding.bottom,
+        ),
+        child: body,
+      ));
+}
+
+button(
+    String text,
+    Function() click, {
+      Color? backgroundColor,
+      Color? textColor,
+    }) {
+  return Padding(
+    padding: const EdgeInsets.only(top: 10),
+    child: SizedBox(
+      width: double.infinity,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: backgroundColor ?? Colors.blueAccent,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(25),
+          ),
+        ),
+        onPressed: click,
+        child: Text(text, style: TextStyle(color: textColor ?? Colors.white)),
+      ),
+    ),
+  );
+}

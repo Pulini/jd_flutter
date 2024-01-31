@@ -113,8 +113,8 @@ Future<BaseData> _doHttp(
   try {
     ///创建dio对象
     var dio = Dio(BaseOptions(
-      // baseUrl: testUrlForMES,
-      baseUrl: baseUrlForMES,
+      baseUrl: testUrlForMES,
+      // baseUrl: baseUrlForMES,
       connectTimeout: const Duration(minutes: 2),
       receiveTimeout: const Duration(minutes: 2),
     ))
@@ -289,3 +289,18 @@ const webApiPushProductionOrder =
 
 ///查询财产审核列表
 const webApiQueryProperty = 'api/FixedAsset/SearchUnnumberedProperty';
+
+///获取财产明细
+const webApiGetPropertyDetail = 'api/FixedAsset/GetAssetsByFInterID';
+
+///财产审核关闭
+const webApiPropertyClose = 'api/FixedAsset/AssetsRegistrationClose';
+
+///跳过财产验收
+const webApiSkipAcceptance = 'api/FixedAsset/CloseAssets';
+
+///更新财产信息
+const webApiUpdateProperty = 'api/FixedAsset/UpdateAssets';
+
+///检查员工数据
+const webApiCheckWorker = 'api/User/GetEmpByFNumber';

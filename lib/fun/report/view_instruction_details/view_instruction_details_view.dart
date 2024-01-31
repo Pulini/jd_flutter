@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import '../../../route.dart';
-import '../../../utils.dart';
 import '../../../widget/custom_widget.dart';
 import '../../../widget/picker/picker_view.dart';
 import 'view_instruction_details_logic.dart';

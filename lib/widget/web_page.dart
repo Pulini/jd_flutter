@@ -5,6 +5,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 import '../http/request/apply_authorization.dart';
 import '../http/web_api.dart';
 import '../utils.dart';
+import 'custom_widget.dart';
 import 'dialogs.dart';
 
 class WebPage extends StatelessWidget {

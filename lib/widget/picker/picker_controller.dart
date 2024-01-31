@@ -384,7 +384,7 @@ class DatePickerController extends PickerController {
   }
 
   String getDateFormatYMD() {
-    return '${pickDate.value.year}-${pickDate.value.month}-${pickDate.value.day}';
+    return getDateYMD(time: pickDate.value);
   }
 }
 

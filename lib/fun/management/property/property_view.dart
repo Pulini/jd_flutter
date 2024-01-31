@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/http/response/property_info.dart';
 import 'package:jd_flutter/route.dart';
-import 'package:jd_flutter/utils.dart';
 
 import '../../../widget/custom_widget.dart';
 import '../../../widget/picker/picker_view.dart';
@@ -21,148 +20,98 @@ class _PropertyPageState extends State<PropertyPage> {
 
   _item(PropertyInfo data) {
     return GestureDetector(
-      onTap: () {},
-      child: Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(5),
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(10),
-                topRight: Radius.circular(10),
-              ),
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  flex: 1,
-                  child: Text(
-                    '${data.name}<${data.number}>',
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
+      onTap: () => logic.getPropertyDetail(data.interID ?? -1),
+      child: Container(
+          margin: const EdgeInsets.only(bottom: 10),
+          padding: const EdgeInsets.all(5),
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: Text(
+                      '${data.name}<${data.number}>',
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
+                  if (data.visitedNum == 0)
+                    Text(
+                      'property_item_hint'.tr,
+                      style: const TextStyle(
+                        color: Colors.orange,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                ],
+              ),
+              SizedBox(
+                height: 20,
+                child: Row(
+                  children: [
+                    Text(
+                      'property_item_hint1'.tr,
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Text(
+                        data.sapInvoiceNo ?? '',
+                        style: TextStyle(
+                          color: Colors.blue[900],
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    Checkbox(
+                      value: data.isChecked,
+                      onChanged: (checked) {
+                        if (checked != null) {
+                          data.isChecked = checked;
+                          state.propertyList.refresh();
+                        }
+                      },
+                    )
+                  ],
                 ),
-                if (data.visitedNum == 0)
+              ),
+              Row(
+                children: [
+                  Text('property_item_hint3'.tr),
                   Text(
-                    'property_item_hint'.tr,
-                    style: const TextStyle(
-                      color: Colors.orange,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    data.address ?? '',
+                    style: const TextStyle(color: Colors.green),
                   ),
-              ],
-            ),
-          ),
-          Container(
-            height: 20,
-            padding: const EdgeInsets.only(left: 5, right: 5),
-            color: Colors.white,
-            child: Row(
-              children: [
-                Text(
-                  'property_item_hint1'.tr,
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: Text(
-                    data.sapCgOrderNo ?? '',
-                    style: TextStyle(
-                      color: Colors.blue[900],
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                Checkbox(
-                  value: data.isChecked,
-                  onChanged: (checked) {
-                    if (checked != null) {
-                      data.isChecked = checked;
-                      state.propertyList.refresh();
-                    }
-                  },
-                )
-              ],
-            ),
-          ),
-          Container(
-            height: 20,
-            padding: const EdgeInsets.only(left: 5, right: 5),
-            color: Colors.white,
-            child: Row(
-              children: [
-                Text('property_item_hint2'.tr),
-                Text(
-                  data.custodianName ?? '',
-                  style: const TextStyle(color: Colors.green),
-                ),
-              ],
-            ),
-          ),
-          Container(
-            height: 20,
-            padding: const EdgeInsets.only(left: 5, right: 5),
-            color: Colors.white,
-            child: Row(
-              children: [
-                Text('property_item_hint3'.tr),
-                Text(
-                  data.address ?? '',
-                  style: const TextStyle(color: Colors.green),
-                ),
-              ],
-            ),
-          ),
-          Container(
-            height: 20,
-            padding: const EdgeInsets.only(left: 5, right: 5),
-            color: Colors.white,
-            child: Row(
-              children: [
-                Text('property_item_hint4'.tr),
-                Text(data.buyDate ?? ''),
-              ],
-            ),
-          ),
-          Container(
-            height: 20,
-            padding: const EdgeInsets.only(left: 5, right: 5),
-            color: Colors.white,
-            child: Row(
-              children: [
-                Text('property_item_hint5'.tr),
-                Text(data.writeDate ?? ''),
-              ],
-            ),
-          ),
-          Container(
-            height: 25,
-            padding: const EdgeInsets.only(bottom: 5, right: 5),
-            margin: const EdgeInsets.only(bottom: 10),
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(10),
-                bottomRight: Radius.circular(10),
+                ],
               ),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Text('property_item_hint6'.tr),
-                Text('${data.labelPrintQty}'),
-              ],
-            ),
-          ),
-        ],
-      ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text('property_item_hint2'.tr),
+                  Expanded(
+                    flex: 1,
+                    child: Text(
+                      data.custodianName ?? '',
+                      style: const TextStyle(color: Colors.green),
+                    ),
+                  ),
+                  Text('property_item_hint4'.tr),
+                  Text('${data.labelPrintQty}'),
+                ],
+              ),
+            ],
+          )),
     );
   }
 
@@ -246,7 +195,7 @@ class _PropertyPageState extends State<PropertyPage> {
                     )),
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 10,right: 10,bottom: 15),
+                padding: const EdgeInsets.only(left: 10, right: 10, bottom: 15),
                 child: SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(

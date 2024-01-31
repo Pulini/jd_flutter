@@ -18,6 +18,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'http/response/user_info.dart';
 import 'http/response/version_info.dart';
+import 'http/response/worker_info.dart';
 import 'http/web_api.dart';
 
 late SharedPreferences sharedPreferences;
@@ -136,18 +137,6 @@ hideKeyBoard() {
   SystemChannels.textInput.invokeMethod('TextInput.hide');
 }
 
-///app 背景渐变色
-var backgroundColor = const BoxDecoration(
-  gradient: LinearGradient(
-    colors: [
-      Color.fromARGB(0xff, 0xe4, 0xe8, 0xda),
-      Color.fromARGB(0xff, 0xba, 0xe9, 0xed)
-    ],
-    begin: Alignment.bottomLeft,
-    end: Alignment.topRight,
-  ),
-);
-
 ///BuildContext扩展
 extension ContextExt on BuildContext {
   ///是否是大屏幕
@@ -184,6 +173,22 @@ extension FileExt on File {
 extension StringExt on String {
   String md5Encode() =>
       md5.convert(const Utf8Encoder().convert(this)).toString();
+
+  double toDoubleTry() {
+    try {
+      return double.parse(this);
+    } on Exception catch (_) {
+      return 0.0;
+    }
+  }
+
+  int toIntTry() {
+    try {
+      return int.parse(this);
+    } on Exception catch (_) {
+      return 0;
+    }
+  }
 }
 
 extension RequestOptionsExt on RequestOptions {
@@ -198,275 +203,6 @@ extension RequestOptionsExt on RequestOptions {
     map['data'] = data;
     logger.f(map);
   }
-}
-
-///获取服务器版本信息
-getVersionInfo(
-  bool showLoading, {
-  required Function noUpdate,
-  required Function(VersionInfo) needUpdate,
-}) {
-  httpGet(
-    method: webApiCheckVersion,
-    loading: showLoading ? 'checking_version'.tr : '',
-  ).then((versionInfoCallback) {
-    if (versionInfoCallback.resultCode == resultSuccess) {
-      logger.i(packageInfo);
-      var versionInfo =
-          VersionInfo.fromJson(jsonDecode(versionInfoCallback.data));
-      // versionInfo.versionName = '2.0.0';
-      // versionInfo.force = false;
-      // versionInfo.url =
-      //     'https://geapp.goldemperor.com:8021/AndroidUpdate/GoldEmperor/GE1.0.73.apk';
-      if (packageInfo.version == versionInfo.versionName) {
-        noUpdate.call();
-      } else {
-        needUpdate.call(versionInfo);
-      }
-    } else {
-      errorDialog(content: versionInfoCallback.message);
-    }
-  });
-}
-
-///更新app
-upData() {
-  httpGet(
-    method: webApiCheckVersion,
-    loading: 'checking_version'.tr,
-  ).then((versionInfoCallback) {
-    if (versionInfoCallback.resultCode == resultSuccess) {
-      logger.i(packageInfo);
-      doUpdate(VersionInfo.fromJson(jsonDecode(versionInfoCallback.data)));
-    } else {
-      errorDialog(content: versionInfoCallback.message);
-    }
-  });
-}
-
-///显示SnackBar
-showSnackBar({required String title, required String message}) {
-  snackbarController = Get.snackbar(title, message,
-      margin: const EdgeInsets.all(10),
-      snackPosition: SnackPosition.BOTTOM,
-      backgroundColor: Colors.blueAccent,
-      colorText: Colors.white, snackbarStatus: (state) {
-    if (state == SnackbarStatus.CLOSED) snackbarController = null;
-  });
-}
-
-///选择器
-getCupertinoPicker(List<Widget> items, FixedExtentScrollController controller) {
-  return CupertinoPicker(
-    scrollController: controller,
-    diameterRatio: 1.5,
-    magnification: 1.2,
-    squeeze: 1.2,
-    useMagnifier: true,
-    itemExtent: 32,
-    onSelectedItemChanged: (value) {},
-    children: items,
-  );
-}
-
-///popup工具
-showPopup(Widget widget, {double? height}) {
-  showCupertinoModalPopup(
-    context: Get.overlayContext!,
-    builder: (BuildContext context) {
-      return AnimatedPadding(
-          padding: MediaQuery.of(context).viewInsets,
-          duration: const Duration(milliseconds: 100),
-          child: Container(
-            height: height ?? 260,
-            color: Colors.grey[200],
-            child: widget,
-          ));
-    },
-  );
-}
-
-pageBody({
-  required String title,
-  List<Widget>? actions,
-  required Widget? body,
-}) {
-  return Container(
-    decoration: backgroundColor,
-    child: Scaffold(
-      backgroundColor: Colors.transparent,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        title: Text(title),
-        actions: [
-          ...?actions,
-        ],
-      ),
-      body: body,
-    ),
-  );
-}
-
-pageBodyWithBottomSheet({
-  required String title,
-  List<Widget>? actions,
-  required List<Widget> bottomSheet,
-  required Function query,
-  required Widget? body,
-}) {
-  return Container(
-    decoration: backgroundColor,
-    child: Scaffold(
-      backgroundColor: Colors.transparent,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        title: Text(title),
-        actions: [
-          ...?actions,
-          Builder(
-            //不加builder会导致openDrawer崩溃
-            builder: (context) => IconButton(
-              icon: const Icon(Icons.search),
-              onPressed: () {
-                showSheet(
-                  context,
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      const SizedBox(height: 30),
-                      ...bottomSheet,
-                      const SizedBox(height: 30),
-                      Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.blueAccent,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(25),
-                              ),
-                            ),
-                            onPressed: () {
-                              Navigator.pop(context);
-                              query.call();
-                            },
-                            child: Text(
-                              'page_title_with_drawer_query'.tr,
-                              style: const TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  scrollControlled: true,
-                );
-              },
-            ),
-          )
-        ],
-      ),
-      body: body,
-    ),
-  );
-}
-
-Future<T?> showSheet<T>(
-  BuildContext context,
-  Widget body, {
-  bool scrollControlled = false,
-  Color bodyColor = Colors.white,
-  EdgeInsets? bodyPadding,
-  BorderRadius? borderRadius,
-}) {
-  const radius = Radius.circular(16);
-  borderRadius ??= const BorderRadius.only(topLeft: radius, topRight: radius);
-  bodyPadding ??= const EdgeInsets.all(20);
-  return showModalBottomSheet(
-      context: context,
-      elevation: 0,
-      backgroundColor: bodyColor,
-      shape: RoundedRectangleBorder(borderRadius: borderRadius),
-      barrierColor: Colors.black.withOpacity(0.25),
-      // A处
-      constraints: BoxConstraints(
-          maxHeight: MediaQuery.of(context).size.height -
-              MediaQuery.of(context).viewPadding.top),
-      isScrollControlled: scrollControlled,
-      builder: (ctx) => Padding(
-            padding: EdgeInsets.only(
-              left: bodyPadding!.left,
-              top: bodyPadding.top,
-              right: bodyPadding.right,
-              // B处
-              bottom:
-                  bodyPadding.bottom + MediaQuery.of(ctx).viewPadding.bottom,
-            ),
-            child: body,
-          ));
-}
-
-///页面简单框架
-pageBodyWithDrawer({
-  required String title,
-  List<Widget>? actions,
-  required List<Widget> children,
-  required Function query,
-  required Widget? body,
-}) {
-  return Container(
-    decoration: backgroundColor,
-    child: Scaffold(
-      backgroundColor: Colors.transparent,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        title: Text(title),
-        actions: [
-          ...?actions,
-          Builder(
-            //不加builder会导致openDrawer崩溃
-            builder: (context) => IconButton(
-              icon: const Icon(Icons.search),
-              onPressed: () {
-                Scaffold.of(context).openEndDrawer();
-              },
-            ),
-          )
-        ],
-      ),
-      endDrawer: Drawer(
-        child: ListView(children: [
-          const SizedBox(height: 30),
-          ...children,
-          const SizedBox(height: 30),
-          Padding(
-            padding: const EdgeInsets.all(10),
-            child: SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blueAccent,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                ),
-                onPressed: () {
-                  query.call();
-                },
-                child: Text(
-                  'page_title_with_drawer_query'.tr,
-                  style: const TextStyle(color: Colors.white),
-                ),
-              ),
-            ),
-          ),
-        ]),
-      ),
-      body: body,
-    ),
-  );
 }
 
 class TapUtil {
@@ -518,4 +254,86 @@ Future<void> goLaunch(Uri uri) async {
   if (!await launchUrl(uri)) {
     throw Exception('Could not launch $uri');
   }
+}
+
+///获取服务器版本信息
+getVersionInfo(
+  bool showLoading, {
+  required Function noUpdate,
+  required Function(VersionInfo) needUpdate,
+}) {
+  httpGet(
+    method: webApiCheckVersion,
+    loading: showLoading ? 'checking_version'.tr : '',
+  ).then((versionInfoCallback) {
+    if (versionInfoCallback.resultCode == resultSuccess) {
+      logger.i(packageInfo);
+      var versionInfo =
+          VersionInfo.fromJson(jsonDecode(versionInfoCallback.data));
+      // versionInfo.versionName = '2.0.0';
+      // versionInfo.force = false;
+      // versionInfo.url =
+      //     'https://geapp.goldemperor.com:8021/AndroidUpdate/GoldEmperor/GE1.0.73.apk';
+      if (packageInfo.version == versionInfo.versionName) {
+        noUpdate.call();
+      } else {
+        needUpdate.call(versionInfo);
+      }
+    } else {
+      errorDialog(content: versionInfoCallback.message);
+    }
+  });
+}
+
+///更新app
+upData() {
+  httpGet(
+    method: webApiCheckVersion,
+    loading: 'checking_version'.tr,
+  ).then((versionInfoCallback) {
+    if (versionInfoCallback.resultCode == resultSuccess) {
+      logger.i(packageInfo);
+      doUpdate(VersionInfo.fromJson(jsonDecode(versionInfoCallback.data)));
+    } else {
+      errorDialog(content: versionInfoCallback.message);
+    }
+  });
+}
+
+///检查工号
+checkWorker({
+  required String number,
+  String? department,
+  required Function(List<WorkerInfo>) workers,
+}) {
+  httpGet(method: webApiCheckWorker, query: {
+    'EmpNumber': number,
+    'DeptmentID': department,
+  }).then((worker) {
+    if (worker.resultCode == resultSuccess) {
+      var jsonList = jsonDecode(worker.data);
+      var list = <WorkerInfo>[];
+      for (var i = 0; i < jsonList.length; ++i) {
+        list.add(WorkerInfo.fromJson(jsonList[i]));
+      }
+      workers.call(list);
+    } else {
+      errorDialog(content: worker.message);
+    }
+  });
+}
+
+String getDateYMD({DateTime? time}) {
+  DateTime now;
+  if (time == null) {
+    now = DateTime.now();
+  } else {
+    now = time;
+  }
+  var y = now.year.toString();
+  var m = now.month.toString();
+  if (m.length == 1) m = '0$m';
+  var d = now.day.toString();
+  if (d.length == 1) d = '0$d';
+  return '$y-$m-$d';
 }
