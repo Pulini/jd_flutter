@@ -176,7 +176,7 @@ class PropertyLogic extends GetxController
   updatePropertyInfo() {
     httpPost(
       method: webApiUpdateProperty,
-      loading: 'property_detail_skipping_acceptance'.tr,
+      loading: 'property_detail_submitting'.tr,
       body: state.upDatePropertyBody(),
     ).then((response) {
       if (response.resultCode == resultSuccess) {

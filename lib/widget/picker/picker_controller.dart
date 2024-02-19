@@ -344,8 +344,10 @@ class DatePickerController extends PickerController {
   Rx<DateTime> pickDate = DateTime.now().obs;
   var enable = true.obs;
   final String? saveKey;
-  final DateTime? firstDate;
-  final DateTime? lastDate;
+  DateTime firstDate = DateTime(
+      DateTime.now().year - 1, DateTime.now().month, DateTime.now().day);
+  DateTime lastDate = DateTime(
+      DateTime.now().year, DateTime.now().month, DateTime.now().day + 7);
   final String? buttonName;
   final Function(DateTime)? onChanged;
   final Function(DateTime)? onSelected;
@@ -353,13 +355,20 @@ class DatePickerController extends PickerController {
   DatePickerController(
     super.pickerType, {
     this.saveKey,
-    this.firstDate,
-    this.lastDate,
+    DateTime? firstDate,
+    DateTime? lastDate,
     this.buttonName,
     this.onChanged,
     this.onSelected,
   }) {
-    pickDate.value = getSave();
+    var save = getSave();
+    if (firstDate != null) this.firstDate = firstDate;
+    if (lastDate != null) this.lastDate = lastDate;
+    if (this.firstDate.isAfter(save) == true) {
+      pickDate.value = this.firstDate;
+    } else {
+      pickDate.value = getSave();
+    }
     onSelected?.call(pickDate.value);
   }
 

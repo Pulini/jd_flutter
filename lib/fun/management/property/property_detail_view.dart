@@ -50,12 +50,12 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
     );
   }
 
-  _timePick(DateTime initialDate, Function(String) pickDate) {
+  _timePick(DateTime? initialDate, Function(String) pickDate) {
     var now = DateTime.now();
     showDatePicker(
       locale: View.of(Get.overlayContext!).platformDispatcher.locale,
       context: Get.overlayContext!,
-      initialDate: initialDate,
+      initialDate: initialDate ?? now,
       firstDate: DateTime(now.year - 1, now.month, now.day),
       lastDate: DateTime(now.year, now.month, now.day + 7), //最大可选日期
     ).then((date) {
@@ -66,8 +66,8 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
   }
 
   _textDate(String hint, String? date, Function(String) time) {
-    var dateTime =
-        date?.isEmpty == true ? DateTime.now() : DateTime.parse(date ?? '');
+    DateTime? dateTime;
+    if (date?.isNotEmpty == true) dateTime = DateTime.parse(date ?? '');
     return Row(
       children: [
         Container(
@@ -88,7 +88,12 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
                       color: Colors.white,
                       borderRadius: BorderRadius.all(Radius.circular(5)),
                     ),
-                    child: Text(getDateYMD(time: dateTime)),
+                    child: Text(
+                      dateTime == null ? "请选择时间" : getDateYMD(time: dateTime),
+                      style: TextStyle(
+                        color: dateTime == null ? Colors.red : Colors.black,
+                      ),
+                    ),
                   ),
                 )
               : Text(date ?? '', style: textStyle),

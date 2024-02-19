@@ -17,17 +17,15 @@ class DatePicker extends StatelessWidget {
   final DatePickerController pickerController;
 
   _showOptions() {
-    var now = DateTime.now();
     showDatePicker(
       locale: View.of(Get.overlayContext!).platformDispatcher.locale,
       context: Get.overlayContext!,
-      initialDate: pickerController.pickDate.value,
       //起始时间
-      firstDate: pickerController.firstDate ??
-          DateTime(now.year - 1, now.month, now.day),
+      initialDate: pickerController.pickDate.value,
       //最小可以选日期
-      lastDate: pickerController.lastDate ??
-          DateTime(now.year, now.month, now.day + 7), //最大可选日期
+      firstDate: pickerController.firstDate,
+      //最大可选日期
+      lastDate: pickerController.lastDate,
     ).then((date) {
       if (date != null) {
         pickerController.select(date);

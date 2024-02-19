@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:get/get.dart';
 import 'package:jd_flutter/http/response/property_detail_info.dart';
+import 'package:jd_flutter/http/web_api.dart';
 import 'package:jd_flutter/utils.dart';
 
 import '../../../http/request/update_porperty.dart';
@@ -51,6 +52,7 @@ class PropertyState {
   }
 
   bool checkData() {
+    logger.f(detail.toJson());
     if (detail.name?.isEmpty == true) {
       showSnackBar(title: '缺少数据', message: '请输入名称');
       return false;
@@ -83,7 +85,7 @@ class PropertyState {
       showSnackBar(title: '缺少数据', message: '请输入预计使用时长(月)');
       return false;
     }
-    if (detail.participator != null && detail.expectedLife! == -1) {
+    if (detail.participator != null && detail.participator! == -1) {
       showSnackBar(title: '缺少数据', message: '请输入参检人工号');
       return false;
     }
@@ -115,12 +117,13 @@ class PropertyState {
   }
 
   upDatePropertyBody() {
-    return UpdateProperty()
+   var upDataBody= UpdateProperty()
       ..address = detail.address
       ..assetPicture = assetPicture.value
       ..ratingPlatePicture = ratingPlatePicture.value
       ..deptID = detail.deptID
       ..guaranteePeriod = detail.guaranteePeriod
+      ..expectedLife = detail.expectedLife
       ..interID = detail.interID
       ..keepEmpID = detail.keepEmpID
       ..liableEmpID = detail.liableEmpID
@@ -136,5 +139,7 @@ class PropertyState {
       ..writeDate = detail.writeDate
       ..buyDate = detail.buyDate
       ..reviceDate = detail.reviceDate;
+   logger.f(upDataBody.toJson());
+    return upDataBody;
   }
 }

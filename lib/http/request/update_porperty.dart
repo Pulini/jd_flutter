@@ -5,6 +5,7 @@ class UpdateProperty {
     this.ratingPlatePicture,
     this.deptID,
     this.guaranteePeriod,
+    this.expectedLife,
     this.interID,
     this.keepEmpID,
     this.liableEmpID,
@@ -28,6 +29,7 @@ class UpdateProperty {
     ratingPlatePicture=json['RatingPlatePicture'];
     deptID=json['DeptID'];
     guaranteePeriod=json['GuaranteePeriod'];
+    expectedLife=json['ExpectedLife'];
     interID=json['InterID'];
     keepEmpID=json['KeepEmpID'];
     liableEmpID=json['LiableEmpID'];
@@ -50,6 +52,7 @@ class UpdateProperty {
   String? ratingPlatePicture;//固定资产图片（base64格式）
   int? deptID;//保管部门
   String? guaranteePeriod;//财产保修期
+  int? expectedLife;//预计使用寿命
   int? interID;//id
   int? keepEmpID;//保管人
   int? liableEmpID;//责任人
@@ -74,6 +77,7 @@ class UpdateProperty {
     map['RatingPlatePicture']=ratingPlatePicture;
     map['DeptID']=deptID;
     map['GuaranteePeriod']=guaranteePeriod;
+    map['ExpectedLife']=expectedLife;
     map['InterID']=interID;
     map['KeepEmpID']=keepEmpID;
     map['LiableEmpID']=liableEmpID;

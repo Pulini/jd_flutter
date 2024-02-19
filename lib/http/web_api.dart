@@ -99,7 +99,7 @@ Future<BaseData> _doHttp(
 
   ///设置请求的headers
   var options = Options(headers: {
-    // 'Content-Type': 'application/json',
+    'Content-Type': 'application/json',
     'FunctionID': nowFunction?.id ?? '0',
     'Version': nowFunction?.version ?? 0,
     'Language': language,

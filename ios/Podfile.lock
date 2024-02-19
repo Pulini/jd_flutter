@@ -2,17 +2,8 @@ PODS:
   - device_info_plus (0.0.1):
     - Flutter
   - Flutter (1.0.0)
-  - flutter_hms_scan_kit (1.1.2):
-    - Flutter
-    - ScanKitFrameWork (~> 1.1.0.306)
   - flutter_native_splash (0.0.1):
     - Flutter
-  - flutter_scankit (0.0.1):
-    - Flutter
-    - ScanKitFrameWork (~> 1.1.0.306)
-  - fluttertoast (0.0.2):
-    - Flutter
-    - Toast
   - image_cropper (0.0.4):
     - Flutter
     - TOCropViewController (~> 2.6.1)
@@ -23,13 +14,11 @@ PODS:
   - path_provider_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
-  - permission_handler_apple (9.1.1):
+  - permission_handler_apple (9.3.0):
     - Flutter
-  - ScanKitFrameWork (1.1.0.306)
   - shared_preferences_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
-  - Toast (4.1.0)
   - TOCropViewController (2.6.1)
   - url_launcher_ios (0.0.1):
     - Flutter
@@ -39,10 +28,7 @@ PODS:
 DEPENDENCIES:
   - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
   - Flutter (from `Flutter`)
-  - flutter_hms_scan_kit (from `.symlinks/plugins/flutter_hms_scan_kit/ios`)
   - flutter_native_splash (from `.symlinks/plugins/flutter_native_splash/ios`)
-  - flutter_scankit (from `.symlinks/plugins/flutter_scankit/ios`)
-  - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - image_cropper (from `.symlinks/plugins/image_cropper/ios`)
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
@@ -54,8 +40,6 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
-    - ScanKitFrameWork
-    - Toast
     - TOCropViewController
 
 EXTERNAL SOURCES:
@@ -63,14 +47,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/device_info_plus/ios"
   Flutter:
     :path: Flutter
-  flutter_hms_scan_kit:
-    :path: ".symlinks/plugins/flutter_hms_scan_kit/ios"
   flutter_native_splash:
     :path: ".symlinks/plugins/flutter_native_splash/ios"
-  flutter_scankit:
-    :path: ".symlinks/plugins/flutter_scankit/ios"
-  fluttertoast:
-    :path: ".symlinks/plugins/fluttertoast/ios"
   image_cropper:
     :path: ".symlinks/plugins/image_cropper/ios"
   image_picker_ios:
@@ -91,18 +69,13 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   device_info_plus: c6fb39579d0f423935b0c9ce7ee2f44b71b9fce6
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
-  flutter_hms_scan_kit: b8be18f030dc2a810b01d26a2384dc2ce4aad11f
   flutter_native_splash: 52501b97d1c0a5f898d687f1646226c1f93c56ef
-  flutter_scankit: 9287d79d02699b3f7975835cee2fae2517f62585
-  fluttertoast: fafc4fa4d01a6a9e4f772ecd190ffa525e9e2d9c
   image_cropper: a3291c624a953049bc6a02e1f8c8ceb162a24b25
   image_picker_ios: 99dfe1854b4fa34d0364e74a78448a0151025425
   package_info_plus: 115f4ad11e0698c8c1c5d8a689390df880f47e85
   path_provider_foundation: 3784922295ac71e43754bd15e0653ccfd36a147c
-  permission_handler_apple: e76247795d700c14ea09e3a2d8855d41ee80a2e6
-  ScanKitFrameWork: 25a6ba4adae30de08c358c27152d7a8ed4ca80ab
+  permission_handler_apple: 036b856153a2b1f61f21030ff725f3e6fece2b78
   shared_preferences_foundation: b4c3b4cddf1c21f02770737f147a3f5da9d39695
-  Toast: ec33c32b8688982cecc6348adeae667c1b9938da
   TOCropViewController: edfd4f25713d56905ad1e0b9f5be3fbe0f59c863
   url_launcher_ios: bbd758c6e7f9fd7b5b1d4cde34d2b95fcce5e812
   webview_flutter_wkwebview: be0f0d33777f1bfd0c9fdcb594786704dbf65f36
