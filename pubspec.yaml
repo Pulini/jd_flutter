@@ -85,6 +85,7 @@ dependencies:
   url_launcher: ^6.1.14
   #List扩展工具集
   collection: ^1.17.2
+  flutter_blue_plus: ^1.31.15
 
 
 
