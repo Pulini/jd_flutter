@@ -1,4 +1,4 @@
-package com.jd.pzx.jd_flutter
+package com.jd.pzx.jd_flutter.utils
 
 import android.app.Activity
 import android.content.Context

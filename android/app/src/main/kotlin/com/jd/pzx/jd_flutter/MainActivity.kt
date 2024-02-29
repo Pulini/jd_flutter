@@ -19,8 +19,15 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.gson.Gson
 import com.jd.pzx.jd_flutter.LivenFaceVerificationActivity.Companion.startOneselfFaceVerification
-import com.jd.pzx.jd_flutter.bluetooth.*
 import com.jd.pzx.jd_flutter.messageCenter.JMessage
+import com.jd.pzx.jd_flutter.utils.CHANNEL_ANDROID_SEND
+import com.jd.pzx.jd_flutter.utils.CHANNEL_FLUTTER_SEND
+import com.jd.pzx.jd_flutter.utils.FACE_VERIFY_SUCCESS
+import com.jd.pzx.jd_flutter.utils.PRINTER_UUID
+import com.jd.pzx.jd_flutter.utils.REQUEST_BLUETOOTH_PERMISSIONS
+import com.jd.pzx.jd_flutter.utils.REQUEST_ENABLE_BT
+import com.jd.pzx.jd_flutter.utils.bitmapToBase64
+import com.jd.pzx.jd_flutter.utils.openFile
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
@@ -71,7 +78,7 @@ class MainActivity : FlutterActivity() {
                     }
 
                     "OpenFile" -> {
-                        temporaryFile= File(call.arguments.toString())
+                        temporaryFile = File(call.arguments.toString())
                         openFile(this, temporaryFile!!)
                     }
 

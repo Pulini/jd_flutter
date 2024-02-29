@@ -1,18 +1,15 @@
 buildscript {
-    ext.kotlin_version = '1.8.10'
     repositories {
         google()
         mavenCentral()
-        maven { url 'https://developer.huawei.com/repo/' }
+        // 配置HMS Core SDK的Maven仓地址。
+        maven {url 'https://developer.huawei.com/repo/'}
     }
-
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.3.0'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        // 增加AGC插件配置，请您参见AGC插件依赖关系选择合适的AGC插件版本。
         classpath 'com.huawei.agconnect:agcp:1.9.0.300'
     }
 }
-
 allprojects {
     repositories {
         google()

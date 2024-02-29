@@ -6,8 +6,8 @@ import android.view.WindowManager
 import android.widget.TextView
 import androidx.annotation.StringRes
 import com.jd.pzx.jd_flutter.R
-import com.jd.pzx.jd_flutter.dp2px
-import com.jd.pzx.jd_flutter.setDelayClickListener
+import com.jd.pzx.jd_flutter.utils.dp2px
+import com.jd.pzx.jd_flutter.utils.setDelayClickListener
 
 /**
  * File Name : InquiryDialog
