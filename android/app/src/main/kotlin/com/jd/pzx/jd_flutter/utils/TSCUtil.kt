@@ -9,14 +9,10 @@ import android.graphics.ColorMatrixColorFilter
 import android.graphics.Paint
 import android.graphics.Typeface
 import android.os.Build
-import android.os.SystemClock
 import android.text.Layout
 import android.text.StaticLayout
 import android.text.TextPaint
-import android.util.Log
-import java.util.UUID
 import kotlin.experimental.xor
-
 
 /**
  * Created by : PanZX on 2023/12/15
@@ -29,157 +25,9 @@ import kotlin.experimental.xor
  *
  * 使用前确保有蓝牙权限申请
  * 创建贴标会比较耗时，建议使用子线程进行创建
- * vm.loading.value = "生成贴标中..."
- *     Thread {
- *         val list = mutableListOf<ArrayList<ByteArray>>().apply {
- *             for (a in 0 until 20) {
- *                 add(
- *                     TSCUtil.colorsSeparationLabel(
- *                         "MaterialCode",
- *                         "PickUpCode",
- *                         "BatchNumber",
- *                         "DefaultStockName",
- *                         "200 Unit",
- *                         "Number"
- *                     )
- *                 )
- *             }
- *         }
- *         runOnUiThread {
- *             vm.loading.value = ""
- *             goPrint(list,false){success->
- *                 if (success){
- *                     vm.tips.value="完成"
- *                 }else{
- *                     vm.error.value="失败"
- *                 }
- *             }
- *         }
- *     }.start()
  */
 
-const val USB_STATE_READY = 0//USB已连接
-const val USB_STATE_NO_PERMISSION = 1//USB权限被拒绝
-const val USB_STATE_NOT_CONNECTED = 2//USB设备未连接
-
-const val BT_STATE_READY = 0//蓝牙设备已就绪
-const val BT_STATE_NOT_SUPPORTED = 1//该设备不支持蓝牙
-const val BT_STATE_CLOSED = 2//蓝牙被关闭
-const val BT_STATE_NOT_CONNECTED = 3//蓝牙设备未连接
-
 class TSCUtil(context: Context) {
-
-    /**
-     * usb工具
-     */
-    private var usbState = -1
-    private val usbUtil = USBUtil(context, 4611) { state -> usbState = state }
-
-
-
-    /**
-     * 刷新蓝牙适配器
-     */
-    fun refreshBleAdapter() {
-        bleUtil.refreshBleAdapter()
-    }
-
-    /**
-     * 注册设备监听
-     */
-    fun registerReceiver() {
-        usbUtil.registerReceiver()
-        bleUtil.registerReceiver()
-    }
-
-    /**
-     * 注销设备监听
-     */
-    fun unRegisterReceiver() {
-        usbUtil.unRegisterReceiver()
-        bleUtil.unregisterReceiver()
-    }
-
-    /**
-     * 打印前检测设备状态
-     */
-    fun printCheck(ready: () -> Unit) {
-        if (usbState == USB_STATE_READY) {
-            ready.invoke()
-        } else {
-            if (bleState == BT_STATE_READY) {
-                ready.invoke()
-            } else {
-//                bleUtil.sendCommandWithConnect(ready)
-            }
-        }
-    }
-
-    /**
-     * 发送单张标签打印指令
-     * 注：如设备已通过USB链接，则直接使用USB下发打印指令，否则掉起蓝牙连接模块，通过蓝牙发送指令。
-     */
-    fun printLabel(array: ArrayList<ByteArray>, callback: (Boolean) -> Unit) {
-        if (usbState == USB_STATE_READY) {
-            usbUtil.sendCommand(array, callback)
-            return
-        }
-        if (bleState == BT_STATE_READY) {
-            bleUtil.sendCommand(array, callback)
-            return
-        }
-        callback.invoke(false)
-    }
-
-    /**
-     * 发送打印指令
-     * 注：如设备已通过USB链接，则直接使用USB下发打印指令，否则掉起蓝牙连接模块，通过蓝牙发送指令。
-     */
-    private fun printLabel(array: ArrayList<ByteArray>) = if (usbState == USB_STATE_READY) {
-        usbUtil.sendCommand(array)
-    } else {
-        if (bleState == BT_STATE_READY) {
-            bleUtil.sendCommand(array)
-        } else {
-            false
-        }
-    }
-
-    /**
-     * 发送多张标签打印指令
-     * 注：如设备已通过USB链接，则直接使用USB下发打印指令，否则掉起蓝牙连接模块，通过蓝牙发送指令。
-     */
-    fun printLabelList(
-        list: MutableList<ArrayList<ByteArray>>,
-        finish: (Boolean) -> Unit
-    ) {
-
-        Thread {
-            Log.e("Pan","printLabelList=${list.size}")
-            try {
-                if (list.isNotEmpty()) {
-                    if (printLabel(list[0])) {
-                        list.removeAt(0)
-                        SystemClock.sleep(500)
-                        if (list.isEmpty()) {
-                            finish.invoke(true)
-                        } else {
-                            printLabelList(list, finish)
-                        }
-                    } else {
-                        finish.invoke(false)
-                    }
-                } else {
-                    finish.invoke(false)
-                }
-            } catch (e: Exception) {
-
-            }
-        }.start()
-    }
-
-//↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ 标签指令 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
-
     companion object {
         @Volatile
         private var instance: TSCUtil? = null

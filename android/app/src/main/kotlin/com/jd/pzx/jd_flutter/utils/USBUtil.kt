@@ -56,9 +56,9 @@ fun usbQuickSendCommand(
                     val usbConnection = usbManager.openDevice(device)
                     usbConnection?.claimInterface(usbInterface, true)
                     //串口打开成功 开始发送数据
+                    var index = 0
                     Thread {
                         try {
-                            var index = 0
                             var status: Int
                             do {
                                 val byte = bytesMerger(dataList[index])
@@ -74,17 +74,16 @@ fun usbQuickSendCommand(
                                     progress.invoke(index, dataList.size)
                                 }
                             } while (status == 0 && index <= dataList.size)
+
+                        } catch (e: Exception) {
+                            Log.e("Pan", "USB操作异常：发送数据失败", e)
+                        } finally {
                             runBlocking(Dispatchers.Main) {
                                 if (index == dataList.size) {
                                     sendCallback.invoke(SEND_COMMAND_STATE_SUCCESS)
                                 } else {
                                     sendCallback.invoke(SEND_COMMAND_STATE_PART_SUCCESS)
                                 }
-                            }
-                        } catch (e: Exception) {
-                            Log.e("Pan", "USB操作异常：发送数据失败", e)
-                            runBlocking(Dispatchers.Main) {
-                                sendCallback.invoke(SEND_COMMAND_STATE_FAILED)
                             }
                         }
                     }.start()
@@ -158,17 +157,6 @@ fun openPort(
     }
 }
 
-/**
- * 合并ByteArray
- */
-private fun bytesMerger(byteArray: List<ByteArray>) =
-    ByteArray(byteArray.sumOf { it.size }).apply {
-        var index = 0
-        for (bytes in byteArray) {
-            System.arraycopy(bytes, 0, this, index, bytes.size)
-            index += bytes.size
-        }
-    }
 
 /**
  * 发送长指令

@@ -669,3 +669,15 @@ private fun getFileMIME(file: File): String {
     Log.e("Pan","我定义的MIME类型为：$type")
     return type
 }
+
+/**
+ * 合并ByteArray
+ */
+fun bytesMerger(byteArray: List<ByteArray>) =
+    ByteArray(byteArray.sumOf { it.size }).apply {
+        var index = 0
+        for (bytes in byteArray) {
+            System.arraycopy(bytes, 0, this, index, bytes.size)
+            index += bytes.size
+        }
+    }

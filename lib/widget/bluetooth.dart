@@ -14,6 +14,10 @@ isConnected(Function(bool) connected) {
       .invokeMethod('IsConnected')
       .then((value) => connected(value));
 }
+checkBle(){
+  const MethodChannel(channelFlutterSend)
+      .invokeMethod('CheckBluetooth');
+}
 
 class BluetoothDialog extends StatefulWidget {
   const BluetoothDialog({super.key});

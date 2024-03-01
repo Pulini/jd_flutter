@@ -21,8 +21,6 @@ import android.hardware.usb.UsbManager.ACTION_USB_DEVICE_ATTACHED
 import android.hardware.usb.UsbManager.ACTION_USB_DEVICE_DETACHED
 import android.os.Build
 import android.util.Log
-import com.jd.pzx.jd_flutter.utils.USB_STATE_NO_PERMISSION
-import com.jd.pzx.jd_flutter.utils.USB_STATE_READY
 
 /**
  * Created by : PanZX on 2024/02/28
@@ -97,7 +95,7 @@ class DeviceReceiver : BroadcastReceiver() {
                         } else {
                             false
                         }
-                        if (hasPermission) USB_STATE_READY else USB_STATE_NO_PERMISSION
+//                        if (hasPermission) USB_STATE_READY else USB_STATE_NO_PERMISSION
                     }
                 }
             }

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../bluetooth.dart';
 import '../constant.dart';
 import '../login/login_view.dart';
 import '../utils.dart';
@@ -249,9 +247,8 @@ class _UserSettingState extends State<UserSetting> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(25))),
           onPressed: () {
-            bluetooth();
-            // spSave(spSaveUserInfo, '');
-            // Get.offAll(() => const LoginPage());
+            spSave(spSaveUserInfo, '');
+            Get.offAll(() => const LoginPage());
           },
           child: Text('home_user_setting_logout'.tr,
               style: const TextStyle(fontSize: 20))),

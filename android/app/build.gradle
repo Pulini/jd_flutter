@@ -45,24 +45,13 @@ android {
         applicationId "com.jd.pzx.jd_flutter"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdkVersion flutter.minSdkVersion
+//        minSdkVersion flutter.minSdkVersion
+        minSdkVersion 21
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
 
-        ndk {
-            //选择要添加的对应 cpu 类型的 .so 库。
-            abiFilters 'armeabi', 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
-            // 还可以添加 'x86', 'x86_64', 'mips', 'mips64'
-        }
 
-        manifestPlaceholders = [
-                JPUSH_PKGNAME: applicationId,
-                //JPush 上注册的包名对应的 Appkey.
-                JPUSH_APPKEY : "038491b7cfc3a1b0e579550d",
-                //暂时填写默认值即可.
-                JPUSH_CHANNEL: "developer-default",
-        ]
     }
 
     buildTypes {
@@ -84,7 +73,7 @@ dependencies {
     //JDK编译异常处理
     implementation(platform("org.jetbrains.kotlin:kotlin-bom:1.8.0"))
     //极光推送 https://docs.jiguang.cn/jpush/quickstart/Android_quick
-    implementation 'cn.jiguang.sdk:jpush:5.0.3'
+//    implementation 'cn.jiguang.sdk:jpush:5.0.3'
     //事件传输 https://github.com/greenrobot/EventBus
     implementation 'org.greenrobot:eventbus:3.3.1'
     //json解析 https://github.com/google/gson

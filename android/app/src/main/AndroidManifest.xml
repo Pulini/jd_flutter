@@ -26,7 +26,7 @@
 
     <application
         android:label="jd_flutter"
-        android:name=".APP"
+        android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
@@ -49,32 +49,32 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <!-- Since JCore2.0.0 Required SDK核心功能-->
-        <!-- 可配置android:process参数将Service放在其他进程中；android:enabled属性不能是false -->
-        <!-- 这个是自定义Service，要继承极光JCommonService，可以在更多手机平台上使得推送通道保持的更稳定 -->
-        <service
-            android:name=".messageCenter.JPushService"
-            android:enabled="true"
-            android:exported="false"
-            android:process=":pushcore">
-            <intent-filter>
-                <action android:name="cn.jiguang.user.service.action"/>
-            </intent-filter>
-        </service>
+<!--        &lt;!&ndash; Since JCore2.0.0 Required SDK核心功能&ndash;&gt;-->
+<!--        &lt;!&ndash; 可配置android:process参数将Service放在其他进程中；android:enabled属性不能是false &ndash;&gt;-->
+<!--        &lt;!&ndash; 这个是自定义Service，要继承极光JCommonService，可以在更多手机平台上使得推送通道保持的更稳定 &ndash;&gt;-->
+<!--        <service-->
+<!--            android:name=".messageCenter.JPushService"-->
+<!--            android:enabled="true"-->
+<!--            android:exported="false"-->
+<!--            android:process=":pushcore">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="cn.jiguang.user.service.action"/>-->
+<!--            </intent-filter>-->
+<!--        </service>-->
 
-        <!-- Required since 3.0.7 -->
-        <!-- 新的 tag/alias 接口结果返回需要开发者配置一个自定的广播 -->
-        <!-- 3.3.0开始所有事件将通过该类回调 -->
-        <!-- 该广播需要继承 JPush 提供的 JPushMessageReceiver 类, 并如下新增一个 Intent-Filter -->
-        <receiver
-            android:name=".messageCenter.JPushReceiver"
-            android:enabled="true"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="cn.jpush.android.intent.RECEIVE_MESSAGE"/>
-                <category android:name="com.jd.pzx.jd_flutter"/>
-            </intent-filter>
-        </receiver>
+<!--        &lt;!&ndash; Required since 3.0.7 &ndash;&gt;-->
+<!--        &lt;!&ndash; 新的 tag/alias 接口结果返回需要开发者配置一个自定的广播 &ndash;&gt;-->
+<!--        &lt;!&ndash; 3.3.0开始所有事件将通过该类回调 &ndash;&gt;-->
+<!--        &lt;!&ndash; 该广播需要继承 JPush 提供的 JPushMessageReceiver 类, 并如下新增一个 Intent-Filter &ndash;&gt;-->
+<!--        <receiver-->
+<!--            android:name=".messageCenter.JPushReceiver"-->
+<!--            android:enabled="true"-->
+<!--            android:exported="false">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="cn.jpush.android.intent.RECEIVE_MESSAGE"/>-->
+<!--                <category android:name="com.jd.pzx.jd_flutter"/>-->
+<!--            </intent-filter>-->
+<!--        </receiver>-->
 
         <receiver
             android:name=".DeviceReceiver"
