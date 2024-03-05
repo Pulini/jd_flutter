@@ -279,6 +279,11 @@ class Translation extends Translations {
           'property_detail_photo2': '铭牌照',
           'property_detail_item_hint1': '设备:',
           'property_detail_item_hint2': '金额:',
+          'visit_button_scan_invitation_code': '扫描邀请码',
+          'visit_button_search_recent_records': '搜索最近记录',
+          'visit_button_add_record': '新增记录',
+          'visit_item_people_name': '来访姓名:',
+          'visit_item_interviewee_name': '被访姓名:',
         },
         localeEnglish.toString(): {
           'app_name': 'Gold Emperor',
@@ -492,6 +497,9 @@ class Translation extends Translations {
           'molding_scan_bulletin_report_sort': 'Order Sort',
           'molding_scan_bulletin_report_querying': 'Querying report...',
           'molding_scan_bulletin_report_submitting': 'Submitting sorting...',
+          'visit_button_scan_invitation_code': 'Scan invitation code',
+          'visit_button_search_recent_records': 'Search recent records',
+          'visit_button_add_record': 'adding record',
           'production_dispatch_instruction_hint':
               'Tracking number , instruction , type body',
           'production_dispatch_query_progress': 'Query progress',
@@ -573,6 +581,8 @@ class Translation extends Translations {
           'property_detail_photo2': 'Nameplate',
           'property_detail_item_hint1': 'Device:',
           'property_detail_item_hint2': 'Amount:',
+          'visit_item_people_name': 'Visitor Name：',
+          'visit_item_interviewee_name': 'Interviewee Name:',
         }
       };
 }

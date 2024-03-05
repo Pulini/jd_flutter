@@ -338,3 +338,30 @@ String getDateYMD({DateTime? time}) {
   if (d.length == 1) d = '0$d';
   return '$y-$m-$d';
 }
+
+visitButtonWidget({
+required String title,
+required Function click,
+}){
+  return Padding(
+    padding: const EdgeInsets.all(10),
+    child: SizedBox(
+      width: double.infinity,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.lightBlueAccent,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(25),
+          ),
+        ),
+        onPressed: () {
+            click.call();
+        },
+        child: Text(
+          title,
+          style: const TextStyle(color: Colors.white),
+        ),
+      ),
+    ),
+  );
+}

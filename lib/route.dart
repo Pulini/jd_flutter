@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 
 import 'bean/home_button.dart';
 import 'bean/routes.dart';
+import 'fun/manage/visit_register/visit_register_view.dart';
 import 'fun/dispatching/production_dispatch/production_dispatch_view.dart';
 import 'fun/management/property/property_view.dart';
 import 'fun/report/daily_report/daily_report_view.dart';
@@ -94,6 +95,13 @@ class RouteConfig {
     const MoldingScanBulletinReportPage(),
   );
 
+  ///来访登记
+  static Routes visitRegisterPage = Routes(
+    '/visitor_registration',
+    99,
+    const VisitRegisterPage(),
+  );
+
   ///成型后段扫描看板最大化
   static Routes moldingScanBulletinReportMaximize = Routes(
     '/molding_scan_bulletin_report_maximize',
@@ -134,6 +142,7 @@ class RouteConfig {
     viewProcessSpecification,
     moldingPackAreaReport,
     moldingScanBulletinReportPage,
+    visitRegisterPage,
     productionDispatchPage,
     propertyPage,
     productionMaterialsReportPage,
@@ -204,6 +213,10 @@ class RouteConfig {
     GetPage(
       name: productionMaterialsReportPage.name,
       page: () => productionMaterialsReportPage.page,
+    ),
+    GetPage(
+      name: visitRegisterPage.name,
+      page: () => visitRegisterPage.page,
     ),
   ];
 }

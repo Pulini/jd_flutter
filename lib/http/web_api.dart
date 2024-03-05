@@ -304,3 +304,9 @@ const webApiUpdateProperty = 'api/FixedAsset/UpdateAssets';
 
 ///检查员工数据
 const webApiCheckWorker = 'api/User/GetEmpByFNumber';
+
+///人员来访记录列表
+const webApiGetVisitDtBySqlWhere = 'api/VisitorRegistration/GetVisitDtBySqlWhere';
+
+///获取来访编号
+const webApiGetInviteCode = 'api/VisitorRegistration/GetInviteCode';
