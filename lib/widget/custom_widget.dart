@@ -214,7 +214,7 @@ pageBody({
     ),
   );
 }
-
+///页面简单框架 底部弹出Popup
 pageBodyWithBottomSheet({
   required String title,
   List<Widget>? actions,
@@ -282,7 +282,7 @@ pageBodyWithBottomSheet({
 }
 
 
-///页面简单框架
+///页面简单框架 右侧弹出Drawer
 pageBodyWithDrawer({
   required String title,
   List<Widget>? actions,
@@ -455,6 +455,7 @@ showPopup(Widget widget, {double? height}) {
   );
 }
 
+///底部弹出 sheet
 Future<T?> showSheet<T>(
     BuildContext context,
     Widget body, {
@@ -490,6 +491,7 @@ Future<T?> showSheet<T>(
       ));
 }
 
+///常用格式的按钮
 button(
     String text,
     Function() click, {

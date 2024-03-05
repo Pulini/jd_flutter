@@ -1,11 +1,9 @@
 import 'dart:math';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:path_provider/path_provider.dart';
-
 import '../http/web_api.dart';
 
 class Downloader {
@@ -104,7 +102,10 @@ class Downloader {
         url,
         savePath,
         cancelToken: cancel,
-        options: Options(receiveTimeout: const Duration(minutes: 2)),
+        options: Options(
+          receiveTimeout: const Duration(minutes: 2),
+          contentType: Headers.jsonContentType,
+        ),
         onReceiveProgress: (int count, int total) {
           progress.value = count / total;
         },

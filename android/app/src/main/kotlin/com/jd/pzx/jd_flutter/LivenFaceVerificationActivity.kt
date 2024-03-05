@@ -21,6 +21,13 @@ import com.huawei.hms.mlsdk.livenessdetection.MLLivenessDetectView
 import com.huawei.hms.mlsdk.livenessdetection.OnMLLivenessDetectCallback
 import com.jd.pzx.jd_flutter.dialogs.InquiryDialog
 import com.jd.pzx.jd_flutter.dialogs.TipsDialog
+import com.jd.pzx.jd_flutter.utils.FACE_VERIFY_FAIL_ERROR
+import com.jd.pzx.jd_flutter.utils.FACE_VERIFY_FAIL_NOT_LIVE
+import com.jd.pzx.jd_flutter.utils.FACE_VERIFY_FAIL_NOT_ME
+import com.jd.pzx.jd_flutter.utils.FACE_VERIFY_SUCCESS
+import com.jd.pzx.jd_flutter.utils.display
+import com.jd.pzx.jd_flutter.utils.dp2px
+import com.jd.pzx.jd_flutter.utils.isPad
 import java.io.FileInputStream
 
 

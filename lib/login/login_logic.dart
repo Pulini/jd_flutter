@@ -122,7 +122,7 @@ class LoginLogic extends GetxController with GetSingleTickerProviderStateMixin {
     ).then((val) {
       if (val.resultCode == resultSuccess) {
         Downloader(
-            url: val.data.toString().replaceAll('\'', ''),
+            url: val.data.toString().replaceAll('"', ''),
             completed: (filePath) {
               try {
                 Permission.camera.request().isGranted.then((permission) {

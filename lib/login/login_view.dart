@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/login/login_state.dart';
 
+import '../widget/bluetooth.dart';
 import '../widget/custom_widget.dart';
 import 'login_logic.dart';
 
@@ -61,7 +62,11 @@ class LoginPage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(25),
                 ),
               ),
-              onPressed: () => logic.login(),
+              // onPressed: () => logic.login(),
+              onPressed: () {
+                // Get.dialog(const BluetoothDialog());
+                checkBle();
+              },
               child: Text(
                 'login'.tr,
                 style: const TextStyle(fontSize: 20),
