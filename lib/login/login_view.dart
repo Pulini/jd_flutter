@@ -62,11 +62,11 @@ class LoginPage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(25),
                 ),
               ),
-              // onPressed: () => logic.login(),
-              onPressed: () {
-                // Get.dialog(const BluetoothDialog());
-                checkBle();
-              },
+              onPressed: () => logic.login(),
+              // onPressed: () {
+              //   // Get.dialog(const BluetoothDialog());
+              //   // checkBle();
+              // },
               child: Text(
                 'login'.tr,
                 style: const TextStyle(fontSize: 20),

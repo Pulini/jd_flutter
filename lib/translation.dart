@@ -284,6 +284,14 @@ class Translation extends Translations {
           'visit_button_add_record': '新增记录',
           'visit_item_people_name': '来访姓名:',
           'visit_item_interviewee_name': '被访姓名:',
+          'visit_item_people_phone': '来访电话:',
+          'visit_item_unit': '来访单位:',
+          'visit_item_interviewed_department': '被访部门:',
+          'visit_item_number_of_visitors': '来访人数:',
+          'visit_item_on_duty_security_guard': '值班保安:',
+          'visit_item_license_plate_number': '车牌号码:',
+          'visit_item_visiting_time': '来访时间:',
+          'visit_item_departure': '离开时间:',
         },
         localeEnglish.toString(): {
           'app_name': 'Gold Emperor',
@@ -581,8 +589,16 @@ class Translation extends Translations {
           'property_detail_photo2': 'Nameplate',
           'property_detail_item_hint1': 'Device:',
           'property_detail_item_hint2': 'Amount:',
-          'visit_item_people_name': 'Visitor Name：',
+          'visit_item_people_name': 'Visitor Name:',
           'visit_item_interviewee_name': 'Interviewee Name:',
+          'visit_item_people_phone': 'Visiting phone number:',
+          'visit_item_unit': 'Visiting unit:',
+          'visit_item_interviewed_department': 'Interviewed department:',
+          'visit_item_number_of_visitors': 'Number of visitors:',
+          'visit_item_on_duty_security_guard': 'On duty security guard:',
+          'visit_item_license_plate_number': 'License plate number:',
+          'visit_item_visiting_time': 'Visiting time:',
+          'visit_item_departure': 'Departure:',
         }
       };
 }
