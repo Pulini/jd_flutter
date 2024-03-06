@@ -5,4 +5,5 @@ class VisitRegisterState {   //接口数据返回
   var dataList = <VisitDataListInfo>[].obs;
   var visitCode = "";
   var radioValue=0;
+  var select = 0.obs;
 }

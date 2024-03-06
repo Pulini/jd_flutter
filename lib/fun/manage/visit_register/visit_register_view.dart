@@ -17,10 +17,6 @@ class VisitRegisterPage extends StatefulWidget {
   State<VisitRegisterPage> createState() => _VisitRegisterPageState();
 }
 
-enum SingingCharacter { lafayette, jefferson }
-
-SingingCharacter? _character = SingingCharacter.lafayette;
-
 class _VisitRegisterPageState extends State<VisitRegisterPage> {
   final logic = Get.put(VisitRegisterLogic());
   final state = Get.find<VisitRegisterLogic>().state;
@@ -193,34 +189,20 @@ class _VisitRegisterPageState extends State<VisitRegisterPage> {
                 }),
         DatePicker(pickerController: logic.pickerControllerStartDate),
         DatePicker(pickerController: logic.pickerControllerEndDate),
-        Row(children: [
-          Expanded(child: ListTile(
-            title: const Text('全部'),
-            leading: Radio<SingingCharacter>(
-              value: SingingCharacter.lafayette,
-              groupValue: _character,
-              onChanged: (SingingCharacter? value) {
-                setState(() {
-                  _character = value;
-                });
-              },
-            ),
-          )),
-
-          Expanded(child: ListTile(
-            title: const Text('未离场'),
-            leading: Radio<SingingCharacter>(
-              value: SingingCharacter.jefferson,
-              groupValue: _character,
-              onChanged: (SingingCharacter? value) {
-                setState(() {
-                  _character = value;
-                });
-              },
-            ),
-          ), )
-
-        ])
+        Obx(() => Row(
+              children: [
+                Radio(
+                  value: 0,
+                  groupValue: state.select.value,
+                  onChanged: (v) => state.select.value = v!,
+                ),
+                Radio(
+                  value: 1,
+                  groupValue: state.select.value,
+                  onChanged: (v) => state.select.value = v!,
+                ),
+              ],
+            ))
       ],
       query: () => {},
       body: null,
