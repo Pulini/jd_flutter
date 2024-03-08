@@ -1,31 +1,18 @@
 package com.jd.pzx.jd_flutter.utils
 
-import android.Manifest
-import android.Manifest.permission.ACCESS_FINE_LOCATION
-import android.Manifest.permission.BLUETOOTH
-import android.Manifest.permission.BLUETOOTH_ADMIN
-import android.Manifest.permission.BLUETOOTH_CONNECT
-import android.Manifest.permission.BLUETOOTH_SCAN
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
+import android.bluetooth.BluetoothDevice.BOND_BONDED
 import android.bluetooth.BluetoothManager
 import android.bluetooth.BluetoothSocket
 import android.content.Context
-import android.content.pm.PackageManager
 import android.os.Build
 import android.util.Log
-import android.widget.Toast
-import androidx.annotation.RequiresApi
-import androidx.core.app.ActivityCompat
-import androidx.core.app.ActivityCompat.requestPermissions
-import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.checkSelfPermission
-import androidx.core.content.PermissionChecker.PERMISSION_GRANTED
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import java.io.IOException
+import java.util.HashMap
 import java.util.UUID
 
 /**
@@ -37,81 +24,43 @@ import java.util.UUID
 const val REQUEST_BLUETOOTH_PERMISSIONS = 1223
 const val REQUEST_ENABLE_BT = 1224
 const val PRINTER_UUID = "00001101-0000-1000-8000-00805F9B34FB"
-
-
-fun bluetoothInit(context: Context, isReady: (BluetoothAdapter?) -> Unit) {
-    try {
-        isReady.invoke(
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                context.getSystemService(BluetoothManager::class.java).adapter
-            } else {
-                (context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager).adapter
-            }
-        )
-    } catch (e: Exception) {
-        Log.e("Pan", "经典蓝牙操作异常：检查蓝牙", e)
-    }
-}
-
-
-fun checkBluetooth(activity: Activity) {
-    requestPermissions(
-        activity,
-        arrayOf(
-            BLUETOOTH,
-            BLUETOOTH_SCAN,
-            BLUETOOTH_ADMIN,
-            BLUETOOTH_CONNECT,
-            ACCESS_FINE_LOCATION,
-        ),
-        REQUEST_BLUETOOTH_PERMISSIONS
-    )
-    val request = arrayOf(
-        BLUETOOTH,
-        BLUETOOTH_SCAN,
-        BLUETOOTH_ADMIN,
-        BLUETOOTH_CONNECT,
-        ACCESS_FINE_LOCATION,
-    ).filter { checkSelfPermission(activity, it) != PERMISSION_GRANTED }
-    if (request.isNotEmpty()) {
-        requestPermissions(
-            activity,
-            request.toTypedArray(),
-            REQUEST_BLUETOOTH_PERMISSIONS
-        )
-    }else{
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            activity.getSystemService(BluetoothManager::class.java).adapter
-        } else {
-            (activity.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager).adapter
-        }
-
-    }
-}
-
-fun bluetoothIsEnable(context: Context): Boolean {
+val tscUUID: UUID = UUID.fromString(PRINTER_UUID)
+val devices = mutableListOf<BluetoothDevice>()
+var bluetoothSocket: BluetoothSocket? = null
+fun bluetoothAdapter(context: Context): BluetoothAdapter? {
     return try {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            context.getSystemService(BluetoothManager::class.java).adapter
-        } else {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             (context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager).adapter
-        }?.isEnabled == true
+        } else {
+            context.getSystemService(BluetoothManager::class.java).adapter
+        }
     } catch (e: Exception) {
-        Log.e("Pan", "经典蓝牙操作异常：检查蓝牙", e)
-        false
+        Log.e("Pan", "经典蓝牙操作异常：检查蓝牙\n", e)
+        null
     }
 }
+
+/**
+ * 蓝牙设备是否可用
+ */
+fun bluetoothIsEnable(bleAdapter: BluetoothAdapter?) = bleAdapter?.isEnabled == true
 
 /**
  * 开始扫描蓝牙
  */
 @SuppressLint("MissingPermission")
 fun bluetoothStartScan(bleAdapter: BluetoothAdapter) {
-    try {
-        bleAdapter.startDiscovery()
-    } catch (e: Exception) {
-        Log.e("Pan", "经典蓝牙操作异常：开启扫描经典蓝牙", e)
-    }
+    devices.clear()
+    bleAdapter.startDiscovery()
+    Log.e("Pan", "开启扫描经典蓝牙")
+}
+
+@SuppressLint("MissingPermission")
+fun isSearching(bleAdapter: BluetoothAdapter) = bleAdapter.isDiscovering
+
+@SuppressLint("MissingPermission")
+fun isConnected(bleAdapter: BluetoothAdapter, mac: String) = bleAdapter.bondedDevices.any {
+    it.address == mac && it.bondState == BOND_BONDED
 }
 
 /**
@@ -119,34 +68,44 @@ fun bluetoothStartScan(bleAdapter: BluetoothAdapter) {
  */
 @SuppressLint("MissingPermission")
 fun bluetoothCancelScan(bleAdapter: BluetoothAdapter) {
-    try {
-        bleAdapter.cancelDiscovery()
-    } catch (e: Exception) {
-        Log.e("Pan", "经典蓝牙操作异常：取消扫描经典蓝牙", e)
-    }
+    bleAdapter.cancelDiscovery()
+    Log.e("Pan", "取消扫描经典蓝牙")
 }
 
 /**
  * 连接蓝牙
  */
 @SuppressLint("MissingPermission")
-fun bluetoothConnect(bluetooth: BluetoothDevice, socket: (BluetoothSocket?) -> Unit) {
-    Thread {
-        try {
-            val bleSocket = bluetooth.createRfcommSocketToServiceRecord(
-                UUID.fromString(PRINTER_UUID)
-            ).apply { connect() }
-            Log.e("Pan", "连接成功")
-            runBlocking(Dispatchers.Main) {
-                socket.invoke(bleSocket)
-            }
-        } catch (e: Exception) {
-            Log.e("Pan", "连接失败", e)
-            runBlocking(Dispatchers.Main) {
-                socket.invoke(null)
-            }
+fun bluetoothConnect(mac: String): Boolean {
+    try {
+        Log.e("Pan", "连接经典蓝牙:$mac")
+        devices.find { it.address == mac }?.let { device ->
+            bluetoothSocket = device.createRfcommSocketToServiceRecord(tscUUID)
+            bluetoothSocket?.connect()
+            Log.e("Pan", "经典蓝牙连接成功:$mac")
+            return true
         }
-    }.start()
+        return false
+    } catch (e: IOException) {
+        Log.e("Pan", "经典蓝牙操作异常：连接经典蓝牙\n", e)
+        return false
+    }
+}
+
+/**
+ * 断开蓝牙
+ */
+@SuppressLint("MissingPermission")
+fun bluetoothClose() {
+    try {
+        if (bluetoothSocket?.isConnected == true) {
+            bluetoothSocket?.close()
+            bluetoothSocket = null
+        }
+        devices.clear()
+    } catch (e: IOException) {
+        Log.e("Pan", "经典蓝牙操作异常：关闭失败\n", e)
+    }
 }
 
 /**
@@ -181,4 +140,14 @@ fun bluetoothSendCommand(
             }
         }
     }.start()
+}
+
+@SuppressLint("MissingPermission")
+fun bluetoothGetDevicesList(bleAdapter: BluetoothAdapter) = HashMap<String, Any>().also {
+    bleAdapter.bondedDevices.forEach { device ->
+        it["DeviceName"] = device.name
+        it["DeviceMAC"] = device.address
+        it["DeviceIsConnected"] = device.bondState == BOND_BONDED
+        it["DeviceBondState"] = device.bondState
+    }
 }

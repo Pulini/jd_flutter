@@ -24,8 +24,9 @@ informationDialog({
       canPop: false,
       child: AlertDialog(
         title: Text(
-            title.isEmpty ? 'dialog_default_title_information'.tr : title,
-            style: const TextStyle(color: Colors.orange)),
+          title.isEmpty ? 'dialog_default_title_information'.tr : title,
+          style: const TextStyle(color: Colors.orange),
+        ),
         content: Text(content ?? ''),
         actions: <Widget>[
           TextButton(

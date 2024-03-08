@@ -21,6 +21,8 @@ import android.hardware.usb.UsbManager.ACTION_USB_DEVICE_ATTACHED
 import android.hardware.usb.UsbManager.ACTION_USB_DEVICE_DETACHED
 import android.os.Build
 import android.util.Log
+import com.jd.pzx.jd_flutter.utils.tscUUID
+import java.util.UUID
 
 /**
  * Created by : PanZX on 2024/02/28
@@ -132,9 +134,13 @@ class DeviceReceiver : BroadcastReceiver() {
                     )
                 } else {
                     intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
-                }?.run {
-                    if (!name.isNullOrEmpty()) {
-                        Log.e("Pan", "发现经典蓝牙 Name=${name} Address=${address}")
+                }?.let { bluetooth ->
+
+                    if (!bluetooth.name.isNullOrEmpty() && bluetooth.uuids.any { it.uuid == tscUUID }) {
+                        Log.e(
+                            "Pan",
+                            "发现经典蓝牙 Name=${bluetooth.name} Address=${bluetooth.address}"
+                        )
                     }
                 }
             }
@@ -142,9 +148,11 @@ class DeviceReceiver : BroadcastReceiver() {
             BLUETOOTH_ADAPTER_STATE_OFF -> {//蓝牙不可用
                 Log.e("Pan", "蓝牙不可用")
             }
+
             BLUETOOTH_ADAPTER_STATE_ON -> {//蓝牙可用
                 Log.e("Pan", "蓝牙可用")
             }
+
             ACTION_STATE_CHANGED -> {//蓝牙开关状态监听
                 when (intent.getIntExtra(EXTRA_STATE, 0)) {
                     STATE_OFF -> {
