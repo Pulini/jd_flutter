@@ -85,6 +85,10 @@ dependencies:
   url_launcher: ^6.1.14
   #List扩展工具集
   collection: ^1.17.2
+  #GBK编码
+  fast_gbk: ^1.0.0
+  #Image处理工具集
+  image: ^4.1.7
 
 #  flutter_reactive_ble: ^5.3.1
 #  flutter_blue_plus: ^1.31.15

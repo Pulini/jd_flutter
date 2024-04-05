@@ -89,4 +89,5 @@ dependencies {
     implementation 'com.airbnb.android:lottie:6.3.0'
     //485串口 https://github.com/licheedev/Android-SerialPort-API
     implementation 'com.licheedev:android-serialport:2.1.3'
+    implementation files('libs/pl2303g_multilib.jar')
 }

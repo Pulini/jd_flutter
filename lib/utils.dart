@@ -6,7 +6,6 @@ import 'package:crypto/crypto.dart';
 import 'package:decimal/decimal.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -161,6 +160,18 @@ extension DoubleExt on double? {
       return Decimal.parse(toString()).toString();
     }
   }
+
+  double add(double value) =>
+      (Decimal.parse(toString()) + Decimal.parse(value.toString())).toDouble();
+
+  double sub(double value) =>
+      (Decimal.parse(toString()) - Decimal.parse(value.toString())).toDouble();
+
+  double mul(double value) =>
+      (Decimal.parse(toString()) * Decimal.parse(value.toString())).toDouble();
+
+  double div(double value) =>
+      (Decimal.parse(toString()) / Decimal.parse(value.toString())).toDouble();
 }
 
 ///File扩展方法
@@ -202,7 +213,6 @@ extension RequestOptionsExt on RequestOptions {
     map['QueryParameters'] = queryParameters;
     map['data'] = data;
     logger.f(map);
-
   }
 }
 
@@ -340,9 +350,9 @@ String getDateYMD({DateTime? time}) {
 }
 
 visitButtonWidget({
-required String title,
-required Function click,
-}){
+  required String title,
+  required Function click,
+}) {
   return Padding(
     padding: const EdgeInsets.all(10),
     child: SizedBox(
@@ -355,7 +365,7 @@ required Function click,
           ),
         ),
         onPressed: () {
-            click.call();
+          click.call();
         },
         child: Text(
           title,
