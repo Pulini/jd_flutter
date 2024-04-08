@@ -11,7 +11,6 @@ import android.hardware.usb.UsbManager
 import android.os.Build
 import android.os.SystemClock
 import android.util.Log
-import com.jd.pzx.jd_flutter.ACTION_USB_PERMISSION
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 
@@ -22,7 +21,7 @@ const val SEND_COMMAND_STATE_FAILED = 1003//发送失败
 const val SEND_COMMAND_STATE_USB_ERROR = 1004//usb设备异常
 const val SEND_COMMAND_STATE_NO_PERMISSION = 1005//没有串口指定权限
 const val SEND_COMMAND_STATE_NO_DEVICE = 1006//找不到指定设备
-
+private const val ACTION_USB_PERMISSION = "com.android.example.USB_PERMISSION"
 
 fun usbQuickSendCommand(
     context: Context,

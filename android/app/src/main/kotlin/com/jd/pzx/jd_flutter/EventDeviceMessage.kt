@@ -1,14 +1,14 @@
 package com.jd.pzx.jd_flutter
 
-enum class DeviceType{
+enum class OperationType{
     PdaScanner,
-    UsbWeighbridge,
-    UsbMeterCounter,
-    BluetoothTscPrinter,
-    UsbTscPrinter
+    UsbState,
+    WeighbridgeDetached ,
+    BluetoothState,
+    BluetoothFind,
+    BluetoothDisconnected,
 }
 data class EventDeviceMessage(
-    var deviceType:DeviceType,
-    var message:String,
-    var data:Any
+    var operationType:OperationType,
+    var data:Any?=null
 )

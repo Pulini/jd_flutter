@@ -1,37 +1,23 @@
 package com.jd.pzx.jd_flutter
 
-import android.Manifest
 import android.annotation.SuppressLint
-import android.bluetooth.BluetoothAdapter
-import android.bluetooth.BluetoothDevice
-import android.bluetooth.BluetoothManager
-import android.bluetooth.BluetoothSocket
-import android.content.BroadcastReceiver
-import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
-import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import com.google.gson.Gson
 import com.jd.pzx.jd_flutter.LivenFaceVerificationActivity.Companion.startOneselfFaceVerification
 import com.jd.pzx.jd_flutter.utils.CHANNEL_ANDROID_SEND
 import com.jd.pzx.jd_flutter.utils.CHANNEL_FLUTTER_SEND
 import com.jd.pzx.jd_flutter.utils.FACE_VERIFY_SUCCESS
-import com.jd.pzx.jd_flutter.utils.REQUEST_BLUETOOTH_PERMISSIONS
 import com.jd.pzx.jd_flutter.utils.REQUEST_ENABLE_BT
 import com.jd.pzx.jd_flutter.utils.bitmapToBase64
 import com.jd.pzx.jd_flutter.utils.bluetoothAdapter
 import com.jd.pzx.jd_flutter.utils.bluetoothCancelScan
 import com.jd.pzx.jd_flutter.utils.bluetoothClose
 import com.jd.pzx.jd_flutter.utils.bluetoothConnect
-import com.jd.pzx.jd_flutter.utils.bluetoothGetDevicesList
 import com.jd.pzx.jd_flutter.utils.bluetoothIsEnable
+import com.jd.pzx.jd_flutter.utils.bluetoothSendCommand
 import com.jd.pzx.jd_flutter.utils.bluetoothStartScan
+import com.jd.pzx.jd_flutter.utils.deviceList
 import com.jd.pzx.jd_flutter.utils.openFile
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
@@ -40,8 +26,6 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import java.io.File
-import java.io.IOException
-import java.util.*
 
 
 @SuppressLint("MissingPermission")
@@ -50,7 +34,6 @@ class MainActivity : FlutterActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         EventBus.getDefault().register(this)
-
     }
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
@@ -73,139 +56,88 @@ class MainActivity : FlutterActivity() {
 
                     "OpenFile" -> openFile(this, File(call.arguments.toString()))
 
-                    "ScanBluetooth" -> bluetoothAdapter(this)?.let { bluetoothStartScan(it) }
-
-                    "EndScanBluetooth" -> bluetoothAdapter(this)?.let { bluetoothCancelScan(it) }
-
-                    "ConnectBluetooth" -> bluetoothConnect(call.arguments.toString())
-
-                    "CloseBluetooth" -> bluetoothClose()
-
-                    "IsEnable" -> bluetoothIsEnable(bluetoothAdapter(this))
-
-                    "GetScannedDevices" -> bluetoothAdapter(this)?.let {
-                        bluetoothGetDevicesList(it).forEach { map ->
-                            sendFlutter(CHANNEL_FLUTTER_SEND, "FindBluetooth", map)
+                    "ScanBluetooth" -> bluetoothAdapter(this).let {
+                        if (it == null) {
+                            result.success(false)
+                        } else {
+                            result.success(bluetoothStartScan(it))
                         }
                     }
 
+                    "EndScanBluetooth" -> bluetoothAdapter(this).let {
+                        if (it == null) {
+                            result.success(false)
+                        } else {
+                            result.success(bluetoothCancelScan(it))
+                        }
+                    }
+
+                    "ConnectBluetooth" -> bluetoothAdapter(this).let {
+                        if (it == null) {
+                            result.success(3)
+                        } else {
+                            result.success(
+                                bluetoothConnect(
+                                    it,
+                                    call.arguments.toString()
+                                ) { socket ->
+//                                    bluetoothSendCommand(
+//                                        socket,
+//                                        arrayListOf<List<ByteArray>>().apply {
+//                                            add(
+//                                                TSCUtil.getInstance().propertyLabel(
+//                                                    fInterID = "123123123",
+//                                                    name = "asd123",
+//                                                    number = "333333",
+//                                                    date = "xxxxxxxx",
+//                                                )
+//                                            )
+//                                        },
+//                                        progress = { s, t ->
+//
+//                                        }, sendCallback = {
+//
+//                                        }
+//                                    )
+                                })
+                        }
+                    }
+
+                    "CloseBluetooth" -> result.success(bluetoothClose(call.arguments.toString()))
+
+                    "IsEnable" -> {
+                        val b = bluetoothIsEnable(bluetoothAdapter(this))
+                        Log.e("Pan", "IsEnable=$b")
+                        result.success(b)
+                    }
+
+                    "GetScannedDevices" -> deviceList.forEach { device ->
+                        Log.e("Pan", "device=${device.device.name}")
+                        sendFlutter(
+                            CHANNEL_FLUTTER_SEND,
+                            OperationType.BluetoothFind.toString(),
+                            device.getDeviceMap()
+                        )
+                    }
+
+                    "SendTSC" -> {
+                        Log.e("Pan", "1data=${call.arguments}")
+                        deviceList.find { it.socket.isConnected }?.let {
+                            bluetoothSendCommand(
+                                it.socket,
+                                call.arguments as List<ByteArray>,
+                                sendCallback = {
+
+                                }
+                            )
+                        }
+                    }
 
                     else -> result.notImplemented()
                 }
             }
 
     }
-
-//    /**
-//     * 蓝牙广播接收器
-//     */
-//    private val receiver = object : BroadcastReceiver() {
-//        override fun onReceive(context: Context, intent: Intent) {
-//            Log.e("Pan", "intent.action=${intent.extras.toString()}")
-//            when (intent.action) {
-//                BluetoothAdapter.ACTION_DISCOVERY_STARTED -> {
-//                    Log.e("Pan", "扫描经典蓝牙")
-//                    if (!isScanning) {
-//                        isScanning = true
-//
-//                        sendFlutter(CHANNEL_FLUTTER_SEND, "Bluetooth", 5)
-//                    }
-//                }
-//
-//                BluetoothAdapter.ACTION_DISCOVERY_FINISHED -> {
-//                    Log.e("Pan", "经典蓝牙结束")
-//                    if (isScanning) {
-//                        isScanning = false
-//                        sendFlutter(CHANNEL_FLUTTER_SEND, "Bluetooth", 6)
-//                    }
-//                }
-//
-//                BluetoothDevice.ACTION_FOUND -> {
-//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-//                        intent.getParcelableExtra(
-//                            BluetoothDevice.EXTRA_DEVICE,
-//                            BluetoothDevice::class.java
-//                        )
-//                    } else {
-//                        intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
-//                    }?.let { device ->
-//                        if (!device.name.isNullOrEmpty()
-//                            && devices.none { device.address == it.address }
-////                            && device.uuids?.any { it.uuid == UUID.fromString(PRINTER_UUID) } == true
-//                        ) {
-//                            Log.e(
-//                                "Pan",
-//                                "发现打印机 name=${device.name} Address=${device.address} state=${device.bondState} "
-//                            )
-//                            devices.add(device)
-//                            HashMap<String, Any>().let {
-//                                it["DeviceName"] = device.name
-//                                it["DeviceMAC"] = device.address
-//                                it["DeviceIsConnected"] = isConnected(device.address)
-//                                it["DeviceBondState"] = device.bondState
-//                                sendFlutter(CHANNEL_FLUTTER_SEND, "FindBluetooth", it)
-//                            }
-//                        }
-//                    }
-//                }
-//
-//                BluetoothAdapter.ACTION_STATE_CHANGED -> {
-//                    when (intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, 0)) {
-//                        BluetoothAdapter.STATE_OFF -> {
-//                            Log.e("Pan", "蓝牙关闭")
-//                            closeBluetooth()
-//                            sendFlutter(CHANNEL_FLUTTER_SEND, "Bluetooth", 4)
-//                        }
-//
-//                        BluetoothAdapter.STATE_ON -> {
-//                            Log.e("Pan", "蓝牙打开")
-//                            sendFlutter(CHANNEL_FLUTTER_SEND, "Bluetooth", 3)
-//                        }
-//                    }
-//                }
-//
-//                BluetoothDevice.ACTION_ACL_CONNECTED -> {
-//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-//                        intent.getParcelableExtra(
-//                            BluetoothDevice.EXTRA_DEVICE,
-//                            BluetoothDevice::class.java
-//                        )
-//                    } else {
-//                        intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
-//                    }?.let { device ->
-//                        connectedDevice = device
-//                        Log.e("Pan", "蓝牙设备已连接:${device.address}")
-//                        HashMap<String, String>().let {
-//                            it["MAC"] = device.address
-//                            sendFlutter(CHANNEL_FLUTTER_SEND, "Connected", it)
-//                        }
-//                    }
-//
-//                }
-//
-//                BluetoothDevice.ACTION_ACL_DISCONNECTED -> {
-//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-//                        intent.getParcelableExtra(
-//                            BluetoothDevice.EXTRA_DEVICE,
-//                            BluetoothDevice::class.java
-//                        )
-//                    } else {
-//                        intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
-//                    }?.let { device ->
-//                        bluetoothSocket?.close()
-//                        bluetoothSocket = null
-//                        connectedDevice = null
-//                        Log.e("Pan", "蓝牙设备已断开:${device.address}")
-//                        HashMap<String, String>().let {
-//                            it["MAC"] = device.address
-//                            sendFlutter(CHANNEL_FLUTTER_SEND, "Disconnected", it)
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
-//
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -217,16 +149,30 @@ class MainActivity : FlutterActivity() {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onJPushMessageEvent(event: Any) {
+    fun deviceReceiverEvent(event: EventDeviceMessage) {
         Log.e("Pan", "do:$event")
-        HashMap<String, String>().let {
-            it["json"] = Gson().toJson(event)
-            sendFlutter(CHANNEL_ANDROID_SEND, "JMessage", it)
-        }
+        sendFlutter(
+            CHANNEL_FLUTTER_SEND,
+            event.operationType.toString(),
+            event.data!!
+        )
+
+
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun jPushEvent(event: EventDeviceMessage) {
+        Log.e("Pan", "do:$event")
+        sendFlutter(
+            CHANNEL_ANDROID_SEND,
+            event.operationType.toString(),
+            event.data!!
+        )
     }
 
     private fun sendFlutter(channel: String, method: String, data: Any) {
         flutterEngine?.dartExecutor?.binaryMessenger?.let { messenger ->
+            Log.e("Pan", "method=$method data=$data")
             MethodChannel(messenger, channel).invokeMethod(method, data)
         }
     }

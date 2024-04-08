@@ -1,20 +1,21 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-feature
         android:name="android.hardware.camera"
-        android:required="false"/>
+        android:required="false" />
 
     <!-- 安卓9安装权限 -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
-    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
     <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
@@ -22,72 +23,72 @@
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-
+    <uses-permission
+        android:name="android.permission.BLUETOOTH_PRIVILEGED"
+        tools:ignore="ProtectedPermissions" />
 
     <application
-        android:label="jd_flutter"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+        android:label="jd_flutter">
         <activity
             android:name=".MainActivity"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:exported="true"
+            android:hardwareAccelerated="true"
             android:launchMode="singleTop"
             android:theme="@style/LaunchTheme"
-            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
-            android:hardwareAccelerated="true"
             android:windowSoftInputMode="adjustResize">
             <!-- Specifies an Android theme to apply to this Activity as soon as
                  the Android process has started. This theme is visible to the user
                  while the Flutter UI initializes. After that, this theme continues
                  to determine the Window background behind the Flutter UI. -->
             <meta-data
-              android:name="io.flutter.embedding.android.NormalTheme"
-              android:resource="@style/NormalTheme"
-              />
+                android:name="io.flutter.embedding.android.NormalTheme"
+                android:resource="@style/NormalTheme" />
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-<!--        &lt;!&ndash; Since JCore2.0.0 Required SDK核心功能&ndash;&gt;-->
-<!--        &lt;!&ndash; 可配置android:process参数将Service放在其他进程中；android:enabled属性不能是false &ndash;&gt;-->
-<!--        &lt;!&ndash; 这个是自定义Service，要继承极光JCommonService，可以在更多手机平台上使得推送通道保持的更稳定 &ndash;&gt;-->
-<!--        <service-->
-<!--            android:name=".messageCenter.JPushService"-->
-<!--            android:enabled="true"-->
-<!--            android:exported="false"-->
-<!--            android:process=":pushcore">-->
-<!--            <intent-filter>-->
-<!--                <action android:name="cn.jiguang.user.service.action"/>-->
-<!--            </intent-filter>-->
-<!--        </service>-->
+        <!--        &lt;!&ndash; Since JCore2.0.0 Required SDK核心功能&ndash;&gt;-->
+        <!--        &lt;!&ndash; 可配置android:process参数将Service放在其他进程中；android:enabled属性不能是false &ndash;&gt;-->
+        <!--        &lt;!&ndash; 这个是自定义Service，要继承极光JCommonService，可以在更多手机平台上使得推送通道保持的更稳定 &ndash;&gt;-->
+        <!--        <service-->
+        <!--            android:name=".messageCenter.JPushService"-->
+        <!--            android:enabled="true"-->
+        <!--            android:exported="false"-->
+        <!--            android:process=":pushcore">-->
+        <!--            <intent-filter>-->
+        <!--                <action android:name="cn.jiguang.user.service.action"/>-->
+        <!--            </intent-filter>-->
+        <!--        </service>-->
 
-<!--        &lt;!&ndash; Required since 3.0.7 &ndash;&gt;-->
-<!--        &lt;!&ndash; 新的 tag/alias 接口结果返回需要开发者配置一个自定的广播 &ndash;&gt;-->
-<!--        &lt;!&ndash; 3.3.0开始所有事件将通过该类回调 &ndash;&gt;-->
-<!--        &lt;!&ndash; 该广播需要继承 JPush 提供的 JPushMessageReceiver 类, 并如下新增一个 Intent-Filter &ndash;&gt;-->
-<!--        <receiver-->
-<!--            android:name=".messageCenter.JPushReceiver"-->
-<!--            android:enabled="true"-->
-<!--            android:exported="false">-->
-<!--            <intent-filter>-->
-<!--                <action android:name="cn.jpush.android.intent.RECEIVE_MESSAGE"/>-->
-<!--                <category android:name="com.jd.pzx.jd_flutter"/>-->
-<!--            </intent-filter>-->
-<!--        </receiver>-->
+        <!--        &lt;!&ndash; Required since 3.0.7 &ndash;&gt;-->
+        <!--        &lt;!&ndash; 新的 tag/alias 接口结果返回需要开发者配置一个自定的广播 &ndash;&gt;-->
+        <!--        &lt;!&ndash; 3.3.0开始所有事件将通过该类回调 &ndash;&gt;-->
+        <!--        &lt;!&ndash; 该广播需要继承 JPush 提供的 JPushMessageReceiver 类, 并如下新增一个 Intent-Filter &ndash;&gt;-->
+        <!--        <receiver-->
+        <!--            android:name=".messageCenter.JPushReceiver"-->
+        <!--            android:enabled="true"-->
+        <!--            android:exported="false">-->
+        <!--            <intent-filter>-->
+        <!--                <action android:name="cn.jpush.android.intent.RECEIVE_MESSAGE"/>-->
+        <!--                <category android:name="com.jd.pzx.jd_flutter"/>-->
+        <!--            </intent-filter>-->
+        <!--        </receiver>-->
 
         <receiver
             android:name=".DeviceReceiver"
-            android:enabled="true"
-            android:exported="false">
-            <intent-filter >
+            android:exported="true">
+            <intent-filter>
                 <action android:name="nlscan.action.SCANNER_RESULT" />
                 <action android:name="com.android.server.scannerservice.broadcast" />
                 <action android:name="com.sunmi.scanner.ACTION_DATA_CODE_RECEIVED" />
                 <action android:name="android.intent.ACTION_DECODE_DATA" />
                 <action android:name="tw.PL2303MultiUSBMessage" />
 
-<!--               <action android:name="com.android.example.USB_PERMISSION" />-->
+                <!--               <action android:name="com.android.example.USB_PERMISSION" />-->
 
                 <action android:name="android.hardware.usb.action.USB_ACCESSORY_ATTACHED" />
                 <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
@@ -114,28 +115,28 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"/>
+                android:resource="@xml/file_paths" />
         </provider>
 
         <!--串口协议-->
         <meta-data
             android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
-            android:resource="@xml/device_filter"/>
+            android:resource="@xml/device_filter" />
 
 
         <activity
             android:name=".LivenFaceVerificationActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
-            android:theme="@style/NoActionBar"/>
+            android:theme="@style/NoActionBar" />
         <meta-data
             android:name="com.huawei.hms.ml.DEPENDENCY"
-            android:value="face"/>
+            android:value="face" />
 
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
         <meta-data
@@ -149,8 +150,8 @@
          In particular, this is used by the Flutter engine in io.flutter.plugin.text.ProcessTextPlugin. -->
     <queries>
         <intent>
-            <action android:name="android.intent.action.PROCESS_TEXT"/>
-            <data android:mimeType="text/plain"/>
+            <action android:name="android.intent.action.PROCESS_TEXT" />
+            <data android:mimeType="text/plain" />
         </intent>
     </queries>
 </manifest>
