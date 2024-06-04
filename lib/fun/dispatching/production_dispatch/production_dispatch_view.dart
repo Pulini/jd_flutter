@@ -33,14 +33,52 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
     return [
       EditText(
         hint: 'production_dispatch_instruction_hint'.tr,
-        controller: logic.textControllerInstruction,
+        controller: logic.tecInstruction,
       ),
-      DatePicker(pickerController: logic.pickerControllerStartDate),
-      DatePicker(pickerController: logic.pickerControllerEndDate),
-      SwitchButton(switchController: logic.switchControllerOutsourcing),
-      SwitchButton(switchController: logic.switchControllerClosed),
-      SwitchButton(switchController: logic.switchControllerMany),
-      SwitchButton(switchController: logic.switchControllerMergeOrder),
+      DatePicker(pickerController: logic.dpcStartDate),
+      DatePicker(pickerController: logic.dpcEndDate),
+      Obx(() => state.isSelectedMergeOrder.value
+          ? const SizedBox()
+          : SwitchButton(
+              onChanged: (bool isSelect) {
+                state.isSelectedOutsourcing.value = isSelect;
+              },
+              name: 'production_dispatch_query_show_outsourcing'.tr,
+              value: state.isSelectedOutsourcing.value,
+            )),
+      Obx(() => SwitchButton(
+            onChanged: (bool isSelect) {
+              state.isSelectedClosed.value = isSelect;
+            },
+            name: 'production_dispatch_query_show_close'.tr,
+            value: state.isSelectedClosed.value,
+          )),
+      Obx(() => state.isSelectedMergeOrder.value
+          ? const SizedBox()
+          : SwitchButton(
+              onChanged: (bool isSelect) {
+                if (!isSelect && state.orderList.isNotEmpty) {
+                  for (var value in state.orderList) {
+                    value.select = false;
+                  }
+                  state.orderList.refresh();
+                }
+                state.isSelectedMany.value = isSelect;
+              },
+              name: 'production_dispatch_query_many_select'.tr,
+              value: state.isSelectedMany.value,
+            )),
+      Obx(() => SwitchButton(
+            onChanged: (bool isSelect) {
+              if (isSelect) {
+                state.isSelectedOutsourcing.value = false;
+                state.isSelectedMany.value = false;
+              }
+              state.isSelectedMergeOrder.value = isSelect;
+            },
+            name: 'production_dispatch_query_merge_orders'.tr,
+            value: state.isSelectedMergeOrder.value,
+          )),
       Padding(
         padding: const EdgeInsets.all(10),
         child: ElevatedButton(
@@ -70,17 +108,7 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
                 ? '部分打印'
                 : '状态异常';
     return GestureDetector(
-      onTap: () {
-        data.select = !data.select;
-        if (!logic.switchControllerMany.isChecked.value) {
-          for (var i = 0; i < list.length; ++i) {
-            if (i != index && list[i].select) {
-              list[i].select = false;
-            }
-          }
-        }
-        state.orderList.refresh();
-      },
+      onTap: () => logic.item1click(index),
       child: Column(
         children: [
           Container(
@@ -396,10 +424,6 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
   }
 
   _bottomButtons() {
-    var buttonsTextStyle = TextStyle(
-        color: state.orderList.any((e) => e.select)
-            ? Colors.blueAccent
-            : Colors.red);
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -409,114 +433,93 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
         ),
       ),
       height: 40,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Expanded(
-            child: ListView(
-              shrinkWrap: true,
-              scrollDirection: Axis.horizontal,
-              children: [
-                TextButton(
-                  onPressed: () {},
-                  child: Text(
-                    'production_dispatch_bt_material_list'.tr,
-                    style: buttonsTextStyle,
+      child: Obx(
+        () => Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: ListView(
+                shrinkWrap: true,
+                scrollDirection: Axis.horizontal,
+                children: [
+                  CombinationButton(
+                    combination: Combination.left,
+                    isEnabled: state.cbIsEnabledMaterialList.value,
+                    text: 'production_dispatch_bt_material_list'.tr,
+                    click: () {},
                   ),
-                ),
-                TextButton(
-                  onPressed: () {},
-                  child: Text(
-                    'production_dispatch_bt_instruction'.tr,
-                    style: buttonsTextStyle,
+                  CombinationButton(
+                    combination: Combination.middle,
+                    isEnabled: state.cbIsEnabledInstruction.value,
+                    text: 'production_dispatch_bt_instruction'.tr,
+                    click: () {},
                   ),
-                ),
-                TextButton(
-                  onPressed: () {},
-                  child: Text(
-                    'production_dispatch_bt_color_matching'.tr,
-                    style: buttonsTextStyle,
+                  CombinationButton(
+                    combination: Combination.middle,
+                    isEnabled: state.cbIsEnabledColorMatching.value,
+                    text: 'production_dispatch_bt_color_matching'.tr,
+                    click: () {},
                   ),
-                ),
-                TextButton(
-                  onPressed: () {},
-                  child: Text(
-                    'production_dispatch_bt_process_instruction'.tr,
-                    style: buttonsTextStyle,
+                  CombinationButton(
+                    combination: Combination.middle,
+                    isEnabled: state.cbIsEnabledProcessInstruction.value,
+                    text: 'production_dispatch_bt_process_instruction'.tr,
+                    click: () {},
                   ),
-                ),
-                TextButton(
-                  onPressed: () {},
-                  child: Text(
-                    'production_dispatch_bt_process_open'.tr,
-                    style: buttonsTextStyle,
+                  CombinationButton(
+                    combination: Combination.middle,
+                    isEnabled: state.cbIsEnabledProcessOpen.value,
+                    text: 'production_dispatch_bt_process_open'.tr,
+                    click: () {},
                   ),
-                ),
-                TextButton(
-                  onPressed: () {},
-                  child: Text(
-                    'production_dispatch_bt_delete_downstream'.tr,
-                    style: buttonsTextStyle,
+                  CombinationButton(
+                    combination: Combination.middle,
+                    isEnabled: state.cbIsEnabledDeleteDownstream.value,
+                    text: 'production_dispatch_bt_delete_downstream'.tr,
+                    click: () {},
                   ),
-                ),
-                TextButton(
-                  onPressed: () {},
-                  child: Text(
-                    'production_dispatch_bt_delete_last_report'.tr,
-                    style: buttonsTextStyle,
+                  CombinationButton(
+                    combination: Combination.middle,
+                    isEnabled: state.cbIsEnabledDeleteLastReport.value,
+                    text: 'production_dispatch_bt_delete_last_report'.tr,
+                    click: () {},
                   ),
-                ),
-                TextButton(
-                  onPressed: () {},
-                  child: Text(
-                    'production_dispatch_bt_label_maintenance'.tr,
-                    style: buttonsTextStyle,
+                  CombinationButton(
+                    combination: Combination.middle,
+                    isEnabled: state.cbIsEnabledLabelMaintenance.value,
+                    text: 'production_dispatch_bt_label_maintenance'.tr,
+                    click: () {},
                   ),
-                ),
-                TextButton(
-                  onPressed: () {},
-                  child: Text(
-                    'production_dispatch_bt_update_sap'.tr,
-                    style: buttonsTextStyle,
+                  CombinationButton(
+                    combination: Combination.middle,
+                    isEnabled: state.cbIsEnabledUpdateSap.value,
+                    text: 'production_dispatch_bt_update_sap'.tr,
+                    click: () {},
                   ),
-                ),
-                TextButton(
-                  onPressed: () {},
-                  child: Text(
-                    'production_dispatch_bt_print_material_head'.tr,
-                    style: buttonsTextStyle,
+                  CombinationButton(
+                    combination: Combination.middle,
+                    isEnabled: state.cbIsEnabledPrintMaterialHead.value,
+                    text: 'production_dispatch_bt_print_material_head'.tr,
+                    click: () {},
                   ),
-                ),
-                TextButton(
-                  onPressed: () {},
-                  child: Text(
-                    'production_dispatch_bt_report_sap'.tr,
-                    style: buttonsTextStyle,
+                  CombinationButton(
+                    combination: Combination.right,
+                    isEnabled: state.cbIsEnabledReportSap.value,
+                    text: 'production_dispatch_bt_report_sap'.tr,
+                    click: () {},
                   ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(width: 10),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: state.orderList.any((e) => e.select)
-                  ? Colors.blueAccent
-                  : Colors.grey,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(25),
+                ],
               ),
             ),
-            onPressed: () {
-              logic.push();
-            },
-            child: Text(
-              'production_dispatch_bt_push'.tr,
-              style: const TextStyle(color: Colors.white),
+            const SizedBox(width: 10),
+            CombinationButton(
+              isEnabled: state.cbIsEnabledPush.value,
+              text: 'production_dispatch_bt_push'.tr,
+              click: () => logic.push(),
             ),
-          ),
-          const SizedBox(width: 10),
-        ],
+            const SizedBox(width: 10),
+          ],
+        ),
       ),
     );
   }
@@ -527,11 +530,11 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
       title: getFunctionTitle(),
       children: _queryWidgets(),
       query: () => logic.query(),
-      body: Column(
-        children: [
-          Expanded(
-            child: Obx(
-              () => logic.switchControllerMergeOrder.isChecked.value
+      body: Obx(
+        () => Column(
+          children: [
+            Expanded(
+              child: state.isSelectedMergeOrder.value
                   ? ListView.builder(
                       padding: const EdgeInsets.all(8),
                       itemCount: state.orderGroupList.length,
@@ -547,11 +550,9 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
                           _item1(state.orderList, index),
                     ),
             ),
-          ),
-          Obx(() => logic.switchControllerMergeOrder.isChecked.value
-              ? Container()
-              : _bottomButtons())
-        ],
+            state.isSelectedMergeOrder.value ? Container() : _bottomButtons()
+          ],
+        ),
       ),
     );
   }

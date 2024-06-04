@@ -42,7 +42,11 @@ class _ProductionMaterialsReportPageState
         ),
         OptionsPicker(pickerController: logic.pickerControllerSapProcessFlow),
         SwitchButton(
-            switchController: logic.switchControllerPickingMaterialCompleted),
+          name: '领料完成',
+          value: state.isPickingMaterialCompleted.value,
+          onChanged: (bool isSelect) =>
+              state.isPickingMaterialCompleted.value = isSelect,
+        ),
       ],
       query: () => logic.queryProductionMaterials(),
       body: ListView(

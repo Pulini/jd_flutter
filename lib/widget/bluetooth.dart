@@ -31,6 +31,12 @@ Future<bool> getBluetoothPermission() async {
     Permission.bluetoothAdvertise
   ].request();
   //granted 通过，denied 被拒绝，permanentlyDenied 拒绝且不在提示
+  print('location=${statuses[Permission.location]!.isGranted}');
+  print('bluetoothConnect=${statuses[Permission.bluetoothConnect]!.isGranted}');
+  print('bluetoothScan=${statuses[Permission.bluetoothScan]!.isGranted}');
+  print('bluetooth=${statuses[Permission.bluetooth]!.isGranted}');
+  print(
+      'bluetoothAdvertise=${statuses[Permission.bluetoothAdvertise]!.isGranted}');
   if (statuses[Permission.location]!.isGranted &&
       statuses[Permission.bluetoothConnect]!.isGranted &&
       statuses[Permission.bluetoothScan]!.isGranted &&
@@ -51,7 +57,7 @@ class BluetoothDialog extends StatefulWidget {
 class _BluetoothDialogState extends State<BluetoothDialog> {
   var channel = const MethodChannel(channelFlutterSend);
 
-  _getScannedDevices() {
+  _getScannedDevices()  {
     channel.invokeMethod('GetScannedDevices');
   }
 
@@ -154,7 +160,7 @@ class _BluetoothDialogState extends State<BluetoothDialog> {
                 {
                   deviceList
                       .singleWhere((element) =>
-                  element.deviceMAC == call.arguments['MAC'])
+                          element.deviceMAC == call.arguments['MAC'])
                       .deviceIsConnected = true;
                   deviceList.refresh();
                   break;
@@ -186,7 +192,7 @@ class _BluetoothDialogState extends State<BluetoothDialog> {
           {
             var deviceName = call.arguments['DeviceName'];
             var deviceMAC = call.arguments['DeviceMAC'];
-            var deviceBondState = call.arguments['DeviceBondState'] == 12;
+            var deviceBondState = call.arguments['DeviceBondState'];
             var deviceIsConnected = call.arguments['DeviceIsConnected'];
             if (!deviceList.any((v) => v.deviceMAC == deviceMAC)) {
               deviceList.add(BluetoothDevice.fromJson(<String, dynamic>{}
@@ -225,15 +231,20 @@ class _BluetoothDialogState extends State<BluetoothDialog> {
   @override
   void initState() {
     super.initState();
-    getBluetoothPermission().then((isGranted) {
-      if (isGranted) {
-        _bluetoothListener();
-        // _openBluetooth();
-        _getScannedDevices();
-      } else {
-        Get.back();
-      }
-    });
+    if (GetPlatform.isAndroid) {
+      getBluetoothPermission().then((isGranted) {
+        if (isGranted) {
+          _bluetoothListener();
+          _getScannedDevices();
+        } else {
+          Get.back();
+        }
+      });
+    }
+    if (GetPlatform.isIOS) {
+      _bluetoothListener();
+      _getScannedDevices();
+    }
   }
 
   _item(BluetoothDevice device) {
@@ -245,44 +256,44 @@ class _BluetoothDialogState extends State<BluetoothDialog> {
         ),
         title: device.deviceIsBonded!
             ? Text.rich(
-          TextSpan(
-            children: [
-              TextSpan(
-                text: device.deviceName,
-              ),
-              TextSpan(
-                text: 'bluetooth_connected'.tr,
-                style: const TextStyle(
-                  color: Colors.green,
+                TextSpan(
+                  children: [
+                    TextSpan(
+                      text: device.deviceName,
+                    ),
+                    TextSpan(
+                      text: 'bluetooth_connected'.tr,
+                      style: const TextStyle(
+                        color: Colors.green,
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-            ],
-          ),
-        )
+              )
             : Text(device.deviceName!),
         subtitle: Text(device.deviceMAC!),
         trailing: device.deviceIsConnected!
             ? TextButton(
-            onPressed: () => _closeBluetooth(device),
-            child: Text.rich(
-              TextSpan(
-                style: const TextStyle(color: Colors.red),
-                children: [
-                  const WidgetSpan(
-                    child: Icon(
-                      Icons.square,
-                      color: Colors.red,
-                    ),
-                    alignment: PlaceholderAlignment.middle,
+                onPressed: () => _closeBluetooth(device),
+                child: Text.rich(
+                  TextSpan(
+                    style: const TextStyle(color: Colors.red),
+                    children: [
+                      const WidgetSpan(
+                        child: Icon(
+                          Icons.square,
+                          color: Colors.red,
+                        ),
+                        alignment: PlaceholderAlignment.middle,
+                      ),
+                      TextSpan(text: 'bluetooth_disconnect'.tr),
+                    ],
                   ),
-                  TextSpan(text: 'bluetooth_disconnect'.tr),
-                ],
-              ),
-            ))
+                ))
             : TextButton(
-          onPressed: () => _connectBluetooth(device),
-          child: Text('bluetooth_connect'.tr),
-        ),
+                onPressed: () => _connectBluetooth(device),
+                child: Text('bluetooth_connect'.tr),
+              ),
       ),
     );
   }
@@ -301,11 +312,11 @@ class _BluetoothDialogState extends State<BluetoothDialog> {
               children: [
                 Expanded(
                     child: Obx(() => ListView.builder(
-                      padding: const EdgeInsets.all(8),
-                      itemCount: deviceList.length,
-                      itemBuilder: (BuildContext context, int index) =>
-                          _item(deviceList[index]),
-                    ))),
+                          padding: const EdgeInsets.all(8),
+                          itemCount: deviceList.length,
+                          itemBuilder: (BuildContext context, int index) =>
+                              _item(deviceList[index]),
+                        ))),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -321,53 +332,53 @@ class _BluetoothDialogState extends State<BluetoothDialog> {
                     ),
                     const SizedBox(width: 10),
                     Obx(() => Expanded(
-                      flex: 1,
-                      child: streamIsScanning.value
-                          ? ElevatedButton(
-                        onPressed: () => _endScanBluetooth(),
-                        child: Text.rich(
-                          TextSpan(
-                            style: const TextStyle(color: Colors.red),
-                            children: [
-                              const WidgetSpan(
-                                child: Icon(
-                                  Icons.square,
-                                  color: Colors.red,
+                          flex: 1,
+                          child: streamIsScanning.value
+                              ? ElevatedButton(
+                                  onPressed: () => _endScanBluetooth(),
+                                  child: Text.rich(
+                                    TextSpan(
+                                      style: const TextStyle(color: Colors.red),
+                                      children: [
+                                        const WidgetSpan(
+                                          child: Icon(
+                                            Icons.square,
+                                            color: Colors.red,
+                                          ),
+                                          alignment:
+                                              PlaceholderAlignment.middle,
+                                        ),
+                                        TextSpan(text: 'bluetooth_stop'.tr),
+                                      ],
+                                    ),
+                                  ),
+                                )
+                              : ElevatedButton(
+                                  onPressed: () => _isEnable((enable) => enable
+                                      ? _scanBluetooth()
+                                      : errorDialog(
+                                          content:
+                                              'bluetooth_connect_error_type3'
+                                                  .tr)),
+                                  child: Text.rich(
+                                    TextSpan(
+                                      style:
+                                          const TextStyle(color: Colors.green),
+                                      children: [
+                                        const WidgetSpan(
+                                          child: Icon(
+                                            Icons.play_arrow,
+                                            color: Colors.green,
+                                          ),
+                                          alignment:
+                                              PlaceholderAlignment.middle,
+                                        ),
+                                        TextSpan(text: 'bluetooth_scan'.tr),
+                                      ],
+                                    ),
+                                  ),
                                 ),
-                                alignment:
-                                PlaceholderAlignment.middle,
-                              ),
-                              TextSpan(text: 'bluetooth_stop'.tr),
-                            ],
-                          ),
-                        ),
-                      )
-                          : ElevatedButton(
-                        onPressed: () => _isEnable((enable) => enable
-                            ? _scanBluetooth()
-                            : errorDialog(
-                            content:
-                            'bluetooth_connect_error_type3'
-                                .tr)),
-                        child: Text.rich(
-                          TextSpan(
-                            style:
-                            const TextStyle(color: Colors.green),
-                            children: [
-                              const WidgetSpan(
-                                child: Icon(
-                                  Icons.play_arrow,
-                                  color: Colors.green,
-                                ),
-                                alignment:
-                                PlaceholderAlignment.middle,
-                              ),
-                              TextSpan(text: 'bluetooth_scan'.tr),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ))
+                        ))
                   ],
                 ),
               ],

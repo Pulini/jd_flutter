@@ -5,8 +5,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/utils.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
-
 import '../constant.dart';
 import '../http/request/user_avatar.dart';
 import '../http/response/department.dart';
@@ -18,8 +16,6 @@ import 'home_state.dart';
 
 class HomeLogic extends GetxController {
   final HomeState state = HomeState();
-  RefreshController refreshController =
-      RefreshController(initialRefresh: false);
 
   ///用户头像
   late Widget userAvatar;
@@ -37,25 +33,19 @@ class HomeLogic extends GetxController {
   @override
   onReady() {
     super.onReady();
-    refreshFunList();
-    // if (GetPlatform.isWeb) {
-    //   refreshFunList();
-    // } else {
-    //   getVersionInfo(
-    //     false,
-    //     noUpdate: () => refreshFunList(),
-    //     needUpdate: (versionInfo) => doUpdate(versionInfo),
-    //   );
-    // }
+    getVersionInfo(
+      false,
+      noUpdate: () {},
+      needUpdate: (versionInfo) => doUpdate(versionInfo),
+    );
   }
 
-  refreshFunList() {
+  refreshFunList({required Function()  refresh}) {
     httpGet(
       method: webApiGetMenuFunction,
       loading: 'checking_version'.tr,
       query: {'empID': userInfo?.empID ?? 0},
     ).then((response) {
-      refreshController.refreshCompleted();
       if (response.resultCode == resultSuccess) {
         var list = <HomeFunctions>[];
         for (var item in jsonDecode(response.data)) {
@@ -65,6 +55,7 @@ class HomeLogic extends GetxController {
       } else {
         errorDialog(content: response.message);
       }
+      refresh.call();
     });
   }
 

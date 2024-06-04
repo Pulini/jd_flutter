@@ -96,7 +96,7 @@ class PropertyLogic extends GetxController
 
   setParticipator(String str) {
     if (str.length >= 6) {
-      checkWorker(
+      getWorkerInfo(
         number: str,
         workers: (list) {
           state.setParticipator(
@@ -113,7 +113,7 @@ class PropertyLogic extends GetxController
 
   setCustodian(String str) {
     if (str.length >= 6) {
-      checkWorker(
+      getWorkerInfo(
         number: str,
         workers: (list) {
           state.setCustodian(
@@ -130,7 +130,7 @@ class PropertyLogic extends GetxController
 
   setLiable(String str) {
     if (str.length >= 6) {
-      checkWorker(
+      getWorkerInfo(
         number: str,
         workers: (list) {
           state.setLiable(

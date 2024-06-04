@@ -237,6 +237,6 @@ data class BDevice(
         it["DeviceName"] = device.name
         it["DeviceMAC"] = device.address
         it["DeviceIsConnected"] = socket.isConnected
-        it["DeviceBondState"] = device.bondState
+        it["DeviceBondState"] = device.bondState== 12
     }
 }

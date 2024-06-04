@@ -1,3 +1,7 @@
+import 'package:jd_flutter/utils.dart';
+
+import '../../bean/dispatch_info.dart';
+
 /// WorkCardList : [{"ID":0,"InterID":0,"EntryID":1,"OperPlanningEntryFID":3714871,"EmpID":0,"WorkerCode":"0","WorkerName":"","SourceQty":1463,"MustQty":1463,"PreSchedulingQty":0,"Qty":1463,"FinishQty":0,"SourceEntryID":2,"SourceInterID":213014,"SourceEntryFID":555546,"ProcessNumber":"YT","ProcessName":"沿条","IsOpen":1,"RoutingID":162132}]
 /// WorkCardTitle : {"FQtyPass":1463,"FQtyProcessPass":0,"DayWorkCardPlanQty":0,"FCardNoReportStatus":0,"PlantBody":"","ProcessBillNumber":"P2048549","DispatchingNumber":1463}
 
@@ -44,44 +48,56 @@ class ProductionDispatchOrderDetailInfo {
 
 class WorkCardTitle {
   WorkCardTitle({
-    this.fQtyPass,
-    this.fQtyProcessPass,
+    this.qtyPass,
+    this.qtyProcessPass,
     this.dayWorkCardPlanQty,
-    this.fCardNoReportStatus,
+    this.cardNoReportStatus,
     this.plantBody,
     this.processBillNumber,
     this.dispatchingNumber,
   });
 
   WorkCardTitle.fromJson(dynamic json) {
-    fQtyPass = json['FQtyPass'];
-    fQtyProcessPass = json['FQtyProcessPass'];
+    qtyPass = json['FQtyPass'];
+    qtyProcessPass = json['FQtyProcessPass'];
     dayWorkCardPlanQty = json['DayWorkCardPlanQty'];
-    fCardNoReportStatus = json['FCardNoReportStatus'];
+    cardNoReportStatus = json['FCardNoReportStatus'];
     plantBody = json['PlantBody'];
     processBillNumber = json['ProcessBillNumber'];
     dispatchingNumber = json['DispatchingNumber'];
   }
 
-  double? fQtyPass;
-  double? fQtyProcessPass;
+  double? qtyPass;
+  double? qtyProcessPass;
   double? dayWorkCardPlanQty;
-  int? fCardNoReportStatus;
+  int? cardNoReportStatus;
   String? plantBody;
   String? processBillNumber;
   double? dispatchingNumber;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
-    map['FQtyPass'] = fQtyPass;
-    map['FQtyProcessPass'] = fQtyProcessPass;
+    map['FQtyPass'] = qtyPass;
+    map['FQtyProcessPass'] = qtyProcessPass;
     map['DayWorkCardPlanQty'] = dayWorkCardPlanQty;
-    map['FCardNoReportStatus'] = fCardNoReportStatus;
+    map['FCardNoReportStatus'] = cardNoReportStatus;
     map['PlantBody'] = plantBody;
     map['ProcessBillNumber'] = processBillNumber;
     map['DispatchingNumber'] = dispatchingNumber;
     return map;
   }
+
+  getDispatchTotal() => '派工总数：${dispatchingNumber.toShowString()}';
+
+  getTodayGoal() => '今日目标：${dayWorkCardPlanQty.toShowString()}';
+
+  getReported() => '已汇报数：${qtyPass.toShowString()}';
+
+  getUnderCount() => '汇报欠数：${dispatchingNumber.sub(qtyPass!).toShowString()}';
+
+  getAccumulateReportCount() => '累计计工数：${qtyProcessPass.toShowString()}';
+
+  getReportedCount() => '已汇报计工数：${qtyPass.sub(qtyProcessPass!).toShowString()}';
 }
 
 /// ID : 0
@@ -168,6 +184,7 @@ class WorkCardList {
   String? processName;
   int? isOpen;
   int? routingID;
+  List<DispatchInfo> dispatch = [];
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -192,4 +209,25 @@ class WorkCardList {
     map['RoutingID'] = routingID;
     return map;
   }
+
+  getProcess() => '< $processNumber > $processName';
+
+
+  double getTotal() {
+    var total = 0.0;
+    for (var dis in dispatch) {
+      total = total.add(dis.qty);
+    }
+    return total;
+  }
+
+  getTotalString() => '计工：${getTotal().toShowString()}';
+
+  getFinishQtyString() => '已计工：${finishQty.toShowString()}';
+
+  getSurplusQtyString() => '剩余：${mustQty.toShowString()}';
+
+  isShowWarning() => getTotal() > mustQty!;
+
+  isShowFlag() => getTotal() == mustQty!;
 }

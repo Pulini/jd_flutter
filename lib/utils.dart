@@ -311,13 +311,13 @@ upData() {
   });
 }
 
-///检查工号
-checkWorker({
-  required String number,
+///获取员工信息
+getWorkerInfo({
+  String? number,
   String? department,
   required Function(List<WorkerInfo>) workers,
 }) {
-  httpGet(method: webApiCheckWorker, query: {
+  httpGet(method: webApiGetWorkerInfo, query: {
     'EmpNumber': number,
     'DeptmentID': department,
   }).then((worker) {

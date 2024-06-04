@@ -287,6 +287,9 @@ const webApiGetWorkCardCombinedSizeList =
 const webApiPushProductionOrder =
     'api/NeedleCartDispatch/GetProcessWorkCardForWorkCard';
 
+///根据组别获取本组组员信息
+const webApiGetWorkerInfo = 'api/User/GetEmpByFNumber';
+
 ///查询财产审核列表
 const webApiQueryProperty = 'api/FixedAsset/SearchUnnumberedProperty';
 
@@ -301,9 +304,6 @@ const webApiSkipAcceptance = 'api/FixedAsset/CloseAssets';
 
 ///更新财产信息
 const webApiUpdateProperty = 'api/FixedAsset/UpdateAssets';
-
-///检查员工数据
-const webApiCheckWorker = 'api/User/GetEmpByFNumber';
 
 ///人员来访记录列表
 const webApiGetVisitDtBySqlWhere = 'api/VisitorRegistration/GetVisitDtBySqlWhere';

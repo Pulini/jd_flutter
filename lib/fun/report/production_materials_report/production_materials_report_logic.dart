@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-
 import '../../../route.dart';
 import '../../../widget/picker/picker_controller.dart';
 import 'production_materials_report_state.dart';
@@ -16,11 +15,6 @@ class ProductionMaterialsReportLogic extends GetxController {
     saveKey:
         '${RouteConfig.productionMaterialsReportPage.name}${PickerType.sapProcessFlow}',
   );
-
-  var switchControllerPickingMaterialCompleted = SwitchButtonController(
-      buttonName: '领料完成',
-      saveKey:
-          '${RouteConfig.productionMaterialsReportPage.name}PickingMaterialCompleted');
 
   @override
   void onReady() {

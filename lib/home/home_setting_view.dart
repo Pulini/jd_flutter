@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/widget/bluetooth.dart';
-import '../constant.dart';
-import '../login/login_view.dart';
 import '../utils.dart';
 import '../widget/custom_widget.dart';
 import '../widget/dialogs.dart';
@@ -50,9 +48,9 @@ class _UserSettingState extends State<UserSetting> {
     return Positioned(
       top: 50,
       left: 20,
-      child: GestureDetector(
-        onTap: () => Get.back(),
-        child: const Icon(
+      child: IconButton(
+        onPressed: ()=>Get.back(),
+        icon: const Icon(
           Icons.arrow_back_ios,
           color: Colors.black54,
         ),

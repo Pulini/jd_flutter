@@ -22,6 +22,8 @@ class _HomePageState extends State<HomePage> {
   final logic = Get.put(HomeLogic());
   final state = Get.find<HomeLogic>().state;
 
+  var controller = RefreshController(initialRefresh: true);
+
   _appBar() {
     return AppBar(
       leading: IconButton(
@@ -164,42 +166,40 @@ class _HomePageState extends State<HomePage> {
     _methodChannel();
   }
 
-  var key = const Key('SmartRefresher');
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: backgroundColor,
-      child: Obx(
-        () => Scaffold(
-          backgroundColor: Colors.transparent,
-          appBar: _appBar(),
-          body: SmartRefresher(
-            key: key,
-            controller: logic.refreshController,
-            enablePullDown: true,
-            onRefresh:()=> logic.refreshFunList(),
-            header: const WaterDropHeader(),
-            child: ListView.builder(
-              padding: const EdgeInsets.all(8),
-              itemCount: state.buttons.length,
-              itemBuilder: (BuildContext context, int index) =>
-                  _item(state.buttons[index], index),
-            ),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: _appBar(),
+        body: SmartRefresher(
+          controller: controller,
+          enablePullDown: true,
+          onRefresh: () => logic.refreshFunList(
+            refresh: () => setState(() => controller.refreshCompleted()),
           ),
-          bottomNavigationBar: state.navigationBar.isEmpty
-              ? null
-              : BottomNavigationBar(
-                  // type: BottomNavigationBarType.fixed,
-                  type: BottomNavigationBarType.shifting,
-                  items: state.navigationBar,
-                  currentIndex: state.navigationBarIndex,
-                  selectedItemColor: state.selectedItemColor,
-                  onTap: (index) {
-                    state.navigationBarIndex = index;
-                    state.refreshButton();
-                  },
-                ),
+          header: const WaterDropHeader(),
+          child: ListView.builder(
+            padding: const EdgeInsets.all(8),
+            itemCount: state.buttons.length,
+            itemBuilder: (BuildContext context, int index) =>
+                _item(state.buttons[index], index),
+          ),
         ),
+        bottomNavigationBar: state.navigationBar.isEmpty
+            ? null
+            : BottomNavigationBar(
+                // type: BottomNavigationBarType.fixed,
+                type: BottomNavigationBarType.shifting,
+                items: state.navigationBar,
+                currentIndex: state.navigationBarIndex,
+                selectedItemColor: state.selectedItemColor,
+                onTap: (index) {
+                  state.navigationBarIndex = index;
+                  state.refreshButton();
+                },
+              ),
       ),
     );
   }

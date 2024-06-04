@@ -5,6 +5,7 @@ import '../../../http/response/molding_pack_area_report_info.dart';
 
 class ProductionMaterialsReportState {
   var tableData = <MoldingPackAreaReportInfo>[].obs;
+  var isPickingMaterialCompleted =false.obs;
 
   var tableDataColumn = <DataColumn>[
     DataColumn(label: Text('销售订单号')),

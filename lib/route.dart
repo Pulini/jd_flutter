@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 
 import 'bean/home_button.dart';
 import 'bean/routes.dart';
+import 'fun/dispatching/production_dispatch/production_dispatch_detail_view.dart';
 import 'fun/manage/visit_register/visit_register_view.dart';
 import 'fun/dispatching/production_dispatch/production_dispatch_view.dart';
 import 'fun/management/property/property_view.dart';
@@ -116,6 +117,13 @@ class RouteConfig {
     const ProductionDispatchPage(),
   );
 
+  ///生产派工-派工明细
+  static Routes productionDispatchDetailPage = Routes(
+    '/production_dispatch',
+    99,
+    const ProductionDispatchDetailPage(),
+  );
+
   ///财产管理
   static Routes propertyPage = Routes(
     '/property',
@@ -144,6 +152,7 @@ class RouteConfig {
     moldingScanBulletinReportPage,
     visitRegisterPage,
     productionDispatchPage,
+    productionDispatchDetailPage,
     propertyPage,
     productionMaterialsReportPage,
   ];
@@ -205,6 +214,10 @@ class RouteConfig {
     GetPage(
       name: productionDispatchPage.name,
       page: () => productionDispatchPage.page,
+    ),
+    GetPage(
+      name: productionDispatchDetailPage.name,
+      page: () => productionDispatchDetailPage.page,
     ),
     GetPage(
       name: propertyPage.name,
