@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jd_flutter/http/response/property_info.dart';
 import 'package:jd_flutter/route.dart';
 
+import '../../../bean/http/response/property_info.dart';
 import '../../../widget/custom_widget.dart';
 import '../../../widget/picker/picker_view.dart';
 import 'property_logic.dart';
@@ -133,19 +133,19 @@ class _PropertyPageState extends State<PropertyPage> {
       bottomSheet: [
         EditText(
           hint: 'property_query_et_property_number'.tr,
-          controller: logic.textControllerPropertyNumber,
+          onChanged: (v) => state.etPropertyNumber = v,
         ),
         EditText(
           hint: 'property_query_et_property_name'.tr,
-          controller: logic.textControllerPropertyName,
+          onChanged: (v) => state.etPropertyName = v,
         ),
         EditText(
           hint: 'property_query_et_serial_number'.tr,
-          controller: logic.textControllerSerialNumber,
+          onChanged: (v) => state.etSerialNumber = v,
         ),
         EditText(
           hint: 'property_query_et_invoice_number'.tr,
-          controller: logic.textControllerInvoiceNumber,
+          onChanged: (v) => state.etInvoiceNumber = v,
         ),
         Row(
           children: [
@@ -153,13 +153,13 @@ class _PropertyPageState extends State<PropertyPage> {
                 flex: 1,
                 child: EditText(
                   hint: 'property_query_et_name'.tr,
-                  controller: logic.textControllerName,
+                  onChanged: (v) => state.etName = v,
                 )),
             Expanded(
                 flex: 1,
                 child: EditText(
                   hint: 'property_query_et_worker_number'.tr,
-                  controller: logic.textControllerWorkerNumber,
+                  onChanged: (v) => state.etWorkerNumber = v,
                 )),
           ],
         ),

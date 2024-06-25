@@ -1,4 +1,4 @@
-import '../web_api.dart';
+import '../../../web_api.dart';
 
 class BaseData {
   BaseData({

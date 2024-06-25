@@ -5,11 +5,11 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/bluetooth_device.dart';
 import 'package:jd_flutter/constant.dart';
-import 'package:jd_flutter/http/web_api.dart';
+import 'package:jd_flutter/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import '../tscUtil.dart';
+import '../tsc_util.dart';
 import 'dialogs.dart';
 
 isConnected(Function(bool) connected) {

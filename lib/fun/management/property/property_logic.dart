@@ -3,9 +3,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/management/property/property_detail_view.dart';
-import 'package:jd_flutter/http/response/property_detail_info.dart';
-import '../../../http/response/property_info.dart';
-import '../../../http/web_api.dart';
+import '../../../bean/http/response/property_detail_info.dart';
+import '../../../bean/http/response/property_info.dart';
+import '../../../web_api.dart';
 import '../../../route.dart';
 import '../../../utils.dart';
 import '../../../widget/dialogs.dart';
@@ -19,12 +19,7 @@ class PropertyLogic extends GetxController
   ///tab控制器
   late TabController tabController = TabController(length: 3, vsync: this);
 
-  var textControllerPropertyNumber = TextEditingController();
-  var textControllerPropertyName = TextEditingController();
-  var textControllerSerialNumber = TextEditingController();
-  var textControllerInvoiceNumber = TextEditingController();
-  var textControllerName = TextEditingController();
-  var textControllerWorkerNumber = TextEditingController();
+
 
   ///日期选择器的控制器
   var pickerControllerStartDate = DatePickerController(
@@ -48,13 +43,13 @@ class PropertyLogic extends GetxController
     httpGet(
       method: webApiQueryProperty,
       loading: 'property_querying'.tr,
-      query: {
-        'PropertyNumber': textControllerPropertyNumber.text,
-        'PropertyName': textControllerPropertyName.text,
-        'SerialNumber': textControllerSerialNumber.text,
-        'InvoiceNumber': textControllerInvoiceNumber.text,
-        'EmpName': textControllerName.text,
-        'EmpCode': textControllerWorkerNumber.text,
+      params: {
+        'PropertyNumber': state.etPropertyNumber,
+        'PropertyName': state.etPropertyName,
+        'SerialNumber': state.etSerialNumber,
+        'InvoiceNumber': state.etInvoiceNumber,
+        'EmpName': state.etName,
+        'EmpCode': state.etWorkerNumber,
         'StartDate': pickerControllerStartDate.getDateFormatYMD(),
         'EndDate': pickerControllerEndDate.getDateFormatYMD(),
       },
@@ -77,7 +72,7 @@ class PropertyLogic extends GetxController
     httpGet(
       method: webApiGetPropertyDetail,
       loading: 'property_querying'.tr,
-      query: {'InterID': detailId},
+      params: {'InterID': detailId},
     ).then((response) {
       if (response.resultCode == resultSuccess) {
         state.detail = PropertyDetailInfo.fromJson(jsonDecode(response.data));
@@ -149,7 +144,7 @@ class PropertyLogic extends GetxController
     httpPost(
       method: webApiPropertyClose,
       loading: 'property_detail_closing'.tr,
-      query: {'InterID': detailId},
+      params: {'InterID': detailId},
     ).then((response) {
       if (response.resultCode == resultSuccess) {
         successDialog(content: response.message);
@@ -163,7 +158,7 @@ class PropertyLogic extends GetxController
     httpPost(
       method: webApiSkipAcceptance,
       loading: 'property_detail_skipping_acceptance'.tr,
-      query: {'InterID': detailId},
+      params: {'InterID': detailId},
     ).then((response) {
       if (response.resultCode == resultSuccess) {
         successDialog(content: response.message);

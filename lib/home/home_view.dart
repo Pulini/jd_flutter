@@ -196,7 +196,9 @@ class _HomePageState extends State<HomePage> {
                 currentIndex: state.navigationBarIndex,
                 selectedItemColor: state.selectedItemColor,
                 onTap: (index) {
-                  state.navigationBarIndex = index;
+                  setState(() {
+                    state.navigationBarIndex = index;
+                  });
                   state.refreshButton();
                 },
               ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class DailyReportData {
-  DailyReportData({
+class DailyReport {
+  DailyReport({
     this.type,
     this.materialName,
     this.size,
@@ -9,7 +9,7 @@ class DailyReportData {
     this.qty,
   });
 
-  DailyReportData.fromJson(dynamic json) {
+  DailyReport.fromJson(dynamic json) {
     type = json['Type'];
     materialName = json['MaterialName'];
     size = json['Size'];

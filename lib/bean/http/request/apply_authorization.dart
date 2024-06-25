@@ -42,8 +42,4 @@ class ApplyAuthorization {
     return map;
   }
 
-  @override
-  String toString() {
-    return toJson().toString();
-  }
 }

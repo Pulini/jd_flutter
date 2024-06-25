@@ -1,11 +1,10 @@
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/widget/picker/picker_controller.dart';
 
-import '../../../http/response/molding_pack_area_report_info.dart';
-import '../../../http/web_api.dart';
+import '../../../bean/http/response/molding_pack_area_report_info.dart';
+import '../../../web_api.dart';
 import '../../../route.dart';
 import '../../../widget/dialogs.dart';
 import 'molding_pack_area_detail_report_view.dart';
@@ -14,9 +13,7 @@ import 'molding_pack_area_report_state.dart';
 class MoldingPackAreaReportPageLogic extends GetxController {
   final MoldingPackAreaReportPageState state = MoldingPackAreaReportPageState();
 
-  var textControllerInstruction = TextEditingController();
-  var textControllerOrderNumber = TextEditingController();
-  var textControllerTypeBody = TextEditingController();
+
 
   late DatePickerController dateControllerStart;
   late DatePickerController dateControllerEnd;
@@ -45,30 +42,16 @@ class MoldingPackAreaReportPageLogic extends GetxController {
     );
     super.onInit();
   }
-
-  // @override
-  // void onReady() {
-  //   super.onReady();
-  //   refreshList();
-  // }
-
-  // string startDate,
-  // string endDate,
-  // string factoryType,
-  // string billNO,
-  // string clientOrderNumber,
-  // List<string> packAreaIDs
-
   query() {
     httpGet(
         method: webApiGetMoldingPackAreaReport,
         loading: '正在查询区域报表...',
-        query: {
+        params: {
           'startDate': dateControllerStart.getDateFormatYMD(),
           'endDate': dateControllerEnd.getDateFormatYMD(),
-          'factoryType': textControllerTypeBody.text,
-          'billNO': textControllerInstruction.text,
-          'clientOrderNumber': textControllerOrderNumber.text,
+          'factoryType': state.etTypeBody,
+          'billNO': state.etInstruction,
+          'clientOrderNumber': state.etOrderNumber,
           'packAreaIDs': checkBoxController.selectedIds,
         }).then((response) {
       if (response.resultCode == resultSuccess) {
@@ -91,7 +74,7 @@ class MoldingPackAreaReportPageLogic extends GetxController {
     httpGet(
         method: webApiGetMoldingPackAreaReportDetail,
         loading: '正在获取报表明细...',
-        query: {
+        params: {
           'interID': interID,
           'clientOrderNumber': clientOrderNumber,
         }).then((response) {

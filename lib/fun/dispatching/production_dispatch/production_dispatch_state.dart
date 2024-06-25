@@ -1,15 +1,16 @@
-import 'package:get/get_rx/src/rx_types/rx_types.dart';
-import 'package:jd_flutter/http/response/worker_info.dart';
-
-import '../../../bean/dispatch_info.dart';
-import '../../../http/response/production_dispatch_order_detail_info.dart';
-import '../../../http/response/production_dispatch_order_info.dart';
+import 'package:get/get.dart';
+import '../../../bean/production_dispatch.dart';
+import '../../../bean/http/response/production_dispatch_order_detail_info.dart';
+import '../../../bean/http/response/production_dispatch_order_info.dart';
+import '../../../bean/http/response/worker_info.dart';
+import '../../../utils.dart';
 
 class ProductionDispatchState {
-  var isSelectedOutsourcing = false.obs;
-  var isSelectedClosed = false.obs;
-  var isSelectedMany = false.obs;
-  var isSelectedMergeOrder = false.obs;
+  var etInstruction='';
+  var isSelectedOutsourcing =  spGet('${Get.currentRoute}/isSelectedOutsourcing') ??false;
+  var isSelectedClosed =  spGet('${Get.currentRoute}/isSelectedClosed') ??false;
+  var isSelectedMany =  spGet('${Get.currentRoute}/isSelectedMany') ??false;
+  var isSelectedMergeOrder =  spGet('${Get.currentRoute}/isSelectedMergeOrder') ??false;
   var orderList = <ProductionDispatchOrderInfo>[].obs;
   var orderGroupList = <String, List<ProductionDispatchOrderInfo>>{}.obs;
 
@@ -18,6 +19,7 @@ class ProductionDispatchState {
   var cbIsEnabledColorMatching = false.obs;
   var cbIsEnabledProcessInstruction = false.obs;
   var cbIsEnabledProcessOpen = false.obs;
+  var cbNameProcess = ''.obs;
   var cbIsEnabledDeleteDownstream = false.obs;
   var cbIsEnabledDeleteLastReport = false.obs;
   var cbIsEnabledLabelMaintenance = false.obs;
@@ -38,11 +40,23 @@ class ProductionDispatchState {
   var isEnabledAddAllDispatch = true;
   var isCheckedSelectAllDispatch = false;
   var isEnabledSelectAllDispatch = false;
-  var isOpenedAllWorkProcedure=true.obs;
+  var isOpenedAllWorkProcedure = true.obs;
 
   var isEnabledBatchDispatch = false.obs;
   var isEnabledNextWorkProcedure = true.obs;
   var isEnabledAddOne = true.obs;
+
+
+
+  ///获取组员列表数据
+  detailViewGetWorkerList() {
+    getWorkerInfo(
+      department: userInfo?.departmentID.toString(),
+      workers: (list) => workerList = list,
+    );
+  }
+
+  // ProductionDispatchState() {}
 
   remake() {
     workCardTitle.value = WorkCardTitle();
@@ -50,7 +64,7 @@ class ProductionDispatchState {
     dispatchInfo.value = [];
     workProcedureSelect.value = -1;
     workerList = [];
-    isOpenedAllWorkProcedure.value=true;
+    isOpenedAllWorkProcedure.value = true;
     isCheckedDivideEqually = true;
     isCheckedAutoCount = true;
     isCheckedRounding = true;
@@ -58,7 +72,9 @@ class ProductionDispatchState {
     isEnabledAddAllDispatch = true;
     isCheckedSelectAllDispatch = false;
     isEnabledSelectAllDispatch = false;
-    isEnabledAddOne.value=false;
-    isEnabledBatchDispatch.value=false;
+    isEnabledAddOne.value = false;
+    isEnabledBatchDispatch.value = false;
   }
+
+
 }

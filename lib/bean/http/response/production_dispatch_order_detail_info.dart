@@ -1,6 +1,6 @@
 import 'package:jd_flutter/utils.dart';
 
-import '../../bean/dispatch_info.dart';
+import '../../production_dispatch.dart';
 
 /// WorkCardList : [{"ID":0,"InterID":0,"EntryID":1,"OperPlanningEntryFID":3714871,"EmpID":0,"WorkerCode":"0","WorkerName":"","SourceQty":1463,"MustQty":1463,"PreSchedulingQty":0,"Qty":1463,"FinishQty":0,"SourceEntryID":2,"SourceInterID":213014,"SourceEntryFID":555546,"ProcessNumber":"YT","ProcessName":"沿条","IsOpen":1,"RoutingID":162132}]
 /// WorkCardTitle : {"FQtyPass":1463,"FQtyProcessPass":0,"DayWorkCardPlanQty":0,"FCardNoReportStatus":0,"PlantBody":"","ProcessBillNumber":"P2048549","DispatchingNumber":1463}
@@ -97,7 +97,7 @@ class WorkCardTitle {
 
   getAccumulateReportCount() => '累计计工数：${qtyProcessPass.toShowString()}';
 
-  getReportedCount() => '已汇报计工数：${qtyPass.sub(qtyProcessPass!).toShowString()}';
+  getReportedCount() => '已汇报未计工数：${qtyPass.sub(qtyProcessPass!).toShowString()}';
 }
 
 /// ID : 0
@@ -212,11 +212,10 @@ class WorkCardList {
 
   getProcess() => '< $processNumber > $processName';
 
-
   double getTotal() {
     var total = 0.0;
     for (var dis in dispatch) {
-      total = total.add(dis.qty);
+      total = total.add(dis.qty??0.0);
     }
     return total;
   }
@@ -231,3 +230,4 @@ class WorkCardList {
 
   isShowFlag() => getTotal() == mustQty!;
 }
+

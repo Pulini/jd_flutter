@@ -2,10 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jd_flutter/http/response/workshop_production_daily_report_info.dart';
 import 'package:jd_flutter/utils.dart';
 
-import '../../../http/web_api.dart';
+import '../../../bean/http/response/workshop_production_daily_report_info.dart';
+import '../../../web_api.dart';
 import '../../../widget/dialogs.dart';
 import 'workshop_production_daily_report_state.dart';
 
@@ -35,7 +35,7 @@ class WorkshopProductionDailyReportLogic extends GetxController
     httpGet(
       loading: '正在获取车间生产日报表汇总数据...',
       method: webApiGetWorkshopProductionDailySummary,
-      query: {'Date': '${now.year}-${now.month}-${now.day}'},
+      params: {'Date': '${now.year}-${now.month}-${now.day}'},
     ).then((response) {
       if (response.resultCode == resultSuccess) {
         var list = <DataRow>[];
@@ -71,7 +71,7 @@ class WorkshopProductionDailyReportLogic extends GetxController
     httpGet(
       loading: '正在获取车间生产日报表明细数据...',
       method: webApiGetWorkshopProductionDailyDetail,
-      query: {'Date': '${now.year}-${now.month}-${now.day}'},
+      params: {'Date': '${now.year}-${now.month}-${now.day}'},
     ).then((response) {
       if (response.resultCode == resultSuccess) {
         // var list = <DataRow>[];

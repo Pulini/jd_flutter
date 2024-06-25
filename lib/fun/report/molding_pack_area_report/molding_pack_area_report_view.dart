@@ -26,17 +26,17 @@ class _MoldingPackAreaReportPageState extends State<MoldingPackAreaReportPage> {
       children: [
         EditText(
           hint: 'page_molding_pack_area_report_query_instruction'.tr,
-          controller: logic.textControllerInstruction,
+          onChanged: (v)=>state.etInstruction=v,
         ),
         const SizedBox(height: 10),
         EditText(
           hint: 'page_molding_pack_area_report_query_order_number'.tr,
-          controller: logic.textControllerOrderNumber,
+          onChanged: (v)=>state.etOrderNumber=v,
         ),
         const SizedBox(height: 10),
         EditText(
           hint: 'page_molding_pack_area_report_query_type_body'.tr,
-          controller: logic.textControllerTypeBody,
+          onChanged: (v)=>state.etTypeBody=v,
         ),
         DatePicker(pickerController: logic.dateControllerStart),
         DatePicker(pickerController: logic.dateControllerEnd),

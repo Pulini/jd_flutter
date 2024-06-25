@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
+import '../bean/http/response/version_info.dart';
 import '../constant.dart';
-import '../http/response/version_info.dart';
-import '../http/web_api.dart';
+import '../web_api.dart';
 import '../login/login_logic.dart';
 import '../login/login_view.dart';
 import 'downloader.dart';
@@ -62,19 +62,19 @@ askDialog({
           TextButton(
             onPressed: () {
               Get.back();
-              confirm?.call();
-            },
-            child: Text('dialog_default_confirm'.tr),
-          ),
-          TextButton(
-            onPressed: () {
-              Get.back();
               cancel?.call();
             },
             child: Text(
               'dialog_default_cancel'.tr,
               style: const TextStyle(color: Colors.grey),
             ),
+          ),
+          TextButton(
+            onPressed: () {
+              Get.back();
+              confirm?.call();
+            },
+            child: Text('dialog_default_confirm'.tr),
           ),
         ],
       ),

@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/utils.dart';
 
-import '../../../http/response/production_summary_info.dart';
+import '../../../bean/http/response/production_summary_info.dart';
+
 
 class ProductionSummaryReportState {
   List<ProductionSummaryInfo> tableData = <ProductionSummaryInfo>[];

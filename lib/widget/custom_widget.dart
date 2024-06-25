@@ -114,20 +114,30 @@ class _NumberTextFieldState extends State<NumberTextField> {
 class EditText extends StatelessWidget {
   const EditText({
     super.key,
-    required this.hint,
-    required this.controller,
+    this.hint,
+    this.initStr = '',
+    this.hasFocus = false,
+    required this.onChanged,
   });
 
-  final String hint;
-  final TextEditingController controller;
+  final String? initStr;
+  final bool hasFocus;
+  final String? hint;
+  final Function(String v) onChanged;
 
   @override
   Widget build(BuildContext context) {
+    TextEditingController controller = TextEditingController(text: initStr);
+    FocusNode? fn;
+    if (hasFocus) {
+      fn = FocusNode()..requestFocus();
+    }
     return Container(
       height: 50,
       margin: const EdgeInsets.fromLTRB(10, 5, 10, 5),
       child: TextField(
         controller: controller,
+        focusNode: fn,
         decoration: InputDecoration(
           contentPadding: const EdgeInsets.only(
             top: 0,
@@ -164,41 +174,111 @@ class NumberDecimalEditText extends StatelessWidget {
     super.key,
     this.hasDecimal = true,
     this.max = double.infinity,
-    required this.hint,
-    this.onChanged,
-    required this.controller,
+    this.initQty = 0.0,
+    this.hint,
+    this.hasFocus = false,
+    required this.onChanged,
   });
 
-  final String hint;
+  final String? hint;
   final bool hasDecimal;
   final double? max;
-  final TextEditingController controller;
-  final Function(double)? onChanged;
+  final double? initQty;
+  final bool hasFocus;
+  final Function(double) onChanged;
 
   @override
   Widget build(BuildContext context) {
+    TextEditingController controller =
+        TextEditingController(text: initQty.toShowString());
+    controller.selection = TextSelection.fromPosition(
+      TextPosition(offset: controller.text.length),
+    );
+    FocusNode? fn;
+    if (hasFocus) {
+      fn = FocusNode()..requestFocus();
+    }
     return Container(
-      height: 50,
       margin: const EdgeInsets.fromLTRB(10, 5, 10, 5),
       child: TextField(
         keyboardType: TextInputType.number,
         inputFormatters: [
           hasDecimal
-              ? FilteringTextInputFormatter.allow(RegExp("[0-9.]"))
-              : FilteringTextInputFormatter.digitsOnly, //数字包括小数
+              ? FilteringTextInputFormatter.allow(RegExp("[0-9.]")) //数字包括小数
+              : FilteringTextInputFormatter.digitsOnly,
         ],
+        focusNode: fn,
         controller: controller,
         onChanged: (v) {
           if (v.toDoubleTry() > max!) {
-            controller.text = max.toString();
+            controller.text = max.toShowString();
             controller.selection = TextSelection.fromPosition(
               TextPosition(offset: controller.text.length),
             );
-            onChanged?.call(max!);
-          }else{
-            onChanged?.call(v.toDoubleTry());
+            onChanged.call(max!);
+          } else {
+            onChanged.call(v.toDoubleTry());
           }
         },
+        decoration: InputDecoration(
+          contentPadding: const EdgeInsets.only(
+            top: 0,
+            bottom: 0,
+            left: 10,
+            right: 10,
+          ),
+          filled: true,
+          fillColor: Colors.grey[300],
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(30),
+            borderSide: const BorderSide(
+              color: Colors.transparent,
+            ),
+          ),
+          border: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(30)),
+          ),
+          hintText: hint,
+          hintStyle: const TextStyle(color: Colors.grey),
+          suffixIcon: IconButton(
+            icon: const Icon(Icons.close, color: Colors.grey),
+            onPressed: () => controller.clear(),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+///数字小数输入框输入框
+class NumberEditText extends StatelessWidget {
+  const NumberEditText({
+    super.key,
+    this.hint,
+    this.hasFocus = false,
+    required this.onChanged,
+  });
+
+  final bool hasFocus;
+  final String? hint;
+  final Function(String) onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    TextEditingController controller = TextEditingController();
+    FocusNode? fn;
+    if (hasFocus) {
+      fn = FocusNode()..requestFocus();
+    }
+    return Container(
+      height: 50,
+      margin: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+      child: TextField(
+        focusNode: fn,
+        keyboardType: TextInputType.number,
+        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+        controller: controller,
+        onChanged: onChanged,
         decoration: InputDecoration(
           contentPadding: const EdgeInsets.only(
             top: 0,
@@ -452,7 +532,10 @@ takePhoto(Function(File) callback, {String? title}) {
         CupertinoActionSheetAction(
           isDefaultAction: true,
           onPressed: () => Get.back(),
-          child: Text('dialog_default_cancel'.tr),
+          child: Text(
+            'dialog_default_cancel'.tr,
+            style: const TextStyle(color: Colors.grey),
+          ),
         ),
       ],
     ),
@@ -495,11 +578,17 @@ _takePhoto(bool isGallery, Function(File) callback) async {
 }
 
 ///显示SnackBar
-showSnackBar({required String title, required String message}) {
+showSnackBar({
+  bool? isWarning = false,
+  required String title,
+  required String message,
+}) {
   snackbarController = Get.snackbar(title, message,
       margin: const EdgeInsets.all(10),
       snackPosition: SnackPosition.BOTTOM,
-      backgroundColor: Colors.blueAccent,
+      backgroundColor: isWarning == true
+          ? Colors.redAccent.shade100
+          : Colors.blueAccent.shade100,
       colorText: Colors.white, snackbarStatus: (state) {
     if (state == SnackbarStatus.CLOSED) snackbarController = null;
   });
@@ -611,10 +700,10 @@ class CombinationButton extends StatelessWidget {
     super.key,
     required this.text,
     required this.click,
-    this.combination=Combination.intact,
+    this.combination = Combination.intact,
     this.backgroundColor = Colors.blueAccent,
     this.foregroundColor = Colors.white,
-    this.isEnabled=true,
+    this.isEnabled = true,
   });
 
   EdgeInsets getPadding() {
@@ -673,8 +762,8 @@ class CombinationButton extends StatelessWidget {
             borderRadius: getRadius(),
           ),
         ),
-        onPressed:(){
-          if(isEnabled==true){
+        onPressed: () {
+          if (isEnabled == true) {
             click.call();
           }
         },
@@ -688,117 +777,6 @@ class CombinationButton extends StatelessWidget {
     );
   }
 }
-/*
-///组合按钮控制器
-class CombinationButtonController {
-  Combination? combination;
-  Color? backgroundColor;
-  Color? foregroundColor;
-  String content = '';
-  var isEnabled = true.obs;
-
-  CombinationButtonController({
-    this.combination = Combination.intact,
-    this.backgroundColor = Colors.blueAccent,
-    this.foregroundColor = Colors.white,
-    required this.content,
-  });
-
-  BorderRadius getRadius() {
-    BorderRadius borderRadius;
-    switch (combination) {
-      case Combination.left:
-        borderRadius = const BorderRadius.only(
-          topLeft: Radius.circular(25),
-          bottomLeft: Radius.circular(25),
-        );
-        break;
-      case Combination.middle:
-        borderRadius = const BorderRadius.all(Radius.zero);
-        break;
-      case Combination.right:
-        borderRadius = const BorderRadius.only(
-          topRight: Radius.circular(25),
-          bottomRight: Radius.circular(25),
-        );
-        break;
-      default:
-        borderRadius = const BorderRadius.all(Radius.circular(25));
-        break;
-    }
-    return borderRadius;
-  }
-
-  EdgeInsets getPadding() {
-    EdgeInsets padding;
-    switch (combination) {
-      case Combination.left:
-        padding = const EdgeInsets.only(left: 4, top: 4, right: 1, bottom: 4);
-        break;
-      case Combination.middle:
-        padding = const EdgeInsets.only(left: 1, top: 4, right: 1, bottom: 4);
-        break;
-      case Combination.right:
-        padding = const EdgeInsets.only(left: 1, top: 4, right: 4, bottom: 4);
-        break;
-      default:
-        padding = const EdgeInsets.all(4);
-        break;
-    }
-    return padding;
-  }
-}
-*/
-
-/*
-
-///组合按钮
-class CombinationButton extends StatelessWidget {
-  final CombinationButtonController? controller;
-  final Function() onPressed;
-
-  const CombinationButton({
-    Key? key,
-    required this.onPressed,
-    this.controller,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Obx(() => Padding(
-          padding: controller == null
-              ? const EdgeInsets.all(4)
-              : controller!.getPadding(),
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              padding: const EdgeInsets.only(left: 8, right: 8),
-              backgroundColor: controller == null
-                  ? Colors.blueAccent
-                  : controller!.isEnabled.value
-                      ? controller!.backgroundColor
-                      : Colors.grey,
-              shape: RoundedRectangleBorder(
-                borderRadius: controller == null
-                    ? const BorderRadius.all(Radius.circular(25))
-                    : controller!.getRadius(),
-              ),
-            ),
-            onPressed: onPressed,
-            child: Text(
-              controller == null ? '' : controller!.content,
-              style: TextStyle(
-                color: controller == null
-                    ? Colors.white
-                    : controller!.isEnabled.value
-                        ? controller!.foregroundColor
-                        : Colors.grey[800],
-              ),
-            ),
-          ),
-        ));
-  }
-}
-*/
 
 class CheckBox extends StatefulWidget {
   final Function(bool isChecked) onChanged;
@@ -958,10 +936,10 @@ class Spinner extends StatelessWidget {
   }
 }
 
-class SwitchButton extends StatelessWidget {
-  final Function(bool isSelect) onChanged;
+class SwitchButton extends StatefulWidget {
+  final Function(bool isChecked) onChanged;
   final String name;
-  final bool value;
+  final bool? value;
   final bool? isEnabled;
   final bool? needSave;
 
@@ -969,17 +947,44 @@ class SwitchButton extends StatelessWidget {
     super.key,
     required this.onChanged,
     required this.name,
-    required this.value,
+    this.value,
     this.isEnabled = true,
     this.needSave = true,
   });
 
-  _select(bool select) {
-    if (isEnabled == true) {
-      onChanged.call(select);
-      if (needSave == true) {
-        spSave('${Get.currentRoute}/$name', select);
+  @override
+  State<SwitchButton> createState() => _SwitchButtonState();
+}
+
+class _SwitchButtonState extends State<SwitchButton> {
+  var isChecked = false;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.value == null) {
+      if (widget.needSave == true) {
+        var initialValue = spGet('${Get.currentRoute}/${widget.name}') ??
+            widget.value ??
+            false;
+        if (isChecked != initialValue) {
+          isChecked = initialValue;
+        }
       }
+    } else {
+      isChecked = widget.value!;
+    }
+  }
+
+  _select(bool checked) {
+    if (widget.isEnabled == true && isChecked != checked) {
+      setState(() {
+        isChecked = checked;
+        widget.onChanged.call(isChecked);
+        if (widget.value == null && widget.needSave == true) {
+          spSave('${Get.currentRoute}/${widget.name}', isChecked);
+        }
+      });
     }
   }
 
@@ -996,7 +1001,7 @@ class SwitchButton extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            name,
+            widget.name,
             style: const TextStyle(color: Colors.black),
           ),
           Switch(
@@ -1008,7 +1013,7 @@ class SwitchButton extends StatelessWidget {
                 return const Icon(Icons.close);
               },
             ),
-            value: value,
+            value: isChecked,
             onChanged: _select,
           ),
         ],
@@ -1016,86 +1021,3 @@ class SwitchButton extends StatelessWidget {
     );
   }
 }
-//
-// class SwitchButton extends StatefulWidget {
-//   final Function(bool isSelect) onChanged;
-//   final String name;
-//   final bool value;
-//   final bool? isEnabled;
-//   final bool? needSave;
-//
-//   const SwitchButton({
-//     super.key,
-//     required this.onChanged,
-//     required this.name,
-//     required this.value,
-//     this.isEnabled = true,
-//     this.needSave = true,
-//   });
-//
-//   @override
-//   State<SwitchButton> createState() => _SwitchButtonState();
-// }
-//
-// class _SwitchButtonState extends State<SwitchButton> {
-//   var isSelected = false;
-//
-//   @override
-//   void initState() {
-//     super.initState();
-//     if (widget.needSave == true) {
-//       var initialValue =
-//           spGet('${Get.currentRoute}/${widget.name}') ?? widget.value ?? false;
-//       if (isSelected != initialValue) {
-//         isSelected = initialValue;
-//         widget.onChanged.call(isSelected);
-//       }
-//     } else {
-//       isSelected = widget.value;
-//     }
-//   }
-//
-//   _select(bool select) {
-//     if (widget.isEnabled == true) {
-//       print('-----${widget.name} select $select');
-//       isSelected = select;
-//       if (widget.needSave == true) {
-//         spSave('${Get.currentRoute}/${widget.name}', isSelected);
-//       }
-//       widget.onChanged.call(isSelected);
-//     }
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       margin: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-//       padding: const EdgeInsets.only(left: 15),
-//       decoration: BoxDecoration(
-//         color: Colors.grey[300],
-//         borderRadius: BorderRadius.circular(25),
-//       ),
-//       child: Row(
-//         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//         children: [
-//           Text(
-//             widget.name,
-//             style: const TextStyle(color: Colors.black),
-//           ),
-//           Switch(
-//             thumbIcon: MaterialStateProperty.resolveWith<Icon>(
-//               (Set<MaterialState> states) {
-//                 if (states.contains(MaterialState.selected)) {
-//                   return const Icon(Icons.check);
-//                 }
-//                 return const Icon(Icons.close);
-//               },
-//             ),
-//             value: isSelected,
-//             onChanged: _select,
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }

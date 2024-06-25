@@ -2,9 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/utils.dart';
 
-import '../../../http/response/molding_pack_area_report_info.dart';
+import '../../../bean/http/response/molding_pack_area_report_info.dart';
+
 
 class MoldingPackAreaReportPageState {
+  var etInstruction = '';
+  var etOrderNumber = '';
+  var etTypeBody = '';
+
   var tableData = <MoldingPackAreaReportInfo>[].obs;
   var tableDataColumn = <DataColumn>[
     DataColumn(label: Text('page_molding_pack_area_report_table_hint1'.tr)),

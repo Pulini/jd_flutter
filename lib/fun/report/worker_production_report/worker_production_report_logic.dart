@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:get/get.dart';
 
-import '../../../http/response/worker_production_info.dart';
-import '../../../http/web_api.dart';
+import '../../../bean/http/response/worker_production_info.dart';
+import '../../../web_api.dart';
 import '../../../route.dart';
 import '../../../widget/dialogs.dart';
 import '../../../widget/picker/picker_controller.dart';
@@ -30,7 +30,7 @@ class WorkerProductionReportLogic extends GetxController {
     httpGet(
       loading: '正在查询计件产量...',
       method: webApiGetWorkerProductionReport,
-      query: {
+      params: {
         'DepartmentID': pickerControllerDepartment.selectedId.value,
         'Date': pickerControllerDate.getDateFormatYMD(),
       },

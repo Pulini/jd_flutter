@@ -2,14 +2,14 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
-import 'package:jd_flutter/http/response/base_data.dart';
 import 'package:logger/logger.dart';
 import 'package:uuid/uuid.dart';
 
-import '../constant.dart';
-import '../route.dart';
-import '../utils.dart';
-import '../widget/dialogs.dart';
+import 'bean/http/response/base_data.dart';
+import 'constant.dart';
+import 'route.dart';
+import 'utils.dart';
+import 'widget/dialogs.dart';
 
 ///接口返回异常
 const resultError = 0;
@@ -39,20 +39,20 @@ var language = 'zh';
 Future<BaseData> httpPost({
   String? loading,
   required String method,
-  Map<String, dynamic>? query,
+  Map<String, dynamic>? params,
   Object? body,
 }) {
-  return _doHttp(true, method, loading: loading, query: query, body: body);
+  return _doHttp(true, method, loading: loading, params: params, body: body);
 }
 
 ///get请求
 Future<BaseData> httpGet({
   String? loading,
   required String method,
-  Map<String, dynamic>? query,
+  Map<String, dynamic>? params,
   Object? body,
 }) {
-  return _doHttp(false, method, loading: loading, query: query, body: body);
+  return _doHttp(false, method, loading: loading, params: params, body: body);
 }
 
 ///接口拦截器
@@ -86,7 +86,7 @@ Future<BaseData> _doHttp(
   bool isPost,
   String method, {
   String? loading,
-  Map<String, dynamic>? query,
+  Map<String, dynamic>? params,
   Object? body,
 }) async {
   snackbarController?.close(withAnimations: false);
@@ -123,9 +123,9 @@ Future<BaseData> _doHttp(
     ///发起post/get请求
     var response = isPost
         ? await dio.post(method,
-            queryParameters: query, data: body, options: options)
+            queryParameters: params, data: body, options: options)
         : await dio.get(method,
-            queryParameters: query, data: body, options: options);
+            queryParameters: params, data: body, options: options);
     if (response.statusCode == 200) {
       var baseData = BaseData.fromJson(response.data.runtimeType == String
           ? jsonDecode(response.data)
@@ -138,8 +138,8 @@ Future<BaseData> _doHttp(
       base.message = '网络异常';
     }
   } on DioException catch (e) {
-    logger.e('error:${e.error}');
-    base.message = '链接服务器失败：${e.error}';
+    logger.e('error:${e.toString()}');
+    base.message = '链接服务器失败：${e.toString()}';
   } on Exception catch (e) {
     logger.e('error:${e.toString()}');
     base.message = '发生错误：${e.toString()}';
@@ -287,6 +287,10 @@ const webApiGetWorkCardCombinedSizeList =
 const webApiPushProductionOrder =
     'api/NeedleCartDispatch/GetProcessWorkCardForWorkCard';
 
+///生产派工单批量下推
+const webApiBatchPushProductionOrder =
+    'api/NeedleCartDispatch/GetProcessWorkCardForWorkCardBatch';
+
 ///根据组别获取本组组员信息
 const webApiGetWorkerInfo = 'api/User/GetEmpByFNumber';
 
@@ -310,3 +314,58 @@ const webApiGetVisitDtBySqlWhere = 'api/VisitorRegistration/GetVisitDtBySqlWhere
 
 ///获取来访编号
 const webApiGetInviteCode = 'api/VisitorRegistration/GetInviteCode';
+
+///获取工艺指导书列表
+const webApiGetManufactureInstructions = 'api/NeedleCartDispatch/GetManufactureInstructions';
+
+///获取用料清单
+const webApiGetWorkPlanMaterial = 'api/NeedleCartDispatch/GetWorkPlanMaterial';
+
+///获取工艺路线
+const webApiGetPrdRouteInfo = 'api/NeedleCartDispatch/GetPrdRouteInfo';
+
+///发送微信校对信息给派工员工
+const webApiSendDispatchToWechat = 'api/NeedleCartDispatch/WechatPostByFEmpID';
+
+///工序计工
+const webApiProductionDispatch = 'api/NeedleCartDispatch/ProcessCalculation';
+
+///获取派工单派工数、完工数信息
+const webApiGetIntactProductionDispatch = 'api/WorkCard/GetSubmitScWorkCard2ProcessOutputReport';
+
+///获取生产用料表
+const webApiGetSapMoPickList = 'api/Material/GetSapMoPickList';
+
+///获取指令表
+const webApiGetProductionOrderPDF = 'api/Package/GetProductionOrderPDF';
+
+///获取配色单列表
+const webApiGetMatchColors = 'api/Inspection/GetMatchColors';
+
+///获取配色单pdf
+const webApiGetMatchColorsPDF = 'api/Inspection/GetMatchColorsPDF';
+
+///修改派工单开关状态
+const webApiChangeWorkCardStatus = 'api/NeedleCartDispatch/SetWorkCardCloseStatus';
+
+///删除派工单下游工序
+const webApiDeleteScProcessWorkCard = 'api/NeedleCartDispatch/DeleteScProcessWorkCard';
+
+///删除派工单上次报工
+const webApiDeleteLastReport = 'api/NeedleCartDispatch/DeleteLastProcessWorkCardAndProcessOutPut';
+
+///更新sap配套数
+const webApiUpdateSAPPickingSupportingQty = 'api/CompoundDispatching/UpdateSAPPickingSupportingQty';
+
+///更新sap配套数
+const webApiReportSAPByWorkCardInterID = 'api/CompoundDispatching/ReportSAPByWorkCardInterID';
+
+///获取贴标列表
+const webApiGetLabelList = 'api/CompoundDispatching/PackagePrintLabelList';
+
+///创建单码贴标
+const webApiCreateSingleLabel = 'api/CompoundDispatching/GeneratePackingListByWorkCardInterID';
+
+///创建单码贴标
+const webApiGetPackingListBarCodeCount = 'api/CompoundDispatching/GetPackingListBarCodeCount';
+

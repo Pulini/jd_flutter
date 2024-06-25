@@ -1,10 +1,10 @@
 import 'package:get/get.dart';
 
-import '../../../http/response/daily_report_data.dart';
+import '../../../bean/http/response/daily_report_info.dart';
 
 
 class DailyReportState {
   ///报表数据
-  RxList<DailyReportData> dataList = <DailyReportData>[].obs;
+  RxList<DailyReport> dataList = <DailyReport>[].obs;
 
 }

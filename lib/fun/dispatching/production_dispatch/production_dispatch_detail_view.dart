@@ -1,10 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jd_flutter/http/response/production_dispatch_order_detail_info.dart';
-import 'package:jd_flutter/utils.dart';
+import 'package:jd_flutter/fun/dispatching/production_dispatch/production_dispatch_dialogs.dart';
 import 'package:rotated_corner_decoration/rotated_corner_decoration.dart';
-import '../../../bean/dispatch_info.dart';
+import '../../../bean/production_dispatch.dart';
+import '../../../bean/http/response/production_dispatch_order_detail_info.dart';
 import '../../../widget/custom_widget.dart';
 import '../../../widget/dialogs.dart';
 import 'production_dispatch_logic.dart';
@@ -28,23 +27,34 @@ class _ProductionDispatchDetailPageState
       child: Obx(() => Row(
             children: [
               Expanded(
-                child: Text(state.workCardTitle.value.getDispatchTotal()),
+                child: Text(
+                  state.workCardTitle.value.getDispatchTotal(),
+                ),
               ),
               Expanded(
-                child: Text(state.workCardTitle.value.getTodayGoal()),
+                child: Text(
+                  state.workCardTitle.value.getTodayGoal(),
+                ),
               ),
               Expanded(
-                child: Text(state.workCardTitle.value.getReported()),
+                child: Text(
+                  state.workCardTitle.value.getReported(),
+                ),
               ),
               Expanded(
-                child: Text(state.workCardTitle.value.getUnderCount()),
+                child: Text(
+                  state.workCardTitle.value.getUnderCount(),
+                ),
               ),
               Expanded(
-                child:
-                    Text(state.workCardTitle.value.getAccumulateReportCount()),
+                child: Text(
+                  state.workCardTitle.value.getAccumulateReportCount(),
+                ),
               ),
               Expanded(
-                child: Text(state.workCardTitle.value.getReportedCount()),
+                child: Text(
+                  state.workCardTitle.value.getReportedCount(),
+                ),
               ),
             ],
           )),
@@ -63,39 +73,17 @@ class _ProductionDispatchDetailPageState
               scrollDirection: Axis.horizontal,
               children: [
                 CheckBox(
-                  onChanged: (c) => setState(() {
-                    state.isCheckedAutoCount = c;
-                    state.isCheckedDivideEqually = c;
-                    state.isCheckedRounding = c;
-                  }),
+                  onChanged: (c) => setState(() => logic.checkAutoCount(c)),
                   name: '自动填充报工',
                   value: state.isCheckedAutoCount,
                 ),
                 CheckBox(
-                  onChanged: (c) => setState(() {
-                    state.isCheckedDivideEqually = c;
-                    if (c) {
-                      state.isCheckedAutoCount = c;
-                    } else {
-                      if (state.isCheckedRounding == c) {
-                        state.isCheckedAutoCount = c;
-                      }
-                    }
-                  }),
+                  onChanged: (c) => setState(() => logic.checkDivideEqually(c)),
                   name: '均分',
                   value: state.isCheckedDivideEqually,
                 ),
                 CheckBox(
-                  onChanged: (c) => setState(() {
-                    state.isCheckedRounding = c;
-                    if (c) {
-                      state.isCheckedAutoCount = c;
-                    } else {
-                      if (state.isCheckedDivideEqually == c) {
-                        state.isCheckedAutoCount = c;
-                      }
-                    }
-                  }),
+                  onChanged: (c) => setState(() => logic.checkRounding(c)),
                   name: '取整',
                   value: state.isCheckedRounding,
                 ),
@@ -114,8 +102,13 @@ class _ProductionDispatchDetailPageState
                 isEnabled: state.isEnabledBatchDispatch.value,
                 text: '批量计工',
                 click: () => logic.detailViewBatchModifyDispatchClick(
-                  (selectList, surplus) =>
-                      _batchModifyDispatchQtyDialog(selectList, surplus),
+                  (v1, v2) => batchModifyDispatchQtyDialog(
+                    state.isCheckedDivideEqually,
+                    state.isCheckedRounding,
+                    v1,
+                    v2,
+                    (v3) => logic.detailViewBatchModifyDispatch(v1, v3),
+                  ),
                 ),
               )),
         ],
@@ -315,20 +308,21 @@ class _ProductionDispatchDetailPageState
                       Obx(() => CombinationButton(
                             text: '添加员工',
                             isEnabled: state.isEnabledAddOne.value,
-                            click: () =>
-                                logic.detailViewGetDispatchSelectedWorkerList(
-                              (l) => _addWorkerDialog(l),
+                            click: () => addWorkerDialog(
+                              state.workerList,
+                              logic.detailViewGetSelectedWorkerList(),
+                              (v) => logic.detailViewModifyDispatch(works: v),
                             ),
                           )),
                       CheckBox(
                         onChanged: (c) {
-                          logic.detailViewAddAllWorker(() => askDialog(
-                                content: '确定要清空本工序下所有派工数据吗？',
-                                confirm: () {
-                                  logic.detailViewModifyDispatch([]);
-                                  state.isCheckedAddAllDispatch = false;
-                                },
-                              ));
+                          logic.detailViewAddAllWorker(
+                            () => askDialog(
+                              content: '确定要清空本工序下所有派工数据吗？',
+                              confirm: () =>
+                                  logic.cleanDispatchFromWorkProcedure(),
+                            ),
+                          );
                         },
                         needSave: false,
                         name: '添加本组所有员工',
@@ -336,10 +330,7 @@ class _ProductionDispatchDetailPageState
                         value: state.isCheckedAddAllDispatch,
                       ),
                       CheckBox(
-                        onChanged: (c) {
-                          logic.detailViewSelectAllDispatch(c);
-                          state.isCheckedSelectAllDispatch = c;
-                        },
+                        onChanged: (c) => logic.checkSelectAllDispatch(c),
                         needSave: false,
                         name: '选中本工序所有组员',
                         isEnabled: state.isEnabledSelectAllDispatch,
@@ -368,13 +359,16 @@ class _ProductionDispatchDetailPageState
   Widget _dispatchItem(DispatchInfo data) {
     return GestureDetector(
       onTap: () => logic.detailViewDispatchItemClick(
-          data, (surplus) => _modifyDispatchQtyDialog(data, surplus)),
+        data,
+        (surplus) =>
+            modifyDispatchQtyDialog(data, surplus, (di) => setState(() => di)),
+      ),
       onLongPress: () {
-        setState(() => data.select = !data.select);
+        setState(() => data.select = !data.select!);
         state.isCheckedSelectAllDispatch =
-            !state.dispatchInfo.any((v) => !v.select);
+            !state.dispatchInfo.any((v) => !v.select!);
         state.isEnabledBatchDispatch.value =
-            state.dispatchInfo.where((v) => v.select).length > 1;
+            state.dispatchInfo.where((v) => v.select!).length > 1;
       },
       child: Container(
         decoration: BoxDecoration(
@@ -384,11 +378,11 @@ class _ProductionDispatchDetailPageState
             end: Alignment.topRight,
           ),
           border: Border.all(
-            color: data.select ? Colors.green : Colors.grey.shade600,
-            width: data.select ? 4 : 2,
+            color: data.select! ? Colors.green : Colors.grey.shade600,
+            width: data.select! ? 4 : 2,
           ),
           borderRadius: BorderRadius.all(
-            Radius.circular(data.select ? 12 : 10),
+            Radius.circular(data.select! ? 12 : 10),
           ),
         ),
         child: Row(
@@ -466,32 +460,67 @@ class _ProductionDispatchDetailPageState
                 CombinationButton(
                   combination: Combination.middle,
                   text: '上次派工',
-                  click: () {},
+                  click: () => showDispatchList(
+                      context, true, state.workProcedure, (i1, i2) {
+                    logic.detailViewJumpToDispatchOnWorkProcedure(
+                      i1,
+                      i2,
+                      (data, surplus) => modifyDispatchQtyDialog(
+                        data,
+                        surplus,
+                        (di) => setState(() => di),
+                      ),
+                    );
+                  }),
                 ),
                 CombinationButton(
                   combination: Combination.middle,
                   text: '本次派工',
-                  click: () {},
+                  click: () => showDispatchList(
+                      context, false, state.workProcedure, (i1, i2) {
+                    logic.detailViewJumpToDispatchOnWorkProcedure(
+                      i1,
+                      i2,
+                      (data, surplus) => modifyDispatchQtyDialog(
+                        data,
+                        surplus,
+                        (di) => setState(() => di),
+                      ),
+                    );
+                  }),
                 ),
-                CombinationButton(
-                  combination: Combination.middle,
-                  text: '暂存派工',
-                  click: () {},
-                ),
-                CombinationButton(
-                  combination: Combination.middle,
-                  text: '应用派工',
-                  click: () {},
-                ),
+                if (GetPlatform.isMobile)
+                  CombinationButton(
+                    combination: Combination.middle,
+                    text: '暂存派工',
+                    click: () => logic.saveDispatch(),
+                  ),
+                if (GetPlatform.isMobile)
+                  CombinationButton(
+                    combination: Combination.middle,
+                    text: '应用派工',
+                    click: () => SaveWorkProcedure.getSave(
+                      state.workCardTitle.value.plantBody ?? '',
+                      (list) => typeBodySaveDialog(
+                        list,
+                        () => logic.saveWorkProcedure(),
+                        (v) => logic.applySaveWorkProcedure(v),
+                      ),
+                    ),
+                  ),
                 CombinationButton(
                   combination: Combination.middle,
                   text: '工艺指导书',
-                  click: () {},
+                  click: () => logic.getManufactureInstructions(
+                    state.workProcedure[0].routingID??0,
+                    (list) => manufactureInstructionsDialog(list),
+                  ),
                 ),
                 CombinationButton(
                   combination: Combination.right,
                   text: '用料清单',
-                  click: () {},
+                  click: () => logic.getWorkPlanMaterial(
+                      (list) => workPlanMaterialDialog(list)),
                 ),
               ],
             ),
@@ -500,205 +529,18 @@ class _ProductionDispatchDetailPageState
           CombinationButton(
             combination: Combination.left,
             text: '工序核对',
-            click: () {},
+            click: () => logic.getPrdRouteInfo(),
           ),
           CombinationButton(
             combination: Combination.middle,
             text: '员工校对',
-            click: () {},
+            click: () =>
+                logic.checkDispatch(() => logic.sendDispatchToWechat()),
           ),
           CombinationButton(
             combination: Combination.right,
             text: '工序计工',
-            click: () {},
-          ),
-        ],
-      ),
-    );
-  }
-
-  _addWorkerDialog(List<int> select) {
-    showCupertinoModalPopup<void>(
-      context: Get.overlayContext!,
-      builder: (BuildContext context) => AlertDialog(
-        title: Text('选择组员'),
-        content: SizedBox(
-          width: MediaQuery.of(context).size.width * 0.5,
-          height: MediaQuery.of(context).size.height * 0.5,
-          child: GridView.builder(
-            itemCount: state.workerList.length,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 4, // 网格的列数
-            ),
-            itemBuilder: (BuildContext context, int index) {
-              var item = state.workerList[index];
-              return GestureDetector(
-                onTap: () {
-                  if (select.contains(item.empID)) {
-                    select.remove(item.empID);
-                  } else {
-                    select.add(item.empID ?? 0);
-                  }
-                },
-                child: Obx(() => Card(
-                      color: select.contains(item.empID)
-                          ? Colors.green.shade100
-                          : Colors.white,
-                      child: Padding(
-                        padding: const EdgeInsets.all(5),
-                        child: Column(
-                          children: <Widget>[
-                            Expanded(
-                              child: item.picUrl == null ||
-                                      item.picUrl?.isEmpty == true
-                                  ? Icon(
-                                      Icons.account_circle_rounded,
-                                      color: Colors.grey.shade400,
-                                      size: MediaQuery.of(context).size.width *
-                                          0.08,
-                                    )
-                                  : ClipRRect(
-                                      borderRadius: BorderRadius.circular(7),
-                                      child: Image.network(
-                                        item.picUrl ?? '',
-                                      ),
-                                    ),
-                            ),
-                            Text(
-                              item.empCode ?? '',
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.grey.shade600,
-                              ),
-                            ),
-                            Text(
-                              item.empName ?? '',
-                              style: TextStyle(
-                                color: Colors.blue.shade800,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    )),
-              );
-            },
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              logic.detailViewModifyDispatch(select);
-              Get.back();
-            },
-            child: Text('dialog_default_confirm'.tr),
-          ),
-          TextButton(
-            onPressed: () => Get.back(),
-            child: Text('dialog_default_cancel'.tr),
-          ),
-        ],
-      ),
-    );
-  }
-
-  _modifyDispatchQtyDialog(DispatchInfo di, double surplus) {
-    var tec = TextEditingController(text: di.qty.toShowString());
-    showCupertinoModalPopup<void>(
-      context: Get.overlayContext!,
-      builder: (BuildContext context) => AlertDialog(
-        title: Text('派工'),
-        content: SizedBox(
-            width: 300,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('<${di.processNumber}>${di.processName}'),
-                Text('<${di.number}>${di.name}'),
-                Text(
-                  '本次计工(剩余可计工数:${surplus.toShowString()})',
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey,
-                  ),
-                ),
-                NumberDecimalEditText(
-                  hint: '请输入要计工的数量',
-                  max: surplus,
-                  controller: tec,
-                ),
-              ],
-            )),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Get.back();
-              setState(() {
-                di.qty = tec.text.toDoubleTry();
-              });
-            },
-            child: Text('dialog_default_confirm'.tr),
-          ),
-          TextButton(
-            onPressed: () => Get.back(),
-            child: Text('dialog_default_cancel'.tr),
-          ),
-        ],
-      ),
-    );
-  }
-
-  _batchModifyDispatchQtyDialog(
-    List<DispatchInfo> dil,
-    double surplus,
-  ) {
-    var text2 = logic.detailViewSetDispatchDialogText(dil, 0).obs;
-    var tec = TextEditingController();
-    var inputMax = state.isCheckedDivideEqually
-        ? surplus
-        : surplus.div(dil.length.toDouble());
-    showCupertinoModalPopup<void>(
-      context: Get.overlayContext!,
-      builder: (BuildContext context) => AlertDialog(
-        title: Text('派工'),
-        content: SizedBox(
-            width: 300,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('<${dil[0].processNumber}>${dil[0].processName}'),
-                Obx(() => Text(text2.value)),
-                Text(
-                  '本次计工(剩余可计工数:${surplus.toShowString()})',
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey,
-                  ),
-                ),
-                NumberDecimalEditText(
-                  hint: '请输入要计工的数量',
-                  max: inputMax,
-                  controller: tec,
-                  onChanged: (v) {
-                    text2.value = logic.detailViewSetDispatchDialogText(dil, v);
-                  },
-                ),
-              ],
-            )),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Get.back();
-              logic.detailViewBatchModifyDispatch(dil, tec.text.toDoubleTry());
-            },
-            child: Text('dialog_default_confirm'.tr),
-          ),
-          TextButton(
-            onPressed: () => Get.back(),
-            child: Text('dialog_default_cancel'.tr),
+            click: () => logic.checkDispatch(() => logic.productionDispatch()),
           ),
         ],
       ),
@@ -707,36 +549,56 @@ class _ProductionDispatchDetailPageState
 
   @override
   void initState() {
-    logic.detailViewGetWorkerList();
+    state.detailViewGetWorkerList();
+    SaveDispatch.getSave(
+      state.workCardTitle.value.processBillNumber ?? '',
+      (v) => askDialog(
+        content: '检测到本工单有暂存数据，是否应用',
+        confirm: () => logic.applySaveDispatch(v),
+      ),
+    );
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return pageBody(
-      title: '派工',
-      body: Column(
-        children: [
-          _titleDetails(),
-          _operationButtons(),
-          Expanded(
-            child: Row(
-              children: [
-                Expanded(
-                  flex: 4,
-                  child: _workProcedure(),
-                ),
-                Expanded(
-                  flex: 7,
-                  child: _dispatch(),
-                ),
-              ],
+        title: '派工',
+        body: Column(
+          children: [
+            _titleDetails(),
+            _operationButtons(),
+            Expanded(
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 4,
+                    child: _workProcedure(),
+                  ),
+                  Expanded(
+                    flex: 7,
+                    child: _dispatch(),
+                  ),
+                ],
+              ),
             ),
-          ),
-          state.isSelectedMergeOrder.value ? Container() : _bottomButtons()
-        ],
-      ),
-    );
+            state.isSelectedMergeOrder ? Container() : _bottomButtons()
+          ],
+        ),
+        actions: [
+          if (state.workCardTitle.value.cardNoReportStatus == 1)
+            const Padding(
+              padding: EdgeInsets.only(right: 10),
+              child: Text(
+                '委外',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.teal,
+                  fontSize: 20,
+                ),
+              ),
+            )
+        ]);
   }
 
   @override

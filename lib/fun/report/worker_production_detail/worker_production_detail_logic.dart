@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/utils.dart';
 
-import '../../../http/response/worker_production_detail_info.dart';
-import '../../../http/web_api.dart';
+import '../../../bean/http/response/worker_production_detail_info.dart';
+import '../../../web_api.dart';
 import '../../../route.dart';
 import '../../../widget/dialogs.dart';
 import '../../../widget/picker/picker_controller.dart';
@@ -33,16 +33,16 @@ class WorkerProductionDetailLogic extends GetxController {
         '${RouteConfig.workerProductionDetail.name}${PickerType.mesProductionReportType}',
   );
 
-  var textControllerWorker = TextEditingController();
+
 
   query() {
     httpGet(
       loading: '正在查询计件明细...',
       method: webApiProductionReport,
-      query: {
+      params: {
         'BeginDate': pickerControllerStartDate.getDateFormatYMD(),
         'EndDate': pickerControllerEndDate.getDateFormatYMD(),
-        'EmpNumber': textControllerWorker.text,
+        'EmpNumber': state.etWorker,
         'ItemID': pickerControllerReportType.selectedId.value,
         // 'DeptID': userController.user.value?.departmentID ?? '',
         'DeptID': '554821',

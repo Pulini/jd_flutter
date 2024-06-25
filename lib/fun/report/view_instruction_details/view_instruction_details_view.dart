@@ -24,7 +24,7 @@ class _ViewInstructionDetailsPageState
     return pageBodyWithDrawer(
       title: getFunctionTitle(),
       children: [
-        EditText(hint: '请输入指令单号', controller: logic.textControllerInstruction),
+        EditText(hint: '请输入指令单号', onChanged: (v) => logic.tetInstruction = v),
         OptionsPicker(pickerController: logic.pickerControllerProcessFlow),
       ],
       query: () => logic.queryPDF(),

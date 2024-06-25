@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/fun/dispatching/production_dispatch/production_dispatch_dialogs.dart';
+import 'package:jd_flutter/utils.dart';
 import 'package:marquee/marquee.dart';
 
-import '../../../http/response/production_dispatch_order_info.dart';
+import '../../../bean/http/response/production_dispatch_order_info.dart';
 import '../../../route.dart';
-import '../../../utils.dart';
 import '../../../widget/custom_widget.dart';
 import '../../../widget/picker/picker_view.dart';
+import '../../../widget/web_page.dart';
 import 'production_dispatch_logic.dart';
 
 class ProductionDispatchPage extends StatefulWidget {
@@ -33,52 +35,56 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
     return [
       EditText(
         hint: 'production_dispatch_instruction_hint'.tr,
-        controller: logic.tecInstruction,
+        onChanged: (v) => state.etInstruction = v,
       ),
       DatePicker(pickerController: logic.dpcStartDate),
       DatePicker(pickerController: logic.dpcEndDate),
-      Obx(() => state.isSelectedMergeOrder.value
-          ? const SizedBox()
-          : SwitchButton(
-              onChanged: (bool isSelect) {
-                state.isSelectedOutsourcing.value = isSelect;
-              },
-              name: 'production_dispatch_query_show_outsourcing'.tr,
-              value: state.isSelectedOutsourcing.value,
-            )),
-      Obx(() => SwitchButton(
-            onChanged: (bool isSelect) {
-              state.isSelectedClosed.value = isSelect;
-            },
-            name: 'production_dispatch_query_show_close'.tr,
-            value: state.isSelectedClosed.value,
-          )),
-      Obx(() => state.isSelectedMergeOrder.value
-          ? const SizedBox()
-          : SwitchButton(
-              onChanged: (bool isSelect) {
-                if (!isSelect && state.orderList.isNotEmpty) {
-                  for (var value in state.orderList) {
-                    value.select = false;
-                  }
-                  state.orderList.refresh();
-                }
-                state.isSelectedMany.value = isSelect;
-              },
-              name: 'production_dispatch_query_many_select'.tr,
-              value: state.isSelectedMany.value,
-            )),
-      Obx(() => SwitchButton(
-            onChanged: (bool isSelect) {
-              if (isSelect) {
-                state.isSelectedOutsourcing.value = false;
-                state.isSelectedMany.value = false;
+      if (!state.isSelectedMergeOrder)
+        SwitchButton(
+          onChanged: (bool isSelect) {
+            setState(() => state.isSelectedOutsourcing = isSelect);
+            spSave('${Get.currentRoute}/isSelectedOutsourcing', isSelect);
+          },
+          name: 'production_dispatch_query_show_outsourcing'.tr,
+          value: state.isSelectedOutsourcing,
+        ),
+      SwitchButton(
+        onChanged: (bool isSelect) {
+          setState(() => state.isSelectedClosed = isSelect);
+          spSave('${Get.currentRoute}/isSelectedClosed', isSelect);
+        },
+        name: 'production_dispatch_query_show_close'.tr,
+        value: state.isSelectedClosed,
+      ),
+      if (!state.isSelectedMergeOrder)
+        SwitchButton(
+          onChanged: (bool isSelect) {
+            if (!isSelect && state.orderList.isNotEmpty) {
+              for (var value in state.orderList) {
+                value.select = false;
               }
-              state.isSelectedMergeOrder.value = isSelect;
-            },
-            name: 'production_dispatch_query_merge_orders'.tr,
-            value: state.isSelectedMergeOrder.value,
-          )),
+              state.orderList.refresh();
+            }
+            setState(() => state.isSelectedMany = isSelect);
+            spSave('${Get.currentRoute}/isSelectedMany', isSelect);
+          },
+          name: 'production_dispatch_query_many_select'.tr,
+          value: state.isSelectedMany,
+        ),
+      SwitchButton(
+        onChanged: (bool isSelect) {
+          if (isSelect) {
+            state.isSelectedOutsourcing = false;
+            state.isSelectedMany = false;
+          }
+          setState(() {
+            state.isSelectedMergeOrder = isSelect;
+          });
+          spSave('${Get.currentRoute}/isSelectedMergeOrder', isSelect);
+        },
+        name: 'production_dispatch_query_merge_orders'.tr,
+        value: state.isSelectedMergeOrder,
+      ),
       Padding(
         padding: const EdgeInsets.all(10),
         child: ElevatedButton(
@@ -291,12 +297,12 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
     var data = list[0];
     var buttonStyle = ButtonStyle(
       shape: MaterialStateProperty.all(
-        RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+        RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
       ),
       side: MaterialStateProperty.all(
         BorderSide(
           color: _printTextColor(data.printStatus),
-          width: 1,
+          width: 2,
         ),
       ),
     );
@@ -349,6 +355,7 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
         Container(
           padding: const EdgeInsets.only(left: 5, top: 5, right: 5),
           color: Colors.white,
+          height: 40,
           child: Row(
             children: [
               Expanded(
@@ -423,6 +430,7 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
     );
   }
 
+
   _bottomButtons() {
     return Container(
       decoration: BoxDecoration(
@@ -446,67 +454,84 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
                     combination: Combination.left,
                     isEnabled: state.cbIsEnabledMaterialList.value,
                     text: 'production_dispatch_bt_material_list'.tr,
-                    click: () {},
+                    click: () => logic.orderMaterialList(),
                   ),
                   CombinationButton(
                     combination: Combination.middle,
                     isEnabled: state.cbIsEnabledInstruction.value,
                     text: 'production_dispatch_bt_instruction'.tr,
-                    click: () {},
-                  ),
-                  CombinationButton(
-                    combination: Combination.middle,
-                    isEnabled: state.cbIsEnabledColorMatching.value,
-                    text: 'production_dispatch_bt_color_matching'.tr,
-                    click: () {},
+                    click: () => logic.instructionList(
+                      (url) => Get.to(WebPage(title: '', url: url)),
+                    ),
                   ),
                   CombinationButton(
                     combination: Combination.middle,
                     isEnabled: state.cbIsEnabledProcessInstruction.value,
                     text: 'production_dispatch_bt_process_instruction'.tr,
-                    click: () {},
+                    click: () => logic
+                        .processSpecification(manufactureInstructionsDialog),
                   ),
                   CombinationButton(
                     combination: Combination.middle,
-                    isEnabled: state.cbIsEnabledProcessOpen.value,
-                    text: 'production_dispatch_bt_process_open'.tr,
-                    click: () {},
+                    isEnabled: state.cbIsEnabledColorMatching.value,
+                    text: 'production_dispatch_bt_color_matching'.tr,
+                    click: () => logic.colorMatching(
+                      (list, id) => colorListDialog(
+                        list,
+                        (s) => logic.getColorPdf(
+                          s,
+                          id,
+                          (url) => Get.to(WebPage(title: '', url: url)),
+                        ),
+                      ),
+                    ),
                   ),
+                  if (state.orderList.any((e) => e.select))
+                    CombinationButton(
+                      combination: Combination.middle,
+                      isEnabled: state.cbIsEnabledProcessOpen.value,
+                      text: state.cbNameProcess.value,
+                      click: () => logic.offOnProcess(),
+                    ),
                   CombinationButton(
                     combination: Combination.middle,
                     isEnabled: state.cbIsEnabledDeleteDownstream.value,
                     text: 'production_dispatch_bt_delete_downstream'.tr,
-                    click: () {},
+                    click: () => logic.deleteDownstream(),
                   ),
                   CombinationButton(
                     combination: Combination.middle,
                     isEnabled: state.cbIsEnabledDeleteLastReport.value,
                     text: 'production_dispatch_bt_delete_last_report'.tr,
-                    click: () {},
+                    click: () => logic.deleteLastReport(),
                   ),
                   CombinationButton(
                     combination: Combination.middle,
                     isEnabled: state.cbIsEnabledLabelMaintenance.value,
                     text: 'production_dispatch_bt_label_maintenance'.tr,
-                    click: () {},
+                    click: () => logic.labelMaintenance(),
                   ),
                   CombinationButton(
                     combination: Combination.middle,
                     isEnabled: state.cbIsEnabledUpdateSap.value,
                     text: 'production_dispatch_bt_update_sap'.tr,
-                    click: () {},
+                    click: () => logic.updateSap(),
                   ),
                   CombinationButton(
                     combination: Combination.middle,
                     isEnabled: state.cbIsEnabledPrintMaterialHead.value,
                     text: 'production_dispatch_bt_print_material_head'.tr,
-                    click: () {},
+                    click: () =>
+                        logic.getSurplusMaterial(showSelectMaterialPopup),
                   ),
                   CombinationButton(
                     combination: Combination.right,
                     isEnabled: state.cbIsEnabledReportSap.value,
                     text: 'production_dispatch_bt_report_sap'.tr,
-                    click: () {},
+                    click: () => sapReportDialog(
+                      logic.getReportMax(),
+                      logic.reportToSap,
+                    ),
                   ),
                 ],
               ),
@@ -534,7 +559,7 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
         () => Column(
           children: [
             Expanded(
-              child: state.isSelectedMergeOrder.value
+              child: state.isSelectedMergeOrder
                   ? ListView.builder(
                       padding: const EdgeInsets.all(8),
                       itemCount: state.orderGroupList.length,
@@ -550,7 +575,7 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
                           _item1(state.orderList, index),
                     ),
             ),
-            state.isSelectedMergeOrder.value ? Container() : _bottomButtons()
+            state.isSelectedMergeOrder ? Container() : _bottomButtons()
           ],
         ),
       ),

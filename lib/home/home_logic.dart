@@ -5,11 +5,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/utils.dart';
+import '../bean/http/request/user_avatar.dart';
+import '../bean/http/response/department_info.dart';
+import '../bean/http/response/home_function_info.dart';
 import '../constant.dart';
-import '../http/request/user_avatar.dart';
-import '../http/response/department.dart';
-import '../http/response/home_function_info.dart';
-import '../http/web_api.dart';
+import '../web_api.dart';
 import '../widget/custom_widget.dart';
 import '../widget/dialogs.dart';
 import 'home_state.dart';
@@ -44,7 +44,7 @@ class HomeLogic extends GetxController {
     httpGet(
       method: webApiGetMenuFunction,
       loading: 'checking_version'.tr,
-      query: {'empID': userInfo?.empID ?? 0},
+      params: {'empID': userInfo?.empID ?? 0},
     ).then((response) {
       if (response.resultCode == resultSuccess) {
         var list = <HomeFunctions>[];
@@ -89,7 +89,7 @@ class HomeLogic extends GetxController {
     var departmentCallback = await httpGet(
       loading: 'getting_group'.tr,
       method: webApiGetDepartment,
-      query: {'EmpID': userInfo!.empID},
+      params: {'EmpID': userInfo!.empID},
     );
     if (departmentCallback.resultCode == resultSuccess) {
       //创建部门列表数据
@@ -126,7 +126,7 @@ class HomeLogic extends GetxController {
           httpGet(
             loading: 'modifying_group'.tr,
             method: webApiChangeDepartment,
-            query: {
+            params: {
               'EmpID': userInfo!.empID,
               'OrganizeID': userInfo!.organizeID,
               'DeptmentID': list[controller.selectedItem].itemID,
@@ -238,7 +238,7 @@ class HomeLogic extends GetxController {
             onPressed: () {
               Get.back();
             },
-            child: Text('dialog_default_cancel'.tr),
+            child: Text('dialog_default_cancel'.tr,style: const TextStyle(color: Colors.grey),),
           ),
           TextButton(
             onPressed: () {
@@ -269,7 +269,7 @@ class HomeLogic extends GetxController {
               httpPost(
                 loading: 'change_password_dialog_submitting'.tr,
                 method: webApiChangePassword,
-                query: {
+                params: {
                   'OldPassWord': oldPassword,
                   'NewPassWord': newPassword,
                   'PhoneNumber': phone

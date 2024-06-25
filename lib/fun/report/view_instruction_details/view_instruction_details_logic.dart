@@ -4,12 +4,12 @@ import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/picker/picker_controller.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-import '../../../http/web_api.dart';
+import '../../../web_api.dart';
 import '../../../route.dart';
 import '../../../utils.dart';
 
 class ViewInstructionDetailsLogic extends GetxController {
-  TextEditingController textControllerInstruction = TextEditingController();
+  var tetInstruction = '';
 
   var pickerControllerProcessFlow = OptionsPickerController(
     PickerType.mesProcessFlow,
@@ -55,15 +55,15 @@ class ViewInstructionDetailsLogic extends GetxController {
   }
 
   queryPDF() {
-    if (textControllerInstruction.text.trim().isEmpty) {
+    if (tetInstruction.isEmpty) {
       errorDialog(content: '请输入指令单号');
       return;
     }
     httpGet(
       loading: '正在查询指令明细...',
       method: webApiGetInstructionDetailsFile,
-      query: {
-        'MoNo': textControllerInstruction.text,
+      params: {
+        'MoNo': tetInstruction,
         'ProcessFlowID': pickerControllerProcessFlow.selectedId.value,
       },
     ).then((response) {

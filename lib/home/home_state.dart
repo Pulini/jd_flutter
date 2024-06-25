@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../bean/home_button.dart';
-import '../http/response/home_function_info.dart';
+import '../bean/http/response/home_function_info.dart';
 import '../route.dart';
 import '../utils.dart';
 

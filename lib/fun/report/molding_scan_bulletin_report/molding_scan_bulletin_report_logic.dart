@@ -4,10 +4,10 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:jd_flutter/utils.dart';
 
+import '../../../bean/http/request/molding_scan_bulletin_sort.dart';
+import '../../../bean/http/response/molding_scan_bulletin_report_info.dart';
 import '../../../constant.dart';
-import '../../../http/request/molding_scan_bulletin_sort.dart';
-import '../../../http/response/molding_scan_bulletin_report_info.dart';
-import '../../../http/web_api.dart';
+import '../../../web_api.dart';
 import '../../../route.dart';
 import '../../../widget/custom_widget.dart';
 import '../../../widget/dialogs.dart';
@@ -25,7 +25,7 @@ class MoldingScanBulletinReportLogic extends GetxController {
     httpGet(
       method: webApiGetMoldingScanBulletinReport,
       loading: 'molding_scan_bulletin_report_querying'.tr,
-      query: {'departmentID': userInfo?.departmentID, 'IsGetAllList': true},
+      params: {'departmentID': userInfo?.departmentID, 'IsGetAllList': true},
     ).then((response) {
       if (response.resultCode == resultSuccess) {
         var jsonList = jsonDecode(response.data);
@@ -54,7 +54,7 @@ class MoldingScanBulletinReportLogic extends GetxController {
     timer = null;
     httpGet(
       method: webApiGetMoldingScanBulletinReport,
-      query: {
+      params: {
         'departmentID': userInfo?.departmentID,
         'IsGetAllList':
             Get.currentRoute == RouteConfig.moldingScanBulletinReportPage.name
@@ -99,7 +99,7 @@ class MoldingScanBulletinReportLogic extends GetxController {
     httpPost(
       method: webApiSubmitNewSort,
       loading: 'molding_scan_bulletin_report_submitting'.tr,
-      body: json.encode(body),
+      body: body,
     ).then((response) {
       if (response.resultCode == resultSuccess) {
         showSnackBar(

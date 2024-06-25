@@ -25,7 +25,7 @@ class _ViewProcessSpecificationPageState
     return pageBodyWithDrawer(
       title: getFunctionTitle(),
       children: [
-        EditText(hint: '请输入型体', controller: logic.textControllerTypeBody),
+        EditText(hint: '请输入型体', onChanged: (v) => state.etTypeBody = v),
       ],
       query: () => logic.queryProcessSpecification(),
       body: Obx(

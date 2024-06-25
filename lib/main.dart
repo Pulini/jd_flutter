@@ -8,17 +8,29 @@ import 'package:get/get_navigation/src/router_report.dart';
 import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/utils.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:path/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:sqflite/sqflite.dart';
+import 'bean/production_dispatch.dart';
+import 'constant.dart';
 import 'home/home_view.dart';
-import 'http/web_api.dart';
+import 'web_api.dart';
 import 'login/login_view.dart';
 import 'translation.dart';
-
 main() async {
   ///确保初始化完成才能加载耗时插件
   WidgetsFlutterBinding.ensureInitialized();
-
+  if (GetPlatform.isMobile){
+    getDatabasesPath().then((path) => openDatabase(
+      join(path, jdDatabase),
+      version: 1,
+      onCreate:(db,v){
+        db.execute(SaveDispatch.dbCreate);
+        db.execute(SaveWorkProcedure.dbCreate);
+        db.close();
+      },
+    ));
+  }
   sharedPreferences = await SharedPreferences.getInstance();
   packageInfo = await PackageInfo.fromPlatform();
   deviceInfo = await DeviceInfoPlugin().deviceInfo;
@@ -32,6 +44,8 @@ main() async {
   //   },
   // );
 }
+
+
 
 ///路由感知 用于释放GetXController
 class GetXRouterObserver extends NavigatorObserver {

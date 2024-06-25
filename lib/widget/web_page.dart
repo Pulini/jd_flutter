@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-import '../http/request/apply_authorization.dart';
-import '../http/web_api.dart';
+import '../bean/http/request/apply_authorization.dart';
+import '../web_api.dart';
 import '../utils.dart';
 import 'custom_widget.dart';
 import 'dialogs.dart';
@@ -20,7 +20,7 @@ class WebPage extends StatelessWidget {
     httpPost(
       loading: '正在查询授权信息...',
       method: webApiCheckAuthorize,
-      query: {'androidID': getDeviceID()},
+      params: {'androidID': getDeviceID()},
     ).then((response) {
       if (response.resultCode == resultSuccess) {
         if (GetPlatform.isAndroid || GetPlatform.isIOS) {
@@ -58,7 +58,7 @@ class WebPage extends StatelessWidget {
     httpPost(
       loading: '正在提交授权申请...',
       method: webApiAuthorizedApplication,
-      body: ApplyAuthorization(reason: reason).toJson(),
+      body: ApplyAuthorization(reason: reason),
     ).then(
       (response) {
         if (response.resultCode == resultSuccess) {

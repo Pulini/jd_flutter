@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../http/response/daily_report_data.dart';
+import '../../../bean/http/response/daily_report_info.dart';
 import '../../../route.dart';
 import '../../../widget/custom_widget.dart';
 import '../../../widget/picker/picker_view.dart';
@@ -19,7 +19,7 @@ class _DailyReportPageState extends State<DailyReportPage> {
   final logic = Get.put(DailyReportLogic());
   final state = Get.find<DailyReportLogic>().state;
 
-  _item(DailyReportData item, int index) {
+  _item(DailyReport item, int index) {
     return Container(
       color: item.getItemColor(),
       child: Padding(

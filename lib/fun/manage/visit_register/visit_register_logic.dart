@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:jd_flutter/utils.dart';
 
-import '../../../http/response/Visit_data_list_info.dart';
-import '../../../http/web_api.dart';
+import '../../../bean/http/response/visit_data_list_info.dart';
+import '../../../web_api.dart';
 import '../../../route.dart';
 import '../../../widget/dialogs.dart';
 import '../../../widget/picker/picker_controller.dart';

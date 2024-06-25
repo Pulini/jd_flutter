@@ -1,27 +1,25 @@
 import 'dart:convert';
-
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../http/response/process_specification_info.dart';
-import '../../../http/web_api.dart';
+import '../../../bean/http/response/process_specification_info.dart';
+import '../../../web_api.dart';
 import '../../../widget/dialogs.dart';
 import 'view_process_specification_state.dart';
 
 class ViewProcessSpecificationLogic extends GetxController {
   final ViewProcessSpecificationState state = ViewProcessSpecificationState();
-  var textControllerTypeBody = TextEditingController();
+
 
   queryProcessSpecification() {
-    if (textControllerTypeBody.text.trim().isEmpty) {
+    if (state.etTypeBody.isEmpty) {
       errorDialog(content: '请输入型体');
       return;
     }
     httpGet(
       loading: '正在查询工艺说明书...',
       method: webApiGetProcessSpecificationList,
-      query: {
-        'Product': textControllerTypeBody.text,
+      params: {
+        'Product': state.etTypeBody,
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {

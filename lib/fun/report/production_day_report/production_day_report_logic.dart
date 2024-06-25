@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../http/response/production_day_report_info.dart';
-import '../../../http/web_api.dart';
+import '../../../bean/http/response/production_day_report_info.dart';
+import '../../../web_api.dart';
 import '../../../route.dart';
 import '../../../utils.dart';
 import '../../../widget/custom_widget.dart';
@@ -102,7 +102,7 @@ class ProductionDayReportLogic extends GetxController {
     httpGet(
       loading: 'page_production_day_report_querying'.tr,
       method: webApiGetPrdDayReport,
-      query: {
+      params: {
         'Date': pickerControllerDate.getDateFormatYMD(),
         'WorkShopID': spinnerControllerWorkShop.selectIndex + 1,
         'OrganizeID': userInfo!.organizeID ?? 0,
@@ -173,7 +173,7 @@ class ProductionDayReportLogic extends GetxController {
     httpPost(
       loading: 'page_production_day_report_reason_dialog_save'.tr,
       method: webApiSubmitDayReportReason,
-      query: {
+      params: {
         'Date': date,
         'Value': reason,
         'DeptID': userInfo!.departmentID ?? 0,

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/route.dart';
@@ -28,7 +27,7 @@ class _WorkerProductionDetailPageState
         DatePicker(pickerController: logic.pickerControllerStartDate),
         DatePicker(pickerController: logic.pickerControllerEndDate),
         OptionsPicker(pickerController: logic.pickerControllerReportType),
-        EditText(hint: '请输入工号', controller: logic.textControllerWorker),
+        EditText(hint: '请输入工号', onChanged: (v) => state.etWorker = v),
       ],
       query: () => logic.query(),
       body: Obx(() => ListView.builder(

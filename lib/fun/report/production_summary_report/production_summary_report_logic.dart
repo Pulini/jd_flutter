@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/route.dart';
 
-import '../../../http/response/production_summary_info.dart';
-import '../../../http/web_api.dart';
+import '../../../bean/http/response/production_summary_info.dart';
+import '../../../web_api.dart';
 import '../../../widget/custom_widget.dart';
 import '../../../widget/dialogs.dart';
 import '../../../widget/picker/picker_controller.dart';
@@ -35,7 +35,7 @@ class ProductionSummaryReportLogic extends GetxController {
     httpGet(
       loading: 'page_production_summary_report_querying'.tr,
       method: webApiGetPrdShopDayReport,
-      query: {
+      params: {
         'ExecTodayDateTime': pickerControllerDate.getDateFormatYMD(),
         'ExecWhere':
             'where t.FWorkShopID = ${spinnerControllerWorkShop.selectIndex + 1}',

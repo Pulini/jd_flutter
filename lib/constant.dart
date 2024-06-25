@@ -1,3 +1,4 @@
+const jdDatabase = 'jd_app.db';
 const spSaveLoginPhone = 'login_phone';
 const spSaveLoginFace = 'login_face';
 const spSaveLoginMachine = 'login_machine';

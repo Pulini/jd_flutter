@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:get/get.dart';
 
-import '../../http/web_api.dart';
+import '../../web_api.dart';
 import '../../utils.dart';
 import 'picker_item.dart';
 
@@ -658,7 +658,7 @@ Future getMesWorkShop() async {
 Future getMesDepartment() async {
   var response = await httpGet(
     method: webApiPickerMesDepartment,
-    query: {'OrganizeID': userInfo?.organizeID ?? -1},
+    params: {'OrganizeID': userInfo?.organizeID ?? -1},
   );
   if (response.resultCode == resultSuccess) {
     try {
@@ -737,7 +737,7 @@ Future getMesProcessFlow() async {
 Future getMesProductionReportType() async {
   var response = await httpGet(
     method: webApiGetProductionReportType,
-    query: {'SearchType': 'app'},
+    params: {'SearchType': 'app'},
   );
   if (response.resultCode == resultSuccess) {
     try {
@@ -759,7 +759,7 @@ Future getMesProductionReportType() async {
 Future getSapMachine() async {
   var response = await httpGet(
     method: webApiPickerSapMachine,
-    query: {'EmpID': userInfo?.empID ?? 0},
+    params: {'EmpID': userInfo?.empID ?? 0},
   );
   if (response.resultCode == resultSuccess) {
     try {
@@ -781,7 +781,7 @@ Future getSapMachine() async {
 Future getSapWorkCenterNew() async {
   var response = await httpGet(
     method: webApiPickerSapWorkCenterNew,
-    query: {
+    params: {
       'ShowType': 10,
       'UserID': userInfo?.userID ?? 0,
     },
@@ -806,7 +806,7 @@ Future getSapWorkCenterNew() async {
 Future getSapGroup() async {
   var response = await httpGet(
     method: webApiPickerSapGroup,
-    query: {'EmpID': userInfo?.empID ?? 0},
+    params: {'EmpID': userInfo?.empID ?? 0},
   );
   if (response.resultCode == resultSuccess) {
     try {

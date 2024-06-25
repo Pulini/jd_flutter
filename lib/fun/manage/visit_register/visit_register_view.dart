@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../http/response/Visit_data_list_info.dart';
-import '../../../http/web_api.dart';
+import '../../../bean/http/response/visit_data_list_info.dart';
+import '../../../web_api.dart';
 import '../../../route.dart';
 import '../../../utils.dart';
 import '../../../widget/custom_widget.dart';

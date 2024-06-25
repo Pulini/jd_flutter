@@ -4,9 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/management/property/property_logic.dart';
-import 'package:jd_flutter/http/web_api.dart';
+import 'package:jd_flutter/web_api.dart';
 
-import '../../../http/response/property_detail_info.dart';
+import '../../../bean/http/response/property_detail_info.dart';
 import '../../../utils.dart';
 import '../../../widget/custom_widget.dart';
 import '../../../widget/dialogs.dart';

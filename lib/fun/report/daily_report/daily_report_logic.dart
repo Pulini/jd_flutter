@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import 'package:get/get.dart';
-import 'package:jd_flutter/http/response/daily_report_data.dart';
-import 'package:jd_flutter/http/web_api.dart';
+import 'package:jd_flutter/web_api.dart';
 
+import '../../../bean/http/response/daily_report_info.dart';
 import '../../../route.dart';
 import '../../../widget/dialogs.dart';
 import '../../../widget/picker/picker_controller.dart';
@@ -29,15 +29,15 @@ class DailyReportLogic extends GetxController {
     httpGet(
       loading: 'page_daily_report_querying'.tr,
       method: webApiGetDayOutput,
-      query: {
+      params: {
         'DepartmentID': pickerControllerDepartment.selectedId.value,
         'Date': pickerControllerDate.getDateFormatYMD(),
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
         try {
-          var list = <DailyReportData>[
-            DailyReportData(
+          var list = <DailyReport>[
+            DailyReport(
               type: 0,
               materialName: 'page_daily_report_table_title_hint1'.tr,
               size: 'page_daily_report_table_title_hint2'.tr,
@@ -46,7 +46,7 @@ class DailyReportLogic extends GetxController {
             )
           ];
           for (var item in jsonDecode(response.data)) {
-            list.add(DailyReportData.fromJson(item));
+            list.add(DailyReport.fromJson(item));
           }
           state.dataList.value = list;
           Get.back();

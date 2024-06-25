@@ -1,12 +1,12 @@
 import 'dart:ui';
 
 import 'package:get/get.dart';
-import 'package:jd_flutter/http/response/property_detail_info.dart';
-import 'package:jd_flutter/http/web_api.dart';
+import 'package:jd_flutter/web_api.dart';
 import 'package:jd_flutter/utils.dart';
 
-import '../../../http/request/update_porperty.dart';
-import '../../../http/response/property_info.dart';
+import '../../../bean/http/request/update_porperty.dart';
+import '../../../bean/http/response/property_detail_info.dart';
+import '../../../bean/http/response/property_info.dart';
 import '../../../widget/custom_widget.dart';
 
 enum AuditedType { audited, unAudited, underAudit }
@@ -26,7 +26,12 @@ class PropertyState {
   var assetPicture = ''.obs;
   var ratingPlatePicture = ''.obs;
   bool canModify = false;
-
+  var etPropertyNumber = '';
+  var etPropertyName = '';
+  var etSerialNumber = '';
+  var etInvoiceNumber = '';
+  var etName = '';
+  var etWorkerNumber = '';
   PropertyState() {
     ///Initialize variables
   }
@@ -54,63 +59,63 @@ class PropertyState {
   bool checkData() {
     logger.f(detail.toJson());
     if (detail.name?.isEmpty == true) {
-      showSnackBar(title: '缺少数据', message: '请输入名称');
+      showSnackBar(title: '缺少数据', message: '请输入名称',isWarning: true);
       return false;
     }
     if (detail.number?.isEmpty == true) {
-      showSnackBar(title: '缺少数据', message: '请输入编号');
+      showSnackBar(title: '缺少数据', message: '请输入编号',isWarning: true);
       return false;
     }
     if (detail.model?.isEmpty == true) {
-      showSnackBar(title: '缺少数据', message: '请输入规格型号');
+      showSnackBar(title: '缺少数据', message: '请输入规格型号',isWarning: true);
       return false;
     }
     if (detail.price != null && detail.price! <= 0) {
-      showSnackBar(title: '缺少数据', message: '请输入单价');
+      showSnackBar(title: '缺少数据', message: '请输入单价',isWarning: true);
       return false;
     }
     if (detail.orgVal != null && detail.orgVal! <= 0) {
-      showSnackBar(title: '缺少数据', message: '请输入原值');
+      showSnackBar(title: '缺少数据', message: '请输入原值',isWarning: true);
       return false;
     }
     if (detail.manufacturer?.isEmpty == true) {
-      showSnackBar(title: '缺少数据', message: '请输入制造商');
+      showSnackBar(title: '缺少数据', message: '请输入制造商',isWarning: true);
       return false;
     }
     if (detail.guaranteePeriod?.isEmpty == true) {
-      showSnackBar(title: '缺少数据', message: '请输入保修期限(月)');
+      showSnackBar(title: '缺少数据', message: '请输入保修期限(月)',isWarning: true);
       return false;
     }
     if (detail.expectedLife != null && detail.expectedLife! <= 0) {
-      showSnackBar(title: '缺少数据', message: '请输入预计使用时长(月)');
+      showSnackBar(title: '缺少数据', message: '请输入预计使用时长(月)',isWarning: true);
       return false;
     }
     if (detail.participator != null && detail.participator! == -1) {
-      showSnackBar(title: '缺少数据', message: '请输入参检人工号');
+      showSnackBar(title: '缺少数据', message: '请输入参检人工号',isWarning: true);
       return false;
     }
     if (detail.keepEmpID != null && detail.keepEmpID! == -1) {
-      showSnackBar(title: '缺少数据', message: '请输入保管人工号');
+      showSnackBar(title: '缺少数据', message: '请输入保管人工号',isWarning: true);
       return false;
     }
     if (detail.liableEmpID != null && detail.liableEmpID! == -1) {
-      showSnackBar(title: '缺少数据', message: '请输入监管人工号');
+      showSnackBar(title: '缺少数据', message: '请输入监管人工号',isWarning: true);
       return false;
     }
     if (detail.writeDate?.isEmpty == true) {
-      showSnackBar(title: '缺少数据', message: '请选择登记日期');
+      showSnackBar(title: '缺少数据', message: '请选择登记日期',isWarning: true);
       return false;
     }
     if (detail.address?.isEmpty == true) {
-      showSnackBar(title: '缺少数据', message: '请输入存放地点');
+      showSnackBar(title: '缺少数据', message: '请输入存放地点',isWarning: true);
       return false;
     }
     if (assetPicture.isEmpty) {
-      showSnackBar(title: '缺少数据', message: '请拍摄现场照片');
+      showSnackBar(title: '缺少数据', message: '请拍摄现场照片',isWarning: true);
       return false;
     }
     if (ratingPlatePicture.isEmpty) {
-      showSnackBar(title: '缺少数据', message: '请拍摄铭牌照片');
+      showSnackBar(title: '缺少数据', message: '请拍摄铭牌照片',isWarning: true);
       return false;
     }
     return true;

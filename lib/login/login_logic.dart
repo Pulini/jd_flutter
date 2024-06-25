@@ -6,10 +6,10 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import '../bean/http/response/user_info.dart';
 import '../constant.dart';
 import '../home/home_view.dart';
-import '../http/response/user_info.dart';
-import '../http/web_api.dart';
+import '../web_api.dart';
 import '../utils.dart';
 import '../widget/custom_widget.dart';
 import '../widget/dialogs.dart';
@@ -118,7 +118,7 @@ class LoginLogic extends GetxController with GetSingleTickerProviderStateMixin {
     httpGet(
       loading: 'face_login_getting_photo_path'.tr,
       method: webApiGetUserPhoto,
-      query: {'Phone': faceLoginPhoneController.text},
+      params: {'Phone': faceLoginPhoneController.text},
     ).then((val) {
       if (val.resultCode == resultSuccess) {
         Downloader(
@@ -135,7 +135,7 @@ class LoginLogic extends GetxController with GetSingleTickerProviderStateMixin {
                         httpPost(
                           loading: 'logging'.tr,
                           method: webApiLogin,
-                          query: {
+                          params: {
                             'JiGuangID': '',
                             'Phone': faceLoginPhoneController.text,
                             'Password': '',
@@ -194,7 +194,7 @@ class LoginLogic extends GetxController with GetSingleTickerProviderStateMixin {
     httpPost(
       loading: 'logging'.tr,
       method: webApiLogin,
-      query: {
+      params: {
         'JiGuangID': '',
         'Phone': machineLoginMachineController.text,
         'Password': machineLoginPasswordController.text,
@@ -228,7 +228,7 @@ class LoginLogic extends GetxController with GetSingleTickerProviderStateMixin {
     httpPost(
       loading: 'phone_login_getting_verify_code'.tr,
       method: webApiVerificationCode,
-      query: {'phone': phoneLoginPhoneController.text},
+      params: {'phone': phoneLoginPhoneController.text},
     ).then((verifyCodeCallback) {
       if (verifyCodeCallback.resultCode == resultSuccess) {
         showSnackBar(
@@ -276,7 +276,7 @@ class LoginLogic extends GetxController with GetSingleTickerProviderStateMixin {
     httpPost(
       loading: 'logging'.tr,
       method: webApiLogin,
-      query: {
+      params: {
         'JiGuangID': '',
         'Phone': phoneLoginPhoneController.text,
         'Password': phoneLoginPasswordController.text,
@@ -312,7 +312,7 @@ class LoginLogic extends GetxController with GetSingleTickerProviderStateMixin {
     httpPost(
       loading: 'logging'.tr,
       method: webApiLogin,
-      query: {
+      params: {
         'JiGuangID': '',
         'Phone': workLoginWorkNumberController.text,
         'Password': workLoginPasswordController.text,

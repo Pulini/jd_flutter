@@ -12,13 +12,15 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:path/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sqflite/sqflite.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'http/response/user_info.dart';
-import 'http/response/version_info.dart';
-import 'http/response/worker_info.dart';
-import 'http/web_api.dart';
+import 'bean/http/response/user_info.dart';
+import 'bean/http/response/version_info.dart';
+import 'bean/http/response/worker_info.dart';
+import 'web_api.dart';
 
 late SharedPreferences sharedPreferences;
 late PackageInfo packageInfo;
@@ -181,13 +183,13 @@ extension FileExt on File {
 }
 
 ///String扩展方法
-extension StringExt on String {
+extension StringExt on String? {
   String md5Encode() =>
-      md5.convert(const Utf8Encoder().convert(this)).toString();
+      md5.convert(const Utf8Encoder().convert(this??'')).toString();
 
   double toDoubleTry() {
     try {
-      return double.parse(this);
+      return double.parse(this??'');
     } on Exception catch (_) {
       return 0.0;
     }
@@ -195,12 +197,21 @@ extension StringExt on String {
 
   int toIntTry() {
     try {
-      return int.parse(this);
+      return int.parse(this??'');
     } on Exception catch (_) {
       return 0;
     }
   }
+
+  String ifEmpty(String v){
+    if(this!=null&&this?.isNotEmpty==true){
+      return this!;
+    }else{
+      return v;
+    }
+  }
 }
+
 
 extension RequestOptionsExt on RequestOptions {
   print() {
@@ -211,7 +222,7 @@ extension RequestOptionsExt on RequestOptions {
     map['Path'] = path;
     map['Headers'] = headers;
     map['QueryParameters'] = queryParameters;
-    map['data'] = data;
+    map['Data'] = data;
     logger.f(map);
   }
 }
@@ -317,7 +328,7 @@ getWorkerInfo({
   String? department,
   required Function(List<WorkerInfo>) workers,
 }) {
-  httpGet(method: webApiGetWorkerInfo, query: {
+  httpGet(method: webApiGetWorkerInfo, params: {
     'EmpNumber': number,
     'DeptmentID': department,
   }).then((worker) {
@@ -374,4 +385,8 @@ visitButtonWidget({
       ),
     ),
   );
+}
+
+Future<Database> openDb()  async {
+  return openDatabase(join(await getDatabasesPath(), jdDatabase));
 }
