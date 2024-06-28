@@ -49,4 +49,12 @@ class PickingBarCodeInfo {
   double getSurplusQty() {
     return totalQty.sub(qty ?? 0);
   }
+  int maxLabel(){
+    print('totalQty=$totalQty qty=$qty packingQty=$packingQty');
+    if(packingQty==0){
+      return (totalQty??0).ceil();
+    }else{
+      return ((totalQty.sub(qty??0)).div(packingQty)).ceil();
+    }
+  }
 }

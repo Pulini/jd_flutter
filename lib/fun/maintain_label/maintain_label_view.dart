@@ -6,6 +6,7 @@ import 'package:jd_flutter/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 
 import '../../bean/http/response/label_info.dart';
+import '../../widget/dialogs.dart';
 import 'maintain_label_dialogs.dart';
 import 'maintain_label_logic.dart';
 
@@ -292,10 +293,23 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
                         if (checkUserPermission('1051105')) {
                           createLabelSelect(
                             single: () => logic.createSingleLabel(),
-                            mix: () {
-                              logic.getBarCodeCount((g)=> createMixLabelDialog(g));
-                            },
-                            custom: () {},
+                            mix: () => logic.getBarCodeCount(
+                              true,
+                              (data) => createMixLabelDialog(
+                                data,
+                                state.interID,
+                                () => logic.refreshDataList(),
+                              ),
+                            ),
+                            custom: () => logic.getBarCodeCount(
+                              false,
+                              (data) => createCustomLabelDialog(
+                                data,
+                                state.interID,
+                                state.isMaterialLabel.value,
+                                () => logic.refreshDataList(),
+                              ),
+                            ),
                           );
                         } else {
                           showSnackBar(title: '错误', message: '没有创建贴标权限');
@@ -307,7 +321,20 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
                   Expanded(
                     child: CombinationButton(
                       text: '删除',
-                      click: () {},
+                      click: () {
+                        var select = logic.getSelectData();
+                        askDialog(
+                          content:
+                              select.isEmpty ? '确定要删除包装清单吗？' : '确定要删除这些标签吗？',
+                          confirm: () {
+                            if (select.isEmpty) {
+                              logic.deleteAllLabel();
+                            } else {
+                              logic.deleteLabels(select);
+                            }
+                          },
+                        );
+                      },
                       combination: Combination.middle,
                     ),
                   ),
@@ -320,7 +347,18 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
                   Expanded(
                     child: CombinationButton(
                       text: '设置',
-                      click: () {},
+                      click: () => setLabelSelect(
+                        property: () => logic.getMaterialProperties(
+                          (list) => setLabelPropertyDialog(
+                            list,
+                            state.interID,
+                            state.materialCode,
+                            () => logic.refreshDataList(),
+                          ),
+                        ),
+                        boxCapacity: () {},
+                        language: () {},
+                      ),
                       combination: Combination.right,
                     ),
                   ),

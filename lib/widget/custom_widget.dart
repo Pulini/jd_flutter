@@ -133,10 +133,12 @@ class EditText extends StatelessWidget {
       fn = FocusNode()..requestFocus();
     }
     return Container(
-      height: 50,
       margin: const EdgeInsets.fromLTRB(10, 5, 10, 5),
       child: TextField(
         controller: controller,
+        onChanged: (v) {
+          onChanged.call(v);
+        },
         focusNode: fn,
         decoration: InputDecoration(
           contentPadding: const EdgeInsets.only(
@@ -257,27 +259,28 @@ class NumberEditText extends StatelessWidget {
     this.hint,
     this.hasFocus = false,
     required this.onChanged,
+    this.controller,
   });
 
   final bool hasFocus;
   final String? hint;
   final Function(String) onChanged;
+  final TextEditingController? controller;
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController controller = TextEditingController();
+    var c = TextEditingController();
     FocusNode? fn;
     if (hasFocus) {
       fn = FocusNode()..requestFocus();
     }
     return Container(
-      height: 50,
       margin: const EdgeInsets.fromLTRB(10, 5, 10, 5),
       child: TextField(
         focusNode: fn,
         keyboardType: TextInputType.number,
         inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-        controller: controller,
+        controller: controller ?? c,
         onChanged: onChanged,
         decoration: InputDecoration(
           contentPadding: const EdgeInsets.only(
@@ -301,7 +304,7 @@ class NumberEditText extends StatelessWidget {
           hintStyle: const TextStyle(color: Colors.grey),
           suffixIcon: IconButton(
             icon: const Icon(Icons.close, color: Colors.grey),
-            onPressed: () => controller.clear(),
+            onPressed: () => (controller ?? c).clear(),
           ),
         ),
       ),

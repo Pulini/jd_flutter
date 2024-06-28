@@ -366,6 +366,30 @@ const webApiGetLabelList = 'api/CompoundDispatching/PackagePrintLabelList';
 ///创建单码贴标
 const webApiCreateSingleLabel = 'api/CompoundDispatching/GeneratePackingListByWorkCardInterID';
 
-///创建单码贴标
+///获取可创建标签数据
 const webApiGetPackingListBarCodeCount = 'api/CompoundDispatching/GetPackingListBarCodeCount';
+
+///获取可创建标签数据
+const webApiGetPackingListBarCodeCountBySize = 'api/CompoundDispatching/GetPackingListBarCodeCountBySize';
+
+///创建混码贴标
+const webApiCreateMixLabel = 'api/CompoundDispatching/GeneratePackingListBarCodeBySizedMultiple';
+
+///创建自定义贴标
+const webApiCreateCustomLargeLabel = 'api/CompoundDispatching/GeneratePackingListLargeBarCode';
+
+///创建自定义贴标
+const webApiCreateCustomSizeLabel = 'api/CompoundDispatching/GeneratePackingListBarCodeBySize';
+
+///删除包装清单所有标签
+const webApiCleanLabel = 'api/CompoundDispatching/DelPackingListBarcode';
+
+///删除标签
+const webApiDeleteLabels = 'api/CompoundDispatching/DelBarcode';
+
+///获取物料属性
+const webApiGetMaterialProperties = 'api/CompoundDispatching/GetMaterialProperties';
+
+///修改物料属性配置
+const webApiSetMaterialProperties = 'api/CompoundDispatching/SubmitMaterialProperties';
 

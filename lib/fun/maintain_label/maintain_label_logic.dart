@@ -3,9 +3,12 @@ import 'dart:convert';
 import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/bean/http/response/base_data.dart';
 import 'package:jd_flutter/utils.dart';
 
+import '../../bean/http/request/maintain_label_delete.dart';
 import '../../bean/http/response/label_info.dart';
+import '../../bean/http/response/maintain_material_info.dart';
 import '../../bean/http/response/picking_bar_code_info.dart';
 import '../../web_api.dart';
 import '../../widget/dialogs.dart';
@@ -55,6 +58,11 @@ class MaintainLabelLogic extends GetxController {
           state.labelGroupList.value = group;
         }
       } else {
+        if (state.isMaterialLabel.value) {
+          state.labelList.clear();
+        } else {
+          state.labelGroupList.clear();
+        }
         errorDialog(content: response.message);
       }
     });
@@ -66,7 +74,7 @@ class MaintainLabelLogic extends GetxController {
       for (var v in state.getLabelList().where((v) => v.isBillPrint ?? false)) {
         v.select = c;
       }
-      state.isMaterialLabel.refresh();
+      state.labelList.refresh();
     } else {
       for (var v in state
           .getLabelGroupList()
@@ -86,7 +94,7 @@ class MaintainLabelLogic extends GetxController {
           in state.getLabelList().where((v) => !(v.isBillPrint ?? false))) {
         v.select = c;
       }
-      state.isMaterialLabel.refresh();
+      state.labelList.refresh();
     } else {
       for (var v in state
           .getLabelGroupList()
@@ -124,6 +132,22 @@ class MaintainLabelLogic extends GetxController {
     return list;
   }
 
+  List<String> getSelectData() {
+    var list = <String>[];
+    if (state.isMaterialLabel.value) {
+      state.getLabelList().where((v) => v.select).forEach((data) {
+        list.add(data.barCode ?? '');
+      });
+    } else {
+      state.getLabelGroupList().forEach((g) {
+        g.where((v) => v.select).forEach((data) {
+          list.add(data.barCode ?? '');
+        });
+      });
+    }
+    return list;
+  }
+
   createSingleLabel() {
     httpPost(
       method: webApiCreateSingleLabel,
@@ -143,29 +167,105 @@ class MaintainLabelLogic extends GetxController {
     });
   }
 
-  getBarCodeCount(Function(List<List<PickingBarCodeInfo>>)callback) {
-    httpGet(
-      method: webApiGetPackingListBarCodeCount,
-      loading: '正在获取条码信息...',
-      params: {
-        'InterID': state.interID,
-        'LabelType': 3,
-        'UserID': userInfo?.userID,
-      },
-    ).then((response) {
+  getBarCodeCount(bool isMix, Function(List<PickingBarCodeInfo>) callback) {
+    _barCodeCount(isMix).then((response) {
       if (response.resultCode == resultSuccess) {
         var list = <PickingBarCodeInfo>[];
         var jsonList = jsonDecode(response.data);
         for (var i = 0; i < jsonList.length; ++i) {
           list.add(PickingBarCodeInfo.fromJson(jsonList[i]));
-          list.add(PickingBarCodeInfo.fromJson(jsonList[i]));
-          list.add(PickingBarCodeInfo.fromJson(jsonList[i]));
         }
-        var group=<List<PickingBarCodeInfo>>[];
-        groupBy(list, (v) => v.size).forEach((key, value) {
-          group.add(value);
-        });
-        callback.call(group);
+        callback.call(list);
+      } else {
+        errorDialog(content: response.message);
+      }
+    });
+  }
+
+  Future<BaseData> _barCodeCount(bool isMix) {
+    if (isMix) {
+      return httpGet(
+        method: webApiGetPackingListBarCodeCount,
+        loading: '正在获取条码信息...',
+        params: {
+          'InterID': state.interID,
+          'LabelType': 3,
+          'UserID': userInfo?.userID,
+        },
+      );
+    } else {
+      if (state.isMaterialLabel.value) {
+        return httpGet(
+          method: webApiGetPackingListBarCodeCountBySize,
+          loading: '正在获取条码信息...',
+          params: {
+            'InterID': state.interID,
+            'UserID': userInfo?.userID,
+          },
+        );
+      } else {
+        return httpGet(
+          method: webApiGetPackingListBarCodeCount,
+          loading: '正在获取条码信息...',
+          params: {
+            'InterID': state.interID,
+            'LabelType': 3,
+            'UserID': userInfo?.userID,
+          },
+        );
+      }
+    }
+  }
+
+  deleteAllLabel() {
+    httpPost(
+      method: webApiCleanLabel,
+      loading: '正在删除包装清单...',
+      params: {
+        'InterID': state.interID,
+      },
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        successDialog(content: response.message, back: () => refreshDataList());
+      } else {
+        errorDialog(content: response.message);
+      }
+    });
+  }
+
+  deleteLabels(List<String> select) {
+    httpPost(
+      method: webApiDeleteLabels,
+      loading: '正在删除标签...',
+      body: MaintainLabelDelete(
+        workCardID: state.interID.toString(),
+        barCodes: select,
+      ),
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        successDialog(content: response.message, back: () => refreshDataList());
+      } else {
+        errorDialog(content: response.message);
+      }
+    });
+  }
+
+  getMaterialProperties(Function(RxList<MaintainMaterialInfo>) callback) {
+    httpGet(
+      method: webApiGetMaterialProperties,
+      loading: '正在获取物料属性信息...',
+      params: {
+        'MaterialCode': state.materialCode,
+        'InterID': state.interID,
+      },
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        var list = <MaintainMaterialInfo>[].obs;
+        var jsonList = jsonDecode(response.data);
+        for (var i = 0; i < jsonList.length; ++i) {
+          list.add(MaintainMaterialInfo.fromJson(jsonList[i]));
+        }
+        callback.call(list);
       } else {
         errorDialog(content: response.message);
       }
