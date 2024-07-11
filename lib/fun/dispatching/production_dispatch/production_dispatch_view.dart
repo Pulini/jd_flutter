@@ -5,7 +5,6 @@ import 'package:jd_flutter/utils.dart';
 import 'package:marquee/marquee.dart';
 
 import '../../../bean/http/response/production_dispatch_order_info.dart';
-import '../../../route.dart';
 import '../../../widget/custom_widget.dart';
 import '../../../widget/picker/picker_view.dart';
 import '../../../widget/web_page.dart';
@@ -552,8 +551,7 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
   @override
   Widget build(BuildContext context) {
     return pageBodyWithDrawer(
-      title: getFunctionTitle(),
-      children: _queryWidgets(),
+      queryWidgets: _queryWidgets(),
       query: () => logic.query(),
       body: Obx(
         () => Column(

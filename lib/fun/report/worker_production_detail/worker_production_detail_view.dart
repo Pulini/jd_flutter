@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/widget/picker/picker_view.dart';
 
 import '../../../widget/custom_widget.dart';
@@ -22,8 +21,8 @@ class _WorkerProductionDetailPageState
   @override
   Widget build(BuildContext context) {
     return pageBodyWithDrawer(
-      title: getFunctionTitle(),
-      children: [
+      
+      queryWidgets: [
         DatePicker(pickerController: logic.pickerControllerStartDate),
         DatePicker(pickerController: logic.pickerControllerEndDate),
         OptionsPicker(pickerController: logic.pickerControllerReportType),

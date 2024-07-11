@@ -169,9 +169,6 @@ const webApiChangeUserAvatar = 'api/User/UploadEmpPicture';
 ///修改密码接口
 const webApiChangePassword = 'api/User/ChangePassWord';
 
-///获取部门组别列表接口
-const webApiGetDepartment = 'api/User/GetDepListByEmpID';
-
 ///修改部门组别接口
 const webApiChangeDepartment = 'api/User/GetLoginInfo';
 
@@ -310,13 +307,15 @@ const webApiSkipAcceptance = 'api/FixedAsset/CloseAssets';
 const webApiUpdateProperty = 'api/FixedAsset/UpdateAssets';
 
 ///人员来访记录列表
-const webApiGetVisitDtBySqlWhere = 'api/VisitorRegistration/GetVisitDtBySqlWhere';
+const webApiGetVisitDtBySqlWhere =
+    'api/VisitorRegistration/GetVisitDtBySqlWhere';
 
 ///获取来访编号
 const webApiGetInviteCode = 'api/VisitorRegistration/GetInviteCode';
 
 ///获取工艺指导书列表
-const webApiGetManufactureInstructions = 'api/NeedleCartDispatch/GetManufactureInstructions';
+const webApiGetManufactureInstructions =
+    'api/NeedleCartDispatch/GetManufactureInstructions';
 
 ///获取用料清单
 const webApiGetWorkPlanMaterial = 'api/NeedleCartDispatch/GetWorkPlanMaterial';
@@ -331,7 +330,8 @@ const webApiSendDispatchToWechat = 'api/NeedleCartDispatch/WechatPostByFEmpID';
 const webApiProductionDispatch = 'api/NeedleCartDispatch/ProcessCalculation';
 
 ///获取派工单派工数、完工数信息
-const webApiGetIntactProductionDispatch = 'api/WorkCard/GetSubmitScWorkCard2ProcessOutputReport';
+const webApiGetIntactProductionDispatch =
+    'api/WorkCard/GetSubmitScWorkCard2ProcessOutputReport';
 
 ///获取生产用料表
 const webApiGetSapMoPickList = 'api/Material/GetSapMoPickList';
@@ -346,40 +346,51 @@ const webApiGetMatchColors = 'api/Inspection/GetMatchColors';
 const webApiGetMatchColorsPDF = 'api/Inspection/GetMatchColorsPDF';
 
 ///修改派工单开关状态
-const webApiChangeWorkCardStatus = 'api/NeedleCartDispatch/SetWorkCardCloseStatus';
+const webApiChangeWorkCardStatus =
+    'api/NeedleCartDispatch/SetWorkCardCloseStatus';
 
 ///删除派工单下游工序
-const webApiDeleteScProcessWorkCard = 'api/NeedleCartDispatch/DeleteScProcessWorkCard';
+const webApiDeleteScProcessWorkCard =
+    'api/NeedleCartDispatch/DeleteScProcessWorkCard';
 
 ///删除派工单上次报工
-const webApiDeleteLastReport = 'api/NeedleCartDispatch/DeleteLastProcessWorkCardAndProcessOutPut';
+const webApiDeleteLastReport =
+    'api/NeedleCartDispatch/DeleteLastProcessWorkCardAndProcessOutPut';
 
 ///更新sap配套数
-const webApiUpdateSAPPickingSupportingQty = 'api/CompoundDispatching/UpdateSAPPickingSupportingQty';
+const webApiUpdateSAPPickingSupportingQty =
+    'api/CompoundDispatching/UpdateSAPPickingSupportingQty';
 
 ///更新sap配套数
-const webApiReportSAPByWorkCardInterID = 'api/CompoundDispatching/ReportSAPByWorkCardInterID';
+const webApiReportSAPByWorkCardInterID =
+    'api/CompoundDispatching/ReportSAPByWorkCardInterID';
 
 ///获取贴标列表
 const webApiGetLabelList = 'api/CompoundDispatching/PackagePrintLabelList';
 
 ///创建单码贴标
-const webApiCreateSingleLabel = 'api/CompoundDispatching/GeneratePackingListByWorkCardInterID';
+const webApiCreateSingleLabel =
+    'api/CompoundDispatching/GeneratePackingListByWorkCardInterID';
 
 ///获取可创建标签数据
-const webApiGetPackingListBarCodeCount = 'api/CompoundDispatching/GetPackingListBarCodeCount';
+const webApiGetPackingListBarCodeCount =
+    'api/CompoundDispatching/GetPackingListBarCodeCount';
 
 ///获取可创建标签数据
-const webApiGetPackingListBarCodeCountBySize = 'api/CompoundDispatching/GetPackingListBarCodeCountBySize';
+const webApiGetPackingListBarCodeCountBySize =
+    'api/CompoundDispatching/GetPackingListBarCodeCountBySize';
 
 ///创建混码贴标
-const webApiCreateMixLabel = 'api/CompoundDispatching/GeneratePackingListBarCodeBySizedMultiple';
+const webApiCreateMixLabel =
+    'api/CompoundDispatching/GeneratePackingListBarCodeBySizedMultiple';
 
 ///创建自定义贴标
-const webApiCreateCustomLargeLabel = 'api/CompoundDispatching/GeneratePackingListLargeBarCode';
+const webApiCreateCustomLargeLabel =
+    'api/CompoundDispatching/GeneratePackingListLargeBarCode';
 
 ///创建自定义贴标
-const webApiCreateCustomSizeLabel = 'api/CompoundDispatching/GeneratePackingListBarCodeBySize';
+const webApiCreateCustomSizeLabel =
+    'api/CompoundDispatching/GeneratePackingListBarCodeBySize';
 
 ///删除包装清单所有标签
 const webApiCleanLabel = 'api/CompoundDispatching/DelPackingListBarcode';
@@ -388,8 +399,44 @@ const webApiCleanLabel = 'api/CompoundDispatching/DelPackingListBarcode';
 const webApiDeleteLabels = 'api/CompoundDispatching/DelBarcode';
 
 ///获取物料属性
-const webApiGetMaterialProperties = 'api/CompoundDispatching/GetMaterialProperties';
+const webApiGetMaterialProperties =
+    'api/CompoundDispatching/GetMaterialProperties';
 
 ///修改物料属性配置
-const webApiSetMaterialProperties = 'api/CompoundDispatching/SubmitMaterialProperties';
+const webApiSetMaterialProperties =
+    'api/CompoundDispatching/SubmitMaterialProperties';
 
+///获取物料箱容信息
+const webApiGetMaterialCapacity =
+    'api/CompoundDispatching/GetBodySizeBoxCapacity';
+
+///修改物料箱容配置
+const webApiSetMaterialCapacity =
+    'api/CompoundDispatching/SubmitBodySizeBoxCapacity';
+
+///获取物料语言信息信息
+const webApiGetMaterialLanguages =
+    'api/CompoundDispatching/GetMaterialMultilingual';
+
+///修改物料语言信息信息
+const webApiSetMaterialLanguages =
+    'api/CompoundDispatching/SubmitMaterialMultilingual';
+
+///获取生产派工单
+const webApiGetWorkCardOrderList =
+    'api/WorkCard/GetWorkCardCombinedSizeListByScan';
+
+///获取生产派工单部件信息
+const webApiGetPartList = 'api/WetPrinting/GetWorkCardParts';
+
+///获取生产派工单部件信息明细
+const webApiGetPartDetail = 'api/WetPrinting/GetWorkCardPartDetails';
+
+///创建部件贴标
+const webApiCreatePartLabel = 'api/WetPrinting/CreatePartLabelingBarcode';
+
+///删除部件贴标
+const webApiDeletePartLabel = 'api/WetPrinting/DelBarcode';
+
+///获取贴标工序汇总表_已报工
+const webApiGetPartProcessReportedReport = 'api/WetPrinting/GetPartProcessReport_Barcode_Reported';

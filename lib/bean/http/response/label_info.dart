@@ -202,7 +202,7 @@ class LabelMaterialInfo {
   String? languageName;
   String? name;
   String? pageNumber;
-  double? unitName;
+  String? unitName;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};

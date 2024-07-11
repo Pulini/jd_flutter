@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../route.dart';
 import '../../../widget/custom_widget.dart';
 import '../../../widget/web_page.dart';
 import 'view_process_specification_logic.dart';
@@ -23,8 +22,8 @@ class _ViewProcessSpecificationPageState
   Widget build(BuildContext context) {
     // WebViewWidget(controller: logic.webViewController)
     return pageBodyWithDrawer(
-      title: getFunctionTitle(),
-      children: [
+      
+      queryWidgets: [
         EditText(hint: '请输入型体', onChanged: (v) => state.etTypeBody = v),
       ],
       query: () => logic.queryProcessSpecification(),

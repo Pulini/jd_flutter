@@ -2,7 +2,9 @@ import 'package:get/get.dart';
 
 import 'bean/home_button.dart';
 import 'bean/routes.dart';
+import 'fun/dispatching/material_dispatch/material_dispatch_view.dart';
 import 'fun/dispatching/production_dispatch/production_dispatch_detail_view.dart';
+import 'fun/dispatching/work_order_list/work_order_list_view.dart';
 import 'fun/manage/visit_register/visit_register_view.dart';
 import 'fun/dispatching/production_dispatch/production_dispatch_view.dart';
 import 'fun/management/property/property_view.dart';
@@ -18,6 +20,7 @@ import 'fun/report/view_process_specification/view_process_specification_view.da
 import 'fun/report/worker_production_detail/worker_production_detail_view.dart';
 import 'fun/report/worker_production_report/worker_production_report_view.dart';
 import 'fun/report/workshop_production_daily_report/workshop_production_daily_report_view.dart';
+import 'fun/sacn/part_process_scan/part_process_scan_view.dart';
 import 'home/home_view.dart';
 import 'web_api.dart';
 import 'login/login_view.dart';
@@ -138,6 +141,27 @@ class RouteConfig {
     const ProductionMaterialsReportPage(),
   );
 
+  ///工单列表
+  static Routes workOrderListPage = Routes(
+    '/work_order_list',
+    99,
+    const WorkOrderListPage(),
+  );
+
+  ///部件工序扫码
+  static Routes partProcessScanPage = Routes(
+    '/part_process_scan',
+    99,
+    const PartProcessScanPage(),
+  );
+
+  ///材料车间派工
+  static Routes materialDispatchPage = Routes(
+    '/material_dispatch_page',
+    99,
+    const MaterialDispatchPage(),
+  );
+
   ///本地功能入口列表
   static List<Routes> routeList = [
     dailyReport,
@@ -155,6 +179,9 @@ class RouteConfig {
     productionDispatchDetailPage,
     propertyPage,
     productionMaterialsReportPage,
+    workOrderListPage,
+    partProcessScanPage,
+    materialDispatchPage,
   ];
 
   static List<GetPage> appRoutes = [
@@ -231,6 +258,18 @@ class RouteConfig {
       name: visitRegisterPage.name,
       page: () => visitRegisterPage.page,
     ),
+    GetPage(
+      name: workOrderListPage.name,
+      page: () => workOrderListPage.page,
+    ),
+    GetPage(
+      name: partProcessScanPage.name,
+      page: () => partProcessScanPage.page,
+    ),
+    GetPage(
+      name: materialDispatchPage.name,
+      page: () => materialDispatchPage.page,
+    ),
   ];
 }
 
@@ -262,6 +301,7 @@ HomeButton? getNowFunction() {
 
 String getFunctionTitle() {
   var route = Get.currentRoute;
+  print(route);
   if (route == RouteConfig.main) return '';
   for (var item1 in functions) {
     if (item1 is HomeButton && item1.route == route) {

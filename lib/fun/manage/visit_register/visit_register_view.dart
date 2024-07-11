@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 
 import '../../../bean/http/response/visit_data_list_info.dart';
 import '../../../web_api.dart';
-import '../../../route.dart';
 import '../../../utils.dart';
 import '../../../widget/custom_widget.dart';
 import '../../../widget/picker/picker_view.dart';
@@ -170,7 +169,6 @@ class _VisitRegisterPageState extends State<VisitRegisterPage> {
   @override
   Widget build(BuildContext context) {
     return pageBodyWithBottomSheet(
-      title: getFunctionTitle(),
       bottomSheet: [
         visitButtonWidget(
             title: 'visit_button_scan_invitation_code'.tr,
@@ -212,7 +210,6 @@ class _VisitRegisterPageState extends State<VisitRegisterPage> {
   // @override
   // Widget build(BuildContext context) {
   //   return pageBodyWithDrawer(
-  //       title: getFunctionTitle(),
   //       children: [
   //         visitButtonWidget(
   //             title: 'visit_button_scan_invitation_code'.tr,

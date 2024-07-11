@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-import '../../../route.dart';
 import '../../../widget/custom_widget.dart';
 import '../../../widget/picker/picker_view.dart';
 import 'view_instruction_details_logic.dart';
@@ -22,8 +21,7 @@ class _ViewInstructionDetailsPageState
   @override
   Widget build(BuildContext context) {
     return pageBodyWithDrawer(
-      title: getFunctionTitle(),
-      children: [
+      queryWidgets: [
         EditText(hint: '请输入指令单号', onChanged: (v) => logic.tetInstruction = v),
         OptionsPicker(pickerController: logic.pickerControllerProcessFlow),
       ],

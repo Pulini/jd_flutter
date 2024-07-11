@@ -1,7 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/base_data.dart';
 import 'package:jd_flutter/utils.dart';
@@ -375,19 +374,19 @@ _createCustomLabelItem(
         ),
         title: Row(
           children: [
-            _textSpan(
+            expandedTextSpan(
               flex: 2,
               hint: '尺码：',
               text: list[index].size ?? '',
               textColor: Colors.redAccent,
             ),
-            _textSpan(
+            expandedTextSpan(
               flex: 2,
               hint: '已生成贴标：',
               text: list[index].labelCount.toString(),
               textColor: Colors.black45,
             ),
-            _textSpan(
+            expandedTextSpan(
               hint: '创建：',
               text: create[index].toString(),
               textColor: Colors.green,
@@ -398,17 +397,17 @@ _createCustomLabelItem(
           children: [
             Row(
               children: [
-                _textSpan(
+                expandedTextSpan(
                   flex: 2,
                   hint: '总货数：',
                   text: list[index].totalQty.toShowString(),
                 ),
-                _textSpan(
+                expandedTextSpan(
                   flex: 2,
                   hint: '已生成数：',
                   text: list[index].qty.toShowString(),
                 ),
-                _textSpan(
+                expandedTextSpan(
                   hint: '剩余货数：',
                   text: surplus.toShowString(),
                 )
@@ -561,30 +560,7 @@ _createCustomLabel(
   });
 }
 
-_textSpan({
-  required String hint,
-  Color hintColor = Colors.black,
-  required String text,
-  Color textColor = Colors.blueAccent,
-  int flex = 1,
-}) {
-  return Expanded(
-      flex: flex,
-      child: Text.rich(
-        TextSpan(
-          children: [
-            TextSpan(
-              text: hint,
-              style: TextStyle(fontWeight: FontWeight.bold, color: hintColor),
-            ),
-            TextSpan(
-              text: text,
-              style: TextStyle(color: textColor, fontWeight: FontWeight.bold),
-            ),
-          ],
-        ),
-      ));
-}
+
 
 int _createLabel(double capacity, double createGoods) {
   if (capacity > 0.0 && createGoods > 0.0) {
@@ -595,7 +571,7 @@ int _createLabel(double capacity, double createGoods) {
 }
 
 setLabelPropertyDialog(
-  RxList<MaintainMaterialInfo> list,
+  RxList<MaintainMaterialPropertiesInfo> list,
   int id,
   String materialCode,
   Function() callback,
@@ -617,11 +593,12 @@ setLabelPropertyDialog(
                         size: data.size ?? '',
                         netWeight: netWeight.toShowString(),
                         grossWeight: grossWeight.toShowString(),
-                        meas:meas,
+                        meas: meas,
                         unitName: unitName,
                       ));
                     }
-                    _setMaterialProperties(item, id, materialCode, () =>Get.back());
+                    _setMaterialProperties(
+                        item, id, materialCode, () => Get.back());
                   },
                 ),
               ),
@@ -648,7 +625,8 @@ setLabelPropertyDialog(
             TextButton(
               onPressed: () {
                 if (list.any((v) => v.ifNull())) {
-                  showSnackBar(title: '错误', message: '重量必须大于0',isWarning: true);
+                  showSnackBar(
+                      title: '错误', message: '重量必须大于0', isWarning: true);
                 } else {
                   var item = <MaintainLabelSetPropertiesSub>[];
                   for (var data in list) {
@@ -660,7 +638,15 @@ setLabelPropertyDialog(
                       unitName: data.unitName ?? '',
                     ));
                   }
-                  _setMaterialProperties(item, id, materialCode, () =>Get.back());
+                  _setMaterialProperties(
+                    item,
+                    id,
+                    materialCode,
+                    () {
+                      Get.back();
+                      callback.call();
+                    },
+                  );
                 }
               },
               child: Text('修改'),
@@ -670,7 +656,7 @@ setLabelPropertyDialog(
   );
 }
 
-_setLabelPropertyItem(MaintainMaterialInfo data) {
+_setLabelPropertyItem(MaintainMaterialPropertiesInfo data) {
   return Card(
     child: Padding(
       padding: EdgeInsets.all(10),
@@ -747,27 +733,42 @@ batchSetLabelPropertyDialog(
     String unitName,
   ) callback,
 ) {
-  double nw = 0.0;
-  double gw = 0.0;
+  var nw = 0.0.obs;
+  var gw = 0.0.obs;
   String meas = '';
   String unit = '';
+  double bnw = spGet('BatchSetProperty_NetWeight') ?? 0.0;
+  double bgw = spGet('BatchSetProperty_GrossWeight') ?? 0.0;
   Get.dialog(
     PopScope(
         canPop: false,
         child: AlertDialog(
-          title: Text('批量修改属性'),
+          title: Row(
+            children: [
+              Expanded(child: Text('批量修改属性')),
+              if (bnw > 0 && bgw > 0)
+                CombinationButton(
+                    text: '上次记录',
+                    click: () {
+                      nw.value = bnw;
+                      gw.value = bgw;
+                    }),
+            ],
+          ),
           content: SizedBox(
-            width: 240,
+            width: 300,
             height: 200,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                _expandedNumberEditText('净重：', nw, (s) => nw = s),
-                _expandedNumberEditText('毛重：', gw, (s) => gw = s),
-                _expandedEditText('规格：', meas, (s) => meas = s),
-                _expandedEditText('单位：', unit, (s) => unit = s),
-              ],
-            ),
+            child: Obx(() => Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _expandedNumberEditText(
+                        '净重：', nw.value, (s) => nw.value = s),
+                    _expandedNumberEditText(
+                        '毛重：', gw.value, (s) => gw.value = s),
+                    _expandedEditText('规格：', meas, (s) => meas = s),
+                    _expandedEditText('单位：', unit, (s) => unit = s),
+                  ],
+                )),
           ),
           actions: [
             TextButton(
@@ -779,14 +780,16 @@ batchSetLabelPropertyDialog(
             ),
             TextButton(
               onPressed: () {
-                if (nw <= 0 || gw <= 0) {
+                if (nw.value <= 0 || gw.value <= 0) {
                   showSnackBar(
                     title: '错误',
                     message: '请完整填写修改内容',
                     isWarning: true,
                   );
                 } else {
-                  callback.call(nw, gw, meas, unit);
+                  spSave('BatchSetProperty_NetWeight', nw.value);
+                  spSave('BatchSetProperty_GrossWeight', gw.value);
+                  callback.call(nw.value, gw.value, meas, unit);
                   Get.back();
                 }
               },
@@ -798,12 +801,11 @@ batchSetLabelPropertyDialog(
 }
 
 _setMaterialProperties(
-    List<MaintainLabelSetPropertiesSub> list,
+  List<MaintainLabelSetPropertiesSub> list,
   int id,
   String materialCode,
   Function() callback,
 ) {
-
   httpPost(
     method: webApiSetMaterialProperties,
     loading: '正在设置物料属性信息...',
@@ -876,6 +878,218 @@ _expandedEditText(
       ],
     ),
   );
+}
+
+setLabelCapacityDialog(
+  RxList<MaintainMaterialCapacityInfo> list,
+  int id,
+  Function() callback,
+) {
+  Get.dialog(
+    PopScope(
+        canPop: false,
+        child: AlertDialog(
+          title: Text('修改标签箱容'),
+          content: SizedBox(
+            width: MediaQuery.of(Get.overlayContext!).size.width * 0.8,
+            height: MediaQuery.of(Get.overlayContext!).size.height * 0.8,
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(
+                      '批量修改：',
+                      style: TextStyle(
+                          color: Colors.blue.shade900,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16),
+                    ),
+                    SizedBox(
+                      width: 180,
+                      child: NumberDecimalEditText(onChanged: (d) {
+                        for (var data in list) {
+                          data.capacity = d;
+                        }
+                        list.refresh();
+                      }),
+                    ),
+                    SizedBox(
+                      width: 20,
+                    )
+                  ],
+                ),
+                Expanded(
+                  child: Obx(() => ListView.builder(
+                        padding: const EdgeInsets.all(8),
+                        itemCount: list.length,
+                        itemBuilder: (context, index) => Card(
+                          child: Padding(
+                            padding: EdgeInsets.only(left: 10, right: 10),
+                            child: Row(
+                              children: [
+                                expandedTextSpan(
+                                  hint: '尺码：',
+                                  text: list[index].size ?? '',
+                                ),
+                                Text('箱容：'),
+                                SizedBox(
+                                  width: 180,
+                                  child: NumberDecimalEditText(
+                                    initQty: list[index].capacity,
+                                    onChanged: (d) => list[index].capacity = d,
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      )),
+                )
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Get.back(),
+              child: const Text(
+                '返回',
+                style: TextStyle(color: Colors.grey),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                _setMaterialCapacity(
+                  list,
+                  () {
+                    Get.back();
+                    callback.call();
+                  },
+                );
+              },
+              child: Text('修改'),
+            ),
+          ],
+        )),
+  );
+}
+
+_setMaterialCapacity(
+  RxList<MaintainMaterialCapacityInfo> list,
+  Function() callback,
+) {
+  var items = <MaintainLabelSetCapacitySub>[];
+  for (var data in list) {
+    items.add(MaintainLabelSetCapacitySub(
+      itemID: data.itemID ?? 0,
+      factoryType: data.factoryType ?? '',
+      size: data.size ?? '',
+      capacity: data.capacity.toShowString(),
+      processFlowID: data.processFlowID.toString(),
+    ));
+  }
+  httpPost(
+    method: webApiSetMaterialCapacity,
+    loading: '正在设置物料箱容信息...',
+    body: MaintainLabelSetCapacity(
+      userID: userInfo?.userID ?? 0,
+      items: items,
+    ),
+  ).then((response) {
+    if (response.resultCode == resultSuccess) {
+      successDialog(content: response.message, back: () => callback.call());
+    } else {
+      errorDialog(content: response.message);
+    }
+  });
+}
+
+setLabelLanguageDialog(
+  RxList<MaintainMaterialLanguagesInfo> list,
+  String materialCode,
+  Function() callback,
+) {
+  Get.dialog(
+    PopScope(
+        canPop: false,
+        child: AlertDialog(
+          title: Text('修改标签语言'),
+          content: SizedBox(
+            width: MediaQuery.of(Get.overlayContext!).size.width * 0.8,
+            height: MediaQuery.of(Get.overlayContext!).size.height * 0.8,
+            child: ListView.builder(
+              padding: const EdgeInsets.all(8),
+              itemCount: list.length,
+              itemBuilder: (context, index) => Card(
+                child: Padding(
+                  padding: EdgeInsets.only(left: 10, right: 10),
+                  child: Row(
+                    children: [
+                      Text(list[index].languageName ?? ''),
+                      Expanded(
+                        child: EditText(
+                          initStr: list[index].materialName,
+                          onChanged: (s) => list[index].materialName = s,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Get.back(),
+              child: const Text(
+                '返回',
+                style: TextStyle(color: Colors.grey),
+              ),
+            ),
+            TextButton(
+              onPressed: () => _setMaterialLanguages(
+                list,
+                materialCode,
+                () {
+                  Get.back();
+                  callback.call();
+                },
+              ),
+              child: Text('修改'),
+            ),
+          ],
+        )),
+  );
+}
+
+_setMaterialLanguages(
+  RxList<MaintainMaterialLanguagesInfo> list,
+  String materialCode,
+  Function() callback,
+) {
+  var items = <MaintainLabelSetLanguageSub>[];
+  for (var data in list) {
+    items.add(MaintainLabelSetLanguageSub(
+      languageID: data.languageID.toString(),
+      languageName: data.languageName ?? '',
+      materialName: data.materialName ?? '',
+    ));
+  }
+  httpPost(
+    method: webApiSetMaterialLanguages,
+    loading: '正在设置物料语言信息...',
+    body: MaintainLabelSetLanguage(
+      userID: userInfo?.userID ?? 0,
+      items: items,
+      materialCode: materialCode,
+    ),
+  ).then((response) {
+    if (response.resultCode == resultSuccess) {
+      successDialog(content: response.message, back: () => callback.call());
+    } else {
+      errorDialog(content: response.message);
+    }
+  });
 }
 
 showSelectMaterialPopup(List<String> list, Function(String) callback) {

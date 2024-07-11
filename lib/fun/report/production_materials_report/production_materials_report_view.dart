@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/utils.dart';
 
 import '../../../bean/http/response/production_materials_info.dart';
@@ -218,8 +217,8 @@ class _ProductionMaterialsReportPageState
   Widget build(BuildContext context) {
     return Get.arguments == null
         ? pageBodyWithDrawer(
-            title: getFunctionTitle(),
-            children: [
+            
+            queryWidgets: [
               Obx(() => Row(
                     children: [
                       Expanded(
@@ -274,7 +273,7 @@ class _ProductionMaterialsReportPageState
             query: () => logic.query(),
             body: getPageBody(),
           )
-        : pageBody(title: getFunctionTitle(), body: getPageBody());
+        : pageBody( body: getPageBody());
   }
 
   @override

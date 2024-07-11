@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../bean/http/response/daily_report_info.dart';
-import '../../../route.dart';
 import '../../../widget/custom_widget.dart';
 import '../../../widget/picker/picker_view.dart';
 import 'daily_report_logic.dart';
@@ -39,8 +38,8 @@ class _DailyReportPageState extends State<DailyReportPage> {
   @override
   Widget build(BuildContext context) {
     return pageBodyWithDrawer(
-      title: getFunctionTitle(),
-      children: [
+      
+      queryWidgets: [
         OptionsPicker(pickerController: logic.pickerControllerDepartment),
         DatePicker(pickerController: logic.pickerControllerDate),
       ],

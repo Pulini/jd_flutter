@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jd_flutter/route.dart';
 
 import '../../../bean/http/response/property_info.dart';
 import '../../../widget/custom_widget.dart';
@@ -129,7 +128,6 @@ class _PropertyPageState extends State<PropertyPage> {
   @override
   Widget build(BuildContext context) {
     return pageBodyWithBottomSheet(
-      title: getFunctionTitle(),
       bottomSheet: [
         EditText(
           hint: 'property_query_et_property_number'.tr,

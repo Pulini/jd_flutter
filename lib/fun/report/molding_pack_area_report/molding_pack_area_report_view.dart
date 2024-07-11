@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jd_flutter/route.dart';
 
 import '../../../widget/custom_widget.dart';
 import '../../../widget/picker/picker_view.dart';
@@ -22,8 +21,8 @@ class _MoldingPackAreaReportPageState extends State<MoldingPackAreaReportPage> {
   @override
   Widget build(BuildContext context) {
     return pageBodyWithDrawer(
-      title: getFunctionTitle(),
-      children: [
+      
+      queryWidgets: [
         EditText(
           hint: 'page_molding_pack_area_report_query_instruction'.tr,
           onChanged: (v)=>state.etInstruction=v,

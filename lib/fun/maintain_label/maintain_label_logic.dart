@@ -250,7 +250,8 @@ class MaintainLabelLogic extends GetxController {
     });
   }
 
-  getMaterialProperties(Function(RxList<MaintainMaterialInfo>) callback) {
+  getMaterialProperties(
+      Function(RxList<MaintainMaterialPropertiesInfo>) callback) {
     httpGet(
       method: webApiGetMaterialProperties,
       loading: '正在获取物料属性信息...',
@@ -260,10 +261,51 @@ class MaintainLabelLogic extends GetxController {
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        var list = <MaintainMaterialInfo>[].obs;
+        var list = <MaintainMaterialPropertiesInfo>[].obs;
         var jsonList = jsonDecode(response.data);
         for (var i = 0; i < jsonList.length; ++i) {
-          list.add(MaintainMaterialInfo.fromJson(jsonList[i]));
+          list.add(MaintainMaterialPropertiesInfo.fromJson(jsonList[i]));
+        }
+        callback.call(list);
+      } else {
+        errorDialog(content: response.message);
+      }
+    });
+  }
+
+  getMaterialCapacity(Function(RxList<MaintainMaterialCapacityInfo>) callback) {
+    httpGet(
+      method: webApiGetMaterialCapacity,
+      loading: '正在获取包装清单箱容配置信息...',
+      params: {
+        'InterID': state.interID,
+      },
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        var list = <MaintainMaterialCapacityInfo>[].obs;
+        var jsonList = jsonDecode(response.data);
+        for (var i = 0; i < jsonList.length; ++i) {
+          list.add(MaintainMaterialCapacityInfo.fromJson(jsonList[i]));
+        }
+        callback.call(list);
+      } else {
+        errorDialog(content: response.message);
+      }
+    });
+  }
+
+  getMaterialLanguages(
+      Function(RxList<MaintainMaterialLanguagesInfo>) callback) {
+    httpGet(
+      method: webApiGetMaterialLanguages,
+      loading: '正在获物料多语言信息...',
+      params: {'MaterialCode': state.materialCode},
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        var list = <MaintainMaterialLanguagesInfo>[].obs;
+        var jsonList = jsonDecode(response.data);
+        for (var i = 0; i < jsonList.length; ++i) {
+          list.add(MaintainMaterialLanguagesInfo.fromJson(jsonList[i]));
         }
         callback.call(list);
       } else {

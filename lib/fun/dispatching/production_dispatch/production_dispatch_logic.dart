@@ -4,10 +4,10 @@ import 'package:collection/collection.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/dispatching/production_dispatch/production_dispatch_detail_view.dart';
 import 'package:jd_flutter/utils.dart';
-import '../../../bean/http/request/production_dispatch_push_body.dart';
+import '../../../bean/http/request/production_dispatch_push.dart';
 import '../../../bean/http/response/order_color_list.dart';
 import '../../../bean/production_dispatch.dart';
-import '../../../bean/http/request/production_dispatch_body.dart';
+import '../../../bean/http/request/production_dispatch.dart';
 import '../../../bean/http/request/send_dispatch_to_wechat.dart';
 import '../../../bean/http/response/manufacture_instructions_info.dart';
 import '../../../bean/http/response/prd_route_info.dart';
@@ -312,18 +312,18 @@ class ProductionDispatchLogic extends GetxController {
           'StubBarName': v.stubBarName2,
         });
       }
-      surplusMaterial.add({
-        'StubBar':'LT000001',
-        'StubBarName': '料头打印测试数据1',
-      });
-      surplusMaterial.add({
-        'StubBar':'LT000002',
-        'StubBarName': '料头打印测试数据2',
-      });
-      surplusMaterial.add({
-        'StubBar':'LT000003',
-        'StubBarName': '料头打印测试数据3',
-      });
+      // surplusMaterial.add({
+      //   'StubBar':'LT000001',
+      //   'StubBarName': '料头打印测试数据1',
+      // });
+      // surplusMaterial.add({
+      //   'StubBar':'LT000002',
+      //   'StubBarName': '料头打印测试数据2',
+      // });
+      // surplusMaterial.add({
+      //   'StubBar':'LT000003',
+      //   'StubBarName': '料头打印测试数据3',
+      // });
       if (surplusMaterial.isNotEmpty) {
         callback.call(surplusMaterial);
       }else{

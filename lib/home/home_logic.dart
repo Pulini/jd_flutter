@@ -88,7 +88,7 @@ class HomeLogic extends GetxController {
     //获取部门列表
     var departmentCallback = await httpGet(
       loading: 'getting_group'.tr,
-      method: webApiGetDepartment,
+      method: webApiPickerSapGroup,
       params: {'EmpID': userInfo!.empID},
     );
     if (departmentCallback.resultCode == resultSuccess) {

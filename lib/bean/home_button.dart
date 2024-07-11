@@ -32,6 +32,7 @@ class HomeButton extends ButtonItem {
     required this.route,
     required this.hasPermission,
   }) {
+    print('${route.isNotEmpty?'---------------':''}name=$name description=$description route=$route hasPermission=$hasPermission}');
     for(var r in RouteConfig.routeList){
       if(r.name==route){
         hasUpdate = version > r.version;
@@ -50,7 +51,9 @@ class HomeButtonGroup extends ButtonItem {
     required super.icon,
     required super.classify,
     required this.functionGroup,
-  });
+  }){
+    print('name=$name description=$description ');
+  }
 }
 
 /*

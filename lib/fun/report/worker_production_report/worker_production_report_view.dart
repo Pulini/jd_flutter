@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/utils.dart';
 
 import '../../../bean/http/response/worker_production_info.dart';
@@ -24,8 +23,8 @@ class _WorkerProductionReportPageState
   @override
   Widget build(BuildContext context) {
     return pageBodyWithDrawer(
-      title: getFunctionTitle(),
-      children: [
+      
+      queryWidgets: [
         OptionsPicker(pickerController: logic.pickerControllerDepartment),
         DatePicker(pickerController: logic.pickerControllerDate),
       ],

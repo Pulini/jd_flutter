@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
@@ -6,8 +7,11 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:jd_flutter/route.dart';
 
+import '../bean/http/response/worker_info.dart';
 import '../utils.dart';
+import '../web_api.dart';
 
 ///数字输入框 ios端添加 done 按钮
 class NumberTextField extends StatefulWidget {
@@ -117,13 +121,15 @@ class EditText extends StatelessWidget {
     this.hint,
     this.initStr = '',
     this.hasFocus = false,
-    required this.onChanged,
+    this.controller,
+    this.onChanged,
   });
 
   final String? initStr;
   final bool hasFocus;
   final String? hint;
-  final Function(String v) onChanged;
+  final Function(String v)? onChanged;
+  final TextEditingController? controller;
 
   @override
   Widget build(BuildContext context) {
@@ -135,9 +141,9 @@ class EditText extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.fromLTRB(10, 5, 10, 5),
       child: TextField(
-        controller: controller,
+        controller: this.controller ?? controller,
         onChanged: (v) {
-          onChanged.call(v);
+          onChanged?.call(v);
         },
         focusNode: fn,
         decoration: InputDecoration(
@@ -162,7 +168,7 @@ class EditText extends StatelessWidget {
           hintStyle: const TextStyle(color: Colors.grey),
           suffixIcon: IconButton(
             icon: const Icon(Icons.close, color: Colors.grey),
-            onPressed: () => controller.clear(),
+            onPressed: () => (this.controller ?? controller).clear(),
           ),
         ),
       ),
@@ -248,6 +254,104 @@ class NumberDecimalEditText extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+///自定义输入框 根据工号查询员工
+class WorkerCheck extends StatefulWidget {
+  const WorkerCheck({super.key, required this.onChanged, this.hint});
+
+  final Function(WorkerInfo?) onChanged;
+  final String? hint;
+
+  @override
+  State<WorkerCheck> createState() => _WorkerCheckState();
+}
+
+class _WorkerCheckState extends State<WorkerCheck> {
+  var controller = TextEditingController();
+  var name = ''.obs;
+  var error = ''.obs;
+
+  getWorker({
+    required String number,
+    required Function(WorkerInfo) success,
+    required Function(String) error,
+  }) {
+    httpGet(method: webApiGetWorkerInfo, params: {
+      'EmpNumber': number,
+      'DeptmentID': '',
+    }).then((worker) {
+      if (worker.resultCode == resultSuccess) {
+        var jsonList = jsonDecode(worker.data);
+        var list = <WorkerInfo>[];
+        for (var i = 0; i < jsonList.length; ++i) {
+          list.add(WorkerInfo.fromJson(jsonList[i]));
+        }
+        success.call(list[0]);
+      } else {
+        error.call(worker.message ?? '');
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+      child: Obx(() => TextField(
+            keyboardType: TextInputType.number,
+            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+            controller: controller,
+            onChanged: (s) {
+              if (s.length >= 6) {
+                getWorker(
+                    number: s,
+                    success: (worker) {
+                      name.value = worker.empName ?? '';
+                      error.value = '';
+                      widget.onChanged.call(worker);
+                    },
+                    error: (s) {
+                      name.value = '';
+                      error.value = s;
+                      widget.onChanged.call(null);
+                    });
+              } else {
+                name.value = '';
+                error.value = '';
+              }
+            },
+            decoration: InputDecoration(
+              contentPadding: const EdgeInsets.only(
+                top: 0,
+                bottom: 0,
+                left: 10,
+                right: 10,
+              ),
+              filled: true,
+              fillColor: Colors.grey[300],
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(30),
+                borderSide: const BorderSide(
+                  color: Colors.transparent,
+                ),
+              ),
+              border: const OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(30)),
+              ),
+              helperText: name.value,
+              helperStyle: TextStyle(color: Colors.green.shade700),
+              errorText: error.value.isNotEmpty ? error.value : null,
+              hintText: widget.hint?.isEmpty == true ? '请输入员工工号' : widget.hint,
+              hintStyle: const TextStyle(color: Colors.grey),
+              suffixIcon: IconButton(
+                icon: const Icon(Icons.close, color: Colors.grey),
+                onPressed: () => controller.clear(),
+              ),
+            ),
+          )),
     );
   }
 }
@@ -357,7 +461,7 @@ var backgroundColor = const BoxDecoration(
 );
 
 pageBody({
-  required String title,
+  String? title,
   List<Widget>? actions,
   required Widget? body,
 }) {
@@ -367,7 +471,7 @@ pageBody({
       backgroundColor: Colors.transparent,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        title: Text(title),
+        title: Text(title??getFunctionTitle()),
         actions: [
           ...?actions,
         ],
@@ -379,7 +483,7 @@ pageBody({
 
 ///页面简单框架 底部弹出Popup
 pageBodyWithBottomSheet({
-  required String title,
+  String? title,
   List<Widget>? actions,
   required List<Widget> bottomSheet,
   required Function query,
@@ -391,7 +495,7 @@ pageBodyWithBottomSheet({
       backgroundColor: Colors.transparent,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        title: Text(title),
+        title: Text(title??getFunctionTitle()),
         actions: [
           ...?actions,
           Builder(
@@ -446,9 +550,9 @@ pageBodyWithBottomSheet({
 
 ///页面简单框架 右侧弹出Drawer
 pageBodyWithDrawer({
-  required String title,
+  String? title,
   List<Widget>? actions,
-  required List<Widget> children,
+  required List<Widget> queryWidgets,
   required Function query,
   required Widget? body,
 }) {
@@ -458,7 +562,7 @@ pageBodyWithDrawer({
       backgroundColor: Colors.transparent,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        title: Text(title),
+        title: Text(title ?? getFunctionTitle()),
         actions: [
           ...?actions,
           Builder(
@@ -476,7 +580,7 @@ pageBodyWithDrawer({
         key: GlobalKey(),
         child: ListView(children: [
           const SizedBox(height: 30),
-          ...children,
+          ...queryWidgets,
           const SizedBox(height: 30),
           Padding(
             padding: const EdgeInsets.all(10),
@@ -1023,4 +1127,51 @@ class _SwitchButtonState extends State<SwitchButton> {
       ),
     );
   }
+}
+
+expandedTextSpan({
+  required String hint,
+  Color hintColor = Colors.black,
+  required String text,
+  Color textColor = Colors.blueAccent,
+  int flex = 1,
+}) {
+  return Expanded(
+      flex: flex,
+      child: Text.rich(
+        TextSpan(
+          children: [
+            TextSpan(
+              text: hint,
+              style: TextStyle(fontWeight: FontWeight.bold, color: hintColor),
+            ),
+            TextSpan(
+              text: text,
+              style: TextStyle(color: textColor, fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
+      ));
+}
+
+textSpan({
+  required String hint,
+  Color hintColor = Colors.black,
+  required String text,
+  Color textColor = Colors.blueAccent,
+}) {
+  return Text.rich(
+    TextSpan(
+      children: [
+        TextSpan(
+          text: hint,
+          style: TextStyle(fontWeight: FontWeight.bold, color: hintColor),
+        ),
+        TextSpan(
+          text: text,
+          style: TextStyle(color: textColor, fontWeight: FontWeight.bold),
+        ),
+      ],
+    ),
+  );
 }

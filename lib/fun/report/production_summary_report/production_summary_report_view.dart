@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../route.dart';
 import '../../../widget/custom_widget.dart';
 import '../../../widget/picker/picker_view.dart';
 import 'production_summary_report_logic.dart';
@@ -22,8 +21,8 @@ class _ProductionSummaryReportPageState
   @override
   Widget build(BuildContext context) {
     return pageBodyWithDrawer(
-      title: getFunctionTitle(),
-      children: [
+      
+      queryWidgets: [
         Spinner(controller: logic.spinnerControllerWorkShop),
         DatePicker(pickerController: logic.pickerControllerDate),
       ],

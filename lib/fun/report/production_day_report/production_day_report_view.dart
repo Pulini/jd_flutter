@@ -22,7 +22,7 @@ class _ProductionDayReportPageState extends State<ProductionDayReportPage> {
   Widget build(BuildContext context) {
     return pageBodyWithDrawer(
       title:getFunctionTitle(),
-      children: [
+      queryWidgets: [
         Spinner(controller: logic.spinnerControllerWorkShop),
         DatePicker(pickerController: logic.pickerControllerDate),
       ],

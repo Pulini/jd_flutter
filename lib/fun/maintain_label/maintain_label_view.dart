@@ -1,5 +1,4 @@
 import 'package:collection/collection.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/utils.dart';
@@ -356,8 +355,20 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
                             () => logic.refreshDataList(),
                           ),
                         ),
-                        boxCapacity: () {},
-                        language: () {},
+                        boxCapacity: () => logic.getMaterialCapacity(
+                          (s) => setLabelCapacityDialog(
+                            s,
+                            state.interID,
+                            () => logic.refreshDataList(),
+                          ),
+                        ),
+                        language: () => logic.getMaterialLanguages(
+                          (list) => setLabelLanguageDialog(
+                            list,
+                            state.materialCode,
+                            () => logic.refreshDataList(),
+                          ),
+                        ),
                       ),
                       combination: Combination.right,
                     ),
