@@ -292,12 +292,11 @@ getVersionInfo(
       logger.i(packageInfo);
       var versionInfo =
           VersionInfo.fromJson(jsonDecode(versionInfoCallback.data));
-      noUpdate.call();
-      // if (packageInfo.version == versionInfo.versionName) {
-      //   noUpdate.call();
-      // } else {
-      //   needUpdate.call(versionInfo);
-      // }
+      if (packageInfo.version == versionInfo.versionName) {
+        noUpdate.call();
+      } else {
+        needUpdate.call(versionInfo);
+      }
     } else {
       errorDialog(content: versionInfoCallback.message);
     }
