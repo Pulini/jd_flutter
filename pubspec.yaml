@@ -16,10 +16,10 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.0.0
+version: 1.0.0+1
 
 environment:
-  sdk: '>=3.0.5 <4.0.0'
+  sdk: '>=3.4.3 <4.0.0'
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -49,18 +49,18 @@ dependencies:
   #图片选择器工具
   image_picker: ^1.0.4
   #图片裁剪工具
-  image_cropper: ^5.0.0
+  image_cropper: ^7.1.0
   #图片预览
-#  photo_view: ^0.14.0
+  #  photo_view: ^0.14.0
   #获取app基础信息
-  package_info_plus: ^4.1.0
+  package_info_plus: ^8.0.0
   #加密工具
   crypto: ^3.0.3
   #白屏启动页工具
   flutter_native_splash: ^2.3.2
   #华为hms扫码库
-#  flutter_hms_scan_kit: ^1.1.2
-#  flutter_scankit: ^2.0.3
+  #  flutter_hms_scan_kit: ^1.1.2
+  #  flutter_scankit: ^2.0.3
   #国际化 时间选择器需要此包来显示汉化文本
   flutter_localizations:
     sdk: flutter
@@ -72,13 +72,13 @@ dependencies:
   webview_flutter: ^4.4.1
   webview_flutter_web: ^0.2.2+3
   #高精度小数计算
-  decimal: ^2.3.3
+  decimal: ^3.0.2
   #下拉刷新控件
   pull_to_refresh: ^2.0.0
   #隔离区子线程
-#  flutter_isolate: ^2.0.4
+  #  flutter_isolate: ^2.0.4
   #获取设备信息
-  device_info_plus: ^9.0.3
+  device_info_plus: ^10.1.0
   #跑马灯文本
   marquee: ^2.2.3
   #意图启动器
@@ -89,16 +89,21 @@ dependencies:
   fast_gbk: ^1.0.0
   #Image处理工具集
   image: ^4.1.7
+  #角标
   rotated_corner_decoration: ^2.1.0+1
+  #本地数据库
   sqflite: ^2.3.3+1
+  #路径工具
   path: ^1.9.0
-
+  #进度条插件
+#  percent_indicator: ^4.2.3
 #  flutter_reactive_ble: ^5.3.1
 #  flutter_blue_plus: ^1.31.15
 #  flutter_blue_elves: ^0.1.9
 
-
-
+#强制使用固定版本插件
+dependency_overrides:
+  fading_edge_scrollview: ^4.1.1
 
 dev_dependencies:
   flutter_test:
@@ -109,7 +114,7 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^2.0.3
+  flutter_lints: ^4.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

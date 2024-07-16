@@ -207,29 +207,6 @@ class _VisitRegisterPageState extends State<VisitRegisterPage> {
     );
   }
 
-  // @override
-  // Widget build(BuildContext context) {
-  //   return pageBodyWithDrawer(
-  //       children: [
-  //         visitButtonWidget(
-  //             title: 'visit_button_scan_invitation_code'.tr,
-  //             click: () => {
-  //                   // Get.to(() => const DailyReportPage()),   //跳转界面
-  //                 }),
-  //         visitButtonWidget(
-  //             title: 'visit_button_search_recent_records'.tr,
-  //             click: () => {
-  //                   // searchDialog("123")
-  //                 }),
-  //         visitButtonWidget(
-  //             title: 'visit_button_add_record'.tr, click: () => {}),
-  //       ],
-  //       query: () {
-  //         logic.getVisitList();
-  //       },
-  //       body: listView());
-  // }
-
   @override
   void dispose() {
     Get.delete<VisitRegisterLogic>();

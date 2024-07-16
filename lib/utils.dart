@@ -292,15 +292,12 @@ getVersionInfo(
       logger.i(packageInfo);
       var versionInfo =
           VersionInfo.fromJson(jsonDecode(versionInfoCallback.data));
-      // versionInfo.versionName = '2.0.0';
-      // versionInfo.force = false;
-      // versionInfo.url =
-      //     'https://geapp.goldemperor.com:8021/AndroidUpdate/GoldEmperor/GE1.0.73.apk';
-      if (packageInfo.version == versionInfo.versionName) {
-        noUpdate.call();
-      } else {
-        needUpdate.call(versionInfo);
-      }
+      noUpdate.call();
+      // if (packageInfo.version == versionInfo.versionName) {
+      //   noUpdate.call();
+      // } else {
+      //   needUpdate.call(versionInfo);
+      // }
     } else {
       errorDialog(content: versionInfoCallback.message);
     }

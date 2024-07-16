@@ -113,8 +113,8 @@ Future<BaseData> _doHttp(
   try {
     ///创建dio对象
     var dio = Dio(BaseOptions(
-      baseUrl: testUrlForMES,
-      // baseUrl: baseUrlForMES,
+      // baseUrl: testUrlForMES,
+      baseUrl: baseUrlForMES,
       connectTimeout: const Duration(minutes: 2),
       receiveTimeout: const Duration(minutes: 2),
     ))
@@ -440,3 +440,6 @@ const webApiDeletePartLabel = 'api/WetPrinting/DelBarcode';
 
 ///获取贴标工序汇总表_已报工
 const webApiGetPartProcessReportedReport = 'api/WetPrinting/GetPartProcessReport_Barcode_Reported';
+
+///获取工序派工单列表
+const webApiGetScWorkCardProcess = 'api/CompoundDispatching/GetScWorkCardProcessListStripDrawing';

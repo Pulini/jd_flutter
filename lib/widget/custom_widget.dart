@@ -416,6 +416,35 @@ class NumberEditText extends StatelessWidget {
   }
 }
 
+expandedFrameText({
+  Color? borderColor,
+  Color? backgroundColor,
+  Color? textColor,
+  int? flex,
+  EdgeInsetsGeometry? padding,
+  AlignmentGeometry? alignment,
+  required String text,
+}) {
+  return Expanded(
+    flex: flex ?? 1,
+    child: Container(
+      padding: padding ?? const EdgeInsets.all(5),
+      decoration: BoxDecoration(
+        border: Border.all(color: borderColor ?? Colors.grey),
+        color: backgroundColor ?? Colors.transparent,
+      ),
+      alignment: alignment ?? Alignment.centerLeft,
+      child: Text(
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        text,
+        style: TextStyle(color: textColor ?? Colors.black87),
+      ),
+    ),
+  );
+}
+
+///带框文本
 class TextContainer extends StatelessWidget {
   const TextContainer({
     super.key,
@@ -471,7 +500,7 @@ pageBody({
       backgroundColor: Colors.transparent,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        title: Text(title??getFunctionTitle()),
+        title: Text(title ?? getFunctionTitle()),
         actions: [
           ...?actions,
         ],
@@ -495,7 +524,7 @@ pageBodyWithBottomSheet({
       backgroundColor: Colors.transparent,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        title: Text(title??getFunctionTitle()),
+        title: Text(title ?? getFunctionTitle()),
         actions: [
           ...?actions,
           Builder(
@@ -661,7 +690,7 @@ _takePhoto(bool isGallery, Function(File) callback) async {
   var cFile = await ImageCropper().cropImage(
     sourcePath: xFile!.path,
     aspectRatio: const CropAspectRatio(ratioX: 1, ratioY: 1),
-    aspectRatioPresets: [CropAspectRatioPreset.square],
+    // aspectRatioPresets: [CropAspectRatioPreset.square],
     uiSettings: [
       AndroidUiSettings(
         toolbarTitle: 'cropper_title'.tr,
@@ -795,6 +824,7 @@ button(
 
 enum Combination { left, middle, right, intact }
 
+///自定义按钮
 class CombinationButton extends StatelessWidget {
   final Combination? combination;
   final Color? backgroundColor;
@@ -885,6 +915,7 @@ class CombinationButton extends StatelessWidget {
   }
 }
 
+///单选框
 class CheckBox extends StatefulWidget {
   final Function(bool isChecked) onChanged;
   final String name;
@@ -1011,6 +1042,7 @@ class SpinnerController {
   }
 }
 
+///下啦列表
 class Spinner extends StatelessWidget {
   final SpinnerController controller;
 
@@ -1043,6 +1075,7 @@ class Spinner extends StatelessWidget {
   }
 }
 
+///选择器
 class SwitchButton extends StatefulWidget {
   final Function(bool isChecked) onChanged;
   final String name;
@@ -1129,49 +1162,134 @@ class _SwitchButtonState extends State<SwitchButton> {
   }
 }
 
+///带占比带文本提示的文本
 expandedTextSpan({
   required String hint,
   Color hintColor = Colors.black,
   required String text,
   Color textColor = Colors.blueAccent,
+  bool isBold = true,
   int flex = 1,
 }) {
   return Expanded(
       flex: flex,
       child: Text.rich(
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
         TextSpan(
           children: [
             TextSpan(
               text: hint,
-              style: TextStyle(fontWeight: FontWeight.bold, color: hintColor),
+              style: TextStyle(
+                  fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
+                  color: hintColor),
             ),
             TextSpan(
               text: text,
-              style: TextStyle(color: textColor, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
+                color: textColor,
+              ),
             ),
           ],
         ),
       ));
 }
 
+///带文本提示带文本
 textSpan({
   required String hint,
   Color hintColor = Colors.black,
   required String text,
   Color textColor = Colors.blueAccent,
+  bool isBold = true,
 }) {
   return Text.rich(
+    maxLines: 1,
+    overflow: TextOverflow.ellipsis,
     TextSpan(
       children: [
         TextSpan(
           text: hint,
-          style: TextStyle(fontWeight: FontWeight.bold, color: hintColor),
+          style: TextStyle(
+            fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
+            color: hintColor,
+          ),
         ),
         TextSpan(
           text: text,
-          style: TextStyle(color: textColor, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
+            color: textColor,
+          ),
         ),
       ],
     ),
+  );
+}
+
+percentIndicator({
+  required double max,
+  required double value,
+  double? height,
+  Color? color,
+  Color? backgroundColor,
+  Color? textColor,
+}) {
+  var percent = (value.div(max).toStringAsFixed(3)).toDoubleTry();
+  return Stack(
+    children: [
+      Center(
+        child: LinearProgressIndicator(
+          borderRadius: const BorderRadius.all(Radius.circular(100)),
+          value: percent,
+          minHeight: height ?? 20,
+          backgroundColor: backgroundColor ?? Colors.grey.shade300,
+          color: color ?? Colors.green.shade400,
+        ),
+      ),
+      Center(
+        child: Text(
+          '${percent.mul(100).toShowString()}%',
+          style: TextStyle(
+            color: textColor ?? Colors.black87,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+    ],
+  );
+}
+
+progressIndicator({
+  required double max,
+  required double value,
+  double? height,
+  Color? color,
+  Color? backgroundColor,
+  Color? textColor,
+}) {
+  var percent = (value.div(max).toStringAsFixed(3)).toDoubleTry();
+  return Stack(
+    children: [
+      Center(
+        child: LinearProgressIndicator(
+          borderRadius: const BorderRadius.all(Radius.circular(100)),
+          value: percent,
+          minHeight: height ?? 20,
+          backgroundColor: backgroundColor ?? Colors.grey.shade300,
+          color: color ?? Colors.green.shade400,
+        ),
+      ),
+      Center(
+        child: Text(
+          value.toShowString(),
+          style: TextStyle(
+            color: textColor ?? Colors.black87,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+    ],
   );
 }
