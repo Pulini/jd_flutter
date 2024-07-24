@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:get/get.dart';
 import 'package:jd_flutter/web_api.dart';
 
@@ -45,7 +43,7 @@ class DailyReportLogic extends GetxController {
               qty: 'page_daily_report_table_title_hint4'.tr,
             )
           ];
-          for (var item in jsonDecode(response.data)) {
+          for (var item in response.data) {
             list.add(DailyReport.fromJson(item));
           }
           state.dataList.value = list;

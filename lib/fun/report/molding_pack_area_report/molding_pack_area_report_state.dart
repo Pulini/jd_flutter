@@ -100,8 +100,8 @@ class MoldingPackAreaReportPageState {
     Function(int, String) goDetail,
   ) {
     return DataRow(
-      color: MaterialStateProperty.resolveWith<Color?>(
-        (Set<MaterialState> states) {
+      color: WidgetStateProperty.resolveWith<Color?>(
+        (Set<WidgetState> states) {
           return color;
         },
       ),
@@ -135,8 +135,8 @@ class MoldingPackAreaReportPageState {
     Color color,
   ) {
     return DataRow(
-      color: MaterialStateProperty.resolveWith<Color?>(
-        (Set<MaterialState> states) {
+      color: WidgetStateProperty.resolveWith<Color?>(
+        (Set<WidgetState> states) {
           return color;
         },
       ),

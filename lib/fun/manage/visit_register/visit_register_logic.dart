@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:get/get.dart';
 import 'package:jd_flutter/utils.dart';
 
@@ -44,48 +42,42 @@ class VisitRegisterLogic extends GetxController {
     String? phone,
     String? carNo,
     String? credentials,
-}) {
-    httpPost(
-        method: webApiGetVisitDtBySqlWhere,
-        loading: '正在获取来访列表...',
-        body: {
-          'Name':name,
-          'IDCard':iDCard,
-          'VisitedFactory': getUserInfo()?.organizeID,
-          'Interviewee':interviewee,
-          'IntervieweeName':intervieweeName,
-          'SecurityStaff':securityStaff,
-          'StartTime':startTime,
-          'EndTime':endTime,
-          'Leave':leave,
-          'Phone':phone,
-          'CarNo':carNo,
-          'Credentials':credentials,
-        }).then((response) {
+  }) {
+    httpPost(method: webApiGetVisitDtBySqlWhere, loading: '正在获取来访列表...', body: {
+      'Name': name,
+      'IDCard': iDCard,
+      'VisitedFactory': getUserInfo()?.organizeID,
+      'Interviewee': interviewee,
+      'IntervieweeName': intervieweeName,
+      'SecurityStaff': securityStaff,
+      'StartTime': startTime,
+      'EndTime': endTime,
+      'Leave': leave,
+      'Phone': phone,
+      'CarNo': carNo,
+      'Credentials': credentials,
+    }).then((response) {
       if (response.resultCode == resultSuccess) {
-        var jsonList = jsonDecode(response.data);
-        var list = <VisitDataListInfo>[];
-        for (var i = 0; i < jsonList.length; ++i) {
-          list.add(VisitDataListInfo.fromJson(jsonList[i]));
-        }
-        state.dataList.value = list;
+        state.dataList.value = [
+          for (var i = 0; i < response.data.length; ++i)
+            VisitDataListInfo.fromJson(response.data[i])
+        ];
       } else {
-        state.dataList.value=[];
+        state.dataList.value = [];
         errorDialog(content: response.message);
       }
     });
   }
 
-
   getInviteCode() {
     httpGet(
-        method: webApiGetInviteCode,
-        loading: '正在获取来访编号...',
-      ).then((response) {
+      method: webApiGetInviteCode,
+      loading: '正在获取来访编号...',
+    ).then((response) {
       if (response.resultCode == resultSuccess) {
-        state.visitCode = jsonDecode(response.data);
+        state.visitCode = response.data.toString();
       } else {
-        state.visitCode= response.message!;
+        state.visitCode = response.message!;
         errorDialog(content: response.message);
       }
     });

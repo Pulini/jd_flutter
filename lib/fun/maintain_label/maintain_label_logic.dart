@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -32,11 +30,10 @@ class MaintainLabelLogic extends GetxController {
       params: {'WorkCardID': state.interID},
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        var list = <LabelInfo>[];
-        var jsonList = jsonDecode(response.data);
-        for (var i = 0; i < jsonList.length; ++i) {
-          list.add(LabelInfo.fromJson(jsonList[i]));
-        }
+        var list = <LabelInfo>[
+          for (var i = 0; i < response.data.length; ++i)
+            LabelInfo.fromJson(response.data[i])
+        ];
         state.typeBody.value = list[0].factoryType ?? '';
         if (list[0].materialOtherName?.isNotEmpty == true) {
           state.materialName.value = list[0]
@@ -170,12 +167,10 @@ class MaintainLabelLogic extends GetxController {
   getBarCodeCount(bool isMix, Function(List<PickingBarCodeInfo>) callback) {
     _barCodeCount(isMix).then((response) {
       if (response.resultCode == resultSuccess) {
-        var list = <PickingBarCodeInfo>[];
-        var jsonList = jsonDecode(response.data);
-        for (var i = 0; i < jsonList.length; ++i) {
-          list.add(PickingBarCodeInfo.fromJson(jsonList[i]));
-        }
-        callback.call(list);
+        callback.call([
+          for (var i = 0; i < response.data.length; ++i)
+            PickingBarCodeInfo.fromJson(response.data[i])
+        ]);
       } else {
         errorDialog(content: response.message);
       }
@@ -261,12 +256,10 @@ class MaintainLabelLogic extends GetxController {
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        var list = <MaintainMaterialPropertiesInfo>[].obs;
-        var jsonList = jsonDecode(response.data);
-        for (var i = 0; i < jsonList.length; ++i) {
-          list.add(MaintainMaterialPropertiesInfo.fromJson(jsonList[i]));
-        }
-        callback.call(list);
+        callback.call([
+          for (var i = 0; i < response.data.length; ++i)
+            MaintainMaterialPropertiesInfo.fromJson(response.data[i])
+        ].obs);
       } else {
         errorDialog(content: response.message);
       }
@@ -282,12 +275,10 @@ class MaintainLabelLogic extends GetxController {
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        var list = <MaintainMaterialCapacityInfo>[].obs;
-        var jsonList = jsonDecode(response.data);
-        for (var i = 0; i < jsonList.length; ++i) {
-          list.add(MaintainMaterialCapacityInfo.fromJson(jsonList[i]));
-        }
-        callback.call(list);
+        callback.call([
+          for (var i = 0; i < response.data.length; ++i)
+            MaintainMaterialCapacityInfo.fromJson(response.data[i])
+        ].obs);
       } else {
         errorDialog(content: response.message);
       }
@@ -302,12 +293,10 @@ class MaintainLabelLogic extends GetxController {
       params: {'MaterialCode': state.materialCode},
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        var list = <MaintainMaterialLanguagesInfo>[].obs;
-        var jsonList = jsonDecode(response.data);
-        for (var i = 0; i < jsonList.length; ++i) {
-          list.add(MaintainMaterialLanguagesInfo.fromJson(jsonList[i]));
-        }
-        callback.call(list);
+        callback.call([
+          for (var i = 0; i < response.data.length; ++i)
+            MaintainMaterialLanguagesInfo.fromJson(response.data[i])
+        ].obs);
       } else {
         errorDialog(content: response.message);
       }

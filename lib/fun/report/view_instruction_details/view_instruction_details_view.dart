@@ -7,7 +7,7 @@ import '../../../widget/picker/picker_view.dart';
 import 'view_instruction_details_logic.dart';
 
 class ViewInstructionDetailsPage extends StatefulWidget {
-  const ViewInstructionDetailsPage({Key? key}) : super(key: key);
+  const ViewInstructionDetailsPage({super.key});
 
   @override
   State<ViewInstructionDetailsPage> createState() =>

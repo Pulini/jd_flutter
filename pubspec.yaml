@@ -51,7 +51,7 @@ dependencies:
   #图片裁剪工具
   image_cropper: ^7.1.0
   #图片预览
-  #  photo_view: ^0.14.0
+  photo_view: ^0.15.0
   #获取app基础信息
   package_info_plus: ^8.0.0
   #加密工具
@@ -84,7 +84,7 @@ dependencies:
   #意图启动器
   url_launcher: ^6.1.14
   #List扩展工具集
-  collection: ^1.17.2
+  collection: ^1.18.0
   #GBK编码
   fast_gbk: ^1.0.0
   #Image处理工具集
@@ -96,7 +96,6 @@ dependencies:
   #路径工具
   path: ^1.9.0
   #进度条插件
-#  percent_indicator: ^4.2.3
 #  flutter_reactive_ble: ^5.3.1
 #  flutter_blue_plus: ^1.31.15
 #  flutter_blue_elves: ^0.1.9

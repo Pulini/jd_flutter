@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/management/property/property_detail_view.dart';
@@ -55,12 +53,10 @@ class PropertyLogic extends GetxController
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        var jsonList = jsonDecode(response.data);
-        var list = <PropertyInfo>[];
-        for (var i = 0; i < jsonList.length; ++i) {
-          list.add(PropertyInfo.fromJson(jsonList[i]));
-        }
-        state.propertyList.value = list;
+        state.propertyList.value = [
+          for (var i = 0; i < response.data.length; ++i)
+            PropertyInfo.fromJson(response.data[i])
+        ];
       } else {
         state.propertyList.value = [];
         errorDialog(content: response.message);
@@ -75,7 +71,7 @@ class PropertyLogic extends GetxController
       params: {'InterID': detailId},
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        state.detail = PropertyDetailInfo.fromJson(jsonDecode(response.data));
+        state.detail = PropertyDetailInfo.fromJson(response.data);
         state.canModify = state.detail.processStatus == 0;
         state.participatorName.value = state.detail.participatorName ?? '';
         state.custodianName.value = state.detail.custodianName ?? '';

@@ -10,10 +10,8 @@ import '../custom_widget.dart';
 import 'picker_item.dart';
 
 class DatePicker extends StatelessWidget {
-  const DatePicker({
-    Key? key,
-    required this.pickerController,
-  }) : super(key: key);
+  const DatePicker({super.key, required this.pickerController});
+
   final DatePickerController pickerController;
 
   _showOptions() {
@@ -84,10 +82,7 @@ var _titleButtonCancel = TextButton(
 );
 
 class OptionsPicker extends StatelessWidget {
-  const OptionsPicker({
-    Key? key,
-    required this.pickerController,
-  }) : super(key: key);
+  const OptionsPicker({super.key, required this.pickerController});
 
   final OptionsPickerController pickerController;
 
@@ -212,10 +207,8 @@ class OptionsPicker extends StatelessWidget {
 }
 
 class LinkOptionsPicker extends StatelessWidget {
-  const LinkOptionsPicker({
-    Key? key,
-    required this.pickerController,
-  }) : super(key: key);
+  const LinkOptionsPicker({super.key, required this.pickerController});
+
   final LinkOptionsPickerController pickerController;
 
   Widget _pickerText(PickerItem data) {

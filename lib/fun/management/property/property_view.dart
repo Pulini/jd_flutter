@@ -173,7 +173,7 @@ class _PropertyPageState extends State<PropertyPage> {
             indicatorColor: Colors.blueAccent,
             labelColor: Colors.blueAccent,
             unselectedLabelColor: Colors.grey,
-            overlayColor: MaterialStateProperty.all(Colors.transparent),
+            overlayColor: WidgetStateProperty.all(Colors.transparent),
             tabs: [
               Tab(text: 'property_tab_type_1'.tr),
               Tab(text: 'property_tab_type_2'.tr),

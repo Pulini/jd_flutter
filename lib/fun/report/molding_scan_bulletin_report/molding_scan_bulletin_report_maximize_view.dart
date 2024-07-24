@@ -48,13 +48,13 @@ class _MoldingScanBulletinReportMaximizeState
     });
   }
 
-  var whiteColor = MaterialStateProperty.resolveWith<Color?>(
-    (Set<MaterialState> states) {
+  var whiteColor = WidgetStateProperty.resolveWith<Color?>(
+    (Set<WidgetState> states) {
       return Colors.white;
     },
   );
-  var greyColor = MaterialStateProperty.resolveWith<Color?>(
-    (Set<MaterialState> states) {
+  var greyColor = WidgetStateProperty.resolveWith<Color?>(
+    (Set<WidgetState> states) {
       return Colors.grey.shade200;
     },
   );
@@ -66,8 +66,8 @@ class _MoldingScanBulletinReportMaximizeState
         return DataTable(
           border: TableBorder.all(color: Colors.black, width: 1),
           showCheckboxColumn: false,
-          headingRowColor: MaterialStateProperty.resolveWith<Color?>(
-            (Set<MaterialState> states) {
+          headingRowColor: WidgetStateProperty.resolveWith<Color?>(
+            (Set<WidgetState> states) {
               return Colors.blueAccent.shade100;
             },
           ),

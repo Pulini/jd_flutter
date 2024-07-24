@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/route.dart';
@@ -46,7 +44,7 @@ class ProductionSummaryReportLogic extends GetxController {
           state.tableData.clear();
           var list = <DataRow>[];
           var index = 0;
-          for (var item in jsonDecode(response.data)) {
+          for (var item in response.data) {
             var data = ProductionSummaryInfo.fromJson(item);
             state.tableData.add(data);
             list.add(state.createDataRow(data,

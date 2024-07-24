@@ -6,7 +6,7 @@ import '../../../widget/web_page.dart';
 import 'view_process_specification_logic.dart';
 
 class ViewProcessSpecificationPage extends StatefulWidget {
-  const ViewProcessSpecificationPage({Key? key}) : super(key: key);
+  const ViewProcessSpecificationPage({super.key});
 
   @override
   State<ViewProcessSpecificationPage> createState() =>

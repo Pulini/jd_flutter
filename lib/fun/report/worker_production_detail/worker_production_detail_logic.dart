@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/utils.dart';
@@ -59,7 +57,7 @@ class WorkerProductionDetailLogic extends GetxController {
 
   List<WorkerProductionDetailShow> formatData(dynamic json) {
     var list = <WorkerProductionDetail>[];
-    for (var item in jsonDecode(json)) {
+    for (var item in json) {
       switch (pickerControllerReportType.selectedId.value) {
         case '1001':
           list.add(WorkerProductionDetailType1.fromJson(item));
@@ -122,8 +120,8 @@ class WorkerProductionDetailLogic extends GetxController {
             ),
             DataTable(
               showCheckboxColumn: false,
-              headingRowColor: MaterialStateProperty.resolveWith<Color?>(
-                (Set<MaterialState> states) {
+              headingRowColor: WidgetStateProperty.resolveWith<Color?>(
+                (Set<WidgetState> states) {
                   return Colors.blueAccent.shade100;
                 },
               ),
@@ -224,8 +222,8 @@ class WorkerProductionDetailLogic extends GetxController {
       var data = list[index];
       if (data is WorkerProductionDetailType1) {
         row.add(DataRow(
-          color: MaterialStateProperty.resolveWith<Color?>(
-            (Set<MaterialState> states) {
+          color: WidgetStateProperty.resolveWith<Color?>(
+            (Set<WidgetState> states) {
               return index == list.length - 1
                   ? Colors.orange
                   : index.isEven
@@ -254,8 +252,8 @@ class WorkerProductionDetailLogic extends GetxController {
       }
       if (data is WorkerProductionDetailType2) {
         row.add(DataRow(
-          color: MaterialStateProperty.resolveWith<Color?>(
-                (Set<MaterialState> states) {
+          color: WidgetStateProperty.resolveWith<Color?>(
+                (Set<WidgetState> states) {
               return index == list.length - 1
                   ? Colors.orange
                   : index.isEven
@@ -278,8 +276,8 @@ class WorkerProductionDetailLogic extends GetxController {
       }
       if (data is WorkerProductionDetailType3) {
         row.add(DataRow(
-          color: MaterialStateProperty.resolveWith<Color?>(
-                (Set<MaterialState> states) {
+          color: WidgetStateProperty.resolveWith<Color?>(
+                (Set<WidgetState> states) {
               return index == list.length - 1
                   ? Colors.orange
                   : index.isEven

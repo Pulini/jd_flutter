@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:get/get.dart';
 
 import '../../web_api.dart';
@@ -17,6 +15,7 @@ enum PickerType {
   sapWorkCenterNew,
   sapGroup,
   sapFactoryWarehouse,
+  sapWarehouseStorageLocation,
   mesWorkShop,
   mesDepartment,
   mesOrganization,
@@ -55,6 +54,8 @@ abstract class PickerController {
         return 'picker_type_sap_group'.tr;
       case PickerType.sapFactoryWarehouse:
         return 'picker_type_sap_factory_warehouse'.tr;
+      case PickerType.sapWarehouseStorageLocation:
+        return 'picker_type_sap_warehouse_storage_location'.tr;
       case PickerType.mesWorkShop:
         return 'picker_type_mes_work_shop'.tr;
       case PickerType.mesDepartment:
@@ -100,6 +101,8 @@ abstract class PickerController {
         return getSapGroup;
       case PickerType.sapFactoryWarehouse:
         return getSapFactoryAndWarehouse;
+      case PickerType.sapWarehouseStorageLocation:
+        return getSapWarehouseStorageLocation;
       case PickerType.mesWorkShop:
         return getMesWorkShop;
       case PickerType.mesDepartment:
@@ -129,8 +132,9 @@ class OptionsPickerController extends PickerController {
   List<PickerItem> pickerData = [];
   RxList<PickerItem> pickerItems = <PickerItem>[].obs;
   var selectItem = 0;
-  final Function(int)? onChanged;
-  final Function(int)? onSelected;
+  final Function(PickerItem)? onChanged;
+  final Function(PickerItem)? onSelected;
+  String initId;
 
   OptionsPickerController(
     super.pickerType, {
@@ -139,6 +143,7 @@ class OptionsPickerController extends PickerController {
     this.dataList,
     this.onChanged,
     this.onSelected,
+    this.initId = '',
   });
 
   select(int item) {
@@ -148,8 +153,8 @@ class OptionsPickerController extends PickerController {
     if (saveKey != null && saveKey!.isNotEmpty) {
       spSave(saveKey!, pickerItems[item].pickerId());
     }
-    onSelected?.call(selectItem);
-    onChanged?.call(selectItem);
+    onSelected?.call(pickerItems[selectItem]);
+    onChanged?.call(pickerItems[selectItem]);
   }
 
   search(String text) {
@@ -166,15 +171,20 @@ class OptionsPickerController extends PickerController {
 
   int getSave() {
     var select = selectItem;
-    if (saveKey != null && saveKey!.isNotEmpty) {
-      var save = spGet(saveKey!);
-      if (save != null && save.isNotEmpty) {
-        var find1 =
-            pickerItems.indexWhere((element) => element.pickerId() == save);
-        if (find1 >= 0) {
-          select = find1;
+    if (initId.isEmpty) {
+      if (saveKey != null && saveKey!.isNotEmpty) {
+        var save = spGet(saveKey!);
+        if (save != null && save.isNotEmpty) {
+          var find1 =
+              pickerItems.indexWhere((element) => element.pickerId() == save);
+          if (find1 >= 0) {
+            select = find1;
+          }
         }
       }
+    } else {
+      var index = pickerItems.indexWhere((v) => v.pickerId() == initId);
+      if (index != -1) select = index;
     }
     return select;
   }
@@ -189,14 +199,11 @@ class OptionsPickerController extends PickerController {
           pickerData = value;
           pickerItems.value = value;
           if (value.length > 1) {
-            var save = 0;
-            if (saveKey != null && saveKey!.isNotEmpty) {
-              save = getSave();
-            }
+            var save = getSave();
             selectedName.value = pickerItems[save].pickerName();
             selectedId.value = pickerItems[save].pickerId();
             selectItem = save;
-            onSelected?.call(selectItem);
+            onSelected?.call(pickerItems[selectItem]);
           }
         } else {
           loadingError.value = value as String;
@@ -349,6 +356,7 @@ class DatePickerController extends PickerController {
   DateTime lastDate = DateTime(
       DateTime.now().year, DateTime.now().month, DateTime.now().day + 7);
   final String? buttonName;
+  int initDate;
   final Function(DateTime)? onChanged;
   final Function(DateTime)? onSelected;
 
@@ -360,14 +368,17 @@ class DatePickerController extends PickerController {
     this.buttonName,
     this.onChanged,
     this.onSelected,
+    this.initDate = 0,
   }) {
-    var save = getSave();
+    var save = initDate > 0
+        ? DateTime.fromMillisecondsSinceEpoch(initDate)
+        : getSave();
     if (firstDate != null) this.firstDate = firstDate;
     if (lastDate != null) this.lastDate = lastDate;
     if (this.firstDate.isAfter(save) == true) {
       pickDate.value = this.firstDate;
     } else {
-      pickDate.value = getSave();
+      pickDate.value = save;
     }
     onSelected?.call(pickDate.value);
   }
@@ -535,7 +546,6 @@ class CheckBoxPickerController extends PickerController {
   }
 }
 
-
 Future getDataListError() async {
   return 'picker_type_error'.tr;
 }
@@ -546,7 +556,7 @@ Future getSapSupplier() async {
   if (response.resultCode == resultSuccess) {
     try {
       List<PickerItem> list = [];
-      for (var item in jsonDecode(response.data)) {
+      for (var item in response.data) {
         list.add(PickerSapSupplier.fromJson(item));
       }
       return list;
@@ -565,7 +575,7 @@ Future getSapCompany() async {
   if (response.resultCode == resultSuccess) {
     try {
       List<PickerItem> list = [];
-      for (var item in jsonDecode(response.data)) {
+      for (var item in response.data) {
         list.add(PickerSapCompany.fromJson(item));
       }
       return list;
@@ -584,7 +594,7 @@ Future getSapFactory() async {
   if (response.resultCode == resultSuccess) {
     try {
       List<PickerItem> list = [];
-      for (var item in jsonDecode(response.data)) {
+      for (var item in response.data) {
         list.add(PickerSapFactory.fromJson(item));
       }
       return list;
@@ -603,7 +613,7 @@ Future getSapWorkCenter() async {
   if (response.resultCode == resultSuccess) {
     try {
       List<PickerItem> list = [];
-      for (var item in jsonDecode(response.data)) {
+      for (var item in response.data) {
         list.add(PickerSapWorkCenter.fromJson(item));
       }
       return list;
@@ -622,7 +632,7 @@ Future getSapDepartment() async {
   if (response.resultCode == resultSuccess) {
     try {
       List<PickerItem> list = [];
-      for (var item in jsonDecode(response.data)) {
+      for (var item in response.data) {
         list.add(PickerSapDepartment.fromJson(item));
       }
       return list;
@@ -641,7 +651,7 @@ Future getMesWorkShop() async {
   if (response.resultCode == resultSuccess) {
     try {
       List<PickerItem> list = [];
-      for (var item in jsonDecode(response.data)) {
+      for (var item in response.data) {
         list.add(PickerMesWorkShop.fromJson(item));
       }
       return list;
@@ -663,7 +673,7 @@ Future getMesDepartment() async {
   if (response.resultCode == resultSuccess) {
     try {
       List<PickerItem> list = [];
-      for (var item in jsonDecode(response.data)) {
+      for (var item in response.data) {
         list.add(PickerMesDepartment.fromJson(item));
       }
       return list;
@@ -682,7 +692,7 @@ Future getMesOrganization() async {
   if (response.resultCode == resultSuccess) {
     try {
       List<PickerItem> list = [];
-      for (var item in jsonDecode(response.data)) {
+      for (var item in response.data) {
         list.add(PickerMesOrganization.fromJson(item));
       }
       return list;
@@ -701,7 +711,7 @@ Future getSapProcessFlow() async {
   if (response.resultCode == resultSuccess) {
     try {
       List<PickerItem> list = [];
-      for (var item in jsonDecode(response.data)) {
+      for (var item in response.data) {
         list.add(PickerSapProcessFlow.fromJson(item));
       }
       return list;
@@ -720,7 +730,7 @@ Future getMesProcessFlow() async {
   if (response.resultCode == resultSuccess) {
     try {
       List<PickerItem> list = [];
-      for (var item in jsonDecode(response.data)) {
+      for (var item in response.data) {
         list.add(PickerMesProcessFlow.fromJson(item));
       }
       return list;
@@ -742,7 +752,7 @@ Future getMesProductionReportType() async {
   if (response.resultCode == resultSuccess) {
     try {
       List<PickerItem> list = [];
-      for (var item in jsonDecode(response.data)) {
+      for (var item in response.data) {
         list.add(PickerMesProductionReportType.fromJson(item));
       }
       return list;
@@ -764,7 +774,7 @@ Future getSapMachine() async {
   if (response.resultCode == resultSuccess) {
     try {
       List<PickerItem> list = [];
-      for (var item in jsonDecode(response.data)) {
+      for (var item in response.data) {
         list.add(PickerSapMachine.fromJson(item));
       }
       return list;
@@ -789,7 +799,7 @@ Future getSapWorkCenterNew() async {
   if (response.resultCode == resultSuccess) {
     try {
       List<PickerItem> list = [];
-      for (var item in jsonDecode(response.data)) {
+      for (var item in response.data) {
         list.add(PickerSapWorkCenterNew.fromJson(item));
       }
       return list;
@@ -811,7 +821,7 @@ Future getSapGroup() async {
   if (response.resultCode == resultSuccess) {
     try {
       List<PickerItem> list = [];
-      for (var item in jsonDecode(response.data)) {
+      for (var item in response.data) {
         list.add(PickerSapGroup.fromJson(item));
       }
       return list;
@@ -830,7 +840,7 @@ Future getSapFactoryAndWarehouse() async {
   if (response.resultCode == resultSuccess) {
     try {
       List<LinkPickerItem> list = [];
-      for (var item in jsonDecode(response.data)) {
+      for (var item in response.data) {
         list.add(PickerSapFactoryAndWarehouse.fromJson(item));
       }
       return list;
@@ -849,8 +859,33 @@ Future getMesMoldingPackArea() async {
   if (response.resultCode == resultSuccess) {
     try {
       List<PickerItem> list = [];
-      for (var item in jsonDecode(response.data)) {
+      for (var item in response.data) {
         list.add(PickerMesMoldingPackArea.fromJson(item));
+      }
+      return list;
+    } on Error catch (e) {
+      logger.e(e);
+      return 'json_format_error'.tr;
+    }
+  } else {
+    return response.message;
+  }
+}
+
+///获取Sap仓库库位列表
+Future getSapWarehouseStorageLocation() async {
+  var response = await httpGet(
+    method: webApiPickerSapWarehouseStorageLocation,
+    params: {
+      'factory': userInfo?.factory,
+      'warehouse': userInfo?.defaultStockNumber,
+    },
+  );
+  if (response.resultCode == resultSuccess) {
+    try {
+      List<PickerItem> list = [];
+      for (var item in response.data) {
+        list.add(WarehouseLocation.fromJson(item));
       }
       return list;
     } on Error catch (e) {

@@ -6,7 +6,7 @@ import '../../../widget/custom_widget.dart';
 import 'worker_production_detail_logic.dart';
 
 class WorkerProductionDetailPage extends StatefulWidget {
-  const WorkerProductionDetailPage({Key? key}) : super(key: key);
+  const WorkerProductionDetailPage({super.key});
 
   @override
   State<WorkerProductionDetailPage> createState() =>

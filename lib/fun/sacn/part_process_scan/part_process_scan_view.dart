@@ -5,7 +5,7 @@ import '../../../widget/custom_widget.dart';
 import 'part_process_scan_logic.dart';
 
 class PartProcessScanPage extends StatefulWidget {
-  const PartProcessScanPage({Key? key}) : super(key: key);
+  const PartProcessScanPage({super.key});
 
   @override
   State<PartProcessScanPage> createState() => _PartProcessScanPageState();

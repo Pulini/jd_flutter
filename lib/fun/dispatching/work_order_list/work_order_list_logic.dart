@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/dispatching/work_order_list/part_label_view.dart';
 import 'package:jd_flutter/utils.dart';
@@ -42,7 +40,6 @@ class WorkOrderListLogic extends GetxController {
 
   @override
   void onClose() {
-
     super.onClose();
   }
 
@@ -64,13 +61,11 @@ class WorkOrderListLogic extends GetxController {
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        var list = <WorkOrderInfo>[].obs;
-        var jsonList = jsonDecode(response.data);
-        for (var i = 0; i < jsonList.length; ++i) {
-          list.add(WorkOrderInfo.fromJson(jsonList[i]));
-        }
-        state.dataList.value = list;
-        if (list.isNotEmpty) Get.back();
+        state.dataList.value = [
+          for (var i = 0; i < response.data.length; ++i)
+            WorkOrderInfo.fromJson(response.data[i])
+        ];
+        if (state.dataList.isNotEmpty) Get.back();
       } else {
         errorDialog(content: response.message);
       }
@@ -87,12 +82,10 @@ class WorkOrderListLogic extends GetxController {
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        var list = <PartInfo>[].obs;
-        var jsonList = jsonDecode(response.data);
-        for (var i = 0; i < jsonList.length; ++i) {
-          list.add(PartInfo.fromJson(jsonList[i]));
-        }
-        state.partList.value = list;
+        state.partList.value = [
+          for (var i = 0; i < response.data.length; ++i)
+            PartInfo.fromJson(response.data[i])
+        ];
       } else {
         errorDialog(content: response.message);
       }
@@ -194,7 +187,7 @@ class WorkOrderListLogic extends GetxController {
         )
       ];
       if (response.resultCode == resultSuccess) {
-        state.partDetail = PartDetailInfo.fromJson(jsonDecode(response.data));
+        state.partDetail = PartDetailInfo.fromJson(response.data);
         state.partDetail?.barCodeList = barCode;
         state.partDetailSizeList.value = state.partDetail?.sizeList ?? [];
       } else {
@@ -258,8 +251,7 @@ class WorkOrderListLogic extends GetxController {
         successDialog(
           content: response.message,
           back: () {
-            state.partDetail =
-                PartDetailInfo.fromJson(jsonDecode(response.data));
+            state.partDetail = PartDetailInfo.fromJson(response.data);
             state.partDetailSizeList.value = state.partDetail?.sizeList ?? [];
           },
         );

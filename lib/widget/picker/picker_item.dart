@@ -298,7 +298,7 @@ class PickerSapMachine extends PickerItem {
 
   @override
   String pickerId() {
-    return number ?? '';
+    return id.toString();
   }
 
   @override
@@ -470,5 +470,30 @@ class PickerMesMoldingPackArea extends PickerItem {
   @override
   String pickerName() {
     return name?.trim() ?? '';
+  }
+}
+
+class WarehouseLocation extends PickerItem {
+  WarehouseLocation({
+    required this.location,
+    required this.noUsedNum,
+  });
+
+  WarehouseLocation.fromJson(dynamic json) {
+    location = json['Location'];
+    noUsedNum = json['NoUsedNum'];
+  }
+  String? location;
+  double? noUsedNum;
+
+
+  @override
+  String pickerId() {
+    return location??'';
+  }
+
+  @override
+  String pickerName() {
+    return '$location - 剩余$noUsedNum';
   }
 }

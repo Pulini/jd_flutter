@@ -291,7 +291,7 @@ getVersionInfo(
     if (versionInfoCallback.resultCode == resultSuccess) {
       logger.i(packageInfo);
       var versionInfo =
-          VersionInfo.fromJson(jsonDecode(versionInfoCallback.data));
+          VersionInfo.fromJson(versionInfoCallback.data);
       if (packageInfo.version == versionInfo.versionName) {
         noUpdate.call();
       } else {
@@ -311,7 +311,7 @@ upData() {
   ).then((versionInfoCallback) {
     if (versionInfoCallback.resultCode == resultSuccess) {
       logger.i(packageInfo);
-      doUpdate(VersionInfo.fromJson(jsonDecode(versionInfoCallback.data)));
+      doUpdate(VersionInfo.fromJson(versionInfoCallback.data));
     } else {
       errorDialog(content: versionInfoCallback.message);
     }
@@ -329,12 +329,10 @@ getWorkerInfo({
     'DeptmentID': department,
   }).then((worker) {
     if (worker.resultCode == resultSuccess) {
-      var jsonList = jsonDecode(worker.data);
-      var list = <WorkerInfo>[];
-      for (var i = 0; i < jsonList.length; ++i) {
-        list.add(WorkerInfo.fromJson(jsonList[i]));
-      }
-      workers.call(list);
+      workers.call([
+        for (var i = 0; i < worker.data.length; ++i)
+          WorkerInfo.fromJson(worker.data[i])
+      ]);
     } else {
       errorDialog(content: worker.message);
     }

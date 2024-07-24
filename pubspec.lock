@@ -289,10 +289,10 @@ packages:
     dependency: transitive
     description:
       name: http
-      sha256: "761a297c042deedc1ffbb156d6e2af13886bb305c2a343a4d972504cd67dd938"
+      sha256: b9c29a161230ee03d3ccf545097fccd9b87a5264228c5d348202e0f0c28f9010
       url: "https://pub.dev"
     source: hosted
-    version: "1.2.1"
+    version: "1.2.2"
   http_parser:
     dependency: transitive
     description:
@@ -613,6 +613,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.0.2"
+  photo_view:
+    dependency: "direct main"
+    description:
+      name: photo_view
+      sha256: "1fc3d970a91295fbd1364296575f854c9863f225505c28c46e0a03e48960c75e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.15.0"
   platform:
     dependency: transitive
     description:
@@ -934,10 +942,10 @@ packages:
     dependency: "direct main"
     description:
       name: webview_flutter_web
-      sha256: "7a480b5d7f31b60d2146ec0847552fe7975df40f2ed62acfeef29657ff2b9e64"
+      sha256: a9122bde996d9cdd03954e30c80188cdac0b3258a97573639f022c9d7cca3862
       url: "https://pub.dev"
     source: hosted
-    version: "0.2.3"
+    version: "0.2.3+1"
   webview_flutter_wkwebview:
     dependency: transitive
     description:

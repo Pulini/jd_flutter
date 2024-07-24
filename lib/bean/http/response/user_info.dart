@@ -48,9 +48,9 @@ class UserInfo {
     this.empPassWord,
     this.quickLoginType,
     this.isAppAutoLock,
-    this.sAPRole,
-    this.sAPLineNumber,
-    this.sAPFactory,
+    this.sapRole,
+    this.sapLineNumber,
+    this.sapFactory,
     this.jurisdictionList,
     this.reportDeptmentID,
   });
@@ -77,9 +77,9 @@ class UserInfo {
     empPassWord = json['EmpPassWord'];
     quickLoginType = json['QuickLoginType'];
     isAppAutoLock = json['IsAppAutoLock'];
-    sAPRole = json['SAPRole'];
-    sAPLineNumber = json['SAPLineNumber'];
-    sAPFactory = json['SAPFactory'];
+    sapRole = json['SAPRole'];
+    sapLineNumber = json['SAPLineNumber'];
+    sapFactory = json['SAPFactory'];
     if (json['JurisdictionList'] != null) {
       jurisdictionList = [];
       json['JurisdictionList'].forEach((v) {
@@ -110,9 +110,9 @@ class UserInfo {
   String? empPassWord;
   int? quickLoginType;
   int? isAppAutoLock;
-  String? sAPRole;
-  String? sAPLineNumber;
-  String? sAPFactory;
+  String? sapRole;
+  String? sapLineNumber;
+  String? sapFactory;
   List<JurisdictionList>? jurisdictionList;
   int? reportDeptmentID;
 
@@ -139,9 +139,9 @@ class UserInfo {
     map['EmpPassWord'] = empPassWord;
     map['QuickLoginType'] = quickLoginType;
     map['IsAppAutoLock'] = isAppAutoLock;
-    map['SAPRole'] = sAPRole;
-    map['SAPLineNumber'] = sAPLineNumber;
-    map['SAPFactory'] = sAPFactory;
+    map['SAPRole'] = sapRole;
+    map['SAPLineNumber'] = sapLineNumber;
+    map['SAPFactory'] = sapFactory;
     if (jurisdictionList != null) {
       map['JurisdictionList'] =
           jurisdictionList?.map((v) => v.toJson()).toList();

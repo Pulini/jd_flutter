@@ -27,9 +27,9 @@ class _MoldingScanBulletinReportPageState
       padding: const EdgeInsets.all(5),
       child: ElevatedButton(
           style: ButtonStyle(
-              minimumSize: MaterialStateProperty.all(const Size(1, 1)),
-              padding: MaterialStateProperty.all(EdgeInsets.zero),
-              backgroundColor: MaterialStateProperty.all(background)),
+              minimumSize: WidgetStateProperty.all(const Size(1, 1)),
+              padding: WidgetStateProperty.all(EdgeInsets.zero),
+              backgroundColor: WidgetStateProperty.all(background)),
           child: Center(
             child: child,
           ),

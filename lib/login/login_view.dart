@@ -6,7 +6,7 @@ import '../widget/custom_widget.dart';
 import 'login_logic.dart';
 
 class LoginPage extends StatelessWidget {
-  const LoginPage({Key? key}) : super(key: key);
+  const LoginPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +91,7 @@ class LoginInlet extends StatelessWidget {
         indicatorColor: Colors.greenAccent,
         labelColor: Colors.greenAccent,
         unselectedLabelColor: Colors.white,
-        overlayColor: MaterialStateProperty.all(Colors.transparent),
+        overlayColor: WidgetStateProperty.all(Colors.transparent),
         tabs: [
           const Tab(icon: Icon(Icons.phone)),
           if (GetPlatform.isAndroid)

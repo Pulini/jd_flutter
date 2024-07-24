@@ -6,7 +6,7 @@ import '../../../widget/custom_widget.dart';
 import 'workshop_production_daily_report_logic.dart';
 
 class WorkshopProductionDailyReportPage extends StatefulWidget {
-  const WorkshopProductionDailyReportPage({Key? key}) : super(key: key);
+  const WorkshopProductionDailyReportPage({super.key});
 
   @override
   State<WorkshopProductionDailyReportPage> createState() =>
@@ -40,8 +40,8 @@ class _WorkshopProductionDailyReportPageState
                 scrollDirection: Axis.horizontal,
                 child: Obx(
                   () => DataTable(
-                    headingRowColor: MaterialStateProperty.resolveWith<Color?>(
-                      (Set<MaterialState> states) {
+                    headingRowColor: WidgetStateProperty.resolveWith<Color?>(
+                      (Set<WidgetState> states) {
                         return Colors.blueAccent.shade100;
                       },
                     ),

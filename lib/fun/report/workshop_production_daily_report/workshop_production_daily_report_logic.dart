@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/utils.dart';
@@ -40,11 +38,11 @@ class WorkshopProductionDailyReportLogic extends GetxController
       if (response.resultCode == resultSuccess) {
         var list = <DataRow>[];
         var index = 0;
-        for (var item in jsonDecode(response.data)) {
+        for (var item in response.data) {
           var data = WorkshopProductionDailyReportSummaryInfo.fromJson(item);
           list.add(DataRow(
-            color: MaterialStateProperty.resolveWith<Color?>(
-              (Set<MaterialState> states) {
+            color: WidgetStateProperty.resolveWith<Color?>(
+              (Set<WidgetState> states) {
                 return index.isEven ? Colors.transparent : Colors.grey.shade100;
               },
             ),
@@ -75,7 +73,7 @@ class WorkshopProductionDailyReportLogic extends GetxController
     ).then((response) {
       if (response.resultCode == resultSuccess) {
         // var list = <DataRow>[];
-        // for (var item in jsonDecode(response.data)) {
+        // for (var item in response.data) {
         //   var data = WorkshopProductionDailyReportDetailInfo.fromJson(item);
         // }
       } else {

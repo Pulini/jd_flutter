@@ -74,7 +74,7 @@ class _PartProcessReportState extends State<PartProcessReport>
           indicatorColor: Colors.greenAccent,
           labelColor: Colors.greenAccent,
           unselectedLabelColor: Colors.white,
-          overlayColor: MaterialStateProperty.all(Colors.transparent),
+          overlayColor: WidgetStateProperty.all(Colors.transparent),
           tabs: const [
             Tab(
               icon: Icon(Icons.phone),

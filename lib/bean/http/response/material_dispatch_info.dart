@@ -153,7 +153,7 @@ class Children {
     this.codeQty,
     this.noCodeQty,
     this.finishQty,
-    this.sAPColorBatch,
+    this.sapColorBatch,
     this.workProcessNumber,
     this.interID,
     this.routeEntryFID,
@@ -172,7 +172,7 @@ class Children {
     codeQty = (json['CodeQty'] as String).toDoubleTry().toShowString();
     noCodeQty = (json['NoCodeQty'] as String).toDoubleTry().toShowString();
     finishQty = (json['FinishQty'] as String).toDoubleTry().toShowString();
-    sAPColorBatch = json['SAPColorBatch'];
+    sapColorBatch = json['SAPColorBatch'];
     workProcessNumber = json['WorkProcessNumber'];
     interID = json['InterID'];
     routeEntryFID = json['RouteEntryFID'];
@@ -190,7 +190,7 @@ class Children {
   String? codeQty; //生成贴标数量
   String? noCodeQty; //未生成贴标数量
   String? finishQty; //完成数量
-  String? sAPColorBatch; //配色批次
+  String? sapColorBatch; //配色批次
   String? workProcessNumber; //工序派工单号
   String? interID; //工序派工主键ID
   String? routeEntryFID; //工艺路线分录ID
@@ -209,7 +209,7 @@ class Children {
     map['CodeQty'] = codeQty;
     map['NoCodeQty'] = noCodeQty;
     map['FinishQty'] = finishQty;
-    map['SAPColorBatch'] = sAPColorBatch;
+    map['SAPColorBatch'] = sapColorBatch;
     map['WorkProcessNumber'] = workProcessNumber;
     map['InterID'] = interID;
     map['RouteEntryFID'] = routeEntryFID;
@@ -220,4 +220,117 @@ class Children {
     map['BillStyle'] = billStyle;
     return map;
   }
+}
+
+/// Number : "021800294"
+/// Name : "0.22mm*1.5m白色JY28可特（针织布/100%涤纶）"
+/// UnitName : "米"
+/// Batch : ""
+/// NeedQty : 27.41
+
+class MaterialInfo {
+  MaterialInfo({
+    this.number,
+    this.name,
+    this.unitName,
+    this.batch,
+    this.needQty,});
+
+  MaterialInfo.fromJson(dynamic json) {
+    number = json['Number'];
+    name = json['Name'];
+    unitName = json['UnitName'];
+    batch = json['Batch'];
+    needQty = json['NeedQty'];
+  }
+  String? number;
+  String? name;
+  String? unitName;
+  String? batch;
+  double? needQty;
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['Number'] = number;
+    map['Name'] = name;
+    map['UnitName'] = unitName;
+    map['Batch'] = batch;
+    map['NeedQty'] = needQty;
+    return map;
+  }
+}
+
+/// DrillingCrewName : "湖北贴合1号机台"
+/// GUID : "68983AA7-64EC-4B4F-8028-0FE4E17E4972"
+/// PickUpCode : "1104-20240722-0016"
+/// BillInterID : 3189111
+/// OutPutNumber : "GXHB24484990"
+/// InsertDateTime : "2024-07-22 14:45:52"
+/// SAPColorBatch : ""
+/// Qty : 30.0
+/// Status : "已报工"
+/// ReportStatus : "1"
+/// PalletNumber : ""
+/// Location : "A101"
+
+class LabelInfo {
+  LabelInfo({
+    this.drillingCrewName,
+    this.guid,
+    this.pickUpCode,
+    this.billInterID,
+    this.outPutNumber,
+    this.insertDateTime,
+    this.sapColorBatch,
+    this.qty,
+    this.status,
+    this.reportStatus,
+    this.palletNumber,
+    this.location,});
+
+  LabelInfo.fromJson(dynamic json) {
+    drillingCrewName = json['DrillingCrewName'];
+    guid = json['GUID'];
+    pickUpCode = json['PickUpCode'];
+    billInterID = json['BillInterID'];
+    outPutNumber = json['OutPutNumber'];
+    insertDateTime = json['InsertDateTime'];
+    sapColorBatch = json['SAPColorBatch'];
+    qty = json['Qty'];
+    status = json['Status'];
+    reportStatus = json['ReportStatus'];
+    palletNumber = json['PalletNumber'];
+    location = json['Location'];
+  }
+
+  String? drillingCrewName;
+  String? guid;
+  String? pickUpCode;
+  int? billInterID;
+  String? outPutNumber;
+  String? insertDateTime;
+  String? sapColorBatch;
+  double? qty;
+  String? status;
+  String? reportStatus;
+  String? palletNumber;
+  String? location;
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['DrillingCrewName'] = drillingCrewName;
+    map['GUID'] = guid;
+    map['PickUpCode'] = pickUpCode;
+    map['BillInterID'] = billInterID;
+    map['OutPutNumber'] = outPutNumber;
+    map['InsertDateTime'] = insertDateTime;
+    map['SAPColorBatch'] = sapColorBatch;
+    map['Qty'] = qty;
+    map['Status'] = status;
+    map['ReportStatus'] = reportStatus;
+    map['PalletNumber'] = palletNumber;
+    map['Location'] = location;
+    return map;
+  }
+
 }

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:get/get.dart';
 import 'package:jd_flutter/widget/picker/picker_controller.dart';
 
@@ -12,8 +10,6 @@ import 'molding_pack_area_report_state.dart';
 
 class MoldingPackAreaReportPageLogic extends GetxController {
   final MoldingPackAreaReportPageState state = MoldingPackAreaReportPageState();
-
-
 
   late DatePickerController dateControllerStart;
   late DatePickerController dateControllerEnd;
@@ -42,6 +38,7 @@ class MoldingPackAreaReportPageLogic extends GetxController {
     );
     super.onInit();
   }
+
   query() {
     httpGet(
         method: webApiGetMoldingPackAreaReport,
@@ -55,13 +52,11 @@ class MoldingPackAreaReportPageLogic extends GetxController {
           'packAreaIDs': checkBoxController.selectedIds,
         }).then((response) {
       if (response.resultCode == resultSuccess) {
-        var jsonList = jsonDecode(response.data);
-        var list = <MoldingPackAreaReportInfo>[];
-        for (var i = 0; i < jsonList.length; ++i) {
-          list.add( MoldingPackAreaReportInfo.fromJson(jsonList[i]));
-        }
-        state.tableData.value=list;
-        if (list.isNotEmpty) Get.back();
+        state.tableData.value = [
+          for (var i = 0; i < response.data.length; ++i)
+            MoldingPackAreaReportInfo.fromJson(response.data[i])
+        ];
+        if (state.tableData.isNotEmpty) Get.back();
       } else {
         errorDialog(content: response.message);
       }
@@ -79,12 +74,10 @@ class MoldingPackAreaReportPageLogic extends GetxController {
           'clientOrderNumber': clientOrderNumber,
         }).then((response) {
       if (response.resultCode == resultSuccess) {
-        var jsonList = jsonDecode(response.data);
-        var list = <MoldingPackAreaReportDetailInfo>[];
-        for (var i = 0; i < jsonList.length; ++i) {
-          list.add( MoldingPackAreaReportDetailInfo.fromJson(jsonList[i]));
-        }
-        state.detailTableData.value = list;
+        state.detailTableData.value = [
+          for (var i = 0; i < response.data.length; ++i)
+            MoldingPackAreaReportDetailInfo.fromJson(response.data[i])
+        ];
         Get.to(() => const MoldingPackAreaDetailReportPage());
       } else {
         errorDialog(content: response.message);

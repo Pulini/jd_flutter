@@ -31,12 +31,13 @@ Future<bool> getBluetoothPermission() async {
     Permission.bluetoothAdvertise
   ].request();
   //granted 通过，denied 被拒绝，permanentlyDenied 拒绝且不在提示
-  print('location=${statuses[Permission.location]!.isGranted}');
-  print('bluetoothConnect=${statuses[Permission.bluetoothConnect]!.isGranted}');
-  print('bluetoothScan=${statuses[Permission.bluetoothScan]!.isGranted}');
-  print('bluetooth=${statuses[Permission.bluetooth]!.isGranted}');
-  print(
-      'bluetoothAdvertise=${statuses[Permission.bluetoothAdvertise]!.isGranted}');
+  logger.f('''
+  location=${statuses[Permission.location]!.isGranted}
+  bluetoothConnect=${statuses[Permission.bluetoothConnect]!.isGranted}
+  bluetoothScan=${statuses[Permission.bluetoothScan]!.isGranted}
+  bluetooth=${statuses[Permission.bluetooth]!.isGranted}
+  bluetoothAdvertise=${statuses[Permission.bluetoothAdvertise]!.isGranted}
+  ''');
   if (statuses[Permission.location]!.isGranted &&
       statuses[Permission.bluetoothConnect]!.isGranted &&
       statuses[Permission.bluetoothScan]!.isGranted &&
@@ -57,7 +58,7 @@ class BluetoothDialog extends StatefulWidget {
 class _BluetoothDialogState extends State<BluetoothDialog> {
   var channel = const MethodChannel(channelFlutterSend);
 
-  _getScannedDevices()  {
+  _getScannedDevices() {
     channel.invokeMethod('GetScannedDevices');
   }
 

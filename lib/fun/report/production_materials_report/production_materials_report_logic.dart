@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:collection/collection.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/base_data.dart';
@@ -99,14 +97,12 @@ class ProductionMaterialsReportLogic extends GetxController {
 
   dataFormat(BaseData response) {
     if (response.resultCode == resultSuccess) {
-      var list = <ProductionMaterialsInfo>[];
-      var jsonList = jsonDecode(response.data);
-      for (var i = 0; i < jsonList.length; ++i) {
-        list.add(ProductionMaterialsInfo.fromJson(jsonList[i]));
-      }
       state.tableOpenIndex.clear();
       var group = <List<ProductionMaterialsInfo>>[];
-      groupBy(list, (v) => v.subItemMaterialCode).forEach((k, v) {
+      groupBy([
+        for (var i = 0; i < response.data.length; ++i)
+          ProductionMaterialsInfo.fromJson(response.data[i])
+      ], (v) => v.subItemMaterialCode).forEach((k, v) {
         group.add(v);
         state.tableOpenIndex.add(false);
       });

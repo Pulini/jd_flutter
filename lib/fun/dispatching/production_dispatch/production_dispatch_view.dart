@@ -295,10 +295,10 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
   _item2(List<ProductionDispatchOrderInfo> list) {
     var data = list[0];
     var buttonStyle = ButtonStyle(
-      shape: MaterialStateProperty.all(
+      shape: WidgetStateProperty.all(
         RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
       ),
-      side: MaterialStateProperty.all(
+      side: WidgetStateProperty.all(
         BorderSide(
           color: _printTextColor(data.printStatus),
           width: 2,

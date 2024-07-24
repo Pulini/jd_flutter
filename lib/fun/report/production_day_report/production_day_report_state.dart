@@ -57,8 +57,8 @@ class ProductionDayReportState {
       ProductionDayReportInfo data, Color color, Function modifyReason) {
     bool isParty = data.number == userInfo?.number;
     return DataRow(
-      color: MaterialStateProperty.resolveWith<Color?>(
-        (Set<MaterialState> states) {
+      color: WidgetStateProperty.resolveWith<Color?>(
+        (Set<WidgetState> states) {
           return color;
         },
       ),

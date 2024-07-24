@@ -8,7 +8,7 @@ import '../../../widget/picker/picker_view.dart';
 import 'worker_production_report_logic.dart';
 
 class WorkerProductionReportPage extends StatefulWidget {
-  const WorkerProductionReportPage({Key? key}) : super(key: key);
+  const WorkerProductionReportPage({super.key});
 
   @override
   State<WorkerProductionReportPage> createState() =>

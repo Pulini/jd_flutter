@@ -1,11 +1,15 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
+import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:rotated_corner_decoration/rotated_corner_decoration.dart';
 
 import '../../../bean/http/response/material_dispatch_info.dart';
+import '../../../route.dart';
 import '../../../widget/picker/picker_view.dart';
+import 'material_dispatch_dialogs.dart';
 import 'material_dispatch_logic.dart';
 
 class MaterialDispatchPage extends StatefulWidget {
@@ -57,11 +61,14 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
           child: Row(
             children: [
               Expanded(
-                child: Text(
+                flex: 3,
+                child: AutoSizeText(
                   '物料：<${data.materialNumber}> ${data.materialName}',
                   style: itemTitleStyle,
+                  maxLines: 2,
+                  minFontSize: 8,
+                  maxFontSize: 18,
                 ),
-                flex: 3,
               ),
               Expanded(
                 child: Text(
@@ -154,11 +161,6 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
                 text: '配色批次',
                 backgroundColor: Colors.blue.shade50,
               ),
-              // expandedFrameText(
-              //   text: ' ',
-              //   flex: 3,
-              //   backgroundColor: Colors.blue.shade50,
-              // )
               Container(
                   height: 32,
                   decoration: BoxDecoration(
@@ -171,9 +173,7 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
                     maintainAnimation: true,
                     maintainSize: true,
                     maintainState: true,
-                    child: Row(
-                      children: _subItemButton(data, isTitle: true),
-                    ),
+                    child: Row(children: _subItemButton(data: data)),
                   ))
             ],
           ),
@@ -185,7 +185,9 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
             child: Row(
               children: [
                 expandedFrameText(
+                  click: () => showBillNoList(data.children?[i].billNo ?? ''),
                   text: data.children?[i].billNo ?? '',
+                  textColor: Colors.blue.shade900,
                   flex: 3,
                 ),
                 expandedFrameText(
@@ -205,7 +207,7 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
                   text: data.children![i].noCodeQty ?? '',
                 ),
                 expandedFrameText(
-                  text: data.children![i].sAPColorBatch ?? '',
+                  text: data.children![i].sapColorBatch ?? '',
                 ),
                 Container(
                   height: 32,
@@ -215,7 +217,8 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
                   ),
                   alignment: Alignment.centerLeft,
                   child: Row(
-                    children: _subItemButton(data),
+                    children:
+                        _subItemButton(data: data, subData: data.children![i]),
                   ),
                 )
               ],
@@ -284,27 +287,36 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
               ),
               CombinationButton(
                 text: '用料清单',
-                click: () {},
+                click: () => materialListDialog(context, data),
                 combination: Combination.left,
               ),
               CombinationButton(
                 text: '工艺说明书',
-                click: () {},
+                click: () => logic.queryProcessSpecification(
+                  data.productName ?? '',
+                  (list) => processSpecificationDialog(list),
+                ),
                 combination: Combination.middle,
               ),
               CombinationButton(
                 text: '贴标列表',
-                click: () {},
+                click: () => labelListDialog(context, data),
                 combination: Combination.middle,
               ),
               CombinationButton(
                 text: '报工',
-                click: () {},
+                click: () => askDialog(
+                  content: '确定要整组报工吗?',
+                  confirm: () => logic.itemReport(data),
+                ),
                 combination: Combination.middle,
               ),
               CombinationButton(
                 text: '取消报工',
-                click: () {},
+                click: () => askDialog(
+                  content: '确定要整组取消报工吗',
+                  confirm: () => logic.itemCancelReport(data),
+                ),
                 combination: Combination.right,
               )
             ],
@@ -314,477 +326,242 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
     );
   }
 
-  _subItemButton(MaterialDispatchInfo data, {bool isTitle = false}) {
+  _subItemButton({
+    required MaterialDispatchInfo data,
+    Children? subData,
+  }) {
     btReport() {
-      if (!isTitle) {
-        print('btReport');
+      if (subData != null) {
+        subItemReportDialog(
+          context,
+          data,
+          subData,
+          (d) {
+            subData.qty = d.toShowString();
+            logic.subItemReport(data, subData, false);
+          },
+        );
       }
     }
-
     btCancelReport() {
-      if (!isTitle) {
+      if (subData != null) {
         print('btCancelReport');
       }
     }
 
     btPrint() {
-      if (!isTitle) {
-        print('btPrint');
+      if (subData != null) {
+        subItemReportDialog(
+          context,
+          data,
+          subData,
+          (d) {
+            subData.qty = d.toShowString();
+            logic.subItemReport(data, subData, true);
+          },
+        );
       }
     }
 
     btWarehouse() {
-      if (!isTitle) {
-        print('btWarehouse');
-      }
-    }
-
-    var buttons = <Widget>[];
-    if (data.printLabel == '1') {
-      if (data.children![0].partialWarehousing == '1') {
-        buttons.add(CombinationButton(
-          text: '打印标签',
-          click: btPrint,
-          combination: Combination.left,
-        ));
-        buttons.add(CombinationButton(
-          text: '入库',
-          click: btWarehouse,
-          combination: Combination.right,
-        ));
-      } else {
-        buttons.add(CombinationButton(
-          text: '打印标签',
-          click: btPrint,
-        ));
-      }
-    } else {
-      if (data.children![0].partialWarehousing == '1') {
-        buttons.add(CombinationButton(
-          text: '报工',
-          click: btReport,
-          combination: Combination.left,
-        ));
-        buttons.add(CombinationButton(
-          text: '取消报工',
-          click: btCancelReport,
-          combination: Combination.middle,
-        ));
-        buttons.add(CombinationButton(
-          text: '入库',
-          click: btWarehouse,
-          combination: Combination.right,
-        ));
-      } else {
-        buttons.add(CombinationButton(
-          text: '报工',
-          click: btReport,
-          combination: Combination.left,
-        ));
-        buttons.add(CombinationButton(
-          text: '取消报工',
-          click: btCancelReport,
-          combination: Combination.right,
-        ));
-      }
-    }
-    return buttons;
-  }
-
-  _item(MaterialDispatchInfo data) {
-    var style = TextStyle(color: Colors.black87, fontWeight: FontWeight.bold);
-    var shape = RoundedRectangleBorder(
-      borderRadius: BorderRadius.all(Radius.circular(10)),
-    );
-    return Container(
-      padding: EdgeInsets.only(bottom: 10),
-      foregroundDecoration: data.children?[0].lastProcessNode == '1'
-          ? const RotatedCornerDecoration.withColor(
-              color: Colors.red,
-              badgeCornerRadius: Radius.circular(8),
-              badgeSize: Size(50, 50),
-              textSpan: TextSpan(
-                text: '末道',
-                style: TextStyle(fontSize: 14),
-              ),
-            )
-          : null,
-      child: ExpansionTile(
-        shape: shape,
-        collapsedShape: shape,
-        collapsedBackgroundColor: Colors.white,
-        backgroundColor: Colors.yellow.shade200,
-        leading: IconButton(
-          onPressed: () => _itemSheet(data),
-          icon: Icon(
-            Icons.assignment_outlined,
-            size: 40,
-            color: Colors.blue.shade900,
+      if (subData != null) {
+        askDialog(
+          content: '确定要提交入库吗？',
+          confirm: () => logic.subItemWarehousing(
+            subData,
+            data.sapDecideArea ?? '',
           ),
-        ),
-        title: Row(
-          children: [
-            expandedTextSpan(
-                hint: '物料：',
-                text: '<${data.materialNumber}> ${data.materialName}'),
-            textSpan(hint: '型体：', text: data.productName ?? ''),
-          ],
-        ),
-        subtitle: Column(
-          children: [
-            Row(
-              children: [
-                expandedTextSpan(
-                  hint: '厂区：',
-                  text: data.sapDecideArea ?? '',
-                  textColor: Colors.black54,
-                ),
-                expandedTextSpan(
-                  hint: '机台：',
-                  text: data.drillingCrewName ?? '',
-                  textColor: Colors.redAccent,
-                ),
-                expandedTextSpan(
-                  hint: '工单类型：',
-                  text: data.billStyle == '0' ? '正单' : '补单',
-                  textColor:
-                      data.billStyle == '0' ? Colors.green : Colors.redAccent,
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                expandedTextSpan(
-                  hint: '派工日：',
-                  text: data.date ?? '',
-                  textColor: Colors.black54,
-                ),
-                expandedTextSpan(
-                  hint: '部位：',
-                  text: data.partName ?? '',
-                  textColor: Colors.black54,
-                ),
-                expandedTextSpan(
-                  hint: '工序名：',
-                  text: data.processName ?? '',
-                  textColor: Colors.black54,
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: Row(
-                    children: [
-                      Text(
-                        '完成量(${data.unitName})：',
-                        style: style,
-                      ),
-                      SizedBox(
-                        width: 300,
-                        child: progressIndicator(
-                          max: data.qty.toDoubleTry(),
-                          value: data.finishQty.toDoubleTry(),
-                        ),
-                      ),
-                      Text(
-                        '${data.qty}',
-                        style: style,
-                      ),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: Row(
-                    children: [
-                      Text(
-                        '标签生成量(${data.unitName})：',
-                        style: style,
-                      ),
-                      SizedBox(
-                        width: 300,
-                        child: progressIndicator(
-                          max: data.qty.toDoubleTry(),
-                          value: data.codeQty.toDoubleTry(),
-                        ),
-                      ),
-                      Text(
-                        '${data.qty}',
-                        style: style,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-        children: _subItem(data),
+        );
+      }
+    }
+
+    var buttons = <Widget>[
+      CombinationButton(
+        text: '报工',
+        click: btReport,
+        combination: Combination.left,
       ),
-    );
-  }
-
-  _subItem(MaterialDispatchInfo data) {
-    var style = TextStyle(color: Colors.black87, fontWeight: FontWeight.bold);
-    return [
-      for (var i = 0; i < data.children!.length; ++i)
-        Padding(
-          padding: EdgeInsets.only(left: 10, right: 10),
-          child: Card(
-            color: Colors.blue.shade50,
-            child: ListTile(
-              trailing: IconButton(
-                onPressed: () => _subItemSheet(data.children![i]),
-                icon: Icon(
-                  Icons.settings_suggest_sharp,
-                  size: 30,
-                ),
-              ),
-              title: textSpan(
-                hint: '指令：',
-                text: data.children?[i].billNo ?? '',
-                textColor: Colors.red.shade400,
-              ),
-              subtitle: Column(
-                children: [
-                  Row(
-                    children: [
-                      expandedTextSpan(
-                        hint: '工序派工单号：',
-                        text: data.children?[i].workProcessNumber ?? '',
-                        textColor: Colors.black54,
-                      ),
-                      expandedTextSpan(
-                        hint: '配色批次：',
-                        text: data.children?[i].sAPColorBatch ?? '',
-                        textColor: Colors.black54,
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Row(
-                          children: [
-                            Text(
-                              '完成量：',
-                              style: style,
-                            ),
-                            SizedBox(
-                              width: 200,
-                              child: progressIndicator(
-                                max: data.children![i].qty.toDoubleTry(),
-                                value:
-                                    data.children![i].finishQty.toDoubleTry(),
-                              ),
-                            ),
-                            Text(
-                              '${data.children![i].qty}',
-                              style: style,
-                            ),
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                        child: Row(
-                          children: [
-                            Text(
-                              '标签生成量：',
-                              style: style,
-                            ),
-                            SizedBox(
-                              width: 200,
-                              child: progressIndicator(
-                                max: data.children![i].qty.toDoubleTry(),
-                                value: data.children![i].codeQty.toDoubleTry(),
-                              ),
-                            ),
-                            Text(
-                              '${data.children![i].qty}',
-                              style: style,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      SizedBox(height: 10),
+      CombinationButton(
+        text: '取消报工',
+        click: btCancelReport,
+        combination: Combination.middle,
+      ),
+      CombinationButton(
+        text: '入库',
+        click: btWarehouse,
+        combination: Combination.right,
+      )
     ];
-  }
 
-  _itemSheet(MaterialDispatchInfo data) {
-    showSheet(
-      context,
-      Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Row(
-            children: [
-              expandedTextSpan(
-                  hint: '物料：',
-                  text: '<${data.materialNumber}> ${data.materialName}'),
-              textSpan(hint: '型体：', text: data.productName ?? ''),
-            ],
-          ),
-          Row(
-            children: [
-              Expanded(
-                child: CombinationButton(
-                  text: '用料清单',
-                  click: () {},
-                  combination: Combination.left,
-                ),
-              ),
-              Expanded(
-                child: CombinationButton(
-                  text: '工艺说明书',
-                  click: () {},
-                  combination: Combination.middle,
-                ),
-              ),
-              Expanded(
-                child: CombinationButton(
-                  text: '贴标列表',
-                  click: () {},
-                  combination: Combination.middle,
-                ),
-              ),
-              Expanded(
-                child: CombinationButton(
-                  text: '报工',
-                  click: () {},
-                  combination: Combination.middle,
-                ),
-              ),
-              Expanded(
-                child: CombinationButton(
-                  text: '取消报工',
-                  click: () {},
-                  combination: Combination.right,
-                ),
-              ),
-            ],
-          )
-        ],
-      ),
-      scrollControlled: true,
-    );
-  }
-
-  _subItemSheet(Children data) {
-    showSheet(
-      context,
-      Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          textSpan(
-            hint: '指令：',
-            text: data.billNo ?? '',
-            textColor: Colors.red.shade400,
-          ),
-          Row(
-            children: [
-              Expanded(
-                child: CombinationButton(
-                  text: '报工',
-                  click: () {},
-                  combination: Combination.left,
-                ),
-              ),
-              Expanded(
-                child: CombinationButton(
-                  text: '取消报工',
-                  click: () {},
-                  combination: Combination.middle,
-                ),
-              ),
-              Expanded(
-                child: CombinationButton(
-                  text: '打印标签',
-                  click: () {},
-                  combination: Combination.middle,
-                ),
-              ),
-              Expanded(
-                child: CombinationButton(
-                  text: '入库',
-                  click: () {},
-                  combination: Combination.right,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-      scrollControlled: true,
-    );
+    // if (data.printLabel == '1') {
+    //   if (data.children![0].partialWarehousing == '1') {
+    //     buttons.add(CombinationButton(
+    //       text: '打印标签',
+    //       click: btPrint,
+    //       combination: Combination.left,
+    //     ));
+    //     buttons.add(CombinationButton(
+    //       text: '入库',
+    //       click: btWarehouse,
+    //       combination: Combination.right,
+    //     ));
+    //   } else {
+    //     buttons.add(CombinationButton(
+    //       text: '打印标签',
+    //       click: btPrint,
+    //     ));
+    //   }
+    // } else {
+    //   if (data.children![0].partialWarehousing == '1') {
+    //     buttons.add(CombinationButton(
+    //       text: '报工',
+    //       click: btReport,
+    //       combination: Combination.left,
+    //     ));
+    //     buttons.add(CombinationButton(
+    //       text: '取消报工',
+    //       click: btCancelReport,
+    //       combination: Combination.middle,
+    //     ));
+    //     buttons.add(CombinationButton(
+    //       text: '入库',
+    //       click: btWarehouse,
+    //       combination: Combination.right,
+    //     ));
+    //   } else {
+    //     buttons.add(CombinationButton(
+    //       text: '报工',
+    //       click: btReport,
+    //       combination: Combination.left,
+    //     ));
+    //     buttons.add(CombinationButton(
+    //       text: '取消报工',
+    //       click: btCancelReport,
+    //       combination: Combination.right,
+    //     ));
+    //   }
+    // }
+    return buttons;
   }
 
   @override
   Widget build(BuildContext context) {
-    return pageBodyWithDrawer(
-      actions: [
-        SizedBox(
-          width: 400,
-          child: EditText(
-            hint: '输入物料编号进行筛选',
-            onChanged: (s) => logic.search(s),
+    if (state.isNeedSetInitData()) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        pickPallet(
+            isFirst: true,
+            savePalletDate: state.date,
+            saveMachine: state.machineId,
+            saveWarehouseLocation: state.locationId,
+            savePallet: state.palletNumber,
+            context: context,
+            callback: (
+              int date,
+              String machineId,
+              String locationId,
+              String palletNumber,
+            ) =>
+                setState(() => state.savePickData(
+                      date: date,
+                      machineId: machineId,
+                      locationId: locationId,
+                      palletNumber: palletNumber,
+                    )));
+      });
+      return Container(
+        decoration: backgroundColor,
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            title: Text(getFunctionTitle()),
           ),
         ),
-        CombinationButton(
-          text: '库位托盘选择',
-          click: () {},
-          combination: Combination.left,
-        ),
-        CombinationButton(
-          text: '批量入库',
-          click: () {},
-          combination: Combination.middle,
-        ),
-        CombinationButton(
-          text: '贴合区域图',
-          click: () {},
-          combination: Combination.middle,
-        ),
-        CombinationButton(
-          text: '报工到SAP',
-          click: () {},
-          combination: Combination.right,
-        ),
-        SizedBox(width: 10),
-      ],
-      queryWidgets: [
-        EditText(
-          hint: '请输入型体名称',
-          onChanged: (s) => state.typeBody = s,
-        ),
-        DatePicker(pickerController: logic.dpcStartDate),
-        DatePicker(pickerController: logic.dpcEndDate),
-        Spinner(controller: logic.scReportState),
-        Obx(() => CheckBox(
-              onChanged: (c) => state.lastProcess.value = c,
-              name: '显示末道工序',
-              value: state.lastProcess.value,
+      );
+    } else {
+      return pageBodyWithDrawer(
+        actions: [
+          SizedBox(
+            width: 400,
+            child: EditText(
+              hint: '输入物料编号进行筛选',
+              onChanged: (s) => logic.search(s),
+            ),
+          ),
+          CombinationButton(
+            text: '库位托盘选择',
+            click: () => pickPallet(
+              savePalletDate: state.date,
+              saveMachine: state.machineId,
+              saveWarehouseLocation: state.locationId,
+              savePallet: state.palletNumber,
+              context: context,
+              callback: (
+                int date,
+                String machineId,
+                String locationId,
+                String palletNumber,
+              ) =>
+                  state.savePickData(
+                date: date,
+                machineId: machineId,
+                locationId: locationId,
+                palletNumber: palletNumber,
+              ),
+            ),
+            combination: Combination.left,
+          ),
+          CombinationButton(
+            text: '批量入库',
+            click: () => askDialog(
+              content: '确定要批量提交入库吗？',
+              confirm: () => logic.batchWarehousing(),
+            ),
+            combination: Combination.middle,
+          ),
+          CombinationButton(
+            text: '贴合区域图',
+            click: () => showAreaPhoto(context),
+            combination: Combination.middle,
+          ),
+          CombinationButton(
+            text: '报工到SAP',
+            click: () => askDialog(
+              content: '确定要报工到SAP吗？',
+              confirm: () => logic.reportToSAP(),
+            ),
+            combination: Combination.right,
+          ),
+          const SizedBox(width: 10),
+        ],
+        queryWidgets: [
+          EditText(
+            hint: '请输入型体名称',
+            onChanged: (s) => state.typeBody = s,
+          ),
+          DatePicker(pickerController: logic.dpcStartDate),
+          DatePicker(pickerController: logic.dpcEndDate),
+          Spinner(controller: logic.scReportState),
+          Obx(() => CheckBox(
+                onChanged: (c) => state.lastProcess.value = c,
+                name: '显示末道工序',
+                value: state.lastProcess.value,
+              )),
+          Obx(() => CheckBox(
+                onChanged: (c) => state.unStockIn.value = c,
+                name: '显示未入库',
+                value: state.unStockIn.value,
+              )),
+        ],
+        query: () => logic.query(),
+        body: Obx(() => ListView.builder(
+              padding: const EdgeInsets.all(8),
+              itemCount: state.showOrderList.length,
+              itemBuilder: (context, index) =>
+                  _item1(state.showOrderList[index]),
             )),
-        Obx(() => CheckBox(
-              onChanged: (c) => state.unStockIn.value = c,
-              name: '显示未入库',
-              value: state.unStockIn.value,
-            )),
-      ],
-      query: () => logic.query(),
-      body: Obx(() => ListView.builder(
-            padding: const EdgeInsets.all(8),
-            itemCount: state.showOrderList.length,
-            itemBuilder: (context, index) => _item1(state.showOrderList[index]),
-          )),
-    );
+      );
+    }
   }
 
   @override

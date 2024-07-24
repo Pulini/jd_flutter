@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:get/get.dart';
 
 import '../../../bean/http/response/worker_production_info.dart';
@@ -37,7 +35,7 @@ class WorkerProductionReportLogic extends GetxController {
     ).then((response) {
       if (response.resultCode == resultSuccess) {
         var list = <WorkerProductionInfo>[];
-        for (var item in jsonDecode(response.data)) {
+        for (var item in response.data) {
           list.add(WorkerProductionInfo.fromJson(item));
         }
         state.dataList.value=list;

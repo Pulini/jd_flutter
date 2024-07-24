@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
-
 import 'package:get/get.dart';
 import 'package:jd_flutter/utils.dart';
 
@@ -28,12 +26,10 @@ class MoldingScanBulletinReportLogic extends GetxController {
       params: {'departmentID': userInfo?.departmentID, 'IsGetAllList': true},
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        var jsonList = jsonDecode(response.data);
-        var list = <MoldingScanBulletinReportInfo>[];
-        for (var i = 0; i < jsonList.length; ++i) {
-          list.add(MoldingScanBulletinReportInfo.fromJson(jsonList[i]));
-        }
-        state.reportInfo.value = list;
+        state.reportInfo.value = [
+          for (var i = 0; i < response.data.length; ++i)
+            MoldingScanBulletinReportInfo.fromJson(response.data[i])
+        ];
       } else {
         errorDialog(content: response.message);
       }
@@ -63,14 +59,12 @@ class MoldingScanBulletinReportLogic extends GetxController {
       if (response.resultCode == resultSuccess) {
         if (Get.currentRoute ==
             RouteConfig.moldingScanBulletinReportPage.name) {
-          var jsonList = jsonDecode(response.data);
-          var list = <MoldingScanBulletinReportInfo>[];
-          for (var i = 0; i < jsonList.length; ++i) {
-            list.add(MoldingScanBulletinReportInfo.fromJson(jsonList[i]));
-          }
-          state.reportInfo.value = list;
+          state.reportInfo.value = [
+            for (var i = 0; i < response.data.length; ++i)
+              MoldingScanBulletinReportInfo.fromJson(response.data[i])
+          ];
         } else {
-          var json = jsonDecode(response.data)[0];
+          var json = response.data[0];
           var data = MoldingScanBulletinReportInfo.fromJson(json);
           state.reportInfo[0] = data;
         }

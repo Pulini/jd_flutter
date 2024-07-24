@@ -23,11 +23,17 @@ const resultReLogin = 2;
 ///版本升级
 const resultToUpdate = 3;
 
-///WebService 基地址
+///MES正式库
 const baseUrlForMES = 'https://geapp.goldemperor.com:1226/';
 
-///WebService 基地址
+///MES测试库
 const testUrlForMES = 'https://geapptest.goldemperor.com:1224/';
+
+///SAP正式库
+const baseUrlForSAP = 'https://erpprd01.goldemperor.com:8003/';
+
+///SAP测试库
+const testUrlForSAP = 'https://erpqas01.goldemperor.com:8002/';
 
 /// 日志工具
 var logger = Logger();
@@ -42,7 +48,14 @@ Future<BaseData> httpPost({
   Map<String, dynamic>? params,
   Object? body,
 }) {
-  return _doHttp(true, method, loading: loading, params: params, body: body);
+  return _doHttp(
+    loading: loading,
+    params: params,
+    body: body,
+    baseUrl: baseUrlForMES,
+    isPost: true,
+    method: method,
+  );
 }
 
 ///get请求
@@ -52,43 +65,46 @@ Future<BaseData> httpGet({
   Map<String, dynamic>? params,
   Object? body,
 }) {
-  return _doHttp(false, method, loading: loading, params: params, body: body);
+  return _doHttp(
+    loading: loading,
+    params: params,
+    body: body,
+    baseUrl: baseUrlForMES,
+    isPost: false,
+    method: method,
+  );
 }
 
-///接口拦截器
-var _interceptors = InterceptorsWrapper(onRequest: (options, handler) {
-  options.print();
-  handler.next(options);
-}, onResponse: (response, handler) {
-  var baseData = BaseData.fromJson(response.data.runtimeType == String
-      ? jsonDecode(response.data)
-      : response.data);
-  baseData.print();
-  if (baseData.resultCode == 2) {
-    logger.e('需要重新登录');
-    if (Get.isDialogOpen == true) Get.back();
-    spSave(spSaveUserInfo, '');
-    reLoginPopup();
-  } else if (baseData.resultCode == 3) {
-    logger.e('需要更新版本');
-    if (Get.isDialogOpen == true) Get.back();
-    upData();
-  } else {
-    handler.next(response);
-  }
-}, onError: (DioException e, handler) {
-  logger.e('error:$e');
-  handler.next(e);
-});
+///post请求
+Future<BaseData> sapPost({
+  String? loading,
+  required String method,
+  Map<String, dynamic>? params,
+  Object? body,
+}) {
+  return _doHttp(
+    loading: loading,
+    params: params,
+    body: body,
+    baseUrl: baseUrlForSAP,
+    isPost: true,
+    method: method,
+  );
+}
 
 ///初始化网络请求
-Future<BaseData> _doHttp(
-  bool isPost,
-  String method, {
+Future<BaseData> _doHttp({
+  required bool isPost,
+  required String method,
+  required String baseUrl,
   String? loading,
   Map<String, dynamic>? params,
   Object? body,
 }) async {
+  ///用于开发时切换测试库，打包时必须屏蔽
+  // baseUrl = baseUrl == baseUrlForSAP ? testUrlForSAP : testUrlForMES;
+  ///------------------------------------------------
+
   snackbarController?.close(withAnimations: false);
   if (loading != null && loading.isNotEmpty) {
     loadingDialog(loading);
@@ -113,26 +129,69 @@ Future<BaseData> _doHttp(
   try {
     ///创建dio对象
     var dio = Dio(BaseOptions(
-      // baseUrl: testUrlForMES,
-      baseUrl: baseUrlForMES,
+      baseUrl: baseUrl,
       connectTimeout: const Duration(minutes: 2),
       receiveTimeout: const Duration(minutes: 2),
-    ))
-      ..interceptors.add(_interceptors);
+    ));
+
+    ///接口拦截器
+    dio.interceptors.add(
+      InterceptorsWrapper(
+        onRequest: (options, handler) {
+          options.print();
+          handler.next(options);
+        },
+        onResponse: (response, handler) {
+          var baseData = BaseData.fromJson(
+            response.data.runtimeType == String
+                ? jsonDecode(response.data)
+                : response.data,
+          )..print(
+              '${response.realUri.origin}/$method',
+              response.realUri.queryParameters,
+            );
+          if (baseData.resultCode == 2) {
+            logger.e('需要重新登录');
+            if (Get.isDialogOpen == true) Get.back();
+            spSave(spSaveUserInfo, '');
+            reLoginPopup();
+          } else if (baseData.resultCode == 3) {
+            logger.e('需要更新版本');
+            if (Get.isDialogOpen == true) Get.back();
+            upData();
+          } else {
+            handler.next(response);
+          }
+        },
+        onError: (DioException e, handler) {
+          logger.e('error:$e');
+          handler.next(e);
+        },
+      ),
+    );
 
     ///发起post/get请求
     var response = isPost
-        ? await dio.post(method,
-            queryParameters: params, data: body, options: options)
-        : await dio.get(method,
-            queryParameters: params, data: body, options: options);
+        ? await dio.post(
+            method,
+            queryParameters: params,
+            data: body,
+            options: options,
+          )
+        : await dio.get(
+            method,
+            queryParameters: params,
+            data: body,
+            options: options,
+          );
     if (response.statusCode == 200) {
-      var baseData = BaseData.fromJson(response.data.runtimeType == String
+      var json = response.data.runtimeType == String
           ? jsonDecode(response.data)
-          : response.data);
-      base.resultCode = baseData.resultCode ?? 0;
-      base.data = jsonEncode(baseData.data);
-      base.message = baseData.message ?? '';
+          : response.data;
+      base.resultCode = json['ResultCode'];
+      // base.data = jsonEncode(json['Data']);
+      base.data = json['Data'];
+      base.message = json['Message'];
     } else {
       logger.e('网络异常');
       base.message = '网络异常';
@@ -216,6 +275,10 @@ const webApiPickerSapGroup = 'api/User/GetDepListByEmpID';
 
 ///获取sap工厂及仓库列表接口
 const webApiPickerSapFactoryAndWarehouse = 'api/Stock/GetSAPFactoryStockInfo';
+
+///获取sap仓库库位列表接口
+const webApiPickerSapWarehouseStorageLocation =
+    'api/InStockTrackingNum/GetWarehouseStorageLocationList';
 
 ///获取mes包装区域列表
 const webApiGetPickerMesMoldingPackArea = 'api/BaseInfo/GetMoldingPackAreaInfo';
@@ -439,7 +502,39 @@ const webApiCreatePartLabel = 'api/WetPrinting/CreatePartLabelingBarcode';
 const webApiDeletePartLabel = 'api/WetPrinting/DelBarcode';
 
 ///获取贴标工序汇总表_已报工
-const webApiGetPartProcessReportedReport = 'api/WetPrinting/GetPartProcessReport_Barcode_Reported';
+const webApiGetPartProcessReportedReport =
+    'api/WetPrinting/GetPartProcessReport_Barcode_Reported';
 
 ///获取工序派工单列表
-const webApiGetScWorkCardProcess = 'api/CompoundDispatching/GetScWorkCardProcessListStripDrawing';
+const webApiGetScWorkCardProcess =
+    'api/CompoundDispatching/GetScWorkCardProcessListStripDrawing';
+
+///获取SPA仓库托盘列表
+const webApiGetPallet = 'api/InStockTrackingNum/GetPallet';
+
+///抽条末道工序生成工序汇报单
+const webApiCreateLastProcessReport =
+    'api/CompoundDispatching/CreateProcessOutPutByDepIDStripDrawing';
+
+///取件码-批量生产入库
+const webApiPickCodeBatchProductionWarehousing =
+    'api/CompoundDispatching/PickCodeBatchProductionWarehousing';
+
+///抽条获取用料清单
+const webApiGetSubItemBatchMaterialInformation =
+    'api/CompoundDispatching/GetSubItemBatchMaterialInformation';
+
+///抽条用料清单数量矫正
+const webApiMetersConvert = 'api/CompoundDispatching/MetersConvert';
+
+///抽条获取贴标列表
+const webApiGetQRCodeList = 'api/BarCode/GetQRCodeList';
+
+///抽条车间贴标打印记工
+const webApiCreateProcessOutPutStripDrawing = 'api/CompoundDispatching/CreateProcessOutPutStripDrawing';
+
+///批量取消报工
+const webApiProcessOutPutReport= 'api/CompoundDispatching/ProcessOutPutReport1';
+
+///取件码-生产入库
+const webApiPickCodeProductionWarehousing= 'api/CompoundDispatching/PickCodeProductionWarehousing';

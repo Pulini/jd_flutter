@@ -5,7 +5,7 @@ import '../../../widget/custom_widget.dart';
 import 'molding_pack_area_report_logic.dart';
 
 class MoldingPackAreaDetailReportPage extends StatefulWidget {
-  const MoldingPackAreaDetailReportPage({Key? key}) : super(key: key);
+  const MoldingPackAreaDetailReportPage({super.key});
 
   @override
   State<MoldingPackAreaDetailReportPage> createState() =>
@@ -35,8 +35,8 @@ class _MoldingPackAreaDetailReportPageState
                   () => DataTable(
                     border: TableBorder.all(color: Colors.black, width: 1),
                     showCheckboxColumn: false,
-                    headingRowColor: MaterialStateProperty.resolveWith<Color?>(
-                      (Set<MaterialState> states) {
+                    headingRowColor: WidgetStateProperty.resolveWith<Color?>(
+                      (Set<WidgetState> states) {
                         return Colors.blueAccent.shade100;
                       },
                     ),

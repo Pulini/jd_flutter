@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -122,35 +121,34 @@ class LoginLogic extends GetxController with GetSingleTickerProviderStateMixin {
     ).then((val) {
       if (val.resultCode == resultSuccess) {
         Downloader(
-            url: val.data.toString().replaceAll('"', ''),
-            completed: (filePath) {
-              try {
-                Permission.camera.request().isGranted.then((permission) {
-                  if (permission) {
-                    const MethodChannel(channelFlutterSend)
-                        .invokeMethod('StartDetect', filePath)
-                        .then(
-                      (detectCallback) {
-                        logger.i(detectCallback);
-                        httpPost(
-                          loading: 'logging'.tr,
-                          method: webApiLogin,
-                          params: {
-                            'JiGuangID': '',
-                            'Phone': faceLoginPhoneController.text,
-                            'Password': '',
-                            'VCode': '',
-                            'Type': 2,
-                          },
-                        ).then((loginCallback) {
+          url: val.data.toString().replaceAll('"', ''),
+          completed: (filePath) {
+            try {
+              Permission.camera.request().isGranted.then((permission) {
+                if (permission) {
+                  const MethodChannel(channelFlutterSend)
+                      .invokeMethod('StartDetect', filePath)
+                      .then(
+                    (detectCallback) {
+                      logger.i(detectCallback);
+                      httpPost(
+                        loading: 'logging'.tr,
+                        method: webApiLogin,
+                        params: {
+                          'JiGuangID': '',
+                          'Phone': faceLoginPhoneController.text,
+                          'Password': '',
+                          'VCode': '',
+                          'Type': 2,
+                        },
+                      ).then(
+                        (loginCallback) {
                           if (loginCallback.resultCode == resultSuccess) {
                             spSave(spSaveLoginType, loginTypeFace);
                             spSave(
                                 spSaveLoginFace, faceLoginPhoneController.text);
-                            spSave(
-                                spSaveUserInfo, loginCallback.data.toString());
-                            userInfo = UserInfo.fromJson(
-                                jsonDecode(loginCallback.data));
+                            spSave(spSaveUserInfo, jsonEncode(loginCallback.data).toString());
+                            userInfo = UserInfo.fromJson(loginCallback.data);
                             Get.delete<LoginLogic>();
                             _isReLogin
                                 ? Get.back()
@@ -160,19 +158,21 @@ class LoginLogic extends GetxController with GetSingleTickerProviderStateMixin {
                                 content:
                                     loginCallback.message ?? 'login_failed'.tr);
                           }
-                        });
-                      },
-                    ).catchError((e) {
-                      logger.i(e);
-                    });
-                  } else {
-                    errorDialog(content: 'face_login_no_camera_permission'.tr);
-                  }
-                });
-              } on PlatformException {
-                errorDialog(content: 'face_login_failed'.tr);
-              }
-            });
+                        },
+                      );
+                    },
+                  ).catchError((e) {
+                    logger.i(e);
+                  });
+                } else {
+                  errorDialog(content: 'face_login_no_camera_permission'.tr);
+                }
+              });
+            } on PlatformException {
+              errorDialog(content: 'face_login_failed'.tr);
+            }
+          },
+        );
       } else {
         errorDialog(
             content: val.message ?? 'face_login_get_photo_path_failed'.tr);
@@ -205,8 +205,8 @@ class LoginLogic extends GetxController with GetSingleTickerProviderStateMixin {
       if (loginCallback.resultCode == resultSuccess) {
         spSave(spSaveLoginType, loginTypeMachine);
         spSave(spSaveLoginMachine, machineLoginMachineController.text);
-        spSave(spSaveUserInfo, loginCallback.data.toString());
-        userInfo=UserInfo.fromJson(jsonDecode(loginCallback.data));
+        spSave(spSaveUserInfo, jsonEncode(loginCallback.data).toString());
+        userInfo = UserInfo.fromJson(loginCallback.data);
         Get.delete<LoginLogic>();
         _isReLogin ? Get.back() : Get.offAll(() => const HomePage());
       } else {
@@ -287,8 +287,8 @@ class LoginLogic extends GetxController with GetSingleTickerProviderStateMixin {
       if (loginCallback.resultCode == resultSuccess) {
         spSave(spSaveLoginType, loginTypePhone);
         spSave(spSaveLoginPhone, phoneLoginPhoneController.text);
-        spSave(spSaveUserInfo, loginCallback.data.toString());
-        userInfo=UserInfo.fromJson(jsonDecode(loginCallback.data));
+        spSave(spSaveUserInfo, jsonEncode(loginCallback.data).toString());
+        userInfo = UserInfo.fromJson(loginCallback.data);
         Get.delete<LoginLogic>();
         _isReLogin ? Get.back() : Get.offAll(() => const HomePage());
       } else {
@@ -323,8 +323,8 @@ class LoginLogic extends GetxController with GetSingleTickerProviderStateMixin {
       if (loginCallback.resultCode == resultSuccess) {
         spSave(spSaveLoginType, loginTypeMachine);
         spSave(spSaveLoginWork, workLoginWorkNumberController.text);
-        spSave(spSaveUserInfo, loginCallback.data.toString());
-        userInfo=UserInfo.fromJson(jsonDecode(loginCallback.data));
+        spSave(spSaveUserInfo, jsonEncode(loginCallback.data).toString());
+        userInfo = UserInfo.fromJson(loginCallback.data);
         Get.delete<LoginLogic>();
         _isReLogin ? Get.back() : Get.offAll(() => const HomePage());
       } else {

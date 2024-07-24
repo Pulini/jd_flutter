@@ -20,8 +20,8 @@ class MoldingScanBulletinReportState {
     var table = DataTable(
       border: TableBorder.all(color: Colors.black, width: 1),
       showCheckboxColumn: false,
-      headingRowColor: MaterialStateProperty.resolveWith<Color?>(
-        (Set<MaterialState> states) {
+      headingRowColor: WidgetStateProperty.resolveWith<Color?>(
+        (Set<WidgetState> states) {
           return Colors.blueAccent.shade100;
         },
       ),
@@ -114,8 +114,8 @@ class MoldingScanBulletinReportState {
 
   createTableCardDataRow(ScWorkCardSizeInfos data, Color color) {
     return DataRow(
-      color: MaterialStateProperty.resolveWith<Color?>(
-        (Set<MaterialState> states) {
+      color: WidgetStateProperty.resolveWith<Color?>(
+        (Set<WidgetState> states) {
           return color;
         },
       ),

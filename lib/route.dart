@@ -301,7 +301,6 @@ HomeButton? getNowFunction() {
 
 String getFunctionTitle() {
   var route = Get.currentRoute;
-  print(route);
   if (route == RouteConfig.main) return '';
   for (var item1 in functions) {
     if (item1 is HomeButton && item1.route == route) {

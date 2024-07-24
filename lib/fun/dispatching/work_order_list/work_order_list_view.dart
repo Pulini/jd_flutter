@@ -10,7 +10,7 @@ import '../../maintain_label/maintain_label_view.dart';
 import 'work_order_list_logic.dart';
 
 class WorkOrderListPage extends StatefulWidget {
-  const WorkOrderListPage({Key? key}) : super(key: key);
+  const WorkOrderListPage({super.key});
 
   @override
   State<WorkOrderListPage> createState() => _WorkOrderListPageState();

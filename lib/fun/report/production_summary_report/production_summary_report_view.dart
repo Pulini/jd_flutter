@@ -6,7 +6,7 @@ import '../../../widget/picker/picker_view.dart';
 import 'production_summary_report_logic.dart';
 
 class ProductionSummaryReportPage extends StatefulWidget {
-  const ProductionSummaryReportPage({Key? key}) : super(key: key);
+  const ProductionSummaryReportPage({super.key});
 
   @override
   State<ProductionSummaryReportPage> createState() =>
@@ -32,8 +32,8 @@ class _ProductionSummaryReportPageState
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: DataTable(
-                  headingRowColor: MaterialStateProperty.resolveWith<Color?>(
-                    (Set<MaterialState> states) {
+                  headingRowColor: WidgetStateProperty.resolveWith<Color?>(
+                    (Set<WidgetState> states) {
                       return Colors.blueAccent.shade100;
                     },
                   ),

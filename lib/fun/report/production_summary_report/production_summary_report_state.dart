@@ -44,8 +44,8 @@ class ProductionSummaryReportState {
 
   createDataRow(ProductionSummaryInfo data, Color color) {
     return DataRow(
-      color: MaterialStateProperty.resolveWith<Color?>(
-        (Set<MaterialState> states) {
+      color: WidgetStateProperty.resolveWith<Color?>(
+        (Set<WidgetState> states) {
           return color;
         },
       ),

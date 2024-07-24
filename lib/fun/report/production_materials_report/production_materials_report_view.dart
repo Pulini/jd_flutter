@@ -53,8 +53,8 @@ class _ProductionMaterialsReportPageState
 
   _tableDataRow(List<ProductionMaterialsInfo> list, int index) {
     return DataRow(
-      color: MaterialStateProperty.resolveWith<Color?>(
-        (Set<MaterialState> states) {
+      color: WidgetStateProperty.resolveWith<Color?>(
+        (Set<WidgetState> states) {
           return index % 2 != 0 ? Colors.blue.shade200 : Colors.white;
         },
       ),
@@ -175,8 +175,8 @@ class _ProductionMaterialsReportPageState
                       child: DataTable(
                         showCheckboxColumn: false,
                         headingRowColor:
-                            MaterialStateProperty.resolveWith<Color?>(
-                          (Set<MaterialState> states) {
+                            WidgetStateProperty.resolveWith<Color?>(
+                          (Set<WidgetState> states) {
                             return Colors.blueAccent.shade100;
                           },
                         ),

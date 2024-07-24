@@ -6,7 +6,7 @@ import '../../../widget/picker/picker_view.dart';
 import 'molding_pack_area_report_logic.dart';
 ///开发中-------------------------------------------------------------------------------------------------------------------------------------
 class MoldingPackAreaReportPage extends StatefulWidget {
-  const MoldingPackAreaReportPage({Key? key}) : super(key: key);
+  const MoldingPackAreaReportPage({super.key});
 
   @override
   State<MoldingPackAreaReportPage> createState() =>
@@ -50,8 +50,8 @@ class _MoldingPackAreaReportPageState extends State<MoldingPackAreaReportPage> {
             child: Obx(() => DataTable(
                   border: TableBorder.all(color: Colors.black, width: 1),
                   showCheckboxColumn: false,
-                  headingRowColor: MaterialStateProperty.resolveWith<Color?>(
-                    (Set<MaterialState> states) {
+                  headingRowColor: WidgetStateProperty.resolveWith<Color?>(
+                    (Set<WidgetState> states) {
                       return Colors.blueAccent.shade100;
                     },
                   ),

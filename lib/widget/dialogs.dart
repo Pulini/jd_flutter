@@ -257,17 +257,17 @@ doUpdate(VersionInfo version) {
                   child: ElevatedButton(
                     style: ButtonStyle(
                       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      textStyle: MaterialStateProperty.all(
+                      textStyle: WidgetStateProperty.all(
                         const TextStyle(fontSize: 14),
                       ),
-                      foregroundColor: MaterialStateProperty.all(Colors.white),
-                      shape: MaterialStateProperty.all(
+                      foregroundColor: WidgetStateProperty.all(Colors.white),
+                      shape: WidgetStateProperty.all(
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(5),
                         ),
                       ),
-                      elevation: MaterialStateProperty.all(5),
-                      backgroundColor: MaterialStateProperty.all(Colors.red),
+                      elevation: WidgetStateProperty.all(5),
+                      backgroundColor: WidgetStateProperty.all(Colors.red),
                     ),
                     onPressed: update,
                     child: Text('update_dialog_confirm'.tr),
@@ -279,13 +279,13 @@ doUpdate(VersionInfo version) {
                     child: TextButton(
                       style: ButtonStyle(
                         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        textStyle: MaterialStateProperty.all(
+                        textStyle: WidgetStateProperty.all(
                           const TextStyle(fontSize: 14),
                         ),
-                        foregroundColor: MaterialStateProperty.all(
+                        foregroundColor: WidgetStateProperty.all(
                           Colors.grey[600],
                         ),
-                        shape: MaterialStateProperty.all(
+                        shape: WidgetStateProperty.all(
                           RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5),
                           ),

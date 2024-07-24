@@ -45,7 +45,7 @@ class PartProcessScanLogic extends GetxController {
 
       // if (response.resultCode == resultSuccess) {
       //   var data = ScanBarcodeReportedReportInfo.fromJson(
-      //     jsonDecode(response.data),
+      //     response.data,
       //   );
       //   var report = <ReportInfo>[];
       //   data.reportList?.where((v) => v.type == '0').forEach((v) {

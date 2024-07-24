@@ -8,7 +8,7 @@ import 'daily_report_logic.dart';
 
 class DailyReportPage extends StatefulWidget {
 
-  const DailyReportPage({Key? key}) : super(key: key);
+  const DailyReportPage({super.key});
 
   @override
   State<DailyReportPage> createState() => _DailyReportPageState();

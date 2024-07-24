@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
@@ -186,6 +185,7 @@ class NumberDecimalEditText extends StatelessWidget {
     this.hint,
     this.hasFocus = false,
     required this.onChanged,
+    this.controller,
   });
 
   final String? hint;
@@ -194,14 +194,22 @@ class NumberDecimalEditText extends StatelessWidget {
   final double? initQty;
   final bool hasFocus;
   final Function(double) onChanged;
+  final TextEditingController? controller;
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController controller =
-        TextEditingController(text: initQty.toShowString());
-    controller.selection = TextSelection.fromPosition(
-      TextPosition(offset: controller.text.length),
+    var c = TextEditingController(
+      text: initQty.toShowString(),
     );
+    c.selection = TextSelection.fromPosition(
+      TextPosition(offset: c.text.length),
+    );
+
+    if (controller != null) {
+      controller!.selection = TextSelection.fromPosition(
+        TextPosition(offset: controller!.text.length),
+      );
+    }
     FocusNode? fn;
     if (hasFocus) {
       fn = FocusNode()..requestFocus();
@@ -219,10 +227,17 @@ class NumberDecimalEditText extends StatelessWidget {
         controller: controller,
         onChanged: (v) {
           if (v.toDoubleTry() > max!) {
-            controller.text = max.toShowString();
-            controller.selection = TextSelection.fromPosition(
-              TextPosition(offset: controller.text.length),
-            );
+            if (controller != null) {
+              controller!.text = max.toShowString();
+              controller!.selection = TextSelection.fromPosition(
+                TextPosition(offset: controller!.text.length),
+              );
+            } else {
+              c.text = max.toShowString();
+              c.selection = TextSelection.fromPosition(
+                TextPosition(offset: c.text.length),
+              );
+            }
             onChanged.call(max!);
           } else {
             onChanged.call(v.toDoubleTry());
@@ -250,7 +265,8 @@ class NumberDecimalEditText extends StatelessWidget {
           hintStyle: const TextStyle(color: Colors.grey),
           suffixIcon: IconButton(
             icon: const Icon(Icons.close, color: Colors.grey),
-            onPressed: () => controller.clear(),
+            onPressed: () =>
+                controller != null ? controller!.clear() : c.clear(),
           ),
         ),
       ),
@@ -284,12 +300,7 @@ class _WorkerCheckState extends State<WorkerCheck> {
       'DeptmentID': '',
     }).then((worker) {
       if (worker.resultCode == resultSuccess) {
-        var jsonList = jsonDecode(worker.data);
-        var list = <WorkerInfo>[];
-        for (var i = 0; i < jsonList.length; ++i) {
-          list.add(WorkerInfo.fromJson(jsonList[i]));
-        }
-        success.call(list[0]);
+        success.call(WorkerInfo.fromJson(worker.data[0]));
       } else {
         error.call(worker.message ?? '');
       }
@@ -417,6 +428,7 @@ class NumberEditText extends StatelessWidget {
 }
 
 expandedFrameText({
+  Function? click,
   Color? borderColor,
   Color? backgroundColor,
   Color? textColor,
@@ -427,18 +439,21 @@ expandedFrameText({
 }) {
   return Expanded(
     flex: flex ?? 1,
-    child: Container(
-      padding: padding ?? const EdgeInsets.all(5),
-      decoration: BoxDecoration(
-        border: Border.all(color: borderColor ?? Colors.grey),
-        color: backgroundColor ?? Colors.transparent,
-      ),
-      alignment: alignment ?? Alignment.centerLeft,
-      child: Text(
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        text,
-        style: TextStyle(color: textColor ?? Colors.black87),
+    child: GestureDetector(
+      onTap: () => click?.call(),
+      child: Container(
+        padding: padding ?? const EdgeInsets.all(5),
+        decoration: BoxDecoration(
+          border: Border.all(color: borderColor ?? Colors.grey),
+          color: backgroundColor ?? Colors.transparent,
+        ),
+        alignment: alignment ?? Alignment.centerLeft,
+        child: Text(
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          text,
+          style: TextStyle(color: textColor ?? Colors.black87),
+        ),
       ),
     ),
   );

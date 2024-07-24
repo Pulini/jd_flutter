@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -112,7 +110,7 @@ class ProductionDayReportLogic extends GetxController {
         try {
           var list = <DataRow>[];
           var index = 0;
-          for (var item in jsonDecode(response.data)) {
+          for (var item in response.data) {
             var data = ProductionDayReportInfo.fromJson(item);
             list.add(
               state.createDataRow(

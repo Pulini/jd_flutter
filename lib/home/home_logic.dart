@@ -30,15 +30,7 @@ class HomeLogic extends GetxController {
     );
   }
 
-  @override
-  onReady() {
-    super.onReady();
-    getVersionInfo(
-      false,
-      noUpdate: () {},
-      needUpdate: (versionInfo) => doUpdate(versionInfo),
-    );
-  }
+
 
   refreshFunList({required Function()  refresh}) {
     httpGet(
@@ -48,7 +40,7 @@ class HomeLogic extends GetxController {
     ).then((response) {
       if (response.resultCode == resultSuccess) {
         var list = <HomeFunctions>[];
-        for (var item in jsonDecode(response.data)) {
+        for (var item in response.data) {
           list.add(HomeFunctions.fromJson(item));
         }
         state.refreshFunctions(list);
@@ -56,6 +48,11 @@ class HomeLogic extends GetxController {
         errorDialog(content: response.message);
       }
       refresh.call();
+      // getVersionInfo(
+      //   false,
+      //   noUpdate: () {},
+      //   needUpdate: (versionInfo) => doUpdate(versionInfo),
+      // );
     });
   }
 
@@ -94,7 +91,7 @@ class HomeLogic extends GetxController {
     if (departmentCallback.resultCode == resultSuccess) {
       //创建部门列表数据
       List<Department> list = [];
-      for (var item in jsonDecode(departmentCallback.data)) {
+      for (var item in departmentCallback.data) {
         list.add(Department.fromJson(item));
       }
       //查询当前部门下标
@@ -133,10 +130,10 @@ class HomeLogic extends GetxController {
             },
           ).then((changeDepartmentCallback) {
             if (changeDepartmentCallback.resultCode == resultSuccess) {
-              var json = jsonDecode(changeDepartmentCallback.data);
+
               //修改用户数据中的部门数据
-              userInfo?.departmentID = json['DeptmentID'];
-              userInfo?.departmentName = json['DeptmentName'];
+              userInfo?.departmentID = changeDepartmentCallback.data['DeptmentID'];
+              userInfo?.departmentName = changeDepartmentCallback.data['DeptmentName'];
               spSave(spSaveUserInfo, jsonEncode(userInfo));
               state.departmentName.value = userInfo?.departmentName ?? '';
             } else {

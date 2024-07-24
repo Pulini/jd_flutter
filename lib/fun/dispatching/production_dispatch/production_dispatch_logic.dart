@@ -49,7 +49,7 @@ class ProductionDispatchLogic extends GetxController {
         if (selected.isNotEmpty &&
             selected
                 .none((v) => v.plantBody == state.orderList[index].plantBody)) {
-          showSnackBar(title: '选择错误', message: '不属于同一型体的订单',isWarning: true);
+          showSnackBar(title: '选择错误', message: '不属于同一型体的订单', isWarning: true);
           return;
         } else {
           state.orderList[index].select = true;
@@ -105,19 +105,17 @@ class ProductionDispatchLogic extends GetxController {
         'deptID': userInfo?.departmentID,
       },
     ).then((response) {
-      var list = <ProductionDispatchOrderInfo>[];
       if (response.resultCode == resultSuccess) {
-        var jsonList = jsonDecode(response.data);
-        for (var i = 0; i < jsonList.length; ++i) {
-          list.add(ProductionDispatchOrderInfo.fromJson(jsonList[i]));
-        }
-        state.orderList.value = list;
+        state.orderList.value = [
+          for (var i = 0; i < response.data.length; ++i)
+            ProductionDispatchOrderInfo.fromJson(response.data[i])
+        ];
         state.orderGroupList.value = groupBy(
-          list,
+          state.orderList,
           (ProductionDispatchOrderInfo e) =>
               e.sapOrderBill.ifEmpty(e.orderBill ?? ''),
         );
-        if (list.isNotEmpty && !isRefresh) Get.back();
+        if (state.orderList.isNotEmpty && !isRefresh) Get.back();
       } else {
         state.orderList.value = [];
         errorDialog(content: response.message);
@@ -166,15 +164,12 @@ class ProductionDispatchLogic extends GetxController {
           method: webApiGetMatchColors,
           loading: '正在获取配色信息...',
           params: {'planBill': v.planBill},
-          // params: {'planBill': 'J2403600'},
         ).then((response) {
-          var list = <OrderColorList>[];
           if (response.resultCode == resultSuccess) {
-            var jsonList = jsonDecode(response.data);
-            for (var i = 0; i < jsonList.length; ++i) {
-              list.add(OrderColorList.fromJson(jsonList[i]));
-            }
-            callback.call(list, 'J2403600');
+            callback.call([
+              for (var i = 0; i < response.data.length; ++i)
+                OrderColorList.fromJson(response.data[i])
+            ], v.planBill ?? '');
           } else {
             errorDialog(content: response.message);
           }
@@ -258,16 +253,16 @@ class ProductionDispatchLogic extends GetxController {
 
   ///贴标维护
   labelMaintenance() {
-    if(checkUserPermission('1051106')){
+    if (checkUserPermission('1051106')) {
       getSelectOne((v) {
-        Get.to(const MaintainLabelPage(),arguments: {
-          'materialCode':v.materialCode,
-          'interID':v.interID,
-          'isMaterialLabel':false,
+        Get.to(const MaintainLabelPage(), arguments: {
+          'materialCode': v.materialCode,
+          'interID': v.interID,
+          'isMaterialLabel': false,
         });
       });
-    }else{
-      showSnackBar(title: '错误', message: '您没有标签打印权限',isWarning: true);
+    } else {
+      showSnackBar(title: '错误', message: '您没有标签打印权限', isWarning: true);
     }
   }
 
@@ -288,7 +283,7 @@ class ProductionDispatchLogic extends GetxController {
     });
   }
 
-  getSurplusMaterial(Function(List<Map>) callback){
+  getSurplusMaterial(Function(List<Map>) callback) {
     var surplusMaterial = <Map>[];
     getSelectOne((v) {
       if (v.stubBar1?.isNotEmpty == true &&
@@ -326,15 +321,14 @@ class ProductionDispatchLogic extends GetxController {
       // });
       if (surplusMaterial.isNotEmpty) {
         callback.call(surplusMaterial);
-      }else{
-        showSnackBar(title: '错误', message: '无物料头信息',isWarning: true);
+      } else {
+        showSnackBar(title: '错误', message: '无物料头信息', isWarning: true);
       }
     });
   }
-  ///料头打印
-  printSurplusMaterial(List<Map> list) {
 
-  }
+  ///料头打印
+  printSurplusMaterial(List<Map> list) {}
 
   double getReportMax() {
     var max = 0.0;
@@ -410,7 +404,7 @@ class ProductionDispatchLogic extends GetxController {
       ).then((response) {
         if (response.resultCode == resultSuccess) {
           var data = ProductionDispatchOrderDetailInfo.fromJson(
-            jsonDecode(response.data),
+            response.data,
           );
           if (data.workCardList?.isEmpty == true) {
             errorDialog(content: '暂无工序列表');
@@ -453,7 +447,7 @@ class ProductionDispatchLogic extends GetxController {
       ).then((response) {
         if (response.resultCode == resultSuccess) {
           // var data = ProductionDispatchOrderDetailInfo.fromJson(
-          //   jsonDecode(response.data),
+          //   response.data,
           // );
         } else {
           errorDialog(content: response.message);
@@ -720,7 +714,7 @@ class ProductionDispatchLogic extends GetxController {
   ///工序列表点击，选中工序进行派工
   detailViewWorkProcedureClick(int index) {
     if (state.workProcedure[index].isOpen == 0) {
-      showSnackBar(title: '温馨提示', message: '无法选中已关闭的工序',isWarning: true);
+      showSnackBar(title: '温馨提示', message: '无法选中已关闭的工序', isWarning: true);
     } else {
       if (index == state.workProcedureSelect.value) {
         state.workProcedureSelect.value = -1;
@@ -875,12 +869,10 @@ class ProductionDispatchLogic extends GetxController {
       params: {'RouteID': routeID},
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        var jsonList = jsonDecode(response.data);
-        var miList = <ManufactureInstructionsInfo>[];
-        for (var i = 0; i < jsonList.length; ++i) {
-          miList.add(ManufactureInstructionsInfo.fromJson(jsonList[i]));
-        }
-        callback.call(miList);
+        callback.call([
+          for (var i = 0; i < response.data.length; ++i)
+            ManufactureInstructionsInfo.fromJson(response.data[i])
+        ]);
       } else {
         errorDialog(content: response.message);
       }
@@ -896,12 +888,10 @@ class ProductionDispatchLogic extends GetxController {
       params: {'InterID': state.orderList.firstWhere((v) => v.select).interID},
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        var jsonList = jsonDecode(response.data);
-        var miList = <WorkPlanMaterialInfo>[];
-        for (var i = 0; i < jsonList.length; ++i) {
-          miList.add(WorkPlanMaterialInfo.fromJson(jsonList[i]));
-        }
-        callback.call(miList);
+        callback.call([
+          for (var i = 0; i < response.data.length; ++i)
+            WorkPlanMaterialInfo.fromJson(response.data[i])
+        ]);
       } else {
         errorDialog(content: response.message);
       }
@@ -917,11 +907,11 @@ class ProductionDispatchLogic extends GetxController {
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        var jsonList = jsonDecode(response.data);
-        var prList = <PrdRouteInfo>[];
-        for (var i = 0; i < jsonList.length; ++i) {
-          prList.add(PrdRouteInfo.fromJson(jsonList[i]));
-        }
+        var prList = <PrdRouteInfo>[
+          for (var i = 0; i < response.data.length; ++i)
+            PrdRouteInfo.fromJson(response.data[i])
+        ];
+
         for (var wp in state.workProcedure) {
           prList.removeWhere((v) => v.processNumber == wp.processNumber);
         }

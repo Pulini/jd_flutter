@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:get/get.dart';
 
 import '../../../bean/http/response/process_specification_info.dart';
@@ -25,7 +24,7 @@ class ViewProcessSpecificationLogic extends GetxController {
       if (response.resultCode == resultSuccess) {
         Get.back();
         var list = <ProcessSpecificationInfo>[];
-        for (var item in jsonDecode(response.data)) {
+        for (var item in response.data) {
           list.add(ProcessSpecificationInfo.fromJson(item));
         }
         state.pdfList.value = list;

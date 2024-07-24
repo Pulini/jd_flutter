@@ -7,7 +7,7 @@ import '../../../widget/picker/picker_view.dart';
 import 'production_day_report_logic.dart';
 
 class ProductionDayReportPage extends StatefulWidget {
-  const ProductionDayReportPage({Key? key}) : super(key: key);
+  const ProductionDayReportPage({super.key});
 
   @override
   State<ProductionDayReportPage> createState() =>
@@ -33,8 +33,8 @@ class _ProductionDayReportPageState extends State<ProductionDayReportPage> {
                 scrollDirection: Axis.horizontal,
                 child: DataTable(
                   showCheckboxColumn: false,
-                  headingRowColor: MaterialStateProperty.resolveWith<Color?>(
-                    (Set<MaterialState> states) {
+                  headingRowColor: WidgetStateProperty.resolveWith<Color?>(
+                    (Set<WidgetState> states) {
                       return Colors.blueAccent.shade100;
                     },
                   ),
