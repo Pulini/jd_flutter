@@ -343,9 +343,13 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
         );
       }
     }
+
     btCancelReport() {
       if (subData != null) {
-        print('btCancelReport');
+        askDialog(
+          content: '确定要取消报工吗？',
+          confirm: () => logic.subItemCancelReport(subData),
+        );
       }
     }
 
@@ -375,72 +379,56 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
       }
     }
 
-    var buttons = <Widget>[
-      CombinationButton(
-        text: '报工',
-        click: btReport,
-        combination: Combination.left,
-      ),
-      CombinationButton(
-        text: '取消报工',
-        click: btCancelReport,
-        combination: Combination.middle,
-      ),
-      CombinationButton(
-        text: '入库',
-        click: btWarehouse,
-        combination: Combination.right,
-      )
-    ];
+    var buttons = <Widget>[];
 
-    // if (data.printLabel == '1') {
-    //   if (data.children![0].partialWarehousing == '1') {
-    //     buttons.add(CombinationButton(
-    //       text: '打印标签',
-    //       click: btPrint,
-    //       combination: Combination.left,
-    //     ));
-    //     buttons.add(CombinationButton(
-    //       text: '入库',
-    //       click: btWarehouse,
-    //       combination: Combination.right,
-    //     ));
-    //   } else {
-    //     buttons.add(CombinationButton(
-    //       text: '打印标签',
-    //       click: btPrint,
-    //     ));
-    //   }
-    // } else {
-    //   if (data.children![0].partialWarehousing == '1') {
-    //     buttons.add(CombinationButton(
-    //       text: '报工',
-    //       click: btReport,
-    //       combination: Combination.left,
-    //     ));
-    //     buttons.add(CombinationButton(
-    //       text: '取消报工',
-    //       click: btCancelReport,
-    //       combination: Combination.middle,
-    //     ));
-    //     buttons.add(CombinationButton(
-    //       text: '入库',
-    //       click: btWarehouse,
-    //       combination: Combination.right,
-    //     ));
-    //   } else {
-    //     buttons.add(CombinationButton(
-    //       text: '报工',
-    //       click: btReport,
-    //       combination: Combination.left,
-    //     ));
-    //     buttons.add(CombinationButton(
-    //       text: '取消报工',
-    //       click: btCancelReport,
-    //       combination: Combination.right,
-    //     ));
-    //   }
-    // }
+    if (data.printLabel == '1') {
+      if (data.children![0].partialWarehousing == '1') {
+        buttons.add(CombinationButton(
+          text: '打印标签',
+          click: btPrint,
+          combination: Combination.left,
+        ));
+        buttons.add(CombinationButton(
+          text: '入库',
+          click: btWarehouse,
+          combination: Combination.right,
+        ));
+      } else {
+        buttons.add(CombinationButton(
+          text: '打印标签',
+          click: btPrint,
+        ));
+      }
+    } else {
+      if (data.children![0].partialWarehousing == '1') {
+        buttons.add(CombinationButton(
+          text: '报工',
+          click: btReport,
+          combination: Combination.left,
+        ));
+        buttons.add(CombinationButton(
+          text: '取消报工',
+          click: btCancelReport,
+          combination: Combination.middle,
+        ));
+        buttons.add(CombinationButton(
+          text: '入库',
+          click: btWarehouse,
+          combination: Combination.right,
+        ));
+      } else {
+        buttons.add(CombinationButton(
+          text: '报工',
+          click: btReport,
+          combination: Combination.left,
+        ));
+        buttons.add(CombinationButton(
+          text: '取消报工',
+          click: btCancelReport,
+          combination: Combination.right,
+        ));
+      }
+    }
     return buttons;
   }
 

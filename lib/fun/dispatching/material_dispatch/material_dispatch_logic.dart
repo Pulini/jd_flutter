@@ -312,4 +312,26 @@ class MaterialDispatchLogic extends GetxController {
       }
     });
   }
+
+  subItemCancelReport(Children subData) {
+    httpPost(
+      loading: '正在取消报工...',
+      method: webApiProcessOutPutReport,
+      body: [
+        {
+          'ScProcessWorkCardInterID': subData.interID,
+          'RouteEntryFID': subData.routeEntryFID,
+          'RouteEntryFIDs': subData.routeEntryFIDs,
+          'UserID': userInfo?.userID,
+        }
+      ].toList(),
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        successDialog(
+            content: response.message, back: () => query(refresh: () {}));
+      } else {
+        errorDialog(content: response.message);
+      }
+    });
+  }
 }

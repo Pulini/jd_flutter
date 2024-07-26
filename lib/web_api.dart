@@ -538,3 +538,4 @@ const webApiProcessOutPutReport= 'api/CompoundDispatching/ProcessOutPutReport1';
 
 ///取件码-生产入库
 const webApiPickCodeProductionWarehousing= 'api/CompoundDispatching/PickCodeProductionWarehousing';
+
