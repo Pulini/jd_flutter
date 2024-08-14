@@ -1,13 +1,15 @@
+import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../bean/home_button.dart';
+import '../bean/http/response/home_function_info.dart';
 import '../constant.dart';
 import '../utils.dart';
 import '../widget/custom_widget.dart';
+import '../widget/dialogs.dart';
 import 'home_logic.dart';
 import 'home_setting_view.dart';
 
@@ -21,8 +23,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final logic = Get.put(HomeLogic());
   final state = Get.find<HomeLogic>().state;
-
-  var controller = RefreshController(initialRefresh: true);
+  var controller = EasyRefreshController(controlFinishRefresh: true);
 
   _appBar() {
     return AppBar(
@@ -42,10 +43,7 @@ class _HomePageState extends State<HomePage> {
           borderRadius: BorderRadius.circular(20),
         ),
         placeholder: 'home_top_search'.tr,
-        onChanged: (String value) {
-          state.search = value;
-          state.refreshButton();
-        },
+        onChanged: (v) => logic.search(v),
       ),
       backgroundColor: Colors.transparent,
       actions: [
@@ -70,7 +68,11 @@ class _HomePageState extends State<HomePage> {
       onTap: () => item.hasUpdate
           ? upData()
           : item.route.isEmpty
-              ? showSnackBar(title: '无路由', message: '该功能暂未开放')
+              ? showSnackBar(
+                  title: '无路由',
+                  message: '该功能暂未开放',
+                  isWarning: true,
+                )
               : Get.toNamed(item.route),
       enabled: item.hasUpdate ? true : item.hasPermission,
       leading: Image.network(
@@ -160,48 +162,74 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  _navigationBar(HomeFunctions bar) {
+    return BottomNavigationBarItem(
+      icon: Image.network(
+        bar.icon ?? '',
+        width: 30,
+        height: 30,
+        color: bar.getTextColor(),
+        errorBuilder: (bc, o, st) => Image.asset(
+          'lib/res/images/ic_logo.png',
+          height: 30,
+          width: 30,
+          color: bar.getTextColor(),
+        ),
+      ),
+      label: bar.className ?? 'Fun',
+      backgroundColor: bar.getBKGColor(),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
     _methodChannel();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      getVersionInfo(
+        false,
+        noUpdate: () {
+          controller.callRefresh();
+        },
+        needUpdate: (versionInfo) => doUpdate(versionInfo),
+      );
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: backgroundColor,
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        appBar: _appBar(),
-        body: SmartRefresher(
-          controller: controller,
-          enablePullDown: true,
-          onRefresh: () => logic.refreshFunList(
-            refresh: () => setState(() => controller.refreshCompleted()),
+      child: Obx(
+        () => Scaffold(
+          backgroundColor: Colors.transparent,
+          appBar: _appBar(),
+          body: EasyRefresh(
+            controller: controller,
+            header: const MaterialHeader(),
+            onRefresh: () => logic.refreshFunList(
+              refresh: () => controller.finishRefresh(),
+            ),
+            child: ListView.builder(
+              padding: const EdgeInsets.all(8),
+              itemCount: state.buttons.length,
+              itemBuilder: (BuildContext context, int index) =>
+                  _item(state.buttons[index], index),
+            ),
           ),
-          header: const WaterDropHeader(),
-          child: ListView.builder(
-            padding: const EdgeInsets.all(8),
-            itemCount: state.buttons.length,
-            itemBuilder: (BuildContext context, int index) =>
-                _item(state.buttons[index], index),
-          ),
+          bottomNavigationBar: state.navigationBar.isEmpty
+              ? null
+              : BottomNavigationBar(
+                  // type: BottomNavigationBarType.fixed,
+                  type: BottomNavigationBarType.shifting,
+                  items: [
+                    for (var bar in state.navigationBar) _navigationBar(bar)
+                  ],
+                  currentIndex: state.nBarIndex,
+                  selectedItemColor: state.navigationBar[0].getTextColor(),
+                  onTap: (i) => logic.navigationBarClick(i),
+                ),
         ),
-        bottomNavigationBar: state.navigationBar.isEmpty
-            ? null
-            : BottomNavigationBar(
-                // type: BottomNavigationBarType.fixed,
-                type: BottomNavigationBarType.shifting,
-                items: state.navigationBar,
-                currentIndex: state.navigationBarIndex,
-                selectedItemColor: state.selectedItemColor,
-                onTap: (index) {
-                  setState(() {
-                    state.navigationBarIndex = index;
-                  });
-                  state.refreshButton();
-                },
-              ),
       ),
     );
   }
@@ -209,6 +237,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void dispose() {
     Get.delete<HomeLogic>();
+    controller.dispose();
     super.dispose();
   }
 }

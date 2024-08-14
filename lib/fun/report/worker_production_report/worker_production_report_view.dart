@@ -23,71 +23,58 @@ class _WorkerProductionReportPageState
   @override
   Widget build(BuildContext context) {
     return pageBodyWithDrawer(
-      
       queryWidgets: [
         OptionsPicker(pickerController: logic.pickerControllerDepartment),
         DatePicker(pickerController: logic.pickerControllerDate),
       ],
       query: () => logic.query(),
-      body: Obx(() => ListView.builder(
-            padding: const EdgeInsets.all(8),
-            itemCount: state.dataList.length,
-            itemBuilder: (BuildContext context, int index) => Card(
-              child: ExpansionTile(
-                backgroundColor: Colors.white,
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                ),
-                title: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text.rich(
-                      TextSpan(
-                        children: [
-                          const TextSpan(text: '员工姓名：'),
-                          TextSpan(
-                            text: state.dataList[index].empName,
-                            style: const TextStyle(color: Colors.blueAccent),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Text.rich(
-                      TextSpan(
-                        children: [
-                          const TextSpan(text: '总产量:'),
-                          TextSpan(
-                            text: state.dataList[index].empFinishQty
-                                .toShowString(),
-                            style: const TextStyle(color: Colors.green),
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-                subtitle: Text('工序名称：${state.dataList[index].processName}'),
+      body: Obx(
+        () => ListView.builder(
+          padding: const EdgeInsets.all(8),
+          itemCount: state.dataList.length,
+          itemBuilder: (BuildContext context, int index) => Card(
+            child: ExpansionTile(
+              backgroundColor: Colors.white,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+              ),
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  for (ItemList item in state.dataList[index].itemList ?? [])
-                    Column(
-                      children: [
-                        const Divider(indent: 20, endIndent: 20),
-                        ListTile(
-                          title: Text(
-                            '物料：${item.materialName}',
-                            style: const TextStyle(color: Colors.grey),
-                          ),
-                          subtitle: Text(
-                            '数量：${item.empFinishQty.toShowString()}',
-                            style: const TextStyle(color: Colors.grey),
-                          ),
-                        ),
-                      ],
-                    )
+                  textSpan(
+                    hint: '员工姓名：',
+                    text: state.dataList[index].empName ?? '',
+                  ),
+                  textSpan(
+                    hint: '总产量：',
+                    text: state.dataList[index].empFinishQty.toShowString(),
+                    textColor: Colors.green,
+                  ),
                 ],
               ),
+              subtitle: Text('工序名称：${state.dataList[index].processName}'),
+              children: [
+                for (ItemList item in state.dataList[index].itemList ?? [])
+                  Column(
+                    children: [
+                      const Divider(indent: 20, endIndent: 20),
+                      ListTile(
+                        title: Text(
+                          '物料：${item.materialName}',
+                          style: const TextStyle(color: Colors.grey),
+                        ),
+                        subtitle: Text(
+                          '数量：${item.empFinishQty.toShowString()}',
+                          style: const TextStyle(color: Colors.grey),
+                        ),
+                      ),
+                    ],
+                  )
+              ],
             ),
-          )),
+          ),
+        ),
+      ),
     );
   }
 

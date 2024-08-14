@@ -2,12 +2,15 @@ import 'package:get/get.dart';
 
 import 'bean/home_button.dart';
 import 'bean/routes.dart';
+import 'fun/dispatching/machine_dispatch/machine_dispatch_report_view.dart';
+import 'fun/dispatching/machine_dispatch/machine_dispatch_view.dart';
 import 'fun/dispatching/material_dispatch/material_dispatch_view.dart';
 import 'fun/dispatching/production_dispatch/production_dispatch_detail_view.dart';
 import 'fun/dispatching/work_order_list/work_order_list_view.dart';
-import 'fun/manage/visit_register/visit_register_view.dart';
 import 'fun/dispatching/production_dispatch/production_dispatch_view.dart';
 import 'fun/management/property/property_view.dart';
+import 'fun/management/visit_register/visit_register_view.dart';
+import 'fun/other/sacn/part_process_scan/part_process_scan_view.dart';
 import 'fun/report/daily_report/daily_report_view.dart';
 import 'fun/report/molding_pack_area_report/molding_pack_area_report_view.dart';
 import 'fun/report/molding_scan_bulletin_report/molding_scan_bulletin_report_maximize_view.dart';
@@ -19,8 +22,6 @@ import 'fun/report/view_instruction_details/view_instruction_details_view.dart';
 import 'fun/report/view_process_specification/view_process_specification_view.dart';
 import 'fun/report/worker_production_detail/worker_production_detail_view.dart';
 import 'fun/report/worker_production_report/worker_production_report_view.dart';
-import 'fun/report/workshop_production_daily_report/workshop_production_daily_report_view.dart';
-import 'fun/sacn/part_process_scan/part_process_scan_view.dart';
 import 'home/home_view.dart';
 import 'web_api.dart';
 import 'login/login_view.dart';
@@ -50,12 +51,6 @@ class RouteConfig {
     const ProductionDayReportPage(),
   );
 
-  ///车间生产日报表
-  static Routes workshopProductionDailyReport = Routes(
-    '/workshop_production_daily_report',
-    99,
-    const WorkshopProductionDailyReportPage(),
-  );
 
   ///查看指令明细
   static Routes viewInstructionDetails = Routes(
@@ -162,12 +157,25 @@ class RouteConfig {
     const MaterialDispatchPage(),
   );
 
+  ///机台派工单
+  static Routes machineDispatchPage = Routes(
+    '/machine_dispatch_page',
+    99,
+    const MachineDispatchPage(),
+  );
+
+  ///机台派工单汇报
+  static Routes machineDispatchReportPage = Routes(
+    '/machine_dispatch_report_page',
+    99,
+    const MachineDispatchReportPage(),
+  );
+
   ///本地功能入口列表
   static List<Routes> routeList = [
     dailyReport,
     productionSummaryTable,
     productionDayReport,
-    workshopProductionDailyReport,
     viewInstructionDetails,
     workerProductionReport,
     workerProductionDetail,
@@ -182,6 +190,8 @@ class RouteConfig {
     workOrderListPage,
     partProcessScanPage,
     materialDispatchPage,
+    machineDispatchPage,
+    machineDispatchReportPage,
   ];
 
   static List<GetPage> appRoutes = [
@@ -205,10 +215,6 @@ class RouteConfig {
     GetPage(
       name: productionDayReport.name,
       page: () => productionDayReport.page,
-    ),
-    GetPage(
-      name: workshopProductionDailyReport.name,
-      page: () => workshopProductionDailyReport.page,
     ),
     GetPage(
       name: viewInstructionDetails.name,
@@ -269,6 +275,14 @@ class RouteConfig {
     GetPage(
       name: materialDispatchPage.name,
       page: () => materialDispatchPage.page,
+    ),
+    GetPage(
+      name: machineDispatchPage.name,
+      page: () => machineDispatchPage.page,
+    ),
+    GetPage(
+      name: machineDispatchReportPage.name,
+      page: () => machineDispatchReportPage.page,
     ),
   ];
 }

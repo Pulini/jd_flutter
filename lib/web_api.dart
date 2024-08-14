@@ -32,8 +32,14 @@ const testUrlForMES = 'https://geapptest.goldemperor.com:1224/';
 ///SAP正式库
 const baseUrlForSAP = 'https://erpprd01.goldemperor.com:8003/';
 
-///SAP测试库
-const testUrlForSAP = 'https://erpqas01.goldemperor.com:8002/';
+///SAP开发库
+const developUrlForSAP = 'https://erpqas01.goldemperor.com:8001/';
+
+///SAP正式库
+const baseClientForSAP = 800;
+
+///SAP开发库
+const developClientForSAP = 300;
 
 /// 日志工具
 var logger = Logger();
@@ -84,7 +90,10 @@ Future<BaseData> sapPost({
 }) {
   return _doHttp(
     loading: loading,
-    params: params,
+    params: {
+      'sap-client':baseClientForSAP,
+      ...?params
+    },
     body: body,
     baseUrl: baseUrlForSAP,
     isPost: true,
@@ -102,10 +111,13 @@ Future<BaseData> _doHttp({
   Object? body,
 }) async {
   ///用于开发时切换测试库，打包时必须屏蔽
-  // baseUrl = baseUrl == baseUrlForSAP ? testUrlForSAP : testUrlForMES;
+  // baseUrl = baseUrl == baseUrlForSAP ? developUrlForSAP : testUrlForMES;
   ///------------------------------------------------
-
-  snackbarController?.close(withAnimations: false);
+  try{
+    snackbarController?.close(withAnimations: false);
+  }catch(e){
+    logger.f('销毁snackbar异常');
+  }
   if (loading != null && loading.isNotEmpty) {
     loadingDialog(loading);
   }
@@ -538,4 +550,33 @@ const webApiProcessOutPutReport= 'api/CompoundDispatching/ProcessOutPutReport1';
 
 ///取件码-生产入库
 const webApiPickCodeProductionWarehousing= 'api/CompoundDispatching/PickCodeProductionWarehousing';
+
+///获取工序派工单列表
+const webApiGetWorkCardList= 'api/CompoundDispatching/GetScWorkCardListJinZhen';
+
+///获取工序派工单详情
+const webApiGetWorkCardDetail= 'api/CompoundDispatching/GetScWorkCardDetailJinZhen';
+
+///获取已入库的贴标列表
+const webApiSapGetMaterialDispatchLabelList= 'sap/zapp/ZFUN_APP_BARCODE_FETCH';
+
+///机台派工单--贴标维护
+const webApiSapMaterialDispatchLabelMaintain= 'sap/zapp/ZFUN_APP_BARCODE_MAINTAIN';
+
+///验证码发送接口
+const webApiSendManagerCode= 'api/Public/SendManagerCode';
+
+///验证人员
+const webApiCheckManagerByCode= 'api/Public/CheckManagerByCode';
+
+///上班尾数标识状态修改_金臻
+const webApiCleanOrRecoveryLastQty= 'api/CompoundDispatching/UpdateLastScWorkCardMantissaFlagJinZhen';
+
+///修改派工表_金臻
+const webApiModifyWorkCardItem= 'api/CompoundDispatching/UpdateScWorkCardJinZhen';
+
+///生成报工产量表_金臻
+const webApiReportDispatch= 'api/CompoundDispatching/SubmitScWorkCardReportJinZhen';
+
+
 

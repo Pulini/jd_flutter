@@ -1,7 +1,6 @@
 import 'package:get/get.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 
-import '../../../web_api.dart';
 import 'part_process_scan_state.dart';
 
 class PartProcessScanLogic extends GetxController {
@@ -35,29 +34,6 @@ class PartProcessScanLogic extends GetxController {
       showSnackBar(title: '错误', message: '没有可提交的条码', isWarning: true);
       return;
     }
-    httpPost(
-      method: webApiGetPartProcessReportedReport,
-      loading: '正在获取汇总信息...',
-      body: {
-        'BarCodeList': state.barCodeList.toList(),
-      },
-    ).then((response) {
-
-      // if (response.resultCode == resultSuccess) {
-      //   var data = ScanBarcodeReportedReportInfo.fromJson(
-      //     response.data,
-      //   );
-      //   var report = <ReportInfo>[];
-      //   data.reportList?.where((v) => v.type == '0').forEach((v) {
-      //     report.add(v);
-      //   });
-      //   groupBy(report,(v) => v.name).forEach((key, value) {
-      //     state.reportProcessList.add(value);
-      //     state.reportSelectList.add(false);
-      //   });
-      // } else {
-      //   errorDialog(content: response.message);
-      // }
-    });
+    state.getPartProcessReportedReport();
   }
 }

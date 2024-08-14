@@ -6,7 +6,7 @@ import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
 import '../../../bean/http/response/part_detail_info.dart';
-import '../../sacn/part_process_scan/part_process_scan_view.dart';
+import '../../other/sacn/part_process_scan/part_process_scan_view.dart';
 
 class PartLabelPage extends StatefulWidget {
   const PartLabelPage({super.key});

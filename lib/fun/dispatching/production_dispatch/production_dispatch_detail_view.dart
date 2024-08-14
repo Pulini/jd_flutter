@@ -511,8 +511,7 @@ class _ProductionDispatchDetailPageState
                 CombinationButton(
                   combination: Combination.middle,
                   text: '工艺指导书',
-                  click: () => logic.getManufactureInstructions(
-                    state.workProcedure[0].routingID??0,
+                  click: () => logic.detailViewGetManufactureInstructions(
                     (list) => manufactureInstructionsDialog(list),
                   ),
                 ),

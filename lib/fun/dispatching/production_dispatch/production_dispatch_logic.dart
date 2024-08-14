@@ -4,22 +4,17 @@ import 'package:collection/collection.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/dispatching/production_dispatch/production_dispatch_detail_view.dart';
 import 'package:jd_flutter/utils.dart';
-import '../../../bean/http/request/production_dispatch_push.dart';
 import '../../../bean/http/response/order_color_list.dart';
 import '../../../bean/production_dispatch.dart';
-import '../../../bean/http/request/production_dispatch.dart';
-import '../../../bean/http/request/send_dispatch_to_wechat.dart';
 import '../../../bean/http/response/manufacture_instructions_info.dart';
-import '../../../bean/http/response/prd_route_info.dart';
 import '../../../bean/http/response/production_dispatch_order_detail_info.dart';
 import '../../../bean/http/response/production_dispatch_order_info.dart';
 import '../../../bean/http/response/work_plan_material_info.dart';
-import '../../../web_api.dart';
 import '../../../route.dart';
 import '../../../widget/custom_widget.dart';
 import '../../../widget/dialogs.dart';
 import '../../../widget/picker/picker_controller.dart';
-import '../../maintain_label/maintain_label_view.dart';
+import '../../other/maintain_label/maintain_label_view.dart';
 import '../../report/production_materials_report/production_materials_report_view.dart';
 import 'production_dispatch_state.dart';
 
@@ -93,173 +88,98 @@ class ProductionDispatchLogic extends GetxController {
 
   ///工单查询
   query({bool isRefresh = false}) {
-    httpGet(
-      method: webApiGetWorkCardCombinedSizeList,
-      loading: '正在查询工单',
-      params: {
-        'startTime': dpcStartDate.getDateFormatYMD(),
-        'endTime': dpcEndDate.getDateFormatYMD(),
-        'moNo': state.etInstruction,
-        'isClose': state.isSelectedClosed,
-        'isOutsourcing': state.isSelectedOutsourcing,
-        'deptID': userInfo?.departmentID,
+    state.query(
+      startTime: dpcStartDate.getDateFormatYMD(),
+      endTime: dpcEndDate.getDateFormatYMD(),
+      success: (isNotEmpty) {
+        if (isNotEmpty && !isRefresh) Get.back();
       },
-    ).then((response) {
-      if (response.resultCode == resultSuccess) {
-        state.orderList.value = [
-          for (var i = 0; i < response.data.length; ++i)
-            ProductionDispatchOrderInfo.fromJson(response.data[i])
-        ];
-        state.orderGroupList.value = groupBy(
-          state.orderList,
-          (ProductionDispatchOrderInfo e) =>
-              e.sapOrderBill.ifEmpty(e.orderBill ?? ''),
-        );
-        if (state.orderList.isNotEmpty && !isRefresh) Get.back();
-      } else {
-        state.orderList.value = [];
-        errorDialog(content: response.message);
-      }
-    });
-  }
-
-  getSelectOne(Function(ProductionDispatchOrderInfo) callback) {
-    List<ProductionDispatchOrderInfo> select =
-        state.orderList.where((v) => v.select).toList();
-    if (select.isNotEmpty) {
-      callback.call(select[0]);
-    }
+      error: (msg) => errorDialog(content: msg),
+    );
   }
 
   ///生产订单用料表
   orderMaterialList() {
-    getSelectOne((v) => Get.to(() => const ProductionMaterialsReportPage(),
-        arguments: {'interID': v.interID}));
+    state.getSelectOne(
+      (v) => Get.to(
+        () => const ProductionMaterialsReportPage(),
+        arguments: {'interID': v.interID},
+      ),
+    );
   }
 
   ///指令表
   instructionList(Function(String url) callback) {
-    getSelectOne((v) => httpGet(
-          method: webApiGetProductionOrderPDF,
-          loading: '正在查询指令表...',
-          params: {'orderBill': v.orderBill},
-        ).then((response) {
-          if (response.resultCode == resultSuccess) {
-            callback.call(response.data);
-          } else {
-            errorDialog(content: response.message);
-          }
-        }));
+    state.instructionList(
+      success: callback,
+      error: (msg) => errorDialog(content: msg),
+    );
   }
 
   ///工艺指导书
   processSpecification(Function(List<ManufactureInstructionsInfo>) callback) {
-    getSelectOne(
-        (v) => getManufactureInstructions(v.routingID.toIntTry(), callback));
+    state.getSelectOne(
+      (v) => state.getManufactureInstructions(
+        routeID: v.routingID.toIntTry(),
+        success: callback,
+        error: (msg) => errorDialog(content: msg),
+      ),
+    );
   }
 
   ///配色单列表
   colorMatching(Function(List<OrderColorList>, String) callback) {
-    getSelectOne((v) => httpGet(
-          method: webApiGetMatchColors,
-          loading: '正在获取配色信息...',
-          params: {'planBill': v.planBill},
-        ).then((response) {
-          if (response.resultCode == resultSuccess) {
-            callback.call([
-              for (var i = 0; i < response.data.length; ++i)
-                OrderColorList.fromJson(response.data[i])
-            ], v.planBill ?? '');
-          } else {
-            errorDialog(content: response.message);
-          }
-        }));
+    state.colorMatching(
+      success: callback,
+      error: (msg) => errorDialog(content: msg),
+    );
   }
 
   getColorPdf(String code, String id, Function(String) callback) {
-    httpGet(
-      method: webApiGetMatchColorsPDF,
-      loading: '正在获取配色文件...',
-      params: {
-        'planBill': id,
-        'materialCode': code,
-      },
-    ).then((response) {
-      if (response.resultCode == resultSuccess) {
-        callback.call(response.data);
-      } else {
-        errorDialog(content: response.message);
-      }
-    });
+    state.getColorPdf(
+      code: code,
+      id: id,
+      success: callback,
+      error: (msg) => errorDialog(content: msg),
+    );
   }
 
   ///打开/关闭工序
   offOnProcess() {
-    getSelectOne((v) {
-      httpPost(
-        method: webApiChangeWorkCardStatus,
-        loading: '正在获取配色文件...',
-        params: {
-          'Number': v.orderBill,
-          'CloseStatus': v.state?.contains('未关闭'),
-          'UserID': userInfo?.userID,
-        },
-      ).then((response) {
-        if (response.resultCode == resultSuccess) {
-          query(isRefresh: true);
-        } else {
-          errorDialog(content: response.message);
-        }
-      });
-    });
+    state.offOnProcess(
+      success: () => query(isRefresh: true),
+      error: (msg) => errorDialog(content: msg),
+    );
   }
 
   ///删除下游工序
   deleteDownstream() {
-    getSelectOne((v) {
-      httpPost(
-        method: webApiDeleteScProcessWorkCard,
-        loading: '正在删除下游工序...',
-        params: {'WorkCardID': v.interID},
-      ).then((response) {
-        if (response.resultCode == resultSuccess) {
-          query(isRefresh: true);
-        } else {
-          errorDialog(content: response.message);
-        }
-      });
-    });
+    state.deleteDownstream(
+      success: () => query(isRefresh: true),
+      error: (msg) => errorDialog(content: msg),
+    );
   }
 
   ///删除上一次报工
   deleteLastReport() {
-    getSelectOne((v) {
-      httpPost(
-        method: webApiDeleteLastReport,
-        loading: '正在删除上次报工...',
-        params: {
-          'WorkCardInterID': v.interID,
-          'UserID': userInfo?.userID,
-        },
-      ).then((response) {
-        if (response.resultCode == resultSuccess) {
-          query(isRefresh: true);
-        } else {
-          errorDialog(content: response.message);
-        }
-      });
-    });
+    state.deleteLastReport(
+      success: () => query(isRefresh: true),
+      error: (msg) => errorDialog(content: msg),
+    );
   }
 
   ///贴标维护
   labelMaintenance() {
     if (checkUserPermission('1051106')) {
-      getSelectOne((v) {
-        Get.to(const MaintainLabelPage(), arguments: {
-          'materialCode': v.materialCode,
-          'interID': v.interID,
-          'isMaterialLabel': false,
-        });
+      state.getSelectOne((v) {
+        Get.to(
+          const MaintainLabelPage(),
+          arguments: {
+            'materialCode': v.materialCode,
+            'interID': v.interID,
+            'isMaterialLabel': false,
+          },
+        );
       });
     } else {
       showSnackBar(title: '错误', message: '您没有标签打印权限', isWarning: true);
@@ -268,59 +188,16 @@ class ProductionDispatchLogic extends GetxController {
 
   ///更新领料配套数
   updateSap() {
-    getSelectOne((v) {
-      httpPost(
-        method: webApiUpdateSAPPickingSupportingQty,
-        loading: '正在更新领料配套数...',
-        params: {'InterID': v.interID},
-      ).then((response) {
-        if (response.resultCode == resultSuccess) {
-          query(isRefresh: true);
-        } else {
-          errorDialog(content: response.message);
-        }
-      });
-    });
+    state.updateSap(
+      success: () => query(isRefresh: true),
+      error: (msg) => errorDialog(content: msg),
+    );
   }
 
   getSurplusMaterial(Function(List<Map>) callback) {
-    var surplusMaterial = <Map>[];
-    getSelectOne((v) {
-      if (v.stubBar1?.isNotEmpty == true &&
-          v.stubBarName1?.isNotEmpty == true) {
-        surplusMaterial.add({
-          'StubBar': v.stubBar1,
-          'StubBarName': v.stubBarName1,
-        });
-      }
-      if (v.stubBar2?.isNotEmpty == true &&
-          v.stubBarName2?.isNotEmpty == true) {
-        surplusMaterial.add({
-          'StubBar': v.stubBar2,
-          'StubBarName': v.stubBarName2,
-        });
-      }
-      if (v.stubBar2?.isNotEmpty == true &&
-          v.stubBarName3?.isNotEmpty == true) {
-        surplusMaterial.add({
-          'StubBar': v.stubBar2,
-          'StubBarName': v.stubBarName2,
-        });
-      }
-      // surplusMaterial.add({
-      //   'StubBar':'LT000001',
-      //   'StubBarName': '料头打印测试数据1',
-      // });
-      // surplusMaterial.add({
-      //   'StubBar':'LT000002',
-      //   'StubBarName': '料头打印测试数据2',
-      // });
-      // surplusMaterial.add({
-      //   'StubBar':'LT000003',
-      //   'StubBarName': '料头打印测试数据3',
-      // });
-      if (surplusMaterial.isNotEmpty) {
-        callback.call(surplusMaterial);
+    state.getSurplusMaterial((list) {
+      if (list.isNotEmpty) {
+        callback.call(list);
       } else {
         showSnackBar(title: '错误', message: '无物料头信息', isWarning: true);
       }
@@ -332,34 +209,26 @@ class ProductionDispatchLogic extends GetxController {
 
   double getReportMax() {
     var max = 0.0;
-    getSelectOne((v) => max = v.workNumberTotal.add(v.reportedUnentered ?? 0));
+    state.getSelectOne(
+      (v) => max = v.workNumberTotal.add(v.reportedUnentered ?? 0),
+    );
     return max;
   }
 
   ///报工SAP
   reportToSap(double qty) {
-    getSelectOne((v) {
-      httpPost(
-        method: webApiReportSAPByWorkCardInterID,
-        loading: '正在报工到SAP...',
-        params: {
-          'InterID': v.interID,
-          'Qty': qty,
-          'UserID': userInfo?.userID,
-        },
-      ).then((response) {
-        if (response.resultCode == resultSuccess) {
-          query(isRefresh: true);
-        } else {
-          errorDialog(content: response.message);
-        }
-      });
-    });
+    state.reportToSap(
+      qty: qty,
+      success: () => query(isRefresh: true),
+      error: (msg) => errorDialog(content: msg),
+    );
   }
 
   ///工单下推检查
-  pushCheck(Function(ProductionDispatchOrderInfo) orderPush,
-      Function(List<ProductionDispatchOrderInfo>) ordersPush) {
+  pushCheck(
+    Function(ProductionDispatchOrderInfo) orderPush,
+    Function(List<ProductionDispatchOrderInfo>) ordersPush,
+  ) {
     if (checkUserPermission('1051102')) {
       var selectList = state.orderList.where((v) => v.select).toList();
       if (selectList.length > 1) {
@@ -390,70 +259,28 @@ class ProductionDispatchLogic extends GetxController {
 
   ///工单下推
   push() {
-    pushCheck((order) {
-      httpPost(
-        method: webApiPushProductionOrder,
-        loading: '正在下推...',
-        params: {
-          'interID': order.interID,
-          'entryID': order.entryID,
-          'organizeID': userInfo?.organizeID,
-          'userID': userInfo?.userID,
-          'departmentID': userInfo?.departmentID,
-        },
-      ).then((response) {
-        if (response.resultCode == resultSuccess) {
-          var data = ProductionDispatchOrderDetailInfo.fromJson(
-            response.data,
-          );
-          if (data.workCardList?.isEmpty == true) {
+    pushCheck(
+      (order) => state.orderPush(
+        order: order,
+        success: (detailInfo) {
+          if (detailInfo.workCardList?.isEmpty == true) {
             errorDialog(content: '暂无工序列表');
           } else {
-            state.workCardTitle.value = data.workCardTitle ?? WorkCardTitle();
-            state.workProcedure.value = data.workCardList ?? <WorkCardList>[];
+            state.workCardTitle.value =
+                detailInfo.workCardTitle ?? WorkCardTitle();
+            state.workProcedure.value =
+                detailInfo.workCardList ?? <WorkCardList>[];
             Get.to(() => const ProductionDispatchDetailPage());
           }
-        } else {
-          errorDialog(content: response.message);
-        }
-      });
-    }, (orders) {
-      // var planBills = '';
-      // var routeBillNumber = <String>[];
-      // var interIdList = <int>[];
-
-      // for (var order in orders) {
-      //   routeBillNumber.add(order.routeBillNumber ?? '');
-      //   planBills += '${order.planBill},';
-      //   interIdList.add(order.interID ?? 0);
-      // }
-      var body = <ProductionDispatchPush>[];
-      groupBy(orders, (v) => v.interID).forEach((key, value) {
-        var sub = <ProductionDispatchPushSub>[];
-        for (var v in value) {
-          sub.add(ProductionDispatchPushSub(entryID: key, interID: v.interID));
-        }
-        body.add(ProductionDispatchPush(
-            organizeID: userInfo?.organizeID,
-            userID: userInfo?.userID,
-            departmentID: userInfo?.departmentID,
-            workCardItems: sub));
-      });
-
-      httpPost(
-        method: webApiBatchPushProductionOrder,
-        loading: '正在下推...',
-        body: body,
-      ).then((response) {
-        if (response.resultCode == resultSuccess) {
-          // var data = ProductionDispatchOrderDetailInfo.fromJson(
-          //   response.data,
-          // );
-        } else {
-          errorDialog(content: response.message);
-        }
-      });
-    });
+        },
+        error: (msg) => errorDialog(content: msg),
+      ),
+      (orders) => state.ordersPush(
+        orders: orders,
+        success: () {},
+        error: (msg) => errorDialog(content: msg),
+      ),
+    );
   }
 
   ///获取以选中的员工列表
@@ -859,100 +686,51 @@ class ProductionDispatchLogic extends GetxController {
     state.isCheckedSelectAllDispatch = false;
   }
 
-  getManufactureInstructions(
-    int routeID,
+  ///工艺书
+  detailViewGetManufactureInstructions(
     Function(List<ManufactureInstructionsInfo>) callback,
   ) {
-    httpGet(
-      method: webApiGetManufactureInstructions,
-      loading: '正在查询工艺指导书...',
-      params: {'RouteID': routeID},
-    ).then((response) {
-      if (response.resultCode == resultSuccess) {
-        callback.call([
-          for (var i = 0; i < response.data.length; ++i)
-            ManufactureInstructionsInfo.fromJson(response.data[i])
-        ]);
-      } else {
-        errorDialog(content: response.message);
-      }
-    });
+    state.getManufactureInstructions(
+      routeID: state.workProcedure[0].routingID ?? 0,
+      success: callback,
+      error: (msg) => errorDialog(content: msg),
+    );
   }
 
   getWorkPlanMaterial(
     Function(List<WorkPlanMaterialInfo>) callback,
   ) {
-    httpGet(
-      method: webApiGetWorkPlanMaterial,
-      loading: '正在查询用料清单...',
-      params: {'InterID': state.orderList.firstWhere((v) => v.select).interID},
-    ).then((response) {
-      if (response.resultCode == resultSuccess) {
-        callback.call([
-          for (var i = 0; i < response.data.length; ++i)
-            WorkPlanMaterialInfo.fromJson(response.data[i])
-        ]);
-      } else {
-        errorDialog(content: response.message);
-      }
-    });
+    state.getWorkPlanMaterial(
+      success: callback,
+      error: (msg) => errorDialog(content: msg),
+    );
   }
 
   getPrdRouteInfo() {
-    httpGet(
-      method: webApiGetPrdRouteInfo,
-      loading: '正在查询工艺路线...',
-      params: {
-        'BillNo': state.orderList.firstWhere((v) => v.select).routeBillNumber
-      },
-    ).then((response) {
-      if (response.resultCode == resultSuccess) {
-        var prList = <PrdRouteInfo>[
-          for (var i = 0; i < response.data.length; ++i)
-            PrdRouteInfo.fromJson(response.data[i])
-        ];
-
+    state.getPrdRouteInfo(
+      success: (list) {
         for (var wp in state.workProcedure) {
-          prList.removeWhere((v) => v.processNumber == wp.processNumber);
+          list.removeWhere((v) => v.processNumber == wp.processNumber);
         }
-        if (prList.isEmpty) {
+        if (list.isEmpty) {
           successDialog(content: '工序正确！');
         } else {
           var msg = '';
-          for (var v in prList) {
+          for (var v in list) {
             msg = '$msg工序<${v.processNumber}_${v.processName}>缺失！\r\n';
           }
           errorDialog(content: msg);
         }
-      } else {
-        errorDialog(content: response.message);
-      }
-    });
+      },
+      error: (msg) => errorDialog(content: msg),
+    );
   }
 
   sendDispatchToWechat() {
-    var body = <SendDispatchToWechat>[];
-    state.workProcedure.where((v) => v.isOpen == 1).forEach((wp) {
-      for (var d in wp.dispatch) {
-        body.add(SendDispatchToWechat(
-          empID: d.empID ?? 0,
-          workOrderType:
-              '指令号：${state.orderList.firstWhere((v) => v.select).planBill}\r\n工厂型体：${state.workCardTitle.value.plantBody}\r\n工序：${d.processName}',
-          workOrderContent: '汇报数量：${d.qty.toShowString()}',
-        ));
-      }
-    });
-    httpPost(
-      method: webApiSendDispatchToWechat,
-      loading: '正在给员工发送派工信息...',
-      body: body,
-    ).then((response) {
-      if (response.resultCode == resultSuccess) {
-        successDialog(content: response.message);
-      } else {
-        errorDialog(content: response.message);
-      }
-    });
+    state.sendDispatchToWechat(
+      success: (msg) => successDialog(content: msg),
+      error: (msg) => errorDialog(content: msg),
+    );
   }
 
   checkDispatch(Function callback) {
@@ -997,28 +775,14 @@ class ProductionDispatchLogic extends GetxController {
   }
 
   productionDispatch() {
-    var pdBody = ProductionDispatch(userID: userInfo!.userID ?? 0, list: []);
-    state.workProcedure.where((v) => v.isOpen == 1).forEachIndexed((i1, wp) {
-      wp.dispatch.forEachIndexed((i2, d) {
-        if (d.qty! > 0) {
-          pdBody.list?.add(ProductionDispatchSub.of(di: d, wc: wp));
-        }
-      });
-    });
-    httpPost(
-      method: webApiProductionDispatch,
-      loading: '正在发送派工数据...',
-      body: pdBody,
-    ).then((response) {
-      if (response.resultCode == resultSuccess) {
+    state.productionDispatch(
+      success: (msg) {
         SaveDispatch.delete(
-          state.workCardTitle.value.processBillNumber ?? '',
-          () {},
+          processBillNumber: '${state.workCardTitle.value.processBillNumber}',
         );
-        successDialog(content: response.message);
-      } else {
-        errorDialog(content: response.message);
-      }
-    });
+        successDialog(content: msg);
+      },
+      error: (msg) => errorDialog(content: msg),
+    );
   }
 }

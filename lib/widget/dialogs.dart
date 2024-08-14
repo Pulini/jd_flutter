@@ -8,7 +8,6 @@ import 'package:get/get.dart';
 import '../bean/http/response/version_info.dart';
 import '../constant.dart';
 import '../web_api.dart';
-import '../login/login_logic.dart';
 import '../login/login_view.dart';
 import 'downloader.dart';
 
@@ -62,19 +61,19 @@ askDialog({
           TextButton(
             onPressed: () {
               Get.back();
+              confirm?.call();
+            },
+            child: Text('dialog_default_confirm'.tr),
+          ),
+          TextButton(
+            onPressed: () {
+              Get.back();
               cancel?.call();
             },
             child: Text(
               'dialog_default_cancel'.tr,
               style: const TextStyle(color: Colors.grey),
             ),
-          ),
-          TextButton(
-            onPressed: () {
-              Get.back();
-              confirm?.call();
-            },
-            child: Text('dialog_default_confirm'.tr),
           ),
         ],
       ),
@@ -313,60 +312,6 @@ doUpdate(VersionInfo version) {
 }
 
 reLoginPopup() {
-  var logic = Get.put(LoginLogic());
-  var state = Get.find<LoginLogic>().state;
-  var button = ElevatedButton(
-    style: ElevatedButton.styleFrom(
-      minimumSize: const Size(280, 50),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(25),
-      ),
-    ),
-    onPressed: () => logic.reLogin(),
-    child: Text(
-      'login'.tr,
-      style: const TextStyle(fontSize: 20),
-    ),
-  );
-  var popup = Container(
-    padding: const EdgeInsets.all(8.0),
-    decoration: const BoxDecoration(
-      borderRadius: BorderRadius.only(
-        topLeft: Radius.circular(20),
-        topRight: Radius.circular(20),
-      ),
-      gradient: LinearGradient(
-        colors: [Colors.lightBlueAccent, Colors.blueAccent],
-        begin: Alignment.bottomLeft,
-        end: Alignment.topRight,
-      ),
-    ),
-    child: Column(
-      children: [
-        Center(
-          child: Text(
-            're_login'.tr,
-            style: const TextStyle(
-                fontSize: 22,
-                color: Colors.white,
-                decoration: TextDecoration.none),
-          ),
-        ),
-        const SizedBox(height: 50),
-        Container(
-          width: 360,
-          height: 330,
-          padding: const EdgeInsets.only(left: 20, right: 20),
-          child: LoginInlet(logic: logic, state: state),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 30, right: 30),
-          child: button,
-        )
-      ],
-    ),
-  );
-
   showCupertinoModalPopup(
     context: Get.overlayContext!,
     barrierDismissible: false,
@@ -378,7 +323,34 @@ reLoginPopup() {
         padding: EdgeInsets.only(
           bottom: MediaQuery.of(context).viewInsets.bottom,
         ),
-        child: popup,
+        child: Container(
+          padding: const EdgeInsets.all(8.0),
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20),
+              topRight: Radius.circular(20),
+            ),
+            gradient: LinearGradient(
+              colors: [Colors.lightBlueAccent, Colors.blueAccent],
+              begin: Alignment.bottomLeft,
+              end: Alignment.topRight,
+            ),
+          ),
+          child: Column(
+            children: [
+              Center(
+                child: Text(
+                  're_login'.tr,
+                  style: const TextStyle(
+                      fontSize: 22,
+                      color: Colors.white,
+                      decoration: TextDecoration.none),
+                ),
+              ),
+              const Center(child: LoginPick(isReLogin: true)),
+            ],
+          ),
+        ),
       ),
     ),
   );

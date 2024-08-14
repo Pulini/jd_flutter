@@ -105,6 +105,7 @@ class _NumberTextFieldState extends State<NumberTextField> {
     return TextField(
       style: const TextStyle(color: Colors.white),
       keyboardType: TextInputType.number,
+      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
       controller: widget.numberController,
       focusNode: _numberFocusNode,
       decoration: widget.decoration,
@@ -183,12 +184,14 @@ class NumberDecimalEditText extends StatelessWidget {
     this.max = double.infinity,
     this.initQty = 0.0,
     this.hint,
+    this.helperText,
     this.hasFocus = false,
     required this.onChanged,
     this.controller,
   });
 
   final String? hint;
+  final String? helperText;
   final bool hasDecimal;
   final double? max;
   final double? initQty;
@@ -244,6 +247,8 @@ class NumberDecimalEditText extends StatelessWidget {
           }
         },
         decoration: InputDecoration(
+          helperText: helperText,
+          helperStyle: const TextStyle(color: Colors.blueAccent),
           contentPadding: const EdgeInsets.only(
             top: 0,
             bottom: 0,
@@ -270,99 +275,6 @@ class NumberDecimalEditText extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-///自定义输入框 根据工号查询员工
-class WorkerCheck extends StatefulWidget {
-  const WorkerCheck({super.key, required this.onChanged, this.hint});
-
-  final Function(WorkerInfo?) onChanged;
-  final String? hint;
-
-  @override
-  State<WorkerCheck> createState() => _WorkerCheckState();
-}
-
-class _WorkerCheckState extends State<WorkerCheck> {
-  var controller = TextEditingController();
-  var name = ''.obs;
-  var error = ''.obs;
-
-  getWorker({
-    required String number,
-    required Function(WorkerInfo) success,
-    required Function(String) error,
-  }) {
-    httpGet(method: webApiGetWorkerInfo, params: {
-      'EmpNumber': number,
-      'DeptmentID': '',
-    }).then((worker) {
-      if (worker.resultCode == resultSuccess) {
-        success.call(WorkerInfo.fromJson(worker.data[0]));
-      } else {
-        error.call(worker.message ?? '');
-      }
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-      child: Obx(() => TextField(
-            keyboardType: TextInputType.number,
-            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-            controller: controller,
-            onChanged: (s) {
-              if (s.length >= 6) {
-                getWorker(
-                    number: s,
-                    success: (worker) {
-                      name.value = worker.empName ?? '';
-                      error.value = '';
-                      widget.onChanged.call(worker);
-                    },
-                    error: (s) {
-                      name.value = '';
-                      error.value = s;
-                      widget.onChanged.call(null);
-                    });
-              } else {
-                name.value = '';
-                error.value = '';
-              }
-            },
-            decoration: InputDecoration(
-              contentPadding: const EdgeInsets.only(
-                top: 0,
-                bottom: 0,
-                left: 10,
-                right: 10,
-              ),
-              filled: true,
-              fillColor: Colors.grey[300],
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(30),
-                borderSide: const BorderSide(
-                  color: Colors.transparent,
-                ),
-              ),
-              border: const OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(30)),
-              ),
-              helperText: name.value,
-              helperStyle: TextStyle(color: Colors.green.shade700),
-              errorText: error.value.isNotEmpty ? error.value : null,
-              hintText: widget.hint?.isEmpty == true ? '请输入员工工号' : widget.hint,
-              hintStyle: const TextStyle(color: Colors.grey),
-              suffixIcon: IconButton(
-                icon: const Icon(Icons.close, color: Colors.grey),
-                onPressed: () => controller.clear(),
-              ),
-            ),
-          )),
     );
   }
 }
@@ -427,36 +339,107 @@ class NumberEditText extends StatelessWidget {
   }
 }
 
-expandedFrameText({
-  Function? click,
-  Color? borderColor,
-  Color? backgroundColor,
-  Color? textColor,
-  int? flex,
-  EdgeInsetsGeometry? padding,
-  AlignmentGeometry? alignment,
-  required String text,
-}) {
-  return Expanded(
-    flex: flex ?? 1,
-    child: GestureDetector(
-      onTap: () => click?.call(),
-      child: Container(
-        padding: padding ?? const EdgeInsets.all(5),
-        decoration: BoxDecoration(
-          border: Border.all(color: borderColor ?? Colors.grey),
-          color: backgroundColor ?? Colors.transparent,
-        ),
-        alignment: alignment ?? Alignment.centerLeft,
-        child: Text(
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          text,
-          style: TextStyle(color: textColor ?? Colors.black87),
+///自定义输入框 根据工号查询员工
+class WorkerCheck extends StatefulWidget {
+  const WorkerCheck({super.key, required this.onChanged, this.hint});
+
+  final Function(WorkerInfo?) onChanged;
+  final String? hint;
+
+  @override
+  State<WorkerCheck> createState() => _WorkerCheckState();
+}
+
+class _WorkerCheckState extends State<WorkerCheck> {
+  var controller = TextEditingController();
+  var name = ''.obs;
+  var error = ''.obs;
+
+  getWorker({
+    required String number,
+    required Function(WorkerInfo) success,
+    required Function(String) error,
+  }) {
+    httpGet(method: webApiGetWorkerInfo, params: {
+      'EmpNumber': number,
+      'DeptmentID': '',
+    }).then((worker) {
+      if (worker.resultCode == resultSuccess) {
+        success.call(WorkerInfo.fromJson(worker.data[0]));
+      } else {
+        error.call(worker.message ?? '');
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+      child: Obx(
+        () => TextField(
+          keyboardType: TextInputType.number,
+          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+          controller: controller,
+          onChanged: (s) {
+            if (s.length >= 6) {
+              getWorker(
+                  number: s,
+                  success: (worker) {
+                    name.value = worker.empName ?? '';
+                    error.value = '';
+                    widget.onChanged.call(worker);
+                  },
+                  error: (s) {
+                    name.value = '';
+                    error.value = s;
+                    widget.onChanged.call(null);
+                  });
+            } else {
+              name.value = '';
+              error.value = '';
+              widget.onChanged.call(null);
+            }
+          },
+          decoration: InputDecoration(
+            contentPadding: const EdgeInsets.only(
+              top: 0,
+              bottom: 0,
+              left: 10,
+              right: 10,
+            ),
+            filled: true,
+            fillColor: Colors.grey[300],
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(30),
+              borderSide: const BorderSide(
+                color: Colors.transparent,
+              ),
+            ),
+            border: const OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(30)),
+            ),
+            helperText: name.value,
+            helperStyle: TextStyle(color: Colors.green.shade700),
+            errorText: error.value.isNotEmpty ? error.value : null,
+            hintText: widget.hint != null && widget.hint!.isNotEmpty
+                ? widget.hint
+                : '请输入员工工号',
+            hintStyle: const TextStyle(color: Colors.grey),
+            suffixIcon: IconButton(
+              icon: const Icon(Icons.close, color: Colors.grey),
+              onPressed: () {
+                controller.clear();
+                name.value = '';
+                error.value = '';
+                widget.onChanged.call(null);
+              },
+            ),
+          ),
         ),
       ),
-    ),
-  );
+    );
+  }
 }
 
 ///带框文本
@@ -490,351 +473,6 @@ class TextContainer extends StatelessWidget {
       child: text,
     );
   }
-}
-
-///app 背景渐变色
-var backgroundColor = const BoxDecoration(
-  gradient: LinearGradient(
-    colors: [
-      Color.fromARGB(0xff, 0xe4, 0xe8, 0xda),
-      Color.fromARGB(0xff, 0xba, 0xe9, 0xed)
-    ],
-    begin: Alignment.bottomLeft,
-    end: Alignment.topRight,
-  ),
-);
-
-pageBody({
-  String? title,
-  List<Widget>? actions,
-  required Widget? body,
-}) {
-  return Container(
-    decoration: backgroundColor,
-    child: Scaffold(
-      backgroundColor: Colors.transparent,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        title: Text(title ?? getFunctionTitle()),
-        actions: [
-          ...?actions,
-        ],
-      ),
-      body: body,
-    ),
-  );
-}
-
-///页面简单框架 底部弹出Popup
-pageBodyWithBottomSheet({
-  String? title,
-  List<Widget>? actions,
-  required List<Widget> bottomSheet,
-  required Function query,
-  required Widget? body,
-}) {
-  return Container(
-    decoration: backgroundColor,
-    child: Scaffold(
-      backgroundColor: Colors.transparent,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        title: Text(title ?? getFunctionTitle()),
-        actions: [
-          ...?actions,
-          Builder(
-            //不加builder会导致openDrawer崩溃
-            builder: (context) => IconButton(
-              icon: const Icon(Icons.search),
-              onPressed: () {
-                showSheet(
-                  context,
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      const SizedBox(height: 30),
-                      ...bottomSheet,
-                      const SizedBox(height: 30),
-                      Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.blueAccent,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(25),
-                              ),
-                            ),
-                            onPressed: () {
-                              Navigator.pop(context);
-                              query.call();
-                            },
-                            child: Text(
-                              'page_title_with_drawer_query'.tr,
-                              style: const TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  scrollControlled: true,
-                );
-              },
-            ),
-          )
-        ],
-      ),
-      body: body,
-    ),
-  );
-}
-
-///页面简单框架 右侧弹出Drawer
-pageBodyWithDrawer({
-  String? title,
-  List<Widget>? actions,
-  required List<Widget> queryWidgets,
-  required Function query,
-  required Widget? body,
-}) {
-  return Container(
-    decoration: backgroundColor,
-    child: Scaffold(
-      backgroundColor: Colors.transparent,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        title: Text(title ?? getFunctionTitle()),
-        actions: [
-          ...?actions,
-          Builder(
-            //不加builder会导致openDrawer崩溃
-            builder: (context) => IconButton(
-              icon: const Icon(Icons.search),
-              onPressed: () {
-                Scaffold.of(context).openEndDrawer();
-              },
-            ),
-          )
-        ],
-      ),
-      endDrawer: Drawer(
-        key: GlobalKey(),
-        child: ListView(children: [
-          const SizedBox(height: 30),
-          ...queryWidgets,
-          const SizedBox(height: 30),
-          Padding(
-            padding: const EdgeInsets.all(10),
-            child: SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blueAccent,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                ),
-                onPressed: () {
-                  query.call();
-                },
-                child: Text(
-                  'page_title_with_drawer_query'.tr,
-                  style: const TextStyle(color: Colors.white),
-                ),
-              ),
-            ),
-          ),
-        ]),
-      ),
-      body: body,
-    ),
-  );
-}
-
-///照片选择器
-takePhoto(Function(File) callback, {String? title}) {
-  showCupertinoModalPopup(
-    context: Get.overlayContext!,
-    builder: (BuildContext context) => CupertinoActionSheet(
-      title: title != null
-          ? Text('home_user_setting_avatar_photo_sheet_title'.tr)
-          : null,
-      message: Text('take_photo_sheet_message'.tr),
-      actions: <CupertinoActionSheetAction>[
-        CupertinoActionSheetAction(
-          isDefaultAction: true,
-          onPressed: () {
-            Get.back();
-            _takePhoto(false, callback);
-          },
-          child: Text('take_photo_photo_sheet_take_photo'.tr),
-        ),
-        CupertinoActionSheetAction(
-          isDefaultAction: true,
-          onPressed: () {
-            Get.back();
-            _takePhoto(true, callback);
-          },
-          child: Text('take_photo_photo_sheet_select_photo'.tr),
-        ),
-        CupertinoActionSheetAction(
-          isDefaultAction: true,
-          onPressed: () => Get.back(),
-          child: Text(
-            'dialog_default_cancel'.tr,
-            style: const TextStyle(color: Colors.grey),
-          ),
-        ),
-      ],
-    ),
-  );
-}
-
-///获取照片
-_takePhoto(bool isGallery, Function(File) callback) async {
-  //获取照片
-  var xFile = await ImagePicker().pickImage(
-    imageQuality: 75,
-    maxWidth: 700,
-    maxHeight: 700,
-    source: isGallery ? ImageSource.gallery : ImageSource.camera,
-  );
-  var cFile = await ImageCropper().cropImage(
-    sourcePath: xFile!.path,
-    aspectRatio: const CropAspectRatio(ratioX: 1, ratioY: 1),
-    // aspectRatioPresets: [CropAspectRatioPreset.square],
-    uiSettings: [
-      AndroidUiSettings(
-        toolbarTitle: 'cropper_title'.tr,
-        toolbarColor: Colors.blueAccent,
-        toolbarWidgetColor: Colors.white,
-        initAspectRatio: CropAspectRatioPreset.square,
-        lockAspectRatio: true,
-      ),
-      IOSUiSettings(
-        title: 'cropper_title'.tr,
-        cancelButtonTitle: 'cropper_cancel'.tr,
-        doneButtonTitle: 'cropper_confirm'.tr,
-        aspectRatioPickerButtonHidden: true,
-        resetAspectRatioEnabled: false,
-        aspectRatioLockEnabled: true,
-      ),
-      WebUiSettings(context: Get.overlayContext!),
-    ],
-  );
-  if (cFile != null) callback.call(File(cFile.path));
-}
-
-///显示SnackBar
-showSnackBar({
-  bool? isWarning = false,
-  required String title,
-  required String message,
-}) {
-  snackbarController = Get.snackbar(title, message,
-      margin: const EdgeInsets.all(10),
-      snackPosition: SnackPosition.BOTTOM,
-      backgroundColor: isWarning == true
-          ? Colors.redAccent.shade100
-          : Colors.blueAccent.shade100,
-      colorText: Colors.white, snackbarStatus: (state) {
-    if (state == SnackbarStatus.CLOSED) snackbarController = null;
-  });
-}
-
-///选择器
-getCupertinoPicker(List<Widget> items, FixedExtentScrollController controller) {
-  return CupertinoPicker(
-    scrollController: controller,
-    diameterRatio: 1.5,
-    magnification: 1.2,
-    squeeze: 1.2,
-    useMagnifier: true,
-    itemExtent: 32,
-    onSelectedItemChanged: (value) {},
-    children: items,
-  );
-}
-
-///popup工具
-showPopup(Widget widget, {double? height}) {
-  showCupertinoModalPopup(
-    context: Get.overlayContext!,
-    builder: (BuildContext context) {
-      return AnimatedPadding(
-          padding: MediaQuery.of(context).viewInsets,
-          duration: const Duration(milliseconds: 100),
-          child: Container(
-            height: height ?? 260,
-            color: Colors.grey[200],
-            child: widget,
-          ));
-    },
-  );
-}
-
-///底部弹出 sheet
-Future<T?> showSheet<T>(
-  BuildContext context,
-  Widget body, {
-  bool scrollControlled = false,
-  Color bodyColor = Colors.white,
-  EdgeInsets? bodyPadding,
-  BorderRadius? borderRadius,
-}) {
-  const radius = Radius.circular(16);
-  borderRadius ??= const BorderRadius.only(topLeft: radius, topRight: radius);
-  bodyPadding ??= const EdgeInsets.all(20);
-  return showModalBottomSheet(
-      context: context,
-      elevation: 0,
-      backgroundColor: bodyColor,
-      shape: RoundedRectangleBorder(borderRadius: borderRadius),
-      barrierColor: Colors.black.withOpacity(0.25),
-      // A处
-      constraints: BoxConstraints(
-          maxHeight: MediaQuery.of(context).size.height -
-              MediaQuery.of(context).viewPadding.top),
-      isScrollControlled: scrollControlled,
-      builder: (ctx) => Padding(
-            padding: EdgeInsets.only(
-              left: bodyPadding!.left,
-              top: bodyPadding.top,
-              right: bodyPadding.right,
-              // B处
-              bottom:
-                  bodyPadding.bottom + MediaQuery.of(ctx).viewPadding.bottom,
-            ),
-            child: body,
-          ));
-}
-
-///常用格式的按钮
-button(
-  String text,
-  Function() click, {
-  Color? backgroundColor,
-  Color? textColor,
-}) {
-  return Padding(
-    padding: const EdgeInsets.only(top: 10),
-    child: SizedBox(
-      width: double.infinity,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: backgroundColor ?? Colors.blueAccent,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(25),
-          ),
-        ),
-        onPressed: click,
-        child: Text(text, style: TextStyle(color: textColor ?? Colors.white)),
-      ),
-    ),
-  );
 }
 
 enum Combination { left, middle, right, intact }
@@ -1177,12 +815,367 @@ class _SwitchButtonState extends State<SwitchButton> {
   }
 }
 
+///app 背景渐变色
+var backgroundColor = const BoxDecoration(
+  gradient: LinearGradient(
+    colors: [
+      Color.fromARGB(0xff, 0xe4, 0xe8, 0xda),
+      Color.fromARGB(0xff, 0xba, 0xe9, 0xed)
+    ],
+    begin: Alignment.bottomLeft,
+    end: Alignment.topRight,
+  ),
+);
+
+pageBody({
+  String? title,
+  List<Widget>? actions,
+  required Widget? body,
+}) {
+  return Container(
+    decoration: backgroundColor,
+    child: Scaffold(
+      backgroundColor: Colors.transparent,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        title: Text(title ?? getFunctionTitle()),
+        actions: [
+          ...?actions,
+        ],
+      ),
+      body: body,
+    ),
+  );
+}
+
+///页面简单框架 底部弹出Popup
+pageBodyWithBottomSheet({
+  String? title,
+  List<Widget>? actions,
+  required List<Widget> bottomSheet,
+  required Function query,
+  required Widget? body,
+}) {
+  return Container(
+    decoration: backgroundColor,
+    child: Scaffold(
+      backgroundColor: Colors.transparent,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        title: Text(title ?? getFunctionTitle()),
+        actions: [
+          ...?actions,
+          Builder(
+            //不加builder会导致openDrawer崩溃
+            builder: (context) => IconButton(
+              icon: const Icon(Icons.search),
+              onPressed: () {
+                showSheet(
+                  context,
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const SizedBox(height: 30),
+                      ...bottomSheet,
+                      const SizedBox(height: 30),
+                      Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.blueAccent,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(25),
+                              ),
+                            ),
+                            onPressed: () {
+                              Navigator.pop(context);
+                              query.call();
+                            },
+                            child: Text(
+                              'page_title_with_drawer_query'.tr,
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  scrollControlled: true,
+                );
+              },
+            ),
+          )
+        ],
+      ),
+      body: body,
+    ),
+  );
+}
+
+///页面简单框架 右侧弹出Drawer
+pageBodyWithDrawer({
+  String? title,
+  List<Widget>? actions,
+  required List<Widget> queryWidgets,
+  required Function query,
+  required Widget? body,
+}) {
+  return Container(
+    decoration: backgroundColor,
+    child: Scaffold(
+      backgroundColor: Colors.transparent,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        title: Text(title ?? getFunctionTitle()),
+        actions: [
+          ...?actions,
+          Builder(
+            //不加builder会导致openDrawer崩溃
+            builder: (context) => IconButton(
+              icon: const Icon(Icons.search),
+              onPressed: () {
+                Scaffold.of(context).openEndDrawer();
+              },
+            ),
+          )
+        ],
+      ),
+      endDrawer: Drawer(
+        key: GlobalKey(),
+        child: ListView(children: [
+          const SizedBox(height: 30),
+          ...queryWidgets,
+          const SizedBox(height: 30),
+          Padding(
+            padding: const EdgeInsets.all(10),
+            child: SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blueAccent,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                ),
+                onPressed: () {
+                  query.call();
+                },
+                child: Text(
+                  'page_title_with_drawer_query'.tr,
+                  style: const TextStyle(color: Colors.white),
+                ),
+              ),
+            ),
+          ),
+        ]),
+      ),
+      body: body,
+    ),
+  );
+}
+
+///照片选择器
+takePhoto(Function(File) callback, {String? title}) {
+  showCupertinoModalPopup(
+    context: Get.overlayContext!,
+    builder: (BuildContext context) => CupertinoActionSheet(
+      title: title != null
+          ? Text('home_user_setting_avatar_photo_sheet_title'.tr)
+          : null,
+      message: Text('take_photo_sheet_message'.tr),
+      actions: <CupertinoActionSheetAction>[
+        CupertinoActionSheetAction(
+          isDefaultAction: true,
+          onPressed: () {
+            Get.back();
+            _takePhoto(false, callback);
+          },
+          child: Text('take_photo_photo_sheet_take_photo'.tr),
+        ),
+        CupertinoActionSheetAction(
+          isDefaultAction: true,
+          onPressed: () {
+            Get.back();
+            _takePhoto(true, callback);
+          },
+          child: Text('take_photo_photo_sheet_select_photo'.tr),
+        ),
+        CupertinoActionSheetAction(
+          isDefaultAction: true,
+          onPressed: () => Get.back(),
+          child: Text(
+            'dialog_default_cancel'.tr,
+            style: const TextStyle(color: Colors.grey),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+///获取照片
+_takePhoto(bool isGallery, Function(File) callback) async {
+  //获取照片
+  var xFile = await ImagePicker().pickImage(
+    imageQuality: 75,
+    maxWidth: 700,
+    maxHeight: 700,
+    source: isGallery ? ImageSource.gallery : ImageSource.camera,
+  );
+  var cFile = await ImageCropper().cropImage(
+    sourcePath: xFile!.path,
+    aspectRatio: const CropAspectRatio(ratioX: 1, ratioY: 1),
+    // aspectRatioPresets: [CropAspectRatioPreset.square],
+    uiSettings: [
+      AndroidUiSettings(
+        toolbarTitle: 'cropper_title'.tr,
+        toolbarColor: Colors.blueAccent,
+        toolbarWidgetColor: Colors.white,
+        initAspectRatio: CropAspectRatioPreset.square,
+        lockAspectRatio: true,
+      ),
+      IOSUiSettings(
+        title: 'cropper_title'.tr,
+        cancelButtonTitle: 'cropper_cancel'.tr,
+        doneButtonTitle: 'cropper_confirm'.tr,
+        aspectRatioPickerButtonHidden: true,
+        resetAspectRatioEnabled: false,
+        aspectRatioLockEnabled: true,
+      ),
+      WebUiSettings(context: Get.overlayContext!),
+    ],
+  );
+  if (cFile != null) callback.call(File(cFile.path));
+}
+
+///显示SnackBar
+showSnackBar({
+  bool? isWarning = false,
+  required String title,
+  required String message,
+}) {
+  if (snackbarStatus != SnackbarStatus.CLOSED) {
+    snackbarController?.close(withAnimations: false);
+  }
+  snackbarController = Get.snackbar(
+    title,
+    message,
+    margin: const EdgeInsets.all(10),
+    snackPosition: SnackPosition.BOTTOM,
+    backgroundColor: isWarning == true
+        ? Colors.redAccent.shade100
+        : Colors.greenAccent.shade100,
+    colorText:isWarning == true
+        ? Colors.white
+        : Colors.blue.shade900,
+    snackbarStatus: (state) {
+      snackbarStatus = state;
+    },
+  );
+}
+
+///选择器
+getCupertinoPicker(List<Widget> items, FixedExtentScrollController controller) {
+  return CupertinoPicker(
+    scrollController: controller,
+    diameterRatio: 1.5,
+    magnification: 1.2,
+    squeeze: 1.2,
+    useMagnifier: true,
+    itemExtent: 32,
+    onSelectedItemChanged: (value) {},
+    children: items,
+  );
+}
+
+///popup工具
+showPopup(Widget widget, {double? height}) {
+  showCupertinoModalPopup(
+    context: Get.overlayContext!,
+    builder: (BuildContext context) {
+      return AnimatedPadding(
+          padding: MediaQuery.of(context).viewInsets,
+          duration: const Duration(milliseconds: 100),
+          child: Container(
+            height: height ?? 260,
+            color: Colors.grey[200],
+            child: widget,
+          ));
+    },
+  );
+}
+
+///底部弹出 sheet
+Future<T?> showSheet<T>(
+  BuildContext context,
+  Widget body, {
+  bool scrollControlled = false,
+  Color bodyColor = Colors.white,
+  EdgeInsets? bodyPadding,
+  BorderRadius? borderRadius,
+}) {
+  const radius = Radius.circular(16);
+  borderRadius ??= const BorderRadius.only(topLeft: radius, topRight: radius);
+  bodyPadding ??= const EdgeInsets.all(20);
+  return showModalBottomSheet(
+      context: context,
+      elevation: 0,
+      backgroundColor: bodyColor,
+      shape: RoundedRectangleBorder(borderRadius: borderRadius),
+      barrierColor: Colors.black.withOpacity(0.25),
+      // A处
+      constraints: BoxConstraints(
+          maxHeight: MediaQuery.of(context).size.height -
+              MediaQuery.of(context).viewPadding.top),
+      isScrollControlled: scrollControlled,
+      builder: (ctx) => Padding(
+            padding: EdgeInsets.only(
+              left: bodyPadding!.left,
+              top: bodyPadding.top,
+              right: bodyPadding.right,
+              // B处
+              bottom:
+                  bodyPadding.bottom + MediaQuery.of(ctx).viewPadding.bottom,
+            ),
+            child: body,
+          ));
+}
+
+///常用格式的按钮
+button(
+  String text,
+  Function() click, {
+  Color? backgroundColor,
+  Color? textColor,
+}) {
+  return Padding(
+    padding: const EdgeInsets.only(top: 10),
+    child: SizedBox(
+      width: double.infinity,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: backgroundColor ?? Colors.blueAccent,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(25),
+          ),
+        ),
+        onPressed: click,
+        child: Text(text, style: TextStyle(color: textColor ?? Colors.white)),
+      ),
+    ),
+  );
+}
+
 ///带占比带文本提示的文本
 expandedTextSpan({
   required String hint,
   Color hintColor = Colors.black,
   required String text,
   Color textColor = Colors.blueAccent,
+  double fontSize = 14,
   bool isBold = true,
   int flex = 1,
 }) {
@@ -1196,12 +1189,14 @@ expandedTextSpan({
             TextSpan(
               text: hint,
               style: TextStyle(
+                  fontSize: fontSize,
                   fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
                   color: hintColor),
             ),
             TextSpan(
               text: text,
               style: TextStyle(
+                fontSize: fontSize,
                 fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
                 color: textColor,
               ),
@@ -1217,6 +1212,7 @@ textSpan({
   Color hintColor = Colors.black,
   required String text,
   Color textColor = Colors.blueAccent,
+  double fontSize = 14,
   bool isBold = true,
 }) {
   return Text.rich(
@@ -1227,6 +1223,7 @@ textSpan({
         TextSpan(
           text: hint,
           style: TextStyle(
+            fontSize: fontSize,
             fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
             color: hintColor,
           ),
@@ -1234,6 +1231,7 @@ textSpan({
         TextSpan(
           text: text,
           style: TextStyle(
+            fontSize: fontSize,
             fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
             color: textColor,
           ),
@@ -1306,5 +1304,42 @@ progressIndicator({
         ),
       ),
     ],
+  );
+}
+
+///带框、带点击事件带文本
+expandedFrameText({
+  Function? click,
+  Color? borderColor,
+  Color? backgroundColor,
+  Color? textColor,
+  int? flex,
+  EdgeInsetsGeometry? padding,
+  AlignmentGeometry? alignment,
+  bool isBold = false,
+  required String text,
+}) {
+  return Expanded(
+    flex: flex ?? 1,
+    child: GestureDetector(
+      onTap: () => click?.call(),
+      child: Container(
+        padding: padding ?? const EdgeInsets.all(5),
+        decoration: BoxDecoration(
+          border: Border.all(color: borderColor ?? Colors.grey),
+          color: backgroundColor ?? Colors.transparent,
+        ),
+        alignment: alignment ?? Alignment.centerLeft,
+        child: Text(
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          text,
+          style: TextStyle(
+            color: textColor ?? Colors.black87,
+            fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
+          ),
+        ),
+      ),
+    ),
   );
 }

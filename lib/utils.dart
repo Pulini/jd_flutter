@@ -28,6 +28,7 @@ late BaseDeviceInfo deviceInfo;
 var localeChinese = const Locale('zh', 'Hans_CN');
 var localeEnglish = const Locale('en', 'US');
 SnackbarController? snackbarController;
+SnackbarStatus? snackbarStatus;
 UserInfo? userInfo;
 
 /// 保存SP数据
@@ -185,11 +186,11 @@ extension FileExt on File {
 ///String扩展方法
 extension StringExt on String? {
   String md5Encode() =>
-      md5.convert(const Utf8Encoder().convert(this??'')).toString();
+      md5.convert(const Utf8Encoder().convert(this ?? '')).toString();
 
   double toDoubleTry() {
     try {
-      return double.parse(this??'');
+      return double.parse(this ?? '');
     } on Exception catch (_) {
       return 0.0;
     }
@@ -197,21 +198,20 @@ extension StringExt on String? {
 
   int toIntTry() {
     try {
-      return int.parse(this??'');
+      return int.parse(this ?? '');
     } on Exception catch (_) {
       return 0;
     }
   }
 
-  String ifEmpty(String v){
-    if(this!=null&&this?.isNotEmpty==true){
+  String ifEmpty(String v) {
+    if (this != null && this?.isNotEmpty == true) {
       return this!;
-    }else{
+    } else {
       return v;
     }
   }
 }
-
 
 extension RequestOptionsExt on RequestOptions {
   print() {
@@ -290,8 +290,7 @@ getVersionInfo(
   ).then((versionInfoCallback) {
     if (versionInfoCallback.resultCode == resultSuccess) {
       logger.i(packageInfo);
-      var versionInfo =
-          VersionInfo.fromJson(versionInfoCallback.data);
+      var versionInfo = VersionInfo.fromJson(versionInfoCallback.data);
       if (packageInfo.version == versionInfo.versionName) {
         noUpdate.call();
       } else {
@@ -323,6 +322,7 @@ getWorkerInfo({
   String? number,
   String? department,
   required Function(List<WorkerInfo>) workers,
+  Function(String)? error,
 }) {
   httpGet(method: webApiGetWorkerInfo, params: {
     'EmpNumber': number,
@@ -334,6 +334,7 @@ getWorkerInfo({
           WorkerInfo.fromJson(worker.data[i])
       ]);
     } else {
+      error?.call(worker.message??'');
       errorDialog(content: worker.message);
     }
   });
@@ -381,6 +382,6 @@ visitButtonWidget({
   );
 }
 
-Future<Database> openDb()  async {
+Future<Database> openDb() async {
   return openDatabase(join(await getDatabasesPath(), jdDatabase));
 }

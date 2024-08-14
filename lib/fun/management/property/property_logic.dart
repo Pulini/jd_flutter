@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/management/property/property_detail_view.dart';
-import '../../../bean/http/response/property_detail_info.dart';
-import '../../../bean/http/response/property_info.dart';
 import '../../../web_api.dart';
 import '../../../route.dart';
 import '../../../utils.dart';
+import '../../../widget/custom_widget.dart';
 import '../../../widget/dialogs.dart';
 import '../../../widget/picker/picker_controller.dart';
 import 'property_state.dart';
@@ -16,8 +15,6 @@ class PropertyLogic extends GetxController
 
   ///tab控制器
   late TabController tabController = TabController(length: 3, vsync: this);
-
-
 
   ///日期选择器的控制器
   var pickerControllerStartDate = DatePickerController(
@@ -38,51 +35,19 @@ class PropertyLogic extends GetxController
   }
 
   queryProperty() {
-    httpGet(
-      method: webApiQueryProperty,
-      loading: 'property_querying'.tr,
-      params: {
-        'PropertyNumber': state.etPropertyNumber,
-        'PropertyName': state.etPropertyName,
-        'SerialNumber': state.etSerialNumber,
-        'InvoiceNumber': state.etInvoiceNumber,
-        'EmpName': state.etName,
-        'EmpCode': state.etWorkerNumber,
-        'StartDate': pickerControllerStartDate.getDateFormatYMD(),
-        'EndDate': pickerControllerEndDate.getDateFormatYMD(),
-      },
-    ).then((response) {
-      if (response.resultCode == resultSuccess) {
-        state.propertyList.value = [
-          for (var i = 0; i < response.data.length; ++i)
-            PropertyInfo.fromJson(response.data[i])
-        ];
-      } else {
-        state.propertyList.value = [];
-        errorDialog(content: response.message);
-      }
-    });
+    state.queryProperty(
+      startDate: pickerControllerStartDate.getDateFormatYMD(),
+      endDate: pickerControllerEndDate.getDateFormatYMD(),
+      error: (msg) => errorDialog(content: msg),
+    );
   }
 
   getPropertyDetail(int detailId) {
-    httpGet(
-      method: webApiGetPropertyDetail,
-      loading: 'property_querying'.tr,
-      params: {'InterID': detailId},
-    ).then((response) {
-      if (response.resultCode == resultSuccess) {
-        state.detail = PropertyDetailInfo.fromJson(response.data);
-        state.canModify = state.detail.processStatus == 0;
-        state.participatorName.value = state.detail.participatorName ?? '';
-        state.custodianName.value = state.detail.custodianName ?? '';
-        state.liableEmpName.value = state.detail.liableEmpName ?? '';
-        state.assetPicture.value = state.detail.assetPicture ?? '';
-        state.ratingPlatePicture.value = state.detail.ratingPlatePicture ?? '';
-        Get.to(() => const PropertyDetailPage());
-      } else {
-        errorDialog(content: response.message);
-      }
-    });
+    state.getPropertyDetail(
+      detailId: detailId,
+      success: () => Get.to(() => const PropertyDetailPage()),
+      error: (msg) => errorDialog(content: msg),
+    );
   }
 
   setParticipator(String str) {
@@ -137,45 +102,91 @@ class PropertyLogic extends GetxController
   }
 
   propertyClose(int detailId) {
-    httpPost(
-      method: webApiPropertyClose,
-      loading: 'property_detail_closing'.tr,
-      params: {'InterID': detailId},
-    ).then((response) {
-      if (response.resultCode == resultSuccess) {
-        successDialog(content: response.message);
-      } else {
-        errorDialog(content: response.message);
-      }
-    });
+    state.propertyClose(
+      detailId: detailId,
+      success: (msg) => successDialog(content: msg),
+      error: (msg) => errorDialog(content: msg),
+    );
   }
 
   skipAcceptance(int detailId) {
-    httpPost(
-      method: webApiSkipAcceptance,
-      loading: 'property_detail_skipping_acceptance'.tr,
-      params: {'InterID': detailId},
-    ).then((response) {
-      if (response.resultCode == resultSuccess) {
-        successDialog(content: response.message);
-      } else {
-        errorDialog(content: response.message);
-      }
-    });
+    state.skipAcceptance(
+      detailId: detailId,
+      success: (msg) => successDialog(content: msg),
+      error: (msg) => errorDialog(content: msg),
+    );
   }
 
   updatePropertyInfo() {
-    httpPost(
-      method: webApiUpdateProperty,
-      loading: 'property_detail_submitting'.tr,
-      body: state.upDatePropertyBody(),
-    ).then((response) {
-      if (response.resultCode == resultSuccess) {
-        successDialog(content: response.message);
-      } else {
-        errorDialog(content: response.message);
-      }
-    });
+    state.updatePropertyInfo(
+      success: (msg) => successDialog(content: msg),
+      error: (msg) => errorDialog(content: msg),
+    );
+  }
+
+  bool checkData() {
+    logger.f(state.detail.toJson());
+    if (state.detail.name?.isEmpty == true) {
+      showSnackBar(title: '缺少数据', message: '请输入名称', isWarning: true);
+      return false;
+    }
+    if (state.detail.number?.isEmpty == true) {
+      showSnackBar(title: '缺少数据', message: '请输入编号', isWarning: true);
+      return false;
+    }
+    if (state.detail.model?.isEmpty == true) {
+      showSnackBar(title: '缺少数据', message: '请输入规格型号', isWarning: true);
+      return false;
+    }
+    if (state.detail.price != null && state.detail.price! <= 0) {
+      showSnackBar(title: '缺少数据', message: '请输入单价', isWarning: true);
+      return false;
+    }
+    if (state.detail.orgVal != null && state.detail.orgVal! <= 0) {
+      showSnackBar(title: '缺少数据', message: '请输入原值', isWarning: true);
+      return false;
+    }
+    if (state.detail.manufacturer?.isEmpty == true) {
+      showSnackBar(title: '缺少数据', message: '请输入制造商', isWarning: true);
+      return false;
+    }
+    if (state.detail.guaranteePeriod?.isEmpty == true) {
+      showSnackBar(title: '缺少数据', message: '请输入保修期限(月)', isWarning: true);
+      return false;
+    }
+    if (state.detail.expectedLife != null && state.detail.expectedLife! <= 0) {
+      showSnackBar(title: '缺少数据', message: '请输入预计使用时长(月)', isWarning: true);
+      return false;
+    }
+    if (state.detail.participator != null && state.detail.participator! == -1) {
+      showSnackBar(title: '缺少数据', message: '请输入参检人工号', isWarning: true);
+      return false;
+    }
+    if (state.detail.keepEmpID != null && state.detail.keepEmpID! == -1) {
+      showSnackBar(title: '缺少数据', message: '请输入保管人工号', isWarning: true);
+      return false;
+    }
+    if (state.detail.liableEmpID != null && state.detail.liableEmpID! == -1) {
+      showSnackBar(title: '缺少数据', message: '请输入监管人工号', isWarning: true);
+      return false;
+    }
+    if (state.detail.writeDate?.isEmpty == true) {
+      showSnackBar(title: '缺少数据', message: '请选择登记日期', isWarning: true);
+      return false;
+    }
+    if (state.detail.address?.isEmpty == true) {
+      showSnackBar(title: '缺少数据', message: '请输入存放地点', isWarning: true);
+      return false;
+    }
+    if (state.assetPicture.isEmpty) {
+      showSnackBar(title: '缺少数据', message: '请拍摄现场照片', isWarning: true);
+      return false;
+    }
+    if (state.ratingPlatePicture.isEmpty) {
+      showSnackBar(title: '缺少数据', message: '请拍摄铭牌照片', isWarning: true);
+      return false;
+    }
+    return true;
   }
 
   printLabel() {

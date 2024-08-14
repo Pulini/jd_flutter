@@ -158,13 +158,6 @@ _addNewWorkerDialog(
       ),
       actions: [
         TextButton(
-          onPressed: () => Get.back(),
-          child: Text(
-            'dialog_default_cancel'.tr,
-            style: const TextStyle(color: Colors.grey),
-          ),
-        ),
-        TextButton(
           onPressed: () {
             if (newWorker != null) {
               callback.call(newWorker!);
@@ -172,6 +165,13 @@ _addNewWorkerDialog(
             }
           },
           child: Text('dialog_default_confirm'.tr),
+        ),
+        TextButton(
+          onPressed: () => Get.back(),
+          child: Text(
+            'dialog_default_cancel'.tr,
+            style: const TextStyle(color: Colors.grey),
+          ),
         ),
       ],
     ),
@@ -274,18 +274,18 @@ addWorkerDialog(
         ),
         actions: [
           TextButton(
-            onPressed: () => Get.back(),
-            child: Text(
-              'dialog_default_cancel'.tr,
-              style: const TextStyle(color: Colors.grey),
-            ),
-          ),
-          TextButton(
             onPressed: () {
               Get.back();
               callback.call(select);
             },
             child: Text('dialog_default_confirm'.tr),
+          ),
+          TextButton(
+            onPressed: () => Get.back(),
+            child: Text(
+              'dialog_default_cancel'.tr,
+              style: const TextStyle(color: Colors.grey),
+            ),
           ),
         ],
       );
@@ -328,19 +328,19 @@ modifyDispatchQtyDialog(
           )),
       actions: [
         TextButton(
-          onPressed: () => Get.back(),
-          child: Text(
-            'dialog_default_cancel'.tr,
-            style: const TextStyle(color: Colors.grey),
-          ),
-        ),
-        TextButton(
           onPressed: () {
             Get.back();
             di.qty = qty;
             callback.call(di);
           },
           child: Text('dialog_default_confirm'.tr),
+        ),
+        TextButton(
+          onPressed: () => Get.back(),
+          child: Text(
+            'dialog_default_cancel'.tr,
+            style: const TextStyle(color: Colors.grey),
+          ),
         ),
       ],
     ),
@@ -424,18 +424,18 @@ batchModifyDispatchQtyDialog(
       ),
       actions: [
         TextButton(
-          onPressed: () => Get.back(),
-          child: Text(
-            'dialog_default_cancel'.tr,
-            style: const TextStyle(color: Colors.grey),
-          ),
-        ),
-        TextButton(
           onPressed: () {
             Get.back();
             callback.call(qty);
           },
           child: Text('dialog_default_confirm'.tr),
+        ),
+        TextButton(
+          onPressed: () => Get.back(),
+          child: Text(
+            'dialog_default_cancel'.tr,
+            style: const TextStyle(color: Colors.grey),
+          ),
         ),
       ],
     ),
@@ -526,13 +526,6 @@ typeBodySaveDialog(
         ),
         actions: [
           TextButton(
-            onPressed: () => Get.back(),
-            child: Text(
-              'dialog_default_cancel'.tr,
-              style: const TextStyle(color: Colors.grey),
-            ),
-          ),
-          TextButton(
             onPressed: () {
               Get.back();
               if (selected != -1) {
@@ -540,6 +533,13 @@ typeBodySaveDialog(
               }
             },
             child: Text('应用'),
+          ),
+          TextButton(
+            onPressed: () => Get.back(),
+            child: Text(
+              'dialog_default_cancel'.tr,
+              style: const TextStyle(color: Colors.grey),
+            ),
           ),
         ],
       );
@@ -592,13 +592,6 @@ manufactureInstructionsDialog(List<ManufactureInstructionsInfo> files) {
               ),
               actions: [
                 TextButton(
-                  onPressed: () => Get.back(),
-                  child: Text(
-                    'dialog_default_cancel'.tr,
-                    style: const TextStyle(color: Colors.grey),
-                  ),
-                ),
-                TextButton(
                   onPressed: () {
                     if (selected == -1) {
                       showSnackBar(title: '查看工艺指导书', message: '请选择要查看的文件');
@@ -611,6 +604,13 @@ manufactureInstructionsDialog(List<ManufactureInstructionsInfo> files) {
                     }
                   },
                   child: Text('查看'),
+                ),
+                TextButton(
+                  onPressed: () => Get.back(),
+                  child: Text(
+                    'dialog_default_cancel'.tr,
+                    style: const TextStyle(color: Colors.grey),
+                  ),
                 ),
               ],
             );
@@ -713,18 +713,18 @@ sapReportDialog(double initQty, Function(double) callback) {
             ),
             actions: [
               TextButton(
-                onPressed: () => Get.back(),
-                child: Text(
-                  'dialog_default_cancel'.tr,
-                  style: const TextStyle(color: Colors.grey),
-                ),
-              ),
-              TextButton(
                 onPressed: () {
                   Get.back();
                   callback.call(qty);
                 },
                 child: Text('报工'),
+              ),
+              TextButton(
+                onPressed: () => Get.back(),
+                child: Text(
+                  'dialog_default_cancel'.tr,
+                  style: const TextStyle(color: Colors.grey),
+                ),
               ),
             ],
           );
@@ -846,18 +846,18 @@ reportToSap(Function(bool isInstructionReport) callback) {
           TextButton(
             onPressed: () {
               Get.back();
+              callback.call(isInstructionReport.value);
+            },
+            child: Text('dialog_default_confirm'.tr),
+          ),
+          TextButton(
+            onPressed: () {
+              Get.back();
             },
             child: Text(
               'dialog_default_cancel'.tr,
               style: const TextStyle(color: Colors.grey),
             ),
-          ),
-          TextButton(
-            onPressed: () {
-              Get.back();
-              callback.call(isInstructionReport.value);
-            },
-            child: Text('dialog_default_confirm'.tr),
           ),
         ],
       ),
@@ -889,16 +889,16 @@ showSelectMaterialPopup(List<Map> list) {
             onPressed: () {
               Get.back();
             },
-            child: Text(
-              'dialog_default_cancel'.tr,
-              style: const TextStyle(color: Colors.grey),
-            ),
+            child: Text('打印'),
           ),
           TextButton(
             onPressed: () {
               Get.back();
             },
-            child: Text('打印'),
+            child: Text(
+              'dialog_default_cancel'.tr,
+              style: const TextStyle(color: Colors.grey),
+            ),
           ),
         ],
       ),

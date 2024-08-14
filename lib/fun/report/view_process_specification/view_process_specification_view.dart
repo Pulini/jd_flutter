@@ -20,57 +20,34 @@ class _ViewProcessSpecificationPageState
 
   @override
   Widget build(BuildContext context) {
-    // WebViewWidget(controller: logic.webViewController)
     return pageBodyWithDrawer(
-      
       queryWidgets: [
         EditText(hint: '请输入型体', onChanged: (v) => state.etTypeBody = v),
       ],
       query: () => logic.queryProcessSpecification(),
       body: Obx(
         () => ListView.builder(
-            padding: const EdgeInsets.all(8),
-            itemCount: state.pdfList.length,
-            itemBuilder: (BuildContext context, int index) => Card(
-                  child: ListTile(
-                    onTap: () {
-                      Get.to(WebPage(
-                        title: '',
-                        url: state.pdfList[index].fullName ?? '',
-                      ));
-                    },
-                    title: Text.rich(
-                      TextSpan(
-                        children: [
-                          const TextSpan(
-                            text: '型体：',
-                            style: TextStyle(
-                              color: Colors.blueAccent,
-                            ),
-                          ),
-                          TextSpan(
-                            text: state.pdfList[index].name,
-                          ),
-                        ],
-                      ),
-                    ),
-                    subtitle: Text.rich(
-                      TextSpan(
-                        children: [
-                          const TextSpan(
-                            text: '分类：',
-                            style: TextStyle(
-                              color: Colors.blueAccent,
-                            ),
-                          ),
-                          TextSpan(
-                            text: state.pdfList[index].typeName,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                )),
+          padding: const EdgeInsets.all(8),
+          itemCount: state.pdfList.length,
+          itemBuilder: (context, index) => Card(
+            child: ListTile(
+              onTap: () => Get.to(
+                WebPage(
+                  title: '',
+                  url: state.pdfList[index].fullName ?? '',
+                ),
+              ),
+              title: textSpan(
+                hint: '型体：',
+                text: state.pdfList[index].name ?? '',
+              ),
+              subtitle: textSpan(
+                hint: '分类：',
+                text: state.pdfList[index].typeName ?? '',
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }

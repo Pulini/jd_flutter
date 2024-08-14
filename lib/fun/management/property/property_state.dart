@@ -4,10 +4,8 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/web_api.dart';
 import 'package:jd_flutter/utils.dart';
 
-import '../../../bean/http/request/update_porperty.dart';
 import '../../../bean/http/response/property_detail_info.dart';
 import '../../../bean/http/response/property_info.dart';
-import '../../../widget/custom_widget.dart';
 
 enum AuditedType { audited, unAudited, underAudit }
 
@@ -32,6 +30,7 @@ class PropertyState {
   var etInvoiceNumber = '';
   var etName = '';
   var etWorkerNumber = '';
+
   PropertyState() {
     ///Initialize variables
   }
@@ -56,95 +55,133 @@ class PropertyState {
     liableEmpName.value = empName;
   }
 
-  bool checkData() {
-    logger.f(detail.toJson());
-    if (detail.name?.isEmpty == true) {
-      showSnackBar(title: '缺少数据', message: '请输入名称',isWarning: true);
-      return false;
-    }
-    if (detail.number?.isEmpty == true) {
-      showSnackBar(title: '缺少数据', message: '请输入编号',isWarning: true);
-      return false;
-    }
-    if (detail.model?.isEmpty == true) {
-      showSnackBar(title: '缺少数据', message: '请输入规格型号',isWarning: true);
-      return false;
-    }
-    if (detail.price != null && detail.price! <= 0) {
-      showSnackBar(title: '缺少数据', message: '请输入单价',isWarning: true);
-      return false;
-    }
-    if (detail.orgVal != null && detail.orgVal! <= 0) {
-      showSnackBar(title: '缺少数据', message: '请输入原值',isWarning: true);
-      return false;
-    }
-    if (detail.manufacturer?.isEmpty == true) {
-      showSnackBar(title: '缺少数据', message: '请输入制造商',isWarning: true);
-      return false;
-    }
-    if (detail.guaranteePeriod?.isEmpty == true) {
-      showSnackBar(title: '缺少数据', message: '请输入保修期限(月)',isWarning: true);
-      return false;
-    }
-    if (detail.expectedLife != null && detail.expectedLife! <= 0) {
-      showSnackBar(title: '缺少数据', message: '请输入预计使用时长(月)',isWarning: true);
-      return false;
-    }
-    if (detail.participator != null && detail.participator! == -1) {
-      showSnackBar(title: '缺少数据', message: '请输入参检人工号',isWarning: true);
-      return false;
-    }
-    if (detail.keepEmpID != null && detail.keepEmpID! == -1) {
-      showSnackBar(title: '缺少数据', message: '请输入保管人工号',isWarning: true);
-      return false;
-    }
-    if (detail.liableEmpID != null && detail.liableEmpID! == -1) {
-      showSnackBar(title: '缺少数据', message: '请输入监管人工号',isWarning: true);
-      return false;
-    }
-    if (detail.writeDate?.isEmpty == true) {
-      showSnackBar(title: '缺少数据', message: '请选择登记日期',isWarning: true);
-      return false;
-    }
-    if (detail.address?.isEmpty == true) {
-      showSnackBar(title: '缺少数据', message: '请输入存放地点',isWarning: true);
-      return false;
-    }
-    if (assetPicture.isEmpty) {
-      showSnackBar(title: '缺少数据', message: '请拍摄现场照片',isWarning: true);
-      return false;
-    }
-    if (ratingPlatePicture.isEmpty) {
-      showSnackBar(title: '缺少数据', message: '请拍摄铭牌照片',isWarning: true);
-      return false;
-    }
-    return true;
+  queryProperty({
+    required String startDate,
+    required String endDate,
+    required Function(String msg) error,
+  }) {
+    httpGet(
+      method: webApiQueryProperty,
+      loading: 'property_querying'.tr,
+      params: {
+        'PropertyNumber': etPropertyNumber,
+        'PropertyName': etPropertyName,
+        'SerialNumber': etSerialNumber,
+        'InvoiceNumber': etInvoiceNumber,
+        'EmpName': etName,
+        'EmpCode': etWorkerNumber,
+        'StartDate': startDate,
+        'EndDate': endDate,
+      },
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        propertyList.value = [
+          for (var json in response.data) PropertyInfo.fromJson(json)
+        ];
+      } else {
+        propertyList.value = [];
+        error.call(response.message ?? '');
+      }
+    });
   }
 
-  upDatePropertyBody() {
-   var upDataBody= UpdateProperty()
-      ..address = detail.address
-      ..assetPicture = assetPicture.value
-      ..ratingPlatePicture = ratingPlatePicture.value
-      ..deptID = detail.deptID
-      ..guaranteePeriod = detail.guaranteePeriod
-      ..expectedLife = detail.expectedLife
-      ..interID = detail.interID
-      ..keepEmpID = detail.keepEmpID
-      ..liableEmpID = detail.liableEmpID
-      ..manufacturer = detail.manufacturer
-      ..model = detail.model
-      ..name = detail.name
-      ..notes = detail.notes
-      ..number = detail.number
-      ..orgVal = detail.orgVal.toShowString()
-      ..participator = detail.participator
-      ..price = detail.price.toShowString()
-      ..registrationerID = userInfo?.empID
-      ..writeDate = detail.writeDate
-      ..buyDate = detail.buyDate
-      ..reviceDate = detail.reviceDate;
-   logger.f(upDataBody.toJson());
-    return upDataBody;
+  getPropertyDetail({
+    required int detailId,
+    required Function() success,
+    required Function(String msg) error,
+  }) {
+    httpGet(
+      method: webApiGetPropertyDetail,
+      loading: 'property_querying'.tr,
+      params: {'InterID': detailId},
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        detail = PropertyDetailInfo.fromJson(response.data);
+        canModify = detail.processStatus == 0;
+        participatorName.value = detail.participatorName ?? '';
+        custodianName.value = detail.custodianName ?? '';
+        liableEmpName.value = detail.liableEmpName ?? '';
+        assetPicture.value = detail.assetPicture ?? '';
+        ratingPlatePicture.value = detail.ratingPlatePicture ?? '';
+        success.call();
+      } else {
+        error.call(response.message ?? '');
+      }
+    });
+  }
+
+  propertyClose({
+    required int detailId,
+    required Function(String msg) success,
+    required Function(String msg) error,
+  }) {
+    httpPost(
+      method: webApiPropertyClose,
+      loading: 'property_detail_closing'.tr,
+      params: {'InterID': detailId},
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        success.call(response.message ?? '');
+      } else {
+        error.call(response.message ?? '');
+      }
+    });
+  }
+
+  skipAcceptance({
+    required int detailId,
+    required Function(String msg) success,
+    required Function(String msg) error,
+  }) {
+    httpPost(
+      method: webApiSkipAcceptance,
+      loading: 'property_detail_skipping_acceptance'.tr,
+      params: {'InterID': detailId},
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        success.call(response.message ?? '');
+      } else {
+        error.call(response.message ?? '');
+      }
+    });
+  }
+
+  updatePropertyInfo({
+    required Function(String msg) success,
+    required Function(String msg) error,
+  }) {
+    httpPost(
+      method: webApiUpdateProperty,
+      loading: 'property_detail_submitting'.tr,
+      body: {
+        'Address': detail.address,
+        'AssetPicture': assetPicture.value,
+        'RatingPlatePicture': ratingPlatePicture.value,
+        'DeptID': detail.deptID,
+        'GuaranteePeriod': detail.guaranteePeriod,
+        'ExpectedLife': detail.expectedLife,
+        'InterID': detail.interID,
+        'KeepEmpID': detail.keepEmpID,
+        'LiableEmpID': detail.liableEmpID,
+        'Manufacturer': detail.manufacturer,
+        'Model': detail.model,
+        'Name': detail.name,
+        'Notes': detail.notes,
+        'Number': detail.number,
+        'OrgVal': detail.orgVal.toShowString(),
+        'Participator': detail.participator,
+        'Price': detail.price.toShowString(),
+        'RegistrationerID': userInfo?.empID,
+        'WriteDate': detail.writeDate,
+        'BuyDate': detail.buyDate,
+        'ReviceDate': detail.reviceDate,
+      },
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        success.call(response.message ?? '');
+      } else {
+        error.call(response.message ?? '');
+      }
+    });
   }
 }

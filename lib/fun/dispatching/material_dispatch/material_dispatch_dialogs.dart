@@ -332,13 +332,6 @@ processSpecificationDialog(List<ProcessSpecificationInfo> files) {
               ),
               actions: [
                 TextButton(
-                  onPressed: () => Get.back(),
-                  child: Text(
-                    'dialog_default_cancel'.tr,
-                    style: const TextStyle(color: Colors.grey),
-                  ),
-                ),
-                TextButton(
                   onPressed: () {
                     if (selected == -1) {
                       showSnackBar(title: '查看工艺指导书', message: '请选择要查看的文件');
@@ -351,6 +344,13 @@ processSpecificationDialog(List<ProcessSpecificationInfo> files) {
                     }
                   },
                   child: Text('查看'),
+                ),
+                TextButton(
+                  onPressed: () => Get.back(),
+                  child: Text(
+                    'dialog_default_cancel'.tr,
+                    style: const TextStyle(color: Colors.grey),
+                  ),
                 ),
               ],
             );
@@ -599,16 +599,6 @@ pickPallet({
         actions: [
           TextButton(
             onPressed: () {
-              Get.back();
-              if (isFirst) Get.back();
-            },
-            child: Text(
-              isFirst ? 'dialog_default_back'.tr : 'dialog_default_cancel'.tr,
-              style: const TextStyle(color: Colors.grey),
-            ),
-          ),
-          TextButton(
-            onPressed: () {
               if (selectDate == 0) {
                 showSnackBar(title: '错误', message: '请选择过账日期', isWarning: true);
                 return;
@@ -634,6 +624,16 @@ pickPallet({
               Get.back();
             },
             child: Text('dialog_default_confirm'.tr),
+          ),
+          TextButton(
+            onPressed: () {
+              Get.back();
+              if (isFirst) Get.back();
+            },
+            child: Text(
+              isFirst ? 'dialog_default_back'.tr : 'dialog_default_cancel'.tr,
+              style: const TextStyle(color: Colors.grey),
+            ),
           ),
         ],
       ),
@@ -755,9 +755,9 @@ class PickPalletController {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  titleButtonCancel,
-                  Expanded(child: Container()),
                   titleButtonConfirm,
+                  Expanded(child: Container()),
+                  titleButtonCancel,
                 ],
               ),
             ),

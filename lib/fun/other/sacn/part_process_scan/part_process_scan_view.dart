@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
-import '../../../widget/custom_widget.dart';
 import 'part_process_scan_logic.dart';
 
+///--------开发中
 class PartProcessScanPage extends StatefulWidget {
   const PartProcessScanPage({super.key});
 
@@ -19,7 +20,6 @@ class _PartProcessScanPageState extends State<PartProcessScanPage> {
   @override
   Widget build(BuildContext context) {
     return pageBody(
-      
       actions: [
         TextButton(
           onPressed: () => askDialog(

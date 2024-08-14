@@ -1,6 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jd_flutter/widget/bluetooth.dart';
+import '../bean/http/response/department_info.dart';
+import '../constant.dart';
+import '../login/login_view.dart';
 import '../utils.dart';
 import '../widget/custom_widget.dart';
 import '../widget/dialogs.dart';
@@ -49,7 +52,7 @@ class _UserSettingState extends State<UserSetting> {
       top: 50,
       left: 20,
       child: IconButton(
-        onPressed: ()=>Get.back(),
+        onPressed: () => Get.back(),
         icon: const Icon(
           Icons.arrow_back_ios,
           color: Colors.black54,
@@ -122,7 +125,9 @@ class _UserSettingState extends State<UserSetting> {
             style: hintTextStyle,
           ),
           GestureDetector(
-            onTap: () => logic.changeDepartment(),
+            onTap: () => logic.getDepartment(
+              (l, i) => showChangeDepartmentPopup(l, i),
+            ),
             child: Row(
               children: [
                 Obx(
@@ -138,6 +143,60 @@ class _UserSettingState extends State<UserSetting> {
         ],
       ),
     );
+  }
+
+  showChangeDepartmentPopup(List<Department> list, int selected) {
+    //创建选择器控制器
+    var controller = FixedExtentScrollController(initialItem: selected);
+
+    //创建底部弹窗
+    showPopup(Column(
+      children: <Widget>[
+        //选择器顶部按钮
+        Container(
+          height: 45,
+          color: Colors.grey[200],
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              TextButton(
+                onPressed: () {
+                  Get.back();
+                },
+                child: Text(
+                  'dialog_default_cancel'.tr,
+                  style: const TextStyle(
+                    color: Colors.grey,
+                    fontSize: 20,
+                  ),
+                ),
+              ),
+              TextButton(
+                onPressed: () => logic.changeDepartment(
+                  list[controller.initialItem],
+                ),
+                child: Text(
+                  'dialog_default_confirm'.tr,
+                  style: const TextStyle(
+                    color: Colors.blueAccent,
+                    fontSize: 20,
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+        //选择器主体
+        Expanded(
+          child: getCupertinoPicker(
+            list.map((data) {
+              return Center(child: Text(data.name!));
+            }).toList(),
+            controller,
+          ),
+        )
+      ],
+    ));
   }
 
   ///职位
@@ -176,9 +235,7 @@ class _UserSettingState extends State<UserSetting> {
           SizedBox(
             width: 100,
             child: GestureDetector(
-              onTap: () {
-                logic.changePasswordDialog();
-              },
+              onTap: () => changePasswordDialog(),
               child: Container(
                 color: Colors.transparent,
                 alignment: Alignment.centerRight,
@@ -187,6 +244,79 @@ class _UserSettingState extends State<UserSetting> {
               ),
             ),
           )
+        ],
+      ),
+    );
+  }
+
+  ///修改密码弹窗
+  changePasswordDialog() {
+    var oldPassword = TextEditingController();
+    var newPassword = TextEditingController();
+    showCupertinoModalPopup<void>(
+      context: Get.overlayContext!,
+      builder: (context) => AlertDialog(
+        title: Text('change_password_dialog_title'.tr),
+        content: SizedBox(
+          height: 150,
+          child: Column(
+            children: [
+              TextField(
+                controller: oldPassword,
+                style: const TextStyle(color: Colors.grey),
+                decoration: InputDecoration(
+                  hintText: 'change_password_dialog_old_password'.tr,
+                  hintStyle: const TextStyle(color: Colors.grey),
+                  counterStyle: const TextStyle(color: Colors.grey),
+                  prefixIcon:
+                      const Icon(Icons.lock_outline, color: Colors.grey),
+                  suffixIcon: IconButton(
+                    icon: const Icon(Icons.close, color: Colors.grey),
+                    onPressed: () {
+                      oldPassword.clear();
+                    },
+                  ),
+                ),
+                maxLength: 10,
+              ),
+              TextField(
+                controller: newPassword,
+                style: const TextStyle(color: Colors.grey),
+                decoration: InputDecoration(
+                  hintText: 'change_password_dialog_new_password'.tr,
+                  hintStyle: const TextStyle(color: Colors.grey),
+                  counterStyle: const TextStyle(color: Colors.grey),
+                  prefixIcon:
+                      const Icon(Icons.lock_outline, color: Colors.grey),
+                  suffixIcon: IconButton(
+                    icon: const Icon(Icons.close, color: Colors.grey),
+                    onPressed: () {
+                      newPassword.clear();
+                    },
+                  ),
+                ),
+                maxLength: 10,
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => logic.changePassword(
+              oldPassword.text,
+              newPassword.text,
+            ),
+            child: Text('change_password_dialog_submit'.tr),
+          ),
+          TextButton(
+            onPressed: () {
+              Get.back();
+            },
+            child: Text(
+              'dialog_default_cancel'.tr,
+              style: const TextStyle(color: Colors.grey),
+            ),
+          ),
         ],
       ),
     );
@@ -246,9 +376,9 @@ class _UserSettingState extends State<UserSetting> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(25))),
           onPressed: () {
-            // spSave(spSaveUserInfo, '');
-            // Get.offAll(() => const LoginPage());
-            Get.dialog(const BluetoothDialog());
+            spSave(spSaveUserInfo, '');
+            Get.offAll(() => const LoginPage());
+            // Get.dialog(const BluetoothDialog());
           },
           child: Text('home_user_setting_logout'.tr,
               style: const TextStyle(fontSize: 20))),

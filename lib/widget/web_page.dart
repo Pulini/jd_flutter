@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-import '../bean/http/request/apply_authorization.dart';
 import '../web_api.dart';
 import '../utils.dart';
 import 'custom_widget.dart';
@@ -58,7 +57,15 @@ class WebPage extends StatelessWidget {
     httpPost(
       loading: '正在提交授权申请...',
       method: webApiAuthorizedApplication,
-      body: ApplyAuthorization(reason: reason),
+      body: {
+        'Reason': reason,
+        'RequestUser': userInfo?.userID,
+        'EmpNumber': userInfo?.number,
+        'EmpName': userInfo?.name,
+        'Code': getDeviceID(),
+        'RequestMachineName': getDeviceName(),
+        'RequestNotes': '',
+      },
     ).then(
       (response) {
         if (response.resultCode == resultSuccess) {

@@ -5,13 +5,11 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/base_data.dart';
 import 'package:jd_flutter/utils.dart';
 
-import '../../bean/http/request/maintain_label_create.dart';
-import '../../bean/http/request/maintain_label_set.dart';
-import '../../bean/http/response/maintain_material_info.dart';
-import '../../bean/http/response/picking_bar_code_info.dart';
-import '../../web_api.dart';
-import '../../widget/custom_widget.dart';
-import '../../widget/dialogs.dart';
+import '../../../bean/http/response/maintain_material_info.dart';
+import '../../../bean/http/response/picking_bar_code_info.dart';
+import '../../../web_api.dart';
+import '../../../widget/custom_widget.dart';
+import '../../../widget/dialogs.dart';
 
 createMixLabelDialog(
     List<PickingBarCodeInfo> list, int id, Function() callback) {
@@ -106,28 +104,26 @@ _createMixLabel(
     showSnackBar(title: '错误', message: '可生产贴标数未0', isWarning: true);
     return;
   }
-  var size = <MaintainLabelCreateMixSub>[];
-  for (var i = 0; i < selected.length; ++i) {
-    for (var j = 0; j < selected[i].length; ++j) {
-      if (selected[i][j].value) {
-        size.add(MaintainLabelCreateMixSub(
-          size: list[i][j].size ?? '',
-          capacity: list[i][j].packingQty.toShowString(),
-          mtoNo: list[i][j].interID.toString(),
-        ));
-      }
-    }
-  }
+
   httpPost(
     method: webApiCreateMixLabel,
     loading: '正在生成贴标...',
-    body: MaintainLabelCreateMix(
-      interID: id.toString(),
-      barcodeQty: maxLabel,
-      userID: userInfo?.userID ?? 0,
-      sizeList: size,
-      labelTyp: '3',
-    ),
+    body: {
+      'InterID': id.toString(),
+      'BarcodeQty': maxLabel,
+      'UserID': userInfo?.userID,
+      'SizeList': [
+        for (var i = 0; i < selected.length; ++i)
+          for (var j = 0; j < selected[i].length; ++j)
+            if (selected[i][j].value)
+              {
+                'Size': list[i][j].size,
+                'Capacity': list[i][j].packingQty.toShowString(),
+                'MtoNo': list[i][j].interID.toString(),
+              }
+      ],
+      'LabelTyp': '3',
+    },
   ).then((response) {
     if (response.resultCode == resultSuccess) {
       successDialog(content: response.message, back: () => callback.call());
@@ -511,46 +507,34 @@ _createCustomLabel(
     showSnackBar(title: '错误', message: '请勾选要创建的尺码', isWarning: true);
     return;
   }
-  var size = <MaintainLabelCreateCustomSub>[];
-  for (var i = 0; i < selected.length; ++i) {
-    if (selected[i]) {
-      size.add(MaintainLabelCreateCustomSub(
-        size: list[i].size ?? '',
-        capacity: capacity[i].toShowString(),
-        qty: createGoods[i].toShowString(),
-      ));
-    }
-  }
+  var body = {
+    'InterID': id.toString(),
+    'UserID': userInfo?.userID ?? 0,
+    'SizeList': [
+      for (var i = 0; i < selected.length; ++i)
+        if (selected[i])
+          {
+            'Size': list[i].size ?? '',
+            'Capacity': capacity[i].toShowString(),
+            'Qty': createGoods[i].toShowString(),
+          }
+    ],
+    'LabelTyp': '2',
+  };
   Future<BaseData> post;
   if (isMaterialLabel) {
     post = httpPost(
       method: webApiCreateCustomLargeLabel,
       loading: '正在生成贴标...',
-      body: MaintainLabelCreateCustom(
-        interID: id.toString(),
-        userID: userInfo?.userID ?? 0,
-        sizeList: size,
-        labelTyp: '2',
-      ),
+      body: body,
     );
   } else {
     post = httpPost(
       method: webApiCreateCustomSizeLabel,
       loading: '正在生成贴标...',
-      body: MaintainLabelCreateCustom(
-        interID: id.toString(),
-        userID: userInfo?.userID ?? 0,
-        sizeList: size,
-        labelTyp: '2',
-      ),
+      body: body,
     );
   }
-  logger.f(MaintainLabelCreateCustom(
-    interID: id.toString(),
-    userID: userInfo?.userID ?? 0,
-    sizeList: size,
-    labelTyp: '2',
-  ).toJson());
   post.then((response) {
     if (response.resultCode == resultSuccess) {
       successDialog(content: response.message, back: () => callback.call());
@@ -559,8 +543,6 @@ _createCustomLabel(
     }
   });
 }
-
-
 
 int _createLabel(double capacity, double createGoods) {
   if (capacity > 0.0 && createGoods > 0.0) {
@@ -587,15 +569,15 @@ setLabelPropertyDialog(
                 text: '批量修改',
                 click: () => batchSetLabelPropertyDialog(
                   (netWeight, grossWeight, meas, unitName) {
-                    var item = <MaintainLabelSetPropertiesSub>[];
+                    var item = <Map>[];
                     for (var data in list) {
-                      item.add(MaintainLabelSetPropertiesSub(
-                        size: data.size ?? '',
-                        netWeight: netWeight.toShowString(),
-                        grossWeight: grossWeight.toShowString(),
-                        meas: meas,
-                        unitName: unitName,
-                      ));
+                      item.add({
+                        'Size': data.size ?? '',
+                        'NetWeight': netWeight.toShowString(),
+                        'GrossWeight': grossWeight.toShowString(),
+                        'Meas': meas,
+                        'UnitName': unitName,
+                      });
                     }
                     _setMaterialProperties(
                         item, id, materialCode, () => Get.back());
@@ -628,15 +610,15 @@ setLabelPropertyDialog(
                   showSnackBar(
                       title: '错误', message: '重量必须大于0', isWarning: true);
                 } else {
-                  var item = <MaintainLabelSetPropertiesSub>[];
+                  var item = <Map>[];
                   for (var data in list) {
-                    item.add(MaintainLabelSetPropertiesSub(
-                      size: data.size ?? '',
-                      netWeight: data.netWeight ?? '0',
-                      grossWeight: data.grossWeight ?? '0',
-                      meas: data.meas ?? '',
-                      unitName: data.unitName ?? '',
-                    ));
+                    item.add({
+                      'Size': data.size ?? '',
+                      'NetWeight': data.netWeight ?? '0',
+                      'GrossWeight': data.grossWeight ?? '0',
+                      'Meas': data.meas ?? '',
+                      'UnitName': data.unitName ?? '',
+                    });
                   }
                   _setMaterialProperties(
                     item,
@@ -801,7 +783,7 @@ batchSetLabelPropertyDialog(
 }
 
 _setMaterialProperties(
-  List<MaintainLabelSetPropertiesSub> list,
+  List<Map> list,
   int id,
   String materialCode,
   Function() callback,
@@ -809,12 +791,12 @@ _setMaterialProperties(
   httpPost(
     method: webApiSetMaterialProperties,
     loading: '正在设置物料属性信息...',
-    body: MaintainLabelSetProperties(
-      userID: userInfo?.userID ?? 0,
-      interID: id.toString(),
-      materialCode: materialCode,
-      items: list,
-    ),
+    body: {
+      'UserID': userInfo?.userID ?? 0,
+      'InterID': id.toString(),
+      'MaterialCode': materialCode,
+      'Items': list,
+    },
   ).then((response) {
     if (response.resultCode == resultSuccess) {
       successDialog(content: response.message, back: () => callback.call());
@@ -978,23 +960,22 @@ _setMaterialCapacity(
   RxList<MaintainMaterialCapacityInfo> list,
   Function() callback,
 ) {
-  var items = <MaintainLabelSetCapacitySub>[];
-  for (var data in list) {
-    items.add(MaintainLabelSetCapacitySub(
-      itemID: data.itemID ?? 0,
-      factoryType: data.factoryType ?? '',
-      size: data.size ?? '',
-      capacity: data.capacity.toShowString(),
-      processFlowID: data.processFlowID.toString(),
-    ));
-  }
   httpPost(
     method: webApiSetMaterialCapacity,
     loading: '正在设置物料箱容信息...',
-    body: MaintainLabelSetCapacity(
-      userID: userInfo?.userID ?? 0,
-      items: items,
-    ),
+    body: {
+      'UserID': userInfo?.userID ?? 0,
+      'Items': [
+        for (var data in list)
+          {
+            'ItemID': data.itemID ?? 0,
+            'FactoryType': data.factoryType ?? '',
+            'Size': data.size ?? '',
+            'Capacity': data.capacity.toShowString(),
+            'ProcessFlowID': data.processFlowID.toString(),
+          }
+      ],
+    },
   ).then((response) {
     if (response.resultCode == resultSuccess) {
       successDialog(content: response.message, back: () => callback.call());
@@ -1067,22 +1048,21 @@ _setMaterialLanguages(
   String materialCode,
   Function() callback,
 ) {
-  var items = <MaintainLabelSetLanguageSub>[];
-  for (var data in list) {
-    items.add(MaintainLabelSetLanguageSub(
-      languageID: data.languageID.toString(),
-      languageName: data.languageName ?? '',
-      materialName: data.materialName ?? '',
-    ));
-  }
   httpPost(
     method: webApiSetMaterialLanguages,
     loading: '正在设置物料语言信息...',
-    body: MaintainLabelSetLanguage(
-      userID: userInfo?.userID ?? 0,
-      items: items,
-      materialCode: materialCode,
-    ),
+    body: {
+      'UserID': userInfo?.userID ?? 0,
+      'Items': [
+        for (var data in list)
+          {
+            'LanguageID': data.languageID.toString(),
+            'LanguageName': data.languageName ?? '',
+            'MaterialName': data.materialName ?? '',
+          }
+      ],
+      'MaterialCode': materialCode,
+    },
   ).then((response) {
     if (response.resultCode == resultSuccess) {
       successDialog(content: response.message, back: () => callback.call());
@@ -1114,18 +1094,18 @@ showSelectMaterialPopup(List<String> list, Function(String) callback) {
           TextButton(
             onPressed: () {
               Get.back();
+              callback.call(list[controller.selectedItem]);
+            },
+            child: Text('dialog_default_confirm'.tr),
+          ),
+          TextButton(
+            onPressed: () {
+              Get.back();
             },
             child: Text(
               'dialog_default_cancel'.tr,
               style: const TextStyle(color: Colors.grey),
             ),
-          ),
-          TextButton(
-            onPressed: () {
-              Get.back();
-              callback.call(list[controller.selectedItem]);
-            },
-            child: Text('dialog_default_confirm'.tr),
           ),
         ],
       ),

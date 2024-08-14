@@ -217,10 +217,10 @@ class SaveDispatch {
     });
   }
 
-  static delete(
-      String processBillNumber,
-      Function() callback,
-      ) {
+  static delete({
+    required String processBillNumber,
+    Function()? callback,
+  }) {
     openDb().then((db) {
       db.delete(
         tableName,
@@ -228,7 +228,7 @@ class SaveDispatch {
         whereArgs: [processBillNumber],
       ).then((value) {
         db.close();
-        callback.call();
+        callback?.call();
       }, onError: (e) {
         logger.e('数据库操作异常：$e');
         db.close();
@@ -237,9 +237,9 @@ class SaveDispatch {
   }
 
   static getSave(
-      String processBillNumber,
-      Function(SaveDispatch) callback,
-      ) {
+    String processBillNumber,
+    Function(SaveDispatch) callback,
+  ) {
     openDb().then((db) {
       db.query(
         tableName,

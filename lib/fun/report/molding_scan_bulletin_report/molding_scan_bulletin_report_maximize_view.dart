@@ -60,6 +60,14 @@ class _MoldingScanBulletinReportMaximizeState
   );
 
   getTable() {
+    var greenText = const TextStyle(
+      color: Colors.green,
+      fontWeight: FontWeight.bold,
+    );
+    var redText = const TextStyle(
+      color: Colors.red,
+      fontWeight: FontWeight.bold,
+    );
     return Obx(
       () {
         var data = state.reportInfo[0].sizeInfo!;
@@ -108,12 +116,12 @@ class _MoldingScanBulletinReportMaximizeState
               cells: [
                 DataCell(Text(
                   'molding_scan_bulletin_report_table_hint5'.tr,
-                  style: state.redText,
+                  style: redText,
                 )),
                 for (var i = 0; i < data.length; ++i)
                   DataCell(Text(
                     data[i].getOwe().toShowString(),
-                    style: state.redText,
+                    style: redText,
                   ))
               ],
             ),
@@ -123,13 +131,13 @@ class _MoldingScanBulletinReportMaximizeState
                 DataCell(
                   Text(
                     'molding_scan_bulletin_report_table_hint6'.tr,
-                    style: state.greenText,
+                    style: greenText,
                   ),
                 ),
                 for (var i = 0; i < data.length; ++i)
                   DataCell(Text(
                     data[i].getCompletionRate(),
-                    style: state.greenText,
+                    style: greenText,
                   )),
               ],
             )

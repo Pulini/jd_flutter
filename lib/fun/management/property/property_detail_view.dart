@@ -546,7 +546,7 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
               'property_detail_bt_submit'.tr,
               backgroundColor: Colors.green,
               () {
-                if (state.checkData()) {
+                if (logic.checkData()) {
                   askDialog(
                     content: 'property_detail_hint_submit'.tr,
                     confirm: () {

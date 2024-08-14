@@ -4,8 +4,8 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 
-import '../../bean/http/response/label_info.dart';
-import '../../widget/dialogs.dart';
+import '../../../bean/http/response/label_info.dart';
+import '../../../widget/dialogs.dart';
 import 'maintain_label_dialogs.dart';
 import 'maintain_label_logic.dart';
 

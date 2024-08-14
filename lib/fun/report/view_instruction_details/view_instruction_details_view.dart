@@ -17,12 +17,15 @@ class ViewInstructionDetailsPage extends StatefulWidget {
 class _ViewInstructionDetailsPageState
     extends State<ViewInstructionDetailsPage> {
   final logic = Get.put(ViewInstructionDetailsLogic());
+  final state = Get.find<ViewInstructionDetailsLogic>().state;
+
+
 
   @override
   Widget build(BuildContext context) {
     return pageBodyWithDrawer(
       queryWidgets: [
-        EditText(hint: '请输入指令单号', onChanged: (v) => logic.tetInstruction = v),
+        EditText(hint: '请输入指令单号', onChanged: (v) => state.tetInstruction = v),
         OptionsPicker(pickerController: logic.pickerControllerProcessFlow),
       ],
       query: () => logic.queryPDF(),

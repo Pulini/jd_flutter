@@ -7,7 +7,6 @@ import '../../../widget/picker/picker_view.dart';
 import 'daily_report_logic.dart';
 
 class DailyReportPage extends StatefulWidget {
-
   const DailyReportPage({super.key});
 
   @override
@@ -18,17 +17,44 @@ class _DailyReportPageState extends State<DailyReportPage> {
   final logic = Get.put(DailyReportLogic());
   final state = Get.find<DailyReportLogic>().state;
 
-  _item(DailyReport item, int index) {
+
+  _item(DailyReport? item) {
     return Container(
-      color: item.getItemColor(),
+      color: item == null ? Colors.greenAccent : item.getItemColor(),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Row(
           children: [
-            Expanded(flex: 1, child: Text(item.size ?? '')),
-            Expanded(flex: 2, child: Text(item.qty.toString())),
-            Expanded(flex: 6, child: Text(item.materialName ?? '')),
-            Expanded(flex: 2, child: Text(item.processName ?? '')),
+            Expanded(
+              flex: 1,
+              child: Text(
+                item == null
+                    ? 'page_daily_report_table_title_hint2'.tr
+                    : item.size ?? '',
+              ),
+            ),
+            Expanded(
+              flex: 2,
+              child: Text(item == null
+                  ? 'page_daily_report_table_title_hint4'.tr
+                  : item.qty.toString()),
+            ),
+            Expanded(
+              flex: 6,
+              child: Text(
+                item == null
+                    ? 'page_daily_report_table_title_hint1'.tr
+                    : item.materialName ?? '',
+              ),
+            ),
+            Expanded(
+              flex: 2,
+              child: Text(
+                item == null
+                    ? 'page_daily_report_table_title_hint3'.tr
+                    : item.processName ?? '',
+              ),
+            ),
           ],
         ),
       ),
@@ -38,18 +64,22 @@ class _DailyReportPageState extends State<DailyReportPage> {
   @override
   Widget build(BuildContext context) {
     return pageBodyWithDrawer(
-      
       queryWidgets: [
         OptionsPicker(pickerController: logic.pickerControllerDepartment),
         DatePicker(pickerController: logic.pickerControllerDate),
       ],
-      query:()=> logic.query(),
-      body: Obx(() => ListView.builder(
-            padding: const EdgeInsets.all(8),
-            itemCount: state.dataList.length,
-            itemBuilder: (BuildContext context, int index) =>
-                _item(state.dataList[index], index),
-          )),
+      query: () => logic.query(
+
+      ),
+      body: Obx(
+        () => ListView(
+          padding: const EdgeInsets.all(8),
+          children: [
+            _item(null),
+            for (var data in state.dataList) _item(data),
+          ],
+        ),
+      ),
     );
   }
 

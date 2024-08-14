@@ -1,7 +1,4 @@
 import 'package:get/get.dart';
-import 'package:jd_flutter/web_api.dart';
-
-import '../../../bean/http/response/daily_report_info.dart';
 import '../../../route.dart';
 import '../../../widget/dialogs.dart';
 import '../../../widget/picker/picker_controller.dart';
@@ -21,40 +18,13 @@ class DailyReportLogic extends GetxController {
     PickerType.date,
     saveKey: '${RouteConfig.dailyReport.name}${PickerType.date}',
   );
-
   ///获取扫码日产量接口
   query() {
-    httpGet(
-      loading: 'page_daily_report_querying'.tr,
-      method: webApiGetDayOutput,
-      params: {
-        'DepartmentID': pickerControllerDepartment.selectedId.value,
-        'Date': pickerControllerDate.getDateFormatYMD(),
-      },
-    ).then((response) {
-      if (response.resultCode == resultSuccess) {
-        try {
-          var list = <DailyReport>[
-            DailyReport(
-              type: 0,
-              materialName: 'page_daily_report_table_title_hint1'.tr,
-              size: 'page_daily_report_table_title_hint2'.tr,
-              processName: 'page_daily_report_table_title_hint3'.tr,
-              qty: 'page_daily_report_table_title_hint4'.tr,
-            )
-          ];
-          for (var item in response.data) {
-            list.add(DailyReport.fromJson(item));
-          }
-          state.dataList.value = list;
-          Get.back();
-        } on Error catch (e) {
-          logger.e(e);
-          errorDialog(content: 'json_format_error'.tr);
-        }
-      } else {
-        errorDialog(content: response.message ?? 'query_default_error'.tr);
-      }
-    });
+    state.getDayOutput(
+      departmentID: pickerControllerDepartment.selectedId.value,
+      date: pickerControllerDate.getDateFormatYMD(),
+      success: () => Get.back(),
+      error: (msg) => errorDialog(content: msg),
+    );
   }
 }

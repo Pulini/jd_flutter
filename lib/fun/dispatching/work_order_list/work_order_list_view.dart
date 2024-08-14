@@ -6,7 +6,7 @@ import 'package:jd_flutter/widget/custom_widget.dart';
 import '../../../bean/http/response/work_order_info.dart';
 import '../../../utils.dart';
 import '../../../widget/picker/picker_view.dart';
-import '../../maintain_label/maintain_label_view.dart';
+import '../../other/maintain_label/maintain_label_view.dart';
 import 'work_order_list_logic.dart';
 
 class WorkOrderListPage extends StatefulWidget {

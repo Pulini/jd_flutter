@@ -1,16 +1,24 @@
+import 'package:collection/collection.dart';
 import 'package:get/get.dart';
+import '../../../bean/http/response/manufacture_instructions_info.dart';
+import '../../../bean/http/response/order_color_list.dart';
+import '../../../bean/http/response/prd_route_info.dart';
+import '../../../bean/http/response/work_plan_material_info.dart';
 import '../../../bean/production_dispatch.dart';
 import '../../../bean/http/response/production_dispatch_order_detail_info.dart';
 import '../../../bean/http/response/production_dispatch_order_info.dart';
 import '../../../bean/http/response/worker_info.dart';
 import '../../../utils.dart';
+import '../../../web_api.dart';
 
 class ProductionDispatchState {
-  var etInstruction='';
-  var isSelectedOutsourcing =  spGet('${Get.currentRoute}/isSelectedOutsourcing') ??false;
-  var isSelectedClosed =  spGet('${Get.currentRoute}/isSelectedClosed') ??false;
-  var isSelectedMany =  spGet('${Get.currentRoute}/isSelectedMany') ??false;
-  var isSelectedMergeOrder =  spGet('${Get.currentRoute}/isSelectedMergeOrder') ??false;
+  var etInstruction = '';
+  var isSelectedOutsourcing =
+      spGet('${Get.currentRoute}/isSelectedOutsourcing') ?? false;
+  var isSelectedClosed = spGet('${Get.currentRoute}/isSelectedClosed') ?? false;
+  var isSelectedMany = spGet('${Get.currentRoute}/isSelectedMany') ?? false;
+  var isSelectedMergeOrder =
+      spGet('${Get.currentRoute}/isSelectedMergeOrder') ?? false;
   var orderList = <ProductionDispatchOrderInfo>[].obs;
   var orderGroupList = <String, List<ProductionDispatchOrderInfo>>{}.obs;
 
@@ -46,8 +54,6 @@ class ProductionDispatchState {
   var isEnabledNextWorkProcedure = true.obs;
   var isEnabledAddOne = true.obs;
 
-
-
   ///获取组员列表数据
   detailViewGetWorkerList() {
     getWorkerInfo(
@@ -57,6 +63,13 @@ class ProductionDispatchState {
   }
 
   // ProductionDispatchState() {}
+  getSelectOne(Function(ProductionDispatchOrderInfo) callback) {
+    List<ProductionDispatchOrderInfo> select =
+        orderList.where((v) => v.select).toList();
+    if (select.isNotEmpty) {
+      callback.call(select[0]);
+    }
+  }
 
   remake() {
     workCardTitle.value = WorkCardTitle();
@@ -76,5 +89,449 @@ class ProductionDispatchState {
     isEnabledBatchDispatch.value = false;
   }
 
+  query({
+    required String startTime,
+    required String endTime,
+    required Function(bool isNotEmpty) success,
+    required Function(String msg) error,
+  }) {
+    httpGet(
+      method: webApiGetWorkCardCombinedSizeList,
+      loading: '正在查询工单',
+      params: {
+        'startTime': startTime,
+        'endTime': endTime,
+        'moNo': etInstruction,
+        'isClose': isSelectedClosed,
+        'isOutsourcing': isSelectedOutsourcing,
+        'deptID': userInfo?.departmentID,
+      },
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        orderList.value = [
+          for (var json in response.data)
+            ProductionDispatchOrderInfo.fromJson(json)
+        ];
+        orderGroupList.value = groupBy(
+          orderList,
+          (ProductionDispatchOrderInfo e) =>
+              e.sapOrderBill.ifEmpty(e.orderBill ?? ''),
+        );
+        success.call(orderList.isNotEmpty);
+      } else {
+        orderList.value = [];
+        error.call(response.message ?? '');
+      }
+    });
+  }
 
+  ///指令表
+  instructionList({
+    required Function(String url) success,
+    required Function(String msg) error,
+  }) {
+    getSelectOne(
+      (v) => httpGet(
+        method: webApiGetProductionOrderPDF,
+        loading: '正在查询指令表...',
+        params: {'orderBill': v.orderBill},
+      ).then(
+        (response) {
+          if (response.resultCode == resultSuccess) {
+            success.call(response.data);
+          } else {
+            error.call(response.message ?? '');
+          }
+        },
+      ),
+    );
+  }
+
+  ///工艺书
+  getManufactureInstructions({
+    required int routeID,
+    required Function(List<ManufactureInstructionsInfo> data) success,
+    required Function(String msg) error,
+  }) {
+    httpGet(
+      method: webApiGetManufactureInstructions,
+      loading: '正在查询工艺指导书...',
+      params: {'RouteID': routeID},
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        success.call([
+          for (var json in response.data)
+            ManufactureInstructionsInfo.fromJson(json)
+        ]);
+      } else {
+        error.call(response.message ?? '');
+      }
+    });
+  }
+
+  ///配色单列表
+  colorMatching({
+    required Function(List<OrderColorList> data, String planBill) success,
+    required Function(String msg) error,
+  }) {
+    getSelectOne(
+      (v) => httpGet(
+        method: webApiGetMatchColors,
+        loading: '正在获取配色信息...',
+        params: {'planBill': v.planBill},
+      ).then(
+        (response) {
+          if (response.resultCode == resultSuccess) {
+            success.call(
+              [for (var json in response.data) OrderColorList.fromJson(json)],
+              v.planBill ?? '',
+            );
+          } else {
+            error.call(response.message ?? '');
+          }
+        },
+      ),
+    );
+  }
+
+  getColorPdf({
+    required String code,
+    required String id,
+    required Function(String uri) success,
+    required Function(String msg) error,
+  }) {
+    httpGet(
+      method: webApiGetMatchColorsPDF,
+      loading: '正在获取配色文件...',
+      params: {
+        'planBill': id,
+        'materialCode': code,
+      },
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        success.call(response.data);
+      } else {
+        error.call(response.message ?? '');
+      }
+    });
+  }
+
+  ///打开/关闭工序
+  offOnProcess({
+    required Function() success,
+    required Function(String msg) error,
+  }) {
+    getSelectOne((v) {
+      httpPost(
+        method: webApiChangeWorkCardStatus,
+        loading: '正在获取配色文件...',
+        params: {
+          'Number': v.orderBill,
+          'CloseStatus': v.state?.contains('未关闭'),
+          'UserID': userInfo?.userID,
+        },
+      ).then((response) {
+        if (response.resultCode == resultSuccess) {
+          success.call();
+        } else {
+          error.call(response.message ?? '');
+        }
+      });
+    });
+  }
+
+  ///删除下游工序
+  deleteDownstream({
+    required Function() success,
+    required Function(String msg) error,
+  }) {
+    getSelectOne((v) {
+      httpPost(
+        method: webApiDeleteScProcessWorkCard,
+        loading: '正在删除下游工序...',
+        params: {'WorkCardID': v.interID},
+      ).then((response) {
+        if (response.resultCode == resultSuccess) {
+          success.call();
+        } else {
+          error.call(response.message ?? '');
+        }
+      });
+    });
+  }
+
+  ///删除上一次报工
+  deleteLastReport({
+    required Function() success,
+    required Function(String msg) error,
+  }) {
+    getSelectOne((v) {
+      httpPost(
+        method: webApiDeleteLastReport,
+        loading: '正在删除上次报工...',
+        params: {
+          'WorkCardInterID': v.interID,
+          'UserID': userInfo?.userID,
+        },
+      ).then((response) {
+        if (response.resultCode == resultSuccess) {
+          success.call();
+        } else {
+          error.call(response.message ?? '');
+        }
+      });
+    });
+  }
+
+  ///更新领料配套数
+  updateSap({
+    required Function() success,
+    required Function(String msg) error,
+  }) {
+    getSelectOne((v) {
+      httpPost(
+        method: webApiUpdateSAPPickingSupportingQty,
+        loading: '正在更新领料配套数...',
+        params: {'InterID': v.interID},
+      ).then((response) {
+        if (response.resultCode == resultSuccess) {
+          success.call();
+        } else {
+          error.call(response.message ?? '');
+        }
+      });
+    });
+  }
+
+  getSurplusMaterial(Function(List<Map>) callback) {
+    getSelectOne((v) {
+      callback.call([
+        if (v.stubBar1?.isNotEmpty == true &&
+            v.stubBarName1?.isNotEmpty == true)
+          {
+            'StubBar': v.stubBar1,
+            'StubBarName': v.stubBarName1,
+          },
+        if (v.stubBar2?.isNotEmpty == true &&
+            v.stubBarName2?.isNotEmpty == true)
+          {
+            'StubBar': v.stubBar2,
+            'StubBarName': v.stubBarName2,
+          },
+        if (v.stubBar2?.isNotEmpty == true &&
+            v.stubBarName3?.isNotEmpty == true)
+          {
+            'StubBar': v.stubBar2,
+            'StubBarName': v.stubBarName2,
+          },
+      ]);
+    });
+  }
+
+  ///报工SAP
+  reportToSap({
+    required double qty,
+    required Function() success,
+    required Function(String msg) error,
+  }) {
+    getSelectOne((v) {
+      httpPost(
+        method: webApiReportSAPByWorkCardInterID,
+        loading: '正在报工到SAP...',
+        params: {
+          'InterID': v.interID,
+          'Qty': qty,
+          'UserID': userInfo?.userID,
+        },
+      ).then((response) {
+        if (response.resultCode == resultSuccess) {
+          success.call();
+        } else {
+          error.call(response.message ?? '');
+        }
+      });
+    });
+  }
+
+  orderPush({
+    required ProductionDispatchOrderInfo order,
+    required Function(ProductionDispatchOrderDetailInfo detailInfo) success,
+    required Function(String msg) error,
+  }) {
+    httpPost(
+      method: webApiPushProductionOrder,
+      loading: '正在下推...',
+      params: {
+        'interID': order.interID,
+        'entryID': order.entryID,
+        'organizeID': userInfo?.organizeID,
+        'userID': userInfo?.userID,
+        'departmentID': userInfo?.departmentID,
+      },
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        success.call(ProductionDispatchOrderDetailInfo.fromJson(
+          response.data,
+        ));
+      } else {
+        error.call(response.message ?? '');
+      }
+    });
+  }
+
+  ordersPush({
+    required List<ProductionDispatchOrderInfo> orders,
+    required Function() success,
+    required Function(String msg) error,
+  }) {
+    // var planBills = '';
+    // var routeBillNumber = <String>[];
+    // var interIdList = <int>[];
+
+    // for (var order in orders) {
+    //   routeBillNumber.add(order.routeBillNumber ?? '');
+    //   planBills += '${order.planBill},';
+    //   interIdList.add(order.interID ?? 0);
+    // }
+    var body = <Map>[];
+    groupBy(orders, (v) => v.interID).forEach((key, value) {
+      body.add({
+        'OrganizeID': userInfo?.organizeID,
+        'UserID': userInfo?.userID,
+        'DepartmentID': userInfo?.departmentID,
+        'WorkCardItems': [
+          for (var v in value)
+            {
+              'EntryID': key,
+              'InterID': v.interID,
+            }
+        ]
+      });
+    });
+
+    httpPost(
+      method: webApiBatchPushProductionOrder,
+      loading: '正在下推...',
+      body: body,
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        // var data = ProductionDispatchOrderDetailInfo.fromJson(
+        //   response.data,
+        // );
+        success.call();
+      } else {
+        error.call(response.message ?? '');
+      }
+    });
+  }
+
+  getWorkPlanMaterial({
+    required Function(List<WorkPlanMaterialInfo> data) success,
+    required Function(String msg) error,
+  }) {
+    httpGet(
+      method: webApiGetWorkPlanMaterial,
+      loading: '正在查询用料清单...',
+      params: {'InterID': orderList.firstWhere((v) => v.select).interID},
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        success.call([
+          for (var json in response.data) WorkPlanMaterialInfo.fromJson(json)
+        ]);
+      } else {
+        error.call(response.message ?? '');
+      }
+    });
+  }
+
+  getPrdRouteInfo({
+    required Function(List<PrdRouteInfo> data) success,
+    required Function(String msg) error,
+  }) {
+    httpGet(
+      method: webApiGetPrdRouteInfo,
+      loading: '正在查询工艺路线...',
+      params: {'BillNo': orderList.firstWhere((v) => v.select).routeBillNumber},
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        success.call([
+          for (var json in response.data) PrdRouteInfo.fromJson(json),
+        ]);
+      } else {
+        error.call(response.message ?? '');
+      }
+    });
+  }
+
+  sendDispatchToWechat({
+    required Function(String msg) success,
+    required Function(String msg) error,
+  }) {
+    var msg =
+        '指令号：${orderList.firstWhere((v) => v.select).planBill}\r\n工厂型体：${workCardTitle.value.plantBody}\r\n工序：';
+    httpPost(
+      method: webApiSendDispatchToWechat,
+      loading: '正在给员工发送派工信息...',
+      body: [
+        for (var wp in workProcedure.where((v) => v.isOpen == 1))
+          for (var d in wp.dispatch)
+            {
+              'EmpID': d.empID,
+              'WorkOrderType': '$msg${d.processName}',
+              'WorkOrderContent': '汇报数量：${d.qty.toShowString()}'
+            }
+      ],
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        success.call(response.message ?? '');
+      } else {
+        error.call(response.message ?? '');
+      }
+    });
+  }
+
+  productionDispatch({
+    required Function(String msg) success,
+    required Function(String msg) error,
+  }) {
+    httpPost(
+      method: webApiProductionDispatch,
+      loading: '正在发送派工数据...',
+      body: {
+        'UserID': userInfo?.userID,
+        'List': [
+          for (var wc in workProcedure.where((v) => v.isOpen == 1))
+            for (var di in wc.dispatch)
+              if (di.qty! > 0)
+                {
+                  'ID': wc.id,
+                  'InterID': wc.interID,
+                  'EntryID': wc.entryID,
+                  'OperPlanningEntryFID': wc.operPlanningEntryFID,
+                  'EmpID': di.empID,
+                  'WorkerCode': di.number,
+                  'WorkerName': di.name,
+                  'SourceQty': wc.sourceQty,
+                  'MustQty': wc.mustQty,
+                  'PreSchedulingQty': wc.preSchedulingQty,
+                  'Qty': di.qty,
+                  'FinishQty': wc.finishQty,
+                  'SourceEntryID': wc.sourceEntryID,
+                  'SourceInterID': wc.sourceInterID,
+                  'SourceEntryFID': wc.sourceEntryFID,
+                  'ProcessNumber': wc.processNumber,
+                  'ProcessName': wc.processName,
+                  'IsOpen': wc.isOpen,
+                  'RoutingID': wc.routingID,
+                }
+        ]
+      },
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        success.call(response.message ?? '');
+      } else {
+        error.call(response.message ?? '');
+      }
+    });
+  }
 }

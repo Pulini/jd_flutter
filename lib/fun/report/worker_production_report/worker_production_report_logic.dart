@@ -1,7 +1,5 @@
 import 'package:get/get.dart';
 
-import '../../../bean/http/response/worker_production_info.dart';
-import '../../../web_api.dart';
 import '../../../route.dart';
 import '../../../widget/dialogs.dart';
 import '../../../widget/picker/picker_controller.dart';
@@ -23,26 +21,12 @@ class WorkerProductionReportLogic extends GetxController {
     saveKey: '${RouteConfig.workerProductionReport.name}${PickerType.date}',
   );
 
-
   query() {
-    httpGet(
-      loading: '正在查询计件产量...',
-      method: webApiGetWorkerProductionReport,
-      params: {
-        'DepartmentID': pickerControllerDepartment.selectedId.value,
-        'Date': pickerControllerDate.getDateFormatYMD(),
-      },
-    ).then((response) {
-      if (response.resultCode == resultSuccess) {
-        var list = <WorkerProductionInfo>[];
-        for (var item in response.data) {
-          list.add(WorkerProductionInfo.fromJson(item));
-        }
-        state.dataList.value=list;
-        Get.back();
-      } else {
-        errorDialog(content: response.message ?? 'query_default_error'.tr);
-      }
-    });
+    state.getWorkerProductionReport(
+      departmentID: pickerControllerDepartment.selectedId.value,
+      date: pickerControllerDate.getDateFormatYMD(),
+      success: () => Get.back(),
+      error: (msg) => errorDialog(content: msg),
+    );
   }
 }

@@ -1,136 +1,48 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../../../bean/http/response/production_day_report_info.dart';
-import '../../../web_api.dart';
 import '../../../route.dart';
-import '../../../utils.dart';
 import '../../../widget/custom_widget.dart';
 import '../../../widget/dialogs.dart';
 import '../../../widget/picker/picker_controller.dart';
-import '../../../widget/picker/picker_view.dart';
 import 'production_day_report_state.dart';
 
 class ProductionDayReportLogic extends GetxController {
   final ProductionDayReportState state = ProductionDayReportState();
 
   ///日期选择器的控制器
-  late DatePickerController pickerControllerDate;
+  late DatePickerController pickerControllerDate = DatePickerController(
+    PickerType.date,
+    saveKey: '${RouteConfig.productionDayReport.name}${PickerType.date}',
+    firstDate: state.lastWeek,
+    lastDate: state.today,
+    onChanged: (index) => query(),
+  );
 
   ///下拉选择器的控制器
-  late SpinnerController spinnerControllerWorkShop;
-  late DatePickerController reasonDateController;
-  var reasonTitle = <Widget>[];
-  var reasonTextStyle = const TextStyle(color: Colors.white);
-  late DateTime today;
-  late DateTime lastWeek;
-  late DateTime yesterday;
-
-  @override
-  void onInit() {
-    today = DateTime.now();
-    lastWeek = DateTime(today.year, today.month, today.day - 7);
-    yesterday = DateTime(today.year, today.month, today.day - 1);
-    pickerControllerDate = DatePickerController(
-      PickerType.date,
-      saveKey: '${RouteConfig.productionDayReport.name}${PickerType.date}',
-      firstDate: lastWeek,
-      lastDate: today,
-      onChanged: (index) => query(),
-    );
-    spinnerControllerWorkShop = SpinnerController(
-      saveKey: RouteConfig.productionDayReport.name,
-      dataList: [
-        'spinner_work_shop_hint1'.tr,
-        'spinner_work_shop_hint2'.tr,
-        'spinner_work_shop_hint3'.tr,
-        'spinner_work_shop_hint4'.tr,
-        'spinner_work_shop_hint5'.tr
-      ],
-      onChanged: (index) => query(),
-    );
-    reasonDateController = DatePickerController(
-      PickerType.date,
-      firstDate: yesterday,
-      lastDate: today,
-    );
-    reasonTitle = [
-      getText(
-        'page_production_day_report_reason_dialog_hint1'.tr,
-        userInfo?.departmentName ?? '',
-      ),
-      getText(
-        'page_production_day_report_reason_dialog_hint2'.tr,
-        userInfo?.number ?? '',
-      ),
-      getText(
-        'page_production_day_report_reason_dialog_hint3'.tr,
-        userInfo?.name ?? '',
-      ),
-      getText(
-        'page_production_day_report_reason_dialog_hint4'.tr,
-        userInfo?.position ?? '',
-      ),
-      DatePicker(pickerController: reasonDateController),
-    ];
-    super.onInit();
-  }
-
-  Widget getText(String hint, String text) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 10, top: 5, right: 10, bottom: 5),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            hint,
-            style: reasonTextStyle,
-          ),
-          Text(
-            text,
-            style: reasonTextStyle,
-          )
-        ],
-      ),
-    );
-  }
+  late SpinnerController spinnerControllerWorkShop = SpinnerController(
+    saveKey: RouteConfig.productionDayReport.name,
+    dataList: [
+      'spinner_work_shop_hint1'.tr,
+      'spinner_work_shop_hint2'.tr,
+      'spinner_work_shop_hint3'.tr,
+      'spinner_work_shop_hint4'.tr,
+      'spinner_work_shop_hint5'.tr
+    ],
+    onChanged: (index) => query(),
+  );
+  late DatePickerController reasonDateController = DatePickerController(
+    PickerType.date,
+    firstDate: state.yesterday,
+    lastDate: state.today,
+  );
 
   ///获取产量汇总表接口
   query() {
-    httpGet(
-      loading: 'page_production_day_report_querying'.tr,
-      method: webApiGetPrdDayReport,
-      params: {
-        'Date': pickerControllerDate.getDateFormatYMD(),
-        'WorkShopID': spinnerControllerWorkShop.selectIndex + 1,
-        'OrganizeID': userInfo!.organizeID ?? 0,
-      },
-    ).then((response) {
-      if (response.resultCode == resultSuccess) {
-        try {
-          var list = <DataRow>[];
-          var index = 0;
-          for (var item in response.data) {
-            var data = ProductionDayReportInfo.fromJson(item);
-            list.add(
-              state.createDataRow(
-                data,
-                index.isEven ? Colors.transparent : Colors.grey.shade100,
-                () => showReasonDialog(),
-              ),
-            );
-            index++;
-          }
-          state.tableDataRows.value = list;
-          Get.back(closeOverlays: true);
-        } on Error catch (e) {
-          logger.e(e);
-          errorDialog(content: 'json_format_error'.tr);
-        }
-      } else {
-        errorDialog(content: response.message ?? 'query_default_error'.tr);
-      }
-    });
+    state.getPrdDayReport(
+      date: pickerControllerDate.getDateFormatYMD(),
+      workShopID: spinnerControllerWorkShop.selectIndex + 1,
+      success: (msg) => Get.back(closeOverlays: true),
+      error: (msg) => errorDialog(content: msg),
+    );
   }
 
   bool checkDate() {
@@ -148,44 +60,16 @@ class ProductionDayReportLogic extends GetxController {
     return false;
   }
 
-  showReasonDialog() {
-    if (checkDate()) {
-      reasonDateController.pickDate.value = DateTime.now();
-      reasonInputPopup(
-        title: reasonTitle,
-        hintText:'dialog_reason_hint'.tr ,
-        confirmText: 'dialog_reason_submit'.tr,
-        confirm: (reason) {
-          submitReason(
-            reasonDateController.getDateFormatYMD(),
-            reason,
-          );
-        },
-      );
-    } else {
-      errorDialog(content: 'page_production_day_report_reason_dialog_error'.tr);
-    }
-  }
-
-  submitReason(String date, String reason) {
-    httpPost(
-      loading: 'page_production_day_report_reason_dialog_save'.tr,
-      method: webApiSubmitDayReportReason,
-      params: {
-        'Date': date,
-        'Value': reason,
-        'DeptID': userInfo!.departmentID ?? 0,
-        'Number': userInfo!.number ?? '',
-      },
-    ).then((response) {
-      if (response.resultCode == resultSuccess) {
-        successDialog(content: response.message, back: () => query());
-      } else {
-        errorDialog(
-          content: response.message ??
-              'page_production_day_report_reason_dialog_save_error'.tr,
-        );
-      }
-    });
+  submitReason({
+    required String date,
+    required String reason,
+    required Function() refresh,
+  }) {
+    state.submitReason(
+      date: date,
+      reason: reason,
+      success: (msg) => successDialog(content: msg, back: () => refresh.call()),
+      error: (msg) => errorDialog(content: msg),
+    );
   }
 }

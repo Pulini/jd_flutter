@@ -17,7 +17,7 @@ import 'home/home_view.dart';
 import 'web_api.dart';
 import 'login/login_view.dart';
 import 'translation.dart';
-main() async {
+ main() async {
   ///确保初始化完成才能加载耗时插件
   WidgetsFlutterBinding.ensureInitialized();
   if (GetPlatform.isMobile){

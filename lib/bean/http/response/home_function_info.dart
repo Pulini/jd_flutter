@@ -1,3 +1,4 @@
+import 'dart:ui';
 
 /// ClassName : "生产"
 /// BackGroundColor : "＃00FF00"
@@ -11,7 +12,8 @@ class HomeFunctions {
     this.backGroundColor,
     this.fontColor,
     this.icon,
-    this.subFunctions,});
+    this.subFunctions,
+  });
 
   HomeFunctions.fromJson(dynamic json) {
     className = json['ClassName'];
@@ -25,6 +27,7 @@ class HomeFunctions {
       });
     }
   }
+
   String? className;
   int? backGroundColor;
   int? fontColor;
@@ -43,6 +46,9 @@ class HomeFunctions {
     return map;
   }
 
+  getTextColor() => Color(fontColor ?? 0xffffffff);
+
+  getBKGColor() => Color(backGroundColor ?? 0xffffffff);
 }
 
 /// Name : "派工"
@@ -55,7 +61,8 @@ class SubFunctions {
     this.name,
     this.description,
     this.icon,
-    this.functionGroup,});
+    this.functionGroup,
+  });
 
   SubFunctions.fromJson(dynamic json) {
     name = json['Name'];
@@ -68,6 +75,7 @@ class SubFunctions {
       });
     }
   }
+
   String? name;
   String? description;
   String? icon;
@@ -83,7 +91,6 @@ class SubFunctions {
     }
     return map;
   }
-
 }
 
 /// Id : 1
@@ -102,7 +109,8 @@ class FunctionGroup {
     this.description,
     this.icon,
     this.routeSrc,
-    this.hasPermission,});
+    this.hasPermission,
+  });
 
   FunctionGroup.fromJson(dynamic json) {
     id = json['Id'];
@@ -113,6 +121,7 @@ class FunctionGroup {
     routeSrc = json['RouteSrc'];
     hasPermission = json['HasPermission'];
   }
+
   int? id;
   int? version;
   String? name;
@@ -132,5 +141,4 @@ class FunctionGroup {
     map['HasPermission'] = hasPermission;
     return map;
   }
-
 }
