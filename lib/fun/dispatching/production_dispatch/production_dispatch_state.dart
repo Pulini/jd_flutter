@@ -1,10 +1,10 @@
 import 'package:collection/collection.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/bean/http/response/base_data.dart';
 import '../../../bean/http/response/manufacture_instructions_info.dart';
 import '../../../bean/http/response/order_color_list.dart';
 import '../../../bean/http/response/prd_route_info.dart';
 import '../../../bean/http/response/work_plan_material_info.dart';
-import '../../../bean/production_dispatch.dart';
 import '../../../bean/http/response/production_dispatch_order_detail_info.dart';
 import '../../../bean/http/response/production_dispatch_order_info.dart';
 import '../../../bean/http/response/worker_info.dart';
@@ -38,6 +38,7 @@ class ProductionDispatchState {
 
   var workCardTitle = WorkCardTitle().obs;
   var workProcedure = <WorkCardList>[].obs;
+  var batchWorkProcedure = <WorkCardList>[];
   var dispatchInfo = <DispatchInfo>[].obs;
   var workProcedureSelect = 0.obs;
   var workerList = <WorkerInfo>[];
@@ -74,6 +75,7 @@ class ProductionDispatchState {
   remake() {
     workCardTitle.value = WorkCardTitle();
     workProcedure.value = [];
+    batchWorkProcedure = [];
     dispatchInfo.value = [];
     workProcedureSelect.value = -1;
     workerList = [];
@@ -381,18 +383,9 @@ class ProductionDispatchState {
 
   ordersPush({
     required List<ProductionDispatchOrderInfo> orders,
-    required Function() success,
+    required Function(ProductionDispatchOrderDetailInfo data) success,
     required Function(String msg) error,
   }) {
-    // var planBills = '';
-    // var routeBillNumber = <String>[];
-    // var interIdList = <int>[];
-
-    // for (var order in orders) {
-    //   routeBillNumber.add(order.routeBillNumber ?? '');
-    //   planBills += '${order.planBill},';
-    //   interIdList.add(order.interID ?? 0);
-    // }
     var body = <Map>[];
     groupBy(orders, (v) => v.interID).forEach((key, value) {
       body.add({
@@ -402,8 +395,8 @@ class ProductionDispatchState {
         'WorkCardItems': [
           for (var v in value)
             {
-              'EntryID': key,
-              'InterID': v.interID,
+              'InterID': key,
+              'EntryID': v.entryID,
             }
         ]
       });
@@ -415,10 +408,9 @@ class ProductionDispatchState {
       body: body,
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        // var data = ProductionDispatchOrderDetailInfo.fromJson(
-        //   response.data,
-        // );
-        success.call();
+        success.call(ProductionDispatchOrderDetailInfo.fromJson(
+          response.data,
+        ));
       } else {
         error.call(response.message ?? '');
       }
@@ -448,11 +440,27 @@ class ProductionDispatchState {
     required Function(List<PrdRouteInfo> data) success,
     required Function(String msg) error,
   }) {
-    httpGet(
-      method: webApiGetPrdRouteInfo,
-      loading: '正在查询工艺路线...',
-      params: {'BillNo': orderList.firstWhere((v) => v.select).routeBillNumber},
-    ).then((response) {
+    Future<BaseData> http;
+    if (batchWorkProcedure.isEmpty) {
+      http = httpGet(
+        method: webApiGetPrdRouteInfo,
+        loading: '正在查询工艺路线...',
+        params: {
+          'BillNo': orderList.firstWhere((v) => v.select).routeBillNumber
+        },
+      );
+    } else {
+      var list = <String>[
+        for (var data in orderList.where((v) => v.select))
+          data.routeBillNumber ?? ''
+      ];
+      http = httpPost(
+        method: webApiGetBatchPrdRouteInfo,
+        loading: '正在查询工艺路线...',
+        body: list.toSet().toList(),
+      );
+    }
+    http.then((response) {
       if (response.resultCode == resultSuccess) {
         success.call([
           for (var json in response.data) PrdRouteInfo.fromJson(json),
@@ -469,18 +477,59 @@ class ProductionDispatchState {
   }) {
     var msg =
         '指令号：${orderList.firstWhere((v) => v.select).planBill}\r\n工厂型体：${workCardTitle.value.plantBody}\r\n工序：';
+    var submitData = <Map>[];
+    for (var wp in workProcedure.where((v) => v.isOpen == 1)) {
+      //如果批量数据不为空，则说明当前是多工单同时派工，需要对员工进行工单分配
+      if (batchWorkProcedure.isNotEmpty) {
+        for (var bwp in batchWorkProcedure.where(
+          (v) => v.processNumber == wp.processNumber,
+        )) {
+          //指令已分配数量
+          var disQty = 0.0;
+
+          for (var worker in wp.dispatch) {
+            //人员的剩余可分配数量大于0 说明人员的数量上一个指令分配满后还有剩余  可以继续下一个指令分配
+            if (worker.remainder() > 0) {
+              //指令剩余可分配数量
+              var surplus = bwp.mustQty.sub(disQty);
+
+              //指令剩余数量大于0 说明指令的数量上一个员工分配满后还有剩余  可以继续下一个员工分配
+              if (surplus > 0) {
+                //可分配数=如果剩余数大于人员可分配数则分配人员可分配数 否则分配剩余数
+                var qty =
+                    surplus > worker.remainder() ? worker.remainder() : surplus;
+
+                //分配人员数据到指令
+                submitData.add({
+                  'EmpID': worker.empID,
+                  'WorkOrderType': '$msg${wp.processName}',
+                  'WorkOrderContent': '汇报数量：${qty.toShowString()}'
+                });
+
+                //累加人员数据的分配数量
+                worker.dispatchQty = worker.dispatchQty.add(qty);
+
+                //累加指令的分配数量
+                disQty = disQty.add(qty);
+              }
+            }
+          }
+        }
+      } else {
+        for (var d in wp.dispatch) {
+          submitData.add({
+            'EmpID': d.empID,
+            'WorkOrderType': '$msg${d.processName}',
+            'WorkOrderContent': '汇报数量：${d.qty.toShowString()}'
+          });
+        }
+      }
+    }
+
     httpPost(
       method: webApiSendDispatchToWechat,
       loading: '正在给员工发送派工信息...',
-      body: [
-        for (var wp in workProcedure.where((v) => v.isOpen == 1))
-          for (var d in wp.dispatch)
-            {
-              'EmpID': d.empID,
-              'WorkOrderType': '$msg${d.processName}',
-              'WorkOrderContent': '汇报数量：${d.qty.toShowString()}'
-            }
-      ],
+      body: submitData,
     ).then((response) {
       if (response.resultCode == resultSuccess) {
         success.call(response.message ?? '');
@@ -494,37 +543,93 @@ class ProductionDispatchState {
     required Function(String msg) success,
     required Function(String msg) error,
   }) {
+    var submitData = <Map>[];
+
+    for (var wp in workProcedure.where((v) => v.isOpen == 1)) {
+      //如果批量数据不为空，则说明当前是多工单同时派工，需要对员工进行工单分配
+      if (batchWorkProcedure.isNotEmpty) {
+        for (var bwp in batchWorkProcedure.where(
+              (v) => v.processNumber == wp.processNumber,
+        )) {
+          //指令已分配数量
+          var disQty = 0.0;
+
+          for (var worker in wp.dispatch) {
+            //人员的剩余可分配数量大于0 说明人员的数量上一个指令分配满后还有剩余  可以继续下一个指令分配
+            if (worker.remainder() > 0) {
+              //指令剩余可分配数量
+              var surplus = bwp.mustQty.sub(disQty);
+
+              //指令剩余数量大于0 说明指令的数量上一个员工分配满后还有剩余  可以继续下一个员工分配
+              if (surplus > 0) {
+                //可分配数=如果剩余数大于人员可分配数则分配人员可分配数 否则分配剩余数
+                var qty =
+                surplus > worker.remainder() ? worker.remainder() : surplus;
+
+                //分配人员数据到指令
+                submitData.add({
+                  'ID': bwp.id,
+                  'InterID': bwp.interID,
+                  'EntryID': bwp.entryID,
+                  'OperPlanningEntryFID': bwp.operPlanningEntryFID,
+                  'EmpID': worker.empID,
+                  'WorkerCode': worker.number,
+                  'WorkerName': worker.name,
+                  'SourceQty': bwp.sourceQty,
+                  'MustQty': bwp.mustQty,
+                  'PreSchedulingQty': bwp.preSchedulingQty,
+                  'Qty': qty,
+                  'FinishQty': bwp.finishQty,
+                  'SourceEntryID': bwp.sourceEntryID,
+                  'SourceInterID': bwp.sourceInterID,
+                  'SourceEntryFID': bwp.sourceEntryFID,
+                  'ProcessNumber': bwp.processNumber,
+                  'ProcessName': bwp.processName,
+                  'IsOpen': bwp.isOpen,
+                  'RoutingID': bwp.routingID,
+                });
+
+                //累加人员数据的分配数量
+                worker.dispatchQty = worker.dispatchQty.add(qty);
+
+                //累加指令的分配数量
+                disQty = disQty.add(qty);
+              }
+            }
+          }
+        }
+      } else {
+        for (var d in wp.dispatch) {
+          submitData.add({
+            'ID': wp.id,
+            'InterID': wp.interID,
+            'EntryID': wp.entryID,
+            'OperPlanningEntryFID': wp.operPlanningEntryFID,
+            'EmpID': d.empID,
+            'WorkerCode': d.number,
+            'WorkerName': d.name,
+            'SourceQty': wp.sourceQty,
+            'MustQty': wp.mustQty,
+            'PreSchedulingQty': wp.preSchedulingQty,
+            'Qty': d.qty,
+            'FinishQty': wp.finishQty,
+            'SourceEntryID': wp.sourceEntryID,
+            'SourceInterID': wp.sourceInterID,
+            'SourceEntryFID': wp.sourceEntryFID,
+            'ProcessNumber': wp.processNumber,
+            'ProcessName': wp.processName,
+            'IsOpen': wp.isOpen,
+            'RoutingID': wp.routingID,
+          });
+        }
+      }
+    }
     httpPost(
       method: webApiProductionDispatch,
       loading: '正在发送派工数据...',
       body: {
         'UserID': userInfo?.userID,
-        'List': [
-          for (var wc in workProcedure.where((v) => v.isOpen == 1))
-            for (var di in wc.dispatch)
-              if (di.qty! > 0)
-                {
-                  'ID': wc.id,
-                  'InterID': wc.interID,
-                  'EntryID': wc.entryID,
-                  'OperPlanningEntryFID': wc.operPlanningEntryFID,
-                  'EmpID': di.empID,
-                  'WorkerCode': di.number,
-                  'WorkerName': di.name,
-                  'SourceQty': wc.sourceQty,
-                  'MustQty': wc.mustQty,
-                  'PreSchedulingQty': wc.preSchedulingQty,
-                  'Qty': di.qty,
-                  'FinishQty': wc.finishQty,
-                  'SourceEntryID': wc.sourceEntryID,
-                  'SourceInterID': wc.sourceInterID,
-                  'SourceEntryFID': wc.sourceEntryFID,
-                  'ProcessNumber': wc.processNumber,
-                  'ProcessName': wc.processName,
-                  'IsOpen': wc.isOpen,
-                  'RoutingID': wc.routingID,
-                }
-        ]
+        'List': submitData
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {

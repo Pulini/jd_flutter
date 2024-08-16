@@ -11,7 +11,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
-import 'bean/production_dispatch.dart';
+import 'bean/http/response/production_dispatch_order_detail_info.dart';
 import 'constant.dart';
 import 'home/home_view.dart';
 import 'web_api.dart';

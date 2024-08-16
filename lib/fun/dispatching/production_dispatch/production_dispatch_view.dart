@@ -64,6 +64,7 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
               }
               state.orderList.refresh();
             }
+            logic.refreshBottomButtons();
             setState(() => state.isSelectedMany = isSelect);
             spSave('${Get.currentRoute}/isSelectedMany', isSelect);
           },
@@ -429,7 +430,6 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
     );
   }
 
-
   _bottomButtons() {
     return Container(
       decoration: BoxDecoration(
@@ -449,89 +449,100 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
                 shrinkWrap: true,
                 scrollDirection: Axis.horizontal,
                 children: [
-                  CombinationButton(
-                    combination: Combination.left,
-                    isEnabled: state.cbIsEnabledMaterialList.value,
-                    text: 'production_dispatch_bt_material_list'.tr,
-                    click: () => logic.orderMaterialList(),
-                  ),
-                  CombinationButton(
-                    combination: Combination.middle,
-                    isEnabled: state.cbIsEnabledInstruction.value,
-                    text: 'production_dispatch_bt_instruction'.tr,
-                    click: () => logic.instructionList(
-                      (url) => Get.to(WebPage(title: '', url: url)),
+                  if (!state.isSelectedMany)
+                    CombinationButton(
+                      combination: Combination.left,
+                      isEnabled: state.cbIsEnabledMaterialList.value,
+                      text: 'production_dispatch_bt_material_list'.tr,
+                      click: () => logic.orderMaterialList(),
                     ),
-                  ),
-                  CombinationButton(
-                    combination: Combination.middle,
-                    isEnabled: state.cbIsEnabledProcessInstruction.value,
-                    text: 'production_dispatch_bt_process_instruction'.tr,
-                    click: () => logic
-                        .processSpecification(manufactureInstructionsDialog),
-                  ),
-                  CombinationButton(
-                    combination: Combination.middle,
-                    isEnabled: state.cbIsEnabledColorMatching.value,
-                    text: 'production_dispatch_bt_color_matching'.tr,
-                    click: () => logic.colorMatching(
-                      (list, id) => colorListDialog(
-                        list,
-                        (s) => logic.getColorPdf(
-                          s,
-                          id,
-                          (url) => Get.to(WebPage(title: '', url: url)),
+                  if (!state.isSelectedMany)
+                    CombinationButton(
+                      combination: Combination.middle,
+                      isEnabled: state.cbIsEnabledInstruction.value,
+                      text: 'production_dispatch_bt_instruction'.tr,
+                      click: () => logic.instructionList(
+                        (url) => Get.to(WebPage(title: '', url: url)),
+                      ),
+                    ),
+                  if (!state.isSelectedMany)
+                    CombinationButton(
+                      combination: Combination.middle,
+                      isEnabled: state.cbIsEnabledProcessInstruction.value,
+                      text: 'production_dispatch_bt_process_instruction'.tr,
+                      click: () => logic
+                          .processSpecification(manufactureInstructionsDialog),
+                    ),
+                  if (!state.isSelectedMany)
+                    CombinationButton(
+                      combination: Combination.middle,
+                      isEnabled: state.cbIsEnabledColorMatching.value,
+                      text: 'production_dispatch_bt_color_matching'.tr,
+                      click: () => logic.colorMatching(
+                        (list, id) => colorListDialog(
+                          list,
+                          (s) => logic.getColorPdf(
+                            s,
+                            id,
+                            (url) => Get.to(WebPage(title: '', url: url)),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  if (state.orderList.any((e) => e.select))
+                  if (state.orderList.any((e) => e.select) &&
+                      !state.isSelectedMany)
                     CombinationButton(
                       combination: Combination.middle,
                       isEnabled: state.cbIsEnabledProcessOpen.value,
                       text: state.cbNameProcess.value,
                       click: () => logic.offOnProcess(),
                     ),
-                  CombinationButton(
-                    combination: Combination.middle,
-                    isEnabled: state.cbIsEnabledDeleteDownstream.value,
-                    text: 'production_dispatch_bt_delete_downstream'.tr,
-                    click: () => logic.deleteDownstream(),
-                  ),
-                  CombinationButton(
-                    combination: Combination.middle,
-                    isEnabled: state.cbIsEnabledDeleteLastReport.value,
-                    text: 'production_dispatch_bt_delete_last_report'.tr,
-                    click: () => logic.deleteLastReport(),
-                  ),
-                  CombinationButton(
-                    combination: Combination.middle,
-                    isEnabled: state.cbIsEnabledLabelMaintenance.value,
-                    text: 'production_dispatch_bt_label_maintenance'.tr,
-                    click: () => logic.labelMaintenance(),
-                  ),
-                  CombinationButton(
-                    combination: Combination.middle,
-                    isEnabled: state.cbIsEnabledUpdateSap.value,
-                    text: 'production_dispatch_bt_update_sap'.tr,
-                    click: () => logic.updateSap(),
-                  ),
-                  CombinationButton(
-                    combination: Combination.middle,
-                    isEnabled: state.cbIsEnabledPrintMaterialHead.value,
-                    text: 'production_dispatch_bt_print_material_head'.tr,
-                    click: () =>
-                        logic.getSurplusMaterial(showSelectMaterialPopup),
-                  ),
-                  CombinationButton(
-                    combination: Combination.right,
-                    isEnabled: state.cbIsEnabledReportSap.value,
-                    text: 'production_dispatch_bt_report_sap'.tr,
-                    click: () => sapReportDialog(
-                      logic.getReportMax(),
-                      logic.reportToSap,
+                  if (!state.isSelectedMany)
+                    CombinationButton(
+                      combination: Combination.middle,
+                      isEnabled: state.cbIsEnabledDeleteDownstream.value,
+                      text: 'production_dispatch_bt_delete_downstream'.tr,
+                      click: () => logic.deleteDownstream(),
                     ),
-                  ),
+                  if (!state.isSelectedMany)
+                    CombinationButton(
+                      combination: Combination.middle,
+                      isEnabled: state.cbIsEnabledDeleteLastReport.value,
+                      text: 'production_dispatch_bt_delete_last_report'.tr,
+                      click: () => logic.deleteLastReport(),
+                    ),
+                  if (!state.isSelectedMany)
+                    CombinationButton(
+                      combination: Combination.middle,
+                      isEnabled: state.cbIsEnabledLabelMaintenance.value,
+                      text: 'production_dispatch_bt_label_maintenance'.tr,
+                      click: () => logic.labelMaintenance(),
+                    ),
+                  if (!state.isSelectedMany)
+                    CombinationButton(
+                      combination: Combination.middle,
+                      isEnabled: state.cbIsEnabledUpdateSap.value,
+                      text: 'production_dispatch_bt_update_sap'.tr,
+                      click: () => logic.updateSap(),
+                    ),
+                  if (!state.isSelectedMany)
+                    CombinationButton(
+                      combination: Combination.middle,
+                      isEnabled: state.cbIsEnabledPrintMaterialHead.value,
+                      text: 'production_dispatch_bt_print_material_head'.tr,
+                      click: () =>
+                          logic.getSurplusMaterial(showSelectMaterialPopup),
+                    ),
+                  if (!state.isSelectedMany)
+                    CombinationButton(
+                      combination: Combination.right,
+                      isEnabled: state.cbIsEnabledReportSap.value,
+                      text: 'production_dispatch_bt_report_sap'.tr,
+                      click: () => sapReportDialog(
+                        logic.getReportMax(),
+                        logic.reportToSap,
+                      ),
+                    ),
                 ],
               ),
             ),

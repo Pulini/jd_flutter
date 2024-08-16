@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/fun/dispatching/production_dispatch/production_dispatch_detail_view.dart';
 import 'package:jd_flutter/utils.dart';
 import '../../../bean/http/response/order_color_list.dart';
-import '../../../bean/production_dispatch.dart';
 import '../../../bean/http/response/manufacture_instructions_info.dart';
 import '../../../bean/http/response/production_dispatch_order_detail_info.dart';
 import '../../../bean/http/response/production_dispatch_order_info.dart';
@@ -62,7 +61,9 @@ class ProductionDispatchLogic extends GetxController {
       }
     }
     state.orderList.refresh();
-
+    refreshBottomButtons();
+  }
+  refreshBottomButtons(){
     var hasSelect = state.orderList.any((e) => e.select);
     state.cbIsEnabledMaterialList.value = hasSelect;
     state.cbIsEnabledInstruction.value = hasSelect;
@@ -83,6 +84,7 @@ class ProductionDispatchLogic extends GetxController {
     state.cbIsEnabledUpdateSap.value = hasSelect;
     state.cbIsEnabledPrintMaterialHead.value = hasSelect;
     state.cbIsEnabledReportSap.value = hasSelect;
+
     state.cbIsEnabledPush.value = hasSelect;
   }
 
@@ -262,14 +264,12 @@ class ProductionDispatchLogic extends GetxController {
     pushCheck(
       (order) => state.orderPush(
         order: order,
-        success: (detailInfo) {
-          if (detailInfo.workCardList?.isEmpty == true) {
+        success: (data) {
+          if (data.workCardList?.isEmpty == true) {
             errorDialog(content: '暂无工序列表');
           } else {
-            state.workCardTitle.value =
-                detailInfo.workCardTitle ?? WorkCardTitle();
-            state.workProcedure.value =
-                detailInfo.workCardList ?? <WorkCardList>[];
+            state.workCardTitle.value = data.workCardTitle ?? WorkCardTitle();
+            state.workProcedure.value = data.workCardList!;
             Get.to(() => const ProductionDispatchDetailPage());
           }
         },
@@ -277,7 +277,36 @@ class ProductionDispatchLogic extends GetxController {
       ),
       (orders) => state.ordersPush(
         orders: orders,
-        success: () {},
+        success: (data) {
+          if (data.workCardList?.isEmpty == true) {
+            errorDialog(content: '暂无工序列表');
+          } else {
+            state.workCardTitle.value = data.workCardTitle ?? WorkCardTitle();
+            state.batchWorkProcedure = data.workCardList!;
+            var workProcedure=<WorkCardList>[];
+            groupBy(data.workCardList!, (v) => v.processNumber).forEach((k, v) {
+              var qty=0.0;
+              var finishQty=0.0;
+              var mustQty=0.0;
+              for (var v2 in v) {
+                qty=qty.add(v2.qty??0);
+                finishQty=finishQty.add(v2.finishQty??0);
+                mustQty=mustQty.add(v2.mustQty??0);
+              }
+              workProcedure.add(WorkCardList(
+                  mustQty:mustQty,
+                  qty:qty,
+                  finishQty:finishQty,
+                  processNumber:v[0].processNumber,
+                  processName:v[0].processName,
+                  isOpen:v.any((v3)=>v3.isOpen==1)?1:0,
+                  routingID:v[0].routingID,
+              ));
+            });
+            state.workProcedure.value=workProcedure;
+            Get.to(() => const ProductionDispatchDetailPage());
+          }
+        },
         error: (msg) => errorDialog(content: msg),
       ),
     );
@@ -433,8 +462,6 @@ class ProductionDispatchLogic extends GetxController {
           name: worker.empName ?? '',
           empID: id,
           qty: exist.qty,
-          finishQty: exist.finishQty,
-          dispatchQty: exist.dispatchQty,
         );
         workerList.add(dispatch);
       }

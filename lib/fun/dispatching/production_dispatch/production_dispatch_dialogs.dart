@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../bean/http/response/order_color_list.dart';
-import '../../../bean/production_dispatch.dart';
 import '../../../bean/http/response/manufacture_instructions_info.dart';
 import '../../../bean/http/response/production_dispatch_order_detail_info.dart';
 import '../../../bean/http/response/work_plan_material_info.dart';
@@ -20,20 +19,19 @@ showDispatchList(
 ) {
   var items = <ShowDispatch>[];
   list.forEachIndexed((i1, wc) {
-    wc.dispatch.forEachIndexed((i2, d) {
-      if (isLast) {
-        if (d.finishQty! > 0) {
-          items.add(ShowDispatch(
-            groupIndex: i1,
-            subIndex: i2,
-            processName: wc.processName ?? '',
-            processNumber: wc.processNumber ?? '',
-            name: d.name!,
-            qty: d.qty!,
-            finishQty: d.finishQty!,
-          ));
-        }
-      } else {
+    if (isLast) {
+      if (wc.finishQty! > 0) {
+        items.add(ShowDispatch(
+          groupIndex: 0,
+          subIndex: 0,
+          processName: wc.processName ?? '',
+          processNumber: wc.processNumber ?? '',
+          name: wc.workerName ?? '',
+          qty: wc.finishQty ?? 0.0,
+        ));
+      }
+    } else {
+      wc.dispatch.forEachIndexed((i2, d) {
         if (d.qty! > 0) {
           items.add(ShowDispatch(
             groupIndex: i1,
@@ -42,11 +40,10 @@ showDispatchList(
             processNumber: wc.processNumber ?? '',
             name: d.name!,
             qty: d.qty!,
-            finishQty: d.finishQty!,
           ));
         }
-      }
-    });
+      });
+    }
   });
   Get.dialog(
     PopScope(
@@ -72,6 +69,7 @@ showDispatchList(
             itemCount: items.length,
             itemBuilder: (BuildContext context, int index) => GestureDetector(
               onTap: () {
+                if (isLast) return;
                 Get.back();
                 modify.call(items[index].groupIndex, items[index].subIndex);
               },
@@ -81,7 +79,7 @@ showDispatchList(
                 decoration: BoxDecoration(
                   color: index % 2 != 0
                       ? Colors.blue.shade200
-                      : Colors.grey.shade400,
+                      : Colors.grey.shade300,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Row(
@@ -93,9 +91,7 @@ showDispatchList(
                       ),
                     ),
                     Text(
-                      isLast
-                          ? '${items[index].name}(已计工数：${items[index].finishQty})'
-                          : '${items[index].name}(计工数：${items[index].qty})',
+                      '${items[index].name}(${isLast ? '已计工数：' : '计工数：'}${items[index].qty})',
                       style: const TextStyle(color: Colors.black),
                     ),
                   ],

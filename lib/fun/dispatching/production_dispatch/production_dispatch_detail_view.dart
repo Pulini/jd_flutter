@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/dispatching/production_dispatch/production_dispatch_dialogs.dart';
 import 'package:rotated_corner_decoration/rotated_corner_decoration.dart';
-import '../../../bean/production_dispatch.dart';
 import '../../../bean/http/response/production_dispatch_order_detail_info.dart';
 import '../../../widget/custom_widget.dart';
 import '../../../widget/dialogs.dart';
@@ -461,7 +460,11 @@ class _ProductionDispatchDetailPageState
                   combination: Combination.middle,
                   text: '上次派工',
                   click: () => showDispatchList(
-                      context, true, state.workProcedure, (i1, i2) {
+                      context,
+                      true,
+                      state.batchWorkProcedure.isNotEmpty
+                          ? state.batchWorkProcedure
+                          : state.workProcedure, (i1, i2) {
                     logic.detailViewJumpToDispatchOnWorkProcedure(
                       i1,
                       i2,

@@ -1,6 +1,6 @@
 import 'package:jd_flutter/utils.dart';
 
-import '../../production_dispatch.dart';
+import '../../../web_api.dart';
 
 /// WorkCardList : [{"ID":0,"InterID":0,"EntryID":1,"OperPlanningEntryFID":3714871,"EmpID":0,"WorkerCode":"0","WorkerName":"","SourceQty":1463,"MustQty":1463,"PreSchedulingQty":0,"Qty":1463,"FinishQty":0,"SourceEntryID":2,"SourceInterID":213014,"SourceEntryFID":555546,"ProcessNumber":"YT","ProcessName":"沿条","IsOpen":1,"RoutingID":162132}]
 /// WorkCardTitle : {"FQtyPass":1463,"FQtyProcessPass":0,"DayWorkCardPlanQty":0,"FCardNoReportStatus":0,"PlantBody":"","ProcessBillNumber":"P2048549","DispatchingNumber":1463}
@@ -67,13 +67,13 @@ class WorkCardTitle {
     dispatchingNumber = json['DispatchingNumber'];
   }
 
-  double? qtyPass;
-  double? qtyProcessPass;
-  double? dayWorkCardPlanQty;
-  int? cardNoReportStatus;
+  double? qtyPass;//已汇报数
+  double? qtyProcessPass;//累计计工数
+  double? dayWorkCardPlanQty;//今日目标数
+  int? cardNoReportStatus;//Status=1委外
   String? plantBody;
   String? processBillNumber;
-  double? dispatchingNumber;
+  double? dispatchingNumber;//派工总数
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -97,7 +97,8 @@ class WorkCardTitle {
 
   getAccumulateReportCount() => '累计计工数：${qtyProcessPass.toShowString()}';
 
-  getReportedCount() => '已汇报未计工数：${qtyPass.sub(qtyProcessPass!).toShowString()}';
+  getReportedCount() =>
+      '已汇报未计工数：${qtyPass.sub(qtyProcessPass!).toShowString()}';
 }
 
 /// ID : 0
@@ -165,25 +166,26 @@ class WorkCardList {
     routingID = json['RoutingID'];
   }
 
-  int? id;
-  int? interID;
-  int? entryID;
-  int? operPlanningEntryFID;
-  int? empID;
-  String? workerCode;
-  String? workerName;
-  double? sourceQty;
-  double? mustQty;
-  double? preSchedulingQty;
-  double? qty;
-  double? finishQty;
-  int? sourceEntryID;
-  int? sourceInterID;
-  int? sourceEntryFID;
-  String? processNumber;
-  String? processName;
-  int? isOpen;
-  int? routingID;
+  int? id; //单据FID
+  int? interID; //单据FInterID
+  int? entryID; //单据分录ID
+  int? operPlanningEntryFID; //工序计划FID
+  int? empID; //员工ID
+  String? workerCode; //员工工号
+  String? workerName; //员工名字
+  double? sourceQty; //源单数量
+  double? mustQty; //计工的 直接设定应派工数未实派工数, 因为有可能一道工序多个人做
+  double? preSchedulingQty; //预排数量
+  double? qty; //派工数量
+  double? finishQty; //已技工数量
+  int? sourceEntryID; //源单分录ID
+  int? sourceInterID; //源单InterID
+  int? sourceEntryFID; //源单FID
+  String? processNumber; //工序编号
+  String? processName; //工序名称
+  int? isOpen; //1-开启，0-关闭
+  int? routingID; //工艺指导书ID
+
   List<DispatchInfo> dispatch = [];
 
   Map<String, dynamic> toJson() {
@@ -215,7 +217,7 @@ class WorkCardList {
   double getTotal() {
     var total = 0.0;
     for (var dis in dispatch) {
-      total = total.add(dis.qty??0.0);
+      total = total.add(dis.qty ?? 0.0);
     }
     return total;
   }
@@ -231,3 +233,284 @@ class WorkCardList {
   isShowFlag() => getTotal() == mustQty!;
 }
 
+class DispatchInfo {
+  bool? select;
+  bool? resigned;
+  String? processName;
+  String? processNumber;
+  String? number;
+  String? name;
+  int? empID;
+  double? qty;
+
+  double dispatchQty = 0.0;
+
+  DispatchInfo({
+    this.select = false,
+    this.resigned = false,
+    this.processName = '',
+    this.processNumber = '',
+    this.number = '',
+    this.name = '',
+    this.empID = 0,
+    this.qty = 0.0,
+  });
+
+  DispatchInfo.fromJson(dynamic json) {
+    select = json['select'];
+    resigned = json['resigned'];
+    processName = json['processName'];
+    processNumber = json['processNumber'];
+    number = json['number'];
+    name = json['name'];
+    empID = json['empID'];
+    qty = json['qty'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['select'] = select;
+    map['resigned'] = resigned;
+    map['processName'] = processName;
+    map['processNumber'] = processNumber;
+    map['number'] = number;
+    map['name'] = name;
+    map['empID'] = empID;
+    map['qty'] = qty;
+    return map;
+  }
+
+  String getName() => '<$number>$name';
+
+  String getQty() => qty.toShowString();
+
+  double remainder() => qty.sub(dispatchQty);
+}
+
+class ShowDispatch {
+  int groupIndex;
+  int subIndex;
+  String processName;
+  String processNumber;
+  String name;
+  double qty;
+
+  ShowDispatch({
+    required this.groupIndex,
+    required this.subIndex,
+    required this.processName,
+    required this.processNumber,
+    required this.name,
+    required this.qty,
+  });
+}
+
+class SaveWorkProcedure {
+  int? id;
+  String? plantBody;
+  String? saveTime;
+  String? dispatchJson;
+  static const tableName = 'work_procedure';
+  static const dbCreate = '''
+      CREATE TABLE $tableName (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      plantBody TEXT NOT NULL,
+      saveTime TEXT NOT NULL,
+      dispatchJson TEXT NOT NULL
+      )
+      ''';
+
+  SaveWorkProcedure({
+    this.id,
+    required this.plantBody,
+    required this.saveTime,
+    required this.dispatchJson,
+  });
+
+  SaveWorkProcedure.fromJson(dynamic json) {
+    id = json['id'];
+    plantBody = json['plantBody'];
+    saveTime = json['saveTime'];
+    dispatchJson = json['dispatchJson'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['id'] = id;
+    map['plantBody'] = plantBody;
+    map['saveTime'] = saveTime;
+    map['dispatchJson'] = dispatchJson;
+    return map;
+  }
+
+  save(Function(SaveWorkProcedure) callback) {
+    openDb().then((db) {
+      db.insert(tableName, toJson()).then((value) {
+        db.close();
+        callback.call(this);
+      }, onError: (e) {
+        logger.e('数据库操作异常：$e');
+        db.close();
+      });
+    });
+  }
+
+  static getSave(String plantBody, Function(List<SaveWorkProcedure>) callback) {
+    openDb().then((db) {
+      db.query(
+        tableName,
+        where: 'plantBody = ?',
+        whereArgs: [plantBody],
+      ).then((value) {
+        db.close();
+        var list = <SaveWorkProcedure>[];
+        for (var v in value) {
+          list.add(SaveWorkProcedure.fromJson(v));
+        }
+        callback.call(list);
+      }, onError: (e) {
+        logger.e('数据库操作异常：$e');
+        db.close();
+        callback.call([]);
+      });
+    });
+  }
+
+  delete(Function() callback) {
+    openDb().then((db) {
+      db.delete(tableName, where: 'id = ?', whereArgs: [id]).then((value) {
+        db.close();
+        callback.call();
+      }, onError: (e) {
+        logger.e('数据库操作异常：$e');
+        db.close();
+      });
+    });
+  }
+}
+
+class SaveDispatch {
+  int? id;
+  String? processBillNumber;
+  String? cacheJson;
+  static const tableName = 'dispatch';
+  static const dbCreate = '''
+      CREATE TABLE $tableName (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      processBillNumber TEXT NOT NULL UNIQUE,
+      cacheJson TEXT NOT NULL
+      )
+      ''';
+  static const dbInsertOrReplace = '''
+      INSERT OR REPLACE INTO dispatch (
+      id, processBillNumber,
+      cacheJson
+      ) VALUES (?, ?, ?)
+      ''';
+
+  SaveDispatch({
+    this.id,
+    required this.processBillNumber,
+    required this.cacheJson,
+  });
+
+  SaveDispatch.fromJson(dynamic json) {
+    id = json['id'];
+    processBillNumber = json['processBillNumber'];
+    cacheJson = json['cacheJson'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['id'] = id;
+    map['processBillNumber'] = processBillNumber;
+    map['cacheJson'] = cacheJson;
+    return map;
+  }
+
+  save(Function(SaveDispatch) callback) {
+    openDb().then((db) {
+      db.rawInsert(
+        dbInsertOrReplace,
+        [id, processBillNumber, cacheJson],
+      ).then((value) {
+        db.close();
+        callback.call(this);
+      }, onError: (e) {
+        logger.e('数据库操作异常：$e');
+        db.close();
+      });
+    });
+  }
+
+  static delete({
+    required String processBillNumber,
+    Function()? callback,
+  }) {
+    openDb().then((db) {
+      db.delete(
+        tableName,
+        where: 'processBillNumber = ?',
+        whereArgs: [processBillNumber],
+      ).then((value) {
+        db.close();
+        callback?.call();
+      }, onError: (e) {
+        logger.e('数据库操作异常：$e');
+        db.close();
+      });
+    });
+  }
+
+  static getSave(
+    String processBillNumber,
+    Function(SaveDispatch) callback,
+  ) {
+    openDb().then((db) {
+      db.query(
+        tableName,
+        where: 'processBillNumber = ?',
+        whereArgs: [processBillNumber],
+      ).then((value) {
+        db.close();
+        if (value.isNotEmpty) {
+          callback.call(SaveDispatch.fromJson(value[0]));
+        }
+      }, onError: (e) {
+        logger.e('数据库操作异常：$e');
+        db.close();
+      });
+    });
+  }
+}
+
+class CacheJson {
+  String? processName;
+  String? processNumber;
+  List<DispatchInfo>? dispatch;
+
+  CacheJson({
+    required this.processName,
+    required this.processNumber,
+    required this.dispatch,
+  });
+
+  CacheJson.fromJson(dynamic json) {
+    processName = json['processName'];
+    processNumber = json['processNumber'];
+    if (json['dispatch'] != null) {
+      dispatch = [];
+      json['dispatch'].forEach((v) {
+        dispatch?.add(DispatchInfo.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['processName'] = processName;
+    map['processNumber'] = processNumber;
+    map['dispatch'] = dispatch?.map((v) => v.toJson()).toList();
+    return map;
+  }
+}

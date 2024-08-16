@@ -111,7 +111,7 @@ Future<BaseData> _doHttp({
   Object? body,
 }) async {
   ///用于开发时切换测试库，打包时必须屏蔽
-  // baseUrl = baseUrl == baseUrlForSAP ? developUrlForSAP : testUrlForMES;
+  baseUrl = baseUrl == baseUrlForSAP ? developUrlForSAP : testUrlForMES;
   ///------------------------------------------------
   try{
     snackbarController?.close(withAnimations: false);
@@ -397,6 +397,9 @@ const webApiGetWorkPlanMaterial = 'api/NeedleCartDispatch/GetWorkPlanMaterial';
 
 ///获取工艺路线
 const webApiGetPrdRouteInfo = 'api/NeedleCartDispatch/GetPrdRouteInfo';
+
+///获取批量工艺路线
+const webApiGetBatchPrdRouteInfo = 'api/NeedleCartDispatch/GetPrdRouteInfoNewBatch';
 
 ///发送微信校对信息给派工员工
 const webApiSendDispatchToWechat = 'api/NeedleCartDispatch/WechatPostByFEmpID';
