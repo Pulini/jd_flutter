@@ -80,7 +80,7 @@ class WorkOrderInfo {
   }
 
   int _getState() {
-    double min = double.infinity;
+    double min = codeInfos?.isNotEmpty == true ? double.infinity : 0;
     codeInfos?.forEach((info) {
       if (min > (info.codeQty ?? 0)) {
         min = info.codeQty ?? 0;

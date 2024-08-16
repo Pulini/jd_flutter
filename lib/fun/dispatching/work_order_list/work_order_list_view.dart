@@ -23,7 +23,7 @@ class _WorkOrderListPageState extends State<WorkOrderListPage> {
   _item(WorkOrderInfo data) {
     return Card(
       child: Padding(
-        padding: EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
@@ -35,7 +35,6 @@ class _WorkOrderListPageState extends State<WorkOrderListPage> {
                 color: data.getStateColor(),
               ),
             ),
-            const SizedBox(height: 20),
             Row(
               children: [
                 expandedTextSpan(
@@ -72,6 +71,7 @@ class _WorkOrderListPageState extends State<WorkOrderListPage> {
                 )
               ],
             ),
+            const SizedBox(height: 10),
             for (var i = 0; i < data.mtonoInfos!.length; ++i)
               Row(
                 children: [
