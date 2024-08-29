@@ -2,7 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/base_data.dart';
 import '../../../bean/http/response/manufacture_instructions_info.dart';
-import '../../../bean/http/response/order_color_list.dart';
+import '../../../bean/http/response/order_color_info.dart';
 import '../../../bean/http/response/prd_route_info.dart';
 import '../../../bean/http/response/work_plan_material_info.dart';
 import '../../../bean/http/response/production_dispatch_order_detail_info.dart';

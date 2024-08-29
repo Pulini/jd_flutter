@@ -1,4 +1,3 @@
-import 'dart:ffi';
 
 class PackingShipmentScanInfo {
   PackingShipmentScanInfo({
