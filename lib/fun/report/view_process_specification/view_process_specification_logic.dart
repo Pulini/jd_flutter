@@ -8,7 +8,7 @@ class ViewProcessSpecificationLogic extends GetxController {
 
   queryProcessSpecification() {
     if (state.etTypeBody.isEmpty) {
-      errorDialog(content: '请输入型体');
+      errorDialog(content: 'view_process_specification_query_hint'.tr);
       return;
     }
     state.getProcessSpecificationList(

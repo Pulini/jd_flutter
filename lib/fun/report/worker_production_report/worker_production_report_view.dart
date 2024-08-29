@@ -42,17 +42,18 @@ class _WorkerProductionReportPageState
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   textSpan(
-                    hint: '员工姓名：',
+                    hint: 'worker_production_report_item_hint1'.tr,
                     text: state.dataList[index].empName ?? '',
                   ),
                   textSpan(
-                    hint: '总产量：',
+                    hint: 'worker_production_report_item_hint2'.tr,
                     text: state.dataList[index].empFinishQty.toShowString(),
                     textColor: Colors.green,
                   ),
                 ],
               ),
-              subtitle: Text('工序名称：${state.dataList[index].processName}'),
+              subtitle: Text(
+                  '${'worker_production_report_sub_item_hint1'.tr}${state.dataList[index].processName}'),
               children: [
                 for (ItemList item in state.dataList[index].itemList ?? [])
                   Column(
@@ -60,11 +61,11 @@ class _WorkerProductionReportPageState
                       const Divider(indent: 20, endIndent: 20),
                       ListTile(
                         title: Text(
-                          '物料：${item.materialName}',
+                          '${'worker_production_report_sub_item_hint2'.tr}${item.materialName}',
                           style: const TextStyle(color: Colors.grey),
                         ),
                         subtitle: Text(
-                          '数量：${item.empFinishQty.toShowString()}',
+                          '${'worker_production_report_sub_item_hint3'.tr}${item.empFinishQty.toShowString()}',
                           style: const TextStyle(color: Colors.grey),
                         ),
                       ),

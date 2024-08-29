@@ -12,7 +12,7 @@ class ViewInstructionDetailsState {
     required Function(String msg) error,
   }) {
     httpGet(
-      loading: '正在查询指令明细...',
+      loading: 'view_instruction_details_querying'.tr,
       method: webApiGetInstructionDetailsFile,
       params: {
         'MoNo': tetInstruction,

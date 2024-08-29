@@ -227,7 +227,7 @@ class NumberDecimalEditText extends StatelessWidget {
               : FilteringTextInputFormatter.digitsOnly,
         ],
         focusNode: fn,
-        controller: controller,
+        controller: controller ?? c,
         onChanged: (v) {
           if (v.toDoubleTry() > max!) {
             if (controller != null) {
@@ -271,7 +271,7 @@ class NumberDecimalEditText extends StatelessWidget {
           suffixIcon: IconButton(
             icon: const Icon(Icons.close, color: Colors.grey),
             onPressed: () =>
-                controller != null ? controller!.clear() : c.clear(),
+                controller == null ? c.clear() : controller?.clear(),
           ),
         ),
       ),
@@ -1068,9 +1068,7 @@ showSnackBar({
     backgroundColor: isWarning == true
         ? Colors.redAccent.shade100
         : Colors.greenAccent.shade100,
-    colorText:isWarning == true
-        ? Colors.white
-        : Colors.blue.shade900,
+    colorText: isWarning == true ? Colors.white : Colors.blue.shade900,
     snackbarStatus: (state) {
       snackbarStatus = state;
     },

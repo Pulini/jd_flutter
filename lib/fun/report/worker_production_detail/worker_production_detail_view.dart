@@ -213,7 +213,7 @@ class _WorkerProductionDetailPageState
         DatePicker(pickerController: logic.pickerControllerStartDate),
         DatePicker(pickerController: logic.pickerControllerEndDate),
         OptionsPicker(pickerController: logic.pickerControllerReportType),
-        EditText(hint: '请输入工号', onChanged: (v) => state.etWorker = v),
+        EditText(hint: 'worker_production_detail_query_hint'.tr, onChanged: (v) => state.etWorker = v),
       ],
       query: () => logic.query(),
       body: Obx(

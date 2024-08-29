@@ -24,7 +24,7 @@ class WorkerProductionDetailState {
     required Function(String msg) error,
   }) {
     httpGet(
-      loading: '正在查询计件明细...',
+      loading: 'worker_production_detail_querying'.tr,
       method: webApiProductionReport,
       params: {
         'BeginDate': beginDate,

@@ -112,7 +112,7 @@ class _WorkOrderListPageState extends State<WorkOrderListPage> {
                         });
                       } else {
                         showSnackBar(
-                          title: '错误',
+                          title: 'snack_bar_default_wrong'.tr,
                           message: '缺少末道贴标操作权限',
                           isWarning: true,
                         );
@@ -134,7 +134,7 @@ class _WorkOrderListPageState extends State<WorkOrderListPage> {
                       //   Get.to(const PartPickPage());
                       // } else {
                       //   showSnackBar(
-                      //     title: '错误',
+                      //     title: 'snack_bar_default_wrong'.tr,
                       //     message: '缺少个件贴标操作权限',
                       //     isWarning: true,
                       //   );

@@ -27,7 +27,7 @@ class ViewInstructionDetailsLogic extends GetxController {
         ..setNavigationDelegate(
           NavigationDelegate(
             onPageStarted: (String url) {
-              loadingDialog('加載中');
+              loadingDialog('view_instruction_details_reading'.tr);
             },
             onPageFinished: (String url) {
               if (Get.isDialogOpen == true) Get.back();
@@ -50,7 +50,7 @@ class ViewInstructionDetailsLogic extends GetxController {
 
   queryPDF() {
     if (state.tetInstruction.isEmpty) {
-      errorDialog(content: '请输入指令单号');
+      errorDialog(content: 'view_instruction_details_query_hint'.tr);
       return;
     }
     state.getInstructionDetailsFile(

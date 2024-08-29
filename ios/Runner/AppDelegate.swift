@@ -3,7 +3,7 @@ import Flutter
 import CoreBluetooth
 
 
-@UIApplicationMain
+@main
 @objc class AppDelegate: FlutterAppDelegate {
     var channel="com.jd.pzx.jd_flutter_flutter_send"
     override func application(

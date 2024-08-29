@@ -18,7 +18,11 @@ class ProductionMaterialsReportLogic extends GetxController {
     if (state.etInstruction.isEmpty &&
         state.etOrderNumber.isEmpty &&
         state.etSizeOrderNumber.isEmpty) {
-      showSnackBar(title: '查询', message: '请输入查询条件');
+      showSnackBar(
+        title: 'snack_bar_default_wrong'.tr,
+        message: 'production_materials_report_query_error'.tr,
+        isWarning: true,
+      );
       return;
     }
     state.getSapMoPickList(

@@ -97,11 +97,11 @@ _createMixLabel(
   Function() callback,
 ) {
   if (!selected.any((v1) => v1.any((v2) => v2.value))) {
-    showSnackBar(title: '错误', message: '请勾选要创建的指令和尺码', isWarning: true);
+    showSnackBar(title: 'snack_bar_default_wrong'.tr, message: '请勾选要创建的指令和尺码', isWarning: true);
     return;
   }
   if (maxLabel == 0) {
-    showSnackBar(title: '错误', message: '可生产贴标数未0', isWarning: true);
+    showSnackBar(title: 'snack_bar_default_wrong'.tr, message: '可生产贴标数未0', isWarning: true);
     return;
   }
 
@@ -504,7 +504,7 @@ _createCustomLabel(
   Function() callback,
 ) {
   if (!selected.any((v1) => v1)) {
-    showSnackBar(title: '错误', message: '请勾选要创建的尺码', isWarning: true);
+    showSnackBar(title: 'snack_bar_default_wrong'.tr, message: '请勾选要创建的尺码', isWarning: true);
     return;
   }
   var body = {
@@ -608,7 +608,7 @@ setLabelPropertyDialog(
               onPressed: () {
                 if (list.any((v) => v.ifNull())) {
                   showSnackBar(
-                      title: '错误', message: '重量必须大于0', isWarning: true);
+                      title: 'snack_bar_default_wrong'.tr, message: '重量必须大于0', isWarning: true);
                 } else {
                   var item = <Map>[];
                   for (var data in list) {
@@ -764,7 +764,7 @@ batchSetLabelPropertyDialog(
               onPressed: () {
                 if (nw.value <= 0 || gw.value <= 0) {
                   showSnackBar(
-                    title: '错误',
+                    title: 'snack_bar_default_wrong'.tr,
                     message: '请完整填写修改内容',
                     isWarning: true,
                   );

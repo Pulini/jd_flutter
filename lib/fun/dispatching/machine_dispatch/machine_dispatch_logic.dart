@@ -8,15 +8,6 @@ import 'machine_dispatch_state.dart';
 class MachineDispatchLogic extends GetxController {
   final MachineDispatchState state = MachineDispatchState();
 
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
-  }
 
   getWorkCardList(Function(List<MachineDispatchInfo>) callback) {
     state.getWorkCardList(

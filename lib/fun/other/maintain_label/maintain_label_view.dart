@@ -311,7 +311,7 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
                             ),
                           );
                         } else {
-                          showSnackBar(title: '错误', message: '没有创建贴标权限');
+                          showSnackBar(title: 'snack_bar_default_wrong'.tr, message: '没有创建贴标权限');
                         }
                       },
                       combination: Combination.left,

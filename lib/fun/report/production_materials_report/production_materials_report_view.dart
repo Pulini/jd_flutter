@@ -21,34 +21,54 @@ class _ProductionMaterialsReportPageState
   final state = Get.find<ProductionMaterialsReportLogic>().state;
 
   var tableColumns = [
-    DataColumn(label: Text('销售订单号')),
-    DataColumn(label: Text('生产订单编号')),
-    DataColumn(label: Text('订单类型')),
-    DataColumn(label: Text('产品编码')),
-    DataColumn(label: Text('产品名称')),
-    DataColumn(label: Text('订单交期')),
-    DataColumn(label: Text('计划开工日期')),
-    DataColumn(label: Text('计划完工日期')),
-    DataColumn(label: Text('尺码')),
-    DataColumn(label: Text('BOM号')),
-    DataColumn(label: Text('BOM版本')),
-    DataColumn(label: Text('单位')),
-    DataColumn(label: Text('生产数量'), numeric: true),
-    DataColumn(label: Text('已派工数量'), numeric: true),
-    DataColumn(label: Text('部位')),
-    DataColumn(label: Text('外发工序')),
-    DataColumn(label: Text('子项物料编码')),
-    DataColumn(label: Text('子项物料名称')),
-    DataColumn(label: Text('规格型号')),
-    DataColumn(label: Text('子项单位')),
-    DataColumn(label: Text('子项尺码')),
-    DataColumn(label: Text('物料需求日期')),
-    DataColumn(label: Text('最新BOM需求数量'), numeric: true),
-    DataColumn(label: Text('批次')),
-    DataColumn(label: Text('需求数量'), numeric: true),
-    DataColumn(label: Text('已领数量'), numeric: true),
-    DataColumn(label: Text('未领数量'), numeric: true),
-    DataColumn(label: Text('补单数量'), numeric: true),
+    DataColumn(label: Text('production_materials_report_table_hint1'.tr)),
+    DataColumn(label: Text('production_materials_report_table_hint2'.tr)),
+    DataColumn(label: Text('production_materials_report_table_hint3'.tr)),
+    DataColumn(label: Text('production_materials_report_table_hint4'.tr)),
+    DataColumn(label: Text('production_materials_report_table_hint5'.tr)),
+    DataColumn(label: Text('production_materials_report_table_hint6'.tr)),
+    DataColumn(label: Text('production_materials_report_table_hint7'.tr)),
+    DataColumn(label: Text('production_materials_report_table_hint8'.tr)),
+    DataColumn(label: Text('production_materials_report_table_hint9'.tr)),
+    DataColumn(label: Text('production_materials_report_table_hint10'.tr)),
+    DataColumn(label: Text('production_materials_report_table_hint11'.tr)),
+    DataColumn(label: Text('production_materials_report_table_hint12'.tr)),
+    DataColumn(
+      label: Text('production_materials_report_table_hint13'.tr),
+      numeric: true,
+    ),
+    DataColumn(
+        label: Text('production_materials_report_table_hint14'.tr),
+        numeric: true),
+    DataColumn(label: Text('production_materials_report_table_hint15'.tr)),
+    DataColumn(label: Text('production_materials_report_table_hint16'.tr)),
+    DataColumn(label: Text('production_materials_report_table_hint17'.tr)),
+    DataColumn(label: Text('production_materials_report_table_hint18'.tr)),
+    DataColumn(label: Text('production_materials_report_table_hint19'.tr)),
+    DataColumn(label: Text('production_materials_report_table_hint20'.tr)),
+    DataColumn(label: Text('production_materials_report_table_hint21'.tr)),
+    DataColumn(label: Text('production_materials_report_table_hint22'.tr)),
+    DataColumn(
+      label: Text('production_materials_report_table_hint23'.tr),
+      numeric: true,
+    ),
+    DataColumn(label: Text('production_materials_report_table_hint24'.tr)),
+    DataColumn(
+      label: Text('production_materials_report_table_hint25'.tr),
+      numeric: true,
+    ),
+    DataColumn(
+      label: Text('production_materials_report_table_hint26'.tr),
+      numeric: true,
+    ),
+    DataColumn(
+      label: Text('production_materials_report_table_hint27'.tr),
+      numeric: true,
+    ),
+    DataColumn(
+      label: Text('production_materials_report_table_hint28'.tr),
+      numeric: true,
+    ),
   ];
 
   _tableDataRow(List<ProductionMaterialsInfo> list, int index) {
@@ -138,28 +158,28 @@ class _ProductionMaterialsReportPageState
                 subtitle: Row(
                   children: [
                     Text(
-                      '需求数量：${demandQty.toShowString()}',
+                      '${'production_materials_report_table_hint25'.tr}${demandQty.toShowString()}',
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     const SizedBox(width: 50),
                     Text(
-                      '已领数量：${collectQty.toShowString()}',
+                      '${'production_materials_report_table_hint26'.tr}${collectQty.toShowString()}',
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     const SizedBox(width: 50),
                     Text(
-                      '未领数量：${uncollectedQty.toShowString()}',
+                      '${'production_materials_report_table_hint27'.tr}${uncollectedQty.toShowString()}',
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     const SizedBox(width: 50),
                     Text(
-                      '补单数量：${orderQty.toShowString()}',
+                      '${'production_materials_report_table_hint28'.tr}${orderQty.toShowString()}',
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
@@ -217,7 +237,6 @@ class _ProductionMaterialsReportPageState
   Widget build(BuildContext context) {
     return Get.arguments == null
         ? pageBodyWithDrawer(
-            
             queryWidgets: [
               Obx(() => Row(
                     children: [
@@ -232,7 +251,9 @@ class _ProductionMaterialsReportPageState
                             ),
                             GestureDetector(
                               onTap: _radioClick,
-                              child: Text('全部'),
+                              child: Text(
+                                'production_materials_report_query_hint1'.tr,
+                              ),
                             ),
                           ],
                         ),
@@ -248,23 +269,28 @@ class _ProductionMaterialsReportPageState
                             ),
                             GestureDetector(
                               onTap: _radioClick,
-                              child: Text('汇总'),
+                              child: Text(
+                                'production_materials_report_query_hint2'.tr,
+                              ),
                             ),
                           ],
                         ),
                       ),
                     ],
                   )),
-              EditText(hint: '指令', onChanged: (v) => state.etInstruction = v),
               EditText(
-                  hint: '生产订单号', onChanged: (v) => state.etOrderNumber = v),
+                  hint: 'production_materials_report_query_hint3'.tr,
+                  onChanged: (v) => state.etInstruction = v),
               EditText(
-                  hint: '尺码生产订单号',
+                  hint: 'production_materials_report_query_hint4'.tr,
+                  onChanged: (v) => state.etOrderNumber = v),
+              EditText(
+                  hint: 'production_materials_report_query_hint5'.tr,
                   onChanged: (v) => state.etSizeOrderNumber = v),
               OptionsPicker(
                   pickerController: logic.pickerControllerSapProcessFlow),
               SwitchButton(
-                name: '领料完成',
+                name: 'production_materials_report_query_hint6'.tr,
                 value: state.isPickingMaterialCompleted.value,
                 onChanged: (bool isSelect) =>
                     state.isPickingMaterialCompleted.value = isSelect,
@@ -273,7 +299,7 @@ class _ProductionMaterialsReportPageState
             query: () => logic.query(),
             body: getPageBody(),
           )
-        : pageBody( body: getPageBody());
+        : pageBody(body: getPageBody());
   }
 
   @override

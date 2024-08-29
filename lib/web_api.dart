@@ -90,10 +90,7 @@ Future<BaseData> sapPost({
 }) {
   return _doHttp(
     loading: loading,
-    params: {
-      'sap-client':baseClientForSAP,
-      ...?params
-    },
+    params: {'sap-client': baseClientForSAP, ...?params},
     body: body,
     baseUrl: baseUrlForSAP,
     isPost: true,
@@ -111,11 +108,14 @@ Future<BaseData> _doHttp({
   Object? body,
 }) async {
   ///用于开发时切换测试库，打包时必须屏蔽
-  baseUrl = baseUrl == baseUrlForSAP ? developUrlForSAP : testUrlForMES;
-  ///------------------------------------------------
-  try{
-    snackbarController?.close(withAnimations: false);
-  }catch(e){
+  // baseUrl = baseUrl == baseUrlForSAP ? developUrlForSAP : testUrlForMES;
+  ///--------------------------------------------x----
+  try {
+    logger.f('SnackbarStatus=$snackbarStatus');
+    if(snackbarStatus==SnackbarStatus.OPEN || snackbarStatus == SnackbarStatus.OPENING){
+      snackbarController?.close(withAnimations: false);
+    }
+  } catch (e) {
     logger.f('销毁snackbar异常');
   }
   if (loading != null && loading.isNotEmpty) {
@@ -399,7 +399,8 @@ const webApiGetWorkPlanMaterial = 'api/NeedleCartDispatch/GetWorkPlanMaterial';
 const webApiGetPrdRouteInfo = 'api/NeedleCartDispatch/GetPrdRouteInfo';
 
 ///获取批量工艺路线
-const webApiGetBatchPrdRouteInfo = 'api/NeedleCartDispatch/GetPrdRouteInfoNewBatch';
+const webApiGetBatchPrdRouteInfo =
+    'api/NeedleCartDispatch/GetPrdRouteInfoNewBatch';
 
 ///发送微信校对信息给派工员工
 const webApiSendDispatchToWechat = 'api/NeedleCartDispatch/WechatPostByFEmpID';
@@ -546,40 +547,50 @@ const webApiMetersConvert = 'api/CompoundDispatching/MetersConvert';
 const webApiGetQRCodeList = 'api/BarCode/GetQRCodeList';
 
 ///抽条车间贴标打印记工
-const webApiCreateProcessOutPutStripDrawing = 'api/CompoundDispatching/CreateProcessOutPutStripDrawing';
+const webApiCreateProcessOutPutStripDrawing =
+    'api/CompoundDispatching/CreateProcessOutPutStripDrawing';
 
 ///批量取消报工
-const webApiProcessOutPutReport= 'api/CompoundDispatching/ProcessOutPutReport1';
+const webApiProcessOutPutReport =
+    'api/CompoundDispatching/ProcessOutPutReport1';
 
 ///取件码-生产入库
-const webApiPickCodeProductionWarehousing= 'api/CompoundDispatching/PickCodeProductionWarehousing';
+const webApiPickCodeProductionWarehousing =
+    'api/CompoundDispatching/PickCodeProductionWarehousing';
 
 ///获取工序派工单列表
-const webApiGetWorkCardList= 'api/CompoundDispatching/GetScWorkCardListJinZhen';
+const webApiGetWorkCardList =
+    'api/CompoundDispatching/GetScWorkCardListJinZhen';
 
 ///获取工序派工单详情
-const webApiGetWorkCardDetail= 'api/CompoundDispatching/GetScWorkCardDetailJinZhen';
+const webApiGetWorkCardDetail =
+    'api/CompoundDispatching/GetScWorkCardDetailJinZhen';
 
 ///获取已入库的贴标列表
-const webApiSapGetMaterialDispatchLabelList= 'sap/zapp/ZFUN_APP_BARCODE_FETCH';
+const webApiSapGetMaterialDispatchLabelList = 'sap/zapp/ZFUN_APP_BARCODE_FETCH';
 
 ///机台派工单--贴标维护
-const webApiSapMaterialDispatchLabelMaintain= 'sap/zapp/ZFUN_APP_BARCODE_MAINTAIN';
+const webApiSapMaterialDispatchLabelMaintain =
+    'sap/zapp/ZFUN_APP_BARCODE_MAINTAIN';
 
 ///验证码发送接口
-const webApiSendManagerCode= 'api/Public/SendManagerCode';
+const webApiSendManagerCode = 'api/Public/SendManagerCode';
 
 ///验证人员
-const webApiCheckManagerByCode= 'api/Public/CheckManagerByCode';
+const webApiCheckManagerByCode = 'api/Public/CheckManagerByCode';
 
 ///上班尾数标识状态修改_金臻
-const webApiCleanOrRecoveryLastQty= 'api/CompoundDispatching/UpdateLastScWorkCardMantissaFlagJinZhen';
+const webApiCleanOrRecoveryLastQty =
+    'api/CompoundDispatching/UpdateLastScWorkCardMantissaFlagJinZhen';
 
 ///修改派工表_金臻
-const webApiModifyWorkCardItem= 'api/CompoundDispatching/UpdateScWorkCardJinZhen';
+const webApiModifyWorkCardItem =
+    'api/CompoundDispatching/UpdateScWorkCardJinZhen';
 
 ///生成报工产量表_金臻
-const webApiReportDispatch= 'api/CompoundDispatching/SubmitScWorkCardReportJinZhen';
+const webApiReportDispatch =
+    'api/CompoundDispatching/SubmitScWorkCardReportJinZhen';
 
-
-
+///贴标工序报工_修改已报工
+const webApiProductionDispatchReportSubmit =
+    'api/WetPrinting/BarCodeProcessReportSubmit_Reported';

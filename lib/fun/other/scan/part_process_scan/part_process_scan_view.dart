@@ -4,7 +4,6 @@ import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'part_process_scan_logic.dart';
 
-///--------开发中
 class PartProcessScanPage extends StatefulWidget {
   const PartProcessScanPage({super.key});
 
@@ -57,25 +56,43 @@ class _PartProcessScanPageState extends State<PartProcessScanPage> {
             ],
           ),
           Expanded(
-              child: Obx(() => ListView.builder(
-                    padding: const EdgeInsets.all(8),
-                    itemCount: state.barCodeList.length,
-                    itemBuilder: (context, index) => Card(
-                      color: Colors.white,
-                      child: Padding(
-                        padding: EdgeInsets.all(10),
-                        child: Text(state.barCodeList[index]),
-                      ),
+            child: Obx(
+              () => ListView.builder(
+                padding: const EdgeInsets.all(8),
+                itemCount: state.barCodeList.length,
+                itemBuilder: (context, index) => Card(
+                  color: Colors.white,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 10, right: 10),
+                    child: Row(
+                      children: [
+                        Expanded(child: Text(state.barCodeList[index])),
+                        IconButton(
+                          onPressed: () => askDialog(
+                            content: '确定要删除该条码吗？',
+                            confirm: () => logic.deleteItem(index),
+                          ),
+                          icon: const Icon(
+                            Icons.delete_forever,
+                            color: Colors.red,
+                          ),
+                        ),
+                      ],
                     ),
-                  ))),
+                  ),
+                ),
+              ),
+            ),
+          ),
           Row(
             children: [
               Expanded(
-                  child: CombinationButton(
-                text: '修改',
-                click: () =>logic.barCodeModify(),
-                combination: Combination.left,
-              )),
+                child: CombinationButton(
+                  text: '修改',
+                  click: () => logic.barCodeModify(),
+                  combination: Combination.left,
+                ),
+              ),
               Expanded(
                 child: CombinationButton(
                   text: '提交',

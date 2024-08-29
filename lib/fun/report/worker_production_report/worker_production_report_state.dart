@@ -16,7 +16,7 @@ class WorkerProductionReportState {
 }
       ) {
     httpGet(
-      loading: '正在查询计件产量...',
+      loading: 'worker_production_report_querying'.tr,
       method: webApiGetWorkerProductionReport,
       params: {
         'DepartmentID':departmentID,

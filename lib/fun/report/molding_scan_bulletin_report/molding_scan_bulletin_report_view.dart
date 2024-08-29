@@ -185,7 +185,7 @@ class _MoldingScanBulletinReportPageState
           backgroundColor: Colors.transparent,
           title: Text(getFunctionTitle()),
           actions: [
-            const Text('刷新间隔(秒)：<'),
+            Text('${'molding_scan_bulletin_report_refresh_interval'.tr}：<'),
             Obx(() => circleButton(
                   const Text('3'),
                   state.refreshDuration.value == 3

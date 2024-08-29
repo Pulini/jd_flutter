@@ -1,3 +1,6 @@
+import 'package:get/get.dart';
+import 'package:jd_flutter/utils.dart';
+
 class ScanBarcodeReportedReportInfo {
   ScanBarcodeReportedReportInfo({
     this.empList,
@@ -100,7 +103,6 @@ class ReportInfo {
   String? mtonoQty; //指令数
   String? qty; //贴标数
 
-
   ReportInfo.fromJson(dynamic json) {
     type = json['Type'];
     name = json['Name'];
@@ -122,22 +124,6 @@ class ReportInfo {
   }
 }
 
-class Distribution {
-  String? name;
-  String? number;
-  int? empId;
-  double? distributionQty;
-  double? percentage;
-
-  Distribution({
-    this.name,
-    this.number,
-    this.empId,
-    this.distributionQty,
-    this.percentage,
-  });
-}
-
 class BarCodeInfo {
   BarCodeInfo({
     this.barCode,
@@ -148,6 +134,8 @@ class BarCodeInfo {
   String? barCode; //条码
   double? qty; //数量
   String? processName; //工序
+
+  RxBool isSelect=false.obs;
 
   BarCodeInfo.fromJson(dynamic json) {
     barCode = json['BarCode'];
@@ -160,6 +148,102 @@ class BarCodeInfo {
     map['BarCode'] = barCode;
     map['Qty'] = qty;
     map['ProcessName'] = processName;
+    return map;
+  }
+}
+
+class ReportItemData {
+  var reportList = <ReportInfo>[].obs;
+  var distribution = <Distribution>[].obs;
+  var isSelect = false.obs;
+
+  ReportItemData.fromData({
+    required List<EmpInfo> empList,
+    required List<ReportInfo> reportList,
+  }) {
+    this.reportList.addAll(reportList);
+    for (var worker in empList) {
+      distribution.add(Distribution(
+        name: worker.empName ?? '',
+        number: worker.empNumber ?? '',
+        empId: worker.empID ?? 0,
+        distributionQty: worker.qty ?? 0,
+      ));
+    }
+  }
+
+  sharingDistribution() {
+    if (distribution.isNotEmpty) {
+      var disTotal = getProcessMax();
+      var integer = disTotal ~/ distribution.length;
+      var decimal = (disTotal % distribution.length).toInt();
+      for (var v in distribution) {
+        v.distributionQty = integer.toDouble();
+      }
+      distribution.last.distributionQty =
+          distribution.last.distributionQty.add(decimal.toDouble());
+    }
+  }
+
+  double getProcessMax() {
+    var total = 0.0;
+    for (var v1 in reportList) {
+      total = total.add(v1.qty.toDoubleTry());
+    }
+    return total;
+  }
+
+  double getDistributionMax() {
+    var total = 0.0;
+    for (var v1 in distribution) {
+      total = total.add(v1.distributionQty);
+    }
+    return total;
+  }
+
+  double getProcessSurplus() => getProcessMax().sub(getDistributionMax());
+
+  Distribution? getDistributionWorker(int empID) {
+    return distribution.any((v) => v.empId == empID)
+        ? distribution.firstWhere((v) => v.empId == empID)
+        : null;
+  }
+
+  double getSurplusQty(int id) {
+    var surplus = getProcessMax();
+    for (var v in distribution.where((v) => v.empId != id)) {
+      surplus = surplus.sub(v.distributionQty);
+    }
+    return surplus;
+  }
+}
+
+class Distribution {
+  late String name;
+  late String number;
+  late int empId;
+  late double distributionQty;
+
+  Distribution({
+    required this.name,
+    required this.number,
+    required this.empId,
+    required this.distributionQty,
+  });
+
+  Distribution.fromJson(dynamic json) {
+    name = json['Name'];
+    number = json['Number'];
+    empId = json['EmpId'];
+    distributionQty = json['DistributionQty'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['Name'] = name;
+    map['Number'] = number;
+    map['EmpId'] = empId;
+    map['DistributionQty'] = distributionQty;
     return map;
   }
 }

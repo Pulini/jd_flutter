@@ -184,7 +184,7 @@ class ProductionDispatchLogic extends GetxController {
         );
       });
     } else {
-      showSnackBar(title: '错误', message: '您没有标签打印权限', isWarning: true);
+      showSnackBar(title: 'snack_bar_default_wrong'.tr, message: '您没有标签打印权限', isWarning: true);
     }
   }
 
@@ -201,7 +201,7 @@ class ProductionDispatchLogic extends GetxController {
       if (list.isNotEmpty) {
         callback.call(list);
       } else {
-        showSnackBar(title: '错误', message: '无物料头信息', isWarning: true);
+        showSnackBar(title: 'snack_bar_default_wrong'.tr, message: '无物料头信息', isWarning: true);
       }
     });
   }

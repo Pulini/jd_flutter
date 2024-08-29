@@ -22,7 +22,10 @@ class _ViewProcessSpecificationPageState
   Widget build(BuildContext context) {
     return pageBodyWithDrawer(
       queryWidgets: [
-        EditText(hint: '请输入型体', onChanged: (v) => state.etTypeBody = v),
+        EditText(
+          hint: 'view_process_specification_query_hint'.tr,
+          onChanged: (v) => state.etTypeBody = v,
+        ),
       ],
       query: () => logic.queryProcessSpecification(),
       body: Obx(
@@ -38,11 +41,11 @@ class _ViewProcessSpecificationPageState
                 ),
               ),
               title: textSpan(
-                hint: '型体：',
+                hint: 'view_process_specification_item_hint1'.tr,
                 text: state.pdfList[index].name ?? '',
               ),
               subtitle: textSpan(
-                hint: '分类：',
+                hint: 'view_process_specification_item_hint2'.tr,
                 text: state.pdfList[index].typeName ?? '',
               ),
             ),

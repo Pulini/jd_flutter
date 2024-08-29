@@ -25,7 +25,7 @@ class _ViewInstructionDetailsPageState
   Widget build(BuildContext context) {
     return pageBodyWithDrawer(
       queryWidgets: [
-        EditText(hint: '请输入指令单号', onChanged: (v) => state.tetInstruction = v),
+        EditText(hint: 'view_instruction_details_query_hint'.tr, onChanged: (v) => state.tetInstruction = v),
         OptionsPicker(pickerController: logic.pickerControllerProcessFlow),
       ],
       query: () => logic.queryPDF(),

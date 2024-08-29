@@ -29,7 +29,7 @@ class ProductionMaterialsReportState {
   }) {
     httpGet(
       method: webApiGetSapMoPickList,
-      loading: '正在查询物料料表...',
+      loading: 'production_materials_report_querying'.tr,
       params: {
         'ShowType': showType,
         'interID': interID,

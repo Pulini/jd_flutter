@@ -581,7 +581,7 @@ workerSignature(
               control.toImage(border: 0).then((image) {
                 if (image == null && data.signature == null) {
                   showSnackBar(
-                    title: '错误',
+                    title: 'snack_bar_default_wrong'.tr,
                     message: '请在空白处签名',
                     isWarning: true,
                   );
@@ -668,7 +668,7 @@ addDispatchWorker(DispatchProcessInfo data, Function() refresh) {
             onPressed: () {
               if (worker == null) {
                 showSnackBar(
-                  title: '错误',
+                  title: 'snack_bar_default_wrong'.tr,
                   message: '请输入正确的员工工号',
                   isWarning: true,
                 );
@@ -678,7 +678,7 @@ addDispatchWorker(DispatchProcessInfo data, Function() refresh) {
                 (v) => v.workerNumber == worker!.empCode,
               )) {
                 showSnackBar(
-                  title: '错误',
+                  title: 'snack_bar_default_wrong'.tr,
                   message: '该员工已分配',
                   isWarning: true,
                 );
@@ -686,7 +686,7 @@ addDispatchWorker(DispatchProcessInfo data, Function() refresh) {
               }
               if (dispatchQty == 0) {
                 showSnackBar(
-                  title: '错误',
+                  title: 'snack_bar_default_wrong'.tr,
                   message: '请正确填写分配数量',
                   isWarning: true,
                 );

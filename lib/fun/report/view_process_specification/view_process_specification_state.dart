@@ -13,7 +13,7 @@ class ViewProcessSpecificationState {
     required Function(String msg) error,
   }) {
     httpGet(
-      loading: '正在查询工艺说明书...',
+      loading: 'view_process_specification_querying'.tr,
       method: webApiGetProcessSpecificationList,
       params: {
         'Product': etTypeBody,

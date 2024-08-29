@@ -104,7 +104,7 @@ subItemReportDialog(
           TextButton(
             onPressed: () {
               if (qty == 0.0) {
-                showSnackBar(title: '错误', message: '请填写报工数量');
+                showSnackBar(title: 'snack_bar_default_wrong'.tr, message: '请填写报工数量');
               } else {
                 callback.call(qty);
                 Get.back();
@@ -600,19 +600,19 @@ pickPallet({
           TextButton(
             onPressed: () {
               if (selectDate == 0) {
-                showSnackBar(title: '错误', message: '请选择过账日期', isWarning: true);
+                showSnackBar(title: 'snack_bar_default_wrong'.tr, message: '请选择过账日期', isWarning: true);
                 return;
               }
               if (selectMachineId.isEmpty) {
-                showSnackBar(title: '错误', message: '请选择SAP机台', isWarning: true);
+                showSnackBar(title: 'snack_bar_default_wrong'.tr, message: '请选择SAP机台', isWarning: true);
                 return;
               }
               if (selectLocationId.isEmpty) {
-                showSnackBar(title: '错误', message: '请选择入库仓位', isWarning: true);
+                showSnackBar(title: 'snack_bar_default_wrong'.tr, message: '请选择入库仓位', isWarning: true);
                 return;
               }
               if (selectPalletNumber.isEmpty) {
-                showSnackBar(title: '错误', message: '请选择托盘', isWarning: true);
+                showSnackBar(title: 'snack_bar_default_wrong'.tr, message: '请选择托盘', isWarning: true);
                 return;
               }
               callback.call(

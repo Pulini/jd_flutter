@@ -25,7 +25,7 @@ class MoldingPackAreaReportPageState {
   }) {
     httpGet(
         method: webApiGetMoldingPackAreaReport,
-        loading: '正在查询区域报表...',
+        loading: 'page_molding_pack_area_report_query'.tr,
         params: {
           'startDate': startDate,
           'endDate': endDate,
@@ -54,7 +54,7 @@ class MoldingPackAreaReportPageState {
   }) {
     httpGet(
         method: webApiGetMoldingPackAreaReportDetail,
-        loading: '正在获取报表明细...',
+        loading: 'page_molding_pack_area_report_query_detail'.tr,
         params: {
           'interID': interID,
           'clientOrderNumber': clientOrderNumber,

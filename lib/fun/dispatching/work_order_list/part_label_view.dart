@@ -6,7 +6,7 @@ import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
 import '../../../bean/http/response/part_detail_info.dart';
-import '../../other/sacn/part_process_scan/part_process_scan_view.dart';
+import '../../other/scan/part_process_scan/part_process_scan_view.dart';
 
 class PartLabelPage extends StatefulWidget {
   const PartLabelPage({super.key});
@@ -181,7 +181,7 @@ class _PartLabelPageState extends State<PartLabelPage> {
                         );
                       } else {
                         showSnackBar(
-                          title: '错误',
+                          title: 'snack_bar_default_wrong'.tr,
                           message: '缺少删除权限！',
                           isWarning: true,
                         );
@@ -277,7 +277,7 @@ class _PartLabelPageState extends State<PartLabelPage> {
         if (checkUserPermission('1052501')) {
           _createLabelDialog(data);
         } else {
-          showSnackBar(title: '错误', message: '缺少贴标操作权限', isWarning: true);
+          showSnackBar(title: 'snack_bar_default_wrong'.tr, message: '缺少贴标操作权限', isWarning: true);
         }
       },
       child: Card(
@@ -371,7 +371,7 @@ class _PartLabelPageState extends State<PartLabelPage> {
                 _printLabelDialog(state.partDetail?.barCodeList ?? []);
               } else {
                 showSnackBar(
-                  title: '错误',
+                  title: 'snack_bar_default_wrong'.tr,
                   message: '缺少贴标操作权限！',
                   isWarning: true,
                 );

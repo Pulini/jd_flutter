@@ -330,8 +330,8 @@ getWorkerInfo({
   }).then((worker) {
     if (worker.resultCode == resultSuccess) {
       workers.call([
-        for (var i = 0; i < worker.data.length; ++i)
-          WorkerInfo.fromJson(worker.data[i])
+        for (var json in worker.data)
+          WorkerInfo.fromJson(json)
       ]);
     } else {
       error?.call(worker.message??'');
