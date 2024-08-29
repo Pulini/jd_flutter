@@ -590,6 +590,30 @@ const webApiModifyWorkCardItem =
 ///生成报工产量表_金臻
 const webApiReportDispatch =
     'api/CompoundDispatching/SubmitScWorkCardReportJinZhen';
+///最近一次来访记录
+const webApiGetVisitInfoByJsonStr = 'api/VisitorRegistration/GetVisitInfoByJsonStr';
+
+///来访详情
+const webApiGetVisitorInfo = 'api/VisitorRegistration/GetVisitorInfo';
+
+///离场更新
+const webApiUpdateLeaveFVisit = 'api/VisitorRegistration/UpdateLeaveFVisit';
+
+///离场新增
+const webApiInsertIntoFVisit = 'api/VisitorRegistration/InsertIntoFVisit';
+
+///根据部门ID或员工工号获得员工信息
+const webApiGetEmpByField = 'api/VisitorRegistration/GetEmpByField';
+
+///获取会客地点
+const webApiGetReceiveVisitorPlace = 'api/VisitorRegistration/GetReceiveVisitorPlace';
+
+///成型集装箱出货扫码汇总
+const webApiSAPContainerScanner = "sap/zapp/ZMM_ZXCFSM_SUMM";
+
+///根据条件获取成型集装箱出货信息
+const WebApiSAPContainerShipmentScanner = "sap/zapp/ZMM_ZXCFSM_D";
+
 
 ///贴标工序报工_修改已报工
 const webApiProductionDispatchReportSubmit =

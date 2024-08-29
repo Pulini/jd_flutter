@@ -21,6 +21,7 @@ import 'bean/http/response/user_info.dart';
 import 'bean/http/response/version_info.dart';
 import 'bean/http/response/worker_info.dart';
 import 'web_api.dart';
+import 'package:intl/intl.dart';
 
 late SharedPreferences sharedPreferences;
 late PackageInfo packageInfo;
@@ -384,4 +385,11 @@ visitButtonWidget({
 
 Future<Database> openDb() async {
   return openDatabase(join(await getDatabasesPath(), jdDatabase));
+}
+
+String getCurrentTime() {
+  final now = DateTime.now();
+  final formattedTime =  DateFormat('yyyy-MM-dd HH:mm:ss').format(now);
+
+  return formattedTime;
 }

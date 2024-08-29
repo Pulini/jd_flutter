@@ -11,6 +11,8 @@ import 'fun/dispatching/production_dispatch/production_dispatch_view.dart';
 import 'fun/management/property/property_view.dart';
 import 'fun/management/visit_register/visit_register_view.dart';
 import 'fun/other/scan/part_process_scan/part_process_scan_view.dart';
+import 'fun/other/sacn/forming_packing_scan/packing_scan_view.dart';
+import 'fun/other/sacn/part_process_scan/part_process_scan_view.dart';
 import 'fun/report/daily_report/daily_report_view.dart';
 import 'fun/report/molding_pack_area_report/molding_pack_area_report_view.dart';
 import 'fun/report/molding_scan_bulletin_report/molding_scan_bulletin_report_maximize_view.dart';
@@ -171,6 +173,13 @@ class RouteConfig {
     const MachineDispatchReportPage(),
   );
 
+  ///成型装箱扫码
+  static Routes packingScanPage = Routes(
+    '/scan_packing_page',
+    99,
+    const PackingScanPage(),
+  );
+
   ///本地功能入口列表
   static List<Routes> routeList = [
     dailyReport,
@@ -192,6 +201,7 @@ class RouteConfig {
     materialDispatchPage,
     machineDispatchPage,
     machineDispatchReportPage,
+    packingScanPage,
   ];
 
   static List<GetPage> appRoutes = [
@@ -283,6 +293,10 @@ class RouteConfig {
     GetPage(
       name: machineDispatchReportPage.name,
       page: () => machineDispatchReportPage.page,
+    ),
+    GetPage(
+      name: packingScanPage.name,
+      page: () => packingScanPage.page,
     ),
   ];
 }
