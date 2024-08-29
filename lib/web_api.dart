@@ -108,7 +108,7 @@ Future<BaseData> _doHttp({
   Object? body,
 }) async {
   ///用于开发时切换测试库，打包时必须屏蔽
-  // baseUrl = baseUrl == baseUrlForSAP ? developUrlForSAP : testUrlForMES;
+  baseUrl = baseUrl == baseUrlForSAP ? developUrlForSAP : testUrlForMES;
   ///--------------------------------------------x----
   try {
     logger.f('SnackbarStatus=$snackbarStatus');

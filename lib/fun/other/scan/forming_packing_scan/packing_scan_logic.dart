@@ -1,10 +1,8 @@
 import 'dart:convert';
 
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_state_manager/src/simple/get_controllers.dart';
-import 'package:jd_flutter/fun/other/sacn/forming_packing_scan/packing_scan_state.dart';
-import 'package:jd_flutter/fun/other/sacn/forming_packing_scan/packing_shipment_scan_view.dart';
+import 'package:jd_flutter/fun/other/scan/forming_packing_scan/packing_scan_state.dart';
+import 'package:jd_flutter/fun/other/scan/forming_packing_scan/packing_shipment_scan_view.dart';
 
 import '../../../../bean/http/response/container_scanner_info.dart';
 import '../../../../bean/http/response/packing_scan_time.dart';
