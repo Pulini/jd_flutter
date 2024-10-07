@@ -5,6 +5,7 @@ import 'bean/routes.dart';
 import 'fun/dispatching/machine_dispatch/machine_dispatch_report_view.dart';
 import 'fun/dispatching/machine_dispatch/machine_dispatch_view.dart';
 import 'fun/dispatching/material_dispatch/material_dispatch_view.dart';
+import 'fun/dispatching/process_dispatch_register/process_dispatch_register_view.dart';
 import 'fun/dispatching/production_dispatch/production_dispatch_detail_view.dart';
 import 'fun/dispatching/work_order_list/work_order_list_view.dart';
 import 'fun/dispatching/production_dispatch/production_dispatch_view.dart';
@@ -23,6 +24,7 @@ import 'fun/report/view_instruction_details/view_instruction_details_view.dart';
 import 'fun/report/view_process_specification/view_process_specification_view.dart';
 import 'fun/report/worker_production_detail/worker_production_detail_view.dart';
 import 'fun/report/worker_production_report/worker_production_report_view.dart';
+import 'fun/warehouse/smart_delivery/smart_delivery_view.dart';
 import 'home/home_view.dart';
 import 'web_api.dart';
 import 'login/login_view.dart';
@@ -51,7 +53,6 @@ class RouteConfig {
     99,
     const ProductionDayReportPage(),
   );
-
 
   ///查看指令明细
   static Routes viewInstructionDetails = Routes(
@@ -179,6 +180,20 @@ class RouteConfig {
     const PackingScanPage(),
   );
 
+  ///湿印工序派工
+  static Routes processDispatchRegisterPage = Routes(
+    '/process_dispatch_register_page',
+    99,
+    const ProcessDispatchRegisterPage(),
+  );
+
+  ///智能仓库配送
+  static Routes smartDeliveryPage = Routes(
+    '/smart_delivery_page',
+    99,
+    const SmartDeliveryPage(),
+  );
+
   ///本地功能入口列表
   static List<Routes> routeList = [
     dailyReport,
@@ -201,6 +216,8 @@ class RouteConfig {
     machineDispatchPage,
     machineDispatchReportPage,
     packingScanPage,
+    processDispatchRegisterPage,
+    smartDeliveryPage,
   ];
 
   static List<GetPage> appRoutes = [
@@ -296,6 +313,14 @@ class RouteConfig {
     GetPage(
       name: packingScanPage.name,
       page: () => packingScanPage.page,
+    ),
+    GetPage(
+      name: processDispatchRegisterPage.name,
+      page: () => processDispatchRegisterPage.page,
+    ),
+    GetPage(
+      name: smartDeliveryPage.name,
+      page: () => smartDeliveryPage.page,
     ),
   ];
 }

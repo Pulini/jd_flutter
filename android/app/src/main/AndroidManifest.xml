@@ -78,34 +78,34 @@
         <!--            </intent-filter>-->
         <!--        </receiver>-->
 
-        <receiver
-            android:name=".DeviceReceiver"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="nlscan.action.SCANNER_RESULT" />
-                <action android:name="com.android.server.scannerservice.broadcast" />
-                <action android:name="com.sunmi.scanner.ACTION_DATA_CODE_RECEIVED" />
-                <action android:name="android.intent.ACTION_DECODE_DATA" />
-                <action android:name="tw.PL2303MultiUSBMessage" />
+<!--        <receiver-->
+<!--            android:name=".DeviceReceiver"-->
+<!--            android:exported="true">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="nlscan.action.SCANNER_RESULT" />-->
+<!--                <action android:name="com.android.server.scannerservice.broadcast" />-->
+<!--                <action android:name="com.sunmi.scanner.ACTION_DATA_CODE_RECEIVED" />-->
+<!--                <action android:name="android.intent.ACTION_DECODE_DATA" />-->
+<!--                <action android:name="tw.PL2303MultiUSBMessage" />-->
 
-                <!--               <action android:name="com.android.example.USB_PERMISSION" />-->
+<!--                &lt;!&ndash;               <action android:name="com.android.example.USB_PERMISSION" />&ndash;&gt;-->
 
-                <action android:name="android.hardware.usb.action.USB_ACCESSORY_ATTACHED" />
-                <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
-                <action android:name="android.hardware.usb.action.USB_ACCESSORY_DETACHED" />
-                <action android:name="android.hardware.usb.action.USB_DEVICE_DETACHED" />
+<!--                <action android:name="android.hardware.usb.action.USB_ACCESSORY_ATTACHED" />-->
+<!--                <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />-->
+<!--                <action android:name="android.hardware.usb.action.USB_ACCESSORY_DETACHED" />-->
+<!--                <action android:name="android.hardware.usb.action.USB_DEVICE_DETACHED" />-->
 
-                <action android:name="android.bluetooth.BluetoothAdapter.STATE_OFF" />
-                <action android:name="android.bluetooth.BluetoothAdapter.STATE_ON" />
+<!--                <action android:name="android.bluetooth.BluetoothAdapter.STATE_OFF" />-->
+<!--                <action android:name="android.bluetooth.BluetoothAdapter.STATE_ON" />-->
 
-                <action android:name="android.bluetooth.device.action.ACL_DISCONNECTED" />
-                <action android:name="android.bluetooth.adapter.action.DISCOVERY_STARTED" />
-                <action android:name="android.bluetooth.adapter.action.DISCOVERY_FINISHED" />
-                <action android:name="android.bluetooth.device.action.FOUND" />
-                <action android:name="android.bluetooth.adapter.action.STATE_CHANGED" />
+<!--                <action android:name="android.bluetooth.device.action.ACL_DISCONNECTED" />-->
+<!--                <action android:name="android.bluetooth.adapter.action.DISCOVERY_STARTED" />-->
+<!--                <action android:name="android.bluetooth.adapter.action.DISCOVERY_FINISHED" />-->
+<!--                <action android:name="android.bluetooth.device.action.FOUND" />-->
+<!--                <action android:name="android.bluetooth.adapter.action.STATE_CHANGED" />-->
 
-            </intent-filter>
-        </receiver>
+<!--            </intent-filter>-->
+<!--        </receiver>-->
 
         <!--文件提供者-->
         <provider

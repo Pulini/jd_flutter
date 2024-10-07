@@ -5,6 +5,7 @@ import 'package:jd_flutter/utils.dart';
 import 'package:jd_flutter/web_api.dart';
 
 import '../../../../bean/http/response/worker_info.dart';
+import '../../../../widget/dialogs.dart';
 
 class PartProcessScanState {
   var barCodeList = <String>[].obs;
@@ -25,6 +26,7 @@ class PartProcessScanState {
     getWorkerInfo(
       department: userInfo?.departmentID.toString(),
       workers: (list) => workerList.value = list,
+      error: (msg) => errorDialog(content: msg),
     );
   }
 

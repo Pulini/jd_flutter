@@ -1341,3 +1341,25 @@ expandedFrameText({
     ),
   );
 }
+
+avatarPhoto(String? url) {
+  return AspectRatio(
+    aspectRatio: 1 / 1,
+    child: ClipRRect(
+      borderRadius: BorderRadius.circular(7),
+      child: url == null
+          ? Image.asset(
+              'lib/res/images/ic_logo.png',
+              color: Colors.blue,
+            )
+          : Image.network(
+              url,
+              fit: BoxFit.fill,
+              errorBuilder: (ctx, err, stackTrace) => Image.asset(
+                'lib/res/images/ic_logo.png',
+                color: Colors.blue,
+              ),
+            ),
+    ),
+  );
+}

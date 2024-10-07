@@ -97,6 +97,7 @@ dependencies:
   path: ^1.9.0
   #手写签字控件
   hand_signature: ^3.0.3
+
   #item侧滑控件
 #  flutter_slidable: ^3.1.1
   #进度条插件

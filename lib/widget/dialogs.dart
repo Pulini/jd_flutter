@@ -273,27 +273,30 @@ doUpdate(VersionInfo version) {
                   ),
                 ),
                 if ((version.force ?? false) == false)
-                  FractionallySizedBox(
-                    widthFactor: 1,
-                    child: TextButton(
-                      style: ButtonStyle(
-                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        textStyle: WidgetStateProperty.all(
-                          const TextStyle(fontSize: 14),
-                        ),
-                        foregroundColor: WidgetStateProperty.all(
-                          Colors.grey[600],
-                        ),
-                        shape: WidgetStateProperty.all(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5),
+                  Padding(
+                    padding: EdgeInsets.only(top:10, bottom: 10),
+                    child: FractionallySizedBox(
+                      widthFactor: 1,
+                      child: TextButton(
+                        style: ButtonStyle(
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          textStyle: WidgetStateProperty.all(
+                            const TextStyle(fontSize: 14),
+                          ),
+                          foregroundColor: WidgetStateProperty.all(
+                            Colors.grey[600],
+                          ),
+                          shape: WidgetStateProperty.all(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5),
+                            ),
                           ),
                         ),
+                        onPressed: () => Get.back(),
+                        child: Text('update_dialog_cancel'.tr),
                       ),
-                      onPressed: () => Get.back(),
-                      child: Text('update_dialog_cancel'.tr),
                     ),
-                  )
+                  ),
               ],
             )),
           ),

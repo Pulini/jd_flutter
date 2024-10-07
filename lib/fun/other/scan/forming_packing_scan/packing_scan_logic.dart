@@ -36,7 +36,7 @@ class PackingScanLogic extends GetxController {
         ZHGCCRQ: pickerControllerDate.getDateFormatYMD().replaceAll('-', '')));
 
     httpPost(
-      method: webApiSAPContainerScanner,
+      method: webApiSapContainerScanner,
       loading: '正在获取汇总数据...',
       body: body,
     ).then((response) {
@@ -69,7 +69,7 @@ class PackingScanLogic extends GetxController {
     body.add(PackingShipmentScan(ZHGCCRQ: time, ZZKHXH1: cabinetNumber));
 
     sapPost(
-      method: webApiSAPContainerScanner,
+      method: webApiSapContainerScanner,
       loading: '正在获取成型集装箱出货信息...',
       body: body,
     ).then((response) {
@@ -93,11 +93,11 @@ class PackingScanLogic extends GetxController {
   }
 
   bool checkCode(String code) {
-    var have = 1;
-    var codes = "";
-    var deliveryNumber = "";
-
-    var count = 0;
+    // var have = 1;
+    // var codes = "";
+    // var deliveryNumber = "";
+    //
+    // var count = 0;
 
     if (code.isNotEmpty && state.packingShipmentScanInfo!.GT_ITEMS2!.isNotEmpty){
       for (var data in state.packingShipmentScanInfo!.GT_ITEMS2!) {

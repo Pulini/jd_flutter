@@ -10,11 +10,11 @@ import android.content.Context
 import android.os.Build
 import android.os.SystemClock
 import android.util.Log
-import com.jd.pzx.jd_flutter.EventDeviceMessage
-import com.jd.pzx.jd_flutter.OperationType
+//import com.jd.pzx.jd_flutter.EventDeviceMessage
+//import com.jd.pzx.jd_flutter.OperationType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
-import org.greenrobot.eventbus.EventBus
+
 import java.io.IOException
 import java.util.UUID
 
@@ -62,12 +62,12 @@ fun bluetoothStartScan(bleAdapter: BluetoothAdapter): Boolean {
                     Log.e(
                         "Pan", "已绑定设备：${dev.device.name} isConnected:${dev.socket.isConnected}"
                     )
-                    EventBus.getDefault().post(
-                        EventDeviceMessage(
-                            OperationType.BluetoothFind,
-                            dev.getDeviceMap()
-                        )
-                    )
+//                    EventBus.getDefault().post(
+//                        EventDeviceMessage(
+//                            OperationType.BluetoothFind,
+//                            dev.getDeviceMap()
+//                        )
+//                    )
                 }
             }
         }
@@ -78,9 +78,9 @@ fun bluetoothStartScan(bleAdapter: BluetoothAdapter): Boolean {
                 if (!bleAdapter.isDiscovering) {
                     Log.e("Pan", "EndScan")
                     scanLock = false
-                    EventBus.getDefault().post(
-                        EventDeviceMessage(OperationType.BluetoothState, "EndScan")
-                    )
+//                    EventBus.getDefault().post(
+//                        EventDeviceMessage(OperationType.BluetoothState, "EndScan")
+//                    )
                 } else {
                     SystemClock.sleep(200)
                 }
@@ -128,9 +128,9 @@ fun bluetoothConnect(
             val cd = bleAdapter.cancelDiscovery()
             scanLock = false
             Log.e("Pan", "取消扫描经典蓝牙:$cd")
-            EventBus.getDefault().post(
-                EventDeviceMessage(OperationType.BluetoothState, "EndScan")
-            )
+//            EventBus.getDefault().post(
+//                EventDeviceMessage(OperationType.BluetoothState, "EndScan")
+//            )
         }
         Log.e("Pan", "连接经典蓝牙:$mac ")
         deviceList.find { it.device.address == mac }.let { device ->

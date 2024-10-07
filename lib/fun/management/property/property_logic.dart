@@ -61,6 +61,7 @@ class PropertyLogic extends GetxController
             empID: list[0].empID ?? -1,
           );
         },
+        error: (msg) => errorDialog(content: msg),
       );
     } else {
       state.setParticipator();
@@ -78,6 +79,7 @@ class PropertyLogic extends GetxController
             empID: list[0].empID ?? -1,
           );
         },
+        error: (msg) => errorDialog(content: msg),
       );
     } else {
       state.setCustodian();
@@ -95,6 +97,7 @@ class PropertyLogic extends GetxController
             empID: list[0].empID ?? -1,
           );
         },
+        error: (msg) => errorDialog(content: msg),
       );
     } else {
       state.setLiable();

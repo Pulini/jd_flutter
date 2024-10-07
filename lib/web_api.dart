@@ -108,7 +108,7 @@ Future<BaseData> _doHttp({
   Object? body,
 }) async {
   ///用于开发时切换测试库，打包时必须屏蔽
-  baseUrl = baseUrl == baseUrlForSAP ? developUrlForSAP : testUrlForMES;
+  // baseUrl = baseUrl == baseUrlForSAP ? developUrlForSAP : testUrlForMES;
   ///--------------------------------------------x----
   try {
     logger.f('SnackbarStatus=$snackbarStatus');
@@ -225,7 +225,7 @@ Future<BaseData> _doHttp({
 ///登录接口
 const webApiLogin = 'api/User/Login';
 
-///登录接口
+///获取用户头像
 const webApiGetUserPhoto = 'api/User/GetEmpPhotoByPhone';
 
 ///获取验证码接口
@@ -609,12 +609,13 @@ const webApiGetEmpByField = 'api/VisitorRegistration/GetEmpByField';
 const webApiGetReceiveVisitorPlace = 'api/VisitorRegistration/GetReceiveVisitorPlace';
 
 ///成型集装箱出货扫码汇总
-const webApiSAPContainerScanner = "sap/zapp/ZMM_ZXCFSM_SUMM";
+const webApiSapContainerScanner = "sap/zapp/ZMM_ZXCFSM_SUMM";
 
 ///根据条件获取成型集装箱出货信息
-const WebApiSAPContainerShipmentScanner = "sap/zapp/ZMM_ZXCFSM_D";
-
+const webApiSapContainerShipmentScanner = "sap/zapp/ZMM_ZXCFSM_D";
 
 ///贴标工序报工_修改已报工
-const webApiProductionDispatchReportSubmit =
-    'api/WetPrinting/BarCodeProcessReportSubmit_Reported';
+const webApiProductionDispatchReportSubmit = 'api/WetPrinting/BarCodeProcessReportSubmit_Reported';
+
+///获取工序派工单信息
+const webApiGetProcessWorkCard = 'api/WetPrinting/GetProcessWorkCardByBarcode';

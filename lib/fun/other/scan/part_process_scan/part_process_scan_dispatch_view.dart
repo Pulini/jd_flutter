@@ -215,21 +215,7 @@ class _PartProcessScanDispatchPageState
                     children: [
                       Padding(
                         padding: const EdgeInsets.all(10),
-                        child: AspectRatio(
-                          aspectRatio: 1 / 1,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(7),
-                            child: Image.network(
-                              wi.picUrl ?? '',
-                              fit: BoxFit.fill,
-                              errorBuilder: (ctx, err, stackTrace) =>
-                                  Image.asset(
-                                'lib/res/images/ic_logo.png',
-                                color: Colors.blue,
-                              ),
-                            ),
-                          ),
-                        ),
+                        child: avatarPhoto(wi.picUrl),
                       ),
                       Expanded(
                         child: Column(

@@ -22,18 +22,62 @@ import com.jd.pzx.jd_flutter.utils.openFile
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
-import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
 import java.io.File
 
 
 @SuppressLint("MissingPermission")
 class MainActivity : FlutterActivity() {
+    val receiverUtil = ReceiverUtil(
+        this,
+        usbAttached = {
+            sendFlutter(CHANNEL_FLUTTER_SEND, "UsbState", "Attached")
+        },
+        usbDetached = {
+            sendFlutter(CHANNEL_FLUTTER_SEND, "UsbState", "Detached")
+        },
+        weighbridgeDetached = {
+            sendFlutter(CHANNEL_FLUTTER_SEND, "WeighbridgeDetached", "Detached")
+        },
+        bleDisconnected = {
+            sendFlutter(CHANNEL_FLUTTER_SEND, "BluetoothState", "Disconnected")
+        },
+        bleConnected = {
+            sendFlutter(CHANNEL_FLUTTER_SEND, "BluetoothState", "Connected")
+        },
+        bleScanStart = {
+            sendFlutter(CHANNEL_FLUTTER_SEND, "BluetoothState", "StartScan")
+        },
+        bleFindDevice = {
+            sendFlutter(CHANNEL_FLUTTER_SEND, "BluetoothFind", it)
+        },
+        bleScanFinished = {
+            sendFlutter(CHANNEL_FLUTTER_SEND, "BluetoothState", "EndScan")
+        },
+        bleStateOff = {
+            sendFlutter(CHANNEL_FLUTTER_SEND,"BluetoothState","Off")
+        },
+        bleStateOn = {
+            sendFlutter(CHANNEL_FLUTTER_SEND,"BluetoothState","On")
+        },
+        bleStateClose = {
+            sendFlutter(CHANNEL_FLUTTER_SEND,"BluetoothState","Close")
+        },
+        bleStateOpen = {
+            sendFlutter(CHANNEL_FLUTTER_SEND,"BluetoothState","Open")
+        },
+        scanCode = {
+            sendFlutter(CHANNEL_ANDROID_SEND, "PdaScanner", it)
+        },
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        EventBus.getDefault().register(this)
+        receiverUtil.registerReceiver()
+    }
+
+    override fun onDestroy() {
+        receiverUtil.unRegisterReceiver()
+        super.onDestroy()
     }
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
@@ -115,7 +159,7 @@ class MainActivity : FlutterActivity() {
                         Log.e("Pan", "device=${device.device.name}")
                         sendFlutter(
                             CHANNEL_FLUTTER_SEND,
-                            OperationType.BluetoothFind.toString(),
+                            "BluetoothFind",
                             device.getDeviceMap()
                         )
                     }
@@ -146,28 +190,6 @@ class MainActivity : FlutterActivity() {
             Log.e("Pan", "onActivityResult   蓝牙打开成功")
             sendFlutter(CHANNEL_FLUTTER_SEND, "Bluetooth", 3)
         }
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun deviceReceiverEvent(event: EventDeviceMessage) {
-        Log.e("Pan", "do:$event")
-        sendFlutter(
-            CHANNEL_FLUTTER_SEND,
-            event.operationType.toString(),
-            event.data!!
-        )
-
-
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun jPushEvent(event: EventDeviceMessage) {
-        Log.e("Pan", "do:$event")
-        sendFlutter(
-            CHANNEL_ANDROID_SEND,
-            event.operationType.toString(),
-            event.data!!
-        )
     }
 
     private fun sendFlutter(channel: String, method: String, data: Any) {

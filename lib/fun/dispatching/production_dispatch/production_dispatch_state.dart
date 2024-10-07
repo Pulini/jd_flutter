@@ -10,6 +10,7 @@ import '../../../bean/http/response/production_dispatch_order_info.dart';
 import '../../../bean/http/response/worker_info.dart';
 import '../../../utils.dart';
 import '../../../web_api.dart';
+import '../../../widget/dialogs.dart';
 
 class ProductionDispatchState {
   var etInstruction = '';
@@ -60,6 +61,7 @@ class ProductionDispatchState {
     getWorkerInfo(
       department: userInfo?.departmentID.toString(),
       workers: (list) => workerList = list,
+      error: (msg) => errorDialog(content: msg),
     );
   }
 
