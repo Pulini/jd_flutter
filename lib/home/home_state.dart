@@ -9,8 +9,8 @@ import '../bean/http/response/department_info.dart';
 import '../bean/http/response/home_function_info.dart';
 import '../constant.dart';
 import '../route.dart';
-import '../utils.dart';
-import '../web_api.dart';
+import '../utils/utils.dart';
+import '../utils/web_api.dart';
 
 class HomeState {
   var userPicUrl = ''.obs;

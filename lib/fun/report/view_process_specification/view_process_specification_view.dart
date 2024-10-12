@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../widget/custom_widget.dart';
+import '../../../widget/edit_text_widget.dart';
 import '../../../widget/web_page.dart';
 import 'view_process_specification_logic.dart';
 

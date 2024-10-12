@@ -5,11 +5,11 @@ import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:uuid/uuid.dart';
 
-import 'bean/http/response/base_data.dart';
-import 'constant.dart';
-import 'route.dart';
+import '../bean/http/response/base_data.dart';
+import '../constant.dart';
+import '../route.dart';
 import 'utils.dart';
-import 'widget/dialogs.dart';
+import '../widget/dialogs.dart';
 
 ///接口返回异常
 const resultError = 0;
@@ -619,3 +619,12 @@ const webApiProductionDispatchReportSubmit = 'api/WetPrinting/BarCodeProcessRepo
 
 ///获取工序派工单信息
 const webApiGetProcessWorkCard = 'api/WetPrinting/GetProcessWorkCardByBarcode';
+
+///获取报工信息
+const webApiGetReportDataByBarcode = 'api/WetPrinting/GetReportDataByBarcode';
+
+///修改操作员
+const webApiChangeLabelingBarcodeEmp = 'api/WetPrinting/ChangeLabelingBarcodeEmp';
+
+///删除标签
+const webApiUnReportAndDelLabelingBarcode = 'api/WetPrinting/UnReportAndDelLabelingBarcode';

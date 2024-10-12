@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 
 import '../bean/home_button.dart';
 import '../bean/http/response/home_function_info.dart';
-import '../utils.dart';
+import '../utils/utils.dart';
 import '../widget/custom_widget.dart';
 import '../widget/dialogs.dart';
 import 'home_logic.dart';

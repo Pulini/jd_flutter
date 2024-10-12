@@ -1,8 +1,8 @@
 import 'package:get/get.dart';
 
 import '../../../bean/http/response/worker_production_detail_info.dart';
-import '../../../utils.dart';
-import '../../../web_api.dart';
+import '../../../utils/utils.dart';
+import '../../../utils/web_api.dart';
 
 class WorkerProductionDetailState {
   var etWorker = '';

@@ -49,28 +49,39 @@ fun bluetoothAdapter(context: Context): BluetoothAdapter? {
  */
 fun bluetoothIsEnable(bleAdapter: BluetoothAdapter?) = bleAdapter?.isEnabled == true
 
+@SuppressLint("MissingPermission")
+fun isSearching(bleAdapter: BluetoothAdapter) = bleAdapter.isDiscovering
+
+@SuppressLint("MissingPermission")
+fun deviceIsConnected(bleAdapter: BluetoothAdapter, mac: String) = bleAdapter.bondedDevices.any {
+    it.address == mac && it.bondState == BOND_BONDED
+}
+
 /**
  * 开始扫描蓝牙
  */
 @SuppressLint("MissingPermission")
-fun bluetoothStartScan(bleAdapter: BluetoothAdapter): Boolean {
-//    bleAdapter.enable()
+fun bluetoothStartScan(
+    bleAdapter: BluetoothAdapter,
+    bondedDevices: (BDevice) -> Unit
+): Boolean {
+    bleAdapter.enable()
+    Log.e("Pan", "已绑定设备=${bleAdapter.bondedDevices.size}")
     return if (bleAdapter.startDiscovery()) {
+        val bondedList= mutableListOf<BDevice>()
         bleAdapter.bondedDevices.forEach { bonded ->
             deviceList.find { it.device.address == bonded.address }.let { device ->
-                (device ?: BDevice(bonded).apply { deviceList.add(this) }).let { dev ->
-                    Log.e(
-                        "Pan", "已绑定设备：${dev.device.name} isConnected:${dev.socket.isConnected}"
-                    )
-//                    EventBus.getDefault().post(
-//                        EventDeviceMessage(
-//                            OperationType.BluetoothFind,
-//                            dev.getDeviceMap()
-//                        )
-//                    )
-                }
+                val dev = device ?: BDevice(bonded)
+                bondedList.add(dev)
+                Log.e(
+                    "Pan", "已绑定设备：${dev.device.name} isConnected:${dev.socket.isConnected}"
+                )
+                bondedDevices.invoke(dev)
             }
         }
+        deviceList.clear()
+        deviceList.addAll(bondedList)
+
         scanLock = true
         Thread {
             Log.e("Pan", "开启扫描经典蓝牙")
@@ -78,9 +89,6 @@ fun bluetoothStartScan(bleAdapter: BluetoothAdapter): Boolean {
                 if (!bleAdapter.isDiscovering) {
                     Log.e("Pan", "EndScan")
                     scanLock = false
-//                    EventBus.getDefault().post(
-//                        EventDeviceMessage(OperationType.BluetoothState, "EndScan")
-//                    )
                 } else {
                     SystemClock.sleep(200)
                 }
@@ -92,14 +100,6 @@ fun bluetoothStartScan(bleAdapter: BluetoothAdapter): Boolean {
         false
     }
 
-}
-
-@SuppressLint("MissingPermission")
-fun isSearching(bleAdapter: BluetoothAdapter) = bleAdapter.isDiscovering
-
-@SuppressLint("MissingPermission")
-fun isConnected(bleAdapter: BluetoothAdapter, mac: String) = bleAdapter.bondedDevices.any {
-    it.address == mac && it.bondState == BOND_BONDED
 }
 
 /**
@@ -120,7 +120,6 @@ fun bluetoothCancelScan(bleAdapter: BluetoothAdapter): Boolean {
 fun bluetoothConnect(
     bleAdapter: BluetoothAdapter,
     mac: String,
-    send: (BluetoothSocket) -> Unit
 ): Int {
 
     try {
@@ -128,11 +127,11 @@ fun bluetoothConnect(
             val cd = bleAdapter.cancelDiscovery()
             scanLock = false
             Log.e("Pan", "取消扫描经典蓝牙:$cd")
-//            EventBus.getDefault().post(
-//                EventDeviceMessage(OperationType.BluetoothState, "EndScan")
-//            )
         }
         Log.e("Pan", "连接经典蓝牙:$mac ")
+        deviceList.forEach {
+            Log.e("Pan", "经典蓝牙:${it.device.address} ")
+        }
         deviceList.find { it.device.address == mac }.let { device ->
             if (device == null) {
                 Log.e("Pan", "找不到该蓝牙")
@@ -141,7 +140,6 @@ fun bluetoothConnect(
                 device.socket.connect()
                 Log.e("Pan", "经典蓝牙连接成功")
                 SystemClock.sleep(500)
-                send.invoke(device.socket)
                 return 0
             }
         }
@@ -210,19 +208,19 @@ fun bluetoothSendCommand(
     dataList: List<ByteArray>,
     sendCallback: (Int) -> Unit
 ) {
-    if (dataList.isEmpty()) return
+    if (dataList.isEmpty()) {
+        sendCallback.invoke(SEND_COMMAND_STATE_FAILED)
+        return
+    }
     Thread {
         try {
-//            dataList.forEach {byte->
-//                Log.e("Pan",byte.joinToString(" ", transform = { it.toInt().and(0xff).toString(16).padStart(2, '0') }))
-//            }
             val byte = bytesMerger(dataList)
             bleSocket.outputStream?.write(byte)
             Log.e("Pan", "蓝牙发送数据:$byte")
+            sendCallback.invoke(SEND_COMMAND_STATE_SUCCESS)
         } catch (e: Exception) {
             Log.e("Pan", "蓝牙操作异常：发送数据失败", e)
-        } finally {
-            sendCallback.invoke(SEND_COMMAND_STATE_SUCCESS)
+            sendCallback.invoke(SEND_COMMAND_STATE_FAILED)
         }
     }.start()
 }
@@ -237,6 +235,6 @@ data class BDevice(
         it["DeviceName"] = device.name
         it["DeviceMAC"] = device.address
         it["DeviceIsConnected"] = socket.isConnected
-        it["DeviceBondState"] = device.bondState== 12
+        it["DeviceBondState"] = device.bondState == 12
     }
 }

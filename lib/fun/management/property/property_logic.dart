@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/management/property/property_detail_view.dart';
-import '../../../web_api.dart';
+import '../../../utils/web_api.dart';
 import '../../../route.dart';
-import '../../../utils.dart';
+import '../../../utils/utils.dart';
 import '../../../widget/custom_widget.dart';
 import '../../../widget/dialogs.dart';
 import '../../../widget/picker/picker_controller.dart';

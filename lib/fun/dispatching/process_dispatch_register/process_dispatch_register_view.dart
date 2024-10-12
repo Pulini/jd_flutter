@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/dispatching/process_dispatch_register/process_dispatch_register_dialog.dart';
+import 'package:jd_flutter/fun/dispatching/process_dispatch_register/process_dispatch_register_modify_label_worker_view.dart';
 import 'package:jd_flutter/fun/dispatching/process_dispatch_register/process_dispatch_register_state.dart';
-import 'package:jd_flutter/utils.dart';
+import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 
 import '../../../constant.dart';
+import '../../../widget/combination_button_widget.dart';
+import '../../../widget/edit_text_widget.dart';
 import 'process_dispatch_register_logic.dart';
 
 class ProcessDispatchRegisterPage extends StatefulWidget {
@@ -23,6 +26,8 @@ class _ProcessDispatchRegisterPageState
       Get.put(ProcessDispatchRegisterLogic());
   final ProcessDispatchRegisterState state =
       Get.find<ProcessDispatchRegisterLogic>().state;
+
+  TextEditingController controller = TextEditingController();
 
   itemList1() {
     var listWidget = <Widget>[];
@@ -76,7 +81,7 @@ class _ProcessDispatchRegisterPageState
         listWidget.add(Row(
           children: [
             expandedFrameText(
-              text: data.mToNo ?? '',
+              text: data.instructions ?? '',
               flex: 3,
               isBold: true,
               backgroundColor: Colors.white,
@@ -166,6 +171,7 @@ class _ProcessDispatchRegisterPageState
           isBold: true,
         ),
         expandedFrameText(
+          padding: const EdgeInsets.only(bottom: 5, top: 5),
           text: '日派数',
           backgroundColor: Colors.blue,
           textColor: Colors.white,
@@ -198,7 +204,7 @@ class _ProcessDispatchRegisterPageState
         dayMustQty = dayMustQty.add(data.dayMustQty ?? 0);
         mustQty = mustQty.add(data.mustQty ?? 0);
         qty = qty.add(data.qty.sub(data.mustQty ?? 0));
-        salesOrderList.add(data.mToNo ?? '');
+        salesOrderList.add(data.instructions ?? '');
       }
       listWidget.add(Row(
         children: [
@@ -276,15 +282,17 @@ class _ProcessDispatchRegisterPageState
 
   _methodChannel() {
     print('注册监听');
-    const MethodChannel(channelAndroidSend).setMethodCallHandler((call) {
+    const MethodChannel(channelScanAndroidToFlutter)
+        .setMethodCallHandler((call) {
       switch (call.method) {
         case 'PdaScanner':
           {
-            print('PdaScanner=${call.arguments}');
+            controller.text = call.arguments;
+            logic.queryOrder(call.arguments);
           }
           break;
       }
-      return Future.value(null);
+      return Future.value(call);
     });
   }
 
@@ -292,7 +300,9 @@ class _ProcessDispatchRegisterPageState
   void initState() {
     super.initState();
     _methodChannel();
+    controller.text = 'GXPG24446580/5';
   }
+
   @override
   Widget build(BuildContext context) {
     return pageBody(
@@ -308,7 +318,7 @@ class _ProcessDispatchRegisterPageState
           children: [
             EditText(
               hint: '工票或生产派工单',
-              onChanged: (v) => state.order.value = v,
+              controller: controller,
             ),
             if (state.typeBody.isNotEmpty)
               Container(
@@ -331,15 +341,17 @@ class _ProcessDispatchRegisterPageState
                 Expanded(
                   child: CombinationButton(
                     text: '查询',
-                    isEnabled: state.order.isNotEmpty,
-                    click: () => logic.queryOrder(),
+                    isEnabled: controller.text.isNotEmpty,
+                    click: () => logic.queryOrder(controller.text),
                     combination: Combination.left,
                   ),
                 ),
                 Expanded(
                   child: CombinationButton(
                     text: '更换',
-                    click: () =>modifyOperatorDialog(state.workerList,(index){}),
+                    click: () => Get.to(()=>const ModifyLabelWorkerPage())?.then(
+                      (v) => _methodChannel(),
+                    ),
                     combination: Combination.middle,
                   ),
                 ),
@@ -353,7 +365,7 @@ class _ProcessDispatchRegisterPageState
                 Expanded(
                   child: CombinationButton(
                     text: '打印贴标',
-                    click: () {},
+                    click: () => logic.goPrintLabel(),
                     combination: Combination.right,
                   ),
                 ),

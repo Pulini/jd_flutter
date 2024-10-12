@@ -1,28 +1,29 @@
+
 class BluetoothDevice {
   BluetoothDevice({
-    this.deviceName,
-    this.deviceMAC,
-    this.deviceIsBonded,
-    this.deviceIsConnected,
+    required this.deviceName,
+    required this.deviceMAC,
+    required this.deviceIsBonded,
+    required this.deviceIsConnected,
   });
 
   BluetoothDevice.fromJson(dynamic json) {
     deviceName = json['DeviceName'];
     deviceMAC = json['DeviceMAC'];
-    deviceIsBonded = json['DeviceIsBonded'];
+    deviceIsBonded = json['DeviceBondState'];
     deviceIsConnected = json['DeviceIsConnected'];
   }
 
-  String? deviceName;
-  String? deviceMAC;
-  bool? deviceIsBonded;
-  bool? deviceIsConnected;
+  var deviceName = '';
+  var deviceMAC = '';
+  var deviceIsBonded = false;
+  var deviceIsConnected = false;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['DeviceName'] = deviceName;
     map['DeviceMAC'] = deviceMAC;
-    map['DeviceIsBonded'] = deviceIsBonded;
+    map['DeviceBondState'] = deviceIsBonded;
     map['DeviceIsConnected'] = deviceIsConnected;
     return map;
   }

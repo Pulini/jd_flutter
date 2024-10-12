@@ -2,12 +2,12 @@ import 'dart:convert';
 
 import 'package:collection/collection.dart';
 import 'package:get/get.dart';
-import 'package:jd_flutter/utils.dart';
+import 'package:jd_flutter/utils/utils.dart';
 
 import '../../../bean/http/response/base_data.dart';
 import '../../../bean/http/response/machine_dispatch_info.dart';
 import '../../../bean/http/response/sap_label_info.dart';
-import '../../../web_api.dart';
+import '../../../utils/web_api.dart';
 
 class MachineDispatchState {
   var dataList = <String>[].obs;

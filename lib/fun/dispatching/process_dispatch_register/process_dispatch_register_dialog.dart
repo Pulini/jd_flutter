@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../../../bean/http/response/worker_info.dart';
-import '../../../widget/custom_widget.dart';
+import '../../../widget/worker_check_widget.dart';
 
 showSalesOrderListDialog(List<String> list) {
   Get.dialog(
@@ -38,7 +37,7 @@ showSalesOrderListDialog(List<String> list) {
   );
 }
 
-_addNewWorkerDialog(
+addNewWorkerDialog(
   List<WorkerInfo> workers,
   Function(WorkerInfo wi) callback,
 ) {
@@ -53,25 +52,38 @@ _addNewWorkerDialog(
           title: const Text('添加临时组员'),
           content: SizedBox(
             width: 200,
+            height: 260,
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                if (avatar.isNotEmpty)
-                  SizedBox(
-                    width: 150,
-                    height: 150,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(7),
-                      child: Image.network(avatar.value, fit: BoxFit.fill),
-                    ),
+                Expanded(
+                  child: ListView(
+                    children: [
+                      if (avatar.isNotEmpty)
+                        Center(
+                          child: SizedBox(
+                            width: 150,
+                            height: 150,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(7),
+                              child:
+                                  Image.network(avatar.value, fit: BoxFit.fill),
+                            ),
+                          ),
+                        ),
+                    ],
                   ),
+                ),
                 if (exists.value)
-                  Text(
-                    '员工已存在',
-                    style: TextStyle(
-                      color: Colors.redAccent,
-                      fontWeight: FontWeight.bold,
+                  Padding(
+                    padding: EdgeInsets.only(left: 10),
+                    child: Text(
+                      '员工已存在',
+                      style: TextStyle(
+                        color: Colors.redAccent,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 WorkerCheck(onChanged: (w) {
@@ -83,6 +95,8 @@ _addNewWorkerDialog(
               ],
             ),
           ),
+          contentPadding: const EdgeInsets.only(left: 30, right: 30),
+          actionsPadding: const EdgeInsets.only(right: 10, bottom: 10),
           actions: [
             if (!exists.value && newWorker != null)
               TextButton(
@@ -106,104 +120,4 @@ _addNewWorkerDialog(
       ),
     ),
   );
-}
-
-modifyOperatorDialog(
-  List<WorkerInfo> workers,
-  Function(int) callback,
-) {
-  var select = (-1).obs;
-  Get.dialog(PopScope(
-    canPop: false,
-    child: StatefulBuilder(builder: (context, dialogSetState) {
-      return AlertDialog(
-        title: Row(
-          children: [
-            const Expanded(child: Text('修改操作员')),
-            IconButton(
-              icon: const Icon(
-                Icons.add,
-                size: 30,
-                color: Colors.blueAccent,
-              ),
-              onPressed: () {
-                _addNewWorkerDialog(workers, (wi) {
-                  dialogSetState(() {
-                    workers.add(wi);
-                  });
-                });
-              },
-            ),
-          ],
-        ),
-        content: SizedBox(
-          width: MediaQuery.of(context).size.width,
-          height: 300,
-          child: GridView.builder(
-            itemCount: workers.length,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              childAspectRatio: 2 / 1,
-            ),
-            itemBuilder: (context, index) => GestureDetector(
-              onTap: () {
-                dialogSetState(() {
-                  select.value = index;
-                });
-              },
-              child: Card(
-                color: select.value == index
-                    ? Colors.greenAccent.shade100
-                    : Colors.white,
-                child: Padding(
-                  padding: const EdgeInsets.all(5),
-                  child: Row(
-                    children: [
-                      avatarPhoto(workers[index].picUrl),
-                      Expanded(
-                          child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Text(
-                            workers[index].empCode ?? '',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey.shade600,
-                            ),
-                          ),
-                          Text(
-                            workers[index].empName ?? '',
-                            style: TextStyle(
-                              color: Colors.blue.shade800,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ))
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Get.back();
-              // callback.call(select);
-            },
-            child: Text('dialog_default_confirm'.tr),
-          ),
-          TextButton(
-            onPressed: () => Get.back(),
-            child: Text(
-              'dialog_default_cancel'.tr,
-              style: const TextStyle(color: Colors.grey),
-            ),
-          ),
-        ],
-      );
-    }),
-  ));
 }

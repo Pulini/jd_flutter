@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 
 import '../bean/http/response/version_info.dart';
 import '../constant.dart';
-import '../web_api.dart';
+import '../utils/web_api.dart';
 import '../login/login_view.dart';
 import 'downloader.dart';
 
@@ -174,7 +174,7 @@ doUpdate(VersionInfo version) {
       logger.f('Android_Update');
       Downloader(
         url: version.url!,
-        completed: (path) => const MethodChannel(channelFlutterSend)
+        completed: (path) => const MethodChannel(channelUsbAndroidToFlutter)
             .invokeMethod('OpenFile', path),
       );
       return;
@@ -274,7 +274,7 @@ doUpdate(VersionInfo version) {
                 ),
                 if ((version.force ?? false) == false)
                   Padding(
-                    padding: EdgeInsets.only(top:10, bottom: 10),
+                    padding: const EdgeInsets.only(top: 10, bottom: 10),
                     child: FractionallySizedBox(
                       widthFactor: 1,
                       child: TextButton(

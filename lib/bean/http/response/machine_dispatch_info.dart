@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:jd_flutter/utils.dart';
+import 'package:jd_flutter/utils/utils.dart';
 
 /// InterID : 26825
 /// DecrementNumber : "D0002560"

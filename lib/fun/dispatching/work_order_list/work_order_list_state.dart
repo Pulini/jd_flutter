@@ -1,9 +1,9 @@
 import 'package:get/get.dart';
-import 'package:jd_flutter/utils.dart';
+import 'package:jd_flutter/utils/utils.dart';
 
 import '../../../bean/http/response/part_detail_info.dart';
 import '../../../bean/http/response/work_order_info.dart';
-import '../../../web_api.dart';
+import '../../../utils/web_api.dart';
 
 class WorkOrderListState {
   var workBarCode = '';

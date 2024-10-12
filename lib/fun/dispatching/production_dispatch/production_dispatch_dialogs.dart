@@ -7,9 +7,10 @@ import '../../../bean/http/response/manufacture_instructions_info.dart';
 import '../../../bean/http/response/production_dispatch_order_detail_info.dart';
 import '../../../bean/http/response/work_plan_material_info.dart';
 import '../../../bean/http/response/worker_info.dart';
-import '../../../utils.dart';
+import '../../../utils/utils.dart';
 import '../../../widget/custom_widget.dart';
 import '../../../widget/dialogs.dart';
+import '../../../widget/edit_text_widget.dart';
 import '../../../widget/web_page.dart';
 
 showDispatchList(

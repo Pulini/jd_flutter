@@ -9,7 +9,7 @@ import '../../../../bean/http/response/packing_scan_time.dart';
 import '../../../../bean/http/response/packing_shipment_scan.dart';
 import '../../../../bean/http/response/packing_shipment_scan_info.dart';
 import '../../../../route.dart';
-import '../../../../web_api.dart';
+import '../../../../utils/web_api.dart';
 import '../../../../widget/dialogs.dart';
 import '../../../../widget/picker/picker_controller.dart';
 

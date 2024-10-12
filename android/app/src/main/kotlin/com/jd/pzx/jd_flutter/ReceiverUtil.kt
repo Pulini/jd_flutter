@@ -23,6 +23,7 @@ import android.hardware.usb.UsbManager.ACTION_USB_DEVICE_DETACHED
 import android.os.Build
 import android.util.Log
 import com.jd.pzx.jd_flutter.utils.BDevice
+import com.jd.pzx.jd_flutter.utils.deviceList
 
 /**
  * File Name : USBReceiver
@@ -63,7 +64,6 @@ class ReceiverUtil(
 ) {
 
     private var permissionListener: (Boolean) -> Unit = {}
-    val deviceList = mutableListOf<BDevice>()
 
     /**
      * USB广播接收器
@@ -159,17 +159,15 @@ class ReceiverUtil(
                     intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
                 }?.let { device ->
                     if (!device.name.isNullOrEmpty()) {
-                        (deviceList.find { it.device.address == device.address }
-                            ?: BDevice(device).apply {
-                                deviceList.add(
-                                    this
-                                )
-                            }).let { device ->
+                        if (deviceList.none { it.device.address == device.address }) {
                             Log.e(
                                 "Pan",
-                                "发现经典蓝牙 Name=${device.device.name} Address=${device.device.address} isConnected=${device.socket.isConnected}"
+                                "发现经典蓝牙 Name=${device.name} Address=${device.address}"
                             )
-                            bleFindDevice.invoke(device.getDeviceMap())
+                            BDevice(device).let {
+                                deviceList.add(it)
+                                bleFindDevice.invoke(it.getDeviceMap())
+                            }
                         }
                     }
                 }

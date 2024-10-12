@@ -8,7 +8,7 @@ import 'package:jd_flutter/fun/management/visit_register/visit_register_logic.da
 
 import '../../../bean/http/response/visit_add_record_info.dart';
 import '../../../bean/http/response/visit_photo_bean.dart';
-import '../../../utils.dart';
+import '../../../utils/utils.dart';
 import '../../../widget/custom_widget.dart';
 import '../../../widget/dialogs.dart';
 

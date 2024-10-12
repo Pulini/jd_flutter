@@ -5,8 +5,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import com.jd.pzx.jd_flutter.LivenFaceVerificationActivity.Companion.startOneselfFaceVerification
-import com.jd.pzx.jd_flutter.utils.CHANNEL_ANDROID_SEND
-import com.jd.pzx.jd_flutter.utils.CHANNEL_FLUTTER_SEND
+import com.jd.pzx.jd_flutter.utils.CHANNEL_BLUETOOTH_ANDROID_TO_FLUTTER
+import com.jd.pzx.jd_flutter.utils.CHANNEL_BLUETOOTH_FLUTTER_TO_ANDROID
+import com.jd.pzx.jd_flutter.utils.CHANNEL_FACE_VERIFICATION_FLUTTER_TO_ANDROID
+import com.jd.pzx.jd_flutter.utils.CHANNEL_SCAN_FLUTTER_TO_ANDROID
+import com.jd.pzx.jd_flutter.utils.CHANNEL_USB_ANDROID_TO_FLUTTER
+import com.jd.pzx.jd_flutter.utils.CHANNEL_USB_FLUTTER_TO_ANDROID
 import com.jd.pzx.jd_flutter.utils.FACE_VERIFY_SUCCESS
 import com.jd.pzx.jd_flutter.utils.REQUEST_ENABLE_BT
 import com.jd.pzx.jd_flutter.utils.bitmapToBase64
@@ -30,43 +34,43 @@ class MainActivity : FlutterActivity() {
     val receiverUtil = ReceiverUtil(
         this,
         usbAttached = {
-            sendFlutter(CHANNEL_FLUTTER_SEND, "UsbState", "Attached")
+            sendFlutter(CHANNEL_USB_FLUTTER_TO_ANDROID, "UsbState", "Attached")
         },
         usbDetached = {
-            sendFlutter(CHANNEL_FLUTTER_SEND, "UsbState", "Detached")
+            sendFlutter(CHANNEL_USB_FLUTTER_TO_ANDROID, "UsbState", "Detached")
         },
         weighbridgeDetached = {
-            sendFlutter(CHANNEL_FLUTTER_SEND, "WeighbridgeDetached", "Detached")
+            sendFlutter(CHANNEL_USB_FLUTTER_TO_ANDROID, "WeighbridgeDetached", "Detached")
         },
         bleDisconnected = {
-            sendFlutter(CHANNEL_FLUTTER_SEND, "BluetoothState", "Disconnected")
+            sendFlutter(CHANNEL_BLUETOOTH_FLUTTER_TO_ANDROID, "BluetoothState", "Disconnected")
         },
         bleConnected = {
-            sendFlutter(CHANNEL_FLUTTER_SEND, "BluetoothState", "Connected")
+            sendFlutter(CHANNEL_BLUETOOTH_FLUTTER_TO_ANDROID, "BluetoothState", "Connected")
         },
         bleScanStart = {
-            sendFlutter(CHANNEL_FLUTTER_SEND, "BluetoothState", "StartScan")
+            sendFlutter(CHANNEL_BLUETOOTH_FLUTTER_TO_ANDROID, "BluetoothState", "StartScan")
         },
         bleFindDevice = {
-            sendFlutter(CHANNEL_FLUTTER_SEND, "BluetoothFind", it)
+            sendFlutter(CHANNEL_BLUETOOTH_FLUTTER_TO_ANDROID, "BluetoothFind", it)
         },
         bleScanFinished = {
-            sendFlutter(CHANNEL_FLUTTER_SEND, "BluetoothState", "EndScan")
+            sendFlutter(CHANNEL_BLUETOOTH_FLUTTER_TO_ANDROID, "BluetoothState", "EndScan")
         },
         bleStateOff = {
-            sendFlutter(CHANNEL_FLUTTER_SEND,"BluetoothState","Off")
+            sendFlutter(CHANNEL_BLUETOOTH_FLUTTER_TO_ANDROID, "BluetoothState", "Off")
         },
         bleStateOn = {
-            sendFlutter(CHANNEL_FLUTTER_SEND,"BluetoothState","On")
+            sendFlutter(CHANNEL_BLUETOOTH_FLUTTER_TO_ANDROID, "BluetoothState", "On")
         },
         bleStateClose = {
-            sendFlutter(CHANNEL_FLUTTER_SEND,"BluetoothState","Close")
+            sendFlutter(CHANNEL_BLUETOOTH_FLUTTER_TO_ANDROID, "BluetoothState", "Close")
         },
         bleStateOpen = {
-            sendFlutter(CHANNEL_FLUTTER_SEND,"BluetoothState","Open")
+            sendFlutter(CHANNEL_BLUETOOTH_FLUTTER_TO_ANDROID, "BluetoothState", "Open")
         },
         scanCode = {
-            sendFlutter(CHANNEL_ANDROID_SEND, "PdaScanner", it)
+            sendFlutter(CHANNEL_SCAN_FLUTTER_TO_ANDROID, "PdaScanner", it)
         },
     )
 
@@ -82,113 +86,104 @@ class MainActivity : FlutterActivity() {
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
-        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL_FLUTTER_SEND)
-            .setMethodCallHandler { call, result ->
-                Log.e("Pan", "method=${call.method} arguments=${call.arguments}")
-                when (call.method) {
-                    "StartDetect" -> startOneselfFaceVerification(
-                        this,
-                        call.arguments.toString()
-                    ) { code, bitmap ->
-                        Log.e("Pan", "code=$code")
-                        if (code == FACE_VERIFY_SUCCESS) {
-                            result.success(bitmapToBase64(bitmap!!))
-                        } else {
-                            result.error(code.toString(), null, null)
-                        }
+
+        //人脸识别通道
+        MethodChannel(
+            flutterEngine.dartExecutor.binaryMessenger,
+            CHANNEL_FACE_VERIFICATION_FLUTTER_TO_ANDROID
+        ).setMethodCallHandler { call, result ->
+            if (call.method == "StartDetect") {
+                startOneselfFaceVerification(
+                    this,
+                    call.arguments.toString()
+                ) { code, bitmap ->
+                    Log.e("Pan", "code=$code")
+                    if (code == FACE_VERIFY_SUCCESS) {
+                        result.success(bitmapToBase64(bitmap!!))
+                    } else {
+                        result.error(code.toString(), null, null)
                     }
-
-                    "OpenFile" -> openFile(this, File(call.arguments.toString()))
-
-                    "ScanBluetooth" -> bluetoothAdapter(this).let {
-                        if (it == null) {
-                            result.success(false)
-                        } else {
-                            result.success(bluetoothStartScan(it))
-                        }
-                    }
-
-                    "EndScanBluetooth" -> bluetoothAdapter(this).let {
-                        if (it == null) {
-                            result.success(false)
-                        } else {
-                            result.success(bluetoothCancelScan(it))
-                        }
-                    }
-
-                    "ConnectBluetooth" -> bluetoothAdapter(this).let {
-                        if (it == null) {
-                            result.success(3)
-                        } else {
-                            result.success(
-                                bluetoothConnect(
-                                    it,
-                                    call.arguments.toString()
-                                ) { socket ->
-//                                    bluetoothSendCommand(
-//                                        socket,
-//                                        arrayListOf<List<ByteArray>>().apply {
-//                                            add(
-//                                                TSCUtil.getInstance().propertyLabel(
-//                                                    fInterID = "123123123",
-//                                                    name = "asd123",
-//                                                    number = "333333",
-//                                                    date = "xxxxxxxx",
-//                                                )
-//                                            )
-//                                        },
-//                                        progress = { s, t ->
-//
-//                                        }, sendCallback = {
-//
-//                                        }
-//                                    )
-                                })
-                        }
-                    }
-
-                    "CloseBluetooth" -> result.success(bluetoothClose(call.arguments.toString()))
-
-                    "IsEnable" -> {
-                        val b = bluetoothIsEnable(bluetoothAdapter(this))
-                        Log.e("Pan", "IsEnable=$b")
-                        result.success(b)
-                    }
-
-                    "GetScannedDevices" -> deviceList.forEach { device ->
-                        Log.e("Pan", "device=${device.device.name}")
-                        sendFlutter(
-                            CHANNEL_FLUTTER_SEND,
-                            "BluetoothFind",
-                            device.getDeviceMap()
-                        )
-                    }
-
-                    "SendTSC" -> {
-                        Log.e("Pan", "1data=${call.arguments}")
-                        deviceList.find { it.socket.isConnected }?.let {
-                            bluetoothSendCommand(
-                                it.socket,
-                                call.arguments as List<ByteArray>,
-                                sendCallback = {
-
-                                }
-                            )
-                        }
-                    }
-
-                    else -> result.notImplemented()
                 }
             }
+        }
+
+        //基础数据通道
+        MethodChannel(
+            flutterEngine.dartExecutor.binaryMessenger,
+            CHANNEL_USB_ANDROID_TO_FLUTTER
+        ).setMethodCallHandler { call, _ ->
+            if (call.method == "OpenFile") openFile(this, File(call.arguments.toString()))
+        }
+
+        //蓝牙通道
+        MethodChannel(
+            flutterEngine.dartExecutor.binaryMessenger,
+            CHANNEL_BLUETOOTH_FLUTTER_TO_ANDROID
+        ).setMethodCallHandler { call, result ->
+            Log.e("Pan", "method=${call.method} arguments=${call.arguments}")
+            when (call.method) {
+                "ScanBluetooth" -> bluetoothAdapter(this).let {
+                    if (it == null) {
+                        result.success(false)
+                    } else {
+                        result.success(
+                            bluetoothStartScan(it, bondedDevices = { bonded ->
+                                sendFlutter(
+                                    CHANNEL_BLUETOOTH_FLUTTER_TO_ANDROID,
+                                    "BluetoothFind",
+                                    bonded.getDeviceMap()
+                                )
+                            }),
+                        )
+                    }
+                }
+
+                "EndScanBluetooth" -> bluetoothAdapter(this).let {
+                    if (it == null) {
+                        result.success(false)
+                    } else {
+                        result.success(bluetoothCancelScan(it))
+                    }
+                }
+
+                "ConnectBluetooth" -> bluetoothAdapter(this).let {
+                    if (it == null) {
+                        result.success(3)
+                    } else {
+                        result.success(bluetoothConnect(it, call.arguments.toString()))
+                    }
+                }
+
+                "CloseBluetooth" -> result.success(bluetoothClose(call.arguments.toString()))
+
+                "IsEnable" -> result.success(bluetoothIsEnable(bluetoothAdapter(this)))
+
+                "GetScannedDevices" -> result.success(mutableListOf<HashMap<String, Any>>().apply {
+                    deviceList.forEach { add(it.getDeviceMap()) }
+                })
+
+                "SendTSC" -> deviceList.find { it.socket.isConnected }?.let {
+                    bluetoothSendCommand(
+                        it.socket,
+                        call.arguments as List<ByteArray>,
+                        sendCallback = { code ->
+                            result.success(code)
+                        }
+                    )
+                }
+
+
+                else -> result.notImplemented()
+            }
+        }
 
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        Log.e("Pan", "onActivityResult  requestCode$requestCode resultCode$resultCode")
         if (requestCode == REQUEST_ENABLE_BT && resultCode == RESULT_OK) {
             Log.e("Pan", "onActivityResult   蓝牙打开成功")
-            sendFlutter(CHANNEL_FLUTTER_SEND, "Bluetooth", 3)
+            sendFlutter(CHANNEL_BLUETOOTH_ANDROID_TO_FLUTTER, "Bluetooth", 3)
         }
     }
 

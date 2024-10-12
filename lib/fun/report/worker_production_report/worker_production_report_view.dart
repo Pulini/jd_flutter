@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jd_flutter/utils.dart';
+import 'package:jd_flutter/utils/utils.dart';
 
 import '../../../bean/http/response/worker_production_info.dart';
 import '../../../widget/custom_widget.dart';

@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
-import '../../../web_api.dart';
+import '../../../utils/web_api.dart';
 
 class ViewInstructionDetailsState {
   var tetInstruction = '';

@@ -2,7 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:get/get.dart';
 
 import '../../../bean/http/response/production_materials_info.dart';
-import '../../../web_api.dart';
+import '../../../utils/web_api.dart';
 
 class ProductionMaterialsReportState {
   var tableOpenIndex = <bool>[];

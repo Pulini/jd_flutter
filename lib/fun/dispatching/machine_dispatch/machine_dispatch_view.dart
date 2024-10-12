@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/dispatching/machine_dispatch/machine_dispatch_dialog.dart';
-import 'package:jd_flutter/utils.dart';
+import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 
 import '../../../bean/http/response/machine_dispatch_info.dart';
+import '../../../widget/combination_button_widget.dart';
 import '../../../widget/dialogs.dart';
 import 'machine_dispatch_logic.dart';
 import 'machine_dispatch_report_view.dart';

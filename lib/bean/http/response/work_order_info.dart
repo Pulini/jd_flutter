@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:jd_flutter/utils.dart';
+import 'package:jd_flutter/utils/utils.dart';
 
 /// InterID : 213332
 /// OrderBill : "P2048871"

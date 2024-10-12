@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jd_flutter/utils.dart';
+import 'package:jd_flutter/utils/utils.dart';
 
 import '../../../bean/http/response/production_materials_info.dart';
 import '../../../widget/custom_widget.dart';
+import '../../../widget/edit_text_widget.dart';
 import '../../../widget/picker/picker_view.dart';
+import '../../../widget/switch_button_widget.dart';
 import 'production_materials_report_logic.dart';
 
 class ProductionMaterialsReportPage extends StatefulWidget {

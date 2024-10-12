@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 
 import '../../../bean/http/response/molding_scan_bulletin_report_info.dart';
-import '../../../web_api.dart';
+import '../../../utils/web_api.dart';
 
 class MoldingScanBulletinReportState {
   var reportInfo = <MoldingScanBulletinReportInfo>[].obs;

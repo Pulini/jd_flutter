@@ -4,8 +4,11 @@ import 'package:jd_flutter/fun/other/scan/part_process_scan/part_process_scan_lo
 
 import '../../../../bean/http/response/scan_barcode_info.dart';
 import '../../../../bean/http/response/worker_info.dart';
-import '../../../../utils.dart';
+import '../../../../utils/utils.dart';
+import '../../../../widget/check_box_widget.dart';
 import '../../../../widget/custom_widget.dart';
+import '../../../../widget/edit_text_widget.dart';
+import '../../../../widget/worker_check_widget.dart';
 
 class PartProcessScanDispatchPage extends StatefulWidget {
   const PartProcessScanDispatchPage({super.key});

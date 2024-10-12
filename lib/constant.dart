@@ -10,8 +10,15 @@ const loginTypePhone = 'login_type_phone';
 const loginTypeFace = 'login_type_face';
 const loginTypeWorkNumber = 'login_type_work_number';
 const loginTypeMachine = 'login_type_machine';
-const channelFlutterSend = 'com.jd.pzx.jd_flutter_flutter_send';
-const channelAndroidSend = 'com.jd.pzx.jd_flutter_android_send';
-const channelIosSend = 'com.jd.pzx.jd_flutter_ios_send';
+const channelBluetoothFlutterToAndroid = 'channel_bluetooth_flutter_to_android';
+const channelBluetoothAndroidToFlutter = 'channel_bluetooth_android_to_flutter';
+const channelUsbFlutterToAndroid = 'channel_usb_flutter_to_android';
+const channelUsbAndroidToFlutter = 'channel_usb_android_to_flutter';
+const channelScanAndroidToFlutter = 'channel_scan_android_to_flutter';
+const channelFaceVerificationAndroidToFlutter = 'channel_face_verification_flutter_to_android';
+
+const channelBluetoothFlutterToIos = 'channel_bluetooth_flutter_to_ios';
+const channelBluetoothIosToFlutter = 'channel_bluetooth_ios_to_flutter';
+
 const spSaveMoldingScanBulletinReportTimeDuration =
     'molding_scan_bulletin_report_time_duration';

@@ -26,7 +26,7 @@ import 'fun/report/worker_production_detail/worker_production_detail_view.dart';
 import 'fun/report/worker_production_report/worker_production_report_view.dart';
 import 'fun/warehouse/smart_delivery/smart_delivery_view.dart';
 import 'home/home_view.dart';
-import 'web_api.dart';
+import 'utils/web_api.dart';
 import 'login/login_view.dart';
 
 class RouteConfig {

@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:jd_flutter/utils.dart';
+import 'package:jd_flutter/utils/utils.dart';
 import '../../../bean/http/response/machine_dispatch_info.dart';
 import '../../../widget/dialogs.dart';
 import 'machine_dispatch_report_view.dart';

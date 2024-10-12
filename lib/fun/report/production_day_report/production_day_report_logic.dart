@@ -1,8 +1,8 @@
 import 'package:get/get.dart';
 import '../../../route.dart';
-import '../../../widget/custom_widget.dart';
 import '../../../widget/dialogs.dart';
 import '../../../widget/picker/picker_controller.dart';
+import '../../../widget/spinner_widget.dart';
 import 'production_day_report_state.dart';
 
 class ProductionDayReportLogic extends GetxController {

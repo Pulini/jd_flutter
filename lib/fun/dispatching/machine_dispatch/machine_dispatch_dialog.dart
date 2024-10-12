@@ -3,14 +3,17 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hand_signature/signature.dart';
-import 'package:jd_flutter/utils.dart';
+import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:rotated_corner_decoration/rotated_corner_decoration.dart';
 
 import '../../../bean/http/response/machine_dispatch_info.dart';
 import '../../../bean/http/response/worker_info.dart';
-import '../../../web_api.dart';
+import '../../../utils/web_api.dart';
+import '../../../widget/combination_button_widget.dart';
+import '../../../widget/edit_text_widget.dart';
+import '../../../widget/worker_check_widget.dart';
 import 'machine_dispatch_logic.dart';
 
 showWorkCardListDialog(

@@ -1,4 +1,4 @@
-import 'package:jd_flutter/utils.dart';
+import 'package:jd_flutter/utils/utils.dart';
 
 /// InterID : 67660
 /// Mtono : "JZ2300102"

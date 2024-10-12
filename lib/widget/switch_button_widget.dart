@@ -1,0 +1,91 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+import '../utils/utils.dart';
+
+///选择器
+class SwitchButton extends StatefulWidget {
+  final Function(bool isChecked) onChanged;
+  final String name;
+  final bool? value;
+  final bool? isEnabled;
+  final bool? needSave;
+
+  const SwitchButton({
+    super.key,
+    required this.onChanged,
+    required this.name,
+    this.value,
+    this.isEnabled = true,
+    this.needSave = true,
+  });
+
+  @override
+  State<SwitchButton> createState() => _SwitchButtonState();
+}
+
+class _SwitchButtonState extends State<SwitchButton> {
+  var isChecked = false;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.value == null) {
+      if (widget.needSave == true) {
+        var initialValue = spGet('${Get.currentRoute}/${widget.name}') ??
+            widget.value ??
+            false;
+        if (isChecked != initialValue) {
+          isChecked = initialValue;
+        }
+      }
+    } else {
+      isChecked = widget.value!;
+    }
+  }
+
+  _select(bool checked) {
+    if (widget.isEnabled == true && isChecked != checked) {
+      setState(() {
+        isChecked = checked;
+        widget.onChanged.call(isChecked);
+        if (widget.value == null && widget.needSave == true) {
+          spSave('${Get.currentRoute}/${widget.name}', isChecked);
+        }
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+      padding: const EdgeInsets.only(left: 15),
+      decoration: BoxDecoration(
+        color: Colors.grey[300],
+        borderRadius: BorderRadius.circular(25),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            widget.name,
+            style: const TextStyle(color: Colors.black),
+          ),
+          Switch(
+            thumbIcon: WidgetStateProperty.resolveWith<Icon>(
+                  (Set<WidgetState> states) {
+                if (states.contains(WidgetState.selected)) {
+                  return const Icon(Icons.check);
+                }
+                return const Icon(Icons.close);
+              },
+            ),
+            value: isChecked,
+            onChanged: _select,
+          ),
+        ],
+      ),
+    );
+  }
+}

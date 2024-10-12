@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jd_flutter/utils.dart';
+import 'package:jd_flutter/utils/utils.dart';
 
 import '../../../bean/http/response/molding_pack_area_report_info.dart';
 import '../../../widget/custom_widget.dart';
+import '../../../widget/edit_text_widget.dart';
 import '../../../widget/picker/picker_view.dart';
 import 'molding_pack_area_report_logic.dart';
 
