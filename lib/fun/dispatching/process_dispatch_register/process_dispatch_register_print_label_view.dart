@@ -9,6 +9,7 @@ import 'package:jd_flutter/widget/custom_widget.dart';
 import '../../../bean/http/response/process_dispatch_register_info.dart';
 import '../../../utils/printer/print_util.dart';
 import '../../../widget/combination_button_widget.dart';
+import '../../../widget/preview_label_list_widget.dart';
 import '../../../widget/preview_label_widget.dart';
 
 class PrintLabelPage extends StatefulWidget {
@@ -26,8 +27,8 @@ class _PrintLabelPageState extends State<PrintLabelPage> {
 
   PrintUtil pu = PrintUtil();
 
-  _previewLabel(Barcode data) {
-    var title = Padding(
+  _labelTitle() {
+    return Padding(
       padding: const EdgeInsets.only(
         left: 3,
         right: 3,
@@ -40,8 +41,10 @@ class _PrintLabelPageState extends State<PrintLabelPage> {
         ),
       ),
     );
+  }
 
-    var subTitle = Padding(
+  _subTitle(Barcode data) {
+    return Padding(
       padding: const EdgeInsets.only(
         left: 3,
         right: 3,
@@ -57,8 +60,10 @@ class _PrintLabelPageState extends State<PrintLabelPage> {
         maxFontSize: 36,
       ),
     );
+  }
 
-    var content = data.instructionsText().isNotEmpty
+  _content(Barcode data) {
+    return data.instructionsText().isNotEmpty
         ? Padding(
             padding: const EdgeInsets.only(
               left: 3,
@@ -75,7 +80,10 @@ class _PrintLabelPageState extends State<PrintLabelPage> {
             ),
           )
         : null;
-    var bottomLeft = Column(
+  }
+
+  _bottomLeft(Barcode data) {
+    return Column(
       children: [
         Expanded(
           child: Text(
@@ -95,7 +103,10 @@ class _PrintLabelPageState extends State<PrintLabelPage> {
         ),
       ],
     );
-    var bottomMiddle = Center(
+  }
+
+  _bottomMiddle(Barcode data) {
+    return Center(
       child: Text(
         '${data.size}# ${data.mustQty.toShowString()}',
         style: const TextStyle(
@@ -104,7 +115,10 @@ class _PrintLabelPageState extends State<PrintLabelPage> {
         ),
       ),
     );
-    var bottomRight = Center(
+  }
+
+  bottomRight(Barcode data) {
+    return Center(
       child: Text(
         '序号: ${data.rowID}',
         style: const TextStyle(
@@ -113,17 +127,19 @@ class _PrintLabelPageState extends State<PrintLabelPage> {
         ),
       ),
     );
+  }
 
+  _previewLabel(Barcode data) {
     Get.to(
       () => PreviewLabel(
         labelWidget: labelTemplate(
           qrCode: data.barCode ?? '',
-          title: title,
-          subTitle: subTitle,
-          content: content,
-          bottomLeft: bottomLeft,
-          bottomMiddle: bottomMiddle,
-          bottomRight: bottomRight,
+          title: _labelTitle(),
+          subTitle: _subTitle(data),
+          content: _content(data),
+          bottomLeft: _bottomLeft(data),
+          bottomMiddle: _bottomMiddle(data),
+          bottomRight: bottomRight(data),
         ),
       ),
     )?.then((v) {
@@ -225,34 +241,48 @@ class _PrintLabelPageState extends State<PrintLabelPage> {
     );
   }
 
+  _previewLabelList() {
+    var selected = state.labelList.where((v) => v.isSelected).toList();
+    Get.to(
+      () => PreviewLabelList(
+        labelWidgets: [
+          for (var i = 0; i < selected.length; ++i)
+            labelTemplate(
+              qrCode: selected[i].barCode ?? '',
+              title: _labelTitle(),
+              subTitle: _subTitle(selected[i]),
+              content: _content(selected[i]),
+              bottomLeft: _bottomLeft(selected[i]),
+              bottomMiddle: _bottomMiddle(selected[i]),
+              bottomRight: bottomRight(selected[i]),
+            )
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return pageBody(
       title: '贴标列表',
-      body: Column(
-        children: [
-          Expanded(
-            child: Obx(
-              () => ListView.builder(
-                padding: const EdgeInsets.all(5),
-                itemCount: state.labelList.length,
-                itemBuilder: (context, index) => _item(state.labelList[index]),
-              ),
-            ),
-          ),
-          Row(
+      body: Obx(() => Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Expanded(
-                child: CombinationButton(
-                    text: '打印',
-                    click: () {
-                      // pu.goPrintlabels();
-                    }),
+                child: ListView.builder(
+                  padding: const EdgeInsets.all(5),
+                  itemCount: state.labelList.length,
+                  itemBuilder: (context, index) =>
+                      _item(state.labelList[index]),
+                ),
               ),
+              if (state.labelList.any((v) => v.isSelected))
+                CombinationButton(
+                  text: '打印',
+                  click: () => _previewLabelList(),
+                )
             ],
-          )
-        ],
-      ),
+          )),
     );
   }
 }

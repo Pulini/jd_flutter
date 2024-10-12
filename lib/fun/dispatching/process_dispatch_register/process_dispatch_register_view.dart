@@ -300,7 +300,6 @@ class _ProcessDispatchRegisterPageState
   void initState() {
     super.initState();
     _methodChannel();
-    controller.text = 'GXPG24446580/5';
   }
 
   @override

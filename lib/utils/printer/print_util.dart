@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -15,14 +14,13 @@ class PrintUtil {
   var bluetoothChannel = const MethodChannel(channelBluetoothFlutterToAndroid);
   var deviceList = <BluetoothDevice>[].obs;
   var isScanning = false.obs;
-  List<Uint8List>? cacheLabel;
 
   PrintUtil() {
     setChannelListener();
   }
 
   printLabel({
-    required dynamic label,
+    required List<Uint8List> label,
     required Function start,
     required Function success,
     required Function failed,
@@ -44,16 +42,15 @@ class PrintUtil {
         failed: failed,
       );
     } else {
-      cacheLabel = label;
       _showBluetoothDialog();
     }
   }
 
   printLabelList({
-    required List<dynamic> labelList,
+    required List<List<Uint8List>> labelList,
     required Function start,
-    required Function success,
-    required Function failed,
+    required Function(int, int) progress,
+    required Function(List<int>, List<int>) finished,
   }) async {
     if (!await _getBluetoothPermission()) {
       showSnackBar(title: '蓝牙错误', message: '缺少蓝牙权限');
@@ -65,14 +62,13 @@ class PrintUtil {
     }
     deviceList.value = await _getScannedDevices();
     if (deviceList.any((v) => v.deviceIsConnected)) {
-      // _send(
-      //   label: label,
-      //   start: start,
-      //   success: success,
-      //   failed: failed,
-      // );
+      _sendList(
+        labels: labelList,
+        start: start,
+        progress: progress,
+        finished: finished,
+      );
     } else {
-      // cacheLabel = label;
       _showBluetoothDialog();
     }
   }
@@ -321,6 +317,28 @@ class PrintUtil {
     }
   }
 
+  _sendList({
+    required List<dynamic> labels,
+    required Function start,
+    required Function(int, int) progress,
+    required Function(List<int>, List<int>) finished,
+  }) async {
+    start.call();
+    var success = <int>[];
+    var fail = <int>[];
+    for (var i = 0; i < labels.length; ++i) {
+      progress.call(i+1,labels.length);
+      var code = await bluetoothChannel.invokeMethod('SendTSC', labels[i]);
+      if (code == 1000) {
+        success.add(i);
+      } else if (code == 1003) {
+        fail.add(i);
+      }
+      await Future.delayed(const Duration(milliseconds: 300));
+    }
+    finished.call(success, fail);
+  }
+
   _item(int index) {
     var device = deviceList[index];
     return Card(
@@ -418,35 +436,6 @@ class PrintUtil {
                     itemBuilder: (context, index) => Obx(() => _item(index)),
                   ),
                 ),
-                if (cacheLabel != null &&
-                    deviceList.any((v) => v.deviceIsConnected))
-                  CombinationButton(
-                    text: '打印',
-                    click: () {
-                      _send(
-                        label: cacheLabel,
-                        start: () {
-                          loadingDialog('正在下发标签...');
-                        },
-                        success: () {
-                          Get.back();
-                          cacheLabel = null;
-                          successDialog(
-                            content: '标签下发完成。',
-                            back: () => Get.back(),
-                          );
-                        },
-                        failed: () {
-                          Get.back();
-                          showSnackBar(
-                            title: '打印',
-                            message: '标签下发失败。',
-                            isWarning: true,
-                          );
-                        },
-                      );
-                    },
-                  )
               ],
             ),
           )),
