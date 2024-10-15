@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 
 import '../../../bean/http/response/process_specification_info.dart';
-import '../../../web_api.dart';
+import '../../../utils/web_api.dart';
 
 class ViewProcessSpecificationState {
   RxList<ProcessSpecificationInfo> pdfList = <ProcessSpecificationInfo>[].obs;

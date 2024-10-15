@@ -3,13 +3,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/base_data.dart';
-import 'package:jd_flutter/utils.dart';
+import 'package:jd_flutter/utils/utils.dart';
 
 import '../../../bean/http/response/maintain_material_info.dart';
 import '../../../bean/http/response/picking_bar_code_info.dart';
-import '../../../web_api.dart';
+import '../../../utils/web_api.dart';
+import '../../../widget/combination_button_widget.dart';
 import '../../../widget/custom_widget.dart';
 import '../../../widget/dialogs.dart';
+import '../../../widget/edit_text_widget.dart';
 
 createMixLabelDialog(
     List<PickingBarCodeInfo> list, int id, Function() callback) {
@@ -42,14 +44,15 @@ createMixLabelDialog(
                   children: [
                     Text('最大标签数：'),
                     Expanded(
-                        child: NumberEditText(
-                      onChanged: (s) {
-                        if (s.toDoubleTry() > maxLabel.value) {
-                          controller.text = maxLabel.value.toString();
-                        }
-                      },
-                      controller: controller,
-                    )),
+                      child: NumberEditText(
+                        onChanged: (s) {
+                          if (s.toDoubleTry() > maxLabel.value) {
+                            controller.text = maxLabel.value.toString();
+                          }
+                        },
+                        controller: controller,
+                      ),
+                    ),
                   ],
                 ),
                 Expanded(
@@ -97,11 +100,17 @@ _createMixLabel(
   Function() callback,
 ) {
   if (!selected.any((v1) => v1.any((v2) => v2.value))) {
-    showSnackBar(title: 'snack_bar_default_wrong'.tr, message: '请勾选要创建的指令和尺码', isWarning: true);
+    showSnackBar(
+        title: 'snack_bar_default_wrong'.tr,
+        message: '请勾选要创建的指令和尺码',
+        isWarning: true);
     return;
   }
   if (maxLabel == 0) {
-    showSnackBar(title: 'snack_bar_default_wrong'.tr, message: '可生产贴标数未0', isWarning: true);
+    showSnackBar(
+        title: 'snack_bar_default_wrong'.tr,
+        message: '可生产贴标数未0',
+        isWarning: true);
     return;
   }
 
@@ -504,7 +513,10 @@ _createCustomLabel(
   Function() callback,
 ) {
   if (!selected.any((v1) => v1)) {
-    showSnackBar(title: 'snack_bar_default_wrong'.tr, message: '请勾选要创建的尺码', isWarning: true);
+    showSnackBar(
+        title: 'snack_bar_default_wrong'.tr,
+        message: '请勾选要创建的尺码',
+        isWarning: true);
     return;
   }
   var body = {
@@ -608,7 +620,9 @@ setLabelPropertyDialog(
               onPressed: () {
                 if (list.any((v) => v.ifNull())) {
                   showSnackBar(
-                      title: 'snack_bar_default_wrong'.tr, message: '重量必须大于0', isWarning: true);
+                      title: 'snack_bar_default_wrong'.tr,
+                      message: '重量必须大于0',
+                      isWarning: true);
                 } else {
                   var item = <Map>[];
                   for (var data in list) {

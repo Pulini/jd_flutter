@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/management/visit_register/visit_register_logic.dart';
-import 'package:jd_flutter/utils.dart';
+import 'package:jd_flutter/utils/utils.dart';
 
 import '../../../bean/http/response/visit_get_detail_info.dart';
 import '../../../bean/http/response/visit_photo_bean.dart';
@@ -53,64 +53,64 @@ class _VisitRegisterDetailPageState extends State<VisitRegisterDetailPage> {
     return Padding(
       padding: const EdgeInsets.only(top: 20, bottom: 20),
       child: Obx(() => Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          GestureDetector(
-            child: Column(
-              children: [
-                state.cardPicture.value.isNotEmpty
-                    ? ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: Image.network(
-                    state.cardPicture.value,
-                    gaplessPlayback: true,
-                    width: 150,
-                    height: 150,
-                    fit: BoxFit.cover,
-                  ),
-                )
-                    : const Icon(
-                  Icons.add_a_photo_outlined,
-                  color: Colors.blueAccent,
-                  size: 150,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              GestureDetector(
+                child: Column(
+                  children: [
+                    state.cardPicture.value.isNotEmpty
+                        ? ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Image.network(
+                              state.cardPicture.value,
+                              gaplessPlayback: true,
+                              width: 150,
+                              height: 150,
+                              fit: BoxFit.cover,
+                            ),
+                          )
+                        : const Icon(
+                            Icons.add_a_photo_outlined,
+                            color: Colors.blueAccent,
+                            size: 150,
+                          ),
+                    Text('visit_details_card_picture'.tr),
+                  ],
                 ),
-                Text('visit_details_card_picture'.tr),
-              ],
-            ),
-          ),
-          GestureDetector(
-            child: Column(
-              children: [
-                state.facePicture.value.isNotEmpty
-                    ? ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: Image.network(
-                    state.facePicture.value,
-                    gaplessPlayback: true,
-                    width: 150,
-                    height: 150,
-                    fit: BoxFit.cover,
-                  ),
-                )
-                    : const Icon(
-                  Icons.add_a_photo_outlined,
-                  color: Colors.blueAccent,
-                  size: 150,
+              ),
+              GestureDetector(
+                child: Column(
+                  children: [
+                    state.facePicture.value.isNotEmpty
+                        ? ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Image.network(
+                              state.facePicture.value,
+                              gaplessPlayback: true,
+                              width: 150,
+                              height: 150,
+                              fit: BoxFit.cover,
+                            ),
+                          )
+                        : const Icon(
+                            Icons.add_a_photo_outlined,
+                            color: Colors.blueAccent,
+                            size: 150,
+                          ),
+                    Text('visit_details_face_picture'.tr),
+                  ],
                 ),
-                Text('visit_details_face_picture'.tr),
-              ],
-            ),
-          )
-        ],
-      )),
+              )
+            ],
+          )),
     );
   }
 
   _inspectWeight(
-      String title,
-      String text,
-      bool checkBool,
-      ) {
+    String title,
+    String text,
+    bool checkBool,
+  ) {
     return Row(
       children: [
         Container(
@@ -188,20 +188,20 @@ class _VisitRegisterDetailPageState extends State<VisitRegisterDetailPage> {
         child: GestureDetector(
           child: photoUrl!.isNotEmpty
               ? ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: Image.network(
-              photoUrl,
-              gaplessPlayback: true,
-              width: 50,
-              height: 50,
-              fit: BoxFit.cover,
-            ),
-          )
+                  borderRadius: BorderRadius.circular(10),
+                  child: Image.network(
+                    photoUrl,
+                    gaplessPlayback: true,
+                    width: 50,
+                    height: 50,
+                    fit: BoxFit.cover,
+                  ),
+                )
               : const Icon(
-            Icons.error_outline_outlined,
-            color: Colors.blueAccent,
-            size: 50,
-          ),
+                  Icons.error_outline_outlined,
+                  color: Colors.blueAccent,
+                  size: 50,
+                ),
         ));
   }
 
@@ -249,20 +249,20 @@ class _VisitRegisterDetailPageState extends State<VisitRegisterDetailPage> {
           },
           child: data.typeAdd != '0'
               ? ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: Image.memory(
-              base64Decode(data.photo!),
-              gaplessPlayback: true,
-              width: 50,
-              height: 50,
-              fit: BoxFit.cover,
-            ),
-          )
+                  borderRadius: BorderRadius.circular(10),
+                  child: Image.memory(
+                    base64Decode(data.photo!),
+                    gaplessPlayback: true,
+                    width: 50,
+                    height: 50,
+                    fit: BoxFit.cover,
+                  ),
+                )
               : const Icon(
-            Icons.add_a_photo_outlined,
-            color: Colors.blueAccent,
-            size: 50,
-          ),
+                  Icons.add_a_photo_outlined,
+                  color: Colors.blueAccent,
+                  size: 50,
+                ),
         ));
   }
 
@@ -338,8 +338,9 @@ class _VisitRegisterDetailPageState extends State<VisitRegisterDetailPage> {
       line,
       _text('visit_details_reason_for_visit'.tr, data.subjectMatter),
       line,
-      if(state.cardPicture.value.isNotEmpty || state.facePicture.value.isNotEmpty)   _peoplePhotos(),
-
+      if (state.cardPicture.value.isNotEmpty ||
+          state.facePicture.value.isNotEmpty)
+        _peoplePhotos(),
       if (data.carNo!.isNotEmpty)
         {
           const SizedBox(height: 10),
@@ -347,6 +348,16 @@ class _VisitRegisterDetailPageState extends State<VisitRegisterDetailPage> {
           _subTitle('visit_details_vehicle_information'.tr),
            const SizedBox(height: 10),
         },
+        Padding(
+          padding: const EdgeInsets.only(top: 10, bottom: 10),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              line,
+              _subTitle('visit_details_vehicle_information'.tr),
+            ],
+          ),
+        ),
       _text('visit_details_entrance_ate'.tr, data.gate),
       line,
       ..._showCarList(data),
@@ -385,7 +396,7 @@ class _VisitRegisterDetailPageState extends State<VisitRegisterDetailPage> {
             ..._textList(state.dataDetail), //详情内容
             _comeListView(),
             _leaveListView(),
-            if(state.dataDetail.leaveTime!.isEmpty)  _clickButton(),
+            if (state.dataDetail.leaveTime!.isEmpty) _clickButton(),
           ],
         ),
       ),

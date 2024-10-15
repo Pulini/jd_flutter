@@ -1,10 +1,10 @@
 import 'package:collection/collection.dart';
 import 'package:get/get.dart';
-import 'package:jd_flutter/utils.dart';
+import 'package:jd_flutter/utils/utils.dart';
 
 import '../../../bean/http/response/material_dispatch_info.dart';
 import '../../../bean/http/response/process_specification_info.dart';
-import '../../../web_api.dart';
+import '../../../utils/web_api.dart';
 
 class MaterialDispatchState {
   final String spPalletDate = 'MaterialDispatchPickPalletDate';

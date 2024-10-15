@@ -1,13 +1,11 @@
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import '../bean/home_button.dart';
 import '../bean/http/response/home_function_info.dart';
-import '../constant.dart';
-import '../utils.dart';
+import '../utils/utils.dart';
 import '../widget/custom_widget.dart';
 import '../widget/dialogs.dart';
 import 'home_logic.dart';
@@ -145,22 +143,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  _methodChannel() {
-    const MethodChannel(channelAndroidSend).setMethodCallHandler((call) {
-      switch (call.method) {
-        case 'JMessage':
-          {
-            switch (call.arguments['json']) {
-              case 'UpDate':
-                {}
-                break;
-            }
-          }
-          break;
-      }
-      return Future.value(null);
-    });
-  }
 
   _navigationBar(HomeFunctions bar) {
     return BottomNavigationBarItem(
@@ -184,7 +166,6 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    _methodChannel();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       getVersionInfo(
         false,

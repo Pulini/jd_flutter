@@ -1,14 +1,18 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jd_flutter/utils.dart';
+import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:rotated_corner_decoration/rotated_corner_decoration.dart';
 
 import '../../../bean/http/response/material_dispatch_info.dart';
 import '../../../route.dart';
+import '../../../widget/check_box_widget.dart';
+import '../../../widget/combination_button_widget.dart';
+import '../../../widget/edit_text_widget.dart';
 import '../../../widget/picker/picker_view.dart';
+import '../../../widget/spinner_widget.dart';
 import 'material_dispatch_dialogs.dart';
 import 'material_dispatch_logic.dart';
 

@@ -5,14 +5,15 @@ import 'bean/routes.dart';
 import 'fun/dispatching/machine_dispatch/machine_dispatch_report_view.dart';
 import 'fun/dispatching/machine_dispatch/machine_dispatch_view.dart';
 import 'fun/dispatching/material_dispatch/material_dispatch_view.dart';
+import 'fun/dispatching/process_dispatch_register/process_dispatch_register_view.dart';
 import 'fun/dispatching/production_dispatch/production_dispatch_detail_view.dart';
 import 'fun/dispatching/work_order_list/work_order_list_view.dart';
 import 'fun/dispatching/production_dispatch/production_dispatch_view.dart';
 import 'fun/management/property/property_view.dart';
 import 'fun/management/quality_management/quality_management_view.dart';
 import 'fun/management/visit_register/visit_register_view.dart';
+import 'fun/other/scan/forming_packing_scan/packing_scan_view.dart';
 import 'fun/other/scan/part_process_scan/part_process_scan_view.dart';
-import 'fun/other/sacn/forming_packing_scan/packing_scan_view.dart';
 import 'fun/report/daily_report/daily_report_view.dart';
 import 'fun/report/molding_pack_area_report/molding_pack_area_report_view.dart';
 import 'fun/report/molding_scan_bulletin_report/molding_scan_bulletin_report_maximize_view.dart';
@@ -24,8 +25,9 @@ import 'fun/report/view_instruction_details/view_instruction_details_view.dart';
 import 'fun/report/view_process_specification/view_process_specification_view.dart';
 import 'fun/report/worker_production_detail/worker_production_detail_view.dart';
 import 'fun/report/worker_production_report/worker_production_report_view.dart';
+import 'fun/warehouse/smart_delivery/smart_delivery_view.dart';
 import 'home/home_view.dart';
-import 'web_api.dart';
+import 'utils/web_api.dart';
 import 'login/login_view.dart';
 
 class RouteConfig {
@@ -52,7 +54,6 @@ class RouteConfig {
     99,
     const ProductionDayReportPage(),
   );
-
 
   ///查看指令明细
   static Routes viewInstructionDetails = Routes(
@@ -187,6 +188,20 @@ class RouteConfig {
     const QualityRestrictionPage(),
   );
 
+  ///湿印工序派工
+  static Routes processDispatchRegisterPage = Routes(
+    '/process_dispatch_register_page',
+    99,
+    const ProcessDispatchRegisterPage(),
+  );
+
+  ///智能仓库配送
+  static Routes smartDeliveryPage = Routes(
+    '/smart_delivery_page',
+    99,
+    const SmartDeliveryPage(),
+  );
+
   ///本地功能入口列表
   static List<Routes> routeList = [
     dailyReport,
@@ -210,6 +225,8 @@ class RouteConfig {
     machineDispatchReportPage,
     packingScanPage,
     qualityRestrictionPage
+    processDispatchRegisterPage,
+    smartDeliveryPage,
   ];
 
   static List<GetPage> appRoutes = [
@@ -309,6 +326,14 @@ class RouteConfig {
     GetPage(
       name: qualityRestrictionPage.name,
       page: () => qualityRestrictionPage.page,
+    ),
+    GetPage(
+      name: processDispatchRegisterPage.name,
+      page: () => processDispatchRegisterPage.page,
+    ),
+    GetPage(
+      name: smartDeliveryPage.name,
+      page: () => smartDeliveryPage.page,
     ),
   ];
 }

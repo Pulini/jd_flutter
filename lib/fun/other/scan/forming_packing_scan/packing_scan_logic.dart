@@ -1,17 +1,15 @@
 import 'dart:convert';
 
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_state_manager/src/simple/get_controllers.dart';
-import 'package:jd_flutter/fun/other/sacn/forming_packing_scan/packing_scan_state.dart';
-import 'package:jd_flutter/fun/other/sacn/forming_packing_scan/packing_shipment_scan_view.dart';
+import 'package:jd_flutter/fun/other/scan/forming_packing_scan/packing_scan_state.dart';
+import 'package:jd_flutter/fun/other/scan/forming_packing_scan/packing_shipment_scan_view.dart';
 
 import '../../../../bean/http/response/container_scanner_info.dart';
 import '../../../../bean/http/response/packing_scan_time.dart';
 import '../../../../bean/http/response/packing_shipment_scan.dart';
 import '../../../../bean/http/response/packing_shipment_scan_info.dart';
 import '../../../../route.dart';
-import '../../../../web_api.dart';
+import '../../../../utils/web_api.dart';
 import '../../../../widget/dialogs.dart';
 import '../../../../widget/picker/picker_controller.dart';
 
@@ -38,7 +36,7 @@ class PackingScanLogic extends GetxController {
         ZHGCCRQ: pickerControllerDate.getDateFormatYMD().replaceAll('-', '')));
 
     httpPost(
-      method: webApiSAPContainerScanner,
+      method: webApiSapContainerScanner,
       loading: '正在获取汇总数据...',
       body: body,
     ).then((response) {
@@ -71,7 +69,7 @@ class PackingScanLogic extends GetxController {
     body.add(PackingShipmentScan(ZHGCCRQ: time, ZZKHXH1: cabinetNumber));
 
     sapPost(
-      method: webApiSAPContainerScanner,
+      method: webApiSapContainerScanner,
       loading: '正在获取成型集装箱出货信息...',
       body: body,
     ).then((response) {
@@ -95,11 +93,11 @@ class PackingScanLogic extends GetxController {
   }
 
   bool checkCode(String code) {
-    var have = 1;
-    var codes = "";
-    var deliveryNumber = "";
-
-    var count = 0;
+    // var have = 1;
+    // var codes = "";
+    // var deliveryNumber = "";
+    //
+    // var count = 0;
 
     if (code.isNotEmpty && state.packingShipmentScanInfo!.GT_ITEMS2!.isNotEmpty){
       for (var data in state.packingShipmentScanInfo!.GT_ITEMS2!) {

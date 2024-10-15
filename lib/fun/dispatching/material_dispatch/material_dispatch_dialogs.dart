@@ -2,14 +2,16 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/material_dispatch_info.dart';
-import 'package:jd_flutter/utils.dart';
+import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/picker/picker_view.dart';
 
 import '../../../bean/http/response/process_specification_info.dart';
 import '../../../bean/http/response/sap_pallet_info.dart';
-import '../../../web_api.dart';
+import '../../../utils/web_api.dart';
+import '../../../widget/combination_button_widget.dart';
 import '../../../widget/dialogs.dart';
+import '../../../widget/edit_text_widget.dart';
 import '../../../widget/picker/picker_controller.dart';
 import '../../../widget/web_page.dart';
 
@@ -104,7 +106,8 @@ subItemReportDialog(
           TextButton(
             onPressed: () {
               if (qty == 0.0) {
-                showSnackBar(title: 'snack_bar_default_wrong'.tr, message: '请填写报工数量');
+                showSnackBar(
+                    title: 'snack_bar_default_wrong'.tr, message: '请填写报工数量');
               } else {
                 callback.call(qty);
                 Get.back();
@@ -600,19 +603,31 @@ pickPallet({
           TextButton(
             onPressed: () {
               if (selectDate == 0) {
-                showSnackBar(title: 'snack_bar_default_wrong'.tr, message: '请选择过账日期', isWarning: true);
+                showSnackBar(
+                    title: 'snack_bar_default_wrong'.tr,
+                    message: '请选择过账日期',
+                    isWarning: true);
                 return;
               }
               if (selectMachineId.isEmpty) {
-                showSnackBar(title: 'snack_bar_default_wrong'.tr, message: '请选择SAP机台', isWarning: true);
+                showSnackBar(
+                    title: 'snack_bar_default_wrong'.tr,
+                    message: '请选择SAP机台',
+                    isWarning: true);
                 return;
               }
               if (selectLocationId.isEmpty) {
-                showSnackBar(title: 'snack_bar_default_wrong'.tr, message: '请选择入库仓位', isWarning: true);
+                showSnackBar(
+                    title: 'snack_bar_default_wrong'.tr,
+                    message: '请选择入库仓位',
+                    isWarning: true);
                 return;
               }
               if (selectPalletNumber.isEmpty) {
-                showSnackBar(title: 'snack_bar_default_wrong'.tr, message: '请选择托盘', isWarning: true);
+                showSnackBar(
+                    title: 'snack_bar_default_wrong'.tr,
+                    message: '请选择托盘',
+                    isWarning: true);
                 return;
               }
               callback.call(
@@ -811,22 +826,14 @@ class PickPallet extends StatelessWidget {
                   maxFontSize: 16,
                 ),
               )),
-          Obx(() => controller.palletDataList.isEmpty
-              ? Container()
-              : ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
-                    foregroundColor: Colors.greenAccent,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
+          Obx(
+            () => controller.palletDataList.isEmpty
+                ? Container()
+                : CombinationButton(
+                    text: '选择托盘',
+                    click: () => controller._showOptions(),
                   ),
-                  onPressed: () => controller._showOptions(),
-                  child: Text(
-                    '选择托盘',
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                ))
+          )
         ],
       ),
     );

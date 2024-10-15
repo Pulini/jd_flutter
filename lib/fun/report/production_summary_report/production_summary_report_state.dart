@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 
 import '../../../bean/http/response/production_summary_info.dart';
-import '../../../web_api.dart';
+import '../../../utils/web_api.dart';
 
 class ProductionSummaryReportState {
   var tableData = <ProductionSummaryInfo>[];

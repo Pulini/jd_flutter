@@ -4,10 +4,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/management/property/property_logic.dart';
-import 'package:jd_flutter/web_api.dart';
+import 'package:jd_flutter/utils/web_api.dart';
+import 'package:jd_flutter/widget/combination_button_widget.dart';
 
 import '../../../bean/http/response/property_detail_info.dart';
-import '../../../utils.dart';
+import '../../../utils/utils.dart';
 import '../../../widget/custom_widget.dart';
 import '../../../widget/dialogs.dart';
 
@@ -517,12 +518,15 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          button('property_bt_print'.tr, () {
-            logger.f(state.detail.toJson());
-          }),
-          button(
-            'property_detail_bt_close'.tr,
-            () => askDialog(
+          CombinationButton(
+            text: 'property_bt_print'.tr,
+            click: () {
+              logger.f(state.detail.toJson());
+            },
+          ),
+          CombinationButton(
+            text: 'property_detail_bt_close'.tr,
+            click: () => askDialog(
               content: 'property_detail_hint_close'.tr,
               confirm: () {
                 Get.back();
@@ -530,10 +534,10 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
               },
             ),
           ),
-          button(
-            'property_detail_bt_no_acceptance'.tr,
+          CombinationButton(
+            text: 'property_detail_bt_no_acceptance'.tr,
             backgroundColor: Colors.grey,
-            () => askDialog(
+            click: () => askDialog(
               content: 'property_detail_hint_no_acceptance'.tr,
               confirm: () {
                 Get.back();
@@ -542,10 +546,10 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
             ),
           ),
           if (hasSubmit)
-            button(
-              'property_detail_bt_submit'.tr,
+            CombinationButton(
+              text: 'property_detail_bt_submit'.tr,
               backgroundColor: Colors.green,
-              () {
+              click: () {
                 if (logic.checkData()) {
                   askDialog(
                     content: 'property_detail_hint_submit'.tr,

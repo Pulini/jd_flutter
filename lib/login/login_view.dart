@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../constant.dart';
-import '../utils.dart';
-import '../widget/custom_widget.dart';
+import '../utils/utils.dart';
+import '../widget/number_text_field_widget.dart';
 import 'login_logic.dart';
 
 class LoginPage extends StatelessWidget {

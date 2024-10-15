@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:jd_flutter/utils.dart';
+import 'package:jd_flutter/utils/utils.dart';
 
 class Translation extends Translations {
   @override
@@ -9,7 +9,7 @@ class Translation extends Translations {
           'bluetooth_connecting': '正在连接蓝牙...',
           'bluetooth_connect_error_type1': '连接失败',
           'bluetooth_connect_error_type2': '未找到设备',
-          'bluetooth_connect_error_type3': '创建通道失败',
+          'bluetooth_connect_error_type3': '蓝牙处于关闭状态',
           'bluetooth_close_error': '断开失败',
           'bluetooth_no_device': '设备不支持蓝牙',
           'bluetooth_no_permission': '权限被拒绝',

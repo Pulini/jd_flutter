@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/dispatching/work_order_list/work_order_list_logic.dart';
-import 'package:jd_flutter/utils.dart';
+import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
 import '../../../bean/http/response/part_detail_info.dart';
+import '../../../widget/combination_button_widget.dart';
+import '../../../widget/edit_text_widget.dart';
+import '../../../widget/worker_check_widget.dart';
 import '../../other/scan/part_process_scan/part_process_scan_view.dart';
 
 class PartLabelPage extends StatefulWidget {

@@ -20,8 +20,14 @@ import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
-const val CHANNEL_ANDROID_SEND = "com.jd.pzx.jd_flutter_android_send"
-const val CHANNEL_FLUTTER_SEND = "com.jd.pzx.jd_flutter_flutter_send"
+//const val CHANNEL_ANDROID_SEND = "com.jd.pzx.jd_flutter_android_send"
+//const val CHANNEL_FLUTTER_SEND = "com.jd.pzx.jd_flutter_flutter_send"
+const val CHANNEL_BLUETOOTH_FLUTTER_TO_ANDROID = "channel_bluetooth_flutter_to_android"
+const val CHANNEL_BLUETOOTH_ANDROID_TO_FLUTTER = "channel_bluetooth_android_to_flutter"
+const val CHANNEL_USB_FLUTTER_TO_ANDROID = "channel_usb_flutter_to_android"
+const val CHANNEL_USB_ANDROID_TO_FLUTTER = "channel_usb_android_to_flutter"
+const val CHANNEL_SCAN_FLUTTER_TO_ANDROID = "channel_scan_flutter_to_android"
+const val CHANNEL_FACE_VERIFICATION_FLUTTER_TO_ANDROID = "channel_face_verification_flutter_to_android"
 const val FACE_VERIFY_SUCCESS = 1
 const val FACE_VERIFY_FAIL_NOT_LIVE = 2
 const val FACE_VERIFY_FAIL_NOT_ME = 3

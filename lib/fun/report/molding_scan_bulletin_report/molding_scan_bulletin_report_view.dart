@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/route.dart';
 
 import '../../../bean/http/response/molding_scan_bulletin_report_info.dart';
-import '../../../utils.dart';
+import '../../../utils/utils.dart';
 import '../../../widget/custom_widget.dart';
 import 'molding_scan_bulletin_report_logic.dart';
 import 'molding_scan_bulletin_report_maximize_view.dart';

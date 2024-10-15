@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 
-import '../../web_api.dart';
-import '../../utils.dart';
+import '../../utils/web_api.dart';
+import '../../utils/utils.dart';
 import 'picker_item.dart';
 
 enum PickerType {

@@ -5,11 +5,11 @@ import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:uuid/uuid.dart';
 
-import 'bean/http/response/base_data.dart';
-import 'constant.dart';
-import 'route.dart';
+import '../bean/http/response/base_data.dart';
+import '../constant.dart';
+import '../route.dart';
 import 'utils.dart';
-import 'widget/dialogs.dart';
+import '../widget/dialogs.dart';
 
 ///接口返回异常
 const resultError = 0;
@@ -225,7 +225,7 @@ Future<BaseData> _doHttp({
 ///登录接口
 const webApiLogin = 'api/User/Login';
 
-///登录接口
+///获取用户头像
 const webApiGetUserPhoto = 'api/User/GetEmpPhotoByPhone';
 
 ///获取验证码接口
@@ -609,15 +609,25 @@ const webApiGetEmpByField = 'api/VisitorRegistration/GetEmpByField';
 const webApiGetReceiveVisitorPlace = 'api/VisitorRegistration/GetReceiveVisitorPlace';
 
 ///成型集装箱出货扫码汇总
-const webApiSAPContainerScanner = "sap/zapp/ZMM_ZXCFSM_SUMM";
+const webApiSapContainerScanner = "sap/zapp/ZMM_ZXCFSM_SUMM";
 
 ///根据条件获取成型集装箱出货信息
-const WebApiSAPContainerShipmentScanner = "sap/zapp/ZMM_ZXCFSM_D";
-
+const webApiSapContainerShipmentScanner = "sap/zapp/ZMM_ZXCFSM_D";
 
 ///贴标工序报工_修改已报工
-const webApiProductionDispatchReportSubmit =
-    'api/WetPrinting/BarCodeProcessReportSubmit_Reported';
+const webApiProductionDispatchReportSubmit = 'api/WetPrinting/BarCodeProcessReportSubmit_Reported';
+
+///获取工序派工单信息
+const webApiGetProcessWorkCard = 'api/WetPrinting/GetProcessWorkCardByBarcode';
+
+///获取报工信息
+const webApiGetReportDataByBarcode = 'api/WetPrinting/GetReportDataByBarcode';
+
+///修改操作员
+const webApiChangeLabelingBarcodeEmp = 'api/WetPrinting/ChangeLabelingBarcodeEmp';
+
+///删除标签
+const webApiUnReportAndDelLabelingBarcode = 'api/WetPrinting/UnReportAndDelLabelingBarcode';
 
 ///获取品质异常详情
 const webApiGetSCDispatchOrders = 'api/QMProcessFlowEx/GetSCDispatchOrders';

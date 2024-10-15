@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 
 import '../bean/http/response/version_info.dart';
 import '../constant.dart';
-import '../web_api.dart';
+import '../utils/web_api.dart';
 import '../login/login_view.dart';
 import 'downloader.dart';
 
@@ -174,7 +174,7 @@ doUpdate(VersionInfo version) {
       logger.f('Android_Update');
       Downloader(
         url: version.url!,
-        completed: (path) => const MethodChannel(channelFlutterSend)
+        completed: (path) => const MethodChannel(channelUsbAndroidToFlutter)
             .invokeMethod('OpenFile', path),
       );
       return;
@@ -273,27 +273,30 @@ doUpdate(VersionInfo version) {
                   ),
                 ),
                 if ((version.force ?? false) == false)
-                  FractionallySizedBox(
-                    widthFactor: 1,
-                    child: TextButton(
-                      style: ButtonStyle(
-                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        textStyle: WidgetStateProperty.all(
-                          const TextStyle(fontSize: 14),
-                        ),
-                        foregroundColor: WidgetStateProperty.all(
-                          Colors.grey[600],
-                        ),
-                        shape: WidgetStateProperty.all(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10, bottom: 10),
+                    child: FractionallySizedBox(
+                      widthFactor: 1,
+                      child: TextButton(
+                        style: ButtonStyle(
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          textStyle: WidgetStateProperty.all(
+                            const TextStyle(fontSize: 14),
+                          ),
+                          foregroundColor: WidgetStateProperty.all(
+                            Colors.grey[600],
+                          ),
+                          shape: WidgetStateProperty.all(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5),
+                            ),
                           ),
                         ),
+                        onPressed: () => Get.back(),
+                        child: Text('update_dialog_cancel'.tr),
                       ),
-                      onPressed: () => Get.back(),
-                      child: Text('update_dialog_cancel'.tr),
                     ),
-                  )
+                  ),
               ],
             )),
           ),

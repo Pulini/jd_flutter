@@ -3,9 +3,9 @@ import 'package:get/get.dart';
 import '../../../bean/http/response/material_dispatch_info.dart';
 import '../../../bean/http/response/process_specification_info.dart';
 import '../../../route.dart';
-import '../../../widget/custom_widget.dart';
 import '../../../widget/dialogs.dart';
 import '../../../widget/picker/picker_controller.dart';
+import '../../../widget/spinner_widget.dart';
 import '../../../widget/web_page.dart';
 import 'material_dispatch_state.dart';
 

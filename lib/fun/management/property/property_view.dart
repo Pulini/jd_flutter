@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../bean/http/response/property_info.dart';
+import '../../../widget/combination_button_widget.dart';
 import '../../../widget/custom_widget.dart';
+import '../../../widget/edit_text_widget.dart';
 import '../../../widget/picker/picker_view.dart';
 import 'property_logic.dart';
 
@@ -193,22 +195,10 @@ class _PropertyPageState extends State<PropertyPage> {
                     )),
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 10, right: 10, bottom: 15),
-                child: SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blueAccent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(25),
-                      ),
-                    ),
-                    onPressed: () => logic.printLabel(),
-                    child: Text(
-                      'property_bt_print'.tr,
-                      style: const TextStyle(color: Colors.white),
-                    ),
-                  ),
+                padding: const EdgeInsets.only(left: 2, right: 2, bottom: 15),
+                child: CombinationButton(
+                  text: 'property_bt_print'.tr,
+                  click: () => logic.printLabel(),
                 ),
               ),
             ],

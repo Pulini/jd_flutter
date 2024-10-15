@@ -3,11 +3,13 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/fun/other/scan/part_process_scan/part_process_scan_dispatch_view.dart';
 import 'package:jd_flutter/fun/other/scan/part_process_scan/part_process_scan_logic.dart';
 import 'package:jd_flutter/fun/other/scan/part_process_scan/part_process_scan_quick_dispatch_view.dart';
-import 'package:jd_flutter/utils.dart';
+import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
 import '../../../../bean/http/response/scan_barcode_info.dart';
+import '../../../../widget/check_box_widget.dart';
+import '../../../../widget/combination_button_widget.dart';
 
 class PartProcessScanReportPage extends StatefulWidget {
   const PartProcessScanReportPage({super.key});

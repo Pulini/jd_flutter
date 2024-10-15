@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import '../bean/http/response/department_info.dart';
 import '../constant.dart';
 import '../login/login_view.dart';
-import '../utils.dart';
+import '../utils/utils.dart';
 import '../widget/custom_widget.dart';
 import '../widget/dialogs.dart';
 import 'home_logic.dart';

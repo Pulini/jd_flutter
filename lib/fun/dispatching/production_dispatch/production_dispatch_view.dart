@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/dispatching/production_dispatch/production_dispatch_dialogs.dart';
-import 'package:jd_flutter/utils.dart';
+import 'package:jd_flutter/utils/utils.dart';
 import 'package:marquee/marquee.dart';
 
 import '../../../bean/http/response/production_dispatch_order_info.dart';
+import '../../../widget/combination_button_widget.dart';
 import '../../../widget/custom_widget.dart';
+import '../../../widget/edit_text_widget.dart';
 import '../../../widget/picker/picker_view.dart';
+import '../../../widget/switch_button_widget.dart';
 import '../../../widget/web_page.dart';
 import 'production_dispatch_logic.dart';
 
@@ -87,18 +90,10 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
       ),
       Padding(
         padding: const EdgeInsets.all(10),
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.green,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(25),
-            ),
-          ),
-          onPressed: () {},
-          child: Text(
-            'production_dispatch_query_progress'.tr,
-            style: const TextStyle(color: Colors.white),
-          ),
+        child: CombinationButton(
+          text: 'production_dispatch_query_progress'.tr,
+          backgroundColor: Colors.green,
+          click: () {},
         ),
       )
     ];

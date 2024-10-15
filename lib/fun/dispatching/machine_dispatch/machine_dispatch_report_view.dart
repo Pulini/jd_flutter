@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jd_flutter/utils.dart';
+import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
 import '../../../bean/http/response/machine_dispatch_info.dart';
+import '../../../widget/combination_button_widget.dart';
 import 'machine_dispatch_dialog.dart';
 import 'machine_dispatch_logic.dart';
 
@@ -195,20 +196,7 @@ class _MachineDispatchReportPageState extends State<MachineDispatchReportPage> {
     var data = dpi.dispatchList[index];
     var avatar = Padding(
       padding: const EdgeInsets.all(5),
-      child: AspectRatio(
-        aspectRatio: 1 / 1,
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(7),
-          child: Image.network(
-            data.workerAvatar ?? '',
-            fit: BoxFit.fill,
-            errorBuilder: (ctx, err, stackTrace) => Image.asset(
-              'lib/res/images/ic_logo.png',
-              color: Colors.blue,
-            ),
-          ),
-        ),
-      ),
+      child:avatarPhoto(data.workerAvatar),
     );
     return GestureDetector(
       onTap: () => workerSignature(context, data, () => logic.signatureIdenticalWorker(data)),

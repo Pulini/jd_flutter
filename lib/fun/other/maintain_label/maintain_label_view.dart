@@ -1,10 +1,12 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jd_flutter/utils.dart';
+import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 
 import '../../../bean/http/response/label_info.dart';
+import '../../../widget/check_box_widget.dart';
+import '../../../widget/combination_button_widget.dart';
 import '../../../widget/dialogs.dart';
 import 'maintain_label_dialogs.dart';
 import 'maintain_label_logic.dart';
@@ -111,50 +113,30 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
               : Colors.white,
       child: Row(
         children: [
-          Expanded(
+          expandedFrameText(
             flex: 5,
-            child: TextContainer(
-              text: Text(
-                text1,
-                style: TextStyle(
-                  color: type == 1
-                      ? Colors.black
-                      : type == 3
-                          ? Colors.redAccent
-                          : Colors.green.shade900,
-                ),
-              ),
-            ),
+            text: text1,
+            textColor: type == 1
+                ? Colors.black
+                : type == 3
+                    ? Colors.redAccent
+                    : Colors.green.shade900,
           ),
-          Expanded(
-            flex: 1,
-            child: TextContainer(
-              text: Text(
-                text2,
-                style: TextStyle(
-                  color: type == 1
-                      ? Colors.black
-                      : type == 3
-                          ? Colors.redAccent
-                          : Colors.green.shade900,
-                ),
-              ),
-            ),
+          expandedFrameText(
+            text: text2,
+            textColor: type == 1
+                ? Colors.black
+                : type == 3
+                    ? Colors.redAccent
+                    : Colors.green.shade900,
           ),
-          Expanded(
-            flex: 1,
-            child: TextContainer(
-              text: Text(
-                text3,
-                style: TextStyle(
-                  color: type == 1
-                      ? Colors.black
-                      : type == 3
-                          ? Colors.redAccent
-                          : Colors.green.shade900,
-                ),
-              ),
-            ),
+          expandedFrameText(
+            text: text3,
+            textColor: type == 1
+                ? Colors.black
+                : type == 3
+                    ? Colors.redAccent
+                    : Colors.green.shade900,
           ),
         ],
       ),
@@ -311,7 +293,9 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
                             ),
                           );
                         } else {
-                          showSnackBar(title: 'snack_bar_default_wrong'.tr, message: '没有创建贴标权限');
+                          showSnackBar(
+                              title: 'snack_bar_default_wrong'.tr,
+                              message: '没有创建贴标权限');
                         }
                       },
                       combination: Combination.left,

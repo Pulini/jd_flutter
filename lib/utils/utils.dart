@@ -17,9 +17,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'bean/http/response/user_info.dart';
-import 'bean/http/response/version_info.dart';
-import 'bean/http/response/worker_info.dart';
+import '../bean/http/response/user_info.dart';
+import '../bean/http/response/version_info.dart';
+import '../bean/http/response/worker_info.dart';
 import 'web_api.dart';
 import 'package:intl/intl.dart';
 
@@ -323,7 +323,7 @@ getWorkerInfo({
   String? number,
   String? department,
   required Function(List<WorkerInfo>) workers,
-  Function(String)? error,
+  required Function(String) error,
 }) {
   httpGet(method: webApiGetWorkerInfo, params: {
     'EmpNumber': number,
@@ -335,8 +335,7 @@ getWorkerInfo({
           WorkerInfo.fromJson(json)
       ]);
     } else {
-      error?.call(worker.message??'');
-      errorDialog(content: worker.message);
+      error.call(worker.message??'');
     }
   });
 }

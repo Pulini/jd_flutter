@@ -4,8 +4,8 @@ import 'package:permission_handler/permission_handler.dart';
 
 import '../constant.dart';
 import '../home/home_view.dart';
-import '../web_api.dart';
-import '../utils.dart';
+import '../utils/web_api.dart';
+import '../utils/utils.dart';
 import '../widget/custom_widget.dart';
 import '../widget/dialogs.dart';
 import '../widget/downloader.dart';
@@ -32,7 +32,7 @@ class LoginLogic extends GetxController {
               try {
                 Permission.camera.request().isGranted.then((permission) {
                   if (permission) {
-                    const MethodChannel(channelFlutterSend)
+                    const MethodChannel(channelFaceVerificationAndroidToFlutter)
                         .invokeMethod('StartDetect', filePath)
                         .then(
                       (detectCallback) {

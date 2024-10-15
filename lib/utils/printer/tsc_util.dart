@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 import 'dart:ui' as ui;
 import 'package:collection/collection.dart';
@@ -6,7 +5,7 @@ import 'package:fast_gbk/fast_gbk.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image/image.dart' as img;
-import 'package:jd_flutter/utils.dart';
+import 'package:jd_flutter/utils/utils.dart';
 
 ///dpi
 const _dpi = 8;
@@ -254,6 +253,83 @@ Future<Uint8List> _tscBitmapText(
 
   return Uint8List.fromList(List.from(
     utf8.encode('BITMAP $xAxis,$yAxis,${(tp.width + 7) ~/ 8},${tp.height},0,'),
+  )
+    ..addAll(stream)
+    ..addAll(utf8.encode('\r\n')));
+}
+
+Future<Uint8List> _tscBitmap(
+  int xAxis,
+  int yAxis,
+  Uint8List bitmapData,
+  int reSizeWidth,
+  int reSizeHeight,
+) async {
+  //创建图像处理器
+  var image = img.decodeImage(bitmapData)!;
+
+  //创建一个灰阶图，大小与原图相同
+  var grayImage = img.Image(width: image.width, height: image.height);
+
+  //设置灰阶阈值
+  const int threshold = 127;
+
+  // 遍历图像的每个像素
+  for (int y = 0; y < image.height; y++) {
+    for (int x = 0; x < image.width; x++) {
+      // 获取当前像素的RGBA值
+      final pixel = image.getPixel(x, y);
+
+      // 计算灰度值
+      var gray = (pixel.r * 0.3 + pixel.g * 0.59 + pixel.b * 0.11).round();
+
+      // 将灰阶图二值化
+      var newPixel = gray > threshold
+          ? img.ColorRgba8(255, 255, 255, 255) // 白色
+          : img.ColorRgba8(0, 0, 0, 255); // 黑色
+
+      // 设置二值化后的图像的像素
+      grayImage.setPixel(x, y, newPixel);
+    }
+  }
+
+  //二值图位宽
+  var widthByte = (grayImage.width + 7) ~/ 8;
+
+  var width = grayImage.width;
+  var height = grayImage.height;
+
+  //二值图数据
+  Uint8List stream = Uint8List(widthByte * height);
+
+  //初始化二值图数据
+  int y;
+  for (y = 0; y < height * widthByte; ++y) {
+    stream[y] = -1;
+  }
+  //遍历二值图，转换成tsc打印机可识别的数据
+  for (y = 0; y < height; ++y) {
+    for (int x = 0; x < width; ++x) {
+      var pixelColor = grayImage.getPixel(x, y);
+      var red = pixelColor.r;
+      var green = pixelColor.g;
+      var blue = pixelColor.b;
+      var total = (red + green + blue) / 3;
+      // 像素为黑色时，将二值图数据置为1
+      if (total == 0) {
+        //找到二值图数据在stream中的索引
+        int byteIndex = y * ((width + 7) ~/ 8) + x ~/ 8;
+        // 找到二值图数据在stream中的位掩码
+        int targetBitMask = (128 >> (x % 8)).toInt();
+        // 将二值图数据置为1
+        stream[byteIndex] ^= targetBitMask;
+      }
+    }
+  }
+
+  return Uint8List.fromList(List.from(
+    utf8.encode(
+        'BITMAP $xAxis,$yAxis,${(image.width + 7) ~/ 8},${image.height},0,'),
   )
     ..addAll(stream)
     ..addAll(utf8.encode('\r\n')));
@@ -836,4 +912,32 @@ Future<List<Uint8List>> labelMultipurposeDynamic({
   list.add(_tscPrint());
 
   return list;
+}
+// fun bitmapLabel(
+// bitmap: Bitmap
+// ) = arrayListOf<ByteArray>().apply {
+// val dpi = 8
+// add(tscClearBuffer())
+// add(tscSetUp(75, 45))
+// add(tscBitmap(1, 1, bitmap, dpi * 73, dpi * 43))
+// add(tscPrint())
+// }
+
+Future<List<Uint8List>> bitmapLabel( Uint8List imageUint8List) async {
+  var list = <Uint8List>[];
+  list.add(_tscClearBuffer());
+  list.add(_tscSetup(75, 45, density: _dpi));
+  list.add(await _tscBitmap(1, 1, imageUint8List, _dpi * 73, _dpi * 43));
+  list.add(_tscPrint());
+
+  return list;
+}
+
+Future<Uint8List> labelImageResize(Uint8List image) async {
+  var reImage = img.copyResize(
+    img.decodeImage(image)!,
+    width: 75 * 8,
+    height: 45 * 8,
+  );
+  return Uint8List.fromList(img.encodePng(reImage));
 }

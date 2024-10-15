@@ -1,4 +1,4 @@
-import 'package:jd_flutter/utils.dart';
+import 'package:jd_flutter/utils/utils.dart';
 
 /// SapDecideArea : "驻马店全套外发"
 /// ProductName : "DX242256-10"

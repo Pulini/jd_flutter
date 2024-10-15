@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jd_flutter/utils.dart';
+import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/picker/picker_view.dart';
 
 import '../../../bean/http/response/worker_production_detail_info.dart';
 import '../../../widget/custom_widget.dart';
+import '../../../widget/edit_text_widget.dart';
 import 'worker_production_detail_logic.dart';
 
 class WorkerProductionDetailPage extends StatefulWidget {

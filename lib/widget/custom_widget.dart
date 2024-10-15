@@ -1,819 +1,13 @@
 import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:jd_flutter/route.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
-import '../bean/http/response/worker_info.dart';
-import '../utils.dart';
-import '../web_api.dart';
-
-///数字输入框 ios端添加 done 按钮
-class NumberTextField extends StatefulWidget {
-  final TextEditingController numberController;
-  final InputDecoration decoration;
-  final TextStyle textStyle;
-  final int maxLength;
-
-  const NumberTextField(
-      {super.key,
-      required this.numberController,
-      required this.maxLength,
-      required this.textStyle,
-      required this.decoration});
-
-  @override
-  State<NumberTextField> createState() => _NumberTextFieldState();
-}
-
-///ios适配专用输入法
-class _NumberTextFieldState extends State<NumberTextField> {
-  OverlayEntry? _overlayEntry;
-  final FocusNode _numberFocusNode = FocusNode();
-
-  Widget doneButton(BuildContext context) {
-    return Positioned(
-      bottom: MediaQuery.of(context).viewInsets.bottom,
-      right: 0.0,
-      left: 0.0,
-      child: Container(
-          width: double.infinity,
-          color: Colors.white,
-          child: Align(
-            alignment: Alignment.topRight,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 4.0, bottom: 4.0),
-              child: CupertinoButton(
-                padding:
-                    const EdgeInsets.only(right: 24.0, top: 8.0, bottom: 8.0),
-                onPressed: () {
-                  FocusScope.of(context).requestFocus(FocusNode());
-                },
-                child: Text('key_board_done'.tr,
-                    style: const TextStyle(
-                        color: Colors.blueAccent, fontWeight: FontWeight.bold)),
-              ),
-            ),
-          )),
-    );
-  }
-
-  ///显示done键
-  showOverlay() {
-    if (_overlayEntry != null) return;
-    OverlayState? overlayState = Overlay.of(context);
-    _overlayEntry = OverlayEntry(builder: (context) => doneButton(context));
-    overlayState.insert(_overlayEntry!);
-  }
-
-  ///移除 done 键
-  removeOverlay() {
-    if (_overlayEntry != null) {
-      _overlayEntry!.remove();
-      _overlayEntry = null;
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    if (GetPlatform.isIOS) {
-      //ios 端添加监听
-      _numberFocusNode.addListener(() {
-        if (_numberFocusNode.hasFocus) {
-          showOverlay();
-        } else {
-          removeOverlay();
-        }
-      });
-    }
-  }
-
-  @override
-  void dispose() {
-    _numberFocusNode.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return TextField(
-      style: const TextStyle(color: Colors.white),
-      keyboardType: TextInputType.number,
-      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-      controller: widget.numberController,
-      focusNode: _numberFocusNode,
-      decoration: widget.decoration,
-      maxLength: widget.maxLength,
-    );
-  }
-}
-
-///文本输入框
-class EditText extends StatelessWidget {
-  const EditText({
-    super.key,
-    this.hint,
-    this.initStr = '',
-    this.hasFocus = false,
-    this.controller,
-    this.onChanged,
-  });
-
-  final String? initStr;
-  final bool hasFocus;
-  final String? hint;
-  final Function(String v)? onChanged;
-  final TextEditingController? controller;
-
-  @override
-  Widget build(BuildContext context) {
-    TextEditingController controller = TextEditingController(text: initStr);
-    FocusNode? fn;
-    if (hasFocus) {
-      fn = FocusNode()..requestFocus();
-    }
-    return Container(
-      margin: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-      child: TextField(
-        controller: this.controller ?? controller,
-        onChanged: (v) {
-          onChanged?.call(v);
-        },
-        focusNode: fn,
-        decoration: InputDecoration(
-          contentPadding: const EdgeInsets.only(
-            top: 0,
-            bottom: 0,
-            left: 10,
-            right: 10,
-          ),
-          filled: true,
-          fillColor: Colors.grey[300],
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(30),
-            borderSide: const BorderSide(
-              color: Colors.transparent,
-            ),
-          ),
-          border: const OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(30)),
-          ),
-          hintText: hint,
-          hintStyle: const TextStyle(color: Colors.grey),
-          suffixIcon: IconButton(
-            icon: const Icon(Icons.close, color: Colors.grey),
-            onPressed: () => (this.controller ?? controller).clear(),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-///数字小数输入框输入框
-class NumberDecimalEditText extends StatelessWidget {
-  const NumberDecimalEditText({
-    super.key,
-    this.hasDecimal = true,
-    this.max = double.infinity,
-    this.initQty = 0.0,
-    this.hint,
-    this.helperText,
-    this.hasFocus = false,
-    required this.onChanged,
-    this.controller,
-  });
-
-  final String? hint;
-  final String? helperText;
-  final bool hasDecimal;
-  final double? max;
-  final double? initQty;
-  final bool hasFocus;
-  final Function(double) onChanged;
-  final TextEditingController? controller;
-
-  @override
-  Widget build(BuildContext context) {
-    var c = TextEditingController(
-      text: initQty.toShowString(),
-    );
-    c.selection = TextSelection.fromPosition(
-      TextPosition(offset: c.text.length),
-    );
-
-    if (controller != null) {
-      controller!.selection = TextSelection.fromPosition(
-        TextPosition(offset: controller!.text.length),
-      );
-    }
-    FocusNode? fn;
-    if (hasFocus) {
-      fn = FocusNode()..requestFocus();
-    }
-    return Container(
-      margin: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-      child: TextField(
-        keyboardType: TextInputType.number,
-        inputFormatters: [
-          hasDecimal
-              ? FilteringTextInputFormatter.allow(RegExp("[0-9.]")) //数字包括小数
-              : FilteringTextInputFormatter.digitsOnly,
-        ],
-        focusNode: fn,
-        controller: controller ?? c,
-        onChanged: (v) {
-          if (v.toDoubleTry() > max!) {
-            if (controller != null) {
-              controller!.text = max.toShowString();
-              controller!.selection = TextSelection.fromPosition(
-                TextPosition(offset: controller!.text.length),
-              );
-            } else {
-              c.text = max.toShowString();
-              c.selection = TextSelection.fromPosition(
-                TextPosition(offset: c.text.length),
-              );
-            }
-            onChanged.call(max!);
-          } else {
-            onChanged.call(v.toDoubleTry());
-          }
-        },
-        decoration: InputDecoration(
-          helperText: helperText,
-          helperStyle: const TextStyle(color: Colors.blueAccent),
-          contentPadding: const EdgeInsets.only(
-            top: 0,
-            bottom: 0,
-            left: 10,
-            right: 10,
-          ),
-          filled: true,
-          fillColor: Colors.grey[300],
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(30),
-            borderSide: const BorderSide(
-              color: Colors.transparent,
-            ),
-          ),
-          border: const OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(30)),
-          ),
-          hintText: hint,
-          hintStyle: const TextStyle(color: Colors.grey),
-          suffixIcon: IconButton(
-            icon: const Icon(Icons.close, color: Colors.grey),
-            onPressed: () =>
-                controller == null ? c.clear() : controller?.clear(),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-///数字小数输入框输入框
-class NumberEditText extends StatelessWidget {
-  const NumberEditText({
-    super.key,
-    this.hint,
-    this.hasFocus = false,
-    required this.onChanged,
-    this.controller,
-  });
-
-  final bool hasFocus;
-  final String? hint;
-  final Function(String) onChanged;
-  final TextEditingController? controller;
-
-  @override
-  Widget build(BuildContext context) {
-    var c = TextEditingController();
-    FocusNode? fn;
-    if (hasFocus) {
-      fn = FocusNode()..requestFocus();
-    }
-    return Container(
-      margin: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-      child: TextField(
-        focusNode: fn,
-        keyboardType: TextInputType.number,
-        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-        controller: controller ?? c,
-        onChanged: onChanged,
-        decoration: InputDecoration(
-          contentPadding: const EdgeInsets.only(
-            top: 0,
-            bottom: 0,
-            left: 10,
-            right: 10,
-          ),
-          filled: true,
-          fillColor: Colors.grey[300],
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(30),
-            borderSide: const BorderSide(
-              color: Colors.transparent,
-            ),
-          ),
-          border: const OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(30)),
-          ),
-          hintText: hint,
-          hintStyle: const TextStyle(color: Colors.grey),
-          suffixIcon: IconButton(
-            icon: const Icon(Icons.close, color: Colors.grey),
-            onPressed: () => (controller ?? c).clear(),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-///自定义输入框 根据工号查询员工
-class WorkerCheck extends StatefulWidget {
-  const WorkerCheck({super.key, required this.onChanged, this.hint});
-
-  final Function(WorkerInfo?) onChanged;
-  final String? hint;
-
-  @override
-  State<WorkerCheck> createState() => _WorkerCheckState();
-}
-
-class _WorkerCheckState extends State<WorkerCheck> {
-  var controller = TextEditingController();
-  var name = ''.obs;
-  var error = ''.obs;
-
-  getWorker({
-    required String number,
-    required Function(WorkerInfo) success,
-    required Function(String) error,
-  }) {
-    httpGet(method: webApiGetWorkerInfo, params: {
-      'EmpNumber': number,
-      'DeptmentID': '',
-    }).then((worker) {
-      if (worker.resultCode == resultSuccess) {
-        success.call(WorkerInfo.fromJson(worker.data[0]));
-      } else {
-        error.call(worker.message ?? '');
-      }
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-      child: Obx(
-        () => TextField(
-          keyboardType: TextInputType.number,
-          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-          controller: controller,
-          onChanged: (s) {
-            if (s.length >= 6) {
-              getWorker(
-                  number: s,
-                  success: (worker) {
-                    name.value = worker.empName ?? '';
-                    error.value = '';
-                    widget.onChanged.call(worker);
-                  },
-                  error: (s) {
-                    name.value = '';
-                    error.value = s;
-                    widget.onChanged.call(null);
-                  });
-            } else {
-              name.value = '';
-              error.value = '';
-              widget.onChanged.call(null);
-            }
-          },
-          decoration: InputDecoration(
-            contentPadding: const EdgeInsets.only(
-              top: 0,
-              bottom: 0,
-              left: 10,
-              right: 10,
-            ),
-            filled: true,
-            fillColor: Colors.grey[300],
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(30),
-              borderSide: const BorderSide(
-                color: Colors.transparent,
-              ),
-            ),
-            border: const OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(30)),
-            ),
-            helperText: name.value,
-            helperStyle: TextStyle(color: Colors.green.shade700),
-            errorText: error.value.isNotEmpty ? error.value : null,
-            hintText: widget.hint != null && widget.hint!.isNotEmpty
-                ? widget.hint
-                : '请输入员工工号',
-            hintStyle: const TextStyle(color: Colors.grey),
-            suffixIcon: IconButton(
-              icon: const Icon(Icons.close, color: Colors.grey),
-              onPressed: () {
-                controller.clear();
-                name.value = '';
-                error.value = '';
-                widget.onChanged.call(null);
-              },
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-///带框文本
-class TextContainer extends StatelessWidget {
-  const TextContainer({
-    super.key,
-    required this.text,
-    this.borderColor,
-    this.backgroundColor,
-    this.width,
-    this.height,
-  });
-
-  final Widget text;
-  final Color? borderColor;
-  final Color? backgroundColor;
-  final double? width;
-  final double? height;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: width,
-      height: height,
-      padding: const EdgeInsets.only(left: 15, right: 15),
-      decoration: BoxDecoration(
-        border: Border.all(color: borderColor ?? Colors.grey),
-        color: backgroundColor ?? Colors.transparent,
-      ),
-      alignment: Alignment.centerLeft,
-      child: text,
-    );
-  }
-}
-
-enum Combination { left, middle, right, intact }
-
-///自定义按钮
-class CombinationButton extends StatelessWidget {
-  final Combination? combination;
-  final Color? backgroundColor;
-  final Color? foregroundColor;
-  final bool? isEnabled;
-  final String text;
-  final Function() click;
-
-  const CombinationButton({
-    super.key,
-    required this.text,
-    required this.click,
-    this.combination = Combination.intact,
-    this.backgroundColor = Colors.blueAccent,
-    this.foregroundColor = Colors.white,
-    this.isEnabled = true,
-  });
-
-  EdgeInsets getPadding() {
-    EdgeInsets padding;
-    switch (combination) {
-      case Combination.left:
-        padding = const EdgeInsets.only(left: 4, top: 4, right: 1, bottom: 4);
-        break;
-      case Combination.middle:
-        padding = const EdgeInsets.only(left: 1, top: 4, right: 1, bottom: 4);
-        break;
-      case Combination.right:
-        padding = const EdgeInsets.only(left: 1, top: 4, right: 4, bottom: 4);
-        break;
-      default:
-        padding = const EdgeInsets.all(4);
-        break;
-    }
-    return padding;
-  }
-
-  BorderRadius getRadius() {
-    BorderRadius borderRadius;
-    switch (combination) {
-      case Combination.left:
-        borderRadius = const BorderRadius.only(
-          topLeft: Radius.circular(25),
-          bottomLeft: Radius.circular(25),
-        );
-        break;
-      case Combination.middle:
-        borderRadius = const BorderRadius.all(Radius.zero);
-        break;
-      case Combination.right:
-        borderRadius = const BorderRadius.only(
-          topRight: Radius.circular(25),
-          bottomRight: Radius.circular(25),
-        );
-        break;
-      default:
-        borderRadius = const BorderRadius.all(Radius.circular(25));
-        break;
-    }
-    return borderRadius;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: getPadding(),
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          padding: const EdgeInsets.only(left: 8, right: 8),
-          backgroundColor: isEnabled == true ? backgroundColor : Colors.grey,
-          shape: RoundedRectangleBorder(
-            borderRadius: getRadius(),
-          ),
-        ),
-        onPressed: () {
-          if (isEnabled == true) {
-            click.call();
-          }
-        },
-        child: Text(
-          text,
-          style: TextStyle(
-            color: isEnabled == true ? foregroundColor : Colors.grey[800],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-///单选框
-class CheckBox extends StatefulWidget {
-  final Function(bool isChecked) onChanged;
-  final String name;
-  final bool value;
-  final bool? isEnabled;
-  final bool? needSave;
-
-  const CheckBox({
-    super.key,
-    required this.onChanged,
-    required this.name,
-    required this.value,
-    this.isEnabled = true,
-    this.needSave = true,
-  });
-
-  @override
-  State<CheckBox> createState() => _CheckBoxState();
-}
-
-class _CheckBoxState extends State<CheckBox> {
-  var isChecked = false;
-
-  @override
-  void initState() {
-    super.initState();
-    if (widget.needSave == true) {
-      var initialValue =
-          spGet('${Get.currentRoute}/${widget.name}') ?? widget.value ?? false;
-      if (isChecked != initialValue) {
-        setState(() => isChecked = initialValue);
-      }
-    } else {
-      isChecked = widget.value;
-    }
-  }
-
-  _checked(bool checked) {
-    if (widget.isEnabled == true) {
-      isChecked = checked;
-      if (widget.needSave == true) {
-        spSave('${Get.currentRoute}/${widget.name}', isChecked);
-      }
-      widget.onChanged.call(isChecked);
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (isChecked != widget.value) {
-      isChecked = widget.value;
-      if (widget.needSave == true) {
-        spSave('${Get.currentRoute}/${widget.name}', isChecked);
-      }
-    }
-    return Padding(
-      padding: const EdgeInsets.only(left: 10, right: 10),
-      child: GestureDetector(
-        onTap: () => _checked(!isChecked),
-        child: Row(
-          children: [
-            Checkbox(
-              activeColor: widget.isEnabled == true ? Colors.blue : Colors.grey,
-              visualDensity: const VisualDensity(
-                horizontal: VisualDensity.minimumDensity,
-              ),
-              value: isChecked,
-              onChanged: (v) => _checked(v!),
-            ),
-            Text(
-              widget.name,
-              style: TextStyle(
-                color: widget.isEnabled == true ? Colors.black : Colors.grey,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class SpinnerController {
-  var select = ''.obs;
-  var selectIndex = 0;
-  String? saveKey;
-  var dataList = <String>[];
-  final Function(int)? onChanged;
-  final Function(int)? onSelected;
-
-  SpinnerController({
-    this.saveKey,
-    required this.dataList,
-    this.onChanged,
-    this.onSelected,
-  }) {
-    selectIndex = getSave();
-    select.value = dataList[selectIndex];
-    onSelected?.call(selectIndex);
-  }
-
-  int getSave() {
-    var select = selectIndex;
-    if (saveKey != null && saveKey!.isNotEmpty) {
-      var save = spGet(saveKey!);
-      if (save != null && save.isNotEmpty) {
-        var index = dataList.indexOf(save);
-        if (index != -1) select = index;
-      }
-    }
-    return select;
-  }
-
-  changeSelected(String? value) {
-    if (value != null && value.isNotEmpty) {
-      select.value = value;
-      var index = dataList.indexOf(value);
-      if (index != -1) {
-        selectIndex = index;
-        spSave(saveKey!, value);
-      }
-      onChanged?.call(selectIndex);
-    }
-  }
-}
-
-///下啦列表
-class Spinner extends StatelessWidget {
-  final SpinnerController controller;
-
-  const Spinner({
-    super.key,
-    required this.controller,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 50,
-      margin: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-      padding: const EdgeInsets.only(left: 15, right: 5),
-      decoration: BoxDecoration(
-        color: Colors.grey[300],
-        borderRadius: BorderRadius.circular(25),
-      ),
-      child: Obx(() => DropdownButton<String>(
-            isExpanded: true,
-            value: controller.select.value,
-            underline: Container(height: 0),
-            onChanged: (String? value) => controller.changeSelected(value),
-            items: controller.dataList
-                .map<DropdownMenuItem<String>>((String value) =>
-                    DropdownMenuItem<String>(value: value, child: Text(value)))
-                .toList(),
-          )),
-    );
-  }
-}
-
-///选择器
-class SwitchButton extends StatefulWidget {
-  final Function(bool isChecked) onChanged;
-  final String name;
-  final bool? value;
-  final bool? isEnabled;
-  final bool? needSave;
-
-  const SwitchButton({
-    super.key,
-    required this.onChanged,
-    required this.name,
-    this.value,
-    this.isEnabled = true,
-    this.needSave = true,
-  });
-
-  @override
-  State<SwitchButton> createState() => _SwitchButtonState();
-}
-
-class _SwitchButtonState extends State<SwitchButton> {
-  var isChecked = false;
-
-  @override
-  void initState() {
-    super.initState();
-    if (widget.value == null) {
-      if (widget.needSave == true) {
-        var initialValue = spGet('${Get.currentRoute}/${widget.name}') ??
-            widget.value ??
-            false;
-        if (isChecked != initialValue) {
-          isChecked = initialValue;
-        }
-      }
-    } else {
-      isChecked = widget.value!;
-    }
-  }
-
-  _select(bool checked) {
-    if (widget.isEnabled == true && isChecked != checked) {
-      setState(() {
-        isChecked = checked;
-        widget.onChanged.call(isChecked);
-        if (widget.value == null && widget.needSave == true) {
-          spSave('${Get.currentRoute}/${widget.name}', isChecked);
-        }
-      });
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-      padding: const EdgeInsets.only(left: 15),
-      decoration: BoxDecoration(
-        color: Colors.grey[300],
-        borderRadius: BorderRadius.circular(25),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            widget.name,
-            style: const TextStyle(color: Colors.black),
-          ),
-          Switch(
-            thumbIcon: WidgetStateProperty.resolveWith<Icon>(
-              (Set<WidgetState> states) {
-                if (states.contains(WidgetState.selected)) {
-                  return const Icon(Icons.check);
-                }
-                return const Icon(Icons.close);
-              },
-            ),
-            value: isChecked,
-            onChanged: _select,
-          ),
-        ],
-      ),
-    );
-  }
-}
+import '../utils/utils.dart';
 
 ///app 背景渐变色
 var backgroundColor = const BoxDecoration(
@@ -827,6 +21,7 @@ var backgroundColor = const BoxDecoration(
   ),
 );
 
+///页面简单框架
 pageBody({
   String? title,
   List<Widget>? actions,
@@ -1142,31 +337,6 @@ Future<T?> showSheet<T>(
           ));
 }
 
-///常用格式的按钮
-button(
-  String text,
-  Function() click, {
-  Color? backgroundColor,
-  Color? textColor,
-}) {
-  return Padding(
-    padding: const EdgeInsets.only(top: 10),
-    child: SizedBox(
-      width: double.infinity,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: backgroundColor ?? Colors.blueAccent,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(25),
-          ),
-        ),
-        onPressed: click,
-        child: Text(text, style: TextStyle(color: textColor ?? Colors.white)),
-      ),
-    ),
-  );
-}
-
 ///带占比带文本提示的文本
 expandedTextSpan({
   required String hint,
@@ -1239,6 +409,7 @@ textSpan({
   );
 }
 
+///进度条、百分比
 percentIndicator({
   required double max,
   required double value,
@@ -1272,6 +443,7 @@ percentIndicator({
   );
 }
 
+///进度条、带文本
 progressIndicator({
   required double max,
   required double value,
@@ -1336,6 +508,152 @@ expandedFrameText({
             color: textColor ?? Colors.black87,
             fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
           ),
+        ),
+      ),
+    ),
+  );
+}
+
+///固定宽高1比1的头像
+avatarPhoto(String? url) {
+  return AspectRatio(
+    aspectRatio: 1 / 1,
+    child: ClipRRect(
+      borderRadius: BorderRadius.circular(7),
+      child: url == null
+          ? Image.asset(
+              'lib/res/images/ic_logo.png',
+              color: Colors.blue,
+            )
+          : Image.network(
+              url,
+              fit: BoxFit.fill,
+              errorBuilder: (ctx, err, stackTrace) => Image.asset(
+                'lib/res/images/ic_logo.png',
+                color: Colors.blue,
+              ),
+            ),
+    ),
+  );
+}
+
+///标准格式标签模版
+///75*45大小
+labelTemplate({
+  required String qrCode,
+  Widget? title,
+  Widget? subTitle,
+  Widget? content,
+  Widget? subContent,
+  Widget? bottomLeft,
+  Widget? bottomMiddle,
+  Widget? bottomRight,
+}) {
+  var bs = const BorderSide(color: Colors.black, width: 1.5);
+  var titleWidget = Container(
+    decoration: BoxDecoration(
+      border: Border(bottom: bs),
+    ),
+    child: Row(
+      children: [
+        Container(
+          decoration: BoxDecoration(border: Border(right: bs)),
+          child: QrImageView(
+            data: qrCode,
+            padding: const EdgeInsets.all(5),
+            version: QrVersions.auto,
+          ),
+        ),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Container(
+                decoration: BoxDecoration(border: Border(bottom: bs)),
+                child: Center(
+                  child: Text(
+                    qrCode,
+                    style: const TextStyle(
+                      fontSize: 8,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 2,
+                child: Container(
+                  decoration: BoxDecoration(border: Border(bottom: bs)),
+                  child: title ?? const Text(''),
+                ),
+              ),
+              Expanded(
+                flex: 3,
+                child: subTitle ?? const Text(''),
+              ),
+            ],
+          ),
+        ),
+      ],
+    ),
+  );
+  var contentWidget = Container(
+    decoration: BoxDecoration(
+      border: Border(bottom: bs),
+    ),
+    child: content ?? const Text(''),
+  );
+
+  var bottomWidget = Row(
+    crossAxisAlignment: CrossAxisAlignment.stretch,
+    children: [
+      Expanded(
+        flex: 3,
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border(right: bs),
+          ),
+          child: bottomLeft ?? const Text(''),
+        ),
+      ),
+      Expanded(
+        flex: 5,
+        child: Container(
+          child: bottomMiddle ?? const Text(''),
+        ),
+      ),
+      Expanded(
+        flex: 2,
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border(left: bs),
+          ),
+          child: bottomRight ?? const Text(''),
+        ),
+      ),
+    ],
+  );
+
+  return Container(
+    color: Colors.white,
+    width: 75 * 5.5,
+    height: 45 * 5.5,
+    child: Padding(
+      padding: const EdgeInsets.all(4),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: Colors.black,
+            width: 1.5,
+          ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(flex: 19, child: titleWidget),
+            Expanded(flex: 17, child: contentWidget),
+            Expanded(flex: 7, child: bottomWidget),
+          ],
         ),
       ),
     ),

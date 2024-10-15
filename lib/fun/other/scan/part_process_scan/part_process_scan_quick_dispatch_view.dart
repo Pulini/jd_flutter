@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/other/scan/part_process_scan/part_process_scan_dispatch_view.dart';
 import 'package:jd_flutter/fun/other/scan/part_process_scan/part_process_scan_logic.dart';
-import 'package:jd_flutter/utils.dart';
+import 'package:jd_flutter/utils/utils.dart';
 import '../../../../bean/http/response/scan_barcode_info.dart';
 import '../../../../bean/http/response/worker_info.dart';
+import '../../../../widget/combination_button_widget.dart';
 import '../../../../widget/custom_widget.dart';
+import '../../../../widget/edit_text_widget.dart';
 import '../../../../widget/wave_progress/wave_progress.dart';
 
 class PartProcessScanQuickDispatchPage extends StatefulWidget {
@@ -42,21 +44,7 @@ class _PartProcessScanQuickDispatchPageState
                     children: [
                       Padding(
                         padding: const EdgeInsets.all(10),
-                        child: AspectRatio(
-                          aspectRatio: 1 / 1,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(7),
-                            child: Image.network(
-                              wi.picUrl ?? '',
-                              fit: BoxFit.fill,
-                              errorBuilder: (ctx, err, stackTrace) =>
-                                  Image.asset(
-                                'lib/res/images/ic_logo.png',
-                                color: Colors.blue,
-                              ),
-                            ),
-                          ),
-                        ),
+                        child:avatarPhoto(wi.picUrl),
                       ),
                       Expanded(
                         child: Column(
