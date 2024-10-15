@@ -292,6 +292,9 @@ const webApiPickerSapFactoryAndWarehouse = 'api/Stock/GetSAPFactoryStockInfo';
 const webApiPickerSapWarehouseStorageLocation =
     'api/InStockTrackingNum/GetWarehouseStorageLocationList';
 
+///获取mes组别
+const webApiPickerMesGroup = 'api/Autoworkshopbatch/GetClassList';
+
 ///获取mes包装区域列表
 const webApiGetPickerMesMoldingPackArea = 'api/BaseInfo/GetMoldingPackAreaInfo';
 
@@ -628,3 +631,6 @@ const webApiChangeLabelingBarcodeEmp = 'api/WetPrinting/ChangeLabelingBarcodeEmp
 
 ///删除标签
 const webApiUnReportAndDelLabelingBarcode = 'api/WetPrinting/UnReportAndDelLabelingBarcode';
+
+///智能AGV派送获取工单列表
+const webApiSmartDeliveryGetWorkCardList = 'api/Autoworkshopbatch/GetWorkCardList';

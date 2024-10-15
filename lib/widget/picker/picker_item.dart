@@ -473,13 +473,13 @@ class PickerMesMoldingPackArea extends PickerItem {
   }
 }
 
-class WarehouseLocation extends PickerItem {
-  WarehouseLocation({
+class PickerSapWarehouseLocation extends PickerItem {
+  PickerSapWarehouseLocation({
     required this.location,
     required this.noUsedNum,
   });
 
-  WarehouseLocation.fromJson(dynamic json) {
+  PickerSapWarehouseLocation.fromJson(dynamic json) {
     location = json['Location'];
     noUsedNum = json['NoUsedNum'];
   }
@@ -495,5 +495,33 @@ class WarehouseLocation extends PickerItem {
   @override
   String pickerName() {
     return '$location - 剩余$noUsedNum';
+  }
+}
+
+class PickerMesGroup extends PickerItem {
+  PickerMesGroup({
+    required this.departmentID,
+    required this.departmentNumber,
+    required this.departmentName,
+  });
+
+  PickerMesGroup.fromJson(dynamic json) {
+    departmentID = json['DepartmentID'];
+    departmentNumber = json['DepartmentNumber'];
+    departmentName = json['DepartmentName'];
+  }
+  int? departmentID;
+  String? departmentNumber;
+  String? departmentName;
+
+
+  @override
+  String pickerId() {
+    return departmentID.toString();
+  }
+
+  @override
+  String pickerName() {
+    return departmentName??'';
   }
 }

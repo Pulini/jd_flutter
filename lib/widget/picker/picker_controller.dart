@@ -22,6 +22,7 @@ enum PickerType {
   mesProcessFlow,
   mesProductionReportType,
   mesMoldingPackAreaReportType,
+  mesGroup,
   date,
   startDate,
   endDate,
@@ -68,6 +69,8 @@ abstract class PickerController {
         return 'picker_type_mes_production_report_type'.tr;
       case PickerType.mesMoldingPackAreaReportType:
         return 'picker_type_mes_molding_pack_area_report_type'.tr;
+      case PickerType.mesGroup:
+        return 'picker_type_mes_group'.tr;
       case PickerType.date:
         return 'picker_type_date'.tr;
       case PickerType.startDate:
@@ -115,6 +118,8 @@ abstract class PickerController {
         return getMesProductionReportType;
       case PickerType.mesMoldingPackAreaReportType:
         return getMesMoldingPackArea;
+      case PickerType.mesGroup:
+        return getMeGroup;
       default:
         return getDataListError;
     }
@@ -885,7 +890,29 @@ Future getSapWarehouseStorageLocation() async {
     try {
       List<PickerItem> list = [];
       for (var item in response.data) {
-        list.add(WarehouseLocation.fromJson(item));
+        list.add(PickerSapWarehouseLocation.fromJson(item));
+      }
+      return list;
+    } on Error catch (e) {
+      logger.e(e);
+      return 'json_format_error'.tr;
+    }
+  } else {
+    return response.message;
+  }
+}
+
+///获取Sap仓库库位列表
+Future getMeGroup() async {
+  var response = await httpGet(
+    method: webApiPickerMesGroup,
+    params: {'UserID': userInfo?.userID},
+  );
+  if (response.resultCode == resultSuccess) {
+    try {
+      List<PickerItem> list = [];
+      for (var item in response.data) {
+        list.add(PickerMesGroup.fromJson(item));
       }
       return list;
     } on Error catch (e) {
