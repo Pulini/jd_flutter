@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
 
+import '../../../../bean/http/response/carton_label_scan_info.dart';
+import '../../../../constant.dart';
 import 'carton_label_scan_logic.dart';
 import 'carton_label_scan_state.dart';
 
@@ -19,11 +22,83 @@ class _CartonLabelScanPageState extends State<CartonLabelScanPage> {
 
   TextEditingController controller = TextEditingController();
 
-  _item(String data) {}
+  _item(LinkDataSizeList data) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.all(8.0),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [Colors.blue.shade100, Colors.green.shade50],
+        ),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: Colors.grey, width: 2),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              textSpan(hint: '尺码：', text: data.size ?? ''),
+              textSpan(hint: '内标：', text: data.priceBarCode ?? ''),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              textSpan(
+                hint: '贴标数量：',
+                text: data.labelCount.toString(),
+                textColor: Colors.black,
+              ),
+              textSpan(
+                hint: '已扫数量：',
+                text: data.scanned.toString(),
+                textColor: Colors.black,
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  _methodChannel() {
+    print('注册监听');
+    const MethodChannel(channelScanFlutterToAndroid)
+        .setMethodCallHandler((call) {
+      switch (call.method) {
+        case 'PdaScanner':
+          {
+            controller.text = call.arguments;
+            logic.queryCartonLabelInfo(controller.text);
+          }
+          break;
+      }
+      return Future.value(call);
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _methodChannel();
+  }
 
   @override
   Widget build(BuildContext context) {
     return pageBody(
+      actions: [
+        IconButton(
+          onPressed: () => logic.cleanAll(() => controller.text = ''),
+          icon: const Icon(
+            Icons.refresh,
+            color: Colors.blue,
+          ),
+        )
+      ],
       body: Obx(() => Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -33,16 +108,13 @@ class _CartonLabelScanPageState extends State<CartonLabelScanPage> {
                     child: EditText(
                       hint: '请扫描或手动输入外箱贴标',
                       controller: controller,
-                      onChanged: (v) {
-                        state.cartonLabel.value = v;
-                      },
                     ),
                   ),
-                  if (state.cartonLabel.value.isNotEmpty)
-                    IconButton(
-                      onPressed: () => logic.queryCartonLabelInfo(),
-                      icon: const Icon(Icons.search, color: Colors.blue),
-                    )
+                  IconButton(
+                    onPressed: () =>
+                        logic.queryCartonLabelInfo(controller.text),
+                    icon: const Icon(Icons.search, color: Colors.blue),
+                  )
                 ],
               ),
               Container(
@@ -60,29 +132,39 @@ class _CartonLabelScanPageState extends State<CartonLabelScanPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    textSpan(hint: '外箱条码：', text: state.cartonLabel.value),
-                    const SizedBox(height: 8),
                     Row(
                       children: [
-                        Expanded(
-                          child: progressIndicator(
-                            max: 100,
-                            value: 50,
+                        expandedTextSpan(hint: '外箱条码：', text: state.cartonLabel.value),
+                        GestureDetector(
+                          onTap: () => logic.cleanScanned(),
+                          child: Container(
+                            padding: const EdgeInsets.only(left: 5, right: 5),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(color: Colors.blue, width: 2),
+                            ),
+                            child: Text(
+                              '重扫内标',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.blue,
+                              ),
+                            ),
                           ),
                         ),
-                        const SizedBox(width: 8),
-                        Text(
-                          '100',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
                       ],
-                    )
+                    ),
+                    const SizedBox(height: 8),
+                    progressIndicator(
+                      max: logic.labelTotal().toDouble(),
+                      value: logic.scannedLabelTotal().toDouble(),
+                    ),
                   ],
                 ),
               ),
               Expanded(
                 child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.all(8),
                   itemCount: state.cartonInsideLabelList.length,
                   itemBuilder: (c, i) => _item(state.cartonInsideLabelList[i]),
                 ),

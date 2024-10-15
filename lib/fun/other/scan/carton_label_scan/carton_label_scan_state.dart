@@ -1,30 +1,35 @@
 import 'package:get/get.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 
+import '../../../../bean/http/response/carton_label_scan_info.dart';
+
 class CartonLabelScanState {
+  var cartonInsideLabelList = <LinkDataSizeList>[].obs;
   var cartonLabel=''.obs;
-  var cartonInsideLabelList=<String>[].obs;
+  CartonLabelScanInfo? cartonLabelInfo;
+
   CartonLabelScanState() {
     ///Initialize variables
   }
 
-
-   queryCartonLabelInfo({required Function(dynamic msg) error}) {
-     httpGet(
-       loading:'正在查询外箱标签明细...',
-       method: webApiGetPrdDayReport,
-       params: {
-         'barCode': cartonLabel.value,
-       },
-     ).then((response) {
-       if (response.resultCode == resultSuccess) {
-         // tableData.value = [
-         //   for (var item in response.data) ProductionDayReportInfo.fromJson(item)
-         // ];
-         // Get.back(closeOverlays: true);
-       } else {
-         error.call(response.message ?? 'query_default_error'.tr);
-       }
-     });
-   }
+  queryCartonLabelInfo({
+    required String code,
+    required Function(dynamic msg) error,
+  }) {
+    httpGet(
+      loading: '正在查询外箱标签明细...',
+      method: webApiGetCartonLabelInfo,
+      params: {
+        'CartonBarCode': code,
+      },
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        cartonLabelInfo = CartonLabelScanInfo.fromJson(response.data);
+        cartonLabel.value=cartonLabelInfo?.outBoxBarCode??'';
+        cartonInsideLabelList.value = cartonLabelInfo!.linkDataSizeList ?? [];
+      } else {
+        error.call(response.message ?? 'query_default_error'.tr);
+      }
+    });
+  }
 }

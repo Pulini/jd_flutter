@@ -452,7 +452,11 @@ progressIndicator({
   Color? backgroundColor,
   Color? textColor,
 }) {
-  var percent = (value.div(max).toStringAsFixed(3)).toDoubleTry();
+  var percent = 0.0;
+  if (value != 0 || max != 0) {
+    percent = (value.div(max).toStringAsFixed(3)).toDoubleTry();
+  }
+
   return Stack(
     children: [
       Center(
@@ -466,7 +470,7 @@ progressIndicator({
       ),
       Center(
         child: Text(
-          value.toShowString(),
+          '${value.toShowString()}/${max.toShowString()}',
           style: TextStyle(
             color: textColor ?? Colors.black87,
             fontWeight: FontWeight.bold,
