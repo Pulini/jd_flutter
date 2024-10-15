@@ -642,6 +642,6 @@ const webApiGetSCDispatchOrders = 'api/QMProcessFlowEx/GetSCDispatchOrders';
 const webApiGetProcessFlowEXTypes = 'api/QMProcessFlowEx/GetProcessFlowEXTypes';
 
 ///品质异常插入
-const webApiAddAbnormalQuality = 'api/Inspection/AddAbnormalQuality';
+const webApiAddAbnormalQuality = 'api/QMProcessFlowEx/QMAbnormityBysuitID';
 
 

@@ -232,7 +232,7 @@ class RouteConfig {
     machineDispatchPage,
     machineDispatchReportPage,
     packingScanPage,
-    qualityRestrictionPage
+    qualityRestrictionPage,
     processDispatchRegisterPage,
     smartDeliveryPage,
     cartonLabelScanPage,

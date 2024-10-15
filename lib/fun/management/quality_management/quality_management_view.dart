@@ -7,10 +7,13 @@ import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/globalTimer.dart';
 
 import '../../../bean/http/response/abnormal_quality_list_info.dart';
-import '../../../utils.dart';
-import '../../../web_api.dart';
+import '../../../utils/utils.dart';
+import '../../../utils/web_api.dart';
 import '../../../widget/custom_widget.dart';
+import '../../../widget/edit_text_widget.dart';
 import '../../../widget/picker/picker_view.dart';
+import '../../../widget/switch_button_widget.dart';
+import '../../../widget/worker_check_widget.dart';
 
 class QualityRestrictionPage extends StatefulWidget {
   const QualityRestrictionPage({super.key});
@@ -39,7 +42,7 @@ class _QualityRestrictionPageState extends State<QualityRestrictionPage> {
           //整个面板都可以点击
           headerBuilder: (BuildContext context, bool isExpanded) {
             return ListTile(
-              title: Text('销售订单号：${item.orderNumber}'),
+              title: Text('销售订单号：${item.orderNumber}',style: const TextStyle(fontSize: 13),),
             );
           },
           body: ListView.builder(
@@ -168,8 +171,7 @@ class _QualityRestrictionPageState extends State<QualityRestrictionPage> {
           onTap: () => {
             state.selected.value = index,
             state.dialogMiss.value = false,
-            state.entryID =
-                state.exceptionDataList[index].fItemID.toString(),
+            state.entryID = state.exceptionDataList[index].fItemID.toString(),
             if (state.isAutomatic)
               {
                 Future.delayed(const Duration(seconds: 1), () {
@@ -233,7 +235,7 @@ class _QualityRestrictionPageState extends State<QualityRestrictionPage> {
           click.call();
         },
         child: Container(
-          margin: const EdgeInsets.only(left: 25, top: 5, right: 10, bottom: 5),
+          margin: const EdgeInsets.only(left: 15, top: 5, right: 5, bottom: 5),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               border: Border.all(color: Colors.blue, width: 3)),
@@ -241,7 +243,7 @@ class _QualityRestrictionPageState extends State<QualityRestrictionPage> {
           child: Icon(
             icon,
             color: Colors.black,
-            size: 50,
+            size: 30,
           ),
         ));
   }
@@ -252,7 +254,7 @@ class _QualityRestrictionPageState extends State<QualityRestrictionPage> {
     required Function(bool) onChanged,
   }) {
     return Container(
-      margin: const EdgeInsets.all(5),
+        margin: const EdgeInsets.only(left: 5, top: 5, bottom: 5),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
@@ -382,14 +384,14 @@ class _QualityRestrictionPageState extends State<QualityRestrictionPage> {
     return InkWell(
       onTap: () => {_searchDialog()},
       child: Container(
-        margin: const EdgeInsets.only(left: 25, top: 5, right: 10, bottom: 5),
+        margin: const EdgeInsets.only(left: 15, top: 5, right: 5, bottom: 5),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             border: Border.all(color: Colors.blue, width: 3)),
         alignment: Alignment.center,
         child: Text.rich(
           TextSpan(
-              style: const TextStyle(fontSize: 30, color: Colors.lightBlue),
+              style: const TextStyle(fontSize: 20, color: Colors.lightBlue),
               children: [
                 TextSpan(text: title),
                 const WidgetSpan(
@@ -441,7 +443,7 @@ class _QualityRestrictionPageState extends State<QualityRestrictionPage> {
         },
         child: Center(
             child: Container(
-          margin: const EdgeInsets.all(5),
+                margin: const EdgeInsets.only(left: 5, top: 5, right: 0, bottom: 5),
           decoration: BoxDecoration(
               color: Colors.red, borderRadius: BorderRadius.circular(10)),
           alignment: Alignment.center,
@@ -577,7 +579,7 @@ class _QualityRestrictionPageState extends State<QualityRestrictionPage> {
                             Expanded(
                               child: Container(
                                 padding:
-                                    const EdgeInsets.only(left: 50, right: 50),
+                                    const EdgeInsets.only(left: 20, right: 20),
                                 child: Column(
                                   children: [
                                     Expanded(

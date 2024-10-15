@@ -11,7 +11,9 @@ class AddEntryDetailInfo {
   AddEntryDetailInfo({
       this.exNumber, 
       this.empName, 
-      this.empNumber, 
+      this.billDate,
+      this.empID,
+      this.empNumber,
       this.fQty, 
       this.fExceptionID, 
       this.exceptionName, 
@@ -20,6 +22,8 @@ class AddEntryDetailInfo {
 
   AddEntryDetailInfo.fromJson(dynamic json) {
     exNumber = json['exNumber'];
+    billDate = json['billDate'];
+    empID = json['empID'];
     empName = json['empName'];
     empNumber = json['empNumber'];
     fQty = json['FQty'];
@@ -29,6 +33,8 @@ class AddEntryDetailInfo {
     fReCheck = json['FReCheck'];
   }
   String? exNumber;
+  String? billDate;
+  int? empID;
   String? empName;
   String? empNumber;
   double? fQty;
@@ -40,6 +46,8 @@ class AddEntryDetailInfo {
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['exNumber'] = exNumber;
+    map['empID'] = empID;
+    map['billDate'] = billDate;
     map['empName'] = empName;
     map['empNumber'] = empNumber;
     map['FQty'] = fQty;

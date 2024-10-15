@@ -5,8 +5,8 @@ import 'package:jd_flutter/bean/http/response/add_entry_detail_info.dart';
 import 'package:jd_flutter/bean/http/response/exception_type_info.dart';
 import '../../../bean/http/response/abnormal_quality_info.dart';
 import '../../../bean/http/response/abnormal_quality_list_info.dart';
-import '../../../utils.dart';
-import '../../../web_api.dart';
+import '../../../utils/utils.dart';
+import '../../../utils/web_api.dart';
 
 class QualityManagementState {
   RxList<AbnormalQualityInfo> dataList = <AbnormalQualityInfo>[].obs;
@@ -36,13 +36,12 @@ class QualityManagementState {
   var dialogMiss = false.obs;
 
   ///需要提交的数据
-  var departmentID =getUserInfo()!.departmentID.toString();  //部门id
-  var empID =getUserInfo()!.empID.toString();  //员工empId
-  var entryID ="";  //异常id
-  var interID ="";  //工单id
-  var number = "1".obs;  //异常数量
+  var departmentID = getUserInfo()!.departmentID.toString(); //部门id
+  var empID = getUserInfo()!.empID.toString(); //员工empId
+  var entryID = ""; //异常id
+  var interID = ""; //工单id
+  var number = "1".obs; //异常数量
   AddEntryDetailInfo? addEntryDetailInfo;
-
 
   getProductionProcessInfo({
     required String mtoNo,
@@ -82,9 +81,13 @@ class QualityManagementState {
           orderShowSubDataList.add(AbnormalQualityListInfo(
               abnormalQualityInfo: listData, orderNumber: list[i]));
         }
+        exceptionDataList.value=[];
+        showEntryDataList.value=[];
         if (orderShowSubDataList.isNotEmpty) Get.back();
       } else {
         dataList.value = [];
+        exceptionDataList.value=[];
+        showEntryDataList.value=[];
         orderShowSubDataList.value = [];
         error.call(response.message ?? '');
       }
@@ -113,7 +116,10 @@ class QualityManagementState {
     showEntryDataList.value =
         orderShowSubDataList[headIndex].abnormalQualityInfo![index].entry!;
 
-    interID = orderShowSubDataList[headIndex].abnormalQualityInfo![index].interID.toString();
+    interID = orderShowSubDataList[headIndex]
+        .abnormalQualityInfo![index]
+        .interID
+        .toString();
   }
 
   getProcessFlowEXTypes({
@@ -142,20 +148,18 @@ class QualityManagementState {
   submitReview({
     required Function(String msg) error,
   }) {
-
     logger.f('serious:$serious');
     logger.f('slight:$slight');
 
-    var type ='';
+    var type = '';
 
-    if(serious.value){
-      type='1';
+    if (serious.value) {
+      type = '1';
     }
 
-    if(slight.value){
-      type='0';
+    if (slight.value) {
+      type = '0';
     }
-
 
     httpPost(method: webApiAddAbnormalQuality, loading: '正在上传品质异常数据...', body: {
       'DeptmentID': departmentID,
@@ -172,18 +176,27 @@ class QualityManagementState {
       ],
     }).then((response) {
       if (response.resultCode == resultSuccess) {
-
         addEntryDetailInfo = AddEntryDetailInfo.fromJson(response.data);
+
         var list = <Entry>[];
         list.clear();
-
         for (var o = 0; o < showEntryDataList.length; ++o) {
           list.add(showEntryDataList[o]);
         }
 
-        list.add(Entry());
+        list.add(Entry(
+          exNumber: addEntryDetailInfo!.exNumber.toString(),
+          billDate: addEntryDetailInfo!.billDate,
+          empID: addEntryDetailInfo!.empID,
+          empName: addEntryDetailInfo!.empName,
+          empNumber: addEntryDetailInfo!.empNumber,
+          qty: addEntryDetailInfo!.fQty,
+          exceptionID: addEntryDetailInfo!.fExceptionID,
+          exceptionName: addEntryDetailInfo!.exceptionName,
+          exceptionLevel: addEntryDetailInfo!.fExceptionLevel.toString(),
+          reCheck: addEntryDetailInfo!.fReCheck,
+        ));
         showEntryDataList.value = list;
-
       } else {
         error.call(response.message ?? '');
       }
