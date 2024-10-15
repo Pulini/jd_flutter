@@ -618,3 +618,14 @@ const WebApiSAPContainerShipmentScanner = "sap/zapp/ZMM_ZXCFSM_D";
 ///贴标工序报工_修改已报工
 const webApiProductionDispatchReportSubmit =
     'api/WetPrinting/BarCodeProcessReportSubmit_Reported';
+
+///获取品质异常详情
+const webApiGetSCDispatchOrders = 'api/QMProcessFlowEx/GetSCDispatchOrders';
+
+///获取品质异常类型
+const webApiGetProcessFlowEXTypes = 'api/QMProcessFlowEx/GetProcessFlowEXTypes';
+
+///品质异常插入
+const webApiAddAbnormalQuality = 'api/Inspection/AddAbnormalQuality';
+
+

@@ -345,6 +345,13 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
                 state.upAddDetail.value.carCab = s,
               }),
           line,
+          _inputText(
+              'visit_details_Driver_cab_inspection'.tr, '', inputNumber,
+              controller: logic.textTail,
+              onChange: (s) => {
+                state.upAddDetail.value.carRear = s,
+              }),
+          line,
           _inputText('visit_details_landing_gear'.tr, '', inputNumber,
               controller: logic.textLandingGear,
               onChange: (s) => {

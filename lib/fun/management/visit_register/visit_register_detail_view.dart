@@ -345,7 +345,7 @@ class _VisitRegisterDetailPageState extends State<VisitRegisterDetailPage> {
           const SizedBox(height: 10),
           line,
           _subTitle('visit_details_vehicle_information'.tr),
-          const SizedBox(height: 10),
+           const SizedBox(height: 10),
         },
       _text('visit_details_entrance_ate'.tr, data.gate),
       line,
