@@ -26,7 +26,7 @@ class _ModifyLabelWorkerPageState extends State<ModifyLabelWorkerPage> {
 
   _methodChannel() {
     print('注册监听');
-    const MethodChannel(channelScanAndroidToFlutter).setMethodCallHandler((call) {
+    const MethodChannel(channelScanFlutterToAndroid).setMethodCallHandler((call) {
       switch (call.method) {
         case 'PdaScanner':
           {

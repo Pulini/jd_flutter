@@ -14,7 +14,7 @@ const channelBluetoothFlutterToAndroid = 'channel_bluetooth_flutter_to_android';
 const channelBluetoothAndroidToFlutter = 'channel_bluetooth_android_to_flutter';
 const channelUsbFlutterToAndroid = 'channel_usb_flutter_to_android';
 const channelUsbAndroidToFlutter = 'channel_usb_android_to_flutter';
-const channelScanAndroidToFlutter = 'channel_scan_android_to_flutter';
+const channelScanFlutterToAndroid= 'channel_scan_flutter_to_android';
 const channelFaceVerificationAndroidToFlutter = 'channel_face_verification_flutter_to_android';
 
 const channelBluetoothFlutterToIos = 'channel_bluetooth_flutter_to_ios';
