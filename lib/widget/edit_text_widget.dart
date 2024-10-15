@@ -56,14 +56,16 @@ class EditText extends StatelessWidget {
           hintStyle: const TextStyle(color: Colors.grey),
           suffixIcon: IconButton(
             icon: const Icon(Icons.close, color: Colors.grey),
-            onPressed: () => (this.controller ?? controller).clear(),
+            onPressed: () {
+              onChanged?.call('');
+              (this.controller ?? controller).clear();
+            },
           ),
         ),
       ),
     );
   }
 }
-
 
 ///数字小数输入框输入框
 class NumberDecimalEditText extends StatelessWidget {
@@ -160,14 +162,13 @@ class NumberDecimalEditText extends StatelessWidget {
           suffixIcon: IconButton(
             icon: const Icon(Icons.close, color: Colors.grey),
             onPressed: () =>
-            controller == null ? c.clear() : controller?.clear(),
+                controller == null ? c.clear() : controller?.clear(),
           ),
         ),
       ),
     );
   }
 }
-
 
 ///数字小数输入框输入框
 class NumberEditText extends StatelessWidget {

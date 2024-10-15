@@ -12,6 +12,7 @@ import 'fun/dispatching/production_dispatch/production_dispatch_view.dart';
 import 'fun/management/property/property_view.dart';
 import 'fun/management/quality_management/quality_management_view.dart';
 import 'fun/management/visit_register/visit_register_view.dart';
+import 'fun/other/scan/carton_label_scan/carton_label_scan_view.dart';
 import 'fun/other/scan/forming_packing_scan/packing_scan_view.dart';
 import 'fun/other/scan/part_process_scan/part_process_scan_view.dart';
 import 'fun/report/daily_report/daily_report_view.dart';
@@ -202,6 +203,13 @@ class RouteConfig {
     const SmartDeliveryPage(),
   );
 
+  ///智能仓库配送
+  static Routes cartonLabelScanPage = Routes(
+    '/carton_label_scan_page',
+    99,
+    const CartonLabelScanPage(),
+  );
+
   ///本地功能入口列表
   static List<Routes> routeList = [
     dailyReport,
@@ -227,6 +235,7 @@ class RouteConfig {
     qualityRestrictionPage
     processDispatchRegisterPage,
     smartDeliveryPage,
+    cartonLabelScanPage,
   ];
 
   static List<GetPage> appRoutes = [
@@ -334,6 +343,10 @@ class RouteConfig {
     GetPage(
       name: smartDeliveryPage.name,
       page: () => smartDeliveryPage.page,
+    ),
+    GetPage(
+      name: cartonLabelScanPage.name,
+      page: () => cartonLabelScanPage.page,
     ),
   ];
 }

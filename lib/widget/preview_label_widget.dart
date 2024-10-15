@@ -43,41 +43,36 @@ class _PreviewLabelState extends State<PreviewLabel> {
     );
   }
 
-  imageToLabel(Uint8List image) async {
-    var reImage = await compute(labelImageResize, image);
-    label.value = await compute(bitmapLabel, reImage);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Obx(() => pageBody(
-      title: '标签预览',
-      actions: [
-        label.isNotEmpty
-            ? IconButton(
-          onPressed: () => printLabel(),
-          icon: const Icon(Icons.print),
-        )
-            : Container(
-          width: 25,
-          height: 25,
-          margin: const EdgeInsets.only(right: 10),
-          child: const CircularProgressIndicator(),
-        ),
-      ],
-      body: Center(
-        child: SingleChildScrollView(
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: WidgetsToImage(
-              image: (image) {
-                imageToLabel(image);
-              },
-              child: widget.labelWidget,
+          title: '标签预览',
+          actions: [
+            label.isNotEmpty
+                ? IconButton(
+                    onPressed: () => printLabel(),
+                    icon: const Icon(Icons.print),
+                  )
+                : Container(
+                    width: 25,
+                    height: 25,
+                    margin: const EdgeInsets.only(right: 10),
+                    child: const CircularProgressIndicator(),
+                  ),
+          ],
+          body: Center(
+            child: SingleChildScrollView(
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: WidgetsToImage(
+                  image: (image) => imageResizeToLabel(image).then(
+                    (l) => label.value = l,
+                  ),
+                  child: widget.labelWidget,
+                ),
+              ),
             ),
           ),
-        ),
-      ),
-    ));
+        ));
   }
 }

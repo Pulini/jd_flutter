@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:ui' as ui;
 import 'package:collection/collection.dart';
 import 'package:fast_gbk/fast_gbk.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image/image.dart' as img;
@@ -923,7 +924,7 @@ Future<List<Uint8List>> labelMultipurposeDynamic({
 // add(tscPrint())
 // }
 
-Future<List<Uint8List>> bitmapLabel( Uint8List imageUint8List) async {
+Future<List<Uint8List>> bitmapLabel(Uint8List imageUint8List) async {
   var list = <Uint8List>[];
   list.add(_tscClearBuffer());
   list.add(_tscSetup(75, 45, density: _dpi));
@@ -940,4 +941,50 @@ Future<Uint8List> labelImageResize(Uint8List image) async {
     height: 45 * 8,
   );
   return Uint8List.fromList(img.encodePng(reImage));
+}
+
+Future<List<Uint8List>> imageResizeToLabel(Uint8List image) async {
+  return await compute(_imageResizeToLabel, image);
+}
+
+Future<List<Uint8List>> _imageResizeToLabel(Uint8List image) async {
+  var reImage = img.copyResize(
+    img.decodeImage(image)!,
+    width: 75 * 8,
+    height: 45 * 8,
+  );
+  var imageUint8List = Uint8List.fromList(img.encodePng(reImage));
+  return [
+    _tscClearBuffer(),
+    _tscSetup(75, 45, density: _dpi),
+    await _tscBitmap(1, 1, imageUint8List, _dpi * 73, _dpi * 43),
+    _tscPrint(),
+  ];
+}
+
+Future<List<List<Uint8List>>> imageResizeToLabels(
+  List<Uint8List> images,
+) async {
+  return await compute(_imageResizeToLabels, images);
+}
+
+Future<List<List<Uint8List>>> _imageResizeToLabels(
+  List<Uint8List> images,
+) async {
+  List<List<Uint8List>> labelList = [];
+  for (var image in images) {
+    var reImage = img.copyResize(
+      img.decodeImage(image)!,
+      width: 75 * 8,
+      height: 45 * 8,
+    );
+    var imageUint8List = Uint8List.fromList(img.encodePng(reImage));
+    labelList.add([
+      _tscClearBuffer(),
+      _tscSetup(75, 45, density: _dpi),
+      await _tscBitmap(1, 1, imageUint8List, _dpi * 73, _dpi * 43),
+      _tscPrint(),
+    ]);
+  }
+  return labelList;
 }
