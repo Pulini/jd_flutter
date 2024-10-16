@@ -11,6 +11,7 @@ import 'fun/dispatching/production_dispatch/production_dispatch_detail_view.dart
 import 'fun/dispatching/work_order_list/work_order_list_view.dart';
 import 'fun/dispatching/production_dispatch/production_dispatch_view.dart';
 import 'fun/management/property/property_view.dart';
+import 'fun/management/quality_management/quality_management_view.dart';
 import 'fun/management/visit_register/visit_register_view.dart';
 import 'fun/other/forming_packing_scan/packing_scan_view.dart';
 import 'fun/report/daily_report/daily_report_view.dart';
@@ -182,6 +183,13 @@ class RouteConfig {
     const PackingScanPage(),
   );
 
+  ///品质检验
+  static Routes qualityRestrictionPage = Routes(
+    '/quality_restriction',
+    99,
+    const QualityRestrictionPage(),
+  );
+
   ///湿印工序派工
   static Routes processDispatchRegisterPage = Routes(
     '/process_dispatch_register_page',
@@ -232,6 +240,7 @@ class RouteConfig {
     machineDispatchPage,
     machineDispatchReportPage,
     packingScanPage,
+    qualityRestrictionPage,
     processDispatchRegisterPage,
     smartDeliveryPage,
     cartonLabelScanPage,
@@ -331,6 +340,10 @@ class RouteConfig {
     GetPage(
       name: packingScanPage.name,
       page: () => packingScanPage.page,
+    ),
+    GetPage(
+      name: qualityRestrictionPage.name,
+      page: () => qualityRestrictionPage.page,
     ),
     GetPage(
       name: processDispatchRegisterPage.name,

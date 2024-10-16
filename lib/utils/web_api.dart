@@ -646,3 +646,14 @@ const webApiGetCartonLabelScanHistory = 'api/OutBoxScan/GetOrderScan';
 
 ///订单扫码情况明细表
 const webApiGetCartonLabelScanHistoryDetail = 'api/OutBoxScan/GetOrderScanDetail';
+
+///获取品质异常详情
+const webApiGetSCDispatchOrders = 'api/QMProcessFlowEx/GetSCDispatchOrders';
+
+///获取品质异常类型
+const webApiGetProcessFlowEXTypes = 'api/QMProcessFlowEx/GetProcessFlowEXTypes';
+
+///品质异常插入
+const webApiAddAbnormalQuality = 'api/QMProcessFlowEx/QMAbnormityBysuitID';
+
+

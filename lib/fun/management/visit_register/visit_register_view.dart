@@ -180,7 +180,6 @@ class _VisitRegisterPageState extends State<VisitRegisterPage> {
               Row(
                 children: [
                   Expanded(
-                    //来访时间
                       flex: 1,
                       child: Row(
                         children: [

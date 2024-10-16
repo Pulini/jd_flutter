@@ -342,6 +342,12 @@ class _VisitRegisterDetailPageState extends State<VisitRegisterDetailPage> {
           state.facePicture.value.isNotEmpty)
         _peoplePhotos(),
       if (data.carNo!.isNotEmpty)
+        {
+          const SizedBox(height: 10),
+          line,
+          _subTitle('visit_details_vehicle_information'.tr),
+           const SizedBox(height: 10),
+        },
         Padding(
           padding: const EdgeInsets.only(top: 10, bottom: 10),
           child: Column(
