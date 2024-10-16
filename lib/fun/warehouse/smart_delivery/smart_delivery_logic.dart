@@ -1,7 +1,6 @@
 import 'package:get/get.dart';
 
 import '../../../route.dart';
-import '../../../utils/web_api.dart';
 import '../../../widget/dialogs.dart';
 import '../../../widget/picker/picker_controller.dart';
 import 'smart_delivery_state.dart';

@@ -1,7 +1,6 @@
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/carton_label_scan_progress_info.dart';
 
-import '../../../utils/web_api.dart';
 import '../../../widget/dialogs.dart';
 import 'carton_label_scan_progress_state.dart';
 
