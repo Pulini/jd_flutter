@@ -5,15 +5,14 @@ import 'bean/routes.dart';
 import 'fun/dispatching/machine_dispatch/machine_dispatch_report_view.dart';
 import 'fun/dispatching/machine_dispatch/machine_dispatch_view.dart';
 import 'fun/dispatching/material_dispatch/material_dispatch_view.dart';
+import 'fun/dispatching/part_process_scan/part_process_scan_view.dart';
 import 'fun/dispatching/process_dispatch_register/process_dispatch_register_view.dart';
 import 'fun/dispatching/production_dispatch/production_dispatch_detail_view.dart';
 import 'fun/dispatching/work_order_list/work_order_list_view.dart';
 import 'fun/dispatching/production_dispatch/production_dispatch_view.dart';
 import 'fun/management/property/property_view.dart';
 import 'fun/management/visit_register/visit_register_view.dart';
-import 'fun/other/scan/carton_label_scan/carton_label_scan_view.dart';
-import 'fun/other/scan/forming_packing_scan/packing_scan_view.dart';
-import 'fun/other/scan/part_process_scan/part_process_scan_view.dart';
+import 'fun/other/forming_packing_scan/packing_scan_view.dart';
 import 'fun/report/daily_report/daily_report_view.dart';
 import 'fun/report/molding_pack_area_report/molding_pack_area_report_view.dart';
 import 'fun/report/molding_scan_bulletin_report/molding_scan_bulletin_report_maximize_view.dart';
@@ -25,6 +24,8 @@ import 'fun/report/view_instruction_details/view_instruction_details_view.dart';
 import 'fun/report/view_process_specification/view_process_specification_view.dart';
 import 'fun/report/worker_production_detail/worker_production_detail_view.dart';
 import 'fun/report/worker_production_report/worker_production_report_view.dart';
+import 'fun/warehouse/carton_label_scan/carton_label_scan_view.dart';
+import 'fun/warehouse/carton_label_scan_progress/carton_label_scan_progress_view.dart';
 import 'fun/warehouse/smart_delivery/smart_delivery_view.dart';
 import 'home/home_view.dart';
 import 'utils/web_api.dart';
@@ -195,11 +196,18 @@ class RouteConfig {
     const SmartDeliveryPage(),
   );
 
-  ///智能仓库配送
+  ///外箱标扫码
   static Routes cartonLabelScanPage = Routes(
     '/carton_label_scan_page',
     99,
     const CartonLabelScanPage(),
+  );
+
+  ///外箱标扫码进度
+  static Routes cartonLabelScanProgressPage = Routes(
+    '/carton_label_scan_progress_page',
+    99,
+    const CartonLabelScanProgressPage(),
   );
 
   ///本地功能入口列表
@@ -227,6 +235,7 @@ class RouteConfig {
     processDispatchRegisterPage,
     smartDeliveryPage,
     cartonLabelScanPage,
+    cartonLabelScanProgressPage,
   ];
 
   static List<GetPage> appRoutes = [
@@ -334,6 +343,10 @@ class RouteConfig {
     GetPage(
       name: cartonLabelScanPage.name,
       page: () => cartonLabelScanPage.page,
+    ),
+    GetPage(
+      name: cartonLabelScanProgressPage.name,
+      page: () => cartonLabelScanProgressPage.page,
     ),
   ];
 }

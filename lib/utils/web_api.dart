@@ -108,7 +108,7 @@ Future<BaseData> _doHttp({
   Object? body,
 }) async {
   ///用于开发时切换测试库，打包时必须屏蔽
-  baseUrl = baseUrl == baseUrlForSAP ? developUrlForSAP : testUrlForMES;
+  // baseUrl = baseUrl == baseUrlForSAP? developUrlForSAP : baseUrl==baseUrlForMES? testUrlForMES:baseUrl;
   ///--------------------------------------------x----
   try {
     logger.f('SnackbarStatus=$snackbarStatus');
@@ -637,3 +637,12 @@ const webApiSmartDeliveryGetWorkCardList = 'api/Autoworkshopbatch/GetWorkCardLis
 
 ///外箱内盒条码关联数据
 const webApiGetCartonLabelInfo = 'api/OutBoxScan/GetLinkData';
+
+///外箱鞋盒贴标数据提交
+const webApiSubmitScannedCartonLabel = 'api/OutBoxScan/SubOutBoxData';
+
+///订单扫码情况表查询
+const webApiGetCartonLabelScanHistory = 'api/OutBoxScan/GetOrderScan';
+
+///订单扫码情况明细表
+const webApiGetCartonLabelScanHistoryDetail = 'api/OutBoxScan/GetOrderScanDetail';

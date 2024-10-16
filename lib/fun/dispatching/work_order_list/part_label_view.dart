@@ -9,7 +9,7 @@ import '../../../bean/http/response/part_detail_info.dart';
 import '../../../widget/combination_button_widget.dart';
 import '../../../widget/edit_text_widget.dart';
 import '../../../widget/worker_check_widget.dart';
-import '../../other/scan/part_process_scan/part_process_scan_view.dart';
+import '../part_process_scan/part_process_scan_view.dart';
 
 class PartLabelPage extends StatefulWidget {
   const PartLabelPage({super.key});
