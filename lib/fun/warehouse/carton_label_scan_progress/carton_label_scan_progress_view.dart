@@ -32,7 +32,7 @@ class _CartonLabelScanProgressPageState
             children: [
               Expanded(
                 child: EditText(
-                  hint: '请扫描或手动输入外箱贴标',
+                  hint: '请输入销售订单或客户PO查询',
                   controller: controller,
                 ),
               ),
