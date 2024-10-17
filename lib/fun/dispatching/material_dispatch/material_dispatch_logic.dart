@@ -113,7 +113,7 @@ class MaterialDispatchLogic extends GetxController {
       typeBody: typeBody,
       success: (list) {
         if (list.length == 1) {
-          Get.to(WebPage(
+          Get.to(()=>WebPage(
             title: list[0].fileName ?? '',
             url: list[0].fullName ?? '',
           ));

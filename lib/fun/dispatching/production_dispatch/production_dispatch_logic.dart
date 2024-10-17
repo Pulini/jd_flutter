@@ -175,7 +175,7 @@ class ProductionDispatchLogic extends GetxController {
     if (checkUserPermission('1051106')) {
       state.getSelectOne((v) {
         Get.to(
-          const MaintainLabelPage(),
+            ()=> const MaintainLabelPage(),
           arguments: {
             'materialCode': v.materialCode,
             'interID': v.interID,

@@ -69,8 +69,8 @@ dependencies:
   #UUID
   uuid: ^4.1.0
   #webview控件
-  webview_flutter: ^4.4.1
-  webview_flutter_web: ^0.2.2+3
+  webview_flutter: ^4.10.0
+  webview_flutter_web: ^0.2.3+2
   #高精度小数计算
   decimal: ^3.0.2
   #下拉刷新控件

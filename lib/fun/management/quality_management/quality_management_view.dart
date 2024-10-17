@@ -84,8 +84,7 @@ class _QualityRestrictionPageState extends State<QualityRestrictionPage> {
                         expandedTextSpan(
                             hint: '数量：',
                             text: item.abnormalQualityInfo![index].qty
-                                    .toString() ??
-                                ''),
+                                    .toString()),
                         expandedTextSpan(
                             hint: '行号：',
                             text: item.abnormalQualityInfo![index].entryID
@@ -134,8 +133,7 @@ class _QualityRestrictionPageState extends State<QualityRestrictionPage> {
                   expandedTextSpan(
                       hint: '质检人：',
                       text:
-                          "${state.showEntryDataList[index].empName}(${state.showEntryDataList[index].empNumber})" ??
-                              ''),
+                          "${state.showEntryDataList[index].empName}(${state.showEntryDataList[index].empNumber})" ),
                   expandedTextSpan(
                       textColor:
                           state.showEntryDataList[index].reCheck!.contains("合格")
@@ -146,13 +144,11 @@ class _QualityRestrictionPageState extends State<QualityRestrictionPage> {
                   expandedTextSpan(
                       hint: '数量：',
                       text:
-                          "${state.showEntryDataList[index].qty} <${state.showEntryDataList[index].exceptionLevel}>" ??
-                              ''),
+                          "${state.showEntryDataList[index].qty} <${state.showEntryDataList[index].exceptionLevel}>"),
                   expandedTextSpan(
                       hint: '缺陷：',
                       text:
-                          "<${state.showEntryDataList[index].exceptionName}>" ??
-                              ''),
+                          "<${state.showEntryDataList[index].exceptionName}>" ),
                 ],
               )),
         ),

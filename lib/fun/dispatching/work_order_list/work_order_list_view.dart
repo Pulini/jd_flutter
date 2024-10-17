@@ -108,7 +108,7 @@ class _WorkOrderListPageState extends State<WorkOrderListPage> {
                     text: '末道贴标',
                     click: () {
                       if (checkUserPermission('1051105')) {
-                        Get.to(const MaintainLabelPage(),arguments: {
+                        Get.to(()=>const MaintainLabelPage(),arguments: {
                           'materialCode':data.materialCode,
                           'interID':data.interID,
                           'isMaterialLabel':false,

@@ -89,6 +89,10 @@ class WebPage extends StatelessWidget {
               logger.f('onPageStarted------$url');
               loadingDialog('加載中');
             },
+            onHttpError: (HttpResponseError error) {
+              logger.f('${Get.isDialogOpen}  onHttpError------${error.response?.statusCode}');
+              if (Get.isDialogOpen == true) Get.back();
+            },
             onPageFinished: (String url) {
               logger.f('${Get.isDialogOpen}  onPageFinished------$url');
               if (Get.isDialogOpen == true) Get.back();
@@ -101,8 +105,10 @@ class WebPage extends StatelessWidget {
           ),
         );
     }
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      checkAuthorize();
+      webViewController.clearCache();
+      webViewController.loadRequest(Uri.parse(url));
     });
     return Container(
       decoration: backgroundColor,

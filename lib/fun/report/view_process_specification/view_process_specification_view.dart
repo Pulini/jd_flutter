@@ -36,8 +36,8 @@ class _ViewProcessSpecificationPageState
           itemBuilder: (context, index) => Card(
             child: ListTile(
               onTap: () => Get.to(
-                WebPage(
-                  title: '',
+                () => WebPage(
+                  title:  state.pdfList[index].name ?? '',
                   url: state.pdfList[index].fullName ?? '',
                 ),
               ),

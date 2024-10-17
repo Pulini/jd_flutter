@@ -596,7 +596,7 @@ manufactureInstructionsDialog(List<ManufactureInstructionsInfo> files) {
                       showSnackBar(title: '查看工艺指导书', message: '请选择要查看的文件');
                     } else {
                       Get.back();
-                      Get.to(WebPage(
+                      Get.to(()=>WebPage(
                         title: files[selected].name ?? '',
                         url: files[selected].url ?? '',
                       ));
