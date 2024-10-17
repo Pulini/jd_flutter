@@ -94,7 +94,8 @@ class WebPage extends StatelessWidget {
               if (Get.isDialogOpen == true) Get.back();
             },
             onHttpError: (HttpResponseError error) {
-              logger.f('${Get.isDialogOpen}  onHttpError------${error.response?.statusCode}');
+              logger.f(
+                  '${Get.isDialogOpen}  onHttpError------${error.response?.statusCode}');
               if (Get.isDialogOpen == true) Get.back();
             },
             onWebResourceError: (WebResourceError error) {
@@ -105,9 +106,8 @@ class WebPage extends StatelessWidget {
           ),
         );
     }
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
-        checkAuthorize();
+      checkAuthorize();
     });
     return Container(
       decoration: backgroundColor,

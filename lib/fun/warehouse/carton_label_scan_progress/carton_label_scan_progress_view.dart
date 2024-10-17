@@ -25,7 +25,6 @@ class _CartonLabelScanProgressPageState
 
   @override
   Widget build(BuildContext context) {
-    controller.text = '20240129003';
     return pageBody(
       body: Column(
         children: [
