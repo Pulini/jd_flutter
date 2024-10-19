@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:get/get.dart';
 
 import '../../../bean/http/response/carton_label_scan_progress_info.dart';
@@ -33,7 +34,7 @@ class CartonLabelScanProgressState {
 
   getCartonLabelScanHistoryDetail({
     required int id,
-    required Function(List<CartonLabelScanProgressDetailInfo>) success,
+    required Function(List<List<CartonLabelScanProgressDetailInfo>>) success,
     required Function(String) error,
   }) {
     httpGet(
@@ -44,10 +45,15 @@ class CartonLabelScanProgressState {
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        success.call([
+        var list =<CartonLabelScanProgressDetailInfo> [
           for (var json in response.data)
             CartonLabelScanProgressDetailInfo.fromJson(json)
-        ]);
+        ];
+        var group = <List<CartonLabelScanProgressDetailInfo>>[];
+        groupBy(list, (v) => v.size ?? '').forEach((k, v) {
+          group.add(v);
+        });
+        success.call(group);
       } else {
         error.call(response.message ?? 'query_default_error'.tr);
       }

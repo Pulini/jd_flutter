@@ -82,23 +82,73 @@ class _CartonLabelScanProgressPageState
                             padding: const EdgeInsets.all(8),
                             itemCount: detail.length,
                             itemBuilder: (context, index) => Card(
-                              child: Padding(
-                                padding: const EdgeInsets.all(8),
-                                child: Row(
-                                  children: [
-                                    expandedTextSpan(
-                                      hint: '外箱标：',
-                                      text: detail[index].outBoxBarCode ?? '',
-                                      textColor: detail[index].stateColor(),
+                              child: detail[index].length == 1
+                                  ? Padding(
+                                      padding: const EdgeInsets.all(8),
+                                      child: Row(
+                                        children: [
+                                          expandedTextSpan(
+                                            hint: '外箱标：',
+                                            text: detail[index][0]
+                                                    .outBoxBarCode ??
+                                                '',
+                                            textColor:
+                                                detail[index][0].stateColor(),
+                                          ),
+                                          textSpan(
+                                            hint: '尺码：',
+                                            text: detail[index][0].size ?? '',
+                                            textColor:
+                                                detail[index][0].stateColor(),
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  : ExpansionTile(
+                                      backgroundColor: Colors.blue.shade100,
+                                      shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(10)),
+                                      ),
+                                      title: textSpan(
+                                        hint: '尺码：',
+                                        text: detail[index][0].size ?? '',
+                                      ),
+                                      subtitle: progressIndicator(
+                                        max: detail[index].length.toDouble(),
+                                        value: detail[index]
+                                            .where((v) =>
+                                                v.sendCustomSystemState == 1 ||
+                                                v.sendCustomSystemState == 2)
+                                            .length
+                                            .toDouble(),
+                                      ),
+                                      children: [
+                                        for (var item in detail[index])
+                                          Card(
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(8),
+                                              child: Row(
+                                                children: [
+                                                  expandedTextSpan(
+                                                    hint: '外箱标：',
+                                                    text: item.outBoxBarCode ??
+                                                        '',
+                                                    textColor:
+                                                        item.stateColor(),
+                                                  ),
+                                                  textSpan(
+                                                    hint: '尺码：',
+                                                    text: item.size ?? '',
+                                                    textColor:
+                                                        item.stateColor(),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          )
+                                      ],
                                     ),
-                                    textSpan(
-                                      hint: '尺码：',
-                                      text: detail[index].size ?? '',
-                                      textColor: detail[index].stateColor(),
-                                    ),
-                                  ],
-                                ),
-                              ),
                             ),
                           ),
                         ),

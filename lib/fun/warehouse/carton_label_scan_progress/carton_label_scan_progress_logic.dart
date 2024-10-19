@@ -28,7 +28,7 @@ class CartonLabelScanProgressLogic extends GetxController {
 
   getProgressDetail(
     CartonLabelScanProgressInfo data,
-    Function(List<CartonLabelScanProgressDetailInfo>) detail,
+    Function(List<List<CartonLabelScanProgressDetailInfo>>) detail,
   ) {
     state.getCartonLabelScanHistoryDetail(
       id: data.interID ?? 0,
@@ -36,4 +36,8 @@ class CartonLabelScanProgressLogic extends GetxController {
       error: (msg) => errorDialog(content: msg),
     );
   }
+
+
+
+
 }

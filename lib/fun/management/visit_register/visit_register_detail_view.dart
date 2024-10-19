@@ -315,7 +315,7 @@ class _VisitRegisterDetailPageState extends State<VisitRegisterDetailPage> {
 
   _textList(VisitGetDetailInfo data) {
     //是离场
-    return [
+    return <Widget>[
       _text('visit_details_id_card'.tr, data.iDCard),
       line,
       _text('visit_details_name'.tr, data.name),
@@ -341,32 +341,30 @@ class _VisitRegisterDetailPageState extends State<VisitRegisterDetailPage> {
       if (state.cardPicture.value.isNotEmpty ||
           state.facePicture.value.isNotEmpty)
         _peoplePhotos(),
-      if (data.carNo!.isNotEmpty)
-        {
-          const SizedBox(height: 10),
-          line,
-          _subTitle('visit_details_vehicle_information'.tr),
-           const SizedBox(height: 10),
-        },
-        Padding(
-          padding: const EdgeInsets.only(top: 10, bottom: 10),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              line,
-              _subTitle('visit_details_vehicle_information'.tr),
-            ],
-          ),
+      if (data.carNo!.isNotEmpty) ...[
+        const SizedBox(height: 10),
+        line,
+        _subTitle('visit_details_vehicle_information'.tr),
+        const SizedBox(height: 10),
+      ],
+      Padding(
+        padding: const EdgeInsets.only(top: 10, bottom: 10),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            line,
+            _subTitle('visit_details_vehicle_information'.tr),
+          ],
         ),
+      ),
       _text('visit_details_entrance_ate'.tr, data.gate),
       line,
       ..._showCarList(data),
-      if (state.dataDetail.ownGoods!.isNotEmpty)
-        {
-          _text('visit_details_bring_your_own_goods'.tr,
-              state.dataDetail.ownGoods),
-          line
-        },
+      if (state.dataDetail.ownGoods!.isNotEmpty) ...[
+        _text(
+            'visit_details_bring_your_own_goods'.tr, state.dataDetail.ownGoods),
+        line
+      ],
       _text('visit_details_on_duty_security_guard'.tr,
           state.dataDetail.securityStaff),
       line,

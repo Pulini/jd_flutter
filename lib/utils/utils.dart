@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:crypto/crypto.dart';
 import 'package:decimal/decimal.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -330,12 +329,9 @@ getWorkerInfo({
     'DeptmentID': department,
   }).then((worker) {
     if (worker.resultCode == resultSuccess) {
-      workers.call([
-        for (var json in worker.data)
-          WorkerInfo.fromJson(json)
-      ]);
+      workers.call([for (var json in worker.data) WorkerInfo.fromJson(json)]);
     } else {
-      error.call(worker.message??'');
+      error.call(worker.message ?? '');
     }
   });
 }
@@ -388,7 +384,57 @@ Future<Database> openDb() async {
 
 String getCurrentTime() {
   final now = DateTime.now();
-  final formattedTime =  DateFormat('yyyy-MM-dd HH:mm:ss').format(now);
+  final formattedTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(now);
 
   return formattedTime;
+}
+
+checkUrlType({
+  required String url,
+  required Function(String) jdPdf,
+  required Function(String) web,
+}) {
+  if (url.endsWith('pdf') && url.contains('url=')) {
+    jdPdf.call(extractUrl(url));
+  } else {
+    web.call(url);
+  }
+}
+
+String extractUrl(String url) {
+  int startIndex = 0;
+  if (url.contains('url=')) {
+    startIndex = url.indexOf('url=') + 4;
+  }
+  return escapeDecode(url.substring(startIndex));
+}
+
+String escapeDecode(String input) {
+  // 使用正则表达式匹配所有的 \uXXXX 格式的 Unicode 编码
+  final RegExp unicodeRegex = RegExp('%u([0-9a-fA-F]{4})');
+
+  // 替换所有匹配的 Unicode 编码
+  return input.replaceAllMapped(unicodeRegex, (Match match) {
+    String hex = match.group(1)!;
+    int codePoint = int.parse(hex, radix: 16);
+    return String.fromCharCode(codePoint);
+  });
+}
+
+String escapeEncode(String originalString) {
+  return originalString.codeUnits
+      .map((codeUnit) => '%u${codeUnit.toRadixString(16).padLeft(4, '0')}')
+      .join()
+      .replaceAllMapped(
+        RegExp(r'\\u([0-9A-Fa-f]{4})'),
+        (match) => String.fromCharCode(int.parse(match.group(1)!, radix: 16)),
+      );
+}
+
+bool containsChinese(String input) {
+  // 使用正则表达式匹配中文字符
+  final RegExp chineseRegex = RegExp(r'[\u4e00-\u9fff]');
+
+  // 检查字符串中是否存在匹配的中文字符
+  return chineseRegex.hasMatch(input);
 }

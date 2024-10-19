@@ -77,6 +77,8 @@ class WebPage extends StatelessWidget {
     );
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     if (GetPlatform.isAndroid || GetPlatform.isIOS) {
@@ -100,7 +102,7 @@ class WebPage extends StatelessWidget {
             },
             onWebResourceError: (WebResourceError error) {
               logger.f(
-                  '${Get.isDialogOpen}  onWebResourceError------${error.toString()}');
+                  '${Get.isDialogOpen}  onWebResourceError------${error.description}');
               if (Get.isDialogOpen == true) Get.back();
             },
           ),
