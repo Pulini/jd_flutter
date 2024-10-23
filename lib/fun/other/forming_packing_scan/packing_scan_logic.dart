@@ -1,8 +1,7 @@
 import 'dart:convert';
-
 import 'package:get/get.dart';
-import 'package:jd_flutter/fun/other/scan/forming_packing_scan/packing_scan_state.dart';
-import 'package:jd_flutter/fun/other/scan/forming_packing_scan/packing_shipment_scan_view.dart';
+import 'package:jd_flutter/fun/other/forming_packing_scan/packing_scan_state.dart';
+import 'package:jd_flutter/fun/other/forming_packing_scan/packing_shipment_scan_view.dart';
 
 import '../../../../bean/http/response/container_scanner_info.dart';
 import '../../../../bean/http/response/packing_scan_time.dart';

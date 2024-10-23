@@ -34,6 +34,7 @@ class PrintUtil {
       return;
     }
     deviceList.value = await _getScannedDevices();
+    logger.f('deviceList=${deviceList.map((v) => v.toJson()).toList()}');
     if (deviceList.any((v) => v.deviceIsConnected)) {
       _send(
         label: label,

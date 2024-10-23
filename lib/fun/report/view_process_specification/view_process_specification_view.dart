@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../utils/utils.dart';
 import '../../../widget/custom_widget.dart';
 import '../../../widget/edit_text_widget.dart';
+import '../../../widget/pdf_view.dart';
 import '../../../widget/web_page.dart';
 import 'view_process_specification_logic.dart';
 
@@ -35,10 +37,15 @@ class _ViewProcessSpecificationPageState
           itemCount: state.pdfList.length,
           itemBuilder: (context, index) => Card(
             child: ListTile(
-              onTap: () => Get.to(
-                WebPage(
-                  title: '',
-                  url: state.pdfList[index].fullName ?? '',
+              onTap: () => checkUrlType(
+                url: state.pdfList[index].fullName ?? '',
+                jdPdf: (url) => PDFViewerCachedFromUrl(
+                  title: state.pdfList[index].name ?? '',
+                  url: url,
+                ),
+                web: (url) => WebPage(
+                  title: state.pdfList[index].name ?? '',
+                  url: url,
                 ),
               ),
               title: textSpan(

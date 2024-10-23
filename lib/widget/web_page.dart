@@ -77,6 +77,8 @@ class WebPage extends StatelessWidget {
     );
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     if (GetPlatform.isAndroid || GetPlatform.isIOS) {
@@ -93,9 +95,14 @@ class WebPage extends StatelessWidget {
               logger.f('${Get.isDialogOpen}  onPageFinished------$url');
               if (Get.isDialogOpen == true) Get.back();
             },
+            onHttpError: (HttpResponseError error) {
+              logger.f(
+                  '${Get.isDialogOpen}  onHttpError------${error.response?.statusCode}');
+              if (Get.isDialogOpen == true) Get.back();
+            },
             onWebResourceError: (WebResourceError error) {
               logger.f(
-                  '${Get.isDialogOpen}  onWebResourceError------${error.toString()}');
+                  '${Get.isDialogOpen}  onWebResourceError------${error.description}');
               if (Get.isDialogOpen == true) Get.back();
             },
           ),

@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:crypto/crypto.dart';
 import 'package:decimal/decimal.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -21,7 +20,6 @@ import '../bean/http/response/user_info.dart';
 import '../bean/http/response/version_info.dart';
 import '../bean/http/response/worker_info.dart';
 import 'web_api.dart';
-import 'package:intl/intl.dart';
 
 late SharedPreferences sharedPreferences;
 late PackageInfo packageInfo;
@@ -291,7 +289,7 @@ getVersionInfo(
   ).then((versionInfoCallback) {
     if (versionInfoCallback.resultCode == resultSuccess) {
       logger.i(packageInfo);
-      // var versionInfo = VersionInfo.fromJson(versionInfoCallback.data);
+      var versionInfo = VersionInfo.fromJson(versionInfoCallback.data);
       // if (packageInfo.version == versionInfo.versionName) {
       //   noUpdate.call();
       // } else {
@@ -331,12 +329,9 @@ getWorkerInfo({
     'DeptmentID': department,
   }).then((worker) {
     if (worker.resultCode == resultSuccess) {
-      workers.call([
-        for (var json in worker.data)
-          WorkerInfo.fromJson(json)
-      ]);
+      workers.call([for (var json in worker.data) WorkerInfo.fromJson(json)]);
     } else {
-      error.call(worker.message??'');
+      error.call(worker.message ?? '');
     }
   });
 }
@@ -389,7 +384,66 @@ Future<Database> openDb() async {
 
 String getCurrentTime() {
   final now = DateTime.now();
-  final formattedTime =  DateFormat('yyyy-MM-dd HH:mm:ss').format(now);
+  var year = now.year.toString();
+  var month = now.month.toString();
+  if (month.length == 1) month = '0$month';
+  var day = now.day.toString();
+  if (day.length == 1) day = '0$day';
+  var hour = now.hour.toString();
+  if (hour.length == 1) hour = '0$hour';
+  var minute = now.minute.toString();
+  if (minute.length == 1) minute = '0$minute';
+  var second = now.second.toString();
+  if (second.length == 1) second = '0$second';
+  return '$year-$month-$day $hour:$minute:$second';
+}
 
-  return formattedTime;
+checkUrlType({
+  required String url,
+  required Function(String) jdPdf,
+  required Function(String) web,
+}) {
+  if (url.endsWith('pdf') && url.contains('url=')) {
+    jdPdf.call(extractUrl(url));
+  } else {
+    web.call(url);
+  }
+}
+
+String extractUrl(String url) {
+  int startIndex = 0;
+  if (url.contains('url=')) {
+    startIndex = url.indexOf('url=') + 4;
+  }
+  return escapeDecode(url.substring(startIndex));
+}
+
+String escapeDecode(String input) {
+  // 使用正则表达式匹配所有的 \uXXXX 格式的 Unicode 编码
+  final RegExp unicodeRegex = RegExp('%u([0-9a-fA-F]{4})');
+
+  // 替换所有匹配的 Unicode 编码
+  return input.replaceAllMapped(unicodeRegex, (Match match) {
+    String hex = match.group(1)!;
+    int codePoint = int.parse(hex, radix: 16);
+    return String.fromCharCode(codePoint);
+  });
+}
+
+String escapeEncode(String originalString) {
+  return originalString.codeUnits
+      .map((codeUnit) => '%u${codeUnit.toRadixString(16).padLeft(4, '0')}')
+      .join()
+      .replaceAllMapped(
+        RegExp(r'\\u([0-9A-Fa-f]{4})'),
+        (match) => String.fromCharCode(int.parse(match.group(1)!, radix: 16)),
+      );
+}
+
+bool containsChinese(String input) {
+  // 使用正则表达式匹配中文字符
+  final RegExp chineseRegex = RegExp(r'[\u4e00-\u9fff]');
+
+  // 检查字符串中是否存在匹配的中文字符
+  return chineseRegex.hasMatch(input);
 }

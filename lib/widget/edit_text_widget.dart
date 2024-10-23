@@ -170,24 +170,30 @@ class NumberDecimalEditText extends StatelessWidget {
   }
 }
 
-///数字小数输入框输入框
+///数字输入框输入框
 class NumberEditText extends StatelessWidget {
   const NumberEditText({
     super.key,
     this.hint,
     this.hasFocus = false,
+    this.showClean = true,
     required this.onChanged,
+    this.initQty = 0,
     this.controller,
   });
 
   final bool hasFocus;
+  final bool showClean;
   final String? hint;
+  final int? initQty;
   final Function(String) onChanged;
   final TextEditingController? controller;
 
   @override
   Widget build(BuildContext context) {
-    var c = TextEditingController();
+    var c = TextEditingController(
+      text: initQty.toString(),
+    );
     FocusNode? fn;
     if (hasFocus) {
       fn = FocusNode()..requestFocus();
@@ -220,10 +226,10 @@ class NumberEditText extends StatelessWidget {
           ),
           hintText: hint,
           hintStyle: const TextStyle(color: Colors.grey),
-          suffixIcon: IconButton(
+          suffixIcon: showClean?IconButton(
             icon: const Icon(Icons.close, color: Colors.grey),
             onPressed: () => (controller ?? c).clear(),
-          ),
+          ):Container(),
         ),
       ),
     );

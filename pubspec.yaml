@@ -69,8 +69,8 @@ dependencies:
   #UUID
   uuid: ^4.1.0
   #webview控件
-  webview_flutter: ^4.4.1
-  webview_flutter_web: ^0.2.2+3
+  webview_flutter: ^4.10.0
+  webview_flutter_web: ^0.2.3+2
   #高精度小数计算
   decimal: ^3.0.2
   #下拉刷新控件
@@ -101,6 +101,8 @@ dependencies:
 #  widgets_to_image: ^1.0.0
   #二维码生成
   qr_flutter: ^4.1.0
+  #PDF控件
+  flutter_cached_pdfview: ^0.4.2
 
   #item侧滑控件
 #  flutter_slidable: ^3.1.1

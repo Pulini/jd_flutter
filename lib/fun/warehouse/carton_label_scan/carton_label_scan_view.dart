@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
 
@@ -72,8 +73,11 @@ class _CartonLabelScanPageState extends State<CartonLabelScanPage> {
       switch (call.method) {
         case 'PdaScanner':
           {
-            controller.text = call.arguments;
-            logic.queryCartonLabelInfo(controller.text);
+            logic.scan(
+              code: call.arguments,
+              outsideCode: (o) => controller.text = call.arguments,
+              insideCode: (i) {},
+            );
           }
           break;
       }
@@ -134,7 +138,8 @@ class _CartonLabelScanPageState extends State<CartonLabelScanPage> {
                   children: [
                     Row(
                       children: [
-                        expandedTextSpan(hint: '外箱条码：', text: state.cartonLabel.value),
+                        expandedTextSpan(
+                            hint: '外箱条码：', text: state.cartonLabel.value),
                         GestureDetector(
                           onTap: () => logic.cleanScanned(),
                           child: Container(
@@ -169,6 +174,12 @@ class _CartonLabelScanPageState extends State<CartonLabelScanPage> {
                   itemBuilder: (c, i) => _item(state.cartonInsideLabelList[i]),
                 ),
               ),
+              if (logic.labelTotal() != 0 &&
+                  logic.labelTotal() == logic.scannedLabelTotal())
+                CombinationButton(
+                  text: '提交',
+                  click: () => logic.submit(() => controller.text = ''),
+                )
             ],
           )),
     );

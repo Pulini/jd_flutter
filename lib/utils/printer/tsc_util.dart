@@ -377,10 +377,9 @@ List<List<String>> tableFormat(
 ) {
   var list = <List<String>>[];
   if (tableData.isEmpty) return [];
+  //取出所有尺码
   var titleList = <String>[];
   var columnsTitleList = <String>[];
-
-  //取出所有尺码
   tableData.forEach((k, v) {
     for (var v2 in v) {
       if (!titleList.contains(v2[0])) {
@@ -393,8 +392,9 @@ List<List<String>> tableFormat(
   //指令缺的尺码做补位处理
   tableData.forEach((k, v) {
     var text = <List<String>>[];
-    for (var v2 in titleList) {
-      text.add(v.firstWhere((e) => e[0] == v2, orElse: () => [v2, '']));
+    for (var indexText in titleList) {
+      text.add(v.firstWhere((e) => e[0] == indexText,
+          orElse: () => [indexText, '']));
     }
     v.clear();
     v.addAll(text);
@@ -402,32 +402,24 @@ List<List<String>> tableFormat(
 
   //添加表格头行
   var printList = <List<String>>[];
-  var print = <String>[];
 
   //保存表格列第一格
   columnsTitleList.add(title);
   //保存表格第一行
-  for (var v in titleList) {
-    print.add(v);
-  }
-  printList.add(print);
+  printList.add(titleList);
 
   //添加表格体
   tableData.forEach((k, v) {
-    print = <String>[];
     //保存表格列第一格
     columnsTitleList.add(k);
     //保存表格本体所有行
-    for (var v2 in v) {
-      print.add(v2[1]);
-    }
-    printList.add(print);
+    printList.add([for (var v2 in v) v2[1]]);
   });
 
-  //添加表格尾行
-  print = <String>[];
+
   //保存表格列第一格
   columnsTitleList.add(bottom);
+  var print=<String>[];
   //保存表格最后一行
   for (var i = 0; i < titleList.length; ++i) {
     var sum = 0.0;
@@ -466,6 +458,7 @@ List<List<String>> tableFormat(
 
   return list;
 }
+
 
 //------------------------------------以上为tsc指令集--------------------------------------
 
@@ -746,7 +739,6 @@ Future<List<Uint8List>> labelMultipurposeDynamic({
       bottomTextHeight +
       padding +
       margin;
-
   var qrCodeX = (1 + padding) * _dpi;
   var qrCodeY = (margin + padding) * _dpi;
   var qrCodeShowX = (1 + padding + qrCodeWidth) * _dpi;
@@ -856,16 +848,16 @@ Future<List<Uint8List>> labelMultipurposeDynamic({
         boxH += tableLineWrap * _dpi;
       } else {
         int boxW;
-        line.forEachIndexed((columnIndex, s) async {
-          boxW = columnIndex == 0 ? 22 * _dpi : 8 * _dpi;
-          if (s.isNotEmpty) {
-            list.add(await _tscBitmapText(boxX + _dpi, boxY + _dpi, 28, s));
+        for (var i = 0; i < line.length; ++i) {
+          boxW = i == 0 ? 22 * _dpi : 8 * _dpi;
+          if (line[i].isNotEmpty) {
+            list.add(await _tscBitmapText(boxX + _dpi, boxY + _dpi, 28, line[i]));
           }
           list.add(_tscBox(
               boxX, boxY + _halfDpi, boxW + boxX, boxH + boxY + _halfDpi,
               crude: 2));
           boxX += boxW;
-        });
+        }
         boxY += tableLineHeight * _dpi;
         boxH += tableLineHeight * _dpi;
       }

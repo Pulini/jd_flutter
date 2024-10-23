@@ -340,7 +340,7 @@ processSpecificationDialog(List<ProcessSpecificationInfo> files) {
                       showSnackBar(title: '查看工艺指导书', message: '请选择要查看的文件');
                     } else {
                       Get.back();
-                      Get.to(WebPage(
+                      Get.to(()=>WebPage(
                         title: files[selected].fileName ?? '',
                         url: files[selected].fullName ?? '',
                       ));

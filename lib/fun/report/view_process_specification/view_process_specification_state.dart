@@ -12,6 +12,9 @@ class ViewProcessSpecificationState {
     required Function() success,
     required Function(String msg) error,
   }) {
+    if(etTypeBody.isEmpty){
+      return;
+    }
     httpGet(
       loading: 'view_process_specification_querying'.tr,
       method: webApiGetProcessSpecificationList,
@@ -24,6 +27,7 @@ class ViewProcessSpecificationState {
           for (var item in response.data)
             ProcessSpecificationInfo.fromJson(item)
         ];
+        success.call();
       } else {
         error.call(response.message ?? 'query_default_error'.tr);
       }

@@ -457,7 +457,7 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
                       isEnabled: state.cbIsEnabledInstruction.value,
                       text: 'production_dispatch_bt_instruction'.tr,
                       click: () => logic.instructionList(
-                        (url) => Get.to(WebPage(title: '', url: url)),
+                        (url) => Get.to(()=>WebPage(title: '', url: url)),
                       ),
                     ),
                   if (!state.isSelectedMany)
@@ -479,7 +479,7 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
                           (s) => logic.getColorPdf(
                             s,
                             id,
-                            (url) => Get.to(WebPage(title: '', url: url)),
+                            (url) => Get.to(()=>WebPage(title: '', url: url)),
                           ),
                         ),
                       ),

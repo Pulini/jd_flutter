@@ -293,7 +293,10 @@ addWorkerDialog(
 }
 
 modifyDispatchQtyDialog(
-    DispatchInfo di, double surplus, Function(DispatchInfo) callback) {
+  DispatchInfo di,
+  double surplus,
+  Function(DispatchInfo) callback,
+) {
   var qty = 0.0;
   Get.dialog(PopScope(
     canPop: false,
@@ -596,10 +599,10 @@ manufactureInstructionsDialog(List<ManufactureInstructionsInfo> files) {
                       showSnackBar(title: '查看工艺指导书', message: '请选择要查看的文件');
                     } else {
                       Get.back();
-                      Get.to(WebPage(
-                        title: files[selected].name ?? '',
-                        url: files[selected].url ?? '',
-                      ));
+                      Get.to(() => WebPage(
+                            title: files[selected].name ?? '',
+                            url: files[selected].url ?? '',
+                          ));
                     }
                   },
                   child: Text('查看'),
