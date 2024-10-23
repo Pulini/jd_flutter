@@ -20,7 +20,6 @@ import '../bean/http/response/user_info.dart';
 import '../bean/http/response/version_info.dart';
 import '../bean/http/response/worker_info.dart';
 import 'web_api.dart';
-import 'package:intl/intl.dart';
 
 late SharedPreferences sharedPreferences;
 late PackageInfo packageInfo;
@@ -291,11 +290,12 @@ getVersionInfo(
     if (versionInfoCallback.resultCode == resultSuccess) {
       logger.i(packageInfo);
       var versionInfo = VersionInfo.fromJson(versionInfoCallback.data);
-      if (packageInfo.version == versionInfo.versionName) {
-        noUpdate.call();
-      } else {
-        needUpdate.call(versionInfo);
-      }
+      // if (packageInfo.version == versionInfo.versionName) {
+      //   noUpdate.call();
+      // } else {
+      //   needUpdate.call(versionInfo);
+      // }
+      noUpdate.call();
     } else {
       errorDialog(content: versionInfoCallback.message);
     }
@@ -384,9 +384,18 @@ Future<Database> openDb() async {
 
 String getCurrentTime() {
   final now = DateTime.now();
-  final formattedTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(now);
-
-  return formattedTime;
+  var year = now.year.toString();
+  var month = now.month.toString();
+  if (month.length == 1) month = '0$month';
+  var day = now.day.toString();
+  if (day.length == 1) day = '0$day';
+  var hour = now.hour.toString();
+  if (hour.length == 1) hour = '0$hour';
+  var minute = now.minute.toString();
+  if (minute.length == 1) minute = '0$minute';
+  var second = now.second.toString();
+  if (second.length == 1) second = '0$second';
+  return '$year-$month-$day $hour:$minute:$second';
 }
 
 checkUrlType({

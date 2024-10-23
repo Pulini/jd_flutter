@@ -203,7 +203,7 @@ class OptionsPickerController extends PickerController {
           loadingError.value = '';
           pickerData = value;
           pickerItems.value = value;
-          if (value.length > 1) {
+          if (value.isNotEmpty) {
             var save = getSave();
             selectedName.value = pickerItems[save].pickerName();
             selectedId.value = pickerItems[save].pickerId();

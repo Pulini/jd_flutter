@@ -173,7 +173,7 @@ class _UserSettingState extends State<UserSetting> {
               ),
               TextButton(
                 onPressed: () => logic.changeDepartment(
-                  list[controller.initialItem],
+                  list[controller.selectedItem],
                 ),
                 child: Text(
                   'dialog_default_confirm'.tr,
@@ -378,7 +378,6 @@ class _UserSettingState extends State<UserSetting> {
           onPressed: () {
             spSave(spSaveUserInfo, '');
             Get.offAll(() => const LoginPage());
-            // Get.dialog(const BluetoothDialog());
           },
           child: Text('home_user_setting_logout'.tr,
               style: const TextStyle(fontSize: 20))),

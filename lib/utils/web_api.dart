@@ -108,7 +108,7 @@ Future<BaseData> _doHttp({
   Object? body,
 }) async {
   ///用于开发时切换测试库，打包时必须屏蔽
-  // baseUrl = baseUrl == baseUrlForSAP? developUrlForSAP : baseUrl==baseUrlForMES? testUrlForMES:baseUrl;
+  baseUrl = baseUrl == baseUrlForSAP? developUrlForSAP : baseUrl==baseUrlForMES? testUrlForMES:baseUrl;
   ///--------------------------------------------x----
   try {
     logger.f('SnackbarStatus=$snackbarStatus');
@@ -634,6 +634,18 @@ const webApiUnReportAndDelLabelingBarcode = 'api/WetPrinting/UnReportAndDelLabel
 
 ///智能AGV派送获取工单列表
 const webApiSmartDeliveryGetWorkCardList = 'api/Autoworkshopbatch/GetWorkCardList';
+
+///发料明细(材料清单)
+const webApiSmartDeliveryGetWorkCardMaterial = 'api/Autoworkshopbatch/GetWorkCardMaterial';
+
+///获取楦头库存
+const webApiSmartDeliveryGetShorTreeList = 'api/Autoworkshopbatch/GetBalance';
+
+///保存楦头库存
+const webApiSmartDeliverySaveShorTree = 'api/Autoworkshopbatch/BalanceEdit';
+
+///具体部件物料发料详情
+const webApiSmartDeliveryDetail = 'api/Autoworkshopbatch/GetPartsOrder';
 
 ///外箱内盒条码关联数据
 const webApiGetCartonLabelInfo = 'api/OutBoxScan/GetLinkData';

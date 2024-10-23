@@ -76,6 +76,7 @@ class CombinationButton extends StatelessWidget {
       padding: getPadding(),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
+          overlayColor: Colors.white,
           padding: const EdgeInsets.only(left: 8, right: 8),
           backgroundColor: isEnabled == true ? backgroundColor : Colors.grey,
           shape: RoundedRectangleBorder(
