@@ -42,7 +42,10 @@ class _QualityRestrictionPageState extends State<QualityRestrictionPage> {
           //整个面板都可以点击
           headerBuilder: (BuildContext context, bool isExpanded) {
             return ListTile(
-              title: Text('销售订单号：${item.orderNumber}',style: const TextStyle(fontSize: 13),),
+              title: Text(
+                '销售订单号：${item.orderNumber}',
+                style: const TextStyle(fontSize: 13),
+              ),
             );
           },
           body: ListView.builder(
@@ -254,7 +257,7 @@ class _QualityRestrictionPageState extends State<QualityRestrictionPage> {
     required Function(bool) onChanged,
   }) {
     return Container(
-        margin: const EdgeInsets.only(left: 5, top: 5, bottom: 5),
+      margin: const EdgeInsets.only(left: 5, top: 5, bottom: 5),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
@@ -443,7 +446,7 @@ class _QualityRestrictionPageState extends State<QualityRestrictionPage> {
         },
         child: Center(
             child: Container(
-                margin: const EdgeInsets.only(left: 5, top: 5, right: 0, bottom: 5),
+          margin: const EdgeInsets.only(left: 5, top: 5, right: 0, bottom: 5),
           decoration: BoxDecoration(
               color: Colors.red, borderRadius: BorderRadius.circular(10)),
           alignment: Alignment.center,
@@ -501,14 +504,7 @@ class _QualityRestrictionPageState extends State<QualityRestrictionPage> {
           EditText(hint: '输入跟踪号', onChanged: (s) => {state.order = s}),
           DatePicker(pickerController: logic.pcStartDate),
           DatePicker(pickerController: logic.pcEndDate),
-          SwitchButton(
-            onChanged: (isSelect) {
-              setState(() => state.isOutsourcing = isSelect);
-              spSave('${Get.currentRoute}/QualityOutsourcing', isSelect);
-            },
-            name: '是否委外',
-            value: state.isOutsourcing,
-          ),
+          OptionsPicker(pickerController: logic.pickerControllerDepartment),
           SwitchButton(
             onChanged: (isSelect) {
               setState(() => state.isAutomatic = isSelect);
@@ -519,8 +515,10 @@ class _QualityRestrictionPageState extends State<QualityRestrictionPage> {
           )
         ],
         query: () => state.getProductionProcessInfo(
-              mtoNo: 'J2003237',
-              outsourcing: state.isOutsourcing,
+              deptID: logic.pickerControllerDepartment.selectedId.value,
+              mtoNo: state.order,
+              startTime: logic.pcStartDate.getDateFormatYMD(),
+              endTime: logic.pcEndDate.getDateFormatYMD(),
               error: (msg) => {
                 errorDialog(content: msg),
               },

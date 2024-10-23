@@ -291,12 +291,13 @@ getVersionInfo(
   ).then((versionInfoCallback) {
     if (versionInfoCallback.resultCode == resultSuccess) {
       logger.i(packageInfo);
-      var versionInfo = VersionInfo.fromJson(versionInfoCallback.data);
-      if (packageInfo.version == versionInfo.versionName) {
-        noUpdate.call();
-      } else {
-        needUpdate.call(versionInfo);
-      }
+      // var versionInfo = VersionInfo.fromJson(versionInfoCallback.data);
+      // if (packageInfo.version == versionInfo.versionName) {
+      //   noUpdate.call();
+      // } else {
+      //   needUpdate.call(versionInfo);
+      // }
+      noUpdate.call();
     } else {
       errorDialog(content: versionInfoCallback.message);
     }

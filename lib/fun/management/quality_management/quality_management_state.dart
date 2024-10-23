@@ -15,8 +15,6 @@ class QualityManagementState {
   RxList<AbnormalQualityListInfo> orderShowSubDataList =
       <AbnormalQualityListInfo>[].obs;
   RxList<Entry> showEntryDataList = <Entry>[].obs;
-  var isOutsourcing =
-      spGet('${Get.currentRoute}/QualityOutsourcing') ?? false; //是否委外
   var isAutomatic =
       spGet('${Get.currentRoute}/QualityAutomatic') ?? false; //是否自动提交
 
@@ -44,17 +42,17 @@ class QualityManagementState {
   AddEntryDetailInfo? addEntryDetailInfo;
 
   getProductionProcessInfo({
+    required String deptID,
     required String mtoNo,
-    required bool outsourcing,
+    required String startTime,
+    required String endTime,
     required Function(String msg) error,
   }) {
     httpGet(method: webApiGetSCDispatchOrders, loading: '正在获取数据详情...', params: {
-      'MtoNo': mtoNo,
-      // 'dateStart': pcStartDate.getDateFormatYMD(),
-      // 'dateEnd': pcEndDate.getDateFormatYMD(),
-      'dateStart': '',
+      'deptID': deptID,
+      'MtoNo': '',
+      'dateStart':'' ,
       'dateEnd': '',
-      'isOutsourcing': outsourcing,
     }).then((response) {
       if (response.resultCode == resultSuccess) {
         dataList.value = [
