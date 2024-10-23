@@ -5,7 +5,6 @@ import 'package:jd_flutter/fun/warehouse/smart_delivery/smart_delivery_logic.dar
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 
-import '../../../bean/http/response/part_detail_info.dart';
 
 class CreateDeliveryOrderPage extends StatefulWidget {
   const CreateDeliveryOrderPage({super.key});

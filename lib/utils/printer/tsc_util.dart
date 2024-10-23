@@ -381,9 +381,9 @@ List<List<String>> tableFormat(
   var titleList = <String>[];
   var columnsTitleList = <String>[];
   tableData.forEach((k, v) {
-    for (var indexText in v) {
-      if (!titleList.contains(indexText[0])) {
-        titleList.add(indexText[0]);
+    for (var v2 in v) {
+      if (!titleList.contains(v2[0])) {
+        titleList.add(v2[0]);
       }
     }
   });
@@ -402,7 +402,6 @@ List<List<String>> tableFormat(
 
   //添加表格头行
   var printList = <List<String>>[];
-  // var print = <String>[];
 
   //保存表格列第一格
   columnsTitleList.add(title);
@@ -459,6 +458,7 @@ List<List<String>> tableFormat(
 
   return list;
 }
+
 
 //------------------------------------以上为tsc指令集--------------------------------------
 
