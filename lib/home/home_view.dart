@@ -22,6 +22,7 @@ class _HomePageState extends State<HomePage> {
   final logic = Get.put(HomeLogic());
   final state = Get.find<HomeLogic>().state;
   var controller = EasyRefreshController(controlFinishRefresh: true);
+  var logo = 'assets/images/ic_logo.png';
 
   _appBar() {
     return AppBar(
@@ -79,7 +80,7 @@ class _HomePageState extends State<HomePage> {
         height: isGroup ? 30 : 40,
         color: _color(item),
         errorBuilder: (ctx, err, stackTrace) => Image.asset(
-          'lib/res/images/ic_logo.png',
+          logo,
           width: isGroup ? 30 : 40,
           height: isGroup ? 30 : 40,
           color: _color(item),
@@ -122,7 +123,7 @@ class _HomePageState extends State<HomePage> {
                 height: 50,
                 color: Colors.blueAccent,
                 errorBuilder: (ctx, err, stackTrace) => Image.asset(
-                  'lib/res/images/ic_logo.png',
+                  logo,
                   height: 30,
                   width: 30,
                   color: Colors.blueAccent,
@@ -143,7 +144,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-
   _navigationBar(HomeFunctions bar) {
     return BottomNavigationBarItem(
       icon: Image.network(
@@ -152,7 +152,7 @@ class _HomePageState extends State<HomePage> {
         height: 30,
         color: bar.getTextColor(),
         errorBuilder: (bc, o, st) => Image.asset(
-          'lib/res/images/ic_logo.png',
+          logo,
           height: 30,
           width: 30,
           color: bar.getTextColor(),

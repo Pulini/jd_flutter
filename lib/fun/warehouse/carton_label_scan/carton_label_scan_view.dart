@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -21,7 +22,13 @@ class _CartonLabelScanPageState extends State<CartonLabelScanPage> {
   final CartonLabelScanLogic logic = Get.put(CartonLabelScanLogic());
   final CartonLabelScanState state = Get.find<CartonLabelScanLogic>().state;
 
-  TextEditingController controller = TextEditingController();
+  var controller = TextEditingController();
+  late AudioPlayer player;
+  var as1 = 'audios/audio_success1.mp3';
+  var as2 = 'audios/audio_success2.mp3';
+  var as3 = 'audios/audio_success3.mp3';
+  var ae1 = 'audios/audio_error1.mp3';
+  var ae2 = 'audios/audio_error2.mp3';
 
   _item(LinkDataSizeList data) {
     return Container(
@@ -67,7 +74,7 @@ class _CartonLabelScanPageState extends State<CartonLabelScanPage> {
   }
 
   _methodChannel() {
-    print('注册监听');
+    debugPrint('注册监听');
     const MethodChannel(channelScanFlutterToAndroid)
         .setMethodCallHandler((call) {
       switch (call.method) {
@@ -75,8 +82,17 @@ class _CartonLabelScanPageState extends State<CartonLabelScanPage> {
           {
             logic.scan(
               code: call.arguments,
-              outsideCode: (o) => controller.text = call.arguments,
-              insideCode: (i) {},
+              outsideCode: (code) {
+                controller.text = code;
+                playAudio(as3);
+              },
+              insideCode: (i) => playAudio(as1),
+              insideExpired: () => playAudio(ae1),
+              notOutsideCode: () => playAudio(ae2),
+              submitSuccess: () {
+                controller.text = '';
+                playAudio(as2);
+              },
             );
           }
           break;
@@ -85,10 +101,21 @@ class _CartonLabelScanPageState extends State<CartonLabelScanPage> {
     });
   }
 
+  playAudio(String as) {
+    if (player.state != PlayerState.completed) {
+      player.stop();
+      player.setSource(AssetSource(as));
+      player.resume();
+    }else{
+      player.play(AssetSource(as));
+    }
+  }
+
   @override
   void initState() {
-    super.initState();
+    player = AudioPlayer();
     _methodChannel();
+    super.initState();
   }
 
   @override
@@ -161,8 +188,8 @@ class _CartonLabelScanPageState extends State<CartonLabelScanPage> {
                     ),
                     const SizedBox(height: 8),
                     progressIndicator(
-                      max: logic.labelTotal().toDouble(),
-                      value: logic.scannedLabelTotal().toDouble(),
+                      max: state.labelTotal.value.toDouble(),
+                      value: state.scannedLabelTotal.value.toDouble(),
                     ),
                   ],
                 ),
@@ -174,8 +201,8 @@ class _CartonLabelScanPageState extends State<CartonLabelScanPage> {
                   itemBuilder: (c, i) => _item(state.cartonInsideLabelList[i]),
                 ),
               ),
-              if (logic.labelTotal() != 0 &&
-                  logic.labelTotal() == logic.scannedLabelTotal())
+              if (state.labelTotal.value != 0 &&
+                  state.labelTotal.value == state.scannedLabelTotal.value)
                 CombinationButton(
                   text: '提交',
                   click: () => logic.submit(() => controller.text = ''),
@@ -188,6 +215,7 @@ class _CartonLabelScanPageState extends State<CartonLabelScanPage> {
   @override
   void dispose() {
     Get.delete<CartonLabelScanLogic>();
+    player.dispose();
     super.dispose();
   }
 }

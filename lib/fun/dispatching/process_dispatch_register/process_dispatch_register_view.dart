@@ -281,7 +281,7 @@ class _ProcessDispatchRegisterPageState
   }
 
   _methodChannel() {
-    print('注册监听');
+    debugPrint('注册监听');
     const MethodChannel(channelScanFlutterToAndroid)
         .setMethodCallHandler((call) {
       switch (call.method) {

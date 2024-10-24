@@ -103,6 +103,7 @@ dependencies:
   qr_flutter: ^4.1.0
   #PDF控件
   flutter_cached_pdfview: ^0.4.2
+  audioplayers: ^6.1.0
 
   #item侧滑控件
 #  flutter_slidable: ^3.1.1
@@ -139,7 +140,9 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - lib/res/images/
+    - assets/
+    - assets/images/
+    - assets/audios/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

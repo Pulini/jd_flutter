@@ -216,7 +216,7 @@ doUpdate(VersionInfo version) {
           SizedBox(
             width: dialogWidth,
             child: Image.asset(
-              'lib/res/images/bg_update_top.png',
+              'assets/images/bg_update_top.png',
               fit: BoxFit.fill,
             ),
           ),

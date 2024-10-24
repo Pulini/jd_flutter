@@ -5,6 +5,7 @@ import 'carton_label_scan_state.dart';
 
 class CartonLabelScanLogic extends GetxController {
   final CartonLabelScanState state = CartonLabelScanState();
+  var isSubmitting=false;
 
   @override
   void onReady() {
@@ -25,16 +26,6 @@ class CartonLabelScanLogic extends GetxController {
     );
   }
 
-  int labelTotal() {
-    return state.cartonInsideLabelList
-        .fold(0, (total, next) => total + next.labelCount!);
-  }
-
-  int scannedLabelTotal() {
-    return state.cartonInsideLabelList
-        .fold(0, (total, next) => total + next.scanned);
-  }
-
   cleanAll(Function refresh) {
     state.cartonInsideLabelList.value = [];
     state.cartonLabel.value = '';
@@ -53,7 +44,11 @@ class CartonLabelScanLogic extends GetxController {
     required String code,
     required Function(String) outsideCode,
     required Function(String) insideCode,
+    required Function() insideExpired,
+    required Function() notOutsideCode,
+    required Function() submitSuccess,
   }) {
+    if(isSubmitting)return;
     if (state.cartonLabel.value.isEmpty) {
       outsideCode.call(code);
       queryCartonLabelInfo(code);
@@ -65,24 +60,44 @@ class CartonLabelScanLogic extends GetxController {
         if (exist.scanned < exist.labelCount!) {
           insideCode.call(code);
           exist.scanned++;
-          state.cartonInsideLabelList.refresh();
+          state.scannedLabelTotal.value+=1;
+          // state.cartonInsideLabelList.refresh();
         } else {
+          insideExpired.call();
+          if (Get.isDialogOpen == true) Get.back();
           errorDialog(content: '条码[$code]已扫满，请确认是否放错或重复扫码。');
         }
       } catch (e) {
+        notOutsideCode.call();
+        if (Get.isDialogOpen == true) Get.back();
         errorDialog(content: '条码[$code]不是外箱对应数据，请检查是否放错。');
       }
+    }
+    if (state.labelTotal.value > 0 &&
+        state.labelTotal.value == state.scannedLabelTotal.value) {
+      state.submitScannedCartonLabel(
+        success: (msg) {
+          cleanAll(submitSuccess);
+          successDialog(content: msg);
+        },
+        error: (msg) => errorDialog(content: msg),
+      );
     }
   }
 
   submit(Function refresh) {
+    if(isSubmitting)return;
+    isSubmitting=true;
     state.submitScannedCartonLabel(
       success: (msg) {
-        successDialog(content: msg,back: (){
-          cleanAll(refresh);
-        });
+        cleanAll(refresh);
+        successDialog(content: msg);
+        isSubmitting=false;
       },
-      error: (msg) => errorDialog(content: msg),
+      error: (msg) {
+        errorDialog(content: msg);
+        isSubmitting=false;
+      },
     );
   }
 }
