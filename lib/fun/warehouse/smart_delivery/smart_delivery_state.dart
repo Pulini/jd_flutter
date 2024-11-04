@@ -165,6 +165,9 @@ class SmartDeliveryState {
     ).then((response) {
       if (response.resultCode == resultSuccess) {
         deliveryDetail!.workData = [];
+        for (var v in deliveryList) {
+          v.isSelected=false;
+        }
         success.call(response.message ?? '');
       } else {
         error.call(response.message ?? 'query_default_error'.tr);

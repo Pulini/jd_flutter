@@ -225,16 +225,18 @@ class SmartDeliveryLogic extends GetxController {
 
   cancelMergeDelivery() {
     spSave('MergeDelivery', '');
-    if (state.saveDeliveryDetail!.newWorkCardInterID ==
-            state.deliveryDetail!.newWorkCardInterID &&
-        state.saveDeliveryDetail!.partsID == state.deliveryDetail!.partsID) {
-      for (var v1 in state.saveDeliveryDetail!.workData!) {
-        state.deliveryList.add(v1);
+    if (state.saveDeliveryDetail != null) {
+      if (state.saveDeliveryDetail!.newWorkCardInterID ==
+              state.deliveryDetail!.newWorkCardInterID &&
+          state.saveDeliveryDetail!.partsID == state.deliveryDetail!.partsID) {
+        for (var v1 in state.saveDeliveryDetail!.workData!) {
+          state.deliveryList.add(v1);
+        }
+        state.deliveryList
+            .sort((a, b) => a.round.toIntTry().compareTo(b.round.toIntTry()));
       }
-      state.deliveryList
-          .sort((a, b) => a.round.toIntTry().compareTo(b.round.toIntTry()));
+      state.saveDeliveryDetail = null;
     }
-    state.saveDeliveryDetail = null;
   }
 
   refreshCreated(String taskId) {
