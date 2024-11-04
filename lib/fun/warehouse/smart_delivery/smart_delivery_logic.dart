@@ -4,11 +4,9 @@ import 'package:collection/collection.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/warehouse/smart_delivery/smart_delivery_material_view.dart';
 import 'package:jd_flutter/utils/utils.dart';
-import 'package:jd_flutter/widget/custom_widget.dart';
 
 import '../../../bean/http/response/smart_delivery_info.dart';
 import '../../../route.dart';
-import '../../../utils/web_api.dart';
 import '../../../widget/dialogs.dart';
 import '../../../widget/picker/picker_controller.dart';
 import 'smart_delivery_state.dart';
