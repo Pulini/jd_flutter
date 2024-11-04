@@ -219,6 +219,7 @@ Future<BaseData> _doHttp({
     base.message = '发生异常：${e.toString()}';
   }
   if (loading != null && loading.isNotEmpty) Get.back();
+  base.baseUrl=baseUrl;
   return base;
 }
 
@@ -244,7 +245,7 @@ const webApiChangePassword = 'api/User/ChangePassWord';
 const webApiChangeDepartment = 'api/User/GetLoginInfo';
 
 ///检查版本更新接口
-const webApiCheckVersion = 'api/Public/VersionUpgrade';
+const webApiCheckVersion = 'api/Public/FlutterVersionUpgrade';
 
 ///获取sap供应商列表接口
 const webApiPickerSapSupplier = 'api/Supplier/GetSAPSupplierMessageNew';
@@ -646,6 +647,24 @@ const webApiSmartDeliverySaveShorTree = 'api/Autoworkshopbatch/BalanceEdit';
 
 ///具体部件物料发料详情
 const webApiSmartDeliveryDetail = 'api/Autoworkshopbatch/GetPartsOrder';
+
+///新增发料数据
+const webApiSmartDeliveryAddPartsStock = 'api/Autoworkshopbatch/AddPartsStock';
+
+///删除发料数据
+const webApiSmartDeliveryDeletePartsStock = 'api/Autoworkshopbatch/DeletePartsStock';
+
+///获取模板类
+const webApiSmartDeliveryGetTaskType= 'api/Autoworkshopbatch/GetTaskType';
+
+///发料数据创建机器人任务
+const webApiSmartDeliveryCreatRobTask= 'api/Autoworkshopbatch/CreatRobTask';
+
+///机器人任务记录
+const webApiSmartDeliveryGetRobTask= 'api/Autoworkshopbatch/GetRobTask';
+
+///获取机器人站点信息
+const webApiSmartDeliveryGetRobotPosition = 'api/Autoworkshopbatch/GetRobotPosition';
 
 ///外箱内盒条码关联数据
 const webApiGetCartonLabelInfo = 'api/OutBoxScan/GetLinkData';

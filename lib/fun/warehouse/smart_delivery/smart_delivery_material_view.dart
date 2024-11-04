@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/warehouse/smart_delivery/smart_delivery_create_order_view.dart';
+import 'package:jd_flutter/fun/warehouse/smart_delivery/smart_delivery_dialog.dart';
 import 'package:jd_flutter/fun/warehouse/smart_delivery/smart_delivery_logic.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
@@ -23,114 +23,19 @@ class _SmartDeliveryMaterialListPageState
   final logic = Get.find<SmartDeliveryLogic>();
   final state = Get.find<SmartDeliveryLogic>().state;
   final typeBody = Get.arguments['typeBody'];
-
-  modifyShoeTreeDialog(SmartDeliveryShorTreeInfo sti) {
-    Get.dialog(PopScope(
-      canPop: false,
-      child: AlertDialog(
-        title: Text('楦头库存维护'),
-        content: SizedBox(
-            width: 460,
-            height: 600,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                textSpan(hint: '型体：', text: typeBody),
-                textSpan(hint: '楦头号：', text: sti.shoeTreeNo ?? ''),
-                Expanded(
-                  child: GridView.builder(
-                    itemCount: sti.sizeList?.length,
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      childAspectRatio: 3 / 1,
-                    ),
-                    itemBuilder: (context, index) {
-                      var controller = TextEditingController(
-                        text: sti.sizeList?[index].qty.toString(),
-                      );
-                      return Card(
-                        child: Padding(
-                          padding: const EdgeInsets.all(5),
-                          child: Row(
-                            children: [
-                              textSpan(
-                                hint: '尺码：',
-                                text: sti.sizeList?[index].size ?? '',
-                              ),
-                              const SizedBox(width: 30),
-                              Text(
-                                '库存：',
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              Expanded(
-                                child: TextField(
-                                  textAlign: TextAlign.center,
-                                  keyboardType: TextInputType.number,
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.digitsOnly
-                                  ],
-                                  onChanged: (c) {
-                                    sti.sizeList?[index].qty = c.toIntTry();
-                                    controller.text = c.toIntTry().toString();
-                                    controller.selection =
-                                        TextSelection.fromPosition(
-                                      TextPosition(
-                                        offset: controller.text.length,
-                                      ),
-                                    );
-                                  },
-                                  controller: controller,
-                                  decoration: InputDecoration(
-                                    filled: true,
-                                    fillColor: Colors.grey[300],
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(30),
-                                      borderSide: const BorderSide(
-                                        color: Colors.transparent,
-                                      ),
-                                    ),
-                                    border: const OutlineInputBorder(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(30)),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ],
-            )),
-        actions: [
-          TextButton(
-            onPressed: () => logic.saveShoeTree(
-              sti,
-              typeBody,
-              () => Get.back(),
-            ),
-            child: Text('保存'),
-          ),
-          TextButton(
-            onPressed: () => Get.back(),
-            child: Text(
-              'dialog_default_cancel'.tr,
-              style: const TextStyle(color: Colors.grey),
-            ),
-          ),
-        ],
-      ),
-    ));
-  }
+  final departmentID = Get.arguments['departmentID'];
 
   _item(SmartDeliveryMaterialInfo data) {
     return GestureDetector(
-      onTap: () =>logic.getDeliveryDetail(data,()=> Get.to(() => const CreateDeliveryOrderPage())),
+      onTap: () {
+        logic.getDeliveryDetail(
+          data,
+          departmentID,
+          () => Get.to(() => const CreateDeliveryOrderPage())?.then((v) {
+            logic.callbackRefresh(data);
+          }),
+        );
+      },
       child: Container(
         margin: const EdgeInsets.only(bottom: 10),
         padding: const EdgeInsets.all(8),
@@ -186,23 +91,38 @@ class _SmartDeliveryMaterialListPageState
   }
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      var save = spGet('SmartDeliveryMaterialListSearch').toString();
+      setState(() {
+        if (save != 'null') {
+          state.searchText = save;
+          state.searchMaterial(state.searchText);
+        }
+      });
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return pageBody(
       title: '材料清单',
       actions: [
         CombinationButton(
           text: '楦头库存维护',
-          click: () => logic.getShoeTreeList(
-            typeBody,
-            (sti) => modifyShoeTreeDialog(sti),
-          ),
+          click: () => modifyShoeTreeDialog(typeBody,departmentID),
         )
       ],
       body: Column(
         children: [
           EditText(
             hint: '输入物料代码查询',
-            onChanged: (v) => state.searchMaterial(v),
+            controller: TextEditingController(text: state.searchText),
+            onChanged: (v) {
+              state.searchMaterial(v);
+              spSave('SmartDeliveryMaterialListSearch', v);
+            },
           ),
           Expanded(
             child: Obx(() => ListView.builder(

@@ -1,11 +1,12 @@
 import 'package:get/get.dart';
+import 'package:jd_flutter/widget/custom_widget.dart';
 
 import '../../../../widget/dialogs.dart';
 import 'carton_label_scan_state.dart';
 
 class CartonLabelScanLogic extends GetxController {
   final CartonLabelScanState state = CartonLabelScanState();
-  var isSubmitting=false;
+  var isSubmitting = false;
 
   @override
   void onReady() {
@@ -47,8 +48,9 @@ class CartonLabelScanLogic extends GetxController {
     required Function() insideExpired,
     required Function() notOutsideCode,
     required Function() submitSuccess,
+    required Function() submitError,
   }) {
-    if(isSubmitting)return;
+    if (isSubmitting) return;
     if (state.cartonLabel.value.isEmpty) {
       outsideCode.call(code);
       queryCartonLabelInfo(code);
@@ -60,7 +62,7 @@ class CartonLabelScanLogic extends GetxController {
         if (exist.scanned < exist.labelCount!) {
           insideCode.call(code);
           exist.scanned++;
-          state.scannedLabelTotal.value+=1;
+          state.scannedLabelTotal.value += 1;
           // state.cartonInsideLabelList.refresh();
         } else {
           insideExpired.call();
@@ -78,25 +80,28 @@ class CartonLabelScanLogic extends GetxController {
       state.submitScannedCartonLabel(
         success: (msg) {
           cleanAll(submitSuccess);
-          successDialog(content: msg);
+          showSnackBar(title: '操作成功', message: msg);
         },
-        error: (msg) => errorDialog(content: msg),
+        error: (msg) {
+          submitError.call();
+          errorDialog(content: msg);
+        } ,
       );
     }
   }
 
   submit(Function refresh) {
-    if(isSubmitting)return;
-    isSubmitting=true;
+    if (isSubmitting) return;
+    isSubmitting = true;
     state.submitScannedCartonLabel(
       success: (msg) {
         cleanAll(refresh);
         successDialog(content: msg);
-        isSubmitting=false;
+        isSubmitting = false;
       },
       error: (msg) {
         errorDialog(content: msg);
-        isSubmitting=false;
+        isSubmitting = false;
       },
     );
   }

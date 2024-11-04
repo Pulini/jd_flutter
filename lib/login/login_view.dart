@@ -82,17 +82,17 @@ class _LoginPickState extends State<LoginPick>
 
   ///手机登录手机号输入框控制器
   var phoneLoginPhoneController = TextEditingController()
-    // ..text = spGet(spSaveLoginPhone) ?? '15868587600';
-  ..text = spGet(spSaveLoginPhone) ?? '';
+    ..text = spGet(spSaveLoginPhone) ?? '15868587600';
+  // ..text = spGet(spSaveLoginPhone) ?? '';
 
   ///手机登录密码输入框控制器
-  var phoneLoginPasswordController = TextEditingController();
-    // ..text ='123456';
+  var phoneLoginPasswordController = TextEditingController()
+    ..text ='123456';
 
 
   ///手机登录验证码输入框控制器
-  late var phoneLoginVCodeController = TextEditingController();
-    // ..text = state.getDebugVCode();
+  late var phoneLoginVCodeController = TextEditingController()
+    ..text = state.getDebugVCode();
 
   ///工号登录工号输入框控制器
   var workLoginWorkNumberController = TextEditingController()

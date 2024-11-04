@@ -508,6 +508,10 @@ expandedFrameText({
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           text,
+          strutStyle: const StrutStyle(
+            forceStrutHeight: true,
+            leading: 0.5,
+          ),
           style: TextStyle(
             color: textColor ?? Colors.black87,
             fontWeight: isBold ? FontWeight.bold : FontWeight.normal,

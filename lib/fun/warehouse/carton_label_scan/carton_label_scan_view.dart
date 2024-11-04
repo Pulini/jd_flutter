@@ -93,6 +93,7 @@ class _CartonLabelScanPageState extends State<CartonLabelScanPage> {
                 controller.text = '';
                 playAudio(as2);
               },
+              submitError: () => playAudio(ae2),
             );
           }
           break;
@@ -106,7 +107,7 @@ class _CartonLabelScanPageState extends State<CartonLabelScanPage> {
       player.stop();
       player.setSource(AssetSource(as));
       player.resume();
-    }else{
+    } else {
       player.play(AssetSource(as));
     }
   }

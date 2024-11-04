@@ -5,6 +5,7 @@ import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 
 import '../../../bean/http/response/smart_delivery_info.dart';
+import '../../../widget/edit_text_widget.dart';
 import '../../../widget/picker/picker_view.dart';
 import 'smart_delivery_logic.dart';
 
@@ -25,7 +26,11 @@ class _SmartDeliveryPageState extends State<SmartDeliveryPage> {
 
   _item(SmartDeliveryOrderInfo data) {
     return GestureDetector(
-      onTap: () => logic.getOrderMaterialList(data.workCardInterID ?? 0,data.typeBody??''),
+      onTap: () => logic.getOrderMaterialList(
+        data.workCardInterID ?? 0,
+        data.typeBody ?? '',
+        data.departmentId ?? 0,
+      ),
       child: Container(
         margin: const EdgeInsets.only(bottom: 10),
         padding: const EdgeInsets.all(8),
@@ -90,6 +95,7 @@ class _SmartDeliveryPageState extends State<SmartDeliveryPage> {
   Widget build(BuildContext context) {
     return pageBodyWithBottomSheet(
       bottomSheet: [
+        EditText(hint:'请输入指令查询',onChanged: (v)=>state.instructions=v),
         DatePicker(pickerController: logic.pcStartDate),
         DatePicker(pickerController: logic.pcEndDate),
         OptionsPicker(pickerController: logic.pcGroup),
@@ -111,8 +117,9 @@ class _SmartDeliveryPageState extends State<SmartDeliveryPage> {
         ),
         child: Obx(() => ListView.builder(
               padding: const EdgeInsets.all(8),
-              itemCount: state.orderList.length,
-              itemBuilder: (context, index) => _item(state.orderList[index]),
+              itemCount: state.orderShowList.length,
+              itemBuilder: (context, index) =>
+                  _item(state.orderShowList[index]),
             )),
       ),
     );

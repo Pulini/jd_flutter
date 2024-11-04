@@ -16,6 +16,7 @@ class BaseData {
   int? resultCode;
   dynamic data;
   String? message;
+  String baseUrl='';
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
