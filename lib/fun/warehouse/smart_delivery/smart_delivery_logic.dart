@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:collection/collection.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/warehouse/smart_delivery/smart_delivery_material_view.dart';
 import 'package:jd_flutter/utils/utils.dart';
@@ -115,17 +116,6 @@ class SmartDeliveryLogic extends GetxController {
     if (state.deliveryDetail!.workData.isNullOrEmpty()) {
       //轮数 小数位退位取整，15.1和15.9都等于15
       int round = state.deliveryDetail!.getMaxRound().truncate();
-
-      //检查每一个尺码的轮数是否合理
-      for (PartsSizeList o in state.deliveryDetail?.partsSizeList ?? []) {
-        var roundSurplus = (o.qty ?? 0) % round;
-        if (roundSurplus > o.reserveShoeTreeQty * round) {
-          //如果预留楦头数量不够够余数分配，则轮数+1
-          round += 1;
-          break;
-        }
-      }
-
       //每轮尺码列表预排
       for (int i = 0; i < round; i++) {
         var roundList = <SizeInfo>[];
@@ -141,6 +131,7 @@ class SmartDeliveryLogic extends GetxController {
             taskID: '',
             sendSizeList: roundList));
       }
+
       state.deliveryDetail!.partsSizeList?.forEachIndexed((index, ps) {
         var pageQty = 0;
         for (var i = 0; i < (ps.qty ?? 0) % round; ++i) {

@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:jd_flutter/utils/utils.dart';
 
 /// rowNo : 10
@@ -49,7 +50,6 @@ class SmartDeliveryOrderInfo {
   String? depName; //课组名称
   int? departmentId; //课组ID
   String? instructions; //指令号
-
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -389,42 +389,113 @@ class PartsSizeList {
     }
   }
 
-  double getRound() => shoeTreeQty == 0
-      ? 0
-      : ((qty ?? 0) / ((shoeTreeQty ?? 0) - reserveShoeTreeQty));
+  double getRound() {
+    double round = shoeTreeQty == 0
+        ? 0
+        : ((qty ?? 0) / ((shoeTreeQty ?? 0) - reserveShoeTreeQty));
+    //检查退位后每轮数是否会超出预排楦头数，超出的话轮数进位
+    if ((qty ?? 0) / round.truncate() >
+        (shoeTreeQty ?? 0) - reserveShoeTreeQty) {
+      round = round.ceil().toDouble();
+    }
+    return round;
+  }
 
   int roundDelivery() => (shoeTreeQty ?? 0) - reserveShoeTreeQty;
 }
 
-/// StartPoint : [{"PositionCode":"F1","PositionName":"工作区"},{"PositionCode":"F2","PositionName":"工作区"}]
-/// EndPoint : [{"PositionCode":"F3","PositionName":"工作区"},{"PositionCode":"F4","PositionName":"工作区"},{"PositionCode":"F5","PositionName":"工作区"},{"PositionCode":"F6","PositionName":"工作区"},{"PositionCode":"F7","PositionName":"工作区"},{"PositionCode":"F8","PositionName":"工作区"},{"PositionCode":"F9","PositionName":"工作区"},{"PositionCode":"F10","PositionName":"工作区"},{"PositionCode":"F11","PositionName":"工作区"},{"PositionCode":"F12","PositionName":"工作区"},{"PositionCode":"F13","PositionName":"工作区"},{"PositionCode":"F14","PositionName":"工作区"}]
+class AgvInfo {
+  AgvInfo({
+    this.robInfo,
+    this.robotPosition,
+  });
 
-class PatchRouteInfo {
-  PatchRouteInfo({
+  AgvInfo.fromJson(dynamic json) {
+    if (json['RobInfo'] != null) {
+      robInfo = [];
+      json['RobInfo'].forEach((v) {
+        robInfo?.add(RobotDeviceInfo.fromJson(v));
+      });
+    }
+    if (json['RobotPosition'] != null) {
+      robotPosition = [];
+      json['RobotPosition'].forEach((v) {
+        robotPosition?.add(RobotPositionInfo.fromJson(v));
+      });
+    }
+  }
+
+  List<RobotDeviceInfo>? robInfo;
+  List<RobotPositionInfo>? robotPosition;
+}
+
+/// RobNumber : "123"
+/// RobName : "agv"
+
+class RobotDeviceInfo {
+  RobotDeviceInfo({
+    this.agvNumber,
+    this.agvName,
+  });
+
+  RobotDeviceInfo.fromJson(dynamic json) {
+    agvNumber = json['RobNumber'];
+    agvName = json['RobName'];
+  }
+
+  String? agvNumber;
+  String? agvName;
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['RobNumber'] = agvNumber;
+    map['RobName'] = agvName;
+    return map;
+  }
+
+  @override
+  String toString() {
+    return agvName ?? '';
+  }
+}
+
+/// TaskType : "F01"
+/// TaskTypName : "成型自动化5楼"
+
+class RobotPositionInfo {
+  RobotPositionInfo({
+    this.taskType,
+    this.taskTypeName,
     this.startPoint,
     this.endPoint,
   });
 
-  PatchRouteInfo.fromJson(dynamic json) {
+  RobotPositionInfo.fromJson(dynamic json) {
+    taskType = json['TaskType'];
+    taskTypeName = json['TaskTypeName'];
     if (json['StartPoint'] != null) {
       startPoint = [];
       json['StartPoint'].forEach((v) {
-        startPoint?.add(StartPoint.fromJson(v));
+        startPoint?.add(TaskPoint.fromJson(v));
       });
     }
     if (json['EndPoint'] != null) {
       endPoint = [];
       json['EndPoint'].forEach((v) {
-        endPoint?.add(EndPoint.fromJson(v));
+        endPoint?.add(TaskPoint.fromJson(v));
       });
     }
   }
 
-  List<StartPoint>? startPoint;
-  List<EndPoint>? endPoint;
+  String? taskType;
+  String? taskTypeName;
+  List<TaskPoint>? startPoint;
+  List<TaskPoint>? endPoint;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
+    map['TaskType'] = taskType;
+    map['TaskTypeName'] = taskTypeName;
     if (startPoint != null) {
       map['StartPoint'] = startPoint?.map((v) => v.toJson()).toList();
     }
@@ -433,18 +504,22 @@ class PatchRouteInfo {
     }
     return map;
   }
+
+  @override
+  String toString() {
+    return taskTypeName ?? '';
+  }
 }
 
 /// PositionCode : "F3"
 /// PositionName : "工作区"
-
-class EndPoint {
-  EndPoint({
+class TaskPoint {
+  TaskPoint({
     this.positionCode,
     this.positionName,
   });
 
-  EndPoint.fromJson(dynamic json) {
+  TaskPoint.fromJson(dynamic json) {
     positionCode = json['PositionCode'];
     positionName = json['PositionName'];
   }
@@ -458,54 +533,44 @@ class EndPoint {
     map['PositionName'] = positionName;
     return map;
   }
-}
 
-/// PositionCode : "F1"
-/// PositionName : "工作区"
-
-class StartPoint {
-  StartPoint({
-    this.positionCode,
-    this.positionName,
-  });
-
-  StartPoint.fromJson(dynamic json) {
-    positionCode = json['PositionCode'];
-    positionName = json['PositionName'];
-  }
-
-  String? positionCode;
-  String? positionName;
-
-  Map<String, dynamic> toJson() {
-    final map = <String, dynamic>{};
-    map['PositionCode'] = positionCode;
-    map['PositionName'] = positionName;
-    return map;
+  @override
+  String toString() {
+    return positionName ?? '';
   }
 }
 
-/// TaskType : "F01"
-/// TaskTypName : "成型自动化5楼"
+/// TaskID : "84affcad5c7b44748f40e6c6afc634c9"
+/// TaskType : "执行中"
+/// StartingPoint : "F1"
+/// EndPoint : "F6"
 
 class AgvTaskInfo {
   AgvTaskInfo({
+    this.taskID,
     this.taskType,
-    this.taskTypeName,
+    this.startingPoint,
+    this.endPoint,
   });
 
   AgvTaskInfo.fromJson(dynamic json) {
+    taskID = json['TaskID'];
     taskType = json['TaskType'];
-    taskTypeName = json['TaskTypeName'];
+    startingPoint = json['StartingPoint'];
+    endPoint = json['EndPoint'];
   }
 
-  String? taskType;
-  String? taskTypeName;
+  String? taskID;
+  int? taskType;
+  String? startingPoint;
+  String? endPoint;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
+    map['TaskID'] = taskID;
     map['TaskType'] = taskType;
-    map['TaskTypeName'] = taskTypeName;
+    map['StartingPoint'] = startingPoint;
+    map['EndPoint'] = endPoint;
     return map;
   }
 }

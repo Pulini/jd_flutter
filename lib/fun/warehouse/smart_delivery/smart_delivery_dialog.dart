@@ -306,6 +306,11 @@ _item(PartsSizeList data, StateSetter dialogSetState) {
   );
 }
 
+const agvDeviceSelect = 'AGV_DEVICE_SELECT';
+const agvTaskTypeSelect = 'AGV_TASK_TYPE_SELECT';
+const agvTaskStartSelect = 'AGV_TASK_START_SELECT';
+const agvTaskEndSelect = 'AGV_TASK_END_SELECT';
+
 createDeliveryTaskDialog({
   required String nowOrderId,
   required String nowOrderPartsId,
@@ -319,185 +324,147 @@ createDeliveryTaskDialog({
     errorDialog(content: '请选择需要配送的轮次');
     return;
   }
-  var typeList = <AgvTaskInfo>[].obs;
-  var getTaskTypeFail = ''.obs;
-  var typeSelected = 0.obs;
-  var startList = <StartPoint>[].obs;
-  var endList = <EndPoint>[].obs;
-  var getPathRouteFail = ''.obs;
-  var startSelected = 0.obs;
-  var endSelected = 0.obs;
 
-  arlSuccessCallback(start, end) {
-    startList.value = start;
-    endList.value = end;
-    getPathRouteFail.value = '';
-    var startSave = spGet('AGV_PathRouteStart').toString();
-    var endSave = spGet('AGV_PathRouteEnd').toString();
+  _getAgvInfo(
+    success: (agvInfo) {
+      var agvSelect = spGet(agvDeviceSelect).toString().toIntTry();
+      var typeSelect = spGet(agvTaskTypeSelect).toString().toIntTry();
+      var startSelect = spGet(agvTaskStartSelect).toString().toIntTry();
+      var endSelect = spGet(agvTaskEndSelect).toString().toIntTry();
 
-    var saveStart = startList.indexWhere((v) => v.positionCode == startSave);
-    if (saveStart != -1) {
-      startSelected.value = saveStart;
-    }
-    var saveEnd = endList.indexWhere((v) => v.positionCode == endSave);
-    if (saveEnd != -1) {
-      endSelected.value = saveEnd;
-    }
-  }
+      var agvList = <RobotDeviceInfo>[...agvInfo.robInfo ?? []];
+      var taskTypeList = <RobotPositionInfo>[...agvInfo.robotPosition ?? []];
+      var startList = <TaskPoint>[];
+      var endList = <TaskPoint>[];
 
-  arlFailCallback(msg) {
-    startList.value = [];
-    endList.value = [];
-    getPathRouteFail.value = msg;
-    startSelected.value = -1;
-    endSelected.value = -1;
-  }
+      if (taskTypeList.isNotEmpty) {
+        if (typeSelect < taskTypeList.length) {
+          startList.addAll(taskTypeList[typeSelect].startPoint ?? []);
+          endList.addAll(taskTypeList[typeSelect].endPoint ?? []);
+        } else {
+          startList.addAll(taskTypeList[0].startPoint ?? []);
+          endList.addAll(taskTypeList[0].endPoint ?? []);
+        }
+      }
 
-  attSuccessCallback(type) {
-    typeList.value = type;
-    getTaskTypeFail.value = '';
-    var typeSave = spGet('AGV_TaskType').toString();
-    var save = typeList.indexWhere(
-      (v) => v.taskType == typeSave,
-    );
-    if (save != -1) {
-      typeSelected.value = save;
-    }
-    _getAgvRouteList(
-      taskType: typeList[typeSelected.value].taskType ?? '',
-      success: arlSuccessCallback,
-      fail: arlFailCallback,
-    );
-  }
+      var agvController = FixedExtentScrollController(
+        initialItem: agvSelect < agvList.length ? agvSelect : 0,
+      );
 
-  attFailCallback(msg) {
-    typeList.value = [];
-    getTaskTypeFail.value = msg;
-    typeSelected.value = -1;
-  }
+      var agvTypeController = FixedExtentScrollController(
+        initialItem: typeSelect < taskTypeList.length ? typeSelect : 0,
+      );
 
-  var selectedStyle = const TextStyle(
-    color: Colors.blue,
-    fontWeight: FontWeight.bold,
-  );
-  Get.dialog(
-    PopScope(
-      canPop: false,
-      child: StatefulBuilder(builder: (context, dialogSetState) {
-        return AlertDialog(
-          title: Text('AGV任务创建'),
-          content: Obx(
-            () => SizedBox(
-              width: 460,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _selectView(
-                    list: typeList.map((v) {
-                      return Center(
-                        child: Text('${v.taskTypeName}', style: selectedStyle),
-                      );
-                    }).toList(),
-                    initIndex: typeSelected.value,
-                    errorMsg: getTaskTypeFail.value,
-                    hint: '任务模版：',
-                    selectedText:
-                        '${typeList.isEmpty ? '' : typeList[typeSelected.value].taskTypeName}',
-                    buttonClick: () => _getAgvTaskTypList(
-                      success: attSuccessCallback,
-                      fail: attFailCallback,
+      var startController = FixedExtentScrollController(
+        initialItem: startSelect < startList.length ? startSelect : 0,
+      );
+
+      var endController = FixedExtentScrollController(
+        initialItem: endSelect < endList.length ? endSelect : 0,
+      );
+
+      Get.dialog(
+        PopScope(
+          canPop: false,
+          child: StatefulBuilder(builder: (context, dialogSetState) {
+            return AlertDialog(
+              title: Text('AGV任务创建'),
+              content: SizedBox(
+                width: 460,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _selectView(
+                      list: agvList,
+                      controller: agvController,
+                      errorMsg: '查询不到AGV设备信息',
+                      hint: '执行设备：',
                     ),
-                    select: (i) => typeSelected.value = i,
-                  ),
-                  _selectView(
-                    list: startList.map((v) {
-                      return Center(
-                        child: Text('${v.positionName}', style: selectedStyle),
-                      );
-                    }).toList(),
-                    initIndex: startSelected.value,
-                    errorMsg: getPathRouteFail.value,
-                    hint: '任务起点：',
-                    selectedText:
-                        '${startList.isEmpty ? '' : startList[startSelected.value].positionName}',
-                    buttonClick: () => _getAgvRouteList(
-                      taskType: typeList[typeSelected.value].taskType ?? '',
-                      success: arlSuccessCallback,
-                      fail: arlFailCallback,
+                    _selectView(
+                      list: taskTypeList,
+                      controller: agvTypeController,
+                      errorMsg: '查询不到AGV模版信息',
+                      hint: '任务模版：',
+                      select: (i) => dialogSetState(() {
+                        typeSelect = i;
+                        startList = taskTypeList[i].startPoint ?? [];
+                        endList = taskTypeList[i].endPoint ?? [];
+                      }),
                     ),
-                    select: (i) => startSelected.value = i,
-                  ),
-                  _selectView(
-                    list: endList.map((v) {
-                      return Center(
-                        child: Text('${v.positionName}', style: selectedStyle),
-                      );
-                    }).toList(),
-                    initIndex: endSelected.value,
-                    errorMsg: getPathRouteFail.value,
-                    hint: '任务终点：',
-                    selectedText:
-                        '${endList.isEmpty ? '' : endList[endSelected.value].positionName}',
-                    buttonClick: () => _getAgvTaskTypList(
-                      success: attSuccessCallback,
-                      fail: attFailCallback,
+                    _selectView(
+                      list: startList,
+                      controller: startController,
+                      errorMsg: '查询不到AGV起点信息',
+                      hint: '任务起点：',
                     ),
-                    select: (i) => endSelected.value = i,
-                  ),
-                ],
+                    _selectView(
+                      list: endList,
+                      controller: endController,
+                      errorMsg: '查询不到AGV终点信息',
+                      hint: '任务终点：',
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                _createAgvTask(
-                  nowOrderId: nowOrderId,
-                  nowOrderPartsId: nowOrderPartsId,
-                  nowOrderRoundList: nowOrderRoundList,
-                  mergeOrderId: mergeOrderId,
-                  mergeOrderPartsId: mergeOrderPartsId,
-                  mergeOrderRoundList: mergeOrderRoundList,
-                  start: startList[startSelected.value].positionCode ?? '',
-                  end: endList[endSelected.value].positionCode ?? '',
-                  success: (taskId,msg) {
-                    Get.back();
-                    success.call(taskId);
-                    successDialog(content: msg);
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    agvSelect =
+                        agvList.length > 1 ? agvController.selectedItem : 0;
+                    typeSelect = taskTypeList.length > 1
+                        ? agvTypeController.selectedItem
+                        : 0;
+                    startSelect =
+                        startList.length > 1 ? startController.selectedItem : 0;
+                    endSelect =
+                        endList.length > 1 ? endController.selectedItem : 0;
+                    spSave(agvDeviceSelect, agvSelect);
+                    spSave(agvTaskTypeSelect, typeSelect);
+                    spSave(agvTaskStartSelect, startSelect);
+                    spSave(agvTaskEndSelect, endSelect);
+                    _createAgvTask(
+                      agvNumber: agvList[agvSelect].agvNumber ?? '',
+                      nowOrderId: nowOrderId,
+                      nowOrderPartsId: nowOrderPartsId,
+                      nowOrderRoundList: nowOrderRoundList,
+                      mergeOrderId: mergeOrderId,
+                      mergeOrderPartsId: mergeOrderPartsId,
+                      mergeOrderRoundList: mergeOrderRoundList,
+                      start: startList[startSelect].positionCode ?? '',
+                      end: endList[endSelect].positionCode ?? '',
+                      success: (taskId, msg) {
+                        Get.back();
+                        success.call(taskId);
+                        successDialog(content: msg);
+                      },
+                      fail: (msg) => errorDialog(content: msg),
+                    );
                   },
-                  fail: (msg) => errorDialog(content: msg),
-                );
-              },
-              child: Text('创建'),
-            ),
-            TextButton(
-              onPressed: () => Get.back(),
-              child: Text(
-                'dialog_default_cancel'.tr,
-                style: const TextStyle(color: Colors.grey),
-              ),
-            ),
-          ],
-        );
-      }),
-    ),
-  );
-
-  _getAgvTaskTypList(
-    success: attSuccessCallback,
-    fail: attFailCallback,
+                  child: Text('创建'),
+                ),
+                TextButton(
+                  onPressed: () => Get.back(),
+                  child: Text(
+                    'dialog_default_cancel'.tr,
+                    style: const TextStyle(color: Colors.grey),
+                  ),
+                ),
+              ],
+            );
+          }),
+        ),
+      );
+    },
   );
 }
 
 _selectView({
-  required List<Widget> list,
-  required int initIndex,
+  required List<dynamic> list,
+  required FixedExtentScrollController controller,
   required String errorMsg,
   required String hint,
-  required String selectedText,
-  required Function buttonClick,
-  required Function(int) select,
+  Function(int)? select,
 }) {
   return Container(
     height: list.length > 1 ? 150 : 50,
@@ -520,71 +487,116 @@ _selectView({
               ),
               Expanded(
                 child: CupertinoPicker(
-                  scrollController: FixedExtentScrollController(
-                    initialItem: initIndex,
-                  ),
+                  scrollController: controller,
                   diameterRatio: 1.5,
                   magnification: 1.2,
                   squeeze: 1.2,
                   useMagnifier: true,
                   itemExtent: 32,
-                  onSelectedItemChanged: (v) => select.call(v),
-                  children: list,
+                  onSelectedItemChanged: (v) => select?.call(v),
+                  children: list
+                      .map((v) => Center(
+                            child: Text(
+                              v.toString(),
+                              style: const TextStyle(
+                                color: Colors.blue,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ))
+                      .toList(),
                 ),
               ),
             ],
           )
         : list.isEmpty
             ? Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Expanded(
-                    child: AutoSizeText(
-                      errorMsg,
-                      style: const TextStyle(color: Colors.black),
-                      maxLines: 2,
-                      minFontSize: 8,
-                      maxFontSize: 16,
-                    ),
-                  ),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
-                      foregroundColor: Colors.orange,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                    ),
-                    onPressed: () => buttonClick.call(),
-                    child: Text(
-                      '重新获取',
-                      style: const TextStyle(color: Colors.white),
-                    ),
+                  AutoSizeText(
+                    errorMsg,
+                    style: const TextStyle(color: Colors.black),
+                    maxLines: 2,
+                    minFontSize: 8,
+                    maxFontSize: 16,
                   )
                 ],
               )
-            : Row(children: [textSpan(hint: hint, text: selectedText)]),
+            : Row(children: [textSpan(hint: hint, text: list[0].toString())]),
   );
 }
 
 checkAgvTask(String taskId) {
   _getAgvTaskInfo(
     taskId: taskId,
-    success: (sti) {
+    success: (task) {
+      String taskState;
+      Color taskStateColor;
+      switch (task.taskType) {
+        case 1:
+          taskState = '执行中';
+          taskStateColor = Colors.green;
+          break;
+        case 2:
+          taskState = '已完成';
+          taskStateColor = Colors.blueAccent;
+          break;
+        case 3:
+          taskState = '暂停中';
+          taskStateColor = Colors.orange;
+          break;
+        default:
+          taskState = '未知';
+          taskStateColor = Colors.red;
+      }
+      var title = Text('AGV 任务详情');
       Get.dialog(
         PopScope(
           canPop: false,
           child: AlertDialog(
-            title: Text('楦头库存维护'),
+            title: task.taskType == 1 || task.taskType == 3
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      title,
+                      IconButton(
+                        onPressed: () {
+                          if (task.taskType == 1) {
+                            _stopAgvTask(taskId);
+                          }
+                          if (task.taskType == 3) {
+                            _resumeAgvTask(taskId);
+                          }
+                        },
+                        icon: Icon(
+                          task.taskType == 1
+                              ? Icons.pause_circle
+                              : Icons.replay_circle_filled_sharp,
+                          color:
+                              task.taskType == 1 ? Colors.orange : Colors.green,
+                        ),
+                      )
+                    ],
+                  )
+                : title,
             content: SizedBox(
-                width: 460,
-                height: 600,
+                width: 300,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    textSpan(hint: '型体：', text: 'typeBody'),
-                    textSpan(hint: '楦头号：', text: ''),
+                    textSpan(
+                      hint: '任务状态：',
+                      text: taskState,
+                      textColor: taskStateColor,
+                    ),
+                    Row(
+                      children: [
+                        expandedTextSpan(
+                            hint: '任务起点：', text: task.startingPoint ?? ''),
+                        expandedTextSpan(
+                            hint: '任务终点：', text: task.endPoint ?? ''),
+                      ],
+                    ),
                   ],
                 )),
             actions: [
@@ -655,44 +667,23 @@ _saveShoeTree({
   });
 }
 
-_getAgvRouteList({
-  required String taskType,
-  required Function(List<StartPoint>, List<EndPoint>) success,
-  required Function(String) fail,
+_getAgvInfo({
+  required Function(AgvInfo) success,
 }) {
   httpGet(
-    loading: '正在获取机器人站点信息...',
-    method: webApiSmartDeliveryGetRobotPosition,
-    params: {'taskType': taskType},
+    loading: '正在获取机器人信息...',
+    method: webApiSmartDeliveryGetRobInfo,
   ).then((response) {
     if (response.resultCode == resultSuccess) {
-      var path = PatchRouteInfo.fromJson(response.data);
-      success.call(path.startPoint ?? [], path.endPoint ?? []);
+      success.call(AgvInfo.fromJson(response.data));
     } else {
-      fail.call(response.message ?? 'query_default_error'.tr);
-    }
-  });
-}
-
-_getAgvTaskTypList({
-  required Function(List<AgvTaskInfo>) success,
-  required Function(String) fail,
-}) {
-  httpGet(
-    loading: '正在获取机器人模版信息...',
-    method: webApiSmartDeliveryGetTaskType,
-  ).then((response) {
-    if (response.resultCode == resultSuccess) {
-      success.call(<AgvTaskInfo>[
-        for (var item in response.data) AgvTaskInfo.fromJson(item)
-      ]);
-    } else {
-      fail.call(response.message ?? 'query_default_error'.tr);
+      errorDialog(content: response.message ?? 'query_default_error'.tr);
     }
   });
 }
 
 _createAgvTask({
+  required String agvNumber,
   required String nowOrderId,
   required String nowOrderPartsId,
   required List<WorkData> nowOrderRoundList,
@@ -701,7 +692,7 @@ _createAgvTask({
   required List<WorkData> mergeOrderRoundList,
   required String start,
   required String end,
-  required Function(String taskId,String msg) success,
+  required Function(String taskId, String msg) success,
   required Function(String) fail,
 }) {
   httpPost(
@@ -711,6 +702,7 @@ _createAgvTask({
       'StartPoint': start,
       'EndPoint': end,
       'CheckerID': userInfo?.userID,
+      'RobNumber': agvNumber,
       'RoundsData': [
         {
           'NewWorkCardInterID': nowOrderId,
@@ -728,7 +720,7 @@ _createAgvTask({
     },
   ).then((response) {
     if (response.resultCode == resultSuccess) {
-      success.call(response.data.toString(),response.message ?? '');
+      success.call(response.data.toString(), response.message ?? '');
     } else {
       fail.call(response.message ?? 'query_default_error'.tr);
     }
@@ -737,17 +729,21 @@ _createAgvTask({
 
 _getAgvTaskInfo({
   required String taskId,
-  required Function(String) success,
+  required Function(AgvTaskInfo) success,
 }) {
   httpGet(
     loading: '正在获取AGV当前任务...',
     method: webApiSmartDeliveryGetRobTask,
-    body: {'TaskID': taskId},
+    params: {'TaskID': taskId},
   ).then((response) {
     if (response.resultCode == resultSuccess) {
-      success.call(response.message ?? '');
+      success.call(AgvTaskInfo.fromJson(response.data[0]));
     } else {
       errorDialog(content: response.message ?? 'query_default_error'.tr);
     }
   });
 }
+
+_stopAgvTask(String taskId) {}
+
+_resumeAgvTask(String taskId) {}

@@ -112,7 +112,8 @@ Future<BaseData> _doHttp({
   ///--------------------------------------------x----
   try {
     logger.f('SnackbarStatus=$snackbarStatus');
-    if(snackbarStatus==SnackbarStatus.OPEN || snackbarStatus == SnackbarStatus.OPENING){
+    if (snackbarStatus == SnackbarStatus.OPEN ||
+        snackbarStatus == SnackbarStatus.OPENING) {
       snackbarController?.close(withAnimations: false);
     }
   } catch (e) {
@@ -219,7 +220,7 @@ Future<BaseData> _doHttp({
     base.message = '发生异常：${e.toString()}';
   }
   if (loading != null && loading.isNotEmpty) Get.back();
-  base.baseUrl=baseUrl;
+  base.baseUrl = baseUrl;
   return base;
 }
 
@@ -594,8 +595,10 @@ const webApiModifyWorkCardItem =
 ///生成报工产量表_金臻
 const webApiReportDispatch =
     'api/CompoundDispatching/SubmitScWorkCardReportJinZhen';
+
 ///最近一次来访记录
-const webApiGetVisitInfoByJsonStr = 'api/VisitorRegistration/GetVisitInfoByJsonStr';
+const webApiGetVisitInfoByJsonStr =
+    'api/VisitorRegistration/GetVisitInfoByJsonStr';
 
 ///来访详情
 const webApiGetVisitorInfo = 'api/VisitorRegistration/GetVisitorInfo';
@@ -610,7 +613,8 @@ const webApiInsertIntoFVisit = 'api/VisitorRegistration/InsertIntoFVisit';
 const webApiGetEmpByField = 'api/VisitorRegistration/GetEmpByField';
 
 ///获取会客地点
-const webApiGetReceiveVisitorPlace = 'api/VisitorRegistration/GetReceiveVisitorPlace';
+const webApiGetReceiveVisitorPlace =
+    'api/VisitorRegistration/GetReceiveVisitorPlace';
 
 ///成型集装箱出货扫码汇总
 const webApiSapContainerScanner = "sap/zapp/ZMM_ZXCFSM_SUMM";
@@ -619,7 +623,8 @@ const webApiSapContainerScanner = "sap/zapp/ZMM_ZXCFSM_SUMM";
 const webApiSapContainerShipmentScanner = "sap/zapp/ZMM_ZXCFSM_D";
 
 ///贴标工序报工_修改已报工
-const webApiProductionDispatchReportSubmit = 'api/WetPrinting/BarCodeProcessReportSubmit_Reported';
+const webApiProductionDispatchReportSubmit =
+    'api/WetPrinting/BarCodeProcessReportSubmit_Reported';
 
 ///获取工序派工单信息
 const webApiGetProcessWorkCard = 'api/WetPrinting/GetProcessWorkCardByBarcode';
@@ -628,16 +633,20 @@ const webApiGetProcessWorkCard = 'api/WetPrinting/GetProcessWorkCardByBarcode';
 const webApiGetReportDataByBarcode = 'api/WetPrinting/GetReportDataByBarcode';
 
 ///修改操作员
-const webApiChangeLabelingBarcodeEmp = 'api/WetPrinting/ChangeLabelingBarcodeEmp';
+const webApiChangeLabelingBarcodeEmp =
+    'api/WetPrinting/ChangeLabelingBarcodeEmp';
 
 ///删除标签
-const webApiUnReportAndDelLabelingBarcode = 'api/WetPrinting/UnReportAndDelLabelingBarcode';
+const webApiUnReportAndDelLabelingBarcode =
+    'api/WetPrinting/UnReportAndDelLabelingBarcode';
 
 ///智能AGV派送获取工单列表
-const webApiSmartDeliveryGetWorkCardList = 'api/Autoworkshopbatch/GetWorkCardList';
+const webApiSmartDeliveryGetWorkCardList =
+    'api/Autoworkshopbatch/GetWorkCardList';
 
 ///发料明细(材料清单)
-const webApiSmartDeliveryGetWorkCardMaterial = 'api/Autoworkshopbatch/GetWorkCardMaterial';
+const webApiSmartDeliveryGetWorkCardMaterial =
+    'api/Autoworkshopbatch/GetWorkCardMaterial';
 
 ///获取楦头库存
 const webApiSmartDeliveryGetShorTreeList = 'api/Autoworkshopbatch/GetBalance';
@@ -652,19 +661,17 @@ const webApiSmartDeliveryDetail = 'api/Autoworkshopbatch/GetPartsOrder';
 const webApiSmartDeliveryAddPartsStock = 'api/Autoworkshopbatch/AddPartsStock';
 
 ///删除发料数据
-const webApiSmartDeliveryDeletePartsStock = 'api/Autoworkshopbatch/DeletePartsStock';
-
-///获取模板类
-const webApiSmartDeliveryGetTaskType= 'api/Autoworkshopbatch/GetTaskType';
+const webApiSmartDeliveryDeletePartsStock =
+    'api/Autoworkshopbatch/DeletePartsStock';
 
 ///发料数据创建机器人任务
-const webApiSmartDeliveryCreatRobTask= 'api/Autoworkshopbatch/CreatRobTask';
+const webApiSmartDeliveryCreatRobTask = 'api/Autoworkshopbatch/CreatRobTask';
+
+///获取机器人信息
+const webApiSmartDeliveryGetRobInfo = 'api/Autoworkshopbatch/GetRobInfo';
 
 ///机器人任务记录
-const webApiSmartDeliveryGetRobTask= 'api/Autoworkshopbatch/GetRobTask';
-
-///获取机器人站点信息
-const webApiSmartDeliveryGetRobotPosition = 'api/Autoworkshopbatch/GetRobotPosition';
+const webApiSmartDeliveryGetRobTask = 'api/Autoworkshopbatch/GetRobTask';
 
 ///外箱内盒条码关联数据
 const webApiGetCartonLabelInfo = 'api/OutBoxScan/GetLinkData';
@@ -676,7 +683,8 @@ const webApiSubmitScannedCartonLabel = 'api/OutBoxScan/SubOutBoxData';
 const webApiGetCartonLabelScanHistory = 'api/OutBoxScan/GetOrderScan';
 
 ///订单扫码情况明细表
-const webApiGetCartonLabelScanHistoryDetail = 'api/OutBoxScan/GetOrderScanDetail';
+const webApiGetCartonLabelScanHistoryDetail =
+    'api/OutBoxScan/GetOrderScanDetail';
 
 ///获取品质异常详情
 const webApiGetSCDispatchOrders = 'api/QMProcessFlowEx/GetSCDispatchOrders';
@@ -686,5 +694,3 @@ const webApiGetProcessFlowEXTypes = 'api/QMProcessFlowEx/GetProcessFlowEXTypes';
 
 ///品质异常插入
 const webApiAddAbnormalQuality = 'api/QMProcessFlowEx/QMAbnormityBysuitID';
-
-
