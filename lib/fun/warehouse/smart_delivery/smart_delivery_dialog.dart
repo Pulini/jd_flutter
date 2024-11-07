@@ -336,14 +336,19 @@ createDeliveryTaskDialog({
       var taskTypeList = <RobotPositionInfo>[...agvInfo.robotPosition ?? []];
       var startList = <TaskPoint>[];
       var endList = <TaskPoint>[];
+      var emptyList = <TaskPoint>[
+        TaskPoint(positionName: '无', positionCode: '0')
+      ];
 
       if (taskTypeList.isNotEmpty) {
         if (typeSelect < taskTypeList.length) {
           startList.addAll(taskTypeList[typeSelect].startPoint ?? []);
           endList.addAll(taskTypeList[typeSelect].endPoint ?? []);
+          emptyList.addAll(taskTypeList[typeSelect].endPoint ?? []);
         } else {
           startList.addAll(taskTypeList[0].startPoint ?? []);
           endList.addAll(taskTypeList[0].endPoint ?? []);
+          emptyList.addAll(taskTypeList[0].endPoint ?? []);
         }
       }
 
@@ -362,6 +367,8 @@ createDeliveryTaskDialog({
       var endController = FixedExtentScrollController(
         initialItem: endSelect < endList.length ? endSelect : 0,
       );
+
+      var emptyController = FixedExtentScrollController();
 
       Get.dialog(
         PopScope(
@@ -404,6 +411,12 @@ createDeliveryTaskDialog({
                       errorMsg: '查询不到AGV终点信息',
                       hint: '任务终点：',
                     ),
+                    _selectView(
+                      list: emptyList,
+                      controller: emptyController,
+                      errorMsg: '查询不到AGV空托盘信息',
+                      hint: '空托盘点：',
+                    ),
                   ],
                 ),
               ),
@@ -433,6 +446,9 @@ createDeliveryTaskDialog({
                       mergeOrderRoundList: mergeOrderRoundList,
                       start: startList[startSelect].positionCode ?? '',
                       end: endList[endSelect].positionCode ?? '',
+                      empty: emptyController.selectedItem == 0
+                          ? ''
+                          : '${emptyList[emptyController.selectedItem].positionCode}',
                       success: (taskId, msg) {
                         Get.back();
                         success.call(taskId);
@@ -525,7 +541,7 @@ _selectView({
   );
 }
 
-checkAgvTask(String taskId) {
+checkAgvTask(String taskId, String agvNumber) {
   _getAgvTaskInfo(
     taskId: taskId,
     success: (task) {
@@ -551,65 +567,77 @@ checkAgvTask(String taskId) {
       var title = Text('AGV 任务详情');
       Get.dialog(
         PopScope(
-          canPop: false,
-          child: AlertDialog(
-            title: task.taskType == 1 || task.taskType == 3
-                ? Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      title,
-                      IconButton(
-                        onPressed: () {
-                          if (task.taskType == 1) {
-                            _stopAgvTask(taskId);
-                          }
-                          if (task.taskType == 3) {
-                            _resumeAgvTask(taskId);
-                          }
-                        },
-                        icon: Icon(
-                          task.taskType == 1
-                              ? Icons.pause_circle
-                              : Icons.replay_circle_filled_sharp,
-                          color:
-                              task.taskType == 1 ? Colors.orange : Colors.green,
-                        ),
+            canPop: false,
+            child: StatefulBuilder(
+              builder: (c, dialogSetState) => AlertDialog(
+                title: task.taskType == 1 || task.taskType == 3
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          title,
+                          IconButton(
+                            onPressed: () {
+                              if (task.taskType == 1) {
+                                _stopAgvTask(
+                                  agvNumber: agvNumber,
+                                  success: () => dialogSetState(
+                                    () => task.taskType = 3,
+                                  ),
+                                );
+                              }
+                              if (task.taskType == 3) {
+                                _resumeAgvTask(
+                                  agvNumber: agvNumber,
+                                  success: () => dialogSetState(
+                                    () => task.taskType = 1,
+                                  ),
+                                );
+                              }
+                            },
+                            icon: Icon(
+                              task.taskType == 1
+                                  ? Icons.pause_circle
+                                  : Icons.replay_circle_filled_sharp,
+                              color: task.taskType == 1
+                                  ? Colors.orange
+                                  : Colors.green,
+                            ),
+                          )
+                        ],
                       )
-                    ],
-                  )
-                : title,
-            content: SizedBox(
-                width: 300,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    textSpan(
-                      hint: '任务状态：',
-                      text: taskState,
-                      textColor: taskStateColor,
-                    ),
-                    Row(
+                    : title,
+                content: SizedBox(
+                    width: 300,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        expandedTextSpan(
-                            hint: '任务起点：', text: task.startingPoint ?? ''),
-                        expandedTextSpan(
-                            hint: '任务终点：', text: task.endPoint ?? ''),
+                        textSpan(
+                          hint: '任务状态：',
+                          text: taskState,
+                          textColor: taskStateColor,
+                        ),
+                        Row(
+                          children: [
+                            expandedTextSpan(
+                                hint: '任务起点：', text: task.startingPoint ?? ''),
+                            expandedTextSpan(
+                                hint: '任务终点：', text: task.endPoint ?? ''),
+                          ],
+                        ),
                       ],
+                    )),
+                actions: [
+                  TextButton(
+                    onPressed: () => Get.back(),
+                    child: Text(
+                      'dialog_default_back'.tr,
+                      style: const TextStyle(color: Colors.grey),
                     ),
-                  ],
-                )),
-            actions: [
-              TextButton(
-                onPressed: () => Get.back(),
-                child: Text(
-                  'dialog_default_back'.tr,
-                  style: const TextStyle(color: Colors.grey),
-                ),
+                  ),
+                ],
               ),
-            ],
-          ),
-        ),
+            )),
       );
     },
   );
@@ -692,6 +720,7 @@ _createAgvTask({
   required List<WorkData> mergeOrderRoundList,
   required String start,
   required String end,
+  required String empty,
   required Function(String taskId, String msg) success,
   required Function(String) fail,
 }) {
@@ -701,6 +730,7 @@ _createAgvTask({
     body: {
       'StartPoint': start,
       'EndPoint': end,
+      'EmptyPoint': empty,
       'CheckerID': userInfo?.userID,
       'RobNumber': agvNumber,
       'RoundsData': [
@@ -737,13 +767,45 @@ _getAgvTaskInfo({
     params: {'TaskID': taskId},
   ).then((response) {
     if (response.resultCode == resultSuccess) {
-      success.call(AgvTaskInfo.fromJson(response.data[0]));
+      success.call(AgvTaskInfo.fromJson(response.data));
     } else {
       errorDialog(content: response.message ?? 'query_default_error'.tr);
     }
   });
 }
 
-_stopAgvTask(String taskId) {}
+_stopAgvTask({
+  required String agvNumber,
+  required Function() success,
+}) {
+  httpPost(
+    loading: '正在暂停AGV当前任务...',
+    method: webApiSmartDeliveryStopRobot,
+    params: {'RobNumber': agvNumber},
+  ).then((response) {
+    if (response.resultCode == resultSuccess) {
+      success.call();
+      showSnackBar(title: 'AGV设置', message: response.message??'');
+    } else {
+      errorDialog(content: response.message ?? 'query_default_error'.tr);
+    }
+  });
+}
 
-_resumeAgvTask(String taskId) {}
+_resumeAgvTask({
+  required String agvNumber,
+  required Function() success,
+}) {
+  httpPost(
+    loading: '正在恢复AGV当前任务...',
+    method: webApiSmartDeliveryResumeRobot,
+    params: {'RobNumber': agvNumber},
+  ).then((response) {
+    if (response.resultCode == resultSuccess) {
+      success.call();
+      showSnackBar(title: 'AGV设置', message: response.message??'');
+    } else {
+      errorDialog(content: response.message ?? 'query_default_error'.tr);
+    }
+  });
+}

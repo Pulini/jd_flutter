@@ -231,9 +231,9 @@ class SmartDeliveryLogic extends GetxController {
   refreshCreated(String taskId) {
     state.deliveryQty = 0;
     state.deliveryList.where((v) => v.isSelected).forEach((v) {
-      v.isSelected = false;
       v.sendType = 1;
       v.taskID = taskId;
+      v.isSelected = false;
     });
     state.deliveryList.where((v) => v.sendType == 1).forEach((v) {
       state.deliveryQty += (v.sendSizeList ?? [])
@@ -244,9 +244,9 @@ class SmartDeliveryLogic extends GetxController {
       state.saveDeliveryDetail!.workData!
           .where((v) => v.isSelected)
           .forEach((v) {
-        v.isSelected = false;
         v.sendType = 1;
         v.taskID = taskId;
+        v.isSelected = false;
       });
       spSave('MergeDelivery', jsonEncode(state.saveDeliveryDetail!.toJson()));
     }

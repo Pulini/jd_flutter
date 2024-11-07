@@ -116,7 +116,10 @@ class _CreateDeliveryOrderPageState extends State<CreateDeliveryOrderPage> {
                               list[i].isSelected = !list[i].isSelected;
                             });
                           } else {
-                            checkAgvTask(list[i].taskID ?? '');
+                            checkAgvTask(
+                              list[i].taskID ?? '',
+                              list[i].agvNumber ?? '',
+                            );
                           }
                         }
                       },
@@ -208,7 +211,10 @@ class _CreateDeliveryOrderPageState extends State<CreateDeliveryOrderPage> {
                                 !ddi.workData![i].isSelected;
                           });
                         } else {
-                          checkAgvTask(ddi.workData![i].taskID ?? '');
+                          checkAgvTask(
+                            ddi.workData![i].taskID ?? '',
+                            ddi.workData![i].agvNumber ?? '',
+                          );
                         }
                       }
                     },
@@ -368,29 +374,29 @@ class _CreateDeliveryOrderPageState extends State<CreateDeliveryOrderPage> {
             line2,
             table(state.deliveryDetail!, state.deliveryList),
             SizedBox(height: 20),
-            if(state.saveDeliveryDetail!=null)
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    expandedTextSpan(
-                      hint: '部位：',
-                      text: state.saveDeliveryDetail!.partName ?? '',
-                    ),
-                    if (state.saveDeliveryDetail!.partsID ==
-                        state.deliveryDetail!.partsID)
-                      CombinationButton(
-                          text: '取消合并',
-                          backgroundColor: Colors.orange,
-                          click: () =>
-                              setState(() => logic.cancelMergeDelivery()))
-                  ],
-                ),
-                SizedBox(height: 10),
-                mergeDeliveryTable(state.saveDeliveryDetail!),
-              ],
-            )
+            if (state.saveDeliveryDetail != null)
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      expandedTextSpan(
+                        hint: '部位：',
+                        text: state.saveDeliveryDetail!.partName ?? '',
+                      ),
+                      if (state.saveDeliveryDetail!.partsID ==
+                          state.deliveryDetail!.partsID)
+                        CombinationButton(
+                            text: '取消合并',
+                            backgroundColor: Colors.orange,
+                            click: () =>
+                                setState(() => logic.cancelMergeDelivery()))
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  mergeDeliveryTable(state.saveDeliveryDetail!),
+                ],
+              )
           ],
         ),
       ),

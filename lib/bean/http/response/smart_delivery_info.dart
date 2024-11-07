@@ -320,6 +320,7 @@ class WorkData {
     round = json['Round'];
     sendType = json['SendType'];
     taskID = json['TaskID'];
+    agvNumber = json['RobNumber'];
     if (json['SendSizeList'] != null) {
       sendSizeList = [];
       json['SendSizeList'].forEach((v) {
@@ -333,6 +334,7 @@ class WorkData {
   String? round;
   int? sendType;
   String? taskID;
+  String? agvNumber;
   List<SizeInfo>? sendSizeList;
 
   Map<String, dynamic> toJson() {
@@ -340,6 +342,7 @@ class WorkData {
     map['Round'] = round;
     map['SendType'] = sendType;
     map['TaskID'] = taskID;
+    map['RobNumber'] = agvNumber;
     if (sendSizeList != null) {
       map['SendSizeList'] = sendSizeList?.map((v) => v.toJson()).toList();
     }

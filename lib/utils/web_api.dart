@@ -673,6 +673,12 @@ const webApiSmartDeliveryGetRobInfo = 'api/Autoworkshopbatch/GetRobInfo';
 ///机器人任务记录
 const webApiSmartDeliveryGetRobTask = 'api/Autoworkshopbatch/GetRobTask';
 
+///暂停机器人
+const webApiSmartDeliveryStopRobot = 'api/Autoworkshopbatch/StopRobot';
+
+///恢复机器人
+const webApiSmartDeliveryResumeRobot = 'api/Autoworkshopbatch/ResumeRobot';
+
 ///外箱内盒条码关联数据
 const webApiGetCartonLabelInfo = 'api/OutBoxScan/GetLinkData';
 
