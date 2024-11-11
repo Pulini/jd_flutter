@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+
 import '../../../bean/http/response/maintain_material_info.dart';
 import '../../../bean/http/response/picking_bar_code_info.dart';
 import '../../../widget/dialogs.dart';

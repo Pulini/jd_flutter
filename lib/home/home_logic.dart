@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/utils/utils.dart';
+
 import '../bean/home_button.dart';
 import '../bean/http/response/department_info.dart';
 import '../constant.dart';

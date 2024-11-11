@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
+
 import '../../../../widget/combination_button_widget.dart';
 import '../../../../widget/edit_text_widget.dart';
 import 'part_process_scan_logic.dart';

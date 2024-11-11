@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:get/get.dart';
 import 'package:jd_flutter/utils/utils.dart';
 
@@ -24,7 +25,7 @@ class MoldingScanBulletinReportLogic extends GetxController {
     state.getMoldingScanBulletinReport(
       departmentID: userInfo?.departmentID ?? 0,
       isGetAllList: isRefresh
-          ? Get.currentRoute == RouteConfig.moldingScanBulletinReportPage.name
+          ? Get.currentRoute == RouteConfig.moldingScanBulletinReport.name
           : true,
       error: (msg) => errorDialog(content: msg),
       refreshTimer: () {

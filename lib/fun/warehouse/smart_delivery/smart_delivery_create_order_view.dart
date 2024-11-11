@@ -85,6 +85,34 @@ class _CreateDeliveryOrderPageState extends State<CreateDeliveryOrderPage> {
                 children: [
                   expandedFrameText(
                     flex: 2,
+                    text: '楦头库存',
+                    backgroundColor: Colors.green,
+                    textColor: Colors.white,
+                    borderColor: Colors.black,
+                    alignment: Alignment.center,
+                  ),
+                  for (PartsSizeList data
+                      in state.deliveryDetail!.partsSizeList ?? [])
+                    expandedFrameText(
+                      text: data.shoeTreeQty.toString(),
+                      backgroundColor: Colors.green,
+                      textColor: Colors.white,
+                      borderColor: Colors.black,
+                      alignment: Alignment.centerRight,
+                    ),
+                  expandedFrameText(
+                    text: state.deliveryDetail!.getShoeTreeTotal().toString(),
+                    backgroundColor: Colors.green,
+                    textColor: Colors.white,
+                    borderColor: Colors.black,
+                    alignment: Alignment.centerRight,
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  expandedFrameText(
+                    flex: 2,
                     text: '订单数',
                     backgroundColor: Colors.orange.shade100,
                     borderColor: Colors.black,
@@ -111,20 +139,21 @@ class _CreateDeliveryOrderPageState extends State<CreateDeliveryOrderPage> {
                     expandedFrameText(
                       click: () {
                         if (!ddi.workData.isNullOrEmpty()) {
-                          if (list[i].sendType == 0) {
-                            setState(() {
-                              list[i].isSelected = !list[i].isSelected;
-                            });
-                          } else {
+                          if (list[i].sendType == 1) {
                             checkAgvTask(
                               list[i].taskID ?? '',
                               list[i].agvNumber ?? '',
                             );
+                          } else {
+                            setState(() {
+                              list[i].isSelected = !list[i].isSelected;
+                            });
                           }
                         }
                       },
                       flex: 2,
-                      text: '第 ${list[i].round} 轮',
+                      text:
+                          '${list[i].sendType == 2 ? '★' : ''}第 ${list[i].round} 轮',
                       backgroundColor: list[i].sendType == 1
                           ? Colors.green.shade300
                           : list[i].isSelected
@@ -204,22 +233,25 @@ class _CreateDeliveryOrderPageState extends State<CreateDeliveryOrderPage> {
                 children: [
                   expandedFrameText(
                     click: () {
-                      if (state.deliveryDetail!.partsID != ddi.partsID) {
-                        if (ddi.workData![i].sendType == 0) {
-                          setState(() {
-                            ddi.workData![i].isSelected =
-                                !ddi.workData![i].isSelected;
-                          });
-                        } else {
+                      if (state.deliveryDetail!.partsID == ddi.partsID &&
+                          state.deliveryDetail?.newWorkCardInterID !=
+                              ddi.newWorkCardInterID) {
+                        if (ddi.workData![i].sendType == 1) {
                           checkAgvTask(
                             ddi.workData![i].taskID ?? '',
                             ddi.workData![i].agvNumber ?? '',
                           );
+                        } else {
+                          setState(() {
+                            ddi.workData![i].isSelected =
+                            !ddi.workData![i].isSelected;
+                          });
                         }
                       }
                     },
                     flex: 2,
-                    text: '第 ${ddi.workData![i].round} 轮',
+                    text:
+                        '${ddi.workData![i].sendType == 2 ? '★' : ''}第 ${ddi.workData![i].round} 轮',
                     backgroundColor: ddi.workData![i].sendType == 1
                         ? Colors.green.shade300
                         : ddi.workData![i].isSelected
@@ -344,6 +376,14 @@ class _CreateDeliveryOrderPageState extends State<CreateDeliveryOrderPage> {
           ),
         if (bt4Visible)
           CombinationButton(
+            combination: Combination.middle,
+            backgroundColor:
+                logic.isCanCache() ? Colors.blue : Colors.amberAccent,
+            text: logic.isCanCache() ? '暂存' : '取消暂存',
+            click: () => logic.cacheDelivery(() => setState(() {})),
+          ),
+        if (bt4Visible)
+          CombinationButton(
             combination: bt1Visible || bt2Visible
                 ? Combination.right
                 : Combination.intact,
@@ -360,7 +400,8 @@ class _CreateDeliveryOrderPageState extends State<CreateDeliveryOrderPage> {
                       .where((v) => v.isSelected)
                       .toList() ??
                   [],
-              success: (taskId) => setState(() => logic.refreshCreated(taskId)),
+              success: (taskId, agvNumber) =>
+                  setState(() => logic.refreshCreated(taskId, agvNumber)),
             ),
           ),
         const SizedBox(width: 10),
@@ -384,8 +425,10 @@ class _CreateDeliveryOrderPageState extends State<CreateDeliveryOrderPage> {
                         hint: '部位：',
                         text: state.saveDeliveryDetail!.partName ?? '',
                       ),
-                      if (state.saveDeliveryDetail!.partsID ==
-                          state.deliveryDetail!.partsID)
+                      if (state.deliveryDetail?.newWorkCardInterID ==
+                              state.saveDeliveryDetail?.newWorkCardInterID &&
+                          state.saveDeliveryDetail!.partsID ==
+                              state.deliveryDetail!.partsID)
                         CombinationButton(
                             text: '取消合并',
                             backgroundColor: Colors.orange,

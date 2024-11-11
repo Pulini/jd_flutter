@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/other/forming_packing_scan/packing_scan_state.dart';
 import 'package:jd_flutter/fun/other/forming_packing_scan/packing_shipment_scan_view.dart';
@@ -19,7 +20,7 @@ class PackingScanLogic extends GetxController {
   ///日期选择器的控制器
   var pickerControllerDate = DatePickerController(
     PickerType.date,
-    saveKey: '${RouteConfig.packingScanPage.name}StartDate',
+    saveKey: '${RouteConfig.packingScan.name}StartDate',
   );
 
   ///初始化界面后拉取所有数据

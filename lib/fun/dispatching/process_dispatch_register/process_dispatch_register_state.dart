@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:get/get.dart';
+
 import '../../../bean/http/response/process_dispatch_register_info.dart';
 import '../../../bean/http/response/worker_info.dart';
 import '../../../utils/utils.dart';

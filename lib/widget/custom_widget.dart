@@ -1,4 +1,6 @@
 import 'dart:io';
+
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -305,7 +307,7 @@ showPopup(Widget widget, {double? height}) {
 Future<T?> showSheet<T>(
   BuildContext context,
   Widget body, {
-  bool scrollControlled = false,
+  bool scrollControlled = true,
   Color bodyColor = Colors.white,
   EdgeInsets? bodyPadding,
   BorderRadius? borderRadius,
@@ -314,27 +316,29 @@ Future<T?> showSheet<T>(
   borderRadius ??= const BorderRadius.only(topLeft: radius, topRight: radius);
   bodyPadding ??= const EdgeInsets.all(20);
   return showModalBottomSheet(
-      context: context,
-      elevation: 0,
-      backgroundColor: bodyColor,
-      shape: RoundedRectangleBorder(borderRadius: borderRadius),
-      barrierColor: Colors.black.withOpacity(0.25),
-      // A处
-      constraints: BoxConstraints(
-          maxHeight: MediaQuery.of(context).size.height -
-              MediaQuery.of(context).viewPadding.top),
-      isScrollControlled: scrollControlled,
-      builder: (ctx) => Padding(
-            padding: EdgeInsets.only(
-              left: bodyPadding!.left,
-              top: bodyPadding.top,
-              right: bodyPadding.right,
-              // B处
-              bottom:
-                  bodyPadding.bottom + MediaQuery.of(ctx).viewPadding.bottom,
-            ),
-            child: body,
-          ));
+    context: context,
+    elevation: 0,
+    backgroundColor: bodyColor,
+    shape: RoundedRectangleBorder(borderRadius: borderRadius),
+    barrierColor: Colors.black.withOpacity(0.25),
+    // A处
+    constraints: BoxConstraints(
+        maxHeight: MediaQuery.of(context).size.height -
+            MediaQuery.of(context).viewInsets.top),
+    isScrollControlled: scrollControlled,
+    builder: (ctx) => SingleChildScrollView(
+      child: Padding(
+        padding: EdgeInsets.only(
+          left: bodyPadding!.left,
+          top: bodyPadding.top,
+          right: bodyPadding.right,
+          // B处
+          bottom: bodyPadding.bottom + MediaQuery.of(ctx).viewInsets.bottom,
+        ),
+        child: body,
+      ),
+    ),
+  );
 }
 
 ///带占比带文本提示的文本
@@ -665,5 +669,76 @@ labelTemplate({
         ),
       ),
     ),
+  );
+}
+
+selectView({
+  required List<dynamic> list,
+  required FixedExtentScrollController controller,
+  required String errorMsg,
+  required String hint,
+  Function(int)? select,
+}) {
+  var weights = [
+    Text(
+      hint,
+      style: const TextStyle(
+        color: Colors.black87,
+        fontWeight: FontWeight.bold,
+      ),
+    ),
+    Expanded(
+        child: CupertinoPicker(
+      scrollController: controller,
+      magnification: 1.2,
+      useMagnifier: true,
+      itemExtent: 26,
+      onSelectedItemChanged: (v) => select?.call(v),
+      children: list
+          .map((v) => AutoSizeText(
+                v.toString(),
+                maxLines: 1,
+                minFontSize: 8,
+                maxFontSize: 16,
+                style: const TextStyle(
+                  color: Colors.blue,
+                ),
+              ))
+          .toList(),
+    ))
+  ];
+
+  return Container(
+    height: list.length > 1
+        ? 120
+        : errorMsg.length > 15
+            ? 50
+            : 35,
+    width: double.infinity,
+    margin: const EdgeInsets.all(5),
+    padding: const EdgeInsets.all(8),
+    decoration: BoxDecoration(
+      color: Colors.grey.shade200,
+      borderRadius: BorderRadius.circular(list.length > 1 ? 10 : 25),
+    ),
+    child: list.length > 1
+        ? GetPlatform.isMobile
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.start, children: weights)
+            : Row(children: weights)
+        : list.isEmpty
+            ? Row(
+                children: [
+                  Expanded(
+                      child: AutoSizeText(
+                    errorMsg,
+                    style: const TextStyle(color: Colors.red),
+                    maxLines: 2,
+                    minFontSize: 12,
+                    maxFontSize: 16,
+                  ))
+                ],
+              )
+            : Row(children: [textSpan(hint: hint, text: list[0].toString())]),
   );
 }

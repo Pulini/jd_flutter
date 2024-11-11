@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import '../bean/http/response/department_info.dart';
 import '../constant.dart';
 import '../login/login_view.dart';
@@ -336,6 +337,19 @@ class _UserSettingState extends State<UserSetting> {
           ),
           GestureDetector(
             onTap: () {
+/*            测试接口
+              httpGet(
+                loading: '检查网络中...',
+                method: webApiLNetTest,
+                params: {'Seconds': 30},
+              ).then((response) {
+                if (response.resultCode == resultSuccess) {
+                  successDialog(content: response.message);
+                } else {
+                  errorDialog(content: response.message );
+                }
+              });
+*/
               if (!GetPlatform.isWeb) {
                 getVersionInfo(
                   true,

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/add_entry_detail_info.dart';
 import 'package:jd_flutter/bean/http/response/exception_type_info.dart';
+
 import '../../../bean/http/response/abnormal_quality_info.dart';
 import '../../../bean/http/response/abnormal_quality_list_info.dart';
 import '../../../utils/utils.dart';

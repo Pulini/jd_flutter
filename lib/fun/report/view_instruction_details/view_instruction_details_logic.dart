@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/fun/report/view_instruction_details/view_instruction_details_state.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+
 import '../../../route.dart';
 import '../../../utils/utils.dart';
 import '../../../widget/picker/picker_controller.dart';

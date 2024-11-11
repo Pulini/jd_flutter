@@ -11,12 +11,13 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
+
 import 'bean/http/response/production_dispatch_order_detail_info.dart';
 import 'constant.dart';
 import 'home/home_view.dart';
-import 'utils/web_api.dart';
 import 'login/login_view.dart';
 import 'translation.dart';
+import 'utils/web_api.dart';
  main() async {
   ///确保初始化完成才能加载耗时插件
   WidgetsFlutterBinding.ensureInitialized();

@@ -38,6 +38,7 @@ class _SwitchButtonState extends State<SwitchButton> {
         if (isChecked != initialValue) {
           isChecked = initialValue;
         }
+        widget.onChanged.call(isChecked);
       }
     } else {
       isChecked = widget.value!;

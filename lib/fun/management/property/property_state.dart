@@ -1,8 +1,8 @@
 import 'dart:ui';
 
 import 'package:get/get.dart';
-import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/web_api.dart';
 
 import '../../../bean/http/response/property_detail_info.dart';
 import '../../../bean/http/response/property_info.dart';

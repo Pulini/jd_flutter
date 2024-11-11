@@ -13,19 +13,19 @@ class WorkOrderListLogic extends GetxController {
   ///组别选择器的控制器
   var pcGroup = OptionsPickerController(
     PickerType.sapGroup,
-    saveKey: '${RouteConfig.workOrderListPage.name}${PickerType.sapGroup}',
+    saveKey: '${RouteConfig.workOrderList.name}${PickerType.sapGroup}',
   );
 
   ///日期选择器的控制器
   var pcStartDate = DatePickerController(
     PickerType.startDate,
-    saveKey: '${RouteConfig.workOrderListPage.name}${PickerType.startDate}',
+    saveKey: '${RouteConfig.workOrderList.name}${PickerType.startDate}',
   );
 
   ///日期选择器的控制器
   var pcEndDate = DatePickerController(
     PickerType.endDate,
-    saveKey: '${RouteConfig.workOrderListPage.name}${PickerType.endDate}',
+    saveKey: '${RouteConfig.workOrderList.name}${PickerType.endDate}',
   );
 
   @override

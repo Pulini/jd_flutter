@@ -170,7 +170,8 @@ class _HomePageState extends State<HomePage> {
       getVersionInfo(
         false,
         noUpdate: () {
-          controller.callRefresh();
+          loadingDialog('读取功能列表中...');
+          logic.refreshFunList(refresh: () =>Get.back());
         },
         needUpdate: (versionInfo) => doUpdate(versionInfo),
       );

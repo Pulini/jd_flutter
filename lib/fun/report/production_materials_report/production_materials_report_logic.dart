@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
+
 import '../../../bean/http/response/production_materials_info.dart';
 import '../../../route.dart';
 import '../../../widget/dialogs.dart';
@@ -11,7 +12,7 @@ class ProductionMaterialsReportLogic extends GetxController {
   var pickerControllerSapProcessFlow = OptionsPickerController(
     PickerType.sapProcessFlow,
     saveKey:
-        '${RouteConfig.productionMaterialsReportPage.name}${PickerType.sapProcessFlow}',
+        '${RouteConfig.productionMaterialsReport.name}${PickerType.sapProcessFlow}',
   );
 
   query() {

@@ -7,10 +7,11 @@ import '../utils/web_api.dart';
 
 ///自定义输入框 根据工号查询员工
 class WorkerCheck extends StatefulWidget {
-  const WorkerCheck({super.key, required this.onChanged, this.hint});
+  const WorkerCheck({super.key, required this.onChanged, this.hint, this.init});
 
   final Function(WorkerInfo?) onChanged;
   final String? hint;
+  final String? init;
 
   @override
   State<WorkerCheck> createState() => _WorkerCheckState();
@@ -37,7 +38,35 @@ class _WorkerCheckState extends State<WorkerCheck> {
       }
     });
   }
+  @override
+  void initState() {
+    if(widget.init?.isNotEmpty==true){
+      controller.text=widget.init!;
+      checkWorker(widget.init!);
+    }
+    super.initState();
+  }
 
+  checkWorker(String number) {
+    if (number.length >= 6) {
+      getWorker(
+          number: number,
+          success: (worker) {
+            name.value = worker.empName ?? '';
+            error.value = '';
+            widget.onChanged.call(worker);
+          },
+          error: (s) {
+            name.value = '';
+            error.value = s;
+            widget.onChanged.call(null);
+          });
+    } else {
+      name.value = '';
+      error.value = '';
+      widget.onChanged.call(null);
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -47,26 +76,7 @@ class _WorkerCheckState extends State<WorkerCheck> {
           keyboardType: TextInputType.number,
           inputFormatters: [FilteringTextInputFormatter.digitsOnly],
           controller: controller,
-          onChanged: (s) {
-            if (s.length >= 6) {
-              getWorker(
-                  number: s,
-                  success: (worker) {
-                    name.value = worker.empName ?? '';
-                    error.value = '';
-                    widget.onChanged.call(worker);
-                  },
-                  error: (s) {
-                    name.value = '';
-                    error.value = s;
-                    widget.onChanged.call(null);
-                  });
-            } else {
-              name.value = '';
-              error.value = '';
-              widget.onChanged.call(null);
-            }
-          },
+          onChanged: (s) =>checkWorker(s),
           decoration: InputDecoration(
             contentPadding: const EdgeInsets.only(
               top: 0,

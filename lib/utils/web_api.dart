@@ -8,8 +8,8 @@ import 'package:uuid/uuid.dart';
 import '../bean/http/response/base_data.dart';
 import '../constant.dart';
 import '../route.dart';
-import 'utils.dart';
 import '../widget/dialogs.dart';
+import 'utils.dart';
 
 ///接口返回异常
 const resultError = 0;
@@ -143,8 +143,9 @@ Future<BaseData> _doHttp({
     ///创建dio对象
     var dio = Dio(BaseOptions(
       baseUrl: baseUrl,
-      connectTimeout: const Duration(minutes: 2),
-      receiveTimeout: const Duration(minutes: 2),
+      connectTimeout: const Duration(minutes: 1),
+      sendTimeout: const Duration(minutes: 1),
+      receiveTimeout: const Duration(minutes: 1),
     ));
 
     ///接口拦截器
@@ -165,12 +166,10 @@ Future<BaseData> _doHttp({
             );
           if (baseData.resultCode == 2) {
             logger.e('需要重新登录');
-            if (Get.isDialogOpen == true) Get.back();
             spSave(spSaveUserInfo, '');
             reLoginPopup();
           } else if (baseData.resultCode == 3) {
             logger.e('需要更新版本');
-            if (Get.isDialogOpen == true) Get.back();
             upData();
           } else {
             handler.next(response);
@@ -206,23 +205,53 @@ Future<BaseData> _doHttp({
       base.data = json['Data'];
       base.message = json['Message'];
     } else {
+      if (loading != null && loading.isNotEmpty) Get.back();
       logger.e('网络异常');
       base.message = '网络异常';
     }
   } on DioException catch (e) {
     logger.e('error:${e.toString()}');
-    base.message = '链接服务器失败：${e.toString()}';
+    switch (e.type) {
+      case DioExceptionType.connectionTimeout:
+        base.message = '连接服务器超时';
+        break;
+      case DioExceptionType.sendTimeout:
+        base.message = '发送数据超时';
+        break;
+      case DioExceptionType.receiveTimeout:
+        base.message = '接收数据超时';
+        break;
+      case DioExceptionType.badResponse:
+        base.message = '请求配置错误';
+        break;
+      case DioExceptionType.cancel:
+        base.message = '取消请求';
+        break;
+      case DioExceptionType.connectionError:
+        base.message = '连接服务器异常';
+        break;
+      case DioExceptionType.badCertificate:
+        base.message = '服务器证书错误';
+        break;
+      case DioExceptionType.unknown:
+        base.message = '未知异常';
+        break;
+    }
   } on Exception catch (e) {
     logger.e('error:${e.toString()}');
     base.message = '发生错误：${e.toString()}';
   } on Error catch (e) {
     logger.e('error:${e.toString()}');
     base.message = '发生异常：${e.toString()}';
+  } finally {
+    if (loading != null && loading.isNotEmpty) Get.back();
+    base.baseUrl = baseUrl;
   }
-  if (loading != null && loading.isNotEmpty) Get.back();
-  base.baseUrl = baseUrl;
   return base;
 }
+
+///网络测试接口
+const webApiLNetTest = 'api/Public/NetTest';
 
 ///登录接口
 const webApiLogin = 'api/User/Login';
@@ -664,6 +693,9 @@ const webApiSmartDeliveryAddPartsStock = 'api/Autoworkshopbatch/AddPartsStock';
 const webApiSmartDeliveryDeletePartsStock =
     'api/Autoworkshopbatch/DeletePartsStock';
 
+///修改发料状态为备料
+const webApiSmartDeliveryEditSendType = 'api/Autoworkshopbatch/EditSendType';
+
 ///发料数据创建机器人任务
 const webApiSmartDeliveryCreatRobTask = 'api/Autoworkshopbatch/CreatRobTask';
 
@@ -700,3 +732,24 @@ const webApiGetProcessFlowEXTypes = 'api/QMProcessFlowEx/GetProcessFlowEXTypes';
 
 ///品质异常插入
 const webApiAddAbnormalQuality = 'api/QMProcessFlowEx/QMAbnormityBysuitID';
+
+///sap送货单列表
+const webApiSapGetDeliveryList = 'sap/zapp/ZFUN_APP_GET_DELI_1500';
+
+///sap送货单明细
+const webApiSapGetDeliveryDetail = 'sap/zapp/ZFUN_APP_GET_DELIDETAIL_1500';
+
+///sap检查暂收单是否已生成
+const webApiSapCheckTemporaryOrder = 'sap/zapp/ZFUN_APP_TEMPORARYDEYAIL_1500A';
+
+///根据工厂编号获取存储位置列表
+const webApiGetStorageLocationList = 'api/Department/GetStorageLocationList';
+
+///送货单保存核查
+const webApiSapSaveDeliveryCheck = 'sap/zapp/ZFUN_APP_RECEIVE_1500';
+
+///获取仓库是否启用了人脸识别
+const webApiGetStockFaceConfig = 'api/Stock/GetStockEnableFaceRec';
+
+///人脸识别,通过保管人工号获取保管人，监管人信息以及保管人部门
+const webApiGetLiableInfoByEmpCode = 'api/User/GetLiableInfoByEmpCode';

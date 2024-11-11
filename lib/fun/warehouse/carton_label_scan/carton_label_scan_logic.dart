@@ -77,15 +77,18 @@ class CartonLabelScanLogic extends GetxController {
     }
     if (state.labelTotal.value > 0 &&
         state.labelTotal.value == state.scannedLabelTotal.value) {
+      isSubmitting = true;
       state.submitScannedCartonLabel(
         success: (msg) {
           cleanAll(submitSuccess);
           showSnackBar(title: '操作成功', message: msg);
+          isSubmitting = false;
         },
         error: (msg) {
           submitError.call();
           errorDialog(content: msg);
-        } ,
+          isSubmitting = false;
+        },
       );
     }
   }

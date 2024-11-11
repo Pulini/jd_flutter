@@ -1,6 +1,7 @@
-import 'package:flutter/widgets.dart';
-import 'dart:ui' as ui;
 import 'dart:math' as math;
+import 'dart:ui' as ui;
+
+import 'package:flutter/widgets.dart';
 
 /// A widget that paints watermark.
 class WaterMark extends StatefulWidget {

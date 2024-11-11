@@ -7,6 +7,7 @@ import 'package:jd_flutter/utils/utils.dart';
 import '../bean/http/response/user_info.dart';
 import '../constant.dart';
 import '../utils/web_api.dart';
+import '../widget/dialogs.dart';
 
 class LoginState {
   var buttonName = 'get_verify_code'.tr.obs;
@@ -94,6 +95,7 @@ class LoginState {
         'Type': type,
       },
     ).then((response) {
+      reLoginDialogIsShowing=false;
       if (response.resultCode == resultSuccess) {
         spSave(spSaveUserInfo, jsonEncode(response.data).toString());
         userInfo = UserInfo.fromJson(response.data);

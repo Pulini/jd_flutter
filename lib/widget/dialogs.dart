@@ -7,8 +7,8 @@ import 'package:get/get.dart';
 
 import '../bean/http/response/version_info.dart';
 import '../constant.dart';
-import '../utils/web_api.dart';
 import '../login/login_view.dart';
+import '../utils/web_api.dart';
 import 'downloader.dart';
 
 /// 提示弹窗
@@ -141,8 +141,10 @@ errorDialog({
 }
 
 ///加载中弹窗
-loadingDialog(String? content) {
+GlobalKey<NavigatorState> loadingDialog(String? content) {
+  GlobalKey<NavigatorState> dialogKey = GlobalKey();
   Get.dialog(
+    navigatorKey: dialogKey,
     PopScope(
       //拦截返回键
       canPop: false,
@@ -163,6 +165,7 @@ loadingDialog(String? content) {
     ),
     barrierDismissible: false, //拦截dialog外部点击
   );
+  return dialogKey;
 }
 
 doUpdate(VersionInfo version) {
@@ -314,7 +317,10 @@ doUpdate(VersionInfo version) {
   );
 }
 
+bool reLoginDialogIsShowing=false;
 reLoginPopup() {
+  if(reLoginDialogIsShowing) return;
+  reLoginDialogIsShowing=true;
   showCupertinoModalPopup(
     context: Get.overlayContext!,
     barrierDismissible: false,

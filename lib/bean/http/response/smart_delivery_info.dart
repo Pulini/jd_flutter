@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:jd_flutter/utils/utils.dart';
 
 /// rowNo : 10
@@ -46,7 +45,7 @@ class SmartDeliveryOrderInfo {
   String? typeBody; //工厂型体
   String? dispatchDate; //派工日期
   double? dispatchQty; //派工总量
-  String? materialIssuanceStatus; //发料情况
+  int? materialIssuanceStatus; //发料情况 0未发料、1已发料
   String? depName; //课组名称
   int? departmentId; //课组ID
   String? instructions; //指令号
@@ -374,7 +373,7 @@ class PartsSizeList {
   String? size;
   int? qty;
   int? shoeTreeQty;
-  int reserveShoeTreeQty = 0;
+  int reserveShoeTreeQty = 2;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};

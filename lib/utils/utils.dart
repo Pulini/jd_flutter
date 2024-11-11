@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:crypto/crypto.dart';
 import 'package:decimal/decimal.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -16,6 +17,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../bean/http/response/leader_info.dart';
 import '../bean/http/response/user_info.dart';
 import '../bean/http/response/version_info.dart';
 import '../bean/http/response/worker_info.dart';
@@ -225,9 +227,10 @@ extension RequestOptionsExt on RequestOptions {
     logger.f(map);
   }
 }
-extension ListExt on List?{
-  isNullOrEmpty(){
-    if(this==null)return true;
+
+extension ListExt on List? {
+  isNullOrEmpty() {
+    if (this == null) return true;
     return this!.isEmpty;
   }
 }
@@ -299,10 +302,10 @@ getVersionInfo(
         noUpdate.call();
       } else {
         var versionInfo = VersionInfo.fromJson(versionInfoCallback.data);
-        if (packageInfo.version == versionInfo.versionName) {
-          noUpdate.call();
-        } else {
+        if (packageInfo.buildNumber.toIntTry() < versionInfo.versionCode!) {
           needUpdate.call(versionInfo);
+        } else {
+          noUpdate.call();
         }
       }
     } else {
@@ -347,6 +350,32 @@ getWorkerInfo({
   });
 }
 
+///人脸识别,通过保管人工号获取保管人，监管人信息以及保管人部门
+getLeaderList({
+  String? billType,
+  String? empCode,
+  String? sapFactoryNumber,
+  String? sapStockNumber,
+  required Function(List<LeaderInfo>) success,
+  required Function(String) error,
+}) {
+  httpGet(
+    method: webApiGetLiableInfoByEmpCode,
+    params: {
+      'BillType': billType,
+      'EmpCode': empCode,
+      'SapFactoryNumber': sapFactoryNumber,
+      'SapStockNumber': sapStockNumber,
+    },
+  ).then((response) {
+    if (response.resultCode == resultSuccess) {
+      success.call([for (var json in response.data) LeaderInfo.fromJson(json)]);
+    } else {
+      error.call(response.message ?? 'query_default_error'.tr);
+    }
+  });
+}
+
 String getDateYMD({DateTime? time}) {
   DateTime now;
   if (time == null) {
@@ -360,6 +389,21 @@ String getDateYMD({DateTime? time}) {
   var d = now.day.toString();
   if (d.length == 1) d = '0$d';
   return '$y-$m-$d';
+}
+
+String getDateSapYMD({DateTime? time}) {
+  DateTime now;
+  if (time == null) {
+    now = DateTime.now();
+  } else {
+    now = time;
+  }
+  var y = now.year.toString();
+  var m = now.month.toString();
+  if (m.length == 1) m = '0$m';
+  var d = now.day.toString();
+  if (d.length == 1) d = '0$d';
+  return '$y$m$d';
 }
 
 visitButtonWidget({

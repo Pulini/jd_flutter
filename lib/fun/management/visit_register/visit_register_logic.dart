@@ -1,9 +1,11 @@
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/management/visit_register/visit_register_add_view.dart';
 import 'package:jd_flutter/fun/management/visit_register/visit_register_detail_view.dart';
 import 'package:jd_flutter/utils/utils.dart';
+
 import '../../../bean/http/response/leave_visit_record.dart';
 import '../../../bean/http/response/photoBean.dart';
 import '../../../bean/http/response/search_people_info.dart';
@@ -58,13 +60,13 @@ class VisitRegisterLogic extends GetxController {
   ///日期选择器的控制器
   var pickerControllerStartDate = DatePickerController(
     PickerType.date,
-    saveKey: '${RouteConfig.propertyPage.name}StartDate',
+    saveKey: '${RouteConfig.property.name}StartDate',
   );
 
   ///日期选择器的控制器
   var pickerControllerEndDate = DatePickerController(
     PickerType.date,
-    saveKey: '${RouteConfig.propertyPage.name}EndDate',
+    saveKey: '${RouteConfig.property.name}EndDate',
   );
 
   refreshGetVisitList(
