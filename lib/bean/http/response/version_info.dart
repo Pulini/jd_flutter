@@ -26,7 +26,7 @@ class VersionInfo {
   bool? force;
   String? url;
   String? versionName;
-  num? versionCode;
+  int? versionCode;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};

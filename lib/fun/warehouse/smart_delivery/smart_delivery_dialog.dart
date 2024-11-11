@@ -318,7 +318,7 @@ createDeliveryTaskDialog({
   required String mergeOrderId,
   required String mergeOrderPartsId,
   required List<WorkData> mergeOrderRoundList,
-  required Function(String) success,
+  required Function(String taskId,String agvNumber) success,
 }) {
   if (nowOrderRoundList.isEmpty) {
     errorDialog(content: '请选择需要配送的轮次');
@@ -449,9 +449,9 @@ createDeliveryTaskDialog({
                       empty: emptyController.selectedItem == 0
                           ? ''
                           : '${emptyList[emptyController.selectedItem].positionCode}',
-                      success: (taskId, msg) {
+                      success: (taskId,agvNumber, msg) {
                         Get.back();
-                        success.call(taskId);
+                        success.call(taskId,agvNumber);
                         successDialog(content: msg);
                       },
                       fail: (msg) => errorDialog(content: msg),
@@ -572,35 +572,31 @@ checkAgvTask(String taskId, String agvNumber) {
               builder: (c, dialogSetState) => AlertDialog(
                 title: task.taskType == 1 || task.taskType == 3
                     ? Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           title,
+                          Expanded(child: Container()),
                           IconButton(
-                            onPressed: () {
-                              if (task.taskType == 1) {
-                                _stopAgvTask(
-                                  agvNumber: agvNumber,
-                                  success: () => dialogSetState(
-                                    () => task.taskType = 3,
-                                  ),
-                                );
-                              }
-                              if (task.taskType == 3) {
-                                _resumeAgvTask(
-                                  agvNumber: agvNumber,
-                                  success: () => dialogSetState(
-                                    () => task.taskType = 1,
-                                  ),
-                                );
-                              }
-                            },
-                            icon: Icon(
-                              task.taskType == 1
-                                  ? Icons.pause_circle
-                                  : Icons.replay_circle_filled_sharp,
-                              color: task.taskType == 1
-                                  ? Colors.orange
-                                  : Colors.green,
+                            onPressed: () => _stopAgvTask(
+                              agvNumber: agvNumber,
+                              success: () => dialogSetState(
+                                () => task.taskType = 3,
+                              ),
+                            ),
+                            icon: const Icon(
+                              Icons.pause_circle,
+                              color: Colors.orange,
+                            ),
+                          ),
+                          IconButton(
+                            onPressed: () => _resumeAgvTask(
+                              agvNumber: agvNumber,
+                              success: () => dialogSetState(
+                                () => task.taskType = 1,
+                              ),
+                            ),
+                            icon: const Icon(
+                              Icons.replay_circle_filled_sharp,
+                              color: Colors.green,
                             ),
                           )
                         ],
@@ -721,7 +717,7 @@ _createAgvTask({
   required String start,
   required String end,
   required String empty,
-  required Function(String taskId, String msg) success,
+  required Function(String taskId,String agvNumber, String msg) success,
   required Function(String) fail,
 }) {
   httpPost(
@@ -750,7 +746,7 @@ _createAgvTask({
     },
   ).then((response) {
     if (response.resultCode == resultSuccess) {
-      success.call(response.data.toString(), response.message ?? '');
+      success.call(response.data.toString(),agvNumber, response.message ?? '');
     } else {
       fail.call(response.message ?? 'query_default_error'.tr);
     }
@@ -778,14 +774,14 @@ _stopAgvTask({
   required String agvNumber,
   required Function() success,
 }) {
+  showSnackBar(title: 'AGV设置', message: '正在暂停AGV当前任务...');
   httpPost(
-    loading: '正在暂停AGV当前任务...',
     method: webApiSmartDeliveryStopRobot,
     params: {'RobNumber': agvNumber},
   ).then((response) {
     if (response.resultCode == resultSuccess) {
       success.call();
-      showSnackBar(title: 'AGV设置', message: response.message??'');
+      showSnackBar(title: 'AGV设置', message: response.message ?? '');
     } else {
       errorDialog(content: response.message ?? 'query_default_error'.tr);
     }
@@ -796,14 +792,14 @@ _resumeAgvTask({
   required String agvNumber,
   required Function() success,
 }) {
+  showSnackBar(title: 'AGV设置', message: '正在恢复AGV当前任务...');
   httpPost(
-    loading: '正在恢复AGV当前任务...',
     method: webApiSmartDeliveryResumeRobot,
     params: {'RobNumber': agvNumber},
   ).then((response) {
     if (response.resultCode == resultSuccess) {
       success.call();
-      showSnackBar(title: 'AGV设置', message: response.message??'');
+      showSnackBar(title: 'AGV设置', message: response.message ?? '');
     } else {
       errorDialog(content: response.message ?? 'query_default_error'.tr);
     }

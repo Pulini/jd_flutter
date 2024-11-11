@@ -299,10 +299,10 @@ getVersionInfo(
         noUpdate.call();
       } else {
         var versionInfo = VersionInfo.fromJson(versionInfoCallback.data);
-        if (packageInfo.version == versionInfo.versionName) {
-          noUpdate.call();
-        } else {
+        if (packageInfo.buildNumber.toIntTry() < versionInfo.versionCode!) {
           needUpdate.call(versionInfo);
+        } else {
+          noUpdate.call();
         }
       }
     } else {

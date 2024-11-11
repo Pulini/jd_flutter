@@ -143,8 +143,9 @@ Future<BaseData> _doHttp({
     ///创建dio对象
     var dio = Dio(BaseOptions(
       baseUrl: baseUrl,
-      connectTimeout: const Duration(minutes: 2),
-      receiveTimeout: const Duration(minutes: 2),
+      connectTimeout: const Duration(minutes: 1),
+      sendTimeout: const Duration(minutes: 1),
+      receiveTimeout: const Duration(minutes: 1),
     ));
 
     ///接口拦截器
@@ -165,12 +166,10 @@ Future<BaseData> _doHttp({
             );
           if (baseData.resultCode == 2) {
             logger.e('需要重新登录');
-            if (Get.isDialogOpen == true) Get.back();
             spSave(spSaveUserInfo, '');
             reLoginPopup();
           } else if (baseData.resultCode == 3) {
             logger.e('需要更新版本');
-            if (Get.isDialogOpen == true) Get.back();
             upData();
           } else {
             handler.next(response);
@@ -206,23 +205,53 @@ Future<BaseData> _doHttp({
       base.data = json['Data'];
       base.message = json['Message'];
     } else {
+      if (loading != null && loading.isNotEmpty) Get.back();
       logger.e('网络异常');
       base.message = '网络异常';
     }
   } on DioException catch (e) {
     logger.e('error:${e.toString()}');
-    base.message = '链接服务器失败：${e.toString()}';
+    switch (e.type) {
+      case DioExceptionType.connectionTimeout:
+        base.message = '连接服务器超时';
+        break;
+      case DioExceptionType.sendTimeout:
+        base.message = '发送数据超时';
+        break;
+      case DioExceptionType.receiveTimeout:
+        base.message = '接收数据超时';
+        break;
+      case DioExceptionType.badResponse:
+        base.message = '请求配置错误';
+        break;
+      case DioExceptionType.cancel:
+        base.message = '取消请求';
+        break;
+      case DioExceptionType.connectionError:
+        base.message = '连接服务器异常';
+        break;
+      case DioExceptionType.badCertificate:
+        base.message = '服务器证书错误';
+        break;
+      case DioExceptionType.unknown:
+        base.message = '未知异常';
+        break;
+    }
   } on Exception catch (e) {
     logger.e('error:${e.toString()}');
     base.message = '发生错误：${e.toString()}';
   } on Error catch (e) {
     logger.e('error:${e.toString()}');
     base.message = '发生异常：${e.toString()}';
+  } finally {
+    if (loading != null && loading.isNotEmpty) Get.back();
+    base.baseUrl = baseUrl;
   }
-  if (loading != null && loading.isNotEmpty) Get.back();
-  base.baseUrl = baseUrl;
   return base;
 }
+
+///网络测试接口
+const webApiLNetTest = 'api/Public/NetTest';
 
 ///登录接口
 const webApiLogin = 'api/User/Login';

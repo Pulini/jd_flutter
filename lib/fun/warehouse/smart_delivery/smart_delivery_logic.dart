@@ -1,37 +1,16 @@
 import 'dart:convert';
 
 import 'package:collection/collection.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/warehouse/smart_delivery/smart_delivery_material_view.dart';
 import 'package:jd_flutter/utils/utils.dart';
 
 import '../../../bean/http/response/smart_delivery_info.dart';
-import '../../../route.dart';
 import '../../../widget/dialogs.dart';
-import '../../../widget/picker/picker_controller.dart';
 import 'smart_delivery_state.dart';
 
 class SmartDeliveryLogic extends GetxController {
   final SmartDeliveryState state = SmartDeliveryState();
-
-  ///日期选择器的控制器
-  var pcStartDate = DatePickerController(
-    PickerType.date,
-    saveKey: '${RouteConfig.smartDeliveryPage.name}StartDate',
-  );
-
-  ///日期选择器的控制器
-  var pcEndDate = DatePickerController(
-    PickerType.date,
-    saveKey: '${RouteConfig.smartDeliveryPage.name}EndDate',
-  );
-
-  ///组别选择器的控制器
-  var pcGroup = OptionsPickerController(
-    PickerType.mesGroup,
-    saveKey: '${RouteConfig.smartDeliveryPage.name}${PickerType.mesGroup}',
-  );
 
   @override
   void onReady() {
@@ -45,28 +24,45 @@ class SmartDeliveryLogic extends GetxController {
     super.onClose();
   }
 
-  refreshOrder({required void Function() refresh}) {
+  refreshOrder({
+    required bool isQuery,
+    required String instructions,
+    required String startDate,
+    required String endDate,
+    required String group,
+    required void Function() refresh,
+  }) {
+    if(!isQuery&&group.isEmpty){
+      refresh.call();
+      return;
+    }
     state.pageIndex.value = 1;
     state.querySmartDeliveryOrder(
-      showLoading: false,
-      startTime: pcStartDate.getDateFormatYMD(),
-      endTime: pcEndDate.getDateFormatYMD(),
-      deptIDs: pcGroup.selectedId.value,
+      showLoading: isQuery,
+      instructions: instructions,
+      startTime: startDate,
+      endTime: endDate,
+      deptIDs: group,
       success: (length) => refresh.call(),
       error: (msg) => errorDialog(content: msg, back: refresh),
     );
   }
 
   loadMoreOrder({
+    required String instructions,
+    required String startDate,
+    required String endDate,
+    required String group,
     required Function(bool) success,
     required Function() error,
   }) {
     state.pageIndex.value++;
     state.querySmartDeliveryOrder(
       showLoading: false,
-      startTime: pcStartDate.getDateFormatYMD(),
-      endTime: pcEndDate.getDateFormatYMD(),
-      deptIDs: pcGroup.selectedId.value,
+      instructions: instructions,
+      startTime: startDate,
+      endTime: endDate,
+      deptIDs: group,
       success: (length) => success.call(state.maxPageSize > length),
       error: (msg) {
         state.pageIndex.value--;
@@ -228,11 +224,12 @@ class SmartDeliveryLogic extends GetxController {
     }
   }
 
-  refreshCreated(String taskId) {
+  refreshCreated(String taskId, String agvNumber) {
     state.deliveryQty = 0;
     state.deliveryList.where((v) => v.isSelected).forEach((v) {
       v.sendType = 1;
       v.taskID = taskId;
+      v.agvNumber = agvNumber;
       v.isSelected = false;
     });
     state.deliveryList.where((v) => v.sendType == 1).forEach((v) {
@@ -246,6 +243,7 @@ class SmartDeliveryLogic extends GetxController {
           .forEach((v) {
         v.sendType = 1;
         v.taskID = taskId;
+        v.agvNumber = agvNumber;
         v.isSelected = false;
       });
       spSave('MergeDelivery', jsonEncode(state.saveDeliveryDetail!.toJson()));

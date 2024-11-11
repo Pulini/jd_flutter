@@ -85,6 +85,34 @@ class _CreateDeliveryOrderPageState extends State<CreateDeliveryOrderPage> {
                 children: [
                   expandedFrameText(
                     flex: 2,
+                    text: '楦头库存',
+                    backgroundColor: Colors.green,
+                    textColor: Colors.white,
+                    borderColor: Colors.black,
+                    alignment: Alignment.center,
+                  ),
+                  for (PartsSizeList data
+                  in state.deliveryDetail!.partsSizeList ?? [])
+                    expandedFrameText(
+                      text: data.shoeTreeQty.toString(),
+                      backgroundColor: Colors.green,
+                      textColor: Colors.white,
+                      borderColor: Colors.black,
+                      alignment: Alignment.centerRight,
+                    ),
+                  expandedFrameText(
+                    text: state.deliveryDetail!.getShoeTreeTotal().toString(),
+                    backgroundColor: Colors.green,
+                    textColor: Colors.white,
+                    borderColor: Colors.black,
+                    alignment: Alignment.centerRight,
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  expandedFrameText(
+                    flex: 2,
                     text: '订单数',
                     backgroundColor: Colors.orange.shade100,
                     borderColor: Colors.black,
@@ -360,7 +388,7 @@ class _CreateDeliveryOrderPageState extends State<CreateDeliveryOrderPage> {
                       .where((v) => v.isSelected)
                       .toList() ??
                   [],
-              success: (taskId) => setState(() => logic.refreshCreated(taskId)),
+              success: (taskId,agvNumber) => setState(() => logic.refreshCreated(taskId,agvNumber)),
             ),
           ),
         const SizedBox(width: 10),

@@ -305,7 +305,7 @@ showPopup(Widget widget, {double? height}) {
 Future<T?> showSheet<T>(
   BuildContext context,
   Widget body, {
-  bool scrollControlled = false,
+  bool scrollControlled = true,
   Color bodyColor = Colors.white,
   EdgeInsets? bodyPadding,
   BorderRadius? borderRadius,
@@ -322,19 +322,22 @@ Future<T?> showSheet<T>(
       // A处
       constraints: BoxConstraints(
           maxHeight: MediaQuery.of(context).size.height -
-              MediaQuery.of(context).viewPadding.top),
+              MediaQuery.of(context).viewInsets.top),
       isScrollControlled: scrollControlled,
-      builder: (ctx) => Padding(
-            padding: EdgeInsets.only(
-              left: bodyPadding!.left,
-              top: bodyPadding.top,
-              right: bodyPadding.right,
-              // B处
-              bottom:
-                  bodyPadding.bottom + MediaQuery.of(ctx).viewPadding.bottom,
+      builder: (ctx) => SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.only(
+                left: bodyPadding!.left,
+                top: bodyPadding.top,
+                right: bodyPadding.right,
+                // B处
+                bottom:
+                    bodyPadding.bottom + MediaQuery.of(ctx).viewInsets.bottom,
+              ),
+              child: body,
             ),
-            child: body,
-          ));
+          ),
+  );
 }
 
 ///带占比带文本提示的文本

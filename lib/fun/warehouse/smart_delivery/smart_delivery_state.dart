@@ -5,7 +5,6 @@ import '../../../bean/http/response/smart_delivery_info.dart';
 import '../../../utils/web_api.dart';
 
 class SmartDeliveryState {
-  var instructions = '';
   var searchText = '';
   var pageIndex = 1.obs;
   var maxPageSize = 20;
@@ -24,6 +23,7 @@ class SmartDeliveryState {
 
   querySmartDeliveryOrder({
     required bool showLoading,
+    required String instructions,
     required String startTime,
     required String endTime,
     required String deptIDs,
