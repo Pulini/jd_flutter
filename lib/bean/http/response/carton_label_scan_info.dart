@@ -71,7 +71,7 @@ class LinkDataSizeList {
   String? priceBarCode;
   String? size;
   int? labelCount;
-  int scanned= 0;
+  int scanned = 0;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -80,4 +80,5 @@ class LinkDataSizeList {
     map['LabelCount'] = labelCount;
     return map;
   }
+
 }

@@ -8,6 +8,8 @@ class CartonLabelScanState {
   var cartonInsideLabelList = <LinkDataSizeList>[].obs;
   var cartonLabel = ''.obs;
   CartonLabelScanInfo? cartonLabelInfo;
+  var labelTotal = 0.obs;
+  var scannedLabelTotal = 0.obs;
 
   CartonLabelScanState() {
     ///Initialize variables
@@ -17,6 +19,8 @@ class CartonLabelScanState {
     required String code,
     required Function(String) error,
   }) {
+    labelTotal.value=0;
+    scannedLabelTotal.value=0;
     httpGet(
       loading: '正在查询外箱标签明细...',
       method: webApiGetCartonLabelInfo,
@@ -28,6 +32,8 @@ class CartonLabelScanState {
         cartonLabelInfo = CartonLabelScanInfo.fromJson(response.data);
         cartonLabel.value = cartonLabelInfo?.outBoxBarCode ?? '';
         cartonInsideLabelList.value = cartonLabelInfo!.linkDataSizeList ?? [];
+        labelTotal.value = cartonInsideLabelList.fold(
+            0, (total, next) => total + next.labelCount!);
       } else {
         error.call(response.message ?? 'query_default_error'.tr);
       }
@@ -58,6 +64,8 @@ class CartonLabelScanState {
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
+        labelTotal.value=0;
+        scannedLabelTotal.value=0;
         success.call(response.message ?? '');
       } else {
         error.call(response.message ?? 'query_default_error'.tr);

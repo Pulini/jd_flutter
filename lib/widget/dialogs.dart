@@ -141,8 +141,10 @@ errorDialog({
 }
 
 ///加载中弹窗
-loadingDialog(String? content) {
+GlobalKey<NavigatorState> loadingDialog(String? content) {
+  GlobalKey<NavigatorState> dialogKey = GlobalKey();
   Get.dialog(
+    navigatorKey: dialogKey,
     PopScope(
       //拦截返回键
       canPop: false,
@@ -163,6 +165,7 @@ loadingDialog(String? content) {
     ),
     barrierDismissible: false, //拦截dialog外部点击
   );
+  return dialogKey;
 }
 
 doUpdate(VersionInfo version) {
@@ -216,7 +219,7 @@ doUpdate(VersionInfo version) {
           SizedBox(
             width: dialogWidth,
             child: Image.asset(
-              'lib/res/images/bg_update_top.png',
+              'assets/images/bg_update_top.png',
               fit: BoxFit.fill,
             ),
           ),

@@ -4,7 +4,7 @@ import '../../../bean/http/response/production_summary_info.dart';
 import '../../../utils/web_api.dart';
 
 class ProductionSummaryReportState {
-  var tableData = <ProductionSummaryInfo>[];
+  var tableData = <ProductionSummaryInfo>[].obs;
 
   getPrdShopDayReport({
     required String date,
@@ -21,7 +21,7 @@ class ProductionSummaryReportState {
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        tableData = [
+        tableData.value = [
           for (var item in response.data) ProductionSummaryInfo.fromJson(item)
         ];
         success.call();

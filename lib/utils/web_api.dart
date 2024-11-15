@@ -112,7 +112,8 @@ Future<BaseData> _doHttp({
   ///--------------------------------------------x----
   try {
     logger.f('SnackbarStatus=$snackbarStatus');
-    if(snackbarStatus==SnackbarStatus.OPEN || snackbarStatus == SnackbarStatus.OPENING){
+    if (snackbarStatus == SnackbarStatus.OPEN ||
+        snackbarStatus == SnackbarStatus.OPENING) {
       snackbarController?.close(withAnimations: false);
     }
   } catch (e) {
@@ -142,8 +143,9 @@ Future<BaseData> _doHttp({
     ///创建dio对象
     var dio = Dio(BaseOptions(
       baseUrl: baseUrl,
-      connectTimeout: const Duration(minutes: 2),
-      receiveTimeout: const Duration(minutes: 2),
+      connectTimeout: const Duration(minutes: 1),
+      sendTimeout: const Duration(minutes: 1),
+      receiveTimeout: const Duration(minutes: 1),
     ));
 
     ///接口拦截器
@@ -164,12 +166,10 @@ Future<BaseData> _doHttp({
             );
           if (baseData.resultCode == 2) {
             logger.e('需要重新登录');
-            if (Get.isDialogOpen == true) Get.back();
             spSave(spSaveUserInfo, '');
             reLoginPopup();
           } else if (baseData.resultCode == 3) {
             logger.e('需要更新版本');
-            if (Get.isDialogOpen == true) Get.back();
             upData();
           } else {
             handler.next(response);
@@ -205,22 +205,53 @@ Future<BaseData> _doHttp({
       base.data = json['Data'];
       base.message = json['Message'];
     } else {
+      if (loading != null && loading.isNotEmpty) Get.back();
       logger.e('网络异常');
       base.message = '网络异常';
     }
   } on DioException catch (e) {
     logger.e('error:${e.toString()}');
-    base.message = '链接服务器失败：${e.toString()}';
+    switch (e.type) {
+      case DioExceptionType.connectionTimeout:
+        base.message = '连接服务器超时';
+        break;
+      case DioExceptionType.sendTimeout:
+        base.message = '发送数据超时';
+        break;
+      case DioExceptionType.receiveTimeout:
+        base.message = '接收数据超时';
+        break;
+      case DioExceptionType.badResponse:
+        base.message = '请求配置错误';
+        break;
+      case DioExceptionType.cancel:
+        base.message = '取消请求';
+        break;
+      case DioExceptionType.connectionError:
+        base.message = '连接服务器异常';
+        break;
+      case DioExceptionType.badCertificate:
+        base.message = '服务器证书错误';
+        break;
+      case DioExceptionType.unknown:
+        base.message = '未知异常';
+        break;
+    }
   } on Exception catch (e) {
     logger.e('error:${e.toString()}');
     base.message = '发生错误：${e.toString()}';
   } on Error catch (e) {
     logger.e('error:${e.toString()}');
     base.message = '发生异常：${e.toString()}';
+  } finally {
+    if (loading != null && loading.isNotEmpty) Get.back();
+    base.baseUrl = baseUrl;
   }
-  if (loading != null && loading.isNotEmpty) Get.back();
   return base;
 }
+
+///网络测试接口
+const webApiLNetTest = 'api/Public/NetTest';
 
 ///登录接口
 const webApiLogin = 'api/User/Login';
@@ -244,7 +275,7 @@ const webApiChangePassword = 'api/User/ChangePassWord';
 const webApiChangeDepartment = 'api/User/GetLoginInfo';
 
 ///检查版本更新接口
-const webApiCheckVersion = 'api/Public/VersionUpgrade';
+const webApiCheckVersion = 'api/Public/FlutterVersionUpgrade';
 
 ///获取sap供应商列表接口
 const webApiPickerSapSupplier = 'api/Supplier/GetSAPSupplierMessageNew';
@@ -593,8 +624,10 @@ const webApiModifyWorkCardItem =
 ///生成报工产量表_金臻
 const webApiReportDispatch =
     'api/CompoundDispatching/SubmitScWorkCardReportJinZhen';
+
 ///最近一次来访记录
-const webApiGetVisitInfoByJsonStr = 'api/VisitorRegistration/GetVisitInfoByJsonStr';
+const webApiGetVisitInfoByJsonStr =
+    'api/VisitorRegistration/GetVisitInfoByJsonStr';
 
 ///来访详情
 const webApiGetVisitorInfo = 'api/VisitorRegistration/GetVisitorInfo';
@@ -609,7 +642,8 @@ const webApiInsertIntoFVisit = 'api/VisitorRegistration/InsertIntoFVisit';
 const webApiGetEmpByField = 'api/VisitorRegistration/GetEmpByField';
 
 ///获取会客地点
-const webApiGetReceiveVisitorPlace = 'api/VisitorRegistration/GetReceiveVisitorPlace';
+const webApiGetReceiveVisitorPlace =
+    'api/VisitorRegistration/GetReceiveVisitorPlace';
 
 ///成型集装箱出货扫码汇总
 const webApiSapContainerScanner = "sap/zapp/ZMM_ZXCFSM_SUMM";
@@ -618,7 +652,8 @@ const webApiSapContainerScanner = "sap/zapp/ZMM_ZXCFSM_SUMM";
 const webApiSapContainerShipmentScanner = "sap/zapp/ZMM_ZXCFSM_D";
 
 ///贴标工序报工_修改已报工
-const webApiProductionDispatchReportSubmit = 'api/WetPrinting/BarCodeProcessReportSubmit_Reported';
+const webApiProductionDispatchReportSubmit =
+    'api/WetPrinting/BarCodeProcessReportSubmit_Reported';
 
 ///获取工序派工单信息
 const webApiGetProcessWorkCard = 'api/WetPrinting/GetProcessWorkCardByBarcode';
@@ -627,16 +662,20 @@ const webApiGetProcessWorkCard = 'api/WetPrinting/GetProcessWorkCardByBarcode';
 const webApiGetReportDataByBarcode = 'api/WetPrinting/GetReportDataByBarcode';
 
 ///修改操作员
-const webApiChangeLabelingBarcodeEmp = 'api/WetPrinting/ChangeLabelingBarcodeEmp';
+const webApiChangeLabelingBarcodeEmp =
+    'api/WetPrinting/ChangeLabelingBarcodeEmp';
 
 ///删除标签
-const webApiUnReportAndDelLabelingBarcode = 'api/WetPrinting/UnReportAndDelLabelingBarcode';
+const webApiUnReportAndDelLabelingBarcode =
+    'api/WetPrinting/UnReportAndDelLabelingBarcode';
 
 ///智能AGV派送获取工单列表
-const webApiSmartDeliveryGetWorkCardList = 'api/Autoworkshopbatch/GetWorkCardList';
+const webApiSmartDeliveryGetWorkCardList =
+    'api/Autoworkshopbatch/GetWorkCardList';
 
 ///发料明细(材料清单)
-const webApiSmartDeliveryGetWorkCardMaterial = 'api/Autoworkshopbatch/GetWorkCardMaterial';
+const webApiSmartDeliveryGetWorkCardMaterial =
+    'api/Autoworkshopbatch/GetWorkCardMaterial';
 
 ///获取楦头库存
 const webApiSmartDeliveryGetShorTreeList = 'api/Autoworkshopbatch/GetBalance';
@@ -646,6 +685,28 @@ const webApiSmartDeliverySaveShorTree = 'api/Autoworkshopbatch/BalanceEdit';
 
 ///具体部件物料发料详情
 const webApiSmartDeliveryDetail = 'api/Autoworkshopbatch/GetPartsOrder';
+
+///新增发料数据
+const webApiSmartDeliveryAddPartsStock = 'api/Autoworkshopbatch/AddPartsStock';
+
+///删除发料数据
+const webApiSmartDeliveryDeletePartsStock =
+    'api/Autoworkshopbatch/DeletePartsStock';
+
+///发料数据创建机器人任务
+const webApiSmartDeliveryCreatRobTask = 'api/Autoworkshopbatch/CreatRobTask';
+
+///获取机器人信息
+const webApiSmartDeliveryGetRobInfo = 'api/Autoworkshopbatch/GetRobInfo';
+
+///机器人任务记录
+const webApiSmartDeliveryGetRobTask = 'api/Autoworkshopbatch/GetRobTask';
+
+///暂停机器人
+const webApiSmartDeliveryStopRobot = 'api/Autoworkshopbatch/StopRobot';
+
+///恢复机器人
+const webApiSmartDeliveryResumeRobot = 'api/Autoworkshopbatch/ResumeRobot';
 
 ///外箱内盒条码关联数据
 const webApiGetCartonLabelInfo = 'api/OutBoxScan/GetLinkData';
@@ -657,7 +718,8 @@ const webApiSubmitScannedCartonLabel = 'api/OutBoxScan/SubOutBoxData';
 const webApiGetCartonLabelScanHistory = 'api/OutBoxScan/GetOrderScan';
 
 ///订单扫码情况明细表
-const webApiGetCartonLabelScanHistoryDetail = 'api/OutBoxScan/GetOrderScanDetail';
+const webApiGetCartonLabelScanHistoryDetail =
+    'api/OutBoxScan/GetOrderScanDetail';
 
 ///获取品质异常详情
 const webApiGetSCDispatchOrders = 'api/QMProcessFlowEx/GetSCDispatchOrders';

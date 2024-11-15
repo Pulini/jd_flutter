@@ -25,7 +25,7 @@ class _ModifyLabelWorkerPageState extends State<ModifyLabelWorkerPage> {
       Get.find<ProcessDispatchRegisterLogic>().state;
 
   _methodChannel() {
-    print('注册监听');
+    debugPrint('注册监听');
     const MethodChannel(channelScanFlutterToAndroid).setMethodCallHandler((call) {
       switch (call.method) {
         case 'PdaScanner':

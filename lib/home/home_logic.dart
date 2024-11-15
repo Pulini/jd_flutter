@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/utils/utils.dart';
@@ -22,7 +21,18 @@ class HomeLogic extends GetxController {
     userAvatar = Obx(
       () => state.userPicUrl.value.isEmpty
           ? const Icon(Icons.flutter_dash, color: Colors.white)
-          : ClipOval(child: Image.network(userInfo!.picUrl!)),
+          : AspectRatio(
+              aspectRatio: 1 / 1,
+              child: ClipOval(
+                child: Image.network(
+                  userInfo!.picUrl!,
+                  errorBuilder: (ctx, err, st) => Image.asset(
+                    'assets/images/ic_logo.png',
+                    color: Colors.blue,
+                  ),
+                ),
+              ),
+            ),
     );
   }
 

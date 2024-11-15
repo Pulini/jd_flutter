@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 import '../../../bean/http/response/carton_label_scan_progress_info.dart';
@@ -25,7 +26,7 @@ class CartonLabelScanProgressState {
           for (var json in response.data)
             CartonLabelScanProgressInfo.fromJson(json)
         ];
-        print('progress=${progress.length}');
+        debugPrint('progress=${progress.length}');
       } else {
         error.call(response.message ?? 'query_default_error'.tr);
       }

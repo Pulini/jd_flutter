@@ -225,6 +225,12 @@ extension RequestOptionsExt on RequestOptions {
     logger.f(map);
   }
 }
+extension ListExt on List?{
+  isNullOrEmpty(){
+    if(this==null)return true;
+    return this!.isEmpty;
+  }
+}
 
 class TapUtil {
   static debounce(Function() fn) {
@@ -289,13 +295,16 @@ getVersionInfo(
   ).then((versionInfoCallback) {
     if (versionInfoCallback.resultCode == resultSuccess) {
       logger.i(packageInfo);
-      var versionInfo = VersionInfo.fromJson(versionInfoCallback.data);
-      // if (packageInfo.version == versionInfo.versionName) {
-      //   noUpdate.call();
-      // } else {
-      //   needUpdate.call(versionInfo);
-      // }
-      noUpdate.call();
+      if (versionInfoCallback.baseUrl == testUrlForMES) {
+        noUpdate.call();
+      } else {
+        var versionInfo = VersionInfo.fromJson(versionInfoCallback.data);
+        if (packageInfo.buildNumber.toIntTry() < versionInfo.versionCode!) {
+          needUpdate.call(versionInfo);
+        } else {
+          noUpdate.call();
+        }
+      }
     } else {
       errorDialog(content: versionInfoCallback.message);
     }
@@ -310,7 +319,9 @@ upData() {
   ).then((versionInfoCallback) {
     if (versionInfoCallback.resultCode == resultSuccess) {
       logger.i(packageInfo);
-      doUpdate(VersionInfo.fromJson(versionInfoCallback.data));
+      if (versionInfoCallback.baseUrl == baseUrlForMES) {
+        doUpdate(VersionInfo.fromJson(versionInfoCallback.data));
+      }
     } else {
       errorDialog(content: versionInfoCallback.message);
     }

@@ -1,3 +1,5 @@
+import 'package:jd_flutter/utils/utils.dart';
+
 /// rowNo : 10
 /// workCardInterID : 169689
 /// workCardNo : "P2005162"
@@ -18,6 +20,8 @@ class SmartDeliveryOrderInfo {
     this.dispatchQty,
     this.materialIssuanceStatus,
     this.depName,
+    this.departmentId,
+    this.instructions,
   });
 
   SmartDeliveryOrderInfo.fromJson(dynamic json) {
@@ -30,6 +34,8 @@ class SmartDeliveryOrderInfo {
     dispatchQty = json['dispatchQty'];
     materialIssuanceStatus = json['materialIssuanceStatus'];
     depName = json['depName'];
+    departmentId = json['depID'];
+    instructions = json['mtoNo'];
   }
 
   int? rowNo; //行号
@@ -39,8 +45,10 @@ class SmartDeliveryOrderInfo {
   String? typeBody; //工厂型体
   String? dispatchDate; //派工日期
   double? dispatchQty; //派工总量
-  String? materialIssuanceStatus; //发料情况
+  int? materialIssuanceStatus; //发料情况 0未发料、1已发料
   String? depName; //课组名称
+  int? departmentId; //课组ID
+  String? instructions; //指令号
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -53,6 +61,8 @@ class SmartDeliveryOrderInfo {
     map['dispatchQty'] = dispatchQty;
     map['materialIssuanceStatus'] = materialIssuanceStatus;
     map['depName'] = depName;
+    map['depID'] = departmentId;
+    map['mtoNo'] = instructions;
     return map;
   }
 }
@@ -90,6 +100,7 @@ class SmartDeliveryMaterialInfo {
   }
 
   int? scWorkCardInterID;
+
   int? partsID;
   int? materialID;
   String? partName;
@@ -168,6 +179,7 @@ class SizeInfo {
 }
 
 /// TypeBody : "D13677-22B MB"
+/// SrcICMOInterID : "156640"
 /// SeOrders : "JZ2400056"
 /// MapNumber : ""
 /// ClientOrderNumber : ""
@@ -179,11 +191,15 @@ class SizeInfo {
 
 class DeliveryDetailInfo {
   DeliveryDetailInfo({
+    this.newWorkCardInterID,
+    this.partsID,
     this.typeBody,
     this.seOrders,
     this.mapNumber,
+    this.srcICMOInterID,
     this.clientOrderNumber,
     this.partName,
+    this.materialID,
     this.materialName,
     this.materialNumber,
     this.partsSizeList,
@@ -191,12 +207,16 @@ class DeliveryDetailInfo {
   });
 
   DeliveryDetailInfo.fromJson(dynamic json) {
+    newWorkCardInterID = json['NewWorkCardInterID'];
+    partsID = json['PartsID'];
     typeBody = json['TypeBody'];
     seOrders = json['SeOrders'];
     mapNumber = json['MapNumber'];
+    srcICMOInterID = json['SrcICMOInterID'];
     clientOrderNumber = json['ClientOrderNumber'];
     partName = json['PartName'];
     materialName = json['MaterialName'];
+    materialID = json['MaterialID'];
     materialNumber = json['MaterialNumber'];
     if (json['PartsSizeList'] != null) {
       partsSizeList = [];
@@ -212,11 +232,15 @@ class DeliveryDetailInfo {
     }
   }
 
+  String? newWorkCardInterID;
+  String? partsID;
   String? typeBody;
   String? seOrders;
   String? mapNumber;
+  String? srcICMOInterID;
   String? clientOrderNumber;
   String? partName;
+  String? materialID;
   String? materialName;
   String? materialNumber;
   List<PartsSizeList>? partsSizeList;
@@ -224,11 +248,15 @@ class DeliveryDetailInfo {
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
+    map['NewWorkCardInterID'] = newWorkCardInterID;
+    map['PartsID'] = partsID;
     map['TypeBody'] = typeBody;
     map['SeOrders'] = seOrders;
     map['MapNumber'] = mapNumber;
+    map['SrcICMOInterID'] = srcICMOInterID;
     map['ClientOrderNumber'] = clientOrderNumber;
     map['PartName'] = partName;
+    map['MaterialID'] = materialID;
     map['MaterialName'] = materialName;
     map['MaterialNumber'] = materialNumber;
     if (partsSizeList != null) {
@@ -239,6 +267,39 @@ class DeliveryDetailInfo {
     }
     return map;
   }
+
+  bool hasDelivered() =>
+      workData?.isNullOrEmpty() ? false : workData!.any((v) => v.sendType == 1);
+
+  double getMaxRound() => partsSizeList == null
+      ? 0
+      : partsSizeList!.map((v) => v.getRound()).reduce((a, b) => a > b ? a : b);
+
+  int getShoeTreeTotal() => partsSizeList == null
+      ? 0
+      : partsSizeList!
+          .map((e) => e.shoeTreeQty ?? 0)
+          .reduce((v1, v2) => v1 + v2);
+
+  int getShoeTreeReserveTotal() => partsSizeList == null
+      ? 0
+      : partsSizeList!
+          .map((e) => (e.shoeTreeQty ?? 0) - e.reserveShoeTreeQty)
+          .reduce((v1, v2) => v1 + v2);
+
+  int getMinShoeTreeQty() => partsSizeList == null
+      ? 0
+      : partsSizeList!
+          .map((v) => v.shoeTreeQty ?? 0)
+          .reduce((a, b) => a < b ? a : b);
+
+  int getOrderTotal() => partsSizeList == null
+      ? 0
+      : partsSizeList!.map((e) => e.qty ?? 0).reduce((v1, v2) => v1 + v2);
+
+  int getOrderMin() => partsSizeList == null
+      ? 0
+      : partsSizeList!.map((v) => v.qty ?? 0).reduce((a, b) => a < b ? a : b);
 }
 
 /// Round : "1"
@@ -258,6 +319,7 @@ class WorkData {
     round = json['Round'];
     sendType = json['SendType'];
     taskID = json['TaskID'];
+    agvNumber = json['RobNumber'];
     if (json['SendSizeList'] != null) {
       sendSizeList = [];
       json['SendSizeList'].forEach((v) {
@@ -266,11 +328,12 @@ class WorkData {
     }
   }
 
-  bool isSelected=false;
+  bool isSelected = false;
 
   String? round;
   int? sendType;
   String? taskID;
+  String? agvNumber;
   List<SizeInfo>? sendSizeList;
 
   Map<String, dynamic> toJson() {
@@ -278,11 +341,16 @@ class WorkData {
     map['Round'] = round;
     map['SendType'] = sendType;
     map['TaskID'] = taskID;
+    map['RobNumber'] = agvNumber;
     if (sendSizeList != null) {
       map['SendSizeList'] = sendSizeList?.map((v) => v.toJson()).toList();
     }
     return map;
   }
+
+  int getTotalQty() => sendSizeList == null
+      ? 0
+      : sendSizeList!.map((v) => v.qty ?? 0).reduce((v1, v2) => v1 + v2);
 }
 
 /// Size : "36"
@@ -305,12 +373,206 @@ class PartsSizeList {
   String? size;
   int? qty;
   int? shoeTreeQty;
+  int reserveShoeTreeQty = 2;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['Size'] = size;
     map['Qty'] = qty;
     map['ShoeTreeQty'] = shoeTreeQty;
+    return map;
+  }
+
+  double getOrderProportion(double orderTotal) {
+    if (qty == null || qty == 0) {
+      return 0;
+    } else {
+      return qty!.toDouble().div(orderTotal);
+    }
+  }
+
+  double getRound() {
+    double round = shoeTreeQty == 0
+        ? 0
+        : ((qty ?? 0) / ((shoeTreeQty ?? 0) - reserveShoeTreeQty));
+    //检查退位后每轮数是否会超出预排楦头数，超出的话轮数进位
+    if ((qty ?? 0) / round.truncate() >
+        (shoeTreeQty ?? 0) - reserveShoeTreeQty) {
+      round = round.ceil().toDouble();
+    }
+    return round;
+  }
+
+  int roundDelivery() => (shoeTreeQty ?? 0) - reserveShoeTreeQty;
+}
+
+class AgvInfo {
+  AgvInfo({
+    this.robInfo,
+    this.robotPosition,
+  });
+
+  AgvInfo.fromJson(dynamic json) {
+    if (json['RobInfo'] != null) {
+      robInfo = [];
+      json['RobInfo'].forEach((v) {
+        robInfo?.add(RobotDeviceInfo.fromJson(v));
+      });
+    }
+    if (json['RobotPosition'] != null) {
+      robotPosition = [];
+      json['RobotPosition'].forEach((v) {
+        robotPosition?.add(RobotPositionInfo.fromJson(v));
+      });
+    }
+  }
+
+  List<RobotDeviceInfo>? robInfo;
+  List<RobotPositionInfo>? robotPosition;
+}
+
+/// RobNumber : "123"
+/// RobName : "agv"
+
+class RobotDeviceInfo {
+  RobotDeviceInfo({
+    this.agvNumber,
+    this.agvName,
+  });
+
+  RobotDeviceInfo.fromJson(dynamic json) {
+    agvNumber = json['RobNumber'];
+    agvName = json['RobName'];
+  }
+
+  String? agvNumber;
+  String? agvName;
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['RobNumber'] = agvNumber;
+    map['RobName'] = agvName;
+    return map;
+  }
+
+  @override
+  String toString() {
+    return agvName ?? '';
+  }
+}
+
+/// TaskType : "F01"
+/// TaskTypName : "成型自动化5楼"
+
+class RobotPositionInfo {
+  RobotPositionInfo({
+    this.taskType,
+    this.taskTypeName,
+    this.startPoint,
+    this.endPoint,
+  });
+
+  RobotPositionInfo.fromJson(dynamic json) {
+    taskType = json['TaskType'];
+    taskTypeName = json['TaskTypeName'];
+    if (json['StartPoint'] != null) {
+      startPoint = [];
+      json['StartPoint'].forEach((v) {
+        startPoint?.add(TaskPoint.fromJson(v));
+      });
+    }
+    if (json['EndPoint'] != null) {
+      endPoint = [];
+      json['EndPoint'].forEach((v) {
+        endPoint?.add(TaskPoint.fromJson(v));
+      });
+    }
+  }
+
+  String? taskType;
+  String? taskTypeName;
+  List<TaskPoint>? startPoint;
+  List<TaskPoint>? endPoint;
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['TaskType'] = taskType;
+    map['TaskTypeName'] = taskTypeName;
+    if (startPoint != null) {
+      map['StartPoint'] = startPoint?.map((v) => v.toJson()).toList();
+    }
+    if (endPoint != null) {
+      map['EndPoint'] = endPoint?.map((v) => v.toJson()).toList();
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return taskTypeName ?? '';
+  }
+}
+
+/// PositionCode : "F3"
+/// PositionName : "工作区"
+class TaskPoint {
+  TaskPoint({
+    this.positionCode,
+    this.positionName,
+  });
+
+  TaskPoint.fromJson(dynamic json) {
+    positionCode = json['PositionCode'];
+    positionName = json['PositionName'];
+  }
+
+  String? positionCode;
+  String? positionName;
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['PositionCode'] = positionCode;
+    map['PositionName'] = positionName;
+    return map;
+  }
+
+  @override
+  String toString() {
+    return positionName ?? '';
+  }
+}
+
+/// TaskID : "84affcad5c7b44748f40e6c6afc634c9"
+/// TaskType : "执行中"
+/// StartingPoint : "F1"
+/// EndPoint : "F6"
+
+class AgvTaskInfo {
+  AgvTaskInfo({
+    this.taskID,
+    this.taskType,
+    this.startingPoint,
+    this.endPoint,
+  });
+
+  AgvTaskInfo.fromJson(dynamic json) {
+    taskID = json['TaskID'];
+    taskType = json['TaskType'];
+    startingPoint = json['StartingPoint'];
+    endPoint = json['EndPoint'];
+  }
+
+  String? taskID;
+  int? taskType;
+  String? startingPoint;
+  String? endPoint;
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['TaskID'] = taskID;
+    map['TaskType'] = taskType;
+    map['StartingPoint'] = startingPoint;
+    map['EndPoint'] = endPoint;
     return map;
   }
 }
