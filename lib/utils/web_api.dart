@@ -33,7 +33,7 @@ const testUrlForMES = 'https://geapptest.goldemperor.com:1224/';
 const baseUrlForSAP = 'https://erpprd01.goldemperor.com:8003/';
 
 ///SAP开发库
-const developUrlForSAP = 'https://erpqas01.goldemperor.com:8001/';
+const developUrlForSAP = 'https://erpdev01.goldemperor.com:8001/';
 
 ///SAP正式库
 const baseClientForSAP = 800;
@@ -90,7 +90,7 @@ Future<BaseData> sapPost({
 }) {
   return _doHttp(
     loading: loading,
-    params: {'sap-client': baseClientForSAP, ...?params},
+    params: {'sap-client': developClientForSAP, ...?params},
     body: body,
     baseUrl: baseUrlForSAP,
     isPost: true,
@@ -667,5 +667,11 @@ const webApiGetProcessFlowEXTypes = 'api/QMProcessFlowEx/GetProcessFlowEXTypes';
 
 ///品质异常插入
 const webApiAddAbnormalQuality = 'api/QMProcessFlowEx/QMAbnormityBysuitID';
+
+///删除品质异常
+const webApiDelExBill = 'api/QMProcessFlowEx/DelExBill';
+
+///扫码添加成型集装箱出货
+const webApiSapScanAdd = "sap/zapp/ZMM_RES_ZXCFSM_D";
 
 

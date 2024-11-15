@@ -4,7 +4,7 @@ import 'package:jd_flutter/fun/other/forming_packing_scan/packing_scan_logic.dar
 import '../../../../bean/http/response/container_scanner_info.dart';
 import '../../../../widget/custom_widget.dart';
 import '../../../../widget/picker/picker_view.dart';
-
+import '../../../widget/dialogs.dart';
 
 class PackingScanPage extends StatefulWidget {
   const PackingScanPage({super.key});
@@ -17,35 +17,77 @@ class _PackingScanPageState extends State<PackingScanPage> {
   final logic = Get.put(PackingScanLogic());
   final state = Get.find<PackingScanLogic>().state;
 
+  ///带框、带点击事件带文本
+  expandedLeftFrameText({
+    Function? click,
+    Color? backgroundColor,
+    Color? textColor,
+    int? flex,
+    EdgeInsetsGeometry? padding,
+    AlignmentGeometry? alignment,
+    bool isBold = false,
+    required String text,
+  }) {
+    return Expanded(
+      flex: flex ?? 1,
+      child: GestureDetector(
+        onTap: () => click?.call(),
+        child: Container(
+          padding: padding ?? const EdgeInsets.all(5),
+          decoration: BoxDecoration(
+            border: const Border(
+                top: BorderSide(width: 1, color: Colors.grey),
+                bottom: BorderSide(width: 1, color: Colors.grey),
+                right: BorderSide(width: 1, color: Colors.grey)),
+            color: backgroundColor ?? Colors.transparent,
+          ),
+          alignment: alignment ?? Alignment.centerLeft,
+          child: Text(
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            text,
+            style: TextStyle(
+              color: textColor ?? Colors.black87,
+              fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   _item(ContainerScanner data) {
     return GestureDetector(
       onTap: () => {
-        logic.goShipment(data.ZZKHXH1.toString())
+        state.getShipmentInformation(
+            time: logic.pickerControllerDate
+                .getDateFormatYMD()
+                .replaceAll('-', ''),
+            cabinetNumber: data.ZZKHXH1,
+            error: (String msg) {
+              errorDialog(content: msg);
+            }),
       },
-      child: Container(
-          margin: const EdgeInsets.only(bottom: 10),
-          padding: const EdgeInsets.all(5),
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.all(Radius.circular(10)),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              expandedFrameText(
+                text: data.ZZKHXH1.toString(),
+                backgroundColor: Colors.blue.shade50,
+                flex: 1,
+              ),
+              expandedFrameText(
+                text: '${data.YFXS}/${data.ZZYCXS}',
+                backgroundColor: Colors.blue.shade50,
+                flex: 1,
+              )
+            ],
           ),
-          child: Padding(
-            padding: const EdgeInsets.only(left: 5, right: 5),
-            child: Row(
-              children: [
-                expandedFrameText(
-                  text: data.ZZKHXH1.toString(),
-                  backgroundColor: Colors.blue.shade50,
-                  flex: 1,
-                ),
-                expandedFrameText(
-                  text: '${data.YFXS}/${data.ZZYCXS}',
-                  backgroundColor: Colors.blue.shade50,
-                  flex: 1,
-                )
-              ],
-            ),
-          )),
+        ],
+      ),
     );
   }
 
@@ -61,28 +103,26 @@ class _PackingScanPageState extends State<PackingScanPage> {
           const SizedBox(
             height: 10,
           ),
-          Padding(
-              padding: const EdgeInsets.only(left: 5, right: 5),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
                 children: [
-                  Row(
-                    children: [
-                      expandedFrameText(
-                        text: '柜号',
-                        backgroundColor: Colors.blue.shade50,
-                        flex: 1,
-                      ),
-                      expandedFrameText(
-                        text: '已发/应出',
-                        backgroundColor: Colors.blue.shade50,
-                        flex: 1,
-                      )
-                    ],
+                  expandedFrameText(
+                    text: '柜号',
+                    backgroundColor: Colors.blue.shade50,
+                    flex: 1,
                   ),
+                  expandedLeftFrameText(
+                    text: '已发/应出',
+                    backgroundColor: Colors.blue.shade50,
+                    flex: 1,
+                  )
                 ],
-              )),
+              ),
+            ],
+          ),
           Expanded(
             child: Obx(
               () => ListView.builder(
@@ -93,6 +133,14 @@ class _PackingScanPageState extends State<PackingScanPage> {
             ),
           )
         ]));
+  }
+
+  @override
+  void didChangeDependencies() {
+    state.getAllData(
+        time: logic.pickerControllerDate.getDateFormatYMD().replaceAll('-', ''),
+        error: (msg) => errorDialog(content: msg));
+    super.didChangeDependencies();
   }
 
   @override
