@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -6,36 +5,48 @@ import 'package:hand_signature/signature.dart';
 
 import 'custom_widget.dart';
 
-class SignatureView extends StatefulWidget {
-  SignatureView({super.key, required this.name, this.signature});
+class SignaturePage extends StatefulWidget {
+  const SignaturePage({
+    super.key,
+    this.signature,
+    required this.name,
+    required this.callback,
+  });
 
-  ByteData? signature;
+  final ByteData? signature;
   final String name;
+  final Function(ByteData) callback;
 
   @override
-  State<SignatureView> createState() => _SignatureViewState();
+  State<SignaturePage> createState() => _SignaturePageState();
 }
 
-class _SignatureViewState extends State<SignatureView> {
-  final RxBool reSignature = false.obs;
-  final control = HandSignatureControl(
+class _SignaturePageState extends State<SignaturePage> {
+  var control = HandSignatureControl(
     threshold: 3.0,
     smoothRatio: 0.65,
     velocityRange: 2.0,
   );
+  late RxBool reSignature;
 
   @override
   void initState() {
-    SystemChrome.setPreferredOrientations(
-        [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
+    reSignature = (widget.signature == null).obs;
+    // SystemChrome.setPreferredOrientations([
+    //   DeviceOrientation.landscapeLeft,
+    //   DeviceOrientation.landscapeRight,
+    // ]);
     super.initState();
   }
-@override
-  void dispose() {
-  SystemChrome.setPreferredOrientations(
-      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-    super.dispose();
-  }
+
+  // @override
+  // void dispose() {
+  //   super.dispose();
+  //   SystemChrome.setPreferredOrientations([
+  //     DeviceOrientation.portraitUp,
+  //     DeviceOrientation.portraitDown,
+  //   ]);
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -71,8 +82,11 @@ class _SignatureViewState extends State<SignatureView> {
                       isWarning: true,
                     );
                   } else {
-                    if (image != null) widget.signature = image;
-                    Get.back(result: image);
+                    debugPrint('callback image=${image == null}');
+                    if (image != null) {
+                      Get.back(result: image);
+                      widget.callback.call(image);
+                    }
                   }
                 });
               },
@@ -84,40 +98,38 @@ class _SignatureViewState extends State<SignatureView> {
             ),
           ],
         ),
-        body: Container(
-          margin: EdgeInsets.only(left: 20, right: 20, bottom: 20),
-          color: Colors.grey.shade200,
-          child: Obx(
-            () => Stack(
-              children: [
-                Center(
-                  child: Text(
-                    widget.name,
-                    style: TextStyle(
-                      fontSize: 180,
-                      color: Colors.black87.withOpacity(0.1),
+        body: Obx(() => Container(
+              margin: EdgeInsets.only(left: 20, right: 20, bottom: 20),
+              color: Colors.grey.shade200,
+              child: Stack(
+                children: [
+                  Center(
+                    child: Text(
+                      widget.name,
+                      style: TextStyle(
+                        fontSize: 180,
+                        color: Colors.black87.withOpacity(0.1),
+                      ),
                     ),
                   ),
-                ),
-                ConstrainedBox(
-                  constraints: const BoxConstraints.expand(),
-                  child: reSignature.value || widget.signature == null
-                      ? HandSignature(
-                          control: control,
-                          color: Colors.blueGrey,
-                          width: 1.0,
-                          maxWidth: 10.0,
-                          type: SignatureDrawType.shape,
-                        )
-                      : Image.memory(
-                          fit: BoxFit.cover,
-                          widget.signature!.buffer.asUint8List(),
-                        ),
-                ),
-              ],
-            ),
-          ),
-        ),
+                  ConstrainedBox(
+                    constraints: const BoxConstraints.expand(),
+                    child: reSignature.value || widget.signature == null
+                        ? HandSignature(
+                            control: control,
+                            color: Colors.blueGrey,
+                            width: 1.0,
+                            maxWidth: 10.0,
+                            type: SignatureDrawType.shape,
+                          )
+                        : Image.memory(
+                            fit: BoxFit.cover,
+                            widget.signature!.buffer.asUint8List(),
+                          ),
+                  ),
+                ],
+              ),
+            )),
       ),
     );
   }

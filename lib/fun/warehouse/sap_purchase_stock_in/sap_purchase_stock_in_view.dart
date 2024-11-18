@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/sap_purchase_stock_in_info.dart';
 import 'package:jd_flutter/fun/warehouse/sap_purchase_stock_in/sap_purchase_stock_in_dialog.dart';
+import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
@@ -66,8 +67,8 @@ class _SapPurchaseStockInPageState extends State<SapPurchaseStockInPage> {
             state.selectedList[index] = !state.selectedList[index];
           },
           child: Container(
-            margin: const EdgeInsets.only(left: 5, right: 5, bottom: 10),
-            padding: const EdgeInsets.all(10),
+            margin: const EdgeInsets.only(left: 4, right: 4, bottom: 10),
+            padding: const EdgeInsets.only(left: 4, right: 4),
             decoration: BoxDecoration(
               color: state.selectedList[index]
                   ? Colors.blue.shade100
@@ -77,14 +78,17 @@ class _SapPurchaseStockInPageState extends State<SapPurchaseStockInPage> {
                   ? Border.all(color: Colors.green, width: 2)
                   : Border.all(color: Colors.white, width: 2),
             ),
-            foregroundDecoration: list[0].isExempt == 'X'
-                ? const RotatedCornerDecoration.withColor(
+            foregroundDecoration: list[0].isGenerate?.isNotEmpty == true ||
+                    list[0].inspector?.isNotEmpty == true
+                ? RotatedCornerDecoration.withColor(
                     color: Colors.green,
-                    badgeCornerRadius: Radius.circular(8),
-                    badgeSize: Size(45, 45),
+                    badgeCornerRadius: const Radius.circular(8),
+                    badgeSize: const Size(45, 45),
                     textSpan: TextSpan(
-                      text: '免检',
-                      style: TextStyle(
+                      text: list[0].isGenerate?.isNotEmpty == true
+                          ? '已暂收'
+                          : '已清点',
+                      style: const TextStyle(
                         fontSize: 14,
                         color: Colors.white,
                       ),
@@ -109,15 +113,29 @@ class _SapPurchaseStockInPageState extends State<SapPurchaseStockInPage> {
                           .reduce((a, b) => a + b)
                           .toString(),
                     ),
-                    if (list[0].isExempt == 'X') const SizedBox(width: 30),
+                    if (list[0].isGenerate?.isNotEmpty == true ||
+                        list[0].inspector?.isNotEmpty == true)
+                      const SizedBox(width: 30),
                   ],
                 ),
-                textSpan(
-                  hint: '送货单号：',
-                  text: list[0].deliveryNumber ?? '',
-                  isBold: false,
-                  textColor: Colors.grey.shade700,
-                  hintColor: Colors.grey.shade700,
+                Row(
+                  children: [
+                    expandedTextSpan(
+                      hint: '送货单号：',
+                      text: list[0].deliveryNumber ?? '',
+                      isBold: false,
+                      textColor: Colors.grey.shade700,
+                      hintColor: Colors.grey.shade700,
+                    ),
+                    if (list[0].isExempt == 'X')
+                      Text(
+                        '免检',
+                        style: TextStyle(
+                          color: Colors.green,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      )
+                  ],
                 ),
                 textSpan(
                   hint: '备注：',
@@ -135,9 +153,17 @@ class _SapPurchaseStockInPageState extends State<SapPurchaseStockInPage> {
                 for (var item in materialList) ..._subItem(item),
                 Row(children: [
                   Expanded(
-                    child: CombinationButton(
-                      text: '核查',
-                      click: () => logic.checkOrder(
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        overlayColor: Colors.white,
+                        backgroundColor: Colors.blueAccent,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(7),
+                          ),
+                        ),
+                      ),
+                      onPressed: () => logic.checkOrder(
                         index: index,
                         list: list[0],
                         refresh: () => logic.queryOrder(
@@ -154,17 +180,32 @@ class _SapPurchaseStockInPageState extends State<SapPurchaseStockInPage> {
                           company: companyController.selectedId.value,
                         ),
                       ),
-                      combination: Combination.left,
+                      child: Text(
+                        '核查',
+                        style: TextStyle(color: Colors.white),
+                      ),
                     ),
                   ),
+                  SizedBox(width: 1),
                   Expanded(
-                    child: CombinationButton(
-                      text: '明细',
-                      click: () => logic.queryDetail(
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        overlayColor: Colors.white,
+                        backgroundColor: Colors.blueAccent,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                            bottomRight: Radius.circular(7),
+                          ),
+                        ),
+                      ),
+                      onPressed: () => logic.queryDetail(
                         index,
                         list[0].deliveryNumber ?? '',
                       ),
-                      combination: Combination.right,
+                      child: Text(
+                        '明细',
+                        style: TextStyle(color: Colors.white),
+                      ),
                     ),
                   ),
                 ])
@@ -209,8 +250,8 @@ class _SapPurchaseStockInPageState extends State<SapPurchaseStockInPage> {
           ),
           Expanded(
             child: progressIndicator(
-              max: list.map((v) => v.qty ?? 0).reduce((a, b) => a + b),
-              value: list.map((v) => v.checkQty ?? 0).reduce((a, b) => a + b),
+              max: list.map((v) => v.qty ?? 0).reduce((a, b) => a.add(b)),
+              value: list.map((v) => v.checkQty ?? 0).reduce((a, b) => a.add(b)),
             ),
           ),
         ],
@@ -264,15 +305,7 @@ class _SapPurchaseStockInPageState extends State<SapPurchaseStockInPage> {
               ],
             )),
       ],
-      query: () => logic.queryOrder(
-        deliNo: deliveryOrderController.text,
-        startDate: dpcStartDate.getDateFormatSapYMD(),
-        endDate: dpcEndDate.getDateFormatSapYMD(),
-        factory: factoryWarehouseController.getOptionsPicker1().pickerId(),
-        warehouse: factoryWarehouseController.getOptionsPicker2().pickerId(),
-        supplier: supplierController.selectedId.value,
-        company: companyController.selectedId.value,
-      ),
+      query: queryOrder,
       body: Obx(() => Column(
             children: [
               Expanded(
@@ -289,8 +322,8 @@ class _SapPurchaseStockInPageState extends State<SapPurchaseStockInPage> {
                       child: CombinationButton(
                         text: '入库',
                         click: () => stockInDialog(
-                          factoryNumber: logic.getSelected()[0].factory??'',
-                          callback: (){},
+                          list: logic.getSelected(),
+                          refresh: queryOrder,
                         ),
                         combination: Combination.left,
                       ),
@@ -298,14 +331,24 @@ class _SapPurchaseStockInPageState extends State<SapPurchaseStockInPage> {
                     Expanded(
                       child: CombinationButton(
                         text: '入库冲销',
-                        click: () {},
+                        click: () => logic.checkStockInWriteOffSelected(
+                          (list) => stockInWriteOffDialog(
+                            list: list,
+                            refresh: queryOrder,
+                          ),
+                        ),
                         combination: Combination.middle,
                       ),
                     ),
                     Expanded(
                       child: CombinationButton(
                         text: '暂收',
-                        click: () {},
+                        click: () => logic.checkTemporarySelected(
+                          (list) => temporaryDialog(
+                            list: list,
+                            refresh: queryOrder,
+                          ),
+                        ),
                         combination: Combination.right,
                       ),
                     ),
@@ -313,6 +356,18 @@ class _SapPurchaseStockInPageState extends State<SapPurchaseStockInPage> {
                 )
             ],
           )),
+    );
+  }
+
+  queryOrder() {
+    logic.queryOrder(
+      deliNo: deliveryOrderController.text,
+      startDate: dpcStartDate.getDateFormatSapYMD(),
+      endDate: dpcEndDate.getDateFormatSapYMD(),
+      factory: factoryWarehouseController.getOptionsPicker1().pickerId(),
+      warehouse: factoryWarehouseController.getOptionsPicker2().pickerId(),
+      supplier: supplierController.selectedId.value,
+      company: companyController.selectedId.value,
     );
   }
 

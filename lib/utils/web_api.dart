@@ -143,9 +143,9 @@ Future<BaseData> _doHttp({
     ///创建dio对象
     var dio = Dio(BaseOptions(
       baseUrl: baseUrl,
-      connectTimeout: const Duration(minutes: 1),
-      sendTimeout: const Duration(minutes: 1),
-      receiveTimeout: const Duration(minutes: 1),
+      connectTimeout: const Duration(minutes: 2),
+      sendTimeout: const Duration(minutes: 2),
+      receiveTimeout: const Duration(minutes: 2),
     ));
 
     ///接口拦截器
@@ -745,11 +745,14 @@ const webApiSapCheckTemporaryOrder = 'sap/zapp/ZFUN_APP_TEMPORARYDEYAIL_1500A';
 ///根据工厂编号获取存储位置列表
 const webApiGetStorageLocationList = 'api/Department/GetStorageLocationList';
 
-///送货单保存核查
+///sap送货单保存核查
 const webApiSapSaveDeliveryCheck = 'sap/zapp/ZFUN_APP_RECEIVE_1500';
 
 ///获取仓库是否启用了人脸识别
-const webApiGetStockFaceConfig = 'api/Stock/GetStockEnableFaceRec';
+const webApiGetStockFaceConfig = 'api/User/Flutter_GetLiableInfoByEmpCode';
 
-///人脸识别,通过保管人工号获取保管人，监管人信息以及保管人部门
-const webApiGetLiableInfoByEmpCode = 'api/User/GetLiableInfoByEmpCode';
+///sap送货单入库
+const webApiSapDeliveryOrderStockIn = 'sap/zapp/ZFUN_RES_ZCLCGRUKU_1500';
+
+///sap创建暂收单
+const webApiSapCreateTemporary = 'sap/zapp/ZFUN_APP_TEMPORARYDEYAIL_1500';

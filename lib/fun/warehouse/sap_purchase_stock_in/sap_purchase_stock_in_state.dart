@@ -12,7 +12,6 @@ class SapPurchaseStockInState {
   var selectedList = <bool>[].obs;
   var detailInfo = <SapPurchaseStockInDetailInfo>[].obs;
 
-
   SapPurchaseStockInState() {
     ///Initialize variables
   }
@@ -104,7 +103,6 @@ class SapPurchaseStockInState {
     });
   }
 
-
   saveDeliveryCheck({
     required String location,
     required String inspector,
@@ -115,18 +113,18 @@ class SapPurchaseStockInState {
     sapPost(
       method: webApiSapSaveDeliveryCheck,
       body: [
-        for(var data in list)
-        {
-          'ZDELINO':data.deliveryNumber,
-          'ZDELIISEQ':data.deliveryOrderLineNumber,
-          'ZLGORT':location,
-          'ZVERIFYQTY':data.editQty.toShowString(),
-          'ZINSPECTOR':inspector,
-        }
+        for (var data in list)
+          {
+            'ZDELINO': data.deliveryNumber,
+            'ZDELIISEQ': data.deliveryOrderLineNumber,
+            'ZLGORT': location,
+            'ZVERIFYQTY': data.editQty.toShowString(),
+            'ZINSPECTOR': inspector,
+          }
       ],
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        success.call(response.message??'');
+        success.call(response.message ?? '');
       } else {
         error.call(response.message ?? 'query_default_error'.tr);
       }

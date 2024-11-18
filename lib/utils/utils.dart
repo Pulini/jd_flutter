@@ -350,28 +350,35 @@ getWorkerInfo({
   });
 }
 
-///人脸识别,通过保管人工号获取保管人，监管人信息以及保管人部门
-getLeaderList({
-  String? billType,
-  String? empCode,
-  String? sapFactoryNumber,
-  String? sapStockNumber,
-  required Function(List<LeaderInfo>) success,
+checkStockLeaderConfig({
+   String? showLoading,
+  required String type,
+  required String number,
+  required String factoryNumber,
+  required String stockNumber,
+  required Function(List<LeaderInfo>) hasConfig,
+  required Function() noConfig,
   required Function(String) error,
 }) {
   httpGet(
-    method: webApiGetLiableInfoByEmpCode,
+    loading: showLoading,
+    method: webApiGetStockFaceConfig,
     params: {
-      'BillType': billType,
-      'EmpCode': empCode,
-      'SapFactoryNumber': sapFactoryNumber,
-      'SapStockNumber': sapStockNumber,
+      'BillType': type,
+      'EmpCode': number,
+      'SapFactoryNumber': factoryNumber,
+      'SapStockNumber': stockNumber,
     },
-  ).then((response) {
-    if (response.resultCode == resultSuccess) {
-      success.call([for (var json in response.data) LeaderInfo.fromJson(json)]);
+  ).then((config) {
+    if (config.resultCode == resultSuccess) {
+      var data = LeaderConfigInfo.fromJson(config.data);
+      if (data.isEnableFaceRecognition == true) {
+        hasConfig.call(data.leaderList ?? []);
+      } else {
+        noConfig.call();
+      }
     } else {
-      error.call(response.message ?? 'query_default_error'.tr);
+      error.call(config.message ?? 'query_default_error'.tr);
     }
   });
 }

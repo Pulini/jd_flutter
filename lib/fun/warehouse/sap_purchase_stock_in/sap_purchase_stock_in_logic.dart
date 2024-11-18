@@ -84,11 +84,58 @@ class SapPurchaseStockInLogic extends GetxController {
     );
   }
 
-  List<SapPurchaseStockInInfo>getSelected() {
+  List<SapPurchaseStockInInfo> getSelected() {
     var list = <SapPurchaseStockInInfo>[];
-    state.selectedList.forEachIndexed((i, data) {
-      list.addAll(state.orderList[i]);
+    state.selectedList.forEachIndexed((i, selected) {
+      if (selected) {
+        list.addAll(state.orderList[i]);
+      }
     });
     return list;
+  }
+
+  checkStockInWriteOffSelected(
+      Function(List<SapPurchaseStockInInfo>) callback) {
+    var exempt = <SapPurchaseStockInInfo>[];
+    var notExempt = <SapPurchaseStockInInfo>[];
+    state.selectedList.forEachIndexed((i, selected) {
+      if (selected) {
+        if (state.orderList[i][0].isExempt == 'X') {
+          exempt.addAll(state.orderList[i]);
+        } else {
+          notExempt.addAll(state.orderList[i]);
+        }
+      }
+    });
+    if (exempt.isNotEmpty && notExempt.isNotEmpty) {
+      errorDialog(content: '所选条目包含免检与非免检');
+    } else {
+      callback.call([...exempt, ...notExempt]);
+    }}
+
+  checkTemporarySelected(Function(List<SapPurchaseStockInInfo>) callback) {
+    var noInspector = 0;
+    var isExempt = 0;
+    var selectList = <SapPurchaseStockInInfo>[];
+    state.selectedList.forEachIndexed((i, selected) {
+      if (selected) {
+        selectList.addAll(state.orderList[i]);
+        if (state.orderList[i][0].isExempt == 'X') {
+          isExempt++;
+        }
+        if (state.orderList[i][0].inspector?.isEmpty == true) {
+          noInspector++;
+        }
+      }
+    });
+    if (isExempt > 0) {
+      errorDialog(content: '免检物料禁止暂收！');
+      return;
+    }
+    if (noInspector > 0) {
+      errorDialog(content: '含有未清点数据！');
+      return;
+    }
+    callback.call(selectList);
   }
 }
