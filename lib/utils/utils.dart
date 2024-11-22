@@ -351,7 +351,7 @@ getWorkerInfo({
 }
 
 checkStockLeaderConfig({
-   String? showLoading,
+  String? showLoading,
   required String type,
   required String number,
   required String factoryNumber,
@@ -508,4 +508,18 @@ bool containsChinese(String input) {
 
   // 检查字符串中是否存在匹配的中文字符
   return chineseRegex.hasMatch(input);
+}
+
+pdaScanner({required Function(String) scan}) {
+  debugPrint('PdaScanner 注册监听');
+  const MethodChannel(channelScanFlutterToAndroid).setMethodCallHandler((call) {
+    switch (call.method) {
+      case 'PdaScanner':
+        {
+          scan.call(call.arguments);
+        }
+        break;
+    }
+    return Future.value(call);
+  });
 }

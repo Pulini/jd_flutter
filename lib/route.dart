@@ -27,6 +27,7 @@ import 'fun/report/worker_production_detail/worker_production_detail_view.dart';
 import 'fun/report/worker_production_report/worker_production_report_view.dart';
 import 'fun/warehouse/carton_label_scan/carton_label_scan_view.dart';
 import 'fun/warehouse/carton_label_scan_progress/carton_label_scan_progress_view.dart';
+import 'fun/warehouse/sap_production_picking/sap_production_picking_view.dart';
 import 'fun/warehouse/sap_purchase_stock_in/sap_purchase_stock_in_view.dart';
 import 'fun/warehouse/smart_delivery/smart_delivery_view.dart';
 import 'home/home_view.dart';
@@ -226,6 +227,13 @@ class RouteConfig {
     const SapPurchaseStockInPage(),
   );
 
+  ///sap生产领料
+  static Routes sapProductionPicking = Routes(
+    '/sap_production_picking',
+    99,
+    const SapProductionPickingPage(),
+  );
+
   ///本地功能入口列表
   static List<Routes> routeList = [
     dailyReport,
@@ -254,6 +262,7 @@ class RouteConfig {
     cartonLabelScan,
     cartonLabelScanProgress,
     sapPurchaseStockIn,
+    sapProductionPicking,
   ];
 
   static List<GetPage> appRoutes = [
@@ -373,6 +382,10 @@ class RouteConfig {
     GetPage(
       name: sapPurchaseStockIn.name,
       page: () => sapPurchaseStockIn.page,
+    ),
+    GetPage(
+      name: sapProductionPicking.name,
+      page: () => sapProductionPicking.page,
     ),
   ];
 }

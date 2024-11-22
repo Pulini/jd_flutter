@@ -272,6 +272,31 @@ showSnackBar({
   );
 }
 
+///显示SnackBar
+showScanTips() {
+  Get.snackbar(
+    '',
+    '',
+    messageText: const Center(
+      child: Text(
+        '+1',
+        style: TextStyle(
+          fontSize: 200,
+          fontWeight: FontWeight.bold,
+          color: Colors.blueAccent,
+        ),
+      ),
+    ),
+    duration: const Duration(milliseconds: 500),
+    margin: const EdgeInsets.all(10),
+    overlayBlur: 5,
+    barBlur:0,
+    overlayColor:Colors.transparent,
+    reverseAnimationCurve: Curves.bounceOut,
+    backgroundColor: Colors.transparent,
+  );
+}
+
 ///选择器
 getCupertinoPicker(List<Widget> items, FixedExtentScrollController controller) {
   return CupertinoPicker(

@@ -47,7 +47,11 @@ askDialog({
   String title = '',
   required String? content,
   Function()? confirm,
+  String? confirmText,
+  Color? confirmColor,
   Function()? cancel,
+  String? cancelText,
+  Color? cancelColor,
 }) {
   Get.dialog(
     PopScope(
@@ -55,7 +59,7 @@ askDialog({
       canPop: false,
       child: AlertDialog(
         title: Text(title.isEmpty ? 'dialog_default_title'.tr : title,
-            style: const TextStyle(color: Colors.black)),
+            style: TextStyle(color: confirmColor ?? Colors.black)),
         content: Text(content ?? ''),
         actions: <Widget>[
           TextButton(
@@ -63,7 +67,7 @@ askDialog({
               Get.back();
               confirm?.call();
             },
-            child: Text('dialog_default_confirm'.tr),
+            child: Text(confirmText ?? 'dialog_default_confirm'.tr),
           ),
           TextButton(
             onPressed: () {
@@ -71,8 +75,8 @@ askDialog({
               cancel?.call();
             },
             child: Text(
-              'dialog_default_cancel'.tr,
-              style: const TextStyle(color: Colors.grey),
+              cancelText ?? 'dialog_default_cancel'.tr,
+              style: TextStyle(color: cancelColor ?? Colors.grey),
             ),
           ),
         ],
@@ -317,10 +321,11 @@ doUpdate(VersionInfo version) {
   );
 }
 
-bool reLoginDialogIsShowing=false;
+bool reLoginDialogIsShowing = false;
+
 reLoginPopup() {
-  if(reLoginDialogIsShowing) return;
-  reLoginDialogIsShowing=true;
+  if (reLoginDialogIsShowing) return;
+  reLoginDialogIsShowing = true;
   showCupertinoModalPopup(
     context: Get.overlayContext!,
     barrierDismissible: false,

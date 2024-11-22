@@ -30,7 +30,7 @@ checkSaveDialog({
       String saveNumber = spGet(checkSaveDialogNumber) ?? '';
       String saveLocation = spGet(checkSaveDialogLocation) ?? '';
       var avatar = ''.obs;
-      WorkerInfo? newWorker;
+      WorkerInfo? worker;
       var locationController = FixedExtentScrollController(
         initialItem: locationList.indexWhere(
           (v) => v.storageLocationNumber == saveLocation,
@@ -61,7 +61,7 @@ checkSaveDialog({
                       init: saveNumber,
                       hint: '核查人',
                       onChanged: (w) {
-                        newWorker = w;
+                        worker = w;
                         avatar.value = w?.picUrl ?? '';
                       },
                     ),
@@ -79,12 +79,12 @@ checkSaveDialog({
               actions: [
                 TextButton(
                   onPressed: () {
-                    if (newWorker != null) {
+                    if (worker != null) {
                       var location =
                           '${locationList[locationController.selectedItem].storageLocationNumber}';
-                      spSave(checkSaveDialogNumber, newWorker!.empCode ?? '');
+                      spSave(checkSaveDialogNumber, worker!.empCode ?? '');
                       spSave(checkSaveDialogLocation, location);
-                      callback.call(location, newWorker!.empCode ?? '');
+                      callback.call(location, worker!.empCode ?? '');
                       Get.back();
                     }
                   },

@@ -756,3 +756,18 @@ const webApiSapDeliveryOrderStockIn = 'sap/zapp/ZFUN_RES_ZCLCGRUKU_1500';
 
 ///sap创建暂收单
 const webApiSapCreateTemporary = 'sap/zapp/ZFUN_APP_TEMPORARYDEYAIL_1500';
+
+///sap获取领料工单列表
+const webApiSapGetProductionPickingOrders = 'sap/zapp/ZFUN_GET_ZDLL_PO_HEAD_1500';
+
+///sap获取领料明细
+const webApiSapGetProductionPickingOrderDetail = 'sap/zapp/ZFUN_GET_ZDLL_PO_ITEM_1500';
+
+///sap领料过账
+const webApiSapMaterialsPicking = 'sap/zapp/ZFUN_RES_ZLINGYONG_1500';
+
+///根据物料编码获取条码
+const webApiGetProductionPickingBarCodeList = 'api/CompoundDispatching/GetBarcodeByMaterialNumberJinZhen';
+
+///材料出库——金臻拌料
+const webApiMixBarCodePicking = 'api/CompoundDispatching/MaterialOutStockJinZhen';
