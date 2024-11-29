@@ -34,12 +34,12 @@ class DatePicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 50,
-      margin: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-      padding: const EdgeInsets.only(left: 15, right: 5),
+      height: 40,
+      margin: const EdgeInsets.all(5),
+      padding: const EdgeInsets.only(left: 10, right: 3),
       decoration: BoxDecoration(
         color: Colors.grey[300],
-        borderRadius: BorderRadius.circular(30),
+        borderRadius: BorderRadius.circular(20),
       ),
       child: Obx(() => Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -48,20 +48,25 @@ class DatePicker extends StatelessWidget {
                 getDateYMD(time: pickerController.pickDate.value),
                 style: const TextStyle(color: Colors.black),
               ),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor:
-                      pickerController.enable.value ? Colors.blue : Colors.grey,
-                  foregroundColor: Colors.greenAccent,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
+              SizedBox(
+                height: 35,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.only(left: 10,right: 10),
+                    backgroundColor: pickerController.enable.value
+                        ? Colors.blue
+                        : Colors.grey,
+                    foregroundColor: Colors.greenAccent,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(17),
+                    ),
                   ),
-                ),
-                onPressed: () => _showOptions(),
-                child: Text(
-                  pickerController.buttonName ??
-                      pickerController.getButtonName(),
-                  style: const TextStyle(color: Colors.white),
+                  onPressed: () => _showOptions(),
+                  child: Text(
+                    pickerController.buttonName ??
+                        pickerController.getButtonName(),
+                    style: const TextStyle(color: Colors.white),
+                  ),
                 ),
               )
             ],
@@ -156,12 +161,12 @@ class OptionsPicker extends StatelessWidget {
     pickerController.search('');
     pickerController.getData();
     return Container(
-      height: 50,
-      margin: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-      padding: const EdgeInsets.only(left: 15, right: 5),
+      height: 40,
+      margin: const EdgeInsets.all(5),
+      padding: const EdgeInsets.only(left: 10, right: 3),
       decoration: BoxDecoration(
         color: Colors.grey[300],
-        borderRadius: BorderRadius.circular(25),
+        borderRadius: BorderRadius.circular(20),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -177,27 +182,31 @@ class OptionsPicker extends StatelessWidget {
                   maxFontSize: 16,
                 ),
               )),
-          Obx(() => ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: pickerController.pickerItems.isEmpty
-                      ? Colors.red
-                      : pickerController.enable.value
-                          ? Colors.blue
-                          : Colors.grey,
-                  foregroundColor: pickerController.pickerItems.isEmpty
-                      ? Colors.orange
-                      : Colors.greenAccent,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
+          Obx(() => SizedBox(
+                height: 35,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                     padding: const EdgeInsets.only(left: 10,right: 10),
+                    backgroundColor: pickerController.pickerItems.isEmpty
+                        ? Colors.red
+                        : pickerController.enable.value
+                            ? Colors.blue
+                            : Colors.grey,
+                    foregroundColor: pickerController.pickerItems.isEmpty
+                        ? Colors.orange
+                        : Colors.greenAccent,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(17),
+                    ),
                   ),
-                ),
-                onPressed: () => _showOptions(),
-                child: Text(
-                  pickerController.pickerItems.isNotEmpty
-                      ? pickerController.buttonName ??
-                          pickerController.getButtonName()
-                      : 'picker_refresh'.tr,
-                  style: const TextStyle(color: Colors.white),
+                  onPressed: () => _showOptions(),
+                  child: Text(
+                    pickerController.pickerItems.isNotEmpty
+                        ? pickerController.buttonName ??
+                            pickerController.getButtonName()
+                        : 'picker_refresh'.tr,
+                    style: const TextStyle(color: Colors.white),
+                  ),
                 ),
               ))
         ],
@@ -311,12 +320,12 @@ class LinkOptionsPicker extends StatelessWidget {
     pickerController.search('');
     pickerController.getData();
     return Container(
-      height: 50,
-      margin: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-      padding: const EdgeInsets.only(left: 15, right: 5),
+      height: 40,
+      margin: const EdgeInsets.all(5),
+      padding: const EdgeInsets.only(left: 10, right: 3),
       decoration: BoxDecoration(
         color: Colors.grey[300],
-        borderRadius: BorderRadius.circular(25),
+        borderRadius: BorderRadius.circular(20),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -332,27 +341,31 @@ class LinkOptionsPicker extends StatelessWidget {
                   maxFontSize: 16,
                 ),
               )),
-          Obx(() => ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: pickerController.pickerItems2.isEmpty
-                      ? Colors.red
-                      : pickerController.enable.value
-                          ? Colors.blue
-                          : Colors.grey,
-                  foregroundColor: pickerController.pickerItems2.isEmpty
-                      ? Colors.orange
-                      : Colors.greenAccent,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
+          Obx(() => SizedBox(
+                height: 35,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                     padding: const EdgeInsets.only(left: 10,right: 10),
+                    backgroundColor: pickerController.pickerItems2.isEmpty
+                        ? Colors.red
+                        : pickerController.enable.value
+                            ? Colors.blue
+                            : Colors.grey,
+                    foregroundColor: pickerController.pickerItems2.isEmpty
+                        ? Colors.orange
+                        : Colors.greenAccent,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(17),
+                    ),
                   ),
-                ),
-                onPressed: () => _showOptions(),
-                child: Text(
-                  pickerController.pickerItems2.isNotEmpty
-                      ? pickerController.buttonName ??
-                          pickerController.getButtonName()
-                      : 'picker_refresh'.tr,
-                  style: const TextStyle(color: Colors.white),
+                  onPressed: () => _showOptions(),
+                  child: Text(
+                    pickerController.pickerItems2.isNotEmpty
+                        ? pickerController.buttonName ??
+                            pickerController.getButtonName()
+                        : 'picker_refresh'.tr,
+                    style: const TextStyle(color: Colors.white),
+                  ),
                 ),
               ))
         ],
@@ -461,12 +474,12 @@ class CheckBoxPicker extends StatelessWidget {
     checkBoxController.search('');
     checkBoxController.getData();
     return Container(
-      height: 50,
-      margin: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-      padding: const EdgeInsets.only(left: 15, right: 5),
+      height: 40,
+      margin: const EdgeInsets.all(5),
+      padding: const EdgeInsets.only(left: 10, right: 3),
       decoration: BoxDecoration(
         color: Colors.grey[300],
-        borderRadius: BorderRadius.circular(25),
+        borderRadius: BorderRadius.circular(20),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -485,27 +498,32 @@ class CheckBoxPicker extends StatelessWidget {
                   ),
                 ),
               )),
-          Obx(() => ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: checkBoxController.checkboxItems.isEmpty
-                      ? Colors.red
-                      : checkBoxController.enable.value
-                          ? Colors.blue
-                          : Colors.grey,
-                  foregroundColor: checkBoxController.checkboxItems.isEmpty
-                      ? Colors.orange
-                      : Colors.greenAccent,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
+          const SizedBox(width: 10),
+          Obx(() => SizedBox(
+                height: 35,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                     padding: const EdgeInsets.only(left: 10,right: 10),
+                    backgroundColor: checkBoxController.checkboxItems.isEmpty
+                        ? Colors.red
+                        : checkBoxController.enable.value
+                            ? Colors.blue
+                            : Colors.grey,
+                    foregroundColor: checkBoxController.checkboxItems.isEmpty
+                        ? Colors.orange
+                        : Colors.greenAccent,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(17),
+                    ),
                   ),
-                ),
-                onPressed: () => _showCheckBoxList(),
-                child: Text(
-                  checkBoxController.checkboxItems.isNotEmpty
-                      ? checkBoxController.buttonName ??
-                          checkBoxController.getButtonName()
-                      : 'picker_refresh'.tr,
-                  style: const TextStyle(color: Colors.white),
+                  onPressed: () => _showCheckBoxList(),
+                  child: Text(
+                    checkBoxController.checkboxItems.isNotEmpty
+                        ? checkBoxController.buttonName ??
+                            checkBoxController.getButtonName()
+                        : 'picker_refresh'.tr,
+                    style: const TextStyle(color: Colors.white),
+                  ),
                 ),
               ))
         ],

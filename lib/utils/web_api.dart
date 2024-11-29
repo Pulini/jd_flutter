@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:uuid/uuid.dart';
@@ -32,8 +33,11 @@ const testUrlForMES = 'https://geapptest.goldemperor.com:1224/';
 ///SAP正式库
 const baseUrlForSAP = 'https://erpprd01.goldemperor.com:8003/';
 
+///SAP测试库
+const testUrlForSAP = 'https://erpqas01.goldemperor.com:8002/';
+
 ///SAP开发库
-const developUrlForSAP = 'https://erpqas01.goldemperor.com:8001/';
+const developUrlForSAP = 'https://erpdev01.goldemperor.com:8001/';
 
 ///SAP正式库
 const baseClientForSAP = 800;
@@ -90,13 +94,38 @@ Future<BaseData> sapPost({
 }) {
   return _doHttp(
     loading: loading,
-    params: {'sap-client': baseClientForSAP, ...?params},
+    params: {...?params},
     body: body,
     baseUrl: baseUrlForSAP,
     isPost: true,
     method: method,
   );
 }
+
+///用于开发时切换测试库，打包时必须屏蔽
+_setTestUrl({
+  required String url,
+  Map<String, dynamic>? params,
+  required Function(String testUrl, Map<String, dynamic>? testParams) test,
+}) {
+  debugPrint('url=$url');
+  if (url == baseUrlForMES) {
+    url = testUrlForMES;
+  } else if (url == baseUrlForSAP) {
+    url = developUrlForSAP;
+    params = {
+      'sap-client':
+          url == baseUrlForSAP ? baseClientForSAP : developClientForSAP,
+      ...?params,
+    };
+  }
+  debugPrint('url=$url');
+  debugPrint('params=$params');
+  test.call(url, params);
+}
+
+///用于开发时切换测试库
+var useTestUrl = false;
 
 ///初始化网络请求
 Future<BaseData> _doHttp({
@@ -107,9 +136,17 @@ Future<BaseData> _doHttp({
   Map<String, dynamic>? params,
   Object? body,
 }) async {
-  ///用于开发时切换测试库，打包时必须屏蔽
-  // baseUrl = baseUrl == baseUrlForSAP? developUrlForSAP : baseUrl==baseUrlForMES? testUrlForMES:baseUrl;
-  ///--------------------------------------------x----
+  if (useTestUrl) {
+    _setTestUrl(
+      url: baseUrl,
+      params: params,
+      test: (testUrl, testParams) {
+        baseUrl = testUrl;
+        params = testParams;
+      },
+    );
+  }
+
   try {
     logger.f('SnackbarStatus=$snackbarStatus');
     if (snackbarStatus == SnackbarStatus.OPEN ||
@@ -758,16 +795,26 @@ const webApiSapDeliveryOrderStockIn = 'sap/zapp/ZFUN_RES_ZCLCGRUKU_1500';
 const webApiSapCreateTemporary = 'sap/zapp/ZFUN_APP_TEMPORARYDEYAIL_1500';
 
 ///sap获取领料工单列表
-const webApiSapGetProductionPickingOrders = 'sap/zapp/ZFUN_GET_ZDLL_PO_HEAD_1500';
+const webApiSapGetPickingOrders = 'sap/zapp/ZFUN_GET_ZDLL_PO_HEAD_1500';
 
 ///sap获取领料明细
-const webApiSapGetProductionPickingOrderDetail = 'sap/zapp/ZFUN_GET_ZDLL_PO_ITEM_1500';
+const webApiSapGetPickingOrderDetail = 'sap/zapp/ZFUN_GET_ZDLL_PO_ITEM_1500';
 
 ///sap领料过账
 const webApiSapMaterialsPicking = 'sap/zapp/ZFUN_RES_ZLINGYONG_1500';
 
 ///根据物料编码获取条码
-const webApiGetProductionPickingBarCodeList = 'api/CompoundDispatching/GetBarcodeByMaterialNumberJinZhen';
+const webApiGetProductionPickingBarCodeList =
+    'api/CompoundDispatching/GetBarcodeByMaterialNumberJinZhen';
 
 ///材料出库——金臻拌料
 const webApiMixBarCodePicking = 'api/CompoundDispatching/MaterialOutStockJinZhen';
+
+///sap喷漆领料过账
+const webApiSapPrintPicking = 'sap/zapp/ZFUN_RES_ZLINGYONG_1500A';
+
+///sap待上架列表
+const webApiSapGetPalletList = 'sap/zapp/ZWMS_STOCK_FETCH';
+
+///sap上架移库
+const webApiSapPuttingOnShelves = 'sap/zapp/ZWMS_INTERFACE';

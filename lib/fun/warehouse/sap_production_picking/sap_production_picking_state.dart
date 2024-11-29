@@ -5,21 +5,20 @@ import 'package:collection/collection.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/utils/utils.dart';
 
-import '../../../bean/http/response/sap_production_picking_info.dart';
+import '../../../bean/http/response/sap_picking_info.dart';
 import '../../../utils/web_api.dart';
 
 class SapProductionPickingState {
-  var pickOrderList = <SapProductionPickingInfo>[].obs;
+  var pickOrderList = <SapPickingInfo>[].obs;
   var dispatch = <SapProductionPickingDetailDispatchInfo>[].obs;
-  var labels = <SapProductionPickingDetailLabelInfo>[].obs;
-  var barCodeList = <SapProductionPickingBarCodeInfo>[].obs;
+  var labels = <SapPickingDetailLabelInfo>[].obs;
+  var barCodeList = <SapPickingBarCodeInfo>[].obs;
   var pickDetailList = <PickingOrderMaterialInfo>[].obs;
+  bool needRefresh = false;
 
   SapProductionPickingState() {
     ///Initialize variables
   }
-
-  bool needRefresh = false;
 
   getMaterialPickingOrderList({
     String? noticeNo,
@@ -34,12 +33,11 @@ class SapProductionPickingState {
     String? picker,
     String? purchaseOrder,
     String? supplier,
-    required Function() success,
     required Function(String) error,
   }) {
     sapPost(
       loading: '正在获取领料通知单列表...',
-      method: webApiSapGetProductionPickingOrders,
+      method: webApiSapGetPickingOrders,
       body: {
         'NOTICE_NO': noticeNo ?? '',
         'ZVBELN_ORI': instructionNo ?? '',
@@ -57,11 +55,10 @@ class SapProductionPickingState {
     ).then((response) {
       if (response.resultCode == resultSuccess) {
         pickOrderList.value = [
-          for (var json in response.data)
-            SapProductionPickingInfo.fromJson(json)
+          for (var json in response.data) SapPickingInfo.fromJson(json)
         ];
-        success.call();
       } else {
+        pickOrderList.value = [];
         error.call(response.message ?? 'query_default_error'.tr);
       }
     });
@@ -73,7 +70,7 @@ class SapProductionPickingState {
   }) {
     sapPost(
       loading: '正在获取派工单列表明细...',
-      method: webApiSapGetProductionPickingOrderDetail,
+      method: webApiSapGetPickingOrderDetail,
       body: [
         for (var data in pickOrderList.where((v) => v.select))
           {
@@ -91,13 +88,13 @@ class SapProductionPickingState {
       ],
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        var data = SapProductionPickingDetailInfo.fromJson(response.data);
+        var data = SapPickingDetailInfo.fromJson(response.data);
         var list = <PickingOrderMaterialInfo>[];
         dispatch.value = data.dispatch ?? [];
         labels.value = data.labels ?? [];
         groupBy(data.order ?? <SapProductionPickingDetailOrderInfo>[],
             (v) => v.dispatchNumber).forEach((k, v) {
-          list.add(PickingOrderMaterialInfo.fromData(v,isScan));
+          list.add(PickingOrderMaterialInfo.fromData(v, isScan));
         });
         pickDetailList.value = list;
         if (isScan) {
@@ -109,7 +106,7 @@ class SapProductionPickingState {
     });
   }
 
-  submitProductionPicking({
+  submitMaterialPrintPicking({
     required String pickerNumber,
     required ByteData pickerSignature,
     required String userNumber,
@@ -202,7 +199,7 @@ class SapProductionPickingState {
   }
 
   getProductionPickingBarCodeList({
-    String?loading,
+    String? loading,
     required Function(String) error,
   }) {
     httpPost(
@@ -219,8 +216,7 @@ class SapProductionPickingState {
     ).then((response) {
       if (response.resultCode == resultSuccess) {
         barCodeList.value = [
-          for (var json in response.data)
-            SapProductionPickingBarCodeInfo.fromJson(json)
+          for (var json in response.data) SapPickingBarCodeInfo.fromJson(json)
         ];
       } else {
         error.call(response.message ?? 'query_default_error'.tr);

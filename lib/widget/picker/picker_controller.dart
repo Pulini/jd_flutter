@@ -669,8 +669,8 @@ class LinkOptionsPickerController extends PickerController {
   final String? saveKey;
   final String? buttonName;
   final Function? dataList;
-  final Function(int, int)? onChanged;
-  final Function(int, int)? onSelected;
+  final Function(PickerItem, PickerItem)? onChanged;
+  final Function(PickerItem, PickerItem)? onSelected;
 
   LinkOptionsPickerController(
     super.pickerType, {
@@ -699,8 +699,8 @@ class LinkOptionsPickerController extends PickerController {
     if (saveKey != null && saveKey!.isNotEmpty) {
       spSave(saveKey!, '${pick1.pickerId()}@@@${pick2.pickerId()}');
     }
-    onSelected?.call(selectItem1, selectItem2);
-    onChanged?.call(selectItem1, selectItem2);
+    onSelected?.call(getOptionsPicker1(), getOptionsPicker2());
+    onChanged?.call(getOptionsPicker1(), getOptionsPicker2());
   }
 
   refreshItem2(int index) {
@@ -761,7 +761,7 @@ class LinkOptionsPickerController extends PickerController {
             pickerItems2.value = pickerData[selectItem1].subList();
             var pick2 = pickerItems2[selectItem2];
             selectedName.value = '${pick1.pickerName()}-${pick2.pickerName()}';
-            onSelected?.call(selectItem1, selectItem2);
+            onSelected?.call(getOptionsPicker1(), getOptionsPicker2());
           }
         } else {
           loadingError.value = value as String;

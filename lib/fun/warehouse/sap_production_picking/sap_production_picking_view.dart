@@ -4,7 +4,7 @@ import 'package:jd_flutter/fun/warehouse/sap_production_picking/sap_production_p
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:rotated_corner_decoration/rotated_corner_decoration.dart';
 
-import '../../../bean/http/response/sap_production_picking_info.dart';
+import '../../../bean/http/response/sap_picking_info.dart';
 import '../../../route.dart';
 import '../../../widget/combination_button_widget.dart';
 import '../../../widget/edit_text_widget.dart';
@@ -45,13 +45,12 @@ class _SapProductionPickingPageState extends State<SapProductionPickingPage> {
   );
   var factoryWarehouseController = LinkOptionsPickerController(
     PickerType.sapFactoryWarehouse,
-    hasAll: true,
     saveKey:
         '${RouteConfig.sapProductionPicking.name}${PickerType.sapFactoryWarehouse}',
   );
   var isSupplementOrder = false.obs;
 
-  _item(SapProductionPickingInfo data) {
+  _item(SapPickingInfo data) {
     return GestureDetector(
       onTap: () => setState(() => data.select = !data.select),
       child: Container(
@@ -137,7 +136,6 @@ class _SapProductionPickingPageState extends State<SapProductionPickingPage> {
 
   @override
   Widget build(BuildContext context) {
-    noticeNoController.text = '128044';
     return pageBodyWithBottomSheet(
       bottomSheet: [
         EditText(hint: '通知单号', controller: noticeNoController),
@@ -176,14 +174,7 @@ class _SapProductionPickingPageState extends State<SapProductionPickingPage> {
             ],
           ),
         ),
-        GetPlatform.isMobile
-            ? Column(
-                children: [
-                  DatePicker(pickerController: dpcStartDate),
-                  DatePicker(pickerController: dpcEndDate),
-                ],
-              )
-            : Row(
+      Row(
                 children: [
                   Expanded(child: DatePicker(pickerController: dpcStartDate)),
                   Expanded(child: DatePicker(pickerController: dpcEndDate)),

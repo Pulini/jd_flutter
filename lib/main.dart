@@ -18,20 +18,25 @@ import 'home/home_view.dart';
 import 'login/login_view.dart';
 import 'translation.dart';
 import 'utils/web_api.dart';
- main() async {
+
+main() async {
+  ///切换测试库，打包时屏蔽
+  useTestUrl = true;
+
   ///确保初始化完成才能加载耗时插件
   WidgetsFlutterBinding.ensureInitialized();
-  if (GetPlatform.isMobile){
+  if (GetPlatform.isMobile) {
     getDatabasesPath().then((path) => openDatabase(
-      join(path, jdDatabase),
-      version: 1,
-      onCreate:(db,v){
-        db.execute(SaveDispatch.dbCreate);
-        db.execute(SaveWorkProcedure.dbCreate);
-        db.close();
-      },
-    ));
+          join(path, jdDatabase),
+          version: 1,
+          onCreate: (db, v) {
+            db.execute(SaveDispatch.dbCreate);
+            db.execute(SaveWorkProcedure.dbCreate);
+            db.close();
+          },
+        ));
   }
+
   sharedPreferences = await SharedPreferences.getInstance();
   packageInfo = await PackageInfo.fromPlatform();
   deviceInfo = await DeviceInfoPlugin().deviceInfo;
@@ -45,8 +50,6 @@ import 'utils/web_api.dart';
   //   },
   // );
 }
-
-
 
 ///路由感知 用于释放GetXController
 class GetXRouterObserver extends NavigatorObserver {
@@ -104,7 +107,7 @@ class _MyAppState extends State<MyApp> {
         useMaterial3: true,
       ),
       getPages: RouteConfig.appRoutes,
-      home: userInfo?.token==null ? const LoginPage() : const HomePage(),
+      home: userInfo?.token == null ? const LoginPage() : const HomePage(),
       // home:FutureBuilder<UserInfo>(
       //     future: userInfo(),
       //     builder: (context, AsyncSnapshot<UserInfo> snapshot) {

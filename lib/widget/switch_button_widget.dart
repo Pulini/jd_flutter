@@ -60,11 +60,12 @@ class _SwitchButtonState extends State<SwitchButton> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-      padding: const EdgeInsets.only(left: 15),
+      height: 40,
+      margin: const EdgeInsets.all(5),
+      padding: const EdgeInsets.only(left: 10),
       decoration: BoxDecoration(
         color: Colors.grey[300],
-        borderRadius: BorderRadius.circular(25),
+        borderRadius: BorderRadius.circular(20),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -270,14 +270,7 @@ class _SapPurchaseStockInPageState extends State<SapPurchaseStockInPage> {
     return pageBodyWithBottomSheet(
       bottomSheet: [
         EditText(hint: '送货单号', controller: deliveryOrderController),
-        GetPlatform.isMobile
-            ? Column(
-                children: [
-                  DatePicker(pickerController: dpcStartDate),
-                  DatePicker(pickerController: dpcEndDate),
-                ],
-              )
-            : Row(
+    Row(
                 children: [
                   Expanded(child: DatePicker(pickerController: dpcStartDate)),
                   Expanded(child: DatePicker(pickerController: dpcEndDate)),

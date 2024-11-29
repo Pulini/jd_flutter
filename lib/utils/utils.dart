@@ -212,6 +212,31 @@ extension StringExt on String? {
       return v;
     }
   }
+
+  bool isLabel() {
+    final regex = RegExp(
+        r'^[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}$');
+    final upperCaseInput = (this ?? '').toUpperCase();
+
+    if (regex.hasMatch(upperCaseInput)) {
+      return true;
+    }
+
+    final parts = (this ?? '').split('/');
+    if (parts.length == 2 && parts[1].length == 3) {
+      return true;
+    }
+
+    if ((this ?? '').length == 32) {
+      return true;
+    }
+    return false;
+  }
+
+  bool isPallet() =>
+      (this ?? '').startsWith('GE') &&
+      (this ?? '').length >= 10 &&
+      (this ?? '').length <= 13;
 }
 
 extension RequestOptionsExt on RequestOptions {

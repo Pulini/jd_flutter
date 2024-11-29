@@ -49,7 +49,6 @@ class SapProductionPickingLogic extends GetxController {
       endDate: endDate,
       workCenter: workCenter,
       warehouse: warehouse,
-      success: () {},
       error: (msg) => errorDialog(content: msg),
     );
   }
@@ -88,9 +87,7 @@ class SapProductionPickingLogic extends GetxController {
   bool hasSubmitSelect() {
     for (var item in state.pickDetailList) {
       for (var j = 0; j < item.materialList.length; ++j) {
-        if (item.materialList[j].select &&
-                (item.materialList[j].lineStock ?? 0) > 0 ||
-            item.pickQtyList[j] > 0) {
+        if (item.materialList[j].select &&item.canPicking(j)) {
           return true;
         }
       }
@@ -106,7 +103,7 @@ class SapProductionPickingLogic extends GetxController {
     required bool isPrint,
     required bool isScan,
   }) {
-    state.submitProductionPicking(
+    state.submitMaterialPrintPicking(
       pickerNumber: pickerNumber,
       pickerSignature: pickerSignature,
       userNumber: userNumber,

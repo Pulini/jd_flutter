@@ -73,9 +73,9 @@ pageBodyWithBottomSheet({
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      const SizedBox(height: 30),
+                      const SizedBox(height: 10),
                       ...bottomSheet,
-                      const SizedBox(height: 30),
+                      const SizedBox(height: 20),
                       Padding(
                         padding: const EdgeInsets.all(10),
                         child: SizedBox(
@@ -339,14 +339,13 @@ Future<T?> showSheet<T>(
 }) {
   const radius = Radius.circular(16);
   borderRadius ??= const BorderRadius.only(topLeft: radius, topRight: radius);
-  bodyPadding ??= const EdgeInsets.all(20);
+  bodyPadding ??= const EdgeInsets.all(10);
   return showModalBottomSheet(
     context: context,
     elevation: 0,
     backgroundColor: bodyColor,
     shape: RoundedRectangleBorder(borderRadius: borderRadius),
     barrierColor: Colors.black.withOpacity(0.25),
-    // A处
     constraints: BoxConstraints(
         maxHeight: MediaQuery.of(context).size.height -
             MediaQuery.of(context).viewInsets.top),
@@ -357,7 +356,6 @@ Future<T?> showSheet<T>(
           left: bodyPadding!.left,
           top: bodyPadding.top,
           right: bodyPadding.right,
-          // B处
           bottom: bodyPadding.bottom + MediaQuery.of(ctx).viewInsets.bottom,
         ),
         child: body,

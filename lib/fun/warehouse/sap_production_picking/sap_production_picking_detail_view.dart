@@ -5,7 +5,7 @@ import 'package:jd_flutter/fun/warehouse/sap_production_picking/sap_production_p
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 
-import '../../../bean/http/response/sap_production_picking_info.dart';
+import '../../../bean/http/response/sap_picking_info.dart';
 import '../../../widget/combination_button_widget.dart';
 import '../../../widget/dialogs.dart';
 import 'sap_production_picking_logic.dart';
@@ -200,8 +200,7 @@ class _SapProductionPickingDetailPageState
                         value: data.materialList[i].select,
                         onChanged: (c) => setState(() {
                           if (c!) {
-                            if (data.pickQtyList[i] > 0 ||
-                                (data.materialList[i].lineStock ?? 0) > 0) {
+                            if (data.canPicking(i)) {
                               data.materialList[i].select = c;
                             } else {
                               showSnackBar(

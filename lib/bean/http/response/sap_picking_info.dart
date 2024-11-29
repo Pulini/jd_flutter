@@ -19,8 +19,8 @@ import 'package:jd_flutter/utils/utils.dart';
 ///   "LIFNR": "",
 ///   "NAME1": ""
 /// }
-class SapProductionPickingInfo {
-  SapProductionPickingInfo({
+class SapPickingInfo {
+  SapPickingInfo({
     this.orderType,
     this.noticeNo,
     this.dispatchNumber,
@@ -58,7 +58,7 @@ class SapProductionPickingInfo {
   String? supplierID; //LIFNR 供应商编号
   String? supplierName; //NAME1 供应商名称
 
-  SapProductionPickingInfo.fromJson(dynamic json) {
+  SapPickingInfo.fromJson(dynamic json) {
     orderType = json['ZTYPE'];
     noticeNo = json['NOTICE_NO'];
     dispatchNumber = json['DISPATCH_NO'];
@@ -107,8 +107,8 @@ class SapProductionPickingInfo {
   }
 }
 
-class SapProductionPickingBarCodeInfo {
-  SapProductionPickingBarCodeInfo({
+class SapPickingBarCodeInfo {
+  SapPickingBarCodeInfo({
     this.barCode,
     this.materialNumber,
     this.materialName,
@@ -123,7 +123,7 @@ class SapProductionPickingBarCodeInfo {
   double? qty;
   String? unitName;
 
-  SapProductionPickingBarCodeInfo.fromJson(dynamic json) {
+  SapPickingBarCodeInfo.fromJson(dynamic json) {
     barCode = json['BarCode'];
     materialNumber = json['MaterialNumber'];
     materialName = json['MaterialName'];
@@ -142,18 +142,18 @@ class SapProductionPickingBarCodeInfo {
   }
 }
 
-class SapProductionPickingDetailInfo {
-  SapProductionPickingDetailInfo({
+class SapPickingDetailInfo {
+  SapPickingDetailInfo({
     this.order,
     this.labels,
     this.dispatch,
   });
 
   List<SapProductionPickingDetailOrderInfo>? order;
-  List<SapProductionPickingDetailLabelInfo>? labels;
+  List<SapPickingDetailLabelInfo>? labels;
   List<SapProductionPickingDetailDispatchInfo>? dispatch;
 
-  SapProductionPickingDetailInfo.fromJson(dynamic json) {
+  SapPickingDetailInfo.fromJson(dynamic json) {
     if (json['ORDER'] != null) {
       order = [];
       json['ORDER'].forEach((v) {
@@ -163,7 +163,7 @@ class SapProductionPickingDetailInfo {
     if (json['PICK'] != null) {
       labels = [];
       json['PICK'].forEach((v) {
-        labels?.add(SapProductionPickingDetailLabelInfo.fromJson(v));
+        labels?.add(SapPickingDetailLabelInfo.fromJson(v));
       });
     }
     if (json['DISPATCH'] != null) {
@@ -437,8 +437,8 @@ class SapProductionPickingDetailDispatchInfo {
   }
 }
 
-class SapProductionPickingDetailLabelInfo {
-  SapProductionPickingDetailLabelInfo({
+class SapPickingDetailLabelInfo {
+  SapPickingDetailLabelInfo({
     this.pickingType,
     this.unit,
     this.quantity,
@@ -456,6 +456,8 @@ class SapProductionPickingDetailLabelInfo {
     this.labelCode,
     this.palletNumber,
   });
+
+  List<DistributableInfo> distribution = []; //分配数据
 
   String? factory; //WERKS  工厂
   String? palletNumber; //ZFTRAYNO 托盘号
@@ -475,7 +477,7 @@ class SapProductionPickingDetailLabelInfo {
   String? unit; //MEINS 单位
   String? pickingType; //ZBQLY  领料类型 B0、整箱领料 B1、拆箱领料 B2、不领料
 
-  SapProductionPickingDetailLabelInfo.fromJson(dynamic json) {
+  SapPickingDetailLabelInfo.fromJson(dynamic json) {
     factory = json['WERKS'];
     palletNumber = json['ZFTRAYNO'];
     labelCode = json['BQID'];
@@ -516,21 +518,195 @@ class SapProductionPickingDetailLabelInfo {
     map['ZBQLY'] = pickingType;
     return map;
   }
+
+  double getPickQty() => distribution.isEmpty
+      ? 0
+      : distribution.map((v) => v.qty).reduce((a, b) => a.add(b));
+}
+
+class PalletInfo {
+  List<PalletItem1Info>? item1;
+  List<PalletItem2Info>? item2;
+
+  PalletInfo({this.item1, this.item2});
+
+  PalletInfo.fromJson(dynamic json) {
+    if (json['item1'] != null) {
+      item1 = [];
+      json['item1'].forEach((v) {
+        item1?.add(PalletItem1Info.fromJson(v));
+      });
+    }
+    if (json['item2'] != null) {
+      item2 = [];
+      json['item2'].forEach((v) {
+        item2?.add(PalletItem2Info.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    if (item1 != null) {
+      map['item1'] = item1?.map((v) => v.toJson()).toList();
+    }
+    if (item2 != null) {
+      map['item2'] = item2?.map((v) => v.toJson()).toList();
+    }
+    return map;
+  }
+}
+
+class PalletItem1Info {
+  bool select=false;
+
+  String? factoryNumber; //工厂  WERKS
+  String? warehouseNumber; //仓库  LGORT
+  String? warehouseName; //仓库名 LGOBE
+  String? location; //库位 ZLOCAL
+  String? palletNumber; //托盘号  ZFTRAYNO
+  String? labelNumber; //标签ID  BQID
+  String? materialNumber; //一般物料编码 SATNR
+  String? materialName; //一般物料名称 MAKTX1
+  String? sizeMaterialNumber; //尺码物料编码 MATNR
+  String? sizeMaterialName; //尺码物料名称 MAKTX
+  String? typeBody; //型体 ZZXTNO
+  String? size; //尺码 SIZE1
+  String? instructionNo; //指令号 ZVBELN_ORI
+  String? salesOrderNo; //销售订单号  KDAUF
+  String? salesOrderLineItem; //销售订单行项目  KDPOS
+  String? batch; //批次  CHARG
+  double? quantity; //数量 MENGE
+  String? unit; //单位 MEINS
+
+  PalletItem1Info({
+    this.factoryNumber,
+    this.warehouseNumber,
+    this.warehouseName,
+    this.location,
+    this.palletNumber,
+    this.labelNumber,
+    this.materialNumber,
+    this.materialName,
+    this.sizeMaterialNumber,
+    this.sizeMaterialName,
+    this.typeBody,
+    this.size,
+    this.instructionNo,
+    this.salesOrderNo,
+    this.salesOrderLineItem,
+    this.batch,
+    this.quantity,
+    this.unit,
+  });
+
+  PalletItem1Info.fromJson(dynamic json) {
+    factoryNumber = json['WERKS'];
+    warehouseNumber = json['LGORT'];
+    warehouseName = json['LGOBE'];
+    location = json['ZLOCAL'];
+    palletNumber = json['ZFTRAYNO'];
+    labelNumber = json['BQID'];
+    materialNumber = json['SATNR'];
+    materialName = json['MAKTX1'];
+    sizeMaterialNumber = json['MATNR'];
+    sizeMaterialName = json['MAKTX'];
+    typeBody = json['ZZXTNO'];
+    size = json['SIZE1'];
+    instructionNo = json['ZVBELN_ORI'];
+    salesOrderNo = json['KDAUF'];
+    salesOrderLineItem = json['KDPOS'];
+    batch = json['CHARG'];
+    quantity = json['MENGE'];
+    unit = json['MEINS'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['WERKS'] = factoryNumber;
+    map['LGORT'] = warehouseNumber;
+    map['LGOBE'] = warehouseName;
+    map['ZLOCAL'] = location;
+    map['ZFTRAYNO'] = palletNumber;
+    map['BQID'] = labelNumber;
+    map['SATNR'] = materialNumber;
+    map['MAKTX1'] = materialName;
+    map['MAKTX'] = sizeMaterialName;
+    map['MATNR'] = sizeMaterialNumber;
+    map['ZZXTNO'] = typeBody;
+    map['SIZE1'] = size;
+    map['ZVBELN_ORI'] = instructionNo;
+    map['KDAUF'] = salesOrderNo;
+    map['KDPOS'] = salesOrderLineItem;
+    map['CHARG'] = batch;
+    map['MENGE'] = quantity;
+    map['MEINS'] = unit;
+    return map;
+  }
+}
+
+class PalletItem2Info {
+  var factoryNumber; //工厂  WERKS
+  var warehouseNumber; //仓库  LGORT
+  var location; //库位 ZLOCAL
+  var palletNumber; //托盘号  ZFTRAYNO
+  var palletExistence; //托盘是否存在  空 托盘不存在、 X 托盘存在 ZTRAY_CFMRT1
+  var palletState; //托盘状态  空 托盘无货、 X 当前条件下有货、Y 托盘有货但不在当前查询条件下  ZTRAY_CFMRT2
+
+  PalletItem2Info({
+    this.factoryNumber,
+    this.warehouseNumber,
+    this.location,
+    this.palletNumber,
+    this.palletExistence,
+    this.palletState,
+  });
+
+  PalletItem2Info.fromJson(dynamic json) {
+    factoryNumber = json['WERKS'];
+    warehouseNumber = json['LGORT'];
+    location = json['ZLOCAL'];
+    palletNumber = json['ZFTRAYNO'];
+    palletExistence = json['ZTRAY_CFMRT1'];
+    palletState = json['ZTRAY_CFMRT2'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['WERKS'] = factoryNumber;
+    map['LGORT'] = warehouseNumber;
+    map['ZLOCAL'] = location;
+    map['ZFTRAYNO'] = palletNumber;
+    map['ZTRAY_CFMRT1'] = palletExistence;
+    map['ZTRAY_CFMRT2'] = palletState;
+    return map;
+  }
+}
+
+class DistributableInfo {
+  int ascriptionId = -1; //归属ID
+  double qty = 0.0;
+
+  DistributableInfo(this.ascriptionId, this.qty); //分配数
 }
 
 class PickingOrderMaterialInfo {
   bool select = true;
   String dispatchNumber = '';
   String machineNumber = '';
+  String material = '';
   String process = '';
   String dispatchDate = '';
   List<SapProductionPickingDetailOrderInfo> materialList = [];
   List<double> remainderList = [];
   List<double> pickQtyList = [];
 
+  bool canPicking(int index) =>
+      (materialList[index].lineStock ?? 0) > 0 || pickQtyList[index] > 0;
+
   PickingOrderMaterialInfo.fromData(
     List<SapProductionPickingDetailOrderInfo> data,
-    bool isScan,
+    bool isSelect,
   ) {
     dispatchNumber = data[0].dispatchNumber ?? '';
     machineNumber = data[0].machineNumber ?? '';
@@ -557,11 +733,36 @@ class PickingOrderMaterialInfo {
         typeBody: v[0].typeBody,
         commonUnit: v[0].commonUnit,
         lineStock: v[0].lineStock,
-      )..select=!isScan;
+      )..select = !isSelect;
       materialList.add(material);
       remainderList.add(remainder);
-      pickQtyList.add(isScan ? 0 : pickQty);
+      pickQtyList.add(isSelect ? 0 : pickQty);
     });
-    select = !isScan;
+    select = !isSelect;
   }
 }
+
+class PrintPickingDetailInfo {
+  int dataId = -1; //数据ID
+  bool select = true;
+  double pickQty = 0;
+  SapProductionPickingDetailOrderInfo order;
+
+  PrintPickingDetailInfo.fromData(this.order) {
+    pickQty = order.location == '1001'
+        ? order.demandQty.sub(order.deliveryQty ?? 0)
+        : 0;
+  }
+
+  bool canPicking() => (order.lineStock ?? 0) > 0 || pickQty > 0;
+}
+// class PrintPickingDispatchInfo{
+//  String instructionNo;
+//  String orderNumber;
+//  String dispatchLineNumber;
+//  String dispatchDate;
+//  String productionOrderNo;
+//  String machineNumber;
+//  String purchaseOrderNumber;
+//  String purchaseOrderLineNumber;
+// }
