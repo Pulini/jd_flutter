@@ -818,3 +818,9 @@ const webApiSapGetPalletList = 'sap/zapp/ZWMS_STOCK_FETCH';
 
 ///sap上架移库
 const webApiSapPuttingOnShelves = 'sap/zapp/ZWMS_INTERFACE';
+
+///sap获取托盘明细
+const webApiSapGetPalletDetails = 'sap/zapp/ZWMS_BARCODE_LIST';
+
+///sap移库领料
+const webApiSapRelocationPicking = 'sap/zapp/ZWMS_BARCODE_YK';

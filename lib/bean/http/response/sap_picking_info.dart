@@ -683,6 +683,82 @@ class PalletItem2Info {
   }
 }
 
+class SapPalletDetailInfo {
+  SapPalletDetailInfo({
+    this.unit,
+    this.quantity,
+    this.size,
+    this.typeBody,
+    this.instructionsNo,
+    this.salesOrderLineItem,
+    this.salesOrderNo,
+    this.batchNumber,
+    this.materialCode,
+    this.materialName,
+    this.warehouseLocation,
+    this.location,
+    this.labelCode,
+    this.palletNumber,
+  });
+
+  double pickQty=0.0;
+
+  String? factory; //WERKS  工厂
+  String? palletNumber; //ZFTRAYNO 托盘号
+  String? labelCode; //BQID  贴标号
+  String? location; //LGORT 存储位置
+  String? warehouseLocation; //ZLOCAL  库位
+  String? materialCode; //MATNR 物料编号
+  String? materialName; //MAKTX 物料描述
+  String? batchNumber; //CHARG  批号
+  String? salesOrderNo; //KDAUF 销售订单号
+  int? salesOrderLineItem; //KDPOS 销售订单行项
+  String? instructionsNo; //ZZVBELN 指令
+  String? typeBody; //ZZXTNO 型体
+  String? size; //SIZE1 尺码
+  double? quantity; //MENGE 数量
+  String? unit; //MEINS 单位
+
+  SapPalletDetailInfo.fromJson(dynamic json) {
+    factory = json['WERKS'];
+    palletNumber = json['ZFTRAYNO'];
+    labelCode = json['BQID'];
+    location = json['LGORT'];
+    warehouseLocation = json['ZLOCAL'];
+    materialCode = json['MATNR'];
+    materialName = json['MAKTX'];
+    batchNumber = json['CHARG'];
+    salesOrderNo = json['KDAUF'];
+    salesOrderLineItem = json['KDPOS'];
+    instructionsNo = json['ZZVBELN'];
+    typeBody = json['ZZXTNO'];
+    size = json['SIZE1'];
+    quantity = json['MENGE'];
+    unit = json['MEINS'];
+    pickQty=quantity??0;
+  }
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['WERKS'] = factory;
+    map['ZFTRAYNO'] = palletNumber;
+    map['BQID'] = labelCode;
+    map['LGORT'] = location;
+    map['ZLOCAL'] = warehouseLocation;
+    map['MATNR'] = materialCode;
+    map['MAKTX'] = materialName;
+    map['CHARG'] = batchNumber;
+    map['KDAUF'] = salesOrderNo;
+    map['KDPOS'] = salesOrderLineItem;
+    map['ZZVBELN'] = instructionsNo;
+    map['ZZXTNO'] = typeBody;
+    map['SIZE1'] = size;
+    map['MENGE'] = quantity;
+    map['MEINS'] = unit;
+    return map;
+  }
+}
+
 class DistributableInfo {
   int ascriptionId = -1; //归属ID
   double qty = 0.0;
@@ -756,13 +832,4 @@ class PrintPickingDetailInfo {
 
   bool canPicking() => (order.lineStock ?? 0) > 0 || pickQty > 0;
 }
-// class PrintPickingDispatchInfo{
-//  String instructionNo;
-//  String orderNumber;
-//  String dispatchLineNumber;
-//  String dispatchDate;
-//  String productionOrderNo;
-//  String machineNumber;
-//  String purchaseOrderNumber;
-//  String purchaseOrderLineNumber;
-// }
+

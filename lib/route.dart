@@ -30,6 +30,7 @@ import 'fun/warehouse/carton_label_scan_progress/carton_label_scan_progress_view
 import 'fun/warehouse/sap_print_picking/sap_print_picking_view.dart';
 import 'fun/warehouse/sap_production_picking/sap_production_picking_view.dart';
 import 'fun/warehouse/sap_purchase_stock_in/sap_purchase_stock_in_view.dart';
+import 'fun/warehouse/sap_relocation_picking/sap_relocation_picking_view.dart';
 import 'fun/warehouse/smart_delivery/smart_delivery_view.dart';
 import 'home/home_view.dart';
 import 'login/login_view.dart';
@@ -242,6 +243,13 @@ class RouteConfig {
     const SapPrintPickingPage(),
   );
 
+  ///sap移库领料
+  static Routes sapRelocationPicking = Routes(
+    '/sap_relocation_picking',
+    99,
+    const SapRelocationPickingPage(),
+  );
+
   ///本地功能入口列表
   static List<Routes> routeList = [
     dailyReport,
@@ -272,6 +280,7 @@ class RouteConfig {
     sapPurchaseStockIn,
     sapProductionPicking,
     sapPrintPicking,
+    sapRelocationPicking,
   ];
 
   static List<GetPage> appRoutes = [
@@ -399,6 +408,10 @@ class RouteConfig {
     GetPage(
       name: sapPrintPicking.name,
       page: () => sapPrintPicking.page,
+    ),
+    GetPage(
+      name: sapRelocationPicking.name,
+      page: () => sapRelocationPicking.page,
     ),
   ];
 }
