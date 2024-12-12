@@ -53,7 +53,7 @@ class _SapPrintPickingPageState extends State<SapPrintPickingPage> {
     PickerType.sapSupplier,
     saveKey: '${RouteConfig.sapPrintPicking.name}${PickerType.sapSupplier}',
   );
- late LinkOptionsPickerController factoryWarehouseController;
+  late LinkOptionsPickerController factoryWarehouseController;
 
   _item(SapPickingInfo data) {
     return GestureDetector(
@@ -126,16 +126,16 @@ class _SapPrintPickingPageState extends State<SapPrintPickingPage> {
       ),
     );
   }
+
   @override
   void initState() {
     factoryWarehouseController = LinkOptionsPickerController(
         PickerType.sapFactoryWarehouse,
         saveKey:
-        '${RouteConfig.sapPrintPicking.name}${PickerType.sapFactoryWarehouse}',
-        onSelected: (i1,i2){
-          state.warehouse=i2.pickerId();
-        }
-    );
+            '${RouteConfig.sapPrintPicking.name}${PickerType.sapFactoryWarehouse}',
+        onSelected: (i1, i2) {
+      state.warehouse = i2.pickerId();
+    });
     super.initState();
   }
 
@@ -170,15 +170,15 @@ class _SapPrintPickingPageState extends State<SapPrintPickingPage> {
                 ),
               ),
               if (state.pickOrderList.any((v) => v.select))
-                Row(children: [
-                  Expanded(
-                    child: CombinationButton(
-                      text: '扫码拣货',
-                      click: () =>
-                          Get.to(() => const SapPrintPickingDetailPage(),),
+                SizedBox(
+                  width: double.infinity,
+                  child: CombinationButton(
+                    text: '扫码拣货',
+                    click: () => Get.to(
+                      () => const SapPrintPickingDetailPage(),
                     ),
                   ),
-                ]),
+                ),
             ],
           )),
     );

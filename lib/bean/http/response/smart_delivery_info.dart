@@ -343,7 +343,7 @@ class WorkData {
   bool isSelected = false;
 
   String? round;
-  int? sendType;
+  int? sendType;//0-未发料 1-已发料 2-已备料
   String? taskID;
   String? agvNumber;
   List<SizeInfo>? sendSizeList;

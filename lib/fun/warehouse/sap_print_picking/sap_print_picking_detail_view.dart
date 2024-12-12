@@ -199,50 +199,47 @@ class _SapPrintPickingDetailPageState extends State<SapPrintPickingDetailPage> {
                         .length
                         .toString()),
               ),
-              Row(
-                children: [
-                  Expanded(
-                    child: CombinationButton(
-                      text: '领料',
-                      click: () => logic.checkSubmitSelect(
-                        pick: (isSizeMaterial, list) {
-                          checkPickerDialog(
-                            pickerCheck: (
-                              pickerNumber,
-                              pickerSignature,
-                              userNumber,
-                              userSignature,
-                            ) {
-                              if (isSizeMaterial) {
-                                logic.sizeMaterialPicking(
-                                  pickerNumber: pickerNumber,
-                                  pickerSignature: pickerSignature,
-                                  userNumber: userNumber,
-                                  userSignature: userSignature,
-                                  transfer: () {
-                                    Get.to(
-                                      () => const SapPrintPickingTransferPage(),
-                                    )?.then((_) {
-                                      _scanListener();
-                                      logic.getOrderDetail();
-                                    });
-                                  },
-                                );
-                              } else {
-                                logic.materialPicking(
-                                  pickerNumber: pickerNumber,
-                                  pickerSignature: pickerSignature,
-                                  userNumber: userNumber,
-                                  userSignature: userSignature,
-                                );
-                              }
-                            },
-                          );
+              SizedBox(
+                width: double.infinity,
+                child: CombinationButton(
+                  text: '领料',
+                  click: () => logic.checkSubmitSelect(
+                    pick: (isSizeMaterial, list) {
+                      checkPickerDialog(
+                        pickerCheck: (
+                          pickerNumber,
+                          pickerSignature,
+                          userNumber,
+                          userSignature,
+                        ) {
+                          if (isSizeMaterial) {
+                            logic.sizeMaterialPicking(
+                              pickerNumber: pickerNumber,
+                              pickerSignature: pickerSignature,
+                              userNumber: userNumber,
+                              userSignature: userSignature,
+                              transfer: () {
+                                Get.to(
+                                  () => const SapPrintPickingTransferPage(),
+                                )?.then((_) {
+                                  _scanListener();
+                                  logic.getOrderDetail();
+                                });
+                              },
+                            );
+                          } else {
+                            logic.materialPicking(
+                              pickerNumber: pickerNumber,
+                              pickerSignature: pickerSignature,
+                              userNumber: userNumber,
+                              userSignature: userSignature,
+                            );
+                          }
                         },
-                      ),
-                    ),
+                      );
+                    },
                   ),
-                ],
+                ),
               ),
             ],
           ),

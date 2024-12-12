@@ -742,6 +742,9 @@ const webApiSmartDeliveryGetRobInfo = 'api/Autoworkshopbatch/GetRobInfo';
 ///机器人任务记录
 const webApiSmartDeliveryGetRobTask = 'api/Autoworkshopbatch/GetRobTask';
 
+///机器人任务取消
+const webApiSmartDeliveryCancelTask = 'api/Autoworkshopbatch/CancelTask';
+
 ///暂停机器人
 const webApiSmartDeliveryStopRobot = 'api/Autoworkshopbatch/StopRobot';
 
@@ -824,3 +827,15 @@ const webApiSapGetPalletDetails = 'sap/zapp/ZWMS_BARCODE_LIST';
 
 ///sap移库领料
 const webApiSapRelocationPicking = 'sap/zapp/ZWMS_BARCODE_YK';
+
+///sap获取入库派工单列表
+const webApiSapGetNoLabelStockInOrderList = 'sap/zapp/ZFUN_APP_PO_LIST_1500';
+
+///sap无标入库单提交入库
+const webApiSapSubmitNoLabelStockIn = 'sap/zapp/ZFUN_APP_PO_POST_1500';
+
+///sap获取贴标汇总状态
+const webApiSapGetStockInReport = 'sap/zapp/ZFUN_APP_PO_LIST_1500A';
+
+///sap注塑入库单提交入库
+const webApiSapInjectionMoldingStockIn = 'sap/zapp/ZFUN_APP_PO_POST_1500A';

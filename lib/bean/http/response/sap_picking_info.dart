@@ -531,15 +531,15 @@ class PalletInfo {
   PalletInfo({this.item1, this.item2});
 
   PalletInfo.fromJson(dynamic json) {
-    if (json['item1'] != null) {
+    if (json['ITEM'] != null) {
       item1 = [];
-      json['item1'].forEach((v) {
+      json['ITEM'].forEach((v) {
         item1?.add(PalletItem1Info.fromJson(v));
       });
     }
-    if (json['item2'] != null) {
+    if (json['ITEM2'] != null) {
       item2 = [];
-      json['item2'].forEach((v) {
+      json['ITEM2'].forEach((v) {
         item2?.add(PalletItem2Info.fromJson(v));
       });
     }
@@ -548,10 +548,10 @@ class PalletInfo {
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     if (item1 != null) {
-      map['item1'] = item1?.map((v) => v.toJson()).toList();
+      map['ITEM'] = item1?.map((v) => v.toJson()).toList();
     }
     if (item2 != null) {
-      map['item2'] = item2?.map((v) => v.toJson()).toList();
+      map['ITEM2'] = item2?.map((v) => v.toJson()).toList();
     }
     return map;
   }
@@ -574,7 +574,7 @@ class PalletItem1Info {
   String? size; //尺码 SIZE1
   String? instructionNo; //指令号 ZVBELN_ORI
   String? salesOrderNo; //销售订单号  KDAUF
-  String? salesOrderLineItem; //销售订单行项目  KDPOS
+  int? salesOrderLineItem; //销售订单行项目  KDPOS
   String? batch; //批次  CHARG
   double? quantity; //数量 MENGE
   String? unit; //单位 MEINS

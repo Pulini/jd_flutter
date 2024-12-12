@@ -283,36 +283,33 @@ class _SapProductionPickingDetailPageState
                   ),
                 ),
               ),
-              Row(
-                children: [
-                  Expanded(
-                    child: CombinationButton(
-                      text: '领料',
-                      click: () {
-                        if (logic.hasSubmitSelect()) {
-                          checkPickerDialog(
-                            pickerCheck: (
-                              pickerNumber,
-                              pickerSignature,
-                              userNumber,
-                              userSignature,
-                            ) =>
-                                logic.submitPicking(
-                              pickerNumber: pickerNumber,
-                              pickerSignature: pickerSignature,
-                              userNumber: userNumber,
-                              userSignature: userSignature,
-                              isPrint: false,
-                              isScan: isScan,
-                            ),
-                          );
-                        } else {
-                          errorDialog(content: '请选择要领料的物料！');
-                        }
-                      },
-                    ),
-                  ),
-                ],
+              SizedBox(
+                width: double.infinity,
+                child: CombinationButton(
+                  text: '领料',
+                  click: () {
+                    if (logic.hasSubmitSelect()) {
+                      checkPickerDialog(
+                        pickerCheck: (
+                          pickerNumber,
+                          pickerSignature,
+                          userNumber,
+                          userSignature,
+                        ) =>
+                            logic.submitPicking(
+                          pickerNumber: pickerNumber,
+                          pickerSignature: pickerSignature,
+                          userNumber: userNumber,
+                          userSignature: userSignature,
+                          isPrint: false,
+                          isScan: isScan,
+                        ),
+                      );
+                    } else {
+                      errorDialog(content: '请选择要领料的物料！');
+                    }
+                  },
+                ),
               ),
             ],
           )),

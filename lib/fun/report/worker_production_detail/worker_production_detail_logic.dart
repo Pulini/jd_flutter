@@ -9,15 +9,15 @@ class WorkerProductionDetailLogic extends GetxController {
   final WorkerProductionDetailState state = WorkerProductionDetailState();
 
   var pickerControllerStartDate = DatePickerController(
-    PickerType.date,
+    PickerType.startDate,
     saveKey:
-        '${RouteConfig.workerProductionDetail.name}${PickerType.date}start',
+        '${RouteConfig.workerProductionDetail.name}${PickerType.date}${PickerType.startDate}',
     lastDate: DateTime.now(),
   );
 
   var pickerControllerEndDate = DatePickerController(
-    PickerType.date,
-    saveKey: '${RouteConfig.workerProductionDetail.name}${PickerType.date}end',
+    PickerType.endDate,
+    saveKey: '${RouteConfig.workerProductionDetail.name}${PickerType.date}${PickerType.endDate}',
     lastDate: DateTime.now(),
   );
 

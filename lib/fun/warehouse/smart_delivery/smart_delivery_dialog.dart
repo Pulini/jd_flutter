@@ -469,13 +469,20 @@ createDeliveryTaskDialog({
   );
 }
 
-checkAgvTask(String taskId, String agvNumber) {
+checkAgvTask({
+  required String taskId,
+  required String agvNumber,
+  required Function(String) cancelTask,
+}) {
   _getAgvTaskInfo(
     taskId: taskId,
     success: (task) {
-      String taskState;
-      Color taskStateColor;
-      switch (task.taskType) {
+      int taskType = task.taskType ?? 0;
+      String startingPoint = task.startingPoint ?? '';
+      String endPoint = task.endPoint ?? '';
+      String taskState = '未知';
+      Color taskStateColor = Colors.red;
+      switch (taskType) {
         case 1:
           taskState = '执行中';
           taskStateColor = Colors.green;
@@ -488,79 +495,93 @@ checkAgvTask(String taskId, String agvNumber) {
           taskState = '暂停中';
           taskStateColor = Colors.orange;
           break;
-        default:
-          taskState = '未知';
-          taskStateColor = Colors.red;
       }
+
       var title = Text('AGV 任务详情');
       Get.dialog(
         PopScope(
             canPop: false,
             child: StatefulBuilder(
-              builder: (c, dialogSetState) => AlertDialog(
-                title: task.taskType == 1 || task.taskType == 3
-                    ? Row(
+              builder: (c, dialogSetState) {
+                return AlertDialog(
+                  title: title,
+                  content: SizedBox(
+                      width: 300,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          title,
-                          Expanded(child: Container()),
-                          IconButton(
-                            onPressed: () => _stopAgvTask(
-                              agvNumber: agvNumber,
-                              success: () => dialogSetState(
-                                () => task.taskType = 3,
-                              ),
+                          if (taskType == 1 || taskType == 3)
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                IconButton(
+                                  onPressed: () => _cancelAgvTask(
+                                    taskId: taskId,
+                                    success: () {
+                                      Get.back();
+                                      cancelTask.call(taskId);
+                                    },
+                                  ),
+                                  icon: const Icon(
+                                    Icons.stop_circle,
+                                    color: Colors.red,
+                                    size: 35,
+                                  ),
+                                ),
+                                IconButton(
+                                  onPressed: () => _stopAgvTask(
+                                    agvNumber: agvNumber,
+                                    success: () => dialogSetState(
+                                      () => taskType = 3,
+                                    ),
+                                  ),
+                                  icon: const Icon(
+                                    Icons.pause_circle,
+                                    color: Colors.orange,
+                                    size: 35,
+                                  ),
+                                ),
+                                IconButton(
+                                  onPressed: () => _resumeAgvTask(
+                                    agvNumber: agvNumber,
+                                    success: () => dialogSetState(
+                                      () => taskType = 1,
+                                    ),
+                                  ),
+                                  icon: const Icon(
+                                    Icons.replay_circle_filled_sharp,
+                                    color: Colors.green,
+                                    size: 35,
+                                  ),
+                                ),
+                              ],
                             ),
-                            icon: const Icon(
-                              Icons.pause_circle,
-                              color: Colors.orange,
-                            ),
+                          textSpan(
+                            hint: '任务状态：',
+                            text: taskState,
+                            textColor: taskStateColor,
                           ),
-                          IconButton(
-                            onPressed: () => _resumeAgvTask(
-                              agvNumber: agvNumber,
-                              success: () => dialogSetState(
-                                () => task.taskType = 1,
-                              ),
-                            ),
-                            icon: const Icon(
-                              Icons.replay_circle_filled_sharp,
-                              color: Colors.green,
-                            ),
-                          )
+                          Row(
+                            children: [
+                              expandedTextSpan(
+                                  hint: '任务起点：', text: startingPoint),
+                              expandedTextSpan(hint: '任务终点：', text: endPoint),
+                            ],
+                          ),
                         ],
-                      )
-                    : title,
-                content: SizedBox(
-                    width: 300,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        textSpan(
-                          hint: '任务状态：',
-                          text: taskState,
-                          textColor: taskStateColor,
-                        ),
-                        Row(
-                          children: [
-                            expandedTextSpan(
-                                hint: '任务起点：', text: task.startingPoint ?? ''),
-                            expandedTextSpan(
-                                hint: '任务终点：', text: task.endPoint ?? ''),
-                          ],
-                        ),
-                      ],
-                    )),
-                actions: [
-                  TextButton(
-                    onPressed: () => Get.back(),
-                    child: Text(
-                      'dialog_default_back'.tr,
-                      style: const TextStyle(color: Colors.grey),
+                      )),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Get.back(),
+                      child: Text(
+                        'dialog_default_back'.tr,
+                        style: const TextStyle(color: Colors.grey),
+                      ),
                     ),
-                  ),
-                ],
-              ),
+                  ],
+                );
+              },
             )),
       );
     },
@@ -654,7 +675,7 @@ _createAgvTask({
     body: {
       'StartPoint': start,
       'EndPoint': end,
-      'IsScheduling': isScheduling?1:0,
+      'IsScheduling': isScheduling ? 1 : 0,
       'CheckerID': userInfo?.userID,
       'RobNumber': agvNumber,
       'RoundsData': [
@@ -692,6 +713,23 @@ _getAgvTaskInfo({
   ).then((response) {
     if (response.resultCode == resultSuccess) {
       success.call(AgvTaskInfo.fromJson(response.data));
+    } else {
+      errorDialog(content: response.message ?? 'query_default_error'.tr);
+    }
+  });
+}
+
+_cancelAgvTask({
+  required String taskId,
+  required Function() success,
+}) {
+  httpPost(
+    loading: '正在取消AGV当前任务...',
+    method: webApiSmartDeliveryCancelTask,
+    body: {'TaskID': taskId},
+  ).then((response) {
+    if (response.resultCode == resultSuccess) {
+      successDialog(content: response.message, back: () => success.call());
     } else {
       errorDialog(content: response.message ?? 'query_default_error'.tr);
     }

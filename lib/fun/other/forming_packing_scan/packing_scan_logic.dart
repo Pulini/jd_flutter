@@ -19,8 +19,8 @@ class PackingScanLogic extends GetxController {
 
   ///日期选择器的控制器
   var pickerControllerDate = DatePickerController(
-    PickerType.date,
-    saveKey: '${RouteConfig.packingScan.name}StartDate',
+    PickerType.startDate,
+    saveKey: '${RouteConfig.packingScan.name}${PickerType.startDate}',
   );
 
   ///初始化界面后拉取所有数据

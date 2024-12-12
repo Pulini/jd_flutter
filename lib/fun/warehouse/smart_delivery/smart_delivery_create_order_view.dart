@@ -141,8 +141,9 @@ class _CreateDeliveryOrderPageState extends State<CreateDeliveryOrderPage> {
                         if (!ddi.workData.isNullOrEmpty()) {
                           if (list[i].sendType == 1) {
                             checkAgvTask(
-                              list[i].taskID ?? '',
-                              list[i].agvNumber ?? '',
+                              taskId: list[i].taskID ?? '',
+                              agvNumber: list[i].agvNumber ?? '',
+                              cancelTask: (id) => _cancelTack(id),
                             );
                           } else {
                             setState(() {
@@ -238,13 +239,14 @@ class _CreateDeliveryOrderPageState extends State<CreateDeliveryOrderPage> {
                               ddi.newWorkCardInterID) {
                         if (ddi.workData![i].sendType == 1) {
                           checkAgvTask(
-                            ddi.workData![i].taskID ?? '',
-                            ddi.workData![i].agvNumber ?? '',
+                            taskId: ddi.workData![i].taskID ?? '',
+                            agvNumber: ddi.workData![i].agvNumber ?? '',
+                            cancelTask: (id) => _cancelTack(id),
                           );
                         } else {
                           setState(() {
                             ddi.workData![i].isSelected =
-                            !ddi.workData![i].isSelected;
+                                !ddi.workData![i].isSelected;
                           });
                         }
                       }
@@ -291,6 +293,17 @@ class _CreateDeliveryOrderPageState extends State<CreateDeliveryOrderPage> {
     );
   }
 
+  _cancelTack(String taskID) {
+    setState(() {
+      state.deliveryList
+          .where((v) => v.taskID == taskID)
+          .forEach((v) => v.sendType = 2);
+      state.saveDeliveryDetail?.workData
+          ?.where((v) => v.taskID == taskID)
+          .forEach((v) => v.sendType = 2);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     var line1 = Row(
@@ -322,20 +335,18 @@ class _CreateDeliveryOrderPageState extends State<CreateDeliveryOrderPage> {
         ),
       ],
     );
-    var bt1Visible = state.deliveryDetail?.hasDelivered() == false;
-    var bt2Visible = state.saveDeliveryDetail == null &&
+    var bt1V = state.deliveryDetail?.hasDelivered() == false;
+    var bt2V = state.saveDeliveryDetail == null &&
         state.deliveryList.any((v) => v.isSelected);
-    var bt3Visible = state.deliveryDetail?.workData.isNullOrEmpty();
-    var bt4Visible = state.deliveryList.any((v) => v.isSelected);
+    var bt3V = state.deliveryDetail?.workData.isNullOrEmpty();
+    var bt4V = state.deliveryList.any((v) => v.isSelected);
+    var bt5V = state.deliveryList.any((v) => v.isSelected);
 
     return pageBody(
       title: '创建配送单',
       actions: [
-        if (bt1Visible)
+        if (bt1V)
           CombinationButton(
-            combination: bt2Visible || bt3Visible || bt4Visible
-                ? Combination.left
-                : Combination.intact,
             text: state.deliveryDetail?.workData.isNullOrEmpty()
                 ? '预留楦头'
                 : '重制工单',
@@ -356,37 +367,27 @@ class _CreateDeliveryOrderPageState extends State<CreateDeliveryOrderPage> {
                     }),
                   ),
           ),
-        if (bt2Visible)
+        if (bt2V)
           CombinationButton(
-            combination: bt1Visible && (bt3Visible || bt4Visible)
-                ? Combination.middle
-                : Combination.left,
             backgroundColor: Colors.orange,
             text: '合并配送',
             click: () => logic.mergeDeliveryRound(() => setState(() {})),
           ),
-        if (bt3Visible)
+        if (bt3V)
           CombinationButton(
-            combination: bt1Visible || bt2Visible
-                ? Combination.right
-                : Combination.intact,
             backgroundColor: Colors.blue,
             text: '保存预排',
             click: () => _saveDelivery(),
           ),
-        if (bt4Visible)
+        if (bt4V)
           CombinationButton(
-            combination: Combination.middle,
             backgroundColor:
                 logic.isCanCache() ? Colors.blue : Colors.amberAccent,
             text: logic.isCanCache() ? '暂存' : '取消暂存',
             click: () => logic.cacheDelivery(() => setState(() {})),
           ),
-        if (bt4Visible)
+        if (bt5V)
           CombinationButton(
-            combination: bt1Visible || bt2Visible
-                ? Combination.right
-                : Combination.intact,
             backgroundColor: Colors.green,
             text: '创建发料任务',
             click: () => createDeliveryTaskDialog(
@@ -414,7 +415,7 @@ class _CreateDeliveryOrderPageState extends State<CreateDeliveryOrderPage> {
             line1,
             line2,
             table(state.deliveryDetail!, state.deliveryList),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             if (state.saveDeliveryDetail != null)
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -436,7 +437,7 @@ class _CreateDeliveryOrderPageState extends State<CreateDeliveryOrderPage> {
                                 setState(() => logic.cancelMergeDelivery()))
                     ],
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   mergeDeliveryTable(state.saveDeliveryDetail!),
                 ],
               )

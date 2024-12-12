@@ -119,25 +119,21 @@ class _SapRelocationPickingPageState extends State<SapRelocationPickingPage> {
                 ),
               ),
               if (state.materialList.isNotEmpty)
-                Row(
-                  children: [
-                    Expanded(
-                      child: CombinationButton(
-                        text: '提交领料',
-                        click: () => checkPickerAndWarehouseDialog(
-                          pickerCheck: (pn, ps, un, us, w) =>
-                              logic.submitPicking(
-                            pickerNumber: pn,
-                            pickerSignature: ps,
-                            userNumber: un,
-                            userSignature: us,
-                            warehouse: w,
-                          ),
-                        ),
+                SizedBox(
+                  width: double.infinity,
+                  child: CombinationButton(
+                    text: '提交领料',
+                    click: () => checkPickerAndWarehouseDialog(
+                      pickerCheck: (pn, ps, un, us, w) => logic.submitPicking(
+                        pickerNumber: pn,
+                        pickerSignature: ps,
+                        userNumber: un,
+                        userSignature: us,
+                        warehouse: w,
                       ),
                     ),
-                  ],
-                )
+                  ),
+                ),
             ],
           ),
         ));

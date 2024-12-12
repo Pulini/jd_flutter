@@ -267,7 +267,7 @@ class SmartDeliveryLogic extends GetxController {
           )
           .sendQty = total.toDouble();
       var list = state.saveDeliveryDetail!.workData!
-          .where((v) => v.sendType == 0)
+          .where((v) => v.sendType == 0 || v.sendType == 2)
           .toList();
       if (list.isEmpty) {
         spSave('MergeDelivery', '');

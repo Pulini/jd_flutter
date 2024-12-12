@@ -1,5 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
+import '../../bean/http/response/base_data.dart';
 import '../../utils/utils.dart';
 import '../../utils/web_api.dart';
 import 'picker_item.dart';
@@ -139,9 +141,13 @@ abstract class PickerController {
         List<PickerItem> list = [
           if (hasAll) PickerSapSupplier(name: '全部', supplierNumber: '')
         ];
-        for (var item in response.data) {
-          list.add(PickerSapSupplier.fromJson(item));
-        }
+        list.addAll(await compute(
+          parseJsonToList<PickerSapSupplier>,
+          ParseJsonParams<PickerSapSupplier>(
+            response.data,
+            PickerSapSupplier.fromJson,
+          ),
+        ));
         return list;
       } on Error catch (e) {
         logger.e(e);
@@ -158,9 +164,13 @@ abstract class PickerController {
     if (response.resultCode == resultSuccess) {
       try {
         List<PickerItem> list = [];
-        for (var item in response.data) {
-          list.add(PickerSapCompany.fromJson(item));
-        }
+        list.addAll(await compute(
+          parseJsonToList<PickerSapCompany>,
+          ParseJsonParams<PickerSapCompany>(
+            response.data,
+            PickerSapCompany.fromJson,
+          ),
+        ));
         return list;
       } on Error catch (e) {
         logger.e(e);
@@ -179,9 +189,13 @@ abstract class PickerController {
         List<PickerItem> list = [
           if (hasAll) PickerSapFactory(name: '全部', number: 0)
         ];
-        for (var item in response.data) {
-          list.add(PickerSapFactory.fromJson(item));
-        }
+        list.addAll(await compute(
+          parseJsonToList<PickerSapFactory>,
+          ParseJsonParams<PickerSapFactory>(
+            response.data,
+            PickerSapFactory.fromJson,
+          ),
+        ));
         return list;
       } on Error catch (e) {
         logger.e(e);
@@ -200,9 +214,13 @@ abstract class PickerController {
         List<PickerItem> list = [
           if (hasAll) PickerSapWorkCenter(name: '全部', number: '')
         ];
-        for (var item in response.data) {
-          list.add(PickerSapWorkCenter.fromJson(item));
-        }
+        list.addAll(await compute(
+          parseJsonToList<PickerSapWorkCenter>,
+          ParseJsonParams<PickerSapWorkCenter>(
+            response.data,
+            PickerSapWorkCenter.fromJson,
+          ),
+        ));
         return list;
       } on Error catch (e) {
         logger.e(e);
@@ -222,9 +240,13 @@ abstract class PickerController {
           if (hasAll)
             PickerSapDepartment(name: '全部', departmentId: 0, number: '')
         ];
-        for (var item in response.data) {
-          list.add(PickerSapDepartment.fromJson(item));
-        }
+        list.addAll(await compute(
+          parseJsonToList<PickerSapDepartment>,
+          ParseJsonParams<PickerSapDepartment>(
+            response.data,
+            PickerSapDepartment.fromJson,
+          ),
+        ));
         return list;
       } on Error catch (e) {
         logger.e(e);
@@ -244,9 +266,13 @@ abstract class PickerController {
           if (hasAll)
             PickerMesWorkShop(name: '全部', number: '', processFlowId: 0)
         ];
-        for (var item in response.data) {
-          list.add(PickerMesWorkShop.fromJson(item));
-        }
+        list.addAll(await compute(
+          parseJsonToList<PickerMesWorkShop>,
+          ParseJsonParams<PickerMesWorkShop>(
+            response.data,
+            PickerMesWorkShop.fromJson,
+          ),
+        ));
         return list;
       } on Error catch (e) {
         logger.e(e);
@@ -269,9 +295,13 @@ abstract class PickerController {
           if (hasAll)
             PickerMesDepartment(name: '全部', number: '', departmentId: 0)
         ];
-        for (var item in response.data) {
-          list.add(PickerMesDepartment.fromJson(item));
-        }
+        list.addAll(await compute(
+          parseJsonToList<PickerMesDepartment>,
+          ParseJsonParams<PickerMesDepartment>(
+            response.data,
+            PickerMesDepartment.fromJson,
+          ),
+        ));
         return list;
       } on Error catch (e) {
         logger.e(e);
@@ -292,9 +322,13 @@ abstract class PickerController {
             PickerMesOrganization(
                 itemId: 0, code: '', name: '全部', number: '', adminOrganizeId: 0)
         ];
-        for (var item in response.data) {
-          list.add(PickerMesOrganization.fromJson(item));
-        }
+        list.addAll(await compute(
+          parseJsonToList<PickerMesOrganization>,
+          ParseJsonParams<PickerMesOrganization>(
+            response.data,
+            PickerMesOrganization.fromJson,
+          ),
+        ));
         return list;
       } on Error catch (e) {
         logger.e(e);
@@ -313,9 +347,13 @@ abstract class PickerController {
         List<PickerItem> list = [
           if (hasAll) PickerSapProcessFlow(name: '全部', number: '')
         ];
-        for (var item in response.data) {
-          list.add(PickerSapProcessFlow.fromJson(item));
-        }
+        list.addAll(await compute(
+          parseJsonToList<PickerSapProcessFlow>,
+          ParseJsonParams<PickerSapProcessFlow>(
+            response.data,
+            PickerSapProcessFlow.fromJson,
+          ),
+        ));
         return list;
       } on Error catch (e) {
         logger.e(e);
@@ -334,9 +372,13 @@ abstract class PickerController {
         List<PickerItem> list = [
           if (hasAll) PickerMesProcessFlow(name: '', processFlowId: 0)
         ];
-        for (var item in response.data) {
-          list.add(PickerMesProcessFlow.fromJson(item));
-        }
+        list.addAll(await compute(
+          parseJsonToList<PickerMesProcessFlow>,
+          ParseJsonParams<PickerMesProcessFlow>(
+            response.data,
+            PickerMesProcessFlow.fromJson,
+          ),
+        ));
         return list;
       } on Error catch (e) {
         logger.e(e);
@@ -358,9 +400,13 @@ abstract class PickerController {
         List<PickerItem> list = [
           if (hasAll) PickerMesProductionReportType(itemID: 0, itemName: '全部')
         ];
-        for (var item in response.data) {
-          list.add(PickerMesProductionReportType.fromJson(item));
-        }
+        list.addAll(await compute(
+          parseJsonToList<PickerMesProductionReportType>,
+          ParseJsonParams<PickerMesProductionReportType>(
+            response.data,
+            PickerMesProductionReportType.fromJson,
+          ),
+        ));
         return list;
       } on Error catch (e) {
         logger.e(e);
@@ -389,9 +435,13 @@ abstract class PickerController {
               sapCostCenterNumber: '',
             )
         ];
-        for (var item in response.data) {
-          list.add(PickerSapMachine.fromJson(item));
-        }
+        list.addAll(await compute(
+          parseJsonToList<PickerSapMachine>,
+          ParseJsonParams<PickerSapMachine>(
+            response.data,
+            PickerSapMachine.fromJson,
+          ),
+        ));
         return list;
       } on Error catch (e) {
         logger.e(e);
@@ -416,9 +466,13 @@ abstract class PickerController {
         List<PickerItem> list = [
           if (hasAll) PickerSapWorkCenterNew(name: '全部', number: '')
         ];
-        for (var item in response.data) {
-          list.add(PickerSapWorkCenterNew.fromJson(item));
-        }
+        list.addAll(await compute(
+          parseJsonToList<PickerSapWorkCenterNew>,
+          ParseJsonParams<PickerSapWorkCenterNew>(
+            response.data,
+            PickerSapWorkCenterNew.fromJson,
+          ),
+        ));
         return list;
       } on Error catch (e) {
         logger.e(e);
@@ -440,9 +494,13 @@ abstract class PickerController {
         List<PickerItem> list = [
           if (hasAll) PickerSapGroup(name: '全部', itemId: 0)
         ];
-        for (var item in response.data) {
-          list.add(PickerSapGroup.fromJson(item));
-        }
+        list.addAll(await compute(
+          parseJsonToList<PickerSapGroup>,
+          ParseJsonParams<PickerSapGroup>(
+            response.data,
+            PickerSapGroup.fromJson,
+          ),
+        ));
         return list;
       } on Error catch (e) {
         logger.e(e);
@@ -472,9 +530,13 @@ abstract class PickerController {
               ],
             )
         ];
-        for (var item in response.data) {
-          list.add(PickerSapFactoryAndWarehouse.fromJson(item));
-        }
+        list.addAll(await compute(
+          parseJsonToList<PickerSapFactoryAndWarehouse>,
+          ParseJsonParams<PickerSapFactoryAndWarehouse>(
+            response.data,
+            PickerSapFactoryAndWarehouse.fromJson,
+          ),
+        ));
         return list;
       } on Error catch (e) {
         logger.e(e);
@@ -493,9 +555,13 @@ abstract class PickerController {
         List<PickerItem> list = [
           if (hasAll) PickerMesMoldingPackArea(id: 0, name: '全部')
         ];
-        for (var item in response.data) {
-          list.add(PickerMesMoldingPackArea.fromJson(item));
-        }
+        list.addAll(await compute(
+          parseJsonToList<PickerMesMoldingPackArea>,
+          ParseJsonParams<PickerMesMoldingPackArea>(
+            response.data,
+            PickerMesMoldingPackArea.fromJson,
+          ),
+        ));
         return list;
       } on Error catch (e) {
         logger.e(e);
@@ -518,9 +584,13 @@ abstract class PickerController {
     if (response.resultCode == resultSuccess) {
       try {
         List<PickerItem> list = [];
-        for (var item in response.data) {
-          list.add(PickerSapWarehouseLocation.fromJson(item));
-        }
+        list.addAll(await compute(
+          parseJsonToList<PickerSapWarehouseLocation>,
+          ParseJsonParams<PickerSapWarehouseLocation>(
+            response.data,
+            PickerSapWarehouseLocation.fromJson,
+          ),
+        ));
         return list;
       } on Error catch (e) {
         logger.e(e);
@@ -547,9 +617,13 @@ abstract class PickerController {
               departmentName: '全部',
             )
         ];
-        for (var item in response.data) {
-          list.add(PickerMesGroup.fromJson(item));
-        }
+        list.addAll(await compute(
+          parseJsonToList<PickerMesGroup>,
+          ParseJsonParams<PickerMesGroup>(
+            response.data,
+            PickerMesGroup.fromJson,
+          ),
+        ));
         return list;
       } on Error catch (e) {
         logger.e(e);

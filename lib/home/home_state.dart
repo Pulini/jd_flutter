@@ -1,10 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../bean/home_button.dart';
+import '../bean/http/response/base_data.dart';
 import '../bean/http/response/department_info.dart';
 import '../bean/http/response/home_function_info.dart';
 import '../constant.dart';
@@ -29,76 +31,38 @@ class HomeState {
   refreshFunList({
     required Function() success,
     required Function(String msg) error,
-  }) {
+  }) async {
     httpGet(
       method: webApiGetMenuFunction,
       params: {'empID': userInfo?.empID ?? 0},
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        _formatButtonData([
-          for (var item in response.data) HomeFunctions.fromJson(item),
-        ]);
-        success.call();
+        compute(
+          parseJsonToList<HomeFunctions>,
+          ParseJsonParams<HomeFunctions>(
+            response.data,
+            HomeFunctions.fromJson,
+          ),
+        ).then((v1) {
+          nBarIndex = 0;
+          navigationBar.value = [
+            for (var b in v1)
+              HomeFunctions(
+                className: b.className,
+                backGroundColor: b.backGroundColor,
+                fontColor: b.fontColor,
+                icon: b.icon,
+              )
+          ];
+          compute(formatButton, v1).then((v2) {
+            functions = v2;
+            success.call();
+          });
+        });
       } else {
         error.call(response.message ?? '');
       }
     });
-  }
-
-  _formatButtonData(List<HomeFunctions> list) {
-    functions.clear();
-    for (var navigation in list) {
-      var list = <ButtonItem>[];
-      for (var fun in navigation.subFunctions ?? <SubFunctions>[]) {
-        if (fun.functionGroup != null && fun.functionGroup!.length>1) {
-          list.add(HomeButtonGroup(
-            name: fun.name ?? '',
-            description: fun.description ?? '',
-            classify: navigation.className ?? '',
-            icon: fun.icon ?? '',
-            functionGroup: [
-              for (var sub in fun.functionGroup!)
-                HomeButton(
-                  name: sub.name ?? '',
-                  description: sub.description ?? '',
-                  classify: navigation.className ?? '',
-                  icon: sub.icon ?? '',
-                  id: sub.id ?? 0,
-                  // version: sub.version ?? 0,
-                  version: 98,
-                  route: sub.routeSrc ?? '',
-                  // hasPermission: sub.hasPermission ?? false,
-                  hasPermission: true,
-                )
-            ],
-          ));
-        } else {
-          list.add(HomeButton(
-            name: fun.functionGroup![0].name ?? '',
-            description: fun.functionGroup![0].description ?? '',
-            classify: navigation.className ?? '',
-            icon: fun.functionGroup![0].icon ?? '',
-            id: fun.functionGroup![0].id ?? 0,
-            // version: fun.functionGroup![0].version ?? 0,
-            version: 98,
-            route: fun.functionGroup![0].routeSrc ?? '',
-            // hasPermission: fun.functionGroup![0].hasPermission ?? false,
-            hasPermission: true,
-          ));
-        }
-      }
-      functions.addAll(list);
-    }
-    nBarIndex = 0;
-    navigationBar.value = [
-      for (var b in list)
-        HomeFunctions(
-          className: b.className,
-          backGroundColor: b.backGroundColor,
-          fontColor: b.fontColor,
-          icon: b.icon,
-        )
-    ];
   }
 
   changeUserAvatar({

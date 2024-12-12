@@ -174,12 +174,12 @@ class _SapProductionPickingPageState extends State<SapProductionPickingPage> {
             ],
           ),
         ),
-      Row(
-                children: [
-                  Expanded(child: DatePicker(pickerController: dpcStartDate)),
-                  Expanded(child: DatePicker(pickerController: dpcEndDate)),
-                ],
-              ),
+        Row(
+          children: [
+            Expanded(child: DatePicker(pickerController: dpcStartDate)),
+            Expanded(child: DatePicker(pickerController: dpcEndDate)),
+          ],
+        ),
         OptionsPicker(pickerController: workCenterController),
         LinkOptionsPicker(pickerController: factoryWarehouseController),
       ],
@@ -194,15 +194,14 @@ class _SapProductionPickingPageState extends State<SapProductionPickingPage> {
                 ),
               ),
               if (state.pickOrderList.any((v) => v.select))
-                Row(children: [
-                  Expanded(
-                    child: CombinationButton(
-                      text: '入库',
-                      click: () => logic
-                          .checkPickingSelected((scan) => _goPicking(scan)),
-                    ),
+                SizedBox(
+                  width: double.infinity,
+                  child: CombinationButton(
+                    text: '入库',
+                    click: () =>
+                        logic.checkPickingSelected((scan) => _goPicking(scan)),
                   ),
-                ]),
+                ),
             ],
           )),
     );

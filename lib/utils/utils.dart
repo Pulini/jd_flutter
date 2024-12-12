@@ -153,7 +153,6 @@ extension ContextExt on BuildContext {
   ///是否是小屏幕
   bool isSmallScreen() => MediaQuery.of(this).size.width < 768;
 }
-
 ///Double扩展方法
 extension DoubleExt on double? {
   ///double转string并去除小数点后为0的位数，非0不去除
@@ -323,15 +322,11 @@ getVersionInfo(
   ).then((versionInfoCallback) {
     if (versionInfoCallback.resultCode == resultSuccess) {
       logger.i(packageInfo);
-      if (versionInfoCallback.baseUrl == testUrlForMES) {
-        noUpdate.call();
+      var versionInfo = VersionInfo.fromJson(versionInfoCallback.data);
+      if (packageInfo.buildNumber.toIntTry() < versionInfo.versionCode!) {
+        needUpdate.call(versionInfo);
       } else {
-        var versionInfo = VersionInfo.fromJson(versionInfoCallback.data);
-        if (packageInfo.buildNumber.toIntTry() < versionInfo.versionCode!) {
-          needUpdate.call(versionInfo);
-        } else {
-          noUpdate.call();
-        }
+        noUpdate.call();
       }
     } else {
       errorDialog(content: versionInfoCallback.message);
@@ -542,6 +537,65 @@ pdaScanner({required Function(String) scan}) {
       case 'PdaScanner':
         {
           scan.call(call.arguments);
+        }
+        break;
+    }
+    return Future.value(call);
+  });
+}
+
+weighbridgeOpen() async {
+  await const MethodChannel(channelWeighbridgeAndroidToFlutter)
+      .invokeMethod('OpenDevice');
+}
+
+weighbridgeListener({
+  required Function() usbAttached,
+  required Function() deviceNotConnected,
+  required Function(bool) deviceOpen,
+  required Function(double) readWeight,
+  required Function() readError,
+}) {
+  debugPrint('weighbridge 注册监听');
+  const MethodChannel(channelWeighbridgeFlutterToAndroid)
+      .setMethodCallHandler((call) {
+    switch (call.method) {
+      case 'WeighbridgeState':
+        {
+          switch (call.arguments) {
+            case 'WEIGHT_MSG_DEVICE_DETACHED':
+              debugPrint('地磅断开');
+              break;
+            case 'WEIGHT_MSG_DEVICE_NOT_CONNECTED':
+              debugPrint('地磅未连接');
+              break;
+            case 'WEIGHT_MSG_OPEN_DEVICE_SUCCESS':
+              debugPrint('打开地磅串口成功');
+              break;
+            case 'WEIGHT_MSG_OPEN_DEVICE_FAILED':
+              debugPrint('打开地磅串口失败');
+              break;
+            case 'WEIGHT_MSG_READ_ERROR':
+              debugPrint('地磅串口读取错误');
+              break;
+          }
+        }
+        break;
+      case 'WeighbridgeRead':
+        {
+          readWeight.call(call.arguments);
+        }
+        break;
+    }
+    return Future.value(call);
+  });
+  const MethodChannel(channelUsbFlutterToAndroid).setMethodCallHandler((call) {
+    switch (call.method) {
+      case 'UsbState':
+        {
+          if (call.arguments == 'Attached') {
+            debugPrint('USB设备插入');
+          }
         }
         break;
     }

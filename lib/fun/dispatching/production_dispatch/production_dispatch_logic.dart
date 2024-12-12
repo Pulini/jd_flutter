@@ -23,15 +23,15 @@ class ProductionDispatchLogic extends GetxController {
 
   ///日期选择器的控制器
   var dpcStartDate = DatePickerController(
-    PickerType.date,
-    saveKey: '${RouteConfig.workerProductionReport.name}StartDate',
+    PickerType.startDate,
+    saveKey: '${RouteConfig.workerProductionReport.name}${PickerType.startDate}',
   )..firstDate = DateTime(
       DateTime.now().year - 5, DateTime.now().month, DateTime.now().day);
 
   ///日期选择器的控制器
   var dpcEndDate = DatePickerController(
-    PickerType.date,
-    saveKey: '${RouteConfig.workerProductionReport.name}EndDate',
+    PickerType.endDate,
+    saveKey: '${RouteConfig.workerProductionReport.name}${PickerType.endDate}',
   );
 
   ///工单列表非合并item点击事件

@@ -26,7 +26,8 @@ class _ModifyLabelWorkerPageState extends State<ModifyLabelWorkerPage> {
 
   _methodChannel() {
     debugPrint('注册监听');
-    const MethodChannel(channelScanFlutterToAndroid).setMethodCallHandler((call) {
+    const MethodChannel(channelScanFlutterToAndroid)
+        .setMethodCallHandler((call) {
       switch (call.method) {
         case 'PdaScanner':
           {
@@ -160,14 +161,12 @@ class _ModifyLabelWorkerPageState extends State<ModifyLabelWorkerPage> {
                     _item(state.workerList[index], index),
               ),
             ),
-            Row(
-              children: [
-                Expanded(
-                    child: CombinationButton(
-                  text: '提交修改',
-                  click: () => logic.modifyLabelWorker(),
-                ))
-              ],
+            SizedBox(
+              width: double.infinity,
+              child: CombinationButton(
+                text: '提交修改',
+                click: () => logic.modifyLabelWorker(),
+              ),
             ),
           ],
         ),

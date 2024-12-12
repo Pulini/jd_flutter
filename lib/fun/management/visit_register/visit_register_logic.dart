@@ -59,14 +59,14 @@ class VisitRegisterLogic extends GetxController {
 
   ///日期选择器的控制器
   var pickerControllerStartDate = DatePickerController(
-    PickerType.date,
-    saveKey: '${RouteConfig.property.name}StartDate',
+    PickerType.startDate,
+    saveKey: '${RouteConfig.property.name}${PickerType.startDate}',
   );
 
   ///日期选择器的控制器
   var pickerControllerEndDate = DatePickerController(
-    PickerType.date,
-    saveKey: '${RouteConfig.property.name}EndDate',
+    PickerType.endDate,
+    saveKey: '${RouteConfig.property.name}${PickerType.endDate}',
   );
 
   refreshGetVisitList(

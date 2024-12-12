@@ -636,15 +636,22 @@ addDispatchWorker(DispatchProcessInfo data, Function() refresh) {
             () => Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                if (avatar.isNotEmpty)
-                  SizedBox(
+                Center(
+                  child: SizedBox(
                     width: 150,
                     height: 150,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(7),
-                      child: Image.network(avatar.value, fit: BoxFit.fill),
+                      child: avatar.isNotEmpty
+                          ? Image.network(avatar.value, fit: BoxFit.fill)
+                          : Icon(
+                        Icons.account_circle,
+                        size: 150,
+                        color: Colors.grey.shade300,
+                      ),
                     ),
                   ),
+                ),
                 WorkerCheck(onChanged: (w) {
                   worker = w;
                   avatar.value = w?.picUrl ?? '';

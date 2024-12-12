@@ -256,6 +256,7 @@ showSnackBar({
 }) {
   if (snackbarStatus != SnackbarStatus.CLOSED) {
     snackbarController?.close(withAnimations: false);
+    return;
   }
   snackbarController = Get.snackbar(
     title,

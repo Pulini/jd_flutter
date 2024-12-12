@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:jd_flutter/fun/warehouse/sap_injection_molding_stock_in/sap_injection_molding_stock_in_view.dart';
 
 import 'bean/home_button.dart';
 import 'bean/routes.dart';
@@ -27,10 +28,12 @@ import 'fun/report/worker_production_detail/worker_production_detail_view.dart';
 import 'fun/report/worker_production_report/worker_production_report_view.dart';
 import 'fun/warehouse/carton_label_scan/carton_label_scan_view.dart';
 import 'fun/warehouse/carton_label_scan_progress/carton_label_scan_progress_view.dart';
+import 'fun/warehouse/sap_no_label_stock_in/sap_no_label_stock_in_view.dart';
 import 'fun/warehouse/sap_print_picking/sap_print_picking_view.dart';
 import 'fun/warehouse/sap_production_picking/sap_production_picking_view.dart';
 import 'fun/warehouse/sap_purchase_stock_in/sap_purchase_stock_in_view.dart';
 import 'fun/warehouse/sap_relocation_picking/sap_relocation_picking_view.dart';
+import 'fun/warehouse/sap_surplus_material_stock_in/sap_surplus_material_stock_in_view.dart';
 import 'fun/warehouse/smart_delivery/smart_delivery_view.dart';
 import 'home/home_view.dart';
 import 'login/login_view.dart';
@@ -250,6 +253,27 @@ class RouteConfig {
     const SapRelocationPickingPage(),
   );
 
+  ///sap移库领料
+  static Routes sapNoLabelStockIn = Routes(
+    '/sap_no_label_stock_in',
+    99,
+    const SapNoLabelStockInPage(),
+  );
+
+  ///sap注塑入库
+  static Routes sapInjectionMoldingStockIn = Routes(
+    '/sap_injection_molding_stock_in',
+    99,
+    const SapInjectionMoldingStockInPage(),
+  );
+
+  ///sap料头入库
+  static Routes sapSurplusMaterialStockIn = Routes(
+    '/sap_surplus_material_stock_in',
+    99,
+    const SapSurplusMaterialStockInPage(),
+  );
+
   ///本地功能入口列表
   static List<Routes> routeList = [
     dailyReport,
@@ -281,6 +305,9 @@ class RouteConfig {
     sapProductionPicking,
     sapPrintPicking,
     sapRelocationPicking,
+    sapNoLabelStockIn,
+    sapInjectionMoldingStockIn,
+    sapSurplusMaterialStockIn
   ];
 
   static List<GetPage> appRoutes = [
@@ -412,6 +439,18 @@ class RouteConfig {
     GetPage(
       name: sapRelocationPicking.name,
       page: () => sapRelocationPicking.page,
+    ),
+    GetPage(
+      name: sapNoLabelStockIn.name,
+      page: () => sapNoLabelStockIn.page,
+    ),
+    GetPage(
+      name: sapInjectionMoldingStockIn.name,
+      page: () => sapInjectionMoldingStockIn.page,
+    ),
+    GetPage(
+      name: sapSurplusMaterialStockIn.name,
+      page: () => sapSurplusMaterialStockIn.page,
     ),
   ];
 }
