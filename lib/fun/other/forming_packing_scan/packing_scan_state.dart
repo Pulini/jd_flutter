@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:ffi';
 
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/packing_shipment_scan_info.dart';

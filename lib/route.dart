@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:jd_flutter/fun/other/hydroelectric_excess/hydroelectric_excess_view.dart';
 
 import 'bean/home_button.dart';
 import 'bean/routes.dart';
@@ -28,6 +29,7 @@ import 'fun/report/worker_production_report/worker_production_report_view.dart';
 import 'fun/warehouse/carton_label_scan/carton_label_scan_view.dart';
 import 'fun/warehouse/carton_label_scan_progress/carton_label_scan_progress_view.dart';
 import 'fun/warehouse/smart_delivery/smart_delivery_view.dart';
+import 'fun/warehouse/warehouse_allocation/warehouse_allocation_view.dart';
 import 'home/home_view.dart';
 import 'utils/web_api.dart';
 import 'login/login_view.dart';
@@ -218,6 +220,20 @@ class RouteConfig {
     const CartonLabelScanProgressPage(),
   );
 
+  ///水电抄度
+  static Routes hydroelectricExcessPage = Routes(
+    '/hydroelectric_excess_page',
+    99,
+    const HydroelectricExcessPage(),
+  );
+
+  ///仓库调拨
+  static Routes warehouseAllocationPage = Routes(
+    '/warehouse_allocation_page',
+    99,
+    const WarehouseAllocationPage(),
+  );
+
   ///本地功能入口列表
   static List<Routes> routeList = [
     dailyReport,
@@ -245,6 +261,7 @@ class RouteConfig {
     smartDeliveryPage,
     cartonLabelScanPage,
     cartonLabelScanProgressPage,
+    warehouseAllocationPage
   ];
 
   static List<GetPage> appRoutes = [
@@ -360,6 +377,10 @@ class RouteConfig {
     GetPage(
       name: cartonLabelScanProgressPage.name,
       page: () => cartonLabelScanProgressPage.page,
+    ),
+    GetPage(
+      name: warehouseAllocationPage.name,
+      page: () => warehouseAllocationPage.page,
     ),
   ];
 }

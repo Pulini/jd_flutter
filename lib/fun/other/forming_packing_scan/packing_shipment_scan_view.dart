@@ -49,6 +49,7 @@ class _PackingShipmentScanPageState extends State<PackingShipmentScanPage> {
                   )
                 ],
               )),
+              Expanded(child: Stack())
               // Obx(()=> )
             ],
           )),
@@ -64,14 +65,12 @@ class _PackingShipmentScanPageState extends State<PackingShipmentScanPage> {
           {
             switch (state.checkCode(
               code: call.arguments.toString(),
-              success: () => {
-
-              },
+              success: () => {},
             )) {
               case 0:
-                { }
+                {}
               case 1:
-                { }
+                {}
             }
           }
           break;

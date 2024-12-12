@@ -388,7 +388,7 @@ class Translation extends Translations {
           'visit_search_record_phone': '电话号码:',
           'visit_search_record_car': '车牌号码:',
           'quality_management_number': '请输入工号',
-
+          'warehouse_allocation_input': '手动录入登记',
 
         },
         localeEnglish.toString(): {
@@ -802,6 +802,7 @@ class Translation extends Translations {
           'visit_search_record_phone': 'Phone:',
           'visit_search_record_car': 'Car No:',
           'quality_management_number': 'Please enter the job number',
+          'warehouse_allocation_input': 'Manually enter and register',
         }
       };
 }
