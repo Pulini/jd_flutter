@@ -27,7 +27,8 @@ class EditText extends StatelessWidget {
       fn = FocusNode()..requestFocus();
     }
     return Container(
-      margin: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+      margin: const EdgeInsets.all(5),
+      height: 40,
       child: TextField(
         controller: this.controller ?? controller,
         onChanged: (v) {
@@ -44,13 +45,13 @@ class EditText extends StatelessWidget {
           filled: true,
           fillColor: Colors.grey[300],
           enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(30),
+            borderRadius: BorderRadius.circular(20),
             borderSide: const BorderSide(
               color: Colors.transparent,
             ),
           ),
           border: const OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(30)),
+            borderRadius: BorderRadius.all(Radius.circular(20)),
           ),
           hintText: hint,
           hintStyle: const TextStyle(color: Colors.grey),
@@ -109,7 +110,8 @@ class NumberDecimalEditText extends StatelessWidget {
       fn = FocusNode()..requestFocus();
     }
     return Container(
-      margin: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+      height: 40,
+      margin: const EdgeInsets.all(5),
       child: TextField(
         keyboardType: TextInputType.number,
         inputFormatters: [
@@ -149,13 +151,13 @@ class NumberDecimalEditText extends StatelessWidget {
           filled: true,
           fillColor: Colors.grey[300],
           enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(30),
+            borderRadius: BorderRadius.circular(20),
             borderSide: const BorderSide(
               color: Colors.transparent,
             ),
           ),
           border: const OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(30)),
+            borderRadius: BorderRadius.all(Radius.circular(20)),
           ),
           hintText: hint,
           hintStyle: const TextStyle(color: Colors.grey),
@@ -199,7 +201,8 @@ class NumberEditText extends StatelessWidget {
       fn = FocusNode()..requestFocus();
     }
     return Container(
-      margin: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+      height: 40,
+      margin: const EdgeInsets.all(5),
       child: TextField(
         focusNode: fn,
         keyboardType: TextInputType.number,
@@ -216,13 +219,13 @@ class NumberEditText extends StatelessWidget {
           filled: true,
           fillColor: Colors.grey[300],
           enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(30),
+            borderRadius: BorderRadius.circular(20),
             borderSide: const BorderSide(
               color: Colors.transparent,
             ),
           ),
           border: const OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(30)),
+            borderRadius: BorderRadius.all(Radius.circular(20)),
           ),
           hintText: hint,
           hintStyle: const TextStyle(color: Colors.grey),

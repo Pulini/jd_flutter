@@ -12,7 +12,7 @@ import 'material_dispatch_state.dart';
 class MaterialDispatchLogic extends GetxController {
   final MaterialDispatchState state = MaterialDispatchState();
   var scReportState = SpinnerController(
-    saveKey: RouteConfig.materialDispatchPage.name,
+    saveKey: RouteConfig.materialDispatch.name,
     dataList: [
       '全部',
       '未报工',
@@ -23,15 +23,15 @@ class MaterialDispatchLogic extends GetxController {
 
   ///日期选择器的控制器
   var dpcStartDate = DatePickerController(
-    PickerType.date,
-    saveKey: '${RouteConfig.materialDispatchPage.name}StartDate',
+    PickerType.startDate,
+    saveKey: '${RouteConfig.materialDispatch.name}${PickerType.startDate}',
   )..firstDate = DateTime(
       DateTime.now().year - 5, DateTime.now().month, DateTime.now().day);
 
   ///日期选择器的控制器
   var dpcEndDate = DatePickerController(
-    PickerType.date,
-    saveKey: '${RouteConfig.materialDispatchPage.name}EndDate',
+    PickerType.endDate,
+    saveKey: '${RouteConfig.materialDispatch.name}${PickerType.endDate}',
   );
 
   // @override

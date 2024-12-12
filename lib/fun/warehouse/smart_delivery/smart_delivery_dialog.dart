@@ -1,5 +1,3 @@
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -10,6 +8,7 @@ import '../../../bean/http/response/smart_delivery_info.dart';
 import '../../../utils/web_api.dart';
 import '../../../widget/custom_widget.dart';
 import '../../../widget/dialogs.dart';
+import '../../../widget/switch_button_widget.dart';
 
 modifyShoeTreeDialog(String typeBody, int departmentID) {
   _getShoeTreeList(
@@ -318,7 +317,7 @@ createDeliveryTaskDialog({
   required String mergeOrderId,
   required String mergeOrderPartsId,
   required List<WorkData> mergeOrderRoundList,
-  required Function(String taskId,String agvNumber) success,
+  required Function(String taskId, String agvNumber) success,
 }) {
   if (nowOrderRoundList.isEmpty) {
     errorDialog(content: '请选择需要配送的轮次');
@@ -367,28 +366,27 @@ createDeliveryTaskDialog({
       var endController = FixedExtentScrollController(
         initialItem: endSelect < endList.length ? endSelect : 0,
       );
-
-      var emptyController = FixedExtentScrollController();
+      var isScheduling = true;
 
       Get.dialog(
         PopScope(
           canPop: false,
           child: StatefulBuilder(builder: (context, dialogSetState) {
             return AlertDialog(
-              title: Text('AGV任务创建'),
+              title: Text('创建任务'),
               content: SizedBox(
                 width: 460,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _selectView(
+                    selectView(
                       list: agvList,
                       controller: agvController,
                       errorMsg: '查询不到AGV设备信息',
                       hint: '执行设备：',
                     ),
-                    _selectView(
+                    selectView(
                       list: taskTypeList,
                       controller: agvTypeController,
                       errorMsg: '查询不到AGV模版信息',
@@ -399,23 +397,21 @@ createDeliveryTaskDialog({
                         endList = taskTypeList[i].endPoint ?? [];
                       }),
                     ),
-                    _selectView(
+                    selectView(
                       list: startList,
                       controller: startController,
                       errorMsg: '查询不到AGV起点信息',
                       hint: '任务起点：',
                     ),
-                    _selectView(
+                    selectView(
                       list: endList,
                       controller: endController,
                       errorMsg: '查询不到AGV终点信息',
                       hint: '任务终点：',
                     ),
-                    _selectView(
-                      list: emptyList,
-                      controller: emptyController,
-                      errorMsg: '查询不到AGV空托盘信息',
-                      hint: '空托盘点：',
+                    SwitchButton(
+                      onChanged: (v) => isScheduling = v,
+                      name: '启用AGV配送',
                     ),
                   ],
                 ),
@@ -446,12 +442,10 @@ createDeliveryTaskDialog({
                       mergeOrderRoundList: mergeOrderRoundList,
                       start: startList[startSelect].positionCode ?? '',
                       end: endList[endSelect].positionCode ?? '',
-                      empty: emptyController.selectedItem == 0
-                          ? ''
-                          : '${emptyList[emptyController.selectedItem].positionCode}',
-                      success: (taskId,agvNumber, msg) {
+                      isScheduling: isScheduling,
+                      success: (taskId, agvNumber, msg) {
                         Get.back();
-                        success.call(taskId,agvNumber);
+                        success.call(taskId, agvNumber);
                         successDialog(content: msg);
                       },
                       fail: (msg) => errorDialog(content: msg),
@@ -475,79 +469,20 @@ createDeliveryTaskDialog({
   );
 }
 
-_selectView({
-  required List<dynamic> list,
-  required FixedExtentScrollController controller,
-  required String errorMsg,
-  required String hint,
-  Function(int)? select,
+checkAgvTask({
+  required String taskId,
+  required String agvNumber,
+  required Function(String) cancelTask,
 }) {
-  return Container(
-    height: list.length > 1 ? 150 : 50,
-    width: double.infinity,
-    margin: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-    padding: const EdgeInsets.only(left: 15, right: 5),
-    decoration: BoxDecoration(
-      color: Colors.grey.shade200,
-      borderRadius: BorderRadius.circular(list.length > 1 ? 10 : 25),
-    ),
-    child: list.length > 1
-        ? Row(
-            children: [
-              Text(
-                hint,
-                style: const TextStyle(
-                  color: Colors.black87,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Expanded(
-                child: CupertinoPicker(
-                  scrollController: controller,
-                  diameterRatio: 1.5,
-                  magnification: 1.2,
-                  squeeze: 1.2,
-                  useMagnifier: true,
-                  itemExtent: 32,
-                  onSelectedItemChanged: (v) => select?.call(v),
-                  children: list
-                      .map((v) => Center(
-                            child: Text(
-                              v.toString(),
-                              style: const TextStyle(
-                                color: Colors.blue,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ))
-                      .toList(),
-                ),
-              ),
-            ],
-          )
-        : list.isEmpty
-            ? Row(
-                children: [
-                  AutoSizeText(
-                    errorMsg,
-                    style: const TextStyle(color: Colors.black),
-                    maxLines: 2,
-                    minFontSize: 8,
-                    maxFontSize: 16,
-                  )
-                ],
-              )
-            : Row(children: [textSpan(hint: hint, text: list[0].toString())]),
-  );
-}
-
-checkAgvTask(String taskId, String agvNumber) {
   _getAgvTaskInfo(
     taskId: taskId,
     success: (task) {
-      String taskState;
-      Color taskStateColor;
-      switch (task.taskType) {
+      int taskType = task.taskType ?? 0;
+      String startingPoint = task.startingPoint ?? '';
+      String endPoint = task.endPoint ?? '';
+      String taskState = '未知';
+      Color taskStateColor = Colors.red;
+      switch (taskType) {
         case 1:
           taskState = '执行中';
           taskStateColor = Colors.green;
@@ -560,79 +495,93 @@ checkAgvTask(String taskId, String agvNumber) {
           taskState = '暂停中';
           taskStateColor = Colors.orange;
           break;
-        default:
-          taskState = '未知';
-          taskStateColor = Colors.red;
       }
+
       var title = Text('AGV 任务详情');
       Get.dialog(
         PopScope(
             canPop: false,
             child: StatefulBuilder(
-              builder: (c, dialogSetState) => AlertDialog(
-                title: task.taskType == 1 || task.taskType == 3
-                    ? Row(
+              builder: (c, dialogSetState) {
+                return AlertDialog(
+                  title: title,
+                  content: SizedBox(
+                      width: 300,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          title,
-                          Expanded(child: Container()),
-                          IconButton(
-                            onPressed: () => _stopAgvTask(
-                              agvNumber: agvNumber,
-                              success: () => dialogSetState(
-                                () => task.taskType = 3,
-                              ),
+                          if (taskType == 1 || taskType == 3)
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                IconButton(
+                                  onPressed: () => _cancelAgvTask(
+                                    taskId: taskId,
+                                    success: () {
+                                      Get.back();
+                                      cancelTask.call(taskId);
+                                    },
+                                  ),
+                                  icon: const Icon(
+                                    Icons.stop_circle,
+                                    color: Colors.red,
+                                    size: 35,
+                                  ),
+                                ),
+                                IconButton(
+                                  onPressed: () => _stopAgvTask(
+                                    agvNumber: agvNumber,
+                                    success: () => dialogSetState(
+                                      () => taskType = 3,
+                                    ),
+                                  ),
+                                  icon: const Icon(
+                                    Icons.pause_circle,
+                                    color: Colors.orange,
+                                    size: 35,
+                                  ),
+                                ),
+                                IconButton(
+                                  onPressed: () => _resumeAgvTask(
+                                    agvNumber: agvNumber,
+                                    success: () => dialogSetState(
+                                      () => taskType = 1,
+                                    ),
+                                  ),
+                                  icon: const Icon(
+                                    Icons.replay_circle_filled_sharp,
+                                    color: Colors.green,
+                                    size: 35,
+                                  ),
+                                ),
+                              ],
                             ),
-                            icon: const Icon(
-                              Icons.pause_circle,
-                              color: Colors.orange,
-                            ),
+                          textSpan(
+                            hint: '任务状态：',
+                            text: taskState,
+                            textColor: taskStateColor,
                           ),
-                          IconButton(
-                            onPressed: () => _resumeAgvTask(
-                              agvNumber: agvNumber,
-                              success: () => dialogSetState(
-                                () => task.taskType = 1,
-                              ),
-                            ),
-                            icon: const Icon(
-                              Icons.replay_circle_filled_sharp,
-                              color: Colors.green,
-                            ),
-                          )
+                          Row(
+                            children: [
+                              expandedTextSpan(
+                                  hint: '任务起点：', text: startingPoint),
+                              expandedTextSpan(hint: '任务终点：', text: endPoint),
+                            ],
+                          ),
                         ],
-                      )
-                    : title,
-                content: SizedBox(
-                    width: 300,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        textSpan(
-                          hint: '任务状态：',
-                          text: taskState,
-                          textColor: taskStateColor,
-                        ),
-                        Row(
-                          children: [
-                            expandedTextSpan(
-                                hint: '任务起点：', text: task.startingPoint ?? ''),
-                            expandedTextSpan(
-                                hint: '任务终点：', text: task.endPoint ?? ''),
-                          ],
-                        ),
-                      ],
-                    )),
-                actions: [
-                  TextButton(
-                    onPressed: () => Get.back(),
-                    child: Text(
-                      'dialog_default_back'.tr,
-                      style: const TextStyle(color: Colors.grey),
+                      )),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Get.back(),
+                      child: Text(
+                        'dialog_default_back'.tr,
+                        style: const TextStyle(color: Colors.grey),
+                      ),
                     ),
-                  ),
-                ],
-              ),
+                  ],
+                );
+              },
             )),
       );
     },
@@ -716,8 +665,8 @@ _createAgvTask({
   required List<WorkData> mergeOrderRoundList,
   required String start,
   required String end,
-  required String empty,
-  required Function(String taskId,String agvNumber, String msg) success,
+  required bool isScheduling,
+  required Function(String taskId, String agvNumber, String msg) success,
   required Function(String) fail,
 }) {
   httpPost(
@@ -726,7 +675,7 @@ _createAgvTask({
     body: {
       'StartPoint': start,
       'EndPoint': end,
-      'EmptyPoint': empty,
+      'IsScheduling': isScheduling ? 1 : 0,
       'CheckerID': userInfo?.userID,
       'RobNumber': agvNumber,
       'RoundsData': [
@@ -746,7 +695,7 @@ _createAgvTask({
     },
   ).then((response) {
     if (response.resultCode == resultSuccess) {
-      success.call(response.data.toString(),agvNumber, response.message ?? '');
+      success.call(response.data.toString(), agvNumber, response.message ?? '');
     } else {
       fail.call(response.message ?? 'query_default_error'.tr);
     }
@@ -764,6 +713,23 @@ _getAgvTaskInfo({
   ).then((response) {
     if (response.resultCode == resultSuccess) {
       success.call(AgvTaskInfo.fromJson(response.data));
+    } else {
+      errorDialog(content: response.message ?? 'query_default_error'.tr);
+    }
+  });
+}
+
+_cancelAgvTask({
+  required String taskId,
+  required Function() success,
+}) {
+  httpPost(
+    loading: '正在取消AGV当前任务...',
+    method: webApiSmartDeliveryCancelTask,
+    body: {'TaskID': taskId},
+  ).then((response) {
+    if (response.resultCode == resultSuccess) {
+      successDialog(content: response.message, back: () => success.call());
     } else {
       errorDialog(content: response.message ?? 'query_default_error'.tr);
     }

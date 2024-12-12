@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jd_flutter/utils/web_api.dart';
+
 import '../bean/http/response/department_info.dart';
 import '../constant.dart';
 import '../login/login_view.dart';

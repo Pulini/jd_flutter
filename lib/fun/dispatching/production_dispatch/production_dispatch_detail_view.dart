@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/dispatching/production_dispatch/production_dispatch_dialogs.dart';
 import 'package:rotated_corner_decoration/rotated_corner_decoration.dart';
+
 import '../../../bean/http/response/production_dispatch_order_detail_info.dart';
 import '../../../widget/check_box_widget.dart';
 import '../../../widget/combination_button_widget.dart';

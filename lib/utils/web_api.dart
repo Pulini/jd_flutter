@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:uuid/uuid.dart';
@@ -8,8 +9,8 @@ import 'package:uuid/uuid.dart';
 import '../bean/http/response/base_data.dart';
 import '../constant.dart';
 import '../route.dart';
-import 'utils.dart';
 import '../widget/dialogs.dart';
+import 'utils.dart';
 
 ///接口返回异常
 const resultError = 0;
@@ -31,6 +32,9 @@ const testUrlForMES = 'https://geapptest.goldemperor.com:1224/';
 
 ///SAP正式库
 const baseUrlForSAP = 'https://erpprd01.goldemperor.com:8003/';
+
+///SAP测试库
+const testUrlForSAP = 'https://erpqas01.goldemperor.com:8002/';
 
 ///SAP开发库
 const developUrlForSAP = 'https://erpdev01.goldemperor.com:8001/';
@@ -90,13 +94,38 @@ Future<BaseData> sapPost({
 }) {
   return _doHttp(
     loading: loading,
-    params: {'sap-client': developClientForSAP, ...?params},
+    params: {...?params},
     body: body,
     baseUrl: baseUrlForSAP,
     isPost: true,
     method: method,
   );
 }
+
+///用于开发时切换测试库，打包时必须屏蔽
+_setTestUrl({
+  required String url,
+  Map<String, dynamic>? params,
+  required Function(String testUrl, Map<String, dynamic>? testParams) test,
+}) {
+  debugPrint('url=$url');
+  if (url == baseUrlForMES) {
+    url = testUrlForMES;
+  } else if (url == baseUrlForSAP) {
+    url = developUrlForSAP;
+    params = {
+      'sap-client':
+          url == baseUrlForSAP ? baseClientForSAP : developClientForSAP,
+      ...?params,
+    };
+  }
+  debugPrint('url=$url');
+  debugPrint('params=$params');
+  test.call(url, params);
+}
+
+///用于开发时切换测试库
+var useTestUrl = false;
 
 ///初始化网络请求
 Future<BaseData> _doHttp({
@@ -107,9 +136,17 @@ Future<BaseData> _doHttp({
   Map<String, dynamic>? params,
   Object? body,
 }) async {
-  ///用于开发时切换测试库，打包时必须屏蔽
-  baseUrl = baseUrl == baseUrlForSAP? developUrlForSAP : baseUrl==baseUrlForMES? testUrlForMES:baseUrl;
-  ///--------------------------------------------x----
+  if (useTestUrl) {
+    _setTestUrl(
+      url: baseUrl,
+      params: params,
+      test: (testUrl, testParams) {
+        baseUrl = testUrl;
+        params = testParams;
+      },
+    );
+  }
+
   try {
     logger.f('SnackbarStatus=$snackbarStatus');
     if (snackbarStatus == SnackbarStatus.OPEN ||
@@ -143,9 +180,9 @@ Future<BaseData> _doHttp({
     ///创建dio对象
     var dio = Dio(BaseOptions(
       baseUrl: baseUrl,
-      connectTimeout: const Duration(minutes: 1),
-      sendTimeout: const Duration(minutes: 1),
-      receiveTimeout: const Duration(minutes: 1),
+      connectTimeout: const Duration(minutes: 2),
+      sendTimeout: const Duration(minutes: 2),
+      receiveTimeout: const Duration(minutes: 2),
     ));
 
     ///接口拦截器
@@ -693,6 +730,9 @@ const webApiSmartDeliveryAddPartsStock = 'api/Autoworkshopbatch/AddPartsStock';
 const webApiSmartDeliveryDeletePartsStock =
     'api/Autoworkshopbatch/DeletePartsStock';
 
+///修改发料状态为备料
+const webApiSmartDeliveryEditSendType = 'api/Autoworkshopbatch/EditSendType';
+
 ///发料数据创建机器人任务
 const webApiSmartDeliveryCreatRobTask = 'api/Autoworkshopbatch/CreatRobTask';
 
@@ -701,6 +741,9 @@ const webApiSmartDeliveryGetRobInfo = 'api/Autoworkshopbatch/GetRobInfo';
 
 ///机器人任务记录
 const webApiSmartDeliveryGetRobTask = 'api/Autoworkshopbatch/GetRobTask';
+
+///机器人任务取消
+const webApiSmartDeliveryCancelTask = 'api/Autoworkshopbatch/CancelTask';
 
 ///暂停机器人
 const webApiSmartDeliveryStopRobot = 'api/Autoworkshopbatch/StopRobot';
@@ -729,6 +772,73 @@ const webApiGetProcessFlowEXTypes = 'api/QMProcessFlowEx/GetProcessFlowEXTypes';
 
 ///品质异常插入
 const webApiAddAbnormalQuality = 'api/QMProcessFlowEx/QMAbnormityBysuitID';
+
+///sap送货单列表
+const webApiSapGetDeliveryList = 'sap/zapp/ZFUN_APP_GET_DELI_1500';
+
+///sap送货单明细
+const webApiSapGetDeliveryDetail = 'sap/zapp/ZFUN_APP_GET_DELIDETAIL_1500';
+
+///sap检查暂收单是否已生成
+const webApiSapCheckTemporaryOrder = 'sap/zapp/ZFUN_APP_TEMPORARYDEYAIL_1500A';
+
+///根据工厂编号获取存储位置列表
+const webApiGetStorageLocationList = 'api/Department/GetStorageLocationList';
+
+///sap送货单保存核查
+const webApiSapSaveDeliveryCheck = 'sap/zapp/ZFUN_APP_RECEIVE_1500';
+
+///获取仓库是否启用了人脸识别
+const webApiGetStockFaceConfig = 'api/User/Flutter_GetLiableInfoByEmpCode';
+
+///sap送货单入库
+const webApiSapDeliveryOrderStockIn = 'sap/zapp/ZFUN_RES_ZCLCGRUKU_1500';
+
+///sap创建暂收单
+const webApiSapCreateTemporary = 'sap/zapp/ZFUN_APP_TEMPORARYDEYAIL_1500';
+
+///sap获取领料工单列表
+const webApiSapGetPickingOrders = 'sap/zapp/ZFUN_GET_ZDLL_PO_HEAD_1500';
+
+///sap获取领料明细
+const webApiSapGetPickingOrderDetail = 'sap/zapp/ZFUN_GET_ZDLL_PO_ITEM_1500';
+
+///sap领料过账
+const webApiSapMaterialsPicking = 'sap/zapp/ZFUN_RES_ZLINGYONG_1500';
+
+///根据物料编码获取条码
+const webApiGetProductionPickingBarCodeList =
+    'api/CompoundDispatching/GetBarcodeByMaterialNumberJinZhen';
+
+///材料出库——金臻拌料
+const webApiMixBarCodePicking = 'api/CompoundDispatching/MaterialOutStockJinZhen';
+
+///sap喷漆领料过账
+const webApiSapPrintPicking = 'sap/zapp/ZFUN_RES_ZLINGYONG_1500A';
+
+///sap待上架列表
+const webApiSapGetPalletList = 'sap/zapp/ZWMS_STOCK_FETCH';
+
+///sap上架移库
+const webApiSapPuttingOnShelves = 'sap/zapp/ZWMS_INTERFACE';
+
+///sap获取托盘明细
+const webApiSapGetPalletDetails = 'sap/zapp/ZWMS_BARCODE_LIST';
+
+///sap移库领料
+const webApiSapRelocationPicking = 'sap/zapp/ZWMS_BARCODE_YK';
+
+///sap获取入库派工单列表
+const webApiSapGetNoLabelStockInOrderList = 'sap/zapp/ZFUN_APP_PO_LIST_1500';
+
+///sap无标入库单提交入库
+const webApiSapSubmitNoLabelStockIn = 'sap/zapp/ZFUN_APP_PO_POST_1500';
+
+///sap获取贴标汇总状态
+const webApiSapGetStockInReport = 'sap/zapp/ZFUN_APP_PO_LIST_1500A';
+
+///sap注塑入库单提交入库
+const webApiSapInjectionMoldingStockIn = 'sap/zapp/ZFUN_APP_PO_POST_1500A';
 
 ///删除品质异常
 const webApiDelExBill = 'api/QMProcessFlowEx/DelExBill';

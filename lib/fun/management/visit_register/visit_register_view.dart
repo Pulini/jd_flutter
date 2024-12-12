@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+
 import '../../../bean/http/response/visit_data_list_info.dart';
 import '../../../route.dart';
 import '../../../utils/web_api.dart';

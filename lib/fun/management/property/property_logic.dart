@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/management/property/property_detail_view.dart';
-import '../../../utils/web_api.dart';
+
 import '../../../route.dart';
 import '../../../utils/utils.dart';
+import '../../../utils/web_api.dart';
 import '../../../widget/custom_widget.dart';
 import '../../../widget/dialogs.dart';
 import '../../../widget/picker/picker_controller.dart';
@@ -18,14 +19,14 @@ class PropertyLogic extends GetxController
 
   ///日期选择器的控制器
   var pickerControllerStartDate = DatePickerController(
-    PickerType.date,
-    saveKey: '${RouteConfig.propertyPage.name}StartDate',
+    PickerType.startDate,
+    saveKey: '${RouteConfig.property.name}${PickerType.startDate}',
   );
 
   ///日期选择器的控制器
   var pickerControllerEndDate = DatePickerController(
-    PickerType.date,
-    saveKey: '${RouteConfig.propertyPage.name}EndDate',
+    PickerType.endDate,
+    saveKey: '${RouteConfig.property.name}${PickerType.endDate}',
   );
 
   @override

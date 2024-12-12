@@ -32,7 +32,7 @@ class SmartDeliveryLogic extends GetxController {
     required String group,
     required void Function() refresh,
   }) {
-    if(!isQuery&&group.isEmpty){
+    if (!isQuery && group.isEmpty) {
       refresh.call();
       return;
     }
@@ -267,7 +267,7 @@ class SmartDeliveryLogic extends GetxController {
           )
           .sendQty = total.toDouble();
       var list = state.saveDeliveryDetail!.workData!
-          .where((v) => v.sendType == 0)
+          .where((v) => v.sendType == 0 || v.sendType == 2)
           .toList();
       if (list.isEmpty) {
         spSave('MergeDelivery', '');
@@ -278,5 +278,29 @@ class SmartDeliveryLogic extends GetxController {
       state.saveDeliveryDetail = null;
     }
     state.materialShowList.refresh();
+  }
+
+  cacheDelivery(Function refresh) {
+    askDialog(
+      content: isCanCache() ? '确定要暂存选中轮次吗？' : '确定要取消暂存轮次吗？',
+      confirm: () => state.cacheDelivery(
+        success: (msg) {
+          refresh.call();
+          successDialog(content: msg);
+        },
+        error: (msg) => errorDialog(content: msg),
+        isCache: isCanCache(),
+      ),
+    );
+  }
+
+  bool isCanCache() {
+    var select = state.deliveryList.where((v) => v.isSelected);
+    var cacheList = select.where((v) => v.sendType == 2);
+    if (cacheList.isNotEmpty) {
+      return select.length != cacheList.length;
+    } else {
+      return true;
+    }
   }
 }

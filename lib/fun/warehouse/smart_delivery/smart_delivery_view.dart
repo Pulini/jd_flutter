@@ -26,20 +26,20 @@ class _SmartDeliveryPageState extends State<SmartDeliveryPage> {
 
   ///日期选择器的控制器
   var pcStartDate = DatePickerController(
-    PickerType.date,
-    saveKey: '${RouteConfig.smartDeliveryPage.name}StartDate',
+    PickerType.startDate,
+    saveKey: '${RouteConfig.smartDelivery.name}${PickerType.startDate}',
   );
 
   ///日期选择器的控制器
   var pcEndDate = DatePickerController(
-    PickerType.date,
-    saveKey: '${RouteConfig.smartDeliveryPage.name}EndDate',
+    PickerType.endDate,
+    saveKey: '${RouteConfig.smartDelivery.name}${PickerType.endDate}',
   );
 
   ///组别选择器的控制器
   var pcGroup = OptionsPickerController(
     PickerType.mesGroup,
-    saveKey: '${RouteConfig.smartDeliveryPage.name}${PickerType.mesGroup}',
+    saveKey: '${RouteConfig.smartDelivery.name}${PickerType.mesGroup}',
   );
   var controller = EasyRefreshController(
     controlFinishRefresh: true,

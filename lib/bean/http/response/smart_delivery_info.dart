@@ -271,35 +271,47 @@ class DeliveryDetailInfo {
   bool hasDelivered() =>
       workData?.isNullOrEmpty() ? false : workData!.any((v) => v.sendType == 1);
 
-  double getMaxRound() => partsSizeList == null
-      ? 0
-      : partsSizeList!.map((v) => v.getRound()).reduce((a, b) => a > b ? a : b);
+  double getMaxRound() =>
+      partsSizeList == null
+          ? 0
+          : partsSizeList!.map((v) => v.getRound()).reduce((a, b) =>
+      a > b
+          ? a
+          : b);
 
-  int getShoeTreeTotal() => partsSizeList == null
-      ? 0
-      : partsSizeList!
+  int getShoeTreeTotal() =>
+      partsSizeList == null
+          ? 0
+          : partsSizeList!
           .map((e) => e.shoeTreeQty ?? 0)
           .reduce((v1, v2) => v1 + v2);
 
-  int getShoeTreeReserveTotal() => partsSizeList == null
-      ? 0
-      : partsSizeList!
+  int getShoeTreeReserveTotal() =>
+      partsSizeList == null
+          ? 0
+          : partsSizeList!
           .map((e) => (e.shoeTreeQty ?? 0) - e.reserveShoeTreeQty)
           .reduce((v1, v2) => v1 + v2);
 
-  int getMinShoeTreeQty() => partsSizeList == null
-      ? 0
-      : partsSizeList!
+  int getMinShoeTreeQty() =>
+      partsSizeList == null
+          ? 0
+          : partsSizeList!
           .map((v) => v.shoeTreeQty ?? 0)
           .reduce((a, b) => a < b ? a : b);
 
-  int getOrderTotal() => partsSizeList == null
-      ? 0
-      : partsSizeList!.map((e) => e.qty ?? 0).reduce((v1, v2) => v1 + v2);
+  int getOrderTotal() =>
+      partsSizeList == null
+          ? 0
+          : partsSizeList!.map((e) => e.qty ?? 0).reduce((v1, v2) => v1 + v2);
 
-  int getOrderMin() => partsSizeList == null
-      ? 0
-      : partsSizeList!.map((v) => v.qty ?? 0).reduce((a, b) => a < b ? a : b);
+  int getOrderMin() =>
+      partsSizeList == null
+          ? 0
+          : partsSizeList!.map((v) => v.qty ?? 0).reduce((a, b) =>
+      a < b
+          ? a
+          : b);
 }
 
 /// Round : "1"
@@ -331,7 +343,7 @@ class WorkData {
   bool isSelected = false;
 
   String? round;
-  int? sendType;
+  int? sendType;//0-未发料 1-已发料 2-已备料
   String? taskID;
   String? agvNumber;
   List<SizeInfo>? sendSizeList;
@@ -348,9 +360,10 @@ class WorkData {
     return map;
   }
 
-  int getTotalQty() => sendSizeList == null
-      ? 0
-      : sendSizeList!.map((v) => v.qty ?? 0).reduce((v1, v2) => v1 + v2);
+  int getTotalQty() =>
+      sendSizeList == null
+          ? 0
+          : sendSizeList!.map((v) => v.qty ?? 0).reduce((v1, v2) => v1 + v2);
 }
 
 /// Size : "36"
@@ -392,12 +405,12 @@ class PartsSizeList {
   }
 
   double getRound() {
-    double round = shoeTreeQty == 0
-        ? 0
-        : ((qty ?? 0) / ((shoeTreeQty ?? 0) - reserveShoeTreeQty));
+    if (qty == null || (qty ?? 0) <= 0) return 0;
+    if (shoeTreeQty == null || (shoeTreeQty ?? 0) <= 0) return 0;
+    if (((shoeTreeQty! - reserveShoeTreeQty) <= 0))return 0;
+    double round =qty!/ (shoeTreeQty! - reserveShoeTreeQty);
     //检查退位后每轮数是否会超出预排楦头数，超出的话轮数进位
-    if ((qty ?? 0) / round.truncate() >
-        (shoeTreeQty ?? 0) - reserveShoeTreeQty) {
+    if (qty! / round.truncate() > shoeTreeQty! - reserveShoeTreeQty) {
       round = round.ceil().toDouble();
     }
     return round;

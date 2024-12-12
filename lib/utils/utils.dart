@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:crypto/crypto.dart';
 import 'package:decimal/decimal.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -16,6 +17,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../bean/http/response/leader_info.dart';
 import '../bean/http/response/user_info.dart';
 import '../bean/http/response/version_info.dart';
 import '../bean/http/response/worker_info.dart';
@@ -151,7 +153,6 @@ extension ContextExt on BuildContext {
   ///是否是小屏幕
   bool isSmallScreen() => MediaQuery.of(this).size.width < 768;
 }
-
 ///Double扩展方法
 extension DoubleExt on double? {
   ///double转string并去除小数点后为0的位数，非0不去除
@@ -210,6 +211,31 @@ extension StringExt on String? {
       return v;
     }
   }
+
+  bool isLabel() {
+    final regex = RegExp(
+        r'^[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}$');
+    final upperCaseInput = (this ?? '').toUpperCase();
+
+    if (regex.hasMatch(upperCaseInput)) {
+      return true;
+    }
+
+    final parts = (this ?? '').split('/');
+    if (parts.length == 2 && parts[1].length == 3) {
+      return true;
+    }
+
+    if ((this ?? '').length == 32) {
+      return true;
+    }
+    return false;
+  }
+
+  bool isPallet() =>
+      (this ?? '').startsWith('GE') &&
+      (this ?? '').length >= 10 &&
+      (this ?? '').length <= 13;
 }
 
 extension RequestOptionsExt on RequestOptions {
@@ -225,9 +251,10 @@ extension RequestOptionsExt on RequestOptions {
     logger.f(map);
   }
 }
-extension ListExt on List?{
-  isNullOrEmpty(){
-    if(this==null)return true;
+
+extension ListExt on List? {
+  isNullOrEmpty() {
+    if (this == null) return true;
     return this!.isEmpty;
   }
 }
@@ -295,15 +322,11 @@ getVersionInfo(
   ).then((versionInfoCallback) {
     if (versionInfoCallback.resultCode == resultSuccess) {
       logger.i(packageInfo);
-      if (versionInfoCallback.baseUrl == testUrlForMES) {
-        noUpdate.call();
+      var versionInfo = VersionInfo.fromJson(versionInfoCallback.data);
+      if (packageInfo.buildNumber.toIntTry() < versionInfo.versionCode!) {
+        needUpdate.call(versionInfo);
       } else {
-        var versionInfo = VersionInfo.fromJson(versionInfoCallback.data);
-        if (packageInfo.buildNumber.toIntTry() < versionInfo.versionCode!) {
-          needUpdate.call(versionInfo);
-        } else {
-          noUpdate.call();
-        }
+        noUpdate.call();
       }
     } else {
       errorDialog(content: versionInfoCallback.message);
@@ -347,6 +370,39 @@ getWorkerInfo({
   });
 }
 
+checkStockLeaderConfig({
+  String? showLoading,
+  required String type,
+  required String number,
+  required String factoryNumber,
+  required String stockNumber,
+  required Function(List<LeaderInfo>) hasConfig,
+  required Function() noConfig,
+  required Function(String) error,
+}) {
+  httpGet(
+    loading: showLoading,
+    method: webApiGetStockFaceConfig,
+    params: {
+      'BillType': type,
+      'EmpCode': number,
+      'SapFactoryNumber': factoryNumber,
+      'SapStockNumber': stockNumber,
+    },
+  ).then((config) {
+    if (config.resultCode == resultSuccess) {
+      var data = LeaderConfigInfo.fromJson(config.data);
+      if (data.isEnableFaceRecognition == true) {
+        hasConfig.call(data.leaderList ?? []);
+      } else {
+        noConfig.call();
+      }
+    } else {
+      error.call(config.message ?? 'query_default_error'.tr);
+    }
+  });
+}
+
 String getDateYMD({DateTime? time}) {
   DateTime now;
   if (time == null) {
@@ -360,6 +416,21 @@ String getDateYMD({DateTime? time}) {
   var d = now.day.toString();
   if (d.length == 1) d = '0$d';
   return '$y-$m-$d';
+}
+
+String getDateSapYMD({DateTime? time}) {
+  DateTime now;
+  if (time == null) {
+    now = DateTime.now();
+  } else {
+    now = time;
+  }
+  var y = now.year.toString();
+  var m = now.month.toString();
+  if (m.length == 1) m = '0$m';
+  var d = now.day.toString();
+  if (d.length == 1) d = '0$d';
+  return '$y$m$d';
 }
 
 visitButtonWidget({
@@ -457,4 +528,77 @@ bool containsChinese(String input) {
 
   // 检查字符串中是否存在匹配的中文字符
   return chineseRegex.hasMatch(input);
+}
+
+pdaScanner({required Function(String) scan}) {
+  debugPrint('PdaScanner 注册监听');
+  const MethodChannel(channelScanFlutterToAndroid).setMethodCallHandler((call) {
+    switch (call.method) {
+      case 'PdaScanner':
+        {
+          scan.call(call.arguments);
+        }
+        break;
+    }
+    return Future.value(call);
+  });
+}
+
+weighbridgeOpen() async {
+  await const MethodChannel(channelWeighbridgeAndroidToFlutter)
+      .invokeMethod('OpenDevice');
+}
+
+weighbridgeListener({
+  required Function() usbAttached,
+  required Function() deviceNotConnected,
+  required Function(bool) deviceOpen,
+  required Function(double) readWeight,
+  required Function() readError,
+}) {
+  debugPrint('weighbridge 注册监听');
+  const MethodChannel(channelWeighbridgeFlutterToAndroid)
+      .setMethodCallHandler((call) {
+    switch (call.method) {
+      case 'WeighbridgeState':
+        {
+          switch (call.arguments) {
+            case 'WEIGHT_MSG_DEVICE_DETACHED':
+              debugPrint('地磅断开');
+              break;
+            case 'WEIGHT_MSG_DEVICE_NOT_CONNECTED':
+              debugPrint('地磅未连接');
+              break;
+            case 'WEIGHT_MSG_OPEN_DEVICE_SUCCESS':
+              debugPrint('打开地磅串口成功');
+              break;
+            case 'WEIGHT_MSG_OPEN_DEVICE_FAILED':
+              debugPrint('打开地磅串口失败');
+              break;
+            case 'WEIGHT_MSG_READ_ERROR':
+              debugPrint('地磅串口读取错误');
+              break;
+          }
+        }
+        break;
+      case 'WeighbridgeRead':
+        {
+          readWeight.call(call.arguments);
+        }
+        break;
+    }
+    return Future.value(call);
+  });
+  const MethodChannel(channelUsbFlutterToAndroid).setMethodCallHandler((call) {
+    switch (call.method) {
+      case 'UsbState':
+        {
+          if (call.arguments == 'Attached') {
+            debugPrint('USB设备插入');
+          }
+        }
+        break;
+    }
+    return Future.value(call);
+  });
 }

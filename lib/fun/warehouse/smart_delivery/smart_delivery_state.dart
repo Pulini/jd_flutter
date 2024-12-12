@@ -14,12 +14,11 @@ class SmartDeliveryState {
   DeliveryDetailInfo? deliveryDetail;
   DeliveryDetailInfo? saveDeliveryDetail;
   var deliveryList = <WorkData>[];
-  var deliveryQty=0;
+  var deliveryQty = 0;
 
   SmartDeliveryState() {
     ///Initialize variables
   }
-
 
   querySmartDeliveryOrder({
     required bool showLoading,
@@ -105,7 +104,7 @@ class SmartDeliveryState {
         'PartsID': sdmi.partsID,
         'MaterialID': sdmi.materialID,
         'StockID': userInfo?.defaultStockID,
-        'DepartmentID':departmentID,
+        'DepartmentID': departmentID,
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
@@ -166,8 +165,71 @@ class SmartDeliveryState {
       if (response.resultCode == resultSuccess) {
         deliveryDetail!.workData = [];
         for (var v in deliveryList) {
-          v.isSelected=false;
+          v.isSelected = false;
         }
+        success.call(response.message ?? '');
+      } else {
+        error.call(response.message ?? 'query_default_error'.tr);
+      }
+    });
+  }
+
+  cacheDelivery({
+    required bool isCache,
+    required Function(String) success,
+    required Function(String) error,
+  }) {
+    var order = <WorkData>[];
+    if (isCache) {
+      order.addAll(deliveryList
+          .where((v) => v.isSelected)
+          .where((v) => v.sendType != 2));
+    } else {
+      order.addAll(deliveryList
+          .where((v) => v.isSelected)
+          .where((v) => v.sendType == 2));
+    }
+    var saveOrder = <WorkData>[];
+    if (saveDeliveryDetail != null) {
+      if (isCache) {
+        saveOrder.addAll(saveDeliveryDetail!.workData!
+            .where((v) => v.isSelected)
+            .where((v) => v.sendType != 2));
+      } else {
+        saveOrder.addAll(saveDeliveryDetail!.workData!
+            .where((v) => v.isSelected)
+            .where((v) => v.sendType == 2));
+      }
+    }
+
+    httpPost(
+      loading: isCache ? '正在暂存轮次...' : '正在取消暂存...',
+      method: webApiSmartDeliveryEditSendType,
+      body: [
+        {
+          'NewWorkCardInterID': deliveryDetail!.newWorkCardInterID,
+          'PartsID': deliveryDetail!.partsID,
+          'Rounds': [for (var o in order) o.round],
+          'IsEdit': isCache,
+        },
+        if(saveOrder.isNotEmpty)
+          {
+            'NewWorkCardInterID': saveDeliveryDetail!.newWorkCardInterID,
+            'PartsID': saveDeliveryDetail!.partsID,
+            'Rounds':[for (var o in saveOrder) o.round],
+            'IsEdit': isCache,
+          }
+      ],
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        deliveryList.where((v) => v.isSelected).forEach((v) {
+          v.isSelected = false;
+          v.sendType = isCache ? 2 : 0;
+        });
+        saveDeliveryDetail?.workData!.where((v) => v.isSelected).forEach((v) {
+          v.isSelected = false;
+          v.sendType = isCache ? 2 : 0;
+        });
         success.call(response.message ?? '');
       } else {
         error.call(response.message ?? 'query_default_error'.tr);

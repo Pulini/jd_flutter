@@ -47,8 +47,8 @@ class CombinationButton extends StatelessWidget {
     switch (combination) {
       case Combination.left:
         borderRadius = const BorderRadius.only(
-          topLeft: Radius.circular(25),
-          bottomLeft: Radius.circular(25),
+          topLeft: Radius.circular(20),
+          bottomLeft: Radius.circular(20),
         );
         break;
       case Combination.middle:
@@ -56,12 +56,12 @@ class CombinationButton extends StatelessWidget {
         break;
       case Combination.right:
         borderRadius = const BorderRadius.only(
-          topRight: Radius.circular(25),
-          bottomRight: Radius.circular(25),
+          topRight: Radius.circular(20),
+          bottomRight: Radius.circular(20),
         );
         break;
       default:
-        borderRadius = const BorderRadius.all(Radius.circular(25));
+        borderRadius = const BorderRadius.all(Radius.circular(20));
         break;
     }
     return borderRadius;
@@ -72,7 +72,8 @@ class CombinationButton extends StatelessWidget {
     var textStyle = TextStyle(
       color: isEnabled == true ? foregroundColor : Colors.grey[800],
     );
-    return Padding(
+    return Container(
+      height: 40,
       padding: getPadding(),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(

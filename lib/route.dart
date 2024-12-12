@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/other/hydroelectric_excess/hydroelectric_excess_view.dart';
+import 'package:jd_flutter/fun/warehouse/sap_injection_molding_stock_in/sap_injection_molding_stock_in_view.dart';
 
 import 'bean/home_button.dart';
 import 'bean/routes.dart';
@@ -9,8 +10,8 @@ import 'fun/dispatching/material_dispatch/material_dispatch_view.dart';
 import 'fun/dispatching/part_process_scan/part_process_scan_view.dart';
 import 'fun/dispatching/process_dispatch_register/process_dispatch_register_view.dart';
 import 'fun/dispatching/production_dispatch/production_dispatch_detail_view.dart';
-import 'fun/dispatching/work_order_list/work_order_list_view.dart';
 import 'fun/dispatching/production_dispatch/production_dispatch_view.dart';
+import 'fun/dispatching/work_order_list/work_order_list_view.dart';
 import 'fun/management/property/property_view.dart';
 import 'fun/management/quality_management/quality_management_view.dart';
 import 'fun/management/visit_register/visit_register_view.dart';
@@ -28,11 +29,17 @@ import 'fun/report/worker_production_detail/worker_production_detail_view.dart';
 import 'fun/report/worker_production_report/worker_production_report_view.dart';
 import 'fun/warehouse/carton_label_scan/carton_label_scan_view.dart';
 import 'fun/warehouse/carton_label_scan_progress/carton_label_scan_progress_view.dart';
+import 'fun/warehouse/sap_no_label_stock_in/sap_no_label_stock_in_view.dart';
+import 'fun/warehouse/sap_print_picking/sap_print_picking_view.dart';
+import 'fun/warehouse/sap_production_picking/sap_production_picking_view.dart';
+import 'fun/warehouse/sap_purchase_stock_in/sap_purchase_stock_in_view.dart';
+import 'fun/warehouse/sap_relocation_picking/sap_relocation_picking_view.dart';
+import 'fun/warehouse/sap_surplus_material_stock_in/sap_surplus_material_stock_in_view.dart';
 import 'fun/warehouse/smart_delivery/smart_delivery_view.dart';
 import 'fun/warehouse/warehouse_allocation/warehouse_allocation_view.dart';
 import 'home/home_view.dart';
-import 'utils/web_api.dart';
 import 'login/login_view.dart';
+import 'utils/web_api.dart';
 
 class RouteConfig {
   static const String main = '/';
@@ -95,14 +102,14 @@ class RouteConfig {
   );
 
   ///成型后段扫描看板
-  static Routes moldingScanBulletinReportPage = Routes(
+  static Routes moldingScanBulletinReport = Routes(
     '/molding_scan_bulletin_report',
     99,
     const MoldingScanBulletinReportPage(),
   );
 
   ///来访登记
-  static Routes visitRegisterPage = Routes(
+  static Routes visitRegister = Routes(
     '/visitor_registration',
     99,
     const VisitRegisterPage(),
@@ -116,105 +123,105 @@ class RouteConfig {
   );
 
   ///生产派工
-  static Routes productionDispatchPage = Routes(
+  static Routes productionDispatch = Routes(
     '/production_dispatch',
     99,
     const ProductionDispatchPage(),
   );
 
   ///生产派工-派工明细
-  static Routes productionDispatchDetailPage = Routes(
+  static Routes productionDispatchDetail = Routes(
     '/production_dispatch',
     99,
     const ProductionDispatchDetailPage(),
   );
 
   ///财产管理
-  static Routes propertyPage = Routes(
+  static Routes property = Routes(
     '/property',
     99,
     const PropertyPage(),
   );
 
   ///生产订单用料表
-  static Routes productionMaterialsReportPage = Routes(
+  static Routes productionMaterialsReport = Routes(
     '/production_materials_report',
     99,
     const ProductionMaterialsReportPage(),
   );
 
   ///工单列表
-  static Routes workOrderListPage = Routes(
+  static Routes workOrderList = Routes(
     '/work_order_list',
     99,
     const WorkOrderListPage(),
   );
 
   ///部件工序扫码
-  static Routes partProcessScanPage = Routes(
+  static Routes partProcessScan = Routes(
     '/part_process_scan',
     99,
     const PartProcessScanPage(),
   );
 
   ///材料车间派工
-  static Routes materialDispatchPage = Routes(
+  static Routes materialDispatch = Routes(
     '/material_dispatch_page',
     99,
     const MaterialDispatchPage(),
   );
 
   ///机台派工单
-  static Routes machineDispatchPage = Routes(
+  static Routes machineDispatch = Routes(
     '/machine_dispatch_page',
     99,
     const MachineDispatchPage(),
   );
 
   ///机台派工单汇报
-  static Routes machineDispatchReportPage = Routes(
+  static Routes machineDispatchReport = Routes(
     '/machine_dispatch_report_page',
     99,
     const MachineDispatchReportPage(),
   );
 
   ///成型装箱扫码
-  static Routes packingScanPage = Routes(
+  static Routes packingScan = Routes(
     '/scan_packing_page',
     99,
     const PackingScanPage(),
   );
 
   ///品质检验
-  static Routes qualityRestrictionPage = Routes(
+  static Routes qualityRestriction = Routes(
     '/quality_restriction',
     99,
     const QualityRestrictionPage(),
   );
 
   ///湿印工序派工
-  static Routes processDispatchRegisterPage = Routes(
+  static Routes processDispatchRegister = Routes(
     '/process_dispatch_register_page',
     99,
     const ProcessDispatchRegisterPage(),
   );
 
   ///智能仓库配送
-  static Routes smartDeliveryPage = Routes(
+  static Routes smartDelivery = Routes(
     '/smart_delivery_page',
     99,
     const SmartDeliveryPage(),
   );
 
   ///外箱标扫码
-  static Routes cartonLabelScanPage = Routes(
+  static Routes cartonLabelScan = Routes(
     '/carton_label_scan_page',
     99,
     const CartonLabelScanPage(),
   );
 
   ///外箱标扫码进度
-  static Routes cartonLabelScanProgressPage = Routes(
+  static Routes cartonLabelScanProgress = Routes(
     '/carton_label_scan_progress_page',
     99,
     const CartonLabelScanProgressPage(),
@@ -232,6 +239,55 @@ class RouteConfig {
     '/warehouse_allocation_page',
     99,
     const WarehouseAllocationPage(),
+  );
+
+  ///sap采购入库
+  static Routes sapPurchaseStockIn = Routes(
+    '/sap_purchase_stock_in',
+    99,
+    const SapPurchaseStockInPage(),
+  );
+
+  ///sap生产领料
+  static Routes sapProductionPicking = Routes(
+    '/sap_production_picking',
+    99,
+    const SapProductionPickingPage(),
+  );
+
+  ///sap喷漆领料
+  static Routes sapPrintPicking = Routes(
+    '/sap_print_picking',
+    99,
+    const SapPrintPickingPage(),
+  );
+
+  ///sap移库领料
+  static Routes sapRelocationPicking = Routes(
+    '/sap_relocation_picking',
+    99,
+    const SapRelocationPickingPage(),
+  );
+
+  ///sap移库领料
+  static Routes sapNoLabelStockIn = Routes(
+    '/sap_no_label_stock_in',
+    99,
+    const SapNoLabelStockInPage(),
+  );
+
+  ///sap注塑入库
+  static Routes sapInjectionMoldingStockIn = Routes(
+    '/sap_injection_molding_stock_in',
+    99,
+    const SapInjectionMoldingStockInPage(),
+  );
+
+  ///sap料头入库
+  static Routes sapSurplusMaterialStockIn = Routes(
+    '/sap_surplus_material_stock_in',
+    99,
+    const SapSurplusMaterialStockInPage(),
   );
 
   ///本地功能入口列表
@@ -262,6 +318,30 @@ class RouteConfig {
     cartonLabelScanPage,
     cartonLabelScanProgressPage,
     warehouseAllocationPage
+    moldingScanBulletinReport,
+    visitRegister,
+    productionDispatch,
+    productionDispatchDetail,
+    property,
+    productionMaterialsReport,
+    workOrderList,
+    partProcessScan,
+    materialDispatch,
+    machineDispatch,
+    machineDispatchReport,
+    packingScan,
+    qualityRestriction,
+    processDispatchRegister,
+    smartDelivery,
+    cartonLabelScan,
+    cartonLabelScanProgress,
+    sapPurchaseStockIn,
+    sapProductionPicking,
+    sapPrintPicking,
+    sapRelocationPicking,
+    sapNoLabelStockIn,
+    sapInjectionMoldingStockIn,
+    sapSurplusMaterialStockIn
   ];
 
   static List<GetPage> appRoutes = [
@@ -307,76 +387,104 @@ class RouteConfig {
       page: () => moldingPackAreaReport.page,
     ),
     GetPage(
-      name: moldingScanBulletinReportPage.name,
-      page: () => moldingScanBulletinReportPage.page,
+      name: moldingScanBulletinReport.name,
+      page: () => moldingScanBulletinReport.page,
     ),
     GetPage(
       name: moldingScanBulletinReportMaximize.name,
       page: () => moldingScanBulletinReportMaximize.page,
     ),
     GetPage(
-      name: productionDispatchPage.name,
-      page: () => productionDispatchPage.page,
+      name: productionDispatch.name,
+      page: () => productionDispatch.page,
     ),
     GetPage(
-      name: productionDispatchDetailPage.name,
-      page: () => productionDispatchDetailPage.page,
+      name: productionDispatchDetail.name,
+      page: () => productionDispatchDetail.page,
     ),
     GetPage(
-      name: propertyPage.name,
-      page: () => propertyPage.page,
+      name: property.name,
+      page: () => property.page,
     ),
     GetPage(
-      name: productionMaterialsReportPage.name,
-      page: () => productionMaterialsReportPage.page,
+      name: productionMaterialsReport.name,
+      page: () => productionMaterialsReport.page,
     ),
     GetPage(
-      name: visitRegisterPage.name,
-      page: () => visitRegisterPage.page,
+      name: visitRegister.name,
+      page: () => visitRegister.page,
     ),
     GetPage(
-      name: workOrderListPage.name,
-      page: () => workOrderListPage.page,
+      name: workOrderList.name,
+      page: () => workOrderList.page,
     ),
     GetPage(
-      name: partProcessScanPage.name,
-      page: () => partProcessScanPage.page,
+      name: partProcessScan.name,
+      page: () => partProcessScan.page,
     ),
     GetPage(
-      name: materialDispatchPage.name,
-      page: () => materialDispatchPage.page,
+      name: materialDispatch.name,
+      page: () => materialDispatch.page,
     ),
     GetPage(
-      name: machineDispatchPage.name,
-      page: () => machineDispatchPage.page,
+      name: machineDispatch.name,
+      page: () => machineDispatch.page,
     ),
     GetPage(
-      name: machineDispatchReportPage.name,
-      page: () => machineDispatchReportPage.page,
+      name: machineDispatchReport.name,
+      page: () => machineDispatchReport.page,
     ),
     GetPage(
-      name: packingScanPage.name,
-      page: () => packingScanPage.page,
+      name: packingScan.name,
+      page: () => packingScan.page,
     ),
     GetPage(
-      name: qualityRestrictionPage.name,
-      page: () => qualityRestrictionPage.page,
+      name: qualityRestriction.name,
+      page: () => qualityRestriction.page,
     ),
     GetPage(
-      name: processDispatchRegisterPage.name,
-      page: () => processDispatchRegisterPage.page,
+      name: processDispatchRegister.name,
+      page: () => processDispatchRegister.page,
     ),
     GetPage(
-      name: smartDeliveryPage.name,
-      page: () => smartDeliveryPage.page,
+      name: smartDelivery.name,
+      page: () => smartDelivery.page,
     ),
     GetPage(
-      name: cartonLabelScanPage.name,
-      page: () => cartonLabelScanPage.page,
+      name: cartonLabelScan.name,
+      page: () => cartonLabelScan.page,
     ),
     GetPage(
-      name: cartonLabelScanProgressPage.name,
-      page: () => cartonLabelScanProgressPage.page,
+      name: cartonLabelScanProgress.name,
+      page: () => cartonLabelScanProgress.page,
+    ),
+    GetPage(
+      name: sapPurchaseStockIn.name,
+      page: () => sapPurchaseStockIn.page,
+    ),
+    GetPage(
+      name: sapProductionPicking.name,
+      page: () => sapProductionPicking.page,
+    ),
+    GetPage(
+      name: sapPrintPicking.name,
+      page: () => sapPrintPicking.page,
+    ),
+    GetPage(
+      name: sapRelocationPicking.name,
+      page: () => sapRelocationPicking.page,
+    ),
+    GetPage(
+      name: sapNoLabelStockIn.name,
+      page: () => sapNoLabelStockIn.page,
+    ),
+    GetPage(
+      name: sapInjectionMoldingStockIn.name,
+      page: () => sapInjectionMoldingStockIn.page,
+    ),
+    GetPage(
+      name: sapSurplusMaterialStockIn.name,
+      page: () => sapSurplusMaterialStockIn.page,
     ),
     GetPage(
       name: warehouseAllocationPage.name,

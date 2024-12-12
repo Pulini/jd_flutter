@@ -16,7 +16,7 @@ class BaseData {
   int? resultCode;
   dynamic data;
   String? message;
-  String baseUrl='';
+  String baseUrl = '';
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -25,14 +25,34 @@ class BaseData {
     map['Message'] = message;
     return map;
   }
-  print(String uri,Map<String,dynamic>queryParameters){
+
+  print(String uri, Map<String, dynamic> queryParameters) {
     Map<String, dynamic> map = <String, dynamic>{};
-    map['Uri'] =uri;
-    map['Parameters'] =queryParameters;
+    map['Uri'] = uri;
+    map['Parameters'] = queryParameters;
     map['ResponseTime'] = DateTime.now();
     map['ResultCode'] = resultCode;
     map['Data'] = data;
     map['Message'] = message;
     logger.f(map);
   }
+}
+
+class ParseJsonParams<T> {
+  final dynamic data;
+  final T Function(dynamic) fromJson;
+
+  ParseJsonParams(this.data, this.fromJson);
+}
+
+List<T> parseJsonToList<T>(ParseJsonParams<T> params) {
+  if (params.data is List) {
+    return [for (var json in params.data) params.fromJson(json)];
+  } else {
+    return <T>[];
+  }
+}
+
+T parseJsonToData<T>(ParseJsonParams<T> params) {
+  return params.fromJson(params.data);
 }

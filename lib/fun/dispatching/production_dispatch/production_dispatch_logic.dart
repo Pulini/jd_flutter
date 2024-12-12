@@ -4,8 +4,9 @@ import 'package:collection/collection.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/dispatching/production_dispatch/production_dispatch_detail_view.dart';
 import 'package:jd_flutter/utils/utils.dart';
-import '../../../bean/http/response/order_color_info.dart';
+
 import '../../../bean/http/response/manufacture_instructions_info.dart';
+import '../../../bean/http/response/order_color_info.dart';
 import '../../../bean/http/response/production_dispatch_order_detail_info.dart';
 import '../../../bean/http/response/production_dispatch_order_info.dart';
 import '../../../bean/http/response/work_plan_material_info.dart';
@@ -22,15 +23,15 @@ class ProductionDispatchLogic extends GetxController {
 
   ///日期选择器的控制器
   var dpcStartDate = DatePickerController(
-    PickerType.date,
-    saveKey: '${RouteConfig.workerProductionReport.name}StartDate',
+    PickerType.startDate,
+    saveKey: '${RouteConfig.workerProductionReport.name}${PickerType.startDate}',
   )..firstDate = DateTime(
       DateTime.now().year - 5, DateTime.now().month, DateTime.now().day);
 
   ///日期选择器的控制器
   var dpcEndDate = DatePickerController(
-    PickerType.date,
-    saveKey: '${RouteConfig.workerProductionReport.name}EndDate',
+    PickerType.endDate,
+    saveKey: '${RouteConfig.workerProductionReport.name}${PickerType.endDate}',
   );
 
   ///工单列表非合并item点击事件

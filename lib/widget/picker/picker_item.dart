@@ -1,6 +1,5 @@
 abstract class PickerItem {
   String pickerName();
-
   String pickerId();
 }
 
@@ -414,7 +413,7 @@ class PickerSapWarehouse extends PickerItem {
 
   @override
   String pickerId() {
-    return warehouseId ?? '';
+    return warehouseNumber ?? '';
   }
 
   @override

@@ -17,13 +17,13 @@ class QualityManagementLogic extends GetxController {
   ///日期选择器的控制器
   var pcStartDate = DatePickerController(
     PickerType.startDate,
-    saveKey: '${RouteConfig.qualityRestrictionPage.name}${PickerType.startDate}',
+    saveKey: '${RouteConfig.qualityRestriction.name}${PickerType.startDate}',
   );
 
   ///日期选择器的控制器
   var pcEndDate = DatePickerController(
     PickerType.endDate,
-    saveKey: '${RouteConfig.qualityRestrictionPage.name}${PickerType.endDate}',
+    saveKey: '${RouteConfig.qualityRestriction.name}${PickerType.endDate}',
   );
 
 

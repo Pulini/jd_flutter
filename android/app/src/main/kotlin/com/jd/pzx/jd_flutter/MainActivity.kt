@@ -11,6 +11,8 @@ import com.jd.pzx.jd_flutter.utils.CHANNEL_FACE_VERIFICATION_FLUTTER_TO_ANDROID
 import com.jd.pzx.jd_flutter.utils.CHANNEL_SCAN_FLUTTER_TO_ANDROID
 import com.jd.pzx.jd_flutter.utils.CHANNEL_USB_ANDROID_TO_FLUTTER
 import com.jd.pzx.jd_flutter.utils.CHANNEL_USB_FLUTTER_TO_ANDROID
+import com.jd.pzx.jd_flutter.utils.CHANNEL_WEIGHBRIDGE_ANDROID_TO_FLUTTER
+import com.jd.pzx.jd_flutter.utils.CHANNEL_WEIGHBRIDGE_FLUTTER_TO_ANDROID
 import com.jd.pzx.jd_flutter.utils.FACE_VERIFY_SUCCESS
 import com.jd.pzx.jd_flutter.utils.REQUEST_ENABLE_BT
 import com.jd.pzx.jd_flutter.utils.bitmapToBase64
@@ -31,7 +33,7 @@ import java.io.File
 
 @SuppressLint("MissingPermission")
 class MainActivity : FlutterActivity() {
-    val receiverUtil = ReceiverUtil(
+    private val receiverUtil = ReceiverUtil(
         this,
         usbAttached = {
             sendFlutter(CHANNEL_USB_FLUTTER_TO_ANDROID, "UsbState", "Attached")
@@ -39,8 +41,11 @@ class MainActivity : FlutterActivity() {
         usbDetached = {
             sendFlutter(CHANNEL_USB_FLUTTER_TO_ANDROID, "UsbState", "Detached")
         },
-        weighbridgeDetached = {
-            sendFlutter(CHANNEL_USB_FLUTTER_TO_ANDROID, "WeighbridgeDetached", "Detached")
+        weighbridgeState = {
+            sendFlutter(CHANNEL_WEIGHBRIDGE_FLUTTER_TO_ANDROID, "WeighbridgeState", it.name)
+        },
+        weighbridgeRead = {
+            sendFlutter(CHANNEL_WEIGHBRIDGE_FLUTTER_TO_ANDROID, "WeighbridgeRead", it)
         },
         bleDisconnected = {
             sendFlutter(CHANNEL_BLUETOOTH_FLUTTER_TO_ANDROID, "BluetoothState", "Disconnected")
@@ -76,11 +81,16 @@ class MainActivity : FlutterActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        receiverUtil.registerReceiver()
+        receiverUtil.create()
+    }
+
+    override fun onResume() {
+        receiverUtil.resume()
+        super.onResume()
     }
 
     override fun onDestroy() {
-        receiverUtil.unRegisterReceiver()
+        receiverUtil.destroy()
         super.onDestroy()
     }
 
@@ -177,6 +187,15 @@ class MainActivity : FlutterActivity() {
             }
         }
 
+
+        //地磅设备通道
+        MethodChannel(
+            flutterEngine.dartExecutor.binaryMessenger,
+            CHANNEL_WEIGHBRIDGE_ANDROID_TO_FLUTTER
+        ).setMethodCallHandler { call, _ ->
+            if (call.method == "OpenDevice") receiverUtil.openDevice()
+        }
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -193,6 +212,7 @@ class MainActivity : FlutterActivity() {
             MethodChannel(messenger, channel).invokeMethod(method, data)
         }
     }
+
 
     /*
 

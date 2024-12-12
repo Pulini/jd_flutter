@@ -1,4 +1,5 @@
 import '../route.dart';
+import 'http/response/home_function_info.dart';
 
 abstract class ButtonItem {
   late String name;
@@ -51,4 +52,50 @@ class HomeButtonGroup extends ButtonItem {
     required super.classify,
     required this.functionGroup,
   });
+}
+List<ButtonItem> formatButton(List<HomeFunctions> data) {
+  var functions = <ButtonItem>[];
+  for (var navigation in data) {
+    var list = <ButtonItem>[];
+    for (var fun in navigation.subFunctions ?? <SubFunctions>[]) {
+      if (fun.functionGroup != null && fun.functionGroup!.length > 1) {
+        list.add(HomeButtonGroup(
+          name: fun.name ?? '',
+          description: fun.description ?? '',
+          classify: navigation.className ?? '',
+          icon: fun.icon ?? '',
+          functionGroup: [
+            for (var sub in fun.functionGroup!)
+              HomeButton(
+                name: sub.name ?? '',
+                description: sub.description ?? '',
+                classify: navigation.className ?? '',
+                icon: sub.icon ?? '',
+                id: sub.id ?? 0,
+                // version: sub.version ?? 0,
+                version: 98,
+                route: sub.routeSrc ?? '',
+                // hasPermission: sub.hasPermission ?? false,
+                hasPermission: true,
+              )
+          ],
+        ));
+      } else {
+        list.add(HomeButton(
+          name: fun.functionGroup![0].name ?? '',
+          description: fun.functionGroup![0].description ?? '',
+          classify: navigation.className ?? '',
+          icon: fun.functionGroup![0].icon ?? '',
+          id: fun.functionGroup![0].id ?? 0,
+          // version: fun.functionGroup![0].version ?? 0,
+          version: 98,
+          route: fun.functionGroup![0].routeSrc ?? '',
+          // hasPermission: fun.functionGroup![0].hasPermission ?? false,
+          hasPermission: true,
+        ));
+      }
+    }
+    functions.addAll(list);
+  }
+  return functions;
 }

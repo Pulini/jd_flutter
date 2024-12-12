@@ -1,10 +1,13 @@
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
-import '../../utils/web_api.dart';
+import '../../bean/http/response/base_data.dart';
 import '../../utils/utils.dart';
+import '../../utils/web_api.dart';
 import 'picker_item.dart';
 
 enum PickerType {
+  ghost,
   sapSupplier,
   sapCompany,
   sapFactory,
@@ -30,8 +33,9 @@ enum PickerType {
 
 abstract class PickerController {
   late PickerType pickerType;
+  late bool hasAll;
 
-  PickerController(this.pickerType);
+  PickerController(this.pickerType, {this.hasAll = false});
 
   String getButtonName() {
     switch (pickerType) {
@@ -124,6 +128,511 @@ abstract class PickerController {
         return getDataListError;
     }
   }
+
+  Future getDataListError() async {
+    return 'picker_type_error'.tr;
+  }
+
+  ///获取Sap供应商列表
+  Future getSapSupplier() async {
+    var response = await httpGet(method: webApiPickerSapSupplier);
+    if (response.resultCode == resultSuccess) {
+      try {
+        List<PickerItem> list = [
+          if (hasAll) PickerSapSupplier(name: '全部', supplierNumber: '')
+        ];
+        list.addAll(await compute(
+          parseJsonToList<PickerSapSupplier>,
+          ParseJsonParams<PickerSapSupplier>(
+            response.data,
+            PickerSapSupplier.fromJson,
+          ),
+        ));
+        return list;
+      } on Error catch (e) {
+        logger.e(e);
+        return 'json_format_error'.tr;
+      }
+    } else {
+      return response.message;
+    }
+  }
+
+  ///获取Sap公司列表
+  Future getSapCompany() async {
+    var response = await httpGet(method: webApiPickerSapCompany);
+    if (response.resultCode == resultSuccess) {
+      try {
+        List<PickerItem> list = [];
+        list.addAll(await compute(
+          parseJsonToList<PickerSapCompany>,
+          ParseJsonParams<PickerSapCompany>(
+            response.data,
+            PickerSapCompany.fromJson,
+          ),
+        ));
+        return list;
+      } on Error catch (e) {
+        logger.e(e);
+        return 'json_format_error'.tr;
+      }
+    } else {
+      return response.message;
+    }
+  }
+
+  ///获取Sap厂区列表
+  Future getSapFactory() async {
+    var response = await httpGet(method: webApiPickerSapFactory);
+    if (response.resultCode == resultSuccess) {
+      try {
+        List<PickerItem> list = [
+          if (hasAll) PickerSapFactory(name: '全部', number: 0)
+        ];
+        list.addAll(await compute(
+          parseJsonToList<PickerSapFactory>,
+          ParseJsonParams<PickerSapFactory>(
+            response.data,
+            PickerSapFactory.fromJson,
+          ),
+        ));
+        return list;
+      } on Error catch (e) {
+        logger.e(e);
+        return 'json_format_error'.tr;
+      }
+    } else {
+      return response.message;
+    }
+  }
+
+  ///获取Sap工作中心列表
+  Future getSapWorkCenter() async {
+    var response = await httpGet(method: webApiPickerSapWorkCenter);
+    if (response.resultCode == resultSuccess) {
+      try {
+        List<PickerItem> list = [
+          if (hasAll) PickerSapWorkCenter(name: '全部', number: '')
+        ];
+        list.addAll(await compute(
+          parseJsonToList<PickerSapWorkCenter>,
+          ParseJsonParams<PickerSapWorkCenter>(
+            response.data,
+            PickerSapWorkCenter.fromJson,
+          ),
+        ));
+        return list;
+      } on Error catch (e) {
+        logger.e(e);
+        return 'json_format_error'.tr;
+      }
+    } else {
+      return response.message;
+    }
+  }
+
+  ///获取Sap部门列表
+  Future getSapDepartment() async {
+    var response = await httpGet(method: webApiPickerSapDepartment);
+    if (response.resultCode == resultSuccess) {
+      try {
+        List<PickerItem> list = [
+          if (hasAll)
+            PickerSapDepartment(name: '全部', departmentId: 0, number: '')
+        ];
+        list.addAll(await compute(
+          parseJsonToList<PickerSapDepartment>,
+          ParseJsonParams<PickerSapDepartment>(
+            response.data,
+            PickerSapDepartment.fromJson,
+          ),
+        ));
+        return list;
+      } on Error catch (e) {
+        logger.e(e);
+        return 'json_format_error'.tr;
+      }
+    } else {
+      return response.message;
+    }
+  }
+
+  ///获取Mes车间列表
+  Future getMesWorkShop() async {
+    var response = await httpGet(method: webApiPickerMesWorkShop);
+    if (response.resultCode == resultSuccess) {
+      try {
+        List<PickerItem> list = [
+          if (hasAll)
+            PickerMesWorkShop(name: '全部', number: '', processFlowId: 0)
+        ];
+        list.addAll(await compute(
+          parseJsonToList<PickerMesWorkShop>,
+          ParseJsonParams<PickerMesWorkShop>(
+            response.data,
+            PickerMesWorkShop.fromJson,
+          ),
+        ));
+        return list;
+      } on Error catch (e) {
+        logger.e(e);
+        return 'json_format_error'.tr;
+      }
+    } else {
+      return response.message;
+    }
+  }
+
+  ///获取Mes部门列表
+  Future getMesDepartment() async {
+    var response = await httpGet(
+      method: webApiPickerMesDepartment,
+      params: {'OrganizeID': userInfo?.organizeID ?? -1},
+    );
+    if (response.resultCode == resultSuccess) {
+      try {
+        List<PickerItem> list = [
+          if (hasAll)
+            PickerMesDepartment(name: '全部', number: '', departmentId: 0)
+        ];
+        list.addAll(await compute(
+          parseJsonToList<PickerMesDepartment>,
+          ParseJsonParams<PickerMesDepartment>(
+            response.data,
+            PickerMesDepartment.fromJson,
+          ),
+        ));
+        return list;
+      } on Error catch (e) {
+        logger.e(e);
+        return 'json_format_error'.tr;
+      }
+    } else {
+      return response.message;
+    }
+  }
+
+  ///获取Mes组织列表
+  Future getMesOrganization() async {
+    var response = await httpGet(method: webApiPickerMesOrganization);
+    if (response.resultCode == resultSuccess) {
+      try {
+        List<PickerItem> list = [
+          if (hasAll)
+            PickerMesOrganization(
+                itemId: 0, code: '', name: '全部', number: '', adminOrganizeId: 0)
+        ];
+        list.addAll(await compute(
+          parseJsonToList<PickerMesOrganization>,
+          ParseJsonParams<PickerMesOrganization>(
+            response.data,
+            PickerMesOrganization.fromJson,
+          ),
+        ));
+        return list;
+      } on Error catch (e) {
+        logger.e(e);
+        return 'json_format_error'.tr;
+      }
+    } else {
+      return response.message;
+    }
+  }
+
+  ///获取Sap制程列表
+  Future getSapProcessFlow() async {
+    var response = await httpGet(method: webApiPickerSapProcessFlow);
+    if (response.resultCode == resultSuccess) {
+      try {
+        List<PickerItem> list = [
+          if (hasAll) PickerSapProcessFlow(name: '全部', number: '')
+        ];
+        list.addAll(await compute(
+          parseJsonToList<PickerSapProcessFlow>,
+          ParseJsonParams<PickerSapProcessFlow>(
+            response.data,
+            PickerSapProcessFlow.fromJson,
+          ),
+        ));
+        return list;
+      } on Error catch (e) {
+        logger.e(e);
+        return 'json_format_error'.tr;
+      }
+    } else {
+      return response.message;
+    }
+  }
+
+  ///获取Mes制程列表
+  Future getMesProcessFlow() async {
+    var response = await httpGet(method: webApiPickerMesProcessFlow);
+    if (response.resultCode == resultSuccess) {
+      try {
+        List<PickerItem> list = [
+          if (hasAll) PickerMesProcessFlow(name: '', processFlowId: 0)
+        ];
+        list.addAll(await compute(
+          parseJsonToList<PickerMesProcessFlow>,
+          ParseJsonParams<PickerMesProcessFlow>(
+            response.data,
+            PickerMesProcessFlow.fromJson,
+          ),
+        ));
+        return list;
+      } on Error catch (e) {
+        logger.e(e);
+        return 'json_format_error'.tr;
+      }
+    } else {
+      return response.message;
+    }
+  }
+
+  ///获取Mes生产计件报表类型
+  Future getMesProductionReportType() async {
+    var response = await httpGet(
+      method: webApiGetProductionReportType,
+      params: {'SearchType': 'app'},
+    );
+    if (response.resultCode == resultSuccess) {
+      try {
+        List<PickerItem> list = [
+          if (hasAll) PickerMesProductionReportType(itemID: 0, itemName: '全部')
+        ];
+        list.addAll(await compute(
+          parseJsonToList<PickerMesProductionReportType>,
+          ParseJsonParams<PickerMesProductionReportType>(
+            response.data,
+            PickerMesProductionReportType.fromJson,
+          ),
+        ));
+        return list;
+      } on Error catch (e) {
+        logger.e(e);
+        return 'json_format_error'.tr;
+      }
+    } else {
+      return response.message;
+    }
+  }
+
+  ///获取Sap机台列表
+  Future getSapMachine() async {
+    var response = await httpGet(
+      method: webApiPickerSapMachine,
+      params: {'EmpID': userInfo?.empID ?? 0},
+    );
+    if (response.resultCode == resultSuccess) {
+      try {
+        List<PickerItem> list = [
+          if (hasAll)
+            PickerSapMachine(
+              id: 0,
+              number: '',
+              name: '全部',
+              sapNumber: '',
+              sapCostCenterNumber: '',
+            )
+        ];
+        list.addAll(await compute(
+          parseJsonToList<PickerSapMachine>,
+          ParseJsonParams<PickerSapMachine>(
+            response.data,
+            PickerSapMachine.fromJson,
+          ),
+        ));
+        return list;
+      } on Error catch (e) {
+        logger.e(e);
+        return 'json_format_error'.tr;
+      }
+    } else {
+      return response.message;
+    }
+  }
+
+  ///获取Sap工作中心(新)列表
+  Future getSapWorkCenterNew() async {
+    var response = await httpGet(
+      method: webApiPickerSapWorkCenterNew,
+      params: {
+        'ShowType': 10,
+        'UserID': userInfo?.userID ?? 0,
+      },
+    );
+    if (response.resultCode == resultSuccess) {
+      try {
+        List<PickerItem> list = [
+          if (hasAll) PickerSapWorkCenterNew(name: '全部', number: '')
+        ];
+        list.addAll(await compute(
+          parseJsonToList<PickerSapWorkCenterNew>,
+          ParseJsonParams<PickerSapWorkCenterNew>(
+            response.data,
+            PickerSapWorkCenterNew.fromJson,
+          ),
+        ));
+        return list;
+      } on Error catch (e) {
+        logger.e(e);
+        return 'json_format_error'.tr;
+      }
+    } else {
+      return response.message;
+    }
+  }
+
+  ///获取Sap组别列表
+  Future getSapGroup() async {
+    var response = await httpGet(
+      method: webApiPickerSapGroup,
+      params: {'EmpID': userInfo?.empID ?? 0},
+    );
+    if (response.resultCode == resultSuccess) {
+      try {
+        List<PickerItem> list = [
+          if (hasAll) PickerSapGroup(name: '全部', itemId: 0)
+        ];
+        list.addAll(await compute(
+          parseJsonToList<PickerSapGroup>,
+          ParseJsonParams<PickerSapGroup>(
+            response.data,
+            PickerSapGroup.fromJson,
+          ),
+        ));
+        return list;
+      } on Error catch (e) {
+        logger.e(e);
+        return 'json_format_error'.tr;
+      }
+    } else {
+      return response.message;
+    }
+  }
+
+  ///获取Sap工厂及仓库列表
+  Future getSapFactoryAndWarehouse() async {
+    var response = await httpGet(method: webApiPickerSapFactoryAndWarehouse);
+    if (response.resultCode == resultSuccess) {
+      try {
+        List<LinkPickerItem> list = [
+          if (hasAll)
+            PickerSapFactoryAndWarehouse(
+              name: '全部',
+              number: '',
+              warehouseList: [
+                PickerSapWarehouse(
+                  warehouseName: '全部',
+                  warehouseNumber: '',
+                  warehouseId: '',
+                )
+              ],
+            )
+        ];
+        list.addAll(await compute(
+          parseJsonToList<PickerSapFactoryAndWarehouse>,
+          ParseJsonParams<PickerSapFactoryAndWarehouse>(
+            response.data,
+            PickerSapFactoryAndWarehouse.fromJson,
+          ),
+        ));
+        return list;
+      } on Error catch (e) {
+        logger.e(e);
+        return 'json_format_error'.tr;
+      }
+    } else {
+      return response.message;
+    }
+  }
+
+  ///获取Mes包装区域列表
+  Future getMesMoldingPackArea() async {
+    var response = await httpGet(method: webApiGetPickerMesMoldingPackArea);
+    if (response.resultCode == resultSuccess) {
+      try {
+        List<PickerItem> list = [
+          if (hasAll) PickerMesMoldingPackArea(id: 0, name: '全部')
+        ];
+        list.addAll(await compute(
+          parseJsonToList<PickerMesMoldingPackArea>,
+          ParseJsonParams<PickerMesMoldingPackArea>(
+            response.data,
+            PickerMesMoldingPackArea.fromJson,
+          ),
+        ));
+        return list;
+      } on Error catch (e) {
+        logger.e(e);
+        return 'json_format_error'.tr;
+      }
+    } else {
+      return response.message;
+    }
+  }
+
+  ///获取Sap仓库库位列表
+  Future getSapWarehouseStorageLocation() async {
+    var response = await httpGet(
+      method: webApiPickerSapWarehouseStorageLocation,
+      params: {
+        'factory': userInfo?.factory,
+        'warehouse': userInfo?.defaultStockNumber,
+      },
+    );
+    if (response.resultCode == resultSuccess) {
+      try {
+        List<PickerItem> list = [];
+        list.addAll(await compute(
+          parseJsonToList<PickerSapWarehouseLocation>,
+          ParseJsonParams<PickerSapWarehouseLocation>(
+            response.data,
+            PickerSapWarehouseLocation.fromJson,
+          ),
+        ));
+        return list;
+      } on Error catch (e) {
+        logger.e(e);
+        return 'json_format_error'.tr;
+      }
+    } else {
+      return response.message;
+    }
+  }
+
+  ///获取Sap仓库库位列表
+  Future getMeGroup() async {
+    var response = await httpGet(
+      method: webApiPickerMesGroup,
+      params: {'UserID': userInfo?.userID},
+    );
+    if (response.resultCode == resultSuccess) {
+      try {
+        List<PickerItem> list = [
+          if (hasAll)
+            PickerMesGroup(
+              departmentID: 0,
+              departmentNumber: '',
+              departmentName: '全部',
+            )
+        ];
+        list.addAll(await compute(
+          parseJsonToList<PickerMesGroup>,
+          ParseJsonParams<PickerMesGroup>(
+            response.data,
+            PickerMesGroup.fromJson,
+          ),
+        ));
+        return list;
+      } on Error catch (e) {
+        logger.e(e);
+        return 'json_format_error'.tr;
+      }
+    } else {
+      return response.message;
+    }
+  }
 }
 
 class OptionsPickerController extends PickerController {
@@ -131,6 +640,7 @@ class OptionsPickerController extends PickerController {
   var selectedId = ''.obs;
   var loadingError = ''.obs;
   var enable = true.obs;
+
   final String? saveKey;
   final String? buttonName;
   final Function? dataList;
@@ -143,6 +653,7 @@ class OptionsPickerController extends PickerController {
 
   OptionsPickerController(
     super.pickerType, {
+    super.hasAll,
     this.saveKey,
     this.buttonName,
     this.dataList,
@@ -220,7 +731,6 @@ class OptionsPickerController extends PickerController {
 
 class LinkOptionsPickerController extends PickerController {
   var selectedName = ''.obs;
-  var selectedId = ''.obs;
   var loadingError = ''.obs;
   var enable = true.obs;
   List<LinkPickerItem> pickerData = [];
@@ -233,11 +743,12 @@ class LinkOptionsPickerController extends PickerController {
   final String? saveKey;
   final String? buttonName;
   final Function? dataList;
-  final Function(int, int)? onChanged;
-  final Function(int, int)? onSelected;
+  final Function(PickerItem, PickerItem)? onChanged;
+  final Function(PickerItem, PickerItem)? onSelected;
 
   LinkOptionsPickerController(
     super.pickerType, {
+    super.hasAll,
     this.saveKey,
     this.buttonName,
     this.dataList,
@@ -245,12 +756,15 @@ class LinkOptionsPickerController extends PickerController {
     this.onSelected,
   });
 
+  PickerItem getOptionsPicker1() => pickerItems1[selectItem1];
+
+  PickerItem getOptionsPicker2() => pickerItems2[selectItem2];
+
   select(int item1, int item2) {
     if (pickerItems1.isEmpty) return;
     var pick1 = pickerItems1[item1];
     var pick2 = pickerItems2[item2];
     selectedName.value = '${pick1.pickerName()}-${pick2.pickerName()}';
-    selectedId.value = pickerItems2[item2].pickerId();
     selectItem1 =
         pickerData.indexWhere((v) => v.pickerId() == pick1.pickerId());
     selectItem2 = pickerData[selectItem1]
@@ -259,8 +773,8 @@ class LinkOptionsPickerController extends PickerController {
     if (saveKey != null && saveKey!.isNotEmpty) {
       spSave(saveKey!, '${pick1.pickerId()}@@@${pick2.pickerId()}');
     }
-    onSelected?.call(selectItem1, selectItem2);
-    onChanged?.call(selectItem1, selectItem2);
+    onSelected?.call(getOptionsPicker1(), getOptionsPicker2());
+    onChanged?.call(getOptionsPicker1(), getOptionsPicker2());
   }
 
   refreshItem2(int index) {
@@ -321,8 +835,7 @@ class LinkOptionsPickerController extends PickerController {
             pickerItems2.value = pickerData[selectItem1].subList();
             var pick2 = pickerItems2[selectItem2];
             selectedName.value = '${pick1.pickerName()}-${pick2.pickerName()}';
-            selectedId.value = pick2.pickerId();
-            onSelected?.call(selectItem1, selectItem2);
+            onSelected?.call(getOptionsPicker1(), getOptionsPicker2());
           }
         } else {
           loadingError.value = value as String;
@@ -410,6 +923,10 @@ class DatePickerController extends PickerController {
 
   String getDateFormatYMD() {
     return getDateYMD(time: pickDate.value);
+  }
+
+  String getDateFormatSapYMD() {
+    return getDateSapYMD(time: pickDate.value);
   }
 }
 
@@ -548,378 +1065,5 @@ class CheckBoxPickerController extends PickerController {
     } else {
       initSelectState();
     }
-  }
-}
-
-Future getDataListError() async {
-  return 'picker_type_error'.tr;
-}
-
-///获取Sap供应商列表
-Future getSapSupplier() async {
-  var response = await httpGet(method: webApiPickerSapSupplier);
-  if (response.resultCode == resultSuccess) {
-    try {
-      List<PickerItem> list = [];
-      for (var item in response.data) {
-        list.add(PickerSapSupplier.fromJson(item));
-      }
-      return list;
-    } on Error catch (e) {
-      logger.e(e);
-      return 'json_format_error'.tr;
-    }
-  } else {
-    return response.message;
-  }
-}
-
-///获取Sap公司列表
-Future getSapCompany() async {
-  var response = await httpGet(method: webApiPickerSapCompany);
-  if (response.resultCode == resultSuccess) {
-    try {
-      List<PickerItem> list = [];
-      for (var item in response.data) {
-        list.add(PickerSapCompany.fromJson(item));
-      }
-      return list;
-    } on Error catch (e) {
-      logger.e(e);
-      return 'json_format_error'.tr;
-    }
-  } else {
-    return response.message;
-  }
-}
-
-///获取Sap厂区列表
-Future getSapFactory() async {
-  var response = await httpGet(method: webApiPickerSapFactory);
-  if (response.resultCode == resultSuccess) {
-    try {
-      List<PickerItem> list = [];
-      for (var item in response.data) {
-        list.add(PickerSapFactory.fromJson(item));
-      }
-      return list;
-    } on Error catch (e) {
-      logger.e(e);
-      return 'json_format_error'.tr;
-    }
-  } else {
-    return response.message;
-  }
-}
-
-///获取Sap工作中心列表
-Future getSapWorkCenter() async {
-  var response = await httpGet(method: webApiPickerSapWorkCenter);
-  if (response.resultCode == resultSuccess) {
-    try {
-      List<PickerItem> list = [];
-      for (var item in response.data) {
-        list.add(PickerSapWorkCenter.fromJson(item));
-      }
-      return list;
-    } on Error catch (e) {
-      logger.e(e);
-      return 'json_format_error'.tr;
-    }
-  } else {
-    return response.message;
-  }
-}
-
-///获取Sap部门列表
-Future getSapDepartment() async {
-  var response = await httpGet(method: webApiPickerSapDepartment);
-  if (response.resultCode == resultSuccess) {
-    try {
-      List<PickerItem> list = [];
-      for (var item in response.data) {
-        list.add(PickerSapDepartment.fromJson(item));
-      }
-      return list;
-    } on Error catch (e) {
-      logger.e(e);
-      return 'json_format_error'.tr;
-    }
-  } else {
-    return response.message;
-  }
-}
-
-///获取Mes车间列表
-Future getMesWorkShop() async {
-  var response = await httpGet(method: webApiPickerMesWorkShop);
-  if (response.resultCode == resultSuccess) {
-    try {
-      List<PickerItem> list = [];
-      for (var item in response.data) {
-        list.add(PickerMesWorkShop.fromJson(item));
-      }
-      return list;
-    } on Error catch (e) {
-      logger.e(e);
-      return 'json_format_error'.tr;
-    }
-  } else {
-    return response.message;
-  }
-}
-
-///获取Mes部门列表
-Future getMesDepartment() async {
-  var response = await httpGet(
-    method: webApiPickerMesDepartment,
-    params: {'OrganizeID': userInfo?.organizeID ?? -1},
-  );
-  if (response.resultCode == resultSuccess) {
-    try {
-      List<PickerItem> list = [];
-      for (var item in response.data) {
-        list.add(PickerMesDepartment.fromJson(item));
-      }
-      return list;
-    } on Error catch (e) {
-      logger.e(e);
-      return 'json_format_error'.tr;
-    }
-  } else {
-    return response.message;
-  }
-}
-
-///获取Mes组织列表
-Future getMesOrganization() async {
-  var response = await httpGet(method: webApiPickerMesOrganization);
-  if (response.resultCode == resultSuccess) {
-    try {
-      List<PickerItem> list = [];
-      for (var item in response.data) {
-        list.add(PickerMesOrganization.fromJson(item));
-      }
-      return list;
-    } on Error catch (e) {
-      logger.e(e);
-      return 'json_format_error'.tr;
-    }
-  } else {
-    return response.message;
-  }
-}
-
-///获取Sap制程列表
-Future getSapProcessFlow() async {
-  var response = await httpGet(method: webApiPickerSapProcessFlow);
-  if (response.resultCode == resultSuccess) {
-    try {
-      List<PickerItem> list = [];
-      for (var item in response.data) {
-        list.add(PickerSapProcessFlow.fromJson(item));
-      }
-      return list;
-    } on Error catch (e) {
-      logger.e(e);
-      return 'json_format_error'.tr;
-    }
-  } else {
-    return response.message;
-  }
-}
-
-///获取Mes制程列表
-Future getMesProcessFlow() async {
-  var response = await httpGet(method: webApiPickerMesProcessFlow);
-  if (response.resultCode == resultSuccess) {
-    try {
-      List<PickerItem> list = [];
-      for (var item in response.data) {
-        list.add(PickerMesProcessFlow.fromJson(item));
-      }
-      return list;
-    } on Error catch (e) {
-      logger.e(e);
-      return 'json_format_error'.tr;
-    }
-  } else {
-    return response.message;
-  }
-}
-
-///获取Mes生产计件报表类型
-Future getMesProductionReportType() async {
-  var response = await httpGet(
-    method: webApiGetProductionReportType,
-    params: {'SearchType': 'app'},
-  );
-  if (response.resultCode == resultSuccess) {
-    try {
-      List<PickerItem> list = [];
-      for (var item in response.data) {
-        list.add(PickerMesProductionReportType.fromJson(item));
-      }
-      return list;
-    } on Error catch (e) {
-      logger.e(e);
-      return 'json_format_error'.tr;
-    }
-  } else {
-    return response.message;
-  }
-}
-
-///获取Sap机台列表
-Future getSapMachine() async {
-  var response = await httpGet(
-    method: webApiPickerSapMachine,
-    params: {'EmpID': userInfo?.empID ?? 0},
-  );
-  if (response.resultCode == resultSuccess) {
-    try {
-      List<PickerItem> list = [];
-      for (var item in response.data) {
-        list.add(PickerSapMachine.fromJson(item));
-      }
-      return list;
-    } on Error catch (e) {
-      logger.e(e);
-      return 'json_format_error'.tr;
-    }
-  } else {
-    return response.message;
-  }
-}
-
-///获取Sap工作中心(新)列表
-Future getSapWorkCenterNew() async {
-  var response = await httpGet(
-    method: webApiPickerSapWorkCenterNew,
-    params: {
-      'ShowType': 10,
-      'UserID': userInfo?.userID ?? 0,
-    },
-  );
-  if (response.resultCode == resultSuccess) {
-    try {
-      List<PickerItem> list = [];
-      for (var item in response.data) {
-        list.add(PickerSapWorkCenterNew.fromJson(item));
-      }
-      return list;
-    } on Error catch (e) {
-      logger.e(e);
-      return 'json_format_error'.tr;
-    }
-  } else {
-    return response.message;
-  }
-}
-
-///获取Sap组别列表
-Future getSapGroup() async {
-  var response = await httpGet(
-    method: webApiPickerSapGroup,
-    params: {'EmpID': userInfo?.empID ?? 0},
-  );
-  if (response.resultCode == resultSuccess) {
-    try {
-      List<PickerItem> list = [];
-      for (var item in response.data) {
-        list.add(PickerSapGroup.fromJson(item));
-      }
-      return list;
-    } on Error catch (e) {
-      logger.e(e);
-      return 'json_format_error'.tr;
-    }
-  } else {
-    return response.message;
-  }
-}
-
-///获取Sap工厂及仓库列表
-Future getSapFactoryAndWarehouse() async {
-  var response = await httpGet(method: webApiPickerSapFactoryAndWarehouse);
-  if (response.resultCode == resultSuccess) {
-    try {
-      List<LinkPickerItem> list = [];
-      for (var item in response.data) {
-        list.add(PickerSapFactoryAndWarehouse.fromJson(item));
-      }
-      return list;
-    } on Error catch (e) {
-      logger.e(e);
-      return 'json_format_error'.tr;
-    }
-  } else {
-    return response.message;
-  }
-}
-
-///获取Mes包装区域列表
-Future getMesMoldingPackArea() async {
-  var response = await httpGet(method: webApiGetPickerMesMoldingPackArea);
-  if (response.resultCode == resultSuccess) {
-    try {
-      List<PickerItem> list = [];
-      for (var item in response.data) {
-        list.add(PickerMesMoldingPackArea.fromJson(item));
-      }
-      return list;
-    } on Error catch (e) {
-      logger.e(e);
-      return 'json_format_error'.tr;
-    }
-  } else {
-    return response.message;
-  }
-}
-
-///获取Sap仓库库位列表
-Future getSapWarehouseStorageLocation() async {
-  var response = await httpGet(
-    method: webApiPickerSapWarehouseStorageLocation,
-    params: {
-      'factory': userInfo?.factory,
-      'warehouse': userInfo?.defaultStockNumber,
-    },
-  );
-  if (response.resultCode == resultSuccess) {
-    try {
-      List<PickerItem> list = [];
-      for (var item in response.data) {
-        list.add(PickerSapWarehouseLocation.fromJson(item));
-      }
-      return list;
-    } on Error catch (e) {
-      logger.e(e);
-      return 'json_format_error'.tr;
-    }
-  } else {
-    return response.message;
-  }
-}
-
-///获取Sap仓库库位列表
-Future getMeGroup() async {
-  var response = await httpGet(
-    method: webApiPickerMesGroup,
-    params: {'UserID': userInfo?.userID},
-  );
-  if (response.resultCode == resultSuccess) {
-    try {
-      List<PickerItem> list = [];
-      for (var item in response.data) {
-        list.add(PickerMesGroup.fromJson(item));
-      }
-      return list;
-    } on Error catch (e) {
-      logger.e(e);
-      return 'json_format_error'.tr;
-    }
-  } else {
-    return response.message;
   }
 }

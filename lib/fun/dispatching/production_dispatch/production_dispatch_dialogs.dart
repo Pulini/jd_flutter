@@ -2,8 +2,8 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../bean/http/response/order_color_info.dart';
 import '../../../bean/http/response/manufacture_instructions_info.dart';
+import '../../../bean/http/response/order_color_info.dart';
 import '../../../bean/http/response/production_dispatch_order_detail_info.dart';
 import '../../../bean/http/response/work_plan_material_info.dart';
 import '../../../bean/http/response/worker_info.dart';
