@@ -1,8 +1,8 @@
 
 import 'package:get/get.dart';
+import 'package:jd_flutter/bean/http/response/container_scanner_info.dart';
 import 'package:jd_flutter/bean/http/response/packing_shipment_scan_info.dart';
 
-import '../../../../bean/http/response/container_scanner_info.dart';
 
 class PackingScanState {
 

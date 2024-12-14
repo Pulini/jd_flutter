@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/other/forming_packing_scan/packing_scan_logic.dart';
+import 'package:jd_flutter/widget/custom_widget.dart';
 
-import '../../../../widget/custom_widget.dart';
 
 
 class PackingShipmentScanPage extends StatefulWidget {

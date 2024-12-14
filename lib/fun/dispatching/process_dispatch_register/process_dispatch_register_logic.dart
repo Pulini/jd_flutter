@@ -1,9 +1,9 @@
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/process_dispatch_register_info.dart';
 import 'package:jd_flutter/fun/dispatching/process_dispatch_register/process_dispatch_register_print_label_view.dart';
+import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
-import '../../../utils/utils.dart';
 import 'process_dispatch_register_state.dart';
 
 class ProcessDispatchRegisterLogic extends GetxController {

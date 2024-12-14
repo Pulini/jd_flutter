@@ -3,14 +3,13 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/bean/http/response/property_detail_info.dart';
 import 'package:jd_flutter/fun/management/property/property_logic.dart';
+import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
-
-import '../../../bean/http/response/property_detail_info.dart';
-import '../../../utils/utils.dart';
-import '../../../widget/custom_widget.dart';
-import '../../../widget/dialogs.dart';
+import 'package:jd_flutter/widget/custom_widget.dart';
+import 'package:jd_flutter/widget/dialogs.dart';
 
 class PropertyDetailPage extends StatefulWidget {
   const PropertyDetailPage({super.key});

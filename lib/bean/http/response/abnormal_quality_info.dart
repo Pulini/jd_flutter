@@ -1,4 +1,3 @@
-
 /// Entry : [{"exNumber":"SCPZYCD200000108","billDate":"2020/7/9 16:35:01","empID":139697,"qty":"28","exceptionID":34,"exceptionName":"鞋口高低、不平顺","exceptionLevel":"轻微","reCheck":"复检合格"}]
 /// interID : 190109
 /// entryID : 2
@@ -44,7 +43,7 @@ class AbnormalQualityInfo {
   int? processFlowID;
   String? productName;
   double? qty;
-  bool select= false;
+  bool select = false;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};

@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/bean/http/response/production_dispatch_order_info.dart';
 import 'package:jd_flutter/fun/dispatching/production_dispatch/production_dispatch_dialogs.dart';
 import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/widget/combination_button_widget.dart';
+import 'package:jd_flutter/widget/custom_widget.dart';
+import 'package:jd_flutter/widget/edit_text_widget.dart';
+import 'package:jd_flutter/widget/picker/picker_view.dart';
+import 'package:jd_flutter/widget/switch_button_widget.dart';
+import 'package:jd_flutter/widget/web_page.dart';
 import 'package:marquee/marquee.dart';
 
-import '../../../bean/http/response/production_dispatch_order_info.dart';
-import '../../../widget/combination_button_widget.dart';
-import '../../../widget/custom_widget.dart';
-import '../../../widget/edit_text_widget.dart';
-import '../../../widget/picker/picker_view.dart';
-import '../../../widget/switch_button_widget.dart';
-import '../../../widget/web_page.dart';
 import 'production_dispatch_logic.dart';
 
 class ProductionDispatchPage extends StatefulWidget {

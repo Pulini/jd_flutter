@@ -1,12 +1,11 @@
 import 'package:get/get.dart';
-
-import '../../../bean/http/response/material_dispatch_info.dart';
-import '../../../bean/http/response/process_specification_info.dart';
-import '../../../route.dart';
-import '../../../widget/dialogs.dart';
-import '../../../widget/picker/picker_controller.dart';
-import '../../../widget/spinner_widget.dart';
-import '../../../widget/web_page.dart';
+import 'package:jd_flutter/bean/http/response/material_dispatch_info.dart';
+import 'package:jd_flutter/bean/http/response/process_specification_info.dart';
+import 'package:jd_flutter/route.dart';
+import 'package:jd_flutter/widget/dialogs.dart';
+import 'package:jd_flutter/widget/picker/picker_controller.dart';
+import 'package:jd_flutter/widget/spinner_widget.dart';
+import 'package:jd_flutter/widget/web_page.dart';
 import 'material_dispatch_state.dart';
 
 class MaterialDispatchLogic extends GetxController {

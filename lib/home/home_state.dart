@@ -1,18 +1,16 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../bean/home_button.dart';
-import '../bean/http/response/base_data.dart';
-import '../bean/http/response/department_info.dart';
-import '../bean/http/response/home_function_info.dart';
-import '../constant.dart';
-import '../route.dart';
-import '../utils/utils.dart';
-import '../utils/web_api.dart';
+import 'package:jd_flutter/bean/home_button.dart';
+import 'package:jd_flutter/bean/http/response/base_data.dart';
+import 'package:jd_flutter/bean/http/response/department_info.dart';
+import 'package:jd_flutter/bean/http/response/home_function_info.dart';
+import 'package:jd_flutter/constant.dart';
+import 'package:jd_flutter/route.dart';
+import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/web_api.dart';
 
 class HomeState {
   var userPicUrl = ''.obs;

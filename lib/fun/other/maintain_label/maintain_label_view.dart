@@ -1,13 +1,13 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/bean/http/response/label_info.dart';
 import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/widget/check_box_widget.dart';
+import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
+import 'package:jd_flutter/widget/dialogs.dart';
 
-import '../../../bean/http/response/label_info.dart';
-import '../../../widget/check_box_widget.dart';
-import '../../../widget/combination_button_widget.dart';
-import '../../../widget/dialogs.dart';
 import 'maintain_label_dialogs.dart';
 import 'maintain_label_logic.dart';
 

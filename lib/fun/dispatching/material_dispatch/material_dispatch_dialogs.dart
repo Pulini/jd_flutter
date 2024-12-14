@@ -2,18 +2,17 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/material_dispatch_info.dart';
+import 'package:jd_flutter/bean/http/response/process_specification_info.dart';
+import 'package:jd_flutter/bean/http/response/sap_pallet_info.dart';
 import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/web_api.dart';
+import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
+import 'package:jd_flutter/widget/dialogs.dart';
+import 'package:jd_flutter/widget/edit_text_widget.dart';
+import 'package:jd_flutter/widget/picker/picker_controller.dart';
 import 'package:jd_flutter/widget/picker/picker_view.dart';
-
-import '../../../bean/http/response/process_specification_info.dart';
-import '../../../bean/http/response/sap_pallet_info.dart';
-import '../../../utils/web_api.dart';
-import '../../../widget/combination_button_widget.dart';
-import '../../../widget/dialogs.dart';
-import '../../../widget/edit_text_widget.dart';
-import '../../../widget/picker/picker_controller.dart';
-import '../../../widget/web_page.dart';
+import 'package:jd_flutter/widget/web_page.dart';
 
 subItemReportDialog(
   BuildContext context,

@@ -1,13 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:get/get.dart';
+import 'package:jd_flutter/bean/http/response/user_info.dart';
+import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/web_api.dart';
+import 'package:jd_flutter/widget/dialogs.dart';
 
-import '../bean/http/response/user_info.dart';
-import '../constant.dart';
-import '../utils/web_api.dart';
-import '../widget/dialogs.dart';
 
 class LoginState {
   var buttonName = 'get_verify_code'.tr.obs;

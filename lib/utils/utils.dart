@@ -8,6 +8,10 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/bean/http/response/leader_info.dart';
+import 'package:jd_flutter/bean/http/response/user_info.dart';
+import 'package:jd_flutter/bean/http/response/version_info.dart';
+import 'package:jd_flutter/bean/http/response/worker_info.dart';
 import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -16,10 +20,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../bean/http/response/leader_info.dart';
-import '../bean/http/response/user_info.dart';
-import '../bean/http/response/version_info.dart';
-import '../bean/http/response/worker_info.dart';
 import 'web_api.dart';
 
 late SharedPreferences sharedPreferences;

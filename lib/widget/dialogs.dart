@@ -4,11 +4,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/bean/http/response/version_info.dart';
+import 'package:jd_flutter/constant.dart';
+import 'package:jd_flutter/login/login_view.dart';
+import 'package:jd_flutter/utils/web_api.dart';
 
-import '../bean/http/response/version_info.dart';
-import '../constant.dart';
-import '../login/login_view.dart';
-import '../utils/web_api.dart';
 import 'downloader.dart';
 
 /// 提示弹窗

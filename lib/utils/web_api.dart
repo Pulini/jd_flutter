@@ -3,13 +3,14 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/bean/http/response/base_data.dart';
+import 'package:jd_flutter/constant.dart';
+import 'package:jd_flutter/route.dart';
+import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:logger/logger.dart';
 import 'package:uuid/uuid.dart';
 
-import '../bean/http/response/base_data.dart';
-import '../constant.dart';
-import '../route.dart';
-import '../widget/dialogs.dart';
+
 import 'utils.dart';
 
 ///接口返回异常

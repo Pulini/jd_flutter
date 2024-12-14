@@ -1,5 +1,6 @@
-import '../../../utils/utils.dart';
-import '../../../utils/web_api.dart';
+
+import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/web_api.dart';
 
 class BarCodeInfo {
   int? id;

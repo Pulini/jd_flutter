@@ -2,12 +2,11 @@ import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../bean/home_button.dart';
-import '../bean/http/response/home_function_info.dart';
-import '../utils/utils.dart';
-import '../widget/custom_widget.dart';
-import '../widget/dialogs.dart';
+import 'package:jd_flutter/bean/home_button.dart';
+import 'package:jd_flutter/bean/http/response/home_function_info.dart';
+import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/widget/custom_widget.dart';
+import 'package:jd_flutter/widget/dialogs.dart';
 import 'home_logic.dart';
 import 'home_setting_view.dart';
 

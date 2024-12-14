@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/bean/http/response/base_data.dart';
+import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/web_api.dart';
 
-import '../../bean/http/response/base_data.dart';
-import '../../utils/utils.dart';
-import '../../utils/web_api.dart';
 import 'picker_item.dart';
 
 enum PickerType {

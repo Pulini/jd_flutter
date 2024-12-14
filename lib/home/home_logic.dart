@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/bean/home_button.dart';
+import 'package:jd_flutter/bean/http/response/department_info.dart';
+import 'package:jd_flutter/constant.dart';
+import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/utils/utils.dart';
-
-import '../bean/home_button.dart';
-import '../bean/http/response/department_info.dart';
-import '../constant.dart';
-import '../route.dart';
-import '../widget/custom_widget.dart';
-import '../widget/dialogs.dart';
+import 'package:jd_flutter/widget/custom_widget.dart';
+import 'package:jd_flutter/widget/dialogs.dart';
 import 'home_state.dart';
 
 class HomeLogic extends GetxController {

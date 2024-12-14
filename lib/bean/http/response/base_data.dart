@@ -1,4 +1,5 @@
-import '../../../utils/web_api.dart';
+
+import 'package:jd_flutter/utils/web_api.dart';
 
 class BaseData {
   BaseData({

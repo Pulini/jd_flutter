@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/widget/custom_widget.dart';
+import 'package:jd_flutter/widget/edit_text_widget.dart';
+import 'package:jd_flutter/widget/picker/picker_view.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-import '../../../widget/custom_widget.dart';
-import '../../../widget/edit_text_widget.dart';
-import '../../../widget/picker/picker_view.dart';
 import 'view_instruction_details_logic.dart';
 
 class ViewInstructionDetailsPage extends StatefulWidget {

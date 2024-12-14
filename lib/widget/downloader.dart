@@ -3,10 +3,10 @@ import 'dart:math';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:path_provider/path_provider.dart';
 
-import '../utils/web_api.dart';
 
 class Downloader {
   var url = '';

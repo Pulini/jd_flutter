@@ -1,17 +1,17 @@
 import 'dart:convert';
 
 import 'package:get/get.dart';
+import 'package:jd_flutter/bean/http/response/container_scanner_info.dart';
+import 'package:jd_flutter/bean/http/response/packing_scan_time.dart';
+import 'package:jd_flutter/bean/http/response/packing_shipment_scan.dart';
+import 'package:jd_flutter/bean/http/response/packing_shipment_scan_info.dart';
 import 'package:jd_flutter/fun/other/forming_packing_scan/packing_scan_state.dart';
 import 'package:jd_flutter/fun/other/forming_packing_scan/packing_shipment_scan_view.dart';
+import 'package:jd_flutter/route.dart';
+import 'package:jd_flutter/utils/web_api.dart';
+import 'package:jd_flutter/widget/dialogs.dart';
+import 'package:jd_flutter/widget/picker/picker_controller.dart';
 
-import '../../../../bean/http/response/container_scanner_info.dart';
-import '../../../../bean/http/response/packing_scan_time.dart';
-import '../../../../bean/http/response/packing_shipment_scan.dart';
-import '../../../../bean/http/response/packing_shipment_scan_info.dart';
-import '../../../../route.dart';
-import '../../../../utils/web_api.dart';
-import '../../../../widget/dialogs.dart';
-import '../../../../widget/picker/picker_controller.dart';
 
 
 class PackingScanLogic extends GetxController {

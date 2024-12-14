@@ -2,20 +2,19 @@ import 'dart:convert';
 
 import 'package:collection/collection.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/bean/http/response/manufacture_instructions_info.dart';
+import 'package:jd_flutter/bean/http/response/order_color_info.dart';
+import 'package:jd_flutter/bean/http/response/production_dispatch_order_detail_info.dart';
+import 'package:jd_flutter/bean/http/response/production_dispatch_order_info.dart';
+import 'package:jd_flutter/bean/http/response/work_plan_material_info.dart';
 import 'package:jd_flutter/fun/dispatching/production_dispatch/production_dispatch_detail_view.dart';
+import 'package:jd_flutter/fun/other/maintain_label/maintain_label_view.dart';
+import 'package:jd_flutter/fun/report/production_materials_report/production_materials_report_view.dart';
+import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/utils/utils.dart';
-
-import '../../../bean/http/response/manufacture_instructions_info.dart';
-import '../../../bean/http/response/order_color_info.dart';
-import '../../../bean/http/response/production_dispatch_order_detail_info.dart';
-import '../../../bean/http/response/production_dispatch_order_info.dart';
-import '../../../bean/http/response/work_plan_material_info.dart';
-import '../../../route.dart';
-import '../../../widget/custom_widget.dart';
-import '../../../widget/dialogs.dart';
-import '../../../widget/picker/picker_controller.dart';
-import '../../other/maintain_label/maintain_label_view.dart';
-import '../../report/production_materials_report/production_materials_report_view.dart';
+import 'package:jd_flutter/widget/custom_widget.dart';
+import 'package:jd_flutter/widget/dialogs.dart';
+import 'package:jd_flutter/widget/picker/picker_controller.dart';
 import 'production_dispatch_state.dart';
 
 class ProductionDispatchLogic extends GetxController {

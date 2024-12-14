@@ -1,13 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../bean/http/response/department_info.dart';
-import '../constant.dart';
-import '../login/login_view.dart';
-import '../utils/utils.dart';
-import '../widget/custom_widget.dart';
-import '../widget/dialogs.dart';
+import 'package:jd_flutter/bean/http/response/department_info.dart';
+import 'package:jd_flutter/constant.dart';
+import 'package:jd_flutter/login/login_view.dart';
+import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/widget/custom_widget.dart';
+import 'package:jd_flutter/widget/dialogs.dart';
 import 'home_logic.dart';
 
 class UserSetting extends StatefulWidget {

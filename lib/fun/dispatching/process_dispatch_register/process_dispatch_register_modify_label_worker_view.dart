@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/bean/http/response/worker_info.dart';
+import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/fun/dispatching/process_dispatch_register/process_dispatch_register_dialog.dart';
 import 'package:jd_flutter/fun/dispatching/process_dispatch_register/process_dispatch_register_logic.dart';
 import 'package:jd_flutter/fun/dispatching/process_dispatch_register/process_dispatch_register_state.dart';
+import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
-
-import '../../../bean/http/response/worker_info.dart';
-import '../../../constant.dart';
-import '../../../utils/utils.dart';
-import '../../../widget/combination_button_widget.dart';
 
 class ModifyLabelWorkerPage extends StatefulWidget {
   const ModifyLabelWorkerPage({super.key});

@@ -1,8 +1,8 @@
 import 'package:get/get.dart';
+import 'package:jd_flutter/route.dart';
+import 'package:jd_flutter/widget/dialogs.dart';
+import 'package:jd_flutter/widget/picker/picker_controller.dart';
 
-import '../../../route.dart';
-import '../../../widget/dialogs.dart';
-import '../../../widget/picker/picker_controller.dart';
 import 'worker_production_detail_state.dart';
 
 class WorkerProductionDetailLogic extends GetxController {

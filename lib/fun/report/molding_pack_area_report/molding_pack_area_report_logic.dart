@@ -1,8 +1,8 @@
 import 'package:get/get.dart';
+import 'package:jd_flutter/route.dart';
+import 'package:jd_flutter/widget/dialogs.dart';
+import 'package:jd_flutter/widget/picker/picker_controller.dart';
 
-import '../../../route.dart';
-import '../../../widget/dialogs.dart';
-import '../../../widget/picker/picker_controller.dart';
 import 'molding_pack_area_detail_report_view.dart';
 import 'molding_pack_area_report_state.dart';
 

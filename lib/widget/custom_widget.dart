@@ -7,9 +7,9 @@ import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:jd_flutter/route.dart';
+import 'package:jd_flutter/utils/utils.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
-import '../utils/utils.dart';
 
 ///app 背景渐变色
 var backgroundColor = const BoxDecoration(

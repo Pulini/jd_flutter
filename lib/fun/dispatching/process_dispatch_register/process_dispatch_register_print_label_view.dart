@@ -1,16 +1,16 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/bean/http/response/process_dispatch_register_info.dart';
 import 'package:jd_flutter/fun/dispatching/process_dispatch_register/process_dispatch_register_logic.dart';
 import 'package:jd_flutter/fun/dispatching/process_dispatch_register/process_dispatch_register_state.dart';
+import 'package:jd_flutter/utils/printer/print_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
+import 'package:jd_flutter/widget/preview_label_list_widget.dart';
+import 'package:jd_flutter/widget/preview_label_widget.dart';
 
-import '../../../bean/http/response/process_dispatch_register_info.dart';
-import '../../../utils/printer/print_util.dart';
-import '../../../widget/combination_button_widget.dart';
-import '../../../widget/preview_label_list_widget.dart';
-import '../../../widget/preview_label_widget.dart';
 
 class PrintLabelPage extends StatefulWidget {
   const PrintLabelPage({super.key});

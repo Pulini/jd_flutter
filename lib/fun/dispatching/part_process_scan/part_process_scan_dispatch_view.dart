@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/bean/http/response/scan_barcode_info.dart';
+import 'package:jd_flutter/bean/http/response/worker_info.dart';
 import 'package:jd_flutter/fun/dispatching/part_process_scan/part_process_scan_logic.dart';
-
-import '../../../../bean/http/response/scan_barcode_info.dart';
-import '../../../../bean/http/response/worker_info.dart';
-import '../../../../utils/utils.dart';
-import '../../../../widget/check_box_widget.dart';
-import '../../../../widget/custom_widget.dart';
-import '../../../../widget/edit_text_widget.dart';
-import '../../../../widget/worker_check_widget.dart';
+import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/widget/check_box_widget.dart';
+import 'package:jd_flutter/widget/custom_widget.dart';
+import 'package:jd_flutter/widget/edit_text_widget.dart';
+import 'package:jd_flutter/widget/worker_check_widget.dart';
 
 class PartProcessScanDispatchPage extends StatefulWidget {
   const PartProcessScanDispatchPage({super.key});

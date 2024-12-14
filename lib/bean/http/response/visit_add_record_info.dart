@@ -1,4 +1,6 @@
-import '../response/photoBean.dart';
+
+
+import 'photoBean.dart';
 
 /// ActionZone : "一楼会客厅"
 /// ActionZoneID : "0"

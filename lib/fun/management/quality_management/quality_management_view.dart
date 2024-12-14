@@ -2,18 +2,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/bean/http/response/abnormal_quality_list_info.dart';
 import 'package:jd_flutter/fun/management/quality_management/quality_management_logic.dart';
+import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
+import 'package:jd_flutter/widget/edit_text_widget.dart';
 import 'package:jd_flutter/widget/globalTimer.dart';
-
-import '../../../bean/http/response/abnormal_quality_list_info.dart';
-import '../../../utils/utils.dart';
-import '../../../utils/web_api.dart';
-import '../../../widget/custom_widget.dart';
-import '../../../widget/edit_text_widget.dart';
-import '../../../widget/picker/picker_view.dart';
-import '../../../widget/switch_button_widget.dart';
-import '../../../widget/worker_check_widget.dart';
+import 'package:jd_flutter/widget/picker/picker_view.dart';
+import 'package:jd_flutter/widget/switch_button_widget.dart';
+import 'package:jd_flutter/widget/worker_check_widget.dart';
 
 class QualityRestrictionPage extends StatefulWidget {
   const QualityRestrictionPage({super.key});
@@ -351,9 +349,6 @@ class _QualityRestrictionPageState extends State<QualityRestrictionPage> {
                 state.personal.value = state.searchPeople;
                 state.departmentID = state.searchPeopleDepartmentID;
                 state.empID = state.searchPeopleEmpId;
-
-                logger.f('state.departmentID:${state.departmentID}');
-                logger.f('state.empID:${state.empID}');
                 Get.back();
               },
               child: Text('dialog_default_confirm'.tr),

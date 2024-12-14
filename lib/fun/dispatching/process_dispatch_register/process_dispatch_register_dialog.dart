@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/bean/http/response/worker_info.dart';
+import 'package:jd_flutter/widget/worker_check_widget.dart';
 
-import '../../../bean/http/response/worker_info.dart';
-import '../../../widget/worker_check_widget.dart';
 
 showSalesOrderListDialog(List<String> list) {
   Get.dialog(

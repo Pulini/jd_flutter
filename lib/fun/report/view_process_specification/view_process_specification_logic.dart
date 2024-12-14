@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
+import 'package:jd_flutter/widget/dialogs.dart';
 
-import '../../../widget/dialogs.dart';
 import 'view_process_specification_state.dart';
 
 class ViewProcessSpecificationLogic extends GetxController {

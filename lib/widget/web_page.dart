@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/web_api.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-import '../utils/utils.dart';
-import '../utils/web_api.dart';
 import 'custom_widget.dart';
 import 'dialogs.dart';
 

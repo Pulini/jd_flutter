@@ -3,12 +3,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/bean/http/response/visit_data_list_info.dart';
+import 'package:jd_flutter/route.dart';
+import 'package:jd_flutter/utils/web_api.dart';
+import 'package:jd_flutter/widget/custom_widget.dart';
+import 'package:jd_flutter/widget/picker/picker_view.dart';
 
-import '../../../bean/http/response/visit_data_list_info.dart';
-import '../../../route.dart';
-import '../../../utils/web_api.dart';
-import '../../../widget/custom_widget.dart';
-import '../../../widget/picker/picker_view.dart';
 import 'visit_register_logic.dart';
 
 class VisitRegisterPage extends StatefulWidget {

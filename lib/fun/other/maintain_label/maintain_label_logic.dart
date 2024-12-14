@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/bean/http/response/maintain_material_info.dart';
+import 'package:jd_flutter/bean/http/response/picking_bar_code_info.dart';
+import 'package:jd_flutter/widget/dialogs.dart';
 
-import '../../../bean/http/response/maintain_material_info.dart';
-import '../../../bean/http/response/picking_bar_code_info.dart';
-import '../../../widget/dialogs.dart';
 import 'maintain_label_state.dart';
 
 class MaintainLabelLogic extends GetxController {

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/bean/bluetooth_device.dart';
+import 'package:jd_flutter/constant.dart';
+import 'package:jd_flutter/utils/web_api.dart';
+import 'package:jd_flutter/widget/combination_button_widget.dart';
+import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import '../../bean/bluetooth_device.dart';
-import '../../constant.dart';
-import '../../widget/combination_button_widget.dart';
-import '../../widget/custom_widget.dart';
-import '../web_api.dart';
 
 class PrintUtil {
   var bluetoothChannel = const MethodChannel(channelBluetoothFlutterToAndroid);

@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/bean/http/response/production_dispatch_order_detail_info.dart';
 import 'package:jd_flutter/fun/dispatching/production_dispatch/production_dispatch_dialogs.dart';
+import 'package:jd_flutter/widget/check_box_widget.dart';
+import 'package:jd_flutter/widget/combination_button_widget.dart';
+import 'package:jd_flutter/widget/custom_widget.dart';
+import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:rotated_corner_decoration/rotated_corner_decoration.dart';
-
-import '../../../bean/http/response/production_dispatch_order_detail_info.dart';
-import '../../../widget/check_box_widget.dart';
-import '../../../widget/combination_button_widget.dart';
-import '../../../widget/custom_widget.dart';
-import '../../../widget/dialogs.dart';
 import 'production_dispatch_logic.dart';
 
 class ProductionDispatchDetailPage extends StatefulWidget {

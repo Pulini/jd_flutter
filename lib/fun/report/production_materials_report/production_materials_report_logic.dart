@@ -1,10 +1,9 @@
 import 'package:get/get.dart';
+import 'package:jd_flutter/bean/http/response/production_materials_info.dart';
+import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
-
-import '../../../bean/http/response/production_materials_info.dart';
-import '../../../route.dart';
-import '../../../widget/dialogs.dart';
-import '../../../widget/picker/picker_controller.dart';
+import 'package:jd_flutter/widget/dialogs.dart';
+import 'package:jd_flutter/widget/picker/picker_controller.dart';
 import 'production_materials_report_state.dart';
 
 class ProductionMaterialsReportLogic extends GetxController {
