@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/utils/utils.dart';
-import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
 import '../../../bean/http/response/sap_surplus_material_info.dart';
@@ -34,7 +33,7 @@ class SapSurplusMaterialStockInLogic extends GetxController {
         weighbridgeState == 'WEIGHT_MSG_DEVICE_NOT_CONNECTED' ||
         weighbridgeState == 'WEIGHT_MSG_OPEN_DEVICE_FAILED' ||
         weighbridgeState == 'WEIGHT_MSG_READ_ERROR') {
-      // state.weight.value = 0;
+      state.weight.value = 0;
     }
   }
 

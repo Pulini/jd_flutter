@@ -19,7 +19,7 @@ const surplusMaterialType = <String>[
 
 class SapSurplusMaterialStockInState {
   var dispatchOrderNumber = ''.obs;
-  var weight = (9.0).obs;
+  var weight = (0.0).obs;
   var materialList = <SurplusMaterialLabelInfo>[].obs;
   var historyList = <List<SurplusMaterialHistoryInfo>>[].obs;
   var interceptorText = '';
