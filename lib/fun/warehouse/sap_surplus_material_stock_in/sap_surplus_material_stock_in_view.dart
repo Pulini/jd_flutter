@@ -289,9 +289,6 @@ class _SapSurplusMaterialStockInPageState
     );
   }
 
-  var barCode =
-      '{"ID":0,"DispatchNumber":"dis123456","StubBar":"460500005","Factory":"1500","Date":"2024-11-11","NowTime":1734073524136}';
-
   @override
   void initState() {
     weighbridgeListener(
@@ -419,11 +416,10 @@ class _SapSurplusMaterialStockInPageState
                       width: double.infinity,
                       child: CombinationButton(
                         text: '查询历史',
-                        click: ()=>logic.scanCode(barCode),
-                        // click: () => logic.queryHistory(
-                        //   startDate: dpcStartDate.getDateFormatSapYMD(),
-                        //   endDate: dpcEndDate.getDateFormatSapYMD(),
-                        // ),
+                        click: () => logic.queryHistory(
+                          startDate: dpcStartDate.getDateFormatSapYMD(),
+                          endDate: dpcEndDate.getDateFormatSapYMD(),
+                        ),
                         combination: Combination.right,
                       ),
                     )
