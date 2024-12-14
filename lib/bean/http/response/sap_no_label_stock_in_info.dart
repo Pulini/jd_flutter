@@ -42,7 +42,7 @@ class SapNoLabelStockInInfo {
     this.labelNumber,
   });
 
-  SapNoLabelStockInInfo.fromJson(Map<String, dynamic> json) {
+  SapNoLabelStockInInfo.fromJson(dynamic json) {
     dispatchNumber = json['DISPATCH_NO'];
     dispatchLineNumber = json['DISPATCH_ITEM'];
     dispatchDate = json['ERDAT'];

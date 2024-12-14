@@ -14,6 +14,7 @@ import 'package:sqflite/sqflite.dart';
 
 import 'bean/http/response/bar_code.dart';
 import 'bean/http/response/production_dispatch_order_detail_info.dart';
+import 'bean/http/response/sap_surplus_material_info.dart';
 import 'constant.dart';
 import 'home/home_view.dart';
 import 'login/login_view.dart';
@@ -31,20 +32,33 @@ main() async {
     getDatabasesPath().then(
       (path) => openDatabase(
         join(path, jdDatabase),
-        version: 2,
+        version: 3,
         onCreate: (db, v) {
           debugPrint('onCreate -----------v=$v');
           db.execute(SaveDispatch.dbCreate);
           db.execute(SaveWorkProcedure.dbCreate);
           db.execute(BarCodeInfo.dbCreate);
+          db.execute(SurplusMaterialLabelInfo.dbCreate);
           db.close();
         },
         onUpgrade: (db, ov, nv) {
           debugPrint('onUpgrade-----------ov=$ov nv=$nv');
-          if (ov < 2) {
-            db.execute(BarCodeInfo.dbCreate);
-            db.close();
+          // 从版本1开始，逐步处理到最新版本的升级操作
+          for (int cv = ov + 1; cv <= nv; cv++) {
+            switch (cv) {
+              case 2: // 版本1升级到版本2
+                debugPrint('版本1升级到版本2');
+                db.execute(BarCodeInfo.dbCreate);
+                break;
+              case 3: // 版本2升级到版本3
+                debugPrint('版本2升级到版本3');
+                db.execute(SurplusMaterialLabelInfo.dbCreate);
+                break;
+              default:
+                break;
+            }
           }
+          db.close();
         },
         onOpen: (db) {
           debugPrint('onOpen-------');

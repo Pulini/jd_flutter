@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:crypto/crypto.dart';
 import 'package:decimal/decimal.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -153,6 +152,7 @@ extension ContextExt on BuildContext {
   ///是否是小屏幕
   bool isSmallScreen() => MediaQuery.of(this).size.width < 768;
 }
+
 ///Double扩展方法
 extension DoubleExt on double? {
   ///double转string并去除小数点后为0的位数，非0不去除
@@ -551,10 +551,8 @@ weighbridgeOpen() async {
 
 weighbridgeListener({
   required Function() usbAttached,
-  required Function() deviceNotConnected,
-  required Function(bool) deviceOpen,
+  required Function(String) weighbridgeState,
   required Function(double) readWeight,
-  required Function() readError,
 }) {
   debugPrint('weighbridge 注册监听');
   const MethodChannel(channelWeighbridgeFlutterToAndroid)
@@ -562,23 +560,7 @@ weighbridgeListener({
     switch (call.method) {
       case 'WeighbridgeState':
         {
-          switch (call.arguments) {
-            case 'WEIGHT_MSG_DEVICE_DETACHED':
-              debugPrint('地磅断开');
-              break;
-            case 'WEIGHT_MSG_DEVICE_NOT_CONNECTED':
-              debugPrint('地磅未连接');
-              break;
-            case 'WEIGHT_MSG_OPEN_DEVICE_SUCCESS':
-              debugPrint('打开地磅串口成功');
-              break;
-            case 'WEIGHT_MSG_OPEN_DEVICE_FAILED':
-              debugPrint('打开地磅串口失败');
-              break;
-            case 'WEIGHT_MSG_READ_ERROR':
-              debugPrint('地磅串口读取错误');
-              break;
-          }
+          weighbridgeState.call(call.arguments);
         }
         break;
       case 'WeighbridgeRead':
@@ -595,6 +577,7 @@ weighbridgeListener({
         {
           if (call.arguments == 'Attached') {
             debugPrint('USB设备插入');
+            usbAttached.call();
           }
         }
         break;

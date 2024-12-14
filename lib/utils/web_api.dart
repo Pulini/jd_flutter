@@ -839,3 +839,12 @@ const webApiSapGetStockInReport = 'sap/zapp/ZFUN_APP_PO_LIST_1500A';
 
 ///sap注塑入库单提交入库
 const webApiSapInjectionMoldingStockIn = 'sap/zapp/ZFUN_APP_PO_POST_1500A';
+
+///sap料头入库历史记录
+const webApiSapSurplusMaterialHistory = 'sap/zapp/ZFUN_GET_LTRUKU';
+
+///sap料头入库
+const webApiSapPostingSurplusMaterial = 'sap/zapp/ZFUN_RES_LTRUKU';
+
+///mes根据编码获取物料信息
+const webApiMesGetMaterialInfo = 'api/Piecework/GetMaterialByCode';

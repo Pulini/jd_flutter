@@ -254,9 +254,8 @@ showSnackBar({
   required String title,
   required String message,
 }) {
-  if (snackbarStatus != SnackbarStatus.CLOSED) {
+  if (Get.isSnackbarOpen) {
     snackbarController?.close(withAnimations: false);
-    return;
   }
   snackbarController = Get.snackbar(
     title,
@@ -291,8 +290,8 @@ showScanTips() {
     duration: const Duration(milliseconds: 500),
     margin: const EdgeInsets.all(10),
     overlayBlur: 5,
-    barBlur:0,
-    overlayColor:Colors.transparent,
+    barBlur: 0,
+    overlayColor: Colors.transparent,
     reverseAnimationCurve: Curves.bounceOut,
     backgroundColor: Colors.transparent,
   );
