@@ -520,7 +520,7 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
           CombinationButton(
             text: 'property_bt_print'.tr,
             click: () {
-              logger.f(state.detail.toJson());
+              logger.d(state.detail.toJson());
             },
           ),
           CombinationButton(

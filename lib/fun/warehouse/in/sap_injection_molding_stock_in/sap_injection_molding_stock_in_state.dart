@@ -83,7 +83,7 @@ class SapInjectionMoldingStockInState {
       if (response.resultCode == resultSuccess) {
         compute(
           parseJsonToList<SapLabelInfo>,
-          ParseJsonParams<SapLabelInfo>(response.data, SapLabelInfo.fromJson),
+          ParseJsonParams(response.data, SapLabelInfo.fromJson),
         ).then((list) {
           usedList = list.map((v) => v.labelID ?? '').toList();
           for (var v in barCodeList) {

@@ -61,17 +61,17 @@ class _VisitRegisterPageState extends State<VisitRegisterPage> {
   _item(VisitDataListInfo data) {
     return GestureDetector(
       onTap: () => {
-        logger.f(data.toJson()),
+        logger.d(data.toJson()),
         if(state.lastAdd){
           logic.getVisitorDetailInfo(data.interID.toString(),false),
-          logger.f('1')
+          logger.d('1')
         }else{
           if(data.submitType==0){
             logic.getVisitorDetailInfo(data.interID.toString(),true),
-            logger.f('2')
+            logger.d('2')
           }else{
             logic.getVisitorDetailInfo(data.interID.toString(),false),
-            logger.f('3')
+            logger.d('3')
           }
         }
       }, //获取详情点击事件
@@ -315,7 +315,7 @@ class _VisitRegisterPageState extends State<VisitRegisterPage> {
                       groupValue: state.select.value,
                       onChanged: (v) {
                         state.select.value = v!;
-                        logger.f(v);
+                        logger.d(v);
                       },
                     ),
                   ),
@@ -329,7 +329,7 @@ class _VisitRegisterPageState extends State<VisitRegisterPage> {
                       groupValue: state.select.value,
                       onChanged: (v) {
                         state.select.value = v!;
-                        logger.f(v);
+                        logger.d(v);
                       },
                     ),
                   ),
@@ -343,7 +343,7 @@ class _VisitRegisterPageState extends State<VisitRegisterPage> {
                       groupValue: state.select.value,
                       onChanged: (v) {
                         state.select.value = v!;
-                        logger.f(v);
+                        logger.d(v);
                       },
                     ),
                   ),

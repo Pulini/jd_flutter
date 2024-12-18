@@ -143,16 +143,14 @@ errorDialog({
     barrierDismissible: false, //拦截dialog外部点击
   );
 }
-
+GlobalKey<NavigatorState> loadingKey = GlobalKey();
 ///加载中弹窗
-GlobalKey<NavigatorState> loadingDialog(String? content) {
-  GlobalKey<NavigatorState> dialogKey = GlobalKey();
+loadingDialog(String? content) {
   Get.dialog(
-    navigatorKey: dialogKey,
     PopScope(
-      //拦截返回键
       canPop: false,
       child: Dialog(
+        key: loadingKey,
         backgroundColor: Colors.white,
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 20),
@@ -169,7 +167,14 @@ GlobalKey<NavigatorState> loadingDialog(String? content) {
     ),
     barrierDismissible: false, //拦截dialog外部点击
   );
-  return dialogKey;
+}
+loadingDismiss(){
+  if (loadingKey.currentContext != null) {
+    final routeDialog = ModalRoute.of(loadingKey.currentContext!);
+    if (routeDialog != null) {
+      Navigator.removeRoute(Get.overlayContext!, routeDialog);
+    }
+  }
 }
 
 doUpdate(VersionInfo version) {
@@ -178,7 +183,7 @@ doUpdate(VersionInfo version) {
   final double dialogWidth = min(height, width) * 0.618;
   update() {
     if (GetPlatform.isAndroid) {
-      logger.f('Android_Update');
+      debugPrint('Android_Update');
       Downloader(
         url: version.url!,
         completed: (path) => const MethodChannel(channelUsbAndroidToFlutter)
@@ -187,27 +192,27 @@ doUpdate(VersionInfo version) {
       return;
     }
     if (GetPlatform.isIOS) {
-      logger.f('IOS_Update');
+      debugPrint('IOS_Update');
       return;
     }
     if (GetPlatform.isWeb) {
-      logger.f('Web_Update');
+      debugPrint('Web_Update');
       return;
     }
     if (GetPlatform.isWindows) {
-      logger.f('Windows_Update');
+      debugPrint('Windows_Update');
       return;
     }
     if (GetPlatform.isLinux) {
-      logger.f('Linux_Update');
+      debugPrint('Linux_Update');
       return;
     }
     if (GetPlatform.isMacOS) {
-      logger.f('MacOS_Update');
+      debugPrint('MacOS_Update');
       return;
     }
     if (GetPlatform.isFuchsia) {
-      logger.f('Fuchsia_Update');
+      debugPrint('Fuchsia_Update');
       return;
     }
   }

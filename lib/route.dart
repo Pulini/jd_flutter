@@ -27,6 +27,7 @@ import 'fun/report/worker_production_detail/worker_production_detail_view.dart';
 import 'fun/report/worker_production_report/worker_production_report_view.dart';
 import 'fun/warehouse/in/sap_injection_molding_stock_in/sap_injection_molding_stock_in_view.dart';
 import 'fun/warehouse/in/sap_no_label_stock_in/sap_no_label_stock_in_view.dart';
+import 'fun/warehouse/in/sap_produce_stock_in/sap_produce_stock_in_view.dart';
 import 'fun/warehouse/in/sap_purchase_stock_in/sap_purchase_stock_in_view.dart';
 import 'fun/warehouse/in/sap_surplus_material_stock_in/sap_surplus_material_stock_in_view.dart';
 import 'fun/warehouse/manage/carton_label_scan/carton_label_scan_view.dart';
@@ -35,6 +36,7 @@ import 'fun/warehouse/manage/smart_delivery/smart_delivery_view.dart';
 import 'fun/warehouse/out/sap_print_picking/sap_print_picking_view.dart';
 import 'fun/warehouse/out/sap_production_picking/sap_production_picking_view.dart';
 import 'fun/warehouse/out/sap_relocation_picking/sap_relocation_picking_view.dart';
+import 'fun/warehouse/out/sap_sales_shipment/sap_sales_shipment_view.dart';
 import 'home/home_view.dart';
 import 'login/login_view.dart';
 import 'utils/web_api.dart';
@@ -274,6 +276,20 @@ class RouteConfig {
     const SapSurplusMaterialStockInPage(),
   );
 
+  ///sap生产入库
+  static Routes sapProduceStockIn = Routes(
+    '/sap_produce_stock_in',
+    99,
+    const SapProduceStockInPage(),
+  );
+
+  ///sap销售出库
+  static Routes sapSalesShipment = Routes(
+    '/sap_sales_shipment',
+    99,
+    const SapSalesShipmentPage(),
+  );
+
   ///本地功能入口列表
   static List<Routes> routeList = [
     dailyReport,
@@ -307,7 +323,9 @@ class RouteConfig {
     sapRelocationPicking,
     sapNoLabelStockIn,
     sapInjectionMoldingStockIn,
-    sapSurplusMaterialStockIn
+    sapSurplusMaterialStockIn,
+    sapProduceStockIn,
+    sapSalesShipment,
   ];
 
   static List<GetPage> appRoutes = [
@@ -451,6 +469,14 @@ class RouteConfig {
     GetPage(
       name: sapSurplusMaterialStockIn.name,
       page: () => sapSurplusMaterialStockIn.page,
+    ),
+    GetPage(
+      name: sapProduceStockIn.name,
+      page: () => sapProduceStockIn.page,
+    ),
+    GetPage(
+      name: sapSalesShipment.name,
+      page: () => sapSalesShipment.page,
     ),
   ];
 }

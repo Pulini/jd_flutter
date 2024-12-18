@@ -144,7 +144,7 @@ class VisitRegisterLogic extends GetxController {
     ).then((response) {
       if (response.resultCode == resultSuccess) {
         state.visitCode.value = response.message!;
-        logger.f(state.visitCode.value);
+        logger.d(state.visitCode.value);
       } else {
         state.visitCode.value = response.message!;
         errorDialog(content: response.message);
@@ -164,7 +164,7 @@ class VisitRegisterLogic extends GetxController {
         }else{  //带数据的新增
 
           if(state.lastAdd){
-            logger.f('带数据的新增');
+            logger.d('带数据的新增');
             state.dataDetail =
                 VisitGetDetailInfo.fromJson(jsonDecode(response.data));
             textIdCard.text = state.dataDetail.iDCard ?? '';
@@ -175,7 +175,7 @@ class VisitRegisterLogic extends GetxController {
             state.upAddDetail.value.examineID = getUserInfo()!.empID.toString();
             state.upAddDetail.value.securityStaff = getUserInfo()!.empID.toString();
           }else{
-            logger.f('走详情界面');
+            logger.d('走详情界面');
             state.dataDetail =
                 VisitGetDetailInfo.fromJson(jsonDecode(response.data));
             state.cardPicture.value = state.dataDetail.cardPic ?? '';
@@ -197,11 +197,11 @@ class VisitRegisterLogic extends GetxController {
 
   addPicture(String bitmapBase64, bool isCome) {
     if (isCome) {
-      logger.f('添加来访图片');
+      logger.d('添加来访图片');
       state.upComePicture
           .add(VisitPhotoBean(photo: bitmapBase64, typeAdd: "1"));
     } else {
-      logger.f('添加离场图片');
+      logger.d('添加离场图片');
       state.upLeavePicture
           .add(VisitPhotoBean(photo: bitmapBase64, typeAdd: "1"));
     }
@@ -237,7 +237,7 @@ class VisitRegisterLogic extends GetxController {
     state.upAddDetail.value.securityStaff = getUserInfo()!.empID.toString();
     state.upAddDetail.value.visitPics = body;
 
-    logger.f(state.upAddDetail.value.toJson());
+    logger.d(state.upAddDetail.value.toJson());
 
     if (!isIDCorrect(state.upAddDetail.value.iDCard.toString())) {
       errorDialog(content: 'visit_search_idCard_error'.tr);
@@ -428,7 +428,7 @@ class VisitRegisterLogic extends GetxController {
             textVisitedDept.text =
                 list[controller.selectedItem].empDepartName.toString();
             textSearch.clear();
-            logger.f("访问部门：${state.upAddDetail.value.visitedDept}");
+            logger.d("访问部门：${state.upAddDetail.value.visitedDept}");
           },
           child: Text(
             'dialog_default_confirm'.tr,

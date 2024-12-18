@@ -142,8 +142,8 @@ abstract class PickerController {
           if (hasAll) PickerSapSupplier(name: '全部', supplierNumber: '')
         ];
         list.addAll(await compute(
-          parseJsonToList<PickerSapSupplier>,
-          ParseJsonParams<PickerSapSupplier>(
+          parseJsonToList,
+          ParseJsonParams(
             response.data,
             PickerSapSupplier.fromJson,
           ),
@@ -165,8 +165,8 @@ abstract class PickerController {
       try {
         List<PickerItem> list = [];
         list.addAll(await compute(
-          parseJsonToList<PickerSapCompany>,
-          ParseJsonParams<PickerSapCompany>(
+          parseJsonToList,
+          ParseJsonParams(
             response.data,
             PickerSapCompany.fromJson,
           ),
@@ -190,8 +190,8 @@ abstract class PickerController {
           if (hasAll) PickerSapFactory(name: '全部', number: 0)
         ];
         list.addAll(await compute(
-          parseJsonToList<PickerSapFactory>,
-          ParseJsonParams<PickerSapFactory>(
+          parseJsonToList,
+          ParseJsonParams(
             response.data,
             PickerSapFactory.fromJson,
           ),
@@ -215,8 +215,8 @@ abstract class PickerController {
           if (hasAll) PickerSapWorkCenter(name: '全部', number: '')
         ];
         list.addAll(await compute(
-          parseJsonToList<PickerSapWorkCenter>,
-          ParseJsonParams<PickerSapWorkCenter>(
+          parseJsonToList,
+          ParseJsonParams(
             response.data,
             PickerSapWorkCenter.fromJson,
           ),
@@ -241,8 +241,8 @@ abstract class PickerController {
             PickerSapDepartment(name: '全部', departmentId: 0, number: '')
         ];
         list.addAll(await compute(
-          parseJsonToList<PickerSapDepartment>,
-          ParseJsonParams<PickerSapDepartment>(
+          parseJsonToList,
+          ParseJsonParams(
             response.data,
             PickerSapDepartment.fromJson,
           ),
@@ -267,8 +267,8 @@ abstract class PickerController {
             PickerMesWorkShop(name: '全部', number: '', processFlowId: 0)
         ];
         list.addAll(await compute(
-          parseJsonToList<PickerMesWorkShop>,
-          ParseJsonParams<PickerMesWorkShop>(
+          parseJsonToList,
+          ParseJsonParams(
             response.data,
             PickerMesWorkShop.fromJson,
           ),
@@ -296,8 +296,8 @@ abstract class PickerController {
             PickerMesDepartment(name: '全部', number: '', departmentId: 0)
         ];
         list.addAll(await compute(
-          parseJsonToList<PickerMesDepartment>,
-          ParseJsonParams<PickerMesDepartment>(
+          parseJsonToList,
+          ParseJsonParams(
             response.data,
             PickerMesDepartment.fromJson,
           ),
@@ -323,8 +323,8 @@ abstract class PickerController {
                 itemId: 0, code: '', name: '全部', number: '', adminOrganizeId: 0)
         ];
         list.addAll(await compute(
-          parseJsonToList<PickerMesOrganization>,
-          ParseJsonParams<PickerMesOrganization>(
+          parseJsonToList,
+          ParseJsonParams(
             response.data,
             PickerMesOrganization.fromJson,
           ),
@@ -348,8 +348,8 @@ abstract class PickerController {
           if (hasAll) PickerSapProcessFlow(name: '全部', number: '')
         ];
         list.addAll(await compute(
-          parseJsonToList<PickerSapProcessFlow>,
-          ParseJsonParams<PickerSapProcessFlow>(
+          parseJsonToList,
+          ParseJsonParams(
             response.data,
             PickerSapProcessFlow.fromJson,
           ),
@@ -373,8 +373,8 @@ abstract class PickerController {
           if (hasAll) PickerMesProcessFlow(name: '', processFlowId: 0)
         ];
         list.addAll(await compute(
-          parseJsonToList<PickerMesProcessFlow>,
-          ParseJsonParams<PickerMesProcessFlow>(
+          parseJsonToList,
+          ParseJsonParams(
             response.data,
             PickerMesProcessFlow.fromJson,
           ),
@@ -401,8 +401,8 @@ abstract class PickerController {
           if (hasAll) PickerMesProductionReportType(itemID: 0, itemName: '全部')
         ];
         list.addAll(await compute(
-          parseJsonToList<PickerMesProductionReportType>,
-          ParseJsonParams<PickerMesProductionReportType>(
+          parseJsonToList,
+          ParseJsonParams(
             response.data,
             PickerMesProductionReportType.fromJson,
           ),
@@ -436,8 +436,8 @@ abstract class PickerController {
             )
         ];
         list.addAll(await compute(
-          parseJsonToList<PickerSapMachine>,
-          ParseJsonParams<PickerSapMachine>(
+          parseJsonToList,
+          ParseJsonParams(
             response.data,
             PickerSapMachine.fromJson,
           ),
@@ -467,8 +467,8 @@ abstract class PickerController {
           if (hasAll) PickerSapWorkCenterNew(name: '全部', number: '')
         ];
         list.addAll(await compute(
-          parseJsonToList<PickerSapWorkCenterNew>,
-          ParseJsonParams<PickerSapWorkCenterNew>(
+          parseJsonToList,
+          ParseJsonParams(
             response.data,
             PickerSapWorkCenterNew.fromJson,
           ),
@@ -495,8 +495,8 @@ abstract class PickerController {
           if (hasAll) PickerSapGroup(name: '全部', itemId: 0)
         ];
         list.addAll(await compute(
-          parseJsonToList<PickerSapGroup>,
-          ParseJsonParams<PickerSapGroup>(
+          parseJsonToList,
+          ParseJsonParams(
             response.data,
             PickerSapGroup.fromJson,
           ),
@@ -531,8 +531,8 @@ abstract class PickerController {
             )
         ];
         list.addAll(await compute(
-          parseJsonToList<PickerSapFactoryAndWarehouse>,
-          ParseJsonParams<PickerSapFactoryAndWarehouse>(
+          parseJsonToList,
+          ParseJsonParams(
             response.data,
             PickerSapFactoryAndWarehouse.fromJson,
           ),
@@ -556,8 +556,8 @@ abstract class PickerController {
           if (hasAll) PickerMesMoldingPackArea(id: 0, name: '全部')
         ];
         list.addAll(await compute(
-          parseJsonToList<PickerMesMoldingPackArea>,
-          ParseJsonParams<PickerMesMoldingPackArea>(
+          parseJsonToList,
+          ParseJsonParams(
             response.data,
             PickerMesMoldingPackArea.fromJson,
           ),
@@ -585,8 +585,8 @@ abstract class PickerController {
       try {
         List<PickerItem> list = [];
         list.addAll(await compute(
-          parseJsonToList<PickerSapWarehouseLocation>,
-          ParseJsonParams<PickerSapWarehouseLocation>(
+          parseJsonToList,
+          ParseJsonParams(
             response.data,
             PickerSapWarehouseLocation.fromJson,
           ),
@@ -618,8 +618,8 @@ abstract class PickerController {
             )
         ];
         list.addAll(await compute(
-          parseJsonToList<PickerMesGroup>,
-          ParseJsonParams<PickerMesGroup>(
+          parseJsonToList,
+          ParseJsonParams(
             response.data,
             PickerMesGroup.fromJson,
           ),

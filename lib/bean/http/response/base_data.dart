@@ -1,5 +1,4 @@
-
-import 'package:jd_flutter/utils/web_api.dart';
+import 'package:jd_flutter/utils/utils.dart';
 
 class BaseData {
   BaseData({
@@ -35,9 +34,10 @@ class BaseData {
     map['ResultCode'] = resultCode;
     map['Data'] = data;
     map['Message'] = message;
-    logger.f(map);
+    loggerF(map);
   }
 }
+
 
 class ParseJsonParams<T> {
   final dynamic data;

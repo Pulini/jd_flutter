@@ -88,20 +88,20 @@ class WebPage extends StatelessWidget {
         ..setNavigationDelegate(
           NavigationDelegate(
             onPageStarted: (String url) {
-              logger.f('onPageStarted------$url');
+              debugPrint('onPageStarted------$url');
               loadingDialog('加載中');
             },
             onPageFinished: (String url) {
-              logger.f('${Get.isDialogOpen}  onPageFinished------$url');
+              debugPrint('${Get.isDialogOpen}  onPageFinished------$url');
               if (Get.isDialogOpen == true) Get.back();
             },
             onHttpError: (HttpResponseError error) {
-              logger.f(
+              debugPrint(
                   '${Get.isDialogOpen}  onHttpError------${error.response?.statusCode}');
               if (Get.isDialogOpen == true) Get.back();
             },
             onWebResourceError: (WebResourceError error) {
-              logger.f(
+              debugPrint(
                   '${Get.isDialogOpen}  onWebResourceError------${error.description}');
               if (Get.isDialogOpen == true) Get.back();
             },

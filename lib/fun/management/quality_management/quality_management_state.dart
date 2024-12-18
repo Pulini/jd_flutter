@@ -148,8 +148,8 @@ class QualityManagementState {
   submitReview({
     required Function(String msg) error,
   }) {
-    logger.f('serious:$serious');
-    logger.f('slight:$slight');
+    logger.d('serious:$serious');
+    logger.d('slight:$slight');
 
     var type = '';
 

@@ -10,7 +10,6 @@ import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:logger/logger.dart';
 import 'package:uuid/uuid.dart';
 
-
 import 'utils.dart';
 
 ///接口返回异常
@@ -149,14 +148,15 @@ Future<BaseData> _doHttp({
   }
 
   try {
-    logger.f('SnackbarStatus=$snackbarStatus');
+    debugPrint('SnackbarStatus=$snackbarStatus');
     if (snackbarStatus == SnackbarStatus.OPEN ||
         snackbarStatus == SnackbarStatus.OPENING) {
       snackbarController?.close(withAnimations: false);
     }
   } catch (e) {
-    logger.f('销毁snackbar异常');
+    debugPrint('销毁snackbar异常');
   }
+
   if (loading != null && loading.isNotEmpty) {
     loadingDialog(loading);
   }
@@ -239,7 +239,6 @@ Future<BaseData> _doHttp({
           ? jsonDecode(response.data)
           : response.data;
       base.resultCode = json['ResultCode'];
-      // base.data = jsonEncode(json['Data']);
       base.data = json['Data'];
       base.message = json['Message'];
     } else {
@@ -282,7 +281,7 @@ Future<BaseData> _doHttp({
     logger.e('error:${e.toString()}');
     base.message = '发生异常：${e.toString()}';
   } finally {
-    if (loading != null && loading.isNotEmpty) Get.back();
+    if (loading != null && loading.isNotEmpty) loadingDismiss();
     base.baseUrl = baseUrl;
   }
   return base;
@@ -812,7 +811,8 @@ const webApiGetProductionPickingBarCodeList =
     'api/CompoundDispatching/GetBarcodeByMaterialNumberJinZhen';
 
 ///材料出库——金臻拌料
-const webApiMixBarCodePicking = 'api/CompoundDispatching/MaterialOutStockJinZhen';
+const webApiMixBarCodePicking =
+    'api/CompoundDispatching/MaterialOutStockJinZhen';
 
 ///sap喷漆领料过账
 const webApiSapPrintPicking = 'sap/zapp/ZFUN_RES_ZLINGYONG_1500A';
@@ -849,3 +849,12 @@ const webApiSapPostingSurplusMaterial = 'sap/zapp/ZFUN_RES_LTRUKU';
 
 ///mes根据编码获取物料信息
 const webApiMesGetMaterialInfo = 'api/Piecework/GetMaterialByCode';
+
+///sap获取客户订单信息
+const webApiSapGetOrderInfoFromCode = 'sap/zapp/ZMM_ZCXSMRK_ZCTN';
+
+///sap获取待出货列表
+const webApiSapGetSalesShipmentList = 'sap/zapp/ZFUN_RES_ZXSOUT_LIST_1500';
+
+///sap销售出库过账
+const webApiSapPostingSalesShipment = 'sap/zapp/ZFUN_RES_ZXSOUT_JINC_1500';

@@ -37,7 +37,7 @@ class HomeState {
       if (response.resultCode == resultSuccess) {
         compute(
           parseJsonToList<HomeFunctions>,
-          ParseJsonParams<HomeFunctions>(
+          ParseJsonParams(
             response.data,
             HomeFunctions.fromJson,
           ),

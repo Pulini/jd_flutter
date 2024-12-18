@@ -5,6 +5,7 @@ import 'package:crypto/crypto.dart';
 import 'package:decimal/decimal.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -35,19 +36,19 @@ UserInfo? userInfo;
 spSave(String key, Object value) {
   if (value is String) {
     sharedPreferences.setString(key, value);
-    logger.d('save\nclass:${value.runtimeType}\nkey:$key\nvalue:$value');
+    debugPrint('save\nclass:${value.runtimeType}\nkey:$key\nvalue:$value');
   } else if (value is int) {
     sharedPreferences.setInt(key, value);
-    logger.d('save\nclass:${value.runtimeType}\nkey:$key\nvalue:$value');
+    debugPrint('save\nclass:${value.runtimeType}\nkey:$key\nvalue:$value');
   } else if (value is double) {
     sharedPreferences.setDouble(key, value);
-    logger.d('save\nclass:${value.runtimeType}\nkey:$key\nvalue:$value');
+    debugPrint('save\nclass:${value.runtimeType}\nkey:$key\nvalue:$value');
   } else if (value is bool) {
     sharedPreferences.setBool(key, value);
-    logger.d('save\nclass:${value.runtimeType}\nkey:$key\nvalue:$value');
+    debugPrint('save\nclass:${value.runtimeType}\nkey:$key\nvalue:$value');
   } else if (value is List<String>) {
     sharedPreferences.setStringList(key, value);
-    logger.d('save\nclass:${value.runtimeType}\nkey:$key\nvalue:$value');
+    debugPrint('save\nclass:${value.runtimeType}\nkey:$key\nvalue:$value');
   } else {
     logger.e('error\nclass:${value.runtimeType}');
   }
@@ -56,7 +57,7 @@ spSave(String key, Object value) {
 /// 获取SP数据
 dynamic spGet(String key) {
   var value = sharedPreferences.get(key);
-  logger.d('read\nclass:${value.runtimeType}\nkey:$key\nvalue:$value');
+  debugPrint('read\nclass:${value.runtimeType}\nkey:$key\nvalue:$value');
   switch (value.runtimeType) {
     case String:
       return value ?? '';
@@ -237,7 +238,18 @@ extension StringExt on String? {
       (this ?? '').length >= 10 &&
       (this ?? '').length <= 13;
 }
-
+loggerF(Map<String, dynamic> map){
+  if(map.toString().length>500){
+    map['日志类型'] = '异步打印日志';
+    compute(_logF, map);
+  }else{
+    map['日志类型'] = '直接打印日志';
+    logger.f(map);
+  }
+}
+_logF(Map<String, dynamic> data) {
+  logger.f(data);
+}
 extension RequestOptionsExt on RequestOptions {
   print() {
     Map<String, dynamic> map = <String, dynamic>{};
@@ -248,7 +260,7 @@ extension RequestOptionsExt on RequestOptions {
     map['Headers'] = headers;
     map['QueryParameters'] = queryParameters;
     map['Data'] = data;
-    logger.f(map);
+    loggerF(map);
   }
 }
 
@@ -277,26 +289,6 @@ class TapUtil {
   }
 }
 
-///Log日志工具
-log(String msg) {
-  var strLength = msg.length;
-  var start = 0;
-  var end = 2000;
-  var printText = '';
-  for (int i = 0; i < 999; i++) {
-    if (strLength > end) {
-      printText += '${msg.substring(start, end)}\n';
-      debugPrint(msg.substring(start, end));
-      start = end;
-      end += 2000;
-    } else {
-      debugPrint(msg.substring(start, strLength));
-      printText += '${msg.substring(start, strLength)}\n';
-      break;
-    }
-  }
-  logger.f(printText);
-}
 
 /// 权限检查
 bool checkUserPermission(String code) {

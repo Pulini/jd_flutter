@@ -45,7 +45,7 @@ class SapSurplusMaterialStockInState {
       if (response.resultCode == resultSuccess) {
         compute(
           parseJsonToList<SurplusMaterialHistoryInfo>,
-          ParseJsonParams<SurplusMaterialHistoryInfo>(
+          ParseJsonParams(
             response.data,
             SurplusMaterialHistoryInfo.fromJson,
           ),

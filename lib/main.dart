@@ -125,7 +125,7 @@ class _MyAppState extends State<MyApp> {
         language = locales?.first.languageCode == localeChinese.languageCode
             ? 'zh'
             : 'en';
-        log('当前语音：$locales');
+        debugPrint('当前语音：$locales');
         return null;
       },
       localizationsDelegates: const [
@@ -143,10 +143,10 @@ class _MyAppState extends State<MyApp> {
       //     builder: (context, AsyncSnapshot<UserInfo> snapshot) {
       //       if (snapshot.hasData) {
       //         userController.init(snapshot.requireData);
-      //         logger.f('----------1-----------');
+      //         logger.d('----------1-----------');
       //         return const Home();
       //       } else {
-      //         logger.f('----------2-----------');
+      //         logger.d('----------2-----------');
       //         return const Login();
       //       }
       //     }
