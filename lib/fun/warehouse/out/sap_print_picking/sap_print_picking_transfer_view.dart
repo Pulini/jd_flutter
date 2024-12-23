@@ -65,7 +65,7 @@ class _SapPrintPickingTransferPageState
     super.initState();
   }
 
-  _item(List<PalletItem1Info> list) {
+  _item(List<PalletDetailItem1Info> list) {
     return Container(
       margin: const EdgeInsets.only(left: 4, right: 4, bottom: 10),
       padding: const EdgeInsets.only(left: 4, right: 4),

@@ -1,4 +1,6 @@
 import 'package:get/get.dart';
+import 'package:jd_flutter/fun/warehouse/in/sap_picking_receipt_reversal/sap_picking_receipt_reversal_view.dart';
+import 'package:jd_flutter/fun/warehouse/in/sap_put_on_shelves/sap_put_on_shelves_view.dart';
 
 import 'bean/home_button.dart';
 import 'bean/routes.dart';
@@ -255,7 +257,7 @@ class RouteConfig {
     const SapRelocationPickingPage(),
   );
 
-  ///sap移库领料
+  ///sap无标入库
   static Routes sapNoLabelStockIn = Routes(
     '/sap_no_label_stock_in',
     99,
@@ -288,6 +290,20 @@ class RouteConfig {
     '/sap_sales_shipment',
     99,
     const SapSalesShipmentPage(),
+  );
+
+  ///sap领料入库冲销
+  static Routes sapPickingReceiptReversal = Routes(
+    '/sap_picking_receipt_reversal',
+    99,
+    const SapPickingReceiptReversalPage(),
+  );
+
+  ///sap贴标上架
+  static Routes sapPutOnShelves = Routes(
+    '/sap_put_on_shelves',
+    99,
+    const SapPutOnShelvesPage(),
   );
 
   ///本地功能入口列表
@@ -326,6 +342,8 @@ class RouteConfig {
     sapSurplusMaterialStockIn,
     sapProduceStockIn,
     sapSalesShipment,
+    sapPickingReceiptReversal,
+    sapPutOnShelves,
   ];
 
   static List<GetPage> appRoutes = [
@@ -477,6 +495,14 @@ class RouteConfig {
     GetPage(
       name: sapSalesShipment.name,
       page: () => sapSalesShipment.page,
+    ),
+    GetPage(
+      name: sapPickingReceiptReversal.name,
+      page: () => sapPickingReceiptReversal.page,
+    ),
+    GetPage(
+      name: sapPutOnShelves.name,
+      page: () => sapPutOnShelves.page,
     ),
   ];
 }

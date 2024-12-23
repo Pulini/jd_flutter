@@ -10,7 +10,6 @@ import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
-
 ///app 背景渐变色
 var backgroundColor = const BoxDecoration(
   gradient: LinearGradient(
@@ -765,3 +764,4 @@ selectView({
             : Row(children: [textSpan(hint: hint, text: list[0].toString())]),
   );
 }
+

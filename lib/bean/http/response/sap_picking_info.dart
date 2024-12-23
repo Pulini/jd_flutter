@@ -524,23 +524,23 @@ class SapPickingDetailLabelInfo {
       : distribution.map((v) => v.qty).reduce((a, b) => a.add(b));
 }
 
-class PalletInfo {
-  List<PalletItem1Info>? item1;
-  List<PalletItem2Info>? item2;
+class PalletDetailInfo {
+  List<PalletDetailItem1Info>? item1;
+  List<PalletDetailItem2Info>? item2;
 
-  PalletInfo({this.item1, this.item2});
+  PalletDetailInfo({this.item1, this.item2});
 
-  PalletInfo.fromJson(dynamic json) {
+  PalletDetailInfo.fromJson(dynamic json) {
     if (json['ITEM'] != null) {
       item1 = [];
       json['ITEM'].forEach((v) {
-        item1?.add(PalletItem1Info.fromJson(v));
+        item1?.add(PalletDetailItem1Info.fromJson(v));
       });
     }
     if (json['ITEM2'] != null) {
       item2 = [];
       json['ITEM2'].forEach((v) {
-        item2?.add(PalletItem2Info.fromJson(v));
+        item2?.add(PalletDetailItem2Info.fromJson(v));
       });
     }
   }
@@ -557,7 +557,7 @@ class PalletInfo {
   }
 }
 
-class PalletItem1Info {
+class PalletDetailItem1Info {
   bool select=false;
 
   String? factoryNumber; //工厂  WERKS
@@ -579,7 +579,7 @@ class PalletItem1Info {
   double? quantity; //数量 MENGE
   String? unit; //单位 MEINS
 
-  PalletItem1Info({
+  PalletDetailItem1Info({
     this.factoryNumber,
     this.warehouseNumber,
     this.warehouseName,
@@ -600,7 +600,7 @@ class PalletItem1Info {
     this.unit,
   });
 
-  PalletItem1Info.fromJson(dynamic json) {
+  PalletDetailItem1Info.fromJson(dynamic json) {
     factoryNumber = json['WERKS'];
     warehouseNumber = json['LGORT'];
     warehouseName = json['LGOBE'];
@@ -645,7 +645,7 @@ class PalletItem1Info {
   }
 }
 
-class PalletItem2Info {
+class PalletDetailItem2Info {
   var factoryNumber; //工厂  WERKS
   var warehouseNumber; //仓库  LGORT
   var location; //库位 ZLOCAL
@@ -653,7 +653,7 @@ class PalletItem2Info {
   var palletExistence; //托盘是否存在  空 托盘不存在、 X 托盘存在 ZTRAY_CFMRT1
   var palletState; //托盘状态  空 托盘无货、 X 当前条件下有货、Y 托盘有货但不在当前查询条件下  ZTRAY_CFMRT2
 
-  PalletItem2Info({
+  PalletDetailItem2Info({
     this.factoryNumber,
     this.warehouseNumber,
     this.location,
@@ -662,7 +662,7 @@ class PalletItem2Info {
     this.palletState,
   });
 
-  PalletItem2Info.fromJson(dynamic json) {
+  PalletDetailItem2Info.fromJson(dynamic json) {
     factoryNumber = json['WERKS'];
     warehouseNumber = json['LGORT'];
     location = json['ZLOCAL'];

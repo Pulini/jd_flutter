@@ -15,7 +15,7 @@ class SapPrintPickingState {
   var orderDetailDispatch = <SapProductionPickingDetailDispatchInfo>[];
   var orderDetailLabels = <SapPickingDetailLabelInfo>[].obs;
   var orderDetailOrderList = <PrintPickingDetailInfo>[].obs;
-  var transferList = <List<PalletItem1Info>>[];
+  var transferList = <List<PalletDetailItem1Info>>[];
   var warehouse = '';
   bool needRefresh = false;
 
@@ -244,7 +244,7 @@ class SapPrintPickingState {
 
   checkPallet({
     required List<String> pallets,
-    required Function(PalletInfo) success,
+    required Function(PalletDetailInfo) success,
     required Function(String) error,
   }) {
     sapPost(
@@ -270,7 +270,7 @@ class SapPrintPickingState {
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        success.call(PalletInfo.fromJson(response.data));
+        success.call(PalletDetailInfo.fromJson(response.data));
       } else {
         error.call(response.message ?? 'query_default_error'.tr);
       }
@@ -278,7 +278,7 @@ class SapPrintPickingState {
   }
 
   transfer({
-    required PalletItem2Info targetPallet,
+    required PalletDetailItem2Info targetPallet,
     required Function() success,
     required Function(String) error,
   }) {

@@ -858,3 +858,14 @@ const webApiSapGetSalesShipmentList = 'sap/zapp/ZFUN_RES_ZXSOUT_LIST_1500';
 
 ///sap销售出库过账
 const webApiSapPostingSalesShipment = 'sap/zapp/ZFUN_RES_ZXSOUT_JINC_1500';
+
+///sap生产领料、收货列表
+const webApiSapProductionReceipt = 'sap/zapp/ZFUN_APP_PO_CANCEL_1500';
+
+///sap生产领料、收货列表 冲销
+const webApiSapProductionReceiptWriteOff = 'sap/zapp/ZFUN_APP_PO_CANCEL_1500A';
+
+///sap获取推荐库位
+const webApiSapGetRecommendLocation = 'sap/zapp/ZWMS_LOCATION_RECOMMEND';
+
+

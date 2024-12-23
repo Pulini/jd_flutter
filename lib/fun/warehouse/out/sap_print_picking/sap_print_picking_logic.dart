@@ -366,7 +366,7 @@ class SapPrintPickingLogic extends GetxController {
                 pallets: list,
                 success: (info) {
                   groupBy(
-                    info.item1 ?? <PalletItem1Info>[],
+                    info.item1 ?? <PalletDetailItem1Info>[],
                     (v) => v.palletNumber,
                   ).forEach((k, v) {
                     state.transferList.add(v);
@@ -457,7 +457,7 @@ class SapPrintPickingLogic extends GetxController {
               state.transfer(
                 targetPallet: info.item2![0],
                 success: () {
-                  var list=<PalletItem1Info>[];
+                  var list=<PalletDetailItem1Info>[];
                   for (var pallet in state.transferList) {
                     list.addAll(pallet.where((v)=>!v.select));
                   }

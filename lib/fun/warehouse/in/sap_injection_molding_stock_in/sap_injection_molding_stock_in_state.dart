@@ -19,7 +19,7 @@ class SapInjectionMoldingStockInState {
   var barCodeList = <BarCodeInfo>[].obs;
   var usedList = <String>[];
   var palletNumber = ''.obs;
-  PalletItem2Info? pallet;
+  PalletDetailItem2Info? pallet;
   var reportList = <List<SapInjectionMoldingStockInInfo>>[];
 
   SapInjectionMoldingStockInState() {
@@ -31,7 +31,7 @@ class SapInjectionMoldingStockInState {
 
   checkPallet({
     required List<String> pallets,
-    required Function(PalletInfo) success,
+    required Function(PalletDetailInfo) success,
     required Function(String) error,
   }) {
     sapPost(
@@ -39,8 +39,7 @@ class SapInjectionMoldingStockInState {
       method: webApiSapGetPalletList,
       body: {
         'WERKS': '1500',
-        'LGORT': '1200',
-        // 'LGORT': userInfo?.defaultStockNumber,
+        'LGORT': userInfo?.defaultStockNumber,
         'ZTRAY_CFM': 'X',
         'ITEM': [
           for (var pallet in pallets)
@@ -58,7 +57,7 @@ class SapInjectionMoldingStockInState {
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        success.call(PalletInfo.fromJson(response.data));
+        success.call(PalletDetailInfo.fromJson(response.data));
       } else {
         error.call(response.message ?? 'query_default_error'.tr);
       }
