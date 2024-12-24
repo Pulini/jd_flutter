@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/warehouse/in/sap_picking_receipt_reversal/sap_picking_receipt_reversal_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/sap_put_on_shelves/sap_put_on_shelves_view.dart';
+import 'package:jd_flutter/fun/warehouse/manage/sap_stock_transfer/sap_stock_transfer_view.dart';
 
 import 'bean/home_button.dart';
 import 'bean/routes.dart';
@@ -306,6 +307,13 @@ class RouteConfig {
     const SapPutOnShelvesPage(),
   );
 
+  ///sap移库
+  static Routes sapStockTransfer = Routes(
+    '/sap_stock_transfer',
+    99,
+    const SapStockTransferPage(),
+  );
+
   ///本地功能入口列表
   static List<Routes> routeList = [
     dailyReport,
@@ -344,6 +352,7 @@ class RouteConfig {
     sapSalesShipment,
     sapPickingReceiptReversal,
     sapPutOnShelves,
+    sapStockTransfer,
   ];
 
   static List<GetPage> appRoutes = [
@@ -503,6 +512,10 @@ class RouteConfig {
     GetPage(
       name: sapPutOnShelves.name,
       page: () => sapPutOnShelves.page,
+    ),
+    GetPage(
+      name: sapStockTransfer.name,
+      page: () => sapStockTransfer.page,
     ),
   ];
 }

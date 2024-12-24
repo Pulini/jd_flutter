@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/carton_label_scan_info.dart';
 import 'package:jd_flutter/constant.dart';
+import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
@@ -73,35 +74,6 @@ class _CartonLabelScanPageState extends State<CartonLabelScanPage> {
     );
   }
 
-  _methodChannel() {
-    debugPrint('注册监听');
-    const MethodChannel(channelScanFlutterToAndroid)
-        .setMethodCallHandler((call) {
-      switch (call.method) {
-        case 'PdaScanner':
-          {
-            logic.scan(
-              code: call.arguments,
-              outsideCode: (code) {
-                controller.text = code;
-                playAudio(as3);
-              },
-              insideCode: (i) => playAudio(as1),
-              insideExpired: () => playAudio(ae1),
-              notOutsideCode: () => playAudio(ae2),
-              submitSuccess: () {
-                controller.text = '';
-                playAudio(as2);
-              },
-              submitError: () => playAudio(ae2),
-            );
-          }
-          break;
-      }
-      return Future.value(call);
-    });
-  }
-
   playAudio(String as) {
     if (player.state != PlayerState.completed) {
       player.stop();
@@ -115,7 +87,23 @@ class _CartonLabelScanPageState extends State<CartonLabelScanPage> {
   @override
   void initState() {
     player = AudioPlayer();
-    _methodChannel();
+    pdaScanner(scan: (barCode){
+      logic.scan(
+        code: barCode,
+        outsideCode: (code) {
+          controller.text = code;
+          playAudio(as3);
+        },
+        insideCode: (i) => playAudio(as1),
+        insideExpired: () => playAudio(ae1),
+        notOutsideCode: () => playAudio(ae2),
+        submitSuccess: () {
+          controller.text = '';
+          playAudio(as2);
+        },
+        submitError: () => playAudio(ae2),
+      );
+    });
     super.initState();
   }
 

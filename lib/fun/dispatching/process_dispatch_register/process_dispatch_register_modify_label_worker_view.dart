@@ -23,20 +23,7 @@ class _ModifyLabelWorkerPageState extends State<ModifyLabelWorkerPage> {
   final ProcessDispatchRegisterState state =
       Get.find<ProcessDispatchRegisterLogic>().state;
 
-  _methodChannel() {
-    debugPrint('注册监听');
-    const MethodChannel(channelScanFlutterToAndroid)
-        .setMethodCallHandler((call) {
-      switch (call.method) {
-        case 'PdaScanner':
-          {
-            logic.getLabelInfo(call.arguments);
-          }
-          break;
-      }
-      return Future.value(call);
-    });
-  }
+
 
   _item(WorkerInfo wi, int index) {
     return Obx(() => GestureDetector(
@@ -83,7 +70,7 @@ class _ModifyLabelWorkerPageState extends State<ModifyLabelWorkerPage> {
   @override
   void initState() {
     super.initState();
-    _methodChannel();
+    pdaScanner(scan: (code)=> logic.getLabelInfo(code));
     getWorkerInfo(
       department: userInfo?.departmentID.toString(),
       workers: (list) => state.workerList.value = list,

@@ -281,17 +281,9 @@ class _ProcessDispatchRegisterPageState
 
   _methodChannel() {
     debugPrint('注册监听');
-    const MethodChannel(channelScanFlutterToAndroid)
-        .setMethodCallHandler((call) {
-      switch (call.method) {
-        case 'PdaScanner':
-          {
-            controller.text = call.arguments;
-            logic.queryOrder(call.arguments);
-          }
-          break;
-      }
-      return Future.value(call);
+    pdaScanner(scan: (code){
+      controller.text =code;
+      logic.queryOrder(code);
     });
   }
 
