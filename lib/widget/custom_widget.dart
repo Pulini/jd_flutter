@@ -345,7 +345,7 @@ Future<T?> showSheet<T>(
     elevation: 0,
     backgroundColor: bodyColor,
     shape: RoundedRectangleBorder(borderRadius: borderRadius),
-    barrierColor: Colors.black.withOpacity(0.25),
+    barrierColor: Colors.black.withValues(alpha: 0.25),
     constraints: BoxConstraints(
         maxHeight: MediaQuery.of(context).size.height -
             MediaQuery.of(context).viewInsets.top),
@@ -769,7 +769,11 @@ dynamicLabelTemplate({
               child: titleWidget,
             ),
             if (header != null) header,
-            if (table != null) ...[const SizedBox(height: 5), table],
+            if (table != null) ...[
+              const SizedBox(height: 5),
+              table,
+              const SizedBox(height: 5),
+            ],
             if (footer != null) ...[footer, const SizedBox(height: 5)],
           ],
         ),
@@ -780,7 +784,7 @@ dynamicLabelTemplate({
 
 List<List<String>> labelTableFormat({
   required String title,
-  required String bottom,
+  String? total,
   required Map<String, List<List<String>>> list,
 }) {
   if (list.isEmpty) return [];
@@ -829,21 +833,23 @@ List<List<String>> labelTableFormat({
     printList.add([for (var data in v) data[1]]);
   });
 
-  // 保存表格列第一格
-  columnsTitleList.add(bottom);
-  var print = <String>[];
-  // 保存表格最后一行
-  titleList.forEachIndexed((i, v) {
-    double sum = 0.0;
-    list.forEach((key, value) {
-      if (i < titleList.length) {
-        sum = sum.add(value[i][1].toDoubleTry());
-      }
+  if (total != null && total.isNotEmpty) {
+    // 保存表格列第一格
+    columnsTitleList.add(total);
+    var print = <String>[];
+    // 保存表格最后一行
+    titleList.forEachIndexed((i, v) {
+      double sum = 0.0;
+      list.forEach((key, value) {
+        if (i < titleList.length) {
+          sum = sum.add(value[i][1].toDoubleTry());
+        }
+      });
+      print.add(sum.toShowString());
     });
-    print.add(sum.toShowString());
-  });
-  // 添加表格尾行
-  printList.add(print);
+    // 添加表格尾行
+    printList.add(print);
+  }
 
   const max = 6;
   final maxColumns = (titleList.length / max).ceil();
