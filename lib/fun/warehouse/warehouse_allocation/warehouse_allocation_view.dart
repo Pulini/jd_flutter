@@ -148,11 +148,11 @@ class _WarehouseAllocationPageState extends State<WarehouseAllocationPage> {
           Container(
             height: 40,
             width: double.maxFinite,
-            margin: const EdgeInsets.all(5),
+            margin: const EdgeInsets.all(10),
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blue,
-                padding: const EdgeInsets.only(left: 8, right: 8),
+                padding: const EdgeInsets.only(left: 8, right:20),
                 shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                 ),

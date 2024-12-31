@@ -1,11 +1,9 @@
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/other/hydroelectric_excess/hydroelectric_excess_view.dart';
-import 'package:jd_flutter/fun/warehouse/sap_injection_molding_stock_in/sap_injection_molding_stock_in_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/sap_picking_receipt_reversal/sap_picking_receipt_reversal_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/sap_put_on_shelves/sap_put_on_shelves_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/sap_stock_transfer/sap_stock_transfer_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/sap_wms_reprint_labels/sap_wms_reprint_labels_view.dart';
-
 import 'bean/home_button.dart';
 import 'bean/routes.dart';
 import 'fun/dispatching/machine_dispatch/machine_dispatch_report_view.dart';
@@ -43,15 +41,6 @@ import 'fun/warehouse/out/sap_print_picking/sap_print_picking_view.dart';
 import 'fun/warehouse/out/sap_production_picking/sap_production_picking_view.dart';
 import 'fun/warehouse/out/sap_relocation_picking/sap_relocation_picking_view.dart';
 import 'fun/warehouse/out/sap_sales_shipment/sap_sales_shipment_view.dart';
-import 'fun/warehouse/carton_label_scan/carton_label_scan_view.dart';
-import 'fun/warehouse/carton_label_scan_progress/carton_label_scan_progress_view.dart';
-import 'fun/warehouse/sap_no_label_stock_in/sap_no_label_stock_in_view.dart';
-import 'fun/warehouse/sap_print_picking/sap_print_picking_view.dart';
-import 'fun/warehouse/sap_production_picking/sap_production_picking_view.dart';
-import 'fun/warehouse/sap_purchase_stock_in/sap_purchase_stock_in_view.dart';
-import 'fun/warehouse/sap_relocation_picking/sap_relocation_picking_view.dart';
-import 'fun/warehouse/sap_surplus_material_stock_in/sap_surplus_material_stock_in_view.dart';
-import 'fun/warehouse/smart_delivery/smart_delivery_view.dart';
 import 'fun/warehouse/warehouse_allocation/warehouse_allocation_view.dart';
 import 'home/home_view.dart';
 import 'login/login_view.dart';

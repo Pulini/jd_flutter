@@ -855,7 +855,6 @@ const webApiSapScanAdd = "sap/zapp/ZMM_RES_ZXCFSM_D";
 ///获取汇总表
 const webApiNewGetSubmitBarCodeReport = "api/ScanJobBooking/NewGetSubmitBarCodeReport";
 
-
 ///sap料头入库历史记录
 const webApiSapSurplusMaterialHistory = 'sap/zapp/ZFUN_GET_LTRUKU';
 
@@ -885,3 +884,6 @@ const webApiSapGetRecommendLocation = 'sap/zapp/ZWMS_LOCATION_RECOMMEND';
 
 ///sap获取贴标列表
 const  webApiSAPGetLabels = 'sap/zapp/ZFUN_APP_BARCODE_PRINT';
+
+///提交条形码数据,自动生成调拨单
+const  webApiUploadWarehouseAllocation = "api/BarCode/SubmitBarCode2CkRequisitionSlipCollectBillNew";

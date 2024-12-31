@@ -7,6 +7,8 @@ class WarehouseAllocationState {
   var code = "";
   var dataList  =  <ScanCode>[].obs;
   var reportDataList = <ReportInfo>[].obs;
+  var outStockId ="";
+  var onStockId ="";
 
 
 
