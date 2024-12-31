@@ -1,27 +1,25 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../bean/home_button.dart';
-import '../bean/http/response/base_data.dart';
-import '../bean/http/response/department_info.dart';
-import '../bean/http/response/home_function_info.dart';
-import '../constant.dart';
-import '../route.dart';
-import '../utils/utils.dart';
-import '../utils/web_api.dart';
+import 'package:jd_flutter/bean/home_button.dart';
+import 'package:jd_flutter/bean/http/response/base_data.dart';
+import 'package:jd_flutter/bean/http/response/department_info.dart';
+import 'package:jd_flutter/bean/http/response/home_function_info.dart';
+import 'package:jd_flutter/constant.dart';
+import 'package:jd_flutter/route.dart';
+import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/web_api.dart';
 
 class HomeState {
   var userPicUrl = ''.obs;
   var departmentName = ''.obs;
   String search = '';
   var nBarIndex = 0;
-  RxList<ButtonItem> buttons = <ButtonItem>[].obs;
+  var buttons = <ButtonItem>[];
   var selectedItemColor = Colors.white;
-  var navigationBar = <HomeFunctions>[].obs;
+  var navigationBar = <HomeFunctions>[];
 
   HomeState() {
     userPicUrl.value = userInfo?.picUrl ?? '';
@@ -39,13 +37,13 @@ class HomeState {
       if (response.resultCode == resultSuccess) {
         compute(
           parseJsonToList<HomeFunctions>,
-          ParseJsonParams<HomeFunctions>(
+          ParseJsonParams(
             response.data,
             HomeFunctions.fromJson,
           ),
         ).then((v1) {
           nBarIndex = 0;
-          navigationBar.value = [
+          navigationBar = [
             for (var b in v1)
               HomeFunctions(
                 className: b.className,

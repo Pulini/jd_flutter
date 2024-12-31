@@ -1,12 +1,12 @@
 import 'package:collection/collection.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/bean/http/response/base_data.dart';
 import 'package:jd_flutter/bean/http/response/label_info.dart';
-
-import '../../../bean/http/response/base_data.dart';
-import '../../../bean/http/response/maintain_material_info.dart';
-import '../../../bean/http/response/picking_bar_code_info.dart';
-import '../../../utils/utils.dart';
-import '../../../utils/web_api.dart';
+import 'package:jd_flutter/bean/http/response/maintain_material_info.dart';
+import 'package:jd_flutter/bean/http/response/picking_bar_code_info.dart';
+import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/web_api.dart';
 
 class MaintainLabelState {
   var materialCode = '';
@@ -53,29 +53,33 @@ class MaintainLabelState {
       params: {'WorkCardID': interID},
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        var list = [
-          for (var json in response.data) LabelInfo.fromJson(json),
-        ];
-        typeBody.value = list[0].factoryType ?? '';
-        if (list[0].materialOtherName?.isNotEmpty == true) {
-          materialName.value = list[0]
-                  .materialOtherName!
-                  .firstWhere((v) => v.languageCode == 'zh')
-                  .name ??
-              '';
-        }
-
-        if (isMaterialLabel.value) {
-          list.sort((a, b) => a.labelState().compareTo(b.labelState()));
-          labelList.value = list;
-        } else {
-          isSingleLabel = list[0].packType ?? false;
-          var group = <List<LabelInfo>>[];
-          groupBy(list, (v) => v.barCode).forEach((k, v) {
-            group.add(v);
-          });
-          labelGroupList.value = group;
-        }
+        compute(
+          parseJsonToList<LabelInfo>,
+          ParseJsonParams(
+            response.data,
+            LabelInfo.fromJson,
+          ),
+        ).then((list) {
+          typeBody.value = list[0].factoryType ?? '';
+          if (list[0].materialOtherName?.isNotEmpty == true) {
+            materialName.value = list[0]
+                    .materialOtherName!
+                    .firstWhere((v) => v.languageCode == 'zh')
+                    .name ??
+                '';
+          }
+          if (isMaterialLabel.value) {
+            list.sort((a, b) => a.labelState().compareTo(b.labelState()));
+            labelList.value = list;
+          } else {
+            isSingleLabel = list[0].packType ?? false;
+            var group = <List<LabelInfo>>[];
+            groupBy(list, (v) => v.barCode).forEach((k, v) {
+              group.add(v);
+            });
+            labelGroupList.value = group;
+          }
+        });
       } else {
         if (isMaterialLabel.value) {
           labelList.clear();

@@ -1,14 +1,13 @@
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/constant.dart';
+import 'package:jd_flutter/home/home_view.dart';
+import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/web_api.dart';
+import 'package:jd_flutter/widget/custom_widget.dart';
+import 'package:jd_flutter/widget/dialogs.dart';
+import 'package:jd_flutter/widget/downloader.dart';
 import 'package:permission_handler/permission_handler.dart';
-
-import '../constant.dart';
-import '../home/home_view.dart';
-import '../utils/utils.dart';
-import '../utils/web_api.dart';
-import '../widget/custom_widget.dart';
-import '../widget/dialogs.dart';
-import '../widget/downloader.dart';
 import 'login_state.dart';
 
 class LoginLogic extends GetxController {

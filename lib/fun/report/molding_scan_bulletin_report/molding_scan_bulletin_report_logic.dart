@@ -1,12 +1,11 @@
 import 'dart:async';
 
 import 'package:get/get.dart';
+import 'package:jd_flutter/constant.dart';
+import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/utils/utils.dart';
-
-import '../../../constant.dart';
-import '../../../route.dart';
-import '../../../widget/custom_widget.dart';
-import '../../../widget/dialogs.dart';
+import 'package:jd_flutter/widget/custom_widget.dart';
+import 'package:jd_flutter/widget/dialogs.dart';
 import 'molding_scan_bulletin_report_state.dart';
 
 class MoldingScanBulletinReportLogic extends GetxController {

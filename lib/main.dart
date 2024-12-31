@@ -13,6 +13,7 @@ import 'package:sqflite/sqflite.dart';
 
 import 'bean/http/response/bar_code.dart';
 import 'bean/http/response/production_dispatch_order_detail_info.dart';
+import 'bean/http/response/sap_surplus_material_info.dart';
 import 'constant.dart';
 import 'home/home_view.dart';
 import 'login/login_view.dart';
@@ -30,20 +31,33 @@ main() async {
     getDatabasesPath().then(
       (path) => openDatabase(
         join(path, jdDatabase),
-        version: 2,
+        version: 3,
         onCreate: (db, v) {
           debugPrint('onCreate -----------v=$v');
           db.execute(SaveDispatch.dbCreate);
           db.execute(SaveWorkProcedure.dbCreate);
           db.execute(BarCodeInfo.dbCreate);
+          db.execute(SurplusMaterialLabelInfo.dbCreate);
           db.close();
         },
         onUpgrade: (db, ov, nv) {
           debugPrint('onUpgrade-----------ov=$ov nv=$nv');
-          if (ov < 2) {
-            db.execute(BarCodeInfo.dbCreate);
-            db.close();
+          // 从版本1开始，逐步处理到最新版本的升级操作
+          for (int cv = ov + 1; cv <= nv; cv++) {
+            switch (cv) {
+              case 2: // 版本1升级到版本2
+                debugPrint('版本1升级到版本2');
+                db.execute(BarCodeInfo.dbCreate);
+                break;
+              case 3: // 版本2升级到版本3
+                debugPrint('版本2升级到版本3');
+                db.execute(SurplusMaterialLabelInfo.dbCreate);
+                break;
+              default:
+                break;
+            }
           }
+          db.close();
         },
         onOpen: (db) {
           debugPrint('onOpen-------');
@@ -57,7 +71,8 @@ main() async {
   deviceInfo = await DeviceInfoPlugin().deviceInfo;
 
   runApp(const MyApp());
-
+  // 启用性能叠加层
+  debugProfileBuildsEnabled = true;
   // FlutterHmsScanKit.scan.then(
   //       (result) => {
   //     logger
@@ -110,7 +125,7 @@ class _MyAppState extends State<MyApp> {
         language = locales?.first.languageCode == localeChinese.languageCode
             ? 'zh'
             : 'en';
-        log('当前语音：$locales');
+        debugPrint('当前语音：$locales');
         return null;
       },
       localizationsDelegates: const [
@@ -128,10 +143,10 @@ class _MyAppState extends State<MyApp> {
       //     builder: (context, AsyncSnapshot<UserInfo> snapshot) {
       //       if (snapshot.hasData) {
       //         userController.init(snapshot.requireData);
-      //         logger.f('----------1-----------');
+      //         logger.d('----------1-----------');
       //         return const Home();
       //       } else {
-      //         logger.f('----------2-----------');
+      //         logger.d('----------2-----------');
       //         return const Login();
       //       }
       //     }

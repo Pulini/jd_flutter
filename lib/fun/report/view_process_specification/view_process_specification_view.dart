@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/widget/custom_widget.dart';
+import 'package:jd_flutter/widget/edit_text_widget.dart';
+import 'package:jd_flutter/widget/pdf_view.dart';
+import 'package:jd_flutter/widget/web_page.dart';
 
-import '../../../utils/utils.dart';
-import '../../../widget/custom_widget.dart';
-import '../../../widget/edit_text_widget.dart';
-import '../../../widget/pdf_view.dart';
-import '../../../widget/web_page.dart';
+
 import 'view_process_specification_logic.dart';
 
 class ViewProcessSpecificationPage extends StatefulWidget {

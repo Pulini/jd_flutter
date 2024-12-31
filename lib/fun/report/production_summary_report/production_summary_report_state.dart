@@ -1,7 +1,6 @@
 import 'package:get/get.dart';
-
-import '../../../bean/http/response/production_summary_info.dart';
-import '../../../utils/web_api.dart';
+import 'package:jd_flutter/bean/http/response/production_summary_info.dart';
+import 'package:jd_flutter/utils/web_api.dart';
 
 class ProductionSummaryReportState {
   var tableData = <ProductionSummaryInfo>[].obs;

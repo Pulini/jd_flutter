@@ -2,24 +2,23 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/bean/http/response/leave_visit_record.dart';
+import 'package:jd_flutter/bean/http/response/photoBean.dart';
+import 'package:jd_flutter/bean/http/response/search_people_info.dart';
+import 'package:jd_flutter/bean/http/response/visit_add_record_info.dart';
+import 'package:jd_flutter/bean/http/response/visit_data_list_info.dart';
+import 'package:jd_flutter/bean/http/response/visit_get_detail_info.dart';
+import 'package:jd_flutter/bean/http/response/visit_last_record.dart';
+import 'package:jd_flutter/bean/http/response/visit_photo_bean.dart';
+import 'package:jd_flutter/bean/http/response/visit_place_bean.dart';
 import 'package:jd_flutter/fun/management/visit_register/visit_register_add_view.dart';
 import 'package:jd_flutter/fun/management/visit_register/visit_register_detail_view.dart';
+import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/utils/utils.dart';
-
-import '../../../bean/http/response/leave_visit_record.dart';
-import '../../../bean/http/response/photoBean.dart';
-import '../../../bean/http/response/search_people_info.dart';
-import '../../../bean/http/response/visit_add_record_info.dart';
-import '../../../bean/http/response/visit_data_list_info.dart';
-import '../../../bean/http/response/visit_get_detail_info.dart';
-import '../../../bean/http/response/visit_last_record.dart';
-import '../../../bean/http/response/visit_photo_bean.dart';
-import '../../../bean/http/response/visit_place_bean.dart';
-import '../../../route.dart';
-import '../../../utils/web_api.dart';
-import '../../../widget/custom_widget.dart';
-import '../../../widget/dialogs.dart';
-import '../../../widget/picker/picker_controller.dart';
+import 'package:jd_flutter/utils/web_api.dart';
+import 'package:jd_flutter/widget/custom_widget.dart';
+import 'package:jd_flutter/widget/dialogs.dart';
+import 'package:jd_flutter/widget/picker/picker_controller.dart';
 import 'visit_register_state.dart';
 
 class VisitRegisterLogic extends GetxController {
@@ -145,7 +144,7 @@ class VisitRegisterLogic extends GetxController {
     ).then((response) {
       if (response.resultCode == resultSuccess) {
         state.visitCode.value = response.message!;
-        logger.f(state.visitCode.value);
+        logger.d(state.visitCode.value);
       } else {
         state.visitCode.value = response.message!;
         errorDialog(content: response.message);
@@ -165,7 +164,7 @@ class VisitRegisterLogic extends GetxController {
         }else{  //带数据的新增
 
           if(state.lastAdd){
-            logger.f('带数据的新增');
+            logger.d('带数据的新增');
             state.dataDetail =
                 VisitGetDetailInfo.fromJson(jsonDecode(response.data));
             textIdCard.text = state.dataDetail.iDCard ?? '';
@@ -176,7 +175,7 @@ class VisitRegisterLogic extends GetxController {
             state.upAddDetail.value.examineID = getUserInfo()!.empID.toString();
             state.upAddDetail.value.securityStaff = getUserInfo()!.empID.toString();
           }else{
-            logger.f('走详情界面');
+            logger.d('走详情界面');
             state.dataDetail =
                 VisitGetDetailInfo.fromJson(jsonDecode(response.data));
             state.cardPicture.value = state.dataDetail.cardPic ?? '';
@@ -198,11 +197,11 @@ class VisitRegisterLogic extends GetxController {
 
   addPicture(String bitmapBase64, bool isCome) {
     if (isCome) {
-      logger.f('添加来访图片');
+      logger.d('添加来访图片');
       state.upComePicture
           .add(VisitPhotoBean(photo: bitmapBase64, typeAdd: "1"));
     } else {
-      logger.f('添加离场图片');
+      logger.d('添加离场图片');
       state.upLeavePicture
           .add(VisitPhotoBean(photo: bitmapBase64, typeAdd: "1"));
     }
@@ -238,7 +237,7 @@ class VisitRegisterLogic extends GetxController {
     state.upAddDetail.value.securityStaff = getUserInfo()!.empID.toString();
     state.upAddDetail.value.visitPics = body;
 
-    logger.f(state.upAddDetail.value.toJson());
+    logger.d(state.upAddDetail.value.toJson());
 
     if (!isIDCorrect(state.upAddDetail.value.iDCard.toString())) {
       errorDialog(content: 'visit_search_idCard_error'.tr);
@@ -429,7 +428,7 @@ class VisitRegisterLogic extends GetxController {
             textVisitedDept.text =
                 list[controller.selectedItem].empDepartName.toString();
             textSearch.clear();
-            logger.f("访问部门：${state.upAddDetail.value.visitedDept}");
+            logger.d("访问部门：${state.upAddDetail.value.visitedDept}");
           },
           child: Text(
             'dialog_default_confirm'.tr,

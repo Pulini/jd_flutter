@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/bean/http/response/worker_info.dart';
 import 'package:jd_flutter/fun/dispatching/process_dispatch_register/process_dispatch_register_dialog.dart';
 import 'package:jd_flutter/fun/dispatching/process_dispatch_register/process_dispatch_register_logic.dart';
 import 'package:jd_flutter/fun/dispatching/process_dispatch_register/process_dispatch_register_state.dart';
+import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
-
-import '../../../bean/http/response/worker_info.dart';
-import '../../../constant.dart';
-import '../../../utils/utils.dart';
-import '../../../widget/combination_button_widget.dart';
 
 class ModifyLabelWorkerPage extends StatefulWidget {
   const ModifyLabelWorkerPage({super.key});
@@ -24,20 +21,7 @@ class _ModifyLabelWorkerPageState extends State<ModifyLabelWorkerPage> {
   final ProcessDispatchRegisterState state =
       Get.find<ProcessDispatchRegisterLogic>().state;
 
-  _methodChannel() {
-    debugPrint('注册监听');
-    const MethodChannel(channelScanFlutterToAndroid)
-        .setMethodCallHandler((call) {
-      switch (call.method) {
-        case 'PdaScanner':
-          {
-            logic.getLabelInfo(call.arguments);
-          }
-          break;
-      }
-      return Future.value(call);
-    });
-  }
+
 
   _item(WorkerInfo wi, int index) {
     return Obx(() => GestureDetector(
@@ -84,7 +68,7 @@ class _ModifyLabelWorkerPageState extends State<ModifyLabelWorkerPage> {
   @override
   void initState() {
     super.initState();
-    _methodChannel();
+    pdaScanner(scan: (code)=> logic.getLabelInfo(code));
     getWorkerInfo(
       department: userInfo?.departmentID.toString(),
       workers: (list) => state.workerList.value = list,

@@ -1,17 +1,17 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/bean/http/response/manufacture_instructions_info.dart';
+import 'package:jd_flutter/bean/http/response/order_color_info.dart';
+import 'package:jd_flutter/bean/http/response/production_dispatch_order_detail_info.dart';
+import 'package:jd_flutter/bean/http/response/work_plan_material_info.dart';
+import 'package:jd_flutter/bean/http/response/worker_info.dart';
+import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/widget/custom_widget.dart';
+import 'package:jd_flutter/widget/dialogs.dart';
+import 'package:jd_flutter/widget/edit_text_widget.dart';
+import 'package:jd_flutter/widget/web_page.dart';
 
-import '../../../bean/http/response/manufacture_instructions_info.dart';
-import '../../../bean/http/response/order_color_info.dart';
-import '../../../bean/http/response/production_dispatch_order_detail_info.dart';
-import '../../../bean/http/response/work_plan_material_info.dart';
-import '../../../bean/http/response/worker_info.dart';
-import '../../../utils/utils.dart';
-import '../../../widget/custom_widget.dart';
-import '../../../widget/dialogs.dart';
-import '../../../widget/edit_text_widget.dart';
-import '../../../widget/web_page.dart';
 
 showDispatchList(
   BuildContext context,

@@ -1,9 +1,8 @@
 import 'package:get/get.dart';
-
-import '../../../bean/http/response/visit_add_record_info.dart';
-import '../../../bean/http/response/visit_data_list_info.dart';
-import '../../../bean/http/response/visit_get_detail_info.dart';
-import '../../../bean/http/response/visit_photo_bean.dart';
+import 'package:jd_flutter/bean/http/response/visit_add_record_info.dart';
+import 'package:jd_flutter/bean/http/response/visit_data_list_info.dart';
+import 'package:jd_flutter/bean/http/response/visit_get_detail_info.dart';
+import 'package:jd_flutter/bean/http/response/visit_photo_bean.dart';
 
 class VisitRegisterState {   //接口数据返回
   var dataList = <VisitDataListInfo>[].obs;  //来访数据

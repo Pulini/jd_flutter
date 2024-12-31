@@ -2,11 +2,11 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/bean/http/response/molding_scan_bulletin_report_info.dart';
 import 'package:jd_flutter/route.dart';
+import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/widget/custom_widget.dart';
 
-import '../../../bean/http/response/molding_scan_bulletin_report_info.dart';
-import '../../../utils/utils.dart';
-import '../../../widget/custom_widget.dart';
 import 'molding_scan_bulletin_report_logic.dart';
 import 'molding_scan_bulletin_report_maximize_view.dart';
 
@@ -107,11 +107,9 @@ class _MoldingScanBulletinReportPageState
     );
   }
 
-  tableCard({
-    required MoldingScanBulletinReportInfo data,
-    required Key key,
-    required bool isFirst,
-  }) {
+  tableCard(int index) {
+    MoldingScanBulletinReportInfo data = state.reportInfo[index];
+    Key key = Key('$index');
     var textStyle = const TextStyle(
       fontSize: 20,
       fontWeight: FontWeight.bold,
@@ -119,7 +117,7 @@ class _MoldingScanBulletinReportPageState
 
     return Card(
       key: key,
-      color: isFirst ? Colors.greenAccent : Colors.lime.shade100,
+      color: index == 0 ? Colors.greenAccent : Colors.lime.shade100,
       child: Padding(
         padding:
             const EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 40),
@@ -130,7 +128,7 @@ class _MoldingScanBulletinReportPageState
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  if (isFirst)
+                  if (index == 0)
                     SizedBox(
                       height: 40,
                       child: Center(
@@ -150,7 +148,7 @@ class _MoldingScanBulletinReportPageState
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (isFirst) const SizedBox(height: 40),
+                if (index == 0) const SizedBox(height: 40),
                 Text('molding_scan_bulletin_report_hint1'.tr, style: textStyle),
                 Text('molding_scan_bulletin_report_hint2'.tr, style: textStyle),
                 Text('molding_scan_bulletin_report_hint3'.tr, style: textStyle),
@@ -159,16 +157,35 @@ class _MoldingScanBulletinReportPageState
                 Expanded(
                   child: SingleChildScrollView(
                     scrollDirection: Axis.vertical,
-                    child: isFirst
+                    child: index == 0
                         ? Hero(
                             tag: 'MSBR_table',
                             child: subTable(data.sizeInfo ?? []),
                           )
                         : subTable(data.sizeInfo ?? []),
                   ),
-                )
+                ),
+                if (index != 0) const SizedBox(height: 40),
               ],
-            )
+            ),
+            if (index != 0)
+              Positioned(
+                right: 0,
+                bottom: 0,
+                child: TextButton(
+                  onPressed: () => setState(() => logic.changeSort(
+                        oldIndex: index,
+                        newIndex: 0,
+                      )),
+                  child: Text(
+                    '置顶',
+                    style: TextStyle(
+                      color: Colors.lightBlue,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
           ],
         ),
       ),
@@ -257,12 +274,7 @@ class _MoldingScanBulletinReportPageState
         body: Obx(
           () {
             var cards = <Card>[
-              for (int i = 0; i < state.reportInfo.length; i += 1)
-                tableCard(
-                  data: state.reportInfo[i],
-                  key: Key('$i'),
-                  isFirst: i == 0,
-                ),
+              for (int i = 0; i < state.reportInfo.length; i += 1) tableCard(i),
             ];
             return ReorderableListView(
               shrinkWrap: true,

@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/bean/http/response/molding_pack_area_report_info.dart';
 import 'package:jd_flutter/utils/utils.dart';
-
-import '../../../bean/http/response/molding_pack_area_report_info.dart';
-import '../../../widget/custom_widget.dart';
-import '../../../widget/edit_text_widget.dart';
-import '../../../widget/picker/picker_view.dart';
+import 'package:jd_flutter/widget/custom_widget.dart';
+import 'package:jd_flutter/widget/edit_text_widget.dart';
+import 'package:jd_flutter/widget/picker/picker_view.dart';
 import 'molding_pack_area_report_logic.dart';
 
 class MoldingPackAreaReportPage extends StatefulWidget {

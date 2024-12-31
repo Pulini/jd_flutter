@@ -1,10 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/utils/printer/print_util.dart';
+import 'package:jd_flutter/utils/printer/tsc_util.dart';
 import 'package:jd_flutter/widget/widgets_to_image_wisget.dart';
 
-import '../utils/printer/print_util.dart';
-import '../utils/printer/tsc_util.dart';
 import 'custom_widget.dart';
 import 'dialogs.dart';
 

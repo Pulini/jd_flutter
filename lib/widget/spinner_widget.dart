@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/utils/utils.dart';
 
-import '../utils/utils.dart';
 
 class SpinnerController {
   var select = ''.obs;

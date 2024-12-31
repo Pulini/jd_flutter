@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/management/property/property_detail_view.dart';
-
-import '../../../route.dart';
-import '../../../utils/utils.dart';
-import '../../../utils/web_api.dart';
-import '../../../widget/custom_widget.dart';
-import '../../../widget/dialogs.dart';
-import '../../../widget/picker/picker_controller.dart';
+import 'package:jd_flutter/route.dart';
+import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/widget/custom_widget.dart';
+import 'package:jd_flutter/widget/dialogs.dart';
+import 'package:jd_flutter/widget/picker/picker_controller.dart';
 import 'property_state.dart';
 
 class PropertyLogic extends GetxController
@@ -129,7 +127,6 @@ class PropertyLogic extends GetxController
   }
 
   bool checkData() {
-    logger.f(state.detail.toJson());
     if (state.detail.name?.isEmpty == true) {
       showSnackBar(title: '缺少数据', message: '请输入名称', isWarning: true);
       return false;

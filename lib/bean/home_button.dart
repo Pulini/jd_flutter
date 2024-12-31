@@ -1,4 +1,5 @@
-import '../route.dart';
+import 'package:jd_flutter/route.dart';
+
 import 'http/response/home_function_info.dart';
 
 abstract class ButtonItem {

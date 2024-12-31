@@ -1,9 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:jd_flutter/fun/management/quality_management/quality_management_state.dart';
-
-import '../../../route.dart';
-import '../../../widget/picker/picker_controller.dart';
+import 'package:jd_flutter/route.dart';
+import 'package:jd_flutter/widget/picker/picker_controller.dart';
 
 class QualityManagementLogic extends GetxController {
   final QualityManagementState state = QualityManagementState();

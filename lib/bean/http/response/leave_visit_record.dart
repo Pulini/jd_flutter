@@ -1,5 +1,6 @@
 
-import '../response/photoBean.dart';
+
+import 'photoBean.dart';
 
 class LeaveVisitRecord {
   LeaveVisitRecord({

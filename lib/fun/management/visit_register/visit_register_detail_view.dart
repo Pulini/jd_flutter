@@ -3,13 +3,13 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/bean/http/response/visit_get_detail_info.dart';
+import 'package:jd_flutter/bean/http/response/visit_photo_bean.dart';
 import 'package:jd_flutter/fun/management/visit_register/visit_register_logic.dart';
 import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/widget/custom_widget.dart';
+import 'package:jd_flutter/widget/dialogs.dart';
 
-import '../../../bean/http/response/visit_get_detail_info.dart';
-import '../../../bean/http/response/visit_photo_bean.dart';
-import '../../../widget/custom_widget.dart';
-import '../../../widget/dialogs.dart';
 
 class VisitRegisterDetailPage extends StatefulWidget {
   //来访登记详情页 离场

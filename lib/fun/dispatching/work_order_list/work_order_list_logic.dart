@@ -1,10 +1,10 @@
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/dispatching/work_order_list/part_label_view.dart';
+import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
+import 'package:jd_flutter/widget/dialogs.dart';
+import 'package:jd_flutter/widget/picker/picker_controller.dart';
 
-import '../../../route.dart';
-import '../../../widget/dialogs.dart';
-import '../../../widget/picker/picker_controller.dart';
 import 'work_order_list_state.dart';
 
 class WorkOrderListLogic extends GetxController {

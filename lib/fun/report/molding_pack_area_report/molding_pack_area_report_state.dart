@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
+import 'package:jd_flutter/bean/http/response/molding_pack_area_report_info.dart';
+import 'package:jd_flutter/utils/web_api.dart';
 
-import '../../../bean/http/response/molding_pack_area_report_info.dart';
-import '../../../utils/web_api.dart';
 
 class MoldingPackAreaReportPageState {
   var etInstruction = '';
