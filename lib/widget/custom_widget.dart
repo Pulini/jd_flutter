@@ -372,12 +372,13 @@ expandedTextSpan({
   Color textColor = Colors.blueAccent,
   double fontSize = 14,
   bool isBold = true,
+  int maxLines = 1,
   int flex = 1,
 }) {
   return Expanded(
       flex: flex,
       child: Text.rich(
-        maxLines: 1,
+        maxLines: maxLines,
         overflow: TextOverflow.ellipsis,
         TextSpan(
           children: [
@@ -409,9 +410,10 @@ textSpan({
   Color textColor = Colors.blueAccent,
   double fontSize = 14,
   bool isBold = true,
+  int maxLines = 1,
 }) {
   return Text.rich(
-    maxLines: 1,
+    maxLines: maxLines,
     overflow: TextOverflow.ellipsis,
     TextSpan(
       children: [

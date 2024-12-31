@@ -177,6 +177,20 @@ extension DoubleExt on double? {
   double div(double value) =>
       (Decimal.parse(toString()) / Decimal.parse(value.toString())).toDouble();
 }
+extension Uint8ListExt on Uint8List{
+  toHexString() {
+    var hexString = '';
+    for (int i = 0; i < length; i++) {
+      String hex = this[i].toRadixString(16);
+      if (hex.length == 1) {
+        hexString += '0';
+      }
+      hexString += hex;
+    }
+    return hexString.toUpperCase();
+  }
+}
+
 
 ///File扩展方法
 extension FileExt on File {
@@ -239,6 +253,12 @@ extension StringExt on String? {
       (this ?? '').length <= 13;
 
   String allowWordTruncation() => Characters(this ?? '').join('\u{200B}');
+
+
+  int hexToInt() {
+    return int.parse(this??'', radix: 16);
+  }
+
 }
 
 loggerF(Map<String, dynamic> map) {

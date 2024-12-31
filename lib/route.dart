@@ -36,6 +36,7 @@ import 'fun/warehouse/in/sap_purchase_stock_in/sap_purchase_stock_in_view.dart';
 import 'fun/warehouse/in/sap_surplus_material_stock_in/sap_surplus_material_stock_in_view.dart';
 import 'fun/warehouse/manage/carton_label_scan/carton_label_scan_view.dart';
 import 'fun/warehouse/manage/carton_label_scan_progress/carton_label_scan_progress_view.dart';
+import 'fun/warehouse/manage/sap_wms_split_label/sap_wms_split_label_view.dart';
 import 'fun/warehouse/manage/smart_delivery/smart_delivery_view.dart';
 import 'fun/warehouse/out/sap_print_picking/sap_print_picking_view.dart';
 import 'fun/warehouse/out/sap_production_picking/sap_production_picking_view.dart';
@@ -322,6 +323,13 @@ class RouteConfig {
     const SapWmsReprintLabelsPage(),
   );
 
+  ///sap贴标拆分
+  static Routes sapWmsSplitLabel = Routes(
+    '/sap_wms_split_label',
+    99,
+    const SapWmsSplitLabelPage(),
+  );
+
   ///本地功能入口列表
   static List<Routes> routeList = [
     dailyReport,
@@ -362,6 +370,7 @@ class RouteConfig {
     sapPutOnShelves,
     sapStockTransfer,
     sapWmsReprintLabels,
+    sapWmsSplitLabel,
   ];
 
   static List<GetPage> appRoutes = [
@@ -529,6 +538,10 @@ class RouteConfig {
     GetPage(
       name: sapWmsReprintLabels.name,
       page: () => sapWmsReprintLabels.page,
+    ),
+    GetPage(
+      name: sapWmsSplitLabel.name,
+      page: () => sapWmsSplitLabel.page,
     ),
   ];
 }
