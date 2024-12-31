@@ -363,7 +363,7 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
                 ),
               ),
               TextButton(
-                onPressed: () {},
+                onPressed: () => logic.materialLabelMaintenance(data),
                 style: buttonStyle,
                 child: Text(
                   printText,

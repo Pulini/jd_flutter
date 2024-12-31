@@ -237,19 +237,24 @@ extension StringExt on String? {
       (this ?? '').startsWith('GE') &&
       (this ?? '').length >= 10 &&
       (this ?? '').length <= 13;
+
+  String allowWordTruncation() => Characters(this ?? '').join('\u{200B}');
 }
-loggerF(Map<String, dynamic> map){
-  if(map.toString().length>500){
+
+loggerF(Map<String, dynamic> map) {
+  if (map.toString().length > 500) {
     map['日志类型'] = '异步打印日志';
     compute(_logF, map);
-  }else{
+  } else {
     map['日志类型'] = '直接打印日志';
     logger.f(map);
   }
 }
+
 _logF(Map<String, dynamic> data) {
   logger.f(data);
 }
+
 extension RequestOptionsExt on RequestOptions {
   print() {
     Map<String, dynamic> map = <String, dynamic>{};
@@ -288,7 +293,6 @@ class TapUtil {
     };
   }
 }
-
 
 /// 权限检查
 bool checkUserPermission(String code) {

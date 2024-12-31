@@ -132,7 +132,7 @@ class _PrintLabelPageState extends State<PrintLabelPage> {
   _previewLabel(Barcode data) {
     Get.to(
       () => PreviewLabel(
-        labelWidget: labelTemplate(
+        labelWidget: fixedLabelTemplate(
           qrCode: data.barCode ?? '',
           title: _labelTitle(),
           subTitle: _subTitle(data),
@@ -247,7 +247,7 @@ class _PrintLabelPageState extends State<PrintLabelPage> {
       () => PreviewLabelList(
         labelWidgets: [
           for (var i = 0; i < selected.length; ++i)
-            labelTemplate(
+            fixedLabelTemplate(
               qrCode: selected[i].barCode ?? '',
               title: _labelTitle(),
               subTitle: _subTitle(selected[i]),

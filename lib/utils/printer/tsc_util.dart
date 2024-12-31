@@ -72,6 +72,7 @@ Uint8List _tscBox(int sx, int sy, int ex, int ey, {int? crude = 4}) =>
 ///[y] y坐标
 ///[diameter] 直径
 ///[thickness] 粗细
+// ignore: unused_element
 Uint8List _tscCircle(int x, int y, int diameter, int thickness) =>
     utf8.encode('CIRCLE $x,$y,$diameter,$thickness\r\n');
 
@@ -116,6 +117,7 @@ Uint8List _tscQrCode(
 ///[moduleWidth] 模组宽度，默认为2，范围1 - 10
 ///[sepHt] 分隔符高度，默认为2，可选1或2
 ///[segWidth] UCC/EAN-128的高度，默认为35，单位DOT，范围1-500可选
+// ignore: unused_element
 Uint8List _tscBarCode(
   int x,
   int y,
@@ -137,6 +139,7 @@ Uint8List _tscBarCode(
 ///[xMultiplication] x方向放大倍数
 ///[yMultiplication] y方向放大倍数
 ///[string] 文本
+// ignore: unused_element
 List<int> _tscText(
   int x,
   int y,

@@ -17,9 +17,9 @@ class HomeState {
   var departmentName = ''.obs;
   String search = '';
   var nBarIndex = 0;
-  RxList<ButtonItem> buttons = <ButtonItem>[].obs;
+  var buttons = <ButtonItem>[];
   var selectedItemColor = Colors.white;
-  var navigationBar = <HomeFunctions>[].obs;
+  var navigationBar = <HomeFunctions>[];
 
   HomeState() {
     userPicUrl.value = userInfo?.picUrl ?? '';
@@ -43,7 +43,7 @@ class HomeState {
           ),
         ).then((v1) {
           nBarIndex = 0;
-          navigationBar.value = [
+          navigationBar = [
             for (var b in v1)
               HomeFunctions(
                 className: b.className,

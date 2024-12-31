@@ -1,3 +1,5 @@
+import 'package:jd_flutter/utils/utils.dart';
+
 /// BillNo : "JZ2300102"
 /// BarCode : "20488980010236/002"
 /// MaterialOtherName : []
@@ -79,6 +81,7 @@ class LabelInfo {
       json['Items'].forEach((v) {
         items?.add(LabelSizeInfo.fromJson(v));
       });
+      items?.sort((a, b) => a.size.toDoubleTry().compareTo(b.size.toDoubleTry()));
     }
   }
   bool select=false;

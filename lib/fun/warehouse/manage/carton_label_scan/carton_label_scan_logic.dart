@@ -38,6 +38,7 @@ class CartonLabelScanLogic extends GetxController {
     for (var v in state.cartonInsideLabelList) {
       v.scanned = 0;
     }
+    state.scannedLabelTotal.value =0;
     state.cartonInsideLabelList.refresh();
   }
 
@@ -61,9 +62,8 @@ class CartonLabelScanLogic extends GetxController {
         );
         if (exist.scanned < exist.labelCount!) {
           insideCode.call(code);
-          exist.scanned++;
+          exist.scanned+=1;
           state.scannedLabelTotal.value += 1;
-          // state.cartonInsideLabelList.refresh();
         } else {
           insideExpired.call();
           if (Get.isDialogOpen == true) Get.back();

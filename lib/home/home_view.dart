@@ -1,4 +1,3 @@
-import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -10,6 +9,8 @@ import 'package:jd_flutter/widget/dialogs.dart';
 import 'home_logic.dart';
 import 'home_setting_view.dart';
 
+const _logo = 'assets/images/ic_logo.png';
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -20,8 +21,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final logic = Get.put(HomeLogic());
   final state = Get.find<HomeLogic>().state;
-  var controller = EasyRefreshController(controlFinishRefresh: true);
-  var logo = 'assets/images/ic_logo.png';
 
   _appBar() {
     return AppBar(
@@ -41,7 +40,7 @@ class _HomePageState extends State<HomePage> {
           borderRadius: BorderRadius.circular(20),
         ),
         placeholder: 'home_top_search'.tr,
-        onChanged: (v) => logic.search(v),
+        onChanged: (v) => setState(() => logic.search(v)),
       ),
       backgroundColor: Colors.transparent,
       actions: [
@@ -53,6 +52,122 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  _item(ButtonItem item) {
+    return Card(
+      color: item is HomeButton ? Colors.white : Colors.blue.shade50,
+      child: item is HomeButton
+          ? HomeSubItem(isGroup: false, item: item)
+          : ExpansionTile(
+              backgroundColor: Colors.white,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+              ),
+              leading: Image.network(
+                (item as HomeButtonGroup).icon,
+                width: 50,
+                height: 50,
+                color: Colors.blueAccent,
+                errorBuilder: (ctx, err, stackTrace) => Image.asset(
+                  _logo,
+                  height: 30,
+                  width: 30,
+                  color: Colors.blueAccent,
+                ),
+              ),
+              title: Text(item.name),
+              subtitle: Text(item.description),
+              children: [
+                for (var item in item.functionGroup) ...[
+                  const Divider(indent: 20, endIndent: 20),
+                  HomeSubItem(isGroup: true, item: item)
+                ]
+              ],
+            ),
+    );
+  }
+
+  _navigationBar(HomeFunctions bar) {
+    return BottomNavigationBarItem(
+      icon: Image.network(
+       bar.icon ?? '',
+        width: 30,
+        height: 30,
+        color: bar.getTextColor(),
+        errorBuilder: (ctx, err, stackTrace) => Image.asset(
+          _logo,
+          height: 30,
+          width: 30,
+          color:  bar.getTextColor(),
+        ),
+      ),
+      label: bar.className ?? 'Fun',
+      backgroundColor: bar.getBKGColor(),
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await getVersionInfo(
+        false,
+        noUpdate: () async {
+          loadingDialog('读取功能列表中...');
+          await logic.refreshFunList(
+            refresh: () => setState(() {
+              loadingDismiss();
+            }),
+          );
+        },
+        needUpdate: (versionInfo) => doUpdate(versionInfo),
+      );
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: backgroundColor,
+      child: state.navigationBar.isEmpty
+          ? Scaffold(
+              backgroundColor: Colors.transparent,
+              appBar: _appBar(),
+            )
+          : Scaffold(
+              backgroundColor: Colors.transparent,
+              appBar: _appBar(),
+              body: ListView.builder(
+                padding: const EdgeInsets.all(8),
+                itemCount: state.buttons.length,
+                itemBuilder: ( context,  index) =>
+                    _item(state.buttons[index]),
+              ),
+              bottomNavigationBar: BottomNavigationBar(
+                type: BottomNavigationBarType.shifting,
+                items: [
+                  for (var bar in state.navigationBar) _navigationBar(bar)
+                ],
+                currentIndex: state.nBarIndex,
+                selectedItemColor: state.navigationBar[0].getTextColor(),
+                onTap: (i) => setState(() => logic.navigationBarClick(i)),
+              ),
+            ),
+    );
+  }
+
+  @override
+  void dispose() {
+    Get.delete<HomeLogic>();
+    super.dispose();
+  }
+}
+
+class HomeSubItem extends StatelessWidget {
+  const HomeSubItem({super.key, required this.isGroup, required this.item});
+
+  final bool isGroup;
+  final HomeButton item;
+
   Color _color(HomeButton item) {
     return item.hasUpdate
         ? Colors.green[200]!
@@ -61,7 +176,8 @@ class _HomePageState extends State<HomePage> {
             : Colors.grey;
   }
 
-  _listTile(bool isGroup, HomeButton item) {
+  @override
+  Widget build(BuildContext context) {
     return ListTile(
       onTap: () => item.hasUpdate
           ? upData()
@@ -74,12 +190,12 @@ class _HomePageState extends State<HomePage> {
               : Get.toNamed(item.route),
       enabled: item.hasUpdate ? true : item.hasPermission,
       leading: Image.network(
-        item.icon,
+      item.icon,
         width: isGroup ? 30 : 40,
         height: isGroup ? 30 : 40,
         color: _color(item),
-        errorBuilder: (ctx, err, stackTrace) => Image.asset(
-          logo,
+        errorBuilder: (context, url, error) => Image.asset(
+          _logo,
           width: isGroup ? 30 : 40,
           height: isGroup ? 30 : 40,
           color: _color(item),
@@ -92,133 +208,19 @@ class _HomePageState extends State<HomePage> {
               crossAxisAlignment: WrapCrossAlignment.center,
               direction: Axis.vertical,
               children: [
-                Icon(Icons.cloud_upload, color: Colors.green[200]),
-                Text('home_button_has_update'.tr,
-                    style: TextStyle(
-                      color: _color(item),
-                      fontSize: 10,
-                    )),
+                Icon(Icons.cloud_upload, color: Colors.green.shade200),
+                Text(
+                  'home_button_has_update'.tr,
+                  style: TextStyle(
+                    color: _color(item),
+                    fontSize: 10,
+                  ),
+                ),
               ],
             )
           : item.hasPermission
               ? const Icon(Icons.arrow_forward_ios, size: 15)
               : Text('home_button_no_permission'.tr),
     );
-  }
-
-  _item(ButtonItem item, int index) {
-    return Card(
-      color: item is HomeButton ? Colors.white : Colors.blue.shade50,
-      child: item is HomeButton
-          ? _listTile(false, item)
-          : ExpansionTile(
-              backgroundColor: Colors.white,
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-              ),
-              leading: Image.network(
-                (item as HomeButtonGroup).icon,
-                width: 50,
-                height: 50,
-                color: Colors.blueAccent,
-                errorBuilder: (ctx, err, stackTrace) => Image.asset(
-                  logo,
-                  height: 30,
-                  width: 30,
-                  color: Colors.blueAccent,
-                ),
-              ),
-              title: Text(item.name),
-              subtitle: Text(item.description),
-              children: [
-                for (var item in item.functionGroup)
-                  Column(
-                    children: [
-                      const Divider(indent: 20, endIndent: 20),
-                      _listTile(true, item),
-                    ],
-                  )
-              ],
-            ),
-    );
-  }
-
-  _navigationBar(HomeFunctions bar) {
-    return BottomNavigationBarItem(
-      icon: Image.network(
-        bar.icon ?? '',
-        width: 30,
-        height: 30,
-        color: bar.getTextColor(),
-        errorBuilder: (bc, o, st) => Image.asset(
-          logo,
-          height: 30,
-          width: 30,
-          color: bar.getTextColor(),
-        ),
-      ),
-      label: bar.className ?? 'Fun',
-      backgroundColor: bar.getBKGColor(),
-    );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      getVersionInfo(
-        false,
-        noUpdate: () {
-          loadingDialog('读取功能列表中...');
-          logic.refreshFunList(refresh: () =>Get.back());
-        },
-        needUpdate: (versionInfo) => doUpdate(versionInfo),
-      );
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: backgroundColor,
-      child: Obx(
-        () => Scaffold(
-          backgroundColor: Colors.transparent,
-          appBar: _appBar(),
-          body: EasyRefresh(
-            controller: controller,
-            header: const MaterialHeader(),
-            onRefresh: () => logic.refreshFunList(
-              refresh: () => controller.finishRefresh(),
-            ),
-            child: ListView.builder(
-              padding: const EdgeInsets.all(8),
-              itemCount: state.buttons.length,
-              itemBuilder: (BuildContext context, int index) =>
-                  _item(state.buttons[index], index),
-            ),
-          ),
-          bottomNavigationBar: state.navigationBar.isEmpty
-              ? null
-              : BottomNavigationBar(
-                  // type: BottomNavigationBarType.fixed,
-                  type: BottomNavigationBarType.shifting,
-                  items: [
-                    for (var bar in state.navigationBar) _navigationBar(bar)
-                  ],
-                  currentIndex: state.nBarIndex,
-                  selectedItemColor: state.navigationBar[0].getTextColor(),
-                  onTap: (i) => logic.navigationBarClick(i),
-                ),
-        ),
-      ),
-    );
-  }
-
-  @override
-  void dispose() {
-    Get.delete<HomeLogic>();
-    controller.dispose();
-    super.dispose();
   }
 }

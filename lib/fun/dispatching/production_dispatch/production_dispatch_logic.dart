@@ -23,7 +23,8 @@ class ProductionDispatchLogic extends GetxController {
   ///日期选择器的控制器
   var dpcStartDate = DatePickerController(
     PickerType.startDate,
-    saveKey: '${RouteConfig.workerProductionReport.name}${PickerType.startDate}',
+    saveKey:
+        '${RouteConfig.workerProductionReport.name}${PickerType.startDate}',
   )..firstDate = DateTime(
       DateTime.now().year - 5, DateTime.now().month, DateTime.now().day);
 
@@ -63,7 +64,8 @@ class ProductionDispatchLogic extends GetxController {
     state.orderList.refresh();
     refreshBottomButtons();
   }
-  refreshBottomButtons(){
+
+  refreshBottomButtons() {
     var hasSelect = state.orderList.any((e) => e.select);
     state.cbIsEnabledMaterialList.value = hasSelect;
     state.cbIsEnabledInstruction.value = hasSelect;
@@ -174,17 +176,33 @@ class ProductionDispatchLogic extends GetxController {
   labelMaintenance() {
     if (checkUserPermission('1051106')) {
       state.getSelectOne((v) {
-        Get.to(
-            ()=> const MaintainLabelPage(),
-          arguments: {
-            'materialCode': v.materialCode,
-            'interID': v.interID,
-            'isMaterialLabel': false,
-          },
-        );
+        Get.to(() => const MaintainLabelPage(), arguments: {
+          'materialCode': v.materialCode,
+          'interID': v.interID,
+          'isMaterialLabel': false,
+        });
       });
     } else {
-      showSnackBar(title: 'snack_bar_default_wrong'.tr, message: '您没有标签打印权限', isWarning: true);
+      showSnackBar(
+          title: 'snack_bar_default_wrong'.tr,
+          message: '您没有标签打印权限',
+          isWarning: true);
+    }
+  }
+
+  ///物料贴标维护
+  materialLabelMaintenance(ProductionDispatchOrderInfo data) {
+    if (checkUserPermission('1051106')) {
+      Get.to(() => const MaintainLabelPage(), arguments: {
+        'materialCode': data.materialCode,
+        'interID': data.interID,
+        'isMaterialLabel': true,
+      });
+    } else {
+      showSnackBar(
+          title: 'snack_bar_default_wrong'.tr,
+          message: '您没有标签打印权限',
+          isWarning: true);
     }
   }
 
@@ -201,7 +219,10 @@ class ProductionDispatchLogic extends GetxController {
       if (list.isNotEmpty) {
         callback.call(list);
       } else {
-        showSnackBar(title: 'snack_bar_default_wrong'.tr, message: '无物料头信息', isWarning: true);
+        showSnackBar(
+            title: 'snack_bar_default_wrong'.tr,
+            message: '无物料头信息',
+            isWarning: true);
       }
     });
   }
@@ -283,27 +304,27 @@ class ProductionDispatchLogic extends GetxController {
           } else {
             state.workCardTitle.value = data.workCardTitle ?? WorkCardTitle();
             state.batchWorkProcedure = data.workCardList!;
-            var workProcedure=<WorkCardList>[];
+            var workProcedure = <WorkCardList>[];
             groupBy(data.workCardList!, (v) => v.processNumber).forEach((k, v) {
-              var qty=0.0;
-              var finishQty=0.0;
-              var mustQty=0.0;
+              var qty = 0.0;
+              var finishQty = 0.0;
+              var mustQty = 0.0;
               for (var v2 in v) {
-                qty=qty.add(v2.qty??0);
-                finishQty=finishQty.add(v2.finishQty??0);
-                mustQty=mustQty.add(v2.mustQty??0);
+                qty = qty.add(v2.qty ?? 0);
+                finishQty = finishQty.add(v2.finishQty ?? 0);
+                mustQty = mustQty.add(v2.mustQty ?? 0);
               }
               workProcedure.add(WorkCardList(
-                  mustQty:mustQty,
-                  qty:qty,
-                  finishQty:finishQty,
-                  processNumber:v[0].processNumber,
-                  processName:v[0].processName,
-                  isOpen:v.any((v3)=>v3.isOpen==1)?1:0,
-                  routingID:v[0].routingID,
+                mustQty: mustQty,
+                qty: qty,
+                finishQty: finishQty,
+                processNumber: v[0].processNumber,
+                processName: v[0].processName,
+                isOpen: v.any((v3) => v3.isOpen == 1) ? 1 : 0,
+                routingID: v[0].routingID,
               ));
             });
-            state.workProcedure.value=workProcedure;
+            state.workProcedure.value = workProcedure;
             Get.to(() => const ProductionDispatchDetailPage());
           }
         },

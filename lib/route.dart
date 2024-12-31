@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/fun/warehouse/in/sap_picking_receipt_reversal/sap_picking_receipt_reversal_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/sap_put_on_shelves/sap_put_on_shelves_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/sap_stock_transfer/sap_stock_transfer_view.dart';
+import 'package:jd_flutter/fun/warehouse/manage/sap_wms_reprint_labels/sap_wms_reprint_labels_view.dart';
 
 import 'bean/home_button.dart';
 import 'bean/routes.dart';
@@ -314,6 +315,13 @@ class RouteConfig {
     const SapStockTransferPage(),
   );
 
+  ///sap贴标重打
+  static Routes sapWmsReprintLabels = Routes(
+    '/sap_wms_reprint_labels',
+    99,
+    const SapWmsReprintLabelsPage(),
+  );
+
   ///本地功能入口列表
   static List<Routes> routeList = [
     dailyReport,
@@ -353,6 +361,7 @@ class RouteConfig {
     sapPickingReceiptReversal,
     sapPutOnShelves,
     sapStockTransfer,
+    sapWmsReprintLabels,
   ];
 
   static List<GetPage> appRoutes = [
@@ -516,6 +525,10 @@ class RouteConfig {
     GetPage(
       name: sapStockTransfer.name,
       page: () => sapStockTransfer.page,
+    ),
+    GetPage(
+      name: sapWmsReprintLabels.name,
+      page: () => sapWmsReprintLabels.page,
     ),
   ];
 }

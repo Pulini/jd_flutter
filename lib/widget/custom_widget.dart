@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -573,12 +574,11 @@ avatarPhoto(String? url) {
 
 ///标准格式标签模版
 ///75*45大小
-labelTemplate({
+fixedLabelTemplate({
   required String qrCode,
   Widget? title,
   Widget? subTitle,
   Widget? content,
-  Widget? subContent,
   Widget? bottomLeft,
   Widget? bottomMiddle,
   Widget? bottomRight,
@@ -694,6 +694,183 @@ labelTemplate({
   );
 }
 
+dynamicLabelTemplate({
+  required String qrCode,
+  Widget? title,
+  Widget? subTitle,
+  Widget? header,
+  Widget? table,
+  Widget? footer,
+}) {
+  var bs = const BorderSide(color: Colors.black, width: 1.5);
+  var titleWidget = Container(
+    decoration: BoxDecoration(border: Border(bottom: bs)),
+    child: Row(
+      children: [
+        Container(
+          decoration: BoxDecoration(border: Border(right: bs)),
+          child: QrImageView(
+            data: qrCode,
+            padding: const EdgeInsets.all(5),
+            version: QrVersions.auto,
+          ),
+        ),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Container(
+                decoration: BoxDecoration(border: Border(bottom: bs)),
+                child: Center(
+                  child: Text(
+                    qrCode,
+                    style: const TextStyle(
+                      fontSize: 8,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 2,
+                child: Container(
+                  decoration: BoxDecoration(border: Border(bottom: bs)),
+                  child: title ?? const Text(''),
+                ),
+              ),
+              Expanded(
+                flex: 3,
+                child: subTitle ?? const Text(''),
+              ),
+            ],
+          ),
+        ),
+      ],
+    ),
+  );
+
+  return Container(
+    color: Colors.white,
+    width: 75 * 5.5,
+    child: Padding(
+      padding: const EdgeInsets.all(4),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: Colors.black,
+            width: 1.5,
+          ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            SizedBox(
+              height: 19 * 5.5,
+              child: titleWidget,
+            ),
+            if (header != null) header,
+            if (table != null) ...[const SizedBox(height: 5), table],
+            if (footer != null) ...[footer, const SizedBox(height: 5)],
+          ],
+        ),
+      ),
+    ),
+  );
+}
+
+List<List<String>> labelTableFormat({
+  required String title,
+  required String bottom,
+  required Map<String, List<List<String>>> list,
+}) {
+  if (list.isEmpty) return [];
+
+  List<List<String>> result = [];
+  // 取出所有尺码
+  List<String> titleList = [];
+  List<String> columnsTitleList = [];
+
+  list.forEach((k, v) {
+    for (var t in v) {
+      if (!titleList.contains(t[0])) {
+        titleList.add(t[0]);
+      }
+    }
+  });
+
+  titleList.sort((a, b) => a.toDoubleTry().compareTo(b.toDoubleTry()));
+
+  // 指令缺的尺码做补位处理
+  list.forEach((k, v) {
+    List<List<String>> text = [];
+    for (var t in titleList) {
+      try {
+        text.add(v.firstWhere((v) => v[0] == t));
+      } catch (e) {
+        text.add([t, '']);
+      }
+    }
+    v.clear();
+    v.addAll(text);
+  });
+
+  List<List<String>> printList = [];
+
+  // 保存表格列第一格
+  columnsTitleList.add(title);
+  // 添加表格头行
+  printList.add([for (var s in titleList) s]);
+
+  // 添加表格体
+  list.forEach((k, v) {
+    // 保存表格列第一格
+    columnsTitleList.add(k);
+    // 添加表格行
+    printList.add([for (var data in v) data[1]]);
+  });
+
+  // 保存表格列第一格
+  columnsTitleList.add(bottom);
+  var print = <String>[];
+  // 保存表格最后一行
+  titleList.forEachIndexed((i, v) {
+    double sum = 0.0;
+    list.forEach((key, value) {
+      if (i < titleList.length) {
+        sum = sum.add(value[i][1].toDoubleTry());
+      }
+    });
+    print.add(sum.toShowString());
+  });
+  // 添加表格尾行
+  printList.add(print);
+
+  const max = 6;
+  final maxColumns = (titleList.length / max).ceil();
+
+  for (int i = 0; i < maxColumns; i++) {
+    // 添加表格
+    printList.forEachIndexed((index, data) {
+      var s = i * max;
+      var t = i * max + max;
+      List<String> subData = [];
+      // 添加行表头
+      subData.add(columnsTitleList[index]);
+      // 添加行
+      subData.addAll(data.sublist(
+        s,
+        s < data.length && t <= data.length ? t : data.length,
+      ));
+      result.add(subData);
+    });
+    if (i < maxColumns - 1) {
+      // 加入空行用于区分表格换行
+      result.add([]);
+    }
+  }
+  return result;
+}
+
 selectView({
   required List<dynamic> list,
   required FixedExtentScrollController controller,
@@ -764,4 +941,3 @@ selectView({
             : Row(children: [textSpan(hint: hint, text: list[0].toString())]),
   );
 }
-

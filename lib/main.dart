@@ -72,7 +72,8 @@ main() async {
   deviceInfo = await DeviceInfoPlugin().deviceInfo;
 
   runApp(const MyApp());
-
+  // 启用性能叠加层
+  debugProfileBuildsEnabled = true;
   // FlutterHmsScanKit.scan.then(
   //       (result) => {
   //     logger

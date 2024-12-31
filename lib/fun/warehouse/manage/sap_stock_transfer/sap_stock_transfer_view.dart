@@ -99,11 +99,9 @@ class _SapStockTransferPageState extends State<SapStockTransferPage> {
               () => textSpan(hint: '库位：', text: state.location.value),
             ),
           ),
-          Obx(
-            () => EditText(
-              hint: '请扫描目的库位标签或托盘标签',
-              controller: logic.locationOrPalletController,
-            ),
+          EditText(
+            hint: '请扫描目的库位标签或托盘标签',
+            controller: logic.locationOrPalletController,
           ),
           Expanded(
             child: Obx(

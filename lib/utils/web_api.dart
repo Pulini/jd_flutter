@@ -205,9 +205,11 @@ Future<BaseData> _doHttp({
           if (baseData.resultCode == 2) {
             logger.e('需要重新登录');
             spSave(spSaveUserInfo, '');
+            if (loading != null && loading.isNotEmpty) loadingDismiss();
             reLoginPopup();
           } else if (baseData.resultCode == 3) {
             logger.e('需要更新版本');
+            if (loading != null && loading.isNotEmpty) loadingDismiss();
             upData();
           } else {
             handler.next(response);
@@ -868,4 +870,5 @@ const webApiSapProductionReceiptWriteOff = 'sap/zapp/ZFUN_APP_PO_CANCEL_1500A';
 ///sap获取推荐库位
 const webApiSapGetRecommendLocation = 'sap/zapp/ZWMS_LOCATION_RECOMMEND';
 
-
+///sap获取贴标列表
+const  webApiSAPGetLabels = 'sap/zapp/ZFUN_APP_BARCODE_PRINT';

@@ -1086,7 +1086,7 @@ _setMaterialLanguages(
   });
 }
 
-showSelectMaterialPopup(List<String> list, Function(String) callback) {
+selectMaterialDialog(List<String> list, Function(String) callback) {
   var controller = FixedExtentScrollController();
   Get.dialog(
     PopScope(
@@ -1094,6 +1094,48 @@ showSelectMaterialPopup(List<String> list, Function(String) callback) {
       canPop: false,
       child: AlertDialog(
         title: Text('选择尺码'),
+        content: SizedBox(
+          width: 200,
+          height: 100,
+          child: getCupertinoPicker(
+            list.map((data) {
+              return Center(child: Text(data));
+            }).toList(),
+            controller,
+          ),
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Get.back();
+              callback.call(list[controller.selectedItem]);
+            },
+            child: Text('dialog_default_confirm'.tr),
+          ),
+          TextButton(
+            onPressed: () {
+              Get.back();
+            },
+            child: Text(
+              'dialog_default_cancel'.tr,
+              style: const TextStyle(color: Colors.grey),
+            ),
+          ),
+        ],
+      ),
+    ),
+    barrierDismissible: false, //拦截dialog外部点击
+  );
+}
+
+selectLanguageDialog({required List<String> list, required Function(String) callback}) {
+  var controller = FixedExtentScrollController();
+  Get.dialog(
+    PopScope(
+      //拦截返回键
+      canPop: false,
+      child: AlertDialog(
+        title: Text('选择语言'),
         content: SizedBox(
           width: 200,
           height: 100,
