@@ -84,11 +84,11 @@ class _LoginPickState extends State<LoginPick>
 
   ///手机登录手机号输入框控制器
   var phoneLoginPhoneController = TextEditingController()
-    ..text = useTestUrl ? '15868587600' : spGet(spSaveLoginPhone) ?? '';
+    ..text = useTestUrl ? '15267733701' : spGet(spSaveLoginPhone) ?? '';
 
   ///手机登录密码输入框控制器
   var phoneLoginPasswordController = TextEditingController()
-    ..text = useTestUrl ? '123456' : '';
+    ..text = useTestUrl ? '111111' : '';
 
   ///手机登录验证码输入框控制器
   late var phoneLoginVCodeController = TextEditingController()

@@ -235,7 +235,7 @@ class RouteConfig {
   );
 
   ///仓库调拨
-  static Routes warehouseAllocationPage = Routes(
+  static Routes warehouseAllocation = Routes(
     '/warehouse_allocation_page',
     99,
     const WarehouseAllocationPage(),
@@ -300,25 +300,7 @@ class RouteConfig {
     workerProductionDetail,
     viewProcessSpecification,
     moldingPackAreaReport,
-    moldingScanBulletinReportPage,
-    visitRegisterPage,
-    productionDispatchPage,
-    productionDispatchDetailPage,
-    propertyPage,
-    productionMaterialsReportPage,
-    workOrderListPage,
-    partProcessScanPage,
-    materialDispatchPage,
-    machineDispatchPage,
-    machineDispatchReportPage,
-    packingScanPage,
-    qualityRestrictionPage,
-    processDispatchRegisterPage,
-    smartDeliveryPage,
-    cartonLabelScanPage,
-    cartonLabelScanProgressPage,
-    warehouseAllocationPage
-    moldingScanBulletinReport,
+    warehouseAllocation,
     visitRegister,
     productionDispatch,
     productionDispatchDetail,
@@ -487,8 +469,8 @@ class RouteConfig {
       page: () => sapSurplusMaterialStockIn.page,
     ),
     GetPage(
-      name: warehouseAllocationPage.name,
-      page: () => warehouseAllocationPage.page,
+      name: warehouseAllocation.name,
+      page: () => warehouseAllocation.page,
     ),
   ];
 }

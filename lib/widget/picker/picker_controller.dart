@@ -29,6 +29,7 @@ enum PickerType {
   date,
   startDate,
   endDate,
+  stockList,
 }
 
 abstract class PickerController {
@@ -81,8 +82,12 @@ abstract class PickerController {
         return 'picker_type_start_date'.tr;
       case PickerType.endDate:
         return 'picker_type_end_date'.tr;
+      case PickerType.stockList:
+        return 'picker_type_mes_stock_list'.tr;
       default:
+
         return 'Picker';
+
     }
   }
 
@@ -124,6 +129,8 @@ abstract class PickerController {
         return getMesMoldingPackArea;
       case PickerType.mesGroup:
         return getMeGroup;
+      case PickerType.stockList:
+        return getMesStockList;
       default:
         return getDataListError;
     }
@@ -633,6 +640,44 @@ abstract class PickerController {
       return response.message;
     }
   }
+
+  ///获取Mes仓库
+  Future getMesStockList() async {
+    var response = await httpGet(method: webApiPickerMesStockList,params: {
+      'OrganizeID': getUserInfo()!.organizeID,
+    });
+    if (response.resultCode == resultSuccess) {
+      try {
+        List<LinkPickerItem> list = [
+          if (hasAll)
+            MesStockInfo(
+                itemID:-1,
+                name:'全部',
+                stockList:[
+                  StockItem(
+                      itemID:-1,
+                      name:'全部'
+                  )
+                ],
+            )
+        ];
+        list.addAll(await compute(
+          parseJsonToList<MesStockInfo>,
+          ParseJsonParams<MesStockInfo>(
+            response.data,
+            MesStockInfo.fromJson,
+          ),
+        ));
+        return list;
+      } on Error catch (e) {
+        logger.e(e);
+        return 'json_format_error'.tr;
+      }
+    } else {
+      return response.message;
+    }
+  }
+
 }
 
 class OptionsPickerController extends PickerController {

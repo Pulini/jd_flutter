@@ -11,7 +11,7 @@ class QualityManagementLogic extends GetxController {
   ///部门选择器的控制器
   var pickerControllerDepartment = OptionsPickerController(
     PickerType.mesDepartment,
-    saveKey: '${RouteConfig.qualityRestrictionPage.name}${PickerType.mesDepartment}',
+    saveKey: '${RouteConfig.qualityRestriction.name}${PickerType.mesDepartment}',
   );
 
   ///日期选择器的控制器

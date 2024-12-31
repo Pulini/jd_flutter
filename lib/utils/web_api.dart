@@ -356,6 +356,9 @@ const webApiPickerSapGroup = 'api/User/GetDepListByEmpID';
 ///获取sap工厂及仓库列表接口
 const webApiPickerSapFactoryAndWarehouse = 'api/Stock/GetSAPFactoryStockInfo';
 
+///获取MES仓库列表
+const webApiPickerMesStockList = 'api/Stock/GetStockList';
+
 ///获取sap仓库库位列表接口
 const webApiPickerSapWarehouseStorageLocation =
     'api/InStockTrackingNum/GetWarehouseStorageLocationList';
@@ -846,4 +849,6 @@ const webApiDelExBill = 'api/QMProcessFlowEx/DelExBill';
 ///扫码添加成型集装箱出货
 const webApiSapScanAdd = "sap/zapp/ZMM_RES_ZXCFSM_D";
 
+///获取汇总表
+const webApiNewGetSubmitBarCodeReport = "api/ScanJobBooking/NewGetSubmitBarCodeReport";
 

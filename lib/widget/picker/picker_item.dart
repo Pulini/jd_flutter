@@ -524,3 +524,68 @@ class PickerMesGroup extends PickerItem {
     return departmentName??'';
   }
 }
+
+class MesStockInfo extends LinkPickerItem {
+  MesStockInfo({
+    required this.itemID,
+    required this.name,
+    required this.stockList,
+  });
+
+  MesStockInfo.fromJson(dynamic json) {
+    name = json['Name'];
+    itemID = json['ItemID'];
+    if (json['EntryList'] != null) {
+      stockList = [];
+      json['EntryList'].forEach((v) {
+        stockList?.add(StockItem.fromJson(v));
+      });
+    }
+  }
+
+  int? itemID;
+  String? name;
+  List<StockItem>? stockList;
+
+  @override
+  String pickerId() {
+    return (itemID ??-1).toString();
+  }
+
+  @override
+  String pickerName() {
+    return name ?? '';
+  }
+
+  @override
+  List<PickerItem> subList() {
+    return stockList ?? [];
+  }
+}
+
+class StockItem extends PickerItem {
+  StockItem({
+    required this.itemID,
+    required this.name,
+  });
+
+  StockItem.fromJson(dynamic json) {
+    itemID = json['ItemID'];
+    name = json['Name'];
+  }
+
+  int? itemID;
+  String? name;
+
+
+  @override
+  String pickerId() {
+    return (itemID ?? -1).toString();
+  }
+
+  @override
+  String pickerName() {
+    return name ?? '';
+  }
+}
+
