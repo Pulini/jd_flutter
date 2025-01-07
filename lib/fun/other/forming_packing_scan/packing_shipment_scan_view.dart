@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/other/forming_packing_scan/packing_scan_logic.dart';
-import 'package:jd_flutter/widget/custom_widget.dart';
 
-
+import '../../../../widget/custom_widget.dart';
+import '../../../constant.dart';
 
 class PackingShipmentScanPage extends StatefulWidget {
   const PackingShipmentScanPage({super.key});
@@ -25,21 +26,23 @@ class _PackingShipmentScanPageState extends State<PackingShipmentScanPage> {
           backgroundColor: Colors.transparent,
           appBar: AppBar(
             backgroundColor: Colors.transparent,
-            title: Text('packing_shipment_scan_title'.tr),
+            title: Text('成型出货装箱扫码'.tr),
           ),
           body: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Text('柜号：${state.cabinetNumber}'),
+              Text('柜号：${state.showCabinetNumber}'),
               Obx(
-                () => Text('条码：${state.cabinetNumber}'),
+                () => Text('条码：${state.showCabinetNumber.value}'),
               ),
-              Expanded(child: Row(
-                children: [expandedFrameText(
-                  text: '订单号',
-                  backgroundColor: Colors.blue.shade50,
-                  flex: 1,
-                ),
+              Expanded(
+                  child: Row(
+                children: [
+                  expandedFrameText(
+                    text: '订单号',
+                    backgroundColor: Colors.blue.shade50,
+                    flex: 3,
+                  ),
                   expandedFrameText(
                     text: '已发/应出',
                     backgroundColor: Colors.blue.shade50,
@@ -47,9 +50,39 @@ class _PackingShipmentScanPageState extends State<PackingShipmentScanPage> {
                   )
                 ],
               )),
+              Expanded(child: Stack())
               // Obx(()=> )
             ],
           )),
     );
+  }
+
+  _methodChannel() {
+    print('注册监听');
+    const MethodChannel(channelScanFlutterToAndroid)
+        .setMethodCallHandler((call) {
+      switch (call.method) {
+        case 'PdaScanner':
+          {
+            switch (state.checkCode(
+              code: call.arguments.toString(),
+              success: () => {},
+            )) {
+              case 0:
+                {}
+              case 1:
+                {}
+            }
+          }
+          break;
+      }
+      return Future.value(call);
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _methodChannel();
   }
 }

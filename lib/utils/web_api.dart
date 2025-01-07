@@ -358,6 +358,9 @@ const webApiPickerSapGroup = 'api/User/GetDepListByEmpID';
 ///获取sap工厂及仓库列表接口
 const webApiPickerSapFactoryAndWarehouse = 'api/Stock/GetSAPFactoryStockInfo';
 
+///获取MES仓库列表
+const webApiPickerMesStockList = 'api/Stock/GetStockList';
+
 ///获取sap仓库库位列表接口
 const webApiPickerSapWarehouseStorageLocation =
     'api/InStockTrackingNum/GetWarehouseStorageLocationList';
@@ -843,6 +846,15 @@ const webApiSapGetStockInReport = 'sap/zapp/ZFUN_APP_PO_LIST_1500A';
 ///sap注塑入库单提交入库
 const webApiSapInjectionMoldingStockIn = 'sap/zapp/ZFUN_APP_PO_POST_1500A';
 
+///删除品质异常
+const webApiDelExBill = 'api/QMProcessFlowEx/DelExBill';
+
+///扫码添加成型集装箱出货
+const webApiSapScanAdd = "sap/zapp/ZMM_RES_ZXCFSM_D";
+
+///获取汇总表
+const webApiNewGetSubmitBarCodeReport = "api/ScanJobBooking/NewGetSubmitBarCodeReport";
+
 ///sap料头入库历史记录
 const webApiSapSurplusMaterialHistory = 'sap/zapp/ZFUN_GET_LTRUKU';
 
@@ -875,3 +887,6 @@ const  webApiSapGetLabels = 'sap/zapp/ZFUN_APP_BARCODE_PRINT';
 
 ///sap根据原标获取新标
 const  webApiSapGetNewLabel = 'sap/zapp/ZWMS_BARCODE_SPLIT';
+
+///提交条形码数据,自动生成调拨单
+const  webApiUploadWarehouseAllocation = "api/BarCode/SubmitBarCode2CkRequisitionSlipCollectBillNew";

@@ -14,11 +14,11 @@ class AddEntryDetailInfo {
       this.billDate,
       this.empID,
       this.empNumber,
-      this.fQty, 
-      this.fExceptionID, 
+      this.qty,
+      this.exceptionID,
       this.exceptionName, 
-      this.fExceptionLevel, 
-      this.fReCheck,});
+      this.exceptionLevel,
+      this.reCheck,});
 
   AddEntryDetailInfo.fromJson(dynamic json) {
     exNumber = json['exNumber'];
@@ -26,22 +26,22 @@ class AddEntryDetailInfo {
     empID = json['empID'];
     empName = json['empName'];
     empNumber = json['empNumber'];
-    fQty = json['FQty'];
-    fExceptionID = json['FExceptionID'];
+    qty = json['qty'];
+    exceptionID = json['exceptionID'];
     exceptionName = json['exceptionName'];
-    fExceptionLevel = json['FExceptionLevel'];
-    fReCheck = json['FReCheck'];
+    exceptionLevel = json['exceptionLevel'];
+    reCheck = json['reCheck'];
   }
   String? exNumber;
   String? billDate;
   int? empID;
   String? empName;
   String? empNumber;
-  double? fQty;
-  int? fExceptionID;
+  double? qty;
+  int? exceptionID;
   String? exceptionName;
-  int? fExceptionLevel;
-  String? fReCheck;
+  String? exceptionLevel;
+  String? reCheck;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -50,11 +50,11 @@ class AddEntryDetailInfo {
     map['billDate'] = billDate;
     map['empName'] = empName;
     map['empNumber'] = empNumber;
-    map['FQty'] = fQty;
-    map['FExceptionID'] = fExceptionID;
+    map['qty'] = qty;
+    map['exceptionID'] = exceptionID;
     map['exceptionName'] = exceptionName;
-    map['FExceptionLevel'] = fExceptionLevel;
-    map['FReCheck'] = fReCheck;
+    map['exceptionLevel'] = exceptionLevel;
+    map['reCheck'] = reCheck;
     return map;
   }
 

@@ -40,7 +40,10 @@ class _QualityRestrictionPageState extends State<QualityRestrictionPage> {
           //整个面板都可以点击
           headerBuilder: (BuildContext context, bool isExpanded) {
             return ListTile(
-              title: Text('销售订单号：${item.orderNumber}',style: const TextStyle(fontSize: 13),),
+              title: Text(
+                '销售订单号：${item.orderNumber}',
+                style: const TextStyle(fontSize: 13),
+              ),
             );
           },
           body: ListView.builder(
@@ -61,6 +64,7 @@ class _QualityRestrictionPageState extends State<QualityRestrictionPage> {
               child: InkWell(
                   onTap: () {
                     state.arrangementData(index);
+                    state.itemId = "-1";
                     state.getProcessFlowEXTypes(
                         index: index,
                         error: (msg) => {errorDialog(content: msg)});
@@ -82,7 +86,7 @@ class _QualityRestrictionPageState extends State<QualityRestrictionPage> {
                         expandedTextSpan(
                             hint: '数量：',
                             text: item.abnormalQualityInfo![index].qty
-                                    .toString()),
+                                .toString()),
                         expandedTextSpan(
                             hint: '行号：',
                             text: item.abnormalQualityInfo![index].entryID
@@ -116,39 +120,54 @@ class _QualityRestrictionPageState extends State<QualityRestrictionPage> {
               width: 3,
             ),
           ),
-          child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  expandedTextSpan(
-                      hint: '编号：',
-                      text: state.showEntryDataList[index].exNumber ?? ''),
-                  expandedTextSpan(
-                      hint: '质检时间：',
-                      text: state.showEntryDataList[index].billDate ?? ''),
-                  expandedTextSpan(
-                      hint: '质检人：',
-                      text:
-                          "${state.showEntryDataList[index].empName}(${state.showEntryDataList[index].empNumber})" ),
-                  expandedTextSpan(
-                      textColor:
-                          state.showEntryDataList[index].reCheck!.contains("合格")
-                              ? Colors.green.shade900
-                              : Colors.red,
-                      hint: '状态：',
-                      text: state.showEntryDataList[index].reCheck ?? ''),
-                  expandedTextSpan(
-                      hint: '数量：',
-                      text:
-                          "${state.showEntryDataList[index].qty} <${state.showEntryDataList[index].exceptionLevel}>"),
-                  expandedTextSpan(
-                      hint: '缺陷：',
-                      text:
-                          "<${state.showEntryDataList[index].exceptionName}>" ),
-                ],
-              )),
+          child: GestureDetector(
+            onLongPress: ()=>{
+              askDialog(
+                content: '确定要删除该异常吗?',
+                confirm: () => {
+                  state.delBill(
+                    position: index,
+                    success: (msg, position) => successDialog(
+                        content: msg, back: state.removeBill(position)),
+                    error: (msg) => errorDialog(content: msg),
+                  ),
+                },
+              ),
+            },
+            child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    expandedTextSpan(
+                        hint: '编号：',
+                        text: state.showEntryDataList[index].exNumber ?? ''),
+                    expandedTextSpan(
+                        hint: '质检时间：',
+                        text: state.showEntryDataList[index].billDate ?? ''),
+                    expandedTextSpan(
+                        hint: '质检人：',
+                        text:
+                            "${state.showEntryDataList[index].empName}(${state.showEntryDataList[index].empNumber})"),
+                    expandedTextSpan(
+                        textColor:
+                            state.showEntryDataList[index].reCheck == "合格"
+                                ? Colors.green.shade900
+                                : Colors.red,
+                        hint: '状态：',
+                        text: state.showEntryDataList[index].reCheck ?? ''),
+                    expandedTextSpan(
+                        hint: '数量：',
+                        text:
+                            "${state.showEntryDataList[index].qty.toShowString()} <${state.showEntryDataList[index].exceptionLevel == "0" ? '轻微' : '严重'}>"),
+                    expandedTextSpan(
+                        hint: '缺陷：',
+                        text:
+                            "<${state.showEntryDataList[index].exceptionName}>"),
+                  ],
+                )),
+          ),
         ),
       ),
     );
@@ -165,7 +184,7 @@ class _QualityRestrictionPageState extends State<QualityRestrictionPage> {
           onTap: () => {
             state.selected.value = index,
             state.dialogMiss.value = false,
-            state.entryID = state.exceptionDataList[index].fItemID.toString(),
+            state.itemId = state.exceptionDataList[index].fItemID.toString(),
             if (state.isAutomatic)
               {
                 Future.delayed(const Duration(seconds: 1), () {
@@ -248,7 +267,7 @@ class _QualityRestrictionPageState extends State<QualityRestrictionPage> {
     required Function(bool) onChanged,
   }) {
     return Container(
-        margin: const EdgeInsets.only(left: 5, top: 5, bottom: 5),
+      margin: const EdgeInsets.only(left: 5, top: 5, bottom: 5),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
@@ -434,7 +453,7 @@ class _QualityRestrictionPageState extends State<QualityRestrictionPage> {
         },
         child: Center(
             child: Container(
-                margin: const EdgeInsets.only(left: 5, top: 5, right: 0, bottom: 5),
+          margin: const EdgeInsets.only(left: 5, top: 5, right: 0, bottom: 5),
           decoration: BoxDecoration(
               color: Colors.red, borderRadius: BorderRadius.circular(10)),
           alignment: Alignment.center,
@@ -492,14 +511,7 @@ class _QualityRestrictionPageState extends State<QualityRestrictionPage> {
           EditText(hint: '输入跟踪号', onChanged: (s) => {state.order = s}),
           DatePicker(pickerController: logic.pcStartDate),
           DatePicker(pickerController: logic.pcEndDate),
-          SwitchButton(
-            onChanged: (isSelect) {
-              setState(() => state.isOutsourcing = isSelect);
-              spSave('${Get.currentRoute}/QualityOutsourcing', isSelect);
-            },
-            name: '是否委外',
-            value: state.isOutsourcing,
-          ),
+          OptionsPicker(pickerController: logic.pickerControllerDepartment),
           SwitchButton(
             onChanged: (isSelect) {
               setState(() => state.isAutomatic = isSelect);
@@ -509,13 +521,18 @@ class _QualityRestrictionPageState extends State<QualityRestrictionPage> {
             value: state.isAutomatic,
           )
         ],
-        query: () => state.getProductionProcessInfo(
-              mtoNo: 'J2003237',
-              outsourcing: state.isOutsourcing,
-              error: (msg) => {
-                errorDialog(content: msg),
-              },
-            ),
+        query: () => {
+              state.itemId = "-1",
+              state.getProductionProcessInfo(
+                deptID: logic.pickerControllerDepartment.selectedId.value,
+                mtoNo: state.order,
+                startTime: logic.pcStartDate.getDateFormatYMD(),
+                endTime: logic.pcEndDate.getDateFormatYMD(),
+                error: (msg) => {
+                  errorDialog(content: msg),
+                },
+              ),
+            },
         body: Obx(() => Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -623,5 +640,11 @@ class _QualityRestrictionPageState extends State<QualityRestrictionPage> {
                 const SizedBox(width: 10),
               ],
             )));
+  }
+
+  @override
+  void dispose() {
+    Get.delete<QualityManagementLogic>();
+    super.dispose();
   }
 }

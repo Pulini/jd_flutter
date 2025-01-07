@@ -1,9 +1,9 @@
 import 'package:get/get.dart';
+import 'package:jd_flutter/fun/other/hydroelectric_excess/hydroelectric_excess_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/sap_picking_receipt_reversal/sap_picking_receipt_reversal_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/sap_put_on_shelves/sap_put_on_shelves_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/sap_stock_transfer/sap_stock_transfer_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/sap_wms_reprint_labels/sap_wms_reprint_labels_view.dart';
-
 import 'bean/home_button.dart';
 import 'bean/routes.dart';
 import 'fun/dispatching/machine_dispatch/machine_dispatch_report_view.dart';
@@ -42,6 +42,7 @@ import 'fun/warehouse/out/sap_print_picking/sap_print_picking_view.dart';
 import 'fun/warehouse/out/sap_production_picking/sap_production_picking_view.dart';
 import 'fun/warehouse/out/sap_relocation_picking/sap_relocation_picking_view.dart';
 import 'fun/warehouse/out/sap_sales_shipment/sap_sales_shipment_view.dart';
+import 'fun/warehouse/warehouse_allocation/warehouse_allocation_view.dart';
 import 'home/home_view.dart';
 import 'login/login_view.dart';
 import 'utils/web_api.dart';
@@ -232,6 +233,20 @@ class RouteConfig {
     const CartonLabelScanProgressPage(),
   );
 
+  ///水电抄度
+  static Routes hydroelectricExcessPage = Routes(
+    '/hydroelectric_excess_page',
+    99,
+    const HydroelectricExcessPage(),
+  );
+
+  ///仓库调拨
+  static Routes warehouseAllocation = Routes(
+    '/warehouse_allocation_page',
+    99,
+    const WarehouseAllocationPage(),
+  );
+
   ///sap采购入库
   static Routes sapPurchaseStockIn = Routes(
     '/sap_purchase_stock_in',
@@ -340,7 +355,7 @@ class RouteConfig {
     workerProductionDetail,
     viewProcessSpecification,
     moldingPackAreaReport,
-    moldingScanBulletinReport,
+    warehouseAllocation,
     visitRegister,
     productionDispatch,
     productionDispatchDetail,
@@ -514,6 +529,10 @@ class RouteConfig {
     GetPage(
       name: sapSurplusMaterialStockIn.name,
       page: () => sapSurplusMaterialStockIn.page,
+    ),
+    GetPage(
+      name: warehouseAllocation.name,
+      page: () => warehouseAllocation.page,
     ),
     GetPage(
       name: sapProduceStockIn.name,

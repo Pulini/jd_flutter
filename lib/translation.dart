@@ -106,6 +106,7 @@ class Translation extends Translations {
           'picker_type_sap_work_center_new': 'SAP工作中心(新)',
           'picker_type_sap_group': 'SAP组别',
           'picker_type_sap_factory_warehouse': 'SAP工厂仓库',
+          'picker_type_mes_stock_list': 'MES仓库列表',
           'picker_type_sap_warehouse_storage_location': 'SAP仓库库位',
           'picker_type_mes_work_shop': 'MES车间',
           'picker_type_mes_department': 'MES部门',
@@ -388,7 +389,7 @@ class Translation extends Translations {
           'visit_search_record_phone': '电话号码:',
           'visit_search_record_car': '车牌号码:',
           'quality_management_number': '请输入工号',
-
+          'warehouse_allocation_input': '手动录入登记',
 
         },
         localeEnglish.toString(): {
@@ -483,6 +484,7 @@ class Translation extends Translations {
           'picker_type_sap_work_center_new': 'SAP Work Center(New)',
           'picker_type_sap_group': 'SAP Group',
           'picker_type_sap_factory_warehouse': 'SAP Factory Warehouse',
+          'picker_type_mes_stock_list': 'MES Stock List',
           'picker_type_sap_warehouse_storage_location': 'SAP Factory Location',
           'picker_type_mes_work_shop': 'MES Work Shop',
           'picker_type_mes_department': 'MES Department',
@@ -802,6 +804,7 @@ class Translation extends Translations {
           'visit_search_record_phone': 'Phone:',
           'visit_search_record_car': 'Car No:',
           'quality_management_number': 'Please enter the job number',
+          'warehouse_allocation_input': 'Manually enter and register',
         }
       };
 }

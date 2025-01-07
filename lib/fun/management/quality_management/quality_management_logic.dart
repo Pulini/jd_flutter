@@ -7,6 +7,12 @@ import 'package:jd_flutter/widget/picker/picker_controller.dart';
 class QualityManagementLogic extends GetxController {
   final QualityManagementState state = QualityManagementState();
 
+  ///部门选择器的控制器
+  var pickerControllerDepartment = OptionsPickerController(
+    PickerType.mesDepartment,
+    saveKey: '${RouteConfig.qualityRestriction.name}${PickerType.mesDepartment}',
+  );
+
   ///日期选择器的控制器
   var pcStartDate = DatePickerController(
     PickerType.startDate,

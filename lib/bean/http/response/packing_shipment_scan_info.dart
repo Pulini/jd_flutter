@@ -7,15 +7,15 @@ class PackingShipmentScanInfo {
 
   PackingShipmentScanInfo.fromJson(dynamic json) {
 
-    if (json['GTITEMS'] != null) {
+    if (json['gtItems'] != null) {
       GT_ITEMS = [];
-      json['ReportList'].forEach((v) {
+      json['gtItems'].forEach((v) {
         GT_ITEMS?.add(gtItems.fromJson(v));
       });
     }
-    if (json['GTITEMS2'] != null) {
+    if (json['gtItems2'] != null) {
       GT_ITEMS2 = [];
-      json['BarCodeList'].forEach((v) {
+      json['gtItems2'].forEach((v) {
         GT_ITEMS2?.add(gtItems2.fromJson(v));
       });
     }
@@ -83,7 +83,7 @@ class gtItems2 {
   });
 
   String? ZCTNLABEL; //外箱条码
-  double? ZZKHPO2; //订单号
+  String? ZZKHPO2; //订单号
   String? VBELN_VL; //交货号
 
   gtItems2.fromJson(dynamic json) {

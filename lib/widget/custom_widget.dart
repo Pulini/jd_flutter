@@ -32,6 +32,7 @@ pageBody({
   return Container(
     decoration: backgroundColor,
     child: Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.transparent,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -123,6 +124,7 @@ pageBodyWithDrawer({
   return Container(
     decoration: backgroundColor,
     child: Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.transparent,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
