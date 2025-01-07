@@ -58,9 +58,6 @@ dependencies:
   crypto: ^3.0.3
   #白屏启动页工具
   flutter_native_splash: ^2.3.2
-  #华为hms扫码库
-  #  flutter_hms_scan_kit: ^1.1.2
-  #  flutter_scankit: ^2.0.3
   #国际化 时间选择器需要此包来显示汉化文本
   flutter_localizations:
     sdk: flutter
@@ -97,22 +94,16 @@ dependencies:
   path: ^1.9.0
   #手写签字控件
   hand_signature: ^3.0.3
-  #控件转图片
-#  widgets_to_image: ^1.0.0
   #二维码生成
   qr_flutter: ^4.1.0
   #PDF控件
   flutter_cached_pdfview: ^0.4.2
   #音频播放器
   audioplayers: ^6.1.0
-
   #item侧滑控件
   flutter_slidable: ^3.1.1
-#  cached_network_image: ^3.4.1
-  #进度条插件
-#  flutter_reactive_ble: ^5.3.1
-#  flutter_blue_plus: ^1.31.15
-#  flutter_blue_elves: ^0.1.9
+  #二维码扫描
+  mobile_scanner: ^6.0.2
 
 #强制使用固定版本插件
 dependency_overrides:

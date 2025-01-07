@@ -63,7 +63,7 @@ class _SapWmsReprintLabelsPageState extends State<SapWmsReprintLabelsPage> {
                   isBold: false,
                   textColor: Colors.grey,
                 ),
-                Text('${label.quantity.toShowString()}${label.unit}'),
+                Text('${label.quantity}${label.unit}'),
               ],
             ),
           ],
@@ -202,7 +202,7 @@ class _SapWmsReprintLabelsPageState extends State<SapWmsReprintLabelsPage> {
                 // logic.scanCode(
                 //   warehouse:
                 //       factoryWarehouseController.getOptionsPicker2().pickerId(),
-                //   code: 'GE10001777',
+                //   code: 'GE10023400',
                 // );
               },
             ),
