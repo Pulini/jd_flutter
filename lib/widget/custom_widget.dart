@@ -50,6 +50,7 @@ pageBody({
 pageBodyWithBottomSheet({
   String? title,
   List<Widget>? actions,
+  bool? isShow,
   required List<Widget> bottomSheet,
   required Function query,
   required Widget? body,
@@ -347,7 +348,7 @@ Future<T?> showSheet<T>(
     elevation: 0,
     backgroundColor: bodyColor,
     shape: RoundedRectangleBorder(borderRadius: borderRadius),
-    barrierColor: Colors.black.withValues(alpha: 0.25),
+    barrierColor: Colors.black.withOpacity(0.25),
     constraints: BoxConstraints(
         maxHeight: MediaQuery.of(context).size.height -
             MediaQuery.of(context).viewInsets.top),

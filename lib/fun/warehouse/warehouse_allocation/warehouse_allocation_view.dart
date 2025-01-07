@@ -23,8 +23,6 @@ class _WarehouseAllocationPageState extends State<WarehouseAllocationPage> {
   final logic = Get.put(WarehouseAllocationLogic());
   final state = Get.find<WarehouseAllocationLogic>().state;
 
-
-
   ///出仓库
   var outStockList = LinkOptionsPickerController(
     PickerType.stockList,
@@ -145,29 +143,17 @@ class _WarehouseAllocationPageState extends State<WarehouseAllocationPage> {
               ),
             ),
           ),
-          Container(
-            height: 40,
-            width: double.maxFinite,
-            margin: const EdgeInsets.all(10),
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue,
-                padding: const EdgeInsets.only(left: 8, right:20),
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                ),
+          SizedBox(
+            width: double.infinity,
+            child: CombinationButton(
+              text: '提交',
+              click: () => logic.goReport(
+                onStockId: onStockList.getOptionsPicker2().pickerId(),
+                outStockId: outStockList.getOptionsPicker2().pickerId(),
               ),
-              onPressed: () {
-                logic.goReport(
-                  onStockId: onStockList.getOptionsPicker2().pickerId(),
-                  outStockId: outStockList.getOptionsPicker2().pickerId(),
-                );
-              },
-              child: const Text('提 交',
-                  style: TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.bold)),
             ),
           )
+
         ],
       ),
     );

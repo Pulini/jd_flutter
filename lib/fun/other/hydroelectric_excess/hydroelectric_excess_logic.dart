@@ -3,4 +3,11 @@ import 'package:jd_flutter/fun/other/hydroelectric_excess/hydroelectric_excess_s
 
 class HydroelectricExcessLogic extends GetxController {
   final HydroelectricExcessState state = HydroelectricExcessState();
+
+
+
+  searchData() {
+    state.getWaterEnergyMachine();
+  }
+
 }

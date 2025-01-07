@@ -1,11 +1,6 @@
-import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/other/forming_packing_scan/packing_scan_state.dart';
-import 'package:jd_flutter/fun/other/forming_packing_scan/packing_shipment_scan_view.dart';
-import '../../../../bean/http/response/packing_shipment_scan.dart';
-import '../../../../bean/http/response/packing_shipment_scan_info.dart';
 import '../../../../route.dart';
-import '../../../../utils/web_api.dart';
 import '../../../../widget/dialogs.dart';
 import '../../../../widget/picker/picker_controller.dart';
 

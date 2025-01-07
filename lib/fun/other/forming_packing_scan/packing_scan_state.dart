@@ -120,13 +120,13 @@ class PackingScanState {
     required Function(String msg) error,
   }) {
     sapPost(method: webApiSapScanAdd, body: {
-       'ZCTNLABEL': code, //外箱标
-       'VBELN_VL': deliveryNumber, //交货
-       'ZZKHPO2': orderNumber, //订单号
-       'ZBILLER': getUserInfo()!.number, //制单人
-       'ZZKHXH1': showCabinetNumber, //柜号
-       'ZHGCCRQ': showCabinetNumber, //发货日期},
-     }).then((response) {
+      'ZCTNLABEL': code, //外箱标
+      'VBELN_VL': deliveryNumber, //交货
+      'ZZKHPO2': orderNumber, //订单号
+      'ZBILLER': getUserInfo()!.number, //制单人
+      'ZZKHXH1': showCabinetNumber, //柜号
+      'ZHGCCRQ': showCabinetNumber, //发货日期},
+    }).then((response) {
       Future.delayed(const Duration(seconds: 1), () {  //延迟一秒执行
         if (response.resultCode == resultSuccess) {
 

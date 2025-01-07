@@ -887,3 +887,12 @@ const  webApiSAPGetLabels = 'sap/zapp/ZFUN_APP_BARCODE_PRINT';
 
 ///提交条形码数据,自动生成调拨单
 const  webApiUploadWarehouseAllocation = "api/BarCode/SubmitBarCode2CkRequisitionSlipCollectBillNew";
+
+///获取设备信息
+const  webApiGetWaterEnergyMachine = "api/SsDormitory/GetWaterEnergyMachine";
+
+///获取抄度数据
+const webApiGetWaterEnergyMachineDetail = "api/SsDormitory/GetWaterEnergyMachineDetail";
+
+///提交水电表抄度
+const webApiSubmitSsWaterEnergyMachineDetail = "api/SsDormitory/SubmitSsWaterEnergyMachineDetail";

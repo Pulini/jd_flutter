@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/fun/warehouse/warehouse_allocation/warehouse_allocation_logic.dart';
 import 'package:jd_flutter/fun/warehouse/warehouse_allocation/warehouse_allocation_state.dart';
 import '../../../bean/http/response/report_info.dart';
+import '../../../widget/combination_button_widget.dart';
 import '../../../widget/custom_widget.dart';
 
 class WarehouseShareReportPage extends StatefulWidget {
@@ -65,24 +66,12 @@ class _WarehouseShareReportPageState extends State<WarehouseShareReportPage> {
                   ),
                 ),
               ),
-            ), Container(
-              height: 40,
-              width: double.maxFinite,
-              margin: const EdgeInsets.all(5),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
-                  padding: const EdgeInsets.only(left: 8, right: 8),
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                  ),
-                ),
-                onPressed: () {
-                  logic.submit();
-                },
-                child: const Text('提 交',
-                    style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold)),
+            ),
+            SizedBox(
+              width: double.infinity,
+              child: CombinationButton(
+                text: '提交',
+                click: () => logic.submit(),
               ),
             )
           ],

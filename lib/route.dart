@@ -233,7 +233,7 @@ class RouteConfig {
   );
 
   ///水电抄度
-  static Routes hydroelectricExcessPage = Routes(
+  static Routes hydroelectricExcess = Routes(
     '/hydroelectric_excess_page',
     99,
     const HydroelectricExcessPage(),
@@ -377,6 +377,7 @@ class RouteConfig {
     sapPutOnShelves,
     sapStockTransfer,
     sapWmsReprintLabels,
+    hydroelectricExcess,
   ];
 
   static List<GetPage> appRoutes = [
@@ -548,6 +549,10 @@ class RouteConfig {
     GetPage(
       name: sapWmsReprintLabels.name,
       page: () => sapWmsReprintLabels.page,
+    ),
+    GetPage(
+      name: hydroelectricExcess.name,
+      page: () => hydroelectricExcess.page,
     ),
   ];
 }
