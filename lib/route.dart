@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:jd_flutter/fun/maintenance/sap_ink_color_matching/sap_ink_color_matching_view.dart';
 import 'package:jd_flutter/fun/other/hydroelectric_excess/hydroelectric_excess_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/sap_picking_receipt_reversal/sap_picking_receipt_reversal_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/sap_put_on_shelves/sap_put_on_shelves_view.dart';
@@ -345,6 +346,13 @@ class RouteConfig {
     const SapWmsSplitLabelPage(),
   );
 
+  ///sap油墨调色
+  static Routes sapInkColorMatching = Routes(
+    '/sap_ink_color_matching',
+    99,
+    const SapInkColorMatchingPage(),
+  );
+
   ///本地功能入口列表
   static List<Routes> routeList = [
     dailyReport,
@@ -355,8 +363,9 @@ class RouteConfig {
     workerProductionDetail,
     viewProcessSpecification,
     moldingPackAreaReport,
-    warehouseAllocation,
+    moldingScanBulletinReport,
     visitRegister,
+    moldingScanBulletinReportMaximize,
     productionDispatch,
     productionDispatchDetail,
     property,
@@ -372,6 +381,8 @@ class RouteConfig {
     smartDelivery,
     cartonLabelScan,
     cartonLabelScanProgress,
+    hydroelectricExcessPage,
+    warehouseAllocation,
     sapPurchaseStockIn,
     sapProductionPicking,
     sapPrintPicking,
@@ -386,6 +397,7 @@ class RouteConfig {
     sapStockTransfer,
     sapWmsReprintLabels,
     sapWmsSplitLabel,
+    sapInkColorMatching,
   ];
 
   static List<GetPage> appRoutes = [
@@ -435,6 +447,10 @@ class RouteConfig {
       page: () => moldingScanBulletinReport.page,
     ),
     GetPage(
+      name: visitRegister.name,
+      page: () => visitRegister.page,
+    ),
+    GetPage(
       name: moldingScanBulletinReportMaximize.name,
       page: () => moldingScanBulletinReportMaximize.page,
     ),
@@ -453,10 +469,6 @@ class RouteConfig {
     GetPage(
       name: productionMaterialsReport.name,
       page: () => productionMaterialsReport.page,
-    ),
-    GetPage(
-      name: visitRegister.name,
-      page: () => visitRegister.page,
     ),
     GetPage(
       name: workOrderList.name,
@@ -503,6 +515,14 @@ class RouteConfig {
       page: () => cartonLabelScanProgress.page,
     ),
     GetPage(
+      name: hydroelectricExcessPage.name,
+      page: () => hydroelectricExcessPage.page,
+    ),
+    GetPage(
+      name: warehouseAllocation.name,
+      page: () => warehouseAllocation.page,
+    ),
+    GetPage(
       name: sapPurchaseStockIn.name,
       page: () => sapPurchaseStockIn.page,
     ),
@@ -531,10 +551,6 @@ class RouteConfig {
       page: () => sapSurplusMaterialStockIn.page,
     ),
     GetPage(
-      name: warehouseAllocation.name,
-      page: () => warehouseAllocation.page,
-    ),
-    GetPage(
       name: sapProduceStockIn.name,
       page: () => sapProduceStockIn.page,
     ),
@@ -561,6 +577,10 @@ class RouteConfig {
     GetPage(
       name: sapWmsSplitLabel.name,
       page: () => sapWmsSplitLabel.page,
+    ),
+    GetPage(
+      name: sapInkColorMatching.name,
+      page: () => sapInkColorMatching.page,
     ),
   ];
 }

@@ -890,3 +890,15 @@ const  webApiSapGetNewLabel = 'sap/zapp/ZWMS_BARCODE_SPLIT';
 
 ///提交条形码数据,自动生成调拨单
 const  webApiUploadWarehouseAllocation = "api/BarCode/SubmitBarCode2CkRequisitionSlipCollectBillNew";
+
+///sap油墨调色单查询
+const  webApiSapGetInkColorMatchOrder = 'sap/zapp/ZFUN_APP_YM_QUERY';
+
+///sap油墨获取物料列表及型体判断
+const  webApiSapCheckInkColorMatchTypeBody = 'sap/zapp/ZFUN_APP_YM_MATNR';
+
+///sap创建油墨调色单
+const  webApiSapCreateInkColorMatch= 'sap/zapp/ZFUN_APP_YM_WOFNR';
+
+///sap油墨调色单试做结果提交
+const  webApiSapSubmitTrialFinish= 'sap/zapp/ZFUN_APP_YM_RESULT';

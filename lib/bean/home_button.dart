@@ -1,5 +1,5 @@
+import 'package:flutter/cupertino.dart';
 import 'package:jd_flutter/route.dart';
-
 import 'http/response/home_function_info.dart';
 
 abstract class ButtonItem {
@@ -35,6 +35,7 @@ class HomeButton extends ButtonItem {
     required this.hasPermission,
   }) {
     for(var r in RouteConfig.routeList){
+      debugPrint('route=${r.name} version=$version ${r.version}');
       if(r.name==route){
         hasUpdate = version > r.version;
         break;
@@ -73,8 +74,8 @@ List<ButtonItem> formatButton(List<HomeFunctions> data) {
                 classify: navigation.className ?? '',
                 icon: sub.icon ?? '',
                 id: sub.id ?? 0,
-                // version: sub.version ?? 0,
-                version: 98,
+                version: sub.version ?? 0,
+                // version: 98,
                 route: sub.routeSrc ?? '',
                 // hasPermission: sub.hasPermission ?? false,
                 hasPermission: true,
@@ -88,15 +89,17 @@ List<ButtonItem> formatButton(List<HomeFunctions> data) {
           classify: navigation.className ?? '',
           icon: fun.functionGroup![0].icon ?? '',
           id: fun.functionGroup![0].id ?? 0,
-          // version: fun.functionGroup![0].version ?? 0,
-          version: 98,
+          version: fun.functionGroup![0].version ?? 0,
+          // version: 98,
           route: fun.functionGroup![0].routeSrc ?? '',
           // hasPermission: fun.functionGroup![0].hasPermission ?? false,
           hasPermission: true,
         ));
       }
+
     }
     functions.addAll(list);
+
   }
   return functions;
 }

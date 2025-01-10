@@ -109,14 +109,13 @@ class _MoldingScanBulletinReportPageState
 
   tableCard(int index) {
     MoldingScanBulletinReportInfo data = state.reportInfo[index];
-    Key key = Key('$index');
     var textStyle = const TextStyle(
       fontSize: 20,
       fontWeight: FontWeight.bold,
     );
 
     return Card(
-      key: key,
+      key: ValueKey('${data.moID}'),
       color: index == 0 ? Colors.greenAccent : Colors.lime.shade100,
       child: Padding(
         padding:
@@ -259,6 +258,19 @@ class _MoldingScanBulletinReportPageState
                       : Colors.white,
                   () => logic.setRefresh(10),
                 )),
+            Obx(() => circleButton(
+                  const Text(
+                    '永不',
+                    style: TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  state.refreshDuration.value == -1
+                      ? Colors.greenAccent
+                      : Colors.white,
+                  () => logic.setRefresh(-1),
+                )),
             const Text('>'),
             const SizedBox(width: 50),
             circleButton(
@@ -267,7 +279,7 @@ class _MoldingScanBulletinReportPageState
                 color: Colors.white,
               ),
               Colors.blueAccent,
-              () => logic.refreshTable(isRefresh: false),
+              () => logic.refreshTable( false),
             ),
           ],
         ),

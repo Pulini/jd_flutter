@@ -115,6 +115,7 @@ pageBodyWithBottomSheet({
 
 ///页面简单框架 右侧弹出Drawer
 pageBodyWithDrawer({
+  Key? scaffoldKey,
   String? title,
   List<Widget>? actions,
   required List<Widget> queryWidgets,
@@ -124,6 +125,7 @@ pageBodyWithDrawer({
   return Container(
     decoration: backgroundColor,
     child: Scaffold(
+      key: scaffoldKey,
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.transparent,
       appBar: AppBar(

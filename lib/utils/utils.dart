@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 import 'package:crypto/crypto.dart';
 import 'package:decimal/decimal.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -162,6 +163,15 @@ extension DoubleExt on double? {
       return '0';
     } else {
       return Decimal.parse(toString()).toString();
+    }
+  }
+  String toMaxString() {
+    if (this == null) {
+      return '0';
+    } else {
+      // 将 Decimal 转换为 num 类型，然后使用 toStringAsFixed 方法
+      num value = this!;
+      return value.toStringAsFixed(6).replaceAll(RegExp(r'0+$'), '').replaceAll(RegExp(r'\.$'), '');
     }
   }
 
@@ -601,3 +611,4 @@ weighbridgeListener({
     return Future.value(call);
   });
 }
+randomDouble(double min, double max) => min + Random().nextDouble() * (max - min);

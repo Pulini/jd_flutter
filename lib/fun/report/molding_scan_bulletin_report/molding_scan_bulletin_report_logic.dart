@@ -16,22 +16,26 @@ class MoldingScanBulletinReportLogic extends GetxController {
   setRefresh(int duration) {
     state.refreshDuration.value = duration;
     spSave(spSaveMoldingScanBulletinReportTimeDuration, duration);
+    refreshTable(true);
   }
 
-  refreshTable({bool isRefresh = true}) {
+  refreshTable(bool isRefresh) {
     timer?.cancel();
     timer = null;
     state.getMoldingScanBulletinReport(
       departmentID: userInfo?.departmentID ?? 0,
+      isRefresh: isRefresh,
       isGetAllList: isRefresh
           ? Get.currentRoute == RouteConfig.moldingScanBulletinReport.name
           : true,
       error: (msg) => errorDialog(content: msg),
       refreshTimer: () {
-        timer = Timer(
-          Duration(seconds: state.refreshDuration.value),
-          () => refreshTable(),
-        );
+        if (state.refreshDuration.value > 0) {
+          timer = Timer(
+            Duration(seconds: state.refreshDuration.value),
+            () => refreshTable(true),
+          );
+        }
       },
     );
   }
@@ -52,7 +56,7 @@ class MoldingScanBulletinReportLogic extends GetxController {
       refreshTimer: () {
         timer = Timer(
           Duration(seconds: state.refreshDuration.value),
-          () => refreshTable(),
+          () => refreshTable(true),
         );
       },
     );
@@ -61,7 +65,7 @@ class MoldingScanBulletinReportLogic extends GetxController {
   @override
   void onReady() {
     super.onReady();
-    refreshTable(isRefresh: false);
+    refreshTable(false);
     state.refreshDuration.value =
         spGet(spSaveMoldingScanBulletinReportTimeDuration) ?? 10;
   }

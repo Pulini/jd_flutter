@@ -122,21 +122,27 @@ class NumberDecimalEditText extends StatelessWidget {
         focusNode: fn,
         controller: controller ?? c,
         onChanged: (v) {
-          if (v.toDoubleTry() > max!) {
-            if (controller != null) {
-              controller!.text = max.toShowString();
-              controller!.selection = TextSelection.fromPosition(
-                TextPosition(offset: controller!.text.length),
-              );
+          if(!v.endsWith('.')){
+            if (v.toDoubleTry() > max!) {
+              if (controller != null) {
+                controller!.text = max.toShowString();
+                controller!.selection = TextSelection.fromPosition(
+                  TextPosition(offset: controller!.text.length),
+                );
+              } else {
+                c.text = max.toShowString();
+                c.selection = TextSelection.fromPosition(
+                  TextPosition(offset: c.text.length),
+                );
+              }
+              onChanged.call(max!);
             } else {
-              c.text = max.toShowString();
+              c.text = v.toDoubleTry().toShowString();
               c.selection = TextSelection.fromPosition(
                 TextPosition(offset: c.text.length),
               );
+              onChanged.call(v.toDoubleTry());
             }
-            onChanged.call(max!);
-          } else {
-            onChanged.call(v.toDoubleTry());
           }
         },
         decoration: InputDecoration(
