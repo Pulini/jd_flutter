@@ -165,7 +165,7 @@ class _PropertyPageState extends State<PropertyPage> {
         DatePicker(pickerController: logic.pickerControllerStartDate),
         DatePicker(pickerController: logic.pickerControllerEndDate),
       ],
-      query: () => logic.queryProperty(),
+      query:() => logic.queryProperty(),
       body: Scaffold(
           backgroundColor: Colors.transparent,
           appBar: TabBar(

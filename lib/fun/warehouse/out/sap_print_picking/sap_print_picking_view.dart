@@ -158,7 +158,7 @@ class _SapPrintPickingPageState extends State<SapPrintPickingPage> {
         OptionsPicker(pickerController: workCenterController),
         LinkOptionsPicker(pickerController: factoryWarehouseController),
       ],
-      query: _query,
+      query:()=> _query(),
       body: Obx(() => Column(
             children: [
               Expanded(

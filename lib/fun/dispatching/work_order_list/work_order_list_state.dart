@@ -23,7 +23,6 @@ class WorkOrderListState {
     required String pcStartDate,
     required String pcEndDate,
     required String pcGroup,
-    required Function(bool isNotEmpty) success,
     required Function(String msg) error,
   }) {
     httpGet(
@@ -43,7 +42,6 @@ class WorkOrderListState {
         dataList.value = [
           for (var json in response.data) WorkOrderInfo.fromJson(json)
         ];
-        success.call(dataList.isNotEmpty);
       } else {
         error.call(response.message ?? '');
       }

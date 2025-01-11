@@ -34,7 +34,6 @@ class SapInkColorMatchingState {
   queryOrder({
     required String startDate,
     required String endDate,
-    required Function() success,
     required Function(String) error,
   }) {
     sapPost(
@@ -57,7 +56,6 @@ class SapInkColorMatchingState {
           ),
         ).then((list) {
           orderList.value = list;
-          success.call();
         });
       } else {
         orderList.value = [];

@@ -184,7 +184,7 @@ class _SapPickingReceiptReversalPageState
         DatePicker(pickerController: dpcEndDate),
         LinkOptionsPicker(pickerController: factoryWarehouseController)
       ],
-      query: _query,
+      query:()=> _query(),
       body: Column(
         children: [
           Expanded(

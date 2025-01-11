@@ -51,7 +51,7 @@ pageBodyWithBottomSheet({
   String? title,
   List<Widget>? actions,
   required List<Widget> bottomSheet,
-  required Function query,
+  required Function() query,
   required Widget? body,
 }) {
   return Container(
@@ -115,13 +115,13 @@ pageBodyWithBottomSheet({
 
 ///页面简单框架 右侧弹出Drawer
 pageBodyWithDrawer({
-  Key? scaffoldKey,
   String? title,
   List<Widget>? actions,
   required List<Widget> queryWidgets,
-  required Function query,
+  required Function() query,
   required Widget? body,
 }) {
+  var scaffoldKey = GlobalKey<ScaffoldState>();
   return Container(
     decoration: backgroundColor,
     child: Scaffold(
@@ -161,7 +161,8 @@ pageBodyWithDrawer({
                     borderRadius: BorderRadius.circular(25),
                   ),
                 ),
-                onPressed: () {
+                onPressed: (){
+                  scaffoldKey.currentState?.closeEndDrawer();
                   query.call();
                 },
                 child: Text(
@@ -333,7 +334,7 @@ showPopup(Widget widget, {double? height}) {
 }
 
 ///底部弹出 sheet
-Future<T?> showSheet<T>(
+ showSheet<T>(
   BuildContext context,
   Widget body, {
   bool scrollControlled = true,

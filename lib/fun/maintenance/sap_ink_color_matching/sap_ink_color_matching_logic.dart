@@ -24,12 +24,11 @@ class SapInkColorMatchingLogic extends GetxController {
   queryOrder({
     required String startDate,
     required String endDate,
-    required Function() refresh,
+    Function()? refresh,
   }) {
     state.queryOrder(
       startDate: startDate,
       endDate: endDate,
-      success: refresh,
       error: (msg) => errorDialog(content: msg),
     );
   }
@@ -113,8 +112,8 @@ class SapInkColorMatchingLogic extends GetxController {
   readBeforeWeight() {
     for (var v in state.inkColorList) {
       if (!v.weightBeforeLock.value && v.isNewItem) {
-        v.weightBeforeColorMix.value = v.weight.value;
-        // v.weightBeforeColorMix.value = randomDouble(5.0001, 9.9999);
+        // v.weightBeforeColorMix.value = v.weight.value;
+        v.weightBeforeColorMix.value = randomDouble(5.0001, 9.9999);
         v.weightBeforeLock.value = true;
         v.weightAfterLock.value = false;
       }
@@ -126,8 +125,8 @@ class SapInkColorMatchingLogic extends GetxController {
       if (v.weightBeforeColorMix.value > 0 &&
           !v.weightAfterLock.value &&
           v.isNewItem) {
-        v.weightAfterColorMix.value = v.weight.value;
-        // v.weightAfterColorMix.value = randomDouble(0.0001, 5);
+        // v.weightAfterColorMix.value = v.weight.value;
+        v.weightAfterColorMix.value = randomDouble(0.0001, 5);
         v.weightAfterLock.value = true;
       }
     }
@@ -155,11 +154,11 @@ class SapInkColorMatchingLogic extends GetxController {
     for (var v in submitData) {
       if (v.weightBeforeColorMix.value <= 0) {
         errorDialog(content: '(${v.materialName})调前重量尚未读取！');
-        continue;
+        return;
       }
       if (v.weightAfterColorMix.value <= 0) {
         errorDialog(content: '(${v.materialName})调后重量尚未读取！');
-        continue;
+        return;
       }
     }
     if (state.mixDeviceScalePort == null) {

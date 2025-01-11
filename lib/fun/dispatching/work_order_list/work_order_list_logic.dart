@@ -43,9 +43,6 @@ class WorkOrderListLogic extends GetxController {
       pcStartDate: pcStartDate.getDateFormatYMD(),
       pcEndDate: pcEndDate.getDateFormatYMD(),
       pcGroup: pcGroup.selectedId.value,
-      success: (isNotEmpty) {
-        if (isNotEmpty) Get.back();
-      },
       error: (msg) => errorDialog(content: msg),
     );
   }

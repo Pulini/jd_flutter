@@ -62,7 +62,6 @@ class MaterialDispatchState {
     required String startDate,
     required String endDate,
     required int status,
-    required Function() success,
     required Function(String msg) error,
   }) {
     httpGet(
@@ -83,7 +82,6 @@ class MaterialDispatchState {
           for (var json in response.data) MaterialDispatchInfo.fromJson(json)
         ];
         showOrderList.value = orderList;
-        success.call();
       } else {
         orderList = [];
         error.call(response.message ?? '');

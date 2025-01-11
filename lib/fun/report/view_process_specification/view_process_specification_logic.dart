@@ -12,7 +12,6 @@ class ViewProcessSpecificationLogic extends GetxController {
       return;
     }
     state.getProcessSpecificationList(
-      success: () => Get.back(),
       error: (msg) => errorDialog(content: msg),
     );
   }

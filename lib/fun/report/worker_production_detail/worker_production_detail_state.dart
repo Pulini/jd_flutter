@@ -20,7 +20,6 @@ class WorkerProductionDetailState {
     required String endDate,
     required String itemID,
     required String reportType,
-    required Function() success,
     required Function(String msg) error,
   }) {
     httpGet(
@@ -36,7 +35,6 @@ class WorkerProductionDetailState {
     ).then((response) {
       if (response.resultCode == resultSuccess) {
         dataList.value = formatData(response.data, reportType);
-        success.call();
       } else {
         error.call(response.message ?? 'query_default_error'.tr);
       }

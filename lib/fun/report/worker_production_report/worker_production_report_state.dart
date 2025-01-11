@@ -11,7 +11,6 @@ class WorkerProductionReportState {
   {
     required String departmentID,
     required String date,
-    required Function() success,
     required Function(String msg) error,
 }
       ) {
@@ -25,7 +24,6 @@ class WorkerProductionReportState {
     ).then((response) {
       if (response.resultCode == resultSuccess) {
         dataList.value=[ for (var item in response.data) WorkerProductionInfo.fromJson(item)];
-        success.call();
       } else {
         error.call( response.message ?? 'query_default_error'.tr);
       }

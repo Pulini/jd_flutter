@@ -57,7 +57,6 @@ class ViewInstructionDetailsLogic extends GetxController {
     state.getInstructionDetailsFile(
       processFlowID: pickerControllerProcessFlow.selectedId.value,
       success: (uri) {
-        Get.back();
         if (GetPlatform.isAndroid || GetPlatform.isIOS) {
           webViewController.clearCache();
           webViewController.loadRequest(uri);

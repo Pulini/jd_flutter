@@ -67,9 +67,7 @@ class _DailyReportPageState extends State<DailyReportPage> {
         OptionsPicker(pickerController: logic.pickerControllerDepartment),
         DatePicker(pickerController: logic.pickerControllerDate),
       ],
-      query: () => logic.query(
-
-      ),
+      query: () => logic.query(),
       body: Obx(
         () => ListView(
           padding: const EdgeInsets.all(8),

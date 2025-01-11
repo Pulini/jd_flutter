@@ -24,7 +24,6 @@ class WorkerProductionReportLogic extends GetxController {
     state.getWorkerProductionReport(
       departmentID: pickerControllerDepartment.selectedId.value,
       date: pickerControllerDate.getDateFormatYMD(),
-      success: () => Get.back(),
       error: (msg) => errorDialog(content: msg),
     );
   }

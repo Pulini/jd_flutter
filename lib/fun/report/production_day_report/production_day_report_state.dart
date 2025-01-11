@@ -36,7 +36,7 @@ class ProductionDayReportState {
         tableData.value = [
           for (var item in response.data) ProductionDayReportInfo.fromJson(item)
         ];
-        Get.back(closeOverlays: true);
+        success.call(response.message??'');
       } else {
         error.call(response.message ?? 'query_default_error'.tr);
       }

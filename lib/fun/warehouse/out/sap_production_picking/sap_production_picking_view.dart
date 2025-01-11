@@ -182,7 +182,7 @@ class _SapProductionPickingPageState extends State<SapProductionPickingPage> {
         OptionsPicker(pickerController: workCenterController),
         LinkOptionsPicker(pickerController: factoryWarehouseController),
       ],
-      query: _query,
+      query:()=> _query(),
       body: Obx(() => Column(
             children: [
               Expanded(

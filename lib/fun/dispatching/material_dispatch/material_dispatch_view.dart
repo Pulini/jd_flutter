@@ -544,7 +544,7 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
                 value: state.unStockIn.value,
               )),
         ],
-        query: () => logic.query(),
+        query: () => logic.refreshDataList(),
         body: Obx(() => ListView.builder(
               padding: const EdgeInsets.all(8),
               itemCount: state.showOrderList.length,

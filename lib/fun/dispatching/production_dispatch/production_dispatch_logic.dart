@@ -91,13 +91,10 @@ class ProductionDispatchLogic extends GetxController {
   }
 
   ///工单查询
-  query({bool isRefresh = false}) {
+  query() {
     state.query(
       startTime: dpcStartDate.getDateFormatYMD(),
       endTime: dpcEndDate.getDateFormatYMD(),
-      success: (isNotEmpty) {
-        if (isNotEmpty && !isRefresh) Get.back();
-      },
       error: (msg) => errorDialog(content: msg),
     );
   }
@@ -151,7 +148,7 @@ class ProductionDispatchLogic extends GetxController {
   ///打开/关闭工序
   offOnProcess() {
     state.offOnProcess(
-      success: () => query(isRefresh: true),
+      success: () => query(),
       error: (msg) => errorDialog(content: msg),
     );
   }
@@ -159,7 +156,7 @@ class ProductionDispatchLogic extends GetxController {
   ///删除下游工序
   deleteDownstream() {
     state.deleteDownstream(
-      success: () => query(isRefresh: true),
+      success: () => query(),
       error: (msg) => errorDialog(content: msg),
     );
   }
@@ -167,7 +164,7 @@ class ProductionDispatchLogic extends GetxController {
   ///删除上一次报工
   deleteLastReport() {
     state.deleteLastReport(
-      success: () => query(isRefresh: true),
+      success: () => query(),
       error: (msg) => errorDialog(content: msg),
     );
   }
@@ -209,7 +206,7 @@ class ProductionDispatchLogic extends GetxController {
   ///更新领料配套数
   updateSap() {
     state.updateSap(
-      success: () => query(isRefresh: true),
+      success: () => query(),
       error: (msg) => errorDialog(content: msg),
     );
   }
@@ -242,7 +239,7 @@ class ProductionDispatchLogic extends GetxController {
   reportToSap(double qty) {
     state.reportToSap(
       qty: qty,
-      success: () => query(isRefresh: true),
+      success: () => query(),
       error: (msg) => errorDialog(content: msg),
     );
   }

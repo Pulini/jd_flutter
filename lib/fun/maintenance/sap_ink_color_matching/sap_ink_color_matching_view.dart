@@ -26,7 +26,8 @@ class _SapInkColorMatchingPageState extends State<SapInkColorMatchingPage> {
   final SapInkColorMatchingLogic logic = Get.put(SapInkColorMatchingLogic());
   final SapInkColorMatchingState state =
       Get.find<SapInkColorMatchingLogic>().state;
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  //
 
   ///日期选择器的控制器
   var dpcStartDate = DatePickerController(
@@ -40,7 +41,7 @@ class _SapInkColorMatchingPageState extends State<SapInkColorMatchingPage> {
     saveKey: '${RouteConfig.sapInkColorMatching.name}${PickerType.endDate}',
   );
   var controller = TextEditingController(
-    // text: 'PDW25308979-24',
+    text: 'PDW25308979-24',
   );
 
   _item(int index) {
@@ -48,7 +49,7 @@ class _SapInkColorMatchingPageState extends State<SapInkColorMatchingPage> {
     return GestureDetector(
       onTap: () {
         if (data.materialList?.isNotEmpty == true) {
-          logic.modifyOrder(index: index, refresh: () => _queryOrder(true));
+          logic.modifyOrder(index: index, refresh: () => _refreshOrder());
         } else {
           showSnackBar(title: '错误', message: '该调色单没有调色信息！');
         }
@@ -131,7 +132,7 @@ class _SapInkColorMatchingPageState extends State<SapInkColorMatchingPage> {
                       typeBody: data.typeBody ?? '',
                       orderNumber: data.orderNumber ?? '',
                       mixWeight: data.mixtureWeight ?? 0,
-                      refresh: () => _queryOrder(true),
+                      refresh: () => _refreshOrder(),
                     ),
                   )
               ],
@@ -176,23 +177,24 @@ class _SapInkColorMatchingPageState extends State<SapInkColorMatchingPage> {
     );
   }
 
-  _queryOrder(bool isRefresh) {
+  _refreshOrder() {
     logic.queryOrder(
       startDate: dpcStartDate.getDateFormatSapYMD(),
       endDate: dpcEndDate.getDateFormatSapYMD(),
-      refresh: () {
-        FocusScope.of(context).unfocus();
-        if (!isRefresh) {
-          Get.back();
-        }
-      },
     );
+  }
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _refreshOrder();
+    });
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return pageBodyWithDrawer(
-      scaffoldKey: _scaffoldKey,
       actions: [
         Container(
           width: 300,
@@ -232,8 +234,7 @@ class _SapInkColorMatchingPageState extends State<SapInkColorMatchingPage> {
                   newTypeBody: controller.text,
                   refresh: () {
                     controller.clear();
-                    FocusScope.of(context).unfocus();
-                    _queryOrder(true);
+                    _refreshOrder();
                   },
                 ),
               ),
@@ -254,7 +255,10 @@ class _SapInkColorMatchingPageState extends State<SapInkColorMatchingPage> {
               value: state.idTested.value,
             ))
       ],
-      query: () => _queryOrder(false),
+      query: () => logic.queryOrder(
+        startDate: dpcStartDate.getDateFormatSapYMD(),
+        endDate: dpcEndDate.getDateFormatSapYMD(),
+      ),
       body: Obx(() => ListView.builder(
             itemCount: state.orderList.length,
             itemBuilder: (c, i) => _item(i),

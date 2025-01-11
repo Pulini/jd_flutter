@@ -10,7 +10,6 @@ class DailyReportState {
   getDayOutput({
     required String departmentID,
     required String date,
-    required Function() success,
     required Function(String msg) error,
   }) {
     httpGet(
@@ -25,7 +24,6 @@ class DailyReportState {
         dataList.value = [
           for (var item in response.data) DailyReport.fromJson(item)
         ];
-        success.call();
       } else {
         error.call(response.message ?? 'query_default_error'.tr);
       }
