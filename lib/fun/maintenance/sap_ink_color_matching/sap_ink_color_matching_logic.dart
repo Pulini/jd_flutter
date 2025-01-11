@@ -110,8 +110,6 @@ class SapInkColorMatchingLogic extends GetxController {
     });
   }
 
-
-
   readBeforeWeight() {
     for (var v in state.inkColorList) {
       if (!v.weightBeforeLock.value && v.isNewItem) {
@@ -177,26 +175,28 @@ class SapInkColorMatchingLogic extends GetxController {
   }
 
   submitModifyOrder(int index) {
-    var newItemWeight = state.inkColorList
-        .where((v) => v.isNewItem)
-        .map((v) => v.consumption())
-        .reduce((a, b) => a.add(b));
-    var mixActualWeight =
-        (state.mixDeviceScalePort?.mixWeight.value ?? 0).add(newItemWeight);
-    var mixTheoreticalWeight = state.inkColorList
-        .map((v) => v.consumption())
-        .reduce((a, b) => a.add(b));
-    checkSubmit(() => state.submitOrder(
-          orderNumber: state.orderList[index].orderNumber ?? '',
-          inkMaster: state.orderList[index].inkMaster ?? '',
-          mixActualWeight: mixActualWeight,
-          mixTheoreticalWeight: mixTheoreticalWeight,
-          success: (msg) => successDialog(
-            content: msg,
-            back: () => Get.back(result: true),
-          ),
-          error: (msg) => errorDialog(content: msg),
-        ));
+    checkSubmit(() {
+      var newItemWeight = state.inkColorList
+          .where((v) => v.isNewItem)
+          .map((v) => v.consumption())
+          .reduce((a, b) => a.add(b));
+      var mixActualWeight =
+          (state.mixDeviceScalePort?.mixWeight.value ?? 0).add(newItemWeight);
+      var mixTheoreticalWeight = state.inkColorList
+          .map((v) => v.consumption())
+          .reduce((a, b) => a.add(b));
+      state.submitOrder(
+        orderNumber: state.orderList[index].orderNumber ?? '',
+        inkMaster: state.orderList[index].inkMaster ?? '',
+        mixActualWeight: mixActualWeight,
+        mixTheoreticalWeight: mixTheoreticalWeight,
+        success: (msg) => successDialog(
+          content: msg,
+          back: () => Get.back(result: true),
+        ),
+        error: (msg) => errorDialog(content: msg),
+      );
+    });
   }
 
   submitCreateOrder() {
