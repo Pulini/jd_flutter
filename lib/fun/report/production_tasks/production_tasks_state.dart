@@ -37,8 +37,8 @@ class ProductionTasksState {
         method: webApiGetProductionOrderSchedule,
         loading: '正在查询生产任务进度表...',
         params: {
-          // 'departmentID': getUserInfo()!.departmentID ?? 0,
-          'departmentID': 554744,
+          'departmentID': getUserInfo()!.departmentID ?? 0,
+          // 'departmentID': 554744,
         }).then((response) {
       if (response.resultCode == resultSuccess) {
         var info=ProductionTasksInfo.fromJson(response.data);
