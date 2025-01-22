@@ -101,6 +101,7 @@ selectMaterialDialog({
                             scalePort: device.scalePort ?? 0,
                             materialCode: material.materialCode ?? '',
                             materialName: material.materialName ?? '',
+                            materialColor: material.materialColor ?? '',
                           ));
                         },
                       ),
@@ -131,10 +132,38 @@ selectMaterialDialog({
                       child: materialList.isNotEmpty
                           ? getCupertinoPicker(
                               showList.map((data) {
-                                return Center(
-                                    child: Text(
-                                  '(${data.materialCode}) ${data.materialName}',
-                                ));
+                                var color =
+                                    data.materialColor.getColorByDescription();
+                                return Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      height: 20,
+                                      width: 20,
+                                      decoration: BoxDecoration(
+                                        color: color,
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                        left: 10,
+                                        right: 10,
+                                      ),
+                                      child: Text(
+                                        '(${data.materialCode}) ${data.materialName}',
+                                      ),
+                                    ),
+                                    Container(
+                                      height: 20,
+                                      width: 20,
+                                      decoration: BoxDecoration(
+                                        color: color,
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                    )
+                                  ],
+                                );
                               }).toList(),
                               materialController,
                             )
@@ -202,7 +231,7 @@ trialFinishDialog({
           title: Text('试做结果'),
           content: SizedBox(
             width: 300,
-            height: 200,
+            height: 230,
             child: ListView(
               children: [
                 textSpan(
@@ -300,7 +329,7 @@ trialFinishDialog({
                 if (inputMixWeight.value == mixWeight) {
                   showSnackBar(
                     title: '错误',
-                    message: '混合物试做后重量填写错误！',
+                    message: '混合物试做后重量不能等于混合物重量！',
                     isWarning: true,
                   );
                   return;

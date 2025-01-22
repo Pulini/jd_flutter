@@ -89,7 +89,7 @@ class _HomePageState extends State<HomePage> {
   _navigationBar(HomeFunctions bar) {
     return BottomNavigationBarItem(
       icon: Image.network(
-       bar.icon ?? '',
+        bar.icon ?? '',
         width: 30,
         height: 30,
         color: bar.getTextColor(),
@@ -97,7 +97,7 @@ class _HomePageState extends State<HomePage> {
           _logo,
           height: 30,
           width: 30,
-          color:  bar.getTextColor(),
+          color: bar.getTextColor(),
         ),
       ),
       label: bar.className ?? 'Fun',
@@ -108,17 +108,10 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await getVersionInfo(
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      getVersionInfo(
         false,
-        noUpdate: () async {
-          loadingDialog('读取功能列表中...');
-          await logic.refreshFunList(
-            refresh: () => setState(() {
-              loadingDismiss();
-            }),
-          );
-        },
+        noUpdate: () => logic.refreshFunList(isRefresh: true),
         needUpdate: (versionInfo) => doUpdate(versionInfo),
       );
     });
@@ -127,32 +120,38 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: backgroundColor,
-      child: state.navigationBar.isEmpty
-          ? Scaffold(
-              backgroundColor: Colors.transparent,
-              appBar: _appBar(),
-            )
-          : Scaffold(
-              backgroundColor: Colors.transparent,
-              appBar: _appBar(),
-              body: ListView.builder(
-                padding: const EdgeInsets.all(8),
-                itemCount: state.buttons.length,
-                itemBuilder: ( context,  index) =>
-                    _item(state.buttons[index]),
-              ),
-              bottomNavigationBar: BottomNavigationBar(
-                type: BottomNavigationBarType.shifting,
-                items: [
-                  for (var bar in state.navigationBar) _navigationBar(bar)
-                ],
-                currentIndex: state.nBarIndex,
-                selectedItemColor: state.navigationBar[0].getTextColor(),
-                onTap: (i) => setState(() => logic.navigationBarClick(i)),
-              ),
-            ),
-    );
+        decoration: backgroundColor,
+        child: Scaffold(
+            backgroundColor: Colors.transparent,
+            appBar: _appBar(),
+            body: Obx(() => ListView.builder(
+                  padding: const EdgeInsets.all(8),
+                  itemCount:
+                      state.navigationBar.isEmpty ? 1 : state.buttons.length,
+                  itemBuilder: (context, index) => state.navigationBar.isEmpty
+                      ? Center(
+                          child: IconButton(
+                            onPressed: () =>
+                                logic.refreshFunList(isRefresh: true),
+                            icon: const Icon(
+                              Icons.refresh,
+                              color: Colors.blueAccent,
+                            ),
+                          ),
+                        )
+                      : _item(state.buttons[index]),
+                )),
+            bottomNavigationBar: Obx(() => state.navigationBar.isEmpty
+                ? const Center()
+                : BottomNavigationBar(
+                    type: BottomNavigationBarType.shifting,
+                    items: [
+                      for (var bar in state.navigationBar) _navigationBar(bar)
+                    ],
+                    currentIndex: state.nBarIndex,
+                    selectedItemColor: state.navigationBar[0].getTextColor(),
+                    onTap: (i) => setState(() => logic.navigationBarClick(i)),
+                  ))));
   }
 
   @override
@@ -190,7 +189,7 @@ class HomeSubItem extends StatelessWidget {
               : Get.toNamed(item.route),
       enabled: item.hasUpdate ? true : item.hasPermission,
       leading: Image.network(
-      item.icon,
+        item.icon,
         width: isGroup ? 30 : 40,
         height: isGroup ? 30 : 40,
         color: _color(item),

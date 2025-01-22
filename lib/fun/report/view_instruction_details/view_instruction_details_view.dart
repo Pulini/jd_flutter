@@ -32,7 +32,7 @@ class _ViewInstructionDetailsPageState
       query: () => logic.queryPDF(),
       body: GetPlatform.isAndroid || GetPlatform.isIOS
           ? WebViewWidget(controller: logic.webViewController)
-          : null,
+          : Container(),
     );
   }
 

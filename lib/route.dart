@@ -26,6 +26,7 @@ import 'fun/report/molding_scan_bulletin_report/molding_scan_bulletin_report_vie
 import 'fun/report/production_day_report/production_day_report_view.dart';
 import 'fun/report/production_materials_report/production_materials_report_view.dart';
 import 'fun/report/production_summary_report/production_summary_report_view.dart';
+import 'fun/report/production_tasks/production_tasks_view.dart';
 import 'fun/report/view_instruction_details/view_instruction_details_view.dart';
 import 'fun/report/view_process_specification/view_process_specification_view.dart';
 import 'fun/report/worker_production_detail/worker_production_detail_view.dart';
@@ -353,6 +354,13 @@ class RouteConfig {
     const SapInkColorMatchingPage(),
   );
 
+  ///成型生产任务
+  static Routes productionTasks = Routes(
+    '/production_tasks',
+    99,
+    const ProductionTasksPage(),
+  );
+
   ///本地功能入口列表
   static List<Routes> routeList = [
     dailyReport,
@@ -398,6 +406,7 @@ class RouteConfig {
     sapWmsReprintLabels,
     sapWmsSplitLabel,
     sapInkColorMatching,
+    productionTasks,
   ];
 
   static List<GetPage> appRoutes = [
@@ -581,6 +590,10 @@ class RouteConfig {
     GetPage(
       name: sapInkColorMatching.name,
       page: () => sapInkColorMatching.page,
+    ),
+    GetPage(
+      name: productionTasks.name,
+      page: () => productionTasks.page,
     ),
   ];
 }

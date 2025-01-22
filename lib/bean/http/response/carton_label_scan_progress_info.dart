@@ -48,23 +48,27 @@ class CartonLabelScanProgressInfo {
 
 class CartonLabelScanProgressDetailInfo {
   CartonLabelScanProgressDetailInfo({
+    this.cartonNo,
     this.outBoxBarCode,
     this.size,
     this.sendCustomSystemState,
   });
 
   CartonLabelScanProgressDetailInfo.fromJson(dynamic json) {
+    cartonNo = json['CartonNo'];
     outBoxBarCode = json['OutBoxBarCode'];
     size = json['Size'];
     sendCustomSystemState = json['SendCustomSystemState'];
   }
 
+  String? cartonNo;
   String? outBoxBarCode;
   String? size;
   int? sendCustomSystemState;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
+    map['CartonNo'] = cartonNo;
     map['OutBoxBarCode'] = outBoxBarCode;
     map['Size'] = size;
     map['SendCustomSystemState'] = sendCustomSystemState;

@@ -28,7 +28,7 @@ class MoldingScanBulletinReportLogic extends GetxController {
       isGetAllList: isRefresh
           ? Get.currentRoute == RouteConfig.moldingScanBulletinReport.name
           : true,
-      error: (msg) => errorDialog(content: msg),
+      error: (msg) => showSnackBar(title: '错误', message: msg, isWarning: true),
       refreshTimer: () {
         if (state.refreshDuration.value > 0) {
           timer = Timer(

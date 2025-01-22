@@ -93,15 +93,15 @@ class SapInkColorMatchingState {
           try {
             var mix = data.scalePorts?.firstWhere((v) => v.isMix == 'X');
             mixDeviceScalePort = SapInkColorMatchItemInfo(
-              isNewItem: true,
-              deviceName: mix!.deviceName ?? '',
-              deviceIp: data.serverIp ?? '',
-              // deviceIp: '192.168.101.231',
-              scalePort:  mix.scalePort??0,
-              // scalePort: 5800,
-              materialCode: '',
-              materialName: '',
-            );
+                isNewItem: true,
+                deviceName: mix!.deviceName ?? '',
+                deviceIp: data.serverIp ?? '',
+                // deviceIp: '192.168.101.231',
+                scalePort: mix.scalePort ?? 0,
+                // scalePort: 5800,
+                materialCode: '',
+                materialName: '',
+                materialColor: '');
           } catch (_) {
             mixDeviceScalePort?.close();
             mixDeviceScalePort = null;
@@ -157,5 +157,4 @@ class SapInkColorMatchingState {
       }
     });
   }
-
 }

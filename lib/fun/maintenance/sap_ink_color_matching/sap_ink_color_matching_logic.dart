@@ -68,6 +68,7 @@ class SapInkColorMatchingLogic extends GetxController {
       success: () {
         state.mixDeviceScalePort?.mixWeight.value =
             state.orderList[index].mixtureWeight ?? 0;
+
         Get.to(
           () => const SapInkColorMatchingDetailPage(),
           arguments: {'index': index},
@@ -81,7 +82,7 @@ class SapInkColorMatchingLogic extends GetxController {
     );
   }
 
-  getMaterialList() => state.typeBodyMaterialList
+ List<SapInkColorMatchTypeBodyMaterialInfo> getMaterialList() => state.typeBodyMaterialList
       .where((v) =>
           !state.inkColorList
               .where((v) => v.isNewItem)
@@ -89,7 +90,7 @@ class SapInkColorMatchingLogic extends GetxController {
           v.materialName?.trim().isNotEmpty == true)
       .toList();
 
-  getScalePortList() => state.typeBodyScalePortList
+  List<SapInkColorMatchTypeBodyScalePortInfo> getScalePortList() => state.typeBodyScalePortList
       .where((v) =>
           !state.inkColorList.any((v2) => v2.scalePort == v.scalePort) &&
           v.isMix?.isEmpty == true)
@@ -103,6 +104,7 @@ class SapInkColorMatchingLogic extends GetxController {
         scalePort: 0,
         materialCode: v.materialCode ?? '',
         materialName: v.materialName ?? '',
+        materialColor: v.materialColor ?? '',
         weightBeforeColorMix: v.weightBeforeColorMix,
         weightAfterColorMix: v.weightAfterColorMix,
       )..unit.value = v.unit ?? '');
@@ -112,8 +114,8 @@ class SapInkColorMatchingLogic extends GetxController {
   readBeforeWeight() {
     for (var v in state.inkColorList) {
       if (!v.weightBeforeLock.value && v.isNewItem) {
-        // v.weightBeforeColorMix.value = v.weight.value;
-        v.weightBeforeColorMix.value = randomDouble(5.0001, 9.9999);
+        v.weightBeforeColorMix.value = v.weight.value;
+        // v.weightBeforeColorMix.value = randomDouble(5.0001, 9.9999);
         v.weightBeforeLock.value = true;
         v.weightAfterLock.value = false;
       }
@@ -125,8 +127,8 @@ class SapInkColorMatchingLogic extends GetxController {
       if (v.weightBeforeColorMix.value > 0 &&
           !v.weightAfterLock.value &&
           v.isNewItem) {
-        // v.weightAfterColorMix.value = v.weight.value;
-        v.weightAfterColorMix.value = randomDouble(0.0001, 5);
+        v.weightAfterColorMix.value = v.weight.value;
+        // v.weightAfterColorMix.value = randomDouble(0.0001, 5);
         v.weightAfterLock.value = true;
       }
     }

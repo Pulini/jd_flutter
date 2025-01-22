@@ -40,9 +40,7 @@ class _SapInkColorMatchingPageState extends State<SapInkColorMatchingPage> {
     PickerType.endDate,
     saveKey: '${RouteConfig.sapInkColorMatching.name}${PickerType.endDate}',
   );
-  var controller = TextEditingController(
-    text: 'PDW25308979-24',
-  );
+  var controller = TextEditingController();
 
   _item(int index) {
     SapInkColorMatchOrderInfo data = state.orderList[index];
@@ -223,16 +221,18 @@ class _SapInkColorMatchingPageState extends State<SapInkColorMatchingPage> {
               hintText: '型体',
               hintStyle: const TextStyle(color: Colors.grey),
               prefixIcon: IconButton(
-                  onPressed: () => controller.clear(),
-                  icon: const Icon(
-                    Icons.replay_circle_filled,
-                    color: Colors.red,
-                  )),
+                onPressed: () => controller.clear(),
+                icon: const Icon(
+                  Icons.replay_circle_filled,
+                  color: Colors.red,
+                ),
+              ),
               suffixIcon: CombinationButton(
                 text: '新增调色',
                 click: () => logic.createMixOrder(
                   newTypeBody: controller.text,
                   refresh: () {
+                    FocusScope.of(context).requestFocus(FocusNode());
                     controller.clear();
                     _refreshOrder();
                   },

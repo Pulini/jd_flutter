@@ -7,6 +7,7 @@ import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
+
 import 'home_state.dart';
 
 class HomeLogic extends GetxController {
@@ -36,15 +37,11 @@ class HomeLogic extends GetxController {
     );
   }
 
-  refreshFunList({required Function() refresh}) {
+  refreshFunList({required bool isRefresh}) {
     state.refreshFunList(
-      success: () {
-        refreshButton();
-        refresh.call();
-      },
-      error: (msg) {
-        errorDialog(content: msg);
-      },
+      isRefresh: isRefresh,
+      success: () => refreshButton(),
+      error: (msg) => errorDialog(content: msg),
     );
   }
 
@@ -59,9 +56,9 @@ class HomeLogic extends GetxController {
   }
 
   refreshButton() {
-    state.buttons.clear();
+    var list = <ButtonItem>[];
     if (state.search.isEmpty) {
-      state.buttons.addAll(
+      list.addAll(
         functions.where((v) =>
             v.classify == state.navigationBar[state.nBarIndex].className),
       );
@@ -74,12 +71,13 @@ class HomeLogic extends GetxController {
           list.add(fun);
         }
       }
-      state.buttons.addAll(
+      list.addAll(
         list.where((v) =>
             v.name.toUpperCase().contains(state.search.toUpperCase()) ||
             v.description.toUpperCase().contains(state.search.toUpperCase())),
       );
     }
+    state.buttons.value = list;
   }
 
   ///底部弹窗

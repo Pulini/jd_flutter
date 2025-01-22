@@ -29,6 +29,7 @@ class _SapInkColorMatchingDetailPageState
 
   _item(int i) {
     var data = state.inkColorList[i];
+    var ballColor = data.materialColor.getColorByDescription();
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.all(10),
@@ -37,7 +38,7 @@ class _SapInkColorMatchingDetailPageState
         borderRadius: BorderRadius.circular(10),
         gradient: LinearGradient(
           colors: [
-            data.isNewItem ? Colors.green.shade100 : Colors.grey.shade300,
+            data.isNewItem ? Colors.green.shade100 : Colors.grey.shade400,
             Colors.white
           ],
           begin: Alignment.topCenter,
@@ -86,10 +87,28 @@ class _SapInkColorMatchingDetailPageState
                     ),
                   ],
                 ),
-                Divider(),
+                const Divider(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    Container(
+                      height: 30,
+                      width: 30,
+                      margin: const EdgeInsets.only(right: 5),
+                      decoration: BoxDecoration(
+                        color: data.materialColor.getColorByDescription(),
+                        borderRadius: BorderRadius.circular(15),
+                        border: Border.all(
+                          color: Colors.white,
+                          width: 1,
+                        ),
+                      ),
+                      child: ballColor == Colors.transparent
+                          ? Center(
+                              child: Text('无'),
+                            )
+                          : null,
+                    ),
                     expandedTextSpan(
                       flex: 3,
                       hint: '物料：',
@@ -181,6 +200,22 @@ class _SapInkColorMatchingDetailPageState
           : Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                Container(
+                  height: 30,
+                  width: 30,
+                  margin: const EdgeInsets.only(right: 5),
+                  decoration: BoxDecoration(
+                    color: data.materialColor.getColorByDescription(),
+                    borderRadius: BorderRadius.circular(15),
+                    border: Border.all(
+                      color: Colors.white,
+                      width: 1,
+                    ),
+                  ),
+                  child: ballColor == Colors.transparent
+                      ? Center(child: Text('无'))
+                      : null,
+                ),
                 expandedTextSpan(
                   flex: 3,
                   hint: '物料：',
@@ -215,6 +250,14 @@ class _SapInkColorMatchingDetailPageState
     );
   }
 
+  Widget _ratioBarChart() {
+    var ratioColorLine = <List>[];
+    state.orderList[index].materialList?.forEach((v) {
+      ratioColorLine.add([v.ratio ?? 0.0, v.materialColor ?? '']);
+    });
+    return ratioBarChart(ratioList: ratioColorLine);
+  }
+
   _body() {
     return Padding(
       padding: const EdgeInsets.only(
@@ -223,6 +266,7 @@ class _SapInkColorMatchingDetailPageState
         bottom: 10,
       ),
       child: Column(children: [
+        if (index >= 0) _ratioBarChart(),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -330,7 +374,10 @@ class _SapInkColorMatchingDetailPageState
                 click: () {
                   selectMaterialDialog(
                     deviceIp: state.typeBodyServerIp,
-                    materialList: logic.getMaterialList(),
+                    materialList: logic
+                        .getMaterialList()
+                        .where((v) => v.materialColor?.isNotEmpty == true)
+                        .toList(),
                     scalePortList: logic.getScalePortList(),
                     addItem: (item) {
                       state.inkColorList.add(item);
@@ -376,12 +423,19 @@ class _SapInkColorMatchingDetailPageState
                 combination: Combination.right,
               ),
             ]
-          : null,
+          : [
+              CombinationButton(text: '再做一单', click: () {}),
+            ],
       title: index >= 0
           ? (state.orderList[index].trialQty ?? 0) > 0
               ? '调色明细'
               : '修改调色'
           : '创建调色',
+      popTitle: index >= 0
+          ? (state.orderList[index].trialQty ?? 0) > 0
+              ? ''
+              : '确定要退出 < 修改调色 > 吗?'
+          : '确定要退出 < 创建调色 > 吗?',
       body: _body(),
     );
   }

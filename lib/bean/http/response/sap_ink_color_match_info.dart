@@ -98,37 +98,45 @@ class SapInkColorMatchOrderInfo {
 class SapInkColorMatchMaterialInfo {
   String? materialCode; //MATNR  物料编码
   String? materialName; //ZMAKTG 物料描述
+  String? materialColor; //ZCOLOR 物料颜色
   double? weightBeforeColorMix; //ZNTGEW_BEF  调色前重量
   double? weightAfterColorMix; //ZNTGEW_AFT  调色后重量
   double? consumption; //ZMENG3  耗量
   String? unit; //MEINS 单位
+  double? ratio; //ZPROPORTION  配比
 
   SapInkColorMatchMaterialInfo({
     this.materialCode,
     this.materialName,
+    this.materialColor,
     this.weightBeforeColorMix,
     this.weightAfterColorMix,
     this.consumption,
     this.unit,
+    this.ratio,
   });
 
   SapInkColorMatchMaterialInfo.fromJson(dynamic json) {
     materialCode = json['MATNR'];
     materialName = json['ZMAKTG'];
+    materialColor = json['ZCOLOR'];
     weightBeforeColorMix = json['ZNTGEW_BEF'].toString().toDoubleTry();
     weightAfterColorMix = json['ZNTGEW_AFT'].toString().toDoubleTry();
     consumption = json['ZMENG3'].toString().toDoubleTry();
     unit = json['MEINS'];
+    ratio = json['ZPROPORTION'].toString().toDoubleTry();
   }
 
   Map<String, dynamic> toJson() {
     var map = <String, dynamic>{};
     map['MATNR'] = materialCode;
     map['ZMAKTG'] = materialName;
+    map['ZCOLOR'] = materialColor;
     map['ZNTGEW_BEF'] = weightBeforeColorMix;
     map['ZNTGEW_AFT'] = weightAfterColorMix;
     map['ZMENG3'] = consumption;
     map['MEINS'] = unit;
+    map['ZPROPORTION'] = ratio;
     return map;
   }
 }
@@ -176,21 +184,25 @@ class SapInkColorMatchTypeBodyInfo {
 class SapInkColorMatchTypeBodyMaterialInfo {
   String? materialCode; //MATNR  物料编码
   String? materialName; //ZMAKTG 物料描述
+  String? materialColor; //ZCOLOR 物料颜色
 
   SapInkColorMatchTypeBodyMaterialInfo({
     this.materialCode,
     this.materialName,
+    this.materialColor,
   });
 
   SapInkColorMatchTypeBodyMaterialInfo.fromJson(dynamic json) {
     materialCode = json['MATNR'];
     materialName = json['ZMAKTG'];
+    materialColor = json['ZCOLOR'];
   }
 
   Map<String, dynamic> toJson() {
     var map = <String, dynamic>{};
     map['MATNR'] = materialCode;
     map['ZMAKTG'] = materialName;
+    map['ZCOLOR'] = materialColor;
     return map;
   }
 }
@@ -229,6 +241,7 @@ class SapInkColorMatchItemInfo {
   int scalePort;
   String materialCode;
   String materialName;
+  String materialColor;
 
 
   bool isNewItem;
@@ -256,6 +269,7 @@ class SapInkColorMatchItemInfo {
     weightAfterColorMix = 0.0,
     required this.materialCode,
     required this.materialName,
+    required this.materialColor,
   }) {
     this.weightBeforeColorMix.value = weightBeforeColorMix;
     this.weightAfterColorMix.value = weightAfterColorMix;
