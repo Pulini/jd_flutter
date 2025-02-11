@@ -148,7 +148,7 @@ class SapInkColorMatchingLogic extends GetxController {
       .where((v) => v.isNewItem)
       .any((v) => v.weightBeforeColorMix.value > 0);
 
-  checkSubmit(Function submit) {
+  checkSubmit(bool isModify,Function submit) {
     var submitData = state.inkColorList.where((v) => v.isNewItem);
     if (submitData.isEmpty) {
       errorDialog(content: '没有可提交的物料信息！');
@@ -164,19 +164,21 @@ class SapInkColorMatchingLogic extends GetxController {
         return;
       }
     }
-    if (state.mixDeviceSocket == null) {
-      errorDialog(content: '当前服务器尚未配置混合物秤！');
-      return;
-    }
-    if (state.readMixDeviceWeight.value <= 0) {
-      errorDialog(content: '(${state.mixDeviceName})混合物重量尚未读取！');
-      return;
+    if(!isModify){
+      if (state.mixDeviceSocket == null) {
+        errorDialog(content: '当前服务器尚未配置混合物秤！');
+        return;
+      }
+      if (state.readMixDeviceWeight.value <= 0) {
+        errorDialog(content: '(${state.mixDeviceName})混合物重量尚未读取！');
+        return;
+      }
     }
     submit.call();
   }
 
   submitModifyOrder(int index) {
-    checkSubmit(() {
+    checkSubmit(true,() {
       var newItemWeight = state.inkColorList
           .where((v) => v.isNewItem)
           .map((v) => v.consumption())
@@ -200,7 +202,7 @@ class SapInkColorMatchingLogic extends GetxController {
   }
 
   submitCreateOrder() {
-    checkSubmit(() => state.submitOrder(
+    checkSubmit(false,() => state.submitOrder(
           orderNumber: '',
           inkMaster: userInfo?.name ?? '',
           mixActualWeight: state.readMixDeviceWeight.value,
