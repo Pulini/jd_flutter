@@ -122,7 +122,7 @@ class _SapInkColorMatchingDetailPageState
                               textSpan(
                                 hint: '调前重量：',
                                 text:
-                                    '${data.weightBeforeColorMix.value.toMaxString()} ${data.unit.value}',
+                                    '${data.weightBeforeColorMix.value.toFixed(4).toShowString()} ${data.unit.value}',
                                 textColor: data.weightBeforeLock.value
                                     ? Colors.red
                                     : Colors.green,
@@ -154,7 +154,7 @@ class _SapInkColorMatchingDetailPageState
                               textSpan(
                                 hint: '调后重量：',
                                 text:
-                                    '${data.weightAfterColorMix.value.toMaxString()} ${data.unit.value}',
+                                    '${data.weightAfterColorMix.value.toFixed(4).toShowString()} ${data.unit.value}',
                                 textColor: data.weightAfterLock.value
                                     ? Colors.red
                                     : Colors.green,
@@ -183,7 +183,7 @@ class _SapInkColorMatchingDetailPageState
                           flex: 2,
                           hint: '耗量：',
                           text:
-                              '${(data.weightBeforeColorMix.value.sub(data.weightAfterColorMix.value)).toMaxString()} ${data.unit.value}',
+                              '${(data.weightBeforeColorMix.value.sub(data.weightAfterColorMix.value)).toFixed(4).toShowString()} ${data.unit.value}',
                           textColor: Colors.blueAccent,
                         )),
                     Obx(() => Text(
@@ -226,7 +226,7 @@ class _SapInkColorMatchingDetailPageState
                   flex: 2,
                   hint: '调前重量：',
                   text:
-                      '${data.weightBeforeColorMix.value.toMaxString()} ${data.unit.value}',
+                      '${data.weightBeforeColorMix.value.toFixed(4).toShowString()} ${data.unit.value}',
                   textColor:
                       data.weightBeforeLock.value ? Colors.red : Colors.green,
                 ),
@@ -234,7 +234,7 @@ class _SapInkColorMatchingDetailPageState
                   flex: 2,
                   hint: '调后重量：',
                   text:
-                      '${data.weightAfterColorMix.value.toMaxString()} ${data.unit.value}',
+                      '${data.weightAfterColorMix.value.toFixed(4).toShowString()} ${data.unit.value}',
                   textColor:
                       data.weightAfterLock.value ? Colors.red : Colors.green,
                 ),
@@ -242,7 +242,7 @@ class _SapInkColorMatchingDetailPageState
                   flex: 2,
                   hint: '耗量：',
                   text:
-                      '${(data.weightBeforeColorMix.value.sub(data.weightAfterColorMix.value)).toMaxString()} ${data.unit.value}',
+                      '${(data.weightBeforeColorMix.value.sub(data.weightAfterColorMix.value)).toFixed(4).toShowString()} ${data.unit.value}',
                   textColor: Colors.blueAccent,
                 )
               ],
@@ -308,7 +308,7 @@ class _SapInkColorMatchingDetailPageState
                           : textSpan(
                               hint: '${state.mixDeviceName}：',
                               text:
-                                  '${state.readMixDeviceWeight.value.toMaxString()} ${state.mixDeviceUnit}',
+                                  '${state.readMixDeviceWeight.value.toFixed(4).toShowString()} ${state.mixDeviceUnit}',
                               textColor: Colors.green,
                             )
                       : Row(

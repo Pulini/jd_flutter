@@ -540,17 +540,17 @@ puttingDialog({
                           Obx(() => textSpan(
                                 hint: '应倒入：',
                                 text:
-                                    '${data.finalWeight.value.toShowString()} ${mixDeviceUnit.value}',
+                                    '${data.finalWeight.value.toFixed(4).toShowString()} ${mixDeviceUnit.value}',
                               )),
                           Obx(() => textSpan(
                                 hint: '已倒入：',
                                 text:
-                                    '${data.actualWeight.value.toShowString()} ${mixDeviceUnit.value}',
+                                    '${data.actualWeight.value.toFixed(4).toShowString()} ${mixDeviceUnit.value}',
                               )),
                           Obx(() => textSpan(
                                 hint: '还需倒入：',
                                 text:
-                                    '${data.finalWeight.value.sub(data.actualWeight.value).toShowString()} ${mixDeviceUnit.value}',
+                                    '${data.finalWeight.value.sub(data.actualWeight.value).toFixed(4).toShowString()} ${mixDeviceUnit.value}',
                               )),
                         ],
                       ),

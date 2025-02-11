@@ -114,7 +114,7 @@ class _SapInkColorMatchingPageState extends State<SapInkColorMatchingPage> {
                           expandedTextSpan(
                             flex: 2,
                             hint: '混合物重量：',
-                            text: '${data.mixtureWeight.toMaxString()}千克',
+                            text: '${data.mixtureWeight.toFixed(4).toShowString()}千克',
                             textColor: Colors.black87,
                             isBold: false,
                           ),
@@ -143,25 +143,25 @@ class _SapInkColorMatchingPageState extends State<SapInkColorMatchingPage> {
                   children: [
                     expandedTextSpan(
                       hint: '试做数量：',
-                      text: '${data.trialQty.toMaxString()}双',
+                      text: '${data.trialQty.toFixed(4).toShowString()}双',
                       textColor: Colors.black87,
                       isBold: false,
                     ),
                     expandedTextSpan(
                       hint: '混合物试做后重量：',
-                      text: '${data.mixtureTheoreticalWeight.toMaxString()}千克',
+                      text: '${data.mixtureTheoreticalWeight.toFixed(4).toShowString()}千克',
                       textColor: Colors.black87,
                       isBold: false,
                     ),
                     expandedTextSpan(
                       hint: '损耗：',
-                      text: '${data.loss.toMaxString()}%',
+                      text: '${data.loss.toFixed(4).toShowString()}%',
                       textColor: Colors.black87,
                       isBold: false,
                     ),
                     expandedTextSpan(
                       hint: '单位用量：',
-                      text: data.unitUsage.toMaxString(),
+                      text: data.unitUsage.toFixed(4).toShowString(),
                       textColor: Colors.black87,
                       isBold: false,
                     ),
