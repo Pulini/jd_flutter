@@ -1,5 +1,6 @@
 import 'package:decimal/decimal.dart';
 import 'package:jd_flutter/utils/utils.dart';
+
 //{
 //   "DeptID": "1020110",
 //   "WorkCardInterID": "213589",
@@ -34,11 +35,11 @@ import 'package:jd_flutter/utils/utils.dart';
 //  	  "BarCode": "12023000070119"
 //    }
 //   ]
-class ProductionTasksInfo{
-  String? deptID;//部门ID
-  double? toDayPlanQty;//今日任务数
-  double? toDayFinishQty;//今日完成数
-  double? toMonthFinishQty;//月完成数
+class ProductionTasksInfo {
+  String? deptID; //部门ID
+  double? toDayPlanQty; //今日任务数
+  double? toDayFinishQty; //今日完成数
+  double? toMonthFinishQty; //月完成数
   List<ProductionTasksSubInfo>? subInfo;
 
   ProductionTasksInfo({
@@ -61,6 +62,7 @@ class ProductionTasksInfo{
       });
     }
   }
+
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['DeptID'] = deptID;
@@ -75,20 +77,20 @@ class ProductionTasksInfo{
 }
 
 class ProductionTasksSubInfo {
-  String? workCardInterID;//生产派工单ID
-  String? workCardNo;//生产派工单号
-  String? mapNumber;//客户货号
-  String? clientOrderNumber;//客户订单号
-  String? moID;//指令ID
-  String? mtoNo;//指令号
-  String? productName;//型体名称
-  String? color;//型体颜色
-  String? priorityLevel;//派工单优先级
+  String? workCardInterID; //生产派工单ID
+  String? workCardNo; //生产派工单号
+  String? mapNumber; //客户货号
+  String? clientOrderNumber; //客户订单号
+  String? moID; //指令ID
+  String? mtoNo; //指令号
+  String? productName; //型体名称
+  String? color; //型体颜色
+  String? priorityLevel; //派工单优先级
   bool? isClose;
-  String? itemImage;//型体图片
-  double? finishQtyTotal;//累计完成数
-  double? shouldPackQty;//应装箱数
-  double? packagedQty;//应装箱数
+  String? itemImage; //型体图片
+  double? finishQtyTotal; //累计完成数
+  double? shouldPackQty; //应装箱数
+  double? packagedQty; //应装箱数
   String? entryFID;
   List<WorkCardSizeInfos>? workCardSizeInfo;
 
@@ -133,7 +135,6 @@ class ProductionTasksSubInfo {
         workCardSizeInfo!.add(WorkCardSizeInfos.fromJson(v));
       });
     }
-
   }
 
   Map<String, dynamic> toJson() {
@@ -203,12 +204,24 @@ class WorkCardSizeInfos {
     return map;
   }
 
-  double getOwe() =>qty! - scannedQty!;
+  double getOwe() => qty! - scannedQty!;
 
-  String getCompletionRate() =>'${Decimal.parse(((1 - getOwe() / qty!) * 100).toStringAsFixed(2))}%';
+  String getCompletionRate() =>
+      '${Decimal.parse(((1 - getOwe() / qty!) * 100).toStringAsFixed(2))}%';
 
-  double scannedNotInstalled()=>scannedQty.sub(installedQty??0);
+  double scannedNotInstalled() => scannedQty.sub(installedQty ?? 0);
+
+  addProductScannedQty(double qty) {
+    productScannedQty = productScannedQty.add(qty);
+    scannedQty=scannedQty.add(qty);
+  }
+
+  addManualScannedQty(double qty) {
+    manualScannedQty = manualScannedQty.add(qty);
+    scannedQty=scannedQty.add(qty);
+  }
 }
+
 //{
 // 	"BillNo": "JZ2400002",
 // 	"ClientOrderNumber": "202301040002",
@@ -224,7 +237,7 @@ class WorkCardSizeInfos {
 // 		}
 // 	]
 // }
-class ProductionTasksDetailInfo{
+class ProductionTasksDetailInfo {
   String? billNo;
   String? clientOrderNumber;
   double? total;
@@ -251,9 +264,9 @@ class ProductionTasksDetailInfo{
       });
     }
   }
-
 }
-class ProductionTasksDetailItemInfo{
+
+class ProductionTasksDetailItemInfo {
   String? size;
   double? qty;
   double? productScannedQty;
@@ -278,6 +291,7 @@ class ProductionTasksDetailItemInfo{
     scannedQty = json['ScannedQty'];
     installedQty = json['InstalledQty'];
   }
+
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['Size'] = size;
@@ -289,9 +303,48 @@ class ProductionTasksDetailItemInfo{
     return map;
   }
 
-  double getOwe() =>qty! - scannedQty!;
+  double getOwe() => qty! - scannedQty!;
 
-  String getCompletionRate() =>'${Decimal.parse(((1 - getOwe() / qty!) * 100).toStringAsFixed(2))}%';
+  String getCompletionRate() =>
+      '${Decimal.parse(((1 - getOwe() / qty!) * 100).toStringAsFixed(2))}%';
 
-  double scannedNotInstalled()=>scannedQty.sub(installedQty??0);
+  double scannedNotInstalled() => scannedQty.sub(installedQty ?? 0);
+}
+
+class MqttMsgInfo {
+  String? workCardInterID; //生产派工单ID
+  String? clientOrderNumber; //客户订单号
+  String? size; //尺码
+  double? productScannedQty; //机器扫码
+  double? manualScannedQty; //手动扫码
+  String? type;
+
+  MqttMsgInfo({
+    this.workCardInterID,
+    this.clientOrderNumber,
+    this.size,
+    this.productScannedQty,
+    this.manualScannedQty,
+    this.type,
+  });
+
+  MqttMsgInfo.fromJson(dynamic json) {
+    workCardInterID = json['WorkCardInterID'];
+    clientOrderNumber = json['ClientOrderNumber'];
+    size = json['Size'];
+    productScannedQty = json['ProductScannedQty'];
+    manualScannedQty = json['ManualScannedQty'];
+    type = json['Type'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['WorkCardInterID'] = workCardInterID;
+    map['ClientOrderNumber'] = clientOrderNumber;
+    map['Size'] = size;
+    map['ProductScannedQty'] = productScannedQty;
+    map['ManualScannedQty'] = manualScannedQty;
+    map['Type'] = type;
+    return map;
+  }
 }

@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/production_tasks_info.dart';
 import 'package:jd_flutter/fun/report/production_tasks/production_tasks_detail_view.dart';
@@ -111,5 +114,64 @@ class ProductionTasksLogic extends GetxController {
       },
       error: (msg) => showSnackBar(title: '错误', message: msg, isWarning: true),
     );
+  }
+
+  mqttRefresh({required String data, required Function(String) refresh}) {
+    var info = MqttMsgInfo.fromJson(jsonDecode(data));
+    try {
+      if (state.orderList[0].workCardInterID == info.workCardInterID &&
+          state.orderList[0].clientOrderNumber == info.clientOrderNumber) {
+        if ((info.manualScannedQty ?? 0) > 0) {
+          state.tableInfo
+              .firstWhere(
+                (v) => v.size == info.size,
+              )
+              .addManualScannedQty(info.manualScannedQty ?? 0);
+          state.tableInfo.refresh();
+          refresh.call('${info.size}码 +${info.manualScannedQty.toShowString()}');
+        }
+        if ((info.productScannedQty ?? 0) > 0) {
+          state.tableInfo
+              .firstWhere(
+                (v) => v.size == info.size,
+              )
+              .addProductScannedQty(info.productScannedQty ?? 0);
+          state.tableInfo.refresh();
+          refresh.call('${info.size}码 +${info.productScannedQty.toShowString()}');
+        }
+      } else {
+        debugPrint('其他列表');
+        if ((info.manualScannedQty ?? 0) > 0) {
+          state.orderList
+              .firstWhere(
+                (v) =>
+                    v.workCardInterID == info.workCardInterID &&
+                    v.clientOrderNumber == info.clientOrderNumber,
+              )
+              .workCardSizeInfo
+              ?.firstWhere(
+                (v) => v.size == info.size,
+              )
+              .addManualScannedQty(info.manualScannedQty ?? 0);
+          refresh.call('${info.size}码 +${info.manualScannedQty.toShowString()}');
+        }
+        if ((info.productScannedQty ?? 0) > 0) {
+          state.orderList
+              .firstWhere(
+                (v) =>
+                    v.workCardInterID == info.workCardInterID &&
+                    v.clientOrderNumber == info.clientOrderNumber,
+              )
+              .workCardSizeInfo
+              ?.firstWhere(
+                (v) => v.size == info.size,
+              )
+              .addProductScannedQty(info.productScannedQty ?? 0);
+          refresh.call('${info.size}码 +${info.productScannedQty.toShowString()}');
+        }
+      }
+    } catch (e) {
+      debugPrint('mqttRefresh error=$e');
+    }
   }
 }

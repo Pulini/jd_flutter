@@ -51,10 +51,9 @@ pageBody({
               content: Text(
                 popTitle,
                 style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.red,
-                  fontSize: 18
-                ),
+                    fontWeight: FontWeight.bold,
+                    color: Colors.red,
+                    fontSize: 18),
               ),
               actions: [
                 TextButton(
@@ -152,8 +151,7 @@ pageBodyWithBottomSheet({
                 style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Colors.red,
-                    fontSize: 18
-                ),
+                    fontSize: 18),
               ),
               actions: [
                 TextButton(
@@ -250,8 +248,7 @@ pageBodyWithDrawer({
                 style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Colors.red,
-                    fontSize: 18
-                ),
+                    fontSize: 18),
               ),
               actions: [
                 TextButton(
@@ -374,26 +371,26 @@ showSnackBar({
 }
 
 ///显示SnackBar
-showScanTips() {
+showScanTips({String tips = '+1', Color color = Colors.blueAccent}) {
   Get.snackbar(
     '',
     '',
-    messageText: const Center(
+    messageText: Center(
       child: Text(
-        '+1',
+        tips,
         style: TextStyle(
           fontSize: 200,
           fontWeight: FontWeight.bold,
-          color: Colors.blueAccent,
+          color: color,
         ),
       ),
     ),
     duration: const Duration(milliseconds: 500),
-    margin: const EdgeInsets.all(10),
+    // margin: const EdgeInsets.all(10),
     overlayBlur: 5,
     barBlur: 0,
     overlayColor: Colors.transparent,
-    reverseAnimationCurve: Curves.bounceOut,
+    reverseAnimationCurve: Curves.easeInOut,
     backgroundColor: Colors.transparent,
   );
 }
@@ -548,6 +545,7 @@ percentIndicator({
   Color? backgroundColor,
   Color? textColor,
 }) {
+  debugPrint('max:$max,value:$value');
   var percent = (value.div(max).toStringAsFixed(3)).toDoubleTry();
   return Stack(
     children: [
@@ -796,6 +794,7 @@ fixedLabelTemplate({
     ),
   );
 }
+
 ///动态格式标签模版
 ///45宽，高度由内容决定
 dynamicLabelTemplate({
@@ -885,6 +884,7 @@ dynamicLabelTemplate({
     ),
   );
 }
+
 ///标签表格格式化
 List<List<String>> labelTableFormat({
   required String title,
@@ -980,6 +980,7 @@ List<List<String>> labelTableFormat({
   }
   return result;
 }
+
 ///滚动选择器
 selectView({
   required List<dynamic> list,

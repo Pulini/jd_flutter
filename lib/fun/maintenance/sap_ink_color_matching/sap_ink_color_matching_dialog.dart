@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/sap_ink_color_match_info.dart';
+import 'package:jd_flutter/utils/socket_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
@@ -397,4 +398,218 @@ _submitTrialFinish({
       error.call(response.message ?? 'query_default_error'.tr);
     }
   });
+}
+
+puttingDialog({
+  required SapRecreateInkColorItemInfo data,
+  required String deviceName,
+  required String deviceServerIp,
+  required int deviceScalePort,
+  required double nowWeight,
+  required Function() refresh,
+}) {
+  var actual = data.actualWeight.value;
+  var ballColor = data.materialColor.getColorByDescription();
+  var mixDeviceWeight = (0.0).obs;
+  var mixDeviceUnit = ''.obs;
+  var connectState = 0.obs;
+  var styleBlue = const TextStyle(
+    color: Colors.blue,
+    fontSize: 24,
+    fontWeight: FontWeight.bold,
+  );
+  var styleRed = const TextStyle(
+    color: Colors.red,
+    fontSize: 24,
+    fontWeight: FontWeight.bold,
+  );
+  var styleGreen = const TextStyle(
+    color: Colors.green,
+    fontSize: 24,
+    fontWeight: FontWeight.bold,
+  );
+  SocketClientUtil mixDeviceSocket = SocketClientUtil(
+    ip: deviceServerIp,
+    port: deviceScalePort,
+    weightListener: (weight, unit) {
+      debugPrint('weight=$weight unit=$unit');
+      mixDeviceWeight.value = weight;
+      mixDeviceUnit.value = unit;
+    },
+    connectListener: (state) {
+      debugPrint('state=$state');
+      connectState.value = state.value;
+    },
+  )..connect();
+  Get.dialog(
+    PopScope(
+      canPop: false,
+      child: StatefulBuilder(builder: (c, dialogSetState) {
+        return AlertDialog(
+          title: Row(
+            children: [
+              Container(
+                height: 30,
+                width: 30,
+                margin: const EdgeInsets.only(right: 5),
+                decoration: BoxDecoration(
+                  color: ballColor,
+                  borderRadius: BorderRadius.circular(15),
+                  border: Border.all(
+                    color: Colors.white,
+                    width: 1,
+                  ),
+                ),
+                child: ballColor == Colors.transparent
+                    ? Center(child: Text('无'))
+                    : null,
+              ),
+              expandedTextSpan(
+                flex: 3,
+                hint: '物料：',
+                text: '(${data.materialCode})${data.materialName}',
+                textColor: Colors.black87,
+              ),
+            ],
+          ),
+          content: SizedBox(
+            width: 450,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Obx(() => connectState.value == ConnectState.connecting.value
+                    ? Row(
+                        children: [
+                          Text('$deviceName：', style: styleBlue),
+                          Container(
+                            width: 30,
+                            height: 30,
+                            margin: const EdgeInsets.only(left: 5, right: 10),
+                            child: const CircularProgressIndicator(),
+                          ),
+                          Text('连接中...', style: styleBlue),
+                        ],
+                      )
+                    : connectState.value == ConnectState.connected.value
+                        ? mixDeviceUnit.value != 'kg'
+                            ? Text('$deviceName：设备单位错误!', style: styleRed)
+                            : Text('$deviceName：连接成功', style: styleGreen)
+                        : Row(
+                            children: [
+                              Text('$deviceName：', style: styleRed),
+                              const Icon(
+                                Icons.leak_remove,
+                                color: Colors.red,
+                                size: 30,
+                              ),
+                              Text('设备异常', style: styleRed),
+                            ],
+                          )),
+                Obx(() => textSpan(
+                      hint: '混合物总重量：',
+                      fontSize: 24,
+                      text:
+                          '${mixDeviceWeight.value.toShowString()} ${mixDeviceUnit.value}',
+                    )),
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: Colors.blue, width: 2),
+                  ),
+                  child: Column(
+                    children: [
+                      Obx(() {
+                        var v = mixDeviceWeight.value
+                            .sub(nowWeight)
+                            .add(actual)
+                            .clamp(0.0, double.infinity);
+                        return percentIndicator(
+                          max: data.finalWeight.value,
+                          value: v,
+                          color: v > data.finalWeight.value
+                              ? Colors.red
+                              : Colors.green,
+                        );
+                      }),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Obx(() => textSpan(
+                                hint: '应倒入：',
+                                text:
+                                    '${data.finalWeight.value.toShowString()} ${mixDeviceUnit.value}',
+                              )),
+                          Obx(() => textSpan(
+                                hint: '已倒入：',
+                                text:
+                                    '${data.actualWeight.value.toShowString()} ${mixDeviceUnit.value}',
+                              )),
+                          Obx(() => textSpan(
+                                hint: '还需倒入：',
+                                text:
+                                    '${data.finalWeight.value.sub(data.actualWeight.value).toShowString()} ${mixDeviceUnit.value}',
+                              )),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  margin: const EdgeInsets.only(top: 20, bottom: 20),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(color: Colors.blue, width: 2),
+                  ),
+                  child: Center(
+                    child: Obx(() {
+                      var materialWeight = mixDeviceWeight.value
+                          .sub(nowWeight)
+                          .clamp(0.0, double.infinity);
+                      return Text(
+                        '${materialWeight.toShowString()} ${mixDeviceUnit.value}',
+                        style: const TextStyle(
+                          fontSize: 70,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.blue,
+                        ),
+                      );
+                    }),
+                  ),
+                ),
+                Obx(() => SizedBox(
+                      width: double.infinity,
+                      child: CombinationButton(
+                        isEnabled: mixDeviceUnit.value.isNotEmpty,
+                        text: '混合完成',
+                        click: () {
+                          if (connectState.value ==
+                                  ConnectState.connected.value &&
+                              mixDeviceUnit.value == 'kg') {
+                            mixDeviceSocket.clean();
+                            var materialWeight = mixDeviceWeight.value
+                                .sub(nowWeight)
+                                .clamp(0.0, double.infinity);
+                            if (data.actualWeight.value > 0) {
+                              data.actualWeight.value =
+                                  data.actualWeight.value.add(materialWeight);
+                            } else {
+                              data.actualWeight.value = materialWeight;
+                            }
+                            refresh.call();
+                          }
+                          Get.back();
+                        },
+                      ),
+                    ))
+              ],
+            ),
+          ),
+        );
+      }),
+    ),
+  );
 }

@@ -250,7 +250,10 @@ class _SapInkColorMatchingPageState extends State<SapInkColorMatchingPage> {
         DatePicker(pickerController: dpcStartDate),
         DatePicker(pickerController: dpcEndDate),
         Obx(() => SwitchButton(
-              onChanged: (s) => state.idTested.value = s,
+              onChanged: (s) {
+                state.idTested.value = s;
+                spSave('${Get.currentRoute}/idTested', s);
+              },
               name: '试做完成',
               value: state.idTested.value,
             ))

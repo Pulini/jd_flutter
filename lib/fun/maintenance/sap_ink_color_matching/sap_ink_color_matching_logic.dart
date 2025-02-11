@@ -66,9 +66,6 @@ class SapInkColorMatchingLogic extends GetxController {
       isNew: false,
       newTypeBody: state.orderList[index].typeBody ?? '',
       success: () {
-        state.mixDeviceScalePort?.mixWeight.value =
-            state.orderList[index].mixtureWeight ?? 0;
-
         Get.to(
           () => const SapInkColorMatchingDetailPage(),
           arguments: {'index': index},
@@ -82,33 +79,38 @@ class SapInkColorMatchingLogic extends GetxController {
     );
   }
 
- List<SapInkColorMatchTypeBodyMaterialInfo> getMaterialList() => state.typeBodyMaterialList
-      .where((v) =>
-          !state.inkColorList
-              .where((v) => v.isNewItem)
-              .any((v2) => v2.materialName == v.materialName) &&
-          v.materialName?.trim().isNotEmpty == true)
-      .toList();
+  List<SapInkColorMatchTypeBodyMaterialInfo> getMaterialList() =>
+      state.typeBodyMaterialList
+          .where((v) =>
+              !state.inkColorList
+                  .where((v) => v.isNewItem)
+                  .any((v2) => v2.materialName == v.materialName) &&
+              v.materialName?.trim().isNotEmpty == true)
+          .toList();
 
-  List<SapInkColorMatchTypeBodyScalePortInfo> getScalePortList() => state.typeBodyScalePortList
-      .where((v) =>
-          !state.inkColorList.any((v2) => v2.scalePort == v.scalePort) &&
-          v.isMix?.isEmpty == true)
-      .toList();
+  List<SapInkColorMatchTypeBodyScalePortInfo> getScalePortList() =>
+      state.typeBodyScalePortList
+          .where((v) =>
+              !state.inkColorList.any((v2) => v2.scalePort == v.scalePort) &&
+              v.isMix?.isEmpty == true)
+          .toList();
 
   initModifyBodyData(int index) {
-    state.orderList[index].materialList?.forEach((v) {
-      state.inkColorList.add(SapInkColorMatchItemInfo(
-        deviceName: '',
-        deviceIp: '',
-        scalePort: 0,
-        materialCode: v.materialCode ?? '',
-        materialName: v.materialName ?? '',
-        materialColor: v.materialColor ?? '',
-        weightBeforeColorMix: v.weightBeforeColorMix,
-        weightAfterColorMix: v.weightAfterColorMix,
-      )..unit.value = v.unit ?? '');
-    });
+    state.readMixDeviceWeight.value = state.orderList[index].mixtureWeight ?? 0;
+    state.inkColorList.value = [
+      for (var item in (state.orderList[index].materialList ??
+          <SapInkColorMatchMaterialInfo>[]))
+        SapInkColorMatchItemInfo(
+          deviceName: '',
+          deviceIp: '',
+          scalePort: 0,
+          materialCode: item.materialCode ?? '',
+          materialName: item.materialName ?? '',
+          materialColor: item.materialColor ?? '',
+          weightBeforeColorMix: item.weightBeforeColorMix,
+          weightAfterColorMix: item.weightAfterColorMix,
+        )..unit.value = item.unit ?? ''
+    ];
   }
 
   readBeforeWeight() {
@@ -135,8 +137,7 @@ class SapInkColorMatchingLogic extends GetxController {
   }
 
   readMixWeight() {
-    state.mixDeviceScalePort?.mixWeight.value =
-        state.mixDeviceScalePort?.weight.value ?? 0;
+    state.readMixDeviceWeight.value = state.mixDeviceWeight;
   }
 
   bool hasReadBeforeWeight() => state.inkColorList
@@ -163,13 +164,12 @@ class SapInkColorMatchingLogic extends GetxController {
         return;
       }
     }
-    if (state.mixDeviceScalePort == null) {
+    if (state.mixDeviceSocket == null) {
       errorDialog(content: '当前服务器尚未配置混合物秤！');
       return;
     }
-    if ((state.mixDeviceScalePort?.mixWeight.value ?? 0) <= 0) {
-      errorDialog(
-          content: '(${state.mixDeviceScalePort!.deviceName})混合物重量尚未读取！');
+    if (state.readMixDeviceWeight.value <= 0) {
+      errorDialog(content: '(${state.mixDeviceName})混合物重量尚未读取！');
       return;
     }
     submit.call();
@@ -181,8 +181,7 @@ class SapInkColorMatchingLogic extends GetxController {
           .where((v) => v.isNewItem)
           .map((v) => v.consumption())
           .reduce((a, b) => a.add(b));
-      var mixActualWeight =
-          (state.mixDeviceScalePort?.mixWeight.value ?? 0).add(newItemWeight);
+      var mixActualWeight = state.readMixDeviceWeight.value.add(newItemWeight);
       var mixTheoreticalWeight = state.inkColorList
           .map((v) => v.consumption())
           .reduce((a, b) => a.add(b));
@@ -204,7 +203,7 @@ class SapInkColorMatchingLogic extends GetxController {
     checkSubmit(() => state.submitOrder(
           orderNumber: '',
           inkMaster: userInfo?.name ?? '',
-          mixActualWeight: state.mixDeviceScalePort?.mixWeight.value ?? 0,
+          mixActualWeight: state.readMixDeviceWeight.value,
           mixTheoreticalWeight: state.inkColorList
               .map((v) => v.consumption())
               .reduce((a, b) => a.add(b)),
@@ -214,5 +213,85 @@ class SapInkColorMatchingLogic extends GetxController {
           ),
           error: (msg) => errorDialog(content: msg),
         ));
+  }
+
+  List<List> getRatioColorLine(int index) {
+    var ratioColorLine = <List>[];
+    state.orderList[index].materialList?.forEach((v) {
+      ratioColorLine.add([v.ratio ?? 0.0, v.materialColor ?? '']);
+    });
+    return ratioColorLine;
+  }
+
+  initRecreateItemData(int index) {
+    state.presetInkColorList = [
+      for (var item in (state.orderList[index].materialList ??
+          <SapInkColorMatchMaterialInfo>[]))
+        SapRecreateInkColorItemInfo(
+          materialCode: item.materialCode ?? '',
+          materialName: item.materialName ?? '',
+          materialColor: item.materialColor ?? '',
+          ratio: item.ratio ?? 0,
+        )
+    ];
+  }
+
+  List<List> getRecreateRatioColorLine() {
+    var ratioColorLine = <List>[];
+    for (var v in state.presetInkColorList) {
+      ratioColorLine.add([v.ratio, v.materialColor]);
+    }
+    return ratioColorLine;
+  }
+
+  setPresetWeight(double weight) {
+    state.finalWeight.value = weight;
+    for (var v in state.presetInkColorList) {
+      var preset = weight.mul(v.ratio.div(100));
+      v.actualWeight.value = 0;
+      v.presetWeight.value = preset;
+      v.finalWeight.value = preset;
+      v.repairWeight.value = preset;
+    }
+  }
+
+  double getNowWeight(int index) {
+    var nowWeight = 0.0;
+    if (state.presetInkColorList[index].actualWeight.value > 0) {
+      nowWeight = state.presetInkColorList
+          .map((v) => v.actualWeight.value)
+          .reduce((a, b) => a.add(b));
+    } else {
+      for (var i = 0; i < state.presetInkColorList.length; ++i) {
+        if (i != index) {
+          nowWeight =
+              nowWeight.add(state.presetInkColorList[i].actualWeight.value);
+        }
+      }
+    }
+    return nowWeight;
+  }
+
+  refreshItemList(int index) {
+    var item = state.presetInkColorList[index];
+    var preset = item.actualWeight.value.div((item.ratio.div(100)));
+    if (preset > state.finalWeight.value) {
+      state.finalWeight.value = preset;
+      for (var v in state.presetInkColorList) {
+        v.finalWeight.value = preset.mul(v.ratio.div(100));
+        v.repairWeight.value = v.finalWeight.value.sub(v.actualWeight.value);
+      }
+    }else{
+      item.repairWeight.value = item.finalWeight.value.sub(item.actualWeight.value);
+    }
+  }
+
+  refreshAll() {
+    state.finalWeight.value = 0;
+    for (var v in state.presetInkColorList) {
+      v.actualWeight.value = 0;
+      v.presetWeight.value = 0;
+      v.repairWeight.value = 0;
+    }
   }
 }

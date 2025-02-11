@@ -21,12 +21,7 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
   final ProductionTasksLogic logic = Get.put(ProductionTasksLogic());
   final ProductionTasksState state = Get.find<ProductionTasksLogic>().state;
   final orderListKey = GlobalKey<AnimatedListState>();
-  MqttUtil mqtt = MqttUtil(
-    server: '192.168.99.229',
-    port: 1883,
-    topic: 'JJb_WorkLine/${userInfo?.departmentID}/ge_cj_rfid_record',
-    listener: (data) {},
-  );
+  late MqttUtil mqtt;
 
   Widget _orderItem(
     ProductionTasksSubInfo data,
@@ -454,8 +449,17 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) => _refreshTable()
+    mqtt = MqttUtil(
+      server: '192.168.99.229',
+      port: 1883,
+      topic: 'JJb_WorkLine/${userInfo?.departmentID}/ge_cj_rfid_record',
+      // topic: 'JJb_WorkLine/${userInfo?.departmentID}/sync',
+      listener: (data) => logic.mqttRefresh(
+        data: data,
+        refresh: (msg) => showScanTips(tips: msg),
+      ),
     );
+    WidgetsBinding.instance.addPostFrameCallback((_) => _refreshTable());
     super.initState();
   }
 

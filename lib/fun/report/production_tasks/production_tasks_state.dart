@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/production_tasks_info.dart';
-import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 
 class ProductionTasksState {
@@ -37,8 +36,8 @@ class ProductionTasksState {
         method: webApiGetProductionOrderSchedule,
         loading: '正在查询生产任务进度表...',
         params: {
-          'departmentID': getUserInfo()!.departmentID ?? 0,
-          // 'departmentID': 554744,
+          // 'departmentID': getUserInfo()!.departmentID ?? 0,
+          'departmentID': 554744,
         }).then((response) {
       if (response.resultCode == resultSuccess) {
         var info=ProductionTasksInfo.fromJson(response.data);

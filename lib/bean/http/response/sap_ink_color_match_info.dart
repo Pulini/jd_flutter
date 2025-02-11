@@ -243,7 +243,6 @@ class SapInkColorMatchItemInfo {
   String materialName;
   String materialColor;
 
-
   bool isNewItem;
 
   RxBool weightBeforeLock = true.obs;
@@ -257,7 +256,7 @@ class SapInkColorMatchItemInfo {
   RxBool isConnect = false.obs;
   RxBool isConnecting = false.obs;
   RxDouble weight = 0.0.obs;
-  RxString unit='kg'.obs;
+  RxString unit = 'kg'.obs;
   RxDouble mixWeight = 0.0.obs;
 
   SapInkColorMatchItemInfo({
@@ -273,26 +272,36 @@ class SapInkColorMatchItemInfo {
   }) {
     this.weightBeforeColorMix.value = weightBeforeColorMix;
     this.weightAfterColorMix.value = weightAfterColorMix;
-    if(isNewItem){
-      weightBeforeLock.value=false;
+    if (isNewItem) {
+      weightBeforeLock.value = false;
       scu = SocketClientUtil(
         ip: deviceIp,
         port: scalePort,
         weightListener: (weight, unit) {
           errorUnit.value = unit != 'kg';
-          this.unit.value=unit;
+          this.unit.value = unit;
           this.weight.value = weight;
         },
-        connectListener: (c) {
-          isConnecting.value = false;
-          isConnect.value = c;
-          logger.f('$deviceName ${c?'连接成功':'连接失败'}');
+        connectListener: (connectState) {
+          if (connectState == ConnectState.connecting) {
+            isConnecting.value = true;
+          } else {
+            isConnecting.value = false;
+          }
+          if (connectState == ConnectState.connected) {
+            isConnect.value = true;
+          } else {
+            isConnect.value = false;
+          }
+
+          logger.f('设备:$deviceName  状态:$connectState');
         },
       );
     }
   }
- double consumption()=>weightBeforeColorMix.value.sub(weightAfterColorMix.value);
 
+  double consumption() =>
+      weightBeforeColorMix.value.sub(weightAfterColorMix.value);
 
   connect() {
     if (!isConnect.value && !isConnecting.value) {
@@ -306,4 +315,22 @@ class SapInkColorMatchItemInfo {
     scu?.close();
     isConnect.value = false;
   }
+}
+
+class SapRecreateInkColorItemInfo {
+  String materialCode;
+  String materialName;
+  String materialColor;
+  double ratio;
+  RxDouble presetWeight = 0.0.obs;//首次录入预调数量
+  RxDouble finalWeight = 0.0.obs;//最终应该使用数量
+  RxDouble actualWeight = 0.0.obs;//实际使用数量
+  RxDouble repairWeight = 0.0.obs;//达到最终使用数量时所需的修正数
+
+  SapRecreateInkColorItemInfo({
+    required this.materialCode,
+    required this.materialName,
+    required this.materialColor,
+    required this.ratio,
+  });
 }

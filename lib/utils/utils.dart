@@ -166,17 +166,12 @@ extension DoubleExt on double? {
     }
   }
 
-  String toMaxString() {
-    if (this == null) {
-      return '0';
-    } else {
-      // 将 Decimal 转换为 num 类型，然后使用 toStringAsFixed 方法
-      num value = this!;
-      return value
-          .toStringAsFixed(6)
-          .replaceAll(RegExp(r'0+$'), '')
-          .replaceAll(RegExp(r'\.$'), '');
-    }
+  ///double转string并保留最大6位小数
+  String toMaxString() => toFixed(6).toShowString();
+
+  double toFixed(int fractionDigits) {
+    if (this == null) return 0;
+    return double.parse(this!.toStringAsFixed(fractionDigits));
   }
 
   double add(double value) =>
@@ -188,8 +183,10 @@ extension DoubleExt on double? {
   double mul(double value) =>
       (Decimal.parse(toString()) * Decimal.parse(value.toString())).toDouble();
 
-  double div(double value) =>
-      (Decimal.parse(toString()) / Decimal.parse(value.toString())).toDouble();
+  double div(double value){
+    if(value==0) return 0;
+    return  (Decimal.parse(toString()) / Decimal.parse(value.toString())).toDouble();
+  }
 }
 
 extension Uint8ListExt on Uint8List {
@@ -361,7 +358,7 @@ extension StringExt on String? {
       }
     }
     // 如果描述字符串中没有找到匹配的颜色字样，则返回默认颜色，这里以透明色为例
-    return  Colors.transparent;
+    return Colors.transparent;
   }
 }
 

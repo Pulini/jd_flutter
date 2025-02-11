@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/base_data.dart';
 import 'package:jd_flutter/bean/http/response/sap_ink_color_match_info.dart';
+import 'package:jd_flutter/utils/socket_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 
@@ -9,26 +10,63 @@ class SapInkColorMatchingState {
   var typeBody = ''.obs;
   var idTested = false.obs;
   var orderList = <SapInkColorMatchOrderInfo>[].obs;
+
+  var mixDeviceName = '';
+  var mixDeviceServerIp = '';
+  var mixDeviceScalePort = 0;
+  SocketClientUtil? mixDeviceSocket;
+  var mixDeviceWeight = (0.0);
+  var mixDeviceUnit = '';
+  late ConnectState mixDeviceConnectState;
+
   var newTypeBody = '';
+  var readMixDeviceWeight = (0.0).obs;
   var inkColorList = <SapInkColorMatchItemInfo>[].obs;
   var typeBodyMaterialList = <SapInkColorMatchTypeBodyMaterialInfo>[];
   var typeBodyServerIp = '';
   var typeBodyScalePortList = <SapInkColorMatchTypeBodyScalePortInfo>[];
 
-  SapInkColorMatchItemInfo? mixDeviceScalePort;
+  var presetWeight = 0.0;
+  var finalWeight = (0.0).obs;
+  var presetInkColorList = <SapRecreateInkColorItemInfo>[];
 
-  SapInkColorMatchingState() {
-    ///Initialize variables
+
+  SapInkColorMatchingState(){
+    idTested.value=  spGet('${Get.currentRoute}/idTested')??false;
   }
+
 
   clean() {
     newTypeBody = '';
+    readMixDeviceWeight.value=0;
     inkColorList.value = [];
     typeBodyMaterialList = [];
     typeBodyServerIp = '';
     typeBodyScalePortList = [];
-    mixDeviceScalePort?.close();
-    mixDeviceScalePort = null;
+
+    mixDeviceName='';
+    mixDeviceServerIp='';
+    mixDeviceScalePort=0;
+    mixDeviceSocket?.clean();
+    mixDeviceSocket=null;
+    mixDeviceWeight=0;
+    mixDeviceUnit='';
+    mixDeviceConnectState=ConnectState.unConnect;
+  }
+
+  cleanRecreate() {
+    presetWeight = 0;
+    finalWeight.value = 0;
+    presetInkColorList=[];
+
+    mixDeviceName='';
+    mixDeviceServerIp='';
+    mixDeviceScalePort=0;
+    mixDeviceSocket?.clean();
+    mixDeviceSocket=null;
+    mixDeviceWeight=0;
+    mixDeviceUnit='';
+    mixDeviceConnectState=ConnectState.unConnect;
   }
 
   queryOrder({
@@ -92,20 +130,10 @@ class SapInkColorMatchingState {
           typeBodyScalePortList = data.scalePorts ?? [];
           try {
             var mix = data.scalePorts?.firstWhere((v) => v.isMix == 'X');
-            mixDeviceScalePort = SapInkColorMatchItemInfo(
-                isNewItem: true,
-                deviceName: mix!.deviceName ?? '',
-                deviceIp: data.serverIp ?? '',
-                // deviceIp: '192.168.101.231',
-                scalePort: mix.scalePort ?? 0,
-                // scalePort: 5800,
-                materialCode: '',
-                materialName: '',
-                materialColor: '');
-          } catch (_) {
-            mixDeviceScalePort?.close();
-            mixDeviceScalePort = null;
-          }
+            mixDeviceName= mix!.deviceName ?? '';
+            mixDeviceServerIp=data.serverIp ?? '';
+            mixDeviceScalePort=mix.scalePort ?? 0;
+          } catch (_) {}
           success.call();
         });
       } else {
@@ -113,8 +141,6 @@ class SapInkColorMatchingState {
         typeBodyMaterialList = [];
         typeBodyServerIp = '';
         typeBodyScalePortList = [];
-        mixDeviceScalePort?.close();
-        mixDeviceScalePort = null;
         error.call(response.message ?? 'query_default_error'.tr);
       }
     });

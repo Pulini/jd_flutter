@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/maintenance/sap_ink_color_matching/sap_ink_color_matching_dialog.dart';
+import 'package:jd_flutter/fun/maintenance/sap_ink_color_matching/sap_ink_color_matching_recreate_view.dart';
 import 'package:jd_flutter/fun/maintenance/sap_ink_color_matching/sap_ink_color_matching_state.dart';
 import 'package:jd_flutter/utils/socket_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
@@ -25,7 +26,6 @@ class _SapInkColorMatchingDetailPageState
       Get.find<SapInkColorMatchingLogic>().state;
   int index = Get.arguments['index'];
   var canAdd = false;
-  late SocketClientUtil mixDeviceSocket;
 
   _item(int i) {
     var data = state.inkColorList[i];
@@ -250,14 +250,6 @@ class _SapInkColorMatchingDetailPageState
     );
   }
 
-  Widget _ratioBarChart() {
-    var ratioColorLine = <List>[];
-    state.orderList[index].materialList?.forEach((v) {
-      ratioColorLine.add([v.ratio ?? 0.0, v.materialColor ?? '']);
-    });
-    return ratioBarChart(ratioList: ratioColorLine);
-  }
-
   _body() {
     return Padding(
       padding: const EdgeInsets.only(
@@ -266,7 +258,8 @@ class _SapInkColorMatchingDetailPageState
         bottom: 10,
       ),
       child: Column(children: [
-        if (index >= 0) _ratioBarChart(),
+        if (index >= 0)
+          ratioBarChart(ratioList: logic.getRatioColorLine(index)),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -296,7 +289,34 @@ class _SapInkColorMatchingDetailPageState
                   : '${userInfo?.name}',
               textColor: Colors.black87,
             ),
-            _mixMaterialWidget()
+            if (state.mixDeviceSocket != null)
+              state.mixDeviceConnectState == ConnectState.connecting
+                  ? Row(
+                      children: [
+                        Text('${state.mixDeviceName}：'),
+                        const CircularProgressIndicator()
+                      ],
+                    )
+                  : state.mixDeviceConnectState == ConnectState.connected
+                      ? state.mixDeviceUnit != 'kg'
+                          ? textSpan(
+                              hint: '${state.mixDeviceName}：',
+                              text: '设备单位错误！',
+                              hintColor: Colors.red,
+                              textColor: Colors.red,
+                            )
+                          : textSpan(
+                              hint: '${state.mixDeviceName}：',
+                              text:
+                                  '${state.readMixDeviceWeight.value.toMaxString()} ${state.mixDeviceUnit}',
+                              textColor: Colors.green,
+                            )
+                      : Row(
+                          children: [
+                            Text('${state.mixDeviceName}：'),
+                            const Icon(Icons.leak_remove, color: Colors.red)
+                          ],
+                        )
           ],
         ),
         Expanded(
@@ -310,56 +330,27 @@ class _SapInkColorMatchingDetailPageState
     );
   }
 
-  _mixMaterialWidget() {
-    if (state.mixDeviceScalePort == null) {
-      return Container();
-    } else {
-      return Obx(() {
-        return index < 0
-            ? state.mixDeviceScalePort?.isConnecting.value == true
-                ? Row(
-                    children: [
-                      Text('${state.mixDeviceScalePort!.deviceName}：'),
-                      const CircularProgressIndicator()
-                    ],
-                  )
-                : state.mixDeviceScalePort?.isConnect.value == true
-                    ? state.mixDeviceScalePort?.errorUnit.value == true
-                        ? textSpan(
-                            hint: '${state.mixDeviceScalePort!.deviceName}：',
-                            text: '设备单位错误！',
-                            hintColor: Colors.red,
-                            textColor: Colors.red,
-                          )
-                        : textSpan(
-                            hint: '${state.mixDeviceScalePort!.deviceName}：',
-                            text:
-                                '${state.mixDeviceScalePort!.mixWeight.value.toMaxString()} ${state.mixDeviceScalePort!.unit.value}',
-                            textColor: Colors.green,
-                          )
-                    : Row(
-                        children: [
-                          Text('${state.mixDeviceScalePort!.deviceName}：'),
-                          const Icon(Icons.leak_remove, color: Colors.red)
-                        ],
-                      )
-            : textSpan(
-                hint: '混合物重量：',
-                text:
-                    '${state.mixDeviceScalePort!.mixWeight.value.toMaxString()} ${state.mixDeviceScalePort!.unit.value}',
-                textColor: Colors.green,
-              );
-      });
-    }
-  }
-
   @override
   void initState() {
     canAdd = index < 0 || (index >= 0 && state.orderList[index].trialQty == 0);
     if (index >= 0) {
       logic.initModifyBodyData(index);
     } else {
-      state.mixDeviceScalePort?.connect();
+      state.mixDeviceSocket = SocketClientUtil(
+        ip: state.mixDeviceServerIp,
+        port: state.mixDeviceScalePort,
+        weightListener: (weight, unit) {
+          setState(() {
+            state.mixDeviceWeight = weight;
+            state.mixDeviceUnit = unit;
+          });
+        },
+        connectListener: (connectState) {
+          setState(() {
+            state.mixDeviceConnectState = connectState;
+          });
+        },
+      )..connect();
     }
     super.initState();
   }
@@ -424,7 +415,18 @@ class _SapInkColorMatchingDetailPageState
               ),
             ]
           : [
-              CombinationButton(text: '再做一单', click: () {}),
+              CombinationButton(
+                text: '再做一单',
+                click: () => Get.off(
+                  () => const SapInkColorMatchingRecreatePage(),
+                  arguments: {
+                    'index': index,
+                    'deviceName': state.mixDeviceName,
+                    'deviceServerIp': state.mixDeviceServerIp,
+                    'deviceScalePort': state.mixDeviceScalePort,
+                  },
+                ),
+              ),
             ],
       title: index >= 0
           ? (state.orderList[index].trialQty ?? 0) > 0
