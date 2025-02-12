@@ -10,13 +10,14 @@ class MoldingScanBulletinReportState {
 
   getMoldingScanBulletinReport({
     required int departmentID,
+    required bool isRefresh,
     required bool isGetAllList,
     required Function(String msg) error,
     required Function() refreshTimer,
   }) {
     httpGet(
       method: webApiGetMoldingScanBulletinReport,
-      loading: 'molding_scan_bulletin_report_querying'.tr,
+      loading: isRefresh?'':'molding_scan_bulletin_report_querying'.tr,
       params: {
         'departmentID': departmentID,
         'IsGetAllList': isGetAllList,

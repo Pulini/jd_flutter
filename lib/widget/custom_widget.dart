@@ -27,7 +27,8 @@ var backgroundColor = const BoxDecoration(
 pageBody({
   String? title,
   List<Widget>? actions,
-  required Widget? body,
+  String popTitle = '',
+  required Widget body,
 }) {
   return Container(
     decoration: backgroundColor,
@@ -41,7 +42,37 @@ pageBody({
           ...?actions,
         ],
       ),
-      body: body,
+      body: PopScope(
+        canPop: popTitle.isEmpty ? true : false,
+        onPopInvokedWithResult: (didPop, result) {
+          if (!didPop) {
+            Get.dialog(AlertDialog(
+              title: Text('dialog_default_exit_title'.tr),
+              content: Text(
+                popTitle,
+                style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.red,
+                    fontSize: 18),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Get.back(closeOverlays: true),
+                  child: Text('dialog_default_confirm'.tr),
+                ),
+                TextButton(
+                  onPressed: () => Get.back(),
+                  child: Text(
+                    'dialog_default_cancel'.tr,
+                    style: const TextStyle(color: Colors.grey),
+                  ),
+                ),
+              ],
+            ));
+          }
+        },
+        child: body,
+      ),
     ),
   );
 }
@@ -52,8 +83,9 @@ pageBodyWithBottomSheet({
   List<Widget>? actions,
   bool? isShow,
   required List<Widget> bottomSheet,
-  required Function query,
-  required Widget? body,
+  required Function() query,
+  String popTitle = '',
+  required Widget body,
 }) {
   return Container(
     decoration: backgroundColor,
@@ -109,7 +141,37 @@ pageBodyWithBottomSheet({
           )
         ],
       ),
-      body: body,
+      body: PopScope(
+        canPop: popTitle.isEmpty ? true : false,
+        onPopInvokedWithResult: (didPop, result) {
+          if (!didPop) {
+            Get.dialog(AlertDialog(
+              title: Text('dialog_default_exit_title'.tr),
+              content: Text(
+                popTitle,
+                style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.red,
+                    fontSize: 18),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Get.back(closeOverlays: true),
+                  child: Text('dialog_default_confirm'.tr),
+                ),
+                TextButton(
+                  onPressed: () => Get.back(),
+                  child: Text(
+                    'dialog_default_cancel'.tr,
+                    style: const TextStyle(color: Colors.grey),
+                  ),
+                ),
+              ],
+            ));
+          }
+        },
+        child: body,
+      ),
     ),
   );
 }
@@ -119,12 +181,15 @@ pageBodyWithDrawer({
   String? title,
   List<Widget>? actions,
   required List<Widget> queryWidgets,
-  required Function query,
-  required Widget? body,
+  required Function() query,
+  String popTitle = '',
+  required Widget body,
 }) {
+  var scaffoldKey = GlobalKey<ScaffoldState>();
   return Container(
     decoration: backgroundColor,
     child: Scaffold(
+      key: scaffoldKey,
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.transparent,
       appBar: AppBar(
@@ -161,6 +226,7 @@ pageBodyWithDrawer({
                   ),
                 ),
                 onPressed: () {
+                  scaffoldKey.currentState?.closeEndDrawer();
                   query.call();
                 },
                 child: Text(
@@ -172,7 +238,37 @@ pageBodyWithDrawer({
           ),
         ]),
       ),
-      body: body,
+      body: PopScope(
+        canPop: popTitle.isEmpty ? true : false,
+        onPopInvokedWithResult: (didPop, result) {
+          if (!didPop) {
+            Get.dialog(AlertDialog(
+              title: Text('dialog_default_exit_title'.tr),
+              content: Text(
+                popTitle,
+                style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.red,
+                    fontSize: 18),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Get.back(closeOverlays: true),
+                  child: Text('dialog_default_confirm'.tr),
+                ),
+                TextButton(
+                  onPressed: () => Get.back(),
+                  child: Text(
+                    'dialog_default_cancel'.tr,
+                    style: const TextStyle(color: Colors.grey),
+                  ),
+                ),
+              ],
+            ));
+          }
+        },
+        child: body,
+      ),
     ),
   );
 }
@@ -276,26 +372,26 @@ showSnackBar({
 }
 
 ///显示SnackBar
-showScanTips() {
+showScanTips({String tips = '+1', Color color = Colors.blueAccent}) {
   Get.snackbar(
     '',
     '',
-    messageText: const Center(
+    messageText: Center(
       child: Text(
-        '+1',
+        tips,
         style: TextStyle(
           fontSize: 200,
           fontWeight: FontWeight.bold,
-          color: Colors.blueAccent,
+          color: color,
         ),
       ),
     ),
     duration: const Duration(milliseconds: 500),
-    margin: const EdgeInsets.all(10),
+    // margin: const EdgeInsets.all(10),
     overlayBlur: 5,
     barBlur: 0,
     overlayColor: Colors.transparent,
-    reverseAnimationCurve: Curves.bounceOut,
+    reverseAnimationCurve: Curves.easeInOut,
     backgroundColor: Colors.transparent,
   );
 }
@@ -332,7 +428,7 @@ showPopup(Widget widget, {double? height}) {
 }
 
 ///底部弹出 sheet
-Future<T?> showSheet<T>(
+showSheet<T>(
   BuildContext context,
   Widget body, {
   bool scrollControlled = true,
@@ -450,6 +546,7 @@ percentIndicator({
   Color? backgroundColor,
   Color? textColor,
 }) {
+  debugPrint('max:$max,value:$value');
   var percent = (value.div(max).toStringAsFixed(3)).toDoubleTry();
   return Stack(
     children: [
@@ -699,6 +796,8 @@ fixedLabelTemplate({
   );
 }
 
+///动态格式标签模版
+///45宽，高度由内容决定
 dynamicLabelTemplate({
   required String qrCode,
   Widget? title,
@@ -787,6 +886,7 @@ dynamicLabelTemplate({
   );
 }
 
+///标签表格格式化
 List<List<String>> labelTableFormat({
   required String title,
   String? total,
@@ -882,6 +982,7 @@ List<List<String>> labelTableFormat({
   return result;
 }
 
+///滚动选择器
 selectView({
   required List<dynamic> list,
   required FixedExtentScrollController controller,
@@ -950,5 +1051,83 @@ selectView({
                 ],
               )
             : Row(children: [textSpan(hint: hint, text: list[0].toString())]),
+  );
+}
+
+///是否深色
+bool isDeepColor(Color color) {
+  if (color == Colors.transparent) {
+    return false;
+  }
+  var grayscale = 0.299 * color.r + 0.587 * color.g + 0.114 * color.b;
+  debugPrint('grayscale=$grayscale');
+  //灰阶值小于到30%认定为深色。
+  return grayscale < 0.3;
+}
+
+///柱状图进度条
+Widget ratioBarChart({
+  double width = double.infinity,
+  required List<List<dynamic>> ratioList,
+}) {
+  debugPrint('ratioList=$ratioList');
+  var list = <Widget>[];
+  var radius = const Radius.circular(13);
+  for (var i = 0; i < ratioList.length; ++i) {
+    var percent = (ratioList[i][0] as double);
+    var colorName = (ratioList[i][1] as String);
+    var color = colorName.getColorByDescription();
+    var text = Center(
+        child: Text(
+      '${percent.toShowString()}% ${colorName.isEmpty ? '无色' : colorName}',
+      style: TextStyle(
+        fontWeight: FontWeight.bold,
+        color: isDeepColor(color) ? Colors.white : Colors.black,
+      ),
+    ));
+    list.add(
+      Expanded(
+        flex: percent.toInt(),
+        child: i == 0
+            ? Container(
+                height: 50,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    topLeft: radius,
+                    bottomLeft: radius,
+                  ),
+                  color: color,
+                ),
+                child: text,
+              )
+            : i == ratioList.length - 1
+                ? Container(
+                    height: 50,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                        topRight: radius,
+                        bottomRight: radius,
+                      ),
+                      color: color,
+                    ),
+                    child: text,
+                  )
+                : Container(height: 50, color: color, child: text),
+      ),
+    );
+  }
+
+  return Container(
+    height: 50,
+    width: width,
+    decoration: BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(15),
+      border: Border.all(
+        color: Colors.blueAccent,
+        width: 2,
+      ),
+    ),
+    child: Row(children: list),
   );
 }

@@ -21,7 +21,6 @@ class MoldingPackAreaReportPageState {
     required String startDate,
     required String endDate,
     required List<String> packAreaIDs,
-    required Function() success,
     required Function(String msg) error,
   }) {
     httpGet(
@@ -40,7 +39,6 @@ class MoldingPackAreaReportPageState {
           for (var json in response.data)
             MoldingPackAreaReportInfo.fromJson(json)
         ];
-        success.call();
       } else {
         error.call(response.message ?? 'query_default_error'.tr);
       }

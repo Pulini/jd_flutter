@@ -46,24 +46,11 @@ class MaterialDispatchLogic extends GetxController {
     super.onClose();
   }
 
-  query() {
+  refreshDataList() {
     state.getScWorkCardProcess(
       startDate: dpcStartDate.getDateFormatYMD(),
       endDate: dpcEndDate.getDateFormatYMD(),
       status: scReportState.selectIndex - 1,
-      success: () {
-        if (state.orderList.isNotEmpty) Get.back();
-      },
-      error: (msg) => errorDialog(content: msg),
-    );
-  }
-
-  refreshDataList({Function()? refresh}) {
-    state.getScWorkCardProcess(
-      startDate: dpcStartDate.getDateFormatYMD(),
-      endDate: dpcEndDate.getDateFormatYMD(),
-      status: scReportState.selectIndex - 1,
-      success: () => refresh?.call(),
       error: (msg) => errorDialog(content: msg),
     );
   }
@@ -168,12 +155,7 @@ class MaterialDispatchLogic extends GetxController {
       subData: subData,
       success: (msg) => successDialog(
         content: msg,
-        back: () => refreshDataList(refresh: () {
-          if (isPrint) {
-            // List<String> guidList = response.data['GuidList'];
-            // List<String> pickUpCodeList = response.data['PickUpCodeList'];
-          }
-        }),
+        back: () => refreshDataList(),
       ),
       error: (msg) => errorDialog(content: msg),
     );

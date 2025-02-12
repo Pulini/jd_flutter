@@ -2,10 +2,10 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/carton_label_scan_info.dart';
+import 'package:jd_flutter/fun/warehouse/manage/carton_label_scan_progress/carton_label_scan_progress_view.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
-import 'package:jd_flutter/widget/edit_text_widget.dart';
 
 import 'carton_label_scan_logic.dart';
 import 'carton_label_scan_state.dart';
@@ -85,7 +85,7 @@ class _CartonLabelScanPageState extends State<CartonLabelScanPage> {
   @override
   void initState() {
     player = AudioPlayer();
-    pdaScanner(scan: (barCode){
+    pdaScanner(scan: (barCode) {
       logic.scan(
         code: barCode,
         outsideCode: (code) {
@@ -110,9 +110,12 @@ class _CartonLabelScanPageState extends State<CartonLabelScanPage> {
     return pageBody(
       actions: [
         IconButton(
-          onPressed: () => logic.cleanAll(() => controller.text = ''),
+          onPressed: () => Get.to(
+            () => const CartonLabelScanProgressPage(),
+            arguments: {'CustomerPO':state.cartonLabelInfo?.custOrderNumber??''},
+          ),
           icon: const Icon(
-            Icons.refresh,
+            Icons.menu_book,
             color: Colors.blue,
           ),
         )
@@ -120,20 +123,41 @@ class _CartonLabelScanPageState extends State<CartonLabelScanPage> {
       body: Obx(() => Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: EditText(
-                      hint: '请扫描或手动输入外箱贴标',
-                      controller: controller,
+              Container(
+                margin: const EdgeInsets.all(5),
+                height: 40,
+                child: TextField(
+                  controller: controller,
+                  decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.only(left: 15, right: 10),
+                    filled: true,
+                    fillColor: Colors.white54,
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      borderSide: const BorderSide(color: Colors.transparent),
+                    ),
+                    border: const OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                    ),
+                    hintText: '请扫描或手动输入外箱贴标',
+                    hintStyle: const TextStyle(color: Colors.grey),
+                    prefixIcon: IconButton(
+                      onPressed: () => controller.clear(),
+                      icon: const Icon(
+                        Icons.replay_circle_filled,
+                        color: Colors.red,
+                      ),
+                    ),
+                    suffixIcon: IconButton(
+                      onPressed: () =>
+                          logic.queryCartonLabelInfo(controller.text),
+                      icon: const Icon(
+                        Icons.loupe_rounded,
+                        color: Colors.green,
+                      ),
                     ),
                   ),
-                  IconButton(
-                    onPressed: () =>
-                        logic.queryCartonLabelInfo(controller.text),
-                    icon: const Icon(Icons.search, color: Colors.blue),
-                  )
-                ],
+                ),
               ),
               Container(
                 margin: const EdgeInsets.all(8),
@@ -142,7 +166,10 @@ class _CartonLabelScanPageState extends State<CartonLabelScanPage> {
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: [Colors.blue.shade200, Colors.green.shade50],
+                    colors: [
+                      Colors.green.shade100,
+                      Colors.blue.shade200,
+                    ],
                   ),
                   borderRadius: BorderRadius.circular(10),
                   // border: Border.all(color: Colors.blue.shade200, width: 2),
@@ -150,34 +177,41 @@ class _CartonLabelScanPageState extends State<CartonLabelScanPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
+                    textSpan(
+                      hint: '外箱条码：',
+                      text: state.cartonLabel.value,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        top: 8,
+                        left: 4,
+                        right: 4,
+                        bottom: 8,
+                      ),
+                      child: progressIndicator(
+                        max: state.labelTotal.value.toDouble(),
+                        value: state.scannedLabelTotal.value.toDouble(),
+                      ),
+                    ),
                     Row(
                       children: [
-                        expandedTextSpan(
-                            hint: '外箱条码：', text: state.cartonLabel.value),
-                        GestureDetector(
-                          onTap: () => logic.cleanScanned(),
-                          child: Container(
-                            padding: const EdgeInsets.only(left: 5, right: 5),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(color: Colors.blue, width: 2),
-                            ),
-                            child: Text(
-                              '重扫内标',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.blue,
-                              ),
-                            ),
+                        Expanded(
+                          child: CombinationButton(
+                            text: '重新扫码',
+                            click: () =>
+                                logic.cleanAll(() => controller.text = ''),
+                            combination: Combination.left,
+                          ),
+                        ),
+                        Expanded(
+                          child: CombinationButton(
+                            text: '重扫内标',
+                            click: () => logic.cleanScanned(),
+                            combination: Combination.right,
                           ),
                         ),
                       ],
-                    ),
-                    const SizedBox(height: 8),
-                    progressIndicator(
-                      max: state.labelTotal.value.toDouble(),
-                      value: state.scannedLabelTotal.value.toDouble(),
-                    ),
+                    )
                   ],
                 ),
               ),

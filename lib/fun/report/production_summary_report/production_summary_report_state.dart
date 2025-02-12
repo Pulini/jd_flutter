@@ -8,7 +8,6 @@ class ProductionSummaryReportState {
   getPrdShopDayReport({
     required String date,
     required int workShopID,
-    required Function() success,
     required Function(String msg) error,
   }) {
     httpGet(
@@ -23,8 +22,6 @@ class ProductionSummaryReportState {
         tableData.value = [
           for (var item in response.data) ProductionSummaryInfo.fromJson(item)
         ];
-        success.call();
-        Get.back();
       } else {
         error.call( response.message ?? 'query_default_error'.tr);
       }

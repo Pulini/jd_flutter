@@ -17,9 +17,9 @@ class HomeState {
   var departmentName = ''.obs;
   String search = '';
   var nBarIndex = 0;
-  var buttons = <ButtonItem>[];
+  var buttons = <ButtonItem>[].obs;
   var selectedItemColor = Colors.white;
-  var navigationBar = <HomeFunctions>[];
+  var navigationBar = <HomeFunctions>[].obs;
 
   HomeState() {
     userPicUrl.value = userInfo?.picUrl ?? '';
@@ -27,10 +27,12 @@ class HomeState {
   }
 
   refreshFunList({
+    required bool isRefresh,
     required Function() success,
     required Function(String msg) error,
   }) async {
     httpGet(
+      loading: isRefresh ? '读取功能列表中...' : '',
       method: webApiGetMenuFunction,
       params: {'empID': userInfo?.empID ?? 0},
     ).then((response) {
@@ -43,7 +45,7 @@ class HomeState {
           ),
         ).then((v1) {
           nBarIndex = 0;
-          navigationBar = [
+          navigationBar.value = [
             for (var b in v1)
               HomeFunctions(
                 className: b.className,
@@ -52,10 +54,8 @@ class HomeState {
                 icon: b.icon,
               )
           ];
-          compute(formatButton, v1).then((v2) {
-            functions = v2;
-            success.call();
-          });
+          functions = formatButton(v1);
+          success.call();
         });
       } else {
         error.call(response.message ?? '');

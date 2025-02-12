@@ -10,6 +10,7 @@ import 'package:jd_flutter/login/login_view.dart';
 
 import 'downloader.dart';
 
+
 /// 提示弹窗
 informationDialog({
   String title = '',
@@ -142,7 +143,9 @@ errorDialog({
     barrierDismissible: false, //拦截dialog外部点击
   );
 }
+
 GlobalKey<NavigatorState> loadingKey = GlobalKey();
+
 ///加载中弹窗
 loadingDialog(String? content) {
   Get.dialog(
@@ -167,7 +170,8 @@ loadingDialog(String? content) {
     barrierDismissible: false, //拦截dialog外部点击
   );
 }
-loadingDismiss(){
+
+loadingDismiss() {
   if (loadingKey.currentContext != null) {
     final routeDialog = ModalRoute.of(loadingKey.currentContext!);
     if (routeDialog != null) {

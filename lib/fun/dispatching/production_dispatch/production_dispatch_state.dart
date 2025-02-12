@@ -96,7 +96,6 @@ class ProductionDispatchState {
   query({
     required String startTime,
     required String endTime,
-    required Function(bool isNotEmpty) success,
     required Function(String msg) error,
   }) {
     httpGet(
@@ -121,7 +120,6 @@ class ProductionDispatchState {
           (ProductionDispatchOrderInfo e) =>
               e.sapOrderBill.ifEmpty(e.orderBill ?? ''),
         );
-        success.call(orderList.isNotEmpty);
       } else {
         orderList.value = [];
         error.call(response.message ?? '');

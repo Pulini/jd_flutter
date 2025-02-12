@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
-import 'package:jd_flutter/widget/edit_text_widget.dart';
-
 import 'carton_label_scan_progress_logic.dart';
 import 'carton_label_scan_progress_state.dart';
 
@@ -21,26 +19,61 @@ class _CartonLabelScanProgressPageState
   final CartonLabelScanProgressState state =
       Get.find<CartonLabelScanProgressLogic>().state;
 
+  String customerPO = Get.arguments['CustomerPO'];
   TextEditingController controller = TextEditingController();
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (customerPO.isNotEmpty) {
+        controller.text = customerPO;
+        logic.queryScanHistory(customerPO);
+      }
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return pageBody(
+      title: '外箱标扫码进度',
       body: Column(
         children: [
-          Row(
-            children: [
-              Expanded(
-                child: EditText(
-                  hint: '请输入销售订单或客户PO查询',
-                  controller: controller,
+          Container(
+            margin: const EdgeInsets.all(5),
+            height: 40,
+            child: TextField(
+              controller: controller,
+              decoration: InputDecoration(
+                contentPadding: const EdgeInsets.only(left: 15, right: 10),
+                filled: true,
+                fillColor: Colors.white54,
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: const BorderSide(color: Colors.transparent),
+                ),
+                border: const OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                ),
+                hintText: '请输入销售订单或客户PO查询',
+                hintStyle: const TextStyle(color: Colors.grey),
+                prefixIcon: IconButton(
+                  onPressed: () => controller.clear(),
+                  icon: const Icon(
+                    Icons.replay_circle_filled,
+                    color: Colors.red,
+                  ),
+                ),
+                suffixIcon: IconButton(
+                  onPressed: () =>
+                      logic.queryScanHistory(controller.text),
+                  icon: const Icon(
+                    Icons.loupe_rounded,
+                    color: Colors.green,
+                  ),
                 ),
               ),
-              IconButton(
-                onPressed: () => logic.queryScanHistory(controller.text),
-                icon: const Icon(Icons.search, color: Colors.blue),
-              )
-            ],
+            ),
           ),
           Expanded(
             child: Obx(() => ListView.builder(
@@ -73,87 +106,7 @@ class _CartonLabelScanProgressPageState
                         ),
                       ),
                     ),
-                    onTap: () => logic.getProgressDetail(
-                      state.progress[index],
-                      (detail) => Get.dialog(
-                        pageBody(
-                          title: '订单扫码明细',
-                          body: ListView.builder(
-                            padding: const EdgeInsets.all(8),
-                            itemCount: detail.length,
-                            itemBuilder: (context, index) => Card(
-                              child: detail[index].length == 1
-                                  ? Padding(
-                                      padding: const EdgeInsets.all(8),
-                                      child: Row(
-                                        children: [
-                                          expandedTextSpan(
-                                            hint: '外箱标：',
-                                            text: detail[index][0]
-                                                    .outBoxBarCode ??
-                                                '',
-                                            textColor:
-                                                detail[index][0].stateColor(),
-                                          ),
-                                          textSpan(
-                                            hint: '尺码：',
-                                            text: detail[index][0].size ?? '',
-                                            textColor:
-                                                detail[index][0].stateColor(),
-                                          ),
-                                        ],
-                                      ),
-                                    )
-                                  : ExpansionTile(
-                                      backgroundColor: Colors.blue.shade100,
-                                      shape: const RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(10)),
-                                      ),
-                                      title: textSpan(
-                                        hint: '尺码：',
-                                        text: detail[index][0].size ?? '',
-                                      ),
-                                      subtitle: progressIndicator(
-                                        max: detail[index].length.toDouble(),
-                                        value: detail[index]
-                                            .where((v) =>
-                                                v.sendCustomSystemState == 1 ||
-                                                v.sendCustomSystemState == 2)
-                                            .length
-                                            .toDouble(),
-                                      ),
-                                      children: [
-                                        for (var item in detail[index])
-                                          Card(
-                                            child: Padding(
-                                              padding: const EdgeInsets.all(8),
-                                              child: Row(
-                                                children: [
-                                                  expandedTextSpan(
-                                                    hint: '外箱标：',
-                                                    text: item.outBoxBarCode ??
-                                                        '',
-                                                    textColor:
-                                                        item.stateColor(),
-                                                  ),
-                                                  textSpan(
-                                                    hint: '尺码：',
-                                                    text: item.size ?? '',
-                                                    textColor:
-                                                        item.stateColor(),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          )
-                                      ],
-                                    ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
+                    onTap: () => logic.getProgressDetail(state.progress[index]),
                   ),
                 )),
           )

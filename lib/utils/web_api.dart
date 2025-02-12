@@ -108,7 +108,7 @@ _setTestUrl({
   Map<String, dynamic>? params,
   required Function(String testUrl, Map<String, dynamic>? testParams) test,
 }) {
-  debugPrint('url=$url');
+  debugPrint('in url=$url');
   if (url == baseUrlForMES) {
     url = testUrlForMES;
   } else if (url == baseUrlForSAP) {
@@ -119,7 +119,7 @@ _setTestUrl({
       ...?params,
     };
   }
-  debugPrint('url=$url');
+  debugPrint('out url=$url');
   debugPrint('params=$params');
   test.call(url, params);
 }
@@ -935,3 +935,21 @@ const webApiGetBarCodeListByEmp = "api/BoxLabelBarcode/GetBarCodeListByEmpNumber
 
 ///Puma防伪标出库
 const webApiBarCodeOutStock = "api/BoxLabelBarcode/BarCodeOutStock";
+
+///sap油墨调色单查询
+const  webApiSapGetInkColorMatchOrder = 'sap/zapp/ZFUN_APP_YM_QUERY';
+
+///sap油墨获取物料列表及型体判断
+const  webApiSapCheckInkColorMatchTypeBody = 'sap/zapp/ZFUN_APP_YM_MATNR';
+
+///sap创建油墨调色单
+const  webApiSapCreateInkColorMatch= 'sap/zapp/ZFUN_APP_YM_WOFNR';
+
+///sap油墨调色单试做结果提交
+const  webApiSapSubmitTrialFinish= 'sap/zapp/ZFUN_APP_YM_RESULT';
+
+///Mes获取成型线生成执行进度表
+const  webApiGetProductionOrderSchedule= 'api/Package/GetProductionOrderSchedule';
+
+///Mes获取成型线生成执行进度明细表
+const  webApiGetProductionOrderScheduleDetail= 'api/Package/GetProductionOrderScheduleBillorPO';

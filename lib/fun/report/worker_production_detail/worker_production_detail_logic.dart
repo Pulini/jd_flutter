@@ -33,7 +33,6 @@ class WorkerProductionDetailLogic extends GetxController {
       endDate: pickerControllerEndDate.getDateFormatYMD(),
       itemID: pickerControllerReportType.selectedId.value,
       reportType: pickerControllerReportType.selectedId.value,
-      success: () => Get.back(),
       error: (msg) => errorDialog(content: msg),
     );
   }

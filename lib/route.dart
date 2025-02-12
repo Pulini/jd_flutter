@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:jd_flutter/fun/maintenance/sap_ink_color_matching/sap_ink_color_matching_view.dart';
 import 'package:jd_flutter/fun/management/anti_Counterfeiting/puma_anti_counterfeiting_view.dart';
 import 'package:jd_flutter/fun/other/hydroelectric_excess/hydroelectric_excess_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/sap_picking_receipt_reversal/sap_picking_receipt_reversal_view.dart';
@@ -28,6 +29,7 @@ import 'fun/report/molding_scan_bulletin_report/molding_scan_bulletin_report_vie
 import 'fun/report/production_day_report/production_day_report_view.dart';
 import 'fun/report/production_materials_report/production_materials_report_view.dart';
 import 'fun/report/production_summary_report/production_summary_report_view.dart';
+import 'fun/report/production_tasks/production_tasks_view.dart';
 import 'fun/report/view_instruction_details/view_instruction_details_view.dart';
 import 'fun/report/view_process_specification/view_process_specification_view.dart';
 import 'fun/report/worker_production_detail/worker_production_detail_view.dart';
@@ -370,6 +372,20 @@ class RouteConfig {
     const SapWmsSplitLabelPage(),
   );
 
+  ///sap油墨调色
+  static Routes sapInkColorMatching = Routes(
+    '/sap_ink_color_matching',
+    99,
+    const SapInkColorMatchingPage(),
+  );
+
+  ///成型生产任务
+  static Routes productionTasks = Routes(
+    '/production_tasks',
+    99,
+    const ProductionTasksPage(),
+  );
+
   ///本地功能入口列表
   static List<Routes> routeList = [
     dailyReport,
@@ -380,8 +396,9 @@ class RouteConfig {
     workerProductionDetail,
     viewProcessSpecification,
     moldingPackAreaReport,
-    warehouseAllocation,
+    moldingScanBulletinReport,
     visitRegister,
+    moldingScanBulletinReportMaximize,
     productionDispatch,
     productionDispatchDetail,
     property,
@@ -397,6 +414,8 @@ class RouteConfig {
     smartDelivery,
     cartonLabelScan,
     cartonLabelScanProgress,
+    hydroelectricExcessPage,
+    warehouseAllocation,
     sapPurchaseStockIn,
     sapProductionPicking,
     sapPrintPicking,
@@ -415,6 +434,8 @@ class RouteConfig {
     deviceMaintenance,
     timelyInventory,
     antiCounterfeiting
+    sapInkColorMatching,
+    productionTasks,
   ];
 
   static List<GetPage> appRoutes = [
@@ -464,6 +485,10 @@ class RouteConfig {
       page: () => moldingScanBulletinReport.page,
     ),
     GetPage(
+      name: visitRegister.name,
+      page: () => visitRegister.page,
+    ),
+    GetPage(
       name: moldingScanBulletinReportMaximize.name,
       page: () => moldingScanBulletinReportMaximize.page,
     ),
@@ -482,10 +507,6 @@ class RouteConfig {
     GetPage(
       name: productionMaterialsReport.name,
       page: () => productionMaterialsReport.page,
-    ),
-    GetPage(
-      name: visitRegister.name,
-      page: () => visitRegister.page,
     ),
     GetPage(
       name: workOrderList.name,
@@ -532,6 +553,14 @@ class RouteConfig {
       page: () => cartonLabelScanProgress.page,
     ),
     GetPage(
+      name: hydroelectricExcessPage.name,
+      page: () => hydroelectricExcessPage.page,
+    ),
+    GetPage(
+      name: warehouseAllocation.name,
+      page: () => warehouseAllocation.page,
+    ),
+    GetPage(
       name: sapPurchaseStockIn.name,
       page: () => sapPurchaseStockIn.page,
     ),
@@ -558,10 +587,6 @@ class RouteConfig {
     GetPage(
       name: sapSurplusMaterialStockIn.name,
       page: () => sapSurplusMaterialStockIn.page,
-    ),
-    GetPage(
-      name: warehouseAllocation.name,
-      page: () => warehouseAllocation.page,
     ),
     GetPage(
       name: sapProduceStockIn.name,
@@ -606,6 +631,14 @@ class RouteConfig {
     GetPage(
       name: antiCounterfeiting.name,
       page: () => antiCounterfeiting.page,
+    ),
+    GetPage(
+      name: sapInkColorMatching.name,
+      page: () => sapInkColorMatching.page,
+    ),
+    GetPage(
+      name: productionTasks.name,
+      page: () => productionTasks.page,
     ),
   ];
 }

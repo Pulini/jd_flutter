@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/molding_scan_bulletin_report_info.dart';
-import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 
@@ -109,14 +108,13 @@ class _MoldingScanBulletinReportPageState
 
   tableCard(int index) {
     MoldingScanBulletinReportInfo data = state.reportInfo[index];
-    Key key = Key('$index');
     var textStyle = const TextStyle(
       fontSize: 20,
       fontWeight: FontWeight.bold,
     );
 
     return Card(
-      key: key,
+      key: GlobalKey(),
       color: index == 0 ? Colors.greenAccent : Colors.lime.shade100,
       child: Padding(
         padding:
@@ -194,83 +192,89 @@ class _MoldingScanBulletinReportPageState
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: backgroundColor,
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          title: Text(getFunctionTitle()),
-          actions: [
-            Text('${'molding_scan_bulletin_report_refresh_interval'.tr}：<'),
-            Obx(() => circleButton(
-                  const Text('3'),
-                  state.refreshDuration.value == 3
-                      ? Colors.greenAccent
-                      : Colors.white,
-                  () => logic.setRefresh(3),
-                )),
-            Obx(() => circleButton(
-                  const Text('4'),
-                  state.refreshDuration.value == 4
-                      ? Colors.greenAccent
-                      : Colors.white,
-                  () => logic.setRefresh(4),
-                )),
-            Obx(() => circleButton(
-                  const Text('5'),
-                  state.refreshDuration.value == 5
-                      ? Colors.greenAccent
-                      : Colors.white,
-                  () => logic.setRefresh(5),
-                )),
-            Obx(() => circleButton(
-                  const Text('6'),
-                  state.refreshDuration.value == 6
-                      ? Colors.greenAccent
-                      : Colors.white,
-                  () => logic.setRefresh(6),
-                )),
-            Obx(() => circleButton(
-                  const Text('7'),
-                  state.refreshDuration.value == 7
-                      ? Colors.greenAccent
-                      : Colors.white,
-                  () => logic.setRefresh(7),
-                )),
-            Obx(() => circleButton(
-                  const Text('8'),
-                  state.refreshDuration.value == 8
-                      ? Colors.greenAccent
-                      : Colors.white,
-                  () => logic.setRefresh(8),
-                )),
-            Obx(() => circleButton(
-                  const Text('9'),
-                  state.refreshDuration.value == 9
-                      ? Colors.greenAccent
-                      : Colors.white,
-                  () => logic.setRefresh(9),
-                )),
-            Obx(() => circleButton(
-                  const Text('10'),
-                  state.refreshDuration.value == 10
-                      ? Colors.greenAccent
-                      : Colors.white,
-                  () => logic.setRefresh(10),
-                )),
-            const Text('>'),
-            const SizedBox(width: 50),
-            circleButton(
-              const Icon(
-                Icons.refresh,
-                color: Colors.white,
-              ),
-              Colors.blueAccent,
-              () => logic.refreshTable(isRefresh: false),
+    return pageBody(
+        actions: [
+          Text('${'molding_scan_bulletin_report_refresh_interval'.tr}：<'),
+          Obx(() => circleButton(
+                const Text('3'),
+                state.refreshDuration.value == 3
+                    ? Colors.greenAccent
+                    : Colors.white,
+                () => logic.setRefresh(3),
+              )),
+          Obx(() => circleButton(
+                const Text('4'),
+                state.refreshDuration.value == 4
+                    ? Colors.greenAccent
+                    : Colors.white,
+                () => logic.setRefresh(4),
+              )),
+          Obx(() => circleButton(
+                const Text('5'),
+                state.refreshDuration.value == 5
+                    ? Colors.greenAccent
+                    : Colors.white,
+                () => logic.setRefresh(5),
+              )),
+          Obx(() => circleButton(
+                const Text('6'),
+                state.refreshDuration.value == 6
+                    ? Colors.greenAccent
+                    : Colors.white,
+                () => logic.setRefresh(6),
+              )),
+          Obx(() => circleButton(
+                const Text('7'),
+                state.refreshDuration.value == 7
+                    ? Colors.greenAccent
+                    : Colors.white,
+                () => logic.setRefresh(7),
+              )),
+          Obx(() => circleButton(
+                const Text('8'),
+                state.refreshDuration.value == 8
+                    ? Colors.greenAccent
+                    : Colors.white,
+                () => logic.setRefresh(8),
+              )),
+          Obx(() => circleButton(
+                const Text('9'),
+                state.refreshDuration.value == 9
+                    ? Colors.greenAccent
+                    : Colors.white,
+                () => logic.setRefresh(9),
+              )),
+          Obx(() => circleButton(
+                const Text('10'),
+                state.refreshDuration.value == 10
+                    ? Colors.greenAccent
+                    : Colors.white,
+                () => logic.setRefresh(10),
+              )),
+          Obx(() => circleButton(
+                const Text(
+                  '永不',
+                  style: TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                state.refreshDuration.value == -1
+                    ? Colors.greenAccent
+                    : Colors.white,
+                () => logic.setRefresh(-1),
+              )),
+          const Text('>'),
+          const SizedBox(width: 50),
+          circleButton(
+            const Icon(
+              Icons.refresh,
+              color: Colors.white,
             ),
-          ],
-        ),
+            Colors.blueAccent,
+            () => logic.refreshTable(false),
+          ),
+        ],
         body: Obx(
           () {
             var cards = <Card>[
@@ -309,9 +313,7 @@ class _MoldingScanBulletinReportPageState
               children: cards,
             );
           },
-        ),
-      ),
-    );
+        ));
   }
 
   @override

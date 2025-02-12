@@ -24,7 +24,6 @@ class DailyReportLogic extends GetxController {
     state.getDayOutput(
       departmentID: pickerControllerDepartment.selectedId.value,
       date: pickerControllerDate.getDateFormatYMD(),
-      success: () => Get.back(),
       error: (msg) => errorDialog(content: msg),
     );
   }

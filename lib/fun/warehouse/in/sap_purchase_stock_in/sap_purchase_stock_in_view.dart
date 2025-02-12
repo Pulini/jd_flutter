@@ -298,7 +298,7 @@ class _SapPurchaseStockInPageState extends State<SapPurchaseStockInPage> {
               ],
             )),
       ],
-      query: queryOrder,
+      query:()=> queryOrder(),
       body: Obx(() => Column(
             children: [
               Expanded(

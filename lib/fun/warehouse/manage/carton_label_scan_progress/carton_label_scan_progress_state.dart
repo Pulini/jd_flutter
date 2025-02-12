@@ -8,6 +8,7 @@ import 'package:jd_flutter/utils/web_api.dart';
 
 class CartonLabelScanProgressState {
   var progress = <CartonLabelScanProgressInfo>[].obs;
+  var progressDetail = <List<CartonLabelScanProgressDetailInfo>>[].obs;
 
   CartonLabelScanProgressState() {
     ///Initialize variables
@@ -36,7 +37,7 @@ class CartonLabelScanProgressState {
 
   getCartonLabelScanHistoryDetail({
     required int id,
-    required Function(List<List<CartonLabelScanProgressDetailInfo>>) success,
+    required Function() success,
     required Function(String) error,
   }) {
     httpGet(
@@ -55,7 +56,8 @@ class CartonLabelScanProgressState {
         groupBy(list, (v) => v.size ?? '').forEach((k, v) {
           group.add(v);
         });
-        success.call(group);
+        progressDetail.value=group;
+        success.call();
       } else {
         error.call(response.message ?? 'query_default_error'.tr);
       }

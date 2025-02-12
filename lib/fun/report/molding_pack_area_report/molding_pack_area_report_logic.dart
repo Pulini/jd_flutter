@@ -32,9 +32,6 @@ class MoldingPackAreaReportPageLogic extends GetxController {
       startDate: dateControllerStart.getDateFormatYMD(),
       endDate: dateControllerEnd.getDateFormatYMD(),
       packAreaIDs: checkBoxController.selectedIds,
-      success: () {
-        if (state.tableData.isNotEmpty) Get.back();
-      },
       error: (msg) => errorDialog(content: msg),
     );
   }
