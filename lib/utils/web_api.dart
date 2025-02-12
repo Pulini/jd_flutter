@@ -899,3 +899,39 @@ const webApiGetWaterEnergyMachineDetail = "api/SsDormitory/GetWaterEnergyMachine
 
 ///提交水电表抄度
 const webApiSubmitSsWaterEnergyMachineDetail = "api/SsDormitory/SubmitSsWaterEnergyMachineDetail";
+
+///根据设备编号获取设备信息
+const webApiGetDeviceInformationByFNumber = "api/EquipmentRepair/GetDeviceInformationByFNumber";
+
+///获取设备维修单列表
+const webApiGetRepairOrderList = "api/EquipmentRepair/GetRepairOrderList";
+
+///设备维修记录单作废
+const webApiRepairOrderVoid = "api/EquipmentRepair/RepairOrderVoid";
+
+///通过保管人工号获取保管人，监管人信息以及保管人部门
+const webApiGetEmpAndLiableByEmpCode = "api/User/GetEmpAndLiableByEmpCode";
+
+///获取设备维修记录单故障原因列表
+const webApiGetIssueCauseType = "api/EquipmentRepair/GetIssueCauseType";
+
+///设备报修提交数据
+const webApiSubmitRecordData = "api/EquipmentRepair/SubmitRecordData";
+
+///获取即时库存
+const webApiGetImmediateStockList = "api/Stock/GetImmediateStockList";
+
+///即时库存修改库位
+const webApiModifyStorageLocation = "api/Stock/ModifyStorageLocation";
+
+///获取箱标详情
+const webApiGetBarCodeListByBoxNumber = "api/BoxLabelBarcode/GetBarCodeListByBoxNumber";
+
+///Puma防伪标入库
+const webApiBarCodeInStock = "api/BoxLabelBarcode/BarCodeInStock";
+
+///获取条码
+const webApiGetBarCodeListByEmp = "api/BoxLabelBarcode/GetBarCodeListByEmpNumber";
+
+///Puma防伪标出库
+const webApiBarCodeOutStock = "api/BoxLabelBarcode/BarCodeOutStock";

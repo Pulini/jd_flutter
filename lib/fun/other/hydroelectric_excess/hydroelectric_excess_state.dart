@@ -24,7 +24,7 @@ class HydroelectricExcessState {
 
 
 ///搜索具体房间信息
-  searchRoom(DeviceListInfo data){
+  searchRoom(DeviceListInfo data,bool  isBack){
     if(select.value=='0' || select.value =='2'){
       stateToSearch.value='1';
     }else{
@@ -50,8 +50,7 @@ class HydroelectricExcessState {
         }
 
         if (list.isNotEmpty) setDeviceUse(list[0]);  //设置本月使用量
-
-        Get.back();
+        if(isBack) Get.back();
       } else {
         errorDialog(content: response.message);
       }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/warehouse/warehouse_allocation/warehouse_allocation_logic.dart';
+import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import '../../../constant.dart';
 import '../../../route.dart';
@@ -153,32 +154,18 @@ class _WarehouseAllocationPageState extends State<WarehouseAllocationPage> {
               ),
             ),
           )
-
         ],
       ),
     );
   }
 
-  _methodChannel() {
-    debugPrint('注册监听');
-    const MethodChannel(channelScanFlutterToAndroid)
-        .setMethodCallHandler((call) {
-      switch (call.method) {
-        case 'PdaScanner':
-          {
-            state.addCode(call.arguments.toString());
-          }
-          break;
-      }
-      return Future.value(call);
-    });
-  }
 
   @override
   void initState() {
-    _methodChannel();
+    pdaScanner(
+      scan: (code) => {state.addCode(code)},
+    );
     super.initState();
-
   }
 
   @override

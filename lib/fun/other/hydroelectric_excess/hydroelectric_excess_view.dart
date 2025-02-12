@@ -4,10 +4,13 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/other/hydroelectric_excess/hydroelectric_excess_logic.dart';
 import 'package:jd_flutter/fun/other/hydroelectric_excess/hydroelectric_excess_treat_list_view.dart';
+import 'package:jd_flutter/utils/utils.dart';
+import '../../../bean/http/response/device_list_info.dart';
 import '../../../constant.dart';
 import '../../../widget/combination_button_widget.dart';
 import '../../../widget/custom_widget.dart';
 import '../../../widget/edit_text_widget.dart';
+import '../../../widget/scanner.dart';
 
 class HydroelectricExcessPage extends StatefulWidget {
   const HydroelectricExcessPage({super.key});
@@ -24,6 +27,38 @@ class _HydroelectricExcessPageState extends State<HydroelectricExcessPage> {
   var hintStyle = const TextStyle(color: Colors.black);
   var textStyle = TextStyle(color: Colors.blue.shade900);
 
+  textField(
+          {required TextEditingController controller,
+          required String hint,
+          required Function()? onClicked}) =>
+      SizedBox(
+        height: 40,
+        child: TextField(
+          controller: controller,
+          style: const TextStyle(color: Colors.black),
+          decoration: InputDecoration(
+            filled: true,
+            fillColor: Colors.grey[300],
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20),
+              borderSide: const BorderSide(
+                color: Colors.transparent,
+              ),
+            ),
+            border: const OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(20)),
+            ),
+            hintText: hint,
+            hintStyle: const TextStyle(color: Colors.grey),
+            suffixIcon: IconButton(
+              icon: const Icon(Icons.search, color: Colors.grey),
+              onPressed: () {
+                onClicked?.call();
+              },
+            ),
+          ),
+        ),
+      );
 
   _text(String title, String text1) {
     return Row(
@@ -48,31 +83,19 @@ class _HydroelectricExcessPageState extends State<HydroelectricExcessPage> {
     );
   }
 
-  _methodChannel() {
-    debugPrint('注册监听');
-    const MethodChannel(channelScanFlutterToAndroid)
-        .setMethodCallHandler((call) {
-      switch (call.method) {
-        case 'PdaScanner':
-          {
-            state.textThisTime.text = call.arguments.toString();
-          }
-          break;
-      }
-      return Future.value(call);
-    });
-  }
-
   @override
   void initState() {
+    pdaScanner(
+      scan: (code) => {
+        state.textThisTime.text = code,
+        if (code.isNotEmpty)
+          {
+            state.stateToSearch.value = "0",
+            state.searchRoom(DeviceListInfo(number: code), false)
+          }
+      },
+    );
     super.initState();
-    _methodChannel();
-  }
-
-  @override
-  void dispose(){
-    Get.delete<HydroelectricExcessLogic>();
-    super.dispose();
   }
 
   @override
@@ -103,12 +126,17 @@ class _HydroelectricExcessPageState extends State<HydroelectricExcessPage> {
                     children: [
                       Expanded(
                           flex: 3,
-                          child: EditText(
-                            hint: '房号'.tr,
-                            onChanged: (v) => {
-                              if (v.isEmpty) {state.clearData()}
-                            },
+                          child: textField(
                             controller: state.textNumber,
+                            hint: '房号',
+                            onClicked: () {
+                              if (state.textNumber.text.isNotEmpty) {
+                                state.searchRoom(
+                                    DeviceListInfo(
+                                        number: state.textNumber.text),
+                                    false);
+                              }
+                            },
                           )),
                       Expanded(
                           flex: 1,
@@ -147,7 +175,10 @@ class _HydroelectricExcessPageState extends State<HydroelectricExcessPage> {
                                 combination: Combination.left,
                                 text: '扫描设备码',
                                 click: () => {
-                                  //扫描二维码或者条形码
+                                  Get.to(() => const Scanner())?.then((v) {
+                                    state.searchRoom(
+                                        DeviceListInfo(number: v), false);
+                                  })
                                 },
                               ),
                             )),
@@ -182,4 +213,11 @@ class _HydroelectricExcessPageState extends State<HydroelectricExcessPage> {
       ),
     );
   }
+
+  @override
+  void dispose() {
+    Get.delete<HydroelectricExcessLogic>();
+    super.dispose();
+  }
+
 }

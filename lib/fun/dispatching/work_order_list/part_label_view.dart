@@ -195,7 +195,7 @@ class _PartLabelPageState extends State<PartLabelPage> {
                           ? Colors.green.shade100
                           : Colors.white,
                       child: Padding(
-                        padding: EdgeInsets.all(10),
+                        padding: const EdgeInsets.all(10),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisSize: MainAxisSize.min,

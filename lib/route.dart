@@ -1,9 +1,11 @@
 import 'package:get/get.dart';
+import 'package:jd_flutter/fun/management/anti_Counterfeiting/puma_anti_counterfeiting_view.dart';
 import 'package:jd_flutter/fun/other/hydroelectric_excess/hydroelectric_excess_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/sap_picking_receipt_reversal/sap_picking_receipt_reversal_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/sap_put_on_shelves/sap_put_on_shelves_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/sap_stock_transfer/sap_stock_transfer_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/sap_wms_reprint_labels/sap_wms_reprint_labels_view.dart';
+import 'package:jd_flutter/fun/warehouse/timely_inventory/timely_inventory_view.dart';
 import 'bean/home_button.dart';
 import 'bean/routes.dart';
 import 'fun/dispatching/machine_dispatch/machine_dispatch_report_view.dart';
@@ -17,6 +19,7 @@ import 'fun/dispatching/work_order_list/work_order_list_view.dart';
 import 'fun/management/property/property_view.dart';
 import 'fun/management/quality_management/quality_management_view.dart';
 import 'fun/management/visit_register/visit_register_view.dart';
+import 'fun/other/device_maintenance_record/device_maintenance_record_view.dart';
 import 'fun/other/forming_packing_scan/packing_scan_view.dart';
 import 'fun/report/daily_report/daily_report_view.dart';
 import 'fun/report/molding_pack_area_report/molding_pack_area_report_view.dart';
@@ -240,11 +243,33 @@ class RouteConfig {
     const HydroelectricExcessPage(),
   );
 
+
+  ///设备维修记录
+  static Routes deviceMaintenance = Routes(
+    '/device_maintenance_record',
+    99,
+    const DeviceMaintenanceRecordPage(),
+  );
+
   ///仓库调拨
   static Routes warehouseAllocation = Routes(
     '/warehouse_allocation_page',
     99,
     const WarehouseAllocationPage(),
+  );
+
+  ///即时库存查询
+  static Routes timelyInventory = Routes(
+    '/timely_inventory_page',
+    99,
+    const TimelyInventoryPage(),
+  );
+
+  ///PUMA防伪标管理
+  static Routes antiCounterfeiting = Routes(
+    '/anti_counterfeiting',
+    99,
+    const PumaAntiCounterfeitingPage(),
   );
 
   ///sap采购入库
@@ -387,6 +412,9 @@ class RouteConfig {
     sapWmsReprintLabels,
     hydroelectricExcess,
     sapWmsSplitLabel,
+    deviceMaintenance,
+    timelyInventory,
+    antiCounterfeiting
   ];
 
   static List<GetPage> appRoutes = [
@@ -566,6 +594,18 @@ class RouteConfig {
     GetPage(
       name: sapWmsSplitLabel.name,
       page: () => sapWmsSplitLabel.page,
+    ),
+    GetPage(
+      name: deviceMaintenance.name,
+      page: () => deviceMaintenance.page,
+    ),
+    GetPage(
+      name: timelyInventory.name,
+      page: () => timelyInventory.page,
+    ),
+    GetPage(
+      name: antiCounterfeiting.name,
+      page: () => antiCounterfeiting.page,
     ),
   ];
 }

@@ -21,7 +21,7 @@ class _HydroelectricExcessTreatListPageState
 
   _item(DeviceListInfo data) {
     return InkWell(
-      onTap: () => {state.searchRoom(data)},
+      onTap: () => {state.searchRoom(data,true)},
       child: Container(
         height: 100,
         margin: const EdgeInsets.only(left: 5, right: 5, bottom: 10),

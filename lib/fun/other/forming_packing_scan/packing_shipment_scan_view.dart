@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/other/forming_packing_scan/packing_scan_logic.dart';
+import 'package:jd_flutter/utils/utils.dart';
 import '../../../../widget/custom_widget.dart';
 import '../../../constant.dart';
 
@@ -56,32 +57,13 @@ class _PackingShipmentScanPageState extends State<PackingShipmentScanPage> {
     );
   }
 
-  _methodChannel() {
-    print('注册监听');
-    const MethodChannel(channelScanFlutterToAndroid)
-        .setMethodCallHandler((call) {
-      switch (call.method) {
-        case 'PdaScanner':
-          {
-            switch (state.checkCode(
-              code: call.arguments.toString(),
-              success: () => {},
-            )) {
-              case 0:
-                {}
-              case 1:
-                {}
-            }
-          }
-          break;
-      }
-      return Future.value(call);
-    });
-  }
-
   @override
   void initState() {
+    pdaScanner(
+      scan: (code) => {
+
+      },
+    );
     super.initState();
-    _methodChannel();
   }
 }
