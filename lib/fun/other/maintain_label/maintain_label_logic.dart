@@ -318,100 +318,76 @@ class MaintainLabelLogic extends GetxController {
     for (var data in list) {
       var languageInfo =
           data.materialOtherName!.firstWhere((v) => v.languageName == language);
-      var labelTitle = Padding(
-        padding: const EdgeInsets.only(
-          left: 3,
-          right: 3,
-        ),
-        child: Text(
-          data.factoryType ?? '',
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 24,
-          ),
+      var labelTitle = Text(
+        data.factoryType ?? '',
+        style: const TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 24,
         ),
       );
-      var labelSubTitle = Padding(
-        padding: const EdgeInsets.only(
-          left: 3,
-          right: 3,
-        ),
-        child: Text(
-          data.billNo ?? '',
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 24,
-          ),
+      var labelSubTitle = Text(
+        data.billNo ?? '',
+        style: const TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 24,
         ),
       );
-      var labelContent = Padding(
-        padding: const EdgeInsets.only(
-          left: 3,
-          right: 3,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Expanded(
-              child: Text(
-                '(${data.materialCode})${data.materialName}'
-                    .allowWordTruncation(),
-                style: const TextStyle(
-                  overflow: TextOverflow.ellipsis,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16.5,
-                  height: 1,
-                ),
-                maxLines: 3,
+      var labelContent =  Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(
+            child: Text(
+              '(${data.materialCode})${data.materialName}'
+                  .allowWordTruncation(),
+              style: const TextStyle(
+                overflow: TextOverflow.ellipsis,
+                fontWeight: FontWeight.bold,
+                fontSize: 16.5,
+                height: 1,
               ),
+              maxLines: 3,
             ),
-            if (languageInfo.languageCode != 'zh')
-              Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      'GW:${data.grossWeight.toShowString()}KG',
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                      ),
+          ),
+          if (languageInfo.languageCode != 'zh')
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    'GW:${data.grossWeight.toShowString()}KG',
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
                     ),
                   ),
-                  Expanded(
-                    child: Text(
-                      'NW:${data.netWeight.toShowString()}KG',
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                      ),
+                ),
+                Expanded(
+                  child: Text(
+                    'NW:${data.netWeight.toShowString()}KG',
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
                     ),
                   ),
-                ],
-              ),
-            if (languageInfo.languageCode != 'zh')
-              Text(
-                'MEAS:${data.meas}',
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 15,
-                  height: 1,
                 ),
-              ),
-          ],
-        ),
-      );
-      var labelBottomLeft = Padding(
-        padding: const EdgeInsets.only(
-          left: 3,
-          right: 3,
-        ),
-        child: Center(
-          child: Text(
-            languageInfo.pageNumber ?? '',
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
+              ],
             ),
+          if (languageInfo.languageCode != 'zh')
+            Text(
+              'MEAS:${data.meas}',
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 15,
+                height: 1,
+              ),
+            ),
+        ],
+      );
+      var labelBottomLeft = Center(
+        child: Text(
+          languageInfo.pageNumber ?? '',
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
           ),
         ),
       );

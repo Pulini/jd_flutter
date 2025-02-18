@@ -34,7 +34,10 @@ class HomeState {
     httpGet(
       loading: isRefresh ? '读取功能列表中...' : '',
       method: webApiGetMenuFunction,
-      params: {'empID': userInfo?.empID ?? 0},
+      params: {
+        'empID': userInfo?.empID ?? 0,
+        'userID': userInfo?.userID?? 0,
+      },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
         compute(

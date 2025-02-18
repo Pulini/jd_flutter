@@ -719,12 +719,18 @@ fixedLabelTemplate({
                 flex: 2,
                 child: Container(
                   decoration: BoxDecoration(border: Border(bottom: bs)),
-                  child: title ?? const Text(''),
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 3,right: 3),
+                    child: title ?? const Text(''),
+                  ),
                 ),
               ),
               Expanded(
                 flex: 3,
-                child: subTitle ?? const Text(''),
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 3,right: 3),
+                  child: subTitle ?? const Text(''),
+                ),
               ),
             ],
           ),
@@ -736,7 +742,10 @@ fixedLabelTemplate({
     decoration: BoxDecoration(
       border: Border(bottom: bs),
     ),
-    child: content ?? const Text(''),
+    child: Padding(
+      padding: const EdgeInsets.only(left: 3,right: 3),
+      child: content ?? const Text(''),
+    ),
   );
 
   var bottomWidget = Row(
@@ -748,12 +757,16 @@ fixedLabelTemplate({
           decoration: BoxDecoration(
             border: Border(right: bs),
           ),
-          child: bottomLeft ?? const Text(''),
+          child: Padding(
+            padding: const EdgeInsets.only(left: 3,right: 3),
+            child: bottomLeft ?? const Text(''),
+          ),
         ),
       ),
       Expanded(
         flex: 5,
-        child: Container(
+        child: Padding(
+          padding: const EdgeInsets.only(left: 3,right: 3),
           child: bottomMiddle ?? const Text(''),
         ),
       ),
@@ -763,7 +776,10 @@ fixedLabelTemplate({
           decoration: BoxDecoration(
             border: Border(left: bs),
           ),
-          child: bottomRight ?? const Text(''),
+          child: Padding(
+            padding: const EdgeInsets.only(left: 3,right: 3),
+            child: bottomRight ?? const Text(''),
+          ),
         ),
       ),
     ],

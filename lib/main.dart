@@ -22,7 +22,7 @@ import 'utils/web_api.dart';
 
 main() async {
   ///切换测试库，打包时屏蔽
-  useTestUrl = true;
+  // useTestUrl = true;
 
   ///确保初始化完成才能加载耗时插件
   WidgetsFlutterBinding.ensureInitialized();
@@ -117,7 +117,7 @@ class _MyAppState extends State<MyApp> {
     return GetMaterialApp(
       scrollBehavior: AppScrollBehavior(),
       onGenerateTitle: (context) => 'app_name'.tr,
-      debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner: useTestUrl,
       translations: Translation(),
       navigatorObservers: [GetXRouterObserver()],
       locale: View.of(context).platformDispatcher.locale,

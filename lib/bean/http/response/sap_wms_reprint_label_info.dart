@@ -1,6 +1,5 @@
-
 class ReprintLabelInfo {
-  bool select=false;
+  bool select = false;
 
   String? factory; //工厂  WERKS
   String? warehouse; //仓库  LGORT
@@ -14,7 +13,7 @@ class ReprintLabelInfo {
   String? instructionNo; //指令号 ZVBELN_ORI
   String? salesOrderNumber; //销售订单号  KDAUF
   int? salesOrderLineItem; //销售订单行号  KDPOS
-  int? quantity; //数量 MENGE
+  double? quantity; //数量 MENGE
   String? unit; // MEINS
   String? deliveryDate; //单位 EINDT
   String? numPage; //交货日期  ZPQYM
@@ -65,7 +64,7 @@ class ReprintLabelInfo {
     instructionNo = json['ZVBELN_ORI'];
     salesOrderNumber = json['KDAUF'];
     salesOrderLineItem = json['KDPOS'];
-    quantity = json['MENGE'];
+    quantity = json['MENGE'].toDouble();
     unit = json['MEINS'];
     deliveryDate = json['EINDT'];
     numPage = json['ZPQYM'];

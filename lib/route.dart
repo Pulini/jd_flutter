@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/maintenance/sap_ink_color_matching/sap_ink_color_matching_view.dart';
 import 'package:jd_flutter/fun/other/hydroelectric_excess/hydroelectric_excess_view.dart';
+import 'package:jd_flutter/fun/warehouse/in/puma_label_manage/puma_label_manage_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/sap_picking_receipt_reversal/sap_picking_receipt_reversal_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/sap_put_on_shelves/sap_put_on_shelves_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/sap_stock_transfer/sap_stock_transfer_view.dart';
@@ -361,6 +362,13 @@ class RouteConfig {
     const ProductionTasksPage(),
   );
 
+  ///Puma防伪标管理
+  static Routes pumaLabelManage = Routes(
+    '/puma_label_manage',
+    99,
+    const PumaLabelManagePage(),
+  );
+
   ///本地功能入口列表
   static List<Routes> routeList = [
     dailyReport,
@@ -407,6 +415,7 @@ class RouteConfig {
     sapWmsSplitLabel,
     sapInkColorMatching,
     productionTasks,
+    pumaLabelManage,
   ];
 
   static List<GetPage> appRoutes = [
@@ -594,6 +603,10 @@ class RouteConfig {
     GetPage(
       name: productionTasks.name,
       page: () => productionTasks.page,
+    ),
+    GetPage(
+      name: pumaLabelManage.name,
+      page: () => pumaLabelManage.page,
     ),
   ];
 }

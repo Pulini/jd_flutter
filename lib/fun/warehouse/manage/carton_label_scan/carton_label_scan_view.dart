@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/carton_label_scan_info.dart';
 import 'package:jd_flutter/fun/warehouse/manage/carton_label_scan_progress/carton_label_scan_progress_view.dart';
-import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
+import 'package:jd_flutter/widget/scanner.dart';
 
 import 'carton_label_scan_logic.dart';
 import 'carton_label_scan_state.dart';

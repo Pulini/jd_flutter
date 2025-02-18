@@ -7,6 +7,7 @@ import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
+import 'package:jd_flutter/widget/scanner.dart';
 import 'process_dispatch_register_logic.dart';
 
 class ProcessDispatchRegisterPage extends StatefulWidget {

@@ -12,9 +12,6 @@ import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 
-
-
-
 class SapInjectionMoldingStockInState {
   var barCodeList = <BarCodeInfo>[].obs;
   var usedList = <String>[];

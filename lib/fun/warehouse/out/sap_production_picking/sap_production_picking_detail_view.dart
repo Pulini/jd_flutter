@@ -7,6 +7,7 @@ import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
+import 'package:jd_flutter/widget/scanner.dart';
 
 import 'sap_production_picking_logic.dart';
 import 'sap_production_picking_state.dart';

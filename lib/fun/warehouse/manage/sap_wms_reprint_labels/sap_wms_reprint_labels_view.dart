@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/sap_wms_reprint_label_info.dart';
 import 'package:jd_flutter/route.dart';
-import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/picker/picker_controller.dart';
 import 'package:jd_flutter/widget/picker/picker_view.dart';
 import 'package:jd_flutter/widget/preview_label_list_widget.dart';
+import 'package:jd_flutter/widget/scanner.dart';
 
 import 'sap_wms_reprint_labels_logic.dart';
 import 'sap_wms_reprint_labels_state.dart';
