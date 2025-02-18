@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/warehouse/warehouse_allocation/warehouse_allocation_logic.dart';
-import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/route.dart';
+import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
-import '../../../constant.dart';
-import '../../../route.dart';
-import '../../../widget/combination_button_widget.dart';
-import '../../../widget/dialogs.dart';
-import '../../../widget/edit_text_widget.dart';
-import '../../../widget/picker/picker_controller.dart';
-import '../../../widget/picker/picker_view.dart';
+import 'package:jd_flutter/widget/dialogs.dart';
+import 'package:jd_flutter/widget/edit_text_widget.dart';
+import 'package:jd_flutter/widget/picker/picker_controller.dart';
+import 'package:jd_flutter/widget/picker/picker_view.dart';
+import 'package:jd_flutter/widget/scanner.dart';
 
 class WarehouseAllocationPage extends StatefulWidget {
   const WarehouseAllocationPage({super.key});

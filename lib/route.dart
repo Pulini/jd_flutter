@@ -422,7 +422,7 @@ class RouteConfig {
     smartDelivery,
     cartonLabelScan,
     cartonLabelScanProgress,
-    hydroelectricExcessPage,
+    hydroelectricExcess,
     warehouseAllocation,
     sapPurchaseStockIn,
     sapProductionPicking,
@@ -437,11 +437,10 @@ class RouteConfig {
     sapPutOnShelves,
     sapStockTransfer,
     sapWmsReprintLabels,
-    hydroelectricExcess,
     sapWmsSplitLabel,
     deviceMaintenance,
     timelyInventory,
-    antiCounterfeiting
+    antiCounterfeiting,
     sapInkColorMatching,
     productionTasks,
     pumaLabelManage,
@@ -562,8 +561,8 @@ class RouteConfig {
       page: () => cartonLabelScanProgress.page,
     ),
     GetPage(
-      name: hydroelectricExcessPage.name,
-      page: () => hydroelectricExcessPage.page,
+      name: hydroelectricExcess.name,
+      page: () => hydroelectricExcess.page,
     ),
     GetPage(
       name: warehouseAllocation.name,
@@ -620,10 +619,6 @@ class RouteConfig {
     GetPage(
       name: sapWmsReprintLabels.name,
       page: () => sapWmsReprintLabels.page,
-    ),
-    GetPage(
-      name: hydroelectricExcess.name,
-      page: () => hydroelectricExcess.page,
     ),
     GetPage(
       name: sapWmsSplitLabel.name,

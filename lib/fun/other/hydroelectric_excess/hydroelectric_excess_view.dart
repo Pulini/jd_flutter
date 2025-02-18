@@ -1,16 +1,12 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/bean/http/response/device_list_info.dart';
 import 'package:jd_flutter/fun/other/hydroelectric_excess/hydroelectric_excess_logic.dart';
 import 'package:jd_flutter/fun/other/hydroelectric_excess/hydroelectric_excess_treat_list_view.dart';
-import 'package:jd_flutter/utils/utils.dart';
-import '../../../bean/http/response/device_list_info.dart';
-import '../../../constant.dart';
-import '../../../widget/combination_button_widget.dart';
-import '../../../widget/custom_widget.dart';
-import '../../../widget/edit_text_widget.dart';
-import '../../../widget/scanner.dart';
+import 'package:jd_flutter/widget/combination_button_widget.dart';
+import 'package:jd_flutter/widget/custom_widget.dart';
+import 'package:jd_flutter/widget/edit_text_widget.dart';
+import 'package:jd_flutter/widget/scanner.dart';
 
 class HydroelectricExcessPage extends StatefulWidget {
   const HydroelectricExcessPage({super.key});
