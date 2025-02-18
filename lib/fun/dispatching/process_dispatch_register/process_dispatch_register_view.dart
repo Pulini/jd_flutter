@@ -278,18 +278,12 @@ class _ProcessDispatchRegisterPageState
     return listWidget;
   }
 
-  _methodChannel() {
-    debugPrint('注册监听');
-    pdaScanner(scan: (code){
-      controller.text =code;
-      logic.queryOrder(code);
-    });
-  }
-
   @override
   void initState() {
+    pdaScanner(
+      scan: (code) => {controller.text = code, logic.queryOrder(code)},
+    );
     super.initState();
-    _methodChannel();
   }
 
   @override
@@ -298,7 +292,7 @@ class _ProcessDispatchRegisterPageState
       actions: [
         TextButton(
           onPressed: () => state.isDetails.value = !state.isDetails.value,
-          child: Text('报工'),
+          child: const Text('报工'),
         )
       ],
       body: Obx(
@@ -338,8 +332,12 @@ class _ProcessDispatchRegisterPageState
                 Expanded(
                   child: CombinationButton(
                     text: '更换',
-                    click: () => Get.to(()=>const ModifyLabelWorkerPage())?.then(
-                      (v) => _methodChannel(),
+                    click: () =>
+                        Get.to(() => const ModifyLabelWorkerPage())?.then(
+                      (v) => pdaScanner(
+                        scan: (code) =>
+                            {controller.text = code, logic.queryOrder(code)},
+                      ),
                     ),
                     combination: Combination.middle,
                   ),

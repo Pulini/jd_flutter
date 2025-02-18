@@ -11,8 +11,7 @@ import 'package:jd_flutter/widget/dialogs.dart';
 import 'sap_injection_molding_stock_in_state.dart';
 
 class SapInjectionMoldingStockInLogic extends GetxController {
-  final SapInjectionMoldingStockInState state =
-      SapInjectionMoldingStockInState();
+  final SapInjectionMoldingStockInState state = SapInjectionMoldingStockInState();
 
   @override
   void onReady() {

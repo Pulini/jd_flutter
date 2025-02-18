@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/other/forming_packing_scan/packing_scan_logic.dart';
-
 import '../../../../bean/http/response/container_scanner_info.dart';
 import '../../../../widget/custom_widget.dart';
 import '../../../../widget/picker/picker_view.dart';

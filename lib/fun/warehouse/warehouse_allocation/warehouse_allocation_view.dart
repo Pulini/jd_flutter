@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/warehouse/warehouse_allocation/warehouse_allocation_logic.dart';
+import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import '../../../constant.dart';
 import '../../../route.dart';
@@ -22,8 +23,6 @@ class WarehouseAllocationPage extends StatefulWidget {
 class _WarehouseAllocationPageState extends State<WarehouseAllocationPage> {
   final logic = Get.put(WarehouseAllocationLogic());
   final state = Get.find<WarehouseAllocationLogic>().state;
-
-
 
   ///出仓库
   var outStockList = LinkOptionsPickerController(
@@ -145,27 +144,14 @@ class _WarehouseAllocationPageState extends State<WarehouseAllocationPage> {
               ),
             ),
           ),
-          Container(
-            height: 40,
-            width: double.maxFinite,
-            margin: const EdgeInsets.all(10),
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue,
-                padding: const EdgeInsets.only(left: 8, right:20),
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                ),
+          SizedBox(
+            width: double.infinity,
+            child: CombinationButton(
+              text: '提交',
+              click: () => logic.goReport(
+                onStockId: onStockList.getOptionsPicker2().pickerId(),
+                outStockId: outStockList.getOptionsPicker2().pickerId(),
               ),
-              onPressed: () {
-                logic.goReport(
-                  onStockId: onStockList.getOptionsPicker2().pickerId(),
-                  outStockId: outStockList.getOptionsPicker2().pickerId(),
-                );
-              },
-              child: const Text('提 交',
-                  style: TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.bold)),
             ),
           )
         ],
@@ -173,26 +159,13 @@ class _WarehouseAllocationPageState extends State<WarehouseAllocationPage> {
     );
   }
 
-  _methodChannel() {
-    debugPrint('注册监听');
-    const MethodChannel(channelScanFlutterToAndroid)
-        .setMethodCallHandler((call) {
-      switch (call.method) {
-        case 'PdaScanner':
-          {
-            state.addCode(call.arguments.toString());
-          }
-          break;
-      }
-      return Future.value(call);
-    });
-  }
 
   @override
   void initState() {
-    _methodChannel();
+    pdaScanner(
+      scan: (code) => {state.addCode(code)},
+    );
     super.initState();
-
   }
 
   @override
