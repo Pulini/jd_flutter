@@ -43,7 +43,7 @@ class _SuppliersScanStorePageState extends State<SuppliersScanStorePage> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return WillPopScope(
+        return PopScope(
             child: Dialog(
               child: Container(
                 padding: const EdgeInsets.all(5),
@@ -108,8 +108,7 @@ class _SuppliersScanStorePageState extends State<SuppliersScanStorePage> {
                   ],
                 ),
               ),
-            ),
-            onWillPop: () async => false);
+            ),);
       },
     );
   }
