@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-import 'package:jd_flutter/bean/http/response/bar_code.dart';
 import 'package:jd_flutter/bean/http/response/device_maintenance_info.dart';
 import 'package:jd_flutter/bean/http/response/people_message_info.dart';
 import 'package:jd_flutter/utils/utils.dart';

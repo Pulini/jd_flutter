@@ -4,6 +4,7 @@ import 'package:jd_flutter/fun/management/anti_Counterfeiting/puma_anti_counterf
 import 'package:jd_flutter/fun/other/hydroelectric_excess/hydroelectric_excess_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/sap_picking_receipt_reversal/sap_picking_receipt_reversal_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/sap_put_on_shelves/sap_put_on_shelves_view.dart';
+import 'package:jd_flutter/fun/warehouse/in/suppliers_scan_store/suppliers_scan_store_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/sap_stock_transfer/sap_stock_transfer_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/sap_wms_reprint_labels/sap_wms_reprint_labels_view.dart';
 import 'package:jd_flutter/fun/warehouse/timely_inventory/timely_inventory_view.dart';
@@ -386,6 +387,13 @@ class RouteConfig {
     const ProductionTasksPage(),
   );
 
+  ///成型生产任务
+  static Routes suppliersScanStore = Routes(
+    '/suppliers_scan_store',
+    99,
+    const SuppliersScanStorePage(),
+  );
+
   ///本地功能入口列表
   static List<Routes> routeList = [
     dailyReport,
@@ -414,7 +422,7 @@ class RouteConfig {
     smartDelivery,
     cartonLabelScan,
     cartonLabelScanProgress,
-    hydroelectricExcessPage,
+    hydroelectricExcess,
     warehouseAllocation,
     sapPurchaseStockIn,
     sapProductionPicking,
@@ -433,9 +441,10 @@ class RouteConfig {
     sapWmsSplitLabel,
     deviceMaintenance,
     timelyInventory,
-    antiCounterfeiting
+    antiCounterfeiting,
     sapInkColorMatching,
     productionTasks,
+    suppliersScanStore
   ];
 
   static List<GetPage> appRoutes = [
@@ -553,8 +562,8 @@ class RouteConfig {
       page: () => cartonLabelScanProgress.page,
     ),
     GetPage(
-      name: hydroelectricExcessPage.name,
-      page: () => hydroelectricExcessPage.page,
+      name: hydroelectricExcess.name,
+      page: () => hydroelectricExcess.page,
     ),
     GetPage(
       name: warehouseAllocation.name,
@@ -639,6 +648,10 @@ class RouteConfig {
     GetPage(
       name: productionTasks.name,
       page: () => productionTasks.page,
+    ),
+    GetPage(
+      name: suppliersScanStore.name,
+      page: () => suppliersScanStore.page,
     ),
   ];
 }

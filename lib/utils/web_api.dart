@@ -361,6 +361,9 @@ const webApiPickerSapFactoryAndWarehouse = 'api/Stock/GetSAPFactoryStockInfo';
 ///获取MES仓库列表
 const webApiPickerMesStockList = 'api/Stock/GetStockList';
 
+///获取MES仓库列表
+const webApiPickerOrderStockList = 'api/Stock/GetBillStockList';
+
 ///获取sap仓库库位列表接口
 const webApiPickerSapWarehouseStorageLocation =
     'api/InStockTrackingNum/GetWarehouseStorageLocationList';
@@ -953,3 +956,12 @@ const  webApiGetProductionOrderSchedule= 'api/Package/GetProductionOrderSchedule
 
 ///Mes获取成型线生成执行进度明细表
 const  webApiGetProductionOrderScheduleDetail= 'api/Package/GetProductionOrderScheduleBillorPO';
+
+///检查工号是否合法
+const webApiJudgeEmpNumber = 'api/User/JudgeEmpNumber';
+
+///获得已入库条形码数据
+const webApiGetBarCodeStatusByDepartmentID = "api/BarCode/GetBarCodeStatusByDepartmentID";
+
+///提交条形码数据,自动生成外购入库单
+const webApiUploadSupplierBarCode = "api/BarCode/SubmitBarCode2CollectBill";

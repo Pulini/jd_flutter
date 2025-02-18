@@ -1,3 +1,5 @@
+
+
 import 'dart:io';
 
 import 'package:auto_size_text/auto_size_text.dart';
@@ -1059,7 +1061,7 @@ bool isDeepColor(Color color) {
   if (color == Colors.transparent) {
     return false;
   }
-  var grayscale = 0.299 * color.r + 0.587 * color.g + 0.114 * color.b;
+  var grayscale = 0.299 * color.r + 0.587 * color.g+ 0.114 * color.b;
   debugPrint('grayscale=$grayscale');
   //灰阶值小于到30%认定为深色。
   return grayscale < 0.3;

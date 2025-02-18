@@ -589,3 +589,33 @@ class StockItem extends PickerItem {
   }
 }
 
+class OrderStockItem extends PickerItem {
+  OrderStockItem({
+    required this.factoryID,
+    required this.stockName,
+    required this.stockID,
+  });
+
+  OrderStockItem.fromJson(dynamic json) {
+    factoryID = json['FactoryID'];
+    stockName = json['StockName'];
+    stockID = json['StockID'];
+  }
+
+  String? factoryID;
+  String? stockName;
+  int? stockID;
+
+
+  @override
+  String pickerId() {
+    return (stockID ?? -1).toString();
+  }
+
+  @override
+  String pickerName() {
+    return stockName ?? '';
+  }
+}
+
+

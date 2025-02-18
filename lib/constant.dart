@@ -31,4 +31,5 @@ const barCodeTypes = [
   'zstbrk', //金臻注塑贴标入库
   'pqtbrk', //金臻喷漆贴标入库
   'tbsj', //金臻上架
+  'gyssmrk' //供应商扫码入库
 ];

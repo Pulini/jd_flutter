@@ -186,6 +186,7 @@ class NumberEditText extends StatelessWidget {
     this.hasFocus = false,
     this.showClean = true,
     required this.onChanged,
+    this.onClear,
     this.initQty = 0,
     this.controller,
   });
@@ -195,6 +196,7 @@ class NumberEditText extends StatelessWidget {
   final String? hint;
   final int? initQty;
   final Function(String) onChanged;
+  final Function()? onClear;
   final TextEditingController? controller;
 
   @override
@@ -237,7 +239,10 @@ class NumberEditText extends StatelessWidget {
           hintStyle: const TextStyle(color: Colors.grey),
           suffixIcon: showClean?IconButton(
             icon: const Icon(Icons.close, color: Colors.grey),
-            onPressed: () => (controller ?? c).clear(),
+            onPressed: () => {
+              (controller ?? c).clear(),
+              onClear?.call(),
+            },
           ):Container(),
         ),
       ),

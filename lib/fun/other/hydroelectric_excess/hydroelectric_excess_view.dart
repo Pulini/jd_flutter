@@ -1,12 +1,9 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/other/hydroelectric_excess/hydroelectric_excess_logic.dart';
 import 'package:jd_flutter/fun/other/hydroelectric_excess/hydroelectric_excess_treat_list_view.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import '../../../bean/http/response/device_list_info.dart';
-import '../../../constant.dart';
 import '../../../widget/combination_button_widget.dart';
 import '../../../widget/custom_widget.dart';
 import '../../../widget/edit_text_widget.dart';
@@ -133,7 +130,7 @@ class _HydroelectricExcessPageState extends State<HydroelectricExcessPage> {
                               if (state.textNumber.text.isNotEmpty) {
                                 state.searchRoom(
                                     DeviceListInfo(
-                                        number: state.textNumber.text),
+                                        number: state.textNumber.text.toString()),
                                     false);
                               }
                             },

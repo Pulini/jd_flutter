@@ -705,3 +705,13 @@ weighbridgeListener({
 
 randomDouble(double min, double max) =>
     min + Random().nextDouble() * (max - min);
+
+///dp转换成px
+int dp2Px(double dp, BuildContext context) {
+
+  MediaQueryData mq = MediaQuery.of(context);
+  // 屏幕密度
+  double pixelRatio = mq.devicePixelRatio;
+
+  return (dp * pixelRatio + 1).toInt();
+}
