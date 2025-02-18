@@ -1,12 +1,12 @@
 import 'package:get/get.dart';
+import 'package:jd_flutter/bean/http/response/report_info.dart';
 import 'package:jd_flutter/fun/warehouse/warehouse_allocation/warehouse_allocation_state.dart';
 import 'package:jd_flutter/fun/warehouse/warehouse_allocation/warehouse_share_report_view.dart';
+import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
+import 'package:jd_flutter/widget/dialogs.dart';
 
-import '../../../bean/http/response/report_info.dart';
-import '../../../utils/utils.dart';
-import '../../../widget/dialogs.dart';
 
 class WarehouseAllocationLogic extends GetxController {
   final WarehouseAllocationState state = WarehouseAllocationState();

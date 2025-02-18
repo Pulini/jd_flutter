@@ -1,18 +1,18 @@
 import 'package:get/get.dart';
+import 'package:jd_flutter/bean/http/response/device_maintenance_info.dart';
+import 'package:jd_flutter/bean/http/response/device_maintenance_list_info.dart';
+import 'package:jd_flutter/bean/http/response/issue_cause_info.dart';
 import 'package:jd_flutter/bean/http/response/people_message_info.dart';
 import 'package:jd_flutter/fun/other/device_maintenance_record/device_maintenance_record_detail_view.dart';
 import 'package:jd_flutter/fun/other/device_maintenance_record/device_maintenance_record_repair_view.dart';
 import 'package:jd_flutter/fun/other/device_maintenance_record/device_maintenance_record_state.dart';
+import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
-import '../../../bean/http/response/device_maintenance_info.dart';
-import '../../../bean/http/response/device_maintenance_list_info.dart';
-import '../../../bean/http/response/issue_cause_info.dart';
-import '../../../route.dart';
-import '../../../utils/web_api.dart';
-import '../../../widget/dialogs.dart';
-import '../../../widget/picker/picker_controller.dart';
-import '../../../widget/spinner_widget.dart';
+import 'package:jd_flutter/widget/dialogs.dart';
+import 'package:jd_flutter/widget/picker/picker_controller.dart';
+import 'package:jd_flutter/widget/spinner_widget.dart';
 
 class DeviceMaintenanceRecordLogic extends GetxController {
   final DeviceMaintenanceRecordState state = DeviceMaintenanceRecordState();

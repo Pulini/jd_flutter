@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/scan_code.dart';
 import 'package:jd_flutter/fun/management/anti_Counterfeiting/puma_anti_counterfeiting_logic.dart';
-import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
+import 'package:jd_flutter/widget/scanner.dart';
 
 class PumaAntiCounterfeitingStorePage extends StatefulWidget {
   const PumaAntiCounterfeitingStorePage({super.key});

@@ -2,13 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import '../../../bean/http/response/device_maintenance_info.dart';
-import '../../../widget/combination_button_widget.dart';
-import '../../../widget/custom_widget.dart';
-import '../../../widget/dialogs.dart';
-import '../../../widget/edit_text_widget.dart';
-import '../../../widget/picker/picker_view.dart';
-import '../../../widget/spinner_widget.dart';
+import 'package:jd_flutter/bean/http/response/device_maintenance_info.dart';
+import 'package:jd_flutter/widget/combination_button_widget.dart';
+import 'package:jd_flutter/widget/custom_widget.dart';
+import 'package:jd_flutter/widget/dialogs.dart';
+import 'package:jd_flutter/widget/edit_text_widget.dart';
+import 'package:jd_flutter/widget/picker/picker_view.dart';
+import 'package:jd_flutter/widget/spinner_widget.dart';
+
 import 'device_maintenance_record_logic.dart';
 
 class DeviceMaintenanceRecordRepairPage extends StatefulWidget {

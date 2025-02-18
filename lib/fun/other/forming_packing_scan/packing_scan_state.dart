@@ -1,13 +1,14 @@
 import 'dart:convert';
 
 import 'package:get/get.dart';
+import 'package:jd_flutter/bean/http/response/container_scanner_info.dart';
 import 'package:jd_flutter/bean/http/response/packing_shipment_scan_info.dart';
 import 'package:jd_flutter/fun/other/forming_packing_scan/packing_shipment_scan_view.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
+import 'package:jd_flutter/widget/dialogs.dart';
 
-import '../../../../bean/http/response/container_scanner_info.dart';
-import '../../../widget/dialogs.dart';
+
 
 class PackingScanState {
   var dataList = <ContainerScanner>[].obs; //来访数据

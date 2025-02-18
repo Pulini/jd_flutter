@@ -7,8 +7,8 @@ import 'package:jd_flutter/fun/report/production_tasks/production_tasks_detail_v
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
+import 'package:jd_flutter/widget/dialogs.dart';
 
-import '../../../widget/dialogs.dart';
 import 'production_tasks_state.dart';
 
 class ProductionTasksLogic extends GetxController {

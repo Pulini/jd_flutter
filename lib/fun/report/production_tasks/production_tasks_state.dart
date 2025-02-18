@@ -1,8 +1,8 @@
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/production_tasks_info.dart';
+import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 
-import '../../../utils/utils.dart';
 
 class ProductionTasksState {
   var mqttServer = '192.168.99.229';

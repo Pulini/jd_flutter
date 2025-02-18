@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/bean/http/response/device_detail_info.dart';
 import 'package:jd_flutter/bean/http/response/device_list_info.dart';
 import 'package:jd_flutter/utils/utils.dart';
-import '../../../bean/http/response/device_detail_info.dart';
-import '../../../utils/web_api.dart';
-import '../../../widget/custom_widget.dart';
-import '../../../widget/dialogs.dart';
+import 'package:jd_flutter/utils/web_api.dart';
+import 'package:jd_flutter/widget/custom_widget.dart';
+import 'package:jd_flutter/widget/dialogs.dart';
 
 class HydroelectricExcessState {
 
