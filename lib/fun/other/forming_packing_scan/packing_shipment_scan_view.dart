@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/other/forming_packing_scan/packing_scan_logic.dart';
-import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
+import 'package:jd_flutter/widget/scanner.dart';
 
 class PackingShipmentScanPage extends StatefulWidget {
   const PackingShipmentScanPage({super.key});
