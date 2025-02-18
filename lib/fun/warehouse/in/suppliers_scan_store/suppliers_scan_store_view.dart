@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/bar_code.dart';
 import 'package:jd_flutter/fun/warehouse/in/suppliers_scan_store/suppliers_scan_store_logic.dart';
 import 'package:jd_flutter/fun/warehouse/in/suppliers_scan_store/suppliers_scan_store_state.dart';
-import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
