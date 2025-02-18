@@ -92,17 +92,17 @@ class _SapInkColorMatchingRecreatePageState
             Obx(() => expandedTextSpan(
                   flex: 2,
                   hint: '预调重量：',
-                  text: '${data.presetWeight.value.toMaxString()} kg',
+                  text: '${data.presetWeight.value.toFixed(4).toShowString()} kg',
                 )),
             Obx(() => expandedTextSpan(
                   flex: 2,
                   hint: '实际重量：',
-                  text: '${data.actualWeight.value.toMaxString()} kg',
+                  text: '${data.actualWeight.value.toFixed(4).toShowString()} kg',
                 )),
             Obx(() => expandedTextSpan(
                   flex: 2,
                   hint: '应补重量：',
-                  text: '${data.repairWeight.value.toMaxString()} kg',
+                  text: '${data.repairWeight.value.toFixed(4).toShowString()} kg',
                 )),
           ],
         ),
@@ -235,7 +235,7 @@ class _SapInkColorMatchingRecreatePageState
                   ),
                   Obx(() => textSpan(
                         hint: '最终总重：',
-                        text: '${state.finalWeight.value.toMaxString()} kg',
+                        text: '${state.finalWeight.value.toFixed(4).toShowString()} kg',
                         textColor: Colors.blue,
                       )),
                 ],

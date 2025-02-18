@@ -11,7 +11,6 @@ import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/preview_label_list_widget.dart';
 import 'package:jd_flutter/widget/preview_label_widget.dart';
 
-
 class PrintLabelPage extends StatefulWidget {
   const PrintLabelPage({super.key});
 
@@ -28,56 +27,38 @@ class _PrintLabelPageState extends State<PrintLabelPage> {
   PrintUtil pu = PrintUtil();
 
   _labelTitle() {
-    return Padding(
-      padding: const EdgeInsets.only(
-        left: 3,
-        right: 3,
-      ),
-      child: Text(
-        state.typeBody.value,
-        style: const TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 24,
-        ),
+    return  Text(
+      state.typeBody.value,
+      style: const TextStyle(
+        fontWeight: FontWeight.bold,
+        fontSize: 24,
       ),
     );
   }
 
   _subTitle(Barcode data) {
-    return Padding(
-      padding: const EdgeInsets.only(
-        left: 3,
-        right: 3,
+    return AutoSizeText(
+      data.processName ?? '',
+      style: const TextStyle(
+        fontWeight: FontWeight.bold,
+        fontSize: 36,
       ),
-      child: AutoSizeText(
-        data.processName ?? '',
-        style: const TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 36,
-        ),
-        maxLines: 2,
-        minFontSize: 12,
-        maxFontSize: 36,
-      ),
+      maxLines: 2,
+      minFontSize: 12,
+      maxFontSize: 36,
     );
   }
 
   _content(Barcode data) {
     return data.instructionsText().isNotEmpty
-        ? Padding(
-            padding: const EdgeInsets.only(
-              left: 3,
-              right: 3,
+        ? Text(
+            data.instructionsText(),
+            style: const TextStyle(
+              overflow: TextOverflow.ellipsis,
+              fontWeight: FontWeight.bold,
+              fontSize: 16.5,
             ),
-            child: Text(
-              data.instructionsText(),
-              style: const TextStyle(
-                overflow: TextOverflow.ellipsis,
-                fontWeight: FontWeight.bold,
-                fontSize: 16.5,
-              ),
-              maxLines: 4,
-            ),
+            maxLines: 4,
           )
         : null;
   }

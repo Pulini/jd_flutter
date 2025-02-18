@@ -21,7 +21,21 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
   final ProductionTasksLogic logic = Get.put(ProductionTasksLogic());
   final ProductionTasksState state = Get.find<ProductionTasksLogic>().state;
   final orderListKey = GlobalKey<AnimatedListState>();
-  late MqttUtil mqtt;
+  late MqttUtil mqtt = MqttUtil(
+    server: state.mqttServer,
+    port: state.mqttPort,
+    topic: state.mqttTopic,
+    connectListener: (m) => mqtt.send(
+      topic: state.mqttSend,
+      msg: '{"IsGetAllList":1}',
+    ),
+    msgListener: (topic, data) => logic.mqttRefresh(
+      topic: topic,
+      data: data,
+      refreshItem: (msg) => showScanTips(tips: msg),
+      refreshAll: () => _refreshTable(),
+    ),
+  );
 
   Widget _orderItem(
     ProductionTasksSubInfo data,
@@ -321,20 +335,6 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
     });
   }
 
-  _refreshTable() {
-    mqtt.connect();
-    logic.refreshTable(
-      refresh: () => setState(() {
-        orderListKey.currentState!.removeAllItems((context, animation) {
-          return _orderRemoveItem(animation);
-        });
-        Future.delayed(const Duration(milliseconds: 300), () {
-          orderListKey.currentState!.insertAllItems(0, state.orderList.length);
-        });
-      }),
-    );
-  }
-
   Widget productionTasksTableItem({
     WorkCardSizeInfos? data,
     int? type,
@@ -447,19 +447,23 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
     );
   }
 
+  _refreshTable() {
+    setState(() {
+      orderListKey.currentState!.removeAllItems((context, animation) {
+        return _orderRemoveItem(animation);
+      });
+      Future.delayed(const Duration(milliseconds: 300), () {
+        orderListKey.currentState!.insertAllItems(0, state.orderList.length);
+      });
+    });
+  }
+
   @override
   void initState() {
-    mqtt = MqttUtil(
-      server: '192.168.99.229',
-      port: 1883,
-      topic: 'JJb_WorkLine/${userInfo?.departmentID}/ge_cj_rfid_record',
-      // topic: 'JJb_WorkLine/${userInfo?.departmentID}/sync',
-      listener: (data) => logic.mqttRefresh(
-        data: data,
-        refresh: (msg) => showScanTips(tips: msg),
-      ),
-    );
-    WidgetsBinding.instance.addPostFrameCallback((_) => _refreshTable());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      mqtt.connect();
+      // logic.refreshTable(refresh: () => _refreshTable());
+    });
     super.initState();
   }
 
@@ -469,7 +473,7 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
       title: '${getFunctionTitle()}  <${userInfo?.departmentName}>',
       actions: [
         IconButton(
-          onPressed: () => _refreshTable(),
+          onPressed: () => logic.refreshTable(refresh: () => _refreshTable()),
           icon: const Icon(Icons.refresh),
         )
       ],

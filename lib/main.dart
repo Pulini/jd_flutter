@@ -117,7 +117,7 @@ class _MyAppState extends State<MyApp> {
     return GetMaterialApp(
       scrollBehavior: AppScrollBehavior(),
       onGenerateTitle: (context) => 'app_name'.tr,
-      debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner: useTestUrl,
       translations: Translation(),
       navigatorObservers: [GetXRouterObserver()],
       locale: View.of(context).platformDispatcher.locale,

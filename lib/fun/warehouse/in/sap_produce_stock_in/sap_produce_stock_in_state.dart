@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/base_data.dart';
+import 'package:jd_flutter/bean/http/response/sap_forming_scan_label_info.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 
-import '../../../../bean/http/response/sap_forming_scan_label_info.dart';
 
 class SapProduceStockInState {
   var barCodeList = <SapProduceStockInLabelInfo>[].obs;

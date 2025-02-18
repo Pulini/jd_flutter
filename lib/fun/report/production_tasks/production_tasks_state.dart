@@ -1,8 +1,19 @@
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/production_tasks_info.dart';
+import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 
+
 class ProductionTasksState {
+  var mqttServer = '192.168.99.229';
+  var mqttPort = 1883;
+  var mqttTopic = [
+    'JJb_WorkLine/${userInfo?.departmentID}/sync/resp',
+    'JJb_WorkLine/${userInfo?.departmentID}/rfid_record',
+    'JJb_WorkLine/outbox_data',
+  ];
+  var mqttSend='JJb_WorkLine/${userInfo?.departmentID}/sync';
+
   var selected = (-1).obs;
   var orderList = <ProductionTasksSubInfo>[];
 
@@ -36,16 +47,16 @@ class ProductionTasksState {
         method: webApiGetProductionOrderSchedule,
         loading: '正在查询生产任务进度表...',
         params: {
-          // 'departmentID': getUserInfo()!.departmentID ?? 0,
-          'departmentID': 554744,
+          'departmentID': getUserInfo()!.departmentID ?? 0,
+          // 'departmentID': 554744,
         }).then((response) {
       if (response.resultCode == resultSuccess) {
-        var info=ProductionTasksInfo.fromJson(response.data);
+        var info = ProductionTasksInfo.fromJson(response.data);
 
-        orderList = info.subInfo??[];
-        todayTargetQty.value = info.toDayPlanQty??0;
-        todayCompleteQty.value = info.toDayFinishQty??0;
-        monthCompleteQty.value = info.toDayFinishQty??0;
+        orderList = info.subInfo ?? [];
+        todayTargetQty.value = info.toDayPlanQty ?? 0;
+        todayCompleteQty.value = info.toDayFinishQty ?? 0;
+        monthCompleteQty.value = info.toDayFinishQty ?? 0;
         refreshUiData();
         success.call();
       } else {
@@ -53,6 +64,7 @@ class ProductionTasksState {
       }
     });
   }
+
   refreshUiData() {
     if (orderList.isNotEmpty) {
       typeBody.value = orderList[0].productName ?? '';

@@ -103,8 +103,12 @@ dependencies:
   #item侧滑控件
   flutter_slidable: ^3.1.1
   #二维码扫描
+  mobile_scanner: ^6.0.6
+  #mqtt服务端
   mobile_scanner: ^6.0.2
   mqtt_client: ^10.5.1
+  #设备方向
+  native_device_orientation: ^2.0.3
 
 #强制使用固定版本插件
 dependency_overrides:

@@ -6,6 +6,7 @@ import 'package:jd_flutter/fun/warehouse/out/sap_sales_shipment/sap_sales_shipme
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
+import 'package:jd_flutter/widget/scanner.dart';
 
 class SapSalesShipmentPalletView extends StatefulWidget {
   const SapSalesShipmentPalletView({super.key});

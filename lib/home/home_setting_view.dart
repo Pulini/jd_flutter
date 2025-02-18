@@ -336,23 +336,12 @@ class _UserSettingState extends State<UserSetting> {
           ),
           GestureDetector(
             onTap: () {
-              // SocketClientUtil(
-              //   ip: '192.168.101.231',
-              //   port: 5800,
-              //   weightListener: (d, s) {
-              //     debugPrint('接收到重量<$d $s>');
-              //   },
-              //   connectListener: (c) {
-              //     showSnackBar(
-              //       title: 'Socket',
-              //       message: c ? '连接成功！' : '连接失败！',
-              //       isWarning: !c,
-              //     );
-              //   },
-              // ).connect();
-              // Get.to(() => const Scanner())?.then((v) {
-              //   showSnackBar(title: '扫码', message: v);
+              // Get.to(() =>  const Scanner())?.then((v) {
+              //   if(v!=null){
+              //     showSnackBar(title: '扫码', message: v);
+              //   }
               // });
+              // scannerDialog( detect: (String code)=>showSnackBar(title: 'title', message: code));
               if (!GetPlatform.isWeb) {
                 getVersionInfo(
                   true,

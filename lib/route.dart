@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/fun/maintenance/sap_ink_color_matching/sap_ink_color_matching_view.dart';
 import 'package:jd_flutter/fun/management/anti_Counterfeiting/puma_anti_counterfeiting_view.dart';
 import 'package:jd_flutter/fun/other/hydroelectric_excess/hydroelectric_excess_view.dart';
+import 'package:jd_flutter/fun/warehouse/in/puma_label_manage/puma_label_manage_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/sap_picking_receipt_reversal/sap_picking_receipt_reversal_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/sap_put_on_shelves/sap_put_on_shelves_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/suppliers_scan_store/suppliers_scan_store_view.dart';
@@ -437,7 +438,6 @@ class RouteConfig {
     sapPutOnShelves,
     sapStockTransfer,
     sapWmsReprintLabels,
-    hydroelectricExcess,
     sapWmsSplitLabel,
     deviceMaintenance,
     timelyInventory,

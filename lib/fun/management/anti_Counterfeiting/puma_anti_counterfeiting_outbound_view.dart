@@ -2,11 +2,11 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/management/anti_Counterfeiting/puma_anti_counterfeiting_logic.dart';
+import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
+import 'package:jd_flutter/widget/dialogs.dart';
+import 'package:jd_flutter/widget/scanner.dart';
 
-import '../../../utils/utils.dart';
-import '../../../widget/combination_button_widget.dart';
-import '../../../widget/dialogs.dart';
 
 class PumaAntiCounterfeitingOutboundPage extends StatefulWidget {
   const PumaAntiCounterfeitingOutboundPage({super.key});

@@ -7,6 +7,7 @@ import 'package:jd_flutter/fun/dispatching/process_dispatch_register/process_dis
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
+import 'package:jd_flutter/widget/scanner.dart';
 
 class ModifyLabelWorkerPage extends StatefulWidget {
   const ModifyLabelWorkerPage({super.key});

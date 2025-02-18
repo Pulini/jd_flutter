@@ -163,6 +163,10 @@ class SapInkColorMatchingLogic extends GetxController {
         errorDialog(content: '(${v.materialName})调后重量尚未读取！');
         return;
       }
+      if(v.weightAfterColorMix.value.sub(v.weightBeforeColorMix.value)==0){
+        errorDialog(content: '(${v.materialName})耗量为0！');
+        return;
+      }
     }
     if(!isModify){
       if (state.mixDeviceSocket == null) {

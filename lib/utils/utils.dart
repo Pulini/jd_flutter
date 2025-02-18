@@ -263,6 +263,7 @@ extension StringExt on String? {
       (this ?? '').length >= 10 &&
       (this ?? '').length <= 13;
 
+  ///允许英文单词在换行时截断
   String allowWordTruncation() => Characters(this ?? '').join('\u{200B}');
 
   int hexToInt() {
@@ -647,19 +648,7 @@ bool containsChinese(String input) {
   return chineseRegex.hasMatch(input);
 }
 
-pdaScanner({required Function(String) scan}) {
-  debugPrint('PdaScanner 注册监听');
-  const MethodChannel(channelScanFlutterToAndroid).setMethodCallHandler((call) {
-    switch (call.method) {
-      case 'PdaScanner':
-        {
-          scan.call(call.arguments);
-        }
-        break;
-    }
-    return Future.value(call);
-  });
-}
+
 
 weighbridgeOpen() async {
   await const MethodChannel(channelWeighbridgeAndroidToFlutter)

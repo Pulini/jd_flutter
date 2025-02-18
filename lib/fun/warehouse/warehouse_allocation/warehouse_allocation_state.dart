@@ -1,7 +1,8 @@
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/report_info.dart';
+import 'package:jd_flutter/bean/http/response/scan_code.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
-import '../../../bean/http/response/scan_code.dart';
+
 class WarehouseAllocationState {
 
   var code = "";

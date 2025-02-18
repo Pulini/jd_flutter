@@ -213,12 +213,15 @@ class WorkCardSizeInfos {
 
   addProductScannedQty(double qty) {
     productScannedQty = productScannedQty.add(qty);
-    scannedQty=scannedQty.add(qty);
+    scannedQty = scannedQty.add(qty);
   }
 
   addManualScannedQty(double qty) {
     manualScannedQty = manualScannedQty.add(qty);
-    scannedQty=scannedQty.add(qty);
+    scannedQty = scannedQty.add(qty);
+  }
+  addInstalledQty(double qty) {
+    installedQty = installedQty.add(qty);
   }
 }
 
@@ -311,40 +314,58 @@ class ProductionTasksDetailItemInfo {
   double scannedNotInstalled() => scannedQty.sub(installedQty ?? 0);
 }
 
+//{
+// 	"Number": "20250214110250694001",
+// 	"MoID": "381952",
+// 	"WorkCardID": "854437",
+// 	"ClientOrderNumber": "4801162355",
+// 	"Size": "12",
+// 	"BarCode": "4065449966627",
+// 	"ScanTime": "2025-02-11T16:37:59",
+// 	"ScannerName": "",
+// 	"ScannerIP": "",
+// 	"ScanTypeID": "1",
+// 	"DeptmentID": "492312",
+// 	"Sid": "F368FF08-8FC3-49A9-85D0-0000007F081B"
+// }
 class MqttMsgInfo {
-  String? workCardInterID; //生产派工单ID
+  String? number; //序号
+  String? moID; //指令ID
+  String? workCardID; //生产派工单ID
   String? clientOrderNumber; //客户订单号
   String? size; //尺码
-  double? productScannedQty; //机器扫码
-  double? manualScannedQty; //手动扫码
-  String? type;
+  double? qty;//数量
+  String? scanTypeID;//扫码枪类型 1扫码枪，2井松、3山腾
 
   MqttMsgInfo({
-    this.workCardInterID,
+    this.number,
+    this.moID,
+    this.workCardID,
     this.clientOrderNumber,
     this.size,
-    this.productScannedQty,
-    this.manualScannedQty,
-    this.type,
+    this.qty,
+    this.scanTypeID,
   });
 
   MqttMsgInfo.fromJson(dynamic json) {
-    workCardInterID = json['WorkCardInterID'];
+    number = json['Number'];
+    moID = json['MoID'];
+    workCardID = json['WorkCardID'];
     clientOrderNumber = json['ClientOrderNumber'];
     size = json['Size'];
-    productScannedQty = json['ProductScannedQty'];
-    manualScannedQty = json['ManualScannedQty'];
-    type = json['Type'];
+    qty = json['Qty'];
+    scanTypeID = json['ScanTypeID'];
   }
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
-    map['WorkCardInterID'] = workCardInterID;
+    map['Number'] = number;
+    map['MoID'] = moID;
+    map['WorkCardID'] = workCardID;
     map['ClientOrderNumber'] = clientOrderNumber;
     map['Size'] = size;
-    map['ProductScannedQty'] = productScannedQty;
-    map['ManualScannedQty'] = manualScannedQty;
-    map['Type'] = type;
+    map['Qty'] = qty;
+    map['ScanTypeID'] = scanTypeID;
     return map;
   }
 }

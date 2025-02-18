@@ -1,11 +1,11 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/bean/http/response/device_maintenance_info.dart';
 import 'package:jd_flutter/fun/other/device_maintenance_record/device_maintenance_record_logic.dart';
+import 'package:jd_flutter/widget/combination_button_widget.dart';
+import 'package:jd_flutter/widget/custom_widget.dart';
 
-import '../../../bean/http/response/device_maintenance_info.dart';
-import '../../../widget/combination_button_widget.dart';
-import '../../../widget/custom_widget.dart';
+
 
 class DeviceMaintenanceRecordDetailPage extends StatefulWidget {
   const DeviceMaintenanceRecordDetailPage({super.key});
@@ -83,27 +83,27 @@ class _DeviceMaintenanceRecordDetailPageState
             children: [
               textSpan(
                 hint: '设备名称：'.tr,
-                text: state.deviceData.value.deviceMessage!.deviceName ?? '',
+                text: state.deviceData.value.deviceMessage!.deviceName?? '',
               ),
               textSpan(
                 hint: '设备编号：'.tr,
-                text: state.deviceData.value.deviceMessage!.deviceNo ?? '',
+                text: state.deviceData.value.deviceMessage!.deviceNo?? '',
               ),
               textSpan(
                 hint: '设备型号：'.tr,
-                text: state.deviceData.value.deviceMessage!.model??'' ,
+                text: state.deviceData.value.deviceMessage!.model?? '',
               ),
               textSpan(
                 hint: '保管单位：'.tr,
-                text: state.deviceData.value.deviceMessage!.custodianDept ?? '',
+                text: state.deviceData.value.deviceMessage!.custodianDept?? '',
               ),
               textSpan(
                 hint: '保管人：'.tr,
-                text: state.deviceData.value.deviceMessage!.custodianName ?? '',
+                text: state.deviceData.value.deviceMessage!.custodianName?? '',
               ),
               textSpan(
                 hint: '保管人电话：'.tr,
-                text: state.deviceData.value.deviceMessage!.custodianTel ?? '',
+                text: state.deviceData.value.deviceMessage!.custodianTel?? '',
               ),
               Center(
                 child: Text(
@@ -116,56 +116,56 @@ class _DeviceMaintenanceRecordDetailPageState
               Visibility(
                 child: textSpan(
                   hint: '单据编号：'.tr,
-                  text: state.deviceData.value.repairOrder!.number ?? '',
+                  text: state.deviceData.value.repairOrder!.number?? '',
                 ),
                 visible: state.isHave.value,
               ),
               Visibility(
                 child: textSpan(
                   hint: '故障说明：'.tr,
-                  text: state.deviceData.value.repairOrder!.faultDescription ?? '',
+                  text: state.deviceData.value.repairOrder!.faultDescription?? '',
                 ),
                 visible: state.isHave.value,
               ),
               Visibility(
                 child: textSpan(
                   hint: '故障原因判断：'.tr,
-                  text: state.deviceData.value.repairOrder!.issueCause ?? '',
+                  text: state.deviceData.value.repairOrder!.issueCause?? '',
                 ),
                 visible: state.isHave.value,
               ),
               Visibility(
                 child: textSpan(
                   hint: '报修时间：'.tr,
-                  text: state.deviceData.value.repairOrder!.repairTime ?? '',
+                  text: state.deviceData.value.repairOrder!.repairTime?? '',
                 ),
                 visible: state.isHave.value,
               ),
               Visibility(
                 child: textSpan(
                   hint: '维修单位：'.tr,
-                  text: state.deviceData.value.repairOrder!.maintenanceUnit ?? '',
+                  text: state.deviceData.value.repairOrder!.maintenanceUnit?? '',
                 ),
                 visible: state.isHave.value,
               ),
               Visibility(
                 child: textSpan(
                   hint: '维修后评估及预防：'.tr,
-                  text: state.deviceData.value.repairOrder!.assessmentPrevention ?? '',
+                  text: state.deviceData.value.repairOrder!.assessmentPrevention?? '',
                 ),
                 visible: state.isHave.value,
               ),
               Visibility(
                 child: textSpan(
                   hint: '报修时间：'.tr,
-                  text: state.deviceData.value.repairOrder!.inspectionTime ?? '',
+                  text: state.deviceData.value.repairOrder!.inspectionTime?? '',
                 ),
                 visible: state.isHave.value,
               ),
               Visibility(
                 child: textSpan(
                   hint: '修复时间：'.tr,
-                  text: state.deviceData.value.repairOrder!.repairTime ?? '',
+                  text: state.deviceData.value.repairOrder!.repairTime?? '',
                 ),
                 visible: state.isHave.value,
               ),

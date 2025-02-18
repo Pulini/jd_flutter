@@ -5,9 +5,10 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/production_tasks_info.dart';
 import 'package:jd_flutter/fun/report/production_tasks/production_tasks_detail_view.dart';
 import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
+import 'package:jd_flutter/widget/dialogs.dart';
 
-import '../../../widget/dialogs.dart';
 import 'production_tasks_state.dart';
 
 class ProductionTasksLogic extends GetxController {
@@ -116,62 +117,72 @@ class ProductionTasksLogic extends GetxController {
     );
   }
 
-  mqttRefresh({required String data, required Function(String) refresh}) {
-    var info = MqttMsgInfo.fromJson(jsonDecode(data));
-    try {
-      if (state.orderList[0].workCardInterID == info.workCardInterID &&
-          state.orderList[0].clientOrderNumber == info.clientOrderNumber) {
-        if ((info.manualScannedQty ?? 0) > 0) {
-          state.tableInfo
-              .firstWhere(
-                (v) => v.size == info.size,
-              )
-              .addManualScannedQty(info.manualScannedQty ?? 0);
-          state.tableInfo.refresh();
-          refresh.call('${info.size}码 +${info.manualScannedQty.toShowString()}');
-        }
-        if ((info.productScannedQty ?? 0) > 0) {
-          state.tableInfo
-              .firstWhere(
-                (v) => v.size == info.size,
-              )
-              .addProductScannedQty(info.productScannedQty ?? 0);
-          state.tableInfo.refresh();
-          refresh.call('${info.size}码 +${info.productScannedQty.toShowString()}');
-        }
-      } else {
-        debugPrint('其他列表');
-        if ((info.manualScannedQty ?? 0) > 0) {
-          state.orderList
-              .firstWhere(
-                (v) =>
-                    v.workCardInterID == info.workCardInterID &&
-                    v.clientOrderNumber == info.clientOrderNumber,
-              )
+  mqttRefresh({
+    required String topic,
+    required String data,
+    required Function(String) refreshItem,
+    required Function() refreshAll,
+  }) {
+    if (topic == state.mqttTopic[1] || topic == state.mqttTopic[2]) {
+      var info = MqttMsgInfo.fromJson(jsonDecode(data));
+      try {
+        if (state.orderList[0].workCardInterID == info.workCardID &&
+            state.orderList[0].clientOrderNumber == info.clientOrderNumber &&
+            state.orderList[0].moID == info.moID) {
+          debugPrint('主页表格');
+          WorkCardSizeInfos? findSize = state.orderList[0].workCardSizeInfo
+              ?.firstWhere((v) => v.size == info.size);
+          if (findSize != null) {
+            if (info.scanTypeID == '1') {
+              findSize.addManualScannedQty(info.qty ?? 0);
+              state.todayCompleteQty.value+=1;
+              state.monthCompleteQty.value+=1;
+            } else if (info.scanTypeID == '2' || info.scanTypeID == '3') {
+              findSize.addProductScannedQty(info.qty ?? 0);
+              state.todayCompleteQty.value+=1;
+              state.monthCompleteQty.value+=1;
+            } else {
+              findSize.addInstalledQty(info.qty ?? 0);
+            }
+            state.tableInfo.refresh();
+            refreshItem.call('${info.size}码 +${info.qty.toShowString()}');
+          }
+        } else {
+          debugPrint('其他表格');
+          WorkCardSizeInfos? findSize = state.orderList
+              .firstWhere((v) =>
+                  v.workCardInterID == info.workCardID &&
+                  v.clientOrderNumber == info.clientOrderNumber &&
+                  v.moID == info.moID)
               .workCardSizeInfo
-              ?.firstWhere(
-                (v) => v.size == info.size,
-              )
-              .addManualScannedQty(info.manualScannedQty ?? 0);
-          refresh.call('${info.size}码 +${info.manualScannedQty.toShowString()}');
+              ?.firstWhere((v) => v.size == info.size);
+          if (findSize != null) {
+            if (info.scanTypeID == '1') {
+              findSize.addManualScannedQty(info.qty ?? 0);
+              state.todayCompleteQty.value+=1;
+              state.monthCompleteQty.value+=1;
+            } else if (info.scanTypeID == '2' || info.scanTypeID == '3') {
+              findSize.addProductScannedQty(info.qty ?? 0);
+              state.todayCompleteQty.value+=1;
+              state.monthCompleteQty.value+=1;
+            } else {
+              findSize.addInstalledQty(info.qty ?? 0);
+            }
+            refreshItem.call('${info.size}码 +${info.qty.toShowString()}');
+          }
         }
-        if ((info.productScannedQty ?? 0) > 0) {
-          state.orderList
-              .firstWhere(
-                (v) =>
-                    v.workCardInterID == info.workCardInterID &&
-                    v.clientOrderNumber == info.clientOrderNumber,
-              )
-              .workCardSizeInfo
-              ?.firstWhere(
-                (v) => v.size == info.size,
-              )
-              .addProductScannedQty(info.productScannedQty ?? 0);
-          refresh.call('${info.size}码 +${info.productScannedQty.toShowString()}');
-        }
+      } catch (e) {
+        debugPrint('mqttRefresh error=$e');
       }
-    } catch (e) {
-      debugPrint('mqttRefresh error=$e');
+    } else if (topic == state.mqttTopic[0]) {
+      var info = ProductionTasksInfo.fromJson(jsonDecode(data)['Data']);
+      logger.f(info.toJson());
+      state.orderList = info.subInfo ?? [];
+      state.todayTargetQty.value = info.toDayPlanQty ?? 0;
+      state.todayCompleteQty.value = info.toDayFinishQty ?? 0;
+      state.monthCompleteQty.value = info.toDayFinishQty ?? 0;
+      state.refreshUiData();
+      refreshAll.call();
     }
   }
 }

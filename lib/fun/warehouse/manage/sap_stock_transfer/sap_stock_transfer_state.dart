@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/bean/http/response/base_data.dart';
 import 'package:jd_flutter/bean/http/response/sap_picking_info.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 
-import '../../../../bean/http/response/base_data.dart';
 
 class SapStockTransferState {
   var labelList = <PalletDetailItem1Info>[].obs;
