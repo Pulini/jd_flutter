@@ -2,13 +2,12 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/fun/maintenance/sap_ink_color_matching/sap_ink_color_matching_view.dart';
 import 'package:jd_flutter/fun/management/anti_Counterfeiting/puma_anti_counterfeiting_view.dart';
 import 'package:jd_flutter/fun/other/hydroelectric_excess/hydroelectric_excess_view.dart';
-import 'package:jd_flutter/fun/warehouse/in/puma_label_manage/puma_label_manage_view.dart';
+import 'package:jd_flutter/fun/warehouse/in/production_scan_warehouse/production_scan_warehouse_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/sap_picking_receipt_reversal/sap_picking_receipt_reversal_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/sap_put_on_shelves/sap_put_on_shelves_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/suppliers_scan_store/suppliers_scan_store_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/sap_stock_transfer/sap_stock_transfer_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/sap_wms_reprint_labels/sap_wms_reprint_labels_view.dart';
-import 'package:jd_flutter/fun/warehouse/timely_inventory/timely_inventory_view.dart';
 import 'bean/home_button.dart';
 import 'bean/routes.dart';
 import 'fun/dispatching/machine_dispatch/machine_dispatch_report_view.dart';
@@ -45,11 +44,12 @@ import 'fun/warehouse/manage/carton_label_scan/carton_label_scan_view.dart';
 import 'fun/warehouse/manage/carton_label_scan_progress/carton_label_scan_progress_view.dart';
 import 'fun/warehouse/manage/sap_wms_split_label/sap_wms_split_label_view.dart';
 import 'fun/warehouse/manage/smart_delivery/smart_delivery_view.dart';
+import 'fun/warehouse/manage/timely_inventory/timely_inventory_view.dart';
+import 'fun/warehouse/manage/warehouse_allocation/warehouse_allocation_view.dart';
 import 'fun/warehouse/out/sap_print_picking/sap_print_picking_view.dart';
 import 'fun/warehouse/out/sap_production_picking/sap_production_picking_view.dart';
 import 'fun/warehouse/out/sap_relocation_picking/sap_relocation_picking_view.dart';
 import 'fun/warehouse/out/sap_sales_shipment/sap_sales_shipment_view.dart';
-import 'fun/warehouse/warehouse_allocation/warehouse_allocation_view.dart';
 import 'home/home_view.dart';
 import 'login/login_view.dart';
 import 'utils/web_api.dart';
@@ -388,11 +388,18 @@ class RouteConfig {
     const ProductionTasksPage(),
   );
 
-  ///成型生产任务
+  ///供应商扫码入库
   static Routes suppliersScanStore = Routes(
     '/suppliers_scan_store',
     99,
     const SuppliersScanStorePage(),
+  );
+
+  ///生产扫码入库
+  static Routes productionScanWarehouse = Routes(
+    '/production_scan_warehouse',
+    99,
+    const ProductionScanWarehousePage(),
   );
 
   ///本地功能入口列表
@@ -444,7 +451,8 @@ class RouteConfig {
     antiCounterfeiting,
     sapInkColorMatching,
     productionTasks,
-    suppliersScanStore
+    suppliersScanStore,
+    productionScanWarehouse
   ];
 
   static List<GetPage> appRoutes = [
@@ -652,6 +660,10 @@ class RouteConfig {
     GetPage(
       name: suppliersScanStore.name,
       page: () => suppliersScanStore.page,
+    ),
+    GetPage(
+      name: productionScanWarehouse.name,
+      page: () => productionScanWarehouse.page,
     ),
   ];
 }

@@ -86,7 +86,7 @@ class SuppliersScanStoreLogic extends GetxController {
     }
   }
 
-  bool goToReport() {
+  bool haveCodeData() {
     if (state.barCodeList.isNotEmpty) {
       return true;
     } else {
@@ -96,7 +96,7 @@ class SuppliersScanStoreLogic extends GetxController {
 
   ///删除对应条码
   deleteCode(BarCodeInfo barCodeList) {
-    barCodeList.delete(callback: () {
+    barCodeList.deleteByCode(callback: () {
       state.barCodeList.remove(barCodeList);
     });
   }
@@ -195,15 +195,13 @@ class SuppliersScanStoreLogic extends GetxController {
   }
 
   ///获得已入库条形码数据
-  getBarCodeStatusByDepartmentID({
-    String? type,
-  }) {
+  getBarCodeStatusByDepartmentID({required Function() refresh,}) {
     httpGet(method: webApiGetBarCodeStatusByDepartmentID, params: {
       'Type': "SupplierScanInStock",
       'DepartmentID': getUserInfo()!.departmentID,
     }).then((response) {
       if (response.resultCode == resultSuccess) {
-        state.usedList.cast();
+        state.usedList.clear();
         var list = <UsedBarCodeInfo>[
           for (var i = 0; i < response.data.length; ++i)
             UsedBarCodeInfo.fromJson(response.data[i])
@@ -212,8 +210,14 @@ class SuppliersScanStoreLogic extends GetxController {
         for (var i = 0; i < list.length; ++i) {
           state.usedList.add(list[i].barCode.toString());
         }
+
+        for (var data in state.barCodeList) {
+          data.isUsed = state.usedList.contains(data.code);
+        }
+        refresh.call();
       } else {
         showSnackBar(title: '温馨提示', message: response.message ?? '');
+        refresh.call;
       }
     });
   }
@@ -237,16 +241,8 @@ class SuppliersScanStoreLogic extends GetxController {
       'UserID': getUserInfo()!.userID,
     }).then((response) {
       if (response.resultCode == resultSuccess) {
-        state.usedList.cast();
-        var list = <UsedBarCodeInfo>[
-          for (var i = 0; i < response.data.length; ++i)
-            UsedBarCodeInfo.fromJson(response.data[i])
-        ];
-
-        for (var i = 0; i < list.length; ++i) {
-          state.usedList.add(list[i].barCode.toString());
-        }
         clearBarCodeList();
+        successDialog(content: response.message, back: () => getBarCodeStatusByDepartmentID(refresh: (){}));
       } else {
         showSnackBar(title: '温馨提示', message: response.message ?? '');
       }

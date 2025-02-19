@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/warehouse/code_list_report/code_list_report_view.dart';
-import 'package:jd_flutter/fun/warehouse/warehouse_allocation/warehouse_allocation_state.dart';
+import 'package:jd_flutter/fun/warehouse/manage/warehouse_allocation/warehouse_allocation_state.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';

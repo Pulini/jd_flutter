@@ -965,3 +965,9 @@ const webApiGetBarCodeStatusByDepartmentID = "api/BarCode/GetBarCodeStatusByDepa
 
 ///提交条形码数据,自动生成外购入库单
 const webApiUploadSupplierBarCode = "api/BarCode/SubmitBarCode2CollectBill";
+
+///验证生产扫码入库条码
+const webApiGetUnReportedBarCode = "api/scanjobbooking/GetUnReportedBarCode";
+
+///生产扫码入库提交
+const webApiUploadProductionScanning = "api/ScanJobBooking/SubmitBarCode2PrdInStockCollectBillNew";

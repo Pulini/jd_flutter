@@ -86,6 +86,17 @@ class BarCodeInfo {
       });
     });
   }
+  deleteByCode({required Function() callback}) {
+    openDb().then((db) {
+      db.delete(tableName, where: 'code = ?', whereArgs: [code]).then((value) {
+        db.close();
+        callback.call();
+      }, onError: (e) {
+        logger.e('数据库操作异常：$e');
+        db.close();
+      });
+    });
+  }
 
   static clear({
     required String type,

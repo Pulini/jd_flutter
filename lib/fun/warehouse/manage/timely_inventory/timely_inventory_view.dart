@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/timely_inventory_show_info.dart';
-import 'package:jd_flutter/fun/warehouse/timely_inventory/timely_inventory_logic.dart';
+import 'package:jd_flutter/fun/warehouse/manage/timely_inventory/timely_inventory_logic.dart';
 import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
