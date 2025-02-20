@@ -30,6 +30,7 @@ enum PickerType {
   startDate,
   endDate,
   stockList,
+  billStockList
 }
 
 abstract class PickerController {
@@ -84,10 +85,10 @@ abstract class PickerController {
         return 'picker_type_end_date'.tr;
       case PickerType.stockList:
         return 'picker_type_mes_stock_list'.tr;
+      case PickerType.billStockList:
+        return 'picker_type_order_stock_list'.tr;
       default:
-
         return 'Picker';
-
     }
   }
 
@@ -131,6 +132,8 @@ abstract class PickerController {
         return getMeGroup;
       case PickerType.stockList:
         return getMesStockList;
+      case PickerType.billStockList:
+        return getOrderStockList;
       default:
         return getDataListError;
     }
@@ -643,7 +646,7 @@ abstract class PickerController {
 
   //获取Mes仓库
   Future getMesStockList() async {
-    var response = await httpGet(method: webApiPickerMesStockList,params: {
+    var response = await httpGet(method: webApiPickerMesStockList, params: {
       'OrganizeID': getUserInfo()!.organizeID,
     });
     if (response.resultCode == resultSuccess) {
@@ -651,14 +654,9 @@ abstract class PickerController {
         List<LinkPickerItem> list = [
           if (hasAll)
             MesStockInfo(
-                itemID:-1,
-                name:'全部',
-                stockList:[
-                  StockItem(
-                      itemID:-1,
-                      name:'全部'
-                  )
-                ],
+              itemID: -1,
+              name: '全部',
+              stockList: [StockItem(itemID: -1, name: '全部')],
             )
         ];
         list.addAll(await compute(
@@ -678,6 +676,31 @@ abstract class PickerController {
     }
   }
 
+  ///获取单据对应仓库列表
+  Future getOrderStockList() async {
+    var response = await httpGet(method: webApiPickerOrderStockList,params: {
+      'UserID': getUserInfo()!.userID,
+      'ReportType': 1,
+    });
+    if (response.resultCode == resultSuccess) {
+      try {
+        List<PickerItem> list = [];
+        list.addAll(await compute(
+          parseJsonToList,
+          ParseJsonParams(
+            response.data,
+            OrderStockItem.fromJson,
+          ),
+        ));
+        return list;
+      } on Error catch (e) {
+        logger.e(e);
+        return 'json_format_error'.tr;
+      }
+    } else {
+      return response.message;
+    }
+  }
 }
 
 class OptionsPickerController extends PickerController {

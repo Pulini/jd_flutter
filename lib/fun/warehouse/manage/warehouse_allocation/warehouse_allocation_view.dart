@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jd_flutter/fun/warehouse/warehouse_allocation/warehouse_allocation_logic.dart';
+import 'package:jd_flutter/fun/warehouse/manage/warehouse_allocation/warehouse_allocation_logic.dart';
 import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
@@ -57,89 +57,74 @@ class _WarehouseAllocationPageState extends State<WarehouseAllocationPage> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
-            flex: 2,
-            child: Row(
-              children: [
-                Expanded(
-                  flex: 3,
-                  child: EditText(
-                    hint: 'warehouse_allocation_input'.tr,
-                    onChanged: (v) => state.code = v,
-                  ),
+          Row(
+            children: [
+              Expanded(
+                child: EditText(
+                  hint: 'warehouse_allocation_input'.tr,
+                  onChanged: (v) => state.code = v,
                 ),
-                Expanded(
-                    child: CombinationButton(
-                  text: '手动添加',
-                  click: () {
-                    state.addCode(state.code);
-                  },
-                )),
-                const SizedBox(width: 5),
-              ],
-            ),
+              ),
+              CombinationButton(
+                text: '手动添加',
+                click: () {
+                  state.addCode(state.code);
+                },
+              ),
+            ],
           ),
           Expanded(
-            flex: 18,
             child: Obx(
               () => ListView.builder(
                 padding: const EdgeInsets.only(left: 5, right: 5),
                 itemCount: state.dataList.length,
-                itemBuilder: (context, index) => Container(
-                  padding: const EdgeInsets.only(
-                      left: 5, top: 3, right: 3, bottom: 3),
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(color: Colors.blue, width: 1),
-                      borderRadius: BorderRadius.circular(5)),
-                  child: Text(
-                    state.dataList[index].code.toString(),
-                  ),
-                ),
+                itemBuilder: (context, index) => GestureDetector(
+                    onLongPress:()=> logic.deleteCode(index),
+                    child: Container(
+                      padding: const EdgeInsets.only(
+                          left: 5, top: 3, right: 3, bottom: 3),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(color: Colors.blue, width: 1),
+                          borderRadius: BorderRadius.circular(5)),
+                      child: Text(
+                        state.dataList[index].code.toString(),
+                      ),
+                    )),
               ),
             ),
           ),
-          Expanded(
-            child: Obx(
-              () => Padding(
-                padding: const EdgeInsets.only(
-                  left: 10,
-                ),
-                child: Text(
+          Padding(
+            padding: const EdgeInsets.only(
+              left: 10,
+            ),
+            child: Obx(() => Text(
                   '已扫描${state.dataList.length}条',
                   style: const TextStyle(color: Colors.red),
+                )),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 10, right: 10),
+            child: Row(
+              children: [
+                const Text('出仓库：'),
+                Expanded(
+                  child: LinkOptionsPicker(
+                    pickerController: outStockList,
+                  ),
                 ),
-              ),
+              ],
             ),
           ),
-          Expanded(
-            flex: 2,
-            child: Padding(
-              padding: const EdgeInsets.only(left: 10, right: 10),
-              child: Row(
-                children: [
-                  const Text('出仓库：'),
-                  Expanded(
-                    child: LinkOptionsPicker(
-                      pickerController: outStockList,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Expanded(
-            flex: 2,
-            child: Padding(
-              padding: const EdgeInsets.only(left: 10, right: 10),
-              child: Row(
-                children: [
-                  const Text('入仓库：'),
-                  Expanded(
-                    child: LinkOptionsPicker(pickerController: onStockList),
-                  ),
-                ],
-              ),
+          Padding(
+            padding: const EdgeInsets.only(left: 10, right: 10),
+            child: Row(
+              children: [
+                const Text('入仓库：'),
+                Expanded(
+                  child: LinkOptionsPicker(pickerController: onStockList),
+                ),
+              ],
             ),
           ),
           SizedBox(
@@ -157,11 +142,10 @@ class _WarehouseAllocationPageState extends State<WarehouseAllocationPage> {
     );
   }
 
-
   @override
   void initState() {
     pdaScanner(
-      scan: (code) => {state.addCode(code)},
+      scan: (code) => state.addCode(code),
     );
     super.initState();
   }

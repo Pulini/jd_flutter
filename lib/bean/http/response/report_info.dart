@@ -1,3 +1,8 @@
+import 'dart:ui';
+
+import 'package:get/get.dart';
+import 'package:jd_flutter/utils/utils.dart';
+
 class ReportInfo {
   ReportInfo({
     this.rowIndex,
@@ -29,6 +34,9 @@ class ReportInfo {
     }
     return map;
   }
+
+  Color getBkg() =>
+      Color(int.parse('0xFF${backgroundColor?.replaceAll('#', '')}'));
 }
 
 class DataList {
@@ -45,21 +53,23 @@ class DataList {
   DataList.fromJson(dynamic json) {
     content = json['Content'];
     fieldName = json['FieldName'];
-    width = json['Width'];
+    width = json['Width'].toDouble();
     visible = json['Visible'];
     colIndex = json['ColIndex'];
     caption = json['Caption'];
     foreColor = json['ForeColor'];
+    if (content?.isNum == true) {
+      content = content.toDoubleTry().toShowString();
+    }
   }
 
   String? content;
   String? fieldName;
-  int? width;
+  double? width;
   bool? visible;
   int? colIndex;
   String? caption;
   String? foreColor;
-
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -73,4 +83,6 @@ class DataList {
 
     return map;
   }
+  Color getTextColor() =>
+      Color(int.parse('0xFF${foreColor?.replaceAll('#', '')}'));
 }

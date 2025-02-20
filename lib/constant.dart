@@ -31,6 +31,8 @@ const barCodeTypes = [
   'zstbrk', //金臻注塑贴标入库
   'pqtbrk', //金臻喷漆贴标入库
   'tbsj', //金臻上架
+  'gyssmrk', //供应商扫码入库
+  'scsmrk'//生产扫码入库
 ];
 
 const feishuUserTokenData='feishu_user_token_data';

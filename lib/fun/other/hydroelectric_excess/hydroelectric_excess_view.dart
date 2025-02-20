@@ -129,7 +129,7 @@ class _HydroelectricExcessPageState extends State<HydroelectricExcessPage> {
                               if (state.textNumber.text.isNotEmpty) {
                                 state.searchRoom(
                                     DeviceListInfo(
-                                        number: state.textNumber.text),
+                                        number: state.textNumber.text.toString()),
                                     false);
                               }
                             },

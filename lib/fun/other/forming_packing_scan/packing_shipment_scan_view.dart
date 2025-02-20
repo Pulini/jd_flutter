@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/other/forming_packing_scan/packing_scan_logic.dart';
+import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/scanner.dart';
 
@@ -33,8 +34,7 @@ class _PackingShipmentScanPageState extends State<PackingShipmentScanPage> {
               Obx(
                 () => Text('条码：${state.showCabinetNumber.value}'),
               ),
-              Expanded(
-                  child: Row(
+              Row(
                 children: [
                   expandedFrameText(
                     text: '订单号',
@@ -47,9 +47,24 @@ class _PackingShipmentScanPageState extends State<PackingShipmentScanPage> {
                     flex: 1,
                   )
                 ],
-              )),
-              Expanded(child: Stack())
-              // Obx(()=> )
+              ),
+              // Expanded(
+              //   child: Obx(
+              //         () => ListView.builder(
+              //       padding: const EdgeInsets.all(8),
+              //       itemCount: state.barCodeList.length,
+              //       itemBuilder: (BuildContext context, int index) =>
+              //           _item(state.barCodeList[index]),
+              //     ),
+              //   ),
+              // ),
+              CombinationButton(
+                text: '手动添加',
+                click: () {
+
+                },
+                combination: Combination.intact,
+              )
             ],
           )),
     );
@@ -58,8 +73,10 @@ class _PackingShipmentScanPageState extends State<PackingShipmentScanPage> {
   @override
   void initState() {
     pdaScanner(
-      scan: (code) => {
+      scan: (scanCode) => {
+          state.checkCode(code:scanCode,success: ()=>{
 
+          })
       },
     );
     super.initState();
