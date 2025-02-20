@@ -26,7 +26,6 @@ class SapSurplusMaterialStockInState {
   var weighbridgeStateText = ''.obs;
   var weighbridgeStateTextColor = Colors.black.obs;
 
-  SapSurplusMaterialStockInState() {}
 
   getSurplusMaterialHistory({
     required String startDate,

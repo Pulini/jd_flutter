@@ -17,7 +17,7 @@ class SmartDeliveryState {
   var deliveryQty = 0;
 
   SmartDeliveryState() {
-    ///Initialize variables
+    //Initialize variables
   }
 
   querySmartDeliveryOrder({

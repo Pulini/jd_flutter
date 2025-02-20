@@ -11,7 +11,7 @@ import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
-///app 背景渐变色
+//app 背景渐变色
 var backgroundColor = const BoxDecoration(
   gradient: LinearGradient(
     colors: [
@@ -23,7 +23,7 @@ var backgroundColor = const BoxDecoration(
   ),
 );
 
-///页面简单框架
+//页面简单框架
 pageBody({
   String? title,
   List<Widget>? actions,
@@ -77,7 +77,7 @@ pageBody({
   );
 }
 
-///页面简单框架 底部弹出Popup
+//页面简单框架 底部弹出Popup
 pageBodyWithBottomSheet({
   String? title,
   List<Widget>? actions,
@@ -176,7 +176,7 @@ pageBodyWithBottomSheet({
   );
 }
 
-///页面简单框架 右侧弹出Drawer
+//页面简单框架 右侧弹出Drawer
 pageBodyWithDrawer({
   String? title,
   List<Widget>? actions,
@@ -273,7 +273,7 @@ pageBodyWithDrawer({
   );
 }
 
-///照片选择器
+//照片选择器
 takePhoto(Function(File) callback, {String? title}) {
   showCupertinoModalPopup(
     context: Get.overlayContext!,
@@ -312,7 +312,7 @@ takePhoto(Function(File) callback, {String? title}) {
   );
 }
 
-///获取照片
+//获取照片
 _takePhoto(bool isGallery, Function(File) callback) async {
   //获取照片
   var xFile = await ImagePicker().pickImage(
@@ -347,7 +347,7 @@ _takePhoto(bool isGallery, Function(File) callback) async {
   if (cFile != null) callback.call(File(cFile.path));
 }
 
-///显示SnackBar
+//显示SnackBar
 showSnackBar({
   bool? isWarning = false,
   required String title,
@@ -371,22 +371,28 @@ showSnackBar({
   );
 }
 
-///显示SnackBar
-showScanTips({String tips = '+1', Color color = Colors.blueAccent}) {
+//显示SnackBar
+showScanTips({
+  String tips = '+1',
+  Color color = Colors.blueAccent,
+  Duration duration = const Duration(milliseconds: 500),
+}) {
   Get.snackbar(
     '',
     '',
     messageText: Center(
-      child: Text(
+      child: AutoSizeText(
         tips,
+        maxLines: 1,
+        minFontSize: 150,
+        maxFontSize: 200,
         style: TextStyle(
-          fontSize: 200,
           fontWeight: FontWeight.bold,
           color: color,
         ),
       ),
     ),
-    duration: const Duration(milliseconds: 500),
+    duration: duration,
     // margin: const EdgeInsets.all(10),
     overlayBlur: 5,
     barBlur: 0,
@@ -396,7 +402,7 @@ showScanTips({String tips = '+1', Color color = Colors.blueAccent}) {
   );
 }
 
-///选择器
+//选择器
 getCupertinoPicker(List<Widget> items, FixedExtentScrollController controller) {
   return CupertinoPicker(
     scrollController: controller,
@@ -410,7 +416,7 @@ getCupertinoPicker(List<Widget> items, FixedExtentScrollController controller) {
   );
 }
 
-///popup工具
+//popup工具
 showPopup(Widget widget, {double? height}) {
   showCupertinoModalPopup(
     context: Get.overlayContext!,
@@ -427,7 +433,7 @@ showPopup(Widget widget, {double? height}) {
   );
 }
 
-///底部弹出 sheet
+//底部弹出 sheet
 showSheet<T>(
   BuildContext context,
   Widget body, {
@@ -444,7 +450,7 @@ showSheet<T>(
     elevation: 0,
     backgroundColor: bodyColor,
     shape: RoundedRectangleBorder(borderRadius: borderRadius),
-    barrierColor: Colors.black.withOpacity(0.25),
+    barrierColor: Colors.black.withValues(alpha: 0.25),
     constraints: BoxConstraints(
         maxHeight: MediaQuery.of(context).size.height -
             MediaQuery.of(context).viewInsets.top),
@@ -463,7 +469,7 @@ showSheet<T>(
   );
 }
 
-///带占比带文本提示的文本
+//带占比带文本提示的文本
 expandedTextSpan({
   required String hint,
   Color hintColor = Colors.black,
@@ -501,7 +507,7 @@ expandedTextSpan({
       ));
 }
 
-///带文本提示带文本
+//带文本提示带文本
 textSpan({
   required String hint,
   Color hintColor = Colors.black,
@@ -537,7 +543,7 @@ textSpan({
   );
 }
 
-///进度条、百分比
+//进度条、百分比
 percentIndicator({
   required double max,
   required double value,
@@ -572,7 +578,7 @@ percentIndicator({
   );
 }
 
-///进度条、带文本
+//进度条、带文本
 progressIndicator({
   required double max,
   required double value,
@@ -610,7 +616,7 @@ progressIndicator({
   );
 }
 
-///带框、带点击事件带文本
+//带框、带点击事件带文本
 expandedFrameText({
   Function? click,
   Color? borderColor,
@@ -651,7 +657,7 @@ expandedFrameText({
   );
 }
 
-///固定宽高1比1的头像
+//固定宽高1比1的头像
 avatarPhoto(String? url) {
   return AspectRatio(
     aspectRatio: 1 / 1,
@@ -674,8 +680,8 @@ avatarPhoto(String? url) {
   );
 }
 
-///标准格式标签模版
-///75*45大小
+//标准格式标签模版
+//75*45大小
 fixedLabelTemplate({
   required String qrCode,
   Widget? title,
@@ -721,7 +727,7 @@ fixedLabelTemplate({
                 child: Container(
                   decoration: BoxDecoration(border: Border(bottom: bs)),
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 3,right: 3),
+                    padding: const EdgeInsets.only(left: 3, right: 3),
                     child: title ?? const Text(''),
                   ),
                 ),
@@ -729,7 +735,7 @@ fixedLabelTemplate({
               Expanded(
                 flex: 3,
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 3,right: 3),
+                  padding: const EdgeInsets.only(left: 3, right: 3),
                   child: subTitle ?? const Text(''),
                 ),
               ),
@@ -744,7 +750,7 @@ fixedLabelTemplate({
       border: Border(bottom: bs),
     ),
     child: Padding(
-      padding: const EdgeInsets.only(left: 3,right: 3),
+      padding: const EdgeInsets.only(left: 3, right: 3),
       child: content ?? const Text(''),
     ),
   );
@@ -759,7 +765,7 @@ fixedLabelTemplate({
             border: Border(right: bs),
           ),
           child: Padding(
-            padding: const EdgeInsets.only(left: 3,right: 3),
+            padding: const EdgeInsets.only(left: 3, right: 3),
             child: bottomLeft ?? const Text(''),
           ),
         ),
@@ -767,7 +773,7 @@ fixedLabelTemplate({
       Expanded(
         flex: 5,
         child: Padding(
-          padding: const EdgeInsets.only(left: 3,right: 3),
+          padding: const EdgeInsets.only(left: 3, right: 3),
           child: bottomMiddle ?? const Text(''),
         ),
       ),
@@ -778,7 +784,7 @@ fixedLabelTemplate({
             border: Border(left: bs),
           ),
           child: Padding(
-            padding: const EdgeInsets.only(left: 3,right: 3),
+            padding: const EdgeInsets.only(left: 3, right: 3),
             child: bottomRight ?? const Text(''),
           ),
         ),
@@ -812,8 +818,8 @@ fixedLabelTemplate({
   );
 }
 
-///动态格式标签模版
-///45宽，高度由内容决定
+//动态格式标签模版
+//45宽，高度由内容决定
 dynamicLabelTemplate({
   required String qrCode,
   Widget? title,
@@ -902,7 +908,7 @@ dynamicLabelTemplate({
   );
 }
 
-///标签表格格式化
+//标签表格格式化
 List<List<String>> labelTableFormat({
   required String title,
   String? total,
@@ -998,7 +1004,7 @@ List<List<String>> labelTableFormat({
   return result;
 }
 
-///滚动选择器
+//滚动选择器
 selectView({
   required List<dynamic> list,
   required FixedExtentScrollController controller,
@@ -1070,7 +1076,7 @@ selectView({
   );
 }
 
-///是否深色
+//是否深色
 bool isDeepColor(Color color) {
   if (color == Colors.transparent) {
     return false;
@@ -1081,7 +1087,7 @@ bool isDeepColor(Color color) {
   return grayscale < 0.3;
 }
 
-///柱状图进度条
+//柱状图进度条
 Widget ratioBarChart({
   double width = double.infinity,
   required List<List<dynamic>> ratioList,

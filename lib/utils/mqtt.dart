@@ -6,25 +6,25 @@ import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 
 class MqttUtil {
-  /// MQTT客户端
+  // MQTT客户端
   late MqttServerClient client;
 
-  /// MQTT服务器地址
+  // MQTT服务器地址
   String server;
 
-  /// MQTT服务器端口
+  // MQTT服务器端口
   int port;
 
-  /// MQTT订阅主题
+  // MQTT订阅主题
   List<String> topic;
 
-  /// MQTT消息监听
+  // MQTT消息监听
   Function(String, String) msgListener = (topic, data) {};
 
-  /// 连接成功回调
+  // 连接成功回调
   Function(MqttUtil)? connectListener = (mqtt) {};
 
-  /// 订阅成功回调
+  // 订阅成功回调
   Function(String)? subscribedListener = (topic) {};
 
   MqttUtil({

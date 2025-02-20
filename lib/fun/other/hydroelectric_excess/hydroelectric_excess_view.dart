@@ -170,12 +170,13 @@ class _HydroelectricExcessPageState extends State<HydroelectricExcessPage> {
                               child: CombinationButton(
                                 combination: Combination.left,
                                 text: '扫描设备码',
-                                click: () => {
-                                  Get.to(() => const Scanner())?.then((v) {
+                                click: () =>
+                                    Get.to(() => const Scanner())?.then((v) {
+                                  if (v != null) {
                                     state.searchRoom(
                                         DeviceListInfo(number: v), false);
-                                  })
-                                },
+                                  }
+                                }),
                               ),
                             )),
                             Expanded(
@@ -215,5 +216,4 @@ class _HydroelectricExcessPageState extends State<HydroelectricExcessPage> {
     Get.delete<HydroelectricExcessLogic>();
     super.dispose();
   }
-
 }

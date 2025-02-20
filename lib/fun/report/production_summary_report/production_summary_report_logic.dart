@@ -9,7 +9,7 @@ import 'production_summary_report_state.dart';
 class ProductionSummaryReportLogic extends GetxController {
   final ProductionSummaryReportState state = ProductionSummaryReportState();
 
-  ///日期选择器的控制器
+  //日期选择器的控制器
   var pickerControllerDate = DatePickerController(
     PickerType.date,
     saveKey: '${RouteConfig.productionSummaryTable.name}${PickerType.date}',
@@ -25,7 +25,7 @@ class ProductionSummaryReportLogic extends GetxController {
     ],
   );
 
-  ///获取产量汇总表接口
+  //获取产量汇总表接口
   query() {
     state.getPrdShopDayReport(
       date: pickerControllerDate.getDateFormatYMD(),

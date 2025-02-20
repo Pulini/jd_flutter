@@ -12,7 +12,7 @@ class PumaAntiCounterfeitingState {
   var outScanNum = "0".obs;
   var sortingList = <PumaCodeListInfo>[].obs;
 
-  ///添加条码
+  //添加条码
   addCode(String newCode) {
     if (newCode.isEmpty) {
       showSnackBar(title: '警告', message: '请扫描条码');
@@ -33,7 +33,7 @@ class PumaAntiCounterfeitingState {
     }
   }
 
-  ///判断条码是否存在
+  //判断条码是否存在
   bool isExists(String code) {
     for (var v in dataCodeList) {
       if (v.code == code) {
@@ -44,29 +44,29 @@ class PumaAntiCounterfeitingState {
   }
 
 
-  ///计算扫码条数
+  //计算扫码条数
   setScanNum() {
     scanNum.value = dataCodeList.length.toString();
   }
 
-  ///计算分拣扫码条数
+  //计算分拣扫码条数
   setSortingScanNum() {
     outScanNum.value = sortingList.length.toString();
   }
 
-  ///清空条码,更新条码条数
+  //清空条码,更新条码条数
   clearData() {
     dataCodeList.clear();
     setScanNum();
   }
 
-  ///删除条码
+  //删除条码
   deleteCode(ScanCode data) {
     dataCodeList.remove(data);
     scanNum.value = dataCodeList.length.toString();
   }
 
-  ///清空分拣条码信息,更新条码条数
+  //清空分拣条码信息,更新条码条数
   clearSortingList(){
     sortingList.clear();
     setSortingScanNum();

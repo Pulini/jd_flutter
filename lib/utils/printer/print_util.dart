@@ -9,7 +9,6 @@ import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-
 class PrintUtil {
   var bluetoothChannel = const MethodChannel(channelBluetoothFlutterToAndroid);
   var deviceList = <BluetoothDevice>[].obs;
@@ -139,7 +138,7 @@ class PrintUtil {
                 deviceMAC: call.arguments['DeviceMAC'],
                 deviceIsBonded: call.arguments['DeviceBondState'],
                 deviceIsConnected: call.arguments['DeviceIsConnected']);
-            logger.f("BluetoothFind=${device.toJson()}");
+            logger.f('BluetoothFind=${device.toJson()}');
             if (!deviceList.any((v) => v.deviceMAC == device.deviceMAC)) {
               deviceList.add(device);
             }
@@ -327,7 +326,7 @@ class PrintUtil {
     var success = <int>[];
     var fail = <int>[];
     for (var i = 0; i < labels.length; ++i) {
-      progress.call(i+1,labels.length);
+      progress.call(i + 1, labels.length);
       var code = await bluetoothChannel.invokeMethod('SendTSC', labels[i]);
       if (code == 1000) {
         success.add(i);

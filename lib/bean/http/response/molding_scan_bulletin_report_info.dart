@@ -1,19 +1,19 @@
 import 'package:decimal/decimal.dart';
 import 'package:get/get.dart';
 
-/// DeptID : "554744"
-/// WorkCardInterID : "213249"
-/// WorkCardNo : "P2048786"
-/// MapNumber : "1202300007"
-/// ClientOrderNumber : "20230304001"
-/// MoID : "155919"
-/// MtoNo : "JZ2300007"
-/// ProductName : "D13677-22B M"
-/// Color : ""
-/// PriorityLevel : "3"
-/// EntryFID : "555868"
-/// ScWorkCardSizeInfos : [{"Size":"38","Qty":100.0000000000,"ScannedQty":0.0},{"Size":"39","Qty":100.0000000000,"ScannedQty":0.0},{"Size":"40","Qty":100.0000000000,"ScannedQty":0.0}]
-/// SizeRelations : [{"Size":"38","BarCode":"12023000070119"},{"Size":"39","BarCode":"12023000070121"},{"Size":"40","BarCode":"12023000070123"}]
+// DeptID : "554744"
+// WorkCardInterID : "213249"
+// WorkCardNo : "P2048786"
+// MapNumber : "1202300007"
+// ClientOrderNumber : "20230304001"
+// MoID : "155919"
+// MtoNo : "JZ2300007"
+// ProductName : "D13677-22B M"
+// Color : ""
+// PriorityLevel : "3"
+// EntryFID : "555868"
+// ScWorkCardSizeInfos : [{"Size":"38","Qty":100.0000000000,"ScannedQty":0.0},{"Size":"39","Qty":100.0000000000,"ScannedQty":0.0},{"Size":"40","Qty":100.0000000000,"ScannedQty":0.0}]
+// SizeRelations : [{"Size":"38","BarCode":"12023000070119"},{"Size":"39","BarCode":"12023000070121"},{"Size":"40","BarCode":"12023000070123"}]
 
 class MoldingScanBulletinReportInfo {
   MoldingScanBulletinReportInfo({
@@ -111,8 +111,8 @@ class MoldingScanBulletinReportInfo {
   }
 }
 
-/// Size : "38"
-/// BarCode : "12023000070119"
+// Size : "38"
+// BarCode : "12023000070119"
 
 class SizeRelations {
   SizeRelations({
@@ -136,9 +136,9 @@ class SizeRelations {
   }
 }
 
-/// Size : "38"
-/// Qty : 100.0000000000
-/// ScannedQty : 0.0
+// Size : "38"
+// Qty : 100.0000000000
+// ScannedQty : 0.0
 
 class ScWorkCardSizeInfos {
   ScWorkCardSizeInfos({

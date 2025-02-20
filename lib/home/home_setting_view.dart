@@ -32,7 +32,7 @@ class _UserSettingState extends State<UserSetting> {
       decoration: TextDecoration.none,
       color: Colors.blueAccent);
 
-  ///分割线
+  //分割线
   var line = const Column(
     children: [
       SizedBox(height: 5),
@@ -46,7 +46,7 @@ class _UserSettingState extends State<UserSetting> {
     ],
   );
 
-  ///返回按钮
+  //返回按钮
   backArrow() {
     return Positioned(
       top: 50,
@@ -61,7 +61,7 @@ class _UserSettingState extends State<UserSetting> {
     );
   }
 
-  ///头像
+  //头像
   avatarImage() {
     return Positioned(
       top: 100,
@@ -79,7 +79,7 @@ class _UserSettingState extends State<UserSetting> {
     );
   }
 
-  ///名字
+  //名字
   name() {
     return Text(
       '${userInfo?.name ?? ''}(${userInfo?.number ?? ''})',
@@ -91,7 +91,7 @@ class _UserSettingState extends State<UserSetting> {
     );
   }
 
-  ///工厂
+  //工厂
   factory() {
     return SizedBox(
       width: 260,
@@ -112,7 +112,7 @@ class _UserSettingState extends State<UserSetting> {
     );
   }
 
-  ///部门
+  //部门
   department() {
     return SizedBox(
       width: 260,
@@ -199,7 +199,7 @@ class _UserSettingState extends State<UserSetting> {
     ));
   }
 
-  ///职位
+  //职位
   position() {
     return SizedBox(
       width: 260,
@@ -220,7 +220,7 @@ class _UserSettingState extends State<UserSetting> {
     );
   }
 
-  ///修改密码
+  //修改密码
   changePassword() {
     return SizedBox(
       width: 260,
@@ -249,7 +249,7 @@ class _UserSettingState extends State<UserSetting> {
     );
   }
 
-  ///修改密码弹窗
+  //修改密码弹窗
   changePasswordDialog() {
     var oldPassword = TextEditingController();
     var newPassword = TextEditingController();
@@ -322,7 +322,7 @@ class _UserSettingState extends State<UserSetting> {
     );
   }
 
-  ///检查版本更新
+  //检查版本更新
   checkVersion() {
     return SizedBox(
       width: 260,
@@ -336,12 +336,38 @@ class _UserSettingState extends State<UserSetting> {
           ),
           GestureDetector(
             onTap: () {
+              // Get.to(() => FeishuAuthorize())?.then((code) {
+              //   if (code != null) {
+              //     showSnackBar(title: '飞书授权', message: code);
+              //   }
+              // });
+              // feishuAuthorizeCheck(
+              //   notAuthorize: () =>
+              //       Get.to(() => FeishuAuthorize())?.then((code) {
+              //     if (code != null) {
+              //       showSnackBar(title: '飞书授权', message: code);
+              //     }
+              //   }),
+              //   authorized: (token) {
+              //     // showSnackBar(title: '飞书授权', message: token);
+              //     feishuWikiSearch(
+              //       token:token,
+              //       query: 'query',
+              //       success: (list) {},
+              //       failed: (msg) => errorDialog(content: msg),
+              //     );
+              //   },
+              // );
               // Get.to(() =>  const Scanner())?.then((v) {
               //   if(v!=null){
               //     showSnackBar(title: '扫码', message: v);
               //   }
               // });
               // scannerDialog( detect: (String code)=>showSnackBar(title: 'title', message: code));
+              // Get.to(() => WebPage(
+              //     title: 'title',
+              //     url:
+              //         'https://goldemperor.feishu.cn/wiki/LK5YwQFdwiorgIkeac6cGszGnwb'));
               if (!GetPlatform.isWeb) {
                 getVersionInfo(
                   true,
@@ -372,7 +398,7 @@ class _UserSettingState extends State<UserSetting> {
     );
   }
 
-  ///注销
+  //注销
   logout() {
     return Positioned(
       bottom: 30,

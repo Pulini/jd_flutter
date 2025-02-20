@@ -455,7 +455,7 @@ temporaryDialog({
   );
 }
 
-///根据工厂编号获取Mes存储位置列表
+//根据工厂编号获取Mes存储位置列表
 _getStorageLocationList({
   required String factoryNumber,
   required Function(List<LocationInfo>) success,

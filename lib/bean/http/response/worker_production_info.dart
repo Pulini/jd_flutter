@@ -1,10 +1,10 @@
-/// EmpID : 141661
-/// EmpNumber : "016483"
-/// EmpName : "刘文勇"
-/// ProcessCode : "XMB"
-/// ProcessName : "鞋面报"
-/// EmpFinishQty : 225.0
-/// ItemList : [{"MaterialName":"鞋面-DD182920-E7A","EmpFinishQty":225.0}]
+// EmpID : 141661
+// EmpNumber : "016483"
+// EmpName : "刘文勇"
+// ProcessCode : "XMB"
+// ProcessName : "鞋面报"
+// EmpFinishQty : 225.0
+// ItemList : [{"MaterialName":"鞋面-DD182920-E7A","EmpFinishQty":225.0}]
 
 class WorkerProductionInfo {
   WorkerProductionInfo({
@@ -54,8 +54,8 @@ class WorkerProductionInfo {
 
 }
 
-/// MaterialName : "鞋面-DD182920-E7A"
-/// EmpFinishQty : 225.0
+// MaterialName : "鞋面-DD182920-E7A"
+// EmpFinishQty : 225.0
 
 class ItemList {
   ItemList({

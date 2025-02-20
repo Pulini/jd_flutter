@@ -1,15 +1,15 @@
 import 'package:jd_flutter/utils/utils.dart';
 
-/// DeptName : "金帝裁断2组"
-/// Unit : "双"
-/// FactoryType : "鞋面-D13677-22B M"
-/// PartName : "鞋面"
-/// FIDs : [3716273,3716274,3716275,3716276]
-/// ProcessName : "裁1,裁2,裁3,裁4"
-/// Qty : 160.0
-/// CreateQty : 0.0
-/// SizeList : [{"Size":"38","Qty":40.0,"CreateQty":0.0,"MtonoList":[{"Mtono":"JZ2400096","Qty":40.0,"CreateQty":0.0,"EmpID":0,"EmpNumber":"","EmpName":""}]},{"Size":"39","Qty":40.0,"CreateQty":0.0,"MtonoList":[{"Mtono":"JZ2400096","Qty":40.0,"CreateQty":0.0,"EmpID":0,"EmpNumber":"","EmpName":""}]},{"Size":"40","Qty":40.0,"CreateQty":0.0,"MtonoList":[{"Mtono":"JZ2400096","Qty":40.0,"CreateQty":0.0,"EmpID":0,"EmpNumber":"","EmpName":""}]},{"Size":"41","Qty":40.0,"CreateQty":0.0,"MtonoList":[{"Mtono":"JZ2400096","Qty":40.0,"CreateQty":0.0,"EmpID":0,"EmpNumber":"","EmpName":""}]}]
-/// BarCodeList : []
+// DeptName : "金帝裁断2组"
+// Unit : "双"
+// FactoryType : "鞋面-D13677-22B M"
+// PartName : "鞋面"
+// FIDs : [3716273,3716274,3716275,3716276]
+// ProcessName : "裁1,裁2,裁3,裁4"
+// Qty : 160.0
+// CreateQty : 0.0
+// SizeList : [{"Size":"38","Qty":40.0,"CreateQty":0.0,"MtonoList":[{"Mtono":"JZ2400096","Qty":40.0,"CreateQty":0.0,"EmpID":0,"EmpNumber":"","EmpName":""}]},{"Size":"39","Qty":40.0,"CreateQty":0.0,"MtonoList":[{"Mtono":"JZ2400096","Qty":40.0,"CreateQty":0.0,"EmpID":0,"EmpNumber":"","EmpName":""}]},{"Size":"40","Qty":40.0,"CreateQty":0.0,"MtonoList":[{"Mtono":"JZ2400096","Qty":40.0,"CreateQty":0.0,"EmpID":0,"EmpNumber":"","EmpName":""}]},{"Size":"41","Qty":40.0,"CreateQty":0.0,"MtonoList":[{"Mtono":"JZ2400096","Qty":40.0,"CreateQty":0.0,"EmpID":0,"EmpNumber":"","EmpName":""}]}]
+// BarCodeList : []
 
 class PartDetailInfo {
   PartDetailInfo({
@@ -89,10 +89,10 @@ class PartDetailInfo {
   }
 }
 
-/// Size : "38"
-/// Qty : 40.0
-/// CreateQty : 0.0
-/// MtonoList : [{"Mtono":"JZ2400096","Qty":40.0,"CreateQty":0.0,"EmpID":0,"EmpNumber":"","EmpName":""}]
+// Size : "38"
+// Qty : 40.0
+// CreateQty : 0.0
+// MtonoList : [{"Mtono":"JZ2400096","Qty":40.0,"CreateQty":0.0,"EmpID":0,"EmpNumber":"","EmpName":""}]
 
 class SizeInfo {
   SizeInfo({
@@ -151,12 +151,12 @@ class SizeInfo {
   }
 }
 
-/// Mtono : "JZ2400096"
-/// Qty : 40.0
-/// CreateQty : 0.0
-/// EmpID : 0
-/// EmpNumber : ""
-/// EmpName : ""
+// Mtono : "JZ2400096"
+// Qty : 40.0
+// CreateQty : 0.0
+// EmpID : 0
+// EmpNumber : ""
+// EmpName : ""
 
 class MtonoInfo {
   MtonoInfo({

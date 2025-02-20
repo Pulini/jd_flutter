@@ -18,10 +18,10 @@ class PartProcessScanState {
   var isSelectAll=false.obs;
 
   PartProcessScanState() {
-    ///Initialize variables
+    //Initialize variables
   }
 
-  ///获取组员列表数据
+  //获取组员列表数据
   reportViewGetWorkerList() {
     getWorkerInfo(
       department: userInfo?.departmentID.toString(),

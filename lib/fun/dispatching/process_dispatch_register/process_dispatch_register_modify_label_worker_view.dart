@@ -30,7 +30,7 @@ class _ModifyLabelWorkerPageState extends State<ModifyLabelWorkerPage> {
             state.select.value = index;
           },
           child: Card(
-            color: state.select == index
+            color: state.select.value == index
                 ? Colors.greenAccent.shade100
                 : Colors.white,
             child: Padding(

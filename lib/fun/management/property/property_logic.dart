@@ -12,16 +12,16 @@ class PropertyLogic extends GetxController
     with GetSingleTickerProviderStateMixin {
   final PropertyState state = PropertyState();
 
-  ///tab控制器
+  //tab控制器
   late TabController tabController = TabController(length: 3, vsync: this);
 
-  ///日期选择器的控制器
+  //日期选择器的控制器
   var pickerControllerStartDate = DatePickerController(
     PickerType.startDate,
     saveKey: '${RouteConfig.property.name}${PickerType.startDate}',
   );
 
-  ///日期选择器的控制器
+  //日期选择器的控制器
   var pickerControllerEndDate = DatePickerController(
     PickerType.endDate,
     saveKey: '${RouteConfig.property.name}${PickerType.endDate}',

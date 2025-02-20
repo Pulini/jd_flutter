@@ -31,7 +31,6 @@ class _PumaAntiCounterfeitingPageState
     );
   }
 
-
   _subTitle(String title) {
     return Container(
       padding: const EdgeInsets.all(10),
@@ -51,19 +50,16 @@ class _PumaAntiCounterfeitingPageState
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
     return pageBody(
         actions: [
           TextButton(
-            onPressed: () => {
-              Get.to(() => const Scanner())?.then(
-                (v) {
-                  logic.getBarCodeListByBoxNumber(v);
-                },
-              ),
-            },
+            onPressed: () => Get.to(() => const Scanner())?.then((v) {
+              if (v != null) {
+                logic.getBarCodeListByBoxNumber(v);
+              }
+            }),
             child: Text(
               '扫描'.tr,
               style: const TextStyle(color: Colors.grey),
@@ -115,7 +111,6 @@ class _PumaAntiCounterfeitingPageState
           ],
         ));
   }
-
 
   @override
   void initState() {

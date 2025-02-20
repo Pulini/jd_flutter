@@ -109,7 +109,8 @@ class WebPage extends StatelessWidget {
         );
     }
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      checkAuthorize();
+      // checkAuthorize();
+      webViewController.loadRequest(Uri.parse(url));
     });
     return Container(
       decoration: backgroundColor,

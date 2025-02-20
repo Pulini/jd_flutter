@@ -1,25 +1,25 @@
-/// ZDELINO : "310000575861"
-/// ZDELIISEQ : "00010"
-/// LIFNR : "0000200759"
-/// NAME1 : "浙江康润新材料有限公司"
-/// ZDELIQTY : 90000.0
-/// MATNR : "090500076"
-/// ZMAKTX : "OPP薄膜袋(塑料袋）27*45"
-/// ZREMARK : ""
-/// EBELN : "4500968444"
-/// EBELP : "00010"
-/// WERKS : "1500"
-/// ZBASEUNIT : "个"
-/// ZCOMMUNIT : "个"
-/// ZCOEFFICIENT : 1.0
-/// ZNUMPAGE : 6
-/// ISGENERATE : ""
-/// ZISNOCHECK : "X"
-/// ZLGORT : "1001"
-/// ZVERIFYQTY : 0.0
-/// ZINSPECTOR : ""
-/// ZINSPECTDATE : "0000-00-00"
-/// ZINSPECTTIME : "00:00:00"
+// ZDELINO : "310000575861"
+// ZDELIISEQ : "00010"
+// LIFNR : "0000200759"
+// NAME1 : "浙江康润新材料有限公司"
+// ZDELIQTY : 90000.0
+// MATNR : "090500076"
+// ZMAKTX : "OPP薄膜袋(塑料袋）27*45"
+// ZREMARK : ""
+// EBELN : "4500968444"
+// EBELP : "00010"
+// WERKS : "1500"
+// ZBASEUNIT : "个"
+// ZCOMMUNIT : "个"
+// ZCOEFFICIENT : 1.0
+// ZNUMPAGE : 6
+// ISGENERATE : ""
+// ZISNOCHECK : "X"
+// ZLGORT : "1001"
+// ZVERIFYQTY : 0.0
+// ZINSPECTOR : ""
+// ZINSPECTDATE : "0000-00-00"
+// ZINSPECTTIME : "00:00:00"
 
 class SapPurchaseStockInInfo {
   SapPurchaseStockInInfo({
@@ -126,26 +126,26 @@ class SapPurchaseStockInInfo {
   }
 }
 
-/// ZDELINO : "310000575861"
-/// NAME1 : "浙江康润新材料有限公司"
-/// ZDELIISEQ : "00010"
-/// ZEBELN : "4500968444"
-/// ZEBELP : "00010"
-/// ZDELIADDRESS : "金臻"
-/// ZMATNR : "090500076"
-/// ZMAKTX : "OPP薄膜袋(塑料袋）27*45"
-/// ZBASEUNIT : "EA"
-/// ZBASEQTY : 90000.0
-/// ZCOEFFICIENT : 1.0
-/// ZCOMMUNIT : "EA"
-/// ZDELIQTY : 90000.0
-/// ZTEMPREQTY : 0.0
-/// ZINSTOCKQTY : 0.0
-/// ZNUMPAGE : 6
-/// EEIND : "2024-10-19"
-/// ZVERIFYQTY : 0.0
-/// ZINSPECTOR : ""
-/// ZINSPECTDATE : "0000-00-00"
+// ZDELINO : "310000575861"
+// NAME1 : "浙江康润新材料有限公司"
+// ZDELIISEQ : "00010"
+// ZEBELN : "4500968444"
+// ZEBELP : "00010"
+// ZDELIADDRESS : "金臻"
+// ZMATNR : "090500076"
+// ZMAKTX : "OPP薄膜袋(塑料袋）27*45"
+// ZBASEUNIT : "EA"
+// ZBASEQTY : 90000.0
+// ZCOEFFICIENT : 1.0
+// ZCOMMUNIT : "EA"
+// ZDELIQTY : 90000.0
+// ZTEMPREQTY : 0.0
+// ZINSTOCKQTY : 0.0
+// ZNUMPAGE : 6
+// EEIND : "2024-10-19"
+// ZVERIFYQTY : 0.0
+// ZINSPECTOR : ""
+// ZINSPECTDATE : "0000-00-00"
 
 class SapPurchaseStockInDetailInfo {
   SapPurchaseStockInDetailInfo({
@@ -241,9 +241,9 @@ class SapPurchaseStockInDetailInfo {
   }
 }
 
-/// FactoryNumber : "1500"
-/// StorageLocationNumber : "1801"
-/// Name : "金臻拌料线边仓"
+// FactoryNumber : "1500"
+// StorageLocationNumber : "1801"
+// Name : "金臻拌料线边仓"
 
 class LocationInfo {
   LocationInfo({

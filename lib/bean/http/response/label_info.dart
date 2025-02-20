@@ -1,27 +1,27 @@
 import 'package:jd_flutter/utils/utils.dart';
 
-/// BillNo : "JZ2300102"
-/// BarCode : "20488980010236/002"
-/// MaterialOtherName : []
-/// GrossWeight : 600.0
-/// NetWeight : 1000.0
-/// Meas : "1x1x1"
-/// FactoryType : "D13677-22B M"
-/// MaterialID : 452554
-/// MaterialCode : "800200818"
-/// MaterialName : "鞋面-D13677-22B M"
-/// IsBillPrint : false
-/// IsTempRec : false
-/// IsInStock : false
-/// IsOutStock : false
-/// IsScReport : false
-/// IsScProcessReport : false
-/// ServiceName : ""
-/// BarCodeTypeID : 81
-/// PackType : true
-/// InterID : 67660
-/// DepartName : "金帝针车2组"
-/// Items : [{"BillNo":"JZ2300102","Size":"36","Qty":200.0}]
+// BillNo : "JZ2300102"
+// BarCode : "20488980010236/002"
+// MaterialOtherName : []
+// GrossWeight : 600.0
+// NetWeight : 1000.0
+// Meas : "1x1x1"
+// FactoryType : "D13677-22B M"
+// MaterialID : 452554
+// MaterialCode : "800200818"
+// MaterialName : "鞋面-D13677-22B M"
+// IsBillPrint : false
+// IsTempRec : false
+// IsInStock : false
+// IsOutStock : false
+// IsScReport : false
+// IsScProcessReport : false
+// ServiceName : ""
+// BarCodeTypeID : 81
+// PackType : true
+// InterID : 67660
+// DepartName : "金帝针车2组"
+// Items : [{"BillNo":"JZ2300102","Size":"36","Qty":200.0}]
 
 class LabelInfo {
   LabelInfo({
@@ -150,9 +150,9 @@ class LabelInfo {
   }
 }
 
-/// BillNo : "JZ2300102"
-/// Size : "36"
-/// Qty : 200.0
+// BillNo : "JZ2300102"
+// Size : "36"
+// Qty : 200.0
 
 class LabelSizeInfo {
   LabelSizeInfo({

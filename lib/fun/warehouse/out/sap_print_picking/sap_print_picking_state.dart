@@ -20,7 +20,7 @@ class SapPrintPickingState {
   bool needRefresh = false;
 
   SapPrintPickingState() {
-    ///Initialize variables
+    //Initialize variables
   }
 
   getMaterialPickingOrderList({

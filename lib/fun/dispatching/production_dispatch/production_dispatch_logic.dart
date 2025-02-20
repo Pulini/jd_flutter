@@ -20,7 +20,7 @@ import 'production_dispatch_state.dart';
 class ProductionDispatchLogic extends GetxController {
   final ProductionDispatchState state = ProductionDispatchState();
 
-  ///日期选择器的控制器
+  //日期选择器的控制器
   var dpcStartDate = DatePickerController(
     PickerType.startDate,
     saveKey:
@@ -28,13 +28,13 @@ class ProductionDispatchLogic extends GetxController {
   )..firstDate = DateTime(
       DateTime.now().year - 5, DateTime.now().month, DateTime.now().day);
 
-  ///日期选择器的控制器
+  //日期选择器的控制器
   var dpcEndDate = DatePickerController(
     PickerType.endDate,
     saveKey: '${RouteConfig.workerProductionReport.name}${PickerType.endDate}',
   );
 
-  ///工单列表非合并item点击事件
+  //工单列表非合并item点击事件
   item1click(int index) {
     if (state.isSelectedMany) {
       if (state.orderList[index].select) {
@@ -90,7 +90,7 @@ class ProductionDispatchLogic extends GetxController {
     state.cbIsEnabledPush.value = hasSelect;
   }
 
-  ///工单查询
+  //工单查询
   query() {
     state.query(
       startTime: dpcStartDate.getDateFormatYMD(),
@@ -99,7 +99,7 @@ class ProductionDispatchLogic extends GetxController {
     );
   }
 
-  ///生产订单用料表
+  //生产订单用料表
   orderMaterialList() {
     state.getSelectOne(
       (v) => Get.to(
@@ -109,7 +109,7 @@ class ProductionDispatchLogic extends GetxController {
     );
   }
 
-  ///指令表
+  //指令表
   instructionList(Function(String url) callback) {
     state.instructionList(
       success: callback,
@@ -117,7 +117,7 @@ class ProductionDispatchLogic extends GetxController {
     );
   }
 
-  ///工艺指导书
+  //工艺指导书
   processSpecification(Function(List<ManufactureInstructionsInfo>) callback) {
     state.getSelectOne(
       (v) => state.getManufactureInstructions(
@@ -128,7 +128,7 @@ class ProductionDispatchLogic extends GetxController {
     );
   }
 
-  ///配色单列表
+  //配色单列表
   colorMatching(Function(List<OrderColorList>, String) callback) {
     state.colorMatching(
       success: callback,
@@ -145,7 +145,7 @@ class ProductionDispatchLogic extends GetxController {
     );
   }
 
-  ///打开/关闭工序
+  //打开/关闭工序
   offOnProcess() {
     state.offOnProcess(
       success: () => query(),
@@ -153,7 +153,7 @@ class ProductionDispatchLogic extends GetxController {
     );
   }
 
-  ///删除下游工序
+  //删除下游工序
   deleteDownstream() {
     state.deleteDownstream(
       success: () => query(),
@@ -161,7 +161,7 @@ class ProductionDispatchLogic extends GetxController {
     );
   }
 
-  ///删除上一次报工
+  //删除上一次报工
   deleteLastReport() {
     state.deleteLastReport(
       success: () => query(),
@@ -169,7 +169,7 @@ class ProductionDispatchLogic extends GetxController {
     );
   }
 
-  ///贴标维护
+  //贴标维护
   labelMaintenance() {
     if (checkUserPermission('1051106')) {
       state.getSelectOne((v) {
@@ -187,7 +187,7 @@ class ProductionDispatchLogic extends GetxController {
     }
   }
 
-  ///物料贴标维护
+  //物料贴标维护
   materialLabelMaintenance(ProductionDispatchOrderInfo data) {
     if (checkUserPermission('1051106')) {
       Get.to(() => const MaintainLabelPage(), arguments: {
@@ -203,7 +203,7 @@ class ProductionDispatchLogic extends GetxController {
     }
   }
 
-  ///更新领料配套数
+  //更新领料配套数
   updateSap() {
     state.updateSap(
       success: () => query(),
@@ -224,7 +224,7 @@ class ProductionDispatchLogic extends GetxController {
     });
   }
 
-  ///料头打印
+  //料头打印
   printSurplusMaterial(List<Map> list) {}
 
   double getReportMax() {
@@ -235,7 +235,7 @@ class ProductionDispatchLogic extends GetxController {
     return max;
   }
 
-  ///报工SAP
+  //报工SAP
   reportToSap(double qty) {
     state.reportToSap(
       qty: qty,
@@ -244,7 +244,7 @@ class ProductionDispatchLogic extends GetxController {
     );
   }
 
-  ///工单下推检查
+  //工单下推检查
   pushCheck(
     Function(ProductionDispatchOrderInfo) orderPush,
     Function(List<ProductionDispatchOrderInfo>) ordersPush,
@@ -277,7 +277,7 @@ class ProductionDispatchLogic extends GetxController {
     }
   }
 
-  ///工单下推
+  //工单下推
   push() {
     pushCheck(
       (order) => state.orderPush(
@@ -330,7 +330,7 @@ class ProductionDispatchLogic extends GetxController {
     );
   }
 
-  ///获取以选中的员工列表
+  //获取以选中的员工列表
   List<int> detailViewGetSelectedWorkerList() {
     var select = <int>[];
     if (state.workProcedureSelect.value >= 0) {
@@ -372,7 +372,7 @@ class ProductionDispatchLogic extends GetxController {
     }
   }
 
-  ///选中本工序中的所有派工人员数据
+  //选中本工序中的所有派工人员数据
   checkSelectAllDispatch(bool isChecked) {
     if (state.dispatchInfo.where((v) => v.select!).length ==
         state.dispatchInfo.length) {
@@ -390,7 +390,7 @@ class ProductionDispatchLogic extends GetxController {
     state.dispatchInfo.refresh();
   }
 
-  ///跳转到下一道工序
+  //跳转到下一道工序
   detailViewNextWorkProcedure() {
     if (state.workProcedure.where((v) => v.isOpen == 1).length > 1) {
       var start = state.workProcedureSelect.value;
@@ -412,7 +412,7 @@ class ProductionDispatchLogic extends GetxController {
     }
   }
 
-  ///派工数据item点击，修改派工
+  //派工数据item点击，修改派工
   detailViewDispatchItemClick(
     DispatchInfo di,
     Function(double surplus) callback,
@@ -424,7 +424,7 @@ class ProductionDispatchLogic extends GetxController {
     callback.call((wp.mustQty ?? 0.0).sub(other));
   }
 
-  ///批量修改派工数据
+  //批量修改派工数据
   detailViewBatchModifyDispatchClick(
     Function(List<DispatchInfo> selectLis, double surplus) callback,
   ) {
@@ -439,7 +439,7 @@ class ProductionDispatchLogic extends GetxController {
     );
   }
 
-  ///批量修改派工数据
+  //批量修改派工数据
   detailViewBatchModifyDispatch(List<DispatchInfo> selectList, double qty) {
     if (state.isCheckedDivideEqually) {
       if (state.isCheckedRounding) {
@@ -464,7 +464,7 @@ class ProductionDispatchLogic extends GetxController {
     state.workProcedure.refresh();
   }
 
-  ///添加派工人员或删除已派工人员
+  //添加派工人员或删除已派工人员
   WorkCardList _modifyDispatch(WorkCardList wp, List<int> ids) {
     var workerList = <DispatchInfo>[];
     if (ids.isNotEmpty) {
@@ -534,7 +534,7 @@ class ProductionDispatchLogic extends GetxController {
     }
   }
 
-  ///派工剩余组员或删除所有派工
+  //派工剩余组员或删除所有派工
   detailViewAddAllWorker(Function() clean) {
     var exist = <int>[];
     var workers = <int>[];
@@ -553,7 +553,7 @@ class ProductionDispatchLogic extends GetxController {
     }
   }
 
-  ///打开或关闭该工序
+  //打开或关闭该工序
   detailViewWorkProcedureLock(int index) {
     if (state.workProcedure[index].isOpen == 1) {
       state.workProcedure[index].isOpen = 0;
@@ -569,7 +569,7 @@ class ProductionDispatchLogic extends GetxController {
     refreshSelectState();
   }
 
-  ///打开或关闭全部工序
+  //打开或关闭全部工序
   detailViewWorkProcedureLockAll() {
     var hasOpen = state.workProcedure.any((v) => v.isOpen == 1);
     for (var wp in state.workProcedure) {
@@ -583,7 +583,7 @@ class ProductionDispatchLogic extends GetxController {
     refreshSelectState();
   }
 
-  ///工序列表点击，选中工序进行派工
+  //工序列表点击，选中工序进行派工
   detailViewWorkProcedureClick(int index) {
     if (state.workProcedure[index].isOpen == 0) {
       showSnackBar(title: '温馨提示', message: '无法选中已关闭的工序', isWarning: true);
@@ -597,7 +597,7 @@ class ProductionDispatchLogic extends GetxController {
     refreshSelectState();
   }
 
-  ///根据选中状态刷新界面UI
+  //根据选中状态刷新界面UI
   refreshSelectState() {
     if (state.workProcedureSelect.value == -1) {
       state.isEnabledAddOne.value = false;
@@ -627,7 +627,7 @@ class ProductionDispatchLogic extends GetxController {
         state.workProcedure.any((v) => v.isOpen == 1);
   }
 
-  ///删除派工人员数据
+  //删除派工人员数据
   detailViewDispatchItemDeleteClick(DispatchInfo dispatchInfo) {
     var wp = state.workProcedure[state.workProcedureSelect.value];
     wp.dispatch.remove(dispatchInfo);
@@ -638,7 +638,7 @@ class ProductionDispatchLogic extends GetxController {
     detailViewModifyDispatch(works: ids);
   }
 
-  ///从汇总列表跳转到指定工序并打开指定员工到派工数据
+  //从汇总列表跳转到指定工序并打开指定员工到派工数据
   detailViewJumpToDispatchOnWorkProcedure(
     int i1,
     int i2,
@@ -656,7 +656,7 @@ class ProductionDispatchLogic extends GetxController {
     );
   }
 
-  ///暂存该派工单的派工数据
+  //暂存该派工单的派工数据
   saveDispatch() {
     var cacheList = <CacheJson>[];
     for (var wp in state.workProcedure.where((v) => v.isOpen == 1)) {
@@ -671,7 +671,7 @@ class ProductionDispatchLogic extends GetxController {
     ).save((v) => showSnackBar(title: '数据库', message: '暂存派工成功'));
   }
 
-  ///应用暂存派工单的派工数据
+  //应用暂存派工单的派工数据
   applySaveDispatch(SaveDispatch sd) {
     var json = jsonDecode(sd.cacheJson!);
     for (var i = 0; i < json.length; ++i) {
@@ -683,7 +683,7 @@ class ProductionDispatchLogic extends GetxController {
     state.workProcedure.refresh();
   }
 
-  ///保存该类形体的派工数据
+  //保存该类形体的派工数据
   SaveWorkProcedure saveWorkProcedure() {
     var cacheList = <CacheJson>[];
     for (var wp in state.workProcedure.where((v) => v.isOpen == 1)) {
@@ -731,7 +731,7 @@ class ProductionDispatchLogic extends GetxController {
     state.isCheckedSelectAllDispatch = false;
   }
 
-  ///工艺书
+  //工艺书
   detailViewGetManufactureInstructions(
     Function(List<ManufactureInstructionsInfo>) callback,
   ) {

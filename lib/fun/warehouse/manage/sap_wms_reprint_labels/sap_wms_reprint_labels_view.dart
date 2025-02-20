@@ -7,7 +7,6 @@ import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/picker/picker_controller.dart';
 import 'package:jd_flutter/widget/picker/picker_view.dart';
-import 'package:jd_flutter/widget/preview_label_list_widget.dart';
 import 'package:jd_flutter/widget/scanner.dart';
 
 import 'sap_wms_reprint_labels_logic.dart';
@@ -71,6 +70,7 @@ class _SapWmsReprintLabelsPageState extends State<SapWmsReprintLabelsPage> {
       ),
     );
   }
+  /*
   _labelTitle(ReprintLabelInfo label) {
     return Padding(
       padding: const EdgeInsets.only(
@@ -126,6 +126,7 @@ class _SapWmsReprintLabelsPageState extends State<SapWmsReprintLabelsPage> {
   }
 
 
+
   _previewLabelList() {
     var selected = state.labelList.where((v) => v.select).toList();
     Get.to(() => PreviewLabelList(
@@ -140,6 +141,7 @@ class _SapWmsReprintLabelsPageState extends State<SapWmsReprintLabelsPage> {
           ],
         ));
   }
+*/
 
   @override
   void initState() {

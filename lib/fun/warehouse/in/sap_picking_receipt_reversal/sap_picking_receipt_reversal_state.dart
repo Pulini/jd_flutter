@@ -12,7 +12,7 @@ class SapPickingReceiptReversalState {
   var select = -1.obs;
 
   SapPickingReceiptReversalState() {
-    ///Initialize variables
+    //Initialize variables
   }
 
   queryOrderList({

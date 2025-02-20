@@ -13,7 +13,7 @@ class SapStockTransferState {
   PalletDetailItem2Info? targetPallet;
 
   SapStockTransferState() {
-    ///Initialize variables
+    //Initialize variables
   }
 
   checkPallet({
@@ -103,7 +103,7 @@ class SapStockTransferState {
     required Function(String) error,
   }) {
     _submitTransfer(
-      tLocation: targetPallet?.location,
+      tLocation: targetPallet?.location??'',
       tPallet: targetPallet?.palletNumber ?? '',
       warehouse: warehouse,
       list: list,
@@ -128,10 +128,10 @@ class SapStockTransferState {
     );
   }
 
-  ///移库模式
-  /// 1、托盘A移动全部货物到新库位      (有原托盘号 有原库位 扫描新库)
-  /// 2、托盘A移动部分货物至托盘B      (有原托盘号 有原库位 扫描目标托盘 获取目标托盘库位  获取目标托盘)
-  /// 3、托盘A移动部分货物至新托盘      (有原托盘号 有原库位 扫描目标托盘  获取托盘号 扫描目标库位  获取新库位)
+  //移库模式
+  // 1、托盘A移动全部货物到新库位      (有原托盘号 有原库位 扫描新库)
+  // 2、托盘A移动部分货物至托盘B      (有原托盘号 有原库位 扫描目标托盘 获取目标托盘库位  获取目标托盘)
+  // 3、托盘A移动部分货物至新托盘      (有原托盘号 有原库位 扫描目标托盘  获取托盘号 扫描目标库位  获取新库位)
   _submitTransfer({
     required String tLocation,
     required String tPallet,

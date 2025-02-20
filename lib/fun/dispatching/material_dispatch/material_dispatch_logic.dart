@@ -20,14 +20,14 @@ class MaterialDispatchLogic extends GetxController {
     ],
   );
 
-  ///日期选择器的控制器
+  //日期选择器的控制器
   var dpcStartDate = DatePickerController(
     PickerType.startDate,
     saveKey: '${RouteConfig.materialDispatch.name}${PickerType.startDate}',
   )..firstDate = DateTime(
       DateTime.now().year - 5, DateTime.now().month, DateTime.now().day);
 
-  ///日期选择器的控制器
+  //日期选择器的控制器
   var dpcEndDate = DatePickerController(
     PickerType.endDate,
     saveKey: '${RouteConfig.materialDispatch.name}${PickerType.endDate}',
@@ -41,10 +41,6 @@ class MaterialDispatchLogic extends GetxController {
   //   super.onReady();
   // }
 
-  @override
-  void onClose() {
-    super.onClose();
-  }
 
   refreshDataList() {
     state.getScWorkCardProcess(

@@ -18,7 +18,7 @@ class SapProductionPickingState {
   bool needRefresh = false;
 
   SapProductionPickingState() {
-    ///Initialize variables
+    //Initialize variables
   }
 
   getMaterialPickingOrderList({

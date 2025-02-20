@@ -12,7 +12,7 @@ class SapRelocationPickingState {
   var materialList = <SapPalletDetailInfo>[].obs;
 
   SapRelocationPickingState() {
-    ///Initialize variables
+    //Initialize variables
   }
 
   checkPalletOrLabel({

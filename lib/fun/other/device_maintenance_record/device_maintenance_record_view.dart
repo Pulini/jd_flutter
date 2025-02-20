@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/device_maintenance_list_info.dart';
@@ -10,7 +9,6 @@ import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
 import 'package:jd_flutter/widget/picker/picker_view.dart';
 import 'package:jd_flutter/widget/scanner.dart';
-
 
 class DeviceMaintenanceRecordPage extends StatefulWidget {
   const DeviceMaintenanceRecordPage({super.key});
@@ -27,9 +25,7 @@ class _DeviceMaintenanceRecordViewState
 
   _item(DeviceMaintenanceListInfo data) {
     return InkWell(
-      onTap: () => {
-          logic.searchDeviceInfo(data.deviceNo.toString())
-      },
+      onTap: () => {logic.searchDeviceInfo(data.deviceNo.toString())},
       onLongPress: () => {
         if (checkUserPermission('705080113'))
           {
@@ -147,11 +143,12 @@ class _DeviceMaintenanceRecordViewState
               flex: 1,
               child: CombinationButton(
                 text: '扫描设备二维码',
-                click: () {
-                  Get.to(() => const Scanner())?.then((v) {
-                    logic.searchDeviceInfo(v.toString().substring(v.toString().lastIndexOf("=") + 1));
-                  });
-                },
+                click: () => Get.to(() => const Scanner())?.then((v) {
+                  if (v != null) {
+                    logic.searchDeviceInfo(
+                        v?.substring(v?.lastIndexOf("=") + 1));
+                  }
+                }),
               ),
             )
           ],

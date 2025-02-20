@@ -12,7 +12,7 @@ class SapPutOnShelvesState {
   var palletNumber=''.obs;
 
   SapPutOnShelvesState() {
-    ///Initialize variables
+    //Initialize variables
   }
 
   getPalletList({
@@ -66,17 +66,17 @@ class SapPutOnShelvesState {
     });
   }
 
-  ///    操作类型
-  ///    WM01	上架
-  ///    WM02	下架
-  ///    WM03	移仓
-  ///    WM04	盘点
-  ///    WM05	收货
-  ///    WM06	发货
-  ///    WM07	标签绑定
-  ///    WM08	并筐合标
-  ///    WM09	注塑换标出库
-  ///    WM10	喷漆换标入库
+  //    操作类型
+  //    WM01	上架
+  //    WM02	下架
+  //    WM03	移仓
+  //    WM04	盘点
+  //    WM05	收货
+  //    WM06	发货
+  //    WM07	标签绑定
+  //    WM08	并筐合标
+  //    WM09	注塑换标出库
+  //    WM10	喷漆换标入库
   getRecommendLocation({
     required String factory,
     required String warehouse,

@@ -12,7 +12,7 @@ class CartonLabelScanState {
   var scannedLabelTotal = 0.obs;
 
   CartonLabelScanState() {
-    ///Initialize variables
+    //Initialize variables
   }
 
   queryCartonLabelInfo({

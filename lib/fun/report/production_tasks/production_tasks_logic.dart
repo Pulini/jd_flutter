@@ -2,12 +2,14 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/bean/http/response/feishu_info.dart';
 import 'package:jd_flutter/bean/http/response/production_tasks_info.dart';
 import 'package:jd_flutter/fun/report/production_tasks/production_tasks_detail_view.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
+import 'package:jd_flutter/widget/feishu_authorize.dart';
 
 import 'production_tasks_state.dart';
 
@@ -74,26 +76,31 @@ class ProductionTasksLogic extends GetxController {
             .reduce((a, b) => a.add(b)),
       );
 
-  changeSort(
-      {required int oldIndex,
-      required int newIndex,
-      required Function() refresh}) {
-    if (oldIndex < newIndex) {
-      newIndex -= 1;
+  changeSort({
+    required int oldIndex,
+    required int newIndex,
+    required Function() refresh,
+  }) {
+    if (checkUserPermission('1053802')) {
+      if (oldIndex < newIndex) {
+        newIndex -= 1;
+      }
+      var newLine = <ProductionTasksSubInfo>[...state.orderList];
+      newLine.insert(newIndex, newLine.removeAt(oldIndex));
+      state.changeSort(
+        newLine: newLine,
+        success: (msg) {
+          showSnackBar(
+            title: 'molding_scan_bulletin_report_sort'.tr,
+            message: msg,
+          );
+          refresh.call();
+        },
+        error: (msg) => errorDialog(content: msg),
+      );
+    } else {
+      errorDialog(content: '没有操作权限！');
     }
-    var newLine = <ProductionTasksSubInfo>[...state.orderList];
-    newLine.insert(newIndex, newLine.removeAt(oldIndex));
-    state.changeSort(
-      newLine: newLine,
-      success: (msg) {
-        showSnackBar(
-          title: 'molding_scan_bulletin_report_sort'.tr,
-          message: msg,
-        );
-        refresh.call();
-      },
-      error: (msg) => errorDialog(content: msg),
-    );
   }
 
   getDetail({String? ins, String? po, required String imageUrl}) {
@@ -135,12 +142,12 @@ class ProductionTasksLogic extends GetxController {
           if (findSize != null) {
             if (info.scanTypeID == '1') {
               findSize.addManualScannedQty(info.qty ?? 0);
-              state.todayCompleteQty.value+=1;
-              state.monthCompleteQty.value+=1;
+              state.todayCompleteQty.value += 1;
+              state.monthCompleteQty.value += 1;
             } else if (info.scanTypeID == '2' || info.scanTypeID == '3') {
               findSize.addProductScannedQty(info.qty ?? 0);
-              state.todayCompleteQty.value+=1;
-              state.monthCompleteQty.value+=1;
+              state.todayCompleteQty.value += 1;
+              state.monthCompleteQty.value += 1;
             } else {
               findSize.addInstalledQty(info.qty ?? 0);
             }
@@ -159,12 +166,12 @@ class ProductionTasksLogic extends GetxController {
           if (findSize != null) {
             if (info.scanTypeID == '1') {
               findSize.addManualScannedQty(info.qty ?? 0);
-              state.todayCompleteQty.value+=1;
-              state.monthCompleteQty.value+=1;
+              state.todayCompleteQty.value += 1;
+              state.monthCompleteQty.value += 1;
             } else if (info.scanTypeID == '2' || info.scanTypeID == '3') {
               findSize.addProductScannedQty(info.qty ?? 0);
-              state.todayCompleteQty.value+=1;
-              state.monthCompleteQty.value+=1;
+              state.todayCompleteQty.value += 1;
+              state.monthCompleteQty.value += 1;
             } else {
               findSize.addInstalledQty(info.qty ?? 0);
             }
@@ -180,9 +187,42 @@ class ProductionTasksLogic extends GetxController {
       state.orderList = info.subInfo ?? [];
       state.todayTargetQty.value = info.toDayPlanQty ?? 0;
       state.todayCompleteQty.value = info.toDayFinishQty ?? 0;
-      state.monthCompleteQty.value = info.toDayFinishQty ?? 0;
+      state.monthCompleteQty.value = info.toMonthFinishQty ?? 0;
       state.refreshUiData();
       refreshAll.call();
     }
+  }
+
+  queryProcessInstruction({
+    required String query,
+    required Function(List<FeishuWikiSearchItemInfo> list) files,
+  }) {
+    feishuAuthorizeCheck(
+      notAuthorize: () =>
+          Get.to(() => FeishuAuthorize())?.then((token) => _queryFeishuWiki(
+                token: token,
+                query: query,
+                files: files,
+              )),
+      authorized: (token) => _queryFeishuWiki(
+        token: token,
+        query: query,
+        files: files,
+      ),
+    );
+  }
+
+  _queryFeishuWiki({
+    required String token,
+    required String query,
+    required Function(List<FeishuWikiSearchItemInfo> list) files,
+  }) {
+
+    feishuWikiSearch(
+      token: token,
+      query: query,
+      success: (list) =>files.call(list),
+      failed: (msg) => errorDialog(content: msg),
+    );
   }
 }

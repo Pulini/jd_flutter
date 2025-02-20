@@ -8,7 +8,7 @@ import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
-import 'package:jd_flutter/widget/globalTimer.dart';
+import 'package:jd_flutter/widget/global_timer.dart';
 import 'package:jd_flutter/widget/picker/picker_view.dart';
 import 'package:jd_flutter/widget/switch_button_widget.dart';
 import 'package:jd_flutter/widget/worker_check_widget.dart';
@@ -198,7 +198,7 @@ class _QualityRestrictionPageState extends State<QualityRestrictionPage> {
                           errorDialog(content: msg),
                         },
                       );
-                      Navigator.of(context).pop();
+                      Get.back();
                     }
                   });
                 })
@@ -298,7 +298,7 @@ class _QualityRestrictionPageState extends State<QualityRestrictionPage> {
     FilteringTextInputFormatter.allow(RegExp('[0-9]')),
   ];
 
-  ///  输入数量
+  //  输入数量
   _inputDialog({
     required String title,
     Function()? confirm,
@@ -347,7 +347,7 @@ class _QualityRestrictionPageState extends State<QualityRestrictionPage> {
     );
   }
 
-  ///  根据工号搜索员工信息
+  //  根据工号搜索员工信息
   _searchDialog() {
     Get.dialog(
       PopScope(
@@ -465,7 +465,7 @@ class _QualityRestrictionPageState extends State<QualityRestrictionPage> {
         )));
   }
 
-  ///  输入数量
+  //  输入数量
   _timeDownDialog() {
     Get.dialog(
       PopScope(

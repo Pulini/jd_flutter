@@ -108,7 +108,7 @@ class _SignaturePageState extends State<SignaturePage> {
                       widget.name,
                       style: TextStyle(
                         fontSize: 180,
-                        color: Colors.black87.withOpacity(0.1),
+                        color: Colors.black87.withValues(alpha: 0.1),
                       ),
                     ),
                   ),

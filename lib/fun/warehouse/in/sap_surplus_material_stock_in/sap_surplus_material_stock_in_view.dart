@@ -28,14 +28,14 @@ class _SapSurplusMaterialStockInPageState
   final SapSurplusMaterialStockInState state =
       Get.find<SapSurplusMaterialStockInLogic>().state;
 
-  ///日期选择器的控制器
+  //日期选择器的控制器
   var dpcStartDate = DatePickerController(
     PickerType.startDate,
     saveKey:
         '${RouteConfig.sapSurplusMaterialStockIn.name}${PickerType.startDate}',
   );
 
-  ///日期选择器的控制器
+  //日期选择器的控制器
   var dpcEndDate = DatePickerController(
     PickerType.date,
     saveKey:

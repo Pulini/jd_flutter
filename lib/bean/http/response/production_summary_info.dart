@@ -1,15 +1,15 @@
-/// WorkshopLocation : "待维护"
-/// Group : "金焕裁断3组"
-/// ProcessFlow : "面部裁断"
-/// LineLeader : "谭金华"
-/// TodayTargetProduction : 2876.0
-/// TodayProduction : 0.0
-/// CompletionRate : "0%"
-/// MonthlyCumulativeTargetProduction : 6920.0
-/// MonthlyCumulativeProduction : 4206.0
-/// MonthlyCompletionRate : "60.7803%"
-/// ActualPeopleNumber : 18
-/// DepartmentID : "543247"
+// WorkshopLocation : "待维护"
+// Group : "金焕裁断3组"
+// ProcessFlow : "面部裁断"
+// LineLeader : "谭金华"
+// TodayTargetProduction : 2876.0
+// TodayProduction : 0.0
+// CompletionRate : "0%"
+// MonthlyCumulativeTargetProduction : 6920.0
+// MonthlyCumulativeProduction : 4206.0
+// MonthlyCompletionRate : "60.7803%"
+// ActualPeopleNumber : 18
+// DepartmentID : "543247"
 
 class ProductionSummaryInfo {
   ProductionSummaryInfo({

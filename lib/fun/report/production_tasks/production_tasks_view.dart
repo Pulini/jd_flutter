@@ -1,11 +1,14 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/bean/http/response/feishu_info.dart';
 import 'package:jd_flutter/bean/http/response/production_tasks_info.dart';
 import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/utils/mqtt.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
+import 'package:jd_flutter/widget/web_page.dart';
 
 import 'production_tasks_logic.dart';
 import 'production_tasks_state.dart';
@@ -32,10 +35,98 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
     msgListener: (topic, data) => logic.mqttRefresh(
       topic: topic,
       data: data,
-      refreshItem: (msg) => showScanTips(tips: msg),
+      refreshItem: (msg) => showScanTips(
+        tips: msg,
+        color: Colors.red,
+        duration: const Duration(milliseconds: 750),
+      ),
       refreshAll: () => _refreshTable(),
     ),
   );
+
+  _pickFilePopup(List<FeishuWikiSearchItemInfo> list) {
+    showCupertinoModalPopup(
+      context: Get.overlayContext!,
+      barrierDismissible: false,
+      builder: (BuildContext context) => PopScope(
+        canPop: true,
+        child: SingleChildScrollView(
+          primary: true,
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
+          child: Container(
+            height: MediaQuery.of(context).size.height * 0.35,
+            padding: const EdgeInsets.all(8.0),
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
+              ),
+              gradient: LinearGradient(
+                colors: [Colors.lightBlueAccent, Colors.blueAccent],
+                begin: Alignment.bottomLeft,
+                end: Alignment.topRight,
+              ),
+            ),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        '工艺书列表',
+                        style: const TextStyle(
+                          fontSize: 24,
+                          color: Colors.white,
+                          decoration: TextDecoration.none,
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () => Get.back(),
+                      icon: const Icon(
+                        Icons.cancel_rounded,
+                        color: Colors.white,
+                      ),
+                    )
+                  ],
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: list.length,
+                    itemBuilder: (c, i) => Card(
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 10, right: 10),
+                        child: Row(
+                          children: [
+                            Expanded(child: Text(list[i].title ?? '')),
+                            IconButton(
+                              onPressed: () {
+                                Get.back();
+                                Get.to(() => WebPage(
+                                      title: list[i].title ?? '',
+                                      url: list[i].url ?? '',
+                                    ));
+                              },
+                              icon: const Icon(
+                                Icons.chevron_right,
+                                color: Colors.blueAccent,
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 
   Widget _orderItem(
     ProductionTasksSubInfo data,
@@ -190,85 +281,144 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
               // Text(data.mtoNo ?? ''),
               // Text(data.clientOrderNumber ?? ''),
               Expanded(
-                  child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  AnimatedContainer(
-                    height: 39,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(
-                        color: state.selected.value == index || index == 0
-                            ? Colors.blueAccent
-                            : Colors.transparent,
-                        width: 2,
-                      ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: AnimatedContainer(
+                            height: 39,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.only(
+                                topLeft: const Radius.circular(20),
+                                bottomLeft: const Radius.circular(20),
+                                topRight: Radius.circular(
+                                  state.selected.value == index || index == 0
+                                      ? 0
+                                      : 20,
+                                ),
+                                bottomRight: Radius.circular(
+                                  state.selected.value == index || index == 0
+                                      ? 0
+                                      : 20,
+                                ),
+                              ),
+                              border: Border.all(
+                                color:
+                                    state.selected.value == index || index == 0
+                                        ? Colors.blueAccent
+                                        : Colors.transparent,
+                                width: 2,
+                              ),
+                            ),
+                            duration: duration,
+                            child: TextButton(
+                              onPressed: () {
+                                if (state.selected.value == index ||
+                                    index == 0) {
+                                  logic.getDetail(
+                                    ins: data.mtoNo ?? '',
+                                    imageUrl: data.itemImage ?? '',
+                                  );
+                                } else {
+                                  setState(() => state.selected.value = index);
+                                }
+                              },
+                              child: Text(
+                                data.mtoNo ?? '',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: state.selected.value == index ||
+                                          index == 0
+                                      ? Colors.blueAccent
+                                      : Colors.black87,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        if (state.selected.value == index || index == 0)
+                          AnimatedContainer(
+                            height: 39,
+                            decoration: BoxDecoration(
+                              borderRadius: const BorderRadius.only(
+                                topRight: Radius.circular(20),
+                                bottomRight: Radius.circular(20),
+                              ),
+                              border: Border.all(
+                                color:
+                                    state.selected.value == index || index == 0
+                                        ? Colors.blueAccent
+                                        : Colors.transparent,
+                                width: 2,
+                              ),
+                            ),
+                            duration: duration,
+                            child: TextButton(
+                              onPressed: () {
+                                if (state.selected.value == index ||
+                                    index == 0) {
+                                  logic.queryProcessInstruction(
+                                    // query: data.shoeStyle ?? '',
+                                    query: 'pdf',
+                                    files: (files) => _pickFilePopup(files),
+                                  );
+                                } else {
+                                  setState(() => state.selected.value = index);
+                                }
+                              },
+                              child: Text(
+                                '工艺书',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.blueAccent,
+                                ),
+                              ),
+                            ),
+                          ),
+                      ],
                     ),
-                    duration: duration,
-                    child: TextButton(
-                      onPressed: () {
-                        if (state.selected.value == index || index == 0) {
-                          logic.getDetail(
-                            ins: data.mtoNo ?? '',
-                            imageUrl: data.itemImage ?? '',
-                          );
-                        } else {
-                          setState(() => state.selected.value = index);
-                        }
-                      },
-                      child: Text(
-                        data.mtoNo ?? '',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
+                    AnimatedContainer(
+                      margin: const EdgeInsets.only(top: 5),
+                      height: 39,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
                           color: state.selected.value == index || index == 0
                               ? Colors.blueAccent
-                              : Colors.black87,
+                              : Colors.transparent,
+                          width: 2,
+                        ),
+                      ),
+                      duration: duration,
+                      child: TextButton(
+                        onPressed: () {
+                          if (state.selected.value == index || index == 0) {
+                            logic.getDetail(
+                              po: data.clientOrderNumber ?? '',
+                              imageUrl: data.itemImage ?? '',
+                            );
+                          } else {
+                            setState(() => state.selected.value = index);
+                          }
+                        },
+                        child: Text(
+                          data.clientOrderNumber ?? '',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: state.selected.value == index || index == 0
+                                ? Colors.blueAccent
+                                : Colors.black87,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  AnimatedContainer(
-                    height: 39,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(
-                        color: state.selected.value == index || index == 0
-                            ? Colors.blueAccent
-                            : Colors.transparent,
-                        width: 2,
-                      ),
-                    ),
-                    duration: duration,
-                    child: TextButton(
-                      onPressed: () {
-                        if (state.selected.value == index || index == 0) {
-                          logic.getDetail(
-                            po: data.clientOrderNumber ?? '',
-                            imageUrl: data.itemImage ?? '',
-                          );
-                        } else {
-                          setState(() => state.selected.value = index);
-                        }
-                      },
-                      child: Text(
-                        data.clientOrderNumber ?? '',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: state.selected.value == index || index == 0
-                              ? Colors.blueAccent
-                              : Colors.black87,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              )),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
@@ -458,6 +608,64 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
     });
   }
 
+  _packetWay() => Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const SizedBox(height: 10),
+          Text(
+            '装箱方式',
+            style: TextStyle(
+                color: Colors.blue.shade700, fontWeight: FontWeight.bold),
+          ),
+          Container(
+            padding: const EdgeInsets.all(5),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.blue.shade100, Colors.green.shade50],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
+              // color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: Colors.blue, width: 2),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [for (var i in state.packetWay) Text(i)],
+            ),
+          )
+        ],
+      );
+
+  _specificRequirements() => Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const SizedBox(height: 10),
+          Text(
+            '客人特殊要求',
+            style: TextStyle(
+                color: Colors.blue.shade700, fontWeight: FontWeight.bold),
+          ),
+          Container(
+            padding: const EdgeInsets.all(5),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.blue.shade100, Colors.green.shade50],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
+              // color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: Colors.blue, width: 2),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [for (var i in state.specificRequirements) Text(i)],
+            ),
+          )
+        ],
+      );
+
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -552,6 +760,9 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
                         productionTasksTableItem(data: item),
                       if (state.tableInfo.isNotEmpty)
                         productionTasksTableItem(type: 2),
+                      if (state.packetWay.isNotEmpty) _packetWay(),
+                      if (state.specificRequirements.isNotEmpty)
+                        _specificRequirements()
                     ],
                   )),
             ),

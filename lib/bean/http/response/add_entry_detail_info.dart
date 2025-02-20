@@ -1,11 +1,11 @@
-/// exNumber : "SCPZYCD240000009"
-/// empName : "叶明杰"
-/// empNumber : "019766"
-/// FQty : 1.0
-/// FExceptionID : 14
-/// exceptionName : "刷胶不均匀"
-/// FExceptionLevel : 0
-/// FReCheck : ""
+// exNumber : "SCPZYCD240000009"
+// empName : "叶明杰"
+// empNumber : "019766"
+// FQty : 1.0
+// FExceptionID : 14
+// exceptionName : "刷胶不均匀"
+// FExceptionLevel : 0
+// FReCheck : ""
 
 class AddEntryDetailInfo {
   AddEntryDetailInfo({

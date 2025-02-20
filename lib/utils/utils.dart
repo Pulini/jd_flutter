@@ -33,7 +33,7 @@ SnackbarController? snackbarController;
 SnackbarStatus? snackbarStatus;
 UserInfo? userInfo;
 
-/// 保存SP数据
+// 保存SP数据
 spSave(String key, Object value) {
   if (value is String) {
     sharedPreferences.setString(key, value);
@@ -55,18 +55,18 @@ spSave(String key, Object value) {
   }
 }
 
-/// 获取SP数据
+// 获取SP数据
 dynamic spGet(String key) {
   var value = sharedPreferences.get(key);
   debugPrint('read\nclass:${value.runtimeType}\nkey:$key\nvalue:$value');
   switch (value.runtimeType) {
-    case String:
+    case const (String):
       return value ?? '';
-    case int:
+    case const (int):
       return value ?? 0;
-    case double:
+    case const (double):
       return value ?? 0.0;
-    case bool:
+    case const (bool):
       return value ?? false;
     case const (List<Object?>):
       return sharedPreferences.getStringList(key) ?? [];
@@ -75,7 +75,7 @@ dynamic spGet(String key) {
   }
 }
 
-///获取用户数据
+//获取用户数据
 UserInfo? getUserInfo() {
   try {
     var spUserInfo = sharedPreferences.get(spSaveUserInfo) as String?;
@@ -90,7 +90,7 @@ UserInfo? getUserInfo() {
   return null;
 }
 
-///获取设备唯一码
+//获取设备唯一码
 String getDeviceID() {
   if (GetPlatform.isAndroid) {
     return (deviceInfo as AndroidDeviceInfo).id;
@@ -113,7 +113,7 @@ String getDeviceID() {
   return '';
 }
 
-///获取设备名称
+//获取设备名称
 String getDeviceName() {
   if (GetPlatform.isAndroid) {
     return (deviceInfo as AndroidDeviceInfo).model;
@@ -136,28 +136,28 @@ String getDeviceName() {
   return '';
 }
 
-///隐藏键盘而不丢失文本字段焦点：
+//隐藏键盘而不丢失文本字段焦点：
 hideKeyBoard() {
   SystemChannels.textInput.invokeMethod('TextInput.hide');
 }
 
-///BuildContext扩展
+//BuildContext扩展
 extension ContextExt on BuildContext {
-  ///是否是大屏幕
+  //是否是大屏幕
   bool isLargeScreen() => MediaQuery.of(this).size.width > 768;
 
-  ///是否是中屏幕
+  //是否是中屏幕
   bool isMediumScreen() =>
       MediaQuery.of(this).size.width > 425 &&
       MediaQuery.of(this).size.width < 1200;
 
-  ///是否是小屏幕
+  //是否是小屏幕
   bool isSmallScreen() => MediaQuery.of(this).size.width < 768;
 }
 
-///Double扩展方法
+//Double扩展方法
 extension DoubleExt on double? {
-  ///double转string并去除小数点后为0的位数，非0不去除
+  //double转string并去除小数点后为0的位数，非0不去除
   String toShowString() {
     if (this == null) {
       return '0';
@@ -166,7 +166,7 @@ extension DoubleExt on double? {
     }
   }
 
-  ///double转string并保留最大6位小数
+  //double转string并保留最大6位小数
   String toMaxString() => toFixed(6).toShowString();
 
   double toFixed(int fractionDigits) {
@@ -203,13 +203,13 @@ extension Uint8ListExt on Uint8List {
   }
 }
 
-///File扩展方法
+//File扩展方法
 extension FileExt on File {
-  ///图片转 base64
+  //图片转 base64
   String toBase64() => base64Encode(readAsBytesSync());
 }
 
-///String扩展方法
+//String扩展方法
 extension StringExt on String? {
   String md5Encode() =>
       md5.convert(const Utf8Encoder().convert(this ?? '')).toString();
@@ -263,7 +263,7 @@ extension StringExt on String? {
       (this ?? '').length >= 10 &&
       (this ?? '').length <= 13;
 
-  ///允许英文单词在换行时截断
+  //允许英文单词在换行时截断
   String allowWordTruncation() => Characters(this ?? '').join('\u{200B}');
 
   int hexToInt() {
@@ -416,19 +416,19 @@ class TapUtil {
   }
 }
 
-/// 权限检查
+// 权限检查
 bool checkUserPermission(String code) {
   return userInfo?.jurisdictionList?.any((v) => v.jid == code) ?? false;
 }
 
-///Launch启动器
+//Launch启动器
 Future<void> goLaunch(Uri uri) async {
   if (!await launchUrl(uri)) {
     throw Exception('Could not launch $uri');
   }
 }
 
-///获取服务器版本信息
+//获取服务器版本信息
 getVersionInfo(
   bool showLoading, {
   required Function noUpdate,
@@ -452,7 +452,7 @@ getVersionInfo(
   });
 }
 
-///更新app
+//更新app
 upData() {
   httpGet(
     method: webApiCheckVersion,
@@ -469,7 +469,7 @@ upData() {
   });
 }
 
-///获取员工信息
+//获取员工信息
 getWorkerInfo({
   String? number,
   String? department,

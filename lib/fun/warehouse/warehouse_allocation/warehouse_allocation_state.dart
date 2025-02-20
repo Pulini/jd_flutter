@@ -13,7 +13,7 @@ class WarehouseAllocationState {
 
 
 
-  ///dp转换成px
+  //dp转换成px
   int dp2Px(double dp, BuildContext context) {
 
     MediaQueryData mq = MediaQuery.of(context);

@@ -9,7 +9,7 @@ class SapWmsSplitLabelState {
   var hasOriginalLabel = false.obs;
 
   SapWmsSplitLabelState() {
-    ///Initialize variables
+    //Initialize variables
   }
 
   dataFormat(BaseData response) {

@@ -56,7 +56,7 @@ class ProductionDispatchState {
   var isEnabledNextWorkProcedure = true.obs;
   var isEnabledAddOne = true.obs;
 
-  ///获取组员列表数据
+  //获取组员列表数据
   detailViewGetWorkerList() {
     getWorkerInfo(
       department: userInfo?.departmentID.toString(),
@@ -127,7 +127,7 @@ class ProductionDispatchState {
     });
   }
 
-  ///指令表
+  //指令表
   instructionList({
     required Function(String url) success,
     required Function(String msg) error,
@@ -149,7 +149,7 @@ class ProductionDispatchState {
     );
   }
 
-  ///工艺书
+  //工艺书
   getManufactureInstructions({
     required int routeID,
     required Function(List<ManufactureInstructionsInfo> data) success,
@@ -171,7 +171,7 @@ class ProductionDispatchState {
     });
   }
 
-  ///配色单列表
+  //配色单列表
   colorMatching({
     required Function(List<OrderColorList> data, String planBill) success,
     required Function(String msg) error,
@@ -218,7 +218,7 @@ class ProductionDispatchState {
     });
   }
 
-  ///打开/关闭工序
+  //打开/关闭工序
   offOnProcess({
     required Function() success,
     required Function(String msg) error,
@@ -242,7 +242,7 @@ class ProductionDispatchState {
     });
   }
 
-  ///删除下游工序
+  //删除下游工序
   deleteDownstream({
     required Function() success,
     required Function(String msg) error,
@@ -262,7 +262,7 @@ class ProductionDispatchState {
     });
   }
 
-  ///删除上一次报工
+  //删除上一次报工
   deleteLastReport({
     required Function() success,
     required Function(String msg) error,
@@ -285,7 +285,7 @@ class ProductionDispatchState {
     });
   }
 
-  ///更新领料配套数
+  //更新领料配套数
   updateSap({
     required Function() success,
     required Function(String msg) error,
@@ -330,7 +330,7 @@ class ProductionDispatchState {
     });
   }
 
-  ///报工SAP
+  //报工SAP
   reportToSap({
     required double qty,
     required Function() success,

@@ -215,7 +215,7 @@ class _VisitRegisterPageState extends State<VisitRegisterPage> {
     );
   }
 
-  ///最近来访记录
+  //最近来访记录
   showDialogLastRecord({
     context,
     Function()? click,

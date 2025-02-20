@@ -1,29 +1,29 @@
 class VisitLastRecord {
   VisitLastRecord({
-    this.Name,
-    this.Phone,
-    this.IDCard,
-    this.CarNo,
+    this.name,
+    this.phone,
+    this.idCard,
+    this.carNo,
   });
 
   VisitLastRecord.fromJson(dynamic json) {
-    Name = json['Name'];
-    Phone = json['Phone'];
-    IDCard = json['IDCard'];
-    CarNo = json['CarNo'];
+    name = json['Name'];
+    phone = json['Phone'];
+    idCard = json['IDCard'];
+    carNo = json['CarNo'];
   }
 
-  String? Name;
-  String? Phone;
-  String? IDCard;
-  String? CarNo;
+  String? name;
+  String? phone;
+  String? idCard;
+  String? carNo;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
-    map['Name'] = Name;
-    map['Phone'] = Phone;
-    map['IDCard'] = IDCard;
-    map['CarNo'] = CarNo;
+    map['Name'] = name;
+    map['Phone'] = phone;
+    map['IDCard'] = idCard;
+    map['CarNo'] = carNo;
     return map;
   }
 }

@@ -11,7 +11,7 @@ import 'package:jd_flutter/login/login_view.dart';
 import 'downloader.dart';
 
 
-/// 提示弹窗
+// 提示弹窗
 informationDialog({
   String title = '',
   required String? content,
@@ -42,7 +42,7 @@ informationDialog({
   );
 }
 
-///  咨询弹窗
+//  咨询弹窗
 askDialog({
   String title = '',
   required String? content,
@@ -86,7 +86,7 @@ askDialog({
   );
 }
 
-/// 提示弹窗
+// 提示弹窗
 successDialog({
   String title = '',
   required String? content,
@@ -115,7 +115,7 @@ successDialog({
   );
 }
 
-///错误弹窗
+//错误弹窗
 errorDialog({
   String title = '',
   required String? content,
@@ -146,7 +146,7 @@ errorDialog({
 
 GlobalKey<NavigatorState> loadingKey = GlobalKey();
 
-///加载中弹窗
+//加载中弹窗
 loadingDialog(String? content) {
   Get.dialog(
     PopScope(

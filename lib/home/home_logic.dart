@@ -13,7 +13,7 @@ import 'home_state.dart';
 class HomeLogic extends GetxController {
   final HomeState state = HomeState();
 
-  ///用户头像
+  //用户头像
   late Widget userAvatar;
 
   @override
@@ -80,7 +80,7 @@ class HomeLogic extends GetxController {
     state.buttons.value = list;
   }
 
-  ///底部弹窗
+  //底部弹窗
   takeAvatarPhoto() {
     takePhoto((f) {
       state.changeUserAvatar(
@@ -94,7 +94,7 @@ class HomeLogic extends GetxController {
     }, title: 'home_user_setting_avatar_photo_sheet_title'.tr);
   }
 
-  ///部门列表弹窗
+  //部门列表弹窗
   getDepartment(Function(List<Department> list, int index) callback) {
     state.getDepartment(
       success: (list) {

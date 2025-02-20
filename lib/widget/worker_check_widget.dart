@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/worker_info.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 
-///自定义输入框 根据工号查询员工
+//自定义输入框 根据工号查询员工
 class WorkerCheck extends StatefulWidget {
   const WorkerCheck({super.key, required this.onChanged, this.hint, this.init});
 

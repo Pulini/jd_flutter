@@ -12,7 +12,7 @@ class SapSalesShipmentState {
   var palletList = <List<SapPalletDetailInfo>>[].obs;
 
   SapSalesShipmentState() {
-    ///Initialize variables
+    //Initialize variables
   }
 
   querySalesShipmentList({

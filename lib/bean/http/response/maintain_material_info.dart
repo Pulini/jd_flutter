@@ -1,10 +1,10 @@
 import 'package:jd_flutter/utils/utils.dart';
 
-/// Size : "35"
-/// NetWeight : "5.000"
-/// GrossWeight : "6.000"
-/// Meas : "10x10x10"
-/// UnitName : "个"
+// Size : "35"
+// NetWeight : "5.000"
+// GrossWeight : "6.000"
+// Meas : "10x10x10"
+// UnitName : "个"
 
 class MaintainMaterialPropertiesInfo {
   MaintainMaterialPropertiesInfo({
@@ -42,11 +42,11 @@ class MaintainMaterialPropertiesInfo {
   }
 }
 
-/// ProcessFlowID : 2
-/// ItemID : 389742
-/// FactoryType : "D13677-22B M"
-/// Size : "35"
-/// Capacity : 2000.0
+// ProcessFlowID : 2
+// ItemID : 389742
+// FactoryType : "D13677-22B M"
+// Size : "35"
+// Capacity : 2000.0
 
 class MaintainMaterialCapacityInfo {
   MaintainMaterialCapacityInfo({
@@ -80,9 +80,9 @@ class MaintainMaterialCapacityInfo {
   }
 
 }
-/// LanguageID : 1001
-/// LanguageName : "中文简体"
-/// MaterialName : ""
+// LanguageID : 1001
+// LanguageName : "中文简体"
+// MaterialName : ""
 
 class MaintainMaterialLanguagesInfo {
   MaintainMaterialLanguagesInfo({

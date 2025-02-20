@@ -4,7 +4,7 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
 
-///控件转图片byte
+//控件转图片byte
 class WidgetsToImage extends StatefulWidget {
   final Widget child;
   final Function(Uint8List) image;

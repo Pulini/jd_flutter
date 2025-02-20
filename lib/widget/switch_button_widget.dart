@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/utils/utils.dart';
 
 
-///选择器
+//选择器
 class SwitchButton extends StatefulWidget {
   final Function(bool isChecked) onChanged;
   final String name;

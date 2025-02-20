@@ -7,14 +7,14 @@ import 'worker_production_report_state.dart';
 class WorkerProductionReportLogic extends GetxController {
   final WorkerProductionReportState state = WorkerProductionReportState();
 
-  ///部门选择器的控制器
+  //部门选择器的控制器
   var pickerControllerDepartment = OptionsPickerController(
     PickerType.mesDepartment,
     saveKey:
         '${RouteConfig.workerProductionReport.name}${PickerType.mesDepartment}',
   );
 
-  ///日期选择器的控制器
+  //日期选择器的控制器
   late DatePickerController pickerControllerDate = DatePickerController(
     PickerType.date,
     saveKey: '${RouteConfig.workerProductionReport.name}${PickerType.date}',

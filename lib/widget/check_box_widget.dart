@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/utils/utils.dart';
 
 
-///单选框
+//单选框
 class CheckBox extends StatefulWidget {
   final Function(bool isChecked) onChanged;
   final String name;

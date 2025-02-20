@@ -10,7 +10,7 @@ import 'package:jd_flutter/widget/dialogs.dart';
 class PumaAntiCounterfeitingLogic extends GetxController {
   final PumaAntiCounterfeitingState state = PumaAntiCounterfeitingState();
 
-  ///获取箱标详情
+  //获取箱标详情
   getBarCodeListByBoxNumber(String boxNumber) {
     if (boxNumber.isEmpty) {
     } else {
@@ -37,7 +37,7 @@ class PumaAntiCounterfeitingLogic extends GetxController {
     }
   }
 
-  ///提交入库
+  //提交入库
   submitCode() {
     httpPost(
       method: webApiBarCodeInStock,
@@ -61,7 +61,7 @@ class PumaAntiCounterfeitingLogic extends GetxController {
     });
   }
 
-  ///获取拣货标签列表
+  //获取拣货标签列表
   getBarCodeListByEmp() {
     httpGet(
       method: webApiGetBarCodeListByEmp,
@@ -82,7 +82,7 @@ class PumaAntiCounterfeitingLogic extends GetxController {
     });
   }
 
-  ///扫描条码判断是否扫过
+  //扫描条码判断是否扫过
   haveCode({
     required String code,
     required Function() have,
@@ -109,7 +109,7 @@ class PumaAntiCounterfeitingLogic extends GetxController {
     }
   }
 
-  ///PUMA防伪标出库
+  //PUMA防伪标出库
   submitOutCode() {
     httpPost(
       method: webApiBarCodeOutStock,

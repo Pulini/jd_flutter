@@ -64,40 +64,40 @@ class _LoginPickState extends State<LoginPick>
   var logic = Get.put(LoginLogic());
   var state = Get.find<LoginLogic>().state;
 
-  ///tab控制器
+  //tab控制器
   late var tabController = TabController(
     length: GetPlatform.isAndroid ? 4 : 3,
     vsync: this,
   );
 
-  ///人脸登录手机号输入框控制器
+  //人脸登录手机号输入框控制器
   var faceLoginPhoneController = TextEditingController()
     ..text = spGet(spSaveLoginFace) ?? '';
 
-  ///机台登录机台号输入框控制器
+  //机台登录机台号输入框控制器
   var machineLoginMachineController = TextEditingController()
     ..text = spGet(spSaveLoginMachine) ?? '';
 
-  ///机台登录密码输入框控制器
+  //机台登录密码输入框控制器
   var machineLoginPasswordController = TextEditingController();
 
-  ///手机登录手机号输入框控制器
+  //手机登录手机号输入框控制器
   var phoneLoginPhoneController = TextEditingController()
     ..text = useTestUrl ? '15868587600' : spGet(spSaveLoginPhone) ?? '';
 
-  ///手机登录密码输入框控制器
+  //手机登录密码输入框控制器
   var phoneLoginPasswordController = TextEditingController()
     ..text = useTestUrl ? '123456' : '';
 
-  ///手机登录验证码输入框控制器
+  //手机登录验证码输入框控制器
   late var phoneLoginVCodeController = TextEditingController()
     ..text = useTestUrl ? state.getDebugVCode() : '';
 
-  ///工号登录工号输入框控制器
+  //工号登录工号输入框控制器
   var workLoginWorkNumberController = TextEditingController()
     ..text = spGet(spSaveLoginWork) ?? '';
 
-  ///工号登录密码输入框控制器
+  //工号登录密码输入框控制器
   var workLoginPasswordController = TextEditingController();
 
   textField({

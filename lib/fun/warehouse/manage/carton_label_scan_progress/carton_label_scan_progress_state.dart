@@ -11,7 +11,7 @@ class CartonLabelScanProgressState {
   var progressDetail = <List<CartonLabelScanProgressDetailInfo>>[].obs;
 
   CartonLabelScanProgressState() {
-    ///Initialize variables
+    //Initialize variables
   }
 
   getCartonLabelScanHistory({

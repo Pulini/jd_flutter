@@ -14,7 +14,7 @@ class SapPurchaseStockInState {
   var detailInfo = <SapPurchaseStockInDetailInfo>[].obs;
 
   SapPurchaseStockInState() {
-    ///Initialize variables
+    //Initialize variables
   }
 
   getDeliveryList({

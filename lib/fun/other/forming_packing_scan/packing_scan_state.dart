@@ -13,12 +13,12 @@ import 'package:jd_flutter/widget/dialogs.dart';
 class PackingScanState {
   var dataList = <ContainerScanner>[].obs; //来访数据
   PackingShipmentScanInfo? packingShipmentScanInfo; //成型集装箱出货信息
-  var showDataList = <gtItems>[].obs; //汇总拣货
+  var showDataList = <GtItem>[].obs; //汇总拣货
 
   var showCabinetNumber = ''.obs; //显示的柜号
   var scanNumber = ''.obs; //扫描的条码
 
-  ///  获取汇总信息
+  //  获取汇总信息
   getAllData({
     String? time,
     required Function(String msg) error,
@@ -43,7 +43,7 @@ class PackingScanState {
     });
   }
 
-  ///根据条件获取成型集装箱出货信息
+  //根据条件获取成型集装箱出货信息
   getShipmentInformation({
     String? time,
     String? cabinetNumber,
@@ -63,7 +63,7 @@ class PackingScanState {
 
         Get.to(() => const PackingShipmentScanPage());
 
-        ///跳转到扫码界面
+        //跳转到扫码界面
       } else {
         error.call(response.message ?? 'query_default_error'.tr);
       }
@@ -112,7 +112,7 @@ class PackingScanState {
     return have;
   }
 
-  ///根据条件获取成型集装箱出货信息
+  //根据条件获取成型集装箱出货信息
   addCode({
     String? code,
     String? orderNumber,

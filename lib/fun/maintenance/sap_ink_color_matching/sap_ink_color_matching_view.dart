@@ -29,13 +29,13 @@ class _SapInkColorMatchingPageState extends State<SapInkColorMatchingPage> {
 
   //
 
-  ///日期选择器的控制器
+  //日期选择器的控制器
   var dpcStartDate = DatePickerController(
     PickerType.startDate,
     saveKey: '${RouteConfig.sapInkColorMatching.name}${PickerType.startDate}',
   );
 
-  ///日期选择器的控制器
+  //日期选择器的控制器
   var dpcEndDate = DatePickerController(
     PickerType.endDate,
     saveKey: '${RouteConfig.sapInkColorMatching.name}${PickerType.endDate}',

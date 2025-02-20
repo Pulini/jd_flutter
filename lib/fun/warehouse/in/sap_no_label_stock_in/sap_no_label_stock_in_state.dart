@@ -13,7 +13,7 @@ class SapNoLabelStockInState {
   var orderList = <List<SapNoLabelStockInItemInfo>>[].obs;
 
   SapNoLabelStockInState() {
-    ///Initialize variables
+    //Initialize variables
   }
 
   queryOrderList({

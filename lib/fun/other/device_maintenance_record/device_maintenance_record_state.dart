@@ -19,7 +19,7 @@ class DeviceMaintenanceRecordState {
   var repairPrevent = ''; //维修后评估及预防
 
 
-  ///要添加的零部件信息
+  //要添加的零部件信息
   var brand = ""; // 零部件的品牌
   var partName = ""; // 零部件的名字
   var partNumber = ""; // 零部件的数量
@@ -28,7 +28,7 @@ class DeviceMaintenanceRecordState {
   var partRemark = ""; // 零部件的备注
 
 
-  ///要去报修的设备信息
+  //要去报修的设备信息
   var custodianNumber =''.obs; //持有人工号
   var maintenanceUnit =''.obs; //维修单位
   var repairParts =''.obs; //维修部位
@@ -38,13 +38,13 @@ class DeviceMaintenanceRecordState {
   var issueCauseId =''; //故障原因id
 
 
-  ///删除零部件信息
+  //删除零部件信息
   deleteRepairEntry(RepairEntryData data){
     repairEntryData.remove(data);
   }
 
 
-  ///添加零部件信息
+  //添加零部件信息
   addRepairEntryData({
     required Function() success,
   }) {

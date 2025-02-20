@@ -1,14 +1,14 @@
 import 'package:jd_flutter/utils/utils.dart';
 
-/// rowNo : 10
-/// workCardInterID : 169689
-/// workCardNo : "P2005162"
-/// salesOrderNo : "0010000741"
-/// typeBody : "DN202682-1"
-/// dispatchDate : "2020-03-17"
-/// dispatchQty : 600.0
-/// materialIssuanceStatus : "未发料"
-/// depName : "针车1组"
+// rowNo : 10
+// workCardInterID : 169689
+// workCardNo : "P2005162"
+// salesOrderNo : "0010000741"
+// typeBody : "DN202682-1"
+// dispatchDate : "2020-03-17"
+// dispatchQty : 600.0
+// materialIssuanceStatus : "未发料"
+// depName : "针车1组"
 class SmartDeliveryOrderInfo {
   SmartDeliveryOrderInfo({
     this.rowNo,
@@ -67,14 +67,14 @@ class SmartDeliveryOrderInfo {
   }
 }
 
-/// ScWorkCardInterID : 213425
-/// PartsID : 665
-/// MaterialID : 452550
-/// PartName : "后内外边排"
-/// ItemNumber : "800605186"
-/// ItemName : "深蓝色7泼水超纤复0.35mm厚灰色柔软布+2*3白色帆布"
-/// RequireQty : 2.634
-/// SendQty : 0.0
+// ScWorkCardInterID : 213425
+// PartsID : 665
+// MaterialID : 452550
+// PartName : "后内外边排"
+// ItemNumber : "800605186"
+// ItemName : "深蓝色7泼水超纤复0.35mm厚灰色柔软布+2*3白色帆布"
+// RequireQty : 2.634
+// SendQty : 0.0
 
 class SmartDeliveryMaterialInfo {
   SmartDeliveryMaterialInfo({
@@ -178,16 +178,16 @@ class SizeInfo {
   }
 }
 
-/// TypeBody : "D13677-22B MB"
-/// SrcICMOInterID : "156640"
-/// SeOrders : "JZ2400056"
-/// MapNumber : ""
-/// ClientOrderNumber : ""
-/// PartName : "头排"
-/// MaterialName : "深蓝色1泼水超纤复0.35mm厚灰色柔软布+2*3白色帆布+0.6mm白色定型"
-/// MaterialNumber : "800605185"
-/// PartsSizeList : [{"Size":"36","Qty":20,"ShoeTreeQty":0},{"Size":"38","Qty":20,"ShoeTreeQty":0},{"Size":"39","Qty":20,"ShoeTreeQty":0},{"Size":"40","Qty":20,"ShoeTreeQty":0}]
-/// WorkData : [{"Round":"1","SendType":0,"TaskID":"","SendSizeList":[{"Size":"39","Qty":5},{"Size":"40","Qty":5}]},{"Round":"2","SendType":0,"TaskID":"","SendSizeList":[{"Size":"37","Qty":6},{"Size":"38","Qty":6}]}]
+// TypeBody : "D13677-22B MB"
+// SrcICMOInterID : "156640"
+// SeOrders : "JZ2400056"
+// MapNumber : ""
+// ClientOrderNumber : ""
+// PartName : "头排"
+// MaterialName : "深蓝色1泼水超纤复0.35mm厚灰色柔软布+2*3白色帆布+0.6mm白色定型"
+// MaterialNumber : "800605185"
+// PartsSizeList : [{"Size":"36","Qty":20,"ShoeTreeQty":0},{"Size":"38","Qty":20,"ShoeTreeQty":0},{"Size":"39","Qty":20,"ShoeTreeQty":0},{"Size":"40","Qty":20,"ShoeTreeQty":0}]
+// WorkData : [{"Round":"1","SendType":0,"TaskID":"","SendSizeList":[{"Size":"39","Qty":5},{"Size":"40","Qty":5}]},{"Round":"2","SendType":0,"TaskID":"","SendSizeList":[{"Size":"37","Qty":6},{"Size":"38","Qty":6}]}]
 
 class DeliveryDetailInfo {
   DeliveryDetailInfo({
@@ -314,10 +314,10 @@ class DeliveryDetailInfo {
           : b);
 }
 
-/// Round : "1"
-/// SendType : 0
-/// TaskID : ""
-/// SendSizeList : [{"Size":"39","Qty":5},{"Size":"40","Qty":5}]
+// Round : "1"
+// SendType : 0
+// TaskID : ""
+// SendSizeList : [{"Size":"39","Qty":5},{"Size":"40","Qty":5}]
 
 class WorkData {
   WorkData({
@@ -366,9 +366,9 @@ class WorkData {
           : sendSizeList!.map((v) => v.qty ?? 0).reduce((v1, v2) => v1 + v2);
 }
 
-/// Size : "36"
-/// Qty : 20
-/// ShoeTreeQty : 0
+// Size : "36"
+// Qty : 20
+// ShoeTreeQty : 0
 
 class PartsSizeList {
   PartsSizeList({
@@ -444,8 +444,8 @@ class AgvInfo {
   List<RobotPositionInfo>? robotPosition;
 }
 
-/// RobNumber : "123"
-/// RobName : "agv"
+// RobNumber : "123"
+// RobName : "agv"
 
 class RobotDeviceInfo {
   RobotDeviceInfo({
@@ -474,8 +474,8 @@ class RobotDeviceInfo {
   }
 }
 
-/// TaskType : "F01"
-/// TaskTypName : "成型自动化5楼"
+// TaskType : "F01"
+// TaskTypName : "成型自动化5楼"
 
 class RobotPositionInfo {
   RobotPositionInfo({
@@ -526,8 +526,8 @@ class RobotPositionInfo {
   }
 }
 
-/// PositionCode : "F3"
-/// PositionName : "工作区"
+// PositionCode : "F3"
+// PositionName : "工作区"
 class TaskPoint {
   TaskPoint({
     this.positionCode,
@@ -555,10 +555,10 @@ class TaskPoint {
   }
 }
 
-/// TaskID : "84affcad5c7b44748f40e6c6afc634c9"
-/// TaskType : "执行中"
-/// StartingPoint : "F1"
-/// EndPoint : "F6"
+// TaskID : "84affcad5c7b44748f40e6c6afc634c9"
+// TaskType : "执行中"
+// StartingPoint : "F1"
+// EndPoint : "F6"
 
 class AgvTaskInfo {
   AgvTaskInfo({

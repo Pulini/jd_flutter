@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/leave_visit_record.dart';
-import 'package:jd_flutter/bean/http/response/photoBean.dart';
+import 'package:jd_flutter/bean/http/response/photo_bean.dart';
 import 'package:jd_flutter/bean/http/response/search_people_info.dart';
 import 'package:jd_flutter/bean/http/response/visit_add_record_info.dart';
 import 'package:jd_flutter/bean/http/response/visit_data_list_info.dart';
@@ -50,19 +50,19 @@ class VisitRegisterLogic extends GetxController {
   var textSearchIdCard = TextEditingController();
   var textSearch = TextEditingController();
 
-  ///部门选择器的控制器
+  //部门选择器的控制器
   var pickerControllerDepartment = OptionsPickerController(
     PickerType.mesDepartment,
     saveKey: '${RouteConfig.dailyReport.name}${PickerType.mesDepartment}',
   );
 
-  ///日期选择器的控制器
+  //日期选择器的控制器
   var pickerControllerStartDate = DatePickerController(
     PickerType.startDate,
     saveKey: '${RouteConfig.property.name}${PickerType.startDate}',
   );
 
-  ///日期选择器的控制器
+  //日期选择器的控制器
   var pickerControllerEndDate = DatePickerController(
     PickerType.endDate,
     saveKey: '${RouteConfig.property.name}${PickerType.endDate}',
@@ -116,10 +116,10 @@ class VisitRegisterLogic extends GetxController {
         method: webApiGetVisitInfoByJsonStr,
         loading: '正在搜索最近一次来访记录...',
         body: VisitLastRecord(
-          Name: textSearchName.text,
-          Phone: textSearchPhone.text,
-          IDCard: textSearchCar.text,
-          CarNo: textSearchIdCard.text,
+          name: textSearchName.text,
+          phone: textSearchPhone.text,
+          idCard: textSearchCar.text,
+          carNo: textSearchIdCard.text,
         )).then((response) {
       if (response.resultCode == resultSuccess) {
         var jsonList = jsonDecode(response.data);

@@ -1,21 +1,21 @@
-/// InterID : 2300
-/// Number : "LFRY2002300"
-/// Name : "11"
-/// IDCard : "330322199408121213"
-/// Unit : "11"
-/// Phone : "15267733584"
-/// VisitedFactory : "金帝集团股份有限公司"
-/// VisitedDept : "11"
-/// IntervieweeName : "11"
-/// VisitorNum : 11
-/// SecurityStaff : "叶明杰"
-/// DateTime : "2024-02-29 11:05"
-/// LeaveTime : null
-/// CarNo : ""
-/// CarType : ""
-/// DataSourceType : 0
-/// SourceID : "0"
-/// SubmitType : 0
+// InterID : 2300
+// Number : "LFRY2002300"
+// Name : "11"
+// IDCard : "330322199408121213"
+// Unit : "11"
+// Phone : "15267733584"
+// VisitedFactory : "金帝集团股份有限公司"
+// VisitedDept : "11"
+// IntervieweeName : "11"
+// VisitorNum : 11
+// SecurityStaff : "叶明杰"
+// DateTime : "2024-02-29 11:05"
+// LeaveTime : null
+// CarNo : ""
+// CarType : ""
+// DataSourceType : 0
+// SourceID : "0"
+// SubmitType : 0
 
 class VisitDataListInfo {
   VisitDataListInfo({

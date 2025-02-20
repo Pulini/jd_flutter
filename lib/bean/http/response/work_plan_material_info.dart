@@ -1,9 +1,9 @@
-/// Code : "10030100232"
-/// Name : "深蓝色-12尼龙拉头"
-/// Model : ""
-/// Color : ""
-/// Unit : "个"
-/// NeedQty : 1600.0
+// Code : "10030100232"
+// Name : "深蓝色-12尼龙拉头"
+// Model : ""
+// Color : ""
+// Unit : "个"
+// NeedQty : 1600.0
 
 class WorkPlanMaterialInfo {
   WorkPlanMaterialInfo({

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
-///数字输入框 ios端添加 done 按钮
+//数字输入框 ios端添加 done 按钮
 class NumberTextField extends StatefulWidget {
   final TextEditingController numberController;
   final InputDecoration decoration;
@@ -21,7 +21,7 @@ class NumberTextField extends StatefulWidget {
   State<NumberTextField> createState() => _NumberTextFieldState();
 }
 
-///ios适配专用输入法
+//ios适配专用输入法
 class _NumberTextFieldState extends State<NumberTextField> {
   OverlayEntry? _overlayEntry;
   final FocusNode _numberFocusNode = FocusNode();
@@ -53,7 +53,7 @@ class _NumberTextFieldState extends State<NumberTextField> {
     );
   }
 
-  ///显示done键
+  //显示done键
   showOverlay() {
     if (_overlayEntry != null) return;
     OverlayState? overlayState = Overlay.of(context);
@@ -61,7 +61,7 @@ class _NumberTextFieldState extends State<NumberTextField> {
     overlayState.insert(_overlayEntry!);
   }
 
-  ///移除 done 键
+  //移除 done 键
   removeOverlay() {
     if (_overlayEntry != null) {
       _overlayEntry!.remove();

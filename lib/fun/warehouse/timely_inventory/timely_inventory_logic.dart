@@ -11,7 +11,7 @@ class TimelyInventoryLogic extends GetxController {
   final TimelyInventoryState state = TimelyInventoryState();
 
 
-  ///获取及时库存
+  //获取及时库存
   getImmediateStockList({
     required String factoryNumber,
     required String stockId,
@@ -65,7 +65,7 @@ class TimelyInventoryLogic extends GetxController {
   }
 
 
-  ///修改库位
+  //修改库位
   modifyStorageLocation({
     required TimelyInventoryShowInfo data,
     required String newLocation,

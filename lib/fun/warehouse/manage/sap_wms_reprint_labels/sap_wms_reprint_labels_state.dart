@@ -7,7 +7,7 @@ class SapWmsReprintLabelsState {
   var labelList = <ReprintLabelInfo>[].obs;
 
   SapWmsReprintLabelsState() {
-    ///Initialize variables
+    //Initialize variables
   }
 
   getLabels({

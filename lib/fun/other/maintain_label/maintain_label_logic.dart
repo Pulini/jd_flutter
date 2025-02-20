@@ -308,7 +308,7 @@ class MaintainLabelLogic extends GetxController {
     }
   }
 
-  ///物料标
+  //物料标
   createMaterialLabel({
     String language = '',
     required List<LabelInfo> list,
@@ -430,7 +430,7 @@ class MaintainLabelLogic extends GetxController {
     labels.call(labelList);
   }
 
-  ///动态标
+  //动态标
   createDynamicLabel({
     String language = '',
     required List<LabelInfo> list,
@@ -705,7 +705,7 @@ class MaintainLabelLogic extends GetxController {
     labels.call(labelList);
   }
 
-  ///固定单码标
+  //固定单码标
   createFixedLabel({
     required String language,
     required List<List<LabelInfo>> list,
@@ -869,7 +869,7 @@ class MaintainLabelLogic extends GetxController {
     labels.call(labelList);
   }
 
-  ///合并动态标签
+  //合并动态标签
   createGroupDynamicLabel({
     required String language,
     required List<List<LabelInfo>> list,

@@ -34,7 +34,7 @@ class QualityManagementState {
   var countTimerNumber = "3".obs;
   var dialogMiss = false.obs;
 
-  ///需要提交的数据
+  //需要提交的数据
   var departmentID = getUserInfo()!.departmentID.toString(); //部门id
   var empID = getUserInfo()!.empID.toString(); //员工empId
   var entryID = ""; //工单id

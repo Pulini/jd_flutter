@@ -6,12 +6,12 @@ import 'package:jd_flutter/widget/picker/picker_controller.dart';
 class PackingScanLogic extends GetxController {
   final PackingScanState state = PackingScanState();
 
-  ///日期选择器的控制器
+  //日期选择器的控制器
   late DatePickerController pickerControllerDate = DatePickerController(PickerType.date,
       saveKey: '${RouteConfig.packingScan.name}${PickerType.date}',
       onChanged: (index) => query());
 
-  ///初始化界面后拉取所有数据
+  //初始化界面后拉取所有数据
   @override
   void onReady() {
     super.onReady();

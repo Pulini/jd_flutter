@@ -140,7 +140,7 @@ abstract class PickerController {
     return 'picker_type_error'.tr;
   }
 
-  ///获取Sap供应商列表
+  //获取Sap供应商列表
   Future getSapSupplier() async {
     var response = await httpGet(method: webApiPickerSapSupplier);
     if (response.resultCode == resultSuccess) {
@@ -165,7 +165,7 @@ abstract class PickerController {
     }
   }
 
-  ///获取Sap公司列表
+  //获取Sap公司列表
   Future getSapCompany() async {
     var response = await httpGet(method: webApiPickerSapCompany);
     if (response.resultCode == resultSuccess) {
@@ -188,7 +188,7 @@ abstract class PickerController {
     }
   }
 
-  ///获取Sap厂区列表
+  //获取Sap厂区列表
   Future getSapFactory() async {
     var response = await httpGet(method: webApiPickerSapFactory);
     if (response.resultCode == resultSuccess) {
@@ -213,7 +213,7 @@ abstract class PickerController {
     }
   }
 
-  ///获取Sap工作中心列表
+  //获取Sap工作中心列表
   Future getSapWorkCenter() async {
     var response = await httpGet(method: webApiPickerSapWorkCenter);
     if (response.resultCode == resultSuccess) {
@@ -238,7 +238,7 @@ abstract class PickerController {
     }
   }
 
-  ///获取Sap部门列表
+  //获取Sap部门列表
   Future getSapDepartment() async {
     var response = await httpGet(method: webApiPickerSapDepartment);
     if (response.resultCode == resultSuccess) {
@@ -264,7 +264,7 @@ abstract class PickerController {
     }
   }
 
-  ///获取Mes车间列表
+  //获取Mes车间列表
   Future getMesWorkShop() async {
     var response = await httpGet(method: webApiPickerMesWorkShop);
     if (response.resultCode == resultSuccess) {
@@ -290,7 +290,7 @@ abstract class PickerController {
     }
   }
 
-  ///获取Mes部门列表
+  //获取Mes部门列表
   Future getMesDepartment() async {
     var response = await httpGet(
       method: webApiPickerMesDepartment,
@@ -319,7 +319,7 @@ abstract class PickerController {
     }
   }
 
-  ///获取Mes组织列表
+  //获取Mes组织列表
   Future getMesOrganization() async {
     var response = await httpGet(method: webApiPickerMesOrganization);
     if (response.resultCode == resultSuccess) {
@@ -346,7 +346,7 @@ abstract class PickerController {
     }
   }
 
-  ///获取Sap制程列表
+  //获取Sap制程列表
   Future getSapProcessFlow() async {
     var response = await httpGet(method: webApiPickerSapProcessFlow);
     if (response.resultCode == resultSuccess) {
@@ -371,7 +371,7 @@ abstract class PickerController {
     }
   }
 
-  ///获取Mes制程列表
+  //获取Mes制程列表
   Future getMesProcessFlow() async {
     var response = await httpGet(method: webApiPickerMesProcessFlow);
     if (response.resultCode == resultSuccess) {
@@ -396,7 +396,7 @@ abstract class PickerController {
     }
   }
 
-  ///获取Mes生产计件报表类型
+  //获取Mes生产计件报表类型
   Future getMesProductionReportType() async {
     var response = await httpGet(
       method: webApiGetProductionReportType,
@@ -424,7 +424,7 @@ abstract class PickerController {
     }
   }
 
-  ///获取Sap机台列表
+  //获取Sap机台列表
   Future getSapMachine() async {
     var response = await httpGet(
       method: webApiPickerSapMachine,
@@ -459,7 +459,7 @@ abstract class PickerController {
     }
   }
 
-  ///获取Sap工作中心(新)列表
+  //获取Sap工作中心(新)列表
   Future getSapWorkCenterNew() async {
     var response = await httpGet(
       method: webApiPickerSapWorkCenterNew,
@@ -490,7 +490,7 @@ abstract class PickerController {
     }
   }
 
-  ///获取Sap组别列表
+  //获取Sap组别列表
   Future getSapGroup() async {
     var response = await httpGet(
       method: webApiPickerSapGroup,
@@ -518,7 +518,7 @@ abstract class PickerController {
     }
   }
 
-  ///获取Sap工厂及仓库列表
+  //获取Sap工厂及仓库列表
   Future getSapFactoryAndWarehouse() async {
     var response = await httpGet(method: webApiPickerSapFactoryAndWarehouse);
     if (response.resultCode == resultSuccess) {
@@ -554,7 +554,7 @@ abstract class PickerController {
     }
   }
 
-  ///获取Mes包装区域列表
+  //获取Mes包装区域列表
   Future getMesMoldingPackArea() async {
     var response = await httpGet(method: webApiGetPickerMesMoldingPackArea);
     if (response.resultCode == resultSuccess) {
@@ -579,7 +579,7 @@ abstract class PickerController {
     }
   }
 
-  ///获取Sap仓库库位列表
+  //获取Sap仓库库位列表
   Future getSapWarehouseStorageLocation() async {
     var response = await httpGet(
       method: webApiPickerSapWarehouseStorageLocation,
@@ -608,7 +608,7 @@ abstract class PickerController {
     }
   }
 
-  ///获取Sap仓库库位列表
+  //获取Sap仓库库位列表
   Future getMeGroup() async {
     var response = await httpGet(
       method: webApiPickerMesGroup,
@@ -641,7 +641,7 @@ abstract class PickerController {
     }
   }
 
-  ///获取Mes仓库
+  //获取Mes仓库
   Future getMesStockList() async {
     var response = await httpGet(method: webApiPickerMesStockList,params: {
       'OrganizeID': getUserInfo()!.organizeID,

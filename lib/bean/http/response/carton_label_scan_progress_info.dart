@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-/// SalesOrder : "N2400054"
-/// CustOrderNumber : "202408140001"
-/// TotalPiece : 20.0
-/// NoScanPiece : 20.0
+// SalesOrder : "N2400054"
+// CustOrderNumber : "202408140001"
+// TotalPiece : 20.0
+// NoScanPiece : 20.0
 
 class CartonLabelScanProgressInfo {
   CartonLabelScanProgressInfo({
@@ -42,9 +42,9 @@ class CartonLabelScanProgressInfo {
 
 }
 
-/// OutBoxBarCode : "00340486681090872291"
-/// Size : "混码"
-/// SendCustomSystemState : 0
+// OutBoxBarCode : "00340486681090872291"
+// Size : "混码"
+// SendCustomSystemState : 0
 
 class CartonLabelScanProgressDetailInfo {
   CartonLabelScanProgressDetailInfo({

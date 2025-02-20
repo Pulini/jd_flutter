@@ -32,3 +32,5 @@ const barCodeTypes = [
   'pqtbrk', //金臻喷漆贴标入库
   'tbsj', //金臻上架
 ];
+
+const feishuUserTokenData='feishu_user_token_data';

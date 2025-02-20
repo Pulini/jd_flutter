@@ -31,7 +31,7 @@ class PropertyState {
   var etWorkerNumber = '';
 
   PropertyState() {
-    ///Initialize variables
+    //Initialize variables
   }
 
   setParticipator({String empCode = '', String empName = '', int empID = -1}) {

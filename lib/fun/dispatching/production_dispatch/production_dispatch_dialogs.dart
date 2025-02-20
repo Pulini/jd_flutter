@@ -349,7 +349,7 @@ modifyDispatchQtyDialog(
   ));
 }
 
-///获取批量修改派工dialog提示文本
+//获取批量修改派工dialog提示文本
 String detailViewSetDispatchDialogText(
   bool isCheckedDivideEqually,
   bool isCheckedRounding,
@@ -802,7 +802,7 @@ workPlanMaterialDialog(List<WorkPlanMaterialInfo> list) {
   );
 }
 
-///报功到sap
+//报功到sap
 reportToSap(Function(bool isInstructionReport) callback) {
   var isInstructionReport = true.obs;
   Get.dialog(

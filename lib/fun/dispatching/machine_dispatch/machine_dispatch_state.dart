@@ -22,7 +22,7 @@ class MachineDispatchState {
   var processSelect = 0.obs;
 
   MachineDispatchState() {
-    ///Initialize variables
+    //Initialize variables
   }
 
   createDispatchProcess() {

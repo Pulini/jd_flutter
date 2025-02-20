@@ -2,12 +2,12 @@ import 'dart:typed_data';
 
 import 'package:jd_flutter/utils/utils.dart';
 
-/// InterID : 26825
-/// DecrementNumber : "D0002560"
-/// DispatchNumber : "000000079839"
-/// MaterialNumber : "06200400783"
-/// MaterialName : "XD13536-2D"
-/// Shift : "白班"
+// InterID : 26825
+// DecrementNumber : "D0002560"
+// DispatchNumber : "000000079839"
+// MaterialNumber : "06200400783"
+// MaterialName : "XD13536-2D"
+// Shift : "白班"
 
 class MachineDispatchInfo {
   MachineDispatchInfo({
@@ -47,35 +47,35 @@ class MachineDispatchInfo {
   }
 }
 
-/// InterID : 26826
-/// DecrementNumber : "D0002535"
-/// StartDate : "2024-07-26"
-/// DispatchNumber : "000000079758"
-/// StubBar1 : "460500007"
-/// StubBar2 : ""
-/// StubBar3 : "460401268"
-/// StubBarName1 : "新_回收料头(轻质)"
-/// StubBarName2 : ""
-/// StubBarName3 : "拌料半成品DX212980--TPR-轻质黑色+车线-有喷漆-60-62"
-/// StubBar1PrintFlag : 0
-/// StubBar2PrintFlag : 0
-/// StubBar3PrintFlag : 0
-/// MaterialNumber : "06200401209"
-/// MaterialName : "注塑半成品DX212980--TPR-轻质黑色+车线-有喷漆-60-62"
-/// FactoryType : "DX212980-5A"
-/// Machine : "JT23"
-/// DecreasingMachine : "JT17"
-/// Factory : "1500"
-/// Shift : "白班"
-/// Processflow : "ZHUS"
-/// Remarks : ""
-/// Withdrawal : " "
-/// Items : [{"EntryID":1,"Size":"3.5","SizeMaterialNumber":"0620040120902","SumQty":40.0,"SumUnderQty":40.0,"SumReportQty":0.0,"Mould":0.0,"TodayDispatchQty":0.0,"LastNotFullQty":0.0,"Capacity":35.0,"ReportQty":0.0,"NotFullQty":0.0,"BoxesQty":0.0,"ConfirmCurrentWorkingHours":"0.50000","WorkingHoursUnit":"H","BUoM":"双","MantissaMark":"","MantissaFlag":0,"LastMantissaFlag":0,"AvailableMouldsQty":1.0,"CapacityPerMold":200.0},{"EntryID":2,"Size":"4","SizeMaterialNumber":"0620040120903","SumQty":532.0,"SumUnderQty":0.0,"SumReportQty":532.0,"Mould":0.0,"TodayDispatchQty":0.0,"LastNotFullQty":0.0,"Capacity":35.0,"ReportQty":0.0,"NotFullQty":0.0,"BoxesQty":0.0,"ConfirmCurrentWorkingHours":"0.50000","WorkingHoursUnit":"H","BUoM":"双","MantissaMark":"X","MantissaFlag":0,"LastMantissaFlag":0,"AvailableMouldsQty":1.0,"CapacityPerMold":200.0},{"EntryID":3,"Size":"4.5","SizeMaterialNumber":"0620040120904","SumQty":1251.0,"SumUnderQty":849.0,"SumReportQty":402.0,"Mould":1.0,"TodayDispatchQty":200.0,"LastNotFullQty":16.0,"Capacity":35.0,"ReportQty":0.0,"NotFullQty":0.0,"BoxesQty":0.0,"ConfirmCurrentWorkingHours":"0.50000","WorkingHoursUnit":"H","BUoM":"双","MantissaMark":"","MantissaFlag":0,"LastMantissaFlag":0,"AvailableMouldsQty":1.0,"CapacityPerMold":200.0},{"EntryID":4,"Size":"5","SizeMaterialNumber":"0620040120905","SumQty":3264.0,"SumUnderQty":1090.0,"SumReportQty":2174.0,"Mould":1.0,"TodayDispatchQty":200.0,"LastNotFullQty":19.0,"Capacity":35.0,"ReportQty":0.0,"NotFullQty":0.0,"BoxesQty":0.0,"ConfirmCurrentWorkingHours":"0.50000","WorkingHoursUnit":"H","BUoM":"双","MantissaMark":"","MantissaFlag":0,"LastMantissaFlag":0,"AvailableMouldsQty":1.0,"CapacityPerMold":200.0},{"EntryID":5,"Size":"5.5","SizeMaterialNumber":"0620040120906","SumQty":3902.0,"SumUnderQty":1708.0,"SumReportQty":2194.0,"Mould":1.0,"TodayDispatchQty":200.0,"LastNotFullQty":30.0,"Capacity":35.0,"ReportQty":0.0,"NotFullQty":0.0,"BoxesQty":0.0,"ConfirmCurrentWorkingHours":"0.50000","WorkingHoursUnit":"H","BUoM":"双","MantissaMark":"","MantissaFlag":0,"LastMantissaFlag":0,"AvailableMouldsQty":1.0,"CapacityPerMold":200.0},{"EntryID":6,"Size":"6","SizeMaterialNumber":"0620040120907","SumQty":2815.0,"SumUnderQty":1005.0,"SumReportQty":1810.0,"Mould":0.0,"TodayDispatchQty":0.0,"LastNotFullQty":0.0,"Capacity":35.0,"ReportQty":0.0,"NotFullQty":0.0,"BoxesQty":0.0,"ConfirmCurrentWorkingHours":"0.50000","WorkingHoursUnit":"H","BUoM":"双","MantissaMark":"","MantissaFlag":0,"LastMantissaFlag":0,"AvailableMouldsQty":1.0,"CapacityPerMold":200.0},{"EntryID":7,"Size":"6.5","SizeMaterialNumber":"0620040120908","SumQty":2547.0,"SumUnderQty":394.0,"SumReportQty":2153.0,"Mould":1.0,"TodayDispatchQty":195.0,"LastNotFullQty":5.0,"Capacity":35.0,"ReportQty":0.0,"NotFullQty":0.0,"BoxesQty":0.0,"ConfirmCurrentWorkingHours":"0.50000","WorkingHoursUnit":"H","BUoM":"双","MantissaMark":"","MantissaFlag":0,"LastMantissaFlag":0,"AvailableMouldsQty":1.0,"CapacityPerMold":200.0},{"EntryID":8,"Size":"7","SizeMaterialNumber":"0620040120909","SumQty":2347.0,"SumUnderQty":521.0,"SumReportQty":1826.0,"Mould":1.0,"TodayDispatchQty":200.0,"LastNotFullQty":0.0,"Capacity":35.0,"ReportQty":0.0,"NotFullQty":0.0,"BoxesQty":0.0,"ConfirmCurrentWorkingHours":"0.50000","WorkingHoursUnit":"H","BUoM":"双","MantissaMark":"","MantissaFlag":0,"LastMantissaFlag":0,"AvailableMouldsQty":1.0,"CapacityPerMold":200.0},{"EntryID":9,"Size":"7.5","SizeMaterialNumber":"0620040120910","SumQty":696.0,"SumUnderQty":224.0,"SumReportQty":472.0,"Mould":0.0,"TodayDispatchQty":0.0,"LastNotFullQty":0.0,"Capacity":35.0,"ReportQty":0.0,"NotFullQty":0.0,"BoxesQty":0.0,"ConfirmCurrentWorkingHours":"0.50000","WorkingHoursUnit":"H","BUoM":"双","MantissaMark":"","MantissaFlag":0,"LastMantissaFlag":0,"AvailableMouldsQty":1.0,"CapacityPerMold":200.0},{"EntryID":10,"Size":"8","SizeMaterialNumber":"0620040120911","SumQty":324.0,"SumUnderQty":0.0,"SumReportQty":324.0,"Mould":0.0,"TodayDispatchQty":0.0,"LastNotFullQty":0.0,"Capacity":35.0,"ReportQty":0.0,"NotFullQty":0.0,"BoxesQty":0.0,"ConfirmCurrentWorkingHours":"0.50000","WorkingHoursUnit":"H","BUoM":"双","MantissaMark":"X","MantissaFlag":0,"LastMantissaFlag":0,"AvailableMouldsQty":1.0,"CapacityPerMold":200.0}]
-/// ProcessList : [{"FWorkingHoursUnit":"H","FWorkingHours":0.5,"ProcessNumber":"ZD1","ProcessName":"撬模1"},{"FWorkingHoursUnit":"H","FWorkingHours":0.5,"ProcessNumber":"ZD2","ProcessName":"撬模2"},{"FWorkingHoursUnit":"H","FWorkingHours":0.5,"ProcessNumber":"ZD3","ProcessName":"修边"}]
-/// Status : 0
-/// MoldNo : "DX212980"
-/// Weight : 400.0
-/// BarCodeList : []
+// InterID : 26826
+// DecrementNumber : "D0002535"
+// StartDate : "2024-07-26"
+// DispatchNumber : "000000079758"
+// StubBar1 : "460500007"
+// StubBar2 : ""
+// StubBar3 : "460401268"
+// StubBarName1 : "新_回收料头(轻质)"
+// StubBarName2 : ""
+// StubBarName3 : "拌料半成品DX212980--TPR-轻质黑色+车线-有喷漆-60-62"
+// StubBar1PrintFlag : 0
+// StubBar2PrintFlag : 0
+// StubBar3PrintFlag : 0
+// MaterialNumber : "06200401209"
+// MaterialName : "注塑半成品DX212980--TPR-轻质黑色+车线-有喷漆-60-62"
+// FactoryType : "DX212980-5A"
+// Machine : "JT23"
+// DecreasingMachine : "JT17"
+// Factory : "1500"
+// Shift : "白班"
+// Processflow : "ZHUS"
+// Remarks : ""
+// Withdrawal : " "
+// Items : [{"EntryID":1,"Size":"3.5","SizeMaterialNumber":"0620040120902","SumQty":40.0,"SumUnderQty":40.0,"SumReportQty":0.0,"Mould":0.0,"TodayDispatchQty":0.0,"LastNotFullQty":0.0,"Capacity":35.0,"ReportQty":0.0,"NotFullQty":0.0,"BoxesQty":0.0,"ConfirmCurrentWorkingHours":"0.50000","WorkingHoursUnit":"H","BUoM":"双","MantissaMark":"","MantissaFlag":0,"LastMantissaFlag":0,"AvailableMouldsQty":1.0,"CapacityPerMold":200.0},{"EntryID":2,"Size":"4","SizeMaterialNumber":"0620040120903","SumQty":532.0,"SumUnderQty":0.0,"SumReportQty":532.0,"Mould":0.0,"TodayDispatchQty":0.0,"LastNotFullQty":0.0,"Capacity":35.0,"ReportQty":0.0,"NotFullQty":0.0,"BoxesQty":0.0,"ConfirmCurrentWorkingHours":"0.50000","WorkingHoursUnit":"H","BUoM":"双","MantissaMark":"X","MantissaFlag":0,"LastMantissaFlag":0,"AvailableMouldsQty":1.0,"CapacityPerMold":200.0},{"EntryID":3,"Size":"4.5","SizeMaterialNumber":"0620040120904","SumQty":1251.0,"SumUnderQty":849.0,"SumReportQty":402.0,"Mould":1.0,"TodayDispatchQty":200.0,"LastNotFullQty":16.0,"Capacity":35.0,"ReportQty":0.0,"NotFullQty":0.0,"BoxesQty":0.0,"ConfirmCurrentWorkingHours":"0.50000","WorkingHoursUnit":"H","BUoM":"双","MantissaMark":"","MantissaFlag":0,"LastMantissaFlag":0,"AvailableMouldsQty":1.0,"CapacityPerMold":200.0},{"EntryID":4,"Size":"5","SizeMaterialNumber":"0620040120905","SumQty":3264.0,"SumUnderQty":1090.0,"SumReportQty":2174.0,"Mould":1.0,"TodayDispatchQty":200.0,"LastNotFullQty":19.0,"Capacity":35.0,"ReportQty":0.0,"NotFullQty":0.0,"BoxesQty":0.0,"ConfirmCurrentWorkingHours":"0.50000","WorkingHoursUnit":"H","BUoM":"双","MantissaMark":"","MantissaFlag":0,"LastMantissaFlag":0,"AvailableMouldsQty":1.0,"CapacityPerMold":200.0},{"EntryID":5,"Size":"5.5","SizeMaterialNumber":"0620040120906","SumQty":3902.0,"SumUnderQty":1708.0,"SumReportQty":2194.0,"Mould":1.0,"TodayDispatchQty":200.0,"LastNotFullQty":30.0,"Capacity":35.0,"ReportQty":0.0,"NotFullQty":0.0,"BoxesQty":0.0,"ConfirmCurrentWorkingHours":"0.50000","WorkingHoursUnit":"H","BUoM":"双","MantissaMark":"","MantissaFlag":0,"LastMantissaFlag":0,"AvailableMouldsQty":1.0,"CapacityPerMold":200.0},{"EntryID":6,"Size":"6","SizeMaterialNumber":"0620040120907","SumQty":2815.0,"SumUnderQty":1005.0,"SumReportQty":1810.0,"Mould":0.0,"TodayDispatchQty":0.0,"LastNotFullQty":0.0,"Capacity":35.0,"ReportQty":0.0,"NotFullQty":0.0,"BoxesQty":0.0,"ConfirmCurrentWorkingHours":"0.50000","WorkingHoursUnit":"H","BUoM":"双","MantissaMark":"","MantissaFlag":0,"LastMantissaFlag":0,"AvailableMouldsQty":1.0,"CapacityPerMold":200.0},{"EntryID":7,"Size":"6.5","SizeMaterialNumber":"0620040120908","SumQty":2547.0,"SumUnderQty":394.0,"SumReportQty":2153.0,"Mould":1.0,"TodayDispatchQty":195.0,"LastNotFullQty":5.0,"Capacity":35.0,"ReportQty":0.0,"NotFullQty":0.0,"BoxesQty":0.0,"ConfirmCurrentWorkingHours":"0.50000","WorkingHoursUnit":"H","BUoM":"双","MantissaMark":"","MantissaFlag":0,"LastMantissaFlag":0,"AvailableMouldsQty":1.0,"CapacityPerMold":200.0},{"EntryID":8,"Size":"7","SizeMaterialNumber":"0620040120909","SumQty":2347.0,"SumUnderQty":521.0,"SumReportQty":1826.0,"Mould":1.0,"TodayDispatchQty":200.0,"LastNotFullQty":0.0,"Capacity":35.0,"ReportQty":0.0,"NotFullQty":0.0,"BoxesQty":0.0,"ConfirmCurrentWorkingHours":"0.50000","WorkingHoursUnit":"H","BUoM":"双","MantissaMark":"","MantissaFlag":0,"LastMantissaFlag":0,"AvailableMouldsQty":1.0,"CapacityPerMold":200.0},{"EntryID":9,"Size":"7.5","SizeMaterialNumber":"0620040120910","SumQty":696.0,"SumUnderQty":224.0,"SumReportQty":472.0,"Mould":0.0,"TodayDispatchQty":0.0,"LastNotFullQty":0.0,"Capacity":35.0,"ReportQty":0.0,"NotFullQty":0.0,"BoxesQty":0.0,"ConfirmCurrentWorkingHours":"0.50000","WorkingHoursUnit":"H","BUoM":"双","MantissaMark":"","MantissaFlag":0,"LastMantissaFlag":0,"AvailableMouldsQty":1.0,"CapacityPerMold":200.0},{"EntryID":10,"Size":"8","SizeMaterialNumber":"0620040120911","SumQty":324.0,"SumUnderQty":0.0,"SumReportQty":324.0,"Mould":0.0,"TodayDispatchQty":0.0,"LastNotFullQty":0.0,"Capacity":35.0,"ReportQty":0.0,"NotFullQty":0.0,"BoxesQty":0.0,"ConfirmCurrentWorkingHours":"0.50000","WorkingHoursUnit":"H","BUoM":"双","MantissaMark":"X","MantissaFlag":0,"LastMantissaFlag":0,"AvailableMouldsQty":1.0,"CapacityPerMold":200.0}]
+// ProcessList : [{"FWorkingHoursUnit":"H","FWorkingHours":0.5,"ProcessNumber":"ZD1","ProcessName":"撬模1"},{"FWorkingHoursUnit":"H","FWorkingHours":0.5,"ProcessNumber":"ZD2","ProcessName":"撬模2"},{"FWorkingHoursUnit":"H","FWorkingHours":0.5,"ProcessNumber":"ZD3","ProcessName":"修边"}]
+// Status : 0
+// MoldNo : "DX212980"
+// Weight : 400.0
+// BarCodeList : []
 
 class MachineDispatchDetailsInfo {
   MachineDispatchDetailsInfo({
@@ -228,10 +228,10 @@ class MachineDispatchDetailsInfo {
   }
 }
 
-/// FWorkingHoursUnit : "H"
-/// FWorkingHours : 0.5
-/// ProcessNumber : "ZD1"
-/// ProcessName : "撬模1"
+// FWorkingHoursUnit : "H"
+// FWorkingHours : 0.5
+// ProcessNumber : "ZD1"
+// ProcessName : "撬模1"
 
 class ProcessList {
   ProcessList({
@@ -263,27 +263,27 @@ class ProcessList {
   }
 }
 
-/// EntryID : 1
-/// Size : "3.5"
-/// SizeMaterialNumber : "0620040120902"
-/// SumQty : 40.0
-/// SumUnderQty : 40.0
-/// SumReportQty : 0.0
-/// Mould : 0.0
-/// TodayDispatchQty : 0.0
-/// LastNotFullQty : 0.0
-/// Capacity : 35.0
-/// ReportQty : 0.0
-/// NotFullQty : 0.0
-/// BoxesQty : 0.0
-/// ConfirmCurrentWorkingHours : "0.50000"
-/// WorkingHoursUnit : "H"
-/// BUoM : "双"
-/// MantissaMark : ""
-/// MantissaFlag : 0
-/// LastMantissaFlag : 0
-/// AvailableMouldsQty : 1.0
-/// CapacityPerMold : 200.0
+// EntryID : 1
+// Size : "3.5"
+// SizeMaterialNumber : "0620040120902"
+// SumQty : 40.0
+// SumUnderQty : 40.0
+// SumReportQty : 0.0
+// Mould : 0.0
+// TodayDispatchQty : 0.0
+// LastNotFullQty : 0.0
+// Capacity : 35.0
+// ReportQty : 0.0
+// NotFullQty : 0.0
+// BoxesQty : 0.0
+// ConfirmCurrentWorkingHours : "0.50000"
+// WorkingHoursUnit : "H"
+// BUoM : "双"
+// MantissaMark : ""
+// MantissaFlag : 0
+// LastMantissaFlag : 0
+// AvailableMouldsQty : 1.0
+// CapacityPerMold : 200.0
 
 class Items {
   Items({

@@ -1,59 +1,59 @@
 class MoldingPackAreaReportInfo {
-  /// 类型
+  // 类型
   int? type;
 
-  /// 线别
+  // 线别
   String? departmentName;
 
-  /// 指令ID
+  // 指令ID
   int? interID;
 
-  /// 销售订单
+  // 销售订单
   String? orderNo;
 
-  /// 客户订单号
+  // 客户订单号
   String? clientOrderNumber;
 
-  /// 交期
+  // 交期
   String? fetchDate;
 
-  /// 型体
+  // 型体
   String? factoryType;
 
-  /// 颜色
+  // 颜色
   String? color;
 
-  /// 订单件数
+  // 订单件数
   double? orderPiece;
 
-  /// 订单双数
+  // 订单双数
   double? orderQty;
 
-  /// 入包装区双数
+  // 入包装区双数
   double? inPackAreaQty;
 
-  /// 未入包装区双数
+  // 未入包装区双数
   double? notInPackAreaQty;
 
-  /// 可配箱双数
+  // 可配箱双数
   double? distributedQty;
 
-  /// 可配箱件数
+  // 可配箱件数
   double? distributedPiece;
 
-  /// 偏码数
+  // 偏码数
   double? remainQty;
 
-  /// SAP过账双数
+  // SAP过账双数
   double? sapFinishQty;
 
-  /// SAP过账件数
+  // SAP过账件数
   double? sapFinishPiece;
 
-  /// SAP未过账双数
+  // SAP未过账双数
   double? sapUnFinishQty;
 
-  /// SAP未过账件数
+  // SAP未过账件数
   double? sapUnFinishPiece;
 
   MoldingPackAreaReportInfo({
@@ -102,28 +102,28 @@ class MoldingPackAreaReportInfo {
 }
 
 class MoldingPackAreaReportDetailInfo {
-  /// 客户订单号
+  // 客户订单号
   String? clientOrderNumber;
 
-  /// 订单行号
+  // 订单行号
   String? clientOrderIndex;
 
-  /// 尺码
+  // 尺码
   String? size;
 
-  /// 订单双数
+  // 订单双数
   double? orderQty;
 
-  /// 订单件数
+  // 订单件数
   double? orderPiece;
 
-  /// 分配双数
+  // 分配双数
   double? distributedQty;
 
-  /// 分配件数
+  // 分配件数
   double? distributedPiece;
 
-  /// 偏码数
+  // 偏码数
   double? remainQty;
 
   MoldingPackAreaReportDetailInfo({

@@ -16,7 +16,7 @@ class WorkOrderListState {
   var partDetailSizeList = <SizeInfo>[].obs;
 
   WorkOrderListState() {
-    ///Initialize variables
+    //Initialize variables
   }
 
   query({

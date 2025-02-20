@@ -21,10 +21,10 @@ import 'translation.dart';
 import 'utils/web_api.dart';
 
 main() async {
-  ///切换测试库，打包时屏蔽
+  //切换测试库，打包时屏蔽
   // useTestUrl = true;
 
-  ///确保初始化完成才能加载耗时插件
+  //确保初始化完成才能加载耗时插件
   WidgetsFlutterBinding.ensureInitialized();
   if (GetPlatform.isMobile) {
     debugPrint('isMobile -----------');
@@ -81,7 +81,7 @@ main() async {
   // );
 }
 
-///路由感知 用于释放GetXController
+//路由感知 用于释放GetXController
 class GetXRouterObserver extends NavigatorObserver {
   @override
   void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
@@ -94,7 +94,7 @@ class GetXRouterObserver extends NavigatorObserver {
   }
 }
 
-///适配鼠标滚动
+//适配鼠标滚动
 class AppScrollBehavior extends MaterialScrollBehavior {
   @override
   Set<PointerDeviceKind> get dragDevices => {

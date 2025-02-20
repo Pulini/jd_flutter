@@ -47,7 +47,7 @@ class SpinnerController {
   }
 }
 
-///下啦列表
+//下啦列表
 class Spinner extends StatelessWidget {
   final SpinnerController controller;
 
