@@ -9,8 +9,6 @@ import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
 import 'package:jd_flutter/widget/scanner.dart';
 
-
-
 class SapPrintPickingTransferPage extends StatefulWidget {
   const SapPrintPickingTransferPage({super.key});
 
@@ -42,7 +40,7 @@ class _SapPrintPickingTransferPageState
       });
     });
     dialog = AlertDialog(
-      title: const Text('新托盘'),
+      title: Text('sap_print_picking_transfer_new_pallet'.tr),
       content: SizedBox(
         width: 300,
         child: EditText(controller: controller),
@@ -84,7 +82,7 @@ class _SapPrintPickingTransferPageState
           Row(
             children: [
               expandedTextSpan(
-                hint: '托盘号：',
+                hint: 'sap_print_picking_transfer_pallet_no'.tr,
                 text: list[0].palletNumber ?? '',
               ),
               Checkbox(
@@ -107,13 +105,18 @@ class _SapPrintPickingTransferPageState
                     Expanded(
                       child: Column(
                         children: [
-                          textSpan(hint: '标签号：', text: item.labelNumber ?? ''),
+                          textSpan(
+                              hint: 'sap_print_picking_transfer_label_no'.tr,
+                              text: item.labelNumber ?? ''),
                           Row(
                             children: [
                               expandedTextSpan(
-                                  hint: '型体:', text: item.typeBody ?? ''),
+                                  hint:
+                                      'sap_print_picking_transfer_type_body'.tr,
+                                  text: item.typeBody ?? ''),
                               textSpan(
-                                hint: '尺码/数量：',
+                                hint:
+                                    'sap_print_picking_transfer_size_or_qty'.tr,
                                 text:
                                     '${item.size} / ${item.quantity.toShowString()}',
                               )
@@ -143,7 +146,7 @@ class _SapPrintPickingTransferPageState
   @override
   Widget build(BuildContext context) {
     return pageBody(
-      title: '剩余物料移库',
+      title: 'sap_print_picking_transfer_surplus_material_transfer'.tr,
       actions: [
         TextButton(
           onPressed: () {
@@ -155,10 +158,14 @@ class _SapPrintPickingTransferPageState
                 ),
               );
             } else {
-              errorDialog(content: '请扫描或勾选要移库的货物标签！');
+              errorDialog(
+                content:
+                    'sap_print_picking_transfer_scan_or_select_label_fo_transfer_tips'
+                        .tr,
+              );
             }
           },
-          child: Text('移库'),
+          child: Text('sap_print_picking_transfer_transfer'.tr),
         ),
       ],
       body: ListView.builder(

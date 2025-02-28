@@ -1,41 +1,41 @@
 
 
-import 'photoBean.dart';
+import 'photo_bean.dart';
 
-/// ActionZone : "一楼会客厅"
-/// ActionZoneID : "0"
-/// CarBottom : ""
-/// CarCab : ""
-/// CarExterior : ""
-/// CarNo : ""
-/// CarRear : ""
-/// CarType : ""
-/// CardPic : ""
-/// Credentials : "123"
-/// DataSourceType : 0
-/// DateTime : "2024-03-14 14:46:34"
-/// ExamineID : "138236"
-/// Gate : "1号门"
-/// IDCard : "330322199408121212"
-/// InterID : ""
-/// Interviewee : "1446"
-/// IntervieweeName : "叶炎堂"
-/// LandingGear : ""
-/// LeavePics : []
-/// Name : "测试"
-/// Note : ""
-/// OwnGoods : ""
-/// PeoPic : ""
-/// Phone : "15267733701"
-/// SecurityStaff : "138236"
-/// SourceID : 0
-/// SubjectMatter : "测试"
-/// SubmitType : "0"
-/// Unit : "测试"
-/// VisitPics : []
-/// VisitedDept : "DHM制作车间成型课"
-/// VisitedFactory : "1"
-/// VisitorNum : "2"
+// ActionZone : "一楼会客厅"
+// ActionZoneID : "0"
+// CarBottom : ""
+// CarCab : ""
+// CarExterior : ""
+// CarNo : ""
+// CarRear : ""
+// CarType : ""
+// CardPic : ""
+// Credentials : "123"
+// DataSourceType : 0
+// DateTime : "2024-03-14 14:46:34"
+// ExamineID : "138236"
+// Gate : "1号门"
+// IDCard : "330322199408121212"
+// InterID : ""
+// Interviewee : "1446"
+// IntervieweeName : "叶炎堂"
+// LandingGear : ""
+// LeavePics : []
+// Name : "测试"
+// Note : ""
+// OwnGoods : ""
+// PeoPic : ""
+// Phone : "15267733701"
+// SecurityStaff : "138236"
+// SourceID : 0
+// SubjectMatter : "测试"
+// SubmitType : "0"
+// Unit : "测试"
+// VisitPics : []
+// VisitedDept : "DHM制作车间成型课"
+// VisitedFactory : "1"
+// VisitorNum : "2"
 
 class VisitAddRecordInfo {
   VisitAddRecordInfo({

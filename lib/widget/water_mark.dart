@@ -3,7 +3,7 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/widgets.dart';
 
-/// A widget that paints watermark.
+// A widget that paints watermark.
 class WaterMark extends StatefulWidget {
   const WaterMark({
     super.key,
@@ -11,10 +11,10 @@ class WaterMark extends StatefulWidget {
     required this.painter,
   });
 
-  /// 单元水印画笔
+  // 单元水印画笔
   final WaterMarkPainter painter;
 
-  /// 单元水印的重复方式
+  // 单元水印的重复方式
   final ImageRepeat repeat;
 
   @override
@@ -78,7 +78,7 @@ class _WaterMarkState extends State<WaterMark> {
     // 绘制单元水印并获取其大小
     final size = widget.painter.paintUnit(
       canvas,
-      MediaQueryData.fromView(ui.window).devicePixelRatio,
+      MediaQuery.of(context).devicePixelRatio,
     );
 
     final picture = recorder.endRecording();
@@ -99,26 +99,26 @@ class _WaterMarkState extends State<WaterMark> {
   }
 }
 
-/// 定义水印画笔
+// 定义水印画笔
 abstract class WaterMarkPainter {
-  /// 绘制"单元水印"，完整的水印是由单元水印重复平铺组成,返回值为"单元水印"占用空间的大小。
-  /// [devicePixelRatio]: 因为最终要将绘制内容保存为图片，所以在绘制时需要根据屏幕的
-  /// DPR来放大，以防止失真
+  // 绘制"单元水印"，完整的水印是由单元水印重复平铺组成,返回值为"单元水印"占用空间的大小。
+  // [devicePixelRatio]: 因为最终要将绘制内容保存为图片，所以在绘制时需要根据屏幕的
+  // DPR来放大，以防止失真
   Size paintUnit(Canvas canvas, double devicePixelRatio);
 
-  /// 是否需要重绘
+  // 是否需要重绘
   bool shouldRepaint(covariant WaterMarkPainter oldPainter) => true;
 }
 
-/// 文本水印画笔
+// 文本水印画笔
 class TextWaterMarkPainter extends WaterMarkPainter {
   TextWaterMarkPainter(
       {Key? key,
-        double? rotate,
-        EdgeInsets? padding,
-        TextStyle? textStyle,
-        required this.text,
-        this.textDirection = TextDirection.ltr})
+      double? rotate,
+      EdgeInsets? padding,
+      TextStyle? textStyle,
+      required this.text,
+      this.textDirection = TextDirection.ltr})
       : assert(rotate == null || rotate >= -90 && rotate <= 90),
         rotate = rotate ?? 0,
         padding = padding ?? const EdgeInsets.all(10.0),
@@ -271,8 +271,8 @@ class TextWaterMarkPainter extends WaterMarkPainter {
   }
 }
 
-/// 交错文本水印画笔，可以在水平或垂直方向上组合两个文本水印，
-/// 通过给第二个文本水印指定不同的 padding 来实现交错效果。
+// 交错文本水印画笔，可以在水平或垂直方向上组合两个文本水印，
+// 通过给第二个文本水印指定不同的 padding 来实现交错效果。
 class StaggerTextWaterMarkPainter extends WaterMarkPainter {
   StaggerTextWaterMarkPainter({
     required this.text,

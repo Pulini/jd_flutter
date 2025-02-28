@@ -1,5 +1,5 @@
-/// DeviceMessage : {"DeviceID":10473,"DeviceNo":"A013111516","DeviceName":"空调","Model":"格力立式3p","CustodianID":13927,"CustodianCode":"007371","CustodianName":"廖小燕","CustodianDept":"金帝厂设备组","CustodianTel":"15869470406"}
-/// RepairOrder : {"InterID":5,"Number":"SBWXJLD2000005","DeviceID":10473,"DeviceNo":"A013111516","DeviceName":"空调","Model":"格力立式3p","CustodianID":13927,"CustodianCode":"007371","CustodianDept":"金帝厂设备组","CustodianTel":"15869470406","MaintenanceUnit":"。","RepairParts":"。","InspectionTime":"2020-07-06","FaultDescription":"，","RepairTime":"2020-07-06","IssueCause":"其它","AssessmentPrevention":"，","Custodian":"","RepairEntryData":[{"AccessoriesName":"，","Manufacturer":"，","Specification":"，","Quantity":1,"Unit":"，","Budget":1,"Remarks":"，"}]}
+// DeviceMessage : {"DeviceID":10473,"DeviceNo":"A013111516","DeviceName":"空调","Model":"格力立式3p","CustodianID":13927,"CustodianCode":"007371","CustodianName":"廖小燕","CustodianDept":"金帝厂设备组","CustodianTel":"15869470406"}
+// RepairOrder : {"InterID":5,"Number":"SBWXJLD2000005","DeviceID":10473,"DeviceNo":"A013111516","DeviceName":"空调","Model":"格力立式3p","CustodianID":13927,"CustodianCode":"007371","CustodianDept":"金帝厂设备组","CustodianTel":"15869470406","MaintenanceUnit":"。","RepairParts":"。","InspectionTime":"2020-07-06","FaultDescription":"，","RepairTime":"2020-07-06","IssueCause":"其它","AssessmentPrevention":"，","Custodian":"","RepairEntryData":[{"AccessoriesName":"，","Manufacturer":"，","Specification":"，","Quantity":1,"Unit":"，","Budget":1,"Remarks":"，"}]}
 
 class DeviceMaintenanceInfo {
   DeviceMaintenanceInfo({
@@ -26,25 +26,25 @@ class DeviceMaintenanceInfo {
 
 }
 
-/// InterID : 5
-/// Number : "SBWXJLD2000005"
-/// DeviceID : 10473
-/// DeviceNo : "A013111516"
-/// DeviceName : "空调"
-/// Model : "格力立式3p"
-/// CustodianID : 13927
-/// CustodianCode : "007371"
-/// CustodianDept : "金帝厂设备组"
-/// CustodianTel : "15869470406"
-/// MaintenanceUnit : "。"
-/// RepairParts : "。"
-/// InspectionTime : "2020-07-06"
-/// FaultDescription : "，"
-/// RepairTime : "2020-07-06"
-/// IssueCause : "其它"
-/// AssessmentPrevention : "，"
-/// Custodian : ""
-/// RepairEntryData : [{"AccessoriesName":"，","Manufacturer":"，","Specification":"，","Quantity":1,"Unit":"，","Budget":1,"Remarks":"，"}]
+// InterID : 5
+// Number : "SBWXJLD2000005"
+// DeviceID : 10473
+// DeviceNo : "A013111516"
+// DeviceName : "空调"
+// Model : "格力立式3p"
+// CustodianID : 13927
+// CustodianCode : "007371"
+// CustodianDept : "金帝厂设备组"
+// CustodianTel : "15869470406"
+// MaintenanceUnit : "。"
+// RepairParts : "。"
+// InspectionTime : "2020-07-06"
+// FaultDescription : "，"
+// RepairTime : "2020-07-06"
+// IssueCause : "其它"
+// AssessmentPrevention : "，"
+// Custodian : ""
+// RepairEntryData : [{"AccessoriesName":"，","Manufacturer":"，","Specification":"，","Quantity":1,"Unit":"，","Budget":1,"Remarks":"，"}]
 
 class RepairOrder {
   RepairOrder({
@@ -142,13 +142,13 @@ class RepairOrder {
 
 }
 
-/// AccessoriesName : "，"
-/// Manufacturer : "，"
-/// Specification : "，"
-/// Quantity : 1
-/// Unit : "，"
-/// Budget : 1
-/// Remarks : "，"
+// AccessoriesName : "，"
+// Manufacturer : "，"
+// Specification : "，"
+// Quantity : 1
+// Unit : "，"
+// Budget : 1
+// Remarks : "，"
 
 class RepairEntryData {
   RepairEntryData({
@@ -191,15 +191,15 @@ class RepairEntryData {
 
 }
 
-/// DeviceID : 10473
-/// DeviceNo : "A013111516"
-/// DeviceName : "空调"
-/// Model : "格力立式3p"
-/// CustodianID : 13927
-/// CustodianCode : "007371"
-/// CustodianName : "廖小燕"
-/// CustodianDept : "金帝厂设备组"
-/// CustodianTel : "15869470406"
+// DeviceID : 10473
+// DeviceNo : "A013111516"
+// DeviceName : "空调"
+// Model : "格力立式3p"
+// CustodianID : 13927
+// CustodianCode : "007371"
+// CustodianName : "廖小燕"
+// CustodianDept : "金帝厂设备组"
+// CustodianTel : "15869470406"
 
 class DeviceMessage {
   DeviceMessage({

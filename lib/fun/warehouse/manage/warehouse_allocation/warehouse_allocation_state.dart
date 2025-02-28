@@ -16,7 +16,7 @@ class WarehouseAllocationState {
     dataList.clear();
   }
 
-  ///添加条码
+  //添加条码
   addCode( String code ) {
       if(code.isNotEmpty){ //如果条码不为空
           if(isExists(code)){

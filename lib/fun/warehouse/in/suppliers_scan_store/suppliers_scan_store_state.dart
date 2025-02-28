@@ -12,15 +12,15 @@ class SuppliersScanStoreState {
   var usedBarCodeList = <UsedBarCodeInfo>[].obs; //入库过的条码数据
   var handCode = '';
   PalletDetailItem2Info? pallet;
-  var palletNumber = ''.obs;  ///托盘号
-  var peopleName = ''.obs;  ///员工名字
+  var palletNumber = ''.obs;  //托盘号
+  var peopleName = ''.obs;  //员工名字
   var usedList = <String>[];
   var red = false.obs;
 
   var peopleNumber = TextEditingController(); //员工工号
 
 
-  ///从数据库读取条码信息
+  //从数据库读取条码信息
   SuppliersScanStoreState() {
     BarCodeInfo.getSave(
       type: barCodeTypes[3],

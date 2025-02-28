@@ -1,6 +1,6 @@
-/// PalletNumber : "F101-33"
-/// CreationDate : "0000-00-00"
-/// UsedNum : 0.0
+// PalletNumber : "F101-33"
+// CreationDate : "0000-00-00"
+// UsedNum : 0.0
 
 class SapPalletInfo {
   SapPalletInfo({

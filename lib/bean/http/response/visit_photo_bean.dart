@@ -1,5 +1,5 @@
-/// Photo : 2300
-/// TypeAdd : true
+// Photo : 2300
+// TypeAdd : true
 
 class VisitPhotoBean {
   VisitPhotoBean({

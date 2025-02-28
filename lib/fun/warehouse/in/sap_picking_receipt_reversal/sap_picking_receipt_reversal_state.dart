@@ -11,9 +11,6 @@ class SapPickingReceiptReversalState {
   var orderList = <PickingReceiptReversalInfo>[].obs;
   var select = -1.obs;
 
-  SapPickingReceiptReversalState() {
-    ///Initialize variables
-  }
 
   queryOrderList({
     required String order,
@@ -25,7 +22,9 @@ class SapPickingReceiptReversalState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: orderType == 1 ? '正在获取已领料列表...' : '正在获取已收货列表...',
+      loading: orderType == 1
+          ? 'sap_picking_receipt_reversal_getting_picking_list'.tr
+          : 'sap_picking_receipt_reversal_getting_take_list'.tr,
       method: webApiSapProductionReceipt,
       body: {
         'ZTYPE': orderType,
@@ -60,7 +59,7 @@ class SapPickingReceiptReversalState {
   }) {
     orderList[select].item?.forEach((v) => {});
     sapPost(
-      loading: '正在获取已收货列表...',
+      loading: 'sap_picking_receipt_reversal_getting_take_list'.tr,
       method: webApiSapProductionReceipt,
       body: {
         'BUDAT': postingDate,

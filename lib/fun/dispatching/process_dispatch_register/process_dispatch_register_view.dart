@@ -35,35 +35,35 @@ class _ProcessDispatchRegisterPageState
     listWidget.add(Row(
       children: [
         expandedFrameText(
-          text: '销售订单号',
+          text: 'process_dispatch_register_sales_order_no'.tr,
           flex: 3,
           backgroundColor: Colors.blue,
           textColor: Colors.white,
           isBold: true,
         ),
         expandedFrameText(
-          text: '尺码',
+          text: 'process_dispatch_register_size'.tr,
           backgroundColor: Colors.blue,
           textColor: Colors.white,
           alignment: Alignment.center,
           isBold: true,
         ),
         expandedFrameText(
-          text: '日派数',
+          text: 'process_dispatch_register_daily_dispatch_qty'.tr,
           backgroundColor: Colors.blue,
           textColor: Colors.white,
           alignment: Alignment.centerRight,
           isBold: true,
         ),
         expandedFrameText(
-          text: '已派',
+          text: 'process_dispatch_register_dispatched'.tr,
           backgroundColor: Colors.blue,
           textColor: Colors.white,
           alignment: Alignment.centerRight,
           isBold: true,
         ),
         expandedFrameText(
-          text: '数量',
+          text: 'process_dispatch_register_quantity'.tr,
           backgroundColor: Colors.blue,
           textColor: Colors.white,
           alignment: Alignment.centerRight,
@@ -115,7 +115,7 @@ class _ProcessDispatchRegisterPageState
     listWidget.add(Row(
       children: [
         expandedFrameText(
-          text: '合计',
+          text: 'process_dispatch_register_total'.tr,
           flex: 4,
           isBold: true,
           textColor: Colors.blue,
@@ -155,14 +155,14 @@ class _ProcessDispatchRegisterPageState
     listWidget.add(Row(
       children: [
         expandedFrameText(
-          text: '销售订单号',
+          text: 'process_dispatch_register_report'.tr,
           flex: 3,
           backgroundColor: Colors.blue,
           textColor: Colors.white,
           isBold: true,
         ),
         expandedFrameText(
-          text: '尺码',
+          text: 'process_dispatch_register_size'.tr,
           backgroundColor: Colors.blue,
           textColor: Colors.white,
           alignment: Alignment.center,
@@ -170,21 +170,21 @@ class _ProcessDispatchRegisterPageState
         ),
         expandedFrameText(
           padding: const EdgeInsets.only(bottom: 5, top: 5),
-          text: '日派数',
+          text: 'process_dispatch_register_daily_dispatch_qty'.tr,
           backgroundColor: Colors.blue,
           textColor: Colors.white,
           alignment: Alignment.centerRight,
           isBold: true,
         ),
         expandedFrameText(
-          text: '已派',
+          text: 'process_dispatch_register_dispatched'.tr,
           backgroundColor: Colors.blue,
           textColor: Colors.white,
           alignment: Alignment.centerRight,
           isBold: true,
         ),
         expandedFrameText(
-          text: '数量',
+          text: 'process_dispatch_register_quantity'.tr,
           backgroundColor: Colors.blue,
           textColor: Colors.white,
           alignment: Alignment.centerRight,
@@ -246,7 +246,7 @@ class _ProcessDispatchRegisterPageState
     listWidget.add(Row(
       children: [
         expandedFrameText(
-          text: '合计',
+          text: 'process_dispatch_register_total'.tr,
           flex: 4,
           isBold: true,
           textColor: Colors.blue,
@@ -292,7 +292,7 @@ class _ProcessDispatchRegisterPageState
       actions: [
         TextButton(
           onPressed: () => state.isDetails.value = !state.isDetails.value,
-          child: const Text('报工'),
+          child: Text('process_dispatch_register_report'.tr),
         )
       ],
       body: Obx(
@@ -300,17 +300,23 @@ class _ProcessDispatchRegisterPageState
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             EditText(
-              hint: '工票或生产派工单',
+              hint:
+                  'process_dispatch_register_work_ticket_or_production_dispatch_order'
+                      .tr,
               controller: controller,
             ),
             if (state.typeBody.isNotEmpty)
               Container(
-                child: textSpan(hint: '工厂型体：', text: state.typeBody.value),
+                child: textSpan(
+                    hint: 'process_dispatch_register_type_body'.tr,
+                    text: state.typeBody.value),
                 margin: const EdgeInsets.only(left: 8, right: 8),
               ),
             if (state.progress.isNotEmpty)
               Container(
-                child: textSpan(hint: '工序：', text: state.progress.value),
+                child: textSpan(
+                    hint: 'process_dispatch_register_process'.tr,
+                    text: state.progress.value),
                 margin: const EdgeInsets.only(left: 8, right: 8),
               ),
             Expanded(
@@ -323,7 +329,7 @@ class _ProcessDispatchRegisterPageState
               children: [
                 Expanded(
                   child: CombinationButton(
-                    text: '查询',
+                    text: 'process_dispatch_register_query'.tr,
                     isEnabled: controller.text.isNotEmpty,
                     click: () => logic.queryOrder(controller.text),
                     combination: Combination.left,
@@ -331,7 +337,7 @@ class _ProcessDispatchRegisterPageState
                 ),
                 Expanded(
                   child: CombinationButton(
-                    text: '更换',
+                    text: 'process_dispatch_register_replace'.tr,
                     click: () =>
                         Get.to(() => const ModifyLabelWorkerPage())?.then(
                       (v) => pdaScanner(
@@ -344,14 +350,16 @@ class _ProcessDispatchRegisterPageState
                 ),
                 Expanded(
                   child: CombinationButton(
-                    text: state.isDetails.value ? '汇总' : '明细',
+                    text: state.isDetails.value
+                        ? 'process_dispatch_register_summary'.tr
+                        : 'process_dispatch_register_detail'.tr,
                     click: () => state.isDetails.value = !state.isDetails.value,
                     combination: Combination.middle,
                   ),
                 ),
                 Expanded(
                   child: CombinationButton(
-                    text: '打印贴标',
+                    text: 'process_dispatch_register_print_label'.tr,
                     click: () => logic.goPrintLabel(),
                     combination: Combination.right,
                   ),

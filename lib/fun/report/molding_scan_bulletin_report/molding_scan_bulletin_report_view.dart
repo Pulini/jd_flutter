@@ -176,8 +176,8 @@ class _MoldingScanBulletinReportPageState
                         newIndex: 0,
                       )),
                   child: Text(
-                    '置顶',
-                    style: TextStyle(
+                    'molding_scan_bulletin_report_top_up'.tr,
+                    style: const TextStyle(
                       color: Colors.lightBlue,
                       fontWeight: FontWeight.bold,
                     ),
@@ -252,9 +252,9 @@ class _MoldingScanBulletinReportPageState
                 () => logic.setRefresh(10),
               )),
           Obx(() => circleButton(
-                const Text(
-                  '永不',
-                  style: TextStyle(
+                Text(
+                  'molding_scan_bulletin_report_never'.tr,
+                  style: const TextStyle(
                     fontSize: 11,
                     fontWeight: FontWeight.bold,
                   ),

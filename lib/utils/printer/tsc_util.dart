@@ -9,20 +9,20 @@ import 'package:flutter/services.dart';
 import 'package:image/image.dart' as img;
 import 'package:jd_flutter/utils/utils.dart';
 
-///dpi
+//dpi
 const _dpi = 8;
 
-///半dpi
+//半dpi
 const _halfDpi = 4;
 
-///设置打印参数
-///[width] 纸宽
-///[height] 纸高
-///[speed] 打印速度
-///[density] 打印浓度
-///[sensor] 感应器类型
-///[sensorDistance] 感应器距离
-///[sensorOffset] 感应器偏移
+//设置打印参数
+//[width] 纸宽
+//[height] 纸高
+//[speed] 打印速度
+//[density] 打印浓度
+//[sensor] 感应器类型
+//[sensorDistance] 感应器距离
+//[sensorOffset] 感应器偏移
 Uint8List _tscSetup(
   int width,
   int height, {
@@ -46,54 +46,54 @@ Uint8List _tscSetup(
   return utf8.encode(message);
 }
 
-/// 清空缓冲区
+// 清空缓冲区
 Uint8List _tscClearBuffer() => utf8.encode('CLS\r\n');
 
-/// 打印指令
-/// [quantity] 打印次数
-/// [copy]  复制次数
+// 打印指令
+// [quantity] 打印次数
+// [copy]  复制次数
 Uint8List _tscPrint({int quantity = 1, int copy = 1}) =>
     utf8.encode('PRINT $quantity, $copy\r\n');
 
-///下发拆切指令
+//下发拆切指令
 Uint8List _tscCutter() => utf8.encode('SET CUTTER 1\r\n');
 
-/// 矩形
-/// [sx] 左上角x坐标
-/// [sy] 左上角y坐标
-/// [ex] 右下角x坐标
-/// [ey] 右下角y坐标
-/// [crude] 粗细
+// 矩形
+// [sx] 左上角x坐标
+// [sy] 左上角y坐标
+// [ex] 右下角x坐标
+// [ey] 右下角y坐标
+// [crude] 粗细
 Uint8List _tscBox(int sx, int sy, int ex, int ey, {int? crude = 4}) =>
     utf8.encode('BOX $sx,$sy,$ex,$ey,$crude\n');
 
-///圆形
-///[x] x坐标
-///[y] y坐标
-///[diameter] 直径
-///[thickness] 粗细
+//圆形
+//[x] x坐标
+//[y] y坐标
+//[diameter] 直径
+//[thickness] 粗细
 // ignore: unused_element
 Uint8List _tscCircle(int x, int y, int diameter, int thickness) =>
     utf8.encode('CIRCLE $x,$y,$diameter,$thickness\r\n');
 
-/// 线
-///[x] 左上角x坐标
-///[y] 左上角y坐标
-///[width] 线宽
-///[height] 线高
+// 线
+//[x] 左上角x坐标
+//[y] 左上角y坐标
+//[width] 线宽
+//[height] 线高
 Uint8List _tscLine(int x, int y, int width, int height) =>
     utf8.encode('BAR $x,$y,$width,$height\r\n');
 
-///二维码
-///[x] 左上角x坐标
-///[y] 左上角y坐标
-///[eccLevel] 纠错等级
-///[cellWidth] 单元格宽度
-///[mode] 编码模式
-///[rotation] 旋转角度
-///[version] 版本
-///[mask] 掩码
-///[content] 内容
+//二维码
+//[x] 左上角x坐标
+//[y] 左上角y坐标
+//[eccLevel] 纠错等级
+//[cellWidth] 单元格宽度
+//[mode] 编码模式
+//[rotation] 旋转角度
+//[version] 版本
+//[mask] 掩码
+//[content] 内容
 Uint8List _tscQrCode(
   int x,
   int y,
@@ -108,37 +108,37 @@ Uint8List _tscQrCode(
     utf8.encode(
         'QRCODE $x,$y,$ecc,$cell,$mode,$rotation,$version,$mask,"$content"\r\n');
 
-/// 打印条形码
-///[x] X坐标
-///[y] Y坐标
-///[content] 内容
-///[sym] 条码类型，默认为"UCC128CCA"
-///[rotate] 旋转角度，默认为0，范围0 - 270
-///[moduleWidth] 模组宽度，默认为2，范围1 - 10
-///[sepHt] 分隔符高度，默认为2，可选1或2
-///[segWidth] UCC/EAN-128的高度，默认为35，单位DOT，范围1-500可选
+// 打印条形码
+//[x] X坐标
+//[y] Y坐标
+//[content] 内容
+//[sym] 条码类型，默认为"UCC128CCA"
+//[rotate] 旋转角度，默认为0，范围0 - 270
+//[moduleWidth] 模组宽度，默认为2，范围1 - 10
+//[sepHt] 分隔符高度，默认为2，可选1或2
+//[segWidth] UCC/EAN-128的高度，默认为35，单位DOT，范围1-500可选
 // ignore: unused_element
 Uint8List _tscBarCode(
   int x,
   int y,
   String content, {
-  String sym = "UCC128CCA",
-  String rotate = "0",
-  String moduleWidth = "2",
-  String sepHt = "2",
-  String segWidth = "35",
+  String sym = 'UCC128CCA',
+  String rotate = '0',
+  String moduleWidth = '2',
+  String sepHt = '2',
+  String segWidth = '35',
 }) =>
     utf8.encode(
         'RSS $x,$y,"$sym",$rotate,$moduleWidth,$sepHt,$segWidth,"$content"\r\n');
 
-///文本
-///[x] 左上角x坐标
-///[y] 左上角y坐标
-///[font] 字体
-///[rotation] 旋转角度
-///[xMultiplication] x方向放大倍数
-///[yMultiplication] y方向放大倍数
-///[string] 文本
+//文本
+//[x] 左上角x坐标
+//[y] 左上角y坐标
+//[font] 字体
+//[rotation] 旋转角度
+//[xMultiplication] x方向放大倍数
+//[yMultiplication] y方向放大倍数
+//[string] 文本
 // ignore: unused_element
 List<int> _tscText(
   int x,
@@ -152,11 +152,11 @@ List<int> _tscText(
     gbk.encode(
         'TEXT $x,$y,"$fontSize",$rotation,$xMultiplication,$yMultiplication,"$text"\r\n');
 
-///图片文本
-///[xAxis] 左上角x坐标
-///[yAxis] 左上角y坐标
-///[fontSize] 字体大小
-///[text] 文本内容
+//图片文本
+//[xAxis] 左上角x坐标
+//[yAxis] 左上角y坐标
+//[fontSize] 字体大小
+//[text] 文本内容
 Future<Uint8List> _tscBitmapText(
   int xAxis,
   int yAxis,
@@ -340,10 +340,10 @@ Future<Uint8List> _tscBitmap(
     ..addAll(utf8.encode('\r\n')));
 }
 
-///创建一个文本列表，将传入的文本根据字体大小和限宽进行拆分换行
-///[text] 文本内容
-///[fontSize] 字体大小
-///[maxWidthPx] 最大宽度
+//创建一个文本列表，将传入的文本根据字体大小和限宽进行拆分换行
+//[text] 文本内容
+//[fontSize] 字体大小
+//[maxWidthPx] 最大宽度
 List<String> contextFormat(String text, double fontSize, double maxWidthPx) {
   final List<String> lines = <String>[];
   String currentLine = '';
@@ -370,10 +370,10 @@ List<String> contextFormat(String text, double fontSize, double maxWidthPx) {
   return lines;
 }
 
-///表格格式化
-///[title] 表格标题
-///[bottom] 表格底部
-///[tableData] 表格数据
+//表格格式化
+//[title] 表格标题
+//[bottom] 表格底部
+//[tableData] 表格数据
 List<List<String>> tableFormat(
   String title,
   String bottom,
@@ -466,12 +466,12 @@ List<List<String>> tableFormat(
 
 //------------------------------------以上为tsc指令集--------------------------------------
 
-/// 财产标签
-/// 70mm X 40mm
-/// [id] 资产ID
-/// [name] 资产名称
-/// [number] 资产编号
-/// [date] 日期
+// 财产标签
+// 70mm X 40mm
+// [id] 资产ID
+// [name] 资产名称
+// [number] 资产编号
+// [date] 日期
 Future<List<Uint8List>> labelForProperty(
   String id,
   String name,
@@ -496,14 +496,14 @@ Future<List<Uint8List>> labelForProperty(
       _tscPrint()
     ];
 
-///料头标签
-///[qrCode] 二维码信息
-///[machine] 派工机台
-///[shift] 班次
-///[startDate] 派工日期
-///[factoryType] 工厂型体
-///[stubBar] 料头名称
-///[stuBarCode] 料头编码
+//料头标签
+//[qrCode] 二维码信息
+//[machine] 派工机台
+//[shift] 班次
+//[startDate] 派工日期
+//[factoryType] 工厂型体
+//[stubBar] 料头名称
+//[stuBarCode] 料头编码
 Future<List<Uint8List>> labelForSurplusMaterial({
   required String qrCode,
   required String machine,
@@ -539,19 +539,19 @@ Future<List<Uint8List>> labelForSurplusMaterial({
   return list;
 }
 
-///通用固定标签
-///[qrCode] 二维码内容
-///[title]  主标题文本
-///[subTitle] 子标题文本
-///[content]  主内容文本
-///[subContent1]  子内容文本1
-///[subContent2]  字内容文本2
-///[bottomLeftText1]  左下文本1
-///[bottomLeftText2]  左下文本2
-///[bottomMiddleText1]  中下文本1
-///[bottomMiddleText2]  中下文本2
-///[bottomRightText1] 右下文本1
-///[bottomRightText2] 右下文本2
+//通用固定标签
+//[qrCode] 二维码内容
+//[title]  主标题文本
+//[subTitle] 子标题文本
+//[content]  主内容文本
+//[subContent1]  子内容文本1
+//[subContent2]  字内容文本2
+//[bottomLeftText1]  左下文本1
+//[bottomLeftText2]  左下文本2
+//[bottomMiddleText1]  中下文本1
+//[bottomMiddleText2]  中下文本2
+//[bottomRightText1] 右下文本1
+//[bottomRightText2] 右下文本2
 Future<List<Uint8List>> labelMultipurposeFixed({
   String qrCode = '',
   String title = '',
@@ -662,20 +662,20 @@ Future<List<Uint8List>> labelMultipurposeFixed({
   return list;
 }
 
-///通用动态标签
-///[qrCode] 二维码内容
-///[title]  主标题文本
-///[subTitle] 子标题文本
-///[tableTitle] 表格标题文本
-///[tableTitleTips] 表格标题提示文本
-///[tableSubTitle]  表格子标题文本
-///[tableFirstLineTitle]  表格第一行标题文本
-///[tableLastLineTitle] 表格最后一行标题文本
-///[tableData]  表格数据
-///[bottomLeftText1]  左下文本1
-///[bottomLeftText2]  左下文本2
-///[bottomRightText1] 右下文本1
-///[bottomRightText2] 右下文本2
+//通用动态标签
+//[qrCode] 二维码内容
+//[title]  主标题文本
+//[subTitle] 子标题文本
+//[tableTitle] 表格标题文本
+//[tableTitleTips] 表格标题提示文本
+//[tableSubTitle]  表格子标题文本
+//[tableFirstLineTitle]  表格第一行标题文本
+//[tableLastLineTitle] 表格最后一行标题文本
+//[tableData]  表格数据
+//[bottomLeftText1]  左下文本1
+//[bottomLeftText2]  左下文本2
+//[bottomRightText1] 右下文本1
+//[bottomRightText2] 右下文本2
 Future<List<Uint8List>> labelMultipurposeDynamic({
   String qrCode = '',
   String title = '',

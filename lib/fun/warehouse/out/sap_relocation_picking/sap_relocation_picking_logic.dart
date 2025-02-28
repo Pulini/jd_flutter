@@ -10,17 +10,9 @@ import 'sap_relocation_picking_state.dart';
 class SapRelocationPickingLogic extends GetxController {
   final SapRelocationPickingState state = SapRelocationPickingState();
 
-  @override
-  void onReady() {
-    // TODO: implement onReady
-    super.onReady();
-  }
 
-  @override
-  void onClose() {
-    // TODO: implement onClose
-    super.onClose();
-  }
+
+
 
   scanCode(String code) {
     if (code.isPallet()) {
@@ -33,7 +25,7 @@ class SapRelocationPickingLogic extends GetxController {
     }
     if (code.isLabel()) {
       if (state.materialList.any((v) => v.labelCode == code)) {
-        showSnackBar(title: '错误', message: '条码已扫', isWarning: true);
+        showSnackBar(message: 'sap_relocation_pick_scanned_barcode'.tr, isWarning: true);
       } else {
         state.checkPalletOrLabel(
           pallet: '',

@@ -11,18 +11,6 @@ import 'sap_surplus_material_stock_in_state.dart';
 class SapSurplusMaterialStockInLogic extends GetxController {
   final SapSurplusMaterialStockInState state = SapSurplusMaterialStockInState();
 
-  @override
-  void onReady() {
-    // TODO: implement onReady
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    // TODO: implement onClose
-    super.onClose();
-  }
-
   setWeighbridgeState(String weighbridgeState) {
     state.weighbridgeStateText.value =
         getWeighbridgeStateText(weighbridgeState);
@@ -39,15 +27,15 @@ class SapSurplusMaterialStockInLogic extends GetxController {
   String getWeighbridgeStateText(String weighbridgeState) {
     switch (weighbridgeState) {
       case 'WEIGHT_MSG_DEVICE_DETACHED':
-        return '地磅断开';
+        return 'sap_surplus_material_stock_in_weighbridge_disconnect'.tr;
       case 'WEIGHT_MSG_DEVICE_NOT_CONNECTED':
-        return '地磅未连接';
+        return 'sap_surplus_material_stock_in_weighbridge_unconnected'.tr;
       case 'WEIGHT_MSG_OPEN_DEVICE_SUCCESS':
-        return '地磅连接成功';
+        return 'sap_surplus_material_stock_in_weighbridge_connected'.tr;
       case 'WEIGHT_MSG_OPEN_DEVICE_FAILED':
-        return '地磅连接失败';
+        return 'sap_surplus_material_stock_in_weighbridge_connect_failed'.tr;
       case 'WEIGHT_MSG_READ_ERROR':
-        return '地磅连接异常';
+        return 'sap_surplus_material_stock_in_weighbridge_connect_error'.tr;
     }
     return '';
   }
@@ -99,19 +87,30 @@ class SapSurplusMaterialStockInLogic extends GetxController {
       var codeData = SurplusMaterialLabelInfo.fromJson(jsonDecode(code));
       if (state.materialList.isNotEmpty &&
           state.materialList[0].dispatchNumber != codeData.dispatchNumber) {
-        informationDialog(content: '请扫描同一派工单的料头贴标！！');
+        informationDialog(
+          content:
+              'sap_surplus_material_stock_in_scan_wrong_order_label_tips'.tr,
+        );
         return;
       }
       if (state.materialList.any((v) => v.number == codeData.stubBar)) {
-        informationDialog(content: '此料头已扫！！');
+        informationDialog(
+          content:
+              'sap_surplus_material_stock_in_surplus_material_already_scanned'
+                  .tr,
+        );
         return;
       }
       if (state.materialList.length == 3) {
-        informationDialog(content: '一次只能入库 3 种料头！！');
+        informationDialog(
+            content:
+                'sap_surplus_material_stock_in_surplus_material_stock_in_tips！.tr,！');
         return;
       }
       if (await codeData.isExist()) {
-        informationDialog(content: '标签已入库！！');
+        informationDialog(
+          content: 'sap_surplus_material_stock_in_label_already_stock_in'.tr,
+        );
         return;
       }
       state.getMaterialInfoByCode(
@@ -125,17 +124,25 @@ class SapSurplusMaterialStockInLogic extends GetxController {
         error: (msg) => errorDialog(content: msg),
       );
     } catch (e) {
-      errorDialog(content: '解析标签失败！！');
+      errorDialog(
+        content: 'sap_surplus_material_stock_in_analysis_label_failed'.tr,
+      );
     }
   }
 
   bool checkSubmitData() {
     if (state.materialList.isEmpty) {
-      informationDialog(content: '无数据可提交！！');
+      informationDialog(
+        content: 'sap_surplus_material_stock_in_no_data_submit'.tr,
+      );
       return false;
     }
     if (state.materialList.any((v) => v.editQty <= 0)) {
-      informationDialog(content: '请填写料头重量！！');
+      informationDialog(
+        content:
+            'sap_surplus_material_stock_in_input_surplus_material_weight_tips'
+                .tr,
+      );
       return false;
     }
     return true;
@@ -148,8 +155,8 @@ class SapSurplusMaterialStockInLogic extends GetxController {
         for (var v in state.materialList) {
           v.save();
         }
-        state.materialList.value=[];
-        state.dispatchOrderNumber.value='';
+        state.materialList.value = [];
+        state.dispatchOrderNumber.value = '';
         successDialog(content: msg);
       },
       error: (msg) => errorDialog(content: msg),

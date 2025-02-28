@@ -187,9 +187,9 @@ class _PropertyPageState extends State<PropertyPage> {
                 child: Obx(() => TabBarView(
                       controller: logic.tabController,
                       children: [
-                        listView("2"),
-                        listView("0"),
-                        listView("1"),
+                        listView('2'),
+                        listView('0'),
+                        listView('1'),
                       ],
                     )),
               ),

@@ -1,13 +1,13 @@
-/// WorkShopName : "裁断车间"
-/// OrganizeName : "金帝"
-/// ParentDeptID : "金帝裁断课"
-/// DeptID : "金帝裁断5组"
-/// ToDayMustQty : 0.0
-/// TimeMustQty : 0.0
-/// TimeQty : 0.0
-/// NoTimeQty : 0.0
-/// TimeFinishRate : "0.00%"
-/// NoDoingReason : ""
+// WorkShopName : "裁断车间"
+// OrganizeName : "金帝"
+// ParentDeptID : "金帝裁断课"
+// DeptID : "金帝裁断5组"
+// ToDayMustQty : 0.0
+// TimeMustQty : 0.0
+// TimeQty : 0.0
+// NoTimeQty : 0.0
+// TimeFinishRate : "0.00%"
+// NoDoingReason : ""
 
 class WorkshopProductionDailyReportDetailInfo{
   WorkshopProductionDailyReportDetailInfo({
@@ -61,14 +61,14 @@ class WorkshopProductionDailyReportDetailInfo{
   }
 
 }
-/// WorkShopName : "贴合车间"
-/// OrganizeName : "Gold Emperor(Myanmar)Company Limited"
-/// ToDayMustQty : 0.0
-/// ToDayQty : 0.0
-/// NoToDayQty : 0.0
-/// ToDayFinishRate : "0.00%"
-/// LJQty : 0.0
-/// NoDoingReason : ""
+// WorkShopName : "贴合车间"
+// OrganizeName : "Gold Emperor(Myanmar)Company Limited"
+// ToDayMustQty : 0.0
+// ToDayQty : 0.0
+// NoToDayQty : 0.0
+// ToDayFinishRate : "0.00%"
+// LJQty : 0.0
+// NoDoingReason : ""
 
 class WorkshopProductionDailyReportSummaryInfo  {
   WorkshopProductionDailyReportSummaryInfo({

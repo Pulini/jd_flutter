@@ -1,6 +1,6 @@
-/// SalesAndDistributionVoucherNumber : "J2403600"
-/// MaterialCode : "01202844"
-/// MaterialName : "1.0mm*1.35m黑色弹力压花擦焦PU"
+// SalesAndDistributionVoucherNumber : "J2403600"
+// MaterialCode : "01202844"
+// MaterialName : "1.0mm*1.35m黑色弹力压花擦焦PU"
 
 class OrderColorList {
   OrderColorList({

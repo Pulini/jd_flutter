@@ -69,12 +69,15 @@ class _SapInkColorMatchingDetailPageState
                                 ),
                         )),
                     expandedTextSpan(
-                      hint: '设备：',
+                      hint: 'sap_ink_color_matching_detail_device'.tr,
                       text: data.deviceName,
                     ),
                     IconButton(
                       onPressed: () => askDialog(
-                        content: '确定要删除<${data.deviceName}>的物料吗？',
+                        content:
+                            'sap_ink_color_matching_detail_delete_tips'.trArgs([
+                          data.deviceName,
+                        ]),
                         confirm: () {
                           data.close();
                           state.inkColorList.remove(data);
@@ -105,13 +108,14 @@ class _SapInkColorMatchingDetailPageState
                       ),
                       child: ballColor == Colors.transparent
                           ? Center(
-                              child: Text('无'),
+                              child:
+                                  Text('sap_ink_color_matching_detail_null'.tr),
                             )
                           : null,
                     ),
                     expandedTextSpan(
                       flex: 3,
-                      hint: '物料：',
+                      hint: 'sap_ink_color_matching_detail_material'.tr,
                       text: '(${data.materialCode})${data.materialName}',
                       textColor: Colors.black87,
                     ),
@@ -120,7 +124,9 @@ class _SapInkColorMatchingDetailPageState
                       child: Obx(() => Row(
                             children: [
                               textSpan(
-                                hint: '调前重量：',
+                                hint:
+                                    'sap_ink_color_matching_detail_before_toning_weight'
+                                        .tr,
                                 text:
                                     '${data.weightBeforeColorMix.value.toFixed(4).toShowString()} ${data.unit.value}',
                                 textColor: data.weightBeforeLock.value
@@ -152,7 +158,9 @@ class _SapInkColorMatchingDetailPageState
                       child: Obx(() => Row(
                             children: [
                               textSpan(
-                                hint: '调后重量：',
+                                hint:
+                                    'sap_ink_color_matching_detail_after_toning_weight'
+                                        .tr,
                                 text:
                                     '${data.weightAfterColorMix.value.toFixed(4).toShowString()} ${data.unit.value}',
                                 textColor: data.weightAfterLock.value
@@ -181,13 +189,16 @@ class _SapInkColorMatchingDetailPageState
                     ),
                     Obx(() => expandedTextSpan(
                           flex: 2,
-                          hint: '耗量：',
+                          hint: 'sap_ink_color_matching_detail_loss'.tr,
                           text:
                               '${(data.weightBeforeColorMix.value.sub(data.weightAfterColorMix.value)).toFixed(4).toShowString()} ${data.unit.value}',
                           textColor: Colors.blueAccent,
                         )),
                     Obx(() => Text(
-                          data.errorUnit.value ? '设备单位错误！' : '',
+                          data.errorUnit.value
+                              ? 'sap_ink_color_matching_detail_device_unit_error'
+                                  .tr
+                              : '',
                           style: const TextStyle(
                             color: Colors.red,
                             fontWeight: FontWeight.bold,
@@ -213,18 +224,19 @@ class _SapInkColorMatchingDetailPageState
                     ),
                   ),
                   child: ballColor == Colors.transparent
-                      ? Center(child: Text('无'))
+                      ? Center(
+                          child: Text('sap_ink_color_matching_detail_null'.tr))
                       : null,
                 ),
                 expandedTextSpan(
                   flex: 3,
-                  hint: '物料：',
+                  hint: 'sap_ink_color_matching_detail_material'.tr,
                   text: '(${data.materialCode})${data.materialName}',
                   textColor: Colors.black87,
                 ),
                 expandedTextSpan(
                   flex: 2,
-                  hint: '调前重量：',
+                  hint: 'sap_ink_color_matching_detail_before_toning_weight'.tr,
                   text:
                       '${data.weightBeforeColorMix.value.toFixed(4).toShowString()} ${data.unit.value}',
                   textColor:
@@ -232,7 +244,7 @@ class _SapInkColorMatchingDetailPageState
                 ),
                 expandedTextSpan(
                   flex: 2,
-                  hint: '调后重量：',
+                  hint: 'sap_ink_color_matching_detail_after_toning_weight'.tr,
                   text:
                       '${data.weightAfterColorMix.value.toFixed(4).toShowString()} ${data.unit.value}',
                   textColor:
@@ -240,7 +252,7 @@ class _SapInkColorMatchingDetailPageState
                 ),
                 expandedTextSpan(
                   flex: 2,
-                  hint: '耗量：',
+                  hint: 'sap_ink_color_matching_detail_loss'.tr,
                   text:
                       '${(data.weightBeforeColorMix.value.sub(data.weightAfterColorMix.value)).toFixed(4).toShowString()} ${data.unit.value}',
                   textColor: Colors.blueAccent,
@@ -264,7 +276,7 @@ class _SapInkColorMatchingDetailPageState
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             textSpan(
-              hint: '型体：',
+              hint: 'sap_ink_color_matching_detail_type_body'.tr,
               text: index >= 0
                   ? '${state.orderList[index].typeBody}'
                   : state.newTypeBody,
@@ -272,18 +284,18 @@ class _SapInkColorMatchingDetailPageState
             ),
             if (index >= 0)
               textSpan(
-                hint: '调色单号：',
+                hint: 'sap_ink_color_matching_detail_color_toning_order_no'.tr,
                 text: state.orderList[index].orderNumber ?? '',
                 textColor: Colors.green.shade700,
               ),
             if (index >= 0)
               textSpan(
-                hint: '调色日期：',
+                hint: 'sap_ink_color_matching_detail_color_toning_date'.tr,
                 text: state.orderList[index].mixDate ?? '',
                 textColor: Colors.black87,
               ),
             textSpan(
-              hint: '油墨师：',
+              hint: 'sap_ink_color_matching_detail_inkmaster'.tr,
               text: index >= 0
                   ? '${state.orderList[index].inkMaster}'
                   : '${userInfo?.name}',
@@ -301,15 +313,39 @@ class _SapInkColorMatchingDetailPageState
                       ? state.mixDeviceUnit != 'kg'
                           ? textSpan(
                               hint: '${state.mixDeviceName}：',
-                              text: '设备单位错误！',
+                              text:
+                                  'sap_ink_color_matching_detail_device_unit_error'
+                                      .tr,
                               hintColor: Colors.red,
                               textColor: Colors.red,
                             )
-                          : textSpan(
-                              hint: '${state.mixDeviceName}：',
-                              text:
-                                  '${state.readMixDeviceWeight.value.toFixed(4).toShowString()} ${state.mixDeviceUnit}',
-                              textColor: Colors.green,
+                          : Row(
+                              children: [
+                                Obx(() => textSpan(
+                                      hint:
+                                          'sap_ink_color_matching_detail_theoretical_loss'
+                                              .tr,
+                                      text:
+                                          '${state.inkColorList.map((v) => v.consumption()).reduce((a, b) => a.add(b)).toFixed(4).toShowString()} ${state.mixDeviceUnit}',
+                                    )),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 20, right: 20),
+                                  child: Obx(() => textSpan(
+                                        hint:
+                                            'sap_ink_color_matching_detail_offset'
+                                                .tr,
+                                        text:
+                                            '${state.inkColorList.map((v) => v.consumption()).reduce((a, b) => a.add(b)).sub(state.readMixDeviceWeight.value).toFixed(4).toShowString()} ${state.mixDeviceUnit}',
+                                      )),
+                                ),
+                                textSpan(
+                                  hint: '${state.mixDeviceName}：',
+                                  text:
+                                      '${state.readMixDeviceWeight.value.toFixed(4).toShowString()} ${state.mixDeviceUnit}',
+                                  textColor: Colors.green,
+                                )
+                              ],
                             )
                       : Row(
                           children: [
@@ -361,7 +397,7 @@ class _SapInkColorMatchingDetailPageState
       actions: canAdd
           ? [
               CombinationButton(
-                text: '新增物料',
+                text: 'sap_ink_color_matching_detail_add_material'.tr,
                 click: () {
                   selectMaterialDialog(
                     deviceIp: state.typeBodyServerIp,
@@ -383,13 +419,17 @@ class _SapInkColorMatchingDetailPageState
                   children: [
                     if (logic.hasReadBeforeWeight())
                       CombinationButton(
-                        text: '读取调前重量',
+                        text:
+                            'sap_ink_color_matching_detail_read_before_toning_weight'
+                                .tr,
                         click: () => logic.readBeforeWeight(),
                         combination: Combination.middle,
                       ),
                     if (logic.hasReadAfterWeight())
                       CombinationButton(
-                        text: '读取调后重量',
+                        text:
+                            'sap_ink_color_matching_detail_read_after_toning_weight'
+                                .tr,
                         click: () => logic.readAfterWeight(),
                         combination: Combination.middle,
                       ),
@@ -398,12 +438,12 @@ class _SapInkColorMatchingDetailPageState
               }),
               if (index < 0)
                 CombinationButton(
-                  text: '读取混合物重量',
+                  text: 'sap_ink_color_matching_detail_read_mix_weight'.tr,
                   click: () => logic.readMixWeight(),
                   combination: Combination.middle,
                 ),
               CombinationButton(
-                text: '调色完成',
+                text: 'sap_ink_color_matching_detail_color_toning_finish'.tr,
                 click: () {
                   if (index >= 0) {
                     logic.submitModifyOrder(index);
@@ -416,7 +456,7 @@ class _SapInkColorMatchingDetailPageState
             ]
           : [
               CombinationButton(
-                text: '再做一单',
+                text: 'sap_ink_color_matching_detail_toning_again'.tr,
                 click: () => Get.off(
                   () => const SapInkColorMatchingRecreatePage(),
                   arguments: {
@@ -430,14 +470,14 @@ class _SapInkColorMatchingDetailPageState
             ],
       title: index >= 0
           ? (state.orderList[index].trialQty ?? 0) > 0
-              ? '调色明细'
-              : '修改调色'
-          : '创建调色',
+              ? 'sap_ink_color_matching_detail_color_toning_detail'.tr
+              : 'sap_ink_color_matching_detail_modify_color_toning'.tr
+          : 'sap_ink_color_matching_detail_create_color_toning'.tr,
       popTitle: index >= 0
           ? (state.orderList[index].trialQty ?? 0) > 0
               ? ''
-              : '确定要退出 < 修改调色 > 吗?'
-          : '确定要退出 < 创建调色 > 吗?',
+              : 'sap_ink_color_matching_detail_exit_modify_tips'.tr
+          : 'sap_ink_color_matching_detail_exit_create_tips'.tr,
       body: _body(),
     );
   }

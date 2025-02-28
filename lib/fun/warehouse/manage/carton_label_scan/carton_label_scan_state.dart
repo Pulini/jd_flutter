@@ -1,5 +1,7 @@
+import 'package:collection/collection.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/carton_label_scan_info.dart';
+import 'package:jd_flutter/bean/http/response/carton_label_scan_progress_info.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 
@@ -10,10 +12,8 @@ class CartonLabelScanState {
   CartonLabelScanInfo? cartonLabelInfo;
   var labelTotal = 0.obs;
   var scannedLabelTotal = 0.obs;
-
-  CartonLabelScanState() {
-    ///Initialize variables
-  }
+  var progress = <CartonLabelScanProgressInfo>[].obs;
+  var progressDetail = <List<CartonLabelScanProgressDetailInfo>>[].obs;
 
   queryCartonLabelInfo({
     required String code,
@@ -22,7 +22,7 @@ class CartonLabelScanState {
     labelTotal.value=0;
     scannedLabelTotal.value=0;
     httpGet(
-      loading: '正在查询外箱标签明细...',
+      loading: 'carton_label_scan_querying_outside_label_detail'.tr,
       method: webApiGetCartonLabelInfo,
       params: {
         'CartonBarCode': code,
@@ -45,7 +45,7 @@ class CartonLabelScanState {
     required Function(String) error,
   }) {
     httpPost(
-      loading: '正在提交扫码进度...',
+      loading: 'carton_label_scan_submitting_scan_progress'.tr,
       method: webApiSubmitScannedCartonLabel,
       body: {
         'InterID': cartonLabelInfo?.interID,
@@ -67,6 +67,57 @@ class CartonLabelScanState {
         labelTotal.value=0;
         scannedLabelTotal.value=0;
         success.call(response.message ?? '');
+      } else {
+        error.call(response.message ?? 'query_default_error'.tr);
+      }
+    });
+  }
+
+
+
+  getCartonLabelScanHistory({
+    required String orderNo,
+    required Function(String) error,
+  }) {
+    httpGet(
+      loading: 'carton_label_scan_querying_outside_label_detail'.tr,
+      method: webApiGetCartonLabelScanHistory,
+      params: {'BillorPO': orderNo},
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        progress.value = [
+          for (var json in response.data)
+            CartonLabelScanProgressInfo.fromJson(json)
+        ];
+      } else {
+        error.call(response.message ?? 'query_default_error'.tr);
+      }
+    });
+  }
+
+  getCartonLabelScanHistoryDetail({
+    required int id,
+    required Function() success,
+    required Function(String) error,
+  }) {
+    httpGet(
+      loading: 'carton_label_scan_querying_outside_label_detail'.tr,
+      method: webApiGetCartonLabelScanHistoryDetail,
+      params: {
+        'InterID': id,
+      },
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        var list =<CartonLabelScanProgressDetailInfo> [
+          for (var json in response.data)
+            CartonLabelScanProgressDetailInfo.fromJson(json)
+        ];
+        var group = <List<CartonLabelScanProgressDetailInfo>>[];
+        groupBy(list, (v) => v.size ?? '').forEach((k, v) {
+          group.add(v);
+        });
+        progressDetail.value=group;
+        success.call();
       } else {
         error.call(response.message ?? 'query_default_error'.tr);
       }

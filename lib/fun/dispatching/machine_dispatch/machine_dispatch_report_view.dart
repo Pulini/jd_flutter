@@ -32,18 +32,18 @@ class _MachineDispatchReportPageState extends State<MachineDispatchReportPage> {
         child: Column(
           children: [
             expandedFrameText(
-              text: '尺码',
+              text: 'machine_dispatch_report_size'.tr,
               backgroundColor: Colors.blue.shade300,
               textColor: Colors.white,
               alignment: Alignment.center,
             ),
             expandedFrameText(
-              text: '报工数量',
+              text: 'machine_dispatch_report_report_qty'.tr,
               backgroundColor: Colors.green.shade200,
               alignment: Alignment.center,
             ),
             expandedFrameText(
-              text: '本班未满箱数',
+              text: 'machine_dispatch_report_current_shift_under_qty'.tr,
               backgroundColor: Colors.orange.shade100,
               alignment: Alignment.center,
             ),
@@ -87,7 +87,7 @@ class _MachineDispatchReportPageState extends State<MachineDispatchReportPage> {
       child: Column(
         children: [
           expandedFrameText(
-            text: '合计',
+            text: 'machine_dispatch_report_total'.tr,
             backgroundColor: Colors.blue.shade300,
             textColor: Colors.white,
             alignment: Alignment.center,
@@ -122,7 +122,7 @@ class _MachineDispatchReportPageState extends State<MachineDispatchReportPage> {
           Row(
             children: [
               expandedTextSpan(
-                hint: '工序：',
+                hint: 'machine_dispatch_report_process'.tr,
                 text: '<${data.processNumber}> ${data.processName}',
                 fontSize: 20,
               ),
@@ -131,7 +131,7 @@ class _MachineDispatchReportPageState extends State<MachineDispatchReportPage> {
                 overflow: TextOverflow.ellipsis,
                 TextSpan(
                   children: [
-                    const TextSpan(text: '已分配< '),
+                    TextSpan(text: 'machine_dispatch_report_dispatched_1'.tr),
                     TextSpan(
                       text: data.dispatchList.length.toString(),
                       style: const TextStyle(
@@ -139,7 +139,7 @@ class _MachineDispatchReportPageState extends State<MachineDispatchReportPage> {
                         color: Colors.green,
                       ),
                     ),
-                    const TextSpan(text: ' >名员工，剩余可分配产量：'),
+                    TextSpan(text: 'machine_dispatch_report_dispatched_2'.tr),
                     TextSpan(
                       text: data.getSurplus().toShowString(),
                       style: TextStyle(
@@ -169,7 +169,10 @@ class _MachineDispatchReportPageState extends State<MachineDispatchReportPage> {
                 GestureDetector(
                   onTap: () => data.totalProduction > 1
                       ? addDispatchWorker(data, () => setState(() {}))
-                      : errorDialog(content: '无剩余可分配产量！'),
+                      : errorDialog(
+                          content:
+                              'machine_dispatch_report_no_surplus_allocation_qty_tips'
+                                  .tr),
                   child: Container(
                     width: 50,
                     height: double.infinity,
@@ -196,10 +199,11 @@ class _MachineDispatchReportPageState extends State<MachineDispatchReportPage> {
     var data = dpi.dispatchList[index];
     var avatar = Padding(
       padding: const EdgeInsets.all(5),
-      child:avatarPhoto(data.workerAvatar),
+      child: avatarPhoto(data.workerAvatar),
     );
     return GestureDetector(
-      onTap: () => workerSignature(context, data, () => logic.signatureIdenticalWorker(data)),
+      onTap: () => workerSignature(
+          context, data, () => logic.signatureIdenticalWorker(data)),
       child: Container(
         width: 300,
         margin: const EdgeInsets.only(right: 15),
@@ -221,19 +225,19 @@ class _MachineDispatchReportPageState extends State<MachineDispatchReportPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   textSpan(
-                    hint: '姓名：',
+                    hint: 'machine_dispatch_report_name'.tr,
                     text: data.workerName ?? '',
                     textColor: Colors.blue.shade900,
                     fontSize: 18,
                   ),
                   textSpan(
-                    hint: '工号：',
+                    hint: 'machine_dispatch_report_worker'.tr,
                     text: data.workerNumber ?? '',
                     textColor: Colors.blue.shade900,
                     fontSize: 14,
                   ),
                   textSpan(
-                    hint: '产量：',
+                    hint: 'machine_dispatch_report_production'.tr,
                     text: data.dispatchQty.toShowString(),
                     textColor: Colors.red,
                     fontSize: 14,
@@ -248,7 +252,10 @@ class _MachineDispatchReportPageState extends State<MachineDispatchReportPage> {
                   setState(() {});
                 } else {
                   askDialog(
-                    content: '员工< ${data.workerName} >已签字！！！\n确定要删除该员工吗？',
+                    content:
+                        'machine_dispatch_report_delete_signed_tips'.trArgs([
+                      data.workerName ?? '',
+                    ]),
                     confirm: () {
                       dpi.dispatchList.removeAt(index);
                       setState(() {});
@@ -283,7 +290,11 @@ class _MachineDispatchReportPageState extends State<MachineDispatchReportPage> {
   @override
   Widget build(BuildContext context) {
     return pageBody(
-      actions: [CombinationButton(text: '报工', click: () => logic.report())],
+      actions: [
+        CombinationButton(
+            text: 'machine_dispatch_report_report'.tr,
+            click: () => logic.report())
+      ],
       body: Column(
         children: [
           SizedBox(

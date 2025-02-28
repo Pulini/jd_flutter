@@ -56,7 +56,7 @@ class _SignaturePageState extends State<SignaturePage> {
         backgroundColor: Colors.transparent,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
-          title: Text('请在空白处签名'),
+          title: Text('signature_tips'.tr),
           actions: [
             IconButton(
               onPressed: () {
@@ -77,8 +77,7 @@ class _SignaturePageState extends State<SignaturePage> {
                 control.toImage(border: 0).then((image) {
                   if (image == null && widget.signature == null) {
                     showSnackBar(
-                      title: 'snack_bar_default_wrong'.tr,
-                      message: '请在空白处签名',
+                      message: 'signature_tips'.tr,
                       isWarning: true,
                     );
                   } else {
@@ -99,7 +98,7 @@ class _SignaturePageState extends State<SignaturePage> {
           ],
         ),
         body: Obx(() => Container(
-              margin: EdgeInsets.only(left: 20, right: 20, bottom: 20),
+              margin: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
               color: Colors.grey.shade200,
               child: Stack(
                 children: [
@@ -108,7 +107,7 @@ class _SignaturePageState extends State<SignaturePage> {
                       widget.name,
                       style: TextStyle(
                         fontSize: 180,
-                        color: Colors.black87.withOpacity(0.1),
+                        color: Colors.black87.withValues(alpha: 0.1),
                       ),
                     ),
                   ),

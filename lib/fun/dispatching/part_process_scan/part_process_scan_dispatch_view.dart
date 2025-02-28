@@ -67,10 +67,10 @@ addWorkerItem(
                       padding: const EdgeInsets.only(left: 10),
                       child: Text(
                         newWorker == null
-                            ? '添加临时组员'
+                            ? 'part_process_scan_dispatch_add_temp'.tr
                             : workerList.any((v) => v.empID == newWorker!.empID)
-                                ? '该组员已存在'
-                                : '可添加以下组员',
+                                ? 'part_process_scan_dispatch_members_exists'.tr
+                                : 'part_process_scan_dispatch_members_can_add'.tr,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 18,
@@ -115,16 +115,14 @@ addWorkerItem(
                   onPressed: () {
                     if (newWorker == null) {
                       showSnackBar(
-                        title: 'snack_bar_default_wrong'.tr,
-                        message: '请输入正确的工号！',
+                        message: 'part_process_scan_dispatch_input_worker_number_tips'.tr,
                         isWarning: true,
                       );
                       return;
                     }
                     if (workerList.any((v) => v.empID == newWorker!.empID)) {
                       showSnackBar(
-                        title: 'snack_bar_default_wrong'.tr,
-                        message: '该员工已存在！',
+                        message: 'part_process_scan_dispatch_worker_exists'.tr,
                         isWarning: true,
                       );
                       return;
@@ -133,7 +131,7 @@ addWorkerItem(
                     callback?.call(newWorker!);
                   },
                   child: Text(
-                    '添加',
+                    'part_process_scan_dispatch_add'.tr,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: newWorker != null &&
@@ -185,8 +183,7 @@ class _PartProcessScanDispatchPageState
                   ));
                 } else {
                   showSnackBar(
-                    title: 'snack_bar_default_wrong'.tr,
-                    message: '可分配数为0',
+                    message: 'part_process_scan_dispatch_allocation_qty_zero_tips'.tr,
                     isWarning: true,
                   );
                 }
@@ -225,7 +222,7 @@ class _PartProcessScanDispatchPageState
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             textSpan(
-                              hint: '员工：',
+                              hint: 'part_process_scan_dispatch_worker'.tr,
                               text: '${wi.empName}<${wi.empCode}>',
                               textColor: Colors.blue.shade900,
                               fontSize: 18,
@@ -234,7 +231,7 @@ class _PartProcessScanDispatchPageState
                                 ? NumberDecimalEditText(
                                     initQty: dis.distributionQty,
                                     max: surplus,
-                                    hint: '请填写分配数',
+                                    hint: 'part_process_scan_dispatch_input_allocation_qty_tips'.tr,
                                     onChanged: (d) {
                                       setState(() {
                                         dis.distributionQty = d;
@@ -243,7 +240,7 @@ class _PartProcessScanDispatchPageState
                                           .refresh();
                                     },
                                   )
-                                : Text('点击分配该员工'),
+                                : Text('part_process_scan_dispatch_allocation_this_worker'.tr),
                           ],
                         ),
                       ),
@@ -308,14 +305,14 @@ class _PartProcessScanDispatchPageState
   @override
   Widget build(BuildContext context) {
     return pageBody(
-      title: '分配报工',
+      title: 'part_process_scan_dispatch_allocation_report'.tr,
       actions: [
         CheckBox(
           onChanged: (c) => setState(() {
             isSharing = c;
             spSave('${Get.currentRoute}/isSharing', c);
           }),
-          name: '均分',
+          name: 'part_process_scan_dispatch_sharing'.tr,
           value: isSharing,
         )
       ],
@@ -333,7 +330,7 @@ class _PartProcessScanDispatchPageState
               ),
             ),
             textSpan(
-              hint: '剩余可分配数：',
+              hint: 'part_process_scan_dispatch_surplus_allocation_qty'.tr,
               text: state.modifyDistributionList[index]
                   .getProcessSurplus()
                   .toShowString(),

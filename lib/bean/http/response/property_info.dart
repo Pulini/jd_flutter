@@ -1,14 +1,14 @@
-/// Number : "F002240051"
-/// InterID : 102526
-/// Name : "海尔冰柜"
-/// CustodianName : "邓林波"
-/// BuyDate : "2024-01-16 00:00"
-/// WriteDate : "2024-01-17 00:00"
-/// Address : "金帝办公楼5楼"
-/// ProcessStatus : "2"
-/// LabelPrintQty : 0
-/// SAPCgOrderNo : "4500734296"
-/// VisitedNum : 0
+// Number : "F002240051"
+// InterID : 102526
+// Name : "海尔冰柜"
+// CustodianName : "邓林波"
+// BuyDate : "2024-01-16 00:00"
+// WriteDate : "2024-01-17 00:00"
+// Address : "金帝办公楼5楼"
+// ProcessStatus : "2"
+// LabelPrintQty : 0
+// SAPCgOrderNo : "4500734296"
+// VisitedNum : 0
 
 class PropertyInfo {
   PropertyInfo({

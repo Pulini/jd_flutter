@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 
-///屏幕适配工具
+//屏幕适配工具
 class ScreenUtil {
   static ScreenUtil instance = ScreenUtil();
 
@@ -37,54 +37,54 @@ class ScreenUtil {
     _screenHeight = mediaQuery.size.height;
     _statusBarHeight = mediaQuery.padding.top;
     _bottomBarHeight = _mediaQueryData.padding.bottom;
-    _textScaleFactor = mediaQuery.textScaleFactor;
+    _textScaleFactor =MediaQuery.textScalerOf(context).scale(1);
   }
 
   static MediaQueryData get mediaQueryData => _mediaQueryData;
 
-  ///每个逻辑像素的字体像素数，字体的缩放比例
+  //每个逻辑像素的字体像素数，字体的缩放比例
   static double get textScaleFactory => _textScaleFactor;
 
-  ///设备的像素密度
+  //设备的像素密度
   static double get pixelRatio => _pixelRatio;
 
-  ///当前设备宽度 dp
+  //当前设备宽度 dp
   static double get screenWidthDp => _screenWidth;
 
-  ///当前设备高度 dp
+  //当前设备高度 dp
   static double get screenHeightDp => _screenHeight;
 
-  ///当前设备宽度 px
+  //当前设备宽度 px
   static double get screenWidth => _screenWidth * _pixelRatio;
 
-  ///当前设备高度 px
+  //当前设备高度 px
   static double get screenHeight => _screenHeight * _pixelRatio;
 
-  ///状态栏高度 dp 刘海屏会更高
+  //状态栏高度 dp 刘海屏会更高
   static double get statusBarHeight => _statusBarHeight;
 
-  ///底部安全区距离 dp
+  //底部安全区距离 dp
   static double get bottomBarHeight => _bottomBarHeight;
 
-  ///实际的dp与设计稿px的比例
+  //实际的dp与设计稿px的比例
   get scaleWidth => _screenWidth / instance.width;
 
   get scaleHeight => _screenHeight / instance.height;
 
-  ///根据设计稿的设备宽度适配
-  ///高度也根据这个来做适配可以保证不变形
+  //根据设计稿的设备宽度适配
+  //高度也根据这个来做适配可以保证不变形
   setWidth(double width) => width * scaleWidth;
 
-  /// 根据设计稿的设备高度适配
-  /// 当发现设计稿中的一屏显示的与当前样式效果不符合时,
-  /// 或者形状有差异时,高度适配建议使用此方法
-  /// 高度适配主要针对想根据设计稿的一屏展示一样的效果
+  // 根据设计稿的设备高度适配
+  // 当发现设计稿中的一屏显示的与当前样式效果不符合时,
+  // 或者形状有差异时,高度适配建议使用此方法
+  // 高度适配主要针对想根据设计稿的一屏展示一样的效果
   setHeight(double height) => height * scaleHeight;
 
-  ///字体大小适配方法
-  ///@param fontSize 传入设计稿上字体的px ,
-  ///@param allowFontScaling 控制字体是否要根据系统的“字体大小”辅助选项来进行缩放。默认值为false。
-  ///@param allowFontScaling Specifies whether fonts should scale to respect Text Size accessibility settings. The default is false.
+  //字体大小适配方法
+  //@param fontSize 传入设计稿上字体的px ,
+  //@param allowFontScaling 控制字体是否要根据系统的“字体大小”辅助选项来进行缩放。默认值为false。
+  //@param allowFontScaling Specifies whether fonts should scale to respect Text Size accessibility settings. The default is false.
   setSp(double fontSize) => allowFontScaling
       ? setWidth(fontSize)
       : setWidth(fontSize) / _textScaleFactor;

@@ -2,8 +2,8 @@ import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 
 
-/// WorkCardList : [{"ID":0,"InterID":0,"EntryID":1,"OperPlanningEntryFID":3714871,"EmpID":0,"WorkerCode":"0","WorkerName":"","SourceQty":1463,"MustQty":1463,"PreSchedulingQty":0,"Qty":1463,"FinishQty":0,"SourceEntryID":2,"SourceInterID":213014,"SourceEntryFID":555546,"ProcessNumber":"YT","ProcessName":"沿条","IsOpen":1,"RoutingID":162132}]
-/// WorkCardTitle : {"FQtyPass":1463,"FQtyProcessPass":0,"DayWorkCardPlanQty":0,"FCardNoReportStatus":0,"PlantBody":"","ProcessBillNumber":"P2048549","DispatchingNumber":1463}
+// WorkCardList : [{"ID":0,"InterID":0,"EntryID":1,"OperPlanningEntryFID":3714871,"EmpID":0,"WorkerCode":"0","WorkerName":"","SourceQty":1463,"MustQty":1463,"PreSchedulingQty":0,"Qty":1463,"FinishQty":0,"SourceEntryID":2,"SourceInterID":213014,"SourceEntryFID":555546,"ProcessNumber":"YT","ProcessName":"沿条","IsOpen":1,"RoutingID":162132}]
+// WorkCardTitle : {"FQtyPass":1463,"FQtyProcessPass":0,"DayWorkCardPlanQty":0,"FCardNoReportStatus":0,"PlantBody":"","ProcessBillNumber":"P2048549","DispatchingNumber":1463}
 
 class ProductionDispatchOrderDetailInfo {
   ProductionDispatchOrderDetailInfo({
@@ -38,13 +38,13 @@ class ProductionDispatchOrderDetailInfo {
   }
 }
 
-/// FQtyPass : 1463
-/// FQtyProcessPass : 0
-/// DayWorkCardPlanQty : 0
-/// FCardNoReportStatus : 0
-/// PlantBody : ""
-/// ProcessBillNumber : "P2048549"
-/// DispatchingNumber : 1463
+// FQtyPass : 1463
+// FQtyProcessPass : 0
+// DayWorkCardPlanQty : 0
+// FCardNoReportStatus : 0
+// PlantBody : ""
+// ProcessBillNumber : "P2048549"
+// DispatchingNumber : 1463
 
 class WorkCardTitle {
   WorkCardTitle({
@@ -101,25 +101,25 @@ class WorkCardTitle {
       '已汇报未计工数：${qtyPass.sub(qtyProcessPass!).toShowString()}';
 }
 
-/// ID : 0
-/// InterID : 0
-/// EntryID : 1
-/// OperPlanningEntryFID : 3714871
-/// EmpID : 0
-/// WorkerCode : "0"
-/// WorkerName : ""
-/// SourceQty : 1463
-/// MustQty : 1463
-/// PreSchedulingQty : 0
-/// Qty : 1463
-/// FinishQty : 0
-/// SourceEntryID : 2
-/// SourceInterID : 213014
-/// SourceEntryFID : 555546
-/// ProcessNumber : "YT"
-/// ProcessName : "沿条"
-/// IsOpen : 1
-/// RoutingID : 162132
+// ID : 0
+// InterID : 0
+// EntryID : 1
+// OperPlanningEntryFID : 3714871
+// EmpID : 0
+// WorkerCode : "0"
+// WorkerName : ""
+// SourceQty : 1463
+// MustQty : 1463
+// PreSchedulingQty : 0
+// Qty : 1463
+// FinishQty : 0
+// SourceEntryID : 2
+// SourceInterID : 213014
+// SourceEntryFID : 555546
+// ProcessNumber : "YT"
+// ProcessName : "沿条"
+// IsOpen : 1
+// RoutingID : 162132
 
 class WorkCardList {
   WorkCardList({

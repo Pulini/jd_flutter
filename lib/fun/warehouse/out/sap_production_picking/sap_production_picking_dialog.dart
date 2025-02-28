@@ -27,7 +27,7 @@ modifyPickingQty({
     PopScope(
       canPop: false,
       child: AlertDialog(
-        title: const Text('修改领料数量'),
+        title: Text('sap_production_picking_dialog_modify_pick_qty'.tr),
         content: SizedBox(
           width: 300,
           child: Column(
@@ -42,7 +42,7 @@ modifyPickingQty({
                 ),
                 child: Row(
                   children: [
-                    Text('本次领取：'),
+                    Text('sap_production_picking_dialog_pick'.tr),
                     Expanded(
                       child: TextField(
                         focusNode: FocusNode()..requestFocus(),
@@ -91,7 +91,7 @@ modifyPickingQty({
                   ),
                   child: Row(
                     children: [
-                      Text('本次领取：'),
+                      Text('sap_production_picking_dialog_pick'.tr),
                       Expanded(
                         child: TextField(
                           style: const TextStyle(color: Colors.blue),
@@ -172,7 +172,7 @@ checkPickerDialog({
       canPop: false,
       child: Obx(
         () => AlertDialog(
-          title: const Text('领料员校验'),
+          title: Text('sap_production_picking_dialog_picker_verify'.tr),
           content: SizedBox(
             width: 300,
             height: 240,
@@ -196,7 +196,7 @@ checkPickerDialog({
                 ),
                 WorkerCheck(
                   init: saveNumber,
-                  hint: '领料员工号',
+                  hint: 'sap_production_picking_dialog_picker_number'.tr,
                   onChanged: (w) {
                     picker = w;
                     avatar.value = w?.picUrl ?? '';

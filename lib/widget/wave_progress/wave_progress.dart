@@ -8,16 +8,16 @@ const double _epsilon = .001;
 const double _sweep = _twoPi - _epsilon;
 
 class CircularProgress extends ProgressIndicator {
-  ///The width of the border, if this is set [borderColor] must also be set.
+  //The width of the border, if this is set [borderColor] must also be set.
   final double? borderWidth;
 
-  ///The color of the border, if this is set [borderWidth] must also be set.
+  //The color of the border, if this is set [borderWidth] must also be set.
   final Color? borderColor;
 
-  ///The widget to show in the center of the progress indicator.
+  //The widget to show in the center of the progress indicator.
   final Widget? center;
 
-  ///The direction the liquid travels.
+  //The direction the liquid travels.
   final Axis direction;
 
   CircularProgress({
@@ -32,7 +32,7 @@ class CircularProgress extends ProgressIndicator {
   }) {
     if (borderWidth != null && borderColor == null ||
         borderColor != null && borderWidth == null) {
-      throw ArgumentError("borderWidth and borderColor should both be set.");
+      throw ArgumentError('borderWidth and borderColor should both be set.');
     }
   }
 
@@ -130,13 +130,13 @@ class _CircleClipper extends CustomClipper<Path> {
 
 
 class CustomProgress extends ProgressIndicator {
-  ///The widget to show in the center of the progress indicator.
+  //The widget to show in the center of the progress indicator.
   final Widget? center;
 
-  ///The direction the liquid travels.
+  //The direction the liquid travels.
   final Axis direction;
 
-  ///The path used to draw the shape of the progress indicator. The size of the progress indicator is controlled by the bounds of this path.
+  //The path used to draw the shape of the progress indicator. The size of the progress indicator is controlled by the bounds of this path.
   final Path shapePath;
 
   const CustomProgress({
@@ -229,19 +229,19 @@ class _CustomPathClipper extends CustomClipper<Path> {
 
 
 class LinearProgress extends ProgressIndicator {
-  ///The width of the border, if this is set [borderColor] must also be set.
+  //The width of the border, if this is set [borderColor] must also be set.
   final double? borderWidth;
 
-  ///The color of the border, if this is set [borderWidth] must also be set.
+  //The color of the border, if this is set [borderWidth] must also be set.
   final Color? borderColor;
 
-  ///The radius of the border.
+  //The radius of the border.
   final double? borderRadius;
 
-  ///The widget to show in the center of the progress indicator.
+  //The widget to show in the center of the progress indicator.
   final Widget? center;
 
-  ///The direction the liquid travels.
+  //The direction the liquid travels.
   final Axis direction;
 
   LinearProgress({
@@ -257,7 +257,7 @@ class LinearProgress extends ProgressIndicator {
   }) {
     if (borderWidth != null && borderColor == null ||
         borderColor != null && borderWidth == null) {
-      throw ArgumentError("borderWidth and borderColor should both be set.");
+      throw ArgumentError('borderWidth and borderColor should both be set.');
     }
   }
 

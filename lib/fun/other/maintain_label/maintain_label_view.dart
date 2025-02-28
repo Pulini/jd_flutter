@@ -41,20 +41,21 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
           value: selected,
           onChanged: (c) => onClick.call(c!),
         ),
-        title: textSpan(hint: '标签：', text: label, fontSize: 16),
+        title: textSpan(
+            hint: 'maintain_label_label'.tr, text: label, fontSize: 16),
         subtitle: Row(
           children: [
             expandedTextSpan(
-              hint: '合计：',
+              hint: 'maintain_label_total'.tr,
               text: total,
               textColor: Colors.green.shade900,
             ),
             Text(
               isReport
-                  ? '工序汇报'
+                  ? 'maintain_label_process_report'.tr
                   : isPrint
-                      ? '已打印'
-                      : '未打印',
+                      ? 'maintain_label_printed'.tr
+                      : 'maintain_label_unprinted'.tr,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: isReport
@@ -130,10 +131,19 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
           .reduce((a, b) => a.add(b))
           .toShowString(),
       subItem: [
-        _subitem('指令', '尺码', '装箱数', 1),
+        _subitem(
+          'maintain_label_instruction'.tr,
+          'maintain_label_size'.tr,
+          'maintain_label_picking'.tr,
+          1,
+        ),
         for (var i = 0; i < data.items!.length; ++i)
-          _subitem(data.items![i].billNo ?? '指令错误', data.items![i].size ?? '',
-              data.items![i].qty.toShowString(), 2)
+          _subitem(
+            data.items![i].billNo ?? 'maintain_label_instruction_error'.tr,
+            data.items![i].size ?? '',
+            data.items![i].qty.toShowString(),
+            2,
+          )
       ],
     );
   }
@@ -162,32 +172,32 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
   @override
   Widget build(BuildContext context) {
     return pageBody(
-      title: '贴标维护',
+      title: 'maintain_label_label_maintenance'.tr,
       body: Padding(
         padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
         child: Obx(() => Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 textSpan(
-                  hint: '物料：',
+                  hint: 'maintain_label_material'.tr,
                   text: state.materialName.value,
                   textColor: Colors.green.shade900,
                 ),
                 Row(children: [
                   expandedTextSpan(
-                    hint: '形体：',
+                    hint: 'maintain_label_type_body'.tr,
                     text: state.typeBody.value,
                     textColor: Colors.green.shade900,
                   ),
                   CheckBox(
                     onChanged: (c) => logic.selectPrinted(c),
-                    name: '已打印',
+                    name: 'maintain_label_printed'.tr,
                     needSave: false,
                     value: state.cbPrinted.value,
                   ),
                   CheckBox(
                     onChanged: (c) => logic.selectUnprinted(c),
-                    name: '未打印',
+                    name: 'maintain_label_unprinted'.tr,
                     needSave: false,
                     value: state.cbUnprinted.value,
                   ),
@@ -206,7 +216,7 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
                   children: [
                     Expanded(
                       child: CombinationButton(
-                        text: '创建',
+                        text: 'maintain_label_create'.tr,
                         click: () {
                           if (checkUserPermission('1051105')) {
                             createLabelSelect(
@@ -231,8 +241,11 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
                             );
                           } else {
                             showSnackBar(
-                                title: 'snack_bar_default_wrong'.tr,
-                                message: '没有创建贴标权限');
+                              message:
+                                  'maintain_label_no_create_label_permission'
+                                      .tr,
+                              isWarning: true,
+                            );
                           }
                         },
                         combination: Combination.left,
@@ -240,12 +253,13 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
                     ),
                     Expanded(
                       child: CombinationButton(
-                        text: '删除',
+                        text: 'maintain_label_delete'.tr,
                         click: () {
                           var select = logic.getSelectData();
                           askDialog(
-                            content:
-                                select.isEmpty ? '确定要删除包装清单吗？' : '确定要删除这些标签吗？',
+                            content: select.isEmpty
+                                ? 'maintain_label_delete_packing_tips'.tr
+                                : 'maintain_label_delete_label_tips'.tr,
                             confirm: () {
                               if (select.isEmpty) {
                                 logic.deleteAllLabel();
@@ -260,7 +274,7 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
                     ),
                     Expanded(
                       child: CombinationButton(
-                        text: '打印',
+                        text: 'maintain_label_print'.tr,
                         click: () => logic.checkLanguage(
                           callback: (select, language) {
                             if (language.isEmpty) {
@@ -286,7 +300,7 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
                     ),
                     Expanded(
                       child: CombinationButton(
-                        text: '设置',
+                        text: 'maintain_label_set'.tr,
                         click: () => setLabelSelect(
                           property: () => logic.getMaterialProperties(
                             (list) => setLabelPropertyDialog(
@@ -323,7 +337,10 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
         TextButton(
           onPressed: () => selectMaterialDialog(
               logic.getSizeList(), (s) => state.filterSize.value = s),
-          child: Text('筛选', style: TextStyle(fontWeight: FontWeight.bold)),
+          child: Text(
+            'maintain_label_filter'.tr,
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
         ),
       ],
     );

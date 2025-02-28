@@ -49,7 +49,7 @@ class _SapPrintPickingBarCodeListPageState
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          textSpan(hint: '标签号：', text: label.labelCode ?? ''),
+          textSpan(hint: 'sap_print_picking_barcode_list_label_no'.tr, text: label.labelCode ?? ''),
           Row(
             children: [
               Expanded(
@@ -58,12 +58,12 @@ class _SapPrintPickingBarCodeListPageState
                     Row(
                       children: [
                         expandedTextSpan(
-                            hint: '托盘号：',
+                            hint: 'sap_print_picking_barcode_list_pallet_no'.tr,
                             isBold: false,
                             text: label.palletNumber ?? '',
                             textColor: Colors.green),
                         textSpan(
-                          hint: '领取/箱容：',
+                          hint: 'sap_print_picking_barcode_list_pick_or_box_capacity'.tr,
                           isBold: false,
                           text:
                               '${label.getPickQty().toShowString()} / ${label.quantity.toShowString()}',
@@ -73,13 +73,13 @@ class _SapPrintPickingBarCodeListPageState
                     Row(
                       children: [
                         expandedTextSpan(
-                          hint: '型体：',
+                          hint: 'sap_print_picking_barcode_list_type_body'.tr,
                           isBold: false,
                           text: label.typeBody ?? '',
                           textColor: Colors.red,
                         ),
                         textSpan(
-                          hint: '尺码：',
+                          hint: 'sap_print_picking_barcode_list_size'.tr,
                           isBold: false,
                           text: label.size ?? '',
                           textColor: Colors.red,
@@ -92,7 +92,7 @@ class _SapPrintPickingBarCodeListPageState
               if (label.distribution.isNotEmpty)
                 IconButton(
                   onPressed: () => askDialog(
-                    content: '确定要删除已扫条码吗？',
+                    content: 'sap_print_picking_barcode_list_delete_label_tips'.tr,
                     confirm: () => logic.scannedLabelDelete(label),
                   ),
                   icon: const Icon(
@@ -110,7 +110,7 @@ class _SapPrintPickingBarCodeListPageState
   @override
   Widget build(BuildContext context) {
     return pageBody(
-      title: '已扫描条码列表',
+      title: 'sap_print_picking_barcode_list_scanned_label_list'.tr,
       body: Obx(() => ListView.builder(
             itemCount: logic.getLabelListWhereId(dataID).length,
             itemBuilder: (c, i) => _item(logic.getLabelListWhereId(dataID)[i]),

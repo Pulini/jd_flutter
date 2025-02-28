@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 enum Combination { left, middle, right, intact }
 
-///自定义按钮
+//自定义按钮
 class CombinationButton extends StatelessWidget {
   final Combination? combination;
   final Color? backgroundColor;

@@ -75,7 +75,7 @@ class SapInkColorMatchingState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在获取调色单列表...',
+      loading: 'sap_ink_color_matching_getting_color_list'.tr,
       method: webApiSapGetInkColorMatchOrder,
       body: {
         'WERKS': userInfo?.sapFactory ?? '',
@@ -109,7 +109,7 @@ class SapInkColorMatchingState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在获取型体及物料数据...',
+      loading: 'sap_ink_color_matching_getting_material_info'.tr,
       method: webApiSapCheckInkColorMatchTypeBody,
       body: {
         'WERKS': userInfo?.sapFactory ?? '',
@@ -155,7 +155,7 @@ class SapInkColorMatchingState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在提交调色单...',
+      loading: 'sap_ink_color_matching_submitting_toning_order'.tr,
       method: webApiSapCreateInkColorMatch,
       body: {
         'WOFNR': orderNumber,

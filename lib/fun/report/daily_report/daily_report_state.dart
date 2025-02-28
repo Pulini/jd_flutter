@@ -4,7 +4,7 @@ import 'package:jd_flutter/utils/web_api.dart';
 
 
 class DailyReportState {
-  ///报表数据
+  //报表数据
   RxList<DailyReport> dataList = <DailyReport>[].obs;
 
   getDayOutput({

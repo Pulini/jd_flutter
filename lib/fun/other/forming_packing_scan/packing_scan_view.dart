@@ -18,7 +18,7 @@ class _PackingScanPageState extends State<PackingScanPage> {
   final logic = Get.put(PackingScanLogic());
   final state = Get.find<PackingScanLogic>().state;
 
-  ///带框、带点击事件带文本
+  //带框、带点击事件带文本
   expandedLeftFrameText({
     Function? click,
     Color? backgroundColor,

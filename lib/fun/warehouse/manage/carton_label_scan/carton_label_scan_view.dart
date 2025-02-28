@@ -2,7 +2,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/carton_label_scan_info.dart';
-import 'package:jd_flutter/fun/warehouse/manage/carton_label_scan_progress/carton_label_scan_progress_view.dart';
+import 'package:jd_flutter/fun/warehouse/manage/carton_label_scan/carton_label_scan_progress_view.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/scanner.dart';
@@ -48,20 +48,26 @@ class _CartonLabelScanPageState extends State<CartonLabelScanPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              textSpan(hint: '尺码：', text: data.size ?? ''),
-              textSpan(hint: '内标：', text: data.priceBarCode ?? ''),
+              textSpan(
+                hint: 'carton_label_scan_size'.tr,
+                text: data.size ?? '',
+              ),
+              textSpan(
+                hint: 'carton_label_scan_inside_label'.tr,
+                text: data.priceBarCode ?? '',
+              ),
             ],
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               textSpan(
-                hint: '贴标数量：',
+                hint: 'carton_label_scan_label_qty'.tr,
                 text: data.labelCount.toString(),
                 textColor: Colors.black,
               ),
               textSpan(
-                hint: '已扫数量：',
+                hint: 'carton_label_scan_scanned_qty'.tr,
                 text: data.scanned.toString(),
                 textColor: Colors.black,
               ),
@@ -112,7 +118,9 @@ class _CartonLabelScanPageState extends State<CartonLabelScanPage> {
         IconButton(
           onPressed: () => Get.to(
             () => const CartonLabelScanProgressPage(),
-            arguments: {'CustomerPO':state.cartonLabelInfo?.custOrderNumber??''},
+            arguments: {
+              'CustomerPO': state.cartonLabelInfo?.custOrderNumber ?? ''
+            },
           ),
           icon: const Icon(
             Icons.menu_book,
@@ -139,7 +147,7 @@ class _CartonLabelScanPageState extends State<CartonLabelScanPage> {
                     border: const OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(20)),
                     ),
-                    hintText: '请扫描或手动输入外箱贴标',
+                    hintText: 'carton_label_scan_scan_code_or_input_outside_code'.tr,
                     hintStyle: const TextStyle(color: Colors.grey),
                     prefixIcon: IconButton(
                       onPressed: () => controller.clear(),
@@ -178,7 +186,7 @@ class _CartonLabelScanPageState extends State<CartonLabelScanPage> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     textSpan(
-                      hint: '外箱条码：',
+                      hint: 'carton_label_scan_outside_code'.tr,
                       text: state.cartonLabel.value,
                     ),
                     Padding(
@@ -197,7 +205,7 @@ class _CartonLabelScanPageState extends State<CartonLabelScanPage> {
                       children: [
                         Expanded(
                           child: CombinationButton(
-                            text: '重新扫码',
+                            text: 'carton_label_scan_rescan_code'.tr,
                             click: () =>
                                 logic.cleanAll(() => controller.text = ''),
                             combination: Combination.left,
@@ -205,7 +213,7 @@ class _CartonLabelScanPageState extends State<CartonLabelScanPage> {
                         ),
                         Expanded(
                           child: CombinationButton(
-                            text: '重扫内标',
+                            text: 'carton_label_scan_rescan_inside_code'.tr,
                             click: () => logic.cleanScanned(),
                             combination: Combination.right,
                           ),
@@ -225,7 +233,7 @@ class _CartonLabelScanPageState extends State<CartonLabelScanPage> {
               if (state.labelTotal.value != 0 &&
                   state.labelTotal.value == state.scannedLabelTotal.value)
                 CombinationButton(
-                  text: '提交',
+                  text: 'carton_label_scan_submit'.tr,
                   click: () => logic.submit(() => controller.text = ''),
                 )
             ],

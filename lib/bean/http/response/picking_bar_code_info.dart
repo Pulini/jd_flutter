@@ -1,11 +1,11 @@
 import 'package:jd_flutter/utils/utils.dart';
 
-/// InterID : 67660
-/// Mtono : "JZ2300102"
-/// Size : "36"
-/// Qty : 200.0
-/// LabelCount : 1
-/// TotalQty : 800.0
+// InterID : 67660
+// Mtono : "JZ2300102"
+// Size : "36"
+// Qty : 200.0
+// LabelCount : 1
+// TotalQty : 800.0
 
 class PickingBarCodeInfo {
   PickingBarCodeInfo({

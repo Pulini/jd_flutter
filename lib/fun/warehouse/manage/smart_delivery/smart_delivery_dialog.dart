@@ -9,8 +9,6 @@ import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/switch_button_widget.dart';
 
-
-
 modifyShoeTreeDialog(String typeBody, int departmentID) {
   _getShoeTreeList(
     typeBody: typeBody,
@@ -20,88 +18,37 @@ modifyShoeTreeDialog(String typeBody, int departmentID) {
         PopScope(
           canPop: false,
           child: AlertDialog(
-            title: Text('楦头库存维护'),
+            title: Text('smart_delivery_dialog_shoe_tree_maintenance'.tr),
             content: SizedBox(
-                width: 460,
-                height: 600,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    textSpan(hint: '型体：', text: typeBody),
-                    textSpan(hint: '楦头号：', text: sti.shoeTreeNo ?? ''),
-                    Expanded(
-                      child: GridView.builder(
-                        itemCount: sti.sizeList?.length,
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          childAspectRatio: 3 / 1,
-                        ),
-                        itemBuilder: (context, index) {
-                          var controller = TextEditingController(
-                            text: sti.sizeList?[index].qty.toString(),
-                          );
-                          return Card(
-                            child: Padding(
-                              padding: const EdgeInsets.all(5),
-                              child: Row(
-                                children: [
-                                  textSpan(
-                                    hint: '尺码：',
-                                    text: sti.sizeList?[index].size ?? '',
-                                  ),
-                                  const SizedBox(width: 30),
-                                  Text(
-                                    '库存：',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
-                                  ),
-                                  Expanded(
-                                    child: TextField(
-                                      textAlign: TextAlign.center,
-                                      keyboardType: TextInputType.number,
-                                      inputFormatters: [
-                                        FilteringTextInputFormatter.digitsOnly
-                                      ],
-                                      onChanged: (c) {
-                                        sti.sizeList?[index].qty = c.toIntTry();
-                                        controller.text =
-                                            c.toIntTry().toString();
-                                        controller.selection =
-                                            TextSelection.fromPosition(
-                                          TextPosition(
-                                            offset: controller.text.length,
-                                          ),
-                                        );
-                                      },
-                                      controller: controller,
-                                      decoration: InputDecoration(
-                                        filled: true,
-                                        fillColor: Colors.grey[300],
-                                        enabledBorder: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(30),
-                                          borderSide: const BorderSide(
-                                            color: Colors.transparent,
-                                          ),
-                                        ),
-                                        border: const OutlineInputBorder(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(30)),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
+              width: 460,
+              height: 600,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  textSpan(
+                    hint: 'smart_delivery_dialog_type_body'.tr,
+                    text: typeBody,
+                  ),
+                  textSpan(
+                    hint: 'smart_delivery_dialog_shoe_tree_no'.tr,
+                    text: sti.shoeTreeNo ?? '',
+                  ),
+                  Expanded(
+                    child: GridView.builder(
+                      itemCount: sti.sizeList?.length,
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        childAspectRatio: 3 / 1,
                       ),
+                      itemBuilder: (context, i) =>
+                          _modifyShoeTreeItem(sti.sizeList ?? [], i),
                     ),
-                  ],
-                )),
+                  ),
+                ],
+              ),
+            ),
             actions: [
               TextButton(
                 onPressed: () => _saveShoeTree(
@@ -113,7 +60,7 @@ modifyShoeTreeDialog(String typeBody, int departmentID) {
                     back: () => Get.back(),
                   ),
                 ),
-                child: Text('保存'),
+                child: Text('smart_delivery_dialog_save'.tr),
               ),
               TextButton(
                 onPressed: () => Get.back(),
@@ -127,6 +74,55 @@ modifyShoeTreeDialog(String typeBody, int departmentID) {
         ),
       );
     },
+  );
+}
+
+_modifyShoeTreeItem(List<SizeInfo> list, int index) {
+  var controller = TextEditingController(text: list[index].qty.toString());
+  var data = list[index];
+  return Card(
+    child: Padding(
+      padding: const EdgeInsets.all(5),
+      child: Row(
+        children: [
+          textSpan(
+            hint: 'smart_delivery_dialog_size'.tr,
+            text: data.size ?? '',
+          ),
+          const SizedBox(width: 30),
+          Text(
+            'smart_delivery_dialog_inventory'.tr,
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+          Expanded(
+            child: TextField(
+              textAlign: TextAlign.center,
+              keyboardType: TextInputType.number,
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              onChanged: (c) {
+                data.qty = c.toIntTry();
+                controller.text = c.toIntTry().toString();
+                controller.selection = TextSelection.fromPosition(
+                  TextPosition(offset: controller.text.length),
+                );
+              },
+              controller: controller,
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.grey[300],
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30),
+                  borderSide: const BorderSide(color: Colors.transparent),
+                ),
+                border: const OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(30)),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    ),
   );
 }
 
@@ -149,11 +145,11 @@ reserveShoeTreeDialog(
         builder: (context, dialogSetState) => AlertDialog(
           title: Row(
             children: [
-              Text('尺码预留楦头'),
+              Text('smart_delivery_dialog_size_reserve_shoe_tree'.tr),
               Expanded(child: Container()),
               CombinationButton(
                 combination: Combination.left,
-                text: '预留2个',
+                text: 'smart_delivery_dialog_reserve_two'.tr,
                 click: () => dialogSetState(() {
                   for (var v in setList) {
                     v.reserveShoeTreeQty = 2;
@@ -162,7 +158,7 @@ reserveShoeTreeDialog(
               ),
               CombinationButton(
                 combination: Combination.right,
-                text: '清零',
+                text: 'smart_delivery_dialog_reset'.tr,
                 click: () => dialogSetState(() {
                   for (var v in setList) {
                     v.reserveShoeTreeQty = 0;
@@ -177,7 +173,7 @@ reserveShoeTreeDialog(
             child: ListView.builder(
               itemCount: setList.length,
               itemBuilder: (context, index) =>
-                  _item(setList[index], dialogSetState),
+                  _reserveShoeTreeItem(setList[index], dialogSetState),
             ),
           ),
           actions: [
@@ -186,7 +182,7 @@ reserveShoeTreeDialog(
                 Get.back();
                 set.call(setList);
               },
-              child: Text('保存'),
+              child: Text('smart_delivery_dialog_save'.tr),
             ),
             TextButton(
               onPressed: () => Get.back(),
@@ -202,21 +198,20 @@ reserveShoeTreeDialog(
   );
 }
 
-_item(PartsSizeList data, StateSetter dialogSetState) {
-  var controller = TextEditingController(
-    text: data.reserveShoeTreeQty.toString(),
-  );
+_reserveShoeTreeItem(PartsSizeList data, StateSetter dialogSetState) {
+  var controller =
+      TextEditingController(text: data.reserveShoeTreeQty.toString());
   return Card(
     child: Padding(
       padding: const EdgeInsets.all(5),
       child: Row(
         children: [
           expandedTextSpan(
-            hint: '尺码：',
+            hint: 'smart_delivery_dialog_size'.tr,
             text: data.size ?? '',
           ),
           expandedTextSpan(
-            hint: '库存：',
+            hint: 'smart_delivery_dialog_inventory'.tr,
             text: data.shoeTreeQty.toString(),
           ),
           Expanded(
@@ -224,8 +219,8 @@ _item(PartsSizeList data, StateSetter dialogSetState) {
             child: Row(
               children: [
                 Text(
-                  '预留：',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  'smart_delivery_dialog_reserve'.tr,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 Expanded(
                   child: TextField(
@@ -236,9 +231,7 @@ _item(PartsSizeList data, StateSetter dialogSetState) {
                       data.reserveShoeTreeQty = c.toIntTry();
                       controller.text = c.toIntTry().toString();
                       controller.selection = TextSelection.fromPosition(
-                        TextPosition(
-                          offset: controller.text.length,
-                        ),
+                        TextPosition(offset: controller.text.length),
                       );
                     }),
                     controller: controller,
@@ -251,13 +244,11 @@ _item(PartsSizeList data, StateSetter dialogSetState) {
                             data.reserveShoeTreeQty = qty;
                             controller.text = qty.toString();
                             controller.selection = TextSelection.fromPosition(
-                              TextPosition(
-                                offset: controller.text.length,
-                              ),
+                              TextPosition(offset: controller.text.length),
                             );
                           }
                         }),
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.remove_circle_outline,
                           color: Colors.red,
                         ),
@@ -274,7 +265,7 @@ _item(PartsSizeList data, StateSetter dialogSetState) {
                             ),
                           );
                         }),
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.add_circle_outline,
                           color: Colors.green,
                         ),
@@ -296,8 +287,9 @@ _item(PartsSizeList data, StateSetter dialogSetState) {
               ],
             ),
           ),
+          const SizedBox(width: 10),
           expandedTextSpan(
-            hint: '  预排：',
+            hint: 'smart_delivery_dialog_pre_sort'.tr,
             text: data.roundDelivery().toString(),
           ),
         ],
@@ -321,7 +313,7 @@ createDeliveryTaskDialog({
   required Function(String taskId, String agvNumber) success,
 }) {
   if (nowOrderRoundList.isEmpty) {
-    errorDialog(content: '请选择需要配送的轮次');
+    errorDialog(content: 'smart_delivery_dialog_select_delivery_round'.tr);
     return;
   }
 
@@ -337,7 +329,8 @@ createDeliveryTaskDialog({
       var startList = <TaskPoint>[];
       var endList = <TaskPoint>[];
       var emptyList = <TaskPoint>[
-        TaskPoint(positionName: '无', positionCode: '0')
+        TaskPoint(
+            positionName: 'smart_delivery_dialog_null'.tr, positionCode: '0')
       ];
 
       if (taskTypeList.isNotEmpty) {
@@ -374,7 +367,7 @@ createDeliveryTaskDialog({
           canPop: false,
           child: StatefulBuilder(builder: (context, dialogSetState) {
             return AlertDialog(
-              title: Text('创建任务'),
+              title: Text('smart_delivery_dialog_create_task'.tr),
               content: SizedBox(
                 width: 460,
                 child: Column(
@@ -384,14 +377,16 @@ createDeliveryTaskDialog({
                     selectView(
                       list: agvList,
                       controller: agvController,
-                      errorMsg: '查询不到AGV设备信息',
-                      hint: '执行设备：',
+                      errorMsg:
+                          'smart_delivery_dialog_unable_query_device_info'.tr,
+                      hint: 'smart_delivery_dialog_execute_device'.tr,
                     ),
                     selectView(
                       list: taskTypeList,
                       controller: agvTypeController,
-                      errorMsg: '查询不到AGV模版信息',
-                      hint: '任务模版：',
+                      errorMsg:
+                          'smart_delivery_dialog_unable_query_mode_info'.tr,
+                      hint: 'smart_delivery_dialog_task_mode'.tr,
                       select: (i) => dialogSetState(() {
                         typeSelect = i;
                         startList = taskTypeList[i].startPoint ?? [];
@@ -401,18 +396,21 @@ createDeliveryTaskDialog({
                     selectView(
                       list: startList,
                       controller: startController,
-                      errorMsg: '查询不到AGV起点信息',
-                      hint: '任务起点：',
+                      errorMsg:
+                          'smart_delivery_dialog_unable_query_starting_point_info'
+                              .tr,
+                      hint: 'smart_delivery_dialog_task_starting_point'.tr,
                     ),
                     selectView(
                       list: endList,
                       controller: endController,
-                      errorMsg: '查询不到AGV终点信息',
-                      hint: '任务终点：',
+                      errorMsg:
+                          'smart_delivery_dialog_unable_query_endpoint_info'.tr,
+                      hint: 'smart_delivery_dialog_task_endpoint'.tr,
                     ),
                     SwitchButton(
                       onChanged: (v) => isScheduling = v,
-                      name: '启用AGV配送',
+                      name: 'smart_delivery_dialog_start_delivery'.tr,
                     ),
                   ],
                 ),
@@ -452,7 +450,7 @@ createDeliveryTaskDialog({
                       fail: (msg) => errorDialog(content: msg),
                     );
                   },
-                  child: Text('创建'),
+                  child: Text('smart_delivery_dialog_creat'.tr),
                 ),
                 TextButton(
                   onPressed: () => Get.back(),
@@ -481,24 +479,24 @@ checkAgvTask({
       int taskType = task.taskType ?? 0;
       String startingPoint = task.startingPoint ?? '';
       String endPoint = task.endPoint ?? '';
-      String taskState = '未知';
+      String taskState = 'smart_delivery_dialog_unknown'.tr;
       Color taskStateColor = Colors.red;
       switch (taskType) {
         case 1:
-          taskState = '执行中';
+          taskState = 'smart_delivery_dialog_executing'.tr;
           taskStateColor = Colors.green;
           break;
         case 2:
-          taskState = '已完成';
+          taskState = 'smart_delivery_dialog_completed'.tr;
           taskStateColor = Colors.blueAccent;
           break;
         case 3:
-          taskState = '暂停中';
+          taskState = 'smart_delivery_dialog_pause'.tr;
           taskStateColor = Colors.orange;
           break;
       }
 
-      var title = Text('AGV 任务详情');
+      var title = Text('smart_delivery_dialog_task_detail'.tr);
       Get.dialog(
         PopScope(
             canPop: false,
@@ -559,15 +557,22 @@ checkAgvTask({
                               ],
                             ),
                           textSpan(
-                            hint: '任务状态：',
+                            hint: 'smart_delivery_dialog_task_state'.tr,
                             text: taskState,
                             textColor: taskStateColor,
                           ),
                           Row(
                             children: [
                               expandedTextSpan(
-                                  hint: '任务起点：', text: startingPoint),
-                              expandedTextSpan(hint: '任务终点：', text: endPoint),
+                                hint:
+                                    'smart_delivery_dialog_task_starting_point'
+                                        .tr,
+                                text: startingPoint,
+                              ),
+                              expandedTextSpan(
+                                hint: 'smart_delivery_dialog_task_endpoint'.tr,
+                                text: endPoint,
+                              ),
                             ],
                           ),
                         ],
@@ -595,7 +600,7 @@ _getShoeTreeList({
   required Function(SmartDeliveryShorTreeInfo) success,
 }) {
   httpGet(
-    loading: '正在检查楦头库存...',
+    loading: 'smart_delivery_dialog_checking_shoe_tree_inventory'.tr,
     method: webApiSmartDeliveryGetShorTreeList,
     params: {
       'TypeBody': typeBody,
@@ -618,7 +623,7 @@ _saveShoeTree({
   required Function(String) success,
 }) {
   httpPost(
-    loading: '正在保存楦头库存信息...',
+    loading: 'smart_delivery_dialog_saving_shoe_tree_inventory'.tr,
     method: webApiSmartDeliverySaveShorTree,
     body: {
       'ShoeTreeNo': shoeTreeNo,
@@ -645,7 +650,7 @@ _getAgvInfo({
   required Function(AgvInfo) success,
 }) {
   httpGet(
-    loading: '正在获取机器人信息...',
+    loading: 'smart_delivery_dialog_getting_device_info'.tr,
     method: webApiSmartDeliveryGetRobInfo,
   ).then((response) {
     if (response.resultCode == resultSuccess) {
@@ -671,7 +676,7 @@ _createAgvTask({
   required Function(String) fail,
 }) {
   httpPost(
-    loading: '正在创建AGV配送任务...',
+    loading: 'smart_delivery_dialog_creating_delivery_task'.tr,
     method: webApiSmartDeliveryCreatRobTask,
     body: {
       'StartPoint': start,
@@ -708,7 +713,7 @@ _getAgvTaskInfo({
   required Function(AgvTaskInfo) success,
 }) {
   httpGet(
-    loading: '正在获取AGV当前任务...',
+    loading: 'smart_delivery_dialog_getting_now_task'.tr,
     method: webApiSmartDeliveryGetRobTask,
     params: {'TaskID': taskId},
   ).then((response) {
@@ -725,7 +730,7 @@ _cancelAgvTask({
   required Function() success,
 }) {
   httpPost(
-    loading: '正在取消AGV当前任务...',
+    loading: 'smart_delivery_dialog_canceling_now_task'.tr,
     method: webApiSmartDeliveryCancelTask,
     body: {'TaskID': taskId},
   ).then((response) {
@@ -741,14 +746,18 @@ _stopAgvTask({
   required String agvNumber,
   required Function() success,
 }) {
-  showSnackBar(title: 'AGV设置', message: '正在暂停AGV当前任务...');
+  showSnackBar(
+      title: 'smart_delivery_dialog_set'.tr,
+      message: 'smart_delivery_dialog_pausing_now_task'.tr);
   httpPost(
     method: webApiSmartDeliveryStopRobot,
     params: {'RobNumber': agvNumber},
   ).then((response) {
     if (response.resultCode == resultSuccess) {
       success.call();
-      showSnackBar(title: 'AGV设置', message: response.message ?? '');
+      showSnackBar(
+          title: 'smart_delivery_dialog_set'.tr,
+          message: response.message ?? '');
     } else {
       errorDialog(content: response.message ?? 'query_default_error'.tr);
     }
@@ -759,14 +768,18 @@ _resumeAgvTask({
   required String agvNumber,
   required Function() success,
 }) {
-  showSnackBar(title: 'AGV设置', message: '正在恢复AGV当前任务...');
+  showSnackBar(
+      title: 'smart_delivery_dialog_set'.tr,
+      message: 'smart_delivery_dialog_restoring_now_task'.tr);
   httpPost(
     method: webApiSmartDeliveryResumeRobot,
     params: {'RobNumber': agvNumber},
   ).then((response) {
     if (response.resultCode == resultSuccess) {
       success.call();
-      showSnackBar(title: 'AGV设置', message: response.message ?? '');
+      showSnackBar(
+          title: 'smart_delivery_dialog_set'.tr,
+          message: response.message ?? '');
     } else {
       errorDialog(content: response.message ?? 'query_default_error'.tr);
     }

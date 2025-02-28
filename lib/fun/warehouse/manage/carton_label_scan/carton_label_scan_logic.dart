@@ -1,4 +1,6 @@
 import 'package:get/get.dart';
+import 'package:jd_flutter/bean/http/response/carton_label_scan_progress_info.dart';
+import 'package:jd_flutter/fun/warehouse/manage/carton_label_scan/carton_label_scan_progress_detail_view.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
@@ -7,18 +9,6 @@ import 'carton_label_scan_state.dart';
 class CartonLabelScanLogic extends GetxController {
   final CartonLabelScanState state = CartonLabelScanState();
   var isSubmitting = false;
-
-  @override
-  void onReady() {
-    // TODO: implement onReady
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    // TODO: implement onClose
-    super.onClose();
-  }
 
   queryCartonLabelInfo(String code) {
     state.queryCartonLabelInfo(
@@ -38,7 +28,7 @@ class CartonLabelScanLogic extends GetxController {
     for (var v in state.cartonInsideLabelList) {
       v.scanned = 0;
     }
-    state.scannedLabelTotal.value =0;
+    state.scannedLabelTotal.value = 0;
     state.cartonInsideLabelList.refresh();
   }
 
@@ -62,17 +52,25 @@ class CartonLabelScanLogic extends GetxController {
         );
         if (exist.scanned < exist.labelCount!) {
           insideCode.call(code);
-          exist.scanned+=1;
+          exist.scanned += 1;
           state.scannedLabelTotal.value += 1;
         } else {
           insideExpired.call();
           if (Get.isDialogOpen == true) Get.back();
-          errorDialog(content: '条码[$code]已扫满，请确认是否放错或重复扫码。');
+          errorDialog(
+            content: 'carton_label_scan_label_scan_completed_tips'.trArgs(
+              [code],
+            ),
+          );
         }
       } catch (e) {
         notOutsideCode.call();
         if (Get.isDialogOpen == true) Get.back();
-        errorDialog(content: '条码[$code]不是外箱对应数据，请检查是否放错。');
+        errorDialog(
+          content: 'carton_label_scan_label_placement_error_tips'.trArgs(
+            [code],
+          ),
+        );
       }
     }
     if (state.labelTotal.value > 0 &&
@@ -81,7 +79,7 @@ class CartonLabelScanLogic extends GetxController {
       state.submitScannedCartonLabel(
         success: (msg) {
           cleanAll(submitSuccess);
-          showSnackBar(title: '操作成功', message: msg);
+          showSnackBar(title: 'carton_label_scan_success'.tr, message: msg);
           isSubmitting = false;
         },
         error: (msg) {
@@ -106,6 +104,21 @@ class CartonLabelScanLogic extends GetxController {
         errorDialog(content: msg);
         isSubmitting = false;
       },
+    );
+  }
+
+  queryScanHistory(String orderNo) {
+    state.getCartonLabelScanHistory(
+      orderNo: orderNo,
+      error: (msg) => errorDialog(content: msg),
+    );
+  }
+
+  getProgressDetail(CartonLabelScanProgressInfo data) {
+    state.getCartonLabelScanHistoryDetail(
+      id: data.interID ?? 0,
+      success: () => Get.to(() => const CartonLabelScanProgressDetailView()),
+      error: (msg) => errorDialog(content: msg),
     );
   }
 }

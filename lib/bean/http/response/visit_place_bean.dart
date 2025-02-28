@@ -1,6 +1,6 @@
-/// FInterID : 1
-/// FPlaceName : "一楼会客厅"
-/// FIfEnterOfficeBuilding : 0
+// FInterID : 1
+// FPlaceName : "一楼会客厅"
+// FIfEnterOfficeBuilding : 0
 
 class VisitPlaceBean {
   VisitPlaceBean({

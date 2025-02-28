@@ -7,15 +7,6 @@ import 'package:jd_flutter/bean/http/response/sap_surplus_material_info.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 
 
-const surplusMaterialType = <String>[
-  '生产',
-  '研发',
-  '底厂报废',
-  '鞋厂报废',
-  '扫地料',
-  '补产',
-  '车间退料',
-];
 
 class SapSurplusMaterialStockInState {
   var dispatchOrderNumber = ''.obs;
@@ -26,15 +17,22 @@ class SapSurplusMaterialStockInState {
   var weighbridgeStateText = ''.obs;
   var weighbridgeStateTextColor = Colors.black.obs;
 
-  SapSurplusMaterialStockInState() {}
-
+  var surplusMaterialType = <String>[
+    'sap_surplus_material_stock_in_production'.tr,
+    'sap_surplus_material_stock_in_research'.tr,
+    'sap_surplus_material_stock_in_sole_factory_scrap'.tr,
+    'sap_surplus_material_stock_in_shoe_factory_scrap'.tr,
+    'sap_surplus_material_stock_in_floor_waste'.tr,
+    'sap_surplus_material_stock_in_supplementary'.tr,
+    'sap_surplus_material_stock_in_workshop_material_return'.tr,
+  ];
   getSurplusMaterialHistory({
     required String startDate,
     required String endDate,
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在查询历史记录...',
+      loading: 'sap_surplus_material_stock_in_querying_history_tips'.tr,
       method: webApiSapSurplusMaterialHistory,
       body: {
         'DATEF': startDate,
@@ -69,7 +67,7 @@ class SapSurplusMaterialStockInState {
     required Function(String) error,
   }) {
     httpGet(
-      loading: '正在获取料头信息...',
+      loading: 'sap_surplus_material_stock_in_getting_surplus_material_info_tips'.tr,
       method: webApiMesGetMaterialInfo,
       params: {'Code': code},
     ).then((response) {
@@ -90,7 +88,7 @@ class SapSurplusMaterialStockInState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在查询历史记录...',
+      loading: 'sap_surplus_material_stock_in_querying_history_tips'.tr,
       method: webApiSapPostingSurplusMaterial,
       body: {
         'I_LTTYPE': surplusMaterialType,

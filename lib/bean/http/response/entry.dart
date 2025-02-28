@@ -1,11 +1,11 @@
-/// exNumber : "SCPZYCD200000094"
-/// billDate : "2020/7/7 16:38:00"
-/// empID : 139697
-/// qty : "22"
-/// exceptionID : 16
-/// exceptionName : "鞋面组合歪斜、移位"
-/// exceptionLevel : "轻微"
-/// reCheck : "复检合格"
+// exNumber : 'SCPZYCD200000094'
+// billDate : '2020/7/7 16:38:00'
+// empID : 139697
+// qty : '22'
+// exceptionID : 16
+// exceptionName : '鞋面组合歪斜、移位'
+// exceptionLevel : '轻微'
+// reCheck : '复检合格'
 
 class Entry {
   Entry({

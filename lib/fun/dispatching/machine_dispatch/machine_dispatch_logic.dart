@@ -9,7 +9,6 @@ import 'machine_dispatch_state.dart';
 class MachineDispatchLogic extends GetxController {
   final MachineDispatchState state = MachineDispatchState();
 
-
   getWorkCardList(Function(List<MachineDispatchInfo>) callback) {
     state.getWorkCardList(
       success: callback,
@@ -68,7 +67,7 @@ class MachineDispatchLogic extends GetxController {
   checkLabelScanState() {
     refreshWorkCardDetail(() {
       if (state.labelList.isEmpty) {
-        errorDialog(content: '此工单尚未打标扫码！');
+        errorDialog(content: 'machine_dispatch_order_not_scanned_tips'.tr);
         return;
       }
       var notScan = state.labelList.where((v) => !v.isScanned).toList();
@@ -82,29 +81,45 @@ class MachineDispatchLogic extends GetxController {
       ];
       if (notScanLabelList.isNotEmpty && lastLabelList.isNotEmpty) {
         errorDialog(
-            content:
-                '含有以下序号的整箱未扫:${notScanLabelList.join(',')}\n含有以下尺码的尾标未扫:${lastLabelList.join(',')}');
+          content: 'machine_dispatch_not_scanned_all_tips'.trArgs([
+            notScanLabelList.join(','),
+            lastLabelList.join(','),
+          ]),
+        );
       } else {
         if (notScanLabelList.isNotEmpty) {
-          errorDialog(content: '含有以下序号的整箱未扫:${notScanLabelList.join(',')}');
+          errorDialog(
+            content: 'machine_dispatch_not_scanned_box_tips'.trArgs([
+              notScanLabelList.join(','),
+            ]),
+          );
         } else if (lastLabelList.isNotEmpty) {
-          errorDialog(content: '含有以下尺码的尾标未扫:${lastLabelList.join(',')}');
+          errorDialog(
+            content: 'machine_dispatch_not_scanned_last_tips'.trArgs([
+              lastLabelList.join(','),
+            ]),
+          );
         } else {
           var totalReport = 0.0;
           for (var v in state.sizeItemList) {
             if ((v.reportQty ?? 0.0) < 0) {
-              errorDialog(content: '请填写<${v.size}码>的报工数');
+              errorDialog(
+                content: 'machine_dispatch_input_size_report_qty_tips'.trArgs([
+                  v.size ?? '',
+                ]),
+              );
               return;
             }
             totalReport = totalReport.add(v.reportQty ?? 0.0);
           }
           if (totalReport == 0) {
-            errorDialog(content: '请填写报工数');
+            errorDialog(content: 'machine_dispatch_input_report_qty_tips'.tr);
             return;
           } else {
             if (state.detailsInfo?.status == 2) {
               askDialog(
-                  content: '还要再次工号汇报吗？',
+                  content:
+                      'machine_dispatch_worker_number_report_again_tips'.tr,
                   confirm: () {
                     Get.to(() => const MachineDispatchReportPage());
                   });
@@ -131,31 +146,52 @@ class MachineDispatchLogic extends GetxController {
   report() {
     for (var v in state.processList) {
       if (v.dispatchList.isEmpty) {
-        errorDialog(content: '工序 <${v.processNumber}>${v.processName} 尚未分配！');
+        errorDialog(
+          content: 'machine_dispatch_precess_not_allocation_tips'.trArgs([
+            v.processNumber,
+            v.processName,
+          ]),
+        );
         return;
       }
       var unsigned = <String>[];
       v.dispatchList.where((v) => v.signature == null).forEach((v) {
-        unsigned.add('员工  <${v.workerNumber}>${v.workerName}  尚未签字');
+        unsigned.add('machine_dispatch_worker_not_signature_tips'.trArgs([
+          v.workerNumber ?? '',
+          v.workerName ?? '',
+        ]));
       });
       if (unsigned.isNotEmpty) {
         errorDialog(
-            content:
-                '工序 <${v.processNumber}>${v.processName}\n${unsigned.join('\n')}');
+          content: 'machine_dispatch_process_unsigned_tips'.trArgs([
+            v.processNumber,
+            v.processName,
+            unsigned.join('\n'),
+          ]),
+        );
         return;
       }
       if (v.totalProduction == 0) {
-        errorDialog(content: '工序 <${v.processNumber}>${v.processName} 无可分配数量！');
+        errorDialog(
+          content: 'machine_dispatch_process_no_allocation_qty_tips'.trArgs([
+            v.processNumber,
+            v.processName,
+          ]),
+        );
         return;
       }
       if (v.getSurplus() > 0) {
         errorDialog(
-            content: '工序 <${v.processNumber}>${v.processName} 还有剩余可分配数量！');
+          content: 'machine_dispatch_process_still_surplus_qty_tips'.trArgs([
+            v.processNumber,
+            v.processName,
+          ]),
+        );
         return;
       }
     }
     askDialog(
-      content: '确定要工资汇报吗？',
+      content: 'machine_dispatch_report_tips'.tr,
       confirm: () => state.reportDispatch(
         success: (msg) => successDialog(
           content: msg,

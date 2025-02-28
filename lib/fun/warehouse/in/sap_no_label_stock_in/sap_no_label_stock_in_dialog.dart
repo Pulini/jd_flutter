@@ -10,9 +10,6 @@ import 'package:jd_flutter/widget/picker/picker_view.dart';
 import 'package:jd_flutter/widget/signature_page.dart';
 import 'package:jd_flutter/widget/worker_check_widget.dart';
 
-
-
-
 const String checkStockInHandoverDialogNumber =
     'CHECK_STOCK_IN_HANDOVER_DIALOG_NUMBER';
 
@@ -31,11 +28,11 @@ modifyMaterialStockInQtyDialog({
     PopScope(
       canPop: false,
       child: AlertDialog(
-        title: const Text('修改此物料入库数'),
+        title: Text('sap_no_label_stock_in_dialog_modify_stock_in_qty'.tr),
         content: SizedBox(
           width: 300,
           child: NumberDecimalEditText(
-            hint: '本次汇报数量',
+            hint: 'sap_no_label_stock_in_dialog_report_qty'.tr,
             max: max,
             onChanged: (d) => qty = d,
             controller: controller,
@@ -73,7 +70,7 @@ checkStockInHandoverDialog({
 }) {
   var dpcDate = DatePickerController(PickerType.date,
       saveKey: '${RouteConfig.sapNoLabelStockIn.name}${PickerType.date}',
-      buttonName: '过账日期');
+      buttonName: 'sap_no_label_stock_in_dialog_posting_date'.tr);
   String saveNumber = spGet(checkStockInHandoverDialogNumber) ?? '';
   var avatar = ''.obs;
   WorkerInfo? leader;
@@ -81,7 +78,7 @@ checkStockInHandoverDialog({
     PopScope(
       canPop: false,
       child: Obx(() => AlertDialog(
-            title: const Text('现场班组长确认'),
+            title: Text('sap_no_label_stock_in_dialog_leader_confirm'.tr),
             content: SizedBox(
               width: 300,
               height: 300,
@@ -105,7 +102,7 @@ checkStockInHandoverDialog({
                   ),
                   WorkerCheck(
                     init: saveNumber,
-                    hint: '班组长工号',
+                    hint: 'sap_no_label_stock_in_dialog_leader_number'.tr,
                     onChanged: (w) {
                       leader = w;
                       avatar.value = w?.picUrl ?? '';

@@ -29,13 +29,13 @@ class _SapInkColorMatchingPageState extends State<SapInkColorMatchingPage> {
 
   //
 
-  ///日期选择器的控制器
+  //日期选择器的控制器
   var dpcStartDate = DatePickerController(
     PickerType.startDate,
     saveKey: '${RouteConfig.sapInkColorMatching.name}${PickerType.startDate}',
   );
 
-  ///日期选择器的控制器
+  //日期选择器的控制器
   var dpcEndDate = DatePickerController(
     PickerType.endDate,
     saveKey: '${RouteConfig.sapInkColorMatching.name}${PickerType.endDate}',
@@ -49,7 +49,10 @@ class _SapInkColorMatchingPageState extends State<SapInkColorMatchingPage> {
         if (data.materialList?.isNotEmpty == true) {
           logic.modifyOrder(index: index, refresh: () => _refreshOrder());
         } else {
-          showSnackBar(title: '错误', message: '该调色单没有调色信息！');
+          showSnackBar(
+            message: 'sap_ink_color_matching_no_color'.tr,
+            isWarning: true,
+          );
         }
       },
       child: Container(
@@ -75,20 +78,20 @@ class _SapInkColorMatchingPageState extends State<SapInkColorMatchingPage> {
                         children: [
                           expandedTextSpan(
                             flex: 3,
-                            hint: '型体：',
+                            hint: 'sap_ink_color_matching_type_body'.tr,
                             text: data.typeBody ?? '',
                             textColor: Colors.green.shade700,
                           ),
                           expandedTextSpan(
                             flex: 3,
-                            hint: '工厂：',
+                            hint: 'sap_ink_color_matching_factory'.tr,
                             text: data.factoryName ?? '',
                             textColor: Colors.black87,
                             isBold: false,
                           ),
                           expandedTextSpan(
                             flex: 2,
-                            hint: '调色单号：',
+                            hint: 'sap_ink_color_matching_toning_order'.tr,
                             text: data.orderNumber ?? '',
                             textColor: Colors.green.shade700,
                             isBold: false,
@@ -99,22 +102,24 @@ class _SapInkColorMatchingPageState extends State<SapInkColorMatchingPage> {
                         children: [
                           expandedTextSpan(
                             flex: 3,
-                            hint: '油墨师：',
+                            hint: 'sap_ink_color_matching_inkmaster'.tr,
                             text: data.inkMaster ?? '',
                             textColor: Colors.black87,
                             isBold: false,
                           ),
                           expandedTextSpan(
                             flex: 3,
-                            hint: '调色日期：',
+                            hint: 'sap_ink_color_matching_toning_date'.tr,
                             text: data.mixDate ?? '',
                             textColor: Colors.black87,
                             isBold: false,
                           ),
                           expandedTextSpan(
                             flex: 2,
-                            hint: '混合物重量：',
-                            text: '${data.mixtureWeight.toFixed(4).toShowString()}千克',
+                            hint: 'sap_ink_color_matching_mix_weight'.tr,
+                            text: 'sap_ink_color_matching_kg_unit'.trArgs([
+                              data.mixtureWeight.toFixed(4).toShowString(),
+                            ]),
                             textColor: Colors.black87,
                             isBold: false,
                           ),
@@ -125,7 +130,7 @@ class _SapInkColorMatchingPageState extends State<SapInkColorMatchingPage> {
                 ),
                 if ((data.trialQty ?? 0) == 0)
                   CombinationButton(
-                    text: '试做完成',
+                    text: 'sap_ink_color_matching_trial_completed'.tr,
                     click: () => trialFinishDialog(
                       typeBody: data.typeBody ?? '',
                       orderNumber: data.orderNumber ?? '',
@@ -142,26 +147,30 @@ class _SapInkColorMatchingPageState extends State<SapInkColorMatchingPage> {
                 child: Row(
                   children: [
                     expandedTextSpan(
-                      hint: '试做数量：',
-                      text: '${data.trialQty.toFixed(4).toShowString()}双',
+                      hint: 'sap_ink_color_matching_trial_qty'.tr,
+                      text: 'sap_ink_color_matching_pair_unit'.trArgs([
+                        data.trialQty.toFixed(4).toShowString(),
+                      ]),
                       textColor: Colors.black87,
                       isBold: false,
                     ),
                     expandedTextSpan(
-                      hint: '混合物试做后重量：',
-                      text: '${data.mixtureTheoreticalWeight.toFixed(4).toShowString()}千克',
+                      hint: 'sap_ink_color_matching_mix_trial_weight'.tr,
+                      text: 'sap_ink_color_matching_kg_unit'.trArgs([
+                        data.mixtureTheoreticalWeight.toFixed(4).toShowString(),
+                      ]),
                       textColor: Colors.black87,
                       isBold: false,
                     ),
                     expandedTextSpan(
-                      hint: '损耗：',
+                      hint: 'sap_ink_color_matching_loss'.tr,
                       text: '${data.loss.toFixed(4).toShowString()}%',
                       textColor: Colors.black87,
                       isBold: false,
                     ),
                     expandedTextSpan(
-                      hint: '单位用量：',
-                      text: data.unitUsage.toFixed(4).toShowString(),
+                      hint: 'sap_ink_color_matching_usage'.tr,
+                      text: data.unitUsage.toMaxString(),
                       textColor: Colors.black87,
                       isBold: false,
                     ),
@@ -218,7 +227,7 @@ class _SapInkColorMatchingPageState extends State<SapInkColorMatchingPage> {
               border: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(20)),
               ),
-              hintText: '型体',
+              hintText: 'sap_ink_color_matching_type_body_tips'.tr,
               hintStyle: const TextStyle(color: Colors.grey),
               prefixIcon: IconButton(
                 onPressed: () => controller.clear(),
@@ -228,7 +237,7 @@ class _SapInkColorMatchingPageState extends State<SapInkColorMatchingPage> {
                 ),
               ),
               suffixIcon: CombinationButton(
-                text: '新增调色',
+                text: 'sap_ink_color_matching_new_toning_order'.tr,
                 click: () => logic.createMixOrder(
                   newTypeBody: controller.text,
                   refresh: () {
@@ -244,7 +253,7 @@ class _SapInkColorMatchingPageState extends State<SapInkColorMatchingPage> {
       ],
       queryWidgets: [
         EditText(
-          hint: '请输入型体',
+          hint: 'sap_ink_color_matching_input_type_body'.tr,
           onChanged: (v) => state.typeBody.value = v,
         ),
         DatePicker(pickerController: dpcStartDate),
@@ -254,7 +263,7 @@ class _SapInkColorMatchingPageState extends State<SapInkColorMatchingPage> {
                 state.idTested.value = s;
                 spSave('${Get.currentRoute}/idTested', s);
               },
-              name: '试做完成',
+              name: 'sap_ink_color_matching_trial_completed'.tr,
               value: state.idTested.value,
             ))
       ],

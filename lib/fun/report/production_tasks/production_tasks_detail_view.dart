@@ -42,15 +42,15 @@ class _ProductionTasksDetailPageState extends State<ProductionTasksDetailPage> {
             : Colors.white;
     var textColor = type != null && type == 1 ? Colors.white : Colors.black87;
     if (type != null && type == 1) {
-      size = '尺码';
-      qty = '生产数';
-      productScannedQty = '产线扫描数';
-      manualScannedQty = '手动扫描数';
-      scannedQty = '累计扫描数';
-      owe = '欠数';
-      completionRate = '完成率';
-      installedQty = '已装数';
-      scannedNotInstalled = '已扫未装数';
+      size = 'production_tasks_detail_size'.tr;
+      qty = 'production_tasks_detail_production_qty'.tr;
+      productScannedQty = 'production_tasks_detail_auto_scan'.tr;
+      manualScannedQty = 'production_tasks_detail_manual_scan'.tr;
+      scannedQty = 'production_tasks_detail_total_scan'.tr;
+      owe = 'production_tasks_detail_owing_qty'.tr;
+      completionRate = 'production_tasks_detail_completion_rate'.tr;
+      installedQty = 'production_tasks_detail_packaged_qty'.tr;
+      scannedNotInstalled = 'production_tasks_detail_scanned_unpackaged'.tr;
     } else {
       if (type != null && type == 2) {
         data = logic.getDetailTotalItem();
@@ -136,11 +136,14 @@ class _ProductionTasksDetailPageState extends State<ProductionTasksDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('isInstruction=$isInstruction imageUrl=$imageUrl');
     return pageBody(
       title: isInstruction
-          ? '指令号：${state.detailInstructionNo.value}'
-          : '客户PO：${state.detailCustomerPO.value}',
+          ? 'production_tasks_detail_instruction_no'.trArgs([
+              state.detailInstructionNo.value,
+            ])
+          : 'production_tasks_detail_customer_po'.trArgs([
+              state.detailCustomerPO.value,
+            ]),
       body: Padding(
         padding: const EdgeInsets.only(left: 7, right: 7, bottom: 7),
         child: Column(
@@ -210,7 +213,7 @@ class _ProductionTasksDetailPageState extends State<ProductionTasksDetailPage> {
                               children: [
                                 Container(
                                   width: double.infinity,
-                                  padding: EdgeInsets.all(5),
+                                  padding: const EdgeInsets.all(5),
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(8),
                                     color: Colors.blue.shade100,
@@ -221,7 +224,11 @@ class _ProductionTasksDetailPageState extends State<ProductionTasksDetailPage> {
                                   ),
                                   child: Center(
                                     child: Text(
-                                      isInstruction ? '客户PO' : '指令号',
+                                      isInstruction
+                                          ? 'production_tasks_detail_customer_po_tips'
+                                              .tr
+                                          : 'production_tasks_detail_instruction_no_tips'
+                                              .tr,
                                       style: const TextStyle(
                                         color: Colors.black,
                                         fontWeight: FontWeight.bold,
@@ -271,8 +278,9 @@ class _ProductionTasksDetailPageState extends State<ProductionTasksDetailPage> {
                               Row(
                                 children: [
                                   Text(
-                                    '装箱进度：',
-                                    style: TextStyle(
+                                    'production_tasks_detail_packing_progress'
+                                        .tr,
+                                    style: const TextStyle(
                                       color: Colors.black,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -291,17 +299,20 @@ class _ProductionTasksDetailPageState extends State<ProductionTasksDetailPage> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   textSpan(
-                                    hint: '应装：',
+                                    hint:
+                                        'production_tasks_detail_should_packing'
+                                            .tr,
                                     text: state.detailShouldPackQty.value
                                         .toShowString(),
                                   ),
                                   textSpan(
-                                    hint: '已装：',
+                                    hint: 'production_tasks_detail_packaged'.tr,
                                     text: state.detailPackagedQty.value
                                         .toShowString(),
                                   ),
                                   textSpan(
-                                    hint: '未装：',
+                                    hint:
+                                        'production_tasks_detail_unpackaged'.tr,
                                     text: state.detailShouldPackQty.value
                                         .sub(state.detailPackagedQty.value)
                                         .toShowString(),

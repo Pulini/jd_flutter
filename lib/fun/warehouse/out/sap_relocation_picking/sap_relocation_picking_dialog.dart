@@ -32,7 +32,7 @@ checkPickerAndWarehouseDialog({
       canPop: false,
       child: Obx(
         () => AlertDialog(
-          title: const Text('领料员校验'),
+          title: Text('sap_relocation_pick_picker_verify'.tr),
           content: SizedBox(
             width: 300,
             height: 300,
@@ -56,7 +56,7 @@ checkPickerAndWarehouseDialog({
                 ),
                 WorkerCheck(
                   init: saveNumber,
-                  hint: '领料员工号',
+                  hint: 'sap_relocation_pick_picker_number'.tr,
                   onChanged: (w) {
                     picker = w;
                     avatar.value = w?.picUrl ?? '';

@@ -27,7 +27,7 @@ class SapProduceStockInState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在读取条码信息...',
+      loading: 'sap_produce_stock_in_reading_bar_code_info'.tr,
       method: webApiSapGetOrderInfoFromCode,
       body: {
         'ZBUSTYPE': '01',

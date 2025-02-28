@@ -22,10 +22,11 @@ checkPickingReceiptReversalDialog({
     String postingDate,
   ) handoverCheck,
 }) {
-  var dpcDate = DatePickerController(PickerType.date,
-      saveKey:
-          '${RouteConfig.sapPickingReceiptReversal.name}${PickerType.date}',
-      buttonName: '过账日期');
+  var dpcDate = DatePickerController(
+    PickerType.date,
+    saveKey: '${RouteConfig.sapPickingReceiptReversal.name}${PickerType.date}',
+    buttonName: 'sap_picking_receipt_reversal_dialog_posting_date'.tr,
+  );
   String saveNumber = spGet(checkPickingReceiptReversalDialogNumber) ?? '';
   var avatar = ''.obs;
   WorkerInfo? leader;
@@ -33,7 +34,11 @@ checkPickingReceiptReversalDialog({
     PopScope(
       canPop: false,
       child: Obx(() => AlertDialog(
-            title: Text(orderType == 1 ? '领料员签字' : '现场班组长确认'),
+            title: Text(
+              orderType == 1
+                  ? 'sap_picking_receipt_reversal_dialog_picker_signature'.tr
+                  : 'sap_picking_receipt_reversal_dialog_leader_signature'.tr,
+            ),
             content: SizedBox(
               width: 300,
               height: 300,
@@ -57,7 +62,10 @@ checkPickingReceiptReversalDialog({
                   ),
                   WorkerCheck(
                     init: saveNumber,
-                    hint: orderType == 1 ? '领料员工号' : '班组长工号',
+                    hint: orderType == 1
+                        ? 'sap_picking_receipt_reversal_dialog_picker_number'.tr
+                        : 'sap_picking_receipt_reversal_dialog_leader_number'
+                            .tr,
                     onChanged: (w) {
                       leader = w;
                       avatar.value = w?.picUrl ?? '';

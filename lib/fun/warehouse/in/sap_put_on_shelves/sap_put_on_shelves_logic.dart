@@ -10,18 +10,6 @@ import 'sap_put_on_shelves_state.dart';
 class SapPutOnShelvesLogic extends GetxController {
   final SapPutOnShelvesState state = SapPutOnShelvesState();
 
-  @override
-  void onReady() {
-    // TODO: implement onReady
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    // TODO: implement onClose
-    super.onClose();
-  }
-
   refreshLabelList({
     required String warehouse,
     required Function() refresh,
@@ -42,7 +30,7 @@ class SapPutOnShelvesLogic extends GetxController {
       var index =
           state.labelList.indexWhere((v) => v[0][0].palletNumber == code);
       if (index == -1) {
-        errorDialog(content: '未找到此托盘');
+        errorDialog(content: 'sap_put_on_shelves_not_find_pallet'.tr);
       } else {
         _goScan(index, warehouse, refresh);
       }
@@ -52,7 +40,7 @@ class SapPutOnShelvesLogic extends GetxController {
       var index = state.labelList.indexWhere(
           (v) => v.any((v2) => v2.any((v3) => v3.labelNumber == code)));
       if (index == -1) {
-        errorDialog(content: '未找到此标签');
+        errorDialog(content: 'sap_put_on_shelves_not_find_label'.tr);
       } else {
         _goScan(index, warehouse, refresh);
       }
@@ -96,7 +84,10 @@ class SapPutOnShelvesLogic extends GetxController {
     required Function() refresh,
   }) {
     if (location.isEmpty) {
-      showSnackBar(title: '错误', message: '请填写库位！', isWarning: true);
+      showSnackBar(
+        message: 'sap_put_on_shelves_input_storage_location'.tr,
+        isWarning: true,
+      );
     } else {
       state.puttingOnShelves(
         warehouse: warehouse,

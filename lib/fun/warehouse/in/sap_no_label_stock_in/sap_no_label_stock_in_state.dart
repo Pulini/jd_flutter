@@ -12,9 +12,6 @@ import 'package:jd_flutter/utils/web_api.dart';
 class SapNoLabelStockInState {
   var orderList = <List<SapNoLabelStockInItemInfo>>[].obs;
 
-  SapNoLabelStockInState() {
-    ///Initialize variables
-  }
 
   queryOrderList({
     required String reportStartDate,
@@ -25,7 +22,7 @@ class SapNoLabelStockInState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在获取待入库列表...',
+      loading: 'sap_no_label_stock_in_getting_wait_stock_in_order_list_tips'.tr,
       method: webApiSapGetNoLabelStockInOrderList,
       body: {
         'ZZBGRQ_F': reportStartDate,
@@ -78,7 +75,7 @@ class SapNoLabelStockInState {
     );
 
     sapPost(
-      loading: '正在提交入库...',
+      loading: 'sap_no_label_stock_in_submitting_stock_in_tips'.tr,
       method: webApiSapSubmitNoLabelStockIn,
       body: {
         'KTSCH': process,

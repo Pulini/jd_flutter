@@ -25,7 +25,7 @@ class _PartPickPageState extends State<PartPickPage> {
       name = data.linkPartName?.join(',') ?? '';
     }
     return GestureDetector(
-      onTap: () => showSnackBar(title: '部件', message: name),
+      onTap: () => showSnackBar(title: 'part_pick_part'.tr, message: name),
       child: Card(
         child: Padding(
           padding: const EdgeInsets.only(left: 10, right: 10),
@@ -57,10 +57,10 @@ class _PartPickPageState extends State<PartPickPage> {
       logic.queryPartList();
     });
     return pageBody(
-      title: '选择部件',
+      title: 'part_pick_select_part'.tr,
       actions: [
         CombinationButton(
-          text: '提交',
+          text: 'part_pick_submit'.tr,
           click: () => logic.submitCheck(),
         ),
         const SizedBox(width: 20),

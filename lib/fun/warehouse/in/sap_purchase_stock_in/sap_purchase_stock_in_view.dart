@@ -86,8 +86,8 @@ class _SapPurchaseStockInPageState extends State<SapPurchaseStockInPage> {
                     badgeSize: const Size(45, 45),
                     textSpan: TextSpan(
                       text: list[0].isGenerate?.isNotEmpty == true
-                          ? '已暂收'
-                          : '已清点',
+                          ? 'sap_purchase_stock_in_temporarily_received'.tr
+                          : 'sap_purchase_stock_in_inventoried'.tr,
                       style: const TextStyle(
                         fontSize: 14,
                         color: Colors.white,
@@ -101,12 +101,12 @@ class _SapPurchaseStockInPageState extends State<SapPurchaseStockInPage> {
                 Row(
                   children: [
                     expandedTextSpan(
-                      hint: '供应商：',
+                      hint: 'sap_purchase_stock_in_supplier'.tr,
                       text: list[0].supplierName ?? '',
                       textColor: Colors.red,
                     ),
                     textSpan(
-                      hint: '件数：',
+                      hint: 'sap_purchase_stock_in_piece_qty'.tr,
                       isBold: false,
                       text: list
                           .map((v) => v.numPage ?? 0)
@@ -121,7 +121,7 @@ class _SapPurchaseStockInPageState extends State<SapPurchaseStockInPage> {
                 Row(
                   children: [
                     expandedTextSpan(
-                      hint: '送货单号：',
+                      hint: 'sap_purchase_stock_in_delivery_no'.tr,
                       text: list[0].deliveryNumber ?? '',
                       isBold: false,
                       textColor: Colors.grey.shade700,
@@ -129,8 +129,8 @@ class _SapPurchaseStockInPageState extends State<SapPurchaseStockInPage> {
                     ),
                     if (list[0].isExempt == 'X')
                       Text(
-                        '免检',
-                        style: TextStyle(
+                        'sap_purchase_stock_in_exempt_inspection'.tr,
+                        style: const TextStyle(
                           color: Colors.green,
                           fontWeight: FontWeight.bold,
                         ),
@@ -138,7 +138,7 @@ class _SapPurchaseStockInPageState extends State<SapPurchaseStockInPage> {
                   ],
                 ),
                 textSpan(
-                  hint: '备注：',
+                  hint: 'sap_purchase_stock_in_remake'.tr,
                   text: list[0].remarks ?? '',
                   isBold: false,
                   textColor: Colors.grey.shade700,
@@ -181,12 +181,12 @@ class _SapPurchaseStockInPageState extends State<SapPurchaseStockInPage> {
                         ),
                       ),
                       child: Text(
-                        '核查',
-                        style: TextStyle(color: Colors.white),
+                        'sap_purchase_stock_in_check'.tr,
+                        style: const TextStyle(color: Colors.white),
                       ),
                     ),
                   ),
-                  SizedBox(width: 1),
+                  const SizedBox(width: 1),
                   Expanded(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
@@ -203,8 +203,8 @@ class _SapPurchaseStockInPageState extends State<SapPurchaseStockInPage> {
                         list[0].deliveryNumber ?? '',
                       ),
                       child: Text(
-                        '明细',
-                        style: TextStyle(color: Colors.white),
+                        'sap_purchase_stock_in_details'.tr,
+                        style: const TextStyle(color: Colors.white),
                       ),
                     ),
                   ),
@@ -221,37 +221,50 @@ class _SapPurchaseStockInPageState extends State<SapPurchaseStockInPage> {
           ? Row(
               children: [
                 expandedTextSpan(
-                  hint: '物料：',
+                  hint: 'sap_purchase_stock_in_material'.tr,
                   text:
                       '(${list[0].materialCode})${list[0].materialDescription}',
                 ),
-                textSpan(hint: '单位：', text: list[0].basicUnit ?? '')
+                textSpan(
+                  hint: 'sap_purchase_stock_in_unit'.tr,
+                  text: list[0].basicUnit ?? '',
+                )
               ],
             )
           : textSpan(
-              hint: '物料：',
+              hint: 'sap_purchase_stock_in_material'.tr,
               text: '(${list[0].materialCode})${list[0].materialDescription}',
             ),
       if (list[0].basicUnit != list[0].commonUnits)
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            textSpan(hint: '基本单位：', text: list[0].basicUnit ?? ''),
-            textSpan(hint: '系数：', text: '${list[0].coefficient ?? 0}'),
-            textSpan(hint: '常用单位：', text: list[0].commonUnits ?? ''),
+            textSpan(
+              hint: 'sap_purchase_stock_in_basic_unit'.tr,
+              text: list[0].basicUnit ?? '',
+            ),
+            textSpan(
+              hint: 'sap_purchase_stock_in_coefficient'.tr,
+              text: '${list[0].coefficient ?? 0}',
+            ),
+            textSpan(
+              hint: 'sap_purchase_stock_in_common_units'.tr,
+              text: list[0].commonUnits ?? '',
+            ),
           ],
         ),
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            '核对情况：',
+            'sap_purchase_stock_in_check_situation'.tr,
             style: const TextStyle(fontWeight: FontWeight.bold),
           ),
           Expanded(
             child: progressIndicator(
               max: list.map((v) => v.qty ?? 0).reduce((a, b) => a.add(b)),
-              value: list.map((v) => v.checkQty ?? 0).reduce((a, b) => a.add(b)),
+              value:
+                  list.map((v) => v.checkQty ?? 0).reduce((a, b) => a.add(b)),
             ),
           ),
         ],
@@ -269,13 +282,16 @@ class _SapPurchaseStockInPageState extends State<SapPurchaseStockInPage> {
   Widget build(BuildContext context) {
     return pageBodyWithBottomSheet(
       bottomSheet: [
-        EditText(hint: '送货单号', controller: deliveryOrderController),
-    Row(
-                children: [
-                  Expanded(child: DatePicker(pickerController: dpcStartDate)),
-                  Expanded(child: DatePicker(pickerController: dpcEndDate)),
-                ],
-              ),
+        EditText(
+          hint: 'sap_purchase_stock_in_delivery_no'.tr,
+          controller: deliveryOrderController,
+        ),
+        Row(
+          children: [
+            Expanded(child: DatePicker(pickerController: dpcStartDate)),
+            Expanded(child: DatePicker(pickerController: dpcEndDate)),
+          ],
+        ),
         OptionsPicker(pickerController: companyController),
         LinkOptionsPicker(pickerController: factoryWarehouseController),
         OptionsPicker(pickerController: supplierController),
@@ -284,21 +300,21 @@ class _SapPurchaseStockInPageState extends State<SapPurchaseStockInPage> {
                 Expanded(
                   child: SwitchButton(
                     onChanged: (s) => state.warehoused.value = s,
-                    name: '已入库',
+                    name: 'sap_purchase_stock_in_already_stock_in'.tr,
                     value: state.warehoused.value,
                   ),
                 ),
                 Expanded(
                   child: SwitchButton(
                     onChanged: (s) => state.generated.value = s,
-                    name: '已暂收',
+                    name: 'sap_purchase_stock_in_temporarily_received'.tr,
                     value: state.generated.value,
                   ),
                 ),
               ],
             )),
       ],
-      query:()=> queryOrder(),
+      query: () => queryOrder(),
       body: Obx(() => Column(
             children: [
               Expanded(
@@ -313,7 +329,7 @@ class _SapPurchaseStockInPageState extends State<SapPurchaseStockInPage> {
                   children: [
                     Expanded(
                       child: CombinationButton(
-                        text: '入库',
+                        text: 'sap_purchase_stock_in_stock_in'.tr,
                         click: () => stockInDialog(
                           list: logic.getSelected(),
                           refresh: queryOrder,
@@ -323,7 +339,7 @@ class _SapPurchaseStockInPageState extends State<SapPurchaseStockInPage> {
                     ),
                     Expanded(
                       child: CombinationButton(
-                        text: '入库冲销',
+                        text: 'sap_purchase_stock_in_stock_in_reversal'.tr,
                         click: () => logic.checkStockInWriteOffSelected(
                           (list) => stockInWriteOffDialog(
                             list: list,
@@ -335,7 +351,7 @@ class _SapPurchaseStockInPageState extends State<SapPurchaseStockInPage> {
                     ),
                     Expanded(
                       child: CombinationButton(
-                        text: '暂收',
+                        text: 'sap_purchase_stock_in_temporarily_receive'.tr,
                         click: () => logic.checkTemporarySelected(
                           (list) => temporaryDialog(
                             list: list,

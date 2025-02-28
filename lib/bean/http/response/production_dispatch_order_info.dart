@@ -1,46 +1,47 @@
+import 'package:get/get.dart';
 import 'package:jd_flutter/utils/utils.dart';
 
-/// InterID : 213015
-/// State : "已派工,已审核,未关闭,未汇报,未记工,未结案"
-/// BillType : "正单"
-/// PlanBill : "ZJ2300000031"
-/// OrderBill : "P2048550"
-/// SAPOrderBill : "000000000838"
-/// OrderDate : "2023-03-02"
-/// Group : "金臻_沿条课"
-/// PlanStartTime : "2023-03-02"
-/// PlanEndTime : "2023-03-02"
-/// PlantBody : ""
-/// MaterialCode : "061600005"
-/// MaterialName : "沿条拌料半成品-D13677-22B M"
-/// Unit : "米"
-/// BillerID : 5259
-/// Biller : "张幸民"
-/// Checker : "张幸民"
-/// BillDate : "2023-03-02 11:44:40"
-/// CheckDate : "2023-03-02 11:44:40"
-/// EntryID : 2
-/// ProcessFlowID : 63
-/// CanReportByNoStockIn : 0
-/// WorkNumberTotal : 3384
-/// RouteBillNumber : "GYLX2000017014"
-/// ReportedNumber : 0
-/// ReportedUnscheduled : 0
-/// ReportedUnentered : 0
-/// StockInQty : 0
-/// RoutingID : "162132"
-/// Size : []
-/// IsClosed : false
-/// PrintStatus : "3"
-/// StubBar1 : "460500011"
-/// StubBar2 : ""
-/// StubBar3 : ""
-/// StubBarName1 : "沿条料头测试1"
-/// StubBarName2 : ""
-/// StubBarName3 : ""
-/// Factory : "1500"
-/// Machine : ""
-/// PastDay : false
+// InterID : 213015
+// State : "已派工,已审核,未关闭,未汇报,未记工,未结案"
+// BillType : "正单"
+// PlanBill : "ZJ2300000031"
+// OrderBill : "P2048550"
+// SAPOrderBill : "000000000838"
+// OrderDate : "2023-03-02"
+// Group : "金臻_沿条课"
+// PlanStartTime : "2023-03-02"
+// PlanEndTime : "2023-03-02"
+// PlantBody : ""
+// MaterialCode : "061600005"
+// MaterialName : "沿条拌料半成品-D13677-22B M"
+// Unit : "米"
+// BillerID : 5259
+// Biller : "张幸民"
+// Checker : "张幸民"
+// BillDate : "2023-03-02 11:44:40"
+// CheckDate : "2023-03-02 11:44:40"
+// EntryID : 2
+// ProcessFlowID : 63
+// CanReportByNoStockIn : 0
+// WorkNumberTotal : 3384
+// RouteBillNumber : "GYLX2000017014"
+// ReportedNumber : 0
+// ReportedUnscheduled : 0
+// ReportedUnentered : 0
+// StockInQty : 0
+// RoutingID : "162132"
+// Size : []
+// IsClosed : false
+// PrintStatus : "3"
+// StubBar1 : "460500011"
+// StubBar2 : ""
+// StubBar3 : ""
+// StubBarName1 : "沿条料头测试1"
+// StubBarName2 : ""
+// StubBarName3 : ""
+// Factory : "1500"
+// Machine : ""
+// PastDay : false
 
 class ProductionDispatchOrderInfo {
   ProductionDispatchOrderInfo({
@@ -229,11 +230,11 @@ class ProductionDispatchOrderInfo {
   }
 
   String getSizeText() {
-    var text = '尺码：';
+    var text = '';
     for (var value in size!) {
       text = '$text  <${value.size}/${value.num}>';
     }
-    return text;
+    return 'production_dispatch_size'.trArgs([text]);
   }
 
   String getProgress() {

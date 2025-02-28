@@ -1,24 +1,24 @@
 import 'package:collection/collection.dart';
 import 'package:jd_flutter/utils/utils.dart';
 
-/// {
-///   "ZTYPE": "1",
-///   "NOTICE_NO": "000000128279",
-///   "DISPATCH_NO": "000000097386",
-///   "ZVBELN_ORI": "",
-///   "ZZGCXT": "",
-///   "ZWOFNR": "",
-///   "ZZPGJT": "BLZ",
-///   "ERDAT": "2024-11-14",
-///   "KTSCH": "BL",
-///   "WERKS": "",
-///   "LGORT": "1001",
-///   "LGOBE": "金臻原材料仓",
-///   "USNAM": "",
-///   "EBELN": "",
-///   "LIFNR": "",
-///   "NAME1": ""
-/// }
+// {
+//   "ZTYPE": "1",
+//   "NOTICE_NO": "000000128279",
+//   "DISPATCH_NO": "000000097386",
+//   "ZVBELN_ORI": "",
+//   "ZZGCXT": "",
+//   "ZWOFNR": "",
+//   "ZZPGJT": "BLZ",
+//   "ERDAT": "2024-11-14",
+//   "KTSCH": "BL",
+//   "WERKS": "",
+//   "LGORT": "1001",
+//   "LGOBE": "金臻原材料仓",
+//   "USNAM": "",
+//   "EBELN": "",
+//   "LIFNR": "",
+//   "NAME1": ""
+// }
 class SapPickingInfo {
   SapPickingInfo({
     this.orderType,
@@ -183,38 +183,38 @@ class SapPickingDetailInfo {
   }
 }
 
-///  {
-///    "ZTYPE": "1",
-///    "NOTICE_NO": "000000128279",
-///    "NOTICE_ITEM": "00001",
-///    "DISPATCH_NO": "000000097386",
-///    "DISPATCH_ITEM": "00050",
-///    "DISPATCH_DATE": "2024-11-14",
-///    "AUFNR": "002011269235",
-///    "ZZPGJT": "BLZ",
-///    "WERKS": "1500",
-///    "LGORT": "1001",
-///    "LGOBE": "金臻原材料仓",
-///    "KTSCH": "BL",
-///    "ZZXTNO": "",
-///    "SATNR": "460200181",
-///    "MAKTX_S": "TPU-3698AYL-1",
-///    "ZCM": "",
-///    "MATNR": "460200181",
-///    "MAKTX": "TPU-3698AYL-1",
-///    "ZSFDL": "",
-///    "BDMNG": 29.921,
-///    "ENMNG": 0.0,
-///    "LABST": 0.0,
-///    "MEINS": "千克",
-///    "AUSME": "",
-///    "ZCOEFFICIENT": 0.0,
-///    "ZVBELN_ORI": "",
-///    "ZPOSNR_ORI": "000000",
-///    "ITEM": [],
-///    "EBELN": "",
-///    "EBELP": "00000"
-///  }
+//  {
+//    "ZTYPE": "1",
+//    "NOTICE_NO": "000000128279",
+//    "NOTICE_ITEM": "00001",
+//    "DISPATCH_NO": "000000097386",
+//    "DISPATCH_ITEM": "00050",
+//    "DISPATCH_DATE": "2024-11-14",
+//    "AUFNR": "002011269235",
+//    "ZZPGJT": "BLZ",
+//    "WERKS": "1500",
+//    "LGORT": "1001",
+//    "LGOBE": "金臻原材料仓",
+//    "KTSCH": "BL",
+//    "ZZXTNO": "",
+//    "SATNR": "460200181",
+//    "MAKTX_S": "TPU-3698AYL-1",
+//    "ZCM": "",
+//    "MATNR": "460200181",
+//    "MAKTX": "TPU-3698AYL-1",
+//    "ZSFDL": "",
+//    "BDMNG": 29.921,
+//    "ENMNG": 0.0,
+//    "LABST": 0.0,
+//    "MEINS": "千克",
+//    "AUSME": "",
+//    "ZCOEFFICIENT": 0.0,
+//    "ZVBELN_ORI": "",
+//    "ZPOSNR_ORI": "000000",
+//    "ITEM": [],
+//    "EBELN": "",
+//    "EBELP": "00000"
+//  }
 
 class SapProductionPickingDetailOrderInfo {
   SapProductionPickingDetailOrderInfo({
@@ -646,12 +646,12 @@ class PalletDetailItem1Info {
 }
 
 class PalletDetailItem2Info {
-  var factoryNumber; //工厂  WERKS
-  var warehouseNumber; //仓库  LGORT
-  var location; //库位 ZLOCAL
-  var palletNumber; //托盘号  ZFTRAYNO
-  var palletExistence; //托盘是否存在  空 托盘不存在、 X 托盘存在 ZTRAY_CFMRT1
-  var palletState; //托盘状态  空 托盘无货、 X 当前条件下有货、Y 托盘有货但不在当前查询条件下  ZTRAY_CFMRT2
+  String? factoryNumber; //工厂  WERKS
+  String? warehouseNumber; //仓库  LGORT
+  String? location; //库位 ZLOCAL
+  String? palletNumber; //托盘号  ZFTRAYNO
+  String? palletExistence; //托盘是否存在  空 托盘不存在、 X 托盘存在 ZTRAY_CFMRT1
+  String? palletState; //托盘状态  空 托盘无货、 X 当前条件下有货、Y 托盘有货但不在当前查询条件下  ZTRAY_CFMRT2
 
   PalletDetailItem2Info({
     this.factoryNumber,

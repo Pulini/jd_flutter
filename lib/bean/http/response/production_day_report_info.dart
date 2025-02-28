@@ -1,18 +1,18 @@
-/// DepName : "裁断1组"
-/// Manager : "尹杰文"
-/// ToDayMustQty : 600.0
-/// ToDayQty : 0.0
-/// ToDayFinishRate : "0%"
-/// NoToDayQty : 600.0
-/// MonthMustQty : 4840.0
-/// MonthQty : 0.0
-/// MonthFinishRate : "0%"
-/// NoMonthQty : 4840.0
-/// MustPeopleCount : 13.0
-/// PeopleCount : 13.0
-/// NoDoingReason : ""
-/// DeptID : "554696"
-/// Number : "002144"
+// DepName : "裁断1组"
+// Manager : "尹杰文"
+// ToDayMustQty : 600.0
+// ToDayQty : 0.0
+// ToDayFinishRate : "0%"
+// NoToDayQty : 600.0
+// MonthMustQty : 4840.0
+// MonthQty : 0.0
+// MonthFinishRate : "0%"
+// NoMonthQty : 4840.0
+// MustPeopleCount : 13.0
+// PeopleCount : 13.0
+// NoDoingReason : ""
+// DeptID : "554696"
+// Number : "002144"
 
 class ProductionDayReportInfo {
   ProductionDayReportInfo({

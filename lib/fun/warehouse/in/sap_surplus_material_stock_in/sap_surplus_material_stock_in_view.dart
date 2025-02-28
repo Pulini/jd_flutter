@@ -28,14 +28,14 @@ class _SapSurplusMaterialStockInPageState
   final SapSurplusMaterialStockInState state =
       Get.find<SapSurplusMaterialStockInLogic>().state;
 
-  ///日期选择器的控制器
+  //日期选择器的控制器
   var dpcStartDate = DatePickerController(
     PickerType.startDate,
     saveKey:
         '${RouteConfig.sapSurplusMaterialStockIn.name}${PickerType.startDate}',
   );
 
-  ///日期选择器的控制器
+  //日期选择器的控制器
   var dpcEndDate = DatePickerController(
     PickerType.date,
     saveKey:
@@ -48,12 +48,13 @@ class _SapSurplusMaterialStockInPageState
       PopScope(
         canPop: false,
         child: AlertDialog(
-          title: const Text('选择料头类型'),
+          title: Text(
+              'sap_surplus_material_stock_in_select_surplus_material_type'.tr),
           content: SizedBox(
             width: 300,
             height: 160,
             child: getCupertinoPicker(
-              surplusMaterialType.map((v) => Center(child: Text(v))).toList(),
+              state.surplusMaterialType.map((v) => Center(child: Text(v))).toList(),
               controller,
             ),
           ),
@@ -99,14 +100,15 @@ class _SapSurplusMaterialStockInPageState
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 textSpan(
-                  hint: '物料：',
+                  hint: 'sap_surplus_material_stock_in_material'.tr,
                   text: '(${data.number})${data.name}',
                   textColor: Colors.blue.shade700,
                 ),
                 Row(
                   children: [
                     Text(
-                      '料头重量：',
+                      'sap_surplus_material_stock_in_surplus_material_weight'
+                          .tr,
                       style: TextStyle(color: Colors.grey.shade700),
                     ),
                     SizedBox(
@@ -143,7 +145,7 @@ class _SapSurplusMaterialStockInPageState
                     ),
                     IconButton(
                       onPressed: () {
-                        data.editQty=state.weight.value;
+                        data.editQty = state.weight.value;
                         controller.text = state.weight.value.toShowString();
                       },
                       icon: Icon(
@@ -158,7 +160,9 @@ class _SapSurplusMaterialStockInPageState
           ),
           IconButton(
             onPressed: () => askDialog(
-              content: '确定要删除此料头数据吗？',
+              content:
+                  'sap_surplus_material_stock_in_delete_surplus_material_tips'
+                      .tr,
               confirm: () {
                 state.materialList.remove(data);
               },
@@ -196,7 +200,7 @@ class _SapSurplusMaterialStockInPageState
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 textSpan(
-                  hint: '料头：',
+                  hint: 'sap_surplus_material_stock_in_surplus_material'.tr,
                   text:
                       '(${list[0].surplusMaterialCode})${list[0].surplusMaterialName}',
                   textColor: Colors.blue.shade700,
@@ -205,12 +209,12 @@ class _SapSurplusMaterialStockInPageState
                   children: [
                     expandedTextSpan(
                       flex: 4,
-                      hint: '型体：',
+                      hint: 'sap_surplus_material_stock_in_type_body'.tr,
                       text: list[0].typeBody ?? '',
                       textColor: Colors.blue.shade700,
                     ),
                     expandedTextSpan(
-                      hint: '总重量：',
+                      hint: 'sap_surplus_material_stock_in_total_weight'.tr,
                       text: list
                           .map((v) => v.surplusMaterialQty ?? 0)
                           .reduce((a, b) => a.add(b))
@@ -231,20 +235,21 @@ class _SapSurplusMaterialStockInPageState
                     children: [
                       expandedTextSpan(
                         flex: 2,
-                        hint: '派工单号：',
+                        hint: 'sap_surplus_material_stock_in_dispatch_order_no'
+                            .tr,
                         text: sub.dispatchNo ?? '',
                         textColor: Colors.blue.shade700,
                       ),
                       expandedTextSpan(
                         flex: 2,
-                        hint: '提交日期：',
+                        hint: 'sap_surplus_material_stock_in_submit_date'.tr,
                         text: sub.submitDate ?? '',
                         isBold: false,
                         hintColor: Colors.grey.shade700,
                         textColor: Colors.blue.shade700,
                       ),
                       expandedTextSpan(
-                        hint: '机台：',
+                        hint: 'sap_surplus_material_stock_in_machine'.tr,
                         text: sub.machine ?? '',
                         isBold: false,
                         hintColor: Colors.grey.shade700,
@@ -264,7 +269,9 @@ class _SapSurplusMaterialStockInPageState
                       ),
                       expandedTextSpan(
                         flex: 2,
-                        hint: '料头类型：',
+                        hint:
+                            'sap_surplus_material_stock_in_surplus_material_type'
+                                .tr,
                         text: sub.surplusMaterialTypeName ?? '',
                         isBold: false,
                         hintColor: Colors.grey.shade700,
@@ -272,7 +279,7 @@ class _SapSurplusMaterialStockInPageState
                             sub.surplusMaterialType ?? '0'),
                       ),
                       expandedTextSpan(
-                        hint: '总量：',
+                        hint: 'sap_surplus_material_stock_in_total'.tr,
                         text: sub.surplusMaterialQty.toShowString(),
                         isBold: false,
                         hintColor: Colors.grey.shade700,
@@ -292,7 +299,10 @@ class _SapSurplusMaterialStockInPageState
   @override
   void initState() {
     weighbridgeListener(
-      usbAttached: () => showSnackBar(title: 'USB监测', message: '监测到USB设备插入'),
+      usbAttached: () => showSnackBar(
+        title: 'sap_surplus_material_stock_in_usb_monitor'.tr,
+        message: 'sap_surplus_material_stock_in_monitor_usb_insert'.tr,
+      ),
       readWeight: (weight) => state.weight.value = weight,
       weighbridgeState: (state) => logic.setWeighbridgeState(state),
     );
@@ -337,7 +347,7 @@ class _SapSurplusMaterialStockInPageState
                 )),
           const SizedBox(width: 50),
           CombinationButton(
-            text: '重新连接',
+            text: 'sap_surplus_material_stock_in_reconnect'.tr,
             click: () {
               state.weighbridgeStateText.value = '';
               weighbridgeOpen();
@@ -356,10 +366,10 @@ class _SapSurplusMaterialStockInPageState
                       child: Obx(() => Row(
                             children: [
                               expandedTextSpan(
-                                  hint: '派工单号：',
+                                  hint: 'sap_surplus_material_stock_in_dispatch_order_no'.tr,
                                   text: state.dispatchOrderNumber.value),
                               textSpan(
-                                hint: '总量：',
+                                hint: 'sap_surplus_material_stock_in_total'.tr,
                                 text: state.weight.value.toShowString(),
                                 textColor: Colors.blueAccent,
                               ),
@@ -378,7 +388,7 @@ class _SapSurplusMaterialStockInPageState
                     SizedBox(
                       width: double.infinity,
                       child: CombinationButton(
-                        text: '过账',
+                        text: 'sap_surplus_material_stock_in_posting'.tr,
                         click: () {
                           if (logic.checkSubmitData()) {
                             _selectSurplusMaterialType(
@@ -415,7 +425,7 @@ class _SapSurplusMaterialStockInPageState
                     SizedBox(
                       width: double.infinity,
                       child: CombinationButton(
-                        text: '查询历史',
+                        text: 'sap_surplus_material_stock_in_query_history'.tr,
                         click: () => logic.queryHistory(
                           startDate: dpcStartDate.getDateFormatSapYMD(),
                           endDate: dpcEndDate.getDateFormatSapYMD(),

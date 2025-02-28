@@ -76,7 +76,7 @@ class _SapPrintPickingDetailPageState extends State<SapPrintPickingDetailPage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             textSpan(
-              hint: '物料：',
+              hint: 'sap_print_picking_detail_material'.tr,
               text: data.order.orderType == '3'
                   ? '(${data.order.sizeMaterialNumber})${data.order.sizeMaterialName}'
                   : '(${data.order.materialNumber})${data.order.materialName}',
@@ -91,12 +91,12 @@ class _SapPrintPickingDetailPageState extends State<SapPrintPickingDetailPage> {
                         children: [
                           expandedTextSpan(
                             flex: 2,
-                            hint: '型体：',
+                            hint: 'sap_print_picking_detail_type_body'.tr,
                             text: data.order.typeBody ?? '',
                             textColor: Colors.red,
                           ),
                           expandedTextSpan(
-                            hint: '单位：',
+                            hint: 'sap_print_picking_detail_unit'.tr,
                             isBold: false,
                             text: data.order.commonUnit
                                 .ifEmpty(data.order.basicUnit ?? ''),
@@ -107,14 +107,14 @@ class _SapPrintPickingDetailPageState extends State<SapPrintPickingDetailPage> {
                       Row(
                         children: [
                           expandedTextSpan(
-                            hint: '可领：',
+                            hint: 'sap_print_picking_detail_can_pick'.tr,
                             text: data.order.getRemainder().toShowString(),
                             isBold: false,
                             textColor: Colors.blue.shade900,
                             hintColor: Colors.grey.shade700,
                           ),
                           expandedTextSpan(
-                            hint: '领取：',
+                            hint: 'sap_print_picking_detail_pick'.tr,
                             text: data.pickQty.toShowString(),
                             isBold: false,
                             textColor: Colors.blue.shade900,
@@ -122,7 +122,7 @@ class _SapPrintPickingDetailPageState extends State<SapPrintPickingDetailPage> {
                           ),
                           if (data.order.location != '1001')
                             expandedTextSpan(
-                              hint: '标数：',
+                              hint: 'sap_print_picking_detail_label_qty'.tr,
                               text: state.orderDetailLabels
                                   .where((v) => v.distribution.any(
                                       (v2) => v2.ascriptionId == data.dataId))
@@ -150,7 +150,8 @@ class _SapPrintPickingDetailPageState extends State<SapPrintPickingDetailPage> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   textSpan(
-                    hint: '推荐库位：',
+                    hint: 'sap_print_picking_detail_recommend_storage_location'
+                        .tr,
                     text: '${item.warehouseLocation}-${item.palletNo}',
                     textColor: Colors.green.shade700,
                     hintColor: Colors.grey.shade700,
@@ -167,14 +168,14 @@ class _SapPrintPickingDetailPageState extends State<SapPrintPickingDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Obx(() => pageBody(
-          title: 'SAP喷漆领料',
+          title: 'sap_print_picking_detail_print_pick'.tr,
           actions: [
             if (state.orderDetailLabels.isNotEmpty)
               TextButton(
                 onPressed: () => _goLabelList(-1),
-                child: const Text(
-                  '标签列表',
-                  style: TextStyle(
+                child: Text(
+                  'sap_print_picking_detail_label_list'.tr,
+                  style: const TextStyle(
                     color: Colors.blueAccent,
                     fontWeight: FontWeight.bold,
                   ),
@@ -193,7 +194,7 @@ class _SapPrintPickingDetailPageState extends State<SapPrintPickingDetailPage> {
               Padding(
                 padding: const EdgeInsets.only(left: 10),
                 child: textSpan(
-                    hint: '已扫瞄:',
+                    hint: 'sap_print_picking_detail_scanned'.tr,
                     text: state.orderDetailLabels
                         .where((v) => v.distribution.isNotEmpty)
                         .length
@@ -202,7 +203,7 @@ class _SapPrintPickingDetailPageState extends State<SapPrintPickingDetailPage> {
               SizedBox(
                 width: double.infinity,
                 child: CombinationButton(
-                  text: '领料',
+                  text: 'sap_print_picking_detail_pick_material'.tr,
                   click: () => logic.checkSubmitSelect(
                     pick: (isSizeMaterial, list) {
                       checkPickerDialog(

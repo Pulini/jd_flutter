@@ -1,13 +1,13 @@
-/// EmpCode : "013600"
-/// EmpID : 137035
-/// EmpName : "潘卓旭"
-/// EmpDepartID : 554911
-/// EmpDepartName : "软件开发课"
-/// EmpDuty : "程序员"
-/// EmpCreatTime : "2018-04-19 16:45"
-/// EmpOperateTime : "2023-08-07 15:24"
-/// EmpLeaveStatus : 1
-/// PicUrl : "https://geapp.goldemperor.com:8084/金帝集团股份有限公司/员工/2018/4/潘卓旭/013600.jpg"
+// EmpCode : "013600"
+// EmpID : 137035
+// EmpName : "潘卓旭"
+// EmpDepartID : 554911
+// EmpDepartName : "软件开发课"
+// EmpDuty : "程序员"
+// EmpCreatTime : "2018-04-19 16:45"
+// EmpOperateTime : "2023-08-07 15:24"
+// EmpLeaveStatus : 1
+// PicUrl : "https://geapp.goldemperor.com:8084/金帝集团股份有限公司/员工/2018/4/潘卓旭/013600.jpg"
 
 class WorkerInfo {
   WorkerInfo({

@@ -70,28 +70,26 @@ class _SapPickingReceiptReversalPageState
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             textSpan(
-              hint: '物料凭证：',
+              hint: 'sap_picking_receipt_reversal_material_voucher'.tr,
               text: state.orderList[index].head!.materialVoucherNo ?? '',
               textColor: Colors.red,
             ),
             textSpan(
-              hint: '派工日期：',
+              hint: 'sap_picking_receipt_reversal_dispatch_date'.tr,
               text: state.orderList[index].head!.date ?? '',
               textColor: Colors.red,
             ),
             const Divider(height: 10, color: Colors.black),
             for (var dis in state.orderList[index].item!) ...[
-              SizedBox(
-                height: 5,
-              ),
+              const SizedBox(height: 5),
               textSpan(
-                hint: '派工单号：',
+                hint: 'sap_picking_receipt_reversal_dispatch_no'.tr,
                 text: dis.order ?? '',
                 textColor: Colors.lightBlueAccent,
               ),
               for (var material in dis.subItem!) ...[
                 textSpan(
-                  hint: '物料名称：',
+                  hint: 'sap_picking_receipt_reversal_material_name'.tr,
                   isBold: false,
                   text: material.name ?? '',
                   textColor: Colors.blue.shade900,
@@ -100,13 +98,13 @@ class _SapPickingReceiptReversalPageState
                   children: [
                     expandedTextSpan(
                       flex: 2,
-                      hint: '存储位置：',
+                      hint: 'sap_picking_receipt_reversal_storage_location'.tr,
                       isBold: false,
                       text: material.locationName ?? '',
                       textColor: Colors.blue.shade900,
                     ),
                     textSpan(
-                      hint: '数量：',
+                      hint: 'sap_picking_receipt_reversal_quantity'.tr,
                       isBold: false,
                       text:
                           '${material.quantity.toShowString()}${material.unit}',
@@ -147,11 +145,11 @@ class _SapPickingReceiptReversalPageState
       bottomSheet: [
         EditText(
           controller: orderController,
-          hint: '请输入派工单号',
+          hint: 'sap_picking_receipt_reversal_input_dispatch_no_tips'.tr,
         ),
         EditText(
           controller: materialCodeController,
-          hint: '请输入物料编码',
+          hint: 'sap_picking_receipt_reversal_input_material_code_tips'.tr,
         ),
         Obx(() => Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -159,7 +157,7 @@ class _SapPickingReceiptReversalPageState
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text('生产领料'),
+                    Text('sap_picking_receipt_reversal_produce_picking'.tr),
                     Radio(
                       value: 1,
                       onChanged: (v) => orderType.value = v!,
@@ -170,7 +168,7 @@ class _SapPickingReceiptReversalPageState
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text('生产收货'),
+                    Text('sap_picking_receipt_reversal_produce_take'.tr),
                     Radio(
                       value: 2,
                       onChanged: (v) => orderType.value = v!,
@@ -184,7 +182,7 @@ class _SapPickingReceiptReversalPageState
         DatePicker(pickerController: dpcEndDate),
         LinkOptionsPicker(pickerController: factoryWarehouseController)
       ],
-      query:()=> _query(),
+      query: () => _query(),
       body: Column(
         children: [
           Expanded(
@@ -198,9 +196,9 @@ class _SapPickingReceiptReversalPageState
             SizedBox(
               width: double.infinity,
               child: CombinationButton(
-                text: '冲销',
+                text: 'sap_picking_receipt_reversal_reverse'.tr,
                 click: () => askDialog(
-                  content: '确定要进行冲销吗？',
+                  content: 'sap_picking_receipt_reversal_reverse_tips'.tr,
                   confirm: () => checkPickingReceiptReversalDialog(
                     orderType: orderType.value,
                     handoverCheck: (ln, ls, un, us, d) =>

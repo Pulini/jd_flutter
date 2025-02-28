@@ -41,11 +41,11 @@ class _WorkOrderListPageState extends State<WorkOrderListPage> {
             Row(
               children: [
                 expandedTextSpan(
-                  hint: '派工单号：',
+                  hint: 'work_order_list_dispatch_order_no'.tr,
                   text: data.orderBill ?? '',
                 ),
                 expandedTextSpan(
-                  hint: '型体：',
+                  hint: 'work_order_list_type_body'.tr,
                   text: data.plantBody ?? '',
                 )
               ],
@@ -53,11 +53,11 @@ class _WorkOrderListPageState extends State<WorkOrderListPage> {
             Row(
               children: [
                 expandedTextSpan(
-                  hint: '派工日期：',
+                  hint: 'work_order_list_dispatch_date'.tr,
                   text: data.orderDate ?? '',
                 ),
                 expandedTextSpan(
-                  hint: '总数：',
+                  hint: 'work_order_list_total'.tr,
                   text: data.workNumberTotal.toDoubleTry().toShowString(),
                 )
               ],
@@ -65,11 +65,11 @@ class _WorkOrderListPageState extends State<WorkOrderListPage> {
             Row(
               children: [
                 expandedTextSpan(
-                  hint: '制程：',
+                  hint: 'work_order_list_process'.tr,
                   text: data.processFlowName ?? '',
                 ),
                 expandedTextSpan(
-                  hint: '组别：',
+                  hint: 'work_order_list_group'.tr,
                   text: data.group ?? '',
                 )
               ],
@@ -79,12 +79,12 @@ class _WorkOrderListPageState extends State<WorkOrderListPage> {
               Row(
                 children: [
                   expandedTextSpan(
-                    hint: '销售订单号：',
+                    hint: 'work_order_list_sales_order_no'.tr,
                     text: data.mtonoInfos![i].planBill ?? '',
                     textColor: Colors.green,
                   ),
                   expandedTextSpan(
-                    hint: '数量：',
+                    hint: 'work_order_list_qty'.tr,
                     text: data.mtonoInfos![i].workNumberTotal
                         .toDoubleTry()
                         .toShowString(),
@@ -98,25 +98,25 @@ class _WorkOrderListPageState extends State<WorkOrderListPage> {
                 if (data.codeInfos != null && data.codeInfos!.isNotEmpty)
                   Expanded(
                     child: CombinationButton(
-                      text: '已生成贴标',
+                      text: 'work_order_list_generated_label'.tr,
                       click: () => _labelListDialog(data.codeInfos!),
                       combination: Combination.left,
                     ),
                   ),
                 Expanded(
                   child: CombinationButton(
-                    text: '末道贴标',
+                    text: 'work_order_list_last_label'.tr,
                     click: () {
                       if (checkUserPermission('1051105')) {
-                        Get.to(()=>const MaintainLabelPage(),arguments: {
-                          'materialCode':data.materialCode,
-                          'interID':data.interID,
-                          'isMaterialLabel':false,
+                        Get.to(() => const MaintainLabelPage(), arguments: {
+                          'materialCode': data.materialCode,
+                          'interID': data.interID,
+                          'isMaterialLabel': false,
                         });
                       } else {
                         showSnackBar(
-                          title: 'snack_bar_default_wrong'.tr,
-                          message: '缺少末道贴标操作权限',
+                          message:
+                              'work_order_list_no_last_label_permission'.tr,
                           isWarning: true,
                         );
                       }
@@ -129,19 +129,18 @@ class _WorkOrderListPageState extends State<WorkOrderListPage> {
                 ),
                 Expanded(
                   child: CombinationButton(
-                    text: '个件贴标',
+                    text: 'work_order_list_individual_item_label'.tr,
                     click: () {
-                      state.orderId=data.orderBill??'';
-                      Get.to(()=>const PartPickPage());
-                      // if (checkUserPermission('1051107')) {
-                      //   Get.to(const PartPickPage());
-                      // } else {
-                      //   showSnackBar(
-                      //     title: 'snack_bar_default_wrong'.tr,
-                      //     message: '缺少个件贴标操作权限',
-                      //     isWarning: true,
-                      //   );
-                      // }
+                      state.orderId = data.orderBill ?? '';
+                      // Get.to(() => const PartPickPage());
+                      if (checkUserPermission('1051107')) {
+                        Get.to(const PartPickPage());
+                      } else {
+                        showSnackBar(
+                          message: 'work_order_list_no_individual_item_label_permission'.tr,
+                          isWarning: true,
+                        );
+                      }
                     },
                     combination: Combination.right,
                   ),
@@ -159,7 +158,7 @@ class _WorkOrderListPageState extends State<WorkOrderListPage> {
       PopScope(
           canPop: false,
           child: AlertDialog(
-            title: Text('已生成贴标'),
+            title: Text('work_order_list_generated_label'.tr),
             content: SizedBox(
               width: MediaQuery.of(Get.overlayContext!).size.width * 0.8,
               height: MediaQuery.of(Get.overlayContext!).size.height * 0.8,
@@ -182,9 +181,9 @@ class _WorkOrderListPageState extends State<WorkOrderListPage> {
             actions: [
               TextButton(
                 onPressed: () => Get.back(),
-                child: const Text(
-                  '返回',
-                  style: TextStyle(color: Colors.grey),
+                child: Text(
+                  'work_order_list_back'.tr,
+                  style: const TextStyle(color: Colors.grey),
                 ),
               ),
             ],
@@ -196,8 +195,14 @@ class _WorkOrderListPageState extends State<WorkOrderListPage> {
   Widget build(BuildContext context) {
     return pageBodyWithDrawer(
       queryWidgets: [
-        EditText(hint: '工票条码', onChanged: (s) => state.workBarCode = s),
-        EditText(hint: '计划跟踪单号', onChanged: (s) => state.planOrderNumber = s),
+        EditText(
+          hint: 'work_order_list_work_ticket_barcode'.tr,
+          onChanged: (s) => state.workBarCode = s,
+        ),
+        EditText(
+          hint: 'work_order_list_plan_track_number'.tr,
+          onChanged: (s) => state.planOrderNumber = s,
+        ),
         OptionsPicker(pickerController: logic.pcGroup),
         DatePicker(pickerController: logic.pcStartDate),
         DatePicker(pickerController: logic.pcEndDate),
@@ -206,7 +211,7 @@ class _WorkOrderListPageState extends State<WorkOrderListPage> {
             setState(() => state.isOutsourcing = isSelect);
             spSave('${Get.currentRoute}/isOutsourcing', isSelect);
           },
-          name: '委外',
+          name: 'work_order_list_outsource'.tr,
           value: state.isOutsourcing,
         ),
         SwitchButton(
@@ -214,7 +219,7 @@ class _WorkOrderListPageState extends State<WorkOrderListPage> {
             setState(() => state.isClosed = isSelect);
             spSave('${Get.currentRoute}/isClosed', isSelect);
           },
-          name: '是否已关闭',
+          name: 'work_order_list_is_closed'.tr,
           value: state.isClosed,
         )
       ],

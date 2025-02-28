@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:jd_flutter/utils/utils.dart';
 
-/// InterID : 213332
-/// OrderBill : "P2048871"
-/// OrderDate : "2024-03-22"
-/// PlantBody : "D13677-22B M"
-/// Group : "金臻_沿条课"
-/// ProcessFlowName : "造粒"
-/// MaterialCode : "460100005"
-/// WorkNumberTotal : "0.02"
-/// CodeInfos : []
-/// MtonoInfos : [{"PlanBill":"ZJ2400000252","WorkNumberTotal":"0.02"}]
+// InterID : 213332
+// OrderBill : "P2048871"
+// OrderDate : "2024-03-22"
+// PlantBody : "D13677-22B M"
+// Group : "金臻_沿条课"
+// ProcessFlowName : "造粒"
+// MaterialCode : "460100005"
+// WorkNumberTotal : "0.02"
+// CodeInfos : []
+// MtonoInfos : [{"PlanBill":"ZJ2400000252","WorkNumberTotal":"0.02"}]
 
 class WorkOrderInfo {
   WorkOrderInfo({
@@ -130,8 +130,8 @@ class WorkOrderInfo {
   }
 }
 
-/// PlanBill : "ZJ2400000252"
-/// WorkNumberTotal : "0.02"
+// PlanBill : "ZJ2400000252"
+// WorkNumberTotal : "0.02"
 
 class MtonoInfos {
   MtonoInfos({
@@ -155,8 +155,8 @@ class MtonoInfos {
   }
 }
 
-/// PlanBill : "ZJ2400000252"
-/// WorkNumberTotal : "0.02"
+// PlanBill : "ZJ2400000252"
+// WorkNumberTotal : "0.02"
 
 class CodeInfo {
   CodeInfo({

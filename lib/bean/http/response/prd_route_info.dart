@@ -1,5 +1,5 @@
-/// ProcessNumber : "ZC01"
-/// ProcessName : "测试"
+// ProcessNumber : "ZC01"
+// ProcessName : "测试"
 
 class PrdRouteInfo {
   PrdRouteInfo({

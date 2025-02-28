@@ -15,9 +15,6 @@ import 'package:jd_flutter/widget/picker/picker_view.dart';
 import 'package:jd_flutter/widget/signature_page.dart';
 import 'package:jd_flutter/widget/worker_check_widget.dart';
 
-
-
-
 const String checkSaveDialogNumber = 'CHECK_SAVE_DIALOG_NUMBER';
 const String checkSaveDialogLocation = 'CHECK_SAVE_DIALOG_LOCATION';
 
@@ -43,7 +40,7 @@ checkSaveDialog({
           canPop: false,
           child: Obx(
             () => AlertDialog(
-              title: const Text('保存核查'),
+              title: Text('sap_purchase_stock_in_dialog_save_verify'.tr),
               content: SizedBox(
                 width: 300,
                 child: Column(
@@ -59,16 +56,16 @@ checkSaveDialog({
                           child: avatar.isNotEmpty
                               ? Image.network(avatar.value, fit: BoxFit.fill)
                               : Icon(
-                            Icons.account_circle,
-                            size: 150,
-                            color: Colors.grey.shade300,
-                          ),
+                                  Icons.account_circle,
+                                  size: 150,
+                                  color: Colors.grey.shade300,
+                                ),
                         ),
                       ),
                     ),
                     WorkerCheck(
                       init: saveNumber,
-                      hint: '核查人',
+                      hint: 'sap_purchase_stock_in_dialog_verifier'.tr,
                       onChanged: (w) {
                         worker = w;
                         avatar.value = w?.picUrl ?? '';
@@ -77,8 +74,10 @@ checkSaveDialog({
                     selectView(
                       list: locationList,
                       controller: locationController,
-                      errorMsg: '获取存储位置失败',
-                      hint: '存储位置：',
+                      errorMsg:
+                          'sap_purchase_stock_in_dialog_get_storage_location_failed'
+                              .tr,
+                      hint: 'sap_purchase_stock_in_dialog_storage_location'.tr,
                     ),
                   ],
                 ),
@@ -126,7 +125,7 @@ stockInDialog({
       var leaderController = FixedExtentScrollController();
       var dpcDate = DatePickerController(
         PickerType.date,
-        buttonName: '过账日期',
+        buttonName: 'sap_purchase_stock_in_dialog_post_date'.tr,
       );
       var leaderList = <LeaderInfo>[].obs;
       var stockNumber = ''.obs;
@@ -134,17 +133,19 @@ stockInDialog({
       var isNeedFaceVerify = true.obs;
 
       debounce(stockNumber, (_) {
-        errorMsg.value = '正在检查人脸配置...';
+        errorMsg.value = 'sap_purchase_stock_in_dialog_checking_face_info'.tr;
         leaderList.value = [];
         checkStockLeaderConfig(
-          type: '入库单',
+          type: 'sap_purchase_stock_in_dialog_stock_in_order'.tr,
           number: userInfo?.number ?? '',
           factoryNumber: list[0].factory ?? '',
           stockNumber: stockNumber.value,
           hasConfig: (leaders) {
             isNeedFaceVerify.value = true;
             leaderList.value = leaders;
-            errorMsg.value = leaders.isEmpty ? '未配置人脸信息' : '';
+            errorMsg.value = leaders.isEmpty
+                ? 'sap_purchase_stock_in_dialog_not_set_face_info'.tr
+                : '';
           },
           noConfig: () {
             isNeedFaceVerify.value = false;
@@ -218,7 +219,7 @@ stockInDialog({
           canPop: false,
           child: Obx(
             () => AlertDialog(
-              title: const Text('入库'),
+              title: Text('sap_purchase_stock_in_dialog_stock_in'.tr),
               content: SizedBox(
                 width: 300,
                 child: Column(
@@ -229,8 +230,10 @@ stockInDialog({
                     selectView(
                       list: locationList,
                       controller: locationController,
-                      errorMsg: '获取存储位置失败',
-                      hint: '存储位置：',
+                      errorMsg:
+                          'sap_purchase_stock_in_dialog_get_storage_location_failed'
+                              .tr,
+                      hint: 'sap_purchase_stock_in_dialog_storage_location'.tr,
                       select: (i) => stockNumber.value =
                           locationList[i].storageLocationNumber ?? '',
                     ),
@@ -239,7 +242,7 @@ stockInDialog({
                         list: leaderList,
                         controller: leaderController,
                         errorMsg: errorMsg.value,
-                        hint: '负责人：',
+                        hint: 'sap_purchase_stock_in_dialog_superintendent'.tr,
                       )
                   ],
                 ),
@@ -270,14 +273,14 @@ stockInWriteOffDialog({
 }) {
   var dpcDate = DatePickerController(
     PickerType.date,
-    buttonName: '过账日期',
+    buttonName: 'sap_purchase_stock_in_dialog_post_date'.tr,
   );
   var reasonController = TextEditingController();
   Get.dialog(
     PopScope(
       canPop: false,
       child: AlertDialog(
-        title: const Text('入库冲销'),
+        title: Text('sap_purchase_stock_in_dialog_stock_in_reversal'.tr),
         content: SizedBox(
           width: 300,
           child: Column(
@@ -294,7 +297,7 @@ stockInWriteOffDialog({
                     onPressed: () => reasonController.clear(),
                   ),
                   contentPadding: const EdgeInsets.all(10),
-                  hintText: '冲销原因',
+                  hintText: 'sap_purchase_stock_in_dialog_reversal_reason'.tr,
                   fillColor: Colors.white,
                   filled: true,
                   border: OutlineInputBorder(
@@ -311,7 +314,10 @@ stockInWriteOffDialog({
           TextButton(
             onPressed: () {
               if (reasonController.text.trim().isEmpty) {
-                errorDialog(content: '请输入冲销原因');
+                errorDialog(
+                  content:
+                      'sap_purchase_stock_in_dialog_input_reversal_reason'.tr,
+                );
               } else {
                 _stockInWriteOff(
                   reason: reasonController.text,
@@ -348,8 +354,8 @@ temporaryDialog({
   required Function() refresh,
 }) {
   checkStockLeaderConfig(
-    showLoading: '正在查询负责人信息...',
-    type: '暂收单',
+    showLoading: 'sap_purchase_stock_in_dialog_querying_superintendent_info'.tr,
+    type: 'sap_purchase_stock_in_dialog_temporarily_order'.tr,
     number: userInfo?.number ?? '',
     factoryNumber: list[0].factory ?? '',
     stockNumber: list[0].location ?? '',
@@ -360,14 +366,14 @@ temporaryDialog({
           PopScope(
             canPop: false,
             child: AlertDialog(
-              title: const Text('生成暂收单'),
+              title: Text('sap_purchase_stock_in_dialog_generate_temporarily_order'.tr),
               content: SizedBox(
                 width: 300,
                 child: selectView(
                   list: leaders,
                   controller: leaderController,
                   errorMsg: '',
-                  hint: '负责人：',
+                  hint: 'sap_purchase_stock_in_dialog_superintendent'.tr,
                 ),
               ),
               contentPadding: const EdgeInsets.only(left: 30, right: 30),
@@ -455,13 +461,13 @@ temporaryDialog({
   );
 }
 
-///根据工厂编号获取Mes存储位置列表
+//根据工厂编号获取Mes存储位置列表
 _getStorageLocationList({
   required String factoryNumber,
   required Function(List<LocationInfo>) success,
 }) {
   httpGet(
-    loading: '正在获取仓库配置...',
+    loading: 'sap_purchase_stock_in_dialog_getting_warehouse_config'.tr,
     method: webApiGetStorageLocationList,
     params: {'FactoryNumber': factoryNumber},
   ).then((response) {
@@ -470,8 +476,8 @@ _getStorageLocationList({
           .call([for (var json in response.data) LocationInfo.fromJson(json)]);
     } else {
       showSnackBar(
-        title: '错误',
         message: response.message ?? 'query_default_error'.tr,
+        isWarning: true,
       );
     }
   });
@@ -489,7 +495,7 @@ _stockIn({
   required Function(String) error,
 }) {
   sapPost(
-    loading: '正在提交入库...',
+    loading: 'sap_purchase_stock_in_dialog_submitting_stock_in'.tr,
     method: webApiSapDeliveryOrderStockIn,
     body: {
       'USNAM': userInfo?.number,
@@ -533,7 +539,7 @@ _stockInWriteOff({
   required Function(String) error,
 }) {
   sapPost(
-    loading: '正在提交入库...',
+    loading: 'sap_purchase_stock_in_dialog_submitting_stock_in'.tr,
     method: webApiSapDeliveryOrderStockIn,
     body: {
       'USNAM': userInfo?.number,
@@ -566,7 +572,7 @@ _createTemporary({
   required Function(String) error,
 }) {
   sapPost(
-    loading: '正在创建暂收单...',
+    loading: 'sap_purchase_stock_in_dialog_creating_temporary_order'.tr,
     method: webApiSapCreateTemporary,
     body: {
       'USNAM': userInfo?.number,

@@ -17,36 +17,36 @@ import 'package:jd_flutter/widget/spinner_widget.dart';
 class DeviceMaintenanceRecordLogic extends GetxController {
   final DeviceMaintenanceRecordState state = DeviceMaintenanceRecordState();
 
-  ///日期选择器的控制器
+  //日期选择器的控制器
   var startDate = DatePickerController(
     PickerType.startDate,
     saveKey: '${RouteConfig.deviceMaintenance.name}${PickerType.startDate}',
   )..firstDate = DateTime(
       DateTime.now().year - 5, DateTime.now().month, DateTime.now().day);
 
-  ///日期选择器的控制器
+  //日期选择器的控制器
   var endDate = DatePickerController(
     PickerType.endDate,
     saveKey: '${RouteConfig.deviceMaintenance.name}${PickerType.endDate}',
   );
 
-  ///日期选择器的控制器
+  //日期选择器的控制器
   var repairStartDate = DatePickerController(
-    buttonName: "报修时间",
+    buttonName: '报修时间',
     PickerType.startDate,
     saveKey: '${RouteConfig.deviceMaintenance.name}${'repairStartDate'}',
   )..lastDate = DateTime(
       DateTime.now().year, DateTime.now().month + 2, DateTime.now().day);
 
-  ///日期选择器的控制器
+  //日期选择器的控制器
   var repairEndDate = DatePickerController(
-    buttonName: "修复时间",
+    buttonName: '修复时间',
     PickerType.endDate,
     saveKey: '${RouteConfig.deviceMaintenance.name}${'repairEndDate'}',
   )..lastDate = DateTime(
       DateTime.now().year, DateTime.now().month + 2, DateTime.now().day);
 
-  ///搜索按钮的分辨事件
+  //搜索按钮的分辨事件
   search() {
     if (state.deviceNumber.isNotEmpty) {
       searchDeviceInfo(state.deviceNumber);
@@ -55,17 +55,17 @@ class DeviceMaintenanceRecordLogic extends GetxController {
     }
   }
 
-  ///下拉选择器的控制器
+  //下拉选择器的控制器
   late SpinnerController spinnerControllerWorkShop;
 
-  ///获取维修列表
+  //获取维修列表
   searchDeviceList() {
     httpGet(
       method: webApiGetRepairOrderList,
       loading: '正在获取设备维修单列表...',
       params: {
         // 'StartDate': startDate.getDateFormatYMD(),
-        'StartDate': "2020-01-16",
+        'StartDate': '2020-01-16',
         'EndDate': endDate.getDateFormatYMD(),
       },
     ).then((response) {
@@ -81,7 +81,7 @@ class DeviceMaintenanceRecordLogic extends GetxController {
     });
   }
 
-  ///设备报修提交数据
+  //设备报修提交数据
   submitRecordData({
     required Function(String msg) success,
   }) {
@@ -130,7 +130,7 @@ class DeviceMaintenanceRecordLogic extends GetxController {
     }
   }
 
-  ///设备维修记录单故障原因
+  //设备维修记录单故障原因
   goRepair() {
     httpGet(
       method: webApiGetIssueCauseType,
@@ -161,7 +161,7 @@ class DeviceMaintenanceRecordLogic extends GetxController {
     });
   }
 
-  ///作废记录单
+  //作废记录单
   repairOrderVoid({
     required String interId,
     required String reason,
@@ -184,7 +184,7 @@ class DeviceMaintenanceRecordLogic extends GetxController {
     });
   }
 
-  ///获取设备详情
+  //获取设备详情
   searchDeviceInfo(String deviceNumber) {
     httpGet(
       method: webApiGetDeviceInformationByFNumber,
@@ -195,7 +195,7 @@ class DeviceMaintenanceRecordLogic extends GetxController {
     ).then((response) {
       if (response.resultCode == resultSuccess) {
         state.deviceData.value = DeviceMaintenanceInfo.fromJson(response.data);
-        if (state.deviceData.value.repairOrder.isNull) {
+        if (state.deviceData.value.repairOrder==null) {
           state.isHave.value = false;
         } else {
           state.isHave.value = true;
@@ -207,7 +207,7 @@ class DeviceMaintenanceRecordLogic extends GetxController {
     });
   }
 
-  ///根据工号获取人员信息
+  //根据工号获取人员信息
   searchPeople(String number) {
     if (number.isNotEmpty && number.length == 6) {
       httpGet(

@@ -89,7 +89,7 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
                       borderRadius: BorderRadius.all(Radius.circular(5)),
                     ),
                     child: Text(
-                      dateTime == null ? "请选择时间" : getDateYMD(time: dateTime),
+                      dateTime == null ? 'property_select_time'.tr : getDateYMD(time: dateTime),
                       style: TextStyle(
                         color: dateTime == null ? Colors.red : Colors.black,
                       ),

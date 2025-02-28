@@ -207,7 +207,7 @@ class _DeviceMaintenanceRecordRepairPageState
                 ),
                 Obx(() => Expanded(
                     child: Text(state.peoPleInfo.value.empName == null
-                        ? ""
+                        ? ''
                         : state.peoPleInfo.value.empName.toString())))
               ],
             ),

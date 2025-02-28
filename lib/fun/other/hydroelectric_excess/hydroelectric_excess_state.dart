@@ -12,18 +12,18 @@ class HydroelectricExcessState {
 
   var dataList = <DeviceListInfo>[].obs;  //来访数据
   var isShow = false.obs;
-  var select = "0".obs; //选择查询的条件
-  var stateToSearch ="0".obs;   //返回回去的状态
-  var deviceNumber ="";//设备编号
-  var bedNumber ="";//床铺编号
+  var select = '0'.obs; //选择查询的条件
+  var stateToSearch ='0'.obs;   //返回回去的状态
+  var deviceNumber ='';//设备编号
+  var bedNumber ='';//床铺编号
   var dataDetail = DeviceDetailInfo().obs;
-  var thisMonthUse = "".obs; //本月使用量
+  var thisMonthUse = ''.obs; //本月使用量
 
   var textThisTime = TextEditingController(); //本次抄度
   var textNumber = TextEditingController(); //房间号
 
 
-///搜索具体房间信息
+//搜索具体房间信息
   searchRoom(DeviceListInfo data,bool  isBack){
     if(select.value=='0' || select.value =='2'){
       stateToSearch.value='1';
@@ -57,7 +57,7 @@ class HydroelectricExcessState {
     });
   }
 
-  ///用户手动输入后，清理数据
+  //用户手动输入后，清理数据
   clearData(){
     dataDetail.value = DeviceDetailInfo();
     textThisTime.clear();
@@ -65,7 +65,7 @@ class HydroelectricExcessState {
     stateToSearch.value='0';
   }
 
-  ///根据输入的度数，
+  //根据输入的度数，
   countMonth(String thisTime){
     var degree = thisTime.toIntTry();
     var lastDegree = dataDetail.value.lastDegree.toIntTry();
@@ -78,7 +78,7 @@ class HydroelectricExcessState {
   }
 
 
-  ///计算本月使用量
+  //计算本月使用量
   setDeviceUse(DeviceDetailInfo data){
 
     var last = data.lastDegree.toIntTry();
@@ -92,7 +92,7 @@ class HydroelectricExcessState {
 
   }
 
-  ///是否显示
+  //是否显示
   clickShow(){
     if(isShow.value == true){
       isShow.value = false;
@@ -101,7 +101,7 @@ class HydroelectricExcessState {
     }
   }
 
-  ///获取所有设备信息
+  //获取所有设备信息
   getWaterEnergyMachine() {
     httpGet(
       method: webApiGetWaterEnergyMachine,
@@ -124,7 +124,7 @@ class HydroelectricExcessState {
     });
   }
 
-  ///提交本次抄录数据
+  //提交本次抄录数据
   submit() {
     if(textThisTime.text.isEmpty){
       showSnackBar(title: '警告', message:'请输入本次抄录度数！');

@@ -1,26 +1,26 @@
 import 'package:jd_flutter/utils/utils.dart';
 
-/// SapDecideArea : "驻马店全套外发"
-/// ProductName : "DX242256-10"
-/// Date : "2024-07-11"
-/// PartName : "外筒排、内侧前后筒排"
-/// DepName : "贴合课"
-/// DrillingCrewName : "贴合课8号机台"
-/// MaterialID : "559962"
-/// MaterialNumber : "800618233"
-/// MaterialName : "0.9mm厚黑1色弹力压花PU复2×3黑色帆布上重胶+PE纸"
-/// ProcessNumber : "FH04"
-/// ProcessName : "加PE纸"
-/// Qty : "1375.719"
-/// CodeQty : "652.5"
-/// NoCodeQty : "723.219"
-/// FinishQty : "181"
-/// UnitName : "米"
-/// PrintLabel : "1"
-/// RouteEntryFIDs : "1744153"
-/// BillStyle : "0"
-/// StuffNumber : "0218733,013300530,04110218788,120126"
-/// Children : [{"BillNo":"J2403330,J2403976,J2403977,J2404036,J2404067,J2407528","GluingTimes":"2","Size":"","Qty":"194.833","CodeQty":"0","NoCodeQty":"194.833","FinishQty":"","SAPColorBatch":"240620C1","WorkProcessNumber":"GXPG24309936","InterID":"1666177","RouteEntryFID":"1744153","RouteEntryFIDs":"1744153","LastProcessNode":"1","ProcessFlowID":"25","PartialWarehousing":"0","BillStyle":"0"},{"BillNo":"J2403330,J2403359,J2403360,J2403976,J2403977,J2404036,J2404067,J2407528","GluingTimes":"2","Size":"","Qty":"1180.886","CodeQty":"652.5","NoCodeQty":"528.386","FinishQty":"181","SAPColorBatch":"240628C1","WorkProcessNumber":"GXPG24309936","InterID":"1666177","RouteEntryFID":"1744153","RouteEntryFIDs":"1744153","LastProcessNode":"1","ProcessFlowID":"25","PartialWarehousing":"1","BillStyle":"0"}]
+// SapDecideArea : "驻马店全套外发"
+// ProductName : "DX242256-10"
+// Date : "2024-07-11"
+// PartName : "外筒排、内侧前后筒排"
+// DepName : "贴合课"
+// DrillingCrewName : "贴合课8号机台"
+// MaterialID : "559962"
+// MaterialNumber : "800618233"
+// MaterialName : "0.9mm厚黑1色弹力压花PU复2×3黑色帆布上重胶+PE纸"
+// ProcessNumber : "FH04"
+// ProcessName : "加PE纸"
+// Qty : "1375.719"
+// CodeQty : "652.5"
+// NoCodeQty : "723.219"
+// FinishQty : "181"
+// UnitName : "米"
+// PrintLabel : "1"
+// RouteEntryFIDs : "1744153"
+// BillStyle : "0"
+// StuffNumber : "0218733,013300530,04110218788,120126"
+// Children : [{"BillNo":"J2403330,J2403976,J2403977,J2404036,J2404067,J2407528","GluingTimes":"2","Size":"","Qty":"194.833","CodeQty":"0","NoCodeQty":"194.833","FinishQty":"","SAPColorBatch":"240620C1","WorkProcessNumber":"GXPG24309936","InterID":"1666177","RouteEntryFID":"1744153","RouteEntryFIDs":"1744153","LastProcessNode":"1","ProcessFlowID":"25","PartialWarehousing":"0","BillStyle":"0"},{"BillNo":"J2403330,J2403359,J2403360,J2403976,J2403977,J2404036,J2404067,J2407528","GluingTimes":"2","Size":"","Qty":"1180.886","CodeQty":"652.5","NoCodeQty":"528.386","FinishQty":"181","SAPColorBatch":"240628C1","WorkProcessNumber":"GXPG24309936","InterID":"1666177","RouteEntryFID":"1744153","RouteEntryFIDs":"1744153","LastProcessNode":"1","ProcessFlowID":"25","PartialWarehousing":"1","BillStyle":"0"}]
 
 class MaterialDispatchInfo {
   MaterialDispatchInfo({
@@ -127,22 +127,22 @@ class MaterialDispatchInfo {
   }
 }
 
-/// BillNo : "J2403330,J2403976,J2403977,J2404036,J2404067,J2407528"
-/// GluingTimes : "2"
-/// Size : ""
-/// Qty : "194.833"
-/// CodeQty : "0"
-/// NoCodeQty : "194.833"
-/// FinishQty : ""
-/// SAPColorBatch : "240620C1"
-/// WorkProcessNumber : "GXPG24309936"
-/// InterID : "1666177"
-/// RouteEntryFID : "1744153"
-/// RouteEntryFIDs : "1744153"
-/// LastProcessNode : "1"
-/// ProcessFlowID : "25"
-/// PartialWarehousing : "0"
-/// BillStyle : "0"
+// BillNo : "J2403330,J2403976,J2403977,J2404036,J2404067,J2407528"
+// GluingTimes : "2"
+// Size : ""
+// Qty : "194.833"
+// CodeQty : "0"
+// NoCodeQty : "194.833"
+// FinishQty : ""
+// SAPColorBatch : "240620C1"
+// WorkProcessNumber : "GXPG24309936"
+// InterID : "1666177"
+// RouteEntryFID : "1744153"
+// RouteEntryFIDs : "1744153"
+// LastProcessNode : "1"
+// ProcessFlowID : "25"
+// PartialWarehousing : "0"
+// BillStyle : "0"
 
 class Children {
   Children({
@@ -222,11 +222,11 @@ class Children {
   }
 }
 
-/// Number : "021800294"
-/// Name : "0.22mm*1.5m白色JY28可特（针织布/100%涤纶）"
-/// UnitName : "米"
-/// Batch : ""
-/// NeedQty : 27.41
+// Number : "021800294"
+// Name : "0.22mm*1.5m白色JY28可特（针织布/100%涤纶）"
+// UnitName : "米"
+// Batch : ""
+// NeedQty : 27.41
 
 class MaterialInfo {
   MaterialInfo({
@@ -260,18 +260,18 @@ class MaterialInfo {
   }
 }
 
-/// DrillingCrewName : "湖北贴合1号机台"
-/// GUID : "68983AA7-64EC-4B4F-8028-0FE4E17E4972"
-/// PickUpCode : "1104-20240722-0016"
-/// BillInterID : 3189111
-/// OutPutNumber : "GXHB24484990"
-/// InsertDateTime : "2024-07-22 14:45:52"
-/// SAPColorBatch : ""
-/// Qty : 30.0
-/// Status : "已报工"
-/// ReportStatus : "1"
-/// PalletNumber : ""
-/// Location : "A101"
+// DrillingCrewName : "湖北贴合1号机台"
+// GUID : "68983AA7-64EC-4B4F-8028-0FE4E17E4972"
+// PickUpCode : "1104-20240722-0016"
+// BillInterID : 3189111
+// OutPutNumber : "GXHB24484990"
+// InsertDateTime : "2024-07-22 14:45:52"
+// SAPColorBatch : ""
+// Qty : 30.0
+// Status : "已报工"
+// ReportStatus : "1"
+// PalletNumber : ""
+// Location : "A101"
 
 class LabelInfo {
   LabelInfo({

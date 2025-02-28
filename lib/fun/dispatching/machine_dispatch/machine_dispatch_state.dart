@@ -21,9 +21,7 @@ class MachineDispatchState {
   var processList = <DispatchProcessInfo>[].obs;
   var processSelect = 0.obs;
 
-  MachineDispatchState() {
-    ///Initialize variables
-  }
+
 
   createDispatchProcess() {
     var totalProduction = 0.0;
@@ -45,7 +43,7 @@ class MachineDispatchState {
     required Function(String msg) error,
   }) {
     httpGet(
-      loading: '正在获取工序计划列表....',
+      loading: 'machine_dispatch_getting_process_plan_list_tips'.tr,
       method: webApiGetWorkCardList,
       params: {
         // 'DispatchingMachine': userInfo?.number,
@@ -72,7 +70,7 @@ class MachineDispatchState {
     nowDispatchNumber.value = dispatchNumber;
     formatWorkCardDetailData(
       doHttp: httpGet(
-        loading: '正在获取工序计划明细....',
+        loading: 'machine_dispatch_getting_process_plan_detail_tips'.tr,
         method: webApiGetWorkCardDetail,
         params: {
           'DispatchingMachine': '',
@@ -90,7 +88,7 @@ class MachineDispatchState {
   }) {
     formatWorkCardDetailData(
       doHttp: httpGet(
-        loading: '正在获取工序计划明细....',
+        loading: 'machine_dispatch_getting_process_plan_detail_tips'.tr,
         method: webApiGetWorkCardDetail,
         params: {
           'DispatchingMachine': '',
@@ -154,7 +152,7 @@ class MachineDispatchState {
     required Function() error,
   }) {
     sapPost(
-      loading: '正在获取标签列表....',
+      loading: 'machine_dispatch_getting_label_list_tips'.tr,
       method: webApiSapGetMaterialDispatchLabelList,
       body: [
         {
@@ -198,7 +196,7 @@ class MachineDispatchState {
     ];
 
     httpPost(
-      loading: isClean ? '正在清除上班尾数...' : '正在恢复上班尾数...',
+      loading: isClean ? 'machine_dispatch_cleaning_last_tips'.tr : 'machine_dispatch_restoring_last_tips'.tr,
       method: webApiCleanOrRecoveryLastQty,
       body: {
         'InterID': detailsInfo?.interID,
@@ -219,7 +217,7 @@ class MachineDispatchState {
     required Function(String msg) error,
   }) {
     httpPost(
-      loading: '正在修改派工单数据...',
+      loading: 'machine_dispatch_modifying_dispatch_order_tips'.tr,
       method: webApiModifyWorkCardItem,
       body: {
         'InterID': detailsInfo?.interID,
@@ -259,7 +257,7 @@ class MachineDispatchState {
     });
 
     httpPost(
-      loading: '正在生成报工产量表...',
+      loading: 'machine_dispatch_generating_production_report_tips'.tr,
       method: webApiReportDispatch,
       body: {
         'InterID': detailsInfo?.interID, //派工单InterID

@@ -1,25 +1,25 @@
 class EntryList {
   EntryList({
-      this.EntryID,
-      this.ExceptionID,
-      this.ExceptionLevel,});
+      this.entryID,
+      this.exceptionID,
+      this.exceptionLevel,});
 
   EntryList.fromJson(dynamic json) {
-    EntryID = json['EntryID'];
-    ExceptionID = json['ExceptionID'];
-    ExceptionLevel = json['ExceptionLevel'];
+    entryID = json['EntryID'];
+    exceptionID = json['ExceptionID'];
+    exceptionLevel = json['ExceptionLevel'];
 
   }
-  String? EntryID;
-  String? ExceptionID;
-  String? ExceptionLevel;
+  String? entryID;
+  String? exceptionID;
+  String? exceptionLevel;
 
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
-    map['EntryID'] = EntryID;
-    map['ExceptionID'] = ExceptionID;
-    map['ExceptionLevel'] = ExceptionLevel;
+    map['EntryID'] = entryID;
+    map['ExceptionID'] = exceptionID;
+    map['ExceptionLevel'] = exceptionLevel;
 
     return map;
   }

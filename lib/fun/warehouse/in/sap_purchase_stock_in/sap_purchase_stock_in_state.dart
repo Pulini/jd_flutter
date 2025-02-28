@@ -13,9 +13,6 @@ class SapPurchaseStockInState {
   var selectedList = <bool>[].obs;
   var detailInfo = <SapPurchaseStockInDetailInfo>[].obs;
 
-  SapPurchaseStockInState() {
-    ///Initialize variables
-  }
 
   getDeliveryList({
     required String deliNo,
@@ -28,7 +25,7 @@ class SapPurchaseStockInState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在获取送货单列表...',
+      loading: 'sap_purchase_stock_in_getting_delivery_order_list'.tr,
       method: webApiSapGetDeliveryList,
       body: {
         'ZDELINO': deliNo,
@@ -64,7 +61,7 @@ class SapPurchaseStockInState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在获取送货单明细...',
+      loading: 'sap_purchase_stock_in_getting_delivery_order_details'.tr,
       method: webApiSapGetDeliveryDetail,
       body: {'ZDEILNO': deliveryNumber},
     ).then((response) {
@@ -86,7 +83,7 @@ class SapPurchaseStockInState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在检查送货单...',
+      loading: 'sap_purchase_stock_in_checking_delivery_order'.tr,
       method: webApiSapCheckTemporaryOrder,
       body: [
         for (var data in list)

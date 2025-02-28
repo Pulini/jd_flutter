@@ -17,11 +17,7 @@ class PartProcessScanState {
   var workerList = <WorkerInfo>[].obs;
   var isSelectAll=false.obs;
 
-  PartProcessScanState() {
-    ///Initialize variables
-  }
-
-  ///获取组员列表数据
+  //获取组员列表数据
   reportViewGetWorkerList() {
     getWorkerInfo(
       department: userInfo?.departmentID.toString(),
@@ -36,7 +32,7 @@ class PartProcessScanState {
   }) {
     httpPost(
       method: webApiGetPartProcessReportedReport,
-      loading: '正在获取汇总信息...',
+      loading: 'part_process_scan_getting_summary'.tr,
       body: {'BarCodeList': barCodeList.toList()},
     ).then((response) {
        modifyReportList.value = [
@@ -123,7 +119,7 @@ class PartProcessScanState {
 
 
     httpPost(
-      loading: '正在提交工序报工...',
+      loading: 'part_process_scan_submitting_process_report'.tr,
       method: webApiProductionDispatchReportSubmit,
       body: [
         {

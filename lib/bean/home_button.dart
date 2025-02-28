@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
@@ -87,7 +86,6 @@ List<ButtonItem> formatButton(List<HomeFunctions> data) {
           ],
         ));
       } else {
-        debugPrint('name=${fun.functionGroup![0].name} useTestUrl=$useTestUrl hasPermission=${fun.functionGroup![0].hasPermission}');
         list.add(HomeButton(
           name: fun.functionGroup![0].name ?? '',
           description: fun.functionGroup![0].description ?? '',

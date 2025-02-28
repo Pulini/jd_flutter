@@ -90,7 +90,7 @@ class Downloader {
     startDownload();
   }
 
-  ///下載文件
+  //下載文件
   startDownload() async {
     isDownloading.value = true;
     progress.value = 0.0;

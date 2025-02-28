@@ -17,9 +17,6 @@ class SapProductionPickingState {
   var pickDetailList = <PickingOrderMaterialInfo>[].obs;
   bool needRefresh = false;
 
-  SapProductionPickingState() {
-    ///Initialize variables
-  }
 
   getMaterialPickingOrderList({
     String? noticeNo,
@@ -37,7 +34,7 @@ class SapProductionPickingState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在获取领料通知单列表...',
+      loading: 'sap_production_picking_getting_picking_notification_order_list_tips'.tr,
       method: webApiSapGetPickingOrders,
       body: {
         'NOTICE_NO': noticeNo ?? '',
@@ -70,7 +67,7 @@ class SapProductionPickingState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在获取派工单列表明细...',
+      loading: 'sap_production_picking_getting_dispatch_order_list_detail_tips'.tr,
       method: webApiSapGetPickingOrderDetail,
       body: [
         for (var data in pickOrderList.where((v) => v.select))
@@ -118,7 +115,7 @@ class SapProductionPickingState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在提交领料...',
+      loading: 'sap_production_picking_submitting_picking_tips'.tr,
       method: webApiSapMaterialsPicking,
       body: {
         'DATA': [

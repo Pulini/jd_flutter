@@ -15,7 +15,7 @@ import 'package:jd_flutter/widget/picker/picker_controller.dart';
 class SuppliersScanStoreLogic extends GetxController {
   final SuppliersScanStoreState state = SuppliersScanStoreState();
 
-  ///仓库选择器
+  //仓库选择器
   var billStockListController = OptionsPickerController(
     PickerType.billStockList,
     saveKey:
@@ -23,14 +23,14 @@ class SuppliersScanStoreLogic extends GetxController {
   );
 
 
-  ///日期选择器的控制器
+  //日期选择器的控制器
   var orderDate = DatePickerController(
     buttonName: '选择过账日期',
     PickerType.endDate,
     saveKey: '${RouteConfig.suppliersScanStore.name}${PickerType.endDate}',
   );
 
-  ///清空供应商扫码入库的条码
+  //清空供应商扫码入库的条码
   clearBarCodeList() {
     BarCodeInfo.clear(
       type: barCodeTypes[3],
@@ -38,16 +38,16 @@ class SuppliersScanStoreLogic extends GetxController {
         if (v == state.barCodeList.length) {
           state.barCodeList.clear();
         } else {
-          showSnackBar(title: '错误', message: '本地数据库删除失败', isWarning: true);
+          showSnackBar( message: '本地数据库删除失败', isWarning: true);
         }
       },
     );
   }
 
-  ///添加条码
+  //添加条码
   scanCode(String code) {
     if (state.barCodeList.any((v) => v.code == code)) {
-      showSnackBar(title: '错误', message: '条码已存在', isWarning: true);
+      showSnackBar( message: '条码已存在', isWarning: true);
     } else {
       if (code.isPallet()) {
         checkPallet(
@@ -61,15 +61,15 @@ class SuppliersScanStoreLogic extends GetxController {
                   break;
                 case 'X':
                   showSnackBar(
-                      title: '错误', message: '请使用空托盘入库！！', isWarning: true);
+                   message: '请使用空托盘入库！！', isWarning: true);
                   break;
                 case 'Y':
                   showSnackBar(
-                      title: '错误', message: '此托盘已在其他仓库使用！！', isWarning: true);
+                      message: '此托盘已在其他仓库使用！！', isWarning: true);
                   break;
               }
             } else {
-              showSnackBar(title: '错误', message: '此托盘不存在！！', isWarning: true);
+              showSnackBar(message: '此托盘不存在！！', isWarning: true);
             }
           },
           error: (msg) => errorDialog(content: msg),
@@ -94,7 +94,7 @@ class SuppliersScanStoreLogic extends GetxController {
     }
   }
 
-  ///删除对应条码
+  //删除对应条码
   deleteCode(BarCodeInfo barCodeList) {
     barCodeList.deleteByCode(callback: () {
       state.barCodeList.remove(barCodeList);
@@ -142,7 +142,7 @@ class SuppliersScanStoreLogic extends GetxController {
     }
   }
 
-  ///验证托盘
+  //验证托盘
   checkPallet({
     required List<String> pallets,
     required Function(PalletDetailInfo) success,
@@ -178,7 +178,7 @@ class SuppliersScanStoreLogic extends GetxController {
     });
   }
 
-  ///检查工号是否合法
+  //检查工号是否合法
   checkOrderInfo({
     String? number,
   }) {
@@ -194,7 +194,7 @@ class SuppliersScanStoreLogic extends GetxController {
     });
   }
 
-  ///获得已入库条形码数据
+  //获得已入库条形码数据
   getBarCodeStatusByDepartmentID({required Function() refresh,}) {
     httpGet(method: webApiGetBarCodeStatusByDepartmentID, params: {
       'Type': "SupplierScanInStock",
@@ -222,7 +222,7 @@ class SuppliersScanStoreLogic extends GetxController {
     });
   }
 
-  ///提交条形码数据,自动生成外购入库单
+  //提交条形码数据,自动生成外购入库单
   submitCode() {
     httpPost(method: webApiUploadSupplierBarCode, body: {
       'BarCodeList': [

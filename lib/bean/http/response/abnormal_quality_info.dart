@@ -1,11 +1,11 @@
-/// Entry : [{"exNumber":"SCPZYCD200000108","billDate":"2020/7/9 16:35:01","empID":139697,"qty":"28","exceptionID":34,"exceptionName":"鞋口高低、不平顺","exceptionLevel":"轻微","reCheck":"复检合格"}]
-/// interID : 190109
-/// entryID : 2
-/// orderNumber : "P2025615"
-/// deptName : "针车17组."
-/// processFlowID : 2
-/// productName : "针车17组."
-/// qty : "834.0000000000"
+// Entry : [{"exNumber":"SCPZYCD200000108","billDate":"2020/7/9 16:35:01","empID":139697,"qty":"28","exceptionID":34,"exceptionName":"鞋口高低、不平顺","exceptionLevel":"轻微","reCheck":"复检合格"}]
+// interID : 190109
+// entryID : 2
+// orderNumber : "P2025615"
+// deptName : "针车17组."
+// processFlowID : 2
+// productName : "针车17组."
+// qty : "834.0000000000"
 
 class AbnormalQualityInfo {
   AbnormalQualityInfo({
@@ -61,14 +61,14 @@ class AbnormalQualityInfo {
   }
 }
 
-/// exNumber : "SCPZYCD200000108"
-/// billDate : "2020/7/9 16:35:01"
-/// empID : 139697
-/// qty : "28"
-/// exceptionID : 34
-/// exceptionName : "鞋口高低、不平顺"
-/// exceptionLevel : "轻微"
-/// reCheck : "复检合格"
+// exNumber : "SCPZYCD200000108"
+// billDate : "2020/7/9 16:35:01"
+// empID : 139697
+// qty : "28"
+// exceptionID : 34
+// exceptionName : "鞋口高低、不平顺"
+// exceptionLevel : "轻微"
+// reCheck : "复检合格"
 
 class Entry {
   Entry({

@@ -33,7 +33,7 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
     FilteringTextInputFormatter.allow(RegExp('[0-9]')),
   ];
 
-  ///  搜索弹窗
+  //  搜索弹窗
   searchDialog({
     required String title,
     required String hintTitle,

@@ -1,21 +1,22 @@
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:jd_flutter/utils/utils.dart';
 
-///socket连接状态枚举类
+//socket连接状态枚举类
 enum ConnectState {
-  /// 未连接
+  // 未连接
   unConnect(0),
 
-  /// 连接中
+  // 连接中
   connecting(1),
 
-  /// 连接成功
+  // 连接成功
   connected(2),
 
-  /// 连接失败
+  // 连接失败
   connectError(3),
 
-  /// 连接断开
+  // 连接断开
   disconnect(4);
 
   final int value;
@@ -23,10 +24,10 @@ enum ConnectState {
   const ConnectState(this.value);
 }
 
-/// 01      03      08          00    00    49    41    00      04          00      00    E6  40
-/// 模块地址	功能码   返回内容长度	重量= x1 x2 x3 x4        空位    小数位长度    空位     单位   校验码
-/// 0x01	  0x03	  0x08	      X1	  X2	  X3	  X4	  0x00	  X5          0x00    X6    **  **
-/// SocketClient端
+// 01      03      08          00    00    49    41    00      04          00      00    E6  40
+// 模块地址	功能码   返回内容长度	重量= x1 x2 x3 x4        空位    小数位长度    空位     单位   校验码
+// 0x01	  0x03	  0x08	      X1	  X2	  X3	  X4	  0x00	  X5          0x00    X6    **  **
+// SocketClient端
 class SocketClientUtil {
   late String ip;
   late int port;
@@ -44,7 +45,7 @@ class SocketClientUtil {
   });
 
   connect() {
-    print('连接设备:$ip $port');
+    debugPrint('连接设备:$ip $port');
     _stateListener(ConnectState.connecting);
     Socket.connect(ip, port).then((v) {
       socket = v;
@@ -54,7 +55,7 @@ class SocketClientUtil {
         // print('接收到数据:event=$hexString');
         weightListener.call(_getWeight(hexString), _getUnit(hexString));
       }, onError: (v) {
-        print('连接异常:$v');
+        debugPrint('连接异常:$v');
         _stateListener(ConnectState.connectError);
       });
     }, onError: (v) {
@@ -69,7 +70,7 @@ class SocketClientUtil {
 
   close() {
     if (socket != null && connectState == ConnectState.connected) {
-      print('关闭设备并返回监听:$ip $port');
+      debugPrint('关闭设备并返回监听:$ip $port');
       socket?.close();
       _stateListener(ConnectState.disconnect);
     }
@@ -77,7 +78,7 @@ class SocketClientUtil {
 
   clean() {
     if (socket != null && connectState == ConnectState.connected) {
-      print('关闭设备:$ip $port');
+      debugPrint('关闭设备:$ip $port');
       socket?.close();
     }
   }

@@ -56,7 +56,7 @@ class _SapWmsSplitLabelPageState extends State<SapWmsSplitLabelPage> {
               Row(
                 children: [
                   expandedTextSpan(
-                    hint: '物料：',
+                    hint: 'sap_wms_split_label_material'.tr,
                     text: '(${label.materialCode})${label.materialName}',
                     textColor: Colors.green.shade900,
                     maxLines: 2,
@@ -68,13 +68,13 @@ class _SapWmsSplitLabelPageState extends State<SapWmsSplitLabelPage> {
                   )
                 ],
               ),
-              textSpan(hint: '型体：', text: label.typeBody ?? ''),
+              textSpan(hint: 'sap_wms_split_label_type_body'.tr, text: label.typeBody ?? ''),
               const Divider(indent: 10, endIndent: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   textSpan(
-                    hint: '尺码：',
+                    hint: 'sap_wms_split_label_size'.tr,
                     text: label.size ?? '',
                     textColor: Colors.green.shade900,
                   ),
@@ -103,7 +103,7 @@ class _SapWmsSplitLabelPageState extends State<SapWmsSplitLabelPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             textSpan(
-              hint: '物料：',
+              hint: 'sap_wms_split_label_material'.tr,
               text:
                   '(${state.originalLabel!.materialCode})${state.originalLabel!.materialName}',
               textColor: Colors.green.shade900,
@@ -112,13 +112,13 @@ class _SapWmsSplitLabelPageState extends State<SapWmsSplitLabelPage> {
             Row(
               children: [
                 expandedTextSpan(
-                  hint: '型体：',
+                  hint: 'sap_wms_split_label_type_body'.tr,
                   text: state.originalLabel!.typeBody ?? '',
                   maxLines: 2,
                 ),
                 if (state.originalLabel!.size?.isNotEmpty == true)
                   textSpan(
-                    hint: '尺码：',
+                    hint: 'sap_wms_split_label_size'.tr,
                     text: state.originalLabel!.size ?? '',
                     textColor: Colors.green.shade900,
                   ),
@@ -134,8 +134,9 @@ class _SapWmsSplitLabelPageState extends State<SapWmsSplitLabelPage> {
               ),
               child: Row(
                 children: [
+                  const SizedBox(width: 10),
                   textSpan(
-                    hint: ' 可拆分数：',
+                    hint: 'sap_wms_split_label_split_qty'.tr,
                     text:
                         '${state.originalLabel!.quantity.toShowString()} ${state.originalLabel!.unit}',
                   ),
@@ -223,10 +224,10 @@ class _SapWmsSplitLabelPageState extends State<SapWmsSplitLabelPage> {
       actions: [
         TextButton(
           onPressed: () => askDialog(
-            content: '确定要提交当前拆分状态吗？',
+            content: 'sap_wms_split_label_submit_split_info_tips'.tr,
             confirm: () => logic.submitSplit(),
           ),
-          child: Text('提交'),
+          child: Text('sap_wms_split_label_submit'.tr),
         ),
       ],
       body: Column(
@@ -247,14 +248,14 @@ class _SapWmsSplitLabelPageState extends State<SapWmsSplitLabelPage> {
             children: [
               Expanded(
                 child: CombinationButton(
-                  text: '删除贴标',
+                  text: 'sap_wms_split_label_delete_label'.tr,
                   click: () => logic.deleteLabel(),
                   combination: Combination.left,
                 ),
               ),
               Expanded(
                 child: CombinationButton(
-                  text: '重打贴标',
+                  text: 'sap_wms_split_label_reprint_label'.tr,
                   click: () => logic.reprintLabel(
                     factory: factoryWarehouseController
                         .getOptionsPicker1()

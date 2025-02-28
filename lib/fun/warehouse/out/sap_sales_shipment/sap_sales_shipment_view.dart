@@ -24,7 +24,8 @@ class _SapSalesShipmentPageState extends State<SapSalesShipmentPage> {
   final SapSalesShipmentLogic logic = Get.put(SapSalesShipmentLogic());
   final SapSalesShipmentState state = Get.find<SapSalesShipmentLogic>().state;
   var insController = TextEditingController();
-  var dpcDate = DatePickerController(PickerType.date, buttonName: '交货日期');
+  var dpcDate = DatePickerController(PickerType.date,
+      buttonName: 'sap_sales_shipment_delivery_date_tips'.tr);
 
   _item(int index) {
     return GestureDetector(
@@ -47,14 +48,14 @@ class _SapSalesShipmentPageState extends State<SapSalesShipmentPage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             textSpan(
-              hint: '指令：',
+              hint: 'sap_sales_shipment_instruction'.tr,
               text:
                   '${state.orderList[index].instructionList[0].instructionNo}',
               hintColor: Colors.grey.shade700,
               textColor: Colors.red,
             ),
             textSpan(
-              hint: '型体：',
+              hint: 'sap_sales_shipment_type_body'.tr,
               text: '${state.orderList[index].instructionList[0].typeBody}',
               hintColor: Colors.grey.shade700,
               textColor: Colors.red,
@@ -87,14 +88,14 @@ class _SapSalesShipmentPageState extends State<SapSalesShipmentPage> {
         Row(
           children: [
             expandedTextSpan(
-              hint: '交货日期：',
+              hint: 'sap_sales_shipment_delivery_date'.tr,
               isBold: false,
               text: item.deliveryDate ?? '',
               hintColor: Colors.grey.shade700,
               textColor: Colors.black,
             ),
             expandedTextSpan(
-              hint: '订单数：',
+              hint: 'sap_sales_shipment_order_qty'.tr,
               isBold: false,
               text: item.orderQty.toShowString(),
               hintColor: Colors.grey.shade700,
@@ -105,14 +106,14 @@ class _SapSalesShipmentPageState extends State<SapSalesShipmentPage> {
         Row(
           children: [
             expandedTextSpan(
-              hint: '已交货数：',
+              hint: 'sap_sales_shipment_delivered_qty'.tr,
               isBold: false,
               text: item.deliveredQty.toShowString(),
               hintColor: Colors.grey.shade700,
               textColor: Colors.black,
             ),
             expandedTextSpan(
-              hint: '交货数：',
+              hint: 'sap_sales_shipment_delivery_qty'.tr,
               isBold: pickQty > 0,
               text: pickQty.toShowString(),
               hintColor: pickQty > 0 ? Colors.black : Colors.grey.shade700,
@@ -130,7 +131,7 @@ class _SapSalesShipmentPageState extends State<SapSalesShipmentPage> {
     return pageBodyWithBottomSheet(
       bottomSheet: [
         EditText(
-          hint: '指令号',
+          hint: 'sap_sales_shipment_instruction_no'.tr,
           controller: insController,
         ),
         DatePicker(pickerController: dpcDate),
@@ -155,7 +156,7 @@ class _SapSalesShipmentPageState extends State<SapSalesShipmentPage> {
             SizedBox(
               width: double.infinity,
               child: CombinationButton(
-                text: '提交出库',
+                text: 'sap_sales_shipment_submit_stock_out'.tr,
                 click: () => logic.postingShipment(
                   refresh: () => logic.query(
                     insController.text,

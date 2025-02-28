@@ -5,10 +5,10 @@ import 'package:jd_flutter/utils/utils.dart';
 class CodeListReportState {
   var reportDataList = <ReportInfo>[].obs;
 
-  ///报表数据
+  //报表数据
   var tableWeight = (0.0).obs;
 
-  ///列表宽度
+  //列表宽度
 
   getData(dynamic data) {
     reportDataList.value = [

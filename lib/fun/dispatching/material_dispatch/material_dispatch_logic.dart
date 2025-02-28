@@ -13,21 +13,21 @@ class MaterialDispatchLogic extends GetxController {
   var scReportState = SpinnerController(
     saveKey: RouteConfig.materialDispatch.name,
     dataList: [
-      '全部',
-      '未报工',
-      '已报工',
-      '已生成贴标未报工',
+      'material_dispatch_report_state_all'.tr,
+      'material_dispatch_report_state_not_report'.tr,
+      'material_dispatch_report_state_reported'.tr,
+      'material_dispatch_report_state_generated_not_report'.tr,
     ],
   );
 
-  ///日期选择器的控制器
+  //日期选择器的控制器
   var dpcStartDate = DatePickerController(
     PickerType.startDate,
     saveKey: '${RouteConfig.materialDispatch.name}${PickerType.startDate}',
   )..firstDate = DateTime(
       DateTime.now().year - 5, DateTime.now().month, DateTime.now().day);
 
-  ///日期选择器的控制器
+  //日期选择器的控制器
   var dpcEndDate = DatePickerController(
     PickerType.endDate,
     saveKey: '${RouteConfig.materialDispatch.name}${PickerType.endDate}',
@@ -41,10 +41,6 @@ class MaterialDispatchLogic extends GetxController {
   //   super.onReady();
   // }
 
-  @override
-  void onClose() {
-    super.onClose();
-  }
 
   refreshDataList() {
     state.getScWorkCardProcess(
@@ -78,7 +74,7 @@ class MaterialDispatchLogic extends GetxController {
   batchWarehousing() {
     var submitList = state.createSubmitData();
     if (submitList.isEmpty) {
-      informationDialog(content: '没有需要入库的数据');
+      informationDialog(content: 'material_dispatch_batch_stock_in_error_tips'.tr);
     } else {
       state.batchWarehousing(
         submitList: submitList,

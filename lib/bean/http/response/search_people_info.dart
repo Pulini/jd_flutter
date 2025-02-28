@@ -1,12 +1,12 @@
-/// EmpCode : "005384"
-/// EmpID : 94256
-/// EmpName : "陆定隆"
-/// EmpDepartID : 554697
-/// EmpDepartName : "金帝_裁断2组"
-/// EmpDuty : "落料"
-/// EmpCreatTime : "2013-05-17 10:50"
-/// EmpOperateTime : "2023-10-04 13:57"
-/// EmpLeaveStatus : 1
+// EmpCode : "005384"
+// EmpID : 94256
+// EmpName : "陆定隆"
+// EmpDepartID : 554697
+// EmpDepartName : "金帝_裁断2组"
+// EmpDuty : "落料"
+// EmpCreatTime : "2013-05-17 10:50"
+// EmpOperateTime : "2023-10-04 13:57"
+// EmpLeaveStatus : 1
 
 class SearchPeopleInfo {
   SearchPeopleInfo({

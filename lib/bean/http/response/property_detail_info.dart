@@ -1,52 +1,52 @@
-/// StatusID : 1
-/// StatusName : "使用中"
-/// InterID : 102433
-/// StyleID : 1
-/// DeptID : 554577
-/// KeepEmpID : 209579
-/// OrganizeID : 1
-/// Model : "2023款华为MateBook-14皓月银"
-/// Number : "A001241647"
-/// SAPCgOrderNo : "4500734300"
-/// Name : "笔记本"
-/// Status : "已审核"
-/// ProcessStatus : 2
-/// LabelPrintQty : 1
-/// Manufacturer : "  "
-/// Qty : 1.0
-/// CurrencyName : "人民币"
-/// Price : 5250.0
-/// OrgVal : 4646.02
-/// BuyDate : "2024-01-04"
-/// GuaranteePeriod : ""
-/// WriteDate : "2024-01-05"
-/// ReviceDate : "2024-01-11"
-/// ProduceDate : ""
-/// Vender : "温州斯艾斯通信有限公司"
-/// CustodianCode : "033953"
-/// CustodianName : "周元双"
-/// LiableEmpID : 5351
-/// LiableEmpName : "诸建勇"
-/// Participator : 139797
-/// ParticipatorCode : "015114"
-/// ParticipatorName : "李进"
-/// Sno : "0000400029290000"
-/// OrganizeName : "01.01|金帝集团股份有限公司"
-/// DeptName : "总经理室"
-/// Address : "金帝办公楼3楼总经理室"
-/// Notes : "24332000000003351748"
-/// RegistrationerID : 140274
-/// SAPINVOICENO : "24332000000003351748"
-/// IsCardCheck : 0
-/// IsFinanceCheck : 0
-/// CheckInterID : 0
-/// ExpectedLife : 36
-/// TypeName : ""
-/// Unit : ""
-/// LiableEmpCode : ""
-/// AssetPicture : ""
-/// RatingPlatePicture : ""
-/// CardEntry : [{"Name":"","Qty":0.0,"Price":0.0,"Amount":0.0,"Plce":"","Notes":""},{"Name":"","Qty":0.0,"Price":0.0,"Amount":0.0,"Plce":"","Notes":""}]
+// StatusID : 1
+// StatusName : "使用中"
+// InterID : 102433
+// StyleID : 1
+// DeptID : 554577
+// KeepEmpID : 209579
+// OrganizeID : 1
+// Model : "2023款华为MateBook-14皓月银"
+// Number : "A001241647"
+// SAPCgOrderNo : "4500734300"
+// Name : "笔记本"
+// Status : "已审核"
+// ProcessStatus : 2
+// LabelPrintQty : 1
+// Manufacturer : "  "
+// Qty : 1.0
+// CurrencyName : "人民币"
+// Price : 5250.0
+// OrgVal : 4646.02
+// BuyDate : "2024-01-04"
+// GuaranteePeriod : ""
+// WriteDate : "2024-01-05"
+// ReviceDate : "2024-01-11"
+// ProduceDate : ""
+// Vender : "温州斯艾斯通信有限公司"
+// CustodianCode : "033953"
+// CustodianName : "周元双"
+// LiableEmpID : 5351
+// LiableEmpName : "诸建勇"
+// Participator : 139797
+// ParticipatorCode : "015114"
+// ParticipatorName : "李进"
+// Sno : "0000400029290000"
+// OrganizeName : "01.01|金帝集团股份有限公司"
+// DeptName : "总经理室"
+// Address : "金帝办公楼3楼总经理室"
+// Notes : "24332000000003351748"
+// RegistrationerID : 140274
+// SAPINVOICENO : "24332000000003351748"
+// IsCardCheck : 0
+// IsFinanceCheck : 0
+// CheckInterID : 0
+// ExpectedLife : 36
+// TypeName : ""
+// Unit : ""
+// LiableEmpCode : ""
+// AssetPicture : ""
+// RatingPlatePicture : ""
+// CardEntry : [{"Name":"","Qty":0.0,"Price":0.0,"Amount":0.0,"Plce":"","Notes":""},{"Name":"","Qty":0.0,"Price":0.0,"Amount":0.0,"Plce":"","Notes":""}]
 
 class PropertyDetailInfo {
   PropertyDetailInfo({
@@ -267,12 +267,12 @@ class PropertyDetailInfo {
 
 }
 
-/// Name : ""
-/// Qty : 0.0
-/// Price : 0.0
-/// Amount : 0.0
-/// Place : ""
-/// Notes : ""
+// Name : ""
+// Qty : 0.0
+// Price : 0.0
+// Amount : 0.0
+// Place : ""
+// Notes : ""
 
 class CardEntry {
   CardEntry({

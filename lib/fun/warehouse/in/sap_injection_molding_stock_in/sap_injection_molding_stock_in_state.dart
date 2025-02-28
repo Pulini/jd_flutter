@@ -32,7 +32,7 @@ class SapInjectionMoldingStockInState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在获取托盘信息...',
+      loading: 'sap_injection_molding_stock_in_getting_pallet_info'.tr,
       method: webApiSapGetPalletList,
       body: {
         'WERKS': '1500',
@@ -66,7 +66,7 @@ class SapInjectionMoldingStockInState {
     required Function() refresh,
   }) {
     sapPost(
-      loading: '正在获取标签状态....',
+      loading: 'sap_injection_molding_stock_in_getting_label_status'.tr,
       method: webApiSapGetMaterialDispatchLabelList,
       body: [
         {
@@ -101,7 +101,7 @@ class SapInjectionMoldingStockInState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在获取汇总信息....',
+      loading: 'sap_injection_molding_stock_in_getting_summary_info'.tr,
       method: webApiSapGetStockInReport,
       body: [
         for (var v in list)
@@ -139,7 +139,7 @@ class SapInjectionMoldingStockInState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在提交入库....',
+      loading: 'sap_injection_molding_stock_in_submitting_stock_in'.tr,
       method: webApiSapInjectionMoldingStockIn,
       body: {
         'KTSCH': 'ZHUS',

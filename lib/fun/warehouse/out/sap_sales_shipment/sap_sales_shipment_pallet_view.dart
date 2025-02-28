@@ -35,7 +35,7 @@ class _SapSalesShipmentPalletViewState
           Row(
             children: [
               expandedTextSpan(
-                hint: '托盘号：',
+                hint: 'sap_sales_shipment_pallet_number'.tr,
                 text: p[0].palletNumber ?? '',
                 textColor: Colors.red,
               ),
@@ -61,13 +61,13 @@ class _SapSalesShipmentPalletViewState
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           textSpan(
-                            hint: '标签号：',
+                            hint: 'sap_sales_shipment_pallet_label_no'.tr,
                             text: item.labelCode ?? '',
                             isBold: false,
                             textColor: Colors.green,
                           ),
                           textSpan(
-                            hint: '数量：',
+                            hint: 'sap_sales_shipment_pallet_quantity'.tr,
                             isBold: false,
                             text: item.quantity.toShowString(),
                             textColor: Colors.green,
@@ -103,13 +103,13 @@ class _SapSalesShipmentPalletViewState
       actions: [
         IconButton(
           onPressed: () => askDialog(
-            content: '确定要重置标签状态吗？',
+            content: 'sap_sales_shipment_pallet_reset_label_status_tips'.tr,
             confirm: () => logic.refreshPallet(index),
           ),
           icon: const Icon(Icons.refresh, color: Colors.blue),
         )
       ],
-      title: '扫瞄或勾选对应标签',
+      title: 'sap_sales_shipment_pallet_scan_or_select_label_tips'.tr,
       body: Obx(() => ListView.builder(
             padding: const EdgeInsets.all(8),
             itemCount: state.palletList.length,

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:jd_flutter/utils/utils.dart';
 
-///文本输入框
+//文本输入框
 class EditText extends StatelessWidget {
   const EditText({
     super.key,
@@ -68,7 +68,7 @@ class EditText extends StatelessWidget {
   }
 }
 
-///数字小数输入框输入框
+//数字小数输入框输入框
 class NumberDecimalEditText extends StatelessWidget {
   const NumberDecimalEditText({
     super.key,
@@ -116,7 +116,7 @@ class NumberDecimalEditText extends StatelessWidget {
         keyboardType: TextInputType.number,
         inputFormatters: [
           hasDecimal
-              ? FilteringTextInputFormatter.allow(RegExp("[0-9.]")) //数字包括小数
+              ? FilteringTextInputFormatter.allow(RegExp('[0-9.]')) //数字包括小数
               : FilteringTextInputFormatter.digitsOnly,
         ],
         focusNode: fn,
@@ -178,7 +178,7 @@ class NumberDecimalEditText extends StatelessWidget {
   }
 }
 
-///数字输入框输入框
+//数字输入框输入框
 class NumberEditText extends StatelessWidget {
   const NumberEditText({
     super.key,

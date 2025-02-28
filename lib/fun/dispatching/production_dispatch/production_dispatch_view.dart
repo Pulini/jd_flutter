@@ -101,13 +101,6 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
 
   _item1(List<ProductionDispatchOrderInfo> list, int index) {
     var data = list[index];
-    String printText = data.printStatus == '1'
-        ? '已打印'
-        : data.printStatus == '2'
-            ? '未打印'
-            : data.printStatus == '3'
-                ? '部分打印'
-                : '状态异常';
     return GestureDetector(
       onTap: () => logic.item1click(index),
       child: Column(
@@ -125,20 +118,26 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
               children: [
                 Expanded(
                   child: Text(
-                    '派工单号：${data.sapOrderBill ?? data.orderBill}',
+                    'production_dispatch_dispatch_order_no'.trArgs([
+                      data.sapOrderBill ?? data.orderBill ?? '',
+                    ]),
                     style: itemTitleStyle,
                   ),
                 ),
                 Expanded(
                   child: Text(
-                    '计划跟踪单号：${data.planBill}',
+                    'production_dispatch_plan_tracking_number'.trArgs([
+                      data.planBill ?? '',
+                    ]),
                     style: itemTitleStyle,
                   ),
                 ),
                 if (data.plantBody?.isNotEmpty == true)
                   Expanded(
                     child: Text(
-                      '工厂型体：${data.plantBody}',
+                      'production_dispatch_factory_type_body'.trArgs([
+                        data.plantBody ?? '',
+                      ]),
                       style: itemTitleStyle,
                     ),
                   ),
@@ -152,7 +151,10 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
               children: [
                 Expanded(
                   child: Text(
-                    '物料描述：(${data.materialCode})${data.materialName}',
+                    'production_dispatch_material'.trArgs([
+                      data.materialCode ?? '',
+                      data.materialName ?? '',
+                    ]),
                     style: TextStyle(
                       color: Colors.blue.shade900,
                       fontWeight: FontWeight.bold,
@@ -160,9 +162,10 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
                   ),
                 ),
                 if (data.pastDay == true)
-                  const Text('超时', style: TextStyle(color: Colors.red)),
+                  Text('production_dispatch_timeout'.tr,
+                      style: const TextStyle(color: Colors.red)),
                 Text(
-                  printText,
+                  _printStatusText(data.printStatus ?? ''),
                   style: TextStyle(color: _printTextColor(data.printStatus)),
                 )
               ],
@@ -175,24 +178,30 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
               children: [
                 Expanded(
                   child: Text(
-                    '订单总量：${data.workNumberTotal.toShowString()}',
+                    'production_dispatch_total_order'.trArgs([
+                      data.workNumberTotal.toShowString(),
+                    ]),
                     style: const TextStyle(color: Colors.green),
                   ),
                 ),
                 Expanded(
                   child: Text(
-                    '派工日期：${data.orderDate}',
+                    'production_dispatch_dispatch_date'.trArgs([
+                      data.orderDate ?? '',
+                    ]),
                   ),
                 ),
                 Expanded(
                   child: Text(
-                    '计划开工日期：${data.planStartTime}',
+                    'production_dispatch_plan_start_date'.trArgs([
+                      data.planStartTime ?? '',
+                    ]),
                   ),
                 ),
                 Expanded(
-                  child: Text(
-                    '计划完工日期：${data.planEndTime}',
-                  ),
+                  child: Text('production_dispatch_plan_end_date'.trArgs([
+                    data.planEndTime ?? '',
+                  ])),
                 ),
               ],
             ),
@@ -204,22 +213,30 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
               children: [
                 Expanded(
                   child: Text(
-                    '已入库数：${data.stockInQty.toShowString()}',
+                    'production_dispatch_stock_in_qty'.trArgs([
+                      data.stockInQty.toShowString(),
+                    ]),
                   ),
                 ),
                 Expanded(
                   child: Text(
-                    '已汇报数：${data.reportedNumber.toShowString()}',
+                    'production_dispatch_report_qty'.trArgs([
+                      data.reportedNumber.toShowString(),
+                    ]),
                   ),
                 ),
                 Expanded(
                   child: Text(
-                    '已汇报未计工数：${data.reportedUnscheduled.toShowString()}',
+                    'production_dispatch_reported_not_record_working'.trArgs([
+                      data.reportedUnscheduled.toShowString(),
+                    ]),
                   ),
                 ),
                 Expanded(
                   child: Text(
-                    '已计工未入库数：${data.reportedUnentered.toShowString()}',
+                    'production_dispatch_record_working_not_stock_in'.trArgs([
+                      data.reportedUnentered.toShowString(),
+                    ]),
                   ),
                 ),
               ],
@@ -237,7 +254,9 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
             ),
             child: Row(
               children: [
-                Text('所属课组：${data.group}'),
+                Text('production_dispatch_group'.trArgs([
+                  data.group ?? '',
+                ])),
                 if (data.size?.isNotEmpty == true)
                   Expanded(
                     child: SizedBox(
@@ -288,6 +307,14 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
                     : Colors.red;
   }
 
+  String _printStatusText(String printStatus) => printStatus == '1'
+      ? 'production_dispatch_print_type_printed'.tr
+      : printStatus == '2'
+          ? 'production_dispatch_print_type_unprinted'.tr
+          : printStatus == '3'
+              ? 'production_dispatch_print_type_partial_printed'.tr
+              : 'production_dispatch_print_type_error'.tr;
+
   _item2(List<ProductionDispatchOrderInfo> list) {
     var data = list[0];
     var buttonStyle = ButtonStyle(
@@ -301,14 +328,6 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
         ),
       ),
     );
-
-    String printText = data.printStatus == '1'
-        ? '已打印'
-        : data.printStatus == '2'
-            ? '未打印'
-            : data.printStatus == '3'
-                ? '部分打印'
-                : '状态异常';
 
     var sumOfStockInQty = list
         .map((item) => item.stockInQty)
@@ -335,13 +354,17 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
             children: [
               Expanded(
                 child: Text(
-                  '派工单号：${data.sapOrderBill ?? data.orderBill}',
+                  'production_dispatch_dispatch_order_no'.trArgs([
+                    data.sapOrderBill ?? data.orderBill ?? '',
+                  ]),
                   style: itemTitleStyle,
                 ),
               ),
               if (data.plantBody?.isNotEmpty == true)
                 Text(
-                  '型体：${data.plantBody}',
+                  'production_dispatch_type_body'.trArgs([
+                    data.plantBody ?? '',
+                  ]),
                   style: itemTitleStyle,
                 ),
             ],
@@ -355,7 +378,10 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
             children: [
               Expanded(
                 child: Text(
-                  '物料描述：(${data.materialCode})${data.materialName}',
+                  'production_dispatch_material'.trArgs([
+                    data.materialCode ?? '',
+                    data.materialName ?? '',
+                  ]),
                   style: TextStyle(
                     color: Colors.blue.shade900,
                     fontWeight: FontWeight.bold,
@@ -366,7 +392,7 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
                 onPressed: () => logic.materialLabelMaintenance(data),
                 style: buttonStyle,
                 child: Text(
-                  printText,
+                  _printStatusText(data.printStatus ?? ''),
                   style: TextStyle(color: _printTextColor(data.printStatus)),
                 ),
               )
@@ -378,11 +404,16 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
           color: Colors.white,
           child: Row(
             children: [
-              _text('计划跟踪单号', Colors.blue.shade100),
-              _text('派工日期', Colors.blue.shade100),
-              _text('计划开工日期', Colors.blue.shade100),
-              _text('计划完工日期', Colors.blue.shade100),
-              _text('完成量', Colors.blue.shade100),
+              _text('production_dispatch_plan_tracking_number_tips'.tr,
+                  Colors.blue.shade100),
+              _text('production_dispatch_dispatch_date_tips'.tr,
+                  Colors.blue.shade100),
+              _text('production_dispatch_plan_start_date_tips'.tr,
+                  Colors.blue.shade100),
+              _text('production_dispatch_plan_end_date_tips'.tr,
+                  Colors.blue.shade100),
+              _text('production_dispatch_completed_tips'.tr,
+                  Colors.blue.shade100),
             ],
           ),
         ),
@@ -412,7 +443,14 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
           ),
           child: Row(
             children: [
-              Expanded(flex: 4, child: Text('所属课组:${data.group}')),
+              Expanded(
+                flex: 4,
+                child: Text(
+                  'production_dispatch_group'.trArgs([
+                    data.group ?? '',
+                  ]),
+                ),
+              ),
               const SizedBox(width: 20),
               Expanded(
                 flex: 1,
@@ -457,7 +495,7 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
                       isEnabled: state.cbIsEnabledInstruction.value,
                       text: 'production_dispatch_bt_instruction'.tr,
                       click: () => logic.instructionList(
-                        (url) => Get.to(()=>WebPage(title: '', url: url)),
+                        (url) => Get.to(() => WebPage(title: '', url: url)),
                       ),
                     ),
                   if (!state.isSelectedMany)
@@ -479,7 +517,7 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
                           (s) => logic.getColorPdf(
                             s,
                             id,
-                            (url) => Get.to(()=>WebPage(title: '', url: url)),
+                            (url) => Get.to(() => WebPage(title: '', url: url)),
                           ),
                         ),
                       ),

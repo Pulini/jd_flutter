@@ -9,7 +9,7 @@ showSalesOrderListDialog(List<String> list) {
     PopScope(
       canPop: false,
       child: AlertDialog(
-        title: Text('销售订单号'),
+        title: Text('process_dispatch_register_dialog_sales_order_no'.tr),
         content: SizedBox(
           width: 300,
           height: 200,
@@ -50,7 +50,7 @@ addNewWorkerDialog(
       canPop: false,
       child: Obx(
         () => AlertDialog(
-          title: const Text('添加临时组员'),
+          title: Text('process_dispatch_register_dialog_add_temp_worker'.tr),
           content: SizedBox(
             width: 200,
             height: 260,
@@ -78,10 +78,10 @@ addNewWorkerDialog(
                 ),
                 if (exists.value)
                   Padding(
-                    padding: EdgeInsets.only(left: 10),
+                    padding: const EdgeInsets.only(left: 10),
                     child: Text(
-                      '员工已存在',
-                      style: TextStyle(
+                      'process_dispatch_register_dialog_worker_exists'.tr,
+                      style: const TextStyle(
                         color: Colors.redAccent,
                         fontWeight: FontWeight.bold,
                       ),

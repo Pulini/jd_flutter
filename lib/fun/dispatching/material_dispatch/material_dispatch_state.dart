@@ -66,7 +66,7 @@ class MaterialDispatchState {
   }) {
     httpGet(
       method: webApiGetScWorkCardProcess,
-      loading: '正在查询工单',
+      loading: 'material_dispatch_querying_order'.tr,
       params: {
         'StartDate': startDate,
         'EndDate': endDate,
@@ -95,7 +95,7 @@ class MaterialDispatchState {
   }) {
     httpPost(
       method: webApiCreateLastProcessReport,
-      loading: '正在提交报工...',
+      loading: 'material_dispatch_reporting'.tr,
       params: {
         'Date': getDateYMD(time: DateTime.fromMillisecondsSinceEpoch(date)),
         'DrillingCrewID': machineId,
@@ -159,7 +159,7 @@ class MaterialDispatchState {
     required Function(String msg) error,
   }) {
     httpGet(
-      loading: '正在查询工艺说明书...',
+      loading: 'material_dispatch_querying_manual'.tr,
       method: webApiGetProcessSpecificationList,
       params: {
         'Product': typeBody,
@@ -182,7 +182,7 @@ class MaterialDispatchState {
     required Function(String msg) error,
   }) {
     httpPost(
-      loading: '正在提交报工...',
+      loading: 'material_dispatch_reporting'.tr,
       method: webApiCreateProcessOutPutStripDrawing,
       params: {
         'DrillingCrewID': machineId,
@@ -232,7 +232,7 @@ class MaterialDispatchState {
       });
     });
     httpPost(
-      loading: '正在取消报工...',
+      loading: 'material_dispatch_cancel_reporting'.tr,
       method: webApiProcessOutPutReport,
       body: list,
     ).then((response) {
@@ -251,7 +251,7 @@ class MaterialDispatchState {
     required Function(String msg) error,
   }) {
     httpPost(
-      loading: '正在提交入库...',
+      loading: 'material_dispatch_in_storage'.tr,
       method: webApiPickCodeProductionWarehousing,
       params: {
         'processWorkCardInterID': data.interID,
@@ -279,7 +279,7 @@ class MaterialDispatchState {
     required Function(String msg) error,
   }) {
     httpPost(
-      loading: '正在提交报工...',
+      loading: 'material_dispatch_reporting'.tr,
       method: webApiCreateProcessOutPutStripDrawing,
       params: {
         'DrillingCrewID': machineId,
@@ -316,7 +316,7 @@ class MaterialDispatchState {
     required Function(String msg) error,
   }) {
     httpPost(
-      loading: '正在取消报工...',
+      loading: 'material_dispatch_cancel_reporting'.tr,
       method: webApiProcessOutPutReport,
       body: [
         {

@@ -9,7 +9,7 @@ import 'production_day_report_state.dart';
 class ProductionDayReportLogic extends GetxController {
   final ProductionDayReportState state = ProductionDayReportState();
 
-  ///日期选择器的控制器
+  //日期选择器的控制器
   late DatePickerController pickerControllerDate = DatePickerController(
     PickerType.date,
     saveKey: '${RouteConfig.productionDayReport.name}${PickerType.date}',
@@ -18,7 +18,7 @@ class ProductionDayReportLogic extends GetxController {
     onChanged: (index) => query(),
   );
 
-  ///下拉选择器的控制器
+  //下拉选择器的控制器
   late SpinnerController spinnerControllerWorkShop = SpinnerController(
     saveKey: RouteConfig.productionDayReport.name,
     dataList: [
@@ -36,7 +36,7 @@ class ProductionDayReportLogic extends GetxController {
     lastDate: state.today,
   );
 
-  ///获取产量汇总表接口
+  //获取产量汇总表接口
   query() {
     state.getPrdDayReport(
       date: pickerControllerDate.getDateFormatYMD(),

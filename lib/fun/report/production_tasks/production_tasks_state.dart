@@ -28,6 +28,8 @@ class ProductionTasksState {
   var customerPO = ''.obs;
   var shouldPackQty = (0.0).obs;
   var packagedQty = (0.0).obs;
+  var packetWay=<String>[].obs;
+  var specificRequirements=<String>[].obs;
 
   var detailTableInfo = <ProductionTasksDetailItemInfo>[].obs;
   var detailInstructionNo = ''.obs;
@@ -35,9 +37,6 @@ class ProductionTasksState {
   var detailShouldPackQty = (0.0).obs;
   var detailPackagedQty = (0.0).obs;
 
-  ProductionTasksState() {
-    ///Initialize variables
-  }
 
   getProductionOrderSchedule({
     required Function() success,
@@ -45,7 +44,7 @@ class ProductionTasksState {
   }) {
     httpGet(
         method: webApiGetProductionOrderSchedule,
-        loading: '正在查询生产任务进度表...',
+        loading: 'production_tasks_querying_tasks'.tr,
         params: {
           'departmentID': getUserInfo()!.departmentID ?? 0,
           // 'departmentID': 554744,
@@ -56,7 +55,7 @@ class ProductionTasksState {
         orderList = info.subInfo ?? [];
         todayTargetQty.value = info.toDayPlanQty ?? 0;
         todayCompleteQty.value = info.toDayFinishQty ?? 0;
-        monthCompleteQty.value = info.toDayFinishQty ?? 0;
+        monthCompleteQty.value = info.toMonthFinishQty ?? 0;
         refreshUiData();
         success.call();
       } else {
@@ -75,6 +74,8 @@ class ProductionTasksState {
       tableInfo.value = [
         ...orderList[0].workCardSizeInfo ?? [],
       ];
+      packetWay.value=orderList[0].packetWay??[];
+      specificRequirements.value=orderList[0].specificRequirements??[];
     } else {
       todayTargetQty.value = 0.0;
       todayCompleteQty.value = 0.0;
@@ -85,6 +86,8 @@ class ProductionTasksState {
       shouldPackQty.value = 0.0;
       packagedQty.value = 0.0;
       tableInfo.value = [];
+      packetWay.value=[];
+      specificRequirements.value=[];
     }
   }
 
@@ -95,7 +98,7 @@ class ProductionTasksState {
   }) {
     httpPost(
       method: webApiSubmitNewSort,
-      loading: 'molding_scan_bulletin_report_submitting'.tr,
+      loading: 'production_tasks_modifying_order_sort'.tr,
       body: [
         for (var i = 0; i < newLine.length; i++)
           {
@@ -121,7 +124,7 @@ class ProductionTasksState {
   }) {
     httpGet(
         method: webApiGetProductionOrderScheduleDetail,
-        loading: '正在查询生产任务进度明细...',
+        loading: 'production_tasks_querying_task_detail'.tr,
         params: {
           'Bill': ins,
           'PO': po,

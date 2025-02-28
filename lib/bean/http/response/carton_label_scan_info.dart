@@ -1,9 +1,9 @@
-/// InterID : "257283"
-/// CustOrderNumber : "4602027696"
-/// OutBoxBarCode : "00340486681090872284"
-/// Mix : 1
-/// IsSoleBarCode : 1
-/// LinkDataSizeList : [{"PriceBarCode":"4099686238735","Size":"3","LabelCount":"1.00000000000000000000"},{"PriceBarCode":"4099686238742","Size":"3.5","LabelCount":"3.00000000000000000000"},{"PriceBarCode":"4099686238759","Size":"4","LabelCount":"2.00000000000000000000"}]
+// InterID : "257283"
+// CustOrderNumber : "4602027696"
+// OutBoxBarCode : "00340486681090872284"
+// Mix : 1
+// IsSoleBarCode : 1
+// LinkDataSizeList : [{"PriceBarCode":"4099686238735","Size":"3","LabelCount":"1.00000000000000000000"},{"PriceBarCode":"4099686238742","Size":"3.5","LabelCount":"3.00000000000000000000"},{"PriceBarCode":"4099686238759","Size":"4","LabelCount":"2.00000000000000000000"}]
 
 class CartonLabelScanInfo {
   CartonLabelScanInfo({
@@ -51,9 +51,9 @@ class CartonLabelScanInfo {
   }
 }
 
-/// PriceBarCode : "4099686238735"
-/// Size : "3"
-/// LabelCount : "1.00000000000000000000"
+// PriceBarCode : "4099686238735"
+// Size : "3"
+// LabelCount : "1.00000000000000000000"
 
 class LinkDataSizeList {
   LinkDataSizeList({

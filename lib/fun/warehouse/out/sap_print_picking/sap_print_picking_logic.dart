@@ -12,18 +12,6 @@ import 'sap_print_picking_state.dart';
 class SapPrintPickingLogic extends GetxController {
   final SapPrintPickingState state = SapPrintPickingState();
 
-  @override
-  void onReady() {
-    // TODO: implement onReady
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    // TODO: implement onClose
-    super.onClose();
-  }
-
   queryOrder({
     required String instructionNo,
     required String typeBody,
@@ -65,8 +53,7 @@ class SapPrintPickingLogic extends GetxController {
     if (state.orderDetailOrderList.any((v) => v.order.location == '1001') ==
         true) {
       showSnackBar(
-        title: '错误',
-        message: '原材料领料无需扫码',
+        message: 'sap_print_picking_raw_material_no_need_scan'.tr,
         isWarning: true,
       );
       return;
@@ -78,16 +65,14 @@ class SapPrintPickingLogic extends GetxController {
         //不在标签列表内 或标签类型为禁止领料
         if (label.pickingType == 'B2') {
           showSnackBar(
-            title: '错误',
-            message: '此标签不在于本次领取范围',
+            message: 'sap_print_picking_label_not_belong_pick_order'.tr,
             isWarning: true,
           );
           return;
         }
         if (label.distribution.isNotEmpty) {
           showSnackBar(
-            title: '错误',
-            message: '条码已扫',
+            message: 'sap_print_picking_label_scanned'.tr,
             isWarning: true,
           );
           return;
@@ -107,8 +92,8 @@ class SapPrintPickingLogic extends GetxController {
 
           if (materialRemainder < (label.quantity ?? 0)) {
             showSnackBar(
-              title: '错误',
-              message: '该标签为整箱领料且超过领料需求！',
+              message:
+                  'sap_print_picking_exceed_material_pick_requirements_tips'.tr,
               isWarning: true,
             );
             return;
@@ -126,13 +111,17 @@ class SapPrintPickingLogic extends GetxController {
               })
               .map((v) => v.pickQty)
               .reduce((a, b) => a.add(b));
-          successDialog(content: '本箱物料超出工单剩余可领总数$surplus，请更换可领箱货。');
+          successDialog(
+            content: 'sap_print_picking_contents_cargo_box_exceed_pick_qty_tips'
+                .trArgs([
+              surplus.toShowString(),
+            ]),
+          );
         }
       } catch (e) {
         //不在标签列表内 或标签类型为禁止领料
         showSnackBar(
-          title: '错误',
-          message: '此标签不在于本次领取范围',
+          message: 'sap_print_picking_label_not_belong_pick_order'.tr,
           isWarning: true,
         );
         return;
@@ -151,16 +140,14 @@ class SapPrintPickingLogic extends GetxController {
           .toList();
       if (pallet.isEmpty) {
         showSnackBar(
-          title: '错误',
-          message: '此托盘不在于本次领取范围',
+          message: 'sap_print_picking_label_not_belong_pick_order'.tr,
           isWarning: true,
         );
         return;
       }
       if (pallet.every((v) => v.distribution.isNotEmpty)) {
         showSnackBar(
-          title: '错误',
-          message: '托盘已扫',
+          message: 'sap_print_picking_label_scanned'.tr,
           isWarning: true,
         );
         return;
@@ -197,7 +184,13 @@ class SapPrintPickingLogic extends GetxController {
             .map((v) => v.pickQty)
             .reduce((a, b) => a.add(b));
         msgList.add(
-            '标签 ${label.size} 码- ${label.quantity.toShowString()} ${label.unit} 超过工单剩余可领数 ${surplus.toShowString()}');
+          'sap_print_picking_label_exceed_order_surplus_qty_tips'.trArgs([
+            label.size ?? '',
+            label.quantity.toShowString(),
+            label.unit ?? '',
+            surplus.toShowString(),
+          ]),
+        );
       });
       if (msgList.isNotEmpty) {
         errorDialog(content: msgList.join('\n'));
@@ -209,8 +202,7 @@ class SapPrintPickingLogic extends GetxController {
       return;
     }
     showSnackBar(
-      title: '错误',
-      message: '请扫描正确的条码!',
+      message: 'sap_print_picking_scan_wrong_barcode_tips'.tr,
       isWarning: true,
     );
   }
@@ -285,8 +277,7 @@ class SapPrintPickingLogic extends GetxController {
         .toList();
     if (selectList.isEmpty) {
       showSnackBar(
-        title: '错误',
-        message: '请勾选要领取的物料',
+        message: 'sap_print_picking_select_pick_material'.tr,
         isWarning: true,
       );
       return;
@@ -295,8 +286,7 @@ class SapPrintPickingLogic extends GetxController {
     var sizeMaterial = selectList.any((v) => v.order.location != '1001');
     if (rawMaterial && sizeMaterial) {
       showSnackBar(
-        title: '错误',
-        message: '尺码物料不能与非尺码物料一起过账!!',
+        message: 'sap_print_picking_material_size_type_different_tips'.tr,
         isWarning: true,
       );
       return;
@@ -308,16 +298,21 @@ class SapPrintPickingLogic extends GetxController {
       for (var v in selectList) {
         var surplus = v.order.getRemainder().sub(v.pickQty);
         if (surplus > 0) {
-          msgList
-              .add('型体 <${v.order.typeBody}> 还有 ${surplus.toShowString()} 未领');
+          msgList.add(
+            'sap_print_picking_pick_still_unfinished_tips'.trArgs([
+              v.order.typeBody ?? '',
+              surplus.toShowString(),
+            ]),
+          );
         }
       }
       if (msgList.isNotEmpty) {
         askDialog(
-            content: '${msgList.join(',')}。确定要提交领料吗？',
-            confirm: () {
-              pick.call(true, selectList);
-            });
+          content: 'sap_print_picking_submit_pick_tips'.trArgs([
+            msgList.join(','),
+          ]),
+          confirm: () => pick.call(true, selectList),
+        );
       } else {
         pick.call(true, selectList);
       }
@@ -360,7 +355,7 @@ class SapPrintPickingLogic extends GetxController {
       userSignature: userSignature,
       relocation: (list) {
         askDialog(
-            content: '检测到有托盘存在未领物料，是否需要移库？',
+            content: 'sap_print_picking_pallet_has_material_cannot_transfer'.tr,
             confirm: () {
               state.checkPallet(
                 pallets: list,
@@ -438,8 +433,7 @@ class SapPrintPickingLogic extends GetxController {
       return;
     }
     showSnackBar(
-      title: '错误',
-      message: '请扫描正确的条码!',
+      message: 'sap_print_picking_scan_wrong_barcode_tips'.tr,
       isWarning: true,
     );
   }
@@ -457,18 +451,18 @@ class SapPrintPickingLogic extends GetxController {
               state.transfer(
                 targetPallet: info.item2![0],
                 success: () {
-                  var list=<PalletDetailItem1Info>[];
+                  var list = <PalletDetailItem1Info>[];
                   for (var pallet in state.transferList) {
-                    list.addAll(pallet.where((v)=>!v.select));
+                    list.addAll(pallet.where((v) => !v.select));
                   }
-                  if(list.isEmpty){
+                  if (list.isEmpty) {
                     successDialog(
-                      content: '所有物料已移库完成!',
+                      content: 'sap_print_picking_all_material_transfer_completed'.tr,
                       back: () => Get.back(),
                     );
-                  }else{
+                  } else {
                     state.transferList.clear();
-                    groupBy(list, (v)=>v.palletNumber).forEach((k,v){
+                    groupBy(list, (v) => v.palletNumber).forEach((k, v) {
                       state.transferList.add(v);
                     });
                     refresh.call();
@@ -478,11 +472,11 @@ class SapPrintPickingLogic extends GetxController {
               );
               break;
             case 'Y':
-              errorDialog(content: '此托盘已在其他仓库使用!!');
+              errorDialog(content: 'sap_print_picking_pallet_already_occupied'.tr);
               break;
           }
         } else {
-          errorDialog(content: '此托盘不存在!!');
+          errorDialog(content: 'sap_print_picking_pallet_not_exists'.tr);
         }
       },
       error: (msg) => errorDialog(content: msg),

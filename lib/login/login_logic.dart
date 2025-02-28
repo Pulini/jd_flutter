@@ -15,7 +15,7 @@ class LoginLogic extends GetxController {
 
 
 
-  ///根据手机号码获取用户头像并登录
+  //根据手机号码获取用户头像并登录
   faceLogin(String phone) {
     hideKeyBoard();
     if (phone.isEmpty) {
@@ -68,7 +68,7 @@ class LoginLogic extends GetxController {
         error: (msg) => errorDialog(content: msg));
   }
 
-  ///机台账号登录
+  //机台账号登录
   machineLogin(
     String machine,
     String password,
@@ -97,7 +97,7 @@ class LoginLogic extends GetxController {
     );
   }
 
-  ///获取验证码
+  //获取验证码
   getVerifyCode(String phone) {
     //按钮名称不是获取验证码，直接返回
     if (state.buttonName.value != 'get_verify_code'.tr) return;
@@ -119,7 +119,7 @@ class LoginLogic extends GetxController {
     );
   }
 
-  /// 手机号码登录
+  // 手机号码登录
   phoneLogin(
     String phone,
     String password,
@@ -153,7 +153,7 @@ class LoginLogic extends GetxController {
     );
   }
 
-  ///工号登录
+  //工号登录
   workNumberLogin(
     String workNumber,
     String password,

@@ -10,19 +10,19 @@ class PackingShipmentScanInfo {
     if (json['gtItems'] != null) {
       GT_ITEMS = [];
       json['gtItems'].forEach((v) {
-        GT_ITEMS?.add(gtItems.fromJson(v));
+        GT_ITEMS?.add(GtItem.fromJson(v));
       });
     }
     if (json['gtItems2'] != null) {
       GT_ITEMS2 = [];
       json['gtItems2'].forEach((v) {
-        GT_ITEMS2?.add(gtItems2.fromJson(v));
+        GT_ITEMS2?.add(GtItem2.fromJson(v));
       });
     }
   }
 
-  List<gtItems>? GT_ITEMS;
-  List<gtItems2>? GT_ITEMS2;
+  List<GtItem>? GT_ITEMS;
+  List<GtItem2>? GT_ITEMS2;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -36,8 +36,8 @@ class PackingShipmentScanInfo {
     return map;
   }
 }
-class gtItems {
-  gtItems({
+class GtItem {
+  GtItem({
     this.ZZKHPO2,
     this.ZZYCXS,
     this.YFXS,
@@ -54,7 +54,7 @@ class gtItems {
   bool? isThis;   //传的是不是这条
 
 
-  gtItems.fromJson(dynamic json) {
+  GtItem.fromJson(dynamic json) {
     ZZKHPO2 = json['ZZKHPO2'];
     ZZYCXS = json['ZZYCXS'];
     YFXS = json['YFXS'];
@@ -75,8 +75,8 @@ class gtItems {
   }
 }
 
-class gtItems2 {
-  gtItems2({
+class GtItem2 {
+  GtItem2({
     this.ZCTNLABEL,
     this.ZZKHPO2,
     this.VBELN_VL,
@@ -86,7 +86,7 @@ class gtItems2 {
   String? ZZKHPO2; //订单号
   String? VBELN_VL; //交货号
 
-  gtItems2.fromJson(dynamic json) {
+  GtItem2.fromJson(dynamic json) {
     ZCTNLABEL = json['ZCTNLABEL'];
     ZZKHPO2 = json['ZZKHPO2'];
     VBELN_VL = json['VBELN_VL'];

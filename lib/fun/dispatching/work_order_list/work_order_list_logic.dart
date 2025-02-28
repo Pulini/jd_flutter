@@ -10,33 +10,23 @@ import 'work_order_list_state.dart';
 class WorkOrderListLogic extends GetxController {
   final WorkOrderListState state = WorkOrderListState();
 
-  ///组别选择器的控制器
+  //组别选择器的控制器
   var pcGroup = OptionsPickerController(
     PickerType.sapGroup,
     saveKey: '${RouteConfig.workOrderList.name}${PickerType.sapGroup}',
   );
 
-  ///日期选择器的控制器
+  //日期选择器的控制器
   var pcStartDate = DatePickerController(
     PickerType.startDate,
     saveKey: '${RouteConfig.workOrderList.name}${PickerType.startDate}',
   );
 
-  ///日期选择器的控制器
+  //日期选择器的控制器
   var pcEndDate = DatePickerController(
     PickerType.endDate,
     saveKey: '${RouteConfig.workOrderList.name}${PickerType.endDate}',
   );
-
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
-  }
 
   query() {
     state.query(
@@ -54,7 +44,9 @@ class WorkOrderListLogic extends GetxController {
   submitCheck() {
     var selected = state.partList.where((v) => v.select);
     if (selected.isEmpty) {
-      showSnackBar(title: 'snack_bar_default_wrong'.tr, message: '至少选择一个部件', isWarning: true);
+      showSnackBar(
+          message: 'work_order_list_select_component_tips'.tr,
+          isWarning: true,);
     } else {
       if (selected.length > 1) {
         var names = <String>[];
@@ -62,9 +54,9 @@ class WorkOrderListLogic extends GetxController {
         for (var data in selected) {
           names.add(data.partName ?? '');
         }
-        name = names.join('和');
+        name = names.join('work_order_list_and'.tr);
         askDialog(
-            content: '确定要合并：$name吗？',
+            content: 'work_order_list_merge_tips'.trArgs([name]),
             confirm: () {
               Get.to(() => const PartLabelPage());
             });
@@ -85,15 +77,24 @@ class WorkOrderListLogic extends GetxController {
     String empId,
   ) {
     if (boxCapacity <= 0) {
-      showSnackBar(title: 'snack_bar_default_wrong'.tr, message: '请输入箱容！', isWarning: true);
+      showSnackBar(
+        message: 'work_order_list_input_box_capacity_tips'.tr,
+        isWarning: true,
+      );
       return;
     }
     if (qty <= 0) {
-      showSnackBar(title: 'snack_bar_default_wrong'.tr, message: '请输入创建数量！', isWarning: true);
+      showSnackBar(
+        message: 'work_order_list_input_create_qty'.tr,
+        isWarning: true,
+      );
       return;
     }
     if (empId.isEmpty) {
-      showSnackBar(title: 'snack_bar_default_wrong'.tr, message: '请输入被指派员工工号！', isWarning: true);
+      showSnackBar(
+        message: 'work_order_list_input_worker_tips'.tr,
+        isWarning: true,
+      );
       return;
     }
     state.createPartLabel(

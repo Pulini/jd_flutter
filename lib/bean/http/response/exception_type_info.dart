@@ -1,8 +1,8 @@
-/// FItemID : 11
-/// FParentID : 3
-/// FName : "材料不良"
-/// FDetail : true
-/// FExPercentage : 0
+// FItemID : 11
+// FParentID : 3
+// FName : "材料不良"
+// FDetail : true
+// FExPercentage : 0
 
 class ExceptionTypeInfo {
   ExceptionTypeInfo({

@@ -54,7 +54,11 @@ class _SapInjectionMoldingStockInPageState
                   )
                 : barCode,
           ),
-          if (bci.isUsed) Text('已提交', style: TextStyle(color: Colors.red)),
+          if (bci.isUsed)
+            Text(
+              'sap_injection_molding_stock_in_submitted'.tr,
+              style: const TextStyle(color: Colors.red),
+            ),
         ],
       ),
     );
@@ -79,7 +83,7 @@ class _SapInjectionMoldingStockInPageState
       actions: [
         TextButton(
           onPressed: () => logic.clearBarCodeList(),
-          child: Text('清空'),
+          child: Text('sap_injection_molding_stock_in_clear'.tr),
         )
       ],
       body: Obx(() => Column(
@@ -120,11 +124,11 @@ class _SapInjectionMoldingStockInPageState
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     textSpan(
-                      hint: '已扫描：',
+                      hint: 'sap_injection_molding_stock_in_scanned'.tr,
                       text: state.barCodeList.length.toString(),
                     ),
                     textSpan(
-                      hint: '托盘号：',
+                      hint: 'sap_injection_molding_stock_in_pallet_no'.tr,
                       text: state.palletNumber.value,
                     ),
                   ],
@@ -133,7 +137,7 @@ class _SapInjectionMoldingStockInPageState
               SizedBox(
                 width: double.infinity,
                 child: CombinationButton(
-                  text: '提交入库',
+                  text: 'sap_injection_molding_stock_in_stock_in'.tr,
                   click: () => logic.goStockInReport(),
                 ),
               )

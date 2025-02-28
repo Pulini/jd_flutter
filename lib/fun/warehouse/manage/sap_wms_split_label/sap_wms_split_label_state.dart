@@ -8,10 +8,6 @@ class SapWmsSplitLabelState {
   ReprintLabelInfo? originalLabel;
   var hasOriginalLabel = false.obs;
 
-  SapWmsSplitLabelState() {
-    ///Initialize variables
-  }
-
   dataFormat(BaseData response) {
     List<ReprintLabelInfo> list = [
       for (var json in response.data) ReprintLabelInfo.fromJson(json)
@@ -33,7 +29,7 @@ class SapWmsSplitLabelState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在获取贴标信息...',
+      loading: 'sap_wms_split_label_getting_label_info'.tr,
       method: webApiSapGetNewLabel,
       body: {
         'BQID': labelNumber,
@@ -52,7 +48,7 @@ class SapWmsSplitLabelState {
     required Function(String msg) error,
   }) {
     sapPost(
-      loading: '正在拆分贴标...',
+      loading: 'sap_wms_split_label_splitting_label'.tr,
       method: webApiSapGetNewLabel,
       body: [
         {
@@ -74,7 +70,7 @@ class SapWmsSplitLabelState {
       ],
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        success.call('贴标拆分完成');
+        success.call('sap_wms_split_label_split_label_complete'.tr);
         dataFormat(response);
       } else {
         error.call(response.message ?? 'query_default_error'.tr);

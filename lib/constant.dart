@@ -34,3 +34,5 @@ const barCodeTypes = [
   'gyssmrk', //供应商扫码入库
   'scsmrk'//生产扫码入库
 ];
+
+const feishuUserTokenData='feishu_user_token_data';

@@ -24,7 +24,7 @@ showWorkCardListDialog(
     PopScope(
       canPop: false,
       child: AlertDialog(
-        title: Text('选择派工单'),
+        title: Text('machine_dispatch_dialog_select_dispatch_order'.tr),
         content: SizedBox(
           width: 300,
           height: 200,
@@ -72,7 +72,7 @@ showSurplusMaterialListDialog(
     PopScope(
       canPop: false,
       child: AlertDialog(
-        title: Text('料头信息'),
+        title: Text('machine_dispatch_dialog_surplus_material_info'.tr),
         content: SizedBox(
           width: MediaQuery.of(context).size.width * 0.5,
           height: MediaQuery.of(context).size.height * 0.5,
@@ -108,7 +108,9 @@ showSurplusMaterialListDialog(
                   ),
                   trailing: IconButton(
                     onPressed: () => askDialog(
-                      content: '确定要打印料头 < $stuBarName > 吗?',
+                      content:
+                          'machine_dispatch_dialog_surplus_material_print_tips'
+                              .trArgs([stuBarName]),
                       confirm: () =>
                           print.call(state.surplusMaterialList[index]),
                     ),
@@ -150,7 +152,7 @@ showLabelListDialog(BuildContext context) {
     PopScope(
       canPop: false,
       child: AlertDialog(
-        title: Text('标签列表'),
+        title: Text('machine_dispatch_dialog_label_list'.tr),
         content: SizedBox(
           width: MediaQuery.of(context).size.width * 0.9,
           height: MediaQuery.of(context).size.height * 0.9,
@@ -159,14 +161,14 @@ showLabelListDialog(BuildContext context) {
             children: [
               if (notScanLabelList.isEmpty && lastLabelList.isNotEmpty)
                 textSpan(
-                  hint: '含有以下尺码的尾标未扫：',
+                  hint: 'machine_dispatch_dialog_size_not_scan_error_tips'.tr,
                   text: lastLabelList.join(','),
                   textColor: Colors.red,
                   fontSize: 20,
                 ),
               if (notScanLabelList.isNotEmpty && lastLabelList.isEmpty)
                 textSpan(
-                  hint: '含有以下序号的整箱未扫：',
+                  hint: 'machine_dispatch_dialog_number_not_scan_error_tips'.tr,
                   text: notScanLabelList.join(','),
                   textColor: Colors.red,
                   fontSize: 20,
@@ -194,7 +196,9 @@ showLabelListDialog(BuildContext context) {
                         badgeCornerRadius: const Radius.circular(8),
                         badgeSize: const Size(45, 45),
                         textSpan: TextSpan(
-                          text: state.labelList[i].isScanned ? '已扫' : '未扫',
+                          text: state.labelList[i].isScanned
+                              ? 'machine_dispatch_dialog_scanned'.tr
+                              : 'machine_dispatch_dialog_not_scanned'.tr,
                           style: const TextStyle(
                             fontSize: 14,
                             color: Colors.white,
@@ -206,11 +210,11 @@ showLabelListDialog(BuildContext context) {
                           children: [
                             expandedTextSpan(
                               flex: 8,
-                              hint: '物料名称：',
+                              hint: 'machine_dispatch_dialog_material_name'.tr,
                               text: state.detailsInfo?.materialName ?? '',
                             ),
                             expandedTextSpan(
-                              hint: '制程：',
+                              hint: 'machine_dispatch_dialog_process'.tr,
                               text: state.detailsInfo?.processflow ?? '',
                             ),
                           ],
@@ -219,27 +223,30 @@ showLabelListDialog(BuildContext context) {
                           children: [
                             expandedTextSpan(
                               flex: 3,
-                              hint: '派工日期：',
+                              hint: 'machine_dispatch_dialog_dispatch_date'.tr,
                               text: state.detailsInfo?.startDate ?? '',
                               textColor: Colors.black54,
                             ),
                             expandedTextSpan(
                               flex: 3,
-                              hint: '型体：',
+                              hint: 'machine_dispatch_dialog_type_body'.tr,
                               text: state.detailsInfo?.factoryType ?? '',
                               textColor: Colors.black54,
                             ),
                             expandedTextSpan(
                               flex: 2,
-                              hint: '尺码/数量：',
-                              text:
-                                  '${state.labelList[i].size}码 / ${state.labelList[i].qty.toShowString()}${state.labelList[i].unit}${state.labelList[i].isLastLabel ? '尾标' : ''}',
+                              hint: 'machine_dispatch_dialog_size_qty'.tr,
+                              text: 'machine_dispatch_dialog_size_qty_input'
+                                  .trArgs([
+                                '${state.labelList[i].size}',
+                                '${state.labelList[i].qty.toShowString()}${state.labelList[i].unit}${state.labelList[i].isLastLabel ? 'machine_dispatch_dialog_tail_label'.tr : ''}',
+                              ]),
                               textColor: state.labelList[i].isLastLabel
                                   ? Colors.red
                                   : Colors.black54,
                             ),
                             expandedTextSpan(
-                              hint: '序号：',
+                              hint: 'machine_dispatch_dialog_number'.tr,
                               text: state.labelList[i].number ?? '',
                               textColor: Colors.black54,
                             ),
@@ -247,7 +254,7 @@ showLabelListDialog(BuildContext context) {
                         ),
                         leading: IconButton(
                           onPressed: () => askDialog(
-                            content: '确定要打印标签吗?',
+                            content: 'machine_dispatch_dialog_label_print_tips'.tr,
                             confirm: () {},
                           ),
                           icon: const Icon(
@@ -259,10 +266,10 @@ showLabelListDialog(BuildContext context) {
                             ? IconButton(
                                 onPressed: () {
                                   if (state.labelList[i].isScanned) {
-                                    errorDialog(content: '已产量汇报到MES,无法删除贴标！');
+                                    errorDialog(content: 'machine_dispatch_dialog_delete_label_error_tips'.tr);
                                   } else {
                                     askDialog(
-                                      content: '确定要删除标签吗?',
+                                      content: 'machine_dispatch_dialog_delete_label_tips'.tr,
                                       confirm: () => _deleteLabel(
                                         state.labelList[i].subLabelID ?? '',
                                         () {
@@ -311,7 +318,7 @@ _deleteLabel(
   Function() callback,
 ) {
   sapPost(
-    loading: '正在删除贴标....',
+    loading: 'machine_dispatch_dialog_deleting_labels'.tr,
     method: webApiSapMaterialDispatchLabelMaintain,
     body: [
       {
@@ -339,7 +346,7 @@ teamLeaderVerifyDialog() {
     PopScope(
       canPop: false,
       child: AlertDialog(
-        title: Text('班组长身份验证'),
+        title: Text('machine_dispatch_dialog_leader_id_verify'.tr),
         content: SizedBox(
           width: 300,
           child: Column(
@@ -353,7 +360,7 @@ teamLeaderVerifyDialog() {
                 children: [
                   Expanded(
                     child: EditText(
-                      hint: '验证码',
+                      hint: 'machine_dispatch_dialog_verify_code'.tr,
                       onChanged: (c) => verificationCode = c,
                     ),
                   ),
@@ -415,12 +422,12 @@ _sendManagerCode(
   if (workerNumber.isEmpty) {
     showSnackBar(
       title: 'get_verify_code'.tr,
-      message: '请输入工号',
+      message: 'machine_dispatch_dialog_enter_number'.tr,
       isWarning: true,
     );
   } else {
     httpGet(
-      loading: '正在发送验证码....',
+      loading: 'machine_dispatch_dialog_sending_verify_code'.tr,
       method: webApiSendManagerCode,
       params: {
         'ManagerCode': workerNumber,
@@ -448,7 +455,7 @@ _checkManagerByCode(
   if (workerNumber.isEmpty) {
     showSnackBar(
       title: 'get_verify_code'.tr,
-      message: '请输入工号',
+      message: 'machine_dispatch_dialog_enter_number'.tr,
       isWarning: true,
     );
     return;
@@ -456,13 +463,13 @@ _checkManagerByCode(
   if (verificationCode.isEmpty) {
     showSnackBar(
       title: 'get_verify_code'.tr,
-      message: '请输入验证码',
+      message: 'machine_dispatch_dialog_enter_verify_code'.tr,
       isWarning: true,
     );
     return;
   }
   httpGet(
-    loading: '正在校验班组长....',
+    loading: 'machine_dispatch_dialog_verifying_leader'.tr,
     method: webApiCheckManagerByCode,
     params: {
       'IdentifyingCode': verificationCode,
@@ -481,7 +488,7 @@ _checkManagerByCode(
 showWorkerAvatar(Widget workerAvatar) {
   Get.dialog(
     AlertDialog(
-      title: Text('员工照片'),
+      title: Text('machine_dispatch_dialog_worker_photos'.tr),
       content: workerAvatar,
       actions: [
         TextButton(
@@ -519,7 +526,7 @@ workerSignature(
         title: Row(
           children: [
             Text(
-              '请在以下空白处签名',
+              'machine_dispatch_dialog_sign_tips_below'.tr,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 24,
@@ -555,7 +562,7 @@ workerSignature(
                     data.workerName ?? '',
                     style: TextStyle(
                       fontSize: 180,
-                      color: Colors.black87.withOpacity(0.1),
+                      color: Colors.black87.withValues(alpha: 0.1),
                     ),
                   ),
                 ),
@@ -584,8 +591,7 @@ workerSignature(
               control.toImage(border: 0).then((image) {
                 if (image == null && data.signature == null) {
                   showSnackBar(
-                    title: 'snack_bar_default_wrong'.tr,
-                    message: '请在空白处签名',
+                    message: 'machine_dispatch_dialog_sign_tips'.tr,
                     isWarning: true,
                   );
                 } else {
@@ -629,7 +635,7 @@ addDispatchWorker(DispatchProcessInfo data, Function() refresh) {
     PopScope(
       canPop: false,
       child: AlertDialog(
-        title: Text('添加员工'),
+        title: Text('machine_dispatch_dialog_add_worker'.tr),
         content: SizedBox(
           width: 200,
           child: Obx(
@@ -645,10 +651,10 @@ addDispatchWorker(DispatchProcessInfo data, Function() refresh) {
                       child: avatar.isNotEmpty
                           ? Image.network(avatar.value, fit: BoxFit.fill)
                           : Icon(
-                        Icons.account_circle,
-                        size: 150,
-                        color: Colors.grey.shade300,
-                      ),
+                              Icons.account_circle,
+                              size: 150,
+                              color: Colors.grey.shade300,
+                            ),
                     ),
                   ),
                 ),
@@ -658,8 +664,8 @@ addDispatchWorker(DispatchProcessInfo data, Function() refresh) {
                 }),
                 NumberDecimalEditText(
                   controller: controller,
-                  hint: '请输入分配数',
-                  helperText: '剩余$surplusQty可分配',
+                  hint: 'machine_dispatch_dialog_enter_allocation_number_tips'.tr,
+                  helperText: 'machine_dispatch_dialog_allocation_tips'.trArgs([surplusQty.toShowString()]),
                   onChanged: (d) {
                     if (d > max) {
                       controller.text = max.toShowString();
@@ -678,8 +684,7 @@ addDispatchWorker(DispatchProcessInfo data, Function() refresh) {
             onPressed: () {
               if (worker == null) {
                 showSnackBar(
-                  title: 'snack_bar_default_wrong'.tr,
-                  message: '请输入正确的员工工号',
+                  message: 'machine_dispatch_dialog_enter_worker_number_tips'.tr,
                   isWarning: true,
                 );
                 return;
@@ -688,16 +693,14 @@ addDispatchWorker(DispatchProcessInfo data, Function() refresh) {
                 (v) => v.workerNumber == worker!.empCode,
               )) {
                 showSnackBar(
-                  title: 'snack_bar_default_wrong'.tr,
-                  message: '该员工已分配',
+                  message: 'machine_dispatch_dialog_worker_has_been_assigned'.tr,
                   isWarning: true,
                 );
                 return;
               }
               if (dispatchQty == 0) {
                 showSnackBar(
-                  title: 'snack_bar_default_wrong'.tr,
-                  message: '请正确填写分配数量',
+                  message: 'machine_dispatch_dialog_enter_quantity_tips'.tr,
                   isWarning: true,
                 );
                 return;

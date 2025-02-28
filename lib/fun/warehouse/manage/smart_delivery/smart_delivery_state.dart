@@ -3,7 +3,6 @@ import 'package:jd_flutter/bean/http/response/smart_delivery_info.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 
-
 class SmartDeliveryState {
   var searchText = '';
   var pageIndex = 1.obs;
@@ -16,9 +15,7 @@ class SmartDeliveryState {
   var deliveryList = <WorkData>[];
   var deliveryQty = 0;
 
-  SmartDeliveryState() {
-    ///Initialize variables
-  }
+
 
   querySmartDeliveryOrder({
     required bool showLoading,
@@ -30,7 +27,7 @@ class SmartDeliveryState {
     required Function(String) error,
   }) {
     httpGet(
-      loading: showLoading ? '正在获取派工单数据...' : '',
+      loading: showLoading ? 'smart_delivery_getting_dispatch_data'.tr : '',
       method: webApiSmartDeliveryGetWorkCardList,
       params: {
         'PageIndex': pageIndex.value,
@@ -63,7 +60,7 @@ class SmartDeliveryState {
     required Function(String) error,
   }) {
     httpGet(
-      loading: '正在获取派工单物料列表...',
+      loading: 'smart_delivery_getting_dispatch_order_material_list'.tr,
       method: webApiSmartDeliveryGetWorkCardMaterial,
       params: {'ScWorkCardInterID': workCardInterID},
     ).then((response) {
@@ -97,7 +94,7 @@ class SmartDeliveryState {
     required Function(String) error,
   }) {
     httpGet(
-      loading: '正在获取发料明细信息...',
+      loading: 'smart_delivery_getting_material_issuance_details'.tr,
       method: webApiSmartDeliveryDetail,
       params: {
         'NewWorkCardInterID': sdmi.scWorkCardInterID,
@@ -122,7 +119,7 @@ class SmartDeliveryState {
     required Function(String) error,
   }) {
     httpPost(
-      loading: '正在保存预排信息...',
+      loading: 'smart_delivery_saving_pre_sort_info'.tr,
       method: webApiSmartDeliveryAddPartsStock,
       body: [
         for (var i = 0; i < deliveryList.length; ++i)
@@ -155,7 +152,7 @@ class SmartDeliveryState {
     required Function(String) error,
   }) {
     httpPost(
-      loading: '正在清除配料信息...',
+      loading: 'smart_delivery_clearing_ingredient_info'.tr,
       method: webApiSmartDeliveryDeletePartsStock,
       params: {
         'NewWorkCardInterID': deliveryDetail!.newWorkCardInterID,
@@ -203,7 +200,9 @@ class SmartDeliveryState {
     }
 
     httpPost(
-      loading: isCache ? '正在暂存轮次...' : '正在取消暂存...',
+      loading: isCache
+          ? 'smart_delivery_saving_temporary_iteration'.tr
+          : 'smart_delivery_cancelling_temporary_iteration'.tr,
       method: webApiSmartDeliveryEditSendType,
       body: [
         {
@@ -212,11 +211,11 @@ class SmartDeliveryState {
           'Rounds': [for (var o in order) o.round],
           'IsEdit': isCache,
         },
-        if(saveOrder.isNotEmpty)
+        if (saveOrder.isNotEmpty)
           {
             'NewWorkCardInterID': saveDeliveryDetail!.newWorkCardInterID,
             'PartsID': saveDeliveryDetail!.partsID,
-            'Rounds':[for (var o in saveOrder) o.round],
+            'Rounds': [for (var o in saveOrder) o.round],
             'IsEdit': isCache,
           }
       ],

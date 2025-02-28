@@ -32,14 +32,17 @@ class _SapInkColorMatchingRecreatePageState
   var errorTextStyle =
       const TextStyle(fontWeight: FontWeight.bold, color: Colors.red);
   var fn = FocusNode();
-  var hasSet=false.obs;
+  var hasSet = false.obs;
 
   _item(SapRecreateInkColorItemInfo data, int index) {
     var ballColor = data.materialColor.getColorByDescription();
     return GestureDetector(
       onTap: () {
         if (data.presetWeight.value <= 0) {
-          errorDialog(content: '请先设置预调重量！', back: () => fn.requestFocus());
+          errorDialog(
+              content:
+                  'sap_ink_color_matching_recreate_pre_toning_weight_tips'.tr,
+              back: () => fn.requestFocus());
         } else {
           puttingDialog(
             data: data,
@@ -80,29 +83,35 @@ class _SapInkColorMatchingRecreatePageState
                 ),
               ),
               child: ballColor == Colors.transparent
-                  ? Center(child: Text('无'))
+                  ? Center(
+                      child: Text('sap_ink_color_matching_recreate_null'.tr))
                   : null,
             ),
             expandedTextSpan(
               flex: 4,
-              hint: '物料：',
+              hint: 'sap_ink_color_matching_recreate_material'.tr,
               text: '(${data.materialCode})${data.materialName}',
               textColor: Colors.black87,
             ),
             Obx(() => expandedTextSpan(
                   flex: 2,
-                  hint: '预调重量：',
-                  text: '${data.presetWeight.value.toFixed(4).toShowString()} kg',
+                  hint: 'sap_ink_color_matching_recreate_pre_toning_weight'.tr,
+                  text:
+                      '${data.presetWeight.value.toFixed(4).toShowString()} kg',
                 )),
             Obx(() => expandedTextSpan(
                   flex: 2,
-                  hint: '实际重量：',
-                  text: '${data.actualWeight.value.toFixed(4).toShowString()} kg',
+                  hint: 'sap_ink_color_matching_recreate_actual_weight'.tr,
+                  text:
+                      '${data.actualWeight.value.toFixed(4).toShowString()} kg',
                 )),
             Obx(() => expandedTextSpan(
                   flex: 2,
-                  hint: '应补重量：',
-                  text: '${data.repairWeight.value.toFixed(4).toShowString()} kg',
+                  hint:
+                      'sap_ink_color_matching_recreate_need_supplemented_weight'
+                          .tr,
+                  text:
+                      '${data.repairWeight.value.toFixed(4).toShowString()} kg',
                 )),
           ],
         ),
@@ -111,10 +120,10 @@ class _SapInkColorMatchingRecreatePageState
   }
 
   setPresetWeight() {
-    if(!hasSet.value){
+    if (!hasSet.value) {
       FocusScope.of(context).requestFocus(FocusNode());
       logic.setPresetWeight(controller.text.toDoubleTry());
-      hasSet.value=true;
+      hasSet.value = true;
     }
   }
 
@@ -142,8 +151,8 @@ class _SapInkColorMatchingRecreatePageState
           child: Row(
             children: [
               Text(
-                '预调重量(kg):',
-                style: TextStyle(
+                'sap_ink_color_matching_recreate_pre_toning_weight_unit'.tr,
+                style: const TextStyle(
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -151,64 +160,66 @@ class _SapInkColorMatchingRecreatePageState
                 width: 150,
                 margin: const EdgeInsets.all(1),
                 height: 40,
-                child: Obx(()=>TextField(
-                  focusNode: fn,
-                  onSubmitted: (value) => setPresetWeight(),
-                  textAlign: TextAlign.center,
-                  keyboardType: TextInputType.number,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.allow(RegExp("[0-9.]"))
-                  ],
-                  controller: controller,
-                  decoration: InputDecoration(
-                    contentPadding: const EdgeInsets.only(
-                      top: 0,
-                      bottom: 0,
-                      left: 15,
-                      right: 10,
-                    ),
-                    filled: true,
-                    fillColor: Colors.grey.shade200,
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
-                      borderSide: const BorderSide(
-                        color: Colors.transparent,
+                child: Obx(() => TextField(
+                      focusNode: fn,
+                      onSubmitted: (value) => setPresetWeight(),
+                      textAlign: TextAlign.center,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(RegExp("[0-9.]"))
+                      ],
+                      controller: controller,
+                      decoration: InputDecoration(
+                        contentPadding: const EdgeInsets.only(
+                          top: 0,
+                          bottom: 0,
+                          left: 15,
+                          right: 10,
+                        ),
+                        filled: true,
+                        fillColor: Colors.grey.shade200,
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
+                          borderSide: const BorderSide(
+                            color: Colors.transparent,
+                          ),
+                        ),
+                        border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(20)),
+                        ),
+                        hintStyle: const TextStyle(color: Colors.white),
+                        prefixIcon: IconButton(
+                          onPressed: () => askDialog(
+                            content:
+                                'sap_ink_color_matching_recreate_restart_tips'
+                                    .tr,
+                            confirm: () {
+                              controller.clear();
+                              logic.refreshAll();
+                              hasSet.value = false;
+                            },
+                          ),
+                          icon: const Icon(
+                            Icons.replay_circle_filled,
+                            color: Colors.red,
+                          ),
+                        ),
+                        suffixIcon: IconButton(
+                          onPressed: () => setPresetWeight(),
+                          icon: Icon(
+                            Icons.check_circle_rounded,
+                            color: hasSet.value ? Colors.grey : Colors.green,
+                          ),
+                        ),
                       ),
-                    ),
-                    border: const OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
-                    ),
-                    hintStyle: const TextStyle(color: Colors.white),
-                    prefixIcon: IconButton(
-                      onPressed: () => askDialog(
-                        content: '确定要重新开始吗？',
-                        confirm: () {
-                          controller.clear();
-                          logic.refreshAll();
-                          hasSet.value=false;
-                        },
-                      ),
-                      icon: const Icon(
-                        Icons.replay_circle_filled,
-                        color: Colors.red,
-                      ),
-                    ),
-                    suffixIcon: IconButton(
-                      onPressed: () => setPresetWeight(),
-                      icon:  Icon(
-                        Icons.check_circle_rounded,
-                        color:hasSet.value?Colors.grey: Colors.green,
-                      ),
-                    ),
-                  ),
-                )),
+                    )),
               )
             ],
           ),
         )
       ],
-      title: '复现调色',
-      popTitle: '确定要退出 < 复现调色 > 吗?',
+      title: 'sap_ink_color_matching_recreate_recurrent_color_toning'.tr,
+      popTitle: 'sap_ink_color_matching_recreate_exit_tips'.tr,
       body: Padding(
         padding: const EdgeInsets.only(
           left: 10,
@@ -224,18 +235,19 @@ class _SapInkColorMatchingRecreatePageState
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   textSpan(
-                    hint: '型体：',
+                    hint: 'sap_ink_color_matching_recreate_type_body'.tr,
                     text: state.orderList[index].typeBody ?? '',
                     textColor: Colors.green.shade700,
                   ),
                   textSpan(
-                    hint: '油墨师：',
+                    hint: 'sap_ink_color_matching_recreate_inkmaster'.tr,
                     text: '${userInfo?.name}',
                     textColor: Colors.black87,
                   ),
                   Obx(() => textSpan(
-                        hint: '最终总重：',
-                        text: '${state.finalWeight.value.toFixed(4).toShowString()} kg',
+                        hint: 'sap_ink_color_matching_recreate_final_weight'.tr,
+                        text:
+                            '${state.finalWeight.value.toFixed(4).toShowString()} kg',
                         textColor: Colors.blue,
                       )),
                 ],

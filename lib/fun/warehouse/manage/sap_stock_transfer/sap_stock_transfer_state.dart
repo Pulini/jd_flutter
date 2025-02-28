@@ -12,9 +12,7 @@ class SapStockTransferState {
   PalletDetailItem2Info? newPallet;
   PalletDetailItem2Info? targetPallet;
 
-  SapStockTransferState() {
-    ///Initialize variables
-  }
+
 
   checkPallet({
     String? palletNo,
@@ -24,7 +22,7 @@ class SapStockTransferState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在获取待上架列表...',
+      loading: 'sap_stock_transfer_getting_wait_put_on_list_tips'.tr,
       method: webApiSapGetPalletList,
       body: {
         'WERKS': '1500',
@@ -64,11 +62,11 @@ class SapStockTransferState {
                   targetPallet = pallet.item2?[0];
                   break;
                 case 'Y':
-                  error.call('此托盘已在其他仓库使用！！');
+                  error.call('sap_stock_transfer_pallet_already_occupied_tips'.tr);
                   break;
               }
             } else {
-              error.call('托盘不存在！！');
+              error.call('sap_stock_transfer_pallet_not_exists_tips'.tr);
             }
           } else {
             labelList.value = pallet.item1 ?? [];
@@ -103,7 +101,7 @@ class SapStockTransferState {
     required Function(String) error,
   }) {
     _submitTransfer(
-      tLocation: targetPallet?.location,
+      tLocation: targetPallet?.location??'',
       tPallet: targetPallet?.palletNumber ?? '',
       warehouse: warehouse,
       list: list,
@@ -128,10 +126,10 @@ class SapStockTransferState {
     );
   }
 
-  ///移库模式
-  /// 1、托盘A移动全部货物到新库位      (有原托盘号 有原库位 扫描新库)
-  /// 2、托盘A移动部分货物至托盘B      (有原托盘号 有原库位 扫描目标托盘 获取目标托盘库位  获取目标托盘)
-  /// 3、托盘A移动部分货物至新托盘      (有原托盘号 有原库位 扫描目标托盘  获取托盘号 扫描目标库位  获取新库位)
+  //移库模式
+  // 1、托盘A移动全部货物到新库位      (有原托盘号 有原库位 扫描新库)
+  // 2、托盘A移动部分货物至托盘B      (有原托盘号 有原库位 扫描目标托盘 获取目标托盘库位  获取目标托盘)
+  // 3、托盘A移动部分货物至新托盘      (有原托盘号 有原库位 扫描目标托盘  获取托盘号 扫描目标库位  获取新库位)
   _submitTransfer({
     required String tLocation,
     required String tPallet,
@@ -141,7 +139,7 @@ class SapStockTransferState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在提交上架信息...',
+      loading: 'sap_stock_transfer_submitting_put_on_tips'.tr,
       method: webApiSapPuttingOnShelves,
       body: {
         'ZCZLX_WMS': 'WM03',

@@ -12,7 +12,7 @@ class LoginState {
   var buttonName = 'get_verify_code'.tr.obs;
   var countTimer = 0;
   var isReLogin = false;
-  ///获取验证码
+  //获取验证码
   String getDebugVCode() {
     var date = DateTime.now();
     var now = '${date.year.toString().substring(2, 4)}'

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/fun/warehouse/manage/carton_label_scan/carton_label_scan_state.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
-import 'carton_label_scan_progress_logic.dart';
-import 'carton_label_scan_progress_state.dart';
+import 'carton_label_scan_logic.dart';
 
 class CartonLabelScanProgressPage extends StatefulWidget {
   const CartonLabelScanProgressPage({super.key});
@@ -14,10 +14,8 @@ class CartonLabelScanProgressPage extends StatefulWidget {
 
 class _CartonLabelScanProgressPageState
     extends State<CartonLabelScanProgressPage> {
-  final CartonLabelScanProgressLogic logic =
-      Get.put(CartonLabelScanProgressLogic());
-  final CartonLabelScanProgressState state =
-      Get.find<CartonLabelScanProgressLogic>().state;
+  final CartonLabelScanLogic logic = Get.find<CartonLabelScanLogic>();
+  final CartonLabelScanState state = Get.find<CartonLabelScanLogic>().state;
 
   String customerPO = Get.arguments['CustomerPO'];
   TextEditingController controller = TextEditingController();
@@ -36,7 +34,7 @@ class _CartonLabelScanProgressPageState
   @override
   Widget build(BuildContext context) {
     return pageBody(
-      title: '外箱标扫码进度',
+      title: 'carton_label_scan_progress_title'.tr,
       body: Column(
         children: [
           Container(
@@ -55,7 +53,7 @@ class _CartonLabelScanProgressPageState
                 border: const OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(20)),
                 ),
-                hintText: '请输入销售订单或客户PO查询',
+                hintText: 'carton_label_scan_progress_input_sales_order_or_customer_po'.tr,
                 hintStyle: const TextStyle(color: Colors.grey),
                 prefixIcon: IconButton(
                   onPressed: () => controller.clear(),
@@ -87,13 +85,13 @@ class _CartonLabelScanProgressPageState
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             textSpan(
-                              hint: '销售/客户订单：',
+                              hint: 'carton_label_scan_progress_sales_order_or_customer_order'.tr,
                               text:
                                   '${state.progress[index].salesOrder} / ${state.progress[index].custOrderNumber}',
                             ),
                             Row(
                               children: [
-                                Text('扫码情况：'),
+                                Text('carton_label_scan_progress_scan_state'.tr),
                                 Expanded(
                                   child: progressIndicator(
                                     max: state.progress[index].totalPiece ?? 0,
@@ -115,9 +113,4 @@ class _CartonLabelScanProgressPageState
     );
   }
 
-  @override
-  void dispose() {
-    Get.delete<CartonLabelScanProgressLogic>();
-    super.dispose();
-  }
 }

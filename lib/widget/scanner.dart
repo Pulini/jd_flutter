@@ -57,6 +57,7 @@ class _ScannerState extends State<Scanner> {
   @override
   Widget build(BuildContext context) {
     return pageBody(
+      title: widget.title,
       body: Center(
         child: AspectRatio(
           aspectRatio: 1 / 1,

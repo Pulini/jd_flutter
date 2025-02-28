@@ -75,17 +75,17 @@ class _ProductionDispatchDetailPageState
               children: [
                 CheckBox(
                   onChanged: (c) => setState(() => logic.checkAutoCount(c)),
-                  name: '自动填充报工',
+                  name: 'production_dispatch_detail_sharing'.tr,
                   value: state.isCheckedAutoCount,
                 ),
                 CheckBox(
                   onChanged: (c) => setState(() => logic.checkDivideEqually(c)),
-                  name: '均分',
+                  name: 'production_dispatch_detail_round_up'.tr,
                   value: state.isCheckedDivideEqually,
                 ),
                 CheckBox(
                   onChanged: (c) => setState(() => logic.checkRounding(c)),
-                  name: '取整',
+                  name: 'production_dispatch_detail_next_process'.tr,
                   value: state.isCheckedRounding,
                 ),
               ],
@@ -94,14 +94,14 @@ class _ProductionDispatchDetailPageState
           const SizedBox(width: 10),
           Obx(() => CombinationButton(
                 combination: Combination.left,
-                text: '下一道工序',
+                text: 'production_dispatch_detail_batch_record_working'.tr,
                 isEnabled: state.isEnabledNextWorkProcedure.value,
                 click: () => logic.detailViewNextWorkProcedure(),
               )),
           Obx(() => CombinationButton(
                 combination: Combination.right,
                 isEnabled: state.isEnabledBatchDispatch.value,
-                text: '批量计工',
+                text: 'production_dispatch_detail_add_worker'.tr,
                 click: () => logic.detailViewBatchModifyDispatchClick(
                   (v1, v2) => batchModifyDispatchQtyDialog(
                     state.isCheckedDivideEqually,
@@ -307,7 +307,7 @@ class _ProductionDispatchDetailPageState
                   child: Row(
                     children: [
                       Obx(() => CombinationButton(
-                            text: '添加员工',
+                            text: 'production_dispatch_detail_clean_tips'.tr,
                             isEnabled: state.isEnabledAddOne.value,
                             click: () => addWorkerDialog(
                               state.workerList,
@@ -319,21 +319,23 @@ class _ProductionDispatchDetailPageState
                         onChanged: (c) {
                           logic.detailViewAddAllWorker(
                             () => askDialog(
-                              content: '确定要清空本工序下所有派工数据吗？',
+                              content:
+                                  'production_dispatch_detail_add_all_worker'
+                                      .tr,
                               confirm: () =>
                                   logic.cleanDispatchFromWorkProcedure(),
                             ),
                           );
                         },
                         needSave: false,
-                        name: '添加本组所有员工',
+                        name: 'production_dispatch_detail_select_all_worker'.tr,
                         isEnabled: state.isEnabledAddAllDispatch,
                         value: state.isCheckedAddAllDispatch,
                       ),
                       CheckBox(
                         onChanged: (c) => logic.checkSelectAllDispatch(c),
                         needSave: false,
-                        name: '选中本工序所有组员',
+                        name: 'production_dispatch_detail_close_all_process'.tr,
                         isEnabled: state.isEnabledSelectAllDispatch,
                         value: state.isCheckedSelectAllDispatch,
                       ),
@@ -454,13 +456,13 @@ class _ProductionDispatchDetailPageState
                 Obx(() => CombinationButton(
                       combination: Combination.left,
                       text: state.isOpenedAllWorkProcedure.value
-                          ? '关闭全部工序'
-                          : '打开全部工序',
+                          ? 'production_dispatch_detail_open_all_process'.tr
+                          : 'production_dispatch_detail_last_dispatch'.tr,
                       click: () => logic.detailViewWorkProcedureLockAll(),
                     )),
                 CombinationButton(
                   combination: Combination.middle,
-                  text: '上次派工',
+                  text: 'production_dispatch_detail_now_dispatch'.tr,
                   click: () => showDispatchList(
                       context,
                       true,
@@ -480,7 +482,7 @@ class _ProductionDispatchDetailPageState
                 ),
                 CombinationButton(
                   combination: Combination.middle,
-                  text: '本次派工',
+                  text: 'production_dispatch_detail_save_dispatch'.tr,
                   click: () => showDispatchList(
                       context, false, state.workProcedure, (i1, i2) {
                     logic.detailViewJumpToDispatchOnWorkProcedure(
@@ -497,13 +499,13 @@ class _ProductionDispatchDetailPageState
                 if (GetPlatform.isMobile)
                   CombinationButton(
                     combination: Combination.middle,
-                    text: '暂存派工',
+                    text: 'production_dispatch_detail_apply_dispatch'.tr,
                     click: () => logic.saveDispatch(),
                   ),
                 if (GetPlatform.isMobile)
                   CombinationButton(
                     combination: Combination.middle,
-                    text: '应用派工',
+                    text: 'production_dispatch_detail_manual'.tr,
                     click: () => SaveWorkProcedure.getSave(
                       state.workCardTitle.value.plantBody ?? '',
                       (list) => typeBodySaveDialog(
@@ -515,14 +517,14 @@ class _ProductionDispatchDetailPageState
                   ),
                 CombinationButton(
                   combination: Combination.middle,
-                  text: '工艺指导书',
+                  text: 'production_dispatch_detail_material_list'.tr,
                   click: () => logic.detailViewGetManufactureInstructions(
                     (list) => manufactureInstructionsDialog(list),
                   ),
                 ),
                 CombinationButton(
                   combination: Combination.right,
-                  text: '用料清单',
+                  text: 'production_dispatch_detail_process_check'.tr,
                   click: () => logic.getWorkPlanMaterial(
                       (list) => workPlanMaterialDialog(list)),
                 ),
@@ -532,18 +534,18 @@ class _ProductionDispatchDetailPageState
           const SizedBox(width: 10),
           CombinationButton(
             combination: Combination.left,
-            text: '工序核对',
+            text: 'production_dispatch_detail_auto_input'.tr,
             click: () => logic.getPrdRouteInfo(),
           ),
           CombinationButton(
             combination: Combination.middle,
-            text: '员工校对',
+            text: 'production_dispatch_detail_worker_check'.tr,
             click: () =>
                 logic.checkDispatch(() => logic.sendDispatchToWechat()),
           ),
           CombinationButton(
             combination: Combination.right,
-            text: '工序计工',
+            text: 'production_dispatch_detail_process_dispatch'.tr,
             click: () => logic.checkDispatch(() => logic.productionDispatch()),
           ),
         ],
@@ -557,7 +559,7 @@ class _ProductionDispatchDetailPageState
     SaveDispatch.getSave(
       state.workCardTitle.value.processBillNumber ?? '',
       (v) => askDialog(
-        content: '检测到本工单有暂存数据，是否应用',
+        content: 'production_dispatch_detail_has_save_tips'.tr,
         confirm: () => logic.applySaveDispatch(v),
       ),
     );
@@ -567,7 +569,7 @@ class _ProductionDispatchDetailPageState
   @override
   Widget build(BuildContext context) {
     return pageBody(
-        title: '派工',
+        title: 'production_dispatch_detail_dispatch'.tr,
         body: Column(
           children: [
             _titleDetails(),
@@ -591,11 +593,11 @@ class _ProductionDispatchDetailPageState
         ),
         actions: [
           if (state.workCardTitle.value.cardNoReportStatus == 1)
-            const Padding(
-              padding: EdgeInsets.only(right: 10),
+            Padding(
+              padding: const EdgeInsets.only(right: 10),
               child: Text(
-                '委外',
-                style: TextStyle(
+                'production_dispatch_detail_outsourcing'.tr,
+                style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   color: Colors.teal,
                   fontSize: 20,

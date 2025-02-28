@@ -7,7 +7,6 @@ import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/picker/picker_controller.dart';
 import 'package:jd_flutter/widget/picker/picker_view.dart';
-import 'package:jd_flutter/widget/preview_label_list_widget.dart';
 import 'package:jd_flutter/widget/scanner.dart';
 
 import 'sap_wms_reprint_labels_logic.dart';
@@ -71,6 +70,7 @@ class _SapWmsReprintLabelsPageState extends State<SapWmsReprintLabelsPage> {
       ),
     );
   }
+  /*
   _labelTitle(ReprintLabelInfo label) {
     return Padding(
       padding: const EdgeInsets.only(
@@ -126,6 +126,7 @@ class _SapWmsReprintLabelsPageState extends State<SapWmsReprintLabelsPage> {
   }
 
 
+
   _previewLabelList() {
     var selected = state.labelList.where((v) => v.select).toList();
     Get.to(() => PreviewLabelList(
@@ -140,6 +141,7 @@ class _SapWmsReprintLabelsPageState extends State<SapWmsReprintLabelsPage> {
           ],
         ));
   }
+*/
 
   @override
   void initState() {
@@ -158,7 +160,7 @@ class _SapWmsReprintLabelsPageState extends State<SapWmsReprintLabelsPage> {
       actions: [
         TextButton(
           onPressed: () => logic.clean(),
-          child: Text('清空'),
+          child: Text('sap_wms_reprint_label_clean'.tr),
         ),
       ],
       body: Column(
@@ -169,7 +171,7 @@ class _SapWmsReprintLabelsPageState extends State<SapWmsReprintLabelsPage> {
             child: Row(
               children: [
                 Obx(() => expandedTextSpan(
-                      hint: '托盘号：',
+                      hint: 'sap_wms_reprint_label_pallet_no'.tr,
                       text: state.palletNumber.value,
                     )),
                 Obx(() => Checkbox(
@@ -197,7 +199,7 @@ class _SapWmsReprintLabelsPageState extends State<SapWmsReprintLabelsPage> {
           SizedBox(
             width: double.infinity,
             child: CombinationButton(
-              text: '重打贴标',
+              text: 'sap_wms_reprint_label_reprint_label'.tr,
               click: () {
                 // logic.scanCode(
                 //   warehouse:

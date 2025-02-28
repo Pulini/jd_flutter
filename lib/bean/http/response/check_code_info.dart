@@ -1,4 +1,4 @@
-/// Items : [{"BarCode":"L24000000000004","NormalBarCodeList":["20488670007940/007","20488670007941/008"]}]
+// Items : [{"BarCode":"L24000000000004","NormalBarCodeList":["20488670007940/007","20488670007941/008"]}]
 
 class CheckCodeInfo {
   CheckCodeInfo({
@@ -24,8 +24,8 @@ class CheckCodeInfo {
 
 }
 
-/// BarCode : "L24000000000004"
-/// NormalBarCodeList : ["20488670007940/007","20488670007941/008"]
+// BarCode : "L24000000000004"
+// NormalBarCodeList : ["20488670007940/007","20488670007941/008"]
 
 class Items {
   Items({

@@ -8,7 +8,6 @@ import 'package:jd_flutter/widget/custom_widget.dart';
 import 'smart_delivery_dialog.dart';
 import 'smart_delivery_logic.dart';
 
-
 class CreateDeliveryOrderPage extends StatefulWidget {
   const CreateDeliveryOrderPage({super.key});
 
@@ -59,7 +58,7 @@ class _CreateDeliveryOrderPageState extends State<CreateDeliveryOrderPage> {
                 children: [
                   expandedFrameText(
                     flex: 2,
-                    text: '尺码',
+                    text: 'smart_delivery_create_order_size'.tr,
                     backgroundColor: Colors.blueAccent,
                     textColor: Colors.white,
                     borderColor: Colors.black,
@@ -74,7 +73,7 @@ class _CreateDeliveryOrderPageState extends State<CreateDeliveryOrderPage> {
                       alignment: Alignment.center,
                     ),
                   expandedFrameText(
-                    text: '合计',
+                    text: 'smart_delivery_create_order_total'.tr,
                     backgroundColor: Colors.blueAccent,
                     textColor: Colors.white,
                     borderColor: Colors.black,
@@ -86,7 +85,7 @@ class _CreateDeliveryOrderPageState extends State<CreateDeliveryOrderPage> {
                 children: [
                   expandedFrameText(
                     flex: 2,
-                    text: '楦头库存',
+                    text: 'smart_delivery_create_order_shoe_tree_inventory'.tr,
                     backgroundColor: Colors.green,
                     textColor: Colors.white,
                     borderColor: Colors.black,
@@ -114,7 +113,7 @@ class _CreateDeliveryOrderPageState extends State<CreateDeliveryOrderPage> {
                 children: [
                   expandedFrameText(
                     flex: 2,
-                    text: '订单数',
+                    text: 'smart_delivery_create_order_order_qty'.tr,
                     backgroundColor: Colors.orange.shade100,
                     borderColor: Colors.black,
                     alignment: Alignment.center,
@@ -154,8 +153,13 @@ class _CreateDeliveryOrderPageState extends State<CreateDeliveryOrderPage> {
                         }
                       },
                       flex: 2,
-                      text:
-                          '${list[i].sendType == 2 ? '★' : ''}第 ${list[i].round} 轮',
+                      text: list[i].sendType == 2
+                          ? 'smart_delivery_create_order_round_star'.trArgs([
+                              list[i].round.toString(),
+                            ])
+                          : 'smart_delivery_create_order_round'.trArgs([
+                              list[i].round.toString(),
+                            ]),
                       backgroundColor: list[i].sendType == 1
                           ? Colors.green.shade300
                           : list[i].isSelected
@@ -207,7 +211,7 @@ class _CreateDeliveryOrderPageState extends State<CreateDeliveryOrderPage> {
               children: [
                 expandedFrameText(
                   flex: 2,
-                  text: '尺码',
+                  text: 'smart_delivery_create_order_size'.tr,
                   backgroundColor: Colors.blueAccent,
                   textColor: Colors.white,
                   borderColor: Colors.black,
@@ -222,7 +226,7 @@ class _CreateDeliveryOrderPageState extends State<CreateDeliveryOrderPage> {
                     alignment: Alignment.center,
                   ),
                 expandedFrameText(
-                  text: '合计',
+                  text: 'smart_delivery_create_order_total'.tr,
                   backgroundColor: Colors.blueAccent,
                   textColor: Colors.white,
                   borderColor: Colors.black,
@@ -253,8 +257,13 @@ class _CreateDeliveryOrderPageState extends State<CreateDeliveryOrderPage> {
                       }
                     },
                     flex: 2,
-                    text:
-                        '${ddi.workData![i].sendType == 2 ? '★' : ''}第 ${ddi.workData![i].round} 轮',
+                    text: ddi.workData![i].sendType == 2
+                        ? 'smart_delivery_create_order_round_star'.trArgs([
+                            ddi.workData![i].round.toString(),
+                          ])
+                        : 'smart_delivery_create_order_round'.trArgs([
+                            ddi.workData![i].round.toString(),
+                          ]),
                     backgroundColor: ddi.workData![i].sendType == 1
                         ? Colors.green.shade300
                         : ddi.workData![i].isSelected
@@ -287,7 +296,7 @@ class _CreateDeliveryOrderPageState extends State<CreateDeliveryOrderPage> {
                   ),
                 ],
               ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
           ],
         ),
       ),
@@ -310,15 +319,15 @@ class _CreateDeliveryOrderPageState extends State<CreateDeliveryOrderPage> {
     var line1 = Row(
       children: [
         expandedTextSpan(
-          hint: '工厂型体：',
+          hint: 'smart_delivery_create_order_type_body'.tr,
           text: state.deliveryDetail!.typeBody ?? '',
         ),
         expandedTextSpan(
-          hint: '销售订单：',
+          hint: 'smart_delivery_create_order_sales_order'.tr,
           text: state.deliveryDetail!.seOrders ?? '',
         ),
         expandedTextSpan(
-          hint: 'PO号：',
+          hint: 'smart_delivery_create_order_po'.tr,
           text: state.deliveryDetail!.clientOrderNumber ?? '',
         ),
       ],
@@ -327,11 +336,11 @@ class _CreateDeliveryOrderPageState extends State<CreateDeliveryOrderPage> {
       children: [
         expandedTextSpan(
           flex: 2,
-          hint: '部位：',
+          hint: 'smart_delivery_create_order_part'.tr,
           text: state.deliveryDetail!.partName ?? '',
         ),
         expandedTextSpan(
-          hint: '货号：',
+          hint: 'smart_delivery_create_order_goods_no'.tr,
           text: state.deliveryDetail!.mapNumber ?? '',
         ),
       ],
@@ -344,13 +353,13 @@ class _CreateDeliveryOrderPageState extends State<CreateDeliveryOrderPage> {
     var bt5V = state.deliveryList.any((v) => v.isSelected);
 
     return pageBody(
-      title: '创建配送单',
+      title: 'smart_delivery_create_order_create_delivery_order'.tr,
       actions: [
         if (bt1V)
           CombinationButton(
             text: state.deliveryDetail?.workData.isNullOrEmpty()
-                ? '预留楦头'
-                : '重制工单',
+                ? 'smart_delivery_create_order_reserve_shoe_tree'.tr
+                : 'smart_delivery_create_order_remake_order'.tr,
             backgroundColor: state.deliveryDetail?.workData.isNullOrEmpty()
                 ? Colors.blue
                 : Colors.red,
@@ -371,26 +380,29 @@ class _CreateDeliveryOrderPageState extends State<CreateDeliveryOrderPage> {
         if (bt2V)
           CombinationButton(
             backgroundColor: Colors.orange,
-            text: '合并配送',
+            text: 'smart_delivery_create_order_merge_delivery'.tr,
             click: () => logic.mergeDeliveryRound(() => setState(() {})),
           ),
         if (bt3V)
           CombinationButton(
             backgroundColor: Colors.blue,
-            text: '保存预排',
+            text: 'smart_delivery_create_order_save_pre_sort'.tr,
             click: () => _saveDelivery(),
           ),
         if (bt4V)
           CombinationButton(
             backgroundColor:
                 logic.isCanCache() ? Colors.blue : Colors.amberAccent,
-            text: logic.isCanCache() ? '暂存' : '取消暂存',
+            text: logic.isCanCache()
+                ? 'smart_delivery_create_order_save_temporary'.tr
+                : 'smart_delivery_create_order_cancel_temporary'.tr,
             click: () => logic.cacheDelivery(() => setState(() {})),
           ),
         if (bt5V)
           CombinationButton(
             backgroundColor: Colors.green,
-            text: '创建发料任务',
+            text:
+                'smart_delivery_create_order_create_material_issuance_task'.tr,
             click: () => createDeliveryTaskDialog(
               nowOrderId: state.deliveryDetail?.newWorkCardInterID ?? '',
               nowOrderPartsId: state.deliveryDetail?.partsID ?? '',
@@ -402,8 +414,9 @@ class _CreateDeliveryOrderPageState extends State<CreateDeliveryOrderPage> {
                       .where((v) => v.isSelected)
                       .toList() ??
                   [],
-              success: (taskId, agvNumber) =>
-                  setState(() => logic.refreshCreated(taskId, agvNumber)),
+              success: (taskId, agvNumber) => setState(
+                () => logic.refreshCreated(taskId, agvNumber),
+              ),
             ),
           ),
         const SizedBox(width: 10),
@@ -424,7 +437,7 @@ class _CreateDeliveryOrderPageState extends State<CreateDeliveryOrderPage> {
                   Row(
                     children: [
                       expandedTextSpan(
-                        hint: '部位：',
+                        hint: 'smart_delivery_create_order_part'.tr,
                         text: state.saveDeliveryDetail!.partName ?? '',
                       ),
                       if (state.deliveryDetail?.newWorkCardInterID ==
@@ -432,10 +445,11 @@ class _CreateDeliveryOrderPageState extends State<CreateDeliveryOrderPage> {
                           state.saveDeliveryDetail!.partsID ==
                               state.deliveryDetail!.partsID)
                         CombinationButton(
-                            text: '取消合并',
-                            backgroundColor: Colors.orange,
-                            click: () =>
-                                setState(() => logic.cancelMergeDelivery()))
+                          text: 'smart_delivery_create_order_cancel_merge'.tr,
+                          backgroundColor: Colors.orange,
+                          click: () =>
+                              setState(() => logic.cancelMergeDelivery()),
+                        )
                     ],
                   ),
                   const SizedBox(height: 10),

@@ -52,7 +52,7 @@ class _PartProcessScanQuickDispatchPageState
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             textSpan(
-                              hint: '员工：',
+                              hint: 'part_process_scan_quick_dispatch_worker'.tr,
                               text: '${wi.empName}<${wi.empCode}>',
                               textColor: Colors.blue.shade900,
                               fontSize: 18,
@@ -60,7 +60,7 @@ class _PartProcessScanQuickDispatchPageState
                             NumberDecimalEditText(
                               initQty: dis.distributionQty.mul(100),
                               max: logic.getWorkerPercentageMax(dis.empId),
-                              hint: '请填写分配比',
+                              hint: 'part_process_scan_quick_dispatch_input_tips'.tr,
                               onChanged: (d) => setState(() {
                                 dis.distributionQty = d.div(100);
                               }),
@@ -123,11 +123,11 @@ class _PartProcessScanQuickDispatchPageState
   @override
   Widget build(BuildContext context) {
     return pageBody(
-      title: '快速分配',
+      title: 'part_process_scan_quick_dispatch_quick_allocation'.tr,
       actions: [
         TextButton(
           onPressed: () =>logic.quickPercentage(),
-          child: Text('分配'),
+          child: Text('part_process_scan_quick_dispatch_allocation'.tr),
         )
       ],
       body: Obx(
@@ -170,14 +170,14 @@ class _PartProcessScanQuickDispatchPageState
                     children: [
                       Expanded(
                         child: CombinationButton(
-                          text: '保存当前比例',
+                          text: 'part_process_scan_quick_dispatch_save'.tr,
                           click: () =>logic.savePercentage(),
                           combination: Combination.left,
                         ),
                       ),
                       Expanded(
                         child: CombinationButton(
-                          text: '应用上次比例',
+                          text: 'part_process_scan_quick_dispatch_apply'.tr,
                           click: () =>logic.usePercentage(),
                           combination: Combination.right,
                         ),

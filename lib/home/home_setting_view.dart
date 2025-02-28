@@ -32,7 +32,7 @@ class _UserSettingState extends State<UserSetting> {
       decoration: TextDecoration.none,
       color: Colors.blueAccent);
 
-  ///分割线
+  //分割线
   var line = const Column(
     children: [
       SizedBox(height: 5),
@@ -46,7 +46,7 @@ class _UserSettingState extends State<UserSetting> {
     ],
   );
 
-  ///返回按钮
+  //返回按钮
   backArrow() {
     return Positioned(
       top: 50,
@@ -61,7 +61,7 @@ class _UserSettingState extends State<UserSetting> {
     );
   }
 
-  ///头像
+  //头像
   avatarImage() {
     return Positioned(
       top: 100,
@@ -79,7 +79,7 @@ class _UserSettingState extends State<UserSetting> {
     );
   }
 
-  ///名字
+  //名字
   name() {
     return Text(
       '${userInfo?.name ?? ''}(${userInfo?.number ?? ''})',
@@ -91,7 +91,7 @@ class _UserSettingState extends State<UserSetting> {
     );
   }
 
-  ///工厂
+  //工厂
   factory() {
     return SizedBox(
       width: 260,
@@ -112,7 +112,7 @@ class _UserSettingState extends State<UserSetting> {
     );
   }
 
-  ///部门
+  //部门
   department() {
     return SizedBox(
       width: 260,
@@ -199,7 +199,7 @@ class _UserSettingState extends State<UserSetting> {
     ));
   }
 
-  ///职位
+  //职位
   position() {
     return SizedBox(
       width: 260,
@@ -220,7 +220,7 @@ class _UserSettingState extends State<UserSetting> {
     );
   }
 
-  ///修改密码
+  //修改密码
   changePassword() {
     return SizedBox(
       width: 260,
@@ -249,7 +249,7 @@ class _UserSettingState extends State<UserSetting> {
     );
   }
 
-  ///修改密码弹窗
+  //修改密码弹窗
   changePasswordDialog() {
     var oldPassword = TextEditingController();
     var newPassword = TextEditingController();
@@ -322,7 +322,7 @@ class _UserSettingState extends State<UserSetting> {
     );
   }
 
-  ///检查版本更新
+  //检查版本更新
   checkVersion() {
     return SizedBox(
       width: 260,
@@ -351,9 +351,7 @@ class _UserSettingState extends State<UserSetting> {
                       message: 'is_already_latest_version'.tr,
                     );
                   },
-                  needUpdate: (versionInfo) {
-                    doUpdate(versionInfo);
-                  },
+                  needUpdate: (v)=>doUpdate(version: v),
                 );
               }
             },
@@ -372,7 +370,7 @@ class _UserSettingState extends State<UserSetting> {
     );
   }
 
-  ///注销
+  //注销
   logout() {
     return Positioned(
       bottom: 30,

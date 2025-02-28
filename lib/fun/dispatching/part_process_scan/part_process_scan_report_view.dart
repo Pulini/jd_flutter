@@ -10,7 +10,6 @@ import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
-
 class PartProcessScanReportPage extends StatefulWidget {
   const PartProcessScanReportPage({super.key});
 
@@ -47,7 +46,7 @@ class _PartProcessScanReportPageState extends State<PartProcessScanReportPage>
                   },
                 ),
                 expandedTextSpan(
-                  hint: '工序：',
+                  hint: 'part_process_scan_report_process'.tr,
                   text: data.reportList[0].name ?? '',
                   fontSize: 16,
                 )
@@ -69,7 +68,7 @@ class _PartProcessScanReportPageState extends State<PartProcessScanReportPage>
                     color: Colors.blue,
                   ),
                 ),
-                Text('分配情况：', style: style),
+                Text('part_process_scan_report_allocation_situation'.tr, style: style),
                 Expanded(
                   child: percentIndicator(
                     max: data.getProcessMax(),
@@ -109,11 +108,11 @@ class _PartProcessScanReportPageState extends State<PartProcessScanReportPage>
                     children: [
                       expandedTextSpan(
                         flex: 2,
-                        hint: '员工：',
+                        hint: 'part_process_scan_report_worker'.tr,
                         text: '${worker.name} < ${worker.number} >',
                       ),
                       expandedTextSpan(
-                        hint: '计工：',
+                        hint: 'part_process_scan_report_record_working'.tr,
                         text: worker.distributionQty.toShowString(),
                       ),
                     ],
@@ -130,9 +129,12 @@ class _PartProcessScanReportPageState extends State<PartProcessScanReportPage>
         title: Row(
           children: [
             expandedTextSpan(
-                flex: 3, hint: '工序：', text: ri.name ?? '', fontSize: 18),
+                flex: 3,
+                hint: 'part_process_scan_report_process'.tr,
+                text: ri.name ?? '',
+                fontSize: 18),
             expandedTextSpan(
-              hint: '尺码：',
+              hint: 'part_process_scan_report_size'.tr,
               text: ri.size ?? '',
               textColor: Colors.grey,
             ),
@@ -142,17 +144,17 @@ class _PartProcessScanReportPageState extends State<PartProcessScanReportPage>
           children: [
             expandedTextSpan(
               flex: 2,
-              hint: '指令号：',
+              hint: 'part_process_scan_report_ins_number'.tr,
               text: ri.mtono ?? '',
               textColor: Colors.grey,
             ),
             expandedTextSpan(
-              hint: '指令数：',
+              hint: 'part_process_scan_report_ins_qty'.tr,
               text: ri.mtonoQty.toDoubleTry().toShowString(),
               textColor: Colors.green,
             ),
             expandedTextSpan(
-              hint: '数量：',
+              hint: 'part_process_scan_report_quantity'.tr,
               text: ri.qty.toDoubleTry().toShowString(),
               textColor: Colors.green,
             ),
@@ -168,18 +170,18 @@ class _PartProcessScanReportPageState extends State<PartProcessScanReportPage>
       child: ListTile(
         title: Row(
           children: [
-            const Expanded(
+            Expanded(
               flex: 3,
               child: Text(
-                '指令合计',
-                style: TextStyle(
+                'part_process_scan_report_ins_total'.tr,
+                style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
                 ),
               ),
             ),
             expandedTextSpan(
-              hint: '尺码：',
+              hint: 'part_process_scan_report_size'.tr,
               text: ri.size ?? '',
               textColor: Colors.grey,
             ),
@@ -189,17 +191,17 @@ class _PartProcessScanReportPageState extends State<PartProcessScanReportPage>
           children: [
             expandedTextSpan(
               flex: 2,
-              hint: '指令号：',
+              hint: 'part_process_scan_report_ins_number'.tr,
               text: ri.mtono ?? '',
               textColor: Colors.grey,
             ),
             expandedTextSpan(
-              hint: '指令数：',
+              hint: 'part_process_scan_report_ins_qty'.tr,
               text: ri.mtonoQty.toDoubleTry().toShowString(),
               textColor: Colors.green,
             ),
             expandedTextSpan(
-              hint: '数量：',
+              hint: 'part_process_scan_report_ins_qty'.tr,
               text: ri.qty.toDoubleTry().toShowString(),
               textColor: Colors.green,
             ),
@@ -215,18 +217,18 @@ class _PartProcessScanReportPageState extends State<PartProcessScanReportPage>
       child: ListTile(
         title: Row(
           children: [
-            const Expanded(
+            Expanded(
               flex: 3,
               child: Text(
-                '部件合计',
-                style: TextStyle(
+                'part_process_scan_report_ins_total'.tr,
+                style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
                 ),
               ),
             ),
             expandedTextSpan(
-              hint: '尺码：',
+              hint: 'part_process_scan_report_size'.tr,
               text: ri.size ?? '',
               textColor: Colors.grey,
             ),
@@ -236,17 +238,17 @@ class _PartProcessScanReportPageState extends State<PartProcessScanReportPage>
           children: [
             expandedTextSpan(
               flex: 2,
-              hint: '指令号：',
+              hint: 'part_process_scan_report_ins_number'.tr,
               text: ri.mtono ?? '',
               textColor: Colors.grey,
             ),
             expandedTextSpan(
-              hint: '指令数：',
+              hint: 'part_process_scan_report_ins_qty'.tr,
               text: ri.mtonoQty.toDoubleTry().toShowString(),
               textColor: Colors.green,
             ),
             expandedTextSpan(
-              hint: '数量：',
+              hint: 'part_process_scan_report_quantity'.tr,
               text: ri.qty.toDoubleTry().toShowString(),
               textColor: Colors.green,
             ),
@@ -260,16 +262,18 @@ class _PartProcessScanReportPageState extends State<PartProcessScanReportPage>
     return Obx(() => Card(
           child: ListTile(
             title: textSpan(
-                hint: '工序：', text: bci.processName ?? '', fontSize: 18),
+                hint: 'part_process_scan_report_process'.tr,
+                text: bci.processName ?? '',
+                fontSize: 18),
             subtitle: Row(
               children: [
                 expandedTextSpan(
-                  hint: '条码：',
+                  hint: 'part_process_scan_report_bar_code'.tr,
                   text: bci.barCode ?? '',
                   textColor: Colors.grey,
                 ),
                 textSpan(
-                  hint: '数量：',
+                  hint: 'part_process_scan_report_quantity'.tr,
                   text: bci.qty.toShowString(),
                   textColor: Colors.grey,
                 ),
@@ -300,12 +304,12 @@ class _PartProcessScanReportPageState extends State<PartProcessScanReportPage>
   @override
   Widget build(BuildContext context) {
     return pageBody(
-      title: '车间日报工（修改）',
+      title: 'part_process_scan_report_day_report'.tr,
       actions: [
         Obx(
           () => CheckBox(
             onChanged: (c) => logic.setSelectedAll(tabController.index, c),
-            name: '全选',
+            name: 'part_process_scan_report_all'.tr,
             value: state.isSelectAll.value,
           ),
         )
@@ -321,7 +325,11 @@ class _PartProcessScanReportPageState extends State<PartProcessScanReportPage>
           labelPadding: const EdgeInsets.only(bottom: 10),
           unselectedLabelColor: Colors.grey,
           overlayColor: WidgetStateProperty.all(Colors.transparent),
-          tabs: const [Text('分配'), Text('工序'), Text('贴标')],
+          tabs: [
+            Text('part_process_scan_report_tab_allocation'.tr),
+            Text('part_process_scan_report_tab_process'.tr),
+            Text('part_process_scan_report_tab_label'.tr),
+          ],
         ),
         body: Obx(
           () => TabBarView(
@@ -342,7 +350,7 @@ class _PartProcessScanReportPageState extends State<PartProcessScanReportPage>
                       Expanded(
                         child: CombinationButton(
                           isEnabled: logic.isMultiSelect(tabController.index),
-                          text: '快速分配',
+                          text: 'part_process_scan_report_quick_allocation'.tr,
                           click: () => Get.to(
                             () => const PartProcessScanQuickDispatchPage(),
                           ),
@@ -351,9 +359,9 @@ class _PartProcessScanReportPageState extends State<PartProcessScanReportPage>
                       ),
                       Expanded(
                         child: CombinationButton(
-                          text: '提交',
+                          text: 'part_process_scan_report_submit'.tr,
                           click: () => askDialog(
-                            content: '确定要提交本次报工吗？',
+                            content: 'part_process_scan_report_submit_tips'.tr,
                             confirm: () => logic.reportModifySubmit(),
                           ),
                           combination: Combination.right,

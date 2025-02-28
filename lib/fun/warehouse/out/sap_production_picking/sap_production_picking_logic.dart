@@ -12,18 +12,6 @@ import 'sap_production_picking_state.dart';
 class SapProductionPickingLogic extends GetxController {
   final SapProductionPickingState state = SapProductionPickingState();
 
-  @override
-  void onReady() {
-    // TODO: implement onReady
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    // TODO: implement onClose
-    super.onClose();
-  }
-
   queryOrder({
     required String noticeNo,
     required String startDate,
@@ -35,7 +23,7 @@ class SapProductionPickingLogic extends GetxController {
   }) {
     if (workCenter.contains('PQCJ')) {
       informationDialog(
-          content: '喷漆物料领取请使用《SAP喷漆领料》功能操作！',
+          content: 'sap_production_picking_use_sap_print_picking_tips'.tr,
           back: () {
             Get.back();
             //跳转至sap喷漆领料
@@ -56,14 +44,19 @@ class SapProductionPickingLogic extends GetxController {
   checkPickingSelected(Function(bool) picking) {
     var select = state.pickOrderList.where((v) => v.select);
     if (groupBy(select, (v) => v.location ?? '').length > 1) {
-      errorDialog(content: '请选不通仓库的物料不能一起领料！');
+      errorDialog(
+          content:
+              'sap_production_picking_different_warehouses_cannot_pick_together_tips'
+                  .tr);
     } else {
       askDialog(
-        content: '有贴标的货物请使用扫码领料！',
-        confirmText: '扫码领料',
+        content:
+            'sap_production_picking_has_label_material_use_scan_picking_tips'
+                .tr,
+        confirmText: 'sap_production_picking_scan_picking'.tr,
         confirmColor: Colors.green,
         confirm: () => picking.call(true),
-        cancelText: '手动领料',
+        cancelText: 'sap_production_picking_artificial_picking'.tr,
         cancelColor: Colors.blueAccent,
         cancel: () => picking.call(false),
       );
@@ -79,7 +72,7 @@ class SapProductionPickingLogic extends GetxController {
 
   getBarCodeList() {
     state.getProductionPickingBarCodeList(
-      loading: '正在获取条码列表...',
+      loading: 'sap_production_picking_getting_barcode_list_tips'.tr,
       error: (msg) => errorDialog(content: msg),
     );
   }
@@ -87,7 +80,7 @@ class SapProductionPickingLogic extends GetxController {
   bool hasSubmitSelect() {
     for (var item in state.pickDetailList) {
       for (var j = 0; j < item.materialList.length; ++j) {
-        if (item.materialList[j].select &&item.canPicking(j)) {
+        if (item.materialList[j].select && item.canPicking(j)) {
           return true;
         }
       }
@@ -119,16 +112,19 @@ class SapProductionPickingLogic extends GetxController {
   }
 
   checkMixCode(String code) {
-    if(state.barCodeList.isEmpty){
-      errorDialog(content: '标签数据为空，请刷新标签列表');
+    if (state.barCodeList.isEmpty) {
+      errorDialog(content: 'sap_production_picking_label_info_error_tips'.tr);
       return;
     }
     if (!state.barCodeList.any((v) => v.barCode == code)) {
-      errorDialog(content: '此标签不在本次领料范围!!');
+      errorDialog(
+          content:
+              'sap_production_picking_this_label_not_belong_pick_order_tips'
+                  .tr);
       return;
     }
     if (state.barCodeList.any((v) => v.barCode == code && v.scanned)) {
-      errorDialog(content: '标签已扫!!');
+      errorDialog(content: 'sap_production_picking_label_scanned'.tr);
       return;
     }
     showScanTips();

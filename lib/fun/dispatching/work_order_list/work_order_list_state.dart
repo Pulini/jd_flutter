@@ -15,9 +15,6 @@ class WorkOrderListState {
   PartDetailInfo? partDetail;
   var partDetailSizeList = <SizeInfo>[].obs;
 
-  WorkOrderListState() {
-    ///Initialize variables
-  }
 
   query({
     required String pcStartDate,
@@ -27,7 +24,7 @@ class WorkOrderListState {
   }) {
     httpGet(
       method: webApiGetWorkCardOrderList,
-      loading: '正在获取包装清单箱容配置信息...',
+      loading: 'work_order_list_getting_packing_list_box_capacity'.tr,
       params: {
         'StartTime': workBarCode.isEmpty ? pcStartDate : '',
         'EndTime': workBarCode.isEmpty ? pcEndDate : '',
@@ -53,7 +50,7 @@ class WorkOrderListState {
   }) {
     httpGet(
       method: webApiGetPartList,
-      loading: '正在获取部件列表...',
+      loading: 'work_order_list_getting_part_list'.tr,
       params: {
         'WorkCardBarCode': orderId,
         'DeptID': userInfo?.departmentID,
@@ -82,7 +79,7 @@ class WorkOrderListState {
     });
     httpPost(
       method: webApiGetPartDetail,
-      loading: '正在获取部件详情...',
+      loading: 'work_order_list_getting_part_detail'.tr,
       body: {
         'WorkCardBarCode': orderId,
         'PartNames': list.toSet().toList(),
@@ -116,7 +113,7 @@ class WorkOrderListState {
     }
     httpPost(
       method: webApiCreatePartLabel,
-      loading: '正在创建条码...',
+      loading: 'work_order_list_creating_label'.tr,
       body: {
         'BoxCapacity': boxCapacity,
         'FID': partDetail?.fIDs ?? [],
@@ -145,7 +142,7 @@ class WorkOrderListState {
   }) {
     httpPost(
       method: webApiDeletePartLabel,
-      loading: '正在删除贴标...',
+      loading: 'work_order_list_deleting_label'.tr,
       params: {
         'Barcode': barCode,
         'UserID': userInfo?.userID,

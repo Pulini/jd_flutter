@@ -19,7 +19,7 @@ class MaintainLabelState {
   var cbPrinted = false.obs;
   var labelList = <LabelInfo>[].obs;
   var labelGroupList = <List<LabelInfo>>[].obs;
-  var filterSize = '全部'.obs;
+  var filterSize = 'maintain_label_all'.tr.obs;
 
   MaintainLabelState() {
     materialCode = Get.arguments['materialCode'];
@@ -28,7 +28,7 @@ class MaintainLabelState {
   }
 
   List<LabelInfo> getLabelList() {
-    return filterSize.value == '全部'
+    return filterSize.value == 'maintain_label_all'.tr
         ? labelList
         : labelList
             .where((v) => v.items!.any((v2) => v2.size == filterSize.value))
@@ -36,7 +36,7 @@ class MaintainLabelState {
   }
 
   List<List<LabelInfo>> getLabelGroupList() {
-    return filterSize.value == '全部'
+    return filterSize.value == 'maintain_label_all'.tr
         ? labelGroupList
         : labelGroupList
             .where((v) => v.any(
@@ -49,7 +49,7 @@ class MaintainLabelState {
   }) {
     httpGet(
       method: webApiGetLabelList,
-      loading: '正在获取标签列表...',
+      loading: 'maintain_label_getting_label_list'.tr,
       params: {'WorkCardID': interID},
     ).then((response) {
       if (response.resultCode == resultSuccess) {
@@ -97,7 +97,7 @@ class MaintainLabelState {
   }) {
     httpPost(
       method: webApiCreateSingleLabel,
-      loading: '正在生成贴标...',
+      loading: 'maintain_label_generating_label'.tr,
       params: {
         'InterID': interID,
         'PackTypeID': '478',
@@ -122,7 +122,7 @@ class MaintainLabelState {
     if (isMix) {
       http = httpGet(
         method: webApiGetPackingListBarCodeCount,
-        loading: '正在获取条码信息...',
+        loading: 'maintain_label_getting_label_info',
         params: {
           'InterID': interID,
           'LabelType': 3,
@@ -133,7 +133,7 @@ class MaintainLabelState {
       if (isMaterialLabel.value) {
         http = httpGet(
           method: webApiGetPackingListBarCodeCountBySize,
-          loading: '正在获取条码信息...',
+          loading: 'maintain_label_getting_label_info'.tr,
           params: {
             'InterID': interID,
             'UserID': userInfo?.userID,
@@ -142,7 +142,7 @@ class MaintainLabelState {
       } else {
         http = httpGet(
           method: webApiGetPackingListBarCodeCount,
-          loading: '正在获取条码信息...',
+          loading: 'maintain_label_getting_label_info'.tr,
           params: {
             'InterID': interID,
             'LabelType': 3,
@@ -168,7 +168,7 @@ class MaintainLabelState {
   }) {
     httpPost(
       method: webApiCleanLabel,
-      loading: '正在删除包装清单...',
+      loading: 'maintain_label_deleting_packing_order'.tr,
       params: {
         'InterID': interID,
       },
@@ -188,7 +188,7 @@ class MaintainLabelState {
   }) {
     httpPost(
       method: webApiDeleteLabels,
-      loading: '正在删除标签...',
+      loading: 'maintain_label_deleting_label'.tr,
       body: {
         'WorkCardID': interID.toString(),
         'BarCodes': select,
@@ -208,7 +208,7 @@ class MaintainLabelState {
   }) {
     httpGet(
       method: webApiGetMaterialProperties,
-      loading: '正在获取物料属性信息...',
+      loading: 'maintain_label_getting_material_info'.tr,
       params: {
         'MaterialCode': materialCode,
         'InterID': interID,
@@ -231,7 +231,7 @@ class MaintainLabelState {
   }) {
     httpGet(
       method: webApiGetMaterialCapacity,
-      loading: '正在获取包装清单箱容配置信息...',
+      loading: 'maintain_label_getting_packing_order_info'.tr,
       params: {
         'InterID': interID,
       },
@@ -253,7 +253,7 @@ class MaintainLabelState {
   }) {
     httpGet(
       method: webApiGetMaterialLanguages,
-      loading: '正在获物料多语言信息...',
+      loading: 'maintain_label_getting_material_language_info'.tr,
       params: {'MaterialCode': materialCode},
     ).then((response) {
       if (response.resultCode == resultSuccess) {

@@ -9,17 +9,7 @@ import 'process_dispatch_register_state.dart';
 class ProcessDispatchRegisterLogic extends GetxController {
   final ProcessDispatchRegisterState state = ProcessDispatchRegisterState();
 
-  @override
-  void onReady() {
-    // TODO: implement onReady
-    super.onReady();
-  }
 
-  @override
-  void onClose() {
-    // TODO: implement onClose
-    super.onClose();
-  }
 
   queryOrder(String code) {
     if (code.isNotEmpty) {
@@ -38,17 +28,17 @@ class ProcessDispatchRegisterLogic extends GetxController {
     if (checkUserPermission('1052501')) {
       Get.to(() => const PrintLabelPage());
     } else {
-      informationDialog(content: '缺少贴标操作权限');
+      informationDialog(content: 'process_dispatch_register_no_permission_tips'.tr);
     }
   }
 
   modifyLabelWorker() {
     if (state.labelInfo == null) {
-      errorDialog(content: '请先查询标签信息');
+      errorDialog(content: 'process_dispatch_register_no_label_info_tips'.tr);
       return;
     }
     if (state.select.value < 0) {
-      errorDialog(content: '请选择操作员');
+      errorDialog(content: 'process_dispatch_register_select_operator_tips'.tr);
     }
     state.modifyLabelWorker(
       success: (msg) => successDialog(content: msg),
@@ -59,7 +49,7 @@ class ProcessDispatchRegisterLogic extends GetxController {
   deleteLabel(Barcode data) {
     if (checkUserPermission('1052504')) {
       askDialog(
-        content: '确定要删除该标签吗？',
+        content: 'process_dispatch_register_delete_tips'.tr,
         confirm: () => state.deleteLabel(
           barCode: data.barCode ?? '',
           success: (msg) {
@@ -70,7 +60,7 @@ class ProcessDispatchRegisterLogic extends GetxController {
         ),
       );
     } else {
-      informationDialog(content: '缺少贴标删除权限');
+      informationDialog(content: 'process_dispatch_register_no_delete_permission'.tr);
     }
   }
 }

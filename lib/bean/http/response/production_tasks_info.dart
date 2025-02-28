@@ -54,7 +54,7 @@ class ProductionTasksInfo {
     deptID = json['DeptID'];
     toDayPlanQty = json['ToDayPlanQty'];
     toDayFinishQty = json['ToDayFinishQty'];
-    toMonthFinishQty = json['FinishQtyTotal'];
+    toMonthFinishQty = json['ToMonthFinishQty'];
     if (json['ScWorkCardInfos'] != null) {
       subInfo = [];
       json['ScWorkCardInfos'].forEach((v) {
@@ -68,7 +68,7 @@ class ProductionTasksInfo {
     map['DeptID'] = deptID;
     map['ToDayPlanQty'] = toDayPlanQty;
     map['ToDayFinishQty'] = toDayFinishQty;
-    map['FinishQtyTotal'] = toMonthFinishQty;
+    map['ToMonthFinishQty'] = toMonthFinishQty;
     if (subInfo != null) {
       map['ScWorkCardInfos'] = subInfo!.map((v) => v.toJson()).toList();
     }
@@ -85,12 +85,15 @@ class ProductionTasksSubInfo {
   String? mtoNo; //指令号
   String? productName; //型体名称
   String? color; //型体颜色
+  String? shoeStyle; //鞋款
   String? priorityLevel; //派工单优先级
   bool? isClose;
   String? itemImage; //型体图片
   double? finishQtyTotal; //累计完成数
   double? shouldPackQty; //应装箱数
   double? packagedQty; //应装箱数
+  List<String>? packetWay; //装箱方式
+  List<String>? specificRequirements; //客人需求
   String? entryFID;
   List<WorkCardSizeInfos>? workCardSizeInfo;
 
@@ -103,12 +106,15 @@ class ProductionTasksSubInfo {
     this.mtoNo,
     this.productName,
     this.color,
+    this.shoeStyle,
     this.priorityLevel,
     this.isClose,
     this.itemImage,
     this.finishQtyTotal,
     this.shouldPackQty,
     this.packagedQty,
+    this.packetWay,
+    this.specificRequirements,
     this.entryFID,
     this.workCardSizeInfo,
   });
@@ -122,12 +128,25 @@ class ProductionTasksSubInfo {
     mtoNo = json['MtoNo'];
     productName = json['ProductName'];
     color = json['Color'];
+    shoeStyle = json['ShoeStyle'];
     priorityLevel = json['PriorityLevel'];
     isClose = json['IsClose'];
     itemImage = json['ItemImage'];
     finishQtyTotal = json['FinishQtyTotal'];
     shouldPackQty = json['NPTotal'];
     packagedQty = json['HasInstall'];
+    if (json['PacketWay'] != null) {
+      packetWay = [];
+      json['PacketWay'].forEach((v) {
+        packetWay!.add(v);
+      });
+    }
+    if (json['SpecificRequirements'] != null) {
+      specificRequirements = [];
+      json['SpecificRequirements'].forEach((v) {
+        specificRequirements!.add(v);
+      });
+    }
     entryFID = json['EntryFID'];
     if (json['ScWorkCardSizeInfos'] != null) {
       workCardSizeInfo = [];
@@ -147,12 +166,15 @@ class ProductionTasksSubInfo {
     map['MtoNo'] = mtoNo;
     map['ProductName'] = productName;
     map['Color'] = color;
+    map['ShoeStyle'] = shoeStyle;
     map['PriorityLevel'] = priorityLevel;
     map['IsClose'] = isClose;
     map['ItemImage'] = itemImage;
     map['FinishQtyTotal'] = finishQtyTotal;
     map['NPTotal'] = shouldPackQty;
     map['HasInstall'] = packagedQty;
+    map['PacketWay'] = packetWay;
+    map['SpecificRequirements'] = specificRequirements;
     map['EntryFID'] = entryFID;
     if (workCardSizeInfo != null) {
       map['ScWorkCardSizeInfos'] =
@@ -163,9 +185,9 @@ class ProductionTasksSubInfo {
   }
 }
 
-/// Size : "38"
-/// Qty : 100.0000000000
-/// ScannedQty : 0.0
+// Size : "38"
+// Qty : 100.0000000000
+// ScannedQty : 0.0
 
 class WorkCardSizeInfos {
   WorkCardSizeInfos({
@@ -220,6 +242,7 @@ class WorkCardSizeInfos {
     manualScannedQty = manualScannedQty.add(qty);
     scannedQty = scannedQty.add(qty);
   }
+
   addInstalledQty(double qty) {
     installedQty = installedQty.add(qty);
   }
@@ -245,6 +268,8 @@ class ProductionTasksDetailInfo {
   String? clientOrderNumber;
   double? total;
   double? hasInstall;
+  List<String>? packetWay; //装箱方式
+  List<String>? specificRequirements; //客人需求
   List<ProductionTasksDetailItemInfo>? scheduleInfos;
 
   ProductionTasksDetailInfo({
@@ -252,6 +277,8 @@ class ProductionTasksDetailInfo {
     this.clientOrderNumber,
     this.total,
     this.hasInstall,
+    this.packetWay,
+    this.specificRequirements,
     this.scheduleInfos,
   });
 
@@ -260,6 +287,18 @@ class ProductionTasksDetailInfo {
     clientOrderNumber = json['ClientOrderNumber'];
     total = json['Total'];
     hasInstall = json['HasInstall'];
+    if (json['PacketWay'] != null) {
+      packetWay = [];
+      json['PacketWay'].forEach((v) {
+        packetWay!.add(v);
+      });
+    }
+    if (json['SpecificRequirements'] != null) {
+      specificRequirements = [];
+      json['SpecificRequirements'].forEach((v) {
+        specificRequirements!.add(v);
+      });
+    }
     if (json['ScheduleInfos'] != null) {
       scheduleInfos = [];
       json['ScheduleInfos'].forEach((v) {
@@ -334,8 +373,8 @@ class MqttMsgInfo {
   String? workCardID; //生产派工单ID
   String? clientOrderNumber; //客户订单号
   String? size; //尺码
-  double? qty;//数量
-  String? scanTypeID;//扫码枪类型 1扫码枪，2井松、3山腾
+  double? qty; //数量
+  String? scanTypeID; //扫码枪类型 1扫码枪，2井松、3山腾
 
   MqttMsgInfo({
     this.number,

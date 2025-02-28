@@ -19,7 +19,7 @@ class _BarCodeListPageState extends State<BarCodeListPage> {
   @override
   Widget build(BuildContext context) {
     return pageBody(
-      title: '已扫描条码列表',
+      title: 'sap_production_picking_barcode_list_scanned_barcode_list'.tr,
       body: Obx(() => ListView.builder(
             itemCount: state.barCodeList.where((v) => v.scanned).length,
             itemBuilder: (c, i) {
@@ -30,9 +30,14 @@ class _BarCodeListPageState extends State<BarCodeListPage> {
                     Expanded(
                       child: Column(
                         children: [
-                          textSpan(hint: '条码：', text: data.barCode ?? ''),
                           textSpan(
-                            hint: '物料：',
+                              hint:
+                                  'sap_production_picking_barcode_list_barcode'
+                                      .tr,
+                              text: data.barCode ?? ''),
+                          textSpan(
+                            hint: 'sap_production_picking_barcode_list_material'
+                                .tr,
                             text:
                                 '${data.materialName}<${data.materialNumber}>',
                           ),

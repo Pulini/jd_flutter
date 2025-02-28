@@ -9,18 +9,6 @@ import 'sap_ink_color_matching_state.dart';
 class SapInkColorMatchingLogic extends GetxController {
   final SapInkColorMatchingState state = SapInkColorMatchingState();
 
-  @override
-  void onReady() {
-    // TODO: implement onReady
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    // TODO: implement onClose
-    super.onClose();
-  }
-
   queryOrder({
     required String startDate,
     required String endDate,
@@ -38,7 +26,7 @@ class SapInkColorMatchingLogic extends GetxController {
     required Function refresh,
   }) {
     if (newTypeBody.trim().isEmpty) {
-      errorDialog(content: '请输入型体！');
+      errorDialog(content: 'sap_ink_color_matching_input_type_body_tips'.tr);
       return;
     }
     state.checkTypeBody(
@@ -148,33 +136,50 @@ class SapInkColorMatchingLogic extends GetxController {
       .where((v) => v.isNewItem)
       .any((v) => v.weightBeforeColorMix.value > 0);
 
-  checkSubmit(bool isModify,Function submit) {
+  checkSubmit(bool isModify, Function submit) {
     var submitData = state.inkColorList.where((v) => v.isNewItem);
     if (submitData.isEmpty) {
-      errorDialog(content: '没有可提交的物料信息！');
+      errorDialog(content: 'sap_ink_color_matching_no_material_submit'.tr);
       return;
     }
     for (var v in submitData) {
       if (v.weightBeforeColorMix.value <= 0) {
-        errorDialog(content: '(${v.materialName})调前重量尚未读取！');
+        errorDialog(
+          content: 'sap_ink_color_matching_not_read_before_toning'.trArgs([
+            v.materialName,
+          ]),
+        );
         return;
       }
       if (v.weightAfterColorMix.value <= 0) {
-        errorDialog(content: '(${v.materialName})调后重量尚未读取！');
+        errorDialog(
+          content: 'sap_ink_color_matching_not_read_after_toning'.trArgs([
+            v.materialName,
+          ]),
+        );
         return;
       }
-      if(v.weightAfterColorMix.value.sub(v.weightBeforeColorMix.value)==0){
-        errorDialog(content: '(${v.materialName})耗量为0！');
+      if (v.weightAfterColorMix.value.sub(v.weightBeforeColorMix.value) == 0) {
+        errorDialog(
+          content: 'sap_ink_color_matching_loss_cant_be_zero'.trArgs([
+            v.materialName,
+          ]),
+        );
         return;
       }
     }
-    if(!isModify){
+    if (!isModify) {
       if (state.mixDeviceSocket == null) {
-        errorDialog(content: '当前服务器尚未配置混合物秤！');
+        errorDialog(
+            content: 'sap_ink_color_matching_server_not_config_mix_device'.tr);
         return;
       }
       if (state.readMixDeviceWeight.value <= 0) {
-        errorDialog(content: '(${state.mixDeviceName})混合物重量尚未读取！');
+        errorDialog(
+          content: 'sap_ink_color_matching_mix_weight_not_read'.trArgs([
+            state.mixDeviceName,
+          ]),
+        );
         return;
       }
     }
@@ -182,7 +187,7 @@ class SapInkColorMatchingLogic extends GetxController {
   }
 
   submitModifyOrder(int index) {
-    checkSubmit(true,() {
+    checkSubmit(true, () {
       var newItemWeight = state.inkColorList
           .where((v) => v.isNewItem)
           .map((v) => v.consumption())
@@ -206,19 +211,21 @@ class SapInkColorMatchingLogic extends GetxController {
   }
 
   submitCreateOrder() {
-    checkSubmit(false,() => state.submitOrder(
-          orderNumber: '',
-          inkMaster: userInfo?.name ?? '',
-          mixActualWeight: state.readMixDeviceWeight.value,
-          mixTheoreticalWeight: state.inkColorList
-              .map((v) => v.consumption())
-              .reduce((a, b) => a.add(b)),
-          success: (msg) => successDialog(
-            content: msg,
-            back: () => Get.back(result: true),
-          ),
-          error: (msg) => errorDialog(content: msg),
-        ));
+    checkSubmit(
+        false,
+        () => state.submitOrder(
+              orderNumber: '',
+              inkMaster: userInfo?.name ?? '',
+              mixActualWeight: state.readMixDeviceWeight.value,
+              mixTheoreticalWeight: state.inkColorList
+                  .map((v) => v.consumption())
+                  .reduce((a, b) => a.add(b)),
+              success: (msg) => successDialog(
+                content: msg,
+                back: () => Get.back(result: true),
+              ),
+              error: (msg) => errorDialog(content: msg),
+            ));
   }
 
   List<List> getRatioColorLine(int index) {
@@ -287,8 +294,9 @@ class SapInkColorMatchingLogic extends GetxController {
         v.finalWeight.value = preset.mul(v.ratio.div(100));
         v.repairWeight.value = v.finalWeight.value.sub(v.actualWeight.value);
       }
-    }else{
-      item.repairWeight.value = item.finalWeight.value.sub(item.actualWeight.value);
+    } else {
+      item.repairWeight.value =
+          item.finalWeight.value.sub(item.actualWeight.value);
     }
   }
 

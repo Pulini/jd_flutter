@@ -11,19 +11,8 @@ import 'package:jd_flutter/widget/dialogs.dart';
 import 'sap_injection_molding_stock_in_state.dart';
 
 class SapInjectionMoldingStockInLogic extends GetxController {
-  final SapInjectionMoldingStockInState state = SapInjectionMoldingStockInState();
-
-  @override
-  void onReady() {
-    // TODO: implement onReady
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    // TODO: implement onClose
-    super.onClose();
-  }
+  final SapInjectionMoldingStockInState state =
+      SapInjectionMoldingStockInState();
 
   clearBarCodeList() {
     BarCodeInfo.clear(
@@ -32,7 +21,10 @@ class SapInjectionMoldingStockInLogic extends GetxController {
         if (v == state.barCodeList.length) {
           state.barCodeList.clear();
         } else {
-          showSnackBar(title: '错误', message: '本地数据库删除失败', isWarning: true);
+          showSnackBar(
+            message: 'sap_injection_molding_stock_in_delete_failed'.tr,
+            isWarning: true,
+          );
         }
       },
     );
@@ -40,7 +32,10 @@ class SapInjectionMoldingStockInLogic extends GetxController {
 
   scanCode(String code) {
     if (state.barCodeList.any((v) => v.code == code)) {
-      showSnackBar(title: '错误', message: '条码已存在', isWarning: true);
+      showSnackBar(
+        message: 'sap_injection_molding_stock_in_bar_code_exists'.tr,
+        isWarning: true,
+      );
     } else {
       if (code.isPallet()) {
         state.checkPallet(
@@ -54,15 +49,24 @@ class SapInjectionMoldingStockInLogic extends GetxController {
                   break;
                 case 'X':
                   showSnackBar(
-                      title: '错误', message: '请使用空托盘入库！！', isWarning: true);
+                    message:
+                        'sap_injection_molding_stock_in_use_empty_pallet'.tr,
+                    isWarning: true,
+                  );
                   break;
                 case 'Y':
                   showSnackBar(
-                      title: '错误', message: '此托盘已在其他仓库使用！！', isWarning: true);
+                    message:
+                        'sap_injection_molding_stock_in_pallet_occupied'.tr,
+                    isWarning: true,
+                  );
                   break;
               }
             } else {
-              showSnackBar(title: '错误', message: '此托盘不存在！！', isWarning: true);
+              showSnackBar(
+                message: 'sap_injection_molding_stock_in_pallet_not_exists'.tr,
+                isWarning: true,
+              );
             }
           },
           error: (msg) => errorDialog(content: msg),
@@ -70,7 +74,10 @@ class SapInjectionMoldingStockInLogic extends GetxController {
         return;
       }
       if (state.pallet == null) {
-        showSnackBar(title: '错误', message: '请先扫描托盘！！', isWarning: true);
+        showSnackBar(
+          message: 'sap_injection_molding_stock_in_scan_pallet_tips'.tr,
+          isWarning: true,
+        );
         return;
       }
       BarCodeInfo(
@@ -85,7 +92,10 @@ class SapInjectionMoldingStockInLogic extends GetxController {
 
   refreshBarCodeStatus({required void Function() refresh}) {
     state.getSapLabelList(
-      error: (msg) => showSnackBar(title: '错误', message: msg, isWarning: true),
+      error: (msg) => showSnackBar(
+        message: msg,
+        isWarning: true,
+      ),
       refresh: refresh,
     );
   }
@@ -99,7 +109,10 @@ class SapInjectionMoldingStockInLogic extends GetxController {
   goStockInReport() {
     var list = state.barCodeList.where((v) => !v.isUsed).toList();
     if (list.isEmpty) {
-      showSnackBar(title: '错误', message: '没有未入库的标签！！', isWarning: true);
+      showSnackBar(
+        message: 'sap_injection_molding_stock_in_no_stock_in_label'.tr,
+        isWarning: true,
+      );
     } else {
       state.getStockInReport(
         list: list,

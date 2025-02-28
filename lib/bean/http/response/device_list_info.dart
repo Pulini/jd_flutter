@@ -1,13 +1,13 @@
-/// ItemID : "6870"
-/// Number : "SJLB509B"
-/// Name : "热水表"
-/// OrganizeName : "金帝PUMA厂区"
-/// DormitoriesName : "金隆宿舍楼"
-/// Floor : ""
-/// TypeName : "热水表"
-/// IsUse : "已使用"
-/// IsWriteMeter : "未抄表"
-/// RoomNumber : "11.5.509"
+// ItemID : "6870"
+// Number : "SJLB509B"
+// Name : "热水表"
+// OrganizeName : "金帝PUMA厂区"
+// DormitoriesName : "金隆宿舍楼"
+// Floor : ""
+// TypeName : "热水表"
+// IsUse : "已使用"
+// IsWriteMeter : "未抄表"
+// RoomNumber : "11.5.509"
 
 class DeviceListInfo {
   DeviceListInfo({
