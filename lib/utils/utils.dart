@@ -37,19 +37,19 @@ UserInfo? userInfo;
 spSave(String key, Object value) {
   if (value is String) {
     sharedPreferences.setString(key, value);
-    debugPrint('save\nclass:${value.runtimeType}\nkey:$key\nvalue:$value');
+    logger.d('save\nclass:${value.runtimeType}\nkey:$key\nvalue:$value');
   } else if (value is int) {
     sharedPreferences.setInt(key, value);
-    debugPrint('save\nclass:${value.runtimeType}\nkey:$key\nvalue:$value');
+    logger.d('save\nclass:${value.runtimeType}\nkey:$key\nvalue:$value');
   } else if (value is double) {
     sharedPreferences.setDouble(key, value);
-    debugPrint('save\nclass:${value.runtimeType}\nkey:$key\nvalue:$value');
+    logger.d('save\nclass:${value.runtimeType}\nkey:$key\nvalue:$value');
   } else if (value is bool) {
     sharedPreferences.setBool(key, value);
-    debugPrint('save\nclass:${value.runtimeType}\nkey:$key\nvalue:$value');
+    logger.d('save\nclass:${value.runtimeType}\nkey:$key\nvalue:$value');
   } else if (value is List<String>) {
     sharedPreferences.setStringList(key, value);
-    debugPrint('save\nclass:${value.runtimeType}\nkey:$key\nvalue:$value');
+    logger.d('save\nclass:${value.runtimeType}\nkey:$key\nvalue:$value');
   } else {
     logger.e('error\nclass:${value.runtimeType}');
   }
@@ -58,7 +58,7 @@ spSave(String key, Object value) {
 // 获取SP数据
 dynamic spGet(String key) {
   var value = sharedPreferences.get(key);
-  debugPrint('read\nclass:${value.runtimeType}\nkey:$key\nvalue:$value');
+  logger.d('read\nclass:${value.runtimeType}\nkey:$key\nvalue:$value');
   switch (value.runtimeType) {
     case const (String):
       return value ?? '';
@@ -461,7 +461,7 @@ upData() {
     if (versionInfoCallback.resultCode == resultSuccess) {
       logger.i(packageInfo);
       if (versionInfoCallback.baseUrl == baseUrlForMES) {
-        doUpdate(VersionInfo.fromJson(versionInfoCallback.data));
+        doUpdate(version: VersionInfo.fromJson(versionInfoCallback.data));
       }
     } else {
       errorDialog(content: versionInfoCallback.message);
@@ -695,7 +695,7 @@ weighbridgeListener({
 randomDouble(double min, double max) =>
     min + Random().nextDouble() * (max - min);
 
-///dp转换成px
+//dp转换成px
 int dp2Px(double dp, BuildContext context) {
 
   MediaQueryData mq = MediaQuery.of(context);

@@ -54,12 +54,12 @@ class WarehouseAllocationLogic extends GetxController {
     }
   }
 
-  ///删除条码
+  //删除条码
   deleteCode(int position){
     state.dataList.removeAt(position);
   }
 
-  ///提交条码
+  //提交条码
   submit(
   ) {
     httpPost(

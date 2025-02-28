@@ -25,12 +25,12 @@ class _PartProcessScanPageState extends State<PartProcessScanPage> {
       actions: [
         TextButton(
           onPressed: () => askDialog(
-            content: '确定要清空条码吗？',
+            content: 'part_process_scan_clean_tips'.tr,
             confirm: () => state.barCodeList.clear(),
           ),
           child: Text(
-            '清空',
-            style: TextStyle(color: Colors.blueAccent),
+            'part_process_scan_clean'.tr,
+            style: const TextStyle(color: Colors.blueAccent),
           ),
         ),
       ],
@@ -72,7 +72,7 @@ class _PartProcessScanPageState extends State<PartProcessScanPage> {
                         Expanded(child: Text(state.barCodeList[index])),
                         IconButton(
                           onPressed: () => askDialog(
-                            content: '确定要删除该条码吗？',
+                            content: 'part_process_scan_delete_tips'.tr,
                             confirm: () => logic.deleteItem(index),
                           ),
                           icon: const Icon(
@@ -91,14 +91,14 @@ class _PartProcessScanPageState extends State<PartProcessScanPage> {
             children: [
               Expanded(
                 child: CombinationButton(
-                  text: '修改',
+                  text: 'part_process_scan_modify'.tr,
                   click: () => logic.barCodeModify(),
                   combination: Combination.left,
                 ),
               ),
               Expanded(
                 child: CombinationButton(
-                  text: '提交',
+                  text: 'part_process_scan_submit'.tr,
                   click: () {},
                   combination: Combination.right,
                 ),

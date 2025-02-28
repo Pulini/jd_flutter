@@ -8,21 +8,8 @@ import 'package:jd_flutter/widget/dialogs.dart';
 import 'smart_delivery_material_view.dart';
 import 'smart_delivery_state.dart';
 
-
 class SmartDeliveryLogic extends GetxController {
   final SmartDeliveryState state = SmartDeliveryState();
-
-  @override
-  void onReady() {
-    // TODO: implement onReady
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    // TODO: implement onClose
-    super.onClose();
-  }
 
   refreshOrder({
     required bool isQuery,
@@ -188,11 +175,11 @@ class SmartDeliveryLogic extends GetxController {
 
   mergeDeliveryRound(Function success) {
     if (!state.deliveryList.any((v) => v.isSelected)) {
-      errorDialog(content: '请勾选要合并的轮次！');
+      errorDialog(content: 'smart_delivery_check_rounds_merged'.tr);
       return;
     }
     askDialog(
-      content: '确定要保存选中轮次并在后续工单中合并配送吗？',
+      content: 'smart_delivery_save_temporary_iteration_and_use_later_tips'.tr,
       confirm: () {
         var copy = state.copyOrder();
         state.deliveryList = [
@@ -282,7 +269,9 @@ class SmartDeliveryLogic extends GetxController {
 
   cacheDelivery(Function refresh) {
     askDialog(
-      content: isCanCache() ? '确定要暂存选中轮次吗？' : '确定要取消暂存轮次吗？',
+      content: isCanCache()
+          ? 'smart_delivery_save_temporary_iteration_tips'.tr
+          : 'smart_delivery_cancel_temporary_iteration_tips'.tr,
       confirm: () => state.cacheDelivery(
         success: (msg) {
           refresh.call();

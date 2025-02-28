@@ -7,18 +7,6 @@ import 'sap_wms_reprint_labels_state.dart';
 class SapWmsReprintLabelsLogic extends GetxController {
   final SapWmsReprintLabelsState state = SapWmsReprintLabelsState();
 
-  @override
-  void onReady() {
-    // TODO: implement onReady
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    // TODO: implement onClose
-    super.onClose();
-  }
-
   scanCode({
     required String warehouse,
     required String code,
@@ -56,11 +44,11 @@ class SapWmsReprintLabelsLogic extends GetxController {
       }
       return;
     }
-    errorDialog(content: '请扫描正确的条码！');
+    errorDialog(content: 'sap_wms_reprint_label_scan_wrong_barcode'.tr);
   }
 
-   clean() {
+  clean() {
     state.labelList.clear();
-    state.palletNumber.value='';
-   }
+    state.palletNumber.value = '';
+  }
 }

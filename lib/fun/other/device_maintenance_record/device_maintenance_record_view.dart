@@ -146,7 +146,7 @@ class _DeviceMaintenanceRecordViewState
                 click: () => Get.to(() => const Scanner())?.then((v) {
                   if (v != null) {
                     logic.searchDeviceInfo(
-                        v?.substring(v?.lastIndexOf("=") + 1));
+                        v?.substring(v?.lastIndexOf('=') + 1));
                   }
                 }),
               ),

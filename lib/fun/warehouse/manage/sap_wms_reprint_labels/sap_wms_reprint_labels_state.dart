@@ -6,9 +6,7 @@ class SapWmsReprintLabelsState {
   var palletNumber = ''.obs;
   var labelList = <ReprintLabelInfo>[].obs;
 
-  SapWmsReprintLabelsState() {
-    //Initialize variables
-  }
+
 
   getLabels({
     required String warehouse,
@@ -17,7 +15,7 @@ class SapWmsReprintLabelsState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在提交上架信息...',
+      loading: 'sap_wms_reprint_label_getting_label_info'.tr,
       method: webApiSapGetLabels,
       body: {
         'WERKS': '1500',

@@ -37,9 +37,6 @@ class ProductionTasksState {
   var detailShouldPackQty = (0.0).obs;
   var detailPackagedQty = (0.0).obs;
 
-  ProductionTasksState() {
-    //Initialize variables
-  }
 
   getProductionOrderSchedule({
     required Function() success,
@@ -47,7 +44,7 @@ class ProductionTasksState {
   }) {
     httpGet(
         method: webApiGetProductionOrderSchedule,
-        loading: '正在查询生产任务进度表...',
+        loading: 'production_tasks_querying_tasks'.tr,
         params: {
           'departmentID': getUserInfo()!.departmentID ?? 0,
           // 'departmentID': 554744,
@@ -101,7 +98,7 @@ class ProductionTasksState {
   }) {
     httpPost(
       method: webApiSubmitNewSort,
-      loading: 'molding_scan_bulletin_report_submitting'.tr,
+      loading: 'production_tasks_modifying_order_sort'.tr,
       body: [
         for (var i = 0; i < newLine.length; i++)
           {
@@ -127,7 +124,7 @@ class ProductionTasksState {
   }) {
     httpGet(
         method: webApiGetProductionOrderScheduleDetail,
-        loading: '正在查询生产任务进度明细...',
+        loading: 'production_tasks_querying_task_detail'.tr,
         params: {
           'Bill': ins,
           'PO': po,

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/carton_label_scan_progress_info.dart';
+import 'package:jd_flutter/fun/warehouse/manage/carton_label_scan/carton_label_scan_logic.dart';
+import 'package:jd_flutter/fun/warehouse/manage/carton_label_scan/carton_label_scan_state.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
-
-import 'carton_label_scan_progress_logic.dart';
-import 'carton_label_scan_progress_state.dart';
 
 class CartonLabelScanProgressDetailView extends StatefulWidget {
   const CartonLabelScanProgressDetailView({super.key});
@@ -16,11 +15,8 @@ class CartonLabelScanProgressDetailView extends StatefulWidget {
 
 class _CartonLabelScanProgressDetailViewState
     extends State<CartonLabelScanProgressDetailView> {
-  final CartonLabelScanProgressLogic logic =
-      Get.find<CartonLabelScanProgressLogic>();
-
-  final CartonLabelScanProgressState state =
-      Get.find<CartonLabelScanProgressLogic>().state;
+  final CartonLabelScanLogic logic = Get.find<CartonLabelScanLogic>();
+  final CartonLabelScanState state = Get.find<CartonLabelScanLogic>().state;
 
   _item(List<CartonLabelScanProgressDetailInfo> list) {
     return Card(
@@ -48,7 +44,7 @@ class _CartonLabelScanProgressDetailViewState
                     ),
                   ),
                   expandedTextSpan(
-                    hint: '外箱标：',
+                    hint: 'carton_label_scan_progress_detail_outside_label'.tr,
                     text: list[0].outBoxBarCode ?? '',
                     textColor: list[0].stateColor(),
                   ),
@@ -71,7 +67,10 @@ class _CartonLabelScanProgressDetailViewState
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  textSpan(hint: '尺码：', text: list[0].size ?? ''),
+                  textSpan(
+                    hint: 'carton_label_scan_progress_detail_size'.tr,
+                    text: list[0].size ?? '',
+                  ),
                   SizedBox(
                     width: 120,
                     child: progressIndicator(
@@ -113,7 +112,9 @@ class _CartonLabelScanProgressDetailViewState
                             ),
                           ),
                           expandedTextSpan(
-                            hint: '外箱标：',
+                            hint:
+                                'carton_label_scan_progress_detail_outside_label'
+                                    .tr,
                             text: item.outBoxBarCode ?? '',
                             textColor: item.stateColor(),
                           ),
@@ -129,7 +130,7 @@ class _CartonLabelScanProgressDetailViewState
   @override
   Widget build(BuildContext context) {
     return pageBody(
-      title: '扫码明细',
+      title: 'carton_label_scan_progress_detail_title'.tr,
       body: ListView.builder(
         padding: const EdgeInsets.all(8),
         itemCount: state.progressDetail.length,

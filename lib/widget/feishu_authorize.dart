@@ -56,7 +56,7 @@ feishuWikiSearch({
       options.print();
       handler.next(options);
     }, onResponse: (response, handler) {
-      logger.f(response.data);
+      loggerF(response.data);
       handler.next(response);
     }, onError: (DioException e, handler) {
       logger.e('error:$e');
@@ -69,7 +69,7 @@ feishuWikiSearch({
       },
       data: {
         'query': query,
-        // 'space_id': '7401026939613921283',
+        // 'space_id': '7401026939613921283',//限制查询范围id
         // 'node_id': '',
       },
       options: Options(
@@ -120,7 +120,7 @@ class FeishuAuthorize extends StatelessWidget {
           handler.next(options);
         },
         onResponse: (response, handler) {
-          logger.f(response.data);
+          loggerF(response.data);
           handler.next(response);
         },
         onError: (DioException e, handler) {
@@ -180,7 +180,7 @@ class FeishuAuthorize extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (GetPlatform.isAndroid || GetPlatform.isIOS) {
+    if (GetPlatform.isMobile) {
       webViewController
         ..setJavaScriptMode(JavaScriptMode.unrestricted)
         ..setBackgroundColor(Colors.transparent)
@@ -214,6 +214,11 @@ class FeishuAuthorize extends StatelessWidget {
     }
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      // if(GetPlatform.isWeb){
+      //   goLaunch(Uri.parse(authUrl));
+      // }else if(GetPlatform.isMobile){
+      //   webViewController.loadRequest(Uri.parse(authUrl));
+      // }
       webViewController.loadRequest(Uri.parse(authUrl));
     });
     return Container(
@@ -222,7 +227,7 @@ class FeishuAuthorize extends StatelessWidget {
         backgroundColor: Colors.transparent,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
-          title: Text('飞书登陆授权'),
+          title: Text('feishu_authorize_login'.tr),
         ),
         body: GetPlatform.isAndroid || GetPlatform.isIOS
             ? WebViewWidget(controller: webViewController)

@@ -32,7 +32,7 @@ class DeviceMaintenanceRecordLogic extends GetxController {
 
   //日期选择器的控制器
   var repairStartDate = DatePickerController(
-    buttonName: "报修时间",
+    buttonName: '报修时间',
     PickerType.startDate,
     saveKey: '${RouteConfig.deviceMaintenance.name}${'repairStartDate'}',
   )..lastDate = DateTime(
@@ -40,7 +40,7 @@ class DeviceMaintenanceRecordLogic extends GetxController {
 
   //日期选择器的控制器
   var repairEndDate = DatePickerController(
-    buttonName: "修复时间",
+    buttonName: '修复时间',
     PickerType.endDate,
     saveKey: '${RouteConfig.deviceMaintenance.name}${'repairEndDate'}',
   )..lastDate = DateTime(
@@ -65,7 +65,7 @@ class DeviceMaintenanceRecordLogic extends GetxController {
       loading: '正在获取设备维修单列表...',
       params: {
         // 'StartDate': startDate.getDateFormatYMD(),
-        'StartDate': "2020-01-16",
+        'StartDate': '2020-01-16',
         'EndDate': endDate.getDateFormatYMD(),
       },
     ).then((response) {

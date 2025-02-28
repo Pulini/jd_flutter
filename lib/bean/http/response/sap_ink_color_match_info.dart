@@ -294,7 +294,7 @@ class SapInkColorMatchItemInfo {
             isConnect.value = false;
           }
 
-          logger.f('设备:$deviceName  状态:$connectState');
+          logger.d('设备:$deviceName  状态:$connectState');
         },
       );
     }
@@ -306,7 +306,7 @@ class SapInkColorMatchItemInfo {
   connect() {
     if (!isConnect.value && !isConnecting.value) {
       isConnecting.value = true;
-      logger.f('连接设备---Name:$deviceName Ip:$deviceIp Port:$scalePort');
+      logger.d('连接设备---Name:$deviceName Ip:$deviceIp Port:$scalePort');
       scu?.connect();
     }
   }

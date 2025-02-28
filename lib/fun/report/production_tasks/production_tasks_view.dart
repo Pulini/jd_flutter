@@ -75,7 +75,7 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
                   children: [
                     Expanded(
                       child: Text(
-                        '工艺书列表',
+                        'production_tasks_manuel_list'.tr,
                         style: const TextStyle(
                           fontSize: 24,
                           color: Colors.white,
@@ -139,7 +139,7 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
       color: Colors.blue,
     );
     var image = Hero(
-        tag: 'ProductionTasksDetailImage-${data.itemImage}',
+        tag: 'ProductionTasksDetailImage-${data.itemImage}-${data.mtoNo}',
         child: AspectRatio(
           aspectRatio: 16 / 9,
           child: ClipRRect(
@@ -269,7 +269,7 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
                   curve: Curves.fastOutSlowIn,
                   height: state.selected.value == index ? 39 : 0,
                   child: CombinationButton(
-                    text: '置顶',
+                    text: 'production_tasks_top_up'.tr,
                     click: () => logic.changeSort(
                       oldIndex: index,
                       newIndex: 0,
@@ -361,8 +361,7 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
                                 if (state.selected.value == index ||
                                     index == 0) {
                                   logic.queryProcessInstruction(
-                                    // query: data.shoeStyle ?? '',
-                                    query: 'pdf',
+                                    query: data.shoeStyle ?? '',
                                     files: (files) => _pickFilePopup(files),
                                   );
                                 } else {
@@ -370,8 +369,8 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
                                 }
                               },
                               child: Text(
-                                '工艺书',
-                                style: TextStyle(
+                                'production_tasks_manuel'.tr,
+                                style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: Colors.blueAccent,
                                 ),
@@ -505,15 +504,15 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
             : Colors.white;
     var textColor = type != null && type == 1 ? Colors.white : Colors.black87;
     if (type != null && type == 1) {
-      size = '尺码';
-      qty = '生产数';
-      productScannedQty = '产线扫描数';
-      manualScannedQty = '手动扫描数';
-      scannedQty = '累计扫描数';
-      owe = '欠数';
-      completionRate = '完成率';
-      installedQty = '已装数';
-      scannedNotInstalled = '已扫未装数';
+      size = 'production_tasks_size'.tr;
+      qty = 'production_tasks_production_qty'.tr;
+      productScannedQty = 'production_tasks_auto_scan'.tr;
+      manualScannedQty = 'production_tasks_manual_scan'.tr;
+      scannedQty = 'production_tasks_total_scan'.tr;
+      owe = 'production_tasks_owing_qty'.tr;
+      completionRate = 'production_tasks_completion_rate'.tr;
+      installedQty = 'production_tasks_packaged_qty'.tr;
+      scannedNotInstalled = 'production_tasks_scanned_unpackaged'.tr;
     } else {
       if (type != null && type == 2) {
         data = logic.getTotalItem();
@@ -613,7 +612,7 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
         children: [
           const SizedBox(height: 10),
           Text(
-            '装箱方式',
+            'production_tasks_packing_method'.tr,
             style: TextStyle(
                 color: Colors.blue.shade700, fontWeight: FontWeight.bold),
           ),
@@ -642,7 +641,7 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
         children: [
           const SizedBox(height: 10),
           Text(
-            '客人特殊要求',
+            'production_tasks_special_requests_from_guests'.tr,
             style: TextStyle(
                 color: Colors.blue.shade700, fontWeight: FontWeight.bold),
           ),
@@ -693,15 +692,15 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Obx(() => textSpan(
-                      hint: '今日目标数：',
+                      hint: 'production_tasks_today_target'.tr,
                       text: state.todayTargetQty.value.toShowString(),
                     )),
                 Obx(() => textSpan(
-                      hint: '今日完成数：',
+                      hint: 'production_tasks_today_completion'.tr,
                       text: state.todayCompleteQty.value.toShowString(),
                     )),
                 Obx(() => textSpan(
-                      hint: '月完成数：',
+                      hint: 'production_tasks_monthly_completion'.tr,
                       text: state.monthCompleteQty.value.toShowString(),
                     )),
               ],
@@ -720,15 +719,15 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
             Row(
               children: [
                 Obx(() => expandedTextSpan(
-                      hint: '型体：',
+                      hint: 'production_tasks_type_body'.tr,
                       text: state.typeBody.value,
                     )),
                 Obx(() => expandedTextSpan(
-                      hint: '指令号：',
+                      hint: 'production_tasks_instruction_no'.tr,
                       text: state.instructionNo.value,
                     )),
                 Obx(() => expandedTextSpan(
-                      hint: '客户PO：',
+                      hint: 'production_tasks_customer_po'.tr,
                       text: state.customerPO.value,
                     )),
               ],
@@ -736,15 +735,15 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
             Row(
               children: [
                 Obx(() => expandedTextSpan(
-                      hint: '应装箱数：',
+                      hint: 'production_tasks_should_packing_box_qty'.tr,
                       text: state.shouldPackQty.value.toShowString(),
                     )),
                 Obx(() => expandedTextSpan(
-                      hint: '已装箱数：',
+                      hint: 'production_tasks_packaged_box_qty'.tr,
                       text: state.packagedQty.value.toShowString(),
                     )),
                 Obx(() => expandedTextSpan(
-                      hint: '未装箱数：',
+                      hint: 'production_tasks_unpackaged_box_qty'.tr,
                       text: state.shouldPackQty.value
                           .sub(state.packagedQty.value)
                           .toShowString(),

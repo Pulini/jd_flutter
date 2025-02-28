@@ -8,17 +8,6 @@ import 'sap_sales_shipment_state.dart';
 class SapSalesShipmentLogic extends GetxController {
   final SapSalesShipmentState state = SapSalesShipmentState();
 
-  @override
-  void onReady() {
-    // TODO: implement onReady
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    // TODO: implement onClose
-    super.onClose();
-  }
 
   query(String ins, String date) {
     state.querySalesShipmentList(
@@ -85,7 +74,7 @@ class SapSalesShipmentLogic extends GetxController {
       state.palletList.refresh();
       return;
     }
-    errorDialog(content: '请扫描正确的条码！');
+    errorDialog(content: 'sap_sales_shipment_scan_wrong_barcode_tips'.tr);
   }
 
   postingShipment({required Function() refresh}) {

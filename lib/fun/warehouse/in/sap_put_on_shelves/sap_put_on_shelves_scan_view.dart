@@ -44,7 +44,7 @@ class _SapPutOnShelvesScanPageState extends State<SapPutOnShelvesScanPage> {
           Row(
             children: [
               expandedTextSpan(
-                hint: '标签：',
+                hint: 'sap_put_on_shelves_scan_label'.tr,
                 text: label.labelNumber ?? '',
                 textColor: Colors.green,
               ),
@@ -79,13 +79,18 @@ class _SapPutOnShelvesScanPageState extends State<SapPutOnShelvesScanPage> {
                   Get.back(result: true);
                 },
               ),
-              child: Text('上架'),
+              child: Text('sap_put_on_shelves_scan_put_on_shelves'.tr),
             )
           ],
-          title: '托盘号：${state.palletNumber.value}',
+          title: 'sap_put_on_shelves_scan_pallet'.trArgs([
+            state.palletNumber.value,
+          ]),
           body: Column(
             children: [
-              EditText(hint: '库位', controller: controller),
+              EditText(
+                hint: 'sap_put_on_shelves_scan_storage_location'.tr,
+                controller: controller,
+              ),
               Expanded(
                 child: ListView.builder(
                   padding: const EdgeInsets.all(5),

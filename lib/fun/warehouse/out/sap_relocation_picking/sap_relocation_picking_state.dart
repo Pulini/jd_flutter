@@ -11,9 +11,6 @@ import 'package:jd_flutter/utils/web_api.dart';
 class SapRelocationPickingState {
   var materialList = <SapPalletDetailInfo>[].obs;
 
-  SapRelocationPickingState() {
-    //Initialize variables
-  }
 
   checkPalletOrLabel({
     required String pallet,
@@ -21,7 +18,7 @@ class SapRelocationPickingState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在校验标签信息...',
+      loading: 'sap_relocation_pick_checking_label_info'.tr,
       method: webApiSapGetPalletDetails,
       body: {
         'ZTYPE': '',
@@ -60,7 +57,7 @@ class SapRelocationPickingState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在提交领料...',
+      loading: 'sap_relocation_pick_submitting_picking'.tr,
       method: webApiSapRelocationPicking,
       body: {
         'WERKS': '1500',

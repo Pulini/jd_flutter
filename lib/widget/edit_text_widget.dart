@@ -116,7 +116,7 @@ class NumberDecimalEditText extends StatelessWidget {
         keyboardType: TextInputType.number,
         inputFormatters: [
           hasDecimal
-              ? FilteringTextInputFormatter.allow(RegExp("[0-9.]")) //数字包括小数
+              ? FilteringTextInputFormatter.allow(RegExp('[0-9.]')) //数字包括小数
               : FilteringTextInputFormatter.digitsOnly,
         ],
         focusNode: fn,

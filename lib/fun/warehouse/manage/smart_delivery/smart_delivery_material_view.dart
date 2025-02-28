@@ -49,21 +49,21 @@ class _SmartDeliveryMaterialListPageState
             Row(
               children: [
                 expandedTextSpan(
-                  hint: '部位：',
+                  hint: 'smart_delivery_material_part'.tr,
                   text: data.partName ?? '',
                   fontSize: 16,
                   textColor: Colors.blue.shade900,
                 ),
                 expandedTextSpan(
                   flex: 1,
-                  hint: '物料代码：',
+                  hint: 'smart_delivery_material_code'.tr,
                   text: data.materialNumber ?? '',
                   fontSize: 16,
                   textColor: Colors.blue.shade900,
                 ),
                 expandedTextSpan(
                   flex: 2,
-                  hint: '物料名称：',
+                  hint: 'smart_delivery_material_name'.tr,
                   text: data.materialName ?? '',
                   fontSize: 16,
                   textColor: Colors.blue.shade900,
@@ -74,8 +74,8 @@ class _SmartDeliveryMaterialListPageState
             Row(
               children: [
                 Text(
-                  '发料情况：',
-                  style: TextStyle(color: Colors.black45),
+                  'smart_delivery_material_state'.tr,
+                  style: const TextStyle(color: Colors.black45),
                 ),
                 Expanded(
                   child: progressIndicator(
@@ -108,17 +108,17 @@ class _SmartDeliveryMaterialListPageState
   @override
   Widget build(BuildContext context) {
     return pageBody(
-      title: '材料清单',
+      title: 'smart_delivery_material_list'.tr,
       actions: [
         CombinationButton(
-          text: '楦头库存维护',
+          text: 'smart_delivery_material_shoe_tree_maintenance'.tr,
           click: () => modifyShoeTreeDialog(typeBody,departmentID),
         )
       ],
       body: Column(
         children: [
           EditText(
-            hint: '输入物料代码查询',
+            hint: 'smart_delivery_material_input_code'.tr,
             controller: TextEditingController(text: state.searchText),
             onChanged: (v) {
               state.searchMaterial(v);

@@ -9,6 +9,7 @@ import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+
 class PrintUtil {
   var bluetoothChannel = const MethodChannel(channelBluetoothFlutterToAndroid);
   var deviceList = <BluetoothDevice>[].obs;
@@ -74,8 +75,7 @@ class PrintUtil {
 
   setChannelListener() {
     bluetoothChannel.setMethodCallHandler((call) {
-      logger.f(
-          'BluetoothChannelMethod：${call.method}  arguments:${call.arguments}');
+      logger.d('BluetoothChannelMethod：${call.method}  arguments:${call.arguments}');
       switch (call.method) {
         case 'BluetoothState':
           {
@@ -138,7 +138,7 @@ class PrintUtil {
                 deviceMAC: call.arguments['DeviceMAC'],
                 deviceIsBonded: call.arguments['DeviceBondState'],
                 deviceIsConnected: call.arguments['DeviceIsConnected']);
-            logger.f('BluetoothFind=${device.toJson()}');
+            logger.d('BluetoothFind=${device.toJson()}');
             if (!deviceList.any((v) => v.deviceMAC == device.deviceMAC)) {
               deviceList.add(device);
             }
@@ -174,7 +174,7 @@ class PrintUtil {
       Permission.bluetoothAdvertise
     ].request();
     //granted 通过，denied 被拒绝，permanentlyDenied 拒绝且不在提示
-    logger.f('''
+    logger.d('''
   location=${statuses[Permission.location]!.isGranted}
   bluetoothConnect=${statuses[Permission.bluetoothConnect]!.isGranted}
   bluetoothScan=${statuses[Permission.bluetoothScan]!.isGranted}
@@ -269,7 +269,7 @@ class PrintUtil {
               break;
             }
         }
-        logger.f('连接蓝牙：${device.deviceName} 结果：$value');
+        logger.d('连接蓝牙：${device.deviceName} 结果：$value');
       },
     );
   }

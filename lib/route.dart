@@ -41,7 +41,7 @@ import 'fun/warehouse/in/sap_produce_stock_in/sap_produce_stock_in_view.dart';
 import 'fun/warehouse/in/sap_purchase_stock_in/sap_purchase_stock_in_view.dart';
 import 'fun/warehouse/in/sap_surplus_material_stock_in/sap_surplus_material_stock_in_view.dart';
 import 'fun/warehouse/manage/carton_label_scan/carton_label_scan_view.dart';
-import 'fun/warehouse/manage/carton_label_scan_progress/carton_label_scan_progress_view.dart';
+import 'fun/warehouse/manage/carton_label_scan/carton_label_scan_progress_view.dart';
 import 'fun/warehouse/manage/sap_wms_split_label/sap_wms_split_label_view.dart';
 import 'fun/warehouse/manage/smart_delivery/smart_delivery_view.dart';
 import 'fun/warehouse/manage/timely_inventory/timely_inventory_view.dart';

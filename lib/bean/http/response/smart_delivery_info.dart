@@ -28,6 +28,7 @@ class SmartDeliveryOrderInfo {
     rowNo = json['rowNo'];
     workCardInterID = json['workCardInterID'];
     workCardNo = json['workCardNo'];
+    customerPo = json['customerPo'];
     salesOrderNo = json['salesOrderNo'];
     typeBody = json['typeBody'];
     dispatchDate = json['dispatchDate'];
@@ -41,6 +42,7 @@ class SmartDeliveryOrderInfo {
   int? rowNo; //行号
   int? workCardInterID; //生产派工单ID
   String? workCardNo; //派工单号
+  String? customerPo; //客户po号
   String? salesOrderNo; //销售订单z
   String? typeBody; //工厂型体
   String? dispatchDate; //派工日期
@@ -55,6 +57,7 @@ class SmartDeliveryOrderInfo {
     map['rowNo'] = rowNo;
     map['workCardInterID'] = workCardInterID;
     map['workCardNo'] = workCardNo;
+    map['customerPo'] = customerPo;
     map['salesOrderNo'] = salesOrderNo;
     map['typeBody'] = typeBody;
     map['dispatchDate'] = dispatchDate;

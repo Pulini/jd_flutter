@@ -44,7 +44,11 @@ class ProductionDispatchLogic extends GetxController {
         if (selected.isNotEmpty &&
             selected
                 .none((v) => v.plantBody == state.orderList[index].plantBody)) {
-          showSnackBar(title: '选择错误', message: '不属于同一型体的订单', isWarning: true);
+          showSnackBar(
+            title: 'production_dispatch_select_error'.tr,
+            message: 'production_dispatch_different_type_body'.tr,
+            isWarning: true,
+          );
           return;
         } else {
           state.orderList[index].select = true;
@@ -181,9 +185,9 @@ class ProductionDispatchLogic extends GetxController {
       });
     } else {
       showSnackBar(
-          title: 'snack_bar_default_wrong'.tr,
-          message: '您没有标签打印权限',
-          isWarning: true);
+        message: 'production_dispatch_no_label_print_permission'.tr,
+        isWarning: true,
+      );
     }
   }
 
@@ -197,9 +201,9 @@ class ProductionDispatchLogic extends GetxController {
       });
     } else {
       showSnackBar(
-          title: 'snack_bar_default_wrong'.tr,
-          message: '您没有标签打印权限',
-          isWarning: true);
+        message: 'production_dispatch_no_label_print_permission'.tr,
+        isWarning: true,
+      );
     }
   }
 
@@ -217,9 +221,9 @@ class ProductionDispatchLogic extends GetxController {
         callback.call(list);
       } else {
         showSnackBar(
-            title: 'snack_bar_default_wrong'.tr,
-            message: '无物料头信息',
-            isWarning: true);
+          message: 'production_dispatch_no_material_header'.tr,
+          isWarning: true,
+        );
       }
     });
   }
@@ -253,27 +257,30 @@ class ProductionDispatchLogic extends GetxController {
       var selectList = state.orderList.where((v) => v.select).toList();
       if (selectList.length > 1) {
         if (selectList.any((v) => v.isClosed!)) {
-          errorDialog(content: '所选工单包含已关闭工单');
+          errorDialog(
+              content: 'production_dispatch_selected_has_close_order'.tr);
           return;
         }
         if (selectList.any((v) => v.pastDay!)) {
-          errorDialog(content: '所选工单包含已超时工单');
+          errorDialog(
+              content: 'production_dispatch_selected_has_timeout_order'.tr);
           return;
         }
         informationDialog(
-            content: '确定要选择${selectList.length}张派工单进行下推吗？',
-            back: () {
-              ordersPush.call(selectList);
-            });
+          content: 'production_dispatch_push_tips'.trArgs([
+            selectList.length.toString(),
+          ]),
+          back: () => ordersPush.call(selectList),
+        );
       } else {
         if (selectList[0].isClosed!) {
-          errorDialog(content: '所选工单已关闭');
+          errorDialog(content: 'production_dispatch_select_order_closed'.tr);
         } else {
           orderPush.call(selectList[0]);
         }
       }
     } else {
-      errorDialog(content: '没有下推权限');
+      errorDialog(content: 'production_dispatch_no_push_permission'.tr);
     }
   }
 
@@ -284,7 +291,7 @@ class ProductionDispatchLogic extends GetxController {
         order: order,
         success: (data) {
           if (data.workCardList?.isEmpty == true) {
-            errorDialog(content: '暂无工序列表');
+            errorDialog(content: 'production_dispatch_no_process_list'.tr);
           } else {
             state.workCardTitle.value = data.workCardTitle ?? WorkCardTitle();
             state.workProcedure.value = data.workCardList!;
@@ -297,7 +304,7 @@ class ProductionDispatchLogic extends GetxController {
         orders: orders,
         success: (data) {
           if (data.workCardList?.isEmpty == true) {
-            errorDialog(content: '暂无工序列表');
+            errorDialog(content: 'production_dispatch_no_process_list'.tr);
           } else {
             state.workCardTitle.value = data.workCardTitle ?? WorkCardTitle();
             state.batchWorkProcedure = data.workCardList!;
@@ -586,7 +593,11 @@ class ProductionDispatchLogic extends GetxController {
   //工序列表点击，选中工序进行派工
   detailViewWorkProcedureClick(int index) {
     if (state.workProcedure[index].isOpen == 0) {
-      showSnackBar(title: '温馨提示', message: '无法选中已关闭的工序', isWarning: true);
+      showSnackBar(
+        title: 'production_dispatch_tips'.tr,
+        message: 'production_dispatch_cant_select_closed_process'.tr,
+        isWarning: true,
+      );
     } else {
       if (index == state.workProcedureSelect.value) {
         state.workProcedureSelect.value = -1;
@@ -668,7 +679,9 @@ class ProductionDispatchLogic extends GetxController {
     SaveDispatch(
       processBillNumber: state.workCardTitle.value.processBillNumber ?? '',
       cacheJson: jsonEncode(cacheList.map((v) => v.toJson()).toList()),
-    ).save((v) => showSnackBar(title: '数据库', message: '暂存派工成功'));
+    ).save((v) => showSnackBar(
+        title: 'production_dispatch_database'.tr,
+        message: 'production_dispatch_save_dispatch_success'.tr));
   }
 
   //应用暂存派工单的派工数据
@@ -758,13 +771,16 @@ class ProductionDispatchLogic extends GetxController {
           list.removeWhere((v) => v.processNumber == wp.processNumber);
         }
         if (list.isEmpty) {
-          successDialog(content: '工序正确！');
+          successDialog(content: 'production_dispatch_process_correct'.tr);
         } else {
-          var msg = '';
+          var msg = <String>[];
           for (var v in list) {
-            msg = '$msg工序<${v.processNumber}_${v.processName}>缺失！\r\n';
+            msg.add('production_dispatch_process_miss'.trArgs([
+              v.processNumber ?? '',
+              v.processName ?? '',
+            ]));
           }
-          errorDialog(content: msg);
+          errorDialog(content: msg.join('\r\n'));
         }
       },
       error: (msg) => errorDialog(content: msg),
@@ -780,16 +796,22 @@ class ProductionDispatchLogic extends GetxController {
 
   checkDispatch(Function callback) {
     //委外工单计工数可以少于上限但不能高于上限，非委外工单计工数必须等于上限。
-    var msg = '';
+    var msg = <String>[];
     state.workProcedure.where((v) => v.isOpen == 1).forEach((wp) {
       if (wp.dispatch.isEmpty) {
-        msg = '$msg工序<${wp.processNumber}_${wp.processName}>没有派工\r\n';
+        msg.add('production_dispatch_process_no_dispatch'.trArgs([
+          wp.processNumber ?? '',
+          wp.processName ?? '',
+        ]));
       } else {
         var total = 0.0;
         for (var d in wp.dispatch) {
           if (d.qty == 0) {
-            msg =
-                '$msg工序<${wp.processNumber}_${wp.processName}>员工 ${d.name} 计工数为0\r\n';
+            msg.add('production_dispatch_process_worker_dispatch_zero'.trArgs([
+              wp.processNumber ?? '',
+              wp.processName ?? '',
+              d.name ?? '',
+            ]));
           } else {
             total = total.add(d.qty!);
           }
@@ -802,20 +824,26 @@ class ProductionDispatchLogic extends GetxController {
         //委外工单上限为剩余派工数，非委外工单上限为 已汇报数 减去 累计计工数。
         if (state.workCardTitle.value.cardNoReportStatus != 1) {
           if (total < max) {
-            msg =
-                '$msg工序<${wp.processNumber}_${wp.processName}>少于汇报数 ${max.sub(total)}\r\n';
+            msg.add('production_dispatch_process_less_report'.trArgs([
+              wp.processNumber ?? '',
+              wp.processName ?? '',
+              max.sub(total).toShowString(),
+            ]));
           }
         }
         if (total > max) {
-          msg =
-              '$msg工序<${wp.processNumber}_${wp.processName}>超过汇报数 ${total.sub(max)}\r\n';
+          msg.add('production_dispatch_process_more_report'.trArgs([
+            wp.processNumber ?? '',
+            wp.processName ?? '',
+            total.sub(max).toShowString(),
+          ]));
         }
       }
     });
     if (msg.isEmpty) {
       callback.call();
     } else {
-      errorDialog(content: msg);
+      errorDialog(content: msg.join('\r\n'));
     }
   }
 

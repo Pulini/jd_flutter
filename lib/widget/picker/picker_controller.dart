@@ -676,7 +676,7 @@ abstract class PickerController {
     }
   }
 
-  ///获取单据对应仓库列表
+  //获取单据对应仓库列表
   Future getOrderStockList() async {
     var response = await httpGet(method: webApiPickerOrderStockList,params: {
       'UserID': getUserInfo()!.userID,

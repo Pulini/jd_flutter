@@ -68,7 +68,7 @@ class MaintainLabelLogic extends GetxController {
   }
 
   List<String> getSizeList() {
-    var list = <String>['全部'];
+    var list = <String>['maintain_label_all'.tr];
     if (state.isMaterialLabel.value) {
       for (var v in state.labelList) {
         v.items?.forEach((v2) {
@@ -178,7 +178,7 @@ class MaintainLabelLogic extends GetxController {
     if (state.isMaterialLabel.value) {
       var select = state.labelList.where((v) => v.select).toList();
       if (select.isEmpty) {
-        errorDialog(content: '请选择标签');
+        errorDialog(content: 'maintain_label_select_label'.tr);
         return;
       }
       for (var order in select) {
@@ -191,18 +191,20 @@ class MaintainLabelLogic extends GetxController {
         });
       }
       if (languageList.isEmpty) {
-        errorDialog(content: '标签语言数据为空，请先维护语言数据。');
+        errorDialog(content: 'maintain_label_label_language_empty_tips'.tr);
         return;
       }
       for (var language in languageList) {
         for (var label in select) {
-          debugPrint(label.materialOtherName.toString());
           if (label.materialOtherName
                   ?.every((v) => v.languageName != language) ==
               true) {
             errorDialog(
-                content:
-                    '标签 < ${label.barCode} > 缺少语言 < $language > 数据，请单独打印或维护语言数据。');
+              content: 'maintain_label_label_language_lack_tips'.trArgs([
+                label.barCode ?? '',
+                language,
+              ]),
+            );
             return;
           }
         }
@@ -212,7 +214,7 @@ class MaintainLabelLogic extends GetxController {
       var select =
           state.labelGroupList.where((v) => v.any((v2) => v2.select)).toList();
       if (select.isEmpty) {
-        errorDialog(content: '请选择标签');
+        errorDialog(content: 'maintain_label_select_label');
         return;
       }
 
@@ -228,19 +230,21 @@ class MaintainLabelLogic extends GetxController {
         }
       }
       if (languageList.isEmpty) {
-        errorDialog(content: '标签语言数据为空，请先维护语言数据。');
+        errorDialog(content: 'maintain_label_label_language_empty_tips');
         return;
       }
       for (var language in languageList) {
         for (var list in select) {
           for (var label in list) {
-            debugPrint(label.materialOtherName.toString());
             if (label.materialOtherName
                     ?.every((v) => v.languageName != language) ==
                 true) {
               errorDialog(
-                  content:
-                      '标签 < ${label.barCode} > 缺少语言 < $language > 数据，请单独打印或维护语言数据。');
+                content: 'maintain_label_label_language_lack_tips'.trArgs([
+                  label.barCode ?? '',
+                  language,
+                ]),
+              );
               return;
             }
           }
@@ -277,14 +281,12 @@ class MaintainLabelLogic extends GetxController {
         }
       }
       if (insNum.length <= 1 && sizeList.length <= 1) {
-        debugPrint('物料标');
         createMaterialLabel(
           language: language,
           list: select[0],
           labels: labelsCallback,
         );
       } else {
-        debugPrint('物料动态标');
         createDynamicLabel(
           language: language,
           list: select[0],
@@ -292,14 +294,12 @@ class MaintainLabelLogic extends GetxController {
         );
       }
     } else if (state.isSingleLabel) {
-      debugPrint('非物料单码标');
       createFixedLabel(
         language: language,
         list: select,
         labels: labelsCallback,
       );
     } else {
-      debugPrint('非物料动态标');
       createGroupDynamicLabel(
         language: language,
         list: select,
@@ -332,7 +332,7 @@ class MaintainLabelLogic extends GetxController {
           fontSize: 24,
         ),
       );
-      var labelContent =  Column(
+      var labelContent = Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(
@@ -1157,11 +1157,18 @@ class MaintainLabelLogic extends GetxController {
     required Widget Function(String text1, String text2, String text3, int type)
         subItem,
   }) {
-    var widgetList = <Widget>[subItem.call('指令', '尺码', '装箱数', 1)];
+    var widgetList = <Widget>[
+      subItem.call(
+        'maintain_label_sub_item_instruction'.tr,
+        'maintain_label_sub_item_size'.tr,
+        'maintain_label_sub_item_packing_qty'.tr,
+        1,
+      )
+    ];
     groupBy(data, (v) => v.items?[0].size).forEach((k, v) {
       for (var v2 in v) {
         widgetList.add(subItem.call(
-          v2.items![0].billNo ?? '指令错误',
+          v2.items![0].billNo ?? 'maintain_label_sub_item_instruction_error'.tr,
           v2.items![0].size ?? '',
           v2.items![0].qty.toShowString(),
           2,

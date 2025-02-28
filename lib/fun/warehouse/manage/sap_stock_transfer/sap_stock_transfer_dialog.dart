@@ -11,19 +11,28 @@ inputLocationDialog({
     PopScope(
       canPop: false,
       child: AlertDialog(
-        title: const Text('空托盘库位登记'),
+        title: Text(
+          'sap_stock_transfer_scan_or_select_goods_fo_transfer_tips'.tr,
+        ),
         content: SizedBox(
           width: 300,
           child: EditText(
-            hint: '请扫描或填写库位号',
+            hint:
+                'sap_stock_transfer_dialog_empty_pallet_storage_location_registration'
+                    .tr,
             controller: controller,
           ),
         ),
         actions: [
           TextButton(
             onPressed: () {
-              if(controller.text.isEmpty){
-                showSnackBar(title: '错误', message: '请扫描或填写库位号');
+              if (controller.text.isEmpty) {
+                showSnackBar(
+                  message:
+                      'sap_stock_transfer_dialog_scan_or_enter_storage_location_tips'
+                          .tr,
+                  isWarning: true,
+                );
                 return;
               }
 

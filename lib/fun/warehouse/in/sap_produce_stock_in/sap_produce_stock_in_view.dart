@@ -57,7 +57,7 @@ class _SapProduceStockInPageState extends State<SapProduceStockInPage> {
               color: Colors.red,
             ),
             onPressed: () => askDialog(
-              content: '确定要删除本组条码吗？',
+              content: 'sap_produce_stock_in_delete_group_tips'.tr,
               confirm: () => state.barCodeList.remove(data),
             ),
           ),
@@ -78,10 +78,10 @@ class _SapProduceStockInPageState extends State<SapProduceStockInPage> {
       actions: [
         TextButton(
           onPressed: () => askDialog(
-            content: '确定要清空条码吗？',
+            content: 'sap_produce_stock_in_clean_tips'.tr,
             confirm: () => state.barCodeList.clear(),
           ),
-          child: Text('清空'),
+          child: Text('sap_produce_stock_in_clean'.tr),
         ),
       ],
       body: Column(
@@ -99,7 +99,7 @@ class _SapProduceStockInPageState extends State<SapProduceStockInPage> {
             children: [
               Expanded(
                 child: CombinationButton(
-                  text: '提交',
+                  text: 'sap_produce_stock_in_submit'.tr,
                   click: () {
                   },
                   combination: Combination.left,
@@ -107,7 +107,7 @@ class _SapProduceStockInPageState extends State<SapProduceStockInPage> {
               ),
               Expanded(
                 child: CombinationButton(
-                  text: '冲销',
+                  text: 'sap_produce_stock_in_reverse'.tr,
                   click: () {},
                   combination: Combination.right,
                 ),

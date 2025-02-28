@@ -6,7 +6,6 @@ import 'package:jd_flutter/fun/warehouse/in/sap_injection_molding_stock_in/sap_i
 import 'package:jd_flutter/fun/warehouse/in/sap_no_label_stock_in/sap_no_label_stock_in_dialog.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 
-
 class SapInjectionMoldingStockInReportPage extends StatefulWidget {
   const SapInjectionMoldingStockInReportPage({super.key});
 
@@ -35,49 +34,53 @@ class _SapInjectionMoldingStockInReportPageState
                 children: [
                   expandedFrameText(
                     flex: 2,
-                    text: '派工单号',
+                    text:
+                        'sap_injection_molding_stock_in_report_dispatch_no'.tr,
                     backgroundColor: Colors.blueAccent,
                     textColor: Colors.white,
                     borderColor: Colors.black,
                     alignment: Alignment.center,
                   ),
                   expandedFrameText(
-                    text: '型体',
+                    text: 'sap_injection_molding_stock_in_report_type_body'.tr,
                     backgroundColor: Colors.blueAccent,
                     textColor: Colors.white,
                     borderColor: Colors.black,
                     alignment: Alignment.center,
                   ),
                   expandedFrameText(
-                    text: '尺码',
+                    text: 'sap_injection_molding_stock_in_report_size'.tr,
                     backgroundColor: Colors.blueAccent,
                     textColor: Colors.white,
                     borderColor: Colors.black,
                     alignment: Alignment.center,
                   ),
                   expandedFrameText(
-                    text: '单位',
+                    text: 'sap_injection_molding_stock_in_report_unit'.tr,
                     backgroundColor: Colors.blueAccent,
                     textColor: Colors.white,
                     borderColor: Colors.black,
                     alignment: Alignment.center,
                   ),
                   expandedFrameText(
-                    text: '待入库数',
+                    text:
+                        'sap_injection_molding_stock_in_report_not_stocked_qty'
+                            .tr,
                     backgroundColor: Colors.blueAccent,
                     textColor: Colors.white,
                     borderColor: Colors.black,
                     alignment: Alignment.center,
                   ),
                   expandedFrameText(
-                    text: '已入库数',
+                    text:
+                        'sap_injection_molding_stock_in_report_stocked_qty'.tr,
                     backgroundColor: Colors.blueAccent,
                     textColor: Colors.white,
                     borderColor: Colors.black,
                     alignment: Alignment.center,
                   ),
                   expandedFrameText(
-                    text: '报工数',
+                    text: 'sap_injection_molding_stock_in_report_report_qty'.tr,
                     backgroundColor: Colors.blueAccent,
                     textColor: Colors.white,
                     borderColor: Colors.black,
@@ -105,19 +108,21 @@ class _SapInjectionMoldingStockInReportPageState
   @override
   Widget build(BuildContext context) {
     return pageBody(
-      title: '入库汇总',
+      title: 'sap_injection_molding_stock_in_report_stock_in_summary'.tr,
       actions: [
         TextButton(
-            onPressed: () => checkStockInHandoverDialog(
-                  handoverCheck: (ln, ls, un, us, d) => logic.submitStockIn(
-                    leaderNumber: ln,
-                    leaderSignature: ls,
-                    userNumber: un,
-                    userSignature: us,
-                    postingDate: d,
-                  ),
-                ),
-            child: Text('确认入库'))
+          onPressed: () => checkStockInHandoverDialog(
+            handoverCheck: (ln, ls, un, us, d) => logic.submitStockIn(
+              leaderNumber: ln,
+              leaderSignature: ls,
+              userNumber: un,
+              userSignature: us,
+              postingDate: d,
+            ),
+          ),
+          child:
+              Text('sap_injection_molding_stock_in_report_confirm_stock_in'.tr),
+        )
       ],
       body: SingleChildScrollView(
         child: ListView(

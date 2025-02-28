@@ -32,12 +32,12 @@ class _SapPurchaseStockInDetailPageState
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           textSpan(
-            hint: '物料：',
+            hint: 'sap_purchase_stock_in_dialog_material'.tr,
             text: '(${info.materialCode})${info.materialDescription}',
             textColor: Colors.red,
           ),
           textSpan(
-            hint: '采购单号：',
+            hint: 'sap_purchase_stock_in_dialog_purchase_no'.tr,
             text: '${info.purchaseOrderNumber}-${info.purchaseOrderLineNumber}',
             isBold: false,
             hintColor: Colors.grey.shade700,
@@ -46,19 +46,19 @@ class _SapPurchaseStockInDetailPageState
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               textSpan(
-                hint: '送货数：',
+                hint: 'sap_purchase_stock_in_dialog_delivery_qty'.tr,
                 isBold: false,
                 hintColor: Colors.grey.shade700,
                 text: info.deliveryQty.toShowString(),
               ),
               textSpan(
-                hint: '入库数：',
+                hint: 'sap_purchase_stock_in_dialog_stock_in_qty'.tr,
                 isBold: false,
                 hintColor: Colors.grey.shade700,
                 text: info.storageQuantity.toShowString(),
               ),
               textSpan(
-                hint: '核查数：',
+                hint: 'sap_purchase_stock_in_dialog_check_qty'.tr,
                 isBold: false,
                 hintColor: Colors.grey.shade700,
                 text: info.checkQty.toShowString(),
@@ -69,13 +69,13 @@ class _SapPurchaseStockInDetailPageState
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               textSpan(
-                hint: '交货日期：',
+                hint: 'sap_purchase_stock_in_dialog_delivery_date'.tr,
                 isBold: false,
                 hintColor: Colors.grey.shade700,
                 text: info.deliveryDate ?? '',
               ),
               textSpan(
-                hint: '件数：',
+                hint: 'sap_purchase_stock_in_dialog_piece_qty'.tr,
                 isBold: false,
                 hintColor: Colors.grey.shade700,
                 text: info.numPage.toString(),
@@ -90,22 +90,22 @@ class _SapPurchaseStockInDetailPageState
   @override
   Widget build(BuildContext context) {
     return pageBody(
-      title: '送货单明细',
+      title: 'sap_purchase_stock_in_dialog_delivery_order_detail'.tr,
       body: Padding(
-        padding: EdgeInsets.all(8),
+        padding: const EdgeInsets.all(8),
         child: Column(
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 textSpan(
-                  hint: '供应商：',
+                  hint: 'sap_purchase_stock_in_dialog_suppler'.tr,
                   text: state.detailInfo[0].supplierName ?? '',
                   textColor: Colors.red,
                 ),
                 if (state.detailInfo[0].inspector?.isNotEmpty == true)
                   textSpan(
-                    hint: '审核人：',
+                    hint: 'sap_purchase_stock_in_dialog_reviewer'.tr,
                     isBold: false,
                     text: state.detailInfo[0].inspector ?? '',
                   )
@@ -115,12 +115,12 @@ class _SapPurchaseStockInDetailPageState
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 textSpan(
-                  hint: '送货单号：',
+                  hint: 'sap_purchase_stock_in_dialog_delivery_order_no'.tr,
                   isBold: false,
                   text: state.detailInfo[0].deliveryNumber ?? '',
                 ),
                 textSpan(
-                  hint: '送货地点：',
+                  hint: 'sap_purchase_stock_in_dialog_delivery_location'.tr,
                   isBold: false,
                   text: state.detailInfo[0].deliveryAddress ?? '',
                 )

@@ -6,8 +6,8 @@ import 'package:jd_flutter/utils/web_api.dart';
 
 class WorkerProductionDetailState {
   var etWorker = '';
-  var showPrice = checkUserPermission("303100102");
-  var showAmount = checkUserPermission("303100103");
+  var showPrice = checkUserPermission('303100102');
+  var showAmount = checkUserPermission('303100103');
 
   // var showPrice = true;
   // var showAmount =true;

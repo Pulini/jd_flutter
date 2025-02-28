@@ -1,5 +1,3 @@
-
-
 import 'dart:io';
 
 import 'package:auto_size_text/auto_size_text.dart';
@@ -351,10 +349,14 @@ _takePhoto(bool isGallery, Function(File) callback) async {
 
 //显示SnackBar
 showSnackBar({
-  bool? isWarning = false,
-  required String title,
+  bool? isWarning,
+  String? title,
   required String message,
 }) {
+  isWarning ??= false;
+  title ??= isWarning
+      ? 'snack_bar_default_wrong'.tr
+      : 'dialog_default_title_information'.tr;
   if (Get.isSnackbarOpen) {
     snackbarController?.close(withAnimations: false);
   }
@@ -554,7 +556,6 @@ percentIndicator({
   Color? backgroundColor,
   Color? textColor,
 }) {
-  debugPrint('max:$max,value:$value');
   var percent = (value.div(max).toStringAsFixed(3)).toDoubleTry();
   return Stack(
     children: [
@@ -1083,8 +1084,7 @@ bool isDeepColor(Color color) {
   if (color == Colors.transparent) {
     return false;
   }
-  var grayscale = 0.299 * color.r + 0.587 * color.g+ 0.114 * color.b;
-  debugPrint('grayscale=$grayscale');
+  var grayscale = 0.299 * color.r + 0.587 * color.g + 0.114 * color.b;
   //灰阶值小于到30%认定为深色。
   return grayscale < 0.3;
 }
@@ -1094,7 +1094,6 @@ Widget ratioBarChart({
   double width = double.infinity,
   required List<List<dynamic>> ratioList,
 }) {
-  debugPrint('ratioList=$ratioList');
   var list = <Widget>[];
   var radius = const Radius.circular(13);
   for (var i = 0; i < ratioList.length; ++i) {

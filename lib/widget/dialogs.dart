@@ -10,7 +10,6 @@ import 'package:jd_flutter/login/login_view.dart';
 
 import 'downloader.dart';
 
-
 // 提示弹窗
 informationDialog({
   String title = '',
@@ -180,7 +179,10 @@ loadingDismiss() {
   }
 }
 
-doUpdate(VersionInfo version) {
+doUpdate({
+  required VersionInfo version,
+  Function()? ignore,
+}) {
   var height = MediaQuery.of(Get.overlayContext!).size.height;
   var width = MediaQuery.of(Get.overlayContext!).size.width;
   final double dialogWidth = min(height, width) * 0.618;
@@ -307,7 +309,10 @@ doUpdate(VersionInfo version) {
                             ),
                           ),
                         ),
-                        onPressed: () => Get.back(),
+                        onPressed: () {
+                          Get.back();
+                          ignore?.call();
+                        },
                         child: Text('update_dialog_cancel'.tr),
                       ),
                     ),

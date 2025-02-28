@@ -75,9 +75,9 @@ class PackingScanState {
     required Function() success,
   }) {
     var have = 1;
-    var codes = "";
-    var orderNumber = "";
-    var deliveryNumber = "";
+    var codes = '';
+    var orderNumber = '';
+    var deliveryNumber = '';
     var count = 0;
 
     if (code!.isNotEmpty && packingShipmentScanInfo!.GT_ITEMS2!.isNotEmpty) {

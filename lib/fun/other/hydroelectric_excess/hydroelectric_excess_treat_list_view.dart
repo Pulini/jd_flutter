@@ -96,7 +96,7 @@ class _HydroelectricExcessTreatListPageState
                   child: ListTile(
                     title: const Text('全部'),
                     leading: Radio(
-                      value: "0",
+                      value: '0',
                       groupValue: state.select.value,
                       onChanged: (v) {
                         state.select.value = v!;
@@ -111,7 +111,7 @@ class _HydroelectricExcessTreatListPageState
                   child: ListTile(
                     title: const Text('待抄'),
                     leading: Radio(
-                      value: "1",
+                      value: '1',
                       groupValue: state.select.value,
                       onChanged: (v) {
                         state.select.value = v!;
@@ -126,7 +126,7 @@ class _HydroelectricExcessTreatListPageState
                   child: ListTile(
                     title: const Text('已抄'),
                     leading: Radio(
-                      value: "2",
+                      value: '2',
                       groupValue: state.select.value,
                       onChanged: (v) {
                         state.select.value = v!;

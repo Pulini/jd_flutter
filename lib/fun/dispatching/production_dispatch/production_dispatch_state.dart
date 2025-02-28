@@ -100,7 +100,7 @@ class ProductionDispatchState {
   }) {
     httpGet(
       method: webApiGetWorkCardCombinedSizeList,
-      loading: '正在查询工单',
+      loading: 'production_dispatch_querying_order'.tr,
       params: {
         'startTime': startTime,
         'endTime': endTime,
@@ -135,7 +135,7 @@ class ProductionDispatchState {
     getSelectOne(
       (v) => httpGet(
         method: webApiGetProductionOrderPDF,
-        loading: '正在查询指令表...',
+        loading: 'production_dispatch_querying_instruction_list'.tr,
         params: {'orderBill': v.orderBill},
       ).then(
         (response) {
@@ -157,7 +157,7 @@ class ProductionDispatchState {
   }) {
     httpGet(
       method: webApiGetManufactureInstructions,
-      loading: '正在查询工艺指导书...',
+      loading: 'production_dispatch_querying_process_manual'.tr,
       params: {'RouteID': routeID},
     ).then((response) {
       if (response.resultCode == resultSuccess) {
@@ -179,7 +179,7 @@ class ProductionDispatchState {
     getSelectOne(
       (v) => httpGet(
         method: webApiGetMatchColors,
-        loading: '正在获取配色信息...',
+        loading: 'production_dispatch_getting_color_info'.tr,
         params: {'planBill': v.planBill},
       ).then(
         (response) {
@@ -204,7 +204,7 @@ class ProductionDispatchState {
   }) {
     httpGet(
       method: webApiGetMatchColorsPDF,
-      loading: '正在获取配色文件...',
+      loading: 'production_dispatch_getting_color_file'.tr,
       params: {
         'planBill': id,
         'materialCode': code,
@@ -224,12 +224,15 @@ class ProductionDispatchState {
     required Function(String msg) error,
   }) {
     getSelectOne((v) {
+      bool closeStatus = v.state?.contains('未关闭') ?? false;
       httpPost(
         method: webApiChangeWorkCardStatus,
-        loading: '正在获取配色文件...',
+        loading: closeStatus
+            ? 'production_dispatch_closing_process'.tr
+            : 'production_dispatch_opening_process'.tr,
         params: {
           'Number': v.orderBill,
-          'CloseStatus': v.state?.contains('未关闭'),
+          'CloseStatus': closeStatus,
           'UserID': userInfo?.userID,
         },
       ).then((response) {
@@ -250,7 +253,7 @@ class ProductionDispatchState {
     getSelectOne((v) {
       httpPost(
         method: webApiDeleteScProcessWorkCard,
-        loading: '正在删除下游工序...',
+        loading: 'production_dispatch_delete_downstream'.tr,
         params: {'WorkCardID': v.interID},
       ).then((response) {
         if (response.resultCode == resultSuccess) {
@@ -270,7 +273,7 @@ class ProductionDispatchState {
     getSelectOne((v) {
       httpPost(
         method: webApiDeleteLastReport,
-        loading: '正在删除上次报工...',
+        loading: 'production_dispatch_delete_last_report'.tr,
         params: {
           'WorkCardInterID': v.interID,
           'UserID': userInfo?.userID,
@@ -293,7 +296,7 @@ class ProductionDispatchState {
     getSelectOne((v) {
       httpPost(
         method: webApiUpdateSAPPickingSupportingQty,
-        loading: '正在更新领料配套数...',
+        loading: 'production_dispatch_upgrade_picking'.tr,
         params: {'InterID': v.interID},
       ).then((response) {
         if (response.resultCode == resultSuccess) {
@@ -339,7 +342,7 @@ class ProductionDispatchState {
     getSelectOne((v) {
       httpPost(
         method: webApiReportSAPByWorkCardInterID,
-        loading: '正在报工到SAP...',
+        loading: 'production_dispatch_report_to_sap'.tr,
         params: {
           'InterID': v.interID,
           'Qty': qty,
@@ -362,7 +365,7 @@ class ProductionDispatchState {
   }) {
     httpPost(
       method: webApiPushProductionOrder,
-      loading: '正在下推...',
+      loading: 'production_dispatch_pushing'.tr,
       params: {
         'interID': order.interID,
         'entryID': order.entryID,
@@ -404,7 +407,7 @@ class ProductionDispatchState {
 
     httpPost(
       method: webApiBatchPushProductionOrder,
-      loading: '正在下推...',
+      loading: 'production_dispatch_pushing'.tr,
       body: body,
     ).then((response) {
       if (response.resultCode == resultSuccess) {
@@ -423,7 +426,7 @@ class ProductionDispatchState {
   }) {
     httpGet(
       method: webApiGetWorkPlanMaterial,
-      loading: '正在查询用料清单...',
+      loading: 'production_dispatch_querying_material_list'.tr,
       params: {'InterID': orderList.firstWhere((v) => v.select).interID},
     ).then((response) {
       if (response.resultCode == resultSuccess) {
@@ -444,7 +447,7 @@ class ProductionDispatchState {
     if (batchWorkProcedure.isEmpty) {
       http = httpGet(
         method: webApiGetPrdRouteInfo,
-        loading: '正在查询工艺路线...',
+        loading: 'production_dispatch_querying_manual'.tr,
         params: {
           'BillNo': orderList.firstWhere((v) => v.select).routeBillNumber
         },
@@ -456,7 +459,7 @@ class ProductionDispatchState {
       ];
       http = httpPost(
         method: webApiGetBatchPrdRouteInfo,
-        loading: '正在查询工艺路线...',
+        loading: 'production_dispatch_querying_manual'.tr,
         body: list.toSet().toList(),
       );
     }
@@ -475,8 +478,10 @@ class ProductionDispatchState {
     required Function(String msg) success,
     required Function(String msg) error,
   }) {
-    var msg =
-        '指令号：${orderList.firstWhere((v) => v.select).planBill}\r\n工厂型体：${workCardTitle.value.plantBody}\r\n工序：';
+    var msg = 'production_dispatch_wechat_dispatch_error1'.trArgs([
+      orderList.firstWhere((v) => v.select).planBill ?? '',
+      workCardTitle.value.plantBody ?? ''
+    ]);
     var submitData = <Map>[];
     for (var wp in workProcedure.where((v) => v.isOpen == 1)) {
       //如果批量数据不为空，则说明当前是多工单同时派工，需要对员工进行工单分配
@@ -503,7 +508,10 @@ class ProductionDispatchState {
                 submitData.add({
                   'EmpID': worker.empID,
                   'WorkOrderType': '$msg${wp.processName}',
-                  'WorkOrderContent': '汇报数量：${qty.toShowString()}'
+                  'WorkOrderContent':
+                      'production_dispatch_wechat_dispatch_error2'.trArgs([
+                    qty.toShowString(),
+                  ]),
                 });
 
                 //累加人员数据的分配数量
@@ -520,7 +528,10 @@ class ProductionDispatchState {
           submitData.add({
             'EmpID': d.empID,
             'WorkOrderType': '$msg${d.processName}',
-            'WorkOrderContent': '汇报数量：${d.qty.toShowString()}'
+            'WorkOrderContent':
+                'production_dispatch_wechat_dispatch_error2'.trArgs([
+              d.qty.toShowString(),
+            ]),
           });
         }
       }
@@ -528,7 +539,7 @@ class ProductionDispatchState {
 
     httpPost(
       method: webApiSendDispatchToWechat,
-      loading: '正在给员工发送派工信息...',
+      loading: 'production_dispatch_wechat_dispatching'.tr,
       body: submitData,
     ).then((response) {
       if (response.resultCode == resultSuccess) {
@@ -549,7 +560,7 @@ class ProductionDispatchState {
       //如果批量数据不为空，则说明当前是多工单同时派工，需要对员工进行工单分配
       if (batchWorkProcedure.isNotEmpty) {
         for (var bwp in batchWorkProcedure.where(
-              (v) => v.processNumber == wp.processNumber,
+          (v) => v.processNumber == wp.processNumber,
         )) {
           //指令已分配数量
           var disQty = 0.0;
@@ -564,7 +575,7 @@ class ProductionDispatchState {
               if (surplus > 0) {
                 //可分配数=如果剩余数大于人员可分配数则分配人员可分配数 否则分配剩余数
                 var qty =
-                surplus > worker.remainder() ? worker.remainder() : surplus;
+                    surplus > worker.remainder() ? worker.remainder() : surplus;
 
                 //分配人员数据到指令
                 submitData.add({
@@ -626,11 +637,8 @@ class ProductionDispatchState {
     }
     httpPost(
       method: webApiProductionDispatch,
-      loading: '正在发送派工数据...',
-      body: {
-        'UserID': userInfo?.userID,
-        'List': submitData
-      },
+      loading: 'production_dispatch_dispatching'.tr,
+      body: {'UserID': userInfo?.userID, 'List': submitData},
     ).then((response) {
       if (response.resultCode == resultSuccess) {
         success.call(response.message ?? '');

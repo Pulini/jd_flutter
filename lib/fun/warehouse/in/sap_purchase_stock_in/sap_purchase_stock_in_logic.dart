@@ -9,18 +9,6 @@ import 'sap_purchase_stock_in_state.dart';
 class SapPurchaseStockInLogic extends GetxController {
   final SapPurchaseStockInState state = SapPurchaseStockInState();
 
-  @override
-  void onReady() {
-    // TODO: implement onReady
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    // TODO: implement onClose
-    super.onClose();
-  }
-
   queryOrder({
     required String deliNo,
     required String startDate,
@@ -107,10 +95,15 @@ class SapPurchaseStockInLogic extends GetxController {
       }
     });
     if (exempt.isNotEmpty && notExempt.isNotEmpty) {
-      errorDialog(content: '所选条目包含免检与非免检');
+      errorDialog(
+        content:
+            'sap_purchase_stock_in_select_item_includes_exempt_and_not_exempt'
+                .tr,
+      );
     } else {
       callback.call([...exempt, ...notExempt]);
-    }}
+    }
+  }
 
   checkTemporarySelected(Function(List<SapPurchaseStockInInfo>) callback) {
     var noInspector = 0;
@@ -128,11 +121,15 @@ class SapPurchaseStockInLogic extends GetxController {
       }
     });
     if (isExempt > 0) {
-      errorDialog(content: '免检物料禁止暂收！');
+      errorDialog(
+        content:
+            'sap_purchase_stock_in_exempt_material_cannot_temporary_collection'
+                .tr,
+      );
       return;
     }
     if (noInspector > 0) {
-      errorDialog(content: '含有未清点数据！');
+      errorDialog(content: 'sap_purchase_stock_in_contains_uncounted'.tr);
       return;
     }
     callback.call(selectList);

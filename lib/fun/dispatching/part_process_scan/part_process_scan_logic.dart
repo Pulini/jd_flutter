@@ -16,16 +16,16 @@ class PartProcessScanLogic extends GetxController {
   addBarCode(String code, Function() callback) {
     if (code.isEmpty) {
       showSnackBar(
-          title: 'snack_bar_default_wrong'.tr,
-          message: '请输入贴标号',
-          isWarning: true);
+        message: 'part_process_scan_input_label_tips'.tr,
+        isWarning: true,
+      );
       return;
     }
     if (state.barCodeList.any((v) => v == code)) {
       showSnackBar(
-          title: 'snack_bar_default_wrong'.tr,
-          message: '标签已存在',
-          isWarning: true);
+        message: 'part_process_scan_label_exists'.tr,
+        isWarning: true,
+      );
       return;
     }
     state.barCodeList.add(code);
@@ -35,8 +35,7 @@ class PartProcessScanLogic extends GetxController {
   barCodeModify() {
     if (state.barCodeList.isEmpty) {
       showSnackBar(
-        title: 'snack_bar_default_wrong'.tr,
-        message: '没有可提交的条码',
+        message: 'part_process_scan_no_submit_code'.tr,
         isWarning: true,
       );
     } else {
@@ -154,13 +153,16 @@ class PartProcessScanLogic extends GetxController {
       'WorkerPercentageList',
       jsonEncode(state.workerPercentageList.map((v) => v.toJson()).toList()),
     );
-    successDialog(content: '当前比例保存成功。');
+    successDialog(content: 'part_process_scan_save_ratio_success'.tr);
   }
 
   usePercentage() {
     var jsonString = spGet('WorkerPercentageList');
     if (jsonString == null) {
-      showSnackBar(title: '应用比例', message: '没有保存比例的记录！', isWarning: true);
+      showSnackBar(
+          title: 'part_process_scan_apply_ratio',
+          message: 'part_process_scan_no_save_data'.tr,
+          isWarning: true);
     } else {
       var list = <Distribution>[
         for (var json in jsonDecode(jsonString)) Distribution.fromJson(json)
@@ -177,7 +179,7 @@ class PartProcessScanLogic extends GetxController {
                   distributionQty: 0,
                 )
       ];
-      successDialog(content: '已成功载入上次保存的比例。');
+      successDialog(content: 'part_process_scan_apply_last_ratio'.tr);
     }
   }
 
@@ -202,7 +204,9 @@ class PartProcessScanLogic extends GetxController {
           )
       ];
     });
-    successDialog(content: '快速分配完成!', back: () => Get.back());
+    successDialog(
+        content: 'part_process_scan_quick_allocation_success'.tr,
+        back: () => Get.back());
   }
 
   reportModifySubmit() {}

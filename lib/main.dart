@@ -5,6 +5,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/router_report.dart';
 import 'package:jd_flutter/route.dart';
+import 'package:jd_flutter/utils/network_manager.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart';
@@ -22,14 +23,17 @@ import 'utils/web_api.dart';
 
 main() async {
   //切换测试库，打包时屏蔽
-  // useTestUrl = true;
+  useTestUrl = true;
 
   //确保初始化完成才能加载耗时插件
   WidgetsFlutterBinding.ensureInitialized();
+
+  // //添加全局网络状态管理
+  Get.put(NetworkManager());
+
   if (GetPlatform.isMobile) {
-    debugPrint('isMobile -----------');
     getDatabasesPath().then(
-      (path) => openDatabase(
+          (path) => openDatabase(
         join(path, jdDatabase),
         version: 3,
         onCreate: (db, v) {
@@ -98,9 +102,9 @@ class GetXRouterObserver extends NavigatorObserver {
 class AppScrollBehavior extends MaterialScrollBehavior {
   @override
   Set<PointerDeviceKind> get dragDevices => {
-        PointerDeviceKind.touch,
-        PointerDeviceKind.mouse,
-      };
+    PointerDeviceKind.touch,
+    PointerDeviceKind.mouse,
+  };
 }
 
 class MyApp extends StatefulWidget {
@@ -125,7 +129,6 @@ class _MyAppState extends State<MyApp> {
         language = locales?.first.languageCode == localeChinese.languageCode
             ? 'zh'
             : 'en';
-        debugPrint('当前语音：$locales');
         return null;
       },
       localizationsDelegates: const [

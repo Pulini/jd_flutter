@@ -12,12 +12,12 @@ class HydroelectricExcessState {
 
   var dataList = <DeviceListInfo>[].obs;  //来访数据
   var isShow = false.obs;
-  var select = "0".obs; //选择查询的条件
-  var stateToSearch ="0".obs;   //返回回去的状态
-  var deviceNumber ="";//设备编号
-  var bedNumber ="";//床铺编号
+  var select = '0'.obs; //选择查询的条件
+  var stateToSearch ='0'.obs;   //返回回去的状态
+  var deviceNumber ='';//设备编号
+  var bedNumber ='';//床铺编号
   var dataDetail = DeviceDetailInfo().obs;
-  var thisMonthUse = "".obs; //本月使用量
+  var thisMonthUse = ''.obs; //本月使用量
 
   var textThisTime = TextEditingController(); //本次抄度
   var textNumber = TextEditingController(); //房间号

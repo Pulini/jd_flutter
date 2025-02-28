@@ -51,13 +51,14 @@ class _SapProductionPickingDetailPageState
                       children: [
                         expandedTextSpan(
                           flex: 10,
-                          hint: '派工单号：',
+                          hint: 'sap_production_picking_detail_dispatch_no'.tr,
                           text: data.dispatchNumber,
                           textColor: Colors.red,
                         ),
                         expandedTextSpan(
                           flex: 8,
-                          hint: '派工机台：',
+                          hint: 'sap_production_picking_detail_dispatch_machine'
+                              .tr,
                           isBold: false,
                           text: data.machineNumber,
                           textColor: Colors.red,
@@ -68,7 +69,7 @@ class _SapProductionPickingDetailPageState
                       children: [
                         expandedTextSpan(
                           flex: 10,
-                          hint: '制程：',
+                          hint: 'sap_production_picking_detail_process'.tr,
                           text: data.process,
                           isBold: false,
                           textColor: Colors.blue.shade900,
@@ -76,7 +77,8 @@ class _SapProductionPickingDetailPageState
                         ),
                         expandedTextSpan(
                           flex: 8,
-                          hint: '派工日期：',
+                          hint:
+                              'sap_production_picking_detail_dispatch_date'.tr,
                           text: data.dispatchDate,
                           isBold: false,
                           textColor: Colors.blue.shade900,
@@ -132,7 +134,7 @@ class _SapProductionPickingDetailPageState
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   textSpan(
-                    hint: '物料名称：',
+                    hint: 'sap_production_picking_detail_material_name'.tr,
                     text:
                         '(${data.materialList[i].materialNumber})${data.materialList[i].materialName}',
                     textColor: Colors.green.shade700,
@@ -148,7 +150,9 @@ class _SapProductionPickingDetailPageState
                               children: [
                                 expandedTextSpan(
                                   flex: 12,
-                                  hint: '型体：',
+                                  hint:
+                                      'sap_production_picking_detail_type_body'
+                                          .tr,
                                   text: data.materialList[i].typeBody ?? '',
                                   isBold: false,
                                   textColor: Colors.blue.shade900,
@@ -156,7 +160,7 @@ class _SapProductionPickingDetailPageState
                                 ),
                                 expandedTextSpan(
                                   flex: 5,
-                                  hint: '单位：',
+                                  hint: 'sap_production_picking_detail_unit'.tr,
                                   text:
                                       '${data.materialList[i].commonUnit?.ifEmpty(data.materialList[i].basicUnit ?? '')}',
                                   isBold: false,
@@ -169,7 +173,8 @@ class _SapProductionPickingDetailPageState
                               children: [
                                 expandedTextSpan(
                                   flex: 6,
-                                  hint: '可领：',
+                                  hint: 'sap_production_picking_detail_can_pick'
+                                      .tr,
                                   text: data.remainderList[i].toShowString(),
                                   isBold: false,
                                   textColor: Colors.blue.shade700,
@@ -177,7 +182,9 @@ class _SapProductionPickingDetailPageState
                                 ),
                                 expandedTextSpan(
                                   flex: 6,
-                                  hint: '线仓：',
+                                  hint:
+                                      'sap_production_picking_detail_scene_warehouse'
+                                          .tr,
                                   text: data.materialList[i].lineStock
                                       .toShowString(),
                                   isBold: false,
@@ -186,7 +193,7 @@ class _SapProductionPickingDetailPageState
                                 ),
                                 expandedTextSpan(
                                   flex: 5,
-                                  hint: '领取：',
+                                  hint: 'sap_production_picking_detail_pick'.tr,
                                   text: data.pickQtyList[i].toShowString(),
                                   isBold: false,
                                   textColor: Colors.blue.shade700,
@@ -205,8 +212,9 @@ class _SapProductionPickingDetailPageState
                               data.materialList[i].select = c;
                             } else {
                               showSnackBar(
-                                title: '错误',
-                                message: '无法勾选领料数量为 0 或线仓库存为 0 的物料！',
+                                message:
+                                    'sap_production_picking_detail_cannot_select_error_material_tips'
+                                        .tr,
                                 isWarning: true,
                               );
                             }
@@ -249,15 +257,15 @@ class _SapProductionPickingDetailPageState
   @override
   Widget build(BuildContext context) {
     return pageBody(
-      title: 'SAP生产领料',
+      title: 'sap_production_picking_detail_sap_production_picking'.tr,
       actions: [
         if (isScan)
           state.barCodeList.isNotEmpty
               ? TextButton(
                   onPressed: () => Get.to(() => const BarCodeListPage()),
-                  child: const Text(
-                    '标签列表',
-                    style: TextStyle(
+                  child: Text(
+                    'sap_production_picking_detail_label_list'.tr,
+                    style: const TextStyle(
                       color: Colors.blueAccent,
                       fontWeight: FontWeight.bold,
                     ),
@@ -265,9 +273,9 @@ class _SapProductionPickingDetailPageState
                 )
               : TextButton(
                   onPressed: () => logic.getBarCodeList(),
-                  child: const Text(
-                    '刷新标签',
-                    style: TextStyle(
+                  child: Text(
+                    'sap_production_picking_detail_refresh_label'.tr,
+                    style: const TextStyle(
                       color: Colors.red,
                       fontWeight: FontWeight.bold,
                     ),
@@ -287,7 +295,7 @@ class _SapProductionPickingDetailPageState
               SizedBox(
                 width: double.infinity,
                 child: CombinationButton(
-                  text: '领料',
+                  text: 'sap_production_picking_detail_pick_material'.tr,
                   click: () {
                     if (logic.hasSubmitSelect()) {
                       checkPickerDialog(
@@ -307,7 +315,11 @@ class _SapProductionPickingDetailPageState
                         ),
                       );
                     } else {
-                      errorDialog(content: '请选择要领料的物料！');
+                      errorDialog(
+                        content:
+                            'sap_production_picking_detail_select_material_tips'
+                                .tr,
+                      );
                     }
                   },
                 ),

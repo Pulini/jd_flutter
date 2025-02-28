@@ -24,7 +24,7 @@ class ProductionScanWarehouseState {
   var codeDataInfo = CheckCodeInfo().obs;
 
 
-  ///从数据库读取条码信息
+  //从数据库读取条码信息
   ProductionScanWarehouseState() {
     BarCodeInfo.getSave(
       type: barCodeTypes[4],

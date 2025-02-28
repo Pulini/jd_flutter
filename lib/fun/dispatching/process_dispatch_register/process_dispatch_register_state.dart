@@ -29,7 +29,7 @@ class ProcessDispatchRegisterState {
     required Function(String msg) error,
   }) {
     httpGet(
-      loading: '正在派工单信息...',
+      loading: 'process_dispatch_register_getting_dispatch_order_info'.tr,
       method: webApiGetProcessWorkCard,
       params: {
         'Barcode': barCode,
@@ -65,7 +65,7 @@ class ProcessDispatchRegisterState {
   }) {
     httpPost(
       method: webApiGetReportDataByBarcode,
-      loading: '正在获取标签信息...',
+      loading: 'process_dispatch_register_getting_label_info'.tr,
       body: [
         {'BarCode': code}
       ],
@@ -89,7 +89,7 @@ class ProcessDispatchRegisterState {
   }) {
     httpPost(
       method: webApiChangeLabelingBarcodeEmp,
-      loading: '正在提交修改...',
+      loading: 'process_dispatch_register_submitting_modify'.tr,
       body: {
         'BarCode': labelInfo!.barCode,
         'EmpID': workerList[select.value].empID,
@@ -111,7 +111,7 @@ class ProcessDispatchRegisterState {
   }) {
     httpPost(
       method: webApiUnReportAndDelLabelingBarcode,
-      loading: '正在删除贴标...',
+      loading: 'process_dispatch_register_detecting_label'.tr,
       body: {
         'Barcode': barCode,
         'DeptID': userInfo!.departmentID,

@@ -9,17 +9,6 @@ import 'sap_no_label_stock_in_state.dart';
 class SapNoLabelStockInLogic extends GetxController {
   final SapNoLabelStockInState state = SapNoLabelStockInState();
 
-  @override
-  void onReady() {
-    // TODO: implement onReady
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    // TODO: implement onClose
-    super.onClose();
-  }
 
   query({
     required String reportStartDate,

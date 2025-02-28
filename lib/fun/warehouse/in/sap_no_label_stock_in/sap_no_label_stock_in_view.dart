@@ -63,20 +63,20 @@ class _SapNoLabelStockInPageState extends State<SapNoLabelStockInPage> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     textSpan(
-                      hint: '派工单号：',
+                      hint: 'sap_no_label_stock_in_dispatch_order_no'.tr,
                       text: list[0].materialList[0].dispatchNumber ?? '',
                       textColor: Colors.red,
                     ),
                     Row(
                       children: [
                         expandedTextSpan(
-                          hint: '派工日期：',
+                          hint: 'sap_no_label_stock_in_dispatch_date'.tr,
                           text: list[0].materialList[0].dispatchDate ?? '',
                           textColor: Colors.blue.shade700,
                           isBold: false,
                         ),
                         expandedTextSpan(
-                          hint: '报工日期：',
+                          hint: 'sap_no_label_stock_in_report_date'.tr,
                           text: list[0].materialList[0].reportDate ?? '',
                           textColor: Colors.blue.shade700,
                           isBold: false,
@@ -108,7 +108,7 @@ class _SapNoLabelStockInPageState extends State<SapNoLabelStockInPage> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   textSpan(
-                    hint: '物料：',
+                    hint: 'sap_no_label_stock_in_material'.tr,
                     text:
                         '${m.materialList[0].materialName}(${m.materialList[0].materialCode})',
                     textColor: Colors.green.shade700,
@@ -123,13 +123,13 @@ class _SapNoLabelStockInPageState extends State<SapNoLabelStockInPage> {
                             Row(
                               children: [
                                 expandedTextSpan(
-                                  hint: '型体：',
+                                  hint: 'sap_no_label_stock_in_type_body'.tr,
                                   text: m.materialList[0].typeBody ?? '',
                                   textColor: Colors.blue.shade700,
                                   isBold: false,
                                 ),
                                 textSpan(
-                                  hint: '单位：',
+                                  hint: 'sap_no_label_stock_in_unit'.tr,
                                   text: m.materialList[0].basicUnit ?? '',
                                   textColor: Colors.blue.shade700,
                                   isBold: false,
@@ -139,12 +139,12 @@ class _SapNoLabelStockInPageState extends State<SapNoLabelStockInPage> {
                             Row(
                               children: [
                                 expandedTextSpan(
-                                  hint: '待入库：',
+                                  hint: 'sap_no_label_stock_in_wait_stock_in'.tr,
                                   text: m.notReceivedQty.toShowString(),
                                   isBold: false,
                                 ),
                                 expandedTextSpan(
-                                  hint: '入库数：',
+                                  hint: 'sap_no_label_stock_in_stock_in'.tr,
                                   text: m.pickQty().toShowString(),
                                   isBold: false,
                                 ),
@@ -195,11 +195,11 @@ class _SapNoLabelStockInPageState extends State<SapNoLabelStockInPage> {
       bottomSheet: [
         EditText(
           controller: dispatchOrderController,
-          hint: '派工单号',
+          hint: 'sap_no_label_stock_in_dispatch_order_no_tips'.tr,
         ),
         EditText(
           controller: materialController,
-          hint: '物料编码',
+          hint: 'sap_no_label_stock_in_material_code'.tr,
         ),
         DatePicker(pickerController: dpcStartDate),
         DatePicker(pickerController: dpcEndDate),
@@ -219,7 +219,7 @@ class _SapNoLabelStockInPageState extends State<SapNoLabelStockInPage> {
                 SizedBox(
                   width: double.infinity,
                   child: CombinationButton(
-                    text: '提交入库',
+                    text: 'sap_no_label_stock_in_submit_stock_in'.tr,
                     click: () => checkStockInHandoverDialog(
                       handoverCheck: (ln, ls, un, us, d) => logic.submitStockIn(
                         leaderNumber: ln,

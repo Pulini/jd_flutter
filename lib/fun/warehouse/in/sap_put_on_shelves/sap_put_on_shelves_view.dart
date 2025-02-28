@@ -46,7 +46,7 @@ class _SapPutOnShelvesPageState extends State<SapPutOnShelvesPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             textSpan(
-              hint: '托盘号：',
+              hint: 'sap_put_on_shelves_pallet_no'.tr,
               text: pallet[0][0].palletNumber ?? '',
               textColor: Colors.red,
             ),
@@ -55,7 +55,7 @@ class _SapPutOnShelvesPageState extends State<SapPutOnShelvesPage> {
               Row(
                 children: [
                   expandedTextSpan(
-                    hint: '物料：',
+                    hint: 'sap_put_on_shelves_material'.tr,
                     text: material[0].materialName ?? '',
                     isBold: false,
                     textColor: Colors.blue.shade900,

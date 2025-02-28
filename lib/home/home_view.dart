@@ -111,10 +111,14 @@ class _HomePageState extends State<HomePage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       getVersionInfo(
         false,
-        noUpdate: () => logic.refreshFunList(isRefresh: true),
-        needUpdate: (versionInfo) => doUpdate(versionInfo),
+        noUpdate: _refreshFunList,
+        needUpdate: (v) => doUpdate(version: v, ignore: _refreshFunList),
       );
     });
+  }
+
+  _refreshFunList() {
+    logic.refreshFunList(isRefresh: true);
   }
 
   @override
@@ -131,8 +135,7 @@ class _HomePageState extends State<HomePage> {
                   itemBuilder: (context, index) => state.navigationBar.isEmpty
                       ? Center(
                           child: IconButton(
-                            onPressed: () =>
-                                logic.refreshFunList(isRefresh: true),
+                            onPressed: _refreshFunList,
                             icon: const Icon(
                               Icons.refresh,
                               color: Colors.blueAccent,

@@ -29,7 +29,11 @@ class _SapPrintPickingPageState extends State<SapPrintPickingPage> {
   var pickerController = TextEditingController();
   var spinnerControllerWorkShop = SpinnerController(
     saveKey: RouteConfig.sapPrintPicking.name,
-    dataList: ['补单', '正单', '委外'],
+    dataList: [
+      'sap_print_picking_supplementary_order'.tr,
+      'sap_print_picking_normal_order'.tr,
+      'sap_print_picking_outsourcing_order'.tr
+    ],
   );
   var dpcStartDate = DatePickerController(
     PickerType.startDate,
@@ -73,12 +77,12 @@ class _SapPrintPickingPageState extends State<SapPrintPickingPage> {
             Row(
               children: [
                 expandedTextSpan(
-                  hint: '合同号：',
+                  hint: 'sap_print_picking_contract_no'.tr,
                   text: data.purchaseOrder ?? '',
                   textColor: Colors.green,
                 ),
                 expandedTextSpan(
-                  hint: '供应商：',
+                  hint: 'sap_print_picking_supplier'.tr,
                   isBold: false,
                   text: data.supplierName ?? '',
                 ),
@@ -87,14 +91,14 @@ class _SapPrintPickingPageState extends State<SapPrintPickingPage> {
             Row(
               children: [
                 expandedTextSpan(
-                  hint: '指令：',
+                  hint: 'sap_print_picking_instruction'.tr,
                   text: data.instructionNo ?? '',
                   isBold: false,
                   textColor: Colors.grey.shade700,
                   hintColor: Colors.grey.shade700,
                 ),
                 expandedTextSpan(
-                  hint: '型体：',
+                  hint: 'sap_print_picking_type_body'.tr,
                   text: data.typeBody ?? '',
                   isBold: false,
                   textColor: Colors.grey.shade700,
@@ -105,14 +109,14 @@ class _SapPrintPickingPageState extends State<SapPrintPickingPage> {
             Row(
               children: [
                 expandedTextSpan(
-                  hint: '仓库',
+                  hint: 'sap_print_picking_warehouse'.tr,
                   text: data.warehouse ?? '',
                   isBold: false,
                   textColor: Colors.grey.shade700,
                   hintColor: Colors.grey.shade700,
                 ),
                 expandedTextSpan(
-                  hint: '合同日期：',
+                  hint: 'sap_print_picking_contract_date'.tr,
                   text: data.orderDate ?? '',
                   isBold: false,
                   textColor: Colors.grey.shade700,
@@ -142,11 +146,26 @@ class _SapPrintPickingPageState extends State<SapPrintPickingPage> {
   Widget build(BuildContext context) {
     return pageBodyWithBottomSheet(
       bottomSheet: [
-        EditText(hint: '通知单号', controller: noticeNoController),
-        EditText(hint: '指令号', controller: instructionNoController),
-        EditText(hint: '委外订单号', controller: purchaseOrderController),
-        EditText(hint: '型体', controller: typeBodyController),
-        EditText(hint: '领料员工号', controller: pickerController),
+        EditText(
+          hint: 'sap_print_picking_notification_no'.tr,
+          controller: noticeNoController,
+        ),
+        EditText(
+          hint: 'sap_print_picking_instruction_no'.tr,
+          controller: instructionNoController,
+        ),
+        EditText(
+          hint: 'sap_print_picking_outsourcing_order_no'.tr,
+          controller: purchaseOrderController,
+        ),
+        EditText(
+          hint: 'sap_print_picking_type_body_tips'.tr,
+          controller: typeBodyController,
+        ),
+        EditText(
+          hint: 'sap_print_picking_picker_number'.tr,
+          controller: pickerController,
+        ),
         Row(
           children: [
             Expanded(child: DatePicker(pickerController: dpcStartDate)),
@@ -158,7 +177,7 @@ class _SapPrintPickingPageState extends State<SapPrintPickingPage> {
         OptionsPicker(pickerController: workCenterController),
         LinkOptionsPicker(pickerController: factoryWarehouseController),
       ],
-      query:()=> _query(),
+      query: () => _query(),
       body: Obx(() => Column(
             children: [
               Expanded(
@@ -172,7 +191,7 @@ class _SapPrintPickingPageState extends State<SapPrintPickingPage> {
                 SizedBox(
                   width: double.infinity,
                   child: CombinationButton(
-                    text: '扫码拣货',
+                    text: 'sap_print_picking_scan_picking'.tr,
                     click: () => Get.to(
                       () => const SapPrintPickingDetailPage(),
                     ),

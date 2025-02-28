@@ -19,9 +19,7 @@ class SapPrintPickingState {
   var warehouse = '';
   bool needRefresh = false;
 
-  SapPrintPickingState() {
-    //Initialize variables
-  }
+
 
   getMaterialPickingOrderList({
     String? noticeNo,
@@ -39,7 +37,7 @@ class SapPrintPickingState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在获取领料通知单列表...',
+      loading: 'sap_print_picking_getting_pick_order_list'.tr,
       method: webApiSapGetPickingOrders,
       body: {
         'NOTICE_NO': noticeNo ?? '',
@@ -71,7 +69,7 @@ class SapPrintPickingState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在获取派工单列表明细...',
+      loading: 'sap_print_picking_getting_dispatch_order_list_detail'.tr,
       method: webApiSapGetPickingOrderDetail,
       body: [
         for (var data in pickOrderList.where((v) => v.select))
@@ -114,7 +112,7 @@ class SapPrintPickingState {
     var list =
         orderDetailOrderList.where((v) => v.select && v.canPicking()).toList();
     sapPost(
-      loading: '正在提交领料...',
+      loading: 'sap_print_picking_submitting_picking'.tr,
       method: webApiSapMaterialsPicking,
       body: {
         'DATA': [
@@ -171,7 +169,7 @@ class SapPrintPickingState {
     var labels =
         orderDetailLabels.where((v) => v.distribution.isNotEmpty).toList();
     sapPost(
-      loading: '正在提交领料...',
+      loading: 'sap_print_picking_submitting_picking'.tr,
       method: webApiSapPrintPicking,
       body: {
         'DATA': [
@@ -248,7 +246,7 @@ class SapPrintPickingState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在获取托盘信息...',
+      loading: 'sap_print_picking_getting_pallet_info'.tr,
       method: webApiSapGetPalletList,
       body: {
         'WERKS': '1500',
@@ -283,7 +281,7 @@ class SapPrintPickingState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在提交移库...',
+      loading: 'sap_print_picking_submitting_transfer'.tr,
       method: webApiSapPuttingOnShelves,
       body: {
         'ZCZLX_WMS': 'WM03',

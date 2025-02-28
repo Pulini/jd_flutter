@@ -128,63 +128,123 @@ class PropertyLogic extends GetxController
 
   bool checkData() {
     if (state.detail.name?.isEmpty == true) {
-      showSnackBar(title: '缺少数据', message: '请输入名称', isWarning: true);
+      showSnackBar(
+        title: 'property_lack_data'.tr,
+        message: '请输入名称',
+        isWarning: true,
+      );
       return false;
     }
     if (state.detail.number?.isEmpty == true) {
-      showSnackBar(title: '缺少数据', message: '请输入编号', isWarning: true);
+      showSnackBar(
+        title: 'property_lack_data'.tr,
+        message: '请输入编号',
+        isWarning: true,
+      );
       return false;
     }
     if (state.detail.model?.isEmpty == true) {
-      showSnackBar(title: '缺少数据', message: '请输入规格型号', isWarning: true);
+      showSnackBar(
+        title: 'property_lack_data'.tr,
+        message: '请输入规格型号',
+        isWarning: true,
+      );
       return false;
     }
     if (state.detail.price != null && state.detail.price! <= 0) {
-      showSnackBar(title: '缺少数据', message: '请输入单价', isWarning: true);
+      showSnackBar(
+        title: 'property_lack_data'.tr,
+        message: '请输入单价',
+        isWarning: true,
+      );
       return false;
     }
     if (state.detail.orgVal != null && state.detail.orgVal! <= 0) {
-      showSnackBar(title: '缺少数据', message: '请输入原值', isWarning: true);
+      showSnackBar(
+        title: 'property_lack_data'.tr,
+        message: '请输入原值',
+        isWarning: true,
+      );
       return false;
     }
     if (state.detail.manufacturer?.isEmpty == true) {
-      showSnackBar(title: '缺少数据', message: '请输入制造商', isWarning: true);
+      showSnackBar(
+        title: 'property_lack_data'.tr,
+        message: '请输入制造商',
+        isWarning: true,
+      );
       return false;
     }
     if (state.detail.guaranteePeriod?.isEmpty == true) {
-      showSnackBar(title: '缺少数据', message: '请输入保修期限(月)', isWarning: true);
+      showSnackBar(
+        title: 'property_lack_data'.tr,
+        message: '请输入保修期限(月)',
+        isWarning: true,
+      );
       return false;
     }
     if (state.detail.expectedLife != null && state.detail.expectedLife! <= 0) {
-      showSnackBar(title: '缺少数据', message: '请输入预计使用时长(月)', isWarning: true);
+      showSnackBar(
+        title: 'property_lack_data'.tr,
+        message: '请输入预计使用时长(月)',
+        isWarning: true,
+      );
       return false;
     }
     if (state.detail.participator != null && state.detail.participator! == -1) {
-      showSnackBar(title: '缺少数据', message: '请输入参检人工号', isWarning: true);
+      showSnackBar(
+        title: 'property_lack_data'.tr,
+        message: '请输入参检人工号',
+        isWarning: true,
+      );
       return false;
     }
     if (state.detail.keepEmpID != null && state.detail.keepEmpID! == -1) {
-      showSnackBar(title: '缺少数据', message: '请输入保管人工号', isWarning: true);
+      showSnackBar(
+        title: 'property_lack_data'.tr,
+        message: '请输入保管人工号',
+        isWarning: true,
+      );
       return false;
     }
     if (state.detail.liableEmpID != null && state.detail.liableEmpID! == -1) {
-      showSnackBar(title: '缺少数据', message: '请输入监管人工号', isWarning: true);
+      showSnackBar(
+        title: 'property_lack_data'.tr,
+        message: '请输入监管人工号',
+        isWarning: true,
+      );
       return false;
     }
     if (state.detail.writeDate?.isEmpty == true) {
-      showSnackBar(title: '缺少数据', message: '请选择登记日期', isWarning: true);
+      showSnackBar(
+        title: 'property_lack_data'.tr,
+        message: '请选择登记日期',
+        isWarning: true,
+      );
       return false;
     }
     if (state.detail.address?.isEmpty == true) {
-      showSnackBar(title: '缺少数据', message: '请输入存放地点', isWarning: true);
+      showSnackBar(
+        title: 'property_lack_data'.tr,
+        message: '请输入存放地点',
+        isWarning: true,
+      );
       return false;
     }
     if (state.assetPicture.isEmpty) {
-      showSnackBar(title: '缺少数据', message: '请拍摄现场照片', isWarning: true);
+      showSnackBar(
+        title: 'property_lack_data'.tr,
+        message: '请拍摄现场照片',
+        isWarning: true,
+      );
       return false;
     }
     if (state.ratingPlatePicture.isEmpty) {
-      showSnackBar(title: '缺少数据', message: '请拍摄铭牌照片', isWarning: true);
+      showSnackBar(
+        title: 'property_lack_data'.tr,
+        message: '请拍摄铭牌照片',
+        isWarning: true,
+      );
       return false;
     }
     return true;
@@ -195,7 +255,7 @@ class PropertyLogic extends GetxController
     switch (tabController.index) {
       case 0:
         selectItem = state.propertyList
-            .where((v) => v.processStatus == "2" && v.isChecked)
+            .where((v) => v.processStatus == '2' && v.isChecked)
             .toList();
         break;
       case 1:

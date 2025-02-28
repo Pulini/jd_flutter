@@ -14,10 +14,10 @@ import 'package:jd_flutter/widget/dialogs.dart';
 class ProductionScanWarehouseLogic extends GetxController {
   final ProductionScanWarehouseState state = ProductionScanWarehouseState();
 
-  ///添加条码
+  //添加条码
   scanCode(String code) {
     if (state.barCodeList.any((v) => v.code == code)) {
-      showSnackBar(title: '错误', message: '条码已存在', isWarning: true);
+      showSnackBar( message: '条码已存在', isWarning: true);
     } else {
       if (code.isPallet()) {
         checkPallet(
@@ -31,15 +31,15 @@ class ProductionScanWarehouseLogic extends GetxController {
                   break;
                 case 'X':
                   showSnackBar(
-                      title: '错误', message: '请使用空托盘入库！！', isWarning: true);
+                       message: '请使用空托盘入库！！', isWarning: true);
                   break;
                 case 'Y':
                   showSnackBar(
-                      title: '错误', message: '此托盘已在其他仓库使用！！', isWarning: true);
+                   message: '此托盘已在其他仓库使用！！', isWarning: true);
                   break;
               }
             } else {
-              showSnackBar(title: '错误', message: '此托盘不存在！！', isWarning: true);
+              showSnackBar( message: '此托盘不存在！！', isWarning: true);
             }
           },
           error: (msg) => errorDialog(content: msg),
@@ -59,7 +59,7 @@ class ProductionScanWarehouseLogic extends GetxController {
     }
   }
 
-  ///获得已入库条形码数据
+  //获得已入库条形码数据
   getBarCodeStatusByDepartmentID({required Function() refresh,}) {
     httpGet(method: webApiGetBarCodeStatusByDepartmentID, params: {
       'Type': "SupplierScanInStock",
@@ -86,7 +86,7 @@ class ProductionScanWarehouseLogic extends GetxController {
     });
   }
 
-  ///验证托盘
+  //验证托盘
   checkPallet({
     required List<String> pallets,
     required Function(PalletDetailInfo) success,
@@ -122,7 +122,7 @@ class ProductionScanWarehouseLogic extends GetxController {
     });
   }
 
-  ///检查工号是否合法
+  //检查工号是否合法
   checkOrderInfo({
     String? number,
   }) {
@@ -138,14 +138,14 @@ class ProductionScanWarehouseLogic extends GetxController {
     });
   }
 
-  ///删除对应条码
+  //删除对应条码
   deleteCode(BarCodeInfo barCodeList) {
     barCodeList.deleteByCode(callback: () {
       state.barCodeList.remove(barCodeList);
     });
   }
 
-  ///清空生产扫码入库的条码
+  //清空生产扫码入库的条码
   clearBarCodeList() {
     BarCodeInfo.clear(
       type: barCodeTypes[4],
@@ -154,13 +154,13 @@ class ProductionScanWarehouseLogic extends GetxController {
           state.isCheck = false;
           state.barCodeList.clear();
         } else {
-          showSnackBar(title: '错误', message: '本地数据库删除失败', isWarning: true);
+          showSnackBar( message: '本地数据库删除失败', isWarning: true);
         }
       },
     );
   }
 
-  ///获取汇总表
+  //获取汇总表
   goReport() {
     if (state.barCodeList.isNotEmpty) {
       httpPost(
@@ -203,7 +203,7 @@ class ProductionScanWarehouseLogic extends GetxController {
     }
   }
 
-  ///验证是否有条码
+  //验证是否有条码
   bool haveCodeData() {
     if (state.barCodeList.isNotEmpty) {
       return true;
@@ -212,7 +212,7 @@ class ProductionScanWarehouseLogic extends GetxController {
     }
   }
 
-  ///验证生产扫码入库的数据
+  //验证生产扫码入库的数据
   checkCodeList({required Function(String) checkBack}) {
     if (state.barCodeList.isNotEmpty) {
       httpPost(
@@ -241,7 +241,6 @@ class ProductionScanWarehouseLogic extends GetxController {
           for (var barCode in state.barCodeList) {
             for (var used in codeList) {
               if (barCode.code == used) {
-                logger.f('条码有相同');
                 barCode.isUsed = true;
               } else {
                 message += '$used，\n';
@@ -261,7 +260,7 @@ class ProductionScanWarehouseLogic extends GetxController {
     }
   }
 
-  ///生产扫码入库的提交
+  //生产扫码入库的提交
   submitCode() {
     httpPost(method: webApiUploadProductionScanning, body: {
       'BarCodeList': [

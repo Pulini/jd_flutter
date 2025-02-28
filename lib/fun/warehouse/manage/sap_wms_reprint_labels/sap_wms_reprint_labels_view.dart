@@ -160,7 +160,7 @@ class _SapWmsReprintLabelsPageState extends State<SapWmsReprintLabelsPage> {
       actions: [
         TextButton(
           onPressed: () => logic.clean(),
-          child: Text('清空'),
+          child: Text('sap_wms_reprint_label_clean'.tr),
         ),
       ],
       body: Column(
@@ -171,7 +171,7 @@ class _SapWmsReprintLabelsPageState extends State<SapWmsReprintLabelsPage> {
             child: Row(
               children: [
                 Obx(() => expandedTextSpan(
-                      hint: '托盘号：',
+                      hint: 'sap_wms_reprint_label_pallet_no'.tr,
                       text: state.palletNumber.value,
                     )),
                 Obx(() => Checkbox(
@@ -199,7 +199,7 @@ class _SapWmsReprintLabelsPageState extends State<SapWmsReprintLabelsPage> {
           SizedBox(
             width: double.infinity,
             child: CombinationButton(
-              text: '重打贴标',
+              text: 'sap_wms_reprint_label_reprint_label'.tr,
               click: () {
                 // logic.scanCode(
                 //   warehouse:

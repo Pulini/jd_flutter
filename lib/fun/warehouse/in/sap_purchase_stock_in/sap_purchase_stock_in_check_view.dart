@@ -36,13 +36,13 @@ class _SapPurchaseStockInCheckPageState
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           textSpan(
-            hint: '物料：',
+            hint: 'sap_purchase_stock_in_check_material'.tr,
             text: '(${info.materialCode})${info.materialDescription}',
             textColor: Colors.red,
           ),
           const SizedBox(height: 10),
           textSpan(
-            hint: '采购单号：',
+            hint: 'sap_purchase_stock_in_check_purchase_no'.tr,
             text: '${info.purchaseOrder}-${info.purchaseOrderLineItem}',
             isBold: false,
             hintColor: Colors.grey.shade700,
@@ -50,7 +50,7 @@ class _SapPurchaseStockInCheckPageState
           Row(
             children: [
               expandedTextSpan(
-                hint: '送货数：',
+                hint: 'sap_purchase_stock_in_check_delivery_qty'.tr,
                 isBold: false,
                 hintColor: Colors.grey.shade700,
                 text: info.qty.toShowString(),
@@ -59,7 +59,7 @@ class _SapPurchaseStockInCheckPageState
                 child: Row(
                   children: [
                     Text(
-                      '核查数：',
+                      'sap_purchase_stock_in_check_check_qty'.tr,
                       style: TextStyle(color: Colors.grey.shade700),
                     ),
                     SizedBox(
@@ -98,7 +98,7 @@ class _SapPurchaseStockInCheckPageState
                 ),
               ),
               textSpan(
-                hint: '件数：',
+                hint: 'sap_purchase_stock_in_check_piece_qty'.tr,
                 isBold: false,
                 hintColor: Colors.grey.shade700,
                 text: info.numPage.toString(),
@@ -114,7 +114,7 @@ class _SapPurchaseStockInCheckPageState
   Widget build(BuildContext context) {
     var data = state.orderList[index];
     return Obx(() => pageBody(
-          title: '送货单核查',
+          title: 'sap_purchase_stock_in_check_delivery_order_verify'.tr,
           actions: [
             TextButton(
               onPressed: () => checkSaveDialog(
@@ -128,7 +128,7 @@ class _SapPurchaseStockInCheckPageState
                   );
                 },
               ),
-              child: Text('提交'),
+              child: Text('sap_purchase_stock_in_check_submit'.tr),
             )
           ],
           body: ListView.builder(

@@ -45,7 +45,7 @@ class _SapRelocationPickingPageState extends State<SapRelocationPickingPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            textSpan(hint: '物料：', text: data.materialName ?? ''),
+            textSpan(hint: 'sap_relocation_pick_material'.tr, text: data.materialName ?? ''),
             Row(
               children: [
                 Expanded(
@@ -53,7 +53,7 @@ class _SapRelocationPickingPageState extends State<SapRelocationPickingPage> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       textSpan(
-                        hint: '型体：',
+                        hint: 'sap_relocation_pick_type_body'.tr,
                         isBold: false,
                         text: data.typeBody ?? '',
                         textColor: Colors.blue.shade700,
@@ -62,13 +62,13 @@ class _SapRelocationPickingPageState extends State<SapRelocationPickingPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           textSpan(
-                            hint: '箱容：',
+                            hint: 'sap_relocation_pick_box_capacity'.tr,
                             isBold: false,
                             text: '${data.quantity.toShowString()}${data.unit}',
                             textColor: Colors.blue.shade700,
                           ),
                           textSpan(
-                            hint: '领料数：',
+                            hint: 'sap_relocation_pick_pick_qty'.tr,
                             isBold: false,
                             text: '${data.pickQty.toShowString()} ${data.unit}',
                             textColor: Colors.green.shade700,
@@ -108,7 +108,7 @@ class _SapRelocationPickingPageState extends State<SapRelocationPickingPage> {
             if (state.materialList.isNotEmpty)
               TextButton(
                 onPressed: () => state.materialList.clear(),
-                child: Text('清空'),
+                child: Text('sap_relocation_pick_clean'.tr),
               ),
           ],
           body: Column(
@@ -123,7 +123,7 @@ class _SapRelocationPickingPageState extends State<SapRelocationPickingPage> {
                 SizedBox(
                   width: double.infinity,
                   child: CombinationButton(
-                    text: '提交领料',
+                    text: 'sap_relocation_pick_submit_pick'.tr,
                     click: () => checkPickerAndWarehouseDialog(
                       pickerCheck: (pn, ps, un, us, w) => logic.submitPicking(
                         pickerNumber: pn,

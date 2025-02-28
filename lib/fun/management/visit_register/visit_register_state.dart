@@ -8,9 +8,9 @@ class VisitRegisterState {   //接口数据返回
   var dataList = <VisitDataListInfo>[].obs;  //来访数据
   var dataDetail = VisitGetDetailInfo();  //来访单据详情
   var upAddDetail = VisitAddRecordInfo().obs;  //新增来访单据
-  var visitCode = "".obs;  //邀请码
-  var select = "".obs; //选择查询的条件
-  var searchMes = ""; //用来查询人员信息的内容
+  var visitCode = ''.obs;  //邀请码
+  var select = ''.obs; //选择查询的条件
+  var searchMes = ''; //用来查询人员信息的内容
   var lastAdd = false; //是不是最后一次离场记录
 
   var cardPicture = ''.obs;  //身份证照片

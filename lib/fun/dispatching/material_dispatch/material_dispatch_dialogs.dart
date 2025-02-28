@@ -38,7 +38,7 @@ subItemReportDialog(
     PopScope(
       canPop: false,
       child: AlertDialog(
-        title: Text('打标工序'),
+        title: Text('material_dispatch_dialog_label_progress'.tr),
         content: SizedBox(
           width: MediaQuery.of(context).size.width * 0.4 < 400
               ? 400
@@ -55,10 +55,16 @@ subItemReportDialog(
                   color: Colors.blue.shade900,
                 ),
               ),
-              textSpan(hint: '色系：', text: subData.sapColorBatch ?? ''),
-              textSpan(hint: '应汇报数：', text: subData.noCodeQty ?? ''),
+              textSpan(
+                hint: 'material_dispatch_dialog_color_batch'.tr,
+                text: subData.sapColorBatch ?? '',
+              ),
+              textSpan(
+                hint: 'material_dispatch_dialog_need_report_qty'.tr,
+                text: subData.noCodeQty ?? '',
+              ),
               NumberDecimalEditText(
-                hint: '本次汇报数量',
+                hint: 'material_dispatch_dialog_report_qty'.tr,
                 max: max,
                 onChanged: (d) => qty = d,
                 controller: controller,
@@ -67,7 +73,7 @@ subItemReportDialog(
                 children: [
                   Expanded(
                     child: CombinationButton(
-                      text: '复制剩余数',
+                      text: 'material_dispatch_dialog_copy_surplus'.tr,
                       click: () {
                         controller.text =
                             subData.noCodeQty.toDoubleTry().toShowString();
@@ -77,14 +83,14 @@ subItemReportDialog(
                   ),
                   Expanded(
                     child: CombinationButton(
-                      text: '读取跑码器',
+                      text: 'material_dispatch_dialog_read_device'.tr,
                       click: () {},
                       combination: Combination.middle,
                     ),
                   ),
                   Expanded(
                     child: CombinationButton(
-                      text: '清空跑码器',
+                      text: 'material_dispatch_dialog_clear_device'.tr,
                       click: () {},
                       combination: Combination.right,
                     ),
@@ -106,13 +112,15 @@ subItemReportDialog(
             onPressed: () {
               if (qty == 0.0) {
                 showSnackBar(
-                    title: 'snack_bar_default_wrong'.tr, message: '请填写报工数量');
+                  message: 'material_dispatch_dialog_enter_report_qty_tips'.tr,
+                  isWarning: true,
+                );
               } else {
                 callback.call(qty);
                 Get.back();
               }
             },
-            child: Text('提交报工'),
+            child: Text('material_dispatch_dialog_submit_report'.tr),
           ),
         ],
       ),
@@ -125,7 +133,7 @@ showBillNoList(String data) {
     PopScope(
       canPop: false,
       child: AlertDialog(
-        title: Text('指令号'),
+        title: Text('material_dispatch_dialog_ins_number'.tr),
         content: Text(data),
         actions: [
           TextButton(
@@ -150,7 +158,7 @@ labelListDialog(
     PopScope(
       canPop: false,
       child: AlertDialog(
-        title: Text('贴标列表'),
+        title: Text('material_dispatch_dialog_label_list'.tr),
         content: SizedBox(
           width: MediaQuery.of(context).size.width * 0.9,
           height: MediaQuery.of(context).size.height * 0.9,
@@ -171,29 +179,31 @@ labelListDialog(
                               children: [
                                 expandedTextSpan(
                                   flex: 2,
-                                  hint: '创建日期：',
+                                  hint:
+                                      'material_dispatch_dialog_create_date'.tr,
                                   text: data.insertDateTime ?? '',
                                 ),
                                 expandedTextSpan(
                                   flex: 2,
-                                  hint: '批次：',
+                                  hint: 'material_dispatch_dialog_batch'.tr,
                                   text: data.sapColorBatch ?? '',
                                 ),
                                 expandedTextSpan(
-                                  hint: '状态：',
+                                  hint: 'material_dispatch_dialog_state'.tr,
                                   text: data.status ?? '',
                                 ),
                                 expandedTextSpan(
-                                  hint: '数量：',
+                                  hint: 'material_dispatch_dialog_qty'.tr,
                                   text: data.qty.toShowString(),
                                 ),
                                 CombinationButton(
-                                  text: '重新打印',
+                                  text: 'material_dispatch_dialog_reprint'.tr,
                                   click: () {},
                                   combination: Combination.left,
                                 ),
                                 CombinationButton(
-                                  text: '删除贴标',
+                                  text: 'material_dispatch_dialog_delete_label'
+                                      .tr,
                                   click: () {},
                                   combination: Combination.right,
                                 ),
@@ -205,24 +215,27 @@ labelListDialog(
                             child: Row(
                               children: [
                                 expandedTextSpan(
-                                  hint: '托盘号：',
+                                  hint: 'material_dispatch_dialog_pallet_number'
+                                      .tr,
                                   text: data.palletNumber ?? '',
                                 ),
                                 expandedTextSpan(
-                                  hint: '取件码：',
+                                  hint: 'material_dispatch_dialog_pick_code'.tr,
                                   text: data.pickUpCode ?? '',
                                 ),
                                 expandedTextSpan(
-                                  hint: '机台：',
+                                  hint: 'material_dispatch_dialog_machine'.tr,
                                   text: data.drillingCrewName ?? '',
                                 ),
                                 CombinationButton(
-                                  text: '更换托盘',
+                                  text: 'material_dispatch_dialog_change_pallet'
+                                      .tr,
                                   click: () {},
                                   combination: Combination.left,
                                 ),
                                 CombinationButton(
-                                  text: '报工SAP',
+                                  text:
+                                      'material_dispatch_dialog_report_sap'.tr,
                                   click: () {},
                                   combination: Combination.right,
                                 ),
@@ -269,7 +282,7 @@ _getLabelList(
 ) {
   httpGet(
     method: webApiGetQRCodeList,
-    loading: '正在获取贴标列表...',
+    loading: 'material_dispatch_dialog_getting_label_list'.tr,
     params: {
       'processWorkCardInterID': interId,
       'routeEntryFID': routeEntryFID,
@@ -297,7 +310,7 @@ processSpecificationDialog(List<ProcessSpecificationInfo> files) {
         child: StatefulBuilder(
           builder: (context, dialogSetState) {
             return AlertDialog(
-              title: Text('选择要查看的工艺指导书'),
+              title: Text('material_dispatch_dialog_select_manual'.tr),
               content: SizedBox(
                 width: MediaQuery.of(context).size.width * 0.5,
                 height: MediaQuery.of(context).size.height * 0.5,
@@ -336,16 +349,19 @@ processSpecificationDialog(List<ProcessSpecificationInfo> files) {
                 TextButton(
                   onPressed: () {
                     if (selected == -1) {
-                      showSnackBar(title: '查看工艺指导书', message: '请选择要查看的文件');
+                      showSnackBar(
+                        title: 'material_dispatch_dialog_see_manual'.tr,
+                        message: 'material_dispatch_dialog_select_file_tips'.tr,
+                      );
                     } else {
                       Get.back();
-                      Get.to(()=>WebPage(
-                        title: files[selected].fileName ?? '',
-                        url: files[selected].fullName ?? '',
-                      ));
+                      Get.to(() => WebPage(
+                            title: files[selected].fileName ?? '',
+                            url: files[selected].fullName ?? '',
+                          ));
                     }
                   },
-                  child: Text('查看'),
+                  child: Text('material_dispatch_dialog_check'.tr),
                 ),
                 TextButton(
                   onPressed: () => Get.back(),
@@ -370,7 +386,7 @@ materialListDialog(
     PopScope(
         canPop: false,
         child: AlertDialog(
-          title: Text('用料清单列表'),
+          title: Text('material_dispatch_dialog_material_list'.tr),
           content: SizedBox(
             width: MediaQuery.of(context).size.width * 0.6,
             height: MediaQuery.of(context).size.height * 0.6,
@@ -413,7 +429,7 @@ materialListDialog(
                               children: [
                                 title,
                                 textSpan(
-                                  hint: '数量：',
+                                  hint: 'material_dispatch_dialog_qty'.tr,
                                   text: '${data.needQty}${data.unitName}',
                                 )
                               ],
@@ -425,9 +441,11 @@ materialListDialog(
                                 Row(
                                   children: [
                                     expandedTextSpan(
-                                        hint: '批次：', text: data.batch ?? ''),
+                                        hint:
+                                            'material_dispatch_dialog_batch'.tr,
+                                        text: data.batch ?? ''),
                                     textSpan(
-                                      hint: '数量：',
+                                      hint: 'material_dispatch_dialog_qty'.tr,
                                       text: '${data.needQty}${data.unitName}',
                                     )
                                   ],
@@ -443,9 +461,9 @@ materialListDialog(
           actions: [
             TextButton(
               onPressed: () => Get.back(),
-              child: const Text(
-                '返回',
-                style: TextStyle(color: Colors.grey),
+              child: Text(
+                'material_dispatch_dialog_back'.tr,
+                style: const TextStyle(color: Colors.grey),
               ),
             ),
           ],
@@ -460,7 +478,7 @@ _getMaterialList(
 ) {
   httpGet(
     method: webApiGetSubItemBatchMaterialInformation,
-    loading: '正在获取工单物料清单...',
+    loading: 'material_dispatch_dialog_getting_order_material_list'.tr,
     params: {
       'ScProcessWorkCardInterIDList': data.children?[0].interID,
       'MaterialNumber': data.materialNumber,
@@ -486,7 +504,7 @@ _materialMetersConvert(
 ) {
   httpPost(
     method: webApiMetersConvert,
-    loading: '正在矫正大小米数量...',
+    loading: 'material_dispatch_dialog_correcting_meters_qry'.tr,
     params: {
       'ScProcessWorkCardInterIDList': interId,
       'MaterialNumber': materialName,
@@ -504,7 +522,7 @@ showAreaPhoto(BuildContext context) => Get.dialog(
       PopScope(
         canPop: false,
         child: AlertDialog(
-          title: Text('贴合区域图'),
+          title: Text('material_dispatch_dialog_map'.tr),
           content: Image.network(
             'https://geapp.goldemperor.com:8084/PDF/贴合区域规划图.png',
           ),
@@ -546,7 +564,7 @@ pickPallet({
   var dateNow = DateTime.now();
   var dpcDate = DatePickerController(
     PickerType.date,
-    buttonName: '过账日期',
+    buttonName: 'material_dispatch_dialog_posting_date'.tr,
     firstDate: DateTime(dateNow.year, dateNow.month - 1, dateNow.day),
     lastDate: dateNow,
     initDate: savePalletDate,
@@ -569,7 +587,7 @@ pickPallet({
 
   var opcWarehouseLocation = OptionsPickerController(
     PickerType.sapWarehouseStorageLocation,
-    buttonName: '入库仓位',
+    buttonName: 'material_dispatch_dialog_stock_in_warehouse_position'.tr,
     initId: saveWarehouseLocation,
     onSelected: (i) {
       selectLocationId = i.pickerId();
@@ -581,14 +599,15 @@ pickPallet({
     PopScope(
       canPop: false,
       child: AlertDialog(
-        title: Text('库位托盘选择'),
+        title: Text('material_dispatch_dialog_pallet_select'.tr),
         content: SizedBox(
           width: MediaQuery.of(context).size.width * 0.35,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               textSpan(
-                  hint: '工厂及存储地点：',
+                  hint: 'material_dispatch_dialog_factory_and_storage_location'
+                      .tr,
                   text: '${userInfo?.factory} / ${userInfo?.defaultStockName}',
                   textColor: Colors.blue.shade900),
               DatePicker(pickerController: dpcDate),
@@ -603,30 +622,33 @@ pickPallet({
             onPressed: () {
               if (selectDate == 0) {
                 showSnackBar(
-                    title: 'snack_bar_default_wrong'.tr,
-                    message: '请选择过账日期',
-                    isWarning: true);
+                  message:
+                      'material_dispatch_dialog_select_posting_date_tips'.tr,
+                  isWarning: true,
+                );
                 return;
               }
               if (selectMachineId.isEmpty) {
                 showSnackBar(
-                    title: 'snack_bar_default_wrong'.tr,
-                    message: '请选择SAP机台',
-                    isWarning: true);
+                  message: 'material_dispatch_dialog_select_machine_tips'.tr,
+                  isWarning: true,
+                );
                 return;
               }
               if (selectLocationId.isEmpty) {
                 showSnackBar(
-                    title: 'snack_bar_default_wrong'.tr,
-                    message: '请选择入库仓位',
-                    isWarning: true);
+                  message:
+                      'material_dispatch_dialog_select_storage_location_tops'
+                          .tr,
+                  isWarning: true,
+                );
                 return;
               }
               if (selectPalletNumber.isEmpty) {
                 showSnackBar(
-                    title: 'snack_bar_default_wrong'.tr,
-                    message: '请选择托盘',
-                    isWarning: true);
+                  message: 'material_dispatch_dialog_select_pallet_tips'.tr,
+                  isWarning: true,
+                );
                 return;
               }
               callback.call(
@@ -672,7 +694,10 @@ class PickPalletController {
   final Function(SapPalletInfo) onSelected;
 
   final RxList<SapPalletInfo> palletDataList = <SapPalletInfo>[].obs;
-  final RxString msg = '请先选择机台和仓位'.obs;
+  final RxString msg =
+      'material_dispatch_dialog_select_machine_and_storage_location_tops'
+          .tr
+          .obs;
   SapPalletInfo? select;
 
   refresh(String location, String machine) {
@@ -687,7 +712,7 @@ class PickPalletController {
     if (location.isEmpty || machine.isEmpty) {
       return;
     }
-    msg.value = '正在读取托盘列表...';
+    msg.value = 'material_dispatch_dialog_reading_pallet_list'.tr;
     httpGet(
       method: webApiGetPallet,
       params: {
@@ -779,7 +804,12 @@ class PickPalletController {
               child: getCupertinoPicker(
                 palletDataList.map((data) {
                   return Center(
-                    child: Text('${data.palletNumber} - 库存${data.usedNum}'),
+                    child: Text(
+                      'material_dispatch_dialog_inventory'.trArgs([
+                        data.palletNumber ?? '',
+                        data.usedNum.toShowString(),
+                      ]),
+                    ),
                   );
                 }).toList(),
                 controller,
@@ -829,7 +859,7 @@ class PickPallet extends StatelessWidget {
             () => controller.palletDataList.isEmpty
                 ? Container()
                 : CombinationButton(
-                    text: '选择托盘',
+                    text: 'material_dispatch_dialog_select_pallet'.tr,
                     click: () => controller._showOptions(),
                   ),
           )

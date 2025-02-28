@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 
 class FeishuUserTokenInfo {
   int? code;
@@ -30,12 +29,6 @@ class FeishuUserTokenInfo {
   bool isTimeout() {
     var now = DateTime.now().millisecondsSinceEpoch;
     var durationSeconds = Duration(milliseconds: now - time).inSeconds;
-    debugPrint(''
-        'expiresIn=$expiresIn  '
-        'time=$time  '
-        'now=$now  '
-        'durationSeconds=$durationSeconds'
-        '');
     return durationSeconds > (expiresIn ?? 0);
   }
 

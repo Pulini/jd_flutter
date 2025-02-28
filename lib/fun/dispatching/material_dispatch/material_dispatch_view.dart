@@ -51,13 +51,13 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
             ),
           ),
           foregroundDecoration: data.children?[0].lastProcessNode == '1'
-              ? const RotatedCornerDecoration.withColor(
+              ?  RotatedCornerDecoration.withColor(
                   color: Colors.red,
-                  badgeCornerRadius: Radius.circular(8),
-                  badgeSize: Size(45, 45),
+                  badgeCornerRadius: const Radius.circular(8),
+                  badgeSize: const Size(45, 45),
                   textSpan: TextSpan(
-                    text: '末道',
-                    style: TextStyle(fontSize: 14),
+                    text: 'material_dispatch_last'.tr,
+                    style: const TextStyle(fontSize: 14),
                   ),
                 )
               : null,
@@ -66,7 +66,10 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
               Expanded(
                 flex: 3,
                 child: AutoSizeText(
-                  '物料：<${data.materialNumber}> ${data.materialName}',
+                  'material_dispatch_material'.trArgs([
+                    data.materialNumber ?? '',
+                    data.materialName ?? '',
+                  ]),
                   style: itemTitleStyle,
                   maxLines: 2,
                   minFontSize: 8,
@@ -75,7 +78,7 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
               ),
               Expanded(
                 child: Text(
-                  '工厂型体：${data.productName}',
+                  'material_dispatch_type_body'.trArgs([data.productName??'']),
                   style: itemTitleStyle,
                 ),
               ),
@@ -94,15 +97,17 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
           child: Row(
             children: [
               expandedTextSpan(
-                  hint: '部位：',
-                  text: data.partName ?? '',
-                  textColor: Colors.black54),
+                hint: 'material_dispatch_position'.tr,
+                text: data.partName ?? '',
+                textColor: Colors.black54,
+              ),
               expandedTextSpan(
-                  hint: '工序名称：',
-                  text: data.processName ?? '',
-                  textColor: Colors.black54),
+                hint: 'material_dispatch_progress_name'.tr,
+                text: data.processName ?? '',
+                textColor: Colors.black54,
+              ),
               expandedTextSpan(
-                hint: '派工日期：',
+                hint: 'material_dispatch_dispatch_date'.tr,
                 text: data.date ?? '',
                 textColor: Colors.black54,
               ),
@@ -115,17 +120,17 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
           child: Row(
             children: [
               expandedTextSpan(
-                hint: '物料编码：',
+                hint: 'material_dispatch_material_code'.tr,
                 text: '${data.stuffNumber}',
                 textColor: Colors.black54,
               ),
               expandedTextSpan(
-                hint: '厂区：',
+                hint: 'material_dispatch_factory'.tr,
                 text: '${data.sapDecideArea}',
                 textColor: Colors.redAccent,
               ),
               expandedTextSpan(
-                hint: '机台：',
+                hint: 'material_dispatch_machine'.tr,
                 text: '${data.drillingCrewName}',
                 textColor: Colors.redAccent,
               ),
@@ -138,30 +143,33 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
           child: Row(
             children: [
               expandedFrameText(
-                text: '指令号',
+                text: 'material_dispatch_ins_number'.tr,
                 backgroundColor: Colors.blue.shade50,
                 flex: 3,
               ),
               expandedFrameText(
-                text: '数量',
+                text: 'material_dispatch_quantity'.tr,
                 backgroundColor: Colors.blue.shade50,
               ),
               expandedFrameText(
-                text: '完成数量',
+                text: 'material_dispatch_completed_qty'.tr,
                 backgroundColor: Colors.blue.shade50,
               ),
               expandedFrameText(
-                  text: '工序派工单', backgroundColor: Colors.blue.shade50, flex: 2),
+                text: 'material_dispatch_progress_dispatch_order'.tr,
+                backgroundColor: Colors.blue.shade50,
+                flex: 2,
+              ),
               expandedFrameText(
-                text: '已印标数',
+                text: 'material_dispatch_printed_qty'.tr,
                 backgroundColor: Colors.blue.shade50,
               ),
               expandedFrameText(
-                text: '未印标数',
+                text: 'material_dispatch_not_printed_qty'.tr,
                 backgroundColor: Colors.blue.shade50,
               ),
               expandedFrameText(
-                text: '配色批次',
+                text: 'material_dispatch_color_batch'.tr,
                 backgroundColor: Colors.blue.shade50,
               ),
               Container(
@@ -244,7 +252,7 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
                 child: Row(
                   children: [
                     Text(
-                      '完成量(${data.unitName})：',
+                      'material_dispatch_completion_amount'.trArgs([data.unitName??'']),
                       style: style,
                     ),
                     SizedBox(
@@ -255,7 +263,7 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(left: 10, right: 10),
+                      padding: const EdgeInsets.only(left: 10, right: 10),
                       child: Text(
                         '${data.finishQty} / ${data.qty}',
                         style: style,
@@ -268,7 +276,7 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
                 child: Row(
                   children: [
                     Text(
-                      '标签生成量(${data.unitName})：',
+                      'material_dispatch_label_generation_amount'.trArgs([data.unitName??'']),
                       style: style,
                     ),
                     SizedBox(
@@ -279,7 +287,7 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(left: 10, right: 10),
+                      padding: const EdgeInsets.only(left: 10, right: 10),
                       child: Text(
                         '${data.codeQty} / ${data.qty}',
                         style: style,
@@ -289,12 +297,12 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
                 ),
               ),
               CombinationButton(
-                text: '用料清单',
+                text: 'material_dispatch_material_list'.tr,
                 click: () => materialListDialog(context, data),
                 combination: Combination.left,
               ),
               CombinationButton(
-                text: '工艺说明书',
+                text: 'material_dispatch_progress_manual'.tr,
                 click: () => logic.queryProcessSpecification(
                   data.productName ?? '',
                   (list) => processSpecificationDialog(list),
@@ -302,22 +310,22 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
                 combination: Combination.middle,
               ),
               CombinationButton(
-                text: '贴标列表',
+                text: 'material_dispatch_label_list'.tr,
                 click: () => labelListDialog(context, data),
                 combination: Combination.middle,
               ),
               CombinationButton(
-                text: '报工',
+                text: 'material_dispatch_report'.tr,
                 click: () => askDialog(
-                  content: '确定要整组报工吗?',
+                  content: 'material_dispatch_report_tips'.tr,
                   confirm: () => logic.itemReport(data),
                 ),
                 combination: Combination.middle,
               ),
               CombinationButton(
-                text: '取消报工',
+                text: 'material_dispatch_cancel_report'.tr,
                 click: () => askDialog(
-                  content: '确定要整组取消报工吗',
+                  content: 'material_dispatch_cancel_all_report_tips'.tr,
                   confirm: () => logic.itemCancelReport(data),
                 ),
                 combination: Combination.right,
@@ -350,7 +358,7 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
     btCancelReport() {
       if (subData != null) {
         askDialog(
-          content: '确定要取消报工吗？',
+          content: 'material_dispatch_cancel_report_tips'.tr,
           confirm: () => logic.subItemCancelReport(subData),
         );
       }
@@ -373,7 +381,7 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
     btWarehouse() {
       if (subData != null) {
         askDialog(
-          content: '确定要提交入库吗？',
+          content: 'material_dispatch_stock_in_tips'.tr,
           confirm: () => logic.subItemWarehousing(
             subData,
             data.sapDecideArea ?? '',
@@ -387,46 +395,46 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
     if (data.printLabel == '1') {
       if (data.children![0].partialWarehousing == '1') {
         buttons.add(CombinationButton(
-          text: '打印标签',
+          text: 'material_dispatch_print_label'.tr,
           click: btPrint,
           combination: Combination.left,
         ));
         buttons.add(CombinationButton(
-          text: '入库',
+          text: 'material_dispatch_stock_in'.tr,
           click: btWarehouse,
           combination: Combination.right,
         ));
       } else {
         buttons.add(CombinationButton(
-          text: '打印标签',
+          text: 'material_dispatch_print_label'.tr,
           click: btPrint,
         ));
       }
     } else {
       if (data.children![0].partialWarehousing == '1') {
         buttons.add(CombinationButton(
-          text: '报工',
+          text: 'material_dispatch_report'.tr,
           click: btReport,
           combination: Combination.left,
         ));
         buttons.add(CombinationButton(
-          text: '取消报工',
+          text: 'material_dispatch_cancel_report'.tr,
           click: btCancelReport,
           combination: Combination.middle,
         ));
         buttons.add(CombinationButton(
-          text: '入库',
+          text: 'material_dispatch_stock_in'.tr,
           click: btWarehouse,
           combination: Combination.right,
         ));
       } else {
         buttons.add(CombinationButton(
-          text: '报工',
+          text: 'material_dispatch_report'.tr,
           click: btReport,
           combination: Combination.left,
         ));
         buttons.add(CombinationButton(
-          text: '取消报工',
+          text: 'material_dispatch_cancel_report'.tr,
           click: btCancelReport,
           combination: Combination.right,
         ));
@@ -475,12 +483,12 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
           SizedBox(
             width: 400,
             child: EditText(
-              hint: '输入物料编号进行筛选',
+              hint: 'material_dispatch_select_tips'.tr,
               onChanged: (s) => logic.search(s),
             ),
           ),
           CombinationButton(
-            text: '库位托盘选择',
+            text: 'material_dispatch_storage_pallet_select'.tr,
             click: () => pickPallet(
               savePalletDate: state.date,
               saveMachine: state.machineId,
@@ -503,22 +511,22 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
             combination: Combination.left,
           ),
           CombinationButton(
-            text: '批量入库',
+            text: 'material_dispatch_batch_stock_in'.tr,
             click: () => askDialog(
-              content: '确定要批量提交入库吗？',
+              content: 'material_dispatch_batch_stock_in_tips'.tr,
               confirm: () => logic.batchWarehousing(),
             ),
             combination: Combination.middle,
           ),
           CombinationButton(
-            text: '贴合区域图',
+            text: 'material_dispatch_map'.tr,
             click: () => showAreaPhoto(context),
             combination: Combination.middle,
           ),
           CombinationButton(
-            text: '报工到SAP',
+            text: 'material_dispatch_report_to_sap'.tr,
             click: () => askDialog(
-              content: '确定要报工到SAP吗？',
+              content: 'material_dispatch_report_to_sap_tips'.tr,
               confirm: () => logic.reportToSAP(),
             ),
             combination: Combination.right,
@@ -527,7 +535,7 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
         ],
         queryWidgets: [
           EditText(
-            hint: '请输入型体名称',
+            hint: 'material_dispatch_enter_type_body_tips'.tr,
             onChanged: (s) => state.typeBody = s,
           ),
           DatePicker(pickerController: logic.dpcStartDate),
@@ -535,12 +543,12 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
           Spinner(controller: logic.scReportState),
           Obx(() => CheckBox(
                 onChanged: (c) => state.lastProcess.value = c,
-                name: '显示末道工序',
+                name: 'material_dispatch_show_last'.tr,
                 value: state.lastProcess.value,
               )),
           Obx(() => CheckBox(
                 onChanged: (c) => state.unStockIn.value = c,
-                name: '显示未入库',
+                name: 'material_dispatch_show_not_stock_in'.tr,
                 value: state.unStockIn.value,
               )),
         ],

@@ -12,18 +12,6 @@ import 'sap_wms_split_label_state.dart';
 class SapWmsSplitLabelLogic extends GetxController {
   final SapWmsSplitLabelState state = SapWmsSplitLabelState();
 
-  @override
-  void onReady() {
-    // TODO: implement onReady
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    // TODO: implement onClose
-    super.onClose();
-  }
-
   scanCode(String code) {
     state.getLabels(
       labelNumber: code,
@@ -37,11 +25,12 @@ class SapWmsSplitLabelLogic extends GetxController {
     required Function() finish,
   }) {
     if (splitQty == 0) {
-      errorDialog(content: '请输入要拆出的数量！', back: input);
+      errorDialog(
+          content: 'sap_wms_split_label_input_split_qty_tips'.tr, back: input);
       return;
     }
     if ((state.originalLabel?.quantity ?? 0) == splitQty) {
-      errorDialog(content: '拆出数量不能与可拆分数量相同！');
+      errorDialog(content: 'sap_wms_split_label_split_qty_error_tops'.tr);
       return;
     }
     state.originalLabel?.quantity = state.originalLabel?.quantity.sub(splitQty);
@@ -81,7 +70,10 @@ class SapWmsSplitLabelLogic extends GetxController {
         warehouse != '1101' &&
         warehouse != '1102' &&
         warehouse != '1105') {
-      informationDialog(content: '请选择对应仓库再进行贴标打印！');
+      informationDialog(
+          content:
+              'sap_wms_split_label_select_warehouse_before_print_label_tips'
+                  .tr);
       return;
     }
     var list = <Widget>[];
@@ -97,7 +89,8 @@ class SapWmsSplitLabelLogic extends GetxController {
       }
     });
     if (list.isEmpty) {
-      informationDialog(content: '请选择要打印的标签！');
+      informationDialog(
+          content: 'sap_wms_split_label_select_label_fo_print'.tr);
     } else {
       if (list.length > 1) {
         Get.to(() => PreviewLabelList(labelWidgets: list));
@@ -243,13 +236,13 @@ class SapWmsSplitLabelLogic extends GetxController {
               maxLines: 2,
             ),
           ),
-          Text(
+          const Text(
             'GW：0KG NW：0KG',
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
           ),
-          Text(
+          const Text(
             'MEAS:No Data',
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
           )
         ],
       ),
@@ -266,9 +259,9 @@ class SapWmsSplitLabelLogic extends GetxController {
             'page：${data.numPage}#',
             style: const TextStyle(fontWeight: FontWeight.bold, height: 1),
           ),
-          Text(
+          const Text(
             'Made in China',
-            style: const TextStyle(fontWeight: FontWeight.bold, height: 1),
+            style: TextStyle(fontWeight: FontWeight.bold, height: 1),
           ),
         ],
       ),

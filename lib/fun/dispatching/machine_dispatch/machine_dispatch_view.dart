@@ -61,28 +61,28 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
                   ),
                 ),
                 expandedFrameText(
-                  text: '尺码',
+                  text: 'machine_dispatch_size'.tr,
                   backgroundColor: Colors.blue.shade300,
                   textColor: Colors.white,
                   alignment: Alignment.center,
                 ),
                 expandedFrameText(
-                  text: '总数量',
+                  text: 'machine_dispatch_total_qty'.tr,
                   backgroundColor: Colors.orange.shade100,
                   alignment: Alignment.center,
                 ),
                 expandedFrameText(
-                  text: '欠数汇总',
+                  text: 'machine_dispatch_shortage_summary'.tr,
                   backgroundColor: Colors.orange.shade100,
                   alignment: Alignment.center,
                 ),
                 expandedFrameText(
-                  text: '累计报工',
+                  text: 'machine_dispatch_sum_report'.tr,
                   backgroundColor: Colors.orange.shade100,
                   alignment: Alignment.center,
                 ),
                 expandedFrameText(
-                  text: '模具',
+                  text: 'machine_dispatch_mould'.tr,
                   backgroundColor: state.leaderVerify.value
                       ? Colors.green.shade200
                       : Colors.blue.shade300,
@@ -90,7 +90,7 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
                   alignment: Alignment.center,
                 ),
                 expandedFrameText(
-                  text: '当日派工数',
+                  text: 'machine_dispatch_day_qty'.tr,
                   backgroundColor: state.leaderVerify.value
                       ? Colors.green.shade200
                       : Colors.blue.shade300,
@@ -99,12 +99,12 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
                   alignment: Alignment.center,
                 ),
                 expandedFrameText(
-                  text: '上班未满箱数',
+                  text: 'machine_dispatch_last_not_fill'.tr,
                   backgroundColor: Colors.orange.shade100,
                   alignment: Alignment.center,
                 ),
                 expandedFrameText(
-                  text: '箱容',
+                  text: 'machine_dispatch_box_capacity'.tr,
                   backgroundColor: state.leaderVerify.value
                       ? Colors.green.shade200
                       : Colors.orange.shade100,
@@ -113,24 +113,24 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
                   alignment: Alignment.center,
                 ),
                 expandedFrameText(
-                  text: '贴标总数',
+                  text: 'machine_dispatch_label_total'.tr,
                   backgroundColor: Colors.orange.shade100,
                   alignment: Alignment.center,
                 ),
                 expandedFrameText(
-                  text: '箱数',
+                  text: 'machine_dispatch_boxes'.tr,
                   backgroundColor: Colors.green.shade200,
                   textColor: Colors.white,
                   alignment: Alignment.center,
                 ),
                 expandedFrameText(
-                  text: '本班未满箱数',
+                  text: 'machine_dispatch_duty_not_fill'.tr,
                   backgroundColor: Colors.green.shade200,
                   textColor: Colors.white,
                   alignment: Alignment.center,
                 ),
                 expandedFrameText(
-                  text: '报工数量',
+                  text: 'machine_dispatch_report_qty'.tr,
                   backgroundColor: Colors.orange.shade100,
                   alignment: Alignment.center,
                 ),
@@ -266,7 +266,7 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
               alignment: Alignment.center,
             ),
             expandedFrameText(
-              text: '合计',
+              text: 'machine_dispatch_total'.tr,
               backgroundColor: Colors.blue.shade300,
               textColor: Colors.white,
               alignment: Alignment.center,
@@ -366,19 +366,19 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 expandedTextSpan(
-                  hint: '递减编号：',
+                  hint: 'machine_dispatch_decreasing_number'.tr,
                   text: state.detailsInfo?.decrementNumber ?? '',
                 ),
                 expandedTextSpan(
-                  hint: '开工日期：',
+                  hint: 'machine_dispatch_start_date'.tr,
                   text: state.detailsInfo?.startDate ?? '',
                 ),
                 expandedTextSpan(
-                  hint: '派工单号：',
+                  hint: 'machine_dispatch_dispatch_no'.tr,
                   text: state.detailsInfo?.dispatchNumber ?? '',
                 ),
                 expandedTextSpan(
-                  hint: '单重：',
+                  hint: 'machine_dispatch_single_weight'.tr,
                   text: (state.detailsInfo?.weight ?? 0.0).toShowString(),
                 ),
               ],
@@ -387,19 +387,19 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 expandedTextSpan(
-                  hint: '物料编码：',
+                  hint: 'machine_dispatch_material_code'.tr,
                   text: state.detailsInfo?.materialNumber ?? '',
                 ),
                 expandedTextSpan(
-                  hint: '工厂型体：',
+                  hint: 'machine_dispatch_type_body'.tr,
                   text: state.detailsInfo?.factoryType ?? '',
                 ),
                 expandedTextSpan(
-                  hint: '递减机台：',
+                  hint: 'machine_dispatch_decreasing_machine'.tr,
                   text: state.detailsInfo?.decreasingMachine ?? '',
                 ),
                 expandedTextSpan(
-                  hint: '实际机台：',
+                  hint: 'machine_dispatch_actual_machine'.tr,
                   hintColor: Colors.red,
                   text: state.detailsInfo?.machine ?? '',
                   textColor: Colors.red,
@@ -410,27 +410,27 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 expandedTextSpan(
-                  hint: '班次：',
+                  hint: 'machine_dispatch_shift_schedule'.tr,
                   text: state.detailsInfo?.shift ?? '',
                 ),
                 expandedTextSpan(
-                  hint: '制程：',
+                  hint: 'machine_dispatch_process'.tr,
                   text: state.detailsInfo?.processflow ?? '',
                 ),
                 expandedTextSpan(
-                  hint: '模具号：',
+                  hint: 'machine_dispatch_mold_number'.tr,
                   text: state.detailsInfo?.moldNo ?? '',
                 ),
                 expandedTextSpan(hint: '', text: ''),
               ],
             ),
             textSpan(
-              hint: '物料名称：',
+              hint: 'machine_dispatch_material_name'.tr,
               text: state.detailsInfo?.materialName ?? '',
               fontSize: 18,
             ),
             textSpan(
-              hint: '备注：',
+              hint: 'machine_dispatch_remarks'.tr,
               hintColor: Colors.red,
               text: state.detailsInfo?.remarks ?? '',
               textColor: Colors.red,
@@ -445,12 +445,12 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
           children: [
             if (!state.leaderVerify.value)
               CombinationButton(
-                text: '班组长操作',
+                text: 'machine_dispatch_leader_operation'.tr,
                 click: () => teamLeaderVerifyDialog(),
               ),
             if (state.leaderVerify.value)
               CombinationButton(
-                text: '清理上班尾数',
+                text: 'machine_dispatch_clean_last'.tr,
                 isEnabled: state.selectList.any((v) => v.value),
                 click: () => logic.cleanOrRecoveryLastQty(
                   true,
@@ -460,7 +460,7 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
               ),
             if (state.leaderVerify.value)
               CombinationButton(
-                text: '恢复上班尾数',
+                text: 'machine_dispatch_restore_last'.tr,
                 isEnabled: state.selectList.any((v) => v.value),
                 click: () => logic.cleanOrRecoveryLastQty(
                   false,
@@ -470,13 +470,13 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
               ),
             if (state.leaderVerify.value)
               CombinationButton(
-                text: '修改工单',
+                text: 'machine_dispatch_modify_order'.tr,
                 click: () {
                   if (state.detailsInfo?.status == 2) {
-                    informationDialog(content: '已工资汇报，请先删除工汇报！');
+                    informationDialog(content: 'machine_dispatch_modify_error_tips'.tr);
                   } else {
                     askDialog(
-                      content: '确定要修改当前工单的模具和箱容吗？',
+                      content: 'machine_dispatch_modify_tips'.tr,
                       confirm: () => logic.modifyWorkCardItem(
                         () => setState(() {}),
                       ),
@@ -487,7 +487,7 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
               ),
             Expanded(child: Container()),
             CombinationButton(
-              text: '历史贴标',
+              text: 'machine_dispatch_label_history'.tr,
               click: () {
                 // Get.to(()=> TestApp());
                 Get.to(()=> const MachineDispatchReportPage());
@@ -495,42 +495,41 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
               combination: Combination.left,
             ),
             CombinationButton(
-              text: '生成并打印',
+              text: 'machine_dispatch_generate_and_print'.tr,
               click: () {},
               combination: Combination.middle,
             ),
             CombinationButton(
-              text: '工艺指导书',
+              text: 'machine_dispatch_process_manual'.tr,
               click: () {},
               combination: Combination.middle,
             ),
             CombinationButton(
-              text: '产量汇报',
+              text: 'machine_dispatch_production_report'.tr,
               click: () {},
               combination: Combination.middle,
             ),
             if (state.detailsInfo?.barCodeList?.isNotEmpty == true)
               CombinationButton(
-                text: '取消工号确认',
+                text: 'machine_dispatch_cancel_number_confirmation'.tr,
                 click: () {},
                 combination: Combination.middle,
               ),
             if (state.detailsInfo?.barCodeList?.isNotEmpty == true)
               CombinationButton(
-                text: '工号确认',
+                text: 'machine_dispatch_number_confirmation'.tr,
                 click: () => logic.checkLabelScanState(),
                 combination: Combination.middle,
               ),
             CombinationButton(
-              text: '两班交接',
+              text: 'machine_dispatch_handover_shifts'.tr,
               click: () {},
               combination: Combination.right,
             ),
           ],
         ),
       );
-  var remake =
-      '注：1、清理或恢复上班尾数需要先勾选要修改的尺码列。2、点击对应尺码的模具或箱容进行数量修改，然后点击《修改工单》进行修改提交。';
+
 
   @override
   Widget build(BuildContext context) {
@@ -539,7 +538,7 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
           actions: [
             if (state.detailsInfo != null)
               CombinationButton(
-                text: '料头信息',
+                text: 'machine_dispatch_surplus_material_info'.tr,
                 click: () => showSurplusMaterialListDialog(
                   context,
                   print: (c) {},
@@ -548,7 +547,7 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
               ),
             if (state.detailsInfo != null)
               CombinationButton(
-                text: '贴标列表',
+                text: 'machine_dispatch_label_list'.tr,
                 click: () {
                   if (state.labelErrorMsg.isNotEmpty) {
                     errorDialog(content: state.labelErrorMsg);
@@ -559,7 +558,7 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
                 combination: Combination.middle,
               ),
             CombinationButton(
-              text: '切换工单',
+              text: 'machine_dispatch_change_order'.tr,
               click: refreshOrder,
               combination: state.detailsInfo != null
                   ? Combination.middle
@@ -569,7 +568,7 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
             ),
             if (state.nowDispatchNumber.value.isNotEmpty)
               CombinationButton(
-                text: '刷新',
+                text: 'machine_dispatch_refresh'.tr,
                 click: () => logic.refreshWorkCardDetail(() => setState(() {})),
                 combination: Combination.right,
               ),
@@ -579,7 +578,7 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
               if (state.detailsInfo != null) pageTitle(),
               if (state.leaderVerify.value)
                 Text(
-                  remake,
+                  'machine_dispatch_tips'.tr,
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Colors.red,

@@ -12,9 +12,7 @@ class SapStockTransferState {
   PalletDetailItem2Info? newPallet;
   PalletDetailItem2Info? targetPallet;
 
-  SapStockTransferState() {
-    //Initialize variables
-  }
+
 
   checkPallet({
     String? palletNo,
@@ -24,7 +22,7 @@ class SapStockTransferState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在获取待上架列表...',
+      loading: 'sap_stock_transfer_getting_wait_put_on_list_tips'.tr,
       method: webApiSapGetPalletList,
       body: {
         'WERKS': '1500',
@@ -64,11 +62,11 @@ class SapStockTransferState {
                   targetPallet = pallet.item2?[0];
                   break;
                 case 'Y':
-                  error.call('此托盘已在其他仓库使用！！');
+                  error.call('sap_stock_transfer_pallet_already_occupied_tips'.tr);
                   break;
               }
             } else {
-              error.call('托盘不存在！！');
+              error.call('sap_stock_transfer_pallet_not_exists_tips'.tr);
             }
           } else {
             labelList.value = pallet.item1 ?? [];
@@ -141,7 +139,7 @@ class SapStockTransferState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在提交上架信息...',
+      loading: 'sap_stock_transfer_submitting_put_on_tips'.tr,
       method: webApiSapPuttingOnShelves,
       body: {
         'ZCZLX_WMS': 'WM03',

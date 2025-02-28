@@ -8,17 +8,6 @@ import 'sap_picking_receipt_reversal_state.dart';
 class SapPickingReceiptReversalLogic extends GetxController {
   final SapPickingReceiptReversalState state = SapPickingReceiptReversalState();
 
-  @override
-  void onReady() {
-    // TODO: implement onReady
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    // TODO: implement onClose
-    super.onClose();
-  }
 
   query({
     required String order,

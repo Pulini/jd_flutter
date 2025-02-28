@@ -27,7 +27,7 @@ selectMaterialDialog({
         return AlertDialog(
           title: Row(
             children: [
-              Expanded(child: Text('添加调色物料')),
+              Expanded(child: Text('sap_ink_color_matching_dialog_add_color_toning_material'.tr)),
               IconButton(
                 onPressed: () => Get.back(),
                 icon: const Icon(Icons.close),
@@ -63,7 +63,7 @@ selectMaterialDialog({
                       border: const OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(20)),
                       ),
-                      hintText: '请输入物料名称',
+                      hintText: 'sap_ink_color_matching_dialog_input_material_name'.tr,
                       hintStyle: const TextStyle(color: Colors.grey),
                       prefixIcon: IconButton(
                           onPressed: () => controller.clear(),
@@ -72,20 +72,18 @@ selectMaterialDialog({
                             color: Colors.red,
                           )),
                       suffixIcon: CombinationButton(
-                        text: '新增物料',
+                        text: 'sap_ink_color_matching_dialog_add_material'.tr,
                         click: () {
                           if (scalePortList.isEmpty) {
                             showSnackBar(
-                              title: '错误',
-                              message: '无可用设备！',
+                              message: 'sap_ink_color_matching_dialog_no_available_devices'.tr,
                               isWarning: true,
                             );
                             return;
                           }
                           if (showList.isEmpty) {
                             showSnackBar(
-                              title: '错误',
-                              message: '请选择物料！',
+                              message: 'sap_ink_color_matching_dialog_select_material'.tr,
                               isWarning: true,
                             );
                             return;
@@ -170,8 +168,8 @@ selectMaterialDialog({
                             )
                           : Center(
                               child: Text(
-                                '无可用物料!',
-                                style: TextStyle(
+                                'sap_ink_color_matching_dialog_no_available_material'.tr,
+                                style: const TextStyle(
                                   color: Colors.red,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 20,
@@ -192,8 +190,8 @@ selectMaterialDialog({
                             )
                           : Center(
                               child: Text(
-                                '无可用设备!',
-                                style: TextStyle(
+                                'sap_ink_color_matching_dialog_no_available_devices'.tr,
+                                style: const TextStyle(
                                   color: Colors.red,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 20,
@@ -229,29 +227,29 @@ trialFinishDialog({
       canPop: false,
       child: StatefulBuilder(builder: (c, dialogSetState) {
         return AlertDialog(
-          title: Text('试做结果'),
+          title: Text('sap_ink_color_matching_dialog_trial_result'.tr),
           content: SizedBox(
             width: 300,
             height: 230,
             child: ListView(
               children: [
                 textSpan(
-                  hint: '调色单：',
+                  hint: 'sap_ink_color_matching_dialog_color_toning_order'.tr,
                   text: orderNumber,
                   textColor: Colors.green,
                 ),
                 textSpan(
-                  hint: '型体：',
+                  hint: '型sap_ink_color_matching_dialog_type_body'.tr,
                   text: typeBody,
                   textColor: Colors.green,
                 ),
                 Obx(() => textSpan(
-                      hint: '单位用量：',
+                      hint: 'sap_ink_color_matching_dialog_usage'.tr,
                       text: actualDosage.value.toMaxString(),
                     )),
                 Row(
                   children: [
-                    Text('试做数量：', style: style),
+                    Text('sap_ink_color_matching_dialog_trial_qty'.tr, style: style),
                     Expanded(
                       child: NumberDecimalEditText(
                         onChanged: (w) {
@@ -264,12 +262,12 @@ trialFinishDialog({
                         },
                       ),
                     ),
-                    Text('双', style: style),
+                    Text('sap_ink_color_matching_dialog_pair_unit'.tr, style: style),
                   ],
                 ),
                 Row(
                   children: [
-                    Text('混合物试做后重量：', style: style),
+                    Text('sap_ink_color_matching_dialog_mix_trial_weight'.tr, style: style),
                     Expanded(
                       child: NumberDecimalEditText(
                         max: mixWeight,
@@ -288,10 +286,10 @@ trialFinishDialog({
                 ),
                 Row(
                   children: [
-                    Text('损耗：', style: style),
+                    Text('sap_ink_color_matching_dialog_loss'.tr, style: style),
                     Expanded(
                       child: NumberDecimalEditText(
-                        max: 100,
+                        max: 20,
                         onChanged: (w) {
                           inputLossPercent.value = w;
                           standardDosage.value = mixWeight
@@ -313,24 +311,21 @@ trialFinishDialog({
               onPressed: () {
                 if (inputTrialQty.value == 0) {
                   showSnackBar(
-                    title: '错误',
-                    message: '请填写试做数量！',
+                    message: 'sap_ink_color_matching_dialog_input_trial_qty'.tr,
                     isWarning: true,
                   );
                   return;
                 }
                 if (inputMixWeight.value == 0) {
                   showSnackBar(
-                    title: '错误',
-                    message: '请填写混合物试做后重量！',
+                    message: 'sap_ink_color_matching_dialog_input_mix_trial_weight'.tr,
                     isWarning: true,
                   );
                   return;
                 }
                 if (inputMixWeight.value == mixWeight) {
                   showSnackBar(
-                    title: '错误',
-                    message: '混合物试做后重量不能等于混合物重量！',
+                    message: 'sap_ink_color_matching_dialog_weight_error'.tr,
                     isWarning: true,
                   );
                   return;
@@ -381,7 +376,7 @@ _submitTrialFinish({
   required Function(String) error,
 }) {
   sapPost(
-    loading: '正在提交试做结果...',
+    loading: 'sap_ink_color_matching_dialog_submitting_trial'.tr,
     method: webApiSapSubmitTrialFinish,
     body: {
       "WOFNR": orderNumber,
@@ -432,12 +427,10 @@ puttingDialog({
     ip: deviceServerIp,
     port: deviceScalePort,
     weightListener: (weight, unit) {
-      debugPrint('weight=$weight unit=$unit');
       mixDeviceWeight.value = weight;
       mixDeviceUnit.value = unit;
     },
     connectListener: (state) {
-      debugPrint('state=$state');
       connectState.value = state.value;
     },
   )..connect();
@@ -461,12 +454,12 @@ puttingDialog({
                   ),
                 ),
                 child: ballColor == Colors.transparent
-                    ? Center(child: Text('无'))
+                    ? Center(child: Text('sap_ink_color_matching_dialog_null'.tr))
                     : null,
               ),
               expandedTextSpan(
                 flex: 3,
-                hint: '物料：',
+                hint: 'sap_ink_color_matching_dialog_material'.tr,
                 text: '(${data.materialCode})${data.materialName}',
                 textColor: Colors.black87,
               ),
@@ -488,13 +481,13 @@ puttingDialog({
                             margin: const EdgeInsets.only(left: 5, right: 10),
                             child: const CircularProgressIndicator(),
                           ),
-                          Text('连接中...', style: styleBlue),
+                          Text('sap_ink_color_matching_dialog_connecting'.tr, style: styleBlue),
                         ],
                       )
                     : connectState.value == ConnectState.connected.value
                         ? mixDeviceUnit.value != 'kg'
-                            ? Text('$deviceName：设备单位错误!', style: styleRed)
-                            : Text('$deviceName：连接成功', style: styleGreen)
+                            ? Text('$deviceName：sap_ink_color_matching_dialog_device_unit_error'.tr, style: styleRed)
+                            : Text('$deviceName：sap_ink_color_matching_dialog_connected'.tr, style: styleGreen)
                         : Row(
                             children: [
                               Text('$deviceName：', style: styleRed),
@@ -503,11 +496,11 @@ puttingDialog({
                                 color: Colors.red,
                                 size: 30,
                               ),
-                              Text('设备异常', style: styleRed),
+                              Text('sap_ink_color_matching_dialog_device_exception'.tr, style: styleRed),
                             ],
                           )),
                 Obx(() => textSpan(
-                      hint: '混合物总重量：',
+                      hint: 'sap_ink_color_matching_dialog_mix_weight'.tr,
                       fontSize: 24,
                       text:
                           '${mixDeviceWeight.value.toShowString()} ${mixDeviceUnit.value}',
@@ -538,17 +531,17 @@ puttingDialog({
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Obx(() => textSpan(
-                                hint: '应倒入：',
+                                hint: 'sap_ink_color_matching_dialog_should_poured_in'.tr,
                                 text:
                                     '${data.finalWeight.value.toFixed(4).toShowString()} ${mixDeviceUnit.value}',
                               )),
                           Obx(() => textSpan(
-                                hint: '已倒入：',
+                                hint: 'sap_ink_color_matching_dialog_already_poured_in'.tr,
                                 text:
                                     '${data.actualWeight.value.toFixed(4).toShowString()} ${mixDeviceUnit.value}',
                               )),
                           Obx(() => textSpan(
-                                hint: '还需倒入：',
+                                hint: 'sap_ink_color_matching_dialog_need_poured_in'.tr,
                                 text:
                                     '${data.finalWeight.value.sub(data.actualWeight.value).toFixed(4).toShowString()} ${mixDeviceUnit.value}',
                               )),
@@ -584,7 +577,7 @@ puttingDialog({
                       width: double.infinity,
                       child: CombinationButton(
                         isEnabled: mixDeviceUnit.value.isNotEmpty,
-                        text: '混合完成',
+                        text: 'sap_ink_color_matching_dialog_mix_finish'.tr,
                         click: () {
                           if (connectState.value ==
                                   ConnectState.connected.value &&

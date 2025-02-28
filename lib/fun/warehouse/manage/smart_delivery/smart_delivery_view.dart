@@ -65,14 +65,20 @@ class _SmartDeliveryPageState extends State<SmartDeliveryPage> {
             Row(
               children: [
                 expandedTextSpan(
-                  hint: '销售订单：',
+                  hint: 'smart_delivery_sales_order'.tr,
                   text: data.salesOrderNo ?? '',
                   fontSize: 19,
                   textColor: Colors.blue.shade900,
                 ),
                 expandedTextSpan(
-                  hint: '工厂型体：',
+                  hint: 'smart_delivery_type_body'.tr,
                   text: data.typeBody ?? '',
+                  fontSize: 19,
+                  textColor: Colors.blue.shade900,
+                ),
+                expandedTextSpan(
+                  hint: 'smart_delivery_customer_po'.tr,
+                  text: data.customerPo ?? '',
                   fontSize: 19,
                   textColor: Colors.blue.shade900,
                 ),
@@ -83,20 +89,22 @@ class _SmartDeliveryPageState extends State<SmartDeliveryPage> {
               children: [
                 expandedTextSpan(
                   flex: 2,
-                  hint: '派工单号(日期)：',
+                  hint: 'smart_delivery_dispatch_no'.tr,
                   text: '${data.workCardNo}(${data.dispatchDate})',
                   hintColor: Colors.grey,
                   textColor: Colors.grey,
                 ),
                 expandedTextSpan(
-                  hint: '订单总量：',
+                  hint: 'smart_delivery_order_total_qty'.tr,
                   text: data.dispatchQty.toShowString(),
                   hintColor: Colors.grey,
                   textColor: Colors.grey,
                 ),
                 expandedTextSpan(
-                  hint: '发料情况：',
-                  text: data.materialIssuanceStatus == 0 ? '未发料' : '已发料',
+                  hint: 'smart_delivery_material_issuance_status'.tr,
+                  text: data.materialIssuanceStatus == 0
+                      ? 'smart_delivery_not_issuance'.tr
+                      : 'smart_delivery_issued'.tr,
                   hintColor: Colors.grey,
                   textColor: data.materialIssuanceStatus == 0
                       ? Colors.grey
@@ -114,7 +122,10 @@ class _SmartDeliveryPageState extends State<SmartDeliveryPage> {
   Widget build(BuildContext context) {
     return pageBodyWithBottomSheet(
       bottomSheet: [
-        EditText(hint: '请输入指令查询', controller: insController),
+        EditText(
+          hint: 'smart_delivery_input_instruction'.tr,
+          controller: insController,
+        ),
         DatePicker(pickerController: pcStartDate),
         DatePicker(pickerController: pcEndDate),
         OptionsPicker(pickerController: pcGroup),
@@ -130,7 +141,7 @@ class _SmartDeliveryPageState extends State<SmartDeliveryPage> {
       body: EasyRefresh(
         controller: controller,
         header: const MaterialHeader(),
-        footer: const ClassicFooter(noMoreText: '没了没了，别拉了！'),
+        footer: ClassicFooter(noMoreText: 'smart_delivery_no_more_data'.tr),
         onRefresh: () => logic.refreshOrder(
           isQuery: false,
           instructions: insController.text,

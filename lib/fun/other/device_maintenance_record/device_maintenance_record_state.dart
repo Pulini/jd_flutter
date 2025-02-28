@@ -7,7 +7,7 @@ import 'package:jd_flutter/widget/custom_widget.dart';
 
 class DeviceMaintenanceRecordState {
   
-  var deviceNumber = "";
+  var deviceNumber = '';
   var isHave = false.obs;
   var dataList = <DeviceMaintenanceListInfo>[].obs; //设备维修列表
   var deviceData = DeviceMaintenanceInfo().obs; //设备维修详情
@@ -20,12 +20,12 @@ class DeviceMaintenanceRecordState {
 
 
   //要添加的零部件信息
-  var brand = ""; // 零部件的品牌
-  var partName = ""; // 零部件的名字
-  var partNumber = ""; // 零部件的数量
-  var partUnit = ""; // 零部件的单位
-  var partNorms = ""; // 零部件的规格
-  var partRemark = ""; // 零部件的备注
+  var brand = ''; // 零部件的品牌
+  var partName = ''; // 零部件的名字
+  var partNumber = ''; // 零部件的数量
+  var partUnit = ''; // 零部件的单位
+  var partNorms = ''; // 零部件的规格
+  var partRemark = ''; // 零部件的备注
 
 
   //要去报修的设备信息
@@ -48,19 +48,19 @@ class DeviceMaintenanceRecordState {
   addRepairEntryData({
     required Function() success,
   }) {
-    if (brand == "") {
+    if (brand == '') {
       showSnackBar(title: '警告', message: '零部件品牌为空');
       return;
-    } else if (partName == "") {
+    } else if (partName == '') {
       showSnackBar(title: '警告', message: '零部件名称为空');
       return;
-    } else if (partNumber == "") {
+    } else if (partNumber == '') {
       showSnackBar(title: '警告', message: '零部件数量为空');
       return;
-    } else if (partNorms == "") {
+    } else if (partNorms == '') {
       showSnackBar(title: '警告', message: '零部件规格为空');
       return;
-    } else if (partUnit == "") {
+    } else if (partUnit == '') {
       showSnackBar(title: '警告', message: '零部件单位为空');
       return;
     } else {

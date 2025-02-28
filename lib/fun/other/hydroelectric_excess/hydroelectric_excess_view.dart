@@ -86,7 +86,7 @@ class _HydroelectricExcessPageState extends State<HydroelectricExcessPage> {
         state.textThisTime.text = code,
         if (code.isNotEmpty)
           {
-            state.stateToSearch.value = "0",
+            state.stateToSearch.value = '0',
             state.searchRoom(DeviceListInfo(number: code), false)
           }
       },

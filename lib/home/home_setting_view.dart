@@ -336,38 +336,12 @@ class _UserSettingState extends State<UserSetting> {
           ),
           GestureDetector(
             onTap: () {
-              // Get.to(() => FeishuAuthorize())?.then((code) {
-              //   if (code != null) {
-              //     showSnackBar(title: '飞书授权', message: code);
-              //   }
-              // });
-              // feishuAuthorizeCheck(
-              //   notAuthorize: () =>
-              //       Get.to(() => FeishuAuthorize())?.then((code) {
-              //     if (code != null) {
-              //       showSnackBar(title: '飞书授权', message: code);
-              //     }
-              //   }),
-              //   authorized: (token) {
-              //     // showSnackBar(title: '飞书授权', message: token);
-              //     feishuWikiSearch(
-              //       token:token,
-              //       query: 'query',
-              //       success: (list) {},
-              //       failed: (msg) => errorDialog(content: msg),
-              //     );
-              //   },
-              // );
               // Get.to(() =>  const Scanner())?.then((v) {
               //   if(v!=null){
               //     showSnackBar(title: '扫码', message: v);
               //   }
               // });
               // scannerDialog( detect: (String code)=>showSnackBar(title: 'title', message: code));
-              // Get.to(() => WebPage(
-              //     title: 'title',
-              //     url:
-              //         'https://goldemperor.feishu.cn/wiki/LK5YwQFdwiorgIkeac6cGszGnwb'));
               if (!GetPlatform.isWeb) {
                 getVersionInfo(
                   true,
@@ -377,9 +351,7 @@ class _UserSettingState extends State<UserSetting> {
                       message: 'is_already_latest_version'.tr,
                     );
                   },
-                  needUpdate: (versionInfo) {
-                    doUpdate(versionInfo);
-                  },
+                  needUpdate: (v)=>doUpdate(version: v),
                 );
               }
             },

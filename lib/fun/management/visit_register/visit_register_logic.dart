@@ -568,15 +568,4 @@ class VisitRegisterLogic extends GetxController {
     return phoneExp.hasMatch(phoneNumber);
   }
 
-  // @override
-  // void onReady() {
-  //   super.onReady();
-  //   getInviteCode();
-  // }
-
-  @override
-  void onClose() {
-    // TODO: implement onClose
-    super.onClose();
-  }
 }

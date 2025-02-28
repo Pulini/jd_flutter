@@ -22,8 +22,6 @@ class _ModifyLabelWorkerPageState extends State<ModifyLabelWorkerPage> {
   final ProcessDispatchRegisterState state =
       Get.find<ProcessDispatchRegisterLogic>().state;
 
-
-
   _item(WorkerInfo wi, int index) {
     return Obx(() => GestureDetector(
           onTap: () {
@@ -69,19 +67,22 @@ class _ModifyLabelWorkerPageState extends State<ModifyLabelWorkerPage> {
   @override
   void initState() {
     super.initState();
-    pdaScanner(scan: (code)=> logic.getLabelInfo(code));
+    pdaScanner(scan: (code) => logic.getLabelInfo(code));
     getWorkerInfo(
       department: userInfo?.departmentID.toString(),
       workers: (list) => state.workerList.value = list,
-      error: (msg) =>
-          showSnackBar(title: '查询失败', message: msg, isWarning: true),
+      error: (msg) => showSnackBar(
+        title: 'process_dispatch_register_modify_query_failed',
+        message: msg,
+        isWarning: true,
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return pageBody(
-      title: '修改操作员',
+      title: 'process_dispatch_register_modify_change_operator',
       actions: [
         IconButton(
           icon: const Icon(
@@ -100,8 +101,8 @@ class _ModifyLabelWorkerPageState extends State<ModifyLabelWorkerPage> {
         () => Column(
           children: [
             textSpan(
-              hint: '温馨提示：',
-              text: '扫描标签进行人员修改！',
+              hint: 'process_dispatch_register_modify_tips'.tr,
+              text: 'process_dispatch_register_modify_tips_msg'.tr,
               hintColor: Colors.redAccent,
               textColor: Colors.redAccent,
             ),
@@ -110,11 +111,11 @@ class _ModifyLabelWorkerPageState extends State<ModifyLabelWorkerPage> {
               child: Row(
                 children: [
                   expandedTextSpan(
-                    hint: '指令号：',
+                    hint: 'process_dispatch_register_modify_ins_number'.tr,
                     text: state.instructions.value,
                   ),
                   expandedTextSpan(
-                    hint: '工序：',
+                    hint: 'process_dispatch_register_modify_process'.tr,
                     text: state.processName.value,
                   ),
                 ],
@@ -125,11 +126,13 @@ class _ModifyLabelWorkerPageState extends State<ModifyLabelWorkerPage> {
               child: Row(
                 children: [
                   expandedTextSpan(
-                    hint: '操作员：',
+                    hint: 'process_dispatch_register_modify_operator'.tr,
                     text: state.worker.value,
                   ),
                   expandedTextSpan(
-                    hint: '数量/箱容：',
+                    hint:
+                        'process_dispatch_register_modify_quantity_or_box_capacity'
+                            .tr,
                     text: state.qty.value,
                   ),
                 ],
@@ -149,7 +152,7 @@ class _ModifyLabelWorkerPageState extends State<ModifyLabelWorkerPage> {
             SizedBox(
               width: double.infinity,
               child: CombinationButton(
-                text: '提交修改',
+                text: 'process_dispatch_register_modify_submit_modify'.tr,
                 click: () => logic.modifyLabelWorker(),
               ),
             ),

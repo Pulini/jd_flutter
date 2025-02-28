@@ -1,3 +1,4 @@
+import 'package:get/get.dart';
 import 'package:jd_flutter/utils/utils.dart';
 
 // InterID : 213015
@@ -229,11 +230,11 @@ class ProductionDispatchOrderInfo {
   }
 
   String getSizeText() {
-    var text = '尺码：';
+    var text = '';
     for (var value in size!) {
       text = '$text  <${value.size}/${value.num}>';
     }
-    return text;
+    return 'production_dispatch_size'.trArgs([text]);
   }
 
   String getProgress() {

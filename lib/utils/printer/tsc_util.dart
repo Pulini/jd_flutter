@@ -122,11 +122,11 @@ Uint8List _tscBarCode(
   int x,
   int y,
   String content, {
-  String sym = "UCC128CCA",
-  String rotate = "0",
-  String moduleWidth = "2",
-  String sepHt = "2",
-  String segWidth = "35",
+  String sym = 'UCC128CCA',
+  String rotate = '0',
+  String moduleWidth = '2',
+  String sepHt = '2',
+  String segWidth = '35',
 }) =>
     utf8.encode(
         'RSS $x,$y,"$sym",$rotate,$moduleWidth,$sepHt,$segWidth,"$content"\r\n');

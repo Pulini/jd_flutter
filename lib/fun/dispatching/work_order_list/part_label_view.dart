@@ -26,7 +26,7 @@ class _PartLabelPageState extends State<PartLabelPage> {
       PopScope(
         canPop: false,
         child: AlertDialog(
-          title: Text('销售订单列表'),
+          title: Text('part_label_sales_order_list'.tr),
           content: SizedBox(
             width: 200,
             height: 300,
@@ -44,9 +44,9 @@ class _PartLabelPageState extends State<PartLabelPage> {
           actions: [
             TextButton(
               onPressed: () => Get.back(),
-              child: const Text(
-                '返回',
-                style: TextStyle(color: Colors.grey),
+              child: Text(
+                'part_label_back'.tr,
+                style: const TextStyle(color: Colors.grey),
               ),
             ),
           ],
@@ -64,20 +64,20 @@ class _PartLabelPageState extends State<PartLabelPage> {
       PopScope(
         canPop: false,
         child: AlertDialog(
-          title: Text('贴标创建'),
+          title: Text('part_label_create_label'.tr),
           content: SizedBox(
             width: 300,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _paddingText('箱容'),
+                _paddingText('part_label_box_capacity'.tr),
                 NumberDecimalEditText(
                   max: max,
                   initQty: max,
                   onChanged: (d) => boxCapacity = d,
                 ),
-                _paddingText('创建总数'),
+                _paddingText('part_label_create_total'.tr),
                 NumberDecimalEditText(
                   max: max,
                   initQty: max,
@@ -85,7 +85,7 @@ class _PartLabelPageState extends State<PartLabelPage> {
                 ),
                 const SizedBox(height: 20),
                 WorkerCheck(
-                  hint: '被指派员工工号',
+                  hint: 'part_label_dispatch_worker_number'.tr,
                   onChanged: (wi) {
                     if (wi != null) {
                       empID = wi.empID.toString();
@@ -100,9 +100,9 @@ class _PartLabelPageState extends State<PartLabelPage> {
           actions: [
             TextButton(
               onPressed: () => Get.back(),
-              child: const Text(
-                '返回',
-                style: TextStyle(color: Colors.grey),
+              child: Text(
+                'part_label_back'.tr,
+                style: const TextStyle(color: Colors.grey),
               ),
             ),
             TextButton(
@@ -112,8 +112,8 @@ class _PartLabelPageState extends State<PartLabelPage> {
                 data.size ?? '',
                 empID,
               ),
-              child: const Text(
-                '创建',
+              child: Text(
+                'part_label_create'.tr,
               ),
             ),
           ],
@@ -135,7 +135,7 @@ class _PartLabelPageState extends State<PartLabelPage> {
         child: Obx(() => AlertDialog(
               title: Row(
                 children: [
-                  Expanded(child: Text('贴标列表(长按删除)')),
+                  Expanded(child: Text('part_label_label_list_delete_tips'.tr)),
                   GestureDetector(
                     onTap: () {
                       var isSelectAll = select.isNotEmpty &&
@@ -145,8 +145,8 @@ class _PartLabelPageState extends State<PartLabelPage> {
                       }
                     },
                     child: Text(
-                      '全选',
-                      style: TextStyle(fontSize: 16),
+                      'part_label_all'.tr,
+                      style: const TextStyle(fontSize: 16),
                     ),
                   ),
                   Checkbox(
@@ -170,7 +170,8 @@ class _PartLabelPageState extends State<PartLabelPage> {
                     onLongPress: () {
                       if (checkUserPermission('1052504')) {
                         askDialog(
-                          content: '确定要删除贴标<${data[index].barCode}>吗？',
+                          content: 'part_label_delete_tips'
+                              .trArgs([data[index].barCode ?? '']),
                           confirm: () {
                             logic.deleteLabel(
                               data[index].barCode ?? '',
@@ -183,8 +184,7 @@ class _PartLabelPageState extends State<PartLabelPage> {
                         );
                       } else {
                         showSnackBar(
-                          title: 'snack_bar_default_wrong'.tr,
-                          message: '缺少删除权限！',
+                          message: 'part_label_no_delete_permission'.tr,
                           isWarning: true,
                         );
                       }
@@ -201,17 +201,17 @@ class _PartLabelPageState extends State<PartLabelPage> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             textSpan(
-                                hint: '条码：',
+                                hint: 'part_label_label'.tr,
                                 text: data[index].barCode ?? '',
                                 textColor: Colors.green.shade700),
                             Row(
                               children: [
                                 expandedTextSpan(
-                                  hint: '尺码：',
+                                  hint: 'part_label_size'.tr,
                                   text: data[index].size ?? '',
                                 ),
                                 expandedTextSpan(
-                                  hint: '数量：',
+                                  hint: 'part_label_qty'.tr,
                                   text: data[index].createQty.toShowString(),
                                 ),
                               ],
@@ -219,14 +219,14 @@ class _PartLabelPageState extends State<PartLabelPage> {
                             Row(
                               children: [
                                 expandedTextSpan(
-                                  hint: '员工：',
+                                  hint: 'part_label_worker'.tr,
                                   text: data[index].getWorkerName(),
                                 ),
                                 expandedTextSpan(
-                                  hint: '报工状态：',
+                                  hint: 'part_label_report_status'.tr,
                                   text: (data[index].reported ?? false)
-                                      ? '已报工'
-                                      : '未报工',
+                                      ? 'part_label_reported'.tr
+                                      : 'part_label_unreported'.tr,
                                   textColor: (data[index].reported ?? false)
                                       ? Colors.green
                                       : Colors.redAccent,
@@ -243,15 +243,15 @@ class _PartLabelPageState extends State<PartLabelPage> {
               actions: [
                 TextButton(
                   onPressed: () => Get.back(),
-                  child: const Text(
-                    '返回',
-                    style: TextStyle(color: Colors.grey),
+                  child: Text(
+                    'part_label_back'.tr,
+                    style: const TextStyle(color: Colors.grey),
                   ),
                 ),
                 TextButton(
                   onPressed: () {},
-                  child: const Text(
-                    '打印',
+                  child: Text(
+                    'part_label_print'.tr,
                   ),
                 ),
               ],
@@ -279,13 +279,16 @@ class _PartLabelPageState extends State<PartLabelPage> {
         if (checkUserPermission('1052501')) {
           _createLabelDialog(data);
         } else {
-          showSnackBar(title: 'snack_bar_default_wrong'.tr, message: '缺少贴标操作权限', isWarning: true);
+          showSnackBar(
+            message: 'part_label_no_label_operation_permission'.tr,
+            isWarning: true,
+          );
         }
       },
       child: Card(
         child: ListTile(
           title: textSpan(
-            hint: '销售订单号：',
+            hint: 'part_label_sales_order_no'.tr,
             text: data.getSalesOrderNumber(),
             textColor: Colors.green.shade900,
           ),
@@ -301,17 +304,17 @@ class _PartLabelPageState extends State<PartLabelPage> {
           subtitle: Row(
             children: [
               expandedTextSpan(
-                hint: '尺码：',
+                hint: 'part_label_label'.tr,
                 text: data.size ?? '',
                 textColor: Colors.blue.shade900,
               ),
               expandedTextSpan(
-                hint: '已派：',
+                hint: 'part_label_dispatched'.tr,
                 text: data.createQty.toShowString(),
                 textColor: Colors.blue.shade900,
               ),
               expandedTextSpan(
-                hint: '数量：',
+                hint: 'part_label_qty'.tr,
                 text: data.qty.toShowString(),
                 textColor: Colors.blue.shade900,
               ),
@@ -330,18 +333,18 @@ class _PartLabelPageState extends State<PartLabelPage> {
         child: Row(
           children: [
             expandedTextSpan(
-              hint: '合计',
+              hint: 'part_label_total'.tr,
               hintColor: Colors.white,
               text: '',
             ),
             expandedTextSpan(
-              hint: '已派：',
+              hint: 'part_label_dispatched'.tr,
               hintColor: Colors.white,
               text: data.createQty.toShowString(),
               textColor: Colors.white,
             ),
             textSpan(
-              hint: '数量：',
+              hint: 'part_label_qty'.tr,
               hintColor: Colors.white,
               text: data.qty.toShowString(),
               textColor: Colors.white,
@@ -363,25 +366,24 @@ class _PartLabelPageState extends State<PartLabelPage> {
   @override
   Widget build(BuildContext context) {
     return pageBody(
-      title: '部件工序贴标',
+      title: 'part_label_part_process_label'.tr,
       actions: [
         if (state.partDetail?.barCodeList?.isNotEmpty == true)
           CombinationButton(
-            text: '打印标签',
+            text: 'part_label_print_label'.tr,
             click: () {
               if (checkUserPermission('1052501')) {
                 _printLabelDialog(state.partDetail?.barCodeList ?? []);
               } else {
                 showSnackBar(
-                  title: 'snack_bar_default_wrong'.tr,
-                  message: '缺少贴标操作权限！',
+                  message: 'part_label_no_label_operation_permission'.tr,
                   isWarning: true,
                 );
               }
             },
           ),
         CombinationButton(
-          text: '工序扫描',
+          text: 'part_label_process_scan'.tr,
           click: () {
             Get.to(() => const PartProcessScanPage());
           },
@@ -394,7 +396,7 @@ class _PartLabelPageState extends State<PartLabelPage> {
           Padding(
             padding: const EdgeInsets.only(left: 10),
             child: textSpan(
-              hint: '工厂型体：',
+              hint: 'part_label_type_body'.tr,
               text: state.partDetail?.factoryType ?? '',
               textColor: Colors.blueAccent,
             ),
@@ -402,7 +404,7 @@ class _PartLabelPageState extends State<PartLabelPage> {
           Padding(
             padding: const EdgeInsets.only(left: 10),
             child: textSpan(
-              hint: '部件：',
+              hint: 'part_label_part'.tr,
               text: state.partDetail?.partName ?? '',
               textColor: Colors.blueAccent,
             ),
@@ -410,7 +412,7 @@ class _PartLabelPageState extends State<PartLabelPage> {
           Padding(
             padding: const EdgeInsets.only(left: 10),
             child: textSpan(
-              hint: '工序：',
+              hint: 'part_label_process'.tr,
               text: state.partDetail?.processName ?? '',
               textColor: Colors.blueAccent,
             ),
@@ -419,7 +421,9 @@ class _PartLabelPageState extends State<PartLabelPage> {
             child: Obx(
               () => ListView.builder(
                 padding: const EdgeInsets.all(8),
-                itemCount:state.partDetailSizeList.isNotEmpty? state.partDetailSizeList.length + 1:0,
+                itemCount: state.partDetailSizeList.isNotEmpty
+                    ? state.partDetailSizeList.length + 1
+                    : 0,
                 itemBuilder: (context, index) {
                   if (index == state.partDetailSizeList.length) {
                     return _itemTotal(state.partDetail!.getSizeListTotal());

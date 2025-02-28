@@ -11,9 +11,6 @@ class SapSalesShipmentState {
   var orderList = <SapSalesShipmentPalletInfo>[].obs;
   var palletList = <List<SapPalletDetailInfo>>[].obs;
 
-  SapSalesShipmentState() {
-    //Initialize variables
-  }
 
   querySalesShipmentList({
     required String instructionNo,
@@ -21,7 +18,7 @@ class SapSalesShipmentState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在查询待出货列表...',
+      loading: 'sap_sales_shipment_querying_wait_stock_out_list_tips'.tr,
       method: webApiSapGetSalesShipmentList,
       body: [
         {
@@ -54,7 +51,7 @@ class SapSalesShipmentState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在提交销售出库...',
+      loading: 'sap_sales_shipment_submitting_sales_stock_out_tips'.tr,
       method: webApiSapPostingSalesShipment,
       body: [
         for (var order in orderList)
@@ -80,7 +77,7 @@ class SapSalesShipmentState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在获取托盘信息...',
+      loading: 'sap_sales_shipment_getting_pallet_info_tips'.tr,
       method: webApiSapGetPalletDetails,
       body: {
         'ZTYPE': '4',

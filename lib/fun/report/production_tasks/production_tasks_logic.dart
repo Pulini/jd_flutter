@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/feishu_info.dart';
 import 'package:jd_flutter/bean/http/response/production_tasks_info.dart';
@@ -16,29 +15,17 @@ import 'production_tasks_state.dart';
 class ProductionTasksLogic extends GetxController {
   final ProductionTasksState state = ProductionTasksState();
 
-  @override
-  void onReady() {
-    // TODO: implement onReady
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    // TODO: implement onClose
-    super.onClose();
-  }
-
   refreshTable({
     required Function() refresh,
   }) {
     state.getProductionOrderSchedule(
       success: () => refresh.call(),
-      error: (msg) => showSnackBar(title: '错误', message: msg, isWarning: true),
+      error: (msg) => showSnackBar(message: msg, isWarning: true),
     );
   }
 
   WorkCardSizeInfos getTotalItem() => WorkCardSizeInfos(
-        size: '合计',
+        size: 'production_tasks_total'.tr,
         qty: (state.orderList[0].workCardSizeInfo ?? [])
             .map((v) => v.qty ?? 0)
             .reduce((a, b) => a.add(b)),
@@ -58,7 +45,7 @@ class ProductionTasksLogic extends GetxController {
 
   ProductionTasksDetailItemInfo getDetailTotalItem() =>
       ProductionTasksDetailItemInfo(
-        size: '合计',
+        size: 'production_tasks_total'.tr,
         qty: state.detailTableInfo
             .map((v) => v.qty ?? 0)
             .reduce((a, b) => a.add(b)),
@@ -99,7 +86,7 @@ class ProductionTasksLogic extends GetxController {
         error: (msg) => errorDialog(content: msg),
       );
     } else {
-      errorDialog(content: '没有操作权限！');
+      errorDialog(content: 'production_tasks_no_operation_permission'.tr);
     }
   }
 
@@ -120,7 +107,7 @@ class ProductionTasksLogic extends GetxController {
           );
         }
       },
-      error: (msg) => showSnackBar(title: '错误', message: msg, isWarning: true),
+      error: (msg) => showSnackBar(message: msg, isWarning: true),
     );
   }
 
@@ -136,7 +123,6 @@ class ProductionTasksLogic extends GetxController {
         if (state.orderList[0].workCardInterID == info.workCardID &&
             state.orderList[0].clientOrderNumber == info.clientOrderNumber &&
             state.orderList[0].moID == info.moID) {
-          debugPrint('主页表格');
           WorkCardSizeInfos? findSize = state.orderList[0].workCardSizeInfo
               ?.firstWhere((v) => v.size == info.size);
           if (findSize != null) {
@@ -152,10 +138,12 @@ class ProductionTasksLogic extends GetxController {
               findSize.addInstalledQty(info.qty ?? 0);
             }
             state.tableInfo.refresh();
-            refreshItem.call('${info.size}码 +${info.qty.toShowString()}');
+            refreshItem.call('production_tasks_size_tips'.trArgs([
+              info.size ?? '',
+              info.qty.toShowString(),
+            ]));
           }
         } else {
-          debugPrint('其他表格');
           WorkCardSizeInfos? findSize = state.orderList
               .firstWhere((v) =>
                   v.workCardInterID == info.workCardID &&
@@ -175,15 +163,18 @@ class ProductionTasksLogic extends GetxController {
             } else {
               findSize.addInstalledQty(info.qty ?? 0);
             }
-            refreshItem.call('${info.size}码 +${info.qty.toShowString()}');
+            refreshItem.call('production_tasks_size_tips'.trArgs([
+              info.size ?? '',
+              info.qty.toShowString(),
+            ]));
           }
         }
       } catch (e) {
-        debugPrint('mqttRefresh error=$e');
+        logger.d('mqttRefresh error=$e');
       }
     } else if (topic == state.mqttTopic[0]) {
       var info = ProductionTasksInfo.fromJson(jsonDecode(data)['Data']);
-      logger.f(info.toJson());
+      loggerF(info.toJson());
       state.orderList = info.subInfo ?? [];
       state.todayTargetQty.value = info.toDayPlanQty ?? 0;
       state.todayCompleteQty.value = info.toDayFinishQty ?? 0;
@@ -198,12 +189,15 @@ class ProductionTasksLogic extends GetxController {
     required Function(List<FeishuWikiSearchItemInfo> list) files,
   }) {
     feishuAuthorizeCheck(
-      notAuthorize: () =>
-          Get.to(() => FeishuAuthorize())?.then((token) => _queryFeishuWiki(
-                token: token,
-                query: query,
-                files: files,
-              )),
+      notAuthorize: () => Get.to(() => FeishuAuthorize())?.then((token) {
+        if (token != null) {
+          _queryFeishuWiki(
+            token: token,
+            query: query,
+            files: files,
+          );
+        }
+      }),
       authorized: (token) => _queryFeishuWiki(
         token: token,
         query: query,
@@ -217,11 +211,10 @@ class ProductionTasksLogic extends GetxController {
     required String query,
     required Function(List<FeishuWikiSearchItemInfo> list) files,
   }) {
-
     feishuWikiSearch(
       token: token,
       query: query,
-      success: (list) =>files.call(list),
+      success: (list) => files.call(list),
       failed: (msg) => errorDialog(content: msg),
     );
   }

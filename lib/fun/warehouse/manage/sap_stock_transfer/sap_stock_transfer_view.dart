@@ -56,7 +56,7 @@ class _SapStockTransferPageState extends State<SapStockTransferPage> {
             Row(
               children: [
                 expandedTextSpan(
-                  hint: '标签：',
+                  hint: 'sap_stock_transfer_label'.tr,
                   text: label.labelNumber ?? '',
                   isBold: false,
                   textColor: Colors.grey,
@@ -91,17 +91,23 @@ class _SapStockTransferPageState extends State<SapStockTransferPage> {
           Padding(
             padding: const EdgeInsets.only(left: 5, right: 5),
             child: Obx(
-              () => textSpan(hint: '托盘号：', text: state.palletNumber.value),
+              () => textSpan(
+                hint: 'sap_stock_transfer_pallet'.tr,
+                text: state.palletNumber.value,
+              ),
             ),
           ),
           Padding(
             padding: const EdgeInsets.only(left: 5, right: 5),
             child: Obx(
-              () => textSpan(hint: '库位：', text: state.location.value),
+              () => textSpan(
+                hint: 'sap_stock_transfer_storage_location'.tr,
+                text: state.location.value,
+              ),
             ),
           ),
           EditText(
-            hint: '请扫描目的库位标签或托盘标签',
+            hint: 'sap_stock_transfer_scan_storage_location_or_pallet_tips'.tr,
             controller: logic.locationOrPalletController,
           ),
           Expanded(
@@ -116,7 +122,7 @@ class _SapStockTransferPageState extends State<SapStockTransferPage> {
           SizedBox(
             width: double.infinity,
             child: CombinationButton(
-              text: '移库',
+              text: 'sap_stock_transfer_transfer'.tr,
               click: () => logic.transfer(
                 factoryWarehouseController.getOptionsPicker2().pickerId(),
               ),

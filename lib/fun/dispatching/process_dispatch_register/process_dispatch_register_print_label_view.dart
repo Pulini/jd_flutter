@@ -101,7 +101,7 @@ class _PrintLabelPageState extends State<PrintLabelPage> {
   bottomRight(Barcode data) {
     return Center(
       child: Text(
-        '序号: ${data.rowID}',
+        'process_dispatch_register_print_number_tips'.trArgs([data.rowID.toString()]),
         style: const TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: 16,
@@ -146,11 +146,11 @@ class _PrintLabelPageState extends State<PrintLabelPage> {
               Row(
                 children: [
                   expandedTextSpan(
-                      hint: '序号：',
+                      hint: 'process_dispatch_register_print_number'.tr,
                       text: data.rowID.toString(),
                       textColor: Colors.red),
                   textSpan(
-                    hint: '尺码：',
+                    hint: 'process_dispatch_register_print_size'.tr,
                     isBold: false,
                     text: data.size ?? '',
                   ),
@@ -160,7 +160,7 @@ class _PrintLabelPageState extends State<PrintLabelPage> {
                 children: [
                   expandedTextSpan(
                     isBold: false,
-                    hint: '报工日期：',
+                    hint: 'process_dispatch_register_print_report_date'.tr,
                     text: data.reportTime ?? '',
                   ),
                 ],
@@ -169,12 +169,12 @@ class _PrintLabelPageState extends State<PrintLabelPage> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   expandedTextSpan(
-                    hint: '数量：',
+                    hint: 'process_dispatch_register_print_quantity'.tr,
                     isBold: false,
                     text: data.qty.toShowString(),
                   ),
                   expandedTextSpan(
-                    hint: '箱容：',
+                    hint: 'process_dispatch_register_print_box_capacity'.tr,
                     isBold: false,
                     text: data.mustQty.toShowString(),
                   ),
@@ -187,8 +187,8 @@ class _PrintLabelPageState extends State<PrintLabelPage> {
                         border: Border.all(color: Colors.green, width: 2),
                       ),
                       child: Text(
-                        '预览',
-                        style: TextStyle(
+                        'process_dispatch_register_print_view'.tr,
+                        style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Colors.green,
                         ),
@@ -205,8 +205,8 @@ class _PrintLabelPageState extends State<PrintLabelPage> {
                         border: Border.all(color: Colors.red, width: 2),
                       ),
                       child: Text(
-                        '删除',
-                        style: TextStyle(
+                        'process_dispatch_register_print_delete'.tr,
+                        style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Colors.red,
                         ),
@@ -245,7 +245,7 @@ class _PrintLabelPageState extends State<PrintLabelPage> {
   @override
   Widget build(BuildContext context) {
     return pageBody(
-      title: '贴标列表',
+      title: 'process_dispatch_register_print_label_list'.tr,
       body: Obx(() => Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -259,7 +259,7 @@ class _PrintLabelPageState extends State<PrintLabelPage> {
               ),
               if (state.labelList.any((v) => v.isSelected))
                 CombinationButton(
-                  text: '打印',
+                  text: 'process_dispatch_register_print_print'.tr,
                   click: () => _previewLabelList(),
                 )
             ],

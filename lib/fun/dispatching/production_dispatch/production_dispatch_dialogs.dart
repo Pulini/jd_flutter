@@ -12,7 +12,6 @@ import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
 import 'package:jd_flutter/widget/web_page.dart';
 
-
 showDispatchList(
   BuildContext context,
   bool isLast,
@@ -53,7 +52,11 @@ showDispatchList(
       child: AlertDialog(
         title: Row(
           children: [
-            Expanded(child: Text(isLast ? '上次派工' : '本次派工')),
+            Expanded(
+              child: Text(isLast
+                  ? 'production_dispatch_dialog_last_dispatch'.tr
+                  : 'production_dispatch_dialog_now_dispatch'.tr),
+            ),
             IconButton(
               onPressed: () => Get.back(),
               icon: const Icon(
@@ -93,7 +96,7 @@ showDispatchList(
                       ),
                     ),
                     Text(
-                      '${items[index].name}(${isLast ? '已计工数：' : '计工数：'}${items[index].qty})',
+                      '${items[index].name}(${isLast ? 'production_dispatch_dialog_recorded_working'.tr : 'production_dispatch_dialog_record_working.tr'}${items[index].qty})',
                       style: const TextStyle(color: Colors.black),
                     ),
                   ],
@@ -117,7 +120,7 @@ _addNewWorkerDialog(
   Get.dialog(PopScope(
     canPop: false,
     child: AlertDialog(
-      title: const Text('添加临时组员'),
+      title: Text('production_dispatch_dialog_add_worker'.tr),
       content: SizedBox(
         width: 200,
         height: 90,
@@ -133,14 +136,17 @@ _addNewWorkerDialog(
                 )),
             NumberEditText(
               hasFocus: true,
-              hint: '请输入员工工号',
+              hint: 'production_dispatch_dialog_input_worker_number'.tr,
               onChanged: (s) {
                 if (s.length >= 6) {
                   getWorkerInfo(
                     number: s,
                     workers: (list) {
                       if (workers.any((v) => v.empID == list[0].empID)) {
-                        name.value = '员工《${list[0].empName}》已存在。';
+                        name.value =
+                            'production_dispatch_dialog_worker_exists'.trArgs([
+                          list[0].empName ?? '',
+                        ]);
                         newWorker = null;
                       } else {
                         newWorker = list[0];
@@ -188,7 +194,9 @@ addWorkerDialog(
       return AlertDialog(
         title: Row(
           children: [
-            const Expanded(child: Text('选择组员')),
+            Expanded(
+              child: Text('production_dispatch_dialog_select_worker'.tr),
+            ),
             IconButton(
               icon: const Icon(
                 Icons.add,
@@ -301,7 +309,7 @@ modifyDispatchQtyDialog(
   Get.dialog(PopScope(
     canPop: false,
     child: AlertDialog(
-      title: Text('派工'),
+      title: Text('production_dispatch_dialog_dispatch'.tr),
       content: SizedBox(
           width: 300,
           child: Column(
@@ -311,14 +319,16 @@ modifyDispatchQtyDialog(
               Text('<${di.processNumber}>${di.processName}'),
               Text('<${di.number}>${di.name}'),
               Text(
-                '本次计工(剩余可计工数:${surplus.toShowString()})',
+                'production_dispatch_dialog_now_surplus_dispatch'.trArgs([
+                  surplus.toShowString(),
+                ]),
                 style: const TextStyle(
                   fontSize: 12,
                   color: Colors.grey,
                 ),
               ),
               NumberDecimalEditText(
-                hint: '请输入要计工的数量',
+                hint: 'production_dispatch_dialog_input_dispatch_qty'.tr,
                 max: surplus,
                 initQty: di.qty,
                 hasFocus: true,
@@ -360,14 +370,27 @@ String detailViewSetDispatchDialogText(
     if (isCheckedRounding) {
       var integer = qty ~/ selectList.length;
       var decimal = (qty % selectList.length).toInt();
-      return '均分${qty.toShowString()}并取整，一共${selectList.length}人，每人$integer，剩余$decimal分配给第一个人。';
+      return 'production_dispatch_dialog_dispatch_round_up_qty_tips'.trArgs([
+        qty.toShowString(),
+        selectList.length.toString(),
+        integer.toString(),
+        decimal.toString(),
+      ]);
     } else {
       var average = qty.div(selectList.length.toDouble());
-      return '均分${qty.toShowString()}，一共${selectList.length}人，每人${average.toShowString()}。';
+      return 'production_dispatch_dialog_dispatch_qty_tips'.trArgs([
+        qty.toShowString(),
+        selectList.length.toString(),
+        average.toShowString(),
+      ]);
     }
   } else {
     var total = qty.mul(selectList.length.toDouble());
-    return '一共${selectList.length}人，每人派工${qty.toShowString()}。共计派工${total.toShowString()}';
+    return 'production_dispatch_dialog_dispatch_total_tips'.trArgs([
+      selectList.length.toString(),
+      qty.toShowString(),
+      total.toShowString(),
+    ]);
   }
 }
 
@@ -390,7 +413,7 @@ batchModifyDispatchQtyDialog(
   Get.dialog(PopScope(
     canPop: false,
     child: AlertDialog(
-      title: Text('派工'),
+      title: Text('production_dispatch_dialog_dispatch'.tr),
       content: SizedBox(
         width: 300,
         child: Column(
@@ -400,14 +423,16 @@ batchModifyDispatchQtyDialog(
             Text('<${dil[0].processNumber}>${dil[0].processName}'),
             Obx(() => Text(showText.value)),
             Text(
-              '本次计工(剩余可计工数:${surplus.toShowString()})',
+              'production_dispatch_dialog_now_surplus_dispatch'.trArgs([
+                surplus.toShowString(),
+              ]),
               style: const TextStyle(
                 fontSize: 12,
                 color: Colors.grey,
               ),
             ),
             NumberDecimalEditText(
-              hint: '请输入要计工的数量',
+              hint: 'production_dispatch_dialog_input_dispatch_qty'.tr,
               max: inputMax,
               initQty: qty,
               hasFocus: true,
@@ -454,7 +479,7 @@ typeBodySaveDialog(
     canPop: false,
     child: StatefulBuilder(builder: (context, dialogSetState) {
       return AlertDialog(
-        title: Text('选择你要应用的形体'),
+        title: Text('production_dispatch_dialog_select_type_body'.tr),
         content: SizedBox(
           width: MediaQuery.of(context).size.width * 0.5,
           height: MediaQuery.of(context).size.height * 0.5,
@@ -490,7 +515,9 @@ typeBodySaveDialog(
                   ),
                 ),
                 child: index == list.length
-                    ? const Center(child: Text('保存当前工序'))
+                    ? Center(
+                        child:
+                            Text('production_dispatch_dialog_save_process'.tr))
                     : Row(
                         mainAxisSize: MainAxisSize.max,
                         children: [
@@ -534,7 +561,7 @@ typeBodySaveDialog(
                 apply.call(list[selected]);
               }
             },
-            child: Text('应用'),
+            child: Text('production_dispatch_dialog_apply'.tr),
           ),
           TextButton(
             onPressed: () => Get.back(),
@@ -557,7 +584,7 @@ manufactureInstructionsDialog(List<ManufactureInstructionsInfo> files) {
         child: StatefulBuilder(
           builder: (context, dialogSetState) {
             return AlertDialog(
-              title: Text('选择要查看的工艺指导书'),
+              title: Text('production_dispatch_dialog_select_manual'.tr),
               content: SizedBox(
                 width: MediaQuery.of(context).size.width * 0.5,
                 height: MediaQuery.of(context).size.height * 0.5,
@@ -596,7 +623,10 @@ manufactureInstructionsDialog(List<ManufactureInstructionsInfo> files) {
                 TextButton(
                   onPressed: () {
                     if (selected == -1) {
-                      showSnackBar(title: '查看工艺指导书', message: '请选择要查看的文件');
+                      showSnackBar(
+                        title: 'production_dispatch_dialog_view_manual'.tr,
+                        message: 'production_dispatch_dialog_select_file'.tr,
+                      );
                     } else {
                       Get.back();
                       Get.to(() => WebPage(
@@ -605,7 +635,7 @@ manufactureInstructionsDialog(List<ManufactureInstructionsInfo> files) {
                           ));
                     }
                   },
-                  child: Text('查看'),
+                  child: Text('production_dispatch_dialog_view'.tr),
                 ),
                 TextButton(
                   onPressed: () => Get.back(),
@@ -629,7 +659,7 @@ colorListDialog(List<OrderColorList> files, Function(String) callback) {
         child: StatefulBuilder(
           builder: (context, dialogSetState) {
             return AlertDialog(
-              title: Text('配色单列表'),
+              title: Text('production_dispatch_dialog_color_list'.tr),
               content: SizedBox(
                 width: MediaQuery.of(context).size.width * 0.5,
                 height: MediaQuery.of(context).size.height * 0.5,
@@ -673,19 +703,21 @@ colorListDialog(List<OrderColorList> files, Function(String) callback) {
                 TextButton(
                   onPressed: () => Get.back(),
                   child: Text(
-                    '返回',
+                    'production_dispatch_dialog_back'.tr,
                     style: const TextStyle(color: Colors.grey),
                   ),
                 ),
                 TextButton(
                   onPressed: () {
                     if (selected == -1) {
-                      showSnackBar(title: '查看配色单', message: '请选择要查看的文件');
+                      showSnackBar(
+                          title: 'production_dispatch_dialog_view_color_list',
+                          message: 'production_dispatch_dialog_select_file'.tr);
                     } else {
                       callback.call(files[selected].materialCode ?? '');
                     }
                   },
-                  child: Text('查看'),
+                  child: Text('production_dispatch_dialog_view'.tr),
                 ),
               ],
             );
@@ -702,11 +734,11 @@ sapReportDialog(double initQty, Function(double) callback) {
       child: StatefulBuilder(
         builder: (context, dialogSetState) {
           return AlertDialog(
-            title: Text('报工数量'),
+            title: Text('production_dispatch_dialog_report_qty'.tr),
             content: SizedBox(
               width: 300,
               child: NumberDecimalEditText(
-                hint: '请输入报工的数量',
+                hint: 'production_dispatch_dialog_input_report_qty'.tr,
                 max: initQty,
                 initQty: qty,
                 hasFocus: true,
@@ -719,7 +751,7 @@ sapReportDialog(double initQty, Function(double) callback) {
                   Get.back();
                   callback.call(qty);
                 },
-                child: Text('报工'),
+                child: Text('production_dispatch_dialog_report'.tr),
               ),
               TextButton(
                 onPressed: () => Get.back(),
@@ -743,7 +775,7 @@ workPlanMaterialDialog(List<WorkPlanMaterialInfo> list) {
         child: StatefulBuilder(
           builder: (context, dialogSetState) {
             return AlertDialog(
-              title: Text('用料清单列表'),
+              title: Text('production_dispatch_dialog_material_list'.tr),
               content: SizedBox(
                 width: MediaQuery.of(context).size.width * 0.6,
                 height: MediaQuery.of(context).size.height * 0.6,
@@ -773,12 +805,26 @@ workPlanMaterialDialog(List<WorkPlanMaterialInfo> list) {
                           children: [
                             Expanded(
                               flex: 3,
-                              child: Text('规格型号:${list[index].model}'),
+                              child: Text(
+                                'production_dispatch_dialog_type'.trArgs([
+                                  list[index].model ?? '',
+                                ]),
+                              ),
                             ),
-                            Expanded(child: Text('颜色:${list[index].color}')),
                             Expanded(
                               child: Text(
-                                  '数量:${list[index].needQty}${list[index].unit}'),
+                                'production_dispatch_dialog_color'.trArgs([
+                                  list[index].color ?? '',
+                                ]),
+                              ),
+                            ),
+                            Expanded(
+                              child: Text(
+                                'production_dispatch_dialog_qty'.trArgs([
+                                  list[index].needQty.toShowString(),
+                                  list[index].unit ?? '',
+                                ]),
+                              ),
                             ),
                           ],
                         )
@@ -790,9 +836,9 @@ workPlanMaterialDialog(List<WorkPlanMaterialInfo> list) {
               actions: [
                 TextButton(
                   onPressed: () => Get.back(),
-                  child: const Text(
-                    '返回',
-                    style: TextStyle(color: Colors.grey),
+                  child: Text(
+                    'production_dispatch_dialog_back'.tr,
+                    style: const TextStyle(color: Colors.grey),
                   ),
                 ),
               ],
@@ -810,7 +856,7 @@ reportToSap(Function(bool isInstructionReport) callback) {
       //拦截返回键
       canPop: false,
       child: AlertDialog(
-        title: Text('请选择报工方式'),
+        title: Text('production_dispatch_dialog_report_type'.tr),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -824,7 +870,7 @@ reportToSap(Function(bool isInstructionReport) callback) {
                   onTap: () {
                     isInstructionReport.value = !isInstructionReport.value;
                   },
-                  child: Text('指令报工'),
+                  child: Text('production_dispatch_dialog_instruction_report'.tr),
                 )
               ],
             ),
@@ -838,7 +884,7 @@ reportToSap(Function(bool isInstructionReport) callback) {
                   onTap: () {
                     isInstructionReport.value = !isInstructionReport.value;
                   },
-                  child: Text('尺码报工'),
+                  child: Text('production_dispatch_dialog_size_report'.tr),
                 )
               ],
             )
@@ -875,7 +921,7 @@ showSelectMaterialPopup(List<Map> list) {
       //拦截返回键
       canPop: false,
       child: AlertDialog(
-        title: Text('选择要打印的料头'),
+        title: Text('production_dispatch_dialog_select_print_surplus_material'.tr),
         content: SizedBox(
           width: 300,
           height: 200,
@@ -891,7 +937,7 @@ showSelectMaterialPopup(List<Map> list) {
             onPressed: () {
               Get.back();
             },
-            child: Text('打印'),
+            child: Text('production_dispatch_dialog_print'.tr),
           ),
           TextButton(
             onPressed: () {

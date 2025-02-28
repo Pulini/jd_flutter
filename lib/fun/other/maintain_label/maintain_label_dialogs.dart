@@ -12,7 +12,6 @@ import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
 
-
 createMixLabelDialog(
     List<PickingBarCodeInfo> list, int id, Function() callback) {
   var group = <List<PickingBarCodeInfo>>[];
@@ -33,7 +32,7 @@ createMixLabelDialog(
     PopScope(
         canPop: false,
         child: AlertDialog(
-          title: Text('创建混码标签'),
+          title: Text('maintain_label_dialog_create_mix_label'.tr),
           content: SizedBox(
             width: MediaQuery.of(Get.overlayContext!).size.width * 0.8,
             height: MediaQuery.of(Get.overlayContext!).size.height * 0.8,
@@ -42,7 +41,7 @@ createMixLabelDialog(
               children: [
                 Row(
                   children: [
-                    Text('最大标签数：'),
+                    Text('maintain_label_dialog_max_label_qty'.tr),
                     Expanded(
                       child: NumberEditText(
                         onChanged: (s) {
@@ -69,9 +68,9 @@ createMixLabelDialog(
           actions: [
             TextButton(
               onPressed: () => Get.back(),
-              child: const Text(
-                '返回',
-                style: TextStyle(color: Colors.grey),
+              child: Text(
+                'maintain_label_dialog_back'.tr,
+                style: const TextStyle(color: Colors.grey),
               ),
             ),
             TextButton(
@@ -85,7 +84,7 @@ createMixLabelDialog(
                   callback.call();
                 },
               ),
-              child: const Text('创建'),
+              child: Text('maintain_label_dialog_create'.tr),
             ),
           ],
         )),
@@ -101,22 +100,22 @@ _createMixLabel(
 ) {
   if (!selected.any((v1) => v1.any((v2) => v2.value))) {
     showSnackBar(
-        title: 'snack_bar_default_wrong'.tr,
-        message: '请勾选要创建的指令和尺码',
-        isWarning: true);
+      message: 'maintain_label_dialog_select_instruction_and_size'.tr,
+      isWarning: true,
+    );
     return;
   }
   if (maxLabel == 0) {
     showSnackBar(
-        title: 'snack_bar_default_wrong'.tr,
-        message: '可生产贴标数未0',
-        isWarning: true);
+      message: 'maintain_label_dialog_cant_generate'.tr,
+      isWarning: true,
+    );
     return;
   }
 
   httpPost(
     method: webApiCreateMixLabel,
-    loading: '正在生成贴标...',
+    loading: 'maintain_label_dialog_generating_label'.tr,
     body: {
       'InterID': id.toString(),
       'BarcodeQty': maxLabel,
@@ -173,9 +172,9 @@ _createMixLabelItem(
           title: Text.rich(
             TextSpan(
               children: [
-                const TextSpan(
-                  text: '尺码：',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                TextSpan(
+                  text: 'maintain_label_dialog_size'.tr,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 TextSpan(
                   text: list[index][0].size,
@@ -234,8 +233,10 @@ _createMixLabelSubItem(
         title: Text.rich(
           TextSpan(
             children: [
-              const TextSpan(
-                  text: '指令：', style: TextStyle(fontWeight: FontWeight.bold)),
+              TextSpan(
+                text: 'maintain_label_dialog_instruction'.tr,
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
               TextSpan(
                 text: list[index][i].mtono,
                 style: TextStyle(
@@ -246,14 +247,14 @@ _createMixLabelSubItem(
             ],
           ),
         ),
-        subtitle: Text(
-          '剩余数：${list[index][i].getSurplusQty().toShowString()}',
-        ),
+        subtitle: Text('maintain_label_dialog_surplus_qty'.trArgs([
+          list[index][i].getSurplusQty().toShowString(),
+        ])),
         trailing: SizedBox(
           width: 180,
           child: Row(
             children: [
-              Text('装箱数：', style: style),
+              Text('maintain_label_dialog_packing_qty'.tr, style: style),
               Expanded(
                   child: selected[index][i].value
                       ? number
@@ -315,7 +316,7 @@ createCustomLabelDialog(
     PopScope(
         canPop: false,
         child: AlertDialog(
-          title: Text('创建自定义标签'),
+          title: Text('maintain_label_dialog_create_customize_label'.tr),
           content: SizedBox(
             width: MediaQuery.of(Get.overlayContext!).size.width * 0.8,
             height: MediaQuery.of(Get.overlayContext!).size.height * 0.8,
@@ -334,9 +335,9 @@ createCustomLabelDialog(
           actions: [
             TextButton(
               onPressed: () => Get.back(),
-              child: const Text(
-                '返回',
-                style: TextStyle(color: Colors.grey),
+              child: Text(
+                'maintain_label_dialog_back'.tr,
+                style: const TextStyle(color: Colors.grey),
               ),
             ),
             TextButton(
@@ -352,7 +353,7 @@ createCustomLabelDialog(
                   callback.call();
                 },
               ),
-              child: Text('创建'),
+              child: Text('maintain_label_dialog_create'.tr),
             ),
           ],
         )),
@@ -381,18 +382,18 @@ _createCustomLabelItem(
           children: [
             expandedTextSpan(
               flex: 2,
-              hint: '尺码：',
+              hint: 'maintain_label_dialog_size'.tr,
               text: list[index].size ?? '',
               textColor: Colors.redAccent,
             ),
             expandedTextSpan(
               flex: 2,
-              hint: '已生成贴标：',
+              hint: 'maintain_label_dialog_generated_label'.tr,
               text: list[index].labelCount.toString(),
               textColor: Colors.black45,
             ),
             expandedTextSpan(
-              hint: '创建：',
+              hint: 'maintain_label_dialog_generate'.tr,
               text: create[index].toString(),
               textColor: Colors.green,
             )
@@ -404,16 +405,16 @@ _createCustomLabelItem(
               children: [
                 expandedTextSpan(
                   flex: 2,
-                  hint: '总货数：',
+                  hint: 'maintain_label_dialog_total_qty'.tr,
                   text: list[index].totalQty.toShowString(),
                 ),
                 expandedTextSpan(
                   flex: 2,
-                  hint: '已生成数：',
+                  hint: 'maintain_label_dialog_generated_qty'.tr,
                   text: list[index].qty.toShowString(),
                 ),
                 expandedTextSpan(
-                  hint: '剩余货数：',
+                  hint: 'maintain_label_dialog_surplus_goods_qty'.tr,
                   text: surplus.toShowString(),
                 )
               ],
@@ -427,8 +428,8 @@ _createCustomLabelItem(
                     child: Row(
                       children: [
                         Text(
-                          '箱容：',
-                          style: TextStyle(
+                          'maintain_label_dialog_box_capacity'.tr,
+                          style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.black45,
                           ),
@@ -454,8 +455,8 @@ _createCustomLabelItem(
                     child: Row(
                       children: [
                         Text(
-                          '本次生成货数：',
-                          style: TextStyle(
+                          'maintain_label_dialog_generated_goods_qty'.tr,
+                          style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.black45,
                           ),
@@ -480,7 +481,7 @@ _createCustomLabelItem(
                     child: Row(
                       children: [
                         CombinationButton(
-                          text: '填满',
+                          text: 'maintain_label_dialog_full'.tr,
                           click: () {
                             capacity[index] = surplus;
                             createGoods[index] = surplus;
@@ -514,9 +515,9 @@ _createCustomLabel(
 ) {
   if (!selected.any((v1) => v1)) {
     showSnackBar(
-        title: 'snack_bar_default_wrong'.tr,
-        message: '请勾选要创建的尺码',
-        isWarning: true);
+      message: 'maintain_label_dialog_select_size_tips'.tr,
+      isWarning: true,
+    );
     return;
   }
   var body = {
@@ -537,13 +538,13 @@ _createCustomLabel(
   if (isMaterialLabel) {
     post = httpPost(
       method: webApiCreateCustomLargeLabel,
-      loading: '正在生成贴标...',
+      loading: 'maintain_label_dialog_generating_label'.tr,
       body: body,
     );
   } else {
     post = httpPost(
       method: webApiCreateCustomSizeLabel,
-      loading: '正在生成贴标...',
+      loading: 'maintain_label_dialog_generating_label'.tr,
       body: body,
     );
   }
@@ -576,9 +577,11 @@ setLabelPropertyDialog(
         child: AlertDialog(
           title: Row(
             children: [
-              Expanded(child: Text('标签属性配置')),
+              Expanded(
+                child: Text('maintain_label_dialog_label_attribute_config'.tr),
+              ),
               CombinationButton(
-                text: '批量修改',
+                text: 'maintain_label_dialog_batch_modify'.tr,
                 click: () => batchSetLabelPropertyDialog(
                   (netWeight, grossWeight, meas, unitName) {
                     var item = <Map>[];
@@ -611,18 +614,19 @@ setLabelPropertyDialog(
           actions: [
             TextButton(
               onPressed: () => Get.back(),
-              child: const Text(
-                '返回',
-                style: TextStyle(color: Colors.grey),
+              child: Text(
+                'maintain_label_dialog_back'.tr,
+                style: const TextStyle(color: Colors.grey),
               ),
             ),
             TextButton(
               onPressed: () {
                 if (list.any((v) => v.ifNull())) {
                   showSnackBar(
-                      title: 'snack_bar_default_wrong'.tr,
-                      message: '重量必须大于0',
-                      isWarning: true);
+                    message:
+                        'maintain_label_dialog_weight_mast_greater_zero'.tr,
+                    isWarning: true,
+                  );
                 } else {
                   var item = <Map>[];
                   for (var data in list) {
@@ -645,7 +649,7 @@ setLabelPropertyDialog(
                   );
                 }
               },
-              child: Text('修改'),
+              child: Text('maintain_label_dialog_modify'.tr),
             ),
           ],
         )),
@@ -655,7 +659,7 @@ setLabelPropertyDialog(
 _setLabelPropertyItem(MaintainMaterialPropertiesInfo data) {
   return Card(
     child: Padding(
-      padding: EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -663,8 +667,8 @@ _setLabelPropertyItem(MaintainMaterialPropertiesInfo data) {
             TextSpan(
               children: [
                 TextSpan(
-                  text: '尺码：',
-                  style: TextStyle(
+                  text: 'maintain_label_dialog_size'.tr,
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
                     color: Colors.black,
@@ -672,7 +676,7 @@ _setLabelPropertyItem(MaintainMaterialPropertiesInfo data) {
                 ),
                 TextSpan(
                   text: data.size ?? '',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
                     color: Colors.redAccent,
@@ -686,12 +690,12 @@ _setLabelPropertyItem(MaintainMaterialPropertiesInfo data) {
             child: Row(
               children: [
                 _expandedNumberEditText(
-                  '净重：',
+                  'maintain_label_dialog_net_weight'.tr,
                   data.netWeight.toDoubleTry(),
                   (s) => data.netWeight = s.toShowString(),
                 ),
                 _expandedNumberEditText(
-                  '毛重：',
+                  'maintain_label_dialog_gross_weight'.tr,
                   data.grossWeight.toDoubleTry(),
                   (s) => data.grossWeight = s.toShowString(),
                 ),
@@ -703,12 +707,12 @@ _setLabelPropertyItem(MaintainMaterialPropertiesInfo data) {
             child: Row(
               children: [
                 _expandedEditText(
-                  '规格：',
+                  'maintain_label_dialog_specifications'.tr,
                   data.meas ?? '',
                   (s) => data.meas = s,
                 ),
                 _expandedEditText(
-                  '单位：',
+                  'maintain_label_dialog_unit'.tr,
                   data.unitName ?? '',
                   (s) => data.unitName = s,
                 ),
@@ -741,10 +745,12 @@ batchSetLabelPropertyDialog(
         child: AlertDialog(
           title: Row(
             children: [
-              Expanded(child: Text('批量修改属性')),
+              Expanded(
+                child: Text('maintain_label_dialog_batch_modify_attribute'.tr),
+              ),
               if (bnw > 0 && bgw > 0)
                 CombinationButton(
-                    text: '上次记录',
+                    text: 'maintain_label_dialog_last_save'.tr,
                     click: () {
                       nw.value = bnw;
                       gw.value = bgw;
@@ -758,28 +764,41 @@ batchSetLabelPropertyDialog(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     _expandedNumberEditText(
-                        '净重：', nw.value, (s) => nw.value = s),
+                      'maintain_label_dialog_net_weight'.tr,
+                      nw.value,
+                      (s) => nw.value = s,
+                    ),
                     _expandedNumberEditText(
-                        '毛重：', gw.value, (s) => gw.value = s),
-                    _expandedEditText('规格：', meas, (s) => meas = s),
-                    _expandedEditText('单位：', unit, (s) => unit = s),
+                      'maintain_label_dialog_gross_weight：.tr',
+                      gw.value,
+                      (s) => gw.value = s,
+                    ),
+                    _expandedEditText(
+                      'maintain_label_dialog_specifications：.tr',
+                      meas,
+                      (s) => meas = s,
+                    ),
+                    _expandedEditText(
+                      'maintain_label_dialog_unit：.tr',
+                      unit,
+                      (s) => unit = s,
+                    ),
                   ],
                 )),
           ),
           actions: [
             TextButton(
               onPressed: () => Get.back(),
-              child: const Text(
-                '返回',
-                style: TextStyle(color: Colors.grey),
+              child: Text(
+                'maintain_label_dialog_back'.tr,
+                style: const TextStyle(color: Colors.grey),
               ),
             ),
             TextButton(
               onPressed: () {
                 if (nw.value <= 0 || gw.value <= 0) {
                   showSnackBar(
-                    title: 'snack_bar_default_wrong'.tr,
-                    message: '请完整填写修改内容',
+                    message: 'maintain_label_dialog_input_tips'.tr,
                     isWarning: true,
                   );
                 } else {
@@ -789,7 +808,7 @@ batchSetLabelPropertyDialog(
                   Get.back();
                 }
               },
-              child: Text('修改'),
+              child: Text('maintain_label_dialog_modify'.tr),
             ),
           ],
         )),
@@ -804,7 +823,7 @@ _setMaterialProperties(
 ) {
   httpPost(
     method: webApiSetMaterialProperties,
-    loading: '正在设置物料属性信息...',
+    loading: 'maintain_label_dialog_setting_material_attribute'.tr,
     body: {
       'UserID': userInfo?.userID ?? 0,
       'InterID': id.toString(),
@@ -885,7 +904,7 @@ setLabelCapacityDialog(
     PopScope(
         canPop: false,
         child: AlertDialog(
-          title: Text('修改标签箱容'),
+          title: Text('maintain_label_dialog_modify_label_box_capacity'.tr),
           content: SizedBox(
             width: MediaQuery.of(Get.overlayContext!).size.width * 0.8,
             height: MediaQuery.of(Get.overlayContext!).size.height * 0.8,
@@ -895,7 +914,7 @@ setLabelCapacityDialog(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Text(
-                      '批量修改：',
+                      'maintain_label_dialog_batch_modify_tips'.tr,
                       style: TextStyle(
                           color: Colors.blue.shade900,
                           fontWeight: FontWeight.bold,
@@ -910,7 +929,7 @@ setLabelCapacityDialog(
                         list.refresh();
                       }),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 20,
                     )
                   ],
@@ -921,14 +940,14 @@ setLabelCapacityDialog(
                         itemCount: list.length,
                         itemBuilder: (context, index) => Card(
                           child: Padding(
-                            padding: EdgeInsets.only(left: 10, right: 10),
+                            padding: const EdgeInsets.only(left: 10, right: 10),
                             child: Row(
                               children: [
                                 expandedTextSpan(
-                                  hint: '尺码：',
+                                  hint: 'maintain_label_dialog_size'.tr,
                                   text: list[index].size ?? '',
                                 ),
-                                Text('箱容：'),
+                                Text('maintain_label_dialog_box_capacity'.tr),
                                 SizedBox(
                                   width: 180,
                                   child: NumberDecimalEditText(
@@ -948,9 +967,9 @@ setLabelCapacityDialog(
           actions: [
             TextButton(
               onPressed: () => Get.back(),
-              child: const Text(
-                '返回',
-                style: TextStyle(color: Colors.grey),
+              child: Text(
+                'maintain_label_dialog_back'.tr,
+                style: const TextStyle(color: Colors.grey),
               ),
             ),
             TextButton(
@@ -963,7 +982,7 @@ setLabelCapacityDialog(
                   },
                 );
               },
-              child: Text('修改'),
+              child: Text('maintain_label_dialog_modify'.tr),
             ),
           ],
         )),
@@ -976,7 +995,7 @@ _setMaterialCapacity(
 ) {
   httpPost(
     method: webApiSetMaterialCapacity,
-    loading: '正在设置物料箱容信息...',
+    loading: 'maintain_label_dialog_setting_material_box_capacity'.tr,
     body: {
       'UserID': userInfo?.userID ?? 0,
       'Items': [
@@ -1008,7 +1027,7 @@ setLabelLanguageDialog(
     PopScope(
         canPop: false,
         child: AlertDialog(
-          title: Text('修改标签语言'),
+          title: Text('maintain_label_dialog_modify_label_language'.tr),
           content: SizedBox(
             width: MediaQuery.of(Get.overlayContext!).size.width * 0.8,
             height: MediaQuery.of(Get.overlayContext!).size.height * 0.8,
@@ -1017,7 +1036,7 @@ setLabelLanguageDialog(
               itemCount: list.length,
               itemBuilder: (context, index) => Card(
                 child: Padding(
-                  padding: EdgeInsets.only(left: 10, right: 10),
+                  padding: const EdgeInsets.only(left: 10, right: 10),
                   child: Row(
                     children: [
                       Text(list[index].languageName ?? ''),
@@ -1036,9 +1055,9 @@ setLabelLanguageDialog(
           actions: [
             TextButton(
               onPressed: () => Get.back(),
-              child: const Text(
-                '返回',
-                style: TextStyle(color: Colors.grey),
+              child: Text(
+                'maintain_label_dialog_back'.tr,
+                style: const TextStyle(color: Colors.grey),
               ),
             ),
             TextButton(
@@ -1050,7 +1069,7 @@ setLabelLanguageDialog(
                   callback.call();
                 },
               ),
-              child: Text('修改'),
+              child: Text('maintain_label_dialog_modify'.tr),
             ),
           ],
         )),
@@ -1064,7 +1083,7 @@ _setMaterialLanguages(
 ) {
   httpPost(
     method: webApiSetMaterialLanguages,
-    loading: '正在设置物料语言信息...',
+    loading: 'maintain_label_dialog_setting_material_language'.tr,
     body: {
       'UserID': userInfo?.userID ?? 0,
       'Items': [
@@ -1093,7 +1112,7 @@ selectMaterialDialog(List<String> list, Function(String) callback) {
       //拦截返回键
       canPop: false,
       child: AlertDialog(
-        title: Text('选择尺码'),
+        title: Text('maintain_label_dialog_select_size'.tr),
         content: SizedBox(
           width: 200,
           height: 100,
@@ -1128,14 +1147,15 @@ selectMaterialDialog(List<String> list, Function(String) callback) {
   );
 }
 
-selectLanguageDialog({required List<String> list, required Function(String) callback}) {
+selectLanguageDialog(
+    {required List<String> list, required Function(String) callback}) {
   var controller = FixedExtentScrollController();
   Get.dialog(
     PopScope(
       //拦截返回键
       canPop: false,
       child: AlertDialog(
-        title: Text('选择语言'),
+        title: Text('maintain_label_dialog_select_language'.tr),
         content: SizedBox(
           width: 200,
           height: 100,
@@ -1179,13 +1199,13 @@ createLabelSelect({
     context: Get.overlayContext!,
     builder: (context) => CupertinoActionSheet(
       title: Text(
-        '创建贴标',
-        style: TextStyle(
+        'maintain_label_dialog_create_label'.tr,
+        style: const TextStyle(
           fontWeight: FontWeight.bold,
           color: Colors.black,
         ),
       ),
-      message: Text('选择标签类型'),
+      message: Text('maintain_label_dialog_select_label_type'.tr),
       actions: [
         CupertinoActionSheetAction(
           isDefaultAction: true,
@@ -1193,7 +1213,7 @@ createLabelSelect({
             Get.back();
             single.call();
           },
-          child: Text('单码'),
+          child: Text('maintain_label_dialog_singe'.tr),
         ),
         CupertinoActionSheetAction(
           isDefaultAction: true,
@@ -1201,7 +1221,7 @@ createLabelSelect({
             Get.back();
             mix.call();
           },
-          child: Text('混码'),
+          child: Text('maintain_label_dialog_mix'.tr),
         ),
         CupertinoActionSheetAction(
           isDefaultAction: true,
@@ -1209,7 +1229,7 @@ createLabelSelect({
             Get.back();
             custom.call();
           },
-          child: Text('自定义'),
+          child: Text('maintain_label_dialog_customize'.tr),
         ),
         CupertinoActionSheetAction(
           isDefaultAction: true,
@@ -1233,13 +1253,13 @@ setLabelSelect({
     context: Get.overlayContext!,
     builder: (context) => CupertinoActionSheet(
       title: Text(
-        '设置',
-        style: TextStyle(
+        'maintain_label_dialog_set'.tr,
+        style: const TextStyle(
           fontWeight: FontWeight.bold,
           color: Colors.black,
         ),
       ),
-      message: Text('选择设置内容'),
+      message: Text('maintain_label_dialog_select_set'.tr),
       actions: [
         CupertinoActionSheetAction(
           isDefaultAction: true,
@@ -1247,7 +1267,7 @@ setLabelSelect({
             Get.back();
             property.call();
           },
-          child: Text('属性'),
+          child: Text('maintain_label_dialog_set_attribute'.tr),
         ),
         CupertinoActionSheetAction(
           isDefaultAction: true,
@@ -1255,7 +1275,7 @@ setLabelSelect({
             Get.back();
             boxCapacity.call();
           },
-          child: Text('箱容'),
+          child: Text('maintain_label_dialog_set_box_capacity'.tr),
         ),
         CupertinoActionSheetAction(
           isDefaultAction: true,
@@ -1263,7 +1283,7 @@ setLabelSelect({
             Get.back();
             language.call();
           },
-          child: Text('语言'),
+          child: Text('maintain_label_dialog_set_language'.tr),
         ),
         CupertinoActionSheetAction(
           isDefaultAction: true,

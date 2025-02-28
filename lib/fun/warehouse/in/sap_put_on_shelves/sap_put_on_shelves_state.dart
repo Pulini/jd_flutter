@@ -9,11 +9,9 @@ import 'package:jd_flutter/utils/web_api.dart';
 class SapPutOnShelvesState {
   var labelList = <List<List<PalletDetailItem1Info>>>[].obs;
   var scanLabelList = <PalletDetailItem1Info>[].obs;
-  var palletNumber=''.obs;
+  var palletNumber = ''.obs;
 
-  SapPutOnShelvesState() {
-    //Initialize variables
-  }
+
 
   getPalletList({
     required String warehouse,
@@ -21,7 +19,7 @@ class SapPutOnShelvesState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在获取待上架列表...',
+      loading: 'sap_put_on_shelves_getting_wait_put_on_shelves_list'.tr,
       method: webApiSapGetPalletList,
       body: {
         'WERKS': '1500',
@@ -85,7 +83,8 @@ class SapPutOnShelvesState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在获取推荐库位信息...',
+      loading:
+          'sap_put_on_shelves_getting_recommended_storage_location_info'.tr,
       method: webApiSapGetRecommendLocation,
       body: {
         'ZCZLX_WMS': 'WM01',
@@ -118,7 +117,7 @@ class SapPutOnShelvesState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在提交上架信息...',
+      loading: 'sap_put_on_shelves_submitting_put_on_shelves'.tr,
       method: webApiSapPuttingOnShelves,
       body: {
         'ZCZLX_WMS': 'WM01',

@@ -32,7 +32,7 @@ class CircularProgress extends ProgressIndicator {
   }) {
     if (borderWidth != null && borderColor == null ||
         borderColor != null && borderWidth == null) {
-      throw ArgumentError("borderWidth and borderColor should both be set.");
+      throw ArgumentError('borderWidth and borderColor should both be set.');
     }
   }
 
@@ -257,7 +257,7 @@ class LinearProgress extends ProgressIndicator {
   }) {
     if (borderWidth != null && borderColor == null ||
         borderColor != null && borderWidth == null) {
-      throw ArgumentError("borderWidth and borderColor should both be set.");
+      throw ArgumentError('borderWidth and borderColor should both be set.');
     }
   }
 

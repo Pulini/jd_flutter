@@ -19,7 +19,6 @@ class ProductionMaterialsReportLogic extends GetxController {
         state.etOrderNumber.isEmpty &&
         state.etSizeOrderNumber.isEmpty) {
       showSnackBar(
-        title: 'snack_bar_default_wrong'.tr,
         message: 'production_materials_report_query_error'.tr,
         isWarning: true,
       );

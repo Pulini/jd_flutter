@@ -13,10 +13,10 @@ class MaterialDispatchLogic extends GetxController {
   var scReportState = SpinnerController(
     saveKey: RouteConfig.materialDispatch.name,
     dataList: [
-      '全部',
-      '未报工',
-      '已报工',
-      '已生成贴标未报工',
+      'material_dispatch_report_state_all'.tr,
+      'material_dispatch_report_state_not_report'.tr,
+      'material_dispatch_report_state_reported'.tr,
+      'material_dispatch_report_state_generated_not_report'.tr,
     ],
   );
 
@@ -74,7 +74,7 @@ class MaterialDispatchLogic extends GetxController {
   batchWarehousing() {
     var submitList = state.createSubmitData();
     if (submitList.isEmpty) {
-      informationDialog(content: '没有需要入库的数据');
+      informationDialog(content: 'material_dispatch_batch_stock_in_error_tips'.tr);
     } else {
       state.batchWarehousing(
         submitList: submitList,

@@ -67,7 +67,9 @@ class _SapProductionPickingPageState extends State<SapProductionPickingPage> {
           badgeCornerRadius: const Radius.circular(8),
           badgeSize: const Size(45, 45),
           textSpan: TextSpan(
-            text: data.orderType == '0' ? '补单' : '正单',
+            text: data.orderType == '0'
+                ? 'sap_production_picking_supplementary_order'.tr
+                : 'sap_production_picking_normal_order'.tr,
             style: const TextStyle(
               fontSize: 14,
               color: Colors.white,
@@ -80,12 +82,12 @@ class _SapProductionPickingPageState extends State<SapProductionPickingPage> {
             Row(
               children: [
                 expandedTextSpan(
-                  hint: '通知单号：',
+                  hint: 'sap_production_picking_notification_no'.tr,
                   text: data.noticeNo ?? '',
                   textColor: Colors.green,
                 ),
                 expandedTextSpan(
-                  hint: '机台：',
+                  hint: 'sap_production_picking_machine'.tr,
                   isBold: false,
                   text: data.machineNumber ?? '',
                 ),
@@ -94,14 +96,14 @@ class _SapProductionPickingPageState extends State<SapProductionPickingPage> {
             Row(
               children: [
                 expandedTextSpan(
-                  hint: '仓库：',
+                  hint: 'sap_production_picking_warehouse'.tr,
                   text: data.warehouse ?? '',
                   isBold: false,
                   textColor: Colors.grey.shade700,
                   hintColor: Colors.grey.shade700,
                 ),
                 expandedTextSpan(
-                  hint: '制程：',
+                  hint: 'sap_production_picking_process'.tr,
                   text: data.process ?? '',
                   isBold: false,
                   textColor: Colors.grey.shade700,
@@ -119,7 +121,7 @@ class _SapProductionPickingPageState extends State<SapProductionPickingPage> {
                   hintColor: Colors.grey.shade700,
                 ),
                 expandedTextSpan(
-                  hint: '派工日期：',
+                  hint: 'sap_production_picking_dispatch_date'.tr,
                   text: data.orderDate ?? '',
                   isBold: false,
                   textColor: Colors.grey.shade700,
@@ -137,7 +139,10 @@ class _SapProductionPickingPageState extends State<SapProductionPickingPage> {
   Widget build(BuildContext context) {
     return pageBodyWithBottomSheet(
       bottomSheet: [
-        EditText(hint: '通知单号', controller: noticeNoController),
+        EditText(
+          hint: 'sap_production_picking_notification_no_tips'.tr,
+          controller: noticeNoController,
+        ),
         Container(
           margin: const EdgeInsets.fromLTRB(10, 5, 10, 5),
           padding: const EdgeInsets.only(left: 15, right: 15),
@@ -149,7 +154,7 @@ class _SapProductionPickingPageState extends State<SapProductionPickingPage> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Text(
-                '正单',
+                'sap_production_picking_normal_order'.tr,
                 style: const TextStyle(color: Colors.black),
               ),
               Obx(() => Switch(
@@ -167,7 +172,7 @@ class _SapProductionPickingPageState extends State<SapProductionPickingPage> {
                     onChanged: (v) => isSupplementOrder.value = v,
                   )),
               Text(
-                '补单',
+                'sap_production_picking_supplementary_order'.tr,
                 style: const TextStyle(color: Colors.black),
               ),
             ],
@@ -182,7 +187,7 @@ class _SapProductionPickingPageState extends State<SapProductionPickingPage> {
         OptionsPicker(pickerController: workCenterController),
         LinkOptionsPicker(pickerController: factoryWarehouseController),
       ],
-      query:()=> _query(),
+      query: () => _query(),
       body: Obx(() => Column(
             children: [
               Expanded(
@@ -196,7 +201,7 @@ class _SapProductionPickingPageState extends State<SapProductionPickingPage> {
                 SizedBox(
                   width: double.infinity,
                   child: CombinationButton(
-                    text: '入库',
+                    text: 'sap_production_picking_stock_in'.tr,
                     click: () =>
                         logic.checkPickingSelected((scan) => _goPicking(scan)),
                   ),
