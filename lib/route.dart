@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/maintenance/sap_ink_color_matching/sap_ink_color_matching_view.dart';
-import 'package:jd_flutter/fun/management/anti_Counterfeiting/puma_anti_counterfeiting_view.dart';
 import 'package:jd_flutter/fun/other/hydroelectric_excess/hydroelectric_excess_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/production_scan_warehouse/production_scan_warehouse_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/sap_picking_receipt_reversal/sap_picking_receipt_reversal_view.dart';
@@ -40,6 +39,7 @@ import 'fun/warehouse/in/sap_no_label_stock_in/sap_no_label_stock_in_view.dart';
 import 'fun/warehouse/in/sap_produce_stock_in/sap_produce_stock_in_view.dart';
 import 'fun/warehouse/in/sap_purchase_stock_in/sap_purchase_stock_in_view.dart';
 import 'fun/warehouse/in/sap_surplus_material_stock_in/sap_surplus_material_stock_in_view.dart';
+import 'fun/warehouse/manage/anti_Counterfeiting/puma_anti_counterfeiting_view.dart';
 import 'fun/warehouse/manage/carton_label_scan/carton_label_scan_view.dart';
 import 'fun/warehouse/manage/carton_label_scan_progress/carton_label_scan_progress_view.dart';
 import 'fun/warehouse/manage/sap_wms_split_label/sap_wms_split_label_view.dart';

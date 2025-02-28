@@ -1,7 +1,7 @@
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:jd_flutter/bean/http/response/puma_box_code_info.dart';
 import 'package:jd_flutter/bean/http/response/puma_code_list_info.dart';
-import 'package:jd_flutter/fun/management/anti_Counterfeiting/puma_anti_counterfeiting_state.dart';
+import 'package:jd_flutter/fun/warehouse/manage/anti_Counterfeiting/puma_anti_counterfeiting_state.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
