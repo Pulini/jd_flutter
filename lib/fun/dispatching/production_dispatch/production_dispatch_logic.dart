@@ -858,4 +858,13 @@ class ProductionDispatchLogic extends GetxController {
       error: (msg) => errorDialog(content: msg),
     );
   }
+
+  queryProgress() {
+
+    state.queryProgress(
+      startTime: dpcStartDate.getDateFormatYMD(),
+      endTime: dpcEndDate.getDateFormatYMD(),
+      error: (msg) => errorDialog(content: msg),
+    );
+  }
 }

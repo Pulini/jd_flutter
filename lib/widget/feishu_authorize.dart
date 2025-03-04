@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:core';
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/feishu_info.dart';
@@ -9,6 +10,7 @@ import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
+import 'package:jd_flutter/widget/web_page.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 const String appID = 'cli_a646a42958f2d00b'; //飞书 App ID
@@ -26,6 +28,119 @@ const String getUserTokenUrl =
 const String wikiSearchUrl =
     'https://open.feishu.cn/open-apis/wiki/v1/nodes/search'; //wiki搜索
 
+
+/// 飞书授权并查看知识库文件
+feishuViewFiles({required String query}) {
+  if (query.isEmpty) {
+    showSnackBar(message: 'view_process_specification_query_hint'.tr);
+  } else {
+    feishuAuthorizeCheck(
+      notAuthorize: () => Get.to(() => FeishuAuthorize())?.then((token) {
+        if (token != null) {
+          feishuWikiSearch(
+            token: token,
+            query: query,
+            success: (files) => pickFilePopup(files),
+            failed: (msg) => errorDialog(content: msg),
+          );
+        }
+      }),
+      authorized: (token) => feishuWikiSearch(
+        token: token,
+        query: query,
+        success: (files) => pickFilePopup(files),
+        failed: (msg) => errorDialog(content: msg),
+      ),
+    );
+  }
+}
+
+/// 飞书文件选择popup
+pickFilePopup(List<FeishuWikiSearchItemInfo> list) {
+  showCupertinoModalPopup(
+    context: Get.overlayContext!,
+    barrierDismissible: false,
+    builder: (BuildContext context) => PopScope(
+      canPop: true,
+      child: SingleChildScrollView(
+        primary: true,
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+        ),
+        child: Container(
+          height: MediaQuery.of(context).size.height * 0.35,
+          padding: const EdgeInsets.all(8.0),
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20),
+              topRight: Radius.circular(20),
+            ),
+            gradient: LinearGradient(
+              colors: [Colors.lightBlueAccent, Colors.blueAccent],
+              begin: Alignment.bottomLeft,
+              end: Alignment.topRight,
+            ),
+          ),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      'production_tasks_manuel_list'.tr,
+                      style: const TextStyle(
+                        fontSize: 24,
+                        color: Colors.white,
+                        decoration: TextDecoration.none,
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () => Get.back(),
+                    icon: const Icon(
+                      Icons.cancel_rounded,
+                      color: Colors.white,
+                    ),
+                  )
+                ],
+              ),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: list.length,
+                  itemBuilder: (c, i) => Card(
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 10, right: 10),
+                      child: Row(
+                        children: [
+                          Expanded(child: Text(list[i].title ?? '')),
+                          IconButton(
+                            onPressed: () {
+                              Get.back();
+                              Get.to(() => WebPage(
+                                    title: list[i].title ?? '',
+                                    url: list[i].url ?? '',
+                                  ));
+                            },
+                            icon: const Icon(
+                              Icons.chevron_right,
+                              color: Colors.blueAccent,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    ),
+  );
+}
+
+/// 飞书授权检查
 feishuAuthorizeCheck({
   required Function() notAuthorize,
   required Function(String token) authorized,
@@ -44,6 +159,7 @@ feishuAuthorizeCheck({
   }
 }
 
+/// 飞书wiki搜索
 feishuWikiSearch({
   required String token,
   required String query,

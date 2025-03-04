@@ -93,7 +93,7 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
         child: CombinationButton(
           text: 'production_dispatch_query_progress'.tr,
           backgroundColor: Colors.green,
-          click: () {},
+          click: () =>logic.queryProgress(),
         ),
       )
     ];
@@ -495,7 +495,7 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
                       isEnabled: state.cbIsEnabledInstruction.value,
                       text: 'production_dispatch_bt_instruction'.tr,
                       click: () => logic.instructionList(
-                        (url) => Get.to(() => WebPage(title: '', url: url)),
+                        (url) => Get.to(() => WebPage( url: url)),
                       ),
                     ),
                   if (!state.isSelectedMany)
@@ -517,7 +517,7 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
                           (s) => logic.getColorPdf(
                             s,
                             id,
-                            (url) => Get.to(() => WebPage(title: '', url: url)),
+                            (url) => Get.to(() => WebPage( url: url)),
                           ),
                         ),
                       ),

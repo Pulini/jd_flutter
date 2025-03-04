@@ -9,6 +9,7 @@ import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
+import 'package:jd_flutter/widget/feishu_authorize.dart';
 import 'package:jd_flutter/widget/picker/picker_view.dart';
 import 'package:jd_flutter/widget/spinner_widget.dart';
 import 'package:rotated_corner_decoration/rotated_corner_decoration.dart';
@@ -303,9 +304,8 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
               ),
               CombinationButton(
                 text: 'material_dispatch_progress_manual'.tr,
-                click: () => logic.queryProcessSpecification(
-                  data.productName ?? '',
-                  (list) => processSpecificationDialog(list),
+                click: () => feishuViewFiles(
+                  query:data.productName ?? '',
                 ),
                 combination: Combination.middle,
               ),

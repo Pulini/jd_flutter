@@ -6,8 +6,8 @@ import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
+import 'package:jd_flutter/widget/feishu_authorize.dart';
 import 'machine_dispatch_logic.dart';
-import 'machine_dispatch_report_view.dart';
 
 class MachineDispatchPage extends StatefulWidget {
   const MachineDispatchPage({super.key});
@@ -20,24 +20,20 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
   final logic = Get.put(MachineDispatchLogic());
   final state = Get.find<MachineDispatchLogic>().state;
 
-  refreshOrder() => logic.getWorkCardList(
-        (list) {
-          if (list.length > 1) {
-            showWorkCardListDialog(
-              list,
-              (mdi) => logic.getWorkCardDetail(mdi, () => setState(() {})),
-            );
-          } else {
-            logic.getWorkCardDetail(list[0], () => setState(() {}));
-          }
-        },
-      );
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => refreshOrder());
-  }
+  refreshOrder() => logic.getWorkCardList((list) {
+        if (list.length > 1) {
+          showWorkCardListDialog(
+            list,
+            (mdi) {
+              state.nowDispatchNumber.value = mdi.dispatchNumber ?? '';
+              logic.refreshWorkCardDetail();
+            },
+          );
+        } else {
+          state.nowDispatchNumber.value = list[0].dispatchNumber ?? '';
+          logic.refreshWorkCardDetail();
+        }
+      });
 
   itemTitle() => SizedBox(
         width: 100,
@@ -50,9 +46,7 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
                   ),
                   alignment: Alignment.center,
                   child: Checkbox(
-                    value: state.selectList.isNotEmpty &&
-                        state.selectList.where((v) => v.value).length ==
-                            state.selectList.length,
+                    value: logic.isSelectAll(),
                     onChanged: (c) {
                       for (var v in state.selectList) {
                         v.value = c!;
@@ -173,13 +167,16 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
               alignment: Alignment.center,
             ),
             expandedFrameText(
-                text: data.mould.toShowString(),
-                backgroundColor: state.leaderVerify.value
-                    ? Colors.green.shade200
-                    : Colors.blue.shade300,
-                textColor: Colors.white,
-                alignment: Alignment.center,
-                click: () {}),
+              text: data.mould.toShowString(),
+              backgroundColor: state.leaderVerify.value
+                  ? Colors.green.shade200
+                  : Colors.blue.shade300,
+              textColor: Colors.white,
+              alignment: Alignment.center,
+              click: () {
+                showSnackBar(message: '模具');
+              },
+            ),
             expandedFrameText(
               text: data.getTodayDispatchQty().toShowString(),
               backgroundColor: state.leaderVerify.value
@@ -187,6 +184,9 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
                   : Colors.blue.shade300,
               textColor: state.leaderVerify.value ? Colors.white : Colors.red,
               alignment: Alignment.center,
+              click: () {
+                showSnackBar(message: '当日派工数');
+              },
             ),
             expandedFrameText(
               text: data.lastNotFullQty.toShowString(),
@@ -203,6 +203,9 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
               textColor:
                   state.leaderVerify.value ? Colors.white : Colors.black87,
               alignment: Alignment.center,
+              click: () {
+                showSnackBar(message: '箱容');
+              },
             ),
             expandedFrameText(
               text: data.labelQty.toString(),
@@ -214,12 +217,18 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
               backgroundColor: Colors.green.shade200,
               textColor: Colors.white,
               alignment: Alignment.center,
+              click: () {
+                showSnackBar(message: '箱数');
+              },
             ),
             expandedFrameText(
               text: data.notFullQty.toShowString(),
               backgroundColor: Colors.green.shade200,
               textColor: Colors.white,
               alignment: Alignment.center,
+              click: () {
+                showSnackBar(message: '本班未满箱数');
+              },
             ),
             expandedFrameText(
               text: data.getReportQty().toShowString(),
@@ -400,7 +409,6 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
                 ),
                 expandedTextSpan(
                   hint: 'machine_dispatch_actual_machine'.tr,
-                  hintColor: Colors.red,
                   text: state.detailsInfo?.machine ?? '',
                   textColor: Colors.red,
                 ),
@@ -421,7 +429,12 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
                   hint: 'machine_dispatch_mold_number'.tr,
                   text: state.detailsInfo?.moldNo ?? '',
                 ),
-                expandedTextSpan(hint: '', text: ''),
+                expandedTextSpan(
+                  hint: '建议模具数：',
+                  text: (state.detailsInfo?.getProposalMoulds() ?? 0)
+                      .toShowString(),
+                  textColor: Colors.red,
+                ),
               ],
             ),
             textSpan(
@@ -446,90 +459,119 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
             if (!state.leaderVerify.value)
               CombinationButton(
                 text: 'machine_dispatch_leader_operation'.tr,
-                click: () => teamLeaderVerifyDialog(),
+                click: () {
+                  if (logic.statusReportedAndGenerate()) {
+                    informationDialog(
+                      content: 'machine_dispatch_modify_error_tips'.tr,
+                    );
+                  } else {
+                    teamLeaderVerifyDialog();
+                  }
+                },
               ),
             if (state.leaderVerify.value)
               CombinationButton(
                 text: 'machine_dispatch_clean_last'.tr,
-                isEnabled: state.selectList.any((v) => v.value),
-                click: () => logic.cleanOrRecoveryLastQty(
-                  true,
-                  () => setState(() {}),
-                ),
+                isEnabled: logic.hasSelected(),
+                click: () => logic.cleanOrRecoveryLastQty(true),
                 combination: Combination.left,
               ),
             if (state.leaderVerify.value)
               CombinationButton(
                 text: 'machine_dispatch_restore_last'.tr,
-                isEnabled: state.selectList.any((v) => v.value),
-                click: () => logic.cleanOrRecoveryLastQty(
-                  false,
-                  () => setState(() {}),
-                ),
+                isEnabled: logic.hasSelected(),
+                click: () => logic.cleanOrRecoveryLastQty(false),
                 combination: Combination.middle,
               ),
             if (state.leaderVerify.value)
               CombinationButton(
                 text: 'machine_dispatch_modify_order'.tr,
                 click: () {
-                  if (state.detailsInfo?.status == 2) {
-                    informationDialog(content: 'machine_dispatch_modify_error_tips'.tr);
-                  } else {
-                    askDialog(
-                      content: 'machine_dispatch_modify_tips'.tr,
-                      confirm: () => logic.modifyWorkCardItem(
-                        () => setState(() {}),
-                      ),
-                    );
-                  }
+                  askDialog(
+                    content: 'machine_dispatch_modify_tips'.tr,
+                    confirm: () => logic.modifyWorkCardItem(),
+                  );
                 },
                 combination: Combination.right,
               ),
             Expanded(child: Container()),
             CombinationButton(
               text: 'machine_dispatch_label_history'.tr,
-              click: () {
-                // Get.to(()=> TestApp());
-                Get.to(()=> const MachineDispatchReportPage());
-                },
+              click: () => logic.getHistoryInfo(),
               combination: Combination.left,
             ),
             CombinationButton(
-              text: 'machine_dispatch_generate_and_print'.tr,
-              click: () {},
-              combination: Combination.middle,
-            ),
-            CombinationButton(
               text: 'machine_dispatch_process_manual'.tr,
-              click: () {},
+              click: () => feishuViewFiles(
+                query: state.detailsInfo?.factoryType ?? '',
+              ),
               combination: Combination.middle,
             ),
+            if (state.leaderVerify.value)
+              CombinationButton(
+                text: 'machine_dispatch_generate_and_print'.tr,
+                isEnabled: logic.isSelectedOne(),
+                click: () {
+                  if (logic.statusReportedAndGenerate()) {
+                    informationDialog(
+                      content: '已经进行过员工汇报，无法再打标',
+                    );
+                  } else {
+                    generateAndPrintDialog(
+                      printLast: () => logic.generateAndPrintLabel(true),
+                      print: () => logic.generateAndPrintLabel(false),
+                    );
+                  }
+                },
+                combination: Combination.middle,
+              ),
             CombinationButton(
               text: 'machine_dispatch_production_report'.tr,
-              click: () {},
+              isEnabled: logic.hasReported(),
+              click: () => askDialog(
+                content: '确定要汇报产量吗？',
+                confirm: () => logic.productionReport(),
+              ),
               combination: Combination.middle,
             ),
-            if (state.detailsInfo?.barCodeList?.isNotEmpty == true)
-              CombinationButton(
-                text: 'machine_dispatch_cancel_number_confirmation'.tr,
-                click: () {},
-                combination: Combination.middle,
-              ),
-            if (state.detailsInfo?.barCodeList?.isNotEmpty == true)
-              CombinationButton(
-                text: 'machine_dispatch_number_confirmation'.tr,
-                click: () => logic.checkLabelScanState(),
-                combination: Combination.middle,
-              ),
+            CombinationButton(
+              text: 'machine_dispatch_number_confirmation'.tr,
+              isEnabled: state.detailsInfo?.barCodeList?.isNotEmpty == true,
+              click: () => logic.workerDispatchConfirmation(),
+              combination: Combination.middle,
+            ),
+            CombinationButton(
+              text: 'machine_dispatch_cancel_number_confirmation'.tr,
+              isEnabled: state.detailsInfo?.barCodeList?.isNotEmpty == true,
+              click: () {
+                if (logic.statusReportedAndGenerate()) {
+                  informationDialog(
+                    content: '请先进行员工确认！',
+                  );
+                } else {
+                  askDialog(
+                    content: '确定要取消员工确认吗？',
+                    confirm: () => logic.cancelWorkerDispatchConfirmation(),
+                  );
+                }
+              },
+              combination: Combination.middle,
+            ),
             CombinationButton(
               text: 'machine_dispatch_handover_shifts'.tr,
-              click: () {},
+              isEnabled: logic.hasReported(),
+              click: () => logic.handoverShifts(),
               combination: Combination.right,
             ),
           ],
         ),
       );
 
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => refreshOrder());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -569,7 +611,7 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
             if (state.nowDispatchNumber.value.isNotEmpty)
               CombinationButton(
                 text: 'machine_dispatch_refresh'.tr,
-                click: () => logic.refreshWorkCardDetail(() => setState(() {})),
+                click: () => logic.refreshWorkCardDetail(),
                 combination: Combination.right,
               ),
           ],

@@ -13,6 +13,8 @@ import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
 class ProductionDispatchState {
+  var isShowOrderProgress=false.obs;
+
   var etInstruction = '';
   var isSelectedOutsourcing =
       spGet('${Get.currentRoute}/isSelectedOutsourcing') ?? false;
@@ -22,6 +24,8 @@ class ProductionDispatchState {
       spGet('${Get.currentRoute}/isSelectedMergeOrder') ?? false;
   var orderList = <ProductionDispatchOrderInfo>[].obs;
   var orderGroupList = <String, List<ProductionDispatchOrderInfo>>{}.obs;
+
+  var orderProgressList = <OrderProgressItemInfo>[].obs;
 
   var cbIsEnabledMaterialList = false.obs;
   var cbIsEnabledInstruction = false.obs;
@@ -98,6 +102,7 @@ class ProductionDispatchState {
     required String endTime,
     required Function(String msg) error,
   }) {
+    isShowOrderProgress.value=false;
     httpGet(
       method: webApiGetWorkCardCombinedSizeList,
       loading: 'production_dispatch_querying_order'.tr,
@@ -643,6 +648,35 @@ class ProductionDispatchState {
       if (response.resultCode == resultSuccess) {
         success.call(response.message ?? '');
       } else {
+        error.call(response.message ?? '');
+      }
+    });
+  }
+
+  queryProgress({
+    required String startTime,
+    required String endTime,
+    required Function(String msg) error,
+  }) {
+    isShowOrderProgress.value=true;
+    httpGet(
+      method: webApiGetWorkCardDetailList,
+      loading: 'production_dispatch_querying_order'.tr,
+      params: {
+        'startTime': startTime,
+        'endTime': endTime,
+        'moNo': etInstruction,
+        'isClose': isSelectedClosed,
+        'isOutsourcing': isSelectedOutsourcing,
+        'deptID': userInfo?.departmentID,
+      },
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        orderProgressList.value = [
+          for (var json in response.data) OrderProgressItemInfo.fromJson(json)
+        ];
+      } else {
+        orderProgressList.value = [];
         error.call(response.message ?? '');
       }
     });

@@ -8,10 +8,18 @@ import 'custom_widget.dart';
 import 'dialogs.dart';
 
 class WebPage extends StatelessWidget {
-  WebPage({super.key, required this.title, required this.url});
+  WebPage({
+    super.key,
+    this.title = '',
+    this.fileId = '',
+    this.needCheckAuthorize = false,
+    required this.url,
+  });
 
   final String url;
   final String title;
+  final String fileId;
+  final bool needCheckAuthorize;
 
   final webViewController = WebViewController();
 
@@ -77,7 +85,21 @@ class WebPage extends StatelessWidget {
     );
   }
 
-
+  addInstructionsLog(String fileItemId) {
+    if (fileItemId.isEmpty) return;
+    httpPost(
+      method: webApiInstructionsLog,
+      params: {
+        'ItemID': fileItemId,
+        'UserID': userInfo?.userID,
+      },
+    ).then((response) {
+      showSnackBar(
+        message: response.message ?? '',
+        isWarning: response.resultCode == resultError,
+      );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,6 +116,7 @@ class WebPage extends StatelessWidget {
             onPageFinished: (String url) {
               debugPrint('${Get.isDialogOpen}  onPageFinished------$url');
               if (Get.isDialogOpen == true) Get.back();
+              addInstructionsLog(fileId);
             },
             onHttpError: (HttpResponseError error) {
               debugPrint(
@@ -109,8 +132,11 @@ class WebPage extends StatelessWidget {
         );
     }
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      // checkAuthorize();
-      webViewController.loadRequest(Uri.parse(url));
+      if (needCheckAuthorize) {
+        checkAuthorize();
+      } else {
+        webViewController.loadRequest(Uri.parse(url));
+      }
     });
     return Container(
       decoration: backgroundColor,

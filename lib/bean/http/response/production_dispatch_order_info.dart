@@ -263,3 +263,86 @@ class SizeBean {
     return map;
   }
 }
+
+class OrderProgressInfo {
+  String? materialCode; //物料编码
+  String? materialName; //物料名称
+  String? factoryType; //型体
+  String? factory; //工厂
+  String? preCompensation; //预补类型
+  List<OrderProgressItemInfo>? mtoNoItems;
+
+  OrderProgressInfo({
+    this.materialCode,
+    this.materialName,
+    this.factoryType,
+    this.factory,
+    this.preCompensation,
+    this.mtoNoItems,
+  });
+
+  OrderProgressInfo.fromJson(dynamic json) {
+    materialCode = json['MaterialCode'];
+    materialName = json['MaterialName'];
+    factoryType = json['FactoryType'];
+    factory = json['Factory'];
+    preCompensation = json['PreCompensation'];
+    if (json['MtoNoItems'] != null) {
+      mtoNoItems = [];
+      json['MtoNoItems'].forEach((v) {
+        mtoNoItems?.add(OrderProgressItemInfo.fromJson(v));
+      });
+    }
+  }
+}
+
+class OrderProgressItemInfo {
+  String? mtoNo; //指令
+  String? unit; //单位
+  double? qty; //数量
+  double? inStockQty; //入库数量
+  double? reportedQty; //已汇报数量
+  int? priority; //优先级
+  List<OrderProgressItemSizeInfo>? sizeItems;
+
+  OrderProgressItemInfo({
+    this.mtoNo,
+    this.unit,
+    this.qty,
+    this.inStockQty,
+    this.reportedQty,
+    this.priority,
+    this.sizeItems,
+  });
+
+  OrderProgressItemInfo.fromJson(dynamic json) {
+    mtoNo = json['MtoNo'];
+    unit = json['Unit'];
+    qty = json['Qty'];
+    inStockQty = json['InStockQty'];
+    reportedQty = json['ReportedQty'];
+    priority = json['Priority'];
+    if (json['SizeItems'] != null) {
+      sizeItems = [];
+      json['SizeItems'].forEach((v) {
+        sizeItems?.add(OrderProgressItemSizeInfo.fromJson(v));
+      });
+    }
+  }
+
+}
+
+class OrderProgressItemSizeInfo {
+  String? size; //尺码
+  double? qty;//派工数量
+
+  OrderProgressItemSizeInfo({
+    this.size,
+    this.qty,
+  });
+
+  OrderProgressItemSizeInfo.fromJson(dynamic json) {
+    size = json['Size'];
+    qty = json['Qty'];
+  }
+}

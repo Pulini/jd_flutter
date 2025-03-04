@@ -632,6 +632,7 @@ manufactureInstructionsDialog(List<ManufactureInstructionsInfo> files) {
                       Get.to(() => WebPage(
                             title: files[selected].name ?? '',
                             url: files[selected].url ?? '',
+                            fileId: files[selected].interID.toString(),
                           ));
                     }
                   },
@@ -870,7 +871,8 @@ reportToSap(Function(bool isInstructionReport) callback) {
                   onTap: () {
                     isInstructionReport.value = !isInstructionReport.value;
                   },
-                  child: Text('production_dispatch_dialog_instruction_report'.tr),
+                  child:
+                      Text('production_dispatch_dialog_instruction_report'.tr),
                 )
               ],
             ),
@@ -921,7 +923,8 @@ showSelectMaterialPopup(List<Map> list) {
       //拦截返回键
       canPop: false,
       child: AlertDialog(
-        title: Text('production_dispatch_dialog_select_print_surplus_material'.tr),
+        title:
+            Text('production_dispatch_dialog_select_print_surplus_material'.tr),
         content: SizedBox(
           width: 300,
           height: 200,

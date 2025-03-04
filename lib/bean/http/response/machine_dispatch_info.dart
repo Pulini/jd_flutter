@@ -1,5 +1,5 @@
+import 'dart:math';
 import 'dart:typed_data';
-
 import 'package:jd_flutter/utils/utils.dart';
 
 // InterID : 26825
@@ -226,6 +226,21 @@ class MachineDispatchDetailsInfo {
     }
     return map;
   }
+
+  double getMaxSingleModeQty() =>
+      items?.map((v) => v.getSingleModeQty()).reduce(max) ?? 0;
+
+  double getSumUnderTotalQty() =>
+      items?.map((v) => v.sumUnderQty ?? 0).reduce((a, b) => a.add(b)) ?? 0;
+
+  double getProposalMoulds() {
+    var maxSingleModeQty = getMaxSingleModeQty();
+    if (maxSingleModeQty > 0) {
+      return getSumUnderTotalQty().div(maxSingleModeQty).toFixed(2);
+    } else {
+      return 0;
+    }
+  }
 }
 
 // FWorkingHoursUnit : "H"
@@ -356,7 +371,7 @@ class Items {
   double? availableMouldsQty; //可用模具数
   double? capacityPerMold; //产能每模
 
-  int labelQty = 0;
+  int labelQty = 0;//贴标总数
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -411,7 +426,92 @@ class Items {
         .add(notFullQty ?? 0)
         .sub(lastNotFullQty ?? 0);
   }
+
+  double getSingleModeQty() => (availableMouldsQty ?? 0) > 0
+      ? sumUnderQty.div(availableMouldsQty ?? 0)
+      : 0;
 }
+
+class MachineDispatchHistoryInfo {
+  int? interID;
+  String? decrementNumber; //递减表号
+  String? startDate; //开工日期
+  String? dispatchNumber; //派工单号
+  String? materialNumber; //物料编码
+  String? materialName; //物料名称
+  String? factoryType; //型体
+  String? machine; //机台
+  String? decreasingMachine; //递减机台
+  String? factory; //工厂
+  String? shift; //班次
+  String? processFlow; //制程
+  String? remarks; //备注
+  String? withdrawal; //撤回标识
+  List<MachineDispatchHistoryItemInfo>? items;//分录
+
+  MachineDispatchHistoryInfo({
+    this.interID,
+    this.decrementNumber,
+    this.startDate,
+    this.dispatchNumber,
+    this.materialNumber,
+    this.materialName,
+    this.factoryType,
+    this.machine,
+    this.decreasingMachine,
+    this.factory,
+    this.shift,
+    this.processFlow,
+    this.remarks,
+    this.withdrawal,
+    this.items,
+  });
+  MachineDispatchHistoryInfo.fromJson(dynamic json) {
+    interID = json['InterID'];
+    decrementNumber = json['DecrementNumber'];
+    startDate = json['StartDate'];
+    dispatchNumber = json['DispatchNumber'];
+    materialNumber = json['MaterialNumber'];
+    materialName = json['MaterialName'];
+    factoryType = json['FactoryType'];
+    machine = json['Machine'];
+    decreasingMachine = json['DecreasingMachine'];
+    factory = json['Factory'];
+    shift = json['Shift'];
+    processFlow = json['ProcessFlow'];
+    remarks = json['Remarks'];
+    withdrawal = json['Withdrawal'];
+    if (json['Items'] != null) {
+      items = [];
+      json['Items'].forEach((v) {
+        items?.add(MachineDispatchHistoryItemInfo.fromJson(v));
+      });
+    }
+  }
+}
+
+class MachineDispatchHistoryItemInfo {
+  String? moldNo; //模具号
+  String? weight; //单重
+
+  MachineDispatchHistoryItemInfo({
+    this.moldNo,
+    this.weight,
+  });
+
+  MachineDispatchHistoryItemInfo.fromJson(dynamic json) {
+    moldNo = json['MoldNo'];
+    weight = json['Weight'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['MoldNo'] = moldNo;
+    map['Weight'] = weight;
+    return map;
+  }
+}
+
 
 class DispatchProcessInfo {
   var processNumber = ''; //工序ID
