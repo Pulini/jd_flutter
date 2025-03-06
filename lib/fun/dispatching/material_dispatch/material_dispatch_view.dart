@@ -52,7 +52,7 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
             ),
           ),
           foregroundDecoration: data.children?[0].lastProcessNode == '1'
-              ?  RotatedCornerDecoration.withColor(
+              ? RotatedCornerDecoration.withColor(
                   color: Colors.red,
                   badgeCornerRadius: const Radius.circular(8),
                   badgeSize: const Size(45, 45),
@@ -79,7 +79,8 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
               ),
               Expanded(
                 child: Text(
-                  'material_dispatch_type_body'.trArgs([data.productName??'']),
+                  'material_dispatch_type_body'
+                      .trArgs([data.productName ?? '']),
                   style: itemTitleStyle,
                 ),
               ),
@@ -253,7 +254,8 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
                 child: Row(
                   children: [
                     Text(
-                      'material_dispatch_completion_amount'.trArgs([data.unitName??'']),
+                      'material_dispatch_completion_amount'
+                          .trArgs([data.unitName ?? '']),
                       style: style,
                     ),
                     SizedBox(
@@ -277,7 +279,8 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
                 child: Row(
                   children: [
                     Text(
-                      'material_dispatch_label_generation_amount'.trArgs([data.unitName??'']),
+                      'material_dispatch_label_generation_amount'
+                          .trArgs([data.unitName ?? '']),
                       style: style,
                     ),
                     SizedBox(
@@ -304,8 +307,8 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
               ),
               CombinationButton(
                 text: 'material_dispatch_progress_manual'.tr,
-                click: () => feishuViewFiles(
-                  query:data.productName ?? '',
+                click: () => feishuViewWikiFiles(
+                  query: data.productName ?? '',
                 ),
                 combination: Combination.middle,
               ),
@@ -444,29 +447,37 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
     if (state.isNeedSetInitData()) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         pickPallet(
-            isFirst: true,
-            savePalletDate: state.date,
-            saveMachine: state.machineId,
-            saveWarehouseLocation: state.locationId,
-            savePallet: state.palletNumber,
-            context: context,
-            callback: (
-              int date,
-              String machineId,
-              String locationId,
-              String palletNumber,
-            ) =>
-                setState(() => state.savePickData(
-                      date: date,
-                      machineId: machineId,
-                      locationId: locationId,
-                      palletNumber: palletNumber,
-                    )));
+          isFirst: true,
+          savePalletDate: state.date,
+          saveMachine: state.machineId,
+          saveWarehouseLocation: state.locationId,
+          savePallet: state.palletNumber,
+          context: context,
+          callback: (
+            date,
+            machineId,
+            locationId,
+            palletNumber,
+          ) =>
+              setState(() => state.savePickData(
+                    date: date,
+                    machineId: machineId,
+                    locationId: locationId,
+                    palletNumber: palletNumber,
+                  )),
+        );
       });
+    }
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (state.isNeedSetInitData()) {
       return Container(
         decoration: backgroundColor,
         child: Scaffold(

@@ -88,7 +88,12 @@ class ProductionTasksLogic extends GetxController {
     }
   }
 
-  getDetail({String? ins, String? po, required String imageUrl}) {
+  getDetail({
+    String? ins,
+    String? po,
+    required String queryFileName,
+    required String imageUrl,
+  }) {
     state.getProductionOrderScheduleDetail(
       ins: ins ?? '',
       po: po ?? '',
@@ -96,12 +101,20 @@ class ProductionTasksLogic extends GetxController {
         if (ins != null && ins.isNotEmpty) {
           Get.to(
             () => const ProductionTasksDetailPage(),
-            arguments: {'isInstruction': true, 'imageUrl': imageUrl},
+            arguments: {
+              'isInstruction': true,
+              'imageUrl': imageUrl,
+              'queryFileName': queryFileName,
+            },
           );
         } else if (po != null && po.isNotEmpty) {
           Get.to(
             () => const ProductionTasksDetailPage(),
-            arguments: {'isInstruction': false, 'imageUrl': imageUrl},
+            arguments: {
+              'isInstruction': false,
+              'imageUrl': imageUrl,
+              'queryFileName': queryFileName,
+            },
           );
         }
       },
@@ -181,5 +194,4 @@ class ProductionTasksLogic extends GetxController {
       refreshAll.call();
     }
   }
-
 }

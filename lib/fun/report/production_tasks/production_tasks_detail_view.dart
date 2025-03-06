@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/production_tasks_info.dart';
 import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
+import 'package:jd_flutter/widget/feishu_authorize.dart';
 
 import 'production_tasks_logic.dart';
 import 'production_tasks_state.dart';
@@ -21,6 +23,7 @@ class _ProductionTasksDetailPageState extends State<ProductionTasksDetailPage> {
   final orderListKey = GlobalKey<AnimatedListState>();
   bool isInstruction = Get.arguments['isInstruction'];
   String imageUrl = Get.arguments['imageUrl'];
+  String queryFileName = Get.arguments['queryFileName'];
 
   Widget productionTasksTableItem({
     ProductionTasksDetailItemInfo? data,
@@ -137,6 +140,12 @@ class _ProductionTasksDetailPageState extends State<ProductionTasksDetailPage> {
   @override
   Widget build(BuildContext context) {
     return pageBody(
+      actions: [
+        CombinationButton(
+          text: '查看包装手册',
+          click: () => feishuViewCloudDocFiles(query: queryFileName),
+        ),
+      ],
       title: isInstruction
           ? 'production_tasks_detail_instruction_no'.trArgs([
               state.detailInstructionNo.value,

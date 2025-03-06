@@ -630,33 +630,43 @@ expandedFrameText({
   AlignmentGeometry? alignment,
   bool isBold = false,
   required String text,
+  int? maxLines = 1,
 }) {
   return Expanded(
     flex: flex ?? 1,
-    child: GestureDetector(
-      onTap: () => click?.call(),
-      child: Container(
-        padding: padding ?? const EdgeInsets.all(5),
-        decoration: BoxDecoration(
-          border: Border.all(color: borderColor ?? Colors.grey),
-          color: backgroundColor ?? Colors.transparent,
-        ),
-        alignment: alignment ?? Alignment.centerLeft,
-        child: Text(
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          text,
-          strutStyle: const StrutStyle(
-            forceStrutHeight: true,
-            leading: 0.5,
+    child: text.isEmpty
+        ? Container(
+            height: (maxLines! * 35).toDouble(),
+            decoration: BoxDecoration(
+              border: Border.all(color: borderColor ?? Colors.grey),
+              color: backgroundColor ?? Colors.transparent,
+            ),
+          )
+        : GestureDetector(
+            onTap: () => click?.call(),
+            child: Container(
+              height: (maxLines! * 35).toDouble(),
+              padding: padding ?? const EdgeInsets.all(5),
+              decoration: BoxDecoration(
+                border: Border.all(color: borderColor ?? Colors.grey),
+                color: backgroundColor ?? Colors.transparent,
+              ),
+              alignment: alignment ?? Alignment.centerLeft,
+              child: Text(
+                maxLines: maxLines,
+                overflow: TextOverflow.ellipsis,
+                text,
+                strutStyle: const StrutStyle(
+                  forceStrutHeight: true,
+                  leading: 0.5,
+                ),
+                style: TextStyle(
+                  color: textColor ?? Colors.black87,
+                  fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
+                ),
+              ),
+            ),
           ),
-          style: TextStyle(
-            color: textColor ?? Colors.black87,
-            fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
-          ),
-        ),
-      ),
-    ),
   );
 }
 
@@ -679,6 +689,143 @@ avatarPhoto(String? url) {
                 color: Colors.blue,
               ),
             ),
+    ),
+  );
+}
+
+surplusMaterialLabelTemplate({
+  required String qrCode,
+  required String machine,
+  required String shift,
+  required String startDate,
+  required String typeBody,
+  required String materialName,
+  required String materialCode,
+}) {
+  var bs = const BorderSide(color: Colors.black, width: 1.5);
+  var qrCodeWidget = Container(
+    decoration: BoxDecoration(border: Border(right: bs)),
+    child: QrImageView(
+      data: qrCode,
+      padding: const EdgeInsets.all(5),
+      version: QrVersions.auto,
+    ),
+  );
+  var detailWidget = Column(
+    children: [
+      Expanded(
+        flex: 5,
+        child: Container(
+          padding: const EdgeInsets.only(left: 3, right: 3),
+          decoration: BoxDecoration(border: Border(bottom: bs)),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                '机台：$machine',
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+              Text(
+                '班次：$shift',
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+      Expanded(
+        flex: 5,
+        child: Container(
+          padding: const EdgeInsets.only(left: 3, right: 3),
+          decoration: BoxDecoration(border: Border(bottom: bs)),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                '派工日期：',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+              Text(
+                startDate,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+      Expanded(
+        flex: 33,
+        child: Padding(
+          padding: const EdgeInsets.only(left: 3, right: 3),
+          child: Text(
+            maxLines: 5,
+            overflow: TextOverflow.ellipsis,
+            '($materialCode)$materialName'.allowWordTruncation(),
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+          ),
+        ),
+      ),
+    ],
+  );
+  var typeBodyWidget = Container(
+    padding: const EdgeInsets.only(left: 3, right: 3),
+    decoration: BoxDecoration(border: Border(top: bs)),
+    child: Text(
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+      '型体：$typeBody',
+      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+    ),
+  );
+  return Container(
+    color: Colors.white,
+    width: 75 * 5.5,
+    height: 45 * 5.5,
+    child: Padding(
+      padding: const EdgeInsets.all(4),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: Colors.black,
+            width: 1.5,
+          ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(
+                flex: 38,
+                child: Row(
+                  children: [
+                    Expanded(
+                      flex: 38,
+                      child: qrCodeWidget,
+                    ),
+                    Expanded(
+                      flex: 35,
+                      child: detailWidget,
+                    ),
+                  ],
+                )),
+            Expanded(
+              flex: 5,
+              child: typeBodyWidget,
+            ),
+          ],
+        ),
+      ),
     ),
   );
 }

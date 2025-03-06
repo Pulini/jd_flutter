@@ -93,7 +93,7 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
         child: CombinationButton(
           text: 'production_dispatch_query_progress'.tr,
           backgroundColor: Colors.green,
-          click: () =>logic.queryProgress(),
+          click: () => logic.queryProgress(),
         ),
       )
     ];
@@ -495,7 +495,7 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
                       isEnabled: state.cbIsEnabledInstruction.value,
                       text: 'production_dispatch_bt_instruction'.tr,
                       click: () => logic.instructionList(
-                        (url) => Get.to(() => WebPage( url: url)),
+                        (url) => Get.to(() => WebPage(url: url)),
                       ),
                     ),
                   if (!state.isSelectedMany)
@@ -517,7 +517,7 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
                           (s) => logic.getColorPdf(
                             s,
                             id,
-                            (url) => Get.to(() => WebPage( url: url)),
+                            (url) => Get.to(() => WebPage(url: url)),
                           ),
                         ),
                       ),
@@ -563,8 +563,12 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
                       combination: Combination.middle,
                       isEnabled: state.cbIsEnabledPrintMaterialHead.value,
                       text: 'production_dispatch_bt_print_material_head'.tr,
-                      click: () =>
-                          logic.getSurplusMaterial(showSelectMaterialPopup),
+                      click: () => logic.getSurplusMaterial(
+                        print: (list) => showSelectMaterialPopup(
+                          surplusMaterialList: list,
+                          print: (data) =>logic.printSurplusMaterial(data),
+                        ),
+                      ),
                     ),
                   if (!state.isSelectedMany)
                     CombinationButton(
@@ -572,8 +576,8 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
                       isEnabled: state.cbIsEnabledReportSap.value,
                       text: 'production_dispatch_bt_report_sap'.tr,
                       click: () => sapReportDialog(
-                        logic.getReportMax(),
-                        logic.reportToSap,
+                        initQty: logic.getReportMax(),
+                        callback: logic.reportToSap,
                       ),
                     ),
                 ],

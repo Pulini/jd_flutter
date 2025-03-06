@@ -45,8 +45,9 @@ class WorkOrderListLogic extends GetxController {
     var selected = state.partList.where((v) => v.select);
     if (selected.isEmpty) {
       showSnackBar(
-          message: 'work_order_list_select_component_tips'.tr,
-          isWarning: true,);
+        message: 'work_order_list_select_component_tips'.tr,
+        isWarning: true,
+      );
     } else {
       if (selected.length > 1) {
         var names = <String>[];
@@ -66,8 +67,11 @@ class WorkOrderListLogic extends GetxController {
     }
   }
 
-  queryPartDetail() {
-    state.queryPartDetail(error: (msg) => errorDialog(content: msg));
+  queryPartDetail({required Function() success}) {
+    state.queryPartDetail(
+      error: (msg) => errorDialog(content: msg),
+      success: success,
+    );
   }
 
   createPartLabel(

@@ -727,7 +727,7 @@ colorListDialog(List<OrderColorList> files, Function(String) callback) {
   );
 }
 
-sapReportDialog(double initQty, Function(double) callback) {
+sapReportDialog({required double initQty, required Function(double) callback}) {
   var qty = initQty;
   Get.dialog(
     PopScope(
@@ -916,7 +916,10 @@ reportToSap(Function(bool isInstructionReport) callback) {
   );
 }
 
-showSelectMaterialPopup(List<Map> list) {
+showSelectMaterialPopup({
+  required List<Map> surplusMaterialList,
+  required Function(Map) print,
+}) {
   var controller = FixedExtentScrollController();
   Get.dialog(
     PopScope(
@@ -929,7 +932,7 @@ showSelectMaterialPopup(List<Map> list) {
           width: 300,
           height: 200,
           child: getCupertinoPicker(
-            list.map((data) {
+            surplusMaterialList.map((data) {
               return Center(child: Text(data['StubBarName']));
             }).toList(),
             controller,
@@ -939,6 +942,7 @@ showSelectMaterialPopup(List<Map> list) {
           TextButton(
             onPressed: () {
               Get.back();
+              print.call(surplusMaterialList[controller.selectedItem]);
             },
             child: Text('production_dispatch_dialog_print'.tr),
           ),

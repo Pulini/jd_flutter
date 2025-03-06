@@ -7,6 +7,7 @@ import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/feishu_authorize.dart';
+import 'package:rotated_corner_decoration/rotated_corner_decoration.dart';
 
 import 'production_tasks_logic.dart';
 import 'production_tasks_state.dart';
@@ -53,20 +54,21 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
       color: Colors.blue,
     );
     var image = Hero(
-        tag: 'ProductionTasksDetailImage-${data.itemImage}-${data.mtoNo}',
-        child: AspectRatio(
-          aspectRatio: 16 / 9,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(7),
-            child: data.itemImage?.isEmpty == true
-                ? errorImage
-                : Image.network(
-                    fit: BoxFit.fill,
-                    data.itemImage ?? '',
-                    errorBuilder: (ctx, err, stackTrace) => errorImage,
-                  ),
-          ),
-        ));
+      tag: 'ProductionTasksDetailImage-${data.itemImage}-${data.mtoNo}',
+      child: AspectRatio(
+        aspectRatio: 16 / 9,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(7),
+          child: data.itemImage?.isEmpty == true
+              ? errorImage
+              : Image.network(
+                  fit: BoxFit.fill,
+                  data.itemImage ?? '',
+                  errorBuilder: (ctx, err, stackTrace) => errorImage,
+                ),
+        ),
+      ),
+    );
     return SizeTransition(
       sizeFactor: animation,
       axis: Axis.horizontal,
@@ -83,6 +85,18 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
           }
         },
         child: AnimatedContainer(
+          foregroundDecoration: RotatedCornerDecoration.withColor(
+            color:data.existOutBoxBarCode==true?Colors.green: Colors.red,
+            badgeCornerRadius: const Radius.circular(10),
+            badgeSize: const Size(55, 55),
+            textSpan: TextSpan(
+              text:'production_tasks_barcode'.tr,
+              style: const TextStyle(
+                fontSize: 14,
+                color: Colors.white,
+              ),
+            ),
+          ),
           curve: Curves.fastOutSlowIn,
           margin: const EdgeInsets.only(left: 5, right: 5, top: 10, bottom: 10),
           padding: const EdgeInsets.all(5),
@@ -110,10 +124,13 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                data.productName ?? '',
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
+              SizedBox(
+                width: double.infinity,
+                child: Text(
+                  data.productName ?? '',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
               index == 0
@@ -234,6 +251,7 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
                                     index == 0) {
                                   logic.getDetail(
                                     ins: data.mtoNo ?? '',
+                                    queryFileName: '${data.mtoNo}-${data.clientOrderNumber}',
                                     imageUrl: data.itemImage ?? '',
                                   );
                                 } else {
@@ -274,7 +292,7 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
                               onPressed: () {
                                 if (state.selected.value == index ||
                                     index == 0) {
-                                  feishuViewFiles(query: data.shoeStyle ?? '');
+                                  feishuViewWikiFiles(query: data.shoeStyle ?? '');
                                 } else {
                                   setState(() => state.selected.value = index);
                                 }
@@ -309,6 +327,7 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
                           if (state.selected.value == index || index == 0) {
                             logic.getDetail(
                               po: data.clientOrderNumber ?? '',
+                              queryFileName: '${data.mtoNo}-${data.clientOrderNumber}',
                               imageUrl: data.itemImage ?? '',
                             );
                           } else {
@@ -552,7 +571,7 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
         children: [
           const SizedBox(height: 10),
           Text(
-            'production_tasks_special_requests_from_guests'.tr,
+            'production_tasks_guests_special_requests'.tr,
             style: TextStyle(
                 color: Colors.blue.shade700, fontWeight: FontWeight.bold),
           ),

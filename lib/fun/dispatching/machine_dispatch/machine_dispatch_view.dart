@@ -502,7 +502,7 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
             ),
             CombinationButton(
               text: 'machine_dispatch_process_manual'.tr,
-              click: () => feishuViewFiles(
+              click: () => feishuViewWikiFiles(
                 query: state.detailsInfo?.factoryType ?? '',
               ),
               combination: Combination.middle,

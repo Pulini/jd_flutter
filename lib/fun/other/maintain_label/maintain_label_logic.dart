@@ -230,7 +230,7 @@ class MaintainLabelLogic extends GetxController {
         }
       }
       if (languageList.isEmpty) {
-        errorDialog(content: 'maintain_label_label_language_empty_tips');
+        errorDialog(content: 'maintain_label_label_language_empty_tips'.tr);
         return;
       }
       for (var language in languageList) {
@@ -1152,10 +1152,14 @@ class MaintainLabelLogic extends GetxController {
     labels.call(labelList);
   }
 
-  createSubItem({
+ List<Widget> createSubItem({
     required List<LabelInfo> data,
-    required Widget Function(String text1, String text2, String text3, int type)
-        subItem,
+    required Widget Function(
+      String text1,
+      String text2,
+      String text3,
+      int type,
+    ) subItem,
   }) {
     var widgetList = <Widget>[
       subItem.call(
@@ -1190,5 +1194,6 @@ class MaintainLabelLogic extends GetxController {
         ));
       }
     });
+    return widgetList;
   }
 }

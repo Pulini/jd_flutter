@@ -99,13 +99,6 @@ class _PartLabelPageState extends State<PartLabelPage> {
           ),
           actions: [
             TextButton(
-              onPressed: () => Get.back(),
-              child: Text(
-                'part_label_back'.tr,
-                style: const TextStyle(color: Colors.grey),
-              ),
-            ),
-            TextButton(
               onPressed: () => logic.createPartLabel(
                 boxCapacity,
                 createQty,
@@ -114,6 +107,13 @@ class _PartLabelPageState extends State<PartLabelPage> {
               ),
               child: Text(
                 'part_label_create'.tr,
+              ),
+            ),
+            TextButton(
+              onPressed: () => Get.back(),
+              child: Text(
+                'part_label_back'.tr,
+                style: const TextStyle(color: Colors.grey),
               ),
             ),
           ],
@@ -359,7 +359,7 @@ class _PartLabelPageState extends State<PartLabelPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      logic.queryPartDetail();
+      logic.queryPartDetail(success: () => setState(() {}));
     });
   }
 

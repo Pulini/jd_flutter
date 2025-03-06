@@ -92,6 +92,7 @@ class ProductionTasksSubInfo {
   double? finishQtyTotal; //累计完成数
   double? shouldPackQty; //应装箱数
   double? packagedQty; //应装箱数
+  bool? existOutBoxBarCode; //外箱标扫码状态
   List<String>? packetWay; //装箱方式
   List<String>? specificRequirements; //客人需求
   String? entryFID;
@@ -134,6 +135,7 @@ class ProductionTasksSubInfo {
     itemImage = json['ItemImage'];
     finishQtyTotal = json['FinishQtyTotal'];
     shouldPackQty = json['NPTotal'];
+    existOutBoxBarCode = json['ExistOutBoxBarCode'];
     packagedQty = json['HasInstall'];
     if (json['PacketWay'] != null) {
       packetWay = [];

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:collection/collection.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/manufacture_instructions_info.dart';
 import 'package:jd_flutter/bean/http/response/order_color_info.dart';
@@ -8,6 +9,7 @@ import 'package:jd_flutter/bean/http/response/production_dispatch_order_detail_i
 import 'package:jd_flutter/bean/http/response/production_dispatch_order_info.dart';
 import 'package:jd_flutter/bean/http/response/work_plan_material_info.dart';
 import 'package:jd_flutter/fun/dispatching/production_dispatch/production_dispatch_detail_view.dart';
+import 'package:jd_flutter/fun/dispatching/production_dispatch/production_dispatch_progress_view.dart';
 import 'package:jd_flutter/fun/other/maintain_label/maintain_label_view.dart';
 import 'package:jd_flutter/fun/report/production_materials_report/production_materials_report_view.dart';
 import 'package:jd_flutter/route.dart';
@@ -15,6 +17,7 @@ import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/picker/picker_controller.dart';
+import 'package:jd_flutter/widget/preview_label_widget.dart';
 import 'production_dispatch_state.dart';
 
 class ProductionDispatchLogic extends GetxController {
@@ -215,10 +218,10 @@ class ProductionDispatchLogic extends GetxController {
     );
   }
 
-  getSurplusMaterial(Function(List<Map>) callback) {
+  getSurplusMaterial({required Function(List<Map>) print}) {
     state.getSurplusMaterial((list) {
       if (list.isNotEmpty) {
-        callback.call(list);
+        print.call(list);
       } else {
         showSnackBar(
           message: 'production_dispatch_no_material_header'.tr,
@@ -229,7 +232,29 @@ class ProductionDispatchLogic extends GetxController {
   }
 
   //料头打印
-  printSurplusMaterial(List<Map> list) {}
+  printSurplusMaterial(Map data) {
+    var stubBar = data['StubBar'];
+    var stubBarName = data['StubBarName'];
+    state.getSelectOne((v) {
+      Get.to(() => PreviewLabel(
+        labelWidget: surplusMaterialLabelTemplate(
+          qrCode: jsonEncode({
+                'DispatchNumber': v.sapOrderBill,
+                'StubBar': stubBar,
+                'Factory': v.factory,
+                'Date': v.orderDate,
+                'NowTime': DateTime.now().millisecondsSinceEpoch,
+              }),
+          machine:v.machine??'',
+          shift: v.shift??'',
+          startDate: v.planStartTime??'',
+          typeBody: v.plantBody??'',
+          materialName:stubBarName,
+          materialCode: stubBar,
+        ),
+      ));
+    });
+  }
 
   double getReportMax() {
     var max = 0.0;
@@ -290,7 +315,7 @@ class ProductionDispatchLogic extends GetxController {
       (order) => state.orderPush(
         order: order,
         success: (data) {
-          if (data.workCardList?.isEmpty == true) {
+          if (data.workCardList==null||data.workCardList?.isEmpty == true) {
             errorDialog(content: 'production_dispatch_no_process_list'.tr);
           } else {
             state.workCardTitle.value = data.workCardTitle ?? WorkCardTitle();
@@ -860,11 +885,170 @@ class ProductionDispatchLogic extends GetxController {
   }
 
   queryProgress() {
-
     state.queryProgress(
       startTime: dpcStartDate.getDateFormatYMD(),
       endTime: dpcEndDate.getDateFormatYMD(),
+      success: (list) {
+        state.orderProgressList.value = formatProgress(list);
+        state.orderProgressTableWeight.value =
+            calculateTableWidth(state.orderProgressList[0].sizeMax);
+        debugPrint('-----orderProgressList=${state.orderProgressList.length}');
+        debugPrint(
+            '-----orderProgressTableWeight=${state.orderProgressTableWeight.value}');
+        Get.to(() => const ProductionDispatchProgressPage());
+      },
       error: (msg) => errorDialog(content: msg),
     );
+  }
+
+  List<OrderProgressShowInfo> formatProgress(List<OrderProgressInfo> list) {
+    var progressList = <OrderProgressShowInfo>[];
+    for (var order in list) {
+      var maxSizeList = order.getMaxSizeList();
+
+      //添加物料头
+      progressList.add(
+        OrderProgressShowInfo()
+          ..itemType = 1
+          ..sizeMax = maxSizeList.length
+          ..material = '物料：${order.materialName}(${order.materialCode})'
+          ..factoryType = '型体：${order.factoryType}'
+          ..factory = '工厂：${order.factory}',
+      );
+
+      //添加表格头
+      progressList.add(
+        OrderProgressShowInfo()
+          ..itemType = 2
+          ..sizeMax = maxSizeList.length
+          ..mtoNo = '指令号'
+          ..unit = '单位'
+          ..qty = '数量'
+          ..inStockQty = '入库数量'
+          ..reportedQty = '已汇报数'
+          ..priority = '优先级'
+          ..sizeData = maxSizeList,
+      );
+
+      //补全码段
+      order.mtoNoItems?.forEach((item) {
+        var newSizeList = <OrderProgressItemSizeInfo>[];
+        for (var size in maxSizeList) {
+          var sizeItem =
+              item.sizeItems?.firstWhereOrNull((v) => v.size == size);
+          newSizeList.add(
+            OrderProgressItemSizeInfo()
+              ..size = sizeItem == null ? size : sizeItem.size
+              ..qty = sizeItem == null ? 0 : sizeItem.qty,
+          );
+        }
+        item.sizeItems = newSizeList;
+      });
+
+      //生成码段合计
+      var newSizeListTotal = <String>[];
+      maxSizeList.forEachIndexed((i, v) {
+        newSizeListTotal.add((order.mtoNoItems
+            ?.map((v) => v.sizeItems![i].qty ?? 0)
+            .reduce((a, b) => a.add(b))).toShowString());
+      });
+
+      //添加表体数据
+      double qtyTotal = 0;
+      order.mtoNoItems?.forEach((v) {
+        //合计表体中的《数量》数
+        qtyTotal = qtyTotal.add(v.qty ?? 0);
+        progressList.add(
+          OrderProgressShowInfo()
+            ..itemType = 3
+            ..sizeMax = maxSizeList.length
+            ..mtoNo = v.mtoNo ?? ''
+            ..unit = v.unit ?? ''
+            ..qty = v.qty.toShowString()
+            ..inStockQty = v.inStockQty.toShowString()
+            ..reportedQty = v.reportedQty.toShowString()
+            ..priority = v.priority.toString()
+            ..sizeData = [for (var i in v.sizeItems!) i.qty.toShowString()],
+        );
+      });
+
+      //添加合计行
+      progressList.add(
+        OrderProgressShowInfo()
+          ..itemType = 4
+          ..sizeMax = maxSizeList.length
+          ..preCompensation =
+              order.preCompensation != 1 && order.preCompensation != 2
+          ..qty = qtyTotal.toShowString()
+          ..sizeData = newSizeListTotal,
+      );
+
+      //预补
+      if (order.preCompensation == 1) {
+        //先合计后预补 按照总数的1%进行四舍五入取整
+        var preCompensationList = <String>[];
+        for (var v in newSizeListTotal) {
+          preCompensationList.add(
+            v.toDoubleTry().div(100).round().toString(),
+          );
+        }
+        progressList.add(
+          OrderProgressShowInfo()
+            ..itemType = 5
+            ..sizeMax = maxSizeList.length
+            ..preCompensation = true
+            ..qty = preCompensationList
+                .map((v) => v)
+                .reduce((a, b) => a + b)
+                .toString()
+            ..sizeData = preCompensationList,
+        );
+      }
+
+      if (order.preCompensation == 2) {
+        //先预补后合计 按照尺码的1%进行向上取证后合计所有尺码
+        var preCompensationList = <String>[];
+        for (var size in maxSizeList) {
+          int pcTotal = 0;
+          order.mtoNoItems?.forEach((v) {
+            var find = v.sizeItems?.firstWhereOrNull((s) => s.size == size);
+            if (find != null && (find.qty ?? 0) > 0) {
+              pcTotal += find.qty.div(100).ceil();
+            }
+          });
+          preCompensationList.add(pcTotal.toString());
+        }
+        progressList.add(
+          OrderProgressShowInfo()
+            ..itemType = 5
+            ..sizeMax = maxSizeList.length
+            ..preCompensation = true
+            ..qty = preCompensationList
+                .map((v) => v)
+                .reduce((a, b) => a + b)
+                .toString()
+            ..sizeData = preCompensationList,
+        );
+      }
+    }
+    return progressList;
+  }
+
+  double calculateTableWidth(int sizeMax) {
+    var motNoWidth = 140;
+    var unitWidth = 60;
+    var qty = 80;
+    var sizeItemWidth = 60;
+    var inStockQty = 80;
+    var reportedQty = 80;
+    var priority = 80;
+    return (motNoWidth +
+            unitWidth +
+            qty +
+            sizeItemWidth * sizeMax +
+            inStockQty +
+            reportedQty +
+            priority)
+        .toDouble();
   }
 }

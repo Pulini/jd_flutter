@@ -132,7 +132,6 @@ class _WorkOrderListPageState extends State<WorkOrderListPage> {
                     text: 'work_order_list_individual_item_label'.tr,
                     click: () {
                       state.orderId = data.orderBill ?? '';
-                      // Get.to(() => const PartPickPage());
                       if (checkUserPermission('1051107')) {
                         Get.to(const PartPickPage());
                       } else {
