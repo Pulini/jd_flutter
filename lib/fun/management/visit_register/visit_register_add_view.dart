@@ -210,7 +210,7 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
       Expanded(
         flex: 1,
         child: ListTile(
-          title: const Text('无车'),
+          title:  Text('visit_no_car'.tr),
           leading: Radio(
             value: "",
             groupValue: state.carType.value,
@@ -225,7 +225,7 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
       Expanded(
         flex: 1,
         child: ListTile(
-          title: const Text('小轿车'),
+          title:  Text('visit_sedan'.tr),
           leading: Radio(
             value: "小桥车",
             groupValue: state.carType.value,
@@ -240,7 +240,7 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
       Expanded(
         flex: 1,
         child: ListTile(
-          title: const Text('货车'),
+          title:  Text('visit_goods_train'.tr),
           leading: Radio(
             value: "货车",
             groupValue: state.carType.value,
@@ -255,7 +255,7 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
       Expanded(
         flex: 1,
         child: ListTile(
-          title: const Text('拖车'),
+          title:  Text('visit_trailer'.tr),
           leading: Radio(
             value: "拖车",
             groupValue: state.carType.value,
@@ -275,7 +275,7 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
       Expanded(
         flex: 1,
         child: ListTile(
-          title: const Text('1号门'),
+          title:  Text('visit_gate_one'.tr),
           leading: Radio(
             value: "1号门",
             groupValue: state.doorType.value,
@@ -288,7 +288,7 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
       Expanded(
         flex: 1,
         child: ListTile(
-          title: const Text('2号门'),
+          title:  Text('visit_gate_two'.tr),
           leading: Radio(
             value: "2号门",
             groupValue: state.doorType.value,
@@ -439,9 +439,9 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
             onPressed: () {
               logic.addVisitRecord();
             },
-            child: const Text(
-              "新增",
-              style: TextStyle(color: Colors.white),
+            child:  Text(
+              'visit_newly_added'.tr,
+              style: const TextStyle(color: Colors.white),
             )),
       ),
     );

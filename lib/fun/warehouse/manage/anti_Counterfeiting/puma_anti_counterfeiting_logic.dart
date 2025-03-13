@@ -1,4 +1,4 @@
-import 'package:get/get_state_manager/src/simple/get_controllers.dart';
+import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/puma_box_code_info.dart';
 import 'package:jd_flutter/bean/http/response/puma_code_list_info.dart';
 import 'package:jd_flutter/fun/warehouse/manage/anti_Counterfeiting/puma_anti_counterfeiting_state.dart';
@@ -19,7 +19,7 @@ class PumaAntiCounterfeitingLogic extends GetxController {
           boxNumber.length <= 13) {
         httpGet(
           method: webApiGetBarCodeListByBoxNumber,
-          loading: '正在获取箱标详情...',
+          loading: 'code_list_report_obtaining_box_label_details'.tr,
         ).then((response) {
           if (response.resultCode == resultSuccess) {
             var list = <PumaBoxCodeInfo>[
@@ -32,7 +32,7 @@ class PumaAntiCounterfeitingLogic extends GetxController {
           }
         });
       } else {
-        showSnackBar(title: '警告', message: '箱标错误');
+        showSnackBar(title: 'shack_bar_warm'.tr, message: 'code_list_report_box_label_error'.tr);
       }
     }
   }
@@ -41,7 +41,7 @@ class PumaAntiCounterfeitingLogic extends GetxController {
   submitCode() {
     httpPost(
       method: webApiBarCodeInStock,
-      loading: '正在入库...',
+      loading: 'code_list_report_in_storage'.tr,
       body: {
         'BoxNumber': state.palletNumber.value,
         'WorkCode': getUserInfo()!.number,
@@ -65,7 +65,7 @@ class PumaAntiCounterfeitingLogic extends GetxController {
   getBarCodeListByEmp() {
     httpGet(
       method: webApiGetBarCodeListByEmp,
-      loading: '正在获取分拣数据...',
+      loading: 'code_list_report_obtaining_sorting_data'.tr,
       params: {
         'WorkCode': getUserInfo()!.number,
       },
@@ -89,7 +89,7 @@ class PumaAntiCounterfeitingLogic extends GetxController {
   }) {
     if (state.sortingList.isNotEmpty) {
       if (code.isEmpty) {
-        showSnackBar(title: '警告', message: '条码为空');
+        showSnackBar(title: 'shack_bar_warm'.tr, message: 'code_list_report_barcode_is_empty'.tr);
       } else {
         for (int i = 0; i < state.sortingList.length; i++) {
           if (state.sortingList[i].fBarCode == code) {
@@ -105,7 +105,7 @@ class PumaAntiCounterfeitingLogic extends GetxController {
         });
       }
     } else {
-      showSnackBar(title: '警告', message: '分拣数据为空');
+      showSnackBar(title: 'shack_bar_warm'.tr, message: 'code_list_report_sorting_empty'.tr);
     }
   }
 
@@ -113,7 +113,7 @@ class PumaAntiCounterfeitingLogic extends GetxController {
   submitOutCode() {
     httpPost(
       method: webApiBarCodeOutStock,
-      loading: '正在出库...',
+      loading: 'code_list_report_out_of_stock'.tr,
       body: {
         'BoxNumber': "",
         'WorkCode': getUserInfo()!.number,

@@ -22,7 +22,7 @@ class _CodeListReportPageState extends State<CodeListReportPage> {
   @override
   Widget build(BuildContext context) {
     return pageBody(
-        title: '条码汇总表',
+        title: 'code_list_report'.tr,
         body: Column(
           children: [
             Expanded(
@@ -43,11 +43,11 @@ class _CodeListReportPageState extends State<CodeListReportPage> {
             SizedBox(
               width: double.infinity,
               child: CombinationButton(
-                text: '提交',
+                text: 'code_list_report_submit'.tr,
                 click: () => {
                   askDialog(
-                    title: '温馨提示',
-                    content: '确定要提交条码吗？',
+                    title: 'code_list_report_tips'.tr,
+                    content: 'code_list_report_submit_code'.tr,
                     confirm: () => Get.back(result: true),
                   )
                 },

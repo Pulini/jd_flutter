@@ -13,11 +13,11 @@ class WarehouseAllocationLogic extends GetxController {
   goReport({required String outStockId, required String onStockId}) {
     if (state.dataList.isNotEmpty) {
       if (outStockId == '' || onStockId == '') {
-        showSnackBar(title: '警告', message: '请选择出/入仓库');
+        showSnackBar(title: 'shack_bar_warm'.tr, message: 'warehouse_allocation_select_warehouse'.tr);
       } else {
         httpPost(
           method: webApiNewGetSubmitBarCodeReport,
-          loading: '正在获取汇总信息...',
+          loading: 'warehouse_allocation_summary_information'.tr,
           body: {
             'BarCodeList': [
               for (var i = 0; i < (state.dataList).length; ++i)
@@ -39,7 +39,7 @@ class WarehouseAllocationLogic extends GetxController {
             state.onStockId = onStockId;
             Get.to(() => const CodeListReportPage(),arguments: {'reportData': response.data})?.then((v) {
               if (v == null) {
-                showSnackBar(title: '温馨提示', message: '检查未完成');
+                showSnackBar(title: 'dialog_default_title_information'.tr, message: 'Inspection not completed'.tr);
               }else if(v == true){
                 submit();
               }
@@ -50,7 +50,7 @@ class WarehouseAllocationLogic extends GetxController {
         });
       }
     } else {
-      showSnackBar(title: '警告', message: '没有条码可提交');
+      showSnackBar(title: 'shack_bar_warm'.tr, message: 'warehouse_allocation_not_barcode'.tr);
     }
   }
 
@@ -64,7 +64,7 @@ class WarehouseAllocationLogic extends GetxController {
   ) {
     httpPost(
       method: webApiUploadWarehouseAllocation,
-      loading: '正在提交调拨...',
+      loading: 'warehouse_allocation_submitting_transfer'.tr,
       body: {
         'BarCodeList': [
           for (var i = 0; i < (state.dataList).length; ++i)

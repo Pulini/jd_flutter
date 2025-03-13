@@ -20,12 +20,12 @@ class WarehouseAllocationState {
   addCode( String code ) {
       if(code.isNotEmpty){ //如果条码不为空
           if(isExists(code)){
-            showSnackBar(title: '警告', message: '条码已存在');
+            showSnackBar(title: 'shack_bar_warm'.tr, message: 'warehouse_allocation_have_code'.tr);
           }else{
             dataList.add(ScanCode(code: code,palletNumber: ''));
           }
       }else{
-        showSnackBar(title: '警告', message: '请输入条码');
+        showSnackBar(title: 'shack_bar_warm'.tr, message: 'warehouse_allocation_input_code'.tr);
       }
   }
 

@@ -111,12 +111,12 @@ class _PackingScanPageState extends State<PackingScanPage> {
               Row(
                 children: [
                   expandedFrameText(
-                    text: '柜号',
+                    text: 'packing_shipment_title_cabinet_number'.tr,
                     backgroundColor: Colors.blue.shade50,
                     flex: 1,
                   ),
                   expandedLeftFrameText(
-                    text: '已发/应出',
+                    text: 'packing_shipment_issued'.tr,
                     backgroundColor: Colors.blue.shade50,
                     flex: 1,
                   )

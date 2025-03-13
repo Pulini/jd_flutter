@@ -31,14 +31,14 @@ class _DeviceMaintenanceRecordViewState
           {
             reasonInputPopup(
               title: [
-                const Center(
+                 Center(
                   child: Text(
-                    '作废',
-                    style: TextStyle(fontSize: 20, color: Colors.white),
+                    'device_maintenance_nullify'.tr,
+                    style: const TextStyle(fontSize: 20, color: Colors.white),
                   ),
                 )
               ],
-              hintText: '请输入作废原因',
+              hintText: 'device_maintenance_reason_for_invalidation'.tr,
               isCanCancel: true,
               confirm: (s) => {
                 Get.back(),
@@ -52,7 +52,7 @@ class _DeviceMaintenanceRecordViewState
             )
           }
         else
-          {showSnackBar(title: '警告', message: '没有作废权限')}
+          showSnackBar(title: 'shack_bar_warm'.tr, message: 'device_maintenance_no_invalidation_permission'.tr)
       },
       child: Container(
         height: 75,
@@ -68,17 +68,17 @@ class _DeviceMaintenanceRecordViewState
             Row(
               children: [
                 expandedTextSpan(
-                  hint: '设备名称：',
+                  hint: 'device_maintenance_equipment_name'.tr,
                   text: data.deviceName.toString(),
                   textColor: Colors.blue,
                 ),
                 expandedTextSpan(
-                  hint: '设备编号：',
+                  hint: 'device_maintenance_equipment_number'.tr,
                   text: data.deviceNo.toString(),
                   textColor: Colors.blue,
                 ),
                 expandedTextSpan(
-                  hint: '制单人：',
+                  hint: 'device_maintenance_creator'.tr,
                   text: data.biller.toString(),
                   textColor: Colors.blue,
                 ),
@@ -87,17 +87,17 @@ class _DeviceMaintenanceRecordViewState
             Row(
               children: [
                 expandedTextSpan(
-                  hint: '作废原因：',
+                  hint: 'device_maintenance_reason_invalidation'.tr,
                   text: data.voidReason.toString(),
                   textColor: Colors.blue,
                 ),
                 expandedTextSpan(
-                  hint: '作废时间：',
+                  hint: 'device_maintenance_cancel_time'.tr,
                   text: data.voidDate.toString(),
                   textColor: Colors.blue,
                 ),
                 expandedTextSpan(
-                  hint: '作废人：',
+                  hint: 'device_maintenance_invalid_person'.tr,
                   text: data.voider.toString(),
                   textColor: Colors.blue,
                 ),
@@ -107,13 +107,13 @@ class _DeviceMaintenanceRecordViewState
               children: [
                 expandedTextSpan(
                   flex: 3,
-                  hint: '保管人：',
+                  hint: 'device_maintenance_keeper'.tr,
                   text: data.custodian.toString(),
                   textColor: Colors.blue,
                 ),
                 expandedTextSpan(
                   flex: 3,
-                  hint: '长按作废！',
+                  hint: 'device_maintenance_long_press_to_void'.tr,
                   text: '',
                   hintColor: Colors.red,
                 ),
@@ -128,7 +128,7 @@ class _DeviceMaintenanceRecordViewState
   @override
   Widget build(BuildContext context) {
     return pageBodyWithBottomSheet(
-      title: '设备维修记录',
+      title: 'device_maintenance_equipment_maintenance_records'.tr,
       bottomSheet: [
         Row(
           children: [
@@ -136,13 +136,13 @@ class _DeviceMaintenanceRecordViewState
               flex: 3,
               child: EditText(
                 onChanged: (v) => state.deviceNumber = v,
-                hint: '设备编号',
+                hint: 'device_maintenance_equipment_numbers'.tr,
               ),
             ),
             Expanded(
               flex: 1,
               child: CombinationButton(
-                text: '扫描设备二维码',
+                text: 'device_maintenance_scan_device_qr_code'.tr,
                 click: () => Get.to(() => const Scanner())?.then((v) {
                   if (v != null) {
                     logic.searchDeviceInfo(

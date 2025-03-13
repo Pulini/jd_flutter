@@ -32,14 +32,14 @@ class _TimelyInventoryPageState extends State<TimelyInventoryPage> {
       onTap: () => {
         reasonInputPopup(
           title: [
-            const Center(
+             Center(
               child: Text(
-                '库位',
-                style: TextStyle(fontSize: 20, color: Colors.white),
+                'timely_inventory_warehouse_location'.tr,
+                style: const TextStyle(fontSize: 20, color: Colors.white),
               ),
             )
           ],
-          hintText: '请输入新的库位',
+          hintText: 'timely_inventory_new_warehouse_location'.tr,
           isCanCancel: true,
           confirm: (s) => {
             Get.back(),
@@ -69,17 +69,17 @@ class _TimelyInventoryPageState extends State<TimelyInventoryPage> {
             Row(
               children: [
                 expandedTextSpan(
-                  hint: '物料名称：',
+                  hint: 'timely_inventory_material_name'.tr,
                   text: data.materialName.toString(),
                   textColor: Colors.blue,
                 ),
                 expandedTextSpan(
-                  hint: '物料编码：',
+                  hint: 'timely_inventory_material_code'.tr,
                   text: data.materialNumber.toString(),
                   textColor: Colors.blue,
                 ),
                 expandedTextSpan(
-                  hint: '工厂：',
+                  hint: 'timely_inventory_factory'.tr,
                   text: data.factoryNumber.toString(),
                   textColor: Colors.blue,
                 )
@@ -88,22 +88,22 @@ class _TimelyInventoryPageState extends State<TimelyInventoryPage> {
             Row(
               children: [
                 expandedTextSpan(
-                  hint: '基本数量：',
+                  hint: 'timely_inventory_basic_quantity'.tr,
                   text: data.stockQty.toString() + data.unit.toString(),
                   textColor: Colors.grey,
                 ),
                 expandedTextSpan(
-                  hint: '常用数量：',
+                  hint: 'timely_inventory_common_quantity'.tr,
                   text: data.stockQty1.toString() + data.unit1.toString(),
                   textColor: Colors.grey,
                 ),
                 expandedTextSpan(
-                  hint: '批次：',
+                  hint: 'timely_inventory_batch'.tr,
                   text: data.batch.toString(),
                   textColor: Colors.grey,
                 ),
                 expandedTextSpan(
-                  hint: '货位：',
+                  hint: 'timely_inventory_storage_location'.tr,
                   text: data.zlocal.toString(),
                   textColor: Colors.grey,
                 )
@@ -120,17 +120,17 @@ class _TimelyInventoryPageState extends State<TimelyInventoryPage> {
     return pageBodyWithDrawer(
       queryWidgets: [
         EditText(
-          hint: '请输入指令号'.tr,
+          hint: 'timely_inventory_input_command'.tr,
           onChanged: (v) => state.instructionNumber = v,
         ),
         const SizedBox(height: 10),
         EditText(
-          hint: '请输入批次'.tr,
+          hint: 'timely_inventory_input_batch'.tr,
           onChanged: (v) => state.batch = v,
         ),
         const SizedBox(height: 10),
         EditText(
-          hint: '请输入物料编码'.tr,
+          hint: 'timely_inventory_input_material_code'.tr,
           onChanged: (v) => state.materialCode = v,
         ),
         LinkOptionsPicker(pickerController: factoryWarehouseController),

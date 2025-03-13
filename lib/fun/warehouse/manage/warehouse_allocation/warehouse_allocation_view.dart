@@ -41,11 +41,11 @@ class _WarehouseAllocationPageState extends State<WarehouseAllocationPage> {
         Padding(
           padding: const EdgeInsets.only(top: 10, right: 30),
           child: InkWell(
-            child: const Text('清空'),
+            child: Text('warehouse_allocation_clean'.tr),
             onTap: () => {
               askDialog(
-                title: '温馨提示',
-                content: '确定要清空条码吗?',
+                title: 'dialog_default_title_information'.tr,
+                content: 'warehouse_allocation_clean_code'.tr,
                 confirm: () {
                   state.clearData();
                 },
@@ -66,7 +66,7 @@ class _WarehouseAllocationPageState extends State<WarehouseAllocationPage> {
                 ),
               ),
               CombinationButton(
-                text: '手动添加',
+                text: 'warehouse_allocation_manually_add'.tr,
                 click: () {
                   state.addCode(state.code);
                 },
@@ -79,7 +79,7 @@ class _WarehouseAllocationPageState extends State<WarehouseAllocationPage> {
                 padding: const EdgeInsets.only(left: 5, right: 5),
                 itemCount: state.dataList.length,
                 itemBuilder: (context, index) => GestureDetector(
-                    onLongPress:()=> logic.deleteCode(index),
+                    onLongPress: () => logic.deleteCode(index),
                     child: Container(
                       padding: const EdgeInsets.only(
                           left: 5, top: 3, right: 3, bottom: 3),
@@ -99,7 +99,9 @@ class _WarehouseAllocationPageState extends State<WarehouseAllocationPage> {
               left: 10,
             ),
             child: Obx(() => Text(
-                  '已扫描${state.dataList.length}条',
+                  'warehouse_allocation_scan'.tr +
+                      state.dataList.length.toString() +
+                      'warehouse_allocation_strip'.tr,
                   style: const TextStyle(color: Colors.red),
                 )),
           ),
@@ -107,7 +109,7 @@ class _WarehouseAllocationPageState extends State<WarehouseAllocationPage> {
             padding: const EdgeInsets.only(left: 10, right: 10),
             child: Row(
               children: [
-                const Text('出仓库：'),
+                Text('warehouse_allocation_out_of_warehouse'.tr),
                 Expanded(
                   child: LinkOptionsPicker(
                     pickerController: outStockList,
@@ -120,7 +122,7 @@ class _WarehouseAllocationPageState extends State<WarehouseAllocationPage> {
             padding: const EdgeInsets.only(left: 10, right: 10),
             child: Row(
               children: [
-                const Text('入仓库：'),
+                 Text('warehouse_allocation_entering_the_warehouse'.tr),
                 Expanded(
                   child: LinkOptionsPicker(pickerController: onStockList),
                 ),
@@ -130,7 +132,7 @@ class _WarehouseAllocationPageState extends State<WarehouseAllocationPage> {
           SizedBox(
             width: double.infinity,
             child: CombinationButton(
-              text: '提交',
+              text: 'warehouse_allocation_submit'.tr,
               click: () => logic.goReport(
                 onStockId: onStockList.getOptionsPicker2().pickerId(),
                 outStockId: outStockList.getOptionsPicker2().pickerId(),

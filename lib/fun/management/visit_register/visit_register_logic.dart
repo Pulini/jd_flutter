@@ -81,7 +81,7 @@ class VisitRegisterLogic extends GetxController {
         String carNo = "",
         String credentials = "",
         Function()? refresh}) {
-    httpPost(method: webApiGetVisitDtBySqlWhere, loading: '正在获取来访列表...', body: {
+    httpPost(method: webApiGetVisitDtBySqlWhere, loading: 'visit_getting_visitor_list'.tr, body: {
       'Name': name,
       'IDCard': iDCard,
       'VisitedFactory': getUserInfo()?.organizeID,
@@ -114,7 +114,7 @@ class VisitRegisterLogic extends GetxController {
   getVisitLastList({Function()? refresh}) {
     httpPost(
         method: webApiGetVisitInfoByJsonStr,
-        loading: '正在搜索最近一次来访记录...',
+        loading: 'visit_latest_visit_history'.tr,
         body: VisitLastRecord(
           name: textSearchName.text,
           phone: textSearchPhone.text,
@@ -140,7 +140,7 @@ class VisitRegisterLogic extends GetxController {
   getInviteCode() {
     httpGet(
       method: webApiGetInviteCode,
-      loading: '正在获取来访编号...',
+      loading: 'visit_obtaining_visitor_id'.tr,
     ).then((response) {
       if (response.resultCode == resultSuccess) {
         state.visitCode.value = response.message!;
@@ -154,7 +154,7 @@ class VisitRegisterLogic extends GetxController {
   }
 
   getVisitorDetailInfo(String interId,bool isLeave) {
-    httpGet(method: webApiGetVisitorInfo, loading: '正在获取来访详情...', params: {
+    httpGet(method: webApiGetVisitorInfo, loading: 'visit_obtaining_visit_details'.tr, params: {
       'InterID': interId,
     }).then((response) {
       if (response.resultCode == resultSuccess) {
@@ -214,7 +214,7 @@ class VisitRegisterLogic extends GetxController {
     }
     httpPost(
         method: webApiUpdateLeaveFVisit,
-        loading: '正在提交离场信息...',
+        loading: 'visit_submitting_departure_information'.tr,
         body: LeaveVisitRecord(
             interID: state.dataDetail.interID,
             leaveTime: getDateYMD(),
@@ -333,7 +333,7 @@ class VisitRegisterLogic extends GetxController {
     }
     httpPost(
         method: webApiInsertIntoFVisit,
-        loading: '正在提交新增记录...',
+        loading: 'visit_submitting_new_records'.tr,
         body: state.upAddDetail.value)
         .then((response) {
       if (response.resultCode == resultSuccess) {
@@ -382,7 +382,7 @@ class VisitRegisterLogic extends GetxController {
     if (textSearch.text.isNotEmpty) {
       //获取人员信息
       var searchPeopleCallback = await httpGet(
-        loading: '正在获取员工信息...',
+        loading: 'visit_obtaining_employee_information'.tr,
         method: webApiGetEmpByField,
         params: {
           'FieldValue': textSearch.text,
@@ -473,7 +473,7 @@ class VisitRegisterLogic extends GetxController {
   visitorPlace() async {
     //获取活动区域
     var visitorPlaceCallback = await httpGet(
-      loading: '正在获取活动区域...',
+      loading: 'visit_getting_activity_area'.tr,
       method: webApiGetReceiveVisitorPlace,
       params: {"FPlaceName": ""},
     );

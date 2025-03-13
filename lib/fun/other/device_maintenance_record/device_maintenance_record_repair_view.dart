@@ -59,32 +59,32 @@ class _DeviceMaintenanceRecordRepairPageState
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             expandedTextSpan(
-              hint: '厂商/品牌:',
+              hint: 'device_maintenance_manufacturer_brand'.tr,
               text: data.manufacturer.toString(),
               textColor: Colors.blue,
             ),
             expandedTextSpan(
-              hint: '更换配件名称:',
+              hint: 'device_maintenance_replace_accessory_name'.tr,
               text: data.accessoriesName.toString(),
               textColor: Colors.blue,
             ),
             expandedTextSpan(
-              hint: '数量:',
+              hint: 'device_maintenance_quantity'.tr,
               text: data.quantity.toString(),
               textColor: Colors.blue,
             ),
             expandedTextSpan(
-              hint: '规格:',
+              hint: 'device_maintenance_specifications'.tr,
               text: data.specification.toString(),
               textColor: Colors.blue,
             ),
             expandedTextSpan(
-              hint: '单位:',
+              hint: 'device_maintenance_unit'.tr,
               text: data.unit.toString(),
               textColor: Colors.blue,
             ),
             expandedTextSpan(
-              hint: '备注:',
+              hint: 'device_maintenance_remarks'.tr,
               text: data.remarks.toString(),
               textColor: Colors.blue,
             ),
@@ -126,24 +126,24 @@ class _DeviceMaintenanceRecordRepairPageState
       canPop: false,
       child: StatefulBuilder(builder: (context, dialogSetState) {
         return AlertDialog(
-          title: const Text('添加零部件'),
+          title:  Text('device_maintenance_add_components'.tr),
           content: Column(
             mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 15),
               _inputSearchText(
-                hint: '厂商/品牌：',
+                hint: 'device_maintenance_manufacturer_brand'.tr,
                 onChanged: (s) => {state.brand = s},
               ),
               const SizedBox(height: 5),
               _inputSearchText(
-                hint: '更换配件名称：',
+                hint: 'device_maintenance_replace_accessory_name'.tr,
                 onChanged: (s) => {state.partName = s},
               ),
               const SizedBox(height: 5),
               _inputSearchText(
-                hint: '数量：',
+                hint: 'device_maintenance_quantity'.tr,
                 inputType: inputNumber,
                 onChanged: (s) => {
                   state.partNumber = s,
@@ -151,21 +151,21 @@ class _DeviceMaintenanceRecordRepairPageState
               ),
               const SizedBox(height: 5),
               _inputSearchText(
-                hint: '单位：',
+                hint: 'device_maintenance_unit'.tr,
                 onChanged: (s) => {
                   state.partUnit = s,
                 },
               ),
               const SizedBox(height: 5),
               _inputSearchText(
-                hint: '规格：',
+                hint: 'device_maintenance_specifications'.tr,
                 onChanged: (s) => {
                   state.partNorms = s,
                 },
               ),
               const SizedBox(height: 5),
               _inputSearchText(
-                hint: '备注：',
+                hint: 'device_maintenance_remarks'.tr,
                 onChanged: (s) => {
                   state.partRemark = s,
                 },
@@ -195,7 +195,7 @@ class _DeviceMaintenanceRecordRepairPageState
   @override
   Widget build(BuildContext context) {
     return pageBody(
-        title: '设备报修',
+        title: 'device_maintenance_equipment_repair_report'.tr,
         body: Column(
           children: [
             Row(
@@ -203,7 +203,7 @@ class _DeviceMaintenanceRecordRepairPageState
                 Expanded(
                   flex: 3,
                   child: EditText(
-                      hint: '持有人工号', onChanged: (s) => {logic.searchPeople(s)}),
+                      hint: 'device_maintenance_holding_artificial_number'.tr, onChanged: (s) => {logic.searchPeople(s)}),
                 ),
                 Obx(() => Expanded(
                     child: Text(state.peoPleInfo.value.empName == null
@@ -211,14 +211,14 @@ class _DeviceMaintenanceRecordRepairPageState
                         : state.peoPleInfo.value.empName.toString())))
               ],
             ),
-            EditText(hint: '维修单位', onChanged: (s) => {state.repairUnit = s}),
-            EditText(hint: '检修部位', onChanged: (s) => {state.repairPart = s}),
-            EditText(hint: '故障说明', onChanged: (s) => {state.repairReason = s}),
+            EditText(hint: 'device_maintenance_maintenance_organization'.tr, onChanged: (s) => {state.repairUnit = s}),
+            EditText(hint: 'device_maintenance_maintenance_location'.tr, onChanged: (s) => {state.repairPart = s}),
+            EditText(hint: 'device_maintenance_fault_description'.tr, onChanged: (s) => {state.repairReason = s}),
             DatePicker(pickerController: logic.repairStartDate),
             DatePicker(pickerController: logic.repairEndDate),
             Spinner(controller: logic.spinnerControllerWorkShop),
             EditText(
-                hint: '维修后评估及预防', onChanged: (s) => {state.repairPrevent = s}),
+                hint: 'device_maintenance_prevention'.tr, onChanged: (s) => {state.repairPrevent = s}),
             Expanded(
               child: Obx(
                 () => ListView.builder(
@@ -232,7 +232,7 @@ class _DeviceMaintenanceRecordRepairPageState
             SizedBox(
               width: double.maxFinite,
               child: CombinationButton(
-                text: '提交',
+                text: 'device_maintenance_submit'.tr,
                 click: () => {
                   logic.submitRecordData(
                     success: (s) => {

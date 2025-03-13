@@ -50,7 +50,7 @@ class QualityManagementState {
     required String endTime,
     required Function(String msg) error,
   }) {
-    httpGet(method: webApiGetSCDispatchOrders, loading: '正在获取数据详情...', params: {
+    httpGet(method: webApiGetSCDispatchOrders, loading: 'quality_management_obtaining_data_details'.tr, params: {
       'deptID': deptID,
       'MtoNo': mtoNo,
       'dateStart': startTime,
@@ -133,7 +133,7 @@ class QualityManagementState {
   }) {
     httpGet(
         method: webApiGetProcessFlowEXTypes,
-        loading: '正在获取异常类型...',
+        loading: 'quality_management_exception_type'.tr,
         params: {
           'processFlowID': orderShowSubDataList[headIndex]
               .abnormalQualityInfo![index]
@@ -154,7 +154,7 @@ class QualityManagementState {
     required Function(String msg) error,
   }) {
     if (itemId == "-1") {
-      error.call('请选择不良项目再提交');
+      error.call('quality_management_select_defective_items'.tr);
     } else {
       var type = '';
 
@@ -168,7 +168,7 @@ class QualityManagementState {
 
       httpPost(
           method: webApiAddAbnormalQuality,
-          loading: '正在上传品质异常数据...',
+          loading: 'quality_management_uploading_data'.tr,
           body: {
             'DeptmentID': departmentID,
             'EmpID': empID,
@@ -219,12 +219,12 @@ class QualityManagementState {
   }) {
     httpPost(
         method: webApiDelExBill,
-        loading: '正在删除品质异常数据...',
+        loading: 'quality_management_delete_data'.tr,
         params: {
           'number': showEntryDataList[position!].exNumber,
         }).then((response) {
       if (response.resultCode == resultSuccess) {
-        success.call(response.message?? '删除成功',position);
+        success.call(response.message?? 'quality_management_delete_success'.tr,position);
       } else {
         error.call(response.message ?? '');
       }

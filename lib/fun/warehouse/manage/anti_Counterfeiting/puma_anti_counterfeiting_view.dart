@@ -61,7 +61,7 @@ class _PumaAntiCounterfeitingPageState
               }
             }),
             child: Text(
-              '扫描'.tr,
+              'code_list_report_scan'.tr,
               style: const TextStyle(color: Colors.grey),
             ),
           ),
@@ -70,8 +70,8 @@ class _PumaAntiCounterfeitingPageState
           children: [
             Row(
               children: [
-                Expanded(flex: 1, child: _title('指令号')),
-                Expanded(flex: 2, child: _title('工厂型体'))
+                Expanded(flex: 1, child: _title('code_list_report_instruction_number'.tr)),
+                Expanded(flex: 2, child: _title('code_list_report_factory_type_body'.tr))
               ],
             ),
             Expanded(
@@ -89,7 +89,7 @@ class _PumaAntiCounterfeitingPageState
                 Expanded(
                   flex: 1,
                   child: CombinationButton(
-                    text: '入库',
+                    text: 'code_list_report_store'.tr,
                     click: () {
                       Get.to(() => const PumaAntiCounterfeitingStorePage());
                     },
@@ -99,7 +99,7 @@ class _PumaAntiCounterfeitingPageState
                 Expanded(
                   flex: 1,
                   child: CombinationButton(
-                    text: '分拣',
+                    text: 'code_list_report_sorting'.tr,
                     click: () {
                       Get.to(() => const PumaAntiCounterfeitingOutboundPage());
                     },

@@ -41,7 +41,7 @@ class _QualityRestrictionPageState extends State<QualityRestrictionPage> {
           headerBuilder: (BuildContext context, bool isExpanded) {
             return ListTile(
               title: Text(
-                '销售订单号：${item.orderNumber}',
+                  'quality_management_sale_order_number'.tr+item.orderNumber.toString(),
                 style: const TextStyle(fontSize: 13),
               ),
             );
@@ -75,20 +75,20 @@ class _QualityRestrictionPageState extends State<QualityRestrictionPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         expandedTextSpan(
-                            hint: '组别：',
+                            hint: 'quality_management_group'.tr,
                             text: item.abnormalQualityInfo![index].deptName ??
                                 ''),
                         expandedTextSpan(
-                            hint: '型体：',
+                            hint: 'quality_management_type_body'.tr,
                             text:
                                 item.abnormalQualityInfo![index].productName ??
                                     ''),
                         expandedTextSpan(
-                            hint: '数量：',
+                            hint: 'quality_management_quantity'.tr,
                             text: item.abnormalQualityInfo![index].qty
                                 .toString()),
                         expandedTextSpan(
-                            hint: '行号：',
+                            hint: 'quality_management_line_number'.tr,
                             text: item.abnormalQualityInfo![index].entryID
                                 .toString())
                       ],
@@ -123,7 +123,7 @@ class _QualityRestrictionPageState extends State<QualityRestrictionPage> {
           child: GestureDetector(
             onLongPress: ()=>{
               askDialog(
-                content: '确定要删除该异常吗?',
+                content: 'quality_management_sure_delete_abnormal'.tr,
                 confirm: () => {
                   state.delBill(
                     position: index,
@@ -141,13 +141,13 @@ class _QualityRestrictionPageState extends State<QualityRestrictionPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     expandedTextSpan(
-                        hint: '编号：',
+                        hint: 'quality_management_serial_number'.tr,
                         text: state.showEntryDataList[index].exNumber ?? ''),
                     expandedTextSpan(
-                        hint: '质检时间：',
+                        hint: 'quality_management_quality_inspection_time'.tr,
                         text: state.showEntryDataList[index].billDate ?? ''),
                     expandedTextSpan(
-                        hint: '质检人：',
+                        hint: 'quality_management_quality_inspector'.tr,
                         text:
                             "${state.showEntryDataList[index].empName}(${state.showEntryDataList[index].empNumber})"),
                     expandedTextSpan(
@@ -155,14 +155,14 @@ class _QualityRestrictionPageState extends State<QualityRestrictionPage> {
                             state.showEntryDataList[index].reCheck == "合格"
                                 ? Colors.green.shade900
                                 : Colors.red,
-                        hint: '状态：',
+                        hint: 'quality_management_quality_state'.tr,
                         text: state.showEntryDataList[index].reCheck ?? ''),
                     expandedTextSpan(
-                        hint: '数量：',
+                        hint: 'quality_management_quantity'.tr,
                         text:
                             "${state.showEntryDataList[index].qty.toShowString()} <${state.showEntryDataList[index].exceptionLevel == "0" ? '轻微' : '严重'}>"),
                     expandedTextSpan(
-                        hint: '缺陷：',
+                        hint: 'quality_management_quality_defect：',
                         text:
                             "<${state.showEntryDataList[index].exceptionName}>"),
                   ],
@@ -354,9 +354,9 @@ class _QualityRestrictionPageState extends State<QualityRestrictionPage> {
         //拦截返回键
         canPop: false,
         child: AlertDialog(
-          title: const Text('修改品检人员',
+          title:  Text('quality_management_modify_personnel'.tr,
               style:
-                  TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+                  const TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
           content: WorkerCheck(onChanged: (worker) {
             state.searchPeople = "${"${worker!.empName!}(${worker.empID}"})";
             state.searchPeopleEmpId = worker.empID.toString();
@@ -423,7 +423,7 @@ class _QualityRestrictionPageState extends State<QualityRestrictionPage> {
 
   _number({required String number}) {
     return InkWell(
-        onTap: () => {_inputDialog(title: '手动输入')},
+        onTap: () => {_inputDialog(title: 'quality_management_manual_input'.tr)},
         child: Text.rich(
           TextSpan(
               style: const TextStyle(
@@ -457,9 +457,9 @@ class _QualityRestrictionPageState extends State<QualityRestrictionPage> {
           decoration: BoxDecoration(
               color: Colors.red, borderRadius: BorderRadius.circular(10)),
           alignment: Alignment.center,
-          child: const Text(
-            "提交",
-            style: TextStyle(fontSize: 100, color: Colors.white),
+          child:  Text(
+            "quality_management_submit".tr,
+            style: const TextStyle(fontSize: 100, color: Colors.white),
             textAlign: TextAlign.center,
           ),
         )));
@@ -472,9 +472,9 @@ class _QualityRestrictionPageState extends State<QualityRestrictionPage> {
         //拦截返回键
         canPop: false,
         child: AlertDialog(
-          title: const Text('三秒过自动提交..',
+          title:  Text('quality_management_three_seconds'.tr,
               style:
-                  TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+                  const TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
           content: Obx(
             () => SizedBox(
                 height: 120,
@@ -508,7 +508,7 @@ class _QualityRestrictionPageState extends State<QualityRestrictionPage> {
     return pageBodyWithDrawer(
         title: 'quality_restriction_title'.tr,
         queryWidgets: [
-          EditText(hint: '输入跟踪号', onChanged: (s) => {state.order = s}),
+          EditText(hint: 'quality_management_enter_tracking_number'.tr, onChanged: (s) => {state.order = s}),
           DatePicker(pickerController: logic.pcStartDate),
           DatePicker(pickerController: logic.pcEndDate),
           OptionsPicker(pickerController: logic.pickerControllerDepartment),
@@ -517,7 +517,7 @@ class _QualityRestrictionPageState extends State<QualityRestrictionPage> {
               setState(() => state.isAutomatic = isSelect);
               spSave('${Get.currentRoute}/QualityAutomatic', isSelect);
             },
-            name: '自动提交',
+            name: 'quality_management_autocommit'.tr,
             value: state.isAutomatic,
           )
         ],
@@ -592,7 +592,7 @@ class _QualityRestrictionPageState extends State<QualityRestrictionPage> {
                                   children: [
                                     Expanded(
                                       child: _seriousOrSlight(
-                                          type: '轻微',
+                                          type: 'quality_management_slight'.tr,
                                           valueBool: state.slight.value,
                                           onChanged: (bool c) {
                                             state.serious.value = !c;
@@ -601,7 +601,7 @@ class _QualityRestrictionPageState extends State<QualityRestrictionPage> {
                                     ),
                                     Expanded(
                                       child: _seriousOrSlight(
-                                          type: '严重',
+                                          type: 'quality_management_serious'.tr,
                                           valueBool: state.serious.value,
                                           onChanged: (bool c) {
                                             state.serious.value = c;

@@ -32,7 +32,7 @@ class HydroelectricExcessState {
     }
     httpGet(
       method: webApiGetWaterEnergyMachineDetail,
-      loading: '正在读取房间信息...',
+      loading: 'hydroelectric_reading_room_information'.tr,
       params: {
         'Number': data.number,
         'EditState': stateToSearch.value,
@@ -105,7 +105,7 @@ class HydroelectricExcessState {
   getWaterEnergyMachine() {
     httpGet(
       method: webApiGetWaterEnergyMachine,
-      loading: '正在读取设备...',
+      loading: 'hydroelectric_reading_device'.tr,
       params: {
         'ShowType': select.value,
         'MachineNumber': deviceNumber,
@@ -127,11 +127,11 @@ class HydroelectricExcessState {
   //提交本次抄录数据
   submit() {
     if(textThisTime.text.isEmpty){
-      showSnackBar(title: '警告', message:'请输入本次抄录度数！');
+      showSnackBar(title: 'shack_bar_warm'.tr, message:'hydroelectric_this_transcription'.tr);
     }else{
       httpPost(
         method: webApiSubmitSsWaterEnergyMachineDetail,
-        loading: '正在提交度数...',
+        loading: 'hydroelectric_submitting_degree'.tr,
         params: {
           'LastDegree': dataDetail.value.lastDegree,
           'NowDegree': textThisTime.text,
