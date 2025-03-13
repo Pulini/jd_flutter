@@ -2,7 +2,6 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/material_dispatch_info.dart';
-import 'package:jd_flutter/bean/http/response/process_specification_info.dart';
 import 'package:jd_flutter/bean/http/response/sap_pallet_info.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
@@ -12,7 +11,6 @@ import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
 import 'package:jd_flutter/widget/picker/picker_controller.dart';
 import 'package:jd_flutter/widget/picker/picker_view.dart';
-import 'package:jd_flutter/widget/web_page.dart';
 
 subItemReportDialog(
   BuildContext context,
@@ -300,81 +298,6 @@ _getLabelList(
       errorDialog(content: response.message);
     }
   });
-}
-
-processSpecificationDialog(List<ProcessSpecificationInfo> files) {
-  var selected = -1.obs;
-  Get.dialog(
-    PopScope(
-        canPop: false,
-        child: StatefulBuilder(
-          builder: (context, dialogSetState) {
-            return AlertDialog(
-              title: Text('material_dispatch_dialog_select_manual'.tr),
-              content: SizedBox(
-                width: MediaQuery.of(context).size.width * 0.5,
-                height: MediaQuery.of(context).size.height * 0.5,
-                child: ListView.builder(
-                  padding: const EdgeInsets.all(8),
-                  itemCount: files.length,
-                  itemBuilder: (context, index) => GestureDetector(
-                    onTap: () => dialogSetState(() => selected = index),
-                    child: Container(
-                      height: 40,
-                      margin: const EdgeInsets.all(5),
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: selected == index
-                            ? Colors.blue.shade100
-                            : Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(
-                          color: selected == index
-                              ? Colors.green.shade200
-                              : Colors.transparent,
-                          width: 2,
-                        ),
-                      ),
-                      child: Center(
-                        child: Text(
-                          files[index].name ?? '',
-                          style: const TextStyle(color: Colors.black),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    if (selected == -1) {
-                      showSnackBar(
-                        title: 'material_dispatch_dialog_see_manual'.tr,
-                        message: 'material_dispatch_dialog_select_file_tips'.tr,
-                      );
-                    } else {
-                      Get.back();
-                      Get.to(() => WebPage(
-                            title: files[selected].fileName ?? '',
-                            url: files[selected].fullName ?? '',
-                          ));
-                    }
-                  },
-                  child: Text('material_dispatch_dialog_check'.tr),
-                ),
-                TextButton(
-                  onPressed: () => Get.back(),
-                  child: Text(
-                    'dialog_default_cancel'.tr,
-                    style: const TextStyle(color: Colors.grey),
-                  ),
-                ),
-              ],
-            );
-          },
-        )),
-  );
 }
 
 materialListDialog(

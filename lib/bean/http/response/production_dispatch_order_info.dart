@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/utils/utils.dart';
 
@@ -85,6 +86,7 @@ class ProductionDispatchOrderInfo {
     this.stubBarName3,
     this.factory,
     this.machine,
+    this.shift,
     this.pastDay,
   });
 
@@ -134,6 +136,7 @@ class ProductionDispatchOrderInfo {
     stubBarName3 = json['StubBarName3'];
     factory = json['Factory'];
     machine = json['Machine'];
+    shift = json['Shift'];
     pastDay = json['PastDay'];
   }
 
@@ -179,6 +182,7 @@ class ProductionDispatchOrderInfo {
   String? stubBarName3;
   String? factory;
   String? machine;
+  String? shift;
   bool? pastDay;
 
   Map<String, dynamic> toJson() {
@@ -225,6 +229,7 @@ class ProductionDispatchOrderInfo {
     map['StubBarName3'] = stubBarName3;
     map['Factory'] = factory;
     map['Machine'] = machine;
+    map['Shift'] = shift;
     map['PastDay'] = pastDay;
     return map;
   }
@@ -262,4 +267,116 @@ class SizeBean {
     map['Size'] = size;
     return map;
   }
+}
+
+class OrderProgressInfo {
+  String? materialCode; //物料编码
+  String? materialName; //物料名称
+  String? factoryType; //型体
+  String? factory; //工厂
+  int? preCompensation; //预补类型
+  List<OrderProgressItemInfo>? mtoNoItems;
+
+  OrderProgressInfo({
+    this.materialCode,
+    this.materialName,
+    this.factoryType,
+    this.factory,
+    this.preCompensation,
+    this.mtoNoItems,
+  });
+
+  OrderProgressInfo.fromJson(dynamic json) {
+    materialCode = json['MaterialCode'];
+    materialName = json['MaterialName'];
+    factoryType = json['FactoryType'];
+    factory = json['Factory'];
+    preCompensation = json['PreCompensation'];
+    if (json['MtoNoItems'] != null) {
+      mtoNoItems = [];
+      json['MtoNoItems'].forEach((v) {
+        mtoNoItems?.add(OrderProgressItemInfo.fromJson(v));
+      });
+    }
+  }
+ List<String> getMaxSizeList() {
+    var list = <String>[];
+    mtoNoItems?.forEach((item){
+      item.sizeItems?.forEach((sizeData){
+       if(!list.contains(sizeData.size))list.add(sizeData.size??'');
+      });
+    });
+    list.sorted();
+    return list;
+  }
+}
+
+class OrderProgressItemInfo {
+  String? mtoNo; //指令
+  String? unit; //单位
+  double? qty; //数量
+  double? inStockQty; //入库数量
+  double? reportedQty; //已汇报数量
+  int? priority; //优先级
+  List<OrderProgressItemSizeInfo>? sizeItems;
+
+  OrderProgressItemInfo({
+    this.mtoNo,
+    this.unit,
+    this.qty,
+    this.inStockQty,
+    this.reportedQty,
+    this.priority,
+    this.sizeItems,
+  });
+
+  OrderProgressItemInfo.fromJson(dynamic json) {
+    mtoNo = json['MtoNo'];
+    unit = json['Unit'];
+    qty = json['Qty'];
+    inStockQty = json['InStockQty'];
+    reportedQty = json['ReportedQty'];
+    priority = json['Priority'];
+    if (json['SizeItems'] != null) {
+      sizeItems = [];
+      json['SizeItems'].forEach((v) {
+        sizeItems?.add(OrderProgressItemSizeInfo.fromJson(v));
+      });
+    }
+  }
+}
+
+class OrderProgressItemSizeInfo {
+  String? size; //尺码
+  double? qty; //派工数量
+
+  OrderProgressItemSizeInfo({
+    this.size,
+    this.qty,
+  });
+
+  OrderProgressItemSizeInfo.fromJson(dynamic json) {
+    size = json['Size'];
+    qty = json['Qty'];
+  }
+}
+
+class OrderProgressShowInfo {
+  int itemType=0; //1、物料 2、体 3、合计 4、预补
+  int sizeMax=0; //尺码最大列数
+  bool preCompensation=false; //是否显示预补
+
+  String material=''; //物料
+  String factoryType=''; //型体
+  String factory=''; //工厂
+
+  String mtoNo=''; //指令
+  String unit=''; //单位
+  String qty=''; //数量
+  String inStockQty=''; //入库数量
+  String reportedQty=''; //已汇报数量
+  String priority=''; //优先级
+
+  List<String> sizeData=[];//尺码数据
+
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/label_info.dart';
 import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/check_box_widget.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
@@ -149,6 +150,10 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
   }
 
   _item2(List<LabelInfo> data) {
+    for (var v in data) {
+      logger.f(v.toJson());
+    }
+
     return _itemWidget(
       selected: data.where((v) => v.select).length == data.length,
       isPrint: data[0].isBillPrint ?? false,
@@ -164,8 +169,9 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
           .reduce((a, b) => a.add(b))
           .toShowString(),
       subItem: logic.createSubItem(
-          data: data,
-          subItem: (t1, t2, t3, type) => _subitem(t1, t2, t3, type)),
+        data: data,
+        subItem: (t1, t2, t3, type) => _subitem(t1, t2, t3, type),
+      ),
     );
   }
 

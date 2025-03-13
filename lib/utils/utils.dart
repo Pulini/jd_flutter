@@ -11,10 +11,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/leader_info.dart';
+import 'package:jd_flutter/bean/http/response/process_specification_info.dart';
 import 'package:jd_flutter/bean/http/response/user_info.dart';
 import 'package:jd_flutter/bean/http/response/version_info.dart';
 import 'package:jd_flutter/bean/http/response/worker_info.dart';
 import 'package:jd_flutter/constant.dart';
+import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart';
@@ -183,9 +185,10 @@ extension DoubleExt on double? {
   double mul(double value) =>
       (Decimal.parse(toString()) * Decimal.parse(value.toString())).toDouble();
 
-  double div(double value){
-    if(value==0) return 0;
-    return  (Decimal.parse(toString()) / Decimal.parse(value.toString())).toDouble();
+  double div(double value) {
+    if (value == 0) return 0;
+    return (Decimal.parse(toString()) / Decimal.parse(value.toString()))
+        .toDouble();
   }
 }
 
@@ -521,6 +524,32 @@ checkStockLeaderConfig({
   });
 }
 
+getProcessManual({
+  required String typeBody,
+  required Function(List<ProcessSpecificationInfo>) manualList,
+  required Function(String) error,
+}) {
+  if (typeBody.isEmpty) {
+    showSnackBar(message: 'view_process_specification_query_hint'.tr);
+    return;
+  }
+  httpGet(
+    loading: 'view_process_specification_querying'.tr,
+    method: webApiGetProcessSpecificationList,
+    params: {
+      'Product': typeBody,
+    },
+  ).then((response) {
+    if (response.resultCode == resultSuccess) {
+      manualList([
+        for (var item in response.data) ProcessSpecificationInfo.fromJson(item)
+      ]);
+    } else {
+      error.call(response.message ?? 'query_default_error'.tr);
+    }
+  });
+}
+
 String getDateYMD({DateTime? time}) {
   DateTime now;
   if (time == null) {
@@ -534,6 +563,22 @@ String getDateYMD({DateTime? time}) {
   var d = now.day.toString();
   if (d.length == 1) d = '0$d';
   return '$y-$m-$d';
+}
+
+String getTimeHms({DateTime? time}) {
+  DateTime now;
+  if (time == null) {
+    now = DateTime.now();
+  } else {
+    now = time;
+  }
+  var h = now.hour.toString();
+  if (h.length == 1) h = '0$h';
+  var m = now.minute.toString();
+  if (m.length == 1) m = '0$m';
+  var s = now.second.toString();
+  if (s.length == 1) s = '0$s';
+  return '$h:$m:$s';
 }
 
 String getDateSapYMD({DateTime? time}) {
@@ -648,8 +693,6 @@ bool containsChinese(String input) {
   return chineseRegex.hasMatch(input);
 }
 
-
-
 weighbridgeOpen() async {
   await const MethodChannel(channelWeighbridgeAndroidToFlutter)
       .invokeMethod('OpenDevice');
@@ -697,7 +740,6 @@ randomDouble(double min, double max) =>
 
 //dp转换成px
 int dp2Px(double dp, BuildContext context) {
-
   MediaQueryData mq = MediaQuery.of(context);
   // 屏幕密度
   double pixelRatio = mq.devicePixelRatio;

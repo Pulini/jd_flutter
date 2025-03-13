@@ -1,14 +1,12 @@
 import 'dart:convert';
 
 import 'package:get/get.dart';
-import 'package:jd_flutter/bean/http/response/feishu_info.dart';
 import 'package:jd_flutter/bean/http/response/production_tasks_info.dart';
 import 'package:jd_flutter/fun/report/production_tasks/production_tasks_detail_view.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
-import 'package:jd_flutter/widget/feishu_authorize.dart';
 
 import 'production_tasks_state.dart';
 
@@ -90,7 +88,12 @@ class ProductionTasksLogic extends GetxController {
     }
   }
 
-  getDetail({String? ins, String? po, required String imageUrl}) {
+  getDetail({
+    String? ins,
+    String? po,
+    required String queryFileName,
+    required String imageUrl,
+  }) {
     state.getProductionOrderScheduleDetail(
       ins: ins ?? '',
       po: po ?? '',
@@ -98,12 +101,20 @@ class ProductionTasksLogic extends GetxController {
         if (ins != null && ins.isNotEmpty) {
           Get.to(
             () => const ProductionTasksDetailPage(),
-            arguments: {'isInstruction': true, 'imageUrl': imageUrl},
+            arguments: {
+              'isInstruction': true,
+              'imageUrl': imageUrl,
+              'queryFileName': queryFileName,
+            },
           );
         } else if (po != null && po.isNotEmpty) {
           Get.to(
             () => const ProductionTasksDetailPage(),
-            arguments: {'isInstruction': false, 'imageUrl': imageUrl},
+            arguments: {
+              'isInstruction': false,
+              'imageUrl': imageUrl,
+              'queryFileName': queryFileName,
+            },
           );
         }
       },
@@ -182,40 +193,5 @@ class ProductionTasksLogic extends GetxController {
       state.refreshUiData();
       refreshAll.call();
     }
-  }
-
-  queryProcessInstruction({
-    required String query,
-    required Function(List<FeishuWikiSearchItemInfo> list) files,
-  }) {
-    feishuAuthorizeCheck(
-      notAuthorize: () => Get.to(() => FeishuAuthorize())?.then((token) {
-        if (token != null) {
-          _queryFeishuWiki(
-            token: token,
-            query: query,
-            files: files,
-          );
-        }
-      }),
-      authorized: (token) => _queryFeishuWiki(
-        token: token,
-        query: query,
-        files: files,
-      ),
-    );
-  }
-
-  _queryFeishuWiki({
-    required String token,
-    required String query,
-    required Function(List<FeishuWikiSearchItemInfo> list) files,
-  }) {
-    feishuWikiSearch(
-      token: token,
-      query: query,
-      success: (list) => files.call(list),
-      failed: (msg) => errorDialog(content: msg),
-    );
   }
 }

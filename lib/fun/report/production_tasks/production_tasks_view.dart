@@ -1,14 +1,13 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jd_flutter/bean/http/response/feishu_info.dart';
 import 'package:jd_flutter/bean/http/response/production_tasks_info.dart';
 import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/utils/mqtt.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
-import 'package:jd_flutter/widget/web_page.dart';
+import 'package:jd_flutter/widget/feishu_authorize.dart';
+import 'package:rotated_corner_decoration/rotated_corner_decoration.dart';
 
 import 'production_tasks_logic.dart';
 import 'production_tasks_state.dart';
@@ -44,90 +43,6 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
     ),
   );
 
-  _pickFilePopup(List<FeishuWikiSearchItemInfo> list) {
-    showCupertinoModalPopup(
-      context: Get.overlayContext!,
-      barrierDismissible: false,
-      builder: (BuildContext context) => PopScope(
-        canPop: true,
-        child: SingleChildScrollView(
-          primary: true,
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom,
-          ),
-          child: Container(
-            height: MediaQuery.of(context).size.height * 0.35,
-            padding: const EdgeInsets.all(8.0),
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(20),
-                topRight: Radius.circular(20),
-              ),
-              gradient: LinearGradient(
-                colors: [Colors.lightBlueAccent, Colors.blueAccent],
-                begin: Alignment.bottomLeft,
-                end: Alignment.topRight,
-              ),
-            ),
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        'production_tasks_manuel_list'.tr,
-                        style: const TextStyle(
-                          fontSize: 24,
-                          color: Colors.white,
-                          decoration: TextDecoration.none,
-                        ),
-                      ),
-                    ),
-                    IconButton(
-                      onPressed: () => Get.back(),
-                      icon: const Icon(
-                        Icons.cancel_rounded,
-                        color: Colors.white,
-                      ),
-                    )
-                  ],
-                ),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: list.length,
-                    itemBuilder: (c, i) => Card(
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 10, right: 10),
-                        child: Row(
-                          children: [
-                            Expanded(child: Text(list[i].title ?? '')),
-                            IconButton(
-                              onPressed: () {
-                                Get.back();
-                                Get.to(() => WebPage(
-                                      title: list[i].title ?? '',
-                                      url: list[i].url ?? '',
-                                    ));
-                              },
-                              icon: const Icon(
-                                Icons.chevron_right,
-                                color: Colors.blueAccent,
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
   Widget _orderItem(
     ProductionTasksSubInfo data,
     Animation<double> animation,
@@ -139,20 +54,21 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
       color: Colors.blue,
     );
     var image = Hero(
-        tag: 'ProductionTasksDetailImage-${data.itemImage}-${data.mtoNo}',
-        child: AspectRatio(
-          aspectRatio: 16 / 9,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(7),
-            child: data.itemImage?.isEmpty == true
-                ? errorImage
-                : Image.network(
-                    fit: BoxFit.fill,
-                    data.itemImage ?? '',
-                    errorBuilder: (ctx, err, stackTrace) => errorImage,
-                  ),
-          ),
-        ));
+      tag: 'ProductionTasksDetailImage-${data.itemImage}-${data.mtoNo}',
+      child: AspectRatio(
+        aspectRatio: 16 / 9,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(7),
+          child: data.itemImage?.isEmpty == true
+              ? errorImage
+              : Image.network(
+                  fit: BoxFit.fill,
+                  data.itemImage ?? '',
+                  errorBuilder: (ctx, err, stackTrace) => errorImage,
+                ),
+        ),
+      ),
+    );
     return SizeTransition(
       sizeFactor: animation,
       axis: Axis.horizontal,
@@ -169,6 +85,18 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
           }
         },
         child: AnimatedContainer(
+          foregroundDecoration: RotatedCornerDecoration.withColor(
+            color:data.existOutBoxBarCode==true?Colors.green: Colors.red,
+            badgeCornerRadius: const Radius.circular(10),
+            badgeSize: const Size(55, 55),
+            textSpan: TextSpan(
+              text:'production_tasks_barcode'.tr,
+              style: const TextStyle(
+                fontSize: 14,
+                color: Colors.white,
+              ),
+            ),
+          ),
           curve: Curves.fastOutSlowIn,
           margin: const EdgeInsets.only(left: 5, right: 5, top: 10, bottom: 10),
           padding: const EdgeInsets.all(5),
@@ -196,10 +124,13 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                data.productName ?? '',
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
+              SizedBox(
+                width: double.infinity,
+                child: Text(
+                  data.productName ?? '',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
               index == 0
@@ -320,6 +251,7 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
                                     index == 0) {
                                   logic.getDetail(
                                     ins: data.mtoNo ?? '',
+                                    queryFileName: '${data.mtoNo}-${data.clientOrderNumber}',
                                     imageUrl: data.itemImage ?? '',
                                   );
                                 } else {
@@ -360,10 +292,7 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
                               onPressed: () {
                                 if (state.selected.value == index ||
                                     index == 0) {
-                                  logic.queryProcessInstruction(
-                                    query: data.shoeStyle ?? '',
-                                    files: (files) => _pickFilePopup(files),
-                                  );
+                                  feishuViewWikiFiles(query: data.shoeStyle ?? '');
                                 } else {
                                   setState(() => state.selected.value = index);
                                 }
@@ -398,6 +327,7 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
                           if (state.selected.value == index || index == 0) {
                             logic.getDetail(
                               po: data.clientOrderNumber ?? '',
+                              queryFileName: '${data.mtoNo}-${data.clientOrderNumber}',
                               imageUrl: data.itemImage ?? '',
                             );
                           } else {
@@ -641,7 +571,7 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
         children: [
           const SizedBox(height: 10),
           Text(
-            'production_tasks_special_requests_from_guests'.tr,
+            'production_tasks_guests_special_requests'.tr,
             style: TextStyle(
                 color: Colors.blue.shade700, fontWeight: FontWeight.bold),
           ),

@@ -67,6 +67,7 @@ class WorkOrderListState {
   }
 
   queryPartDetail({
+    required Function() success,
     required Function(String msg) error,
   }) {
     var list = <String>[];

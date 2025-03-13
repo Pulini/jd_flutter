@@ -21,12 +21,6 @@ class _MachineDispatchReportPageState extends State<MachineDispatchReportPage> {
   final logic = Get.find<MachineDispatchLogic>();
   final state = Get.find<MachineDispatchLogic>().state;
 
-  @override
-  void initState() {
-    state.createDispatchProcess();
-    super.initState();
-  }
-
   itemTitle() => SizedBox(
         width: 100,
         child: Column(
@@ -285,6 +279,12 @@ class _MachineDispatchReportPageState extends State<MachineDispatchReportPage> {
         ),
       ),
     );
+  }
+
+  @override
+  void initState() {
+    state.createDispatchProcess();
+    super.initState();
   }
 
   @override

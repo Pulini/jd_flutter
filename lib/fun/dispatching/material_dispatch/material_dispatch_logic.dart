@@ -1,11 +1,9 @@
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/material_dispatch_info.dart';
-import 'package:jd_flutter/bean/http/response/process_specification_info.dart';
 import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/picker/picker_controller.dart';
 import 'package:jd_flutter/widget/spinner_widget.dart';
-import 'package:jd_flutter/widget/web_page.dart';
 import 'material_dispatch_state.dart';
 
 class MaterialDispatchLogic extends GetxController {
@@ -41,7 +39,6 @@ class MaterialDispatchLogic extends GetxController {
   //   super.onReady();
   // }
 
-
   refreshDataList() {
     state.getScWorkCardProcess(
       startDate: dpcStartDate.getDateFormatYMD(),
@@ -74,7 +71,8 @@ class MaterialDispatchLogic extends GetxController {
   batchWarehousing() {
     var submitList = state.createSubmitData();
     if (submitList.isEmpty) {
-      informationDialog(content: 'material_dispatch_batch_stock_in_error_tips'.tr);
+      informationDialog(
+          content: 'material_dispatch_batch_stock_in_error_tips'.tr);
     } else {
       state.batchWarehousing(
         submitList: submitList,
@@ -87,25 +85,6 @@ class MaterialDispatchLogic extends GetxController {
     }
   }
 
-  queryProcessSpecification(
-    String typeBody,
-    Function(List<ProcessSpecificationInfo>) callback,
-  ) {
-    state.queryProcessSpecification(
-      typeBody: typeBody,
-      success: (list) {
-        if (list.length == 1) {
-          Get.to(()=>WebPage(
-            title: list[0].fileName ?? '',
-            url: list[0].fullName ?? '',
-          ));
-        } else {
-          callback.call(list);
-        }
-      },
-      error: (msg) => errorDialog(content: msg),
-    );
-  }
 
   itemReport(MaterialDispatchInfo data) {
     state.itemReport(
@@ -167,5 +146,4 @@ class MaterialDispatchLogic extends GetxController {
       error: (msg) => errorDialog(content: msg),
     );
   }
-
 }

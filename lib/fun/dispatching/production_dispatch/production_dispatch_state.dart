@@ -13,6 +13,7 @@ import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
 class ProductionDispatchState {
+
   var etInstruction = '';
   var isSelectedOutsourcing =
       spGet('${Get.currentRoute}/isSelectedOutsourcing') ?? false;
@@ -22,6 +23,9 @@ class ProductionDispatchState {
       spGet('${Get.currentRoute}/isSelectedMergeOrder') ?? false;
   var orderList = <ProductionDispatchOrderInfo>[].obs;
   var orderGroupList = <String, List<ProductionDispatchOrderInfo>>{}.obs;
+
+  var orderProgressList = <OrderProgressShowInfo>[].obs;
+  var orderProgressTableWeight = (0.0).obs;
 
   var cbIsEnabledMaterialList = false.obs;
   var cbIsEnabledInstruction = false.obs;
@@ -642,6 +646,34 @@ class ProductionDispatchState {
     ).then((response) {
       if (response.resultCode == resultSuccess) {
         success.call(response.message ?? '');
+      } else {
+        error.call(response.message ?? '');
+      }
+    });
+  }
+
+  queryProgress({
+    required String startTime,
+    required String endTime,
+    required Function(List<OrderProgressInfo>) success,
+    required Function(String msg) error,
+  }) {
+    httpGet(
+      method: webApiGetWorkCardDetailList,
+      loading: 'production_dispatch_querying_order'.tr,
+      params: {
+        'startTime': startTime,
+        'endTime': endTime,
+        'moNo': etInstruction,
+        'isClose': isSelectedClosed,
+        'isOutsourcing': isSelectedOutsourcing,
+        'deptID': userInfo?.departmentID,
+      },
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        success.call([
+          for (var json in response.data) OrderProgressInfo.fromJson(json)
+        ]);
       } else {
         error.call(response.message ?? '');
       }

@@ -408,6 +408,10 @@ const webApiProductionReport = 'api/WorkCard/GetProcessOutputReportDetail';
 const webApiGetProcessSpecificationList =
     'api/NeedleCartDispatch/GetManufactureInstructionsByProduct';
 
+//添加制造说明书查看日志
+const webApiInstructionsLog =
+    'api/NeedleCartDispatch/InsertManufactureInstructionsLog';
+
 //检查设备是否授权查看PDF
 const webApiCheckAuthorize = 'api/User/CheckAuthorize';
 
@@ -483,6 +487,9 @@ const webApiSendDispatchToWechat = 'api/NeedleCartDispatch/WechatPostByFEmpID';
 
 //工序计工
 const webApiProductionDispatch = 'api/NeedleCartDispatch/ProcessCalculation';
+
+//查询生产派工单生产进度表
+const webApiGetWorkCardDetailList = 'api/WorkCard/GetWorkCardDetailList';
 
 //获取派工单派工数、完工数信息
 const webApiGetIntactProductionDispatch =
@@ -638,6 +645,10 @@ const webApiPickCodeProductionWarehousing =
 const webApiGetWorkCardList =
     'api/CompoundDispatching/GetScWorkCardListJinZhen';
 
+//获取时段内工序派工单列表
+const webApiGetWorkCardListByDate =
+    'api/CompoundDispatching/GetScWorkCardListByDateJinZhen';
+
 //获取工序派工单详情
 const webApiGetWorkCardDetail =
     'api/CompoundDispatching/GetScWorkCardDetailJinZhen';
@@ -646,8 +657,7 @@ const webApiGetWorkCardDetail =
 const webApiSapGetMaterialDispatchLabelList = 'sap/zapp/ZFUN_APP_BARCODE_FETCH';
 
 //机台派工单--贴标维护
-const webApiSapMaterialDispatchLabelMaintain =
-    'sap/zapp/ZFUN_APP_BARCODE_MAINTAIN';
+const webApiSapMaterialDispatchLabelMaintain = 'sap/zapp/ZFUN_APP_BARCODE_MAINTAIN';
 
 //验证码发送接口
 const webApiSendManagerCode = 'api/Public/SendManagerCode';
@@ -662,6 +672,9 @@ const webApiCleanOrRecoveryLastQty =
 //修改派工表_金臻
 const webApiModifyWorkCardItem =
     'api/CompoundDispatching/UpdateScWorkCardJinZhen';
+
+//取消工号确认
+const webApiCancelConfirmation = 'api/CompoundDispatching/ClearEmpJinZhen';
 
 //生成报工产量表_金臻
 const webApiReportDispatch =
@@ -853,7 +866,8 @@ const webApiDelExBill = 'api/QMProcessFlowEx/DelExBill';
 const webApiSapScanAdd = 'sap/zapp/ZMM_RES_ZXCFSM_D';
 
 //获取汇总表
-const webApiNewGetSubmitBarCodeReport = 'api/ScanJobBooking/NewGetSubmitBarCodeReport';
+const webApiNewGetSubmitBarCodeReport =
+    'api/ScanJobBooking/NewGetSubmitBarCodeReport';
 
 //sap料头入库历史记录
 const webApiSapSurplusMaterialHistory = 'sap/zapp/ZFUN_GET_LTRUKU';
@@ -883,25 +897,29 @@ const webApiSapProductionReceiptWriteOff = 'sap/zapp/ZFUN_APP_PO_CANCEL_1500A';
 const webApiSapGetRecommendLocation = 'sap/zapp/ZWMS_LOCATION_RECOMMEND';
 
 //sap获取贴标列表
-const  webApiSapGetLabels = 'sap/zapp/ZFUN_APP_BARCODE_PRINT';
+const webApiSapGetLabels = 'sap/zapp/ZFUN_APP_BARCODE_PRINT';
 
 //sap根据原标获取新标
-const  webApiSapGetNewLabel = 'sap/zapp/ZWMS_BARCODE_SPLIT';
+const webApiSapGetNewLabel = 'sap/zapp/ZWMS_BARCODE_SPLIT';
 
 //提交条形码数据,自动生成调拨单
-const  webApiUploadWarehouseAllocation = 'api/BarCode/SubmitBarCode2CkRequisitionSlipCollectBillNew';
+const webApiUploadWarehouseAllocation =
+    'api/BarCode/SubmitBarCode2CkRequisitionSlipCollectBillNew';
 
 //获取设备信息
-const  webApiGetWaterEnergyMachine = 'api/SsDormitory/GetWaterEnergyMachine';
+const webApiGetWaterEnergyMachine = 'api/SsDormitory/GetWaterEnergyMachine';
 
 //获取抄度数据
-const webApiGetWaterEnergyMachineDetail = 'api/SsDormitory/GetWaterEnergyMachineDetail';
+const webApiGetWaterEnergyMachineDetail =
+    'api/SsDormitory/GetWaterEnergyMachineDetail';
 
 //提交水电表抄度
-const webApiSubmitSsWaterEnergyMachineDetail = 'api/SsDormitory/SubmitSsWaterEnergyMachineDetail';
+const webApiSubmitSsWaterEnergyMachineDetail =
+    'api/SsDormitory/SubmitSsWaterEnergyMachineDetail';
 
 //根据设备编号获取设备信息
-const webApiGetDeviceInformationByFNumber = 'api/EquipmentRepair/GetDeviceInformationByFNumber';
+const webApiGetDeviceInformationByFNumber =
+    'api/EquipmentRepair/GetDeviceInformationByFNumber';
 
 //获取设备维修单列表
 const webApiGetRepairOrderList = 'api/EquipmentRepair/GetRepairOrderList';
@@ -925,40 +943,45 @@ const webApiGetImmediateStockList = "api/Stock/GetImmediateStockList";
 const webApiModifyStorageLocation = "api/Stock/ModifyStorageLocation";
 
 //获取箱标详情
-const webApiGetBarCodeListByBoxNumber = "api/BoxLabelBarcode/GetBarCodeListByBoxNumber";
+const webApiGetBarCodeListByBoxNumber =
+    "api/BoxLabelBarcode/GetBarCodeListByBoxNumber";
 
 //Puma防伪标入库
 const webApiBarCodeInStock = "api/BoxLabelBarcode/BarCodeInStock";
 
 //获取条码
-const webApiGetBarCodeListByEmp = "api/BoxLabelBarcode/GetBarCodeListByEmpNumber";
+const webApiGetBarCodeListByEmp =
+    "api/BoxLabelBarcode/GetBarCodeListByEmpNumber";
 
 //Puma防伪标出库
 const webApiBarCodeOutStock = "api/BoxLabelBarcode/BarCodeOutStock";
 
 //sap油墨调色单查询
-const  webApiSapGetInkColorMatchOrder = 'sap/zapp/ZFUN_APP_YM_QUERY';
+const webApiSapGetInkColorMatchOrder = 'sap/zapp/ZFUN_APP_YM_QUERY';
 
 //sap油墨获取物料列表及型体判断
-const  webApiSapCheckInkColorMatchTypeBody = 'sap/zapp/ZFUN_APP_YM_MATNR';
+const webApiSapCheckInkColorMatchTypeBody = 'sap/zapp/ZFUN_APP_YM_MATNR';
 
 //sap创建油墨调色单
-const  webApiSapCreateInkColorMatch= 'sap/zapp/ZFUN_APP_YM_WOFNR';
+const webApiSapCreateInkColorMatch = 'sap/zapp/ZFUN_APP_YM_WOFNR';
 
 //sap油墨调色单试做结果提交
-const  webApiSapSubmitTrialFinish= 'sap/zapp/ZFUN_APP_YM_RESULT';
+const webApiSapSubmitTrialFinish = 'sap/zapp/ZFUN_APP_YM_RESULT';
 
 //Mes获取成型线生成执行进度表
-const  webApiGetProductionOrderSchedule= 'api/Package/GetProductionOrderSchedule';
+const webApiGetProductionOrderSchedule =
+    'api/Package/GetProductionOrderSchedule';
 
 //Mes获取成型线生成执行进度明细表
-const  webApiGetProductionOrderScheduleDetail= 'api/Package/GetProductionOrderScheduleBillorPO';
+const webApiGetProductionOrderScheduleDetail =
+    'api/Package/GetProductionOrderScheduleBillorPO';
 
 //检查工号是否合法
 const webApiJudgeEmpNumber = 'api/User/JudgeEmpNumber';
 
 //获得已入库条形码数据
-const webApiGetBarCodeStatusByDepartmentID = "api/BarCode/GetBarCodeStatusByDepartmentID";
+const webApiGetBarCodeStatusByDepartmentID =
+    "api/BarCode/GetBarCodeStatusByDepartmentID";
 
 //提交条形码数据,自动生成外购入库单
 const webApiUploadSupplierBarCode = "api/BarCode/SubmitBarCode2CollectBill";
@@ -967,4 +990,5 @@ const webApiUploadSupplierBarCode = "api/BarCode/SubmitBarCode2CollectBill";
 const webApiGetUnReportedBarCode = "api/scanjobbooking/GetUnReportedBarCode";
 
 //生产扫码入库提交
-const webApiUploadProductionScanning = "api/ScanJobBooking/SubmitBarCode2PrdInStockCollectBillNew";
+const webApiUploadProductionScanning =
+    "api/ScanJobBooking/SubmitBarCode2PrdInStockCollectBillNew";

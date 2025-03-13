@@ -632,6 +632,7 @@ manufactureInstructionsDialog(List<ManufactureInstructionsInfo> files) {
                       Get.to(() => WebPage(
                             title: files[selected].name ?? '',
                             url: files[selected].url ?? '',
+                            fileId: files[selected].interID.toString(),
                           ));
                     }
                   },
@@ -726,7 +727,7 @@ colorListDialog(List<OrderColorList> files, Function(String) callback) {
   );
 }
 
-sapReportDialog(double initQty, Function(double) callback) {
+sapReportDialog({required double initQty, required Function(double) callback}) {
   var qty = initQty;
   Get.dialog(
     PopScope(
@@ -870,7 +871,8 @@ reportToSap(Function(bool isInstructionReport) callback) {
                   onTap: () {
                     isInstructionReport.value = !isInstructionReport.value;
                   },
-                  child: Text('production_dispatch_dialog_instruction_report'.tr),
+                  child:
+                      Text('production_dispatch_dialog_instruction_report'.tr),
                 )
               ],
             ),
@@ -914,19 +916,23 @@ reportToSap(Function(bool isInstructionReport) callback) {
   );
 }
 
-showSelectMaterialPopup(List<Map> list) {
+showSelectMaterialPopup({
+  required List<Map> surplusMaterialList,
+  required Function(Map) print,
+}) {
   var controller = FixedExtentScrollController();
   Get.dialog(
     PopScope(
       //拦截返回键
       canPop: false,
       child: AlertDialog(
-        title: Text('production_dispatch_dialog_select_print_surplus_material'.tr),
+        title:
+            Text('production_dispatch_dialog_select_print_surplus_material'.tr),
         content: SizedBox(
           width: 300,
           height: 200,
           child: getCupertinoPicker(
-            list.map((data) {
+            surplusMaterialList.map((data) {
               return Center(child: Text(data['StubBarName']));
             }).toList(),
             controller,
@@ -936,6 +942,7 @@ showSelectMaterialPopup(List<Map> list) {
           TextButton(
             onPressed: () {
               Get.back();
+              print.call(surplusMaterialList[controller.selectedItem]);
             },
             child: Text('production_dispatch_dialog_print'.tr),
           ),

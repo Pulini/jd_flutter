@@ -1,7 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/material_dispatch_info.dart';
-import 'package:jd_flutter/bean/http/response/process_specification_info.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 
@@ -147,29 +146,6 @@ class MaterialDispatchState {
     ).then((response) {
       if (response.resultCode == resultSuccess) {
         success.call(response.message ?? '');
-      } else {
-        error.call(response.message ?? '');
-      }
-    });
-  }
-
-  queryProcessSpecification({
-    required String typeBody,
-    required Function(List<ProcessSpecificationInfo>) success,
-    required Function(String msg) error,
-  }) {
-    httpGet(
-      loading: 'material_dispatch_querying_manual'.tr,
-      method: webApiGetProcessSpecificationList,
-      params: {
-        'Product': typeBody,
-      },
-    ).then((response) {
-      if (response.resultCode == resultSuccess) {
-        success.call([
-          for (var item in response.data)
-            ProcessSpecificationInfo.fromJson(item)
-        ]);
       } else {
         error.call(response.message ?? '');
       }

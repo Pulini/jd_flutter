@@ -7,6 +7,7 @@ import 'package:jd_flutter/bean/http/response/machine_dispatch_info.dart';
 import 'package:jd_flutter/bean/http/response/sap_label_info.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
+
 class MachineDispatchState {
   var dataList = <String>[].obs;
   MachineDispatchDetailsInfo? detailsInfo;
@@ -21,7 +22,8 @@ class MachineDispatchState {
   var processList = <DispatchProcessInfo>[].obs;
   var processSelect = 0.obs;
 
-
+  var historyInfo = <MachineDispatchHistoryInfo>[].obs;
+  var historyLabelInfo = <ReprintLabelInfo>[].obs;
 
   createDispatchProcess() {
     var totalProduction = 0.0;
@@ -46,40 +48,44 @@ class MachineDispatchState {
       loading: 'machine_dispatch_getting_process_plan_list_tips'.tr,
       method: webApiGetWorkCardList,
       params: {
-        // 'DispatchingMachine': userInfo?.number,
-        'DispatchingMachine': 'JT23',
+        'DispatchingMachine': userInfo?.number,
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        var list = <MachineDispatchInfo>[
-          for (var i = 0; i < response.data.length; ++i)
-            MachineDispatchInfo.fromJson(response.data[i])
-        ];
-        success.call(list);
+        success.call([
+          for (var json in response.data) MachineDispatchInfo.fromJson(json)
+        ]);
       } else {
         error.call(response.message ?? 'query_default_error'.tr);
       }
     });
   }
 
-  getWorkCardDetail({
-    required String dispatchNumber,
+  getWorkCardListByDate({
+    required String startDate,
+    required String endDate,
     required Function() success,
     required Function(String msg) error,
   }) {
-    nowDispatchNumber.value = dispatchNumber;
-    formatWorkCardDetailData(
-      doHttp: httpGet(
-        loading: 'machine_dispatch_getting_process_plan_detail_tips'.tr,
-        method: webApiGetWorkCardDetail,
-        params: {
-          'DispatchingMachine': '',
-          'DispatchNumber': dispatchNumber,
-        },
-      ),
-      success: success,
-      error: error,
-    );
+    httpGet(
+      loading: 'machine_dispatch_getting_process_plan_list_tips'.tr,
+      method: webApiGetWorkCardListByDate,
+      params: {
+        'StartDate': startDate,
+        'EndDate': endDate,
+        'DispatchingMachine': userInfo?.number,
+      },
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        historyInfo.value = [
+          for (var json in response.data)
+            MachineDispatchHistoryInfo.fromJson(json)
+        ];
+        success.call();
+      } else {
+        error.call(response.message ?? 'query_default_error'.tr);
+      }
+    });
   }
 
   refreshWorkCardDetail({
@@ -116,6 +122,7 @@ class MachineDispatchState {
         selectList = [
           for (var i = 0; i < (detailsInfo?.items ?? []).length; ++i) false.obs
         ];
+
         surplusMaterialList.value = [
           if ((detailsInfo?.stubBar1 ?? '').isNotEmpty)
             {
@@ -147,26 +154,37 @@ class MachineDispatchState {
     });
   }
 
+  Future<BaseData> _getSapMaterialDispatchLabels({
+    required String labelType,
+    required String labelStatus,
+    required String dispatchNumber,
+  }) =>
+      sapPost(
+        loading: 'machine_dispatch_getting_label_list_tips'.tr,
+        method: webApiSapGetMaterialDispatchLabelList,
+        body: [
+          {
+            'ZBQLX': labelType, //10生产标签20销售标签（选填）
+            'ZBQZT': labelStatus, //10创建 20打印 30报工 40入库 50上架 60下架 70销售出库 80标签变更
+            'DISPATCH_NO': dispatchNumber,
+          }
+        ],
+      );
+
   getSapLabelList({
     required Function() success,
-    required Function() error,
+    required Function(String) error,
   }) {
-    sapPost(
-      loading: 'machine_dispatch_getting_label_list_tips'.tr,
-      method: webApiSapGetMaterialDispatchLabelList,
-      body: [
-        {
-          'ZBQLX': '10', //10生产标签20销售标签（选填）
-          'ZBQZT': '20', //10创建 20打印 30报工 40入库 50上架 60下架 70销售出库 80标签变更
-          'DISPATCH_NO': detailsInfo?.dispatchNumber,
-        }
-      ],
+    _getSapMaterialDispatchLabels(
+      labelType: '10',
+      labelStatus: '20',
+      dispatchNumber: detailsInfo?.dispatchNumber ?? '',
     ).then((response) {
       if (response.resultCode == resultSuccess) {
         var list = <SapLabelInfo>[
-          for (var i = 0; i < response.data.length; ++i)
+          for (var json in response.data)
             SapLabelInfo.fromJsonWithState(
-              response.data[i],
+              json,
               detailsInfo?.items ?? [],
               detailsInfo?.barCodeList ?? [],
             )
@@ -180,7 +198,51 @@ class MachineDispatchState {
       } else {
         labelList.clear();
         labelErrorMsg = response.message ?? '';
-        error.call();
+        error.call(labelErrorMsg);
+      }
+    });
+  }
+
+  getHistoryLabelList({
+    required int index,
+    required Function() success,
+    required Function(String) error,
+  }) {
+    _getSapMaterialDispatchLabels(
+      labelType: '10',
+      labelStatus: '',
+      dispatchNumber: historyInfo[index].decrementNumber ?? '',
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        var list = [
+          for (var json in response.data)
+            SapLabelInfo.fromJson(response.data[json])
+        ];
+        var labelList = <ReprintLabelInfo>[];
+        for (var v1 in list) {
+          v1.item?.forEach((v2) {
+            labelList.add(ReprintLabelInfo(
+              number: v1.number ?? '',
+              labelID: v2.subLabelID ?? '',
+              processes: historyInfo[index].processFlow ?? '',
+              qty: v2.qty ?? 0,
+              size: v2.size ?? '',
+              factoryType: historyInfo[index].factoryType ?? '',
+              date: v1.date ?? '',
+              materialName: historyInfo[index].materialName ?? '',
+              unit: v2.unit ?? '',
+              machine: historyInfo[index].machine ?? '',
+              shift: historyInfo[index].shift ?? '',
+              dispatchNumber: historyInfo[index].dispatchNumber ?? '',
+              decrementNumber: historyInfo[index].decrementNumber ?? '',
+            ));
+          });
+        }
+        historyLabelInfo.value = labelList;
+        success.call();
+      } else {
+        historyLabelInfo.clear();
+        error.call(response.message ?? 'query_default_error'.tr);
       }
     });
   }
@@ -196,7 +258,9 @@ class MachineDispatchState {
     ];
 
     httpPost(
-      loading: isClean ? 'machine_dispatch_cleaning_last_tips'.tr : 'machine_dispatch_restoring_last_tips'.tr,
+      loading: isClean
+          ? 'machine_dispatch_cleaning_last_tips'.tr
+          : 'machine_dispatch_restoring_last_tips'.tr,
       method: webApiCleanOrRecoveryLastQty,
       body: {
         'InterID': detailsInfo?.interID,
@@ -315,6 +379,116 @@ class MachineDispatchState {
               //工号
             }
         ],
+      },
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        success.call(response.message ?? '');
+      } else {
+        error.call(response.message ?? 'query_default_error'.tr);
+      }
+    });
+  }
+
+  labelMaintain({
+    required double printQty,
+    required String sizeMaterialNumber,
+    required String size,
+    required Function(String, String) success,
+    required Function(String) error,
+  }) {
+    sapPost(
+      loading: '正在创建标签...',
+      method: webApiSapMaterialDispatchLabelMaintain,
+      body: [
+        {
+          'optype': '0',
+          'dispatch_no': detailsInfo?.dispatchNumber ?? '',
+          'ZZZXFS': 'BULKS',
+          'ZUSNAM': userInfo?.number,
+          'AEDAT': getDateYMD(),
+          'AEZET': getTimeHms(),
+          'ZXR': printQty.toShowString(),
+          'ZBQZT': '20',
+          'item': [
+            {
+              'MATNR': sizeMaterialNumber,
+              'SIZE1_ATINN': size,
+              'MENGE': printQty,
+            }
+          ]
+        }
+      ],
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        success.call(response.data[0]['BQID'], response.data[0]['ZPQYM']);
+      } else {
+        error.call(response.message ?? 'query_default_error'.tr);
+      }
+    });
+  }
+
+  productionReport({
+    required Function(String msg) success,
+    required Function(String msg) error,
+  }) {
+    httpPost(
+      loading: '正在提交产量汇报...',
+      method: webApiModifyWorkCardItem,
+      body: {
+        'InterID': detailsInfo?.interID,
+        'Items': [
+          for (Items item in (detailsInfo?.items ?? []))
+            {
+              'EntryID': item.entryID,
+              'BoxesQty': item.boxesQty,
+              'NotFullQty': item.notFullQty,
+            }
+        ],
+        'Output': {
+          'UserID': userInfo?.userID,
+          'InterID': detailsInfo?.interID,
+          'Shift': detailsInfo?.shift,
+          'DecrementNumber': detailsInfo?.decrementNumber,
+          'DispatchNumber': detailsInfo?.dispatchNumber,
+          'MaterialNumber': detailsInfo?.materialNumber,
+          'Date': detailsInfo?.startDate,
+          'WorkCenter': detailsInfo?.machine,
+          'Items': [
+            for (Items item in (detailsInfo?.items ?? []))
+              {
+                'EntryID': item.entryID,
+                'Size': item.size,
+                'StandardTextCode': detailsInfo?.processflow,
+                'ConfirmedQty': item.getReportQty(),
+                'LastNotFullQty': item.lastNotFullQty,
+                'Mantissa': item.notFullQty,
+                'BoxesQty': item.boxesQty,
+                'Capacity': item.capacity,
+                'BUoM': item.bUoM,
+                'ConfirmCurrentWorkingHours': item.confirmCurrentWorkingHours,
+                'WorkingHoursUnit': item.workingHoursUnit,
+              }
+          ]
+        }
+      },
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        success.call(response.message ?? '');
+      } else {
+        error.call(response.message ?? 'query_default_error'.tr);
+      }
+    });
+  }
+
+  cancelConfirmation({
+    required Function(String msg) success,
+    required Function(String msg) error,
+  }) {
+    httpPost(
+      loading: '正在取消工号确认...',
+      method: webApiCancelConfirmation,
+      params: {
+        'InterID': detailsInfo?.interID,
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {

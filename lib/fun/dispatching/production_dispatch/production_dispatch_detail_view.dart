@@ -462,7 +462,7 @@ class _ProductionDispatchDetailPageState
                     )),
                 CombinationButton(
                   combination: Combination.middle,
-                  text: 'production_dispatch_detail_now_dispatch'.tr,
+                  text: 'production_dispatch_detail_last_dispatch'.tr,
                   click: () => showDispatchList(
                       context,
                       true,
@@ -482,7 +482,7 @@ class _ProductionDispatchDetailPageState
                 ),
                 CombinationButton(
                   combination: Combination.middle,
-                  text: 'production_dispatch_detail_save_dispatch'.tr,
+                  text: 'production_dispatch_detail_now_dispatch'.tr,
                   click: () => showDispatchList(
                       context, false, state.workProcedure, (i1, i2) {
                     logic.detailViewJumpToDispatchOnWorkProcedure(
@@ -499,13 +499,13 @@ class _ProductionDispatchDetailPageState
                 if (GetPlatform.isMobile)
                   CombinationButton(
                     combination: Combination.middle,
-                    text: 'production_dispatch_detail_apply_dispatch'.tr,
+                    text: 'production_dispatch_detail_save_dispatch'.tr,
                     click: () => logic.saveDispatch(),
                   ),
                 if (GetPlatform.isMobile)
                   CombinationButton(
                     combination: Combination.middle,
-                    text: 'production_dispatch_detail_manual'.tr,
+                    text: 'production_dispatch_detail_apply_dispatch'.tr,
                     click: () => SaveWorkProcedure.getSave(
                       state.workCardTitle.value.plantBody ?? '',
                       (list) => typeBodySaveDialog(
@@ -517,14 +517,14 @@ class _ProductionDispatchDetailPageState
                   ),
                 CombinationButton(
                   combination: Combination.middle,
-                  text: 'production_dispatch_detail_material_list'.tr,
+                  text: 'production_dispatch_detail_manual'.tr,
                   click: () => logic.detailViewGetManufactureInstructions(
                     (list) => manufactureInstructionsDialog(list),
                   ),
                 ),
                 CombinationButton(
                   combination: Combination.right,
-                  text: 'production_dispatch_detail_process_check'.tr,
+                  text: 'production_dispatch_detail_material_list'.tr,
                   click: () => logic.getWorkPlanMaterial(
                       (list) => workPlanMaterialDialog(list)),
                 ),
@@ -534,7 +534,7 @@ class _ProductionDispatchDetailPageState
           const SizedBox(width: 10),
           CombinationButton(
             combination: Combination.left,
-            text: 'production_dispatch_detail_auto_input'.tr,
+            text: 'production_dispatch_detail_process_check'.tr,
             click: () => logic.getPrdRouteInfo(),
           ),
           CombinationButton(

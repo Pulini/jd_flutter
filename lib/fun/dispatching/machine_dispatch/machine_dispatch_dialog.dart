@@ -16,6 +16,43 @@ import 'package:rotated_corner_decoration/rotated_corner_decoration.dart';
 
 import 'machine_dispatch_logic.dart';
 
+generateAndPrintDialog({
+  required Function() printLast,
+  required Function() print,
+}){
+  Get.dialog(
+    PopScope(
+      //拦截返回键
+      canPop: false,
+      child: AlertDialog(
+        title: Text('生成并打印'),
+        content: Text( '确定要打印标签吗?'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Get.back();
+              printLast.call();
+            },
+            child: Text('打印尾标'),
+          ),   TextButton(
+            onPressed: () {
+              Get.back();
+              print.call();
+            },
+            child: Text('打印'),
+          ),
+          TextButton(
+            onPressed: ()=>Get.back(),
+            child: Text('dialog_default_cancel'.tr,
+              style: TextStyle(color: Colors.grey),
+            ),
+          ),
+        ],
+      ),
+    ),
+    barrierDismissible: false, //拦截dialog外部点击
+  );
+}
 showWorkCardListDialog(
   List<MachineDispatchInfo> list,
   Function(MachineDispatchInfo) callback,
@@ -342,6 +379,7 @@ teamLeaderVerifyDialog() {
   var countDown = 0;
   var workerNumber = '';
   var verificationCode = '';
+  state.leaderVerify.value = true;
   Get.dialog(
     PopScope(
       canPop: false,

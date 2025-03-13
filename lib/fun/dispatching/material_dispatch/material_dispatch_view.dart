@@ -9,6 +9,7 @@ import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
+import 'package:jd_flutter/widget/feishu_authorize.dart';
 import 'package:jd_flutter/widget/picker/picker_view.dart';
 import 'package:jd_flutter/widget/spinner_widget.dart';
 import 'package:rotated_corner_decoration/rotated_corner_decoration.dart';
@@ -51,7 +52,7 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
             ),
           ),
           foregroundDecoration: data.children?[0].lastProcessNode == '1'
-              ?  RotatedCornerDecoration.withColor(
+              ? RotatedCornerDecoration.withColor(
                   color: Colors.red,
                   badgeCornerRadius: const Radius.circular(8),
                   badgeSize: const Size(45, 45),
@@ -78,7 +79,8 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
               ),
               Expanded(
                 child: Text(
-                  'material_dispatch_type_body'.trArgs([data.productName??'']),
+                  'material_dispatch_type_body'
+                      .trArgs([data.productName ?? '']),
                   style: itemTitleStyle,
                 ),
               ),
@@ -252,7 +254,8 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
                 child: Row(
                   children: [
                     Text(
-                      'material_dispatch_completion_amount'.trArgs([data.unitName??'']),
+                      'material_dispatch_completion_amount'
+                          .trArgs([data.unitName ?? '']),
                       style: style,
                     ),
                     SizedBox(
@@ -276,7 +279,8 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
                 child: Row(
                   children: [
                     Text(
-                      'material_dispatch_label_generation_amount'.trArgs([data.unitName??'']),
+                      'material_dispatch_label_generation_amount'
+                          .trArgs([data.unitName ?? '']),
                       style: style,
                     ),
                     SizedBox(
@@ -303,9 +307,8 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
               ),
               CombinationButton(
                 text: 'material_dispatch_progress_manual'.tr,
-                click: () => logic.queryProcessSpecification(
-                  data.productName ?? '',
-                  (list) => processSpecificationDialog(list),
+                click: () => feishuViewWikiFiles(
+                  query: data.productName ?? '',
                 ),
                 combination: Combination.middle,
               ),
@@ -444,29 +447,37 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
     if (state.isNeedSetInitData()) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         pickPallet(
-            isFirst: true,
-            savePalletDate: state.date,
-            saveMachine: state.machineId,
-            saveWarehouseLocation: state.locationId,
-            savePallet: state.palletNumber,
-            context: context,
-            callback: (
-              int date,
-              String machineId,
-              String locationId,
-              String palletNumber,
-            ) =>
-                setState(() => state.savePickData(
-                      date: date,
-                      machineId: machineId,
-                      locationId: locationId,
-                      palletNumber: palletNumber,
-                    )));
+          isFirst: true,
+          savePalletDate: state.date,
+          saveMachine: state.machineId,
+          saveWarehouseLocation: state.locationId,
+          savePallet: state.palletNumber,
+          context: context,
+          callback: (
+            date,
+            machineId,
+            locationId,
+            palletNumber,
+          ) =>
+              setState(() => state.savePickData(
+                    date: date,
+                    machineId: machineId,
+                    locationId: locationId,
+                    palletNumber: palletNumber,
+                  )),
+        );
       });
+    }
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (state.isNeedSetInitData()) {
       return Container(
         decoration: backgroundColor,
         child: Scaffold(

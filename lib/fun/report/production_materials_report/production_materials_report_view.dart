@@ -239,6 +239,7 @@ class _ProductionMaterialsReportPageState
   Widget build(BuildContext context) {
     return Get.arguments == null
         ? pageBodyWithDrawer(
+            title: '用料清单',
             queryWidgets: [
               Obx(() => Row(
                     children: [
@@ -301,7 +302,7 @@ class _ProductionMaterialsReportPageState
             query: () => logic.query(),
             body: getPageBody(),
           )
-        : pageBody(body: getPageBody());
+        : pageBody(title: '用料清单', body: getPageBody());
   }
 
   @override

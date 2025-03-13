@@ -1,13 +1,32 @@
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/machine_dispatch_info.dart';
+import 'package:jd_flutter/bean/http/response/sap_label_info.dart';
+import 'package:jd_flutter/fun/dispatching/machine_dispatch/machine_dispatch_history_view.dart';
 import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
+import 'package:jd_flutter/widget/preview_label_widget.dart';
 
 import 'machine_dispatch_report_view.dart';
 import 'machine_dispatch_state.dart';
 
 class MachineDispatchLogic extends GetxController {
   final MachineDispatchState state = MachineDispatchState();
+
+  bool isSelectAll() =>
+      state.selectList.isNotEmpty &&
+      state.selectList.where((v) => v.value).length == state.selectList.length;
+
+  bool isSelectedOne() =>
+      state.selectList.map((v) => v.value ? 1 : 0).reduce((a, b) => a + b) == 1;
+
+  bool hasSelected() => state.selectList.any((v) => v.value);
+
+  bool hasReported() =>
+      state.detailsInfo?.items?.any((v) => (v.boxesQty ?? 0) > 0) == true;
+
+  bool statusReportedAndGenerate() => state.detailsInfo?.status == 2;
 
   getWorkCardList(Function(List<MachineDispatchInfo>) callback) {
     state.getWorkCardList(
@@ -16,120 +35,119 @@ class MachineDispatchLogic extends GetxController {
     );
   }
 
-  getWorkCardDetail(MachineDispatchInfo mdi, Function() refreshUI) {
-    state.getWorkCardDetail(
-      dispatchNumber: mdi.dispatchNumber ?? '',
-      success: () => state.getSapLabelList(
-        success: refreshUI,
-        error: refreshUI,
-      ),
-      error: (msg) {
-        refreshUI.call();
-        errorDialog(content: msg);
-      },
-    );
-  }
-
-  refreshWorkCardDetail(Function() refreshUI) {
+  refreshWorkCardDetail({Function()? refreshUI}) {
     state.refreshWorkCardDetail(
-      success: () => state.getSapLabelList(
-        success: refreshUI,
-        error: refreshUI,
-      ),
+      success: () => refreshUI?.call(),
       error: (msg) {
-        refreshUI.call();
         errorDialog(content: msg);
       },
     );
   }
 
-  cleanOrRecoveryLastQty(bool isClean, Function() refreshUI) {
+  cleanOrRecoveryLastQty(bool isClean) {
     state.cleanOrRecoveryLastQty(
       isClean: isClean,
       success: (msg) => successDialog(
         content: msg,
-        back: () => refreshWorkCardDetail(refreshUI),
+        back: () => refreshWorkCardDetail(),
       ),
       error: (msg) => errorDialog(content: msg),
     );
   }
 
-  modifyWorkCardItem(Function() refreshUI) {
+  modifyWorkCardItem() {
     state.modifyWorkCardItem(
       success: (msg) => successDialog(
         content: msg,
-        back: () => refreshWorkCardDetail(refreshUI),
+        back: () => refreshWorkCardDetail(),
       ),
       error: (msg) => errorDialog(content: msg),
     );
   }
 
-  checkLabelScanState() {
-    refreshWorkCardDetail(() {
-      if (state.labelList.isEmpty) {
-        errorDialog(content: 'machine_dispatch_order_not_scanned_tips'.tr);
-        return;
-      }
-      var notScan = state.labelList.where((v) => !v.isScanned).toList();
-      var notScanLabelList = <String>[
-        for (var i = 0; i < notScan.length; ++i) notScan[i].number ?? ''
-      ];
-      var lastAndNotScan = notScan.where((v) => v.isLastLabel).toList();
-      var lastLabelList = <String>[
-        for (var i = 0; i < lastAndNotScan.length; ++i)
-          lastAndNotScan[i].size ?? ''
-      ];
-      if (notScanLabelList.isNotEmpty && lastLabelList.isNotEmpty) {
-        errorDialog(
-          content: 'machine_dispatch_not_scanned_all_tips'.trArgs([
-            notScanLabelList.join(','),
-            lastLabelList.join(','),
-          ]),
-        );
-      } else {
-        if (notScanLabelList.isNotEmpty) {
-          errorDialog(
-            content: 'machine_dispatch_not_scanned_box_tips'.trArgs([
-              notScanLabelList.join(','),
-            ]),
-          );
-        } else if (lastLabelList.isNotEmpty) {
-          errorDialog(
-            content: 'machine_dispatch_not_scanned_last_tips'.trArgs([
-              lastLabelList.join(','),
-            ]),
-          );
-        } else {
-          var totalReport = 0.0;
-          for (var v in state.sizeItemList) {
-            if ((v.reportQty ?? 0.0) < 0) {
+  workerDispatchConfirmation() {
+    refreshWorkCardDetail(refreshUI: () {
+      state.getSapLabelList(
+        success: () {
+          if (state.labelList.isEmpty) {
+            errorDialog(content: 'machine_dispatch_order_not_scanned_tips'.tr);
+            return;
+          }
+          var notScan = state.labelList.where((v) => !v.isScanned).toList();
+          var notScanLabelList = <String>[
+            for (var i = 0; i < notScan.length; ++i) notScan[i].number ?? ''
+          ];
+          var lastAndNotScan = notScan.where((v) => v.isLastLabel).toList();
+          var lastLabelList = <String>[
+            for (var i = 0; i < lastAndNotScan.length; ++i)
+              lastAndNotScan[i].size ?? ''
+          ];
+          if (notScanLabelList.isNotEmpty && lastLabelList.isNotEmpty) {
+            errorDialog(
+              content: 'machine_dispatch_not_scanned_all_tips'.trArgs([
+                notScanLabelList.join(','),
+                lastLabelList.join(','),
+              ]),
+            );
+          } else {
+            if (notScanLabelList.isNotEmpty) {
               errorDialog(
-                content: 'machine_dispatch_input_size_report_qty_tips'.trArgs([
-                  v.size ?? '',
+                content: 'machine_dispatch_not_scanned_box_tips'.trArgs([
+                  notScanLabelList.join(','),
                 ]),
               );
-              return;
-            }
-            totalReport = totalReport.add(v.reportQty ?? 0.0);
-          }
-          if (totalReport == 0) {
-            errorDialog(content: 'machine_dispatch_input_report_qty_tips'.tr);
-            return;
-          } else {
-            if (state.detailsInfo?.status == 2) {
-              askDialog(
-                  content:
-                      'machine_dispatch_worker_number_report_again_tips'.tr,
-                  confirm: () {
-                    Get.to(() => const MachineDispatchReportPage());
-                  });
+            } else if (lastLabelList.isNotEmpty) {
+              errorDialog(
+                content: 'machine_dispatch_not_scanned_last_tips'.trArgs([
+                  lastLabelList.join(','),
+                ]),
+              );
             } else {
-              Get.to(() => const MachineDispatchReportPage());
+              var totalReport = 0.0;
+              for (var v in state.sizeItemList) {
+                if ((v.reportQty ?? 0.0) < 0) {
+                  errorDialog(
+                    content:
+                        'machine_dispatch_input_size_report_qty_tips'.trArgs([
+                      v.size ?? '',
+                    ]),
+                  );
+                  return;
+                }
+                totalReport = totalReport.add(v.reportQty ?? 0.0);
+              }
+              if (totalReport == 0) {
+                errorDialog(
+                    content: 'machine_dispatch_input_report_qty_tips'.tr);
+                return;
+              } else {
+                if (statusReportedAndGenerate()) {
+                  askDialog(
+                      content:
+                          'machine_dispatch_worker_number_report_again_tips'.tr,
+                      confirm: () {
+                        Get.to(() => const MachineDispatchReportPage());
+                      });
+                } else {
+                  errorDialog(content: '');
+                }
+              }
             }
           }
-        }
-      }
+        },
+        error: (msg) => errorDialog(content: msg),
+      );
     });
+  }
+
+  cancelWorkerDispatchConfirmation() {
+    state.cancelConfirmation(
+      success: (msg) => successDialog(
+        content: msg,
+        back: () => refreshWorkCardDetail(),
+      ),
+      error: (msg) => errorDialog(content: msg),
+    );
   }
 
   signatureIdenticalWorker(DispatchInfo data) {
@@ -200,5 +218,212 @@ class MachineDispatchLogic extends GetxController {
         error: (msg) => errorDialog(content: msg),
       ),
     );
+  }
+
+  getHistoryInfo() {
+    state.getWorkCardListByDate(
+      startDate: getDateYMD(
+        time: DateTime.now().subtract(const Duration(days: 7)),
+      ),
+      endDate: getDateYMD(),
+      success: () => Get.to(() => const MachineDispatchHistoryPage()),
+      error: (msg) => errorDialog(content: msg),
+    );
+  }
+
+  getHistoryStockInLabelInfo(int index) {
+    state.getHistoryLabelList(
+      index: index,
+      success: () => Get.to(
+        () => const MachineDispatchHistoryDetailPage(),
+        arguments: {'index', index},
+      ),
+      error: (msg) => errorDialog(content: msg),
+    );
+  }
+
+  printHistoryLabel(int i) {
+    Get.to(() => PreviewLabel(
+          labelWidget: _fixedLabel(label: state.historyLabelInfo[i]),
+        ));
+  }
+
+  _fixedLabel({
+    required ReprintLabelInfo label,
+    String? last,
+  }) =>
+      fixedLabelTemplate(
+        qrCode: label.labelID,
+        title: Text(
+          label.factoryType,
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+        ),
+        subTitle: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              label.processes,
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+            ),
+            Text(
+              '序号:${label.number}',
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+            ),
+          ],
+        ),
+        content: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(
+              child: Text(
+                label.materialName.allowWordTruncation(),
+                style: const TextStyle(
+                  overflow: TextOverflow.ellipsis,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16.5,
+                  height: 1,
+                ),
+                maxLines: 2,
+              ),
+            ),
+            Text(
+              '派工号:${label.dispatchNumber}',
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  '递减号:${label.decrementNumber}',
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 18),
+                ),
+                Text(
+                  '日期:${label.date}',
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 18),
+                )
+              ],
+            )
+          ],
+        ),
+        bottomLeft: Text(
+          '${label.size}#${label.qty.toShowString()}${label.unit}',
+          style: const TextStyle(fontWeight: FontWeight.bold, height: 1),
+        ),
+        bottomMiddle: Center(
+          child: Text(
+            '班次：${label.shift} 机台：${label.machine}',
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+        ),
+        bottomRight: last == null
+            ? null
+            : Center(
+                child: Text(
+                  last,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+      );
+
+  generateAndPrintLabel(bool isPrintLast) {
+    late Items item;
+    for (var i = 0; i < state.selectList.length; ++i) {
+      if (state.selectList[i].value) {
+        item = state.detailsInfo!.items![i];
+        break;
+      }
+    }
+    var printQty = 0.0;
+    if (state.detailsInfo?.status == 1 || state.detailsInfo?.status == 2) {
+      printQty = item.notFullQty ?? 0;
+    } else {
+      if (isPrintLast) {
+        if ((item.capacity ?? 0) > 0) {
+          if (item.mantissaMark == 'X') {
+            printQty = item.sumUnderQty != 0
+                ? (item.sumUnderQty.add(item.lastNotFullQty ?? 0) %
+                    (item.capacity ?? 0))
+                : item.notFullQty ?? 0;
+          } else {
+            printQty = item.capacity ?? 0;
+          }
+        } else {
+          errorDialog(
+            content: '数量必须大于0',
+          );
+          return;
+        }
+      } else {
+        if ((item.capacity ?? 0) > 0) {
+          printQty = item.capacity ?? 0;
+        } else {
+          errorDialog(
+            content: '数量必须大于0',
+          );
+          return;
+        }
+      }
+    }
+    state.labelMaintain(
+      printQty: printQty,
+      sizeMaterialNumber: item.sizeMaterialNumber ?? '',
+      size: item.size ?? '',
+      success: (labelId, number) {
+        Get.to(() => PreviewLabel(
+              labelWidget: _fixedLabel(
+                label: ReprintLabelInfo(
+                  number: number,
+                  labelID: labelId,
+                  processes: state.detailsInfo?.processflow ?? '',
+                  qty: printQty,
+                  size: item.size ?? '',
+                  factoryType: state.detailsInfo?.factoryType ?? '',
+                  date: state.detailsInfo?.startDate ?? '',
+                  materialName: state.detailsInfo?.materialName ?? '',
+                  unit: item.bUoM ?? '',
+                  machine: state.detailsInfo?.machine ?? '',
+                  shift: state.detailsInfo?.shift ?? '',
+                  dispatchNumber: state.detailsInfo?.dispatchNumber ?? '',
+                  decrementNumber: state.detailsInfo?.decrementNumber ?? '',
+                ),
+                last: printQty != item.capacity ? '尾' : '',
+              ),
+            ));
+      },
+      error: (msg) => errorDialog(content: msg),
+    );
+  }
+
+  productionReport() {
+    var noWorkingHours = state.detailsInfo?.items
+        ?.where((v) =>
+            v.getReportQty() > 0 &&
+            v.confirmCurrentWorkingHours.toDoubleTry() == 0)
+        .map((v) => v.size)
+        .toList();
+    if (noWorkingHours != null && noWorkingHours.isNotEmpty) {
+      errorDialog(content: '尺码 < ${noWorkingHours.join(',')} > 无工时！');
+      return;
+    }
+    state.productionReport(
+      success: (msg) => successDialog(
+        content: msg,
+        back: () => refreshWorkCardDetail(),
+      ),
+      error: (msg) => errorDialog(content: msg),
+    );
+  }
+
+  handoverShifts() {
+    if (state.detailsInfo?.stubBar1PrintFlag != 1) {
+      errorDialog(content: '料头一未打印');
+      return;
+    }
+    if (state.detailsInfo?.stubBar2PrintFlag != 1) {
+      errorDialog(content: '料头二未打印');
+      return;
+    }
   }
 }

@@ -117,3 +117,35 @@ class Item {
     return map;
   }
 }
+
+class ReprintLabelInfo {
+  String number = '';
+  String labelID = '';
+  String processes = '';
+  double qty = 0;
+  String size = '';
+  String factoryType = '';
+  String date = '';
+  String materialName = '';
+  String unit = '';
+  String machine = '';
+  String shift = '';
+  String dispatchNumber = '';
+  String decrementNumber = '';
+
+  ReprintLabelInfo({
+    required this.number,
+    required this.labelID,
+    required this.processes,
+    required this.qty,
+    required this.size,
+    required this.factoryType,
+    required this.date,
+    required this.materialName,
+    required this.unit,
+    required this.machine,
+    required this.shift,
+    required this.dispatchNumber,
+    required this.decrementNumber,
+  });
+}
