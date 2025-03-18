@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/scan_barcode_info.dart';
 import 'package:jd_flutter/bean/http/response/worker_info.dart';
-import 'package:jd_flutter/fun/dispatching/part_process_scan/part_process_scan_logic.dart';
+import 'package:jd_flutter/fun/reporting_work/part_process_scan/part_process_scan_logic.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/check_box_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';

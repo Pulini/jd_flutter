@@ -22,11 +22,13 @@ class _CodeListReportPageState extends State<CodeListReportPage> {
   @override
   Widget build(BuildContext context) {
     return pageBody(
-        title: '条码汇总表',
-        body: Column(
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
+      title: '条码汇总表',
+      body: Column(
+        children: [
+          Expanded(
+            child: Padding(
+                padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
+                child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Obx(
                     () => SizedBox(
@@ -38,23 +40,25 @@ class _CodeListReportPageState extends State<CodeListReportPage> {
                             state.reportDataList[i].getBkg()),
                       ),
                     ),
-                  )),
+                  ),
+                )),
+          ),
+          SizedBox(
+            width: double.infinity,
+            child: CombinationButton(
+              text: '提交',
+              click: () => {
+                askDialog(
+                  title: '温馨提示',
+                  content: '确定要提交条码吗？',
+                  confirm: () => Get.back(result: true),
+                )
+              },
             ),
-            SizedBox(
-              width: double.infinity,
-              child: CombinationButton(
-                text: '提交',
-                click: () => {
-                  askDialog(
-                    title: '温馨提示',
-                    content: '确定要提交条码吗？',
-                    confirm: () => Get.back(result: true),
-                  )
-                },
-              ),
-            )
-          ],
-        ));
+          )
+        ],
+      ),
+    );
   }
 
   Widget _item2(List<DataList> list, Color bkg) {

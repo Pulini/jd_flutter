@@ -4,6 +4,7 @@ import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
+import 'package:jd_flutter/widget/scanner.dart';
 
 import 'part_process_scan_logic.dart';
 
@@ -18,6 +19,12 @@ class _PartProcessScanPageState extends State<PartProcessScanPage> {
   final logic = Get.put(PartProcessScanLogic());
   final state = Get.find<PartProcessScanLogic>().state;
   TextEditingController controller = TextEditingController();
+
+  @override
+  void initState() {
+    pdaScanner(scan: (code) => logic.addBarCode(code: code));
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +46,9 @@ class _PartProcessScanPageState extends State<PartProcessScanPage> {
           Row(
             children: [
               IconButton(
-                onPressed: () {},
+                onPressed: () => scannerDialog(
+                  detect: (code) => logic.addBarCode(code: code),
+                ),
                 icon: const Icon(
                   Icons.qr_code_scanner,
                   size: 40,
@@ -48,8 +57,8 @@ class _PartProcessScanPageState extends State<PartProcessScanPage> {
               Expanded(child: EditText(controller: controller)),
               IconButton(
                 onPressed: () => logic.addBarCode(
-                  controller.text,
-                  () => controller.clear(),
+                  code: controller.text,
+                  callback: () => controller.clear(),
                 ),
                 icon: const Icon(
                   Icons.add_box_rounded,

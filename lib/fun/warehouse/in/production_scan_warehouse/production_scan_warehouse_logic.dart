@@ -3,7 +3,6 @@ import 'package:jd_flutter/bean/http/response/bar_code.dart';
 import 'package:jd_flutter/bean/http/response/check_code_info.dart';
 import 'package:jd_flutter/bean/http/response/sap_picking_info.dart';
 import 'package:jd_flutter/bean/http/response/used_bar_code_info.dart';
-import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/fun/warehouse/code_list_report/code_list_report_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/production_scan_warehouse/production_scan_warehouse_state.dart';
 import 'package:jd_flutter/utils/utils.dart';
@@ -17,7 +16,7 @@ class ProductionScanWarehouseLogic extends GetxController {
   //添加条码
   scanCode(String code) {
     if (state.barCodeList.any((v) => v.code == code)) {
-      showSnackBar( message: '条码已存在', isWarning: true);
+      showSnackBar(message: '条码已存在', isWarning: true);
     } else {
       if (code.isPallet()) {
         checkPallet(
@@ -30,16 +29,14 @@ class ProductionScanWarehouseLogic extends GetxController {
                   state.palletNumber.value = code;
                   break;
                 case 'X':
-                  showSnackBar(
-                       message: '请使用空托盘入库！！', isWarning: true);
+                  showSnackBar(message: '请使用空托盘入库！！', isWarning: true);
                   break;
                 case 'Y':
-                  showSnackBar(
-                   message: '此托盘已在其他仓库使用！！', isWarning: true);
+                  showSnackBar(message: '此托盘已在其他仓库使用！！', isWarning: true);
                   break;
               }
             } else {
-              showSnackBar( message: '此托盘不存在！！', isWarning: true);
+              showSnackBar(message: '此托盘不存在！！', isWarning: true);
             }
           },
           error: (msg) => errorDialog(content: msg),
@@ -48,11 +45,10 @@ class ProductionScanWarehouseLogic extends GetxController {
       }
       BarCodeInfo(
         code: code,
-        type: barCodeTypes[4],
-        palletNo: state.palletNumber.value,
+        type: BarCodeReportType.productionScanInStock.text,
       )
+        ..palletNo = state.palletNumber.value
         ..isUsed = state.usedList.contains(code)
-        // ..save(callback: (newBarCode) => state.barCodeList.add(newBarCode));
         ..save(callback: (newBarCode) {
           state.barCodeList.add(newBarCode);
         });
@@ -60,7 +56,9 @@ class ProductionScanWarehouseLogic extends GetxController {
   }
 
   //获得已入库条形码数据
-  getBarCodeStatusByDepartmentID({required Function() refresh,}) {
+  getBarCodeStatusByDepartmentID({
+    required Function() refresh,
+  }) {
     httpGet(method: webApiGetBarCodeStatusByDepartmentID, params: {
       'Type': "SupplierScanInStock",
       'DepartmentID': getUserInfo()!.departmentID,
@@ -148,13 +146,13 @@ class ProductionScanWarehouseLogic extends GetxController {
   //清空生产扫码入库的条码
   clearBarCodeList() {
     BarCodeInfo.clear(
-      type: barCodeTypes[4],
+      type:BarCodeReportType.productionScanInStock.text,
       callback: (v) {
         if (v == state.barCodeList.length) {
           state.isCheck = false;
           state.barCodeList.clear();
         } else {
-          showSnackBar( message: '本地数据库删除失败', isWarning: true);
+          showSnackBar(message: '本地数据库删除失败', isWarning: true);
         }
       },
     );
@@ -281,11 +279,11 @@ class ProductionScanWarehouseLogic extends GetxController {
       if (response.resultCode == resultSuccess) {
         clearBarCodeList();
         successDialog(
-            content: response.message, back: () => getBarCodeStatusByDepartmentID(refresh: (){}));
+            content: response.message,
+            back: () => getBarCodeStatusByDepartmentID(refresh: () {}));
       } else {
         showSnackBar(title: '温馨提示', message: response.message ?? '');
       }
     });
   }
-
 }

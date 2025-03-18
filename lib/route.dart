@@ -2,18 +2,20 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/fun/maintenance/sap_ink_color_matching/sap_ink_color_matching_view.dart';
 import 'package:jd_flutter/fun/management/anti_Counterfeiting/puma_anti_counterfeiting_view.dart';
 import 'package:jd_flutter/fun/other/hydroelectric_excess/hydroelectric_excess_view.dart';
+import 'package:jd_flutter/fun/reporting_work/part_process_scan/part_process_scan_view.dart';
+import 'package:jd_flutter/fun/warehouse/in/incoming_inspection/incoming_inspection_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/production_scan_warehouse/production_scan_warehouse_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/sap_picking_receipt_reversal/sap_picking_receipt_reversal_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/sap_put_on_shelves/sap_put_on_shelves_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/suppliers_scan_store/suppliers_scan_store_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/sap_stock_transfer/sap_stock_transfer_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/sap_wms_reprint_labels/sap_wms_reprint_labels_view.dart';
+import 'package:jd_flutter/fun/warehouse/out/scan_picking_material/scan_picking_material_view.dart';
 import 'bean/home_button.dart';
 import 'bean/routes.dart';
 import 'fun/dispatching/machine_dispatch/machine_dispatch_report_view.dart';
 import 'fun/dispatching/machine_dispatch/machine_dispatch_view.dart';
 import 'fun/dispatching/material_dispatch/material_dispatch_view.dart';
-import 'fun/dispatching/part_process_scan/part_process_scan_view.dart';
 import 'fun/dispatching/process_dispatch_register/process_dispatch_register_view.dart';
 import 'fun/dispatching/production_dispatch/production_dispatch_detail_view.dart';
 import 'fun/dispatching/production_dispatch/production_dispatch_view.dart';
@@ -247,7 +249,6 @@ class RouteConfig {
     const HydroelectricExcessPage(),
   );
 
-
   //设备维修记录
   static Routes deviceMaintenance = Routes(
     '/device_maintenance_record',
@@ -377,14 +378,14 @@ class RouteConfig {
   //sap油墨调色
   static Routes sapInkColorMatching = Routes(
     '/sap_ink_color_matching',
-    99,
+    100,
     const SapInkColorMatchingPage(),
   );
 
   //成型生产任务
   static Routes productionTasks = Routes(
     '/production_tasks',
-    99,
+    102,
     const ProductionTasksPage(),
   );
 
@@ -400,6 +401,20 @@ class RouteConfig {
     '/production_scan_warehouse',
     99,
     const ProductionScanWarehousePage(),
+  );
+
+  //来料稽查
+  static Routes incomingInspection = Routes(
+    '/incoming_inspection',
+    99,
+    const IncomingInspectionPage(),
+  );
+
+  //扫码领料出库
+  static Routes scanPickingMaterial = Routes(
+    '/scan_picking_material',
+    99,
+    const ScanPickingMaterialPage(),
   );
 
   //本地功能入口列表
@@ -452,7 +467,9 @@ class RouteConfig {
     sapInkColorMatching,
     productionTasks,
     suppliersScanStore,
-    productionScanWarehouse
+    productionScanWarehouse,
+    incomingInspection,
+    scanPickingMaterial,
   ];
 
   static List<GetPage> appRoutes = [
@@ -664,6 +681,14 @@ class RouteConfig {
     GetPage(
       name: productionScanWarehouse.name,
       page: () => productionScanWarehouse.page,
+    ),
+    GetPage(
+      name: incomingInspection.name,
+      page: () => incomingInspection.page,
+    ),
+    GetPage(
+      name: scanPickingMaterial.name,
+      page: () => scanPickingMaterial.page,
     ),
   ];
 }

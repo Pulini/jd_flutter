@@ -241,7 +241,7 @@ class _VisitRegisterDetailPageState extends State<VisitRegisterDetailPage> {
                   content: 'visit_details_unable_to_add_more_images'.tr);
             } else {
               if (data.typeAdd == "0") {
-                takePhoto((f) {
+                takePhoto(callback: (f) {
                   logic.addPicture(f.toBase64(), false);
                 });
               }

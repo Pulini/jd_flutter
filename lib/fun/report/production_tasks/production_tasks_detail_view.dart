@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/production_tasks_info.dart';
 import 'package:jd_flutter/utils/utils.dart';
-import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
-import 'package:jd_flutter/widget/feishu_authorize.dart';
 
 import 'production_tasks_logic.dart';
 import 'production_tasks_state.dart';
@@ -20,10 +18,8 @@ class ProductionTasksDetailPage extends StatefulWidget {
 class _ProductionTasksDetailPageState extends State<ProductionTasksDetailPage> {
   final ProductionTasksLogic logic = Get.find<ProductionTasksLogic>();
   final ProductionTasksState state = Get.find<ProductionTasksLogic>().state;
-  final orderListKey = GlobalKey<AnimatedListState>();
   bool isInstruction = Get.arguments['isInstruction'];
   String imageUrl = Get.arguments['imageUrl'];
-  String queryFileName = Get.arguments['queryFileName'];
 
   Widget productionTasksTableItem({
     ProductionTasksDetailItemInfo? data,
@@ -137,15 +133,69 @@ class _ProductionTasksDetailPageState extends State<ProductionTasksDetailPage> {
     );
   }
 
+  _packetWay() => Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const SizedBox(height: 10),
+          Text(
+            'production_tasks_packing_method'.tr,
+            style: TextStyle(
+                color: Colors.blue.shade700, fontWeight: FontWeight.bold),
+          ),
+          Container(
+            padding: const EdgeInsets.all(5),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.blue.shade100, Colors.green.shade50],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
+              // color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: Colors.blue, width: 2),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [for (var i in state.detailPacketWay) Text(i)],
+            ),
+          )
+        ],
+      );
+
+  _specificRequirements() => Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const SizedBox(height: 10),
+          Text(
+            'production_tasks_guests_special_requests'.tr,
+            style: TextStyle(
+                color: Colors.blue.shade700, fontWeight: FontWeight.bold),
+          ),
+          Container(
+            padding: const EdgeInsets.all(5),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.blue.shade100, Colors.green.shade50],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
+              // color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: Colors.blue, width: 2),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                for (var i in state.detailSpecificRequirements) Text(i)
+              ],
+            ),
+          )
+        ],
+      );
+
   @override
   Widget build(BuildContext context) {
     return pageBody(
-      actions: [
-        CombinationButton(
-          text: '查看包装手册',
-          click: () => feishuViewCloudDocFiles(query: queryFileName),
-        ),
-      ],
       title: isInstruction
           ? 'production_tasks_detail_instruction_no'.trArgs([
               state.detailInstructionNo.value,
@@ -158,7 +208,7 @@ class _ProductionTasksDetailPageState extends State<ProductionTasksDetailPage> {
         child: Column(
           children: [
             SizedBox(
-              height: 240,
+              height: (MediaQuery.of(context).size.width * 0.5)/16*9,
               child: Row(
                 children: [
                   Container(
@@ -346,6 +396,9 @@ class _ProductionTasksDetailPageState extends State<ProductionTasksDetailPage> {
                         productionTasksTableItem(data: item),
                       if (state.detailTableInfo.isNotEmpty)
                         productionTasksTableItem(type: 2),
+                      if (state.detailPacketWay.isNotEmpty) _packetWay(),
+                      if (state.detailSpecificRequirements.isNotEmpty)
+                        _specificRequirements()
                     ],
                   )),
             ),

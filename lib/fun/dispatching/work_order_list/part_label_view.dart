@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/part_detail_info.dart';
-import 'package:jd_flutter/fun/dispatching/part_process_scan/part_process_scan_view.dart';
 import 'package:jd_flutter/fun/dispatching/work_order_list/work_order_list_logic.dart';
+import 'package:jd_flutter/fun/reporting_work/part_process_scan/part_process_scan_view.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';

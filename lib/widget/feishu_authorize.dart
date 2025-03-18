@@ -37,7 +37,7 @@ const String cloudDocGetFileInfo =
 /// 飞书授权并查看知识库文件
 feishuViewWikiFiles({required String query}) {
   if (query.isEmpty) {
-    showSnackBar(message: '查询内容不能为空！');
+    showSnackBar(message: 'feishu_authorize_query_empty'.tr);
   } else {
     querySuccess(List<FeishuWikiSearchItemInfo> files) {
       pickFilePopup(
@@ -75,7 +75,7 @@ feishuViewWikiFiles({required String query}) {
 /// 飞书授权并查看知识库文件
 feishuViewCloudDocFiles({required String query}) {
   if (query.isEmpty) {
-    showSnackBar(message: '查询内容不能为空！');
+    showSnackBar(message: 'feishu_authorize_query_empty'.tr);
   } else {
     var authorizeToken = '';
     querySuccess(List<FeishuCloudDocSearchItemInfo> files) {
@@ -131,7 +131,7 @@ pickFilePopup({required List<Map> fileList, required Function(Map) viewFile}) {
   debugPrint(fileList.toString());
   if (fileList.length == 1) {
     viewFile.call(fileList.first);
-  }else{
+  } else {
     showCupertinoModalPopup(
       context: Get.overlayContext!,
       barrierDismissible: false,
@@ -162,7 +162,7 @@ pickFilePopup({required List<Map> fileList, required Function(Map) viewFile}) {
                   children: [
                     Expanded(
                       child: Text(
-                        '文件列表',
+                        'feishu_authorize_file_list'.tr,
                         style: const TextStyle(
                           fontSize: 24,
                           color: Colors.white,
@@ -211,7 +211,6 @@ pickFilePopup({required List<Map> fileList, required Function(Map) viewFile}) {
       ),
     );
   }
-
 }
 
 /// 飞书授权检查
@@ -219,7 +218,7 @@ feishuAuthorizeCheck({
   required Function() notAuthorize,
   required Function(String token) authorized,
 }) {
-  String feishuLoginCache = spGet(feishuUserTokenData) ?? '';
+  String feishuLoginCache = spGet(spSaveFeishuUserTokenData) ?? '';
   if (feishuLoginCache.isEmpty) {
     notAuthorize.call();
   } else {
@@ -240,7 +239,7 @@ feishuWikiSearch({
   required Function(List<FeishuWikiSearchItemInfo> list) success,
   required Function(String error) failed,
 }) {
-  loadingDialog('正在搜索知识库...');
+  loadingDialog('feishu_authorize_wiki_searching'.tr);
   Dio()
     ..interceptors.add(InterceptorsWrapper(onRequest: (options, handler) {
       options.print();
@@ -275,18 +274,25 @@ feishuWikiSearch({
         if (searchInfo.code == 0) {
           var wikiInfo = FeishuWikiSearchDataInfo.fromJson(searchInfo.data);
           if (wikiInfo.items?.isEmpty == true) {
-            failed.call('找不到相应的文件');
+            failed.call('feishu_authorize_not_find_file'.tr);
           } else {
             success.call(wikiInfo.items ?? []);
           }
         } else {
-          failed.call('wiki 知识库搜索失败：${searchInfo.code}  ${searchInfo.msg}');
+          failed.call(
+            'feishu_authorize_wiki_search_failed'.trArgs([
+              '${searchInfo.code}  ${searchInfo.msg}',
+            ]),
+          );
         }
       },
       onError: (e) {
         loadingDismiss();
         failed.call(
-            'wiki 知识库访问失败：${(e as DioException).response?.statusCode}  ${e.response?.statusMessage}');
+          'feishu_authorize_wiki_visit_failed'.trArgs([
+            '${(e as DioException).response?.statusCode}  ${e.response?.statusMessage}',
+          ]),
+        );
       },
     );
 }
@@ -298,7 +304,7 @@ feishuCloudDocSearch({
   required Function(List<FeishuCloudDocSearchItemInfo> list) success,
   required Function(String error) failed,
 }) {
-  loadingDialog('正在搜索云文档...');
+  loadingDialog('feishu_authorize_cloud_doc_searching'.tr);
   Dio()
     ..interceptors.add(InterceptorsWrapper(onRequest: (options, handler) {
       options.print();
@@ -328,18 +334,25 @@ feishuCloudDocSearch({
         if (searchInfo.code == 0) {
           var cloudDocInfo = FeishuCloudDocSearchInfo.fromJson(searchInfo.data);
           if (cloudDocInfo.docs?.isEmpty == true) {
-            failed.call('找不到相应的文件');
+            failed.call('feishu_authorize_not_find_file'.tr);
           } else {
             success.call(cloudDocInfo.docs ?? []);
           }
         } else {
-          failed.call('云文档 搜索失败：${searchInfo.code}  ${searchInfo.msg}');
+          failed.call(
+            'feishu_authorize_cloud_doc_search_failed'.trArgs([
+              '${searchInfo.code}  ${searchInfo.msg}',
+            ]),
+          );
         }
       },
       onError: (e) {
         loadingDismiss();
         failed.call(
-            '云文档 访问失败：${(e as DioException).response?.statusCode}  ${e.response?.statusMessage}');
+          'feishu_authorize_cloud_doc_visit_failed'.trArgs([
+            '${(e as DioException).response?.statusCode}  ${e.response?.statusMessage}',
+          ]),
+        );
       },
     );
 }
@@ -351,7 +364,7 @@ feishuGetCloudDocInfo({
   required Function(List<FeishuCloudDocFileMetasInfo> list) success,
   required Function(String error) failed,
 }) {
-  loadingDialog('正在获取文件明细...');
+  loadingDialog('feishu_authorize_getting_file_detail'.tr);
   Dio()
     ..interceptors.add(InterceptorsWrapper(onRequest: (options, handler) {
       options.print();
@@ -387,18 +400,25 @@ feishuGetCloudDocInfo({
         if (searchInfo.code == 0) {
           var cloudDocInfo = FeishuCloudDocFileInfo.fromJson(searchInfo.data);
           if (cloudDocInfo.metas?.isEmpty == true) {
-            failed.call('找不到相应的文件');
+            failed.call('feishu_authorize_not_find_file'.tr);
           } else {
             success.call(cloudDocInfo.metas ?? []);
           }
         } else {
-          failed.call('云文档 获取元文件失败：${searchInfo.code}  ${searchInfo.msg}');
+          failed.call(
+            'feishu_authorize_cloud_doc_get_metafile_failed'.trArgs([
+              '${searchInfo.code}  ${searchInfo.msg}',
+            ]),
+          );
         }
       },
       onError: (e) {
         loadingDismiss();
         failed.call(
-            '云文档 访问失败：${(e as DioException).response?.statusCode}  ${e.response?.statusMessage}');
+          'feishu_authorize_cloud_doc_visit_failed'.trArgs([
+            '${(e as DioException).response?.statusCode}  ${e.response?.statusMessage}',
+          ]),
+        );
       },
     );
 }
@@ -419,7 +439,7 @@ class FeishuAuthorize extends StatelessWidget {
   final WebViewController webViewController = WebViewController();
 
   _getUserAccessToken(String code) {
-    loadingDialog('正在获取用户Token...');
+    loadingDialog('feishu_authorize_getting_user_token'.tr);
     Dio()
       ..interceptors.add(InterceptorsWrapper(
         onRequest: (options, handler) {
@@ -455,17 +475,19 @@ class FeishuAuthorize extends StatelessWidget {
         (response) {
           loadingDismiss();
           var feishu = FeishuUserTokenInfo.fromJson(response.data);
-          spSave(feishuUserTokenData, jsonEncode(feishu));
+          spSave(spSaveFeishuUserTokenData, jsonEncode(feishu));
           if (feishu.code == 0) {
             successDialog(
-              content: '授权成功',
+              content: 'feishu_authorize_authorize_success'.tr,
               back: () => Get.back(result: feishu.accessToken),
             );
           } else {
             errorDialog(
-              content: '获取token失败：飞书错误码：${feishu.code} ',
+              content: 'feishu_authorize_authorize_failed_code'.trArgs([
+                feishu.code.toString(),
+              ]),
               back: () {
-                spSave(feishuUserTokenData, '');
+                spSave(spSaveFeishuUserTokenData, '');
                 Get.back();
               },
             );
@@ -474,10 +496,11 @@ class FeishuAuthorize extends StatelessWidget {
         onError: (e) {
           loadingDismiss();
           errorDialog(
-            content:
-                '获取token失败：${(e as DioException).response?.statusCode} ${e.response?.statusMessage}',
+            content: 'feishu_authorize_authorize_failed'.trArgs([
+              '${(e as DioException).response?.statusCode} ${e.response?.statusMessage}',
+            ]),
             back: () {
-              spSave(feishuUserTokenData, '');
+              spSave(spSaveFeishuUserTokenData, '');
               Get.back();
             },
           );
@@ -506,7 +529,10 @@ class FeishuAuthorize extends StatelessWidget {
                 if (code != null) {
                   _getUserAccessToken(code);
                 } else {
-                  errorDialog(content: '获取授权码失败！', back: () => Get.back());
+                  errorDialog(
+                    content: 'feishu_authorize_get_authorize_code_failed'.tr,
+                    back: () => Get.back(),
+                  );
                 }
               }
             },

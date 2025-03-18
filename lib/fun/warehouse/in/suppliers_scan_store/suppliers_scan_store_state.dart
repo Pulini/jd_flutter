@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/bar_code.dart';
 import 'package:jd_flutter/bean/http/response/sap_picking_info.dart';
 import 'package:jd_flutter/bean/http/response/used_bar_code_info.dart';
-import 'package:jd_flutter/constant.dart';
 
 
 class SuppliersScanStoreState {
@@ -23,7 +22,7 @@ class SuppliersScanStoreState {
   //从数据库读取条码信息
   SuppliersScanStoreState() {
     BarCodeInfo.getSave(
-      type: barCodeTypes[3],
+      type: BarCodeReportType.supplierScanInStock.text,
       callback: (list) => barCodeList.value = list,
     );
   }

@@ -63,16 +63,16 @@ class HomeLogic extends GetxController {
             v.classify == state.navigationBar[state.nBarIndex].className),
       );
     } else {
-      var list = <ButtonItem>[];
+      var bi = <ButtonItem>[];
       for (var fun in functions) {
         if (fun is HomeButtonGroup) {
-          list.addAll(fun.functionGroup);
+          bi.addAll(fun.functionGroup);
         } else {
-          list.add(fun);
+          bi.add(fun);
         }
       }
       list.addAll(
-        list.where((v) =>
+        bi.where((v) =>
             v.name.toUpperCase().contains(state.search.toUpperCase()) ||
             v.description.toUpperCase().contains(state.search.toUpperCase())),
       );
@@ -82,7 +82,7 @@ class HomeLogic extends GetxController {
 
   //底部弹窗
   takeAvatarPhoto() {
-    takePhoto((f) {
+    takePhoto(callback: (f) {
       state.changeUserAvatar(
         file: f,
         success: (s) => showSnackBar(
@@ -132,10 +132,10 @@ class HomeLogic extends GetxController {
     }
     var phone = '';
     switch (spGet(spSaveLoginType)) {
-      case loginTypePhone:
+      case spSaveLoginTypePhone:
         phone = spGet(spSaveLoginPhone);
         break;
-      case loginTypeFace:
+      case spSaveLoginTypeFace:
         phone = spGet(spSaveLoginFace);
         break;
     }

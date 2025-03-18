@@ -3,7 +3,6 @@ import 'package:jd_flutter/bean/http/response/production_tasks_info.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 
-
 class ProductionTasksState {
   var mqttServer = '192.168.99.229';
   var mqttPort = 1883;
@@ -12,9 +11,9 @@ class ProductionTasksState {
     'JJb_WorkLine/${userInfo?.departmentID}/rfid_record',
     'JJb_WorkLine/outbox_data',
   ];
-  var mqttSend='JJb_WorkLine/${userInfo?.departmentID}/sync';
+  var mqttSend = 'JJb_WorkLine/${userInfo?.departmentID}/sync';
 
-  var selected = (-1).obs;
+  var selected = -1;
   var orderList = <ProductionTasksSubInfo>[];
 
   var tableInfo = <WorkCardSizeInfos>[].obs;
@@ -28,15 +27,19 @@ class ProductionTasksState {
   var customerPO = ''.obs;
   var shouldPackQty = (0.0).obs;
   var packagedQty = (0.0).obs;
-  var packetWay=<String>[].obs;
-  var specificRequirements=<String>[].obs;
+  var packetWay = <String>[].obs;
+  var specificRequirements = <String>[].obs;
 
   var detailTableInfo = <ProductionTasksDetailItemInfo>[].obs;
   var detailInstructionNo = ''.obs;
   var detailCustomerPO = ''.obs;
   var detailShouldPackQty = (0.0).obs;
   var detailPackagedQty = (0.0).obs;
+  var detailPacketWay = <String>[].obs;
+  var detailSpecificRequirements = <String>[].obs;
 
+  var packMaterialList = <ProductionTasksPackMaterialInfo>[];
+  var packMaterialShowList = <ProductionTasksPackMaterialInfo>[].obs;
 
   getProductionOrderSchedule({
     required Function() success,
@@ -74,8 +77,8 @@ class ProductionTasksState {
       tableInfo.value = [
         ...orderList[0].workCardSizeInfo ?? [],
       ];
-      packetWay.value=orderList[0].packetWay??[];
-      specificRequirements.value=orderList[0].specificRequirements??[];
+      packetWay.value = orderList[0].packetWay ?? [];
+      specificRequirements.value = orderList[0].specificRequirements ?? [];
     } else {
       todayTargetQty.value = 0.0;
       todayCompleteQty.value = 0.0;
@@ -86,8 +89,8 @@ class ProductionTasksState {
       shouldPackQty.value = 0.0;
       packagedQty.value = 0.0;
       tableInfo.value = [];
-      packetWay.value=[];
-      specificRequirements.value=[];
+      packetWay.value = [];
+      specificRequirements.value = [];
     }
   }
 
@@ -136,6 +139,34 @@ class ProductionTasksState {
         detailCustomerPO.value = detail.clientOrderNumber ?? '';
         detailShouldPackQty.value = detail.total ?? 0;
         detailPackagedQty.value = detail.hasInstall ?? 0;
+        detailPacketWay.value = detail.packetWay ?? [];
+        detailSpecificRequirements.value = detail.specificRequirements ?? [];
+        success.call();
+      } else {
+        error.call(response.message ?? 'query_default_error'.tr);
+      }
+    });
+  }
+
+  getPackMaterialInfo({
+    required String ins,
+    required Function() success,
+    required Function(String) error,
+  }) {
+    sapPost(
+      loading: 'production_tasks_getting_pack_material_info'.tr,
+      method: webApiSapGetPackMaterialInfo,
+      body: {
+        'VBELN': ins,
+        'WERKS': userInfo?.sapFactory,
+      },
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        packMaterialList = [
+          for (var json in response.data)
+            ProductionTasksPackMaterialInfo.fromJson(json)
+        ];
+        packMaterialShowList.value=packMaterialList;
         success.call();
       } else {
         error.call(response.message ?? 'query_default_error'.tr);

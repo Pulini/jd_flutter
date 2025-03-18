@@ -794,6 +794,9 @@ const webApiAddAbnormalQuality = 'api/QMProcessFlowEx/QMAbnormityBysuitID';
 //sap送货单列表
 const webApiSapGetDeliveryList = 'sap/zapp/ZFUN_APP_GET_DELI_1500';
 
+//sap获取客户订单包材信息
+const webApiSapGetPackMaterialInfo = 'sap/zapp/ZFUNSD_PMAT_GET';
+
 //sap送货单明细
 const webApiSapGetDeliveryDetail = 'sap/zapp/ZFUN_APP_GET_DELIDETAIL_1500';
 
@@ -992,3 +995,42 @@ const webApiGetUnReportedBarCode = "api/scanjobbooking/GetUnReportedBarCode";
 //生产扫码入库提交
 const webApiUploadProductionScanning =
     "api/ScanJobBooking/SubmitBarCode2PrdInStockCollectBillNew";
+
+//根据SAP供应商ID获取待稽查送货单列表
+const webApiGetDeliListBySupplier = 'api/Incoming/GetDeliListBySupplier';
+
+//稽查扫码获取信息
+const webApiGetDeliListByBarCode = 'api/Incoming/GetInspectionDetail';
+
+//提交稽查申请
+const webApiInspectionApplication = 'api/Incoming/InspectionApplication';
+
+//获取稽查列表
+const webApiGetIncomingList = 'api/Incoming/GetIncomingList';
+
+//稽查详情,根据FInterID获取稽查单信息
+const webApiGetIncomingMessage = 'api/Incoming/GetIncomingMessage';
+
+//稽查结果提交
+const webApiIncomingInspection = 'api/Incoming/IncomingInspection';
+
+//稽查签收
+const webApiSigning = 'api/Incoming/Signing';
+
+//异常上传
+const webApiAbnormalUpload = 'api/Incoming/AbnormalUpload';
+
+//提交异常处理
+const webApiAuditExceptionHandling = 'api/Incoming/AuditExceptionHandling';
+
+//稽查结案
+const webApiClosingCase = 'api/Incoming/ClosingCase';
+
+//获取已入库条码数据
+const webApiGetBarCodeStatus = 'api/BarCode/GetBarCodeStatus';
+
+//根据条形码数据,获得对应的制程
+const webApiGetProcessFlowInfoByBarCode = 'api/ProcessFlow/GetProcessFlowInfoByBarCode';
+
+//金灿领料出库
+const webApiJinCanMaterialOutStockSubmit = 'api/ScanJobBooking/JincanMaterialOutStockSubmit';

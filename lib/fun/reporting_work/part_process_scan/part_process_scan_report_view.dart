@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/scan_barcode_info.dart';
-import 'package:jd_flutter/fun/dispatching/part_process_scan/part_process_scan_dispatch_view.dart';
-import 'package:jd_flutter/fun/dispatching/part_process_scan/part_process_scan_logic.dart';
-import 'package:jd_flutter/fun/dispatching/part_process_scan/part_process_scan_quick_dispatch_view.dart';
+import 'package:jd_flutter/fun/reporting_work/part_process_scan/part_process_scan_dispatch_view.dart';
+import 'package:jd_flutter/fun/reporting_work/part_process_scan/part_process_scan_logic.dart';
+import 'package:jd_flutter/fun/reporting_work/part_process_scan/part_process_scan_quick_dispatch_view.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/check_box_widget.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
@@ -68,7 +68,8 @@ class _PartProcessScanReportPageState extends State<PartProcessScanReportPage>
                     color: Colors.blue,
                   ),
                 ),
-                Text('part_process_scan_report_allocation_situation'.tr, style: style),
+                Text('part_process_scan_report_allocation_situation'.tr,
+                    style: style),
                 Expanded(
                   child: percentIndicator(
                     max: data.getProcessMax(),
@@ -100,9 +101,7 @@ class _PartProcessScanReportPageState extends State<PartProcessScanReportPage>
                   ),
                   padding: const EdgeInsets.only(
                     left: 20,
-                    top: 5,
                     right: 20,
-                    bottom: 5,
                   ),
                   child: Row(
                     children: [
@@ -115,6 +114,16 @@ class _PartProcessScanReportPageState extends State<PartProcessScanReportPage>
                         hint: 'part_process_scan_report_record_working'.tr,
                         text: worker.distributionQty.toShowString(),
                       ),
+                      IconButton(
+                        onPressed: () => askDialog(
+                          content: '确定要删除该人员吗？',
+                          confirm: () => data.distribution.remove(worker),
+                        ),
+                        icon: const Icon(
+                          Icons.delete_forever,
+                          color: Colors.red,
+                        ),
+                      )
                     ],
                   ),
                 )
@@ -123,140 +132,127 @@ class _PartProcessScanReportPageState extends State<PartProcessScanReportPage>
         ));
   }
 
-  _reportItem1(ReportInfo ri) {
-    return Card(
-      child: ListTile(
-        title: Row(
-          children: [
-            expandedTextSpan(
-                flex: 3,
-                hint: 'part_process_scan_report_process'.tr,
-                text: ri.name ?? '',
-                fontSize: 18),
-            expandedTextSpan(
-              hint: 'part_process_scan_report_size'.tr,
-              text: ri.size ?? '',
-              textColor: Colors.grey,
-            ),
-          ],
+  _reportItemTitle() => Row(children: [
+        expandedFrameText(
+          flex: 20,
+          text: 'part_process_scan_report_title_process'.tr,
+          backgroundColor: Colors.blue,
+          textColor: Colors.white,
+          isBold: true,
         ),
-        subtitle: Row(
-          children: [
-            expandedTextSpan(
-              flex: 2,
-              hint: 'part_process_scan_report_ins_number'.tr,
-              text: ri.mtono ?? '',
-              textColor: Colors.grey,
-            ),
-            expandedTextSpan(
-              hint: 'part_process_scan_report_ins_qty'.tr,
-              text: ri.mtonoQty.toDoubleTry().toShowString(),
-              textColor: Colors.green,
-            ),
-            expandedTextSpan(
-              hint: 'part_process_scan_report_quantity'.tr,
-              text: ri.qty.toDoubleTry().toShowString(),
-              textColor: Colors.green,
-            ),
-          ],
+        expandedFrameText(
+          flex: 10,
+          text: 'part_process_scan_report_title_ins_number'.tr,
+          backgroundColor: Colors.blue,
+          textColor: Colors.white,
+          isBold: true,
         ),
-      ),
-    );
-  }
+        expandedFrameText(
+          flex: 5,
+          text: 'part_process_scan_report_title_size'.tr,
+          backgroundColor: Colors.blue,
+          textColor: Colors.white,
+          isBold: true,
+        ),
+        expandedFrameText(
+          flex: 7,
+          text: 'part_process_scan_report_title_ins_qty'.tr,
+          backgroundColor: Colors.blue,
+          textColor: Colors.white,
+          isBold: true,
+        ),
+        expandedFrameText(
+          flex: 7,
+          text: 'part_process_scan_report_title_report_qty'.tr,
+          backgroundColor: Colors.blue,
+          textColor: Colors.white,
+          isBold: true,
+        ),
+      ]);
 
-  _reportItem2(ReportInfo ri) {
-    return Card(
-      color: Colors.orange.shade100,
-      child: ListTile(
-        title: Row(
-          children: [
-            Expanded(
-              flex: 3,
-              child: Text(
-                'part_process_scan_report_ins_total'.tr,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                ),
-              ),
-            ),
-            expandedTextSpan(
-              hint: 'part_process_scan_report_size'.tr,
-              text: ri.size ?? '',
-              textColor: Colors.grey,
-            ),
-          ],
+  _reportItem1(ReportInfo item) => Row(children: [
+        expandedFrameText(
+          flex: 20,
+          text: item.name ?? '',
+          backgroundColor: Colors.white,
         ),
-        subtitle: Row(
-          children: [
-            expandedTextSpan(
-              flex: 2,
-              hint: 'part_process_scan_report_ins_number'.tr,
-              text: ri.mtono ?? '',
-              textColor: Colors.grey,
-            ),
-            expandedTextSpan(
-              hint: 'part_process_scan_report_ins_qty'.tr,
-              text: ri.mtonoQty.toDoubleTry().toShowString(),
-              textColor: Colors.green,
-            ),
-            expandedTextSpan(
-              hint: 'part_process_scan_report_ins_qty'.tr,
-              text: ri.qty.toDoubleTry().toShowString(),
-              textColor: Colors.green,
-            ),
-          ],
+        expandedFrameText(
+          flex: 10,
+          text: item.mtono ?? '',
+          backgroundColor: Colors.white,
         ),
-      ),
-    );
-  }
+        expandedFrameText(
+          flex: 5,
+          text: item.size ?? '',
+          backgroundColor: Colors.white,
+        ),
+        expandedFrameText(
+          flex: 7,
+          text: item.mtonoQty.toShowString(),
+          backgroundColor: Colors.white,
+        ),
+        expandedFrameText(
+          flex: 7,
+          text: item.qty.toShowString(),
+          backgroundColor: Colors.white,
+        ),
+      ]);
 
-  _reportItem3(ReportInfo ri) {
-    return Card(
-      color: Colors.greenAccent.shade100,
-      child: ListTile(
-        title: Row(
-          children: [
-            Expanded(
-              flex: 3,
-              child: Text(
-                'part_process_scan_report_ins_total'.tr,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                ),
-              ),
-            ),
-            expandedTextSpan(
-              hint: 'part_process_scan_report_size'.tr,
-              text: ri.size ?? '',
-              textColor: Colors.grey,
-            ),
-          ],
+  _reportItem2(ReportInfo item) => Row(children: [
+        expandedFrameText(
+          flex: 20,
+          text: 'part_process_scan_report_ins_total'.tr,
+          backgroundColor: Colors.orange.shade100,
         ),
-        subtitle: Row(
-          children: [
-            expandedTextSpan(
-              flex: 2,
-              hint: 'part_process_scan_report_ins_number'.tr,
-              text: ri.mtono ?? '',
-              textColor: Colors.grey,
-            ),
-            expandedTextSpan(
-              hint: 'part_process_scan_report_ins_qty'.tr,
-              text: ri.mtonoQty.toDoubleTry().toShowString(),
-              textColor: Colors.green,
-            ),
-            expandedTextSpan(
-              hint: 'part_process_scan_report_quantity'.tr,
-              text: ri.qty.toDoubleTry().toShowString(),
-              textColor: Colors.green,
-            ),
-          ],
+        expandedFrameText(
+          flex: 10,
+          text: item.mtono ?? '',
+          backgroundColor: Colors.orange.shade100,
         ),
-      ),
-    );
-  }
+        expandedFrameText(
+          flex: 5,
+          text: '',
+          backgroundColor: Colors.orange.shade100,
+        ),
+        expandedFrameText(
+          flex: 7,
+          text: item.mtonoQty.toShowString(),
+          backgroundColor: Colors.orange.shade100,
+        ),
+        expandedFrameText(
+          flex: 7,
+          text: item.qty.toShowString(),
+          backgroundColor: Colors.orange.shade100,
+        ),
+      ]);
+
+  _reportItem3(ReportInfo item) => Row(children: [
+        expandedFrameText(
+          flex: 20,
+          text: 'part_process_scan_report_part_total'.tr,
+          backgroundColor: Colors.greenAccent.shade100,
+        ),
+        expandedFrameText(
+          flex: 10,
+          text: '',
+          backgroundColor: Colors.greenAccent.shade100,
+        ),
+        expandedFrameText(
+          flex: 5,
+          text: '',
+          backgroundColor: Colors.greenAccent.shade100,
+        ),
+        expandedFrameText(
+          flex: 7,
+          text: item.mtonoQty.toShowString(),
+          backgroundColor: Colors.greenAccent.shade100,
+        ),
+        expandedFrameText(
+          flex: 7,
+          text: item.qty.toShowString(),
+          backgroundColor: Colors.greenAccent.shade100,
+        ),
+      ]);
 
   _barCodeItem(BarCodeInfo bci) {
     return Obx(() => Card(
@@ -372,19 +368,19 @@ class _PartProcessScanReportPageState extends State<PartProcessScanReportPage>
                   )
                 ],
               ),
-              ListView.builder(
-                  padding: const EdgeInsets.all(8),
-                  itemCount: state.modifyReportList.length,
-                  itemBuilder: (context, index) {
-                    var data = state.modifyReportList[index];
-                    if (data.type == '0') {
-                      return _reportItem1(data);
-                    } else if (data.type == '1') {
-                      return _reportItem2(data);
-                    } else {
-                      return _reportItem3(data);
-                    }
-                  }),
+              ListView(
+                padding: const EdgeInsets.all(8),
+                children: [
+                  _reportItemTitle(),
+                  for (var item in state.modifyReportList)
+                    if (item.type == 0)
+                      _reportItem1(item)
+                    else if (item.type == 1)
+                      _reportItem2(item)
+                    else
+                      _reportItem3(item)
+                ],
+              ),
               ListView.builder(
                 padding: const EdgeInsets.all(8),
                 itemCount: state.modifyBarCodeList.length,

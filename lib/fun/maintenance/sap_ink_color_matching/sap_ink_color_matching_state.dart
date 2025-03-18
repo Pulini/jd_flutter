@@ -10,6 +10,7 @@ class SapInkColorMatchingState {
   var typeBody = ''.obs;
   var idTested = false.obs;
   var orderList = <SapInkColorMatchOrderInfo>[].obs;
+  var remarks=''.obs;
 
   var mixDeviceName = '';
   var mixDeviceServerIp = '';
@@ -43,6 +44,7 @@ class SapInkColorMatchingState {
     typeBodyMaterialList = [];
     typeBodyServerIp = '';
     typeBodyScalePortList = [];
+    remarks.value='';
 
     mixDeviceName='';
     mixDeviceServerIp='';
@@ -162,6 +164,7 @@ class SapInkColorMatchingState {
         'WERKS': userInfo?.sapFactory ?? '',
         'ZCOLORNAM': inkMaster,
         'ZZXTNO': newTypeBody,
+        'ZZPART1': remarks.value,
         'ZMIXNTGEW': mixActualWeight,
         'ZMIXNTGEW_IDEAL': mixTheoreticalWeight,
         'ITEM': [

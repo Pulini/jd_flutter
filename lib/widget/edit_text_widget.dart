@@ -53,8 +53,8 @@ class EditText extends StatelessWidget {
           border: const OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(20)),
           ),
-          hintText: hint,
-          hintStyle: const TextStyle(color: Colors.grey),
+          labelText: hint,
+          labelStyle: const TextStyle(color: Colors.black54),
           suffixIcon: IconButton(
             icon: const Icon(Icons.close, color: Colors.grey),
             onPressed: () {
@@ -165,8 +165,8 @@ class NumberDecimalEditText extends StatelessWidget {
           border: const OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(20)),
           ),
-          hintText: hint,
-          hintStyle: const TextStyle(color: Colors.grey),
+          labelText: hint,
+          labelStyle: const TextStyle(color: Colors.black54),
           suffixIcon: IconButton(
             icon: const Icon(Icons.close, color: Colors.grey),
             onPressed: () =>
@@ -235,8 +235,8 @@ class NumberEditText extends StatelessWidget {
           border: const OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(20)),
           ),
-          hintText: hint,
-          hintStyle: const TextStyle(color: Colors.grey),
+          labelText: hint,
+          labelStyle: const TextStyle(color: Colors.black54),
           suffixIcon: showClean?IconButton(
             icon: const Icon(Icons.close, color: Colors.grey),
             onPressed: () => {

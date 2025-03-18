@@ -12,18 +12,7 @@ class LoginState {
   var buttonName = 'get_verify_code'.tr.obs;
   var countTimer = 0;
   var isReLogin = false;
-  //获取验证码
-  String getDebugVCode() {
-    var date = DateTime.now();
-    var now = '${date.year.toString().substring(2, 4)}'
-        '${date.month.toString().padLeft(2, '0')}'
-        '${date.day.toString().padLeft(2, '0')}';
-    var vCode = '';
-    for (var i = now.length; i > 0; i--) {
-      vCode += now.substring(i - 1, i);
-    }
-    return vCode;
-  }
+
   faceLogin({
     required String phone,
     required Function(String s) success,
