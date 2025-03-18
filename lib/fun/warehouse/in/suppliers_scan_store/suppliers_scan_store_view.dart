@@ -235,4 +235,6 @@ class _SuppliersScanStorePageState extends State<SuppliersScanStorePage> {
     });
     super.initState();
   }
+
+
 }

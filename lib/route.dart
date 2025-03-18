@@ -34,6 +34,7 @@ import 'fun/report/view_instruction_details/view_instruction_details_view.dart';
 import 'fun/report/view_process_specification/view_process_specification_view.dart';
 import 'fun/report/worker_production_detail/worker_production_detail_view.dart';
 import 'fun/report/worker_production_report/worker_production_report_view.dart';
+import 'fun/warehouse/in/process_report/process_report_view.dart';
 import 'fun/warehouse/in/sap_injection_molding_stock_in/sap_injection_molding_stock_in_view.dart';
 import 'fun/warehouse/in/sap_no_label_stock_in/sap_no_label_stock_in_view.dart';
 import 'fun/warehouse/in/sap_produce_stock_in/sap_produce_stock_in_view.dart';
@@ -402,6 +403,13 @@ class RouteConfig {
     const ProductionScanWarehousePage(),
   );
 
+  //工序汇报入库
+  static Routes processReportWarehouse = Routes(
+    '/process_report_warehouse',
+    99,
+    const ProcessReportPage(),
+  );
+
   //本地功能入口列表
   static List<Routes> routeList = [
     dailyReport,
@@ -452,7 +460,8 @@ class RouteConfig {
     sapInkColorMatching,
     productionTasks,
     suppliersScanStore,
-    productionScanWarehouse
+    productionScanWarehouse,
+    processReportWarehouse
   ];
 
   static List<GetPage> appRoutes = [
@@ -664,6 +673,10 @@ class RouteConfig {
     GetPage(
       name: productionScanWarehouse.name,
       page: () => productionScanWarehouse.page,
+    ),
+    GetPage(
+      name: processReportWarehouse.name,
+      page: () => processReportWarehouse.page,
     ),
   ];
 }

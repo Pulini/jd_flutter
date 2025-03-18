@@ -74,7 +74,7 @@ class TimelyInventoryLogic extends GetxController {
   }) {
     httpPost(
       method: webApiModifyStorageLocation,
-      loading: '正在提交修改...',
+      loading: 'timely_inventory_submitting_modifications'.tr,
       body: {
         'BatchNumber':data.batch,
         'StockID':data.stockID,

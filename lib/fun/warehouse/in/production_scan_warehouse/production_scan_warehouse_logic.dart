@@ -17,7 +17,7 @@ class ProductionScanWarehouseLogic extends GetxController {
   //添加条码
   scanCode(String code) {
     if (state.barCodeList.any((v) => v.code == code)) {
-      showSnackBar( message: '条码已存在', isWarning: true);
+      showSnackBar( message: 'production_scan_hava_barcode'.tr, isWarning: true);
     } else {
       if (code.isPallet()) {
         checkPallet(
@@ -31,15 +31,15 @@ class ProductionScanWarehouseLogic extends GetxController {
                   break;
                 case 'X':
                   showSnackBar(
-                       message: '请使用空托盘入库！！', isWarning: true);
+                       message: 'production_scan_use_empty_pallets'.tr, isWarning: true);
                   break;
                 case 'Y':
                   showSnackBar(
-                   message: '此托盘已在其他仓库使用！！', isWarning: true);
+                   message: 'production_scan_used_pallets'.tr, isWarning: true);
                   break;
               }
             } else {
-              showSnackBar( message: '此托盘不存在！！', isWarning: true);
+              showSnackBar( message: 'production_scan_not_exist'.tr, isWarning: true);
             }
           },
           error: (msg) => errorDialog(content: msg),
@@ -81,7 +81,7 @@ class ProductionScanWarehouseLogic extends GetxController {
         refresh.call();
       } else {
         refresh.call();
-        showSnackBar(title: '温馨提示', message: response.message ?? '');
+        showSnackBar(title: 'dialog_default_title_information'.tr, message: response.message ?? '');
       }
     });
   }
@@ -93,7 +93,7 @@ class ProductionScanWarehouseLogic extends GetxController {
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在获取托盘信息...',
+      loading: 'production_scan_obtaining_tray_information'.tr,
       method: webApiSapGetPalletList,
       body: {
         'WERKS': '1500',
@@ -154,7 +154,7 @@ class ProductionScanWarehouseLogic extends GetxController {
           state.isCheck = false;
           state.barCodeList.clear();
         } else {
-          showSnackBar( message: '本地数据库删除失败', isWarning: true);
+          showSnackBar( message: 'production_scan_delete_failed'.tr, isWarning: true);
         }
       },
     );
@@ -165,7 +165,7 @@ class ProductionScanWarehouseLogic extends GetxController {
     if (state.barCodeList.isNotEmpty) {
       httpPost(
         method: webApiNewGetSubmitBarCodeReport,
-        loading: '正在获取汇总信息...',
+        loading: 'warehouse_allocation_summary_information'.tr,
         body: {
           'BarCodeList': [
             for (var i = 0; i < state.barCodeList.length; ++i)
@@ -189,7 +189,7 @@ class ProductionScanWarehouseLogic extends GetxController {
             if (v == null) {
               state.peopleNumber.text = '';
               state.peopleName.value = '';
-              showSnackBar(title: '温馨提示', message: '检查未完成');
+              showSnackBar(title: 'dialog_default_title_information'.tr, message: '检查未完成');
             } else if (v == true) {
               submitCode();
             }
@@ -199,7 +199,7 @@ class ProductionScanWarehouseLogic extends GetxController {
         }
       });
     } else {
-      showSnackBar(title: '警告', message: '没有条码可提交');
+      showSnackBar(title: 'shack_bar_warm'.tr, message: 'production_scan_not_barcode'.tr);
     }
   }
 
@@ -217,7 +217,7 @@ class ProductionScanWarehouseLogic extends GetxController {
     if (state.barCodeList.isNotEmpty) {
       httpPost(
         method: webApiGetUnReportedBarCode,
-        loading: '正在获取校验条码...',
+        loading: 'production_scan_verification_barcode'.tr,
         body: [
           for (var i = 0; i < state.barCodeList.length; ++i)
             {
@@ -256,7 +256,7 @@ class ProductionScanWarehouseLogic extends GetxController {
         }
       });
     } else {
-      showSnackBar(title: '警告', message: '没有条码可提交');
+      showSnackBar(title: 'shack_bar_warm'.tr, message: 'production_scan_not_barcode'.tr);
     }
   }
 
@@ -283,7 +283,7 @@ class ProductionScanWarehouseLogic extends GetxController {
         successDialog(
             content: response.message, back: () => getBarCodeStatusByDepartmentID(refresh: (){}));
       } else {
-        showSnackBar(title: '温馨提示', message: response.message ?? '');
+        showSnackBar(title: 'dialog_default_title_information'.tr, message: response.message ?? '');
       }
     });
   }

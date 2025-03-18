@@ -1,0 +1,163 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:jd_flutter/fun/warehouse/in/process_report/process_report_logic.dart';
+import '../../../../bean/http/response/bar_code.dart';
+import '../../../../widget/combination_button_widget.dart';
+import '../../../../widget/custom_widget.dart';
+import '../../../../widget/edit_text_widget.dart';
+import '../../../../widget/scanner.dart';
+
+class ProcessReportPage extends StatefulWidget {
+  const ProcessReportPage({super.key});
+
+  @override
+  State<ProcessReportPage> createState() => _ProcessReportPageState();
+}
+
+class _ProcessReportPageState extends State<ProcessReportPage> {
+  final logic = Get.put(ProcessReportLogic());
+  final state = Get.find<ProcessReportLogic>().state;
+
+  _item(BarCodeInfo code) {
+    return GestureDetector(
+        onLongPress: () => {
+          logic.deleteCode(code),
+        },
+        child: Container(
+          padding: const EdgeInsets.all(5),
+          margin: const EdgeInsets.only(bottom: 5),
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(5),
+              border: Border.all(
+                  width: 1, color: code.isUsed ? Colors.red : Colors.black)),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                code.code.toString(),
+                style: TextStyle(
+                    color: code.isUsed ? Colors.red.shade700 : Colors.black),
+              ),
+              Text(
+                code.isUsed ? 'production_scan_not_reported'.tr : '',
+                style: TextStyle(
+                    color: code.isUsed ? Colors.red.shade700 : Colors.black),
+              ),
+            ],
+          ),
+        ));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return pageBody(
+      actions: [
+        Padding(
+          padding: const EdgeInsets.only(top: 10, right: 30),
+          child: InkWell(
+            child: const Icon(Icons.menu, color: Colors.blueAccent),
+            onTap: () => {
+                state.showClick.value = !state.showClick.value
+            },
+          ),
+        )
+      ],
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: EditText(
+                  hint: 'process_report_manual_input'.tr,
+                  onChanged: (v) => state.code = v,
+                ),
+              ),
+              InkWell(
+                child: const Icon(Icons.qr_code_scanner, color: Colors.grey),
+                onTap: () => {
+                  Get.to(() => const Scanner())?.then((v) {
+                    if (v != null) {    //调起摄像头扫码后的返回
+
+
+                    }
+                  }),
+
+                },
+              ),
+            ],
+          ),
+          Expanded(
+            child: Obx(
+                  () => ListView.builder(
+                padding: const EdgeInsets.all(8),
+                itemCount: state.barCodeList.length,
+                itemBuilder: (BuildContext context, int index) =>
+                    _item(state.barCodeList[index]),
+              ),
+            ),
+          ),
+          Obx(() => Padding(
+            padding: const EdgeInsets.only(left: 10, right: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                textSpan(
+                  hint: '已扫描：',
+                  text: state.barCodeList.length.toString(),
+                ),
+                textSpan(
+                  hint: '托盘号：',
+                  text: state.palletNumber.value,
+                ),
+              ],
+            ),
+          )),
+          Row(
+            children: [
+              Expanded(
+                flex: 1,
+                child: CombinationButton(
+                  text: '手动添加',
+                  click: () {
+                    logic.scanCode(state.code);
+                  },
+                  combination: Combination.left,
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: CombinationButton(
+                  text: '提交',
+                  click: () {
+
+
+                  },
+                  combination: Combination.right,
+                ),
+              )
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+
+  @override
+  void initState() {
+    pdaScanner(scan: (code) {
+      if (code.isNotEmpty) {
+        logic.scanCode(code);
+      }
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    Get.delete<ProcessReportLogic>();
+    super.dispose();
+  }
+}

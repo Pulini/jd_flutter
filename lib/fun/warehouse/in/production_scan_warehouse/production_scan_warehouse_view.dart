@@ -40,9 +40,9 @@ class _ProductionScanWarehousePageState
               width: 200,
               child: Column(
                 children: [
-                  const Text(
-                    '入库条件',
-                    style: TextStyle(
+                   Text(
+                    'production_scan_storage_conditions'.tr,
+                    style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.blue,
                         fontSize: 18),
@@ -53,7 +53,7 @@ class _ProductionScanWarehousePageState
                       Expanded(
                         child: NumberEditText(
                           hasFocus: true,
-                          hint: '请输入操作人工号',
+                          hint: 'production_scan_operator_number'.tr,
                           controller: state.peopleNumber,
                           onClear: () => {
                             state.peopleName.value = '',
@@ -75,7 +75,7 @@ class _ProductionScanWarehousePageState
                         onPressed: () => {
                           if (state.peopleNumber.text.isEmpty)
                             {
-                              showSnackBar(title: '警告', message: '请输入操作人工号'),
+                              showSnackBar(title: 'shack_bar_warm'.tr, message: 'production_scan_operator_number'.tr),
                             }
                           else
                             {
@@ -83,7 +83,7 @@ class _ProductionScanWarehousePageState
                               logic.goReport(),
                             }
                         },
-                        child: const Text('确定'),
+                        child:  Text('dialog_default_confirm'.tr),
                       ),
                       TextButton(
                         onPressed: () => {
@@ -91,7 +91,7 @@ class _ProductionScanWarehousePageState
                           state.peopleNumber.clear(),
                           Navigator.of(context).pop()
                         },
-                        child: const Text('取消'),
+                        child:  Text('dialog_default_cancel'.tr),
                       )
                     ],
                   )
@@ -126,7 +126,7 @@ class _ProductionScanWarehousePageState
                     color: code.isUsed ? Colors.red.shade700 : Colors.black),
               ),
               Text(
-                code.isUsed ? '未汇报' : '',
+                code.isUsed ? 'production_scan_not_reported'.tr : '',
                 style: TextStyle(
                     color: code.isUsed ? Colors.red.shade700 : Colors.black),
               ),
@@ -142,11 +142,11 @@ class _ProductionScanWarehousePageState
         Padding(
           padding: const EdgeInsets.only(top: 10, right: 30),
           child: InkWell(
-            child: const Text('清空'),
+            child:  Text('production_scan_clear'.tr),
             onTap: () => {
               askDialog(
-                title: '温馨提示',
-                content: '确定要清空条码吗?',
+                title: 'dialog_default_title_information'.tr,
+                content: 'production_scan_clear_the_barcode'.tr,
                 confirm: () {
                   logic.clearBarCodeList();
                 },
@@ -169,7 +169,7 @@ class _ProductionScanWarehousePageState
                     Expanded(
                       flex: 5,
                       child: EditText(
-                        hint: '手动录入登记',
+                        hint: 'warehouse_allocation_input'.tr,
                         onChanged: (s) => {
                           state.handCode = s,
                         },
@@ -179,7 +179,7 @@ class _ProductionScanWarehousePageState
                       flex: 2,
                       child: SwitchButton(
                         onChanged: (s) => state.red.value = s,
-                        name: '红冲',
+                        name: 'production_scan_red'.tr,
                         value: state.red.value,
                       ),
                     ),
@@ -201,11 +201,11 @@ class _ProductionScanWarehousePageState
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       textSpan(
-                        hint: '已扫描：',
+                        hint: 'production_scan_scan'.tr,
                         text: state.barCodeList.length.toString(),
                       ),
                       textSpan(
-                        hint: '托盘号：',
+                        hint: 'production_scan_tray_number'.tr,
                         text: state.palletNumber.value,
                       ),
                     ],
@@ -216,7 +216,7 @@ class _ProductionScanWarehousePageState
                 Expanded(
                   flex: 1,
                   child: CombinationButton(
-                    text: '手动添加',
+                    text: 'warehouse_allocation_manually_add'.tr,
                     click: () {
                       if (state.handCode.isNotEmpty) {
                         logic.scanCode(state.handCode);
@@ -228,21 +228,21 @@ class _ProductionScanWarehousePageState
                 Expanded(
                   flex: 1,
                   child: CombinationButton(
-                    text: '提交',
+                    text: 'production_scan_submit'.tr,
                     click: () {
                       if (logic.haveCodeData()) {
                         if (state.isCheck == true) {
                           //已验证过再次验证
                           askDialog(
-                              content: '确定要再次验证吗？',
-                              confirmText: '校验',
+                              content: 'production_scan_verify_again'.tr,
+                              confirmText: 'production_scan_check'.tr,
                               confirmColor: Colors.red,
                               confirm: () {
                                 logic.checkCodeList(
                                   checkBack: (s) => errorDialog(content: s),
                                 ); //再次验证条码
                               },
-                              cancelText: '提交',
+                              cancelText: 'production_scan_submit'.tr,
                               cancelColor: Colors.blue,
                               cancel: () {
                                 showCustomPickerDialog(context);
@@ -253,7 +253,7 @@ class _ProductionScanWarehousePageState
                           ); //没验证过，首次验证条码
                         }
                       } else {
-                        showSnackBar(title: '警告', message: '没用可提交的条码');
+                        showSnackBar(title: 'shack_bar_warm'.tr, message: 'production_scan_no_barcode'.tr);
                       }
                     },
                     combination: Combination.right,
@@ -276,5 +276,11 @@ class _ProductionScanWarehousePageState
       }
     });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    Get.delete<ProductionScanWarehouseLogic>();
+    super.dispose();
   }
 }
