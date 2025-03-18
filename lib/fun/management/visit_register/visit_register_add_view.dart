@@ -146,7 +146,7 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
         children: [
           GestureDetector(
             onTap: () {
-              takePhoto((f) {
+              takePhoto(callback: (f) {
                 state.upAddDetail.value.cardPic = f.toBase64(); //身份证照片
               });
             },
@@ -174,7 +174,7 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
           ),
           GestureDetector(
             onTap: () {
-              takePhoto((f) {
+              takePhoto(callback: (f) {
                 state.upAddDetail.value.peoPic = f.toBase64();
               });
             },
@@ -379,7 +379,7 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
                   content: 'visit_details_unable_to_add_more_images'.tr);
             } else {
               if (data.typeAdd == "0") {
-                takePhoto((f) {
+                takePhoto(callback: (f) {
                   logic.addPicture(f.toBase64(), true);
                 });
               }

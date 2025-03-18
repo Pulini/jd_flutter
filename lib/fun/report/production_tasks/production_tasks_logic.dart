@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/production_tasks_info.dart';
 import 'package:jd_flutter/fun/report/production_tasks/production_tasks_detail_view.dart';
+import 'package:jd_flutter/fun/report/production_tasks/production_tasks_pack_material_view.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
@@ -91,7 +92,6 @@ class ProductionTasksLogic extends GetxController {
   getDetail({
     String? ins,
     String? po,
-    required String queryFileName,
     required String imageUrl,
   }) {
     state.getProductionOrderScheduleDetail(
@@ -104,7 +104,6 @@ class ProductionTasksLogic extends GetxController {
             arguments: {
               'isInstruction': true,
               'imageUrl': imageUrl,
-              'queryFileName': queryFileName,
             },
           );
         } else if (po != null && po.isNotEmpty) {
@@ -113,7 +112,6 @@ class ProductionTasksLogic extends GetxController {
             arguments: {
               'isInstruction': false,
               'imageUrl': imageUrl,
-              'queryFileName': queryFileName,
             },
           );
         }
@@ -192,6 +190,31 @@ class ProductionTasksLogic extends GetxController {
       state.monthCompleteQty.value = info.toMonthFinishQty ?? 0;
       state.refreshUiData();
       refreshAll.call();
+    }
+  }
+
+  getOrderPackMaterialInfo(String ins) {
+    state.getPackMaterialInfo(
+      ins: ins,
+      success: () => Get.to(
+        () => const ProductionTasksPackMaterialPage(),
+        arguments: { 'instruction': ins},
+      ),
+      error: (msg) => errorDialog(content: msg),
+    );
+  }
+
+  searchPackMaterial(String text) {
+    if (text.trim().isEmpty) {
+      state.packMaterialShowList.value = state.packMaterialList;
+    } else {
+      state.packMaterialShowList.value = state.packMaterialList
+          .where(
+            (v) => (v.materialCode ?? '')
+                .toUpperCase()
+                .contains(text.toUpperCase()),
+          )
+          .toList();
     }
   }
 }

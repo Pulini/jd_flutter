@@ -50,6 +50,7 @@ class LoginPage extends StatelessWidget {
   }
 }
 
+
 class LoginPick extends StatefulWidget {
   const LoginPick({super.key, required this.isReLogin});
 
@@ -82,16 +83,14 @@ class _LoginPickState extends State<LoginPick>
   var machineLoginPasswordController = TextEditingController();
 
   //手机登录手机号输入框控制器
-  var phoneLoginPhoneController = TextEditingController()
-    ..text = useTestUrl ? '15267733701' : spGet(spSaveLoginPhone) ?? '';
+  late var phoneLoginPhoneController = TextEditingController()
+    ..text = useTestUrl ? dadPhone : spGet(spSaveLoginPhone) ?? '';
 
   //手机登录密码输入框控制器
-  var phoneLoginPasswordController = TextEditingController()
-    ..text = useTestUrl ? '111111' : '';
+   var phoneLoginPasswordController = TextEditingController();
 
   //手机登录验证码输入框控制器
-  late var phoneLoginVCodeController = TextEditingController()
-    ..text = useTestUrl ? state.getDebugVCode() : '';
+   var phoneLoginVCodeController = TextEditingController();
 
   //工号登录工号输入框控制器
   var workLoginWorkNumberController = TextEditingController()

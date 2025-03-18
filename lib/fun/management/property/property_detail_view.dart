@@ -89,7 +89,9 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
                       borderRadius: BorderRadius.all(Radius.circular(5)),
                     ),
                     child: Text(
-                      dateTime == null ? 'property_select_time'.tr : getDateYMD(time: dateTime),
+                      dateTime == null
+                          ? 'property_select_time'.tr
+                          : getDateYMD(time: dateTime),
                       style: TextStyle(
                         color: dateTime == null ? Colors.red : Colors.black,
                       ),
@@ -332,7 +334,7 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
               GestureDetector(
                 onTap: () {
                   if (state.canModify) {
-                    takePhoto((f) {
+                    takePhoto(callback: (f) {
                       state.assetPicture.value = f.toBase64();
                     });
                   }
@@ -362,7 +364,7 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
               GestureDetector(
                 onTap: () {
                   if (state.canModify) {
-                    takePhoto((f) {
+                    takePhoto(callback: (f) {
                       state.ratingPlatePicture.value = f.toBase64();
                     });
                   }
@@ -512,8 +514,8 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
 
   _sheet(BuildContext context, bool hasSubmit) {
     showSheet(
-      context,
-      Column(
+      context: context,
+      body: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [

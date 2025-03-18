@@ -102,8 +102,8 @@ pageBodyWithBottomSheet({
               icon: const Icon(Icons.search),
               onPressed: () {
                 showSheet(
-                  context,
-                  Column(
+                  context: context,
+                  body: Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
@@ -274,13 +274,13 @@ pageBodyWithDrawer({
 }
 
 //照片选择器
-takePhoto(Function(File) callback, {String? title}) {
+takePhoto({required Function(File) callback, String? title}) {
   showCupertinoModalPopup(
     context: Get.overlayContext!,
     builder: (BuildContext context) => CupertinoActionSheet(
-      title: title != null
-          ? Text('home_user_setting_avatar_photo_sheet_title'.tr)
-          : null,
+      title: Text(
+        title ?? 'home_user_setting_avatar_photo_sheet_title'.tr,
+      ),
       message: Text('take_photo_sheet_message'.tr),
       actions: <CupertinoActionSheetAction>[
         CupertinoActionSheetAction(
@@ -299,15 +299,15 @@ takePhoto(Function(File) callback, {String? title}) {
           },
           child: Text('take_photo_photo_sheet_select_photo'.tr),
         ),
-        CupertinoActionSheetAction(
-          isDefaultAction: true,
-          onPressed: () => Get.back(),
-          child: Text(
-            'dialog_default_cancel'.tr,
-            style: const TextStyle(color: Colors.grey),
-          ),
-        ),
       ],
+      cancelButton: CupertinoActionSheetAction(
+        isDefaultAction: true,
+        onPressed: () => Get.back(),
+        child: Text(
+          'dialog_default_cancel'.tr,
+          style: const TextStyle(color: Colors.grey),
+        ),
+      ),
     ),
   );
 }
@@ -438,9 +438,9 @@ showPopup(Widget widget, {double? height}) {
 }
 
 //底部弹出 sheet
-showSheet<T>(
-  BuildContext context,
-  Widget body, {
+showSheet<T>({
+  required BuildContext context,
+  required Widget body,
   bool scrollControlled = true,
   Color bodyColor = Colors.white,
   EdgeInsets? bodyPadding,
@@ -1157,9 +1157,9 @@ List<List<String>> labelTableFormat({
 //滚动选择器
 selectView({
   required List<dynamic> list,
-  required FixedExtentScrollController controller,
-  required String errorMsg,
-  required String hint,
+  FixedExtentScrollController? controller,
+  String errorMsg = '',
+  String hint = '',
   Function(int)? select,
 }) {
   var weights = [

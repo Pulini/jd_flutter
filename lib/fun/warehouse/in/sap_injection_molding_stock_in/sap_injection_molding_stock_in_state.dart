@@ -8,7 +8,6 @@ import 'package:jd_flutter/bean/http/response/base_data.dart';
 import 'package:jd_flutter/bean/http/response/sap_injection_molding_stock_in_info.dart';
 import 'package:jd_flutter/bean/http/response/sap_label_info.dart';
 import 'package:jd_flutter/bean/http/response/sap_picking_info.dart';
-import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 
@@ -21,7 +20,7 @@ class SapInjectionMoldingStockInState {
 
   SapInjectionMoldingStockInState() {
     BarCodeInfo.getSave(
-      type: barCodeTypes[0],
+      type:  BarCodeReportType.injectionMoldingStockIn.text,
       callback: (list) => barCodeList.value = list,
     );
   }

@@ -6,7 +6,6 @@ import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
-
 class PartProcessScanState {
   var barCodeList = <String>[].obs;
   var modifyEmpList = <EmpInfo>[].obs;
@@ -15,7 +14,7 @@ class PartProcessScanState {
   var modifyBarCodeList = <BarCodeInfo>[].obs;
   var workerPercentageList = <Distribution>[].obs;
   var workerList = <WorkerInfo>[].obs;
-  var isSelectAll=false.obs;
+  var isSelectAll = false.obs;
 
   //获取组员列表数据
   reportViewGetWorkerList() {
@@ -35,75 +34,21 @@ class PartProcessScanState {
       loading: 'part_process_scan_getting_summary'.tr,
       body: {'BarCodeList': barCodeList.toList()},
     ).then((response) {
-       modifyReportList.value = [
-        for (var i = 1; i < 10; ++i)
-          ReportInfo(
-            type: '0',
-            name: 'processName$i',
-            size: (i*15/2).toString(),
-            mtono: 'mtono',
-            mtonoQty: (i * 100.0).toShowString(),
-            qty: (i * 100.0).toShowString(),
-          ),
-         ReportInfo(
-           type: '1',
-           name: 'processName',
-           size:  (20*15/2).toString(),
-           mtono: 'mtono',
-           mtonoQty:(20 * 100.0).toShowString(),
-           qty: (20 * 100.0).toShowString(),
-         ),
-         ReportInfo(
-           type: '2',
-           name: 'processName',
-           size: (30*15/2).toString(),
-           mtono: 'mtono',
-           mtonoQty:(30 * 100.0).toShowString(),
-           qty: (30 * 100.0).toShowString(),
-         ),
-      ];
-      modifyBarCodeList.value = [
-        for (var i = 1; i < 10; ++i)
-          BarCodeInfo(
-            barCode: i%2==0?'barCode1':'barCode2',
-            qty: i * 10,
-            processName: 'processName$i',
-          )
-      ];
-      groupBy(
-        modifyReportList.where((v) => v.type == '0'),
-        (v) => v.name,
-      ).forEach((k, v) {
-        modifyDistributionList.add(ReportItemData.fromData(
-          empList: modifyEmpList
-              .where(
-                (v1) => v1.processName == v[0].name,
-              )
-              .toList(),
-          reportList: v,
-        ));
-      });
-
-      success.call();
       if (response.resultCode == resultSuccess) {
-        var data = ScanBarcodeReportedReportInfo.fromJson(
-          response.data,
-        );
+        var data = ScanBarcodeReportedReportInfo.fromJson(response.data);
         modifyEmpList.value = data.empList ?? [];
         modifyReportList.value = data.reportList ?? [];
         modifyBarCodeList.value = data.barCodeList ?? [];
-        groupBy(
-          modifyReportList.where((v) => v.type == '0'),
-              (v) => v.name,
-        ).forEach((k, v) {
-          modifyDistributionList.add(ReportItemData.fromData(
-            empList: modifyEmpList
-                .where(
-                  (v1) => v1.processName == v[0].name,
-            )
-                .toList(),
-            reportList: v,
-          ));
+        groupBy(modifyReportList.where((v) => v.type == 0), (v) => v.name)
+            .forEach((k, v) {
+          modifyDistributionList.add(
+            ReportItemData.fromData(
+              empList: modifyEmpList
+                  .where((v1) => v1.processName == v[0].name)
+                  .toList(),
+              reportList: v,
+            ),
+          );
         });
         success.call();
       } else {
@@ -116,8 +61,6 @@ class PartProcessScanState {
     required Function(String msg) success,
     required Function(String msg) error,
   }) {
-
-
     httpPost(
       loading: 'part_process_scan_submitting_process_report'.tr,
       method: webApiProductionDispatchReportSubmit,
@@ -139,12 +82,12 @@ class PartProcessScanState {
     });
   }
 
-  cleanReportData(){
-    modifyEmpList.value=[];
-    modifyDistributionList.value=[];
-    modifyReportList.value=[];
-    modifyBarCodeList.value=[];
-    workerPercentageList.value=[];
-    isSelectAll.value=false;
+  cleanReportData() {
+    modifyEmpList.value = [];
+    modifyDistributionList.value = [];
+    modifyReportList.value = [];
+    modifyBarCodeList.value = [];
+    workerPercentageList.value = [];
+    isSelectAll.value = false;
   }
 }

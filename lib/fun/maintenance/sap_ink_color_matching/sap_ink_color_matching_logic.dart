@@ -99,6 +99,7 @@ class SapInkColorMatchingLogic extends GetxController {
           weightAfterColorMix: item.weightAfterColorMix,
         )..unit.value = item.unit ?? ''
     ];
+    state.remarks.value = state.orderList[index].remarks ?? '';
   }
 
   readBeforeWeight() {
@@ -136,7 +137,7 @@ class SapInkColorMatchingLogic extends GetxController {
       .where((v) => v.isNewItem)
       .any((v) => v.weightBeforeColorMix.value > 0);
 
-  checkSubmit(bool isModify, Function submit) {
+  checkSubmit({required bool isModify, required Function() submit}) {
     var submitData = state.inkColorList.where((v) => v.isNewItem);
     if (submitData.isEmpty) {
       errorDialog(content: 'sap_ink_color_matching_no_material_submit'.tr);
@@ -187,33 +188,36 @@ class SapInkColorMatchingLogic extends GetxController {
   }
 
   submitModifyOrder(int index) {
-    checkSubmit(true, () {
-      var newItemWeight = state.inkColorList
-          .where((v) => v.isNewItem)
-          .map((v) => v.consumption())
-          .reduce((a, b) => a.add(b));
-      var mixActualWeight = state.readMixDeviceWeight.value.add(newItemWeight);
-      var mixTheoreticalWeight = state.inkColorList
-          .map((v) => v.consumption())
-          .reduce((a, b) => a.add(b));
-      state.submitOrder(
-        orderNumber: state.orderList[index].orderNumber ?? '',
-        inkMaster: state.orderList[index].inkMaster ?? '',
-        mixActualWeight: mixActualWeight,
-        mixTheoreticalWeight: mixTheoreticalWeight,
-        success: (msg) => successDialog(
-          content: msg,
-          back: () => Get.back(result: true),
-        ),
-        error: (msg) => errorDialog(content: msg),
-      );
-    });
+    checkSubmit(
+        isModify: true,
+        submit: () {
+          var newItemWeight = state.inkColorList
+              .where((v) => v.isNewItem)
+              .map((v) => v.consumption())
+              .reduce((a, b) => a.add(b));
+          var mixActualWeight =
+              state.readMixDeviceWeight.value.add(newItemWeight);
+          var mixTheoreticalWeight = state.inkColorList
+              .map((v) => v.consumption())
+              .reduce((a, b) => a.add(b));
+          state.submitOrder(
+            orderNumber: state.orderList[index].orderNumber ?? '',
+            inkMaster: state.orderList[index].inkMaster ?? '',
+            mixActualWeight: mixActualWeight,
+            mixTheoreticalWeight: mixTheoreticalWeight,
+            success: (msg) => successDialog(
+              content: msg,
+              back: () => Get.back(result: true),
+            ),
+            error: (msg) => errorDialog(content: msg),
+          );
+        });
   }
 
   submitCreateOrder() {
     checkSubmit(
-        false,
-        () => state.submitOrder(
+        isModify: false,
+        submit: () => state.submitOrder(
               orderNumber: '',
               inkMaster: userInfo?.name ?? '',
               mixActualWeight: state.readMixDeviceWeight.value,

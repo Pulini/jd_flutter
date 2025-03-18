@@ -1,10 +1,10 @@
 class PhotoBean {
-  PhotoBean({
-    this.photo,});
+  PhotoBean({this.photo});
 
   PhotoBean.fromJson(dynamic json) {
     photo = json['Photo'];
   }
+
   String? photo;
 
   Map<String, dynamic> toJson() {
@@ -12,5 +12,4 @@ class PhotoBean {
     map['Photo'] = photo;
     return map;
   }
-
 }

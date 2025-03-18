@@ -90,10 +90,9 @@ class _SapInkColorMatchingPageState extends State<SapInkColorMatchingPage> {
                             isBold: false,
                           ),
                           expandedTextSpan(
-                            flex: 2,
-                            hint: 'sap_ink_color_matching_toning_order'.tr,
-                            text: data.orderNumber ?? '',
-                            textColor: Colors.green.shade700,
+                            flex: 5,
+                            hint: 'sap_ink_color_matching_remarks'.tr,
+                            text: data.remarks ?? '',
                             isBold: false,
                           ),
                         ],
@@ -105,6 +104,13 @@ class _SapInkColorMatchingPageState extends State<SapInkColorMatchingPage> {
                             hint: 'sap_ink_color_matching_inkmaster'.tr,
                             text: data.inkMaster ?? '',
                             textColor: Colors.black87,
+                            isBold: false,
+                          ),
+                          expandedTextSpan(
+                            flex: 3,
+                            hint: 'sap_ink_color_matching_toning_order'.tr,
+                            text: data.orderNumber ?? '',
+                            textColor: Colors.green.shade700,
                             isBold: false,
                           ),
                           expandedTextSpan(

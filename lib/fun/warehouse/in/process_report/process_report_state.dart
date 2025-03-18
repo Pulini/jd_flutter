@@ -17,10 +17,10 @@ class ProcessReportState {
   PalletDetailItem2Info? pallet; //托盘信息
 
   //从数据库读取条码信息
-  ProcessReportState() {
-    BarCodeInfo.getSave(
-      type: barCodeTypes[4],
-      callback: (list) => barCodeList.value = list,
-    );
-  }
+  // ProcessReportState() {
+  //   BarCodeInfo.getSave(
+  //     type: barCodeTypes[4],
+  //     callback: (list) => barCodeList.value = list,
+  //   );
+  // }
 }

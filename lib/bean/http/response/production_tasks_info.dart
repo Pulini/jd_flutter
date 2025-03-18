@@ -355,6 +355,41 @@ class ProductionTasksDetailItemInfo {
   double scannedNotInstalled() => scannedQty.sub(installedQty ?? 0);
 }
 
+class ProductionTasksPackMaterialInfo {
+  String? customerPo; //ZZKHPO1  客户PO
+  String? purchaseType; //ZZCGFL 采购分类
+  String? customerGoodsNo; //ZZKHHH 客人货号
+  String? materialCode; //MATNR  物料编码
+  String? materialName; //MAKTX  物料描述
+  String? unit; //MEINS  单位
+  double? demandQty; //ZZXQSL 需求用量
+  double? inventoryQty; //WEMNG  入库数量
+  double? receivedQty; //ZZSJLL 已领数量
+
+  ProductionTasksPackMaterialInfo({
+    this.customerPo,
+    this.purchaseType,
+    this.customerGoodsNo,
+    this.materialCode,
+    this.materialName,
+    this.unit,
+    this.demandQty,
+    this.inventoryQty,
+    this.receivedQty,
+  });
+  ProductionTasksPackMaterialInfo.fromJson(dynamic json) {
+    customerPo = json['ZZKHPO1'];
+    purchaseType = json['ZZCGFL'];
+    customerGoodsNo = json['ZZKHHH'];
+    materialCode = json['MATNR'];
+    materialName = json['MAKTX'];
+    unit = json['MEINS'];
+    demandQty = json['ZZXQSL'];
+    inventoryQty = json['WEMNG'];
+    receivedQty = json['ZZSJLL'];
+  }
+}
+
 //{
 // 	"Number": "20250214110250694001",
 // 	"MoID": "381952",

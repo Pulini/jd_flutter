@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/scan_barcode_info.dart';
 import 'package:jd_flutter/bean/http/response/worker_info.dart';
-import 'package:jd_flutter/fun/dispatching/part_process_scan/part_process_scan_report_view.dart';
+import 'package:jd_flutter/fun/reporting_work/part_process_scan/part_process_scan_report_view.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
@@ -13,29 +13,29 @@ import 'part_process_scan_state.dart';
 class PartProcessScanLogic extends GetxController {
   final PartProcessScanState state = PartProcessScanState();
 
-  addBarCode(String code, Function() callback) {
+  addBarCode({required String code, Function()? callback}) {
     if (code.isEmpty) {
       showSnackBar(
-        message: 'part_process_scan_input_label_tips'.tr,
+        message: 'part_process_scan_report_input_label_tips'.tr,
         isWarning: true,
       );
       return;
     }
     if (state.barCodeList.any((v) => v == code)) {
       showSnackBar(
-        message: 'part_process_scan_label_exists'.tr,
+        message: 'part_process_scan_report_label_exists'.tr,
         isWarning: true,
       );
       return;
     }
     state.barCodeList.add(code);
-    callback.call();
+    callback?.call();
   }
 
   barCodeModify() {
     if (state.barCodeList.isEmpty) {
       showSnackBar(
-        message: 'part_process_scan_no_submit_code'.tr,
+        message: 'part_process_scan_report_no_submit_code'.tr,
         isWarning: true,
       );
     } else {
@@ -153,16 +153,16 @@ class PartProcessScanLogic extends GetxController {
       'WorkerPercentageList',
       jsonEncode(state.workerPercentageList.map((v) => v.toJson()).toList()),
     );
-    successDialog(content: 'part_process_scan_save_ratio_success'.tr);
+    successDialog(content: 'part_process_scan_report_save_ratio_success'.tr);
   }
 
   usePercentage() {
     var jsonString = spGet('WorkerPercentageList');
     if (jsonString == null) {
       showSnackBar(
-          title: 'part_process_scan_apply_ratio',
-          message: 'part_process_scan_no_save_data'.tr,
-          isWarning: true);
+        message: 'part_process_scan_report_no_save_data'.tr,
+        isWarning: true,
+      );
     } else {
       var list = <Distribution>[
         for (var json in jsonDecode(jsonString)) Distribution.fromJson(json)
@@ -179,7 +179,7 @@ class PartProcessScanLogic extends GetxController {
                   distributionQty: 0,
                 )
       ];
-      successDialog(content: 'part_process_scan_apply_last_ratio'.tr);
+      successDialog(content: 'part_process_scan_report_apply_last_ratio'.tr);
     }
   }
 
@@ -187,7 +187,7 @@ class PartProcessScanLogic extends GetxController {
     state.modifyDistributionList.where((v) => v.isSelect.value).forEach((v) {
       var total = 0.0;
       for (var r in v.reportList) {
-        total = total.add(r.qty.toDoubleTry());
+        total = total.add(r.qty ?? 0);
       }
       v.distribution.value = [
         for (var p
@@ -205,9 +205,12 @@ class PartProcessScanLogic extends GetxController {
       ];
     });
     successDialog(
-        content: 'part_process_scan_quick_allocation_success'.tr,
-        back: () => Get.back());
+      content: 'part_process_scan_quick_allocation_success'.tr,
+      back: () => Get.back(),
+    );
   }
 
-  reportModifySubmit() {}
+  reportModifySubmit() {
+
+  }
 }

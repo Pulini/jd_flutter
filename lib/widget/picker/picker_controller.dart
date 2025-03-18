@@ -747,7 +747,7 @@ class OptionsPickerController extends PickerController {
     } else {
       pickerItems.value = pickerData
           .where(
-            (v) => v.pickerName().toUpperCase().contains(text.toUpperCase()),
+            (v) => v.toShow().toUpperCase().contains(text.toUpperCase()),
           )
           .toList();
     }
@@ -921,7 +921,7 @@ class LinkOptionsPickerController extends PickerController {
       pickerItems1.value = pickerData
           .where(
             (v1) => v1.subList().any((v2) =>
-                v2.pickerName().toUpperCase().contains(text.toUpperCase())),
+                v2.toShow().toUpperCase().contains(text.toUpperCase())),
           )
           .toList();
       if (pickerItems1.isNotEmpty) {
@@ -1046,7 +1046,7 @@ class CheckBoxPickerController extends PickerController {
     } else {
       checkboxItems.value = checkboxData
           .where(
-            (v) => v.pickerName().toUpperCase().contains(text.toUpperCase()),
+            (v) => v.toShow().toUpperCase().contains(text.toUpperCase()),
           )
           .toList();
     }

@@ -3,7 +3,6 @@ import 'package:jd_flutter/bean/http/response/bar_code.dart';
 import 'package:jd_flutter/bean/http/response/check_code_info.dart';
 import 'package:jd_flutter/bean/http/response/sap_picking_info.dart';
 import 'package:jd_flutter/bean/http/response/used_bar_code_info.dart';
-import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/fun/warehouse/code_list_report/code_list_report_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/production_scan_warehouse/production_scan_warehouse_state.dart';
 import 'package:jd_flutter/utils/utils.dart';
@@ -48,11 +47,10 @@ class ProductionScanWarehouseLogic extends GetxController {
       }
       BarCodeInfo(
         code: code,
-        type: barCodeTypes[4],
-        palletNo: state.palletNumber.value,
+        type: BarCodeReportType.productionScanInStock.text,
       )
+        ..palletNo = state.palletNumber.value
         ..isUsed = state.usedList.contains(code)
-        // ..save(callback: (newBarCode) => state.barCodeList.add(newBarCode));
         ..save(callback: (newBarCode) {
           state.barCodeList.add(newBarCode);
         });
@@ -60,7 +58,9 @@ class ProductionScanWarehouseLogic extends GetxController {
   }
 
   //获得已入库条形码数据
-  getBarCodeStatusByDepartmentID({required Function() refresh,}) {
+  getBarCodeStatusByDepartmentID({
+    required Function() refresh,
+  }) {
     httpGet(method: webApiGetBarCodeStatusByDepartmentID, params: {
       'Type': "SupplierScanInStock",
       'DepartmentID': getUserInfo()!.departmentID,
@@ -148,7 +148,7 @@ class ProductionScanWarehouseLogic extends GetxController {
   //清空生产扫码入库的条码
   clearBarCodeList() {
     BarCodeInfo.clear(
-      type: barCodeTypes[4],
+      type:BarCodeReportType.productionScanInStock.text,
       callback: (v) {
         if (v == state.barCodeList.length) {
           state.isCheck = false;
@@ -281,11 +281,11 @@ class ProductionScanWarehouseLogic extends GetxController {
       if (response.resultCode == resultSuccess) {
         clearBarCodeList();
         successDialog(
-            content: response.message, back: () => getBarCodeStatusByDepartmentID(refresh: (){}));
+            content: response.message,
+            back: () => getBarCodeStatusByDepartmentID(refresh: () {}));
       } else {
         showSnackBar(title: 'dialog_default_title_information'.tr, message: response.message ?? '');
       }
     });
   }
-
 }

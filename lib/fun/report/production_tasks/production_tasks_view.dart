@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/production_tasks_info.dart';
@@ -22,6 +23,7 @@ class ProductionTasksPage extends StatefulWidget {
 class _ProductionTasksPageState extends State<ProductionTasksPage> {
   final ProductionTasksLogic logic = Get.put(ProductionTasksLogic());
   final ProductionTasksState state = Get.find<ProductionTasksLogic>().state;
+  var controller = TextEditingController();
   final orderListKey = GlobalKey<AnimatedListState>();
   late MqttUtil mqtt = MqttUtil(
     server: state.mqttServer,
@@ -48,10 +50,24 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
     Animation<double> animation,
     int index,
   ) {
+    isSelected() => state.selected == index;
+
     var duration = const Duration(milliseconds: 500);
     var errorImage = Image.asset(
       'assets/images/ic_logo.png',
       color: Colors.blue,
+    );
+    var outBox = RotatedCornerDecoration.withColor(
+      color: data.existOutBoxBarCode == true ? Colors.green : Colors.red,
+      badgeCornerRadius: const Radius.circular(10),
+      badgeSize: const Size(55, 55),
+      textSpan: TextSpan(
+        text: 'production_tasks_barcode'.tr,
+        style: const TextStyle(
+          fontSize: 14,
+          color: Colors.white,
+        ),
+      ),
     );
     var image = Hero(
       tag: 'ProductionTasksDetailImage-${data.itemImage}-${data.mtoNo}',
@@ -69,6 +85,192 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
         ),
       ),
     );
+    var up = AnimatedOpacity(
+      curve: Curves.fastOutSlowIn,
+      duration: duration,
+      opacity: isSelected() ? 1 : 0,
+      child: AnimatedContainer(
+        duration: duration,
+        curve: Curves.fastOutSlowIn,
+        width: isSelected() ? 50 : 0,
+        height: isSelected() ? 50 : 0,
+        child: IconButton(
+          onPressed: () => logic.changeSort(
+            oldIndex: index,
+            newIndex: index - 1,
+            refresh: () => _moveUpOrderItem(index),
+          ),
+          icon: const Icon(
+            Icons.arrow_back_ios_rounded,
+            color: Colors.blueAccent,
+          ),
+        ),
+      ),
+    );
+    var down = AnimatedOpacity(
+      opacity: isSelected() && index < state.orderList.length - 1 ? 1 : 0,
+      curve: Curves.fastOutSlowIn,
+      duration: duration,
+      child: AnimatedContainer(
+        duration: duration,
+        curve: Curves.fastOutSlowIn,
+        width: isSelected() ? 50 : 0,
+        height: isSelected() ? 50 : 0,
+        child: IconButton(
+          onPressed: () {
+            if (index < state.orderList.length - 1) {
+              logic.changeSort(
+                oldIndex: index,
+                newIndex: index + 1,
+                refresh: () => _moveDownOrderItem(index),
+              );
+            }
+          },
+          icon: const Icon(
+            Icons.arrow_forward_ios_rounded,
+            color: Colors.blueAccent,
+          ),
+        ),
+      ),
+    );
+    var top = AnimatedOpacity(
+      opacity: isSelected() ? 1 : 0,
+      curve: Curves.fastOutSlowIn,
+      duration: duration,
+      child: AnimatedContainer(
+        duration: duration,
+        curve: Curves.fastOutSlowIn,
+        height: isSelected() ? 39 : 0,
+        child: CombinationButton(
+          text: 'production_tasks_top_up'.tr,
+          click: () => logic.changeSort(
+            oldIndex: index,
+            newIndex: 0,
+            refresh: () => _moveTopOrderItem(index),
+          ),
+        ),
+      ),
+    );
+    var mtoNo = TextButton(
+      onPressed: () {
+        if (isSelected() || index == 0) {
+          logic.getDetail(
+            ins: data.mtoNo ?? '',
+            imageUrl: data.itemImage ?? '',
+          );
+        } else {
+          setState(() => state.selected = index);
+        }
+      },
+      child: Text(
+        data.mtoNo ?? '',
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          color:
+              isSelected() || index == 0 ? Colors.blueAccent : Colors.black87,
+        ),
+      ),
+    );
+    var viewFile = AnimatedOpacity(
+      opacity: isSelected() || index == 0 ? 1 : 0,
+      curve: Curves.fastOutSlowIn,
+      duration: duration,
+      child: AnimatedContainer(
+        width: isSelected() || index == 0 ? 50 : 0,
+        duration: duration,
+        child: IconButton(
+          padding: const EdgeInsets.all(0),
+          onPressed: () => showCupertinoModalPopup(
+            context: context,
+            builder: (context) => CupertinoActionSheet(
+              title: Text(
+                'production_tasks_view_title'.tr,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                  fontSize: 22,
+                ),
+              ),
+              actions: [
+                CupertinoActionSheetAction(
+                  isDefaultAction: true,
+                  onPressed: () {
+                    Get.back();
+                    feishuViewWikiFiles(query: data.shoeStyle ?? '');
+                  },
+                  child: Text('production_tasks_manuel'.tr),
+                ),
+                CupertinoActionSheetAction(
+                  isDefaultAction: true,
+                  onPressed: () {
+                    Get.back();
+                    feishuViewCloudDocFiles(
+                      query: '${data.mtoNo}-${data.clientOrderNumber}',
+                    );
+                  },
+                  child: Text('production_tasks_pack_manual'.tr),
+                ),
+                CupertinoActionSheetAction(
+                  isDefaultAction: true,
+                  onPressed: () {
+                    Get.back();
+                    logic.getOrderPackMaterialInfo(data.mtoNo ?? '');
+                  },
+                  child: Text('production_tasks_pack_material_info'.tr),
+                ),
+              ],
+              cancelButton: CupertinoActionSheetAction(
+                isDefaultAction: true,
+                onPressed: () => Get.back(),
+                child: Text(
+                  'dialog_default_cancel'.tr,
+                  style: const TextStyle(color: Colors.grey),
+                ),
+              ),
+            ),
+          ),
+          icon: const Icon(
+            Icons.menu_book,
+            color: Colors.blueAccent,
+          ),
+        ),
+      ),
+    );
+    var clientOrderNo = AnimatedContainer(
+      margin: const EdgeInsets.only(top: 5),
+      height: 39,
+      width: double.infinity,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: isSelected() || index == 0
+              ? Colors.blueAccent
+              : Colors.transparent,
+          width: 2,
+        ),
+      ),
+      duration: duration,
+      child: TextButton(
+        onPressed: () {
+          if (isSelected() || index == 0) {
+            logic.getDetail(
+              po: data.clientOrderNumber ?? '',
+              imageUrl: data.itemImage ?? '',
+            );
+          } else {
+            setState(() => state.selected = index);
+          }
+        },
+        child: Text(
+          data.clientOrderNumber ?? '',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color:
+                isSelected() || index == 0 ? Colors.blueAccent : Colors.black87,
+          ),
+        ),
+      ),
+    );
     return SizeTransition(
       sizeFactor: animation,
       axis: Axis.horizontal,
@@ -76,33 +278,20 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
         onTap: () {
           if (index != 0) {
             setState(() {
-              if (state.selected.value == index) {
-                state.selected.value = -1;
+              if (isSelected()) {
+                state.selected = -1;
               } else {
-                state.selected.value = index;
+                state.selected = index;
               }
             });
           }
         },
         child: AnimatedContainer(
-          foregroundDecoration: RotatedCornerDecoration.withColor(
-            color:data.existOutBoxBarCode==true?Colors.green: Colors.red,
-            badgeCornerRadius: const Radius.circular(10),
-            badgeSize: const Size(55, 55),
-            textSpan: TextSpan(
-              text:'production_tasks_barcode'.tr,
-              style: const TextStyle(
-                fontSize: 14,
-                color: Colors.white,
-              ),
-            ),
-          ),
+          foregroundDecoration: outBox,
           curve: Curves.fastOutSlowIn,
           margin: const EdgeInsets.only(left: 5, right: 5, top: 10, bottom: 10),
           padding: const EdgeInsets.all(5),
-          width: state.selected.value != 0 && state.selected.value == index
-              ? 250
-              : 200,
+          width: state.selected != 0 && isSelected() ? 250 : 200,
           decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topCenter,
@@ -110,7 +299,7 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
               colors: [
                 index == 0
                     ? Colors.green.shade100
-                    : state.selected.value == index
+                    : isSelected()
                         ? Colors.green.shade100
                         : Colors.blue.shade100,
                 index == 0 ? Colors.green.shade300 : Colors.green.shade50
@@ -135,216 +324,29 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
               ),
               index == 0
                   ? image
-                  : Row(
-                      children: [
-                        AnimatedOpacity(
-                          curve: Curves.fastOutSlowIn,
-                          duration: duration,
-                          opacity: state.selected.value == index ? 1 : 0,
-                          child: AnimatedContainer(
-                            duration: duration,
-                            curve: Curves.fastOutSlowIn,
-                            width: state.selected.value == index ? 50 : 0,
-                            height: state.selected.value == index ? 50 : 0,
-                            child: IconButton(
-                              onPressed: () => logic.changeSort(
-                                oldIndex: index,
-                                newIndex: index - 1,
-                                refresh: () => _moveUpOrderItem(index),
-                              ),
-                              icon: const Icon(
-                                Icons.arrow_back_ios_rounded,
-                                color: Colors.blueAccent,
-                              ),
-                            ),
-                          ),
-                        ),
-                        Expanded(child: image),
-                        AnimatedOpacity(
-                          opacity: state.selected.value == index &&
-                                  index < state.orderList.length - 1
-                              ? 1
-                              : 0,
-                          curve: Curves.fastOutSlowIn,
-                          duration: duration,
-                          child: AnimatedContainer(
-                            duration: duration,
-                            curve: Curves.fastOutSlowIn,
-                            width: state.selected.value == index ? 50 : 0,
-                            height: state.selected.value == index ? 50 : 0,
-                            child: IconButton(
-                              onPressed: () {
-                                if (index < state.orderList.length - 1) {
-                                  logic.changeSort(
-                                    oldIndex: index,
-                                    newIndex: index + 1,
-                                    refresh: () => _moveDownOrderItem(index),
-                                  );
-                                }
-                              },
-                              icon: const Icon(
-                                Icons.arrow_forward_ios_rounded,
-                                color: Colors.blueAccent,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-              AnimatedOpacity(
-                opacity: state.selected.value == index ? 1 : 0,
-                curve: Curves.fastOutSlowIn,
-                duration: duration,
-                child: AnimatedContainer(
-                  duration: duration,
-                  curve: Curves.fastOutSlowIn,
-                  height: state.selected.value == index ? 39 : 0,
-                  child: CombinationButton(
-                    text: 'production_tasks_top_up'.tr,
-                    click: () => logic.changeSort(
-                      oldIndex: index,
-                      newIndex: 0,
-                      refresh: () => _moveTopOrderItem(index),
-                    ),
-                  ),
-                ),
-              ),
-              // Text(data.mtoNo ?? ''),
-              // Text(data.clientOrderNumber ?? ''),
+                  : Row(children: [up, Expanded(child: image), down]),
+              top,
               Expanded(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: AnimatedContainer(
-                            height: 39,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.only(
-                                topLeft: const Radius.circular(20),
-                                bottomLeft: const Radius.circular(20),
-                                topRight: Radius.circular(
-                                  state.selected.value == index || index == 0
-                                      ? 0
-                                      : 20,
-                                ),
-                                bottomRight: Radius.circular(
-                                  state.selected.value == index || index == 0
-                                      ? 0
-                                      : 20,
-                                ),
-                              ),
-                              border: Border.all(
-                                color:
-                                    state.selected.value == index || index == 0
-                                        ? Colors.blueAccent
-                                        : Colors.transparent,
-                                width: 2,
-                              ),
-                            ),
-                            duration: duration,
-                            child: TextButton(
-                              onPressed: () {
-                                if (state.selected.value == index ||
-                                    index == 0) {
-                                  logic.getDetail(
-                                    ins: data.mtoNo ?? '',
-                                    queryFileName: '${data.mtoNo}-${data.clientOrderNumber}',
-                                    imageUrl: data.itemImage ?? '',
-                                  );
-                                } else {
-                                  setState(() => state.selected.value = index);
-                                }
-                              },
-                              child: Text(
-                                data.mtoNo ?? '',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: state.selected.value == index ||
-                                          index == 0
-                                      ? Colors.blueAccent
-                                      : Colors.black87,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        if (state.selected.value == index || index == 0)
-                          AnimatedContainer(
-                            height: 39,
-                            decoration: BoxDecoration(
-                              borderRadius: const BorderRadius.only(
-                                topRight: Radius.circular(20),
-                                bottomRight: Radius.circular(20),
-                              ),
-                              border: Border.all(
-                                color:
-                                    state.selected.value == index || index == 0
-                                        ? Colors.blueAccent
-                                        : Colors.transparent,
-                                width: 2,
-                              ),
-                            ),
-                            duration: duration,
-                            child: TextButton(
-                              onPressed: () {
-                                if (state.selected.value == index ||
-                                    index == 0) {
-                                  feishuViewWikiFiles(query: data.shoeStyle ?? '');
-                                } else {
-                                  setState(() => state.selected.value = index);
-                                }
-                              },
-                              child: Text(
-                                'production_tasks_manuel'.tr,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.blueAccent,
-                                ),
-                              ),
-                            ),
-                          ),
-                      ],
-                    ),
                     AnimatedContainer(
-                      margin: const EdgeInsets.only(top: 5),
                       height: 39,
-                      width: double.infinity,
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(20)),
                         border: Border.all(
-                          color: state.selected.value == index || index == 0
+                          color: isSelected() || index == 0
                               ? Colors.blueAccent
                               : Colors.transparent,
                           width: 2,
                         ),
                       ),
                       duration: duration,
-                      child: TextButton(
-                        onPressed: () {
-                          if (state.selected.value == index || index == 0) {
-                            logic.getDetail(
-                              po: data.clientOrderNumber ?? '',
-                              queryFileName: '${data.mtoNo}-${data.clientOrderNumber}',
-                              imageUrl: data.itemImage ?? '',
-                            );
-                          } else {
-                            setState(() => state.selected.value = index);
-                          }
-                        },
-                        child: Text(
-                          data.clientOrderNumber ?? '',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: state.selected.value == index || index == 0
-                                ? Colors.blueAccent
-                                : Colors.black87,
-                          ),
-                        ),
-                      ),
+                      child: Row(children: [Expanded(child: mtoNo), viewFile]),
                     ),
+                    clientOrderNo,
                   ],
                 ),
               ),
@@ -375,7 +377,7 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
 
   _moveUpOrderItem(int index) {
     setState(() {
-      state.selected.value = -1;
+      state.selected = -1;
     });
     Future.delayed(const Duration(milliseconds: 500), () {
       state.orderList.insert(index - 1, state.orderList.removeAt(index));
@@ -387,7 +389,7 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
 
   _moveDownOrderItem(int index) {
     setState(() {
-      state.selected.value = -1;
+      state.selected = -1;
     });
     Future.delayed(const Duration(milliseconds: 500), () {
       state.orderList.insert(index + 1, state.orderList.removeAt(index));
@@ -399,7 +401,7 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
 
   _moveTopOrderItem(int index) {
     setState(() {
-      state.selected.value = -1;
+      state.selected = -1;
     });
     Future.delayed(const Duration(milliseconds: 500), () {
       state.orderList.insert(0, state.orderList.removeAt(index));
@@ -609,31 +611,104 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
     return pageBody(
       title: '${getFunctionTitle()}  <${userInfo?.departmentName}>',
       actions: [
-        IconButton(
-          onPressed: () => logic.refreshTable(refresh: () => _refreshTable()),
-          icon: const Icon(Icons.refresh),
-        )
+        Container(
+          width: 260,
+          margin: const EdgeInsets.all(5),
+          height: 40,
+          child: TextField(
+            controller: controller,
+            decoration: InputDecoration(
+              contentPadding: const EdgeInsets.only(
+                top: 0,
+                bottom: 0,
+                left: 15,
+                right: 10,
+              ),
+              filled: true,
+              fillColor: Colors.grey[300],
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(20),
+                borderSide: const BorderSide(
+                  color: Colors.transparent,
+                ),
+              ),
+              border: const OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(20)),
+              ),
+              labelText: '国际装箱标准',
+              labelStyle: const TextStyle(color: Colors.black54),
+              prefixIcon: IconButton(
+                onPressed: () => controller.clear(),
+                icon: const Icon(
+                  Icons.replay_circle_filled,
+                  color: Colors.red,
+                ),
+              ),
+              suffixIcon: CombinationButton(
+                text: '搜索',
+                click: () {
+                  FocusScope.of(context).requestFocus(FocusNode());
+                  feishuViewCloudDocFiles(query: controller.text);
+                },
+              ),
+            ),
+          ),
+        ),
       ],
       body: Padding(
         padding: const EdgeInsets.only(left: 7, right: 7, bottom: 7),
         child: Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Obx(() => textSpan(
-                      hint: 'production_tasks_today_target'.tr,
-                      text: state.todayTargetQty.value.toShowString(),
-                    )),
-                Obx(() => textSpan(
-                      hint: 'production_tasks_today_completion'.tr,
-                      text: state.todayCompleteQty.value.toShowString(),
-                    )),
-                Obx(() => textSpan(
-                      hint: 'production_tasks_monthly_completion'.tr,
-                      text: state.monthCompleteQty.value.toShowString(),
-                    )),
-              ],
+            Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Colors.blue.shade100, Colors.green.shade50],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
+                // color: Colors.white,
+                borderRadius: BorderRadius.circular(15),
+                border: Border.all(color: Colors.blue, width: 2),
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Obx(() => textSpan(
+                              hint: 'production_tasks_today_target'.tr,
+                              text: state.todayTargetQty.value.toShowString(),
+                            )),
+                        Obx(() => textSpan(
+                              hint: 'production_tasks_today_completion'.tr,
+                              text: state.todayCompleteQty.value.toShowString(),
+                            )),
+                        Obx(() => textSpan(
+                              hint: 'production_tasks_monthly_completion'.tr,
+                              text: state.monthCompleteQty.value.toShowString(),
+                            )),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    height: 35,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(13),
+                      border: Border.all(color: Colors.green, width: 2),
+                    ),
+                    child: IconButton(
+                      padding: const EdgeInsets.all(0),
+                      onPressed: () =>
+                          logic.refreshTable(refresh: () => _refreshTable()),
+                      icon: const Icon(
+                        Icons.refresh,
+                        color: Colors.green,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
             SizedBox(
               height: 260,

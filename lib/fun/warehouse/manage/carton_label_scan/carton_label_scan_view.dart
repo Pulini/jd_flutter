@@ -1,8 +1,10 @@
 import 'package:audioplayers/audioplayers.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/carton_label_scan_info.dart';
 import 'package:jd_flutter/fun/warehouse/manage/carton_label_scan/carton_label_scan_progress_view.dart';
+import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/scanner.dart';
@@ -79,18 +81,25 @@ class _CartonLabelScanPageState extends State<CartonLabelScanPage> {
   }
 
   playAudio(String as) {
-    if (player.state != PlayerState.completed) {
-      player.stop();
-      player.setSource(AssetSource(as));
-      player.resume();
-    } else {
-      player.play(AssetSource(as));
+    if((deviceInfo as AndroidDeviceInfo).version.release.toDoubleTry() >=8){
+      //安卓8.0以上才能调用这个api
+      //安卓5.1会出现 Didn't find class "android.media.AudioFocusRequest"
+      if (player.state != PlayerState.completed) {
+        player.stop();
+        player.setSource(AssetSource(as));
+        player.resume();
+      } else {
+        player.play(AssetSource(as));
+      }
     }
   }
 
   @override
   void initState() {
-    player = AudioPlayer();
+    if((deviceInfo as AndroidDeviceInfo).version.release.toDoubleTry() >=8){
+      //安卓8.0以上才能调用这个api
+      player = AudioPlayer();
+    }
     pdaScanner(scan: (barCode) {
       logic.scan(
         code: barCode,

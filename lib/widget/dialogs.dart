@@ -385,9 +385,9 @@ reLoginPopup() {
 
 reasonInputPopup({
   String? hintText,
-  String? confirmText,
   bool isCanCancel = false,
   required List<Widget> title,
+  String? confirmText,
   required Function(String reason) confirm,
   Function()? cancel,
 }) {
@@ -426,7 +426,7 @@ reasonInputPopup({
                 },
               ),
               contentPadding: const EdgeInsets.all(10),
-              hintText: hintText ?? 'dialog_reason_hint'.tr,
+              labelText: hintText ?? 'dialog_reason_hint'.tr,
               fillColor: Colors.white,
               filled: true,
               border: OutlineInputBorder(

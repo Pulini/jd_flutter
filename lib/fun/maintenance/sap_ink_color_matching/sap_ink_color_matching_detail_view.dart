@@ -8,6 +8,7 @@ import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
+import 'package:jd_flutter/widget/edit_text_widget.dart';
 
 import 'sap_ink_color_matching_logic.dart';
 
@@ -396,6 +397,14 @@ class _SapInkColorMatchingDetailPageState
     return pageBody(
       actions: canAdd
           ? [
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.35,
+                child: EditText(
+                  hint: '可填写备注信息',
+                  initStr: state.remarks.value,
+                  onChanged: (v) => state.remarks.value = v,
+                ),
+              ),
               CombinationButton(
                 text: 'sap_ink_color_matching_detail_add_material'.tr,
                 click: () {

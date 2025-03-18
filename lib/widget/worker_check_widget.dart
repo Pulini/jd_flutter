@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/worker_info.dart';
-import 'package:jd_flutter/utils/web_api.dart';
+import 'package:jd_flutter/utils/utils.dart';
 
 //自定义输入框 根据工号查询员工
 class WorkerCheck extends StatefulWidget {
@@ -21,23 +21,6 @@ class _WorkerCheckState extends State<WorkerCheck> {
   var name = ''.obs;
   var error = ''.obs;
 
-  getWorker({
-    required String number,
-    required Function(WorkerInfo) success,
-    required Function(String) error,
-  }) {
-    httpGet(method: webApiGetWorkerInfo, params: {
-      'EmpNumber': number,
-      'DeptmentID': '',
-    }).then((worker) {
-      if (worker.resultCode == resultSuccess) {
-        success.call(WorkerInfo.fromJson(worker.data[0]));
-      } else {
-        error.call(worker.message ?? '');
-      }
-    });
-  }
-
   @override
   void initState() {
     if (widget.init?.isNotEmpty == true) {
@@ -49,18 +32,17 @@ class _WorkerCheckState extends State<WorkerCheck> {
 
   checkWorker(String number) {
     if (number.length >= 6) {
-      getWorker(
-          number: number,
-          success: (worker) {
-            name.value = worker.empName ?? '';
-            error.value = '';
-            widget.onChanged.call(worker);
-          },
-          error: (s) {
-            name.value = '';
-            error.value = s;
-            widget.onChanged.call(null);
-          });
+      getWorkerInfo(
+          number:number
+          ,workers: (worker) {
+        name.value = worker[0].empName ?? '';
+        error.value = '';
+        widget.onChanged.call(worker[0]);
+      },  error: (s) {
+        name.value = '';
+        error.value = s;
+        widget.onChanged.call(null);
+      });
     } else {
       name.value = '';
       error.value = '';
@@ -99,10 +81,10 @@ class _WorkerCheckState extends State<WorkerCheck> {
               helperText: name.value,
               helperStyle: TextStyle(color: Colors.green.shade700),
               errorText: error.value.isNotEmpty ? error.value : null,
-              hintText: widget.hint != null && widget.hint!.isNotEmpty
+              labelText: widget.hint != null && widget.hint!.isNotEmpty
                   ? widget.hint
                   : '请输入员工工号',
-              hintStyle: const TextStyle(color: Colors.grey),
+              labelStyle: const TextStyle(color: Colors.black54),
               suffixIcon: IconButton(
                 icon: const Icon(Icons.close, color: Colors.grey),
                 onPressed: () {

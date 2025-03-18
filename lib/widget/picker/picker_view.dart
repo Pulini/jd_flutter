@@ -52,7 +52,7 @@ class DatePicker extends StatelessWidget {
                 height: 35,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.only(left: 10,right: 10),
+                    padding: const EdgeInsets.only(left: 10, right: 10),
                     backgroundColor: pickerController.enable.value
                         ? Colors.blue
                         : Colors.grey,
@@ -143,7 +143,7 @@ class OptionsPicker extends StatelessWidget {
             Obx(() => Expanded(
                   child: getCupertinoPicker(
                     pickerController.pickerItems.map((data) {
-                      return Center(child: Text(data.pickerName()));
+                      return Center(child: Text(data.toShow()));
                     }).toList(),
                     controller,
                   ),
@@ -186,7 +186,7 @@ class OptionsPicker extends StatelessWidget {
                 height: 35,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                     padding: const EdgeInsets.only(left: 10,right: 10),
+                    padding: const EdgeInsets.only(left: 10, right: 10),
                     backgroundColor: pickerController.pickerItems.isEmpty
                         ? Colors.red
                         : pickerController.enable.value
@@ -222,8 +222,8 @@ class LinkOptionsPicker extends StatelessWidget {
 
   Widget _pickerText(PickerItem data) {
     return Text(
-      data.pickerName(),
-      style: TextStyle(fontSize: data.pickerName().length > 10 ? 12 : 16),
+      data.toShow(),
+      style: TextStyle(fontSize: data.toShow().length > 10 ? 12 : 16),
     );
   }
 
@@ -345,7 +345,7 @@ class LinkOptionsPicker extends StatelessWidget {
                 height: 35,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                     padding: const EdgeInsets.only(left: 10,right: 10),
+                    padding: const EdgeInsets.only(left: 10, right: 10),
                     backgroundColor: pickerController.pickerItems2.isEmpty
                         ? Colors.red
                         : pickerController.enable.value
@@ -450,8 +450,9 @@ class CheckBoxPicker extends StatelessWidget {
                       itemCount: checkBoxController.checkboxItems.length,
                       itemBuilder: (BuildContext context, int index) => Card(
                         child: CheckboxListTile(
-                          title: Text(checkBoxController.checkboxItems[index]
-                              .pickerName()),
+                          title: Text(
+                            checkBoxController.checkboxItems[index].toShow(),
+                          ),
                           value: (checkBoxController.checkboxItems[index]
                                   as PickerMesMoldingPackArea)
                               .isChecked,
@@ -503,7 +504,7 @@ class CheckBoxPicker extends StatelessWidget {
                 height: 35,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                     padding: const EdgeInsets.only(left: 10,right: 10),
+                    padding: const EdgeInsets.only(left: 10, right: 10),
                     backgroundColor: checkBoxController.checkboxItems.isEmpty
                         ? Colors.red
                         : checkBoxController.enable.value

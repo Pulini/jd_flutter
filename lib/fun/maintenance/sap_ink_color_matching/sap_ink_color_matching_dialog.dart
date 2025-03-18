@@ -239,7 +239,7 @@ trialFinishDialog({
                   textColor: Colors.green,
                 ),
                 textSpan(
-                  hint: '型sap_ink_color_matching_dialog_type_body'.tr,
+                  hint: 'sap_ink_color_matching_dialog_type_body'.tr,
                   text: typeBody,
                   textColor: Colors.green,
                 ),

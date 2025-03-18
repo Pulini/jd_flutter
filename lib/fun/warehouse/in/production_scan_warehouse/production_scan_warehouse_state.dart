@@ -4,7 +4,6 @@ import 'package:jd_flutter/bean/http/response/bar_code.dart';
 import 'package:jd_flutter/bean/http/response/check_code_info.dart';
 import 'package:jd_flutter/bean/http/response/sap_picking_info.dart';
 import 'package:jd_flutter/bean/http/response/used_bar_code_info.dart';
-import 'package:jd_flutter/constant.dart';
 
 class ProductionScanWarehouseState {
 
@@ -27,7 +26,7 @@ class ProductionScanWarehouseState {
   //从数据库读取条码信息
   ProductionScanWarehouseState() {
     BarCodeInfo.getSave(
-      type: barCodeTypes[4],
+      type: BarCodeReportType.productionScanInStock.text,
       callback: (list) => barCodeList.value = list,
     );
   }

@@ -96,12 +96,12 @@ class ReportInfo {
     this.qty,
   });
 
-  String? type; //类型 0.工序 1.指令合计 2.部件合计
+  int? type; //类型 0.工序 1.指令合计 2.部件合计
   String? name; //工序
   String? size; //尺码
   String? mtono; //指令
-  String? mtonoQty; //指令数
-  String? qty; //贴标数
+  double? mtonoQty; //指令数
+  double? qty; //贴标数
 
   ReportInfo.fromJson(dynamic json) {
     type = json['Type'];
@@ -188,7 +188,7 @@ class ReportItemData {
   double getProcessMax() {
     var total = 0.0;
     for (var v1 in reportList) {
-      total = total.add(v1.qty.toDoubleTry());
+      total = total.add(v1.qty??0);
     }
     return total;
   }

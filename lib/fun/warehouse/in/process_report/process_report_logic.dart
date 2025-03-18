@@ -3,7 +3,6 @@ import 'package:jd_flutter/fun/warehouse/in/process_report/process_report_state.
 import 'package:jd_flutter/utils/utils.dart';
 import '../../../../bean/http/response/bar_code.dart';
 import '../../../../bean/http/response/sap_picking_info.dart';
-import '../../../../constant.dart';
 import '../../../../utils/web_api.dart';
 import '../../../../widget/custom_widget.dart';
 import '../../../../widget/dialogs.dart';
@@ -44,16 +43,16 @@ class ProcessReportLogic extends GetxController {
         );
         return;
       }
-      BarCodeInfo(
-        code: code,
-        type: barCodeTypes[4],
-        palletNo: state.palletNumber.value,
-      )
-        ..isUsed = state.usedList.contains(code)
+      // BarCodeInfo(
+      //   code: code,
+      //   type: barCodeTypes[4],
+      //   palletNo: state.palletNumber.value,
+      // )
+      //   ..isUsed = state.usedList.contains(code)
       // ..save(callback: (newBarCode) => state.barCodeList.add(newBarCode));
-        ..save(callback: (newBarCode) {
-          state.barCodeList.add(newBarCode);
-        });
+      //   ..save(callback: (newBarCode) {
+      //     state.barCodeList.add(newBarCode);
+      //   });
     }
   }
 

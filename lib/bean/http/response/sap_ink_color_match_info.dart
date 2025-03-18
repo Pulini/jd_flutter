@@ -38,6 +38,7 @@ class SapInkColorMatchOrderInfo {
   double? trialQty; //MENGE  试做数量
   double? mixtureTheoreticalWeight; //ZMIXNTGEW_AFT 混合物理论重量
   double? loss; //AUSCH  损耗
+  String? remarks; //ZZPART1  备注
   List<SapInkColorMatchMaterialInfo>? materialList; //MATERIAL 物料列表
 
   SapInkColorMatchOrderInfo({
@@ -52,6 +53,7 @@ class SapInkColorMatchOrderInfo {
     this.trialQty,
     this.mixtureTheoreticalWeight,
     this.loss,
+    this.remarks,
     this.materialList,
   });
 
@@ -67,6 +69,7 @@ class SapInkColorMatchOrderInfo {
     trialQty = json['MENGE'].toString().toDoubleTry();
     mixtureTheoreticalWeight = json['ZMIXNTGEW_AFT'].toString().toDoubleTry();
     loss = json['AUSCH'].toString().toDoubleTry();
+    remarks = json['ZZPART1'];
     if (json['MATERIAL'] != null) {
       materialList = [];
       json['MATERIAL'].forEach((v) {
@@ -88,6 +91,7 @@ class SapInkColorMatchOrderInfo {
     map['MENGE'] = trialQty;
     map['ZMIXNTGEW_AFT'] = mixtureTheoreticalWeight;
     map['AUSCH'] = loss;
+    map['remarks'] = remarks;
     if (materialList != null) {
       map['MATERIAL'] = materialList?.map((v) => v.toJson()).toList();
     }

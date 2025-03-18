@@ -2,7 +2,6 @@ import 'dart:typed_data';
 
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/bar_code.dart';
-import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/fun/warehouse/in/sap_injection_molding_stock_in/sap_injection_molding_stock_in_report_view.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
@@ -16,7 +15,7 @@ class SapInjectionMoldingStockInLogic extends GetxController {
 
   clearBarCodeList() {
     BarCodeInfo.clear(
-      type: barCodeTypes[0],
+      type: BarCodeReportType.injectionMoldingStockIn.text,
       callback: (v) {
         if (v == state.barCodeList.length) {
           state.barCodeList.clear();
@@ -82,9 +81,9 @@ class SapInjectionMoldingStockInLogic extends GetxController {
       }
       BarCodeInfo(
         code: code,
-        type: barCodeTypes[0],
-        palletNo: state.palletNumber.value,
+        type: BarCodeReportType.injectionMoldingStockIn.text,
       )
+        ..palletNo = state.palletNumber.value
         ..isUsed = state.usedList.contains(code)
         ..save(callback: (newBarCode) => state.barCodeList.add(newBarCode));
     }
