@@ -137,7 +137,7 @@ class HydroelectricExcessState {
           'NowDegree': textThisTime.text,
           'ItemID': dataDetail.value.itemID,
           'ID': dataDetail.value.id,
-          'UserID': getUserInfo()!.userID,
+          'UserID': userInfo?.userID,
         },
       ).then((response) {
         if (response.resultCode == resultSuccess) {

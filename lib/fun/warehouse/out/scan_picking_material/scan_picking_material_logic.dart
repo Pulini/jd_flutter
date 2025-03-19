@@ -3,6 +3,7 @@ import 'package:jd_flutter/bean/http/response/bar_code.dart';
 import 'package:jd_flutter/bean/http/response/scan_picking_material_info.dart';
 import 'package:jd_flutter/bean/http/response/worker_info.dart';
 import 'package:jd_flutter/fun/warehouse/code_list_report/code_list_report_view.dart';
+import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
@@ -66,11 +67,14 @@ class ScanPickingMaterialLogic extends GetxController {
         if (state.barCodeList.every((v) => v.isUsed)) {
           errorDialog(content: '无条码可提交');
         } else {
-          state.getBarCodeReport(
+          getWaitInStockBarCodeReport(
+            barCodeList:state.barCodeList.where((v) => !v.isUsed).toList(),
+            type: BarCodeReportType.jinCanMaterialOutStock,
             processFlowID: process.processFlowID ?? 0,
+            reverse: state.reverse.value,
             success: (report) {
               Get.to(
-                () => const CodeListReportPage(),
+                    () => const CodeListReportPage(),
                 arguments: {'reportData': report},
               )?.then((v) {
                 if (v != null) {

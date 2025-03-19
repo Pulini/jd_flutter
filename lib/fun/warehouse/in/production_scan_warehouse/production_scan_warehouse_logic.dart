@@ -2,7 +2,6 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/bar_code.dart';
 import 'package:jd_flutter/bean/http/response/check_code_info.dart';
 import 'package:jd_flutter/bean/http/response/sap_picking_info.dart';
-import 'package:jd_flutter/bean/http/response/used_bar_code_info.dart';
 import 'package:jd_flutter/fun/warehouse/code_list_report/code_list_report_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/production_scan_warehouse/production_scan_warehouse_state.dart';
 import 'package:jd_flutter/utils/utils.dart';
@@ -59,17 +58,10 @@ class ProductionScanWarehouseLogic extends GetxController {
   getBarCodeStatusByDepartmentID({
     required Function() refresh,
   }) {
-    httpGet(method: webApiGetBarCodeStatusByDepartmentID, params: {
-      'Type': "SupplierScanInStock",
-      'DepartmentID': getUserInfo()!.departmentID,
-    }).then((response) {
-      if (response.resultCode == resultSuccess) {
+    getAlreadyInStockBarCode(
+      type: BarCodeReportType.productionScanInStock,
+      success: (list) {
         state.usedList.cast();
-        var list = <UsedBarCodeInfo>[
-          for (var i = 0; i < response.data.length; ++i)
-            UsedBarCodeInfo.fromJson(response.data[i])
-        ];
-
         for (var i = 0; i < list.length; ++i) {
           state.usedList.add(list[i].barCode.toString());
         }
@@ -77,11 +69,12 @@ class ProductionScanWarehouseLogic extends GetxController {
           data.isUsed = state.usedList.contains(data.code);
         }
         refresh.call();
-      } else {
+      },
+      error: (msg){
         refresh.call();
-        showSnackBar(title: '温馨提示', message: response.message ?? '');
-      }
-    });
+        showSnackBar(title: '温馨提示', message: msg);
+      },
+    );
   }
 
   //验证托盘
@@ -161,29 +154,13 @@ class ProductionScanWarehouseLogic extends GetxController {
   //获取汇总表
   goReport() {
     if (state.barCodeList.isNotEmpty) {
-      httpPost(
-        method: webApiNewGetSubmitBarCodeReport,
-        loading: '正在获取汇总信息...',
-        body: {
-          'BarCodeList': [
-            for (var i = 0; i < state.barCodeList.length; ++i)
-              {
-                'BarCode': state.barCodeList[i].code,
-                'PalletNo': state.barCodeList[i].palletNo,
-              }
-          ],
-          'BillTypeID': '106',
-          'Red': state.red.value ? 1 : -1,
-          'ProcessFlowID': 0,
-          'OrganizeID': getUserInfo()!.organizeID,
-          'DefaultStockID': getUserInfo()!.defaultStockID,
-          'UserID': getUserInfo()!.userID,
-          'EmpID': getUserInfo()!.empID,
-        },
-      ).then((response) {
-        if (response.resultCode == resultSuccess) {
+      getWaitInStockBarCodeReport(
+        barCodeList: state.barCodeList,
+        type: BarCodeReportType.productionScanInStock,
+        reverse: state.red.value,
+        success: (data){
           Get.to(() => const CodeListReportPage(),
-              arguments: {'reportData': response.data})?.then((v) {
+              arguments: {'reportData': data})?.then((v) {
             if (v == null) {
               state.peopleNumber.text = '';
               state.peopleName.value = '';
@@ -192,10 +169,9 @@ class ProductionScanWarehouseLogic extends GetxController {
               submitCode();
             }
           });
-        } else {
-          errorDialog(content: response.message);
-        }
-      });
+        },
+        error: (msg)=>errorDialog(content: msg),
+      );
     } else {
       showSnackBar(title: '警告', message: '没有条码可提交');
     }
@@ -270,10 +246,10 @@ class ProductionScanWarehouseLogic extends GetxController {
       ],
       'Red': state.red.value ? -1 : 1,
       'EmpCode': state.peopleNumber.text.toString(),
-      'DefaultStockID': getUserInfo()!.defaultStockID,
+      'DefaultStockID': userInfo?.defaultStockID,
       'TranTypeID': '106',
-      'OrganizeID': getUserInfo()!.organizeID,
-      'UserID': getUserInfo()!.userID,
+      'OrganizeID': userInfo?.organizeID,
+      'UserID': userInfo?.userID,
     }).then((response) {
       state.isCheck = false;
       if (response.resultCode == resultSuccess) {

@@ -1,23 +1,26 @@
-import 'package:flutter/cupertino.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
+import 'package:sqflite/sqflite.dart';
 
 enum BarCodeReportType {
-  supplierScanInStock(1,'SupplierScanInStock'), // 供应商扫码入库
-  processReportInStock(11,'ProcessReportInStock'), // 工序汇报入库
-  productionReportInStock(5,'ProductionReportInStock'), // 生产汇报入库
-  productionScanInStock(106,'ProductionScanInStock'), // 生产扫码入库
-  productionScanPicking(107,'ProductionScanPicking'), // 生产扫码领料
-  formingPosteriorScan(3,'FormingPosteriorScan'), // 成型后段扫码
-  warehouseAllocation(6,'WarehouseAllocation'), // 仓库调拨
-  jinCanSalesScanningCode(13,'JinCanSalesScanningCode'), // 销售扫码出库
-  jinCanMaterialOutStock(14,'JincanMaterialOutStock'), // 金灿领料出库
-  injectionMoldingStockIn(1000,'InjectionMoldingStockIn'); // 金臻注塑入库
+  supplierScanInStock(1, 'SupplierScanInStock'), // 供应商扫码入库
+  warehouseAllocation(6, 'WarehouseAllocation'), // 仓库调拨
+  processReportInStock(11, 'ProcessReportInStock'), // 工序汇报入库
+  jinCanSalesScanningCode(13, 'JinCanSalesScanningCode'), // 销售扫码出库
+  jinCanMaterialOutStock(14, 'JincanMaterialOutStock'), // 金灿领料出库
+  productionScanInStock(106, 'ProductionScanInStock'), // 生产扫码入库
+  productionScanPicking(107, 'ProductionScanPicking'), // 生产扫码领料
+  injectionMoldingStockIn(1000, 'InjectionMoldingStockIn'); // 金臻注塑入库
+
+  //功能无用 formingPosteriorScan(3, 'FormingPosteriorScan'), // 成型后段扫码
+  //功能无用 sapProcessReportScan(15,'SapProcessReportScan'), // sap工序汇报扫码
+  //功能无用 productionReportInStock(5,'ProductionReportInStock'), // 生产汇报入库
+
   final int value;
   final String text;
-  const BarCodeReportType(this.value,this.text);
-}
 
+  const BarCodeReportType(this.value, this.text);
+}
 
 class BarCodeInfo {
   int? id;
@@ -61,15 +64,21 @@ class BarCodeInfo {
 
   save({required Function(BarCodeInfo) callback}) {
     openDb().then((db) {
-      db.insert(tableName, toJson()).then((value) {
-        debugPrint('value=$value');
-        id = value;
-        db.close();
-        callback.call(this);
-      }, onError: (e) {
-        logger.e('数据库操作异常：$e');
-        db.close();
-      });
+      db.insert(
+        tableName,
+        toJson(),
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      ).then(
+        (value) {
+          id = value;
+          db.close();
+          callback.call(this);
+        },
+        onError: (e) {
+          logger.e('数据库操作异常：$e');
+          db.close();
+        },
+      );
     });
   }
 
@@ -133,6 +142,29 @@ class BarCodeInfo {
   }
 }
 
+class UsedBarCodeInfo {
+  UsedBarCodeInfo({
+    this.barCode,
+    this.name,
+  });
+
+  UsedBarCodeInfo.fromJson(dynamic json) {
+    barCode = json['BarCode'];
+    name = json['Name'];
+  }
+
+  String? barCode;
+  String? name;
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['BarCode'] = barCode;
+    map['Name'] = name;
+
+    return map;
+  }
+}
+
 class BarCodeProcessInfo {
   int? processFlowID; //制程id
   String? processFlowName; //名称
@@ -143,14 +175,15 @@ class BarCodeProcessInfo {
     this.processFlowName,
     this.processNodeName,
   });
+
   BarCodeProcessInfo.fromJson(dynamic json) {
     processFlowID = json['ProcessFlowID'];
     processFlowName = json['ProcessFlowName'];
     processNodeName = json['ProcessNodeName'];
   }
+
   @override
   toString() {
     return '$processFlowName/$processNodeName';
   }
 }
-

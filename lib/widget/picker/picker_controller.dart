@@ -647,7 +647,7 @@ abstract class PickerController {
   //获取Mes仓库
   Future getMesStockList() async {
     var response = await httpGet(method: webApiPickerMesStockList, params: {
-      'OrganizeID': getUserInfo()!.organizeID,
+      'OrganizeID': userInfo?.organizeID,
     });
     if (response.resultCode == resultSuccess) {
       try {
@@ -679,7 +679,7 @@ abstract class PickerController {
   //获取单据对应仓库列表
   Future getOrderStockList() async {
     var response = await httpGet(method: webApiPickerOrderStockList,params: {
-      'UserID': getUserInfo()!.userID,
+      'UserID': userInfo?.userID,
       'ReportType': 1,
     });
     if (response.resultCode == resultSuccess) {

@@ -203,6 +203,7 @@ Future<BaseData> _doHttp({
             logger.e('需要重新登录');
             spSave(spSaveUserInfo, '');
             if (loading != null && loading.isNotEmpty) loadingDismiss();
+            handler.next(response);
             reLoginPopup();
           } else if (baseData.resultCode == 3) {
             logger.e('需要更新版本');
@@ -1034,3 +1035,7 @@ const webApiGetProcessFlowInfoByBarCode = 'api/ProcessFlow/GetProcessFlowInfoByB
 
 //金灿领料出库
 const webApiJinCanMaterialOutStockSubmit = 'api/ScanJobBooking/JincanMaterialOutStockSubmit';
+
+//金灿销售扫码销售出库提交
+const webApiJinCanSalesScanningCodeSubmit = 'api/ScanJobBooking/JinCanSalesScanningCodeSubmit';
+

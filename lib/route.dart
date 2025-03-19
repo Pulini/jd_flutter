@@ -10,6 +10,8 @@ import 'package:jd_flutter/fun/warehouse/in/sap_put_on_shelves/sap_put_on_shelve
 import 'package:jd_flutter/fun/warehouse/in/suppliers_scan_store/suppliers_scan_store_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/sap_stock_transfer/sap_stock_transfer_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/sap_wms_reprint_labels/sap_wms_reprint_labels_view.dart';
+import 'package:jd_flutter/fun/warehouse/out/production_scan_picking_material/production_scan_picking_material_view.dart';
+import 'package:jd_flutter/fun/warehouse/out/sale_scan_out_warehouse/sale_scan_out_warehouse_view.dart';
 import 'package:jd_flutter/fun/warehouse/out/scan_picking_material/scan_picking_material_view.dart';
 import 'bean/home_button.dart';
 import 'bean/routes.dart';
@@ -417,6 +419,21 @@ class RouteConfig {
     const ScanPickingMaterialPage(),
   );
 
+  //销售扫码出库
+  static Routes saleScanOutWarehouse = Routes(
+    '/sale_scan_out_warehouse',
+    99,
+    const SaleScanOutWarehousePage(),
+  );
+
+  //生产扫码领料
+  static Routes productionScanPickingMaterial = Routes(
+    '/production_scan_picking_material',
+    99,
+    const ProductionScanPickingMaterialPage(),
+  );
+
+
   //本地功能入口列表
   static List<Routes> routeList = [
     dailyReport,
@@ -470,6 +487,8 @@ class RouteConfig {
     productionScanWarehouse,
     incomingInspection,
     scanPickingMaterial,
+    saleScanOutWarehouse,
+    productionScanPickingMaterial,
   ];
 
   static List<GetPage> appRoutes = [
@@ -689,6 +708,14 @@ class RouteConfig {
     GetPage(
       name: scanPickingMaterial.name,
       page: () => scanPickingMaterial.page,
+    ),
+    GetPage(
+      name: saleScanOutWarehouse.name,
+      page: () => saleScanOutWarehouse.page,
+    ),
+    GetPage(
+      name: productionScanPickingMaterial.name,
+      page: () => productionScanPickingMaterial.page,
     ),
   ];
 }

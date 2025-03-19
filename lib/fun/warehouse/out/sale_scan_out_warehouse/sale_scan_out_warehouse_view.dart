@@ -1,29 +1,73 @@
+import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/bar_code.dart';
-import 'package:jd_flutter/fun/warehouse/out/scan_picking_material/scan_picking_material_dialog.dart';
-import 'package:jd_flutter/widget/check_box_widget.dart';
+import 'package:jd_flutter/bean/http/response/worker_info.dart';
+import 'package:jd_flutter/constant.dart';
+import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/scanner.dart';
+import 'package:jd_flutter/widget/worker_check_widget.dart';
 
-import 'scan_picking_material_logic.dart';
-import 'scan_picking_material_state.dart';
+import 'sale_scan_out_warehouse_logic.dart';
+import 'sale_scan_out_warehouse_state.dart';
 
-class ScanPickingMaterialPage extends StatefulWidget {
-  const ScanPickingMaterialPage({super.key});
+class SaleScanOutWarehousePage extends StatefulWidget {
+  const SaleScanOutWarehousePage({super.key});
 
   @override
-  State<ScanPickingMaterialPage> createState() =>
-      _ScanPickingMaterialPageState();
+  State<SaleScanOutWarehousePage> createState() =>
+      _SaleScanOutWarehousePageState();
 }
 
-class _ScanPickingMaterialPageState extends State<ScanPickingMaterialPage> {
-  final ScanPickingMaterialLogic logic = Get.put(ScanPickingMaterialLogic());
-  final ScanPickingMaterialState state =
-      Get.find<ScanPickingMaterialLogic>().state;
-  var controller = TextEditingController();
+class _SaleScanOutWarehousePageState extends State<SaleScanOutWarehousePage> {
+  final SaleScanOutWarehouseLogic logic = Get.put(SaleScanOutWarehouseLogic());
+  final SaleScanOutWarehouseState state =
+      Get.find<SaleScanOutWarehouseLogic>().state;
+  var inputController = TextEditingController();
+  var refreshController = EasyRefreshController(controlFinishRefresh: true);
+
+  inputWorkerDialog({required Function(WorkerInfo) submit}) {
+    WorkerInfo? worker;
+    Get.dialog(
+      PopScope(
+        canPop: true,
+        child: StatefulBuilder(builder: (context, dialogSetState) {
+          return AlertDialog(
+            title: Text('提交领料'),
+            content: WorkerCheck(
+              hint: '请输入领料员工号',
+              init: spGet(spSaveSaleScanOutWarehouseWorker),
+              onChanged: (v) => worker = v,
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  if (worker == null) {
+                    showSnackBar(message: '请输入领料员工号', isWarning: true);
+                    return;
+                  }
+                  spSave(spSaveSaleScanOutWarehouseWorker, worker!.empCode ?? '');
+                  Get.back();
+                  submit.call(worker!);
+                },
+                child: Text('提交'),
+              ),
+              TextButton(
+                onPressed: () => Get.back(),
+                child: Text(
+                  'dialog_default_cancel'.tr,
+                  style: const TextStyle(color: Colors.grey),
+                ),
+              ),
+            ],
+          );
+        }),
+      ),
+    );
+  }
 
   _item(BarCodeInfo item) {
     return Container(
@@ -31,7 +75,10 @@ class _ScanPickingMaterialPageState extends State<ScanPickingMaterialPage> {
       padding: const EdgeInsets.only(left: 10),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [Colors.blue.shade100, Colors.green.shade50],
+          colors: [
+            item.isUsed ? Colors.red.shade100 : Colors.blue.shade100,
+            Colors.green.shade50
+          ],
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
         ),
@@ -46,7 +93,9 @@ class _ScanPickingMaterialPageState extends State<ScanPickingMaterialPage> {
             child: item.isUsed
                 ? textSpan(
                     hint: '已提交：',
+                    hintColor: Colors.red,
                     text: item.code ?? '',
+                    textColor: Colors.grey,
                   )
                 : Text(
                     item.code ?? '',
@@ -68,22 +117,19 @@ class _ScanPickingMaterialPageState extends State<ScanPickingMaterialPage> {
       ),
     );
   }
+
   @override
   void initState() {
-    pdaScanner(scan: (code)=>logic.scanCode(code));
+    pdaScanner(scan: (code) => logic.scanCode(code));
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      refreshController.callRefresh();
+    });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return pageBody(
-      actions: [
-        Obx(() => CheckBox(
-              onChanged: (c) => state.reverse.value = c,
-              name: '红冲',
-              value: state.reverse.value,
-            ))
-      ],
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -91,7 +137,7 @@ class _ScanPickingMaterialPageState extends State<ScanPickingMaterialPage> {
             height: 40,
             padding: const EdgeInsets.only(left: 10, right: 10),
             child: TextField(
-              controller: controller,
+              controller: inputController,
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.only(
                   top: 0,
@@ -113,14 +159,14 @@ class _ScanPickingMaterialPageState extends State<ScanPickingMaterialPage> {
                 hintText: '手动录入登记',
                 hintStyle: const TextStyle(color: Colors.grey),
                 prefixIcon: IconButton(
-                    onPressed: () => controller.clear(),
+                    onPressed: () => inputController.clear(),
                     icon: const Icon(
                       Icons.replay_circle_filled,
                       color: Colors.red,
                     )),
                 suffixIcon: IconButton(
                   onPressed: () {
-                    var text = controller.text;
+                    var text = inputController.text;
                     if (text.trim().isEmpty) {
                       showSnackBar(message: '请输入条码');
                     } else {
@@ -134,15 +180,23 @@ class _ScanPickingMaterialPageState extends State<ScanPickingMaterialPage> {
                   ),
                 ),
               ),
-              onChanged: (search) {},
             ),
           ),
           Expanded(
-            child: Obx(() => ListView.builder(
+            child: Obx(
+              () => EasyRefresh(
+                controller: refreshController,
+                header: const MaterialHeader(),
+                onRefresh: () => logic.refreshBarCodeStatus(
+                  refresh: () => refreshController.finishRefresh(),
+                ),
+                child: ListView.builder(
                   padding: const EdgeInsets.all(8),
                   itemCount: state.barCodeList.length,
                   itemBuilder: (c, i) => _item(state.barCodeList[i]),
-                )),
+                ),
+              ),
+            ),
           ),
           Padding(
             padding: const EdgeInsets.all(5),
@@ -167,9 +221,8 @@ class _ScanPickingMaterialPageState extends State<ScanPickingMaterialPage> {
                       combination: Combination.right,
                       isEnabled: state.barCodeList.isNotEmpty,
                       text: '提交',
-                      click: () => checkBarCodeProcessDialog(
-                        list: state.barCodeList,
-                        submit: (w, p) => logic.submit(worker: w, process: p),
+                      click: () => inputWorkerDialog(
+                        submit: (w) => logic.submit(worker: w),
                       ),
                     )),
               ),
@@ -182,7 +235,7 @@ class _ScanPickingMaterialPageState extends State<ScanPickingMaterialPage> {
 
   @override
   void dispose() {
-    Get.delete<ScanPickingMaterialLogic>();
+    Get.delete<SaleScanOutWarehouseLogic>();
     super.dispose();
   }
 }

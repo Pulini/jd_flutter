@@ -10,6 +10,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/bean/http/response/bar_code.dart';
+import 'package:jd_flutter/bean/http/response/base_data.dart';
 import 'package:jd_flutter/bean/http/response/leader_info.dart';
 import 'package:jd_flutter/bean/http/response/process_specification_info.dart';
 import 'package:jd_flutter/bean/http/response/user_info.dart';
@@ -544,6 +546,70 @@ getProcessManual({
       manualList([
         for (var item in response.data) ProcessSpecificationInfo.fromJson(item)
       ]);
+    } else {
+      error.call(response.message ?? 'query_default_error'.tr);
+    }
+  });
+}
+
+getAlreadyInStockBarCode({
+  required BarCodeReportType type,
+  required Function(List<UsedBarCodeInfo>) success,
+  required Function(String) error,
+}) {
+  httpGet(
+    method: webApiGetBarCodeStatusByDepartmentID,
+    params: {
+      'Type': type.text,
+      'DepartmentID': userInfo?.departmentID,
+    },
+  ).then((response) async {
+    if (response.resultCode == resultSuccess) {
+      success.call(await compute(
+        parseJsonToList,
+        ParseJsonParams(
+          response.data,
+          UsedBarCodeInfo.fromJson,
+        ),
+      ));
+    } else {
+      error.call(response.message ?? 'query_default_error'.tr);
+    }
+  });
+}
+
+getWaitInStockBarCodeReport({
+  required List<BarCodeInfo> barCodeList,
+  required BarCodeReportType type,
+  bool reverse = false,
+  int? processFlowID,
+  int? organizeID,
+  int? defaultStockID,
+  int? userID,
+  required Function(dynamic) success,
+  required Function(String) error,
+}) {
+  httpPost(
+    loading: '正在获取汇总信息...',
+    method: webApiNewGetSubmitBarCodeReport,
+    body: {
+      'BarCodeList': [
+        for (var item in barCodeList)
+          {
+            'BarCode': item.code,
+            'PalletNo': item.palletNo,
+          }
+      ],
+      'BillTypeID': type.value,
+      'Red': reverse,
+      'ProcessFlowID': processFlowID ?? 0,
+      'OrganizeID': organizeID ?? userInfo?.organizeID,
+      'DefaultStockID': defaultStockID ?? userInfo?.defaultStockID,
+      'UserID': userID ?? userInfo?.userID,
+    },
+  ).then((response) {
+    if (response.resultCode == resultSuccess) {
+      success.call(response.data);
     } else {
       error.call(response.message ?? 'query_default_error'.tr);
     }

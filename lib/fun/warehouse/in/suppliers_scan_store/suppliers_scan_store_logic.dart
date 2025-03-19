@@ -1,7 +1,6 @@
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/bar_code.dart';
 import 'package:jd_flutter/bean/http/response/sap_picking_info.dart';
-import 'package:jd_flutter/bean/http/response/used_bar_code_info.dart';
 import 'package:jd_flutter/fun/warehouse/code_list_report/code_list_report_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/suppliers_scan_store/suppliers_scan_store_state.dart';
 import 'package:jd_flutter/route.dart';
@@ -99,28 +98,13 @@ class SuppliersScanStoreLogic extends GetxController {
 
   goReport() {
     if (state.barCodeList.isNotEmpty) {
-      httpPost(
-        method: webApiNewGetSubmitBarCodeReport,
-        loading: '正在获取汇总信息...',
-        body: {
-          'BarCodeList': [
-            for (var i = 0; i < state.barCodeList.length; ++i)
-              {
-                'BarCode': state.barCodeList[i].code,
-                'PalletNo': state.barCodeList[i].palletNo,
-              }
-          ],
-          'BillTypeID': BarCodeReportType.supplierScanInStock.value,
-          'Red': state.red.value ? 1 : -1,
-          'ProcessFlowID': 0,
-          'OrganizeID': getUserInfo()!.organizeID,
-          'DefaultStockID': getUserInfo()!.defaultStockID,
-          'UserID': getUserInfo()!.userID,
-        },
-      ).then((response) {
-        if (response.resultCode == resultSuccess) {
+      getWaitInStockBarCodeReport(
+        barCodeList:state.barCodeList,
+        type: BarCodeReportType.supplierScanInStock,
+        reverse:  state.red.value,
+        success: (data){
           Get.to(() => const CodeListReportPage(),
-              arguments: {'reportData': response.data})?.then((v) {
+              arguments: {'reportData': data})?.then((v) {
             if (v == null) {
               state.peopleNumber.text = '';
               state.peopleName.value = '';
@@ -129,10 +113,9 @@ class SuppliersScanStoreLogic extends GetxController {
               submitCode();
             }
           });
-        } else {
-          errorDialog(content: response.message);
-        }
-      });
+        },
+        error: (msg)=> errorDialog(content: msg),
+      );
     } else {
       showSnackBar(title: '警告', message: '没有条码可提交');
     }
@@ -194,30 +177,23 @@ class SuppliersScanStoreLogic extends GetxController {
   getBarCodeStatusByDepartmentID({
     required Function() refresh,
   }) {
-    httpGet(method: webApiGetBarCodeStatusByDepartmentID, params: {
-      'Type': "SupplierScanInStock",
-      'DepartmentID': getUserInfo()!.departmentID,
-    }).then((response) {
-      if (response.resultCode == resultSuccess) {
+    getAlreadyInStockBarCode(
+      type: BarCodeReportType.supplierScanInStock,
+      success: (list) {
         state.usedList.clear();
-        var list = <UsedBarCodeInfo>[
-          for (var i = 0; i < response.data.length; ++i)
-            UsedBarCodeInfo.fromJson(response.data[i])
-        ];
-
         for (var i = 0; i < list.length; ++i) {
           state.usedList.add(list[i].barCode.toString());
         }
-
         for (var data in state.barCodeList) {
           data.isUsed = state.usedList.contains(data.code);
         }
         refresh.call();
-      } else {
-        showSnackBar(title: '温馨提示', message: response.message ?? '');
-        refresh.call;
-      }
-    });
+      },
+      error: (msg){
+        showSnackBar(title: '温馨提示', message: msg);
+        refresh.call();
+      },
+    );
   }
 
   //提交条形码数据,自动生成外购入库单
@@ -235,8 +211,8 @@ class SuppliersScanStoreLogic extends GetxController {
       'EmpCode': state.peopleNumber.text.toString(),
       'DefaultStockID': billStockListController.selectedId.value,
       'TranTypeID': BarCodeReportType.supplierScanInStock.value,
-      'OrganizeID': getUserInfo()!.organizeID,
-      'UserID': getUserInfo()!.userID,
+      'OrganizeID': userInfo?.organizeID,
+      'UserID': userInfo?.userID,
     }).then((response) {
       if (response.resultCode == resultSuccess) {
         clearBarCodeList();

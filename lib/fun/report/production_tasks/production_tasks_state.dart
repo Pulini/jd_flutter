@@ -49,7 +49,7 @@ class ProductionTasksState {
         method: webApiGetProductionOrderSchedule,
         loading: 'production_tasks_querying_tasks'.tr,
         params: {
-          'departmentID': getUserInfo()!.departmentID ?? 0,
+          'departmentID': userInfo?.departmentID ?? 0,
           // 'departmentID': 554744,
         }).then((response) {
       if (response.resultCode == resultSuccess) {

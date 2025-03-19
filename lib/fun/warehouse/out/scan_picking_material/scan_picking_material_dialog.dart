@@ -35,7 +35,7 @@ checkBarCodeProcessDialog({
                   children: [
                     WorkerCheck(
                       hint: '请输入领料员工号',
-                      init: spGet(spSaveScanPickingMaterial),
+                      init: spGet(spSaveScanPickingMaterialWorker),
                       onChanged: (v) => worker = v,
                     ),
                     selectView(
@@ -63,7 +63,7 @@ checkBarCodeProcessDialog({
                         : 0;
                     spSave(
                         spSaveScanPickingMaterialSelectProcess, processSelect);
-                    spSave(spSaveScanPickingMaterial, worker!.empCode ?? '');
+                    spSave(spSaveScanPickingMaterialWorker, worker!.empCode ?? '');
                     Get.back();
                     submit.call(worker!, processList[processSelect]);
 
