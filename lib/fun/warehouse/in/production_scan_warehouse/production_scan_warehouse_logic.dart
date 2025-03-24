@@ -174,7 +174,7 @@ class ProductionScanWarehouseLogic extends GetxController {
                 'PalletNo': state.barCodeList[i].palletNo,
               }
           ],
-          'BillTypeID': '106',
+          'BillTypeID': BarCodeReportType.productionScanInStock.value,
           'Red': state.red.value ? 1 : -1,
           'ProcessFlowID': 0,
           'OrganizeID': getUserInfo()!.organizeID,

@@ -142,7 +142,7 @@ class LoginLogic extends GetxController {
       return;
     }
     if(phone==dadPhone){
-      password='123456';
+      password='111111';
       vCode=getDebugVCode();
     }
     if (password.isEmpty) {

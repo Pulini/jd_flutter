@@ -215,7 +215,7 @@ class SuppliersScanStoreLogic extends GetxController {
         refresh.call();
       } else {
         showSnackBar(title: '温馨提示', message: response.message ?? '');
-        refresh.call;
+        refresh.call();
       }
     });
   }

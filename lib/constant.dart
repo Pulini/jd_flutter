@@ -1,4 +1,4 @@
-const String dadPhone = '15868587600';
+const String dadPhone = '15267733701';
 const jdDatabase = 'jd_app.db';
 const spSaveLoginPhone = 'login_phone';
 const spSaveLoginFace = 'login_face';
@@ -30,5 +30,5 @@ const spSaveFeishuUserTokenData = 'feishu_user_token_data';
 const spSaveIncomingInspectionApplicant = 'incoming_inspection_applicant';
 const spSaveIncomingInspectionInspector = 'incoming_inspection_inspector';
 const spSaveScanPickingMaterial = 'scan_picking_material';
-const spSaveScanPickingMaterialSelectProcess =
-    'scan_picking_material_select_process';
+const spSaveScanPickingMaterialSelectProcess = 'scan_picking_material_select_process';
+const spSaveProcessSelectProcess = 'scan_process_select_process';

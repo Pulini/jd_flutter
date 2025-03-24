@@ -229,7 +229,10 @@ class _SuppliersScanStorePageState extends State<SuppliersScanStorePage> {
 
   @override
   void initState() {
-    logic.getBarCodeStatusByDepartmentID(refresh: (){});
+    logic.getBarCodeStatusByDepartmentID(refresh: (){
+      refreshController.finishRefresh();
+      refreshController.resetFooter();
+    });
     pdaScanner(scan: (code) {
       logic.scanCode(code);
     });

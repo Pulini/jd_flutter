@@ -1034,3 +1034,13 @@ const webApiGetProcessFlowInfoByBarCode = 'api/ProcessFlow/GetProcessFlowInfoByB
 
 //金灿领料出库
 const webApiJinCanMaterialOutStockSubmit = 'api/ScanJobBooking/JincanMaterialOutStockSubmit';
+
+//工序汇报入库提交
+const webApiUploadProcessReport = "api/ScanJobBooking/SubmitScWorkCardBarCode2ProcessOutput";
+
+//工序汇报入库，获取贴标数据
+const webApiGetBarCodeInfo = "api/BarCode/GetBarCodeInfo";
+
+
+//工序汇报入库，提交贴标数据
+const webApiUpdateBarCodeInfo = "api/BarCode/UpdateBarCodeInfo";
