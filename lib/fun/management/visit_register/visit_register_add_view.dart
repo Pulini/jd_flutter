@@ -480,7 +480,7 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
             state.upAddDetail.value.visitorNum = s,
           }),
       line,
-      _text('visit_details_factory_area'.tr, getUserInfo()!.factory),
+      _text('visit_details_factory_area'.tr, userInfo?.factory),
       line,
       _inputText(
           'visit_details_name_of_interviewee'.tr, data.intervieweeName, [],

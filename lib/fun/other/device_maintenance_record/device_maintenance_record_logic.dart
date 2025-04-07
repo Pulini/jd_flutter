@@ -106,7 +106,7 @@ class DeviceMaintenanceRecordLogic extends GetxController {
             state.deviceData.value.deviceMessage!.custodianID.toString(),
         'CustodianNumber':
             state.deviceData.value.deviceMessage!.custodianCode.toString(),
-        'UserID': getUserInfo()!.userID.toString(),
+        'UserID': userInfo?.userID.toString(),
         'RepairParts': state.repairParts.value,
         'MaintenanceUnit': state.maintenanceUnit.value,
         'RepairEntryData': [
@@ -173,7 +173,7 @@ class DeviceMaintenanceRecordLogic extends GetxController {
       params: {
         'InterID': startDate.getDateFormatYMD(),
         'VoidReason': endDate.getDateFormatYMD(),
-        'UserID': getUserInfo()!.userID,
+        'UserID': userInfo?.userID,
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {

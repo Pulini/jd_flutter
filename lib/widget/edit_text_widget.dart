@@ -169,8 +169,10 @@ class NumberDecimalEditText extends StatelessWidget {
           labelStyle: const TextStyle(color: Colors.black54),
           suffixIcon: IconButton(
             icon: const Icon(Icons.close, color: Colors.grey),
-            onPressed: () =>
-                controller == null ? c.clear() : controller?.clear(),
+            onPressed: () {
+              controller == null ? c.clear() : controller?.clear();
+              onChanged.call(0);
+            },
           ),
         ),
       ),

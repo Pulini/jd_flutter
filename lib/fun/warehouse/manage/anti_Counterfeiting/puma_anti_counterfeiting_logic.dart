@@ -44,7 +44,7 @@ class PumaAntiCounterfeitingLogic extends GetxController {
       loading: 'code_list_report_in_storage'.tr,
       body: {
         'BoxNumber': state.palletNumber.value,
-        'WorkCode': getUserInfo()!.number,
+        'WorkCode': userInfo?.number,
         'BarCodeList': [
           for (var i = 0; i < state.dataCodeList.length; ++i)
             state.dataCodeList[i].code
@@ -67,7 +67,7 @@ class PumaAntiCounterfeitingLogic extends GetxController {
       method: webApiGetBarCodeListByEmp,
       loading: 'code_list_report_obtaining_sorting_data'.tr,
       params: {
-        'WorkCode': getUserInfo()!.number,
+        'WorkCode': userInfo?.number,
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
@@ -116,7 +116,7 @@ class PumaAntiCounterfeitingLogic extends GetxController {
       loading: 'code_list_report_out_of_stock'.tr,
       body: {
         'BoxNumber': "",
-        'WorkCode': getUserInfo()!.number,
+        'WorkCode': userInfo?.number,
         'BarCodeList': [
           for (var i = 0; i < state.sortingList.length; ++i)
             {

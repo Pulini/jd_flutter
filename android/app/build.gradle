@@ -70,8 +70,8 @@ flutter {
 }
 
 dependencies {
-    implementation 'androidx.activity:activity-ktx:1.9.2'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.activity:activity-ktx:1.10.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
     //JDK编译异常处理
     implementation(platform("org.jetbrains.kotlin:kotlin-bom:1.8.22"))
     implementation 'androidx.multidex:multidex:2.0.1'
@@ -92,4 +92,6 @@ dependencies {
     //485串口 https://github.com/licheedev/Android-SerialPort-API
     implementation 'com.licheedev:android-serialport:2.1.4'
     implementation files('libs/pl2303g_multilib.jar')
+    implementation 'androidx.print:print:1.0.0'
+//    implementation files('libs/larksso-3.0.10.aar')
 }

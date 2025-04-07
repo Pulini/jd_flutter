@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/bar_code.dart';
 import 'package:jd_flutter/bean/http/response/sap_picking_info.dart';
-import 'package:jd_flutter/bean/http/response/used_bar_code_info.dart';
 
 
 class SuppliersScanStoreState {

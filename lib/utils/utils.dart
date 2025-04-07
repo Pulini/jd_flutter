@@ -10,6 +10,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/bean/http/response/bar_code.dart';
+import 'package:jd_flutter/bean/http/response/base_data.dart';
 import 'package:jd_flutter/bean/http/response/leader_info.dart';
 import 'package:jd_flutter/bean/http/response/process_specification_info.dart';
 import 'package:jd_flutter/bean/http/response/user_info.dart';
@@ -18,8 +20,10 @@ import 'package:jd_flutter/bean/http/response/worker_info.dart';
 import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
+import 'package:jd_flutter/widget/downloader.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -550,6 +554,70 @@ getProcessManual({
   });
 }
 
+getAlreadyInStockBarCode({
+  required BarCodeReportType type,
+  required Function(List<UsedBarCodeInfo>) success,
+  required Function(String) error,
+}) {
+  httpGet(
+    method: webApiGetBarCodeStatusByDepartmentID,
+    params: {
+      'Type': type.text,
+      'DepartmentID': userInfo?.departmentID,
+    },
+  ).then((response) async {
+    if (response.resultCode == resultSuccess) {
+      success.call(await compute(
+        parseJsonToList,
+        ParseJsonParams(
+          response.data,
+          UsedBarCodeInfo.fromJson,
+        ),
+      ));
+    } else {
+      error.call(response.message ?? 'query_default_error'.tr);
+    }
+  });
+}
+
+getWaitInStockBarCodeReport({
+  required List<BarCodeInfo> barCodeList,
+  required BarCodeReportType type,
+  bool reverse = false,
+  int? processFlowID,
+  int? organizeID,
+  int? defaultStockID,
+  int? userID,
+  required Function(dynamic) success,
+  required Function(String) error,
+}) {
+  httpPost(
+    loading: '正在获取汇总信息...',
+    method: webApiNewGetSubmitBarCodeReport,
+    body: {
+      'BarCodeList': [
+        for (var item in barCodeList)
+          {
+            'BarCode': item.code,
+            'PalletNo': item.palletNo,
+          }
+      ],
+      'BillTypeID': type.value,
+      'Red': reverse,
+      'ProcessFlowID': processFlowID ?? 0,
+      'OrganizeID': organizeID ?? userInfo?.organizeID,
+      'DefaultStockID': defaultStockID ?? userInfo?.defaultStockID,
+      'UserID': userID ?? userInfo?.userID,
+    },
+  ).then((response) {
+    if (response.resultCode == resultSuccess) {
+      success.call(response.data);
+    } else {
+      error.call(response.message ?? 'query_default_error'.tr);
+    }
+  });
+}
+
 String getDateYMD({DateTime? time}) {
   DateTime now;
   if (time == null) {
@@ -745,4 +813,29 @@ int dp2Px(double dp, BuildContext context) {
   double pixelRatio = mq.devicePixelRatio;
 
   return (dp * pixelRatio + 1).toInt();
+}
+
+livenFaceVerification({
+  required String faceUrl,
+  required Function(String) verifySuccess,
+}) {
+  Downloader(
+    url: faceUrl,
+    completed: (filePath) {
+      try {
+        Permission.camera.request().isGranted.then((permission) {
+          if (permission) {
+            const MethodChannel(channelFaceVerificationAndroidToFlutter)
+                .invokeMethod('StartDetect', filePath)
+                .then((v) => verifySuccess.call(v))
+                .catchError((e) => errorDialog(content: '人脸验证错误：$e'));
+          } else {
+            errorDialog(content: '缺少相机权限');
+          }
+        });
+      } on PlatformException {
+        errorDialog(content: '人脸验证程序启动失败');
+      }
+    },
+  );
 }

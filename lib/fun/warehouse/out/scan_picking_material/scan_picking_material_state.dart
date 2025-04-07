@@ -30,7 +30,7 @@ class ScanPickingMaterialState {
         ],
         'ProcessFlowID': processFlowID,
         'ProcessName': processName,
-        'Type': BarCodeReportType.jinCanSalesScanningCode.text,
+        'Type': BarCodeReportType.jinCanMaterialOutStock.text,
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
@@ -41,35 +41,7 @@ class ScanPickingMaterialState {
     });
   }
 
-  getBarCodeReport({
-    required int processFlowID,
-    required Function(dynamic) success,
-    required Function(String) error,
-  }) {
-    httpPost(
-      loading: '正在获取汇总信息...',
-      method: webApiNewGetSubmitBarCodeReport,
-      body: {
-        'BarCodeList': [
-          for (var item in barCodeList.where((v) => !v.isUsed))
-            {'BarCode': item.code}
-        ],
-        'BillTypeID':BarCodeReportType.jinCanMaterialOutStock.value,
-        'Red': reverse.value ? 1 : -1,
-        'ProcessFlowID': processFlowID,
-        'OrganizeID': userInfo?.organizeID,
-        'DefaultStockID': userInfo?.defaultStockID,
-        'UserID': userInfo?.userID,
-        'EmpID': userInfo?.empID,
-      },
-    ).then((response) {
-      if (response.resultCode == resultSuccess) {
-        success.call(response.data);
-      } else {
-        error.call(response.message ?? 'query_default_error'.tr);
-      }
-    });
-  }
+
   submitBarCode({
     required Function(String) success,
     required Function(String) error,

@@ -81,7 +81,7 @@ class TimelyInventoryLogic extends GetxController {
         'MaterialCode':data.materialNumber,
         'Factory':data.factoryNumber,
         'Location':newLocation,
-        'Operator':getUserInfo()!.userID,
+        'Operator':userInfo?.userID,
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {

@@ -4,6 +4,11 @@ abstract class PickerItem {
   String pickerId();
 
   String toShow();
+
+  @override
+  String toString() {
+    return toShow();
+  }
 }
 
 abstract class LinkPickerItem extends PickerItem {
@@ -38,6 +43,7 @@ class PickerSapSupplier extends PickerItem {
   String toShow() {
     return '($supplierNumber)-$name';
   }
+
 }
 
 class PickerSapCompany extends PickerItem {
@@ -60,10 +66,10 @@ class PickerSapCompany extends PickerItem {
   String pickerName() {
     return company ?? '';
   }
-  
+
   @override
   String toShow() {
-    return company??'';
+    return company ?? '';
   }
 }
 
@@ -90,7 +96,7 @@ class PickerSapFactory extends PickerItem {
   String pickerName() {
     return name ?? '';
   }
-  
+
   @override
   String toShow() {
     return name ?? '';
@@ -120,6 +126,7 @@ class PickerSapWorkCenter extends PickerItem {
   String pickerName() {
     return name ?? '';
   }
+
   @override
   String toShow() {
     return '($number)-$name';
@@ -152,6 +159,7 @@ class PickerSapDepartment extends PickerItem {
   String pickerName() {
     return name ?? '';
   }
+
   @override
   String toShow() {
     return '($number)-$name';
@@ -184,6 +192,7 @@ class PickerMesWorkShop extends PickerItem {
   String pickerName() {
     return name ?? '';
   }
+
   @override
   String toShow() {
     return '($number)-$name';
@@ -216,6 +225,7 @@ class PickerMesDepartment extends PickerItem {
   String pickerName() {
     return name ?? '';
   }
+
   @override
   String toShow() {
     return '($number)-$name';
@@ -254,6 +264,7 @@ class PickerMesOrganization extends PickerItem {
   String pickerName() {
     return name ?? '';
   }
+
   @override
   String toShow() {
     return '($number)-$name';
@@ -283,6 +294,7 @@ class PickerSapProcessFlow extends PickerItem {
   String pickerName() {
     return name ?? '';
   }
+
   @override
   String toShow() {
     return '($number)-$name';
@@ -312,9 +324,10 @@ class PickerMesProcessFlow extends PickerItem {
   String pickerName() {
     return name ?? '';
   }
+
   @override
   String toShow() {
-    return name??'';
+    return name ?? '';
   }
 }
 
@@ -350,6 +363,7 @@ class PickerSapMachine extends PickerItem {
   String pickerName() {
     return name ?? '';
   }
+
   @override
   String toShow() {
     return '($number)-$name';
@@ -379,6 +393,7 @@ class PickerSapWorkCenterNew extends PickerItem {
   String pickerName() {
     return name ?? '';
   }
+
   @override
   String toShow() {
     return '($number)-$name';
@@ -408,9 +423,10 @@ class PickerSapGroup extends PickerItem {
   String pickerName() {
     return name ?? '';
   }
+
   @override
   String toShow() {
-    return name??'';
+    return name ?? '';
   }
 }
 
@@ -450,6 +466,7 @@ class PickerSapFactoryAndWarehouse extends LinkPickerItem {
   List<PickerItem> subList() {
     return warehouseList ?? [];
   }
+
   @override
   String toShow() {
     return '($number)-$name';
@@ -482,6 +499,7 @@ class PickerSapWarehouse extends PickerItem {
   String pickerName() {
     return warehouseName ?? '';
   }
+
   @override
   String toShow() {
     return '($warehouseNumber)-$warehouseName';
@@ -511,9 +529,10 @@ class PickerMesProductionReportType extends PickerItem {
   String pickerName() {
     return itemName ?? '';
   }
+
   @override
   String toShow() {
-    return itemName??'';
+    return itemName ?? '';
   }
 }
 
@@ -541,9 +560,10 @@ class PickerMesMoldingPackArea extends PickerItem {
   String pickerName() {
     return name?.trim() ?? '';
   }
+
   @override
   String toShow() {
-    return name??'';
+    return name ?? '';
   }
 }
 
@@ -570,12 +590,12 @@ class PickerSapWarehouseLocation extends PickerItem {
   String pickerName() {
     return '$location - 剩余$noUsedNum';
   }
+
   @override
   String toShow() {
     return '$location - 剩余$noUsedNum';
   }
 }
-
 
 class PickerMesGroup extends PickerItem {
   PickerMesGroup({
@@ -603,6 +623,7 @@ class PickerMesGroup extends PickerItem {
   String pickerName() {
     return departmentName ?? '';
   }
+
   @override
   String toShow() {
     return '($departmentNumber)-$departmentName';
@@ -645,9 +666,10 @@ class MesStockInfo extends LinkPickerItem {
   List<PickerItem> subList() {
     return stockList ?? [];
   }
+
   @override
   String toShow() {
-    return name??'';
+    return name ?? '';
   }
 }
 
@@ -674,9 +696,10 @@ class StockItem extends PickerItem {
   String pickerName() {
     return name ?? '';
   }
+
   @override
   String toShow() {
-    return name??'';
+    return name ?? '';
   }
 }
 
@@ -706,8 +729,9 @@ class OrderStockItem extends PickerItem {
   String pickerName() {
     return stockName ?? '';
   }
+
   @override
   String toShow() {
-    return stockName??'';
+    return stockName ?? '';
   }
 }

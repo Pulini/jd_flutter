@@ -203,6 +203,7 @@ Future<BaseData> _doHttp({
             logger.e('需要重新登录');
             spSave(spSaveUserInfo, '');
             if (loading != null && loading.isNotEmpty) loadingDismiss();
+            // handler.next(response);
             reLoginPopup();
           } else if (baseData.resultCode == 3) {
             logger.e('需要更新版本');
@@ -1034,6 +1035,22 @@ const webApiGetProcessFlowInfoByBarCode = 'api/ProcessFlow/GetProcessFlowInfoByB
 
 //金灿领料出库
 const webApiJinCanMaterialOutStockSubmit = 'api/ScanJobBooking/JincanMaterialOutStockSubmit';
+
+//金灿销售扫码销售出库提交
+const webApiJinCanSalesScanningCodeSubmit = 'api/ScanJobBooking/JinCanSalesScanningCodeSubmit';
+
+//获取领料员可领部门信息
+const webApiSapGetPickerInfo = 'sap/zapp/ZMM_ZMMWORK_D';
+
+//修改物料库位
+const webApiSapModifyLocation = 'sap/zapp/ZFUN_UPDATE_ZMMLGORT';
+
+//获取正单(车间)领料列表
+const webApiGetMaterialList = 'api/Material/GetMaterialList';
+
+//获取物料库存信息列表
+const webApiGetMaterialInventoryList = 'api/Material/GetMaterialInventoryList';
+
 
 //工序汇报入库提交
 const webApiUploadProcessReport = "api/ScanJobBooking/SubmitScWorkCardBarCode2ProcessOutput";

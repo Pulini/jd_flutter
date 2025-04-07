@@ -496,3 +496,32 @@ reasonInputPopup({
     ),
   );
 }
+
+exitDialog({
+  required String content,
+}) {
+  Get.dialog(AlertDialog(
+    title: Text('dialog_default_exit_title'.tr),
+    content: Text(
+      content,
+      style: const TextStyle(
+        fontWeight: FontWeight.bold,
+        color: Colors.red,
+        fontSize: 18,
+      ),
+    ),
+    actions: [
+      TextButton(
+        onPressed: () => Get.back(closeOverlays: true),
+        child: Text('dialog_default_confirm'.tr),
+      ),
+      TextButton(
+        onPressed: () => Get.back(),
+        child: Text(
+          'dialog_default_cancel'.tr,
+          style: const TextStyle(color: Colors.grey),
+        ),
+      ),
+    ],
+  ));
+}

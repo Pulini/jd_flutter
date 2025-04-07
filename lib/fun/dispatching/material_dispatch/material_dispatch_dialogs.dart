@@ -725,7 +725,7 @@ class PickPalletController {
             ),
             Expanded(
               child: getCupertinoPicker(
-                palletDataList.map((data) {
+                items: palletDataList.map((data) {
                   return Center(
                     child: Text(
                       'material_dispatch_dialog_inventory'.trArgs([
@@ -735,7 +735,7 @@ class PickPalletController {
                     ),
                   );
                 }).toList(),
-                controller,
+                controller: controller,
               ),
             ),
           ],

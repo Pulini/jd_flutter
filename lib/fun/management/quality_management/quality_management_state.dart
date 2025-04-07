@@ -25,7 +25,7 @@ class QualityManagementState {
 
   var headIndex = 0; //2级列表头index
   var selected = (-1).obs;
-  var personal = ("${"${getUserInfo()!.name!}（${getUserInfo()!.number}"})").obs;
+  var personal = ("${"${userInfo?.name!}（${userInfo?.number}"})").obs;
   var searchPeople = '';
   var searchPeopleEmpId = '';
   var searchPeopleDepartmentID = '';
@@ -35,8 +35,8 @@ class QualityManagementState {
   var dialogMiss = false.obs;
 
   //需要提交的数据
-  var departmentID = getUserInfo()!.departmentID.toString(); //部门id
-  var empID = getUserInfo()!.empID.toString(); //员工empId
+  var departmentID = userInfo?.departmentID.toString(); //部门id
+  var empID = userInfo?.empID.toString(); //员工empId
   var entryID = ""; //工单id
   var interID = ""; //工单id
   var itemId = "-1"; //工单id
