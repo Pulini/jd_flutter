@@ -2,12 +2,15 @@ package com.jd.pzx.jd_flutter
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Bitmap
 import android.os.Bundle
+import android.print.PrintManager
 import android.util.Log
 import com.jd.pzx.jd_flutter.LivenFaceVerificationActivity.Companion.startOneselfFaceVerification
 import com.jd.pzx.jd_flutter.utils.CHANNEL_BLUETOOTH_ANDROID_TO_FLUTTER
 import com.jd.pzx.jd_flutter.utils.CHANNEL_BLUETOOTH_FLUTTER_TO_ANDROID
 import com.jd.pzx.jd_flutter.utils.CHANNEL_FACE_VERIFICATION_FLUTTER_TO_ANDROID
+import com.jd.pzx.jd_flutter.utils.CHANNEL_PRINTER_FLUTTER_TO_ANDROID
 import com.jd.pzx.jd_flutter.utils.CHANNEL_SCAN_FLUTTER_TO_ANDROID
 import com.jd.pzx.jd_flutter.utils.CHANNEL_USB_ANDROID_TO_FLUTTER
 import com.jd.pzx.jd_flutter.utils.CHANNEL_USB_FLUTTER_TO_ANDROID
@@ -16,6 +19,7 @@ import com.jd.pzx.jd_flutter.utils.CHANNEL_WEIGHBRIDGE_FLUTTER_TO_ANDROID
 import com.jd.pzx.jd_flutter.utils.FACE_VERIFY_SUCCESS
 import com.jd.pzx.jd_flutter.utils.REQUEST_ENABLE_BT
 import com.jd.pzx.jd_flutter.utils.bitmapToBase64
+import com.jd.pzx.jd_flutter.utils.bitmapToByteArray
 import com.jd.pzx.jd_flutter.utils.bluetoothAdapter
 import com.jd.pzx.jd_flutter.utils.bluetoothCancelScan
 import com.jd.pzx.jd_flutter.utils.bluetoothClose
@@ -25,6 +29,8 @@ import com.jd.pzx.jd_flutter.utils.bluetoothSendCommand
 import com.jd.pzx.jd_flutter.utils.bluetoothStartScan
 import com.jd.pzx.jd_flutter.utils.deviceList
 import com.jd.pzx.jd_flutter.utils.openFile
+import com.jd.pzx.jd_flutter.utils.print.printBitmap
+import com.jd.pzx.jd_flutter.utils.print.printPdf
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
@@ -109,7 +115,7 @@ class MainActivity : FlutterActivity() {
                 ) { code, bitmap ->
                     Log.e("Pan", "code=$code")
                     if (code == FACE_VERIFY_SUCCESS) {
-                        result.success(bitmapToBase64(bitmap!!))
+                        result.success(bitmapToByteArray(bitmap!!, Bitmap.CompressFormat.JPEG))
                     } else {
                         result.error(code.toString(), null, null)
                     }
@@ -195,6 +201,23 @@ class MainActivity : FlutterActivity() {
         ).setMethodCallHandler { call, _ ->
             if (call.method == "OpenDevice") receiverUtil.openDevice()
         }
+        //打印机通道
+        MethodChannel(
+            flutterEngine.dartExecutor.binaryMessenger,
+            CHANNEL_PRINTER_FLUTTER_TO_ANDROID
+        ).setMethodCallHandler { call, result ->
+            if (call.method == "PrintFile") {
+//                printBitmap(context, base64ToBitmap(call.arguments.toString()),"物料列表"){
+//                    result.success(it)
+//                }
+                Log.e("Pan", "arguments=${call.arguments}")
+                printPdf(this,"拣货清单",(call.arguments as List<String>)){
+                    result.success(it)
+                }
+            }
+        }
+
+
 
     }
 
@@ -212,7 +235,26 @@ class MainActivity : FlutterActivity() {
             MethodChannel(messenger, channel).invokeMethod(method, data)
         }
     }
-
+//    private fun checkFeiShu() {
+//        val scopeList = ArrayList<String>()
+//        scopeList.add("contact:user.employee_id:readonly")
+//        scopeList.add("contact:user.id:readonly")
+//        scopeList.add("wiki:wiki:readonly")
+//        val builder = LarkSSO.Builder().setAppId("cli_a646a42958f2d00b")
+//            .setServer("Feishu")
+//            .setLanguage("zh")
+//            .setChallengeMode(false)
+//            .setScopeList(scopeList)
+//            .setContext(this)
+//        LarkSSO.inst().startSSOVerify(builder, object : IGetDataCallback {
+//            override fun onSuccess(callBackData: CallBackData) {
+//
+//            }
+//            override fun onError(callBackData: CallBackData) {
+//
+//            }
+//        })
+//    }
 
     /*
 

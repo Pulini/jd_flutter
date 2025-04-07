@@ -678,7 +678,7 @@ abstract class PickerController {
 
   //获取单据对应仓库列表
   Future getOrderStockList() async {
-    var response = await httpGet(method: webApiPickerOrderStockList,params: {
+    var response = await httpGet(method: webApiPickerOrderStockList, params: {
       'UserID': userInfo?.userID,
       'ReportType': 1,
     });
@@ -731,6 +731,7 @@ class OptionsPickerController extends PickerController {
   });
 
   select(int item) {
+    logger.f(pickerItems);
     selectedName.value = pickerItems[item].pickerName();
     selectedId.value = pickerItems[item].pickerId();
     selectItem = pickerData.indexWhere((v) => v.pickerId() == selectedId.value);
@@ -751,6 +752,7 @@ class OptionsPickerController extends PickerController {
           )
           .toList();
     }
+    logger.f(pickerItems);
   }
 
   int getSave() {
@@ -831,6 +833,7 @@ class LinkOptionsPickerController extends PickerController {
   select(int item1, int item2) {
     if (pickerItems1.isEmpty) return;
     var pick1 = pickerItems1[item1];
+    pickerItems2.value = pickerData[item1].subList();
     var pick2 = pickerItems2[item2];
     selectedName.value = '${pick1.pickerName()}-${pick2.pickerName()}';
     selectItem1 =
@@ -920,8 +923,8 @@ class LinkOptionsPickerController extends PickerController {
     } else {
       pickerItems1.value = pickerData
           .where(
-            (v1) => v1.subList().any((v2) =>
-                v2.toShow().toUpperCase().contains(text.toUpperCase())),
+            (v1) => v1.subList().any(
+                (v2) => v2.toShow().toUpperCase().contains(text.toUpperCase())),
           )
           .toList();
       if (pickerItems1.isNotEmpty) {

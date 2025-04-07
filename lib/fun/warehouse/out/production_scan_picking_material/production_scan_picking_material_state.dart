@@ -24,7 +24,7 @@ class ProductionScanPickingMaterialState {
     required Function(String) error,
   }) {
     httpPost(
-      loading: '正在提交领料...',
+      loading: 'production_scan_picking_material_submitting_picking'.tr,
       method: webApiUploadProductionScanning,
       body: {
         'BarCodeList': [

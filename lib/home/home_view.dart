@@ -111,42 +111,66 @@ class _HomePageState extends State<HomePage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       getVersionInfo(
         false,
-        noUpdate: _refreshFunList,
-        needUpdate: (v) => doUpdate(version: v, ignore: _refreshFunList),
+        noUpdate: () => logic.refreshFunList(),
+        needUpdate: (v) =>
+            doUpdate(version: v, ignore: () => logic.refreshFunList()),
+        error: (msg) => errorDialog(content: msg),
       );
     });
-  }
-
-  _refreshFunList() {
-    logic.refreshFunList(isRefresh: true);
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        decoration: backgroundColor,
-        child: Scaffold(
-            backgroundColor: Colors.transparent,
-            appBar: _appBar(),
-            body: Obx(() => ListView.builder(
-                  padding: const EdgeInsets.all(8),
-                  itemCount:
-                      state.navigationBar.isEmpty ? 1 : state.buttons.length,
-                  itemBuilder: (context, index) => state.navigationBar.isEmpty
-                      ? Center(
-                          child: IconButton(
-                            onPressed: _refreshFunList,
-                            icon: const Icon(
-                              Icons.refresh,
-                              color: Colors.blueAccent,
-                            ),
-                          ),
-                        )
-                      : _item(state.buttons[index]),
-                )),
-            bottomNavigationBar: Obx(() => state.navigationBar.isEmpty
-                ? const Center()
-                : BottomNavigationBar(
+      decoration: backgroundColor,
+      child: Obx(() => state.isLoading.value
+          ? Scaffold(
+              backgroundColor: Colors.transparent,
+              appBar: _appBar(),
+              body: const Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CupertinoActivityIndicator(
+                      radius: 20,
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      '读取功能列表中...',
+                      style: TextStyle(
+                        fontSize: 18,
+                        decoration: TextDecoration.none,
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            )
+          : state.navigationBar.isEmpty
+              ? Scaffold(
+                  backgroundColor: Colors.transparent,
+                  appBar: _appBar(),
+                  body: Center(
+                    child: IconButton(
+                      onPressed: () => logic.refreshFunList(),
+                      icon: const Icon(
+                        Icons.refresh,
+                        color: Colors.blueAccent,
+                        size: 50,
+                      ),
+                    ),
+                  ),
+                )
+              : Scaffold(
+                  backgroundColor: Colors.transparent,
+                  appBar: _appBar(),
+                  body: ListView.builder(
+                    padding: const EdgeInsets.all(8),
+                    itemCount: state.buttons.length,
+                    itemBuilder: (context, index) =>
+                        _item(state.buttons[index]),
+                  ),
+                  bottomNavigationBar: BottomNavigationBar(
                     type: BottomNavigationBarType.shifting,
                     items: [
                       for (var bar in state.navigationBar) _navigationBar(bar)
@@ -154,7 +178,9 @@ class _HomePageState extends State<HomePage> {
                     currentIndex: state.nBarIndex,
                     selectedItemColor: state.navigationBar[0].getTextColor(),
                     onTap: (i) => setState(() => logic.navigationBarClick(i)),
-                  ))));
+                  ),
+                )),
+    );
   }
 
   @override

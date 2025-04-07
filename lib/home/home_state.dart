@@ -20,6 +20,7 @@ class HomeState {
   var buttons = <ButtonItem>[].obs;
   var selectedItemColor = Colors.white;
   var navigationBar = <HomeFunctions>[].obs;
+  var isLoading= true.obs;
 
   HomeState() {
     userPicUrl.value = userInfo?.picUrl ?? '';
@@ -27,12 +28,11 @@ class HomeState {
   }
 
   refreshFunList({
-    required bool isRefresh,
     required Function() success,
     required Function(String msg) error,
   }) async {
+    isLoading.value=true;
     httpGet(
-      loading: isRefresh ? '读取功能列表中...' : '',
       method: webApiGetMenuFunction,
       params: {
         'empID': userInfo?.empID ?? 0,
@@ -58,9 +58,12 @@ class HomeState {
               )
           ];
           functions = formatButton(v1);
+          isLoading.value=false;
           success.call();
         });
       } else {
+
+        isLoading.value=false;
         error.call(response.message ?? '');
       }
     });

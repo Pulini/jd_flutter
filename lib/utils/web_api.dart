@@ -102,25 +102,6 @@ Future<BaseData> sapPost({
   );
 }
 
-//用于开发时切换测试库，打包时必须屏蔽
-_setTestUrl({
-  required String url,
-  Map<String, dynamic>? params,
-  required Function(String testUrl, Map<String, dynamic>? testParams) test,
-}) {
-  if (url == baseUrlForMES) {
-    url = testUrlForMES;
-  } else if (url == baseUrlForSAP) {
-    url = developUrlForSAP;
-    params = {
-      'sap-client':
-          url == baseUrlForSAP ? baseClientForSAP : developClientForSAP,
-      ...?params,
-    };
-  }
-  test.call(url, params);
-}
-
 //用于开发时切换测试库
 var useTestUrl = false;
 
@@ -134,14 +115,18 @@ Future<BaseData> _doHttp({
   Object? body,
 }) async {
   if (useTestUrl) {
-    _setTestUrl(
-      url: baseUrl,
-      params: params,
-      test: (testUrl, testParams) {
-        baseUrl = testUrl;
-        params = testParams;
-      },
-    );
+    if (baseUrl == baseUrlForMES) {
+      baseUrl = testUrlForMES;
+    } else if (baseUrl == baseUrlForSAP) {
+      baseUrl = developUrlForSAP;
+    }
+  }
+  if (baseUrl == baseUrlForSAP || baseUrl == developUrlForSAP) {
+    params = {
+      'sap-client':
+          baseUrl == baseUrlForSAP ? baseClientForSAP : developClientForSAP,
+      ...?params,
+    };
   }
 
   try {
@@ -172,7 +157,7 @@ Future<BaseData> _doHttp({
   });
 
   //创建返回数据载体
-  var base = BaseData();
+  var base = BaseData()..resultCode=resultError;
 
   try {
     //创建dio对象
@@ -203,7 +188,7 @@ Future<BaseData> _doHttp({
             logger.e('需要重新登录');
             spSave(spSaveUserInfo, '');
             if (loading != null && loading.isNotEmpty) loadingDismiss();
-            handler.next(response);
+            // handler.next(response);
             reLoginPopup();
           } else if (baseData.resultCode == 3) {
             logger.e('需要更新版本');
@@ -234,6 +219,7 @@ Future<BaseData> _doHttp({
             data: body,
             options: options,
           );
+    logger.d('response:$response');
     if (response.statusCode == 200) {
       var json = response.data.runtimeType == String
           ? jsonDecode(response.data)
@@ -658,7 +644,8 @@ const webApiGetWorkCardDetail =
 const webApiSapGetMaterialDispatchLabelList = 'sap/zapp/ZFUN_APP_BARCODE_FETCH';
 
 //机台派工单--贴标维护
-const webApiSapMaterialDispatchLabelMaintain = 'sap/zapp/ZFUN_APP_BARCODE_MAINTAIN';
+const webApiSapMaterialDispatchLabelMaintain =
+    'sap/zapp/ZFUN_APP_BARCODE_MAINTAIN';
 
 //验证码发送接口
 const webApiSendManagerCode = 'api/Public/SendManagerCode';
@@ -1031,11 +1018,46 @@ const webApiClosingCase = 'api/Incoming/ClosingCase';
 const webApiGetBarCodeStatus = 'api/BarCode/GetBarCodeStatus';
 
 //根据条形码数据,获得对应的制程
-const webApiGetProcessFlowInfoByBarCode = 'api/ProcessFlow/GetProcessFlowInfoByBarCode';
+const webApiGetProcessFlowInfoByBarCode =
+    'api/ProcessFlow/GetProcessFlowInfoByBarCode';
 
 //金灿领料出库
-const webApiJinCanMaterialOutStockSubmit = 'api/ScanJobBooking/JincanMaterialOutStockSubmit';
+const webApiJinCanMaterialOutStockSubmit =
+    'api/ScanJobBooking/JincanMaterialOutStockSubmit';
 
 //金灿销售扫码销售出库提交
-const webApiJinCanSalesScanningCodeSubmit = 'api/ScanJobBooking/JinCanSalesScanningCodeSubmit';
+const webApiJinCanSalesScanningCodeSubmit =
+    'api/ScanJobBooking/JinCanSalesScanningCodeSubmit';
 
+//获取领料员可领部门信息
+const webApiSapGetPickerInfo = 'sap/zapp/ZMM_ZMMWORK_D';
+
+//修改物料库位
+const webApiSapModifyLocation = 'sap/zapp/ZFUN_UPDATE_ZMMLGORT';
+
+//获取正单(车间)领料列表
+const webApiGetMaterialList = 'api/Material/GetMaterialList';
+
+//获取物料库存信息列表
+const webApiGetMaterialInventoryList = 'api/Material/GetMaterialInventoryList';
+
+//APP创建过账正单(车间)领料单-原材料第二屏
+// const webApiSubmitPickingMaterial = 'api/Material/ResZDLLDPic';
+
+//获取已备料待出库领料单列表
+const webApiSapGetPickingMaterialList = 'sap/zapp/ZFUN_GET_ZDLL_GDMVT';
+
+//获取已备料待出库领料单物料打印信息
+const webApiSapGetMaterialPrintInfo = 'sap/zapp/ZFUN_GET_ZDLL_PRINT';
+
+//领料过账
+const webApiSapSubmitPickingMaterialOrder = 'sap/zapp/ZFUN_RES_ZDLL_D';
+
+//备料进度修改
+const webApiSapReportPreparedMaterialsProgress = 'sap/zapp/ZFUN_RES_ZDLL_BL';
+
+//获取盘点明细
+const webApiSapGetInventoryPalletList = 'sap/zapp/ZWMS_PD_LIST';
+
+//盘点结果接收
+const webApiSapSubmitInventory = 'sap/zapp/ZWMS_PD_POST';

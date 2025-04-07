@@ -36,9 +36,9 @@ class _SaleScanOutWarehousePageState extends State<SaleScanOutWarehousePage> {
         canPop: true,
         child: StatefulBuilder(builder: (context, dialogSetState) {
           return AlertDialog(
-            title: Text('提交领料'),
+            title: Text('sale_scan_out_warehouse_submit_picking'.tr),
             content: WorkerCheck(
-              hint: '请输入领料员工号',
+              hint: 'sale_scan_out_warehouse_input_picker_number'.tr,
               init: spGet(spSaveSaleScanOutWarehouseWorker),
               onChanged: (v) => worker = v,
             ),
@@ -46,14 +46,18 @@ class _SaleScanOutWarehousePageState extends State<SaleScanOutWarehousePage> {
               TextButton(
                 onPressed: () {
                   if (worker == null) {
-                    showSnackBar(message: '请输入领料员工号', isWarning: true);
+                    showSnackBar(
+                        message:
+                            'sale_scan_out_warehouse_input_picker_number'.tr,
+                        isWarning: true);
                     return;
                   }
-                  spSave(spSaveSaleScanOutWarehouseWorker, worker!.empCode ?? '');
+                  spSave(
+                      spSaveSaleScanOutWarehouseWorker, worker!.empCode ?? '');
                   Get.back();
                   submit.call(worker!);
                 },
-                child: Text('提交'),
+                child: Text('sale_scan_out_warehouse_submit'.tr),
               ),
               TextButton(
                 onPressed: () => Get.back(),
@@ -92,7 +96,7 @@ class _SaleScanOutWarehousePageState extends State<SaleScanOutWarehousePage> {
           Expanded(
             child: item.isUsed
                 ? textSpan(
-                    hint: '已提交：',
+                    hint: 'sale_scan_out_warehouse_submitted'.tr,
                     hintColor: Colors.red,
                     text: item.code ?? '',
                     textColor: Colors.grey,
@@ -105,7 +109,7 @@ class _SaleScanOutWarehousePageState extends State<SaleScanOutWarehousePage> {
           ),
           IconButton(
             onPressed: () => askDialog(
-              content: '确定要删除该条码吗？',
+              content: 'sale_scan_out_warehouse_delete_tips'.tr,
               confirm: () => logic.deleteItem(item),
             ),
             icon: const Icon(
@@ -156,7 +160,7 @@ class _SaleScanOutWarehousePageState extends State<SaleScanOutWarehousePage> {
                 border: const OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(20)),
                 ),
-                hintText: '手动录入登记',
+                hintText: 'sale_scan_out_warehouse_manual_input'.tr,
                 hintStyle: const TextStyle(color: Colors.grey),
                 prefixIcon: IconButton(
                     onPressed: () => inputController.clear(),
@@ -168,7 +172,8 @@ class _SaleScanOutWarehousePageState extends State<SaleScanOutWarehousePage> {
                   onPressed: () {
                     var text = inputController.text;
                     if (text.trim().isEmpty) {
-                      showSnackBar(message: '请输入条码');
+                      showSnackBar(
+                          message: 'sale_scan_out_warehouse_input_code'.tr);
                     } else {
                       FocusScope.of(context).requestFocus(FocusNode());
                       logic.scanCode(text);
@@ -200,8 +205,12 @@ class _SaleScanOutWarehousePageState extends State<SaleScanOutWarehousePage> {
           ),
           Padding(
             padding: const EdgeInsets.all(5),
-            child: Obx(() =>
-                textSpan(hint: '已扫码：', text: '${state.barCodeList.length} 条')),
+            child: Obx(() => textSpan(
+                  hint: 'sale_scan_out_warehouse_scanned'.tr,
+                  text: 'sale_scan_out_warehouse_qty'.trArgs(
+                    ['${state.barCodeList.length}'],
+                  ),
+                )),
           ),
           Row(
             children: [
@@ -209,9 +218,9 @@ class _SaleScanOutWarehousePageState extends State<SaleScanOutWarehousePage> {
                 child: Obx(() => CombinationButton(
                       combination: Combination.left,
                       isEnabled: state.barCodeList.isNotEmpty,
-                      text: '清空',
+                      text: 'sale_scan_out_warehouse_clear'.tr,
                       click: () => askDialog(
-                        content: '确定要清空条码吗？',
+                        content: 'sale_scan_out_warehouse_clear_tips'.tr,
                         confirm: () => logic.clearBarCodeList(),
                       ),
                     )),
@@ -220,7 +229,7 @@ class _SaleScanOutWarehousePageState extends State<SaleScanOutWarehousePage> {
                 child: Obx(() => CombinationButton(
                       combination: Combination.right,
                       isEnabled: state.barCodeList.isNotEmpty,
-                      text: '提交',
+                      text: 'sale_scan_out_warehouse_submit'.tr,
                       click: () => inputWorkerDialog(
                         submit: (w) => logic.submit(worker: w),
                       ),

@@ -38,7 +38,7 @@ selectSupplierAndDepartmentDialog({
         canPop: true,
         child: StatefulBuilder(builder: (context, dialogSetState) {
           return AlertDialog(
-            title: Text('提交领料'),
+            title: Text('production_scan_picking_material_submit_picking'.tr),
             contentPadding: const EdgeInsets.only(left: 10, right: 10),
             content: SizedBox(
               width: MediaQuery.of(context).size.width * 0.8,
@@ -46,7 +46,8 @@ selectSupplierAndDepartmentDialog({
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   WorkerCheck(
-                    hint: '请输入领料员工号',
+                    hint: 'production_scan_picking_material_input_picker_number'
+                        .tr,
                     init: spGet(spSaveProductionScanPickingMaterialWorker),
                     onChanged: (v) => worker = v,
                   ),
@@ -60,8 +61,11 @@ selectSupplierAndDepartmentDialog({
                         child: selectView(
                           list: isSupplier ? sList : [],
                           controller: sController,
-                          errorMsg: isSupplier ? sError : '请选择供应商或部门',
-                          hint: '供应商：',
+                          errorMsg: isSupplier
+                              ? sError
+                              : 'production_scan_picking_material_select_supplier_or_department'
+                                  .tr,
+                          hint: 'production_scan_picking_material_supplier'.tr,
                         ),
                       )
                     ],
@@ -77,8 +81,12 @@ selectSupplierAndDepartmentDialog({
                         child: selectView(
                           list: isSupplier ? [] : dList,
                           controller: dController,
-                          errorMsg: isSupplier ? '请选择供应商或部门' : dError,
-                          hint: '部门：',
+                          errorMsg: isSupplier
+                              ? 'production_scan_picking_material_select_supplier_or_department'
+                                  .tr
+                              : dError,
+                          hint:
+                              'production_scan_picking_material_department'.tr,
                         ),
                       )
                     ],
@@ -90,11 +98,21 @@ selectSupplierAndDepartmentDialog({
               TextButton(
                 onPressed: () {
                   if (worker == null) {
-                    showSnackBar(message: '请输入领料员工号', isWarning: true);
+                    showSnackBar(
+                      message:
+                          'production_scan_picking_material_input_picker_number'
+                              .tr,
+                      isWarning: true,
+                    );
                     return;
                   }
                   if (sList.isEmpty && dList.isEmpty) {
-                    showSnackBar(message: '请选择供应商或部门', isWarning: true);
+                    showSnackBar(
+                      message:
+                          'production_scan_picking_material_select_supplier_or_department'
+                              .tr,
+                      isWarning: true,
+                    );
                     return;
                   }
                   if (isSupplier) {
@@ -123,7 +141,7 @@ selectSupplierAndDepartmentDialog({
                     isSupplier ? null : dList[dSelect],
                   );
                 },
-                child: Text('提交'),
+                child: Text('production_scan_picking_material_submit'.tr),
               ),
               TextButton(
                 onPressed: () => Get.back(),
@@ -148,7 +166,7 @@ getSapSupplierAndDepartment({
     String,
   ) callback,
 }) {
-  loadingDialog('正在获取供应商及部门...');
+  loadingDialog('production_scan_picking_material_getting_supplier_and_department'.tr);
   Future.wait([
     httpGet(method: webApiPickerSapSupplier),
     httpGet(method: webApiPickerSapDepartment),

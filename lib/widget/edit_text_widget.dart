@@ -78,6 +78,7 @@ class NumberDecimalEditText extends StatelessWidget {
     this.hint,
     this.helperText,
     this.hasFocus = false,
+    this.resetQty = 0,
     required this.onChanged,
     this.controller,
   });
@@ -88,6 +89,7 @@ class NumberDecimalEditText extends StatelessWidget {
   final double? max;
   final double? initQty;
   final bool hasFocus;
+  final double resetQty;
   final Function(double) onChanged;
   final TextEditingController? controller;
 
@@ -166,11 +168,23 @@ class NumberDecimalEditText extends StatelessWidget {
             borderRadius: BorderRadius.all(Radius.circular(20)),
           ),
           labelText: hint,
+          prefixIcon: resetQty!=0?IconButton(
+            onPressed: () {
+              controller == null ? c.text=resetQty.toShowString() : controller?.text=resetQty.toShowString();
+              onChanged.call(resetQty);
+            },
+            icon: const Icon(
+              Icons.replay_circle_filled,
+              color: Colors.blue,
+            ),
+          ):null,
           labelStyle: const TextStyle(color: Colors.black54),
           suffixIcon: IconButton(
             icon: const Icon(Icons.close, color: Colors.grey),
-            onPressed: () =>
-                controller == null ? c.clear() : controller?.clear(),
+            onPressed: () {
+              controller == null ? c.clear() : controller?.clear();
+              onChanged.call(0);
+            },
           ),
         ),
       ),

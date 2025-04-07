@@ -55,7 +55,11 @@ class MqttUtil {
   }
 
   initClient() {
-    client = MqttServerClient.withPort(server, userInfo?.token ?? '', port);
+    client = MqttServerClient.withPort(
+      server,
+      '${userInfo?.token}-${DateTime.now().millisecondsSinceEpoch}',
+      port,
+    );
 
     // 设置日志
     client.logging(on: false);
@@ -91,7 +95,7 @@ class MqttUtil {
         //全局监听，临时替代订阅监听
         client.updates!.listen((msg) {
           for (var v in msg) {
-            var data =  utf8.decode(MqttPublishPayload.bytesToStringAsString(
+            var data = utf8.decode(MqttPublishPayload.bytesToStringAsString(
               (v.payload as MqttPublishMessage).payload.message,
             ).codeUnits);
             debugPrint('接收到订阅号:${v.topic} 的推送: $data');

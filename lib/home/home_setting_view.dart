@@ -189,10 +189,10 @@ class _UserSettingState extends State<UserSetting> {
         //选择器主体
         Expanded(
           child: getCupertinoPicker(
-            list.map((data) {
+            items:list.map((data) {
               return Center(child: Text(data.name!));
             }).toList(),
-            controller,
+            controller: controller,
           ),
         )
       ],
@@ -352,6 +352,7 @@ class _UserSettingState extends State<UserSetting> {
                     );
                   },
                   needUpdate: (v)=>doUpdate(version: v),
+                  error: (msg)=>  errorDialog(content: msg),
                 );
               }
             },

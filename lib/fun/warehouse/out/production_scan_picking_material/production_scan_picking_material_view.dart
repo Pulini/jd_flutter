@@ -52,7 +52,7 @@ class _ProductionScanPickingMaterialPageState
           Expanded(
             child: item.isUsed
                 ? textSpan(
-                    hint: '已提交：',
+                    hint: 'production_scan_picking_material_submitted'.tr,
                     hintColor: Colors.red,
                     text: item.code ?? '',
                     textColor: Colors.grey,
@@ -65,7 +65,7 @@ class _ProductionScanPickingMaterialPageState
           ),
           IconButton(
             onPressed: () => askDialog(
-              content: '确定要删除该条码吗？',
+              content: 'production_scan_picking_material_delete_tips'.tr,
               confirm: () => logic.deleteItem(item),
             ),
             icon: const Icon(
@@ -93,7 +93,7 @@ class _ProductionScanPickingMaterialPageState
       actions: [
         Obx(() => CheckBox(
               onChanged: (c) => state.reverse.value = c,
-              name: '红冲',
+              name: 'production_scan_picking_material_reverse'.tr,
               value: state.reverse.value,
             ))
       ],
@@ -123,7 +123,7 @@ class _ProductionScanPickingMaterialPageState
                 border: const OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(20)),
                 ),
-                hintText: '手动录入登记',
+                hintText: 'production_scan_picking_material_manual_input'.tr,
                 hintStyle: const TextStyle(color: Colors.grey),
                 prefixIcon: IconButton(
                     onPressed: () => inputController.clear(),
@@ -135,7 +135,9 @@ class _ProductionScanPickingMaterialPageState
                   onPressed: () {
                     var text = inputController.text;
                     if (text.trim().isEmpty) {
-                      showSnackBar(message: '请输入条码');
+                      showSnackBar(
+                          message:
+                              'production_scan_picking_material_input_code'.tr);
                     } else {
                       FocusScope.of(context).requestFocus(FocusNode());
                       logic.scanCode(text);
@@ -167,8 +169,12 @@ class _ProductionScanPickingMaterialPageState
           ),
           Padding(
             padding: const EdgeInsets.all(5),
-            child: Obx(() =>
-                textSpan(hint: '已扫码：', text: '${state.barCodeList.length} 条')),
+            child: Obx(() => textSpan(
+                  hint: 'production_scan_picking_material_scanned'.tr,
+                  text: 'production_scan_picking_material_qty'.trArgs(
+                    ['${state.barCodeList.length}'],
+                  ),
+                )),
           ),
           Row(
             children: [
@@ -176,9 +182,10 @@ class _ProductionScanPickingMaterialPageState
                 child: Obx(() => CombinationButton(
                       combination: Combination.left,
                       isEnabled: state.barCodeList.isNotEmpty,
-                      text: '清空',
+                      text: 'production_scan_picking_material_clear'.tr,
                       click: () => askDialog(
-                        content: '确定要清空条码吗？',
+                        content:
+                            'production_scan_picking_material_clear_tips'.tr,
                         confirm: () => logic.clearBarCodeList(),
                       ),
                     )),
@@ -187,7 +194,7 @@ class _ProductionScanPickingMaterialPageState
                 child: Obx(() => CombinationButton(
                       combination: Combination.right,
                       isEnabled: state.barCodeList.isNotEmpty,
-                      text: '提交',
+                      text: 'production_scan_picking_material_submit'.tr,
                       click: () => selectSupplierAndDepartmentDialog(
                         submit: (w, s, d) => logic.submit(
                           worker: w,

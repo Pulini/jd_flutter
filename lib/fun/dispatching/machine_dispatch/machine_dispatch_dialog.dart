@@ -25,26 +25,26 @@ generateAndPrintDialog({
       //拦截返回键
       canPop: false,
       child: AlertDialog(
-        title: Text('生成并打印'),
-        content: Text( '确定要打印标签吗?'),
+        title: Text('machine_dispatch_dialog_create_and_print'.tr),
+        content: Text( 'machine_dispatch_dialog_print_tips'.tr),
         actions: <Widget>[
           TextButton(
             onPressed: () {
               Get.back();
               printLast.call();
             },
-            child: Text('打印尾标'),
+            child: Text('machine_dispatch_dialog_print_last_label'.tr),
           ),   TextButton(
             onPressed: () {
               Get.back();
               print.call();
             },
-            child: Text('打印'),
+            child: Text('machine_dispatch_dialog_print'.tr),
           ),
           TextButton(
             onPressed: ()=>Get.back(),
             child: Text('dialog_default_cancel'.tr,
-              style: TextStyle(color: Colors.grey),
+              style: const TextStyle(color: Colors.grey),
             ),
           ),
         ],

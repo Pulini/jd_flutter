@@ -7,8 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:jd_flutter/bean/http/response/picking_material_order_info.dart';
 import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 //app 背景渐变色
@@ -45,31 +47,7 @@ pageBody({
       body: PopScope(
         canPop: popTitle.isEmpty ? true : false,
         onPopInvokedWithResult: (didPop, result) {
-          if (!didPop) {
-            Get.dialog(AlertDialog(
-              title: Text('dialog_default_exit_title'.tr),
-              content: Text(
-                popTitle,
-                style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.red,
-                    fontSize: 18),
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () => Get.back(closeOverlays: true),
-                  child: Text('dialog_default_confirm'.tr),
-                ),
-                TextButton(
-                  onPressed: () => Get.back(),
-                  child: Text(
-                    'dialog_default_cancel'.tr,
-                    style: const TextStyle(color: Colors.grey),
-                  ),
-                ),
-              ],
-            ));
-          }
+          if (!didPop) exitDialog(content: popTitle);
         },
         child: body,
       ),
@@ -144,31 +122,7 @@ pageBodyWithBottomSheet({
       body: PopScope(
         canPop: popTitle.isEmpty ? true : false,
         onPopInvokedWithResult: (didPop, result) {
-          if (!didPop) {
-            Get.dialog(AlertDialog(
-              title: Text('dialog_default_exit_title'.tr),
-              content: Text(
-                popTitle,
-                style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.red,
-                    fontSize: 18),
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () => Get.back(closeOverlays: true),
-                  child: Text('dialog_default_confirm'.tr),
-                ),
-                TextButton(
-                  onPressed: () => Get.back(),
-                  child: Text(
-                    'dialog_default_cancel'.tr,
-                    style: const TextStyle(color: Colors.grey),
-                  ),
-                ),
-              ],
-            ));
-          }
+          if (!didPop) exitDialog(content: popTitle);
         },
         child: body,
       ),
@@ -241,31 +195,7 @@ pageBodyWithDrawer({
       body: PopScope(
         canPop: popTitle.isEmpty ? true : false,
         onPopInvokedWithResult: (didPop, result) {
-          if (!didPop) {
-            Get.dialog(AlertDialog(
-              title: Text('dialog_default_exit_title'.tr),
-              content: Text(
-                popTitle,
-                style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.red,
-                    fontSize: 18),
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () => Get.back(closeOverlays: true),
-                  child: Text('dialog_default_confirm'.tr),
-                ),
-                TextButton(
-                  onPressed: () => Get.back(),
-                  child: Text(
-                    'dialog_default_cancel'.tr,
-                    style: const TextStyle(color: Colors.grey),
-                  ),
-                ),
-              ],
-            ));
-          }
+          if (!didPop) exitDialog(content: popTitle);
         },
         child: body,
       ),
@@ -407,7 +337,10 @@ showScanTips({
 }
 
 //选择器
-getCupertinoPicker(List<Widget> items, FixedExtentScrollController controller) {
+Widget getCupertinoPicker({
+  required List<Widget> items,
+  required FixedExtentScrollController controller,
+}) {
   return CupertinoPicker(
     scrollController: controller,
     diameterRatio: 1.5,
@@ -419,6 +352,36 @@ getCupertinoPicker(List<Widget> items, FixedExtentScrollController controller) {
     children: items,
   );
 }
+
+//选择器
+Widget getLinkCupertinoPicker({
+  required List<Widget> groupItems,
+  required List<List<Widget>> subItems,
+  required FixedExtentScrollController groupController,
+  required FixedExtentScrollController subController,
+}) =>
+    Row(
+      children: [
+        Expanded(
+          child: CupertinoPicker(
+            scrollController: groupController,
+            onSelectedItemChanged: (value) => subController.jumpToItem(0),
+            itemExtent: 22,
+            squeeze: 1.2,
+            children: groupItems,
+          ),
+        ),
+        Expanded(
+          child: CupertinoPicker(
+            scrollController: subController,
+            onSelectedItemChanged: (value) {},
+            itemExtent: 22,
+            squeeze: 1.2,
+            children: subItems[groupController.selectedItem],
+          ),
+        ),
+      ],
+    );
 
 //popup工具
 showPopup(Widget widget, {double? height}) {
@@ -632,41 +595,44 @@ expandedFrameText({
   required String text,
   int? maxLines = 1,
 }) {
+  var widget = Container(
+    height: (maxLines! * 35).toDouble(),
+    padding: padding ?? const EdgeInsets.all(5),
+    decoration: BoxDecoration(
+      border: Border.all(color: borderColor ?? Colors.grey),
+      color: backgroundColor ?? Colors.transparent,
+    ),
+    alignment: alignment ?? Alignment.centerLeft,
+    child: Text(
+      maxLines: maxLines,
+      overflow: TextOverflow.ellipsis,
+      text,
+      strutStyle: const StrutStyle(
+        forceStrutHeight: true,
+        leading: 0.5,
+      ),
+      style: TextStyle(
+        color: textColor ?? Colors.black87,
+        fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
+      ),
+    ),
+  );
   return Expanded(
     flex: flex ?? 1,
     child: text.isEmpty
         ? Container(
-            height: (maxLines! * 35).toDouble(),
+            height: (maxLines * 35).toDouble(),
             decoration: BoxDecoration(
               border: Border.all(color: borderColor ?? Colors.grey),
               color: backgroundColor ?? Colors.transparent,
             ),
           )
-        : GestureDetector(
-            onTap: () => click?.call(),
-            child: Container(
-              height: (maxLines! * 35).toDouble(),
-              padding: padding ?? const EdgeInsets.all(5),
-              decoration: BoxDecoration(
-                border: Border.all(color: borderColor ?? Colors.grey),
-                color: backgroundColor ?? Colors.transparent,
+        : click == null
+            ? widget
+            : GestureDetector(
+                onTap: () => click.call(),
+                child: widget,
               ),
-              alignment: alignment ?? Alignment.centerLeft,
-              child: Text(
-                maxLines: maxLines,
-                overflow: TextOverflow.ellipsis,
-                text,
-                strutStyle: const StrutStyle(
-                  forceStrutHeight: true,
-                  leading: 0.5,
-                ),
-                style: TextStyle(
-                  color: textColor ?? Colors.black87,
-                  fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
-                ),
-              ),
-            ),
-          ),
   );
 }
 
@@ -1300,4 +1266,323 @@ Widget ratioBarChart({
     ),
     child: Row(children: list),
   );
+}
+
+List<Widget> createA4Paper(PickingMaterialOrderPrintInfo data) {
+
+  //创建表格列item
+  Widget paperTableRow(int flex, String text, CrossAxisAlignment alignment) =>
+      Expanded(
+        flex: flex,
+        child: Container(
+          height: double.infinity,
+          padding: const EdgeInsets.only(left: 5, right: 5),
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.black, width: 0.5),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: alignment,
+            children: [
+              Text(
+                text,
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 16,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
+          ),
+        ),
+      );
+
+  //创建表格行item
+  Widget paperTableLine({
+    required Color backgroundColor,
+    required String? materialCode,
+    required String? materialName,
+    required String? colorSystem,
+    required String? location,
+    required String? unit,
+    required String? contractOweQty,
+    required String? shouldInventoryQty,
+    required String? actualInventoryQty,
+    required String? picking,
+    required String? actual,
+  }) =>
+      Container(
+        height: 29,
+        color: backgroundColor,
+        child: Row(
+          children: [
+            paperTableRow(3, materialCode ?? '', CrossAxisAlignment.start),
+            paperTableRow(11, materialName ?? '', CrossAxisAlignment.start),
+            paperTableRow(3, colorSystem ?? '', CrossAxisAlignment.start),
+            paperTableRow(3, location ?? '', CrossAxisAlignment.start),
+            paperTableRow(1, unit ?? '', CrossAxisAlignment.center),
+            paperTableRow(2, contractOweQty ?? '', CrossAxisAlignment.end),
+            paperTableRow(2, shouldInventoryQty ?? '', CrossAxisAlignment.end),
+            paperTableRow(2, actualInventoryQty ?? '', CrossAxisAlignment.end),
+            paperTableRow(2, picking ?? '', CrossAxisAlignment.end),
+            paperTableRow(2, actual ?? '', CrossAxisAlignment.end),
+          ],
+        ),
+      );
+
+  //创建纸张
+  Widget createPaper({
+    required List<Widget> item,
+    required int page,
+    required int totalPage,
+    required double paperWidth,
+    required double paperHeight,
+    required double paperPadding,
+    required double paperTitleHeight,
+    required double paperSubTitleHeight,
+    required double paperFooterHeight,
+    required String orderNumber,
+    required String contractNo,
+    required String factoryName,
+    required String supplierName,
+  })=>Container(
+    padding: EdgeInsets.all(paperPadding),
+    width: paperWidth,
+    height: paperHeight,
+    color: Colors.white,
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        SizedBox(
+          height: paperTitleHeight,
+          child: const Center(
+            child: Text(
+              '仓库备料单',
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
+            ),
+          ),
+        ),
+        SizedBox(
+          height: paperSubTitleHeight,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                '领料单号：$orderNumber',
+                style: const TextStyle(fontSize: 20, color: Colors.black),
+              ),
+              Text(
+                '合同号：$contractNo',
+                style: const TextStyle(fontSize: 20, color: Colors.black),
+              ),
+              Text(
+                '工厂：$factoryName',
+                style: const TextStyle(fontSize: 20, color: Colors.black),
+              ),
+              Text(
+                '供应商：$supplierName',
+                style: const TextStyle(fontSize: 20, color: Colors.black),
+              ),
+            ],
+          ),
+        ),
+        Container(
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.black, width: 0.5),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: item,
+          ),
+        ),
+        Expanded(child: Container()),
+        Container(
+          height: paperFooterHeight,
+          padding: const EdgeInsets.only(right: 5),
+          child: Row(
+            children: [
+              Text(
+                '打印日期：${getDateYMD()} ${getTimeHms()}',
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 12,
+                ),
+                textAlign: TextAlign.end,
+              ),
+              const SizedBox(width: 50),
+              Text(
+                '打印人：(${userInfo?.number})${userInfo?.name}',
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 12,
+                ),
+                textAlign: TextAlign.end,
+              ),
+              const Expanded(child: Center()),
+              Text(
+                '页码：$page/$totalPage',
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                  fontSize: 12,
+                ),
+                textAlign: TextAlign.end,
+              )
+            ],
+          ),
+        )
+      ],
+    ),
+  );
+
+  var scale = 0.5; //纸张缩放比例
+  double paperHeight = 2380 * scale; //A4纸高度
+  double paperWidth = 3368 * scale; //A4纸宽度
+  double paperTitleHeight = 30; //标题高度
+  double paperSubTitleHeight = 25; //子标题高度
+  double paperFooterHeight = 20; //底部高度
+  double paperPadding = 20; //纸张内边距
+  //表格高度
+  double tableHeight = paperHeight -
+      paperTitleHeight -
+      paperSubTitleHeight -
+      paperFooterHeight -
+      paperPadding * 2;
+
+  var widgetList = <List<dynamic>>[];
+
+  //根据仓库进行物料分类
+  var warehouseList = <List<PickingMaterialOrderPrintMaterialInfo>>[];
+  groupBy(data.materialList!, (v) => v.warehouseNumber ?? '').forEach((k, v) {
+    warehouseList.add(v);
+  });
+
+  //根据物料组进行表格行控件的创建
+  for (var item1 in warehouseList) {
+    //添加仓库行
+    widgetList.add([
+      30,
+      Container(
+        height: 29,
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.black, width: 0.5),
+        ),
+        padding: const EdgeInsets.only(left: 5, right: 5),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              '仓库：${item1[0].warehouseName}',
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+                color: Colors.black,
+              ),
+            )
+          ],
+        ),
+      )
+    ]);
+    //添加表头行
+    widgetList.add([
+      30,
+      paperTableLine(
+        backgroundColor: Colors.grey.shade400,
+        materialCode: '物料编号',
+        materialName: '物料描述',
+        colorSystem: '色系',
+        location: '库位',
+        unit: '单位',
+        contractOweQty: '合同欠数',
+        shouldInventoryQty: '应备货数',
+        actualInventoryQty: '实备货数',
+        picking: '应领料数',
+        actual: '实领料数',
+      )
+    ]);
+    //添加物料行
+    for (var i = 0; i < item1.length; ++i) {
+      widgetList.add([
+        30,
+        paperTableLine(
+          backgroundColor: i % 2 == 0 ? Colors.white : Colors.grey.shade200,
+          materialCode: item1[i].materialCode,
+          materialName: item1[i].materialName,
+          colorSystem: item1[i].colorInfo,
+          location: item1[i].location,
+          unit: item1[i].basicUnit,
+          contractOweQty: item1[i].contractOweQty.toShowString(),
+          shouldInventoryQty: item1[i].shouldInventoryQty.toShowString(),
+          actualInventoryQty: '',
+          picking: item1[i].totalInventoryQty.toShowString(),
+          actual: '',
+        )
+      ]);
+    }
+  }
+
+  //控件总高度
+  int totalHeight =
+      widgetList.map((v) => (v[0] as int)).reduce((a, b) => a + b);
+  var page = 1; //页码
+  var totalPage = (totalHeight / tableHeight).ceil(); //总页数
+  var height = 0.0; //当前控件总高度
+  var item = <Widget>[]; //已添加的控件列表
+  var paperList = <Widget>[]; //纸张列表
+
+  //累加控件行，并根据高度判断是否进行分页。
+  for (var w in widgetList) {
+    if (height + w[0] <= tableHeight) {
+      //控件高度小于纸张高度，累加控件
+      height += w[0];
+      item.add(w[1]);
+      if (widgetList.last == w) {
+        //控件累加完毕，创建纸张
+        paperList.add(createPaper(
+          item: item,
+          page: page,
+          totalPage: totalPage,
+          paperWidth: paperWidth,
+          paperHeight: paperHeight,
+          paperPadding: paperPadding,
+          paperTitleHeight: paperTitleHeight,
+          paperSubTitleHeight: paperSubTitleHeight,
+          paperFooterHeight: paperFooterHeight,
+          orderNumber: data.orderNumber ?? '',
+          contractNo: data.contractNo ?? '',
+          factoryName: data.factoryName ?? '',
+          supplierName: data.supplierName ?? '',
+        ));
+        item = [];
+      }
+    } else {
+      //控件高度大于纸张高度，创建纸张，进行分页。
+      height = 0.0;
+      item.add(w[1]);
+      paperList.add(createPaper(
+        item: item,
+        page: page,
+        totalPage: totalPage,
+        paperWidth: paperWidth,
+        paperHeight: paperHeight,
+        paperPadding: paperPadding,
+        paperTitleHeight: paperTitleHeight,
+        paperSubTitleHeight: paperSubTitleHeight,
+        paperFooterHeight: paperFooterHeight,
+        orderNumber: data.orderNumber ?? '',
+        contractNo: data.contractNo ?? '',
+        factoryName: data.factoryName ?? '',
+        supplierName: data.supplierName ?? '',
+      ));
+      page += 1;
+      item = [];
+    }
+  }
+  return paperList;
 }

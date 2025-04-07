@@ -24,16 +24,23 @@ const channelFaceVerificationAndroidToFlutter =
     'channel_face_verification_flutter_to_android';
 const channelBluetoothFlutterToIos = 'channel_bluetooth_flutter_to_ios';
 const channelBluetoothIosToFlutter = 'channel_bluetooth_ios_to_flutter';
+const channelPrinterAndroidToFlutter = 'channel_printer_android_to_flutter';
+const channelPrinterFlutterToAndroid = 'channel_printer_flutter_to_android';
 const spSaveMoldingScanBulletinReportTimeDuration =
     'molding_scan_bulletin_report_time_duration';
-const spSaveFeishuUserTokenData = 'feishu_user_token_data';
+const spSaveFeishuUserWikiTokenData = 'feishu_user_wiki_token_data';
+const spSaveFeishuUserCloudDocTokenData = 'feishu_user_cloud_doc_token_data';
 const spSaveIncomingInspectionApplicant = 'incoming_inspection_applicant';
 const spSaveIncomingInspectionInspector = 'incoming_inspection_inspector';
 const spSaveScanPickingMaterialWorker = 'scan_picking_material_worker';
 const spSaveScanPickingMaterialSelectProcess =
     'scan_picking_material_select_process';
-const spSaveSaleScanOutWarehouseWorker  = 'sale_scan_out_warehouse_worker';
-const spSaveProductionReportInWarehouseWorker  = 'production_report_in_warehouse_worker';
-const spSaveProductionScanPickingMaterialWorker  = 'production_scan_picking_material_worker';
-const spSaveProductionScanPickingMaterialSupplier  = 'production_scan_picking_material_supplier';
-const spSaveProductionScanPickingMaterialDepartment  = 'production_scan_picking_material_department';
+const spSaveSaleScanOutWarehouseWorker = 'sale_scan_out_warehouse_worker';
+const spSaveProductionReportInWarehouseWorker =
+    'production_report_in_warehouse_worker';
+const spSaveProductionScanPickingMaterialWorker =
+    'production_scan_picking_material_worker';
+const spSaveProductionScanPickingMaterialSupplier =
+    'production_scan_picking_material_supplier';
+const spSaveProductionScanPickingMaterialDepartment =
+    'production_scan_picking_material_department';

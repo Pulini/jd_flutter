@@ -87,7 +87,9 @@ var _titleButtonCancel = TextButton(
 );
 
 class OptionsPicker extends StatelessWidget {
-  const OptionsPicker({super.key, required this.pickerController});
+  OptionsPicker({super.key, required this.pickerController}) {
+    pickerController.getData();
+  }
 
   final OptionsPickerController pickerController;
 
@@ -142,10 +144,10 @@ class OptionsPicker extends StatelessWidget {
             ),
             Obx(() => Expanded(
                   child: getCupertinoPicker(
-                    pickerController.pickerItems.map((data) {
+                    items: pickerController.pickerItems.map((data) {
                       return Center(child: Text(data.toShow()));
                     }).toList(),
-                    controller,
+                    controller: controller,
                   ),
                 )),
           ],
@@ -158,8 +160,6 @@ class OptionsPicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    pickerController.search('');
-    pickerController.getData();
     return Container(
       height: 40,
       margin: const EdgeInsets.all(5),
@@ -216,7 +216,9 @@ class OptionsPicker extends StatelessWidget {
 }
 
 class LinkOptionsPicker extends StatelessWidget {
-  const LinkOptionsPicker({super.key, required this.pickerController});
+  LinkOptionsPicker({super.key, required this.pickerController}) {
+    pickerController.getData();
+  }
 
   final LinkOptionsPickerController pickerController;
 
@@ -317,8 +319,6 @@ class LinkOptionsPicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    pickerController.search('');
-    pickerController.getData();
     return Container(
       height: 40,
       margin: const EdgeInsets.all(5),

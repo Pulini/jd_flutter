@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:collection/collection.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/manufacture_instructions_info.dart';
 import 'package:jd_flutter/bean/http/response/order_color_info.dart';
@@ -892,9 +891,6 @@ class ProductionDispatchLogic extends GetxController {
         state.orderProgressList.value = formatProgress(list);
         state.orderProgressTableWeight.value =
             calculateTableWidth(state.orderProgressList[0].sizeMax);
-        debugPrint('-----orderProgressList=${state.orderProgressList.length}');
-        debugPrint(
-            '-----orderProgressTableWeight=${state.orderProgressTableWeight.value}');
         Get.to(() => const ProductionDispatchProgressPage());
       },
       error: (msg) => errorDialog(content: msg),

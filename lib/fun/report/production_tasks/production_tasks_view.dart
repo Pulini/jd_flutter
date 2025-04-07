@@ -29,10 +29,11 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
     server: state.mqttServer,
     port: state.mqttPort,
     topic: state.mqttTopic,
-    connectListener: (m) => mqtt.send(
-      topic: state.mqttSend,
-      msg: '{"IsGetAllList":1}',
-    ),
+    // connectListener: (m) => mqtt.send(
+    //   topic: state.mqttSend,
+    //   msg: '{"IsGetAllList":1}',
+    // ),
+    connectListener: (m) => logic.refreshTable(refresh: () => _refreshTable()),
     msgListener: (topic, data) => logic.mqttRefresh(
       topic: topic,
       data: data,

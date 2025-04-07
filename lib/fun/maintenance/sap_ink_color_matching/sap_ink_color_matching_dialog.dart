@@ -27,7 +27,10 @@ selectMaterialDialog({
         return AlertDialog(
           title: Row(
             children: [
-              Expanded(child: Text('sap_ink_color_matching_dialog_add_color_toning_material'.tr)),
+              Expanded(
+                  child: Text(
+                      'sap_ink_color_matching_dialog_add_color_toning_material'
+                          .tr)),
               IconButton(
                 onPressed: () => Get.back(),
                 icon: const Icon(Icons.close),
@@ -63,7 +66,9 @@ selectMaterialDialog({
                       border: const OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(20)),
                       ),
-                      hintText: 'sap_ink_color_matching_dialog_input_material_name'.tr,
+                      hintText:
+                          'sap_ink_color_matching_dialog_input_material_name'
+                              .tr,
                       hintStyle: const TextStyle(color: Colors.grey),
                       prefixIcon: IconButton(
                           onPressed: () => controller.clear(),
@@ -76,14 +81,18 @@ selectMaterialDialog({
                         click: () {
                           if (scalePortList.isEmpty) {
                             showSnackBar(
-                              message: 'sap_ink_color_matching_dialog_no_available_devices'.tr,
+                              message:
+                                  'sap_ink_color_matching_dialog_no_available_devices'
+                                      .tr,
                               isWarning: true,
                             );
                             return;
                           }
                           if (showList.isEmpty) {
                             showSnackBar(
-                              message: 'sap_ink_color_matching_dialog_select_material'.tr,
+                              message:
+                                  'sap_ink_color_matching_dialog_select_material'
+                                      .tr,
                               isWarning: true,
                             );
                             return;
@@ -130,7 +139,7 @@ selectMaterialDialog({
                       width: 600,
                       child: materialList.isNotEmpty
                           ? getCupertinoPicker(
-                              showList.map((data) {
+                              items: showList.map((data) {
                                 var color =
                                     data.materialColor.getColorByDescription();
                                 return Row(
@@ -164,11 +173,12 @@ selectMaterialDialog({
                                   ],
                                 );
                               }).toList(),
-                              materialController,
+                              controller: materialController,
                             )
                           : Center(
                               child: Text(
-                                'sap_ink_color_matching_dialog_no_available_material'.tr,
+                                'sap_ink_color_matching_dialog_no_available_material'
+                                    .tr,
                                 style: const TextStyle(
                                   color: Colors.red,
                                   fontWeight: FontWeight.bold,
@@ -182,15 +192,16 @@ selectMaterialDialog({
                       width: 200,
                       child: scalePortList.isNotEmpty
                           ? getCupertinoPicker(
-                              scalePortList.map((data) {
+                            items:  scalePortList.map((data) {
                                 return Center(
                                     child: Text(data.deviceName ?? ''));
                               }).toList(),
-                              scalePorController,
+                        controller:scalePorController,
                             )
                           : Center(
                               child: Text(
-                                'sap_ink_color_matching_dialog_no_available_devices'.tr,
+                                'sap_ink_color_matching_dialog_no_available_devices'
+                                    .tr,
                                 style: const TextStyle(
                                   color: Colors.red,
                                   fontWeight: FontWeight.bold,
@@ -249,7 +260,8 @@ trialFinishDialog({
                     )),
                 Row(
                   children: [
-                    Text('sap_ink_color_matching_dialog_trial_qty'.tr, style: style),
+                    Text('sap_ink_color_matching_dialog_trial_qty'.tr,
+                        style: style),
                     Expanded(
                       child: NumberDecimalEditText(
                         onChanged: (w) {
@@ -262,12 +274,14 @@ trialFinishDialog({
                         },
                       ),
                     ),
-                    Text('sap_ink_color_matching_dialog_pair_unit'.tr, style: style),
+                    Text('sap_ink_color_matching_dialog_pair_unit'.tr,
+                        style: style),
                   ],
                 ),
                 Row(
                   children: [
-                    Text('sap_ink_color_matching_dialog_mix_trial_weight'.tr, style: style),
+                    Text('sap_ink_color_matching_dialog_mix_trial_weight'.tr,
+                        style: style),
                     Expanded(
                       child: NumberDecimalEditText(
                         max: mixWeight,
@@ -318,7 +332,9 @@ trialFinishDialog({
                 }
                 if (inputMixWeight.value == 0) {
                   showSnackBar(
-                    message: 'sap_ink_color_matching_dialog_input_mix_trial_weight'.tr,
+                    message:
+                        'sap_ink_color_matching_dialog_input_mix_trial_weight'
+                            .tr,
                     isWarning: true,
                   );
                   return;
@@ -379,12 +395,12 @@ _submitTrialFinish({
     loading: 'sap_ink_color_matching_dialog_submitting_trial'.tr,
     method: webApiSapSubmitTrialFinish,
     body: {
-      "WOFNR": orderNumber,
-      "MENGE": trialQty,
-      "ZMIXNTGEW_AFT": mixWeight,
-      "AUSCH": lossPercent,
-      "ZMENG1": standardDosage,
-      "ZMENG2": actualDosage
+      'WOFNR': orderNumber,
+      'MENGE': trialQty,
+      'ZMIXNTGEW_AFT': mixWeight,
+      'AUSCH': lossPercent,
+      'ZMENG1': standardDosage,
+      'ZMENG2': actualDosage
     },
   ).then((response) {
     if (response.resultCode == resultSuccess) {
@@ -454,7 +470,8 @@ puttingDialog({
                   ),
                 ),
                 child: ballColor == Colors.transparent
-                    ? Center(child: Text('sap_ink_color_matching_dialog_null'.tr))
+                    ? Center(
+                        child: Text('sap_ink_color_matching_dialog_null'.tr))
                     : null,
               ),
               expandedTextSpan(
@@ -481,13 +498,20 @@ puttingDialog({
                             margin: const EdgeInsets.only(left: 5, right: 10),
                             child: const CircularProgressIndicator(),
                           ),
-                          Text('sap_ink_color_matching_dialog_connecting'.tr, style: styleBlue),
+                          Text('sap_ink_color_matching_dialog_connecting'.tr,
+                              style: styleBlue),
                         ],
                       )
                     : connectState.value == ConnectState.connected.value
                         ? mixDeviceUnit.value != 'kg'
-                            ? Text('$deviceName：sap_ink_color_matching_dialog_device_unit_error'.tr, style: styleRed)
-                            : Text('$deviceName：sap_ink_color_matching_dialog_connected'.tr, style: styleGreen)
+                            ? Text(
+                                '$deviceName：sap_ink_color_matching_dialog_device_unit_error'
+                                    .tr,
+                                style: styleRed)
+                            : Text(
+                                '$deviceName：sap_ink_color_matching_dialog_connected'
+                                    .tr,
+                                style: styleGreen)
                         : Row(
                             children: [
                               Text('$deviceName：', style: styleRed),
@@ -496,7 +520,10 @@ puttingDialog({
                                 color: Colors.red,
                                 size: 30,
                               ),
-                              Text('sap_ink_color_matching_dialog_device_exception'.tr, style: styleRed),
+                              Text(
+                                  'sap_ink_color_matching_dialog_device_exception'
+                                      .tr,
+                                  style: styleRed),
                             ],
                           )),
                 Obx(() => textSpan(
@@ -531,17 +558,23 @@ puttingDialog({
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Obx(() => textSpan(
-                                hint: 'sap_ink_color_matching_dialog_should_poured_in'.tr,
+                                hint:
+                                    'sap_ink_color_matching_dialog_should_poured_in'
+                                        .tr,
                                 text:
                                     '${data.finalWeight.value.toFixed(4).toShowString()} ${mixDeviceUnit.value}',
                               )),
                           Obx(() => textSpan(
-                                hint: 'sap_ink_color_matching_dialog_already_poured_in'.tr,
+                                hint:
+                                    'sap_ink_color_matching_dialog_already_poured_in'
+                                        .tr,
                                 text:
                                     '${data.actualWeight.value.toFixed(4).toShowString()} ${mixDeviceUnit.value}',
                               )),
                           Obx(() => textSpan(
-                                hint: 'sap_ink_color_matching_dialog_need_poured_in'.tr,
+                                hint:
+                                    'sap_ink_color_matching_dialog_need_poured_in'
+                                        .tr,
                                 text:
                                     '${data.finalWeight.value.sub(data.actualWeight.value).toFixed(4).toShowString()} ${mixDeviceUnit.value}',
                               )),
