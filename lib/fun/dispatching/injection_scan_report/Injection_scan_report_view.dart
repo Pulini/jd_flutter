@@ -157,14 +157,14 @@ class _InjectionScanReportPageState extends State<InjectionScanReportPage> {
                           //机台号
                           flex: 1,
                           hint: 'injection_scan_machine'.tr,
-                          text: state.machine.value ?? '',
+                          text: state.machine.value,
                           textColor: Colors.yellow.shade200,
                         ),
                         expandedTextSpan(
                           //派工单号
                           flex: 2,
                           hint: 'injection_scan_dispatchNumber'.tr,
-                          text: state.dispatchNumber.value ?? '',
+                          text: state.dispatchNumber.value,
                           textColor: Colors.yellow.shade200,
                         ),
                       ],
@@ -177,7 +177,7 @@ class _InjectionScanReportPageState extends State<InjectionScanReportPage> {
                       children: [
                         expandedTextSpan(
                           hint: 'injection_scan_type_body'.tr,
-                          text: state.factoryType.value ?? '',
+                          text: state.factoryType.value,
                           textColor: Colors.yellow.shade200,
                         ),
                       ],

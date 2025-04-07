@@ -1,5 +1,4 @@
 import 'package:jd_flutter/utils/utils.dart';
-import 'package:logger/logger.dart';
 
 /// InterID : 39319
 /// DecrementNumber : "D0003966"
