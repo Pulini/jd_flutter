@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.util.Base64
@@ -30,6 +31,8 @@ const val CHANNEL_SCAN_FLUTTER_TO_ANDROID = "channel_scan_flutter_to_android"
 const val CHANNEL_WEIGHBRIDGE_FLUTTER_TO_ANDROID = "channel_weighbridge_flutter_to_android"
 const val CHANNEL_WEIGHBRIDGE_ANDROID_TO_FLUTTER = "channel_weighbridge_android_to_flutter"
 const val CHANNEL_FACE_VERIFICATION_FLUTTER_TO_ANDROID = "channel_face_verification_flutter_to_android"
+const val CHANNEL_PRINTER_ANDROID_TO_FLUTTER = "channel_printer_android_to_flutter"
+const val CHANNEL_PRINTER_FLUTTER_TO_ANDROID = "channel_printer_flutter_to_android"
 const val FACE_VERIFY_SUCCESS = 1
 const val FACE_VERIFY_FAIL_NOT_LIVE = 2
 const val FACE_VERIFY_FAIL_NOT_ME = 3
@@ -522,6 +525,12 @@ fun bitmapToBase64(bitmap: Bitmap): String = Base64.encodeToString(
         close()
     }.toByteArray(), Base64.DEFAULT
 )
+
+fun base64ToBitmap(base64Data: String): Bitmap {
+    val bytes = Base64.decode(base64Data, Base64.DEFAULT)
+    return BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+}
+
 
 fun Activity.display() = DisplayMetrics().apply {
     windowManager.defaultDisplay.getMetrics(this)

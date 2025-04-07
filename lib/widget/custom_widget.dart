@@ -9,6 +9,7 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 //app 背景渐变色
@@ -45,31 +46,7 @@ pageBody({
       body: PopScope(
         canPop: popTitle.isEmpty ? true : false,
         onPopInvokedWithResult: (didPop, result) {
-          if (!didPop) {
-            Get.dialog(AlertDialog(
-              title: Text('dialog_default_exit_title'.tr),
-              content: Text(
-                popTitle,
-                style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.red,
-                    fontSize: 18),
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () => Get.back(closeOverlays: true),
-                  child: Text('dialog_default_confirm'.tr),
-                ),
-                TextButton(
-                  onPressed: () => Get.back(),
-                  child: Text(
-                    'dialog_default_cancel'.tr,
-                    style: const TextStyle(color: Colors.grey),
-                  ),
-                ),
-              ],
-            ));
-          }
+          if (!didPop) exitDialog(content: popTitle);
         },
         child: body,
       ),
@@ -144,31 +121,7 @@ pageBodyWithBottomSheet({
       body: PopScope(
         canPop: popTitle.isEmpty ? true : false,
         onPopInvokedWithResult: (didPop, result) {
-          if (!didPop) {
-            Get.dialog(AlertDialog(
-              title: Text('dialog_default_exit_title'.tr),
-              content: Text(
-                popTitle,
-                style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.red,
-                    fontSize: 18),
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () => Get.back(closeOverlays: true),
-                  child: Text('dialog_default_confirm'.tr),
-                ),
-                TextButton(
-                  onPressed: () => Get.back(),
-                  child: Text(
-                    'dialog_default_cancel'.tr,
-                    style: const TextStyle(color: Colors.grey),
-                  ),
-                ),
-              ],
-            ));
-          }
+          if (!didPop) exitDialog(content: popTitle);
         },
         child: body,
       ),
@@ -241,31 +194,7 @@ pageBodyWithDrawer({
       body: PopScope(
         canPop: popTitle.isEmpty ? true : false,
         onPopInvokedWithResult: (didPop, result) {
-          if (!didPop) {
-            Get.dialog(AlertDialog(
-              title: Text('dialog_default_exit_title'.tr),
-              content: Text(
-                popTitle,
-                style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.red,
-                    fontSize: 18),
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () => Get.back(closeOverlays: true),
-                  child: Text('dialog_default_confirm'.tr),
-                ),
-                TextButton(
-                  onPressed: () => Get.back(),
-                  child: Text(
-                    'dialog_default_cancel'.tr,
-                    style: const TextStyle(color: Colors.grey),
-                  ),
-                ),
-              ],
-            ));
-          }
+          if (!didPop) exitDialog(content: popTitle);
         },
         child: body,
       ),
@@ -407,7 +336,10 @@ showScanTips({
 }
 
 //选择器
-getCupertinoPicker(List<Widget> items, FixedExtentScrollController controller) {
+Widget getCupertinoPicker({
+  required List<Widget> items,
+  required FixedExtentScrollController controller,
+}) {
   return CupertinoPicker(
     scrollController: controller,
     diameterRatio: 1.5,
@@ -419,6 +351,36 @@ getCupertinoPicker(List<Widget> items, FixedExtentScrollController controller) {
     children: items,
   );
 }
+
+//选择器
+Widget getLinkCupertinoPicker({
+  required List<Widget> groupItems,
+  required List<List<Widget>> subItems,
+  required FixedExtentScrollController groupController,
+  required FixedExtentScrollController subController,
+}) =>
+    Row(
+      children: [
+        Expanded(
+          child: CupertinoPicker(
+            scrollController: groupController,
+            onSelectedItemChanged: (value) => subController.jumpToItem(0),
+            itemExtent: 22,
+            squeeze: 1.2,
+            children: groupItems,
+          ),
+        ),
+        Expanded(
+          child: CupertinoPicker(
+            scrollController: subController,
+            onSelectedItemChanged: (value) {},
+            itemExtent: 22,
+            squeeze: 1.2,
+            children: subItems[groupController.selectedItem],
+          ),
+        ),
+      ],
+    );
 
 //popup工具
 showPopup(Widget widget, {double? height}) {
@@ -632,41 +594,44 @@ expandedFrameText({
   required String text,
   int? maxLines = 1,
 }) {
+  var widget = Container(
+    height: (maxLines! * 35).toDouble(),
+    padding: padding ?? const EdgeInsets.all(5),
+    decoration: BoxDecoration(
+      border: Border.all(color: borderColor ?? Colors.grey),
+      color: backgroundColor ?? Colors.transparent,
+    ),
+    alignment: alignment ?? Alignment.centerLeft,
+    child: Text(
+      maxLines: maxLines,
+      overflow: TextOverflow.ellipsis,
+      text,
+      strutStyle: const StrutStyle(
+        forceStrutHeight: true,
+        leading: 0.5,
+      ),
+      style: TextStyle(
+        color: textColor ?? Colors.black87,
+        fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
+      ),
+    ),
+  );
   return Expanded(
     flex: flex ?? 1,
     child: text.isEmpty
         ? Container(
-            height: (maxLines! * 35).toDouble(),
+            height: (maxLines * 35).toDouble(),
             decoration: BoxDecoration(
               border: Border.all(color: borderColor ?? Colors.grey),
               color: backgroundColor ?? Colors.transparent,
             ),
           )
-        : GestureDetector(
-            onTap: () => click?.call(),
-            child: Container(
-              height: (maxLines! * 35).toDouble(),
-              padding: padding ?? const EdgeInsets.all(5),
-              decoration: BoxDecoration(
-                border: Border.all(color: borderColor ?? Colors.grey),
-                color: backgroundColor ?? Colors.transparent,
+        : click == null
+            ? widget
+            : GestureDetector(
+                onTap: () => click.call(),
+                child: widget,
               ),
-              alignment: alignment ?? Alignment.centerLeft,
-              child: Text(
-                maxLines: maxLines,
-                overflow: TextOverflow.ellipsis,
-                text,
-                strutStyle: const StrutStyle(
-                  forceStrutHeight: true,
-                  leading: 0.5,
-                ),
-                style: TextStyle(
-                  color: textColor ?? Colors.black87,
-                  fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
-                ),
-              ),
-            ),
-          ),
   );
 }
 

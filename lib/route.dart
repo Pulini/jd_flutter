@@ -13,6 +13,7 @@ import 'package:jd_flutter/fun/warehouse/manage/sap_wms_reprint_labels/sap_wms_r
 import 'package:jd_flutter/fun/warehouse/out/production_scan_picking_material/production_scan_picking_material_view.dart';
 import 'package:jd_flutter/fun/warehouse/out/sale_scan_out_warehouse/sale_scan_out_warehouse_view.dart';
 import 'package:jd_flutter/fun/warehouse/out/scan_picking_material/scan_picking_material_view.dart';
+import 'package:jd_flutter/fun/warehouse/out/wait_picking_material/wait_picking_material_view.dart';
 import 'bean/home_button.dart';
 import 'bean/routes.dart';
 import 'fun/dispatching/machine_dispatch/machine_dispatch_report_view.dart';
@@ -387,7 +388,7 @@ class RouteConfig {
   //成型生产任务
   static Routes productionTasks = Routes(
     '/production_tasks',
-    102,
+    103,
     const ProductionTasksPage(),
   );
 
@@ -433,6 +434,12 @@ class RouteConfig {
     const ProductionScanPickingMaterialPage(),
   );
 
+  //待领料列表
+  static Routes waitPickingMaterial = Routes(
+    '/wait_picking_material',
+    99,
+    const WaitPickingMaterialPage(),
+  );
 
   //本地功能入口列表
   static List<Routes> routeList = [
@@ -489,6 +496,7 @@ class RouteConfig {
     scanPickingMaterial,
     saleScanOutWarehouse,
     productionScanPickingMaterial,
+    waitPickingMaterial,
   ];
 
   static List<GetPage> appRoutes = [
@@ -716,6 +724,10 @@ class RouteConfig {
     GetPage(
       name: productionScanPickingMaterial.name,
       page: () => productionScanPickingMaterial.page,
+    ),
+    GetPage(
+      name: waitPickingMaterial.name,
+      page: () => waitPickingMaterial.page,
     ),
   ];
 }

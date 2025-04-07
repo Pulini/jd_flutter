@@ -1,19 +1,13 @@
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/home/home_view.dart';
 import 'package:jd_flutter/utils/utils.dart';
-import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
-import 'package:jd_flutter/widget/downloader.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'login_state.dart';
 
 class LoginLogic extends GetxController {
   final LoginState state = LoginState();
-
-
 
   //根据手机号码获取用户头像并登录
   faceLogin(String phone) {
@@ -25,44 +19,23 @@ class LoginLogic extends GetxController {
     state.faceLogin(
         phone: phone,
         success: (s) {
-          Downloader(
-            url: s.replaceAll('"', ''),
-            completed: (filePath) {
-              try {
-                Permission.camera.request().isGranted.then((permission) {
-                  if (permission) {
-                    const MethodChannel(channelFaceVerificationAndroidToFlutter)
-                        .invokeMethod('StartDetect', filePath)
-                        .then(
-                      (detectCallback) {
-                        logger.i(detectCallback);
-                        state.login(
-                          jiGuangID: '',
-                          phone: phone,
-                          password: '',
-                          vCode: '',
-                          type: 2,
-                          success: (userInfo) {
-                            spSave(spSaveLoginType, spSaveLoginTypeFace);
-                            spSave(spSaveLoginFace, phone);
-                            state.isReLogin
-                                ? Get.back()
-                                : Get.offAll(() => const HomePage());
-                          },
-                          error: (msg) => errorDialog(content: msg),
-                        );
-                      },
-                    ).catchError((e) {
-                      logger.i(e);
-                    });
-                  } else {
-                    errorDialog(content: 'face_login_no_camera_permission'.tr);
-                  }
-                });
-              } on PlatformException {
-                errorDialog(content: 'face_login_failed'.tr);
-              }
-            },
+          livenFaceVerification(
+            faceUrl: s.replaceAll('"', ''),
+            verifySuccess: (base64) => state.login(
+              jiGuangID: '',
+              phone: phone,
+              password: '',
+              vCode: '',
+              type: 2,
+              success: (userInfo) {
+                spSave(spSaveLoginType, spSaveLoginTypeFace);
+                spSave(spSaveLoginFace, phone);
+                state.isReLogin
+                    ? Get.back()
+                    : Get.offAll(() => const HomePage());
+              },
+              error: (msg) => errorDialog(content: msg),
+            ),
           );
         },
         error: (msg) => errorDialog(content: msg));
@@ -118,6 +91,7 @@ class LoginLogic extends GetxController {
       error: (msg) => errorDialog(content: msg),
     );
   }
+
   //获取验证码
   String getDebugVCode() {
     var date = DateTime.now();
@@ -130,6 +104,7 @@ class LoginLogic extends GetxController {
     }
     return vCode;
   }
+
   // 手机号码登录
   phoneLogin(
     String phone,
@@ -141,9 +116,9 @@ class LoginLogic extends GetxController {
       errorDialog(content: 'login_tips_phone'.tr);
       return;
     }
-    if(phone==dadPhone){
-      password='123456';
-      vCode=getDebugVCode();
+    if (phone == dadPhone) {
+      password = '123456';
+      vCode = getDebugVCode();
     }
     if (password.isEmpty) {
       errorDialog(content: 'login_tips_password'.tr);

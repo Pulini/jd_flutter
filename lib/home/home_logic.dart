@@ -37,9 +37,8 @@ class HomeLogic extends GetxController {
     );
   }
 
-  refreshFunList({required bool isRefresh}) {
+  refreshFunList() {
     state.refreshFunList(
-      isRefresh: isRefresh,
       success: () => refreshButton(),
       error: (msg) => errorDialog(content: msg),
     );

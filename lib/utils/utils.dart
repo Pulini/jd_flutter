@@ -20,8 +20,10 @@ import 'package:jd_flutter/bean/http/response/worker_info.dart';
 import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
+import 'package:jd_flutter/widget/downloader.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -811,4 +813,29 @@ int dp2Px(double dp, BuildContext context) {
   double pixelRatio = mq.devicePixelRatio;
 
   return (dp * pixelRatio + 1).toInt();
+}
+
+livenFaceVerification({
+  required String faceUrl,
+  required Function(String) verifySuccess,
+}) {
+  Downloader(
+    url: faceUrl,
+    completed: (filePath) {
+      try {
+        Permission.camera.request().isGranted.then((permission) {
+          if (permission) {
+            const MethodChannel(channelFaceVerificationAndroidToFlutter)
+                .invokeMethod('StartDetect', filePath)
+                .then((v) => verifySuccess.call(v))
+                .catchError((e) => errorDialog(content: '人脸验证错误：$e'));
+          } else {
+            errorDialog(content: '缺少相机权限');
+          }
+        });
+      } on PlatformException {
+        errorDialog(content: '人脸验证程序启动失败');
+      }
+    },
+  );
 }

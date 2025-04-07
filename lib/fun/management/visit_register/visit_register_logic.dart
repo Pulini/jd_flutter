@@ -453,11 +453,11 @@ class VisitRegisterLogic extends GetxController {
             //选择器主体
             Expanded(
               child: getCupertinoPicker(
-                list.map((data) {
+                items:list.map((data) {
                   return Center(
                       child: Text("${data.empName!}_${data.empDepartName!}"));
                 }).toList(),
-                controller,
+                controller: controller,
               ),
             )
           ],
@@ -542,10 +542,10 @@ class VisitRegisterLogic extends GetxController {
           //选择器主体
           Expanded(
             child: getCupertinoPicker(
-              list.map((data) {
+            items:  list.map((data) {
                 return Center(child: Text(data.fPlaceName!));
               }).toList(),
-              controller,
+              controller:  controller,
             ),
           )
         ],

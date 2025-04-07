@@ -1117,10 +1117,10 @@ selectMaterialDialog(List<String> list, Function(String) callback) {
           width: 200,
           height: 100,
           child: getCupertinoPicker(
-            list.map((data) {
+            items:list.map((data) {
               return Center(child: Text(data));
             }).toList(),
-            controller,
+            controller: controller,
           ),
         ),
         actions: <Widget>[
@@ -1160,10 +1160,10 @@ selectLanguageDialog(
           width: 200,
           height: 100,
           child: getCupertinoPicker(
-            list.map((data) {
+           items: list.map((data) {
               return Center(child: Text(data));
             }).toList(),
-            controller,
+            controller:  controller,
           ),
         ),
         actions: <Widget>[

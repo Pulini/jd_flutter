@@ -54,8 +54,8 @@ class _SapSurplusMaterialStockInPageState
             width: 300,
             height: 160,
             child: getCupertinoPicker(
-              state.surplusMaterialType.map((v) => Center(child: Text(v))).toList(),
-              controller,
+            items:  state.surplusMaterialType.map((v) => Center(child: Text(v))).toList(),
+              controller: controller,
             ),
           ),
           actions: [

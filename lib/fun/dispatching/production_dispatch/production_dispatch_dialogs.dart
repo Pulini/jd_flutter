@@ -932,10 +932,10 @@ showSelectMaterialPopup({
           width: 300,
           height: 200,
           child: getCupertinoPicker(
-            surplusMaterialList.map((data) {
+           items: surplusMaterialList.map((data) {
               return Center(child: Text(data['StubBarName']));
             }).toList(),
-            controller,
+            controller: controller,
           ),
         ),
         actions: <Widget>[

@@ -939,6 +939,15 @@ Future<Uint8List> labelImageResize(Uint8List image) async {
   return Uint8List.fromList(img.encodePng(reImage));
 }
 
+Future<Uint8List> a4PaperImageResize(Uint8List image) async {
+  var reImage = img.copyResize(
+    img.decodeImage(image)!,
+    width:2380,
+    height:3368,
+  );
+  return Uint8List.fromList(img.encodePng(reImage));
+}
+
 Future<List<Uint8List>> imageResizeToLabel(Uint8List image) async {
   return await compute(_imageResizeToLabel, image);
 }

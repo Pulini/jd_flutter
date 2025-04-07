@@ -142,10 +142,10 @@ class OptionsPicker extends StatelessWidget {
             ),
             Obx(() => Expanded(
                   child: getCupertinoPicker(
-                    pickerController.pickerItems.map((data) {
+                  items:  pickerController.pickerItems.map((data) {
                       return Center(child: Text(data.toShow()));
                     }).toList(),
-                    controller,
+                    controller:   controller,
                   ),
                 )),
           ],

@@ -12,10 +12,6 @@ enum BarCodeReportType {
   productionScanPicking(107, 'ProductionScanPicking'), // 生产扫码领料
   injectionMoldingStockIn(1000, 'InjectionMoldingStockIn'); // 金臻注塑入库
 
-  //功能无用 formingPosteriorScan(3, 'FormingPosteriorScan'), // 成型后段扫码
-  //功能无用 sapProcessReportScan(15,'SapProcessReportScan'), // sap工序汇报扫码
-  //功能无用 productionReportInStock(5,'ProductionReportInStock'), // 生产汇报入库
-
   final int value;
   final String text;
 

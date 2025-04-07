@@ -51,8 +51,10 @@ feishuViewWikiFiles({required String query}) {
       );
     }
 
-    feishuAuthorizeCheck(
-      notAuthorize: () => Get.to(() => FeishuAuthorize())?.then((token) {
+    feishuWikiAuthorizeCheck(
+      notAuthorize: () => Get.to(
+        () => FeishuAuthorize(isWikiPermission: true),
+      )?.then((token) {
         if (token != null) {
           feishuWikiSearch(
             token: token,
@@ -101,8 +103,10 @@ feishuViewCloudDocFiles({required String query}) {
       );
     }
 
-    feishuAuthorizeCheck(
-      notAuthorize: () => Get.to(() => FeishuAuthorize())?.then((token) {
+    feishuCloudDocAuthorizeCheck(
+      notAuthorize: () => Get.to(
+        () => FeishuAuthorize(isWikiPermission: false),
+      )?.then((token) {
         if (token != null) {
           authorizeToken = token;
           feishuCloudDocSearch(
@@ -214,11 +218,30 @@ pickFilePopup({required List<Map> fileList, required Function(Map) viewFile}) {
 }
 
 /// 飞书授权检查
-feishuAuthorizeCheck({
+feishuWikiAuthorizeCheck({
   required Function() notAuthorize,
   required Function(String token) authorized,
 }) {
-  String feishuLoginCache = spGet(spSaveFeishuUserTokenData) ?? '';
+  String feishuLoginCache = spGet(spSaveFeishuUserWikiTokenData) ?? '';
+  if (feishuLoginCache.isEmpty) {
+    notAuthorize.call();
+  } else {
+    var tokenInfo =
+        FeishuUserTokenInfo.fromSaveJson(jsonDecode(feishuLoginCache));
+    if (tokenInfo.isTimeout()) {
+      notAuthorize.call();
+    } else {
+      authorized.call(tokenInfo.accessToken ?? '');
+    }
+  }
+}
+
+/// 飞书授权检查
+feishuCloudDocAuthorizeCheck({
+  required Function() notAuthorize,
+  required Function(String token) authorized,
+}) {
+  String feishuLoginCache = spGet(spSaveFeishuUserCloudDocTokenData) ?? '';
   if (feishuLoginCache.isEmpty) {
     notAuthorize.call();
   } else {
@@ -423,19 +446,13 @@ feishuGetCloudDocInfo({
     );
 }
 
-var permissionWikiSearch = 'wiki:wiki:readonly';
-var permissionCloudDocSearch = 'drive:drive:readonly';
-var permissionCloudDocReadonly = 'drive:drive.metadata:readonly';
-
 class FeishuAuthorize extends StatelessWidget {
-  FeishuAuthorize({super.key});
+  FeishuAuthorize({super.key, required this.isWikiPermission});
 
-  final String authUrl = '$authorizeUri?'
-      'client_id=$appID'
-      '&redirect_uri=${Uri.decodeComponent(redirectUri)}'
-      '&scope=$permissionWikiSearch $permissionCloudDocSearch $permissionCloudDocReadonly'
-      '&state=RANDOMSTRING';
-
+  final String permissionWikiSearch = 'wiki:wiki:readonly';
+  final String permissionCloudDocSearch = 'drive:drive:readonly';
+  final String permissionCloudDocReadonly = 'drive:drive.metadata:readonly';
+  final bool isWikiPermission;
   final WebViewController webViewController = WebViewController();
 
   _getUserAccessToken(String code) {
@@ -475,7 +492,11 @@ class FeishuAuthorize extends StatelessWidget {
         (response) {
           loadingDismiss();
           var feishu = FeishuUserTokenInfo.fromJson(response.data);
-          spSave(spSaveFeishuUserTokenData, jsonEncode(feishu));
+          spSave(
+              isWikiPermission
+                  ? spSaveFeishuUserWikiTokenData
+                  : spSaveFeishuUserCloudDocTokenData,
+              jsonEncode(feishu));
           if (feishu.code == 0) {
             successDialog(
               content: 'feishu_authorize_authorize_success'.tr,
@@ -487,7 +508,11 @@ class FeishuAuthorize extends StatelessWidget {
                 feishu.code.toString(),
               ]),
               back: () {
-                spSave(spSaveFeishuUserTokenData, '');
+                spSave(
+                    isWikiPermission
+                        ? spSaveFeishuUserWikiTokenData
+                        : spSaveFeishuUserCloudDocTokenData,
+                    '');
                 Get.back();
               },
             );
@@ -500,7 +525,11 @@ class FeishuAuthorize extends StatelessWidget {
               '${(e as DioException).response?.statusCode} ${e.response?.statusMessage}',
             ]),
             back: () {
-              spSave(spSaveFeishuUserTokenData, '');
+              spSave(
+                  isWikiPermission
+                      ? spSaveFeishuUserWikiTokenData
+                      : spSaveFeishuUserCloudDocTokenData,
+                  '');
               Get.back();
             },
           );
@@ -547,12 +576,13 @@ class FeishuAuthorize extends StatelessWidget {
     }
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      // if(GetPlatform.isWeb){
-      //   goLaunch(Uri.parse(authUrl));
-      // }else if(GetPlatform.isMobile){
-      //   webViewController.loadRequest(Uri.parse(authUrl));
-      // }
-      webViewController.loadRequest(Uri.parse(authUrl));
+      webViewController.loadRequest(Uri.parse(
+        '$authorizeUri?'
+        'client_id=$appID'
+        '&redirect_uri=${Uri.decodeComponent(redirectUri)}'
+        '${isWikiPermission ? '&scope=$permissionWikiSearch' : '&scope=$permissionCloudDocSearch $permissionCloudDocReadonly'}'
+        '&state=RANDOMSTRING',
+      ));
     });
     return Container(
       decoration: backgroundColor,
