@@ -197,7 +197,7 @@ class ProcessReportLogic extends GetxController {
   //清空条码
   clearBarCodeList() {
     BarCodeInfo.clear(
-      type: BarCodeReportType.processReportInStock.name,
+      type: BarCodeReportType.processReportInStock.text,
       callback: (v) {
         if (v == state.barCodeList.length) {
           state.barCodeList.clear();

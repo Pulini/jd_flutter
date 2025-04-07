@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:jd_flutter/fun/dispatching/injection_scan_report/Injection_scan_report_view.dart';
 import 'package:jd_flutter/fun/maintenance/sap_ink_color_matching/sap_ink_color_matching_view.dart';
 import 'package:jd_flutter/fun/other/hydroelectric_excess/hydroelectric_excess_view.dart';
 import 'package:jd_flutter/fun/reporting_work/part_process_scan/part_process_scan_view.dart';
@@ -425,6 +426,13 @@ class RouteConfig {
     const ProcessReportPage(),
   );
 
+  //注塑车间扫码报工
+  static Routes injectionScanReport = Routes(
+    '/injection_scan_report',
+    99,
+    const InjectionScanReportPage(),
+  );
+
   //本地功能入口列表
   static List<Routes> routeList = [
     dailyReport,
@@ -479,6 +487,7 @@ class RouteConfig {
     processReportWarehouse,
     incomingInspection,
     scanPickingMaterial,
+    injectionScanReport
   ];
 
   static List<GetPage> appRoutes = [
@@ -702,6 +711,10 @@ class RouteConfig {
     GetPage(
       name: processReportWarehouse.name,
       page: () => processReportWarehouse.page,
+    ),
+    GetPage(
+      name: injectionScanReport.name,
+      page: () => injectionScanReport.page,
     ),
   ];
 }

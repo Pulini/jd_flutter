@@ -1,10 +1,7 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/warehouse/in/process_report/process_report_logic.dart';
 import 'package:jd_flutter/fun/warehouse/in/process_report/process_report_state.dart';
-import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import '../../../../bean/http/response/process_modify_info.dart';
 import '../../../../widget/combination_button_widget.dart';

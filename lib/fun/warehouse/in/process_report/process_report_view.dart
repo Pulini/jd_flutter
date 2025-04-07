@@ -6,6 +6,7 @@ import 'package:jd_flutter/fun/warehouse/in/process_report/process_report_modify
 import '../../../../bean/http/response/bar_code.dart';
 import '../../../../widget/combination_button_widget.dart';
 import '../../../../widget/custom_widget.dart';
+import '../../../../widget/dialogs.dart';
 import '../../../../widget/edit_text_widget.dart';
 import '../../../../widget/scanner.dart';
 import '../../out/scan_picking_material/scan_picking_material_dialog.dart';
@@ -89,7 +90,7 @@ class _ProcessReportPageState extends State<ProcessReportPage> {
                   onTap: () => {
                     Get.to(() => const Scanner())?.then((v) {
                       if (v != null) {
-                        //调起摄像头扫码后的返回
+                        logic.scanCode(v);
                       }
                     }),
                   },
@@ -139,7 +140,12 @@ class _ProcessReportPageState extends State<ProcessReportPage> {
                      child: CombinationButton(
                        text: 'process_report_clear_list'.tr,
                        click: () {
-                         logic.clearBarCodeList();
+                         askDialog(
+                           content: 'code_list_report_sure_clean'.tr,
+                           confirm: () {
+                             logic.clearBarCodeList();
+                           },
+                         );
                        },
                        combination: Combination.right,
                      ))
@@ -161,7 +167,7 @@ class _ProcessReportPageState extends State<ProcessReportPage> {
                 Expanded(
                   flex: 1,
                   child: CombinationButton(
-                    text: 'process_report_submit_barcode'.tr,
+                    text: 'process_report_sure_clean_code'.tr,
                     click: () => {
                       checkBarCodeProcessDialog(
                         list: state.barCodeList,

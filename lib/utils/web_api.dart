@@ -1041,6 +1041,20 @@ const webApiUploadProcessReport = "api/ScanJobBooking/SubmitScWorkCardBarCode2Pr
 //工序汇报入库，获取贴标数据
 const webApiGetBarCodeInfo = "api/BarCode/GetBarCodeInfo";
 
-
 //工序汇报入库，提交贴标数据
 const webApiUpdateBarCodeInfo = "api/BarCode/UpdateBarCodeInfo";
+
+//获取工序派工单列表   金甄
+const webApiGetScWorkCardList= "api/CompoundDispatching/GetScWorkCardListJinZhen";
+
+//获取工序派工单详情  金甄
+const webApiGetScWorkCardDetailJinZhen = "api/CompoundDispatching/GetScWorkCardDetailJinZhen";
+
+//根据派工单ID删除贴标和框数
+const webApiClearBarCodeAndBoxQtyJinZhen = "api/CompoundDispatching/ClearBarCodeAndBoxQtyJinZhen";
+
+//获取已入库的贴标列表
+const webApiForSAPGetStockInBarCodeList = "sap/zapp/ZFUN_APP_BARCODE_FETCH";
+
+//修改派工表_金臻 (产量汇报)
+const webApiUpdateScWorkCardJinZhen = "api/CompoundDispatching/UpdateScWorkCardJinZhen";
