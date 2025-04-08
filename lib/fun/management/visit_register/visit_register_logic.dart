@@ -464,11 +464,11 @@ class VisitRegisterLogic extends GetxController {
             //选择器主体
             Expanded(
               child: getCupertinoPicker(
-                list.map((data) {
+                items: list.map((data) {
                   return Center(
                       child: Text("${data.empName!}_${data.empDepartName!}"));
                 }).toList(),
-                controller,
+                controller: controller,
               ),
             )
           ],
@@ -520,8 +520,10 @@ class VisitRegisterLogic extends GetxController {
                   list[controller.selectedItem].fInterID.toString();
             } else {
               state.canInput.value = false;
-              state.upAddDetail.value.actionZone = list[controller.selectedItem].fPlaceName;
-              state.upAddDetail.value.actionZoneID = list[controller.selectedItem].fInterID.toString();
+              state.upAddDetail.value.actionZone =
+                  list[controller.selectedItem].fPlaceName;
+              state.upAddDetail.value.actionZoneID =
+                  list[controller.selectedItem].fInterID.toString();
               textVisitorPlace.text = list[controller.selectedItem].fPlaceName!;
             }
           },
@@ -548,15 +550,14 @@ class VisitRegisterLogic extends GetxController {
             //选择器主体
             Expanded(
               child: getCupertinoPicker(
-                list.map((data) {
+                items: list.map((data) {
                   return Center(child: Text(data.fPlaceName!));
                 }).toList(),
-                controller,
+                controller: controller,
               ),
             )
           ],
         ));
-
       } else {
         errorDialog(content: response.message);
       }

@@ -123,11 +123,11 @@ class _SuppliersScanStorePageState extends State<SuppliersScanStorePage> {
           Padding(
             padding: const EdgeInsets.only(top: 10, right: 30),
             child: InkWell(
-              child: const Text('清空'),
+              child: Text('suppliers_scan_clean'.tr),
               onTap: () => {
                 askDialog(
-                  title: '温馨提示',
-                  content: '确定要清空条码吗?',
+                  title: 'dialog_default_title_information'.tr,
+                  content: 'suppliers_scan_sure_clean_code'.tr,
                   confirm: () {
                     logic.clearBarCodeList();
                   },
@@ -151,7 +151,7 @@ class _SuppliersScanStorePageState extends State<SuppliersScanStorePage> {
                   Expanded(
                     flex: 5,
                     child: EditText(
-                      hint: '手动录入登记',
+                      hint: 'suppliers_scan_enter_register'.tr,
                       onChanged: (s) => {
                         state.handCode = s,
                       },
@@ -161,7 +161,7 @@ class _SuppliersScanStorePageState extends State<SuppliersScanStorePage> {
                     flex: 2,
                     child: SwitchButton(
                       onChanged: (s) => state.red.value = s,
-                      name: '红冲',
+                      name: 'suppliers_scan_red'.tr,
                       value: state.red.value,
                     ),
                   ),
@@ -183,11 +183,11 @@ class _SuppliersScanStorePageState extends State<SuppliersScanStorePage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     textSpan(
-                      hint: '已扫描：',
+                      hint: 'suppliers_scan_is_scan'.tr,
                       text: state.barCodeList.length.toString(),
                     ),
                     textSpan(
-                      hint: '托盘号：',
+                      hint: 'suppliers_scan_tray_number'.tr,
                       text: state.palletNumber.value,
                     ),
                   ],
@@ -198,7 +198,7 @@ class _SuppliersScanStorePageState extends State<SuppliersScanStorePage> {
                   Expanded(
                     flex: 1,
                     child: CombinationButton(
-                      text: '手动添加',
+                      text: 'suppliers_scan_manually_add'.tr,
                       click: () {
                         logic.scanCode(state.handCode);
                       },
@@ -208,12 +208,12 @@ class _SuppliersScanStorePageState extends State<SuppliersScanStorePage> {
                   Expanded(
                     flex: 1,
                     child: CombinationButton(
-                      text: '提交',
+                      text: 'suppliers_scan_submit'.tr,
                       click: () {
                         if (logic.haveCodeData()) {
                           showCustomPickerDialog(context);
                         } else {
-                          showSnackBar(title: '警告', message: '没用可提交的条码');
+                          showSnackBar(title: 'shack_bar_warm'.tr, message: 'suppliers_scan_no_barcode'.tr);
                         }
                       },
                       combination: Combination.right,

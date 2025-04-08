@@ -8,7 +8,6 @@ import 'package:jd_flutter/utils/utils.dart';
 import '../../../../bean/http/response/bar_code.dart';
 import '../../../../bean/http/response/process_modify_info.dart';
 import '../../../../bean/http/response/sap_picking_info.dart';
-import '../../../../bean/http/response/used_bar_code_info.dart';
 import '../../../../bean/http/response/worker_info.dart';
 import '../../../../utils/web_api.dart';
 import '../../../../widget/custom_widget.dart';

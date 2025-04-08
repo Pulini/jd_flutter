@@ -1,7 +1,6 @@
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/bar_code.dart';
 import 'package:jd_flutter/bean/http/response/sap_picking_info.dart';
-import 'package:jd_flutter/bean/http/response/used_bar_code_info.dart';
 import 'package:jd_flutter/fun/warehouse/code_list_report/code_list_report_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/suppliers_scan_store/suppliers_scan_store_state.dart';
 import 'package:jd_flutter/route.dart';
@@ -23,7 +22,7 @@ class SuppliersScanStoreLogic extends GetxController {
 
   //日期选择器的控制器
   var orderDate = DatePickerController(
-    buttonName: '选择过账日期',
+    buttonName: 'suppliers_scan_select_posting_date'.tr,
     PickerType.endDate,
     saveKey: '${RouteConfig.suppliersScanStore.name}${PickerType.endDate}',
   );
@@ -36,7 +35,7 @@ class SuppliersScanStoreLogic extends GetxController {
         if (v == state.barCodeList.length) {
           state.barCodeList.clear();
         } else {
-          showSnackBar(message: '本地数据库删除失败', isWarning: true);
+          showSnackBar(message: 'suppliers_scan_delete_error'.tr, isWarning: true);
         }
       },
     );
@@ -45,7 +44,7 @@ class SuppliersScanStoreLogic extends GetxController {
   //添加条码
   scanCode(String code) {
     if (state.barCodeList.any((v) => v.code == code)) {
-      showSnackBar(message: '条码已存在', isWarning: true);
+      showSnackBar(message: 'suppliers_scan_have_code'.tr, isWarning: true);
     } else {
       if (code.isPallet()) {
         checkPallet(
@@ -58,14 +57,14 @@ class SuppliersScanStoreLogic extends GetxController {
                   state.palletNumber.value = code;
                   break;
                 case 'X':
-                  showSnackBar(message: '请使用空托盘入库！！', isWarning: true);
+                  showSnackBar(message: 'suppliers_scan_use_empty_pallets'.tr, isWarning: true);
                   break;
                 case 'Y':
-                  showSnackBar(message: '此托盘已在其他仓库使用！！', isWarning: true);
+                  showSnackBar(message: 'suppliers_scan_use_other'.tr, isWarning: true);
                   break;
               }
             } else {
-              showSnackBar(message: '此托盘不存在！！', isWarning: true);
+              showSnackBar(message: 'suppliers_scan_does_not_exist'.tr, isWarning: true);
             }
           },
           error: (msg) => errorDialog(content: msg),
@@ -101,7 +100,7 @@ class SuppliersScanStoreLogic extends GetxController {
     if (state.barCodeList.isNotEmpty) {
       httpPost(
         method: webApiNewGetSubmitBarCodeReport,
-        loading: '正在获取汇总信息...',
+        loading: 'suppliers_scan_get_summary'.tr,
         body: {
           'BarCodeList': [
             for (var i = 0; i < state.barCodeList.length; ++i)
@@ -124,7 +123,7 @@ class SuppliersScanStoreLogic extends GetxController {
             if (v == null) {
               state.peopleNumber.text = '';
               state.peopleName.value = '';
-              showSnackBar(title: '温馨提示', message: '检查未完成');
+              showSnackBar(title: 'dialog_default_title_information'.tr, message: 'suppliers_scan_not_completed'.tr);
             } else if (v == true) {
               submitCode();
             }
@@ -134,7 +133,7 @@ class SuppliersScanStoreLogic extends GetxController {
         }
       });
     } else {
-      showSnackBar(title: '警告', message: '没有条码可提交');
+      showSnackBar(title: 'shack_bar_warm'.tr, message: 'suppliers_scan_no_barcode_to_submit'.tr);
     }
   }
 
@@ -145,7 +144,7 @@ class SuppliersScanStoreLogic extends GetxController {
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在获取托盘信息...',
+      loading: 'suppliers_scan_obtaining_tray_information'.tr,
       method: webApiSapGetPalletList,
       body: {
         'WERKS': '1500',
@@ -214,7 +213,7 @@ class SuppliersScanStoreLogic extends GetxController {
         }
         refresh.call();
       } else {
-        showSnackBar(title: '温馨提示', message: response.message ?? '');
+        showSnackBar(title: 'dialog_default_title_information'.tr, message: response.message ?? '');
         refresh.call();
       }
     });
@@ -244,7 +243,7 @@ class SuppliersScanStoreLogic extends GetxController {
             content: response.message,
             back: () => getBarCodeStatusByDepartmentID(refresh: () {}));
       } else {
-        showSnackBar(title: '温馨提示', message: response.message ?? '');
+        showSnackBar(title: 'dialog_default_title_information'.tr, message: response.message ?? '');
       }
     });
   }

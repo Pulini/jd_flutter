@@ -90,11 +90,11 @@ class InjectionScanReportLogic extends GetxController {
                 //选择器主体
                 Expanded(
                   child: getCupertinoPicker(
-                    list.map((data) {
+                    items: list.map((data) {
                       return Center(
                           child: Text("${data.shift}/${data.materialName}"));
                     }).toList(),
-                    controller,
+                    controller: controller,
                   ),
                 )
               ],
@@ -108,25 +108,25 @@ class InjectionScanReportLogic extends GetxController {
   }
 
   getScWorkCardDetail({required String dispatchNumber}) {
-      if(state.dispatchNumber.value.isEmpty){
-        getScWorkCardList();
-      }else{
-        httpGet(
-            method: webApiGetScWorkCardDetailJinZhen,
-            loading: 'injection_scan_getting_process_plan_detail'.tr,
-            params: {
-              'DispatchingMachine': '',
-              'DispatchNumber': dispatchNumber,
-            }).then((response) {
-          if (response.resultCode == resultSuccess) {
-            state.dataBean = ProcessPlanDetailInfo.fromJson(response.data);
-            arrangeData(ProcessPlanDetailInfo.fromJson(response.data));
-          } else {
-            state.dataBean = ProcessPlanDetailInfo();
-            errorDialog(content: response.message);
-          }
-        });
-      }
+    if (state.dispatchNumber.value.isEmpty) {
+      getScWorkCardList();
+    } else {
+      httpGet(
+          method: webApiGetScWorkCardDetailJinZhen,
+          loading: 'injection_scan_getting_process_plan_detail'.tr,
+          params: {
+            'DispatchingMachine': '',
+            'DispatchNumber': dispatchNumber,
+          }).then((response) {
+        if (response.resultCode == resultSuccess) {
+          state.dataBean = ProcessPlanDetailInfo.fromJson(response.data);
+          arrangeData(ProcessPlanDetailInfo.fromJson(response.data));
+        } else {
+          state.dataBean = ProcessPlanDetailInfo();
+          errorDialog(content: response.message);
+        }
+      });
+    }
   }
 
   arrangeData(ProcessPlanDetailInfo data) {
@@ -406,7 +406,7 @@ class InjectionScanReportLogic extends GetxController {
   //产量汇报
   productionReport({
     required Function(String msg) success,
-}) {
+  }) {
     if (state.dispatchNumber.value.isEmpty) {
       showSnackBar(message: 'injection_scan_first_query_detail'.tr);
     } else {
@@ -452,17 +452,18 @@ class InjectionScanReportLogic extends GetxController {
               'Items': [
                 for (var items in state.showDataList)
                   {
-                    'EntryID':items.entryID,
-                    'Size':items.size,
+                    'EntryID': items.entryID,
+                    'Size': items.size,
                     'StandardTextCode': state.dataBean.processflow,
-                    'ConfirmedQty':items.subtotal(),
-                    'LastNotFullQty':items.lastMantissa,
-                    'Mantissa':items.mantissa,
-                    'BoxesQty':items.box,
-                    'Capacity':items.capacity,
-                    'BUoM':items.bUoM,
-                    'ConfirmCurrentWorkingHours':items.confirmCurrentWorkingHours,
-                    'WorkingHoursUnit':items.workingHoursUnit
+                    'ConfirmedQty': items.subtotal(),
+                    'LastNotFullQty': items.lastMantissa,
+                    'Mantissa': items.mantissa,
+                    'BoxesQty': items.box,
+                    'Capacity': items.capacity,
+                    'BUoM': items.bUoM,
+                    'ConfirmCurrentWorkingHours':
+                        items.confirmCurrentWorkingHours,
+                    'WorkingHoursUnit': items.workingHoursUnit
                   }
               ],
             }
