@@ -24,13 +24,13 @@ class _WarehouseAllocationPageState extends State<WarehouseAllocationPage> {
 
   //出仓库
   var outStockList = LinkOptionsPickerController(
-    PickerType.stockList,
+    PickerType.mesStockList,
     saveKey: '${RouteConfig.warehouseAllocation.name}${'outStockList'}',
   );
 
   //入仓库
   var onStockList = LinkOptionsPickerController(
-    PickerType.stockList,
+    PickerType.mesStockList,
     saveKey: '${RouteConfig.warehouseAllocation.name}${'onStockList'}',
   );
 

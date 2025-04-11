@@ -15,9 +15,9 @@ class SuppliersScanStoreLogic extends GetxController {
 
   //仓库选择器
   var billStockListController = OptionsPickerController(
-    PickerType.billStockList,
+    PickerType.mesBillStockList,
     saveKey:
-        '${RouteConfig.suppliersScanStore.name}${PickerType.billStockList}',
+        '${RouteConfig.suppliersScanStore.name}${PickerType.mesBillStockList}',
   );
 
   //日期选择器的控制器

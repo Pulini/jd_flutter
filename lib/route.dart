@@ -29,6 +29,7 @@ import 'fun/management/visit_register/visit_register_view.dart';
 import 'fun/other/device_maintenance_record/device_maintenance_record_view.dart';
 import 'fun/other/forming_packing_scan/packing_scan_view.dart';
 import 'fun/report/daily_report/daily_report_view.dart';
+import 'fun/report/handover_report_list/handover_report_list_view.dart';
 import 'fun/report/molding_pack_area_report/molding_pack_area_report_view.dart';
 import 'fun/report/molding_scan_bulletin_report/molding_scan_bulletin_report_maximize_view.dart';
 import 'fun/report/molding_scan_bulletin_report/molding_scan_bulletin_report_view.dart';
@@ -457,6 +458,13 @@ class RouteConfig {
     const WaitPickingMaterialPage(),
   );
 
+  //报工交接确认列表
+  static Routes handoverReportList = Routes(
+    '/handover_report_list',
+    99,
+    const HandoverReportListPage(),
+  );
+
   //本地功能入口列表
   static List<Routes> routeList = [
     dailyReport,
@@ -514,7 +522,8 @@ class RouteConfig {
     saleScanOutWarehouse,
     productionScanPickingMaterial,
     waitPickingMaterial,
-    injectionScanReport
+    injectionScanReport,
+    handoverReportList
   ];
 
   static List<GetPage> appRoutes = [
@@ -754,6 +763,10 @@ class RouteConfig {
     GetPage(
       name: injectionScanReport.name,
       page: () => injectionScanReport.page,
+    ),
+    GetPage(
+      name: handoverReportList.name,
+      page: () => handoverReportList.page,
     ),
   ];
 }

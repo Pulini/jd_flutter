@@ -112,7 +112,7 @@ class InjectionScanReportLogic extends GetxController {
       getScWorkCardList();
     } else {
       httpGet(
-          method: webApiGetScWorkCardDetailJinZhen,
+          method: webApiGetScWorkCardDetail,
           loading: 'injection_scan_getting_process_plan_detail'.tr,
           params: {
             'DispatchingMachine': '',
@@ -339,7 +339,7 @@ class InjectionScanReportLogic extends GetxController {
   }) {
     if (state.dispatchNumber.value != '') {
       httpPost(
-        method: webApiClearBarCodeAndBoxQtyJinZhen,
+        method: webApiClearBarCodeAndBoxQty,
         loading: 'injection_scan_clean_box_and_label'.tr,
         params: {
           'InterID': state.dataBean.interID,
@@ -424,7 +424,7 @@ class InjectionScanReportLogic extends GetxController {
         showSnackBar(message: size);
       } else {
         httpPost(
-          method: webApiUpdateScWorkCardJinZhen,
+          method: webApiUpdateScWorkCard,
           loading: 'injection_scan_modifying_dispatch_data'.tr,
           body: {
             'InterID': state.dataBean.interID,

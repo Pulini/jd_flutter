@@ -1065,13 +1065,25 @@ const webApiUpdateBarCodeInfo = "api/BarCode/UpdateBarCodeInfo";
 const webApiGetScWorkCardList= "api/CompoundDispatching/GetScWorkCardListJinZhen";
 
 //获取工序派工单详情  金甄
-const webApiGetScWorkCardDetailJinZhen = "api/CompoundDispatching/GetScWorkCardDetailJinZhen";
+const webApiGetScWorkCardDetail = "api/CompoundDispatching/GetScWorkCardDetailJinZhen";
 
 //根据派工单ID删除贴标和框数
-const webApiClearBarCodeAndBoxQtyJinZhen = "api/CompoundDispatching/ClearBarCodeAndBoxQtyJinZhen";
+const webApiClearBarCodeAndBoxQty = "api/CompoundDispatching/ClearBarCodeAndBoxQtyJinZhen";
 
 //获取已入库的贴标列表
 const webApiForSAPGetStockInBarCodeList = "sap/zapp/ZFUN_APP_BARCODE_FETCH";
 
 //修改派工表_金臻 (产量汇报)
-const webApiUpdateScWorkCardJinZhen = "api/CompoundDispatching/UpdateScWorkCardJinZhen";
+const webApiUpdateScWorkCard = "api/CompoundDispatching/UpdateScWorkCardJinZhen";
+
+//班组长获取报工交接确认列表_金臻
+const webApiGetScWorkCardReportCheckList = "api/CompoundDispatching/GetScWorkCardReportCheckListJinZhen";
+
+//班组长反审核汇报单并删除工序汇报单_金臻
+const webApiUnCheckScWorkCardReport = "api/CompoundDispatching/UnCheckScWorkCardReportJinZhen";
+
+//删除报工产量表数据_金臻
+const webApiDelScWorkCardReport = "api/CompoundDispatching/DelScWorkCardReportJinZhen";
+
+//班组长审核汇报单并生成工序汇报单_金臻
+const webApiCheckScWorkCardReport = "api/CompoundDispatching/CheckScWorkCardReportJinZhen";

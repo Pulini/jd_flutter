@@ -29,8 +29,8 @@ enum PickerType {
   date,
   startDate,
   endDate,
-  stockList,
-  billStockList
+  mesStockList,
+  mesBillStockList
 }
 
 abstract class PickerController {
@@ -83,9 +83,9 @@ abstract class PickerController {
         return 'picker_type_start_date'.tr;
       case PickerType.endDate:
         return 'picker_type_end_date'.tr;
-      case PickerType.stockList:
+      case PickerType.mesStockList:
         return 'picker_type_mes_stock_list'.tr;
-      case PickerType.billStockList:
+      case PickerType.mesBillStockList:
         return 'picker_type_order_stock_list'.tr;
       default:
         return 'Picker';
@@ -130,9 +130,9 @@ abstract class PickerController {
         return getMesMoldingPackArea;
       case PickerType.mesGroup:
         return getMeGroup;
-      case PickerType.stockList:
+      case PickerType.mesStockList:
         return getMesStockList;
-      case PickerType.billStockList:
+      case PickerType.mesBillStockList:
         return getOrderStockList;
       default:
         return getDataListError;
