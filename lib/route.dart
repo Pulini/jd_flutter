@@ -33,6 +33,7 @@ import 'fun/report/handover_report_list/handover_report_list_view.dart';
 import 'fun/report/molding_pack_area_report/molding_pack_area_report_view.dart';
 import 'fun/report/molding_scan_bulletin_report/molding_scan_bulletin_report_maximize_view.dart';
 import 'fun/report/molding_scan_bulletin_report/molding_scan_bulletin_report_view.dart';
+import 'fun/report/process_report/process_report_view.dart';
 import 'fun/report/production_day_report/production_day_report_view.dart';
 import 'fun/report/production_materials_report/production_materials_report_view.dart';
 import 'fun/report/production_summary_report/production_summary_report_view.dart';
@@ -41,7 +42,7 @@ import 'fun/report/view_instruction_details/view_instruction_details_view.dart';
 import 'fun/report/view_process_specification/view_process_specification_view.dart';
 import 'fun/report/worker_production_detail/worker_production_detail_view.dart';
 import 'fun/report/worker_production_report/worker_production_report_view.dart';
-import 'fun/warehouse/in/process_report/process_report_view.dart';
+import 'fun/warehouse/in/process_report/process_report_store_view.dart';
 import 'fun/warehouse/in/sap_injection_molding_stock_in/sap_injection_molding_stock_in_view.dart';
 import 'fun/warehouse/in/sap_no_label_stock_in/sap_no_label_stock_in_view.dart';
 import 'fun/warehouse/in/sap_produce_stock_in/sap_produce_stock_in_view.dart';
@@ -427,7 +428,7 @@ class RouteConfig {
   static Routes processReportWarehouse = Routes(
     '/process_report_warehouse',
     99,
-    const ProcessReportPage(),
+    const ProcessReportStorePage(),
   );
 
   //注塑车间扫码报工
@@ -463,6 +464,13 @@ class RouteConfig {
     '/handover_report_list',
     99,
     const HandoverReportListPage(),
+  );
+
+  //工序汇报
+  static Routes processReport = Routes(
+    '/process_report',
+    99,
+    const ProcessReportPage(),
   );
 
   //本地功能入口列表
@@ -523,7 +531,8 @@ class RouteConfig {
     productionScanPickingMaterial,
     waitPickingMaterial,
     injectionScanReport,
-    handoverReportList
+    handoverReportList,
+    processReport
   ];
 
   static List<GetPage> appRoutes = [
@@ -767,6 +776,10 @@ class RouteConfig {
     GetPage(
       name: handoverReportList.name,
       page: () => handoverReportList.page,
+    ),
+    GetPage(
+      name: processReport.name,
+      page: () => processReport.page,
     ),
   ];
 }

@@ -1,8 +1,8 @@
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jd_flutter/fun/warehouse/in/process_report/process_report_logic.dart';
-import 'package:jd_flutter/fun/warehouse/in/process_report/process_report_modify_view.dart';
+import 'package:jd_flutter/fun/warehouse/in/process_report/process_report_store_logic.dart';
+import 'package:jd_flutter/fun/warehouse/in/process_report/process_report_store_modify_view.dart';
 import '../../../../bean/http/response/bar_code.dart';
 import '../../../../widget/combination_button_widget.dart';
 import '../../../../widget/custom_widget.dart';
@@ -11,16 +11,16 @@ import '../../../../widget/edit_text_widget.dart';
 import '../../../../widget/scanner.dart';
 import '../../out/scan_picking_material/scan_picking_material_dialog.dart';
 
-class ProcessReportPage extends StatefulWidget {
-  const ProcessReportPage({super.key});
+class ProcessReportStorePage extends StatefulWidget {
+  const ProcessReportStorePage({super.key});
 
   @override
-  State<ProcessReportPage> createState() => _ProcessReportPageState();
+  State<ProcessReportStorePage> createState() => _ProcessReportPageState();
 }
 
-class _ProcessReportPageState extends State<ProcessReportPage> {
-  final logic = Get.put(ProcessReportLogic());
-  final state = Get.find<ProcessReportLogic>().state;
+class _ProcessReportPageState extends State<ProcessReportStorePage> {
+  final logic = Get.put(ProcessReportStoreLogic());
+  final state = Get.find<ProcessReportStoreLogic>().state;
 
   var refreshController = EasyRefreshController(controlFinishRefresh: true);
 
@@ -81,7 +81,7 @@ class _ProcessReportPageState extends State<ProcessReportPage> {
               children: [
                 Expanded(
                   child: EditText(
-                    hint: 'process_report_manual_input'.tr,
+                    hint: 'process_report_store_manual_input'.tr,
                     onChanged: (v) => state.code = v,
                   ),
                 ),
@@ -114,11 +114,11 @@ class _ProcessReportPageState extends State<ProcessReportPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       textSpan(
-                        hint: '已扫描：',
+                        hint: 'process_report_is_scan'.tr,
                         text: state.barCodeList.length.toString(),
                       ),
                       textSpan(
-                        hint: '托盘号：',
+                        hint: 'process_report_pallet_no'.tr,
                         text: state.palletNumber.value,
                       ),
                     ],
@@ -130,7 +130,7 @@ class _ProcessReportPageState extends State<ProcessReportPage> {
                children: [
                  Expanded(
                      child: CombinationButton(
-                       text: 'process_report_change'.tr,
+                       text: 'process_report_store_change'.tr,
                        click: () {
                          Get.to(() => const ProcessReportModifyPage());
                        },
@@ -138,7 +138,7 @@ class _ProcessReportPageState extends State<ProcessReportPage> {
                      )),
                  Expanded(
                      child: CombinationButton(
-                       text: 'process_report_clear_list'.tr,
+                       text: 'process_report_store_clear_list'.tr,
                        click: () {
                          askDialog(
                            content: 'code_list_report_sure_clean'.tr,
@@ -157,7 +157,7 @@ class _ProcessReportPageState extends State<ProcessReportPage> {
                 Expanded(
                   flex: 1,
                   child: CombinationButton(
-                    text: 'process_report_manually_add'.tr,
+                    text: 'process_report_store_manually_add'.tr,
                     click: () {
                       logic.scanCode(state.code);
                     },
@@ -167,7 +167,7 @@ class _ProcessReportPageState extends State<ProcessReportPage> {
                 Expanded(
                   flex: 1,
                   child: CombinationButton(
-                    text: 'process_report_sure_clean_code'.tr,
+                    text: 'process_report_store_sure_clean_code'.tr,
                     click: () => {
                       checkBarCodeProcessDialog(
                         list: state.barCodeList,
@@ -201,7 +201,7 @@ class _ProcessReportPageState extends State<ProcessReportPage> {
 
   @override
   void dispose() {
-    Get.delete<ProcessReportLogic>();
+    Get.delete<ProcessReportStoreLogic>();
     super.dispose();
   }
 }

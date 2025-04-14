@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/scan_process_info.dart';
-import 'package:jd_flutter/fun/warehouse/in/process_report/process_report_state.dart';
+import 'package:jd_flutter/fun/warehouse/in/process_report/process_report_store_state.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import '../../../../bean/http/response/bar_code.dart';
 import '../../../../bean/http/response/process_modify_info.dart';
@@ -14,8 +14,8 @@ import '../../../../widget/custom_widget.dart';
 import '../../../../widget/dialogs.dart';
 import '../../code_list_report/code_list_report_view.dart';
 
-class ProcessReportLogic extends GetxController {
-  final ProcessReportState state = ProcessReportState();
+class ProcessReportStoreLogic extends GetxController {
+  final ProcessReportStoreState state = ProcessReportStoreState();
 
   var textNumber = TextEditingController(); //实际数量
 
@@ -137,7 +137,7 @@ class ProcessReportLogic extends GetxController {
         }
         refresh.call();
       } else {
-        showSnackBar(title: '温馨提示', message: response.message ?? '');
+        showSnackBar(title: 'dialog_default_title_information'.tr, message: response.message ?? '');
         refresh.call;
       }
     });
@@ -163,7 +163,7 @@ class ProcessReportLogic extends GetxController {
           }
         }
         if (state.barCodeList.every((v) => v.isUsed)) {
-          errorDialog(content: 'process_report_no_barcode'.tr);
+          errorDialog(content: 'process_report_store_no_barcode'.tr);
         } else {
           state.getBarCodeReport(
             processFlowID: process.processFlowID ?? 0,
@@ -202,7 +202,7 @@ class ProcessReportLogic extends GetxController {
           state.barCodeList.clear();
         } else {
           showSnackBar(
-            message: 'process_report_delete_failed'.tr,
+            message: 'process_report_store_delete_failed'.tr,
             isWarning: true,
           );
         }
@@ -238,7 +238,7 @@ class ProcessReportLogic extends GetxController {
               onPressed: () {
                 if (textNumber.text.toString().isEmpty) {
                   showSnackBar(
-                      message: 'process_report_modify_input_real_number'.tr);
+                      message: 'process_report_store_modify_input_real_number'.tr);
                 } else {
                   Get.back();
                   confirm?.call(textNumber.text.toString());
@@ -268,7 +268,7 @@ class ProcessReportLogic extends GetxController {
     if(code.isNotEmpty){
       httpPost(
         method: webApiGetBarCodeInfo,
-        loading: 'process_report_modify_reading_database'.tr,
+        loading: 'process_report_store_modify_reading_database'.tr,
         body: {
           'BarCodeList': [code],
         },
@@ -285,7 +285,7 @@ class ProcessReportLogic extends GetxController {
         }
       });
     }else{
-      showSnackBar(message: 'process_report_modify_scan_real_barcode'.tr);
+      showSnackBar(message: 'process_report_store_modify_scan_real_barcode'.tr);
     }
   }
 
@@ -296,7 +296,7 @@ class ProcessReportLogic extends GetxController {
   }) {
     httpPost(
       method: webApiUpdateBarCodeInfo,
-      loading: 'process_report_modify_reading_database'.tr,
+      loading: 'process_report_store_modify_reading_database'.tr,
       body: {
         [
           for (var i = 0; i < state.modifyList.length; ++i)

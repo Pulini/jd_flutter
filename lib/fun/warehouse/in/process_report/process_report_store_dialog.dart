@@ -27,14 +27,14 @@ checkBarCodeProcessDialog({
           canPop: true,
           child: StatefulBuilder(builder: (context, dialogSetState) {
             return AlertDialog(
-              title: Text('process_report_submit_process_store'.tr),
+              title: Text('process_report_store_submit_process_store'.tr),
               content: SizedBox(
                 width: 300,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     WorkerCheck(
-                      hint: 'process_report_input_operator_id'.tr,
+                      hint: 'process_report_store_input_operator_id'.tr,
                       init: spGet(spSaveScanPickingMaterial),
                       onChanged: (v) => worker = v,
                     ),
@@ -42,7 +42,7 @@ checkBarCodeProcessDialog({
                       list: processList,
                       controller: processController,
                       errorMsg: error,
-                      hint: 'process_report_process_procedure'.tr,
+                      hint: 'process_report_store_process_procedure'.tr,
                     ),
                   ],
                 ),
@@ -51,11 +51,11 @@ checkBarCodeProcessDialog({
                 TextButton(
                   onPressed: () {
                     if (worker == null) {
-                      showSnackBar(message: 'process_report_input_operator_id'.tr, isWarning: true);
+                      showSnackBar(message: 'process_report_store_input_operator_id'.tr, isWarning: true);
                       return;
                     }
                     if (processList.isEmpty) {
-                      showSnackBar(message: 'process_report_select_process_procedure', isWarning: true);
+                      showSnackBar(message: 'process_report_store_select_process_procedure', isWarning: true);
                       return;
                     }
                     processSelect = processList.length > 1
@@ -68,7 +68,7 @@ checkBarCodeProcessDialog({
                     submit.call(worker!, processList[processSelect]);
 
                   },
-                  child: Text('process_report_submit'.tr),
+                  child: Text('process_report_store_submit'.tr),
                 ),
                 TextButton(
                   onPressed: () => Get.back(),

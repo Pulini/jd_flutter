@@ -1087,3 +1087,9 @@ const webApiDelScWorkCardReport = "api/CompoundDispatching/DelScWorkCardReportJi
 
 //班组长审核汇报单并生成工序汇报单_金臻
 const webApiCheckScWorkCardReport = "api/CompoundDispatching/CheckScWorkCardReportJinZhen";
+
+//根据条形码获得工序派工信息
+const webApiGetDispatchInfo = "api/WorkCard/GetDispatchInfo";
+
+//提交工序派工条形码数据
+const webApiSubmitProcessBarCode2CollectBill = "api/WorkCard/SubmitProcessBarCode2CollectBill";

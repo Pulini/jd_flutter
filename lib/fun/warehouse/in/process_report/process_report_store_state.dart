@@ -9,7 +9,7 @@ import '../../../../bean/http/response/worker_info.dart';
 import '../../../../utils/utils.dart';
 import '../../../../utils/web_api.dart';
 
-class ProcessReportState {
+class ProcessReportStoreState {
 
   var showClick = false.obs;
   var code = '';
@@ -42,7 +42,7 @@ class ProcessReportState {
     required Function(String) error,
   }) {
     httpPost(
-      loading: 'process_report_verifying_tags'.tr,
+      loading: 'process_report_store_verifying_tags'.tr,
       method: webApiGetBarCodeStatus,
       body: {
         'BarCodeList': [
@@ -68,7 +68,7 @@ class ProcessReportState {
     required Function(String) error,
   }) {
     httpPost(
-      loading: 'process_report_obtaining_summary_information'.tr,
+      loading: 'process_report_store_obtaining_summary_information'.tr,
       method: webApiNewGetSubmitBarCodeReport,
       body: {
         'BarCodeList': [
@@ -102,7 +102,7 @@ class ProcessReportState {
     required Function(String) error,
   }) {
     httpPost(
-      loading: 'process_report_submitting_process_store'.tr,
+      loading: 'process_report_store_submitting_process_store'.tr,
       method: webApiUploadProcessReport,
       body: {
         'BarCodeList': [

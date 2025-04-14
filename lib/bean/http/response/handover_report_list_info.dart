@@ -9,14 +9,15 @@
 
 class HandoverReportListInfo {
   HandoverReportListInfo({
-      this.interID, 
-      this.dispatchNumber, 
-      this.shift, 
-      this.machine, 
-      this.factoryType, 
-      this.empList, 
-      this.sizeList, 
-      this.status,});
+    this.interID,
+    this.dispatchNumber,
+    this.shift,
+    this.machine,
+    this.factoryType,
+    this.empList,
+    this.sizeList,
+    this.status,
+  });
 
   HandoverReportListInfo.fromJson(dynamic json) {
     interID = json['InterID'];
@@ -38,6 +39,7 @@ class HandoverReportListInfo {
     }
     status = json['Status'];
   }
+
   int? interID;
   String? dispatchNumber;
   String? shift;
@@ -63,7 +65,6 @@ class HandoverReportListInfo {
     map['Status'] = status;
     return map;
   }
-
 }
 
 /// Size : "6"
@@ -76,13 +77,14 @@ class HandoverReportListInfo {
 
 class SizeList {
   SizeList({
-      this.size, 
-      this.boxesQty, 
-      this.dispatchQty, 
-      this.lastMantissa, 
-      this.mantissa, 
-      this.qty, 
-      this.capacity,});
+    this.size,
+    this.boxesQty,
+    this.dispatchQty,
+    this.lastMantissa,
+    this.mantissa,
+    this.qty,
+    this.capacity,
+  });
 
   SizeList.fromJson(dynamic json) {
     size = json['Size'];
@@ -93,6 +95,7 @@ class SizeList {
     qty = json['Qty'];
     capacity = json['Capacity'];
   }
+
   String? size;
   double? boxesQty;
   double? dispatchQty;
@@ -112,7 +115,6 @@ class SizeList {
     map['Capacity'] = capacity;
     return map;
   }
-
 }
 
 /// ProcessName : "制底"
@@ -122,10 +124,11 @@ class SizeList {
 
 class EmpList {
   EmpList({
-      this.processName, 
-      this.empName, 
-      this.qty, 
-      this.unit,});
+    this.processName,
+    this.empName,
+    this.qty,
+    this.unit,
+  });
 
   EmpList.fromJson(dynamic json) {
     processName = json['ProcessName'];
@@ -133,6 +136,7 @@ class EmpList {
     qty = json['Qty'];
     unit = json['Unit'];
   }
+
   String? processName;
   String? empName;
   double? qty;
@@ -146,5 +150,4 @@ class EmpList {
     map['Unit'] = unit;
     return map;
   }
-
 }
