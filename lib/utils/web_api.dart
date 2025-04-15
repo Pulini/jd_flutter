@@ -1060,18 +1060,6 @@ const webApiSapGetInventoryPalletList = 'sap/zapp/ZWMS_PD_LIST';
 
 //盘点结果接收
 const webApiSapSubmitInventory = 'sap/zapp/ZWMS_PD_POST';
-//获取领料员可领部门信息
-const webApiSapGetPickerInfo = 'sap/zapp/ZMM_ZMMWORK_D';
-
-//修改物料库位
-const webApiSapModifyLocation = 'sap/zapp/ZFUN_UPDATE_ZMMLGORT';
-
-//获取正单(车间)领料列表
-const webApiGetMaterialList = 'api/Material/GetMaterialList';
-
-//获取物料库存信息列表
-const webApiGetMaterialInventoryList = 'api/Material/GetMaterialInventoryList';
-
 
 //工序汇报入库提交
 const webApiUploadProcessReport = "api/ScanJobBooking/SubmitScWorkCardBarCode2ProcessOutput";

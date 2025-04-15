@@ -36,8 +36,6 @@ const spSaveScanPickingMaterial = 'scan_picking_material';
 const spSaveScanPickingMaterialSelectProcess = 'scan_picking_material_select_process';
 const spSaveProcessSelectProcess = 'scan_process_select_process';
 const spSaveScanPickingMaterialWorker = 'scan_picking_material_worker';
-const spSaveScanPickingMaterialSelectProcess =
-    'scan_picking_material_select_process';
 const spSaveSaleScanOutWarehouseWorker = 'sale_scan_out_warehouse_worker';
 const spSaveProductionReportInWarehouseWorker =
     'production_report_in_warehouse_worker';
