@@ -219,7 +219,6 @@ Future<BaseData> _doHttp({
             data: body,
             options: options,
           );
-    logger.d('response:$response');
     if (response.statusCode == 200) {
       var json = response.data.runtimeType == String
           ? jsonDecode(response.data)
@@ -1061,3 +1060,57 @@ const webApiSapGetInventoryPalletList = 'sap/zapp/ZWMS_PD_LIST';
 
 //盘点结果接收
 const webApiSapSubmitInventory = 'sap/zapp/ZWMS_PD_POST';
+//获取领料员可领部门信息
+const webApiSapGetPickerInfo = 'sap/zapp/ZMM_ZMMWORK_D';
+
+//修改物料库位
+const webApiSapModifyLocation = 'sap/zapp/ZFUN_UPDATE_ZMMLGORT';
+
+//获取正单(车间)领料列表
+const webApiGetMaterialList = 'api/Material/GetMaterialList';
+
+//获取物料库存信息列表
+const webApiGetMaterialInventoryList = 'api/Material/GetMaterialInventoryList';
+
+
+//工序汇报入库提交
+const webApiUploadProcessReport = "api/ScanJobBooking/SubmitScWorkCardBarCode2ProcessOutput";
+
+//工序汇报入库，获取贴标数据
+const webApiGetBarCodeInfo = "api/BarCode/GetBarCodeInfo";
+
+//工序汇报入库，提交贴标数据
+const webApiUpdateBarCodeInfo = "api/BarCode/UpdateBarCodeInfo";
+
+//获取工序派工单列表   金甄
+const webApiGetScWorkCardList= "api/CompoundDispatching/GetScWorkCardListJinZhen";
+
+//获取工序派工单详情  金甄
+const webApiGetScWorkCardDetail = "api/CompoundDispatching/GetScWorkCardDetailJinZhen";
+
+//根据派工单ID删除贴标和框数
+const webApiClearBarCodeAndBoxQty = "api/CompoundDispatching/ClearBarCodeAndBoxQtyJinZhen";
+
+//获取已入库的贴标列表
+const webApiForSAPGetStockInBarCodeList = "sap/zapp/ZFUN_APP_BARCODE_FETCH";
+
+//修改派工表_金臻 (产量汇报)
+const webApiUpdateScWorkCard = "api/CompoundDispatching/UpdateScWorkCardJinZhen";
+
+//班组长获取报工交接确认列表_金臻
+const webApiGetScWorkCardReportCheckList = "api/CompoundDispatching/GetScWorkCardReportCheckListJinZhen";
+
+//班组长反审核汇报单并删除工序汇报单_金臻
+const webApiUnCheckScWorkCardReport = "api/CompoundDispatching/UnCheckScWorkCardReportJinZhen";
+
+//删除报工产量表数据_金臻
+const webApiDelScWorkCardReport = "api/CompoundDispatching/DelScWorkCardReportJinZhen";
+
+//班组长审核汇报单并生成工序汇报单_金臻
+const webApiCheckScWorkCardReport = "api/CompoundDispatching/CheckScWorkCardReportJinZhen";
+
+//根据条形码获得工序派工信息
+const webApiGetDispatchInfo = "api/WorkCard/GetDispatchInfo";
+
+//提交工序派工条形码数据
+const webApiSubmitProcessBarCode2CollectBill = "api/WorkCard/SubmitProcessBarCode2CollectBill";

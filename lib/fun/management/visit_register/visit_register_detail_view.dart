@@ -174,9 +174,9 @@ class _VisitRegisterDetailPageState extends State<VisitRegisterDetailPage> {
             onPressed: () {
               logic.updateLeaveFVisit();
             },
-            child: const Text(
-              "离场",
-              style: TextStyle(color: Colors.white),
+            child:  Text(
+              'visit_departure'.tr,
+              style: const TextStyle(color: Colors.white),
             )),
       ),
     );

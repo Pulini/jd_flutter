@@ -427,9 +427,7 @@ class Items {
         .sub(lastNotFullQty ?? 0);
   }
 
-  double getSingleModeQty() => (availableMouldsQty ?? 0) > 0
-      ? sumUnderQty.div(availableMouldsQty ?? 0)
-      : 0;
+  double getSingleModeQty() => (availableMouldsQty ?? 0) > 0 ? sumUnderQty.div(availableMouldsQty ?? 0) : 0;
 }
 
 class MachineDispatchHistoryInfo {

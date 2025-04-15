@@ -25,7 +25,7 @@ class PackingScanState {
   }) {
     sapPost(
       method: webApiSapContainerScanner,
-      loading: '正在获取汇总数据...',
+      loading: 'packing_shipment_getting_summary_data'.tr,
       body: {'ZHGCCRQ': time},
     ).then((response) {
       if (response.resultCode == resultSuccess) {
@@ -52,7 +52,7 @@ class PackingScanState {
   }) {
     sapPost(
       method: webApiSapContainerScanner,
-      loading: '正在获取成型集装箱出货信息...',
+      loading: 'packing_shipment_shipping_information'.tr,
       body: {'ZHGCCRQ': time, 'ZZKHXH1': cabinetNumber},
     ).then((response) {
       if (response.resultCode == resultSuccess) {
@@ -134,7 +134,7 @@ class PackingScanState {
 
 
         } else {
-          error.call(response.message ?? '添加失败'.tr);
+          error.call(response.message ?? 'packing_shipment_add_failed'.tr);
         }
       });
     });

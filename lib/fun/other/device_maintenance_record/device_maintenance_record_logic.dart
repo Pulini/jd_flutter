@@ -32,7 +32,7 @@ class DeviceMaintenanceRecordLogic extends GetxController {
 
   //日期选择器的控制器
   var repairStartDate = DatePickerController(
-    buttonName: '报修时间',
+    buttonName: 'device_maintenance_repair_time'.tr,
     PickerType.startDate,
     saveKey: '${RouteConfig.deviceMaintenance.name}${'repairStartDate'}',
   )..lastDate = DateTime(
@@ -40,7 +40,7 @@ class DeviceMaintenanceRecordLogic extends GetxController {
 
   //日期选择器的控制器
   var repairEndDate = DatePickerController(
-    buttonName: '修复时间',
+    buttonName: 'device_maintenance_fixed_time'.tr,
     PickerType.endDate,
     saveKey: '${RouteConfig.deviceMaintenance.name}${'repairEndDate'}',
   )..lastDate = DateTime(
@@ -62,7 +62,7 @@ class DeviceMaintenanceRecordLogic extends GetxController {
   searchDeviceList() {
     httpGet(
       method: webApiGetRepairOrderList,
-      loading: '正在获取设备维修单列表...',
+      loading: 'device_maintenance_repair_orders_list'.tr,
       params: {
         // 'StartDate': startDate.getDateFormatYMD(),
         'StartDate': '2020-01-16',
@@ -87,15 +87,15 @@ class DeviceMaintenanceRecordLogic extends GetxController {
   }) {
     if (state.custodianNumber.toString().length != 6 ||
         state.peoPleInfo.value.empName == null) {
-      showSnackBar(title: '警告', message: '持有人输入错误');
+      showSnackBar(title: 'shack_bar_warm'.tr, message: 'device_maintenance_holder_input_error'.tr);
     } else if (state.maintenanceUnit.toString().isEmpty) {
-      showSnackBar(title: '警告', message: '请输入维修单位');
+      showSnackBar(title: 'shack_bar_warm'.tr, message: 'device_maintenance_repair_unit'.tr);
     } else if (state.faultDescription.isEmpty) {
-      showSnackBar(title: '警告', message: '请输入故障说明');
+      showSnackBar(title: 'shack_bar_warm'.tr, message: 'device_maintenance_input_fault_description'.tr);
     } else if (state.assessmentPrevention.isEmpty) {
-      showSnackBar(title: '警告', message: '请输入维修后评估及预防');
+      showSnackBar(title: 'shack_bar_warm'.tr, message: 'device_maintenance_evaluation_prevention'.tr);
     } else {
-      httpPost(method: webApiSubmitRecordData, loading: '正在提交报修信息...', body: {
+      httpPost(method: webApiSubmitRecordData, loading: 'device_maintenance_submitting_repair_information'.tr, body: {
         'DeviceID': state.deviceData.value.deviceMessage!.deviceID.toString(),
         'FaultDescription': state.faultDescription.value,
         'RepairTime': repairEndDate.getDateFormatYMD(), //修复时间
@@ -134,7 +134,7 @@ class DeviceMaintenanceRecordLogic extends GetxController {
   goRepair() {
     httpGet(
       method: webApiGetIssueCauseType,
-      loading: '正在获取设备维修记录单故障原因...',
+      loading: 'device_maintenance_record_malfunction'.tr,
     ).then((response) {
       if (response.resultCode == resultSuccess) {
         var list = <IssueCauseInfo>[
@@ -169,7 +169,7 @@ class DeviceMaintenanceRecordLogic extends GetxController {
   }) {
     httpPost(
       method: webApiRepairOrderVoid,
-      loading: '正在作废记录单...',
+      loading: 'device_maintenance_cancelling_record_sheet'.tr,
       params: {
         'InterID': startDate.getDateFormatYMD(),
         'VoidReason': endDate.getDateFormatYMD(),
@@ -188,7 +188,7 @@ class DeviceMaintenanceRecordLogic extends GetxController {
   searchDeviceInfo(String deviceNumber) {
     httpGet(
       method: webApiGetDeviceInformationByFNumber,
-      loading: '正在获取设备信息...',
+      loading: 'device_maintenance_device_information'.tr,
       params: {
         'DeviceNo': deviceNumber,
       },
@@ -212,7 +212,7 @@ class DeviceMaintenanceRecordLogic extends GetxController {
     if (number.isNotEmpty && number.length == 6) {
       httpGet(
         method: webApiGetEmpAndLiableByEmpCode,
-        loading: '正在读取人员信息...',
+        loading: 'device_maintenance_personnel_information'.tr,
         params: {
           'EmpCode': number,
         },

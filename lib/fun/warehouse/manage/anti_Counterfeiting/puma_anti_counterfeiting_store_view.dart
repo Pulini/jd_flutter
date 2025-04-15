@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/scan_code.dart';
-import 'package:jd_flutter/fun/management/anti_Counterfeiting/puma_anti_counterfeiting_logic.dart';
+import 'package:jd_flutter/fun/warehouse/manage/anti_Counterfeiting/puma_anti_counterfeiting_logic.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
@@ -39,7 +39,7 @@ class _PumaAntiCounterfeitingStorePageState
   @override
   Widget build(BuildContext context) {
     return pageBody(
-        title: '入库',
+        title: 'code_list_report_store'.tr,
         body: Column(
           children: [
             Obx(() => Expanded(
@@ -53,7 +53,7 @@ class _PumaAntiCounterfeitingStorePageState
             Obx(() => Row(
                   children: [
                     const SizedBox(width: 10),
-                    Expanded(child: Text('${state.scanNum.value}条')),
+                    Expanded(child: Text(state.scanNum.value+'code_list_report_strip'.tr)),
                     Expanded(child: Text(state.palletNumber.value)),
                     const SizedBox(width: 10),
                   ],
@@ -63,10 +63,10 @@ class _PumaAntiCounterfeitingStorePageState
                 Expanded(
                   flex: 1,
                   child: CombinationButton(
-                    text: '清空',
+                    text: 'code_list_report_clean'.tr,
                     click: () {
                       askDialog(
-                        content: '确定要清空条码吗？',
+                        content: 'code_list_report_sure_clean'.tr,
                         confirm: () {
                           state.clearData();
                         },
@@ -78,17 +78,17 @@ class _PumaAntiCounterfeitingStorePageState
                 Expanded(
                   flex: 1,
                   child: CombinationButton(
-                    text: '入库',
+                    text: 'code_list_report_store'.tr,
                     click: () {
                       if(state.dataCodeList.isNotEmpty){
                         askDialog(
-                          content: '确定要入库吗？',
+                          content: 'code_list_report_sure_store'.tr,
                           confirm: () {
                             logic.submitCode();
                           },
                         );
                       }else{
-                        showSnackBar(title: '警告', message: '无条码可提交');
+                        showSnackBar(title: 'shack_bar_warm'.tr, message: 'code_list_report_no_barcode'.tr);
                       }
                     },
                     combination: Combination.right,

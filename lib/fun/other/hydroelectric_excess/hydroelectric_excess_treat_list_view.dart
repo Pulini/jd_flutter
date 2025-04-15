@@ -34,19 +34,19 @@ class _HydroelectricExcessTreatListPageState
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             expandedTextSpan(
-              hint: '组织名称：',
+              hint: 'hydroelectric_organization_name'.tr,
               text: data.organizeName.toString(),
               textColor: Colors.blue,
             ),
             Row(
               children: [
                 expandedTextSpan(
-                  hint: '户号：',
+                  hint: 'hydroelectric_account_number'.tr,
                   text: data.number.toString(),
                   textColor: Colors.blue,
                 ),
                 expandedTextSpan(
-                  hint: '设备名称：',
+                  hint: 'hydroelectric_device_name'.tr,
                   text: data.organizeName.toString(),
                   textColor: Colors.blue,
                 ),
@@ -55,19 +55,19 @@ class _HydroelectricExcessTreatListPageState
             Row(
               children: [
                 expandedTextSpan(
-                  hint: '类型：',
+                  hint: 'hydroelectric_type'.tr,
                   text: data.typeName.toString(),
                   textColor: Colors.blue,
                 ),
                 expandedTextSpan(
-                  hint: '楼号：',
+                  hint: 'hydroelectric_building_number'.tr,
                   text: data.dormitoriesName.toString(),
                   textColor: Colors.blue,
                 ),
               ],
             ),
             expandedTextSpan(
-              hint: '房间号：',
+              hint: 'hydroelectric_room_numbers'.tr,
               text: data.roomNumber.toString(),
               textColor: Colors.blue,
             ),
@@ -80,21 +80,21 @@ class _HydroelectricExcessTreatListPageState
   @override
   Widget build(BuildContext context) {
     return pageBodyWithBottomSheet(
-        title: '水电抄度',
+        title: 'hydroelectric_water_reading'.tr,
         bottomSheet: [
           EditText(
             onChanged: (v) => state.deviceNumber = v,
-            hint: '设备编号',
+            hint: 'hydroelectric_equipment_number'.tr,
           ),
           EditText(
             onChanged: (v) => state.bedNumber = v,
-            hint: '床铺编号',
+            hint: 'hydroelectric_bed_number'.tr,
           ),
           Obx(() => Row(children: [
                 Expanded(
                   flex: 1,
                   child: ListTile(
-                    title: const Text('全部'),
+                    title:  Text('hydroelectric_all'.tr),
                     leading: Radio(
                       value: '0',
                       groupValue: state.select.value,
@@ -109,7 +109,7 @@ class _HydroelectricExcessTreatListPageState
                 Expanded(
                   flex: 1,
                   child: ListTile(
-                    title: const Text('待抄'),
+                    title:  Text('hydroelectric_to_be_copied'.tr),
                     leading: Radio(
                       value: '1',
                       groupValue: state.select.value,
@@ -124,7 +124,7 @@ class _HydroelectricExcessTreatListPageState
                 Expanded(
                   flex: 1,
                   child: ListTile(
-                    title: const Text('已抄'),
+                    title:  Text('hydroelectric_dorP'.tr),
                     leading: Radio(
                       value: '2',
                       groupValue: state.select.value,

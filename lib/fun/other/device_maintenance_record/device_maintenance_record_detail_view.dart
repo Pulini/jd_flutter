@@ -33,32 +33,32 @@ class _DeviceMaintenanceRecordDetailPageState
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           expandedTextSpan(
-            hint: '厂商/品牌:',
+            hint: 'device_maintenance_manufacturer_brand'.tr,
             text: data.manufacturer.toString(),
             textColor: Colors.blue,
           ),
           expandedTextSpan(
-            hint: '更换配件名称:',
+            hint: 'device_maintenance_replace_accessory_name'.tr,
             text: data.accessoriesName.toString(),
             textColor: Colors.blue,
           ),
           expandedTextSpan(
-            hint: '数量:',
+            hint: 'device_maintenance_quantity'.tr,
             text: data.quantity.toString(),
             textColor: Colors.blue,
           ),
           expandedTextSpan(
-            hint: '规格:',
+            hint: 'device_maintenance_specifications'.tr,
             text: data.specification.toString(),
             textColor: Colors.blue,
           ),
           expandedTextSpan(
-            hint: '单位:',
+            hint: 'device_maintenance_unit'.tr,
             text: data.unit.toString(),
             textColor: Colors.blue,
           ),
           expandedTextSpan(
-            hint: '备注:',
+            hint: 'device_maintenance_remarks'.tr,
             text: data.remarks.toString(),
             textColor: Colors.blue,
           ),
@@ -70,8 +70,8 @@ class _DeviceMaintenanceRecordDetailPageState
   @override
   Widget build(BuildContext context) {
     return pageBody(
-      title: '设备信息',
-      actions: [CombinationButton(text: '报修', click: () => {
+      title: 'device_maintenance_title_device_information'.tr,
+      actions: [CombinationButton(text: 'device_maintenance_repair'.tr, click: () => {
          logic.goRepair()
       }),const SizedBox(width: 10,)],
       body: Obx(
@@ -82,89 +82,82 @@ class _DeviceMaintenanceRecordDetailPageState
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               textSpan(
-                hint: '设备名称：'.tr,
+                hint: 'device_maintenance_equipment_name'.tr,
                 text: state.deviceData.value.deviceMessage!.deviceName?? '',
               ),
               textSpan(
-                hint: '设备编号：'.tr,
+                hint: 'device_maintenance_equipment_number'.tr,
                 text: state.deviceData.value.deviceMessage!.deviceNo?? '',
               ),
               textSpan(
-                hint: '设备型号：'.tr,
+                hint: 'device_maintenance_equipment_model'.tr,
                 text: state.deviceData.value.deviceMessage!.model?? '',
               ),
               textSpan(
-                hint: '保管单位：'.tr,
+                hint: 'device_maintenance_custodian_unit'.tr,
                 text: state.deviceData.value.deviceMessage!.custodianDept?? '',
               ),
               textSpan(
-                hint: '保管人：'.tr,
+                hint: 'device_maintenance_custodian'.tr,
                 text: state.deviceData.value.deviceMessage!.custodianName?? '',
               ),
               textSpan(
-                hint: '保管人电话：'.tr,
+                hint: 'device_maintenance_custodian_phone'.tr,
                 text: state.deviceData.value.deviceMessage!.custodianTel?? '',
               ),
               Center(
                 child: Text(
                   state.deviceData.value.repairOrder == null
-                      ? '最近无维修记录'
-                      : '最近一次维修记录',
+                      ? 'device_maintenance_no_records'.tr
+                      : 'device_maintenance_last_records'.tr,
                   style: const TextStyle(color: Colors.red, fontSize: 18),
                 ),
               ),
               Visibility(
                 child: textSpan(
-                  hint: '单据编号：'.tr,
+                  hint: 'device_maintenance_document_number'.tr,
                   text: state.deviceData.value.repairOrder!.number?? '',
                 ),
                 visible: state.isHave.value,
               ),
               Visibility(
                 child: textSpan(
-                  hint: '故障说明：'.tr,
+                  hint: 'device_maintenance_title_fault_description'.tr,
                   text: state.deviceData.value.repairOrder!.faultDescription?? '',
                 ),
                 visible: state.isHave.value,
               ),
               Visibility(
                 child: textSpan(
-                  hint: '故障原因判断：'.tr,
+                  hint: 'device_maintenance_fault_cause_determination'.tr,
                   text: state.deviceData.value.repairOrder!.issueCause?? '',
                 ),
                 visible: state.isHave.value,
               ),
               Visibility(
                 child: textSpan(
-                  hint: '报修时间：'.tr,
-                  text: state.deviceData.value.repairOrder!.repairTime?? '',
-                ),
-                visible: state.isHave.value,
-              ),
-              Visibility(
-                child: textSpan(
-                  hint: '维修单位：'.tr,
+                  hint: 'device_maintenance_title_maintenance_organization'.tr,
                   text: state.deviceData.value.repairOrder!.maintenanceUnit?? '',
                 ),
                 visible: state.isHave.value,
               ),
               Visibility(
                 child: textSpan(
-                  hint: '维修后评估及预防：'.tr,
+                  hint: 'device_maintenance_title_prevention'.tr,
                   text: state.deviceData.value.repairOrder!.assessmentPrevention?? '',
                 ),
                 visible: state.isHave.value,
               ),
               Visibility(
                 child: textSpan(
-                  hint: '报修时间：'.tr,
+                  hint: 'device_maintenance_title_repair_time'.tr,
                   text: state.deviceData.value.repairOrder!.inspectionTime?? '',
                 ),
                 visible: state.isHave.value,
               ),
               Visibility(
                 child: textSpan(
-                  hint: '修复时间：'.tr,
+                  hint: 'device_maintenance_title_fixed_time'.tr,
                   text: state.deviceData.value.repairOrder!.repairTime?? '',
                 ),
                 visible: state.isHave.value,

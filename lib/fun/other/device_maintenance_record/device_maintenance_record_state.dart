@@ -49,19 +49,19 @@ class DeviceMaintenanceRecordState {
     required Function() success,
   }) {
     if (brand == '') {
-      showSnackBar(title: '警告', message: '零部件品牌为空');
+      showSnackBar(title: 'shack_bar_warm'.tr, message: 'device_maintenance_component_brand_empty'.tr);
       return;
     } else if (partName == '') {
-      showSnackBar(title: '警告', message: '零部件名称为空');
+      showSnackBar(title: 'shack_bar_warm'.tr, message: 'device_maintenance_component_name_empty'.tr);
       return;
     } else if (partNumber == '') {
-      showSnackBar(title: '警告', message: '零部件数量为空');
+      showSnackBar(title: 'shack_bar_warm'.tr, message: 'device_maintenance_component_qty_empty'.tr);
       return;
     } else if (partNorms == '') {
-      showSnackBar(title: '警告', message: '零部件规格为空');
+      showSnackBar(title: 'shack_bar_warm'.tr, message: 'device_maintenance_component_specification_empty'.tr);
       return;
     } else if (partUnit == '') {
-      showSnackBar(title: '警告', message: '零部件单位为空');
+      showSnackBar(title: 'shack_bar_warm'.tr, message: 'device_maintenance_component_unit_empty'.tr);
       return;
     } else {
       repairEntryData.add(RepairEntryData(

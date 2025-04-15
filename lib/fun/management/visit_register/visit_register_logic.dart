@@ -70,31 +70,34 @@ class VisitRegisterLogic extends GetxController {
 
   refreshGetVisitList(
       {String name = "",
-        String iDCard = "",
-        String interviewee = "",
-        String intervieweeName = "",
-        String securityStaff = "",
-        String startTime = "",
-        String endTime = "",
-        String leave = "",
-        String phone = "",
-        String carNo = "",
-        String credentials = "",
-        Function()? refresh}) {
-    httpPost(method: webApiGetVisitDtBySqlWhere, loading: '正在获取来访列表...', body: {
-      'Name': name,
-      'IDCard': iDCard,
-      'VisitedFactory':userInfo?.organizeID,
-      'Interviewee': interviewee,
-      'IntervieweeName': intervieweeName,
-      'SecurityStaff': securityStaff,
-      'StartTime': startTime,
-      'EndTime': endTime,
-      'Leave': leave,
-      'Phone': phone,
-      'CarNo': carNo,
-      'Credentials': credentials,
-    }).then((response) {
+      String iDCard = "",
+      String interviewee = "",
+      String intervieweeName = "",
+      String securityStaff = "",
+      String startTime = "",
+      String endTime = "",
+      String leave = "",
+      String phone = "",
+      String carNo = "",
+      String credentials = "",
+      Function()? refresh}) {
+    httpPost(
+        method: webApiGetVisitDtBySqlWhere,
+        loading: 'visit_getting_visitor_list'.tr,
+        body: {
+          'Name': name,
+          'IDCard': iDCard,
+          'VisitedFactory': getUserInfo()?.organizeID,
+          'Interviewee': interviewee,
+          'IntervieweeName': intervieweeName,
+          'SecurityStaff': securityStaff,
+          'StartTime': startTime,
+          'EndTime': endTime,
+          'Leave': leave,
+          'Phone': phone,
+          'CarNo': carNo,
+          'Credentials': credentials,
+        }).then((response) {
       if (response.resultCode == resultSuccess) {
         state.lastAdd = false;
         var jsonList = jsonDecode(response.data);
@@ -114,7 +117,7 @@ class VisitRegisterLogic extends GetxController {
   getVisitLastList({Function()? refresh}) {
     httpPost(
         method: webApiGetVisitInfoByJsonStr,
-        loading: '正在搜索最近一次来访记录...',
+        loading: 'visit_latest_visit_history'.tr,
         body: VisitLastRecord(
           name: textSearchName.text,
           phone: textSearchPhone.text,
@@ -140,7 +143,7 @@ class VisitRegisterLogic extends GetxController {
   getInviteCode() {
     httpGet(
       method: webApiGetInviteCode,
-      loading: '正在获取来访编号...',
+      loading: 'visit_obtaining_visitor_id'.tr,
     ).then((response) {
       if (response.resultCode == resultSuccess) {
         state.visitCode.value = response.message!;
@@ -153,17 +156,23 @@ class VisitRegisterLogic extends GetxController {
     });
   }
 
-  getVisitorDetailInfo(String interId,bool isLeave) {
-    httpGet(method: webApiGetVisitorInfo, loading: '正在获取来访详情...', params: {
-      'InterID': interId,
-    }).then((response) {
+  getVisitorDetailInfo(String interId, bool isLeave) {
+    httpGet(
+        method: webApiGetVisitorInfo,
+        loading: 'visit_obtaining_visit_details'.tr,
+        params: {
+          'InterID': interId,
+        }).then((response) {
       if (response.resultCode == resultSuccess) {
-        if(isLeave){  //去点击离场
-          state.dataDetail = VisitGetDetailInfo.fromJson(jsonDecode(response.data));
+        if (isLeave) {
+          //去点击离场
+          state.dataDetail =
+              VisitGetDetailInfo.fromJson(jsonDecode(response.data));
           Get.to(() => const VisitRegisterDetailPage());
-        }else{  //带数据的新增
+        } else {
+          //带数据的新增
 
-          if(state.lastAdd){
+          if (state.lastAdd) {
             logger.d('带数据的新增');
             state.dataDetail =
                 VisitGetDetailInfo.fromJson(jsonDecode(response.data));
@@ -171,10 +180,11 @@ class VisitRegisterLogic extends GetxController {
             textPersonName.text = state.dataDetail.name ?? '';
             textPhone.text = state.dataDetail.phone ?? '';
             textUnit.text = state.dataDetail.unit ?? '';
-            textSecurity.text = userInfo?.name??'';
-            state.upAddDetail.value.examineID = userInfo?.empID.toString();
-            state.upAddDetail.value.securityStaff = userInfo?.empID.toString();
-          }else{
+            textSecurity.text = getUserInfo()!.name!;
+            state.upAddDetail.value.examineID = getUserInfo()!.empID.toString();
+            state.upAddDetail.value.securityStaff =
+                getUserInfo()!.empID.toString();
+          } else {
             logger.d('走详情界面');
             state.dataDetail =
                 VisitGetDetailInfo.fromJson(jsonDecode(response.data));
@@ -182,14 +192,15 @@ class VisitRegisterLogic extends GetxController {
             state.facePicture.value = state.dataDetail.peoPic ?? '';
             state.upLeavePicture.clear();
             state.upLeavePicture.add(VisitPhotoBean(photo: "", typeAdd: "0"));
-
           }
-          state.upAddDetail.value.examineID = userInfo?.empID.toString();
-          state.upAddDetail.value.securityStaff = userInfo?.empID.toString();
+          state.upAddDetail.value.examineID = getUserInfo()!.empID.toString();
+          state.upAddDetail.value.securityStaff =
+              getUserInfo()!.empID.toString();
 
           Get.to(() => const VisitRegisterAddPage());
         }
-      } else {  //没有找到记录，直接到新增
+      } else {
+        //没有找到记录，直接到新增
         Get.to(() => const VisitRegisterAddPage());
       }
     });
@@ -213,12 +224,12 @@ class VisitRegisterLogic extends GetxController {
       body.add(PhotoBean(photo: value1.photo));
     }
     httpPost(
-        method: webApiUpdateLeaveFVisit,
-        loading: '正在提交离场信息...',
-        body: LeaveVisitRecord(
-            interID: state.dataDetail.interID,
-            leaveTime: getDateYMD(),
-            leavePics: body))
+            method: webApiUpdateLeaveFVisit,
+            loading: 'visit_submitting_departure_information'.tr,
+            body: LeaveVisitRecord(
+                interID: state.dataDetail.interID,
+                leaveTime: getDateYMD(),
+                leavePics: body))
         .then((response) {
       if (response.resultCode == resultSuccess) {
         refreshGetVisitList();
@@ -234,7 +245,7 @@ class VisitRegisterLogic extends GetxController {
     for (var value1 in state.upLeavePicture) {
       body.add(PhotoBean(photo: value1.photo));
     }
-    state.upAddDetail.value.securityStaff = userInfo?.empID.toString();
+    state.upAddDetail.value.securityStaff = getUserInfo()!.empID.toString();
     state.upAddDetail.value.visitPics = body;
 
     logger.d(state.upAddDetail.value.toJson());
@@ -332,17 +343,17 @@ class VisitRegisterLogic extends GetxController {
       }
     }
     httpPost(
-        method: webApiInsertIntoFVisit,
-        loading: '正在提交新增记录...',
-        body: state.upAddDetail.value)
+            method: webApiInsertIntoFVisit,
+            loading: 'visit_submitting_new_records'.tr,
+            body: state.upAddDetail.value)
         .then((response) {
       if (response.resultCode == resultSuccess) {
         successDialog(
             content: response.message,
             back: () => {
-              refreshGetVisitList(),
-              Get.back(),
-            });
+                  refreshGetVisitList(),
+                  Get.back(),
+                });
       } else {
         errorDialog(content: response.message);
       }
@@ -352,10 +363,10 @@ class VisitRegisterLogic extends GetxController {
   getToAddPage() {
     //跳转到新增的时候需要建立的数据
     state.upAddDetail.value = VisitAddRecordInfo(
-        visitedFactory: userInfo?.organizeID.toString(),
-        securityStaff: userInfo?.empID.toString(),
-        securityStaffName: userInfo?.name,
-        examineID: userInfo?.empID.toString(),
+        visitedFactory: getUserInfo()!.organizeID.toString(),
+        securityStaff: getUserInfo()!.empID.toString(),
+        securityStaffName: getUserInfo()!.name,
+        examineID: getUserInfo()!.empID.toString(),
         dateTime: getCurrentTime());
     state.upComePicture.add(VisitPhotoBean(photo: "", typeAdd: "0"));
     textIdCard.clear();
@@ -382,7 +393,7 @@ class VisitRegisterLogic extends GetxController {
     if (textSearch.text.isNotEmpty) {
       //获取人员信息
       var searchPeopleCallback = await httpGet(
-        loading: '正在获取员工信息...',
+        loading: 'visit_obtaining_employee_information'.tr,
         method: webApiGetEmpByField,
         params: {
           'FieldValue': textSearch.text,
@@ -453,7 +464,7 @@ class VisitRegisterLogic extends GetxController {
             //选择器主体
             Expanded(
               child: getCupertinoPicker(
-                items:list.map((data) {
+                items: list.map((data) {
                   return Center(
                       child: Text("${data.empName!}_${data.empDepartName!}"));
                 }).toList(),
@@ -470,89 +481,87 @@ class VisitRegisterLogic extends GetxController {
     }
   }
 
-  visitorPlace() async {
-    //获取活动区域
-    var visitorPlaceCallback = await httpGet(
-      loading: '正在获取活动区域...',
-      method: webApiGetReceiveVisitorPlace,
-      params: {"FPlaceName": ""},
-    );
-    if (visitorPlaceCallback.resultCode == resultSuccess) {
-      //创建部门列表数据
-      List<VisitPlaceBean> list = [];
-      for (var item in jsonDecode(visitorPlaceCallback.data)) {
-        list.add(VisitPlaceBean.fromJson(item));
+  visitorPlace() {
+    httpGet(
+        method: webApiGetReceiveVisitorPlace,
+        loading: 'visit_getting_activity_area'.tr,
+        params: {"FPlaceName": ""}).then((response) {
+      if (response.resultCode == resultSuccess) {
+        var list = <VisitPlaceBean>[
+          for (var i = 0; i < response.data.length; ++i)
+            VisitPlaceBean.fromJson(response.data[i])
+        ];
+        //创建选择器控制器
+        var controller = FixedExtentScrollController(
+          initialItem: 0,
+        );
+        //创建取消按钮
+        var cancel = TextButton(
+          onPressed: () {
+            Get.back();
+          },
+          child: Text(
+            'dialog_default_cancel'.tr,
+            style: const TextStyle(
+              color: Colors.grey,
+              fontSize: 20,
+            ),
+          ),
+        );
+        //创建确认按钮
+        var confirm = TextButton(
+          onPressed: () {
+            Get.back();
+            if (list[controller.selectedItem].fInterID == 5) {
+              //其他区域
+              state.canInput.value = true;
+              textVisitorPlace.text = "";
+              state.upAddDetail.value.actionZoneID =
+                  list[controller.selectedItem].fInterID.toString();
+            } else {
+              state.canInput.value = false;
+              state.upAddDetail.value.actionZone =
+                  list[controller.selectedItem].fPlaceName;
+              state.upAddDetail.value.actionZoneID =
+                  list[controller.selectedItem].fInterID.toString();
+              textVisitorPlace.text = list[controller.selectedItem].fPlaceName!;
+            }
+          },
+          child: Text(
+            'dialog_default_confirm'.tr,
+            style: const TextStyle(
+              color: Colors.blueAccent,
+              fontSize: 20,
+            ),
+          ),
+        );
+        //创建底部弹窗
+        showPopup(Column(
+          children: <Widget>[
+            //选择器顶部按钮
+            Container(
+              height: 45,
+              color: Colors.grey[200],
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [cancel, confirm],
+              ),
+            ),
+            //选择器主体
+            Expanded(
+              child: getCupertinoPicker(
+                items: list.map((data) {
+                  return Center(child: Text(data.fPlaceName!));
+                }).toList(),
+                controller: controller,
+              ),
+            )
+          ],
+        ));
+      } else {
+        errorDialog(content: response.message);
       }
-      //创建选择器控制器
-      var controller = FixedExtentScrollController(
-        initialItem: 0,
-      );
-      //创建取消按钮
-      var cancel = TextButton(
-        onPressed: () {
-          Get.back();
-        },
-        child: Text(
-          'dialog_default_cancel'.tr,
-          style: const TextStyle(
-            color: Colors.grey,
-            fontSize: 20,
-          ),
-        ),
-      );
-      //创建确认按钮
-      var confirm = TextButton(
-        onPressed: () {
-          Get.back();
-          if (list[controller.selectedItem].fInterID == 5) {
-            //其他区域
-            state.canInput.value = true;
-            textVisitorPlace.text = "";
-            state.upAddDetail.value.actionZoneID =
-                list[controller.selectedItem].fInterID.toString();
-          } else {
-            state.canInput.value = false;
-            state.upAddDetail.value.actionZone =
-                list[controller.selectedItem].fPlaceName;
-            state.upAddDetail.value.actionZoneID =
-                list[controller.selectedItem].fInterID.toString();
-            textVisitorPlace.text = list[controller.selectedItem].fPlaceName!;
-          }
-        },
-        child: Text(
-          'dialog_default_confirm'.tr,
-          style: const TextStyle(
-            color: Colors.blueAccent,
-            fontSize: 20,
-          ),
-        ),
-      );
-      //创建底部弹窗
-      showPopup(Column(
-        children: <Widget>[
-          //选择器顶部按钮
-          Container(
-            height: 45,
-            color: Colors.grey[200],
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [cancel, confirm],
-            ),
-          ),
-          //选择器主体
-          Expanded(
-            child: getCupertinoPicker(
-            items:  list.map((data) {
-                return Center(child: Text(data.fPlaceName!));
-              }).toList(),
-              controller:  controller,
-            ),
-          )
-        ],
-      ));
-    } else {
-      errorDialog(content: visitorPlaceCallback.message);
-    }
+    });
   }
 
   bool isIDCorrect(String id) {
@@ -567,5 +576,4 @@ class VisitRegisterLogic extends GetxController {
     );
     return phoneExp.hasMatch(phoneNumber);
   }
-
 }

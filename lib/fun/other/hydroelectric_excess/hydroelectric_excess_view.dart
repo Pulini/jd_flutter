@@ -124,7 +124,7 @@ class _HydroelectricExcessPageState extends State<HydroelectricExcessPage> {
                           flex: 3,
                           child: textField(
                             controller: state.textNumber,
-                            hint: '房号',
+                            hint: 'hydroelectric_excess_room_number'.tr,
                             onClicked: () {
                               if (state.textNumber.text.isNotEmpty) {
                                 state.searchRoom(
@@ -137,7 +137,7 @@ class _HydroelectricExcessPageState extends State<HydroelectricExcessPage> {
                       Expanded(
                           flex: 1,
                           child: EditText(
-                            hint: '本次抄度'.tr,
+                            hint: 'hydroelectric_this_copying_process'.tr,
                             onChanged: (v) => {
                               state.countMonth(v),
                             },
@@ -145,17 +145,17 @@ class _HydroelectricExcessPageState extends State<HydroelectricExcessPage> {
                           ))
                     ],
                   ),
-                  _text('设备名称:', state.dataDetail.value.name.toString()),
-                  _text('类型:', state.dataDetail.value.typeName.toString()),
+                  _text('hydroelectric_device_name'.tr, state.dataDetail.value.name.toString()),
+                  _text('hydroelectric_type'.tr, state.dataDetail.value.typeName.toString()),
                   _text(
-                      '组织名称:', state.dataDetail.value.organizeName.toString()),
+                      'hydroelectric_organization_name'.tr, state.dataDetail.value.organizeName.toString()),
                   _text(
-                      '楼号:', state.dataDetail.value.dormitoriesName.toString()),
-                  _text('房间编号:', state.dataDetail.value.roomNumber.toString()),
-                  _text('上次抄度时间:',
+                      'hydroelectric_building_number'.tr, state.dataDetail.value.dormitoriesName.toString()),
+                  _text('hydroelectric_room_number'.tr, state.dataDetail.value.roomNumber.toString()),
+                  _text('hydroelectric_last_copying_time'.tr,
                       state.dataDetail.value.lastDateTime.toString()),
-                  _text('上次抄度:', state.dataDetail.value.lastDegree.toString()),
-                  _text('本月使用量:', state.thisMonthUse.value),
+                  _text('hydroelectric_last_copying'.tr, state.dataDetail.value.lastDegree.toString()),
+                  _text('hydroelectric_usage_this_month'.tr, state.thisMonthUse.value),
                 ],
               )),
               Column(
@@ -169,7 +169,7 @@ class _HydroelectricExcessPageState extends State<HydroelectricExcessPage> {
                               width: double.infinity,
                               child: CombinationButton(
                                 combination: Combination.left,
-                                text: '扫描设备码',
+                                text: 'hydroelectric_scan_device_code'.tr,
                                 click: () =>
                                     Get.to(() => const Scanner())?.then((v) {
                                   if (v != null) {
@@ -184,7 +184,7 @@ class _HydroelectricExcessPageState extends State<HydroelectricExcessPage> {
                               width: double.infinity,
                               child: CombinationButton(
                                 combination: Combination.right,
-                                text: '待查列表',
+                                text: 'hydroelectric_checked_list'.tr,
                                 click: () => {
                                   state.isShow.value = false,
                                   Get.to(() =>
@@ -198,7 +198,7 @@ class _HydroelectricExcessPageState extends State<HydroelectricExcessPage> {
                   Obx(() => SizedBox(
                         width: double.infinity,
                         child: CombinationButton(
-                          text: state.stateToSearch.value == '0' ? '提交' : '修改',
+                          text: state.stateToSearch.value == '0' ? 'hydroelectric_submit'.tr : 'hydroelectric_change'.tr,
                           click: () => {state.submit()},
                         ),
                       ))

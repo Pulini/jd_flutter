@@ -15,7 +15,7 @@ class ProductionScanWarehouseLogic extends GetxController {
   //添加条码
   scanCode(String code) {
     if (state.barCodeList.any((v) => v.code == code)) {
-      showSnackBar(message: '条码已存在', isWarning: true);
+      showSnackBar( message: 'production_scan_hava_barcode'.tr, isWarning: true);
     } else {
       if (code.isPallet()) {
         checkPallet(
@@ -28,14 +28,16 @@ class ProductionScanWarehouseLogic extends GetxController {
                   state.palletNumber.value = code;
                   break;
                 case 'X':
-                  showSnackBar(message: '请使用空托盘入库！！', isWarning: true);
+                  showSnackBar(
+                       message: 'production_scan_use_empty_pallets'.tr, isWarning: true);
                   break;
                 case 'Y':
-                  showSnackBar(message: '此托盘已在其他仓库使用！！', isWarning: true);
+                  showSnackBar(
+                   message: 'production_scan_used_pallets'.tr, isWarning: true);
                   break;
               }
             } else {
-              showSnackBar(message: '此托盘不存在！！', isWarning: true);
+              showSnackBar( message: 'production_scan_not_exist'.tr, isWarning: true);
             }
           },
           error: (msg) => errorDialog(content: msg),
@@ -58,10 +60,17 @@ class ProductionScanWarehouseLogic extends GetxController {
   getBarCodeStatusByDepartmentID({
     required Function() refresh,
   }) {
-    getAlreadyInStockBarCode(
-      type: BarCodeReportType.productionScanInStock,
-      success: (list) {
+    httpGet(method: webApiGetBarCodeStatusByDepartmentID, params: {
+      'Type': "SupplierScanInStock",
+      'DepartmentID': getUserInfo()!.departmentID,
+    }).then((response) {
+      if (response.resultCode == resultSuccess) {
         state.usedList.cast();
+        var list = <UsedBarCodeInfo>[
+          for (var i = 0; i < response.data.length; ++i)
+            UsedBarCodeInfo.fromJson(response.data[i])
+        ];
+
         for (var i = 0; i < list.length; ++i) {
           state.usedList.add(list[i].barCode.toString());
         }
@@ -69,12 +78,11 @@ class ProductionScanWarehouseLogic extends GetxController {
           data.isUsed = state.usedList.contains(data.code);
         }
         refresh.call();
-      },
-      error: (msg){
+      } else {
         refresh.call();
-        showSnackBar(title: '温馨提示', message: msg);
-      },
-    );
+        showSnackBar(title: 'dialog_default_title_information'.tr, message: response.message ?? '');
+      }
+    });
   }
 
   //验证托盘
@@ -84,7 +92,7 @@ class ProductionScanWarehouseLogic extends GetxController {
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在获取托盘信息...',
+      loading: 'production_scan_obtaining_tray_information'.tr,
       method: webApiSapGetPalletList,
       body: {
         'WERKS': '1500',
@@ -145,7 +153,7 @@ class ProductionScanWarehouseLogic extends GetxController {
           state.isCheck = false;
           state.barCodeList.clear();
         } else {
-          showSnackBar(message: '本地数据库删除失败', isWarning: true);
+          showSnackBar( message: 'production_scan_delete_failed'.tr, isWarning: true);
         }
       },
     );
@@ -154,26 +162,43 @@ class ProductionScanWarehouseLogic extends GetxController {
   //获取汇总表
   goReport() {
     if (state.barCodeList.isNotEmpty) {
-      getWaitInStockBarCodeReport(
-        barCodeList: state.barCodeList,
-        type: BarCodeReportType.productionScanInStock,
-        reverse: state.red.value,
-        success: (data){
+      httpPost(
+        method: webApiNewGetSubmitBarCodeReport,
+        loading: 'warehouse_allocation_summary_information'.tr,
+        body: {
+          'BarCodeList': [
+            for (var i = 0; i < state.barCodeList.length; ++i)
+              {
+                'BarCode': state.barCodeList[i].code,
+                'PalletNo': state.barCodeList[i].palletNo,
+              }
+          ],
+          'BillTypeID': BarCodeReportType.productionScanInStock.value,
+          'Red': state.red.value ? 1 : -1,
+          'ProcessFlowID': 0,
+          'OrganizeID': getUserInfo()!.organizeID,
+          'DefaultStockID': getUserInfo()!.defaultStockID,
+          'UserID': getUserInfo()!.userID,
+          'EmpID': getUserInfo()!.empID,
+        },
+      ).then((response) {
+        if (response.resultCode == resultSuccess) {
           Get.to(() => const CodeListReportPage(),
-              arguments: {'reportData': data})?.then((v) {
+              arguments: {'reportData': response.data})?.then((v) {
             if (v == null) {
               state.peopleNumber.text = '';
               state.peopleName.value = '';
-              showSnackBar(title: '温馨提示', message: '检查未完成');
+              showSnackBar(title: 'dialog_default_title_information'.tr, message: '检查未完成');
             } else if (v == true) {
               submitCode();
             }
           });
-        },
-        error: (msg)=>errorDialog(content: msg),
-      );
+        } else {
+          errorDialog(content: response.message);
+        }
+      });
     } else {
-      showSnackBar(title: '警告', message: '没有条码可提交');
+      showSnackBar(title: 'shack_bar_warm'.tr, message: 'production_scan_not_barcode'.tr);
     }
   }
 
@@ -191,7 +216,7 @@ class ProductionScanWarehouseLogic extends GetxController {
     if (state.barCodeList.isNotEmpty) {
       httpPost(
         method: webApiGetUnReportedBarCode,
-        loading: '正在获取校验条码...',
+        loading: 'production_scan_verification_barcode'.tr,
         body: [
           for (var i = 0; i < state.barCodeList.length; ++i)
             {
@@ -230,7 +255,7 @@ class ProductionScanWarehouseLogic extends GetxController {
         }
       });
     } else {
-      showSnackBar(title: '警告', message: '没有条码可提交');
+      showSnackBar(title: 'shack_bar_warm'.tr, message: 'production_scan_not_barcode'.tr);
     }
   }
 
@@ -246,10 +271,10 @@ class ProductionScanWarehouseLogic extends GetxController {
       ],
       'Red': state.red.value ? -1 : 1,
       'EmpCode': state.peopleNumber.text.toString(),
-      'DefaultStockID': userInfo?.defaultStockID,
+      'DefaultStockID': getUserInfo()!.defaultStockID,
       'TranTypeID': '106',
-      'OrganizeID': userInfo?.organizeID,
-      'UserID': userInfo?.userID,
+      'OrganizeID': getUserInfo()!.organizeID,
+      'UserID': getUserInfo()!.userID,
     }).then((response) {
       state.isCheck = false;
       if (response.resultCode == resultSuccess) {
@@ -258,7 +283,7 @@ class ProductionScanWarehouseLogic extends GetxController {
             content: response.message,
             back: () => getBarCodeStatusByDepartmentID(refresh: () {}));
       } else {
-        showSnackBar(title: '温馨提示', message: response.message ?? '');
+        showSnackBar(title: 'dialog_default_title_information'.tr, message: response.message ?? '');
       }
     });
   }

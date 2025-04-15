@@ -15,7 +15,7 @@ class PumaAntiCounterfeitingState {
   //添加条码
   addCode(String newCode) {
     if (newCode.isEmpty) {
-      showSnackBar(title: '警告', message: '请扫描条码');
+      showSnackBar(title: 'shack_bar_warm'.tr, message: 'code_list_report_please_scan_code'.tr);
     } else {
       if (newCode.startsWith("GE") &&
           newCode.length >= 10 &&
@@ -23,7 +23,7 @@ class PumaAntiCounterfeitingState {
         palletNumber.value = newCode;
       } else {
         if (isExists(newCode)) {
-          showSnackBar(title: '警告', message: '条码已存在');
+          showSnackBar(title: 'shack_bar_warm'.tr, message: 'code_list_report_have_code'.tr);
         } else {
           dataCodeList
               .add(ScanCode(palletNumber: palletNumber.value, code: newCode));

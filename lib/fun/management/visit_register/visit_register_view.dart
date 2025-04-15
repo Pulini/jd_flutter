@@ -225,7 +225,7 @@ class _VisitRegisterPageState extends State<VisitRegisterPage> {
       barrierDismissible: true,
       builder: (BuildContext context) {
         return CupertinoAlertDialog(
-          title: const Text("最近来访记录"),
+          title:  Text("visit_recent_visit_records".tr),
           content: Column(
             mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -249,14 +249,14 @@ class _VisitRegisterPageState extends State<VisitRegisterPage> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text("取消"),
+              child:  Text('dialog_default_cancel'.tr),
             ),
             CupertinoDialogAction(
                 onPressed: () {
                   click?.call();
                   Navigator.of(context).pop();
                 },
-                child: const Text("确定")),
+                child:  Text('dialog_default_confirm'.tr)),
           ],
         );
       },
@@ -309,7 +309,7 @@ class _VisitRegisterPageState extends State<VisitRegisterPage> {
                 Expanded(
                   flex: 1,
                   child: ListTile(
-                    title: const Text('全部'),
+                    title:  Text('visit_all'.tr),
                     leading: Radio(
                       value: "",
                       groupValue: state.select.value,
@@ -323,7 +323,7 @@ class _VisitRegisterPageState extends State<VisitRegisterPage> {
                 Expanded(
                   flex: 1,
                   child: ListTile(
-                    title: const Text('未离场'),
+                    title:  Text('visit_not_leaving_yet'.tr),
                     leading: Radio(
                       value: "0",
                       groupValue: state.select.value,
@@ -337,7 +337,7 @@ class _VisitRegisterPageState extends State<VisitRegisterPage> {
                 Expanded(
                   flex: 1,
                   child: ListTile(
-                    title: const Text('已离场'),
+                    title:  Text('visit_already_left'.tr),
                     leading: Radio(
                       value: "1",
                       groupValue: state.select.value,

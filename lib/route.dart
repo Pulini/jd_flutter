@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
+import 'package:jd_flutter/fun/dispatching/injection_scan_report/Injection_scan_report_view.dart';
 import 'package:jd_flutter/fun/maintenance/sap_ink_color_matching/sap_ink_color_matching_view.dart';
-import 'package:jd_flutter/fun/management/anti_Counterfeiting/puma_anti_counterfeiting_view.dart';
 import 'package:jd_flutter/fun/other/hydroelectric_excess/hydroelectric_excess_view.dart';
 import 'package:jd_flutter/fun/reporting_work/part_process_scan/part_process_scan_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/incoming_inspection/incoming_inspection_view.dart';
@@ -32,9 +32,11 @@ import 'fun/management/visit_register/visit_register_view.dart';
 import 'fun/other/device_maintenance_record/device_maintenance_record_view.dart';
 import 'fun/other/forming_packing_scan/packing_scan_view.dart';
 import 'fun/report/daily_report/daily_report_view.dart';
+import 'fun/report/handover_report_list/handover_report_list_view.dart';
 import 'fun/report/molding_pack_area_report/molding_pack_area_report_view.dart';
 import 'fun/report/molding_scan_bulletin_report/molding_scan_bulletin_report_maximize_view.dart';
 import 'fun/report/molding_scan_bulletin_report/molding_scan_bulletin_report_view.dart';
+import 'fun/report/process_report/process_report_view.dart';
 import 'fun/report/production_day_report/production_day_report_view.dart';
 import 'fun/report/production_materials_report/production_materials_report_view.dart';
 import 'fun/report/production_summary_report/production_summary_report_view.dart';
@@ -43,11 +45,13 @@ import 'fun/report/view_instruction_details/view_instruction_details_view.dart';
 import 'fun/report/view_process_specification/view_process_specification_view.dart';
 import 'fun/report/worker_production_detail/worker_production_detail_view.dart';
 import 'fun/report/worker_production_report/worker_production_report_view.dart';
+import 'fun/warehouse/in/process_report/process_report_store_view.dart';
 import 'fun/warehouse/in/sap_injection_molding_stock_in/sap_injection_molding_stock_in_view.dart';
 import 'fun/warehouse/in/sap_no_label_stock_in/sap_no_label_stock_in_view.dart';
 import 'fun/warehouse/in/sap_produce_stock_in/sap_produce_stock_in_view.dart';
 import 'fun/warehouse/in/sap_purchase_stock_in/sap_purchase_stock_in_view.dart';
 import 'fun/warehouse/in/sap_surplus_material_stock_in/sap_surplus_material_stock_in_view.dart';
+import 'fun/warehouse/manage/anti_Counterfeiting/puma_anti_counterfeiting_view.dart';
 import 'fun/warehouse/manage/carton_label_scan/carton_label_scan_view.dart';
 import 'fun/warehouse/manage/carton_label_scan/carton_label_scan_progress_view.dart';
 import 'fun/warehouse/manage/sap_wms_split_label/sap_wms_split_label_view.dart';
@@ -423,6 +427,20 @@ class RouteConfig {
     const ScanPickingMaterialPage(),
   );
 
+  //工序汇报入库
+  static Routes processReportWarehouse = Routes(
+    '/process_report_warehouse',
+    99,
+    const ProcessReportStorePage(),
+  );
+
+  //注塑车间扫码报工
+  static Routes injectionScanReport = Routes(
+    '/injection_scan_report',
+    99,
+    const InjectionScanReportPage(),
+  );
+
   //销售扫码出库
   static Routes saleScanOutWarehouse = Routes(
     '/sale_scan_out_warehouse',
@@ -464,6 +482,20 @@ class RouteConfig {
     99,
     const SapCountingInventoryPage(),
   );
+  //报工交接确认列表
+  static Routes handoverReportList = Routes(
+    '/handover_report_list',
+    99,
+    const HandoverReportListPage(),
+  );
+
+  //工序汇报
+  static Routes processReport = Routes(
+    '/process_report',
+    99,
+    const ProcessReportPage(),
+  );
+
 
   //本地功能入口列表
   static List<Routes> routeList = [
@@ -516,6 +548,7 @@ class RouteConfig {
     productionTasks,
     suppliersScanStore,
     productionScanWarehouse,
+    processReportWarehouse,
     incomingInspection,
     scanPickingMaterial,
     saleScanOutWarehouse,
@@ -524,6 +557,9 @@ class RouteConfig {
     pickingMaterialOrder,
     sapScanCodeInventory,
     sapCountingInventory,
+    injectionScanReport,
+    handoverReportList,
+    processReport
   ];
 
   static List<GetPage> appRoutes = [
@@ -767,6 +803,22 @@ class RouteConfig {
     GetPage(
       name: sapCountingInventory.name,
       page: () => sapCountingInventory.page,
+    ),
+    GetPage(
+      name: processReportWarehouse.name,
+      page: () => processReportWarehouse.page,
+    ),
+    GetPage(
+      name: injectionScanReport.name,
+      page: () => injectionScanReport.page,
+    ),
+    GetPage(
+      name: handoverReportList.name,
+      page: () => handoverReportList.page,
+    ),
+    GetPage(
+      name: processReport.name,
+      page: () => processReport.page,
     ),
   ];
 }

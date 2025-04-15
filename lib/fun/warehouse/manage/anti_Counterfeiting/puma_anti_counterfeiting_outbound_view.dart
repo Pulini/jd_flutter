@@ -1,7 +1,7 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jd_flutter/fun/management/anti_Counterfeiting/puma_anti_counterfeiting_logic.dart';
+import 'package:jd_flutter/fun/warehouse/manage/anti_Counterfeiting/puma_anti_counterfeiting_logic.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
@@ -27,7 +27,7 @@ class _PumaAntiCounterfeitingOutboundPageState
   @override
   Widget build(BuildContext context) {
     return pageBody(
-        title: '出库',
+        title: 'code_list_report_outbound'.tr,
         body: Column(
           children: [
             Obx(() => Expanded(
@@ -43,10 +43,10 @@ class _PumaAntiCounterfeitingOutboundPageState
                 Expanded(
                   flex: 1,
                   child: CombinationButton(
-                    text: '清空',
+                    text: 'code_list_report_clean'.tr,
                     click: () {
                       askDialog(
-                        content: '确定要清空吗？',
+                        content: 'code_list_report_sure_clean'.tr,
                         confirm: () {
                           state.clearSortingList();
                         },
@@ -58,10 +58,10 @@ class _PumaAntiCounterfeitingOutboundPageState
                 Expanded(
                   flex: 1,
                   child: CombinationButton(
-                    text: '获取条码',
+                    text: 'code_list_report_obtain_barcode'.tr,
                     click: () {
                       askDialog(
-                        content: '确定要获取条码吗？',
+                        content: 'code_list_report_getting_barcode'.tr,
                         confirm: () {
                           logic.getBarCodeListByEmp();
                         },
@@ -73,10 +73,10 @@ class _PumaAntiCounterfeitingOutboundPageState
                 Expanded(
                   flex: 1,
                   child: CombinationButton(
-                    text: '出库',
+                    text: 'code_list_report_outbound'.tr,
                     click: () {
                       askDialog(
-                        content: '确定要出库吗？',
+                        content: 'code_list_report_sure_outbound'.tr,
                         confirm: () {
                           logic.submitOutCode();
                         },

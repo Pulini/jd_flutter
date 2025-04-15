@@ -828,7 +828,6 @@ livenFaceVerification({
       try {
         Permission.camera.request().isGranted.then((permission) {
           if (permission) {
-
             const MethodChannel(channelFaceVerificationAndroidToFlutter)
                 .invokeMethod('StartDetect', filePath)
                 .then((v) {

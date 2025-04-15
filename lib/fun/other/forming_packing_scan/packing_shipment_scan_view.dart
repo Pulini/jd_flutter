@@ -25,24 +25,26 @@ class _PackingShipmentScanPageState extends State<PackingShipmentScanPage> {
           backgroundColor: Colors.transparent,
           appBar: AppBar(
             backgroundColor: Colors.transparent,
-            title: Text('成型出货装箱扫码'.tr),
+            title: Text('packing_shipment_title'.tr),
           ),
           body: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Text('柜号：${state.showCabinetNumber}'),
+              Text('packing_shipment_cabinet_number'.tr +
+                  state.showCabinetNumber.value),
               Obx(
-                () => Text('条码：${state.showCabinetNumber.value}'),
+                () => Text(
+                    'packing_shipment_code'.tr + state.showCabinetNumber.value),
               ),
               Row(
                 children: [
                   expandedFrameText(
-                    text: '订单号',
+                    text: 'packing_shipment_order_no'.tr,
                     backgroundColor: Colors.blue.shade50,
                     flex: 3,
                   ),
                   expandedFrameText(
-                    text: '已发/应出',
+                    text: 'packing_shipment_issued'.tr,
                     backgroundColor: Colors.blue.shade50,
                     flex: 1,
                   )
@@ -59,10 +61,8 @@ class _PackingShipmentScanPageState extends State<PackingShipmentScanPage> {
               //   ),
               // ),
               CombinationButton(
-                text: '手动添加',
-                click: () {
-
-                },
+                text: 'packing_shipment_manually_add'.tr,
+                click: () {},
                 combination: Combination.intact,
               )
             ],
@@ -73,11 +73,7 @@ class _PackingShipmentScanPageState extends State<PackingShipmentScanPage> {
   @override
   void initState() {
     pdaScanner(
-      scan: (scanCode) => {
-          state.checkCode(code:scanCode,success: ()=>{
-
-          })
-      },
+      scan: (scanCode) => {state.checkCode(code: scanCode, success: () => {})},
     );
     super.initState();
   }

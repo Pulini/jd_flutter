@@ -32,6 +32,9 @@ const spSaveFeishuUserWikiTokenData = 'feishu_user_wiki_token_data';
 const spSaveFeishuUserCloudDocTokenData = 'feishu_user_cloud_doc_token_data';
 const spSaveIncomingInspectionApplicant = 'incoming_inspection_applicant';
 const spSaveIncomingInspectionInspector = 'incoming_inspection_inspector';
+const spSaveScanPickingMaterial = 'scan_picking_material';
+const spSaveScanPickingMaterialSelectProcess = 'scan_picking_material_select_process';
+const spSaveProcessSelectProcess = 'scan_process_select_process';
 const spSaveScanPickingMaterialWorker = 'scan_picking_material_worker';
 const spSaveScanPickingMaterialSelectProcess =
     'scan_picking_material_select_process';
