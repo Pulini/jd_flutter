@@ -36,8 +36,8 @@ modifyDetailPickingQtyDialog({
         return AlertDialog(
           title: Text(
             max == double.infinity
-                ? 'wait_picking_material_order_dialog_pick_title_can_tack_more'.tr
-                : 'wait_picking_material_order_dialog_pick_title_cant_tack_more'.tr,
+                ? 'picking_material_order_dialog_pick_title_can_tack_more'.tr
+                : 'picking_material_order_dialog_pick_title_cant_tack_more'.tr,
           ),
           content: SizedBox(
             width: 300,
@@ -46,7 +46,7 @@ modifyDetailPickingQtyDialog({
               children: [
                 Row(
                   children: [
-                    Text('wait_picking_material_order_dialog_picking_qty'.tr),
+                    Text('picking_material_order_dialog_picking_qty'.tr),
                     Expanded(
                       child: NumberDecimalEditText(
                         controller: basicController,
@@ -66,7 +66,7 @@ modifyDetailPickingQtyDialog({
                 if (basicUnit != commonUnits)
                   Row(
                     children: [
-                      Text('wait_picking_material_order_dialog_picking_qty'.tr),
+                      Text('picking_material_order_dialog_picking_qty'.tr),
                       Expanded(
                         child: NumberDecimalEditText(
                           controller: commonController,
@@ -141,8 +141,8 @@ batchAndColorSystemDialog({
         return AlertDialog(
           title: Text(
             isShowBatch
-                ? 'wait_picking_material_order_dialog_title_instruction_detail'.tr
-                : 'wait_picking_material_order_dialog_title_color_detail'.tr,
+                ? 'picking_material_order_dialog_title_instruction_detail'.tr
+                : 'picking_material_order_dialog_title_color_detail'.tr,
           ),
           content: SizedBox(
             width: 300,
@@ -166,13 +166,13 @@ batchAndColorSystemDialog({
                     children: [
                       CheckBox(
                         onChanged: (c) => dialogSetState(() => isShowBatch = c),
-                        name: 'wait_picking_material_order_dialog_instruction'.tr,
+                        name: 'picking_material_order_dialog_instruction'.tr,
                         value: isShowBatch,
                       ),
                       CheckBox(
                         onChanged: (c) =>
                             dialogSetState(() => isShowBatch = !c),
-                        name: 'wait_picking_material_order_dialog_color_system'.tr,
+                        name: 'picking_material_order_dialog_color_system'.tr,
                         value: !isShowBatch,
                       )
                     ],
@@ -257,7 +257,7 @@ realTimeInventoryDialog({
       child: StatefulBuilder(builder: (context, dialogSetState) {
         return AlertDialog(
           title: Text(
-              'wait_picking_material_order_dialog_title_real_time_inventory'.tr),
+              'picking_material_order_dialog_title_real_time_inventory'.tr),
           content: SizedBox(
             width: MediaQuery.of(context).size.width * 0.7,
             height: MediaQuery.of(context).size.height * 0.7,
@@ -283,31 +283,31 @@ realTimeInventoryDialog({
                     children: [
                       Expanded(
                         child: Text(
-                          'wait_picking_material_order_dialog_warehouse'.tr,
+                          'picking_material_order_dialog_warehouse'.tr,
                           style: titleTextStyle,
                         ),
                       ),
                       Expanded(
                         child: Text(
-                          'wait_picking_material_order_dialog_qty'.tr,
+                          'picking_material_order_dialog_qty'.tr,
                           style: titleTextStyle,
                         ),
                       ),
                       Expanded(
                         child: Text(
-                          'wait_picking_material_order_dialog_batch'.tr,
+                          'picking_material_order_dialog_batch'.tr,
                           style: titleTextStyle,
                         ),
                       ),
                       Expanded(
                         child: Text(
-                          'wait_picking_material_order_dialog_sales_order'.tr,
+                          'picking_material_order_dialog_sales_order'.tr,
                           style: titleTextStyle,
                         ),
                       ),
                       Expanded(
                         child: Text(
-                          'wait_picking_material_order_dialog_line_number'.tr,
+                          'picking_material_order_dialog_line_number'.tr,
                           style: titleTextStyle,
                         ),
                       ),
@@ -402,7 +402,7 @@ checkPickerDialog({required Function(WorkerInfo) confirm}) {
       canPop: false,
       child: StatefulBuilder(builder: (context, dialogSetState) {
         return AlertDialog(
-          title: Text('wait_picking_material_order_dialog_title_picker_check'.tr),
+          title: Text('picking_material_order_dialog_title_picker_check'.tr),
           content: SizedBox(
             width: 200,
             height: 240,
@@ -424,7 +424,7 @@ checkPickerDialog({required Function(WorkerInfo) confirm}) {
                       ),
                     ),
                     WorkerCheck(
-                      hint: 'wait_picking_material_order_dialog_picker_number'.tr,
+                      hint: 'picking_material_order_dialog_picker_number'.tr,
                       onChanged: (w) {
                         worker = w;
                         avatar.value = w?.picUrl ?? '';
@@ -439,14 +439,14 @@ checkPickerDialog({required Function(WorkerInfo) confirm}) {
               onPressed: () {
                 if (worker == null) {
                   showSnackBar(
-                    message: 'wait_picking_material_order_dialog_number_error'.tr,
+                    message: 'picking_material_order_dialog_number_error'.tr,
                     isWarning: true,
                   );
                 } else {
                   if (worker!.picUrl == null || worker!.picUrl!.isEmpty) {
                     informationDialog(
                       content:
-                          'wait_picking_material_order_dialog_picker_avatar_not_upload_tips'
+                          'picking_material_order_dialog_picker_avatar_not_upload_tips'
                               .tr,
                     );
                   } else {
@@ -528,7 +528,7 @@ modifyLocationDialog({
       canPop: false,
       child: StatefulBuilder(builder: (context, dialogSetState) {
         return AlertDialog(
-          title: Text('wait_picking_material_order_dialog_title_modify_location'.tr),
+          title: Text('picking_material_order_dialog_title_modify_location'.tr),
           content: SizedBox(
             width: 400,
             height: 300,
@@ -544,7 +544,7 @@ modifyLocationDialog({
                   success: () {
                     successDialog(
                       content:
-                          'wait_picking_material_order_dialog_modify_success'.tr,
+                          'picking_material_order_dialog_modify_success'.tr,
                       back: () {
                         Get.back();
                         back.call();
@@ -579,7 +579,7 @@ _modifyLocation({
   required Function(String) error,
 }) {
   sapPost(
-    loading: 'wait_picking_material_order_dialog_submitting_picking'.tr,
+    loading: 'picking_material_order_dialog_submitting_picking'.tr,
     method: webApiSapModifyLocation,
     body: {
       'GT_REQITEMS': [

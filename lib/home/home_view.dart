@@ -109,13 +109,14 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      getVersionInfo(
-        false,
-        noUpdate: () => logic.refreshFunList(),
-        needUpdate: (v) =>
-            doUpdate(version: v, ignore: () => logic.refreshFunList()),
-        error: (msg) => errorDialog(content: msg),
-      );
+      getVersionInfo(false,
+          noUpdate: () => logic.refreshFunList(),
+          needUpdate: (v) =>
+              doUpdate(version: v, ignore: () => logic.refreshFunList()),
+          error: (msg) {
+            errorDialog(content: msg);
+            state.isLoading.value = false;
+          });
     });
   }
 

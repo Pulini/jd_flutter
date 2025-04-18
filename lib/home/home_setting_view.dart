@@ -189,7 +189,7 @@ class _UserSettingState extends State<UserSetting> {
         //选择器主体
         Expanded(
           child: getCupertinoPicker(
-            items:list.map((data) {
+            items: list.map((data) {
               return Center(child: Text(data.name!));
             }).toList(),
             controller: controller,
@@ -259,43 +259,52 @@ class _UserSettingState extends State<UserSetting> {
         title: Text('change_password_dialog_title'.tr),
         content: SizedBox(
           height: 150,
-          child: Column(
+          width: 200,
+          child: ListView(
             children: [
-              TextField(
-                controller: oldPassword,
-                style: const TextStyle(color: Colors.grey),
-                decoration: InputDecoration(
-                  hintText: 'change_password_dialog_old_password'.tr,
-                  hintStyle: const TextStyle(color: Colors.grey),
-                  counterStyle: const TextStyle(color: Colors.grey),
-                  prefixIcon:
-                      const Icon(Icons.lock_outline, color: Colors.grey),
-                  suffixIcon: IconButton(
-                    icon: const Icon(Icons.close, color: Colors.grey),
-                    onPressed: () {
-                      oldPassword.clear();
-                    },
+              SizedBox(
+                height: 50,
+                width: 200,
+                child: TextField(
+                  controller: oldPassword,
+                  style: const TextStyle(color: Colors.grey),
+                  decoration: InputDecoration(
+                    hintText: 'change_password_dialog_old_password'.tr,
+                    hintStyle: const TextStyle(color: Colors.grey),
+                    counterStyle: const TextStyle(color: Colors.grey),
+                    prefixIcon:
+                        const Icon(Icons.lock_outline, color: Colors.grey),
+                    suffixIcon: IconButton(
+                      icon: const Icon(Icons.close, color: Colors.grey),
+                      onPressed: () {
+                        oldPassword.clear();
+                      },
+                    ),
                   ),
+                  maxLength: 10,
                 ),
-                maxLength: 10,
               ),
-              TextField(
-                controller: newPassword,
-                style: const TextStyle(color: Colors.grey),
-                decoration: InputDecoration(
-                  hintText: 'change_password_dialog_new_password'.tr,
-                  hintStyle: const TextStyle(color: Colors.grey),
-                  counterStyle: const TextStyle(color: Colors.grey),
-                  prefixIcon:
-                      const Icon(Icons.lock_outline, color: Colors.grey),
-                  suffixIcon: IconButton(
-                    icon: const Icon(Icons.close, color: Colors.grey),
-                    onPressed: () {
-                      newPassword.clear();
-                    },
+              SizedBox(
+                height: 50,
+                width: 200,
+                child: TextField(
+                  controller: newPassword,
+                  style: const TextStyle(color: Colors.grey),
+                  decoration: InputDecoration(
+                    hintText: 'change_password_dialog_new_password'.tr,
+                    hintStyle: const TextStyle(color: Colors.grey),
+                    counterStyle: const TextStyle(color: Colors.grey),
+                    prefixIcon:
+                        const Icon(Icons.lock_outline, color: Colors.grey),
+                    suffixIcon: IconButton(
+                      icon: const Icon(Icons.close, color: Colors.grey),
+                      onPressed: () {
+                        newPassword.clear();
+                      },
+                    ),
                   ),
+                  maxLength: 10,
                 ),
-                maxLength: 10,
               ),
             ],
           ),
@@ -351,8 +360,8 @@ class _UserSettingState extends State<UserSetting> {
                       message: 'is_already_latest_version'.tr,
                     );
                   },
-                  needUpdate: (v)=>doUpdate(version: v),
-                  error: (msg)=>  errorDialog(content: msg),
+                  needUpdate: (v) => doUpdate(version: v),
+                  error: (msg) => errorDialog(content: msg),
                 );
               }
             },
@@ -382,6 +391,8 @@ class _UserSettingState extends State<UserSetting> {
                   borderRadius: BorderRadius.circular(25))),
           onPressed: () {
             spSave(spSaveUserInfo, '');
+            spSave(spSaveFeishuUserWikiTokenData, '');
+            spSave(spSaveFeishuUserCloudDocTokenData, '');
             Get.offAll(() => const LoginPage());
           },
           child: Text('home_user_setting_logout'.tr,

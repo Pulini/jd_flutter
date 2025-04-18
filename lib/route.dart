@@ -3,6 +3,7 @@ import 'package:jd_flutter/fun/dispatching/injection_scan_report/Injection_scan_
 import 'package:jd_flutter/fun/maintenance/sap_ink_color_matching/sap_ink_color_matching_view.dart';
 import 'package:jd_flutter/fun/other/hydroelectric_excess/hydroelectric_excess_view.dart';
 import 'package:jd_flutter/fun/reporting_work/part_process_scan/part_process_scan_view.dart';
+import 'package:jd_flutter/fun/warehouse/in/delivery_order/delivery_order_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/incoming_inspection/incoming_inspection_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/production_scan_warehouse/production_scan_warehouse_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/sap_picking_receipt_reversal/sap_picking_receipt_reversal_view.dart';
@@ -482,6 +483,7 @@ class RouteConfig {
     99,
     const SapCountingInventoryPage(),
   );
+
   //报工交接确认列表
   static Routes handoverReportList = Routes(
     '/handover_report_list',
@@ -496,6 +498,12 @@ class RouteConfig {
     const ProcessReportPage(),
   );
 
+  //送货单列表
+  static Routes deliveryOrder = Routes(
+    '/delivery_order',
+    99,
+    const DeliveryOrderPage(),
+  );
 
   //本地功能入口列表
   static List<Routes> routeList = [
@@ -559,7 +567,8 @@ class RouteConfig {
     sapCountingInventory,
     injectionScanReport,
     handoverReportList,
-    processReport
+    processReport,
+    deliveryOrder,
   ];
 
   static List<GetPage> appRoutes = [
@@ -819,6 +828,10 @@ class RouteConfig {
     GetPage(
       name: processReport.name,
       page: () => processReport.page,
+    ),
+    GetPage(
+      name: deliveryOrder.name,
+      page: () => deliveryOrder.page,
     ),
   ];
 }

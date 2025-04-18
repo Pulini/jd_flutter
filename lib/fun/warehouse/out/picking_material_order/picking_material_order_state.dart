@@ -122,10 +122,52 @@ class PickingMaterialOrderState {
           for (var material in order.materialList!)
             for (var item in material.lineList!)
               {
-                'BDMNG_BH': item.preparedMaterialsQty.toShowString(),
+                'BDMNG_BH': item.preparingMaterialsQty.toShowString(),
                 'WOFNR': order.orderNumber,
                 'WOLNR': item.lineNo
               }
+        ],
+      },
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        success.call(response.message ?? '');
+      } else {
+        error.call(response.message ?? 'query_default_error'.tr);
+      }
+    });
+  }
+
+  uploadOutTicket({
+    required bool isCreate,
+    required String orderNumber,
+    required List<PickingMaterialOrderMaterialInfo> materialLines,
+    required Function(String) success,
+    required Function(String) error,
+  }) {
+    var hasOut = <PickingMaterialOrderMaterialDetailLineInfo>[];
+    var noOut = <PickingMaterialOrderMaterialDetailLineInfo>[];
+    for (var material in materialLines) {
+      for (var item in material.lineList!) {
+        if (item.hasOutTicket?.isNotEmpty == true) {
+          hasOut.add(item);
+        } else {
+          noOut.add(item);
+        }
+      }
+    }
+
+    sapPost(
+      loading: isCreate ? '正在生成出门单' : '正在撤销出门单',
+      method: webApiSapCreateOutTicket,
+      body: {
+        'GT_REQITEMS': [
+          for (var item in isCreate ? noOut : hasOut)
+            {
+              'UNAME': userInfo?.number,
+              'ZOAOUTDOORDEL': isCreate ? '' : 'X',
+              'WOFNR': orderNumber,
+              'WOLNR': item.lineNo
+            }
         ],
       },
     ).then((response) {

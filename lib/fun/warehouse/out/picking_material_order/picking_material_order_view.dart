@@ -65,13 +65,33 @@ class _PickingMaterialOrderPageState extends State<PickingMaterialOrderPage> {
     );
   }
 
+
   Widget _item(int index) {
     var data = state.orderList[index];
     var printButton = CombinationButton(
       text: 'picking_material_order_print_material'.tr,
+      combination: Combination.left,
+      click: () => logic.printMaterialList(data.orderNumber ?? ''),
+    );
+    var outTicketStatus = data.outTicketStatus();
+    var createOutTicketButton = CombinationButton(
+      text: 'picking_material_order_create_out'.tr,
       combination:
-          data.pickedStatus() == 1 ? Combination.intact : Combination.left,
-      click: () =>logic.printMaterialList(data.orderNumber??''),
+          outTicketStatus != 0 ? Combination.middle : Combination.right,
+      click: () => logic.uploadOutTicket(
+        isCreate: true,
+        data: data,
+        refresh: () => _query(),
+      ),
+    );
+    var reverseOutTicketButton = CombinationButton(
+      text: 'picking_material_order_reverse_out'.tr,
+      combination: Combination.right,
+      click: () => logic.uploadOutTicket(
+        isCreate: false,
+        data: data,
+        refresh: () => _query(),
+      ),
     );
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
@@ -89,7 +109,9 @@ class _PickingMaterialOrderPageState extends State<PickingMaterialOrderPage> {
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
-        title: textSpan(hint: 'picking_material_order_picking_number'.tr, text: data.orderNumber ?? ''),
+        title: textSpan(
+            hint: 'picking_material_order_picking_number'.tr,
+            text: data.orderNumber ?? ''),
         subtitle: Row(
           children: [
             expandedTextSpan(
@@ -106,33 +128,32 @@ class _PickingMaterialOrderPageState extends State<PickingMaterialOrderPage> {
               textColor: Colors.black54,
               isBold: false,
             ),
-            Expanded(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    data.colorFlg == 'X' ? 'picking_material_order_have_color_system'.tr : 'picking_material_order_not_have_color_system'.tr,
-                    style: TextStyle(
-                      color: data.colorFlg == 'X'
-                          ? Colors.green.shade700
-                          : Colors.red.shade700,
-                    ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const SizedBox(width: 10),
+                Text(
+                  data.preparedMaterialsStatusText(),
+                  style: TextStyle(
+                    color: data.preparedMaterialsStatusColor(),
                   ),
-                  Text(
-                    data.preparedMaterialsStatusText(),
-                    style: TextStyle(
-                      color: data.preparedMaterialsStatusColor(),
-                    ),
+                ),
+                const SizedBox(width: 10),
+                Text(
+                  data.pickedStatusText(),
+                  style: TextStyle(
+                    color: data.pickedStatusColor(),
                   ),
-                  Text(
-                    data.pickedStatusText(),
-                    style: TextStyle(
-                      color: data.pickedStatusColor(),
-                    ),
+                ),
+                const SizedBox(width: 10),
+                Text(
+                  data.colorSystemStatusText(),
+                  style: TextStyle(
+                    color: data.colorSystemStatusColor(),
                   ),
-                ],
-              ),
-            ),
+                ),
+              ],
+            )
           ],
         ),
         children: [
@@ -141,7 +162,7 @@ class _PickingMaterialOrderPageState extends State<PickingMaterialOrderPage> {
             child: Row(
               children: [
                 expandedFrameText(
-                  flex: 7,
+                  flex: 12,
                   text: 'picking_material_order_material'.tr,
                   alignment: Alignment.center,
                   backgroundColor: Colors.blue.shade300,
@@ -149,7 +170,7 @@ class _PickingMaterialOrderPageState extends State<PickingMaterialOrderPage> {
                   borderColor: Colors.black54,
                 ),
                 expandedFrameText(
-                  flex: 3,
+                  flex: 5,
                   text: 'picking_material_order_instruction'.tr,
                   alignment: Alignment.center,
                   backgroundColor: Colors.blue.shade300,
@@ -157,7 +178,7 @@ class _PickingMaterialOrderPageState extends State<PickingMaterialOrderPage> {
                   borderColor: Colors.black54,
                 ),
                 expandedFrameText(
-                  flex: 3,
+                  flex: 5,
                   text: 'picking_material_order_demand_qty'.tr,
                   alignment: Alignment.center,
                   backgroundColor: Colors.blue.shade300,
@@ -165,7 +186,26 @@ class _PickingMaterialOrderPageState extends State<PickingMaterialOrderPage> {
                   borderColor: Colors.black54,
                 ),
                 expandedFrameText(
+                  flex: 2,
                   text: 'picking_material_order_picking_status'.tr,
+                  padding: const EdgeInsets.all(0),
+                  alignment: Alignment.center,
+                  backgroundColor: Colors.blue.shade300,
+                  textColor: Colors.white,
+                  borderColor: Colors.black54,
+                ),
+                expandedFrameText(
+                  flex: 2,
+                  text: 'picking_material_order_color_info'.tr,
+                  padding: const EdgeInsets.all(0),
+                  alignment: Alignment.center,
+                  backgroundColor: Colors.blue.shade300,
+                  textColor: Colors.white,
+                  borderColor: Colors.black54,
+                ),
+                expandedFrameText(
+                  flex: 3,
+                  text: 'picking_material_order_out_ticket'.tr,
                   alignment: Alignment.center,
                   backgroundColor: Colors.blue.shade300,
                   textColor: Colors.white,
@@ -176,13 +216,19 @@ class _PickingMaterialOrderPageState extends State<PickingMaterialOrderPage> {
           ),
           for (var sub in data.materialList ?? []) _subItem(sub),
           data.pickedStatus() == 1
-              ? printButton
+              ? Row(children: [
+                  printButton,
+                  if (outTicketStatus != 1) createOutTicketButton,
+                  if (outTicketStatus != 0) reverseOutTicketButton,
+                ])
               : Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     printButton,
                     CombinationButton(
-                      text: 'picking_material_order_report_preparing_materials_info'.tr,
+                      text:
+                          'picking_material_order_report_preparing_materials_info'
+                              .tr,
                       combination: Combination.middle,
                       click: () => Get.to(
                         () => const PickingMaterialOrderProgressPage(),
@@ -193,7 +239,7 @@ class _PickingMaterialOrderPageState extends State<PickingMaterialOrderPage> {
                     ),
                     CombinationButton(
                       text: 'picking_material_order_posting'.tr,
-                      combination: Combination.right,
+                      combination: Combination.middle,
                       click: () => Get.to(
                         () => const PickingMaterialOrderPostingPage(),
                         arguments: {'index': index},
@@ -201,6 +247,8 @@ class _PickingMaterialOrderPageState extends State<PickingMaterialOrderPage> {
                         if (v != null && v == true) _query();
                       }),
                     ),
+                    if (outTicketStatus != 1) createOutTicketButton,
+                    if (outTicketStatus != 0) reverseOutTicketButton,
                   ],
                 )
         ],
@@ -214,24 +262,25 @@ class _PickingMaterialOrderPageState extends State<PickingMaterialOrderPage> {
       child: Row(
         children: [
           expandedFrameText(
-            flex: 7,
+            flex: 12,
             text: data.getMaterial(),
             borderColor: Colors.black54,
           ),
           expandedFrameText(
-            flex: 3,
+            flex: 5,
             text: data.instructionNo ?? '',
             borderColor: Colors.black54,
           ),
           expandedFrameText(
-            flex: 3,
+            flex: 5,
             text: data.isOnlyOneUnit()
                 ? data.getBasicDemandQtyText()
-                : '${data.getBasicDemandQtyText()}/${data.getCommonDemandQtyText()}',
+                : '${data.getBasicDemandQtyText()} / ${data.getCommonDemandQtyText()}',
             alignment: Alignment.centerRight,
             borderColor: Colors.black54,
           ),
           expandedFrameText(
+            flex: 2,
             text: data.pickedStatusText(),
             alignment: Alignment.center,
             textColor: data.pickedStatus() == 0
@@ -240,6 +289,25 @@ class _PickingMaterialOrderPageState extends State<PickingMaterialOrderPage> {
                     ? Colors.green.shade700
                     : Colors.orange.shade700,
             borderColor: Colors.black54,
+          ),
+          expandedFrameText(
+            flex: 2,
+            text: data.colorFlg == 'X'
+                ? 'picking_material_order_have_color_system'.tr
+                : 'picking_material_order_not_have_color_system'.tr,
+            alignment: Alignment.center,
+            textColor: data.colorFlg == 'X'
+                ? Colors.green.shade700
+                : Colors.red.shade700,
+            borderColor: Colors.black54,
+          ),
+          expandedFrameText(
+            flex: 3,
+            text: data.outTicketStatusText(),
+            alignment: Alignment.center,
+            textColor: data.outTicketStatusColor(),
+            borderColor: Colors.black54,
+            padding: const EdgeInsets.all(0),
           ),
         ],
       ),
