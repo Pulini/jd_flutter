@@ -10,8 +10,11 @@ import 'package:jd_flutter/fun/warehouse/in/production_scan_warehouse/production
 import 'package:jd_flutter/fun/warehouse/in/sap_picking_receipt_reversal/sap_picking_receipt_reversal_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/sap_put_on_shelves/sap_put_on_shelves_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/suppliers_scan_store/suppliers_scan_store_view.dart';
+import 'package:jd_flutter/fun/warehouse/manage/sap_factory_inventory/sap_counting_inventory_view.dart';
+import 'package:jd_flutter/fun/warehouse/manage/sap_factory_inventory/sap_scan_code_inventory_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/sap_stock_transfer/sap_stock_transfer_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/sap_wms_reprint_labels/sap_wms_reprint_labels_view.dart';
+import 'package:jd_flutter/fun/warehouse/out/picking_material_order/picking_material_order_view.dart';
 import 'package:jd_flutter/fun/warehouse/out/production_scan_picking_material/production_scan_picking_material_view.dart';
 import 'package:jd_flutter/fun/warehouse/out/sale_scan_out_warehouse/sale_scan_out_warehouse_view.dart';
 import 'package:jd_flutter/fun/warehouse/out/scan_picking_material/scan_picking_material_view.dart';
@@ -461,6 +464,26 @@ class RouteConfig {
     const WaitPickingMaterialPage(),
   );
 
+  //已配料列表
+  static Routes pickingMaterialOrder = Routes(
+    '/picking_material_order',
+    99,
+    const PickingMaterialOrderPage(),
+  );
+
+  //sap扫码盘点
+  static Routes sapScanCodeInventory = Routes(
+    '/sap_scan_code_inventory',
+    99,
+    const SapScanCodeInventoryPage(),
+  );
+
+  //sap计数盘点
+  static Routes sapCountingInventory = Routes(
+    '/sap_counting_inventory',
+    99,
+    const SapCountingInventoryPage(),
+  );
   //报工交接确认列表
   static Routes handoverReportList = Routes(
     '/handover_report_list',
@@ -480,6 +503,7 @@ class RouteConfig {
     99,
     const PartReportScanPage(),
   );
+
 
 
   //本地功能入口列表
@@ -539,6 +563,9 @@ class RouteConfig {
     saleScanOutWarehouse,
     productionScanPickingMaterial,
     waitPickingMaterial,
+    pickingMaterialOrder,
+    sapScanCodeInventory,
+    sapCountingInventory,
     injectionScanReport,
     handoverReportList,
     processReport,
@@ -774,6 +801,18 @@ class RouteConfig {
     GetPage(
       name: waitPickingMaterial.name,
       page: () => waitPickingMaterial.page,
+    ),
+    GetPage(
+      name: pickingMaterialOrder.name,
+      page: () => pickingMaterialOrder.page,
+    ),
+    GetPage(
+      name: sapScanCodeInventory.name,
+      page: () => sapScanCodeInventory.page,
+    ),
+    GetPage(
+      name: sapCountingInventory.name,
+      page: () => sapCountingInventory.page,
     ),
     GetPage(
       name: processReportWarehouse.name,

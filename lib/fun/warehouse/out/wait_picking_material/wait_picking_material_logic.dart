@@ -1,9 +1,7 @@
-import 'package:collection/collection.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/wait_picking_material_info.dart';
 import 'package:jd_flutter/fun/warehouse/out/wait_picking_material/wait_picking_material_detail_view.dart';
-import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/preview_a4paper_widget.dart';
 
@@ -36,38 +34,30 @@ class WaitPickingMaterialLogic extends GetxController {
     required String supplier,
     required String processFlow,
   }) {
-    debugPrint('typeBody=$typeBody'
-        'instruction=$instruction'
-        'materialCode=$materialCode'
-        'clientPurchaseOrder=$clientPurchaseOrder'
-        'purchaseVoucher=$purchaseVoucher'
-        'productionDemand=$productionDemand'
-        'pickerNumber=$pickerNumber'
-        'startDate=$startDate '
-        'endDate=$endDate '
-        'postingDate=$postingDate '
-        'factory=$factory '
-        'factoryWarehouse=$factoryWarehouse '
-        'workshopWarehouse=$workshopWarehouse '
-        'supplier=$supplier '
-        'processFlow=$processFlow');
-
     if (state.queryParamOrderType.value == 0 &&
         supplier == '' &&
         processFlow == '') {
-      informationDialog(content: '单据类型为所有，需要选择供应商或者制程');
+      informationDialog(
+          content:
+              'wait_picking_material_order_search_all_need_supplier_or_process'
+                  .tr);
       return;
     }
     if ((state.queryParamOrderType.value == 1 ||
             state.queryParamOrderType.value == 3) &&
         processFlow == '') {
-      informationDialog(content: '单据类型为正单或者不但，需要选择制程');
+      informationDialog(
+          content:
+              'wait_picking_material_order_search_not_outsource_need_process'
+                  .tr);
       return;
     }
     if ((state.queryParamOrderType.value == 2 ||
             state.queryParamOrderType.value == 4) &&
         supplier == '') {
-      informationDialog(content: '单据类型为委外，需要选择供应商');
+      informationDialog(
+          content:
+              'wait_picking_material_order_search_outsource_need_supplier'.tr);
       return;
     }
     state.queryPickingMaterialList(
@@ -190,8 +180,8 @@ class WaitPickingMaterialLogic extends GetxController {
   }
 
   checkPickingMaterial({
-    required Function() needCheck,
-    required Function() picking,
+    required Function() oneFaceCheck,
+    required Function() twoFaceCheck,
   }) {
     var list = <WaitPickingMaterialOrderInfo>[];
     var orderType = <String>[];
@@ -208,385 +198,62 @@ class WaitPickingMaterialLogic extends GetxController {
       }
     }
     if (list.isEmpty) {
-      informationDialog(content: '请选择要领取的物料');
+      informationDialog(content: 'wait_picking_material_order_not_select'.tr);
       return;
     }
     if (orderType.length > 1) {
-      informationDialog(content: '请选择相同单据类型的物料');
+      informationDialog(
+          content:
+              'wait_picking_material_order_selected_order_type_different'.tr);
       return;
     }
+
     if (orderType[0] == '1' || orderType[0] == '3') {
-      needCheck.call();
+      twoFaceCheck.call();
     } else {
-      picking.call();
+      oneFaceCheck.call();
     }
   }
 
   pickingMaterial({
+    required bool isMove,
+    required bool isPosting,
     String? pickerNumber,
     String? pickerBase64,
     String? userBase64,
-    required Function(List<WaitPickingMaterialOrderInfo>, String)
-        modifyLocation,
-    required Function(String) refresh,
+    required Function(
+      List<WaitPickingMaterialOrderInfo>,
+      String,
+      String,
+    ) modifyLocation,
+    required Function(String, String) refresh,
   }) {
     state.submitPickingMaterial(
-      isMove: false,
+      isMove: isMove,
+      isPosting: isPosting,
       pickerNumber: pickerNumber ?? '',
       pickerBase64: pickerBase64,
       userBase64: userBase64,
-      success: (msg) {
+      success: (msg, number) {
         var rList = state.orderList
             .where((v) => v.hasSelected() && v.location.isBlank == false)
             .toList();
         if (rList.isNotEmpty) {
-          modifyLocation.call(rList, msg);
+          modifyLocation.call(rList, msg, number);
         } else {
-          refresh.call(msg);
+          refresh.call(msg, number);
         }
       },
       error: (msg) => errorDialog(content: msg),
     );
   }
 
-  printMaterialList() {
-    Get.to(() => PreviewA4Paper(
-          paperWidgets: createA4Paper(
-            state.orderList.where((v) => v.hasSelected()).toList(),
-          ),
-        ));
-  }
-
-  Widget _tableSubTitle(String factoryName) => Container(
-        height: 29,
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.black, width: 0.5),
-        ),
-        padding: const EdgeInsets.only(left: 5, right: 5),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              '工厂：$factoryName',
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-                color: Colors.black,
-              ),
-            )
-          ],
-        ),
-      );
-
-  Widget _tableRowItem({
-    required int flex,
-    required String text,
-    required CrossAxisAlignment alignment,
-  }) {
-    return Expanded(
-      flex: flex,
-      child: Container(
-        height: double.infinity,
-        padding: const EdgeInsets.only(left: 5, right: 5),
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.black, width: 0.5),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: alignment,
-          children: [
-            Text(
-              text,
-              style: const TextStyle(
-                color: Colors.black,
-                fontSize: 16,
-              ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ],
-        ),
-      ),
+  printMaterialList(String orderNumber) {
+    state.getMaterialPrintInfo(
+      orderNumber: orderNumber,
+      success: (info) =>
+          Get.to(() => PreviewA4Paper(paperWidgets: createA4Paper(info))),
+      error: (msg) => errorDialog(content: msg),
     );
-  }
-
-  Widget _paperTableItem({
-    required Color backgroundColor,
-    required String? rawMaterialCode,
-    required String? rawMaterialDescription,
-    required String? colorSystem,
-    required String? pickingWarehouse,
-    required String? location,
-    required String? unit,
-    required String? picking,
-    required String? actual,
-  }) {
-    return Container(
-      height: 29,
-      color: backgroundColor,
-      child: Row(
-        children: [
-          _tableRowItem(
-            flex: 3,
-            text: rawMaterialCode ?? '',
-            alignment: CrossAxisAlignment.start,
-          ),
-          _tableRowItem(
-            flex: 15,
-            text: rawMaterialDescription ?? '',
-            alignment: CrossAxisAlignment.start,
-          ),
-          _tableRowItem(
-            flex: 3,
-            text: colorSystem ?? '',
-            alignment: CrossAxisAlignment.start,
-          ),
-          _tableRowItem(
-            flex: 1,
-            text: pickingWarehouse ?? '',
-            alignment: CrossAxisAlignment.start,
-          ),
-          _tableRowItem(
-            flex: 3,
-            text: location ?? '',
-            alignment: CrossAxisAlignment.start,
-          ),
-          _tableRowItem(
-            flex: 1,
-            text: unit ?? '',
-            alignment: CrossAxisAlignment.center,
-          ),
-          _tableRowItem(
-            flex: 2,
-            text: picking ?? '',
-            alignment: CrossAxisAlignment.end,
-          ),
-          _tableRowItem(
-            flex: 2,
-            text: actual ?? '',
-            alignment: CrossAxisAlignment.end,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _addPaper({
-    required List<Widget> item,
-    required int page,
-    required double paperWidth,
-    required double paperHeight,
-    required double paperPadding,
-    required double paperTitleHeight,
-    required double paperSubTitleHeight,
-    required double paperFooterHeight,
-    required int totalHeight,
-  }) {
-    double tableHeight = paperHeight -
-        paperTitleHeight -
-        paperSubTitleHeight -
-        paperFooterHeight -
-        paperPadding * 2;
-    return Container(
-      padding: EdgeInsets.all(paperPadding),
-      width: paperWidth,
-      height: paperHeight,
-      color: Colors.white,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          SizedBox(
-            height: paperTitleHeight,
-            child: Center(
-              child: Text(
-                '仓库备料单',
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-              ),
-            ),
-          ),
-          SizedBox(
-            height: paperSubTitleHeight,
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    '领料单号：',
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Text(
-                    '合同号：',
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Text(
-                    '供应商：',
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Container(
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.black, width: 0.5),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: item,
-            ),
-          ),
-          Expanded(child: Container()),
-          Container(
-            height: paperFooterHeight,
-            padding: const EdgeInsets.only(right: 5),
-            child: Row(
-              children: [
-                Text(
-                  '打印日期：${getDateYMD()} ${getTimeHms()}',
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 12,
-                  ),
-                  textAlign: TextAlign.end,
-                ),
-                const SizedBox(width: 50),
-                Text(
-                  '打印人：(${userInfo?.number})${userInfo?.name}',
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 12,
-                  ),
-                  textAlign: TextAlign.end,
-                ),
-                const Expanded(child: Center()),
-                Text(
-                  '页码：$page/${(totalHeight / tableHeight).ceil()}',
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                    fontSize: 12,
-                  ),
-                  textAlign: TextAlign.end,
-                )
-              ],
-            ),
-          )
-        ],
-      ),
-    );
-  }
-
-  List<Widget> createA4Paper(List<WaitPickingMaterialOrderInfo> list) {
-    var scale = 0.5;
-    double paperHeight = 2380 * scale;
-    double paperWidth = 3368 * scale;
-    var factoryList = <List<WaitPickingMaterialOrderInfo>>[];
-    groupBy(list, (v) => v.factoryNumber ?? '').forEach((k, v) {
-      factoryList.add(v);
-    });
-
-    var widgetList = <List<dynamic>>[];
-    for (var item1 in factoryList) {
-      widgetList.add([30, _tableSubTitle(item1[0].factoryName ?? '')]);
-      widgetList.add([
-        30,
-        _paperTableItem(
-          backgroundColor: Colors.grey.shade400,
-          rawMaterialCode: '物料编号',
-          rawMaterialDescription: '物料描述',
-          colorSystem: '色系',
-          pickingWarehouse: '仓库',
-          location: '库位',
-          unit: '单位',
-          picking: '应领料数量',
-          actual: '实际领料数量',
-        )
-      ]);
-      for (var i = 0; i < item1.length; ++i) {
-        widgetList.add([
-          30,
-          _paperTableItem(
-            backgroundColor: i % 2 == 0 ? Colors.white : Colors.grey.shade200,
-            rawMaterialCode: item1[i].rawMaterialCode,
-            rawMaterialDescription: item1[i].rawMaterialDescription,
-            colorSystem: item1[i].items![0].models![0].colorSystem,
-            pickingWarehouse: item1[i].pickingWarehouse,
-            location: item1[i].location,
-            unit: item1[i].getUnit(),
-            picking: item1[i].getPicking().toFixed(3).toShowString(),
-            actual: '',
-          )
-        ]);
-      }
-    }
-    double paperTitleHeight = 30;
-    double paperSubTitleHeight = 25;
-    double paperFooterHeight = 20;
-    double paperPadding = 20;
-    var page = 1;
-    var height = 0.0;
-    var paperList = <Widget>[];
-    var item = <Widget>[];
-    int totalHeight =
-        widgetList.map((v) => (v[0] as int)).reduce((a, b) => a + b);
-    double tableHeight = paperHeight -
-        paperTitleHeight -
-        paperSubTitleHeight -
-        paperFooterHeight -
-        paperPadding * 2;
-    for (var w in widgetList) {
-      if (height + w[0] <= tableHeight) {
-        height += w[0];
-        item.add(w[1]);
-        if (widgetList.last == w) {
-          paperList.add(_addPaper(
-            item: item,
-            page: page,
-            paperWidth: paperWidth,
-            paperHeight: paperHeight,
-            paperPadding: paperPadding,
-            paperTitleHeight: paperTitleHeight,
-            paperSubTitleHeight: paperSubTitleHeight,
-            paperFooterHeight: paperFooterHeight,
-            totalHeight: totalHeight,
-          ));
-          item = [];
-        }
-      } else {
-        height = 0.0;
-        item.add(w[1]);
-        paperList.add(_addPaper(
-          item: item,
-          page: page,
-          paperWidth: paperWidth,
-          paperHeight: paperHeight,
-          paperPadding: paperPadding,
-          paperTitleHeight: paperTitleHeight,
-          paperSubTitleHeight: paperSubTitleHeight,
-          paperFooterHeight: paperFooterHeight,
-          totalHeight: totalHeight,
-        ));
-        page += 1;
-        item = [];
-      }
-    }
-    return paperList;
   }
 }

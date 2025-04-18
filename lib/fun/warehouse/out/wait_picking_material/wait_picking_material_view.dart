@@ -40,32 +40,32 @@ class _WaitPickingMaterialPageState extends State<WaitPickingMaterialPage> {
   var dpcStartDate = DatePickerController(
     PickerType.startDate,
     saveKey: '${RouteConfig.waitPickingMaterial.name}${PickerType.startDate}',
-    buttonName: '开工日期',
+    buttonName: 'wait_picking_material_order_start_date'.tr,
   )..firstDate = DateTime(
       DateTime.now().year - 5, DateTime.now().month, DateTime.now().day);
 
   var dpcEndDate = DatePickerController(
     PickerType.endDate,
-    buttonName: '完工日期',
+    buttonName: 'wait_picking_material_order_end_date'.tr,
   );
 
   var dpcPostingDate = DatePickerController(
     PickerType.date,
-    buttonName: '过账日期',
+    buttonName: 'wait_picking_material_order_post_date'.tr,
   );
   var lopcFactoryWarehouse = LinkOptionsPickerController(
     hasAll: true,
     PickerType.sapFactoryWarehouse,
     saveKey:
         '${RouteConfig.waitPickingMaterial.name}${PickerType.sapFactoryWarehouse}-Factory',
-    buttonName: '工厂仓库',
+    buttonName: 'wait_picking_material_order_factory_warehouse'.tr,
   );
   var lopcWorkshopWarehouse = LinkOptionsPickerController(
     hasAll: true,
     PickerType.sapFactoryWarehouse,
     saveKey:
         '${RouteConfig.waitPickingMaterial.name}${PickerType.sapFactoryWarehouse}-Workshop',
-    buttonName: '车间仓库',
+    buttonName: 'wait_picking_material_order_workshop_warehouse'.tr,
   );
   var opcSupplier = OptionsPickerController(
     hasAll: true,
@@ -269,7 +269,7 @@ class _WaitPickingMaterialPageState extends State<WaitPickingMaterialPage> {
                     ),
             ),
             child: Text(
-              '修改勾选项',
+              'wait_picking_material_order_modify_selected'.tr,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: data.canBatchModify() ? Colors.blue : Colors.red,
@@ -300,7 +300,7 @@ class _WaitPickingMaterialPageState extends State<WaitPickingMaterialPage> {
               ),
             ),
             child: Text(
-              '查看批次',
+              'wait_picking_material_order_view_batch'.tr,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: data.canViewBatch() ? Colors.blue : Colors.red,
@@ -315,7 +315,7 @@ class _WaitPickingMaterialPageState extends State<WaitPickingMaterialPage> {
           children: [
             expandedTextSpan(
               flex: 3,
-              hint: '库位：',
+              hint: 'wait_picking_material_order_location'.tr,
               text: data.location ?? '',
             ),
             Expanded(
@@ -323,11 +323,20 @@ class _WaitPickingMaterialPageState extends State<WaitPickingMaterialPage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  _itemSubTitleFlag('配色', data.colorSeparationLogo == 'X'),
-                  _itemSubTitleFlag('批次', data.batchIdentification == 'X'),
-                  _itemSubTitleFlag('多领', data.multiCollarLogo == 'X'),
+                  _itemSubTitleFlag(
+                    'wait_picking_material_order_color'.tr,
+                    data.colorSeparationLogo == 'X',
+                  ),
+                  _itemSubTitleFlag(
+                    'wait_picking_material_order_batch'.tr,
+                    data.batchIdentification == 'X',
+                  ),
+                  _itemSubTitleFlag(
+                    'wait_picking_material_order_take_more'.tr,
+                    data.multiCollarLogo == 'X',
+                  ),
                   Obx(() => textSpan(
-                        hint: '线边库存：',
+                        hint: 'wait_picking_material_order_line_inventory'.tr,
                         text: data.getLineInventory().toFixed(3).toShowString(),
                         textColor: Colors.black54,
                       )),
@@ -342,7 +351,14 @@ class _WaitPickingMaterialPageState extends State<WaitPickingMaterialPage> {
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Obx(() => Text(
-                            '即时库存：${data.getRealTimeInventory().toFixed(3).toShowString()}',
+                            'wait_picking_material_order_real_time_inventory'.trArgs(
+                              [
+                                data
+                                    .getRealTimeInventory()
+                                    .toFixed(3)
+                                    .toShowString()
+                              ],
+                            ),
                             style: const TextStyle(
                               color: Colors.blue,
                               fontWeight: FontWeight.bold,
@@ -361,9 +377,8 @@ class _WaitPickingMaterialPageState extends State<WaitPickingMaterialPage> {
                           ),
                         )
                       : GestureDetector(
-                          onTap: () {
-                            data.isBaseUnit.value = !data.isBaseUnit.value;
-                          },
+                          onTap: () =>
+                              data.isBaseUnit.value = !data.isBaseUnit.value,
                           child: Container(
                             padding: textButtonPadding,
                             decoration: BoxDecoration(
@@ -410,23 +425,23 @@ class _WaitPickingMaterialPageState extends State<WaitPickingMaterialPage> {
               child: Obx(() => Row(
                     children: [
                       _itemSubTitle(
-                        title: '总数',
+                        title: 'wait_picking_material_order_total'.tr,
                         data: data.getTotal().toFixed(3).toShowString(),
                       ),
                       _itemSubTitle(
-                        title: '未下达数',
+                        title: 'wait_picking_material_order_not_dispatch'.tr,
                         data: data.getUnRelease().toFixed(3).toShowString(),
                       ),
                       _itemSubTitle(
-                        title: '已领',
+                        title: 'wait_picking_material_order_received_qty'.tr,
                         data: data.getReceived().toFixed(3).toShowString(),
                       ),
                       _itemSubTitle(
-                        title: '未领',
+                        title: 'wait_picking_material_order_unreceived_qty'.tr,
                         data: data.getUnreceived().toFixed(3).toShowString(),
                       ),
                       _itemSubTitle(
-                        title: '本次领料',
+                        title: 'wait_picking_material_order_picking_qty'.tr,
                         data: data.getPickingString(
                           lopcWorkshopWarehouse.getOptionsPicker2().pickerId(),
                         ),
@@ -505,14 +520,14 @@ class _WaitPickingMaterialPageState extends State<WaitPickingMaterialPage> {
                   const SizedBox(width: 20),
                   textSpan(
                     isBold: false,
-                    hint: '指令：',
+                    hint: 'wait_picking_material_order_instruction'.tr,
                     text: data.moNo ?? '',
                     textColor: Colors.blue.shade900,
                   ),
                   const SizedBox(width: 20),
                   expandedTextSpan(
                     isBold: false,
-                    hint: '部位：',
+                    hint: 'wait_picking_material_order_part'.tr,
                     maxLines: 2,
                     text: data.position ?? '',
                     textColor: Colors.blue.shade900,
@@ -584,48 +599,71 @@ class _WaitPickingMaterialPageState extends State<WaitPickingMaterialPage> {
     );
   }
 
-  _pickingMaterial() {
+  _pickingMaterial({required bool isMove, required bool isPosting}) {
     logic.checkPickingMaterial(
-      needCheck: () => checkPickerDialog(
-        confirm: (picker) => livenFaceVerification(
-          faceUrl: picker.picUrl ?? '',
-          verifySuccess: (pickerBase64) => livenFaceVerification(
-            faceUrl: userInfo?.picUrl ?? '',
-            verifySuccess: (userBase64) => _picking(
-              pickerNumber: picker.empCode ?? '',
-              pickerBase64: pickerBase64,
-              userBase64: userBase64,
-            ),
+      oneFaceCheck: () {
+        //委外
+        livenFaceVerification(
+          faceUrl: userInfo?.picUrl ?? '',
+          verifySuccess: (userBase64) => _picking(
+            isMove: isMove,
+            isPosting: isPosting,
+            userBase64: userBase64,
           ),
-        ),
-      ),
-      picking: () => _picking(),
+        );
+      },
+      twoFaceCheck: () {
+        //厂内
+        if (isPosting) {
+          checkPickerDialog(
+            confirm: (picker) => livenFaceVerification(
+              faceUrl: picker.picUrl ?? '',
+              verifySuccess: (pickerBase64) => livenFaceVerification(
+                faceUrl: userInfo?.picUrl ?? '',
+                verifySuccess: (userBase64) => _picking(
+                  isMove: isMove,
+                  isPosting: isPosting,
+                  pickerNumber: picker.empCode ?? '',
+                  pickerBase64: pickerBase64,
+                  userBase64: userBase64,
+                ),
+              ),
+            ),
+          );
+        } else {
+          errorDialog(content: 'wait_picking_material_order_error_tips'.tr);
+        }
+      },
     );
   }
 
   _picking({
+    required bool isMove,
+    required bool isPosting,
     String? pickerNumber,
     String? pickerBase64,
     String? userBase64,
   }) {
     logic.pickingMaterial(
+      isMove: isMove,
+      isPosting: isPosting,
       pickerNumber: pickerNumber,
       pickerBase64: pickerBase64,
       userBase64: userBase64,
-      refresh: (msg) => askDialog(
+      refresh: (msg, number) => askDialog(
         title: 'dialog_default_title_information'.tr,
         content: msg,
-        confirmText: '打印物料清单',
-        confirm: () => logic.printMaterialList(),
+        confirmText: 'wait_picking_material_order_print'.tr,
+        confirm: () => logic.printMaterialList(number),
         cancel: () => _query(),
       ),
-      modifyLocation: (rList, msg) {
+      modifyLocation: (rList, msg, number) {
         modifyLocationDialog(
           list: rList,
           back: () => askDialog(
             content: msg,
-            confirmText: '打印物料清单',
-            confirm: () => logic.printMaterialList(),
+            confirmText: 'wait_picking_material_order_print'.tr,
+            confirm: () => logic.printMaterialList(number),
             cancel: () => _query(),
           ),
         );
@@ -670,13 +708,13 @@ class _WaitPickingMaterialPageState extends State<WaitPickingMaterialPage> {
                   children: [
                     Expanded(
                       child: EditText(
-                        hint: '型体',
+                        hint: 'wait_picking_material_order_type_body'.tr,
                         controller: tecTypeBody,
                       ),
                     ),
                     Expanded(
                       child: EditText(
-                        hint: '指令(销售订单)',
+                        hint: 'wait_picking_material_order_sales_order_no'.tr,
                         controller: tecInstruction,
                       ),
                     ),
@@ -686,13 +724,13 @@ class _WaitPickingMaterialPageState extends State<WaitPickingMaterialPage> {
                   children: [
                     Expanded(
                       child: EditText(
-                        hint: '物料编码',
+                        hint: 'wait_picking_material_order_material_code'.tr,
                         controller: tecMaterialCode,
                       ),
                     ),
                     Expanded(
                       child: EditText(
-                        hint: '客户采购订单号',
+                        hint: 'wait_picking_material_order_customer_purchase_order_no'.tr,
                         controller: tecClientPurchaseOrder,
                       ),
                     ),
@@ -702,13 +740,13 @@ class _WaitPickingMaterialPageState extends State<WaitPickingMaterialPage> {
                   children: [
                     Expanded(
                       child: EditText(
-                        hint: '采购凭证',
+                        hint: 'wait_picking_material_order_purchasing_documents'.tr,
                         controller: tecPurchaseVoucher,
                       ),
                     ),
                     Expanded(
                       child: EditText(
-                        hint: '生产需求数量',
+                        hint: 'wait_picking_material_order_production_demand_qty'.tr,
                         controller: tecProductionDemand,
                       ),
                     ),
@@ -718,7 +756,7 @@ class _WaitPickingMaterialPageState extends State<WaitPickingMaterialPage> {
                   children: [
                     Expanded(
                       child: EditText(
-                          hint: '领料人工号',
+                          hint: 'wait_picking_material_order_picker_number'.tr,
                           controller: tecPickerNumber,
                           onChanged: (v) {
                             if (v.length >= 6) {
@@ -790,35 +828,35 @@ class _WaitPickingMaterialPageState extends State<WaitPickingMaterialPage> {
                       Obx(() => CheckBox(
                             onChanged: (v) =>
                                 state.queryParamOrderType.value = 0,
-                            name: '所有',
+                            name: 'wait_picking_material_order_all'.tr,
                             value: state.queryParamOrderType.value == 0,
                           )),
                       Obx(() => CheckBox(
                             onChanged: (v) => v
                                 ? state.queryParamOrderType.value = 1
                                 : state.queryParamOrderType.value = 0,
-                            name: '正单',
+                            name: 'wait_picking_material_order_positive_order'.tr,
                             value: state.queryParamOrderType.value == 1,
                           )),
                       Obx(() => CheckBox(
                             onChanged: (v) => v
                                 ? state.queryParamOrderType.value = 2
                                 : state.queryParamOrderType.value = 0,
-                            name: '正单委外',
+                            name: 'wait_picking_material_order_positive_order_outsource'.tr,
                             value: state.queryParamOrderType.value == 2,
                           )),
                       Obx(() => CheckBox(
                             onChanged: (v) => v
                                 ? state.queryParamOrderType.value = 3
                                 : state.queryParamOrderType.value = 0,
-                            name: '补单',
+                            name: 'wait_picking_material_order_supplement_order'.tr,
                             value: state.queryParamOrderType.value == 3,
                           )),
                       Obx(() => CheckBox(
                             onChanged: (v) => v
                                 ? state.queryParamOrderType.value = 4
                                 : state.queryParamOrderType.value = 0,
-                            name: '补单委外',
+                            name: 'wait_picking_material_order_supplement_order_outsource'.tr,
                             value: state.queryParamOrderType.value == 4,
                           )),
                     ],
@@ -831,25 +869,25 @@ class _WaitPickingMaterialPageState extends State<WaitPickingMaterialPage> {
                       Obx(() => CheckBox(
                             onChanged: (v) =>
                                 state.queryParamAllCanPick.value = v,
-                            name: '所有可领物料',
+                            name: 'wait_picking_material_order_all_can_pick_material'.tr,
                             value: state.queryParamAllCanPick.value,
                           )),
                       Obx(() => CheckBox(
                             onChanged: (v) =>
                                 state.queryParamShowNoInventory.value = v,
-                            name: '显示无库存',
+                            name: 'wait_picking_material_order_show_no_inventory'.tr,
                             value: state.queryParamShowNoInventory.value,
                           )),
                       Obx(() => CheckBox(
                             onChanged: (v) =>
                                 state.queryParamReceived.value = v,
-                            name: '显示已领物料',
+                            name: 'wait_picking_material_order_show_received'.tr,
                             value: state.queryParamReceived.value,
                           )),
                       Obx(() => CheckBox(
                             onChanged: (v) =>
                                 state.queryParamIsShowAll.value = v,
-                            name: '显示全部物料',
+                            name: 'wait_picking_material_order_show_all_material'.tr,
                             value: state.queryParamIsShowAll.value,
                           )),
                     ],
@@ -861,7 +899,7 @@ class _WaitPickingMaterialPageState extends State<WaitPickingMaterialPage> {
                     Expanded(
                       child: CombinationButton(
                         combination: Combination.left,
-                        text: '清空条件',
+                        text: 'wait_picking_material_order_clear'.tr,
                         click: () => _clearQueryParam(),
                       ),
                     ),
@@ -888,7 +926,7 @@ class _WaitPickingMaterialPageState extends State<WaitPickingMaterialPage> {
             if (scaffoldKey.currentState?.isEndDrawerOpen == true) {
               scaffoldKey.currentState?.closeEndDrawer();
             } else {
-              if (!didPop) exitDialog(content: '确定要推出本次领料吗？');
+              if (!didPop) exitDialog(content: 'wait_picking_material_order_exit_tips'.tr);
             }
           },
           child: Column(
@@ -905,15 +943,31 @@ class _WaitPickingMaterialPageState extends State<WaitPickingMaterialPage> {
                   Expanded(
                     child: CombinationButton(
                       combination: Combination.left,
-                      text: '移库发货',
-                      click: () {logic.printMaterialList();},
+                      text: 'wait_picking_material_order_move_deliver'.tr,
+                      click: () => _pickingMaterial(
+                        isMove: true,
+                        isPosting: true,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: CombinationButton(
+                      combination: Combination.middle,
+                      text: 'wait_picking_material_order_preparing_materials'.tr,
+                      click: () => _pickingMaterial(
+                        isMove: false,
+                        isPosting: false,
+                      ),
                     ),
                   ),
                   Expanded(
                     child: CombinationButton(
                       combination: Combination.right,
-                      text: '领料',
-                      click: _pickingMaterial,
+                      text: 'wait_picking_material_order_picking_posting'.tr,
+                      click: () => _pickingMaterial(
+                        isMove: false,
+                        isPosting: true,
+                      ),
                     ),
                   ),
                 ],

@@ -531,6 +531,18 @@ fun base64ToBitmap(base64Data: String): Bitmap {
     return BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
 }
 
+fun bitmapToByteArray(bitmap: Bitmap, format: Bitmap.CompressFormat, quality: Int = 100): ByteArray? {
+    val byteArrayOutputStream = ByteArrayOutputStream()
+    try {
+        bitmap.compress(format, quality, byteArrayOutputStream)
+        return byteArrayOutputStream(byteArrayOutputStream).toByteArray()
+    } catch (e: Exception) {
+        e.printStackTrace()
+        return null
+    } finally {
+        byteArrayOutputStream.close()
+    }
+}
 
 fun Activity.display() = DisplayMetrics().apply {
     windowManager.defaultDisplay.getMetrics(this)
@@ -686,6 +698,9 @@ private fun getFileMIME(file: File): String {
     Log.e("Pan","我定义的MIME类型为：$type")
     return type
 }
+
+private fun byteArrayOutputStream(byteArrayOutputStream: ByteArrayOutputStream) =
+    byteArrayOutputStream
 
 /**
  * 合并ByteArray

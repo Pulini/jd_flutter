@@ -8,6 +8,7 @@
     <string name="liven_detection_retry">重试</string>
     <string name="liven_detection_liven_fail">活体验证失败</string>
     <string name="liven_detection_liven_error">活体验证失败:&#12288;%1$d</string>
+    <string name="liven_detection_similarity">对比相似度:&#12288;%1$s</string>
     <string name="liven_detection_face_verification_successful">人脸验证成功</string>
     <string name="liven_detection_living_verification_successful">活体验证成功</string>
     <string name="liven_detection_photo_not_me">照片与本人不符</string>

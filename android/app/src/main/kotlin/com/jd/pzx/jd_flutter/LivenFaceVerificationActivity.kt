@@ -12,6 +12,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.core.view.postDelayed
 import com.huawei.hms.mlsdk.common.MLFrame
 import com.huawei.hms.mlsdk.faceverify.MLFaceVerificationAnalyzerFactory
@@ -85,6 +86,9 @@ class LivenFaceVerificationActivity : Activity() {
     //人事档案人脸照片
     private val image: ImageView by lazy { findViewById(R.id.image) }
 
+    //照片对比相似度
+    private val tvSimilarity: TextView by lazy { findViewById(R.id.tv_similarity) }
+
     //人事档案人脸bitmap
     private var imageBitmap: Bitmap? = null
 
@@ -126,7 +130,7 @@ class LivenFaceVerificationActivity : Activity() {
                     }
                 }.onResume()
             } else {
-                imageBitmap = BitmapFactory.decodeStream(FileInputStream(getString("image")))
+                imageBitmap = BitmapFactory.decodeFile(getString("image"))
                 //设置人事档案照片到界面上
                 image.setImageBitmap(imageBitmap)
                 //设置活体验证
@@ -220,19 +224,27 @@ class LivenFaceVerificationActivity : Activity() {
 
             analyzer.asyncAnalyseFrame(face2)
                 .addOnSuccessListener { mlCompareList ->
-                    if (mlCompareList[0].similarity > 0.75) {
-                        callback.invoke(FACE_VERIFY_SUCCESS, faceBitmap!!)
-                        TipsDialog(this@LivenFaceVerificationActivity).show(
-                            R.string.liven_detection_face_verification_successful
-                        ) {
-                            callback.invoke(FACE_VERIFY_SUCCESS, faceBitmap!!)
-                            finish()
+                    if (mlCompareList.isNotEmpty()) {
+                        mlCompareList[0]?.run {
+                            tvSimilarity.text = String.format(
+                                getString(R.string.liven_detection_similarity),
+                                "${similarity * 100} %"
+                            )
+                            if (similarity > 0.75) {
+                                TipsDialog(this@LivenFaceVerificationActivity).show(
+                                    getString(
+                                        R.string.liven_detection_face_verification_successful
+                                    )
+                                ) {
+                                    callback.invoke(FACE_VERIFY_SUCCESS, faceBitmap!!)
+                                    finish()
+                                }
+                            } else {
+                                errorCode= FACE_VERIFY_FAIL_NOT_ME
+                                showFailDialog(getString(R.string.liven_detection_photo_not_me))
+                            }
                         }
-                    } else {
-                        errorCode= FACE_VERIFY_FAIL_NOT_ME
-                        showFailDialog(getString(R.string.liven_detection_photo_not_me))
                     }
-                    finish()
                 }.addOnFailureListener {
                     Log.e("Pan", it.toString())
                     errorCode= FACE_VERIFY_FAIL_NOT_ME

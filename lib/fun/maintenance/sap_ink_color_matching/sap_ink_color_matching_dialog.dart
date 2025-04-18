@@ -395,12 +395,12 @@ _submitTrialFinish({
     loading: 'sap_ink_color_matching_dialog_submitting_trial'.tr,
     method: webApiSapSubmitTrialFinish,
     body: {
-      "WOFNR": orderNumber,
-      "MENGE": trialQty,
-      "ZMIXNTGEW_AFT": mixWeight,
-      "AUSCH": lossPercent,
-      "ZMENG1": standardDosage,
-      "ZMENG2": actualDosage
+      'WOFNR': orderNumber,
+      'MENGE': trialQty,
+      'ZMIXNTGEW_AFT': mixWeight,
+      'AUSCH': lossPercent,
+      'ZMENG1': standardDosage,
+      'ZMENG2': actualDosage
     },
   ).then((response) {
     if (response.resultCode == resultSuccess) {

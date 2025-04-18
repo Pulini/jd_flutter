@@ -19,7 +19,7 @@ class SaleScanOutWarehouseLogic extends GetxController {
           state.barCodeList.clear();
         } else {
           showSnackBar(
-            message: '本地数据库贴标删除失败',
+            message: 'sale_scan_out_warehouse_data_delete_fail'.tr,
             isWarning: true,
           );
         }
@@ -30,7 +30,7 @@ class SaleScanOutWarehouseLogic extends GetxController {
   scanCode(String code) {
     if (state.barCodeList.any((v) => v.code == code)) {
       showSnackBar(
-        message: '条码已存在',
+        message: 'sale_scan_out_warehouse_code_exists'.tr,
         isWarning: true,
       );
     } else {
@@ -49,7 +49,7 @@ class SaleScanOutWarehouseLogic extends GetxController {
 
   submit({required WorkerInfo worker}) {
     if (state.barCodeList.every((v) => v.isUsed)) {
-      errorDialog(content: '无条码可提交');
+      errorDialog(content: 'sale_scan_out_warehouse_no_code_submit'.tr);
     } else {
       getWaitInStockBarCodeReport(
         barCodeList: state.barCodeList.where((v) => !v.isUsed).toList(),

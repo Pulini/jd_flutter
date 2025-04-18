@@ -24,6 +24,7 @@
         android:layout_width="500dp"
         android:layout_height="700dp"
         android:layout_centerInParent="true"
+        android:contentDescription="@string/app_name"
         android:scaleType="fitXY"
         android:src="@drawable/liven_detection_frame"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -34,7 +35,7 @@
     <View
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="#67000000"
+        android:background="#69000000"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/iv_scanBKG"
         app:layout_constraintStart_toStartOf="parent"
@@ -43,7 +44,7 @@
     <View
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="#67000000"
+        android:background="#69000000"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/iv_scanBKG"
@@ -52,7 +53,7 @@
     <View
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="#67000000"
+        android:background="#69000000"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/iv_scanBKG"
         app:layout_constraintStart_toStartOf="@+id/iv_scanBKG"
@@ -61,7 +62,7 @@
     <View
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="#67000000"
+        android:background="#69000000"
         app:layout_constraintBottom_toTopOf="@+id/iv_scanBKG"
         app:layout_constraintEnd_toEndOf="@+id/iv_scanBKG"
         app:layout_constraintStart_toStartOf="@+id/iv_scanBKG"
@@ -95,6 +96,7 @@
         android:layout_centerVertical="true"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
+        android:contentDescription="@string/app_name"
         android:scaleType="fitXY"
         android:src="@drawable/ic_arrow_back"
         app:layout_constraintStart_toStartOf="parent"
@@ -112,7 +114,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
-        android:textColor="@color/grey"
+        android:textColor="#696969"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

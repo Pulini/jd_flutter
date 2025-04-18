@@ -340,6 +340,51 @@ class WaitPickingMaterialOrderInfo {
           }
     ];
   }
+  getSapPostBody(String pickerNumber) {
+    return [
+      for (var item2 in items!)
+        for (var item3 in item2.getEffectiveSelection())
+          {
+            'ARBPL': item3.pickingDepartment,
+            'AUFNR': item3.productionOrderNumber,
+            'BDMNG': item3.demandQuantity.toShowString(),
+            'BUDAT': item3.postingDate,
+            'CHARG': item3.batch,
+            'EBELN': item3.purchaseOrder,
+            'EBELP': item3.purchaseOrderLineItem,
+            'ERFME': basicUnit,
+            'KDAUF': item2.moNo,
+            'KDPOS': item3.moNoLineItem,
+            'LABST': item2.realTimeInventory.toShowString(),
+            'LABST1': item2.workshopStorageQuantity.toShowString(),
+            'LGORT': pickingWarehouse,
+            'LGORT1': workshopWarehouse,
+            'MATNR_CL': item3.rawMaterialCode,
+            'MEINH': commonUnits,
+            'POSNR': item3.productionOrderLineItemNumber,
+            'POTX1': item2.position,
+            'RSNUM': item3.reservedNumber,
+            'RSPOS': item3.reservedItems,
+            'USNAM': userInfo?.number,//仓管员工号
+            'USNAM_LLY': pickerNumber, //领料员工号
+            'WERKS': factoryNumber,
+            'WOFNR': item3.reservatedLastShipment,
+            'WOLNR': item3.pickingLineItem,
+            'ZSFDL': multiCollarLogo,
+            'ZTYPE': item2.documentType,
+            'ZXDSL': item3.releaseQuantity.toShowString(),
+            'ZZAEMNG': item3.pickingQty.value.toShowString(),
+            'ZZAEMNG1': item3.workshopWarehousePickingQuantity.toShowString(),
+            'ZZAWMNG': item3.receivedQuantity.toShowString(),
+            'ZZAWMNG1': item3.notPostedReceivedQuantity.toShowString(),
+            'ZZFSFLG': colorSeparationLogo,
+            'ZZPLMNG': item3.basicPickingQuantity.toShowString(),
+            'ZZPLMNG1': item3.commonPickingQuantity.toShowString(),
+            'ZZXTNO': item3.typeBody,
+            'ZMAKTX_CL': rawMaterialDescription,
+          }
+    ];
+  }
 }
 
 class WaitPickingMaterialOrderSubInfo {
@@ -481,7 +526,7 @@ class WaitPickingMaterialOrderModelInfo {
   String? reservateLastShipment; //该预定的最后发货(关闭'X')KZEAR
   double? workCardNotReceivedQuantity; //工单未领数GDWLS
 
-  RxBool isSelected = true.obs;
+  RxBool isSelected = false.obs;
   RxDouble pickingQty = 0.0.obs;
 
   String? productionOrderNumber; //生产订单号AUFNR

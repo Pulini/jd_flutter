@@ -352,6 +352,7 @@ class _UserSettingState extends State<UserSetting> {
                     );
                   },
                   needUpdate: (v)=>doUpdate(version: v),
+                  error: (msg)=>  errorDialog(content: msg),
                 );
               }
             },

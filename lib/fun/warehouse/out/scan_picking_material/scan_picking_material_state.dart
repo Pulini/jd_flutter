@@ -22,7 +22,7 @@ class ScanPickingMaterialState {
     required Function(String) error,
   }) {
     httpPost(
-      loading: '正在校验标签...',
+      loading: 'scan_picking_material_submitting_label'.tr,
       method: webApiGetBarCodeStatus,
       body: {
         'BarCodeList': [
@@ -47,7 +47,7 @@ class ScanPickingMaterialState {
     required Function(String) error,
   }) {
     httpPost(
-      loading: '正在提交领料...',
+      loading: 'scan_picking_material_submitting_picking'.tr,
       method: webApiJinCanMaterialOutStockSubmit,
       body: {
         'BarCodeList': [

@@ -2,6 +2,7 @@ package com.jd.pzx.jd_flutter
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.print.PrintManager
 import android.util.Log
@@ -18,6 +19,7 @@ import com.jd.pzx.jd_flutter.utils.CHANNEL_WEIGHBRIDGE_FLUTTER_TO_ANDROID
 import com.jd.pzx.jd_flutter.utils.FACE_VERIFY_SUCCESS
 import com.jd.pzx.jd_flutter.utils.REQUEST_ENABLE_BT
 import com.jd.pzx.jd_flutter.utils.bitmapToBase64
+import com.jd.pzx.jd_flutter.utils.bitmapToByteArray
 import com.jd.pzx.jd_flutter.utils.bluetoothAdapter
 import com.jd.pzx.jd_flutter.utils.bluetoothCancelScan
 import com.jd.pzx.jd_flutter.utils.bluetoothClose
@@ -113,7 +115,7 @@ class MainActivity : FlutterActivity() {
                 ) { code, bitmap ->
                     Log.e("Pan", "code=$code")
                     if (code == FACE_VERIFY_SUCCESS) {
-                        result.success(bitmapToBase64(bitmap!!))
+                        result.success(bitmapToByteArray(bitmap!!, Bitmap.CompressFormat.JPEG))
                     } else {
                         result.error(code.toString(), null, null)
                     }

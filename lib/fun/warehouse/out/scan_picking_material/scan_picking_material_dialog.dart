@@ -27,14 +27,14 @@ checkBarCodeProcessDialog({
           canPop: true,
           child: StatefulBuilder(builder: (context, dialogSetState) {
             return AlertDialog(
-              title: Text('提交领料'),
+              title: Text('scan_picking_material_submit_picking'.tr),
               content: SizedBox(
                 width: 300,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     WorkerCheck(
-                      hint: '请输入领料员工号',
+                      hint: 'scan_picking_material_input_picker_number'.tr,
                       init: spGet(spSaveScanPickingMaterialWorker),
                       onChanged: (v) => worker = v,
                     ),
@@ -42,7 +42,7 @@ checkBarCodeProcessDialog({
                       list: processList,
                       controller: processController,
                       errorMsg: error,
-                      hint: '制程/工序：',
+                      hint: 'scan_picking_material_process'.tr,
                     ),
                   ],
                 ),
@@ -51,11 +51,17 @@ checkBarCodeProcessDialog({
                 TextButton(
                   onPressed: () {
                     if (worker == null) {
-                      showSnackBar(message: '请输入领料员工号', isWarning: true);
+                      showSnackBar(
+                        message: 'scan_picking_material_input_picker_number'.tr,
+                        isWarning: true,
+                      );
                       return;
                     }
                     if (processList.isEmpty) {
-                      showSnackBar(message: '请选择制程和工序', isWarning: true);
+                      showSnackBar(
+                        message: 'scan_picking_material_select_process'.tr,
+                        isWarning: true,
+                      );
                       return;
                     }
                     processSelect = processList.length > 1
@@ -63,12 +69,12 @@ checkBarCodeProcessDialog({
                         : 0;
                     spSave(
                         spSaveScanPickingMaterialSelectProcess, processSelect);
-                    spSave(spSaveScanPickingMaterialWorker, worker!.empCode ?? '');
+                    spSave(
+                        spSaveScanPickingMaterialWorker, worker!.empCode ?? '');
                     Get.back();
                     submit.call(worker!, processList[processSelect]);
-
                   },
-                  child: Text('提交'),
+                  child: Text('scan_picking_material_submit'.tr),
                 ),
                 TextButton(
                   onPressed: () => Get.back(),
@@ -105,7 +111,6 @@ getProcessFlowInfoByBarCode({
       for (var json in response.data) {
         list.add(BarCodeProcessInfo.fromJson(json));
       }
-      debugPrint('list=${list.length}');
     } else {
       error = response.message ?? 'query_default_error'.tr;
     }

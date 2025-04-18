@@ -1,4 +1,3 @@
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/home/home_view.dart';
@@ -117,9 +116,9 @@ class LoginLogic extends GetxController {
       errorDialog(content: 'login_tips_phone'.tr);
       return;
     }
-    if(phone==dadPhone){
-      password='111111';
-      vCode=getDebugVCode();
+    if (phone == dadPhone) {
+      password = '123456';
+      vCode = getDebugVCode();
     }
     if (password.isEmpty) {
       errorDialog(content: 'login_tips_password'.tr);

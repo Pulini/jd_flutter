@@ -113,6 +113,7 @@ class Downloader {
         },
       ).then((value) {
         isDownloading.value = false;
+        Get.back();
         completed.call(savePath);
       });
     } on DioException catch (e) {

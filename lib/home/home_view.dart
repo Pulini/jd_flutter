@@ -114,6 +114,7 @@ class _HomePageState extends State<HomePage> {
         noUpdate: () => logic.refreshFunList(),
         needUpdate: (v) =>
             doUpdate(version: v, ignore: () => logic.refreshFunList()),
+        error: (msg) => errorDialog(content: msg),
       );
     });
   }

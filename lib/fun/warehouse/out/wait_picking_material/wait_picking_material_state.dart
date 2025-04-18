@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/base_data.dart';
+import 'package:jd_flutter/bean/http/response/picking_material_order_info.dart';
 import 'package:jd_flutter/bean/http/response/wait_picking_material_info.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
@@ -28,11 +29,9 @@ class WaitPickingMaterialState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在提交领料...',
+      loading: 'picking_material_order_querying_picker_info'.tr,
       method: webApiSapGetPickerInfo,
-      body: {
-        'USNAM': pickerNumber,
-      },
+      body: {'USNAM': pickerNumber},
     ).then((response) {
       if (response.resultCode == resultSuccess) {
         companyDepartmentList = [
@@ -65,7 +64,7 @@ class WaitPickingMaterialState {
     required Function(String) error,
   }) {
     httpPost(
-      loading: '正在获取待领料数据...',
+      loading: 'wait_picking_material_order_getting_picking_material_data'.tr,
       method: webApiGetMaterialList,
       body: {
         'StartDate': startDate,
@@ -101,9 +100,9 @@ class WaitPickingMaterialState {
           ),
         ).then((list) {
           orderList.value = list;
-          debugPrint('list=${list.length}');
         });
       } else {
+        orderList.value = [];
         error.call(response.message ?? 'query_default_error'.tr);
       }
     });
@@ -116,7 +115,7 @@ class WaitPickingMaterialState {
     required Function(String) error,
   }) {
     httpGet(
-      loading: '正在获取待领料数据...',
+      loading: 'wait_picking_material_order_getting_inventory_data'.tr,
       method: webApiGetMaterialInventoryList,
       params: {
         'FactoryCode': factoryCode,
@@ -135,31 +134,63 @@ class WaitPickingMaterialState {
 
   submitPickingMaterial({
     required bool isMove,
+    required bool isPosting,
     String? pickerNumber,
     String? pickerBase64,
     String? userBase64,
-    required  Function(String) success,
+    required Function(String, String) success,
     required Function(String) error,
   }) {
-    var bodyMap = {
-      'Move': isMove ? 'X' : '',
-      'MaterialList': [
-        for (var item1 in orderList.where((v) => v.hasSelected()))
-          ...item1.getPostBody(pickerNumber??'')
-      ],
-      'PictureList': [
-        if (pickerBase64?.isNotEmpty == true)
-          {
-            'EmpCode': pickerNumber,
-            'Photo': pickerBase64,
-          },
-        if (userBase64?.isNotEmpty == true)
-          {
-            'EmpCode': userInfo?.number,
-            'Photo': userBase64,
-          }
-      ]
-    };
-    success.call('123');
+    sapPost(
+      loading: 'wait_picking_material_order_posting_picking_material'.tr,
+      method: webApiSapSubmitPickingMaterialOrder,
+      body: {
+        'MOVE': isMove ? 'X' : '',
+        'CREATE': isPosting ? '' : 'X',
+        'DIRECTPOSTING': isPosting ? 'X' : '',
+        'GT_REQITEMS': [
+          for (var item1 in orderList.where((v) => v.hasSelected()))
+            ...item1.getSapPostBody(pickerNumber ?? '')
+        ],
+        'GT_PICTURE': [
+          if (pickerBase64?.isNotEmpty == true)
+            {
+              'ZZKEYWORD': pickerNumber,
+              'ZZITEMNO': 2,
+              'ZZDATA': pickerBase64,
+            },
+          if (userBase64?.isNotEmpty == true)
+            {
+              'ZZKEYWORD': userInfo?.number,
+              'ZZITEMNO': 1,
+              'ZZDATA': userBase64,
+            },
+        ]
+      },
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        success.call(response.message ?? '', response.data);
+      } else {
+        error.call(response.message ?? 'query_default_error'.tr);
+      }
+    });
+  }
+
+  getMaterialPrintInfo({
+    required String orderNumber,
+    required Function(PickingMaterialOrderPrintInfo) success,
+    required Function(String) error,
+  }) {
+    sapPost(
+      loading: 'wait_picking_material_order_getting_material_print_info'.tr,
+      method: webApiSapGetMaterialPrintInfo,
+      body: {'WOFNR': orderNumber},
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        success.call(PickingMaterialOrderPrintInfo.fromJson(response.data));
+      } else {
+        error.call(response.message ?? 'query_default_error'.tr);
+      }
+    });
   }
 }

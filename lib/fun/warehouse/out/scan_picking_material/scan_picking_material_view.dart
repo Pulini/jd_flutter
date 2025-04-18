@@ -45,7 +45,7 @@ class _ScanPickingMaterialPageState extends State<ScanPickingMaterialPage> {
           Expanded(
             child: item.isUsed
                 ? textSpan(
-                    hint: '已提交：',
+                    hint: 'scan_picking_material_submitted'.tr,
                     text: item.code ?? '',
                   )
                 : Text(
@@ -56,7 +56,7 @@ class _ScanPickingMaterialPageState extends State<ScanPickingMaterialPage> {
           ),
           IconButton(
             onPressed: () => askDialog(
-              content: '确定要删除该条码吗？',
+              content: 'scan_picking_material_delete_tips'.tr,
               confirm: () => logic.deleteItem(item),
             ),
             icon: const Icon(
@@ -68,9 +68,10 @@ class _ScanPickingMaterialPageState extends State<ScanPickingMaterialPage> {
       ),
     );
   }
+
   @override
   void initState() {
-    pdaScanner(scan: (code)=>logic.scanCode(code));
+    pdaScanner(scan: (code) => logic.scanCode(code));
     super.initState();
   }
 
@@ -80,7 +81,7 @@ class _ScanPickingMaterialPageState extends State<ScanPickingMaterialPage> {
       actions: [
         Obx(() => CheckBox(
               onChanged: (c) => state.reverse.value = c,
-              name: '红冲',
+              name: 'scan_picking_material_reverse'.tr,
               value: state.reverse.value,
             ))
       ],
@@ -110,7 +111,7 @@ class _ScanPickingMaterialPageState extends State<ScanPickingMaterialPage> {
                 border: const OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(20)),
                 ),
-                hintText: '手动录入登记',
+                hintText: 'scan_picking_material_manual_input'.tr,
                 hintStyle: const TextStyle(color: Colors.grey),
                 prefixIcon: IconButton(
                     onPressed: () => controller.clear(),
@@ -122,7 +123,8 @@ class _ScanPickingMaterialPageState extends State<ScanPickingMaterialPage> {
                   onPressed: () {
                     var text = controller.text;
                     if (text.trim().isEmpty) {
-                      showSnackBar(message: '请输入条码');
+                      showSnackBar(
+                          message: 'scan_picking_material_input_code'.tr);
                     } else {
                       FocusScope.of(context).requestFocus(FocusNode());
                       logic.scanCode(text);
@@ -146,8 +148,12 @@ class _ScanPickingMaterialPageState extends State<ScanPickingMaterialPage> {
           ),
           Padding(
             padding: const EdgeInsets.all(5),
-            child: Obx(() =>
-                textSpan(hint: '已扫码：', text: '${state.barCodeList.length} 条')),
+            child: Obx(() => textSpan(
+                  hint: 'scan_picking_material_scanned：'.tr,
+                  text: 'scan_picking_material_qty'.trArgs(
+                    ['${state.barCodeList.length}'],
+                  ),
+                )),
           ),
           Row(
             children: [
@@ -155,9 +161,9 @@ class _ScanPickingMaterialPageState extends State<ScanPickingMaterialPage> {
                 child: Obx(() => CombinationButton(
                       combination: Combination.left,
                       isEnabled: state.barCodeList.isNotEmpty,
-                      text: '清空',
+                      text: 'scan_picking_material_clear'.tr,
                       click: () => askDialog(
-                        content: '确定要清空条码吗？',
+                        content: 'scan_picking_material_clear_tips'.tr,
                         confirm: () => logic.clearBarCodeList(),
                       ),
                     )),
@@ -166,7 +172,7 @@ class _ScanPickingMaterialPageState extends State<ScanPickingMaterialPage> {
                 child: Obx(() => CombinationButton(
                       combination: Combination.right,
                       isEnabled: state.barCodeList.isNotEmpty,
-                      text: '提交',
+                      text: 'scan_picking_material_submit'.tr,
                       click: () => checkBarCodeProcessDialog(
                         list: state.barCodeList,
                         submit: (w, p) => logic.submit(worker: w, process: p),

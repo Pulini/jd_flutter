@@ -20,7 +20,7 @@ class SaleScanOutWarehouseState {
     required Function(String) error,
   }) {
     httpPost(
-      loading: '正在提交领料...',
+      loading: 'sale_scan_out_warehouse_submitting_picking'.tr,
       method: webApiJinCanSalesScanningCodeSubmit,
       body: {
         'BarCodeList': [

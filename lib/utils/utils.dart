@@ -208,6 +208,8 @@ extension Uint8ListExt on Uint8List {
     }
     return hexString.toUpperCase();
   }
+
+  String toBase64() => base64Encode(this);
 }
 
 //File扩展方法
@@ -440,6 +442,7 @@ getVersionInfo(
   bool showLoading, {
   required Function noUpdate,
   required Function(VersionInfo) needUpdate,
+  required Function(String) error,
 }) {
   httpGet(
     method: webApiCheckVersion,
@@ -454,7 +457,7 @@ getVersionInfo(
         noUpdate.call();
       }
     } else {
-      errorDialog(content: versionInfoCallback.message);
+      error.call(versionInfoCallback.message ?? '');
     }
   });
 }
@@ -827,8 +830,10 @@ livenFaceVerification({
           if (permission) {
             const MethodChannel(channelFaceVerificationAndroidToFlutter)
                 .invokeMethod('StartDetect', filePath)
-                .then((v) => verifySuccess.call(v))
-                .catchError((e) => errorDialog(content: '人脸验证错误：$e'));
+                .then((v) {
+              // Get.dialog( AlertDialog( content: Image.memory(v)));
+              verifySuccess.call((v as Uint8List).toBase64());
+            }).catchError((e) => errorDialog(content: '人脸验证错误：$e'));
           } else {
             errorDialog(content: '缺少相机权限');
           }

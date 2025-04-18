@@ -34,7 +34,11 @@ modifyDetailPickingQtyDialog({
       canPop: false,
       child: StatefulBuilder(builder: (context, dialogSetState) {
         return AlertDialog(
-          title: Text(max == double.infinity ? '工单领取(允许多领)' : '工单领取(禁止多领)'),
+          title: Text(
+            max == double.infinity
+                ? 'wait_picking_material_order_dialog_pick_title_can_tack_more'.tr
+                : 'wait_picking_material_order_dialog_pick_title_cant_tack_more'.tr,
+          ),
           content: SizedBox(
             width: 300,
             height: 100,
@@ -42,7 +46,7 @@ modifyDetailPickingQtyDialog({
               children: [
                 Row(
                   children: [
-                    Text('本次领取'),
+                    Text('wait_picking_material_order_dialog_picking_qty'.tr),
                     Expanded(
                       child: NumberDecimalEditText(
                         controller: basicController,
@@ -62,7 +66,7 @@ modifyDetailPickingQtyDialog({
                 if (basicUnit != commonUnits)
                   Row(
                     children: [
-                      Text('本次领取'),
+                      Text('wait_picking_material_order_dialog_picking_qty'.tr),
                       Expanded(
                         child: NumberDecimalEditText(
                           controller: commonController,
@@ -135,7 +139,11 @@ batchAndColorSystemDialog({
             .values
             .toList();
         return AlertDialog(
-          title: Text(isShowBatch ? '指令明细' : '色系明细'),
+          title: Text(
+            isShowBatch
+                ? 'wait_picking_material_order_dialog_title_instruction_detail'.tr
+                : 'wait_picking_material_order_dialog_title_color_detail'.tr,
+          ),
           content: SizedBox(
             width: 300,
             height: 240,
@@ -158,13 +166,13 @@ batchAndColorSystemDialog({
                     children: [
                       CheckBox(
                         onChanged: (c) => dialogSetState(() => isShowBatch = c),
-                        name: '指令',
+                        name: 'wait_picking_material_order_dialog_instruction'.tr,
                         value: isShowBatch,
                       ),
                       CheckBox(
                         onChanged: (c) =>
                             dialogSetState(() => isShowBatch = !c),
-                        name: '色系',
+                        name: 'wait_picking_material_order_dialog_color_system'.tr,
                         value: !isShowBatch,
                       )
                     ],
@@ -248,7 +256,8 @@ realTimeInventoryDialog({
       canPop: true,
       child: StatefulBuilder(builder: (context, dialogSetState) {
         return AlertDialog(
-          title: Text('即时库存明细'),
+          title: Text(
+              'wait_picking_material_order_dialog_title_real_time_inventory'.tr),
           content: SizedBox(
             width: MediaQuery.of(context).size.width * 0.7,
             height: MediaQuery.of(context).size.height * 0.7,
@@ -272,75 +281,101 @@ realTimeInventoryDialog({
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Expanded(child: Text('仓库', style: titleTextStyle)),
-                      Expanded(child: Text('数量', style: titleTextStyle)),
-                      Expanded(child: Text('批号', style: titleTextStyle)),
-                      Expanded(child: Text('销售订单', style: titleTextStyle)),
-                      Expanded(child: Text('项目号', style: titleTextStyle)),
+                      Expanded(
+                        child: Text(
+                          'wait_picking_material_order_dialog_warehouse'.tr,
+                          style: titleTextStyle,
+                        ),
+                      ),
+                      Expanded(
+                        child: Text(
+                          'wait_picking_material_order_dialog_qty'.tr,
+                          style: titleTextStyle,
+                        ),
+                      ),
+                      Expanded(
+                        child: Text(
+                          'wait_picking_material_order_dialog_batch'.tr,
+                          style: titleTextStyle,
+                        ),
+                      ),
+                      Expanded(
+                        child: Text(
+                          'wait_picking_material_order_dialog_sales_order'.tr,
+                          style: titleTextStyle,
+                        ),
+                      ),
+                      Expanded(
+                        child: Text(
+                          'wait_picking_material_order_dialog_line_number'.tr,
+                          style: titleTextStyle,
+                        ),
+                      ),
                     ],
                   ),
                 ),
                 Expanded(
-                    child: Container(
-                  padding: const EdgeInsets.all(5),
-                  decoration: BoxDecoration(
-                    color: Colors.blue.shade50,
-                    border: Border.all(
-                      color: Colors.blue,
-                      width: 2,
+                  child: Container(
+                    padding: const EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                      color: Colors.blue.shade50,
+                      border: Border.all(
+                        color: Colors.blue,
+                        width: 2,
+                      ),
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(10),
+                      ),
                     ),
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(10),
-                    ),
-                  ),
-                  child: ListView.builder(
-                    itemCount: list.length,
-                    itemBuilder: (c, i) => Container(
-                      margin: const EdgeInsets.only(bottom: 10),
-                      padding: const EdgeInsets.all(5),
-                      decoration: BoxDecoration(
-                        color: Colors.green.shade200,
-                        borderRadius: const BorderRadius.all(
-                          Radius.circular(10),
+                    child: ListView.builder(
+                      itemCount: list.length,
+                      itemBuilder: (c, i) => Container(
+                        margin: const EdgeInsets.only(bottom: 10),
+                        padding: const EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                          color: Colors.green.shade200,
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(10),
+                          ),
+                        ),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                list[i].locationDescription ?? '',
+                                style: itemTextStyle,
+                              ),
+                            ),
+                            Expanded(
+                              child: Text(
+                                list[i].realTimeInventory ?? '',
+                                style: itemTextStyle,
+                              ),
+                            ),
+                            Expanded(
+                              child: Text(
+                                list[i].batch ?? '',
+                                style: itemTextStyle,
+                              ),
+                            ),
+                            Expanded(
+                              child: Text(
+                                list[i].salesAndDistributionVoucherNumber ?? '',
+                                style: itemTextStyle,
+                              ),
+                            ),
+                            Expanded(
+                              child: Text(
+                                list[i].productionOrderItemNumber ?? '',
+                                style: itemTextStyle,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              list[i].locationDescription ?? '',
-                              style: itemTextStyle,
-                            ),
-                          ),
-                          Expanded(
-                            child: Text(
-                              list[i].realTimeInventory ?? '',
-                              style: itemTextStyle,
-                            ),
-                          ),
-                          Expanded(
-                            child: Text(
-                              list[i].batch ?? '',
-                              style: itemTextStyle,
-                            ),
-                          ),
-                          Expanded(
-                            child: Text(
-                              list[i].salesAndDistributionVoucherNumber ?? '',
-                              style: itemTextStyle,
-                            ),
-                          ),
-                          Expanded(
-                            child: Text(
-                              list[i].productionOrderItemNumber ?? '',
-                              style: itemTextStyle,
-                            ),
-                          ),
-                        ],
-                      ),
                     ),
                   ),
-                )),
+                ),
               ],
             ),
           ),
@@ -367,18 +402,17 @@ checkPickerDialog({required Function(WorkerInfo) confirm}) {
       canPop: false,
       child: StatefulBuilder(builder: (context, dialogSetState) {
         return AlertDialog(
-          title: Text('领料员校验'),
+          title: Text('wait_picking_material_order_dialog_title_picker_check'.tr),
           content: SizedBox(
             width: 200,
-            child: Obx(() => Column(
-                  mainAxisSize: MainAxisSize.min,
+            height: 240,
+            child: Obx(() => ListView(
                   children: [
                     Center(
                       child: SizedBox(
                         width: 150,
                         height: 150,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(7),
+                        child: ClipOval(
                           child: avatar.isNotEmpty
                               ? Image.network(avatar.value, fit: BoxFit.fill)
                               : Icon(
@@ -390,7 +424,7 @@ checkPickerDialog({required Function(WorkerInfo) confirm}) {
                       ),
                     ),
                     WorkerCheck(
-                      hint: '领料员工号',
+                      hint: 'wait_picking_material_order_dialog_picker_number'.tr,
                       onChanged: (w) {
                         worker = w;
                         avatar.value = w?.picUrl ?? '';
@@ -399,18 +433,21 @@ checkPickerDialog({required Function(WorkerInfo) confirm}) {
                   ],
                 )),
           ),
+          contentPadding: const EdgeInsets.all(10),
           actions: [
             TextButton(
               onPressed: () {
                 if (worker == null) {
                   showSnackBar(
-                    message: '请正确填写领料员工号',
+                    message: 'wait_picking_material_order_dialog_number_error'.tr,
                     isWarning: true,
                   );
                 } else {
                   if (worker!.picUrl == null || worker!.picUrl!.isEmpty) {
                     informationDialog(
-                      content: '领料员人脸照片未上传，请前往人事部门上传正脸照片。',
+                      content:
+                          'wait_picking_material_order_dialog_picker_avatar_not_upload_tips'
+                              .tr,
                     );
                   } else {
                     Get.back();
@@ -468,7 +505,6 @@ Widget _modifyContextEditText(WaitPickingMaterialOrderInfo info) {
         prefixIcon: IconButton(
           onPressed: () {
             controller.text = info.location ?? '';
-            debugPrint('ml=${info.modifyLocation}');
           },
           icon: const Icon(
             Icons.replay_circle_filled,
@@ -492,7 +528,7 @@ modifyLocationDialog({
       canPop: false,
       child: StatefulBuilder(builder: (context, dialogSetState) {
         return AlertDialog(
-          title: Text('修改库位'),
+          title: Text('wait_picking_material_order_dialog_title_modify_location'.tr),
           content: SizedBox(
             width: 400,
             height: 300,
@@ -507,7 +543,8 @@ modifyLocationDialog({
                   materialList: list,
                   success: () {
                     successDialog(
-                      content: '修改成功',
+                      content:
+                          'wait_picking_material_order_dialog_modify_success'.tr,
                       back: () {
                         Get.back();
                         back.call();
@@ -542,7 +579,7 @@ _modifyLocation({
   required Function(String) error,
 }) {
   sapPost(
-    loading: '正在提交领料...',
+    loading: 'wait_picking_material_order_dialog_submitting_picking'.tr,
     method: webApiSapModifyLocation,
     body: {
       'GT_REQITEMS': [

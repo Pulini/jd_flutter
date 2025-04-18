@@ -56,9 +56,15 @@ class _WaitPickingMaterialDetailPageState
             child: Row(
               children: [
                 const SizedBox(width: 20),
-                textSpan(hint: '指令：', text: item.moNo ?? ''),
+                textSpan(
+                  hint: 'wait_picking_material_order_detail_instruction'.tr,
+                  text: item.moNo ?? '',
+                ),
                 const SizedBox(width: 20),
-                textSpan(hint: '型体：', text: item.models?[0].typeBody ?? ''),
+                textSpan(
+                  hint: 'wait_picking_material_order_detail_type_body'.tr,
+                  text: item.models?[0].typeBody ?? '',
+                ),
               ],
             ),
           ),
@@ -154,7 +160,7 @@ class _WaitPickingMaterialDetailPageState
           '(${state.detail.rawMaterialCode}) ${state.detail.rawMaterialDescription}',
       actions: [
         CombinationButton(
-          text: '批量处理',
+          text: 'wait_picking_material_order_detail_batch_set'.tr,
           click: () => _modifyQty(
             subItemList: logic.getDetailModifySelectedList(),
           ),
@@ -188,51 +194,76 @@ class _WaitPickingMaterialDetailPageState
                     ),
                     Expanded(
                       flex: 2,
-                      child: Text('尺码'),
+                      child: Text(
+                        'wait_picking_material_order_detail_size'.tr,
+                      ),
                     ),
                     Expanded(
                       flex: 3,
-                      child: Text('批次'),
+                      child: Text(
+                        'wait_picking_material_order_detail_batch'.tr,
+                      ),
                     ),
                     Expanded(
                       flex: 3,
-                      child: Text('色系'),
+                      child: Text(
+                        'wait_picking_material_order_detail_color_system'.tr,
+                      ),
                     ),
                     Expanded(
                       flex: 3,
-                      child: Text('库位'),
+                      child: Text(
+                        'wait_picking_material_order_detail_location'.tr,
+                      ),
                     ),
                     Expanded(
                       flex: 3,
-                      child: Text('需求数量'),
+                      child: Text(
+                        'wait_picking_material_order_detail_demand_qty'.tr,
+                      ),
                     ),
                     Expanded(
                       flex: 3,
-                      child: Text('下达数量'),
+                      child: Text(
+                        'wait_picking_material_order_detail_release_qty'.tr,
+                      ),
                     ),
                     Expanded(
                       flex: 3,
-                      child: Text('未下达数量'),
+                      child: Text(
+                        'wait_picking_material_order_detail_un_release_qty'.tr,
+                      ),
                     ),
                     Expanded(
                       flex: 3,
-                      child: Text('已领数量'),
+                      child: Text(
+                        'wait_picking_material_order_detail_received_qty'.tr,
+                      ),
                     ),
                     Expanded(
                       flex: 3,
-                      child: Text('未领数量'),
+                      child: Text(
+                        'wait_picking_material_order_detail_un_received_qty'.tr,
+                      ),
                     ),
                     Expanded(
                       flex: 3,
-                      child: Text('领料数量'),
+                      child: Text(
+                        'wait_picking_material_order_detail_picking_qty'.tr,
+                      ),
                     ),
                     Expanded(
                       flex: 4,
-                      child: Text('车间仓库领料数量'),
+                      child: Text(
+                        'wait_picking_material_order_detail_workshop_warehouse_picking_qty'
+                            .tr,
+                      ),
                     ),
                     Expanded(
                       flex: 4,
-                      child: Text('本次实发常用数量'),
+                      child: Text(
+                        'wait_picking_material_order_detail_this_issued_qty'.tr,
+                      ),
                     ),
                   ],
                 ),
