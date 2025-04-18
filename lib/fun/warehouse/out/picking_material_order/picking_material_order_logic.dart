@@ -18,7 +18,6 @@ class PickingMaterialOrderLogic extends GetxController {
     );
   }
 
-
   queryPickingMaterialOrder({
     required String startDate,
     required String endDate,
@@ -29,8 +28,8 @@ class PickingMaterialOrderLogic extends GetxController {
     required String sapWarehouse,
   }) {
     state.getPickingMaterialOrderList(
-      startDate:startDate,
-      endDate:endDate,
+      startDate: startDate,
+      endDate: endDate,
       instruction: instruction,
       pickingMaterialOrder: pickingMaterialOrder,
       sapSupplier: sapSupplier,
@@ -53,12 +52,26 @@ class PickingMaterialOrderLogic extends GetxController {
     );
   }
 
-   reportPreparedMaterialsProgress( PickingMaterialOrderInfo order) {
-     state.reportPreparedMaterialsProgress(
-       order: order,
-       success: (msg) =>
-           successDialog(content: msg, back: () => Get.back(result: true)),
-       error: (msg) => errorDialog(content: msg),
-     );
-   }
+  reportPreparedMaterialsProgress(PickingMaterialOrderInfo order) {
+    state.reportPreparedMaterialsProgress(
+      order: order,
+      success: (msg) =>
+          successDialog(content: msg, back: () => Get.back(result: true)),
+      error: (msg) => errorDialog(content: msg),
+    );
+  }
+
+  uploadOutTicket({
+    required bool isCreate,
+    required PickingMaterialOrderInfo data,
+    required Function() refresh,
+  }) {
+    state.uploadOutTicket(
+      isCreate:isCreate,
+      orderNumber: data.orderNumber??'',
+      materialLines: data.materialList??[],
+      success: (msg) => successDialog(content: msg, back: refresh),
+      error: (msg) => errorDialog(content: msg),
+    );
+  }
 }

@@ -1058,6 +1058,9 @@ const webApiSapSubmitPickingMaterialOrder = 'sap/zapp/ZFUN_RES_ZDLL_D';
 //备料进度修改
 const webApiSapReportPreparedMaterialsProgress = 'sap/zapp/ZFUN_RES_ZDLL_BL';
 
+//生成/撤销 出门单
+const webApiSapCreateOutTicket = 'sap/zapp/ZFUN_RES_ZDLL_OAGATEPASS';
+
 //获取盘点明细
 const webApiSapGetInventoryPalletList = 'sap/zapp/ZWMS_PD_LIST';
 
@@ -1105,6 +1108,9 @@ const webApiGetDispatchInfo = 'api/WorkCard/GetDispatchInfo';
 
 //提交工序派工条形码数据
 const webApiSubmitProcessBarCode2CollectBill = 'api/WorkCard/SubmitProcessBarCode2CollectBill';
+
+//获取送货单列表
+const webApiGetDeliveryOrders = 'api/Package/GetDeliveryOrders';
 
 //获取条码报工数据汇总表
 const webApiGetBarCodeReportDetails = 'api/ShearOff/GetBarCodeReportDetails';

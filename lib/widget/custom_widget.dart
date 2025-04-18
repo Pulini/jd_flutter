@@ -76,46 +76,47 @@ pageBodyWithBottomSheet({
           ...?actions,
           Builder(
             //不加builder会导致openDrawer崩溃
-            builder: (context) => IconButton(
-              icon: const Icon(Icons.search),
-              onPressed: () {
-                showSheet(
-                  context: context,
-                  body: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      const SizedBox(height: 10),
-                      ...bottomSheet,
-                      const SizedBox(height: 20),
-                      Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.blueAccent,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(25),
+            builder: (context) =>
+                IconButton(
+                  icon: const Icon(Icons.search),
+                  onPressed: () {
+                    showSheet(
+                      context: context,
+                      body: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          const SizedBox(height: 10),
+                          ...bottomSheet,
+                          const SizedBox(height: 20),
+                          Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: SizedBox(
+                              width: double.infinity,
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.blueAccent,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(25),
+                                  ),
+                                ),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                  query.call();
+                                },
+                                child: Text(
+                                  'page_title_with_drawer_query'.tr,
+                                  style: const TextStyle(color: Colors.white),
+                                ),
                               ),
                             ),
-                            onPressed: () {
-                              Navigator.pop(context);
-                              query.call();
-                            },
-                            child: Text(
-                              'page_title_with_drawer_query'.tr,
-                              style: const TextStyle(color: Colors.white),
-                            ),
                           ),
-                        ),
+                        ],
                       ),
-                    ],
-                  ),
-                  scrollControlled: true,
-                );
-              },
-            ),
+                      scrollControlled: true,
+                    );
+                  },
+                ),
           )
         ],
       ),
@@ -153,12 +154,13 @@ pageBodyWithDrawer({
           ...?actions,
           Builder(
             //不加builder会导致openDrawer崩溃
-            builder: (context) => IconButton(
-              icon: const Icon(Icons.search),
-              onPressed: () {
-                Scaffold.of(context).openEndDrawer();
-              },
-            ),
+            builder: (context) =>
+                IconButton(
+                  icon: const Icon(Icons.search),
+                  onPressed: () {
+                    Scaffold.of(context).openEndDrawer();
+                  },
+                ),
           )
         ],
       ),
@@ -195,7 +197,11 @@ pageBodyWithDrawer({
       body: PopScope(
         canPop: popTitle.isEmpty ? true : false,
         onPopInvokedWithResult: (didPop, result) {
-          if (!didPop) exitDialog(content: popTitle);
+          if (scaffoldKey.currentState?.isEndDrawerOpen == true) {
+            scaffoldKey.currentState?.closeEndDrawer();
+          } else {
+            if (!didPop) exitDialog(content: popTitle);
+          }
         },
         child: body,
       ),
@@ -207,38 +213,39 @@ pageBodyWithDrawer({
 takePhoto({required Function(File) callback, String? title}) {
   showCupertinoModalPopup(
     context: Get.overlayContext!,
-    builder: (BuildContext context) => CupertinoActionSheet(
-      title: Text(
-        title ?? 'home_user_setting_avatar_photo_sheet_title'.tr,
-      ),
-      message: Text('take_photo_sheet_message'.tr),
-      actions: <CupertinoActionSheetAction>[
-        CupertinoActionSheetAction(
-          isDefaultAction: true,
-          onPressed: () {
-            Get.back();
-            _takePhoto(false, callback);
-          },
-          child: Text('take_photo_photo_sheet_take_photo'.tr),
+    builder: (BuildContext context) =>
+        CupertinoActionSheet(
+          title: Text(
+            title ?? 'home_user_setting_avatar_photo_sheet_title'.tr,
+          ),
+          message: Text('take_photo_sheet_message'.tr),
+          actions: <CupertinoActionSheetAction>[
+            CupertinoActionSheetAction(
+              isDefaultAction: true,
+              onPressed: () {
+                Get.back();
+                _takePhoto(false, callback);
+              },
+              child: Text('take_photo_photo_sheet_take_photo'.tr),
+            ),
+            CupertinoActionSheetAction(
+              isDefaultAction: true,
+              onPressed: () {
+                Get.back();
+                _takePhoto(true, callback);
+              },
+              child: Text('take_photo_photo_sheet_select_photo'.tr),
+            ),
+          ],
+          cancelButton: CupertinoActionSheetAction(
+            isDefaultAction: true,
+            onPressed: () => Get.back(),
+            child: Text(
+              'dialog_default_cancel'.tr,
+              style: const TextStyle(color: Colors.grey),
+            ),
+          ),
         ),
-        CupertinoActionSheetAction(
-          isDefaultAction: true,
-          onPressed: () {
-            Get.back();
-            _takePhoto(true, callback);
-          },
-          child: Text('take_photo_photo_sheet_select_photo'.tr),
-        ),
-      ],
-      cancelButton: CupertinoActionSheetAction(
-        isDefaultAction: true,
-        onPressed: () => Get.back(),
-        child: Text(
-          'dialog_default_cancel'.tr,
-          style: const TextStyle(color: Colors.grey),
-        ),
-      ),
-    ),
   );
 }
 
@@ -355,33 +362,40 @@ Widget getCupertinoPicker({
 
 //选择器
 Widget getLinkCupertinoPicker({
-  required List<Widget> groupItems,
-  required List<List<Widget>> subItems,
+  required List<String> groupItems,
+  required List<List<String>> subItems,
   required FixedExtentScrollController groupController,
   required FixedExtentScrollController subController,
-}) =>
-    Row(
-      children: [
-        Expanded(
-          child: CupertinoPicker(
-            scrollController: groupController,
-            onSelectedItemChanged: (value) => subController.jumpToItem(0),
-            itemExtent: 22,
-            squeeze: 1.2,
-            children: groupItems,
-          ),
+}) {
+  var subIndex = 0.obs;
+  return Obx(()=>Row(
+    children: [
+      Expanded(
+        child: CupertinoPicker(
+          scrollController: groupController,
+          onSelectedItemChanged: (value) {
+            subIndex.value = value;
+            subController.jumpToItem(0);
+          },
+          itemExtent: 22,
+          squeeze: 1.2,
+          children: groupItems.map((data) => Text(data)).toList(),
         ),
-        Expanded(
-          child: CupertinoPicker(
-            scrollController: subController,
-            onSelectedItemChanged: (value) {},
-            itemExtent: 22,
-            squeeze: 1.2,
-            children: subItems[groupController.selectedItem],
-          ),
+      ),
+      Expanded(
+        child: CupertinoPicker(
+          scrollController: subController,
+          onSelectedItemChanged: (value) {},
+          itemExtent: 22,
+          squeeze: 1.2,
+          children: subItems[subIndex.value].map((data) => Text(data))
+              .toList(),
         ),
-      ],
-    );
+      ),
+    ],
+  ));
+}
+
 
 //popup工具
 showPopup(Widget widget, {double? height}) {
@@ -389,7 +403,9 @@ showPopup(Widget widget, {double? height}) {
     context: Get.overlayContext!,
     builder: (BuildContext context) {
       return AnimatedPadding(
-          padding: MediaQuery.of(context).viewInsets,
+          padding: MediaQuery
+              .of(context)
+              .viewInsets,
           duration: const Duration(milliseconds: 100),
           child: Container(
             height: height ?? 260,
@@ -419,20 +435,30 @@ showSheet<T>({
     shape: RoundedRectangleBorder(borderRadius: borderRadius),
     barrierColor: Colors.black.withValues(alpha: 0.25),
     constraints: BoxConstraints(
-        maxHeight: MediaQuery.of(context).size.height -
-            MediaQuery.of(context).viewInsets.top),
+        maxHeight: MediaQuery
+            .of(context)
+            .size
+            .height -
+            MediaQuery
+                .of(context)
+                .viewInsets
+                .top),
     isScrollControlled: scrollControlled,
-    builder: (ctx) => SingleChildScrollView(
-      child: Padding(
-        padding: EdgeInsets.only(
-          left: bodyPadding!.left,
-          top: bodyPadding.top,
-          right: bodyPadding.right,
-          bottom: bodyPadding.bottom + MediaQuery.of(ctx).viewInsets.bottom,
+    builder: (ctx) =>
+        SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.only(
+              left: bodyPadding!.left,
+              top: bodyPadding.top,
+              right: bodyPadding.right,
+              bottom: bodyPadding.bottom + MediaQuery
+                  .of(ctx)
+                  .viewInsets
+                  .bottom,
+            ),
+            child: body,
+          ),
         ),
-        child: body,
-      ),
-    ),
   );
 }
 
@@ -621,18 +647,18 @@ expandedFrameText({
     flex: flex ?? 1,
     child: text.isEmpty
         ? Container(
-            height: (maxLines * 35).toDouble(),
-            decoration: BoxDecoration(
-              border: Border.all(color: borderColor ?? Colors.grey),
-              color: backgroundColor ?? Colors.transparent,
-            ),
-          )
+      height: (maxLines * 35).toDouble(),
+      decoration: BoxDecoration(
+        border: Border.all(color: borderColor ?? Colors.grey),
+        color: backgroundColor ?? Colors.transparent,
+      ),
+    )
         : click == null
-            ? widget
-            : GestureDetector(
-                onTap: () => click.call(),
-                child: widget,
-              ),
+        ? widget
+        : GestureDetector(
+      onTap: () => click.call(),
+      child: widget,
+    ),
   );
 }
 
@@ -644,17 +670,18 @@ avatarPhoto(String? url) {
       borderRadius: BorderRadius.circular(7),
       child: url == null
           ? Image.asset(
+        'assets/images/ic_logo.png',
+        color: Colors.blue,
+      )
+          : Image.network(
+        url,
+        fit: BoxFit.fill,
+        errorBuilder: (ctx, err, stackTrace) =>
+            Image.asset(
               'assets/images/ic_logo.png',
               color: Colors.blue,
-            )
-          : Image.network(
-              url,
-              fit: BoxFit.fill,
-              errorBuilder: (ctx, err, stackTrace) => Image.asset(
-                'assets/images/ic_logo.png',
-                color: Colors.blue,
-              ),
             ),
+      ),
     ),
   );
 }
@@ -1138,13 +1165,14 @@ selectView({
     ),
     Expanded(
         child: CupertinoPicker(
-      scrollController: controller,
-      magnification: 1.2,
-      useMagnifier: true,
-      itemExtent: 26,
-      onSelectedItemChanged: (v) => select?.call(v),
-      children: list
-          .map((v) => AutoSizeText(
+          scrollController: controller,
+          magnification: 1.2,
+          useMagnifier: true,
+          itemExtent: 26,
+          onSelectedItemChanged: (v) => select?.call(v),
+          children: list
+              .map((v) =>
+              AutoSizeText(
                 v.toString(),
                 maxLines: 1,
                 minFontSize: 8,
@@ -1153,16 +1181,16 @@ selectView({
                   color: Colors.blue,
                 ),
               ))
-          .toList(),
-    ))
+              .toList(),
+        ))
   ];
 
   return Container(
     height: list.length > 1
         ? 120
         : errorMsg.length > 15
-            ? 50
-            : 35,
+        ? 50
+        : 35,
     width: double.infinity,
     margin: const EdgeInsets.all(5),
     padding: const EdgeInsets.all(8),
@@ -1172,23 +1200,23 @@ selectView({
     ),
     child: list.length > 1
         ? GetPlatform.isMobile
-            ? Column(
-                crossAxisAlignment: CrossAxisAlignment.start, children: weights)
-            : Row(children: weights)
+        ? Column(
+        crossAxisAlignment: CrossAxisAlignment.start, children: weights)
+        : Row(children: weights)
         : list.isEmpty
-            ? Row(
-                children: [
-                  Expanded(
-                      child: AutoSizeText(
-                    errorMsg,
-                    style: const TextStyle(color: Colors.red),
-                    maxLines: 2,
-                    minFontSize: 12,
-                    maxFontSize: 16,
-                  ))
-                ],
-              )
-            : Row(children: [textSpan(hint: hint, text: list[0].toString())]),
+        ? Row(
+      children: [
+        Expanded(
+            child: AutoSizeText(
+              errorMsg,
+              style: const TextStyle(color: Colors.red),
+              maxLines: 2,
+              minFontSize: 12,
+              maxFontSize: 16,
+            ))
+      ],
+    )
+        : Row(children: [textSpan(hint: hint, text: list[0].toString())]),
   );
 }
 
@@ -1215,40 +1243,42 @@ Widget ratioBarChart({
     var color = colorName.getColorByDescription();
     var text = Center(
         child: Text(
-      '${percent.toShowString()}% ${colorName.isEmpty ? '无色' : colorName}',
-      style: TextStyle(
-        fontWeight: FontWeight.bold,
-        color: isDeepColor(color) ? Colors.white : Colors.black,
-      ),
-    ));
+          '${percent.toShowString()}% ${colorName.isEmpty
+              ? '无色'
+              : colorName}',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: isDeepColor(color) ? Colors.white : Colors.black,
+          ),
+        ));
     list.add(
       Expanded(
         flex: percent.toInt(),
         child: i == 0
             ? Container(
-                height: 50,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                    topLeft: radius,
-                    bottomLeft: radius,
-                  ),
-                  color: color,
-                ),
-                child: text,
-              )
+          height: 50,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topLeft: radius,
+              bottomLeft: radius,
+            ),
+            color: color,
+          ),
+          child: text,
+        )
             : i == ratioList.length - 1
-                ? Container(
-                    height: 50,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                        topRight: radius,
-                        bottomRight: radius,
-                      ),
-                      color: color,
-                    ),
-                    child: text,
-                  )
-                : Container(height: 50, color: color, child: text),
+            ? Container(
+          height: 50,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topRight: radius,
+              bottomRight: radius,
+            ),
+            color: color,
+          ),
+          child: text,
+        )
+            : Container(height: 50, color: color, child: text),
       ),
     );
   }
@@ -1269,7 +1299,6 @@ Widget ratioBarChart({
 }
 
 List<Widget> createA4Paper(PickingMaterialOrderPrintInfo data) {
-
   //创建表格列item
   Widget paperTableRow(int flex, String text, CrossAxisAlignment alignment) =>
       Expanded(
@@ -1346,99 +1375,100 @@ List<Widget> createA4Paper(PickingMaterialOrderPrintInfo data) {
     required String contractNo,
     required String factoryName,
     required String supplierName,
-  })=>Container(
-    padding: EdgeInsets.all(paperPadding),
-    width: paperWidth,
-    height: paperHeight,
-    color: Colors.white,
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        SizedBox(
-          height: paperTitleHeight,
-          child: const Center(
-            child: Text(
-              '仓库备料单',
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
+  }) =>
+      Container(
+        padding: EdgeInsets.all(paperPadding),
+        width: paperWidth,
+        height: paperHeight,
+        color: Colors.white,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            SizedBox(
+              height: paperTitleHeight,
+              child: const Center(
+                child: Text(
+                  '仓库备料单',
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
               ),
             ),
-          ),
+            SizedBox(
+              height: paperSubTitleHeight,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    '领料单号：$orderNumber',
+                    style: const TextStyle(fontSize: 20, color: Colors.black),
+                  ),
+                  Text(
+                    '合同号：$contractNo',
+                    style: const TextStyle(fontSize: 20, color: Colors.black),
+                  ),
+                  Text(
+                    '工厂：$factoryName',
+                    style: const TextStyle(fontSize: 20, color: Colors.black),
+                  ),
+                  Text(
+                    '供应商：$supplierName',
+                    style: const TextStyle(fontSize: 20, color: Colors.black),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.black, width: 0.5),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: item,
+              ),
+            ),
+            Expanded(child: Container()),
+            Container(
+              height: paperFooterHeight,
+              padding: const EdgeInsets.only(right: 5),
+              child: Row(
+                children: [
+                  Text(
+                    '打印日期：${getDateYMD()} ${getTimeHms()}',
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 12,
+                    ),
+                    textAlign: TextAlign.end,
+                  ),
+                  const SizedBox(width: 50),
+                  Text(
+                    '打印人：(${userInfo?.number})${userInfo?.name}',
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 12,
+                    ),
+                    textAlign: TextAlign.end,
+                  ),
+                  const Expanded(child: Center()),
+                  Text(
+                    '页码：$page/$totalPage',
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                      fontSize: 12,
+                    ),
+                    textAlign: TextAlign.end,
+                  )
+                ],
+              ),
+            )
+          ],
         ),
-        SizedBox(
-          height: paperSubTitleHeight,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                '领料单号：$orderNumber',
-                style: const TextStyle(fontSize: 20, color: Colors.black),
-              ),
-              Text(
-                '合同号：$contractNo',
-                style: const TextStyle(fontSize: 20, color: Colors.black),
-              ),
-              Text(
-                '工厂：$factoryName',
-                style: const TextStyle(fontSize: 20, color: Colors.black),
-              ),
-              Text(
-                '供应商：$supplierName',
-                style: const TextStyle(fontSize: 20, color: Colors.black),
-              ),
-            ],
-          ),
-        ),
-        Container(
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.black, width: 0.5),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: item,
-          ),
-        ),
-        Expanded(child: Container()),
-        Container(
-          height: paperFooterHeight,
-          padding: const EdgeInsets.only(right: 5),
-          child: Row(
-            children: [
-              Text(
-                '打印日期：${getDateYMD()} ${getTimeHms()}',
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 12,
-                ),
-                textAlign: TextAlign.end,
-              ),
-              const SizedBox(width: 50),
-              Text(
-                '打印人：(${userInfo?.number})${userInfo?.name}',
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 12,
-                ),
-                textAlign: TextAlign.end,
-              ),
-              const Expanded(child: Center()),
-              Text(
-                '页码：$page/$totalPage',
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                  fontSize: 12,
-                ),
-                textAlign: TextAlign.end,
-              )
-            ],
-          ),
-        )
-      ],
-    ),
-  );
+      );
 
   var scale = 0.5; //纸张缩放比例
   double paperHeight = 2380 * scale; //A4纸高度
@@ -1529,7 +1559,7 @@ List<Widget> createA4Paper(PickingMaterialOrderPrintInfo data) {
 
   //控件总高度
   int totalHeight =
-      widgetList.map((v) => (v[0] as int)).reduce((a, b) => a + b);
+  widgetList.map((v) => (v[0] as int)).reduce((a, b) => a + b);
   var page = 1; //页码
   var totalPage = (totalHeight / tableHeight).ceil(); //总页数
   var height = 0.0; //当前控件总高度

@@ -5,6 +5,7 @@ import 'package:jd_flutter/fun/other/hydroelectric_excess/hydroelectric_excess_v
 import 'package:jd_flutter/fun/report/part_report_scan/part_report_scan_view.dart';
 import 'package:jd_flutter/fun/report/part_report_scan/part_report_scan_view.dart';
 import 'package:jd_flutter/fun/reporting_work/part_process_scan/part_process_scan_view.dart';
+import 'package:jd_flutter/fun/warehouse/in/delivery_order/delivery_order_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/incoming_inspection/incoming_inspection_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/production_scan_warehouse/production_scan_warehouse_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/sap_picking_receipt_reversal/sap_picking_receipt_reversal_view.dart';
@@ -484,6 +485,7 @@ class RouteConfig {
     99,
     const SapCountingInventoryPage(),
   );
+
   //报工交接确认列表
   static Routes handoverReportList = Routes(
     '/handover_report_list',
@@ -505,6 +507,12 @@ class RouteConfig {
   );
 
 
+  //送货单列表
+  static Routes deliveryOrder = Routes(
+    '/delivery_order',
+    99,
+    const DeliveryOrderPage(),
+  );
 
   //本地功能入口列表
   static List<Routes> routeList = [
@@ -570,6 +578,7 @@ class RouteConfig {
     handoverReportList,
     processReport,
     partReportScan
+    deliveryOrder,
   ];
 
   static List<GetPage> appRoutes = [
@@ -833,6 +842,10 @@ class RouteConfig {
     GetPage(
       name: partReportScan.name,
       page: () => partReportScan.page,
+    ),
+    GetPage(
+      name: deliveryOrder.name,
+      page: () => deliveryOrder.page,
     ),
   ];
 }

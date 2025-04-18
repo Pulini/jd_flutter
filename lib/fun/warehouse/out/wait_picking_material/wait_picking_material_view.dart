@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/wait_picking_material_info.dart';
@@ -11,6 +13,7 @@ import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
 import 'package:jd_flutter/widget/picker/picker_controller.dart';
 import 'package:jd_flutter/widget/picker/picker_view.dart';
+import 'package:jd_flutter/widget/signature_page.dart';
 
 import 'wait_picking_material_logic.dart';
 import 'wait_picking_material_state.dart';
@@ -86,15 +89,15 @@ class _WaitPickingMaterialPageState extends State<WaitPickingMaterialPage> {
     if (state.companyDepartmentList.isNotEmpty) {
       var groupController = FixedExtentScrollController();
       var subController = FixedExtentScrollController();
-      var groupList = <Widget>[
-        for (var group in state.companyDepartmentList)
-          Center(child: Text(group.companyName ?? ''))
+      var groupList = <String>[
+        for (var group in state.companyDepartmentList) group.companyName ?? ''
       ];
-      var subList = <List<Widget>>[
+      var subList = <List<String>>[
         for (var group in state.companyDepartmentList)
           (group.departmentList ?? [])
-              .map((sub) => Center(child: Text(sub.departmentName ?? '')))
+              .map((sub) => sub.departmentName ?? '')
               .toList()
+
       ];
       showPopup(
         Column(
@@ -105,6 +108,17 @@ class _WaitPickingMaterialPageState extends State<WaitPickingMaterialPage> {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  TextButton(
+                    onPressed: () => Get.back(),
+                    child: Text(
+                      'dialog_default_cancel'.tr,
+                      style: const TextStyle(
+                        color: Colors.grey,
+                        fontSize: 20,
+                      ),
+                    ),
+                  ),
+                  Expanded(child: Container()),
                   TextButton(
                     onPressed: () {
                       Get.back();
@@ -117,17 +131,6 @@ class _WaitPickingMaterialPageState extends State<WaitPickingMaterialPage> {
                       'dialog_default_confirm'.tr,
                       style: const TextStyle(
                         color: Colors.blueAccent,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                  Expanded(child: Container()),
-                  TextButton(
-                    onPressed: () => Get.back(),
-                    child: Text(
-                      'dialog_default_cancel'.tr,
-                      style: const TextStyle(
-                        color: Colors.grey,
                         fontSize: 20,
                       ),
                     ),
@@ -351,7 +354,8 @@ class _WaitPickingMaterialPageState extends State<WaitPickingMaterialPage> {
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Obx(() => Text(
-                            'wait_picking_material_order_real_time_inventory'.trArgs(
+                            'wait_picking_material_order_real_time_inventory'
+                                .trArgs(
                               [
                                 data
                                     .getRealTimeInventory()
@@ -603,33 +607,58 @@ class _WaitPickingMaterialPageState extends State<WaitPickingMaterialPage> {
     logic.checkPickingMaterial(
       oneFaceCheck: () {
         //委外
-        livenFaceVerification(
-          faceUrl: userInfo?.picUrl ?? '',
-          verifySuccess: (userBase64) => _picking(
-            isMove: isMove,
-            isPosting: isPosting,
-            userBase64: userBase64,
-          ),
-        );
+        (() => SignaturePage(
+              name: userInfo?.name ?? '',
+              callback: (userBase64) => _picking(
+                isMove: isMove,
+                isPosting: isPosting,
+                userBase64: base64Encode(userBase64.buffer.asUint8List()),
+              ),
+            ));
+        // livenFaceVerification(
+        //   faceUrl: userInfo?.picUrl ?? '',
+        //   verifySuccess: (userBase64) => _picking(
+        //     isMove: isMove,
+        //     isPosting: isPosting,
+        //     userBase64: userBase64,
+        //   ),
+        // );
       },
       twoFaceCheck: () {
         //厂内
         if (isPosting) {
           checkPickerDialog(
-            confirm: (picker) => livenFaceVerification(
-              faceUrl: picker.picUrl ?? '',
-              verifySuccess: (pickerBase64) => livenFaceVerification(
-                faceUrl: userInfo?.picUrl ?? '',
-                verifySuccess: (userBase64) => _picking(
-                  isMove: isMove,
-                  isPosting: isPosting,
-                  pickerNumber: picker.empCode ?? '',
-                  pickerBase64: pickerBase64,
-                  userBase64: userBase64,
-                ),
-              ),
-            ),
+            confirm: (picker) => Get.to(() => SignaturePage(
+                  name: picker.empName ?? '',
+                  callback: (pickerBase64) => Get.to(() => SignaturePage(
+                        name: userInfo?.name ?? '',
+                        callback: (userBase64) => _picking(
+                          isMove: isMove,
+                          isPosting: isPosting,
+                          pickerNumber: picker.empCode ?? '',
+                          pickerBase64:
+                              base64Encode(pickerBase64.buffer.asUint8List()),
+                          userBase64:
+                              base64Encode(userBase64.buffer.asUint8List()),
+                        ),
+                      )),
+                )),
           );
+          // checkPickerDialog(
+          //   confirm: (picker) => livenFaceVerification(
+          //     faceUrl: picker.picUrl ?? '',
+          //     verifySuccess: (pickerBase64) => livenFaceVerification(
+          //       faceUrl: userInfo?.picUrl ?? '',
+          //       verifySuccess: (userBase64) => _picking(
+          //         isMove: isMove,
+          //         isPosting: isPosting,
+          //         pickerNumber: picker.empCode ?? '',
+          //         pickerBase64: pickerBase64,
+          //         userBase64: userBase64,
+          //       ),
+          //     ),
+          //   ),
+          // );
         } else {
           errorDialog(content: 'wait_picking_material_order_error_tips'.tr);
         }
@@ -730,7 +759,9 @@ class _WaitPickingMaterialPageState extends State<WaitPickingMaterialPage> {
                     ),
                     Expanded(
                       child: EditText(
-                        hint: 'wait_picking_material_order_customer_purchase_order_no'.tr,
+                        hint:
+                            'wait_picking_material_order_customer_purchase_order_no'
+                                .tr,
                         controller: tecClientPurchaseOrder,
                       ),
                     ),
@@ -740,13 +771,16 @@ class _WaitPickingMaterialPageState extends State<WaitPickingMaterialPage> {
                   children: [
                     Expanded(
                       child: EditText(
-                        hint: 'wait_picking_material_order_purchasing_documents'.tr,
+                        hint: 'wait_picking_material_order_purchasing_documents'
+                            .tr,
                         controller: tecPurchaseVoucher,
                       ),
                     ),
                     Expanded(
                       child: EditText(
-                        hint: 'wait_picking_material_order_production_demand_qty'.tr,
+                        hint:
+                            'wait_picking_material_order_production_demand_qty'
+                                .tr,
                         controller: tecProductionDemand,
                       ),
                     ),
@@ -835,28 +869,34 @@ class _WaitPickingMaterialPageState extends State<WaitPickingMaterialPage> {
                             onChanged: (v) => v
                                 ? state.queryParamOrderType.value = 1
                                 : state.queryParamOrderType.value = 0,
-                            name: 'wait_picking_material_order_positive_order'.tr,
+                            name:
+                                'wait_picking_material_order_positive_order'.tr,
                             value: state.queryParamOrderType.value == 1,
                           )),
                       Obx(() => CheckBox(
                             onChanged: (v) => v
                                 ? state.queryParamOrderType.value = 2
                                 : state.queryParamOrderType.value = 0,
-                            name: 'wait_picking_material_order_positive_order_outsource'.tr,
+                            name:
+                                'wait_picking_material_order_positive_order_outsource'
+                                    .tr,
                             value: state.queryParamOrderType.value == 2,
                           )),
                       Obx(() => CheckBox(
                             onChanged: (v) => v
                                 ? state.queryParamOrderType.value = 3
                                 : state.queryParamOrderType.value = 0,
-                            name: 'wait_picking_material_order_supplement_order'.tr,
+                            name: 'wait_picking_material_order_supplement_order'
+                                .tr,
                             value: state.queryParamOrderType.value == 3,
                           )),
                       Obx(() => CheckBox(
                             onChanged: (v) => v
                                 ? state.queryParamOrderType.value = 4
                                 : state.queryParamOrderType.value = 0,
-                            name: 'wait_picking_material_order_supplement_order_outsource'.tr,
+                            name:
+                                'wait_picking_material_order_supplement_order_outsource'
+                                    .tr,
                             value: state.queryParamOrderType.value == 4,
                           )),
                     ],
@@ -869,25 +909,32 @@ class _WaitPickingMaterialPageState extends State<WaitPickingMaterialPage> {
                       Obx(() => CheckBox(
                             onChanged: (v) =>
                                 state.queryParamAllCanPick.value = v,
-                            name: 'wait_picking_material_order_all_can_pick_material'.tr,
+                            name:
+                                'wait_picking_material_order_all_can_pick_material'
+                                    .tr,
                             value: state.queryParamAllCanPick.value,
                           )),
                       Obx(() => CheckBox(
                             onChanged: (v) =>
                                 state.queryParamShowNoInventory.value = v,
-                            name: 'wait_picking_material_order_show_no_inventory'.tr,
+                            name:
+                                'wait_picking_material_order_show_no_inventory'
+                                    .tr,
                             value: state.queryParamShowNoInventory.value,
                           )),
                       Obx(() => CheckBox(
                             onChanged: (v) =>
                                 state.queryParamReceived.value = v,
-                            name: 'wait_picking_material_order_show_received'.tr,
+                            name:
+                                'wait_picking_material_order_show_received'.tr,
                             value: state.queryParamReceived.value,
                           )),
                       Obx(() => CheckBox(
                             onChanged: (v) =>
                                 state.queryParamIsShowAll.value = v,
-                            name: 'wait_picking_material_order_show_all_material'.tr,
+                            name:
+                                'wait_picking_material_order_show_all_material'
+                                    .tr,
                             value: state.queryParamIsShowAll.value,
                           )),
                     ],
@@ -926,7 +973,8 @@ class _WaitPickingMaterialPageState extends State<WaitPickingMaterialPage> {
             if (scaffoldKey.currentState?.isEndDrawerOpen == true) {
               scaffoldKey.currentState?.closeEndDrawer();
             } else {
-              if (!didPop) exitDialog(content: 'wait_picking_material_order_exit_tips'.tr);
+              if (!didPop)
+                exitDialog(content: 'wait_picking_material_order_exit_tips'.tr);
             }
           },
           child: Column(
@@ -953,7 +1001,8 @@ class _WaitPickingMaterialPageState extends State<WaitPickingMaterialPage> {
                   Expanded(
                     child: CombinationButton(
                       combination: Combination.middle,
-                      text: 'wait_picking_material_order_preparing_materials'.tr,
+                      text:
+                          'wait_picking_material_order_preparing_materials'.tr,
                       click: () => _pickingMaterial(
                         isMove: false,
                         isPosting: false,

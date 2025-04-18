@@ -29,7 +29,7 @@ class WaitPickingMaterialState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: 'picking_material_order_querying_picker_info'.tr,
+      loading: 'wait_picking_material_order_querying_picker_info'.tr,
       method: webApiSapGetPickerInfo,
       body: {'USNAM': pickerNumber},
     ).then((response) {
@@ -37,6 +37,7 @@ class WaitPickingMaterialState {
         companyDepartmentList = [
           for (var json in response.data) CompanyInfo.fromJson(json)
         ];
+        queryParamDepartment.value=companyDepartmentList[0].companyName??'';
         success.call();
       } else {
         companyDepartmentList = [];
@@ -147,7 +148,6 @@ class WaitPickingMaterialState {
       body: {
         'MOVE': isMove ? 'X' : '',
         'CREATE': isPosting ? '' : 'X',
-        'DIRECTPOSTING': isPosting ? 'X' : '',
         'GT_REQITEMS': [
           for (var item1 in orderList.where((v) => v.hasSelected()))
             ...item1.getSapPostBody(pickerNumber ?? '')
