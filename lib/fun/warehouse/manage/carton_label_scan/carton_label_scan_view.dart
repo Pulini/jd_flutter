@@ -3,6 +3,7 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/carton_label_scan_info.dart';
+import 'package:jd_flutter/fun/warehouse/manage/carton_label_scan/carton_label_scan_priority_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/carton_label_scan/carton_label_scan_progress_view.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
@@ -24,6 +25,7 @@ class _CartonLabelScanPageState extends State<CartonLabelScanPage> {
   final CartonLabelScanState state = Get.find<CartonLabelScanLogic>().state;
 
   var controller = TextEditingController();
+
   late AudioPlayer player;
   var as1 = 'audios/audio_success1.mp3';
   var as2 = 'audios/audio_success2.mp3';
@@ -81,7 +83,7 @@ class _CartonLabelScanPageState extends State<CartonLabelScanPage> {
   }
 
   playAudio(String as) {
-    if((deviceInfo as AndroidDeviceInfo).version.release.toDoubleTry() >=8){
+    if ((deviceInfo as AndroidDeviceInfo).version.release.toDoubleTry() >= 8) {
       //安卓8.0以上才能调用这个api
       //安卓5.1会出现 Didn't find class "android.media.AudioFocusRequest"
       if (player.state != PlayerState.completed) {
@@ -94,12 +96,7 @@ class _CartonLabelScanPageState extends State<CartonLabelScanPage> {
     }
   }
 
-  @override
-  void initState() {
-    if((deviceInfo as AndroidDeviceInfo).version.release.toDoubleTry() >=8){
-      //安卓8.0以上才能调用这个api
-      player = AudioPlayer();
-    }
+  _scan() {
     pdaScanner(scan: (barCode) {
       logic.scan(
         code: barCode,
@@ -117,6 +114,15 @@ class _CartonLabelScanPageState extends State<CartonLabelScanPage> {
         submitError: () => playAudio(ae2),
       );
     });
+  }
+
+  @override
+  void initState() {
+    if ((deviceInfo as AndroidDeviceInfo).version.release.toDoubleTry() >= 8) {
+      //安卓8.0以上才能调用这个api
+      player = AudioPlayer();
+    }
+    _scan();
     super.initState();
   }
 
@@ -133,6 +139,15 @@ class _CartonLabelScanPageState extends State<CartonLabelScanPage> {
           ),
           icon: const Icon(
             Icons.menu_book,
+            color: Colors.blue,
+          ),
+        ),
+        IconButton(
+          onPressed: () => Get.to(
+            () => const CartonLabelScanPriorityPage(),
+          )?.then((v) => _scan()),
+          icon: const Icon(
+            Icons.low_priority,
             color: Colors.blue,
           ),
         )
@@ -156,7 +171,8 @@ class _CartonLabelScanPageState extends State<CartonLabelScanPage> {
                     border: const OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(20)),
                     ),
-                    hintText: 'carton_label_scan_scan_code_or_input_outside_code'.tr,
+                    hintText:
+                        'carton_label_scan_scan_code_or_input_outside_code'.tr,
                     hintStyle: const TextStyle(color: Colors.grey),
                     prefixIcon: IconButton(
                       onPressed: () => controller.clear(),

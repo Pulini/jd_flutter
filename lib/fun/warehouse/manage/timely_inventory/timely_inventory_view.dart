@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/bean/http/response/timely_inventory_info.dart';
 import 'package:jd_flutter/bean/http/response/timely_inventory_show_info.dart';
 import 'package:jd_flutter/fun/warehouse/manage/timely_inventory/timely_inventory_logic.dart';
 import 'package:jd_flutter/route.dart';
@@ -27,90 +28,92 @@ class _TimelyInventoryPageState extends State<TimelyInventoryPage> {
         '${RouteConfig.timelyInventory.name}${PickerType.sapFactoryWarehouse}',
   );
 
-  _item(TimelyInventoryShowInfo data) {
-    return InkWell(
-      onTap: () => {
-        reasonInputPopup(
-          title: [
-             Center(
-              child: Text(
-                'timely_inventory_warehouse_location'.tr,
-                style: const TextStyle(fontSize: 20, color: Colors.white),
+  _item(TimelyInventoryInfo data) {
+    return Container(
+      margin: const EdgeInsets.only(left: 5, right: 5, bottom: 10),
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              expandedTextSpan(
+                hint: 'timely_inventory_material_name'.tr,
+                text: data.materialName ?? '',
+                textColor: Colors.blue,
               ),
-            )
-          ],
-          hintText: 'timely_inventory_new_warehouse_location'.tr,
-          isCanCancel: true,
-          confirm: (s) => {
-            Get.back(),
-            logic.modifyStorageLocation(
-                success: logic.getImmediateStockList(
-                    factoryNumber: factoryWarehouseController
-                        .getOptionsPicker1()
-                        .pickerId(),
-                    stockId: factoryWarehouseController
-                        .getOptionsPicker2()
-                        .pickerId()),
-                data: data,
-                newLocation: s)
-          },
-        )
-      },
-      child: Container(
-        height: 100,
-        margin: const EdgeInsets.only(left: 5, right: 5, bottom: 10),
-        padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                expandedTextSpan(
-                  hint: 'timely_inventory_material_name'.tr,
-                  text: data.materialName.toString(),
-                  textColor: Colors.blue,
-                ),
-                expandedTextSpan(
-                  hint: 'timely_inventory_material_code'.tr,
-                  text: data.materialNumber.toString(),
-                  textColor: Colors.blue,
-                ),
-                expandedTextSpan(
-                  hint: 'timely_inventory_factory'.tr,
-                  text: data.factoryNumber.toString(),
-                  textColor: Colors.blue,
+              expandedTextSpan(
+                hint: 'timely_inventory_material_code'.tr,
+                text: data.materialNumber ?? '',
+                textColor: Colors.blue,
+              ),
+              expandedTextSpan(
+                hint: 'timely_inventory_factory'.tr,
+                text: data.factoryNumber ?? '',
+                textColor: Colors.blue,
+              )
+            ],
+          ),
+          for (var v in data.items!)
+            InkWell(
+              child: Row(
+                children: [
+                  expandedTextSpan(
+                    hint: 'timely_inventory_basic_quantity'.tr,
+                    text: v.stockQty ?? '${v.unit}' ?? '',
+                    textColor: Colors.grey,
+                  ),
+                  expandedTextSpan(
+                    hint: 'timely_inventory_common_quantity'.tr,
+                    text: v.stockQty1 ?? '${v.unit1}' ?? '',
+                    textColor: Colors.grey,
+                  ),
+                  expandedTextSpan(
+                    hint: 'timely_inventory_batch'.tr,
+                    text: v.batch ?? '',
+                    textColor: Colors.grey,
+                  ),
+                  expandedTextSpan(
+                    hint: 'timely_inventory_storage_location'.tr,
+                    text: v.zlocal ?? '',
+                    textColor: Colors.grey,
+                  )
+                ],
+              ),
+              onTap: () => {
+                reasonInputPopup(
+                  title: [
+                    Center(
+                      child: Text(
+                        'timely_inventory_warehouse_location'.tr,
+                        style:
+                            const TextStyle(fontSize: 20, color: Colors.white),
+                      ),
+                    )
+                  ],
+                  hintText: 'timely_inventory_new_warehouse_location'.tr,
+                  isCanCancel: true,
+                  confirm: (s) => {
+                    Get.back(),
+                    logic.modifyStorageLocation(
+                        success: logic.getImmediateStockList(
+                            factoryNumber: factoryWarehouseController
+                                .getOptionsPicker1()
+                                .pickerId(),
+                            stockId: factoryWarehouseController
+                                .getOptionsPicker2()
+                                .pickerId()),
+                        data: data,
+                        item: v,
+                        newLocation: s)
+                  },
                 )
-              ],
-            ),
-            Row(
-              children: [
-                expandedTextSpan(
-                  hint: 'timely_inventory_basic_quantity'.tr,
-                  text: data.stockQty.toString() + data.unit.toString(),
-                  textColor: Colors.grey,
-                ),
-                expandedTextSpan(
-                  hint: 'timely_inventory_common_quantity'.tr,
-                  text: data.stockQty1.toString() + data.unit1.toString(),
-                  textColor: Colors.grey,
-                ),
-                expandedTextSpan(
-                  hint: 'timely_inventory_batch'.tr,
-                  text: data.batch.toString(),
-                  textColor: Colors.grey,
-                ),
-                expandedTextSpan(
-                  hint: 'timely_inventory_storage_location'.tr,
-                  text: data.zlocal.toString(),
-                  textColor: Colors.grey,
-                )
-              ],
+              },
             )
-          ],
-        ),
+        ],
       ),
     );
   }

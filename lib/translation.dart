@@ -1335,12 +1335,15 @@ class Translation extends Translations {
           'carton_label_scan_label_qty': '贴标数量：',
           'carton_label_scan_scanned_qty': '已扫数量：',
           'carton_label_scan_scan_code_or_input_outside_code': '请扫描或手动输入外箱贴标',
+          'carton_label_scan_input_or_scan': '请扫描或手动输入外箱贴标或输入PO',
           'carton_label_scan_outside_code': '外箱条码：',
+          'carton_label_scan_po_number': 'PO：',
           'carton_label_scan_rescan_code': '重新扫码',
           'carton_label_scan_rescan_inside_code': '重扫内标',
           'carton_label_scan_submit': '提交',
           'carton_label_scan_querying_outside_label_detail': '正在查询外箱标签明细...',
           'carton_label_scan_submitting_scan_progress': '正在提交扫码进度...',
+          'carton_label_scan_submitting_change_priority': '正在修改优先级...',
           'carton_label_scan_label_scan_completed_tips':
               '条码[%s]已扫满，请确认是否放错或重复扫码。',
           'carton_label_scan_label_placement_error_tips':
@@ -1355,6 +1358,9 @@ class Translation extends Translations {
           'carton_label_scan_progress_detail_outside_label': '外箱标：',
           'carton_label_scan_progress_detail_size': '尺码：',
           'carton_label_scan_progress_detail_title': '扫码明细',
+          'carton_label_scan_change_priority': '更改优先级',
+          'carton_label_scan_please_input': '请输入外箱标号或PO号',
+          'carton_label_scan_change_successful': '更改成功',
           'smart_delivery_sales_order': '销售订单：',
           'smart_delivery_type_body': '工厂型体：',
           'smart_delivery_customer_po': '客户PO：',
@@ -2125,6 +2131,19 @@ class Translation extends Translations {
           'process_report_to_submit_data':'正在提交条码数据...',
           'process_report_click_item':'有工单未绑定员工，请点击工单绑定员工！',
           'process_report_success_submit':'提交成功！',
+          'part_report_manually_add':'手动添加',
+          'part_report_title':'部件报工扫描',
+          'part_report_add':'新增',
+          'part_report_delete':'删除',
+          'part_report_submit':'提交',
+          'part_report_code_is_empty':'扫描内容为空',
+          'part_report_code_is_have':'该条码已存在！',
+          'part_report_code_is_not_have':'找不到该条码！',
+          'part_report_getting_summary':'正在获取汇总数据...',
+          'part_report_select_summary_type':'请选择汇总表类型！',
+          'part_report_select_instruction':'指令',
+          'part_report_select_size':'尺码',
+          'part_report_acquisition_failed':'获取失败！',
 
         },
         localeEnglish.toString(): {
@@ -3716,7 +3735,9 @@ class Translation extends Translations {
           'carton_label_scan_scanned_qty': 'Scanned qty：',
           'carton_label_scan_scan_code_or_input_outside_code':
               'Scan code or input outside code',
+          'carton_label_scan_input_or_scan': 'Please scan or manually input the outer box label or enter the PO',
           'carton_label_scan_outside_code': 'Outside barcode：',
+          'carton_label_scan_po_number': 'PO：',
           'carton_label_scan_rescan_code': 'Rescan barcode',
           'carton_label_scan_rescan_inside_code': 'Rescan inside barcode',
           'carton_label_scan_submit': 'Submit',
@@ -3724,6 +3745,7 @@ class Translation extends Translations {
               'Querying_outside_label_detail...',
           'carton_label_scan_submitting_scan_progress':
               'Submitting_scan_progress ...',
+          'carton_label_scan_submitting_change_priority': 'Modifying priority...',
           'carton_label_scan_label_scan_completed_tips':
               'Barcode [ %s ] has been scanned to capacity. Please confirm if it has been placed incorrectly or scanned repeatedly.',
           'carton_label_scan_label_placement_error_tips':
@@ -3738,6 +3760,9 @@ class Translation extends Translations {
           'carton_label_scan_progress_detail_outside_label': 'Outside barcode：',
           'carton_label_scan_progress_detail_size': 'Size：',
           'carton_label_scan_progress_detail_title': 'Scan detail',
+          'carton_label_scan_change_priority': 'Change Priority',
+          'carton_label_scan_please_input': 'Please enter the outer box number or PO number',
+          'carton_label_scan_change_successful': 'Change successful',
           'smart_delivery_sales_order': 'Sales order：',
           'smart_delivery_type_body': 'Type body：',
           'smart_delivery_customer_po': 'Customer po：',
@@ -4583,7 +4608,19 @@ class Translation extends Translations {
           'process_report_to_submit_data':'Submitting barcode data...',
           'process_report_click_item':'There are work orders that have not been bound to employees. Please click on the work order to bind employees!',
           'process_report_success_submit':'Submitted successfully！',
-
+          'part_report_manually_add':'Manually add',
+          'part_report_title':'Component reporting scan',
+          'part_report_add':'Add',
+          'part_report_delete':'Delete',
+          'part_report_submit':'Submit',
+          'part_report_code_is_empty':'The scanned content is empty',
+          'part_report_code_is_have':'The barcode already exists！',
+          'part_report_code_is_not_have':'The barcode cannot be found！',
+          'part_report_getting_summary':'Getting summary table...',
+          'part_report_select_summary_type':'Please select the type of summary table！',
+          'part_report_select_instruction':'Instruction',
+          'part_report_select_size':'Size',
+          'part_report_acquisition_failed':'Acquisition failed！',
         }
       };
 }

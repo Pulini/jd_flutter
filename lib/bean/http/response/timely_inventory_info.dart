@@ -15,7 +15,7 @@ class TimelyInventoryInfo {
     if (json['Items'] != null) {
       items = [];
       json['Items'].forEach((v) {
-        items?.add(Items.fromJson(
+        items?.add(TimeItems.fromJson(
           json: json,
           factoryNumber: factoryNumber ?? '',
           materialNumber: materialNumber ?? '',
@@ -26,7 +26,7 @@ class TimelyInventoryInfo {
     }
   }
 
-  List<Items>? items;
+  List<TimeItems>? items;
   String? materialNumber;
   String? materialName;
   String? stockID;
@@ -46,8 +46,8 @@ class TimelyInventoryInfo {
   }
 }
 
-class Items {
-  Items({
+class TimeItems {
+  TimeItems({
     this.batch,
     this.factoryDescribe,
     this.lgobe,
@@ -66,7 +66,7 @@ class Items {
     required this.stockID,
   });
 
-  Items.fromJson({
+  TimeItems.fromJson({
     required dynamic json,
     required this.factoryNumber,
     required this.materialNumber,

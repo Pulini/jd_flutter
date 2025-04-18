@@ -776,6 +776,9 @@ const webApiGetCartonLabelInfo = 'api/OutBoxScan/GetLinkData';
 //外箱鞋盒贴标数据提交
 const webApiSubmitScannedCartonLabel = 'api/OutBoxScan/SubOutBoxData';
 
+//外箱鞋盒更改优先级
+const webApiChangePOPriority = 'api/OutBoxScan/ChangePOPriority';
+
 //订单扫码情况表查询
 const webApiGetCartonLabelScanHistory = 'api/OutBoxScan/GetOrderScan';
 
@@ -935,30 +938,30 @@ const webApiRepairOrderVoid = 'api/EquipmentRepair/RepairOrderVoid';
 const webApiGetEmpAndLiableByEmpCode = 'api/User/GetEmpAndLiableByEmpCode';
 
 //获取设备维修记录单故障原因列表
-const webApiGetIssueCauseType = "api/EquipmentRepair/GetIssueCauseType";
+const webApiGetIssueCauseType = 'api/EquipmentRepair/GetIssueCauseType';
 
 //设备报修提交数据
-const webApiSubmitRecordData = "api/EquipmentRepair/SubmitRecordData";
+const webApiSubmitRecordData = 'api/EquipmentRepair/SubmitRecordData';
 
 //获取即时库存
-const webApiGetImmediateStockList = "api/Stock/GetImmediateStockList";
+const webApiGetImmediateStockList = 'api/Stock/GetImmediateStockList';
 
 //即时库存修改库位
-const webApiModifyStorageLocation = "api/Stock/ModifyStorageLocation";
+const webApiModifyStorageLocation = 'api/Stock/ModifyStorageLocation';
 
 //获取箱标详情
 const webApiGetBarCodeListByBoxNumber =
-    "api/BoxLabelBarcode/GetBarCodeListByBoxNumber";
+    'api/BoxLabelBarcode/GetBarCodeListByBoxNumber';
 
 //Puma防伪标入库
-const webApiBarCodeInStock = "api/BoxLabelBarcode/BarCodeInStock";
+const webApiBarCodeInStock = 'api/BoxLabelBarcode/BarCodeInStock';
 
 //获取条码
 const webApiGetBarCodeListByEmp =
-    "api/BoxLabelBarcode/GetBarCodeListByEmpNumber";
+    'api/BoxLabelBarcode/GetBarCodeListByEmpNumber';
 
 //Puma防伪标出库
-const webApiBarCodeOutStock = "api/BoxLabelBarcode/BarCodeOutStock";
+const webApiBarCodeOutStock = 'api/BoxLabelBarcode/BarCodeOutStock';
 
 //sap油墨调色单查询
 const webApiSapGetInkColorMatchOrder = 'sap/zapp/ZFUN_APP_YM_QUERY';
@@ -985,17 +988,17 @@ const webApiJudgeEmpNumber = 'api/User/JudgeEmpNumber';
 
 //获得已入库条形码数据
 const webApiGetBarCodeStatusByDepartmentID =
-    "api/BarCode/GetBarCodeStatusByDepartmentID";
+    'api/BarCode/GetBarCodeStatusByDepartmentID';
 
 //提交条形码数据,自动生成外购入库单
-const webApiUploadSupplierBarCode = "api/BarCode/SubmitBarCode2CollectBill";
+const webApiUploadSupplierBarCode = 'api/BarCode/SubmitBarCode2CollectBill';
 
 //验证生产扫码入库条码
-const webApiGetUnReportedBarCode = "api/scanjobbooking/GetUnReportedBarCode";
+const webApiGetUnReportedBarCode = 'api/scanjobbooking/GetUnReportedBarCode';
 
 //生产扫码入库提交
 const webApiUploadProductionScanning =
-    "api/ScanJobBooking/SubmitBarCode2PrdInStockCollectBillNew";
+    'api/ScanJobBooking/SubmitBarCode2PrdInStockCollectBillNew';
 
 //根据SAP供应商ID获取待稽查送货单列表
 const webApiGetDeliListBySupplier = 'api/Incoming/GetDeliListBySupplier';
@@ -1053,43 +1056,46 @@ const webApiGetMaterialInventoryList = 'api/Material/GetMaterialInventoryList';
 
 
 //工序汇报入库提交
-const webApiUploadProcessReport = "api/ScanJobBooking/SubmitScWorkCardBarCode2ProcessOutput";
+const webApiUploadProcessReport = 'api/ScanJobBooking/SubmitScWorkCardBarCode2ProcessOutput';
 
 //工序汇报入库，获取贴标数据
-const webApiGetBarCodeInfo = "api/BarCode/GetBarCodeInfo";
+const webApiGetBarCodeInfo = 'api/BarCode/GetBarCodeInfo';
 
 //工序汇报入库，提交贴标数据
-const webApiUpdateBarCodeInfo = "api/BarCode/UpdateBarCodeInfo";
+const webApiUpdateBarCodeInfo = 'api/BarCode/UpdateBarCodeInfo';
 
 //获取工序派工单列表   金甄
-const webApiGetScWorkCardList= "api/CompoundDispatching/GetScWorkCardListJinZhen";
+const webApiGetScWorkCardList= 'api/CompoundDispatching/GetScWorkCardListJinZhen';
 
 //获取工序派工单详情  金甄
-const webApiGetScWorkCardDetail = "api/CompoundDispatching/GetScWorkCardDetailJinZhen";
+const webApiGetScWorkCardDetail = 'api/CompoundDispatching/GetScWorkCardDetailJinZhen';
 
 //根据派工单ID删除贴标和框数
-const webApiClearBarCodeAndBoxQty = "api/CompoundDispatching/ClearBarCodeAndBoxQtyJinZhen";
+const webApiClearBarCodeAndBoxQty = 'api/CompoundDispatching/ClearBarCodeAndBoxQtyJinZhen';
 
 //获取已入库的贴标列表
-const webApiForSAPGetStockInBarCodeList = "sap/zapp/ZFUN_APP_BARCODE_FETCH";
+const webApiForSAPGetStockInBarCodeList = 'sap/zapp/ZFUN_APP_BARCODE_FETCH';
 
 //修改派工表_金臻 (产量汇报)
-const webApiUpdateScWorkCard = "api/CompoundDispatching/UpdateScWorkCardJinZhen";
+const webApiUpdateScWorkCard = 'api/CompoundDispatching/UpdateScWorkCardJinZhen';
 
 //班组长获取报工交接确认列表_金臻
-const webApiGetScWorkCardReportCheckList = "api/CompoundDispatching/GetScWorkCardReportCheckListJinZhen";
+const webApiGetScWorkCardReportCheckList = 'api/CompoundDispatching/GetScWorkCardReportCheckListJinZhen';
 
 //班组长反审核汇报单并删除工序汇报单_金臻
-const webApiUnCheckScWorkCardReport = "api/CompoundDispatching/UnCheckScWorkCardReportJinZhen";
+const webApiUnCheckScWorkCardReport = 'api/CompoundDispatching/UnCheckScWorkCardReportJinZhen';
 
 //删除报工产量表数据_金臻
-const webApiDelScWorkCardReport = "api/CompoundDispatching/DelScWorkCardReportJinZhen";
+const webApiDelScWorkCardReport = 'api/CompoundDispatching/DelScWorkCardReportJinZhen';
 
 //班组长审核汇报单并生成工序汇报单_金臻
-const webApiCheckScWorkCardReport = "api/CompoundDispatching/CheckScWorkCardReportJinZhen";
+const webApiCheckScWorkCardReport = 'api/CompoundDispatching/CheckScWorkCardReportJinZhen';
 
 //根据条形码获得工序派工信息
-const webApiGetDispatchInfo = "api/WorkCard/GetDispatchInfo";
+const webApiGetDispatchInfo = 'api/WorkCard/GetDispatchInfo';
 
 //提交工序派工条形码数据
-const webApiSubmitProcessBarCode2CollectBill = "api/WorkCard/SubmitProcessBarCode2CollectBill";
+const webApiSubmitProcessBarCode2CollectBill = 'api/WorkCard/SubmitProcessBarCode2CollectBill';
+
+//获取条码报工数据汇总表
+const webApiGetBarCodeReportDetails = 'api/ShearOff/GetBarCodeReportDetails';

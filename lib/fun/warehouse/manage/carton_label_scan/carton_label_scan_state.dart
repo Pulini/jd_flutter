@@ -4,6 +4,8 @@ import 'package:jd_flutter/bean/http/response/carton_label_scan_info.dart';
 import 'package:jd_flutter/bean/http/response/carton_label_scan_progress_info.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
+import 'package:jd_flutter/widget/custom_widget.dart';
+import 'package:jd_flutter/widget/dialogs.dart';
 
 
 class CartonLabelScanState {
@@ -15,6 +17,11 @@ class CartonLabelScanState {
   var progress = <CartonLabelScanProgressInfo>[].obs;
   var progressDetail = <List<CartonLabelScanProgressDetailInfo>>[].obs;
 
+  var priorityCartonInsideLabelList = <LinkDataSizeList>[].obs;
+  var priorityCartonLabel = ''.obs;
+  var priorityPo = ''.obs;
+  CartonLabelScanInfo? priorityCartonLabelInfo;
+
   queryCartonLabelInfo({
     required String code,
     required Function(String) error,
@@ -22,20 +29,47 @@ class CartonLabelScanState {
     labelTotal.value=0;
     scannedLabelTotal.value=0;
     httpGet(
-      loading: 'carton_label_scan_querying_outside_label_detail'.tr,
+      loading:'carton_label_scan_querying_outside_label_detail'.tr  ,
       method: webApiGetCartonLabelInfo,
       params: {
         'CartonBarCode': code,
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        cartonLabelInfo = CartonLabelScanInfo.fromJson(response.data);
-        cartonLabel.value = cartonLabelInfo?.outBoxBarCode ?? '';
-        cartonInsideLabelList.value = cartonLabelInfo!.linkDataSizeList ?? [];
-        labelTotal.value = cartonInsideLabelList.fold(
-            0, (total, next) => total + next.labelCount!);
+          cartonLabelInfo = CartonLabelScanInfo.fromJson(response.data);
+          cartonLabel.value = cartonLabelInfo?.outBoxBarCode ?? '';
+          cartonInsideLabelList.value = cartonLabelInfo!.linkDataSizeList ?? [];
+          labelTotal.value = cartonInsideLabelList.fold(0, (total, next) => total + next.labelCount!);
       } else {
         error.call(response.message ?? 'query_default_error'.tr);
+      }
+    });
+  }
+
+  //清理优先级界面数据
+  clearPriority(){
+    priorityCartonLabelInfo = CartonLabelScanInfo();
+    priorityCartonLabel.value = '';
+    priorityPo.value='';
+    priorityCartonInsideLabelList.value = [];
+  }
+
+  //更改优先级
+  changePOPriority({
+    required String poNumber,
+    required Function(String) success,
+  }) {
+    httpPost(
+      loading: 'carton_label_scan_submitting_change_priority'.tr,
+      method: webApiChangePOPriority,
+      params: {
+        'PO': poNumber,
+      },
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+       success.call(response.message ?? 'carton_label_scan_change_successful'.tr);
+      } else {
+        errorDialog(content: response.message ?? 'query_default_error'.tr);
       }
     });
   }

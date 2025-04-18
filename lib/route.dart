@@ -2,6 +2,8 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/fun/dispatching/injection_scan_report/Injection_scan_report_view.dart';
 import 'package:jd_flutter/fun/maintenance/sap_ink_color_matching/sap_ink_color_matching_view.dart';
 import 'package:jd_flutter/fun/other/hydroelectric_excess/hydroelectric_excess_view.dart';
+import 'package:jd_flutter/fun/report/part_report_scan/part_report_scan_view.dart';
+import 'package:jd_flutter/fun/report/part_report_scan/part_report_scan_view.dart';
 import 'package:jd_flutter/fun/reporting_work/part_process_scan/part_process_scan_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/incoming_inspection/incoming_inspection_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/production_scan_warehouse/production_scan_warehouse_view.dart';
@@ -238,7 +240,7 @@ class RouteConfig {
   //外箱标扫码
   static Routes cartonLabelScan = Routes(
     '/carton_label_scan_page',
-    99,
+    100,
     const CartonLabelScanPage(),
   );
 
@@ -472,6 +474,13 @@ class RouteConfig {
     99,
     const ProcessReportPage(),
   );
+  //部件报工扫描
+  static Routes partReportScan = Routes(
+    '/part_report_scan',
+    99,
+    const PartReportScanPage(),
+  );
+
 
   //本地功能入口列表
   static List<Routes> routeList = [
@@ -532,7 +541,8 @@ class RouteConfig {
     waitPickingMaterial,
     injectionScanReport,
     handoverReportList,
-    processReport
+    processReport,
+    partReportScan
   ];
 
   static List<GetPage> appRoutes = [
@@ -780,6 +790,10 @@ class RouteConfig {
     GetPage(
       name: processReport.name,
       page: () => processReport.page,
+    ),
+    GetPage(
+      name: partReportScan.name,
+      page: () => partReportScan.page,
     ),
   ];
 }

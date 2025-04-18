@@ -1,6 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/bean/http/response/carton_label_scan_info.dart';
 import 'package:jd_flutter/bean/http/response/carton_label_scan_progress_info.dart';
 import 'package:jd_flutter/fun/warehouse/manage/carton_label_scan/carton_label_scan_progress_detail_view.dart';
+import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
@@ -8,7 +11,31 @@ import 'carton_label_scan_state.dart';
 
 class CartonLabelScanLogic extends GetxController {
   final CartonLabelScanState state = CartonLabelScanState();
+  var scanController = TextEditingController();
+
   var isSubmitting = false;
+
+  queryPriorityCartonLabelInfo({
+    required String code,
+  }) {
+    httpGet(
+      loading:'carton_label_scan_querying_outside_label_detail'.tr  ,
+      method: webApiGetCartonLabelInfo,
+      params: {
+        'CartonBarCode': code,
+      },
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        state.priorityCartonLabelInfo = CartonLabelScanInfo.fromJson(response.data);
+        state.priorityCartonLabel.value = state.priorityCartonLabelInfo?.outBoxBarCode ?? '';
+        state.priorityPo.value = state.priorityCartonLabelInfo?.custOrderNumber ?? '';
+        state.priorityCartonInsideLabelList.value = state.priorityCartonLabelInfo!.linkDataSizeList ?? [];
+      } else {
+        state.clearPriority();
+        errorDialog(content: response.message ?? 'query_default_error'.tr);
+      }
+    });
+  }
 
   queryCartonLabelInfo(String code) {
     state.queryCartonLabelInfo(
@@ -105,6 +132,18 @@ class CartonLabelScanLogic extends GetxController {
         isSubmitting = false;
       },
     );
+  }
+
+  changePriority() {
+    if(scanController.text.isEmpty && state.priorityCartonLabelInfo==null){
+      showSnackBar(message:'carton_label_scan_input_or_scan'.tr  );
+    }else{
+      state.changePOPriority(success: (mes) {
+        successDialog(content: mes, back: () => {
+          scanController.clear(),
+          state.clearPriority()});
+      }, poNumber: scanController.text.length!=20? scanController.text.toString() : state.priorityCartonLabelInfo!.custOrderNumber!.toString());
+    }
   }
 
   queryScanHistory(String orderNo) {

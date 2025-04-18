@@ -34,31 +34,7 @@ class TimelyInventoryLogic extends GetxController {
             TimelyInventoryInfo.fromJson(response.data[i])
         ];
 
-        var lists = <TimelyInventoryShowInfo>[];
-        for (var i = 0; i < list.length; ++i) {
-          for (var x = 0; x < list[x].items!.length; ++x) {
-            lists.add(TimelyInventoryShowInfo(
-              materialNumber: list[i].materialNumber,
-              materialName: list[i].materialName,
-              stockID: list[i].stockID,
-              factoryNumber: list[i].factoryNumber,
-              batch: list[i].items?[x].batch,
-              factoryDescribe: list[i].items?[x].factoryDescribe,
-              lgobe: list[i].items?[x].lgobe,
-              materialCode: list[i].items?[x].materialCode,
-              mtono: list[i].items?[x].mtono,
-              productName: list[i].items?[x].productName,
-              stockQty: list[i].items?[x].stockQty,
-              stockQty1: list[i].items?[x].stockQty1,
-              unit: list[i].items?[x].unit,
-              unit1: list[i].items?[x].unit1,
-              zcoefficient: list[i].items?[x].zcoefficient,
-              zlocal: list[i].items?[x].zlocal,
-            ));
-          }
-        }
-
-        state.dataList.value = lists;
+        state.dataList.value = list;
       } else {
         errorDialog(content: response.message);
       }
@@ -68,7 +44,8 @@ class TimelyInventoryLogic extends GetxController {
 
   //修改库位
   modifyStorageLocation({
-    required TimelyInventoryShowInfo data,
+    required TimelyInventoryInfo data,
+    required TimeItems item,
     required String newLocation,
     required Function(String s) success,
   }) {
@@ -76,7 +53,7 @@ class TimelyInventoryLogic extends GetxController {
       method: webApiModifyStorageLocation,
       loading: 'timely_inventory_submitting_modifications'.tr,
       body: {
-        'BatchNumber':data.batch,
+        'BatchNumber':item.batch,
         'StockID':data.stockID,
         'MaterialCode':data.materialNumber,
         'Factory':data.factoryNumber,
