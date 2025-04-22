@@ -26,7 +26,7 @@ class _PartReportScanPageState extends State<PartReportScanPage> {
         },
         child: Container(
           padding: const EdgeInsets.all(5),
-          margin: const EdgeInsets.only(bottom: 5),
+          margin: const EdgeInsets.only(left: 5,bottom: 2,right: 5,top: 2),
           decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(5),
@@ -48,12 +48,22 @@ class _PartReportScanPageState extends State<PartReportScanPage> {
   @override
   Widget build(BuildContext context) {
     return pageBody(
+      actions: [TextButton(onPressed: ()=>{
+        askDialog(
+          content: 'part_report_sure_clear'.tr,
+          confirm: () {
+            logic.clearData();
+          },
+        ),
+
+      }, child: Text('part_report_clear'.tr))],
         title: 'part_report_title'.tr,
         body: Column(
           children: [
             Row(
               children: [
                 Expanded(
+                  flex: 5,
                   child: EditText(
                     hint: 'process_report_store_manual_input'.tr,
                     onChanged: (v) => state.modifyCode = v,
@@ -89,13 +99,9 @@ class _PartReportScanPageState extends State<PartReportScanPage> {
                   flex: 1,
                   child: CombinationButton(
                     //手动添加
-                    text: 'process_report_manually_add'.tr,
+                    text: 'part_report_manually_add'.tr,
                     click: () => {
-                      Get.to(() => const Scanner())?.then((v) {
-                        if (v != null) {
-                          logic.addCode(state.modifyCode);
-                        }
-                      }),
+                        logic.addCode(state.modifyCode)
                     },
                     combination: Combination.left,
                   ),
@@ -118,19 +124,21 @@ class _PartReportScanPageState extends State<PartReportScanPage> {
                     //提交
                     text: 'part_report_submit'.tr,
                     click: () => {
-                      askDialog(
-                        content: 'part_report_select_summary_type'.tr,
-                        confirmText: 'part_report_select_instruction'.tr,
-                        confirm: () {
-                          logic.getBarCodeReportDetails('1');
-                        },
-                        cancelText: 'part_report_select_size'.tr,
-                        cancel: () {
-                          logic.getBarCodeReportDetails('2');
-                        },
-                      ),
+                      if( logic.haveBarCode()){
+                        askDialog(
+                          content: 'part_report_select_summary_type'.tr,
+                          confirmText: 'part_report_select_instruction'.tr,
+                          confirm: () {
+                            logic.getBarCodeReportDetails('1');
+                          },
+                          cancelText: 'part_report_select_size'.tr,
+                          cancel: () {
+                            logic.getBarCodeReportDetails('2');
+                          },
+                        ),
+                      }
                     },
-                    combination: Combination.middle,
+                    combination: Combination.right,
                   ),
                 )
               ],

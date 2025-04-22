@@ -1,25 +1,25 @@
 class ContainerScanner {
   ContainerScanner({
-    this.ZZKHXH1, //柜号
-    this.ZZYCXS,  //应出
-    this.YFXS,  //已出
+    this.cabinetNumber, //柜号
+    this.shouldRelease,  //应出
+    this.issued,  //已出
   });
 
   ContainerScanner.fromJson(dynamic json) {
-    ZZKHXH1 = json['ZZKHXH1'];
-    ZZYCXS = json['ZZYCXS'];
-    YFXS = json['YFXS'];
+    cabinetNumber = json['ZZKHXH1'];
+    shouldRelease = json['ZZYCXS'];
+    issued = json['YFXS'];
   }
 
-  String? ZZKHXH1;
-  String? ZZYCXS;
-  String? YFXS;
+  String? cabinetNumber; //柜号
+  String? shouldRelease; //应出
+  String? issued; //已出
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
-    map['ZZKHXH1'] = ZZKHXH1;
-    map['ZZYCXS'] = ZZYCXS;
-    map['YFXS'] = YFXS;
+    map['ZZKHXH1'] = cabinetNumber;
+    map['ZZYCXS'] = shouldRelease;
+    map['YFXS'] = issued;
     return map;
   }
 }

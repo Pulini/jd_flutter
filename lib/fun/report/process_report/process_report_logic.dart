@@ -92,7 +92,7 @@ class ProcessReportLogic extends GetxController {
         if (response.resultCode == resultSuccess) {
           success.call(response.message ?? 'process_report_success_submit'.tr);
         } else {
-          errorDialog(content: response.message ?? 'query_default_error'.tr);
+          errorDialog(content: response.message ?? 'process_report_error_submit'.tr);
         }
       });
     } else {

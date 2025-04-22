@@ -577,7 +577,7 @@ class RouteConfig {
     injectionScanReport,
     handoverReportList,
     processReport,
-    partReportScan
+    partReportScan,
     deliveryOrder,
   ];
 

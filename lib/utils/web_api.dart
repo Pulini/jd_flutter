@@ -1114,3 +1114,6 @@ const webApiGetDeliveryOrders = 'api/Package/GetDeliveryOrders';
 
 //获取条码报工数据汇总表
 const webApiGetBarCodeReportDetails = 'api/ShearOff/GetBarCodeReportDetails';
+
+//条码报工
+const webApiBarCodeReport = "api/ShearOff/BarCodeReport";

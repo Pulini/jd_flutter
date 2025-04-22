@@ -7,6 +7,7 @@ class PartReportScanState{
     var modifyCode =''; //手动录入的条码
     var buttonType = true.obs;   //新增或删除
     var dataList = <ComponentCodeInfo>[].obs;  //条码列表
-    var reportInfo = ReportDetailsInfo();
+    var reportInfo = <SummaryLists>[].obs;
+    var productName = ''.obs;
     var errorInfo =PartReportErrorInfo();
 }
