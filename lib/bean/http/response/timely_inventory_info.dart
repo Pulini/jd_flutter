@@ -1,11 +1,16 @@
+/// MaterialNumber : "1201190"
+/// MaterialName : "聚氨酯水溶液（水性胶）"
+/// StockID : "1001"
+/// FactoryNumber : "1000"
+/// Items : [{"FactoryDescribe":"GOLD EMPEROR GROUP CO., LTD","Zlocal":"","Lgobe":"金帝面料仓","Mtono":"","ProductName":"","MaterialCode":"","Size":"","Batch":"","Unit":"千克","StockQty":"773872.468","Unit1":"桶","StockQty1":"38693.623","Zcoefficient":"20"}]
+
 class TimelyInventoryInfo {
   TimelyInventoryInfo({
-    this.items,
-    this.materialNumber,
-    this.materialName,
-    this.stockID,
-    this.factoryNumber,
-  });
+      this.materialNumber, 
+      this.materialName, 
+      this.stockID, 
+      this.factoryNumber, 
+      this.items,});
 
   TimelyInventoryInfo.fromJson(dynamic json) {
     materialNumber = json['MaterialNumber'];
@@ -15,114 +20,105 @@ class TimelyInventoryInfo {
     if (json['Items'] != null) {
       items = [];
       json['Items'].forEach((v) {
-        items?.add(TimeItems.fromJson(
-          json: json,
-          factoryNumber: factoryNumber ?? '',
-          materialNumber: materialNumber ?? '',
-          materialName: materialName ?? '',
-          stockID: stockID ?? '',
-        ));
+        items?.add(TimeItems.fromJson(v));
       });
     }
   }
-
-  List<TimeItems>? items;
   String? materialNumber;
   String? materialName;
   String? stockID;
   String? factoryNumber;
+  List<TimeItems>? items;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
-    if (items != null) {
-      map['Items'] = items?.map((v) => v.toJson()).toList();
-    }
     map['MaterialNumber'] = materialNumber;
     map['MaterialName'] = materialName;
     map['StockID'] = stockID;
     map['FactoryNumber'] = factoryNumber;
-
+    if (items != null) {
+      map['Items'] = items?.map((v) => v.toJson()).toList();
+    }
     return map;
   }
+
 }
+
+/// FactoryDescribe : "GOLD EMPEROR GROUP CO., LTD"
+/// Zlocal : ""
+/// Lgobe : "金帝面料仓"
+/// Mtono : ""
+/// ProductName : ""
+/// MaterialCode : ""
+/// Size : ""
+/// Batch : ""
+/// Unit : "千克"
+/// StockQty : "773872.468"
+/// Unit1 : "桶"
+/// StockQty1 : "38693.623"
+/// Zcoefficient : "20"
 
 class TimeItems {
   TimeItems({
-    this.batch,
-    this.factoryDescribe,
-    this.lgobe,
-    this.materialCode,
-    this.mtono,
-    this.productName,
-    this.stockQty,
-    this.stockQty1,
-    this.unit,
-    this.unit1,
-    this.zcoefficient,
-    this.zlocal,
-    required this.factoryNumber,
-    required this.materialNumber,
-    required this.materialName,
-    required this.stockID,
-  });
+      this.factoryDescribe, 
+      this.zlocal, 
+      this.lgobe, 
+      this.mtono, 
+      this.productName, 
+      this.materialCode, 
+      this.size, 
+      this.batch, 
+      this.unit, 
+      this.stockQty, 
+      this.unit1, 
+      this.stockQty1, 
+      this.zcoefficient,});
 
-  TimeItems.fromJson({
-    required dynamic json,
-    required this.factoryNumber,
-    required this.materialNumber,
-    required this.materialName,
-    required this.stockID,
-  }) {
-    batch = json['Batch'];
+  TimeItems.fromJson(dynamic json) {
     factoryDescribe = json['FactoryDescribe'];
+    zlocal = json['Zlocal'];
     lgobe = json['Lgobe'];
-    materialCode = json['MaterialCode'];
     mtono = json['Mtono'];
     productName = json['ProductName'];
+    materialCode = json['MaterialCode'];
     size = json['Size'];
-    stockQty = json['StockQty'];
-    stockQty1 = json['StockQty1'];
+    batch = json['Batch'];
     unit = json['Unit'];
+    stockQty = json['StockQty'];
     unit1 = json['Unit1'];
+    stockQty1 = json['StockQty1'];
     zcoefficient = json['Zcoefficient'];
-    zlocal = json['Zlocal'];
   }
-
-  String? batch;
   String? factoryDescribe;
+  String? zlocal;
   String? lgobe;
-  String? materialCode;
   String? mtono;
   String? productName;
+  String? materialCode;
   String? size;
-  String? stockQty;
-  String? stockQty1;
+  String? batch;
   String? unit;
+  String? stockQty;
   String? unit1;
+  String? stockQty1;
   String? zcoefficient;
-  String? zlocal;
-
-  String factoryNumber;
-  String materialNumber;
-  String materialName;
-  String stockID;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
-    map['Batch'] = batch;
     map['FactoryDescribe'] = factoryDescribe;
+    map['Zlocal'] = zlocal;
     map['Lgobe'] = lgobe;
-    map['MaterialCode'] = materialCode;
     map['Mtono'] = mtono;
     map['ProductName'] = productName;
+    map['MaterialCode'] = materialCode;
     map['Size'] = size;
-    map['StockQty'] = stockQty;
-    map['StockQty1'] = stockQty1;
+    map['Batch'] = batch;
     map['Unit'] = unit;
+    map['StockQty'] = stockQty;
     map['Unit1'] = unit1;
+    map['StockQty1'] = stockQty1;
     map['Zcoefficient'] = zcoefficient;
-    map['Zlocal'] = zlocal;
-
     return map;
   }
+
 }

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:jd_flutter/bean/http/response/timely_inventory_info.dart';
@@ -35,6 +37,7 @@ class TimelyInventoryLogic extends GetxController {
         ];
 
         state.dataList.value = list;
+
       } else {
         errorDialog(content: response.message);
       }

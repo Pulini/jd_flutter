@@ -23,6 +23,7 @@ class _TimelyInventoryPageState extends State<TimelyInventoryPage> {
   var factoryWarehouseController = LinkOptionsPickerController(
     PickerType.sapFactoryWarehouse,
     hasAll: true,
+    subHasAll: true,
     saveKey:
         '${RouteConfig.timelyInventory.name}${PickerType.sapFactoryWarehouse}',
   );
@@ -56,31 +57,43 @@ class _TimelyInventoryPageState extends State<TimelyInventoryPage> {
               )
             ],
           ),
+          const SizedBox(height: 10,),
           for (var v in data.items!)
             InkWell(
-              child: Row(
-                children: [
-                  expandedTextSpan(
-                    hint: 'timely_inventory_basic_quantity'.tr,
-                    text: (v.stockQty ?? '') + (v.unit ?? ''),
-                    textColor: Colors.grey,
+              child: Container(
+                padding: const EdgeInsets.all(5.0),
+                decoration: const BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                      color: Colors.black, // 下划线颜色
+                      width: 1.0, // 下划线宽度
+                    ),
                   ),
-                  expandedTextSpan(
-                    hint: 'timely_inventory_common_quantity'.tr,
-                    text: v.stockQty1 ?? '${v.unit1}' ?? '',
-                    textColor: Colors.grey,
-                  ),
-                  expandedTextSpan(
-                    hint: 'timely_inventory_batch'.tr,
-                    text: v.batch ?? '',
-                    textColor: Colors.grey,
-                  ),
-                  expandedTextSpan(
-                    hint: 'timely_inventory_storage_location'.tr,
-                    text: v.zlocal ?? '',
-                    textColor: Colors.grey,
-                  )
-                ],
+                ),
+                child: Row(
+                  children: [
+                    expandedTextSpan(
+                      hint: 'timely_inventory_basic_quantity'.tr,
+                      text: (v.stockQty ?? '') + (v.unit ?? ''),
+                      textColor: Colors.grey,
+                    ),
+                    expandedTextSpan(
+                      hint: 'timely_inventory_common_quantity'.tr,
+                      text: v.stockQty1 ?? '${v.unit1}' ?? '',
+                      textColor: Colors.grey,
+                    ),
+                    expandedTextSpan(
+                      hint: 'timely_inventory_batch'.tr,
+                      text: v.batch ?? '',
+                      textColor: Colors.grey,
+                    ),
+                    expandedTextSpan(
+                      hint: 'timely_inventory_storage_location'.tr,
+                      text: v.zlocal ?? '',
+                      textColor: Colors.grey,
+                    )
+                  ],
+                ),
               ),
               onTap: () => {
                 reasonInputPopup(
@@ -111,7 +124,7 @@ class _TimelyInventoryPageState extends State<TimelyInventoryPage> {
                   },
                 )
               },
-            )
+            ),
         ],
       ),
     );

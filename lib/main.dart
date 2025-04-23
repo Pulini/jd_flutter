@@ -11,7 +11,6 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
-
 import 'bean/http/response/bar_code.dart';
 import 'bean/http/response/production_dispatch_order_detail_info.dart';
 import 'bean/http/response/sap_surplus_material_info.dart';
@@ -23,7 +22,7 @@ import 'utils/web_api.dart';
 
 main() async {
   //切换测试库，打包时屏蔽
-  // useTestUrl = true;
+  useTestUrl = true;
 
   //确保初始化完成才能加载耗时插件
   WidgetsFlutterBinding.ensureInitialized();
