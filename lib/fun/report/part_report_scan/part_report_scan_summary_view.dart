@@ -117,7 +117,7 @@ class _PartReportScanSummaryPageState extends State<PartReportScanSummaryPage> {
           backColors = Colors.white;
           textColors = Colors.black;
           process = data.name ?? '';
-          instruction = data.mtonoQty.toShowString() ?? '';
+          instruction = data.mtonoQty.toShowString();
           break;
         }
       case 1:

@@ -3,7 +3,6 @@ import 'package:jd_flutter/fun/dispatching/injection_scan_report/Injection_scan_
 import 'package:jd_flutter/fun/maintenance/sap_ink_color_matching/sap_ink_color_matching_view.dart';
 import 'package:jd_flutter/fun/other/hydroelectric_excess/hydroelectric_excess_view.dart';
 import 'package:jd_flutter/fun/report/part_report_scan/part_report_scan_view.dart';
-import 'package:jd_flutter/fun/report/part_report_scan/part_report_scan_view.dart';
 import 'package:jd_flutter/fun/reporting_work/part_process_scan/part_process_scan_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/delivery_order/delivery_order_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/incoming_inspection/incoming_inspection_view.dart';

@@ -79,7 +79,7 @@ class _TimelyInventoryPageState extends State<TimelyInventoryPage> {
                     ),
                     expandedTextSpan(
                       hint: 'timely_inventory_common_quantity'.tr,
-                      text: v.stockQty1 ?? '${v.unit1}' ?? '',
+                      text: (v.stockQty1 ?? '')+ (v.unit1 ?? ''),
                       textColor: Colors.grey,
                     ),
                     expandedTextSpan(
