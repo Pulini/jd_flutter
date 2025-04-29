@@ -33,6 +33,7 @@ import 'fun/management/quality_management/quality_management_view.dart';
 import 'fun/management/visit_register/visit_register_view.dart';
 import 'fun/other/device_maintenance_record/device_maintenance_record_view.dart';
 import 'fun/other/forming_packing_scan/packing_scan_view.dart';
+import 'fun/report/component_handover/component_handover_view.dart';
 import 'fun/report/daily_report/daily_report_view.dart';
 import 'fun/report/handover_report_list/handover_report_list_view.dart';
 import 'fun/report/molding_pack_area_report/molding_pack_area_report_view.dart';
@@ -505,13 +506,20 @@ class RouteConfig {
     const PartReportScanPage(),
   );
 
-
   //送货单列表
   static Routes deliveryOrder = Routes(
     '/delivery_order',
     99,
     const DeliveryOrderPage(),
   );
+
+  //生产部件交接单
+  static Routes componentHandover = Routes(
+    '/component_handover_order',
+    99,
+    const ComponentHandoverPage(),
+  );
+
 
   //本地功能入口列表
   static List<Routes> routeList = [
@@ -578,6 +586,7 @@ class RouteConfig {
     processReport,
     partReportScan,
     deliveryOrder,
+    componentHandover,
   ];
 
   static List<GetPage> appRoutes = [
@@ -845,6 +854,10 @@ class RouteConfig {
     GetPage(
       name: deliveryOrder.name,
       page: () => deliveryOrder.page,
+    ),
+    GetPage(
+      name: componentHandover.name,
+      page: () => componentHandover.page,
     ),
   ];
 }

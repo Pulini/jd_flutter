@@ -1117,3 +1117,15 @@ const webApiGetBarCodeReportDetails = 'api/ShearOff/GetBarCodeReportDetails';
 
 //条码报工
 const webApiBarCodeReport = "api/ShearOff/BarCodeReport";
+
+//获取制程
+const webApiGetHandoverProcessFlow = "api/WetPrinting/GetHandoverProcessFlow";
+
+//获取交接工序_部件
+const webApiGetHandoverProcess = "api/WetPrinting/GetHandoverProcess";
+
+//获取交接信息_部件
+const webApiGetHandoverInfo = "api/WetPrinting/GetHandoverInfo";
+
+//提交交接信息生成交接单_部件
+const webApiSubmitHandoverInfo = "api/WetPrinting/SubmitHandoverInfo";

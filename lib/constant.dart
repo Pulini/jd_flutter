@@ -45,3 +45,7 @@ const spSaveProductionScanPickingMaterialSupplier =
     'production_scan_picking_material_supplier';
 const spSaveProductionScanPickingMaterialDepartment =
     'production_scan_picking_material_department';
+const spSaveComponentHandoverProcessName =
+    'component_handover_process_name';
+const spSaveComponentHandoverProcessID =
+    'component_handover_process_id';
