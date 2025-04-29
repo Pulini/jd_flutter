@@ -11,7 +11,7 @@ import 'package:jd_flutter/widget/dialogs.dart';
 
 
 class PackingScanState {
-  var dataList = <ContainerScanner>[].obs; //来访数据
+  var dataList = <ContainerScanner>[].obs;
   PackingShipmentScanInfo? packingShipmentScanInfo; //成型集装箱出货信息
   var showDataList = <GtItem>[].obs; //汇总拣货
 
@@ -59,7 +59,7 @@ class PackingScanState {
         packingShipmentScanInfo =
             PackingShipmentScanInfo.fromJson(response.data);
         cabinetNumber = cabinetNumber;
-        showDataList.value = packingShipmentScanInfo!.GT_ITEMS!;
+        showDataList.value = packingShipmentScanInfo!.item1!;
 
         Get.to(() => const PackingShipmentScanPage());
 
@@ -80,15 +80,15 @@ class PackingScanState {
     var deliveryNumber = '';
     var count = 0;
 
-    if (code!.isNotEmpty && packingShipmentScanInfo!.GT_ITEMS2!.isNotEmpty) {
-      for (var i = 0; i < packingShipmentScanInfo!.GT_ITEMS2!.length; ++i) {
-        if (code == packingShipmentScanInfo!.GT_ITEMS2![i].ZCTNLABEL) {
+    if (code!.isNotEmpty && packingShipmentScanInfo!.item2!.isNotEmpty) {
+      for (var i = 0; i < packingShipmentScanInfo!.item2!.length; ++i) {
+        if (code == packingShipmentScanInfo!.item2![i].barCodes) {
           count += 1;
           codes = code;
           orderNumber =
-              packingShipmentScanInfo!.GT_ITEMS2![i].ZZKHPO2.toString();
+              packingShipmentScanInfo!.item2![i].orderNumber?? '';
           deliveryNumber =
-              packingShipmentScanInfo!.GT_ITEMS2![i].VBELN_VL.toString();
+              packingShipmentScanInfo!.item2![i].deliveryNumber?? '';
           have = 0;
           break;
         }

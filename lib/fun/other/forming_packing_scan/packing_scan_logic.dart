@@ -41,9 +41,9 @@ class PackingScanLogic extends GetxController {
     // var count = 0;
 
     if (code.isNotEmpty &&
-        state.packingShipmentScanInfo!.GT_ITEMS2!.isNotEmpty) {
-      for (var data in state.packingShipmentScanInfo!.GT_ITEMS2!) {
-        if (code == data.ZCTNLABEL) {}
+        state.packingShipmentScanInfo!.item2!.isNotEmpty) {
+      for (var data in state.packingShipmentScanInfo!.item2!) {
+        if (code == data.barCodes) {}
       }
     }
 

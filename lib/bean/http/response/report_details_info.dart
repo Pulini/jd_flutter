@@ -11,12 +11,12 @@ class ReportDetailsInfo {
     if (json['List'] != null) {
       list = [];
       json['List'].forEach((v) {
-        list?.add(Lists.fromJson(v));
+        list?.add(SummaryLists.fromJson(v));
       });
     }
   }
   String? productName;
-  List<Lists>? list;
+  List<SummaryLists>? list;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -37,8 +37,8 @@ class ReportDetailsInfo {
 /// Qty : 75.00000
 /// EmpName : "安艳芝"
 
-class Lists {
-  Lists({
+class SummaryLists {
+  SummaryLists({
     this.type,
     this.name,
     this.mtono,
@@ -47,7 +47,7 @@ class Lists {
     this.qty,
     this.empName,});
 
-  Lists.fromJson(dynamic json) {
+  SummaryLists.fromJson(dynamic json) {
     type = json['Type'];
     name = json['Name'];
     mtono = json['Mtono'];

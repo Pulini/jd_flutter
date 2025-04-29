@@ -64,7 +64,7 @@ class _PackingScanPageState extends State<PackingScanPage> {
             time: logic.pickerControllerDate
                 .getDateFormatYMD()
                 .replaceAll('-', ''),
-            cabinetNumber: data.ZZKHXH1,
+            cabinetNumber: data.cabinetNumber,
             error: (String msg) {
               errorDialog(content: msg);
             }),
@@ -76,12 +76,12 @@ class _PackingScanPageState extends State<PackingScanPage> {
           Row(
             children: [
               expandedFrameText(
-                text: data.ZZKHXH1.toString(),
+                text: data.cabinetNumber?? '',
                 backgroundColor: Colors.blue.shade50,
                 flex: 1,
               ),
               expandedFrameText(
-                text: '${data.YFXS}/${data.ZZYCXS}',
+                text: '${data.issued ?? ''}/${data.shouldRelease?? ''}',
                 backgroundColor: Colors.blue.shade50,
                 flex: 1,
               )

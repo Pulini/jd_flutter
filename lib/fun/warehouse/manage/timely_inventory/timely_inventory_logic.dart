@@ -33,6 +33,7 @@ class TimelyInventoryLogic extends GetxController {
         ];
 
         state.dataList.value = list;
+
       } else {
         errorDialog(content: response.message);
       }
