@@ -26,7 +26,6 @@ class _HandoverReportListPageState extends State<HandoverReportListPage> {
     required String mes,
     required bool head,
     required bool judge,
-    required double paddingNumber,
   }) {
     var textColor = Colors.white;
     Color backColor = Colors.blue;
@@ -37,7 +36,7 @@ class _HandoverReportListPageState extends State<HandoverReportListPage> {
       textColor = Colors.black;
       backColor = Colors.white;
     }
-    if(judge){
+    if (judge) {
       backColor = Colors.yellow.shade200;
     }
     return DecoratedBox(
@@ -49,7 +48,7 @@ class _HandoverReportListPageState extends State<HandoverReportListPage> {
         ),
       ),
       child: Padding(
-        padding: EdgeInsets.only(top: paddingNumber, bottom: paddingNumber),
+        padding: const EdgeInsets.only(top: 5, bottom: 5),
         child: Center(
           child: Text(
             mes,
@@ -65,83 +64,83 @@ class _HandoverReportListPageState extends State<HandoverReportListPage> {
       children: [
         Expanded(
             child: _text(
-                mes: 'handover_report_size'.tr,
-                head: true,
-                judge: false,
-                paddingNumber: 5)),
+          mes: 'handover_report_size'.tr,
+          head: true,
+          judge: false,
+        )),
         Expanded(
             child: _text(
-                mes: 'handover_report_box_capacity'.tr,
-                head: true,
-                judge: false,
-                paddingNumber: 5)),
+          mes: 'handover_report_box_capacity'.tr,
+          head: true,
+          judge: false,
+        )),
         Expanded(
             child: _text(
-                mes: 'handover_report_box_number'.tr,
-                head: true,
-                judge: false,
-                paddingNumber: 5)),
+          mes: 'handover_report_box_number'.tr,
+          head: true,
+          judge: false,
+        )),
         Expanded(
             child: _text(
-                mes: 'handover_report_last_number'.tr,
-                head: true,
-                judge: false,
-                paddingNumber: 5)),
+          mes: 'handover_report_last_number'.tr,
+          head: true,
+          judge: false,
+        )),
         Expanded(
             child: _text(
-                mes: 'handover_report_now_number'.tr,
-                head: true,
-                judge: false,
-                paddingNumber: 5)),
+          mes: 'handover_report_now_number'.tr,
+          head: true,
+          judge: false,
+        )),
         Expanded(
             child: _text(
-                mes: 'handover_report_single_subtotal'.tr,
-                head: true,
-                judge: false,
-                paddingNumber: 5)),
+          mes: 'handover_report_single_subtotal'.tr,
+          head: true,
+          judge: false,
+        )),
       ],
     );
   }
 
-  _subTitle(SubList sub,bool judge) {
+  _subTitle(SubList sub, bool judge) {
     return Row(
       children: [
         Expanded(
             child: _text(
-                mes: sub.subSize ?? '',
-                head: false,
-                judge:judge,
-                paddingNumber: 5)),
+          mes: sub.subSize ?? '',
+          head: false,
+          judge: judge,
+        )),
         Expanded(
             child: _text(
-                mes: sub.subCapacity.toShowString(),
-                head: false,
-                judge:judge,
-                paddingNumber: 5)),
+          mes: sub.subCapacity.toShowString(),
+          head: false,
+          judge: judge,
+        )),
         Expanded(
             child: _text(
-                mes: sub.subBox.toShowString(),
-                head: false,
-                judge: judge,
-                paddingNumber: 5)),
+          mes: sub.subBox.toShowString(),
+          head: false,
+          judge: judge,
+        )),
         Expanded(
             child: _text(
-                mes: sub.subLastMantissa.toShowString(),
-                head: false,
-                judge:judge,
-                paddingNumber: 5)),
+          mes: sub.subLastMantissa.toShowString(),
+          head: false,
+          judge: judge,
+        )),
         Expanded(
             child: _text(
-                mes: sub.subMantissa.toShowString(),
-                head: false,
-                judge:judge,
-                paddingNumber: 5)),
+          mes: sub.subMantissa.toShowString(),
+          head: false,
+          judge: judge,
+        )),
         Expanded(
             child: _text(
-                mes: sub.subQty.toShowString(),
-                head: false,
-                judge:judge,
-                paddingNumber: 5)),
+          mes: sub.subQty.toShowString(),
+          head: false,
+          judge: judge,
+        )),
       ],
     );
   }
@@ -214,7 +213,7 @@ class _HandoverReportListPageState extends State<HandoverReportListPage> {
             Text(data.processName.toString()),
             _title(),
             for (var i = 0; i < data.subList!.length; ++i)
-              _subTitle(data.subList![i],data.changeColor!),
+              _subTitle(data.subList![i], data.changeColor!),
           ],
         ),
       ),
@@ -229,7 +228,7 @@ class _HandoverReportListPageState extends State<HandoverReportListPage> {
         actions: [
           TextButton(
               onPressed: () => {logic.getInstructionDetailsFile()},
-              child:  Text('handover_report_query'.tr))
+              child: Text('handover_report_query'.tr))
         ],
         body: Column(
           children: [
