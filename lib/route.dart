@@ -529,7 +529,6 @@ class RouteConfig {
     const ComponentHandoverPage(),
   );
 
-
   //本地功能入口列表
   static List<Routes> routeList = [
     dailyReport,

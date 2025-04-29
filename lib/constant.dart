@@ -33,7 +33,8 @@ const spSaveFeishuUserCloudDocTokenData = 'feishu_user_cloud_doc_token_data';
 const spSaveIncomingInspectionApplicant = 'incoming_inspection_applicant';
 const spSaveIncomingInspectionInspector = 'incoming_inspection_inspector';
 const spSaveScanPickingMaterial = 'scan_picking_material';
-const spSaveScanPickingMaterialSelectProcess = 'scan_picking_material_select_process';
+const spSaveScanPickingMaterialSelectProcess =
+    'scan_picking_material_select_process';
 const spSaveProcessSelectProcess = 'scan_process_select_process';
 const spSaveScanPickingMaterialWorker = 'scan_picking_material_worker';
 const spSaveSaleScanOutWarehouseWorker = 'sale_scan_out_warehouse_worker';
@@ -45,11 +46,12 @@ const spSaveProductionScanPickingMaterialSupplier =
     'production_scan_picking_material_supplier';
 const spSaveProductionScanPickingMaterialDepartment =
     'production_scan_picking_material_department';
-const spSaveComponentHandoverProcessName =
-    'component_handover_process_name';
-const spSaveComponentHandoverProcessID =
-    'component_handover_process_id';
-const spSaveDeliveryOrderCheckInspectorNumber= 'delivery_order_check_inspector_number_';
-const spSaveDeliveryOrderCheckLocation= 'delivery_order_check_location';
-const spSaveDeliveryOrderStockInCheckLocation= 'delivery_order_stock_in_check_location';
-const spSaveDeliveryOrderStockInCheckLeader= 'delivery_order_stock_in_check_leader';
+const spSaveComponentHandoverProcessName = 'component_handover_process_name';
+const spSaveComponentHandoverProcessID = 'component_handover_process_id';
+const spSaveDeliveryOrderCheckInspectorNumber =
+    'delivery_order_check_inspector_number_';
+const spSaveDeliveryOrderCheckLocation = 'delivery_order_check_location';
+const spSaveDeliveryOrderStockInCheckLocation =
+    'delivery_order_stock_in_check_location';
+const spSaveDeliveryOrderStockInCheckLeader =
+    'delivery_order_stock_in_check_leader';
