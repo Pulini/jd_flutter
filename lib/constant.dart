@@ -45,3 +45,7 @@ const spSaveProductionScanPickingMaterialSupplier =
     'production_scan_picking_material_supplier';
 const spSaveProductionScanPickingMaterialDepartment =
     'production_scan_picking_material_department';
+const spSaveDeliveryOrderCheckInspectorNumber= 'delivery_order_check_inspector_number_';
+const spSaveDeliveryOrderCheckLocation= 'delivery_order_check_location';
+const spSaveDeliveryOrderStockInCheckLocation= 'delivery_order_stock_in_check_location';
+const spSaveDeliveryOrderStockInCheckLeader= 'delivery_order_stock_in_check_leader';

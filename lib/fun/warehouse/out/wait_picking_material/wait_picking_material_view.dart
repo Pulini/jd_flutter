@@ -607,7 +607,7 @@ class _WaitPickingMaterialPageState extends State<WaitPickingMaterialPage> {
     logic.checkPickingMaterial(
       oneFaceCheck: () {
         //委外
-        (() => SignaturePage(
+        Get.to(() => SignaturePage(
               name: userInfo?.name ?? '',
               callback: (userBase64) => _picking(
                 isMove: isMove,

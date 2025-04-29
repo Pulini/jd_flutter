@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/timely_inventory_info.dart';
-import 'package:jd_flutter/bean/http/response/timely_inventory_show_info.dart';
 import 'package:jd_flutter/fun/warehouse/manage/timely_inventory/timely_inventory_logic.dart';
 import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
@@ -63,12 +62,12 @@ class _TimelyInventoryPageState extends State<TimelyInventoryPage> {
                 children: [
                   expandedTextSpan(
                     hint: 'timely_inventory_basic_quantity'.tr,
-                    text: v.stockQty ?? '${v.unit}' ?? '',
+                    text: '${v.stockQty}${v.unit}',
                     textColor: Colors.grey,
                   ),
                   expandedTextSpan(
                     hint: 'timely_inventory_common_quantity'.tr,
-                    text: v.stockQty1 ?? '${v.unit1}' ?? '',
+                    text: '${v.stockQty1}${v.unit1}',
                     textColor: Colors.grey,
                   ),
                   expandedTextSpan(

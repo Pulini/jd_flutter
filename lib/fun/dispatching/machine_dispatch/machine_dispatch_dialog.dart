@@ -323,7 +323,7 @@ showLabelListDialog(BuildContext context) {
                                   }
                                 },
                                 icon: const Icon(
-                                  Icons.delete_forever_rounded,
+                                  Icons.delete_forever,
                                   color: Colors.red,
                                 ),
                               )

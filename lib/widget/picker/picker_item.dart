@@ -43,7 +43,6 @@ class PickerSapSupplier extends PickerItem {
   String toShow() {
     return '($supplierNumber)-$name';
   }
-
 }
 
 class PickerSapCompany extends PickerItem {
@@ -89,7 +88,7 @@ class PickerSapFactory extends PickerItem {
 
   @override
   String pickerId() {
-    return (number ?? 0).toString();
+    return number == null || number == 0 ? '' : number.toString();
   }
 
   @override

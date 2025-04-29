@@ -268,7 +268,7 @@ class _MachineDispatchReportPageState extends State<MachineDispatchReportPage> {
                 ),
                 child: const Center(
                   child: Icon(
-                    Icons.delete_forever_rounded,
+                    Icons.delete_forever,
                     color: Colors.white,
                     size: 30,
                   ),

@@ -3,7 +3,6 @@ import 'package:jd_flutter/fun/dispatching/injection_scan_report/Injection_scan_
 import 'package:jd_flutter/fun/maintenance/sap_ink_color_matching/sap_ink_color_matching_view.dart';
 import 'package:jd_flutter/fun/other/hydroelectric_excess/hydroelectric_excess_view.dart';
 import 'package:jd_flutter/fun/report/part_report_scan/part_report_scan_view.dart';
-import 'package:jd_flutter/fun/report/part_report_scan/part_report_scan_view.dart';
 import 'package:jd_flutter/fun/reporting_work/part_process_scan/part_process_scan_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/delivery_order/delivery_order_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/incoming_inspection/incoming_inspection_view.dart';
@@ -11,6 +10,7 @@ import 'package:jd_flutter/fun/warehouse/in/production_scan_warehouse/production
 import 'package:jd_flutter/fun/warehouse/in/sap_picking_receipt_reversal/sap_picking_receipt_reversal_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/sap_put_on_shelves/sap_put_on_shelves_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/suppliers_scan_store/suppliers_scan_store_view.dart';
+import 'package:jd_flutter/fun/warehouse/in/temporary_order/temporary_order_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/sap_factory_inventory/sap_counting_inventory_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/sap_factory_inventory/sap_scan_code_inventory_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/sap_stock_transfer/sap_stock_transfer_view.dart';
@@ -499,6 +499,7 @@ class RouteConfig {
     99,
     const ProcessReportPage(),
   );
+
   //部件报工扫描
   static Routes partReportScan = Routes(
     '/part_report_scan',
@@ -506,12 +507,18 @@ class RouteConfig {
     const PartReportScanPage(),
   );
 
-
   //送货单列表
   static Routes deliveryOrder = Routes(
     '/delivery_order',
     99,
     const DeliveryOrderPage(),
+  );
+
+  //暂收单
+  static Routes temporaryOrder = Routes(
+    '/temporary_order',
+    99,
+    const TemporaryOrderPage(),
   );
 
   //本地功能入口列表
@@ -577,8 +584,9 @@ class RouteConfig {
     injectionScanReport,
     handoverReportList,
     processReport,
-    partReportScan
+    partReportScan,
     deliveryOrder,
+    temporaryOrder,
   ];
 
   static List<GetPage> appRoutes = [
@@ -846,6 +854,10 @@ class RouteConfig {
     GetPage(
       name: deliveryOrder.name,
       page: () => deliveryOrder.page,
+    ),
+    GetPage(
+      name: temporaryOrder.name,
+      page: () => temporaryOrder.page,
     ),
   ];
 }

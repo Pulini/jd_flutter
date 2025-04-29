@@ -1,7 +1,5 @@
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:jd_flutter/bean/http/response/timely_inventory_info.dart';
-import 'package:jd_flutter/bean/http/response/timely_inventory_show_info.dart';
 import 'package:jd_flutter/fun/warehouse/manage/timely_inventory/timely_inventory_state.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
