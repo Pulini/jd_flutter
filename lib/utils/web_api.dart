@@ -131,8 +131,7 @@ Future<BaseData> _doHttp({
 
   try {
     debugPrint('SnackbarStatus=$snackbarStatus');
-    if (snackbarStatus == SnackbarStatus.OPEN ||
-        snackbarStatus == SnackbarStatus.OPENING) {
+    if (Get.isSnackbarOpen) {
       snackbarController?.close(withAnimations: false);
     }
   } catch (e) {
@@ -157,7 +156,7 @@ Future<BaseData> _doHttp({
   });
 
   //创建返回数据载体
-  var base = BaseData()..resultCode=resultError;
+  var base = BaseData()..resultCode = resultError;
 
   try {
     //创建dio对象
@@ -1068,7 +1067,8 @@ const webApiSapGetInventoryPalletList = 'sap/zapp/ZWMS_PD_LIST';
 const webApiSapSubmitInventory = 'sap/zapp/ZWMS_PD_POST';
 
 //工序汇报入库提交
-const webApiUploadProcessReport = 'api/ScanJobBooking/SubmitScWorkCardBarCode2ProcessOutput';
+const webApiUploadProcessReport =
+    'api/ScanJobBooking/SubmitScWorkCardBarCode2ProcessOutput';
 
 //工序汇报入库，获取贴标数据
 const webApiGetBarCodeInfo = 'api/BarCode/GetBarCodeInfo';
@@ -1077,40 +1077,82 @@ const webApiGetBarCodeInfo = 'api/BarCode/GetBarCodeInfo';
 const webApiUpdateBarCodeInfo = 'api/BarCode/UpdateBarCodeInfo';
 
 //获取工序派工单列表   金甄
-const webApiGetScWorkCardList= 'api/CompoundDispatching/GetScWorkCardListJinZhen';
+const webApiGetScWorkCardList =
+    'api/CompoundDispatching/GetScWorkCardListJinZhen';
 
 //获取工序派工单详情  金甄
-const webApiGetScWorkCardDetail = 'api/CompoundDispatching/GetScWorkCardDetailJinZhen';
+const webApiGetScWorkCardDetail =
+    'api/CompoundDispatching/GetScWorkCardDetailJinZhen';
 
 //根据派工单ID删除贴标和框数
-const webApiClearBarCodeAndBoxQty = 'api/CompoundDispatching/ClearBarCodeAndBoxQtyJinZhen';
+const webApiClearBarCodeAndBoxQty =
+    'api/CompoundDispatching/ClearBarCodeAndBoxQtyJinZhen';
 
 //获取已入库的贴标列表
 const webApiForSAPGetStockInBarCodeList = 'sap/zapp/ZFUN_APP_BARCODE_FETCH';
 
 //修改派工表_金臻 (产量汇报)
-const webApiUpdateScWorkCard = 'api/CompoundDispatching/UpdateScWorkCardJinZhen';
+const webApiUpdateScWorkCard =
+    'api/CompoundDispatching/UpdateScWorkCardJinZhen';
 
 //班组长获取报工交接确认列表_金臻
-const webApiGetScWorkCardReportCheckList = 'api/CompoundDispatching/GetScWorkCardReportCheckListJinZhen';
+const webApiGetScWorkCardReportCheckList =
+    'api/CompoundDispatching/GetScWorkCardReportCheckListJinZhen';
 
 //班组长反审核汇报单并删除工序汇报单_金臻
-const webApiUnCheckScWorkCardReport = 'api/CompoundDispatching/UnCheckScWorkCardReportJinZhen';
+const webApiUnCheckScWorkCardReport =
+    'api/CompoundDispatching/UnCheckScWorkCardReportJinZhen';
 
 //删除报工产量表数据_金臻
-const webApiDelScWorkCardReport = 'api/CompoundDispatching/DelScWorkCardReportJinZhen';
+const webApiDelScWorkCardReport =
+    'api/CompoundDispatching/DelScWorkCardReportJinZhen';
 
 //班组长审核汇报单并生成工序汇报单_金臻
-const webApiCheckScWorkCardReport = 'api/CompoundDispatching/CheckScWorkCardReportJinZhen';
+const webApiCheckScWorkCardReport =
+    'api/CompoundDispatching/CheckScWorkCardReportJinZhen';
 
 //根据条形码获得工序派工信息
 const webApiGetDispatchInfo = 'api/WorkCard/GetDispatchInfo';
 
 //提交工序派工条形码数据
-const webApiSubmitProcessBarCode2CollectBill = 'api/WorkCard/SubmitProcessBarCode2CollectBill';
+const webApiSubmitProcessBarCode2CollectBill =
+    'api/WorkCard/SubmitProcessBarCode2CollectBill';
 
 //获取送货单列表
 const webApiGetDeliveryOrders = 'api/Package/GetDeliveryOrders';
+
+//获取送货单详情
+const webApiGetDeliveryOrdersDetails = 'api/Package/GetDeliveryOrdersDetails';
+
+//获取暂收单详情
+const webApiGetTemporaryDetail = 'api/Temporary/GetTemporaryDetail';
+
+//保存核查数据
+const webApiSaveDeliveryOrderCheck = 'api/DeliveryNote/SendLetterOfAdvice';
+
+//获取仓库是否启用了人脸识别
+const webApiGetStockFaceEnable = 'api/Stock/GetStockEnableFaceRec';
+
+//人脸识别,通过保管人工号获取保管人，监管人信息以及保管人部门
+const webApiGetLiableInfo = 'api/User/GetLiableInfoByEmpCode';
+
+//SAP包材批量入库
+const webApiDeliveryOrderStockIn =
+    'api/DeliveryNote/SAPPackagingMaterialBatchStorage';
+
+//根据送货单号或品检单号获取标签,用于冲销
+const webApiSapReversalStockInCheck = 'sap/zapp/ZMM_GET_JBQ_CX';
+
+//SAP包材批量入库冲销
+const webApiReversalStockIn =
+    'api/DeliveryNote/SAPPackagingMaterialBatchStorage_Off';
+
+//SAP包材批量出库冲销
+const webApiReversalStockOut =
+    'api/DeliveryNote/SAPPackagingMaterialBatchOutsourcing_Off';
+
+//批量生成暂收单
+const webApiCreateTemporary = 'api/DeliveryNote/TemporaryBatchGeneration';
 
 //获取条码报工数据汇总表
 const webApiGetBarCodeReportDetails = 'api/ShearOff/GetBarCodeReportDetails';
@@ -1138,3 +1180,15 @@ const webApiSubmitBarCode = "api/WetPrinting/SubmitBarCode";
 
 //扫工票取消报工
 const webApiUnReportByWorkCard = "api/WetPrinting/UnReportByWorkCard";
+
+//获取暂收单列表
+const webApiGetTemporaryList = 'api/Temporary/GetTemporaryList';
+
+//删除暂收单
+const webApiDeleteTemporary = 'api/Temporary/DeleteTemporary';
+
+//暂收单列表获取测试标准接口
+const webApiSapGetTestStandards = 'sap/zapp/ZMM_GET_QMSTANDARD';
+
+//暂收单提交测试申请
+const webApiSapCreateTestApplication = 'sap/zapp/ZFUN_APP_TESTPR';

@@ -32,7 +32,7 @@ main() async {
 
   if (GetPlatform.isMobile) {
     getDatabasesPath().then(
-          (path) => openDatabase(
+      (path) => openDatabase(
         join(path, jdDatabase),
         version: 3,
         onCreate: (db, v) {
@@ -101,9 +101,9 @@ class GetXRouterObserver extends NavigatorObserver {
 class AppScrollBehavior extends MaterialScrollBehavior {
   @override
   Set<PointerDeviceKind> get dragDevices => {
-    PointerDeviceKind.touch,
-    PointerDeviceKind.mouse,
-  };
+        PointerDeviceKind.touch,
+        PointerDeviceKind.mouse,
+      };
 }
 
 class MyApp extends StatefulWidget {
@@ -137,6 +137,7 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent),
         useMaterial3: true,
+        appBarTheme: const AppBarTheme(scrolledUnderElevation: 0.0),
       ),
       getPages: RouteConfig.appRoutes,
       home: userInfo?.token == null ? const LoginPage() : const HomePage(),

@@ -1,6 +1,5 @@
 import 'package:get/get_rx/get_rx.dart';
 import 'package:jd_flutter/bean/http/response/timely_inventory_info.dart';
-import 'package:jd_flutter/bean/http/response/timely_inventory_show_info.dart';
 
 class TimelyInventoryState {
 

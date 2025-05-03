@@ -21,6 +21,8 @@
 // ZINSPECTDATE : "0000-00-00"
 // ZINSPECTTIME : "00:00:00"
 
+import 'package:jd_flutter/widget/picker/picker_item.dart';
+
 class SapPurchaseStockInInfo {
   SapPurchaseStockInInfo({
     this.deliveryNumber,
@@ -245,7 +247,7 @@ class SapPurchaseStockInDetailInfo {
 // StorageLocationNumber : "1801"
 // Name : "金臻拌料线边仓"
 
-class LocationInfo {
+class LocationInfo extends PickerItem{
   LocationInfo({
     this.factoryNumber,
     this.storageLocationNumber,
@@ -270,8 +272,20 @@ class LocationInfo {
     return map;
   }
 
+
+
   @override
-  String toString() {
-    return name ?? '';
+  String pickerId() {
+  return storageLocationNumber??'';
+  }
+
+  @override
+  String pickerName() {
+    return name??'';
+  }
+
+  @override
+  String toShow() {
+    return name??'';
   }
 }

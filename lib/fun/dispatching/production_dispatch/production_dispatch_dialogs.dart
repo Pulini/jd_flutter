@@ -542,7 +542,7 @@ typeBodySaveDialog(
                             },
                             padding: const EdgeInsets.all(0),
                             icon: const Icon(
-                              Icons.delete_forever_rounded,
+                              Icons.delete_forever,
                               color: Colors.redAccent,
                               size: 25,
                             ),

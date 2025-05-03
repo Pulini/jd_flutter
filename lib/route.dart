@@ -10,6 +10,7 @@ import 'package:jd_flutter/fun/warehouse/in/production_scan_warehouse/production
 import 'package:jd_flutter/fun/warehouse/in/sap_picking_receipt_reversal/sap_picking_receipt_reversal_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/sap_put_on_shelves/sap_put_on_shelves_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/suppliers_scan_store/suppliers_scan_store_view.dart';
+import 'package:jd_flutter/fun/warehouse/in/temporary_order/temporary_order_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/sap_factory_inventory/sap_counting_inventory_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/sap_factory_inventory/sap_scan_code_inventory_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/sap_stock_transfer/sap_stock_transfer_view.dart';
@@ -500,6 +501,7 @@ class RouteConfig {
     99,
     const ProcessReportPage(),
   );
+
   //部件报工扫描
   static Routes partReportScan = Routes(
     '/part_report_scan',
@@ -512,6 +514,13 @@ class RouteConfig {
     '/delivery_order',
     99,
     const DeliveryOrderPage(),
+  );
+
+  //暂收单
+  static Routes temporaryOrder = Routes(
+    '/temporary_order',
+    99,
+    const TemporaryOrderPage(),
   );
 
   //生产部件交接单
@@ -594,6 +603,7 @@ class RouteConfig {
     processReport,
     partReportScan,
     deliveryOrder,
+    temporaryOrder,
     componentHandover,
     partReportOrCancel,
   ];
@@ -863,6 +873,10 @@ class RouteConfig {
     GetPage(
       name: deliveryOrder.name,
       page: () => deliveryOrder.page,
+    ),
+    GetPage(
+      name: temporaryOrder.name,
+      page: () => temporaryOrder.page,
     ),
     GetPage(
       name: componentHandover.name,

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/delivery_order_info.dart';
+import 'package:jd_flutter/fun/warehouse/in/delivery_order/delivery_order_check_view.dart';
+import 'package:jd_flutter/fun/warehouse/in/delivery_order/delivery_order_detail_view.dart';
+import 'package:jd_flutter/fun/warehouse/in/delivery_order/delivery_order_dialog.dart';
 import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/check_box_widget.dart';
@@ -36,7 +39,7 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
   var opcCompany = OptionsPickerController(
     hasAll: true,
     PickerType.sapCompany,
-    saveKey: '${RouteConfig.deliveryOrder.name}${PickerType.sapProcessFlow}',
+    saveKey: '${RouteConfig.deliveryOrder.name}${PickerType.sapCompany}',
   );
 
   var opcSupplier = OptionsPickerController(
@@ -61,9 +64,9 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
     PickerType.startDate,
     saveKey: '${RouteConfig.deliveryOrder.name}${PickerType.startDate}',
   )..firstDate = DateTime(
-      DateTime.now().year,
+      DateTime.now().year - 3,
       DateTime.now().month,
-      DateTime.now().day - 7,
+      DateTime.now().day,
     );
 
   var dpcEndDate = DatePickerController(
@@ -91,143 +94,191 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
 
   Widget _item(int index) {
     var data = state.deliveryOrderList[index];
-    return Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.all(10),
-      foregroundDecoration: data[0].hasSubscript()
-          ? RotatedCornerDecoration.withColor(
-              color: data[0].isInspected() ? Colors.yellow : Colors.green,
-              badgeCornerRadius: const Radius.circular(8),
-              badgeSize: const Size(45, 45),
-              textSpan: TextSpan(
-                text: data[0].isInspected() ? '已清点' : '已暂收',
-                style: const TextStyle(
-                  fontSize: 12,
-                  color: Colors.white,
+    return GestureDetector(
+      onTap: () => logic.getOrderDetail(
+          isExempt: data[0].isExempt ?? false,
+          isCheckOrder: false,
+          produceOrderNo: data[0].produceOrderNo ?? '',
+          factoryNumber: data[0].factoryName ?? '',
+          deliNo: data[0].deliNo ?? '',
+          workCenterID:
+              userInfo?.sapRole == '003' ? opcWorkCenter.selectedId.value : '',
+          goTo: () => Get.to(() => const DeliveryOrderDetailPage())),
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 10),
+        padding: const EdgeInsets.all(10),
+        foregroundDecoration: data[0].hasSubscript()
+            ? RotatedCornerDecoration.withColor(
+                color: data[0].isInspected() ? Colors.orange : Colors.green,
+                badgeCornerRadius: const Radius.circular(8),
+                badgeSize: const Size(45, 45),
+                textSpan: TextSpan(
+                  text: data[0].isInspected() ? 'delivery_order_checked'.tr : 'delivery_order_temporarily_received'.tr,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: Colors.white,
+                  ),
                 ),
-              ),
-            )
-          : null,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-        gradient: LinearGradient(
-          colors: [Colors.blue.shade100, Colors.white],
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-        ),
-      ),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        expandedTextSpan(
-                          hint: '供应商：',
-                          text: data[0].supplierName ?? '',
-                          textColor: Colors.red,
-                        ),
-                        expandedTextSpan(
-                          hint: '客户：',
-                          hintColor: Colors.black45,
-                          text: data[0].companyCode ?? '',
-                          textColor: Colors.black45,
-                        ),
-                        expandedTextSpan(
-                          hint: '工厂：',
-                          hintColor: Colors.black45,
-                          text: data[0].factoryName ?? '',
-                          textColor: Colors.black45,
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        expandedTextSpan(
-                          hint: '送货单号：',
-                          hintColor: Colors.black45,
-                          text: data[0].deliNo ?? '',
-                          textColor: Colors.black45,
-                        ),
-                        expandedTextSpan(
-                          hint: '送货地点：',
-                          hintColor: Colors.black45,
-                          text: data[0].deliveryLocation ?? '',
-                          textColor: Colors.black45,
-                        ),
-                        expandedTextSpan(
-                          hint: '制单日期：',
-                          hintColor: Colors.black45,
-                          text: data[0].billDate ?? '',
-                          textColor: Colors.black45,
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        expandedTextSpan(
-                          hint: '件数：',
-                          hintColor: Colors.black45,
-                          text: data[0].numPage ?? '',
-                        ),
-                        expandedTextSpan(
-                          hint: '存储仓库：',
-                          hintColor: Colors.black45,
-                          text: data[0].locationName ?? '',
-                          textColor: Colors.black45,
-                        ),
-                        expandedTextSpan(
-                          hint: '配码：',
-                          hintColor: Colors.black45,
-                          text: data[0].matchCode ?? '',
-                          textColor: Colors.black45,
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        expandedTextSpan(
-                          hint: '最终客户：',
-                          hintColor: Colors.black45,
-                          text: data[0].finalCustomer ?? '',
-                          textColor: Colors.black45,
-                        ),
-                        expandedTextSpan(
-                          flex: 2,
-                          hint: '备注：',
-                          hintColor: Colors.black45,
-                          text: data[0].remark ?? '',
-                          textColor: Colors.black45,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              Checkbox(
-                  value: data.every((v) => v.isSelected.value),
-                  onChanged: (c) {
-                    for (var v in data) {
-                      v.isSelected.value = c!;
-                    }
-                  })
-            ],
+              )
+            : null,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+          gradient: LinearGradient(
+            colors: [Colors.blue.shade100, Colors.white],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
           ),
-          const Divider(indent: 10, endIndent: 10),
-          for (var item in data) _subItem(item),
-          Row(
-            children: [
-              CombinationButton(text: '仓库员清点', click: (){}),
-              Expanded(child: Container()),
-              if(data[0].isExempt==true)
-                Text('')
-            ],
-          )
-        ],
+        ),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          expandedTextSpan(
+                            hint: 'delivery_order_supplier'.tr,
+                            text: data[0].supplierName ?? '',
+                            textColor: Colors.red,
+                          ),
+                          expandedTextSpan(
+                            hint: 'delivery_order_company'.tr,
+                            hintColor: Colors.black45,
+                            text: data[0].companyCode ?? '',
+                            textColor: Colors.black45,
+                          ),
+                          expandedTextSpan(
+                            hint: 'delivery_order_factory'.tr,
+                            hintColor: Colors.black45,
+                            text: data[0].factoryName ?? '',
+                            textColor: Colors.black45,
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          expandedTextSpan(
+                            hint: 'delivery_order_deliver_no'.tr,
+                            hintColor: Colors.black45,
+                            text: data[0].deliNo ?? '',
+                            textColor: Colors.black45,
+                          ),
+                          expandedTextSpan(
+                            hint: 'delivery_order_delivery_location'.tr,
+                            hintColor: Colors.black45,
+                            text: data[0].deliveryLocation ?? '',
+                            textColor: Colors.black45,
+                          ),
+                          expandedTextSpan(
+                            hint: 'delivery_order_build_date'.tr,
+                            hintColor: Colors.black45,
+                            text: data[0].billDate ?? '',
+                            textColor: Colors.black45,
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          expandedTextSpan(
+                            hint: 'delivery_order_piece'.tr,
+                            hintColor: Colors.black45,
+                            text: data[0].numPage ?? '',
+                          ),
+                          expandedTextSpan(
+                            hint: 'delivery_order_location_storage'.tr,
+                            hintColor: Colors.black45,
+                            text: data[0].locationName ?? '',
+                            textColor: Colors.black45,
+                          ),
+                          expandedTextSpan(
+                            hint: 'delivery_order_match_code'.tr,
+                            hintColor: Colors.black45,
+                            text: data[0].matchCode ?? '',
+                            textColor: Colors.black45,
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          expandedTextSpan(
+                            hint: 'delivery_order_final_customer'.tr,
+                            hintColor: Colors.black45,
+                            text: data[0].finalCustomer ?? '',
+                            textColor: Colors.black45,
+                          ),
+                          expandedTextSpan(
+                            hint: 'delivery_order_track_no'.tr,
+                            hintColor: Colors.black45,
+                            text: data[0].trackNo ?? '',
+                            textColor: Colors.black45,
+                          ),
+                          expandedTextSpan(
+                            hint: 'delivery_order_remark'.tr,
+                            hintColor: Colors.black45,
+                            text: data[0].remark ?? '',
+                            textColor: Colors.black45,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                Obx(() => Checkbox(
+                      value: data.every((v) => v.isSelected.value),
+                      onChanged: (c) {
+                        for (var v in data) {
+                          v.isSelected.value = c!;
+                        }
+                      },
+                    )),
+              ],
+            ),
+            const Divider(indent: 10, endIndent: 10),
+            for (var item in data) _subItem(item),
+            Row(
+              children: [
+                CombinationButton(
+                  text: 'delivery_order_check'.tr,
+                  click: () => logic.getOrderDetail(
+                    isExempt: data[0].isExempt ?? false,
+                    isCheckOrder: false,
+                    produceOrderNo: data[0].produceOrderNo ?? '',
+                    factoryNumber: data[0].factoryName ?? '',
+                    deliNo: data[0].deliNo ?? '',
+                    workCenterID: userInfo?.sapRole == '003'
+                        ? opcWorkCenter.selectedId.value
+                        : '',
+                    goTo: () => Get.to(
+                      () => const DeliveryOrderCheckPage(),
+                    )?.then((v) {
+                      logic.cleanCheck();
+                      if (v != null && v) _query();
+                    }),
+                  ),
+                ),
+                Expanded(child: Container()),
+                Text(
+                  data[0].isExempt == true ? 'delivery_order_exempt'.tr : 'delivery_order_not_exempt'.tr,
+                  style: TextStyle(
+                    color: data[0].isExempt == true ? Colors.blue : Colors.red,
+                  ),
+                ),
+                const SizedBox(width: 20),
+                Text(
+                  data[0].isPackingMaterials == true ? 'delivery_order_in_and_out'.tr : 'delivery_order_not_in_and_out'.tr,
+                  style: TextStyle(
+                    color: data[0].isPackingMaterials == true
+                        ? Colors.blue
+                        : Colors.red,
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
       ),
     );
   }
@@ -236,41 +287,61 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           textSpan(
-              hint: '物料：', text: '(${item.materialCode}) ${item.materialName}'),
+              hint: 'delivery_order_material'.tr, text: '(${item.materialCode}) ${item.materialName}'),
           Row(
             children: [
               expandedTextSpan(
                 flex: 2,
-                hint: '送货数量：',
+                hint: 'delivery_order_delivery_qty'.tr,
                 text: item.deliveryQty().toShowString(),
               ),
               expandedTextSpan(
                 flex: 2,
-                hint: '核对数量：',
+                hint: 'delivery_order_check_qty'.tr,
                 text: item.deliveryQty().toShowString(),
               ),
               expandedTextSpan(
                 flex: 4,
-                hint: '工厂型体：',
-                text: item.model??'',
+                hint: 'delivery_order_factory_type_body'.tr,
+                text: item.model ?? '',
               ),
               expandedTextSpan(
-                hint: '系数：',
-                text: item.coefficient??'',
+                hint: 'delivery_order_coefficient'.tr,
+                text: item.coefficient ?? '',
               ),
               expandedTextSpan(
-                hint: '常用单位：',
-                text: item.commUnit??'',
+                hint: 'delivery_order_comm_unit'.tr,
+                text: item.commUnit ?? '',
               ),
               expandedTextSpan(
-                hint: '基本单位：',
-                text: item.baseUnit??'',
+                hint: 'delivery_order_base_unit'.tr,
+                text: item.baseUnit ?? '',
               ),
             ],
           ),
           const Divider(indent: 10, endIndent: 10),
         ],
       );
+
+  _inputReason({required Function(String) callback}) {
+    reasonInputPopup(
+      title: [
+        Center(
+          child: Text(
+            'delivery_order_revere_reason'.tr,
+            style: const TextStyle(
+              fontSize: 20,
+              color: Colors.white,
+            ),
+          ),
+        )
+      ],
+      hintText: 'delivery_order_input_reason'.tr,
+      confirmText: 'delivery_order_reverse'.tr,
+      confirm: callback,
+      isCanCancel: true,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -304,13 +375,13 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
                   children: [
                     Expanded(
                       child: EditText(
-                        hint: '型体',
+                        hint: 'delivery_order_type_body'.tr,
                         controller: tecTypeBody,
                       ),
                     ),
                     Expanded(
                       child: EditText(
-                        hint: '指令',
+                        hint: 'delivery_order_instruction'.tr,
                         controller: tecInstruction,
                       ),
                     ),
@@ -320,13 +391,13 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
                   children: [
                     Expanded(
                       child: EditText(
-                        hint: '采购单号',
+                        hint: 'delivery_order_purchase_no'.tr,
                         controller: tecPurchaseOrder,
                       ),
                     ),
                     Expanded(
                       child: EditText(
-                        hint: '物料编码',
+                        hint: 'delivery_order_material_code'.tr,
                         controller: tecMaterialCode,
                       ),
                     ),
@@ -378,7 +449,7 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
                   children: [
                     Expanded(
                       child: EditText(
-                        hint: '员工工号',
+                        hint: 'delivery_order_worker_number'.tr,
                         controller: tecWorkerNumber,
                       ),
                     ),
@@ -389,21 +460,21 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
                         children: [
                           Obx(() => CheckBox(
                                 onChanged: (v) => state.orderType.value = 1,
-                                name: '全部',
+                                name: 'delivery_order_all'.tr,
                                 value: state.orderType.value == 1,
                               )),
                           Obx(() => CheckBox(
                                 onChanged: (v) => v
                                     ? state.orderType.value = 2
                                     : state.orderType.value = 1,
-                                name: '已生成暂收单',
+                                name: 'delivery_order_created_temporary'.tr,
                                 value: state.orderType.value == 2,
                               )),
                           Obx(() => CheckBox(
                                 onChanged: (v) => v
                                     ? state.orderType.value = 3
                                     : state.orderType.value = 1,
-                                name: '未生成暂收单',
+                                name: 'delivery_order_not_created_temporary'.tr,
                                 value: state.orderType.value == 3,
                               )),
                         ],
@@ -416,28 +487,28 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
                   children: [
                     Obx(() => CheckBox(
                           onChanged: (v) => state.stockType.value = 0,
-                          name: '全部',
+                          name: 'delivery_order_all'.tr,
                           value: state.stockType.value == 0,
                         )),
                     Obx(() => CheckBox(
                           onChanged: (v) => v
                               ? state.stockType.value = 1
                               : state.stockType.value = 0,
-                          name: '未入库',
+                          name: 'delivery_order_not_stock_in'.tr,
                           value: state.stockType.value == 1,
                         )),
                     Obx(() => CheckBox(
                           onChanged: (v) => v
                               ? state.stockType.value = 2
                               : state.stockType.value = 0,
-                          name: '待出库',
+                          name: 'delivery_order_wait_stock_out'.tr,
                           value: state.stockType.value == 2,
                         )),
                     Obx(() => CheckBox(
                           onChanged: (v) => v
                               ? state.stockType.value = 3
                               : state.stockType.value = 0,
-                          name: '已出库',
+                          name: 'delivery_order_stock_outed'.tr,
                           value: state.stockType.value == 3,
                         )),
                   ],
@@ -461,7 +532,7 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
             if (scaffoldKey.currentState?.isEndDrawerOpen == true) {
               scaffoldKey.currentState?.closeEndDrawer();
             } else {
-              if (!didPop) exitDialog(content: '确定要推出送货单列表吗？');
+              if (!didPop) exitDialog(content: 'delivery_order_exit_tips'.tr);
             }
           },
           child: Column(
@@ -473,52 +544,98 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
                       itemBuilder: (c, i) => _item(i),
                     )),
               ),
-              Row(
-                children: [
-                  Expanded(
-                    child: CombinationButton(
-                      combination: Combination.left,
-                      text: '标签查询',
-                      click: () {},
-                    ),
-                  ),
-                  Expanded(
-                    child: CombinationButton(
-                      combination: Combination.middle,
-                      text: '入库',
-                      click: () {},
-                    ),
-                  ),
-                  Expanded(
-                    child: CombinationButton(
-                      combination: Combination.middle,
-                      text: '入库冲销',
-                      click: () {},
-                    ),
-                  ),
-                  Expanded(
-                    child: CombinationButton(
-                      combination: Combination.middle,
-                      text: '出库',
-                      click: () {},
-                    ),
-                  ),
-                  Expanded(
-                    child: CombinationButton(
-                      combination: Combination.middle,
-                      text: '出库冲销',
-                      click: () {},
-                    ),
-                  ),
-                  Expanded(
-                    child: CombinationButton(
-                      combination: Combination.right,
-                      text: '生成暂收单',
-                      click: () {},
-                    ),
-                  ),
-                ],
-              )
+              Obx(() => Row(
+                    children: [
+                      Expanded(
+                        child: CombinationButton(
+                          combination: Combination.left,
+                          isEnabled: state.deliveryOrderList.any(
+                            (v) => v.any((v2) => v2.isSelected.value),
+                          ),
+                          text: 'delivery_order_stock_in'.tr,
+                          click: () => stockInDialog(
+                            submitList: logic.getSelectedList(),
+                            workerCenterId: opcWorkCenter.selectedId.value,
+                            refresh: _query,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: CombinationButton(
+                          combination: Combination.middle,
+                          isEnabled: state.deliveryOrderList.any(
+                            (v) => v.any((v2) => v2.isSelected.value),
+                          ),
+                          text: 'delivery_order_stock_in_reverse'.tr,
+                          click: () => logic.checkReversalStockIn(
+                            reversalWithCode: (list) {
+                              //标签功能尚未使用，先执行直接冲销
+                              _inputReason(
+                                callback: (reason) => logic.reversalStockIn(
+                                  workCenterID: opcWorkCenter.selectedId.value,
+                                  reason: reason,
+                                  labels: list,
+                                  refresh: _query,
+                                ),
+                              );
+                            },
+                            reversal: () => _inputReason(
+                              callback: (reason) => logic.reversalStockIn(
+                                workCenterID: opcWorkCenter.selectedId.value,
+                                reason: reason,
+                                refresh: _query,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: CombinationButton(
+                          combination: Combination.middle,
+                          isEnabled: state.deliveryOrderList.any(
+                            (v) => v.any((v2) => v2.isSelected.value),
+                          ),
+                          text: 'delivery_order_stock_out'.tr,
+                          click: () => stockOutDialog(
+                            workerCenterId: opcWorkCenter.selectedId.value,
+                            submitList: logic.getSelectedList(),
+                            refresh: () {},
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: CombinationButton(
+                          combination: Combination.middle,
+                          isEnabled: state.deliveryOrderList.any(
+                            (v) => v.any((v2) => v2.isSelected.value),
+                          ),
+                          text: 'delivery_order_stock_out_reverse'.tr,
+                          click: () => logic.checkReversalStockOut(
+                            reversal: () => _inputReason(
+                              callback: (reason) => logic.reversalStockOut(
+                                workCenterID: opcWorkCenter.selectedId.value,
+                                reason: reason,
+                                refresh: _query,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: CombinationButton(
+                          combination: Combination.right,
+                          isEnabled: state.deliveryOrderList.any(
+                            (v) => v.any((v2) => v2.isSelected.value),
+                          ),
+                          text: 'delivery_order_create_temporary'.tr,
+                          click: () => stockOutReversalDialog(
+                            submitList: logic.getSelectedList(),
+                            refresh: _query,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ))
             ],
           ),
         ),

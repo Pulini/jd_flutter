@@ -20,7 +20,7 @@ class HomeState {
   var buttons = <ButtonItem>[].obs;
   var selectedItemColor = Colors.white;
   var navigationBar = <HomeFunctions>[].obs;
-  var isLoading= true.obs;
+  var isLoading= false.obs;
 
   HomeState() {
     userPicUrl.value = userInfo?.picUrl ?? '';

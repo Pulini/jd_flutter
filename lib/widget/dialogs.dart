@@ -385,116 +385,182 @@ reLoginPopup() {
 
 reasonInputPopup({
   String? hintText,
+  String? tips,
   bool isCanCancel = false,
   required List<Widget> title,
   String? confirmText,
   required Function(String reason) confirm,
   Function()? cancel,
 }) {
+  var isPad = MediaQuery.of(Get.overlayContext!).size.width >= 600;
   TextEditingController reasonController = TextEditingController();
+  var confirmButton = ElevatedButton(
+    style: ElevatedButton.styleFrom(
+      shape: isPad && isCanCancel
+          ? const RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(25),
+                bottomLeft: Radius.circular(25),
+              ),
+            )
+          : RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(25),
+            ),
+    ),
+    onPressed: () {
+      var reason = reasonController.text;
+      if (reason.trim().isEmpty) {
+        errorDialog(content: hintText ?? 'dialog_reason_hint'.tr);
+      } else {
+        confirm.call(reason);
+      }
+    },
+    child: Text(
+      confirmText ?? 'dialog_default_confirm'.tr,
+      style: const TextStyle(fontSize: 16),
+    ),
+  );
+  Widget? cancelButton;
+  if (isCanCancel) {
+    cancelButton = ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        shape: isPad && isCanCancel
+            ? const RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                  topRight: Radius.circular(25),
+                  bottomRight: Radius.circular(25),
+                ),
+              )
+            : RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(25),
+              ),
+      ),
+      onPressed: () {
+        Get.back();
+        cancel?.call();
+      },
+      child: Text(
+        'dialog_default_cancel'.tr,
+        style: const TextStyle(fontSize: 16, color: Colors.grey),
+      ),
+    );
+  }
+  var children = <Widget>[
+    ...title,
+    const SizedBox(height: 10),
+    TextField(
+      maxLines: 4,
+      controller: reasonController,
+      decoration: InputDecoration(
+        suffixIcon: IconButton(
+          icon: const Icon(Icons.close),
+          onPressed: () {
+            reasonController.clear();
+          },
+        ),
+        contentPadding: const EdgeInsets.all(10),
+        labelText: hintText ?? 'dialog_reason_hint'.tr,
+        fillColor: Colors.white,
+        filled: true,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(15),
+        ),
+      ),
+    ),
+    Text(
+      tips ?? '',
+      maxLines: 2,
+      style: const TextStyle(
+        color: Colors.white,
+        fontSize: 16,
+        fontWeight: FontWeight.bold,
+      ),
+    ),
+    const SizedBox(height: 30),
+    isCanCancel
+        ? isPad
+            ? Row(
+                children: [
+                  Expanded(child: confirmButton),
+                  const SizedBox(width: 2),
+                  Expanded(child: cancelButton!)
+                ],
+              )
+            : Column(
+                children: [
+                  FractionallySizedBox(
+                    widthFactor: 1,
+                    child: confirmButton,
+                  ),
+                  const SizedBox(height: 10),
+                  FractionallySizedBox(
+                    widthFactor: 1,
+                    child: cancelButton,
+                  )
+                ],
+              )
+        : FractionallySizedBox(
+            widthFactor: 1,
+            child: confirmButton,
+          ),
+  ];
+
   var popup = Card(
     margin: const EdgeInsets.all(0),
     color: Colors.transparent,
     shadowColor: Colors.transparent,
     child: Container(
       padding: const EdgeInsets.all(8.0),
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(20),
-          topRight: Radius.circular(20),
-        ),
-        gradient: LinearGradient(
+      decoration: BoxDecoration(
+        borderRadius: isPad
+            ? const BorderRadius.all(Radius.circular(20))
+            : const BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
+              ),
+        gradient: const LinearGradient(
           colors: [Colors.lightBlueAccent, Colors.blueAccent],
           begin: Alignment.bottomLeft,
           end: Alignment.topRight,
         ),
       ),
-      child: Column(
-        mainAxisSize: MainAxisSize.max,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ...title,
-          const SizedBox(height: 10),
-          TextField(
-            maxLines: 3,
-            controller: reasonController,
-            decoration: InputDecoration(
-              suffixIcon: IconButton(
-                icon: const Icon(Icons.close),
-                onPressed: () {
-                  reasonController.clear();
-                },
-              ),
-              contentPadding: const EdgeInsets.all(10),
-              labelText: hintText ?? 'dialog_reason_hint'.tr,
-              fillColor: Colors.white,
-              filled: true,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(15),
-              ),
+      child: isPad
+          ? ListView(children: children)
+          : Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: children,
             ),
-          ),
-          const SizedBox(height: 50),
-          FractionallySizedBox(
-            widthFactor: 1,
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(25),
-                ),
-              ),
-              onPressed: () {
-                var reason = reasonController.text;
-                if (reason.trim().isEmpty) {
-                  errorDialog(content: hintText ?? 'dialog_reason_hint'.tr);
-                } else {
-                  confirm.call(reason);
-                }
-              },
-              child: Text(
-                confirmText ?? 'dialog_default_confirm'.tr,
-                style: const TextStyle(fontSize: 20),
-              ),
-            ),
-          ),
-          if (isCanCancel) const SizedBox(height: 10),
-          if (isCanCancel)
-            FractionallySizedBox(
-              widthFactor: 1,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                ),
-                onPressed: () {
-                  Get.back();
-                  cancel?.call();
-                },
-                child: Text(
-                  'dialog_default_cancel'.tr,
-                  style: const TextStyle(fontSize: 20, color: Colors.grey),
-                ),
-              ),
-            )
-        ],
-      ),
     ),
   );
-  showCupertinoModalPopup(
-    context: Get.overlayContext!,
-    builder: (BuildContext context) => PopScope(
-      //拦截返回键
+  if (isPad) {
+    Get.dialog(PopScope(
       canPop: false,
-      child: SingleChildScrollView(
-        primary: true,
-        padding: EdgeInsets.only(
-          bottom: MediaQuery.of(context).viewInsets.bottom,
+      child: AlertDialog(
+        contentPadding: const EdgeInsets.all(0),
+        content: SizedBox(
+          width: 400,
+          height: 270,
+          child: popup,
         ),
-        child: popup,
       ),
-    ),
-  );
+    ));
+  } else {
+    showCupertinoModalPopup(
+      context: Get.overlayContext!,
+      builder: (BuildContext context) => PopScope(
+        //拦截返回键
+        canPop: false,
+        child: SingleChildScrollView(
+          primary: true,
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
+          child: popup,
+        ),
+      ),
+    );
+  }
 }
 
 exitDialog({

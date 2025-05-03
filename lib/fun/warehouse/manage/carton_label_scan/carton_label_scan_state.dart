@@ -4,7 +4,6 @@ import 'package:jd_flutter/bean/http/response/carton_label_scan_info.dart';
 import 'package:jd_flutter/bean/http/response/carton_label_scan_progress_info.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
-import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
 
