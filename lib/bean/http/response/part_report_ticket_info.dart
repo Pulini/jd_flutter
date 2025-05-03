@@ -1,7 +1,3 @@
-import 'dart:math';
-import 'dart:typed_data';
-import 'package:jd_flutter/utils/utils.dart';
-
 class PartReportTicketInfo {
   PartReportTicketInfo({
     this.factoryType,
