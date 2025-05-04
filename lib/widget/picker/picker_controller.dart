@@ -36,10 +36,9 @@ enum PickerType {
 abstract class PickerController {
   late PickerType pickerType;
   late bool hasAll;
-  late bool subHasAll;
 
-  PickerController(this.pickerType,
-      {this.hasAll = false, this.subHasAll = false});
+
+  PickerController(this.pickerType,{this.hasAll = false});
 
   String getButtonName() {
     switch (pickerType) {
@@ -550,7 +549,7 @@ abstract class PickerController {
             PickerSapFactoryAndWarehouse.fromJson,
           ),
         ));
-        if (subHasAll) {
+        if (hasAll) {
           for (var v in list) {
             (v as PickerSapFactoryAndWarehouse).warehouseList = [
               PickerSapWarehouse(
@@ -723,7 +722,7 @@ class OptionsPickerController extends PickerController {
   var selectedId = ''.obs;
   var loadingError = ''.obs;
   var enable = true.obs;
-
+  String searchText = '';
   final String? saveKey;
   final String? buttonName;
   final Function? dataList;
@@ -758,6 +757,7 @@ class OptionsPickerController extends PickerController {
   }
 
   search(String text) {
+    searchText = text;
     if (text.trim().isEmpty) {
       pickerItems.value = pickerData;
     } else {
@@ -834,7 +834,6 @@ class LinkOptionsPickerController extends PickerController {
   LinkOptionsPickerController(
     super.pickerType, {
     super.hasAll,
-    super.subHasAll,
     this.saveKey,
     this.buttonName,
     this.dataList,
