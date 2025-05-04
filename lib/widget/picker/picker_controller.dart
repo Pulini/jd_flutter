@@ -37,8 +37,7 @@ abstract class PickerController {
   late PickerType pickerType;
   late bool hasAll;
 
-
-  PickerController(this.pickerType,{this.hasAll = false});
+  PickerController(this.pickerType, {this.hasAll = false});
 
   String getButtonName() {
     switch (pickerType) {
@@ -841,18 +840,18 @@ class LinkOptionsPickerController extends PickerController {
     this.onSelected,
   });
 
-  PickerItem getOptionsPicker1() => pickerItems1[selectItem1];
+  PickerItem getOptionsPicker1() => pickerData[selectItem1];
 
-  PickerItem getOptionsPicker2() => pickerItems2[selectItem2];
+  PickerItem getOptionsPicker2() =>
+      pickerData[selectItem1].subList()[selectItem2];
 
   select(int item1, int item2) {
     if (pickerItems1.isEmpty) return;
     var pick1 = pickerItems1[item1];
-    pickerItems2.value = pickerData[item1].subList();
     var pick2 = pickerItems2[item2];
     selectedName.value = '${pick1.pickerName()}-${pick2.pickerName()}';
     selectItem1 =
-        pickerData.indexWhere((v) => v.pickerId() == pick1.pickerId());
+        pickerItems1.indexWhere((v) => v.pickerId() == pick1.pickerId());
     selectItem2 = pickerData[selectItem1]
         .subList()
         .indexWhere((v) => v.pickerId() == pick2.pickerId());
@@ -865,13 +864,16 @@ class LinkOptionsPickerController extends PickerController {
 
   refreshItem2(int index) {
     if (searchText.isNotEmpty) {
-      pickerItems2.value = (pickerItems1[index] as LinkPickerItem)
-          .subList()
-          .where((element) => element
-              .pickerName()
-              .toUpperCase()
-              .contains(searchText.toUpperCase()))
+      var list = (pickerItems1[index] as LinkPickerItem).subList();
+      var searchList = list
+          .where((v) =>
+              v.toShow().toUpperCase().contains(searchText.toUpperCase()))
           .toList();
+      if (searchList.isEmpty) {
+        pickerItems2.value = list;
+      } else {
+        pickerItems2.value = searchList;
+      }
     } else {
       pickerItems2.value = (pickerItems1[index] as LinkPickerItem).subList();
     }
@@ -938,12 +940,22 @@ class LinkOptionsPickerController extends PickerController {
     } else {
       pickerItems1.value = pickerData
           .where(
-            (v1) => v1.subList().any(
-                (v2) => v2.toShow().toUpperCase().contains(text.toUpperCase())),
+            (v1) =>
+                v1.toShow().toUpperCase().contains(text.toUpperCase()) ||
+                v1.subList().any((v2) =>
+                    v2.toShow().toUpperCase().contains(text.toUpperCase())),
           )
           .toList();
       if (pickerItems1.isNotEmpty) {
-        pickerItems2.value = (pickerItems1[0] as LinkPickerItem).subList();
+        var list = (pickerItems1[0] as LinkPickerItem).subList();
+        var searchList = list
+            .where((v) => v.toShow().toUpperCase().contains(text.toUpperCase()))
+            .toList();
+        if (searchList.isEmpty) {
+          pickerItems2.value = list;
+        } else {
+          pickerItems2.value = searchList;
+        }
       } else {
         pickerItems2.value = [];
       }
