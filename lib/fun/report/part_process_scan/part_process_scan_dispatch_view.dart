@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/scan_barcode_info.dart';
 import 'package:jd_flutter/bean/http/response/worker_info.dart';
-import 'package:jd_flutter/fun/reporting_work/part_process_scan/part_process_scan_logic.dart';
+import 'package:jd_flutter/fun/report/part_process_scan/part_process_scan_logic.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/check_box_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
@@ -70,7 +70,8 @@ addWorkerItem(
                             ? 'part_process_scan_dispatch_add_temp'.tr
                             : workerList.any((v) => v.empID == newWorker!.empID)
                                 ? 'part_process_scan_dispatch_members_exists'.tr
-                                : 'part_process_scan_dispatch_members_can_add'.tr,
+                                : 'part_process_scan_dispatch_members_can_add'
+                                    .tr,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 18,
@@ -115,7 +116,9 @@ addWorkerItem(
                   onPressed: () {
                     if (newWorker == null) {
                       showSnackBar(
-                        message: 'part_process_scan_dispatch_input_worker_number_tips'.tr,
+                        message:
+                            'part_process_scan_dispatch_input_worker_number_tips'
+                                .tr,
                         isWarning: true,
                       );
                       return;
@@ -157,16 +160,18 @@ class _PartProcessScanDispatchPageState
   bool isSharing = spGet('${Get.currentRoute}/isSharing') ?? false;
 
   _workerItem(WorkerInfo wi) {
-    var surplus = state.modifyDistributionList[index].getSurplusQty(wi.empID ?? 0);
-    var dis =
-        state.modifyDistributionList[index].getDistributionWorker(wi.empID ?? 0);
+    var surplus =
+        state.modifyDistributionList[index].getSurplusQty(wi.empID ?? 0);
+    var dis = state.modifyDistributionList[index]
+        .getDistributionWorker(wi.empID ?? 0);
     return Column(
       children: [
         GestureDetector(
           onTap: () => setState(() {
             if (dis == null) {
               if (isSharing) {
-                state.modifyDistributionList[index].distribution.add(Distribution(
+                state.modifyDistributionList[index].distribution
+                    .add(Distribution(
                   name: wi.empName ?? '',
                   number: wi.empCode ?? '',
                   empId: wi.empID ?? 0,
@@ -175,7 +180,8 @@ class _PartProcessScanDispatchPageState
                 state.modifyDistributionList[index].sharingDistribution();
               } else {
                 if (surplus > 0) {
-                  state.modifyDistributionList[index].distribution.add(Distribution(
+                  state.modifyDistributionList[index].distribution
+                      .add(Distribution(
                     name: wi.empName ?? '',
                     number: wi.empCode ?? '',
                     empId: wi.empID ?? 0,
@@ -183,7 +189,9 @@ class _PartProcessScanDispatchPageState
                   ));
                 } else {
                   showSnackBar(
-                    message: 'part_process_scan_dispatch_allocation_qty_zero_tips'.tr,
+                    message:
+                        'part_process_scan_dispatch_allocation_qty_zero_tips'
+                            .tr,
                     isWarning: true,
                   );
                 }
@@ -231,16 +239,21 @@ class _PartProcessScanDispatchPageState
                                 ? NumberDecimalEditText(
                                     initQty: dis.distributionQty,
                                     max: surplus,
-                                    hint: 'part_process_scan_dispatch_input_allocation_qty_tips'.tr,
+                                    hint:
+                                        'part_process_scan_dispatch_input_allocation_qty_tips'
+                                            .tr,
                                     onChanged: (d) {
                                       setState(() {
                                         dis.distributionQty = d;
                                       });
-                                      state.modifyDistributionList[index].reportList
+                                      state.modifyDistributionList[index]
+                                          .reportList
                                           .refresh();
                                     },
                                   )
-                                : Text('part_process_scan_dispatch_allocation_this_worker'.tr),
+                                : Text(
+                                    'part_process_scan_dispatch_allocation_this_worker'
+                                        .tr),
                           ],
                         ),
                       ),
@@ -265,23 +278,27 @@ class _PartProcessScanDispatchPageState
               children: [
                 Expanded(
                   child: Slider(
-                    value: (dis.distributionQty
-                            .div(state.modifyDistributionList[index].getProcessMax()))
+                    value: (dis.distributionQty.div(state
+                            .modifyDistributionList[index]
+                            .getProcessMax()))
                         .mul(100),
                     max: 100,
                     divisions: 1000,
                     label:
                         '${(dis.distributionQty.div(state.modifyDistributionList[index].getProcessMax())).mul(10000).round().toDouble().div(100).toShowString()}%',
-                    secondaryTrackValue: (surplus
-                            .div(state.modifyDistributionList[index].getProcessMax()))
+                    secondaryTrackValue: (surplus.div(state
+                            .modifyDistributionList[index]
+                            .getProcessMax()))
                         .mul(100),
                     onChanged: (v) {
                       if (!isSharing) {}
                       setState(() {
-                        var max = (surplus.div(
-                                state.modifyDistributionList[index].getProcessMax()))
+                        var max = (surplus.div(state
+                                .modifyDistributionList[index]
+                                .getProcessMax()))
                             .mul(100);
-                        dis.distributionQty = state.modifyDistributionList[index]
+                        dis.distributionQty = state
+                            .modifyDistributionList[index]
                             .getProcessMax()
                             .mul(v > max ? max : v)
                             .round()
@@ -334,9 +351,10 @@ class _PartProcessScanDispatchPageState
               text: state.modifyDistributionList[index]
                   .getProcessSurplus()
                   .toShowString(),
-              textColor: state.modifyDistributionList[index].getProcessSurplus() > 0
-                  ? Colors.green
-                  : Colors.red,
+              textColor:
+                  state.modifyDistributionList[index].getProcessSurplus() > 0
+                      ? Colors.green
+                      : Colors.red,
             ),
             const SizedBox(height: 10),
             Expanded(

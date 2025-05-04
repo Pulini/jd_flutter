@@ -1,4 +1,5 @@
-const String dadPhone = '15267733701';
+const String dadPhone = '15868587600';
+const String dadPwd = '123456';
 const jdDatabase = 'jd_app.db';
 const spSaveLoginPhone = 'login_phone';
 const spSaveLoginFace = 'login_face';
