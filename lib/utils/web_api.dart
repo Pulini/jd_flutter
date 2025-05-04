@@ -1172,6 +1172,15 @@ const webApiGetHandoverInfo = "api/WetPrinting/GetHandoverInfo";
 //提交交接信息生成交接单_部件
 const webApiSubmitHandoverInfo = "api/WetPrinting/SubmitHandoverInfo";
 
+//员工获取可报工信息_部件
+const webApiGetCanReportSummary = "api/WetPrinting/GetCanReportSummary";
+
+//员工报工_部件
+const webApiSubmitBarCode = "api/WetPrinting/SubmitBarCode";
+
+//扫工票取消报工
+const webApiUnReportByWorkCard = "api/WetPrinting/UnReportByWorkCard";
+
 //获取暂收单列表
 const webApiGetTemporaryList = 'api/Temporary/GetTemporaryList';
 

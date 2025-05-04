@@ -263,3 +263,71 @@ class NumberEditText extends StatelessWidget {
     );
   }
 }
+
+//文本输入框带搜索
+class EditTextSearch extends StatelessWidget {
+  const EditTextSearch({
+    super.key,
+    this.hint,
+    this.initStr = '',
+    this.hasFocus = false,
+    this.controller,
+    this.onChanged,
+    this.onSearch,
+  });
+
+  final String? initStr;
+  final bool hasFocus;
+  final String? hint;
+  final Function(String v)? onChanged;
+  final Function()? onSearch;
+  final TextEditingController? controller;
+
+  @override
+  Widget build(BuildContext context) {
+    TextEditingController controller = TextEditingController(text: initStr);
+    FocusNode? fn;
+    if (hasFocus) {
+      fn = FocusNode()..requestFocus();
+    }
+    return Container(
+      margin: const EdgeInsets.all(5),
+      height: 40,
+      child: TextField(
+        controller: this.controller ?? controller,
+        onChanged: (v) {
+          onChanged?.call(v);
+        },
+        focusNode: fn,
+        decoration: InputDecoration(
+          contentPadding: const EdgeInsets.only(
+            top: 0,
+            bottom: 0,
+            left: 10,
+            right: 10,
+          ),
+          filled: true,
+          fillColor: Colors.grey[300],
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20),
+            borderSide: const BorderSide(
+              color: Colors.transparent,
+            ),
+          ),
+          border: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+          ),
+          labelText: hint,
+          labelStyle: const TextStyle(color: Colors.black54),
+          suffixIcon: IconButton(
+            icon: const Icon(Icons.search, color: Colors.grey),
+            onPressed: () {
+              onSearch?.call();
+              (this.controller ?? controller).clear();
+            },
+          ),
+        ),
+      ),
+    );
+  }
+}

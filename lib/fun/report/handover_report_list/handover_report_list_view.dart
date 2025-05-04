@@ -51,6 +51,7 @@ class _HandoverReportListPageState extends State<HandoverReportListPage> {
         padding: const EdgeInsets.only(top: 5, bottom: 5),
         child: Center(
           child: Text(
+            maxLines: 1,
             mes,
             style: TextStyle(color: textColor),
           ),

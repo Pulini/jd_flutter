@@ -40,6 +40,7 @@ import 'fun/report/handover_report_list/handover_report_list_view.dart';
 import 'fun/report/molding_pack_area_report/molding_pack_area_report_view.dart';
 import 'fun/report/molding_scan_bulletin_report/molding_scan_bulletin_report_maximize_view.dart';
 import 'fun/report/molding_scan_bulletin_report/molding_scan_bulletin_report_view.dart';
+import 'fun/report/part_report_cancel/part_report_cancel_view.dart';
 import 'fun/report/process_report/process_report_view.dart';
 import 'fun/report/production_day_report/production_day_report_view.dart';
 import 'fun/report/production_materials_report/production_materials_report_view.dart';
@@ -529,6 +530,14 @@ class RouteConfig {
     const ComponentHandoverPage(),
   );
 
+  //部件报工或取消
+  static Routes partReportOrCancel = Routes(
+    '/part_report_cancel',
+    99,
+    const PartReportCancelPage(),
+  );
+
+
   //本地功能入口列表
   static List<Routes> routeList = [
     dailyReport,
@@ -596,6 +605,7 @@ class RouteConfig {
     deliveryOrder,
     temporaryOrder,
     componentHandover,
+    partReportOrCancel,
   ];
 
   static List<GetPage> appRoutes = [
@@ -871,6 +881,10 @@ class RouteConfig {
     GetPage(
       name: componentHandover.name,
       page: () => componentHandover.page,
+    ),
+    GetPage(
+      name: partReportOrCancel.name,
+      page: () => partReportOrCancel.page,
     ),
   ];
 }
