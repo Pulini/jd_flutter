@@ -2680,7 +2680,8 @@ class Translation extends Translations {
           'purchase_order_reversal_purchase_order_no': '采购订单号',
           'purchase_order_reversal_material_code': '物料编号',
           'purchase_order_reversal_not_select_order': '请勾选要冲销单物料凭证！',
-          'purchase_order_reversal_getting_receipt_voucher_list': '正在获取入库凭证表...',
+          'purchase_order_reversal_getting_receipt_voucher_list':
+              '正在获取入库凭证表...',
           'purchase_order_reversal_reversing_receipt': '正在冲销入库凭证...',
         },
         localeEnglish.toString(): {
@@ -5901,6 +5902,24 @@ class Translation extends Translations {
               'Getting leader ...',
           'purchase_order_warehousing_dialog_submitting_warehousing':
               'Submitting warehousing...',
+          'purchase_order_reversal_material': 'Material：',
+          'purchase_order_reversal_supplier': 'Supplier：',
+          'purchase_order_reversal_sales_order': 'Sales order：',
+          'purchase_order_reversal_purchase_order': 'Purchase order：',
+          'purchase_order_reversal_receipt_qty': 'Receipt qty：',
+          'purchase_order_reversal_worker': 'Operator：',
+          'purchase_order_reversal_select_all': 'Select All',
+          'purchase_order_reversal_reversal': 'Reversal',
+          'purchase_order_reversal_material_voucher': 'Material voucher',
+          'purchase_order_reversal_type_body': 'Type body',
+          'purchase_order_reversal_sales_order_no': 'Sales order no',
+          'purchase_order_reversal_purchase_order_no': 'Purchase order no',
+          'purchase_order_reversal_material_code': 'Material code',
+          'purchase_order_reversal_not_select_order':
+              'Please check the material voucher to be reversed ！',
+          'purchase_order_reversal_getting_receipt_voucher_list':
+              'Getting  receipt voucher list...',
+          'purchase_order_reversal_reversing_receipt': 'Reversing receipt...',
         }
       };
 }
