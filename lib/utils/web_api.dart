@@ -1198,3 +1198,9 @@ const webApiGetPurchaseOrder = 'api/Package/GetPurchaseOrder';
 
 //采购订单含图片入库
 const webApiPurchaseOrderStockIn = 'api/Package/PurchaseOrderStockInPic';
+
+//获取入库凭证列表
+const webApiSapGetReceiptVoucherList = 'sap/zapp/ZFUN_GET_ZCGSLTZD_CX';
+
+//采购订单入库冲销
+const webApiSapPurchaseOrderReversal= 'api/Package/PurchaseOrderStockInPic_Off';

@@ -7,6 +7,7 @@ import 'package:jd_flutter/fun/report/part_report_scan/part_report_scan_view.dar
 import 'package:jd_flutter/fun/warehouse/in/delivery_order/delivery_order_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/incoming_inspection/incoming_inspection_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/production_scan_warehouse/production_scan_warehouse_view.dart';
+import 'package:jd_flutter/fun/warehouse/in/purchase_order_reversal/purchase_order_reversal_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/sap_picking_receipt_reversal/sap_picking_receipt_reversal_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/sap_put_on_shelves/sap_put_on_shelves_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/suppliers_scan_store/suppliers_scan_store_view.dart';
@@ -545,6 +546,13 @@ class RouteConfig {
     const PurchaseOrderWarehousingPage(),
   );
 
+  //采购订单凭证列表
+  static Routes purchaseOrderReversal = Routes(
+    '/purchase_order_reversal',
+    99,
+    const PurchaseOrderReversalPage(),
+  );
+
   //本地功能入口列表
   static List<Routes> routeList = [
     dailyReport,
@@ -614,6 +622,7 @@ class RouteConfig {
     componentHandover,
     partReportOrCancel,
     purchaseOrderWarehousing,
+    purchaseOrderReversal,
   ];
 
   static List<GetPage> appRoutes = [
@@ -897,6 +906,10 @@ class RouteConfig {
     GetPage(
       name: purchaseOrderWarehousing.name,
       page: () => purchaseOrderWarehousing.page,
+    ),
+    GetPage(
+      name: purchaseOrderReversal.name,
+      page: () => purchaseOrderReversal.page,
     ),
   ];
 }

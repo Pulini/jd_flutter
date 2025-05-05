@@ -2657,13 +2657,31 @@ class Translation extends Translations {
           'purchase_order_warehousing_input_customer_po': '请输入客户PO',
           'purchase_order_warehousing_input_track_no': '请输入跟踪号',
           'purchase_order_warehousing_getting_purchase_orders': '正在查询采购订单列表...',
-          'purchase_order_warehousing_dialog_not_select_order': '请勾选要入库的订单并填写本次入库数！',
+          'purchase_order_warehousing_dialog_not_select_order':
+              '请勾选要入库的订单并填写本次入库数！',
           'purchase_order_warehousing_dialog_post_date': '过账日期',
           'purchase_order_warehousing_dialog_storage_location': '存储位置',
           'purchase_order_warehousing_dialog_warehousing': '入库',
           'purchase_order_warehousing_dialog_disable_face': '当前仓库未启用人脸识别',
           'purchase_order_warehousing_dialog_getting_leader': '正在获取仓库负责人信息...',
-          'purchase_order_warehousing_dialog_submitting_warehousing': '正在提交入库...',
+          'purchase_order_warehousing_dialog_submitting_warehousing':
+              '正在提交入库...',
+          'purchase_order_reversal_material': '物料：',
+          'purchase_order_reversal_supplier': '供应商：',
+          'purchase_order_reversal_sales_order': '销售订单：',
+          'purchase_order_reversal_purchase_order': '采购订单：',
+          'purchase_order_reversal_receipt_qty': '入库数：',
+          'purchase_order_reversal_worker': '入库人：',
+          'purchase_order_reversal_select_all': '全选',
+          'purchase_order_reversal_reversal': '入库冲销',
+          'purchase_order_reversal_material_voucher': '物料凭证号',
+          'purchase_order_reversal_type_body': '型体',
+          'purchase_order_reversal_sales_order_no': '销售订单号',
+          'purchase_order_reversal_purchase_order_no': '采购订单号',
+          'purchase_order_reversal_material_code': '物料编号',
+          'purchase_order_reversal_not_select_order': '请勾选要冲销单物料凭证！',
+          'purchase_order_reversal_getting_receipt_voucher_list': '正在获取入库凭证表...',
+          'purchase_order_reversal_reversing_receipt': '正在冲销入库凭证...',
         },
         localeEnglish.toString(): {
           'app_name': 'Gold Emperor',
@@ -5843,11 +5861,13 @@ class Translation extends Translations {
               'Submitting stock out...',
           'delivery_order_dialog_creating_temporary': 'Creating temporary...',
           'purchase_order_warehousing_type_body': 'Type body：%s',
-          'purchase_order_warehousing_original_sales_order': 'Original sales order：%s',
+          'purchase_order_warehousing_original_sales_order':
+              'Original sales order：%s',
           'purchase_order_warehousing_item_purchase_order': 'Purchase order',
           'purchase_order_warehousing_item_customer_po': 'Customer po',
           'purchase_order_warehousing_item_track_no': 'Track no',
-          'purchase_order_warehousing_item_purchase_order_line': 'Purchase order line',
+          'purchase_order_warehousing_item_purchase_order_line':
+              'Purchase order line',
           'purchase_order_warehousing_item_size': 'Size',
           'purchase_order_warehousing_item_order_qty': 'Order qty',
           'purchase_order_warehousing_item_received_qty': 'Received qty',
@@ -5856,23 +5876,31 @@ class Translation extends Translations {
           'purchase_order_warehousing_received_qty': 'Received qty：',
           'purchase_order_warehousing_qty': 'Qty',
           'purchase_order_warehousing_distribution': 'Distribution',
-          'purchase_order_warehousing_distribution_finish': 'Distribution finish',
+          'purchase_order_warehousing_distribution_finish':
+              'Distribution finish',
           'purchase_order_warehousing_warehousing': 'Warehousing',
           'purchase_order_warehousing_select_all': 'Select all',
           'purchase_order_warehousing_input_type_body': 'Input type body',
           'purchase_order_warehousing_input_instruction': 'Input instruction',
-          'purchase_order_warehousing_input_purchase_order': 'Input purchase order',
-          'purchase_order_warehousing_input_material_code': 'Input material code',
+          'purchase_order_warehousing_input_purchase_order':
+              'Input purchase order',
+          'purchase_order_warehousing_input_material_code':
+              'Input material code',
           'purchase_order_warehousing_input_customer_po': 'Input customer po',
           'purchase_order_warehousing_input_track_no': 'Input track no',
-          'purchase_order_warehousing_getting_purchase_orders': 'Getting purchase orders...',
-          'purchase_order_warehousing_dialog_not_select_order': 'Please check the order to be stored and fill in the current storage quantity !',
+          'purchase_order_warehousing_getting_purchase_orders':
+              'Getting purchase orders...',
+          'purchase_order_warehousing_dialog_not_select_order':
+              'Please check the order to be stored and fill in the current storage quantity !',
           'purchase_order_warehousing_dialog_post_date': 'Post date',
-          'purchase_order_warehousing_dialog_storage_location': 'Storage location',
+          'purchase_order_warehousing_dialog_storage_location':
+              'Storage location',
           'purchase_order_warehousing_dialog_warehousing': 'Warehousing',
           'purchase_order_warehousing_dialog_disable_face': 'Not enabled face',
-          'purchase_order_warehousing_dialog_getting_leader': 'Getting leader ...',
-          'purchase_order_warehousing_dialog_submitting_warehousing': 'Submitting warehousing...',
+          'purchase_order_warehousing_dialog_getting_leader':
+              'Getting leader ...',
+          'purchase_order_warehousing_dialog_submitting_warehousing':
+              'Submitting warehousing...',
         }
       };
 }
