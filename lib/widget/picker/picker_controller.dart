@@ -744,7 +744,6 @@ class OptionsPickerController extends PickerController {
   });
 
   select(int item) {
-    logger.f(pickerItems);
     selectedName.value = pickerItems[item].pickerName();
     selectedId.value = pickerItems[item].pickerId();
     selectItem = pickerData.indexWhere((v) => v.pickerId() == selectedId.value);
@@ -766,7 +765,6 @@ class OptionsPickerController extends PickerController {
           )
           .toList();
     }
-    logger.f(pickerItems);
   }
 
   int getSave() {

@@ -1192,3 +1192,9 @@ const webApiSapGetTestStandards = 'sap/zapp/ZMM_GET_QMSTANDARD';
 
 //暂收单提交测试申请
 const webApiSapCreateTestApplication = 'sap/zapp/ZFUN_APP_TESTPR';
+
+//获取采购订单
+const webApiGetPurchaseOrder = 'api/Package/GetPurchaseOrder';
+
+//采购订单含图片入库
+const webApiPurchaseOrderStockIn = 'api/Package/PurchaseOrderStockInPic';

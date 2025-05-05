@@ -115,7 +115,6 @@ stockInDialog({
         success: stockInSuccess,
       );
     }
-    Get.back();
   }
 
   Get.dialog(
