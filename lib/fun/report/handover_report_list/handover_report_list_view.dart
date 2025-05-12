@@ -39,7 +39,8 @@ class _HandoverReportListPageState extends State<HandoverReportListPage> {
     if (judge) {
       backColor = Colors.yellow.shade200;
     }
-    return DecoratedBox(
+    return Container(
+      height: 35,
       decoration: BoxDecoration(
         color: backColor, // 背景颜色
         border: Border.all(

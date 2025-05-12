@@ -12,7 +12,7 @@ class ComponentHandoverState {
   var empId = ''; //员工EmpId
   var empCode = ''; //员工EmpId
 
-  var process = spGet(spSaveComponentHandoverProcessName) ?? ''.obs; //制程
+  var process = (spGet(spSaveComponentHandoverProcessName) ?? '').toString().obs; //制程
   var processId = spGet(spSaveComponentHandoverProcessID) ?? 0; //制程ID
   var typeBody = ''.obs; //型体
   var outPart= ''.obs; //转出部件

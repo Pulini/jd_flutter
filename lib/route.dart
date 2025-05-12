@@ -41,6 +41,7 @@ import 'fun/report/molding_pack_area_report/molding_pack_area_report_view.dart';
 import 'fun/report/molding_scan_bulletin_report/molding_scan_bulletin_report_maximize_view.dart';
 import 'fun/report/molding_scan_bulletin_report/molding_scan_bulletin_report_view.dart';
 import 'fun/report/part_report_cancel/part_report_cancel_view.dart';
+import 'fun/report/process_dispatch_list/process_dispatch_view.dart';
 import 'fun/report/process_report/process_report_view.dart';
 import 'fun/report/production_day_report/production_day_report_view.dart';
 import 'fun/report/production_materials_report/production_materials_report_view.dart';
@@ -537,6 +538,13 @@ class RouteConfig {
     const PartReportCancelPage(),
   );
 
+  //工序派工单列表
+  static Routes processDispatchList = Routes(
+    '/process_dispatch_list',
+    99,
+    const ProcessDispatchPage(),
+  );
+
 
   //本地功能入口列表
   static List<Routes> routeList = [
@@ -606,6 +614,7 @@ class RouteConfig {
     temporaryOrder,
     componentHandover,
     partReportOrCancel,
+    processDispatchList,
   ];
 
   static List<GetPage> appRoutes = [
@@ -885,6 +894,10 @@ class RouteConfig {
     GetPage(
       name: partReportOrCancel.name,
       page: () => partReportOrCancel.page,
+    ),
+    GetPage(
+      name: processDispatchList.name,
+      page: () => processDispatchList.page,
     ),
   ];
 }

@@ -1192,3 +1192,24 @@ const webApiSapGetTestStandards = 'sap/zapp/ZMM_GET_QMSTANDARD';
 
 //暂收单提交测试申请
 const webApiSapCreateTestApplication = 'sap/zapp/ZFUN_APP_TESTPR';
+
+//获取工序派工单列表
+const webApiGetProcessWorkCardList = "api/ShearOff/GetProcessWorkCardList";
+
+//部件拆分
+const webApiPartsDisassembly = "api/ShearOff/PartsDisassembly";
+
+//部件合并
+const webApiPartsMerging = "api/ShearOff/PartsMerging";
+
+//获取派工单贴标详情
+const webApiGetBarcodeDetails = "api/ShearOff/GetBarcodeDetails";
+
+//生成贴标条码
+const webApiCreateLabelingBarcode = "api/ShearOff/CreateLabelingBarcode";
+
+//删除条码
+const webApiDelLabelingBarcode = "api/ShearOff/DelLabelingBarcode";
+
+//打印传递打印次数
+const webApiUpdatePartsPrintTimes = "api/WetPrinting/UpdatePartsPrintTimes";

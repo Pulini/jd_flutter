@@ -34,7 +34,8 @@ class _ComponentHandoverSummaryPageState
       textColor = Colors.black;
       backColor = Colors.white;
     }
-    return DecoratedBox(
+    return Container(
+      height: 35,
       decoration: BoxDecoration(
         color: backColor, // 背景颜色
         border: Border.all(

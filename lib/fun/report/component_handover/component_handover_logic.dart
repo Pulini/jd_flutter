@@ -338,7 +338,7 @@ class ComponentHandoverLogic extends GetxController {
     clearPeople();
     state.dataList.clear();
     state.summaryDataList.clear();
-    state.process ='';
+    state.process.value ='';
     state.processId =0;
     state.typeBody.value ='';
     state.outPart.value ='';

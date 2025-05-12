@@ -55,3 +55,6 @@ const spSaveDeliveryOrderStockInCheckLocation =
     'delivery_order_stock_in_check_location';
 const spSaveDeliveryOrderStockInCheckLeader =
     'delivery_order_stock_in_check_leader';
+const processDispatchType =
+    'process_dispatch_submit_type';
+

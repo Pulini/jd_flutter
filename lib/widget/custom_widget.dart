@@ -508,6 +508,7 @@ textSpan({
   Color textColor = Colors.blueAccent,
   double fontSize = 14,
   bool isBold = true,
+  bool isSpacing = false,
   int maxLines = 1,
 }) {
   return Text.rich(
@@ -516,7 +517,7 @@ textSpan({
     TextSpan(
       children: [
         TextSpan(
-          text: hint,
+          text: isSpacing? '  $hint' :hint,
           style: TextStyle(
             fontSize: fontSize,
             fontWeight: isBold ? FontWeight.bold : FontWeight.normal,

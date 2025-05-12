@@ -36,7 +36,8 @@ class _PartReportCancelPageState extends State<PartReportCancelPage> {
       backColor = Colors.white;
     }
     return InkWell(
-      child: DecoratedBox(
+      child: Container(
+        height: 35,
         decoration: BoxDecoration(
           color: backColor, // 背景颜色
           border: Border.all(
@@ -151,23 +152,14 @@ class _PartReportCancelPageState extends State<PartReportCancelPage> {
                 )
               ],
             ),
-            SizedBox(
-              child: expandedTextSpan(
-                  hint: 'part_report_cancel_type_body'.tr,
-                  text: state.factory.value),
-              height: double.minPositive,
-            ),
-            SizedBox(
-              child: expandedTextSpan(
-                  hint: 'part_report_cancel_part'.tr, text: state.part.value),
-              height: double.minPositive,
-            ),
-            SizedBox(
-              child: expandedTextSpan(
-                  hint: 'part_report_cancel_process'.tr,
-                  text: state.processName.value),
-              height: double.minPositive,
-            ),
+            textSpan(
+                hint: 'part_report_cancel_type_body'.tr,
+                text: state.factory.value),
+            textSpan(
+                hint: 'part_report_cancel_part'.tr, text: state.part.value),
+            textSpan(
+                hint: 'part_report_cancel_process'.tr,
+                text: state.processName.value),
             Row(
               children: [
                 expandedTextSpan(

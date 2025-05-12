@@ -25,7 +25,8 @@ class _PartReportScanSummaryPageState extends State<PartReportScanSummaryPage> {
     required Color textColor,
     required Color backColor,
   }) {
-    return DecoratedBox(
+    return Container(
+      height: 35,
       decoration: BoxDecoration(
         color: backColor, // 背景颜色
         border: Border.all(
