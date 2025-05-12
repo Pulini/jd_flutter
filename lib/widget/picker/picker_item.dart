@@ -468,7 +468,7 @@ class PickerSapFactoryAndWarehouse extends LinkPickerItem {
 
   @override
   String toShow() {
-    return '($number)-$name';
+    return name??'';
   }
 }
 
@@ -501,7 +501,7 @@ class PickerSapWarehouse extends PickerItem {
 
   @override
   String toShow() {
-    return '($warehouseNumber)-$warehouseName';
+    return '$warehouseName($warehouseNumber)';
   }
 }
 

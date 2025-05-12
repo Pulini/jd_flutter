@@ -23,7 +23,6 @@ class _TimelyInventoryPageState extends State<TimelyInventoryPage> {
   var factoryWarehouseController = LinkOptionsPickerController(
     PickerType.sapFactoryWarehouse,
     hasAll: true,
-    subHasAll: true,
     saveKey:
         '${RouteConfig.timelyInventory.name}${PickerType.sapFactoryWarehouse}',
   );

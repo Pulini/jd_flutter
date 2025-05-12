@@ -58,3 +58,4 @@ const spSaveDeliveryOrderStockInCheckLeader =
 const processDispatchType =
     'process_dispatch_submit_type';
 
+const spSavePurchaseOrderWarehousingCheckLeader = 'purchase_order_warehousing_check_leader';

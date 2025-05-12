@@ -103,6 +103,7 @@ class OptionsPicker extends StatelessWidget {
 
       var titleSearch = Expanded(
         child: CupertinoSearchTextField(
+          controller: TextEditingController(text:pickerController.searchText),
           decoration: BoxDecoration(
             color: Colors.white54,
             borderRadius: BorderRadius.circular(20),
@@ -237,6 +238,18 @@ class LinkOptionsPicker extends StatelessWidget {
       var controller1 = FixedExtentScrollController(initialItem: select[0]);
       var controller2 = FixedExtentScrollController(initialItem: select[1]);
 
+      var titleSearch = Expanded(
+        child: CupertinoSearchTextField(
+          controller: TextEditingController(text:pickerController.searchText),
+          decoration: BoxDecoration(
+            color: Colors.white54,
+            borderRadius: BorderRadius.circular(20),
+          ),
+          placeholder: 'picker_search'.tr,
+          onChanged: (String value) => pickerController.search(value),
+        ),
+      );
+
       var titleButtonConfirm = TextButton(
         onPressed: () {
           if (pickerController.pickerItems1.isEmpty) return;
@@ -263,6 +276,7 @@ class LinkOptionsPicker extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   _titleButtonCancel,
+                  titleSearch,
                   titleButtonConfirm,
                 ],
               ),

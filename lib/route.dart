@@ -2,11 +2,12 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/fun/dispatching/injection_scan_report/Injection_scan_report_view.dart';
 import 'package:jd_flutter/fun/maintenance/sap_ink_color_matching/sap_ink_color_matching_view.dart';
 import 'package:jd_flutter/fun/other/hydroelectric_excess/hydroelectric_excess_view.dart';
+import 'package:jd_flutter/fun/report/part_process_scan/part_process_scan_view.dart';
 import 'package:jd_flutter/fun/report/part_report_scan/part_report_scan_view.dart';
-import 'package:jd_flutter/fun/reporting_work/part_process_scan/part_process_scan_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/delivery_order/delivery_order_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/incoming_inspection/incoming_inspection_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/production_scan_warehouse/production_scan_warehouse_view.dart';
+import 'package:jd_flutter/fun/warehouse/in/purchase_order_reversal/purchase_order_reversal_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/sap_picking_receipt_reversal/sap_picking_receipt_reversal_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/sap_put_on_shelves/sap_put_on_shelves_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/suppliers_scan_store/suppliers_scan_store_view.dart';
@@ -52,6 +53,7 @@ import 'fun/report/view_process_specification/view_process_specification_view.da
 import 'fun/report/worker_production_detail/worker_production_detail_view.dart';
 import 'fun/report/worker_production_report/worker_production_report_view.dart';
 import 'fun/warehouse/in/process_report/process_report_store_view.dart';
+import 'fun/warehouse/in/purchase_order_warehousing/purchase_order_warehousing_view.dart';
 import 'fun/warehouse/in/sap_injection_molding_stock_in/sap_injection_molding_stock_in_view.dart';
 import 'fun/warehouse/in/sap_no_label_stock_in/sap_no_label_stock_in_view.dart';
 import 'fun/warehouse/in/sap_produce_stock_in/sap_produce_stock_in_view.dart';
@@ -538,6 +540,19 @@ class RouteConfig {
     const PartReportCancelPage(),
   );
 
+  //采购订单入库
+  static Routes purchaseOrderWarehousing = Routes(
+    '/purchase_order_warehousing',
+    99,
+    const PurchaseOrderWarehousingPage(),
+  );
+
+  //采购订单凭证列表
+  static Routes purchaseOrderReversal = Routes(
+    '/purchase_order_reversal',
+    99,
+    const PurchaseOrderReversalPage(),
+  );
   //工序派工单列表
   static Routes processDispatchList = Routes(
     '/process_dispatch_list',
@@ -614,6 +629,8 @@ class RouteConfig {
     temporaryOrder,
     componentHandover,
     partReportOrCancel,
+    purchaseOrderWarehousing,
+    purchaseOrderReversal,
     processDispatchList,
   ];
 
@@ -894,6 +911,14 @@ class RouteConfig {
     GetPage(
       name: partReportOrCancel.name,
       page: () => partReportOrCancel.page,
+    ),
+    GetPage(
+      name: purchaseOrderWarehousing.name,
+      page: () => purchaseOrderWarehousing.page,
+    ),
+    GetPage(
+      name: purchaseOrderReversal.name,
+      page: () => purchaseOrderReversal.page,
     ),
     GetPage(
       name: processDispatchList.name,
