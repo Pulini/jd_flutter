@@ -57,3 +57,5 @@ const spSaveDeliveryOrderStockInCheckLocation =
 const spSaveDeliveryOrderStockInCheckLeader =
     'delivery_order_stock_in_check_leader';
 const spSavePurchaseOrderWarehousingCheckLeader = 'purchase_order_warehousing_check_leader';
+const spSaveDeliveryOrderBindingLabelUserNumber = 'delivery_order_binding_label_user_number';
+const spSaveDeliveryOrderBindingLabelLocation = 'delivery_order_binding_label_location';

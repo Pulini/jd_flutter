@@ -1,8 +1,9 @@
+import 'dart:convert';
+
+import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jd_flutter/bean/http/response/base_data.dart';
 import 'package:jd_flutter/bean/http/response/delivery_order_info.dart';
 import 'package:jd_flutter/bean/http/response/sap_purchase_stock_in_info.dart';
 import 'package:jd_flutter/constant.dart';
@@ -10,15 +11,25 @@ import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/picker/picker_controller.dart';
-import 'package:jd_flutter/widget/picker/picker_item.dart';
 import 'package:jd_flutter/widget/picker/picker_view.dart';
 import 'package:jd_flutter/bean/http/response/leader_info.dart';
+import 'package:jd_flutter/widget/signature_page.dart';
 
 stockInDialog({
   required String workerCenterId,
   required List<DeliveryOrderInfo> submitList,
   required Function() refresh,
 }) {
+  var notScanList=<String>[];
+  submitList.where((v)=>v.isScanPieces=='X'&&v.deliJbq?.isEmpty==true).forEach((v){
+    if(!notScanList.contains(v.deliNo)){
+      notScanList.add(v.deliNo??'');
+    }
+  });
+  if(notScanList.isNotEmpty){
+    errorDialog(content: '送货单(${notScanList.join('、')})尚未扫码绑定标签！');
+    return;
+  }
   var matchCode = <String>[];
   if (!submitList.every((v) => v.isExempt == true) &&
       !submitList.every((v) => v.isExempt == false)) {
@@ -35,18 +46,20 @@ stockInDialog({
     return;
   }
 
+
   var leaderEnable = false.obs;
   var errorMsg = ''.obs;
   var leaderList = <LeaderInfo>[].obs;
   String saveLeaderNumber = spGet(spSaveDeliveryOrderStockInCheckLeader) ?? '';
 
-  var postDate = DatePickerController(PickerType.date, buttonName: 'delivery_order_dialog_post_date'.tr);
+  var postDate = DatePickerController(PickerType.date,
+      buttonName: 'delivery_order_dialog_post_date'.tr);
   var leaderController = FixedExtentScrollController();
   var locationController = OptionsPickerController(
     PickerType.ghost,
     buttonName: 'delivery_order_dialog_location'.tr,
     saveKey: spSaveDeliveryOrderStockInCheckLocation,
-    dataList: () => _getStorageLocationList(submitList[0].factoryNO ?? ''),
+    dataList: () => getStorageLocationList(submitList[0].factoryNO ?? ''),
     onSelected: (v) => _checkFaceInfo(
       billType: '入库单',
       sapFactoryNumber: (v as LocationInfo).factoryNumber ?? '',
@@ -89,23 +102,48 @@ stockInDialog({
   stockIn() {
     if (leaderEnable.value) {
       var leader = leaderList[leaderController.selectedItem];
-      livenFaceVerification(
-        faceUrl: userInfo?.picUrl ?? '',
-        verifySuccess: (pickerB64) => livenFaceVerification(
-          faceUrl: leader.liablePicturePath ?? '',
-          verifySuccess: (leaderB64) => _stockInDeliveryOrder(
-            workerCenterId: workerCenterId,
-            stockID: locationController.selectedId.value,
-            postDate: postDate.getDateFormatSapYMD(),
-            pickerNumber: userInfo?.number,
-            pickerB64: pickerB64,
-            leaderNumber: leader.liableEmpCode ?? '',
-            leaderB64: leaderB64,
-            data: submitList,
-            success: stockInSuccess,
+      if (submitList[0].isScanPieces?.isEmpty == true) {
+        livenFaceVerification(
+          faceUrl: userInfo?.picUrl ?? '',
+          verifySuccess: (pickerB64) => livenFaceVerification(
+            faceUrl: leader.liablePicturePath ?? '',
+            verifySuccess: (leaderB64) => _stockInDeliveryOrder(
+              workerCenterId: workerCenterId,
+              stockID: locationController.selectedId.value,
+              postDate: postDate.getDateFormatSapYMD(),
+              pickerNumber: userInfo?.number,
+              pickerB64: pickerB64,
+              leaderNumber: leader.liableEmpCode ?? '',
+              leaderB64: leaderB64,
+              data: submitList,
+              success: stockInSuccess,
+            ),
           ),
-        ),
-      );
+        );
+      } else {
+        Get.to(() => SignaturePage(
+              name: userInfo?.name ?? '',
+              callback: (pickerSignature) {
+                Get.to(
+                  () => SignaturePage(
+                      name: leader.liableEmpName ?? '',
+                      callback: (leaderSignature) => _stockInDeliveryOrder(
+                            workerCenterId: workerCenterId,
+                            stockID: locationController.selectedId.value,
+                            postDate: postDate.getDateFormatSapYMD(),
+                            pickerNumber: userInfo?.number,
+                            pickerB64: base64Encode(
+                                pickerSignature.buffer.asUint8List()),
+                            leaderNumber: leader.liableEmpCode ?? '',
+                            leaderB64: base64Encode(
+                                leaderSignature.buffer.asUint8List()),
+                            data: submitList,
+                            success: stockInSuccess,
+                          )),
+                );
+              },
+            ));
+      }
     } else {
       _stockInDeliveryOrder(
         workerCenterId: workerCenterId,
@@ -200,7 +238,7 @@ stockOutDialog({
   var locationController = OptionsPickerController(
     PickerType.ghost,
     buttonName: 'delivery_order_dialog_location'.tr,
-    dataList: () => _getStorageLocationList(submitList[0].factoryNO ?? ''),
+    dataList: () => getStorageLocationList(submitList[0].factoryNO ?? ''),
   );
   var departmentController = OptionsPickerController(
     PickerType.sapDepartment,
@@ -246,10 +284,18 @@ stockOutDialog({
   ));
 }
 
-stockOutReversalDialog({
+createTemporaryDialog({
   required List<DeliveryOrderInfo> submitList,
   required Function() refresh,
 }) {
+  if (submitList.any((v) => v.inspector?.isEmpty == true)) {
+    errorDialog(content: '含有未清点的数据！');
+    return;
+  }
+  if (groupBy(submitList, (v) => v.isScanPieces ?? '').length > 1) {
+    errorDialog(content: '扫码送货单与非扫码送货单不能一同生成暂收单!');
+    return;
+  }
   _checkFaceInfo(
     billType: '暂收单',
     sapFactoryNumber: submitList[0].factoryNO ?? '',
@@ -279,36 +325,17 @@ stockOutReversalDialog({
                 onSelectedItemChanged: (v) {},
                 children: leaders
                     .map((data) => Center(
-                  child: Text('${data.liableEmpName}'),
-                ))
+                          child: Text('${data.liableEmpName}'),
+                        ))
                     .toList(),
               ),
             ),
             actions: [
               TextButton(
-                onPressed: () => livenFaceVerification(
-                  faceUrl: userInfo?.picUrl ?? '',
-                  verifySuccess: (pickerB64) => livenFaceVerification(
-                    faceUrl: leaders[leaderController.selectedItem]
-                            .liablePicturePath ??
-                        '',
-                    verifySuccess: (leaderB64) => _createTemporaryOder(
-                      pickerNumber: userInfo?.number,
-                      pickerB64: pickerB64,
-                      leaderNumber: leaders[leaderController.selectedItem]
-                              .liableEmpCode ??
-                          '',
-                      leaderB64: leaderB64,
-                      data: submitList,
-                      success: (msg) => successDialog(
-                        content: msg,
-                        back: () {
-                          Get.back();
-                          refresh.call();
-                        },
-                      ),
-                    ),
-                  ),
+                onPressed: () => _checkLeader(
+                  submitList: submitList,
+                  leader: leaders[leaderController.selectedItem],
+                  refresh: refresh,
                 ),
                 child: Text('dialog_default_confirm'.tr),
               ),
@@ -328,28 +355,57 @@ stockOutReversalDialog({
   );
 }
 
-//获取Sap供应商列表
-Future _getStorageLocationList(String factoryNumber) async {
-  var response = await httpGet(
-      method: webApiGetStorageLocationList,
-      params: {'FactoryNumber': factoryNumber});
-  if (response.resultCode == resultSuccess) {
-    try {
-      List<PickerItem> list = [];
-      list.addAll(await compute(
-        parseJsonToList,
-        ParseJsonParams(
-          response.data,
-          LocationInfo.fromJson,
+_checkLeader({
+  required List<DeliveryOrderInfo> submitList,
+  required LeaderInfo leader,
+  required Function() refresh,
+}) {
+  if (submitList[0].isScanPieces?.isEmpty == true) {
+    livenFaceVerification(
+      faceUrl: userInfo?.picUrl ?? '',
+      verifySuccess: (pickerB64) => livenFaceVerification(
+        faceUrl: leader.liablePicturePath ?? '',
+        verifySuccess: (leaderB64) => _createTemporaryOder(
+          pickerNumber: userInfo?.number ?? '',
+          pickerB64: pickerB64,
+          leaderNumber: leader.liableEmpCode ?? '',
+          leaderB64: leaderB64,
+          data: submitList,
+          success: (msg) => successDialog(
+            content: msg,
+            back: () {
+              Get.back();
+              refresh.call();
+            },
+          ),
         ),
-      ));
-      return list;
-    } on Error catch (e) {
-      logger.e(e);
-      return 'json_format_error'.tr;
-    }
+      ),
+    );
   } else {
-    return response.message;
+    Get.to(() => SignaturePage(
+          name: userInfo?.name ?? '',
+          callback: (pickerSignature) {
+            Get.to(
+              () => SignaturePage(
+                name: leader.liableEmpName ?? '',
+                callback: (leaderSignature) => _createTemporaryOder(
+                  pickerNumber: userInfo?.number ?? '',
+                  pickerB64: base64Encode(pickerSignature.buffer.asUint8List()),
+                  leaderNumber: leader.liableEmpCode ?? '',
+                  leaderB64: base64Encode(leaderSignature.buffer.asUint8List()),
+                  data: submitList,
+                  success: (msg) => successDialog(
+                    content: msg,
+                    back: () {
+                      Get.back();
+                      refresh.call();
+                    },
+                  ),
+                ),
+              ),
+            );
+          },
+        ));
   }
 }
 

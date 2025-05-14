@@ -661,6 +661,55 @@ expandedFrameText({
     ),
   );
 }
+//带框、带点击事件带文本
+frameText({
+  Function? click,
+  Color? borderColor,
+  Color? backgroundColor,
+  Color? textColor,
+  EdgeInsetsGeometry? padding,
+  AlignmentGeometry? alignment,
+  bool isBold = false,
+  required String text,
+  int? maxLines = 1,
+}) {
+  var widget = Container(
+    height: (maxLines! * 35).toDouble(),
+    padding: padding ?? const EdgeInsets.all(5),
+    decoration: BoxDecoration(
+      border: Border.all(color: borderColor ?? Colors.grey),
+      color: backgroundColor ?? Colors.transparent,
+    ),
+    alignment: alignment ?? Alignment.centerLeft,
+    child: Text(
+      maxLines: maxLines,
+      overflow: TextOverflow.ellipsis,
+      text,
+      strutStyle: const StrutStyle(
+        forceStrutHeight: true,
+        leading: 0.5,
+      ),
+      style: TextStyle(
+        color: textColor ?? Colors.black87,
+        fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
+      ),
+    ),
+  );
+  return  text.isEmpty
+      ? Container(
+    height: (maxLines * 35).toDouble(),
+    decoration: BoxDecoration(
+      border: Border.all(color: borderColor ?? Colors.grey),
+      color: backgroundColor ?? Colors.transparent,
+    ),
+  )
+      : click == null
+      ? widget
+      : GestureDetector(
+    onTap: () => click.call(),
+    child: widget,
+  );
+}
 
 //固定宽高1比1的头像
 avatarPhoto(String? url) {

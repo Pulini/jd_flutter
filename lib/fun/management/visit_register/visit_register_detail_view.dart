@@ -237,7 +237,7 @@ class _VisitRegisterDetailPageState extends State<VisitRegisterDetailPage> {
         child: GestureDetector(
           onTap: () {
             if (index == 5) {
-              informationDialog(
+              msgDialog(
                   content: 'visit_details_unable_to_add_more_images'.tr);
             } else {
               if (data.typeAdd == "0") {

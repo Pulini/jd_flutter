@@ -70,7 +70,7 @@ class SapWmsSplitLabelLogic extends GetxController {
         warehouse != '1101' &&
         warehouse != '1102' &&
         warehouse != '1105') {
-      informationDialog(
+      msgDialog(
           content:
               'sap_wms_split_label_select_warehouse_before_print_label_tips'
                   .tr);
@@ -89,7 +89,7 @@ class SapWmsSplitLabelLogic extends GetxController {
       }
     });
     if (list.isEmpty) {
-      informationDialog(
+      msgDialog(
           content: 'sap_wms_split_label_select_label_fo_print'.tr);
     } else {
       if (list.length > 1) {

@@ -444,7 +444,7 @@ checkPickerDialog({required Function(WorkerInfo) confirm}) {
                   );
                 } else {
                   if (worker!.picUrl == null || worker!.picUrl!.isEmpty) {
-                    informationDialog(
+                    msgDialog(
                       content:
                           'picking_material_order_dialog_picker_avatar_not_upload_tips'
                               .tr,

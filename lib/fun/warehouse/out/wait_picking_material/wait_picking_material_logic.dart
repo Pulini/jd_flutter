@@ -37,7 +37,7 @@ class WaitPickingMaterialLogic extends GetxController {
     if (state.queryParamOrderType.value == 0 &&
         supplier == '' &&
         processFlow == '') {
-      informationDialog(
+      msgDialog(
           content:
               'wait_picking_material_order_search_all_need_supplier_or_process'
                   .tr);
@@ -46,7 +46,7 @@ class WaitPickingMaterialLogic extends GetxController {
     if ((state.queryParamOrderType.value == 1 ||
             state.queryParamOrderType.value == 3) &&
         processFlow == '') {
-      informationDialog(
+      msgDialog(
           content:
               'wait_picking_material_order_search_not_outsource_need_process'
                   .tr);
@@ -55,7 +55,7 @@ class WaitPickingMaterialLogic extends GetxController {
     if ((state.queryParamOrderType.value == 2 ||
             state.queryParamOrderType.value == 4) &&
         supplier == '') {
-      informationDialog(
+      msgDialog(
           content:
               'wait_picking_material_order_search_outsource_need_supplier'.tr);
       return;
@@ -198,11 +198,11 @@ class WaitPickingMaterialLogic extends GetxController {
       }
     }
     if (list.isEmpty) {
-      informationDialog(content: 'wait_picking_material_order_not_select'.tr);
+      msgDialog(content: 'wait_picking_material_order_not_select'.tr);
       return;
     }
     if (orderType.length > 1) {
-      informationDialog(
+      msgDialog(
           content:
               'wait_picking_material_order_selected_order_type_different'.tr);
       return;

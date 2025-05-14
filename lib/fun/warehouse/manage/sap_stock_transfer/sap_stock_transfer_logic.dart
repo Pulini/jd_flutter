@@ -73,20 +73,20 @@ class SapStockTransferLogic extends GetxController {
 
   transfer(String warehouse) {
     if (state.labelList.isEmpty) {
-      informationDialog(
+      msgDialog(
         content: 'sap_stock_transfer_scan_pallet_or_label_tips'.tr,
       );
       return;
     }
     if (locationOrPalletController.text.isEmpty) {
-      informationDialog(
+      msgDialog(
         content: 'sap_stock_transfer_scan_storage_location_or_pallet_tips'.tr,
       );
       return;
     }
     if (state.targetPallet == null && state.newPallet == null) {
       if (state.labelList.every((v) => !v.select)) {
-        informationDialog(
+        msgDialog(
           content: 'sap_stock_transfer_need_scan_all_label_tips'.tr,
         );
       } else {
@@ -104,7 +104,7 @@ class SapStockTransferLogic extends GetxController {
     } else {
       var labels = state.labelList.where((v) => v.select).toList();
       if (labels.isEmpty) {
-        informationDialog(content: 'sap_stock_transfer_scan_or_select_goods_fo_transfer_tips'.tr);
+        msgDialog(content: 'sap_stock_transfer_scan_or_select_goods_fo_transfer_tips'.tr);
       } else {
         if (state.targetPallet != null) {
           //托盘及其全部或部分货物移动至已有货物的托盘

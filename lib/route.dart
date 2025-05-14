@@ -61,6 +61,7 @@ import 'fun/warehouse/in/sap_surplus_material_stock_in/sap_surplus_material_stoc
 import 'fun/warehouse/manage/anti_Counterfeiting/puma_anti_counterfeiting_view.dart';
 import 'fun/warehouse/manage/carton_label_scan/carton_label_scan_view.dart';
 import 'fun/warehouse/manage/carton_label_scan/carton_label_scan_progress_view.dart';
+import 'fun/warehouse/manage/quality_inspection/quality_inspection_view.dart';
 import 'fun/warehouse/manage/sap_wms_split_label/sap_wms_split_label_view.dart';
 import 'fun/warehouse/manage/smart_delivery/smart_delivery_view.dart';
 import 'fun/warehouse/manage/timely_inventory/timely_inventory_view.dart';
@@ -553,6 +554,13 @@ class RouteConfig {
     const PurchaseOrderReversalPage(),
   );
 
+  //品检
+  static Routes qualityInspection = Routes(
+    '/quality_inspection',
+    99,
+    const QualityInspectionPage(),
+  );
+
   //本地功能入口列表
   static List<Routes> routeList = [
     dailyReport,
@@ -623,6 +631,7 @@ class RouteConfig {
     partReportOrCancel,
     purchaseOrderWarehousing,
     purchaseOrderReversal,
+    qualityInspection,
   ];
 
   static List<GetPage> appRoutes = [
@@ -910,6 +919,10 @@ class RouteConfig {
     GetPage(
       name: purchaseOrderReversal.name,
       page: () => purchaseOrderReversal.page,
+    ),
+    GetPage(
+      name: qualityInspection.name,
+      page: () => qualityInspection.page,
     ),
   ];
 }

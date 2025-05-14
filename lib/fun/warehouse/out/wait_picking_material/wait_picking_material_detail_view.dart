@@ -37,7 +37,7 @@ class _WaitPickingMaterialDetailPageState
         );
         break;
       default:
-        informationDialog(content: state.detail.items?[0].msg);
+        msgDialog(content: state.detail.items?[0].msg);
         break;
     }
   }

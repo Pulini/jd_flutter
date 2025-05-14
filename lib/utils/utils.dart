@@ -14,6 +14,7 @@ import 'package:jd_flutter/bean/http/response/bar_code.dart';
 import 'package:jd_flutter/bean/http/response/base_data.dart';
 import 'package:jd_flutter/bean/http/response/leader_info.dart';
 import 'package:jd_flutter/bean/http/response/process_specification_info.dart';
+import 'package:jd_flutter/bean/http/response/sap_purchase_stock_in_info.dart';
 import 'package:jd_flutter/bean/http/response/user_info.dart';
 import 'package:jd_flutter/bean/http/response/version_info.dart';
 import 'package:jd_flutter/bean/http/response/worker_info.dart';
@@ -21,6 +22,7 @@ import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/downloader.dart';
+import 'package:jd_flutter/widget/picker/picker_item.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -222,6 +224,8 @@ extension FileExt on File {
 extension StringExt on String? {
   String md5Encode() =>
       md5.convert(const Utf8Encoder().convert(this ?? '')).toString();
+
+  bool isNullOrEmpty() => this?.isEmpty ?? true;
 
   double toDoubleTry() {
     try {
@@ -843,4 +847,29 @@ livenFaceVerification({
       }
     },
   );
+}
+
+//获取Sap供应商列表
+Future getStorageLocationList(String factoryNumber) async {
+  var response = await httpGet(
+      method: webApiGetStorageLocationList,
+      params: {'FactoryNumber': factoryNumber});
+  if (response.resultCode == resultSuccess) {
+    try {
+      List<PickerItem> list = [];
+      list.addAll(await compute(
+        parseJsonToList,
+        ParseJsonParams(
+          response.data,
+          LocationInfo.fromJson,
+        ),
+      ));
+      return list;
+    } on Error catch (e) {
+      logger.e(e);
+      return 'json_format_error'.tr;
+    }
+  } else {
+    return response.message;
+  }
 }

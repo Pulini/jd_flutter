@@ -22,7 +22,7 @@ class SapProductionPickingLogic extends GetxController {
     required bool isSupplementOrder,
   }) {
     if (workCenter.contains('PQCJ')) {
-      informationDialog(
+      msgDialog(
           content: 'sap_production_picking_use_sap_print_picking_tips'.tr,
           back: () {
             Get.back();

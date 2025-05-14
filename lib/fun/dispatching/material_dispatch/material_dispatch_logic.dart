@@ -71,7 +71,7 @@ class MaterialDispatchLogic extends GetxController {
   batchWarehousing() {
     var submitList = state.createSubmitData();
     if (submitList.isEmpty) {
-      informationDialog(
+      msgDialog(
           content: 'material_dispatch_batch_stock_in_error_tips'.tr);
     } else {
       state.batchWarehousing(

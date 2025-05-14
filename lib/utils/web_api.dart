@@ -1151,6 +1151,18 @@ const webApiReversalStockIn =
 const webApiReversalStockOut =
     'api/DeliveryNote/SAPPackagingMaterialBatchOutsourcing_Off';
 
+//供应商所属标签信息列表
+const webApiSapGetSupplierLabelInfo = 'sap/zapp/ZMM_GET_DELIBQ';
+
+//获取送货单和件号绑定暂存数据
+const webApiSapGetLabelBindingStaging = 'sap/zapp/ZMM_GET_DELIPIE_TMP';
+
+//暂存SAP标签绑定已扫标签
+const webApiSapStagingLabelBinding = 'sap/zapp/ZMM_RES_DELIPIE_TMP';
+
+//提交SAP标签绑定
+const webApiSapSubmitLabelBinding = 'sap/zapp/ZMM_RES_DELI_PIECE';
+
 //批量生成暂收单
 const webApiCreateTemporary = 'api/DeliveryNote/TemporaryBatchGeneration';
 
@@ -1203,4 +1215,25 @@ const webApiPurchaseOrderStockIn = 'api/Package/PurchaseOrderStockInPic';
 const webApiSapGetReceiptVoucherList = 'sap/zapp/ZFUN_GET_ZCGSLTZD_CX';
 
 //采购订单入库冲销
-const webApiSapPurchaseOrderReversal= 'api/Package/PurchaseOrderStockInPic_Off';
+const webApiPurchaseOrderReversal= 'api/Package/PurchaseOrderStockInPic_Off';
+
+//品检工单查询
+const webApiSapGetQualityInspectionOrders= 'sap/zapp/ZFUN_APP_PJ_ORDERQUERY';
+
+//获取品检工单详情
+const webApiSapGetQualityInspectionOrderDetail= 'sap/zapp/ZFUN_APP_PJ_ORDERDETAILQUERY';
+
+//添加品检异常记录
+const webApiSapAddAbnormalRecord= 'sap/zapp/ZFUN_APP_PJ_ORDERTESTADD';
+
+//修改品检异常记录状态
+const webApiSapModifyAbnormalRecord= 'sap/zapp/ZFUN_APP_PJ_ORDERTESTEDIT';
+
+//删除品检异常记录
+const webApiSapDeleteAbnormalRecord= 'sap/zapp/ZFUN_APP_PJ_ORDERTESTDEL';
+
+//品检提交质检完成标识
+const webApiSapInspectionCompleted= 'sap/zapp/ZFUN_APP_PJ_ORDERTESTCOMP';
+
+//获取质检汇总表
+const webApiSapGetInspectionReport= 'sap/zapp/ZFUN_APP_PJ_SUMQUERY';

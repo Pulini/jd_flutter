@@ -11,7 +11,7 @@ import 'package:jd_flutter/login/login_view.dart';
 import 'downloader.dart';
 
 // 提示弹窗
-informationDialog({
+msgDialog({
   String title = '',
   required String? content,
   Function()? back,

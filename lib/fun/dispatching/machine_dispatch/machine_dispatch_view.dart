@@ -461,7 +461,7 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
                 text: 'machine_dispatch_leader_operation'.tr,
                 click: () {
                   if (logic.statusReportedAndGenerate()) {
-                    informationDialog(
+                    msgDialog(
                       content: 'machine_dispatch_modify_error_tips'.tr,
                     );
                   } else {
@@ -513,7 +513,7 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
                 isEnabled: logic.isSelectedOne(),
                 click: () {
                   if (logic.statusReportedAndGenerate()) {
-                    informationDialog(
+                    msgDialog(
                       content: '已经进行过员工汇报，无法再打标',
                     );
                   } else {
@@ -545,7 +545,7 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
               isEnabled: state.detailsInfo?.barCodeList?.isNotEmpty == true,
               click: () {
                 if (logic.statusReportedAndGenerate()) {
-                  informationDialog(
+                  msgDialog(
                     content: '请先进行员工确认！',
                   );
                 } else {
