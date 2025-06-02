@@ -60,8 +60,8 @@ class _PickingMaterialOrderPageState extends State<PickingMaterialOrderPage> {
       instruction: tecInstruction.text,
       pickingMaterialOrder: tecPickingMaterialOrder.text,
       sapSupplier: opcSupplier.selectedId.value,
-      sapFactory: lopcFactoryWarehouse.getOptionsPicker1().pickerId(),
-      sapWarehouse: lopcFactoryWarehouse.getOptionsPicker2().pickerId(),
+      sapFactory: lopcFactoryWarehouse.getPickItem1().pickerId(),
+      sapWarehouse: lopcFactoryWarehouse.getPickItem2().pickerId(),
     );
   }
 

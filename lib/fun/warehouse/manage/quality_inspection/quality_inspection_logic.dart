@@ -34,19 +34,16 @@ class QualityInspectionLogic extends GetxController {
 
   addAbnormalRecord({
     required QualityInspectionAbnormalItemInfo abnormalItem,
-    required AbnormalDegree degree,
   }) {
     state.addAbnormalRecord(
       abnormalItem: abnormalItem,
-      degree: degree.value,
       success: (NewAbnormalRecordInfo newAbnormal) {
         showScanTips(
-          color: degree == AbnormalDegree.slight ? Colors.orange : Colors.red,
+          color:  Colors.red,
         );
         state.qiDetailAbnormalRecords.add(QualityInspectionAbnormalRecordInfo(
           abnormalRecordId: newAbnormal.abnormalRecordId,
           abnormalItemId: newAbnormal.abnormalItemId,
-          abnormalSeverity: degree.value,
           abnormalStatus: newAbnormal.abnormalStatus,
           modifyDate: newAbnormal.creationTime,
         ));

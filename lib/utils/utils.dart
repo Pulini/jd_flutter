@@ -653,7 +653,8 @@ String getTimeHms({DateTime? time}) {
   if (m.length == 1) m = '0$m';
   var s = now.second.toString();
   if (s.length == 1) s = '0$s';
-  return '$h:$m:$s';
+
+  return '$h:$m:$s ${now.millisecond}';
 }
 
 String getDateSapYMD({DateTime? time}) {

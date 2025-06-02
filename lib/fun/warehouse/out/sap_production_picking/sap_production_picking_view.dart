@@ -217,8 +217,8 @@ class _SapProductionPickingPageState extends State<SapProductionPickingPage> {
       startDate: dpcStartDate.getDateFormatSapYMD(),
       endDate: dpcEndDate.getDateFormatSapYMD(),
       workCenter: workCenterController.selectedId.value,
-      factory: factoryWarehouseController.getOptionsPicker1().pickerId(),
-      warehouse: factoryWarehouseController.getOptionsPicker2().pickerId(),
+      factory: factoryWarehouseController.getPickItem1().pickerId(),
+      warehouse: factoryWarehouseController.getPickItem2().pickerId(),
       isSupplementOrder: isSupplementOrder.value,
     );
   }

@@ -118,8 +118,8 @@ class _SapScanCodeInventoryPageState extends State<SapScanCodeInventoryPage> {
   _queryOrder() {
     logic.queryInventoryOrder(
       isScan: true,
-      factory: factoryWarehouseController.getOptionsPicker1().pickerId(),
-      warehouse: factoryWarehouseController.getOptionsPicker2().pickerId(),
+      factory: factoryWarehouseController.getPickItem1().pickerId(),
+      warehouse: factoryWarehouseController.getPickItem2().pickerId(),
     );
   }
 

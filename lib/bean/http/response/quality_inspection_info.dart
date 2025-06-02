@@ -173,14 +173,12 @@ class QualityInspectionAbnormalRecordInfo {
 
   String? abnormalRecordId;
   String? abnormalItemId;
-  int? abnormalSeverity;
   int? abnormalStatus;
   String? modifyDate;
 
   QualityInspectionAbnormalRecordInfo({
     this.abnormalRecordId,
     this.abnormalItemId,
-    this.abnormalSeverity,
     this.abnormalStatus,
     this.modifyDate,
   });
@@ -189,7 +187,6 @@ class QualityInspectionAbnormalRecordInfo {
       QualityInspectionAbnormalRecordInfo(
         abnormalRecordId: json['ABNORMALRECORDID'],
         abnormalItemId: json['ABNORMALITEMID'],
-        abnormalSeverity: json['ABNORMALSEVERITY'],
         abnormalStatus: json['ABNORMALSTATUS'],
         modifyDate: json['MODIFYDATE'],
       );
@@ -198,7 +195,6 @@ class QualityInspectionAbnormalRecordInfo {
         'isSelect': isSelect.value,
         'AbnormalRecordId': abnormalRecordId,
         'AbnormalItemId': abnormalItemId,
-        'AbnormalSeverity': abnormalSeverity,
         'AbnormalStatus': abnormalStatus,
         'ModifyDate': modifyDate,
       };
@@ -235,7 +231,7 @@ class QualityInspectionAbnormalItemInfo {
       monthlyDefectRate:
           json[index]['MONTHLYDEFECTRATE'].toString().toDoubleTry(),
     );
-    var saveTag = spGet('${data.abnormalItemId}-${userInfo?.number}');
+    var saveTag = spGet('QI-${data.abnormalItemId}-${userInfo?.number}');
     if (saveTag != null && saveTag.toString().isNotEmpty) {
       data.tag.value = saveTag;
     } else {
@@ -270,18 +266,6 @@ class NewAbnormalRecordInfo {
         abnormalRecordId: json['ABNORMALRECORDID'],
         abnormalStatus: json['ABNORMALSTATUS'],
       );
-}
-
-enum AbnormalDegree {
-  /// 轻微
-  slight(1),
-
-  ///严重
-  serious(2);
-
-  final int value;
-
-  const AbnormalDegree(this.value);
 }
 
 //{
@@ -391,13 +375,6 @@ class ReportAbnormalRecordsDetailInfo {
 
   bool isLastInspector() => hasFirstInspector() && hasLastInspector();
 
-  String getAbnormalSeverityText() =>
-      abnormalSeverity == AbnormalDegree.slight.value ? '轻微' : '严重';
-
-  Color getAbnormalSeverityColor() =>
-      abnormalSeverity == AbnormalDegree.slight.value
-          ? Colors.orange
-          : Colors.red;
 
   String getAbnormalStatusText() {
     switch (abnormalStatus) {

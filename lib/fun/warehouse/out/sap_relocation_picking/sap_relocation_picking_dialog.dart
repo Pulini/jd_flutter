@@ -85,7 +85,7 @@ checkPickerAndWarehouseDialog({
                                     pickerSignature,
                                     userInfo?.number ?? '',
                                     userSignature,
-                                    fwController.getOptionsPicker2().pickerId(),
+                                    fwController.getPickItem2().pickerId(),
                                   );
                                 },
                               ));

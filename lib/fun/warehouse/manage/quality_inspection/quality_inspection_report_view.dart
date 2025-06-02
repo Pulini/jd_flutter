@@ -60,9 +60,9 @@ class _QualityInspectionReportPageState
               margin: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                border: Border.all(color: Colors.white, width: 2),
+                border: Border.all(color: Colors.grey.shade300, width: 2),
                 borderRadius: const BorderRadius.all(Radius.circular(10)),
-                color: Colors.grey.shade200,
+                color: Colors.white,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -77,18 +77,12 @@ class _QualityInspectionReportPageState
                       Text('最后修改日期：${order.lastModifyDate}'),
                     ],
                   ),
-                 const SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   Row(
                     children: [
                       expandedFrameText(
                         flex: 5,
                         text: '异常描述',
-                        borderColor: Colors.black87,
-                        backgroundColor: Colors.green.shade100,
-                      ),
-                      expandedFrameText(
-                        text: '异常程度',
-                        alignment: Alignment.center,
                         borderColor: Colors.black87,
                         backgroundColor: Colors.green.shade100,
                       ),
@@ -126,63 +120,60 @@ class _QualityInspectionReportPageState
                       ),
                     ],
                   ),
-                  for (var records in order.abnormalRecordsDetail!)
-                    Row(
-                      children: [
-                        expandedFrameText(
-                          flex: 5,
-                          text: '${records.abnormalDescription}',
-                          borderColor: Colors.black87,
-                          backgroundColor: Colors.white,
-                        ),
-                        expandedFrameText(
-                          alignment: Alignment.center,
-                          text: records.getAbnormalSeverityText(),
-                          borderColor: Colors.black87,
-                          backgroundColor: Colors.white,
-
-                          textColor: records.getAbnormalSeverityColor(),
-                        ),
-                        expandedFrameText(
-                          alignment: Alignment.center,
-                          text: '${records.firstInspector}',
-                          borderColor: Colors.black87,
-                          backgroundColor: Colors.white,
-                        ),
-                        expandedFrameText(
-                          flex: 2,
-                          alignment: Alignment.center,
-                          text: '${records.firstInspectionDate}',
-                          borderColor: Colors.black87,
-                          backgroundColor: Colors.white,
-                        ),
-                        expandedFrameText(
-                          alignment: Alignment.center,
-                          text: '${records.lastInspector}',
-                          borderColor: Colors.black87,
-                          backgroundColor: Colors.white,
-                        ),
-                        expandedFrameText(
-                          flex: 2,
-                          alignment: Alignment.center,
-                          text: '${records.lastInspectionDate}',
-                          borderColor: Colors.black87,
-                          backgroundColor: Colors.white,
-                        ),
-                        expandedFrameText(
-                          text: records.getAbnormalStatusText(),
-                          alignment: Alignment.center,
-                          borderColor: Colors.black87,
-                          backgroundColor: Colors.white,
-                          textColor: records.getAbnormalStatusColor(),
-                        ),
-                      ],
-                    ),
+                  for (var i = 0; i < order.abnormalRecordsDetail!.length; ++i)
+                    _tableLine(order.abnormalRecordsDetail!, i)
                 ],
               ),
             )
         ],
       ),
+    );
+  }
+
+  _tableLine(List<ReportAbnormalRecordsDetailInfo> list, int index) {
+    var records = list[index];
+    return Row(
+      children: [
+        expandedFrameText(
+          flex: 5,
+          text: '${records.abnormalDescription}',
+          borderColor: Colors.black87,
+          backgroundColor: index % 2 == 0 ? Colors.grey.shade200 : Colors.white,
+        ),
+        expandedFrameText(
+          alignment: Alignment.center,
+          text: '${records.firstInspector}',
+          borderColor: Colors.black87,
+          backgroundColor: index % 2 == 0 ? Colors.grey.shade200 : Colors.white,
+        ),
+        expandedFrameText(
+          flex: 2,
+          alignment: Alignment.center,
+          text: '${records.firstInspectionDate}',
+          borderColor: Colors.black87,
+          backgroundColor: index % 2 == 0 ? Colors.grey.shade200 : Colors.white,
+        ),
+        expandedFrameText(
+          alignment: Alignment.center,
+          text: '${records.lastInspector}',
+          borderColor: Colors.black87,
+          backgroundColor: index % 2 == 0 ? Colors.grey.shade200 : Colors.white,
+        ),
+        expandedFrameText(
+          flex: 2,
+          alignment: Alignment.center,
+          text: '${records.lastInspectionDate}',
+          borderColor: Colors.black87,
+          backgroundColor: index % 2 == 0 ? Colors.grey.shade200 : Colors.white,
+        ),
+        expandedFrameText(
+          text: records.getAbnormalStatusText(),
+          alignment: Alignment.center,
+          borderColor: Colors.black87,
+          backgroundColor: index % 2 == 0 ? Colors.grey.shade200 : Colors.white,
+          textColor: records.getAbnormalStatusColor(),
+        ),
+      ],
     );
   }
 

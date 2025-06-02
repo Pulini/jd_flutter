@@ -44,13 +44,13 @@ pageBody({
           ...?actions,
         ],
       ),
-      body: PopScope(
-        canPop: popTitle.isEmpty ? true : false,
+      body:popTitle.isNotEmpty ? PopScope(
+        canPop: false,
         onPopInvokedWithResult: (didPop, result) {
           if (!didPop) exitDialog(content: popTitle);
         },
         child: body,
-      ),
+      ):body,
     ),
   );
 }
@@ -120,13 +120,13 @@ pageBodyWithBottomSheet({
           )
         ],
       ),
-      body: PopScope(
-        canPop: popTitle.isEmpty ? true : false,
+      body:popTitle.isNotEmpty ? PopScope(
+        canPop: false,
         onPopInvokedWithResult: (didPop, result) {
           if (!didPop) exitDialog(content: popTitle);
         },
         child: body,
-      ),
+      ):body,
     ),
   );
 }
@@ -194,8 +194,8 @@ pageBodyWithDrawer({
           ),
         ]),
       ),
-      body: PopScope(
-        canPop: popTitle.isEmpty ? true : false,
+      body:popTitle.isNotEmpty ? PopScope(
+        canPop: false,
         onPopInvokedWithResult: (didPop, result) {
           if (scaffoldKey.currentState?.isEndDrawerOpen == true) {
             scaffoldKey.currentState?.closeEndDrawer();
@@ -204,7 +204,7 @@ pageBodyWithDrawer({
           }
         },
         child: body,
-      ),
+      ):body,
     ),
   );
 }
@@ -417,10 +417,11 @@ showPopup(Widget widget, {double? height}) {
 }
 
 //底部弹出 sheet
-showSheet<T>({
+Future<T?> showSheet<T>({
   required BuildContext context,
   required Widget body,
   bool scrollControlled = true,
+  bool isDismissible = true,
   Color bodyColor = Colors.white,
   EdgeInsets? bodyPadding,
   BorderRadius? borderRadius,
@@ -429,6 +430,7 @@ showSheet<T>({
   borderRadius ??= const BorderRadius.only(topLeft: radius, topRight: radius);
   bodyPadding ??= const EdgeInsets.all(10);
   return showModalBottomSheet(
+    isDismissible: isDismissible,
     context: context,
     elevation: 0,
     backgroundColor: bodyColor,

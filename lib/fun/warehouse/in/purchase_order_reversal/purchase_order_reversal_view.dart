@@ -54,8 +54,8 @@ class _PurchaseOrderReversalPageState extends State<PurchaseOrderReversalPage> {
       startDate: dpcStartDate.getDateFormatSapYMD(),
       endDate: dpcEndDate.getDateFormatSapYMD(),
       supplierNumber: opcSupplier.selectedId.value,
-      factory: factoryWarehouseController.getOptionsPicker1().pickerId(),
-      warehouse: factoryWarehouseController.getOptionsPicker2().pickerId(),
+      factory: factoryWarehouseController.getPickItem1().pickerId(),
+      warehouse: factoryWarehouseController.getPickItem2().pickerId(),
     );
   }
 

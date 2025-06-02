@@ -258,10 +258,10 @@ class _SapWmsSplitLabelPageState extends State<SapWmsSplitLabelPage> {
                   text: 'sap_wms_split_label_reprint_label'.tr,
                   click: () => logic.reprintLabel(
                     factory: factoryWarehouseController
-                        .getOptionsPicker1()
+                        .getPickItem1()
                         .pickerId(),
                     warehouse: factoryWarehouseController
-                        .getOptionsPicker2()
+                        .getPickItem2()
                         .pickerId(),
                   ),
                   combination: Combination.right,

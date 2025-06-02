@@ -33,19 +33,15 @@ class _QualityInspectionDetailPageState
         ),
         child: Column(children: [
           Expanded(
-            flex: 4,
             child: Row(
               children: [
                 const SizedBox(width: 5),
                 GestureDetector(
-                  onTap: () {
-                    debugPrint('data.tag.value=${data.tag.value}');
-                    modifyTagKeyDialog(data: data);
-                  },
+                  onTap: () =>modifyTagKeyDialog(data: data),
                   child: Obx(() => Text(
                         data.tag.value,
                         style: const TextStyle(
-                          fontSize: 80,
+                          fontSize: 70,
                           height: 0,
                           fontWeight: FontWeight.bold,
                         ),
@@ -56,7 +52,6 @@ class _QualityInspectionDetailPageState
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(height: 5),
                       expandedTextSpan(
                         maxLines: 4,
                         hint: '不良项目：',
@@ -68,7 +63,6 @@ class _QualityInspectionDetailPageState
                         text: data.getDefectRate(),
                         textColor: Colors.red,
                       ),
-                      const SizedBox(height: 5),
                     ],
                   ),
                 ),
@@ -76,15 +70,11 @@ class _QualityInspectionDetailPageState
             ),
           ),
           Expanded(
-            flex: 3,
             child: Row(
               children: [
                 Expanded(
                   child: GestureDetector(
-                    onTap: () => logic.addAbnormalRecord(
-                      abnormalItem: data,
-                      degree: AbnormalDegree.slight,
-                    ),
+                    onTap: () => logic.addAbnormalRecord(abnormalItem: data),
                     child: Container(
                       alignment: Alignment.center,
                       decoration: const BoxDecoration(
@@ -95,48 +85,15 @@ class _QualityInspectionDetailPageState
                       ),
                       child: Obx(() {
                         var slight = state.qiDetailAbnormalRecords
-                            .where((v) =>
-                                v.abnormalItemId == data.abnormalItemId &&
-                                v.abnormalSeverity ==
-                                    AbnormalDegree.slight.value)
+                            .where(
+                                (v) => v.abnormalItemId == data.abnormalItemId)
                             .length;
                         return Text(
-                          '轻微${slight > 0 ? ' ($slight)' : ''}',
+                          '记录${slight > 0 ? ' ($slight)' : ''}',
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
-                          ),
-                        );
-                      }),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () => logic.addAbnormalRecord(
-                      abnormalItem: data,
-                      degree: AbnormalDegree.serious,
-                    ),
-                    child: Container(
-                      alignment: Alignment.center,
-                      decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                          bottomRight: Radius.circular(8),
-                        ),
-                        color: Colors.red,
-                      ),
-                      child: Obx(() {
-                        var serious = state.qiDetailAbnormalRecords
-                            .where((v) =>
-                                v.abnormalItemId == data.abnormalItemId &&
-                                v.abnormalSeverity ==
-                                    AbnormalDegree.serious.value)
-                            .length;
-                        return Text(
-                          '严重${serious > 0 ? ' ($serious)' : ''}',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
+                            fontSize: 20
                           ),
                         );
                       }),
@@ -194,7 +151,7 @@ class _QualityInspectionDetailPageState
                   text: state.qiDetailCustomerPo.value,
                 ),
                 textSpan(
-                  hint: '总参量：',
+                  hint: '总量：',
                   text: state.qiDetailTotalQuantity.value.toShowString(),
                 ),
                 textSpan(
@@ -209,7 +166,7 @@ class _QualityInspectionDetailPageState
                   itemCount: state.qiDetailAbnormalItems.length,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 5,
-                    childAspectRatio: 3 / 2,
+                    childAspectRatio: 3 / 2.2,
                   ),
                   itemBuilder: (c, i) => _item(state.qiDetailAbnormalItems[i]),
                 )),

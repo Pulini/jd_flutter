@@ -29,7 +29,7 @@ class _SapPutOnShelvesPageState extends State<SapPutOnShelvesPage> {
     return GestureDetector(
       onTap: () => logic.scanCode(
         code: pallet[0][0].palletNumber ?? '',
-        warehouse: factoryWarehouseController.getOptionsPicker2().pickerId(),
+        warehouse: factoryWarehouseController.getPickItem2().pickerId(),
         refresh: () {
           refreshController.finishRefresh();
           refreshController.resetFooter();
@@ -79,7 +79,7 @@ class _SapPutOnShelvesPageState extends State<SapPutOnShelvesPage> {
     pdaScanner(
       scan: (code) => logic.scanCode(
         code: code,
-        warehouse: factoryWarehouseController.getOptionsPicker2().pickerId(),
+        warehouse: factoryWarehouseController.getPickItem2().pickerId(),
         refresh: () {
           refreshController.finishRefresh();
           refreshController.resetFooter();
@@ -108,7 +108,7 @@ class _SapPutOnShelvesPageState extends State<SapPutOnShelvesPage> {
               header: const MaterialHeader(),
               onRefresh: () => logic.refreshLabelList(
                 warehouse:
-                    factoryWarehouseController.getOptionsPicker2().pickerId(),
+                    factoryWarehouseController.getPickItem2().pickerId(),
                 refresh: () {
                   refreshController.finishRefresh();
                   refreshController.resetFooter();

@@ -163,9 +163,9 @@ class _WaitPickingMaterialPageState extends State<WaitPickingMaterialPage> {
       startDate: dpcStartDate.getDateFormatYMD(),
       endDate: dpcEndDate.getDateFormatYMD(),
       postingDate: dpcPostingDate.getDateFormatYMD(),
-      factory: lopcFactoryWarehouse.getOptionsPicker1().pickerId(),
-      factoryWarehouse: lopcFactoryWarehouse.getOptionsPicker2().pickerId(),
-      workshopWarehouse: lopcWorkshopWarehouse.getOptionsPicker2().pickerId(),
+      factory: lopcFactoryWarehouse.getPickItem1().pickerId(),
+      factoryWarehouse: lopcFactoryWarehouse.getPickItem2().pickerId(),
+      workshopWarehouse: lopcWorkshopWarehouse.getPickItem2().pickerId(),
       supplier: opcSupplier.selectedId.value,
       processFlow: opcProcessFlow.selectedId.value,
     );
@@ -447,7 +447,7 @@ class _WaitPickingMaterialPageState extends State<WaitPickingMaterialPage> {
                       _itemSubTitle(
                         title: 'wait_picking_material_order_picking_qty'.tr,
                         data: data.getPickingString(
-                          lopcWorkshopWarehouse.getOptionsPicker2().pickerId(),
+                          lopcWorkshopWarehouse.getPickItem2().pickerId(),
                         ),
                       ),
                     ],

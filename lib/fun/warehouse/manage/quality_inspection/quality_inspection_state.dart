@@ -92,7 +92,6 @@ class QualityInspectionState {
 
   addAbnormalRecord({
     required QualityInspectionAbnormalItemInfo abnormalItem,
-    required int degree,
     required Function(NewAbnormalRecordInfo) success,
     required Function(String) error,
   }) {
@@ -103,7 +102,6 @@ class QualityInspectionState {
         'abnormalItemId': abnormalItem.abnormalItemId,
         'creatorNumber': userInfo?.number,
         'creatorName': userInfo?.name,
-        'abnormalSeverity': degree,
         'workOrderNo': qiDetailWorkOrderNo.value,
       },
     ).then((response) {
@@ -207,4 +205,6 @@ class QualityInspectionState {
       }
     });
   }
+
+
 }

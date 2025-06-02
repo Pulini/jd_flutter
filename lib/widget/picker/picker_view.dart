@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/picker/picker_controller.dart';
 import 'package:marquee/marquee.dart';
@@ -10,9 +11,18 @@ import 'package:marquee/marquee.dart';
 import 'picker_item.dart';
 
 class DatePicker extends StatelessWidget {
-  const DatePicker({super.key, required this.pickerController});
+  const DatePicker({
+    super.key,
+    required this.pickerController,
+    this.height = 40,
+    this.margin = 5,
+    this.bkgColor = Colors.black12,
+  });
 
   final DatePickerController pickerController;
+  final double height;
+  final double margin;
+  final Color bkgColor;
 
   _showOptions() {
     showDatePicker(
@@ -34,12 +44,12 @@ class DatePicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 40,
-      margin: const EdgeInsets.all(5),
-      padding: const EdgeInsets.only(left: 10, right: 3),
+      height: height,
+      margin: EdgeInsets.all(margin),
+      padding: const EdgeInsets.only(left: 10),
       decoration: BoxDecoration(
-        color: Colors.grey[300],
-        borderRadius: BorderRadius.circular(20),
+        color: bkgColor,
+        borderRadius: BorderRadius.circular(50),
       ),
       child: Obx(() => Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -48,27 +58,14 @@ class DatePicker extends StatelessWidget {
                 getDateYMD(time: pickerController.pickDate.value),
                 style: const TextStyle(color: Colors.black),
               ),
-              SizedBox(
-                height: 35,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.only(left: 10, right: 10),
-                    backgroundColor: pickerController.enable.value
-                        ? Colors.blue
-                        : Colors.grey,
-                    foregroundColor: Colors.greenAccent,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(17),
-                    ),
-                  ),
-                  onPressed: () => _showOptions(),
-                  child: Text(
-                    pickerController.buttonName ??
-                        pickerController.getButtonName(),
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                ),
-              )
+              CombinationButton(
+                hasPadding: false,
+                text: pickerController.buttonName ??
+                    pickerController.getButtonName(),
+                click: () => _showOptions(),
+                backgroundColor:
+                    pickerController.enable.value ? Colors.blue : Colors.grey,
+              ),
             ],
           )),
     );
@@ -87,11 +84,20 @@ var _titleButtonCancel = TextButton(
 );
 
 class OptionsPicker extends StatelessWidget {
-  OptionsPicker({super.key, required this.pickerController}) {
+  OptionsPicker({
+    super.key,
+    required this.pickerController,
+    this.height = 40,
+    this.margin = 5,
+    this.bkgColor = Colors.black12,
+  }) {
     pickerController.getData();
   }
 
   final OptionsPickerController pickerController;
+  final double height;
+  final double margin;
+  final Color bkgColor;
 
   _showOptions() {
     if (pickerController.enable.value == false) return;
@@ -103,7 +109,7 @@ class OptionsPicker extends StatelessWidget {
 
       var titleSearch = Expanded(
         child: CupertinoSearchTextField(
-          controller: TextEditingController(text:pickerController.searchText),
+          controller: TextEditingController(text: pickerController.searchText),
           decoration: BoxDecoration(
             color: Colors.white54,
             borderRadius: BorderRadius.circular(20),
@@ -162,12 +168,17 @@ class OptionsPicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 40,
-      margin: const EdgeInsets.all(5),
-      padding: const EdgeInsets.only(left: 10, right: 3),
+      height: height,
+      margin: EdgeInsets.all(margin),
+      padding: EdgeInsets.only(
+        left: 10,
+        top: margin > 0 ? margin - 2 : 0,
+        bottom: margin > 0 ? margin - 2 : 0,
+        right: margin > 0 ? margin - 2 : 0,
+      ),
       decoration: BoxDecoration(
-        color: Colors.grey[300],
-        borderRadius: BorderRadius.circular(20),
+        color: bkgColor,
+        borderRadius: BorderRadius.circular(50),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -217,11 +228,20 @@ class OptionsPicker extends StatelessWidget {
 }
 
 class LinkOptionsPicker extends StatelessWidget {
-  LinkOptionsPicker({super.key, required this.pickerController}) {
+  LinkOptionsPicker({
+    super.key,
+    required this.pickerController,
+    this.height = 40,
+    this.margin = 5,
+    this.bkgColor = Colors.black12,
+  }) {
     pickerController.getData();
   }
 
   final LinkOptionsPickerController pickerController;
+  final double height;
+  final double margin;
+  final Color bkgColor;
 
   Widget _pickerText(PickerItem data) {
     return Text(
@@ -240,7 +260,7 @@ class LinkOptionsPicker extends StatelessWidget {
 
       var titleSearch = Expanded(
         child: CupertinoSearchTextField(
-          controller: TextEditingController(text:pickerController.searchText),
+          controller: TextEditingController(text: pickerController.searchText),
           decoration: BoxDecoration(
             color: Colors.white54,
             borderRadius: BorderRadius.circular(20),
@@ -322,12 +342,17 @@ class LinkOptionsPicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 40,
-      margin: const EdgeInsets.all(5),
-      padding: const EdgeInsets.only(left: 10, right: 3),
+      height: height,
+      margin: EdgeInsets.all(margin),
+      padding: EdgeInsets.only(
+        left: 10,
+        top: margin > 0 ? margin - 2 : 0,
+        bottom: margin > 0 ? margin - 2 : 0,
+        right: margin > 0 ? margin - 2 : 0,
+      ),
       decoration: BoxDecoration(
-        color: Colors.grey[300],
-        borderRadius: BorderRadius.circular(20),
+        color: bkgColor,
+        borderRadius: BorderRadius.circular(50),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -382,7 +407,14 @@ class CheckBoxPicker extends StatelessWidget {
   const CheckBoxPicker({
     super.key,
     required this.checkBoxController,
+    this.height = 40,
+    this.margin = 5,
+    this.bkgColor = Colors.black12,
   });
+
+  final double height;
+  final double margin;
+  final Color bkgColor;
 
   _showCheckBoxList() {
     if (checkBoxController.enable.value == false) return;
@@ -477,12 +509,17 @@ class CheckBoxPicker extends StatelessWidget {
     checkBoxController.search('');
     checkBoxController.getData();
     return Container(
-      height: 40,
-      margin: const EdgeInsets.all(5),
-      padding: const EdgeInsets.only(left: 10, right: 3),
+      height: height,
+      margin: EdgeInsets.all(margin),
+      padding: EdgeInsets.only(
+        left: 10,
+        top: margin > 0 ? margin - 2 : 0,
+        bottom: margin > 0 ? margin - 2 : 0,
+        right: margin > 0 ? margin - 2 : 0,
+      ),
       decoration: BoxDecoration(
-        color: Colors.grey[300],
-        borderRadius: BorderRadius.circular(20),
+        color: bkgColor,
+        borderRadius: BorderRadius.circular(50),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

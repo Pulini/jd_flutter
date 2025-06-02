@@ -12,6 +12,7 @@ import 'package:jd_flutter/fun/warehouse/in/sap_picking_receipt_reversal/sap_pic
 import 'package:jd_flutter/fun/warehouse/in/sap_put_on_shelves/sap_put_on_shelves_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/suppliers_scan_store/suppliers_scan_store_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/temporary_order/temporary_order_view.dart';
+import 'package:jd_flutter/fun/warehouse/manage/patrol_inspection/patrol_inspection_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/sap_factory_inventory/sap_counting_inventory_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/sap_factory_inventory/sap_scan_code_inventory_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/sap_stock_transfer/sap_stock_transfer_view.dart';
@@ -66,6 +67,7 @@ import 'fun/warehouse/manage/sap_wms_split_label/sap_wms_split_label_view.dart';
 import 'fun/warehouse/manage/smart_delivery/smart_delivery_view.dart';
 import 'fun/warehouse/manage/timely_inventory/timely_inventory_view.dart';
 import 'fun/warehouse/manage/warehouse_allocation/warehouse_allocation_view.dart';
+import 'fun/warehouse/out/sap_packing_scan/sap_packing_scan_view.dart';
 import 'fun/warehouse/out/sap_print_picking/sap_print_picking_view.dart';
 import 'fun/warehouse/out/sap_production_picking/sap_production_picking_view.dart';
 import 'fun/warehouse/out/sap_relocation_picking/sap_relocation_picking_view.dart';
@@ -554,11 +556,25 @@ class RouteConfig {
     const PurchaseOrderReversalPage(),
   );
 
-  //品检
+  //生产车间质检
   static Routes qualityInspection = Routes(
     '/quality_inspection',
     99,
     const QualityInspectionPage(),
+  );
+
+  //生产车间巡检
+  static Routes patrolInspection = Routes(
+    '/patrol_inspection',
+    99,
+    const PatrolInspectionPage(),
+  );
+
+  //SAP装柜出库
+  static Routes sapPackingScan = Routes(
+    '/sap_packing_scan',
+    99,
+    const SapPackingScanPage(),
   );
 
   //本地功能入口列表
@@ -632,6 +648,8 @@ class RouteConfig {
     purchaseOrderWarehousing,
     purchaseOrderReversal,
     qualityInspection,
+    patrolInspection,
+    sapPackingScan,
   ];
 
   static List<GetPage> appRoutes = [
@@ -923,6 +941,14 @@ class RouteConfig {
     GetPage(
       name: qualityInspection.name,
       page: () => qualityInspection.page,
+    ),
+    GetPage(
+      name: patrolInspection.name,
+      page: () => patrolInspection.page,
+    ),
+    GetPage(
+      name: sapPackingScan.name,
+      page: () => sapPackingScan.page,
     ),
   ];
 }

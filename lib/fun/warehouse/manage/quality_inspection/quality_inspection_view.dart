@@ -228,7 +228,7 @@ class _QualityInspectionPageState extends State<QualityInspectionPage> {
           ),
           margin: const EdgeInsets.only(right: 10),
           height: 45,
-          width: MediaQuery.of(context).size.width * 0.4,
+          width: 500,
           child: Row(
             children: [
               Expanded(

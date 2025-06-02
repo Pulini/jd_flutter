@@ -29,7 +29,7 @@ modifyTagKeyDialog({required QualityInspectionAbnormalItemInfo data}) {
                 );
               }else{
                 data.tag.value=controller.text;
-                spSave('${data.abnormalItemId}-${userInfo?.number}', controller.text);
+                spSave('QI-${data.abnormalItemId}-${userInfo?.number}', controller.text);
                 Get.back();
               }
             },

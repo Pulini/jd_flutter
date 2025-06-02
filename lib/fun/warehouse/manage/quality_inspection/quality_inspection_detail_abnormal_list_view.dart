@@ -25,7 +25,6 @@ class _QualityInspectionDetailAbnormalListPageState
     var abnormalItem = state.qiDetailAbnormalItems.firstWhere(
       (v) => v.abnormalItemId == group[0].abnormalItemId,
     );
-    var isSlight = group[0].abnormalSeverity == AbnormalDegree.slight.value;
     return Container(
       margin: const EdgeInsets.all(3),
       decoration: BoxDecoration(
@@ -59,12 +58,6 @@ class _QualityInspectionDetailAbnormalListPageState
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    textSpan(
-                      hint: '程度：',
-                      hintColor: Colors.black54,
-                      text: isSlight ? '轻微' : '严重',
-                      textColor: isSlight ? Colors.orange : Colors.red,
-                    ),
                     textSpan(
                       hint: '不良数：',
                       hintColor: Colors.black54,
@@ -250,12 +243,12 @@ class _QualityInspectionDetailAbnormalListPageState
       body: Obx(() {
         var group = groupBy(
           state.qiDetailAbnormalRecords,
-          (v) => '${v.abnormalItemId}###${v.abnormalSeverity}',
+          (v) => '${v.abnormalItemId}',
         ).values.toList();
         return GridView.builder(
           itemCount: group.length,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 4,
+            crossAxisCount: 3,
             childAspectRatio: 3 / 2,
           ),
           itemBuilder: (c, i) => _item(group[i]),

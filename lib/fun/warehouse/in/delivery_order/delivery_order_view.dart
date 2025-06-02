@@ -87,8 +87,8 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
       company: opcCompany.selectedId.value,
       workerNumber: tecWorkerNumber.text.toString(),
       workCenter: opcWorkCenter.selectedId.value,
-      warehouse: lopcFactoryWarehouse.getOptionsPicker2().pickerId(),
-      factory: lopcFactoryWarehouse.getOptionsPicker1().pickerId(),
+      warehouse: lopcFactoryWarehouse.getPickItem2().pickerId(),
+      factory: lopcFactoryWarehouse.getPickItem1().pickerId(),
     );
   }
 

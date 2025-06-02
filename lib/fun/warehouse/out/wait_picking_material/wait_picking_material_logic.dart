@@ -186,8 +186,7 @@ class WaitPickingMaterialLogic extends GetxController {
     var list = <WaitPickingMaterialOrderInfo>[];
     var orderType = <String>[];
     for (var v in state.orderList) {
-      var insList =
-          v.items!.where((v2) => v2.getEffectiveSelection().isNotEmpty);
+      var insList = v.items!.where((v2) => v2.getEffectiveSelection().isNotEmpty);
       if (insList.isNotEmpty) {
         list.add(v);
         for (var v2 in insList) {

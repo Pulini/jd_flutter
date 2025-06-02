@@ -565,6 +565,8 @@ reasonInputPopup({
 
 exitDialog({
   required String content,
+  Function()? confirm,
+  Function()? cancel,
 }) {
   Get.dialog(AlertDialog(
     title: Text('dialog_default_exit_title'.tr),
@@ -578,11 +580,17 @@ exitDialog({
     ),
     actions: [
       TextButton(
-        onPressed: () => Get.back(closeOverlays: true),
+        onPressed: (){
+          Get.back(closeOverlays: true);
+          confirm?.call();
+        },
         child: Text('dialog_default_confirm'.tr),
       ),
       TextButton(
-        onPressed: () => Get.back(),
+        onPressed: () {
+          Get.back();
+          cancel?.call();
+        },
         child: Text(
           'dialog_default_cancel'.tr,
           style: const TextStyle(color: Colors.grey),
