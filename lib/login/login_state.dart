@@ -12,6 +12,10 @@ class LoginState {
   var buttonName = 'get_verify_code'.tr.obs;
   var countTimer = 0;
   var isReLogin = false;
+  // 添加计时相关变量
+  late Stopwatch stopwatch;
+  int longPressCount = 0;
+  bool isCounting = false;
 
   faceLogin({
     required String phone,

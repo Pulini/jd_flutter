@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/base_data.dart';
 import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/route.dart';
+import 'package:jd_flutter/utils/network_manager.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:logger/logger.dart';
 import 'package:uuid/uuid.dart';
@@ -119,8 +120,6 @@ Future<BaseData> sapGet({
   );
 }
 
-//用于开发时切换测试库
-var useTestUrl = false;
 
 //初始化网络请求
 Future<BaseData> _doHttp({
@@ -131,7 +130,7 @@ Future<BaseData> _doHttp({
   Map<String, dynamic>? params,
   Object? body,
 }) async {
-  if (useTestUrl) {
+  if (Get.find<NetworkManager>().isTestUrl.value) {
     if (baseUrl == baseUrlForMES) {
       baseUrl = testUrlForMES;
     } else if (baseUrl == baseUrlForSAP) {
@@ -664,6 +663,10 @@ const webApiSapGetMaterialDispatchLabelList = 'sap/zapp/ZFUN_APP_BARCODE_FETCH';
 //机台派工单--贴标维护
 const webApiSapMaterialDispatchLabelMaintain =
     'sap/zapp/ZFUN_APP_BARCODE_MAINTAIN';
+
+//机台派工单--更新料头标信息
+const webApiUpdateSurplusMaterialLabelState =
+    'api/CompoundDispatching/UpdateScWorkCardStubBarPrintFlagJinZhen';
 
 //验证码发送接口
 const webApiSendManagerCode = 'api/Public/SendManagerCode';

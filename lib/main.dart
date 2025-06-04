@@ -21,9 +21,6 @@ import 'translation.dart';
 import 'utils/web_api.dart';
 
 main() async {
-  //切换测试库，打包时屏蔽
-  useTestUrl = true;
-
   //确保初始化完成才能加载耗时插件
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -117,10 +114,10 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     userInfo = getUserInfo();
-    return GetMaterialApp(
+    return Obx(()=>GetMaterialApp(
       scrollBehavior: AppScrollBehavior(),
       onGenerateTitle: (context) => 'app_name'.tr,
-      debugShowCheckedModeBanner: useTestUrl,
+      debugShowCheckedModeBanner: Get.find<NetworkManager>().isTestUrl.value,
       translations: Translation(),
       navigatorObservers: [GetXRouterObserver()],
       locale: View.of(context).platformDispatcher.locale,
@@ -141,19 +138,6 @@ class _MyAppState extends State<MyApp> {
       ),
       getPages: RouteConfig.appRoutes,
       home: userInfo?.token == null ? const LoginPage() : const HomePage(),
-      // home:FutureBuilder<UserInfo>(
-      //     future: userInfo(),
-      //     builder: (context, AsyncSnapshot<UserInfo> snapshot) {
-      //       if (snapshot.hasData) {
-      //         userController.init(snapshot.requireData);
-      //         logger.d('----------1-----------');
-      //         return const Home();
-      //       } else {
-      //         logger.d('----------2-----------');
-      //         return const Login();
-      //       }
-      //     }
-      // ),
-    );
+    ));
   }
 }

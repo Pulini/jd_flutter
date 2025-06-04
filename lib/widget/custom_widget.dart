@@ -9,16 +9,22 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:jd_flutter/bean/http/response/picking_material_order_info.dart';
 import 'package:jd_flutter/route.dart';
+import 'package:jd_flutter/utils/network_manager.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
+import '../utils/web_api.dart';
+
 //app 背景渐变色
-var backgroundColor = const BoxDecoration(
+ backgroundColor() =>  BoxDecoration(
   gradient: LinearGradient(
-    colors: [
-      Color.fromARGB(0xff, 0xe4, 0xe8, 0xda),
-      Color.fromARGB(0xff, 0xba, 0xe9, 0xed)
+    colors: Get.find<NetworkManager>().isTestUrl.value?[
+      Colors.green,
+      Colors.blue.shade300,
+    ]:[
+      const Color.fromARGB(0xff, 0xe4, 0xe8, 0xda),
+      const Color.fromARGB(0xff, 0xba, 0xe9, 0xed)
     ],
     begin: Alignment.bottomLeft,
     end: Alignment.topRight,
@@ -33,7 +39,7 @@ pageBody({
   required Widget body,
 }) {
   return Container(
-    decoration: backgroundColor,
+    decoration: backgroundColor(),
     child: Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.transparent,
@@ -68,7 +74,7 @@ pageBodyWithBottomSheet({
   required Widget body,
 }) {
   return Container(
-    decoration: backgroundColor,
+    decoration: backgroundColor(),
     child: Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
@@ -145,7 +151,7 @@ pageBodyWithDrawer({
 }) {
   var scaffoldKey = GlobalKey<ScaffoldState>();
   return Container(
-    decoration: backgroundColor,
+    decoration: backgroundColor(),
     child: Scaffold(
       key: scaffoldKey,
       resizeToAvoidBottomInset: false,

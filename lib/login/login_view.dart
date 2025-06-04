@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/constant.dart';
+import 'package:jd_flutter/utils/network_manager.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/number_text_field_widget.dart';
@@ -11,45 +12,46 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      alignment: Alignment.center,
-      //设置背景
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          colors: [Colors.lightBlueAccent, Colors.blueAccent],
-          begin: Alignment.bottomLeft,
-          end: Alignment.topRight,
-        ),
-      ),
-      padding:
-          EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-      child: ListView(
-        //添加登录UI
-        children: [
-          const SizedBox(height: 30),
-          Image.asset(
-            'assets/images/ic_logo.png',
-            width: 130,
-            height: 130,
-          ),
-          const Center(
-              child: Text(
-            'Gold Emperor',
-            style: TextStyle(
-              fontSize: 40,
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              decoration: TextDecoration.none,
+    return Obx(() => Container(
+          alignment: Alignment.center,
+          //设置背景
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: Get.find<NetworkManager>().isTestUrl.value
+                  ? [Colors.lightBlueAccent, Colors.greenAccent]
+                  : [Colors.lightBlueAccent, Colors.blueAccent],
+              begin: Alignment.bottomLeft,
+              end: Alignment.topRight,
             ),
-          )),
-          const Center(child: LoginPick(isReLogin: false)),
-          const SizedBox(height: 40),
-        ],
-      ),
-    );
+          ),
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          child: ListView(
+            //添加登录UI
+            children: [
+              const SizedBox(height: 30),
+              Image.asset(
+                'assets/images/ic_logo.png',
+                width: 130,
+                height: 130,
+              ),
+              const Center(
+                  child: Text(
+                'Gold Emperor',
+                style: TextStyle(
+                  fontSize: 40,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  decoration: TextDecoration.none,
+                ),
+              )),
+              const Center(child: LoginPick(isReLogin: false)),
+              const SizedBox(height: 40),
+            ],
+          ),
+        ));
   }
 }
-
 
 class LoginPick extends StatefulWidget {
   const LoginPick({super.key, required this.isReLogin});
@@ -84,13 +86,15 @@ class _LoginPickState extends State<LoginPick>
 
   //手机登录手机号输入框控制器
   late var phoneLoginPhoneController = TextEditingController()
-    ..text = useTestUrl ? dadPhone : spGet(spSaveLoginPhone) ?? '';
+    ..text = Get.find<NetworkManager>().isTestUrl.value
+        ? dadPhone
+        : spGet(spSaveLoginPhone) ?? '';
 
   //手机登录密码输入框控制器
-   var phoneLoginPasswordController = TextEditingController();
+  var phoneLoginPasswordController = TextEditingController();
 
   //手机登录验证码输入框控制器
-   var phoneLoginVCodeController = TextEditingController();
+  var phoneLoginVCodeController = TextEditingController();
 
   //工号登录工号输入框控制器
   var workLoginWorkNumberController = TextEditingController()
@@ -128,9 +132,11 @@ class _LoginPickState extends State<LoginPick>
   _box(Widget child) => Wrap(
         children: [
           Container(
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(15)),
-              color: Colors.blueAccent,
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.all(Radius.circular(15)),
+              color: Get.find<NetworkManager>().isTestUrl.value
+                  ? Colors.teal
+                  : Colors.blueAccent,
             ),
             margin: const EdgeInsets.all(5),
             padding: const EdgeInsets.all(20),
@@ -155,44 +161,45 @@ class _LoginPickState extends State<LoginPick>
               maxLength: 10,
               isPassword: true,
             ),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: NumberTextField(
-                    numberController: phoneLoginVCodeController,
-                    maxLength: 6,
-                    textStyle: const TextStyle(color: Colors.white),
-                    decoration: InputDecoration(
-                      hintText: 'login_hint_verify_code'.tr,
-                      hintStyle: const TextStyle(color: Colors.white),
-                      counterStyle: const TextStyle(color: Colors.white),
-                      prefixIcon:
-                          const Icon(Icons.email_outlined, color: Colors.white),
+            if (!Get.find<NetworkManager>().isTestUrl.value)
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: NumberTextField(
+                      numberController: phoneLoginVCodeController,
+                      maxLength: 6,
+                      textStyle: const TextStyle(color: Colors.white),
+                      decoration: InputDecoration(
+                        hintText: 'login_hint_verify_code'.tr,
+                        hintStyle: const TextStyle(color: Colors.white),
+                        counterStyle: const TextStyle(color: Colors.white),
+                        prefixIcon: const Icon(Icons.email_outlined,
+                            color: Colors.white),
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(width: 20),
-                Obx(() => ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor:
-                            state.buttonName.value == 'get_verify_code'.tr
-                                ? Colors.white
-                                : Colors.grey.shade400,
-                      ),
-                      onPressed: () => logic.getVerifyCode(
-                        phoneLoginPhoneController.text,
-                      ),
-                      child: Text(
-                        state.buttonName.value,
-                        style: const TextStyle(
-                          color: Color.fromARGB(255, 213, 41, 42),
+                  const SizedBox(width: 20),
+                  Obx(() => ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              state.buttonName.value == 'get_verify_code'.tr
+                                  ? Colors.white
+                                  : Colors.grey.shade400,
                         ),
-                      ),
-                    )),
-              ],
-            )
+                        onPressed: () => logic.getVerifyCode(
+                          phoneLoginPhoneController.text,
+                        ),
+                        child: Text(
+                          state.buttonName.value,
+                          style: const TextStyle(
+                            color: Color.fromARGB(255, 213, 41, 42),
+                          ),
+                        ),
+                      )),
+                ],
+              )
           ],
         ),
       );
@@ -304,6 +311,7 @@ class _LoginPickState extends State<LoginPick>
                     borderRadius: BorderRadius.circular(25),
                   ),
                 ),
+                onLongPress: () =>logic.handleLongPressStart(),
                 onPressed: () {
                   if (tabController.index == 0) {
                     logic.phoneLogin(

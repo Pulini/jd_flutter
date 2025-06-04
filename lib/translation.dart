@@ -682,6 +682,7 @@ class Translation extends Translations {
               '已产量汇报到MES,无法删除贴标！',
           'machine_dispatch_dialog_delete_label_tips': '确定要删除标签吗?',
           'machine_dispatch_dialog_deleting_labels': '正在删除贴标...',
+          'machine_dispatch_dialog_update_surplus_material_label_state': '正在更新料头信息状态...',
           'machine_dispatch_dialog_leader_id_verify': '班组长身份验证',
           'machine_dispatch_dialog_verify_code': '验证码',
           'machine_dispatch_dialog_enter_number': '请输入工号',
@@ -3308,6 +3309,7 @@ class Translation extends Translations {
           'machine_dispatch_dialog_delete_label_tips':
               'Are you sure you want to delete the tag?',
           'machine_dispatch_dialog_deleting_labels': 'Deleting labels...',
+          'machine_dispatch_dialog_update_surplus_material_label_state': 'Updating surplus material information status...',
           'machine_dispatch_dialog_leader_id_verify': 'Leader id verify',
           'machine_dispatch_dialog_verify_code': 'Verify code',
           'machine_dispatch_dialog_enter_number':

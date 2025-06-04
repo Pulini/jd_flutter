@@ -570,35 +570,28 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: backgroundColor,
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          title: Text('property_detail_title'.tr),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.menu),
-              onPressed: () => _sheet(context, state.detail.processStatus == 0),
-            )
-          ],
-        ),
-        body: ListView(
-          padding: const EdgeInsets.only(left: 20, right: 20),
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [_orderState(state.detail.processStatus!)],
-            ),
-            const SizedBox(height: 10),
-            ..._textList(state.detail),
-            _photos(),
-            _remake(),
-            if (state.detail.cardEntry?.isNotEmpty == true)
-              ..._affiliated(state.detail.cardEntry!),
-          ],
-        ),
+    return pageBody(
+      title: 'property_detail_title'.tr,
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.menu),
+          onPressed: () => _sheet(context, state.detail.processStatus == 0),
+        )
+      ],
+      body: ListView(
+        padding: const EdgeInsets.only(left: 20, right: 20),
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [_orderState(state.detail.processStatus!)],
+          ),
+          const SizedBox(height: 10),
+          ..._textList(state.detail),
+          _photos(),
+          _remake(),
+          if (state.detail.cardEntry?.isNotEmpty == true)
+            ..._affiliated(state.detail.cardEntry!),
+        ],
       ),
     );
   }

@@ -708,7 +708,7 @@ class _WaitPickingMaterialPageState extends State<WaitPickingMaterialPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: backgroundColor,
+      decoration: backgroundColor(),
       child: Scaffold(
         key: scaffoldKey,
         resizeToAvoidBottomInset: false,

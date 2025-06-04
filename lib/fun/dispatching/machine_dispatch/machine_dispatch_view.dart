@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/machine_dispatch_info.dart';
 import 'package:jd_flutter/fun/dispatching/machine_dispatch/machine_dispatch_dialog.dart';
+import 'package:jd_flutter/utils/printer/print_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
@@ -19,6 +20,7 @@ class MachineDispatchPage extends StatefulWidget {
 class _MachineDispatchPageState extends State<MachineDispatchPage> {
   final logic = Get.put(MachineDispatchLogic());
   final state = Get.find<MachineDispatchLogic>().state;
+  PrintUtil pu = PrintUtil();
 
   refreshOrder() => logic.getWorkCardList((list) {
         if (list.length > 1) {
@@ -583,7 +585,26 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
                 text: 'machine_dispatch_surplus_material_info'.tr,
                 click: () => showSurplusMaterialListDialog(
                   context,
-                  print: (c) {},
+                  print: (label) {
+                    pu.printLabel(
+                      label: label,
+                      start: () {
+                        loadingDialog('正在下发标签...');
+                      },
+                      success: () {
+                        Get.back();
+                        showSnackBar(title: '打印', message: '标签下发完成。');
+                      },
+                      failed: () {
+                        Get.back();
+                        showSnackBar(
+                          title: '打印',
+                          message: '标签下发失败。',
+                          isWarning: true,
+                        );
+                      },
+                    );
+                  },
                 ),
                 combination: Combination.left,
               ),

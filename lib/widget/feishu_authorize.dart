@@ -585,7 +585,7 @@ class FeishuAuthorize extends StatelessWidget {
       ));
     });
     return Container(
-      decoration: backgroundColor,
+      decoration: backgroundColor(),
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(

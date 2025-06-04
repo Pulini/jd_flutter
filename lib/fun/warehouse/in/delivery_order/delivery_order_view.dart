@@ -775,7 +775,7 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
     width = MediaQuery.of(context).size.width;
 
     return Container(
-      decoration: backgroundColor,
+      decoration: backgroundColor(),
       child: Scaffold(
         key: scaffoldKey,
         resizeToAvoidBottomInset: false,

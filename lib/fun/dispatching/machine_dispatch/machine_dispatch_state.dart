@@ -17,7 +17,7 @@ class MachineDispatchState {
   var labelList = <Item>[].obs;
   var labelErrorMsg = '';
   var leaderVerify = false.obs;
-  var surplusMaterialList = <Map<String, String>>[].obs;
+  var surplusMaterialList = <Map<String, dynamic>>[].obs;
 
   var processList = <DispatchProcessInfo>[].obs;
   var processSelect = 0.obs;
@@ -129,18 +129,21 @@ class MachineDispatchState {
               'StuBarCode': detailsInfo?.stubBar1 ?? '',
               'StuBarName': detailsInfo?.stubBarName1 ?? '',
               'StuBarNumber': '1',
+              'InterID': detailsInfo!.interID,
             },
           if ((detailsInfo?.stubBar2 ?? '').isNotEmpty)
             {
               'StuBarCode': detailsInfo?.stubBar2 ?? '',
               'StuBarName': detailsInfo?.stubBarName2 ?? '',
               'StuBarNumber': '2',
+              'InterID': detailsInfo!.interID,
             },
           if ((detailsInfo?.stubBar3 ?? '').isNotEmpty)
             {
               'StuBarCode': detailsInfo?.stubBar3 ?? '',
               'StuBarName': detailsInfo?.stubBarName3 ?? '',
               'StuBarNumber': '3',
+              'InterID': detailsInfo!.interID,
             }
         ];
         success.call();

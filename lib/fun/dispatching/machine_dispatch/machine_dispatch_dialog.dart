@@ -1,10 +1,13 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hand_signature/signature.dart';
 import 'package:jd_flutter/bean/http/response/machine_dispatch_info.dart';
 import 'package:jd_flutter/bean/http/response/worker_info.dart';
+import 'package:jd_flutter/utils/printer/tsc_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
@@ -19,14 +22,14 @@ import 'machine_dispatch_logic.dart';
 generateAndPrintDialog({
   required Function() printLast,
   required Function() print,
-}){
+}) {
   Get.dialog(
     PopScope(
       //拦截返回键
       canPop: false,
       child: AlertDialog(
         title: Text('machine_dispatch_dialog_create_and_print'.tr),
-        content: Text( 'machine_dispatch_dialog_print_tips'.tr),
+        content: Text('machine_dispatch_dialog_print_tips'.tr),
         actions: <Widget>[
           TextButton(
             onPressed: () {
@@ -34,7 +37,8 @@ generateAndPrintDialog({
               printLast.call();
             },
             child: Text('machine_dispatch_dialog_print_last_label'.tr),
-          ),   TextButton(
+          ),
+          TextButton(
             onPressed: () {
               Get.back();
               print.call();
@@ -42,8 +46,9 @@ generateAndPrintDialog({
             child: Text('machine_dispatch_dialog_print'.tr),
           ),
           TextButton(
-            onPressed: ()=>Get.back(),
-            child: Text('dialog_default_cancel'.tr,
+            onPressed: () => Get.back(),
+            child: Text(
+              'dialog_default_cancel'.tr,
               style: const TextStyle(color: Colors.grey),
             ),
           ),
@@ -53,6 +58,7 @@ generateAndPrintDialog({
     barrierDismissible: false, //拦截dialog外部点击
   );
 }
+
 showWorkCardListDialog(
   List<MachineDispatchInfo> list,
   Function(MachineDispatchInfo) callback,
@@ -102,7 +108,7 @@ showWorkCardListDialog(
 
 showSurplusMaterialListDialog(
   BuildContext context, {
-  required Function(Map<String, String>) print,
+  required Function(List<Uint8List>) print,
 }) {
   final state = Get.find<MachineDispatchLogic>().state;
   Get.dialog(
@@ -121,7 +127,7 @@ showSurplusMaterialListDialog(
                   state.surplusMaterialList[index]['StuBarCode'] ?? '';
               var stuBarName =
                   state.surplusMaterialList[index]['StuBarName'] ?? '';
-              // var stuBarNumber = list[index]['StuBarNumber'] ?? '';
+
               return Card(
                 color: stuBarCode.startsWith('4605')
                     ? Colors.red.shade100
@@ -148,8 +154,11 @@ showSurplusMaterialListDialog(
                       content:
                           'machine_dispatch_dialog_surplus_material_print_tips'
                               .trArgs([stuBarName]),
-                      confirm: () =>
-                          print.call(state.surplusMaterialList[index]),
+                      confirm: () => updateSurplusMaterialLabelState(
+                        surplusMaterial: state.surplusMaterialList[index],
+                        details: state.detailsInfo!,
+                        print: print,
+                      ),
                     ),
                     icon: const Icon(
                       Icons.print,
@@ -173,6 +182,46 @@ showSurplusMaterialListDialog(
       ),
     ),
   );
+}
+
+updateSurplusMaterialLabelState({
+  required Map<String, dynamic> surplusMaterial,
+  required MachineDispatchDetailsInfo details,
+  required Function(List<Uint8List>) print,
+}) {
+  var stuBarCode = surplusMaterial['StuBarCode'] ?? '';
+  var stuBarName = surplusMaterial['StuBarName'] ?? '';
+  var stuBarNumber = surplusMaterial['StuBarNumber'] ?? '';
+  var interID = surplusMaterial['InterID'] ?? 0;
+  httpPost(
+    loading: 'machine_dispatch_dialog_update_surplus_material_label_state'.tr,
+    method: webApiUpdateSurplusMaterialLabelState,
+    params: {
+      'Type': stuBarNumber,
+      'InterID': interID,
+      'Number': details.dispatchNumber,
+    },
+  ).then((response) async {
+    if (response.resultCode == resultSuccess) {
+      print.call(await labelForSurplusMaterial(
+        qrCode: jsonEncode({
+          'DispatchNumber': details.dispatchNumber,
+          'StubBar': stuBarCode,
+          'Factory': details.factory ?? '',
+          'Date': details.startDate ?? '',
+          'NowTime': DateTime.now().millisecond,
+        }),
+        machine: details.machine ?? '',
+        shift: details.shift ?? '',
+        startDate: details.startDate ?? '',
+        factoryType: details.factoryType ?? '',
+        stubBar: stuBarName,
+        stuBarCode: stuBarCode,
+      ));
+    } else {
+      errorDialog(content: response.message ?? 'query_default_error'.tr);
+    }
+  });
 }
 
 showLabelListDialog(BuildContext context) {
@@ -291,7 +340,8 @@ showLabelListDialog(BuildContext context) {
                         ),
                         leading: IconButton(
                           onPressed: () => askDialog(
-                            content: 'machine_dispatch_dialog_label_print_tips'.tr,
+                            content:
+                                'machine_dispatch_dialog_label_print_tips'.tr,
                             confirm: () {},
                           ),
                           icon: const Icon(
@@ -303,10 +353,15 @@ showLabelListDialog(BuildContext context) {
                             ? IconButton(
                                 onPressed: () {
                                   if (state.labelList[i].isScanned) {
-                                    errorDialog(content: 'machine_dispatch_dialog_delete_label_error_tips'.tr);
+                                    errorDialog(
+                                        content:
+                                            'machine_dispatch_dialog_delete_label_error_tips'
+                                                .tr);
                                   } else {
                                     askDialog(
-                                      content: 'machine_dispatch_dialog_delete_label_tips'.tr,
+                                      content:
+                                          'machine_dispatch_dialog_delete_label_tips'
+                                              .tr,
                                       confirm: () => _deleteLabel(
                                         state.labelList[i].subLabelID ?? '',
                                         () {
@@ -702,8 +757,10 @@ addDispatchWorker(DispatchProcessInfo data, Function() refresh) {
                 }),
                 NumberDecimalEditText(
                   controller: controller,
-                  hint: 'machine_dispatch_dialog_enter_allocation_number_tips'.tr,
-                  helperText: 'machine_dispatch_dialog_allocation_tips'.trArgs([surplusQty.toShowString()]),
+                  hint:
+                      'machine_dispatch_dialog_enter_allocation_number_tips'.tr,
+                  helperText: 'machine_dispatch_dialog_allocation_tips'
+                      .trArgs([surplusQty.toShowString()]),
                   onChanged: (d) {
                     if (d > max) {
                       controller.text = max.toShowString();
@@ -722,7 +779,8 @@ addDispatchWorker(DispatchProcessInfo data, Function() refresh) {
             onPressed: () {
               if (worker == null) {
                 showSnackBar(
-                  message: 'machine_dispatch_dialog_enter_worker_number_tips'.tr,
+                  message:
+                      'machine_dispatch_dialog_enter_worker_number_tips'.tr,
                   isWarning: true,
                 );
                 return;
@@ -731,7 +789,8 @@ addDispatchWorker(DispatchProcessInfo data, Function() refresh) {
                 (v) => v.workerNumber == worker!.empCode,
               )) {
                 showSnackBar(
-                  message: 'machine_dispatch_dialog_worker_has_been_assigned'.tr,
+                  message:
+                      'machine_dispatch_dialog_worker_has_been_assigned'.tr,
                   isWarning: true,
                 );
                 return;

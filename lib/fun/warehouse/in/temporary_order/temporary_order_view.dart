@@ -279,7 +279,7 @@ class _TemporaryOrderPageState extends State<TemporaryOrderPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: backgroundColor,
+      decoration: backgroundColor(),
       child: Scaffold(
         key: scaffoldKey,
         resizeToAvoidBottomInset: false,

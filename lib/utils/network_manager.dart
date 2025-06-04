@@ -3,6 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 class NetworkManager extends GetxController {
+  RxBool isTestUrl = false.obs;
+  void toggle() => isTestUrl.toggle();
+
   final Connectivity _connectivity = Connectivity();
   RxList<ConnectivityResult> networkStatus = [ConnectivityResult.none].obs;
 
