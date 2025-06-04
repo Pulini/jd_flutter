@@ -2,7 +2,6 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/utils/network_manager.dart';
 import 'package:jd_flutter/utils/utils.dart';
-import 'package:jd_flutter/utils/web_api.dart';
 import 'http/response/home_function_info.dart';
 
 abstract class ButtonItem {
