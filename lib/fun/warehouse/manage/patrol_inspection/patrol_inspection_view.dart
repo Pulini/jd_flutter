@@ -105,6 +105,7 @@ class _PatrolInspectionPageState extends State<PatrolInspectionPage> {
                       decoration: const BoxDecoration(
                         borderRadius: BorderRadius.only(
                           bottomLeft: Radius.circular(8),
+                          bottomRight: Radius.circular(8),
                         ),
                         color: Colors.orange,
                       ),
