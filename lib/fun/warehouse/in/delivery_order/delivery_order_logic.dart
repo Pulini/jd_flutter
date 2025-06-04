@@ -66,7 +66,7 @@ class DeliveryOrderLogic extends GetxController {
         );
       } else {
         state.getTemporaryDetail(
-          zno: produceOrderNo,
+          zno: deliNo,
           success: () => state.getDeliveryOrdersDetails(
             produceOrderNo: produceOrderNo,
             deliNo: deliNo,

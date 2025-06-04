@@ -65,21 +65,26 @@ spSave(String key, Object value) {
 
 // 获取SP数据
 dynamic spGet(String key) {
-  var value = sharedPreferences.get(key);
-  logger.d('read\nclass:${value.runtimeType}\nkey:$key\nvalue:$value');
-  switch (value.runtimeType) {
-    case const (String):
-      return value ?? '';
-    case const (int):
-      return value ?? 0;
-    case const (double):
-      return value ?? 0.0;
-    case const (bool):
-      return value ?? false;
-    case const (List<Object?>):
-      return sharedPreferences.getStringList(key) ?? [];
-    default:
-      return value;
+  try {
+    var value = sharedPreferences.get(key);
+    logger.d('read\nclass:${value.runtimeType}\nkey:$key\nvalue:$value');
+    switch (value.runtimeType) {
+      case const (String):
+        return value ?? '';
+      case const (int):
+        return value ?? 0;
+      case const (double):
+        return value ?? 0.0;
+      case const (bool):
+        return value ?? false;
+      case const (List<Object?>):
+        return sharedPreferences.getStringList(key) ?? [];
+      default:
+        return value;
+    }
+  } catch (e) {
+    debugPrint('--------read sp error-------');
+    return null;
   }
 }
 

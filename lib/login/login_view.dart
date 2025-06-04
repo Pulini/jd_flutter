@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/utils/network_manager.dart';
@@ -263,6 +264,7 @@ class _LoginPickState extends State<LoginPick>
   void dispose() {
     Get.delete<LoginLogic>();
     super.dispose();
+    SystemNavigator.pop();
   }
 
   @override

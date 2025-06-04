@@ -463,7 +463,7 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
             ),
             textSpan(
               hint: 'delivery_order_check_qty'.tr,
-              text: item.deliveryQty().toShowString(),
+              text: item.checkQuantity.toDoubleTry().toShowString(),
               textColor: Colors.black45,
             ),
           ],
@@ -490,7 +490,7 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
             expandedTextSpan(
               flex: 2,
               hint: 'delivery_order_check_qty'.tr,
-              text: item.deliveryQty().toShowString(),
+              text: item.checkQuantity.toDoubleTry().toShowString(),
               textColor: Colors.black45,
             ),
             expandedTextSpan(

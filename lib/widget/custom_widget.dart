@@ -14,7 +14,6 @@ import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
-
 //app 背景渐变色
  backgroundColor() =>  BoxDecoration(
   gradient: LinearGradient(

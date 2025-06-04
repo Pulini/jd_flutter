@@ -24,6 +24,10 @@ main() async {
   //确保初始化完成才能加载耗时插件
   WidgetsFlutterBinding.ensureInitialized();
 
+  sharedPreferences = await SharedPreferences.getInstance();
+  packageInfo = await PackageInfo.fromPlatform();
+  deviceInfo = await DeviceInfoPlugin().deviceInfo;
+
   // //添加全局网络状态管理
   Get.put(NetworkManager());
 
@@ -65,10 +69,6 @@ main() async {
       ),
     );
   }
-
-  sharedPreferences = await SharedPreferences.getInstance();
-  packageInfo = await PackageInfo.fromPlatform();
-  deviceInfo = await DeviceInfoPlugin().deviceInfo;
 
   runApp(const MyApp());
   // 启用性能叠加层

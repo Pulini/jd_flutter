@@ -1,8 +1,8 @@
 import 'package:get/get.dart';
+import 'package:jd_flutter/bean/http/response/home_function_info.dart';
 import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/utils/network_manager.dart';
 import 'package:jd_flutter/utils/utils.dart';
-import 'http/response/home_function_info.dart';
 
 abstract class ButtonItem {
   late String name;
