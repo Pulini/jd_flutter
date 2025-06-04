@@ -12,19 +12,6 @@ import 'patrol_inspection_state.dart';
 
 class PatrolInspectionLogic extends GetxController {
   final PatrolInspectionState state = PatrolInspectionState();
-
-  @override
-  void onReady() {
-    // TODO: implement onReady
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    // TODO: implement onClose
-    super.onClose();
-  }
-
   getPatrolInspectionInfo() {
     state.getPatrolInspectionInfo(
       success: (selected) => selectLine(selected == -1 ? 0 : selected),
