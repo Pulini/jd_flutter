@@ -654,7 +654,7 @@ String getTimeHms({DateTime? time}) {
   var s = now.second.toString();
   if (s.length == 1) s = '0$s';
 
-  return '$h:$m:$s ${now.millisecond}';
+  return '$h:$m:$s';
 }
 
 String getDateSapYMD({DateTime? time}) {

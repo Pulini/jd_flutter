@@ -54,12 +54,14 @@ class PatrolInspectionInfo {
   String? produceUnitId;
   List<PatrolInspectionAbnormalRecordInfo>? abnormalRecords;
   List<PatrolInspectionAbnormalItemInfo>? abnormalItems;
+  List<PatrolInspectionTypeBodyInfo>? typeBodyList;
 
   PatrolInspectionInfo({
     this.produceUnitName,
     this.produceUnitId,
     this.abnormalRecords,
     this.abnormalItems,
+    this.typeBodyList,
   }) {
     isSelected.value =
         produceUnitId == (spGet(spSavePatrolInspectionLineId) ?? '');
@@ -82,6 +84,11 @@ class PatrolInspectionInfo {
               i,
             )
       ],
+      typeBodyList: [
+        if (json['TYPEBODYS'] != null)
+          for (var v in json['TYPEBODYS'])
+            PatrolInspectionTypeBodyInfo.fromJson(v)
+      ],
     );
   }
 
@@ -97,14 +104,17 @@ class PatrolInspectionInfo {
 // 		"recordDate": "2025-05-05 20:30:29"
 // 	}
 class PatrolInspectionAbnormalRecordInfo {
+  RxBool isSelect = false.obs;
   String? abnormalItemId;
   String? abnormalRecordId;
   String? recordDate;
+  String? typeBody;
 
   PatrolInspectionAbnormalRecordInfo({
     this.abnormalItemId,
     this.abnormalRecordId,
     this.recordDate,
+    this.typeBody,
   });
 
   factory PatrolInspectionAbnormalRecordInfo.fromJson(dynamic json) {
@@ -112,6 +122,7 @@ class PatrolInspectionAbnormalRecordInfo {
       abnormalItemId: json['ABNORMALITEMID'],
       abnormalRecordId: json['ABNORMALRECORDID'],
       recordDate: json['RECORDDATE'],
+      typeBody: json['TYPEBODY'],
     );
   }
 }
@@ -141,16 +152,18 @@ class PatrolInspectionAbnormalItemInfo {
     );
   }
 
-  factory PatrolInspectionAbnormalItemInfo.fromJsonIndex(
-      dynamic json, int index) {
+  factory PatrolInspectionAbnormalItemInfo.fromJsonIndex(dynamic json,
+      int index) {
     var data = PatrolInspectionAbnormalItemInfo(
       abnormalItemId: json[index]['ABNORMALITEMID'],
       abnormalDescription: json[index]['ABNORMALDESCRIPTION'],
       monthlyDefectRate:
-          json[index]['MONTHLYDEFECTRATE'].toString().toDoubleTry(),
+      json[index]['MONTHLYDEFECTRATE'].toString().toDoubleTry(),
     );
     var saveTag = spGet('PI-${data.abnormalItemId}-${userInfo?.number}');
-    if (saveTag != null && saveTag.toString().isNotEmpty) {
+    if (saveTag != null && saveTag
+        .toString()
+        .isNotEmpty) {
       data.tag.value = saveTag;
     } else {
       data.tag.value = '${index + 1}';
@@ -159,4 +172,74 @@ class PatrolInspectionAbnormalItemInfo {
   }
 
   String getDefectRate() => '${monthlyDefectRate.toShowString()}%';
+}
+//"TYPEBODYS": [
+//   {
+//     "TYPEBODY": "D13677-22B M",
+//     "ISINSPECTION": false
+//   },
+//   {
+//     "TYPEBODY": "PN13786-3",
+//     "ISINSPECTION": true
+//   }
+// ]
+class PatrolInspectionTypeBodyInfo {
+  String? typeBody;
+  bool? isInspection;
+
+  PatrolInspectionTypeBodyInfo({
+    this.typeBody,
+    this.isInspection,
+  });
+
+  factory PatrolInspectionTypeBodyInfo.fromJson(dynamic json) {
+    return PatrolInspectionTypeBodyInfo(
+      typeBody: json['TYPEBODY'],
+      isInspection: json['ISINSPECTION'],
+    );
+  }
+}
+
+class PatrolInspectionReportInfo {
+  String? produceUnitName;
+  double? patrolInspectQuantity;
+  List<PatrolInspectionAbnormalRecordDetailInfo>? abnormalRecordDetail;
+
+  PatrolInspectionReportInfo({
+    this.produceUnitName,
+    this.patrolInspectQuantity,
+    this.abnormalRecordDetail,
+  });
+
+  factory PatrolInspectionReportInfo.fromJson(dynamic json) {
+    return PatrolInspectionReportInfo(
+        produceUnitName: json['PRODUCEUNITNAME'],
+        patrolInspectQuantity: json['PATROLINSPECTQUANTITY'].toString().toDoubleTry(),
+        abnormalRecordDetail: [
+          if (json['ABNORMALRECORDDETAIL'] != null)
+            for (var v in json['ABNORMALRECORDDETAIL'])
+              PatrolInspectionAbnormalRecordDetailInfo.fromJson(v)
+        ]
+    );
+  }
+}
+
+class PatrolInspectionAbnormalRecordDetailInfo {
+  String? abnormalDescription;
+  String? recordDate;
+  String? typeBody;
+
+  PatrolInspectionAbnormalRecordDetailInfo({
+    this.abnormalDescription,
+    this.recordDate,
+    this.typeBody,
+  });
+
+  factory PatrolInspectionAbnormalRecordDetailInfo.fromJson(dynamic json) {
+    return PatrolInspectionAbnormalRecordDetailInfo(
+      abnormalDescription: json['ABNORMALDESCRIPTION'],
+      recordDate: json['RECORDDATE'],
+      typeBody: json['TYPEBODY'],
+    );
+  }
 }

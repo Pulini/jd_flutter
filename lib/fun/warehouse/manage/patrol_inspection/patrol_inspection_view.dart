@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/patrol_inspection_info.dart';
+import 'package:jd_flutter/fun/warehouse/manage/patrol_inspection/patrol_inspection_abnormal_list_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/patrol_inspection/patrol_inspection_dialog.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
@@ -130,7 +131,29 @@ class _PatrolInspectionPageState extends State<PatrolInspectionPage> {
       ),
     );
   }
-
+  Widget _typeBodyItem(int index) => Obx(() => GestureDetector(
+    onTap: () => state.typeBodyIndex.value = index,
+    child: Container(
+      width: 200,
+      alignment: Alignment.center,
+      margin: const EdgeInsets.only(right: 5),
+      padding: const EdgeInsets.all(5),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(5),
+        color: state.typeBodyIndex.value == index
+            ? Colors.green
+            : Colors.blue.shade400,
+      ),
+      child: Text(
+        state.typeBodyList[index].typeBody ?? '',
+        style: const TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 16,
+          color: Colors.white,
+        ),
+      ),
+    ),
+  ));
   List<Widget> _getQueryWidgets() {
     var widgets = <Widget>[];
 
@@ -162,7 +185,7 @@ class _PatrolInspectionPageState extends State<PatrolInspectionPage> {
       combination: state.inspectionList.length > 1
           ? Combination.right
           : Combination.intact,
-      click: () {},
+      click: () => Get.to(() => const PatrolInspectionAbnormalListPage()),
     );
     if (state.inspectionList.isEmpty) {
       widgets = [
@@ -233,24 +256,47 @@ class _PatrolInspectionPageState extends State<PatrolInspectionPage> {
                 ),
               ),
               const SizedBox(width: 10),
-              CombinationButton(text: '查看巡检汇总', click: () {})
+              CombinationButton(
+                text: '查看巡检汇总',
+                click: () =>
+                    logic.getPatrolInspectionReport(dpcDate.getDateFormatYMD()),
+              )
             ],
           ),
         ),
       ],
-      body: Expanded(
-        child: Obx(() => GridView.builder(
-              itemCount: state.abnormalItemList.length + 1,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 5,
-                childAspectRatio: 3 / 2.2,
-              ),
-              itemBuilder: (c, i) => i == 0
-                  ? _qualifiedItem()
-                  : state.abnormalItemList.isEmpty
-                      ? Container()
-                      : _item(state.abnormalItemList[i - 1]),
-            )),
+      body: Column(
+        children: [
+          Expanded(
+            child: Obx(() => GridView.builder(
+                  itemCount: state.abnormalItemList.length + 1,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 5,
+                    childAspectRatio: 3 / 2.2,
+                  ),
+                  itemBuilder: (c, i) => i == 0
+                      ? _qualifiedItem()
+                      : state.abnormalItemList.isEmpty
+                          ? Container()
+                          : _item(state.abnormalItemList[i - 1]),
+                )),
+          ),
+          Container(
+            height: 50,
+            margin: const EdgeInsets.all(5),
+            padding: const EdgeInsets.all(5),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(width: 2, color: Colors.blue),
+              color: Colors.white,
+            ),
+            child: Obx(() => ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: state.typeBodyList.length,
+                  itemBuilder: (c, i) => _typeBodyItem(i),
+                )),
+          )
+        ],
       ),
     );
   }
@@ -260,4 +306,6 @@ class _PatrolInspectionPageState extends State<PatrolInspectionPage> {
     Get.delete<PatrolInspectionLogic>();
     super.dispose();
   }
+
+
 }

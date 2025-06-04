@@ -1282,3 +1282,6 @@ const webApiSapAddPatrolInspectionRecord= 'sap/zapp/ZFUN_APP_PJ_ORDERTESTADD2';
 
 //删除巡查记录
 const webApiSapDeletePatrolInspectionRecord= 'sap/zapp/ZFUN_APP_PJ_ORDERTESTDEL2';
+
+//获取巡查记录
+const webApiSapGetPatrolInspectionReport= 'sap/zapp/ZFUN_APP_PJ_SUMQUERY2';
