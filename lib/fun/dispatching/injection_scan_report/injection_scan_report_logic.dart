@@ -203,7 +203,7 @@ class InjectionScanReportLogic extends GetxController {
       showSnackBar(message: 'injection_scan_first_query_detail'.tr);
     } else {
       sapPost(
-        method: webApiForSAPGetStockInBarCodeList,
+        method: webApiSapGetMaterialDispatchLabelList,
         loading: 'injection_scan_reading_label_data'.tr,
         body: [
           {

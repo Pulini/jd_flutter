@@ -23,8 +23,28 @@ class _WidgetsToImageState extends State<WidgetsToImage> {
       //获取图片
       final boundary =
           key.currentContext!.findRenderObject()! as RenderRepaintBoundary;
+
+      if (boundary.debugNeedsPaint) {
+        await Future.delayed(const Duration(milliseconds: 30));
+        return capture(key); // 递归调用直到组件绘制完成
+      }
       ui.Image image = boundary.toImageSync();
 
+      //旋转图片
+      ui.Image rotatedImage = await rotateImage(image);
+      var byte = await rotatedImage.toByteData(format: ui.ImageByteFormat.png);
+      return byte!.buffer.asUint8List();
+    } catch (e) {
+      return captureFormError(key);
+    }
+  }
+
+  Future<Uint8List> captureFormError(GlobalKey key) async {
+    try {
+      //获取图片
+      final boundary =
+          key.currentContext!.findRenderObject()! as RenderRepaintBoundary;
+      ui.Image image = boundary.toImageSync();
       //旋转图片
       ui.Image rotatedImage = await rotateImage(image);
       var byte = await rotatedImage.toByteData(format: ui.ImageByteFormat.png);
@@ -66,7 +86,7 @@ class _WidgetsToImageState extends State<WidgetsToImage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      widget.image.call( await capture(containerKey));
+      widget.image.call(await capture(containerKey));
     });
   }
 

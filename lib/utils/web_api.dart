@@ -120,7 +120,6 @@ Future<BaseData> sapGet({
   );
 }
 
-
 //初始化网络请求
 Future<BaseData> _doHttp({
   required bool isPost,
@@ -664,6 +663,10 @@ const webApiSapGetMaterialDispatchLabelList = 'sap/zapp/ZFUN_APP_BARCODE_FETCH';
 const webApiSapMaterialDispatchLabelMaintain =
     'sap/zapp/ZFUN_APP_BARCODE_MAINTAIN';
 
+//机台派工单--获取英文贴标
+const webApiSapGetMaterialDispatchEnglishLabel =
+    'sap/zapp/ZFUN_APP_BARCODE_MEAS';
+
 //机台派工单--更新料头标信息
 const webApiUpdateSurplusMaterialLabelState =
     'api/CompoundDispatching/UpdateScWorkCardStubBarPrintFlagJinZhen';
@@ -1111,9 +1114,6 @@ const webApiGetScWorkCardDetail =
 const webApiClearBarCodeAndBoxQty =
     'api/CompoundDispatching/ClearBarCodeAndBoxQtyJinZhen';
 
-//获取已入库的贴标列表
-const webApiForSAPGetStockInBarCodeList = 'sap/zapp/ZFUN_APP_BARCODE_FETCH';
-
 //修改派工表_金臻 (产量汇报)
 const webApiUpdateScWorkCard =
     'api/CompoundDispatching/UpdateScWorkCardJinZhen';
@@ -1281,10 +1281,11 @@ const webApiSapGetAbnormalList = 'sap/zapp/ZFUN_ZGD_4';
 const webApiSapGetPatrolInspectionInfo = 'sap/zapp/ZFUN_APP_PJ_ORDERSUMQUERY';
 
 //添加巡查记录
-const webApiSapAddPatrolInspectionRecord= 'sap/zapp/ZFUN_APP_PJ_ORDERTESTADD2';
+const webApiSapAddPatrolInspectionRecord = 'sap/zapp/ZFUN_APP_PJ_ORDERTESTADD2';
 
 //删除巡查记录
-const webApiSapDeletePatrolInspectionRecord= 'sap/zapp/ZFUN_APP_PJ_ORDERTESTDEL2';
+const webApiSapDeletePatrolInspectionRecord =
+    'sap/zapp/ZFUN_APP_PJ_ORDERTESTDEL2';
 
 //获取巡查记录
-const webApiSapGetPatrolInspectionReport= 'sap/zapp/ZFUN_APP_PJ_SUMQUERY2';
+const webApiSapGetPatrolInspectionReport = 'sap/zapp/ZFUN_APP_PJ_SUMQUERY2';

@@ -264,7 +264,6 @@ class _LoginPickState extends State<LoginPick>
   void dispose() {
     Get.delete<LoginLogic>();
     super.dispose();
-    SystemNavigator.pop();
   }
 
   @override

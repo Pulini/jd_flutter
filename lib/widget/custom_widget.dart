@@ -734,7 +734,7 @@ avatarPhoto(String? url) {
   );
 }
 
-surplusMaterialLabelTemplate({
+Widget surplusMaterialLabelTemplate({
   required String qrCode,
   required String machine,
   required String shift,
@@ -873,7 +873,7 @@ surplusMaterialLabelTemplate({
 
 //标准格式标签模版
 //75*45大小
-fixedLabelTemplate({
+Widget fixedLabelTemplate({
   required String qrCode,
   Widget? title,
   Widget? subTitle,
@@ -1011,7 +1011,7 @@ fixedLabelTemplate({
 
 //动态格式标签模版
 //45宽，高度由内容决定
-dynamicLabelTemplate({
+Widget dynamicLabelTemplate({
   required String qrCode,
   Widget? title,
   Widget? subTitle,

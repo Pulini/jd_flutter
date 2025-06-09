@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/machine_dispatch_info.dart';
 import 'package:jd_flutter/fun/dispatching/machine_dispatch/machine_dispatch_dialog.dart';
-import 'package:jd_flutter/utils/printer/print_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/feishu_authorize.dart';
+import 'package:jd_flutter/widget/preview_label_widget.dart';
 import 'machine_dispatch_logic.dart';
 
 class MachineDispatchPage extends StatefulWidget {
@@ -20,7 +20,8 @@ class MachineDispatchPage extends StatefulWidget {
 class _MachineDispatchPageState extends State<MachineDispatchPage> {
   final logic = Get.put(MachineDispatchLogic());
   final state = Get.find<MachineDispatchLogic>().state;
-  PrintUtil pu = PrintUtil();
+
+  // PrintUtil pu = PrintUtil();
 
   refreshOrder() => logic.getWorkCardList((list) {
         if (list.length > 1) {
@@ -520,9 +521,44 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
                     );
                   } else {
                     generateAndPrintDialog(
-                      printLast: () => logic.generateAndPrintLabel(true),
-                      print: () => logic.generateAndPrintLabel(false),
+                      printLast: () =>
+                          logic.generateAndPrintLabel(isPrintLast: true),
+                      print: () =>
+                          logic.generateAndPrintLabel(isPrintLast: false),
                     );
+                  }
+                },
+                combination: Combination.middle,
+              ),
+            if (state.leaderVerify.value)
+              CombinationButton(
+                text: 'machine_dispatch_generate_and_print_english'.tr,
+                isEnabled: logic.isSelectedOne(),
+                click: () {
+                  if (logic.statusReportedAndGenerate()) {
+                    msgDialog(
+                      content: '已经进行过员工汇报，无法再打标',
+                    );
+                  } else {
+                    logic.getEnglishLabel((label) {
+                      selectLabelTypeDialog(
+                        englishLabel: label,
+                        printLast: (weight, specifications) =>
+                            logic.generateAndPrintLabel(
+                          isPrintLast: true,
+                          isEnglish: true,
+                          weight: weight,
+                          specifications: specifications,
+                        ),
+                        print: (weight, specifications) =>
+                            logic.generateAndPrintLabel(
+                          isPrintLast: false,
+                          isEnglish: true,
+                          weight: weight,
+                          specifications: specifications,
+                        ),
+                      );
+                    });
                   }
                 },
                 combination: Combination.middle,
@@ -569,6 +605,25 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
         ),
       );
 
+  // printLabel(List<Uint8List> label) {
+  //   pu.printLabel(
+  //     label: label,
+  //     start: () => loadingDialog('正在下发标签...'),
+  //     success: () {
+  //       loadingDismiss();
+  //       showSnackBar(title: '打印', message: '标签下发完成。');
+  //     },
+  //     failed: () {
+  //       loadingDismiss();
+  //       showSnackBar(
+  //         title: '打印',
+  //         message: '标签下发失败。',
+  //         isWarning: true,
+  //       );
+  //     },
+  //   );
+  // }
+
   @override
   void initState() {
     super.initState();
@@ -586,24 +641,9 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
                 click: () => showSurplusMaterialListDialog(
                   context,
                   print: (label) {
-                    pu.printLabel(
-                      label: label,
-                      start: () {
-                        loadingDialog('正在下发标签...');
-                      },
-                      success: () {
-                        Get.back();
-                        showSnackBar(title: '打印', message: '标签下发完成。');
-                      },
-                      failed: () {
-                        Get.back();
-                        showSnackBar(
-                          title: '打印',
-                          message: '标签下发失败。',
-                          isWarning: true,
-                        );
-                      },
-                    );
+                    Get.to(() => PreviewLabel(
+                        labelWidget:label
+                    ));
                   },
                 ),
                 combination: Combination.left,
@@ -615,7 +655,10 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
                   if (state.labelErrorMsg.isNotEmpty) {
                     errorDialog(content: state.labelErrorMsg);
                   } else {
-                    showLabelListDialog(context);
+                    showLabelListDialog(
+                      context: context,
+                      print: (label) => logic.printLabel(label),
+                    );
                   }
                 },
                 combination: Combination.middle,

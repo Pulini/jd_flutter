@@ -1,13 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:hand_signature/signature.dart';
 import 'package:jd_flutter/bean/http/response/machine_dispatch_info.dart';
+import 'package:jd_flutter/bean/http/response/sap_label_info.dart';
 import 'package:jd_flutter/bean/http/response/worker_info.dart';
-import 'package:jd_flutter/utils/printer/tsc_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
@@ -108,7 +107,7 @@ showWorkCardListDialog(
 
 showSurplusMaterialListDialog(
   BuildContext context, {
-  required Function(List<Uint8List>) print,
+  required Function(Widget) print,
 }) {
   final state = Get.find<MachineDispatchLogic>().state;
   Get.dialog(
@@ -157,7 +156,10 @@ showSurplusMaterialListDialog(
                       confirm: () => updateSurplusMaterialLabelState(
                         surplusMaterial: state.surplusMaterialList[index],
                         details: state.detailsInfo!,
-                        print: print,
+                        print: (label) {
+                          Get.back();
+                          print.call(label);
+                        },
                       ),
                     ),
                     icon: const Icon(
@@ -187,7 +189,7 @@ showSurplusMaterialListDialog(
 updateSurplusMaterialLabelState({
   required Map<String, dynamic> surplusMaterial,
   required MachineDispatchDetailsInfo details,
-  required Function(List<Uint8List>) print,
+  required Function(Widget) print,
 }) {
   var stuBarCode = surplusMaterial['StuBarCode'] ?? '';
   var stuBarName = surplusMaterial['StuBarName'] ?? '';
@@ -203,7 +205,7 @@ updateSurplusMaterialLabelState({
     },
   ).then((response) async {
     if (response.resultCode == resultSuccess) {
-      print.call(await labelForSurplusMaterial(
+      print.call(surplusMaterialLabelTemplate(
         qrCode: jsonEncode({
           'DispatchNumber': details.dispatchNumber,
           'StubBar': stuBarCode,
@@ -214,9 +216,9 @@ updateSurplusMaterialLabelState({
         machine: details.machine ?? '',
         shift: details.shift ?? '',
         startDate: details.startDate ?? '',
-        factoryType: details.factoryType ?? '',
-        stubBar: stuBarName,
-        stuBarCode: stuBarCode,
+        typeBody: details.factoryType ?? '',
+        materialName: stuBarName,
+        materialCode: stuBarCode,
       ));
     } else {
       errorDialog(content: response.message ?? 'query_default_error'.tr);
@@ -224,16 +226,201 @@ updateSurplusMaterialLabelState({
   });
 }
 
-showLabelListDialog(BuildContext context) {
+showLabelListDialog({
+  required BuildContext context,
+  required Function(MachineDispatchReprintLabelInfo) print,
+}) {
   final state = Get.find<MachineDispatchLogic>().state;
   var notScan = state.labelList.where((v) => !v.isScanned).toList();
   var notScanLabelList = <String>[
-    for (var i = 0; i < notScan.length; ++i) notScan[i].number ?? ''
+    for (var i = 0; i < notScan.length; ++i) notScan[i].number
   ];
   var lastAndNotScan = notScan.where((v) => v.isLastLabel).toList();
   var lastLabelList = <String>[
     for (var i = 0; i < lastAndNotScan.length; ++i) lastAndNotScan[i].size ?? ''
   ];
+
+  createLabel(Item label) {
+    label.type = '01';
+    print.call(MachineDispatchReprintLabelInfo(
+      isLastLabel: label.isLastLabel,
+      isEnglish: label.type == '01',
+      number: label.number,
+      labelID: label.subLabelID ?? '',
+      processes: state.detailsInfo?.processflow ?? '',
+      qty: label.qty ?? 0,
+      size: label.size ?? '',
+      factoryType: label.typeBody ?? '',
+      date: state.detailsInfo?.startDate ?? '',
+      materialName: label.type == '01'
+          ? label.englishName ?? ''
+          : state.detailsInfo?.materialName ?? '',
+      unit: label.type == '01' ? label.englishUnit ?? '' : label.unit ?? '',
+      machine: state.detailsInfo?.machine ?? '',
+      shift: state.detailsInfo?.shift ?? '',
+      dispatchNumber: state.nowDispatchNumber.value,
+      decrementNumber: state.detailsInfo?.decrementNumber ?? '',
+      specifications: label.specifications,
+      netWeight: label.netWeight.toDoubleTry(),
+      grossWeight: label.grossWeight.toDoubleTry(),
+      englishName: label.englishName ?? '',
+      englishUnit: label.englishUnit ?? '',
+    ));
+
+    // if (label.type == '01') {
+    //   //英文标
+    //   print.call(await labelMultipurposeEnglishFixed(
+    //     qrCode: label.subLabelID ?? '',
+    //     title: label.typeBody ?? '',
+    //     subTitle: label.englishName ?? '',
+    //     subTitleWrap: false,
+    //     content: 'GW: ${label.grossWeight} KG    NW: ${label.netWeight} KG',
+    //     specification:
+    //         'MEAS:  ${label.specifications}                       NO.${label.number}',
+    //     subContent1: 'DISPATCH:${state.nowDispatchNumber}',
+    //     subContent2:
+    //         'DECREASE:${state.detailsInfo?.decrementNumber}   DATE:${state.detailsInfo?.startDate}',
+    //     bottomLeftText1: '${label.qty.toString()}${label.englishUnit}',
+    //     bottomMiddleText1: '   Made in China',
+    //     bottomRightText1: '${label.size}#',
+    //   ));
+    // } else {
+    //   print.call(await labelMultipurposeFixed(
+    //     qrCode: label.subLabelID ?? '',
+    //     title: label.typeBody ?? '',
+    //     subTitle:
+    //         '${state.detailsInfo?.processflow}         序号:${label.number}',
+    //     subTitleWrap: false,
+    //     content: state.detailsInfo?.materialName ?? '',
+    //     subContent1: '派工单:${state.nowDispatchNumber}',
+    //     subContent2:
+    //         '递减号:${state.detailsInfo?.decrementNumber}      日期:${state.detailsInfo?.startDate}',
+    //     bottomLeftText1:
+    //         '${label.size}#${label.qty.toShowString()}${label.unit}',
+    //     bottomMiddleText1:
+    //         '班次:${state.detailsInfo?.shift}机台:${state.detailsInfo?.machine}',
+    //     bottomRightText1: label.isLastLabel ? '尾' : '',
+    //   ));
+    // }
+  }
+
+  item(int i) => Container(
+        margin: const EdgeInsets.only(bottom: 10),
+        padding: const EdgeInsets.all(5),
+        decoration: BoxDecoration(
+          color: state.labelList[i].isLastLabel
+              ? Colors.green.shade100
+              : Colors.blue.shade50,
+          borderRadius: const BorderRadius.all(
+            Radius.circular(10),
+          ),
+        ),
+        foregroundDecoration: RotatedCornerDecoration.withColor(
+          color: state.labelList[i].isScanned ? Colors.green : Colors.red,
+          badgeCornerRadius: const Radius.circular(8),
+          badgeSize: const Size(45, 45),
+          textSpan: TextSpan(
+            text: state.labelList[i].isScanned
+                ? 'machine_dispatch_dialog_scanned'.tr
+                : 'machine_dispatch_dialog_not_scanned'.tr,
+            style: const TextStyle(
+              fontSize: 14,
+              color: Colors.white,
+            ),
+          ),
+        ),
+        child: ListTile(
+          title: Row(
+            children: [
+              expandedTextSpan(
+                flex: 8,
+                hint: 'machine_dispatch_dialog_material_name'.tr,
+                text: state.detailsInfo?.materialName ?? '',
+              ),
+              expandedTextSpan(
+                hint: 'machine_dispatch_dialog_process'.tr,
+                text: state.detailsInfo?.processflow ?? '',
+              ),
+            ],
+          ),
+          subtitle: Row(
+            children: [
+              expandedTextSpan(
+                flex: 3,
+                hint: 'machine_dispatch_dialog_dispatch_date'.tr,
+                text: state.detailsInfo?.startDate ?? '',
+                textColor: Colors.black54,
+              ),
+              expandedTextSpan(
+                flex: 3,
+                hint: 'machine_dispatch_dialog_type_body'.tr,
+                text: state.detailsInfo?.factoryType ?? '',
+                textColor: Colors.black54,
+              ),
+              expandedTextSpan(
+                flex: 2,
+                hint: 'machine_dispatch_dialog_size_qty'.tr,
+                text: 'machine_dispatch_dialog_size_qty_input'.trArgs([
+                  '${state.labelList[i].size}',
+                  '${state.labelList[i].qty.toShowString()}${state.labelList[i].unit}${state.labelList[i].isLastLabel ? 'machine_dispatch_dialog_tail_label'.tr : ''}',
+                ]),
+                textColor: state.labelList[i].isLastLabel
+                    ? Colors.red
+                    : Colors.black54,
+              ),
+              expandedTextSpan(
+                hint: 'machine_dispatch_dialog_number'.tr,
+                text: state.labelList[i].number,
+                textColor: Colors.black54,
+              ),
+            ],
+          ),
+          leading: IconButton(
+            onPressed: () => askDialog(
+              content: 'machine_dispatch_dialog_label_print_tips'.tr,
+              confirm: () => createLabel(state.labelList[i]),
+            ),
+            icon: const Icon(
+              Icons.print,
+              color: Colors.blueAccent,
+            ),
+          ),
+          trailing: state.leaderVerify.value
+              ? IconButton(
+                  onPressed: () {
+                    if (state.labelList[i].isScanned) {
+                      errorDialog(
+                          content:
+                              'machine_dispatch_dialog_delete_label_error_tips'
+                                  .tr);
+                    } else {
+                      askDialog(
+                        content: 'machine_dispatch_dialog_delete_label_tips'.tr,
+                        confirm: () {
+                          _deleteLabel(
+                            labelId: state.labelList[i].subLabelID ?? '',
+                            callback: () {
+                              state.labelList.removeAt(i);
+                              state.sizeItemList
+                                  .firstWhere((v1) =>
+                                      v1.size == state.labelList[i].size)
+                                  .labelQty -= 1;
+                              state.sizeItemList.refresh();
+                            },
+                          );
+                        },
+                      );
+                    }
+                  },
+                  icon: const Icon(
+                    Icons.delete_forever,
+                    color: Colors.red,
+                  ),
+                )
+              : null,
+        ),
+      );
+
   Get.dialog(
     PopScope(
       canPop: false,
@@ -264,130 +451,10 @@ showLabelListDialog(BuildContext context) {
                   () => ListView.builder(
                     padding: const EdgeInsets.all(8),
                     itemCount: state.labelList.length,
-                    itemBuilder: (_, i) => Container(
-                      margin: const EdgeInsets.only(bottom: 10),
-                      padding: const EdgeInsets.all(5),
-                      decoration: BoxDecoration(
-                        color: state.labelList[i].isLastLabel
-                            ? Colors.green.shade100
-                            : Colors.blue.shade50,
-                        borderRadius: const BorderRadius.all(
-                          Radius.circular(10),
-                        ),
-                      ),
-                      foregroundDecoration: RotatedCornerDecoration.withColor(
-                        color: state.labelList[i].isScanned
-                            ? Colors.green
-                            : Colors.red,
-                        badgeCornerRadius: const Radius.circular(8),
-                        badgeSize: const Size(45, 45),
-                        textSpan: TextSpan(
-                          text: state.labelList[i].isScanned
-                              ? 'machine_dispatch_dialog_scanned'.tr
-                              : 'machine_dispatch_dialog_not_scanned'.tr,
-                          style: const TextStyle(
-                            fontSize: 14,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                      child: ListTile(
-                        title: Row(
-                          children: [
-                            expandedTextSpan(
-                              flex: 8,
-                              hint: 'machine_dispatch_dialog_material_name'.tr,
-                              text: state.detailsInfo?.materialName ?? '',
-                            ),
-                            expandedTextSpan(
-                              hint: 'machine_dispatch_dialog_process'.tr,
-                              text: state.detailsInfo?.processflow ?? '',
-                            ),
-                          ],
-                        ),
-                        subtitle: Row(
-                          children: [
-                            expandedTextSpan(
-                              flex: 3,
-                              hint: 'machine_dispatch_dialog_dispatch_date'.tr,
-                              text: state.detailsInfo?.startDate ?? '',
-                              textColor: Colors.black54,
-                            ),
-                            expandedTextSpan(
-                              flex: 3,
-                              hint: 'machine_dispatch_dialog_type_body'.tr,
-                              text: state.detailsInfo?.factoryType ?? '',
-                              textColor: Colors.black54,
-                            ),
-                            expandedTextSpan(
-                              flex: 2,
-                              hint: 'machine_dispatch_dialog_size_qty'.tr,
-                              text: 'machine_dispatch_dialog_size_qty_input'
-                                  .trArgs([
-                                '${state.labelList[i].size}',
-                                '${state.labelList[i].qty.toShowString()}${state.labelList[i].unit}${state.labelList[i].isLastLabel ? 'machine_dispatch_dialog_tail_label'.tr : ''}',
-                              ]),
-                              textColor: state.labelList[i].isLastLabel
-                                  ? Colors.red
-                                  : Colors.black54,
-                            ),
-                            expandedTextSpan(
-                              hint: 'machine_dispatch_dialog_number'.tr,
-                              text: state.labelList[i].number ?? '',
-                              textColor: Colors.black54,
-                            ),
-                          ],
-                        ),
-                        leading: IconButton(
-                          onPressed: () => askDialog(
-                            content:
-                                'machine_dispatch_dialog_label_print_tips'.tr,
-                            confirm: () {},
-                          ),
-                          icon: const Icon(
-                            Icons.print,
-                            color: Colors.blueAccent,
-                          ),
-                        ),
-                        trailing: state.leaderVerify.value
-                            ? IconButton(
-                                onPressed: () {
-                                  if (state.labelList[i].isScanned) {
-                                    errorDialog(
-                                        content:
-                                            'machine_dispatch_dialog_delete_label_error_tips'
-                                                .tr);
-                                  } else {
-                                    askDialog(
-                                      content:
-                                          'machine_dispatch_dialog_delete_label_tips'
-                                              .tr,
-                                      confirm: () => _deleteLabel(
-                                        state.labelList[i].subLabelID ?? '',
-                                        () {
-                                          state.labelList.removeAt(i);
-                                          state.sizeItemList
-                                              .firstWhere((v1) =>
-                                                  v1.size ==
-                                                  state.labelList[i].size)
-                                              .labelQty -= 1;
-                                          state.sizeItemList.refresh();
-                                        },
-                                      ),
-                                    );
-                                  }
-                                },
-                                icon: const Icon(
-                                  Icons.delete_forever,
-                                  color: Colors.red,
-                                ),
-                              )
-                            : null,
-                      ),
-                    ),
+                    itemBuilder: (_, i) => item(i),
                   ),
                 ),
-              ),
+              )
             ],
           ),
         ),
@@ -405,10 +472,10 @@ showLabelListDialog(BuildContext context) {
   );
 }
 
-_deleteLabel(
-  String labelId,
-  Function() callback,
-) {
+_deleteLabel({
+  required String labelId,
+  required Function() callback,
+}) {
   sapPost(
     loading: 'machine_dispatch_dialog_deleting_labels'.tr,
     method: webApiSapMaterialDispatchLabelMaintain,
@@ -434,7 +501,7 @@ teamLeaderVerifyDialog() {
   var countDown = 0;
   var workerNumber = '';
   var verificationCode = '';
-  state.leaderVerify.value = true;
+  // state.leaderVerify.value = true; //测试用
   Get.dialog(
     PopScope(
       canPop: false,
@@ -489,7 +556,10 @@ teamLeaderVerifyDialog() {
             onPressed: () => _checkManagerByCode(
               verificationCode,
               workerNumber,
-              () => state.leaderVerify.value = true,
+              () {
+                Get.back();
+                state.leaderVerify.value = true;
+              },
             ),
             child: Text(
               'dialog_default_confirm'.tr,
@@ -570,7 +640,6 @@ _checkManagerByCode(
     },
   ).then((response) {
     if (response.resultCode == resultSuccess) {
-      Get.back();
       callback.call();
     } else {
       errorDialog(content: response.message ?? 'query_default_error'.tr);
@@ -816,6 +885,253 @@ addDispatchWorker(DispatchProcessInfo data, Function() refresh) {
             child: Text(
               'dialog_default_confirm'.tr,
             ),
+          ),
+          TextButton(
+            onPressed: () => Get.back(),
+            child: Text(
+              'dialog_default_back'.tr,
+              style: const TextStyle(color: Colors.grey),
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+selectLabelTypeDialog({
+  required EnglishLabelInfo englishLabel,
+  required Function(double, String) printLast,
+  required Function(double, String) print,
+}) {
+  if (englishLabel.specificationsList?.isEmpty == true) {
+    errorDialog(content: '标签规格信息为空！');
+    return;
+  }
+  var workerNumberController = TextEditingController();
+  var vCodeController = TextEditingController();
+  var btName = 'get_verify_code'.tr.obs;
+  var isCheckedManager = false.obs;
+  var countTimer = 0;
+  var select = 0.obs;
+  double outerBoxWeight = englishLabel.outerBoxWeight ?? 0;
+
+  outerBoxWeight = 10;
+  Get.dialog(
+    PopScope(
+      canPop: false,
+      child: AlertDialog(
+        title: Row(
+          children: [
+            Expanded(
+              child: Text('machine_dispatch_dialog_select_dispatch_order'.tr),
+            ),
+            Container(
+              width: 210,
+              margin: const EdgeInsets.all(1),
+              height: 40,
+              child: TextField(
+                textAlign: TextAlign.center,
+                keyboardType: TextInputType.number,
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp("[0-9]"))
+                ],
+                controller: workerNumberController,
+                decoration: InputDecoration(
+                  contentPadding: const EdgeInsets.only(
+                    top: 0,
+                    bottom: 0,
+                    left: 15,
+                    right: 10,
+                  ),
+                  filled: true,
+                  fillColor: Colors.grey.shade200,
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(25),
+                    borderSide: const BorderSide(
+                      color: Colors.transparent,
+                    ),
+                  ),
+                  border: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(25)),
+                  ),
+                  labelText: '班组长工号',
+                  hintStyle: const TextStyle(color: Colors.white),
+                  suffixIcon: Obx(() => CombinationButton(
+                        text: btName.value,
+                        isEnabled: btName.value == 'get_verify_code'.tr,
+                        click: () =>
+                            _sendManagerCode(workerNumberController.text, () {
+                          isCheckedManager.value = true;
+                          Timer.periodic(
+                            const Duration(milliseconds: 1000),
+                            (timer) {
+                              countTimer++;
+                              if (countTimer == 60) {
+                                timer.cancel();
+                                countTimer = 0;
+                                btName.value = 'get_verify_code'.tr;
+                              } else {
+                                btName.value = (60 - countTimer).toString();
+                              }
+                            },
+                          );
+                        }),
+                      )),
+                ),
+              ),
+            )
+          ],
+        ),
+        content: SizedBox(
+          width: 450,
+          height: 300,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Row(children: [
+                Obx(() => Expanded(
+                      child: isCheckedManager.value
+                          ? NumberDecimalEditText(
+                              hint: '请输入实际一双重量（克）',
+                              initQty: outerBoxWeight,
+                              onChanged: (v) {
+                                outerBoxWeight = v;
+                              },
+                            )
+                          : textSpan(
+                              hint: '实际一双重量（克）：',
+                              text: outerBoxWeight.toShowString(),
+                            ),
+                    )),
+                Container(
+                  width: 180,
+                  margin: const EdgeInsets.all(1),
+                  height: 40,
+                  child: TextField(
+                    textAlign: TextAlign.center,
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(RegExp("[0-9]"))
+                    ],
+                    controller: vCodeController,
+                    decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.only(
+                        top: 0,
+                        bottom: 0,
+                        left: 15,
+                        right: 10,
+                      ),
+                      filled: true,
+                      fillColor: Colors.grey.shade200,
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(25),
+                        borderSide: const BorderSide(
+                          color: Colors.transparent,
+                        ),
+                      ),
+                      border: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(25)),
+                      ),
+                      labelText: '验证码',
+                      hintStyle: const TextStyle(color: Colors.white),
+                      suffixIcon: CombinationButton(
+                        text: '班组长验证',
+                        click: () => _checkManagerByCode(
+                          vCodeController.text,
+                          workerNumberController.text,
+                          () => isCheckedManager.value = true,
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+              ]),
+              const SizedBox(height: 10),
+              Text(
+                '外箱规格',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blue,
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  padding: const EdgeInsets.all(5),
+                  margin: const EdgeInsets.only(bottom: 5),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.white,
+                    border: Border.all(
+                      color: Colors.blue,
+                      width: 2,
+                    ),
+                  ),
+                  child: ListView.builder(
+                    itemCount: englishLabel.specificationsList!.length,
+                    itemBuilder: (c, i) => Obx(() => GestureDetector(
+                          onTap: () => select.value = i,
+                          child: Container(
+                            padding: const EdgeInsets.all(5),
+                            margin: const EdgeInsets.only(bottom: 8),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: select.value == i
+                                  ? Colors.blue.shade100
+                                  : Colors.white,
+                              border: Border.all(
+                                color: select.value == i
+                                    ? Colors.blue
+                                    : Colors.grey,
+                                width: 2,
+                              ),
+                            ),
+                            child: Text(
+                              englishLabel
+                                      .specificationsList![i].specifications ??
+                                  '',
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        )),
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              if (outerBoxWeight > 0) {
+                Get.back();
+                printLast.call(
+                  outerBoxWeight,
+                  englishLabel
+                          .specificationsList![select.value].specifications ??
+                      '',
+                );
+              } else {
+                errorDialog(content: '实际一双重量必须大于0！');
+              }
+            },
+            child: Text('打印尾箱'),
+          ),
+          TextButton(
+            onPressed: () {
+              if (outerBoxWeight > 0) {
+                Get.back();
+                print.call(
+                  outerBoxWeight,
+                  englishLabel
+                          .specificationsList![select.value].specifications ??
+                      '',
+                );
+              } else {
+                errorDialog(content: '实际一双重量必须大于0！');
+              }
+            },
+            child: Text('打印'),
           ),
           TextButton(
             onPressed: () => Get.back(),

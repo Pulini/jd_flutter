@@ -611,7 +611,8 @@ class Translation extends Translations {
           'machine_dispatch_modify_error_tips': '已工资汇报，请先删除工资汇报！',
           'machine_dispatch_modify_tips': '确定要修改当前工单的模具和箱容吗？',
           'machine_dispatch_label_history': '历史贴标',
-          'machine_dispatch_generate_and_print': '生成并打印',
+          'machine_dispatch_generate_and_print': '生成并打印中文标',
+          'machine_dispatch_generate_and_print_english': '生成并打印英文标',
           'machine_dispatch_process_manual': '工艺指导书',
           'machine_dispatch_production_report': '产量汇报',
           'machine_dispatch_cancel_number_confirmation': '取消工号确认',
@@ -700,7 +701,7 @@ class Translation extends Translations {
           'machine_dispatch_dialog_enter_quantity_tips': '请正确填写分配数量',
           'machine_dispatch_dialog_create_and_print': '生成并打印',
           'machine_dispatch_dialog_print_tips': '确定要打印标签吗',
-          'machine_dispatch_dialog_print_last_label': '打印尾标',
+          'machine_dispatch_dialog_print_last_label': '打印尾箱',
           'machine_dispatch_dialog_print': '打印',
           'material_dispatch_last': '末道',
           'material_dispatch_material': '物料：<%s> %s',
@@ -3215,7 +3216,8 @@ class Translation extends Translations {
           'machine_dispatch_modify_tips':
               'Are you sure you want to modify the mold and box capacity of the current work order?',
           'machine_dispatch_label_history': 'Label history',
-          'machine_dispatch_generate_and_print': 'Generate and print',
+          'machine_dispatch_generate_and_print': 'Print chinese label',
+          'machine_dispatch_generate_and_print_english': 'Print english label',
           'machine_dispatch_process_manual': 'Process manual',
           'machine_dispatch_production_report': 'Production report',
           'machine_dispatch_cancel_number_confirmation':

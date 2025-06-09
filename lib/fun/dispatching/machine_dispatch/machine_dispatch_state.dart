@@ -23,7 +23,7 @@ class MachineDispatchState {
   var processSelect = 0.obs;
 
   var historyInfo = <MachineDispatchHistoryInfo>[].obs;
-  var historyLabelInfo = <ReprintLabelInfo>[].obs;
+  var historyLabelInfo = <MachineDispatchReprintLabelInfo>[].obs;
 
   createDispatchProcess() {
     var totalProduction = 0.0;
@@ -221,23 +221,30 @@ class MachineDispatchState {
           for (var json in response.data)
             SapLabelInfo.fromJson(response.data[json])
         ];
-        var labelList = <ReprintLabelInfo>[];
+        var labelList = <MachineDispatchReprintLabelInfo>[];
         for (var v1 in list) {
           v1.item?.forEach((v2) {
-            labelList.add(ReprintLabelInfo(
+            labelList.add(MachineDispatchReprintLabelInfo(
               number: v1.number ?? '',
               labelID: v2.subLabelID ?? '',
               processes: historyInfo[index].processFlow ?? '',
               qty: v2.qty ?? 0,
               size: v2.size ?? '',
-              factoryType: historyInfo[index].factoryType ?? '',
+              factoryType: historyInfo[index].factoryType??'',
               date: v1.date ?? '',
               materialName: historyInfo[index].materialName ?? '',
               unit: v2.unit ?? '',
               machine: historyInfo[index].machine ?? '',
               shift: historyInfo[index].shift ?? '',
-              dispatchNumber: historyInfo[index].dispatchNumber ?? '',
+              dispatchNumber: nowDispatchNumber.value,
               decrementNumber: historyInfo[index].decrementNumber ?? '',
+              isLastLabel: v2.isLastLabel,
+              isEnglish: v2.type=='01',
+              specifications: v2.specifications,
+              netWeight:v2.netWeight.toDoubleTry(),
+              grossWeight:v2.grossWeight.toDoubleTry(),
+              englishName:v2.englishName??'',
+              englishUnit:v2.englishUnit??'',
             ));
           });
         }
@@ -396,7 +403,10 @@ class MachineDispatchState {
     required double printQty,
     required String sizeMaterialNumber,
     required String size,
-    required Function(String, String) success,
+    required bool isEnglish,
+    required String specifications,
+    required double weight,
+    required Function(LabelMaintainInfo) success,
     required Function(String) error,
   }) {
     sapPost(
@@ -412,10 +422,13 @@ class MachineDispatchState {
           'AEZET': getTimeHms(),
           'ZXR': printQty.toShowString(),
           'ZBQZT': '20',
+          'ZZCJGG': specifications,
+          'ZBARCODE_TYPE': isEnglish ? '01' : '',
           'item': [
             {
+              'ZDHMNG': sizeMaterialNumber,
               'MATNR': sizeMaterialNumber,
-              'SIZE1_ATINN': size,
+              'SIZE1_ATINN': isEnglish ? weight : '',
               'MENGE': printQty,
             }
           ]
@@ -423,7 +436,7 @@ class MachineDispatchState {
       ],
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        success.call(response.data[0]['BQID'], response.data[0]['ZPQYM']);
+        success.call(LabelMaintainInfo.fromJson(response.data[0]));
       } else {
         error.call(response.message ?? 'query_default_error'.tr);
       }
@@ -496,6 +509,26 @@ class MachineDispatchState {
     ).then((response) {
       if (response.resultCode == resultSuccess) {
         success.call(response.message ?? '');
+      } else {
+        error.call(response.message ?? 'query_default_error'.tr);
+      }
+    });
+  }
+
+  getEnglishLabel({
+    required String code,
+    required Function(EnglishLabelInfo) success,
+    required Function(String msg) error,
+  }) {
+    sapPost(
+      loading: '正在取消工号确认...',
+      method: webApiSapGetMaterialDispatchEnglishLabel,
+      body: {
+        'MATNR': code,
+      },
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        success.call(EnglishLabelInfo.fromJson(response.data));
       } else {
         error.call(response.message ?? 'query_default_error'.tr);
       }
