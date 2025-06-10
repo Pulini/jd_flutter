@@ -11,10 +11,12 @@ class EditText extends StatelessWidget {
     this.hasFocus = false,
     this.controller,
     this.onChanged,
+    this.isEnable = true,
   });
 
   final String? initStr;
   final bool hasFocus;
+  final bool isEnable;
   final String? hint;
   final Function(String v)? onChanged;
   final TextEditingController? controller;
@@ -30,6 +32,7 @@ class EditText extends StatelessWidget {
       margin: const EdgeInsets.all(5),
       height: 40,
       child: TextField(
+        enabled: isEnable,
         controller: this.controller ?? controller,
         onChanged: (v) {
           onChanged?.call(v);
@@ -81,6 +84,7 @@ class NumberDecimalEditText extends StatelessWidget {
     this.resetQty = 0,
     required this.onChanged,
     this.controller,
+    this.inputEnable=true,
   });
 
   final String? hint;
@@ -92,6 +96,7 @@ class NumberDecimalEditText extends StatelessWidget {
   final double resetQty;
   final Function(double) onChanged;
   final TextEditingController? controller;
+  final bool? inputEnable;
 
   @override
   Widget build(BuildContext context) {
@@ -115,6 +120,7 @@ class NumberDecimalEditText extends StatelessWidget {
       height: 40,
       margin: const EdgeInsets.all(5),
       child: TextField(
+        enabled: inputEnable,
         keyboardType: TextInputType.number,
         inputFormatters: [
           hasDecimal

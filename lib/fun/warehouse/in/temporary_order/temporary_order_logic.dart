@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/warehouse/in/temporary_order/temporary_order_detail_view.dart';
+import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
 import 'temporary_order_state.dart';
@@ -52,12 +53,39 @@ class TemporaryOrderLogic extends GetxController {
   viewTemporaryOrderDetail({
     required String temporaryNo,
     required String materialCode,
+    required Function()? success,
   }) {
     state.getTemporaryOrderDetail(
       temporaryNo: temporaryNo,
       materialCode: materialCode,
-      success:()=>Get.to(()=>const TemporaryOrderDetailPage()),
+      success: () {
+        Get.to(() => const TemporaryOrderDetailPage())?.then((v) {
+          if (v == true) {
+            success!.call();
+          }
+        });
+      },
       error: (msg) => errorDialog(content: msg),
     );
+  }
+
+  checkToInspection() {
+    var checkNum = 0;
+
+    state.detailInfo!.receipt
+        ?.where((data) => data.isSelected.value == true)
+        .toList()
+        .forEach((c) {
+      if (c.inspectionQuantity! > 0 || c.hasLengthCheckData!.isNotEmpty) {
+        checkNum = checkNum + 1;
+      }
+    });
+
+    if(checkNum>1){
+      showSnackBar(message: 'quality_inspection_have_already'.tr);
+      return false;
+    }else{
+      return true;
+    }
   }
 }

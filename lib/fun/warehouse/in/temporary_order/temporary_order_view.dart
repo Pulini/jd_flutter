@@ -266,7 +266,21 @@ class _TemporaryOrderPageState extends State<TemporaryOrderPage> {
                 text: 'temporary_order_view_detail'.tr,
                 click: () => logic.viewTemporaryOrderDetail(
                   temporaryNo: data.temporaryNo ?? '',
-                  materialCode: data.materialCode ?? '',
+                  materialCode: data.materialCode ?? '', success: () {
+                  logic.queryTemporaryOrders(
+                    startDate: dpcStartDate.getDateFormatYMD(),
+                    endDate: dpcEndDate.getDateFormatYMD(),
+                    temporaryNo: tecTemporaryNo.text,
+                    productionNumber: tecProductionOrderNo.text,
+                    factoryType: tecTypeBody.text,
+                    supplierName: opcSupplier.selectedId.value,
+                    materialCode: tecMaterialCode.text,
+                    factoryArea: opcCompany.selectedId.value,
+                    factoryNo: opcFactory.selectedId.value,
+                    userNumber: tecInspectorNumber.text,
+                    trackNo: tecTrackNo.text,
+                  );
+                },
                 ),
               ),
             ],

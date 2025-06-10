@@ -182,6 +182,7 @@ class TemporaryOrderDetailInfo {
   String? remarks;
   List<TemporaryOrderDetailReceiptInfo>? receipt;
 
+
   TemporaryOrderDetailInfo({
     this.companyName,
     this.temporaryNumber,
@@ -231,6 +232,34 @@ class TemporaryOrderDetailInfo {
         receipt?.add(TemporaryOrderDetailReceiptInfo.fromJson(v));
       });
     }
+  }
+
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['CompanyName'] = companyName;
+    map['TemporaryNumber'] = temporaryNumber;
+    map['TemporaryDate'] = temporaryDate;
+    map['SourceType'] = sourceType;
+    map['SupplierName'] = supplierName;
+    map['DeliveryNumber'] = deliveryNumber;
+    map['ProducerNumber'] = producerNumber;
+    map['ProducerName'] = producerName;
+    map['ProducerDate'] = producerDate;
+    map['Reviewer'] = reviewer;
+    map['AuditDate'] = auditDate;
+    map['Reviser'] = reviser;
+    map['ModificationDate'] = modificationDate;
+    map['CompanyNumber'] = companyNumber;
+    map['SupplierNumber'] = supplierNumber;
+    map['FactoryNumber'] = factoryNumber;
+    map['StorageLocationNumber'] = storageLocationNumber;
+    map['StorageLocationName'] = storageLocationName;
+    map['Remarks'] = remarks;
+    if (receipt != null) {
+      map['Receipt'] = receipt?.map((v) => v.toJson()).toList();
+    }
+    return map;
   }
 
   bool isSelectedAll() => receipt!
@@ -313,6 +342,7 @@ class TemporaryOrderDetailReceiptInfo {
   String? hasLengthCheckData;
   String? colorSeparation;
   String? result1;
+  double? samplingQuantity;
 
   TemporaryOrderDetailReceiptInfo({
     this.purchaseType,
@@ -347,6 +377,7 @@ class TemporaryOrderDetailReceiptInfo {
     this.hasLengthCheckData,
     this.colorSeparation,
     this.result1,
+    this.samplingQuantity,
   });
 
   TemporaryOrderDetailReceiptInfo.fromJson(dynamic json) {
@@ -382,6 +413,48 @@ class TemporaryOrderDetailReceiptInfo {
     hasLengthCheckData = json['HasLengthCheckData'];
     colorSeparation = json['ColorSeparation'];
     result1 = json['Result1'];
+    samplingQuantity = json['SamplingQuantity'];
+    isSelected.value = json['isSelected']??false;
+  }
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['PurchaseType'] = purchaseType;
+    map['ContractNo'] = contractNo;
+    map['PurchaseOrderLineNumber'] = purchaseOrderLineNumber;
+    map['PlanningLineNumber'] = planningLineNumber;
+    map['TemporaryLineNumber'] = temporaryLineNumber;
+    map['ProductionNumber'] = productionNumber;
+    map['FactoryModel'] = factoryModel;
+    map['DistributiveModel'] = distributiveModel;
+    map['DeliveryDate'] = deliveryDate;
+    map['MaterialCode'] = materialCode;
+    map['MaterialName'] = materialName;
+    map['MainMaterialCode'] = mainMaterialCode;
+    map['MainMaterialName'] = mainMaterialName;
+    map['Specification'] = specification;
+    map['QuantityTemporarilyReceived'] = quantityTemporarilyReceived;
+    map['Size'] = size;
+    map['InspectionQuantity'] = inspectionQuantity;
+    map['QualifiedQuantity'] = qualifiedQuantity;
+    map['UnqualifiedQuantity'] = unqualifiedQuantity;
+    map['EnterWarehouseQuantity'] = enterWarehouseQuantity;
+    map['Remarks'] = remarks;
+    map['DeliveryOrderLineNumber'] = deliveryOrderLineNumber;
+    map['BasicQuantity'] = basicQuantity;
+    map['Coefficient'] = coefficient;
+    map['CommonUnits'] = commonUnits;
+    map['BasicUnits'] = basicUnits;
+    map['FullInspection'] = fullInspection;
+    map['CanColorSeparation'] = canColorSeparation;
+    map['MissingQuantity'] = missingQuantity;
+    map['HasLengthCheckData'] = hasLengthCheckData;
+    map['ColorSeparation'] = colorSeparation;
+    map['Result1'] = result1;
+    map['SamplingQuantity'] = samplingQuantity;
+    map['isSelected'] = isSelected.value;
+
+    return map;
   }
 
   String getTestStateText() {

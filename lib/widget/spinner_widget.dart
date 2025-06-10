@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/utils/utils.dart';
 
-
 class SpinnerController {
   var select = ''.obs;
   var selectIndex = 0;
@@ -40,7 +39,9 @@ class SpinnerController {
       var index = dataList.indexOf(value);
       if (index != -1) {
         selectIndex = index;
-        spSave(saveKey!, value);
+        if (saveKey != null && saveKey?.isNotEmpty == true) {
+          spSave(saveKey!, value);
+        }
       }
       onChanged?.call(selectIndex);
     }
@@ -67,15 +68,15 @@ class Spinner extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
       ),
       child: Obx(() => DropdownButton<String>(
-        isExpanded: true,
-        value: controller.select.value,
-        underline: Container(height: 0),
-        onChanged: (String? value) => controller.changeSelected(value),
-        items: controller.dataList
-            .map<DropdownMenuItem<String>>((String value) =>
-            DropdownMenuItem<String>(value: value, child: Text(value)))
-            .toList(),
-      )),
+            isExpanded: true,
+            value: controller.select.value,
+            underline: Container(height: 0),
+            onChanged: (String? value) => controller.changeSelected(value),
+            items: controller.dataList
+                .map<DropdownMenuItem<String>>((String value) =>
+                    DropdownMenuItem<String>(value: value, child: Text(value)))
+                .toList(),
+          )),
     );
   }
 }

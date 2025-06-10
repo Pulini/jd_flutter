@@ -1225,3 +1225,34 @@ const webApiDelLabelingBarcode = "api/ShearOff/DelLabelingBarcode";
 
 //打印传递打印次数
 const webApiUpdatePartsPrintTimes = "api/WetPrinting/UpdatePartsPrintTimes";
+
+//获取组别工单列表
+const webApiGetProductionOrderST = "api/Package/GetProductionOrderST";
+
+//获取品检单列表
+const webApiGetInspectionList = "api/Inspection/GetInspectionList";
+
+//创建品检单(删除)
+const webApiCreateInspection = "api/Inspection/CreateInspection";
+
+//采购订单条码扫描入库（SAP）
+const webApiPurchaseOrderStockInForQuality = "api/Package/PurchaseOrderStockIn";
+
+//微信,APP获取SAP品质检验单单条数据
+const webApiGetQualityInspection = "api/Inspection/GetQualityInspection";
+
+//微信,APP获取SAP品质检验单单条数据(编辑)
+const webApiGetQualityInspectionList = "api/DeliveryNote/GetQualityInspectionList";
+
+//入库冲销获取色系信息
+const webApiForSapReceiptReversal = "sap/zapp/ZFUN_GET_ZCHECKB_COSEP";
+
+//品检单冲销
+const webApiPurchaseOrderStockInNew = "api/Package/PurchaseOrderStockIn_Off";
+
+//材料品质异常 品检不合格原因到OA
+const webApiAbnormalMaterialQuality = "api/Inspection/AbnormalMaterialQuality";
+
+
+
+

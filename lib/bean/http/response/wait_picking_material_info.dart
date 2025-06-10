@@ -211,8 +211,7 @@ class WaitPickingMaterialOrderInfo {
 
   bool canBatchModify() =>
       items!.where((v) => v.models!.any((v2) => v2.isSelected.value)).length >
-          1 ||
-      items!.every((v) => v.models!.any((v2) => v2.isSelected.value));
+          1 || items!.every((v) => v.models!.any((v2) => v2.isSelected.value));
 
   bool batchDataNull() =>
       items!.every((v) => v.models!.every((v2) => v2.batch?.isEmpty == true));

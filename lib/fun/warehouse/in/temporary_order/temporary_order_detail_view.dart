@@ -1,10 +1,15 @@
+
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/temporary_order_info.dart';
+import 'package:jd_flutter/fun/warehouse/in/quality_inspection/stuff_quality_inspection_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/temporary_order/temporary_order_dialog.dart';
 import 'package:jd_flutter/fun/warehouse/in/temporary_order/temporary_order_logic.dart';
 import 'package:jd_flutter/fun/warehouse/in/temporary_order/temporary_order_state.dart';
 import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/check_box_widget.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
@@ -163,24 +168,35 @@ class _TemporaryOrderDetailPageState extends State<TemporaryOrderDetailPage> {
         if (itemCanSelect)
           Obx(() => CombinationButton(
                 combination: Combination.left,
-                isEnabled: detail.receipt!.any((v) => v.isSelected.value),
+                isEnabled: detail.receipt!.any((v) => v.isSelected!.value),
                 text: 'temporary_order_detail_test_application'.tr,
                 click: () => testApplicationDialog(
                   temporaryOrderNumber: detail.temporaryNumber ?? '',
                   selectedList:
-                      detail.receipt!.where((v) => v.isSelected.value).toList(),
+                      detail.receipt!.where((v) => v.isSelected!.value).toList(),
                 ),
               )),
         if (itemCanSelect)
           Obx(() => CombinationButton(
                 combination: Combination.right,
-                isEnabled: detail.receipt!.any((v) => v.isSelected.value),
+                isEnabled: detail.receipt!.any((v) => v.isSelected!.value),
                 text: 'temporary_order_detail_inspection'.tr,
-                click: () => checkUserPermission('105180501')
-                    ? Get.to('')
-                    : errorDialog(
-                        content: 'temporary_order_detail_no_permission'.tr,
-                      ),
+                click: (){
+                  logic.checkToInspection();
+                  checkUserPermission('105180501')
+                      ? Get.to(() => const StuffQualityInspectionPage(), arguments: {
+                    'inspectionType': '2',
+                    'temporaryDetail': jsonEncode(state.detailInfo!.toJson()),
+                    //品检单列表
+                  })?.then((v) {
+                    if (v == true) {
+                        Get.back(result: true); //结束界面
+                    }
+                  })
+                      : errorDialog(
+                    content: 'temporary_order_detail_no_permission'.tr,
+                  );
+                }
               )),
         const SizedBox(width: 10)
       ],

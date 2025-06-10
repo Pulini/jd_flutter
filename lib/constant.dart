@@ -1,4 +1,5 @@
 const String dadPhone = '15267733701';
+const String dadPwd = '111111';
 const jdDatabase = 'jd_app.db';
 const spSaveLoginPhone = 'login_phone';
 const spSaveLoginFace = 'login_face';
@@ -57,5 +58,6 @@ const spSaveDeliveryOrderStockInCheckLeader =
     'delivery_order_stock_in_check_leader';
 const processDispatchType =
     'process_dispatch_submit_type';
-
 const spSavePurchaseOrderWarehousingCheckLeader = 'purchase_order_warehousing_check_leader';
+
+

@@ -110,9 +110,6 @@ class TemporaryOrderState {
     ).then((response) {
       if (response.resultCode == resultSuccess) {
         detailInfo = TemporaryOrderDetailInfo.fromJson(response.data);
-        detailInfo?.receipt?.forEach((v){
-          v.quantityTemporarilyReceived=99;
-        });
         success.call();
       } else {
         detailInfo = null;
