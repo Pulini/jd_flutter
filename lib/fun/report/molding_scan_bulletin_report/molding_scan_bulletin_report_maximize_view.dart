@@ -149,28 +149,24 @@ class _MoldingScanBulletinReportMaximizeState
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: backgroundColor,
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        appBar: AppBar(backgroundColor: Colors.transparent),
-        body: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                _header(),
-                const SizedBox(height: 20),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Hero(
-                    tag: 'MSBR_table',
-                    child: getTable(),
-                  ),
-                ),
-              ],
-            )),
+    return pageBody(
+      body: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _header(),
+            const SizedBox(height: 20),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Hero(
+                tag: 'MSBR_table',
+                child: getTable(),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

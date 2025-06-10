@@ -734,3 +734,33 @@ class OrderStockItem extends PickerItem {
     return stockName ?? '';
   }
 }
+
+class PickerSapDestination extends PickerItem {
+  PickerSapDestination({
+    required this.destinationId,
+    required this.destinationName,
+  });
+
+  PickerSapDestination.fromJson(dynamic json) {
+    destinationId = json['ZADGE_RCVER'];
+    destinationName = json['ZADGE_RCVER_TEXT'];
+  }
+
+  String? destinationId;
+  String? destinationName;
+
+  @override
+  String pickerId() {
+    return destinationId??'';
+  }
+
+  @override
+  String pickerName() {
+    return destinationName ?? '';
+  }
+
+  @override
+  String toShow() {
+    return destinationName ?? '';
+  }
+}

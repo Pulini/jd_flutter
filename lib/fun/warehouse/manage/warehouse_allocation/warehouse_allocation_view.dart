@@ -134,8 +134,8 @@ class _WarehouseAllocationPageState extends State<WarehouseAllocationPage> {
             child: CombinationButton(
               text: 'warehouse_allocation_submit'.tr,
               click: () => logic.goReport(
-                onStockId: onStockList.getOptionsPicker2().pickerId(),
-                outStockId: outStockList.getOptionsPicker2().pickerId(),
+                onStockId: onStockList.getPickItem2().pickerId(),
+                outStockId: outStockList.getPickItem2().pickerId(),
               ),
             ),
           )

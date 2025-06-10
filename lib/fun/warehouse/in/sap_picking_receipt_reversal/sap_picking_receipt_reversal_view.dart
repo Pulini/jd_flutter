@@ -135,7 +135,7 @@ class _SapPickingReceiptReversalPageState
       orderType: orderType.value,
       startDate: dpcStartDate.getDateFormatYMD(),
       endDate: dpcEndDate.getDateFormatYMD(),
-      warehouse: factoryWarehouseController.getOptionsPicker2().pickerId(),
+      warehouse: factoryWarehouseController.getPickItem2().pickerId(),
     );
   }
 

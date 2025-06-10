@@ -87,14 +87,14 @@ class SapSurplusMaterialStockInLogic extends GetxController {
       var codeData = SurplusMaterialLabelInfo.fromJson(jsonDecode(code));
       if (state.materialList.isNotEmpty &&
           state.materialList[0].dispatchNumber != codeData.dispatchNumber) {
-        informationDialog(
+        msgDialog(
           content:
               'sap_surplus_material_stock_in_scan_wrong_order_label_tips'.tr,
         );
         return;
       }
       if (state.materialList.any((v) => v.number == codeData.stubBar)) {
-        informationDialog(
+        msgDialog(
           content:
               'sap_surplus_material_stock_in_surplus_material_already_scanned'
                   .tr,
@@ -102,13 +102,13 @@ class SapSurplusMaterialStockInLogic extends GetxController {
         return;
       }
       if (state.materialList.length == 3) {
-        informationDialog(
+        msgDialog(
             content:
                 'sap_surplus_material_stock_in_surplus_material_stock_in_tips！.tr,！');
         return;
       }
       if (await codeData.isExist()) {
-        informationDialog(
+        msgDialog(
           content: 'sap_surplus_material_stock_in_label_already_stock_in'.tr,
         );
         return;
@@ -132,13 +132,13 @@ class SapSurplusMaterialStockInLogic extends GetxController {
 
   bool checkSubmitData() {
     if (state.materialList.isEmpty) {
-      informationDialog(
+      msgDialog(
         content: 'sap_surplus_material_stock_in_no_data_submit'.tr,
       );
       return false;
     }
     if (state.materialList.any((v) => v.editQty <= 0)) {
-      informationDialog(
+      msgDialog(
         content:
             'sap_surplus_material_stock_in_input_surplus_material_weight_tips'
                 .tr,

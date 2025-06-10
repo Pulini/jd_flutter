@@ -139,7 +139,7 @@ class HomeState {
   changePassword({
     required String oldPassword,
     required String newPassword,
-    required String phone,
+    required String account,
     required Function(String msg) success,
     required Function(String msg) error,
   }) {
@@ -149,7 +149,7 @@ class HomeState {
       params: {
         'OldPassWord': oldPassword,
         'NewPassWord': newPassword,
-        'PhoneNumber': phone
+        'PhoneNumber': account
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {

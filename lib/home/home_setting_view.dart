@@ -403,7 +403,7 @@ class _UserSettingState extends State<UserSetting> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: backgroundColor,
+      decoration: backgroundColor(),
       alignment: Alignment.center,
       child: Stack(
         alignment: Alignment.center,

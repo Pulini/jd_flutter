@@ -30,7 +30,8 @@ enum PickerType {
   startDate,
   endDate,
   mesStockList,
-  mesBillStockList
+  mesBillStockList,
+  sapDestination
 }
 
 abstract class PickerController {
@@ -87,6 +88,8 @@ abstract class PickerController {
         return 'picker_type_mes_stock_list'.tr;
       case PickerType.mesBillStockList:
         return 'picker_type_order_stock_list'.tr;
+      case PickerType.sapDestination:
+        return 'picker_type_sap_destination'.tr;
       default:
         return 'Picker';
     }
@@ -134,6 +137,8 @@ abstract class PickerController {
         return getMesStockList;
       case PickerType.mesBillStockList:
         return getOrderStockList;
+      case PickerType.sapDestination:
+        return getSapDestination;
       default:
         return getDataListError;
     }
@@ -714,6 +719,29 @@ abstract class PickerController {
       return response.message;
     }
   }
+
+  //获取sap目的地列表
+  Future getSapDestination() async {
+    var response = await sapGet(method: webApiSapGetDestination);
+    if (response.resultCode == resultSuccess) {
+      try {
+        List<PickerItem> list = [];
+        list.addAll(await compute(
+          parseJsonToList,
+          ParseJsonParams(
+            response.data,
+            PickerSapDestination.fromJson,
+          ),
+        ));
+        return list;
+      } on Error catch (e) {
+        logger.e(e);
+        return 'json_format_error'.tr;
+      }
+    } else {
+      return response.message;
+    }
+  }
 }
 
 class OptionsPickerController extends PickerController {
@@ -731,6 +759,8 @@ class OptionsPickerController extends PickerController {
   final Function(PickerItem)? onChanged;
   final Function(PickerItem)? onSelected;
   String initId;
+
+ bool isReady()=>pickerItems.isNotEmpty;
 
   OptionsPickerController(
     super.pickerType, {
@@ -766,6 +796,8 @@ class OptionsPickerController extends PickerController {
           .toList();
     }
   }
+
+  PickerItem getPickItem() => pickerItems[selectItem];
 
   int getSave() {
     var select = selectItem;
@@ -828,6 +860,8 @@ class LinkOptionsPickerController extends PickerController {
   final Function(PickerItem, PickerItem)? onChanged;
   final Function(PickerItem, PickerItem)? onSelected;
 
+  isReady()=>pickerData.isNotEmpty;
+
   LinkOptionsPickerController(
     super.pickerType, {
     super.hasAll,
@@ -838,9 +872,9 @@ class LinkOptionsPickerController extends PickerController {
     this.onSelected,
   });
 
-  PickerItem getOptionsPicker1() => pickerData[selectItem1];
+  PickerItem getPickItem1() => pickerData[selectItem1];
 
-  PickerItem getOptionsPicker2() =>
+  PickerItem getPickItem2() =>
       pickerData[selectItem1].subList()[selectItem2];
 
   select(int item1, int item2) {
@@ -856,8 +890,8 @@ class LinkOptionsPickerController extends PickerController {
     if (saveKey != null && saveKey!.isNotEmpty) {
       spSave(saveKey!, '${pick1.pickerId()}@@@${pick2.pickerId()}');
     }
-    onSelected?.call(getOptionsPicker1(), getOptionsPicker2());
-    onChanged?.call(getOptionsPicker1(), getOptionsPicker2());
+    onSelected?.call(getPickItem1(), getPickItem2());
+    onChanged?.call(getPickItem1(), getPickItem2());
   }
 
   refreshItem2(int index) {
@@ -921,7 +955,7 @@ class LinkOptionsPickerController extends PickerController {
             pickerItems2.value = pickerData[selectItem1].subList();
             var pick2 = pickerItems2[selectItem2];
             selectedName.value = '${pick1.pickerName()}-${pick2.pickerName()}';
-            onSelected?.call(getOptionsPicker1(), getOptionsPicker2());
+            onSelected?.call(getPickItem1(), getPickItem2());
           }
         } else {
           loadingError.value = value as String;
@@ -1015,6 +1049,10 @@ class DatePickerController extends PickerController {
       }
     }
     return time;
+  }
+
+  DateTime getDate() {
+    return pickDate.value;
   }
 
   String getDateFormatYMD() {

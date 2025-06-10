@@ -28,7 +28,7 @@ class ProcessDispatchRegisterLogic extends GetxController {
     if (checkUserPermission('1052501')) {
       Get.to(() => const PrintLabelPage());
     } else {
-      informationDialog(content: 'process_dispatch_register_no_permission_tips'.tr);
+      msgDialog(content: 'process_dispatch_register_no_permission_tips'.tr);
     }
   }
 
@@ -60,7 +60,7 @@ class ProcessDispatchRegisterLogic extends GetxController {
         ),
       );
     } else {
-      informationDialog(content: 'process_dispatch_register_no_delete_permission'.tr);
+      msgDialog(content: 'process_dispatch_register_no_delete_permission'.tr);
     }
   }
 }

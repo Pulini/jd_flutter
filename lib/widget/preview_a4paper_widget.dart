@@ -37,17 +37,18 @@ class _PreviewA4PaperState extends State<PreviewA4Paper> {
   @override
   void initState() {
     super.initState();
-    for (var paper in widget.paperWidgets) {
-      widgetList.add(WidgetsToImage(
-        child: paper,
-        image: (i) => a4PaperImageResize(i).then(
-          (v) => a4PaperList.add(base64Encode(v)),
-        ),
-        // image: (i) => a4PaperImageResize(i).then(
-        //   (v) => a4PaperList.add(base64Encode(v)),
-        // ),
-      ));
-    }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      for (var paper in widget.paperWidgets) {
+        widgetList.add(WidgetsToImage(
+          child: paper,
+          image: (i) async => a4PaperList.add(
+            base64Encode(
+              await a4PaperImageResize(i),
+            ),
+          ),
+        ));
+      }
+    });
   }
 
   @override

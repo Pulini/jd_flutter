@@ -290,7 +290,7 @@ class ProductionDispatchLogic extends GetxController {
               content: 'production_dispatch_selected_has_timeout_order'.tr);
           return;
         }
-        informationDialog(
+        msgDialog(
           content: 'production_dispatch_push_tips'.trArgs([
             selectList.length.toString(),
           ]),

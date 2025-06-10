@@ -10,7 +10,6 @@ import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
-
 class VisitRegisterDetailPage extends StatefulWidget {
   //来访登记详情页 离场
   const VisitRegisterDetailPage({super.key});
@@ -174,7 +173,7 @@ class _VisitRegisterDetailPageState extends State<VisitRegisterDetailPage> {
             onPressed: () {
               logic.updateLeaveFVisit();
             },
-            child:  Text(
+            child: Text(
               'visit_departure'.tr,
               style: const TextStyle(color: Colors.white),
             )),
@@ -237,8 +236,7 @@ class _VisitRegisterDetailPageState extends State<VisitRegisterDetailPage> {
         child: GestureDetector(
           onTap: () {
             if (index == 5) {
-              informationDialog(
-                  content: 'visit_details_unable_to_add_more_images'.tr);
+              msgDialog(content: 'visit_details_unable_to_add_more_images'.tr);
             } else {
               if (data.typeAdd == "0") {
                 takePhoto(callback: (f) {
@@ -379,24 +377,17 @@ class _VisitRegisterDetailPageState extends State<VisitRegisterDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: backgroundColor,
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          title: Text('visit_document_details'.tr),
-        ),
-        body: ListView(
-          padding: const EdgeInsets.only(left: 20, right: 20),
-          children: [
-            const SizedBox(height: 10),
-            ..._textList(state.dataDetail), //详情内容
-            _comeListView(),
-            _leaveListView(),
-            if (state.dataDetail.leaveTime!.isEmpty) _clickButton(),
-          ],
-        ),
+    return pageBody(
+      title: 'visit_document_details'.tr,
+      body: ListView(
+        padding: const EdgeInsets.only(left: 20, right: 20),
+        children: [
+          const SizedBox(height: 10),
+          ..._textList(state.dataDetail), //详情内容
+          _comeListView(),
+          _leaveListView(),
+          if (state.dataDetail.leaveTime!.isEmpty) _clickButton(),
+        ],
       ),
     );
   }

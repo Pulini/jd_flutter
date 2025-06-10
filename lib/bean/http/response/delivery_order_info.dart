@@ -144,6 +144,14 @@ class DeliveryOrderInfo {
     });
     return deliveryQty;
   }
+
+  double deliveryBaseQty() {
+    var deliveryBaseQty = 0.0;
+    deliSize?.forEach((v) {
+      deliveryBaseQty = deliveryBaseQty.add(v.baseQty.toDoubleTry());
+    });
+    return deliveryBaseQty;
+  }
 }
 
 class DeliveryOrderSizeInfo {
@@ -290,11 +298,11 @@ class DeliveryOrderDetailInfo {
   });
 
   factory DeliveryOrderDetailInfo.fromJson(dynamic json) {
-   var data= DeliveryOrderDetailInfo(
+    var data = DeliveryOrderDetailInfo(
       deliveryNumber: json['DeliveryNumber'],
       contractNo: json['ContractNo'],
       salesAndDistributionVoucherNumber:
-      json['SalesAndDistributionVoucherNumber'],
+          json['SalesAndDistributionVoucherNumber'],
       planningLineNumber: json['PlanningLineNumber'],
       factoryType: json['FactoryType'],
       companyNumber: json['CompanyNumber'],
@@ -324,8 +332,8 @@ class DeliveryOrderDetailInfo {
       deliveryDetailItem: json['DeliveryDetailItem'] == null
           ? []
           : (json['DeliveryDetailItem'] as List)
-          .map((i) => DeliveryOrderDetailItemInfo.fromJson(i))
-          .toList(),
+              .map((i) => DeliveryOrderDetailItemInfo.fromJson(i))
+              .toList(),
       inspector: json['Inspector'],
       inspectDate: json['InspectDate'],
       inspectTime: json['InspectTime'],
@@ -333,14 +341,14 @@ class DeliveryOrderDetailInfo {
       locationName: json['LocationName'],
       division: json['Division'],
     );
-   if(data.modifier?.isEmpty==true){
-     data.modifyDate='';
-   }
-   if(data.inspector?.isEmpty==true){
-     data.deliveryDetailItem?.forEach((v){
-       v.checkQuantity=v.deliverySumQty;
-     });
-   }
+    if (data.modifier?.isEmpty == true) {
+      data.modifyDate = '';
+    }
+    if (data.inspector?.isEmpty == true) {
+      data.deliveryDetailItem?.forEach((v) {
+        v.checkQuantity = v.deliverySumQty;
+      });
+    }
     return data;
   }
 }
@@ -463,15 +471,15 @@ class DeliveryOrderDetailSizeInfo {
   }
 }
 
-class ReversalLabelInfo{
-  String? pieceNo;//件号-标签 ZPIECE_NO
-  String? materialCode;//物料编号 MATNR
-  String? materialName;//物料描述 ZMAKTX
-  String? quantity;//装箱数量 ZXNUM
-  String? unit;//单位 MEINS
-  String? volume;//体积 LADEVOL
-  String? grossWeight;//毛重  BRGEW
-  String? netWeight;//净重  NTGEW
+class ReversalLabelInfo {
+  String? pieceNo; //件号-标签 ZPIECE_NO
+  String? materialCode; //物料编号 MATNR
+  String? materialName; //物料描述 ZMAKTX
+  String? quantity; //装箱数量 ZXNUM
+  String? unit; //单位 MEINS
+  String? volume; //体积 LADEVOL
+  String? grossWeight; //毛重  BRGEW
+  String? netWeight; //净重  NTGEW
 
   ReversalLabelInfo({
     required this.pieceNo,
@@ -483,6 +491,7 @@ class ReversalLabelInfo{
     required this.grossWeight,
     required this.netWeight,
   });
+
   factory ReversalLabelInfo.fromJson(dynamic json) {
     return ReversalLabelInfo(
       pieceNo: json['PIECE_NO'],
@@ -494,5 +503,86 @@ class ReversalLabelInfo{
       grossWeight: json['BRGEW'],
       netWeight: json['NTGEW'],
     );
- }
+  }
+}
+
+class DeliveryOrderPieceInfo {
+  String? pieceNo; //ZPICECE_NO  件号
+  double? volume; //LDEVOL  体积
+  double? grossWeight; //BRGEW  毛重
+  double? netWeight; //NTGEW  净重
+  String? date; //ZMADAT  生产日期
+  String? materialCategory; //ZMATNRCAT  物料类别
+  List<DeliveryOrderLabelInfo>? labelList; //GT_ITEMS  子项
+
+  DeliveryOrderPieceInfo({
+    required this.pieceNo,
+    required this.volume,
+    required this.grossWeight,
+    required this.netWeight,
+    required this.date,
+    required this.materialCategory,
+    required this.labelList,
+  });
+
+  factory DeliveryOrderPieceInfo.fromJson(dynamic json) {
+    return DeliveryOrderPieceInfo(
+      pieceNo: json['ZPIECE_NO'],
+      volume: json['LADEVOL'],
+      grossWeight: json['BRGEW'],
+      netWeight: json['NTGEW'],
+      date: json['ZMADAT'],
+      materialCategory: json['ZMATNRCAT'],
+      labelList: [
+        if (json['GT_ITEMS'] != null)
+          for (var item in json['GT_ITEMS'])
+            DeliveryOrderLabelInfo.fromJson(item)
+      ],
+    );
+  }
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['ZPIECE_NO'] = pieceNo;
+    map['LADEVOL'] = volume;
+    map['BRGEW'] = grossWeight;
+    map['NTGEW'] = netWeight;
+    map['ZMATNRCAT'] = materialCategory;
+    map['GT_ITEMS'] = labelList!.map((e) => e.toJson()).toList();
+    return map;
+  }
+}
+
+class DeliveryOrderLabelInfo {
+  String? labelNumber; //BQID  标签id
+  String? materialCode; //MATNR  物料编号
+  String? materialName; //ZMAKTX  物料描述
+  double? quantity; //ZXNUM  数量
+  String? unit; //MEINS  单位
+
+  DeliveryOrderLabelInfo({
+    required this.labelNumber,
+    required this.materialCode,
+    required this.materialName,
+    required this.quantity,
+    required this.unit,
+  });
+
+  factory DeliveryOrderLabelInfo.fromJson(dynamic json) {
+    return DeliveryOrderLabelInfo(
+      labelNumber: json['BQID'],
+      materialCode: json['MATNR'],
+      materialName: json['ZMAKTX'],
+      quantity: json['ZXNUM'],
+      unit: json['MEINS'],
+    );
+  }
+  Map<String, dynamic> toJson() {
+    return {
+      'BQID': labelNumber,
+      'MATNR': materialCode,
+      'ZMAKTX': materialName,
+      'ZXNUM': quantity,
+      'MEINS': unit,
+    };
+  }
 }

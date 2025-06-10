@@ -63,7 +63,7 @@ class _SignaturePageState extends State<SignaturePage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: backgroundColor,
+      decoration: backgroundColor(),
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
@@ -247,7 +247,7 @@ class _SignatureWithWorkerNumberPageState
     );
 
     return Container(
-      decoration: backgroundColor,
+      decoration: backgroundColor(),
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(

@@ -213,8 +213,8 @@ class _SapPrintPickingPageState extends State<SapPrintPickingPage> {
       startDate: dpcStartDate.getDateFormatSapYMD(),
       endDate: dpcEndDate.getDateFormatSapYMD(),
       workCenter: workCenterController.selectedId.value,
-      factory: factoryWarehouseController.getOptionsPicker1().pickerId(),
-      warehouse: factoryWarehouseController.getOptionsPicker2().pickerId(),
+      factory: factoryWarehouseController.getPickItem1().pickerId(),
+      warehouse: factoryWarehouseController.getPickItem2().pickerId(),
       orderType: spinnerControllerWorkShop.selectIndex,
     );
   }

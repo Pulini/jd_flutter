@@ -171,10 +171,10 @@ class _SapPurchaseStockInPageState extends State<SapPurchaseStockInPage> {
                           startDate: dpcStartDate.getDateFormatSapYMD(),
                           endDate: dpcEndDate.getDateFormatSapYMD(),
                           factory: factoryWarehouseController
-                              .getOptionsPicker1()
+                              .getPickItem1()
                               .pickerId(),
                           warehouse: factoryWarehouseController
-                              .getOptionsPicker2()
+                              .getPickItem2()
                               .pickerId(),
                           supplier: supplierController.selectedId.value,
                           company: companyController.selectedId.value,
@@ -373,8 +373,8 @@ class _SapPurchaseStockInPageState extends State<SapPurchaseStockInPage> {
       deliNo: deliveryOrderController.text,
       startDate: dpcStartDate.getDateFormatSapYMD(),
       endDate: dpcEndDate.getDateFormatSapYMD(),
-      factory: factoryWarehouseController.getOptionsPicker1().pickerId(),
-      warehouse: factoryWarehouseController.getOptionsPicker2().pickerId(),
+      factory: factoryWarehouseController.getPickItem1().pickerId(),
+      warehouse: factoryWarehouseController.getPickItem2().pickerId(),
       supplier: supplierController.selectedId.value,
       company: companyController.selectedId.value,
     );

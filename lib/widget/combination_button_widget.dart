@@ -4,24 +4,25 @@ enum Combination { left, middle, right, intact }
 
 //自定义按钮
 class CombinationButton extends StatelessWidget {
-  final Combination? combination;
-  final Color? backgroundColor;
-  final Color? foregroundColor;
-  final bool? isEnabled;
+  final Combination combination;
+  final Color backgroundColor;
+  final Color foregroundColor;
+  final bool isEnabled;
+  final bool hasPadding;
   final String text;
   final Widget? icon;
   final Function() click;
 
-  const CombinationButton({
-    super.key,
-    required this.text,
-    required this.click,
-    this.icon,
-    this.combination = Combination.intact,
-    this.backgroundColor = Colors.blueAccent,
-    this.foregroundColor = Colors.white,
-    this.isEnabled = true,
-  });
+  const CombinationButton(
+      {super.key,
+      required this.text,
+      required this.click,
+      this.icon,
+      this.combination = Combination.intact,
+      this.backgroundColor = Colors.blue,
+      this.foregroundColor = Colors.white,
+      this.isEnabled = true,
+      this.hasPadding = true});
 
   EdgeInsets getPadding() {
     EdgeInsets padding;
@@ -74,7 +75,7 @@ class CombinationButton extends StatelessWidget {
     );
     return Container(
       height: 40,
-      padding: getPadding(),
+      padding: hasPadding ? getPadding() : const EdgeInsets.all(0),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           overlayColor: Colors.white,
@@ -91,17 +92,17 @@ class CombinationButton extends StatelessWidget {
         },
         child: icon != null
             ? Text.rich(
-          TextSpan(
-            style: textStyle,
-            children: [
-              WidgetSpan(
-                child: icon!,
-                alignment: PlaceholderAlignment.middle,
-              ),
-              TextSpan(text: text),
-            ],
-          ),
-        )
+                TextSpan(
+                  style: textStyle,
+                  children: [
+                    WidgetSpan(
+                      child: icon!,
+                      alignment: PlaceholderAlignment.middle,
+                    ),
+                    TextSpan(text: text),
+                  ],
+                ),
+              )
             : Text(text, style: textStyle),
       ),
     );

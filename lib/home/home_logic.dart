@@ -20,20 +20,22 @@ class HomeLogic extends GetxController {
   void onInit() {
     super.onInit();
     userAvatar = Obx(
-      () => state.userPicUrl.value.isEmpty
+          () =>
+      state.userPicUrl.value.isEmpty
           ? const Icon(Icons.flutter_dash, color: Colors.white)
           : AspectRatio(
-              aspectRatio: 1 / 1,
-              child: ClipOval(
-                child: Image.network(
-                  userInfo!.picUrl!,
-                  errorBuilder: (ctx, err, st) => Image.asset(
-                    'assets/images/ic_logo.png',
-                    color: Colors.blue,
-                  ),
+        aspectRatio: 1 / 1,
+        child: ClipOval(
+          child: Image.network(
+            userInfo!.picUrl!,
+            errorBuilder: (ctx, err, st) =>
+                Image.asset(
+                  'assets/images/ic_logo.png',
+                  color: Colors.blue,
                 ),
-              ),
-            ),
+          ),
+        ),
+      ),
     );
   }
 
@@ -59,7 +61,7 @@ class HomeLogic extends GetxController {
     if (state.search.isEmpty) {
       list.addAll(
         functions.where((v) =>
-            v.classify == state.navigationBar[state.nBarIndex].className),
+        v.classify == state.navigationBar[state.nBarIndex].className),
       );
     } else {
       var bi = <ButtonItem>[];
@@ -72,7 +74,7 @@ class HomeLogic extends GetxController {
       }
       list.addAll(
         bi.where((v) =>
-            v.name.toUpperCase().contains(state.search.toUpperCase()) ||
+        v.name.toUpperCase().contains(state.search.toUpperCase()) ||
             v.description.toUpperCase().contains(state.search.toUpperCase())),
       );
     }
@@ -84,10 +86,11 @@ class HomeLogic extends GetxController {
     takePhoto(callback: (f) {
       state.changeUserAvatar(
         file: f,
-        success: (s) => showSnackBar(
-          title: 'home_user_setting_avatar_photo_sheet_title'.tr,
-          message: s,
-        ),
+        success: (s) =>
+            showSnackBar(
+              title: 'home_user_setting_avatar_photo_sheet_title'.tr,
+              message: s,
+            ),
         error: (s) => errorDialog(content: s),
       );
     }, title: 'home_user_setting_avatar_photo_sheet_title'.tr);
@@ -129,19 +132,25 @@ class HomeLogic extends GetxController {
       errorDialog(content: 'change_password_dialog_new_password'.tr);
       return;
     }
-    var phone = '';
+    var account = '';
     switch (spGet(spSaveLoginType)) {
       case spSaveLoginTypePhone:
-        phone = spGet(spSaveLoginPhone);
+        account = spGet(spSaveLoginPhone);
         break;
       case spSaveLoginTypeFace:
-        phone = spGet(spSaveLoginFace);
+        account = spGet(spSaveLoginFace);
+        break;
+      case spSaveLoginTypeWorkNumber:
+        account = spGet(spSaveLoginWork);
+        break;
+      case spSaveLoginTypeMachine:
+        account = spGet(spSaveLoginMachine);
         break;
     }
     state.changePassword(
       oldPassword: oldPassword,
       newPassword: newPassword,
-      phone: phone,
+      account: account,
       success: (msg) => successDialog(content: msg, back: () => Get.back()),
       error: (msg) => errorDialog(content: msg),
     );

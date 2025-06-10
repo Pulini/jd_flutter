@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/base_data.dart';
 import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/route.dart';
+import 'package:jd_flutter/utils/network_manager.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:logger/logger.dart';
 import 'package:uuid/uuid.dart';
@@ -102,8 +103,22 @@ Future<BaseData> sapPost({
   );
 }
 
-//用于开发时切换测试库
-var useTestUrl = false;
+//get请求
+Future<BaseData> sapGet({
+  String? loading,
+  required String method,
+  Map<String, dynamic>? params,
+  Object? body,
+}) {
+  return _doHttp(
+    loading: loading,
+    params: {...?params},
+    body: body,
+    baseUrl: baseUrlForSAP,
+    isPost: false,
+    method: method,
+  );
+}
 
 //初始化网络请求
 Future<BaseData> _doHttp({
@@ -114,7 +129,7 @@ Future<BaseData> _doHttp({
   Map<String, dynamic>? params,
   Object? body,
 }) async {
-  if (useTestUrl) {
+  if (Get.find<NetworkManager>().isTestUrl.value) {
     if (baseUrl == baseUrlForMES) {
       baseUrl = testUrlForMES;
     } else if (baseUrl == baseUrlForSAP) {
@@ -345,6 +360,9 @@ const webApiPickerMesStockList = 'api/Stock/GetStockList';
 
 //获取MES仓库列表
 const webApiPickerOrderStockList = 'api/Stock/GetBillStockList';
+
+//获取送货单绑定件号信息汇总
+const webApiSapGetDestination = 'sap/zapp/ZFUN_PDA_ZGD';
 
 //获取sap仓库库位列表接口
 const webApiPickerSapWarehouseStorageLocation =
@@ -644,6 +662,14 @@ const webApiSapGetMaterialDispatchLabelList = 'sap/zapp/ZFUN_APP_BARCODE_FETCH';
 //机台派工单--贴标维护
 const webApiSapMaterialDispatchLabelMaintain =
     'sap/zapp/ZFUN_APP_BARCODE_MAINTAIN';
+
+//机台派工单--获取英文贴标
+const webApiSapGetMaterialDispatchEnglishLabel =
+    'sap/zapp/ZFUN_APP_BARCODE_MEAS';
+
+//机台派工单--更新料头标信息
+const webApiUpdateSurplusMaterialLabelState =
+    'api/CompoundDispatching/UpdateScWorkCardStubBarPrintFlagJinZhen';
 
 //验证码发送接口
 const webApiSendManagerCode = 'api/Public/SendManagerCode';
@@ -1088,9 +1114,6 @@ const webApiGetScWorkCardDetail =
 const webApiClearBarCodeAndBoxQty =
     'api/CompoundDispatching/ClearBarCodeAndBoxQtyJinZhen';
 
-//获取已入库的贴标列表
-const webApiForSAPGetStockInBarCodeList = 'sap/zapp/ZFUN_APP_BARCODE_FETCH';
-
 //修改派工表_金臻 (产量汇报)
 const webApiUpdateScWorkCard =
     'api/CompoundDispatching/UpdateScWorkCardJinZhen';
@@ -1151,6 +1174,18 @@ const webApiReversalStockIn =
 const webApiReversalStockOut =
     'api/DeliveryNote/SAPPackagingMaterialBatchOutsourcing_Off';
 
+//供应商所属标签信息列表
+const webApiSapGetSupplierLabelInfo = 'sap/zapp/ZMM_GET_DELIBQ';
+
+//获取送货单和件号绑定暂存数据
+const webApiSapGetLabelBindingStaging = 'sap/zapp/ZMM_GET_DELIPIE_TMP';
+
+//暂存SAP标签绑定已扫标签
+const webApiSapStagingLabelBinding = 'sap/zapp/ZMM_RES_DELIPIE_TMP';
+
+//提交SAP标签绑定
+const webApiSapSubmitLabelBinding = 'sap/zapp/ZMM_RES_DELI_PIECE';
+
 //批量生成暂收单
 const webApiCreateTemporary = 'api/DeliveryNote/TemporaryBatchGeneration';
 
@@ -1203,7 +1238,57 @@ const webApiPurchaseOrderStockIn = 'api/Package/PurchaseOrderStockInPic';
 const webApiSapGetReceiptVoucherList = 'sap/zapp/ZFUN_GET_ZCGSLTZD_CX';
 
 //采购订单入库冲销
-const webApiSapPurchaseOrderReversal= 'api/Package/PurchaseOrderStockInPic_Off';
+const webApiPurchaseOrderReversal = 'api/Package/PurchaseOrderStockInPic_Off';
+
+//品检工单查询
+const webApiSapGetQualityInspectionOrders = 'sap/zapp/ZFUN_APP_PJ_ORDERQUERY';
+
+//获取品检工单详情
+const webApiSapGetQualityInspectionOrderDetail =
+    'sap/zapp/ZFUN_APP_PJ_ORDERDETAILQUERY';
+
+//添加品检异常记录
+const webApiSapAddAbnormalRecord = 'sap/zapp/ZFUN_APP_PJ_ORDERTESTADD';
+
+//修改品检异常记录状态
+const webApiSapModifyAbnormalRecord = 'sap/zapp/ZFUN_APP_PJ_ORDERTESTEDIT';
+
+//删除品检异常记录
+const webApiSapDeleteAbnormalRecord = 'sap/zapp/ZFUN_APP_PJ_ORDERTESTDEL';
+
+//品检提交质检完成标识
+const webApiSapInspectionCompleted = 'sap/zapp/ZFUN_APP_PJ_ORDERTESTCOMP';
+
+//获取质检汇总表
+const webApiSapGetInspectionReport = 'sap/zapp/ZFUN_APP_PJ_SUMQUERY';
+
+//根据件号获取装柜信息
+const webApiSapGetContainerLoadingInfo = 'sap/zapp/ZFUN_ZGD';
+
+//检查货柜状态
+const webApiSapCheckContainer = 'sap/zapp/ZFUN_ZGD_6';
+
+//排柜提交
+const webApiSapSubmit = 'sap/zapp/ZFUN_ZGD_2';
+
+//保存异常单
+const webApiSapSaveAbnormalPiece = 'sap/zapp/ZFUN_ZGD_5';
+
+//获取装柜异常单数据
+const webApiSapGetAbnormalList = 'sap/zapp/ZFUN_ZGD_4';
+
+//获取巡检产线及异常记录
+const webApiSapGetPatrolInspectionInfo = 'sap/zapp/ZFUN_APP_PJ_ORDERSUMQUERY';
+
+//添加巡查记录
+const webApiSapAddPatrolInspectionRecord = 'sap/zapp/ZFUN_APP_PJ_ORDERTESTADD2';
+
+//删除巡查记录
+const webApiSapDeletePatrolInspectionRecord =
+    'sap/zapp/ZFUN_APP_PJ_ORDERTESTDEL2';
+
+//获取巡查记录
+const webApiSapGetPatrolInspectionReport = 'sap/zapp/ZFUN_APP_PJ_SUMQUERY2';
 
 //获取工序派工单列表
 const webApiGetProcessWorkCardList = "api/ShearOff/GetProcessWorkCardList";

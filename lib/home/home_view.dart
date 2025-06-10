@@ -125,7 +125,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: backgroundColor,
+      decoration: backgroundColor(),
       child: Obx(() => state.isLoading.value
           ? Scaffold(
               backgroundColor: Colors.transparent,

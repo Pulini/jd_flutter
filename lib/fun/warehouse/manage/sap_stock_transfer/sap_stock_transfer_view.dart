@@ -74,7 +74,7 @@ class _SapStockTransferPageState extends State<SapStockTransferPage> {
   void initState() {
     pdaScanner(
       scan: (code) => logic.scanCode(
-        warehouse: factoryWarehouseController.getOptionsPicker2().pickerId(),
+        warehouse: factoryWarehouseController.getPickItem2().pickerId(),
         code: code,
       ),
     );
@@ -124,7 +124,7 @@ class _SapStockTransferPageState extends State<SapStockTransferPage> {
             child: CombinationButton(
               text: 'sap_stock_transfer_transfer'.tr,
               click: () => logic.transfer(
-                factoryWarehouseController.getOptionsPicker2().pickerId(),
+                factoryWarehouseController.getPickItem2().pickerId(),
               ),
             ),
           )

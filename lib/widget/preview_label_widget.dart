@@ -29,11 +29,11 @@ class _PreviewLabelState extends State<PreviewLabel> {
         loadingDialog('正在下发标签...');
       },
       success: () {
-        Get.back();
+        loadingDismiss();
         showSnackBar(title: '打印', message: '标签下发完成。');
       },
       failed: () {
-        Get.back();
+        loadingDismiss();
         showSnackBar(
           title: '打印',
           message: '标签下发失败。',

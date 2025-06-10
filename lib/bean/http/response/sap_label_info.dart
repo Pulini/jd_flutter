@@ -1,3 +1,5 @@
+import 'package:jd_flutter/utils/utils.dart';
+
 import 'machine_dispatch_info.dart';
 
 class SapLabelInfo {
@@ -34,11 +36,23 @@ class SapLabelInfo {
     date = json['AEDAT'];
     factory = json['WERKS'];
     number = json['ZPQYM'];
+    type = json['ZBARCODE_TYPE'];
+    specifications = json['ZZCJGG'];
+    netWeight = json['NTGEW'];
+    grossWeight = json['BRGEW'];
     if (json['ITEM'] != null) {
       item = [];
       json['ITEM'].forEach((v) {
-        item?.add(
-            Item.fromJsonWithState(v, number ?? '', sizeList, barCodeList));
+        item?.add(Item.fromJsonWithState(
+          v,
+          number ?? '',
+          type ?? '',
+          specifications ?? '',
+          netWeight ?? '',
+          grossWeight ?? '',
+          sizeList,
+          barCodeList,
+        ));
       });
     }
   }
@@ -49,6 +63,10 @@ class SapLabelInfo {
   String? factory;
   String? number;
   List<Item>? item;
+  String? type;
+  String? specifications;
+  String? netWeight;
+  String? grossWeight;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -60,6 +78,10 @@ class SapLabelInfo {
     if (item != null) {
       map['ITEM'] = item?.map((v) => v.toJson()).toList();
     }
+    map['ZBARCODE_TYPE'] = type;
+    map['ZZCJGG'] = specifications;
+    map['NTGEW'] = netWeight;
+    map['BRGEW'] = grossWeight;
     return map;
   }
 }
@@ -71,12 +93,15 @@ class Item {
     this.size,
     this.typeBody,
     this.unit,
-    this.number,
   });
 
   Item.fromJsonWithState(
     dynamic json,
-    String this.number,
+    this.number,
+    this.type,
+    this.specifications,
+    this.netWeight,
+    this.grossWeight,
     List<Items> sizeList,
     List<String> barCodeList,
   ) {
@@ -95,6 +120,8 @@ class Item {
     size = json['SIZE1_ATINN'];
     typeBody = json['ZZXTNO'];
     unit = json['MEINS'];
+    englishName = json['ZDECLARATION'];
+    englishUnit = json['MSEH3'];
   }
 
   String? subLabelID;
@@ -102,10 +129,16 @@ class Item {
   String? size;
   String? typeBody;
   String? unit;
+  String? englishName;
+  String? englishUnit;
 
-  String? number;
+  String number = '';
   bool isScanned = false;
   bool isLastLabel = false;
+  String type = '';
+  String specifications = '';
+  String netWeight = '';
+  String grossWeight = '';
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -118,22 +151,64 @@ class Item {
   }
 }
 
-class ReprintLabelInfo {
-  String number = '';
-  String labelID = '';
-  String processes = '';
-  double qty = 0;
-  String size = '';
-  String factoryType = '';
-  String date = '';
-  String materialName = '';
-  String unit = '';
-  String machine = '';
-  String shift = '';
-  String dispatchNumber = '';
-  String decrementNumber = '';
+class EnglishLabelInfo {
+  double? outerBoxWeight; //外箱重量
+  List<EnglishLabelItemInfo>? specificationsList; //规格
 
-  ReprintLabelInfo({
+  EnglishLabelInfo({
+    this.outerBoxWeight,
+    this.specificationsList,
+  });
+
+  EnglishLabelInfo.fromJson(dynamic json) {
+    outerBoxWeight = json['ZDHMNG'].toString().toDoubleTry();
+    specificationsList = [
+      if (json['LT_ZTBOX'] != null)
+        for (var v in json['LT_ZTBOX']) EnglishLabelItemInfo.fromJson(v)
+    ];
+  }
+}
+
+class EnglishLabelItemInfo {
+  String? specifications; //规格
+  double? weight; //重量
+
+  EnglishLabelItemInfo({
+    this.specifications,
+    this.weight,
+  });
+
+  EnglishLabelItemInfo.fromJson(dynamic json) {
+    specifications = json['ZZCJGG'];
+    weight = json['ZOUTBOXWGT'];
+  }
+}
+
+class MachineDispatchReprintLabelInfo {
+  bool isLastLabel;
+  bool isEnglish;
+  String number;
+  String labelID;
+  String processes;
+  double qty;
+  String size;
+  String factoryType;
+  String date;
+  String materialName;
+  String unit;
+  String machine;
+  String shift;
+  String dispatchNumber;
+  String decrementNumber;
+  String specifications; //规格
+  double netWeight; //毛重
+  double grossWeight; //净重
+  String englishName; //英文名称
+  String englishUnit; //英文单位
+
+  MachineDispatchReprintLabelInfo({
+    required this.isLastLabel,
+    required this.isEnglish,
     required this.number,
     required this.labelID,
     required this.processes,
@@ -147,5 +222,10 @@ class ReprintLabelInfo {
     required this.shift,
     required this.dispatchNumber,
     required this.decrementNumber,
+    required this.specifications,
+    required this.netWeight,
+    required this.grossWeight,
+    required this.englishName,
+    required this.englishUnit,
   });
 }

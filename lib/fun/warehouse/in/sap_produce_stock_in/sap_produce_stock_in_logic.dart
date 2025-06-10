@@ -14,7 +14,7 @@ class SapProduceStockInLogic extends GetxController {
         exists.scanQty += 1;
         state.barCodeList.refresh();
       } else {
-        informationDialog(
+        msgDialog(
           content: 'sap_produce_stock_in_scan_bar_code_finish'.trArgs([code]),
         );
       }

@@ -9,16 +9,20 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:jd_flutter/bean/http/response/picking_material_order_info.dart';
 import 'package:jd_flutter/route.dart';
+import 'package:jd_flutter/utils/network_manager.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 //app 背景渐变色
-var backgroundColor = const BoxDecoration(
+ backgroundColor() =>  BoxDecoration(
   gradient: LinearGradient(
-    colors: [
-      Color.fromARGB(0xff, 0xe4, 0xe8, 0xda),
-      Color.fromARGB(0xff, 0xba, 0xe9, 0xed)
+    colors: Get.find<NetworkManager>().isTestUrl.value?[
+      Colors.green,
+      Colors.blue.shade300,
+    ]:[
+      const Color.fromARGB(0xff, 0xe4, 0xe8, 0xda),
+      const Color.fromARGB(0xff, 0xba, 0xe9, 0xed)
     ],
     begin: Alignment.bottomLeft,
     end: Alignment.topRight,
@@ -33,7 +37,7 @@ pageBody({
   required Widget body,
 }) {
   return Container(
-    decoration: backgroundColor,
+    decoration: backgroundColor(),
     child: Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.transparent,
@@ -44,13 +48,15 @@ pageBody({
           ...?actions,
         ],
       ),
-      body: PopScope(
-        canPop: popTitle.isEmpty ? true : false,
-        onPopInvokedWithResult: (didPop, result) {
-          if (!didPop) exitDialog(content: popTitle);
-        },
-        child: body,
-      ),
+      body: popTitle.isNotEmpty
+          ? PopScope(
+              canPop: false,
+              onPopInvokedWithResult: (didPop, result) {
+                if (!didPop) exitDialog(content: popTitle);
+              },
+              child: body,
+            )
+          : body,
     ),
   );
 }
@@ -66,7 +72,7 @@ pageBodyWithBottomSheet({
   required Widget body,
 }) {
   return Container(
-    decoration: backgroundColor,
+    decoration: backgroundColor(),
     child: Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
@@ -76,57 +82,58 @@ pageBodyWithBottomSheet({
           ...?actions,
           Builder(
             //不加builder会导致openDrawer崩溃
-            builder: (context) =>
-                IconButton(
-                  icon: const Icon(Icons.search),
-                  onPressed: () {
-                    showSheet(
-                      context: context,
-                      body: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          const SizedBox(height: 10),
-                          ...bottomSheet,
-                          const SizedBox(height: 20),
-                          Padding(
-                            padding: const EdgeInsets.all(10),
-                            child: SizedBox(
-                              width: double.infinity,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.blueAccent,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(25),
-                                  ),
-                                ),
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                  query.call();
-                                },
-                                child: Text(
-                                  'page_title_with_drawer_query'.tr,
-                                  style: const TextStyle(color: Colors.white),
-                                ),
+            builder: (context) => IconButton(
+              icon: const Icon(Icons.search),
+              onPressed: () {
+                showSheet(
+                  context: context,
+                  body: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const SizedBox(height: 10),
+                      ...bottomSheet,
+                      const SizedBox(height: 20),
+                      Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.blueAccent,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(25),
                               ),
                             ),
+                            onPressed: () {
+                              Navigator.pop(context);
+                              query.call();
+                            },
+                            child: Text(
+                              'page_title_with_drawer_query'.tr,
+                              style: const TextStyle(color: Colors.white),
+                            ),
                           ),
-                        ],
+                        ),
                       ),
-                      scrollControlled: true,
-                    );
-                  },
-                ),
+                    ],
+                  ),
+                  scrollControlled: true,
+                );
+              },
+            ),
           )
         ],
       ),
-      body: PopScope(
-        canPop: popTitle.isEmpty ? true : false,
-        onPopInvokedWithResult: (didPop, result) {
-          if (!didPop) exitDialog(content: popTitle);
-        },
-        child: body,
-      ),
+      body: popTitle.isNotEmpty
+          ? PopScope(
+              canPop: false,
+              onPopInvokedWithResult: (didPop, result) {
+                if (!didPop) exitDialog(content: popTitle);
+              },
+              child: body,
+            )
+          : body,
     ),
   );
 }
@@ -142,7 +149,7 @@ pageBodyWithDrawer({
 }) {
   var scaffoldKey = GlobalKey<ScaffoldState>();
   return Container(
-    decoration: backgroundColor,
+    decoration: backgroundColor(),
     child: Scaffold(
       key: scaffoldKey,
       resizeToAvoidBottomInset: false,
@@ -154,13 +161,12 @@ pageBodyWithDrawer({
           ...?actions,
           Builder(
             //不加builder会导致openDrawer崩溃
-            builder: (context) =>
-                IconButton(
-                  icon: const Icon(Icons.search),
-                  onPressed: () {
-                    Scaffold.of(context).openEndDrawer();
-                  },
-                ),
+            builder: (context) => IconButton(
+              icon: const Icon(Icons.search),
+              onPressed: () {
+                Scaffold.of(context).openEndDrawer();
+              },
+            ),
           )
         ],
       ),
@@ -194,17 +200,19 @@ pageBodyWithDrawer({
           ),
         ]),
       ),
-      body: PopScope(
-        canPop: popTitle.isEmpty ? true : false,
-        onPopInvokedWithResult: (didPop, result) {
-          if (scaffoldKey.currentState?.isEndDrawerOpen == true) {
-            scaffoldKey.currentState?.closeEndDrawer();
-          } else {
-            if (!didPop) exitDialog(content: popTitle);
-          }
-        },
-        child: body,
-      ),
+      body: popTitle.isNotEmpty
+          ? PopScope(
+              canPop: false,
+              onPopInvokedWithResult: (didPop, result) {
+                if (scaffoldKey.currentState?.isEndDrawerOpen == true) {
+                  scaffoldKey.currentState?.closeEndDrawer();
+                } else {
+                  if (!didPop) exitDialog(content: popTitle);
+                }
+              },
+              child: body,
+            )
+          : body,
     ),
   );
 }
@@ -213,39 +221,38 @@ pageBodyWithDrawer({
 takePhoto({required Function(File) callback, String? title}) {
   showCupertinoModalPopup(
     context: Get.overlayContext!,
-    builder: (BuildContext context) =>
-        CupertinoActionSheet(
-          title: Text(
-            title ?? 'home_user_setting_avatar_photo_sheet_title'.tr,
-          ),
-          message: Text('take_photo_sheet_message'.tr),
-          actions: <CupertinoActionSheetAction>[
-            CupertinoActionSheetAction(
-              isDefaultAction: true,
-              onPressed: () {
-                Get.back();
-                _takePhoto(false, callback);
-              },
-              child: Text('take_photo_photo_sheet_take_photo'.tr),
-            ),
-            CupertinoActionSheetAction(
-              isDefaultAction: true,
-              onPressed: () {
-                Get.back();
-                _takePhoto(true, callback);
-              },
-              child: Text('take_photo_photo_sheet_select_photo'.tr),
-            ),
-          ],
-          cancelButton: CupertinoActionSheetAction(
-            isDefaultAction: true,
-            onPressed: () => Get.back(),
-            child: Text(
-              'dialog_default_cancel'.tr,
-              style: const TextStyle(color: Colors.grey),
-            ),
-          ),
+    builder: (BuildContext context) => CupertinoActionSheet(
+      title: Text(
+        title ?? 'home_user_setting_avatar_photo_sheet_title'.tr,
+      ),
+      message: Text('take_photo_sheet_message'.tr),
+      actions: <CupertinoActionSheetAction>[
+        CupertinoActionSheetAction(
+          isDefaultAction: true,
+          onPressed: () {
+            Get.back();
+            _takePhoto(false, callback);
+          },
+          child: Text('take_photo_photo_sheet_take_photo'.tr),
         ),
+        CupertinoActionSheetAction(
+          isDefaultAction: true,
+          onPressed: () {
+            Get.back();
+            _takePhoto(true, callback);
+          },
+          child: Text('take_photo_photo_sheet_select_photo'.tr),
+        ),
+      ],
+      cancelButton: CupertinoActionSheetAction(
+        isDefaultAction: true,
+        onPressed: () => Get.back(),
+        child: Text(
+          'dialog_default_cancel'.tr,
+          style: const TextStyle(color: Colors.grey),
+        ),
+      ),
+    ),
   );
 }
 
@@ -316,9 +323,12 @@ showSnackBar({
 showScanTips({
   String tips = '+1',
   Color color = Colors.blueAccent,
-  Duration duration = const Duration(milliseconds: 500),
+  Duration duration = const Duration(milliseconds: 300),
 }) {
-  Get.snackbar(
+  if (Get.isSnackbarOpen) {
+    snackbarController?.close(withAnimations: false);
+  }
+  snackbarController = Get.snackbar(
     '',
     '',
     messageText: Center(
@@ -368,34 +378,33 @@ Widget getLinkCupertinoPicker({
   required FixedExtentScrollController subController,
 }) {
   var subIndex = 0.obs;
-  return Obx(()=>Row(
-    children: [
-      Expanded(
-        child: CupertinoPicker(
-          scrollController: groupController,
-          onSelectedItemChanged: (value) {
-            subIndex.value = value;
-            subController.jumpToItem(0);
-          },
-          itemExtent: 22,
-          squeeze: 1.2,
-          children: groupItems.map((data) => Text(data)).toList(),
-        ),
-      ),
-      Expanded(
-        child: CupertinoPicker(
-          scrollController: subController,
-          onSelectedItemChanged: (value) {},
-          itemExtent: 22,
-          squeeze: 1.2,
-          children: subItems[subIndex.value].map((data) => Text(data))
-              .toList(),
-        ),
-      ),
-    ],
-  ));
+  return Obx(() => Row(
+        children: [
+          Expanded(
+            child: CupertinoPicker(
+              scrollController: groupController,
+              onSelectedItemChanged: (value) {
+                subIndex.value = value;
+                subController.jumpToItem(0);
+              },
+              itemExtent: 22,
+              squeeze: 1.2,
+              children: groupItems.map((data) => Text(data)).toList(),
+            ),
+          ),
+          Expanded(
+            child: CupertinoPicker(
+              scrollController: subController,
+              onSelectedItemChanged: (value) {},
+              itemExtent: 22,
+              squeeze: 1.2,
+              children:
+                  subItems[subIndex.value].map((data) => Text(data)).toList(),
+            ),
+          ),
+        ],
+      ));
 }
-
 
 //popup工具
 showPopup(Widget widget, {double? height}) {
@@ -403,9 +412,7 @@ showPopup(Widget widget, {double? height}) {
     context: Get.overlayContext!,
     builder: (BuildContext context) {
       return AnimatedPadding(
-          padding: MediaQuery
-              .of(context)
-              .viewInsets,
+          padding: MediaQuery.of(context).viewInsets,
           duration: const Duration(milliseconds: 100),
           child: Container(
             height: height ?? 260,
@@ -417,10 +424,11 @@ showPopup(Widget widget, {double? height}) {
 }
 
 //底部弹出 sheet
-showSheet<T>({
+Future<T?> showSheet<T>({
   required BuildContext context,
   required Widget body,
   bool scrollControlled = true,
+  bool isDismissible = true,
   Color bodyColor = Colors.white,
   EdgeInsets? bodyPadding,
   BorderRadius? borderRadius,
@@ -429,36 +437,27 @@ showSheet<T>({
   borderRadius ??= const BorderRadius.only(topLeft: radius, topRight: radius);
   bodyPadding ??= const EdgeInsets.all(10);
   return showModalBottomSheet(
+    isDismissible: isDismissible,
     context: context,
     elevation: 0,
     backgroundColor: bodyColor,
     shape: RoundedRectangleBorder(borderRadius: borderRadius),
     barrierColor: Colors.black.withValues(alpha: 0.25),
     constraints: BoxConstraints(
-        maxHeight: MediaQuery
-            .of(context)
-            .size
-            .height -
-            MediaQuery
-                .of(context)
-                .viewInsets
-                .top),
+        maxHeight: MediaQuery.of(context).size.height -
+            MediaQuery.of(context).viewInsets.top),
     isScrollControlled: scrollControlled,
-    builder: (ctx) =>
-        SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.only(
-              left: bodyPadding!.left,
-              top: bodyPadding.top,
-              right: bodyPadding.right,
-              bottom: bodyPadding.bottom + MediaQuery
-                  .of(ctx)
-                  .viewInsets
-                  .bottom,
-            ),
-            child: body,
-          ),
+    builder: (ctx) => SingleChildScrollView(
+      child: Padding(
+        padding: EdgeInsets.only(
+          left: bodyPadding!.left,
+          top: bodyPadding.top,
+          right: bodyPadding.right,
+          bottom: bodyPadding.bottom + MediaQuery.of(ctx).viewInsets.bottom,
         ),
+        child: body,
+      ),
+    ),
   );
 }
 
@@ -648,19 +647,69 @@ expandedFrameText({
     flex: flex ?? 1,
     child: text.isEmpty
         ? Container(
-      height: (maxLines * 35).toDouble(),
-      decoration: BoxDecoration(
-        border: Border.all(color: borderColor ?? Colors.grey),
-        color: backgroundColor ?? Colors.transparent,
-      ),
-    )
+            height: (maxLines * 35).toDouble(),
+            decoration: BoxDecoration(
+              border: Border.all(color: borderColor ?? Colors.grey),
+              color: backgroundColor ?? Colors.transparent,
+            ),
+          )
         : click == null
-        ? widget
-        : GestureDetector(
-      onTap: () => click.call(),
-      child: widget,
+            ? widget
+            : GestureDetector(
+                onTap: () => click.call(),
+                child: widget,
+              ),
+  );
+}
+
+//带框、带点击事件带文本
+frameText({
+  Function? click,
+  Color? borderColor,
+  Color? backgroundColor,
+  Color? textColor,
+  EdgeInsetsGeometry? padding,
+  AlignmentGeometry? alignment,
+  bool isBold = false,
+  required String text,
+  int? maxLines = 1,
+}) {
+  var widget = Container(
+    height: (maxLines! * 35).toDouble(),
+    padding: padding ?? const EdgeInsets.all(5),
+    decoration: BoxDecoration(
+      border: Border.all(color: borderColor ?? Colors.grey),
+      color: backgroundColor ?? Colors.transparent,
+    ),
+    alignment: alignment ?? Alignment.centerLeft,
+    child: Text(
+      maxLines: maxLines,
+      overflow: TextOverflow.ellipsis,
+      text,
+      strutStyle: const StrutStyle(
+        forceStrutHeight: true,
+        leading: 0.5,
+      ),
+      style: TextStyle(
+        color: textColor ?? Colors.black87,
+        fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
+      ),
     ),
   );
+  return text.isEmpty
+      ? Container(
+          height: (maxLines * 35).toDouble(),
+          decoration: BoxDecoration(
+            border: Border.all(color: borderColor ?? Colors.grey),
+            color: backgroundColor ?? Colors.transparent,
+          ),
+        )
+      : click == null
+          ? widget
+          : GestureDetector(
+              onTap: () => click.call(),
+              child: widget,
+            );
 }
 
 //固定宽高1比1的头像
@@ -671,23 +720,22 @@ avatarPhoto(String? url) {
       borderRadius: BorderRadius.circular(7),
       child: url == null
           ? Image.asset(
-        'assets/images/ic_logo.png',
-        color: Colors.blue,
-      )
-          : Image.network(
-        url,
-        fit: BoxFit.fill,
-        errorBuilder: (ctx, err, stackTrace) =>
-            Image.asset(
               'assets/images/ic_logo.png',
               color: Colors.blue,
+            )
+          : Image.network(
+              url,
+              fit: BoxFit.fill,
+              errorBuilder: (ctx, err, stackTrace) => Image.asset(
+                'assets/images/ic_logo.png',
+                color: Colors.blue,
+              ),
             ),
-      ),
     ),
   );
 }
 
-surplusMaterialLabelTemplate({
+Widget surplusMaterialLabelTemplate({
   required String qrCode,
   required String machine,
   required String shift,
@@ -826,7 +874,7 @@ surplusMaterialLabelTemplate({
 
 //标准格式标签模版
 //75*45大小
-fixedLabelTemplate({
+Widget fixedLabelTemplate({
   required String qrCode,
   Widget? title,
   Widget? subTitle,
@@ -964,7 +1012,7 @@ fixedLabelTemplate({
 
 //动态格式标签模版
 //45宽，高度由内容决定
-dynamicLabelTemplate({
+Widget dynamicLabelTemplate({
   required String qrCode,
   Widget? title,
   Widget? subTitle,
@@ -1166,14 +1214,13 @@ selectView({
     ),
     Expanded(
         child: CupertinoPicker(
-          scrollController: controller,
-          magnification: 1.2,
-          useMagnifier: true,
-          itemExtent: 26,
-          onSelectedItemChanged: (v) => select?.call(v),
-          children: list
-              .map((v) =>
-              AutoSizeText(
+      scrollController: controller,
+      magnification: 1.2,
+      useMagnifier: true,
+      itemExtent: 26,
+      onSelectedItemChanged: (v) => select?.call(v),
+      children: list
+          .map((v) => AutoSizeText(
                 v.toString(),
                 maxLines: 1,
                 minFontSize: 8,
@@ -1182,16 +1229,16 @@ selectView({
                   color: Colors.blue,
                 ),
               ))
-              .toList(),
-        ))
+          .toList(),
+    ))
   ];
 
   return Container(
     height: list.length > 1
         ? 120
         : errorMsg.length > 15
-        ? 50
-        : 35,
+            ? 50
+            : 35,
     width: double.infinity,
     margin: const EdgeInsets.all(5),
     padding: const EdgeInsets.all(8),
@@ -1201,23 +1248,23 @@ selectView({
     ),
     child: list.length > 1
         ? GetPlatform.isMobile
-        ? Column(
-        crossAxisAlignment: CrossAxisAlignment.start, children: weights)
-        : Row(children: weights)
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.start, children: weights)
+            : Row(children: weights)
         : list.isEmpty
-        ? Row(
-      children: [
-        Expanded(
-            child: AutoSizeText(
-              errorMsg,
-              style: const TextStyle(color: Colors.red),
-              maxLines: 2,
-              minFontSize: 12,
-              maxFontSize: 16,
-            ))
-      ],
-    )
-        : Row(children: [textSpan(hint: hint, text: list[0].toString())]),
+            ? Row(
+                children: [
+                  Expanded(
+                      child: AutoSizeText(
+                    errorMsg,
+                    style: const TextStyle(color: Colors.red),
+                    maxLines: 2,
+                    minFontSize: 12,
+                    maxFontSize: 16,
+                  ))
+                ],
+              )
+            : Row(children: [textSpan(hint: hint, text: list[0].toString())]),
   );
 }
 
@@ -1244,42 +1291,40 @@ Widget ratioBarChart({
     var color = colorName.getColorByDescription();
     var text = Center(
         child: Text(
-          '${percent.toShowString()}% ${colorName.isEmpty
-              ? '无色'
-              : colorName}',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: isDeepColor(color) ? Colors.white : Colors.black,
-          ),
-        ));
+      '${percent.toShowString()}% ${colorName.isEmpty ? '无色' : colorName}',
+      style: TextStyle(
+        fontWeight: FontWeight.bold,
+        color: isDeepColor(color) ? Colors.white : Colors.black,
+      ),
+    ));
     list.add(
       Expanded(
         flex: percent.toInt(),
         child: i == 0
             ? Container(
-          height: 50,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.only(
-              topLeft: radius,
-              bottomLeft: radius,
-            ),
-            color: color,
-          ),
-          child: text,
-        )
+                height: 50,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    topLeft: radius,
+                    bottomLeft: radius,
+                  ),
+                  color: color,
+                ),
+                child: text,
+              )
             : i == ratioList.length - 1
-            ? Container(
-          height: 50,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.only(
-              topRight: radius,
-              bottomRight: radius,
-            ),
-            color: color,
-          ),
-          child: text,
-        )
-            : Container(height: 50, color: color, child: text),
+                ? Container(
+                    height: 50,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                        topRight: radius,
+                        bottomRight: radius,
+                      ),
+                      color: color,
+                    ),
+                    child: text,
+                  )
+                : Container(height: 50, color: color, child: text),
       ),
     );
   }
@@ -1560,7 +1605,7 @@ List<Widget> createA4Paper(PickingMaterialOrderPrintInfo data) {
 
   //控件总高度
   int totalHeight =
-  widgetList.map((v) => (v[0] as int)).reduce((a, b) => a + b);
+      widgetList.map((v) => (v[0] as int)).reduce((a, b) => a + b);
   var page = 1; //页码
   var totalPage = (totalHeight / tableHeight).ceil(); //总页数
   var height = 0.0; //当前控件总高度

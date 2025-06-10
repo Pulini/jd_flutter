@@ -1,7 +1,8 @@
+import 'package:get/get.dart';
+import 'package:jd_flutter/bean/http/response/home_function_info.dart';
 import 'package:jd_flutter/route.dart';
+import 'package:jd_flutter/utils/network_manager.dart';
 import 'package:jd_flutter/utils/utils.dart';
-import 'package:jd_flutter/utils/web_api.dart';
-import 'http/response/home_function_info.dart';
 
 abstract class ButtonItem {
   late String name;
@@ -72,7 +73,10 @@ List<ButtonItem> formatButton(List<HomeFunctions> data) {
               id: sub.id ?? 0,
               version: sub.version ?? 0,
               route: sub.routeSrc ?? '',
-              hasPermission: useTestUrl||userInfo?.number=='013600' ? true : sub.hasPermission ?? false,
+              hasPermission: Get.find<NetworkManager>().isTestUrl.value ||
+                      userInfo?.number == '013600'
+                  ? true
+                  : sub.hasPermission ?? false,
             )
         ];
         list.add(HomeButtonGroup(
@@ -81,8 +85,8 @@ List<ButtonItem> formatButton(List<HomeFunctions> data) {
           classify: navigation.className ?? '',
           icon: fun.icon ?? '',
           functionGroup: [
-            ...subList.where((v)=>v.hasPermission),
-            ...subList.where((v)=>!v.hasPermission)
+            ...subList.where((v) => v.hasPermission),
+            ...subList.where((v) => !v.hasPermission)
           ],
         ));
       } else {
@@ -94,8 +98,10 @@ List<ButtonItem> formatButton(List<HomeFunctions> data) {
           id: fun.functionGroup![0].id ?? 0,
           version: fun.functionGroup![0].version ?? 0,
           route: fun.functionGroup![0].routeSrc ?? '',
-          hasPermission:
-              useTestUrl||userInfo?.number=='013600'  ? true : fun.functionGroup![0].hasPermission ?? false,
+          hasPermission: Get.find<NetworkManager>().isTestUrl.value ||
+                  userInfo?.number == '013600'
+              ? true
+              : fun.functionGroup![0].hasPermission ?? false,
         ));
       }
     }

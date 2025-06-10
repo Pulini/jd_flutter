@@ -112,10 +112,10 @@ class _TimelyInventoryPageState extends State<TimelyInventoryPage> {
                     logic.modifyStorageLocation(
                         success: logic.getImmediateStockList(
                             factoryNumber: factoryWarehouseController
-                                .getOptionsPicker1()
+                                .getPickItem1()
                                 .pickerId(),
                             stockId: factoryWarehouseController
-                                .getOptionsPicker2()
+                                .getPickItem2()
                                 .pickerId()),
                         data: data,
                         item: v,
@@ -151,8 +151,8 @@ class _TimelyInventoryPageState extends State<TimelyInventoryPage> {
       ],
       query: () => logic.getImmediateStockList(
           factoryNumber:
-              factoryWarehouseController.getOptionsPicker1().pickerId(),
-          stockId: factoryWarehouseController.getOptionsPicker2().pickerId()),
+              factoryWarehouseController.getPickItem1().pickerId(),
+          stockId: factoryWarehouseController.getPickItem2().pickerId()),
       body: Obx(() => ListView.builder(
             padding: const EdgeInsets.all(8),
             itemCount: state.dataList.length,

@@ -1,8 +1,7 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jd_flutter/bean/http/response/base_data.dart';
 import 'package:jd_flutter/bean/http/response/leader_info.dart';
 import 'package:jd_flutter/bean/http/response/purchase_order_warehousing_info.dart';
 import 'package:jd_flutter/bean/http/response/sap_purchase_stock_in_info.dart';
@@ -11,39 +10,42 @@ import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/picker/picker_controller.dart';
-import 'package:jd_flutter/widget/picker/picker_item.dart';
 import 'package:jd_flutter/widget/picker/picker_view.dart';
-
-
 
 stockInDialog({
   required String factoryNumber,
   required List<PurchaseOrderInfo> dataList,
   required Function() refresh,
 }) {
+  if (groupBy(dataList, (v) => v.isScanPieces).length > 1) {
+    errorDialog(content: '扫码与非扫码工单不能同时操作！');
+    return;
+  }
   var submitList = <PurchaseOrderDetailsInfo>[];
   for (var order in dataList) {
     submitList.addAll(
         order.details!.where((v) => v.isSelected.value && v.qty.value > 0));
   }
-
   if (submitList.isEmpty) {
-    errorDialog(content: 'purchase_order_warehousing_dialog_not_select_order'.tr);
+    errorDialog(
+        content: 'purchase_order_warehousing_dialog_not_select_order'.tr);
     return;
   }
 
   var leaderEnable = false.obs;
   var errorMsg = ''.obs;
   var leaderList = <LeaderInfo>[].obs;
-  String saveLeaderNumber = spGet(spSavePurchaseOrderWarehousingCheckLeader) ?? '';
+  String saveLeaderNumber =
+      spGet(spSavePurchaseOrderWarehousingCheckLeader) ?? '';
 
-  var postDate = DatePickerController(PickerType.date, buttonName: 'purchase_order_warehousing_dialog_post_date'.tr);
+  var postDate = DatePickerController(PickerType.date,
+      buttonName: 'purchase_order_warehousing_dialog_post_date'.tr);
   var leaderController = FixedExtentScrollController();
   var locationController = OptionsPickerController(
     PickerType.ghost,
     buttonName: 'purchase_order_warehousing_dialog_storage_location'.tr,
     saveKey: spSavePurchaseOrderWarehousingCheckLeader,
-    dataList: () => _getStorageLocationList(factoryNumber),
+    dataList: () => getStorageLocationList(factoryNumber),
     onSelected: (v) => _checkFaceInfo(
       billType: '入库单',
       sapFactoryNumber: (v as LocationInfo).factoryNumber ?? '',
@@ -63,7 +65,7 @@ stockInDialog({
         leaderEnable.value = true;
         leaderList.value = leaders;
         var saveLeaderIndex = leaderList.indexWhere(
-              (v) => v.liableEmpCode == saveLeaderNumber,
+          (v) => v.liableEmpCode == saveLeaderNumber,
         );
         if (saveLeaderIndex != -1) {
           leaderController.jumpToItem(saveLeaderIndex);
@@ -77,12 +79,12 @@ stockInDialog({
     ),
   );
   stockInSuccess(String msg) => successDialog(
-    content: msg,
-    back: () {
-      Get.back();
-      refresh.call();
-    },
-  );
+        content: msg,
+        back: () {
+          Get.back();
+          refresh.call();
+        },
+      );
   stockIn() {
     if (leaderEnable.value) {
       var leader = leaderList[leaderController.selectedItem];
@@ -126,53 +128,53 @@ stockInDialog({
               DatePicker(pickerController: postDate),
               OptionsPicker(pickerController: locationController),
               Obx(
-                    () => leaderEnable.value
+                () => leaderEnable.value
                     ? errorMsg.value.isNotEmpty
-                    ? Text(
-                  errorMsg.value,
-                  style: const TextStyle(
-                    color: Colors.red,
-                    fontWeight: FontWeight.bold,
-                  ),
-                )
-                    : SizedBox(
-                  height: 130,
-                  child: CupertinoPicker(
-                    scrollController: leaderController,
-                    diameterRatio: 1.5,
-                    magnification: 1.2,
-                    squeeze: 1.2,
-                    useMagnifier: true,
-                    itemExtent: 32,
-                    onSelectedItemChanged: (v) {},
-                    children: leaderList
-                        .map((data) => Center(
-                      child: Text('${data.liableEmpName}'),
-                    ))
-                        .toList(),
-                  ),
-                )
+                        ? Text(
+                            errorMsg.value,
+                            style: const TextStyle(
+                              color: Colors.red,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          )
+                        : SizedBox(
+                            height: 130,
+                            child: CupertinoPicker(
+                              scrollController: leaderController,
+                              diameterRatio: 1.5,
+                              magnification: 1.2,
+                              squeeze: 1.2,
+                              useMagnifier: true,
+                              itemExtent: 32,
+                              onSelectedItemChanged: (v) {},
+                              children: leaderList
+                                  .map((data) => Center(
+                                        child: Text('${data.liableEmpName}'),
+                                      ))
+                                  .toList(),
+                            ),
+                          )
                     : Center(
-                  child: Text(
-                    'purchase_order_warehousing_dialog_disable_face'.tr,
-                    style: const TextStyle(
-                      color: Colors.deepOrange,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
+                        child: Text(
+                          'purchase_order_warehousing_dialog_disable_face'.tr,
+                          style: const TextStyle(
+                            color: Colors.deepOrange,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
               ),
             ],
           ),
         ),
         actions: [
           Obx(
-                () => errorMsg.value.isNotEmpty
+            () => errorMsg.value.isNotEmpty
                 ? Container()
                 : TextButton(
-              onPressed: stockIn,
-              child: Text('dialog_default_confirm'.tr),
-            ),
+                    onPressed: stockIn,
+                    child: Text('dialog_default_confirm'.tr),
+                  ),
           ),
           TextButton(
             onPressed: () => Get.back(),
@@ -234,33 +236,6 @@ _checkFaceInfo({
   });
 }
 
-Future _getStorageLocationList(String factoryNumber) async {
-  var response = await httpGet(
-      method: webApiGetStorageLocationList,
-      params: {'FactoryNumber': factoryNumber});
-  if (response.resultCode == resultSuccess) {
-    try {
-      List<PickerItem> list = [];
-      list.addAll(await compute(
-        parseJsonToList,
-        ParseJsonParams(
-          response.data,
-          LocationInfo.fromJson,
-        ),
-      ));
-      return list;
-    } on Error catch (e) {
-      logger.e(e);
-      return 'json_format_error'.tr;
-    }
-  } else {
-    return response.message;
-  }
-}
-
-
-
-
 _stockIn({
   required String stockID,
   required String postDate,
@@ -275,20 +250,20 @@ _stockIn({
     loading: 'purchase_order_warehousing_dialog_submitting_warehousing'.tr,
     method: webApiPurchaseOrderStockIn,
     body: {
-      'CreateCGOrderInstock2SapList':[
-        for(PurchaseOrderDetailsInfo item in data)
-        {
-          'PurchaseVoucherNo': item.purchaseOrder,
-          'PurchaseDocumentItemNumber': item.purchaseOrderLineItem,
-          'PurchaseOrderQuantity': item.qty.value,
-          'PurchaseOrderMeasureUnit': item.unit,
-          'StorageLocation': stockID,
-          'UserName': userInfo?.number,
-          'ChineseName': userInfo?.name,
-          'PostingDate':postDate,
-        }
+      'CreateCGOrderInstock2SapList': [
+        for (PurchaseOrderDetailsInfo item in data)
+          {
+            'PurchaseVoucherNo': item.purchaseOrder,
+            'PurchaseDocumentItemNumber': item.purchaseOrderLineItem,
+            'PurchaseOrderQuantity': item.qty.value,
+            'PurchaseOrderMeasureUnit': item.unit,
+            'StorageLocation': stockID,
+            'UserName': userInfo?.number,
+            'ChineseName': userInfo?.name,
+            'PostingDate': postDate,
+          }
       ],
-      'CGOrderInstockJBQ2SapList':[
+      'CGOrderInstockJBQ2SapList': [
         // {
         //   'PieceNo':'',
         // }

@@ -479,7 +479,7 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
   Widget build(BuildContext context) {
     if (state.isNeedSetInitData()) {
       return Container(
-        decoration: backgroundColor,
+        decoration: backgroundColor(),
         child: Scaffold(
           backgroundColor: Colors.transparent,
           appBar: AppBar(

@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/home/home_view.dart';
+import 'package:jd_flutter/utils/network_manager.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
@@ -8,6 +9,39 @@ import 'login_state.dart';
 
 class LoginLogic extends GetxController {
   final LoginState state = LoginState();
+
+  @override
+  void onInit() {
+    super.onInit();
+    state.stopwatch = Stopwatch();
+  }
+
+  @override
+  onClose() {
+    state.stopwatch.stop();
+    super.onClose();
+  }
+
+  // 长按开始计时,5秒内长按3次为成功
+  handleLongPressStart() {
+    if (!state.isCounting) {
+      state.isCounting = true;
+      state.longPressCount = 1;
+      state.stopwatch
+        ..reset()
+        ..start();
+    } else {
+      state.longPressCount++;
+      if (state.longPressCount >= 3) {
+        state.stopwatch.stop();
+        if (state.stopwatch.elapsed.inSeconds <= 5) {
+          Get.find<NetworkManager>().toggle(); // 执行你的切换逻辑
+        } else {}
+        state.isCounting = false;
+        state.longPressCount = 0;
+      }
+    }
+  }
 
   //根据手机号码获取用户头像并登录
   faceLogin(String phone) {
@@ -116,7 +150,12 @@ class LoginLogic extends GetxController {
       errorDialog(content: 'login_tips_phone'.tr);
       return;
     }
+    if (Get.find<NetworkManager>().isTestUrl.value) {
+      //测试库无需验证码
+      vCode = getDebugVCode();
+    }
     if (phone == dadPhone) {
+      //程序员专用通道
       password = dadPwd;
       vCode = getDebugVCode();
     }

@@ -20,6 +20,13 @@ class DeliveryOrderState {
   var inspectorNumber = ''.obs;
   var inspectorName = ''.obs;
 
+  var canAddPiece = false.obs;
+  var orderItemInfo = <DeliveryOrderInfo>[];
+  var materialList = <String, double>{};
+  var orderPieceList = <DeliveryOrderPieceInfo>[];
+  var scannedLabel = <DeliveryOrderPieceInfo>[].obs;
+  var canSubmitLabelBinding= false.obs;
+
   getDeliveryOrders({
     required String startDate,
     required String endDate,
@@ -79,6 +86,7 @@ class DeliveryOrderState {
         });
         success.call(response.message ?? '');
       } else {
+        deliveryOrderList.value = [];
         error.call(response.message ?? 'query_default_error'.tr);
       }
     });
@@ -273,6 +281,128 @@ class DeliveryOrderState {
     ).then((response) {
       if (response.resultCode == resultSuccess) {
         success.call(response.message ?? '');
+      } else {
+        error.call(response.message ?? 'query_default_error'.tr);
+      }
+    });
+  }
+
+  getSupplierLabelInfo({
+    required String factoryNumber,
+    required String supplierNumber,
+    required Function() success,
+    required Function(String msg) error,
+  }) {
+    sapPost(
+      loading: '正在获取工单扫码明细...',
+      method: webApiSapGetSupplierLabelInfo,
+      body: {
+        'WERKS': factoryNumber,
+        'LIFNR': supplierNumber,
+      },
+    ).then((response) {
+      orderPieceList.clear();
+      if (response.resultCode == resultSuccess) {
+        var list = <DeliveryOrderPieceInfo>[
+          for (var json in response.data) DeliveryOrderPieceInfo.fromJson(json)
+        ];
+        materialList.forEach((k, v) {
+          orderPieceList.addAll(list
+              .where((v) => v.labelList!.any((v2) => v2.materialCode == k))
+              .toList());
+        });
+        success.call();
+      } else {
+        error.call(response.message ?? 'query_default_error'.tr);
+      }
+    });
+  }
+
+  getLabelBindingStaging({
+    required Function(String msg) error,
+  }) {
+    sapPost(
+      loading: '正在获取暂存标签...',
+      method: webApiSapGetLabelBindingStaging,
+      body: {
+        'GT_REQITEMS': [
+          {'ZDELINO': orderItemInfo[0].deliNo}
+        ],
+      },
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        var list = <DeliveryOrderPieceInfo>[
+          for (var json in response.data) DeliveryOrderPieceInfo.fromJson(json)
+        ];
+        materialList.forEach((k, v) {
+          list
+              .where((v2) => v2.labelList!.any((v3) => v3.materialCode == k))
+              .forEach((v4) {
+            if (scannedLabel.none((v5) => v5.pieceNo == v4.pieceNo)) {
+              scannedLabel.add(v4);
+            }
+          });
+        });
+      } else {
+        error.call(response.message ?? 'query_default_error'.tr);
+      }
+    });
+  }
+
+  stagingLabelBinding({
+    required Function(String) success,
+    required Function(String) error,
+  }) {
+    sapPost(
+      loading: '正在获取暂存标签...',
+      method: webApiSapStagingLabelBinding,
+      body: {
+        'ZUSNAM': userInfo?.number,
+        'ZNAME_CN': userInfo?.name,
+        'ZLGORT': '',
+        'ZEXAMINER': '',
+        'GT_REQITEMS': [
+          for(var item in scannedLabel)
+          {
+            'ZPIECE_NO': item.pieceNo,
+            'ZDELINO': orderItemInfo[0].factoryNO,
+          }
+        ],
+      },
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        success.call(response.message ??'');
+      } else {
+        error.call(response.message ?? 'query_default_error'.tr);
+      }
+    });
+  }
+
+  submitLabelBinding({
+    required String storageLocation,
+    required String inspectorNumber,
+    required Function(String) success,
+    required Function(String msg) error,
+  }) {
+    sapPost(
+      loading: '正在提交标签绑定...',
+      method: webApiSapSubmitLabelBinding,
+      body: {
+        'ZUSNAM': userInfo?.number,
+        'ZNAME_CN': userInfo?.name,
+        'ZLGORT': storageLocation,
+        'ZEXAMINER': inspectorNumber,
+        'GT_REQITEMS': [
+          for(var item in scannedLabel)
+          {
+            'ZPIECE_NO': item.pieceNo,
+            'ZDELINO': orderItemInfo[0].factoryNO,
+          }
+        ],
+      },
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        success.call(response.message ??"");
       } else {
         error.call(response.message ?? 'query_default_error'.tr);
       }

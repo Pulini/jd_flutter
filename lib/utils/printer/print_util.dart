@@ -120,13 +120,13 @@ class PrintUtil {
                 }
               case 'Open':
                 {
-                  informationDialog(content: 'bluetooth_open_device'.tr);
+                  msgDialog(content: 'bluetooth_open_device'.tr);
                   break;
                 }
               case 'Close':
                 {
                   deviceList.clear();
-                  informationDialog(content: 'bluetooth_close_device'.tr);
+                  msgDialog(content: 'bluetooth_close_device'.tr);
                   break;
                 }
             }
@@ -155,7 +155,7 @@ class PrintUtil {
               }
             }
             if (disconnectDevice != null) {
-              informationDialog(
+              msgDialog(
                   content: '蓝牙设备:${disconnectDevice.deviceName} 连接断开。');
             }
             break;

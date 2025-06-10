@@ -551,3 +551,35 @@ class DispatchInfo {
     required this.signature,
   }); //签名
 }
+
+class LabelMaintainInfo{
+  String? labelID;//打印成功，返回的ID  BQID
+  String? number;//序列号  ZPQYM
+  String? type;//标签类型  中文  英文 ZBARCODE_TYPE
+  String? specifications;//规格 ZZCJGG
+  double? netWeight;//净重  NTGEW
+  double? grossWeight;//毛重  BRGEW
+  String? name;//物料名称 ZDECLARATION
+  String? unit;//单位 MSEH3
+
+  LabelMaintainInfo({
+    this.labelID,
+    this.number,
+    this.type,
+    this.specifications,
+    this.netWeight,
+    this.grossWeight,
+    this.name,
+    this.unit,
+  });
+  LabelMaintainInfo.fromJson(dynamic json) {
+    labelID = json['BQID'].toString();
+    number = json['ZPQYM'];
+    type = json['ZBARCODE_TYPE'];
+    specifications = json['ZZCJGG'];
+    netWeight = json['NTGEW'].toString().toDoubleTry();
+    grossWeight = json['BRGEW'].toString().toDoubleTry();
+    name = json['ZDECLARATION'];
+    unit = json['MSEH3'];
+  }
+}

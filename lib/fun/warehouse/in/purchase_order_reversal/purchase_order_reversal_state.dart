@@ -56,7 +56,7 @@ class PurchaseOrderReversalState {
   }) {
     httpPost(
       loading: 'purchase_order_reversal_reversing_receipt'.tr,
-      method: webApiSapPurchaseOrderReversal,
+      method: webApiPurchaseOrderReversal,
       body: {
         'OffCGOrderInstock2SapList': [
           for(PurchaseOrderReversalInfo item in submitList)

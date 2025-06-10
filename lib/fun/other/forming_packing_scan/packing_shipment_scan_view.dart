@@ -19,54 +19,48 @@ class _PackingShipmentScanPageState extends State<PackingShipmentScanPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: backgroundColor,
-      child: Scaffold(
-          backgroundColor: Colors.transparent,
-          appBar: AppBar(
-            backgroundColor: Colors.transparent,
-            title: Text('packing_shipment_title'.tr),
+    return pageBody(
+      title: 'packing_shipment_title'.tr,
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Text('packing_shipment_cabinet_number'.tr +
+              state.showCabinetNumber.value),
+          Obx(
+            () => Text(
+                'packing_shipment_code'.tr + state.showCabinetNumber.value),
           ),
-          body: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
+          Row(
             children: [
-              Text('packing_shipment_cabinet_number'.tr +
-                  state.showCabinetNumber.value),
-              Obx(
-                () => Text(
-                    'packing_shipment_code'.tr + state.showCabinetNumber.value),
+              expandedFrameText(
+                text: 'packing_shipment_order_no'.tr,
+                backgroundColor: Colors.blue.shade50,
+                flex: 3,
               ),
-              Row(
-                children: [
-                  expandedFrameText(
-                    text: 'packing_shipment_order_no'.tr,
-                    backgroundColor: Colors.blue.shade50,
-                    flex: 3,
-                  ),
-                  expandedFrameText(
-                    text: 'packing_shipment_issued'.tr,
-                    backgroundColor: Colors.blue.shade50,
-                    flex: 1,
-                  )
-                ],
-              ),
-              // Expanded(
-              //   child: Obx(
-              //         () => ListView.builder(
-              //       padding: const EdgeInsets.all(8),
-              //       itemCount: state.barCodeList.length,
-              //       itemBuilder: (BuildContext context, int index) =>
-              //           _item(state.barCodeList[index]),
-              //     ),
-              //   ),
-              // ),
-              CombinationButton(
-                text: 'packing_shipment_manually_add'.tr,
-                click: () {},
-                combination: Combination.intact,
+              expandedFrameText(
+                text: 'packing_shipment_issued'.tr,
+                backgroundColor: Colors.blue.shade50,
+                flex: 1,
               )
             ],
-          )),
+          ),
+          // Expanded(
+          //   child: Obx(
+          //         () => ListView.builder(
+          //       padding: const EdgeInsets.all(8),
+          //       itemCount: state.barCodeList.length,
+          //       itemBuilder: (BuildContext context, int index) =>
+          //           _item(state.barCodeList[index]),
+          //     ),
+          //   ),
+          // ),
+          CombinationButton(
+            text: 'packing_shipment_manually_add'.tr,
+            click: () {},
+            combination: Combination.intact,
+          )
+        ],
+      ),
     );
   }
 
