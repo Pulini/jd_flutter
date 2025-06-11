@@ -234,11 +234,11 @@ class WaitPickingMaterialLogic extends GetxController {
       pickerBase64: pickerBase64,
       userBase64: userBase64,
       success: (msg, number) {
-        var rList = state.orderList
+        var list = state.orderList
             .where((v) => v.hasSelected() && v.location.isBlank == false)
             .toList();
-        if (rList.isNotEmpty) {
-          modifyLocation.call(rList, msg, number);
+        if (list.isNotEmpty) {
+          modifyLocation.call(list, msg, number);
         } else {
           refresh.call(msg, number);
         }

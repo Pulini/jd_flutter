@@ -1289,3 +1289,9 @@ const webApiSapDeletePatrolInspectionRecord =
 
 //获取巡查记录
 const webApiSapGetPatrolInspectionReport = 'sap/zapp/ZFUN_APP_PJ_SUMQUERY2';
+
+//获取标签信息
+const webApiSapLabelBindingGetLabelInfo = 'sap/zapp/ZMM051_GET_BQSC';
+
+//提交标签绑定操作
+const webApiSapLabelBindingSubmitOperation = 'sap/zapp/ZMM051_RES_ZDBDX';

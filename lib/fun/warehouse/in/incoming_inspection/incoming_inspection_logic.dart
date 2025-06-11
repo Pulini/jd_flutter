@@ -150,7 +150,8 @@ class IncomingInspectionLogic extends GetxController {
     state.submitInspection(
       inspector: inspector,
       results: results,
-      success: (msg) => successDialog(content: msg, back: () => Get.back()),
+      success: (msg) =>
+          successDialog(content: msg, back: () => Get.back(result: true)),
       error: (msg) => errorDialog(content: msg),
     );
   }

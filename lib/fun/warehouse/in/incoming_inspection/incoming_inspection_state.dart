@@ -161,13 +161,10 @@ class IncomingInspectionState {
         'Number': inspectionDetail?.number,
         'EmpCode': inspector,
         'InspectionResult': results,
-        'Pictures': [
-          for (var file in inspectionPhotoList) {'Photo': file.toBase64()}
-        ],
+        'Pictures':inspectionPhotoList.map((v)=>v.toBase64()).toList(),
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        inspectionDetail = InspectionDetailInfo.fromJson(response.data);
         success.call(response.message ?? '');
       } else {
         error.call(response.message ?? 'query_default_error'.tr);

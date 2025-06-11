@@ -6,9 +6,6 @@ import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 
 class QualityInspectionState {
-  var instructionNo = ''.obs;
-  var typeBody = ''.obs;
-  var customerPO = ''.obs;
   var orderList = <QualityInspectionInfo>[].obs;
   var qiDetailWorkOrderNo = ''.obs;
   var qiDetailInstructionNo = ''.obs;
@@ -26,6 +23,9 @@ class QualityInspectionState {
   }
 
   queryOrders({
+    required String instructionNo,
+    required String typeBody,
+    required String customerPO,
     required String startDate,
     required String endDate,
     required Function(String msg) error,
@@ -34,9 +34,9 @@ class QualityInspectionState {
       loading: '正在获取产线信息...',
       method: webApiSapGetQualityInspectionOrders,
       body: {
-        'instructionNo': instructionNo.value,
-        'typeBody': typeBody.value,
-        'customerPO': customerPO.value,
+        'instructionNo': instructionNo,
+        'typeBody': typeBody,
+        'customerPO': customerPO,
         'inspectorNo': userInfo?.number,
         'startDate': startDate,
         'endDate': endDate,

@@ -10,6 +10,7 @@ import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/preview_label_list_widget.dart';
 import 'package:jd_flutter/widget/preview_label_widget.dart';
+import 'package:jd_flutter/widget/tsc_label_template.dart';
 
 class PrintLabelPage extends StatefulWidget {
   const PrintLabelPage({super.key});
@@ -113,7 +114,7 @@ class _PrintLabelPageState extends State<PrintLabelPage> {
   _previewLabel(Barcode data) {
     Get.to(
       () => PreviewLabel(
-        labelWidget: fixedLabelTemplate(
+        labelWidget: fixedLabelTemplate75x45(
           qrCode: data.barCode ?? '',
           title: _labelTitle(),
           subTitle: _subTitle(data),
@@ -228,7 +229,7 @@ class _PrintLabelPageState extends State<PrintLabelPage> {
       () => PreviewLabelList(
         labelWidgets: [
           for (var i = 0; i < selected.length; ++i)
-            fixedLabelTemplate(
+            fixedLabelTemplate75x45(
               qrCode: selected[i].barCode ?? '',
               title: _labelTitle(),
               subTitle: _subTitle(selected[i]),

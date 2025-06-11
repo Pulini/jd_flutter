@@ -33,7 +33,8 @@ class _IncomingInspectionOrdersPageState
   var dpcStartDate = DatePickerController(
     PickerType.startDate,
     saveKey: '${RouteConfig.incomingInspection.name}${PickerType.startDate}',
-  );
+  )..firstDate = DateTime(
+      DateTime.now().year - 4, DateTime.now().month, DateTime.now().day);
   var dpcEndDate = DatePickerController(
     PickerType.endDate,
     saveKey: '${RouteConfig.incomingInspection.name}${PickerType.endDate}',
@@ -47,22 +48,35 @@ class _IncomingInspectionOrdersPageState
           success: () {
             switch (item.status) {
               case '1':
-                Get.to(() => const OrderWaitInspectionPage());
+                Get.to(() => const OrderWaitInspectionPage())?.then((refresh) {
+                  if (refresh) _query(true);
+                });
                 break;
               case '2':
-                Get.to(() => const OrderWaitProcessingPage());
+                Get.to(() => const OrderWaitProcessingPage())?.then((refresh) {
+                  if (refresh) _query(true);
+                });
                 break;
               case '3':
-                Get.to(() => const OrderSignedPage());
+                Get.to(() => const OrderSignedPage())?.then((refresh) {
+                  if (refresh) _query(true);
+                });
                 break;
               case '4':
-                Get.to(() => const OrderExceptionHandlingPage());
+                Get.to(() => const OrderExceptionHandlingPage())
+                    ?.then((refresh) {
+                  if (refresh) _query(true);
+                });
                 break;
               case '5':
-                Get.to(() => const OrderExceptionClosePage());
+                Get.to(() => const OrderExceptionClosePage())?.then((refresh) {
+                  if (refresh) _query(true);
+                });
                 break;
               case '6':
-                Get.to(() => const OrderClosedPage());
+                Get.to(() => const OrderClosedPage())?.then((refresh) {
+                  if (refresh) _query(true);
+                });
                 break;
             }
           },
@@ -221,17 +235,21 @@ class _IncomingInspectionOrdersPageState
               width: double.infinity,
               child: CombinationButton(
                 text: 'incoming_inspection_order_query'.tr,
-                click: () => logic.queryInspectionOrders(
-                  startDate: dpcStartDate.getDateFormatYMD(),
-                  endDate: dpcEndDate.getDateFormatYMD(),
-                  success: () => Navigator.pop(context),
-                ),
+                click: _query(false),
               ),
             ),
           ],
         ),
       ),
       scrollControlled: true,
+    );
+  }
+
+  _query(bool isRefresh) {
+    logic.queryInspectionOrders(
+      startDate: dpcStartDate.getDateFormatYMD(),
+      endDate: dpcEndDate.getDateFormatYMD(),
+      success: () =>isRefresh?null: Navigator.pop(context),
     );
   }
 
