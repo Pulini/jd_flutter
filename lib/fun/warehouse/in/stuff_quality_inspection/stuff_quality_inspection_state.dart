@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/people_message_info.dart';
 import 'package:jd_flutter/bean/http/response/show_color_batch.dart';

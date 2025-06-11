@@ -55,6 +55,7 @@ import 'fun/report/worker_production_detail/worker_production_detail_view.dart';
 import 'fun/report/worker_production_report/worker_production_report_view.dart';
 import 'fun/warehouse/in/process_report/process_report_store_view.dart';
 import 'fun/warehouse/in/purchase_order_warehousing/purchase_order_warehousing_view.dart';
+import 'fun/warehouse/in/quality_inspection_list/quality_inspection_list_view.dart';
 import 'fun/warehouse/in/sap_injection_molding_stock_in/sap_injection_molding_stock_in_view.dart';
 import 'fun/warehouse/in/sap_no_label_stock_in/sap_no_label_stock_in_view.dart';
 import 'fun/warehouse/in/sap_produce_stock_in/sap_produce_stock_in_view.dart';
