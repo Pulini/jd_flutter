@@ -5,9 +5,10 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/people_message_info.dart';
 import 'package:jd_flutter/bean/http/response/quality_inspection_info.dart';
 import 'package:jd_flutter/bean/http/response/show_color_batch.dart';
+import 'package:jd_flutter/bean/http/response/stuff_quality_inspection_info.dart';
 import 'package:jd_flutter/bean/http/response/temporary_order_info.dart';
 import 'package:jd_flutter/bean/http/response/visit_photo_bean.dart';
-import 'package:jd_flutter/fun/warehouse/in/quality_inspection/stuff_quality_inspection_state.dart';
+import 'package:jd_flutter/fun/warehouse/in/stuff_quality_inspection/stuff_quality_inspection_state.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
@@ -620,7 +621,7 @@ class StuffQualityInspectionLogic extends GetxController {
     List<dynamic> jsonData = jsonDecode(jsonDat);
 
     state.inspectionsListData =
-        jsonData.map((item) => QualityInspectionInfo.fromJson(item)).toList();
+        jsonData.map((item) => StuffQualityInspectionInfo.fromJson(item)).toList();
 
     var qty = 0.0;
 

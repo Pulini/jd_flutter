@@ -1,14 +1,10 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jd_flutter/bean/http/response/worker_info.dart';
 import 'package:jd_flutter/route.dart';
-import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/picker/picker_controller.dart';
 import 'package:jd_flutter/widget/picker/picker_view.dart';
-import 'package:jd_flutter/widget/signature_page.dart';
-import 'package:jd_flutter/widget/worker_check_widget.dart';
+
 
 qualityInspectionListLocationDialog({
   Function(String)? success,
@@ -18,7 +14,7 @@ qualityInspectionListLocationDialog({
     hasAll: true,
     PickerType.sapFactoryWarehouse,
     saveKey:
-        '${RouteConfig.waitPickingMaterial.name}${PickerType.sapFactoryWarehouse}-location',
+    '${RouteConfig.waitPickingMaterial.name}${PickerType.sapFactoryWarehouse}-location',
     buttonName: 'quality_inspection_store_location'.tr,
   );
 
@@ -26,7 +22,7 @@ qualityInspectionListLocationDialog({
     PopScope(
       canPop: false,
       child: Obx(
-        () => AlertDialog(
+            () => AlertDialog(
           title: Text('quality_inspection_storage_location'.tr),
           content: SizedBox(
             width: 300,
@@ -44,13 +40,13 @@ qualityInspectionListLocationDialog({
           actions: [
             TextButton(
               onPressed: () {
-                if (storeWarehouse.getOptionsPicker1().pickerId().isEmpty ||
-                    storeWarehouse.getOptionsPicker2().pickerId().isEmpty) {
+                if (storeWarehouse.getPickItem1().pickerId().isEmpty ||
+                    storeWarehouse.getPickItem2().pickerId().isEmpty) {
                   showSnackBar(message: 'quality_inspection_store_location_empty'.tr);
                   return;
                 }
                 Get.back();
-                success!.call(storeWarehouse.getOptionsPicker2().pickerId());
+                success!.call(storeWarehouse.getPickItem2().pickerId());
               },
               child: Text('dialog_default_confirm'.tr),
             ),

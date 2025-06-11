@@ -1,14 +1,13 @@
 import 'dart:convert';
 import 'package:collection/collection.dart';
 import 'package:get/get.dart';
-import 'package:jd_flutter/bean/http/response/quality_inspection_detail_info.dart';
-import 'package:jd_flutter/bean/http/response/quality_inspection_info.dart';
+import 'package:jd_flutter/bean/http/response/stuff_quality_inspection_detail_info.dart';
 import 'package:jd_flutter/bean/http/response/quality_inspection_receipt_info.dart';
 import 'package:jd_flutter/bean/http/response/quality_inspection_show_color.dart';
+import 'package:jd_flutter/bean/http/response/stuff_quality_inspection_info.dart';
 import 'package:jd_flutter/fun/warehouse/in/quality_inspection_list/quality_inspection_list_detail_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/quality_inspection_list/quality_inspection_list_state.dart';
 import 'package:jd_flutter/fun/warehouse/in/quality_inspection_list/quality_inspection_reverse_color_view.dart';
-import 'package:jd_flutter/fun/warehouse/in/quality_inspection/stuff_quality_inspection_view.dart';
 import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
@@ -17,10 +16,12 @@ import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/picker/picker_controller.dart';
 import 'package:jd_flutter/widget/spinner_widget.dart';
 
+import '../stuff_quality_inspection/stuff_quality_inspection_view.dart';
+
 class QualityInspectionListLogic extends GetxController {
   final QualityInspectionListState state = QualityInspectionListState();
 
-  var selectList = <QualityInspectionInfo>[];
+  var selectList = <StuffQualityInspectionInfo>[];
   var selectIndex = -1;
   var selectCode = '';
 
@@ -164,7 +165,7 @@ class QualityInspectionListLogic extends GetxController {
       if (response.resultCode == resultSuccess) {
         state.dataList = [
           for (var i = 0; i < response.data.length; ++i)
-            QualityInspectionInfo.fromJson(response.data[i])
+            StuffQualityInspectionInfo.fromJson(response.data[i])
         ];
         arrangeData();
       } else {
@@ -188,7 +189,7 @@ class QualityInspectionListLogic extends GetxController {
     }
 
     for (var name in name) {
-      var dataList = <QualityInspectionInfo>[];
+      var dataList = <StuffQualityInspectionInfo>[];
       dataList.clear();
       for (var data in state.dataList) {
         if (('${data.inspectionOrderNo}_${data.materialCode}') == name) {
@@ -215,7 +216,7 @@ class QualityInspectionListLogic extends GetxController {
 
   //去看详情
   goDetail(int position) {
-    var list = <QualityInspectionInfo>[];
+    var list = <StuffQualityInspectionInfo>[];
     for (var data in state.showDataList[position]) {
       list.add(data);
     }
@@ -474,7 +475,7 @@ class QualityInspectionListLogic extends GetxController {
         state.locationList.clear();
         state.locationList = [
           for (var json in response.data)
-            QualityInspectionDetailInfo.fromJson(json)
+            StuffQualityInspectionDetailInfo.fromJson(json)
         ];
         if (state.locationList.isNotEmpty) {
           success!.call();
@@ -500,14 +501,14 @@ class QualityInspectionListLogic extends GetxController {
             {
               'InspectionOrderNo': list.inspectionOrderNo,
               'InspectionLineNumber':
-                  list.colorSeparationList?[0].inspectionLineNumber,
+                  list.stuffColorSeparationList?[0].inspectionLineNumber,
               'ColorSeparationSheetNumber':
-                  list.colorSeparationList?[0].colorSeparationSheetNumber,
+                  list.stuffColorSeparationList?[0].colorSeparationSheetNumber,
               'ColorSeparationSingleLineNumber':
-                  list.colorSeparationList?[0].colorSeparationSingleLineNumber,
-              'BatchNumber': list.colorSeparationList?[0].batch,
+                  list.stuffColorSeparationList?[0].colorSeparationSingleLineNumber,
+              'BatchNumber': list.stuffColorSeparationList?[0].batch,
               'Location': location,
-              'MaterialCode': list.colorSeparationList?[0].materialCode,
+              'MaterialCode': list.stuffColorSeparationList?[0].materialCode,
             }
         ]
       },
@@ -538,20 +539,20 @@ class QualityInspectionListLogic extends GetxController {
         state.locationList.clear();
         state.locationList = [
           for (var json in response.data)
-            QualityInspectionDetailInfo.fromJson(json)
+            StuffQualityInspectionDetailInfo.fromJson(json)
         ];
         if (state.locationList.isNotEmpty) {
-          var colors = <ColorSeparationList>[];
+          var colors = <StuffColorSeparationList>[];
           var allQty = 0.0;
           colors.clear();
           for (var data in state.locationList) {
-            data.colorSeparationList?.forEach((sub) {
+            data.stuffColorSeparationList?.forEach((sub) {
               allQty = allQty + sub.colorSeparationQuantity.toDoubleTry();
               colors.add(sub);
             });
           }
 
-          colors.add(ColorSeparationList(
+          colors.add(StuffColorSeparationList(
             batch: '合计',
             colorSeparationQuantity: allQty.toShowString(),
           ));

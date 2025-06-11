@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/quality_inspection_info.dart';
+import 'package:jd_flutter/bean/http/response/stuff_quality_inspection_info.dart';
 import 'package:jd_flutter/fun/warehouse/in/quality_inspection_list/quality_inspection_list_logic.dart';
 import 'package:jd_flutter/fun/warehouse/in/quality_inspection_list/quality_inspection_list_state.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
@@ -20,7 +21,7 @@ class _QualityInspectionListDetailPageState
   final QualityInspectionListState state =
       Get.find<QualityInspectionListLogic>().state;
 
-  Widget _item(QualityInspectionInfo item) {
+  Widget _item(StuffQualityInspectionInfo item) {
     return SizedBox(
       width: 120 * 23,
       child: Container(

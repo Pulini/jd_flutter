@@ -1,14 +1,10 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jd_flutter/bean/http/response/worker_info.dart';
 import 'package:jd_flutter/route.dart';
-import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/picker/picker_controller.dart';
 import 'package:jd_flutter/widget/picker/picker_view.dart';
-import 'package:jd_flutter/widget/signature_page.dart';
-import 'package:jd_flutter/widget/worker_check_widget.dart';
+
 
 qualityInspectionListStoreDialog({
   Function(String, String)? success,
@@ -56,14 +52,14 @@ qualityInspectionListStoreDialog({
                   showSnackBar(message: 'quality_inspection_empty'.tr);
                   return;
                 }
-                if (storeWarehouse.getOptionsPicker1().pickerId().isEmpty ||
-                    storeWarehouse.getOptionsPicker2().pickerId().isEmpty) {
+                if (storeWarehouse.getPickItem1().pickerId().isEmpty ||
+                    storeWarehouse.getPickItem2().pickerId().isEmpty) {
                   showSnackBar(message: 'quality_inspection_store_empty'.tr);
                   return;
                 }
                 Get.back();
                 success!.call(postAccountDate.getDateFormatSapYMD(),
-                    storeWarehouse.getOptionsPicker2().pickerId());
+                    storeWarehouse.getPickItem2().pickerId());
               },
               child: Text('dialog_default_confirm'.tr),
             ),

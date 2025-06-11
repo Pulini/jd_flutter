@@ -1,9 +1,8 @@
 import 'dart:convert';
-
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/people_message_info.dart';
-import 'package:jd_flutter/bean/http/response/quality_inspection_info.dart';
 import 'package:jd_flutter/bean/http/response/show_color_batch.dart';
+import 'package:jd_flutter/bean/http/response/stuff_quality_inspection_info.dart';
 import 'package:jd_flutter/bean/http/response/temporary_order_info.dart';
 import 'package:jd_flutter/bean/http/response/visit_photo_bean.dart';
 
@@ -41,7 +40,7 @@ class StuffQualityInspectionState {
   var list2 = ['无', '面料', '里料', '底料', '针辅', '包材', '楦头', '模具'];
   var list3 = ['无', '面部采购课', '底部采购课', '采购中心'];
 
-  var inspectionsListData = <QualityInspectionInfo>[]; //品检单列表带过来的数据
+  var inspectionsListData = <StuffQualityInspectionInfo>[]; //品检单列表带过来的数据
 
   var isSameCode = true; //是否是同一物料
 

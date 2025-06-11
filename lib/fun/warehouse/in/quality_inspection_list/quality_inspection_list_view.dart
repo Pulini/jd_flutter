@@ -1,13 +1,13 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:jd_flutter/bean/http/response/quality_inspection_detail_info.dart';
-import 'package:jd_flutter/bean/http/response/quality_inspection_info.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:jd_flutter/bean/http/response/stuff_quality_inspection_info.dart';
 import 'package:jd_flutter/fun/warehouse/in/quality_inspection_list/quality_inspection_list_location_dialog.dart';
 import 'package:jd_flutter/fun/warehouse/in/quality_inspection_list/quality_inspection_list_logic.dart';
 import 'package:jd_flutter/fun/warehouse/in/quality_inspection_list/quality_inspection_list_state.dart';
 import 'package:jd_flutter/fun/warehouse/in/quality_inspection_list/quality_inspection_list_store_dialog.dart';
-import 'package:jd_flutter/fun/warehouse/in/quality_inspection/stuff_quality_inspection_view.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
@@ -15,6 +15,8 @@ import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
 import 'package:jd_flutter/widget/picker/picker_view.dart';
 import 'package:jd_flutter/widget/spinner_widget.dart';
+
+import '../../../../bean/http/response/stuff_quality_inspection_detail_info.dart';
 
 class QualityInspectionListPage extends StatefulWidget {
   const QualityInspectionListPage({super.key});
@@ -63,7 +65,7 @@ class _QualityInspectionListPageState extends State<QualityInspectionListPage> {
     );
   }
 
-  _colorItem(ColorSeparationList data) {
+  _colorItem(StuffColorSeparationList data) {
     return Row(
       children: [
         Expanded(
@@ -75,7 +77,7 @@ class _QualityInspectionListPageState extends State<QualityInspectionListPage> {
         )),
         Expanded(
             child: _text(
-          mes: data.colorSeparationQuantity.toDoubleTry().toShowString(),
+          mes: data.colorSeparationQuantity!.toDoubleTry().toShowString(),
           backColor: Colors.greenAccent.shade100,
           head: false,
           paddingNumber: 5,
@@ -161,7 +163,7 @@ class _QualityInspectionListPageState extends State<QualityInspectionListPage> {
     );
   }
 
-  Widget _subItem(QualityInspectionInfo data, int index, int position) {
+  Widget _subItem(StuffQualityInspectionInfo data, int index, int position) {
     return GestureDetector(
       onTap: () {
         logic.goDetail(position);
@@ -269,7 +271,7 @@ class _QualityInspectionListPageState extends State<QualityInspectionListPage> {
     );
   }
 
-  _item(List<QualityInspectionInfo> data, int position) {
+  _item(List<StuffQualityInspectionInfo> data, int position) {
     var itemTitle = Row(
       children: [
         Expanded(
@@ -453,187 +455,175 @@ class _QualityInspectionListPageState extends State<QualityInspectionListPage> {
             Row(
               children: [
                 Expanded(
-                    child: Obx(() => Visibility(
-                          visible: state.btnShowReverse.value,
-                          child: CombinationButton(
-                            //冲销
-                            text: 'quality_inspection_reverse'.tr,
-                            click: () {
-                              logic.checkReceipt(success: () {
-                                logic.receiptReversal(error: () {
-                                  reasonInputPopup(
-                                    title: [
-                                      Center(
-                                        child: Text(
-                                          'quality_inspection_reverse'.tr,
-                                          style: const TextStyle(
-                                              fontSize: 20,
-                                              color: Colors.white),
-                                        ),
-                                      )
-                                    ],
-                                    hintText:
-                                        'quality_inspection_reversal_reason'.tr,
-                                    isCanCancel: true,
-                                    confirm: (s) {
-                                      Get.back();
-                                      logic.colorSubmit(
-                                          reason: '',
-                                          success: (s) {
-                                            successDialog(
-                                                content: s,
-                                                back: () {
-                                                  Get.back(result: true);
-                                                });
+                    child: Obx(() => CombinationButton(
+                      isEnabled: state.btnShowReverse.value,
+                      //冲销
+                      text: 'quality_inspection_reverse'.tr,
+                      click: () {
+                        logic.checkReceipt(success: () {
+                          logic.receiptReversal(error: () {
+                            reasonInputPopup(
+                              title: [
+                                Center(
+                                  child: Text(
+                                    'quality_inspection_reverse'.tr,
+                                    style: const TextStyle(
+                                        fontSize: 20,
+                                        color: Colors.white),
+                                  ),
+                                )
+                              ],
+                              hintText:
+                              'quality_inspection_reversal_reason'.tr,
+                              isCanCancel: true,
+                              confirm: (s) {
+                                Get.back();
+                                logic.colorSubmit(
+                                    reason: '',
+                                    success: (s) {
+                                      successDialog(
+                                          content: s,
+                                          back: () {
+                                            Get.back(result: true);
                                           });
-                                    },
-                                  );
-                                });
-                              });
-                            },
-                            combination: Combination.left,
-                          ),
-                        ))),
+                                    });
+                              },
+                            );
+                          });
+                        });
+                      },
+                      combination: Combination.left,
+                    ))),
                 Expanded(
-                    child: Obx(() => Visibility(
-                          visible: state.btnShowStore.value,
-                          child: CombinationButton(
-                            //入库
-                            text: 'quality_inspection_store'.tr,
-                            click: () {
-                              logic.checkStore(success:
-                                  qualityInspectionListStoreDialog(
-                                      success: (date, store1) {
-                                logic.store(
-                                  date: date,
-                                  store1: store1,
+                    child: Obx(() => CombinationButton(
+                      isEnabled: state.btnShowStore.value,
+                      //入库
+                      text: 'quality_inspection_store'.tr,
+                      click: () {
+                        logic.checkStore(success:
+                        qualityInspectionListStoreDialog(
+                            success: (date, store1) {
+                              logic.store(
+                                date: date,
+                                store1: store1,
+                                success: (s) {
+                                  successDialog(
+                                      content: s,
+                                      back: () {
+                                        logic.getInspectionList();
+                                      });
+                                },
+                              );
+                            }));
+                      },
+                      combination: Combination.middle,
+                    ))),
+                Expanded(
+                    child: Obx(() => CombinationButton(
+                      //删除
+                      isEnabled: state.btnShowDelete.value,
+                      text: 'quality_inspection_delete_btn'.tr,
+                      click: () => logic.checkDelete(
+                          success: () => reasonInputPopup(
+                            title: [
+                              Center(
+                                child: Text(
+                                  'quality_inspection_delete_btn'.tr,
+                                  style: const TextStyle(
+                                      fontSize: 20,
+                                      color: Colors.white),
+                                ),
+                              )
+                            ],
+                            hintText:
+                            'quality_inspection_input_delete_reason'
+                                .tr,
+                            isCanCancel: true,
+                            confirm: (s) {
+                              Get.back();
+                              logic.deleteData(
+                                  reason: s,
                                   success: (s) {
                                     successDialog(
                                         content: s,
                                         back: () {
                                           logic.getInspectionList();
                                         });
-                                  },
-                                );
-                              }));
+                                  });
                             },
-                            combination: Combination.middle,
-                          ),
-                        ))),
+                          )),
+                      combination: Combination.middle,
+                    ))),
                 Expanded(
-                    child: Obx(() => Visibility(
-                          visible: state.btnShowDelete.value,
-                          child: CombinationButton(
-                            //删除
-                            text: 'quality_inspection_delete_btn'.tr,
-                            click: () => logic.checkDelete(
-                                success: () => reasonInputPopup(
-                                      title: [
-                                        Center(
-                                          child: Text(
-                                            'quality_inspection_delete_btn'.tr,
-                                            style: const TextStyle(
-                                                fontSize: 20,
-                                                color: Colors.white),
-                                          ),
-                                        )
-                                      ],
-                                      hintText:
-                                          'quality_inspection_input_delete_reason'
-                                              .tr,
-                                      isCanCancel: true,
-                                      confirm: (s) {
-                                        Get.back();
-                                        logic.deleteData(
-                                            reason: s,
-                                            success: (s) {
-                                              successDialog(
-                                                  content: s,
-                                                  back: () {
-                                                    logic.getInspectionList();
-                                                  });
-                                            });
-                                      },
-                                    )),
-                            combination: Combination.middle,
-                          ),
-                        ))),
+                    child: Obx(() => CombinationButton(
+                      //修改
+                      isEnabled: state.btnShowChange.value,
+                      text: 'quality_inspection_change'.tr,
+                      click: () {
+                        logic.checkChange(success: () {
+                          logic.arrangeChangeData();
+                        });
+                      },
+                      combination: Combination.middle,
+                    ))),
                 Expanded(
-                    child: Obx(() => Visibility(
-                          visible: state.btnShowChange.value,
-                          child: CombinationButton(
-                            //修改
-                            text: 'quality_inspection_change'.tr,
-                            click: () {
-                              logic.checkChange(success: () {
-                                logic.arrangeChangeData();
-                              });
-                            },
-                            combination: Combination.middle,
-                          ),
-                        ))),
-                Expanded(
-                    child: Obx(() => Visibility(
-                          visible: state.btnShowLocation.value,
-                          child: CombinationButton(
-                            //货位
-                            text: 'quality_inspection_location'.tr,
-                            click: () {
-                              logic.checkSame(success: () {
-                                qualityInspectionListLocationDialog(
-                                    success: (store) {
-                                  logic.getLocation(
-                                      store: store,
-                                      success: () {
-                                        reasonInputPopup(
-                                          title: [
-                                            Center(
-                                              child: Text(
-                                                'quality_inspection_change_location_title'
-                                                    .tr,
-                                                style: const TextStyle(
-                                                    fontSize: 20,
-                                                    color: Colors.white),
-                                              ),
-                                            )
-                                          ],
-                                          hintText:
-                                              'quality_inspection_input_location'
+                    child: Obx(() =>CombinationButton(
+                      //货位
+                      isEnabled: state.btnShowLocation.value,
+                      text: 'quality_inspection_location'.tr,
+                      click: () {
+                        logic.checkSame(success: () {
+                          qualityInspectionListLocationDialog(
+                              success: (location) {
+                                logic.getLocation(
+                                    store: location,
+                                    success: () {
+                                      reasonInputPopup(
+                                        title: [
+                                          Center(
+                                            child: Text(
+                                              'quality_inspection_change_location_title'
                                                   .tr,
-                                          tips:
-                                              state.locationList[0].location ??
-                                                  '',
-                                          isCanCancel: true,
-                                          confirm: (s) {
-                                            Get.back();
-                                            logic.changeLocation(
-                                                location: s,
-                                                success: () {
-                                                  logic.getInspectionList();
-                                                });
-                                          },
-                                        );
-                                      });
-                                });
+                                              style: const TextStyle(
+                                                  fontSize: 20,
+                                                  color: Colors.white),
+                                            ),
+                                          )
+                                        ],
+                                        hintText:
+                                        'quality_inspection_input_location'
+                                            .tr,
+                                        tips:
+                                        state.locationList[0].location ??
+                                            '',
+                                        isCanCancel: true,
+                                        confirm: (s) {
+                                          Get.back();
+                                          logic.changeLocation(
+                                              location: s,
+                                              success: () {
+                                                logic.getInspectionList();
+                                              });
+                                        },
+                                      );
+                                    });
                               });
-                            },
-                            combination: Combination.middle,
-                          ),
-                        ))),
+                        });
+                      },
+                      combination: Combination.middle,
+                    ))),
                 Expanded(
-                    child: Obx(() => Visibility(
-                          visible: state.btnShowColor.value,
-                          child: CombinationButton(
-                            //分色
-                            text: 'quality_inspection_color'.tr,
-                            click: () {
-                              logic.checkSame(success: () {
-                                logic.getColor(success: showColor());
-                              });
-                            },
-                            combination: Combination.right,
-                          ),
-                        )))
+                    child: Obx(() => CombinationButton(
+                      //分色
+                      isEnabled: state.btnShowColor.value,
+                      text: 'quality_inspection_color'.tr,
+                      click: () {
+                        logic.checkSame(success: () {
+                          logic.getColor(success: showColor());
+                        });
+                      },
+                      combination: Combination.right,
+                    )))
               ],
             )
           ],

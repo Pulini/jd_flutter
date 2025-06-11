@@ -24,8 +24,8 @@
 /// UnqualifiedList : []
 /// ColorSeparationList : [{"Factory":"1000","InspectionOrderNo":"330000494762","InspectionLineNumber":"00016","ColorSeparationSheetNumber":"100000052818","ColorSeparationSingleLineNumber":"00001","Batch":"20250521C1","ColorSeparationQuantity":"226.000","Location":"","MaterialCode":"02280102229","MaterialDescription":"180g*1.37m灰褐色5微弹超纤（麂皮绒）"}]
 
-class QualityInspectionDetailInfo {
-  QualityInspectionDetailInfo({
+class StuffQualityInspectionDetailInfo {
+  StuffQualityInspectionDetailInfo({
       this.inspectionOrderNo, 
       this.inspectionLineNumber, 
       this.temporaryNo, 
@@ -50,9 +50,9 @@ class QualityInspectionDetailInfo {
       this.remarks, 
       this.location, 
       this.unqualifiedList, 
-      this.colorSeparationList,});
+      this.stuffColorSeparationList,});
 
-  QualityInspectionDetailInfo.fromJson(dynamic json) {
+  StuffQualityInspectionDetailInfo.fromJson(dynamic json) {
     inspectionOrderNo = json['InspectionOrderNo'];
     inspectionLineNumber = json['InspectionLineNumber'];
     temporaryNo = json['TemporaryNo'];
@@ -83,9 +83,9 @@ class QualityInspectionDetailInfo {
       });
     }
     if (json['ColorSeparationList'] != null) {
-      colorSeparationList = [];
+      stuffColorSeparationList = [];
       json['ColorSeparationList'].forEach((v) {
-        colorSeparationList?.add(ColorSeparationList.fromJson(v));
+        stuffColorSeparationList?.add(StuffColorSeparationList.fromJson(v));
       });
     }
   }
@@ -113,7 +113,7 @@ class QualityInspectionDetailInfo {
   String? remarks;
   String? location;
   List<UnqualifiedList>? unqualifiedList;
-  List<ColorSeparationList>? colorSeparationList;
+  List<StuffColorSeparationList>? stuffColorSeparationList;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -143,8 +143,8 @@ class QualityInspectionDetailInfo {
     if (unqualifiedList != null) {
       map['UnqualifiedList'] = unqualifiedList?.map((v) => v.toJson()).toList();
     }
-    if (colorSeparationList != null) {
-      map['ColorSeparationList'] = colorSeparationList?.map((v) => v.toJson()).toList();
+    if (stuffColorSeparationList != null) {
+      map['ColorSeparationList'] = stuffColorSeparationList?.map((v) => v.toJson()).toList();
     }
     return map;
   }
@@ -162,8 +162,8 @@ class QualityInspectionDetailInfo {
 /// MaterialCode : "02280102229"
 /// MaterialDescription : "180g*1.37m灰褐色5微弹超纤（麂皮绒）"
 
-class ColorSeparationList {
-  ColorSeparationList({
+class StuffColorSeparationList {
+  StuffColorSeparationList({
       this.factory, 
       this.inspectionOrderNo, 
       this.inspectionLineNumber, 
@@ -175,7 +175,7 @@ class ColorSeparationList {
       this.materialCode, 
       this.materialDescription,});
 
-  ColorSeparationList.fromJson(dynamic json) {
+  StuffColorSeparationList.fromJson(dynamic json) {
     factory = json['Factory'];
     inspectionOrderNo = json['InspectionOrderNo'];
     inspectionLineNumber = json['InspectionLineNumber'];
