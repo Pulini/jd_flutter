@@ -973,8 +973,9 @@ class _WaitPickingMaterialPageState extends State<WaitPickingMaterialPage> {
             if (scaffoldKey.currentState?.isEndDrawerOpen == true) {
               scaffoldKey.currentState?.closeEndDrawer();
             } else {
-              if (!didPop)
+              if (!didPop) {
                 exitDialog(content: 'wait_picking_material_order_exit_tips'.tr);
+              }
             }
           },
           child: Column(

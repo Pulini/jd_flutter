@@ -21,7 +21,9 @@ class QualityInspectionPage extends StatefulWidget {
 class _QualityInspectionPageState extends State<QualityInspectionPage> {
   final QualityInspectionLogic logic = Get.put(QualityInspectionLogic());
   final QualityInspectionState state = Get.find<QualityInspectionLogic>().state;
-
+  var instructionNoController = TextEditingController();
+  var typeBodyController = TextEditingController();
+  var customerPOController = TextEditingController();
   var queryStartDateController = DatePickerController(
     PickerType.startDate,
     saveKey: '${RouteConfig.qualityInspection.name}${PickerType.startDate}',
@@ -46,6 +48,9 @@ class _QualityInspectionPageState extends State<QualityInspectionPage> {
 
   _query() {
     logic.queryOrders(
+      instructionNo: instructionNoController.text,
+      typeBody: typeBodyController.text,
+      customerPO: customerPOController.text,
       startDate: queryStartDateController.getDateFormatSapYMD(),
       endDate: queryEndDateController.getDateFormatSapYMD(),
     );
@@ -214,8 +219,6 @@ class _QualityInspectionPageState extends State<QualityInspectionPage> {
     );
   }
 
-  var inspectorNumberController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return pageBodyWithDrawer(
@@ -249,21 +252,18 @@ class _QualityInspectionPageState extends State<QualityInspectionPage> {
         ),
       ],
       queryWidgets: [
-        Obx(() => EditText(
-              hint: '指令号',
-              initStr: state.instructionNo.value,
-              onChanged: (v) => state.instructionNo.value = v,
-            )),
-        Obx(() => EditText(
-              hint: '型体',
-              initStr: state.typeBody.value,
-              onChanged: (v) => state.typeBody.value = v,
-            )),
-        Obx(() => EditText(
-              hint: '客户PO',
-              initStr: state.customerPO.value,
-              onChanged: (v) => state.customerPO.value = v,
-            )),
+        EditText(
+          hint: '指令号',
+          controller: instructionNoController,
+        ),
+        EditText(
+          hint: '型体',
+          controller: typeBodyController,
+        ),
+        EditText(
+          hint: '客户PO',
+          controller: customerPOController,
+        ),
         DatePicker(pickerController: queryStartDateController),
         DatePicker(pickerController: queryEndDateController),
       ],

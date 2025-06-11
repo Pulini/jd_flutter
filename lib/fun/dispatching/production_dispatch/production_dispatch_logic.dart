@@ -17,6 +17,7 @@ import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/picker/picker_controller.dart';
 import 'package:jd_flutter/widget/preview_label_widget.dart';
+import 'package:jd_flutter/widget/tsc_label_template.dart';
 import 'production_dispatch_state.dart';
 
 class ProductionDispatchLogic extends GetxController {

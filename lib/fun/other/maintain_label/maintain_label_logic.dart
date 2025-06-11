@@ -10,6 +10,7 @@ import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/preview_label_list_widget.dart';
 import 'package:jd_flutter/widget/preview_label_widget.dart';
+import 'package:jd_flutter/widget/tsc_label_template.dart';
 
 import 'maintain_label_state.dart';
 
@@ -418,7 +419,7 @@ class MaintainLabelLogic extends GetxController {
         ],
       );
 
-      labelList.add(fixedLabelTemplate(
+      labelList.add(fixedLabelTemplate75x45(
         qrCode: data.barCode ?? '',
         title: labelTitle,
         subTitle: labelSubTitle,
@@ -693,7 +694,7 @@ class MaintainLabelLogic extends GetxController {
                 ],
               ),
       );
-      labelList.add(dynamicLabelTemplate(
+      labelList.add(dynamicLabelTemplate75xN(
         qrCode: data.barCode ?? '',
         title: labelTitle,
         subTitle: labelSubTitle,
@@ -856,7 +857,7 @@ class MaintainLabelLogic extends GetxController {
         ),
       );
 
-      labelList.add(fixedLabelTemplate(
+      labelList.add(fixedLabelTemplate75x45(
         qrCode: data[0].barCode ?? '',
         title: labelTitle,
         subTitle: labelSubTitle,
@@ -1140,7 +1141,7 @@ class MaintainLabelLogic extends GetxController {
                 ],
               ),
       );
-      labelList.add(dynamicLabelTemplate(
+      labelList.add(dynamicLabelTemplate75xN(
         qrCode: data[0].barCode ?? '',
         title: labelTitle,
         subTitle: labelSubTitle,

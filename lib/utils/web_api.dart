@@ -1338,6 +1338,8 @@ const webApiPurchaseOrderStockInNew = "api/Package/PurchaseOrderStockIn_Off";
 //材料品质异常 品检不合格原因到OA
 const webApiAbnormalMaterialQuality = "api/Inspection/AbnormalMaterialQuality";
 
+//获取标签信息
+const webApiSapLabelBindingGetLabelInfo = 'sap/zapp/ZMM051_GET_BQSC';
 
-
-
+//提交标签绑定操作
+const webApiSapLabelBindingSubmitOperation = 'sap/zapp/ZMM051_RES_ZDBDX';

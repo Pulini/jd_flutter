@@ -4,9 +4,9 @@ import 'package:jd_flutter/bean/http/response/machine_dispatch_info.dart';
 import 'package:jd_flutter/bean/http/response/sap_label_info.dart';
 import 'package:jd_flutter/fun/dispatching/machine_dispatch/machine_dispatch_history_view.dart';
 import 'package:jd_flutter/utils/utils.dart';
-import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/preview_label_widget.dart';
+import 'package:jd_flutter/widget/tsc_label_template.dart';
 
 import 'machine_dispatch_report_view.dart';
 import 'machine_dispatch_state.dart';
@@ -255,7 +255,7 @@ class MachineDispatchLogic extends GetxController {
 
   fixedLabel({required MachineDispatchReprintLabelInfo label}) => label
           .isEnglish
-      ? fixedLabelTemplate(
+      ? fixedLabelTemplate75x45(
           qrCode: label.labelID,
           title: Text(
             label.factoryType,
@@ -381,7 +381,7 @@ class MachineDispatchLogic extends GetxController {
             ),
           ),
         )
-      : fixedLabelTemplate(
+      : fixedLabelTemplate75x45(
           qrCode: label.labelID,
           title: Text(
             label.factoryType,

@@ -135,7 +135,7 @@ class _OrderWaitInspectionPageState extends State<OrderWaitInspectionPage> {
   @override
   Widget build(BuildContext context) {
     return pageBody(
-      title: 'incoming_inspection_order_inspection',
+      title: 'incoming_inspection_order_inspection'.tr,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

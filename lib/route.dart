@@ -8,7 +8,6 @@ import 'package:jd_flutter/fun/warehouse/in/delivery_order/delivery_order_view.d
 import 'package:jd_flutter/fun/warehouse/in/incoming_inspection/incoming_inspection_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/production_scan_warehouse/production_scan_warehouse_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/purchase_order_reversal/purchase_order_reversal_view.dart';
-import 'package:jd_flutter/fun/warehouse/in/quality_inspection_list/quality_inspection_list_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/sap_picking_receipt_reversal/sap_picking_receipt_reversal_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/sap_put_on_shelves/sap_put_on_shelves_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/suppliers_scan_store/suppliers_scan_store_view.dart';
@@ -65,6 +64,7 @@ import 'fun/warehouse/manage/anti_Counterfeiting/puma_anti_counterfeiting_view.d
 import 'fun/warehouse/manage/carton_label_scan/carton_label_scan_view.dart';
 import 'fun/warehouse/manage/carton_label_scan/carton_label_scan_progress_view.dart';
 import 'fun/warehouse/manage/quality_inspection/quality_inspection_view.dart';
+import 'fun/warehouse/manage/sap_label_binding/sap_label_binding_view.dart';
 import 'fun/warehouse/manage/sap_wms_split_label/sap_wms_split_label_view.dart';
 import 'fun/warehouse/manage/smart_delivery/smart_delivery_view.dart';
 import 'fun/warehouse/manage/timely_inventory/timely_inventory_view.dart';
@@ -594,6 +594,13 @@ class RouteConfig {
     const SapPackingScanPage(),
   );
 
+  //SAP标签绑定
+  static Routes sapLabelBinding = Routes(
+    '/sap_label_binding',
+    99,
+    const SapLabelBindingPage(),
+  );
+
   //本地功能入口列表
   static List<Routes> routeList = [
     dailyReport,
@@ -667,6 +674,7 @@ class RouteConfig {
     qualityInspection,
     patrolInspection,
     sapPackingScan,
+    sapLabelBinding,
     processDispatchList,
     qualityInspectionList,
   ];
@@ -976,6 +984,10 @@ class RouteConfig {
     GetPage(
       name: sapPackingScan.name,
       page: () => sapPackingScan.page,
+    ),
+    GetPage(
+      name: sapLabelBinding.name,
+      page: () => sapLabelBinding.page,
     ),
   ];
 }

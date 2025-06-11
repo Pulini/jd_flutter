@@ -12,10 +12,16 @@ class QualityInspectionLogic extends GetxController {
   final QualityInspectionState state = QualityInspectionState();
 
   queryOrders({
+   required String instructionNo,
+   required String typeBody,
+   required String customerPO,
     required String startDate,
     required String endDate,
   }) {
     state.queryOrders(
+      instructionNo:instructionNo,
+      typeBody:typeBody,
+      customerPO:customerPO,
       startDate: startDate,
       endDate: endDate,
       error: (msg) => errorDialog(content: msg),

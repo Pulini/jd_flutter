@@ -360,7 +360,9 @@ submitInspectionDialog({
                     borderRadius: BorderRadius.circular(10),
                     borderSide: const BorderSide(color: Colors.green, width: 2),
                   ),
-                  labelText: 'incoming_inspection_dialog_inspection_result'.tr,
+                  labelText:
+                      'incoming_inspection_dialog_input_inspection_result_tips'
+                          .tr,
                   labelStyle: const TextStyle(
                       color: Colors.black54, fontWeight: FontWeight.bold),
                   suffixIcon: IconButton(
@@ -394,11 +396,10 @@ submitInspectionDialog({
                 }
                 spSave(
                     spSaveIncomingInspectionInspector, worker!.empCode ?? '');
-                submit.call(worker!, results);
                 Get.back();
+                submit.call(worker!, results);
               },
-              child: Text(
-                  'incoming_inspection_dialog_input_inspection_result_tips'.tr),
+              child: Text('dialog_default_confirm'.tr),
             ),
             TextButton(
               onPressed: () => Get.back(),
