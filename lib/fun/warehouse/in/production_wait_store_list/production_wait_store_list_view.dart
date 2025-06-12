@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/fun/warehouse/in/production_wait_store_list/production_wait_store_list_logic.dart';
 import 'package:jd_flutter/fun/warehouse/in/production_wait_store_list/production_wait_store_list_state.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
-import 'package:jd_flutter/widget/edit_text_widget.dart';
 
 class ProductionWaitStoreListPage extends StatefulWidget {
   const ProductionWaitStoreListPage({super.key});

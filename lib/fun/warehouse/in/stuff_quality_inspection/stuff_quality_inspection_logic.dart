@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/people_message_info.dart';
-import 'package:jd_flutter/bean/http/response/quality_inspection_info.dart';
 import 'package:jd_flutter/bean/http/response/show_color_batch.dart';
 import 'package:jd_flutter/bean/http/response/stuff_quality_inspection_info.dart';
 import 'package:jd_flutter/bean/http/response/temporary_order_info.dart';
@@ -555,7 +554,7 @@ class StuffQualityInspectionLogic extends GetxController {
             }
         ],
         'MES_Items2': [
-          for (var item in state.inspectionsListData)
+          for (var _ in state.inspectionsListData)
             {
               'UnqualifiedGroup': upType,
               'UnqualifiedReason': reason,
@@ -832,13 +831,13 @@ class StuffQualityInspectionLogic extends GetxController {
         //入库日期
         'DeclarationDate': getDateYMD(),
         //申报日期
-        'FactoryModel': state.detailInfo!.receipt?.where((data)=>data.isSelected!.value==true).toList()[0].factoryModel,
+        'FactoryModel': state.detailInfo!.receipt?.where((data)=>data.isSelected.value==true).toList()[0].factoryModel,
         //工厂型体
-        'DistributiveModel': state.detailInfo!.receipt?.where((data)=>data.isSelected!.value==true).toList()[0].distributiveModel,
+        'DistributiveModel': state.detailInfo!.receipt?.where((data)=>data.isSelected.value==true).toList()[0].distributiveModel,
         //分配型体
-        'MaterialName': state.detailInfo!.receipt?.where((data)=>data.isSelected!.value==true).toList()[0].materialName,
+        'MaterialName': state.detailInfo!.receipt?.where((data)=>data.isSelected.value==true).toList()[0].materialName,
         //物料名称
-        'MaterialCode': state.detailInfo!.receipt?.where((data)=>data.isSelected!.value==true).toList()[0].materialCode,
+        'MaterialCode': state.detailInfo!.receipt?.where((data)=>data.isSelected.value==true).toList()[0].materialCode,
         //物料编码
         'ExceptionDescription': exceptionDescriptionController.text,
         //异常说明
@@ -854,7 +853,7 @@ class StuffQualityInspectionLogic extends GetxController {
         //检验数量
         'ShortCodesNumber': shortQualifiedController.text,
         //短码数量
-        'InspectionUnit': state.detailInfo!.receipt?.where((data)=>data.isSelected!.value==true).toList()[0].commonUnits,
+        'InspectionUnit': state.detailInfo!.receipt?.where((data)=>data.isSelected.value==true).toList()[0].commonUnits,
         //报检单位
         'Photos': [
           for (var pic in state.picture)
@@ -909,7 +908,7 @@ class StuffQualityInspectionLogic extends GetxController {
       countQuality = qualifiedController.text.toDoubleTry();
     }
 
-    var detailList = state.detailInfo!.receipt!.where((data)=>data.isSelected!.value == true);
+    var detailList = state.detailInfo!.receipt!.where((data)=>data.isSelected.value == true);
 
     for (var data in detailList) {
       //初始化合格数
@@ -1098,7 +1097,7 @@ class StuffQualityInspectionLogic extends GetxController {
             }
         ],
         'MES_Items2': [
-          for (var item in detailList)
+          for (var _ in detailList)
             {
               'UnqualifiedGroup': upType,
               'UnqualifiedReason': reason,

@@ -167,18 +167,18 @@ class _TemporaryOrderDetailPageState extends State<TemporaryOrderDetailPage> {
         if (itemCanSelect)
           Obx(() => CombinationButton(
                 combination: Combination.left,
-                isEnabled: detail.receipt!.any((v) => v.isSelected!.value),
+                isEnabled: detail.receipt!.any((v) => v.isSelected.value),
                 text: 'temporary_order_detail_test_application'.tr,
                 click: () => testApplicationDialog(
                   temporaryOrderNumber: detail.temporaryNumber ?? '',
                   selectedList:
-                      detail.receipt!.where((v) => v.isSelected!.value).toList(),
+                      detail.receipt!.where((v) => v.isSelected.value).toList(),
                 ),
               )),
         if (itemCanSelect)
           Obx(() => CombinationButton(
                 combination: Combination.right,
-                isEnabled: detail.receipt!.any((v) => v.isSelected!.value),
+                isEnabled: detail.receipt!.any((v) => v.isSelected.value),
                 text: 'temporary_order_detail_inspection'.tr,
                 click: (){
                   logic.checkToInspection();
