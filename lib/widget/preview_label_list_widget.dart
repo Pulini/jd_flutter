@@ -47,9 +47,7 @@ class _PreviewLabelListState extends State<PreviewLabelList> {
     super.initState();
     for (var v in widget.labelWidgets) {
       widgetList.add(WidgetsToImage(
-        image: (image) => imageResizeToLabel(image).then((label) {
-          labelList.add(label);
-        }),
+        image: (map) async => labelList.add(await imageResizeToLabel(map)),
         child: v,
       ));
     }
@@ -82,16 +80,18 @@ class _PreviewLabelListState extends State<PreviewLabelList> {
           ],
           body: SingleChildScrollView(
             padding: const EdgeInsets.all(10),
-            child:Center(child:  Column(
-              children: [
-                for (var v in widgetList)
-                  SingleChildScrollView(
-                    padding: const EdgeInsets.only(bottom: 10),
-                    scrollDirection: Axis.horizontal,
-                    child: v,
-                  )
-              ],
-            ),),
+            child: Center(
+              child: Column(
+                children: [
+                  for (var v in widgetList)
+                    SingleChildScrollView(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      scrollDirection: Axis.horizontal,
+                      child: v,
+                    )
+                ],
+              ),
+            ),
           ),
         ));
   }

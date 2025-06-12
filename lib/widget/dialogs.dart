@@ -148,6 +148,7 @@ GlobalKey<NavigatorState> loadingKey = GlobalKey();
 
 //加载中弹窗
 loadingDialog(String? content) {
+  loadingDismiss();
   Get.dialog(
     PopScope(
       canPop: false,

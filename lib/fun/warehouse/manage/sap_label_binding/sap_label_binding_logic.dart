@@ -154,33 +154,35 @@ class SapLabelBindingLogic extends GetxController {
 
   printNewBoxLabel() {
     state.getLabelPrintInfo(
-      success: (labels) {
-
-        // if (labels.length > 1) {
-        //   Get.to(() => PreviewLabelList(labelWidgets: labels));
-        // } else {
-        //   Get.to(() => PreviewLabel(labelWidget: labels[0]));
-        // }
+      success: (labelsData) {
+        var labels = [dynamicLabelTemplate110xN(
+          productName: '干燥剂/dehumidifier/mesin pengering ruangan',
+          companyOrderType: '1096正单',
+          customsDeclarationType: '进料加工/PIM',
+          materialList: [
+            ['010600985','双色PU20244096测试1','999.999','M'],
+            ['010600986','双色PU20244096测试2','999.999','CI'],
+            ['010600987','双色PU20244096测试3','999.999','MM'],
+          ],
+          pieceNo: '1-1',
+          grossWeight: '999.999',
+          netWeight: '999.999',
+          qrCode: '00505685E5761FE090E58AE9B8A5E489',
+          code: '12345678901234',
+          specifications: '30x30x40CM (LxWxH)',
+          volume: '999.999',
+          supplier: '0000500289',
+          manufactureDate: '2025-06-10',
+          consignee: 'PT.GOLD EMPEROR DUA',
+        )];
+        if (labels.length > 1) {
+          Get.to(() => PreviewLabelList(labelWidgets: labels));
+        } else {
+          Get.to(() => PreviewLabel(labelWidget: labels[0]));
+        }
       },
       error: (msg) => errorDialog(content: msg),
     );
   }
 
-  // Widget label1() {
-  //   return dynamicLabelTemplate110xN(
-  //     productName: 'productName',
-  //     companyOrderType: 'companyOrderType',
-  //     customsDeclarationType: 'orderType',
-  //     pieceNo: 'pieceNo',
-  //     grossWeight: 'grossWeight',
-  //     netWeight: 'netWeight',
-  //     qrCode: 'qrCode',
-  //     code: 'code',
-  //     specifications: 'specifications',
-  //     volume: 'volume',
-  //     supplier: 'supplier',
-  //     manufactureDate: 'manufactureDate',
-  //     consignee: 'consignee',
-  //   );
-  // }
 }

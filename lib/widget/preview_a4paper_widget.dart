@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/constant.dart';
-import 'package:jd_flutter/utils/printer/tsc_util.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/widgets_to_image_widget.dart';
+import 'package:image/image.dart' as img;
 
 import 'custom_widget.dart';
 
@@ -33,6 +33,14 @@ class _PreviewA4PaperState extends State<PreviewA4Paper> {
       logger.i(e);
     });
   }
+  Future<Uint8List> a4PaperImageResize(Uint8List image) async {
+    var reImage = img.copyResize(
+      img.decodeImage(image)!,
+      width: 2380,
+      height: 3368,
+    );
+    return Uint8List.fromList(img.encodePng(reImage));
+  }
 
   @override
   void initState() {
@@ -40,12 +48,11 @@ class _PreviewA4PaperState extends State<PreviewA4Paper> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       for (var paper in widget.paperWidgets) {
         widgetList.add(WidgetsToImage(
-          child: paper,
-          image: (i) async => a4PaperList.add(
-            base64Encode(
-              await a4PaperImageResize(i),
-            ),
+          isRotate90: true,
+          image: (map) async => a4PaperList.add(
+            base64Encode(await a4PaperImageResize(map['image'])),
           ),
+          child: paper,
         ));
       }
     });

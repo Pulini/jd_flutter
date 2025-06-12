@@ -515,8 +515,11 @@ Widget dynamicLabelTemplate110xN({
                       padding: textPadding,
                       alignment: Alignment.centerLeft,
                       decoration: BoxDecoration(border: Border(right: bs)),
-                      child: Text('品名/Product/Produck',
-                          maxLines: 2, style: titleTextStyle),
+                      child: Text(
+                        '品名/Product/Produck',
+                        maxLines: 2,
+                        style: titleTextStyle,
+                      ),
                     ),
                   ),
                   Expanded(
@@ -529,6 +532,7 @@ Widget dynamicLabelTemplate110xN({
                         productName,
                         textAlign: TextAlign.center,
                         maxLines: 2,
+                        style: titleTextStyle,
                       ),
                     ),
                   ),
@@ -540,6 +544,7 @@ Widget dynamicLabelTemplate110xN({
                       child: Text(
                         companyOrderType,
                         maxLines: 2,
+                        style: titleTextStyle,
                       ),
                     ),
                   ),
@@ -558,7 +563,7 @@ Widget dynamicLabelTemplate110xN({
                       alignment: Alignment.centerLeft,
                       decoration: BoxDecoration(border: Border(right: bs)),
                       child: Text(
-                        '报关形式/',
+                        '加工贸易/PT/PP',
                         maxLines: 2,
                         style: titleTextStyle,
                       ),
@@ -574,6 +579,7 @@ Widget dynamicLabelTemplate110xN({
                         customsDeclarationType,
                         textAlign: TextAlign.center,
                         maxLines: 2,
+                        style: titleTextStyle,
                       ),
                     ),
                   ),
@@ -582,10 +588,7 @@ Widget dynamicLabelTemplate110xN({
                     child: Container(
                       padding: textPadding,
                       alignment: Alignment.center,
-                      child: Text(
-                        'MADE IN CHINA',
-                        style: titleTextStyle,
-                      ),
+                      child: Text('MADE IN CHINA', style: titleTextStyle),
                     ),
                   ),
                 ],
@@ -641,8 +644,62 @@ Widget dynamicLabelTemplate110xN({
                   ],
                 ),
               ),
-            // for(var item in materialList??[])
-
+            for (var item in materialList ?? [])
+              Container(
+                height: 25,
+                decoration: BoxDecoration(border: Border(bottom: bs)),
+                child: Row(
+                  children: [
+                    Expanded(
+                      flex: 6,
+                      child: Container(
+                        padding: textPadding,
+                        alignment: Alignment.centerLeft,
+                        decoration: BoxDecoration(border: Border(right: bs)),
+                        child: Text(item[0], style: titleTextStyle),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 9,
+                      child: Container(
+                        padding: textPadding,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(border: Border(right: bs)),
+                        child: Text(
+                          item[1],
+                          textAlign: TextAlign.center,
+                          style: titleTextStyle,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 3,
+                      child: Container(
+                        padding: textPadding,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(border: Border(right: bs)),
+                        child: Text(
+                          item[2],
+                          textAlign: TextAlign.center,
+                          style: titleTextStyle,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 2,
+                      child: Container(
+                        padding: textPadding,
+                        alignment: Alignment.center,
+                        child: Text(
+                          item[3],
+                          textAlign: TextAlign.center,
+                          style: titleTextStyle,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             Container(
               height: 150,
               decoration: BoxDecoration(border: Border(bottom: bs)),
@@ -702,7 +759,7 @@ Widget dynamicLabelTemplate110xN({
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
                                 border: Border(bottom: bs, right: bs)),
-                            child: Text(pieceNo),
+                            child: Text(pieceNo, style: titleTextStyle),
                           ),
                         ),
                         Expanded(
@@ -714,7 +771,8 @@ Widget dynamicLabelTemplate110xN({
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
                                       border: Border(bottom: bs, right: bs)),
-                                  child: Text(grossWeight),
+                                  child:
+                                      Text(grossWeight, style: titleTextStyle),
                                 ),
                               ),
                               Expanded(
@@ -722,10 +780,7 @@ Widget dynamicLabelTemplate110xN({
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
                                       border: Border(bottom: bs, right: bs)),
-                                  child: Text(
-                                    'KGS',
-                                    style: titleTextStyle,
-                                  ),
+                                  child: Text('KGS', style: titleTextStyle),
                                 ),
                               ),
                             ],
@@ -740,7 +795,7 @@ Widget dynamicLabelTemplate110xN({
                                   alignment: Alignment.center,
                                   decoration:
                                       BoxDecoration(border: Border(right: bs)),
-                                  child: Text(netWeight),
+                                  child: Text(netWeight, style: titleTextStyle),
                                 ),
                               ),
                               Expanded(
@@ -748,10 +803,7 @@ Widget dynamicLabelTemplate110xN({
                                   alignment: Alignment.center,
                                   decoration:
                                       BoxDecoration(border: Border(right: bs)),
-                                  child: Text(
-                                    'KGS',
-                                    style: titleTextStyle,
-                                  ),
+                                  child: Text('KGS', style: titleTextStyle),
                                 ),
                               ),
                             ],
@@ -809,7 +861,7 @@ Widget dynamicLabelTemplate110xN({
                       alignment: Alignment.center,
                       padding: textPadding,
                       decoration: BoxDecoration(border: Border(right: bs)),
-                      child: Text(specifications),
+                      child: Text(specifications, style: titleTextStyle),
                     ),
                   ),
                   Expanded(
@@ -818,7 +870,7 @@ Widget dynamicLabelTemplate110xN({
                       alignment: Alignment.center,
                       padding: textPadding,
                       decoration: BoxDecoration(border: Border(right: bs)),
-                      child: Text(volume),
+                      child: Text(volume, style: titleTextStyle),
                     ),
                   ),
                   Expanded(
@@ -826,10 +878,7 @@ Widget dynamicLabelTemplate110xN({
                     child: Container(
                       alignment: Alignment.center,
                       padding: textPadding,
-                      child: Text(
-                        'cbm',
-                        style: titleTextStyle,
-                      ),
+                      child: Text('cbm', style: titleTextStyle),
                     ),
                   ),
                 ],
@@ -862,7 +911,7 @@ Widget dynamicLabelTemplate110xN({
                             padding: textPadding,
                             decoration:
                                 BoxDecoration(border: Border(right: bs)),
-                            child: Text(supplier),
+                            child: Text(supplier, style: titleTextStyle),
                           ),
                         ),
                         Expanded(
@@ -885,9 +934,7 @@ Widget dynamicLabelTemplate110xN({
                     child: Container(
                       alignment: Alignment.center,
                       padding: textPadding,
-                      child: Text(
-                        manufactureDate,
-                      ),
+                      child: Text(manufactureDate, style: titleTextStyle),
                     ),
                   ),
                 ],
@@ -914,7 +961,7 @@ Widget dynamicLabelTemplate110xN({
                     child: Container(
                       alignment: Alignment.center,
                       padding: textPadding,
-                      child: Text(consignee),
+                      child: Text(consignee, style: titleTextStyle),
                     ),
                   ),
                 ],

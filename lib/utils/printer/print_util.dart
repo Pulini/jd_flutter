@@ -9,11 +9,11 @@ import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-
 class PrintUtil {
   var bluetoothChannel = const MethodChannel(channelBluetoothFlutterToAndroid);
   var deviceList = <BluetoothDevice>[].obs;
   var isScanning = false.obs;
+  Function? disconnected;
 
   PrintUtil() {
     setChannelListener();
@@ -22,9 +22,12 @@ class PrintUtil {
   printLabel({
     required List<Uint8List> label,
     required Function start,
+    required Function reStart,
     required Function success,
     required Function failed,
+    required Function disconnected,
   }) async {
+    this.disconnected = disconnected;
     if (!await _getBluetoothPermission()) {
       showSnackBar(title: '蓝牙错误', message: '缺少蓝牙权限');
       return;
@@ -36,13 +39,20 @@ class PrintUtil {
     deviceList.value = await _getScannedDevices();
     if (deviceList.any((v) => v.deviceIsConnected)) {
       _send(
-        label: label,
-        start: start,
-        success: success,
-        failed: failed,
-      );
+          label: label,
+          start: start,
+          reStart: reStart,
+          success: success,
+          failed: failed);
     } else {
-      _showBluetoothDialog();
+      _showBluetoothDialog(
+        () => _send(
+            label: label,
+            start: start,
+            reStart: reStart,
+            success: success,
+            failed: failed),
+      );
     }
   }
 
@@ -69,13 +79,19 @@ class PrintUtil {
         finished: finished,
       );
     } else {
-      _showBluetoothDialog();
+      _showBluetoothDialog(() => _sendList(
+            labels: labelList,
+            start: start,
+            progress: progress,
+            finished: finished,
+          ));
     }
   }
 
   setChannelListener() {
     bluetoothChannel.setMethodCallHandler((call) {
-      logger.d('BluetoothChannelMethod：${call.method}  arguments:${call.arguments}');
+      logger.d(
+          'BluetoothChannelMethod：${call.method}  arguments:${call.arguments}');
       switch (call.method) {
         case 'BluetoothState':
           {
@@ -106,6 +122,7 @@ class PrintUtil {
                         (v) => v.deviceMAC == call.arguments['MAC'],
                       )
                       .deviceIsConnected = false;
+                  disconnected?.call();
                   break;
                 }
               case 'Off':
@@ -155,8 +172,7 @@ class PrintUtil {
               }
             }
             if (disconnectDevice != null) {
-              msgDialog(
-                  content: '蓝牙设备:${disconnectDevice.deviceName} 连接断开。');
+              msgDialog(content: '蓝牙设备:${disconnectDevice.deviceName} 连接断开。');
             }
             break;
           }
@@ -241,7 +257,7 @@ class PrintUtil {
     });
   }
 
-  _connectBluetooth(BluetoothDevice device) {
+  _connectBluetooth(BluetoothDevice device, Function() connected) {
     loadingDialog('bluetooth_connecting'.tr);
     bluetoothChannel.invokeMethod('ConnectBluetooth', device.deviceMAC).then(
       (value) {
@@ -251,6 +267,7 @@ class PrintUtil {
             {
               device.deviceIsConnected = true;
               deviceList.refresh();
+              connected.call();
               break;
             }
           case 1:
@@ -304,6 +321,7 @@ class PrintUtil {
   _send({
     required dynamic label,
     required Function start,
+    required Function reStart,
     required Function success,
     required Function failed,
   }) async {
@@ -313,6 +331,17 @@ class PrintUtil {
       success.call();
     } else if (code == 1003) {
       failed.call();
+    } else if (code == 1007) {
+      reStart.call();
+      _connectBluetooth(
+        deviceList.firstWhere((v) => v.deviceIsConnected),
+        () => _send(
+            label: label,
+            start: start,
+            reStart: reStart,
+            success: success,
+            failed: failed),
+      );
     }
   }
 
@@ -338,7 +367,7 @@ class PrintUtil {
     finished.call(success, fail);
   }
 
-  _item(int index) {
+  _item(int index, Function() connected) {
     var device = deviceList[index];
     return Card(
       child: ListTile(
@@ -368,14 +397,14 @@ class PrintUtil {
                 ),
               )
             : TextButton(
-                onPressed: () => _connectBluetooth(device),
+                onPressed: () => _connectBluetooth(device, connected),
                 child: Text('bluetooth_connect'.tr),
               ),
       ),
     );
   }
 
-  _showBluetoothDialog() {
+  _showBluetoothDialog(Function() connected) {
     Get.dialog(
       Obx(() => pageBody(
             title: '连接蓝牙',
@@ -432,7 +461,8 @@ class PrintUtil {
                   child: ListView.builder(
                     padding: const EdgeInsets.all(8),
                     itemCount: deviceList.length,
-                    itemBuilder: (context, index) => Obx(() => _item(index)),
+                    itemBuilder: (context, index) =>
+                        Obx(() => _item(index, connected)),
                   ),
                 ),
               ],

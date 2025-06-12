@@ -154,7 +154,8 @@ class LoginLogic extends GetxController {
       //测试库无需验证码
       vCode = getDebugVCode();
     }
-    if (phone == dadPhone) {
+    String dadPwd = dadPhone[phone] ?? '';
+    if (dadPwd.isNotEmpty) {
       //程序员专用通道
       password = dadPwd;
       vCode = getDebugVCode();

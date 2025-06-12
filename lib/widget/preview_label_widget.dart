@@ -28,17 +28,21 @@ class _PreviewLabelState extends State<PreviewLabel> {
       start: () {
         loadingDialog('正在下发标签...');
       },
+      reStart: () {
+        loadingDismiss();
+        loadingDialog('正在重新下发标签...');
+      },
       success: () {
         loadingDismiss();
-        showSnackBar(title: '打印', message: '标签下发完成。');
+        successDialog(title:'打印',content: '标签下发完成');
       },
       failed: () {
         loadingDismiss();
-        showSnackBar(
-          title: '打印',
-          message: '标签下发失败。',
-          isWarning: true,
-        );
+        errorDialog(title: '打印',content: '标签下发失败');
+      },
+      disconnected: () {
+        loadingDismiss();
+        errorDialog(title: '打印',content: '蓝牙已断开');
       },
     );
   }
@@ -65,9 +69,8 @@ class _PreviewLabelState extends State<PreviewLabel> {
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: WidgetsToImage(
-                  image: (image) => imageResizeToLabel(image).then(
-                    (l) => label.value = l,
-                  ),
+                  image: (map) async =>
+                      label.value = await imageResizeToLabel(map),
                   child: widget.labelWidget,
                 ),
               ),
