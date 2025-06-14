@@ -68,7 +68,7 @@ class _DeliveryOrderCheckPageState extends State<DeliveryOrderCheckPage> {
                       style: const TextStyle(color: Colors.green),
                     ),
                     SizedBox(
-                      width: 150,
+                      width: 130,
                       child: NumberDecimalEditText(
                         initQty: data.checkQuantity,
                         onChanged: (v) => data.checkQuantity = v,
@@ -256,7 +256,7 @@ class _DeliveryOrderCheckPageState extends State<DeliveryOrderCheckPage> {
       title: 'delivery_order_check_title'.tr,
       actions: [
         Container(
-          width: 500,
+          width: 600,
           height: 45,
           margin: const EdgeInsets.only(right: 10),
           padding: const EdgeInsets.only(left: 10),

@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/base_data.dart';
 import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/route.dart';
-import 'package:jd_flutter/utils/network_manager.dart';
+import 'package:jd_flutter/utils/app_init_controller.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:logger/logger.dart';
 import 'package:uuid/uuid.dart';
@@ -129,7 +129,7 @@ Future<BaseData> _doHttp({
   Map<String, dynamic>? params,
   Object? body,
 }) async {
-  if (Get.find<NetworkManager>().isTestUrl.value) {
+  if (isTestUrl()) {
     if (baseUrl == baseUrlForMES) {
       baseUrl = testUrlForMES;
     } else if (baseUrl == baseUrlForSAP) {
@@ -154,7 +154,7 @@ Future<BaseData> _doHttp({
   }
 
   if (loading != null && loading.isNotEmpty) {
-    loadingDialog(loading);
+    loadingShow(loading);
   }
 
   //根据路由获取当前所在的功能

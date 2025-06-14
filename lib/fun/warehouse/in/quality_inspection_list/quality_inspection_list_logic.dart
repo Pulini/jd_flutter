@@ -417,7 +417,6 @@ class QualityInspectionListLogic extends GetxController {
             'MaterialDocumentLineItemNumber': '',
             'MaterialDocumentNo': '',
             'MaterialVoucherYear': '',
-            'Remarks': '',
             'ReversalMark': '',
           }
       ],

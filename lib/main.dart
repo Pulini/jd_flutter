@@ -1,15 +1,12 @@
 import 'dart:ui';
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/router_report.dart';
 import 'package:jd_flutter/route.dart';
-import 'package:jd_flutter/utils/network_manager.dart';
+import 'package:jd_flutter/utils/app_init_controller.dart';
 import 'package:jd_flutter/utils/utils.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 import 'bean/http/response/bar_code.dart';
 import 'bean/http/response/production_dispatch_order_detail_info.dart';
@@ -21,15 +18,15 @@ import 'translation.dart';
 import 'utils/web_api.dart';
 
 main() async {
+  // 启用性能叠加层
+  debugProfileBuildsEnabled = true;
   //确保初始化完成才能加载耗时插件
   WidgetsFlutterBinding.ensureInitialized();
 
-  sharedPreferences = await SharedPreferences.getInstance();
-  packageInfo = await PackageInfo.fromPlatform();
-  deviceInfo = await DeviceInfoPlugin().deviceInfo;
+
 
   // //添加全局网络状态管理
-  Get.put(NetworkManager());
+  Get.put(AppInitController());
 
   if (GetPlatform.isMobile) {
     getDatabasesPath().then(
@@ -71,8 +68,7 @@ main() async {
   }
 
   runApp(const MyApp());
-  // 启用性能叠加层
-  debugProfileBuildsEnabled = true;
+
   // FlutterHmsScanKit.scan.then(
   //       (result) => {
   //     logger
@@ -117,7 +113,7 @@ class _MyAppState extends State<MyApp> {
     return Obx(()=>GetMaterialApp(
       scrollBehavior: AppScrollBehavior(),
       onGenerateTitle: (context) => 'app_name'.tr,
-      debugShowCheckedModeBanner: Get.find<NetworkManager>().isTestUrl.value,
+      debugShowCheckedModeBanner: isTestUrl(),
       translations: Translation(),
       navigatorObservers: [GetXRouterObserver()],
       locale: View.of(context).platformDispatcher.locale,

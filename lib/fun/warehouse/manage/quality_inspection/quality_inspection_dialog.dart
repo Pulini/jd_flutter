@@ -6,16 +6,16 @@ import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
 
 modifyTagKeyDialog({required QualityInspectionAbnormalItemInfo data}) {
-  var controller=TextEditingController(text: data.tag.value);
+  var controller = TextEditingController(text: data.tag.value);
   Get.dialog(
     PopScope(
       canPop: false,
       child: AlertDialog(
-        title: Text('修改标签号'),
+        title: Text('product_quality_inspection_dialog_modify_label_no'.tr),
         content: SizedBox(
           width: 200,
           child: EditText(
-            hint:'标签号',
+            hint: 'product_quality_inspection_dialog_label_no'.tr,
             controller: controller,
           ),
         ),
@@ -24,12 +24,13 @@ modifyTagKeyDialog({required QualityInspectionAbnormalItemInfo data}) {
             onPressed: () {
               if (controller.text.isEmpty) {
                 showSnackBar(
-                  message:'请输入键值',
+                  message: 'product_quality_inspection_dialog_input_key'.tr,
                   isWarning: true,
                 );
-              }else{
-                data.tag.value=controller.text;
-                spSave('QI-${data.abnormalItemId}-${userInfo?.number}', controller.text);
+              } else {
+                data.tag.value = controller.text;
+                spSave('QI-${data.abnormalItemId}-${userInfo?.number}',
+                    controller.text);
                 Get.back();
               }
             },

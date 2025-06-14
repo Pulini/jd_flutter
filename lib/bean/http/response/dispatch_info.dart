@@ -1,8 +1,8 @@
 // CardNo : "GXPG25196000/1"
-// /// EmpID : 213708
-// /// EmpNumber : "035783"
-// /// EmpName : "李含雷"
-// /// Qty : 2111.000
+// // EmpID : 213708
+// // EmpNumber : "035783"
+// // EmpName : "李含雷"
+// // Qty : 2111.000
 
 class DispatchInfo {
   DispatchInfo({

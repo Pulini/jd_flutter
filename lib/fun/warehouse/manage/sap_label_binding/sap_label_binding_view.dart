@@ -7,7 +7,6 @@ import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/scanner.dart';
-import 'package:jd_flutter/widget/widgets_to_image_widget.dart';
 
 import 'sap_label_binding_logic.dart';
 import 'sap_label_binding_state.dart';
@@ -109,10 +108,10 @@ class _SapLabelBindingPageState extends State<SapLabelBindingPage> {
   Widget build(BuildContext context) {
     return pageBody(
       actions: [
-        CombinationButton(
-          text: 'add',
-          click: () => logic.scanLabel('00505685E5761FE090E58AE9B8A5E489'),
-        ),
+        // CombinationButton(
+        //   text: 'add',
+        //   click: () => logic.scanLabel('00505685E5761FE090E58AE9B8A5E489'),
+        // ),
         Obx(() => state.newBoxLabelID.value.isEmpty
             ? Container()
             : CombinationButton(

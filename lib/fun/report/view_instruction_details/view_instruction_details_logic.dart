@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/report/view_instruction_details/view_instruction_details_state.dart';
 import 'package:jd_flutter/route.dart';
+
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/picker/picker_controller.dart';
@@ -28,7 +29,7 @@ class ViewInstructionDetailsLogic extends GetxController {
         ..setNavigationDelegate(
           NavigationDelegate(
             onPageStarted: (String url) {
-              loadingDialog('view_instruction_details_reading'.tr);
+              loadingShow('view_instruction_details_reading'.tr);
             },
             onPageFinished: (String url) {
               if (Get.isDialogOpen == true) Get.back();

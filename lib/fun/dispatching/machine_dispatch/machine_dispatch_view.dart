@@ -608,7 +608,7 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
   // printLabel(List<Uint8List> label) {
   //   pu.printLabel(
   //     label: label,
-  //     start: () => loadingDialog('正在下发标签...'),
+  //     start: () => loadingShow('正在下发标签...'),
   //     success: () {
   //       loadingDismiss();
   //       showSnackBar(title: '打印', message: '标签下发完成。');

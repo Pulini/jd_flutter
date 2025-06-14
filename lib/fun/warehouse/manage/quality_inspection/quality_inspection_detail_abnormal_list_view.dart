@@ -59,7 +59,7 @@ class _QualityInspectionDetailAbnormalListPageState
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     textSpan(
-                      hint: '不良数：',
+                      hint: 'product_quality_inspection_detail_abnormal_defects_qty'.tr,
                       hintColor: Colors.black54,
                       text: group.length.toString(),
                       textColor: Colors.red,
@@ -87,7 +87,7 @@ class _QualityInspectionDetailAbnormalListPageState
                       Expanded(
                         child: GestureDetector(
                           onTap: () => askDialog(
-                            content: '确定要删除该条异常记录吗？',
+                            content: 'product_quality_inspection_detail_abnormal_delete_tips'.tr,
                             confirm: () => logic.deleteAbnormalRecord(
                               abnormalRecord: group.firstWhere(
                                 (v) => v.isSelect.value,
@@ -103,7 +103,7 @@ class _QualityInspectionDetailAbnormalListPageState
                               color: Colors.orange,
                             ),
                             child: Text(
-                              '撤回',
+                              'product_quality_inspection_detail_abnormal_withdraw'.tr,
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white,
@@ -115,7 +115,7 @@ class _QualityInspectionDetailAbnormalListPageState
                       Expanded(
                         child: GestureDetector(
                           onTap: () => askDialog(
-                            content: '确定复检结果为报废吗？',
+                            content: 'product_quality_inspection_detail_abnormal_scrap_tips'.tr,
                             confirm: () => logic.modifyAbnormalRecordStatus(
                               abnormalRecord: group.firstWhere(
                                 (v) => v.isSelect.value,
@@ -127,7 +127,7 @@ class _QualityInspectionDetailAbnormalListPageState
                             color: Colors.red,
                             alignment: Alignment.center,
                             child: Text(
-                              '复检报废',
+                              'product_quality_inspection_detail_abnormal_reinspection_scrap'.tr,
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white,
@@ -139,7 +139,7 @@ class _QualityInspectionDetailAbnormalListPageState
                       Expanded(
                         child: GestureDetector(
                           onTap: () => askDialog(
-                            content: '确定复检结果为合格吗？',
+                            content: 'product_quality_inspection_detail_abnormal_qualified_tips'.tr,
                             confirm: () => logic.modifyAbnormalRecordStatus(
                               abnormalRecord: group.firstWhere(
                                 (v) => v.isSelect.value,
@@ -156,7 +156,7 @@ class _QualityInspectionDetailAbnormalListPageState
                               color: Colors.green,
                             ),
                             child: Text(
-                              '复检合格',
+                              'product_quality_inspection_detail_abnormal_reinspection_qualified'.tr,
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white,
@@ -239,7 +239,7 @@ class _QualityInspectionDetailAbnormalListPageState
   @override
   Widget build(BuildContext context) {
     return pageBody(
-      title: '质检异常记录',
+      title: 'product_quality_inspection_detail_abnormal_inspection_exception_record'.tr,
       body: Obx(() {
         var group = groupBy(
           state.qiDetailAbnormalRecords,

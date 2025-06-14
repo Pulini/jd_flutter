@@ -35,18 +35,21 @@ class _QualityInspectionReportPageState
           Row(
             children: [
               expandedTextSpan(
-                hint: '生产单位：',
+                hint: 'product_quality_inspection_inspection_unit'.tr,
                 text: data.inspectionUnit ?? '',
                 textColor: Colors.green.shade700,
               ),
               textSpan(
-                hint: '本单位总质检数：',
+                hint: 'product_quality_inspection_report_total_inspections_qty'
+                    .tr,
                 text: data.getAbnormalTotalQty().toString(),
                 textColor: Colors.red,
               ),
               const SizedBox(width: 20),
               textSpan(
-                hint: '本单位总复检数：',
+                hint:
+                    'product_quality_inspection_report_total_reinspections_qty'
+                        .tr,
                 text: data.getReInspectionTotalQty().toString(),
                 textColor: Colors.purple,
               ),
@@ -71,10 +74,14 @@ class _QualityInspectionReportPageState
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       textSpan(
-                        hint: '工单号：',
+                        hint:
+                            'product_quality_inspection_report_order_number'.tr,
                         text: order.workOrderNo ?? '',
                       ),
-                      Text('最后修改日期：${order.lastModifyDate}'),
+                      Text(
+                        'product_quality_inspection_report_last_modify_date'
+                            .trArgs([order.lastModifyDate ?? '']),
+                      ),
                     ],
                   ),
                   const SizedBox(height: 10),
@@ -82,38 +89,38 @@ class _QualityInspectionReportPageState
                     children: [
                       expandedFrameText(
                         flex: 5,
-                        text: '异常描述',
+                        text: 'product_quality_inspection_report_abnormal_description'.tr,
                         borderColor: Colors.black87,
                         backgroundColor: Colors.green.shade100,
                       ),
                       expandedFrameText(
-                        text: '质检人',
+                        text: 'product_quality_inspection_report_inspector'.tr,
                         alignment: Alignment.center,
                         borderColor: Colors.black87,
                         backgroundColor: Colors.green.shade100,
                       ),
                       expandedFrameText(
                         flex: 2,
-                        text: '质检时间',
+                        text: 'product_quality_inspection_report_inspection_time'.tr,
                         alignment: Alignment.center,
                         borderColor: Colors.black87,
                         backgroundColor: Colors.green.shade100,
                       ),
                       expandedFrameText(
-                        text: '复检人',
+                        text: 'product_quality_inspection_report_reinspector'.tr,
                         alignment: Alignment.center,
                         borderColor: Colors.black87,
                         backgroundColor: Colors.green.shade100,
                       ),
                       expandedFrameText(
                         flex: 2,
-                        text: '复检时间',
+                        text: 'product_quality_inspection_report_reinspection_time'.tr,
                         alignment: Alignment.center,
                         borderColor: Colors.black87,
                         backgroundColor: Colors.green.shade100,
                       ),
                       expandedFrameText(
-                        text: '当前状态',
+                        text: 'product_quality_inspection_report_state'.tr,
                         alignment: Alignment.center,
                         borderColor: Colors.black87,
                         backgroundColor: Colors.green.shade100,
@@ -180,7 +187,7 @@ class _QualityInspectionReportPageState
   @override
   Widget build(BuildContext context) {
     return pageBody(
-      title: '质检汇总',
+      title: 'product_quality_inspection_report_inspection_summary'.tr,
       body: ListView.builder(
         itemCount: state.report.length,
         itemBuilder: (c, i) => _item(state.report[i]),

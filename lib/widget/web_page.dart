@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -111,7 +112,7 @@ class WebPage extends StatelessWidget {
           NavigationDelegate(
             onPageStarted: (String url) {
               debugPrint('onPageStarted------$url');
-              loadingDialog('加載中');
+              loadingShow('加載中');
             },
             onPageFinished: (String url) {
               debugPrint('${Get.isDialogOpen}  onPageFinished------$url');

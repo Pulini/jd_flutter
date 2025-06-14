@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:jd_flutter/fun/dispatching/injection_scan_report/Injection_scan_report_view.dart';
+import 'package:jd_flutter/fun/dispatching/injection_scan_report/injection_scan_report_view.dart';
 import 'package:jd_flutter/fun/maintenance/sap_ink_color_matching/sap_ink_color_matching_view.dart';
 import 'package:jd_flutter/fun/other/hydroelectric_excess/hydroelectric_excess_view.dart';
 import 'package:jd_flutter/fun/report/part_process_scan/part_process_scan_view.dart';

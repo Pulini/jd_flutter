@@ -13,7 +13,7 @@ changeLineDialog({required RxList<PatrolInspectionInfo> lines,required Function(
       canPop: true,
       child: StatefulBuilder(builder: (context, dialogSetState) {
         return AlertDialog(
-          title: Text('切换线别'),
+          title: Text('product_patrol_inspection_dialog_switching_lines'.tr),
           content: SizedBox(
             width: 300,
             child: Column(
@@ -23,7 +23,7 @@ changeLineDialog({required RxList<PatrolInspectionInfo> lines,required Function(
                   list: lines,
                   controller: controllerLines,
                   errorMsg: '',
-                  hint: '选择巡检单位',
+                  hint: 'product_patrol_inspection_dialog_select_unit'.tr,
                 ),
               ],
             ),
@@ -34,7 +34,7 @@ changeLineDialog({required RxList<PatrolInspectionInfo> lines,required Function(
                 Get.back();
                 change.call(controllerLines.selectedItem);
               },
-              child: Text('确定'),
+              child: Text('dialog_default_confirm'.tr),
             ),
             TextButton(
               onPressed: () => Get.back(),
@@ -55,11 +55,11 @@ modifyTagKeyDialog({required PatrolInspectionAbnormalItemInfo data}) {
     PopScope(
       canPop: false,
       child: AlertDialog(
-        title: Text('修改标签号'),
+        title: Text('product_patrol_inspection_dialog_modify_label_no'.tr),
         content: SizedBox(
           width: 200,
           child: EditText(
-            hint:'标签号',
+            hint:'product_patrol_inspection_dialog_label_no'.tr,
             controller: controller,
           ),
         ),
@@ -68,7 +68,7 @@ modifyTagKeyDialog({required PatrolInspectionAbnormalItemInfo data}) {
             onPressed: () {
               if (controller.text.isEmpty) {
                 showSnackBar(
-                  message:'请输入键值',
+                  message:'product_patrol_inspection_dialog_input_key'.tr,
                   isWarning: true,
                 );
               }else{

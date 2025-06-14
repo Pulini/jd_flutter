@@ -1037,13 +1037,22 @@ Future<Uint8List> labelImageResize(Uint8List image) async {
   );
   return Uint8List.fromList(img.encodePng(reImage));
 }
+List<Uint8List> testLabel()=>[
+  _tscClearBuffer(),
+  _tscSetup(110, 50, sensorDistance: 0),
+  _tscQrCode(10, 10, '1234567890'),
+  _tscCutter(),
+  _tscPrint(),
+];
 
 Future<List<Uint8List>> imageResizeToLabel(Map<String, dynamic> image) async =>
     await compute(_imageResizeToLabel, image);
 
 Future<List<Uint8List>> _imageResizeToLabel(Map<String, dynamic> image) async {
-  int width = ((image['width'] as int) / 5.5).toInt();
-  int height = ((image['height'] as int) / 5.5).toInt();
+  double pixelRatio=image['pixelRatio']??1;
+  bool isDynamic=image['isDynamic']??false;
+  int width = ((image['width'] as int)/5.5/pixelRatio).toInt();
+  int height = ((image['height'] as int) /5.5/pixelRatio).toInt();
   debugPrint(
       'width: ${image['width']} - $width height: ${image['height']} - $height');
   var reImage = img.copyResize(
@@ -1053,10 +1062,10 @@ Future<List<Uint8List>> _imageResizeToLabel(Map<String, dynamic> image) async {
   );
   var imageUint8List = Uint8List.fromList(img.encodePng(reImage));
   return [
-    _tscCutter(),
     _tscClearBuffer(),
-    _tscSetup(width, height, density: 15),
+    _tscSetup(width, height, density: 15,sensorDistance: isDynamic?0:2),
     await _tscBitmap(1, 1, imageUint8List),
+    _tscCutter(),
     _tscPrint(),
   ];
 }
@@ -1070,6 +1079,7 @@ Future<List<List<Uint8List>>> _imageResizeToLabels(
 ) async {
   List<List<Uint8List>> labelList = [];
   for (var image in images) {
+    bool isDynamic=image['isDynamic']??false;
     int width = ((image['width'] as int) / 5.5).toInt();
     int height = ((image['height'] as int) / 5.5).toInt();
     var reImage = img.copyResize(
@@ -1079,10 +1089,10 @@ Future<List<List<Uint8List>>> _imageResizeToLabels(
     );
     var imageUint8List = Uint8List.fromList(img.encodePng(reImage));
     labelList.add([
-      _tscCutter(),
       _tscClearBuffer(),
-      _tscSetup(width, height, density: 15),
+      _tscSetup(width, height, density: 15,sensorDistance: isDynamic?0:2),
       await _tscBitmap(1, 1, imageUint8List),
+      _tscCutter(),
       _tscPrint(),
     ]);
   }

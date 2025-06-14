@@ -102,7 +102,9 @@ modifyBoxInfo({
                       height <= 0 ||
                       outWeight <= 0) {
                     errorDialog(content: '贸易工厂标签必须填写长宽高和外包装重量!');
-                    return;
+                  } else {
+                    Get.back();
+                    modify.call(long, width, height, outWeight);
                   }
                 } else {
                   Get.back();

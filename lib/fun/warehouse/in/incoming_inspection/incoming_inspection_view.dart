@@ -346,7 +346,7 @@ class _IncomingInspectionPageState extends State<IncomingInspectionPage> {
     return pageBody(
       actions: [
         IconButton(
-          onPressed: _showSearch,
+          onPressed:() =>_showSearch(),
           icon: const Icon(Icons.search),
         ),
         IconButton(

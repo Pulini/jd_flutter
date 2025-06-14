@@ -362,10 +362,10 @@ class MachineDispatchLogic extends GetxController {
               ),
             ),
           ),
-          bottomMiddle: Center(
+          bottomMiddle: const Center(
             child: Text(
               'Made in China',
-              style: const TextStyle(
+              style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 20,
               ),
@@ -452,10 +452,10 @@ class MachineDispatchLogic extends GetxController {
             ),
           ),
           bottomRight: label.isLastLabel
-              ? Center(
+              ? const Center(
                   child: Text(
                     '尾',
-                    style: const TextStyle(fontWeight: FontWeight.bold),
+                    style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 )
               : Container(),

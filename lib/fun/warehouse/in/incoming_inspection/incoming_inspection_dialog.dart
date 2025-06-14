@@ -78,8 +78,8 @@ modifySubItemMaterialDialog({
                 item.qty = qty;
                 item.unitName = unit;
                 item.numPage = numberPage;
-                modify.call();
                 Get.back();
+                modify.call();
               },
               child: Text('incoming_inspection_dialog_modify'.tr),
             ),
@@ -239,6 +239,7 @@ addOrModifyMaterialDialog({
                   );
                   return;
                 }
+                Get.back();
                 if (item == null) {
                   add?.call(InspectionDeliveryInfo(
                     billNo: orderNumber,
@@ -255,7 +256,6 @@ addOrModifyMaterialDialog({
                   item.numPage = numberPage;
                   modify?.call();
                 }
-                Get.back();
               },
               child: Text(
                 item != null
@@ -305,8 +305,8 @@ applyInspectionDialog({
                 } else {
                   spSave(
                       spSaveIncomingInspectionApplicant, worker!.empCode ?? '');
-                  submit.call(worker!);
                   Get.back();
+                  submit.call(worker!);
                 }
               },
               child: Text('incoming_inspection_dialog_submit'.tr),

@@ -7,7 +7,7 @@ import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/scanner.dart';
-import 'Injection_scan_report_label_view.dart';
+import 'injection_scan_report_label_view.dart';
 
 class InjectionScanReportPage extends StatefulWidget {
   const InjectionScanReportPage({super.key});

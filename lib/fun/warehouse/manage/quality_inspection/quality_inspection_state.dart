@@ -31,7 +31,7 @@ class QualityInspectionState {
     required Function(String msg) error,
   }) {
     sapPost(
-      loading: '正在获取产线信息...',
+      loading: 'product_quality_inspection_getting_line_info'.tr,
       method: webApiSapGetQualityInspectionOrders,
       body: {
         'instructionNo': instructionNo,
@@ -59,7 +59,7 @@ class QualityInspectionState {
     required Function(String msg) error,
   }) {
     sapPost(
-      loading: '正在获取工单明细...',
+      loading: 'product_quality_inspection_getting_work_order_detail'.tr,
       method: webApiSapGetQualityInspectionOrderDetail,
       body: [
         {'workOrderNo': workOrderNo}
@@ -96,7 +96,7 @@ class QualityInspectionState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在提交异常记录...',
+      loading: 'product_quality_inspection_submitting_abnormal'.tr,
       method: webApiSapAddAbnormalRecord,
       body: {
         'abnormalItemId': abnormalItem.abnormalItemId,
@@ -120,7 +120,7 @@ class QualityInspectionState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在提交复检结果...',
+      loading: 'product_quality_inspection_submitting_reinspection'.tr,
       method: webApiSapModifyAbnormalRecord,
       body: {
         'abnormalRecordId': abnormalRecord.abnormalRecordId,
@@ -143,7 +143,7 @@ class QualityInspectionState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在撤回异常记录...',
+      loading: 'product_quality_inspection_withdrawing_abnormal'.tr,
       method: webApiSapDeleteAbnormalRecord,
       body: {
         'abnormalRecordId': abnormalRecord.abnormalRecordId,
@@ -162,7 +162,7 @@ class QualityInspectionState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在提交质检完成...',
+      loading: 'product_quality_inspection_submitting_inspection_complete'.tr,
       method: webApiSapInspectionCompleted,
       body: {
         'workOrderNo': qiDetailWorkOrderNo.value,
@@ -183,7 +183,7 @@ class QualityInspectionState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在获取质检汇总数据...',
+      loading: 'product_quality_inspection_getting_inspection_report'.tr,
       method: webApiSapGetInspectionReport,
       body: {
         'inspectorNumber': userInfo?.number,

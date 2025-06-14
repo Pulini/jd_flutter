@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/constant.dart';
-import 'package:jd_flutter/utils/network_manager.dart';
+import 'package:jd_flutter/utils/app_init_controller.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/number_text_field_widget.dart';
 import 'login_logic.dart';
@@ -17,7 +16,7 @@ class LoginPage extends StatelessWidget {
           //设置背景
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: Get.find<NetworkManager>().isTestUrl.value
+              colors: isTestUrl()
                   ? [Colors.lightBlueAccent, Colors.greenAccent]
                   : [Colors.lightBlueAccent, Colors.blueAccent],
               begin: Alignment.bottomLeft,
@@ -86,9 +85,7 @@ class _LoginPickState extends State<LoginPick>
 
   //手机登录手机号输入框控制器
   late var phoneLoginPhoneController = TextEditingController()
-    ..text = Get.find<NetworkManager>().isTestUrl.value
-        ? dadPhone
-        : spGet(spSaveLoginPhone) ?? '';
+    ..text = spGet(spSaveLoginPhone) ?? '';
 
   //手机登录密码输入框控制器
   var phoneLoginPasswordController = TextEditingController();
@@ -134,7 +131,7 @@ class _LoginPickState extends State<LoginPick>
           Container(
             decoration: BoxDecoration(
               borderRadius: const BorderRadius.all(Radius.circular(15)),
-              color: Get.find<NetworkManager>().isTestUrl.value
+              color: isTestUrl()
                   ? Colors.teal
                   : Colors.blueAccent,
             ),
@@ -161,7 +158,7 @@ class _LoginPickState extends State<LoginPick>
               maxLength: 10,
               isPassword: true,
             ),
-            if (!Get.find<NetworkManager>().isTestUrl.value)
+            if (!isTestUrl())
               Row(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -311,7 +308,7 @@ class _LoginPickState extends State<LoginPick>
                     borderRadius: BorderRadius.circular(25),
                   ),
                 ),
-                onLongPress: () =>logic.handleLongPressStart(),
+                onLongPress: () => logic.handleLongPressStart(),
                 onPressed: () {
                   if (tabController.index == 0) {
                     logic.phoneLogin(

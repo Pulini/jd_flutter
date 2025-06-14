@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/feishu_info.dart';
 import 'package:jd_flutter/constant.dart';
+
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
@@ -262,7 +263,7 @@ feishuWikiSearch({
   required Function(List<FeishuWikiSearchItemInfo> list) success,
   required Function(String error) failed,
 }) {
-  loadingDialog('feishu_authorize_wiki_searching'.tr);
+  loadingShow('feishu_authorize_wiki_searching'.tr);
   Dio()
     ..interceptors.add(InterceptorsWrapper(onRequest: (options, handler) {
       options.print();
@@ -327,7 +328,7 @@ feishuCloudDocSearch({
   required Function(List<FeishuCloudDocSearchItemInfo> list) success,
   required Function(String error) failed,
 }) {
-  loadingDialog('feishu_authorize_cloud_doc_searching'.tr);
+  loadingShow('feishu_authorize_cloud_doc_searching'.tr);
   Dio()
     ..interceptors.add(InterceptorsWrapper(onRequest: (options, handler) {
       options.print();
@@ -387,7 +388,7 @@ feishuGetCloudDocInfo({
   required Function(List<FeishuCloudDocFileMetasInfo> list) success,
   required Function(String error) failed,
 }) {
-  loadingDialog('feishu_authorize_getting_file_detail'.tr);
+  loadingShow('feishu_authorize_getting_file_detail'.tr);
   Dio()
     ..interceptors.add(InterceptorsWrapper(onRequest: (options, handler) {
       options.print();
@@ -456,7 +457,7 @@ class FeishuAuthorize extends StatelessWidget {
   final WebViewController webViewController = WebViewController();
 
   _getUserAccessToken(String code) {
-    loadingDialog('feishu_authorize_getting_user_token'.tr);
+    loadingShow('feishu_authorize_getting_user_token'.tr);
     Dio()
       ..interceptors.add(InterceptorsWrapper(
         onRequest: (options, handler) {

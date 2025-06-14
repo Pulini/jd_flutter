@@ -661,7 +661,16 @@ class Translation extends Translations {
           'machine_dispatch_report_delete_signed_tips':
               '员工< %s >已签字！！！\n确定要删除该员工吗？',
           'machine_dispatch_report_report': '报工',
+          'machine_dispatch_dialog_label_specifications_empty': '标签规格信息为空！',
           'machine_dispatch_dialog_select_dispatch_order': '选择派工单',
+          'machine_dispatch_dialog_weight_input_tips': '请输入实际一双重量（克）',
+          'machine_dispatch_dialog_weight': '实际一双重量（克）：',
+          'machine_dispatch_dialog_leader_number': '班组长工号',
+          'machine_dispatch_dialog_verify_leader': '班组长验证',
+          'machine_dispatch_dialog_carton_size': '外箱规格',
+          'machine_dispatch_dialog_print_last': '打印尾箱',
+          'machine_dispatch_dialog_print': '打印',
+          'machine_dispatch_dialog_weight_error_tips': '实际一双重量必须大于0！',
           'machine_dispatch_dialog_surplus_material_info': '料头信息',
           'machine_dispatch_dialog_surplus_material_print_tips':
               '确定要打印料头 < %s > 吗?',
@@ -683,7 +692,8 @@ class Translation extends Translations {
               '已产量汇报到MES,无法删除贴标！',
           'machine_dispatch_dialog_delete_label_tips': '确定要删除标签吗?',
           'machine_dispatch_dialog_deleting_labels': '正在删除贴标...',
-          'machine_dispatch_dialog_update_surplus_material_label_state': '正在更新料头信息状态...',
+          'machine_dispatch_dialog_update_surplus_material_label_state':
+              '正在更新料头信息状态...',
           'machine_dispatch_dialog_leader_id_verify': '班组长身份验证',
           'machine_dispatch_dialog_verify_code': '验证码',
           'machine_dispatch_dialog_enter_number': '请输入工号',
@@ -702,7 +712,6 @@ class Translation extends Translations {
           'machine_dispatch_dialog_create_and_print': '生成并打印',
           'machine_dispatch_dialog_print_tips': '确定要打印标签吗',
           'machine_dispatch_dialog_print_last_label': '打印尾箱',
-          'machine_dispatch_dialog_print': '打印',
           'material_dispatch_last': '末道',
           'material_dispatch_material': '物料：<%s> %s',
           'material_dispatch_type_body': '工厂型体：%s',
@@ -1947,7 +1956,7 @@ class Translation extends Translations {
           'picking_material_order_out_ticket': '出门单信息',
           'picking_material_order_report_preparing_materials_info': '汇报备料情况',
           'picking_material_order_posting': '过账出库',
-          'picking_material_order_exit_tips': '确定要推出本次出库吗？',
+          'picking_material_order_exit_tips': '确定要退出本次出库吗？',
           'picking_material_order_sales_order': '指令(销售订单)',
           'picking_material_order_picking_no': '领料单号',
           'picking_material_order_all': '全部',
@@ -2860,43 +2869,135 @@ class Translation extends Translations {
           'quality_inspection_change_success': '修改成功！',
           'quality_inspection_change_failed': '修改失败！',
           'quality_inspection_color_message': '分色信息(长按删除)',
-          'quality_inspection_get_color':'正在获取色系信息...',
-          'quality_inspection_get_label':'正在获取标签...',
-          'quality_inspection_color_scheme':'色系分配',
-          'quality_inspection_material_name':'物料名称',
-          'quality_inspection_color_title':'色系',
-          'quality_inspection_quality_title':'数量',
-          'quality_inspection_add':'新增',
-          'quality_inspection_submit':'提交',
-          'quality_inspection_color_select':'请选中数据！',
-          'quality_inspection_no_qty':'无剩余可分配数量！',
-          'quality_inspection_input_qty':'请输入数量',
-          'quality_inspection_input_color':'请输入色系',
-          'quality_inspection_color_no_same':'分色数量与订单冲销数量不匹配！',
-          'quality_inspection_eliminating':'正在冲销...',
-          'quality_inspection_reversal_successful':'冲销成功！',
-          'quality_inspection_reversal_failed':'冲销失败！',
-          'quality_inspection_no_inspection':'没有品检权限！',
-          'quality_inspection_no_store_inspection':'没有入库权限！',
-          'quality_inspection_reviewer':'审核人',
-          'quality_inspection_photo':'品检异常图片(长按删除)',
-          'quality_inspection_exception_description':'异常说明',
-          'quality_inspection_processing_method':'处理方法',
-          'quality_inspection_availability':'可利用率',
-          'quality_inspection_method':'检验方式：',
-          'quality_inspection_category':'类别：',
-          'quality_inspection_accepting_unit':'受理单位：',
-          'quality_inspection_compromise':'是否让步',
-          'quality_inspection_title':'品检',
-          'quality_inspection_sure_submit':'确定提交品检吗？',
-          'quality_inspection_submit_abnormal':'正在提交异常..',
-          'quality_inspection_submit_failed':'提交异常失败！',
-          'quality_inspection_create_inspection':'正在创建品检单...',
-          'quality_inspection_create_success':'创建成功！',
-          'quality_inspection_create_fail':'创建失败！',
-          'quality_inspection_have_already':'含有已经品检过的物料！',
-
-
+          'quality_inspection_get_color': '正在获取色系信息...',
+          'quality_inspection_get_label': '正在获取标签...',
+          'quality_inspection_color_scheme': '色系分配',
+          'quality_inspection_material_name': '物料名称',
+          'quality_inspection_color_title': '色系',
+          'quality_inspection_quality_title': '数量',
+          'quality_inspection_add': '新增',
+          'quality_inspection_submit': '提交',
+          'quality_inspection_color_select': '请选中数据！',
+          'quality_inspection_no_qty': '无剩余可分配数量！',
+          'quality_inspection_input_qty': '请输入数量',
+          'quality_inspection_input_color': '请输入色系',
+          'quality_inspection_color_no_same': '分色数量与订单冲销数量不匹配！',
+          'quality_inspection_eliminating': '正在冲销...',
+          'quality_inspection_reversal_successful': '冲销成功！',
+          'quality_inspection_reversal_failed': '冲销失败！',
+          'quality_inspection_no_inspection': '没有品检权限！',
+          'quality_inspection_no_store_inspection': '没有入库权限！',
+          'quality_inspection_reviewer': '审核人',
+          'quality_inspection_photo': '品检异常图片(长按删除)',
+          'quality_inspection_exception_description': '异常说明',
+          'quality_inspection_processing_method': '处理方法',
+          'quality_inspection_availability': '可利用率',
+          'quality_inspection_method': '检验方式：',
+          'quality_inspection_category': '类别：',
+          'quality_inspection_accepting_unit': '受理单位：',
+          'quality_inspection_compromise': '是否让步',
+          'quality_inspection_title': '品检',
+          'quality_inspection_sure_submit': '确定提交品检吗？',
+          'quality_inspection_submit_abnormal': '正在提交异常..',
+          'quality_inspection_submit_failed': '提交异常失败！',
+          'quality_inspection_create_inspection': '正在创建品检单...',
+          'quality_inspection_create_success': '创建成功！',
+          'quality_inspection_create_fail': '创建失败！',
+          'quality_inspection_have_already': '含有已经品检过的物料！',
+          'product_quality_inspection_inspection_unit': '生产单位：',
+          'product_quality_inspection_abnormal_qty': '异常数：',
+          'product_quality_inspection_reinspection_qty': '复检数：',
+          'product_quality_inspection_instruction_no_tips': '指令：',
+          'product_quality_inspection_customer_po_tips': 'PO：',
+          'product_quality_inspection_type_body_tips': '型体：',
+          'product_quality_inspection_inspection_date': '质检日期：%s',
+          'product_quality_inspection_inspector': '质检员：%s',
+          'product_quality_inspection_inspection_complete': '质检完成',
+          'product_quality_inspection_start_inspection': '开始质检',
+          'product_quality_inspection_view_report': '查看质检汇总',
+          'product_quality_inspection_instruction': '指令号',
+          'product_quality_inspection_type_body': '型体',
+          'product_quality_inspection_customer_po': '客户PO',
+          'product_quality_inspection_getting_line_info': '正在获取产线信息...',
+          'product_quality_inspection_getting_work_order_detail': '正在获取工单明细...',
+          'product_quality_inspection_submitting_abnormal': '正在提交异常记录...',
+          'product_quality_inspection_submitting_reinspection': '正在提交复检结果...',
+          'product_quality_inspection_withdrawing_abnormal': '正在撤回异常记录...',
+          'product_quality_inspection_submitting_inspection_complete':
+              '正在提交质检完成...',
+          'product_quality_inspection_getting_inspection_report':
+              '正在获取质检汇总数据...',
+          'product_quality_inspection_report_total_inspections_qty': '本单位总质检数：',
+          'product_quality_inspection_report_total_reinspections_qty':
+              '本单位总复检数：',
+          'product_quality_inspection_report_order_number': '工单号：',
+          'product_quality_inspection_report_last_modify_date': '最后修改日期：%s',
+          'product_quality_inspection_report_abnormal_description': '异常描述',
+          'product_quality_inspection_report_inspector': '质检人',
+          'product_quality_inspection_report_inspection_time': '质检时间',
+          'product_quality_inspection_report_reinspector': '复检人',
+          'product_quality_inspection_report_reinspection_time': '复检时间',
+          'product_quality_inspection_report_state': '当前状态',
+          'product_quality_inspection_report_inspection_summary': '质检汇总',
+          'product_quality_inspection_detail_defective_projects': '不良项目',
+          'product_quality_inspection_detail_monthly_defect_rate': '月不良率',
+          'product_quality_inspection_detail_record': '记录%s',
+          'product_quality_inspection_detail_quality_inspection': '品质检验',
+          'product_quality_inspection_detail_inspection_completed': '质检完成',
+          'product_quality_inspection_detail_inspection_completed_tips':
+              '确定质检完成了吗？',
+          'product_quality_inspection_detail_inspection_records': '质检记录',
+          'product_quality_inspection_detail_total': '总量：',
+          'product_quality_inspection_detail_inspector': '质检员：',
+          'product_quality_inspection_detail_abnormal_defects_qty': '不良数：',
+          'product_quality_inspection_detail_abnormal_delete_tips':
+              '确定要删除该条异常记录吗？',
+          'product_quality_inspection_detail_abnormal_withdraw': '撤回',
+          'product_quality_inspection_detail_abnormal_scrap_tips':
+              '确定复检结果为报废吗？',
+          'product_quality_inspection_detail_abnormal_reinspection_scrap':
+              '复检报废',
+          'product_quality_inspection_detail_abnormal_qualified_tips':
+              '确定复检结果为合格吗？',
+          'product_quality_inspection_detail_abnormal_reinspection_qualified':
+              '复检合格',
+          'product_quality_inspection_detail_abnormal_inspection_exception_record':
+              '质检异常记录',
+          'product_quality_inspection_dialog_modify_label_no': '修改标签号',
+          'product_quality_inspection_dialog_label_no': '标签号',
+          'product_quality_inspection_dialog_input_key': '请输入键值',
+          'product_patrol_inspection_inspection_date': '巡检日期',
+          'product_patrol_inspection_qualified': '合格',
+          'product_patrol_inspection_defective_projects': '不良项目：',
+          'product_patrol_inspection_monthly_defect_rate': '月不良率：',
+          'product_patrol_inspection_record': '记录%s',
+          'product_patrol_inspection_refresh': '刷新',
+          'product_patrol_inspection_switching_lines': '切换线别',
+          'product_patrol_inspection_abnormal_records': '异常记录',
+          'product_patrol_inspection_view_inspection_summary': '查看巡检汇总',
+          'product_patrol_inspection_getting_line_info': '正在获取产线信息...',
+          'product_patrol_inspection_adding_patrol_records': '正在添加巡查记录...',
+          'product_patrol_inspection_withdrawing_abnormal': '正在撤回异常记录...',
+          'product_patrol_inspection_getting_patrol_report': '正在获取巡查汇总...',
+          'product_patrol_inspection_report_inspected_unit': '被检单位：',
+          'product_patrol_inspection_report_total_inspections_qty': '总巡查数：',
+          'product_patrol_inspection_report_inspection_summary': '巡检汇总表',
+          'product_patrol_inspection_report_morning': '上午 (00:00:00-11:59:59)',
+          'product_patrol_inspection_report_inspections_qty': '巡查数：',
+          'product_patrol_inspection_report_qualified_qty': '合格数：',
+          'product_patrol_inspection_report_defects_qty': '不良数：',
+          'product_patrol_inspection_report_afternoon':
+              '下午 (12:00:00-23:59:59)',
+          'product_patrol_inspection_abnormal_delete_tips': '确定要删除该条异常记录吗?',
+          'product_patrol_inspection_abnormal_withdraw': '撤回',
+          'product_patrol_inspection_abnormal_inspection_qualified': '巡检合格',
+          'product_patrol_inspection_abnormal_inspection_abnormal_records':
+              '巡检异常记录',
+          'product_patrol_inspection_dialog_change_line': '切换线别',
+          'product_patrol_inspection_dialog_select_unit': '选择巡检单位',
+          'product_patrol_inspection_dialog_modify_label_no': '修改标签号',
+          'product_patrol_inspection_dialog_label_no': '标签号',
+          'product_patrol_inspection_dialog_input_key': '请输入键值',
         },
         localeEnglish.toString(): {
           'app_name': 'Gold Emperor',
@@ -3494,8 +3595,19 @@ class Translation extends Translations {
           'machine_dispatch_report_delete_signed_tips':
               'Worker < %s > signed！！！\nAre you sure you want to delete this worker ?',
           'machine_dispatch_report_report': 'Report',
+          'machine_dispatch_dialog_label_specifications_empty':
+              'Label specifications is empty !',
           'machine_dispatch_dialog_select_dispatch_order':
               'Select dispatch order',
+          'machine_dispatch_dialog_weight_input_tips':
+              'Actual weight of a pair (grams)',
+          'machine_dispatch_dialog_weight': 'Actual weight of a pair (grams)：',
+          'machine_dispatch_dialog_leader_number': 'Leader number',
+          'machine_dispatch_dialog_carton_size': 'Carton Size',
+          'machine_dispatch_dialog_print_last': 'Print last',
+          'machine_dispatch_dialog_weight_error_tips':
+              'The actual weight of a pair must be greater than 0 !',
+          'machine_dispatch_dialog_verify_leader': 'Verify leader',
           'machine_dispatch_dialog_surplus_material_info':
               'Surplus material info',
           'machine_dispatch_dialog_surplus_material_print_tips':
@@ -3522,7 +3634,8 @@ class Translation extends Translations {
           'machine_dispatch_dialog_delete_label_tips':
               'Are you sure you want to delete the tag?',
           'machine_dispatch_dialog_deleting_labels': 'Deleting labels...',
-          'machine_dispatch_dialog_update_surplus_material_label_state': 'Updating surplus material information status...',
+          'machine_dispatch_dialog_update_surplus_material_label_state':
+              'Updating surplus material information status...',
           'machine_dispatch_dialog_leader_id_verify': 'Leader id verify',
           'machine_dispatch_dialog_verify_code': 'Verify code',
           'machine_dispatch_dialog_enter_number':
@@ -6081,7 +6194,8 @@ class Translation extends Translations {
           'process_dispatch_work_ticket': 'Work Ticket',
           'process_dispatch_or': 'or',
           'process_dispatch_dispatch_date': 'Dispatch date',
-          'process_dispatch_get_list': 'Obtaining the list of process dispatch orders...',
+          'process_dispatch_get_list':
+              'Obtaining the list of process dispatch orders...',
           'process_dispatch_part_split': 'component disassembly',
           'process_dispatch_part_merge': 'Component merging',
           'process_dispatch_generate_label': 'Generate labels',
@@ -6093,16 +6207,22 @@ class Translation extends Translations {
           'process_dispatch_factory_body': 'Factory type body：',
           'process_dispatch_job_name': 'Job ID Name：',
           'process_dispatch_job_total': 'Total job number：',
-          'process_dispatch_sure_split_part': 'Are you sure you want to split the components?',
+          'process_dispatch_sure_split_part':
+              'Are you sure you want to split the components?',
           'process_dispatch_please_select_data': 'Please select data！',
-          'process_dispatch_only_select_one': 'Select at most one piece of data！',
+          'process_dispatch_only_select_one':
+              'Select at most one piece of data！',
           'process_dispatch_splitting_part': 'Splitting components...',
-          'process_dispatch_no_part_split': 'No merged components can be split！',
+          'process_dispatch_no_part_split':
+              'No merged components can be split！',
           'process_dispatch_success_split': 'Split successfully！',
           'process_dispatch_fail_split': 'Splitting failed！',
-          'process_dispatch_select_more': 'Please select multiple pieces of data！',
-          'process_dispatch_select_same': 'Please select the same work order for operation！',
-          'process_dispatch_sure_merge_part': 'Are you sure you want to merge the components?',
+          'process_dispatch_select_more':
+              'Please select multiple pieces of data！',
+          'process_dispatch_select_same':
+              'Please select the same work order for operation！',
+          'process_dispatch_sure_merge_part':
+              'Are you sure you want to merge the components?',
           'process_dispatch_merge_part': 'Merging components...',
           'process_dispatch_merge_success': 'Merge successful！',
           'process_dispatch_merge_fail': 'Merge failed！',
@@ -6120,7 +6240,8 @@ class Translation extends Translations {
           'process_dispatch_tab1_instruction': 'instruction',
           'process_dispatch_tab1_create': 'Generate labels',
           'process_dispatch_tab1_select_size': 'Please choose a size！',
-          'process_dispatch_tab1_select_capacity_empty': 'The selected size contains data with empty box capacity, please check！',
+          'process_dispatch_tab1_select_capacity_empty':
+              'The selected size contains data with empty box capacity, please check！',
           'process_dispatch_tab1_create_label': 'Creating labels...',
           'process_dispatch_tab1_create_success': 'Created successfully！',
           'process_dispatch_tab1_create_fail': 'Creation failed！',
@@ -6136,14 +6257,17 @@ class Translation extends Translations {
           'process_dispatch_label_storage_status': 'Storage status：',
           'process_dispatch_label_size_mes': 'Size instruction information：',
           'process_dispatch_label_print_type': 'PRINT STATUS：',
-          'process_dispatch_label_sure_print': 'Are you sure you want to print the label?',
-          'process_dispatch_label_sure_delete': 'Are you sure you want to delete the label?',
+          'process_dispatch_label_sure_print':
+              'Are you sure you want to print the label?',
+          'process_dispatch_label_sure_delete':
+              'Are you sure you want to delete the label?',
           'process_dispatch_label_deleting': 'Removing labels...',
           'process_dispatch_label_delete_success': 'Delete successfully！',
           'process_dispatch_label_delete_fail': 'Delete failed！',
           'process_dispatch_label_delete': 'Delete',
           'process_dispatch_label_print': 'Print',
-          'process_dispatch_label_update_print_fail': 'Upload print status failed!',
+          'process_dispatch_label_update_print_fail':
+              'Upload print status failed!',
           'purchase_order_warehousing_type_body': 'Type body：%s',
           'purchase_order_warehousing_original_sales_order':
               'Original sales order：%s',
@@ -6205,7 +6329,8 @@ class Translation extends Translations {
           'purchase_order_reversal_reversing_receipt': 'Reversing receipt...',
           'forming_code_collection_title': 'Forming barcode collection',
           'forming_code_collection_scan': 'Current QR code scanning',
-          'forming_code_collection_clear_tail': 'Scan the code to clear the tail',
+          'forming_code_collection_clear_tail':
+              'Scan the code to clear the tail',
           'forming_code_collection_factory': 'Factory type body：',
           'forming_code_collection_group': 'Current group：',
           'forming_code_collection_code': 'Shoe box barcode：',
@@ -6237,7 +6362,8 @@ class Translation extends Translations {
           'quality_inspection_delete': 'Deleted',
           'quality_inspection_all_not_delete': 'All (excluding deletion)',
           'quality_inspection_all_not_returned': 'Not returned',
-          'quality_inspection_list_quality_inspection': 'Obtaining the list of quality inspection forms...',
+          'quality_inspection_list_quality_inspection':
+              'Obtaining the list of quality inspection forms...',
           'quality_inspection_select_all': 'Expand and select all',
           'quality_inspection_factory_type': 'Factory type：',
           'quality_inspection_inspection_order_sub': 'Inspection Form：',
@@ -6274,8 +6400,10 @@ class Translation extends Translations {
           'quality_inspection_factory_type_detail': 'Factory type',
           'quality_inspection_no_delete': 'No deletion permission',
           'quality_inspection_select_data': 'Please select data for operation！',
-          'quality_inspection_different_order': 'There are different quality inspection forms available！',
-          'quality_inspection_input_delete_reason': 'Please enter the reason for deletion!',
+          'quality_inspection_different_order':
+              'There are different quality inspection forms available！',
+          'quality_inspection_input_delete_reason':
+              'Please enter the reason for deletion!',
           'quality_inspection_deleting': 'Deleting quality inspection form...',
           'quality_inspection_success_deleting': 'Delete successfully',
           'quality_inspection_fail_deleting': 'Delete failed',
@@ -6286,51 +6414,183 @@ class Translation extends Translations {
           'quality_inspection_storing_success': 'Storage successful！',
           'quality_inspection_storing_fail': 'Storage failed！',
           'quality_inspection_store_location': 'Storage location',
-          'quality_inspection_store_location_empty': 'The storage warehouse cannot be empty',
-          'quality_inspection_quality_detail': 'Obtaining details of the quality inspection form...',
+          'quality_inspection_store_location_empty':
+              'The storage warehouse cannot be empty',
+          'quality_inspection_quality_detail':
+              'Obtaining details of the quality inspection form...',
           'quality_inspection_change_location_title': 'Modify cargo location',
-          'quality_inspection_input_location': 'Please enter the storage location',
+          'quality_inspection_input_location':
+              'Please enter the storage location',
           'quality_inspection_change_location': 'Modifying cargo location...',
           'quality_inspection_change_success': 'Modified successfully！',
           'quality_inspection_change_failed': 'Modification failed！',
-          'quality_inspection_color_message': 'Color separation information (long press to delete)',
-          'quality_inspection_get_color':'Obtaining color scheme information...',
-          'quality_inspection_get_label':'Getting tags...',
-          'quality_inspection_color_scheme':'Color scheme allocation',
-          'quality_inspection_material_name':'Material name',
-          'quality_inspection_color_title':'color system',
-          'quality_inspection_quality_title':'quantity',
-          'quality_inspection_add':'Add',
-          'quality_inspection_submit':'Submit',
-          'quality_inspection_color_select':'Please select data！',
-          'quality_inspection_no_qty':'No remaining distributable quantity！',
-          'quality_inspection_input_qty':'Please enter the quantity',
-          'quality_inspection_input_color':'Please enter the color scheme',
-          'quality_inspection_color_no_same':'The quantity of color separation does not match the quantity of order reversal！',
-          'quality_inspection_eliminating':'Eliminating...',
-          'quality_inspection_reversal_successful':'Reversal successful！',
-          'quality_inspection_reversal_failed':'Reversal failed！',
-          'quality_inspection_no_inspection':'No quality inspection authority！',
-          'quality_inspection_no_store_inspection':'No storage permission！',
-          'quality_inspection_reviewer':'Reviewer',
-          'quality_inspection_photo':'Abnormal quality inspection image (long press to delete)',
-          'quality_inspection_exception_description':'Exception Description',
-          'quality_inspection_processing_method':'Processing method',
-          'quality_inspection_availability':'Availability',
-          'quality_inspection_method':'Inspection method：',
-          'quality_inspection_category':'Category：',
-          'quality_inspection_accepting_unit':'Accepting unit：',
-          'quality_inspection_compromise':'Should we make concessions',
-          'quality_inspection_title':'Quality inspection',
-          'quality_inspection_sure_submit':'Are you sure to submit for quality inspection？',
-          'quality_inspection_submit_abnormal':'Submitting exception..',
-          'quality_inspection_submit_failed':'Submission exception failed！',
-          'quality_inspection_create_inspection':'Creating quality inspection form...',
-          'quality_inspection_create_success':'Created successfully！',
-          'quality_inspection_create_fail':'Creation failed！',
-          'quality_inspection_have_already':'Contains materials that have already been inspected！',
-
-
+          'quality_inspection_color_message':
+              'Color separation information (long press to delete)',
+          'quality_inspection_get_color':
+              'Obtaining color scheme information...',
+          'quality_inspection_get_label': 'Getting tags...',
+          'quality_inspection_color_scheme': 'Color scheme allocation',
+          'quality_inspection_material_name': 'Material name',
+          'quality_inspection_color_title': 'color system',
+          'quality_inspection_quality_title': 'quantity',
+          'quality_inspection_add': 'Add',
+          'quality_inspection_submit': 'Submit',
+          'quality_inspection_color_select': 'Please select data！',
+          'quality_inspection_no_qty': 'No remaining distributable quantity！',
+          'quality_inspection_input_qty': 'Please enter the quantity',
+          'quality_inspection_input_color': 'Please enter the color scheme',
+          'quality_inspection_color_no_same':
+              'The quantity of color separation does not match the quantity of order reversal！',
+          'quality_inspection_eliminating': 'Eliminating...',
+          'quality_inspection_reversal_successful': 'Reversal successful！',
+          'quality_inspection_reversal_failed': 'Reversal failed！',
+          'quality_inspection_no_inspection':
+              'No quality inspection authority！',
+          'quality_inspection_no_store_inspection': 'No storage permission！',
+          'quality_inspection_reviewer': 'Reviewer',
+          'quality_inspection_photo':
+              'Abnormal quality inspection image (long press to delete)',
+          'quality_inspection_exception_description': 'Exception Description',
+          'quality_inspection_processing_method': 'Processing method',
+          'quality_inspection_availability': 'Availability',
+          'quality_inspection_method': 'Inspection method：',
+          'quality_inspection_category': 'Category：',
+          'quality_inspection_accepting_unit': 'Accepting unit：',
+          'quality_inspection_compromise': 'Should we make concessions',
+          'quality_inspection_title': 'Quality inspection',
+          'quality_inspection_sure_submit':
+              'Are you sure to submit for quality inspection？',
+          'quality_inspection_submit_abnormal': 'Submitting exception..',
+          'quality_inspection_submit_failed': 'Submission exception failed！',
+          'quality_inspection_create_inspection':
+              'Creating quality inspection form...',
+          'quality_inspection_create_success': 'Created successfully！',
+          'quality_inspection_create_fail': 'Creation failed！',
+          'quality_inspection_have_already':
+              'Contains materials that have already been inspected！',
+          'product_quality_inspection_inspection_unit': 'Inspection unit：',
+          'product_quality_inspection_abnormal_qty': 'Abnormal qty：',
+          'product_quality_inspection_reinspection_qty': 'Reinspection qty：',
+          'product_quality_inspection_instruction_no_tips': 'Instruction：',
+          'product_quality_inspection_customer_po_tips': 'PO：',
+          'product_quality_inspection_type_body_tips': 'Type body：',
+          'product_quality_inspection_inspection_date': 'Inspection date：%s',
+          'product_quality_inspection_inspector': 'Inspector：%s',
+          'product_quality_inspection_inspection_complete':
+              'Inspection complete',
+          'product_quality_inspection_start_inspection': 'Start inspection',
+          'product_quality_inspection_view_report': 'View report',
+          'product_quality_inspection_instruction': 'Instruction',
+          'product_quality_inspection_type_body': 'Type body',
+          'product_quality_inspection_customer_po': 'PO',
+          'product_quality_inspection_getting_line_info':
+              'Getting line info...',
+          'product_quality_inspection_getting_work_order_detail':
+              'Getting work order detail...',
+          'product_quality_inspection_submitting_abnormal':
+              'Submitting abnormal...',
+          'product_quality_inspection_submitting_reinspection':
+              'Submitting reinspection...',
+          'product_quality_inspection_withdrawing_abnormal':
+              'Withdrawing abnormal...',
+          'product_quality_inspection_submitting_inspection_complete':
+              'Submitting inspection complete...',
+          'product_quality_inspection_getting_inspection_report':
+              'Getting inspection report...',
+          'product_quality_inspection_report_total_inspections_qty':
+              'Total inspections qty：',
+          'product_quality_inspection_report_total_reinspections_qty':
+              'Total reinspections qty：',
+          'product_quality_inspection_report_order_number': 'Order number：',
+          'product_quality_inspection_report_last_modify_date':
+              'Last modify date：%s',
+          'product_quality_inspection_report_abnormal_description':
+              'Abnormal description',
+          'product_quality_inspection_report_inspector': 'Inspector',
+          'product_quality_inspection_report_inspection_time':
+              'Inspection time',
+          'product_quality_inspection_report_reinspector': 'Reinspector',
+          'product_quality_inspection_report_reinspection_time':
+              'Reinspection time',
+          'product_quality_inspection_report_state': 'State',
+          'product_quality_inspection_report_inspection_summary':
+              'Inspection summary',
+          'product_quality_inspection_detail_defective_projects':
+              'Defective projects',
+          'product_quality_inspection_detail_monthly_defect_rate':
+              'Monthly defect rate',
+          'product_quality_inspection_detail_record': 'Record%s',
+          'product_quality_inspection_detail_quality_inspection':
+              'Quality inspection',
+          'product_quality_inspection_detail_inspection_completed':
+              'Inspection completed',
+          'product_quality_inspection_detail_inspection_completed_tips':
+              'Are you sure the quality inspection is completed ？',
+          'product_quality_inspection_detail_inspection_records':
+              'Inspection records',
+          'product_quality_inspection_detail_total': 'Total：',
+          'product_quality_inspection_detail_inspector': 'Inspector：',
+          'product_quality_inspection_detail_abnormal_defects_qty':
+              'Defects qty：',
+          'product_quality_inspection_detail_abnormal_delete_tips':
+              'Are you sure you want to delete this exception record ？',
+          'product_quality_inspection_detail_abnormal_withdraw': 'Withdraw',
+          'product_quality_inspection_detail_abnormal_scrap_tips':
+              'Is the retest result confirmed as scrap ？',
+          'product_quality_inspection_detail_abnormal_reinspection_scrap':
+              'Reinspection scrap',
+          'product_quality_inspection_detail_abnormal_qualified_tips':
+              'Is the retest result confirmed as qualified ？',
+          'product_quality_inspection_detail_abnormal_reinspection_qualified':
+              'Reinspection qualified',
+          'product_quality_inspection_detail_abnormal_inspection_exception_record':
+              'Inspection exception record',
+          'product_quality_inspection_dialog_modify_label_no':
+              'Modify label no',
+          'product_quality_inspection_dialog_label_no': 'Label no',
+          'product_quality_inspection_dialog_input_key': 'Input key',
+          'product_patrol_inspection_inspection_date': 'Inspection date',
+          'product_patrol_inspection_qualified': 'Qualified',
+          'product_patrol_inspection_defective_projects': 'Defective projects：',
+          'product_patrol_inspection_monthly_defect_rate':
+              'Monthly defect rate：',
+          'product_patrol_inspection_record': 'Record%s',
+          'product_patrol_inspection_refresh': 'Refresh',
+          'product_patrol_inspection_switching_lines': 'Switching lines',
+          'product_patrol_inspection_abnormal_records': 'Abnormal records',
+          'product_patrol_inspection_view_inspection_summary': 'View summary',
+          'product_patrol_inspection_getting_line_info': 'Getting line info...',
+          'product_patrol_inspection_adding_patrol_records':
+              'Adding patrol records...',
+          'product_patrol_inspection_withdrawing_abnormal':
+              'Withdrawing abnormal...',
+          'product_patrol_inspection_getting_patrol_report':
+              'Getting patrol report...',
+          'product_patrol_inspection_report_inspected_unit': 'Inspected unit：',
+          'product_patrol_inspection_report_total_inspections_qty':
+              'Total inspection qty：',
+          'product_patrol_inspection_report_inspection_summary':
+              'Inspection summary',
+          'product_patrol_inspection_report_morning':
+              'Morning (00:00:00-11:59:59)',
+          'product_patrol_inspection_report_inspections_qty':
+              'Inspections qty：',
+          'product_patrol_inspection_report_qualified_qty': 'Qualified qty：',
+          'product_patrol_inspection_report_defects_qty': 'Defects qty：',
+          'product_patrol_inspection_report_afternoon':
+              'Afternoon (12:00:00-23:59:59)',
+          'product_patrol_inspection_abnormal_delete_tips':
+              'Are you sure you want to delete this exception record?',
+          'product_patrol_inspection_abnormal_withdraw': 'Withdraw',
+          'product_patrol_inspection_abnormal_inspection_qualified':
+              'Inspection qualified',
+          'product_patrol_inspection_abnormal_inspection_abnormal_records':
+              'Inspection abnormal records',
+          'product_patrol_inspection_dialog_switching_lines': 'Switching lines',
+          'product_patrol_inspection_dialog_select_unit': 'Select unit',
+          'product_patrol_inspection_dialog_modify_label_no': 'Modify label no',
+          'product_patrol_inspection_dialog_label_no': 'Label no',
+          'product_patrol_inspection_dialog_input_key': 'Input key',
         }
       };
 }

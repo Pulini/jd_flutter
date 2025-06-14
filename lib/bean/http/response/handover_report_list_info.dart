@@ -1,11 +1,11 @@
-/// InterID : 44485
-/// DispatchNumber : "000000116158"
-/// Shift : "白班"
-/// Machine : "倒台机01"
-/// FactoryType : "MDW221609-3"
-/// EmpList : [{"ProcessName":"制底","EmpName":"张功庆","Qty":360.0,"Unit":"双"}]
-/// SizeList : [{"Size":"6","BoxesQty":1.000,"DispatchQty":24.000,"LastMantissa":0.0,"Mantissa":0.000,"Qty":24.0,"Capacity":24.00},{"Size":"6.5","BoxesQty":1.000,"DispatchQty":36.000,"LastMantissa":0.0,"Mantissa":0.000,"Qty":36.0,"Capacity":36.00},{"Size":"7","BoxesQty":1.000,"DispatchQty":48.000,"LastMantissa":0.0,"Mantissa":0.000,"Qty":48.0,"Capacity":48.00},{"Size":"7.5","BoxesQty":1.000,"DispatchQty":48.000,"LastMantissa":0.0,"Mantissa":0.000,"Qty":48.0,"Capacity":48.00},{"Size":"8","BoxesQty":1.000,"DispatchQty":48.000,"LastMantissa":0.0,"Mantissa":0.000,"Qty":48.0,"Capacity":48.00},{"Size":"8.5","BoxesQty":1.000,"DispatchQty":48.000,"LastMantissa":0.0,"Mantissa":0.000,"Qty":48.0,"Capacity":48.00},{"Size":"9","BoxesQty":1.000,"DispatchQty":48.000,"LastMantissa":0.0,"Mantissa":0.000,"Qty":48.0,"Capacity":48.00},{"Size":"9.5","BoxesQty":1.000,"DispatchQty":12.000,"LastMantissa":0.0,"Mantissa":0.000,"Qty":12.0,"Capacity":12.00},{"Size":"10","BoxesQty":1.000,"DispatchQty":24.000,"LastMantissa":0.0,"Mantissa":0.000,"Qty":24.0,"Capacity":24.00},{"Size":"11","BoxesQty":1.000,"DispatchQty":24.000,"LastMantissa":0.0,"Mantissa":0.000,"Qty":24.0,"Capacity":24.00}]
-/// Status : true
+// InterID : 44485
+// DispatchNumber : "000000116158"
+// Shift : "白班"
+// Machine : "倒台机01"
+// FactoryType : "MDW221609-3"
+// EmpList : [{"ProcessName":"制底","EmpName":"张功庆","Qty":360.0,"Unit":"双"}]
+// SizeList : [{"Size":"6","BoxesQty":1.000,"DispatchQty":24.000,"LastMantissa":0.0,"Mantissa":0.000,"Qty":24.0,"Capacity":24.00},{"Size":"6.5","BoxesQty":1.000,"DispatchQty":36.000,"LastMantissa":0.0,"Mantissa":0.000,"Qty":36.0,"Capacity":36.00},{"Size":"7","BoxesQty":1.000,"DispatchQty":48.000,"LastMantissa":0.0,"Mantissa":0.000,"Qty":48.0,"Capacity":48.00},{"Size":"7.5","BoxesQty":1.000,"DispatchQty":48.000,"LastMantissa":0.0,"Mantissa":0.000,"Qty":48.0,"Capacity":48.00},{"Size":"8","BoxesQty":1.000,"DispatchQty":48.000,"LastMantissa":0.0,"Mantissa":0.000,"Qty":48.0,"Capacity":48.00},{"Size":"8.5","BoxesQty":1.000,"DispatchQty":48.000,"LastMantissa":0.0,"Mantissa":0.000,"Qty":48.0,"Capacity":48.00},{"Size":"9","BoxesQty":1.000,"DispatchQty":48.000,"LastMantissa":0.0,"Mantissa":0.000,"Qty":48.0,"Capacity":48.00},{"Size":"9.5","BoxesQty":1.000,"DispatchQty":12.000,"LastMantissa":0.0,"Mantissa":0.000,"Qty":12.0,"Capacity":12.00},{"Size":"10","BoxesQty":1.000,"DispatchQty":24.000,"LastMantissa":0.0,"Mantissa":0.000,"Qty":24.0,"Capacity":24.00},{"Size":"11","BoxesQty":1.000,"DispatchQty":24.000,"LastMantissa":0.0,"Mantissa":0.000,"Qty":24.0,"Capacity":24.00}]
+// Status : true
 
 class HandoverReportListInfo {
   HandoverReportListInfo({
@@ -67,13 +67,13 @@ class HandoverReportListInfo {
   }
 }
 
-/// Size : "6"
-/// BoxesQty : 1.000
-/// DispatchQty : 24.000
-/// LastMantissa : 0.0
-/// Mantissa : 0.000
-/// Qty : 24.0
-/// Capacity : 24.00
+// Size : "6"
+// BoxesQty : 1.000
+// DispatchQty : 24.000
+// LastMantissa : 0.0
+// Mantissa : 0.000
+// Qty : 24.0
+// Capacity : 24.00
 
 class SizeList {
   SizeList({
@@ -117,10 +117,10 @@ class SizeList {
   }
 }
 
-/// ProcessName : "制底"
-/// EmpName : "张功庆"
-/// Qty : 360.0
-/// Unit : "双"
+// ProcessName : "制底"
+// EmpName : "张功庆"
+// Qty : 360.0
+// Unit : "双"
 
 class EmpList {
   EmpList({

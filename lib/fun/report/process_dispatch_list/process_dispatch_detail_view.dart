@@ -107,11 +107,11 @@ class _ProcessDispatchDetailPageState extends State<ProcessDispatchDetailPage> {
     pu.printLabelList(
       labelList: labelList,
       start: () {
-        loadingDialog('正在下发标签...');
+        loadingShow('正在下发标签...');
       },
       progress: (i, j) {
         Get.back();
-        loadingDialog('正在下发标签($i/$j)');
+        loadingShow('正在下发标签($i/$j)');
       },
       finished: (success, fail) {
         Get.back();

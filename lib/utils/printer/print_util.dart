@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/bluetooth_device.dart';
 import 'package:jd_flutter/constant.dart';
+
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
@@ -13,7 +14,6 @@ class PrintUtil {
   var bluetoothChannel = const MethodChannel(channelBluetoothFlutterToAndroid);
   var deviceList = <BluetoothDevice>[].obs;
   var isScanning = false.obs;
-  Function? disconnected;
 
   PrintUtil() {
     setChannelListener();
@@ -21,13 +21,10 @@ class PrintUtil {
 
   printLabel({
     required List<Uint8List> label,
-    required Function start,
-    required Function reStart,
-    required Function success,
-    required Function failed,
-    required Function disconnected,
+    Function()? start,
+    Function()? success,
+    Function()? failed,
   }) async {
-    this.disconnected = disconnected;
     if (!await _getBluetoothPermission()) {
       showSnackBar(title: '蓝牙错误', message: '缺少蓝牙权限');
       return;
@@ -38,29 +35,20 @@ class PrintUtil {
     }
     deviceList.value = await _getScannedDevices();
     if (deviceList.any((v) => v.deviceIsConnected)) {
-      _send(
-          label: label,
-          start: start,
-          reStart: reStart,
-          success: success,
-          failed: failed);
+      _send(label: label, start: start, success: success, failed: failed);
     } else {
       _showBluetoothDialog(
-        () => _send(
-            label: label,
-            start: start,
-            reStart: reStart,
-            success: success,
-            failed: failed),
+        () =>
+            _send(label: label, start: start, success: success, failed: failed),
       );
     }
   }
 
   printLabelList({
     required List<List<Uint8List>> labelList,
-    required Function start,
-    required Function(int, int) progress,
-    required Function(List<int>, List<int>) finished,
+    Function()? start,
+    Function(int, int)? progress,
+    Function(List<int>, List<int>)? finished,
   }) async {
     if (!await _getBluetoothPermission()) {
       showSnackBar(title: '蓝牙错误', message: '缺少蓝牙权限');
@@ -122,7 +110,6 @@ class PrintUtil {
                         (v) => v.deviceMAC == call.arguments['MAC'],
                       )
                       .deviceIsConnected = false;
-                  disconnected?.call();
                   break;
                 }
               case 'Off':
@@ -258,10 +245,10 @@ class PrintUtil {
   }
 
   _connectBluetooth(BluetoothDevice device, Function() connected) {
-    loadingDialog('bluetooth_connecting'.tr);
+    loadingShow('bluetooth_connecting'.tr);
     bluetoothChannel.invokeMethod('ConnectBluetooth', device.deviceMAC).then(
       (value) {
-        Get.back();
+        loadingDismiss();
         switch (value) {
           case 0:
             {
@@ -292,11 +279,11 @@ class PrintUtil {
   }
 
   _closeBluetooth(BluetoothDevice device) {
-    loadingDialog('bluetooth_closing'.tr);
+    loadingShow('bluetooth_closing'.tr);
     bluetoothChannel
         .invokeMethod('CloseBluetooth'.tr, device.deviceMAC)
         .then((value) {
-      Get.back();
+      loadingDismiss();
       if (value) {
         device.deviceIsConnected = false;
         deviceList.refresh();
@@ -320,51 +307,47 @@ class PrintUtil {
   // }
   _send({
     required dynamic label,
-    required Function start,
-    required Function reStart,
-    required Function success,
-    required Function failed,
+    required Function()? start,
+    required Function()? success,
+    required Function()? failed,
   }) async {
-    start.call();
+    start?.call();
     var code = await bluetoothChannel.invokeMethod('SendTSC', label);
-    if (code == 1000) {
-      success.call();
-    } else if (code == 1003) {
-      failed.call();
-    } else if (code == 1007) {
-      reStart.call();
-      _connectBluetooth(
-        deviceList.firstWhere((v) => v.deviceIsConnected),
-        () => _send(
-            label: label,
-            start: start,
-            reStart: reStart,
-            success: success,
-            failed: failed),
-      );
+    if (code == 1000) {//发送完成
+      success?.call();
+    } else if (code == 1003) {//发送失败
+      failed?.call();
+    } else if (code == 1007) {//通道断开
+      Future.delayed(const Duration(milliseconds: 500), () {
+        _connectBluetooth(
+          deviceList.firstWhere((v) => v.deviceIsConnected),
+          () => _send(
+              label: label, start: start, success: success, failed: failed),
+        );
+      });
     }
   }
 
   _sendList({
     required List<dynamic> labels,
-    required Function start,
-    required Function(int, int) progress,
-    required Function(List<int>, List<int>) finished,
+    required Function()? start,
+    required Function(int, int)? progress,
+    required Function(List<int>, List<int>)? finished,
   }) async {
-    start.call();
+    start?.call();
     var success = <int>[];
     var fail = <int>[];
     for (var i = 0; i < labels.length; ++i) {
-      progress.call(i + 1, labels.length);
+      progress?.call(i + 1, labels.length);
       var code = await bluetoothChannel.invokeMethod('SendTSC', labels[i]);
       if (code == 1000) {
         success.add(i);
-      } else if (code == 1003) {
+      } else if (code == 1003 || code == 1007) {
         fail.add(i);
       }
       await Future.delayed(const Duration(milliseconds: 300));
     }
-    finished.call(success, fail);
+    finished?.call(success, fail);
   }
 
   _item(int index, Function() connected) {

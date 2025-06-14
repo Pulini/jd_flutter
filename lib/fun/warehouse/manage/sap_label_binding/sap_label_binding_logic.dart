@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/sap_label_binding_info.dart';
+import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/preview_label_list_widget.dart';
 import 'package:jd_flutter/widget/preview_label_widget.dart';
@@ -140,6 +141,9 @@ class SapLabelBindingLogic extends GetxController {
       height: height,
       outWeight: outWeight,
       targetBoxLabelID: targetBoxLabel?.labelID ?? '',
+      supplierNumber: targetBoxLabel == null
+          ? labelList[0].supplierNumber ?? ''
+          : targetBoxLabel.supplierNumber ?? '',
       labelList: labelList,
       success: (msg) => successDialog(
         content: msg,
@@ -155,34 +159,82 @@ class SapLabelBindingLogic extends GetxController {
   printNewBoxLabel() {
     state.getLabelPrintInfo(
       success: (labelsData) {
-        var labels = [dynamicLabelTemplate110xN(
-          productName: '干燥剂/dehumidifier/mesin pengering ruangan',
-          companyOrderType: '1096正单',
-          customsDeclarationType: '进料加工/PIM',
-          materialList: [
-            ['010600985','双色PU20244096测试1','999.999','M'],
-            ['010600986','双色PU20244096测试2','999.999','CI'],
-            ['010600987','双色PU20244096测试3','999.999','MM'],
-          ],
-          pieceNo: '1-1',
-          grossWeight: '999.999',
-          netWeight: '999.999',
-          qrCode: '00505685E5761FE090E58AE9B8A5E489',
-          code: '12345678901234',
-          specifications: '30x30x40CM (LxWxH)',
-          volume: '999.999',
-          supplier: '0000500289',
-          manufactureDate: '2025-06-10',
-          consignee: 'PT.GOLD EMPEROR DUA',
-        )];
+        var labels = [
+          dynamicOutBoxLabel110xN(
+            productName: '干燥剂/dehumidifier/mesin pengering ruangan',
+            companyOrderType: '1096正单',
+            customsDeclarationType: '进料加工/PIM',
+            materialList: [
+              [
+                '010600985',
+                '双色PU20244096测试1双色试1双色PU20244096测试1双色PU20244096测试1双色PU20244096测试1'
+                    .allowWordTruncation(),
+                '999.999',
+                'M'
+              ],
+              [
+                '010600986',
+                '双色PU20244096测试2'.allowWordTruncation(),
+                '999.999',
+                'CI'
+              ],
+              [
+                '010600987',
+                '双色PU20244096测试3'.allowWordTruncation(),
+                '999.999',
+                'MM'
+              ],
+            ],
+            pieceNo: '1-1',
+            grossWeight: '999.999',
+            netWeight: '999.999',
+            qrCode: '00505685E5761FE090E58AE9B8A5E489',
+            code: '12345678901234',
+            specifications: '30x30x40CM (LxWxH)',
+            volume: '999.999',
+            supplier: '0000500289',
+            manufactureDate: '2025-06-10',
+            consignee: 'PT.GOLD EMPEROR DUA',
+          ),
+          dynamicInBoxLabel110xN(
+            productName: '干燥剂/dehumidifier/mesin pengering ruangan',
+            companyOrderType: '1096正单',
+            customsDeclarationType: '进料加工/PIM',
+            materialList: [
+              [
+                '010600985',
+                '双色PU20244096测试1双色PU20244096测试1双色PU20244096测试1双色P44096测试1'
+                    .allowWordTruncation(),
+                '999.999',
+                'M'
+              ],
+              [
+                '010600986',
+                '双色PU20244096测试2'.allowWordTruncation(),
+                '999.999',
+                'CI'
+              ],
+              [
+                '010600987',
+                '双色PU20244096测试3'.allowWordTruncation(),
+                '999.999',
+                'MM'
+              ],
+            ],
+            pieceNo: '1-1',
+            qrCode: '00505685E5761FE090E58AE9B8A5E489',
+            code: '12345678901234',
+            supplier: '0000500289',
+            manufactureDate: '2025-06-10',
+          ),
+        ];
         if (labels.length > 1) {
-          Get.to(() => PreviewLabelList(labelWidgets: labels));
+          Get.to(() => PreviewLabelList(labelWidgets: labels, isDynamic: true));
         } else {
-          Get.to(() => PreviewLabel(labelWidget: labels[0]));
+          Get.to(() => PreviewLabel(labelWidget: labels[0], isDynamic: true));
         }
       },
       error: (msg) => errorDialog(content: msg),
     );
   }
-
 }
