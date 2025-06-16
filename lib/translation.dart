@@ -1,6 +1,8 @@
-import 'package:get/get.dart';
-import 'package:jd_flutter/utils/utils.dart';
+import 'dart:ui';
 
+import 'package:get/get.dart';
+var localeChinese = const Locale('zh', 'Hans_CN');
+var localeEnglish = const Locale('en', 'US');
 class Translation extends Translations {
   @override
   Map<String, Map<String, String>> get keys => {

@@ -1,56 +1,61 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/constant.dart';
-import 'package:jd_flutter/utils/app_init_controller.dart';
+import 'package:jd_flutter/utils/app_init_service.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/number_text_field_widget.dart';
 import 'login_logic.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
   @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  @override
   Widget build(BuildContext context) {
-    return Obx(() => Container(
-          alignment: Alignment.center,
-          //设置背景
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: isTestUrl()
-                  ? [Colors.lightBlueAccent, Colors.greenAccent]
-                  : [Colors.lightBlueAccent, Colors.blueAccent],
-              begin: Alignment.bottomLeft,
-              end: Alignment.topRight,
+    return Container(
+      alignment: Alignment.center,
+      //设置背景
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: isTestUrl()
+              ? [Colors.lightBlueAccent, Colors.greenAccent]
+              : [Colors.lightBlueAccent, Colors.blueAccent],
+          begin: Alignment.bottomLeft,
+          end: Alignment.topRight,
+        ),
+      ),
+      padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+      child: ListView(
+        //添加登录UI
+        children: [
+          const SizedBox(height: 30),
+          Image.asset(
+            'assets/images/ic_logo.png',
+            width: 130,
+            height: 130,
+          ),
+          const Text(
+            'Gold Emperor',
+            style: TextStyle(
+              fontSize: 40,
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              decoration: TextDecoration.none,
             ),
+            textAlign: TextAlign.center,
           ),
-          padding:
-              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-          child: ListView(
-            //添加登录UI
-            children: [
-              const SizedBox(height: 30),
-              Image.asset(
-                'assets/images/ic_logo.png',
-                width: 130,
-                height: 130,
-              ),
-              const Center(
-                  child: Text(
-                'Gold Emperor',
-                style: TextStyle(
-                  fontSize: 40,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  decoration: TextDecoration.none,
-                ),
-              )),
-              const Center(child: LoginPick(isReLogin: false)),
-              const SizedBox(height: 40),
-            ],
-          ),
-        ));
+          const Center(child: LoginPick(isReLogin: false)),
+          const SizedBox(height: 40),
+        ],
+      ),
+    );
   }
 }
+
 
 class LoginPick extends StatefulWidget {
   const LoginPick({super.key, required this.isReLogin});
@@ -289,7 +294,7 @@ class _LoginPickState extends State<LoginPick>
         body: Column(
           children: [
             Expanded(
-              child: TabBarView(
+              child:TabBarView(
                 controller: tabController,
                 children: [
                   _phoneLogin(),

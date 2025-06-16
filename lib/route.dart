@@ -80,8 +80,8 @@ import 'login/login_view.dart';
 import 'utils/web_api.dart';
 
 class RouteConfig {
-  static const String main = '/';
-  static const login = '/login';
+  static const String home = '/home';
+  static const String login = '/login';
 
   //扫码日产量报表
   static Routes dailyReport = Routes(
@@ -681,7 +681,7 @@ class RouteConfig {
 
   static List<GetPage> appRoutes = [
     GetPage(
-      name: main,
+      name: home,
       page: () => const HomePage(),
       transition: Transition.fadeIn,
     ),
@@ -997,9 +997,6 @@ var functions = <ButtonItem>[];
 HomeButton? getNowFunction() {
   var route = Get.currentRoute;
   logger.i('当前路由$route');
-  if (route == RouteConfig.main) {
-    return null;
-  }
   HomeButton? reItem;
   for (var item1 in functions) {
     if (item1 is HomeButton && item1.route == route) {
@@ -1020,7 +1017,6 @@ HomeButton? getNowFunction() {
 
 String getFunctionTitle() {
   var route = Get.currentRoute;
-  if (route == RouteConfig.main) return '';
   for (var item1 in functions) {
     if (item1 is HomeButton && item1.route == route) {
       return item1.name;

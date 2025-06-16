@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/version_info.dart';
 import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/login/login_view.dart';
-import 'package:jd_flutter/utils/app_init_controller.dart';
+import 'package:jd_flutter/utils/app_init_service.dart';
 
 import 'downloader.dart';
 
@@ -152,6 +152,7 @@ loadingShow(String? content) {
     return;
   }
   loadingKey = GlobalKey();
+  debugPrint('loading show');
   Get.dialog(
     PopScope(
       canPop: false,

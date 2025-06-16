@@ -479,7 +479,6 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
           children: [
             Expanded(
               child: ListView(
-                shrinkWrap: true,
                 scrollDirection: Axis.horizontal,
                 children: [
                   if (!state.isSelectedMany)

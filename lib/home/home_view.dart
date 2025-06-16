@@ -56,7 +56,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
   }
 
   _item(ButtonItem item) {
-    return Card(
+    return   Card(
       color: item is HomeButton ? Colors.white : Colors.blue.shade50,
       child: item is HomeButton
           ? HomeSubItem(isGroup: false, item: item)

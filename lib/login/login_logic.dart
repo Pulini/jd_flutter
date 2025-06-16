@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/home/home_view.dart';
-import 'package:jd_flutter/utils/app_init_controller.dart';
+import 'package:jd_flutter/utils/app_init_service.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
@@ -35,8 +35,8 @@ class LoginLogic extends GetxController {
       if (state.longPressCount >= 3) {
         state.stopwatch.stop();
         if (state.stopwatch.elapsed.inSeconds <= 5) {
-          toggleTestUrl(); // 执行你的切换逻辑
-        } else {}
+          toggleTestUrl();
+        }
         state.isCounting = false;
         state.longPressCount = 0;
       }

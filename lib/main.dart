@@ -2,101 +2,15 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
-import 'package:get/get_navigation/src/router_report.dart';
 import 'package:jd_flutter/route.dart';
-import 'package:jd_flutter/utils/app_init_controller.dart';
-import 'package:jd_flutter/utils/utils.dart';
-import 'package:path/path.dart';
-import 'package:sqflite/sqflite.dart';
-import 'bean/http/response/bar_code.dart';
-import 'bean/http/response/production_dispatch_order_detail_info.dart';
-import 'bean/http/response/sap_surplus_material_info.dart';
-import 'constant.dart';
-import 'home/home_view.dart';
-import 'login/login_view.dart';
+import 'package:jd_flutter/utils/app_init_service.dart';
 import 'translation.dart';
 import 'utils/web_api.dart';
 
 main() async {
   // 启用性能叠加层
   debugProfileBuildsEnabled = true;
-  //确保初始化完成才能加载耗时插件
-  WidgetsFlutterBinding.ensureInitialized();
-
-
-
-  // //添加全局网络状态管理
-  Get.put(AppInitController());
-
-  if (GetPlatform.isMobile) {
-    getDatabasesPath().then(
-      (path) => openDatabase(
-        join(path, jdDatabase),
-        version: 3,
-        onCreate: (db, v) {
-          debugPrint('onCreate -----------v=$v');
-          db.execute(SaveDispatch.dbCreate);
-          db.execute(SaveWorkProcedure.dbCreate);
-          db.execute(BarCodeInfo.dbCreate);
-          db.execute(SurplusMaterialLabelInfo.dbCreate);
-          db.close();
-        },
-        onUpgrade: (db, ov, nv) {
-          debugPrint('onUpgrade-----------ov=$ov nv=$nv');
-          // 从版本1开始，逐步处理到最新版本的升级操作
-          for (int cv = ov + 1; cv <= nv; cv++) {
-            switch (cv) {
-              case 2: // 版本1升级到版本2
-                debugPrint('版本1升级到版本2');
-                db.execute(BarCodeInfo.dbCreate);
-                break;
-              case 3: // 版本2升级到版本3
-                debugPrint('版本2升级到版本3');
-                db.execute(SurplusMaterialLabelInfo.dbCreate);
-                break;
-              default:
-                break;
-            }
-          }
-          db.close();
-        },
-        onOpen: (db) {
-          debugPrint('onOpen-------');
-        },
-      ),
-    );
-  }
-
   runApp(const MyApp());
-
-  // FlutterHmsScanKit.scan.then(
-  //       (result) => {
-  //     logger
-  //         .e('form:${result?.scanTypeForm} value:${result?.value}')
-  //   },
-  // );
-}
-
-//路由感知 用于释放GetXController
-class GetXRouterObserver extends NavigatorObserver {
-  @override
-  void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
-    RouterReportManager.reportCurrentRoute(route);
-  }
-
-  @override
-  void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) async {
-    RouterReportManager.reportRouteDispose(route);
-  }
-}
-
-//适配鼠标滚动
-class AppScrollBehavior extends MaterialScrollBehavior {
-  @override
-  Set<PointerDeviceKind> get dragDevices => {
-        PointerDeviceKind.touch,
-        PointerDeviceKind.mouse,
-      };
 }
 
 class MyApp extends StatefulWidget {
@@ -108,14 +22,23 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   @override
+  void initState() {
+    super.initState();
+    // //添加全局网络状态管理
+    Get.put(AppInitService(), permanent: true);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    userInfo = getUserInfo();
     return Obx(()=>GetMaterialApp(
-      scrollBehavior: AppScrollBehavior(),
+      scrollBehavior: ScrollConfiguration.of(context).copyWith(
+        //适配鼠标滚动
+        dragDevices: {PointerDeviceKind.touch, PointerDeviceKind.mouse},
+      ),
       onGenerateTitle: (context) => 'app_name'.tr,
       debugShowCheckedModeBanner: isTestUrl(),
       translations: Translation(),
-      navigatorObservers: [GetXRouterObserver()],
+      navigatorObservers: [GetObserver()],
       locale: View.of(context).platformDispatcher.locale,
       localeListResolutionCallback: (locales, supportedLocales) {
         language = locales?.first.languageCode == localeChinese.languageCode
@@ -133,7 +56,17 @@ class _MyAppState extends State<MyApp> {
         appBarTheme: const AppBarTheme(scrolledUnderElevation: 0.0),
       ),
       getPages: RouteConfig.appRoutes,
-      home: userInfo?.token == null ? const LoginPage() : const HomePage(),
+      home: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: isTestUrl()
+                ? [Colors.lightBlueAccent, Colors.greenAccent]
+                : [Colors.lightBlueAccent, Colors.blueAccent],
+            begin: Alignment.bottomLeft,
+            end: Alignment.topRight,
+          ),
+        ),
+      ),
     ));
   }
 }

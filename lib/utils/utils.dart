@@ -28,12 +28,11 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'app_init_controller.dart';
+import 'app_init_service.dart';
 import 'web_api.dart';
 
 
-var localeChinese = const Locale('zh', 'Hans_CN');
-var localeEnglish = const Locale('en', 'US');
+
 SnackbarController? snackbarController;
 SnackbarStatus? snackbarStatus;
 UserInfo? userInfo;
@@ -80,7 +79,7 @@ dynamic spGet(String key) {
         return value;
     }
   } catch (e) {
-    debugPrint('--------read sp error-------');
+    debugPrint('$key--------read sp error-------');
     return null;
   }
 }

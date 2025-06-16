@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/base_data.dart';
 import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/route.dart';
-import 'package:jd_flutter/utils/app_init_controller.dart';
+import 'package:jd_flutter/utils/app_init_service.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:logger/logger.dart';
 import 'package:uuid/uuid.dart';
