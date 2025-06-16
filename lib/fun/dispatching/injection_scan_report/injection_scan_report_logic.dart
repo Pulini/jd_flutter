@@ -9,9 +9,9 @@ import 'package:jd_flutter/bean/http/response/show_process_plan_detail_info.dart
 import 'package:jd_flutter/bean/http/response/stock_in_barcode_info.dart';
 import 'package:jd_flutter/utils/utils.dart';
 
-import '../../../utils/web_api.dart';
-import '../../../widget/custom_widget.dart';
-import '../../../widget/dialogs.dart';
+import 'package:jd_flutter/utils/web_api.dart';
+import 'package:jd_flutter/widget/custom_widget.dart';
+import 'package:jd_flutter/widget/dialogs.dart';
 import 'injection_scan_report_state.dart';
 
 class InjectionScanReportLogic extends GetxController {

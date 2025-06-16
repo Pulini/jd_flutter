@@ -11,7 +11,7 @@ import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/picker/picker_item.dart';
 import 'package:jd_flutter/widget/worker_check_widget.dart';
 
-import '../../../../widget/dialogs.dart';
+import 'package:jd_flutter/widget/dialogs.dart';
 
 selectSupplierAndDepartmentDialog({
   required Function(

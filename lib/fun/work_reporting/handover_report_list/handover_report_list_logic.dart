@@ -3,12 +3,12 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/handover_report_list_info.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
-import '../../../bean/http/response/show_handover_report_list.dart';
-import '../../../route.dart';
-import '../../../utils/web_api.dart';
-import '../../../widget/dialogs.dart';
-import '../../../widget/picker/picker_controller.dart';
-import '../../../widget/spinner_widget.dart';
+import 'package:jd_flutter/bean/http/response/show_handover_report_list.dart';
+import 'package:jd_flutter/route.dart';
+import 'package:jd_flutter/utils/web_api.dart';
+import 'package:jd_flutter/widget/dialogs.dart';
+import 'package:jd_flutter/widget/picker/picker_controller.dart';
+import 'package:jd_flutter/widget/spinner_widget.dart';
 import 'handover_report_list_state.dart';
 
 class HandoverReportListLogic extends GetxController {

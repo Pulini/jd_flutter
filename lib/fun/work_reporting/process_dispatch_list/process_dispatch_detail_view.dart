@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/process_work_card_detail_info.dart';
-import 'package:jd_flutter/fun/report/process_dispatch_list/process_dispatch_logic.dart';
+import 'package:jd_flutter/fun/work_reporting/process_dispatch_list/process_dispatch_logic.dart';
 import 'package:jd_flutter/utils/printer/print_util.dart';
 import 'package:jd_flutter/utils/printer/tsc_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
@@ -12,8 +12,8 @@ import 'package:jd_flutter/widget/check_box_widget.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
+import 'package:jd_flutter/widget/edit_text_widget.dart';
 
-import '../../../widget/edit_text_widget.dart';
 
 class ProcessDispatchDetailPage extends StatefulWidget {
   const ProcessDispatchDetailPage({super.key});

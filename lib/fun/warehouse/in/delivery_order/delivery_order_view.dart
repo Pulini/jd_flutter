@@ -107,7 +107,7 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
           isExempt: data.isExempt ?? false,
           isCheckOrder: isCheckOrder,
           produceOrderNo: data.produceOrderNo ?? '',
-          factoryNumber: data.factoryName ?? '',
+          factoryNumber: data.factoryNO ?? '',
           deliNo: data.deliNo ?? '',
           workCenterID:
               userInfo?.sapRole == '003' ? opcWorkCenter.selectedId.value : '',
@@ -122,7 +122,7 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
         isExempt: data.isExempt ?? false,
         isCheckOrder: isCheckOrder,
         produceOrderNo: data.produceOrderNo ?? '',
-        factoryNumber: data.factoryName ?? '',
+        factoryNumber: data.factoryNO ?? '',
         deliNo: data.deliNo ?? '',
         workCenterID:
             userInfo?.sapRole == '003' ? opcWorkCenter.selectedId.value : '',

@@ -13,7 +13,7 @@ import 'package:path/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 
-import '../bean/http/response/bar_code.dart';
+import 'package:jd_flutter/bean/http/response/bar_code.dart';
 
 bool isTestUrl() => AppInitService.to.isTestUrl.value;
 
