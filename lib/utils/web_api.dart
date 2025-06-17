@@ -1163,6 +1163,10 @@ const webApiGetLiableInfo = 'api/User/GetLiableInfoByEmpCode';
 const webApiDeliveryOrderStockIn =
     'api/DeliveryNote/SAPPackagingMaterialBatchStorage';
 
+//SAP包材批量入库
+const webApiDeliveryOrderStockOut =
+    'api/DeliveryNote/SAPPackagingMaterialBatchOutsourcing';
+
 //根据送货单号或品检单号获取标签,用于冲销
 const webApiSapReversalStockInCheck = 'sap/zapp/ZMM_GET_JBQ_CX';
 

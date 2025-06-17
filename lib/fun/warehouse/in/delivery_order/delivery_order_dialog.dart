@@ -520,7 +520,7 @@ _stockOutDeliveryOrder({
 
   httpPost(
     loading: 'delivery_order_dialog_submitting_stock_out'.tr,
-    method: webApiDeliveryOrderStockIn,
+    method: webApiDeliveryOrderStockOut,
     body: {
       'EmpCode': userInfo?.number,
       'PickingDepart': department,

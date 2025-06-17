@@ -64,8 +64,7 @@ class DeviceMaintenanceRecordLogic extends GetxController {
       method: webApiGetRepairOrderList,
       loading: 'device_maintenance_repair_orders_list'.tr,
       params: {
-        // 'StartDate': startDate.getDateFormatYMD(),
-        'StartDate': '2020-01-16',
+        'StartDate': startDate.getDateFormatYMD(),
         'EndDate': endDate.getDateFormatYMD(),
       },
     ).then((response) {

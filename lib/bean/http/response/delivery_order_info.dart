@@ -106,7 +106,7 @@ class DeliveryOrderInfo {
     location = json['Location'];
     locationName = json['LocationName'];
     matchCode = json['MatchCode'];
-    produceOrderNo = json['ProduceOrderNo'];
+    produceOrderNo = json['ScWorkcardNo'];
     isScanPieces = json['IsScanPieces'];
     isPiece = json['IsPiece'];
     division = json['Division'];
