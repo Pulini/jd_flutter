@@ -22,7 +22,8 @@ class _PatrolInspectionPageState extends State<PatrolInspectionPage> {
   final PatrolInspectionLogic logic = Get.put(PatrolInspectionLogic());
   final PatrolInspectionState state = Get.find<PatrolInspectionLogic>().state;
 
-  var dpcDate = DatePickerController(PickerType.date, buttonName: '巡检日期');
+  var dpcDate = DatePickerController(PickerType.date,
+      buttonName: 'product_patrol_inspection_inspection_date'.tr);
 
   Widget _qualifiedItem() => GestureDetector(
         onTap: () => logic.addPatrolInspectionAbnormalRecord(),
@@ -35,8 +36,8 @@ class _PatrolInspectionPageState extends State<PatrolInspectionPage> {
           ),
           alignment: Alignment.center,
           child: Text(
-            '合格',
-            style: TextStyle(
+            'product_patrol_inspection_qualified'.tr,
+            style: const TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 100,
               color: Colors.white,
@@ -77,12 +78,13 @@ class _PatrolInspectionPageState extends State<PatrolInspectionPage> {
                     children: [
                       expandedTextSpan(
                         maxLines: 4,
-                        hint: '不良项目：',
+                        hint: 'product_patrol_inspection_defective_projects'.tr,
                         text: data.abnormalDescription ?? '',
                         textColor: Colors.black54,
                       ),
                       textSpan(
-                        hint: '月不良率：',
+                        hint:
+                            'product_patrol_inspection_monthly_defect_rate'.tr,
                         text: data.getDefectRate(),
                         textColor: Colors.red,
                       ),
@@ -115,7 +117,9 @@ class _PatrolInspectionPageState extends State<PatrolInspectionPage> {
                                 (v) => v.abnormalItemId == data.abnormalItemId)
                             .length;
                         return Text(
-                          '记录${slight > 0 ? ' ($slight)' : ''}',
+                          'product_patrol_inspection_record'.trArgs(
+                            [slight > 0 ? ' ($slight)' : ''],
+                          ),
                           style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
@@ -132,29 +136,31 @@ class _PatrolInspectionPageState extends State<PatrolInspectionPage> {
       ),
     );
   }
+
   Widget _typeBodyItem(int index) => Obx(() => GestureDetector(
-    onTap: () => state.typeBodyIndex.value = index,
-    child: Container(
-      width: 200,
-      alignment: Alignment.center,
-      margin: const EdgeInsets.only(right: 5),
-      padding: const EdgeInsets.all(5),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(5),
-        color: state.typeBodyIndex.value == index
-            ? Colors.green
-            : Colors.blue.shade400,
-      ),
-      child: Text(
-        state.typeBodyList[index].typeBody ?? '',
-        style: const TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 16,
-          color: Colors.white,
+        onTap: () => state.typeBodyIndex.value = index,
+        child: Container(
+          width: 200,
+          alignment: Alignment.center,
+          margin: const EdgeInsets.only(right: 5),
+          padding: const EdgeInsets.all(5),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5),
+            color: state.typeBodyIndex.value == index
+                ? Colors.green
+                : Colors.blue.shade400,
+          ),
+          child: Text(
+            state.typeBodyList[index].typeBody ?? '',
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+              color: Colors.white,
+            ),
+          ),
         ),
-      ),
-    ),
-  ));
+      ));
+
   List<Widget> _getQueryWidgets() {
     var widgets = <Widget>[];
 
@@ -166,14 +172,14 @@ class _PatrolInspectionPageState extends State<PatrolInspectionPage> {
     );
 
     var refresh = CombinationButton(
-      text: '刷新',
+      text: 'product_patrol_inspection_refresh'.tr,
       backgroundColor: Colors.red,
       combination: Combination.left,
       click: () => logic.getPatrolInspectionInfo(),
     );
 
     var change = CombinationButton(
-      text: '切换线别',
+      text: 'product_patrol_inspection_switching_lines'.tr,
       combination: Combination.left,
       click: () => changeLineDialog(
         lines: state.inspectionList,
@@ -182,7 +188,7 @@ class _PatrolInspectionPageState extends State<PatrolInspectionPage> {
     );
 
     var abnormalRecord = CombinationButton(
-      text: '异常记录',
+      text: 'product_patrol_inspection_abnormal_records'.tr,
       combination: state.inspectionList.length > 1
           ? Combination.right
           : Combination.intact,
@@ -258,7 +264,7 @@ class _PatrolInspectionPageState extends State<PatrolInspectionPage> {
               ),
               const SizedBox(width: 10),
               CombinationButton(
-                text: '查看巡检汇总',
+                text: 'product_patrol_inspection_view_inspection_summary'.tr,
                 click: () =>
                     logic.getPatrolInspectionReport(dpcDate.getDateFormatYMD()),
               )
@@ -307,6 +313,4 @@ class _PatrolInspectionPageState extends State<PatrolInspectionPage> {
     Get.delete<PatrolInspectionLogic>();
     super.dispose();
   }
-
-
 }

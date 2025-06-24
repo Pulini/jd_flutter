@@ -464,10 +464,10 @@ List<List<String>> labelTableFormat({
   return result;
 }
 
-//动态格式标签模版
-//75 x N（高度由内容决定）
+//动态格式物料外箱标
+//110 x N（高度由内容决定）
 //物料列表格式 [['物料编码','物料名称','数量','单位'],['物料编码','物料名称','数量','单位'],['物料编码','物料名称','数量','单位']]
-Widget dynamicLabelTemplate110xN({
+Widget dynamicOutBoxLabel110xN({
   required String productName, //品名
   required String companyOrderType, //公司订单类型
   required String customsDeclarationType, //报关形式
@@ -483,441 +483,176 @@ Widget dynamicLabelTemplate110xN({
   required String manufactureDate, //生产日期
   required String consignee, //收货方
 }) {
-  var bs = const BorderSide(color: Colors.black, width: 1.5);
-  var titleTextStyle = const TextStyle(
+  var border = BoxDecoration(border: Border.all(color: Colors.black, width: 1));
+  var style = const TextStyle(
     fontWeight: FontWeight.bold,
-    fontSize: 16,
+    fontSize: 17,
   );
   var textPadding = const EdgeInsets.only(left: 3, right: 3);
+  var vDivider = Container(width: 2, color: Colors.black);
+  var hDivider = Container(height: 2, color: Colors.black);
+  paddingText(String text) =>
+      Padding(padding: textPadding, child: Text(text, style: style));
+
+  paddingTextCenter(String text) => Padding(
+        padding: textPadding,
+        child: Text(text, style: style, textAlign: TextAlign.center),
+      );
   return Container(
     color: Colors.white,
     width: 110 * 5.5,
     child: Padding(
-      padding: const EdgeInsets.all(5),
+      padding: const EdgeInsets.all(2 * 5.5),
       child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: Colors.black,
-            width: 1.5,
-          ),
-        ),
+        decoration: border,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Container(
-              height: 50,
-              decoration: BoxDecoration(border: Border(bottom: bs)),
-              child: Row(
-                children: [
-                  Expanded(
-                    flex: 6,
-                    child: Container(
-                      padding: textPadding,
-                      alignment: Alignment.centerLeft,
-                      decoration: BoxDecoration(border: Border(right: bs)),
-                      child: Text('品名/Product/Produck',
-                          maxLines: 2, style: titleTextStyle),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 9,
-                    child: Container(
-                      padding: textPadding,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(border: Border(right: bs)),
-                      child: Text(
-                        productName,
-                        textAlign: TextAlign.center,
-                        maxLines: 2,
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 5,
-                    child: Container(
-                      padding: textPadding,
-                      alignment: Alignment.center,
-                      child: Text(
-                        companyOrderType,
-                        maxLines: 2,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+            createRowText(
+              title: '品名/Product/Produck',
+              cw: paddingTextCenter(productName),
+              rw: paddingTextCenter(companyOrderType),
             ),
-            Container(
-              height: 25,
-              decoration: BoxDecoration(border: Border(bottom: bs)),
-              child: Row(
-                children: [
-                  Expanded(
-                    flex: 6,
-                    child: Container(
-                      padding: textPadding,
-                      alignment: Alignment.centerLeft,
-                      decoration: BoxDecoration(border: Border(right: bs)),
-                      child: Text(
-                        '报关形式/',
-                        maxLines: 2,
-                        style: titleTextStyle,
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 9,
-                    child: Container(
-                      padding: textPadding,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(border: Border(right: bs)),
-                      child: Text(
-                        customsDeclarationType,
-                        textAlign: TextAlign.center,
-                        maxLines: 2,
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 5,
-                    child: Container(
-                      padding: textPadding,
-                      alignment: Alignment.center,
-                      child: Text(
-                        'MADE IN CHINA',
-                        style: titleTextStyle,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+            createRowText(
+              title: '加工贸易/PT/PP',
+              cw: paddingTextCenter(customsDeclarationType),
+              rw: paddingTextCenter('MADE IN CHINA'),
             ),
-            //------------------
             if (materialList != null)
-              Container(
-                height: 50,
-                decoration: BoxDecoration(border: Border(bottom: bs)),
+              createRowText(
+                title: '物编/Mtl No/Nomor material',
+                cw: paddingTextCenter('物料描述/Mtl Des./Bahan Des'),
+                rw: paddingTextCenter('数量/Qty/kuantitas'),
+              ),
+            for (var item in materialList ?? [])
+              createRowText(
+                title: item[0],
+                cw: paddingTextCenter(item[1]),
+                rw: Row(
+                  children: [
+                    Expanded(flex: 3, child: paddingTextCenter(item[2])),
+                    vDivider,
+                    Expanded(flex: 2, child: paddingTextCenter(item[3])),
+                  ],
+                ),
+              ),
+            Container(
+              decoration: border,
+              child: IntrinsicHeight(
                 child: Row(
                   children: [
                     Expanded(
                       flex: 6,
-                      child: Container(
-                        padding: textPadding,
-                        alignment: Alignment.centerLeft,
-                        decoration: BoxDecoration(border: Border(right: bs)),
-                        child: Text(
-                          '物编/Mtl No/Nomor material',
-                          maxLines: 2,
-                          style: titleTextStyle,
-                        ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Expanded(child: paddingText('件号/Serial/Seri')),
+                          hDivider,
+                          Expanded(
+                            flex: 2,
+                            child: paddingText('毛重/G.W/Berat Kotor'),
+                          ),
+                          hDivider,
+                          Expanded(
+                            flex: 2,
+                            child: paddingText('净重/N.W/Berat Bersih'),
+                          ),
+                        ],
                       ),
                     ),
+                    vDivider,
                     Expanded(
                       flex: 9,
-                      child: Container(
-                        padding: textPadding,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(border: Border(right: bs)),
-                        child: Text(
-                          '物料描述/Mtl Des./Bahan Des',
-                          textAlign: TextAlign.center,
-                          style: titleTextStyle,
-                          maxLines: 2,
-                        ),
+                      child: Column(
+                        children: [
+                          Expanded(child: paddingTextCenter(pieceNo)),
+                          hDivider,
+                          Expanded(
+                            flex: 2,
+                            child: Row(
+                              children: [
+                                Expanded(child: paddingTextCenter(grossWeight)),
+                                vDivider,
+                                Expanded(child: paddingTextCenter('KGS')),
+                              ],
+                            ),
+                          ),
+                          hDivider,
+                          Expanded(
+                            flex: 2,
+                            child: Row(
+                              children: [
+                                Expanded(child: paddingTextCenter(netWeight)),
+                                vDivider,
+                                Expanded(child: paddingTextCenter('KGS')),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                     ),
+                    vDivider,
                     Expanded(
-                      flex: 5,
-                      child: Container(
-                        padding: textPadding,
-                        alignment: Alignment.center,
-                        child: Text(
-                          textAlign: TextAlign.center,
-                          '数量/Qty/kuantitas',
-                          style: titleTextStyle,
-                          maxLines: 2,
-                        ),
-                      ),
-                    ),
+                        flex: 5,
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              height: 120,
+                              child: QrImageView(
+                                data: qrCode,
+                                padding: const EdgeInsets.all(5),
+                                version: QrVersions.auto,
+                              ),
+                            ),
+                            Text(
+                              code,
+                              style: const TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                height: 0,
+                              ),
+                            ),
+                          ],
+                        )),
                   ],
                 ),
               ),
-            // for(var item in materialList??[])
-
-            Container(
-              height: 150,
-              decoration: BoxDecoration(border: Border(bottom: bs)),
-              child: Row(
+            ),
+            createRowText(
+              title: '规格/MEA/Spesifikasi',
+              cw: paddingTextCenter(specifications),
+              rw: Row(
                 children: [
-                  Expanded(
-                    flex: 6,
-                    child: Column(
-                      children: [
-                        Expanded(
-                          child: Container(
-                            alignment: Alignment.centerLeft,
-                            padding: textPadding,
-                            decoration: BoxDecoration(
-                                border: Border(bottom: bs, right: bs)),
-                            child: Text(
-                              '件号/Serial/Seri',
-                              style: titleTextStyle,
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 2,
-                          child: Container(
-                            alignment: Alignment.centerLeft,
-                            padding: textPadding,
-                            decoration: BoxDecoration(
-                                border: Border(bottom: bs, right: bs)),
-                            child: Text(
-                              '毛重/G.W/Berat Kotor',
-                              style: titleTextStyle,
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 2,
-                          child: Container(
-                            alignment: Alignment.centerLeft,
-                            padding: textPadding,
-                            decoration:
-                                BoxDecoration(border: Border(right: bs)),
-                            child: Text(
-                              '净重/N.W/Berat Bersih',
-                              style: titleTextStyle,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    flex: 9,
-                    child: Column(
-                      children: [
-                        Expanded(
-                          child: Container(
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                                border: Border(bottom: bs, right: bs)),
-                            child: Text(pieceNo),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 2,
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                      border: Border(bottom: bs, right: bs)),
-                                  child: Text(grossWeight),
-                                ),
-                              ),
-                              Expanded(
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                      border: Border(bottom: bs, right: bs)),
-                                  child: Text(
-                                    'KGS',
-                                    style: titleTextStyle,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Expanded(
-                          flex: 2,
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  decoration:
-                                      BoxDecoration(border: Border(right: bs)),
-                                  child: Text(netWeight),
-                                ),
-                              ),
-                              Expanded(
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  decoration:
-                                      BoxDecoration(border: Border(right: bs)),
-                                  child: Text(
-                                    'KGS',
-                                    style: titleTextStyle,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    flex: 5,
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          height: 130,
-                          child: QrImageView(
-                            data: qrCode,
-                            padding: const EdgeInsets.all(5),
-                            version: QrVersions.auto,
-                          ),
-                        ),
-                        Text(
-                          code,
-                          style: const TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                            height: 0,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  Expanded(flex: 3, child: paddingTextCenter(volume)),
+                  vDivider,
+                  Expanded(flex: 2, child: paddingTextCenter('cbm')),
                 ],
               ),
             ),
-            Container(
-              height: 50,
-              decoration: BoxDecoration(border: Border(bottom: bs)),
-              child: Row(
+            createRowText(
+              title: '供应商/Supplier/Pemasok',
+              cw: Row(
                 children: [
-                  Expanded(
-                    flex: 6,
-                    child: Container(
-                      alignment: Alignment.centerLeft,
-                      padding: textPadding,
-                      decoration: BoxDecoration(border: Border(right: bs)),
-                      child: Text(
-                        '规格/MEA/Spesifikasi',
-                        style: titleTextStyle,
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 9,
-                    child: Container(
-                      alignment: Alignment.center,
-                      padding: textPadding,
-                      decoration: BoxDecoration(border: Border(right: bs)),
-                      child: Text(specifications),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 3,
-                    child: Container(
-                      alignment: Alignment.center,
-                      padding: textPadding,
-                      decoration: BoxDecoration(border: Border(right: bs)),
-                      child: Text(volume),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: Container(
-                      alignment: Alignment.center,
-                      padding: textPadding,
-                      child: Text(
-                        'cbm',
-                        style: titleTextStyle,
-                      ),
-                    ),
-                  ),
+                  Expanded(child: paddingTextCenter(supplier)),
+                  vDivider,
+                  Expanded(child: paddingText('生产日期/Manufact Date/Tanggal'))
                 ],
               ),
+              rw: paddingTextCenter(manufactureDate),
             ),
             Container(
-              height: 75,
-              decoration: BoxDecoration(border: Border(bottom: bs)),
-              child: Row(
-                children: [
-                  Expanded(
-                    flex: 6,
-                    child: Container(
-                      alignment: Alignment.centerLeft,
-                      padding: textPadding,
-                      decoration: BoxDecoration(border: Border(right: bs)),
-                      child: Text(
-                        '供应商/Supplier/Pemasok',
-                        style: titleTextStyle,
-                      ),
+              decoration: border,
+              child: IntrinsicHeight(
+                child: Row(
+                  children: [
+                    Expanded(
+                      flex: 6,
+                      child: paddingText('收货方/Consignee/Penerima Barang'),
                     ),
-                  ),
-                  Expanded(
-                    flex: 9,
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Container(
-                            alignment: Alignment.center,
-                            padding: textPadding,
-                            decoration:
-                                BoxDecoration(border: Border(right: bs)),
-                            child: Text(supplier),
-                          ),
-                        ),
-                        Expanded(
-                          child: Container(
-                            alignment: Alignment.center,
-                            padding: textPadding,
-                            decoration:
-                                BoxDecoration(border: Border(right: bs)),
-                            child: Text(
-                              '生产日期/Manufact Date/Tanggal',
-                              style: titleTextStyle,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    flex: 5,
-                    child: Container(
-                      alignment: Alignment.center,
-                      padding: textPadding,
-                      child: Text(
-                        manufactureDate,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 75,
-              child: Row(
-                children: [
-                  Expanded(
-                    flex: 6,
-                    child: Container(
-                      alignment: Alignment.centerLeft,
-                      padding: textPadding,
-                      decoration: BoxDecoration(border: Border(right: bs)),
-                      child: Text(
-                        '收货方/Consignee/Penerima Barang',
-                        style: titleTextStyle,
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 14,
-                    child: Container(
-                      alignment: Alignment.center,
-                      padding: textPadding,
-                      child: Text(consignee),
-                    ),
-                  ),
-                ],
+                    vDivider,
+                    Expanded(flex: 14, child: paddingTextCenter('consignee')),
+                  ],
+                ),
               ),
             ),
           ],
@@ -926,3 +661,186 @@ Widget dynamicLabelTemplate110xN({
     ),
   );
 }
+
+//动态格式物料小标
+//110 x N（高度由内容决定）
+//物料列表格式 [['物料编码','物料名称','数量','单位'],['物料编码','物料名称','数量','单位'],['物料编码','物料名称','数量','单位']]
+Widget dynamicInBoxLabel110xN({
+  required String productName, //品名
+  required String companyOrderType, //公司订单类型
+  required String customsDeclarationType, //报关形式
+  List<List>? materialList, //物料列表
+  required String pieceNo, //件号
+  required String qrCode, //二维码ID
+  required String code, //标签码ID
+  required String supplier, //供应商
+  required String manufactureDate, //生产日期
+}) {
+  var border = BoxDecoration(border: Border.all(color: Colors.black, width: 1));
+  var style = const TextStyle(
+    fontWeight: FontWeight.bold,
+    fontSize: 17,
+  );
+  var textPadding = const EdgeInsets.only(left: 3, right: 3);
+  var vDivider = Container(width: 2, color: Colors.black);
+  var hDivider = Container(height: 2, color: Colors.black);
+  paddingText(String text) =>
+      Padding(padding: textPadding, child: Text(text, style: style));
+
+  paddingTextCenter(String text) => Padding(
+        padding: textPadding,
+        child: Text(text, style: style, textAlign: TextAlign.center),
+      );
+  return Container(
+    color: Colors.white,
+    width: 110 * 5.5,
+    child: Padding(
+      padding: const EdgeInsets.all(5 * 5.5),
+      child: Container(
+        decoration: border,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            createRowText(
+              title: '品名/Product/Produck',
+              cw: paddingTextCenter(productName),
+              rw: paddingTextCenter(companyOrderType),
+            ),
+            createRowText(
+              title: '加工贸易/PT/PP',
+              cw: paddingTextCenter(customsDeclarationType),
+              rw: paddingTextCenter('MADE IN CHINA'),
+            ),
+            if (materialList != null)
+              createRowText(
+                title: '物编/Mtl No/Nomor material',
+                cw: paddingTextCenter('物料描述/Mtl Des./Bahan Des'),
+                rw: paddingTextCenter('数量/Qty/kuantitas'),
+              ),
+            for (var item in materialList ?? [])
+              createRowText(
+                title: item[0],
+                cw: paddingTextCenter(item[1]),
+                rw: Row(
+                  children: [
+                    Expanded(flex: 3, child: paddingTextCenter(item[2])),
+                    vDivider,
+                    Expanded(flex: 2, child: paddingTextCenter(item[3])),
+                  ],
+                ),
+              ),
+            Container(
+              decoration: border,
+              child: IntrinsicHeight(
+                child: Row(
+                  children: [
+                    Expanded(
+                      flex: 6,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Expanded(child: paddingText('件号/Serial/Seri')),
+                          hDivider,
+                          Expanded(
+                            flex: 2,
+                            child: paddingText('生产日期/Manufact Date/Tanggal'),
+                          ),
+                          hDivider,
+                          Expanded(
+                            flex: 2,
+                            child: paddingText('供应商/Supplier/Pemasok'),
+                          ),
+                        ],
+                      ),
+                    ),
+                    vDivider,
+                    Expanded(
+                      flex: 9,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Expanded(child: paddingTextCenter(pieceNo)),
+                          hDivider,
+                          Expanded(
+                            flex: 2,
+                            child: Center(
+                              child: paddingTextCenter(manufactureDate),
+                            ),
+                          ),
+                          hDivider,
+                          Expanded(
+                            flex: 2,
+                            child: Center(
+                              child: paddingTextCenter(supplier),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    vDivider,
+                    Expanded(
+                        flex: 5,
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              height: 120,
+                              child: QrImageView(
+                                data: qrCode,
+                                padding: const EdgeInsets.all(5),
+                                version: QrVersions.auto,
+                              ),
+                            ),
+                            Text(
+                              '$code(小标)',
+                              style: const TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                                height: 0,
+                              ),
+                            ),
+                          ],
+                        )),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
+}
+
+Widget createRowText({
+  required String title,
+  required Widget cw,
+  required Widget rw,
+}) =>
+    Container(
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.black, width: 1),
+      ),
+      child: IntrinsicHeight(
+        child: Row(
+          children: [
+            Expanded(
+              flex: 6,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 3, right: 3),
+                child: Text(
+                  title,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 17,
+                  ),
+                ),
+              ),
+            ),
+            Container(width: 2, color: Colors.black),
+            Expanded(flex: 9, child: cw),
+            Container(width: 2, color: Colors.black),
+            Expanded(flex: 5, child: rw),
+          ],
+        ),
+      ),
+    );

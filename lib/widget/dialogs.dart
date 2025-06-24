@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/version_info.dart';
 import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/login/login_view.dart';
-import 'package:jd_flutter/utils/network_manager.dart';
+import 'package:jd_flutter/utils/app_init_service.dart';
 
 import 'downloader.dart';
 
@@ -144,10 +144,15 @@ errorDialog({
   );
 }
 
-GlobalKey<NavigatorState> loadingKey = GlobalKey();
-
+GlobalKey<NavigatorState>? loadingKey;
 //加载中弹窗
-loadingDialog(String? content) {
+loadingShow(String? content) {
+  if (loadingKey != null) {
+    debugPrint('loading is showing');
+    return;
+  }
+  loadingKey = GlobalKey();
+  debugPrint('loading show');
   Get.dialog(
     PopScope(
       canPop: false,
@@ -172,10 +177,12 @@ loadingDialog(String? content) {
 }
 
 loadingDismiss() {
-  if (loadingKey.currentContext != null) {
-    final routeDialog = ModalRoute.of(loadingKey.currentContext!);
+  if (loadingKey != null && loadingKey!.currentContext != null) {
+    final routeDialog = ModalRoute.of(loadingKey!.currentContext!);
     if (routeDialog != null) {
       Navigator.removeRoute(Get.overlayContext!, routeDialog);
+      loadingKey=null;
+      debugPrint('loading dismiss');
     }
   }
 }
@@ -351,36 +358,36 @@ reLoginPopup() {
         padding: EdgeInsets.only(
           bottom: MediaQuery.of(context).viewInsets.bottom,
         ),
-        child: Obx(()=>Container(
-          padding: const EdgeInsets.all(8.0),
-          decoration: BoxDecoration(
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(20),
-              topRight: Radius.circular(20),
-            ),
-            gradient: LinearGradient(
-              colors: Get.find<NetworkManager>().isTestUrl.value
-                  ? [Colors.lightBlueAccent, Colors.greenAccent]
-                  : [Colors.lightBlueAccent, Colors.blueAccent],
-              begin: Alignment.bottomLeft,
-              end: Alignment.topRight,
-            ),
-          ),
-          child: Column(
-            children: [
-              Center(
-                child: Text(
-                  're_login'.tr,
-                  style: const TextStyle(
-                      fontSize: 22,
-                      color: Colors.white,
-                      decoration: TextDecoration.none),
+        child: Obx(() => Container(
+              padding: const EdgeInsets.all(8.0),
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
+                ),
+                gradient: LinearGradient(
+                  colors: isTestUrl()
+                      ? [Colors.lightBlueAccent, Colors.greenAccent]
+                      : [Colors.lightBlueAccent, Colors.blueAccent],
+                  begin: Alignment.bottomLeft,
+                  end: Alignment.topRight,
                 ),
               ),
-              const Center(child: LoginPick(isReLogin: true)),
-            ],
-          ),
-        )),
+              child: Column(
+                children: [
+                  Center(
+                    child: Text(
+                      're_login'.tr,
+                      style: const TextStyle(
+                          fontSize: 22,
+                          color: Colors.white,
+                          decoration: TextDecoration.none),
+                    ),
+                  ),
+                  const Center(child: LoginPick(isReLogin: true)),
+                ],
+              ),
+            )),
       ),
     ),
   );

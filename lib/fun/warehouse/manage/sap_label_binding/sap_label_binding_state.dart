@@ -20,7 +20,7 @@ class SapLabelBindingState {
   var labelList = <SapLabelBindingInfo>[].obs;
   var operationType = ScanLabelOperationType.unKnown;
   var operationTypeText = ScanLabelOperationType.unKnown.text.obs;
-  var newBoxLabelID = '00505685E5761FE090E58AE9B8A5E489'.obs;
+  var newBoxLabelID = ''.obs;
 
   getLabelInfo({
     required String labelCode,
@@ -83,6 +83,7 @@ class SapLabelBindingState {
     required double height,
     required double outWeight,
     required String targetBoxLabelID,
+    required String supplierNumber,
     required List<SapLabelBindingInfo> labelList,
     required Function(String) success,
     required Function(String) error,
@@ -94,7 +95,7 @@ class SapLabelBindingState {
         'WERKS': userInfo?.number,
         'USNAM': userInfo?.name,
         'ZNAME_CN': userInfo?.name,
-        'LIFNR': labelList[0].supplierNumber,
+        'LIFNR':supplierNumber,
         'OPERATE': '10',
         'ZZCJC': long,
         'ZZCJK': width,

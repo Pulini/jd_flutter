@@ -13,7 +13,7 @@ import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
-import '../../../../widget/spinner_widget.dart';
+import 'package:jd_flutter/widget/spinner_widget.dart';
 
 class StuffQualityInspectionPage extends StatefulWidget {
   const StuffQualityInspectionPage({super.key});

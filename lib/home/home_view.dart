@@ -18,9 +18,12 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
   final logic = Get.put(HomeLogic());
   final state = Get.find<HomeLogic>().state;
+
+  @override
+  bool get wantKeepAlive => true; // 启用保活
 
   _appBar() {
     return AppBar(
@@ -53,7 +56,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   _item(ButtonItem item) {
-    return Card(
+    return   Card(
       color: item is HomeButton ? Colors.white : Colors.blue.shade50,
       child: item is HomeButton
           ? HomeSubItem(isGroup: false, item: item)
@@ -124,6 +127,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Container(
       decoration: backgroundColor(),
       child: Obx(() => state.isLoading.value

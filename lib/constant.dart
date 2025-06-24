@@ -1,5 +1,9 @@
-const String dadPhone = '15267733701';
-const String dadPwd = '111111';
+const Map<String, String> dadPhone = {
+  '15868587600': '123456',//潘卓旭
+  '15267733701': '111111',//叶明杰
+  '15257154610': '123',//何蓓蓓
+  '13506644569': '123456',//张幸民
+};
 const jdDatabase = 'jd_app.db';
 const spSaveLoginPhone = 'login_phone';
 const spSaveLoginFace = 'login_face';
@@ -56,12 +60,12 @@ const spSaveDeliveryOrderStockInCheckLocation =
     'delivery_order_stock_in_check_location';
 const spSaveDeliveryOrderStockInCheckLeader =
     'delivery_order_stock_in_check_leader';
-const processDispatchType =
-    'process_dispatch_submit_type';
-const spSavePurchaseOrderWarehousingCheckLeader = 'purchase_order_warehousing_check_leader';
-const spSaveDeliveryOrderBindingLabelUserNumber = 'delivery_order_binding_label_user_number';
-const spSaveDeliveryOrderBindingLabelLocation = 'delivery_order_binding_label_location';
+const processDispatchType = 'process_dispatch_submit_type';
+const spSavePurchaseOrderWarehousingCheckLeader =
+    'purchase_order_warehousing_check_leader';
+const spSaveDeliveryOrderBindingLabelUserNumber =
+    'delivery_order_binding_label_user_number';
+const spSaveDeliveryOrderBindingLabelLocation =
+    'delivery_order_binding_label_location';
 const spSavePackingScanActualCabinet = 'packing_scan_actual_cabinet';
-const spSavePatrolInspectionLineId= 'patrol_inspection_line_id';
-
-
+const spSavePatrolInspectionLineId = 'patrol_inspection_line_id';

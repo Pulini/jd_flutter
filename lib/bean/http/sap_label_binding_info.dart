@@ -5,8 +5,8 @@ class SapLabelBindingInfo {
   String? pieceNo; //	件号  ZPIECE_NO
   String? labelID; //标签ID BQID
   String? boxLabelID; //	箱标（大标）  ZDBBQID
-  String? COMAD; //缅甸批文成分 Composition of Myanmar approval documents  ZMATCOM
-  String? COMADE; //缅甸批文成分 英文  ZMATCOM_E
+  String? myanmarApprovalDocuments; //缅甸批文成分 Composition of Myanmar approval documents  ZMATCOM
+  String? myanmarApprovalDocumentsEnglish; //缅甸批文成分 英文  ZMATCOM_E
   String? isTradeFactory; //是否贸易工厂  ZTRADE
 
   double? long; //	长 ZZCJC
@@ -33,8 +33,8 @@ class SapLabelBindingInfo {
     this.height,
     this.boxLabelID,
     this.materialsType,
-    this.COMAD,
-    this.COMADE,
+    this.myanmarApprovalDocuments,
+    this.myanmarApprovalDocumentsEnglish,
     this.supplementType,
     this.outWeight,
   });
@@ -52,8 +52,8 @@ class SapLabelBindingInfo {
     width = json['ZZCJK'].toString().toDoubleTry();
     height = json['ZZCJG'].toString().toDoubleTry();
     boxLabelID = json['ZDBBQID'];
-    COMAD = json['ZMATCOM'];
-    COMADE = json['ZMATCOM_E'];
+    myanmarApprovalDocuments = json['ZMATCOM'];
+    myanmarApprovalDocumentsEnglish = json['ZMATCOM_E'];
     supplementType = json['ZISBD'];
     outWeight = json['ZNTGEW_PZ'];
   }
@@ -69,8 +69,8 @@ class SapLabelBindingPrintInfo {
   String? pieceNo; //	件号  ZPIECE_NO
   String? labelID; //标签ID BQID
   String? boxLabelID; //	箱标（大标）  ZDBBQID
-  String? COMAD; //缅甸批文成分 Composition of Myanmar approval documents  ZMATCOM
-  String? COMADE; //缅甸批文成分 英文  ZMATCOM_E
+  String? myanmarApprovalDocuments; //缅甸批文成分 Composition of Myanmar approval documents  ZMATCOM
+  String? myanmarApprovalDocumentsEnglish; //缅甸批文成分 英文  ZMATCOM_E
   String? isTradeFactory; //是否贸易工厂  ZTRADE
 
   double? long; //	长 ZZCJC
@@ -140,8 +140,8 @@ class SapLabelBindingPrintInfo {
     this.height,
     this.boxLabelID,
     this.materialsType,
-    this.COMAD,
-    this.COMADE,
+    this.myanmarApprovalDocuments,
+    this.myanmarApprovalDocumentsEnglish,
     this.supplementType,
     this.outWeight,
     this.materialNumber,
@@ -201,8 +201,8 @@ class SapLabelBindingPrintInfo {
     width = json['ZZCJK'].toString().toDoubleTry();
     height = json['ZZCJG'].toString().toDoubleTry();
     boxLabelID = json['ZDBBQID'];
-    COMAD = json['ZMATCOM'];
-    COMADE = json['ZMATCOM_E'];
+    myanmarApprovalDocuments = json['ZMATCOM'];
+    myanmarApprovalDocumentsEnglish = json['ZMATCOM_E'];
     supplementType = json['ZISBD'];
     outWeight = json['ZNTGEW_PZ'];
     materialNumber = json['MATNR'];

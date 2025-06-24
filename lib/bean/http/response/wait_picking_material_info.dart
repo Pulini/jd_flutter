@@ -56,7 +56,7 @@ class WaitPickingMaterialOrderInfo {
   String modifyLocation = '';
 
   String? factoryNumber; //工厂 WERKS
-  String? factoryName; ////工厂名称 NAME1_WERKS
+  String? factoryName; //工厂名称 NAME1_WERKS
   String? rawMaterialCode; //物料编码(原材料) MATNR_CL
   String? rawMaterialDescription; //物料描述(原材料)ZMAKTX_CL
   String? basicUnit; //基本单位ERFME

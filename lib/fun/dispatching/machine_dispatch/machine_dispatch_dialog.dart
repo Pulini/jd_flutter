@@ -906,7 +906,7 @@ selectLabelTypeDialog({
   required Function(double, String) print,
 }) {
   if (englishLabel.specificationsList?.isEmpty == true) {
-    errorDialog(content: '标签规格信息为空！');
+    errorDialog(content: 'machine_dispatch_dialog_label_specifications_empty'.tr);
     return;
   }
   var workerNumberController = TextEditingController();
@@ -956,7 +956,7 @@ selectLabelTypeDialog({
                   border: const OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(25)),
                   ),
-                  labelText: '班组长工号',
+                  labelText: 'machine_dispatch_dialog_leader_number'.tr,
                   hintStyle: const TextStyle(color: Colors.white),
                   suffixIcon: Obx(() => CombinationButton(
                         text: btName.value,
@@ -994,14 +994,14 @@ selectLabelTypeDialog({
                 Obx(() => Expanded(
                       child: isCheckedManager.value
                           ? NumberDecimalEditText(
-                              hint: '请输入实际一双重量（克）',
+                              hint: 'machine_dispatch_dialog_weight_input_tips'.tr,
                               initQty: outerBoxWeight,
                               onChanged: (v) {
                                 outerBoxWeight = v;
                               },
                             )
                           : textSpan(
-                              hint: '实际一双重量（克）：',
+                              hint: 'machine_dispatch_dialog_weight'.tr,
                               text: outerBoxWeight.toShowString(),
                             ),
                     )),
@@ -1034,10 +1034,10 @@ selectLabelTypeDialog({
                       border: const OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(25)),
                       ),
-                      labelText: '验证码',
+                      labelText: 'machine_dispatch_dialog_verify_code'.tr,
                       hintStyle: const TextStyle(color: Colors.white),
                       suffixIcon: CombinationButton(
-                        text: '班组长验证',
+                        text: 'machine_dispatch_dialog_verify_leader'.tr,
                         click: () => _checkManagerByCode(
                           vCodeController.text,
                           workerNumberController.text,
@@ -1050,8 +1050,8 @@ selectLabelTypeDialog({
               ]),
               const SizedBox(height: 10),
               Text(
-                '外箱规格',
-                style: TextStyle(
+                'machine_dispatch_dialog_carton_size'.tr,
+                style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   color: Colors.blue,
                 ),
@@ -1113,10 +1113,10 @@ selectLabelTypeDialog({
                       '',
                 );
               } else {
-                errorDialog(content: '实际一双重量必须大于0！');
+                errorDialog(content: 'machine_dispatch_dialog_weight_error_tips'.tr);
               }
             },
-            child: Text('打印尾箱'),
+            child: Text('machine_dispatch_dialog_print_last'.tr),
           ),
           TextButton(
             onPressed: () {
@@ -1129,10 +1129,10 @@ selectLabelTypeDialog({
                       '',
                 );
               } else {
-                errorDialog(content: '实际一双重量必须大于0！');
+                errorDialog(content: 'machine_dispatch_dialog_weight_error_tips'.tr);
               }
             },
-            child: Text('打印'),
+            child: Text('machine_dispatch_dialog_print'.tr),
           ),
           TextButton(
             onPressed: () => Get.back(),

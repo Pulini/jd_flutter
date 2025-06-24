@@ -1,88 +1,91 @@
 import 'package:get/get.dart';
-import 'package:jd_flutter/fun/dispatching/injection_scan_report/Injection_scan_report_view.dart';
+import 'package:jd_flutter/bean/home_button.dart';
+import 'package:jd_flutter/bean/routes.dart';
+import 'package:jd_flutter/fun/dispatching/injection_scan_report/injection_scan_report_view.dart';
+import 'package:jd_flutter/fun/dispatching/machine_dispatch/machine_dispatch_report_view.dart';
+import 'package:jd_flutter/fun/dispatching/machine_dispatch/machine_dispatch_view.dart';
+import 'package:jd_flutter/fun/dispatching/material_dispatch/material_dispatch_view.dart';
+import 'package:jd_flutter/fun/dispatching/process_dispatch_register/process_dispatch_register_view.dart';
+import 'package:jd_flutter/fun/dispatching/production_dispatch/production_dispatch_detail_view.dart';
+import 'package:jd_flutter/fun/dispatching/production_dispatch/production_dispatch_view.dart';
+import 'package:jd_flutter/fun/dispatching/work_order_list/work_order_list_view.dart';
 import 'package:jd_flutter/fun/maintenance/sap_ink_color_matching/sap_ink_color_matching_view.dart';
+import 'package:jd_flutter/fun/management/property/property_view.dart';
+import 'package:jd_flutter/fun/management/quality_management/quality_management_view.dart';
+import 'package:jd_flutter/fun/management/visit_register/visit_register_view.dart';
+import 'package:jd_flutter/fun/other/device_maintenance_record/device_maintenance_record_view.dart';
+import 'package:jd_flutter/fun/other/forming_packing_scan/packing_scan_view.dart';
 import 'package:jd_flutter/fun/other/hydroelectric_excess/hydroelectric_excess_view.dart';
 import 'package:jd_flutter/fun/report/forming_barcode_collection/forming_barcode_collection_view.dart';
 import 'package:jd_flutter/fun/report/part_process_scan/part_process_scan_view.dart';
 import 'package:jd_flutter/fun/report/part_report_scan/part_report_scan_view.dart';
+import 'package:jd_flutter/fun/report/daily_report/daily_report_view.dart';
+import 'package:jd_flutter/fun/report/molding_pack_area_report/molding_pack_area_report_view.dart';
+import 'package:jd_flutter/fun/report/molding_scan_bulletin_report/molding_scan_bulletin_report_maximize_view.dart';
+import 'package:jd_flutter/fun/report/molding_scan_bulletin_report/molding_scan_bulletin_report_view.dart';
+import 'package:jd_flutter/fun/report/production_day_report/production_day_report_view.dart';
+import 'package:jd_flutter/fun/report/production_materials_report/production_materials_report_view.dart';
+import 'package:jd_flutter/fun/report/production_summary_report/production_summary_report_view.dart';
+import 'package:jd_flutter/fun/report/view_instruction_details/view_instruction_details_view.dart';
+import 'package:jd_flutter/fun/report/view_process_specification/view_process_specification_view.dart';
+import 'package:jd_flutter/fun/report/worker_production_detail/worker_production_detail_view.dart';
+import 'package:jd_flutter/fun/report/worker_production_report/worker_production_report_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/delivery_order/delivery_order_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/incoming_inspection/incoming_inspection_view.dart';
+import 'package:jd_flutter/fun/warehouse/in/process_report/process_report_store_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/production_scan_warehouse/production_scan_warehouse_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/purchase_order_reversal/purchase_order_reversal_view.dart';
+import 'package:jd_flutter/fun/warehouse/in/purchase_order_warehousing/purchase_order_warehousing_view.dart';
+import 'package:jd_flutter/fun/warehouse/in/quality_inspection_list/quality_inspection_list_view.dart';
+import 'package:jd_flutter/fun/warehouse/in/sap_injection_molding_stock_in/sap_injection_molding_stock_in_view.dart';
+import 'package:jd_flutter/fun/warehouse/in/sap_no_label_stock_in/sap_no_label_stock_in_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/sap_picking_receipt_reversal/sap_picking_receipt_reversal_view.dart';
+import 'package:jd_flutter/fun/warehouse/in/sap_produce_stock_in/sap_produce_stock_in_view.dart';
+import 'package:jd_flutter/fun/warehouse/in/sap_purchase_stock_in/sap_purchase_stock_in_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/sap_put_on_shelves/sap_put_on_shelves_view.dart';
+import 'package:jd_flutter/fun/warehouse/in/sap_surplus_material_stock_in/sap_surplus_material_stock_in_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/suppliers_scan_store/suppliers_scan_store_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/temporary_order/temporary_order_view.dart';
+import 'package:jd_flutter/fun/warehouse/manage/anti_Counterfeiting/puma_anti_counterfeiting_view.dart';
+import 'package:jd_flutter/fun/warehouse/manage/carton_label_scan/carton_label_scan_progress_view.dart';
+import 'package:jd_flutter/fun/warehouse/manage/carton_label_scan/carton_label_scan_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/patrol_inspection/patrol_inspection_view.dart';
+import 'package:jd_flutter/fun/warehouse/manage/quality_inspection/quality_inspection_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/sap_factory_inventory/sap_counting_inventory_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/sap_factory_inventory/sap_scan_code_inventory_view.dart';
+import 'package:jd_flutter/fun/warehouse/manage/sap_label_binding/sap_label_binding_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/sap_stock_transfer/sap_stock_transfer_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/sap_wms_reprint_labels/sap_wms_reprint_labels_view.dart';
+import 'package:jd_flutter/fun/warehouse/manage/sap_wms_split_label/sap_wms_split_label_view.dart';
+import 'package:jd_flutter/fun/warehouse/manage/smart_delivery/smart_delivery_view.dart';
+import 'package:jd_flutter/fun/warehouse/manage/timely_inventory/timely_inventory_view.dart';
+import 'package:jd_flutter/fun/warehouse/manage/warehouse_allocation/warehouse_allocation_view.dart';
 import 'package:jd_flutter/fun/warehouse/out/picking_material_order/picking_material_order_view.dart';
 import 'package:jd_flutter/fun/warehouse/out/production_scan_picking_material/production_scan_picking_material_view.dart';
 import 'package:jd_flutter/fun/warehouse/out/sale_scan_out_warehouse/sale_scan_out_warehouse_view.dart';
+import 'package:jd_flutter/fun/warehouse/out/sap_packing_scan/sap_packing_scan_view.dart';
+import 'package:jd_flutter/fun/warehouse/out/sap_print_picking/sap_print_picking_view.dart';
+import 'package:jd_flutter/fun/warehouse/out/sap_production_picking/sap_production_picking_view.dart';
+import 'package:jd_flutter/fun/warehouse/out/sap_relocation_picking/sap_relocation_picking_view.dart';
+import 'package:jd_flutter/fun/warehouse/out/sap_sales_shipment/sap_sales_shipment_view.dart';
 import 'package:jd_flutter/fun/warehouse/out/scan_picking_material/scan_picking_material_view.dart';
 import 'package:jd_flutter/fun/warehouse/out/wait_picking_material/wait_picking_material_view.dart';
-import 'bean/home_button.dart';
-import 'bean/routes.dart';
-import 'fun/dispatching/machine_dispatch/machine_dispatch_report_view.dart';
-import 'fun/dispatching/machine_dispatch/machine_dispatch_view.dart';
-import 'fun/dispatching/material_dispatch/material_dispatch_view.dart';
-import 'fun/dispatching/process_dispatch_register/process_dispatch_register_view.dart';
-import 'fun/dispatching/production_dispatch/production_dispatch_detail_view.dart';
-import 'fun/dispatching/production_dispatch/production_dispatch_view.dart';
-import 'fun/dispatching/work_order_list/work_order_list_view.dart';
-import 'fun/management/property/property_view.dart';
-import 'fun/management/quality_management/quality_management_view.dart';
-import 'fun/management/visit_register/visit_register_view.dart';
-import 'fun/other/device_maintenance_record/device_maintenance_record_view.dart';
-import 'fun/other/forming_packing_scan/packing_scan_view.dart';
-import 'fun/report/component_handover/component_handover_view.dart';
-import 'fun/report/daily_report/daily_report_view.dart';
-import 'fun/report/handover_report_list/handover_report_list_view.dart';
-import 'fun/report/molding_pack_area_report/molding_pack_area_report_view.dart';
-import 'fun/report/molding_scan_bulletin_report/molding_scan_bulletin_report_maximize_view.dart';
-import 'fun/report/molding_scan_bulletin_report/molding_scan_bulletin_report_view.dart';
-import 'fun/report/part_report_cancel/part_report_cancel_view.dart';
-import 'fun/report/process_dispatch_list/process_dispatch_view.dart';
-import 'fun/report/process_report/process_report_view.dart';
-import 'fun/report/production_day_report/production_day_report_view.dart';
-import 'fun/report/production_materials_report/production_materials_report_view.dart';
-import 'fun/report/production_summary_report/production_summary_report_view.dart';
-import 'fun/report/production_tasks/production_tasks_view.dart';
-import 'fun/report/view_instruction_details/view_instruction_details_view.dart';
-import 'fun/report/view_process_specification/view_process_specification_view.dart';
-import 'fun/report/worker_production_detail/worker_production_detail_view.dart';
-import 'fun/report/worker_production_report/worker_production_report_view.dart';
-import 'fun/warehouse/in/process_report/process_report_store_view.dart';
-import 'fun/warehouse/in/purchase_order_warehousing/purchase_order_warehousing_view.dart';
-import 'fun/warehouse/in/quality_inspection_list/quality_inspection_list_view.dart';
-import 'fun/warehouse/in/sap_injection_molding_stock_in/sap_injection_molding_stock_in_view.dart';
-import 'fun/warehouse/in/sap_no_label_stock_in/sap_no_label_stock_in_view.dart';
-import 'fun/warehouse/in/sap_produce_stock_in/sap_produce_stock_in_view.dart';
-import 'fun/warehouse/in/sap_purchase_stock_in/sap_purchase_stock_in_view.dart';
-import 'fun/warehouse/in/sap_surplus_material_stock_in/sap_surplus_material_stock_in_view.dart';
-import 'fun/warehouse/manage/anti_Counterfeiting/puma_anti_counterfeiting_view.dart';
-import 'fun/warehouse/manage/carton_label_scan/carton_label_scan_view.dart';
-import 'fun/warehouse/manage/carton_label_scan/carton_label_scan_progress_view.dart';
-import 'fun/warehouse/manage/quality_inspection/quality_inspection_view.dart';
-import 'fun/warehouse/manage/sap_label_binding/sap_label_binding_view.dart';
-import 'fun/warehouse/manage/sap_wms_split_label/sap_wms_split_label_view.dart';
-import 'fun/warehouse/manage/smart_delivery/smart_delivery_view.dart';
-import 'fun/warehouse/manage/timely_inventory/timely_inventory_view.dart';
-import 'fun/warehouse/manage/warehouse_allocation/warehouse_allocation_view.dart';
-import 'fun/warehouse/out/sap_packing_scan/sap_packing_scan_view.dart';
-import 'fun/warehouse/out/sap_print_picking/sap_print_picking_view.dart';
-import 'fun/warehouse/out/sap_production_picking/sap_production_picking_view.dart';
-import 'fun/warehouse/out/sap_relocation_picking/sap_relocation_picking_view.dart';
-import 'fun/warehouse/out/sap_sales_shipment/sap_sales_shipment_view.dart';
-import 'home/home_view.dart';
-import 'login/login_view.dart';
-import 'utils/web_api.dart';
+import 'package:jd_flutter/fun/work_reporting/component_handover/component_handover_view.dart';
+import 'package:jd_flutter/fun/work_reporting/handover_report_list/handover_report_list_view.dart';
+import 'package:jd_flutter/fun/work_reporting/part_process_scan/part_process_scan_view.dart';
+import 'package:jd_flutter/fun/work_reporting/part_report_cancel/part_report_cancel_view.dart';
+import 'package:jd_flutter/fun/work_reporting/part_report_scan/part_report_scan_view.dart';
+import 'package:jd_flutter/fun/work_reporting/process_dispatch_list/process_dispatch_view.dart';
+import 'package:jd_flutter/fun/work_reporting/process_report/process_report_view.dart';
+import 'package:jd_flutter/fun/work_reporting/production_tasks/production_tasks_view.dart';
+import 'package:jd_flutter/fun/work_reporting/workshop_planning/workshop_planning_view.dart';
+import 'package:jd_flutter/home/home_view.dart';
+import 'package:jd_flutter/login/login_view.dart';
+
 
 class RouteConfig {
-  static const String main = '/';
-  static const login = '/login';
+  static const String home = '/home';
+  static const String login = '/login';
 
   //扫码日产量报表
   static Routes dailyReport = Routes(
@@ -574,7 +577,6 @@ class RouteConfig {
     const QualityInspectionListPage(),
   );
 
-
   //生产车间质检
   static Routes qualityInspection = Routes(
     '/quality_inspection',
@@ -617,6 +619,13 @@ class RouteConfig {
   //   const FormingBarcodeCollectionPage(),
   // );
 
+
+  //车间计工
+  static Routes workshopPlanning = Routes(
+    '/workshop_planning',
+    99,
+    const WorkshopPlanningPage(),
+  );
 
   //本地功能入口列表
   static List<Routes> routeList = [
@@ -695,11 +704,12 @@ class RouteConfig {
     processDispatchList,
     qualityInspectionList,
     formingBarcodeCollection,
+    workshopPlanning,
   ];
 
   static List<GetPage> appRoutes = [
     GetPage(
-      name: main,
+      name: home,
       page: () => const HomePage(),
       transition: Transition.fadeIn,
     ),
@@ -1011,6 +1021,10 @@ class RouteConfig {
       name: formingBarcodeCollection.name,
       page: () => formingBarcodeCollection.page,
     ),
+    GetPage(
+      name: workshopPlanning.name,
+      page: () => workshopPlanning.page,
+    ),
   ];
 }
 
@@ -1018,10 +1032,6 @@ var functions = <ButtonItem>[];
 
 HomeButton? getNowFunction() {
   var route = Get.currentRoute;
-  logger.i('当前路由$route');
-  if (route == RouteConfig.main) {
-    return null;
-  }
   HomeButton? reItem;
   for (var item1 in functions) {
     if (item1 is HomeButton && item1.route == route) {
@@ -1042,7 +1052,6 @@ HomeButton? getNowFunction() {
 
 String getFunctionTitle() {
   var route = Get.currentRoute;
-  if (route == RouteConfig.main) return '';
   for (var item1 in functions) {
     if (item1 is HomeButton && item1.route == route) {
       return item1.name;

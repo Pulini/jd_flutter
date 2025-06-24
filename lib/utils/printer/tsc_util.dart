@@ -58,6 +58,9 @@ Uint8List _tscPrint({int quantity = 1, int copy = 1}) =>
 //下发拆切指令
 Uint8List _tscCutter() => utf8.encode('SET CUTTER 1\r\n');
 
+//关闭裁切模式
+Uint8List _tscCutterOff() => utf8.encode('SET CUTTER OFF\r\n');
+
 // 矩形
 // [sx] 左上角x坐标
 // [sy] 左上角y坐标
@@ -267,8 +270,6 @@ Future<Uint8List> _tscBitmap(
   int xAxis,
   int yAxis,
   Uint8List bitmapData,
-  int reSizeWidth,
-  int reSizeHeight,
 ) async {
   //创建图像处理器
   var image = img.decodeImage(bitmapData)!;
@@ -478,6 +479,7 @@ Future<List<Uint8List>> labelForProperty(
 ) async =>
     [
       _tscClearBuffer(),
+      _tscCutterOff(),
       _tscSetup(70, 40),
       _tscLine(10, 350, 820, 4),
       _tscQrCode(500, 30,
@@ -514,6 +516,7 @@ Future<List<Uint8List>> labelForSurplusMaterial({
   var list = <Uint8List>[];
 
   list.add(_tscClearBuffer());
+  list.add(_tscCutterOff());
   list.add(_tscSetup(75, 45, density: 8));
   list.add(_tscQrCode(
       2 * _dpi, 2 * _dpi + _halfDpi, qrCode.replaceAll('"', '\\["]'),
@@ -692,6 +695,7 @@ Future<List<Uint8List>> labelMultipurposeEnglishFixed({
   var list = <Uint8List>[];
 
   list.add(_tscClearBuffer());
+  list.add(_tscCutterOff());
   list.add(_tscSetup(75, 45));
   if (qrCode.isNotEmpty) {
     list.add(_tscQrCode(2 * _dpi, 2 * _dpi + _halfDpi,
@@ -907,6 +911,7 @@ Future<List<Uint8List>> labelMultipurposeDynamic({
           4) *
       _dpi;
 
+  list.add(_tscCutter());
   list.add(_tscClearBuffer());
   list.add(_tscSetup(width, height, sensorDistance: 0));
 
@@ -1019,26 +1024,6 @@ Future<List<Uint8List>> labelMultipurposeDynamic({
     list.add(_tscLine(i * _dpi, height * _dpi - 2, _dpi, 2));
   }
 
-  list.add(_tscCutter());
-  list.add(_tscPrint());
-
-  return list;
-}
-// fun bitmapLabel(
-// bitmap: Bitmap
-// ) = arrayListOf<ByteArray>().apply {
-// val dpi = 8
-// add(tscClearBuffer())
-// add(tscSetUp(75, 45))
-// add(tscBitmap(1, 1, bitmap, dpi * 73, dpi * 43))
-// add(tscPrint())
-// }
-
-Future<List<Uint8List>> bitmapLabel(Uint8List imageUint8List) async {
-  var list = <Uint8List>[];
-  list.add(_tscClearBuffer());
-  list.add(_tscSetup(75, 45, density: _dpi));
-  list.add(await _tscBitmap(1, 1, imageUint8List, _dpi * 73, _dpi * 43));
   list.add(_tscPrint());
 
   return list;
@@ -1052,56 +1037,62 @@ Future<Uint8List> labelImageResize(Uint8List image) async {
   );
   return Uint8List.fromList(img.encodePng(reImage));
 }
+List<Uint8List> testLabel()=>[
+  _tscClearBuffer(),
+  _tscSetup(110, 50, sensorDistance: 0),
+  _tscQrCode(10, 10, '1234567890'),
+  _tscCutter(),
+  _tscPrint(),
+];
 
-Future<Uint8List> a4PaperImageResize(Uint8List image) async {
+Future<List<Uint8List>> imageResizeToLabel(Map<String, dynamic> image) async =>
+    await compute(_imageResizeToLabel, image);
+
+Future<List<Uint8List>> _imageResizeToLabel(Map<String, dynamic> image) async {
+  double pixelRatio=image['pixelRatio']??1;
+  bool isDynamic=image['isDynamic']??false;
+  int width = ((image['width'] as int)/5.5/pixelRatio).toInt();
+  int height = ((image['height'] as int) /5.5/pixelRatio).toInt();
+  debugPrint(
+      'width: ${image['width']} - $width height: ${image['height']} - $height');
   var reImage = img.copyResize(
-    img.decodeImage(image)!,
-    width: 2380,
-    height: 3368,
-  );
-  return Uint8List.fromList(img.encodePng(reImage));
-}
-
-Future<List<Uint8List>> imageResizeToLabel(Uint8List image) async {
-  return await compute(_imageResizeToLabel, image);
-}
-
-Future<List<Uint8List>> _imageResizeToLabel(Uint8List image) async {
-  var reImage = img.copyResize(
-    img.decodeImage(image)!,
-    width: 75 * 8,
-    height: 45 * 8,
+    img.decodeImage(image['image'])!,
+    width: width * 8,
+    height: height * 8,
   );
   var imageUint8List = Uint8List.fromList(img.encodePng(reImage));
   return [
     _tscClearBuffer(),
-    _tscSetup(75, 45, density: _dpi),
-    await _tscBitmap(1, 1, imageUint8List, _dpi * 73, _dpi * 43),
+    _tscSetup(width, height, density: 15,sensorDistance: isDynamic?0:2),
+    await _tscBitmap(1, 1, imageUint8List),
+    _tscCutter(),
     _tscPrint(),
   ];
 }
 
 Future<List<List<Uint8List>>> imageResizeToLabels(
-  List<Uint8List> images,
-) async {
-  return await compute(_imageResizeToLabels, images);
-}
+        List<Map<String, dynamic>> images) async =>
+    await compute(_imageResizeToLabels, images);
 
 Future<List<List<Uint8List>>> _imageResizeToLabels(
-  List<Uint8List> images,
+  List<Map<String, dynamic>> images,
 ) async {
   List<List<Uint8List>> labelList = [];
   for (var image in images) {
+    bool isDynamic=image['isDynamic']??false;
+    int width = ((image['width'] as int) / 5.5).toInt();
+    int height = ((image['height'] as int) / 5.5).toInt();
     var reImage = img.copyResize(
-      img.decodeImage(image)!,
-      width: 75 * 8,
-      height: 45 * 8,
+      img.decodeImage((image['image'] as Uint8List))!,
+      width: width * 8,
+      height: height * 8,
     );
     var imageUint8List = Uint8List.fromList(img.encodePng(reImage));
     labelList.add([
       _tscClearBuffer(),
-      _tscSetup(75, 45, density: _dpi),
-      await _tscBitmap(1, 1, imageUint8List, _dpi * 73, _dpi * 43),
+      _tscSetup(width, height, density: 15,sensorDistance: isDynamic?0:2),
+      await _tscBitmap(1, 1, imageUint8List),
+      _tscCutter(),
       _tscPrint(),
     ]);
   }

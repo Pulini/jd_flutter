@@ -54,13 +54,13 @@ class _PatrolInspectionReportPageState
                   ),
                 ),
                 expandedTextSpan(
-                  hint: '巡查数：',
+                  hint: 'product_patrol_inspection_report_inspections_qty'.tr,
                   hintColor: Colors.black54,
                   text: group.length.toString(),
                   textColor: Colors.blue,
                 ),
                 expandedTextSpan(
-                  hint: '合格数：',
+                  hint: 'product_patrol_inspection_report_qualified_qty'.tr,
                   hintColor: Colors.black54,
                   text: group
                       .where((v) => v.abnormalDescription == '检验合格')
@@ -69,7 +69,7 @@ class _PatrolInspectionReportPageState
                   textColor: Colors.green.shade700,
                 ),
                 expandedTextSpan(
-                  hint: '不良数：',
+                  hint: 'product_patrol_inspection_report_defects_qty'.tr,
                   hintColor: Colors.black54,
                   text: group
                       .where((v) => v.abnormalDescription != '检验合格')
@@ -133,19 +133,19 @@ class _PatrolInspectionReportPageState
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             textSpan(
-              hint: '被检单位：',
+              hint: 'product_patrol_inspection_report_inspected_unit'.tr,
               text: state.reportUnit,
             ),
             const SizedBox(width: 20),
             textSpan(
-              hint: '总巡查数：',
+              hint: 'product_patrol_inspection_report_total_inspections_qty'.tr,
               text: state.reportQuantity.toShowString(),
             ),
             const SizedBox(width: 20),
           ],
         ),
       ],
-      title: '巡检汇总表',
+      title: 'product_patrol_inspection_report_inspection_summary'.tr,
       body: Padding(
         padding: const EdgeInsets.all(5),
         child: Row(
@@ -169,27 +169,27 @@ class _PatrolInspectionReportPageState
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            '上午 (00:00:00-11:59:59)',
-                            style: TextStyle(
+                            'product_patrol_inspection_report_morning'.tr,
+                            style: const TextStyle(
                               fontSize: 20,
                               color: Colors.blue,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                           textSpan(
-                            hint: '巡查数：',
+                            hint: 'product_patrol_inspection_report_inspections_qty'.tr,
                             hintColor: Colors.black54,
                             text: morningReport[1].toString(),
                             textColor: Colors.blue,
                           ),
                           textSpan(
-                            hint: '合格数：',
+                            hint: 'product_patrol_inspection_report_qualified_qty'.tr,
                             hintColor: Colors.black54,
                             text: morningReport[2].toString(),
                             textColor: Colors.green.shade700,
                           ),
                           textSpan(
-                            hint: '不良数：',
+                            hint: 'product_patrol_inspection_report_defects_qty'.tr,
                             hintColor: Colors.black54,
                             text: (morningReport[1] - morningReport[2])
                                 .toString(),
@@ -228,27 +228,27 @@ class _PatrolInspectionReportPageState
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            '下午 (12:00:00-23:59:59)',
-                            style: TextStyle(
+                            'product_patrol_inspection_report_afternoon'.tr,
+                            style: const TextStyle(
                               fontSize: 20,
                               color: Colors.blue,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                           textSpan(
-                            hint: '巡查数：',
+                            hint: 'product_patrol_inspection_report_inspections_qty'.tr,
                             hintColor: Colors.black54,
                             text: afternoonReport[1].toString(),
                             textColor: Colors.blue,
                           ),
                           textSpan(
-                            hint: '合格数：',
+                            hint: 'product_patrol_inspection_report_qualified_qty'.tr,
                             hintColor: Colors.black54,
                             text: afternoonReport[2].toString(),
                             textColor: Colors.green.shade700,
                           ),
                           textSpan(
-                            hint: '不良数：',
+                            hint: 'product_patrol_inspection_report_defects_qty'.tr,
                             hintColor: Colors.black54,
                             text: (afternoonReport[1] - afternoonReport[2])
                                 .toString(),

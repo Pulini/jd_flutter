@@ -3,11 +3,11 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/fun/warehouse/in/process_report/process_report_store_logic.dart';
 import 'package:jd_flutter/fun/warehouse/in/process_report/process_report_store_state.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
-import '../../../../bean/http/response/process_modify_info.dart';
-import '../../../../widget/combination_button_widget.dart';
-import '../../../../widget/dialogs.dart';
-import '../../../../widget/edit_text_widget.dart';
-import '../../../../widget/scanner.dart';
+import 'package:jd_flutter/bean/http/response/process_modify_info.dart';
+import 'package:jd_flutter/widget/combination_button_widget.dart';
+import 'package:jd_flutter/widget/dialogs.dart';
+import 'package:jd_flutter/widget/edit_text_widget.dart';
+import 'package:jd_flutter/widget/scanner.dart';
 
 class ProcessReportModifyPage extends StatefulWidget {
   const ProcessReportModifyPage({super.key});

@@ -44,19 +44,19 @@ class TimelyInventoryInfo {
 
 }
 
-/// FactoryDescribe : "GOLD EMPEROR GROUP CO., LTD"
-/// Zlocal : ""
-/// Lgobe : "金帝面料仓"
-/// Mtono : ""
-/// ProductName : ""
-/// MaterialCode : ""
-/// Size : ""
-/// Batch : ""
-/// Unit : "千克"
-/// StockQty : "773872.468"
-/// Unit1 : "桶"
-/// StockQty1 : "38693.623"
-/// Zcoefficient : "20"
+// FactoryDescribe : "GOLD EMPEROR GROUP CO., LTD"
+// Zlocal : ""
+// Lgobe : "金帝面料仓"
+// Mtono : ""
+// ProductName : ""
+// MaterialCode : ""
+// Size : ""
+// Batch : ""
+// Unit : "千克"
+// StockQty : "773872.468"
+// Unit1 : "桶"
+// StockQty1 : "38693.623"
+// Zcoefficient : "20"
 
 class TimeItems {
   TimeItems({

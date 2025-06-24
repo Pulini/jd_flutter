@@ -70,7 +70,6 @@ class _ProductionDispatchDetailPageState
         children: [
           Expanded(
             child: ListView(
-              shrinkWrap: true,
               scrollDirection: Axis.horizontal,
               children: [
                 CheckBox(
@@ -450,7 +449,6 @@ class _ProductionDispatchDetailPageState
         children: [
           Expanded(
             child: ListView(
-              shrinkWrap: true,
               scrollDirection: Axis.horizontal,
               children: [
                 Obx(() => CombinationButton(

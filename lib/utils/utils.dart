@@ -23,20 +23,16 @@ import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/downloader.dart';
 import 'package:jd_flutter/widget/picker/picker_item.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'app_init_service.dart';
 import 'web_api.dart';
 
-late SharedPreferences sharedPreferences;
-late PackageInfo packageInfo;
-late BaseDeviceInfo deviceInfo;
-var localeChinese = const Locale('zh', 'Hans_CN');
-var localeEnglish = const Locale('en', 'US');
+
+
 SnackbarController? snackbarController;
 SnackbarStatus? snackbarStatus;
 UserInfo? userInfo;
@@ -44,19 +40,19 @@ UserInfo? userInfo;
 // 保存SP数据
 spSave(String key, Object value) {
   if (value is String) {
-    sharedPreferences.setString(key, value);
+    sharedPreferences().setString(key, value);
     logger.d('save\nclass:${value.runtimeType}\nkey:$key\nvalue:$value');
   } else if (value is int) {
-    sharedPreferences.setInt(key, value);
+    sharedPreferences().setInt(key, value);
     logger.d('save\nclass:${value.runtimeType}\nkey:$key\nvalue:$value');
   } else if (value is double) {
-    sharedPreferences.setDouble(key, value);
+    sharedPreferences().setDouble(key, value);
     logger.d('save\nclass:${value.runtimeType}\nkey:$key\nvalue:$value');
   } else if (value is bool) {
-    sharedPreferences.setBool(key, value);
+    sharedPreferences().setBool(key, value);
     logger.d('save\nclass:${value.runtimeType}\nkey:$key\nvalue:$value');
   } else if (value is List<String>) {
-    sharedPreferences.setStringList(key, value);
+    sharedPreferences().setStringList(key, value);
     logger.d('save\nclass:${value.runtimeType}\nkey:$key\nvalue:$value');
   } else {
     logger.e('error\nclass:${value.runtimeType}');
@@ -66,7 +62,7 @@ spSave(String key, Object value) {
 // 获取SP数据
 dynamic spGet(String key) {
   try {
-    var value = sharedPreferences.get(key);
+    var value = sharedPreferences().get(key);
     logger.d('read\nclass:${value.runtimeType}\nkey:$key\nvalue:$value');
     switch (value.runtimeType) {
       case const (String):
@@ -78,12 +74,12 @@ dynamic spGet(String key) {
       case const (bool):
         return value ?? false;
       case const (List<Object?>):
-        return sharedPreferences.getStringList(key) ?? [];
+        return sharedPreferences().getStringList(key) ?? [];
       default:
         return value;
     }
   } catch (e) {
-    debugPrint('--------read sp error-------');
+    debugPrint('$key--------read sp error-------');
     return null;
   }
 }
@@ -91,7 +87,8 @@ dynamic spGet(String key) {
 //获取用户数据
 UserInfo? getUserInfo() {
   try {
-    var spUserInfo = sharedPreferences.get(spSaveUserInfo) as String?;
+    var spUserInfo = sharedPreferences().get(spSaveUserInfo) as String?;
+    debugPrint('spUserInfo=$spUserInfo');
     if (spUserInfo != null) {
       return UserInfo.fromJson(jsonDecode(spUserInfo));
     }
@@ -106,22 +103,22 @@ UserInfo? getUserInfo() {
 //获取设备唯一码
 String getDeviceID() {
   if (GetPlatform.isAndroid) {
-    return (deviceInfo as AndroidDeviceInfo).id;
+    return (deviceInfo() as AndroidDeviceInfo).id;
   }
   if (GetPlatform.isIOS) {
-    return (deviceInfo as IosDeviceInfo).identifierForVendor ?? '';
+    return (deviceInfo() as IosDeviceInfo).identifierForVendor ?? '';
   }
   if (GetPlatform.isWeb) {
-    return (deviceInfo as WebBrowserInfo).userAgent ?? '';
+    return (deviceInfo() as WebBrowserInfo).userAgent ?? '';
   }
   if (GetPlatform.isWindows) {
-    return (deviceInfo as WindowsDeviceInfo).productId;
+    return (deviceInfo() as WindowsDeviceInfo).productId;
   }
   if (GetPlatform.isLinux) {
-    return (deviceInfo as LinuxDeviceInfo).machineId ?? '';
+    return (deviceInfo() as LinuxDeviceInfo).machineId ?? '';
   }
   if (GetPlatform.isMacOS) {
-    return (deviceInfo as MacOsDeviceInfo).systemGUID ?? '';
+    return (deviceInfo() as MacOsDeviceInfo).systemGUID ?? '';
   }
   return '';
 }
@@ -129,22 +126,22 @@ String getDeviceID() {
 //获取设备名称
 String getDeviceName() {
   if (GetPlatform.isAndroid) {
-    return (deviceInfo as AndroidDeviceInfo).model;
+    return (deviceInfo() as AndroidDeviceInfo).model;
   }
   if (GetPlatform.isIOS) {
-    return (deviceInfo as IosDeviceInfo).model;
+    return (deviceInfo() as IosDeviceInfo).model;
   }
   if (GetPlatform.isWeb) {
-    return (deviceInfo as WebBrowserInfo).vendor ?? '';
+    return (deviceInfo() as WebBrowserInfo).vendor ?? '';
   }
   if (GetPlatform.isWindows) {
-    return (deviceInfo as WindowsDeviceInfo).deviceId;
+    return (deviceInfo() as WindowsDeviceInfo).deviceId;
   }
   if (GetPlatform.isLinux) {
-    return (deviceInfo as LinuxDeviceInfo).name;
+    return (deviceInfo() as LinuxDeviceInfo).name;
   }
   if (GetPlatform.isMacOS) {
-    return (deviceInfo as MacOsDeviceInfo).computerName;
+    return (deviceInfo() as MacOsDeviceInfo).computerName;
   }
   return '';
 }
@@ -458,9 +455,9 @@ getVersionInfo(
     loading: showLoading ? 'checking_version'.tr : '',
   ).then((versionInfoCallback) {
     if (versionInfoCallback.resultCode == resultSuccess) {
-      logger.i(packageInfo);
+      logger.i(packageInfo());
       var versionInfo = VersionInfo.fromJson(versionInfoCallback.data);
-      if (packageInfo.buildNumber.toIntTry() < versionInfo.versionCode!) {
+      if (packageInfo().buildNumber.toIntTry() < versionInfo.versionCode!) {
         needUpdate.call(versionInfo);
       } else {
         noUpdate.call();
@@ -478,7 +475,7 @@ upData() {
     loading: 'checking_version'.tr,
   ).then((versionInfoCallback) {
     if (versionInfoCallback.resultCode == resultSuccess) {
-      logger.i(packageInfo);
+      logger.i(packageInfo());
       if (versionInfoCallback.baseUrl == baseUrlForMES) {
         doUpdate(version: VersionInfo.fromJson(versionInfoCallback.data));
       }

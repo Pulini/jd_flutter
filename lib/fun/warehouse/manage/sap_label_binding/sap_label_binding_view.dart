@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/sap_label_binding_info.dart';
 import 'package:jd_flutter/fun/warehouse/manage/sap_label_binding/sap_label_binding_dialog.dart';
+import 'package:jd_flutter/utils/printer/print_util.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/scanner.dart';
-import 'package:jd_flutter/widget/widgets_to_image_widget.dart';
 
 import 'sap_label_binding_logic.dart';
 import 'sap_label_binding_state.dart';
@@ -21,6 +21,7 @@ class SapLabelBindingPage extends StatefulWidget {
 class _SapLabelBindingPageState extends State<SapLabelBindingPage> {
   final SapLabelBindingLogic logic = Get.put(SapLabelBindingLogic());
   final SapLabelBindingState state = Get.find<SapLabelBindingLogic>().state;
+  PrintUtil pu=PrintUtil();
 
   Widget _item(List<SapLabelBindingInfo> labelList) {
     SapLabelBindingInfo? boxLabel;
@@ -96,6 +97,7 @@ class _SapLabelBindingPageState extends State<SapLabelBindingPage> {
     }
   }
 
+
   @override
   void initState() {
     pdaScanner(scan: (code) => logic.scanLabel(code));
@@ -106,10 +108,10 @@ class _SapLabelBindingPageState extends State<SapLabelBindingPage> {
   Widget build(BuildContext context) {
     return pageBody(
       actions: [
-        CombinationButton(
-          text: 'add',
-          click: () => logic.scanLabel('00505685E5761FE090E58AE9B8A5E489'),
-        ),
+        // CombinationButton(
+        //   text: 'add',
+        //   click: () => logic.scanLabel('00505685E5761FE090E58AE9B8A5E489'),
+        // ),
         Obx(() => state.newBoxLabelID.value.isEmpty
             ? Container()
             : CombinationButton(

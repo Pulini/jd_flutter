@@ -1,8 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
+import 'package:jd_flutter/bean/http/response/stuff_quality_inspection_detail_info.dart';
 import 'package:jd_flutter/bean/http/response/stuff_quality_inspection_info.dart';
 import 'package:jd_flutter/fun/warehouse/in/quality_inspection_list/quality_inspection_list_location_dialog.dart';
 import 'package:jd_flutter/fun/warehouse/in/quality_inspection_list/quality_inspection_list_logic.dart';
@@ -16,7 +15,6 @@ import 'package:jd_flutter/widget/edit_text_widget.dart';
 import 'package:jd_flutter/widget/picker/picker_view.dart';
 import 'package:jd_flutter/widget/spinner_widget.dart';
 
-import '../../../../bean/http/response/stuff_quality_inspection_detail_info.dart';
 
 class QualityInspectionListPage extends StatefulWidget {
   const QualityInspectionListPage({super.key});

@@ -3,16 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/scan_process_info.dart';
+import 'package:jd_flutter/fun/warehouse/code_list_report/code_list_report_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/process_report/process_report_store_state.dart';
 import 'package:jd_flutter/utils/utils.dart';
-import '../../../../bean/http/response/bar_code.dart';
-import '../../../../bean/http/response/process_modify_info.dart';
-import '../../../../bean/http/response/sap_picking_info.dart';
-import '../../../../bean/http/response/worker_info.dart';
-import '../../../../utils/web_api.dart';
-import '../../../../widget/custom_widget.dart';
-import '../../../../widget/dialogs.dart';
-import '../../code_list_report/code_list_report_view.dart';
+import 'package:jd_flutter/bean/http/response/bar_code.dart';
+import 'package:jd_flutter/bean/http/response/process_modify_info.dart';
+import 'package:jd_flutter/bean/http/response/sap_picking_info.dart';
+import 'package:jd_flutter/bean/http/response/worker_info.dart';
+import 'package:jd_flutter/utils/web_api.dart';
+import 'package:jd_flutter/widget/custom_widget.dart';
+import 'package:jd_flutter/widget/dialogs.dart';
 
 class ProcessReportStoreLogic extends GetxController {
   final ProcessReportStoreState state = ProcessReportStoreState();

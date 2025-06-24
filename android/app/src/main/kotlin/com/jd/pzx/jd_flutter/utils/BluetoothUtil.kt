@@ -191,8 +191,12 @@ fun bluetoothSendCommand(
                     progress.invoke(index, dataList.size)
                 }
             } while (index < dataList.size)
+        } catch (e: IOException) {
+            Log.e("Pan", "蓝牙操作异常：通道已断开", e)
+            sendCallback.invoke(SEND_COMMAND_STATE_BROKEN_PIPE)
         } catch (e: Exception) {
             Log.e("Pan", "蓝牙操作异常：发送数据失败", e)
+            sendCallback.invoke(SEND_COMMAND_STATE_FAILED)
         } finally {
             if (index == dataList.size) {
                 sendCallback.invoke(SEND_COMMAND_STATE_SUCCESS)
@@ -218,6 +222,9 @@ fun bluetoothSendCommand(
             bleSocket.outputStream?.write(byte)
             Log.e("Pan", "蓝牙发送数据:$byte")
             sendCallback.invoke(SEND_COMMAND_STATE_SUCCESS)
+        } catch (e: IOException) {
+            Log.e("Pan", "蓝牙操作异常：通道已断开", e)
+            sendCallback.invoke(SEND_COMMAND_STATE_BROKEN_PIPE)
         } catch (e: Exception) {
             Log.e("Pan", "蓝牙操作异常：发送数据失败", e)
             sendCallback.invoke(SEND_COMMAND_STATE_FAILED)

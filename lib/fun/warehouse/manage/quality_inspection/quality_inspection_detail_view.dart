@@ -37,7 +37,7 @@ class _QualityInspectionDetailPageState
               children: [
                 const SizedBox(width: 5),
                 GestureDetector(
-                  onTap: () =>modifyTagKeyDialog(data: data),
+                  onTap: () => modifyTagKeyDialog(data: data),
                   child: Obx(() => Text(
                         data.tag.value,
                         style: const TextStyle(
@@ -54,12 +54,16 @@ class _QualityInspectionDetailPageState
                     children: [
                       expandedTextSpan(
                         maxLines: 4,
-                        hint: '不良项目：',
+                        hint:
+                            'product_quality_inspection_detail_defective_projects'
+                                .tr,
                         text: data.abnormalDescription ?? '',
                         textColor: Colors.black54,
                       ),
                       textSpan(
-                        hint: '月不良率：',
+                        hint:
+                            'product_quality_inspection_detail_monthly_defect_rate'
+                                .tr,
                         text: data.getDefectRate(),
                         textColor: Colors.red,
                       ),
@@ -89,12 +93,12 @@ class _QualityInspectionDetailPageState
                                 (v) => v.abnormalItemId == data.abnormalItemId)
                             .length;
                         return Text(
-                          '记录${slight > 0 ? ' ($slight)' : ''}',
+                          'product_quality_inspection_detail_record'
+                              .trArgs([slight > 0 ? ' ($slight)' : '']),
                           style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                            fontSize: 20
-                          ),
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                              fontSize: 20),
                         );
                       }),
                     ),
@@ -109,20 +113,22 @@ class _QualityInspectionDetailPageState
   @override
   Widget build(BuildContext context) {
     return pageBody(
-      title: '品质检验',
+      title: 'product_quality_inspection_detail_quality_inspection'.tr,
       actions: [
         Obx(() => CombinationButton(
               combination: Combination.left,
               isEnabled: logic.allRecordsRechecked(),
-              text: '质检完成',
+              text: 'product_quality_inspection_detail_inspection_completed'.tr,
               click: () => askDialog(
-                  content: '确定质检完成了吗？',
+                  content:
+                      'product_quality_inspection_detail_inspection_completed_tips'
+                          .tr,
                   confirm: () => logic.inspectionCompleted()),
             )),
         Obx(() => CombinationButton(
               combination: Combination.right,
               isEnabled: logic.hasInspectionAbnormalRecords(),
-              text: '质检记录',
+              text: 'product_quality_inspection_detail_inspection_records'.tr,
               click: () =>
                   Get.to(() => const QualityInspectionDetailAbnormalListPage()),
             )),
@@ -135,27 +141,27 @@ class _QualityInspectionDetailPageState
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 textSpan(
-                  hint: '生产单位：',
+                  hint: 'product_quality_inspection_inspection_unit'.tr,
                   text: state.qiDetailInspectionUnit.value,
                 ),
                 textSpan(
-                  hint: '指令：',
+                  hint: 'product_quality_inspection_instruction_no_tips'.tr,
                   text: state.qiDetailInstructionNo.value,
                 ),
                 textSpan(
-                  hint: '型体：',
+                  hint: 'product_quality_inspection_type_body_tips'.tr,
                   text: state.qiDetailTypeBody.value,
                 ),
                 textSpan(
-                  hint: 'PO号：',
+                  hint: 'product_quality_inspection_customer_po_tips'.tr,
                   text: state.qiDetailCustomerPo.value,
                 ),
                 textSpan(
-                  hint: '总量：',
+                  hint: 'product_quality_inspection_detail_total'.tr,
                   text: state.qiDetailTotalQuantity.value.toShowString(),
                 ),
                 textSpan(
-                  hint: '质检员：',
+                  hint: 'product_quality_inspection_detail_inspector'.tr,
                   text: userInfo?.name ?? '',
                 ),
               ],

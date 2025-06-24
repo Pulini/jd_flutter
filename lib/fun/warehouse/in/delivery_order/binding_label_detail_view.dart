@@ -1,7 +1,5 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/fun/warehouse/in/delivery_order/delivery_order_logic.dart';
 import 'package:jd_flutter/fun/warehouse/in/delivery_order/delivery_order_state.dart';

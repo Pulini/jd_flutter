@@ -8,9 +8,11 @@ import 'custom_widget.dart';
 import 'dialogs.dart';
 
 class PreviewLabelList extends StatefulWidget {
-  const PreviewLabelList({super.key, required this.labelWidgets});
+  const PreviewLabelList(
+      {super.key, required this.labelWidgets, this.isDynamic = false});
 
   final List<Widget> labelWidgets;
+  final bool isDynamic;
 
   @override
   State<PreviewLabelList> createState() => _PreviewLabelListState();
@@ -25,15 +27,7 @@ class _PreviewLabelListState extends State<PreviewLabelList> {
     if (labelList.isEmpty) return;
     pu.printLabelList(
       labelList: labelList,
-      start: () {
-        loadingDialog('正在下发标签...');
-      },
-      progress: (i, j) {
-        Get.back();
-        loadingDialog('正在下发标签($i/$j)');
-      },
       finished: (success, fail) {
-        Get.back();
         successDialog(
           title: '标签下发结束',
           content: '完成${success.length}张, 失败${fail.length}张',
@@ -47,9 +41,10 @@ class _PreviewLabelListState extends State<PreviewLabelList> {
     super.initState();
     for (var v in widget.labelWidgets) {
       widgetList.add(WidgetsToImage(
-        image: (image) => imageResizeToLabel(image).then((label) {
-          labelList.add(label);
-        }),
+        image: (map) async => labelList.add(await imageResizeToLabel({
+          ...map,
+          'isDynamic': widget.isDynamic,
+        })),
         child: v,
       ));
     }
@@ -82,16 +77,18 @@ class _PreviewLabelListState extends State<PreviewLabelList> {
           ],
           body: SingleChildScrollView(
             padding: const EdgeInsets.all(10),
-            child:Center(child:  Column(
-              children: [
-                for (var v in widgetList)
-                  SingleChildScrollView(
-                    padding: const EdgeInsets.only(bottom: 10),
-                    scrollDirection: Axis.horizontal,
-                    child: v,
-                  )
-              ],
-            ),),
+            child: Center(
+              child: Column(
+                children: [
+                  for (var v in widgetList)
+                    SingleChildScrollView(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      scrollDirection: Axis.horizontal,
+                      child: v,
+                    )
+                ],
+              ),
+            ),
           ),
         ));
   }

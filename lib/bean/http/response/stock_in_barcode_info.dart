@@ -57,13 +57,13 @@ class StockInBarcodeInfo {
   }
 }
 
-/// MANDT : "300"
-/// BQID : "005056B46EAE1EDD95D266C728B0DC5B"
-/// MATNR : "0601010000501"
-/// SIZE1_ATINN : "35"
-/// MENGE : 30.000
-/// ZZXTNO : ""
-/// MEINS : ""
+// MANDT : "300"
+// BQID : "005056B46EAE1EDD95D266C728B0DC5B"
+// MATNR : "0601010000501"
+// SIZE1_ATINN : "35"
+// MENGE : 30.000
+// ZZXTNO : ""
+// MEINS : ""
 
 class Item {
   Item({

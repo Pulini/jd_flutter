@@ -235,7 +235,7 @@ class _IncomingInspectionOrdersPageState
               width: double.infinity,
               child: CombinationButton(
                 text: 'incoming_inspection_order_query'.tr,
-                click: _query(false),
+                click: ()=>_query(false),
               ),
             ),
           ],
@@ -270,7 +270,7 @@ class _IncomingInspectionOrdersPageState
       title: 'incoming_inspection_order_inspection_list'.tr,
       actions: [
         IconButton(
-          onPressed: _showSearch,
+          onPressed:()=> _showSearch(),
           icon: const Icon(Icons.search),
         ),
       ],

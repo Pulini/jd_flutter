@@ -73,18 +73,18 @@ class _QualityInspectionPageState extends State<QualityInspectionPage> {
           Row(
             children: [
               expandedTextSpan(
-                hint: '生产单位：',
+                hint: 'product_quality_inspection_inspection_unit'.tr,
                 text: data.inspectionUnit ?? '',
                 textColor: Colors.green.shade700,
               ),
               textSpan(
-                hint: '异常数：',
+                hint: 'product_quality_inspection_abnormal_qty'.tr,
                 text: data.getAbnormalQty().toString(),
                 textColor: Colors.red,
               ),
               const SizedBox(width: 20),
               textSpan(
-                hint: '复检数：',
+                hint: 'product_quality_inspection_reinspection_qty'.tr,
                 text: data.getReInspectionQty().toString(),
                 textColor: Colors.purple,
               ),
@@ -119,19 +119,19 @@ class _QualityInspectionPageState extends State<QualityInspectionPage> {
                 Row(
                   children: [
                     expandedTextSpan(
-                      hint: '指令号：',
+                      hint: 'product_quality_inspection_instruction_no_tips'.tr,
                       hintColor: Colors.black54,
                       text: data.instructionNo ?? '',
                       textColor: Colors.blue.shade900,
                     ),
                     expandedTextSpan(
-                      hint: 'PO号：',
+                      hint: 'product_quality_inspection_customer_po_tips'.tr,
                       hintColor: Colors.black54,
                       text: data.customerPo ?? '',
                       textColor: Colors.blue.shade900,
                     ),
                     expandedTextSpan(
-                      hint: '型体：',
+                      hint: 'product_quality_inspection_type_body_tips'.tr,
                       hintColor: Colors.black54,
                       text: data.typeBody ?? '',
                       textColor: Colors.blue.shade900,
@@ -153,18 +153,22 @@ class _QualityInspectionPageState extends State<QualityInspectionPage> {
                   children: [
                     Expanded(
                       child: Text(
-                        '质检日期：${data.inspectionDate}',
+                        'product_quality_inspection_inspection_date'.trArgs(
+                          [data.inspectionDate ?? ''],
+                        ),
                         style: textStyle,
                       ),
                     ),
                     Expanded(
                       child: Text(
-                        '质检员：${data.inspector}',
+                        'product_quality_inspection_inspector'.trArgs(
+                          [data.inspector ?? ''],
+                        ),
                         style: textStyle,
                       ),
                     ),
                     expandedTextSpan(
-                      hint: '异常数：',
+                      hint: 'product_quality_inspection_abnormal_qty'.tr,
                       hintColor: Colors.black54,
                       isBold: false,
                       text: data.abnormalQty.toString(),
@@ -173,7 +177,7 @@ class _QualityInspectionPageState extends State<QualityInspectionPage> {
                     SizedBox(
                       width: 80,
                       child: textSpan(
-                        hint: '复检数：',
+                        hint: 'product_quality_inspection_reinspection_qty'.tr,
                         hintColor: Colors.black54,
                         isBold: false,
                         text: data.reInspectionQty.toString(),
@@ -206,7 +210,9 @@ class _QualityInspectionPageState extends State<QualityInspectionPage> {
               refresh: _query,
             ),
             child: Text(
-              data.status == '4' ? '质检完成' : '开始质检',
+              data.status == '4'
+                  ? 'product_quality_inspection_inspection_complete'.tr
+                  : 'product_quality_inspection_start_inspection'.tr,
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 18,
@@ -241,7 +247,7 @@ class _QualityInspectionPageState extends State<QualityInspectionPage> {
                 child: DatePicker(pickerController: reportEndDateController),
               ),
               CombinationButton(
-                text: '查看质检汇总',
+                text: 'product_quality_inspection_view_report'.tr,
                 click: () => logic.getInspectionReport(
                   startDate: reportStartDateController.getDateFormatSapYMD(),
                   endDate: reportEndDateController.getDateFormatSapYMD(),
@@ -253,15 +259,15 @@ class _QualityInspectionPageState extends State<QualityInspectionPage> {
       ],
       queryWidgets: [
         EditText(
-          hint: '指令号',
+          hint: 'product_quality_inspection_instruction'.tr,
           controller: instructionNoController,
         ),
         EditText(
-          hint: '型体',
+          hint: 'product_quality_inspection_type_body'.tr,
           controller: typeBodyController,
         ),
         EditText(
-          hint: '客户PO',
+          hint: 'product_quality_inspection_customer_po'.tr,
           controller: customerPOController,
         ),
         DatePicker(pickerController: queryStartDateController),

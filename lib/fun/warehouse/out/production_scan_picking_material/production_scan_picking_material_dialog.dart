@@ -4,12 +4,14 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/base_data.dart';
 import 'package:jd_flutter/bean/http/response/worker_info.dart';
 import 'package:jd_flutter/constant.dart';
+
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
-import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/picker/picker_item.dart';
 import 'package:jd_flutter/widget/worker_check_widget.dart';
+
+import 'package:jd_flutter/widget/dialogs.dart';
 
 selectSupplierAndDepartmentDialog({
   required Function(
@@ -166,7 +168,7 @@ getSapSupplierAndDepartment({
     String,
   ) callback,
 }) {
-  loadingDialog('production_scan_picking_material_getting_supplier_and_department'.tr);
+  loadingShow('production_scan_picking_material_getting_supplier_and_department'.tr);
   Future.wait([
     httpGet(method: webApiPickerSapSupplier),
     httpGet(method: webApiPickerSapDepartment),

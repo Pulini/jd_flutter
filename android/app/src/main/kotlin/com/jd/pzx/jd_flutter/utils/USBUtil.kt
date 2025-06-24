@@ -21,6 +21,7 @@ const val SEND_COMMAND_STATE_FAILED = 1003//发送失败
 const val SEND_COMMAND_STATE_USB_ERROR = 1004//usb设备异常
 const val SEND_COMMAND_STATE_NO_PERMISSION = 1005//没有串口指定权限
 const val SEND_COMMAND_STATE_NO_DEVICE = 1006//找不到指定设备
+const val SEND_COMMAND_STATE_BROKEN_PIPE = 1007//蓝牙通道已断开
 private const val ACTION_USB_PERMISSION = "com.android.example.USB_PERMISSION"
 
 fun usbQuickSendCommand(

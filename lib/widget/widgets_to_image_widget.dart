@@ -1,5 +1,4 @@
 import 'dart:ui' as ui;
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
@@ -7,9 +6,15 @@ import 'package:flutter/rendering.dart';
 //控件转图片byte
 class WidgetsToImage extends StatefulWidget {
   final Widget child;
-  final Function(Uint8List) image;
+  final bool isRotate90;
+  final Function(Map<String, dynamic>) image;
 
-  const WidgetsToImage({super.key, required this.child, required this.image});
+  const WidgetsToImage({
+    super.key,
+    required this.child,
+    required this.image,
+    this.isRotate90 = false,
+  });
 
   @override
   State<WidgetsToImage> createState() => _WidgetsToImageState();
@@ -17,6 +22,9 @@ class WidgetsToImage extends StatefulWidget {
 
 class _WidgetsToImageState extends State<WidgetsToImage> {
   final GlobalKey containerKey = GlobalKey();
+  int width = 0;
+  int height = 0;
+  double pixelRatio = 1;
 
   Future<Uint8List> capture(GlobalKey key) async {
     try {
@@ -28,11 +36,17 @@ class _WidgetsToImageState extends State<WidgetsToImage> {
         await Future.delayed(const Duration(milliseconds: 30));
         return capture(key); // 递归调用直到组件绘制完成
       }
-      ui.Image image = boundary.toImageSync();
-
-      //旋转图片
-      ui.Image rotatedImage = await rotateImage(image);
-      var byte = await rotatedImage.toByteData(format: ui.ImageByteFormat.png);
+      ui.Image image = boundary.toImageSync(pixelRatio: pixelRatio);
+      ByteData? byte;
+      if (widget.isRotate90) {
+        //旋转图片
+        ui.Image rotatedImage = await rotateImage(image);
+        byte = await rotatedImage.toByteData(format: ui.ImageByteFormat.png);
+      } else {
+        byte = await image.toByteData(format: ui.ImageByteFormat.png);
+      }
+      width = image.width;
+      height = image.height;
       return byte!.buffer.asUint8List();
     } catch (e) {
       return captureFormError(key);
@@ -44,10 +58,15 @@ class _WidgetsToImageState extends State<WidgetsToImage> {
       //获取图片
       final boundary =
           key.currentContext!.findRenderObject()! as RenderRepaintBoundary;
-      ui.Image image = boundary.toImageSync();
-      //旋转图片
-      ui.Image rotatedImage = await rotateImage(image);
-      var byte = await rotatedImage.toByteData(format: ui.ImageByteFormat.png);
+      ui.Image image = boundary.toImageSync(pixelRatio: pixelRatio);
+      ByteData? byte;
+      if (widget.isRotate90) {
+        //旋转图片
+        ui.Image rotatedImage = await rotateImage(image);
+        byte = await rotatedImage.toByteData(format: ui.ImageByteFormat.png);
+      } else {
+        byte = await image.toByteData(format: ui.ImageByteFormat.png);
+      }
       return byte!.buffer.asUint8List();
     } catch (e) {
       rethrow;
@@ -86,7 +105,13 @@ class _WidgetsToImageState extends State<WidgetsToImage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      widget.image.call(await capture(containerKey));
+      pixelRatio = MediaQuery.of(context).devicePixelRatio;
+      widget.image.call({
+        "image": await capture(containerKey),
+        "width": width,
+        "height": height,
+        "pixelRatio": pixelRatio,
+      });
     });
   }
 

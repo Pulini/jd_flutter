@@ -29,7 +29,7 @@ class PatrolInspectionState {
     required Function(int) success,
   }) {
     sapPost(
-      loading: '正在获取产线信息...',
+      loading: 'product_patrol_inspection_getting_line_info'.tr,
       method: webApiSapGetPatrolInspectionInfo,
       body: {'patrolInspectorNumber': userInfo?.number},
     ).then((response) {
@@ -51,7 +51,7 @@ class PatrolInspectionState {
       required Function(PatrolInspectionAbnormalRecordInfo) success,
       required Function(String) error}) {
     sapPost(
-      loading: '正在添加巡查记录...',
+      loading: 'product_patrol_inspection_adding_patrol_records'.tr,
       method: webApiSapAddPatrolInspectionRecord,
       body: {
         'patrolInspectorNumber': userInfo?.number,
@@ -79,7 +79,7 @@ class PatrolInspectionState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在撤回异常记录...',
+      loading: 'product_patrol_inspection_withdrawing_abnormal'.tr,
       method: webApiSapDeletePatrolInspectionRecord,
       body: {
         'abnormalRecordId': abnormalRecord.abnormalRecordId,
@@ -99,7 +99,7 @@ class PatrolInspectionState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在获取巡查汇总...',
+      loading: 'product_patrol_inspection_getting_patrol_report'.tr,
       method: webApiSapGetPatrolInspectionReport,
       body: {
         'patrolInspectorNumber': userInfo?.number,

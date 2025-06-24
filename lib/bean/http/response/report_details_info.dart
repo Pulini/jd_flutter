@@ -29,13 +29,13 @@ class ReportDetailsInfo {
 
 }
 
-/// Type : 0
-/// Name : "烫钻TPU商标字体（2片/双）"
-/// Mtono : "J2502376"
-/// Size : "37"
-/// MtonoQty : 75.0000000000
-/// Qty : 75.00000
-/// EmpName : "安艳芝"
+// Type : 0
+// Name : "烫钻TPU商标字体（2片/双）"
+// Mtono : "J2502376"
+// Size : "37"
+// MtonoQty : 75.0000000000
+// Qty : 75.00000
+// EmpName : "安艳芝"
 
 class SummaryLists {
   SummaryLists({

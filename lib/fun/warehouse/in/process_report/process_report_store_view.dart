@@ -1,15 +1,15 @@
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/fun/warehouse/in/process_report/process_report_store_dialog.dart';
 import 'package:jd_flutter/fun/warehouse/in/process_report/process_report_store_logic.dart';
 import 'package:jd_flutter/fun/warehouse/in/process_report/process_report_store_modify_view.dart';
-import '../../../../bean/http/response/bar_code.dart';
-import '../../../../widget/combination_button_widget.dart';
-import '../../../../widget/custom_widget.dart';
-import '../../../../widget/dialogs.dart';
-import '../../../../widget/edit_text_widget.dart';
-import '../../../../widget/scanner.dart';
-import '../../out/scan_picking_material/scan_picking_material_dialog.dart';
+import 'package:jd_flutter/bean/http/response/bar_code.dart';
+import 'package:jd_flutter/widget/combination_button_widget.dart';
+import 'package:jd_flutter/widget/custom_widget.dart';
+import 'package:jd_flutter/widget/dialogs.dart';
+import 'package:jd_flutter/widget/edit_text_widget.dart';
+import 'package:jd_flutter/widget/scanner.dart';
 
 class ProcessReportStorePage extends StatefulWidget {
   const ProcessReportStorePage({super.key});

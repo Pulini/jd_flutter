@@ -8,6 +8,7 @@ import 'package:jd_flutter/bean/http/response/stuff_quality_inspection_info.dart
 import 'package:jd_flutter/fun/warehouse/in/quality_inspection_list/quality_inspection_list_detail_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/quality_inspection_list/quality_inspection_list_state.dart';
 import 'package:jd_flutter/fun/warehouse/in/quality_inspection_list/quality_inspection_reverse_color_view.dart';
+import 'package:jd_flutter/fun/warehouse/in/stuff_quality_inspection/stuff_quality_inspection_view.dart';
 import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
@@ -15,8 +16,6 @@ import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/picker/picker_controller.dart';
 import 'package:jd_flutter/widget/spinner_widget.dart';
-
-import '../stuff_quality_inspection/stuff_quality_inspection_view.dart';
 
 class QualityInspectionListLogic extends GetxController {
   final QualityInspectionListState state = QualityInspectionListState();

@@ -1,7 +1,7 @@
 import 'package:jd_flutter/utils/utils.dart';
 
-/// ProductName : "MDWG202652-21"
-/// Mtonos : "0010044148"
+// ProductName : "MDWG202652-21"
+// Mtonos : "0010044148"
 /// Parts : "⑤(Untranslated)、④(Untranslated)、②(Untranslated)"
 /// DeptName : "激光组"
 /// ProcessName : "激光脚背饰带上层小皮,激光脚背饰带,激光内侧第2、3条饰带"

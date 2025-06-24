@@ -1,18 +1,18 @@
 import 'package:jd_flutter/utils/utils.dart';
 
-/// InterID : 2243812
-/// EntryIDs : [2,3]
-/// FIDs : [21596298,21596297]
-/// Number : "GXPG25249521"
-/// ProductID : 976713
-/// ProductNumber : "MDHM201639-26"
-/// PartIDs : [19849]
-/// PartNames : ["①","②"]
-/// Mtonos : ["0010043440"]
-/// Emps : [{"EmpID":228392,"EmpNumber":"041102","EmpName":"黄斌"}]
-/// Processes : [{"ProcessName":"激光脚背饰带（2条）","Qty":903.000,"Unit":"双"},{"ProcessName":"激光第二条前带（2条）","Qty":903.000,"Unit":"双"}]
-/// HasBarcode : false
-/// CardNos : ["GXPG25249521/1"]
+// InterID : 2243812
+// EntryIDs : [2,3]
+// FIDs : [21596298,21596297]
+// Number : "GXPG25249521"
+// ProductID : 976713
+// ProductNumber : "MDHM201639-26"
+// PartIDs : [19849]
+// PartNames : ["①","②"]
+// Mtonos : ["0010043440"]
+// Emps : [{"EmpID":228392,"EmpNumber":"041102","EmpName":"黄斌"}]
+// Processes : [{"ProcessName":"激光脚背饰带（2条）","Qty":903.000,"Unit":"双"},{"ProcessName":"激光第二条前带（2条）","Qty":903.000,"Unit":"双"}]
+// HasBarcode : false
+// CardNos : ["GXPG25249521/1"]
 
 class ProcessWorkCardListInfo {
   ProcessWorkCardListInfo({
@@ -140,7 +140,7 @@ class ProcessWorkCardListInfo {
   }
 }
 
-/// ProcessName : "激光脚背饰带（2条）"
+// ProcessName : "激光脚背饰带（2条）"
 /// Qty : 903.000
 /// Unit : "双"
 

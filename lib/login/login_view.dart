@@ -1,57 +1,61 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/constant.dart';
-import 'package:jd_flutter/utils/network_manager.dart';
+import 'package:jd_flutter/utils/app_init_service.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/number_text_field_widget.dart';
 import 'login_logic.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
   @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  @override
   Widget build(BuildContext context) {
-    return Obx(() => Container(
-          alignment: Alignment.center,
-          //设置背景
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: Get.find<NetworkManager>().isTestUrl.value
-                  ? [Colors.lightBlueAccent, Colors.greenAccent]
-                  : [Colors.lightBlueAccent, Colors.blueAccent],
-              begin: Alignment.bottomLeft,
-              end: Alignment.topRight,
+    return Container(
+      alignment: Alignment.center,
+      //设置背景
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: isTestUrl()
+              ? [Colors.lightBlueAccent, Colors.greenAccent]
+              : [Colors.lightBlueAccent, Colors.blueAccent],
+          begin: Alignment.bottomLeft,
+          end: Alignment.topRight,
+        ),
+      ),
+      padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+      child: ListView(
+        //添加登录UI
+        children: [
+          const SizedBox(height: 30),
+          Image.asset(
+            'assets/images/ic_logo.png',
+            width: 130,
+            height: 130,
+          ),
+          const Text(
+            'Gold Emperor',
+            style: TextStyle(
+              fontSize: 40,
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              decoration: TextDecoration.none,
             ),
+            textAlign: TextAlign.center,
           ),
-          padding:
-              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-          child: ListView(
-            //添加登录UI
-            children: [
-              const SizedBox(height: 30),
-              Image.asset(
-                'assets/images/ic_logo.png',
-                width: 130,
-                height: 130,
-              ),
-              const Center(
-                  child: Text(
-                'Gold Emperor',
-                style: TextStyle(
-                  fontSize: 40,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  decoration: TextDecoration.none,
-                ),
-              )),
-              const Center(child: LoginPick(isReLogin: false)),
-              const SizedBox(height: 40),
-            ],
-          ),
-        ));
+          const Center(child: LoginPick(isReLogin: false)),
+          const SizedBox(height: 40),
+        ],
+      ),
+    );
   }
 }
+
 
 class LoginPick extends StatefulWidget {
   const LoginPick({super.key, required this.isReLogin});
@@ -86,9 +90,7 @@ class _LoginPickState extends State<LoginPick>
 
   //手机登录手机号输入框控制器
   late var phoneLoginPhoneController = TextEditingController()
-    ..text = Get.find<NetworkManager>().isTestUrl.value
-        ? dadPhone
-        : spGet(spSaveLoginPhone) ?? '';
+    ..text = spGet(spSaveLoginPhone) ?? '';
 
   //手机登录密码输入框控制器
   var phoneLoginPasswordController = TextEditingController();
@@ -134,7 +136,7 @@ class _LoginPickState extends State<LoginPick>
           Container(
             decoration: BoxDecoration(
               borderRadius: const BorderRadius.all(Radius.circular(15)),
-              color: Get.find<NetworkManager>().isTestUrl.value
+              color: isTestUrl()
                   ? Colors.teal
                   : Colors.blueAccent,
             ),
@@ -161,7 +163,7 @@ class _LoginPickState extends State<LoginPick>
               maxLength: 10,
               isPassword: true,
             ),
-            if (!Get.find<NetworkManager>().isTestUrl.value)
+            if (!isTestUrl())
               Row(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -292,7 +294,7 @@ class _LoginPickState extends State<LoginPick>
         body: Column(
           children: [
             Expanded(
-              child: TabBarView(
+              child:TabBarView(
                 controller: tabController,
                 children: [
                   _phoneLogin(),
@@ -311,7 +313,7 @@ class _LoginPickState extends State<LoginPick>
                     borderRadius: BorderRadius.circular(25),
                   ),
                 ),
-                onLongPress: () =>logic.handleLongPressStart(),
+                onLongPress: () => logic.handleLongPressStart(),
                 onPressed: () {
                   if (tabController.index == 0) {
                     logic.phoneLogin(

@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/carton_label_scan_info.dart';
 import 'package:jd_flutter/fun/warehouse/manage/carton_label_scan/carton_label_scan_priority_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/carton_label_scan/carton_label_scan_progress_view.dart';
+import 'package:jd_flutter/utils/app_init_service.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
@@ -83,7 +84,7 @@ class _CartonLabelScanPageState extends State<CartonLabelScanPage> {
   }
 
   playAudio(String as) {
-    if ((deviceInfo as AndroidDeviceInfo).version.release.toDoubleTry() >= 8) {
+    if ((deviceInfo() as AndroidDeviceInfo).version.release.toDoubleTry() >= 8) {
       //安卓8.0以上才能调用这个api
       //安卓5.1会出现 Didn't find class "android.media.AudioFocusRequest"
       if (player.state != PlayerState.completed) {
