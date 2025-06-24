@@ -1,5 +1,5 @@
-/// Barcode : "BBEF3634-9F2F-4115-BE57-F6A290F331A4"
-/// Index : "3"
+// Barcode : "BBEF3634-9F2F-4115-BE57-F6A290F331A4"
+// Index : "3"
 
 class ScanHandoverInfo {
   ScanHandoverInfo({

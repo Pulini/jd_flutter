@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/handover_detail_info.dart';
@@ -100,10 +99,10 @@ class _ComponentHandoverSummaryPageState
     SummaryList data,
   ) {
     return InkWell(
-      onTap: () => {
+      onTap: () {
         showSnackBar(
             message: data.partName ??
-                'component_handover_summary_part_name_empty'.tr)
+                'component_handover_summary_part_name_empty'.tr);
       },
       child: Row(
         children: [
@@ -164,13 +163,13 @@ class _ComponentHandoverSummaryPageState
               child: CombinationButton(
                 //交接
                 text: 'component_handover_summary_submit'.tr,
-                click: () => {
+                click: () {
                   askDialog(
                     content: 'component_handover_summary_sure_submit'.tr,
                     confirm: () {
                       Get.back(result: true);
                     },
-                  )
+                  );
                 },
                 combination: Combination.intact,
               ),

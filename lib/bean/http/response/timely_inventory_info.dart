@@ -1,8 +1,8 @@
-/// MaterialNumber : "1201190"
-/// MaterialName : "聚氨酯水溶液（水性胶）"
-/// StockID : "1001"
-/// FactoryNumber : "1000"
-/// Items : [{"FactoryDescribe":"GOLD EMPEROR GROUP CO., LTD","Zlocal":"","Lgobe":"金帝面料仓","Mtono":"","ProductName":"","MaterialCode":"","Size":"","Batch":"","Unit":"千克","StockQty":"773872.468","Unit1":"桶","StockQty1":"38693.623","Zcoefficient":"20"}]
+// MaterialNumber : "1201190"
+// MaterialName : "聚氨酯水溶液（水性胶）"
+// StockID : "1001"
+// FactoryNumber : "1000"
+// Items : [{"FactoryDescribe":"GOLD EMPEROR GROUP CO., LTD","Zlocal":"","Lgobe":"金帝面料仓","Mtono":"","ProductName":"","MaterialCode":"","Size":"","Batch":"","Unit":"千克","StockQty":"773872.468","Unit1":"桶","StockQty1":"38693.623","Zcoefficient":"20"}]
 
 class TimelyInventoryInfo {
   TimelyInventoryInfo({

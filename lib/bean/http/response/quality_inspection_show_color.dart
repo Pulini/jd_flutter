@@ -12,7 +12,7 @@ class QualityInspectionShowColor {
   });
 
 
-  String? subItem;  //是否合计栏
+  String? subItem;  //是否合计栏   2 分色合计  3冲销合计
   String? name;  //物料名称
   String? code;  //物料编码
   String? color;  //色系

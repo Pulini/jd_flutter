@@ -362,7 +362,7 @@ class QualityInspectionListLogic extends GetxController {
         if (checkStoreSameData()) {
           success.call();
         } else {
-          showSnackBar(message: 'quality_inspection_different_order'.tr);
+          showSnackBar(message: 'quality_inspection_different_taxCode'.tr);
         }
       } else {
         showSnackBar(message: 'quality_inspection_select_data'.tr);
@@ -418,6 +418,8 @@ class QualityInspectionListLogic extends GetxController {
             'MaterialDocumentNo': '',
             'MaterialVoucherYear': '',
             'ReversalMark': '',
+            'UserName': getUserInfo()!.number,
+            'ChineseName': getUserInfo()!.name,
           }
       ],
     ).then((response) {
@@ -503,8 +505,8 @@ class QualityInspectionListLogic extends GetxController {
                   list.stuffColorSeparationList?[0].inspectionLineNumber,
               'ColorSeparationSheetNumber':
                   list.stuffColorSeparationList?[0].colorSeparationSheetNumber,
-              'ColorSeparationSingleLineNumber':
-                  list.stuffColorSeparationList?[0].colorSeparationSingleLineNumber,
+              'ColorSeparationSingleLineNumber': list
+                  .stuffColorSeparationList?[0].colorSeparationSingleLineNumber,
               'BatchNumber': list.stuffColorSeparationList?[0].batch,
               'Location': location,
               'MaterialCode': list.stuffColorSeparationList?[0].materialCode,
@@ -673,7 +675,7 @@ class QualityInspectionListLogic extends GetxController {
 
         list.add(QualityInspectionShowColor(
           subItem: '2',
-          name: '',
+          name: data.materialDescription,
           code: data.materialCode,
           color: '分色合计',
           qty: data.item?.map((v) => v.qty ?? 0.0).reduce((a, b) => a.add(b)) ??
@@ -685,7 +687,7 @@ class QualityInspectionListLogic extends GetxController {
 
         list.add(QualityInspectionShowColor(
           subItem: '3',
-          name: '',
+          name: data.materialDescription,
           code: data.materialCode,
           color: '冲销合计',
           qty: selectList
@@ -702,17 +704,20 @@ class QualityInspectionListLogic extends GetxController {
 
   //选中分色数据
   selectColorSubItem(int position) {
-    for (var sub in state.showReceiptColorList.where((v) => v.subItem == '1')) {
+    for (var sub in state.showReceiptColorList) {
       sub.isSelected.value = false;
     }
 
-    state.showReceiptColorList[position].isSelected.value = true;
+    if (state.showReceiptColorList[position].subItem == '1') {
+      state.showReceiptColorList[position].isSelected.value = true;
+    }
     state.showReceiptColorList.refresh();
   }
 
   //是否选中数据
   bool havaColorSelect() {
-    if (state.showReceiptColorList.none((v) => v.isSelected.value == true)) {
+    if (state.showReceiptColorList
+        .none((v) => v.isSelected.value == true && v.subItem == '1')) {
       showSnackBar(message: 'quality_inspection_color_select'.tr);
       return false;
     } else {
@@ -733,10 +738,10 @@ class QualityInspectionListLogic extends GetxController {
       var selectName = '';
 
       state.showReceiptColorList.forEachIndexed((i, v) {
-        if (v.isSelected.value == true) {
+        if (v.isSelected.value == true && v.subItem == '1') {
           position = i;
           selectCode = v.code!;
-          selectCode = v.name!;
+          selectName = v.name!;
         }
       });
 
@@ -750,9 +755,9 @@ class QualityInspectionListLogic extends GetxController {
       });
 
       state.showReceiptColorList
-          .where((v) => v.code == selectCode && v.subItem == '2')
+          .where((v) => v.code == selectCode && v.subItem == '3')
           .forEach((v) {
-        remainQty = v.allQty! - subAllQty;
+        remainQty = v.qty!.sub(subAllQty);
       });
 
       if (remainQty <= 0) {
@@ -767,6 +772,16 @@ class QualityInspectionListLogic extends GetxController {
               color: '',
               qty: remainQty,
             ));
+        state.showReceiptColorList
+                .firstWhere(
+                    (data) => data.code == selectCode && data.subItem == '2')
+                .qty =
+            state.showReceiptColorList
+                .where((data) => data.subItem == '1' && data.code == selectCode)
+                .toList()
+                .map((v) => v.qty ?? 0)
+                .reduce((a, b) => a.add(b));
+
         state.showReceiptColorList.refresh();
       }
     }
@@ -786,13 +801,11 @@ class QualityInspectionListLogic extends GetxController {
     if (state.showReceiptColorList
         .none((data) => data.code == selectCode && data.subItem == '1')) {
       allQty = 0.0;
-      logger.f('没有');
     } else {
       allQty = state.showReceiptColorList
           .where((data) => data.code == selectCode && data.subItem == '1')
           .map((v) => v.qty ?? 0.0)
           .reduce((a, b) => a.add(b));
-      logger.f('有');
     }
 
     for (var c in state.showReceiptColorList) {
@@ -839,8 +852,7 @@ class QualityInspectionListLogic extends GetxController {
       }
 
       for (var s in name) {
-        if ((state.showReceiptColorList
-                .where((data) => data.code == s && data.subItem == '2')
+        if ((state.showReceiptColorList.where((data) => data.code == s && data.subItem == '2')
                 .toList()[0]
                 .qty) !=
             (state.showReceiptColorList
@@ -886,10 +898,9 @@ class QualityInspectionListLogic extends GetxController {
                 'Remarks': reason,
               }
         ],
-        'CGOrder': [
-          for (var color in state.showReceiptColorList.where(
-            (data) => data.subItem == '1',
-          ))
+        'CGOrderInstockCosep2SapList': [
+          for (var color in state.showReceiptColorList
+              .where((data) => data.subItem == '1'))
             {
               'MaterialCode': color.code,
               'ZCOLOR': color.color,

@@ -59,7 +59,7 @@ class _PackingScanPageState extends State<PackingScanPage> {
 
   _item(ContainerScanner data) {
     return GestureDetector(
-      onTap: () => {
+      onTap: () {
         state.getShipmentInformation(
             time: logic.pickerControllerDate
                 .getDateFormatYMD()
@@ -67,7 +67,7 @@ class _PackingScanPageState extends State<PackingScanPage> {
             cabinetNumber: data.cabinetNumber,
             error: (String msg) {
               errorDialog(content: msg);
-            }),
+            });
       },
       child: Column(
         mainAxisSize: MainAxisSize.min,

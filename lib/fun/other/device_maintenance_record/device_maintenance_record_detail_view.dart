@@ -71,8 +71,8 @@ class _DeviceMaintenanceRecordDetailPageState
   Widget build(BuildContext context) {
     return pageBody(
       title: 'device_maintenance_title_device_information'.tr,
-      actions: [CombinationButton(text: 'device_maintenance_repair'.tr, click: () => {
-         logic.goRepair()
+      actions: [CombinationButton(text: 'device_maintenance_repair'.tr, click: () {
+         logic.goRepair();
       }),const SizedBox(width: 10,)],
       body: Obx(
         () => Container(

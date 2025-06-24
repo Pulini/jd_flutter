@@ -124,13 +124,13 @@ class _QualityRestrictionPageState extends State<QualityRestrictionPage> {
             onLongPress: ()=>{
               askDialog(
                 content: 'quality_management_sure_delete_abnormal'.tr,
-                confirm: () => {
+                confirm: () {
                   state.delBill(
                     position: index,
                     success: (msg, position) => successDialog(
                         content: msg, back: state.removeBill(position)),
                     error: (msg) => errorDialog(content: msg),
-                  ),
+                  );
                 },
               ),
             },
@@ -181,10 +181,10 @@ class _QualityRestrictionPageState extends State<QualityRestrictionPage> {
       ),
       itemBuilder: (BuildContext context, int index) {
         return GestureDetector(
-          onTap: () => {
-            state.selected.value = index,
-            state.dialogMiss.value = false,
-            state.itemId = state.exceptionDataList[index].fItemID.toString(),
+          onTap: (){
+            state.selected.value = index;
+            state.dialogMiss.value = false;
+            state.itemId = state.exceptionDataList[index].fItemID.toString();
             if (state.isAutomatic)
               {
                 Future.delayed(const Duration(seconds: 1), () {
@@ -201,7 +201,7 @@ class _QualityRestrictionPageState extends State<QualityRestrictionPage> {
                       Get.back();
                     }
                   });
-                })
+                });
               }
           },
           child: Obx(() => Card(
@@ -423,7 +423,7 @@ class _QualityRestrictionPageState extends State<QualityRestrictionPage> {
 
   _number({required String number}) {
     return InkWell(
-        onTap: () => {_inputDialog(title: 'quality_management_manual_input'.tr)},
+        onTap: (){_inputDialog(title: 'quality_management_manual_input'.tr);},
         child: Text.rich(
           TextSpan(
               style: const TextStyle(

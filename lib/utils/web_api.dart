@@ -1343,3 +1343,31 @@ const webApiSapLabelBindingGetLabelInfo = 'sap/zapp/ZMM051_GET_BQSC';
 
 //提交标签绑定操作
 const webApiSapLabelBindingSubmitOperation = 'sap/zapp/ZMM051_RES_ZDBDX';
+
+//查询多少天内的派工数据
+const webApiGetWorkCardPriority = "api/Package/GetWorkCardPriority";
+
+//提交优先级
+const webApiSubmitWorkCardPriority = "api/Package/SubmitWorkCardPriority";
+
+//扫码提交鞋盒信息
+const webApiReceiveWorkCardDataST = "api/Package/ReceiveWorkCardDataST";
+
+//获得线别的当前的分析报告
+const webApiGetWorkLineAnalysisReportNowNew = "api/Package/GetWorkLineAnalysisReportNowNew";
+
+//获得线别的分配信息
+const webApiGetDeptDistributeInfoNew = "api/Package/GetDeptDistributeInfoNew";
+
+//获得该线别的所扫描的所有指令单信息【主要查看最后激活时间】
+const webApiGetDepartmentScanInfoNew = "api/Package/GetDepartmentSacnInfoNew";
+
+//根据指令单号 获得该指令单的报表明细
+const webApiGetMoReportByMoNo = "api/Package/GetMoReportByMoNo";
+
+//根据指令单号获得尺码数据
+const webApiGetScMoSizeBarCodeByMONo = "api/Package/GetScMoSizeBarCodeByMONo";
+
+//更新无规则条码到指令单尺码分录表中，并执行存储过程同步到表Sc_MO_InBoxBarCode中
+const webApiSubmitScMoSizeBarCodeNew = "api/BarCode/SubmitScMoSizeBarCodeNew";
+

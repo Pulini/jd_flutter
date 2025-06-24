@@ -186,7 +186,7 @@ class _QualityInspectionReverseColorPageState
           onTap: () {
             if (data.subItem == '1') {
               showInputDialog(
-                  allQty: data.qty!,
+                  allQty: state.showReceiptColorList.firstWhere((first)=>first.subItem == '3' && first.code == data.code).qty!,
                   position: position,
                   code: data.code.toString());
             }
@@ -284,7 +284,7 @@ class _QualityInspectionReverseColorPageState
                       confirm: (s) {
                         Get.back();
                         logic.colorSubmit(
-                            reason: '',
+                            reason: s,
                             success: (s) {
                                 successDialog(content: s,back: (){
                                   Get.back(result: true);

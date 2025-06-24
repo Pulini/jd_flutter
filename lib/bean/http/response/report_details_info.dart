@@ -1,5 +1,5 @@
-/// ProductName : "鞋面-DX192116-B2B"
-/// List : [{"Type":0,"Name":"烫钻TPU商标字体（2片/双）","Mtono":"J2502376","Size":"37","MtonoQty":75.0000000000,"Qty":75.00000,"EmpName":"安艳芝"}]
+// ProductName : "鞋面-DX192116-B2B"
+// List : [{"Type":0,"Name":"烫钻TPU商标字体（2片/双）","Mtono":"J2502376","Size":"37","MtonoQty":75.0000000000,"Qty":75.00000,"EmpName":"安艳芝"}]
 
 class ReportDetailsInfo {
   ReportDetailsInfo({

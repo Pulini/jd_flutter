@@ -82,12 +82,12 @@ class _HydroelectricExcessPageState extends State<HydroelectricExcessPage> {
   @override
   void initState() {
     pdaScanner(
-      scan: (code) => {
-        state.textThisTime.text = code,
+      scan: (code) {
+        state.textThisTime.text = code;
         if (code.isNotEmpty)
           {
-            state.stateToSearch.value = '0',
-            state.searchRoom(DeviceListInfo(number: code), false)
+            state.stateToSearch.value = '0';
+            state.searchRoom(DeviceListInfo(number: code), false);
           }
       },
     );
@@ -106,7 +106,7 @@ class _HydroelectricExcessPageState extends State<HydroelectricExcessPage> {
               size: 35,
               color: Colors.white,
             ),
-            onTap: () => {state.clickShow()},
+            onTap: (){state.clickShow();},
           ),
         )
       ],
@@ -138,8 +138,8 @@ class _HydroelectricExcessPageState extends State<HydroelectricExcessPage> {
                           flex: 1,
                           child: EditText(
                             hint: 'hydroelectric_this_copying_process'.tr,
-                            onChanged: (v) => {
-                              state.countMonth(v),
+                            onChanged: (v)  {
+                              state.countMonth(v);
                             },
                             controller: state.textThisTime,
                           ))
@@ -185,10 +185,10 @@ class _HydroelectricExcessPageState extends State<HydroelectricExcessPage> {
                               child: CombinationButton(
                                 combination: Combination.right,
                                 text: 'hydroelectric_checked_list'.tr,
-                                click: () => {
-                                  state.isShow.value = false,
+                                click: (){
+                                  state.isShow.value = false;
                                   Get.to(() =>
-                                      const HydroelectricExcessTreatListPage())
+                                      const HydroelectricExcessTreatListPage());
                                 },
                               ),
                             ))
@@ -199,7 +199,7 @@ class _HydroelectricExcessPageState extends State<HydroelectricExcessPage> {
                         width: double.infinity,
                         child: CombinationButton(
                           text: state.stateToSearch.value == '0' ? 'hydroelectric_submit'.tr : 'hydroelectric_change'.tr,
-                          click: () => {state.submit()},
+                          click: () {state.submit();},
                         ),
                       ))
                 ],

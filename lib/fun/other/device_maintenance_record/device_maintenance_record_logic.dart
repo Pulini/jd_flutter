@@ -148,9 +148,9 @@ class DeviceMaintenanceRecordLogic extends GetxController {
         spinnerControllerWorkShop = SpinnerController(
           saveKey: RouteConfig.productionDayReport.name,
           dataList: lists,
-          onChanged: (index) => {
-            state.issueCause = list[index].issueCause.toString(),
-            state.issueCauseId = list[index].iD.toString()
+          onChanged: (index) {
+            state.issueCause = list[index].issueCause.toString();
+            state.issueCauseId = list[index].iD.toString();
           },
         );
 

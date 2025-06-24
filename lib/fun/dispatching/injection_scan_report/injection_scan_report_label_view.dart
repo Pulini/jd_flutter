@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/dispatching/injection_scan_report/injection_scan_report_logic.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
-
 import '../../../bean/http/response/show_process_barcode_info.dart';
 
 class InjectionScanReportLabelPage extends StatefulWidget {

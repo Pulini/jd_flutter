@@ -19,12 +19,16 @@ class StuffQualityInspectionPage extends StatefulWidget {
   const StuffQualityInspectionPage({super.key});
 
   @override
-  State<StuffQualityInspectionPage> createState() => _StuffQualityInspectionPageState();
+  State<StuffQualityInspectionPage> createState() =>
+      _StuffQualityInspectionPageState();
 }
 
-class _StuffQualityInspectionPageState extends State<StuffQualityInspectionPage> {
-  final StuffQualityInspectionLogic logic = Get.put(StuffQualityInspectionLogic());
-  final StuffQualityInspectionState state = Get.find<StuffQualityInspectionLogic>().state;
+class _StuffQualityInspectionPageState
+    extends State<StuffQualityInspectionPage> {
+  final StuffQualityInspectionLogic logic =
+      Get.put(StuffQualityInspectionLogic());
+  final StuffQualityInspectionState state =
+      Get.find<StuffQualityInspectionLogic>().state;
 
   late SpinnerController spinnerController1;
   late SpinnerController spinnerController2;
@@ -112,9 +116,14 @@ class _StuffQualityInspectionPageState extends State<StuffQualityInspectionPage>
                       controller: colorController,
                     )),
                     Expanded(
-                        child: EditText(
+                        child: NumberDecimalEditText(
                       hint: '数量'.tr,
                       controller: qtyController,
+                      onChanged: (qty) {
+                        if(qty>state.unColorQty.value.toDoubleTry()){
+                          qtyController.text = state.unColorQty.value;
+                        }
+                      },
                     ))
                   ],
                 ),
@@ -277,12 +286,15 @@ class _StuffQualityInspectionPageState extends State<StuffQualityInspectionPage>
                 const SizedBox(
                   width: 30,
                 ),
-               Visibility(child:  expandedTextSpan(
-                   flex: 2,
-                   hint: '选择不同物料时，只支持填写全部合格,如有不合格，必须分开填写!!',
-                   text: '',
-                   hintColor: Colors.red,
-                   fontSize: 16),visible: state.isShowTips.value,),
+                Visibility(
+                  child: expandedTextSpan(
+                      flex: 2,
+                      hint: '选择不同物料时，只支持填写全部合格,如有不合格，必须分开填写!!',
+                      text: '',
+                      hintColor: Colors.red,
+                      fontSize: 16),
+                  visible: state.isShowTips.value,
+                ),
                 const SizedBox(
                   width: 30,
                 ),
@@ -402,7 +414,7 @@ class _StuffQualityInspectionPageState extends State<StuffQualityInspectionPage>
                   hint: 'quality_inspection_availability'.tr,
                   controller: logic.availabilityController,
                   onChanged: (d) {
-                    if(d<0){
+                    if (d < 0) {
                       logic.availabilityController.text = '0';
                     }
                   },
