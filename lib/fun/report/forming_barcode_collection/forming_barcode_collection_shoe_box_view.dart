@@ -3,7 +3,6 @@ import 'package:flutter/material.dart' show Colors, InkWell;
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/forming_barcode_by_mono_info.dart';
 import 'package:jd_flutter/utils/utils.dart';
-import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';

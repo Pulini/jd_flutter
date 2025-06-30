@@ -1,14 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:jd_flutter/bean/http/response/forming_mono_detail_info.dart';
-import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
 
 import 'forming_barcode_collection_logic.dart';
-import 'forming_barcode_collection_state.dart';
 
 class FormingBarcodeCollectionSearchDetailPage extends StatefulWidget {
   const FormingBarcodeCollectionSearchDetailPage({super.key});

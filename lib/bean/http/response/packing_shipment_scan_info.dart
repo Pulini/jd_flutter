@@ -43,15 +43,14 @@ class GtItem {
     this.sendBox,
     this.originalOrderNumber,
     this.salesDocument,
-    this.isThis,
   });
 
   String? customerPO;  //客户PO&仓库编号(订单号)
-  String? boxNumber;    //箱数(应出箱数)
-  String? sendBox;     //已发箱数
+  int? boxNumber;    //箱数(应出箱数)
+  int? sendBox;     //已发箱数
   String? originalOrderNumber;    //原始订单号合并
   String? salesDocument;   //销售凭证合并
-  bool? isThis;   //传的是不是这条
+  bool isThis = false;   //传的是不是这条
 
 
   GtItem.fromJson(dynamic json) {

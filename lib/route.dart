@@ -14,11 +14,8 @@ import 'package:jd_flutter/fun/management/property/property_view.dart';
 import 'package:jd_flutter/fun/management/quality_management/quality_management_view.dart';
 import 'package:jd_flutter/fun/management/visit_register/visit_register_view.dart';
 import 'package:jd_flutter/fun/other/device_maintenance_record/device_maintenance_record_view.dart';
-import 'package:jd_flutter/fun/other/forming_packing_scan/packing_scan_view.dart';
 import 'package:jd_flutter/fun/other/hydroelectric_excess/hydroelectric_excess_view.dart';
 import 'package:jd_flutter/fun/report/forming_barcode_collection/forming_barcode_collection_view.dart';
-import 'package:jd_flutter/fun/report/part_process_scan/part_process_scan_view.dart';
-import 'package:jd_flutter/fun/report/part_report_scan/part_report_scan_view.dart';
 import 'package:jd_flutter/fun/report/daily_report/daily_report_view.dart';
 import 'package:jd_flutter/fun/report/molding_pack_area_report/molding_pack_area_report_view.dart';
 import 'package:jd_flutter/fun/report/molding_scan_bulletin_report/molding_scan_bulletin_report_maximize_view.dart';
@@ -81,6 +78,7 @@ import 'package:jd_flutter/fun/work_reporting/production_tasks/production_tasks_
 import 'package:jd_flutter/fun/work_reporting/workshop_planning/workshop_planning_view.dart';
 import 'package:jd_flutter/home/home_view.dart';
 import 'package:jd_flutter/login/login_view.dart';
+import 'fun/warehouse/out/forming_packing_scan/packing_scan_view.dart';
 
 
 class RouteConfig {
@@ -612,20 +610,13 @@ class RouteConfig {
     const FormingBarcodeCollectionPage(),
   );
 
-  //品质管理
-  // static Routes formingBarcodeCollection = Routes(
-  //   '/forming_barcode_collection',
-  //   99,
-  //   const FormingBarcodeCollectionPage(),
-  // );
-
-
   //车间计工
   static Routes workshopPlanning = Routes(
     '/workshop_planning',
     99,
     const WorkshopPlanningPage(),
   );
+
 
   //本地功能入口列表
   static List<Routes> routeList = [

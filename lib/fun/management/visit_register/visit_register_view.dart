@@ -263,14 +263,6 @@ class _VisitRegisterPageState extends State<VisitRegisterPage> {
     );
   }
 
-  // listView() {
-  //   return Obx(() => ListView.builder(
-  //         padding: const EdgeInsets.all(8),
-  //         itemCount: state.dataList.length,
-  //         itemBuilder: (BuildContext context, int index) =>
-  //             _item(state.dataList.toList()[index]),
-  //       ));
-  // }
 
   @override
   Widget build(BuildContext context) {
