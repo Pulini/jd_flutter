@@ -67,7 +67,7 @@ class _PackingShipmentScanPageState extends State<PackingShipmentScanPage> {
   @override
   void initState() {
     pdaScanner(
-      scan: (scanCode) => {state.checkCode(code: scanCode, success: () => {})},
+      scan: (scanCode) {state.checkCode(code: scanCode, success: () => {});},
     );
     super.initState();
   }

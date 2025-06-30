@@ -46,14 +46,14 @@ class StuffQualityInspectionLogic extends GetxController {
     }
     state.unColorQty.value =
         (state.unColorQty.toString().toDoubleTry() - qty.toDoubleTry())
-            .toStringAsFixed(2);
+            .toStringAsFixed(3);
   }
 
   //移除分色
   removeColor(int position) {
     state.unColorQty.value = (state.unColorQty.toString().toDoubleTry() +
             state.inspectionColorList[position].qty.toDoubleTry())
-        .toStringAsFixed(2);
+        .toStringAsFixed(3);
     state.inspectionColorList.removeAt(position);
   }
 
@@ -100,7 +100,7 @@ class StuffQualityInspectionLogic extends GetxController {
         unqualifiedQualifiedController.text =
             (inspectionQuantityController.text.toDoubleTry() -
                     shortQualifiedController.text.toDoubleTry())
-                .toStringAsFixed(2);
+                .toStringAsFixed(3);
       }
     }
 
@@ -108,7 +108,7 @@ class StuffQualityInspectionLogic extends GetxController {
         (inspectionQuantityController.text.toDoubleTry() -
                 unqualifiedQualifiedController.text.toDoubleTry() -
                 shortQualifiedController.text.toDoubleTry())
-            .toStringAsFixed(2);
+            .toStringAsFixed(3);
   }
 
   //输入短码
@@ -128,7 +128,7 @@ class StuffQualityInspectionLogic extends GetxController {
         shortQualifiedController.text =
             (inspectionQuantityController.text.toDoubleTry() -
                     unqualifiedQualifiedController.text.toDoubleTry())
-                .toStringAsFixed(2);
+                .toStringAsFixed(3);
       }
     }
 
@@ -136,7 +136,7 @@ class StuffQualityInspectionLogic extends GetxController {
         (inspectionQuantityController.text.toDoubleTry() -
                 unqualifiedQualifiedController.text.toDoubleTry() -
                 shortQualifiedController.text.toDoubleTry())
-            .toStringAsFixed(2);
+            .toStringAsFixed(3);
   }
 
   //确定提交品检
@@ -150,23 +150,28 @@ class StuffQualityInspectionLogic extends GetxController {
     if (inspectionQuantityController.text.toDoubleTry() > 0 &&
             unqualifiedQualifiedController.text.toDoubleTry() > 0 ||
         shortQualifiedController.text.toDoubleTry() > 0) {
-
-      if(state.fromInspectionType=='1'){  //品检单列表走异常
-        submitInspectionToOAFromList(inspectionType, type, groupType, success: (s) {
+      if (state.fromInspectionType == '1') {
+        //品检单列表走异常
+        submitInspectionToOAFromList(inspectionType, type, groupType,
+            success: (s) {
           success!.call(s);
         });
-      }else{  //暂收单详情走异常
-        submitInspectionToOAFromDetail(inspectionType, type, groupType, success: (s) {
+      } else {
+        //暂收单详情走异常
+        // submitInspectionToOAFromDetail(inspectionType, type, groupType,
+        //     success: (s) {
+        //   success!.call(s);
+        // });
+        createInspectionFromDetail(inspectionType, type, success: (s) {
           success!.call(s);
         });
       }
     } else {
-
-      if(state.fromInspectionType == '1'){
+      if (state.fromInspectionType == '1') {
         createInspectionFromList(inspectionType, type, success: (s) {
           success!.call(s);
         });
-      }else{
+      } else {
         createInspectionFromDetail(inspectionType, type, success: (s) {
           success!.call(s);
         });
@@ -281,7 +286,7 @@ class StuffQualityInspectionLogic extends GetxController {
       method: webApiAbnormalMaterialQuality,
       loading: 'quality_inspection_submit_abnormal'.tr,
       body: {
-        'ApplicantNumber': userInfo?.number,
+        'ApplicantNumber': getUserInfo()!.number,
         //申报人工号
         'StorageDate': getDateYMD(),
         //入库日期
@@ -358,7 +363,7 @@ class StuffQualityInspectionLogic extends GetxController {
       countQuality = (inspectionQuantityController.text.toDoubleTry() -
               countShortQuality -
               countUnQuality)
-          .toStringAsFixed(2)
+          .toStringAsFixed(3)
           .toDoubleTry();
     } else {
       countShortQuality = shortQualifiedController.text.toDoubleTry();
@@ -366,12 +371,13 @@ class StuffQualityInspectionLogic extends GetxController {
       countQuality = qualifiedController.text.toDoubleTry();
     }
 
-    for (var data in state.inspectionsListData) {
-      //初始化合格数
-      data.qualifiedQuantity = '0';
-    }
 
     if (countQuality > 0) {
+      for (var data in state.inspectionsListData) {
+        //初始化合格数
+        data.qualifiedQuantity = '0';
+      }
+
       //合格数>0  分配合格数
       for (var data in state.inspectionsListData) {
         //合格数量大于检验数量
@@ -380,11 +386,11 @@ class StuffQualityInspectionLogic extends GetxController {
           data.qualifiedQuantity = data.inspectionQuantity;
 
           //剩余合格数量=总合格数量-检验数量
-          countQuality = countQuality - data.inspectionQuantity.toDoubleTry();
+          countQuality = countQuality.sub(data.inspectionQuantity.toDoubleTry());
         } else {
           //合格数量=剩余可分配合格数量
           if (countQuality > 0) {
-            data.qualifiedQuantity = countQuality.toStringAsFixed(2);
+            data.qualifiedQuantity = countQuality.toStringAsFixed(3);
             countQuality = 0.0;
           }
         }
@@ -395,26 +401,26 @@ class StuffQualityInspectionLogic extends GetxController {
       }
     }
 
+
+
     //不合格数>0  分配不合格数
     if (countUnQuality > 0) {
       for (var data in state.inspectionsListData) {
         //可分配数量=送货数量-合格数量
-        var lastQty = data.inspectionQuantity.toDoubleTry() -
-            data.qualifiedQuantity.toDoubleTry() -
-            data.shortCodesNumber.toDoubleTry();
+        var lastQty = data.inspectionQuantity.toDoubleTry().sub(data.qualifiedQuantity.toDoubleTry()).sub( data.shortCodesNumber.toDoubleTry());
         if (lastQty > 0) {
           //可分配数量大于0 说明可以进行不合格数量分配
           if (countUnQuality >= lastQty) {
             //不合格数量大于可分配数量
             //不合格数量=可分配数量
-            data.unqualifiedQuantity = lastQty.toStringAsFixed(2);
+            data.unqualifiedQuantity = lastQty.toStringAsFixed(3);
             //剩余不合格数量=不合格总数-剩余可分配数量
-            countUnQuality = countUnQuality - lastQty;
-          }
-        } else {
-          if (countUnQuality > 0) {
-            data.unqualifiedQuantity = countUnQuality.toStringAsFixed(2);
-            countUnQuality = 0.0;
+            countUnQuality = countUnQuality.sub(lastQty);
+          } else {
+            if (countUnQuality > 0) {
+              data.unqualifiedQuantity = countUnQuality.toStringAsFixed(3);
+              countUnQuality = 0.0;
+            }
           }
         }
       }
@@ -430,22 +436,20 @@ class StuffQualityInspectionLogic extends GetxController {
       for (var data in state.inspectionsListData) {
         //剩余可分配数量=送货数量-合格数量-不合格数量
 
-        var lastQty = data.inspectionQuantity.toDoubleTry() -
-            data.qualifiedQuantity.toDoubleTry() -
-            data.unqualifiedQuantity.toDoubleTry();
+        var lastQty = data.inspectionQuantity.toDoubleTry().sub(data.qualifiedQuantity.toDoubleTry()).sub(data.unqualifiedQuantity.toDoubleTry());
 
         //剩余可分配>0 可以分配短码
         if (lastQty > 0) {
           //短码数量大于剩余可分配数量
           if (countShortQuality >= lastQty) {
             //本行短码数量=剩余可分配数量
-            data.shortCodesNumber = lastQty.toStringAsFixed(2);
+            data.shortCodesNumber = lastQty.toStringAsFixed(3);
             //剩余短码数量=总短码数量-剩余可分配数量
-            countShortQuality = countShortQuality - lastQty;
+            countShortQuality = countShortQuality.sub(lastQty);
           } else {
             //短码数量=剩余短码数量
             if (countShortQuality > 0) {
-              data.shortCodesNumber = countShortQuality.toStringAsFixed(2);
+              data.shortCodesNumber = countShortQuality.toStringAsFixed(3);
               countShortQuality = 0;
             }
           }
@@ -467,10 +471,10 @@ class StuffQualityInspectionLogic extends GetxController {
 
           //剩余抽检数量=总抽检数量-抽检数量
           countWaitQuality =
-              countWaitQuality - data.samplingQuantity.toDoubleTry();
+              countWaitQuality.sub(data.samplingQuantity.toDoubleTry());
         } else {
           //抽检数量=剩余抽检数量
-          data.samplingQuantity = countWaitQuality.toStringAsFixed(2);
+          data.samplingQuantity = countWaitQuality.toStringAsFixed(3);
         }
       }
     }
@@ -484,10 +488,10 @@ class StuffQualityInspectionLogic extends GetxController {
 
           //剩余检验数量=总检验数量-检验数量
           countInspectionQuality =
-              countInspectionQuality - data.inspectionQuantity.toDoubleTry();
+              countInspectionQuality.sub(data.inspectionQuantity.toDoubleTry());
         } else {
           //检验数量=剩余检验数量
-          data.inspectionQuantity = countInspectionQuality.toStringAsFixed(2);
+          data.inspectionQuantity = countInspectionQuality.toStringAsFixed(3);
         }
       }
     }
@@ -506,14 +510,14 @@ class StuffQualityInspectionLogic extends GetxController {
       method: webApiCreateInspection,
       loading: 'quality_inspection_create_inspection'.tr,
       body: {
-        'MES_IdS': userInfo?.userID,
+        'MES_IdS': getUserInfo()!.userID,
         'MES_Heads': [
           {
             'CompanyCode': state.inspectionsListData[0].companyCode,
             'Creator': '',
             'Factory': state.inspectionsListData[0].factoryNumber,
             'IsConcessive': state.compromise.value ? 'X' : '',
-            'ModifiedBy': userInfo?.number,
+            'ModifiedBy': getUserInfo()!.number,
             'Remarks': state.inspectionsListData[0].remarks,
             'SourceOrderType': state.inspectionsListData[0].sourceOrderType,
             'SupplierAccountNumber':
@@ -568,7 +572,7 @@ class StuffQualityInspectionLogic extends GetxController {
             {
               'Batch': item.batch,
               'ColorSeparationQuantity': item.qty,
-              'Creator': userInfo?.number,
+              'Creator': getUserInfo()!.number,
               'PurchaseVoucherNo': '',
               'PurchaseDocumentItemNumber': '',
               'SalesAndDistributionVoucherNumber': '',
@@ -614,13 +618,13 @@ class StuffQualityInspectionLogic extends GetxController {
     }
   }
 
-
   //品检单列表
   getData(jsonDat) {
     List<dynamic> jsonData = jsonDecode(jsonDat);
 
-    state.inspectionsListData =
-        jsonData.map((item) => StuffQualityInspectionInfo.fromJson(item)).toList();
+    state.inspectionsListData = jsonData
+        .map((item) => StuffQualityInspectionInfo.fromJson(item))
+        .toList();
 
     var qty = 0.0;
 
@@ -636,7 +640,7 @@ class StuffQualityInspectionLogic extends GetxController {
     waitInspectionQuantityController.text = qty.toShowString(); //待检验数量
 
     state.isSameCode = name.length == 1; //是否同物料
-    state.isShowTips.value = name.length>1; //多种物料的时候提示
+    state.isShowTips.value = name.length > 1; //多种物料的时候提示
     if (state.inspectionsListData[0].colorSeparation == 'X') {
       state.inspectionType.value = '全检';
       state.inspectionTypeEnable.value = false; //检验方式不可点击
@@ -670,67 +674,68 @@ class StuffQualityInspectionLogic extends GetxController {
   getTemporary(String jsonDat) {
     state.detailInfo = TemporaryOrderDetailInfo.fromJson(jsonDecode(jsonDat));
 
-    logger.f('打印带过来的数据：${state.detailInfo!.toJson()}');
 
     var name = <String>[]; //子物料名称
     var mainName = <String>[]; //主物料名称
     var waitQty = 0.0; //待检数量
 
-    state.detailInfo!.receipt?.where((data) => data.isSelected.value == true).toList().forEach((info) {
-      waitQty = waitQty + (info.quantityTemporarilyReceived! - info.inspectionQuantity!);
-      name.add(info.materialCode!);
-      mainName.add(info.mainMaterialCode!);
+    state.detailInfo!.receipt
+        ?.where((data) => data.isSelected.value == true)
+        .toList()
+        .forEach((info) {
+      waitQty = waitQty +
+          (info.quantityTemporarilyReceived! - info.inspectionQuantity!);
+
+      if (!name.contains(info.materialCode!)) {
+        name.add(info.materialCode!);
+      }
+
+      if (!mainName.contains(info.mainMaterialCode!)) {
+        mainName.add(info.mainMaterialCode!);
+      }
     });
 
     if (name.length > 1 && mainName.length > 1) {
       state.isSameCode = false;
       state.shortQuantityEnable.value = false;
       state.isShowTips.value = true; //多种物料的时候提示
-    }else{
+    } else {
       state.shortQuantityEnable.value = true;
       state.isShowTips.value = false;
     }
 
-    inspectionQuantityController.text = waitQty.toStringAsFixed(2);
-    waitInspectionQuantityController.text = waitQty.toStringAsFixed(2);
-    qualifiedController.text = waitQty.toStringAsFixed(2);
+    inspectionQuantityController.text = waitQty.toStringAsFixed(3);
+    waitInspectionQuantityController.text = waitQty.toStringAsFixed(3);
+    qualifiedController.text = waitQty.toStringAsFixed(3);
 
-
-    if((state.detailInfo!.receipt?[0].colorSeparation) == 'X'){
-
+    if ((state.detailInfo!.receipt?[0].colorSeparation) == 'X') {
       state.inspectionType.value = '全检';
       state.inspectionTypeEnable.value = false; //检验方式不可点击
       state.inspectionEnable.value = false; //检验数量不可点击
       state.waitInputInspectionEnable.value = false; //抽检数量不可点击
       state.hadSplit = true;
-
     }
 
     //如果是不同物料，无法填写不合格数
     if (!state.isSameCode) {
-      state.inspectionEnable.value = false;  //检验数量不可更改
-      state.abnormalExplanationEnable.value = false;  //异常说明
-      state.processingMethodEnable.value = false;  //处理方法
+      state.inspectionEnable.value = false; //检验数量不可更改
+      state.abnormalExplanationEnable.value = false; //异常说明
+      state.processingMethodEnable.value = false; //处理方法
       state.showAllBtn.value = true;
     }
 
-    if(state.isSameCode && state.hadSplit) state.showColor.value = true;  //是否显示分色按钮
-
+    if (state.isSameCode && state.hadSplit) {
+      state.showColor.value = true; //是否显示分色按钮
+    }
   }
 
   //有不合格数量或短码走OA
   submitInspectionToOAFromDetail(
-      String inspectionType,
-      String type,
-      String groupType, {
-        required Function(String)? success,
-      }) {
-    var name = state.inspectionsListData[0].materialDescription?.split(',')[0];
-    for (var c in state.inspectionsListData) {
-      name = ('${name!},');
-      name = name + (c.characteristicValue ?? '');
-    }
-
+    String inspectionType,
+    String type,
+    String groupType, {
+    required Function(String)? success,
+  }) {
     var upInspectionType = '';
     var upType = '';
     var upGroupType = '';
@@ -797,11 +802,6 @@ class StuffQualityInspectionLogic extends GetxController {
       }
     }
 
-    logger.f(
-        'exceptionDescriptionController:${exceptionDescriptionController.text.isEmpty}');
-    logger.f(
-        'processingMethodController:${processingMethodController.text.isEmpty}');
-
     if (unqualifiedQualifiedController.text.toDoubleTry() > 0 &&
         (exceptionDescriptionController.text.isEmpty ||
             processingMethodController.text.isEmpty)) {
@@ -815,7 +815,7 @@ class StuffQualityInspectionLogic extends GetxController {
       return;
     }
     if ((unqualifiedQualifiedController.text.toDoubleTry() > 0 ||
-        shortQualifiedController.text.toDoubleTry() > 0) &&
+            shortQualifiedController.text.toDoubleTry() > 0) &&
         reviewerController.text.isEmpty) {
       showSnackBar(message: '有不合格或短码件,审核人不能为空');
       return;
@@ -825,19 +825,31 @@ class StuffQualityInspectionLogic extends GetxController {
       method: webApiAbnormalMaterialQuality,
       loading: 'quality_inspection_submit_abnormal'.tr,
       body: {
-        'ApplicantNumber': userInfo?.number,
+        'ApplicantNumber': getUserInfo()!.number,
         //申报人工号
         'StorageDate': getDateYMD(),
         //入库日期
         'DeclarationDate': getDateYMD(),
         //申报日期
-        'FactoryModel': state.detailInfo!.receipt?.where((data)=>data.isSelected.value==true).toList()[0].factoryModel,
+        'FactoryModel': state.detailInfo!.receipt
+            ?.where((data) => data.isSelected.value == true)
+            .toList()[0]
+            .factoryModel,
         //工厂型体
-        'DistributiveModel': state.detailInfo!.receipt?.where((data)=>data.isSelected.value==true).toList()[0].distributiveModel,
+        'DistributiveModel': state.detailInfo!.receipt
+            ?.where((data) => data.isSelected.value == true)
+            .toList()[0]
+            .distributiveModel,
         //分配型体
-        'MaterialName': state.detailInfo!.receipt?.where((data)=>data.isSelected.value==true).toList()[0].materialName,
+        'MaterialName': state.detailInfo!.receipt
+            ?.where((data) => data.isSelected.value == true)
+            .toList()[0]
+            .materialName,
         //物料名称
-        'MaterialCode': state.detailInfo!.receipt?.where((data)=>data.isSelected.value==true).toList()[0].materialCode,
+        'MaterialCode': state.detailInfo!.receipt
+            ?.where((data) => data.isSelected.value == true)
+            .toList()[0]
+            .materialCode,
         //物料编码
         'ExceptionDescription': exceptionDescriptionController.text,
         //异常说明
@@ -853,7 +865,10 @@ class StuffQualityInspectionLogic extends GetxController {
         //检验数量
         'ShortCodesNumber': shortQualifiedController.text,
         //短码数量
-        'InspectionUnit': state.detailInfo!.receipt?.where((data)=>data.isSelected.value==true).toList()[0].commonUnits,
+        'InspectionUnit': state.detailInfo!.receipt
+            ?.where((data) => data.isSelected.value == true)
+            .toList()[0]
+            .commonUnits,
         //报检单位
         'Photos': [
           for (var pic in state.picture)
@@ -876,31 +891,33 @@ class StuffQualityInspectionLogic extends GetxController {
     });
   }
 
-  //创建品检单  (品检单列表)
+  //创建品检单  (暂收单详情)
   createInspectionFromDetail(
-      String upInspectionType,
-      String upType, {
-        required Function(String)? success,
-      }) {
+    String upInspectionType,
+    String upType, {
+    required Function(String)? success,
+  }) {
     var countQuality = 0.0; //合格数量
     var countUnQuality = 0.0; //不合格数量
     var countShortQuality = 0.0; //短码
-    var countWaitQuality = waitInspectionQuantityController.text.toDoubleTry(); //抽检数量
-    var countInspectionQuality = inspectionQuantityController.text.toDoubleTry(); //检验数量
+    var countWaitQuality =
+        waitInspectionQuantityController.text.toDoubleTry(); //抽检数量
+    var countInspectionQuality =
+        inspectionQuantityController.text.toDoubleTry(); //检验数量
 
     if (upInspectionType == '抽检') {
       countShortQuality = (shortQualifiedController.text.toDoubleTry() /
-          waitInspectionQuantityController.text.toDoubleTry()) *
+              waitInspectionQuantityController.text.toDoubleTry()) *
           inspectionQuantityController.text.toDoubleTry();
 
       countUnQuality = (unqualifiedQualifiedController.text.toDoubleTry() /
-          waitInspectionQuantityController.text.toDoubleTry()) *
+              waitInspectionQuantityController.text.toDoubleTry()) *
           inspectionQuantityController.text.toDoubleTry();
 
       countQuality = (inspectionQuantityController.text.toDoubleTry() -
-          countShortQuality -
-          countUnQuality)
-          .toStringAsFixed(2)
+              countShortQuality -
+              countUnQuality)
+          .toStringAsFixed(3)
           .toDoubleTry();
     } else {
       countShortQuality = shortQualifiedController.text.toDoubleTry();
@@ -908,14 +925,13 @@ class StuffQualityInspectionLogic extends GetxController {
       countQuality = qualifiedController.text.toDoubleTry();
     }
 
-    var detailList = state.detailInfo!.receipt!.where((data)=>data.isSelected.value == true);
-
-    for (var data in detailList) {
-      //初始化合格数
-      data.qualifiedQuantity = 0;
-    }
+    var detailList = state.detailInfo!.receipt!.where((data) => data.isSelected.value == true);
 
     if (countQuality > 0) {
+      for (var data in detailList) {
+        //初始化合格数
+        data.qualifiedQuantity = 0;
+      }
       //合格数>0  分配合格数
       for (var data in detailList) {
         //合格数量大于检验数量
@@ -924,7 +940,8 @@ class StuffQualityInspectionLogic extends GetxController {
           data.qualifiedQuantity = data.quantityTemporarilyReceived;
 
           //剩余合格数量=总合格数量-检验数量
-          countQuality = countQuality - data.quantityTemporarilyReceived!;
+          countQuality = countQuality.sub(data.quantityTemporarilyReceived!);
+
         } else {
           //合格数量=剩余可分配合格数量
           if (countQuality > 0) {
@@ -943,22 +960,25 @@ class StuffQualityInspectionLogic extends GetxController {
     if (countUnQuality > 0) {
       for (var data in detailList) {
         //可分配数量=送货数量-合格数量
-        var lastQty = data.quantityTemporarilyReceived! -
-            data.qualifiedQuantity! -
-            data.missingQuantity!;
-        if (lastQty > 0) {
+        var lastQty = (data.quantityTemporarilyReceived!.sub(data.qualifiedQuantity!).sub(data.missingQuantity!));
+
+        logger.f('lastQty：$lastQty');
+
+        if (lastQty >= 0) {
           //可分配数量大于0 说明可以进行不合格数量分配
           if (countUnQuality >= lastQty) {
             //不合格数量大于可分配数量
             //不合格数量=可分配数量
             data.unqualifiedQuantity = lastQty;
             //剩余不合格数量=不合格总数-剩余可分配数量
-            countUnQuality = countUnQuality - lastQty;
-          }
-        } else {
-          if (countUnQuality > 0) {
-            data.unqualifiedQuantity = countUnQuality;
-            countUnQuality = 0.0;
+            countUnQuality = countUnQuality.sub(lastQty);
+
+            logger.f('不合格数量：$countUnQuality');
+          }else{
+            if (countUnQuality > 0) {
+              data.unqualifiedQuantity = countUnQuality;
+              countUnQuality = 0.0;
+            }
           }
         }
       }
@@ -974,9 +994,7 @@ class StuffQualityInspectionLogic extends GetxController {
       for (var data in detailList) {
         //剩余可分配数量=送货数量-合格数量-不合格数量
 
-        var lastQty = data.quantityTemporarilyReceived! -
-            data.qualifiedQuantity!-
-            data.unqualifiedQuantity!;
+        var lastQty = data.quantityTemporarilyReceived!.sub(data.qualifiedQuantity!).sub(data.unqualifiedQuantity!);
 
         //剩余可分配>0 可以分配短码
         if (lastQty > 0) {
@@ -985,13 +1003,11 @@ class StuffQualityInspectionLogic extends GetxController {
             //本行短码数量=剩余可分配数量
             data.missingQuantity = lastQty;
             //剩余短码数量=总短码数量-剩余可分配数量
-            countShortQuality = countShortQuality - lastQty;
+            countShortQuality = countShortQuality.sub(lastQty);
           } else {
             //短码数量=剩余短码数量
-            if (countShortQuality > 0) {
-              data.missingQuantity = countShortQuality;
-              countShortQuality = 0;
-            }
+            data.missingQuantity = countShortQuality;
+            countShortQuality = 0;
           }
         } else {
           for (var data in detailList) {
@@ -1010,8 +1026,7 @@ class StuffQualityInspectionLogic extends GetxController {
           data.samplingQuantity = data.inspectionQuantity;
 
           //剩余抽检数量=总抽检数量-抽检数量
-          countWaitQuality =
-              countWaitQuality - data.inspectionQuantity!;
+          countWaitQuality = countWaitQuality.sub(data.inspectionQuantity!);
         } else {
           //抽检数量=剩余抽检数量
           data.samplingQuantity = countWaitQuality;
@@ -1028,7 +1043,7 @@ class StuffQualityInspectionLogic extends GetxController {
 
           //剩余检验数量=总检验数量-检验数量
           countInspectionQuality =
-              countInspectionQuality - data.inspectionQuantity!;
+              countInspectionQuality.sub(data.inspectionQuantity!);
         } else {
           //检验数量=剩余检验数量
           data.inspectionQuantity = countInspectionQuality;
@@ -1050,11 +1065,11 @@ class StuffQualityInspectionLogic extends GetxController {
       method: webApiCreateInspection,
       loading: 'quality_inspection_create_inspection'.tr,
       body: {
-        'MES_IdS': userInfo?.userID,
+        'MES_IdS': getUserInfo()!.userID,
         'MES_Heads': [
           {
-            'CompanyCode':state.detailInfo!.companyNumber,
-            'Creator': userInfo?.number,
+            'CompanyCode': state.detailInfo!.companyNumber,
+            'Creator': getUserInfo()!.number,
             'Factory': state.detailInfo!.factoryNumber,
             'IsConcessive': state.compromise.value ? 'X' : '',
             'ModifiedBy': '',
@@ -1093,7 +1108,7 @@ class StuffQualityInspectionLogic extends GetxController {
               'DeleteReason': '',
               'DeletedBy': '',
               'InspectionLineNumber': '',
-              'InspectionOrderNo':'',
+              'InspectionOrderNo': '',
             }
         ],
         'MES_Items2': [
@@ -1111,10 +1126,12 @@ class StuffQualityInspectionLogic extends GetxController {
             {
               'Batch': item.batch,
               'ColorSeparationQuantity': item.qty,
-              'Creator': userInfo?.number,
+              'Creator': getUserInfo()!.number,
               'PurchaseVoucherNo': detailList.toList()[0].contractNo,
-              'PurchaseDocumentItemNumber': detailList.toList()[0].purchaseOrderLineNumber,
-              'SalesAndDistributionVoucherNumber': detailList.toList()[0].productionNumber,
+              'PurchaseDocumentItemNumber':
+                  detailList.toList()[0].purchaseOrderLineNumber,
+              'SalesAndDistributionVoucherNumber':
+                  detailList.toList()[0].productionNumber,
               'FactoryType': detailList.toList()[0].factoryModel,
               'MaterialCode': detailList.toList()[0].materialCode,
               'BasicUnit': detailList.toList()[0].basicUnits,

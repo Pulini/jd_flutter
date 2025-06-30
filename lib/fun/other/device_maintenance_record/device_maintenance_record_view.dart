@@ -25,8 +25,8 @@ class _DeviceMaintenanceRecordViewState
 
   _item(DeviceMaintenanceListInfo data) {
     return InkWell(
-      onTap: () => {logic.searchDeviceInfo(data.deviceNo.toString())},
-      onLongPress: () => {
+      onTap: () {logic.searchDeviceInfo(data.deviceNo.toString());},
+      onLongPress: (){
         if (checkUserPermission('705080113'))
           {
             reasonInputPopup(
@@ -40,19 +40,20 @@ class _DeviceMaintenanceRecordViewState
               ],
               hintText: 'device_maintenance_reason_for_invalidation'.tr,
               isCanCancel: true,
-              confirm: (s) => {
-                Get.back(),
+              confirm: (s){
+                Get.back();
                 logic.repairOrderVoid(
                     interId: data.interID.toString(),
                     reason: s,
-                    success: (msg) => {
-                          successDialog(content: msg, back: () => Get.back()),
-                        })
+                    success: (msg) {
+                          successDialog(content: msg, back: () => Get.back());
+                        });
               },
-            )
+            );
           }
-        else
-          showSnackBar(title: 'shack_bar_warm'.tr, message: 'device_maintenance_no_invalidation_permission'.tr)
+        else {
+          showSnackBar(title: 'shack_bar_warm'.tr, message: 'device_maintenance_no_invalidation_permission'.tr);
+        }
       },
       child: Container(
         height: 75,

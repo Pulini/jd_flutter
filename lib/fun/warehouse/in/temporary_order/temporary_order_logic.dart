@@ -69,7 +69,7 @@ class TemporaryOrderLogic extends GetxController {
     );
   }
 
-  checkToInspection() {
+ bool checkToInspection() {
     var checkNum = 0;
 
     state.detailInfo!.receipt

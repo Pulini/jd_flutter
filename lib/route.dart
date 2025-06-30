@@ -16,6 +16,7 @@ import 'package:jd_flutter/fun/management/visit_register/visit_register_view.dar
 import 'package:jd_flutter/fun/other/device_maintenance_record/device_maintenance_record_view.dart';
 import 'package:jd_flutter/fun/other/forming_packing_scan/packing_scan_view.dart';
 import 'package:jd_flutter/fun/other/hydroelectric_excess/hydroelectric_excess_view.dart';
+import 'package:jd_flutter/fun/report/forming_barcode_collection/forming_barcode_collection_view.dart';
 import 'package:jd_flutter/fun/report/daily_report/daily_report_view.dart';
 import 'package:jd_flutter/fun/report/molding_pack_area_report/molding_pack_area_report_view.dart';
 import 'package:jd_flutter/fun/report/molding_scan_bulletin_report/molding_scan_bulletin_report_maximize_view.dart';
@@ -80,6 +81,7 @@ import 'package:jd_flutter/fun/work_reporting/production_tasks/production_tasks_
 import 'package:jd_flutter/fun/work_reporting/workshop_planning/workshop_planning_view.dart';
 import 'package:jd_flutter/home/home_view.dart';
 import 'package:jd_flutter/login/login_view.dart';
+
 
 class RouteConfig {
   static const String home = '/home';
@@ -610,6 +612,21 @@ class RouteConfig {
     const SapInnerBoxLabelSplitPage(),
   );
 
+  //成型条码采集
+  static Routes formingBarcodeCollection = Routes(
+    '/forming_barcode_collection',
+    99,
+    const FormingBarcodeCollectionPage(),
+  );
+
+  //品质管理
+  // static Routes formingBarcodeCollection = Routes(
+  //   '/forming_barcode_collection',
+  //   99,
+  //   const FormingBarcodeCollectionPage(),
+  // );
+
+
   //车间计工
   static Routes workshopPlanning = Routes(
     '/workshop_planning',
@@ -701,6 +718,7 @@ class RouteConfig {
     processDispatchList,
     qualityInspectionList,
     sapInnerBoxLabelSplit,
+    formingBarcodeCollection,
     workshopPlanning,
     sapLabelReprint,
   ];
@@ -1018,6 +1036,10 @@ class RouteConfig {
     GetPage(
       name: sapInnerBoxLabelSplit.name,
       page: () => sapInnerBoxLabelSplit.page,
+    ),
+    GetPage(
+      name: formingBarcodeCollection.name,
+      page: () => formingBarcodeCollection.page,
     ),
     GetPage(
       name: workshopPlanning.name,

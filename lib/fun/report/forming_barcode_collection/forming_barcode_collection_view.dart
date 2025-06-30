@@ -3,9 +3,15 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/forming_collection_info.dart';
 import 'package:jd_flutter/fun/report/forming_barcode_collection/forming_barcode_collection_logic.dart';
 import 'package:jd_flutter/fun/report/forming_barcode_collection/forming_barcode_collection_priority_view.dart';
+import 'package:jd_flutter/fun/report/forming_barcode_collection/forming_barcode_collection_state.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
+import 'package:jd_flutter/widget/dialogs.dart';
+import 'package:jd_flutter/widget/scanner.dart';
+
+import 'forming_barcode_collection_shoe_box_view.dart';
+import 'forming_barcode_collection_switch_view.dart';
 
 class FormingBarcodeCollectionPage extends StatefulWidget {
   const FormingBarcodeCollectionPage({super.key});
@@ -17,8 +23,76 @@ class FormingBarcodeCollectionPage extends StatefulWidget {
 
 class _FormingBarcodeCollectionPageState
     extends State<FormingBarcodeCollectionPage> {
-  final logic = Get.find<FormingBarcodeCollectionLogic>();
-  final state = Get.find<FormingBarcodeCollectionLogic>().state;
+  final FormingBarcodeCollectionLogic logic =
+      Get.put(FormingBarcodeCollectionLogic());
+  final FormingBarcodeCollectionState state =
+      Get.find<FormingBarcodeCollectionLogic>().state;
+
+  // 其他功能
+  showOther() {
+    Get.dialog(
+      PopScope(
+        //拦截返回键
+        canPop: false,
+        child: AlertDialog(
+          title: Text('forming_code_collection_other_functions'.tr,
+              style: const TextStyle(
+                  color: Colors.black, fontWeight: FontWeight.bold)),
+          content: SizedBox(
+            height: 150,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                TextButton(
+                    onPressed: () {
+                      Get.back();
+                      logic.getWorkLineReport(success: (mes) {
+                        msgDialog(
+                            title: 'forming_code_collection_analysis'.tr,
+                            content: mes);
+                      });
+                    },
+                    child: Text('forming_code_collection_analysis'.tr)),
+                TextButton(
+                    onPressed: () {
+                      Get.back();
+                      logic.getHistory();
+                    },
+                    child:
+                        Text('forming_code_collection_historical_records'.tr)),
+                TextButton(
+                    onPressed: () {
+                      Get.back();
+                      Get.to(() => const FormingBarcodeCollectionShoeBoxPage())
+                          ?.then((v) {
+                        if (v != null) {
+                            if(state.dataList.firstWhere((data)=> data.isShow==true).mtoNo == v){
+                              logic.getProductionOrderST(first: '2', shoeBoxBillNo: v);
+                            }
+                        }
+                        _scan();
+                      });
+                    },
+                    child: Text('forming_code_collection_special'.tr))
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Get.back();
+              },
+              child: Text(
+                'dialog_default_cancel'.tr,
+                style: const TextStyle(color: Colors.grey),
+              ),
+            ),
+          ],
+        ),
+      ),
+      barrierDismissible: false, //拦截dialog外部点击
+    );
+  }
 
   _item(ScWorkCardSizeInfos data) {
     return Row(
@@ -26,37 +100,45 @@ class _FormingBarcodeCollectionPageState
         Expanded(
             child: _text(
                 mes: data.size ?? '',
-                backColor: Colors.blueAccent,
+                backColor:
+                    data.size == '合计' ? Colors.yellowAccent : Colors.white,
                 head: false,
                 paddingNumber: 5)),
         Expanded(
             child: _text(
                 mes: data.qty.toShowString(),
-                backColor: Colors.blueAccent,
+                backColor:
+                    data.size == '合计' ? Colors.yellowAccent : Colors.white,
                 head: false,
                 paddingNumber: 5)),
         Expanded(
             child: _text(
                 mes: data.todayScannedQty.toShowString(),
-                backColor: Colors.blueAccent,
+                backColor:
+                    data.size == '合计' ? Colors.yellowAccent : Colors.white,
                 head: false,
                 paddingNumber: 5)),
         Expanded(
             child: _text(
                 mes: data.scannedQty.toShowString(),
-                backColor: Colors.blueAccent,
+                backColor:
+                    data.size == '合计' ? Colors.yellowAccent : Colors.white,
                 head: false,
                 paddingNumber: 5)),
         Expanded(
             child: _text(
                 mes: data.qty.sub(data.scannedQty ?? 0.0).toShowString(),
-                backColor: Colors.blueAccent,
+                backColor: data.size == '合计'
+                    ? Colors.yellowAccent
+                    : Colors.red.shade200,
                 head: false,
                 paddingNumber: 5)),
         Expanded(
             child: _text(
-                mes: data.getCompletionRate(),
-                backColor: Colors.blueAccent,
+                mes:
+                    '${(data.scannedQty.div(data.qty ?? 1)).mul(100).toStringAsFixed(1)}%',
+                backColor:
+                    data.size == '合计' ? Colors.yellowAccent : Colors.white,
                 head: false,
                 paddingNumber: 5)),
       ],
@@ -112,9 +194,9 @@ class _FormingBarcodeCollectionPageState
                       hint: 'forming_code_collection_factory'.tr,
                       text: state.factoryType.value))),
               Expanded(
-                  child: Obx(() => textSpan(
+                  child: textSpan(
                       hint: 'forming_code_collection_group'.tr,
-                      text: state.group.value)))
+                      text: getUserInfo()!.departmentName ?? ''))
             ],
           ),
           Row(
@@ -131,7 +213,7 @@ class _FormingBarcodeCollectionPageState
             ],
           ),
           Obx(() => textSpan(
-              hint: 'forming_code_collection_code',
+              hint: 'forming_code_collection_code'.tr,
               text: state.scanCode.value)),
           Row(
             children: [
@@ -176,38 +258,163 @@ class _FormingBarcodeCollectionPageState
           Expanded(
             child: Obx(
               () => ListView.builder(
-                itemCount: state.showDataList.value.scWorkCardSizeInfos?.length,
+                itemCount: state.showDataList.length,
                 itemBuilder: (context, index) =>
-                    _item(state.showDataList.value.scWorkCardSizeInfos![index]),
+                    _item(state.showDataList[index]),
               ),
             ),
           ),
           Row(
             children: [
-              CombinationButton(
+              Expanded(
+                  child: CombinationButton(
                 //切换订单
                 text: 'forming_code_collection_switch'.tr,
-                click: () => {},
-                combination: Combination.middle,
-              ),
-              CombinationButton(
+                click: () {
+                  Get.to(() => const FormingBarcodeCollectionSwitchPage())
+                      ?.then((v) {
+                    if (v != null) {
+                      logic.setFirstData(
+                          first: '1', entryFid: v, shoeBoxBill: '');
+                    }
+                    _scan();
+                  });
+                },
+                combination: Combination.left,
+              )),
+              Expanded(
+                  child: CombinationButton(
                 //更改优先级
                 text: 'forming_code_collection_change'.tr,
-                click: () => {
+                click: () {
                   Get.to(() => const FormingBarcodeCollectionPriorityPage())
                       ?.then((v) {
-                    if (v == null) {
-                    } else if (v == true) {}
-                  })
+                    if (v == true) {
+                      logic.getProductionOrderST(first: '0', shoeBoxBillNo: '');
+                    }
+                  });
                 },
                 combination: Combination.middle,
-              ),
-              CombinationButton(
+              )),
+              Expanded(
+                  child: CombinationButton(
                 //其他功能
                 text: 'forming_code_collection_other'.tr,
-                click: () => {},
-                combination: Combination.middle,
-              )
+                click: () {
+                  showOther();
+                },
+                combination: Combination.right,
+              ))
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+  _tabPage2() {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.grey.shade100,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                  child: Obx(() => textSpan(
+                      hint: 'forming_code_collection_factory'.tr,
+                      text: state.factoryTypeClear.value))),
+              Expanded(
+                  child: Obx(() => textSpan(
+                      hint: 'forming_code_collection_order'.tr,
+                      text: state.saleOrderClear.value)))
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                  child: Obx(() => textSpan(
+                      hint: 'forming_code_collection_order_quantity'.tr,
+                      text: state.orderNumClear.value))),
+              Expanded(
+                  child: Obx(() => textSpan(
+                      hint: 'forming_code_collection_completion_quantity'.tr,
+                      text: state.completionNumClear.value)))
+            ],
+          ),
+          Obx(() => textSpan(
+              hint: 'forming_code_collection_customer_order'.tr,
+              text: state.customerOrderClear.value)),
+          Row(
+            children: [
+              Expanded(
+                  child: _text(
+                      mes: 'forming_code_collection_size'.tr,
+                      backColor: Colors.blueAccent,
+                      head: true,
+                      paddingNumber: 5)),
+              Expanded(
+                  child: _text(
+                      mes: 'forming_code_collection_instruction'.tr,
+                      backColor: Colors.blueAccent,
+                      head: true,
+                      paddingNumber: 5)),
+              Expanded(
+                  child: _text(
+                      mes: 'forming_code_collection_report'.tr,
+                      backColor: Colors.blueAccent,
+                      head: true,
+                      paddingNumber: 5)),
+              Expanded(
+                  child: _text(
+                      mes: 'forming_code_collection_cumulative'.tr,
+                      backColor: Colors.blueAccent,
+                      head: true,
+                      paddingNumber: 5)),
+              Expanded(
+                  child: _text(
+                      mes: 'forming_code_collection_owing_amount'.tr,
+                      backColor: Colors.blueAccent,
+                      head: true,
+                      paddingNumber: 5)),
+              Expanded(
+                  child: _text(
+                      mes: 'forming_code_collection_completion_rate'.tr,
+                      backColor: Colors.blueAccent,
+                      head: true,
+                      paddingNumber: 5)),
+            ],
+          ),
+          Expanded(
+            child: Obx(
+              () => ListView.builder(
+                itemCount: state.showScanDataList.length,
+                itemBuilder: (context, index) =>
+                    _item(state.showScanDataList[index]),
+              ),
+            ),
+          ),
+          Row(
+            children: [
+              Expanded(
+                  child: CombinationButton(
+                //切换订单
+                text: 'forming_code_collection_switch'.tr,
+                click: () => {
+                  Get.to(() => const FormingBarcodeCollectionSwitchPage())
+                      ?.then((v) {
+                    if (v != null) {
+                      logic.setShowScanData(v);
+                    }
+                    _scan();
+                  })
+                },
+                combination: Combination.intact,
+              )),
             ],
           )
         ],
@@ -223,7 +430,7 @@ class _FormingBarcodeCollectionPageState
           onPressed: () =>
               logic.getProductionOrderST(first: '0', shoeBoxBillNo: ''),
           child: Text(
-            'maintain_label_filter'.tr,
+            'forming_code_collection_refresh'.tr,
             style: const TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
@@ -245,20 +452,44 @@ class _FormingBarcodeCollectionPageState
           ),
           body: Column(
             children: [
-              // Expanded(
-              //   child: Obx(() => TabBarView(
-              //         controller: logic.tabController,
-              //         children: [_tabPage1(), _tabPage2()],
-              //       )),
-              // ),
+              Expanded(
+                child: TabBarView(
+                  controller: logic.tabController,
+                  children: [_tabPage1(), _tabPage2()],
+                ),
+              ),
             ],
           )),
     );
   }
 
+  _scan() {
+    pdaScanner(scan: (scanCode) {
+      if (logic.tabController.index == 0) {
+        if (scanCode.isNotEmpty && state.canScan == true) {
+          // 条码不为空，可以扫描
+          logic.checkCode(
+              code: scanCode,
+              success: (scanCode, dataBean) {
+                state.scanCode.value = scanCode;
+                logic.submitCode(
+                    bean: dataBean,
+                    success: () {
+                      showScanTips();
+                      logic.setShowData(dataBean);
+                    });
+              });
+        }
+      }
+    });
+  }
+
   @override
   void initState() {
-    logic.getProductionOrderST(first: '0', shoeBoxBillNo: '');
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      logic.getProductionOrderST(first: '0', shoeBoxBillNo: '');
+    });
+    _scan();
     super.initState();
   }
 }

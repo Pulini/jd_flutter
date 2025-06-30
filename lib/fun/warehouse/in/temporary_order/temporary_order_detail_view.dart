@@ -181,20 +181,24 @@ class _TemporaryOrderDetailPageState extends State<TemporaryOrderDetailPage> {
                 isEnabled: detail.receipt!.any((v) => v.isSelected.value),
                 text: 'temporary_order_detail_inspection'.tr,
                 click: (){
-                  logic.checkToInspection();
-                  checkUserPermission('105180501')
-                      ? Get.to(() => const StuffQualityInspectionPage(), arguments: {
-                    'inspectionType': '2',
-                    'temporaryDetail': jsonEncode(state.detailInfo!.toJson()),
-                    //品检单列表
-                  })?.then((v) {
-                    if (v == true) {
-                        Get.back(result: true); //结束界面
+
+                  if(checkUserPermission('105180501')){
+                    if( logic.checkToInspection()){
+                      Get.to(() => const StuffQualityInspectionPage(), arguments: {
+                        'inspectionType': '2',
+                        'temporaryDetail': jsonEncode(state.detailInfo!.toJson()),
+                        //品检单列表
+                      })?.then((v) {
+                        if (v == true) {
+                          Get.back(result: true); //结束界面
+                        }
+                      });
                     }
-                  })
-                      : errorDialog(
-                    content: 'temporary_order_detail_no_permission'.tr,
-                  );
+                  }else{
+                    errorDialog(
+                      content: 'temporary_order_detail_no_permission'.tr,
+                    );
+                  }
                 }
               )),
         const SizedBox(width: 10)

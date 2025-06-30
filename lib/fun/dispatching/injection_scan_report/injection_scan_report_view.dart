@@ -268,9 +268,9 @@ class _InjectionScanReportPageState extends State<InjectionScanReportPage> {
                   flex: 1,
                   child: CombinationButton(
                     text: 'injection_scan_detail'.tr,
-                    click: () => {
+                    click: () {
                       if(state.showBarCodeList.isNotEmpty){
-                        Get.to(() => const InjectionScanReportLabelPage())
+                        Get.to(() => const InjectionScanReportLabelPage());
                       }
                     },
                     combination: Combination.middle,
@@ -281,12 +281,12 @@ class _InjectionScanReportPageState extends State<InjectionScanReportPage> {
                   child: CombinationButton(
                     //摄像头扫码
                     text: 'injection_scan_scan'.tr,
-                    click: () => {
+                    click: () {
                       Get.to(() => const Scanner())?.then((v) {
                         if (v != null) {
                           logic.findSizeData(v);
                         }
-                      }),
+                      });
                     },
                     combination: Combination.middle,
                   ),
@@ -296,12 +296,12 @@ class _InjectionScanReportPageState extends State<InjectionScanReportPage> {
                   child: CombinationButton(
                     //清空
                     text: 'injection_scan_clean'.tr,
-                    click: () => {
+                    click: (){
                       askDialog(
                         content: 'injection_scan_sure_clean_box_and_label'.tr,
                         confirm: () => logic.clearBarCodeAndBoxQty(
                             success: (s) => logic.getScWorkCardList()),
-                      ),
+                      );
                     },
                     combination: Combination.middle,
                   ),
@@ -310,7 +310,7 @@ class _InjectionScanReportPageState extends State<InjectionScanReportPage> {
                   flex: 1,
                   child: CombinationButton(
                     text: 'injection_scan_production_report'.tr,
-                    click: () => {
+                    click: (){
                       askDialog(
                         content: 'injection_scan_want_production_report'.tr,
                         confirm: () {
@@ -323,7 +323,7 @@ class _InjectionScanReportPageState extends State<InjectionScanReportPage> {
                                             state.dispatchNumber.value),
                                   ));
                         },
-                      ),
+                      );
                     },
                     combination: Combination.right,
                   ),
