@@ -23,8 +23,8 @@ class DeliveryOrderState {
   var canAddPiece = false.obs;
   var orderItemInfo = <DeliveryOrderInfo>[];
   var materialList = <String, double>{};
-  var orderPieceList = <DeliveryOrderPieceInfo>[];
-  var scannedLabel = <DeliveryOrderPieceInfo>[].obs;
+  var orderLabelList = <DeliveryOrderLabelInfo>[];
+  var scannedLabelList = <DeliveryOrderLabelInfo>[].obs;
   var canSubmitLabelBinding= false.obs;
 
   getDeliveryOrders({
@@ -290,6 +290,7 @@ class DeliveryOrderState {
   getSupplierLabelInfo({
     required String factoryNumber,
     required String supplierNumber,
+    required String deliveryOrderNumber,
     required Function() success,
     required Function(String msg) error,
   }) {
@@ -299,18 +300,24 @@ class DeliveryOrderState {
       body: {
         'WERKS': factoryNumber,
         'LIFNR': supplierNumber,
+        'ZDELINO': deliveryOrderNumber,
       },
     ).then((response) {
-      orderPieceList.clear();
+      orderLabelList.clear();
       if (response.resultCode == resultSuccess) {
-        var list = <DeliveryOrderPieceInfo>[
-          for (var json in response.data) DeliveryOrderPieceInfo.fromJson(json)
+        var list = <DeliveryOrderLabelInfo>[
+          for (var json in response.data) DeliveryOrderLabelInfo.fromJson(json)
         ];
         materialList.forEach((k, v) {
-          orderPieceList.addAll(list
-              .where((v) => v.labelList!.any((v2) => v2.materialCode == k))
-              .toList());
+          for (var label in list) {
+            if(label.materialCode==k){
+              if(!orderLabelList.any((v2)=>v2.labelNumber==label.labelNumber)){
+                orderLabelList.add(label);
+              }
+            }
+          }
         });
+        scannedLabelList.value=orderLabelList.where((v)=>v.isBind).toList();
         success.call();
       } else {
         error.call(response.message ?? 'query_default_error'.tr);
@@ -331,17 +338,20 @@ class DeliveryOrderState {
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        var list = <DeliveryOrderPieceInfo>[
-          for (var json in response.data) DeliveryOrderPieceInfo.fromJson(json)
+        var list = <DeliveryOrderLabelInfo>[
+          for (var json in response.data) DeliveryOrderLabelInfo.fromJson(json)
         ];
         materialList.forEach((k, v) {
-          list
-              .where((v2) => v2.labelList!.any((v3) => v3.materialCode == k))
-              .forEach((v4) {
-            if (scannedLabel.none((v5) => v5.pieceNo == v4.pieceNo)) {
-              scannedLabel.add(v4);
+          for (var label in list) {
+            if(label.materialCode==k){
+              if(!orderLabelList.any((v2)=>v2.labelNumber==label.labelNumber)){
+                orderLabelList.add(label);
+              }
+              if(!scannedLabelList.any((v2)=>v2.labelNumber==label.labelNumber)){
+                scannedLabelList.add(label);
+              }
             }
-          });
+          }
         });
       } else {
         error.call(response.message ?? 'query_default_error'.tr);
@@ -362,7 +372,7 @@ class DeliveryOrderState {
         'ZLGORT': '',
         'ZEXAMINER': '',
         'GT_REQITEMS': [
-          for(var item in scannedLabel)
+          for(var item in scannedLabelList)
           {
             'ZPIECE_NO': item.pieceNo,
             'ZDELINO': orderItemInfo[0].factoryNO,
@@ -393,10 +403,10 @@ class DeliveryOrderState {
         'ZLGORT': storageLocation,
         'ZEXAMINER': inspectorNumber,
         'GT_REQITEMS': [
-          for(var item in scannedLabel)
+          for(var item in scannedLabelList)
           {
             'ZPIECE_NO': item.pieceNo,
-            'ZDELINO': orderItemInfo[0].factoryNO,
+            'ZDELINO': orderItemInfo[0].deliNo,
           }
         ],
       },

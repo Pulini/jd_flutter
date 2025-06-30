@@ -112,9 +112,9 @@ class SuppliersScanStoreLogic extends GetxController {
           'BillTypeID': BarCodeReportType.supplierScanInStock.value,
           'Red': state.red.value ? 1 : -1,
           'ProcessFlowID': 0,
-          'OrganizeID': getUserInfo()!.organizeID,
-          'DefaultStockID': getUserInfo()!.defaultStockID,
-          'UserID': getUserInfo()!.userID,
+          'OrganizeID': userInfo?.organizeID,
+          'DefaultStockID': userInfo?.defaultStockID,
+          'UserID': userInfo?.userID,
         },
       ).then((response) {
         if (response.resultCode == resultSuccess) {
@@ -195,7 +195,7 @@ class SuppliersScanStoreLogic extends GetxController {
   }) {
     httpGet(method: webApiGetBarCodeStatusByDepartmentID, params: {
       'Type': "SupplierScanInStock",
-      'DepartmentID': getUserInfo()!.departmentID,
+      'DepartmentID': userInfo?.departmentID,
     }).then((response) {
       if (response.resultCode == resultSuccess) {
         state.usedList.clear();
@@ -234,8 +234,8 @@ class SuppliersScanStoreLogic extends GetxController {
       'EmpCode': state.peopleNumber.text.toString(),
       'DefaultStockID': billStockListController.selectedId.value,
       'TranTypeID': BarCodeReportType.supplierScanInStock.value,
-      'OrganizeID': getUserInfo()!.organizeID,
-      'UserID': getUserInfo()!.userID,
+      'OrganizeID': userInfo?.organizeID,
+      'UserID': userInfo?.userID,
     }).then((response) {
       if (response.resultCode == resultSuccess) {
         clearBarCodeList();

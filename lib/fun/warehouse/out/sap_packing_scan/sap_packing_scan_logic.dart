@@ -47,20 +47,20 @@ class SapPackingScanLogic extends GetxController {
           return;
         }
         logger.f(material.toJson());
-        var total = material.labelList!.any((v) => v.isScanned.value)
+        double total = material.labelList!.any((v) => v.isScanned.value)
             ? material.labelList!
                 .where((v) => v.isScanned.value)
                 .map((v) => v.quality ?? 0)
                 .reduce((a, b) => a.add(b))
             : 0;
 
-        var qty = material.labelList!.any((v) => v.labelNumber == code)
+        double qty = material.labelList!.any((v) => v.labelNumber == code)
             ? material.labelList!
                 .where((v) => v.labelNumber == code)
                 .map((v) => v.quality ?? 0)
                 .reduce((a, b) => a.add(b))
             : 0;
-        if ((total + qty) > (material.quality ?? 0)) {
+        if (total.add(qty) > (material.quality ?? 0)) {
           errorDialog(
               content:
                   '物料 (<${material.materialNumber}>${material.materialName}) 超出待装柜数量，请勿再扫该物料！');

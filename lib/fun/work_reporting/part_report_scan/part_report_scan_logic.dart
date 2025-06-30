@@ -59,8 +59,8 @@ class PartReportScanLogic extends GetxController {
       method: webApiGetBarCodeReportDetails,
       loading: 'part_report_getting_summary'.tr,
       body: {
-        'UserID': getUserInfo()!.userID,
-        'DeptID': getUserInfo()!.departmentID,
+        'UserID': userInfo?.userID,
+        'DeptID': userInfo?.departmentID,
         'Type': type,
         'Barcodes': [
           for (var i = 0; i < state.dataList.length; ++i)
@@ -117,8 +117,8 @@ class PartReportScanLogic extends GetxController {
       method: webApiBarCodeReport,
       loading: 'part_report_summary_reporting'.tr,
       body: {
-        'UserID': getUserInfo()!.userID,
-        'DeptID': getUserInfo()!.departmentID,
+        'UserID': userInfo?.userID,
+        'DeptID': userInfo?.departmentID,
         'Date': getDateSapYMD(),
         'Barcodes': [
           for (var i = 0; i < state.dataList.length; ++i)

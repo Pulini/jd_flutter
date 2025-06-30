@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/bar_code.dart';
 import 'package:jd_flutter/fun/warehouse/out/scan_picking_material/scan_picking_material_dialog.dart';
+import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/check_box_widget.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
@@ -126,7 +127,7 @@ class _ScanPickingMaterialPageState extends State<ScanPickingMaterialPage> {
                       showSnackBar(
                           message: 'scan_picking_material_input_code'.tr);
                     } else {
-                      FocusScope.of(context).requestFocus(FocusNode());
+                      hidKeyboard();
                       logic.scanCode(text);
                     }
                   },
@@ -149,7 +150,7 @@ class _ScanPickingMaterialPageState extends State<ScanPickingMaterialPage> {
           Padding(
             padding: const EdgeInsets.all(5),
             child: Obx(() => textSpan(
-                  hint: 'scan_picking_material_scanned：'.tr,
+                  hint: 'scan_picking_material_scanned'.tr,
                   text: 'scan_picking_material_qty'.trArgs(
                     ['${state.barCodeList.length}'],
                   ),

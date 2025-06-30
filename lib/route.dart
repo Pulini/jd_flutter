@@ -48,9 +48,11 @@ import 'package:jd_flutter/fun/warehouse/manage/carton_label_scan/carton_label_s
 import 'package:jd_flutter/fun/warehouse/manage/carton_label_scan/carton_label_scan_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/patrol_inspection/patrol_inspection_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/quality_inspection/quality_inspection_view.dart';
+import 'package:jd_flutter/fun/warehouse/manage/sap_carton_label_binding/sap_carton_label_binding_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/sap_factory_inventory/sap_counting_inventory_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/sap_factory_inventory/sap_scan_code_inventory_view.dart';
-import 'package:jd_flutter/fun/warehouse/manage/sap_label_binding/sap_label_binding_view.dart';
+import 'package:jd_flutter/fun/warehouse/manage/sap_inner_box_label_split/sap_inner_box_label_split_view.dart';
+import 'package:jd_flutter/fun/warehouse/manage/sap_label_reprint/sap_label_reprint_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/sap_stock_transfer/sap_stock_transfer_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/sap_wms_reprint_labels/sap_wms_reprint_labels_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/sap_wms_split_label/sap_wms_split_label_view.dart';
@@ -596,11 +598,18 @@ class RouteConfig {
     const SapPackingScanPage(),
   );
 
-  //SAP标签绑定
-  static Routes sapLabelBinding = Routes(
-    '/sap_label_binding',
+  //SAP外箱标绑定
+  static Routes sapCartonLabelBinding = Routes(
+    '/sap_carton_label_binding',
     99,
-    const SapLabelBindingPage(),
+    const SapCartonLabelBindingPage(),
+  );
+
+  //SAP内箱标拆分
+  static Routes sapInnerBoxLabelSplit = Routes(
+    '/sap_inner_box_label_split',
+    99,
+    const SapInnerBoxLabelSplitPage(),
   );
 
   //成型条码采集
@@ -610,6 +619,14 @@ class RouteConfig {
     const FormingBarcodeCollectionPage(),
   );
 
+  //品质管理
+  // static Routes formingBarcodeCollection = Routes(
+  //   '/forming_barcode_collection',
+  //   99,
+  //   const FormingBarcodeCollectionPage(),
+  // );
+
+
   //车间计工
   static Routes workshopPlanning = Routes(
     '/workshop_planning',
@@ -617,6 +634,13 @@ class RouteConfig {
     const WorkshopPlanningPage(),
   );
 
+
+  //SAP标签重打
+  static Routes sapLabelReprint = Routes(
+    '/sap_label_reprint',
+    99,
+    const SapLabelReprintPage(),
+  );
 
   //本地功能入口列表
   static List<Routes> routeList = [
@@ -691,11 +715,13 @@ class RouteConfig {
     qualityInspection,
     patrolInspection,
     sapPackingScan,
-    sapLabelBinding,
+    sapCartonLabelBinding,
     processDispatchList,
     qualityInspectionList,
+    sapInnerBoxLabelSplit,
     formingBarcodeCollection,
     workshopPlanning,
+    sapLabelReprint,
   ];
 
   static List<GetPage> appRoutes = [
@@ -1005,8 +1031,12 @@ class RouteConfig {
       page: () => sapPackingScan.page,
     ),
     GetPage(
-      name: sapLabelBinding.name,
-      page: () => sapLabelBinding.page,
+      name: sapCartonLabelBinding.name,
+      page: () => sapCartonLabelBinding.page,
+    ),
+    GetPage(
+      name: sapInnerBoxLabelSplit.name,
+      page: () => sapInnerBoxLabelSplit.page,
     ),
     GetPage(
       name: formingBarcodeCollection.name,
@@ -1015,6 +1045,10 @@ class RouteConfig {
     GetPage(
       name: workshopPlanning.name,
       page: () => workshopPlanning.page,
+    ),
+    GetPage(
+      name: sapLabelReprint.name,
+      page: () => sapLabelReprint.page,
     ),
   ];
 }

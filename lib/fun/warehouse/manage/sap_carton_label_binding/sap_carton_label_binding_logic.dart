@@ -1,17 +1,17 @@
 import 'package:collection/collection.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jd_flutter/bean/http/sap_label_binding_info.dart';
+import 'package:jd_flutter/bean/http/response/sap_carton_label_binding_info.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/preview_label_list_widget.dart';
 import 'package:jd_flutter/widget/preview_label_widget.dart';
 import 'package:jd_flutter/widget/tsc_label_template.dart';
 
-import 'sap_label_binding_state.dart';
+import 'sap_carton_label_binding_state.dart';
 
-class SapLabelBindingLogic extends GetxController {
-  final SapLabelBindingState state = SapLabelBindingState();
+class SapCartonLabelBindingLogic extends GetxController {
+  final SapCartonLabelBindingState state = SapCartonLabelBindingState();
 
   @override
   onReady() {
@@ -159,82 +159,66 @@ class SapLabelBindingLogic extends GetxController {
   printNewBoxLabel() {
     state.getLabelPrintInfo(
       success: (labelsData) {
-        var labels = [
-          dynamicOutBoxLabel110xN(
-            productName: '干燥剂/dehumidifier/mesin pengering ruangan',
-            companyOrderType: '1096正单',
-            customsDeclarationType: '进料加工/PIM',
-            materialList: [
-              [
-                '010600985',
-                '双色PU20244096测试1双色试1双色PU20244096测试1双色PU20244096测试1双色PU20244096测试1'
-                    .allowWordTruncation(),
-                '999.999',
-                'M'
-              ],
-              [
-                '010600986',
-                '双色PU20244096测试2'.allowWordTruncation(),
-                '999.999',
-                'CI'
-              ],
-              [
-                '010600987',
-                '双色PU20244096测试3'.allowWordTruncation(),
-                '999.999',
-                'MM'
-              ],
-            ],
-            pieceNo: '1-1',
-            grossWeight: '999.999',
-            netWeight: '999.999',
-            qrCode: '00505685E5761FE090E58AE9B8A5E489',
-            code: '12345678901234',
-            specifications: '30x30x40CM (LxWxH)',
-            volume: '999.999',
-            supplier: '0000500289',
-            manufactureDate: '2025-06-10',
-            consignee: 'PT.GOLD EMPEROR DUA',
-          ),
-          dynamicInBoxLabel110xN(
-            productName: '干燥剂/dehumidifier/mesin pengering ruangan',
-            companyOrderType: '1096正单',
-            customsDeclarationType: '进料加工/PIM',
-            materialList: [
-              [
-                '010600985',
-                '双色PU20244096测试1双色PU20244096测试1双色PU20244096测试1双色P44096测试1'
-                    .allowWordTruncation(),
-                '999.999',
-                'M'
-              ],
-              [
-                '010600986',
-                '双色PU20244096测试2'.allowWordTruncation(),
-                '999.999',
-                'CI'
-              ],
-              [
-                '010600987',
-                '双色PU20244096测试3'.allowWordTruncation(),
-                '999.999',
-                'MM'
-              ],
-            ],
-            pieceNo: '1-1',
-            qrCode: '00505685E5761FE090E58AE9B8A5E489',
-            code: '12345678901234',
-            supplier: '0000500289',
-            manufactureDate: '2025-06-10',
-          ),
-        ];
-        if (labels.length > 1) {
-          Get.to(() => PreviewLabelList(labelWidgets: labels, isDynamic: true));
-        } else {
-          Get.to(() => PreviewLabel(labelWidget: labels[0], isDynamic: true));
-        }
+        askDialog(
+          title: '打印标签',
+          content: '请选择标签打印类型',
+          confirmText: '物料标',
+          confirmColor: Colors.blue,
+          confirm: () => toPrintView(createOutBoxLabel(labelsData, true)),
+          cancelText: '普通标',
+          cancelColor: Colors.blue,
+          cancel: () => toPrintView(createOutBoxLabel(labelsData, false)),
+        );
       },
       error: (msg) => errorDialog(content: msg),
     );
   }
+
+  toPrintView(List<Widget> labelView) {
+    Get.to(() => labelView.length > 1
+        ? PreviewLabelList(labelWidgets: labelView, isDynamic: true)
+        : PreviewLabel(labelWidget: labelView[0], isDynamic: true));
+  }
+
+  List<Widget> createOutBoxLabel(
+    Map<SapPrintLabelInfo, List<SapPrintLabelSubInfo>> labelList,
+    bool hasMaterialList,
+  ) {
+    var labelView = <Widget>[];
+    labelList.forEach((label, materials) {
+      var materialList = <List>[];
+      if (hasMaterialList) {
+        groupBy(materials, (v) => v.generalMaterialNumber).forEach((k, v) {
+          materialList.add([
+            k,
+            v[0].materialDescription.allowWordTruncation(),
+            v
+                .map((v2) => v2.inBoxQty ?? 0)
+                .reduce((a, b) => a.add(b))
+                .toShowString(),
+            v[0].unit,
+          ]);
+        });
+      }
+      labelView.add(dynamicOutBoxLabel110xN(
+        productName: label.materialDeclarationName ?? '',
+        companyOrderType: '${label.factoryNo}${label.supplementType}',
+        customsDeclarationType: label.customsDeclarationType ?? '',
+        materialList: materialList,
+        pieceNo: label.pieceID ?? '',
+        grossWeight: label.grossWeight.toShowString(),
+        netWeight: label.netWeight.toShowString(),
+        qrCode: label.labelID ?? '',
+        pieceID: label.pieceID ?? '',
+        specifications:label.getLWH(),
+        volume: label.volume.toShowString(),
+        supplier: label.supplierNumber ?? '',
+        manufactureDate: label.manufactureDate ?? '',
+        consignee: label.shipToParty ?? '',
+      ));
+    });
+    return labelView;
+  }
+
+
 }

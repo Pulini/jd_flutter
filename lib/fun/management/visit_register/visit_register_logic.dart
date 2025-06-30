@@ -87,7 +87,7 @@ class VisitRegisterLogic extends GetxController {
         body: {
           'Name': name,
           'IDCard': iDCard,
-          'VisitedFactory': getUserInfo()?.organizeID,
+          'VisitedFactory': userInfo?.organizeID,
           'Interviewee': interviewee,
           'IntervieweeName': intervieweeName,
           'SecurityStaff': securityStaff,
@@ -180,10 +180,10 @@ class VisitRegisterLogic extends GetxController {
             textPersonName.text = state.dataDetail.name ?? '';
             textPhone.text = state.dataDetail.phone ?? '';
             textUnit.text = state.dataDetail.unit ?? '';
-            textSecurity.text = getUserInfo()!.name!;
-            state.upAddDetail.value.examineID = getUserInfo()!.empID.toString();
+            textSecurity.text = userInfo?.name??'';
+            state.upAddDetail.value.examineID = userInfo?.empID.toString();
             state.upAddDetail.value.securityStaff =
-                getUserInfo()!.empID.toString();
+                userInfo?.empID.toString();
           } else {
             logger.d('走详情界面');
             state.dataDetail =
@@ -193,9 +193,9 @@ class VisitRegisterLogic extends GetxController {
             state.upLeavePicture.clear();
             state.upLeavePicture.add(VisitPhotoBean(photo: "", typeAdd: "0"));
           }
-          state.upAddDetail.value.examineID = getUserInfo()!.empID.toString();
+          state.upAddDetail.value.examineID = userInfo?.empID.toString();
           state.upAddDetail.value.securityStaff =
-              getUserInfo()!.empID.toString();
+              userInfo?.empID.toString();
 
           Get.to(() => const VisitRegisterAddPage());
         }
@@ -245,7 +245,7 @@ class VisitRegisterLogic extends GetxController {
     for (var value1 in state.upLeavePicture) {
       body.add(PhotoBean(photo: value1.photo));
     }
-    state.upAddDetail.value.securityStaff = getUserInfo()!.empID.toString();
+    state.upAddDetail.value.securityStaff = userInfo?.empID.toString();
     state.upAddDetail.value.visitPics = body;
 
     logger.d(state.upAddDetail.value.toJson());
@@ -363,10 +363,10 @@ class VisitRegisterLogic extends GetxController {
   getToAddPage() {
     //跳转到新增的时候需要建立的数据
     state.upAddDetail.value = VisitAddRecordInfo(
-        visitedFactory: getUserInfo()!.organizeID.toString(),
-        securityStaff: getUserInfo()!.empID.toString(),
-        securityStaffName: getUserInfo()!.name,
-        examineID: getUserInfo()!.empID.toString(),
+        visitedFactory: userInfo?.organizeID.toString(),
+        securityStaff: userInfo?.empID.toString(),
+        securityStaffName: userInfo?.name,
+        examineID: userInfo?.empID.toString(),
         dateTime: getCurrentTime());
     state.upComePicture.add(VisitPhotoBean(photo: "", typeAdd: "0"));
     textIdCard.clear();

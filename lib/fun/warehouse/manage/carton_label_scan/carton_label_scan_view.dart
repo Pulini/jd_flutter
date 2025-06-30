@@ -119,7 +119,7 @@ class _CartonLabelScanPageState extends State<CartonLabelScanPage> {
 
   @override
   void initState() {
-    if ((deviceInfo as AndroidDeviceInfo).version.release.toDoubleTry() >= 8) {
+    if ((deviceInfo() as AndroidDeviceInfo).version.release.toDoubleTry() >= 8) {
       //安卓8.0以上才能调用这个api
       player = AudioPlayer();
     }

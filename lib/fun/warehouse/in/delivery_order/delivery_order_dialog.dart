@@ -59,7 +59,7 @@ stockInDialog({
     PickerType.ghost,
     buttonName: 'delivery_order_dialog_location'.tr,
     saveKey: spSaveDeliveryOrderStockInCheckLocation,
-    dataList: () => getStorageLocationList(submitList[0].factoryNO ?? ''),
+    dataList: getStorageLocationList(submitList[0].factoryNO ?? ''),
     onSelected: (v) => _checkFaceInfo(
       billType: '入库单',
       sapFactoryNumber: (v as LocationInfo).factoryNumber ?? '',
@@ -238,7 +238,7 @@ stockOutDialog({
   var locationController = OptionsPickerController(
     PickerType.ghost,
     buttonName: 'delivery_order_dialog_location'.tr,
-    dataList: () => getStorageLocationList(submitList[0].factoryNO ?? ''),
+    dataList: getStorageLocationList(submitList[0].factoryNO ?? ''),
   );
   var departmentController = OptionsPickerController(
     PickerType.sapDepartment,

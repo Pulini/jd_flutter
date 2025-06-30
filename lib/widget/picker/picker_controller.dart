@@ -95,61 +95,57 @@ abstract class PickerController {
     }
   }
 
-  Function getDataList() {
+ Future getDataList() async {
     switch (pickerType) {
       case PickerType.sapSupplier:
-        return getSapSupplier;
+        return getSapSupplier();
       case PickerType.sapCompany:
-        return getSapCompany;
+        return getSapCompany();
       case PickerType.sapFactory:
-        return getSapFactory;
+        return getSapFactory();
       case PickerType.sapWorkCenter:
-        return getSapWorkCenter;
+        return getSapWorkCenter();
       case PickerType.sapDepartment:
-        return getSapDepartment;
+        return getSapDepartment();
       case PickerType.sapProcessFlow:
-        return getSapProcessFlow;
+        return getSapProcessFlow();
       case PickerType.sapMachine:
-        return getSapMachine;
+        return getSapMachine();
       case PickerType.sapWorkCenterNew:
-        return getSapWorkCenterNew;
+        return getSapWorkCenterNew();
       case PickerType.sapGroup:
-        return getSapGroup;
+        return getSapGroup();
       case PickerType.sapFactoryWarehouse:
-        return getSapFactoryAndWarehouse;
+        return getSapFactoryAndWarehouse();
       case PickerType.sapWarehouseStorageLocation:
-        return getSapWarehouseStorageLocation;
+        return getSapWarehouseStorageLocation();
       case PickerType.mesWorkShop:
-        return getMesWorkShop;
+        return getMesWorkShop();
       case PickerType.mesDepartment:
-        return getMesDepartment;
+        return getMesDepartment();
       case PickerType.mesOrganization:
-        return getMesOrganization;
+        return getMesOrganization();
       case PickerType.mesProcessFlow:
-        return getMesProcessFlow;
+        return getMesProcessFlow();
       case PickerType.mesProductionReportType:
-        return getMesProductionReportType;
+        return getMesProductionReportType();
       case PickerType.mesMoldingPackAreaReportType:
-        return getMesMoldingPackArea;
+        return getMesMoldingPackArea();
       case PickerType.mesGroup:
-        return getMeGroup;
+        return getMeGroup();
       case PickerType.mesStockList:
-        return getMesStockList;
+        return getMesStockList();
       case PickerType.mesBillStockList:
-        return getOrderStockList;
+        return getOrderStockList();
       case PickerType.sapDestination:
-        return getSapDestination;
+        return getSapDestination();
       default:
-        return getDataListError;
+        return 'picker_type_error'.tr;
     }
   }
 
-  Future getDataListError() async {
-    return 'picker_type_error'.tr;
-  }
-
   //获取Sap供应商列表
-  Future getSapSupplier() async {
+  getSapSupplier() async {
     var response = await httpGet(method: webApiPickerSapSupplier);
     if (response.resultCode == resultSuccess) {
       try {
@@ -752,7 +748,7 @@ class OptionsPickerController extends PickerController {
   String searchText = '';
   final String? saveKey;
   final String? buttonName;
-  final Function? dataList;
+  final Future? dataList;
   List<PickerItem> pickerData = [];
   RxList<PickerItem> pickerItems = <PickerItem>[].obs;
   var selectItem = 0;
@@ -822,8 +818,8 @@ class OptionsPickerController extends PickerController {
   getData() {
     if (pickerItems.isEmpty) {
       loadingError.value = 'picker_loading'.tr;
-      Function fun = dataList ?? getDataList();
-      fun().then((value) {
+      Future fun = dataList ?? getDataList();
+      fun.then((value) {
         if (value is List<PickerItem>) {
           loadingError.value = '';
           pickerData = value;
@@ -856,7 +852,7 @@ class LinkOptionsPickerController extends PickerController {
 
   final String? saveKey;
   final String? buttonName;
-  final Function? dataList;
+  final Future? dataList;
   final Function(PickerItem, PickerItem)? onChanged;
   final Function(PickerItem, PickerItem)? onSelected;
 
@@ -941,8 +937,8 @@ class LinkOptionsPickerController extends PickerController {
   getData() {
     if (pickerItems1.isEmpty && pickerItems2.isEmpty) {
       loadingError.value = 'picker_loading'.tr;
-      Function fun = dataList ?? getDataList();
-      fun().then((value) {
+      Future fun = dataList ?? getDataList();
+      fun.then((value) {
         if (value is List<LinkPickerItem>) {
           loadingError.value = '';
           pickerData = value;
@@ -1075,7 +1071,7 @@ class CheckBoxPickerController extends PickerController {
 
   final String? saveKey;
   final String? buttonName;
-  final Function? dataList;
+  final Future? dataList;
   final Function(List<String>)? onChanged;
   final Function(List<String>)? onSelected;
 
@@ -1168,8 +1164,8 @@ class CheckBoxPickerController extends PickerController {
   getData() {
     if (checkboxItems.isEmpty) {
       loadingError.value = 'picker_loading'.tr;
-      Function fun = dataList ?? getDataList();
-      fun().then((value) {
+      Future fun = dataList ?? getDataList();
+      fun.then((value) {
         if (value is List<PickerItem>) {
           loadingError.value = '';
           checkboxData = value;

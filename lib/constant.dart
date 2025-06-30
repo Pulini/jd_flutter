@@ -3,6 +3,7 @@ const Map<String, String> dadPhone = {
   '15267733701': '111111',//叶明杰
   '15257154610': '123',//何蓓蓓
   '13506644569': '123456',//张幸民
+  '18435177877': '123456',//张欣
 };
 const jdDatabase = 'jd_app.db';
 const spSaveLoginPhone = 'login_phone';
@@ -69,3 +70,5 @@ const spSaveDeliveryOrderBindingLabelLocation =
     'delivery_order_binding_label_location';
 const spSavePackingScanActualCabinet = 'packing_scan_actual_cabinet';
 const spSavePatrolInspectionLineId = 'patrol_inspection_line_id';
+const spSavePurchaseOrderWarehousingBindingLabelLocation =
+    'purchase_order_warehousing_binding_label_location';

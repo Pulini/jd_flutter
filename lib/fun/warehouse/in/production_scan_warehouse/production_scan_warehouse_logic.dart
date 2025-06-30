@@ -62,7 +62,7 @@ class ProductionScanWarehouseLogic extends GetxController {
   }) {
     httpGet(method: webApiGetBarCodeStatusByDepartmentID, params: {
       'Type': "SupplierScanInStock",
-      'DepartmentID': getUserInfo()!.departmentID,
+      'DepartmentID': userInfo?.departmentID,
     }).then((response) {
       if (response.resultCode == resultSuccess) {
         state.usedList.cast();
@@ -176,10 +176,10 @@ class ProductionScanWarehouseLogic extends GetxController {
           'BillTypeID': BarCodeReportType.productionScanInStock.value,
           'Red': state.red.value ? 1 : -1,
           'ProcessFlowID': 0,
-          'OrganizeID': getUserInfo()!.organizeID,
-          'DefaultStockID': getUserInfo()!.defaultStockID,
-          'UserID': getUserInfo()!.userID,
-          'EmpID': getUserInfo()!.empID,
+          'OrganizeID': userInfo?.organizeID,
+          'DefaultStockID': userInfo?.defaultStockID,
+          'UserID': userInfo?.userID,
+          'EmpID': userInfo?.empID,
         },
       ).then((response) {
         if (response.resultCode == resultSuccess) {
@@ -271,10 +271,10 @@ class ProductionScanWarehouseLogic extends GetxController {
       ],
       'Red': state.red.value ? -1 : 1,
       'EmpCode': state.peopleNumber.text.toString(),
-      'DefaultStockID': getUserInfo()!.defaultStockID,
+      'DefaultStockID': userInfo?.defaultStockID,
       'TranTypeID': '106',
-      'OrganizeID': getUserInfo()!.organizeID,
-      'UserID': getUserInfo()!.userID,
+      'OrganizeID': userInfo?.organizeID,
+      'UserID': userInfo?.userID,
     }).then((response) {
       state.isCheck = false;
       if (response.resultCode == resultSuccess) {

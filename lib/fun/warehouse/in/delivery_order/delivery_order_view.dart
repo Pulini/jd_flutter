@@ -97,11 +97,7 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
     debugPrint('isCheckOrder=$isCheckOrder isScanPieces=${data.isScanPieces}');
     if (isCheckOrder) {
       if (data.isScanPieces == 'X') {
-        if (data.deliJbq!.isNotEmpty) {
-          msgDialog(content: '扫码已完成');
-        } else {
-          logic.getSupplierLabelInfo(group: group, refresh: () => _query());
-        }
+        logic.getSupplierLabelInfo(group: group, refresh: () => _query());
       } else {
         logic.getOrderDetail(
           isExempt: data.isExempt ?? false,

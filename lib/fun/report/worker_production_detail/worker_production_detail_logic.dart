@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
@@ -7,7 +8,7 @@ import 'worker_production_detail_state.dart';
 
 class WorkerProductionDetailLogic extends GetxController {
   final WorkerProductionDetailState state = WorkerProductionDetailState();
-
+  var tecWorkerNumber = TextEditingController();
   var pickerControllerStartDate = DatePickerController(
     PickerType.startDate,
     saveKey:
@@ -29,6 +30,7 @@ class WorkerProductionDetailLogic extends GetxController {
 
   query() {
     state.getProductionReport(
+      worker: tecWorkerNumber.text,
       beginDate: pickerControllerStartDate.getDateFormatYMD(),
       endDate: pickerControllerEndDate.getDateFormatYMD(),
       itemID: pickerControllerReportType.selectedId.value,

@@ -51,78 +51,125 @@ class _WorkerProductionDetailPageState
   List<DataColumn> getItemTableHead(WorkerProductionDetail data) {
     if (data is WorkerProductionDetailType1) {
       return [
-        DataColumn(label: Text(data.billNO ?? '')),
-        DataColumn(label: Text(data.billDate ?? '')),
-        DataColumn(label: Text(data.organizeName ?? '')),
-        DataColumn(label: Text(data.deptName ?? '')),
-        DataColumn(label: Text(data.dispatchNO ?? '')),
-        DataColumn(label: Text(data.processFlowName ?? '')),
-        DataColumn(label: Text(data.itemNo ?? '')),
-        DataColumn(label: Text(data.processNumber ?? '')),
-        DataColumn(label: Text(data.processName ?? '')),
         DataColumn(
-          label: Text(data.qty.toShowString()),
+          label: Text('worker_production_report_item_title_order_no'.tr),
+        ),
+        DataColumn(
+          label: Text('worker_production_report_item_title_date'.tr),
+        ),
+        DataColumn(
+          label: Text(
+              'worker_production_report_item_title_report_department_name'.tr),
+        ),
+        DataColumn(
+          label: Text('worker_production_report_item_title_report_group'.tr),
+        ),
+        DataColumn(
+          label: Text('worker_production_report_item_title_dispatch_no'.tr),
+        ),
+        DataColumn(
+          label: Text('worker_production_report_item_title_process'.tr),
+        ),
+        DataColumn(
+          label: Text('worker_production_report_item_title_goods_no'.tr),
+        ),
+        DataColumn(
+          label: Text('worker_production_report_item_title_process_code'.tr),
+        ),
+        DataColumn(
+          label: Text(
+            'worker_production_report_item_title_process_name'.tr,
+          ),
+        ),
+        DataColumn(
+          label: Text('worker_production_report_item_title_qty'.tr),
           numeric: true,
         ),
         if (state.showPrice)
           DataColumn(
-            label: Text(data.price.toShowString()),
+            label: Text('worker_production_report_item_title_price'.tr),
             numeric: true,
           ),
         if (state.showAmount)
           DataColumn(
-            label: Text(data.amount.toShowString()),
+            label: Text('worker_production_report_item_title_amount'.tr),
             numeric: true,
           ),
-        DataColumn(label: Text(data.smallBillSubsidy.toShowString())),
-        if (state.showAmount)
+        DataColumn(
+          label: Text(
+              'worker_production_report_item_title_small_order_subsidy'.tr),
+        ),
+        if (state.showAmount && state.showPrice)
           DataColumn(
-            label: Text(data.amountSum.toShowString()),
+            label: Text('worker_production_report_item_title_amount_total'.tr),
             numeric: true,
           ),
-        DataColumn(label: Text(data.smallBillSubsidyPCT.toShowString()))
+        DataColumn(
+          label: Text(
+              'worker_production_report_item_title_small_order_subsidy_rate'
+                  .tr),
+        )
       ];
     }
     if (data is WorkerProductionDetailType2) {
       return [
-        DataColumn(label: Text(data.itemNo ?? '')),
-        DataColumn(label: Text(data.processNumber ?? '')),
-        DataColumn(label: Text(data.processName ?? '')),
         DataColumn(
-          label: Text(data.qty.toShowString()),
+          label: Text('worker_production_report_item_title_goods_no'.tr),
+        ),
+        DataColumn(
+          label: Text('worker_production_report_item_title_process_code'.tr),
+        ),
+        DataColumn(
+          label: Text('worker_production_report_item_title_process_name'.tr),
+        ),
+        DataColumn(
+          label: Text('worker_production_report_item_title_qty'.tr),
           numeric: true,
         ),
         if (state.showPrice)
           DataColumn(
-            label: Text(data.price.toShowString()),
+            label: Text('worker_production_report_item_title_price'.tr),
             numeric: true,
           ),
         if (state.showAmount)
           DataColumn(
-            label: Text(data.amount.toShowString()),
+            label: Text('worker_production_report_item_title_amount'.tr),
             numeric: true,
           ),
-        DataColumn(label: Text(data.smallBillSubsidy.toShowString())),
-        if (state.showAmount)
+        DataColumn(
+          label: Text(
+              'worker_production_report_item_title_small_order_subsidy'.tr),
+        ),
+        if (state.showAmount && state.showPrice)
           DataColumn(
-            label: Text(data.amountSum.toShowString()),
+            label: Text('worker_production_report_item_title_amount_total'.tr),
             numeric: true,
           ),
-        DataColumn(label: Text(data.smallBillSubsidyPCT.toShowString()))
+        DataColumn(
+          label: Text(
+              'worker_production_report_item_title_small_order_subsidy_rate'
+                  .tr),
+        )
       ];
     }
     if (data is WorkerProductionDetailType3) {
       return [
-        DataColumn(label: Text(data.empNumber ?? '')),
-        DataColumn(label: Text(data.date ?? '')),
-        DataColumn(label: Text(data.empName ?? '')),
         DataColumn(
-          label: Text(data.qty.toShowString()),
+          label: Text('worker_production_report_item_title_worker_number'.tr),
+        ),
+        DataColumn(
+          label: Text('worker_production_report_item_title_date'.tr),
+        ),
+        DataColumn(
+          label: Text('worker_production_report_item_title_worker_name'.tr),
+        ),
+        DataColumn(
+          label: Text('worker_production_report_item_title_qty'.tr),
           numeric: true,
         ),
         if (state.showAmount)
           DataColumn(
-            label: Text(data.amount.toShowString()),
+            label: Text('worker_production_report_item_title_amount'.tr),
             numeric: true,
           ),
       ];
@@ -213,7 +260,9 @@ class _WorkerProductionDetailPageState
         DatePicker(pickerController: logic.pickerControllerStartDate),
         DatePicker(pickerController: logic.pickerControllerEndDate),
         OptionsPicker(pickerController: logic.pickerControllerReportType),
-        EditText(hint: 'worker_production_detail_query_hint'.tr, onChanged: (v) => state.etWorker = v),
+        EditText(
+            hint: 'worker_production_detail_query_hint'.tr,
+            controller: logic.tecWorkerNumber),
       ],
       query: () => logic.query(),
       body: Obx(

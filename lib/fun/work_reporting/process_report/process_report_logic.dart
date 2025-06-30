@@ -84,9 +84,9 @@ class ProcessReportLogic extends GetxController {
             'EmpID':c.empID,
             'Qty':c.qty,
           }],
-          'UserID': getUserInfo()!.userID,
-          'EmpID': getUserInfo()!.empID,
-          'OrganizeID': getUserInfo()!.organizeID,
+          'UserID': userInfo?.userID,
+          'EmpID': userInfo?.empID,
+          'OrganizeID': userInfo?.organizeID,
         },
       ).then((response) {
         if (response.resultCode == resultSuccess) {

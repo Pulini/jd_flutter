@@ -121,7 +121,7 @@ class _SapInkColorMatchingRecreatePageState
 
   setPresetWeight() {
     if (!hasSet.value) {
-      FocusScope.of(context).requestFocus(FocusNode());
+      hidKeyboard();
       logic.setPresetWeight(controller.text.toDoubleTry());
       hasSet.value = true;
     }

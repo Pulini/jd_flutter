@@ -32,7 +32,7 @@ class ProcessDispatchLogic extends GetxController
         'WorkTicketNumber': workTicket,
         'Date': date,
         'EmpNumber': empNumber,
-        'DeptID': getUserInfo()!.departmentID,
+        'DeptID': userInfo?.departmentID,
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
@@ -174,7 +174,7 @@ class ProcessDispatchLogic extends GetxController
         'FIDs': state.dataList.firstWhere((data) => data.select == true).fIDs,
         'CardNos':
             state.dataList.firstWhere((data) => data.select == true).cardNos,
-        'UserID': getUserInfo()!.userID,
+        'UserID': userInfo?.userID,
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
@@ -439,8 +439,8 @@ class ProcessDispatchLogic extends GetxController
           ],
           'LabelCount': state.createLabelQty,
           'BarCodeType': state.submitType.value == '单码' ? '1' : '2',
-          'UserID': getUserInfo()!.userID,
-          'DeptID': getUserInfo()!.departmentID,
+          'UserID': userInfo?.userID,
+          'DeptID': userInfo?.departmentID,
         },
       ).then((response) {
         if (response.resultCode == resultSuccess) {
@@ -490,8 +490,8 @@ class ProcessDispatchLogic extends GetxController
       loading: 'process_dispatch_label_deleting'.tr,
       body: {
         'Barcodes': list,
-        'UserID': getUserInfo()!.userID,
-        'DeptID': getUserInfo()!.departmentID,
+        'UserID': userInfo?.userID,
+        'DeptID': userInfo?.departmentID,
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
@@ -525,7 +525,7 @@ class ProcessDispatchLogic extends GetxController
       loading: 'process_dispatch_label_deleting'.tr,
       body: {
         'Barcodes': list,
-        'DeptID': getUserInfo()!.departmentID,
+        'DeptID': userInfo?.departmentID,
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {

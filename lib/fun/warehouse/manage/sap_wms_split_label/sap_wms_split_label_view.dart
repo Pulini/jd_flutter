@@ -201,7 +201,7 @@ class _SapWmsSplitLabelPageState extends State<SapWmsSplitLabelPage> {
   }
 
   split() {
-    FocusScope.of(context).requestFocus(FocusNode());
+    hidKeyboard();
     logic.split(
       splitQty: controller.text.toDoubleTry(),
       input: () => fn.requestFocus(),
@@ -212,7 +212,7 @@ class _SapWmsSplitLabelPageState extends State<SapWmsSplitLabelPage> {
   @override
   void initState() {
     pdaScanner(scan: (code) {
-      FocusScope.of(context).requestFocus(FocusNode());
+      hidKeyboard();
       logic.scanCode(code);
     });
     super.initState();

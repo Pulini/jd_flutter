@@ -1,58 +1,58 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/delivery_order_info.dart';
+import 'package:jd_flutter/fun/warehouse/in/purchase_order_warehousing/purchase_order_warehousing_logic.dart';
+import 'package:jd_flutter/fun/warehouse/in/purchase_order_warehousing/purchase_order_warehousing_state.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/scanner.dart';
 
-import 'delivery_order_logic.dart';
-import 'delivery_order_state.dart';
-
-class DeliveryOrderLabelBindingPage extends StatefulWidget {
-  const DeliveryOrderLabelBindingPage({super.key});
+class PurchaseOrderWarehousingBindingLabelPage extends StatefulWidget {
+  const PurchaseOrderWarehousingBindingLabelPage({super.key});
 
   @override
-  State<DeliveryOrderLabelBindingPage> createState() =>
-      _DeliveryOrderLabelBindingPageState();
+  State<PurchaseOrderWarehousingBindingLabelPage> createState() =>
+      _PurchaseOrderWarehousingBindingLabelPageState();
 }
 
-class _DeliveryOrderLabelBindingPageState
-    extends State<DeliveryOrderLabelBindingPage> {
-  final DeliveryOrderLogic logic = Get.find<DeliveryOrderLogic>();
-  final DeliveryOrderState state = Get.find<DeliveryOrderLogic>().state;
+class _PurchaseOrderWarehousingBindingLabelPageState
+    extends State<PurchaseOrderWarehousingBindingLabelPage> {
+  final PurchaseOrderWarehousingLogic logic =
+      Get.find<PurchaseOrderWarehousingLogic>();
+  final PurchaseOrderWarehousingState state =
+      Get.find<PurchaseOrderWarehousingLogic>().state;
   var pieceController = TextEditingController();
 
-  Widget _item(DeliveryOrderLabelInfo data) => Obx(() => Container(
-        margin: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
-        padding: const EdgeInsets.only(left: 10),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15),
-          color: data.isChecked.value ? Colors.green.shade200 : Colors.white,
-        ),
-        child: Row(
-          children: [
-            Expanded(child: Text(data.pieceNo ?? '')),
-            IconButton(
-              onPressed: () => askDialog(
-                content: '确定要删除本条标签吗？',
-                confirm: () => logic.deletePiece(pieceInfo: data),
-              ),
-              icon: const Icon(
-                Icons.delete_forever,
-                color: Colors.red,
-              ),
-            )
-          ],
-        ),
-      ));
+  Widget _item(DeliveryOrderLabelInfo data) {
+    return Container(
+      margin: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
+      padding: const EdgeInsets.only(left: 10),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(15),
+        color: Colors.white,
+      ),
+      child: Row(
+        children: [
+          Expanded(child: Text(data.pieceNo ?? '')),
+          IconButton(
+            onPressed: () => askDialog(
+              content: '确定要删除本条标签吗？',
+              confirm: () => logic.deletePiece(pieceInfo: data),
+            ),
+            icon: const Icon(
+              Icons.delete_forever,
+              color: Colors.red,
+            ),
+          )
+        ],
+      ),
+    );
+  }
 
   @override
   void initState() {
     state.canAddPiece.value = false;
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      logic.getLabelBindingStaging();
-    });
     pdaScanner(scan: (code) {
       if (code.isNotEmpty) logic.scanLabel(code);
     });
@@ -127,45 +127,18 @@ class _DeliveryOrderLabelBindingPageState
           ),
           Padding(
             padding: const EdgeInsets.only(left: 10, right: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Obx(() => textSpan(
-                      hint: '已扫描：',
-                      text: state.scannedLabelList.length.toString(),
-                    )),
-                textSpan(
-                  hint: '送货单号：',
-                  text: state.orderItemInfo[0].deliNo ?? '',
-                  textColor: Colors.green.shade700,
-                ),
-              ],
-            ),
+            child: Obx(() => textSpan(
+                  hint: '已扫描：',
+                  text: state.scannedLabelList.length.toString(),
+                )),
           ),
-          Row(
-            children: [
-              Expanded(
-                child: Obx(() => CombinationButton(
-                      combination: Combination.left,
-                      isEnabled: state.scannedLabelList.isNotEmpty,
-                      text: '暂存',
-                      click: () => logic.stagingLabelBinding(),
-                    )),
-              ),
-              Expanded(
-                child: Obx(() => CombinationButton(
-                      combination: Combination.right,
-                      isEnabled: state.scannedLabelList.isNotEmpty &&
-                          (state.scannedLabelList
-                                  .every((v) => v.isChecked.value) ||
-                              state.scannedLabelList
-                                  .every((v) => !v.isChecked.value)),
-                      text: '提交',
-                      click: () => logic.submitLabelBinding(),
-                    )),
-              ),
-            ],
-          )
+          Obx(() => CombinationButton(
+                combination: Combination.right,
+                isEnabled: state.scannedLabelList.isNotEmpty,
+                text: '提交',
+                click: () =>
+                    logic.submitLabelBinding(() => Get.back(result: true)),
+              ))
         ],
       ),
     );

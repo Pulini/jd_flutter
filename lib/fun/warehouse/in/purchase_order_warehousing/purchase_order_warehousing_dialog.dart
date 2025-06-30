@@ -1,7 +1,7 @@
-import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/bean/http/response/delivery_order_info.dart';
 import 'package:jd_flutter/bean/http/response/leader_info.dart';
 import 'package:jd_flutter/bean/http/response/purchase_order_warehousing_info.dart';
 import 'package:jd_flutter/bean/http/response/sap_purchase_stock_in_info.dart';
@@ -14,24 +14,10 @@ import 'package:jd_flutter/widget/picker/picker_view.dart';
 
 stockInDialog({
   required String factoryNumber,
-  required List<PurchaseOrderInfo> dataList,
+  required List<PurchaseOrderDetailsInfo> submitList,
+  List<DeliveryOrderLabelInfo>? labelList,
   required Function() refresh,
 }) {
-  if (groupBy(dataList, (v) => v.isScanPieces).length > 1) {
-    errorDialog(content: '扫码与非扫码工单不能同时操作！');
-    return;
-  }
-  var submitList = <PurchaseOrderDetailsInfo>[];
-  for (var order in dataList) {
-    submitList.addAll(
-        order.details!.where((v) => v.isSelected.value && v.qty.value > 0));
-  }
-  if (submitList.isEmpty) {
-    errorDialog(
-        content: 'purchase_order_warehousing_dialog_not_select_order'.tr);
-    return;
-  }
-
   var leaderEnable = false.obs;
   var errorMsg = ''.obs;
   var leaderList = <LeaderInfo>[].obs;
@@ -45,7 +31,7 @@ stockInDialog({
     PickerType.ghost,
     buttonName: 'purchase_order_warehousing_dialog_storage_location'.tr,
     saveKey: spSavePurchaseOrderWarehousingCheckLeader,
-    dataList: () => getStorageLocationList(factoryNumber),
+    dataList: getStorageLocationList(factoryNumber),
     onSelected: (v) => _checkFaceInfo(
       billType: '入库单',
       sapFactoryNumber: (v as LocationInfo).factoryNumber ?? '',
@@ -100,6 +86,7 @@ stockInDialog({
             leaderNumber: leader.liableEmpCode ?? '',
             leaderB64: leaderB64,
             data: submitList,
+            labelList: labelList,
             success: stockInSuccess,
           ),
         ),
@@ -109,6 +96,7 @@ stockInDialog({
         stockID: locationController.selectedId.value,
         postDate: postDate.getDateFormatSapYMD(),
         data: submitList,
+        labelList: labelList,
         success: stockInSuccess,
       );
     }
@@ -244,6 +232,7 @@ _stockIn({
   String? leaderNumber,
   String? leaderB64,
   required List<PurchaseOrderDetailsInfo> data,
+  List<DeliveryOrderLabelInfo>? labelList,
   required Function(String) success,
 }) {
   httpPost(
@@ -264,9 +253,10 @@ _stockIn({
           }
       ],
       'CGOrderInstockJBQ2SapList': [
-        // {
-        //   'PieceNo':'',
-        // }
+        for (DeliveryOrderLabelInfo label in (labelList ?? []))
+          {
+            'PieceNo': label.pieceNo,
+          }
       ],
       'PictureList': [
         if (pickerB64 != null)

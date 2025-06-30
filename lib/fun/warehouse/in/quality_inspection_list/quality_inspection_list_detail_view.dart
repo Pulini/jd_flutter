@@ -19,6 +19,7 @@ class _QualityInspectionListDetailPageState
       Get.find<QualityInspectionListLogic>();
   final QualityInspectionListState state =
       Get.find<QualityInspectionListLogic>().state;
+  var index=Get.arguments['index'];
 
   Widget _item(StuffQualityInspectionInfo item) {
     return SizedBox(
@@ -386,8 +387,8 @@ class _QualityInspectionListDetailPageState
                 ),
                 Expanded(
                   child: ListView.builder(
-                    itemCount: state.showDetailDataList.length,
-                    itemBuilder: (c, i) => _item(state.showDetailDataList[i]),
+                    itemCount: state.showDataList[index].length,
+                    itemBuilder: (c, i) => _item(state.showDataList[index][i]),
                   ),
                 ),
               ],

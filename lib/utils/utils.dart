@@ -876,3 +876,6 @@ Future getStorageLocationList(String factoryNumber) async {
     return response.message;
   }
 }
+hidKeyboard() {
+  FocusScope.of(Get.overlayContext!).requestFocus(FocusNode());
+}

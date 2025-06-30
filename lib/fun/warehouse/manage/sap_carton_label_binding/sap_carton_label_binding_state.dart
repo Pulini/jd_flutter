@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:jd_flutter/bean/http/sap_label_binding_info.dart';
+import 'package:jd_flutter/bean/http/response/sap_carton_label_binding_info.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 
@@ -16,11 +16,11 @@ enum ScanLabelOperationType {
   const ScanLabelOperationType(this.value, this.text);
 }
 
-class SapLabelBindingState {
+class SapCartonLabelBindingState {
   var labelList = <SapLabelBindingInfo>[].obs;
   var operationType = ScanLabelOperationType.unKnown;
   var operationTypeText = ScanLabelOperationType.unKnown.text.obs;
-  var newBoxLabelID = ''.obs;
+  var newBoxLabelID = '00505685E5761FD090D2EB8C111F2541'.obs;
 
   getLabelInfo({
     required String labelCode,
@@ -28,7 +28,7 @@ class SapLabelBindingState {
   }) {
     sapPost(
       loading: '正在获取标签信息...',
-      method: webApiSapLabelBindingGetLabelInfo,
+      method: webApiSapGetLabelBindingInfo,
       body: {
         'ZTYPE': '04',
         'bqid': labelCode,
@@ -41,10 +41,10 @@ class SapLabelBindingState {
         if (labelList.isNotEmpty &&
             labelList[0].labelType() != list[0].labelType()) {
           error.call('标签供应商、工厂、物料大类、保管形式、单据类型不同，不能同时操作！');
-        }else{
+        } else {
           for (var label in list) {
             if (!labelList.any((v) =>
-            v.labelID == label.labelID || v.boxLabelID == label.labelID)) {
+                v.labelID == label.labelID || v.boxLabelID == label.labelID)) {
               labelList.add(label);
             }
           }
@@ -56,21 +56,34 @@ class SapLabelBindingState {
   }
 
   getLabelPrintInfo({
-    required Function(List<SapLabelBindingPrintInfo>) success,
+    required Function(Map<SapPrintLabelInfo, List<SapPrintLabelSubInfo>>) success,
     required Function(String) error,
   }) {
     sapPost(
       loading: '正在获取标签信息...',
-      method: webApiSapLabelBindingGetLabelInfo,
+      method: webApiSapGetPrintLabelListInfo,
       body: {
-        'ZTYPE': '03',
-        'bqid': newBoxLabelID.value,
+        'BQID': newBoxLabelID.value,
+        'OPERATE': '10', //10 绑定 20 解绑  输出内容都一样 ,拆分不用传
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        success.call([
-          for (var json in response.data) SapLabelBindingPrintInfo.fromJson(json)
-        ]);
+        var list = [
+          for (var json in response.data) SapPrintLabelInfo.fromJson(json)
+        ];
+        var map = <SapPrintLabelInfo, List<SapPrintLabelSubInfo>>{};
+        list.where((v) => v.isBoxLabel).forEach((v) {
+          var materials = <SapPrintLabelSubInfo>[];
+          list.where((v2) => v2.boxLabelID == v.labelID).forEach((v2) {
+            materials.addAll(v2.subLabel ?? []);
+          });
+          map[v] = materials;
+        });
+        if (map.isEmpty) {
+          error.call('没有可打印的标签！');
+        } else {
+          success.call(map);
+        }
       } else {
         error.call(response.message ?? 'query_default_error'.tr);
       }
@@ -90,12 +103,12 @@ class SapLabelBindingState {
   }) {
     sapPost(
       loading: '正在提交标签${operationTypeText.value}...',
-      method: webApiSapLabelBindingSubmitOperation,
+      method: webApiSapSubmitLabelBindingOperation,
       body: {
         'WERKS': userInfo?.number,
         'USNAM': userInfo?.name,
         'ZNAME_CN': userInfo?.name,
-        'LIFNR':supplierNumber,
+        'LIFNR': supplierNumber,
         'OPERATE': '10',
         'ZZCJC': long,
         'ZZCJK': width,
