@@ -28,6 +28,8 @@ class HomeLogic extends GetxController {
         child: ClipOval(
           child: Image.network(
             userInfo!.picUrl!,
+            cacheHeight:200,
+            cacheWidth: 200,
             errorBuilder: (ctx, err, st) =>
                 Image.asset(
                   'assets/images/ic_logo.png',

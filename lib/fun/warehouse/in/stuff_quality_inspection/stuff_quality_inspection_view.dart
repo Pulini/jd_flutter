@@ -473,7 +473,7 @@ class _StuffQualityInspectionPageState extends State<StuffQualityInspectionPage>
     state.picture.clear();
     state.picture.add(VisitPhotoBean(photo: "", typeAdd: "0"));
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      logic.searchPeople(getUserInfo()!.number.toString());
+      logic.searchPeople(userInfo?.number??'');
     });
   }
 

@@ -648,7 +648,7 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
               suffixIcon: CombinationButton(
                 text: '搜索',
                 click: () {
-                  FocusScope.of(context).requestFocus(FocusNode());
+                  hidKeyboard();
                   feishuViewCloudDocFiles(query: controller.text);
                 },
               ),

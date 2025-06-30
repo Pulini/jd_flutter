@@ -177,9 +177,9 @@ Future<BaseData> _doHttp({
     //创建dio对象
     var dio = Dio(BaseOptions(
       baseUrl: baseUrl,
-      connectTimeout: const Duration(minutes: 2),
-      sendTimeout: const Duration(minutes: 2),
-      receiveTimeout: const Duration(minutes: 2),
+      connectTimeout: const Duration(seconds: 10),
+      sendTimeout: const Duration(seconds: 10),
+      receiveTimeout: const Duration(seconds: 10),
     ));
 
     //接口拦截器
@@ -202,7 +202,7 @@ Future<BaseData> _doHttp({
             logger.e('需要重新登录');
             spSave(spSaveUserInfo, '');
             if (loading != null && loading.isNotEmpty) loadingDismiss();
-            // handler.next(response);
+            handler.next(response);
             reLoginPopup();
           } else if (baseData.resultCode == 3) {
             logger.e('需要更新版本');
@@ -1333,17 +1333,26 @@ const webApiGetQualityInspection = "api/Inspection/GetQualityInspection";
 //微信,APP获取SAP品质检验单单条数据(编辑)
 const webApiGetQualityInspectionList = "api/DeliveryNote/GetQualityInspectionList";
 
+//获取品检单分色及标签数据
+const webApiGetQualityInspectionColorLabelInfo = "api/DeliveryNote/ZMM_GET_DELI_PIECE";
+
 //入库冲销获取色系信息
 const webApiForSapReceiptReversal = "sap/zapp/ZFUN_GET_ZCHECKB_COSEP";
 
-//品检单冲销
+//品检单冲销xiao
 const webApiPurchaseOrderStockInNew = "api/Package/PurchaseOrderStockIn_Off";
 
 //材料品质异常 品检不合格原因到OA
 const webApiAbnormalMaterialQuality = "api/Inspection/AbnormalMaterialQuality";
 
 //获取标签信息
-const webApiSapLabelBindingGetLabelInfo = 'sap/zapp/ZMM051_GET_BQSC';
+const webApiSapGetLabelBindingInfo = 'sap/zapp/ZMM051_GET_BQSC';
 
 //提交标签绑定操作
-const webApiSapLabelBindingSubmitOperation = 'sap/zapp/ZMM051_RES_ZDBDX';
+const webApiSapSubmitLabelBindingOperation = 'sap/zapp/ZMM051_RES_ZDBDX';
+
+//根据标签id查找原标及新标
+const webApiSapGetPrintLabelListInfo = 'sap/zapp/ZMM051_BQ_SPLIT';
+
+//提交小标签拆分数据
+const webApiSapSubmitLabelSplit = 'sap/zapp/ZMM051_SPLIT_SMALLBQ';

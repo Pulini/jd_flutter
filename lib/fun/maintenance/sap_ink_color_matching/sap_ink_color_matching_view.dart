@@ -247,7 +247,7 @@ class _SapInkColorMatchingPageState extends State<SapInkColorMatchingPage> {
                 click: () => logic.createMixOrder(
                   newTypeBody: controller.text,
                   refresh: () {
-                    FocusScope.of(context).requestFocus(FocusNode());
+                    hidKeyboard();
                     controller.clear();
                     _refreshOrder();
                   },

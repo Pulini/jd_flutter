@@ -62,7 +62,7 @@ class HandoverReportListLogic extends GetxController {
       method: webApiGetScWorkCardReportCheckList,
       params: {
         'Date': pickerControllerDate.getDateFormatSapYMD(),
-        'UserID': getUserInfo()!.userID,
+        'UserID': userInfo?.userID,
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
@@ -267,7 +267,7 @@ class HandoverReportListLogic extends GetxController {
       loading: 'handover_report_delete_and_reverse'.tr,
       body: {
         'InterIDs': interList,
-        'UserID': getUserInfo()!.userID,
+        'UserID': userInfo?.userID,
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
@@ -291,7 +291,7 @@ class HandoverReportListLogic extends GetxController {
       loading: 'handover_report_delete'.tr,
       body: {
         'InterIDs': interList,
-        'UserID': getUserInfo()!.userID,
+        'UserID': userInfo?.userID,
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
@@ -333,7 +333,7 @@ class HandoverReportListLogic extends GetxController {
       loading: 'handover_report_review_and_generate'.tr,
       body: {
         'InterIDs': interList,
-        'UserID': getUserInfo()!.userID,
+        'UserID': userInfo?.userID,
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {

@@ -56,7 +56,7 @@ class ComponentHandoverLogic extends GetxController {
             for (var i = 0; i < state.dataList.length; ++i)
               state.dataList[i].code
           ],
-          'SCDeptID': getUserInfo()!.departmentID
+          'SCDeptID': userInfo?.departmentID
         },
       ).then((response) {
         if (response.resultCode == resultSuccess) {
@@ -312,8 +312,8 @@ class ComponentHandoverLogic extends GetxController {
         'UserID': state.empId,
         'DCDeptID': state.departmentId, //转入人组别
         'DCEmpID': state.empId, //转入人empId
-        'SCDeptID': getUserInfo()!.departmentID, //转出人empId
-        'SCEmpID': getUserInfo()!.empID, //转出人empId
+        'SCDeptID': userInfo?.departmentID, //转出人empId
+        'SCEmpID': userInfo?.empID, //转出人empId
         'PictureList': [
           {
             "EmpCode": state.empCode,

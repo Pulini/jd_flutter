@@ -29,9 +29,9 @@ class WarehouseAllocationLogic extends GetxController {
             'BillTypeID': '6',
             'Red': 1,
             'ProcessFlowID': 0,
-            'OrganizeID': getUserInfo()!.organizeID,
-            'DefaultStockID': getUserInfo()!.defaultStockID,
-            'UserID': getUserInfo()!.userID,
+            'OrganizeID': userInfo?.organizeID,
+            'DefaultStockID': userInfo?.defaultStockID,
+            'UserID': userInfo?.userID,
           },
         ).then((response) {
           if (response.resultCode == resultSuccess) {
@@ -75,8 +75,8 @@ class WarehouseAllocationLogic extends GetxController {
         ],
         'SCStockID': state.outStockId,
         'DCStockID': state.onStockId,
-        'OrganizeID': getUserInfo()!.organizeID,
-        'UserID': getUserInfo()!.userID,
+        'OrganizeID': userInfo?.organizeID,
+        'UserID': userInfo?.userID,
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {

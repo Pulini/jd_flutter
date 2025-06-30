@@ -281,7 +281,7 @@ class StuffQualityInspectionLogic extends GetxController {
       method: webApiAbnormalMaterialQuality,
       loading: 'quality_inspection_submit_abnormal'.tr,
       body: {
-        'ApplicantNumber': getUserInfo()!.number,
+        'ApplicantNumber': userInfo?.number,
         //申报人工号
         'StorageDate': getDateYMD(),
         //入库日期
@@ -506,14 +506,14 @@ class StuffQualityInspectionLogic extends GetxController {
       method: webApiCreateInspection,
       loading: 'quality_inspection_create_inspection'.tr,
       body: {
-        'MES_IdS': getUserInfo()!.userID,
+        'MES_IdS': userInfo?.userID,
         'MES_Heads': [
           {
             'CompanyCode': state.inspectionsListData[0].companyCode,
             'Creator': '',
             'Factory': state.inspectionsListData[0].factoryNumber,
             'IsConcessive': state.compromise.value ? 'X' : '',
-            'ModifiedBy': getUserInfo()!.number,
+            'ModifiedBy': userInfo?.number,
             'Remarks': state.inspectionsListData[0].remarks,
             'SourceOrderType': state.inspectionsListData[0].sourceOrderType,
             'SupplierAccountNumber':
@@ -568,7 +568,7 @@ class StuffQualityInspectionLogic extends GetxController {
             {
               'Batch': item.batch,
               'ColorSeparationQuantity': item.qty,
-              'Creator': getUserInfo()!.number,
+              'Creator': userInfo?.number,
               'PurchaseVoucherNo': '',
               'PurchaseDocumentItemNumber': '',
               'SalesAndDistributionVoucherNumber': '',
@@ -825,7 +825,7 @@ class StuffQualityInspectionLogic extends GetxController {
       method: webApiAbnormalMaterialQuality,
       loading: 'quality_inspection_submit_abnormal'.tr,
       body: {
-        'ApplicantNumber': getUserInfo()!.number,
+        'ApplicantNumber': userInfo?.number,
         //申报人工号
         'StorageDate': getDateYMD(),
         //入库日期
@@ -1050,11 +1050,11 @@ class StuffQualityInspectionLogic extends GetxController {
       method: webApiCreateInspection,
       loading: 'quality_inspection_create_inspection'.tr,
       body: {
-        'MES_IdS': getUserInfo()!.userID,
+        'MES_IdS': userInfo?.userID,
         'MES_Heads': [
           {
             'CompanyCode':state.detailInfo!.companyNumber,
-            'Creator': getUserInfo()!.number,
+            'Creator': userInfo?.number,
             'Factory': state.detailInfo!.factoryNumber,
             'IsConcessive': state.compromise.value ? 'X' : '',
             'ModifiedBy': '',
@@ -1111,7 +1111,7 @@ class StuffQualityInspectionLogic extends GetxController {
             {
               'Batch': item.batch,
               'ColorSeparationQuantity': item.qty,
-              'Creator': getUserInfo()!.number,
+              'Creator': userInfo?.number,
               'PurchaseVoucherNo': detailList.toList()[0].contractNo,
               'PurchaseDocumentItemNumber': detailList.toList()[0].purchaseOrderLineNumber,
               'SalesAndDistributionVoucherNumber': detailList.toList()[0].productionNumber,

@@ -166,7 +166,7 @@ class _PartReportCancelPageState extends State<PartReportCancelPage> {
                     hint: 'part_report_cancel_qty'.tr, text: state.qty.value),
                 expandedTextSpan(
                     hint: 'part_report_cancel_personal'.tr,
-                    text: '${getUserInfo()!.name}(${getUserInfo()!.number})')
+                    text: '${userInfo?.name}(${userInfo?.number})')
               ],
             ),
             _title(),

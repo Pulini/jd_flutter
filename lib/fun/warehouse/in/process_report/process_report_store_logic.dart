@@ -119,7 +119,7 @@ class ProcessReportStoreLogic extends GetxController {
   }) {
     httpGet(method: webApiGetBarCodeStatusByDepartmentID, params: {
       'Type': BarCodeReportType.processReportInStock.text,
-      'DepartmentID': getUserInfo()!.departmentID,
+      'DepartmentID': userInfo?.departmentID,
     }).then((response) {
       if (response.resultCode == resultSuccess) {
         state.usedList.clear();

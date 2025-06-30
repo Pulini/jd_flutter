@@ -437,24 +437,31 @@ class _PurchaseOrderWarehousingPageState
                             children: [
                               CombinationButton(
                                 combination: Combination.left,
-                                text: 'purchase_order_warehousing_distribution'.tr,
+                                text: 'purchase_order_warehousing_distribution'
+                                    .tr,
                                 click: () => logic.distribution(
                                   qty:
                                       distributionController.text.toDoubleTry(),
                                   refresh: () {
                                     FocusScope.of(context)
                                         .requestFocus(FocusNode());
-                                    showSnackBar(message: 'purchase_order_warehousing_distribution_finish'.tr);
+                                    showSnackBar(
+                                        message:
+                                            'purchase_order_warehousing_distribution_finish'
+                                                .tr);
                                   },
                                 ),
                               ),
                               CombinationButton(
                                 combination: Combination.right,
-                                text: 'purchase_order_warehousing_warehousing'.tr,
-                                click: () => stockInDialog(
-                                  factoryNumber: state.factoryNumber,
-                                  dataList: state.orderList,
-                                  refresh: () => _query(),
+                                text:
+                                    'purchase_order_warehousing_warehousing'.tr,
+                                click: () => logic.checkOrderIsNeedScan(
+                                  stockIn: (list) => stockInDialog(
+                                    factoryNumber: state.factoryNumber,
+                                    submitList: list,
+                                    refresh: () => _query(),
+                                  ),
                                 ),
                               ),
                             ],

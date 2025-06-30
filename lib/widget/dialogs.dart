@@ -46,6 +46,7 @@ msgDialog({
 askDialog({
   String title = '',
   required String? content,
+  Color? contentColor,
   Function()? confirm,
   String? confirmText,
   Color? confirmColor,
@@ -59,7 +60,7 @@ askDialog({
       canPop: false,
       child: AlertDialog(
         title: Text(title.isEmpty ? 'dialog_default_title'.tr : title,
-            style: TextStyle(color: confirmColor ?? Colors.black)),
+            style: TextStyle(color: contentColor ?? Colors.black)),
         content: Text(content ?? ''),
         actions: <Widget>[
           TextButton(
@@ -67,7 +68,10 @@ askDialog({
               Get.back();
               confirm?.call();
             },
-            child: Text(confirmText ?? 'dialog_default_confirm'.tr),
+            child: Text(
+              confirmText ?? 'dialog_default_confirm'.tr,
+              style: TextStyle(color: confirmColor ?? Colors.black87),
+            ),
           ),
           TextButton(
             onPressed: () {
@@ -181,7 +185,7 @@ loadingDismiss() {
     final routeDialog = ModalRoute.of(loadingKey!.currentContext!);
     if (routeDialog != null) {
       Navigator.removeRoute(Get.overlayContext!, routeDialog);
-      loadingKey=null;
+      loadingKey = null;
       debugPrint('loading dismiss');
     }
   }

@@ -18,7 +18,8 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
+class _HomePageState extends State<HomePage>
+    with AutomaticKeepAliveClientMixin {
   final logic = Get.put(HomeLogic());
   final state = Get.find<HomeLogic>().state;
 
@@ -56,7 +57,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
   }
 
   _item(ButtonItem item) {
-    return   Card(
+    return Card(
       color: item is HomeButton ? Colors.white : Colors.blue.shade50,
       child: item is HomeButton
           ? HomeSubItem(isGroup: false, item: item)
@@ -69,11 +70,15 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
                 (item as HomeButtonGroup).icon,
                 width: 50,
                 height: 50,
+                cacheHeight: 75,
+                cacheWidth: 75,
                 color: Colors.blueAccent,
                 errorBuilder: (ctx, err, stackTrace) => Image.asset(
                   _logo,
                   height: 30,
                   width: 30,
+                  cacheHeight: 75,
+                  cacheWidth: 75,
                   color: Colors.blueAccent,
                 ),
               ),
@@ -95,11 +100,15 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
         bar.icon ?? '',
         width: 30,
         height: 30,
+        cacheHeight: 75,
+        cacheWidth: 75,
         color: bar.getTextColor(),
         errorBuilder: (ctx, err, stackTrace) => Image.asset(
           _logo,
           height: 30,
           width: 30,
+          cacheHeight: 75,
+          cacheWidth: 75,
           color: bar.getTextColor(),
         ),
       ),
@@ -128,13 +137,74 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    // return Container(
+    //   decoration: backgroundColor(),
+    //   child: Obx(() => state.isLoading.value
+    //       ? Scaffold(
+    //           backgroundColor: Colors.transparent,
+    //           appBar: _appBar(),
+    //           body: const Center(
+    //             child: Column(
+    //               mainAxisAlignment: MainAxisAlignment.center,
+    //               children: [
+    //                 CupertinoActivityIndicator(
+    //                   radius: 20,
+    //                 ),
+    //                 SizedBox(height: 10),
+    //                 Text(
+    //                   '读取功能列表中...',
+    //                   style: TextStyle(
+    //                     fontSize: 18,
+    //                     decoration: TextDecoration.none,
+    //                   ),
+    //                 )
+    //               ],
+    //             ),
+    //           ),
+    //         )
+    //       : state.navigationBar.isEmpty
+    //           ? Scaffold(
+    //               backgroundColor: Colors.transparent,
+    //               appBar: _appBar(),
+    //               body: Center(
+    //                 child: IconButton(
+    //                   onPressed: () => logic.refreshFunList(),
+    //                   icon: const Icon(
+    //                     Icons.refresh,
+    //                     color: Colors.blueAccent,
+    //                     size: 50,
+    //                   ),
+    //                 ),
+    //               ),
+    //             )
+    //           : Scaffold(
+    //               backgroundColor: Colors.transparent,
+    //               appBar: _appBar(),
+    //               body: ListView.builder(
+    //                 padding: const EdgeInsets.all(8),
+    //                 itemCount: state.buttons.length,
+    //                 itemBuilder: (context, index) =>
+    //                     _item(state.buttons[index]),
+    //               ),
+    //               bottomNavigationBar: BottomNavigationBar(
+    //                 type: BottomNavigationBarType.shifting,
+    //                 items: [
+    //                   for (var bar in state.navigationBar) _navigationBar(bar)
+    //                 ],
+    //                 currentIndex: state.nBarIndex,
+    //                 selectedItemColor: state.navigationBar[0].getTextColor(),
+    //                 onTap: (i) => setState(() => logic.navigationBarClick(i)),
+    //               ),
+    //             )),
+    // );
+
     return Container(
       decoration: backgroundColor(),
-      child: Obx(() => state.isLoading.value
-          ? Scaffold(
-              backgroundColor: Colors.transparent,
-              appBar: _appBar(),
-              body: const Center(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: _appBar(),
+        body: Obx(() => state.isLoading.value
+            ? const Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -151,13 +221,9 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
                     )
                   ],
                 ),
-              ),
-            )
-          : state.navigationBar.isEmpty
-              ? Scaffold(
-                  backgroundColor: Colors.transparent,
-                  appBar: _appBar(),
-                  body: Center(
+              )
+            : state.navigationBar.isEmpty
+                ? Center(
                     child: IconButton(
                       onPressed: () => logic.refreshFunList(),
                       icon: const Icon(
@@ -166,27 +232,25 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
                         size: 50,
                       ),
                     ),
-                  ),
-                )
-              : Scaffold(
-                  backgroundColor: Colors.transparent,
-                  appBar: _appBar(),
-                  body: ListView.builder(
+                  )
+                : ListView.builder(
                     padding: const EdgeInsets.all(8),
                     itemCount: state.buttons.length,
                     itemBuilder: (context, index) =>
                         _item(state.buttons[index]),
-                  ),
-                  bottomNavigationBar: BottomNavigationBar(
-                    type: BottomNavigationBarType.shifting,
-                    items: [
-                      for (var bar in state.navigationBar) _navigationBar(bar)
-                    ],
-                    currentIndex: state.nBarIndex,
-                    selectedItemColor: state.navigationBar[0].getTextColor(),
-                    onTap: (i) => setState(() => logic.navigationBarClick(i)),
-                  ),
-                )),
+                  )),
+        bottomNavigationBar: Obx(()=>state.navigationBar.isEmpty
+            ? Container()
+            : BottomNavigationBar(
+          type: BottomNavigationBarType.shifting,
+          items: [
+            for (var bar in state.navigationBar) _navigationBar(bar)
+          ],
+          currentIndex: state.nBarIndex,
+          selectedItemColor: state.navigationBar[0].getTextColor(),
+          onTap: (i) => setState(() => logic.navigationBarClick(i)),
+        ),)
+      ),
     );
   }
 
@@ -228,11 +292,15 @@ class HomeSubItem extends StatelessWidget {
         item.icon,
         width: isGroup ? 30 : 40,
         height: isGroup ? 30 : 40,
+        cacheHeight: 75,
+        cacheWidth: 75,
         color: _color(item),
         errorBuilder: (context, url, error) => Image.asset(
           _logo,
           width: isGroup ? 30 : 40,
           height: isGroup ? 30 : 40,
+          cacheHeight: 75,
+          cacheWidth: 75,
           color: _color(item),
         ),
       ),

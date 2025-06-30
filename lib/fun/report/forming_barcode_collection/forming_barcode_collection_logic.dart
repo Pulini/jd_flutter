@@ -21,7 +21,7 @@ class FormingBarcodeCollectionLogic extends GetxController
     httpGet(
         method: webApiGetProductionOrderST,
         loading: 'forming_code_collection_get_data'.tr,
-        params: {'DepartmentID': getUserInfo()!.departmentID}).then((response) {
+        params: {'DepartmentID': userInfo?.departmentID}).then((response) {
       if (response.resultCode == resultSuccess) {
         state.dataList.value = [
           for (var json in response.data) FormingCollectionInfo.fromJson(json)

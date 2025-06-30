@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/bar_code.dart';
 import 'package:jd_flutter/fun/warehouse/out/production_scan_picking_material/production_scan_picking_material_dialog.dart';
+import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/check_box_widget.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
@@ -139,7 +140,7 @@ class _ProductionScanPickingMaterialPageState
                           message:
                               'production_scan_picking_material_input_code'.tr);
                     } else {
-                      FocusScope.of(context).requestFocus(FocusNode());
+                      hidKeyboard();
                       logic.scanCode(text);
                     }
                   },

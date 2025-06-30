@@ -19,7 +19,7 @@ class PartReportCancelLogic extends GetxController {
         method: webApiGetCanReportSummary,
         params: {
           'workCardBarCode': code,
-          'DeptID': getUserInfo()!.departmentID,
+          'DeptID': userInfo?.departmentID,
         },
       ).then((response) {
         if (response.resultCode == resultSuccess) {
@@ -51,7 +51,7 @@ class PartReportCancelLogic extends GetxController {
 
   //是否登录人提交
   checkPeople() {
-    if (getUserInfo()!.empID.toString() == state.empID) {
+    if (userInfo?.empID.toString() == state.empID) {
       return true;
     } else {
       return false;
@@ -70,8 +70,8 @@ class PartReportCancelLogic extends GetxController {
         loading: 'part_report_cancel_cancelling'.tr,
         params: {
           'WorkCardBarCode': state.workTicket,
-          'UserID': getUserInfo()!.number,
-          'DeptID': getUserInfo()!.departmentID,
+          'UserID': userInfo?.number,
+          'DeptID': userInfo?.departmentID,
         },
       ).then((response) {
         if (response.resultCode == resultSuccess) {
@@ -95,9 +95,9 @@ class PartReportCancelLogic extends GetxController {
         loading: 'part_report_cancel_reporting'.tr,
         body: {
           'WorkCardBarcode': state.workTicket,
-          'EmpID': getUserInfo()!.empID,
-          'UserID': getUserInfo()!.number,
-          'DeptID': getUserInfo()!.departmentID,
+          'EmpID': userInfo?.empID,
+          'UserID': userInfo?.number,
+          'DeptID': userInfo?.departmentID,
         },
       ).then((response) {
         if (response.resultCode == resultSuccess) {

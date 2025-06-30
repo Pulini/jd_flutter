@@ -506,83 +506,48 @@ class ReversalLabelInfo {
   }
 }
 
-class DeliveryOrderPieceInfo {
-  String? pieceNo; //ZPICECE_NO  件号
-  double? volume; //LDEVOL  体积
-  double? grossWeight; //BRGEW  毛重
-  double? netWeight; //NTGEW  净重
-  String? date; //ZMADAT  生产日期
-  String? materialCategory; //ZMATNRCAT  物料类别
-  List<DeliveryOrderLabelInfo>? labelList; //GT_ITEMS  子项
-
-  DeliveryOrderPieceInfo({
-    required this.pieceNo,
-    required this.volume,
-    required this.grossWeight,
-    required this.netWeight,
-    required this.date,
-    required this.materialCategory,
-    required this.labelList,
-  });
-
-  factory DeliveryOrderPieceInfo.fromJson(dynamic json) {
-    return DeliveryOrderPieceInfo(
-      pieceNo: json['ZPIECE_NO'],
-      volume: json['LADEVOL'],
-      grossWeight: json['BRGEW'],
-      netWeight: json['NTGEW'],
-      date: json['ZMADAT'],
-      materialCategory: json['ZMATNRCAT'],
-      labelList: [
-        if (json['GT_ITEMS'] != null)
-          for (var item in json['GT_ITEMS'])
-            DeliveryOrderLabelInfo.fromJson(item)
-      ],
-    );
-  }
-  Map<String, dynamic> toJson() {
-    final map = <String, dynamic>{};
-    map['ZPIECE_NO'] = pieceNo;
-    map['LADEVOL'] = volume;
-    map['BRGEW'] = grossWeight;
-    map['NTGEW'] = netWeight;
-    map['ZMATNRCAT'] = materialCategory;
-    map['GT_ITEMS'] = labelList!.map((e) => e.toJson()).toList();
-    return map;
-  }
-}
-
 class DeliveryOrderLabelInfo {
+  RxBool isChecked=false.obs;
+  String? pieceNo; //ZPICECE_NO  件号
   String? labelNumber; //BQID  标签id
+  String? outBoxLabelNumber; //ZDBBQID  外箱标ID
   String? materialCode; //MATNR  物料编号
   String? materialName; //ZMAKTX  物料描述
-  double? quantity; //ZXNUM  数量
-  String? unit; //MEINS  单位
+  double? baseQty; //ZXNUM  装箱数量
+  String? baseUnit; //MEINS  基本单位
+  double? commonQty; //ERFMG  常用数量
+  String? commonUnit; //ERFME  常用单位
+  bool isBind=false; //ISBIND  是否绑定
 
   DeliveryOrderLabelInfo({
+    required this.pieceNo,
     required this.labelNumber,
+    required this.outBoxLabelNumber,
     required this.materialCode,
     required this.materialName,
-    required this.quantity,
-    required this.unit,
+    required this.baseQty,
+    required this.baseUnit,
+    required this.commonQty,
+    required this.commonUnit,
+    required this.isBind,
   });
 
   factory DeliveryOrderLabelInfo.fromJson(dynamic json) {
     return DeliveryOrderLabelInfo(
-      labelNumber: json['BQID'],
-      materialCode: json['MATNR'],
-      materialName: json['ZMAKTX'],
-      quantity: json['ZXNUM'],
-      unit: json['MEINS'],
-    );
+        pieceNo: json['ZPIECE_NO'],
+        labelNumber: json['BQID'],
+        outBoxLabelNumber: json['ZDBBQID'],
+        materialCode: json['MATNR'],
+        materialName: json['ZMAKTX'],
+        baseQty: json['ZXNUM'],
+        baseUnit: json['MEINS'],
+        commonQty: json['ERFMG'],
+        commonUnit: json['ERFME'],
+        isBind: json['ISBIND'] == 'X');
   }
-  Map<String, dynamic> toJson() {
-    return {
-      'BQID': labelNumber,
-      'MATNR': materialCode,
-      'ZMAKTX': materialName,
-      'ZXNUM': quantity,
-      'MEINS': unit,
-    };
-  }
+
+  bool isOutBoxLabel() =>
+      outBoxLabelNumber?.isNotEmpty == true &&
+      materialCode?.isNotEmpty == true &&
+      materialName?.isNotEmpty == true;
 }

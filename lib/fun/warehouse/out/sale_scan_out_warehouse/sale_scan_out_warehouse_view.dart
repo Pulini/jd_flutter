@@ -175,7 +175,7 @@ class _SaleScanOutWarehousePageState extends State<SaleScanOutWarehousePage> {
                       showSnackBar(
                           message: 'sale_scan_out_warehouse_input_code'.tr);
                     } else {
-                      FocusScope.of(context).requestFocus(FocusNode());
+                      hidKeyboard();
                       logic.scanCode(text);
                     }
                   },

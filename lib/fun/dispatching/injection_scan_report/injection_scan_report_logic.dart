@@ -27,7 +27,7 @@ class InjectionScanReportLogic extends GetxController {
     httpGet(
       method: webApiGetScWorkCardList,
       loading: 'injection_scan_getting_process_plan'.tr,
-      params: {"DispatchingMachine": getUserInfo()!.number},
+      params: {"DispatchingMachine": userInfo?.number},
     ).then((response) {
       if (response.resultCode == resultSuccess) {
         var list = <ProcessPlanInfo>[

@@ -5,7 +5,6 @@ import 'package:jd_flutter/utils/web_api.dart';
 
 
 class WorkerProductionDetailState {
-  var etWorker = '';
   var showPrice = checkUserPermission('303100102');
   var showAmount = checkUserPermission('303100103');
 
@@ -16,6 +15,7 @@ class WorkerProductionDetailState {
       <WorkerProductionDetailShow>[].obs;
 
   getProductionReport({
+    required String worker,
     required String beginDate,
     required String endDate,
     required String itemID,
@@ -28,7 +28,7 @@ class WorkerProductionDetailState {
       params: {
         'BeginDate': beginDate,
         'EndDate': endDate,
-        'EmpNumber': etWorker,
+        'EmpNumber': worker,
         'ItemID': itemID,
         'DeptID': userInfo?.departmentID ?? '',
       },
