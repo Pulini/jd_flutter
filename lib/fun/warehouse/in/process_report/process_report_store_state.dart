@@ -27,7 +27,7 @@ class ProcessReportStoreState {
   PalletDetailItem2Info? pallet; //托盘信息
 
   //从数据库读取条码信息
-  ProcessReportState() {
+  processReportState() {
     BarCodeInfo.getSave(
       type: BarCodeReportType.processReportInStock.text,
       callback: (list) => barCodeList.value = list,

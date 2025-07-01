@@ -446,7 +446,7 @@ class RouteConfig {
 
   //注塑车间扫码报工
   static Routes injectionScanReport = Routes(
-    '/injection_scan_report',
+    '/injection_scan_report11',
     99,
     const InjectionScanReportPage(),
   );

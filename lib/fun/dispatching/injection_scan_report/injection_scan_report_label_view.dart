@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/bean/http/response/show_process_barcode_info.dart';
 import 'package:jd_flutter/fun/dispatching/injection_scan_report/injection_scan_report_logic.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
-import '../../../bean/http/response/show_process_barcode_info.dart';
 
 class InjectionScanReportLabelPage extends StatefulWidget {
   const InjectionScanReportLabelPage({super.key});
 
   @override
-  State<InjectionScanReportLabelPage> createState() =>
-      _InjectionScanReportLabelPageState();
+  State<InjectionScanReportLabelPage> createState() => _InjectionScanReportLabelPageState();
 }
 
-class _InjectionScanReportLabelPageState
-    extends State<InjectionScanReportLabelPage> {
+class _InjectionScanReportLabelPageState extends State<InjectionScanReportLabelPage> {
 
   final logic = Get.find<InjectionScanReportLogic>();
   final state = Get
