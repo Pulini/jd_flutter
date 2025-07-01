@@ -245,7 +245,7 @@ class QualityInspectionListState {
                 'Remarks': reason,
               }
         ],
-        'CGOrder': [
+        'CGOrderInstockCosep2SapList': [
           for (var color
               in showReceiptColorList.where((data) => data.subItem == '1'))
             {
