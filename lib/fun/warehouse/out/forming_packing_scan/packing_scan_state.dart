@@ -5,7 +5,6 @@ import 'package:jd_flutter/fun/warehouse/out/forming_packing_scan/packing_shipme
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
-import 'package:jd_flutter/widget/dialogs.dart';
 
 class PackingScanState {
   var dataList = <ContainerScanner>[].obs;
