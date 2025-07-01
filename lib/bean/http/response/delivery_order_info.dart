@@ -547,7 +547,7 @@ class DeliveryOrderLabelInfo {
   }
 
   bool isOutBoxLabel() =>
-      outBoxLabelNumber?.isNotEmpty == true &&
-      materialCode?.isNotEmpty == true &&
-      materialName?.isNotEmpty == true;
+      outBoxLabelNumber?.isEmpty == true &&
+      materialCode?.isEmpty == true &&
+      materialName?.isEmpty == true;
 }

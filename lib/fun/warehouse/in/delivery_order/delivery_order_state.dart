@@ -25,7 +25,7 @@ class DeliveryOrderState {
   var materialList = <String, double>{};
   var orderLabelList = <DeliveryOrderLabelInfo>[];
   var scannedLabelList = <DeliveryOrderLabelInfo>[].obs;
-  var canSubmitLabelBinding= false.obs;
+  var canSubmitLabelBinding = false.obs;
 
   getDeliveryOrders({
     required String startDate,
@@ -291,7 +291,7 @@ class DeliveryOrderState {
     required String factoryNumber,
     required String supplierNumber,
     required String deliveryOrderNumber,
-    required Function() success,
+    required Function(List<DeliveryOrderLabelInfo>) success,
     required Function(String msg) error,
   }) {
     sapPost(
@@ -305,20 +305,9 @@ class DeliveryOrderState {
     ).then((response) {
       orderLabelList.clear();
       if (response.resultCode == resultSuccess) {
-        var list = <DeliveryOrderLabelInfo>[
+        success.call([
           for (var json in response.data) DeliveryOrderLabelInfo.fromJson(json)
-        ];
-        materialList.forEach((k, v) {
-          for (var label in list) {
-            if(label.materialCode==k){
-              if(!orderLabelList.any((v2)=>v2.labelNumber==label.labelNumber)){
-                orderLabelList.add(label);
-              }
-            }
-          }
-        });
-        scannedLabelList.value=orderLabelList.where((v)=>v.isBind).toList();
-        success.call();
+        ]);
       } else {
         error.call(response.message ?? 'query_default_error'.tr);
       }
@@ -326,6 +315,7 @@ class DeliveryOrderState {
   }
 
   getLabelBindingStaging({
+    required Function(List<DeliveryOrderLabelInfo>) success,
     required Function(String msg) error,
   }) {
     sapPost(
@@ -338,21 +328,9 @@ class DeliveryOrderState {
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        var list = <DeliveryOrderLabelInfo>[
+        success.call([
           for (var json in response.data) DeliveryOrderLabelInfo.fromJson(json)
-        ];
-        materialList.forEach((k, v) {
-          for (var label in list) {
-            if(label.materialCode==k){
-              if(!orderLabelList.any((v2)=>v2.labelNumber==label.labelNumber)){
-                orderLabelList.add(label);
-              }
-              if(!scannedLabelList.any((v2)=>v2.labelNumber==label.labelNumber)){
-                scannedLabelList.add(label);
-              }
-            }
-          }
-        });
+        ]);
       } else {
         error.call(response.message ?? 'query_default_error'.tr);
       }
@@ -372,16 +350,16 @@ class DeliveryOrderState {
         'ZLGORT': '',
         'ZEXAMINER': '',
         'GT_REQITEMS': [
-          for(var item in scannedLabelList)
-          {
-            'ZPIECE_NO': item.pieceNo,
-            'ZDELINO': orderItemInfo[0].factoryNO,
-          }
+          for (var item in scannedLabelList)
+            {
+              'ZPIECE_NO': item.pieceNo,
+              'ZDELINO': orderItemInfo[0].factoryNO,
+            }
         ],
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        success.call(response.message ??'');
+        success.call(response.message ?? '');
       } else {
         error.call(response.message ?? 'query_default_error'.tr);
       }
@@ -403,16 +381,16 @@ class DeliveryOrderState {
         'ZLGORT': storageLocation,
         'ZEXAMINER': inspectorNumber,
         'GT_REQITEMS': [
-          for(var item in scannedLabelList)
-          {
-            'ZPIECE_NO': item.pieceNo,
-            'ZDELINO': orderItemInfo[0].deliNo,
-          }
+          for (var item in scannedLabelList)
+            {
+              'ZPIECE_NO': item.pieceNo,
+              'ZDELINO': orderItemInfo[0].deliNo,
+            }
         ],
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        success.call(response.message ??"");
+        success.call(response.message ?? "");
       } else {
         error.call(response.message ?? 'query_default_error'.tr);
       }

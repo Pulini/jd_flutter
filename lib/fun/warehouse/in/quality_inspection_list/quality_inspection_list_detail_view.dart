@@ -19,7 +19,7 @@ class _QualityInspectionListDetailPageState
       Get.find<QualityInspectionListLogic>();
   final QualityInspectionListState state =
       Get.find<QualityInspectionListLogic>().state;
-  var index=Get.arguments['index'];
+  int index=Get.arguments['index'];
 
   Widget _item(StuffQualityInspectionInfo item) {
     return SizedBox(

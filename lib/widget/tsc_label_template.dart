@@ -868,6 +868,7 @@ Widget dynamicMyanmarLabel110xN({
   required String volume, //体积
   required String supplier, //供应商
   required String manufactureDate, //生产日期
+  required bool hasNotes, //是否打印备注行
 }) {
   var border = BoxDecoration(border: Border.all(color: Colors.black, width: 1));
   var style = const TextStyle(
@@ -1071,6 +1072,20 @@ Widget dynamicMyanmarLabel110xN({
               ),
               rw: paddingTextCenter(manufactureDate),
             ),
+            if (hasNotes)
+              Container(
+                decoration: border,
+                child: IntrinsicHeight(
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Expanded(flex: 15, child: paddingText('Note:')),
+                      vDivider,
+                      Expanded(flex: 5, child: Container()),
+                    ],
+                  ),
+                ),
+              ),
             Container(
               decoration: border,
               child: paddingTextCenter('MADE IN CHINA'),
@@ -1190,12 +1205,15 @@ Widget dynamicMaterialStandardLabel110xN({
             flex: max - (to - start),
             child: Container(decoration: border),
           ));
+          //添加末尾列（合计）
           line.add(Expanded(
             child: Container(
               decoration: border,
               child: Text(
+                maxLines: 1,
                 size.last,
-                style: style,
+                style:
+                    const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 strutStyle: strutStyle,
                 textAlign: TextAlign.center,
               ),
@@ -1208,6 +1226,7 @@ Widget dynamicMaterialStandardLabel110xN({
               child: Container(
                 decoration: border,
                 child: Text(
+                  maxLines: 1,
                   size[j],
                   style: style,
                   strutStyle: strutStyle,
@@ -1245,7 +1264,7 @@ Widget dynamicMaterialStandardLabel110xN({
               title: '批次/Lot No/Banyak No',
               rw: paddingText(trackNo),
             ),
-            if(materialList.isEmpty)
+            if (materialList.isEmpty)
               createRowText(
                 title: '指令号/Order No/Pesanan No',
                 rw: paddingTextCenter(instructionNo),

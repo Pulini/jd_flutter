@@ -33,14 +33,9 @@ class _SapPackingScanLabelPageState extends State<SapPackingScanLabelPage> {
         children: [
           Row(
             children: [
-              expandedTextSpan(
+              textSpan(
                 hint: '件ID：',
                 text: data.materials[0].labelList![0].pieceNumber ?? '',
-                textColor: Colors.blue.shade900,
-              ),
-              expandedTextSpan(
-                hint: '跟踪号：：',
-                text: data.materials[0].trackNo ?? '',
                 textColor: Colors.blue.shade900,
               ),
               Obx(() => Checkbox(

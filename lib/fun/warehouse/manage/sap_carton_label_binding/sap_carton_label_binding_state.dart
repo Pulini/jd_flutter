@@ -20,7 +20,7 @@ class SapCartonLabelBindingState {
   var labelList = <SapLabelBindingInfo>[].obs;
   var operationType = ScanLabelOperationType.unKnown;
   var operationTypeText = ScanLabelOperationType.unKnown.text.obs;
-  var newBoxLabelID = '00505685E5761FD090D2EB8C111F2541'.obs;
+  var newBoxLabelID = ''.obs;
 
   getLabelInfo({
     required String labelCode,
@@ -50,6 +50,7 @@ class SapCartonLabelBindingState {
           }
         }
       } else {
+
         error.call(response.message ?? 'query_default_error'.tr);
       }
     });

@@ -62,9 +62,10 @@ class _DeliveryOrderLabelBindingPageState
   @override
   Widget build(BuildContext context) {
     return pageBody(
-      title: '标签绑定',
-      popTitle: '确定要退出标签绑定吗？',
+      title: '送货清点',
+      popTitle: '确定要退出送货清点吗？',
       actions: [
+        // IconButton(onPressed: ()=>logic.scanLabel('00505685E5761FE095C24B636E12517B'), icon: Icon(Icons.add)),
         TextButton(
           onPressed: () => askDialog(
             content: '确定要清空已扫描钱吗？',
@@ -119,6 +120,14 @@ class _DeliveryOrderLabelBindingPageState
               ),
             ),
           ),
+          // Obx(() => progressIndicator(
+          //   max: state.colorOrderList[index].qty ?? 0,
+          //   value: scannedList.isEmpty
+          //       ? 0
+          //       : scannedList
+          //       .map((v) => v.commonQty)
+          //       .reduce((a, b) => a.add(b)),
+          // )),
           Expanded(
             child: Obx(() => ListView.builder(
                   itemCount: state.scannedLabelList.length,

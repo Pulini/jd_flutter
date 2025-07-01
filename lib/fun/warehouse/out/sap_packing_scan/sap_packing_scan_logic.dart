@@ -224,7 +224,7 @@ class SapPackingScanLogic extends GetxController {
     }
   }
 
-  checkMaterialSubmitData(Function(List<SapPackingScanLabelInfo>) list) {
+  checkMaterialSubmitData(Function(List<SapPackingScanLabelInfo>) callback) {
     var list = <SapPackingScanLabelInfo>[];
     for (var material in state.materialList) {
       list.addAll(material.labelList!.where((v) => v.isScanned.value));
@@ -237,7 +237,7 @@ class SapPackingScanLogic extends GetxController {
       errorDialog(content: '请填写实际柜号!');
       return;
     }
-    return list;
+    callback.call(list);
   }
 
   submit({

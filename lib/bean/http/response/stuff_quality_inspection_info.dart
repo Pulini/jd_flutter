@@ -1,4 +1,5 @@
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
+import 'package:jd_flutter/utils/utils.dart';
 
 /// OrderType : "Z001"
 /// CompanyCode : "1000"
@@ -62,31 +63,31 @@ import 'package:get/get_rx/src/rx_types/rx_types.dart';
 
 class StuffQualityInspectionInfo {
   StuffQualityInspectionInfo({
-    this.orderType,   //订单类型（采购）BSART
-    this.companyCode,    //公司代码BUKRS
-    this.purchaseVoucherNo,   //采购凭证号EBELN
-    this.purchaseDocumentItemNumber,    //采购凭证的项目编号EBELP
-    this.planningLineNumber,    //计划行编号ETENR
-    this.isColorSeparation,   //是否分色ISCOSEP
-    this.isReturns,   //是否已退货ISRETURNS
-    this.supplierNumber,    //供应商编号LIFNR
-    this.materialDescription,  //物料描述MAKTX
-    this.materialCode,   //物料编码MATNR
-    this.materialDocumentNo,   //物料凭证编号MBLNR
-    this.materialDocumentNumberReversal,  //物料凭证编号冲销MBLNR_REV
-    this.materialVoucherYear,    //物料凭证年度MJAHR
-    this.materialVoucherAnnualReversal,   //物料凭证年度冲销MJAHR_REV
-    this.taxCode,    //税码MWSKZ
-    this.name1,  //供应商名称
-    this.characteristicValue,  //特性值（季节性采购）SIZE1
-    this.salesAndDistributionVoucherNumber,  //销售和分销凭证号VBELN
-    this.factoryNumber,  //工厂编号WERKS
-    this.baseQuantity,  //基本数量ZBASEQTY
-    this.basicUnit,  //基本单位ZBASEUNIT
+    this.orderType, //订单类型（采购）BSART
+    this.companyCode, //公司代码BUKRS
+    this.purchaseVoucherNo, //采购凭证号EBELN
+    this.purchaseDocumentItemNumber, //采购凭证的项目编号EBELP
+    this.planningLineNumber, //计划行编号ETENR
+    this.isColorSeparation, //是否分色ISCOSEP
+    this.isReturns, //是否已退货ISRETURNS
+    this.supplierNumber, //供应商编号LIFNR
+    this.materialDescription, //物料描述MAKTX
+    this.materialCode, //物料编码MATNR
+    this.materialDocumentNo, //物料凭证编号MBLNR
+    this.materialDocumentNumberReversal, //物料凭证编号冲销MBLNR_REV
+    this.materialVoucherYear, //物料凭证年度MJAHR
+    this.materialVoucherAnnualReversal, //物料凭证年度冲销MJAHR_REV
+    this.taxCode, //税码MWSKZ
+    this.name1, //供应商名称
+    this.characteristicValue, //特性值（季节性采购）SIZE1
+    this.salesAndDistributionVoucherNumber, //销售和分销凭证号VBELN
+    this.factoryNumber, //工厂编号WERKS
+    this.baseQuantity, //基本数量ZBASEQTY
+    this.basicUnit, //基本单位ZBASEUNIT
     this.billDate, //制单日期ZBILLDATE
-    this.tempreBillDate,  //暂收日期ZBILLDATE_TEMPRE
-    this.biller,  //制单人ZBILLER
-    this.billTime,  //制单时间ZBILLTIME
+    this.tempreBillDate, //暂收日期ZBILLDATE_TEMPRE
+    this.biller, //制单人ZBILLER
+    this.billTime, //制单时间ZBILLTIME
     this.inspectionOrderNo, //检验单号ZCHECKBNO
     this.inspectionLineNumber, //检验单行号检验单行号ZCHECKBSEQ
     this.inspectionMethod, //检验方式ZCHECKMETHOD
@@ -96,32 +97,31 @@ class StuffQualityInspectionInfo {
     this.commonUnits, //常用单位ZCOMMUNIT
     this.deleteReason, //删除原因ZDELETETEXT
     this.deliAddress, //送货地点ZDELIADDRESS
-    this.itemLineItem,  //物料行项目ZEILE
-    this.materialVoucherItem,  //物料凭证项目(逗号隔开)ZEILES
-    this.detailIDReversal,  //明细id冲销ZEILE_REV
+    this.itemLineItem, //物料行项目ZEILE
+    this.materialVoucherItem, //物料凭证项目(逗号隔开)ZEILES
+    this.detailIDReversal, //明细id冲销ZEILE_REV
     this.storageQuantity, //入库数量ZINSTOCKQTY
     this.location, //货位ZLOCAL
-    this.location1,  //货位ZLOCAL1
+    this.location1, //货位ZLOCAL1
     this.qualifiedQuantity, //合格数量ZQUALIQTY
     this.remarks, //备注ZREMARK
-    this.remarks1,  //备注ZREMARK_D2
+    this.remarks1, //备注ZREMARK_D2
     this.samplingQuantity, //抽检数量ZSCALEQTY
     this.shortCodesNumber, //短码数量ZSHORTCQTY
-    this.sourceOrderType,  //源单类型ZSOURCETYPE
+    this.sourceOrderType, //源单类型ZSOURCETYPE
     this.temporaryNo, //暂收单号ZTEMPRENO
     this.temporaryCollectionBankNo, //暂收单行号ZTEMPRESEQ
-    this.unqualifiedQuantity,  //不合格数量ZUNQUALIQTY
+    this.unqualifiedQuantity, //不合格数量ZUNQUALIQTY
     this.unqualifiedReason, //不合格原因ZUNQUALITEXT
-    this.distributiveForm,  //分配型体ZXT
+    this.distributiveForm, //分配型体ZXT
     this.fullCheckFlag, //全检标志位，需要全检时为'X'ZZFSFLG
-    this.batchIdentification,  //批次物料flag，可以分色时为'X'XCHAR
-    this.factoryType,  //工厂型体ZZGCXT
+    this.batchIdentification, //批次物料flag，可以分色时为'X'XCHAR
+    this.factoryType, //工厂型体ZZGCXT
     this.isCodeRunningMaterial, //是否是跑码物料ZISCLRUN
-    this.colorSeparation,  //是否分色
-    this.isPiece,  //是否  X启用
-    this.trackNo,  //跟踪号
-    this.colorDistinguishEnable,  //是否需要分色扫码
-
+    this.colorSeparation, //是否分色
+    this.isPiece, //是否  X启用
+    this.trackNo, //跟踪号
+    this.colorDistinguishEnable, //是否需要分色扫码
   });
 
   StuffQualityInspectionInfo.fromJson(dynamic json) {
@@ -142,7 +142,8 @@ class StuffQualityInspectionInfo {
     taxCode = json['TaxCode'];
     name1 = json['Name1'];
     characteristicValue = json['CharacteristicValue'];
-    salesAndDistributionVoucherNumber = json['SalesAndDistributionVoucherNumber'];
+    salesAndDistributionVoucherNumber =
+        json['SalesAndDistributionVoucherNumber'];
     factoryNumber = json['FactoryNumber'];
     baseQuantity = json['BaseQuantity'];
     basicUnit = json['BasicUnit'];
@@ -183,8 +184,9 @@ class StuffQualityInspectionInfo {
     colorSeparation = json['ColorSeparation'];
     isPiece = json['IsPiece'];
     trackNo = json['TrackNo'];
-    colorDistinguishEnable = json['ColorDistinguishEnable']=='X';
+    colorDistinguishEnable = json['ColorDistinguishEnable'] == 'X';
   }
+
   String? orderType;
   String? companyCode;
   String? purchaseVoucherNo;
@@ -265,7 +267,8 @@ class StuffQualityInspectionInfo {
     map['TaxCode'] = taxCode;
     map['Name1'] = name1;
     map['CharacteristicValue'] = characteristicValue;
-    map['SalesAndDistributionVoucherNumber'] = salesAndDistributionVoucherNumber;
+    map['SalesAndDistributionVoucherNumber'] =
+        salesAndDistributionVoucherNumber;
     map['FactoryNumber'] = factoryNumber;
     map['BaseQuantity'] = baseQuantity;
     map['BasicUnit'] = basicUnit;
@@ -310,8 +313,7 @@ class StuffQualityInspectionInfo {
     return map;
   }
 
-  String getDataID()=>'${inspectionOrderNo}_$materialCode';
-
+  String getDataID() => '${inspectionOrderNo}_$materialCode';
 }
 
 class StuffQualityInspectionDetailInfo {
@@ -340,7 +342,8 @@ class StuffQualityInspectionDetailInfo {
     this.remarks,
     this.location,
     this.unqualifiedList,
-    this.stuffColorSeparationList,});
+    this.stuffColorSeparationList,
+  });
 
   StuffQualityInspectionDetailInfo.fromJson(dynamic json) {
     inspectionOrderNo = json['InspectionOrderNo'];
@@ -349,7 +352,8 @@ class StuffQualityInspectionDetailInfo {
     temporaryCollectionBankNo = json['TemporaryCollectionBankNo'];
     purchaseOrderNumber = json['PurchaseOrderNumber'];
     purchaseOrderLineItem = json['PurchaseOrderLineItem'];
-    salesAndDistributionVoucherNumber = json['SalesAndDistributionVoucherNumber'];
+    salesAndDistributionVoucherNumber =
+        json['SalesAndDistributionVoucherNumber'];
     factoryType = json['FactoryType'];
     materialCode = json['MaterialCode'];
     materialDescription = json['MaterialDescription'];
@@ -379,6 +383,7 @@ class StuffQualityInspectionDetailInfo {
       });
     }
   }
+
   String? inspectionOrderNo;
   String? inspectionLineNumber;
   String? temporaryNo;
@@ -413,7 +418,8 @@ class StuffQualityInspectionDetailInfo {
     map['TemporaryCollectionBankNo'] = temporaryCollectionBankNo;
     map['PurchaseOrderNumber'] = purchaseOrderNumber;
     map['PurchaseOrderLineItem'] = purchaseOrderLineItem;
-    map['SalesAndDistributionVoucherNumber'] = salesAndDistributionVoucherNumber;
+    map['SalesAndDistributionVoucherNumber'] =
+        salesAndDistributionVoucherNumber;
     map['FactoryType'] = factoryType;
     map['MaterialCode'] = materialCode;
     map['MaterialDescription'] = materialDescription;
@@ -434,11 +440,11 @@ class StuffQualityInspectionDetailInfo {
       map['UnqualifiedList'] = unqualifiedList?.map((v) => v.toJson()).toList();
     }
     if (stuffColorSeparationList != null) {
-      map['ColorSeparationList'] = stuffColorSeparationList?.map((v) => v.toJson()).toList();
+      map['ColorSeparationList'] =
+          stuffColorSeparationList?.map((v) => v.toJson()).toList();
     }
     return map;
   }
-
 }
 
 /// Factory : "1000"
@@ -463,7 +469,8 @@ class StuffColorSeparationList {
     this.colorSeparationQuantity,
     this.location,
     this.materialCode,
-    this.materialDescription,});
+    this.materialDescription,
+  });
 
   StuffColorSeparationList.fromJson(dynamic json) {
     factory = json['Factory'];
@@ -477,6 +484,7 @@ class StuffColorSeparationList {
     materialCode = json['MaterialCode'];
     materialDescription = json['MaterialDescription'];
   }
+
   String? factory;
   String? inspectionOrderNo;
   String? inspectionLineNumber;
@@ -502,7 +510,6 @@ class StuffColorSeparationList {
     map['MaterialDescription'] = materialDescription;
     return map;
   }
-
 }
 
 class UnqualifiedList {
@@ -511,7 +518,6 @@ class UnqualifiedList {
     this.unqualifiedNumber,
     this.unqualifiedLineNumber,
     this.unqualifiedReason,
-
   });
 
   UnqualifiedList.fromJson(dynamic json) {
@@ -519,13 +525,12 @@ class UnqualifiedList {
     unqualifiedNumber = json['UnqualifiedNumber'];
     unqualifiedLineNumber = json['UnqualifiedLineNumber'];
     unqualifiedReason = json['UnqualifiedReason'];
-
   }
-  String? inspectionLineNumber;   // 检验单行号ZCHECKBSEQ
-  String? unqualifiedNumber;  // 不合格编号ZUNQUALINO
-  String? unqualifiedLineNumber;  // 不合格编号ZUNQUALINO
-  String? unqualifiedReason;  // 不合格原因ZUNQUALITEXT
 
+  String? inspectionLineNumber; // 检验单行号ZCHECKBSEQ
+  String? unqualifiedNumber; // 不合格编号ZUNQUALINO
+  String? unqualifiedLineNumber; // 不合格编号ZUNQUALINO
+  String? unqualifiedReason; // 不合格原因ZUNQUALITEXT
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -535,8 +540,8 @@ class UnqualifiedList {
     map['UnqualifiedReason'] = unqualifiedReason;
     return map;
   }
-
 }
+
 class QualityInspectionShowColor {
   QualityInspectionShowColor({
     this.subItem,
@@ -545,16 +550,118 @@ class QualityInspectionShowColor {
     this.color,
     this.qty,
     this.allQty,
-
   });
 
-
-  String? subItem;  //是否合计栏
-  String? name;  //物料名称
-  String? code;  //物料编码
-  String? color;  //色系
-  double? qty;  //数量
-  double? allQty;  //数量
+  String? subItem; //是否合计栏
+  String? name; //物料名称
+  String? code; //物料编码
+  String? color; //色系
+  double? qty; //数量
+  double? allQty; //数量
   RxBool isSelected = false.obs;
+}
 
+class QualityInspectionColorInfo {
+  String? inspectionOrderNo; //检验单号ZCHECKBNO
+  String? materialCode; //物料编码MATNR
+  String? batchNo; //批次号  CHARG
+  double? qty; //数量 ZCOSEPQTY
+  String? unit; //单位  ZCOMMUNIT
+
+  var bindingLabels = <QualityInspectionLabelBindingInfo>[].obs;
+
+  QualityInspectionColorInfo({
+    this.inspectionOrderNo,
+    this.materialCode,
+    this.batchNo,
+    this.qty,
+    this.unit,
+  });
+
+  QualityInspectionColorInfo.fromJson(dynamic json) {
+    inspectionOrderNo = json['ZCHECKBNO'];
+    materialCode = json['MATNR'];
+    batchNo = json['CHARG'];
+    qty = json['ZCOSEPQTY'].toString().toDoubleTry();
+    unit = json['ZCOMMUNIT'];
+  }
+
+  double getMaterialTotalQty() =>bindingLabels.isEmpty?0:bindingLabels.map((v)=>v.commonQty).reduce((a,b)=>a.add(b));
+}
+
+class QualityInspectionLabelInfo {
+  String? labelID; //标签ID BQID
+  String? pieceNo; //	件号  ZPIECE_NO
+  String? orderNo; //工单号  ZDELINO
+  List<QualityInspectionLabelMaterialInfo>? materialList; //	物料列表 GT_ITEM2
+
+  QualityInspectionLabelInfo({
+    this.labelID,
+    this.pieceNo,
+    this.orderNo,
+    this.materialList,
+  });
+
+  QualityInspectionLabelInfo.fromJson(dynamic json) {
+    labelID = json['BQID'];
+    pieceNo = json['ZPIECE_NO'];
+    orderNo = json['ZDELINO'];
+    materialList = [
+      if (json['GT_ITEM2'] != null)
+        for (var item in json['GT_ITEM2'])
+          QualityInspectionLabelMaterialInfo.fromJson(item)
+    ];
+  }
+
+}
+
+class QualityInspectionLabelMaterialInfo {
+  String? labelID; //标签ID BQID
+  String? materialNumber; //物料编号  MATNR
+  String? materialName; //物料名称 ZMAKTX
+  double? baseQty; //MENGE  基本数量
+  String? baseUnit; //MEINS  基本单位
+  double? commonQty; //ERFMG  常用数量
+  String? commonUnit; //ERFME  常用单位
+  QualityInspectionLabelMaterialInfo({
+    this.labelID,
+    this.materialNumber,
+    this.materialName,
+    this.baseQty,
+    this.baseUnit,
+    this.commonQty,
+    this.commonUnit,
+  });
+
+  QualityInspectionLabelMaterialInfo.fromJson(dynamic json) {
+    labelID = json['BQID'];
+    materialNumber = json['MATNR'];
+    materialName = json['ZMAKTX'];
+    baseQty = json['MENGE'].toString().toDoubleTry();
+    baseUnit = json['MEINS'];
+    commonQty = json['ERFMG'].toString().toDoubleTry();
+    commonUnit = json['ERFME'];
+  }
+  String dataId()=>'$labelID$materialNumber';
+}
+
+class QualityInspectionLabelBindingInfo {
+  RxBool isScanned=false.obs;
+  String pieceNo; //	件号  ZPIECE_NO
+  String labelID; //标签ID BQID
+  String materialNumber; //物料编号  MATNR
+  String materialName; //物料名称 ZMAKTX
+  double commonQty; //ERFMG  常用数量
+  String commonUnit; //ERFME  常用单位
+  QualityInspectionLabelBindingInfo({
+    required this.pieceNo,
+    required this.labelID,
+    required this.materialNumber,
+    required this.materialName,
+    required this.commonQty,
+    required this.commonUnit,
+  });
+
+  String dataId()=>'$labelID$materialNumber';
+  String getMaterial()=>'($materialNumber)$materialName';
 }

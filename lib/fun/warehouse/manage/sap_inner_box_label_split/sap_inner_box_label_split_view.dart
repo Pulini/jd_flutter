@@ -258,8 +258,22 @@ class _SapInnerBoxLabelSplitPageState extends State<SapInnerBoxLabelSplitPage> {
                 state.newLabelList.any((v) => v.isSelected.value)
             ? CombinationButton(
                 text: '打印',
-                click: () => logic.printLabel(),
-              )
+                click: () {
+                  if (logic.isMyanmarLabel()) {
+                    askDialog(
+                      title: '打印标签',
+                      content: '是否打印备注行？',
+                      confirmText: '是',
+                      confirmColor: Colors.blue,
+                      confirm: () => logic.printLabel(hasNotes: true),
+                      cancelText: '否',
+                      cancelColor: Colors.blue,
+                      cancel: () => logic.printLabel(hasNotes: false),
+                    );
+                  } else {
+                    logic.printLabel();
+                  }
+                })
             : Container())
       ],
       popTitle: '确定要退出标签拆分吗？',

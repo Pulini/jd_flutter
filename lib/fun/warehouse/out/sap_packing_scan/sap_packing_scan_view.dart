@@ -108,11 +108,11 @@ class _SapPackingScanPageState extends State<SapPackingScanPage> {
         state.actualCabinet = actualCabinet;
         spSave(spSavePackingScanActualCabinet, actualCabinet);
         if (state.isAbnormal.value) {
-          state.abnormalSearchText.value='';
+          state.abnormalSearchText.value = '';
           logic.getAbnormalOrders(() => Get.back());
         } else {
           state.abnormalList.clear();
-          state.materialSearchText.value='';
+          state.materialSearchText.value = '';
           Get.back();
         }
       },
@@ -219,61 +219,48 @@ class _SapPackingScanPageState extends State<SapPackingScanPage> {
     );
   }
 
-  Widget _item(SapPackingScanMaterialInfo data) {
-    return Column(
-      children: [
-        Row(
+  Widget _item(SapPackingScanMaterialInfo data) => Container(
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.black),
+          color: Colors.white,
+        ),
+        child: Column(
           children: [
-            expandedFrameText(
-              text: data.trackNo ?? '',
-              borderColor: Colors.black,
-              flex: 3,
-              backgroundColor: Colors.white,
-              alignment: Alignment.center,
+            Row(
+              children: [
+                Expanded(
+                  flex: 3,
+                  child: Text(data.trackNo ?? '', textAlign: TextAlign.center),
+                ),
+                Expanded(
+                  flex: 2,
+                  child: Text(data.quality.toShowString(),
+                      textAlign: TextAlign.center),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Text(data.unit ?? '', textAlign: TextAlign.center),
+                ),
+                Expanded(
+                  flex: 2,
+                  child: Text(
+                    data.scannedCount().toShowString(),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ],
             ),
-            expandedFrameText(
-              text: data.quality.toShowString(),
-              borderColor: Colors.black,
-              flex: 2,
-              backgroundColor: Colors.white,
-              alignment: Alignment.center,
-            ),
-            expandedFrameText(
-              text: data.unit ?? '',
-              borderColor: Colors.black,
-              flex: 1,
-              backgroundColor: Colors.white,
-              alignment: Alignment.center,
-            ),
-            expandedFrameText(
-              text: data.scannedCount().toString(),
-              borderColor: Colors.black,
-              flex: 2,
-              backgroundColor: Colors.white,
-              alignment: Alignment.center,
+            textSpan(
+              hint: '物料：',
+              text: '(${data.materialNumber}) ${data.materialName}',
+              maxLines: 3,
             ),
           ],
         ),
-        Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(5),
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: Colors.black,
-            ),
-            color: Colors.white,
-          ),
-          child: textSpan(
-            hint: '物料：',
-            text: '(${data.materialNumber}) ${data.materialName}',
-            maxLines: 3,
-          ),
-        ),
-      ],
-    );
-  }
+      );
 
   _pickDate(Function(String) callback) {
+    debugPrint('_pickDate');
     var pickDate = DateTime.now();
     showDatePicker(
       locale: View.of(Get.overlayContext!).platformDispatcher.locale,
@@ -541,8 +528,6 @@ class _SapPackingScanPageState extends State<SapPackingScanPage> {
                           ),
                         ),
                       );
-                      // logic.scanCode('20250516001');
-                      // logic.scanCode('20250516002');
                     },
                   ),
                 ),

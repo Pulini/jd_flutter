@@ -17,6 +17,7 @@
 //   ]
 // }
 import 'package:get/get.dart';
+import 'package:jd_flutter/utils/utils.dart';
 
 class SapPackingScanMaterialInfo {
   String? isDutyFree; //是否免税 DUTY_FREE
@@ -69,7 +70,7 @@ class SapPackingScanMaterialInfo {
 
   String materialID() => '$materialNumber$materialName$unit$trackNo';
 
-  int scannedCount() => labelList?.where((v) => v.isScanned.value).length ?? 0;
+  double scannedCount() => labelList?.where((v) => v.isScanned.value).map((v)=>v.quality??0).reduce((a,b)=>a.add(b))??0;
 
   bool search(String text) =>
       (materialNumber ?? '').contains(text) ||

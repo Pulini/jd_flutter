@@ -57,7 +57,11 @@ class SapInnerBoxLabelSplitLogic extends GetxController {
     );
   }
 
-  printLabel() {
+  bool isMyanmarLabel() => state.newLabelList
+      .where((v) => v.isSelected.value)
+      .any((v) => v.factoryNo == '1098');
+
+  printLabel({bool? hasNotes}) {
 //1、缅甸工厂打专属标（只需判断工厂是否1098）
 //2、先打大标
 //    是否选择打印带物料标签 是 打印物料大标 否 打印大标
@@ -96,6 +100,7 @@ class SapInnerBoxLabelSplitLogic extends GetxController {
           volume: label.volume.toShowString(),
           supplier: label.supplierNumber ?? '',
           manufactureDate: label.formatManufactureDate(),
+          hasNotes: hasNotes ?? false,
         ));
       } else {
         if (!label.isBoxLabel && label.isMixMaterial) {
@@ -128,10 +133,10 @@ class SapInnerBoxLabelSplitLogic extends GetxController {
               }
             }
             sizeList.sort();
-            materials['尺码/Size/ukuran'] = [...sizeList,'总计/total'];
+            materials['尺码/Size/ukuran'] = [...sizeList, '总计/total'];
             groupBy(
               label.subLabel!,
-                  (v) => v.instructionNo ?? '',
+              (v) => v.instructionNo ?? '',
             ).forEach((k, labels) {
               var list = [];
               for (var size in sizeList) {
@@ -144,7 +149,10 @@ class SapInnerBoxLabelSplitLogic extends GetxController {
                   list.add(' ');
                 }
               }
-              list.add(labels.map((v)=>v.inBoxQty??0).reduce((a,b)=>a.add(b)).toShowString());
+              list.add(labels
+                  .map((v) => v.inBoxQty ?? 0)
+                  .reduce((a, b) => a.add(b))
+                  .toShowString());
               materials[k] = list;
             });
           }
@@ -156,15 +164,15 @@ class SapInnerBoxLabelSplitLogic extends GetxController {
             trackNo: label.trackNo ?? '',
             instructionNo: label.instructionNo ?? '',
             generalMaterialNumber:
-            label.subLabel![0].generalMaterialNumber ?? '',
+                label.subLabel![0].generalMaterialNumber ?? '',
             materialDescription: label.subLabel![0].materialDescription ?? '',
-            materialList:materials,
+            materialList: materials,
             inBoxQty: label.subLabel!
                 .map((v) => v.inBoxQty ?? 0)
                 .reduce((a, b) => a.add(b))
                 .toShowString(),
             customsDeclarationUnit:
-            label.subLabel![0].customsDeclarationUnit ?? '',
+                label.subLabel![0].customsDeclarationUnit ?? '',
             customsDeclarationType: label.customsDeclarationType ?? '',
             pieceID: label.pieceID ?? '',
             pieceNo: label.pieceNo ?? '',

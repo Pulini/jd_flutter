@@ -60,13 +60,12 @@ class SapCartonLabelBindingLogic extends GetxController {
         state.operationType = ScanLabelOperationType.transfer;
         state.operationTypeText.value = ScanLabelOperationType.transfer.text;
       }
-      debugPrint('operationType=${state.operationType}');
     });
   }
 
   scanLabel(String code) {
     if (state.labelList.any((v) => v.labelID == code || v.boxLabelID == code)) {
-      errorDialog(content: '标签已存在');
+      errorDialog(content: '标签已存在!');
     } else {
       state.getLabelInfo(
         labelCode: code,
@@ -89,8 +88,6 @@ class SapCartonLabelBindingLogic extends GetxController {
         labelList.addAll(item);
       }
     }
-    debugPrint(
-        'boxLabelList=${boxLabelList.length},labelList=${labelList.length}');
     return [boxLabelList, labelList];
   }
 

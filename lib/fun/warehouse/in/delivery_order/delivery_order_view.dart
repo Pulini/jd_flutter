@@ -94,9 +94,8 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
 
   _checkOrder(bool isCheckOrder, List<DeliveryOrderInfo> group) {
     var data = group[0];
-    debugPrint('isCheckOrder=$isCheckOrder isScanPieces=${data.isScanPieces}');
     if (isCheckOrder) {
-      if (data.isScanPieces == 'X') {
+      if (data.isScanPieces == 'X'&&data.isPackingMaterials==false) {
         logic.getSupplierLabelInfo(group: group, refresh: () => _query());
       } else {
         logic.getOrderDetail(

@@ -253,6 +253,21 @@ class DeliveryOrderLogic extends GetxController {
       error: (msg) => errorDialog(content: msg),
     );
   }
+  _initLabelList(List<DeliveryOrderLabelInfo>list){
+    state.materialList.forEach((k, v) {
+      for (var label in list) {
+        if (label.materialCode == k || label.isOutBoxLabel()) {
+          if (!state.orderLabelList
+              .any((v2) => v2.labelNumber == label.labelNumber)) {
+            state.orderLabelList.add(label);
+          }
+        }
+      }
+    });
+    state.scannedLabelList.value = state.orderLabelList
+        .where((v) => v.isBind && !v.isOutBoxLabel())
+        .toList();
+  }
 
   getSupplierLabelInfo({
     required List<DeliveryOrderInfo> group,
@@ -267,89 +282,82 @@ class DeliveryOrderLogic extends GetxController {
       factoryNumber: group[0].factoryNO ?? '',
       supplierNumber: group[0].supplierCode ?? '',
       deliveryOrderNumber: group[0].deliNo ?? '',
-      success: () =>
-          Get.to(() => const DeliveryOrderLabelBindingPage())?.then((v) {
-        state.scannedLabelList.clear();
-        if (v != null && v) {
-          refresh.call();
-        }
-      }),
+      success: (list) {
+        _initLabelList(list);
+        Get.to(() => const DeliveryOrderLabelBindingPage())?.then((v) {
+          state.scannedLabelList.clear();
+          if (v != null && v) {
+            refresh.call();
+          }
+        });
+      },
       error: (msg) => errorDialog(content: msg),
     );
   }
 
   getLabelBindingStaging() {
-    state.getLabelBindingStaging(error: (msg) => msgDialog(content: msg));
+    state.getLabelBindingStaging(
+      success: (list) =>_initLabelList(list),
+      error: (msg) => msgDialog(content: msg),
+    );
   }
 
   addPiece({required String pieceNo}) {
-    if (state.scannedLabelList.any((v) => v.pieceNo == pieceNo)) {
-      errorDialog(content: '该件已添加');
+    DeliveryOrderLabelInfo? outBox;
+    try {
+      outBox = state.orderLabelList
+          .firstWhere((v) => v.pieceNo == pieceNo && v.isOutBoxLabel());
+    } on StateError catch (_) {}
+    var labels = <DeliveryOrderLabelInfo>[];
+    if (outBox == null) {
+      labels = state.orderLabelList.where((v) => v.pieceNo == pieceNo).toList();
     } else {
-      DeliveryOrderLabelInfo? outBox;
-      try {
-        outBox = state.orderLabelList
-            .firstWhere((v) => v.pieceNo == pieceNo && v.isOutBoxLabel());
-      } on StateError catch (_) {}
-      var labels = <DeliveryOrderLabelInfo>[];
-      if (outBox == null) {
-        labels =
-            state.orderLabelList.where((v) => v.pieceNo == pieceNo).toList();
-      } else {
-        labels = state.orderLabelList
-            .where((v) => v.outBoxLabelNumber == outBox!.labelNumber)
-            .toList();
-      }
-      if (labels.isEmpty) {
-        errorDialog(content: '该件不属于当前送货单!');
-        return;
-      }
-      if (labels.every((v) => state.orderLabelList.contains(v))) {
-        errorDialog(content: '该标签已扫!');
-        return;
-      }
-      _addLabels(labelData: [
-        for (var label in labels)
-          if (!state.scannedLabelList.contains(label)) label
-      ]);
+      labels = state.orderLabelList
+          .where((v) => v.outBoxLabelNumber == outBox!.labelNumber)
+          .toList();
     }
+    _addLabels(labels: labels);
   }
 
   scanLabel(String code) {
-    if (state.scannedLabelList.any((v) => v.labelNumber == code)) {
-      // errorDialog(content: '该标签已扫');
-      state.scannedLabelList.firstWhere((v)=>v.labelNumber==code).isChecked.value=true;
+    DeliveryOrderLabelInfo? outBox;
+    try {
+      outBox = state.orderLabelList
+          .firstWhere((v) => v.labelNumber == code && v.isOutBoxLabel());
+    } on StateError catch (_) {}
+    var labels = <DeliveryOrderLabelInfo>[];
+    if (outBox == null) {
+      labels =
+          state.orderLabelList.where((v) => v.labelNumber == code).toList();
     } else {
-      DeliveryOrderLabelInfo? outBox;
-      try {
-        outBox = state.orderLabelList
-            .firstWhere((v) => v.labelNumber == code && v.isOutBoxLabel());
-      } on StateError catch (_) {}
-      var labels = <DeliveryOrderLabelInfo>[];
-      if (outBox == null) {
-        labels =
-            state.orderLabelList.where((v) => v.labelNumber == code).toList();
-      } else {
-        labels = state.orderLabelList
-            .where((v) => v.outBoxLabelNumber == outBox!.labelNumber)
-            .toList();
-      }
-      if (labels.isEmpty) {
-        errorDialog(content: '该件不属于当前送货单!');
-        return;
-      }
-      if (labels.every((v) => state.orderLabelList.contains(v))) {
-        errorDialog(content: '该标签已扫!');
-        return;
-      }
-      _addLabels(labelData: [
-        for (var label in labels)
-          if (!state.scannedLabelList.contains(label)) label
-      ]);
+      labels = state.orderLabelList
+          .where((v) => v.outBoxLabelNumber == code)
+          .toList();
     }
+    _addLabels(labels: labels);
   }
 
-  _addLabels({required List<DeliveryOrderLabelInfo> labelData}) {
+  _addLabels({required List<DeliveryOrderLabelInfo> labels}) {
+    if (labels.isEmpty) {
+      errorDialog(content: '该件不属于当前送货单!');
+      return;
+    }
+
+    if (labels.every((v) => state.scannedLabelList.contains(v))) {
+      if (labels.every((v) => v.isChecked.value)) {
+        errorDialog(content: '该标签已扫!');
+      } else {
+        for (var v in labels) {
+          v.isChecked.value = true;
+        }
+      }
+      return;
+    }
+
+    var labelData = <DeliveryOrderLabelInfo>[
+      for (var label in labels)
+        if (!state.scannedLabelList.contains(label)) label
+    ];
     var materialNumberList = <String>[];
     state.materialList.forEach((k, v) {
       materialNumberList.add(k);
@@ -363,19 +371,21 @@ class DeliveryOrderLogic extends GetxController {
         double max = state.materialList[label.materialCode] ?? 0;
         double total = 0.0;
         if (state.scannedLabelList.isNotEmpty) {
-          total = state.scannedLabelList
-              .where((v) => v.materialCode == label.materialCode)
-              .map((v) => v.baseQty ?? 0)
-              .reduce((a, b) => a.add(b));
+          for (var v in state.scannedLabelList
+              .where((v) => v.materialCode == label.materialCode)) {
+            total = total.add(v.baseQty ?? 0);
+          }
         }
-        double quantity = labelData
-            .where((v) => v.materialCode == label.materialCode)
-            .map((v) => v.baseQty ?? 0)
-            .reduce((a, b) => a.add(b));
+        double quantity = 0;
+        for (var v
+            in labelData.where((v) => v.materialCode == label.materialCode)) {
+          quantity = quantity.add(v.baseQty ?? 0);
+        }
+
         if (total.add(quantity) > max) {
           errorDialog(content: '该标签数量超出了，请扫瞄数量更小的标签。');
         } else {
-          state.scannedLabelList.add(label..isChecked.value=true);
+          state.scannedLabelList.add(label..isChecked.value = true);
         }
       }
     } else {
@@ -400,7 +410,11 @@ class DeliveryOrderLogic extends GetxController {
         (v) => '(${v.materialCode})${v.materialName}').forEach((k, v) {
       returnList.add([
         k,
-        v.map((v) => v.commonQty ?? 0).reduce((a, b) => a.add(b)).toShowString()+(v[0].commonUnit??''),
+        v
+                .map((v) => v.commonQty ?? 0)
+                .reduce((a, b) => a.add(b))
+                .toShowString() +
+            (v[0].commonUnit ?? ''),
       ]);
     });
     return returnList;
