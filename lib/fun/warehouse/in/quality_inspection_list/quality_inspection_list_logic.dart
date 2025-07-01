@@ -5,7 +5,6 @@ import 'package:jd_flutter/bean/http/response/stuff_quality_inspection_info.dart
 import 'package:jd_flutter/fun/warehouse/in/quality_inspection_list/quality_inspection_list_state.dart';
 import 'package:jd_flutter/fun/warehouse/in/stuff_quality_inspection/stuff_quality_inspection_view.dart';
 import 'package:jd_flutter/utils/utils.dart';
-import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
@@ -71,17 +70,12 @@ class QualityInspectionListLogic extends GetxController {
   }
 
   //验证是否是同一个品检单
-  bool checkSameData() {
-    var name = <String>[];
-    for (var data in state.showDataList) {
-      for (var c in data.where((v) => v.isSelected.value)) {
-        if (!name.contains(c.inspectionOrderNo)) {
-          name.add(c.inspectionOrderNo.toString());
-        }
-      }
-    }
-    return name.length == 1;
-  }
+  bool checkSameData() =>
+      groupBy(<StuffQualityInspectionInfo>[
+        for (var data in state.showDataList)
+          ...data.where((v) => v.isSelected.value)
+      ], (v) => v.inspectionOrderNo ?? '').length ==
+      1;
 
   //删除品检单
   deleteData({
@@ -203,7 +197,7 @@ class QualityInspectionListLogic extends GetxController {
 
                   showList.add(QualityInspectionShowColor(
                     subItem: '2',
-                    name: '',
+                    name: data.materialDescription,
                     code: data.materialCode,
                     color: '分色合计',
                     qty: data.item
@@ -218,7 +212,7 @@ class QualityInspectionListLogic extends GetxController {
 
                   showList.add(QualityInspectionShowColor(
                     subItem: '3',
-                    name: '',
+                    name: data.materialDescription,
                     code: data.materialCode,
                     color: '冲销合计',
                     qty: selectList
@@ -271,10 +265,10 @@ class QualityInspectionListLogic extends GetxController {
       var selectName = '';
 
       state.showReceiptColorList.forEachIndexed((i, v) {
-        if (v.isSelected.value == true) {
+        if (v.isSelected.value == true && v.subItem == '1') {
           position = i;
           selectCode = v.code!;
-          selectCode = v.name!;
+          selectName = v.name!;
         }
       });
 
@@ -284,13 +278,13 @@ class QualityInspectionListLogic extends GetxController {
       state.showReceiptColorList
           .where((v) => v.code == selectCode && v.subItem == '1')
           .forEach((v) {
-        subAllQty = subAllQty + v.qty!;
+        subAllQty = subAllQty.add(v.qty!);
       });
 
       state.showReceiptColorList
-          .where((v) => v.code == selectCode && v.subItem == '2')
+          .where((v) => v.code == selectCode && v.subItem == '3')
           .forEach((v) {
-        remainQty = v.allQty! - subAllQty;
+        remainQty = v.allQty!.sub(subAllQty);
       });
 
       if (remainQty <= 0) {
@@ -305,6 +299,15 @@ class QualityInspectionListLogic extends GetxController {
               color: '',
               qty: remainQty,
             ));
+        state.showReceiptColorList
+                .firstWhere(
+                    (data) => data.code == selectCode && data.subItem == '2')
+                .qty =
+            state.showReceiptColorList
+                .where((data) => data.subItem == '1' && data.code == selectCode)
+                .toList()
+                .map((v) => v.qty ?? 0)
+                .reduce((a, b) => a.add(b));
         state.showReceiptColorList.refresh();
       }
     }
@@ -324,13 +327,11 @@ class QualityInspectionListLogic extends GetxController {
     if (state.showReceiptColorList
         .none((data) => data.code == selectCode && data.subItem == '1')) {
       allQty = 0.0;
-      logger.f('没有');
     } else {
       allQty = state.showReceiptColorList
           .where((data) => data.code == selectCode && data.subItem == '1')
           .map((v) => v.qty ?? 0.0)
           .reduce((a, b) => a.add(b));
-      logger.f('有');
     }
 
     for (var c in state.showReceiptColorList) {
@@ -377,7 +378,7 @@ class QualityInspectionListLogic extends GetxController {
               .where((data) => data.code == s && data.subItem == '3')
               .toList()[0]
               .qty)) {
-        checkQty = checkQty + 1;
+        checkQty++;
       }
     }
 

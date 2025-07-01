@@ -38,11 +38,6 @@ class _SapPackingScanLabelPageState extends State<SapPackingScanLabelPage> {
                 text: data.materials[0].labelList![0].pieceNumber ?? '',
                 textColor: Colors.blue.shade900,
               ),
-              expandedTextSpan(
-                hint: '跟踪号：：',
-                text: data.materials[0].trackNo ?? '',
-                textColor: Colors.blue.shade900,
-              ),
               Obx(() => Checkbox(
                     value: data.isSelected.value,
                     onChanged: (v) => data.isSelected.value = v!,

@@ -11,7 +11,6 @@ import 'package:jd_flutter/fun/dispatching/production_dispatch/production_dispat
 import 'package:jd_flutter/fun/dispatching/work_order_list/work_order_list_view.dart';
 import 'package:jd_flutter/fun/maintenance/sap_ink_color_matching/sap_ink_color_matching_view.dart';
 import 'package:jd_flutter/fun/management/property/property_view.dart';
-import 'package:jd_flutter/fun/management/quality_management/quality_management_view.dart';
 import 'package:jd_flutter/fun/management/visit_register/visit_register_view.dart';
 import 'package:jd_flutter/fun/other/device_maintenance_record/device_maintenance_record_view.dart';
 import 'package:jd_flutter/fun/other/hydroelectric_excess/hydroelectric_excess_view.dart';
@@ -234,12 +233,6 @@ class RouteConfig {
     const PackingScanPage(),
   );
 
-  //品质检验
-  static Routes qualityRestriction = Routes(
-    '/quality_restriction',
-    99,
-    const QualityRestrictionPage(),
-  );
 
   //湿印工序派工
   static Routes processDispatchRegister = Routes(
@@ -665,7 +658,6 @@ class RouteConfig {
     machineDispatch,
     machineDispatchReport,
     packingScan,
-    qualityRestriction,
     processDispatchRegister,
     smartDelivery,
     cartonLabelScan,
@@ -817,10 +809,6 @@ class RouteConfig {
     GetPage(
       name: packingScan.name,
       page: () => packingScan.page,
-    ),
-    GetPage(
-      name: qualityRestriction.name,
-      page: () => qualityRestriction.page,
     ),
     GetPage(
       name: processDispatchRegister.name,

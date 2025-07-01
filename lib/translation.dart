@@ -2196,7 +2196,7 @@ class Translation extends Translations {
           'code_list_report_no_barcode': '无条码可提交!',
           'code_list_report_please_scan_code': '请扫描条码!',
           'code_list_report_have_code': '条码已存在!',
-          'code_list_report_outbound': '出库!',
+          'code_list_report_outbound': '出库',
           'code_list_report_obtain_barcode': '获取条码',
           'code_list_report_getting_barcode': '确定要获取条码吗?',
           'code_list_report_sure_outbound': '确定要出库吗?',
@@ -5705,7 +5705,7 @@ class Translation extends Translations {
           'code_list_report_no_barcode': 'No barcode available for submission!',
           'code_list_report_please_scan_code': 'Please scan the barcode!',
           'code_list_report_have_code': 'Barcode already exists!',
-          'code_list_report_outbound': 'Outbound!',
+          'code_list_report_outbound': 'Outbound',
           'code_list_report_obtain_barcode': 'Obtain barcode',
           'code_list_report_getting_barcode':
               'Are you sure you want to obtain the barcode?',

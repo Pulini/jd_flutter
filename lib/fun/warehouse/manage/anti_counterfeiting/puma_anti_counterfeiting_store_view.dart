@@ -103,7 +103,7 @@ class _PumaAntiCounterfeitingStorePageState
   @override
   void initState() {
     pdaScanner(
-      scan: (code) => {state.addCode(code)},
+      scan: (code) => state.addCode(code),
     );
     super.initState();
   }
