@@ -4,22 +4,36 @@ import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 
 enum ScanLabelOperationType {
-  unKnown(0, '初始'),
-  create(1, '合并'),
-  binding(2, '绑定'),
-  unbind(3, '解绑'),
-  transfer(4, '转移');
-
-  final int value;
-  final String text;
-
-  const ScanLabelOperationType(this.value, this.text);
+  unKnown,
+  create,
+  binding,
+  unbind,
+  transfer,
 }
-
+String getOperationTypeText(ScanLabelOperationType type){
+  var text='';
+  switch (type) {
+      case ScanLabelOperationType.create:
+      text = 'carton_label_binding_operation_type_create'.tr;
+      break;
+    case ScanLabelOperationType.binding:
+      text = 'carton_label_binding_operation_type_binding'.tr;
+      break;
+    case ScanLabelOperationType.unbind:
+      text = 'carton_label_binding_operation_type_unbind'.tr;
+      break;
+    case ScanLabelOperationType.transfer:
+      text = 'carton_label_binding_operation_type_transfer'.tr;
+      break;
+    default:
+      text = 'carton_label_binding_operation_type_unknown'.tr;
+  }
+  return text;
+}
 class SapCartonLabelBindingState {
   var labelList = <SapLabelBindingInfo>[].obs;
   var operationType = ScanLabelOperationType.unKnown;
-  var operationTypeText = ScanLabelOperationType.unKnown.text.obs;
+  var operationTypeText = getOperationTypeText(ScanLabelOperationType.unKnown).obs;
   var newBoxLabelID = ''.obs;
 
   getLabelInfo({

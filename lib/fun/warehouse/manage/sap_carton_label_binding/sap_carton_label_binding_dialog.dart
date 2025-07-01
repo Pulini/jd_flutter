@@ -38,7 +38,7 @@ modifyBoxInfo({
       canPop: true,
       child: StatefulBuilder(builder: (context, dialogSetState) {
         return AlertDialog(
-          title: Text(operationType.text),
+          title: Text(getOperationTypeText(operationType)),
           content: SizedBox(
             width: 400,
             child: Column(
