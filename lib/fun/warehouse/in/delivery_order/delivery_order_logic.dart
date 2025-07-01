@@ -435,4 +435,21 @@ class DeliveryOrderLogic extends GetxController {
       }
     });
   }
+
+ double getMaterialsTotal() {
+    var max=0.0;
+    for (var v in state.materialList.values) {
+      max=max.add(v);
+    }
+    return max;
+  }
+
+
+ double getScanProgress() {
+    var progress = 0.0;
+    for (var v in state.scannedLabelList) {
+      progress = progress.add(v.baseQty??0);
+    }
+    return progress;
+  }
 }

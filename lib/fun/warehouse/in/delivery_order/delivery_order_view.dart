@@ -477,34 +477,37 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
         Row(
           children: [
             expandedTextSpan(
-              flex: 2,
+              flex: 3,
               hint: 'delivery_order_delivery_qty'.tr,
               text: item.deliveryQty().toShowString(),
               textColor: Colors.black45,
             ),
             expandedTextSpan(
-              flex: 2,
+              flex: 3,
               hint: 'delivery_order_check_qty'.tr,
               text: item.checkQuantity.toDoubleTry().toShowString(),
               textColor: Colors.black45,
             ),
             expandedTextSpan(
-              flex: 4,
+              flex: 6,
               hint: 'delivery_order_factory_type_body'.tr,
               text: item.model ?? '',
               textColor: Colors.black45,
             ),
             expandedTextSpan(
+              flex: 2,
               hint: 'delivery_order_coefficient'.tr,
               text: item.coefficient ?? '',
               textColor: Colors.black45,
             ),
             expandedTextSpan(
+              flex: 2,
               hint: 'delivery_order_comm_unit'.tr,
               text: item.commUnit ?? '',
               textColor: Colors.black45,
             ),
             expandedTextSpan(
+              flex: 2,
               hint: 'delivery_order_base_unit'.tr,
               text: item.baseUnit ?? '',
               textColor: Colors.black45,

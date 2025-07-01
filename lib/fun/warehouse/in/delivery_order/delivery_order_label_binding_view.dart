@@ -65,10 +65,10 @@ class _DeliveryOrderLabelBindingPageState
       title: '送货清点',
       popTitle: '确定要退出送货清点吗？',
       actions: [
-        // IconButton(onPressed: ()=>logic.scanLabel('00505685E5761FE095C24B636E12517B'), icon: Icon(Icons.add)),
+        // IconButton(onPressed: ()=>logic.scanLabel('00505685E5761FD095A8CBB6B2C2C805'), icon: Icon(Icons.add)),
         TextButton(
           onPressed: () => askDialog(
-            content: '确定要清空已扫描钱吗？',
+            content: '确定要清空已扫标签吗？',
             confirm: () => state.scannedLabelList.clear(),
           ),
           child: Text('清空'),
@@ -120,14 +120,26 @@ class _DeliveryOrderLabelBindingPageState
               ),
             ),
           ),
-          // Obx(() => progressIndicator(
-          //   max: state.colorOrderList[index].qty ?? 0,
-          //   value: scannedList.isEmpty
-          //       ? 0
-          //       : scannedList
-          //       .map((v) => v.commonQty)
-          //       .reduce((a, b) => a.add(b)),
-          // )),
+          Padding(
+            padding: const EdgeInsets.all(10),
+            child: Obx(() => Row(
+                  children: [
+                    Text(
+                      '清点进度：',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.green,
+                      ),
+                    ),
+                    Expanded(
+                      child: progressIndicator(
+                        max: logic.getMaterialsTotal(),
+                        value: logic.getScanProgress(),
+                      ),
+                    )
+                  ],
+                )),
+          ),
           Expanded(
             child: Obx(() => ListView.builder(
                   itemCount: state.scannedLabelList.length,
