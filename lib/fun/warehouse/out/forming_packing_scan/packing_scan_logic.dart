@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:jd_flutter/fun/other/forming_packing_scan/packing_scan_state.dart';
+import 'package:jd_flutter/fun/warehouse/out/forming_packing_scan/packing_scan_state.dart';
 import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/picker/picker_controller.dart';

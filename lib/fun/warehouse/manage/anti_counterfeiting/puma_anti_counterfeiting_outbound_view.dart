@@ -32,10 +32,10 @@ class _PumaAntiCounterfeitingOutboundPageState
           children: [
             Obx(() => Expanded(
                   child: ListView.builder(
-                    padding: const EdgeInsets.all(8),
+                    padding: const EdgeInsets.all(5),
                     itemCount: state.dataCodeList.length,
                     itemBuilder: (BuildContext context, int index) =>
-                        Text('123'),
+                        Text(state.dataCodeList[index].code.toString()),
                   ),
                 )),
             Row(

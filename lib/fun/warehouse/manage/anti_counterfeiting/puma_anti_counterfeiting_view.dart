@@ -70,14 +70,18 @@ class _PumaAntiCounterfeitingPageState
           children: [
             Row(
               children: [
-                Expanded(flex: 1, child: _title('code_list_report_instruction_number'.tr)),
-                Expanded(flex: 2, child: _title('code_list_report_factory_type_body'.tr))
+                Expanded(
+                    flex: 1,
+                    child: _title('code_list_report_instruction_number'.tr)),
+                Expanded(
+                    flex: 2,
+                    child: _title('code_list_report_factory_type_body'.tr))
               ],
             ),
             Expanded(
               child: Obx(
-                () => ListView.builder(
-                  padding: const EdgeInsets.all(8),
+                    () => ListView.builder(
+                  padding: const EdgeInsets.all(5),
                   itemCount: state.dataList.length,
                   itemBuilder: (BuildContext context, int index) =>
                       _item(state.dataList[index]),
@@ -91,7 +95,8 @@ class _PumaAntiCounterfeitingPageState
                   child: CombinationButton(
                     text: 'code_list_report_store'.tr,
                     click: () {
-                      Get.to(() => const PumaAntiCounterfeitingStorePage());
+                      Get.to(() => const PumaAntiCounterfeitingStorePage())
+                          ?.then((v) => _scan());
                     },
                     combination: Combination.left,
                   ),
@@ -101,7 +106,8 @@ class _PumaAntiCounterfeitingPageState
                   child: CombinationButton(
                     text: 'code_list_report_sorting'.tr,
                     click: () {
-                      Get.to(() => const PumaAntiCounterfeitingOutboundPage());
+                      Get.to(() => const PumaAntiCounterfeitingOutboundPage())
+                          ?.then((v) => _scan());
                     },
                     combination: Combination.right,
                   ),
@@ -112,10 +118,16 @@ class _PumaAntiCounterfeitingPageState
         ));
   }
 
+  _scan() {
+    pdaScanner(
+      scan: (code) => logic.getBarCodeListByBoxNumber(code),
+    );
+  }
+
   @override
   void initState() {
     pdaScanner(
-      scan: (code) => {logic.getBarCodeListByBoxNumber(code)},
+      scan: (code) => logic.getBarCodeListByBoxNumber(code),
     );
     super.initState();
   }
