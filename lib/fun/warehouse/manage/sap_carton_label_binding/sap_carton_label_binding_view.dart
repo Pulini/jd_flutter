@@ -44,10 +44,10 @@ class _SapCartonLabelBindingPageState extends State<SapCartonLabelBindingPage> {
                 for (var sub in labelList.where((v) => !v.isBoxLabel)) ...[
                   Row(
                     children: [
-                      expandedTextSpan(hint: '件号：', text: sub.pieceNo ?? ''),
+                      expandedTextSpan(hint: 'carton_label_binding_piece_no'.tr, text: sub.pieceNo ?? ''),
                       IconButton(
                         onPressed: () => askDialog(
-                            content: '确定要删除标签吗？',
+                            content: 'carton_label_binding_delete_label_tips'.tr,
                             confirm: () => logic.deleteLabel(sub)),
                         icon: const Icon(
                           Icons.delete_forever,
@@ -77,10 +77,10 @@ class _SapCartonLabelBindingPageState extends State<SapCartonLabelBindingPage> {
           children: [
             Row(
               children: [
-                expandedTextSpan(hint: '外箱标件号：', text: boxLabel.pieceNo ?? ''),
+                expandedTextSpan(hint: 'carton_label_binding_out_box_label_piece_no'.tr, text: boxLabel.pieceNo ?? ''),
                 IconButton(
                   onPressed: () => askDialog(
-                    content: '确定要删除标签吗？',
+                    content: 'carton_label_binding_delete_label_tips'.tr,
                     confirm: () => logic.deleteLabel(boxLabel!),
                   ),
                   icon: const Icon(
@@ -112,11 +112,11 @@ class _SapCartonLabelBindingPageState extends State<SapCartonLabelBindingPage> {
             ? Container()
             : CombinationButton(
                 combination: Combination.left,
-                text: '打印新外箱标',
+                text: 'carton_label_binding_print_out_box_label'.tr,
                 click: () => logic.printNewBoxLabel(),
               )),
         Obx(() =>
-            state.operationTypeText.value == ScanLabelOperationType.unKnown.text
+            state.operationTypeText.value == getOperationTypeText(ScanLabelOperationType.unKnown)
                 ? Container()
                 : CombinationButton(
                     combination: state.newBoxLabelID.value.isNotEmpty

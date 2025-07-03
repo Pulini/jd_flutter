@@ -140,12 +140,12 @@ showColor(List<StuffColorSeparationList> colorList) {
               Row(
                 children: [
                   expandedFrameText(
-                    text: '色系',
+                    text: 'quality_inspection_color_title'.tr,
                     textColor: Colors.white,
                     backgroundColor: Colors.blueAccent,
                   ),
                   expandedFrameText(
-                    text: '数量',
+                    text: 'quality_inspection_quality_title'.tr,
                     textColor: Colors.white,
                     backgroundColor: Colors.blueAccent,
                   ),

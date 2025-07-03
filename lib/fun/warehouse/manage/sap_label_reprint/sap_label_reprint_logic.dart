@@ -20,23 +20,46 @@ class SapLabelReprintLogic extends GetxController {
     );
   }
 
-  printLabel() {
+  bool isMyanmarLabel() => state.labelList
+      .where((v) => v.isSelected.value)
+      .any((v) => v.factoryNo == '1098');
+
+  printLabel({bool? hasNotes}) {
     var selected = state.labelList.where((v) => v.isSelected.value).toList();
     if (selected.any((v) => v.isBoxLabel)) {
       askDialog(
-        title: '打印标签',
-        content: '请选择外箱标打印类型',
-        confirmText: '物料标',
+        title: 'label_reprint_print_label'.tr,
+        content: 'label_reprint_select_outer_label_print_type'.tr,
+        confirmText: 'label_reprint_material_label'.tr,
         confirmColor: Colors.blue,
         confirm: () =>
             toPrintView(createLabels(labels: selected, isMaterialLabel: true)),
-        cancelText: '普通标',
+        cancelText: 'label_reprint_common_label'.tr,
         cancelColor: Colors.blue,
         cancel: () =>
             toPrintView(createLabels(labels: selected, isMaterialLabel: false)),
       );
     } else {
-      toPrintView(createLabels(labels: selected));
+      if (selected.any((v) => v.factoryNo == '1098')) {
+        askDialog(
+          title: 'label_reprint_print_label'.tr,
+          content: '是否打印备注行'.tr,
+          confirmText: 'label_reprint_yes'.tr,
+          confirmColor: Colors.blue,
+          confirm: () => toPrintView(createLabels(
+            labels: selected,
+            hasNotes: true,
+          )),
+          cancelText: 'label_reprint_no'.tr,
+          cancelColor: Colors.blue,
+          cancel: () => toPrintView(createLabels(
+            labels: selected,
+            hasNotes: false,
+          )),
+        );
+      } else {
+        toPrintView(createLabels(labels: selected));
+      }
     }
   }
 
@@ -46,7 +69,8 @@ class SapLabelReprintLogic extends GetxController {
         : PreviewLabel(labelWidget: labelView[0], isDynamic: true));
   }
 
-  Widget myanmarLabel(SapPrintLabelInfo label) => dynamicMyanmarLabel110xN(
+  Widget myanmarLabel(SapPrintLabelInfo label, bool hasNotes) =>
+      dynamicMyanmarLabel110xN(
         labelID: label.labelID ?? '',
         myanmarApprovalDocument:
             label.subLabel![0].myanmarApprovalDocument ?? '',
@@ -71,6 +95,7 @@ class SapLabelReprintLogic extends GetxController {
         volume: label.volume.toShowString(),
         supplier: label.supplierNumber ?? '',
         manufactureDate: label.formatManufactureDate(),
+        hasNotes: hasNotes,
       );
 
   Widget outBoxLabel(SapPrintLabelInfo label, bool isMaterialLabel) {
@@ -194,12 +219,13 @@ class SapLabelReprintLogic extends GetxController {
   List<Widget> createLabels({
     required List<SapPrintLabelInfo> labels,
     bool? isMaterialLabel,
+    bool? hasNotes,
   }) {
     var labelsView = <Widget>[];
     for (var label in labels) {
       if (label.factoryNo == '1098') {
         //缅甸标
-        labelsView.add(myanmarLabel(label));
+        labelsView.add(myanmarLabel(label, hasNotes ?? false));
       } else {
         if (label.isBoxLabel) {
           //外箱大标

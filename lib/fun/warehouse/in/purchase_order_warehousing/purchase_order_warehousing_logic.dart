@@ -85,11 +85,11 @@ class PurchaseOrderWarehousingLogic extends GetxController {
       return;
     }
     if (groupBy(selectOrder, (v) => v.isScanPieces).length > 1) {
-      errorDialog(content: '扫码与非扫码工单不能同时操作！');
+      errorDialog(content: 'purchase_order_warehousing_different_order_tips'.tr);
       return;
     }
     if (groupBy(selectOrder, (v) => v.supplier).length > 1) {
-      errorDialog(content: '不同供应商工单不能同时操作！');
+      errorDialog(content: 'purchase_order_warehousing_different_supplier_tips'.tr);
       return;
     }
 
@@ -129,68 +129,61 @@ class PurchaseOrderWarehousingLogic extends GetxController {
   }
 
   addPiece({required String pieceNo}) {
-    if (state.scannedLabelList.any((v) => v.pieceNo == pieceNo)) {
-      errorDialog(content: '该件已添加');
+    DeliveryOrderLabelInfo? outBox;
+    try {
+      outBox = state.orderLabelList
+          .firstWhere((v) => v.pieceNo == pieceNo && v.isOutBoxLabel());
+    } on StateError catch (_) {}
+    var labels = <DeliveryOrderLabelInfo>[];
+    if (outBox == null) {
+      labels = state.orderLabelList.where((v) => v.pieceNo == pieceNo).toList();
     } else {
-      DeliveryOrderLabelInfo? outBox;
-      try {
-        outBox = state.orderLabelList
-            .firstWhere((v) => v.pieceNo == pieceNo && v.isOutBoxLabel());
-      } on StateError catch (_) {}
-      var labels = <DeliveryOrderLabelInfo>[];
-      if (outBox == null) {
-        labels =
-            state.orderLabelList.where((v) => v.pieceNo == pieceNo).toList();
-      } else {
-        labels = state.orderLabelList
-            .where((v) => v.outBoxLabelNumber == outBox!.labelNumber)
-            .toList();
-      }
-      if (labels.isEmpty) {
-        errorDialog(content: '该件不属于当前送货单!');
-        return;
-      }
-      if (labels.every((v) => state.orderLabelList.contains(v))) {
-        errorDialog(content: '该标签已扫!');
-        return;
-      }
+      labels = state.orderLabelList
+          .where((v) => v.outBoxLabelNumber == outBox!.labelNumber)
+          .toList();
     }
+    _addLabels(labels: labels);
   }
 
   scanLabel(String code) {
-    if (state.scannedLabelList.any((v) => v.labelNumber == code)) {
-      errorDialog(content: '该标签已扫');
+    DeliveryOrderLabelInfo? outBox;
+    try {
+      outBox = state.orderLabelList
+          .firstWhere((v) => v.labelNumber == code && v.isOutBoxLabel());
+    } on StateError catch (_) {}
+    var labels = <DeliveryOrderLabelInfo>[];
+    if (outBox == null) {
+      labels =
+          state.orderLabelList.where((v) => v.labelNumber == code).toList();
     } else {
-      DeliveryOrderLabelInfo? outBox;
-      try {
-        outBox = state.orderLabelList
-            .firstWhere((v) => v.labelNumber == code && v.isOutBoxLabel());
-      } on StateError catch (_) {}
-      var labels = <DeliveryOrderLabelInfo>[];
-      if (outBox == null) {
-        labels =
-            state.orderLabelList.where((v) => v.labelNumber == code).toList();
-      } else {
-        labels = state.orderLabelList
-            .where((v) => v.outBoxLabelNumber == outBox!.labelNumber)
-            .toList();
-      }
-      if (labels.isEmpty) {
-        errorDialog(content: '该件不属于当前送货单!');
-        return;
-      }
-      if (labels.every((v) => state.orderLabelList.contains(v))) {
-        errorDialog(content: '该标签已扫!');
-        return;
-      }
-      _addLabels(labelData: [
-        for (var label in labels)
-          if (!state.scannedLabelList.contains(label)) label
-      ]);
+      labels = state.orderLabelList
+          .where((v) => v.outBoxLabelNumber == code)
+          .toList();
     }
+    _addLabels(labels: labels);
   }
 
-  _addLabels({required List<DeliveryOrderLabelInfo> labelData}) {
+  _addLabels({required List<DeliveryOrderLabelInfo> labels}) {
+    if (labels.isEmpty) {
+      errorDialog(content: 'purchase_order_warehousing_order_not_have_this_label'.tr);
+      return;
+    }
+
+    if (labels.every((v) => state.scannedLabelList.contains(v))) {
+      if (labels.every((v) => v.isChecked.value)) {
+        errorDialog(content: 'purchase_order_warehousing_label_scanned'.tr);
+      } else {
+        for (var v in labels) {
+          v.isChecked.value = true;
+        }
+      }
+      return;
+    }
+
+    var labelData =<DeliveryOrderLabelInfo>[
+      for (var label in labels)
+        if (!state.scannedLabelList.contains(label)) label
+    ];
     var materialNumberList = <String>[];
     state.materialList.forEach((k, v) {
       materialNumberList.add(k);
@@ -204,26 +197,27 @@ class PurchaseOrderWarehousingLogic extends GetxController {
         double max = state.materialList[label.materialCode] ?? 0;
         double total = 0.0;
         if (state.scannedLabelList.isNotEmpty) {
-          total = state.scannedLabelList
-              .where((v) => v.materialCode == label.materialCode)
-              .map((v) => v.baseQty ?? 0)
-              .reduce((a, b) => a.add(b));
+          for (var v in state.scannedLabelList
+              .where((v) => v.materialCode == label.materialCode)) {
+            total = total.add(v.baseQty ?? 0);
+          }
         }
-        double quantity = labelData
-            .where((v) => v.materialCode == label.materialCode)
-            .map((v) => v.baseQty ?? 0)
-            .reduce((a, b) => a.add(b));
+        double quantity = 0;
+        for (var v
+        in labelData.where((v) => v.materialCode == label.materialCode)) {
+          quantity = quantity.add(v.baseQty ?? 0);
+        }
+
         if (total.add(quantity) > max) {
-          errorDialog(content: '该标签数量超出了，请扫瞄数量更小的标签。');
+          errorDialog(content: 'purchase_order_warehousing_label_qty_exceed'.tr);
         } else {
-          state.scannedLabelList.add(label);
+          state.scannedLabelList.add(label..isChecked.value = true);
         }
       }
     } else {
-      errorDialog(content: '该件获取内包含了其他工单待物料，请拆分拣货。');
+      errorDialog(content: 'purchase_order_warehousing_has_other_material'.tr);
     }
   }
-
   deletePiece({required DeliveryOrderLabelInfo pieceInfo}) {
     state.scannedLabelList.removeWhere((v) => v.pieceNo == pieceInfo.pieceNo);
   }
@@ -251,11 +245,11 @@ class PurchaseOrderWarehousingLogic extends GetxController {
           .map((v3) => v3.baseQty ?? 0)
           .reduce((a, b) => a.add(b));
       if (total > v) {
-        errorDialog(content: '数量超出本次提交上限，清删除对应标签。');
+        errorDialog(content: 'purchase_order_warehousing_qty_exceed_tips'.tr);
         return;
       }
       if (total < v) {
-        errorDialog(content: '数量不足本次提交下限，请继续扫描标签。');
+        errorDialog(content: 'purchase_order_warehousing_qty_insufficient'.tr);
         return;
       }
     });

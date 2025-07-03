@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/stuff_quality_inspection_info.dart';
-import 'package:jd_flutter/fun/warehouse/in/quality_inspection_list/quality_inspection_list_color_label_binding_view.dart';
+import 'package:jd_flutter/fun/warehouse/in/quality_inspection_list/quality_inspection_list_colors_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/quality_inspection_list/quality_inspection_list_detail_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/quality_inspection_list/quality_inspection_list_dialog.dart';
 import 'package:jd_flutter/fun/warehouse/in/quality_inspection_list/quality_inspection_list_logic.dart';
@@ -80,103 +80,101 @@ class _QualityInspectionListPageState extends State<QualityInspectionListPage> {
   var receiptVoucherController = TextEditingController();
   var trackingNumberController = TextEditingController();
 
-  Widget _subItem(StuffQualityInspectionInfo data, Function toDetail) {
+  Widget _subItem(StuffQualityInspectionInfo data) {
     var subTextStyle = TextStyle(color: Colors.blue.shade900);
-    return GestureDetector(
-      onTap: () => toDetail.call(),
-      child: Container(
-        height: 40,
-        padding: const EdgeInsets.only(right: 10),
-        margin: const EdgeInsets.only(left: 16, right: 50),
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.black54, width: 1),
-        ),
-        child: Row(
-          children: [
-            SizedBox(
-              width: 50,
-              child: Obx(() => Checkbox(
-                    activeColor: Colors.blue,
-                    side: const BorderSide(color: Colors.red, width: 2),
-                    value: data.isSelected.value,
-                    onChanged: (v) => data.isSelected.value = v!,
-                  )),
-            ),
-            Expanded(
-                flex: 6,
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        data.salesAndDistributionVoucherNumber ?? '',
-                        style: subTextStyle,
-                      ),
+    return Container(
+      height: 40,
+      padding: const EdgeInsets.only(right: 10),
+      margin: const EdgeInsets.only(left: 16, right: 55),
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.black54, width: 1),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+              flex: 6,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Obx(() => Checkbox(
+                          activeColor: Colors.blue,
+                          side: const BorderSide(color: Colors.red, width: 2),
+                          value: data.isSelected.value,
+                          onChanged: (v) => data.isSelected.value = v!,
+                        )),
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: Text(
+                      data.salesAndDistributionVoucherNumber ?? '',
+                      style: subTextStyle,
                     ),
-                    expandedTextSpan(
-                      flex: 2,
-                      isBold: false,
-                      hint: 'quality_inspection_factory_type'.tr,
-                      text: data.factoryType ?? '',
-                      textColor: Colors.blue.shade900,
-                    ),
-                    expandedTextSpan(
-                      flex: 2,
-                      isBold: false,
-                      hint: 'quality_inspection_inspection_order_sub'.tr,
-                      text: data.inspectionOrderNo ?? '',
-                      textColor: Colors.blue.shade900,
-                    )
-                  ],
-                )),
-            Expanded(
-              child: Text(
-                data.inspectionQuantity.toDoubleTry().toShowString(),
-                textAlign: TextAlign.end,
-                style: subTextStyle,
-              ),
+                  ),
+                  expandedTextSpan(
+                    flex: 4,
+                    isBold: false,
+                    hint: 'quality_inspection_factory_type'.tr,
+                    text: data.factoryType ?? '',
+                    textColor: Colors.blue.shade900,
+                  ),
+                  expandedTextSpan(
+                    flex: 4,
+                    isBold: false,
+                    hint: 'quality_inspection_inspection_order_sub'.tr,
+                    text: data.inspectionOrderNo ?? '',
+                    textColor: Colors.blue.shade900,
+                  )
+                ],
+              )),
+          Expanded(
+            child: Text(
+              data.inspectionQuantity.toDoubleTry().toShowString(),
+              textAlign: TextAlign.end,
+              style: subTextStyle,
             ),
-            Expanded(
-              child: Text(
-                data.samplingQuantity.toDoubleTry().toShowString(),
-                textAlign: TextAlign.end,
-                style: subTextStyle,
-              ),
+          ),
+          Expanded(
+            child: Text(
+              data.samplingQuantity.toDoubleTry().toShowString(),
+              textAlign: TextAlign.end,
+              style: subTextStyle,
             ),
-            Expanded(
-              child: Text(
-                data.unqualifiedQuantity.toDoubleTry().toShowString(),
-                textAlign: TextAlign.end,
-                style: subTextStyle,
-              ),
+          ),
+          Expanded(
+            child: Text(
+              data.unqualifiedQuantity.toDoubleTry().toShowString(),
+              textAlign: TextAlign.end,
+              style: subTextStyle,
             ),
-            Expanded(
-              child: Text(
-                data.shortCodesNumber.toDoubleTry().toShowString(),
-                textAlign: TextAlign.end,
-                style: subTextStyle,
-              ),
+          ),
+          Expanded(
+            child: Text(
+              data.shortCodesNumber.toDoubleTry().toShowString(),
+              textAlign: TextAlign.end,
+              style: subTextStyle,
             ),
-            Expanded(
-              child: Text(
-                data.qualifiedQuantity.toDoubleTry().toShowString(),
-                textAlign: TextAlign.end,
-                style: subTextStyle,
-              ),
+          ),
+          Expanded(
+            child: Text(
+              data.qualifiedQuantity.toDoubleTry().toShowString(),
+              textAlign: TextAlign.end,
+              style: subTextStyle,
             ),
-            Expanded(
-              child: Text(
-                data.storageQuantity.toDoubleTry().toShowString(),
-                textAlign: TextAlign.end,
-                style: subTextStyle,
-              ),
+          ),
+          Expanded(
+            child: Text(
+              data.storageQuantity.toDoubleTry().toShowString(),
+              textAlign: TextAlign.end,
+              style: subTextStyle,
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 
-  _item(List<StuffQualityInspectionInfo> data) {
+  _item(int index) {
+    var data = state.showDataList[index];
     itemSubTitle({required String title, required String data}) => Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
@@ -218,22 +216,32 @@ class _QualityInspectionListPageState extends State<QualityInspectionListPage> {
           '(${data[0].materialCode}) ${data[0].materialDescription}',
           style: TextStyle(
             fontWeight: FontWeight.bold,
-            color: Colors.green.shade900,
+            color: Colors.green.shade700,
           ),
         ),
         subtitle: Row(
           children: [
             Expanded(
               flex: 6,
-              child: Text(
-                '(${data[0].supplierNumber}) ${data[0].name1}',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.blue.shade900,
-                ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('(${data[0].supplierNumber}) ${data[0].name1}'),
+                  TextButton(
+                    onPressed: () => Get.to(
+                        () => const QualityInspectionListDetailPage(),
+                        arguments: {'index': index}),
+                    child: Text(
+                      'quality_inspection_view_detail'.tr,
+                      style: TextStyle(
+                        color: Colors.blue.shade900,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  )
+                ],
               ),
             ),
-            const SizedBox(width: 50),
             itemSubTitle(
               title: 'quality_inspection_inspection_quantity'.tr,
               data: logic.inspectionTotalQtyText(data),
@@ -261,13 +269,7 @@ class _QualityInspectionListPageState extends State<QualityInspectionListPage> {
           ],
         ),
         children: [
-          for (var i = 0; i < data.length; ++i)
-            _subItem(data[i], () {
-              Get.to(
-                () => const QualityInspectionListDetailPage(),
-                arguments: {'index': i},
-              );
-            }),
+          for (var sub in data) _subItem(sub),
           const SizedBox(height: 10),
         ],
       ),
@@ -370,6 +372,22 @@ class _QualityInspectionListPageState extends State<QualityInspectionListPage> {
     );
   }
 
+  _stockIn() {
+    logic.checkOrderType(
+      stockIn: () => qualityInspectionListStoreDialog(
+        success: (date, store1) => logic.store(
+          date: date,
+          store1: store1,
+          refresh: () => _query(),
+        ),
+      ),
+      bindingLabel: () =>
+          Get.to(() => const QualityInspectionColorListPage())?.then((v) {
+        if (v!=null&&v) _query();
+      }),
+    );
+  }
+
   @override
   void initState() {
     scOrderType = SpinnerController(
@@ -381,10 +399,6 @@ class _QualityInspectionListPageState extends State<QualityInspectionListPage> {
 
   @override
   Widget build(BuildContext context) {
-    // SystemChrome.setPreferredOrientations([
-    //   DeviceOrientation.landscapeLeft, // 横屏左方向
-    //   DeviceOrientation.landscapeRight, // 横屏右方向
-    // ]);
     return pageBodyWithDrawer(
         queryWidgets: [
           EditText(
@@ -429,8 +443,7 @@ class _QualityInspectionListPageState extends State<QualityInspectionListPage> {
               child: Obx(() => ListView.builder(
                     shrinkWrap: true,
                     itemCount: state.showDataList.length,
-                    itemBuilder: (context, index) =>
-                        _item(state.showDataList[index]),
+                    itemBuilder: (context, index) => _item(index),
                   )),
             ),
             Row(
@@ -448,17 +461,7 @@ class _QualityInspectionListPageState extends State<QualityInspectionListPage> {
                         //入库
                         isEnabled: state.orderType.value == 0,
                         text: 'quality_inspection_store'.tr,
-                        click: () => logic.checkOrderType(
-                          needColorSet: () =>
-                              Get.to(() => const ColorLabelBindingPage()),
-                          stockIn: () => qualityInspectionListStoreDialog(
-                            success: (date, store1) => logic.store(
-                              date: date,
-                              store1: store1,
-                              refresh: () => _query(),
-                            ),
-                          ),
-                        ),
+                        click: () => _stockIn(),
                         combination: Combination.middle,
                       )),
                 ),

@@ -58,7 +58,7 @@ class LabelDetailPageState extends State<LabelDetailPage> {
   Widget build(BuildContext context) {
     var materialList = logic.getScannedMaterialsInfo();
     return pageBody(
-      title: '标签详情',
+      title: 'delivery_order_label_check_detail_title'.tr,
       body: Column(
         children: [
           Row(
@@ -92,7 +92,7 @@ class LabelDetailPageState extends State<LabelDetailPage> {
                     border: const OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(20)),
                     ),
-                    labelText: '品检员工号',
+                    labelText: 'delivery_order_label_check_detail_inspector'.tr,
                     prefixIcon: IconButton(
                       onPressed: () {
                         workerNumberController.clear();
@@ -104,10 +104,10 @@ class LabelDetailPageState extends State<LabelDetailPage> {
                       ),
                     ),
                     suffixIcon: Obx(() => CombinationButton(
-                      text: '确定提交',
+                      text: 'delivery_order_label_check_detail_confirm_submit'.tr,
                       isEnabled: state.canSubmitLabelBinding.value,
                       click: () => askDialog(
-                        content: '确定检查完标签要提交了吗？',
+                        content: 'delivery_order_label_check_detail_confirm_checked_tips'.tr,
                         confirm: () => _submit(),
                       ),
                     )),
@@ -125,14 +125,14 @@ class LabelDetailPageState extends State<LabelDetailPage> {
             child: Row(
               children: [
                 expandedFrameText(
-                  text: '物料',
+                  text: 'delivery_order_label_check_detail_material'.tr,
                   isBold: true,
                   textColor: Colors.white,
                 ),
                 SizedBox(
                   width: 100,
                   child: frameText(
-                    text: '数量',
+                    text: 'delivery_order_label_check_detail_quantity'.tr,
                     isBold: true,
                     textColor: Colors.white,
                     alignment: Alignment.centerRight,

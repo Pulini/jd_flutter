@@ -17,6 +17,7 @@
 //   ]
 // }
 import 'package:get/get.dart';
+import 'package:jd_flutter/utils/utils.dart';
 
 class SapPackingScanMaterialInfo {
   String? isDutyFree; //是否免税 DUTY_FREE
@@ -69,7 +70,7 @@ class SapPackingScanMaterialInfo {
 
   String materialID() => '$materialNumber$materialName$unit$trackNo';
 
-  int scannedCount() => labelList?.where((v) => v.isScanned.value).length ?? 0;
+  double scannedCount() => labelList?.where((v) => v.isScanned.value).map((v)=>v.quality??0).reduce((a,b)=>a.add(b))??0;
 
   bool search(String text) =>
       (materialNumber ?? '').contains(text) ||
@@ -118,8 +119,9 @@ class SapPackingScanLabelInfo {
 class PieceMaterialInfo {
   RxBool isSelected = false.obs;
   List<SapPackingScanMaterialInfo> materials = [];
+  String pieceId;
 
-  PieceMaterialInfo({required this.materials});
+  PieceMaterialInfo({required this.pieceId,required this.materials});
 }
 
 class SapPackingScanSubmitAbnormalInfo {
@@ -241,4 +243,48 @@ class SapPackingScanAbnormalInfo {
       (pieceNumber ?? '').contains(text) ||
       (trackNo ?? '').contains(text);
 
+}
+class SapPackingScanReverseLabelInfo{
+  String labelId='';//标签ID
+  String? pieceId;//件ID  ZPIECE_NO
+  double? pieceNo;//件数  CLABS
+  List<SapPackingScanReverseLabelMaterialInfo>? materialList;//物料列表 MATERIALLIST
+
+  SapPackingScanReverseLabelInfo({
+    this.pieceId,
+    this.pieceNo,
+    this.materialList,
+  });
+  SapPackingScanReverseLabelInfo.fromJson(dynamic json) {
+    pieceId = json['ZPIECE_NO'];
+    pieceNo = json['CLABS'].toString().toDoubleTry();
+    materialList = [
+      if(json['MATERIALLIST'] != null)
+      for (var item in json['MATERIALLIST'])
+        SapPackingScanReverseLabelMaterialInfo.fromJson(item)
+    ];
+  }
+
+}
+class SapPackingScanReverseLabelMaterialInfo{
+  String? materialNumber;//物料编码 MATNR
+  String? materialName;//物料编码 ZMAKTG
+  String? trackNo;//跟踪号  ZTRACKNO
+  double? commonQty; //常用数量 ERFMG
+  String? commonUnit; //常用单位  ERFME
+
+  SapPackingScanReverseLabelMaterialInfo({
+    this.materialNumber,
+    this.materialName,
+    this.trackNo,
+    this.commonQty,
+    this.commonUnit,
+  });
+  SapPackingScanReverseLabelMaterialInfo.fromJson(dynamic json) {
+    materialNumber = json['MATNR'];
+    materialName = json['ZMAKTG'];
+    trackNo = json['ZTRACKNO'];
+    commonQty = json['ERFMG'].toString().toDoubleTry();
+    commonUnit = json['ERFME'];
+  }
 }

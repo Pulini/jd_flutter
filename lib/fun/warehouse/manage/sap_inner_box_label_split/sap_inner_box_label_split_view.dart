@@ -45,18 +45,18 @@ class _SapInnerBoxLabelSplitPageState extends State<SapInnerBoxLabelSplitPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       textSpan(
-                          hint: '收货方：',
+                          hint: 'inner_box_label_split_consignee'.tr,
                           text: label.shipToParty ?? '',
                           textColor: Colors.green.shade800),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           textSpan(
-                            hint: '件号：',
+                            hint: 'inner_box_label_split_piece_id'.tr,
                             text: label.pieceID ?? '',
                           ),
                           textSpan(
-                            hint: '供应商：',
+                            hint: 'inner_box_label_split_supplier'.tr,
                             text: label.supplierNumber ?? '',
                           ),
                         ],
@@ -83,7 +83,7 @@ class _SapInnerBoxLabelSplitPageState extends State<SapInnerBoxLabelSplitPage> {
                   ),
                   const SizedBox(width: 10),
                   textSpan(
-                    hint: '数量：',
+                    hint: 'inner_box_label_split_qty'.tr,
                     text: '${sub.inBoxQty.toShowString()}${sub.unit}',
                   )
                 ],
@@ -109,8 +109,8 @@ class _SapInnerBoxLabelSplitPageState extends State<SapInnerBoxLabelSplitPage> {
               children: [
                 Expanded(
                   child: Text(
-                    '待提交标签',
-                    style: TextStyle(
+                    'inner_box_label_split_wait_submit_qty'.tr,
+                    style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Colors.orange,
                     ),
@@ -135,7 +135,7 @@ class _SapInnerBoxLabelSplitPageState extends State<SapInnerBoxLabelSplitPage> {
                   ),
                   const SizedBox(width: 10),
                   textSpan(
-                    hint: '数量：',
+                    hint: 'inner_box_label_split_qty'.tr,
                     text: '${sub.qty.toShowString()}${sub.unit}',
                   )
                 ],
@@ -157,17 +157,17 @@ class _SapInnerBoxLabelSplitPageState extends State<SapInnerBoxLabelSplitPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             textSpan(
-                hint: '收货方：',
+                hint: 'inner_box_label_split_consignee'.tr,
                 text: state.originalLabel!.shipToParty ?? '',
                 textColor: Colors.green.shade800),
             Row(
               children: [
                 expandedTextSpan(
-                  hint: '件号：',
+                  hint: 'inner_box_label_split_piece_id'.tr,
                   text: state.originalLabel!.pieceID ?? '',
                 ),
                 expandedTextSpan(
-                  hint: '供应商：',
+                  hint: 'inner_box_label_split_supplier'.tr,
                   text: state.originalLabel!.supplierNumber ?? '',
                 ),
               ],
@@ -200,11 +200,11 @@ class _SapInnerBoxLabelSplitPageState extends State<SapInnerBoxLabelSplitPage> {
                   Expanded(
                     flex: 3,
                     child: sub.canSplitQty.value == 0
-                        ? Text('已拆出：${sub.inBoxQty.toShowString()}')
+                        ? Text('inner_box_label_split_has_been_split'.trArgs([sub.inBoxQty.toShowString()]))
                         : Row(
                             children: [
                               Text(
-                                '拆出：',
+                                'inner_box_label_split_split'.tr,
                                 style: const TextStyle(
                                     fontWeight: FontWeight.bold),
                               ),
@@ -224,7 +224,7 @@ class _SapInnerBoxLabelSplitPageState extends State<SapInnerBoxLabelSplitPage> {
               width: double.infinity,
               child: Obx(() => CombinationButton(
                     isEnabled: state.originalLabel!.hasSplitQty(),
-                    text: '预拆分',
+                    text: 'inner_box_label_split_pre_split'.tr,
                     click: () => logic.preSplit(),
                   )),
             )
@@ -247,9 +247,9 @@ class _SapInnerBoxLabelSplitPageState extends State<SapInnerBoxLabelSplitPage> {
       actions: [
         Obx(() => state.splitLabelList.isNotEmpty
             ? CombinationButton(
-                text: '提交拆分',
+                text: 'inner_box_label_split_submit_split'.tr,
                 click: () => askDialog(
-                  content: '确定要提交预拆分标签吗？',
+                  content: 'inner_box_label_split_submit_split_tips'.tr,
                   confirm: () => logic.submitPreSplit(),
                 ),
               )
@@ -257,12 +257,26 @@ class _SapInnerBoxLabelSplitPageState extends State<SapInnerBoxLabelSplitPage> {
         Obx(() => state.newLabelList.isNotEmpty &&
                 state.newLabelList.any((v) => v.isSelected.value)
             ? CombinationButton(
-                text: '打印',
-                click: () => logic.printLabel(),
-              )
+                text: 'inner_box_label_split_print'.tr,
+                click: () {
+                  if (logic.isMyanmarLabel()) {
+                    askDialog(
+                      title: 'inner_box_label_split_print_label'.tr,
+                      content: 'inner_box_label_split_print_notes'.tr,
+                      confirmText: 'inner_box_label_split_yes'.tr,
+                      confirmColor: Colors.blue,
+                      confirm: () => logic.printLabel(hasNotes: true),
+                      cancelText: 'inner_box_label_split_no'.tr,
+                      cancelColor: Colors.blue,
+                      cancel: () => logic.printLabel(hasNotes: false),
+                    );
+                  } else {
+                    logic.printLabel();
+                  }
+                })
             : Container())
       ],
-      popTitle: '确定要退出标签拆分吗？',
+      popTitle: 'inner_box_label_split_exit_split_tips'.tr,
       body: Obx(() => ListView(
             children: [
               if (state.originalLabel != null) _originalLabelItem(),

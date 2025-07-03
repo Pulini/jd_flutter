@@ -1,8 +1,10 @@
 import 'dart:ui';
 
 import 'package:get/get.dart';
+
 var localeChinese = const Locale('zh', 'Hans_CN');
 var localeEnglish = const Locale('en', 'US');
+
 class Translation extends Translations {
   @override
   Map<String, Map<String, String>> get keys => {
@@ -541,23 +543,25 @@ class Translation extends Translations {
           'worker_production_report_sub_item_hint1': '工序名称：',
           'worker_production_report_sub_item_hint2': '物料：',
           'worker_production_report_sub_item_hint3': '数量：',
-          'worker_production_report_item_title_order_no':'单号',
-          'worker_production_report_item_title_date':'日期',
-          'worker_production_report_item_title_report_department_name':'报产量组织名称',
-          'worker_production_report_item_title_report_group':'报产量组别',
-          'worker_production_report_item_title_dispatch_no':'派工单号',
-          'worker_production_report_item_title_process':'制程',
-          'worker_production_report_item_title_goods_no':'货号',
-          'worker_production_report_item_title_process_code':'工序编号',
-          'worker_production_report_item_title_process_name':'工序名称',
-          'worker_production_report_item_title_qty':'数量',
-          'worker_production_report_item_title_price':'单价',
-          'worker_production_report_item_title_amount':'金额',
-          'worker_production_report_item_title_small_order_subsidy':'小单补贴',
-          'worker_production_report_item_title_amount_total':'金额合计',
-          'worker_production_report_item_title_small_order_subsidy_rate':'小单补贴百分比',
-          'worker_production_report_item_title_worker_number':'工号',
-          'worker_production_report_item_title_worker_name':'姓名',
+          'worker_production_report_item_title_order_no': '单号',
+          'worker_production_report_item_title_date': '日期',
+          'worker_production_report_item_title_report_department_name':
+              '报产量组织名称',
+          'worker_production_report_item_title_report_group': '报产量组别',
+          'worker_production_report_item_title_dispatch_no': '派工单号',
+          'worker_production_report_item_title_process': '制程',
+          'worker_production_report_item_title_goods_no': '货号',
+          'worker_production_report_item_title_process_code': '工序编号',
+          'worker_production_report_item_title_process_name': '工序名称',
+          'worker_production_report_item_title_qty': '数量',
+          'worker_production_report_item_title_price': '单价',
+          'worker_production_report_item_title_amount': '金额',
+          'worker_production_report_item_title_small_order_subsidy': '小单补贴',
+          'worker_production_report_item_title_amount_total': '金额合计',
+          'worker_production_report_item_title_small_order_subsidy_rate':
+              '小单补贴百分比',
+          'worker_production_report_item_title_worker_number': '工号',
+          'worker_production_report_item_title_worker_name': '姓名',
           'quality_restriction_title': '品质检验',
           'visit_details_card_picture': '身份证',
           'visit_details_face_picture': '正脸照',
@@ -2616,6 +2620,10 @@ class Translation extends Translations {
           'delivery_order_checking_stock_in_order': '正在检查入库单...',
           'delivery_order_reversing_stock_in': '入库冲销中...',
           'delivery_order_reversing_stock_out': '冲销出库中...',
+          'delivery_order_getting_order_scan_detail': '正在获取工单扫码明细...',
+          'delivery_order_getting_temporary_label': '正在获取暂存标签...',
+          'delivery_order_submitting_temporary_label': '正在暂存标签...',
+          'delivery_order_submitting_label_bind': '正在提交标签绑定...',
           'delivery_order_detail_material': '物料：%s',
           'delivery_order_detail_delivery_qty': '送货数：%s',
           'delivery_order_detail_check_qty': '清点数：%s',
@@ -2666,6 +2674,35 @@ class Translation extends Translations {
           'delivery_order_dialog_submitting_stock_in': '正在提交入库...',
           'delivery_order_dialog_submitting_stock_out': '正在提交出库...',
           'delivery_order_dialog_creating_temporary': '正在创建暂收单...',
+          'delivery_order_dialog_not_binding_label_tips': '送货单(%s)尚未扫码绑定标签！',
+          'delivery_order_dialog_has_not_check_data_tips': '含有未清点的数据！',
+          'delivery_order_dialog_different_order_tips':
+              '扫码送货单与非扫码送货单不能一同生成暂收单!',
+          'delivery_order_label_check_order_not_have_this_label': '该件不属于当前送货单!',
+          'delivery_order_label_check_label_scanned': '该标签已扫!',
+          'delivery_order_label_check_label_qty_exceed':
+              '该件货物料数量超出，请扫瞄数量更小的标签。',
+          'delivery_order_label_check_has_other_material':
+              '该件货内包含了其他工单的物料，请拆分拣货。',
+          'delivery_order_label_check_delete_tips': '确定要删除本条标签吗？',
+          'delivery_order_label_check_title': '送货清点',
+          'delivery_order_label_check_exit_tips': '确定要退出送货清点吗？',
+          'delivery_order_label_check_clear_tips': '确定要清空已扫标签吗？',
+          'delivery_order_label_check_clear': '清空',
+          'delivery_order_label_check_piece_id': '件号',
+          'delivery_order_label_check_add_piece': '添加件',
+          'delivery_order_label_check_progress': '清点进度：',
+          'delivery_order_label_check_scanned': '已扫描：',
+          'delivery_order_label_check_order_no': '送货单号：',
+          'delivery_order_label_check_temporary': '暂存',
+          'delivery_order_label_check_submit': '提交',
+          'delivery_order_label_check_detail_title': '标签详情',
+          'delivery_order_label_check_detail_inspector': '品检员工号',
+          'delivery_order_label_check_detail_confirm_submit': '确认提交',
+          'delivery_order_label_check_detail_confirm_checked_tips':
+              '确定检查完标签了吗？',
+          'delivery_order_label_check_detail_material': '物料',
+          'delivery_order_label_check_detail_quantity': '数量',
           'process_dispatch_work_ticket': '工票条码',
           'process_dispatch_or': '或',
           'process_dispatch_dispatch_date': '派工日期',
@@ -2767,6 +2804,8 @@ class Translation extends Translations {
           'purchase_order_warehousing_input_customer_po': '请输入客户PO',
           'purchase_order_warehousing_input_track_no': '请输入跟踪号',
           'purchase_order_warehousing_getting_purchase_orders': '正在查询采购订单列表...',
+          'purchase_order_warehousing_getting_orders_scan_detail':
+              '正在获取工单扫码明细...',
           'purchase_order_warehousing_dialog_not_select_order':
               '请勾选要入库的订单并填写本次入库数！',
           'purchase_order_warehousing_dialog_post_date': '过账日期',
@@ -2776,6 +2815,26 @@ class Translation extends Translations {
           'purchase_order_warehousing_dialog_getting_leader': '正在获取仓库负责人信息...',
           'purchase_order_warehousing_dialog_submitting_warehousing':
               '正在提交入库...',
+          'purchase_order_warehousing_different_order_tips': '扫码与非扫码工单不能同时操作!',
+          'purchase_order_warehousing_different_supplier_tips':
+              '不同供应商工单不能同时操作!',
+          'purchase_order_warehousing_order_not_have_this_label': '该件不属于当前送货单!',
+          'purchase_order_warehousing_label_scanned': '该标签已扫!',
+          'purchase_order_warehousing_label_qty_exceed':
+              '该件货物料数量超出，请扫瞄数量更小的标签。',
+          'purchase_order_warehousing_has_other_material':
+              '该件货内包含了其他工单的物料，请拆分拣货。',
+          'purchase_order_warehousing_qty_exceed_tips': '数量超出本次提交上限，清删除对应标签。',
+          'purchase_order_warehousing_qty_insufficient': '数量不足本次提交下限，请继续扫描标签。',
+          'purchase_order_warehousing_label_check_delete_tips': '确定要删除本条标签吗？',
+          'purchase_order_warehousing_label_check_title': '标签清点',
+          'purchase_order_warehousing_label_check_exit_tips': '确定要退出标签清点吗？',
+          'purchase_order_warehousing_label_check_clear_tips': '确定要清空已扫标签吗？',
+          'purchase_order_warehousing_label_check_clear': '清空',
+          'purchase_order_warehousing_label_check_piece_id': '件号',
+          'purchase_order_warehousing_label_check_add_piece': '添加件',
+          'purchase_order_warehousing_label_check_scanned': '已扫描：',
+          'purchase_order_warehousing_label_check_submit': '提交',
           'purchase_order_reversal_material': '物料：',
           'purchase_order_reversal_supplier': '供应商：',
           'purchase_order_reversal_sales_order': '销售订单：',
@@ -2868,6 +2927,7 @@ class Translation extends Translations {
           'quality_inspection_all_not_delete': '全部（不含删除）',
           'quality_inspection_all_not_returned': '未退货',
           'quality_inspection_list_quality_inspection': '正在获取品检单列表...',
+          'quality_inspection_view_detail': '查看明细',
           'quality_inspection_inspection_quantity': '检验数',
           'quality_inspection_sampling_quantity': '抽检数',
           'quality_inspection_unqualified_quantity': '不合格数',
@@ -2910,6 +2970,9 @@ class Translation extends Translations {
           'quality_inspection_factory_type_detail': '工厂型体',
           'quality_inspection_no_delete': '没有删除权限',
           'quality_inspection_select_data': '请选择数据进行操作！',
+          'quality_inspection_color_item_total': '合计',
+          'quality_inspection_item_color_total': '分色合计',
+          'quality_inspection_item_reverse_total': '冲销合计',
           'quality_inspection_different_order': '存在不同的品检单！',
           'quality_inspection_different_taxCode': '存在不同的税号，无法一起入库！',
           'quality_inspection_input_delete_reason': '请输入删除原因!',
@@ -2928,6 +2991,7 @@ class Translation extends Translations {
           'quality_inspection_change_location_title': '修改货位',
           'quality_inspection_input_location': '请输入货位',
           'quality_inspection_change_location': '正在修改货位...',
+          'quality_inspection_getting_color_info': '正在获取分色及标签信息...',
           'quality_inspection_change_success': '修改成功！',
           'quality_inspection_change_failed': '修改失败！',
           'quality_inspection_color_message': '分色信息(长按删除)',
@@ -2949,6 +3013,12 @@ class Translation extends Translations {
           'quality_inspection_reversal_failed': '冲销失败！',
           'quality_inspection_no_inspection': '没有品检权限！',
           'quality_inspection_no_store_inspection': '没有入库权限！',
+          'quality_inspection_label_exists_tips': '该标签已扫入!',
+          'quality_inspection_label_error_tips': '所扫标签不属于本次操作标签范围!',
+          'quality_inspection_label_color_error_tips': '所扫标签内的物料不属于本色系!',
+          'quality_inspection_label_has_bond_tips': '该标签的物料已被色系<%s>绑定！',
+          'quality_inspection_label_qty_exceed_tips':
+              '该标签内的物料数为%s，超过了本色系的剩余数量%s ！',
           'quality_inspection_reviewer': '审核人',
           'quality_inspection_photo': '品检异常图片(长按删除)',
           'quality_inspection_exception_description': '异常说明',
@@ -2966,6 +3036,18 @@ class Translation extends Translations {
           'quality_inspection_create_success': '创建成功！',
           'quality_inspection_create_fail': '创建失败！',
           'quality_inspection_have_already': '含有已经品检过的物料！',
+          'quality_inspection_label_color': '色系：',
+          'quality_inspection_label_scanned': '已扫标签：',
+          'quality_inspection_label_scanned_material_qty': '已扫物料数：',
+          'quality_inspection_label_title': '色系标签绑定',
+          'quality_inspection_label_exit_tips': '确定要退出色系标签绑定吗？',
+          'quality_inspection_label_submit': '提交',
+          'quality_inspection_binding_piece_id': '标签件号：',
+          'quality_inspection_binding_qty': '数量：',
+          'quality_inspection_binding_delete_label_tips': '确定要删除该条标签吗？',
+          'quality_inspection_binding_title': '色系：%s',
+          'quality_inspection_binding_scanned_material_qty': '已扫物料数：',
+          'quality_inspection_binding_label_qty': '标签数：',
           'product_quality_inspection_inspection_unit': '生产单位：',
           'product_quality_inspection_abnormal_qty': '异常数：',
           'product_quality_inspection_reinspection_qty': '复检数：',
@@ -3060,6 +3142,71 @@ class Translation extends Translations {
           'product_patrol_inspection_dialog_modify_label_no': '修改标签号',
           'product_patrol_inspection_dialog_label_no': '标签号',
           'product_patrol_inspection_dialog_input_key': '请输入键值',
+          'carton_label_binding_piece_no': '件号：',
+          'carton_label_binding_delete_label_tips': '确定要删除标签吗？',
+          'carton_label_binding_out_box_label_piece_no': '外箱标件号：',
+          'carton_label_binding_print_out_box_label': '打印新外箱标',
+          'carton_label_binding_operation_type_unknown': '初始',
+          'carton_label_binding_operation_type_create': '合并',
+          'carton_label_binding_operation_type_binding': '绑定',
+          'carton_label_binding_operation_type_unbind': '解绑',
+          'carton_label_binding_operation_type_transfer': '转移',
+          'carton_label_binding_getting_label_info': '正在获取标签信息...',
+          'carton_label_binding_error_tips':
+              '标签供应商、工厂、物料大类、保管形式、单据类型不同，不能同时操作！',
+          'carton_label_binding_no_label': '没有可打印的标签！',
+          'carton_label_binding_submitting_label': '正在提交标签%s...',
+          'carton_label_binding_label_exists': '标签已存在!',
+          'carton_label_binding_print_out_box_label_tips': '要打印新外箱标吗？',
+          'carton_label_binding_print_label': '打印标签',
+          'carton_label_binding_select_label_type': '请选择标签打印类型',
+          'carton_label_binding_material_label': '物料标',
+          'carton_label_binding_common_label': '普通标',
+          'carton_label_binding_label_binding_new_piece_tips':
+              '确定要将所有标签合并绑定到全新的外箱标上吗?',
+          'carton_label_binding_label_binding_tips': '确定要将所有标签绑定到件号<%s>的外箱标上吗？',
+          'carton_label_binding_label_unbind_tips': '确定要将件号<%s>中的所有标签解绑吗？',
+          'carton_label_binding_label_transfer_tips':
+              '确定要将所有标签转移到件号<%s>的外箱标上吗？',
+          'carton_label_binding_long': '长',
+          'carton_label_binding_width': '宽',
+          'carton_label_binding_height': '高',
+          'carton_label_binding_out_weight': '外包装重量',
+          'carton_label_binding_data_not_input_tips': '贸易工厂标签必须填写长宽高和外包装重量!',
+          'inner_box_label_split_consignee': '收货方：',
+          'inner_box_label_split_piece_id': '件号：',
+          'inner_box_label_split_supplier': '供应商：',
+          'inner_box_label_split_qty': '数量：',
+          'inner_box_label_split_wait_submit_qty': '待提交标签',
+          'inner_box_label_split_has_been_split': '已拆出：%s',
+          'inner_box_label_split_split': '拆出：',
+          'inner_box_label_split_pre_split': '预拆分',
+          'inner_box_label_split_submit_split': '提交拆分',
+          'inner_box_label_split_submit_split_tips': '确定要提交预拆分标签吗？',
+          'inner_box_label_split_print': '打印',
+          'inner_box_label_split_print_label': '打印标签',
+          'inner_box_label_split_print_notes': '是否打印备注行？',
+          'inner_box_label_split_yes': '是',
+          'inner_box_label_split_no': '否',
+          'inner_box_label_split_exit_split_tips': '确定要退出标签拆分吗？',
+          'inner_box_label_split_getting_label_info': '正在获取标签信息...',
+          'inner_box_label_split_submit_label_split': '正在提交拆分标签...',
+          'label_reprint_outer_box_label_id': '外箱件号：',
+          'label_reprint_specifications': '规格：',
+          'label_reprint_total': '总数：',
+          'label_reprint_supplier': '供应商：',
+          'label_reprint_consignee': '收货方：',
+          'label_reprint_piece_id': '件号：',
+          'label_reprint_qty': '数量：',
+          'label_reprint_select_all': '全选',
+          'label_reprint_getting_label_info': '正在获取标签信息...',
+          'label_reprint_print_label': '打印标签',
+          'label_reprint_select_outer_label_print_type': '请选择外箱标打印类型',
+          'label_reprint_material_label': '物料标',
+          'label_reprint_common_label': '普通标',
+          'label_reprint_print_notes': '是否打印备注行？',
+          'label_reprint_yes': '是',
+          'label_reprint_no': '否',
         },
         localeEnglish.toString(): {
           'app_name': 'Gold Emperor',
@@ -3514,23 +3661,26 @@ class Translation extends Translations {
           'worker_production_report_sub_item_hint1': 'Process name：',
           'worker_production_report_sub_item_hint2': 'Material：',
           'worker_production_report_sub_item_hint3': 'Quantity：',
-          'worker_production_report_item_title_order_no':'Order no',
-          'worker_production_report_item_title_date':'Date',
-          'worker_production_report_item_title_report_department_name':'Report department name',
-          'worker_production_report_item_title_report_group':'Report group',
-          'worker_production_report_item_title_dispatch_no':'Dispatch no',
-          'worker_production_report_item_title_process':'Process',
-          'worker_production_report_item_title_goods_no':'Goods no',
-          'worker_production_report_item_title_process_code':'Process code',
-          'worker_production_report_item_title_process_name':'Process name',
-          'worker_production_report_item_title_qty':'Qty',
-          'worker_production_report_item_title_price':'Price',
-          'worker_production_report_item_title_amount':'Amount',
-          'worker_production_report_item_title_small_order_subsidy':'Small order subsidy',
-          'worker_production_report_item_title_amount_total':'Amount total',
-          'worker_production_report_item_title_small_order_subsidy_rate':'Small order subsidy rate',
-          'worker_production_report_item_title_worker_number':'Worker number',
-          'worker_production_report_item_title_worker_name':'Worker name',
+          'worker_production_report_item_title_order_no': 'Order no',
+          'worker_production_report_item_title_date': 'Date',
+          'worker_production_report_item_title_report_department_name':
+              'Report department name',
+          'worker_production_report_item_title_report_group': 'Report group',
+          'worker_production_report_item_title_dispatch_no': 'Dispatch no',
+          'worker_production_report_item_title_process': 'Process',
+          'worker_production_report_item_title_goods_no': 'Goods no',
+          'worker_production_report_item_title_process_code': 'Process code',
+          'worker_production_report_item_title_process_name': 'Process name',
+          'worker_production_report_item_title_qty': 'Qty',
+          'worker_production_report_item_title_price': 'Price',
+          'worker_production_report_item_title_amount': 'Amount',
+          'worker_production_report_item_title_small_order_subsidy':
+              'Small order subsidy',
+          'worker_production_report_item_title_amount_total': 'Amount total',
+          'worker_production_report_item_title_small_order_subsidy_rate':
+              'Small order subsidy rate',
+          'worker_production_report_item_title_worker_number': 'Worker number',
+          'worker_production_report_item_title_worker_name': 'Worker name',
           'quality_restriction_title': 'quality restriction',
           'visit_details_card_picture': 'ID',
           'visit_details_face_picture': 'face picture',
@@ -5645,7 +5795,8 @@ class Translation extends Translations {
               'Post maintenance evaluation and prevention：',
           'device_maintenance_title_fixed_time': 'Fixed Time：',
           'packing_shipment_title': 'Scan code for molded packaging',
-          'packing_shipment_out_title': 'Scan the QR code for forming, shipping, packing, and packaging',
+          'packing_shipment_out_title':
+              'Scan the QR code for forming, shipping, packing, and packaging',
           'packing_shipment_scan_detail': 'Barcode scanning details',
           'packing_shipment_cabinet_number': 'Cabinet Number：',
           'packing_shipment_code': 'bar code：',
@@ -6211,6 +6362,13 @@ class Translation extends Translations {
               'Checking stock in order...',
           'delivery_order_reversing_stock_in': 'Reversing stock in...',
           'delivery_order_reversing_stock_out': 'Reversing stock out...',
+          'delivery_order_getting_order_scan_detail':
+              'Getting order scan detail...',
+          'delivery_order_getting_temporary_label':
+              'Getting temporary label...',
+          'delivery_order_submitting_temporary_label':
+              'Submitting temporary label...',
+          'delivery_order_submitting_label_bind': 'Submitting label bind...',
           'delivery_order_detail_material': 'Material：%s',
           'delivery_order_detail_delivery_qty': 'Delivery qty：%s',
           'delivery_order_detail_check_qty': 'Check qty：%s',
@@ -6272,6 +6430,42 @@ class Translation extends Translations {
           'delivery_order_dialog_submitting_stock_out':
               'Submitting stock out...',
           'delivery_order_dialog_creating_temporary': 'Creating temporary...',
+          'delivery_order_dialog_not_binding_label_tips':
+              'Delivery note (%s) has not been scanned and labeled yet!',
+          'delivery_order_dialog_has_not_check_data_tips':
+              'Contains uncounted data!',
+          'delivery_order_dialog_different_order_tips':
+              'Scanned delivery notes and non scanned delivery notes cannot generate temporary receipts together!',
+          'delivery_order_label_check_order_not_have_this_label':
+              'This piece does not belong to the order!',
+          'delivery_order_label_check_label_scanned':
+              'This label has been scanned!',
+          'delivery_order_label_check_label_qty_exceed':
+              'The quantity of materials in this item exceeds the limit. Please scan the label with a smaller quantity.',
+          'delivery_order_label_check_has_other_material':
+              'This item contains materials from other work orders, please split and pick them.',
+          'delivery_order_label_check_delete_tips':
+              'Are you sure you want to delete this label?',
+          'delivery_order_label_check_title': 'Delivery check',
+          'delivery_order_label_check_exit_tips':
+              'Are you sure you want to exit the delivery inventory？',
+          'delivery_order_label_check_clear_tips':
+              'Are you sure you want to clear the scanned label?',
+          'delivery_order_label_check_clear': 'Clear',
+          'delivery_order_label_check_piece_id': 'Piece ID',
+          'delivery_order_label_check_add_piece': 'Add piece',
+          'delivery_order_label_check_progress': 'Progress：',
+          'delivery_order_label_check_scanned': 'Scanned：',
+          'delivery_order_label_check_order_no': 'Order No：',
+          'delivery_order_label_check_temporary': 'Temporary',
+          'delivery_order_label_check_submit': 'Submit',
+          'delivery_order_label_check_detail_title': 'Label detail',
+          'delivery_order_label_check_detail_inspector': 'Inspector',
+          'delivery_order_label_check_detail_confirm_submit': 'Confirm submit',
+          'delivery_order_label_check_detail_confirm_checked_tips':
+              'Are you sure you have checked the labels ？',
+          'delivery_order_label_check_detail_material': 'Material',
+          'delivery_order_label_check_detail_quantity': 'Quantity',
           'process_dispatch_work_ticket': 'Work Ticket',
           'process_dispatch_or': 'or',
           'process_dispatch_dispatch_date': 'Dispatch date',
@@ -6379,6 +6573,8 @@ class Translation extends Translations {
           'purchase_order_warehousing_input_track_no': 'Input track no',
           'purchase_order_warehousing_getting_purchase_orders':
               'Getting purchase orders...',
+          'purchase_order_warehousing_getting_orders_scan_detail':
+              'Getting order scan detail...',
           'purchase_order_warehousing_dialog_not_select_order':
               'Please check the order to be stored and fill in the current storage quantity !',
           'purchase_order_warehousing_dialog_post_date': 'Post date',
@@ -6390,6 +6586,34 @@ class Translation extends Translations {
               'Getting leader ...',
           'purchase_order_warehousing_dialog_submitting_warehousing':
               'Submitting warehousing...',
+          'purchase_order_warehousing_different_order_tips':
+              'Scanning and non scanning work orders cannot be operated simultaneously!',
+          'purchase_order_warehousing_different_supplier_tips':
+              'Different suppliers cannot be operated simultaneously!',
+          'purchase_order_warehousing_order_not_have_this_label':
+              'This item does not belong to the current order!',
+          'purchase_order_warehousing_label_scanned':
+              'This tag has been scanned!',
+          'purchase_order_warehousing_label_qty_exceed':
+              'The quantity of the goods exceeds the limit. Please scan the label with a smaller quantity.',
+          'purchase_order_warehousing_has_other_material':
+              'This item contains materials from other work orders, please split and pick them separately.',
+          'purchase_order_warehousing_qty_exceed_tips':
+              'The quantity exceeds the submission limit for this time, please delete the corresponding tags.',
+          'purchase_order_warehousing_qty_insufficient':
+              'The quantity is insufficient for this submission, please continue scanning the labels.',
+          'purchase_order_warehousing_label_check_delete_tips':
+              'Are you sure you want to exit the delivery inventory？',
+          'purchase_order_warehousing_label_check_title': 'Check Label',
+          'purchase_order_warehousing_label_check_exit_tips':
+              'Are you sure you want to exit the delivery inventory？',
+          'purchase_order_warehousing_label_check_clear_tips':
+              'Are you sure you want to clear the scanned label？',
+          'purchase_order_warehousing_label_check_clear': 'Clear',
+          'purchase_order_warehousing_label_check_piece_id': 'Piece ID：',
+          'purchase_order_warehousing_label_check_add_piece': 'Add  piece',
+          'purchase_order_warehousing_label_check_scanned': 'Scanned：',
+          'purchase_order_warehousing_label_check_submit': 'Submit',
           'purchase_order_reversal_material': 'Material：',
           'purchase_order_reversal_supplier': 'Supplier：',
           'purchase_order_reversal_sales_order': 'Sales order：',
@@ -6428,23 +6652,30 @@ class Translation extends Translations {
           'forming_code_collection_change': 'Change Priority',
           'forming_code_collection_other': 'Other functions',
           'forming_code_collection_refresh': 'Refresh',
-          'forming_code_collection_input_days': 'Please enter the scope you want to query！（days）',
+          'forming_code_collection_input_days':
+              'Please enter the scope you want to query！（days）',
           'forming_code_collection_sale_order': 'Sale order：',
           'forming_code_collection_customer_orders': 'Customer order：',
           'forming_code_collection_type_body': 'Type body：',
-          'forming_code_collection_dispatch_qty': 'Number of dispatched workers：',
+          'forming_code_collection_dispatch_qty':
+              'Number of dispatched workers：',
           'forming_code_collection_owing_amounts': 'Owing amount：',
           'forming_code_collection_serial_number': 'Serial Number：',
           'forming_code_collection_submit': 'Submit',
-          'forming_code_collection_sure_submit': 'Are you sure you want to change the priority?',
+          'forming_code_collection_sure_submit':
+              'Are you sure you want to change the priority?',
           'forming_code_collection_search': 'Search',
-          'forming_code_collection_no_submit_data': 'No priority data available for submission！',
+          'forming_code_collection_no_submit_data':
+              'No priority data available for submission！',
           'forming_code_collection_submitting': 'Submitting priority...',
           'forming_code_collection_order_quantity': 'Order Quantity:',
-          'forming_code_collection_completion_quantity': 'Accumulated completion:',
-          'forming_code_collection_scan_quantity': 'Scan the code for insufficient quantity:',
+          'forming_code_collection_completion_quantity':
+              'Accumulated completion:',
+          'forming_code_collection_scan_quantity':
+              'Scan the code for insufficient quantity:',
           'forming_code_collection_order_type': 'order status:',
-          'forming_code_collection_no_search': 'Cannot find this sales order number！',
+          'forming_code_collection_no_search':
+              'Cannot find this sales order number！',
           'forming_code_collection_instruction_or_po': 'Instruction or PO！',
           'forming_code_collection_other_functions': 'Other functions',
           'forming_code_collection_analysis': 'analysis report',
@@ -6453,20 +6684,25 @@ class Translation extends Translations {
           'forming_code_collection_getting': 'Getting report...',
           'forming_code_collection_history_body': 'Type body：',
           'forming_code_collection_history_first_time': 'First activation：',
-          'forming_code_collection_history_instruction_number': 'Instruction number：',
+          'forming_code_collection_history_instruction_number':
+              'Instruction number：',
           'forming_code_collection_history_last_time': 'Finally activated：',
           'forming_code_collection_history_state': 'State：',
           'forming_code_collection_history_factory': 'Factory body type',
-          'forming_code_collection_instruction_details': 'Search Instruction sheet details',
+          'forming_code_collection_instruction_details':
+              'Search Instruction sheet details',
           'forming_code_collection_shoe_box': 'Shoe box barcode collection',
-          'forming_code_collection_enter_or_scan': 'Please enter or scan the instruction number',
+          'forming_code_collection_enter_or_scan':
+              'Please enter or scan the instruction number',
           'forming_code_collection_search_button': 'Query',
           'forming_code_collection_submit_button': 'Submit',
           'forming_code_collection_clear_button': 'Clear',
           'forming_code_collection_shoe_size': 'Size',
           'forming_code_collection_shoe_barcode': 'Shoe box barcode',
-          'forming_code_collection_input_shoe_barcode': 'Please enter the barcode of the shoe box',
-          'forming_code_collection_have_code': 'The barcode has been scanned, please do not scan again!',
+          'forming_code_collection_input_shoe_barcode':
+              'Please enter the barcode of the shoe box',
+          'forming_code_collection_have_code':
+              'The barcode has been scanned, please do not scan again!',
           'forming_code_collection_submit_code': 'Submitting barcode data...',
           'quality_inspection_type_body': 'Type body',
           'quality_inspection_material_code': 'Material code',
@@ -6485,6 +6721,7 @@ class Translation extends Translations {
           'quality_inspection_all_not_returned': 'Not returned',
           'quality_inspection_list_quality_inspection':
               'Obtaining the list of quality inspection forms...',
+          'quality_inspection_view_detail': 'Detail',
           'quality_inspection_select_all': 'Expand and select all',
           'quality_inspection_factory_type': 'Factory type：',
           'quality_inspection_inspection_order_sub': 'Inspection Form：',
@@ -6521,11 +6758,15 @@ class Translation extends Translations {
           'quality_inspection_factory_type_detail': 'Factory type',
           'quality_inspection_no_delete': 'No deletion permission',
           'quality_inspection_select_data': 'Please select data for operation！',
+          'quality_inspection_color_item_total': 'Total',
+          'quality_inspection_item_color_total': 'Color total',
+          'quality_inspection_item_reverse_total': 'Reverse total',
           'quality_inspection_different_order':
               'There are different quality inspection forms available！',
           'quality_inspection_input_delete_reason':
               'Please enter the reason for deletion!',
-          'quality_inspection_different_taxCode': 'There are different tax numbers that cannot be stored together！',
+          'quality_inspection_different_taxCode':
+              'There are different tax numbers that cannot be stored together！',
           'quality_inspection_deleting': 'Deleting quality inspection form...',
           'quality_inspection_success_deleting': 'Delete successfully',
           'quality_inspection_fail_deleting': 'Delete failed',
@@ -6544,6 +6785,8 @@ class Translation extends Translations {
           'quality_inspection_input_location':
               'Please enter the storage location',
           'quality_inspection_change_location': 'Modifying cargo location...',
+          'quality_inspection_getting_color_info':
+              'Getting color information...',
           'quality_inspection_change_success': 'Modified successfully！',
           'quality_inspection_change_failed': 'Modification failed！',
           'quality_inspection_color_message':
@@ -6569,6 +6812,15 @@ class Translation extends Translations {
           'quality_inspection_no_inspection':
               'No quality inspection authority！',
           'quality_inspection_no_store_inspection': 'No storage permission！',
+          'quality_inspection_label_exists_tips': 'Label has already exists!',
+          'quality_inspection_label_error_tips':
+              'The scanned label is not within the scope of this operation label!',
+          'quality_inspection_label_color_error_tips':
+              'The material in the scanned label does not belong to the original color system!',
+          'quality_inspection_label_has_bond_tips':
+              'The material of this label has been bound by color scheme<%s>!',
+          'quality_inspection_label_qty_exceed_tips':
+              'The number of materials in this label is %s, which exceeds the remaining quantity of the original color by %s！',
           'quality_inspection_reviewer': 'Reviewer',
           'quality_inspection_photo':
               'Abnormal quality inspection image (long press to delete)',
@@ -6590,6 +6842,26 @@ class Translation extends Translations {
           'quality_inspection_create_fail': 'Creation failed！',
           'quality_inspection_have_already':
               'Contains materials that have already been inspected！',
+          'quality_inspection_label_color': 'Color：',
+          'quality_inspection_label_scanned': 'Scanned：',
+          'quality_inspection_label_scanned_material_qty': 'Material qty：',
+          'quality_inspection_label_title': 'Color Label Binding',
+          'quality_inspection_label_exit_tips': 'Are you sure you want to exit the color label binding？',
+          'quality_inspection_label_submit': 'Submit',
+          'quality_inspection_binding_piece_id': 'Piece ID：',
+          'quality_inspection_binding_qty': 'quantity：',
+          'quality_inspection_binding_delete_label_tips': 'Are you sure you want to delete this label？',
+          'quality_inspection_binding_title': 'Color：%s',
+          'quality_inspection_binding_scanned_material_qty': 'Material qty：',
+          'quality_inspection_binding_label_qty': 'Labels：',
+          'quality_inspection_color_label_binding_color': 'Color：',
+          'quality_inspection_color_label_binding_scanned': 'Scanned：',
+          'quality_inspection_color_label_binding_scanned_material_qty':
+              'Material qty：',
+          'quality_inspection_color_label_binding_title': 'Color Label Binding',
+          'quality_inspection_color_label_binding_exit_tips':
+              'Are you sure you want to exit the color label binding？',
+          'quality_inspection_color_label_binding_submit': 'Submit',
           'product_quality_inspection_inspection_unit': 'Inspection unit：',
           'product_quality_inspection_abnormal_qty': 'Abnormal qty：',
           'product_quality_inspection_reinspection_qty': 'Reinspection qty：',
@@ -6713,6 +6985,81 @@ class Translation extends Translations {
           'product_patrol_inspection_dialog_modify_label_no': 'Modify label no',
           'product_patrol_inspection_dialog_label_no': 'Label no',
           'product_patrol_inspection_dialog_input_key': 'Input key',
+          'carton_label_binding_piece_no': 'Piece no：',
+          'carton_label_binding_delete_label_tips':
+              'Are you sure you want to delete the label？',
+          'carton_label_binding_out_box_label_piece_no':
+              'Outer box label piece no：',
+          'carton_label_binding_print_out_box_label': 'Print label',
+          'carton_label_binding_operation_type_unknown': 'Unknown',
+          'carton_label_binding_operation_type_create': 'Create',
+          'carton_label_binding_operation_type_binding': 'Binding',
+          'carton_label_binding_operation_type_unbind': 'Unbind',
+          'carton_label_binding_operation_type_transfer': 'Transfer',
+          'carton_label_binding_getting_label_info': 'Getting label info...',
+          'carton_label_binding_error_tips':
+              'Label suppliers, factories, material categories, storage methods, and document types are different and cannot be operated simultaneously!',
+          'carton_label_binding_no_label': 'Label empty',
+          'carton_label_binding_submitting_label': 'Submitting label %s...',
+          'carton_label_binding_label_exists': 'Label exists !',
+          'carton_label_binding_print_out_box_label_tips':
+              'Do you want to print a new outer box label ？',
+          'carton_label_binding_print_label': 'Print label',
+          'carton_label_binding_select_label_type': 'Select print type',
+          'carton_label_binding_material_label': 'Material label',
+          'carton_label_binding_common_label': 'Common label',
+          'carton_label_binding_label_binding_new_piece_tips':
+              'Are you sure you want to merge and bind all labels to a brand new outer box label ?',
+          'carton_label_binding_label_binding_tips':
+              'Are you sure you want to bind all labels to the outer box label of part number<%s>?',
+          'carton_label_binding_label_unbind_tips':
+              'Are you sure you want to unbind all tags in part number<% s>?',
+          'carton_label_binding_label_transfer_tips':
+              'Are you sure you want to transfer all labels to the outer box label with part number<% s>?',
+          'carton_label_binding_long': 'Long',
+          'carton_label_binding_width': 'Width',
+          'carton_label_binding_height': 'Height',
+          'carton_label_binding_out_weight': 'Outer box weight',
+          'carton_label_binding_data_not_input_tips':
+              'The trade factory label must be filled with length, width, height, and outer packaging weight !',
+          'inner_box_label_split_consignee': 'Consignee：',
+          'inner_box_label_split_piece_id': 'Piece_id：',
+          'inner_box_label_split_supplier': 'Supplier：',
+          'inner_box_label_split_qty': 'Qty：',
+          'inner_box_label_split_wait_submit_qty': 'Wait submit qty',
+          'inner_box_label_split_has_been_split': 'Has been split：%s',
+          'inner_box_label_split_split': 'Split：',
+          'inner_box_label_split_pre_split': 'PreSplit',
+          'inner_box_label_split_submit_split': 'Submit split',
+          'inner_box_label_split_submit_split_tips':
+              'Are you sure you want to submit the pre split label？',
+          'inner_box_label_split_print': 'Print',
+          'inner_box_label_split_print_label': 'Print label',
+          'inner_box_label_split_print_notes': 'Do you want to print a note？',
+          'inner_box_label_split_yes': 'Yes',
+          'inner_box_label_split_no': 'No',
+          'inner_box_label_split_exit_split_tips':
+              'Are you sure you want to exit label splitting？',
+          'inner_box_label_split_getting_label_info': 'Getting label info...',
+          'inner_box_label_split_submit_label_split':
+              'Submitting label split...',
+          'label_reprint_outer_box_label_id': 'Outer box label id：',
+          'label_reprint_specifications': 'Specifications：',
+          'label_reprint_total': 'Total：',
+          'label_reprint_supplier': 'Supplier：',
+          'label_reprint_consignee': 'Consignee：',
+          'label_reprint_piece_id': 'Piece id：',
+          'label_reprint_qty': 'Qty：',
+          'label_reprint_select_all': 'Select all',
+          'label_reprint_getting_label_info': 'Getting label info...',
+          'label_reprint_print_label': 'Print label',
+          'label_reprint_select_outer_label_print_type':
+              'Select outer label print type',
+          'label_reprint_material_label': 'Material label',
+          'label_reprint_common_label': 'Common label',
+          'label_reprint_print_notes': 'Do you want to print a note line？',
+          'label_reprint_yes': 'Yes',
+          'label_reprint_no': 'No',
         }
       };
 }

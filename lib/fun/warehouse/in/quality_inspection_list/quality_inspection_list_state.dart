@@ -8,6 +8,9 @@ import 'package:jd_flutter/utils/web_api.dart';
 class QualityInspectionListState {
   var showDataList = <List<StuffQualityInspectionInfo>>[].obs;
   var showReceiptColorList = <QualityInspectionShowColor>[].obs; //分色展示信息
+  var colorOrderList = <QualityInspectionColorInfo>[].obs;
+  var labelList = <QualityInspectionLabelInfo>[].obs;
+  var scanList = <QualityInspectionLabelBindingInfo>[].obs;
 
   var orderTypeList = <String, String>{
     'quality_inspection_not_in_stock'.tr: '04',
@@ -74,7 +77,7 @@ class QualityInspectionListState {
   }) {
     var selectList = [
       for (var data in showDataList)
-        for (var c in data.where((v) => v.isSelected.value)) c
+        ...data.where((v) => v.isSelected.value)
     ];
     httpPost(
       method: webApiCreateInspection,
@@ -150,7 +153,7 @@ class QualityInspectionListState {
   }) {
     var selectList = [
       for (var data in showDataList)
-        for (var c in data.where((v) => v.isSelected.value)) c
+        ...data.where((v) => v.isSelected.value)
     ];
     httpPost(
       method: webApiPurchaseOrderStockInForQuality,
@@ -190,7 +193,7 @@ class QualityInspectionListState {
   }) {
     var selectList = [
       for (var data in showDataList)
-        for (var c in data.where((v) => v.isSelected.value)) c
+        ...data.where((v) => v.isSelected.value)
     ];
     sapPost(
       loading: 'quality_inspection_get_color'.tr,
@@ -223,7 +226,7 @@ class QualityInspectionListState {
   }) {
     var selectList = [
       for (var data in showDataList)
-        for (var c in data.where((v) => v.isSelected.value)) c
+        ...data.where((v) => v.isSelected.value)
     ];
     httpPost(
       method: webApiPurchaseOrderStockInNew,
@@ -273,7 +276,7 @@ class QualityInspectionListState {
   }) {
     var selectList = [
       for (var data in showDataList)
-        for (var c in data.where((v) => v.isSelected.value)) c
+        ...data.where((v) => v.isSelected.value)
     ];
     httpGet(
       method: webApiGetQualityInspection,
@@ -334,27 +337,87 @@ class QualityInspectionListState {
   }
 
   getOrderColorLabelInfo({
-    required List<StuffQualityInspectionInfo> selectList,
+    required List<String> selectList,
     required Function() success,
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在获取分色及标签信息...',
+      loading: 'quality_inspection_getting_color_info'.tr,
       method: webApiGetQualityInspectionColorLabelInfo,
       body: {
         'GT_REQITEMS': [
-          for (var item in selectList.where((v)=>v.colorDistinguishEnable==true))
-            {
-              'ZDELINO': item.inspectionOrderNo,
-            }
+          for (var item in selectList) {'ZDELINO': item}
         ]
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        // success.call([
-        //   for (var json in response.data)
-        //     QualityInspectionReceiptInfo.fromJson(json)
-        // ]);
+        colorOrderList.value = [
+          if (response.data['GT_COSEP'] != null)
+            for (var item in response.data['GT_COSEP'])
+              QualityInspectionColorInfo.fromJson(item)
+        ];
+        labelList.value = [
+          if (response.data['GT_DATA1'] != null)
+            for (var item in response.data['GT_DATA1'])
+              QualityInspectionLabelInfo.fromJson(item)
+        ];
+        success.call();
+      } else {
+        colorOrderList.value=[];
+        labelList.value=[];
+        error.call(response.message ?? 'query_default_error'.tr);
+      }
+    });
+  }
+  colorLabelBindingStockIn({
+    required String location,
+    required String postDate,
+    required Function(String) success,
+    required Function(String) error,
+  }) {
+    var selectList = [
+      for (var data in showDataList)
+        ...data.where((v) => v.isSelected.value)
+    ];
+    httpPost(
+      loading: 'purchase_order_warehousing_dialog_submitting_warehousing'.tr,
+      method: webApiPurchaseOrderStockIn,
+      body: {
+        'CreateCGOrderInstock2SapList': [
+          for (StuffQualityInspectionInfo item in selectList)
+            {
+              'PurchaseVoucherNo': item.purchaseVoucherNo,
+              'PurchaseDocumentItemNumber': item.purchaseDocumentItemNumber,
+              'PurchaseOrderQuantity': item.qualifiedQuantity,
+              'PurchaseOrderMeasureUnit': item.commonUnits,
+              'StorageLocation': location,
+              'UserName': userInfo?.number,
+              'ChineseName': userInfo?.name,
+              'PostingDate': postDate,
+              'InspectionLineItem': item.inspectionLineNumber,
+              'Remarks': item.remarks,
+              'InspectionOrderNo': item.inspectionOrderNo,
+              'EnglishName': '',
+              'MaterialDocumentLineItemNumber': '',
+              'MaterialDocumentNo': '',
+              'MaterialVoucherYear': '',
+              'ReversalMark': '',
+            }
+        ],
+        'CGOrderInstockJBQ2SapList': [
+          for (var colorInfo in colorOrderList)
+            for (var label in colorInfo.bindingLabels)
+              {
+                'PieceNo': label.pieceNo,
+                'MATNR': label.materialNumber,
+                'ZCOLOR': colorInfo.batchNo,
+              }
+        ],
+        'PictureList': [],
+      },
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        success.call(response.message ?? '');
       } else {
         error.call(response.message ?? 'query_default_error'.tr);
       }

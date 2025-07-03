@@ -179,7 +179,7 @@ Future<BaseData> _doHttp({
       baseUrl: baseUrl,
       connectTimeout: const Duration(seconds: 10),
       sendTimeout: const Duration(seconds: 10),
-      receiveTimeout: const Duration(seconds: 10),
+      receiveTimeout: const Duration(minutes: 1),
     ));
 
     //接口拦截器
@@ -1281,6 +1281,12 @@ const webApiSapSaveAbnormalPiece = 'sap/zapp/ZFUN_ZGD_5';
 //获取装柜异常单数据
 const webApiSapGetAbnormalList = 'sap/zapp/ZFUN_ZGD_4';
 
+//获取装柜出库冲销条码信息
+const webApiSapGetReverseLabelInfo = 'sap/zapp/ZFUN_ZGD_7';
+
+//装柜出库冲销
+const webApiSapReverseLabel = 'sap/zapp/ZFUN_ZGD_8';
+
 //获取巡检产线及异常记录
 const webApiSapGetPatrolInspectionInfo = 'sap/zapp/ZFUN_APP_PJ_ORDERSUMQUERY';
 
@@ -1327,6 +1333,7 @@ const webApiCreateInspection = "api/Inspection/CreateInspection";
 //采购订单条码扫描入库（SAP）
 const webApiPurchaseOrderStockInForQuality = "api/Package/PurchaseOrderStockIn";
 
+
 //微信,APP获取SAP品质检验单单条数据
 const webApiGetQualityInspection = "api/Inspection/GetQualityInspection";
 
@@ -1334,7 +1341,7 @@ const webApiGetQualityInspection = "api/Inspection/GetQualityInspection";
 const webApiGetQualityInspectionList = "api/DeliveryNote/GetQualityInspectionList";
 
 //获取品检单分色及标签数据
-const webApiGetQualityInspectionColorLabelInfo = "api/DeliveryNote/ZMM_GET_DELI_PIECE";
+const webApiGetQualityInspectionColorLabelInfo = "sap/zapp/ZMM_GET_DELI_PIECE";
 
 //入库冲销获取色系信息
 const webApiForSapReceiptReversal = "sap/zapp/ZFUN_GET_ZCHECKB_COSEP";

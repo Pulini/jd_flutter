@@ -21,16 +21,16 @@ modifyBoxInfo({
   double outWeight = targetBoxLabel?.outWeight ?? 0;
   var title = '';
   if (operationType == ScanLabelOperationType.create) {
-    title = '确定要将所有标签合并绑定到全新的外箱标上吗?';
+    title = 'carton_label_binding_label_binding_new_piece_tips'.tr;
   }
   if (operationType == ScanLabelOperationType.binding) {
-    title = '确定要将所有标签绑定到件号<${targetBoxLabel!.pieceNo}>的外箱标上吗？';
+    title = 'carton_label_binding_label_binding_tips'.trArgs([targetBoxLabel!.pieceNo??'']);
   }
   if (operationType == ScanLabelOperationType.unbind) {
-    title = '确定要将件号<${targetBoxLabel!.pieceNo}>中的所有标签解绑吗？';
+    title = 'carton_label_binding_label_unbind_tips'.trArgs([targetBoxLabel!.pieceNo??'']);
   }
   if (operationType == ScanLabelOperationType.transfer) {
-    title = '确定要将所有标签转移到件号<${targetBoxLabel!.pieceNo}>的外箱标上吗？';
+    title = 'carton_label_binding_label_transfer_tips'.trArgs([targetBoxLabel!.pieceNo??'']);
   }
 
   Get.dialog(
@@ -38,7 +38,7 @@ modifyBoxInfo({
       canPop: true,
       child: StatefulBuilder(builder: (context, dialogSetState) {
         return AlertDialog(
-          title: Text(operationType.text),
+          title: Text(getOperationTypeText(operationType)),
           content: SizedBox(
             width: 400,
             child: Column(
@@ -57,16 +57,16 @@ modifyBoxInfo({
                   children: [
                     Expanded(
                       child: NumberDecimalEditText(
-                        hint: '长',
+                        hint: 'carton_label_binding_long'.tr,
                         initQty: long,
-                        onChanged: (v) {},
+                        onChanged: (v) =>long=v,
                       ),
                     ),
                     Expanded(
                       child: NumberDecimalEditText(
-                        hint: '宽',
+                        hint: 'carton_label_binding_width'.tr,
                         initQty: width,
-                        onChanged: (v) {},
+                        onChanged: (v) =>width=v,
                       ),
                     ),
                   ],
@@ -75,16 +75,16 @@ modifyBoxInfo({
                   children: [
                     Expanded(
                       child: NumberDecimalEditText(
-                        hint: '高',
+                        hint: 'carton_label_binding_height'.tr,
                         initQty: height,
-                        onChanged: (v) {},
+                        onChanged: (v) =>height=v,
                       ),
                     ),
                     Expanded(
                       child: NumberDecimalEditText(
-                        hint: '外包装重量',
+                        hint: 'carton_label_binding_out_weight'.tr,
                         initQty: outWeight,
-                        onChanged: (v) {},
+                        onChanged: (v) =>outWeight=v,
                       ),
                     ),
                   ],
@@ -101,7 +101,7 @@ modifyBoxInfo({
                       width <= 0 ||
                       height <= 0 ||
                       outWeight <= 0) {
-                    errorDialog(content: '贸易工厂标签必须填写长宽高和外包装重量!');
+                    errorDialog(content: 'carton_label_binding_data_not_input_tips'.tr);
                   } else {
                     Get.back();
                     modify.call(long, width, height, outWeight);

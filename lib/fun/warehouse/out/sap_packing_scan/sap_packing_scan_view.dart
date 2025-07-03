@@ -1,9 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jd_flutter/bean/http/response/sap_picing_scan_info.dart';
+import 'package:jd_flutter/bean/http/response/sap_picking_scan_info.dart';
 import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/fun/warehouse/out/sap_packing_scan/sap_packing_scan_label_view.dart';
+import 'package:jd_flutter/fun/warehouse/out/sap_packing_scan/sap_packing_scan_reverse_view.dart';
 import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
@@ -42,6 +43,52 @@ class _SapPackingScanPageState extends State<SapPackingScanPage> {
     saveKey:
         '${RouteConfig.pickingMaterialOrder.name}${PickerType.sapFactoryWarehouse}',
   );
+
+  _muneSheet() {
+    showSheet(
+      context: context,
+      body: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          CombinationButton(
+            text: '查看扫码件号',
+            click: () {
+              Get.back();
+              Get.to(() => const SapPackingScanLabelPage());
+            },
+          ),
+          const SizedBox(height: 5),
+          CombinationButton(
+            text: '封柜',
+            backgroundColor: Colors.green,
+            click: () {
+              Get.back();
+              logic.sealingCabinet();
+            },
+          ),
+          const SizedBox(height: 5),
+          CombinationButton(
+            text: '冲销',
+            backgroundColor: Colors.red,
+            click: () {
+              Get.back();
+              Get.to(() => const SapPackingScanReversePage())
+                  ?.then((_) => _initScan());
+            },
+          ),
+          const SizedBox(height: 5),
+          const Divider(),
+          CombinationButton(
+            text: '取消',
+            backgroundColor: Colors.grey.shade300,
+            foregroundColor: Colors.grey,
+            click: () => Get.back(),
+          ),
+        ],
+      ),
+    );
+  }
 
   _sheet() {
     var tecNumber = TextEditingController(
@@ -108,11 +155,11 @@ class _SapPackingScanPageState extends State<SapPackingScanPage> {
         state.actualCabinet = actualCabinet;
         spSave(spSavePackingScanActualCabinet, actualCabinet);
         if (state.isAbnormal.value) {
-          state.abnormalSearchText.value='';
+          state.abnormalSearchText.value = '';
           logic.getAbnormalOrders(() => Get.back());
         } else {
           state.abnormalList.clear();
-          state.materialSearchText.value='';
+          state.materialSearchText.value = '';
           Get.back();
         }
       },
@@ -219,59 +266,49 @@ class _SapPackingScanPageState extends State<SapPackingScanPage> {
     );
   }
 
-  Widget _item(SapPackingScanMaterialInfo data) {
-    return Column(
-      children: [
-        Row(
+  Widget _item(SapPackingScanMaterialInfo data) => Container(
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.black),
+          color: Colors.white,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            expandedFrameText(
-              text: data.trackNo ?? '',
-              borderColor: Colors.black,
-              flex: 3,
-              backgroundColor: Colors.white,
-              alignment: Alignment.center,
+            Row(
+              children: [
+                Expanded(
+                  flex: 3,
+                  child: Text(data.trackNo ?? '', textAlign: TextAlign.center),
+                ),
+                Expanded(
+                  flex: 2,
+                  child: Text(data.quality.toShowString(),
+                      textAlign: TextAlign.center),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Text(data.unit ?? '', textAlign: TextAlign.center),
+                ),
+                Expanded(
+                  flex: 2,
+                  child: Text(
+                    data.scannedCount().toShowString(),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ],
             ),
-            expandedFrameText(
-              text: data.quality.toShowString(),
-              borderColor: Colors.black,
-              flex: 2,
-              backgroundColor: Colors.white,
-              alignment: Alignment.center,
-            ),
-            expandedFrameText(
-              text: data.unit ?? '',
-              borderColor: Colors.black,
-              flex: 1,
-              backgroundColor: Colors.white,
-              alignment: Alignment.center,
-            ),
-            expandedFrameText(
-              text: data.scannedCount().toString(),
-              borderColor: Colors.black,
-              flex: 2,
-              backgroundColor: Colors.white,
-              alignment: Alignment.center,
+            Padding(
+              padding: const EdgeInsets.only(left: 5, right: 5),
+              child: textSpan(
+                hint: '物料：',
+                text: '(${data.materialNumber}) ${data.materialName}',
+                maxLines: 3,
+              ),
             ),
           ],
         ),
-        Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(5),
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: Colors.black,
-            ),
-            color: Colors.white,
-          ),
-          child: textSpan(
-            hint: '物料：',
-            text: '(${data.materialNumber}) ${data.materialName}',
-            maxLines: 3,
-          ),
-        ),
-      ],
-    );
-  }
+      );
 
   _pickDate(Function(String) callback) {
     var pickDate = DateTime.now();
@@ -288,22 +325,18 @@ class _SapPackingScanPageState extends State<SapPackingScanPage> {
     });
   }
 
-  _abnormalItem(List<SapPackingScanAbnormalInfo> list) {
+  _abnormalItem(List<List<SapPackingScanAbnormalInfo>> data, int index) {
+    var list = data[index];
     var qty = list.map((v) => v.quality ?? 0).reduce((a, b) => a.add(b));
-    var subItemTextStyle = const TextStyle(
-      color: Colors.black54,
-    );
     return Container(
       padding: const EdgeInsets.only(left: 10, top: 5, bottom: 5),
+      margin: const EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5),
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [
-            Colors.blue.shade100,
-            Colors.white,
-          ],
+          colors: [Colors.blue.shade100, Colors.white],
         ),
       ),
       child: Column(
@@ -321,20 +354,16 @@ class _SapPackingScanPageState extends State<SapPackingScanPage> {
               ),
               Obx(() => Checkbox(
                     value: list.every((v) => v.isSelected.value),
-                    onChanged: (v) {
-                      for (var p in list) {
-                        p.isSelected.value = v!;
-                      }
-                    },
+                    onChanged: (v) => logic.selectAbnormalItems(
+                      list: data,
+                      index: index,
+                      isSelected: v!,
+                    ),
                   ))
             ],
           ),
-          for (var p in list) ...{
-            const Divider(
-              height: 1,
-              indent: 10,
-              endIndent: 15,
-            ),
+          for (var p in list) ...[
+            const Divider(height: 1, indent: 10, endIndent: 15),
             Padding(
               padding: const EdgeInsets.only(left: 10),
               child: Row(
@@ -342,35 +371,24 @@ class _SapPackingScanPageState extends State<SapPackingScanPage> {
                   Expanded(
                     child: Text(
                       '件ID：${p.pieceNumber}',
-                      style: subItemTextStyle,
-                    ),
-                  ),
-                  Expanded(
-                    child: Text(
-                      '跟踪号：${p.trackNo}',
-                      style: subItemTextStyle,
+                      style: const TextStyle(color: Colors.black54),
                     ),
                   ),
                   Obx(() => Checkbox(
                         value: p.isSelected.value,
-                        onChanged: (v) => p.isSelected.value = v!,
+                        onChanged: (v) => logic.selectAbnormalItem(
+                          list: data,
+                          item: p,
+                          isSelected: v!,
+                        ),
                       )),
                 ],
               ),
             ),
-          }
+          ]
         ],
       ),
     );
-  }
-
-  @override
-  void initState() {
-    pdaScanner(scan: (code) => logic.scanCode(code));
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _sheet();
-    });
-    super.initState();
   }
 
   _bodyWidgets(bool isAbnormal) {
@@ -409,7 +427,7 @@ class _SapPackingScanPageState extends State<SapPackingScanPage> {
                 var list = logic.showAbnormalList();
                 return ListView.builder(
                   itemCount: list.length,
-                  itemBuilder: (c, i) => _abnormalItem(list[i]),
+                  itemBuilder: (c, i) => _abnormalItem(list, i),
                 );
               }),
             ),
@@ -512,43 +530,36 @@ class _SapPackingScanPageState extends State<SapPackingScanPage> {
                 );
               }),
             ),
-            Row(
-              children: [
-                Expanded(
-                  child: CombinationButton(
-                    combination: Combination.left,
-                    text: '查看扫码件号',
-                    click: () => Get.to(() => const SapPackingScanLabelPage()),
-                  ),
-                ),
-                Expanded(
-                  child: CombinationButton(
-                    combination: Combination.middle,
-                    text: '封柜',
-                    click: () => logic.sealingCabinet(),
-                  ),
-                ),
-                Expanded(
-                  child: CombinationButton(
-                    combination: Combination.right,
-                    text: '提交',
-                    click: () {
-                      logic.checkMaterialSubmitData(
-                        (list) => _pickDate(
-                          (date) => logic.submit(
-                            postingDate: date,
-                            submitList: list,
-                          ),
-                        ),
-                      );
-                      // logic.scanCode('20250516001');
-                      // logic.scanCode('20250516002');
-                    },
-                  ),
-                ),
-              ],
+            SizedBox(
+              width: double.infinity,
+              child: CombinationButton(
+                text: '提交',
+                click: () {
+                  logic.checkMaterialSubmitData(
+                    (list) => _pickDate(
+                      (date) => logic.submit(
+                        postingDate: date,
+                        submitList: list,
+                      ),
+                    ),
+                  );
+                },
+              ),
             )
           ];
+  }
+
+  _initScan() {
+    pdaScanner(scan: (code) => logic.scanCode(code));
+  }
+
+  @override
+  void initState() {
+    _initScan();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _sheet();
+    });
+    super.initState();
   }
 
   @override
@@ -557,14 +568,19 @@ class _SapPackingScanPageState extends State<SapPackingScanPage> {
       popTitle: '确定要退出装柜扫码吗？',
       actions: [
         IconButton(
+          icon: const Icon(Icons.menu),
+          onPressed: () => _muneSheet(),
+        ),
+        IconButton(
           icon: const Icon(Icons.settings_outlined),
           onPressed: () => _sheet(),
         )
       ],
       body: Padding(
         padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
-        child:
-            Obx(() => Column(children: _bodyWidgets(state.isAbnormal.value))),
+        child: Obx(() => Column(
+              children: _bodyWidgets(state.isAbnormal.value),
+            )),
       ),
     );
   }

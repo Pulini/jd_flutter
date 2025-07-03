@@ -37,7 +37,7 @@ class _PurchaseOrderWarehousingBindingLabelPageState
           Expanded(child: Text(data.pieceNo ?? '')),
           IconButton(
             onPressed: () => askDialog(
-              content: '确定要删除本条标签吗？',
+              content: 'purchase_order_warehousing_label_check_delete_tips'.tr,
               confirm: () => logic.deletePiece(pieceInfo: data),
             ),
             icon: const Icon(
@@ -62,15 +62,15 @@ class _PurchaseOrderWarehousingBindingLabelPageState
   @override
   Widget build(BuildContext context) {
     return pageBody(
-      title: '标签绑定',
-      popTitle: '确定要退出标签绑定吗？',
+      title: 'purchase_order_warehousing_label_check_title'.tr,
+      popTitle: 'purchase_order_warehousing_label_check_exit_tips'.tr,
       actions: [
         TextButton(
           onPressed: () => askDialog(
-            content: '确定要清空已扫描钱吗？',
+            content: 'purchase_order_warehousing_label_check_clear_tips'.tr,
             confirm: () => state.scannedLabelList.clear(),
           ),
-          child: Text('清空'),
+          child: Text('purchase_order_warehousing_label_check_clear'.tr),
         )
       ],
       body: Column(
@@ -99,7 +99,7 @@ class _PurchaseOrderWarehousingBindingLabelPageState
                 border: const OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(20)),
                 ),
-                labelText: '件号',
+                labelText: 'purchase_order_warehousing_label_check_piece_id'.tr,
                 prefixIcon: IconButton(
                   onPressed: () {
                     pieceController.clear();
@@ -112,7 +112,7 @@ class _PurchaseOrderWarehousingBindingLabelPageState
                 ),
                 suffixIcon: Obx(() => CombinationButton(
                       isEnabled: state.canAddPiece.value,
-                      text: '添加件',
+                      text: 'purchase_order_warehousing_label_check_add_piece'.tr,
                       click: () =>
                           logic.addPiece(pieceNo: pieceController.text),
                     )),
@@ -128,14 +128,14 @@ class _PurchaseOrderWarehousingBindingLabelPageState
           Padding(
             padding: const EdgeInsets.only(left: 10, right: 10),
             child: Obx(() => textSpan(
-                  hint: '已扫描：',
+                  hint: 'purchase_order_warehousing_label_check_scanned'.tr,
                   text: state.scannedLabelList.length.toString(),
                 )),
           ),
           Obx(() => CombinationButton(
                 combination: Combination.right,
                 isEnabled: state.scannedLabelList.isNotEmpty,
-                text: '提交',
+                text: 'purchase_order_warehousing_label_check_submit'.tr,
                 click: () =>
                     logic.submitLabelBinding(() => Get.back(result: true)),
               ))

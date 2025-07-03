@@ -4,30 +4,44 @@ import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 
 enum ScanLabelOperationType {
-  unKnown(0, '初始'),
-  create(1, '合并'),
-  binding(2, '绑定'),
-  unbind(3, '解绑'),
-  transfer(4, '转移');
-
-  final int value;
-  final String text;
-
-  const ScanLabelOperationType(this.value, this.text);
+  unKnown,
+  create,
+  binding,
+  unbind,
+  transfer,
 }
-
+String getOperationTypeText(ScanLabelOperationType type){
+  var text='';
+  switch (type) {
+      case ScanLabelOperationType.create:
+      text = 'carton_label_binding_operation_type_create'.tr;
+      break;
+    case ScanLabelOperationType.binding:
+      text = 'carton_label_binding_operation_type_binding'.tr;
+      break;
+    case ScanLabelOperationType.unbind:
+      text = 'carton_label_binding_operation_type_unbind'.tr;
+      break;
+    case ScanLabelOperationType.transfer:
+      text = 'carton_label_binding_operation_type_transfer'.tr;
+      break;
+    default:
+      text = 'carton_label_binding_operation_type_unknown'.tr;
+  }
+  return text;
+}
 class SapCartonLabelBindingState {
   var labelList = <SapLabelBindingInfo>[].obs;
   var operationType = ScanLabelOperationType.unKnown;
-  var operationTypeText = ScanLabelOperationType.unKnown.text.obs;
-  var newBoxLabelID = '00505685E5761FD090D2EB8C111F2541'.obs;
+  var operationTypeText = getOperationTypeText(ScanLabelOperationType.unKnown).obs;
+  var newBoxLabelID = ''.obs;
 
   getLabelInfo({
     required String labelCode,
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在获取标签信息...',
+      loading: 'carton_label_binding_getting_label_info'.tr,
       method: webApiSapGetLabelBindingInfo,
       body: {
         'ZTYPE': '04',
@@ -40,7 +54,7 @@ class SapCartonLabelBindingState {
         ];
         if (labelList.isNotEmpty &&
             labelList[0].labelType() != list[0].labelType()) {
-          error.call('标签供应商、工厂、物料大类、保管形式、单据类型不同，不能同时操作！');
+          error.call('carton_label_binding_error_tips'.tr);
         } else {
           for (var label in list) {
             if (!labelList.any((v) =>
@@ -50,6 +64,7 @@ class SapCartonLabelBindingState {
           }
         }
       } else {
+
         error.call(response.message ?? 'query_default_error'.tr);
       }
     });
@@ -60,7 +75,7 @@ class SapCartonLabelBindingState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在获取标签信息...',
+      loading: 'carton_label_binding_getting_label_info'.tr,
       method: webApiSapGetPrintLabelListInfo,
       body: {
         'BQID': newBoxLabelID.value,
@@ -80,7 +95,7 @@ class SapCartonLabelBindingState {
           map[v] = materials;
         });
         if (map.isEmpty) {
-          error.call('没有可打印的标签！');
+          error.call('carton_label_binding_no_label'.tr);
         } else {
           success.call(map);
         }
@@ -102,7 +117,7 @@ class SapCartonLabelBindingState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在提交标签${operationTypeText.value}...',
+      loading: 'carton_label_binding_submitting_label'.trArgs([operationTypeText.value]),
       method: webApiSapSubmitLabelBindingOperation,
       body: {
         'WERKS': userInfo?.number,

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:collection/collection.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/stuff_quality_inspection_info.dart';
+import 'package:jd_flutter/fun/warehouse/in/quality_inspection_list/quality_inspection_list_color_binding_label_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/quality_inspection_list/quality_inspection_list_state.dart';
 import 'package:jd_flutter/fun/warehouse/in/stuff_quality_inspection/stuff_quality_inspection_view.dart';
 import 'package:jd_flutter/utils/utils.dart';
@@ -160,7 +161,7 @@ class QualityInspectionListLogic extends GetxController {
           });
         }
         colors.add(StuffColorSeparationList(
-          batch: '合计',
+          batch: 'quality_inspection_color_item_total'.tr,
           colorSeparationQuantity: allQty.toShowString(),
         ));
         callback.call(colors);
@@ -199,7 +200,7 @@ class QualityInspectionListLogic extends GetxController {
                     subItem: '2',
                     name: data.materialDescription,
                     code: data.materialCode,
-                    color: '分色合计',
+                    color: 'quality_inspection_item_color_total'.tr,
                     qty: data.item
                             ?.map((v) => v.qty ?? 0.0)
                             .reduce((a, b) => a.add(b)) ??
@@ -214,7 +215,7 @@ class QualityInspectionListLogic extends GetxController {
                     subItem: '3',
                     name: data.materialDescription,
                     code: data.materialCode,
-                    color: '冲销合计',
+                    color: 'quality_inspection_item_reverse_total'.tr,
                     qty: selectList
                         .where((select) => select.materialCode == name)
                         .map((v) => v.storageQuantity.toDoubleTry())
@@ -460,7 +461,7 @@ class QualityInspectionListLogic extends GetxController {
       .toShowString();
 
   checkOrderType({
-    required Function() needColorSet,
+    required Function() bindingLabel,
     required Function() stockIn,
   }) {
     if (checkUserPermission('105180401')) {
@@ -472,11 +473,11 @@ class QualityInspectionListLogic extends GetxController {
         } else {
           if (selected.any((v) => v.colorDistinguishEnable == true)) {
             state.getOrderColorLabelInfo(
-              selectList: selected,
-              success: () {
-                needColorSet.call();
-                //--------------
-              },
+              selectList: groupBy(
+                selected.where((v) => v.colorDistinguishEnable == true),
+                (v) => v.inspectionOrderNo ?? '',
+              ).keys.toList(),
+              success: bindingLabel,
               error: (msg) => errorDialog(content: msg),
             );
           } else {
@@ -489,5 +490,110 @@ class QualityInspectionListLogic extends GetxController {
     } else {
       showSnackBar(message: 'quality_inspection_no_store_inspection'.tr);
     }
+  }
+
+  List<QualityInspectionLabelBindingInfo> getColorMaterialLabelList(int index) {
+    var material = state.colorOrderList[index].materialCode ?? '';
+    var labelList = <QualityInspectionLabelBindingInfo>[];
+    var usedLabel = <QualityInspectionLabelBindingInfo>[];
+    for (var i = 0; i < state.colorOrderList.length; ++i) {
+      if (i != index) {
+        usedLabel.addAll(state.colorOrderList[i].bindingLabels);
+      }
+    }
+    for (var label in state.labelList) {
+      for (var m in label.materialList!) {
+        labelList.add(QualityInspectionLabelBindingInfo(
+          pieceNo: label.pieceNo ?? '',
+          labelID: label.labelID ?? '',
+          materialNumber: m.materialNumber ?? '',
+          materialName: m.materialName ?? '',
+          commonQty: m.commonQty ?? 0,
+          commonUnit: m.commonUnit ?? '',
+        )..isScanned.value = state.colorOrderList[index].bindingLabels.any(
+            (v) => v.dataId() == m.dataId(),
+          ));
+      }
+    }
+
+    for (var used in usedLabel) {
+      if (labelList.any((v) => v.dataId() == used.dataId())) {
+        labelList.removeWhere((v) => v.dataId() == used.dataId());
+      }
+    }
+    return labelList.where((v) => v.materialNumber == material).toList();
+  }
+
+  scanLabel(String code, QualityInspectionColorInfo colorInfo) {
+    if (colorInfo.bindingLabels.isNotEmpty &&
+        colorInfo.bindingLabels.any((v) => v.labelID == code)) {
+      errorDialog(content: 'quality_inspection_label_exists_tips'.tr);
+    } else {
+      late QualityInspectionLabelInfo label;
+      late QualityInspectionLabelMaterialInfo labelMaterial;
+      try {
+        label = state.labelList.firstWhere((v) => v.labelID == code);
+      } on StateError catch (_) {
+        errorDialog(content: 'quality_inspection_label_error_tips'.tr);
+        return;
+      }
+      try {
+        labelMaterial = label.materialList!
+            .firstWhere((v) => v.materialNumber == colorInfo.materialCode);
+      } on StateError catch (_) {
+        errorDialog(content: 'quality_inspection_label_color_error_tips'.tr);
+        return;
+      }
+
+      try {
+        var bound = state.colorOrderList.firstWhere(
+          (v) => v.bindingLabels
+              .any((v2) => v2.dataId() == labelMaterial.dataId()),
+        );
+        errorDialog(
+            content: 'quality_inspection_label_has_bond_tips'.trArgs(
+          [bound.batchNo ?? ''],
+        ));
+      } on StateError catch (_) {
+        var surplusQty = colorInfo.qty.sub(colorInfo.getMaterialTotalQty());
+        if (surplusQty < (labelMaterial.commonQty ?? 0)) {
+          errorDialog(
+              content: 'quality_inspection_label_qty_exceed_tips'.trArgs(
+            [
+              labelMaterial.commonQty.toShowString(),
+              surplusQty.toShowString(),
+            ],
+          ));
+        } else {
+          colorInfo.bindingLabels.add(state.scanList
+              .firstWhere((v) => v.dataId() == labelMaterial.dataId())
+            ..isScanned.value = true);
+          state.scanList.refresh();
+        }
+      }
+    }
+  }
+
+  submitColorLabelBinding({
+    required String location,
+    required String postDate,
+  }) {
+    state.colorLabelBindingStockIn(
+      location: location,
+      postDate: postDate,
+      success: (msg) => successDialog(
+          content: msg,
+          back: () {
+            Get.back(result: true);
+            state.colorOrderList.clear();
+            state.labelList.clear();
+          }),
+      error: (msg) => errorDialog(content: msg),
+    );
+  }
+
+  toColorLabelBinding(int index) {
+    state.scanList.value = getColorMaterialLabelList(index);
+    Get.to(() => const ColorBindingLabelPage(), arguments: {'index': index});
   }
 }

@@ -31,7 +31,6 @@ class _WidgetsToImageState extends State<WidgetsToImage> {
       //获取图片
       final boundary =
           key.currentContext!.findRenderObject()! as RenderRepaintBoundary;
-
       if (boundary.debugNeedsPaint) {
         await Future.delayed(const Duration(milliseconds: 30));
         return capture(key); // 递归调用直到组件绘制完成
@@ -49,6 +48,7 @@ class _WidgetsToImageState extends State<WidgetsToImage> {
       height = image.height;
       return byte!.buffer.asUint8List();
     } catch (e) {
+      await Future.delayed(const Duration(milliseconds: 30));
       return captureFormError(key);
     }
   }
@@ -67,9 +67,12 @@ class _WidgetsToImageState extends State<WidgetsToImage> {
       } else {
         byte = await image.toByteData(format: ui.ImageByteFormat.png);
       }
+      width = image.width;
+      height = image.height;
       return byte!.buffer.asUint8List();
     } catch (e) {
-      rethrow;
+      await Future.delayed(const Duration(milliseconds: 30));
+     return captureFormError(key);
     }
   }
 
