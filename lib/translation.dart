@@ -2813,13 +2813,17 @@ class Translation extends Translations {
           'purchase_order_warehousing_dialog_warehousing': '入库',
           'purchase_order_warehousing_dialog_disable_face': '当前仓库未启用人脸识别',
           'purchase_order_warehousing_dialog_getting_leader': '正在获取仓库负责人信息...',
-          'purchase_order_warehousing_dialog_submitting_warehousing': '正在提交入库...',
+          'purchase_order_warehousing_dialog_submitting_warehousing':
+              '正在提交入库...',
           'purchase_order_warehousing_different_order_tips': '扫码与非扫码工单不能同时操作!',
-          'purchase_order_warehousing_different_supplier_tips': '不同供应商工单不能同时操作!',
+          'purchase_order_warehousing_different_supplier_tips':
+              '不同供应商工单不能同时操作!',
           'purchase_order_warehousing_order_not_have_this_label': '该件不属于当前送货单!',
           'purchase_order_warehousing_label_scanned': '该标签已扫!',
-          'purchase_order_warehousing_label_qty_exceed': '该件货物料数量超出，请扫瞄数量更小的标签。',
-          'purchase_order_warehousing_has_other_material': '该件货内包含了其他工单的物料，请拆分拣货。',
+          'purchase_order_warehousing_label_qty_exceed':
+              '该件货物料数量超出，请扫瞄数量更小的标签。',
+          'purchase_order_warehousing_has_other_material':
+              '该件货内包含了其他工单的物料，请拆分拣货。',
           'purchase_order_warehousing_qty_exceed_tips': '数量超出本次提交上限，清删除对应标签。',
           'purchase_order_warehousing_qty_insufficient': '数量不足本次提交下限，请继续扫描标签。',
           'purchase_order_warehousing_label_check_delete_tips': '确定要删除本条标签吗？',
@@ -2923,6 +2927,7 @@ class Translation extends Translations {
           'quality_inspection_all_not_delete': '全部（不含删除）',
           'quality_inspection_all_not_returned': '未退货',
           'quality_inspection_list_quality_inspection': '正在获取品检单列表...',
+          'quality_inspection_view_detail': '查看明细',
           'quality_inspection_inspection_quantity': '检验数',
           'quality_inspection_sampling_quantity': '抽检数',
           'quality_inspection_unqualified_quantity': '不合格数',
@@ -2965,6 +2970,9 @@ class Translation extends Translations {
           'quality_inspection_factory_type_detail': '工厂型体',
           'quality_inspection_no_delete': '没有删除权限',
           'quality_inspection_select_data': '请选择数据进行操作！',
+          'quality_inspection_color_item_total': '合计',
+          'quality_inspection_item_color_total': '分色合计',
+          'quality_inspection_item_reverse_total': '冲销合计',
           'quality_inspection_different_order': '存在不同的品检单！',
           'quality_inspection_different_taxCode': '存在不同的税号，无法一起入库！',
           'quality_inspection_input_delete_reason': '请输入删除原因!',
@@ -2983,6 +2991,7 @@ class Translation extends Translations {
           'quality_inspection_change_location_title': '修改货位',
           'quality_inspection_input_location': '请输入货位',
           'quality_inspection_change_location': '正在修改货位...',
+          'quality_inspection_getting_color_info': '正在获取分色及标签信息...',
           'quality_inspection_change_success': '修改成功！',
           'quality_inspection_change_failed': '修改失败！',
           'quality_inspection_color_message': '分色信息(长按删除)',
@@ -3004,6 +3013,12 @@ class Translation extends Translations {
           'quality_inspection_reversal_failed': '冲销失败！',
           'quality_inspection_no_inspection': '没有品检权限！',
           'quality_inspection_no_store_inspection': '没有入库权限！',
+          'quality_inspection_label_exists_tips': '该标签已扫入!',
+          'quality_inspection_label_error_tips': '所扫标签不属于本次操作标签范围!',
+          'quality_inspection_label_color_error_tips': '所扫标签内的物料不属于本色系!',
+          'quality_inspection_label_has_bond_tips': '该标签的物料已被色系<%s>绑定！',
+          'quality_inspection_label_qty_exceed_tips':
+              '该标签内的物料数为%s，超过了本色系的剩余数量%s ！',
           'quality_inspection_reviewer': '审核人',
           'quality_inspection_photo': '品检异常图片(长按删除)',
           'quality_inspection_exception_description': '异常说明',
@@ -3021,6 +3036,18 @@ class Translation extends Translations {
           'quality_inspection_create_success': '创建成功！',
           'quality_inspection_create_fail': '创建失败！',
           'quality_inspection_have_already': '含有已经品检过的物料！',
+          'quality_inspection_label_color': '色系：',
+          'quality_inspection_label_scanned': '已扫标签：',
+          'quality_inspection_label_scanned_material_qty': '已扫物料数：',
+          'quality_inspection_label_title': '色系标签绑定',
+          'quality_inspection_label_exit_tips': '确定要退出色系标签绑定吗？',
+          'quality_inspection_label_submit': '提交',
+          'quality_inspection_binding_piece_id': '标签件号：',
+          'quality_inspection_binding_qty': '数量：',
+          'quality_inspection_binding_delete_label_tips': '确定要删除该条标签吗？',
+          'quality_inspection_binding_title': '色系：%s',
+          'quality_inspection_binding_scanned_material_qty': '已扫物料数：',
+          'quality_inspection_binding_label_qty': '标签数：',
           'product_quality_inspection_inspection_unit': '生产单位：',
           'product_quality_inspection_abnormal_qty': '异常数：',
           'product_quality_inspection_reinspection_qty': '复检数：',
@@ -6417,10 +6444,13 @@ class Translation extends Translations {
               'The quantity of materials in this item exceeds the limit. Please scan the label with a smaller quantity.',
           'delivery_order_label_check_has_other_material':
               'This item contains materials from other work orders, please split and pick them.',
-          'delivery_order_label_check_delete_tips': 'Are you sure you want to delete this label?',
+          'delivery_order_label_check_delete_tips':
+              'Are you sure you want to delete this label?',
           'delivery_order_label_check_title': 'Delivery check',
-          'delivery_order_label_check_exit_tips': 'Are you sure you want to exit the delivery inventory？',
-          'delivery_order_label_check_clear_tips': 'Are you sure you want to clear the scanned label?',
+          'delivery_order_label_check_exit_tips':
+              'Are you sure you want to exit the delivery inventory？',
+          'delivery_order_label_check_clear_tips':
+              'Are you sure you want to clear the scanned label?',
           'delivery_order_label_check_clear': 'Clear',
           'delivery_order_label_check_piece_id': 'Piece ID',
           'delivery_order_label_check_add_piece': 'Add piece',
@@ -6556,18 +6586,29 @@ class Translation extends Translations {
               'Getting leader ...',
           'purchase_order_warehousing_dialog_submitting_warehousing':
               'Submitting warehousing...',
-          'purchase_order_warehousing_different_order_tips': 'Scanning and non scanning work orders cannot be operated simultaneously!',
-          'purchase_order_warehousing_different_supplier_tips': 'Different suppliers cannot be operated simultaneously!',
-          'purchase_order_warehousing_order_not_have_this_label': 'This item does not belong to the current order!',
-          'purchase_order_warehousing_label_scanned': 'This tag has been scanned!',
-          'purchase_order_warehousing_label_qty_exceed': 'The quantity of the goods exceeds the limit. Please scan the label with a smaller quantity.',
-          'purchase_order_warehousing_has_other_material': 'This item contains materials from other work orders, please split and pick them separately.',
-          'purchase_order_warehousing_qty_exceed_tips': 'The quantity exceeds the submission limit for this time, please delete the corresponding tags.',
-          'purchase_order_warehousing_qty_insufficient': 'The quantity is insufficient for this submission, please continue scanning the labels.',
-          'purchase_order_warehousing_label_check_delete_tips': 'Are you sure you want to exit the delivery inventory？',
+          'purchase_order_warehousing_different_order_tips':
+              'Scanning and non scanning work orders cannot be operated simultaneously!',
+          'purchase_order_warehousing_different_supplier_tips':
+              'Different suppliers cannot be operated simultaneously!',
+          'purchase_order_warehousing_order_not_have_this_label':
+              'This item does not belong to the current order!',
+          'purchase_order_warehousing_label_scanned':
+              'This tag has been scanned!',
+          'purchase_order_warehousing_label_qty_exceed':
+              'The quantity of the goods exceeds the limit. Please scan the label with a smaller quantity.',
+          'purchase_order_warehousing_has_other_material':
+              'This item contains materials from other work orders, please split and pick them separately.',
+          'purchase_order_warehousing_qty_exceed_tips':
+              'The quantity exceeds the submission limit for this time, please delete the corresponding tags.',
+          'purchase_order_warehousing_qty_insufficient':
+              'The quantity is insufficient for this submission, please continue scanning the labels.',
+          'purchase_order_warehousing_label_check_delete_tips':
+              'Are you sure you want to exit the delivery inventory？',
           'purchase_order_warehousing_label_check_title': 'Check Label',
-          'purchase_order_warehousing_label_check_exit_tips': 'Are you sure you want to exit the delivery inventory？',
-          'purchase_order_warehousing_label_check_clear_tips': 'Are you sure you want to clear the scanned label？',
+          'purchase_order_warehousing_label_check_exit_tips':
+              'Are you sure you want to exit the delivery inventory？',
+          'purchase_order_warehousing_label_check_clear_tips':
+              'Are you sure you want to clear the scanned label？',
           'purchase_order_warehousing_label_check_clear': 'Clear',
           'purchase_order_warehousing_label_check_piece_id': 'Piece ID：',
           'purchase_order_warehousing_label_check_add_piece': 'Add  piece',
@@ -6680,6 +6721,7 @@ class Translation extends Translations {
           'quality_inspection_all_not_returned': 'Not returned',
           'quality_inspection_list_quality_inspection':
               'Obtaining the list of quality inspection forms...',
+          'quality_inspection_view_detail': 'Detail',
           'quality_inspection_select_all': 'Expand and select all',
           'quality_inspection_factory_type': 'Factory type：',
           'quality_inspection_inspection_order_sub': 'Inspection Form：',
@@ -6716,6 +6758,9 @@ class Translation extends Translations {
           'quality_inspection_factory_type_detail': 'Factory type',
           'quality_inspection_no_delete': 'No deletion permission',
           'quality_inspection_select_data': 'Please select data for operation！',
+          'quality_inspection_color_item_total': 'Total',
+          'quality_inspection_item_color_total': 'Color total',
+          'quality_inspection_item_reverse_total': 'Reverse total',
           'quality_inspection_different_order':
               'There are different quality inspection forms available！',
           'quality_inspection_input_delete_reason':
@@ -6740,6 +6785,8 @@ class Translation extends Translations {
           'quality_inspection_input_location':
               'Please enter the storage location',
           'quality_inspection_change_location': 'Modifying cargo location...',
+          'quality_inspection_getting_color_info':
+              'Getting color information...',
           'quality_inspection_change_success': 'Modified successfully！',
           'quality_inspection_change_failed': 'Modification failed！',
           'quality_inspection_color_message':
@@ -6765,6 +6812,15 @@ class Translation extends Translations {
           'quality_inspection_no_inspection':
               'No quality inspection authority！',
           'quality_inspection_no_store_inspection': 'No storage permission！',
+          'quality_inspection_label_exists_tips': 'Label has already exists!',
+          'quality_inspection_label_error_tips':
+              'The scanned label is not within the scope of this operation label!',
+          'quality_inspection_label_color_error_tips':
+              'The material in the scanned label does not belong to the original color system!',
+          'quality_inspection_label_has_bond_tips':
+              'The material of this label has been bound by color scheme<%s>!',
+          'quality_inspection_label_qty_exceed_tips':
+              'The number of materials in this label is %s, which exceeds the remaining quantity of the original color by %s！',
           'quality_inspection_reviewer': 'Reviewer',
           'quality_inspection_photo':
               'Abnormal quality inspection image (long press to delete)',
@@ -6786,6 +6842,26 @@ class Translation extends Translations {
           'quality_inspection_create_fail': 'Creation failed！',
           'quality_inspection_have_already':
               'Contains materials that have already been inspected！',
+          'quality_inspection_label_color': 'Color：',
+          'quality_inspection_label_scanned': 'Scanned：',
+          'quality_inspection_label_scanned_material_qty': 'Material qty：',
+          'quality_inspection_label_title': 'Color Label Binding',
+          'quality_inspection_label_exit_tips': 'Are you sure you want to exit the color label binding？',
+          'quality_inspection_label_submit': 'Submit',
+          'quality_inspection_binding_piece_id': 'Piece ID：',
+          'quality_inspection_binding_qty': 'quantity：',
+          'quality_inspection_binding_delete_label_tips': 'Are you sure you want to delete this label？',
+          'quality_inspection_binding_title': 'Color：%s',
+          'quality_inspection_binding_scanned_material_qty': 'Material qty：',
+          'quality_inspection_binding_label_qty': 'Labels：',
+          'quality_inspection_color_label_binding_color': 'Color：',
+          'quality_inspection_color_label_binding_scanned': 'Scanned：',
+          'quality_inspection_color_label_binding_scanned_material_qty':
+              'Material qty：',
+          'quality_inspection_color_label_binding_title': 'Color Label Binding',
+          'quality_inspection_color_label_binding_exit_tips':
+              'Are you sure you want to exit the color label binding？',
+          'quality_inspection_color_label_binding_submit': 'Submit',
           'product_quality_inspection_inspection_unit': 'Inspection unit：',
           'product_quality_inspection_abnormal_qty': 'Abnormal qty：',
           'product_quality_inspection_reinspection_qty': 'Reinspection qty：',

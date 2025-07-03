@@ -30,7 +30,6 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    print('isTestUrl.value=${isTestUrl()}');
     return GetMaterialApp(
       scrollBehavior: ScrollConfiguration.of(context).copyWith(
         //适配鼠标滚动

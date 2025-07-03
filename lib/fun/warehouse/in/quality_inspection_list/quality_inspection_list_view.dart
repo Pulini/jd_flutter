@@ -232,7 +232,7 @@ class _QualityInspectionListPageState extends State<QualityInspectionListPage> {
                         () => const QualityInspectionListDetailPage(),
                         arguments: {'index': index}),
                     child: Text(
-                      '查看明细',
+                      'quality_inspection_view_detail'.tr,
                       style: TextStyle(
                         color: Colors.blue.shade900,
                         fontWeight: FontWeight.bold,

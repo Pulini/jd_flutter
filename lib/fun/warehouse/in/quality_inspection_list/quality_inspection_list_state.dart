@@ -342,7 +342,7 @@ class QualityInspectionListState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在获取分色及标签信息...',
+      loading: 'quality_inspection_getting_color_info'.tr,
       method: webApiGetQualityInspectionColorLabelInfo,
       body: {
         'GT_REQITEMS': [

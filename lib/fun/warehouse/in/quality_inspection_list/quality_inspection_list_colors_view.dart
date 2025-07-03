@@ -52,10 +52,10 @@ class _QualityInspectionColorListPageState
                   Row(
                     children: [
                       expandedTextSpan(
-                          hint: '色系：',
+                          hint: 'quality_inspection_label_color'.tr,
                           text: state.colorOrderList[index].batchNo ?? ''),
                       textSpan(
-                        hint: '已扫标签：',
+                        hint: 'quality_inspection_label_scanned'.tr,
                         text: state.colorOrderList[index].bindingLabels.length
                             .toString(),
                       ),
@@ -65,7 +65,7 @@ class _QualityInspectionColorListPageState
                     () => Row(
                       children: [
                         Text(
-                          '已扫物料数：',
+                          'quality_inspection_label_scanned_material_qty'.tr,
                           style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                         Expanded(
@@ -97,14 +97,14 @@ class _QualityInspectionColorListPageState
   @override
   Widget build(BuildContext context) {
     return pageBody(
-      title: '色系标签绑定',
-      popTitle: '确定要退出色系标签绑定吗？',
+      title: 'quality_inspection_label_title'.tr,
+      popTitle: 'quality_inspection_label_exit_tips'.tr,
       actions: [
         Obx(() => state.colorOrderList.isNotEmpty &&
                 state.colorOrderList
                     .every((v) => v.getMaterialTotalQty() == v.qty)
             ? CombinationButton(
-                text: '提交',
+                text: 'quality_inspection_label_submit'.tr,
                 click: () => logic.submitColorLabelBinding(
                   location: lopcFactoryWarehouse.getPickItem2().pickerId(),
                   postDate: dpcDate.getDateFormatSapYMD(),

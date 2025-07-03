@@ -161,7 +161,7 @@ class QualityInspectionListLogic extends GetxController {
           });
         }
         colors.add(StuffColorSeparationList(
-          batch: '合计',
+          batch: 'quality_inspection_color_item_total'.tr,
           colorSeparationQuantity: allQty.toShowString(),
         ));
         callback.call(colors);
@@ -200,7 +200,7 @@ class QualityInspectionListLogic extends GetxController {
                     subItem: '2',
                     name: data.materialDescription,
                     code: data.materialCode,
-                    color: '分色合计',
+                    color: 'quality_inspection_item_color_total'.tr,
                     qty: data.item
                             ?.map((v) => v.qty ?? 0.0)
                             .reduce((a, b) => a.add(b)) ??
@@ -215,7 +215,7 @@ class QualityInspectionListLogic extends GetxController {
                     subItem: '3',
                     name: data.materialDescription,
                     code: data.materialCode,
-                    color: '冲销合计',
+                    color: 'quality_inspection_item_reverse_total'.tr,
                     qty: selectList
                         .where((select) => select.materialCode == name)
                         .map((v) => v.storageQuantity.toDoubleTry())
@@ -527,21 +527,21 @@ class QualityInspectionListLogic extends GetxController {
   scanLabel(String code, QualityInspectionColorInfo colorInfo) {
     if (colorInfo.bindingLabels.isNotEmpty &&
         colorInfo.bindingLabels.any((v) => v.labelID == code)) {
-      errorDialog(content: '该标签已扫入！');
+      errorDialog(content: 'quality_inspection_label_exists_tips'.tr);
     } else {
       late QualityInspectionLabelInfo label;
       late QualityInspectionLabelMaterialInfo labelMaterial;
       try {
         label = state.labelList.firstWhere((v) => v.labelID == code);
       } on StateError catch (_) {
-        errorDialog(content: '所扫标签不属于本次操作标签范围！');
+        errorDialog(content: 'quality_inspection_label_error_tips'.tr);
         return;
       }
       try {
         labelMaterial = label.materialList!
             .firstWhere((v) => v.materialNumber == colorInfo.materialCode);
       } on StateError catch (_) {
-        errorDialog(content: '所扫标签内的物料不属于本色系！');
+        errorDialog(content: 'quality_inspection_label_color_error_tips'.tr);
         return;
       }
 
@@ -550,13 +550,20 @@ class QualityInspectionListLogic extends GetxController {
           (v) => v.bindingLabels
               .any((v2) => v2.dataId() == labelMaterial.dataId()),
         );
-        errorDialog(content: '该标签的物料已被色系<${bound.batchNo}>绑定！');
+        errorDialog(
+            content: 'quality_inspection_label_has_bond_tips'.trArgs(
+          [bound.batchNo ?? ''],
+        ));
       } on StateError catch (_) {
         var surplusQty = colorInfo.qty.sub(colorInfo.getMaterialTotalQty());
         if (surplusQty < (labelMaterial.commonQty ?? 0)) {
           errorDialog(
-              content:
-                  '该标签内的物料数为${labelMaterial.commonQty.toShowString()}，超过了本色系的剩余数量${surplusQty.toShowString()} ！');
+              content: 'quality_inspection_label_qty_exceed_tips'.trArgs(
+            [
+              labelMaterial.commonQty.toShowString(),
+              surplusQty.toShowString(),
+            ],
+          ));
         } else {
           colorInfo.bindingLabels.add(state.scanList
               .firstWhere((v) => v.dataId() == labelMaterial.dataId())
@@ -589,5 +596,4 @@ class QualityInspectionListLogic extends GetxController {
     state.scanList.value = getColorMaterialLabelList(index);
     Get.to(() => const ColorBindingLabelPage(), arguments: {'index': index});
   }
-
 }

@@ -39,19 +39,21 @@ class _ColorBindingLabelPageState extends State<ColorBindingLabelPage> {
         child: Row(
           children: [
             expandedTextSpan(
-              hint: '标签件号：',
+              hint: 'quality_inspection_binding_piece_id'.tr,
               hintColor: data.isScanned.value ? Colors.black : Colors.grey,
               text: data.pieceNo,
               textColor: data.isScanned.value ? Colors.blueAccent : Colors.grey,
             ),
             textSpan(
-              hint: '数量：',
+              hint: 'quality_inspection_binding_qty'.tr,
               text: data.commonQty.toShowString(),
             ),
             if (data.isScanned.value)
               IconButton(
                 onPressed: () => askDialog(
-                  content: '确定要删除该条标签吗？',
+                  content:
+                      'quality_inspection_binding_delete_label_tips'
+                          .tr,
                   confirm: () {
                     state.colorOrderList[index].bindingLabels.removeWhere(
                       (v) => v.dataId() == data.dataId(),
@@ -77,14 +79,8 @@ class _ColorBindingLabelPageState extends State<ColorBindingLabelPage> {
   Widget build(BuildContext context) {
     var scannedList = state.colorOrderList[index].bindingLabels;
     return pageBody(
-      title: '色系：${state.colorOrderList[index].batchNo}',
-      // actions: [
-      //   IconButton(
-      //     onPressed: () => logic.scanLabel(
-      //         '00505685E5761FD095B0A598ADC914A3', state.colorOrderList[index]),
-      //     icon: const Icon(Icons.add),
-      //   ),
-      // ],
+      title: 'quality_inspection_binding_title'
+          .trArgs([state.colorOrderList[index].batchNo ?? '']),
       body: Column(
         children: [
           Padding(
@@ -92,7 +88,8 @@ class _ColorBindingLabelPageState extends State<ColorBindingLabelPage> {
             child: Row(
               children: [
                 Text(
-                  '已扫物料数：',
+                  'quality_inspection_binding_scanned_material_qty'
+                      .tr,
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 Expanded(
@@ -107,7 +104,9 @@ class _ColorBindingLabelPageState extends State<ColorBindingLabelPage> {
                 ),
                 const SizedBox(width: 30),
                 Obx(() => textSpan(
-                      hint: '标签数：',
+                      hint:
+                          'quality_inspection_binding_label_qty'
+                              .tr,
                       text: scannedList.length.toString(),
                     )),
               ],
