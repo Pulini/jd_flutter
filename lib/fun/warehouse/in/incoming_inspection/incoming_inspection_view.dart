@@ -43,11 +43,6 @@ class _IncomingInspectionPageState extends State<IncomingInspectionPage> {
   );
 
   Widget _deliveryItem(List<List<InspectionDeliveryInfo>> group) {
-    var orderTotalQty = group
-        .map((v) => v.map((v2) => v2.qty ?? 0).reduce((a, b) => a.add(b)))
-        .reduce((a, b) => a.add(b))
-        .toShowString();
-
     var orderTotalNumPage = group
         .map((v) => v.map((v2) => v2.numPage ?? 0).reduce((a, b) => a + b))
         .reduce((a, b) => a + b);
@@ -68,7 +63,7 @@ class _IncomingInspectionPageState extends State<IncomingInspectionPage> {
           hint: 'incoming_inspection_delivery_qty'.tr,
           text: 'incoming_inspection_delivery_detail'.trArgs([
             orderTotalNumPage.toString(),
-            orderTotalQty.toString(),
+            group[0][0].numPage.toString(),
             group[0][0].unitName ?? '',
           ]),
           textColor: Colors.green,

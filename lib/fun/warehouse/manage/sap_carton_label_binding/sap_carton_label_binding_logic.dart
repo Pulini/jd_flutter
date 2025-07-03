@@ -65,7 +65,7 @@ class SapCartonLabelBindingLogic extends GetxController {
 
   scanLabel(String code) {
     if (state.labelList.any((v) => v.labelID == code || v.boxLabelID == code)) {
-      errorDialog(content: '标签已存在!');
+      errorDialog(content: 'carton_label_binding_label_exists'.tr);
     } else {
       state.getLabelInfo(
         labelCode: code,
@@ -145,7 +145,7 @@ class SapCartonLabelBindingLogic extends GetxController {
       success: (msg) => successDialog(
         content: msg,
         back: () => askDialog(
-          content: '要打印新外箱标吗？',
+          content: 'carton_label_binding_print_out_box_label_tips'.tr,
           confirm: () => printNewBoxLabel(),
         ),
       ),
@@ -157,12 +157,12 @@ class SapCartonLabelBindingLogic extends GetxController {
     state.getLabelPrintInfo(
       success: (labelsData) {
         askDialog(
-          title: '打印标签',
-          content: '请选择标签打印类型',
-          confirmText: '物料标',
+          title: 'carton_label_binding_print_label'.tr,
+          content: 'carton_label_binding_select_label_type'.tr,
+          confirmText: 'carton_label_binding_material_label'.tr,
           confirmColor: Colors.blue,
           confirm: () => toPrintView(createOutBoxLabel(labelsData, true)),
-          cancelText: '普通标',
+          cancelText: 'carton_label_binding_common_label'.tr,
           cancelColor: Colors.blue,
           cancel: () => toPrintView(createOutBoxLabel(labelsData, false)),
         );

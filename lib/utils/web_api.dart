@@ -1281,6 +1281,12 @@ const webApiSapSaveAbnormalPiece = 'sap/zapp/ZFUN_ZGD_5';
 //获取装柜异常单数据
 const webApiSapGetAbnormalList = 'sap/zapp/ZFUN_ZGD_4';
 
+//获取装柜出库冲销条码信息
+const webApiSapGetReverseLabelInfo = 'sap/zapp/ZFUN_ZGD_7';
+
+//装柜出库冲销
+const webApiSapReverseLabel = 'sap/zapp/ZFUN_ZGD_8';
+
 //获取巡检产线及异常记录
 const webApiSapGetPatrolInspectionInfo = 'sap/zapp/ZFUN_APP_PJ_ORDERSUMQUERY';
 

@@ -28,13 +28,13 @@ class SapLabelReprintLogic extends GetxController {
     var selected = state.labelList.where((v) => v.isSelected.value).toList();
     if (selected.any((v) => v.isBoxLabel)) {
       askDialog(
-        title: '打印标签',
-        content: '请选择外箱标打印类型',
-        confirmText: '物料标',
+        title: 'label_reprint_print_label'.tr,
+        content: 'label_reprint_select_outer_label_print_type'.tr,
+        confirmText: 'label_reprint_material_label'.tr,
         confirmColor: Colors.blue,
         confirm: () =>
             toPrintView(createLabels(labels: selected, isMaterialLabel: true)),
-        cancelText: '普通标',
+        cancelText: 'label_reprint_common_label'.tr,
         cancelColor: Colors.blue,
         cancel: () =>
             toPrintView(createLabels(labels: selected, isMaterialLabel: false)),
@@ -42,15 +42,15 @@ class SapLabelReprintLogic extends GetxController {
     } else {
       if (selected.any((v) => v.factoryNo == '1098')) {
         askDialog(
-          title: '打印标签',
-          content: '是否打印备注行？',
-          confirmText: '是',
+          title: 'label_reprint_print_label'.tr,
+          content: '是否打印备注行'.tr,
+          confirmText: 'label_reprint_yes'.tr,
           confirmColor: Colors.blue,
           confirm: () => toPrintView(createLabels(
             labels: selected,
             hasNotes: true,
           )),
-          cancelText: '否',
+          cancelText: 'label_reprint_no'.tr,
           cancelColor: Colors.blue,
           cancel: () => toPrintView(createLabels(
             labels: selected,

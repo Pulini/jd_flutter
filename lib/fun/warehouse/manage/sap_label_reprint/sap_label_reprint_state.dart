@@ -7,7 +7,7 @@ class SapLabelReprintState {
 
   getLabelList({required String code, required Function(String) error}) {
     sapPost(
-      loading: '正在获取标签信息...',
+      loading: 'label_reprint_getting_label_info'.tr,
       method: webApiSapGetPrintLabelListInfo,
       body: {
         'BQID': code,

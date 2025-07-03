@@ -42,18 +42,18 @@ class _SapLabelReprintPageState extends State<SapLabelReprintPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           textSpan(
-                            hint: '外箱件号：',
+                            hint: 'label_reprint_outer_box_label_id'.tr,
                             text: label.pieceID ?? '',
                             textColor: Colors.green,
                           ),
                           Row(
                             children: [
                               expandedTextSpan(
-                                hint: '规格：',
+                                hint: 'label_reprint_specifications'.tr,
                                 text: label.getLWH(),
                               ),
                               textSpan(
-                                hint: '总数：',
+                                hint: 'label_reprint_total'.tr,
                                 text: state.labelList
                                     .map((v) => v.getInBoxQty())
                                     .reduce((a, b) => a.add(b))
@@ -74,12 +74,12 @@ class _SapLabelReprintPageState extends State<SapLabelReprintPage> {
                   children: [
                     expandedTextSpan(
                       flex: 2,
-                      hint: '供应商：',
+                      hint: 'label_reprint_supplier'.tr,
                       text: label.supplierNumber ?? '',
                     ),
                     expandedTextSpan(
                       flex: 3,
-                      hint: '收货方：',
+                      hint: 'label_reprint_consignee'.tr,
                       text: label.shipToParty ?? '',
                     ),
                   ],
@@ -92,7 +92,7 @@ class _SapLabelReprintPageState extends State<SapLabelReprintPage> {
                     children: [
                       Expanded(
                         child: textSpan(
-                          hint: '件号：',
+                          hint: 'label_reprint_piece_id'.tr,
                           text: label.pieceID ?? '',
                           textColor: Colors.green,
                         ),
@@ -115,7 +115,7 @@ class _SapLabelReprintPageState extends State<SapLabelReprintPage> {
                         ),
                       ),
                       textSpan(
-                          hint: '数量：',
+                          hint: 'label_reprint_qty'.tr,
                           text: '${sub.inBoxQty.toShowString()}${sub.unit}')
                     ],
                   )
@@ -143,7 +143,7 @@ class _SapLabelReprintPageState extends State<SapLabelReprintPage> {
                     label.isSelected.value = v;
                   }
                 },
-                name: '全选',
+                name: 'label_reprint_select_all'.tr,
               )
             : Container()),
         Obx(() => state.labelList.isNotEmpty &&

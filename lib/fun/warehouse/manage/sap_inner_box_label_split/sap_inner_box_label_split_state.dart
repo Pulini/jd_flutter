@@ -14,7 +14,7 @@ class SapInnerBoxLabelSplitState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在获取标签信息...',
+      loading: 'inner_box_label_split_getting_label_info'.tr,
       method: webApiSapGetPrintLabelListInfo,
       body: {'BQID': code},
     ).then((response) {
@@ -33,7 +33,7 @@ class SapInnerBoxLabelSplitState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在提交拆分标签...',
+      loading: 'inner_box_label_split_submit_label_split'.tr,
       method: webApiSapSubmitLabelSplit,
       body: [
         {

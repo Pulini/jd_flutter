@@ -85,11 +85,11 @@ class PurchaseOrderWarehousingLogic extends GetxController {
       return;
     }
     if (groupBy(selectOrder, (v) => v.isScanPieces).length > 1) {
-      errorDialog(content: '扫码与非扫码工单不能同时操作！');
+      errorDialog(content: 'purchase_order_warehousing_different_order_tips'.tr);
       return;
     }
     if (groupBy(selectOrder, (v) => v.supplier).length > 1) {
-      errorDialog(content: '不同供应商工单不能同时操作！');
+      errorDialog(content: 'purchase_order_warehousing_different_supplier_tips'.tr);
       return;
     }
 
@@ -165,13 +165,13 @@ class PurchaseOrderWarehousingLogic extends GetxController {
 
   _addLabels({required List<DeliveryOrderLabelInfo> labels}) {
     if (labels.isEmpty) {
-      errorDialog(content: '该件不属于当前送货单!');
+      errorDialog(content: 'purchase_order_warehousing_order_not_have_this_label'.tr);
       return;
     }
 
     if (labels.every((v) => state.scannedLabelList.contains(v))) {
       if (labels.every((v) => v.isChecked.value)) {
-        errorDialog(content: '该标签已扫!');
+        errorDialog(content: 'purchase_order_warehousing_label_scanned'.tr);
       } else {
         for (var v in labels) {
           v.isChecked.value = true;
@@ -209,13 +209,13 @@ class PurchaseOrderWarehousingLogic extends GetxController {
         }
 
         if (total.add(quantity) > max) {
-          errorDialog(content: '该标签数量超出了，请扫瞄数量更小的标签。');
+          errorDialog(content: 'purchase_order_warehousing_label_qty_exceed'.tr);
         } else {
           state.scannedLabelList.add(label..isChecked.value = true);
         }
       }
     } else {
-      errorDialog(content: '该件获取内包含了其他工单待物料，请拆分拣货。');
+      errorDialog(content: 'purchase_order_warehousing_has_other_material'.tr);
     }
   }
   deletePiece({required DeliveryOrderLabelInfo pieceInfo}) {
@@ -245,11 +245,11 @@ class PurchaseOrderWarehousingLogic extends GetxController {
           .map((v3) => v3.baseQty ?? 0)
           .reduce((a, b) => a.add(b));
       if (total > v) {
-        errorDialog(content: '数量超出本次提交上限，清删除对应标签。');
+        errorDialog(content: 'purchase_order_warehousing_qty_exceed_tips'.tr);
         return;
       }
       if (total < v) {
-        errorDialog(content: '数量不足本次提交下限，请继续扫描标签。');
+        errorDialog(content: 'purchase_order_warehousing_qty_insufficient'.tr);
         return;
       }
     });

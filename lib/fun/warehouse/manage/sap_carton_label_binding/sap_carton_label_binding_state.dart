@@ -41,7 +41,7 @@ class SapCartonLabelBindingState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在获取标签信息...',
+      loading: 'carton_label_binding_getting_label_info'.tr,
       method: webApiSapGetLabelBindingInfo,
       body: {
         'ZTYPE': '04',
@@ -54,7 +54,7 @@ class SapCartonLabelBindingState {
         ];
         if (labelList.isNotEmpty &&
             labelList[0].labelType() != list[0].labelType()) {
-          error.call('标签供应商、工厂、物料大类、保管形式、单据类型不同，不能同时操作！');
+          error.call('carton_label_binding_error_tips'.tr);
         } else {
           for (var label in list) {
             if (!labelList.any((v) =>
@@ -75,7 +75,7 @@ class SapCartonLabelBindingState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在获取标签信息...',
+      loading: 'carton_label_binding_getting_label_info'.tr,
       method: webApiSapGetPrintLabelListInfo,
       body: {
         'BQID': newBoxLabelID.value,
@@ -95,7 +95,7 @@ class SapCartonLabelBindingState {
           map[v] = materials;
         });
         if (map.isEmpty) {
-          error.call('没有可打印的标签！');
+          error.call('carton_label_binding_no_label'.tr);
         } else {
           success.call(map);
         }
@@ -117,7 +117,7 @@ class SapCartonLabelBindingState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在提交标签${operationTypeText.value}...',
+      loading: 'carton_label_binding_submitting_label'.trArgs([operationTypeText.value]),
       method: webApiSapSubmitLabelBindingOperation,
       body: {
         'WERKS': userInfo?.number,

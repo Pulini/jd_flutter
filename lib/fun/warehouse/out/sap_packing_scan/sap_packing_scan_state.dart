@@ -2,7 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/base_data.dart';
-import 'package:jd_flutter/bean/http/response/sap_picing_scan_info.dart';
+import 'package:jd_flutter/bean/http/response/sap_picking_scan_info.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/picker/picker_item.dart';
@@ -19,6 +19,7 @@ class SapPackingScanState {
   var materialList = <SapPackingScanMaterialInfo>[].obs;
   var pieceList = <PieceMaterialInfo>[].obs;
   var abnormalList = <List<SapPackingScanAbnormalInfo>>[].obs;
+  var reverseLabelList = <SapPackingScanReverseLabelInfo>[].obs;
 
   getContainerLoadingInfo({
     required String code,
@@ -103,7 +104,7 @@ class SapPackingScanState {
 
   submit({
     required String postingDate,
-    required List<SapPackingScanLabelInfo> list,
+    required List<String> list,
     required Function(String) success,
     required Function(String) error,
     required Function(List<SapPackingScanSubmitAbnormalInfo>, String) save,
@@ -115,13 +116,13 @@ class SapPackingScanState {
         'ITEM1': {
           'WERKS': factory?.pickerId(),
           'ZZCQ': getDateYMD(time: plannedDate),
-          'ZADGE_RCVER': destination,
+          'ZADGE_RCVER': destination?.pickerId(),
           'ZZKHXH1': actualCabinet,
           'LGORT': warehouse?.pickerId(),
           'BQIDS': [
             for (var item in list)
               {
-                'BQID': item.labelNumber,
+                'BQID': item,
               }
           ],
           'BUDAT_MKPF': postingDate,
@@ -222,7 +223,7 @@ class SapPackingScanState {
         'ITEM3': {
           'USNAM': userInfo?.number,
           'BQIDS': [
-            for (var item in list.where((v)=>v.isSelected.value))
+            for (var item in list.where((v) => v.isSelected.value))
               {
                 'BQID': item.labelNumber,
               }
@@ -236,12 +237,13 @@ class SapPackingScanState {
             g.removeWhere((v) => v.labelNumber == d.labelNumber);
           }
         }
-        success.call(response.message??'');
+        success.call(response.message ?? '');
       } else {
         error.call(response.message ?? 'query_default_error'.tr);
       }
     });
   }
+
   reSubmit({
     required String postingDate,
     required List<SapPackingScanAbnormalInfo> list,
@@ -255,7 +257,7 @@ class SapPackingScanState {
         'ITEM1': {
           'WERKS': factory?.pickerId(),
           'ZZCQ': getDateYMD(time: plannedDate),
-          'ZADGE_RCVER': destination,
+          'ZADGE_RCVER': destination?.pickerId(),
           'ZZKHXH1': actualCabinet,
           'LGORT': warehouse?.pickerId(),
           'BQIDS': [
@@ -278,6 +280,56 @@ class SapPackingScanState {
             g.removeWhere((v) => v.labelNumber == d.labelNumber);
           }
         }
+        success.call(response.message ?? '');
+      } else {
+        error.call(response.message ?? 'query_default_error'.tr);
+      }
+    });
+  }
+
+  getReverseLabelInfo({
+    required String code,
+    required Function(String) error,
+  }) {
+    sapPost(
+      loading: '正在获取标签信息...',
+      method: webApiSapGetReverseLabelInfo,
+      body: {'BQID': code},
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        var label = SapPackingScanReverseLabelInfo.fromJson(response.data)
+          ..labelId = code;
+        if (reverseLabelList.none((v) => v.pieceId == label.pieceId)) {
+          reverseLabelList.add(label);
+        }
+      } else {
+        error.call(response.message ?? 'query_default_error'.tr);
+      }
+    });
+  }
+
+  reverseLabel({
+    required String postingDate,
+    required Function(String) success,
+    required Function(String) error,
+  }) {
+    sapPost(
+      loading: '正在提交冲销标签...',
+      method: webApiSapReverseLabel,
+      body: {
+        'ZBUDAT_MKPF': postingDate,
+        'USNAM': userInfo?.number,
+        'ZNAME_CN': userInfo?.name,
+        'BQIDS': [
+          for (var item in reverseLabelList)
+            {
+              'BQID': item.labelId,
+            }
+        ],
+      },
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        reverseLabelList.clear();
         success.call(response.message ?? '');
       } else {
         error.call(response.message ?? 'query_default_error'.tr);

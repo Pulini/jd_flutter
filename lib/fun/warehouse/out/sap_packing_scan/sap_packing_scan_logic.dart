@@ -1,6 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:get/get.dart';
-import 'package:jd_flutter/bean/http/response/sap_picing_scan_info.dart';
+import 'package:jd_flutter/bean/http/response/sap_picking_scan_info.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
@@ -100,6 +100,7 @@ class SapPackingScanLogic extends GetxController {
             material.labelList!.add(label);
           }
         }
+        state.materialList.refresh();
       } on StateError catch (_) {
         state.materialList.add(newMaterial);
       }
@@ -178,7 +179,7 @@ class SapPackingScanLogic extends GetxController {
           materialList.add(material);
         }
       }
-      pieceList.add(PieceMaterialInfo(materials: materialList));
+      pieceList.add(PieceMaterialInfo(pieceId: p, materials: materialList));
     }
     if (searchText.isEmpty) {
       return pieceList;
@@ -224,10 +225,14 @@ class SapPackingScanLogic extends GetxController {
     }
   }
 
-  checkMaterialSubmitData(Function(List<SapPackingScanLabelInfo>) callback) {
-    var list = <SapPackingScanLabelInfo>[];
+  checkMaterialSubmitData(Function(List<String>) callback) {
+    var list = <String>[];
     for (var material in state.materialList) {
-      list.addAll(material.labelList!.where((v) => v.isScanned.value));
+      material.labelList!.where((v) => v.isScanned.value).forEach((v) {
+        if (!list.contains(v.labelNumber ?? '')) {
+          list.add(v.labelNumber ?? '');
+        }
+      });
     }
     if (list.isEmpty) {
       errorDialog(content: '没有可提交的数据!');
@@ -242,7 +247,7 @@ class SapPackingScanLogic extends GetxController {
 
   submit({
     required String postingDate,
-    required List<SapPackingScanLabelInfo> submitList,
+    required List<String> submitList,
   }) {
     state.submit(
       postingDate: postingDate,
@@ -297,7 +302,7 @@ class SapPackingScanLogic extends GetxController {
     );
   }
 
-  checkAbnormalSubmitData(Function(List<SapPackingScanAbnormalInfo>) list) {
+  checkAbnormalSubmitData(Function(List<SapPackingScanAbnormalInfo>) callback) {
     var list = <SapPackingScanAbnormalInfo>[
       ...selectedAbnormalItem().where((v) => v.isSelected.value)
     ];
@@ -309,7 +314,7 @@ class SapPackingScanLogic extends GetxController {
       errorDialog(content: '请填写实际柜号!');
       return;
     }
-    return list;
+    callback.call(list);
   }
 
   reSubmit({
@@ -319,6 +324,60 @@ class SapPackingScanLogic extends GetxController {
     state.reSubmit(
       postingDate: postingDate,
       list: submitList,
+      success: (msg) => successDialog(content: msg),
+      error: (msg) => errorDialog(content: msg),
+    );
+  }
+
+  selectAbnormalItem({
+    required List<List<SapPackingScanAbnormalInfo>> list,
+    required SapPackingScanAbnormalInfo item,
+    required bool isSelected,
+  }) {
+    item.isSelected.value = isSelected;
+    for (var group in list) {
+      for (var i in group) {
+        if (i != item && i.pieceNumber == item.pieceNumber) {
+          i.isSelected.value = item.isSelected.value;
+        }
+      }
+    }
+  }
+
+  selectAbnormalItems({
+    required List<List<SapPackingScanAbnormalInfo>> list,
+    required int index,
+    required bool isSelected,
+  }) {
+    var pieceList = <String>[];
+    for (var item in list[index]) {
+      if (!pieceList.contains(item.pieceNumber ?? '')) {
+        pieceList.add(item.pieceNumber ?? '');
+      }
+    }
+    for (var piece in pieceList) {
+      for (var group in list) {
+        group
+            .where((v) => v.pieceNumber == piece)
+            .forEach((v) => v.isSelected.value = isSelected);
+      }
+    }
+  }
+
+  reverseScan(String code) {
+    state.getReverseLabelInfo(
+      code: code,
+      error: (msg) => errorDialog(content: msg),
+    );
+  }
+
+  deleteReverseLabel(SapPackingScanReverseLabelInfo data) {
+    state.reverseLabelList.remove(data);
+  }
+
+  reverseLabel(String postingDate) {
+    state.reverseLabel(
+      postingDate: postingDate,
       success: (msg) => successDialog(content: msg),
       error: (msg) => errorDialog(content: msg),
     );

@@ -44,7 +44,7 @@ class DeliveryOrderState {
     required Function(String) error,
   }) {
     httpGet(
-      loading: '正在查询送货单列表...',
+      loading: 'delivery_order_querying_delivery_orders'.tr,
       method: webApiGetDeliveryOrders,
       params: {
         'beginDate': startDate,
@@ -100,7 +100,7 @@ class DeliveryOrderState {
     required Function(String) error,
   }) {
     httpGet(
-      loading: '正在查询送货单详情...',
+      loading: 'delivery_order_querying_delivery_order_detail'.tr,
       method: webApiGetDeliveryOrdersDetails,
       params: {
         'scWorkcardNo': produceOrderNo,
@@ -128,7 +128,7 @@ class DeliveryOrderState {
     required Function(String) error,
   }) {
     httpGet(
-      loading: '正在查询送货单详情...',
+      loading: 'delivery_order_querying_delivery_order_detail'.tr,
       method: webApiGetTemporaryDetail,
       params: {
         'Type': 'Deli',
@@ -146,11 +146,10 @@ class DeliveryOrderState {
   }
 
   getStorageLocationList() {
-    locationName.value = '正在获取存储位置信息...';
+    locationName.value = 'delivery_order_getting_storage_location'.tr;
     httpGet(
       method: webApiGetStorageLocationList,
       params: {'FactoryNumber': factoryNumber},
-      // params: {'FactoryNumber': '1000'},
     ).then((response) {
       if (response.resultCode == resultSuccess) {
         locationList.value = [
@@ -174,7 +173,7 @@ class DeliveryOrderState {
     required Function(String) error,
   }) {
     httpPost(
-      loading: '正在保存核查数据...',
+      loading: 'delivery_order_checking_data'.tr,
       method: webApiSaveDeliveryOrderCheck,
       body: {
         'MES_Items': [
@@ -204,7 +203,7 @@ class DeliveryOrderState {
     required Function() reversal,
   }) {
     sapPost(
-      loading: '正在检查入库单...',
+      loading: 'delivery_order_checking_stock_in_order'.tr,
       method: webApiSapReversalStockInCheck,
       body: {
         'GT_REQITEMS': [
@@ -234,7 +233,7 @@ class DeliveryOrderState {
     required Function(String msg) error,
   }) {
     sapPost(
-      loading: '入库冲销中...',
+      loading: 'delivery_order_reversing_stock_in'.tr,
       method: webApiReversalStockIn,
       body: {
         'EmpCode': userInfo?.number,
@@ -263,7 +262,7 @@ class DeliveryOrderState {
     required Function(String msg) error,
   }) {
     sapPost(
-      loading: '冲销出库中...',
+      loading: 'delivery_order_reversing_stock_out'.tr,
       method: webApiReversalStockOut,
       body: {
         'EmpCode': userInfo?.number,
@@ -295,7 +294,7 @@ class DeliveryOrderState {
     required Function(String msg) error,
   }) {
     sapPost(
-      loading: '正在获取工单扫码明细...',
+      loading: 'delivery_order_getting_order_scan_detail'.tr,
       method: webApiSapGetSupplierLabelInfo,
       body: {
         'WERKS': factoryNumber,
@@ -319,7 +318,7 @@ class DeliveryOrderState {
     required Function(String msg) error,
   }) {
     sapPost(
-      loading: '正在获取暂存标签...',
+      loading: 'delivery_order_getting_temporary_label'.tr,
       method: webApiSapGetLabelBindingStaging,
       body: {
         'GT_REQITEMS': [
@@ -342,7 +341,7 @@ class DeliveryOrderState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: '正在获取暂存标签...',
+      loading: 'delivery_order_submitting_temporary_label'.tr,
       method: webApiSapStagingLabelBinding,
       body: {
         'ZUSNAM': userInfo?.number,
@@ -373,7 +372,7 @@ class DeliveryOrderState {
     required Function(String msg) error,
   }) {
     sapPost(
-      loading: '正在提交标签绑定...',
+      loading: 'delivery_order_submitting_label_bind'.tr,
       method: webApiSapSubmitLabelBinding,
       body: {
         'ZUSNAM': userInfo?.number,

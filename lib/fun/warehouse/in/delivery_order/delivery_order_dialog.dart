@@ -20,14 +20,20 @@ stockInDialog({
   required List<DeliveryOrderInfo> submitList,
   required Function() refresh,
 }) {
-  var notScanList=<String>[];
-  submitList.where((v)=>v.isScanPieces=='X'&&v.deliJbq?.isEmpty==true).forEach((v){
-    if(!notScanList.contains(v.deliNo)){
-      notScanList.add(v.deliNo??'');
+  var notScanList = <String>[];
+  submitList
+      .where((v) => v.isScanPieces == 'X' && v.deliJbq?.isEmpty == true)
+      .forEach((v) {
+    if (!notScanList.contains(v.deliNo)) {
+      notScanList.add(v.deliNo ?? '');
     }
   });
-  if(notScanList.isNotEmpty){
-    errorDialog(content: '送货单(${notScanList.join('、')})尚未扫码绑定标签！');
+  if (notScanList.isNotEmpty) {
+    errorDialog(
+      content: 'delivery_order_dialog_not_binding_label_tips'.trArgs([
+        notScanList.join('、'),
+      ]),
+    );
     return;
   }
   var matchCode = <String>[];
@@ -45,7 +51,6 @@ stockInDialog({
     errorDialog(content: 'delivery_order_dialog_match_code_different'.tr);
     return;
   }
-
 
   var leaderEnable = false.obs;
   var errorMsg = ''.obs;
@@ -289,11 +294,11 @@ createTemporaryDialog({
   required Function() refresh,
 }) {
   if (submitList.any((v) => v.inspector?.isEmpty == true)) {
-    errorDialog(content: '含有未清点的数据！');
+    errorDialog(content: 'delivery_order_dialog_has_not_check_data_tips'.tr);
     return;
   }
   if (groupBy(submitList, (v) => v.isScanPieces ?? '').length > 1) {
-    errorDialog(content: '扫码送货单与非扫码送货单不能一同生成暂收单!');
+    errorDialog(content: 'delivery_order_dialog_different_order_tips'.tr);
     return;
   }
   _checkFaceInfo(

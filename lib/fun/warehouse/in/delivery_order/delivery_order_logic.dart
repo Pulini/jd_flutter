@@ -273,6 +273,7 @@ class DeliveryOrderLogic extends GetxController {
     required List<DeliveryOrderInfo> group,
     required Function() refresh,
   }) {
+    state.materialList.clear();
     groupBy(group, (v) => v.materialCode ?? '').forEach((k, v) {
       state.materialList[k] =
           v.map((v2) => v2.deliveryBaseQty()).reduce((a, b) => a.add(b));
@@ -339,13 +340,13 @@ class DeliveryOrderLogic extends GetxController {
 
   _addLabels({required List<DeliveryOrderLabelInfo> labels}) {
     if (labels.isEmpty) {
-      errorDialog(content: '该件不属于当前送货单!');
+      errorDialog(content: 'delivery_order_label_check_order_not_have_this_label'.tr);
       return;
     }
 
     if (labels.every((v) => state.scannedLabelList.contains(v))) {
       if (labels.every((v) => v.isChecked.value)) {
-        errorDialog(content: '该标签已扫!');
+        errorDialog(content: 'delivery_order_label_check_label_scanned'.tr);
       } else {
         for (var v in labels) {
           v.isChecked.value = true;
@@ -383,13 +384,13 @@ class DeliveryOrderLogic extends GetxController {
         }
 
         if (total.add(quantity) > max) {
-          errorDialog(content: '该标签数量超出了，请扫瞄数量更小的标签。');
+          errorDialog(content: 'delivery_order_label_check_label_qty_exceed'.tr);
         } else {
           state.scannedLabelList.add(label..isChecked.value = true);
         }
       }
     } else {
-      errorDialog(content: '该件获取内包含了其他工单待物料，请拆分拣货。');
+      errorDialog(content: 'delivery_order_label_check_has_other_material'.tr);
     }
   }
 

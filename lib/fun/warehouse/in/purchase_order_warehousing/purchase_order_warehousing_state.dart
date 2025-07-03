@@ -68,7 +68,7 @@ class PurchaseOrderWarehousingState {
     required Function(String msg) error,
   }) {
     sapPost(
-      loading: '正在获取工单扫码明细...',
+      loading: 'purchase_order_warehousing_getting_orders_scan_detail'.tr,
       method: webApiSapGetSupplierLabelInfo,
       body: {
         'WERKS': factoryNumber,

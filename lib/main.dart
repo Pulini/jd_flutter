@@ -30,7 +30,8 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(()=>GetMaterialApp(
+    print('isTestUrl.value=${isTestUrl()}');
+    return GetMaterialApp(
       scrollBehavior: ScrollConfiguration.of(context).copyWith(
         //适配鼠标滚动
         dragDevices: {PointerDeviceKind.touch, PointerDeviceKind.mouse},
@@ -67,6 +68,6 @@ class _MyAppState extends State<MyApp> {
           ),
         ),
       ),
-    ));
+    );
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jd_flutter/bean/http/response/sap_picing_scan_info.dart';
+import 'package:jd_flutter/bean/http/response/sap_picking_scan_info.dart';
 import 'package:jd_flutter/fun/warehouse/out/sap_packing_scan/sap_packing_scan_logic.dart';
 import 'package:jd_flutter/fun/warehouse/out/sap_packing_scan/sap_packing_scan_state.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
@@ -20,45 +20,46 @@ class _SapPackingScanLabelPageState extends State<SapPackingScanLabelPage> {
   final SapPackingScanLogic logic = Get.find<SapPackingScanLogic>();
   final SapPackingScanState state = Get.find<SapPackingScanLogic>().state;
 
-  Widget _item(PieceMaterialInfo data) {
-    return Container(
-      padding: const EdgeInsets.all(5),
-      margin: const EdgeInsets.only(bottom: 10),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Row(
-            children: [
-              textSpan(
-                hint: '件ID：',
-                text: data.materials[0].labelList![0].pieceNumber ?? '',
-                textColor: Colors.blue.shade900,
+  Widget _item(PieceMaterialInfo data) => Container(
+        padding: const EdgeInsets.all(5),
+        margin: const EdgeInsets.only(bottom: 10),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            SizedBox(
+              height: 40,
+              child: Row(
+                children: [
+                  expandedTextSpan(
+                    hint: '件ID：',
+                    text: data.pieceId,
+                    textColor: Colors.blue.shade900,
+                  ),
+                  Obx(() => Checkbox(
+                        value: data.isSelected.value,
+                        onChanged: (v) => data.isSelected.value = v!,
+                      ))
+                ],
               ),
-              Obx(() => Checkbox(
-                    value: data.isSelected.value,
-                    onChanged: (v) => data.isSelected.value = v!,
-                  ))
-            ],
-          ),
-          for (SapPackingScanMaterialInfo item in data.materials) ...{
-            const Divider(),
-            textSpan(
-              hint: '物料：',
-              hintColor: Colors.grey.shade700,
-              text: '(${item.materialNumber})${item.materialName}',
-              isBold: false,
-              textColor: Colors.grey,
-              maxLines: 2,
             ),
-          }
-        ],
-      ),
-    );
-  }
+            for (SapPackingScanMaterialInfo item in data.materials) ...{
+              const Divider(),
+              textSpan(
+                hint: '物料：',
+                hintColor: Colors.grey.shade700,
+                text: '(${item.materialNumber})${item.materialName}',
+                isBold: false,
+                textColor: Colors.grey,
+                maxLines: 2,
+              ),
+            }
+          ],
+        ),
+      );
 
   @override
   void initState() {
