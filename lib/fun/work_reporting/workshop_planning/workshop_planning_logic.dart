@@ -1,19 +1,28 @@
 import 'package:get/get.dart';
+import 'package:jd_flutter/widget/dialogs.dart';
 
 import 'workshop_planning_state.dart';
 
 class WorkshopPlanningLogic extends GetxController {
   final WorkshopPlanningState state = WorkshopPlanningState();
 
-  @override
-  void onReady() {
-    // TODO: implement onReady
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    // TODO: implement onClose
-    super.onClose();
+  queryProcessPlan({
+    required String productionOrderNo,
+    required String processName,
+  }) {
+    state.getProcessPlanInfo(
+      productionOrderNo: productionOrderNo,
+      processName: processName,
+      error:(msg)=>errorDialog(content: msg),
+    );
+    if(productionOrderNo.isEmpty && processName.isEmpty){
+      errorDialog(content: '请输入工单号或物料名称');
+    }else{
+      state.getProcessPlanInfo(
+        productionOrderNo: productionOrderNo,
+        processName: processName,
+        error:(msg)=>errorDialog(content: msg),
+      );
+    }
   }
 }

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/sap_carton_label_binding_info.dart';
 import 'package:jd_flutter/utils/utils.dart';
@@ -10,10 +11,11 @@ enum ScanLabelOperationType {
   unbind,
   transfer,
 }
-String getOperationTypeText(ScanLabelOperationType type){
-  var text='';
+
+String getOperationTypeText(ScanLabelOperationType type) {
+  var text = '';
   switch (type) {
-      case ScanLabelOperationType.create:
+    case ScanLabelOperationType.create:
       text = 'carton_label_binding_operation_type_create'.tr;
       break;
     case ScanLabelOperationType.binding:
@@ -30,10 +32,12 @@ String getOperationTypeText(ScanLabelOperationType type){
   }
   return text;
 }
+
 class SapCartonLabelBindingState {
   var labelList = <SapLabelBindingInfo>[].obs;
   var operationType = ScanLabelOperationType.unKnown;
-  var operationTypeText = getOperationTypeText(ScanLabelOperationType.unKnown).obs;
+  var operationTypeText =
+      getOperationTypeText(ScanLabelOperationType.unKnown).obs;
   var newBoxLabelID = ''.obs;
 
   getLabelInfo({
@@ -57,21 +61,23 @@ class SapCartonLabelBindingState {
           error.call('carton_label_binding_error_tips'.tr);
         } else {
           for (var label in list) {
-            if (!labelList.any((v) =>
-                v.labelID == label.labelID || v.boxLabelID == label.labelID)) {
+            if (!labelList.any((v) => v.labelID == label.labelID)) {
               labelList.add(label);
             }
           }
         }
+        for (var v in labelList) {
+          debugPrint('labelList=${v.labelID}');
+        }
       } else {
-
         error.call(response.message ?? 'query_default_error'.tr);
       }
     });
   }
 
   getLabelPrintInfo({
-    required Function(Map<SapPrintLabelInfo, List<SapPrintLabelSubInfo>>) success,
+    required Function(Map<SapPrintLabelInfo, List<SapPrintLabelSubInfo>>)
+        success,
     required Function(String) error,
   }) {
     sapPost(
@@ -111,20 +117,24 @@ class SapCartonLabelBindingState {
     required double height,
     required double outWeight,
     required String targetBoxLabelID,
+    required String factoryNo,
     required String supplierNumber,
     required List<SapLabelBindingInfo> labelList,
     required Function(String) success,
     required Function(String) error,
   }) {
     sapPost(
-      loading: 'carton_label_binding_submitting_label'.trArgs([operationTypeText.value]),
+      loading: 'carton_label_binding_submitting_label'
+          .trArgs([operationTypeText.value]),
       method: webApiSapSubmitLabelBindingOperation,
       body: {
-        'WERKS': userInfo?.number,
-        'USNAM': userInfo?.name,
+        'USNAM': userInfo?.number,
         'ZNAME_CN': userInfo?.name,
+        'WERKS': factoryNo,
         'LIFNR': supplierNumber,
-        'OPERATE': '10',
+        'OPERATE': operationType == ScanLabelOperationType.unbind
+                ? '20'
+                : '10',
         'ZZCJC': long,
         'ZZCJK': width,
         'ZZCJG': height,

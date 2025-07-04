@@ -3153,7 +3153,7 @@ class Translation extends Translations {
           'carton_label_binding_operation_type_transfer': '转移',
           'carton_label_binding_getting_label_info': '正在获取标签信息...',
           'carton_label_binding_error_tips':
-              '标签供应商、工厂、物料大类、保管形式、单据类型不同，不能同时操作！',
+              '标签供应商、工厂、物料大类、报关形式、单据类型不同，不能同时操作！',
           'carton_label_binding_no_label': '没有可打印的标签！',
           'carton_label_binding_submitting_label': '正在提交标签%s...',
           'carton_label_binding_label_exists': '标签已存在!',
@@ -6998,7 +6998,7 @@ class Translation extends Translations {
           'carton_label_binding_operation_type_transfer': 'Transfer',
           'carton_label_binding_getting_label_info': 'Getting label info...',
           'carton_label_binding_error_tips':
-              'Label suppliers, factories, material categories, storage methods, and document types are different and cannot be operated simultaneously!',
+              'Label suppliers, factories, material categories, customs declaration forms, and document types are different and cannot be operated simultaneously!',
           'carton_label_binding_no_label': 'Label empty',
           'carton_label_binding_submitting_label': 'Submitting label %s...',
           'carton_label_binding_label_exists': 'Label exists !',

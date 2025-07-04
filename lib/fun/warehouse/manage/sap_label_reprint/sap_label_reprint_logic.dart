@@ -96,6 +96,7 @@ class SapLabelReprintLogic extends GetxController {
         supplier: label.supplierNumber ?? '',
         manufactureDate: label.formatManufactureDate(),
         hasNotes: hasNotes,
+        notes: label.remarks ?? '',
       );
 
   Widget outBoxLabel(SapPrintLabelInfo label, bool isMaterialLabel) {
@@ -113,7 +114,7 @@ class SapLabelReprintLogic extends GetxController {
               .map((v2) => v2.inBoxQty ?? 0)
               .reduce((a, b) => a.add(b))
               .toShowString(),
-          v[0].unit,
+          v[0].customsDeclarationUnit,
         ]);
       });
     }
@@ -122,7 +123,7 @@ class SapLabelReprintLogic extends GetxController {
       companyOrderType: '${label.factoryNo}${label.supplementType}',
       customsDeclarationType: label.customsDeclarationType ?? '',
       materialList: materialList,
-      pieceNo: label.pieceID ?? '',
+      pieceNo: label.pieceNo ?? '',
       grossWeight: label.grossWeight.toShowString(),
       netWeight: label.netWeight.toShowString(),
       qrCode: label.labelID ?? '',
@@ -145,7 +146,7 @@ class SapLabelReprintLogic extends GetxController {
               m.materialNumber,
               m.materialName,
               m.inBoxQty.toShowString(),
-              m.unit
+              m.customsDeclarationUnit
             ]
         ],
         pieceNo: label.pieceNo ?? '',

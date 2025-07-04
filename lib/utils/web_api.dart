@@ -821,6 +821,9 @@ const webApiSapCheckTemporaryOrder = 'sap/zapp/ZFUN_APP_TEMPORARYDEYAIL_1500A';
 //根据工厂编号获取存储位置列表
 const webApiGetStorageLocationList = 'api/Department/GetStorageLocationList';
 
+//根据userId获取负责部门列表
+const webApiGetResponsibleDepartmentList = 'api/Department/GetDeptInfoByUserID';
+
 //sap送货单保存核查
 const webApiSapSaveDeliveryCheck = 'sap/zapp/ZFUN_APP_RECEIVE_1500';
 
@@ -1390,4 +1393,7 @@ const webApiGetScMoSizeBarCodeByMONo = "api/Package/GetScMoSizeBarCodeByMONo";
 
 //更新无规则条码到指令单尺码分录表中，并执行存储过程同步到表Sc_MO_InBoxBarCode中
 const webApiSubmitScMoSizeBarCodeNew = "api/BarCode/SubmitScMoSizeBarCodeNew";
+
+//团件-扫描二维码获取工票信息
+const webApiProcessPlanningList  = "api/Piecework/GetProcessPlanningList";
 

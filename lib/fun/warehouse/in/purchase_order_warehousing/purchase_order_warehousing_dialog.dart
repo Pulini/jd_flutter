@@ -31,7 +31,7 @@ stockInDialog({
     PickerType.ghost,
     buttonName: 'purchase_order_warehousing_dialog_storage_location'.tr,
     saveKey: spSavePurchaseOrderWarehousingCheckLeader,
-    dataList: getStorageLocationList(factoryNumber),
+    dataList:()=> getStorageLocationList(factoryNumber),
     onSelected: (v) => _checkFaceInfo(
       billType: '入库单',
       sapFactoryNumber: (v as LocationInfo).factoryNumber ?? '',

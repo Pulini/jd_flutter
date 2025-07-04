@@ -52,7 +52,7 @@ class _SapPackingScanPageState extends State<SapPackingScanPage> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           CombinationButton(
-            text: '查看扫码件号',
+            text: '查看扫码件',
             click: () {
               Get.back();
               Get.to(() => const SapPackingScanLabelPage());
@@ -90,7 +90,7 @@ class _SapPackingScanPageState extends State<SapPackingScanPage> {
     );
   }
 
-  _sheet() {
+  _operationSheet() {
     var tecNumber = TextEditingController(
         text: spGet(spSavePackingScanActualCabinet) ?? '');
 
@@ -310,8 +310,8 @@ class _SapPackingScanPageState extends State<SapPackingScanPage> {
         ),
       );
 
-  _pickDate(Function(String) callback) {
-    var pickDate = DateTime.now();
+  _pickDate({DateTime? date, required Function(String) callback}) {
+    var pickDate = date ?? DateTime.now();
     showDatePicker(
       locale: View.of(Get.overlayContext!).platformDispatcher.locale,
       context: Get.overlayContext!,
@@ -371,6 +371,12 @@ class _SapPackingScanPageState extends State<SapPackingScanPage> {
                   Expanded(
                     child: Text(
                       '件ID：${p.pieceNumber}',
+                      style: const TextStyle(color: Colors.black54),
+                    ),
+                  ),
+                  Expanded(
+                    child: Text(
+                      '日期：${p.date}',
                       style: const TextStyle(color: Colors.black54),
                     ),
                   ),
@@ -456,8 +462,9 @@ class _SapPackingScanPageState extends State<SapPackingScanPage> {
                             .any((v) => v.isSelected.value),
                         text: '重处理',
                         click: () => logic.checkAbnormalSubmitData(
-                          (list) => _pickDate(
-                            (date) => logic.reSubmit(
+                          (list, maxDate) => _pickDate(
+                            date: maxDate,
+                            callback: (date) => logic.reSubmit(
                               postingDate: date,
                               submitList: list,
                             ),
@@ -537,7 +544,7 @@ class _SapPackingScanPageState extends State<SapPackingScanPage> {
                 click: () {
                   logic.checkMaterialSubmitData(
                     (list) => _pickDate(
-                      (date) => logic.submit(
+                      callback: (date) => logic.submit(
                         postingDate: date,
                         submitList: list,
                       ),
@@ -557,7 +564,7 @@ class _SapPackingScanPageState extends State<SapPackingScanPage> {
   void initState() {
     _initScan();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _sheet();
+      _operationSheet();
     });
     super.initState();
   }
@@ -573,7 +580,7 @@ class _SapPackingScanPageState extends State<SapPackingScanPage> {
         ),
         IconButton(
           icon: const Icon(Icons.settings_outlined),
-          onPressed: () => _sheet(),
+          onPressed: () => _operationSheet(),
         )
       ],
       body: Padding(

@@ -78,6 +78,8 @@ class SapPackingScanLogic extends GetxController {
       }
       if (!labelExist) {
         _getMaterialInfo(code);
+      } else {
+        state.materialList.refresh();
       }
     }
   }
@@ -197,8 +199,7 @@ class SapPackingScanLogic extends GetxController {
     for (var p in state.pieceList.where((v) => v.isSelected.value)) {
       for (var material in state.materialList) {
         material.labelList!
-            .where((v) =>
-                v.pieceNumber == p.materials[0].labelList![0].pieceNumber)
+            .where((v) => v.pieceNumber == p.pieceId)
             .forEach((v) => v.isScanned.value = false);
       }
     }
@@ -302,10 +303,17 @@ class SapPackingScanLogic extends GetxController {
     );
   }
 
-  checkAbnormalSubmitData(Function(List<SapPackingScanAbnormalInfo>) callback) {
+  checkAbnormalSubmitData(
+      Function(List<SapPackingScanAbnormalInfo>, DateTime) callback) {
     var list = <SapPackingScanAbnormalInfo>[
       ...selectedAbnormalItem().where((v) => v.isSelected.value)
     ];
+    var timeList = <String>[
+      ...selectedAbnormalItem()
+          .where((v) => v.isSelected.value)
+          .map((v) => v.date ?? '')
+    ];
+    _findMaxDate(timeList);
     if (list.isEmpty) {
       errorDialog(content: '没有可提交的数据!');
       return;
@@ -314,7 +322,30 @@ class SapPackingScanLogic extends GetxController {
       errorDialog(content: '请填写实际柜号!');
       return;
     }
-    callback.call(list);
+
+    callback.call(list, _findMaxDate(timeList));
+  }
+
+  DateTime _findMaxDate(List<String> dateList) {
+    var dateTimes = <DateTime>[];
+    for (String date in dateList) {
+      try {
+        dateTimes.add(DateTime(
+          date.substring(0, 4).toIntTry(),
+          date.substring(5, 7).toIntTry(),
+          date.substring(8, 10).toIntTry(),
+        ));
+      } catch (e) {
+        dateTimes.add(DateTime.now());
+      }
+    }
+    DateTime maxDate = dateTimes[0];
+    for (DateTime date in dateTimes.sublist(1)) {
+      if (date.isAfter(maxDate)) {
+        maxDate = date;
+      }
+    }
+    return maxDate;
   }
 
   reSubmit({
@@ -375,9 +406,8 @@ class SapPackingScanLogic extends GetxController {
     state.reverseLabelList.remove(data);
   }
 
-  reverseLabel(String postingDate) {
+  reverseLabel() {
     state.reverseLabel(
-      postingDate: postingDate,
       success: (msg) => successDialog(content: msg),
       error: (msg) => errorDialog(content: msg),
     );

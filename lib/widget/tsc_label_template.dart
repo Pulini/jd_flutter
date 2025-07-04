@@ -869,6 +869,7 @@ Widget dynamicMyanmarLabel110xN({
   required String supplier, //供应商
   required String manufactureDate, //生产日期
   required bool hasNotes, //是否打印备注行
+  required String notes, //备注
 }) {
   var border = BoxDecoration(border: Border.all(color: Colors.black, width: 1));
   var style = const TextStyle(
@@ -1079,9 +1080,9 @@ Widget dynamicMyanmarLabel110xN({
                   child: Row(
                     mainAxisSize: MainAxisSize.max,
                     children: [
-                      Expanded(flex: 15, child: paddingText('Note:')),
+                      Expanded(flex: 6, child: paddingText('Note:')),
                       vDivider,
-                      Expanded(flex: 5, child: Container()),
+                      Expanded(flex: 14, child: paddingTextCenter(notes)),
                     ],
                   ),
                 ),
@@ -1186,7 +1187,7 @@ Widget dynamicMaterialStandardLabel110xN({
     final maxColumns = (materialList.values.toList()[0].length / max).ceil();
     for (int i = 0; i < maxColumns; i++) {
       //轮次
-      materialList.forEach((ins, size) {
+      materialList.forEach((ins, data) {
         var line = <Widget>[];
         //添加表格第一列指令列
         line.add(Expanded(
@@ -1196,22 +1197,43 @@ Widget dynamicMaterialStandardLabel110xN({
             child: paddingTextCenter(ins),
           ),
         ));
+        var sizeList = data.sublist(0, data.length - 1);
         var start = i * max;
-        var surplus = size.length - start;
+        var surplus = sizeList.length - start;
         var to = surplus > max ? start + max : start + surplus;
-        if (to - start < max) {
+        for (var j = start; j < to; ++j) {
+          //添加尺码列
+          line.add(Expanded(
+            child: Container(
+              decoration: border,
+              child: Text(
+                maxLines: 1,
+                sizeList[j],
+                style: style,
+                strutStyle: strutStyle,
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ));
+        }
+        var fill = max - ((to + 1) - start);
+        if (fill > 0) {
           //如果数据不足Max列，则填充空白列
           line.add(Expanded(
-            flex: max - (to - start),
+            flex: max - ((to + 1) - start),
             child: Container(decoration: border),
           ));
+        }
+
+
+        if (to - start < max) {
           //添加末尾列（合计）
           line.add(Expanded(
             child: Container(
               decoration: border,
               child: Text(
                 maxLines: 1,
-                size.last,
+                data.last,
                 style:
                     const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 strutStyle: strutStyle,
@@ -1219,22 +1241,6 @@ Widget dynamicMaterialStandardLabel110xN({
               ),
             ),
           ));
-        } else {
-          for (var j = start; j < to; ++j) {
-            //添加尺码列
-            line.add(Expanded(
-              child: Container(
-                decoration: border,
-                child: Text(
-                  maxLines: 1,
-                  size[j],
-                  style: style,
-                  strutStyle: strutStyle,
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ));
-          }
         }
         tableList.add(IntrinsicHeight(child: Row(children: line)));
       });

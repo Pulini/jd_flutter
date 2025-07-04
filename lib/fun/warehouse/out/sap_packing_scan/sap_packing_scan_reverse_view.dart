@@ -74,18 +74,6 @@ class _SapPackingScanReversePageState extends State<SapPackingScanReversePage> {
         ),
       );
 
-  _reverse() {
-    var pickDate = DateTime.now();
-    showDatePicker(
-      locale: View.of(Get.overlayContext!).platformDispatcher.locale,
-      context: Get.overlayContext!,
-      initialDate: pickDate,
-      firstDate: DateTime(pickDate.year, pickDate.month - 1, pickDate.day),
-      lastDate: DateTime(pickDate.year, pickDate.month + 1, pickDate.day),
-    ).then((date) {
-      if (date != null) logic.reverseLabel(getDateYMD(time: date));
-    });
-  }
 
   @override
   void initState() {
@@ -101,7 +89,7 @@ class _SapPackingScanReversePageState extends State<SapPackingScanReversePage> {
         Obx(() => state.reverseLabelList.isNotEmpty
             ? CombinationButton(
                 text: '冲销',
-                click: () => _reverse(),
+                click: () => logic.reverseLabel(),
               )
             : Container()),
       ],

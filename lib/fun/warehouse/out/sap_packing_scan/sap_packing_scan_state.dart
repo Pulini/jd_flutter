@@ -186,6 +186,7 @@ class SapPackingScanState {
         'ZZKHXH1': actualCabinet,
       },
     ).then((response) {
+      abnormalList.clear();
       if (response.resultCode == resultSuccess) {
         compute(
           parseJsonToList<SapPackingScanAbnormalInfo>,
@@ -200,7 +201,6 @@ class SapPackingScanState {
           success.call();
         });
       } else {
-        abnormalList.clear();
         error.call(response.message ?? 'query_default_error'.tr);
       }
     });
@@ -309,7 +309,6 @@ class SapPackingScanState {
   }
 
   reverseLabel({
-    required String postingDate,
     required Function(String) success,
     required Function(String) error,
   }) {
@@ -317,7 +316,7 @@ class SapPackingScanState {
       loading: '正在提交冲销标签...',
       method: webApiSapReverseLabel,
       body: {
-        'ZBUDAT_MKPF': postingDate,
+        'ZBUDAT_MKPF': '',
         'USNAM': userInfo?.number,
         'ZNAME_CN': userInfo?.name,
         'BQIDS': [

@@ -19,7 +19,12 @@ class SapInnerBoxLabelSplitState {
       body: {'BQID': code},
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        originalLabel = SapPrintLabelInfo.fromJson(response.data[0]);
+        var label = SapPrintLabelInfo.fromJson(response.data[0]);
+        if (label.isBoxLabel) {
+          error.call('请勿扫描外箱标签！');
+        } else {
+          originalLabel = SapPrintLabelInfo.fromJson(response.data[0]);
+        }
       } else {
         originalLabel = null;
         error.call(response.message ?? 'query_default_error'.tr);

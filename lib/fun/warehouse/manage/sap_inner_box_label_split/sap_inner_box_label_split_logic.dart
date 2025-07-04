@@ -101,9 +101,10 @@ class SapInnerBoxLabelSplitLogic extends GetxController {
           supplier: label.supplierNumber ?? '',
           manufactureDate: label.formatManufactureDate(),
           hasNotes: hasNotes ?? false,
+          notes: label.remarks??'',
         ));
       } else {
-        if (!label.isBoxLabel && label.isMixMaterial) {
+        if (label.isMixMaterial) {
           labelList.add(dynamicInBoxLabel110xN(
             productName: label.materialDeclarationName ?? '',
             companyOrderType: '${label.factoryNo}${label.supplementType}',

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/sap_carton_label_binding_info.dart';
 import 'package:jd_flutter/utils/utils.dart';
-import 'package:jd_flutter/widget/check_box_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/scanner.dart';
 
@@ -42,18 +41,18 @@ class _SapLabelReprintPageState extends State<SapLabelReprintPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           textSpan(
-                            hint: 'label_reprint_outer_box_label_id'.tr,
+                            hint: '外箱件号：',
                             text: label.pieceID ?? '',
                             textColor: Colors.green,
                           ),
                           Row(
                             children: [
                               expandedTextSpan(
-                                hint: 'label_reprint_specifications'.tr,
+                                hint: '规格：',
                                 text: label.getLWH(),
                               ),
                               textSpan(
-                                hint: 'label_reprint_total'.tr,
+                                hint: '总数：',
                                 text: state.labelList
                                     .map((v) => v.getInBoxQty())
                                     .reduce((a, b) => a.add(b))
@@ -67,19 +66,19 @@ class _SapLabelReprintPageState extends State<SapLabelReprintPage> {
                     Obx(() => Checkbox(
                           value: label.isSelected.value,
                           onChanged: (v) => label.isSelected.value = v!,
-                        ))
+                        )),
                   ],
                 ),
                 Row(
                   children: [
                     expandedTextSpan(
                       flex: 2,
-                      hint: 'label_reprint_supplier'.tr,
+                      hint: '供应商：',
                       text: label.supplierNumber ?? '',
                     ),
                     expandedTextSpan(
                       flex: 3,
-                      hint: 'label_reprint_consignee'.tr,
+                      hint: '收货方：',
                       text: label.shipToParty ?? '',
                     ),
                   ],
@@ -92,7 +91,7 @@ class _SapLabelReprintPageState extends State<SapLabelReprintPage> {
                     children: [
                       Expanded(
                         child: textSpan(
-                          hint: 'label_reprint_piece_id'.tr,
+                          hint: '件号：',
                           text: label.pieceID ?? '',
                           textColor: Colors.green,
                         ),
@@ -115,7 +114,7 @@ class _SapLabelReprintPageState extends State<SapLabelReprintPage> {
                         ),
                       ),
                       textSpan(
-                          hint: 'label_reprint_qty'.tr,
+                          hint: '数量：',
                           text: '${sub.inBoxQty.toShowString()}${sub.unit}')
                     ],
                   )
@@ -135,17 +134,6 @@ class _SapLabelReprintPageState extends State<SapLabelReprintPage> {
   Widget build(BuildContext context) {
     return pageBody(
       actions: [
-        Obx(() => state.labelList.isNotEmpty
-            ? CheckBox(
-                value: state.labelList.every((v) => v.isSelected.value),
-                onChanged: (v) {
-                  for (var label in state.labelList) {
-                    label.isSelected.value = v;
-                  }
-                },
-                name: 'label_reprint_select_all'.tr,
-              )
-            : Container()),
         Obx(() => state.labelList.isNotEmpty &&
                 state.labelList.any((v) => v.isSelected.value)
             ? IconButton(

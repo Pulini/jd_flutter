@@ -47,7 +47,7 @@ class LabelDetailPageState extends State<LabelDetailPage> {
     locationController = OptionsPickerController(
       PickerType.ghost,
       buttonName: 'delivery_order_dialog_location'.tr,
-      dataList: getStorageLocationList(state.orderItemInfo[0].factoryNO ?? ''),
+      dataList:()=> getStorageLocationList(state.orderItemInfo[0].factoryNO ?? ''),
       initId: saveLocation,
     );
     workerNumberController = TextEditingController(text: saveUserNumber);

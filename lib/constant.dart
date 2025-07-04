@@ -72,3 +72,4 @@ const spSavePackingScanActualCabinet = 'packing_scan_actual_cabinet';
 const spSavePatrolInspectionLineId = 'patrol_inspection_line_id';
 const spSavePurchaseOrderWarehousingBindingLabelLocation =
     'purchase_order_warehousing_binding_label_location';
+const spSaveWorkshopPlanningDepartment ='workshop_planning_department';

@@ -18,6 +18,7 @@ import 'package:jd_flutter/bean/http/response/sap_purchase_stock_in_info.dart';
 import 'package:jd_flutter/bean/http/response/user_info.dart';
 import 'package:jd_flutter/bean/http/response/version_info.dart';
 import 'package:jd_flutter/bean/http/response/worker_info.dart';
+import 'package:jd_flutter/bean/http/response/workshop_planning_info.dart';
 import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
@@ -30,8 +31,6 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'app_init_service.dart';
 import 'web_api.dart';
-
-
 
 SnackbarController? snackbarController;
 SnackbarStatus? snackbarStatus;
@@ -876,6 +875,31 @@ Future getStorageLocationList(String factoryNumber) async {
     return response.message;
   }
 }
+
+//根据userId获取负责部门列表
+Future getResponsibleDepartmentList(int userID) async {
+  var response = await httpGet(
+      method: webApiGetResponsibleDepartmentList, params: {'UserID': userID});
+  if (response.resultCode == resultSuccess) {
+    try {
+      List<PickerItem> list = [];
+      list.addAll(await compute(
+        parseJsonToList,
+        ParseJsonParams(
+          response.data,
+          ResponsibleDepartmentInfo.fromJson,
+        ),
+      ));
+      return list;
+    } on Error catch (e) {
+      logger.e(e);
+      return 'json_format_error'.tr;
+    }
+  } else {
+    return response.message;
+  }
+}
+
 hidKeyboard() {
   FocusScope.of(Get.overlayContext!).requestFocus(FocusNode());
 }

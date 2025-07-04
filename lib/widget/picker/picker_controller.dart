@@ -748,7 +748,7 @@ class OptionsPickerController extends PickerController {
   String searchText = '';
   final String? saveKey;
   final String? buttonName;
-  final Future? dataList;
+  final Future Function()? dataList;
   List<PickerItem> pickerData = [];
   RxList<PickerItem> pickerItems = <PickerItem>[].obs;
   var selectItem = 0;
@@ -818,7 +818,7 @@ class OptionsPickerController extends PickerController {
   getData() {
     if (pickerItems.isEmpty) {
       loadingError.value = 'picker_loading'.tr;
-      Future fun = dataList ?? getDataList();
+      Future fun = dataList?.call() ?? getDataList();
       fun.then((value) {
         if (value is List<PickerItem>) {
           loadingError.value = '';
