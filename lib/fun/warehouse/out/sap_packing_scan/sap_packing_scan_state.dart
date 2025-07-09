@@ -10,6 +10,7 @@ import 'package:jd_flutter/widget/picker/picker_item.dart';
 class SapPackingScanState {
   var isAbnormal = false.obs;
   var abnormalSearchText = ''.obs;
+  var deliveryOrderSearchText = ''.obs;
   var materialSearchText = ''.obs;
   PickerItem? factory;
   PickerItem? warehouse;
@@ -20,6 +21,7 @@ class SapPackingScanState {
   var pieceList = <PieceMaterialInfo>[].obs;
   var abnormalList = <List<SapPackingScanAbnormalInfo>>[].obs;
   var reverseLabelList = <SapPackingScanReverseLabelInfo>[].obs;
+  var deliveryOrderList = <PickingScanDeliveryOrderInfo>[].obs;
 
   getContainerLoadingInfo({
     required String code,
@@ -60,7 +62,7 @@ class SapPackingScanState {
   }) {
     sapPost(
       loading: '正在检查货柜...',
-      method: webApiSapGetContainerLoadingInfo,
+      method: webApiSapCheckContainer,
       body: {
         'ZZCQ': getDateYMD(time: plannedDate),
         'ZADGE_RCVER': destination?.pickerId(),
@@ -237,6 +239,7 @@ class SapPackingScanState {
             g.removeWhere((v) => v.labelNumber == d.labelNumber);
           }
         }
+        abnormalList.removeWhere((v) => v.isEmpty);
         success.call(response.message ?? '');
       } else {
         error.call(response.message ?? 'query_default_error'.tr);
@@ -280,6 +283,7 @@ class SapPackingScanState {
             g.removeWhere((v) => v.labelNumber == d.labelNumber);
           }
         }
+        abnormalList.removeWhere((v) => v.isEmpty);
         success.call(response.message ?? '');
       } else {
         error.call(response.message ?? 'query_default_error'.tr);
@@ -289,6 +293,7 @@ class SapPackingScanState {
 
   getReverseLabelInfo({
     required String code,
+    required Function(SapPackingScanReverseLabelInfo) success,
     required Function(String) error,
   }) {
     sapPost(
@@ -297,11 +302,8 @@ class SapPackingScanState {
       body: {'BQID': code},
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        var label = SapPackingScanReverseLabelInfo.fromJson(response.data)
-          ..labelId = code;
-        if (reverseLabelList.none((v) => v.pieceId == label.pieceId)) {
-          reverseLabelList.add(label);
-        }
+        success.call(SapPackingScanReverseLabelInfo.fromJson(response.data)
+          ..labelId = code);
       } else {
         error.call(response.message ?? 'query_default_error'.tr);
       }
@@ -329,6 +331,99 @@ class SapPackingScanState {
     ).then((response) {
       if (response.resultCode == resultSuccess) {
         reverseLabelList.clear();
+        success.call(response.message ?? '');
+      } else {
+        error.call(response.message ?? 'query_default_error'.tr);
+      }
+    });
+  }
+
+  saveLog({
+    required String postingDate,
+    required List<String> list,
+    required Function(String) success,
+    required Function(String) error,
+  }) {
+    sapPost(
+      loading: '正在暂存排柜信息...',
+      method: webApiSapSubmit,
+      body: {
+        'ITEM1': {},
+        'ITEM2': {},
+        'ITEM3': {},
+        'ITEM4': {
+          'WERKS': factory?.pickerId(),
+          'ZZCQ': getDateYMD(time: plannedDate),
+          'ZADGE_RCVER': destination?.pickerId(),
+          'ZZKHXH1': actualCabinet,
+          'LGORT': warehouse?.pickerId(),
+          'BQIDS': [
+            for (var item in list)
+              {
+                'BQID': item,
+              }
+          ],
+          'BUDAT_MKPF': postingDate,
+          'USNAM': userInfo?.number,
+          'ZNAME_CN': userInfo?.name,
+        },
+      },
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        success.call(response.message ?? '');
+      } else {
+        error.call(response.message ?? 'query_default_error'.tr);
+      }
+    });
+  }
+
+  queryDeliveryOrders({
+    required String plannedDate,
+    required String destination,
+    required String cabinetNumber,
+    required Function() success,
+    required Function(String) error,
+  }) {
+    sapPost(
+      loading: '正在获取交货单列表...',
+      method: webApiSapGetDeliveryOrders,
+      body: {
+        'ZZCQ': plannedDate,
+        'ZADGE_RCVER': destination,
+        'ZZKHXH1': cabinetNumber,
+      },
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        deliveryOrderList.value = [
+          for (var item in response.data)
+            PickingScanDeliveryOrderInfo.fromJson(item)
+        ];
+        success.call();
+      } else {
+        error.call(response.message ?? 'query_default_error'.tr);
+      }
+    });
+  }
+
+  modifyDeliveryOrderDate({
+    required List<String> deliveryOrders,
+    required String modifyDate,
+    required Function(String) success,
+    required Function(String) error,
+  }) {
+    sapPost(
+      loading: '正在修改交货单过账日期...',
+      method: webApiSapModifyDeliveryOrderPostingDate,
+      body: {
+        'VLLIST': [
+          for (var item in deliveryOrders) {'VBELN_VL': item}
+        ],
+        'BUDAT_MKPF': modifyDate,
+        'USNAM': userInfo?.number,
+        'ZNAME_CN': userInfo?.name,
+      },
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
         success.call(response.message ?? '');
       } else {
         error.call(response.message ?? 'query_default_error'.tr);

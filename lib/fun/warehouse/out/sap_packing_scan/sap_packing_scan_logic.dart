@@ -4,7 +4,6 @@ import 'package:jd_flutter/bean/http/response/sap_picking_scan_info.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
-
 import 'sap_packing_scan_state.dart';
 
 class SapPackingScanLogic extends GetxController {
@@ -63,7 +62,7 @@ class SapPackingScanLogic extends GetxController {
         if (total.add(qty) > (material.quality ?? 0)) {
           errorDialog(
               content:
-                  '物料 (<${material.materialNumber}>${material.materialName}) 超出待装柜数量，请勿再扫该物料！');
+                  '物料 (<${material.materialNumber}>${material.materialName} 跟踪号:${material.trackNo}) 超出待装柜数量，请勿再扫该物料！');
           return;
         }
       }
@@ -267,6 +266,18 @@ class SapPackingScanLogic extends GetxController {
     );
   }
 
+  saveLog({
+    required String postingDate,
+    required List<String> submitList,
+  }) {
+    state.saveLog(
+      postingDate: postingDate,
+      list: submitList,
+      success: (msg) => successDialog(content: msg),
+      error: (msg) => errorDialog(content: msg),
+    );
+  }
+
   getAbnormalOrders(Function() success) {
     state.getAbnormalOrders(
       success: success,
@@ -398,6 +409,23 @@ class SapPackingScanLogic extends GetxController {
   reverseScan(String code) {
     state.getReverseLabelInfo(
       code: code,
+      success: (label) {
+        if (state.reverseLabelList.isNotEmpty) {
+          if (state.reverseLabelList[0].deliveryOrderNo ==
+              label.deliveryOrderNo) {
+            if (state.reverseLabelList
+                .none((v) => v.pieceId == label.pieceId)) {
+              state.reverseLabelList.add(label);
+            } else {
+              errorDialog(content: '标签已存在！');
+            }
+          } else {
+            errorDialog(content: '不同交货单不能同时操作！');
+          }
+        } else {
+          state.reverseLabelList.add(label);
+        }
+      },
       error: (msg) => errorDialog(content: msg),
     );
   }
@@ -409,6 +437,52 @@ class SapPackingScanLogic extends GetxController {
   reverseLabel() {
     state.reverseLabel(
       success: (msg) => successDialog(content: msg),
+      error: (msg) => errorDialog(content: msg),
+    );
+  }
+
+  queryDeliveryOrders({
+    required String plannedDate,
+    required String destination,
+    required String cabinetNumber,
+    required Function() toDeliveryOrderList,
+  }) {
+    state.queryDeliveryOrders(
+      plannedDate: plannedDate,
+      destination: destination,
+      cabinetNumber: cabinetNumber,
+      success: toDeliveryOrderList,
+      error: (msg) => errorDialog(content: msg),
+    );
+  }
+
+  List<PickingScanDeliveryOrderInfo> getDeliveryOrders() {
+    if (state.deliveryOrderSearchText.isEmpty) {
+      return state.deliveryOrderList;
+    } else {
+      return state.deliveryOrderList
+          .where((v) =>
+              (v.orderNo ?? '').contains(state.deliveryOrderSearchText.value) ||
+              (v.orderDate ?? '').contains(state.deliveryOrderSearchText.value))
+          .toList();
+    }
+  }
+
+  modifyDeliveryOrderDate({
+    required String deliveryOrderNo,
+    required String modifyDate,
+    required Function() callback,
+  }) {
+    state.modifyDeliveryOrderDate(
+      deliveryOrders: [deliveryOrderNo],
+      modifyDate: modifyDate,
+      success: (msg) {
+        state.deliveryOrderList
+            .firstWhere((v) => v.orderNo == deliveryOrderNo)
+            .orderDate = modifyDate;
+        state.deliveryOrderList.refresh();
+        successDialog(content: msg, back: callback);
+      },
       error: (msg) => errorDialog(content: msg),
     );
   }

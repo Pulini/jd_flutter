@@ -74,7 +74,6 @@ class _SapPackingScanReversePageState extends State<SapPackingScanReversePage> {
         ),
       );
 
-
   @override
   void initState() {
     pdaScanner(scan: (code) => logic.reverseScan(code));
@@ -86,18 +85,35 @@ class _SapPackingScanReversePageState extends State<SapPackingScanReversePage> {
     return pageBody(
       title: '扫码冲销',
       actions: [
-        Obx(() => state.reverseLabelList.isNotEmpty
-            ? CombinationButton(
-                text: '冲销',
-                click: () => logic.reverseLabel(),
-              )
-            : Container()),
+        Obx(()=>textSpan(
+            hint: '件数：',
+            text: state.reverseLabelList.isEmpty
+                ? '0'
+                : state.reverseLabelList
+                .map((v) => v.pieceNo ?? 0)
+                .reduce((a, b) => a.add(b))
+                .toShowString())),
+        const SizedBox(width: 10)
       ],
-      body: Obx(() => ListView.builder(
-            padding: const EdgeInsets.only(left: 7, right: 7),
-            itemCount: state.reverseLabelList.length,
-            itemBuilder: (c, i) => _item(state.reverseLabelList[i]),
-          )),
+      body: Column(
+        children: [
+          Expanded(
+            child: Obx(() => ListView.builder(
+                  padding: const EdgeInsets.only(left: 7, right: 7),
+                  itemCount: state.reverseLabelList.length,
+                  itemBuilder: (c, i) => _item(state.reverseLabelList[i]),
+                )),
+          ),
+          SizedBox(
+            width: double.infinity,
+            child: Obx(() => CombinationButton(
+                  isEnabled: state.reverseLabelList.isNotEmpty,
+                  text: '冲销',
+                  click: () => logic.reverseLabel(),
+                )),
+          ),
+        ],
+      ),
     );
   }
 }

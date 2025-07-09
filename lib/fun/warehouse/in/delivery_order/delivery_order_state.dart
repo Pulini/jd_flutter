@@ -22,7 +22,7 @@ class DeliveryOrderState {
 
   var canAddPiece = false.obs;
   var orderItemInfo = <DeliveryOrderInfo>[];
-  var materialList = <String, double>{};
+  var materialList = <String, List<List>>{};
   var orderLabelList = <DeliveryOrderLabelInfo>[];
   var scannedLabelList = <DeliveryOrderLabelInfo>[].obs;
   var canSubmitLabelBinding = false.obs;
@@ -302,7 +302,7 @@ class DeliveryOrderState {
         'ZDELINO': deliveryOrderNumber,
       },
     ).then((response) {
-      orderLabelList.clear();
+
       if (response.resultCode == resultSuccess) {
         success.call([
           for (var json in response.data) DeliveryOrderLabelInfo.fromJson(json)

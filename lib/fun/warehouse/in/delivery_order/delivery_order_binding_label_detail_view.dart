@@ -47,7 +47,8 @@ class LabelDetailPageState extends State<LabelDetailPage> {
     locationController = OptionsPickerController(
       PickerType.ghost,
       buttonName: 'delivery_order_dialog_location'.tr,
-      dataList:()=> getStorageLocationList(state.orderItemInfo[0].factoryNO ?? ''),
+      dataList: () =>
+          getStorageLocationList(state.orderItemInfo[0].factoryNO ?? ''),
       initId: saveLocation,
     );
     workerNumberController = TextEditingController(text: saveUserNumber);
@@ -73,7 +74,7 @@ class LabelDetailPageState extends State<LabelDetailPage> {
                 child: TextField(
                   controller: workerNumberController,
                   onChanged: (v) =>
-                  state.canSubmitLabelBinding.value = v.isNotEmpty,
+                      state.canSubmitLabelBinding.value = v.isNotEmpty,
                   decoration: InputDecoration(
                     contentPadding: const EdgeInsets.only(
                       top: 0,
@@ -104,13 +105,17 @@ class LabelDetailPageState extends State<LabelDetailPage> {
                       ),
                     ),
                     suffixIcon: Obx(() => CombinationButton(
-                      text: 'delivery_order_label_check_detail_confirm_submit'.tr,
-                      isEnabled: state.canSubmitLabelBinding.value,
-                      click: () => askDialog(
-                        content: 'delivery_order_label_check_detail_confirm_checked_tips'.tr,
-                        confirm: () => _submit(),
-                      ),
-                    )),
+                          text:
+                              'delivery_order_label_check_detail_confirm_submit'
+                                  .tr,
+                          isEnabled: state.canSubmitLabelBinding.value,
+                          click: () => askDialog(
+                            content:
+                                'delivery_order_label_check_detail_confirm_checked_tips'
+                                    .tr,
+                            confirm: () => _submit(),
+                          ),
+                        )),
                   ),
                 ),
               ),
@@ -118,16 +123,14 @@ class LabelDetailPageState extends State<LabelDetailPage> {
           ),
           Container(
             margin: const EdgeInsets.only(left: 10, right: 10),
-            decoration: BoxDecoration(
-              color: Colors.blue,
-              border: Border.all(color: Colors.black54),
-            ),
             child: Row(
               children: [
                 expandedFrameText(
                   text: 'delivery_order_label_check_detail_material'.tr,
                   isBold: true,
                   textColor: Colors.white,
+                  borderColor: Colors.black,
+                  backgroundColor: Colors.blue,
                 ),
                 SizedBox(
                   width: 100,
@@ -135,6 +138,8 @@ class LabelDetailPageState extends State<LabelDetailPage> {
                     text: 'delivery_order_label_check_detail_quantity'.tr,
                     isBold: true,
                     textColor: Colors.white,
+                    borderColor: Colors.black,
+                    backgroundColor: Colors.blue,
                     alignment: Alignment.centerRight,
                   ),
                 )
@@ -154,21 +159,23 @@ class LabelDetailPageState extends State<LabelDetailPage> {
   }
 
   Widget _item(List<String> item, Color bkg) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 5),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: Colors.black54),
-      ),
-      child: Row(
-        children: [
-          expandedFrameText(text: item[0]),
-          SizedBox(
-            width: 100,
-            child: frameText(text: item[1], alignment: Alignment.centerRight),
-          )
-        ],
-      ),
+    return Row(
+      children: [
+        expandedFrameText(
+          text: item[0],
+          borderColor: Colors.black,
+          backgroundColor: Colors.white,
+        ),
+        SizedBox(
+          width: 100,
+          child: frameText(
+            text: item[1],
+            borderColor: Colors.black,
+            backgroundColor: Colors.white,
+            alignment: Alignment.centerRight,
+          ),
+        )
+      ],
     );
   }
 }

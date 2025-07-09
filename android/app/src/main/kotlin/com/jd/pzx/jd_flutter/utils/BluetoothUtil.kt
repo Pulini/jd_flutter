@@ -7,11 +7,11 @@ import android.bluetooth.BluetoothDevice.BOND_BONDED
 import android.bluetooth.BluetoothManager
 import android.bluetooth.BluetoothSocket
 import android.content.Context
+import android.location.LocationManager
 import android.os.Build
 import android.os.SystemClock
 import android.util.Log
-//import com.jd.pzx.jd_flutter.EventDeviceMessage
-//import com.jd.pzx.jd_flutter.OperationType
+import androidx.core.content.ContextCompat.getSystemService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 
@@ -31,6 +31,7 @@ val deviceList = mutableListOf<BDevice>()
 var scanLock: Boolean = false
 fun bluetoothAdapter(context: Context): BluetoothAdapter? {
     var adapter: BluetoothAdapter? = null
+
     try {
         adapter = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             (context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager).adapter
@@ -57,6 +58,17 @@ fun deviceIsConnected(bleAdapter: BluetoothAdapter, mac: String) = bleAdapter.bo
     it.address == mac && it.bondState == BOND_BONDED
 }
 
+fun locationOn(context: Context): Boolean {
+    getSystemService(context, LocationManager::class.java).let { lm ->
+        if (lm == null) {
+            return false
+        } else {
+            return lm.isProviderEnabled(LocationManager.GPS_PROVIDER)
+        }
+    }
+}
+
+
 /**
  * 开始扫描蓝牙
  */
@@ -68,7 +80,7 @@ fun bluetoothStartScan(
     bleAdapter.enable()
     Log.e("Pan", "已绑定设备=${bleAdapter.bondedDevices.size}")
     return if (bleAdapter.startDiscovery()) {
-        val bondedList= mutableListOf<BDevice>()
+        val bondedList = mutableListOf<BDevice>()
         bleAdapter.bondedDevices.forEach { bonded ->
             deviceList.find { it.device.address == bonded.address }.let { device ->
                 val dev = device ?: BDevice(bonded)

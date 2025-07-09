@@ -63,7 +63,7 @@ class SapLabelBindingInfo {
   String getBoxLabelID() => isBoxLabel ? labelID ?? '' : boxLabelID ?? '';
 
   String labelType() =>
-      '$factoryNo - $supplierNumber - $materialsType - $customsDeclarationType - $supplementType';
+      '$factoryNo - $materialsType - $customsDeclarationType - $supplementType';
 }
 
 // class SapLabelBindingPrintInfo {
@@ -255,9 +255,13 @@ class SapLabelBindingInfo {
 
 class SapPrintLabelInfo {
   RxBool isSelected = false.obs;
+  RxDouble splitLong = (0.0).obs;
+  RxDouble splitWidth = (0.0).obs;
+  RxDouble splitHeight = (0.0).obs;
   bool isNewLabel = false; //是否新标 ISNEW
   bool isBoxLabel = false; //	标签类型  ZBQLX (05大标 其余小标)
   bool isMixMaterial = false; //	否混物料 是：'X'  否：''  ZMIX
+  bool isTradeFactory = false; //	是否贸易工厂 是：'X'  否：''  ZTRADE
   String? labelID; //标签ID BQID
   String? factoryNo; //工厂  WERKS
   String? supplierNumber; //供应商编号  LIFNR
@@ -290,6 +294,7 @@ class SapPrintLabelInfo {
     this.isNewLabel = false,
     this.isBoxLabel = false,
     this.isMixMaterial = false,
+    this.isTradeFactory = false,
     this.labelID,
     this.factoryNo,
     this.supplierNumber,
@@ -323,6 +328,7 @@ class SapPrintLabelInfo {
     isNewLabel = json['ISNEW'] == 'X';
     isBoxLabel = json['ZBQLX'] == '05';
     isMixMaterial = json['ZMIX'] == 'X';
+    isTradeFactory = json['ZTRADE'] == 'X';
     labelID = json['BQID'];
     factoryNo = json['WERKS'];
     supplierNumber = json['LIFNR'];
@@ -353,7 +359,14 @@ class SapPrintLabelInfo {
       if (json['GT_OUT_ITEMS'] != null)
         for (var sub in json['GT_OUT_ITEMS']) SapPrintLabelSubInfo.fromJson(sub)
     ];
+    splitLong.value = long ?? 0;
+    splitWidth.value = width ?? 0;
+    splitHeight.value = height ?? 0;
   }
+
+ bool canSubmit() => isTradeFactory
+      ? splitLong.value > 0 && splitWidth.value > 0 && splitHeight.value > 0
+      : true;
 
   bool hasSplitQty() => subLabel!.any((v) => v.splitQty.value > 0);
 
@@ -427,12 +440,28 @@ class SapPrintLabelSubInfo {
 }
 
 class SapLabelSplitInfo {
+  RxDouble long;
+  RxDouble width;
+  RxDouble height;
+  List<SapLabelSplitMaterialInfo> materials = [];
+
+  SapLabelSplitInfo({
+    required this.long,
+    required this.width,
+    required this.height,
+    required this.materials,
+  });
+
+  hasSpecificationsData() => long > 0 && width > 0 && height > 0;
+}
+
+class SapLabelSplitMaterialInfo {
   String materialNumber;
   String materialName;
   double qty;
   String unit;
 
-  SapLabelSplitInfo({
+  SapLabelSplitMaterialInfo({
     required this.materialNumber,
     required this.materialName,
     required this.qty,

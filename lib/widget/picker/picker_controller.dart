@@ -1019,7 +1019,8 @@ class DatePickerController extends PickerController {
         : getSave();
     if (firstDate != null) this.firstDate = firstDate;
     if (lastDate != null) this.lastDate = lastDate;
-    if (this.firstDate.isAfter(save) == true) {
+    debugPrint('initDate=$initDate  save=$save  isAfter=${this.firstDate.isAfter(save)}');
+    if (this.firstDate.isAfter(save)) {
       pickDate.value = this.firstDate;
     } else {
       pickDate.value = save;

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/sap_picking_scan_info.dart';
 import 'package:jd_flutter/constant.dart';
+import 'package:jd_flutter/fun/warehouse/out/sap_packing_scan/sap_packing_delivery_order_list_view.dart';
 import 'package:jd_flutter/fun/warehouse/out/sap_packing_scan/sap_packing_scan_label_view.dart';
 import 'package:jd_flutter/fun/warehouse/out/sap_packing_scan/sap_packing_scan_reverse_view.dart';
 import 'package:jd_flutter/route.dart';
@@ -110,7 +111,7 @@ class _SapPackingScanPageState extends State<SapPackingScanPage> {
     );
 
     var viewError = Obx(() => CombinationButton(
-          combination: Combination.middle,
+          combination: Combination.left,
           backgroundColor:
               state.isAbnormal.value ? Colors.green : Colors.orange,
           text: state.isAbnormal.value ? '扫码装柜' : '查看出库报错',
@@ -130,6 +131,29 @@ class _SapPackingScanPageState extends State<SapPackingScanPage> {
             state.isAbnormal.value = !state.isAbnormal.value;
           },
         ));
+    var deliveryOrderList = CombinationButton(
+      combination: Combination.right,
+      text: '交货单列表',
+      click: () {
+        if (tecNumber.text.isEmpty) {
+          errorDialog(content: '请输入实际柜号!');
+          return;
+        }
+        if (!opcDestination.isReady()) {
+          errorDialog(content: '请选择目的地!');
+          return;
+        }
+        logic.queryDeliveryOrders(
+          plannedDate: dpcDate.getDateFormatYMD(),
+          destination: opcDestination.getPickItem().pickerId(),
+          cabinetNumber: tecNumber.text,
+          toDeliveryOrderList: () {
+            Get.back();
+            Get.to(() => const SapPackingDeliveryOrderListPage());
+          },
+        );
+      },
+    );
 
     var confirm = CombinationButton(
       combination: Combination.right,
@@ -205,8 +229,13 @@ class _SapPackingScanPageState extends State<SapPackingScanPage> {
         ),
         Row(
           children: [
-            Expanded(child: cancel),
             Expanded(child: viewError),
+            Expanded(child: deliveryOrderList),
+          ],
+        ),
+        Row(
+          children: [
+            Expanded(child: cancel),
             Expanded(child: confirm),
           ],
         ),
@@ -221,8 +250,13 @@ class _SapPackingScanPageState extends State<SapPackingScanPage> {
         const SizedBox(height: 20),
         Row(
           children: [
-            Expanded(child: cancel),
             Expanded(child: viewError),
+            Expanded(child: deliveryOrderList),
+          ],
+        ),
+        Row(
+          children: [
+            Expanded(child: cancel),
             Expanded(child: confirm),
           ],
         ),
@@ -327,7 +361,9 @@ class _SapPackingScanPageState extends State<SapPackingScanPage> {
 
   _abnormalItem(List<List<SapPackingScanAbnormalInfo>> data, int index) {
     var list = data[index];
-    var qty = list.map((v) => v.quality ?? 0).reduce((a, b) => a.add(b));
+    double qty = list.isEmpty
+        ? 0
+        : list.map((v) => v.quality ?? 0).reduce((a, b) => a.add(b));
     return Container(
       padding: const EdgeInsets.only(left: 10, top: 5, bottom: 5),
       margin: const EdgeInsets.only(bottom: 10),
@@ -369,12 +405,14 @@ class _SapPackingScanPageState extends State<SapPackingScanPage> {
               child: Row(
                 children: [
                   Expanded(
+                    flex: 3,
                     child: Text(
                       '件ID：${p.pieceNumber}',
                       style: const TextStyle(color: Colors.black54),
                     ),
                   ),
                   Expanded(
+                    flex: 2,
                     child: Text(
                       '日期：${p.date}',
                       style: const TextStyle(color: Colors.black54),
@@ -537,22 +575,36 @@ class _SapPackingScanPageState extends State<SapPackingScanPage> {
                 );
               }),
             ),
-            SizedBox(
-              width: double.infinity,
-              child: CombinationButton(
-                text: '提交',
-                click: () {
-                  logic.checkMaterialSubmitData(
+            Row(children: [
+              Expanded(
+                child: CombinationButton(
+                  text: '暂存',
+                  combination: Combination.left,
+                  click: () => logic.checkMaterialSubmitData(
+                    (list) => _pickDate(
+                      callback: (date) => logic.saveLog(
+                        postingDate: date,
+                        submitList: list,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: CombinationButton(
+                  text: '提交',
+                  combination: Combination.right,
+                  click: () => logic.checkMaterialSubmitData(
                     (list) => _pickDate(
                       callback: (date) => logic.submit(
                         postingDate: date,
                         submitList: list,
                       ),
                     ),
-                  );
-                },
+                  ),
+                ),
               ),
-            )
+            ])
           ];
   }
 

@@ -74,6 +74,18 @@ class SapCartonLabelBindingLogic extends GetxController {
     } else {
       state.getLabelInfo(
         labelCode: code,
+        success: (list) {
+          if (state.labelList.isNotEmpty &&
+              state.labelList[0].labelType() != list[0].labelType()) {
+            errorDialog(content: 'carton_label_binding_error_tips'.tr);
+          } else {
+            for (var label in list) {
+              if (!state.labelList.any((v) => v.labelID == label.labelID)) {
+                state.labelList.add(label);
+              }
+            }
+          }
+        },
         error: (msg) => errorDialog(content: msg),
       );
     }
@@ -137,6 +149,15 @@ class SapCartonLabelBindingLogic extends GetxController {
         labelList.addAll(boxLabelList[i]);
       }
     }
+
+    targetBoxLabel == null
+        ? labelList[0].supplierNumber ?? ''
+        : targetBoxLabel.supplierNumber ?? '';
+
+    var supplierNumber =
+        groupBy(labelList, (v) => v.supplierNumber ?? '').length > 1
+            ? ''
+            : labelList[0].supplierNumber ?? '';
     state.operationSubmit(
       long: long,
       width: width,
@@ -146,9 +167,7 @@ class SapCartonLabelBindingLogic extends GetxController {
       factoryNo: targetBoxLabel == null
           ? labelList[0].factoryNo ?? ''
           : targetBoxLabel.factoryNo ?? '',
-      supplierNumber: targetBoxLabel == null
-          ? labelList[0].supplierNumber ?? ''
-          : targetBoxLabel.supplierNumber ?? '',
+      supplierNumber: supplierNumber,
       labelList: labelList,
       success: (msg) => successDialog(
         content: msg,

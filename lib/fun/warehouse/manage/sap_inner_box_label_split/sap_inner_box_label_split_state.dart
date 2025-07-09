@@ -5,7 +5,7 @@ import 'package:jd_flutter/utils/web_api.dart';
 
 class SapInnerBoxLabelSplitState {
   SapPrintLabelInfo? originalLabel;
-  var splitLabelList = <List<SapLabelSplitInfo>>[].obs;
+  var splitLabelList = <SapLabelSplitInfo>[].obs;
   var newLabelList = <SapPrintLabelInfo>[].obs;
 
   getLabelPrintInfo({
@@ -34,7 +34,6 @@ class SapInnerBoxLabelSplitState {
   }
 
   submitPreSplitLabel({
-    required Function() success,
     required Function(String) error,
   }) {
     sapPost(
@@ -46,6 +45,9 @@ class SapInnerBoxLabelSplitState {
           'ZPIECE_NO': originalLabel!.pieceID,
           'USNAM': userInfo?.number,
           'ZNAME_CN': userInfo?.name,
+          'ZZCJC': originalLabel!.long,
+          'ZZCJK': originalLabel!.width,
+          'ZZCJG': originalLabel!.height,
           'ITEM': [
             for (var material in (originalLabel!.subLabel!)
                 .where((v) => v.canSplitQty.value > 0))
@@ -62,8 +64,11 @@ class SapInnerBoxLabelSplitState {
             'ZPIECE_NO': originalLabel!.pieceID,
             'USNAM': userInfo?.number,
             'ZNAME_CN': userInfo?.name,
+            'ZZCJC': label.long,
+            'ZZCJK': label.width,
+            'ZZCJG': label.height,
             'ITEM': [
-              for (var material in label)
+              for (var material in label.materials)
                 {
                   'MATNR': material.materialNumber,
                   'MENGE': material.qty.toShowString(),
@@ -79,7 +84,6 @@ class SapInnerBoxLabelSplitState {
         ];
         originalLabel = null;
         splitLabelList.clear();
-        success.call();
       } else {
         newLabelList.value = [];
         error.call(response.message ?? 'query_default_error'.tr);

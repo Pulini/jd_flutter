@@ -42,7 +42,7 @@ class SapPackingScanMaterialInfo {
 
   SapPackingScanMaterialInfo.fromJson(dynamic json) {
     isDutyFree = json['DUTY_FREE'];
-    quality = json['ERFMG'];
+    quality = json['ERFMG'].toString().toDoubleTry();
     materialNumber = json['MATNR'];
     materialName = json['ZMAKTG'];
     unit = json['VRKME'];
@@ -248,6 +248,7 @@ class SapPackingScanReverseLabelInfo{
   String labelId='';//标签ID
   String? pieceId;//件ID  ZPIECE_NO
   double? pieceNo;//件数  CLABS
+  String? deliveryOrderNo;//交货单号  VBELN_VL
   List<SapPackingScanReverseLabelMaterialInfo>? materialList;//物料列表 MATERIALLIST
 
   SapPackingScanReverseLabelInfo({
@@ -258,6 +259,7 @@ class SapPackingScanReverseLabelInfo{
   SapPackingScanReverseLabelInfo.fromJson(dynamic json) {
     pieceId = json['ZPIECE_NO'];
     pieceNo = json['CLABS'].toString().toDoubleTry();
+    deliveryOrderNo = json['VBELN_VL'];
     materialList = [
       if(json['MATERIALLIST'] != null)
       for (var item in json['MATERIALLIST'])
@@ -286,5 +288,18 @@ class SapPackingScanReverseLabelMaterialInfo{
     trackNo = json['ZTRACKNO'];
     commonQty = json['ERFMG'].toString().toDoubleTry();
     commonUnit = json['ERFME'];
+  }
+}
+class PickingScanDeliveryOrderInfo{
+  String? orderNo;//交货单号  VBELN_VL
+  String? orderDate;//交货日期  WADAT_IST
+
+  PickingScanDeliveryOrderInfo({
+    this.orderNo,
+    this.orderDate,
+  });
+  PickingScanDeliveryOrderInfo.fromJson(dynamic json) {
+    orderNo = json['VBELN_VL'];
+    orderDate = json['WADAT_IST'];
   }
 }

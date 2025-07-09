@@ -1,8 +1,229 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/web_api.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
+
+
+//标签表格格式化
+List<List<String>> labelTableFormat({
+  required String title,
+  String? total,
+  required Map<String, List<List<String>>> list,
+}) {
+  if (list.isEmpty) return [];
+
+  List<List<String>> result = [];
+  // 取出所有尺码
+  List<String> titleList = [];
+  List<String> columnsTitleList = [];
+
+  list.forEach((k, v) {
+    for (var t in v) {
+      if (!titleList.contains(t[0])) {
+        titleList.add(t[0]);
+      }
+    }
+  });
+
+  titleList.sort((a, b) => a.toDoubleTry().compareTo(b.toDoubleTry()));
+
+  // 指令缺的尺码做补位处理
+  list.forEach((k, v) {
+    List<List<String>> text = [];
+    for (var t in titleList) {
+      try {
+        text.add(v.firstWhere((v) => v[0] == t));
+      } catch (e) {
+        text.add([t, '']);
+      }
+    }
+    v.clear();
+    v.addAll(text);
+  });
+
+  List<List<String>> printList = [];
+
+  // 保存表格列第一格
+  columnsTitleList.add(title);
+  // 添加表格头行
+  printList.add([for (var s in titleList) s]);
+
+  // 添加表格体
+  list.forEach((k, v) {
+    // 保存表格列第一格
+    columnsTitleList.add(k);
+    // 添加表格行
+    printList.add([for (var data in v) data[1]]);
+  });
+
+  if (total != null && total.isNotEmpty) {
+    // 保存表格列第一格
+    columnsTitleList.add(total);
+    var print = <String>[];
+    // 保存表格最后一行
+    titleList.forEachIndexed((i, v) {
+      double sum = 0.0;
+      list.forEach((key, value) {
+        if (i < titleList.length) {
+          sum = sum.add(value[i][1].toDoubleTry());
+        }
+      });
+      print.add(sum.toShowString());
+    });
+    // 添加表格尾行
+    printList.add(print);
+  }
+
+  const max = 6;
+  final maxColumns = (titleList.length / max).ceil();
+
+  for (int i = 0; i < maxColumns; i++) {
+    // 添加表格
+    printList.forEachIndexed((index, data) {
+      var s = i * max;
+      var t = i * max + max;
+      List<String> subData = [];
+      // 添加行表头
+      subData.add(columnsTitleList[index]);
+      // 添加行
+      subData.addAll(data.sublist(
+        s,
+        s < data.length && t <= data.length ? t : data.length,
+      ));
+      result.add(subData);
+    });
+    if (i < maxColumns - 1) {
+      // 加入空行用于区分表格换行
+      result.add([]);
+    }
+  }
+  return result;
+}
+
+Widget _createRowText({
+  required String title,
+  required Widget cw,
+  required Widget rw,
+}) =>
+    Container(
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.black, width: 1),
+      ),
+      child: IntrinsicHeight(
+        child: Row(
+          children: [
+            Expanded(
+              flex: 6,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 3, right: 3),
+                child: Text(
+                  title,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 17,
+                  ),
+                ),
+              ),
+            ),
+            Container(width: 2, color: Colors.black),
+            Expanded(flex: 9, child: cw),
+            Container(width: 2, color: Colors.black),
+            Expanded(flex: 5, child: rw),
+          ],
+        ),
+      ),
+    );
+
+List<Widget> createSizeList(Map<String, List> materialList) {
+  logger.f(materialList);
+  var border = BoxDecoration(border: Border.all(color: Colors.black, width: 1));
+  var style = const TextStyle(
+    fontWeight: FontWeight.bold,
+    fontSize: 17,
+  );
+  var strutStyle = const StrutStyle(forceStrutHeight: true, leading: 0.7);
+  var textPadding = const EdgeInsets.only(left: 3, right: 3);
+
+  paddingTextCenter(String text) => Padding(
+    padding: textPadding,
+    child: Text(
+      text,
+      style: style,
+      strutStyle: strutStyle,
+      textAlign: TextAlign.center,
+    ),
+  );
+  var tableList = <Widget>[];
+  if (materialList.isNotEmpty) {
+    int max = 5;
+    final maxColumns = (materialList.values.toList()[0].length / max).ceil();
+    for (int i = 0; i < maxColumns; i++) {
+      //轮次
+      materialList.forEach((ins, data) {
+        var line = <Widget>[];
+        //添加表格第一列指令列
+        line.add(Expanded(
+          flex: 2,
+          child: Container(
+            decoration: border,
+            child: paddingTextCenter(ins),
+          ),
+        ));
+        var sizeList = data.sublist(0, data.length - 1);
+        var start = i * max;
+        var surplus = sizeList.length - start;
+        var to = surplus > max ? start + max : start + surplus;
+        for (var j = start; j < to; ++j) {
+          //添加尺码列
+          line.add(Expanded(
+            child: Container(
+              decoration: border,
+              child: Text(
+                maxLines: 1,
+                sizeList[j],
+                style: style,
+                strutStyle: strutStyle,
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ));
+        }
+        var fill = max - ((to + 1) - start);
+        if (fill > 0) {
+          //如果数据不足Max列，则填充空白列
+          line.add(Expanded(
+            flex: max - ((to + 1) - start),
+            child: Container(decoration: border),
+          ));
+        }
+
+        if (to - start < max) {
+          //添加末尾列（合计）
+          line.add(Expanded(
+            child: Container(
+              decoration: border,
+              child: Text(
+                maxLines: 1,
+                data.last,
+                style:
+                const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                strutStyle: strutStyle,
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ));
+        }
+        tableList.add(IntrinsicHeight(child: Row(children: line)));
+      });
+    }
+  }
+  return tableList;
+}
+
+
+//料头标
 Widget surplusMaterialLabelTemplate({
   required String qrCode,
   required String machine,
@@ -368,135 +589,6 @@ Widget dynamicLabelTemplate75xN({
   );
 }
 
-//标签表格格式化
-List<List<String>> labelTableFormat({
-  required String title,
-  String? total,
-  required Map<String, List<List<String>>> list,
-}) {
-  if (list.isEmpty) return [];
-
-  List<List<String>> result = [];
-  // 取出所有尺码
-  List<String> titleList = [];
-  List<String> columnsTitleList = [];
-
-  list.forEach((k, v) {
-    for (var t in v) {
-      if (!titleList.contains(t[0])) {
-        titleList.add(t[0]);
-      }
-    }
-  });
-
-  titleList.sort((a, b) => a.toDoubleTry().compareTo(b.toDoubleTry()));
-
-  // 指令缺的尺码做补位处理
-  list.forEach((k, v) {
-    List<List<String>> text = [];
-    for (var t in titleList) {
-      try {
-        text.add(v.firstWhere((v) => v[0] == t));
-      } catch (e) {
-        text.add([t, '']);
-      }
-    }
-    v.clear();
-    v.addAll(text);
-  });
-
-  List<List<String>> printList = [];
-
-  // 保存表格列第一格
-  columnsTitleList.add(title);
-  // 添加表格头行
-  printList.add([for (var s in titleList) s]);
-
-  // 添加表格体
-  list.forEach((k, v) {
-    // 保存表格列第一格
-    columnsTitleList.add(k);
-    // 添加表格行
-    printList.add([for (var data in v) data[1]]);
-  });
-
-  if (total != null && total.isNotEmpty) {
-    // 保存表格列第一格
-    columnsTitleList.add(total);
-    var print = <String>[];
-    // 保存表格最后一行
-    titleList.forEachIndexed((i, v) {
-      double sum = 0.0;
-      list.forEach((key, value) {
-        if (i < titleList.length) {
-          sum = sum.add(value[i][1].toDoubleTry());
-        }
-      });
-      print.add(sum.toShowString());
-    });
-    // 添加表格尾行
-    printList.add(print);
-  }
-
-  const max = 6;
-  final maxColumns = (titleList.length / max).ceil();
-
-  for (int i = 0; i < maxColumns; i++) {
-    // 添加表格
-    printList.forEachIndexed((index, data) {
-      var s = i * max;
-      var t = i * max + max;
-      List<String> subData = [];
-      // 添加行表头
-      subData.add(columnsTitleList[index]);
-      // 添加行
-      subData.addAll(data.sublist(
-        s,
-        s < data.length && t <= data.length ? t : data.length,
-      ));
-      result.add(subData);
-    });
-    if (i < maxColumns - 1) {
-      // 加入空行用于区分表格换行
-      result.add([]);
-    }
-  }
-  return result;
-}
-
-Widget _createRowText({
-  required String title,
-  required Widget cw,
-  required Widget rw,
-}) =>
-    Container(
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.black, width: 1),
-      ),
-      child: IntrinsicHeight(
-        child: Row(
-          children: [
-            Expanded(
-              flex: 6,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 3, right: 3),
-                child: Text(
-                  title,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 17,
-                  ),
-                ),
-              ),
-            ),
-            Container(width: 2, color: Colors.black),
-            Expanded(flex: 9, child: cw),
-            Container(width: 2, color: Colors.black),
-            Expanded(flex: 5, child: rw),
-          ],
-        ),
-      ),
-    );
 
 //动态格式物料外箱标
 //110 x N（高度由内容决定）
@@ -847,7 +939,7 @@ Widget dynamicInBoxLabel110xN({
   );
 }
 
-//动态格式物料小标
+//动态格式物料小标（缅甸面料标）
 //110 x N（高度由内容决定）
 //物料列表格式 [['物料编码','物料规格'],['物料编码','物料规格'],['物料编码','物料规格']]
 Widget dynamicMyanmarLabel110xN({
@@ -1098,7 +1190,600 @@ Widget dynamicMyanmarLabel110xN({
   );
 }
 
-//动态格式物料外箱标
+//动态格式物料小标（缅甸尺码物料标-多尺码）
+//110 x N（高度由内容决定）
+//物料列表格式 [['物料编码','物料规格'],['物料编码','物料规格'],['物料编码','物料规格']]
+Widget dynamicMyanmarSizeListLabel110xN({
+  required String labelID, //标签ID
+  required String myanmarApprovalDocument, //缅甸批文
+  required String typeBody, //工厂型体
+  required String trackNo, //跟踪号
+  required Map<String, List> materialList, //物料列表
+  required String inBoxQty, //装箱数
+  required String customsDeclarationUnit, //报关单位
+  required String customsDeclarationType, //报关形式
+  required String pieceNo, //件数
+  required String pieceID, //件号
+  required String grossWeight, //毛重
+  required String netWeight, //净重
+  required String specifications, //规格
+  required String volume, //体积
+  required String supplier, //供应商
+  required String manufactureDate, //生产日期
+  required bool hasNotes, //是否打印备注行
+  required String notes, //备注
+}) {
+  var border = BoxDecoration(border: Border.all(color: Colors.black, width: 1));
+  var style = const TextStyle(fontWeight: FontWeight.bold, fontSize: 17);
+  var textPadding = const EdgeInsets.only(left: 3, right: 3);
+
+  paddingTextCenter(String text) => Container(
+        decoration: border,
+        padding: textPadding,
+        alignment: Alignment.center,
+        child: Text(text, style: style, textAlign: TextAlign.center),
+      );
+
+  paddingTextLeft(String text) => Container(
+        decoration: border,
+        padding: textPadding,
+        alignment: Alignment.centerLeft,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [Text(text, style: style)],
+        ),
+      );
+
+  createRowText({
+    required String title,
+    int flex = 5,
+    required List<Widget> rw,
+  }) =>
+      IntrinsicHeight(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(
+              flex: flex,
+              child: Container(
+                decoration: border,
+                padding: const EdgeInsets.only(left: 3, right: 3),
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  title,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 17,
+                  ),
+                ),
+              ),
+            ),
+            ...rw
+          ],
+        ),
+      );
+
+  return Container(
+    color: Colors.white,
+    width: 110 * 5.5,
+    child: Padding(
+      padding: const EdgeInsets.all(2 * 5.5),
+      child: Container(
+        decoration: border,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            createRowText(
+              title: 'Description:',
+              rw: [
+                Expanded(
+                  flex: 15,
+                  child: paddingTextLeft(myanmarApprovalDocument),
+                )
+              ],
+            ),
+            createRowText(
+              title: 'Style:',
+              rw: [
+                Expanded(
+                  flex: 15,
+                  child: paddingTextLeft(typeBody),
+                )
+              ],
+            ),
+            createRowText(
+              title: 'Lot No:',
+              rw: [
+                Expanded(
+                  flex: 15,
+                  child: paddingTextLeft(trackNo),
+                )
+              ],
+            ),
+            createRowText(
+              title: 'Mtl No',
+              rw: [
+                Expanded(
+                  flex: 15,
+                  child: paddingTextCenter('Mtl Des'),
+                )
+              ],
+            ),
+            ...createSizeList(materialList),
+            createRowText(
+              title: 'Quantity:',
+              rw: [
+                Expanded(
+                  flex: 6,
+                  child: paddingTextCenter(inBoxQty),
+                ),
+                Expanded(
+                  flex: 3,
+                  child: paddingTextCenter(customsDeclarationUnit),
+                ),
+                Expanded(
+                  flex: 6,
+                  child: paddingTextCenter(customsDeclarationType),
+                ),
+              ],
+            ),
+            IntrinsicHeight(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Expanded(
+                    flex: 14,
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 50,
+                          child: Row(
+                            children: [
+                              Expanded(
+                                flex: 5,
+                                child: paddingTextLeft('Package No:'),
+                              ),
+                              Expanded(
+                                flex: 9,
+                                child: paddingTextCenter(pieceNo),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: 50,
+                          child: Row(
+                            children: [
+                              Expanded(
+                                flex: 5,
+                                child: paddingTextLeft('Gross Weight:'),
+                              ),
+                              Expanded(
+                                flex: 6,
+                                child: paddingTextCenter(grossWeight),
+                              ),
+                              Expanded(
+                                flex: 3,
+                                child: paddingTextCenter('KGS'),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: 50,
+                          child: Row(
+                            children: [
+                              Expanded(
+                                flex: 5,
+                                child: paddingTextLeft('Net Weight:'),
+                              ),
+                              Expanded(
+                                flex: 6,
+                                child: paddingTextCenter(netWeight),
+                              ),
+                              Expanded(
+                                flex: 3,
+                                child: paddingTextCenter('KGS'),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    flex: 6,
+                    child: Container(
+                      decoration: border,
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 130,
+                            child: QrImageView(
+                              data: labelID,
+                              padding: const EdgeInsets.all(5),
+                              version: QrVersions.auto,
+                            ),
+                          ),
+                          Text(
+                            pieceID,
+                            style: const TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              height: 0,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            createRowText(
+              flex: 10,
+              title: 'MEA:',
+              rw: [
+                Expanded(flex: 18, child: paddingTextCenter(specifications)),
+                Expanded(flex: 5, child: paddingTextCenter(volume)),
+                Expanded(flex: 7, child: paddingTextCenter('CBM')),
+              ],
+            ),
+            createRowText(
+              flex: 10,
+              title: 'Tracing:',
+              rw: [
+                Expanded(flex: 12, child: paddingTextCenter(supplier)),
+                Expanded(
+                  flex: 11,
+                  child: paddingTextCenter('Production Date: MM-DD-YYYY'),
+                ),
+                Expanded(
+                  flex: 7,
+                  child: Container(
+                    decoration: border,
+                    alignment: Alignment.center,
+                    child: Text(
+                      manufactureDate,
+                      style: style,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            if (hasNotes)
+              Container(
+                decoration: border,
+                child: IntrinsicHeight(
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Expanded(flex: 5, child: paddingTextLeft('Note:')),
+                      Expanded(flex: 15, child: paddingTextCenter(notes)),
+                    ],
+                  ),
+                ),
+              ),
+            paddingTextCenter('MADE IN CHINA')
+          ],
+        ),
+      ),
+    ),
+  );
+}
+
+//动态格式物料小标（缅甸尺码物料标-单尺码）
+//110 x N（高度由内容决定）
+//物料列表格式 [['物料编码','物料规格'],['物料编码','物料规格'],['物料编码','物料规格']]
+Widget dynamicMyanmarSizeLabel110xN({
+  required String labelID, //标签ID
+  required String myanmarApprovalDocument, //缅甸批文
+  required String typeBody, //工厂型体
+  required String trackNo, //跟踪号
+  required String instructionNo, //指令号
+  required String materialCode, //物料编号
+  required String size, //尺码
+  required String inBoxQty, //装箱数
+  required String customsDeclarationUnit, //报关单位
+  required String customsDeclarationType, //报关形式
+  required String pieceNo, //件数
+  required String pieceID, //件号
+  required String grossWeight, //毛重
+  required String netWeight, //净重
+  required String specifications, //规格
+  required String volume, //体积
+  required String supplier, //供应商
+  required String manufactureDate, //生产日期
+  required bool hasNotes, //是否打印备注行
+  required String notes, //备注
+}) {
+  var border = BoxDecoration(border: Border.all(color: Colors.black, width: 1));
+  var style = const TextStyle(fontWeight: FontWeight.bold, fontSize: 17);
+  var textPadding = const EdgeInsets.only(left: 3, right: 3);
+
+  paddingTextCenter(String text) => Container(
+        decoration: border,
+        padding: textPadding,
+        alignment: Alignment.center,
+        child: Text(
+          text,
+          style: style,
+          maxLines: 2,
+        ),
+      );
+
+  paddingTextLeft(String text) => Container(
+        decoration: border,
+        padding: textPadding,
+        alignment: Alignment.centerLeft,
+        child: Text(
+          text,
+          style: style,
+          maxLines: 2,
+        ),
+      );
+
+
+  createRowText({
+    required String title,
+    int flex = 5,
+    required List<Widget> rw,
+  }) =>
+      IntrinsicHeight(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(
+              flex: flex,
+              child: Container(
+                decoration: border,
+                padding: const EdgeInsets.only(left: 3, right: 3),
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  title,
+                  maxLines: 2,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 17,
+                  ),
+                ),
+              ),
+            ),
+            ...rw
+          ],
+        ),
+      );
+
+  return Container(
+    color: Colors.white,
+    width: 110 * 5.5,
+    child: Padding(
+      padding: const EdgeInsets.all(2 * 5.5),
+      child: Container(
+        decoration: border,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            createRowText(
+              title: 'Description:',
+              rw: [
+                Expanded(
+                  flex: 15,
+                  child: paddingTextLeft(myanmarApprovalDocument),
+                  // child:  Text(
+                  //   myanmarApprovalDocument,
+                  //   style: style,
+                  //   maxLines: 2,
+                  // ),
+                )
+              ],
+            ),
+            createRowText(
+              title: 'Style:',
+              rw: [
+                Expanded(
+                  flex: 15,
+                  child: paddingTextLeft(typeBody),
+                )
+              ],
+            ),
+            createRowText(
+              title: 'Lot No:',
+              rw: [
+                Expanded(
+                  flex: 15,
+                  child: paddingTextLeft(trackNo),
+                )
+              ],
+            ),
+            createRowText(
+              title: 'Order No:',
+              rw: [
+                Expanded(
+                  flex: 15,
+                  child: paddingTextLeft(instructionNo),
+                )
+              ],
+            ),
+            createRowText(
+              title: 'Mtl No:',
+              rw: [
+                Expanded(
+                  flex: 6,
+                  child: paddingTextCenter(materialCode),
+                ),
+                Expanded(
+                  flex: 3,
+                  child: paddingTextCenter('Size'),
+                ),
+                Expanded(
+                  flex: 6,
+                  child: paddingTextCenter('$size#'),
+                ),
+              ],
+            ),
+            createRowText(
+              title: 'Quantity:',
+              rw: [
+                Expanded(
+                  flex: 6,
+                  child: paddingTextCenter(inBoxQty),
+                ),
+                Expanded(
+                  flex: 3,
+                  child: paddingTextCenter(customsDeclarationUnit),
+                ),
+                Expanded(
+                  flex: 6,
+                  child: paddingTextCenter(customsDeclarationType),
+                ),
+              ],
+            ),
+            IntrinsicHeight(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Expanded(
+                    flex: 14,
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 50,
+                          child: Row(
+                            children: [
+                              Expanded(
+                                flex: 5,
+                                child: paddingTextLeft('Package No:'),
+                              ),
+                              Expanded(
+                                flex: 9,
+                                child: paddingTextCenter(pieceNo),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: 50,
+                          child: Row(
+                            children: [
+                              Expanded(
+                                flex: 5,
+                                child: paddingTextLeft('Gross Weight:'),
+                              ),
+                              Expanded(
+                                flex: 6,
+                                child: paddingTextCenter(grossWeight),
+                              ),
+                              Expanded(
+                                flex: 3,
+                                child: paddingTextCenter('KGS'),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: 50,
+                          child: Row(
+                            children: [
+                              Expanded(
+                                flex: 5,
+                                child: paddingTextLeft('Net Weight:'),
+                              ),
+                              Expanded(
+                                flex: 6,
+                                child: paddingTextCenter(netWeight),
+                              ),
+                              Expanded(
+                                flex: 3,
+                                child: paddingTextCenter('KGS'),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    flex: 6,
+                    child: Container(
+                      decoration: border,
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 130,
+                            child: QrImageView(
+                              data: labelID,
+                              padding: const EdgeInsets.all(5),
+                              version: QrVersions.auto,
+                            ),
+                          ),
+                          Text(
+                            pieceID,
+                            style: const TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              height: 0,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            createRowText(
+              flex: 10,
+              title: 'MEA:',
+              rw: [
+                Expanded(flex: 18, child: paddingTextCenter(specifications)),
+                Expanded(flex: 5, child: paddingTextCenter(volume)),
+                Expanded(flex: 7, child: paddingTextCenter('CBM')),
+              ],
+            ),
+            createRowText(
+              flex: 10,
+              title: 'Tracing:',
+              rw: [
+                Expanded(flex: 12, child: paddingTextCenter(supplier)),
+                Expanded(
+                  flex: 11,
+                  child: paddingTextCenter('Production Date: MM-DD-YYYY'),
+                ),
+                Expanded(
+                  flex: 7,
+                  child: Container(
+                    decoration: border,
+                    alignment: Alignment.center,
+                    child: Text(
+                      manufactureDate,
+                      style: style,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            if (hasNotes)
+              IntrinsicHeight(
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Expanded(flex: 5, child: paddingTextLeft('Note:')),
+                    Expanded(flex: 15, child: paddingTextCenter(notes)),
+                  ],
+                ),
+              ),
+            paddingTextCenter('MADE IN CHINA')
+          ],
+        ),
+      ),
+    ),
+  );
+}
+
+//动态格式物料标准标
 //110 x N（高度由内容决定）
 //物料列表格式 [['物料编码','物料名称','数量','单位'],['物料编码','物料名称','数量','单位'],['物料编码','物料名称','数量','单位']]
 Widget dynamicMaterialStandardLabel110xN({
@@ -1181,71 +1866,6 @@ Widget dynamicMaterialStandardLabel110xN({
           ),
         ),
       );
-  var tableList = <Widget>[];
-  if (materialList.isNotEmpty) {
-    int max = 5;
-    final maxColumns = (materialList.values.toList()[0].length / max).ceil();
-    for (int i = 0; i < maxColumns; i++) {
-      //轮次
-      materialList.forEach((ins, data) {
-        var line = <Widget>[];
-        //添加表格第一列指令列
-        line.add(Expanded(
-          flex: 2,
-          child: Container(
-            decoration: border,
-            child: paddingTextCenter(ins),
-          ),
-        ));
-        var sizeList = data.sublist(0, data.length - 1);
-        var start = i * max;
-        var surplus = sizeList.length - start;
-        var to = surplus > max ? start + max : start + surplus;
-        for (var j = start; j < to; ++j) {
-          //添加尺码列
-          line.add(Expanded(
-            child: Container(
-              decoration: border,
-              child: Text(
-                maxLines: 1,
-                sizeList[j],
-                style: style,
-                strutStyle: strutStyle,
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ));
-        }
-        var fill = max - ((to + 1) - start);
-        if (fill > 0) {
-          //如果数据不足Max列，则填充空白列
-          line.add(Expanded(
-            flex: max - ((to + 1) - start),
-            child: Container(decoration: border),
-          ));
-        }
-
-
-        if (to - start < max) {
-          //添加末尾列（合计）
-          line.add(Expanded(
-            child: Container(
-              decoration: border,
-              child: Text(
-                maxLines: 1,
-                data.last,
-                style:
-                    const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                strutStyle: strutStyle,
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ));
-        }
-        tableList.add(IntrinsicHeight(child: Row(children: line)));
-      });
-    }
-  }
 
   return Container(
     color: Colors.white,
@@ -1283,7 +1903,7 @@ Widget dynamicMaterialStandardLabel110xN({
               title: generalMaterialNumber,
               rw: paddingTextCenter(materialDescription),
             ),
-            ...tableList,
+            ...createSizeList(materialList),
             _createRowText(
               title: '总数/Grand total/agregat',
               cw: Row(

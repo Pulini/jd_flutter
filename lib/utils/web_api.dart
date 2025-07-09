@@ -1278,6 +1278,12 @@ const webApiSapCheckContainer = 'sap/zapp/ZFUN_ZGD_6';
 //排柜提交
 const webApiSapSubmit = 'sap/zapp/ZFUN_ZGD_2';
 
+//获取交货单列表
+const webApiSapGetDeliveryOrders = 'sap/zapp/ZFUN_ZGD_9';
+
+//修改交货单日期
+const webApiSapModifyDeliveryOrderPostingDate = 'sap/zapp/ZFUN_ZGD_10';
+
 //保存异常单
 const webApiSapSaveAbnormalPiece = 'sap/zapp/ZFUN_ZGD_5';
 

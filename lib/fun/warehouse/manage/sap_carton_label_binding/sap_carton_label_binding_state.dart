@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/sap_carton_label_binding_info.dart';
 import 'package:jd_flutter/utils/utils.dart';
@@ -42,6 +41,7 @@ class SapCartonLabelBindingState {
 
   getLabelInfo({
     required String labelCode,
+    required Function(List<SapLabelBindingInfo>) success,
     required Function(String) error,
   }) {
     sapPost(
@@ -53,22 +53,9 @@ class SapCartonLabelBindingState {
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        var list = <SapLabelBindingInfo>[
+        success.call([
           for (var json in response.data) SapLabelBindingInfo.fromJson(json)
-        ];
-        if (labelList.isNotEmpty &&
-            labelList[0].labelType() != list[0].labelType()) {
-          error.call('carton_label_binding_error_tips'.tr);
-        } else {
-          for (var label in list) {
-            if (!labelList.any((v) => v.labelID == label.labelID)) {
-              labelList.add(label);
-            }
-          }
-        }
-        for (var v in labelList) {
-          debugPrint('labelList=${v.labelID}');
-        }
+        ]);
       } else {
         error.call(response.message ?? 'query_default_error'.tr);
       }

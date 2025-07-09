@@ -58,6 +58,10 @@ class PrintUtil {
       showSnackBar(title: '蓝牙错误', message: '当前蓝牙不可用');
       return;
     }
+    if (!await _bluetoothIsLocationOn()) {
+      showSnackBar(title: '蓝牙错误', message: '请打开位置信息');
+      return;
+    }
     deviceList.value = await _getScannedDevices();
     if (deviceList.any((v) => v.deviceIsConnected)) {
       _sendList(
@@ -231,9 +235,14 @@ class PrintUtil {
     return await bluetoothChannel.invokeMethod('IsEnable');
   }
 
+  Future<bool> _bluetoothIsLocationOn() async {
+    return await bluetoothChannel.invokeMethod('IsLocationOn');
+  }
+
   _scanBluetooth() {
     deviceList.clear();
     bluetoothChannel.invokeMethod('ScanBluetooth').then((value) {
+      errorDialog(content: '启动蓝牙搜索失败，请确认蓝牙及位置信息功能是否开启');
       isScanning.value = value;
     });
   }

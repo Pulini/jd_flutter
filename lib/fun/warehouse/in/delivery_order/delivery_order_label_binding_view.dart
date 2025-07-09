@@ -65,7 +65,6 @@ class _DeliveryOrderLabelBindingPageState
       title: 'delivery_order_label_check_title'.tr,
       popTitle: 'delivery_order_label_check_exit_tips'.tr,
       actions: [
-        // IconButton(onPressed: ()=>logic.scanLabel('00505685E5761FD095A8CBB6B2C2C805'), icon: Icon(Icons.add)),
         TextButton(
           onPressed: () => askDialog(
             content: 'delivery_order_label_check_clear_tips'.tr,
@@ -120,26 +119,52 @@ class _DeliveryOrderLabelBindingPageState
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(10),
-            child: Obx(() => Row(
-                  children: [
-                    Text(
-                      'delivery_order_label_check_progress'.tr,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.green,
+          if (logic.sizeMaterialList().isEmpty)
+            Padding(
+              padding: const EdgeInsets.all(10),
+              child: Obx(() => Row(
+                    children: [
+                      Text(
+                        'delivery_order_label_check_progress'.tr,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.green,
+                        ),
                       ),
-                    ),
-                    Expanded(
-                      child: progressIndicator(
-                        max: logic.getMaterialsTotal(),
-                        value: logic.getScanProgress(),
+                      Expanded(
+                        child: progressIndicator(
+                          max: logic.getMaterialsTotal(),
+                          value: logic.getScanProgress(),
+                        ),
+                      )
+                    ],
+                  )),
+            ),
+          for (var size in logic.sizeMaterialList())
+            Padding(
+              padding: const EdgeInsets.only(left: 10, right: 10, bottom: 5),
+              child: Obx(() => Row(
+                    children: [
+                      SizedBox(
+                        width: 40,
+                        child: Text(
+                          '${size[0]}#',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.blue,
+
+                          ),
+                        ),
                       ),
-                    )
-                  ],
-                )),
-          ),
+                      Expanded(
+                        child: progressIndicator(
+                          max: size[1],
+                          value: logic.getSizeScanProgress(size[0] ?? ''),
+                        ),
+                      )
+                    ],
+                  )),
+            ),
           Expanded(
             child: Obx(() => ListView.builder(
                   itemCount: state.scannedLabelList.length,
