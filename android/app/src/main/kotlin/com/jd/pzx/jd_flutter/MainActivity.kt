@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
-import android.print.PrintManager
 import android.util.Log
 import com.jd.pzx.jd_flutter.LivenFaceVerificationActivity.Companion.startOneselfFaceVerification
 import com.jd.pzx.jd_flutter.utils.CHANNEL_BLUETOOTH_ANDROID_TO_FLUTTER
@@ -18,7 +17,6 @@ import com.jd.pzx.jd_flutter.utils.CHANNEL_WEIGHBRIDGE_ANDROID_TO_FLUTTER
 import com.jd.pzx.jd_flutter.utils.CHANNEL_WEIGHBRIDGE_FLUTTER_TO_ANDROID
 import com.jd.pzx.jd_flutter.utils.FACE_VERIFY_SUCCESS
 import com.jd.pzx.jd_flutter.utils.REQUEST_ENABLE_BT
-import com.jd.pzx.jd_flutter.utils.bitmapToBase64
 import com.jd.pzx.jd_flutter.utils.bitmapToByteArray
 import com.jd.pzx.jd_flutter.utils.bluetoothAdapter
 import com.jd.pzx.jd_flutter.utils.bluetoothCancelScan
@@ -28,8 +26,8 @@ import com.jd.pzx.jd_flutter.utils.bluetoothIsEnable
 import com.jd.pzx.jd_flutter.utils.bluetoothSendCommand
 import com.jd.pzx.jd_flutter.utils.bluetoothStartScan
 import com.jd.pzx.jd_flutter.utils.deviceList
+import com.jd.pzx.jd_flutter.utils.locationOn
 import com.jd.pzx.jd_flutter.utils.openFile
-import com.jd.pzx.jd_flutter.utils.print.printBitmap
 import com.jd.pzx.jd_flutter.utils.print.printPdf
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
@@ -166,13 +164,21 @@ class MainActivity : FlutterActivity() {
                     if (it == null) {
                         result.success(3)
                     } else {
-                        result.success(bluetoothConnect(it, call.arguments.toString()))
+                        Thread {
+                            result.success(
+                                bluetoothConnect(
+                                    it,
+                                    call.arguments.toString()
+                                )
+                            )
+                        }.start()
                     }
                 }
 
                 "CloseBluetooth" -> result.success(bluetoothClose(call.arguments.toString()))
 
                 "IsEnable" -> result.success(bluetoothIsEnable(bluetoothAdapter(this)))
+                "IsLocationOn" -> result.success(locationOn(this))
 
                 "GetScannedDevices" -> result.success(mutableListOf<HashMap<String, Any>>().apply {
                     deviceList.forEach { add(it.getDeviceMap()) }
@@ -211,12 +217,11 @@ class MainActivity : FlutterActivity() {
 //                    result.success(it)
 //                }
                 Log.e("Pan", "arguments=${call.arguments}")
-                printPdf(this,"拣货清单",(call.arguments as List<String>)){
+                printPdf(this, "拣货清单", (call.arguments as List<String>)) {
                     result.success(it)
                 }
             }
         }
-
 
 
     }

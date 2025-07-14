@@ -2684,6 +2684,8 @@ class Translation extends Translations {
               '该件货物料数量超出，请扫瞄数量更小的标签。',
           'delivery_order_label_check_has_other_material':
               '该件货内包含了其他工单的物料，请拆分拣货。',
+          'delivery_order_label_check_qty_exceed_tips': '数量超出本次提交上限，清删除对应标签。',
+          'delivery_order_label_check_qty_insufficient': '数量不足本次提交下限，请继续扫描标签。',
           'delivery_order_label_check_delete_tips': '确定要删除本条标签吗？',
           'delivery_order_label_check_title': '送货清点',
           'delivery_order_label_check_exit_tips': '确定要退出送货清点吗？',
@@ -3153,7 +3155,7 @@ class Translation extends Translations {
           'carton_label_binding_operation_type_transfer': '转移',
           'carton_label_binding_getting_label_info': '正在获取标签信息...',
           'carton_label_binding_error_tips':
-              '标签供应商、工厂、物料大类、保管形式、单据类型不同，不能同时操作！',
+              '标签供应商、工厂、物料大类、报关形式、单据类型不同，不能同时操作！',
           'carton_label_binding_no_label': '没有可打印的标签！',
           'carton_label_binding_submitting_label': '正在提交标签%s...',
           'carton_label_binding_label_exists': '标签已存在!',
@@ -3173,6 +3175,7 @@ class Translation extends Translations {
           'carton_label_binding_height': '高',
           'carton_label_binding_out_weight': '外包装重量',
           'carton_label_binding_data_not_input_tips': '贸易工厂标签必须填写长宽高和外包装重量!',
+          'inner_box_label_split_trade_tag': '贸易',
           'inner_box_label_split_consignee': '收货方：',
           'inner_box_label_split_piece_id': '件号：',
           'inner_box_label_split_supplier': '供应商：',
@@ -3180,6 +3183,9 @@ class Translation extends Translations {
           'inner_box_label_split_wait_submit_qty': '待提交标签',
           'inner_box_label_split_has_been_split': '已拆出：%s',
           'inner_box_label_split_split': '拆出：',
+          'inner_box_label_split_long': '长',
+          'inner_box_label_split_width': '宽',
+          'inner_box_label_split_height': '高',
           'inner_box_label_split_pre_split': '预拆分',
           'inner_box_label_split_submit_split': '提交拆分',
           'inner_box_label_split_submit_split_tips': '确定要提交预拆分标签吗？',
@@ -6444,6 +6450,10 @@ class Translation extends Translations {
               'The quantity of materials in this item exceeds the limit. Please scan the label with a smaller quantity.',
           'delivery_order_label_check_has_other_material':
               'This item contains materials from other work orders, please split and pick them.',
+          'delivery_order_label_check_qty_exceed_tips':
+              'The quantity exceeds the submission limit for this time, please delete the corresponding tags.',
+          'delivery_order_label_check_qty_insufficient':
+              'The quantity is insufficient for this submission, please continue scanning the labels.',
           'delivery_order_label_check_delete_tips':
               'Are you sure you want to delete this label?',
           'delivery_order_label_check_title': 'Delivery check',
@@ -6846,11 +6856,13 @@ class Translation extends Translations {
           'quality_inspection_label_scanned': 'Scanned：',
           'quality_inspection_label_scanned_material_qty': 'Material qty：',
           'quality_inspection_label_title': 'Color Label Binding',
-          'quality_inspection_label_exit_tips': 'Are you sure you want to exit the color label binding？',
+          'quality_inspection_label_exit_tips':
+              'Are you sure you want to exit the color label binding？',
           'quality_inspection_label_submit': 'Submit',
           'quality_inspection_binding_piece_id': 'Piece ID：',
           'quality_inspection_binding_qty': 'quantity：',
-          'quality_inspection_binding_delete_label_tips': 'Are you sure you want to delete this label？',
+          'quality_inspection_binding_delete_label_tips':
+              'Are you sure you want to delete this label？',
           'quality_inspection_binding_title': 'Color：%s',
           'quality_inspection_binding_scanned_material_qty': 'Material qty：',
           'quality_inspection_binding_label_qty': 'Labels：',
@@ -6998,7 +7010,7 @@ class Translation extends Translations {
           'carton_label_binding_operation_type_transfer': 'Transfer',
           'carton_label_binding_getting_label_info': 'Getting label info...',
           'carton_label_binding_error_tips':
-              'Label suppliers, factories, material categories, storage methods, and document types are different and cannot be operated simultaneously!',
+              'Label suppliers, factories, material categories, customs declaration forms, and document types are different and cannot be operated simultaneously!',
           'carton_label_binding_no_label': 'Label empty',
           'carton_label_binding_submitting_label': 'Submitting label %s...',
           'carton_label_binding_label_exists': 'Label exists !',
@@ -7022,6 +7034,7 @@ class Translation extends Translations {
           'carton_label_binding_out_weight': 'Outer box weight',
           'carton_label_binding_data_not_input_tips':
               'The trade factory label must be filled with length, width, height, and outer packaging weight !',
+          'inner_box_label_split_trade_tag': 'Trade',
           'inner_box_label_split_consignee': 'Consignee：',
           'inner_box_label_split_piece_id': 'Piece_id：',
           'inner_box_label_split_supplier': 'Supplier：',
@@ -7029,6 +7042,9 @@ class Translation extends Translations {
           'inner_box_label_split_wait_submit_qty': 'Wait submit qty',
           'inner_box_label_split_has_been_split': 'Has been split：%s',
           'inner_box_label_split_split': 'Split：',
+          'inner_box_label_split_long': 'Long',
+          'inner_box_label_split_width': 'Width',
+          'inner_box_label_split_height': 'Height',
           'inner_box_label_split_pre_split': 'PreSplit',
           'inner_box_label_split_submit_split': 'Submit split',
           'inner_box_label_split_submit_split_tips':

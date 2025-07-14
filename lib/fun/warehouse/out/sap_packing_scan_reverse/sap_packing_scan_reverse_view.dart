@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/sap_picking_scan_info.dart';
-import 'package:jd_flutter/fun/warehouse/out/sap_packing_scan/sap_packing_scan_logic.dart';
-import 'package:jd_flutter/fun/warehouse/out/sap_packing_scan/sap_packing_scan_state.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/scanner.dart';
+
+import 'sap_packing_scan_reverse_logic.dart';
+import 'sap_packing_scan_reverse_state.dart';
 
 class SapPackingScanReversePage extends StatefulWidget {
   const SapPackingScanReversePage({super.key});
@@ -18,8 +19,10 @@ class SapPackingScanReversePage extends StatefulWidget {
 }
 
 class _SapPackingScanReversePageState extends State<SapPackingScanReversePage> {
-  final SapPackingScanLogic logic = Get.find<SapPackingScanLogic>();
-  final SapPackingScanState state = Get.find<SapPackingScanLogic>().state;
+  final SapPackingScanReverseLogic logic =
+      Get.put(SapPackingScanReverseLogic());
+  final SapPackingScanReverseState state =
+      Get.find<SapPackingScanReverseLogic>().state;
 
   Widget _item(SapPackingScanReverseLabelInfo data) => Container(
         padding: const EdgeInsets.all(7),
@@ -74,19 +77,6 @@ class _SapPackingScanReversePageState extends State<SapPackingScanReversePage> {
         ),
       );
 
-  _reverse() {
-    var pickDate = DateTime.now();
-    showDatePicker(
-      locale: View.of(Get.overlayContext!).platformDispatcher.locale,
-      context: Get.overlayContext!,
-      initialDate: pickDate,
-      firstDate: DateTime(pickDate.year, pickDate.month - 1, pickDate.day),
-      lastDate: DateTime(pickDate.year, pickDate.month + 1, pickDate.day),
-    ).then((date) {
-      if (date != null) logic.reverseLabel(getDateYMD(time: date));
-    });
-  }
-
   @override
   void initState() {
     pdaScanner(scan: (code) => logic.reverseScan(code));
@@ -96,20 +86,42 @@ class _SapPackingScanReversePageState extends State<SapPackingScanReversePage> {
   @override
   Widget build(BuildContext context) {
     return pageBody(
-      title: '扫码冲销',
       actions: [
-        Obx(() => state.reverseLabelList.isNotEmpty
-            ? CombinationButton(
-                text: '冲销',
-                click: () => _reverse(),
-              )
-            : Container()),
+        Obx(() => textSpan(
+            hint: '件数：',
+            text: state.reverseLabelList.isEmpty
+                ? '0'
+                : state.reverseLabelList
+                    .map((v) => v.pieceNo ?? 0)
+                    .reduce((a, b) => a.add(b))
+                    .toShowString())),
+        const SizedBox(width: 10)
       ],
-      body: Obx(() => ListView.builder(
-            padding: const EdgeInsets.only(left: 7, right: 7),
-            itemCount: state.reverseLabelList.length,
-            itemBuilder: (c, i) => _item(state.reverseLabelList[i]),
-          )),
+      body: Column(
+        children: [
+          Expanded(
+            child: Obx(() => ListView.builder(
+                  padding: const EdgeInsets.only(left: 7, right: 7),
+                  itemCount: state.reverseLabelList.length,
+                  itemBuilder: (c, i) => _item(state.reverseLabelList[i]),
+                )),
+          ),
+          SizedBox(
+            width: double.infinity,
+            child: Obx(() => CombinationButton(
+                  isEnabled: state.reverseLabelList.isNotEmpty,
+                  text: '冲销',
+                  click: () => logic.reverseLabel(),
+                )),
+          ),
+        ],
+      ),
     );
+  }
+
+  @override
+  void dispose() {
+    Get.delete<SapPackingScanReverseLogic>();
+    super.dispose();
   }
 }

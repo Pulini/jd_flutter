@@ -11,7 +11,7 @@ class SapLabelReprintState {
       method: webApiSapGetPrintLabelListInfo,
       body: {
         'BQID': code,
-        'OPERATE': '10',
+        'OPERATE': '',
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {

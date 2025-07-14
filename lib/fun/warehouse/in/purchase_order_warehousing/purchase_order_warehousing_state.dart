@@ -17,7 +17,7 @@ class PurchaseOrderWarehousingState {
   RxDouble receivedQty = 0.0.obs;
   var factoryNumber = '';
   var supplierNumber = '';
-  var materialList = <String, double>{};
+  var materialList = <String, List<List>>{};
   var orderLabelList = <DeliveryOrderLabelInfo>[];
   var scannedLabelList = <DeliveryOrderLabelInfo>[].obs;
   var canAddPiece = false.obs;

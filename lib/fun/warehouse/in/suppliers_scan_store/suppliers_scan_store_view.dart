@@ -72,12 +72,12 @@ class _SuppliersScanStorePageState extends State<SuppliersScanStorePage> {
                             hasFocus: true,
                             hint: '请输入操作人工号',
                             controller: state.peopleNumber,
-                            onClear: () => {
-                              state.peopleName.value = '',
-                            },
                             onChanged: (s) {
                               if (s.length >= 6) {
                                 logic.checkOrderInfo(number: s);
+                              }
+                              if(s.isEmpty){
+                                state.peopleName.value = '';
                               }
                             },
                           ),

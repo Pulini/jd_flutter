@@ -33,32 +33,37 @@ class SapCartonLabelBindingLogic extends GetxController {
       //无大标并且无小标 = 初始状态
       if (boxLabelList.isEmpty && labelList.isEmpty) {
         state.operationType = ScanLabelOperationType.unKnown;
-        state.operationTypeText.value =getOperationTypeText(ScanLabelOperationType.unKnown);
+        state.operationTypeText.value =
+            getOperationTypeText(ScanLabelOperationType.unKnown);
       }
 
       //无大标 有小标 = 小标绑定到系统生成的大标
       if (boxLabelList.isEmpty && labelList.isNotEmpty) {
         state.operationType = ScanLabelOperationType.create;
-        state.operationTypeText.value = getOperationTypeText(ScanLabelOperationType.create);
+        state.operationTypeText.value =
+            getOperationTypeText(ScanLabelOperationType.create);
       }
 
       //单个大标 无小标 = 大标解绑
       if (boxLabelList.length == 1 && labelList.isEmpty) {
         state.operationType = ScanLabelOperationType.unbind;
-        state.operationTypeText.value = getOperationTypeText(ScanLabelOperationType.unbind);
+        state.operationTypeText.value =
+            getOperationTypeText(ScanLabelOperationType.unbind);
       }
 
       //单个大标 有小标 = 小标绑定到大标
       if (boxLabelList.length == 1 && labelList.isNotEmpty) {
         state.operationType = ScanLabelOperationType.binding;
-        state.operationTypeText.value = getOperationTypeText(ScanLabelOperationType.binding);
+        state.operationTypeText.value =
+            getOperationTypeText(ScanLabelOperationType.binding);
       }
 
       //多个大标 无小标 = 前面扫大标转移到最后一个大标
       //多个大标 有小标 = 前面扫大标和小标转移到最后一个大标
       if (boxLabelList.length > 1) {
         state.operationType = ScanLabelOperationType.transfer;
-        state.operationTypeText.value =  getOperationTypeText(ScanLabelOperationType.transfer);
+        state.operationTypeText.value =
+            getOperationTypeText(ScanLabelOperationType.transfer);
       }
     });
   }
@@ -69,6 +74,18 @@ class SapCartonLabelBindingLogic extends GetxController {
     } else {
       state.getLabelInfo(
         labelCode: code,
+        success: (list) {
+          if (state.labelList.isNotEmpty &&
+              state.labelList[0].labelType() != list[0].labelType()) {
+            errorDialog(content: 'carton_label_binding_error_tips'.tr);
+          } else {
+            for (var label in list) {
+              if (!state.labelList.any((v) => v.labelID == label.labelID)) {
+                state.labelList.add(label);
+              }
+            }
+          }
+        },
         error: (msg) => errorDialog(content: msg),
       );
     }
@@ -132,15 +149,25 @@ class SapCartonLabelBindingLogic extends GetxController {
         labelList.addAll(boxLabelList[i]);
       }
     }
+
+    targetBoxLabel == null
+        ? labelList[0].supplierNumber ?? ''
+        : targetBoxLabel.supplierNumber ?? '';
+
+    var supplierNumber =
+        groupBy(labelList, (v) => v.supplierNumber ?? '').length > 1
+            ? ''
+            : labelList[0].supplierNumber ?? '';
     state.operationSubmit(
       long: long,
       width: width,
       height: height,
       outWeight: outWeight,
       targetBoxLabelID: targetBoxLabel?.labelID ?? '',
-      supplierNumber: targetBoxLabel == null
-          ? labelList[0].supplierNumber ?? ''
-          : targetBoxLabel.supplierNumber ?? '',
+      factoryNo: targetBoxLabel == null
+          ? labelList[0].factoryNo ?? ''
+          : targetBoxLabel.factoryNo ?? '',
+      supplierNumber: supplierNumber,
       labelList: labelList,
       success: (msg) => successDialog(
         content: msg,
@@ -207,7 +234,7 @@ class SapCartonLabelBindingLogic extends GetxController {
         netWeight: label.netWeight.toShowString(),
         qrCode: label.labelID ?? '',
         pieceID: label.pieceID ?? '',
-        specifications:label.getLWH(),
+        specifications: label.getLWH(),
         volume: label.volume.toShowString(),
         supplier: label.supplierNumber ?? '',
         manufactureDate: label.manufactureDate ?? '',
@@ -216,6 +243,4 @@ class SapCartonLabelBindingLogic extends GetxController {
     });
     return labelView;
   }
-
-
 }

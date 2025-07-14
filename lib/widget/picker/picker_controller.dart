@@ -748,7 +748,7 @@ class OptionsPickerController extends PickerController {
   String searchText = '';
   final String? saveKey;
   final String? buttonName;
-  final Future? dataList;
+  final Future Function()? dataList;
   List<PickerItem> pickerData = [];
   RxList<PickerItem> pickerItems = <PickerItem>[].obs;
   var selectItem = 0;
@@ -818,7 +818,7 @@ class OptionsPickerController extends PickerController {
   getData() {
     if (pickerItems.isEmpty) {
       loadingError.value = 'picker_loading'.tr;
-      Future fun = dataList ?? getDataList();
+      Future fun = dataList?.call() ?? getDataList();
       fun.then((value) {
         if (value is List<PickerItem>) {
           loadingError.value = '';
@@ -1019,7 +1019,8 @@ class DatePickerController extends PickerController {
         : getSave();
     if (firstDate != null) this.firstDate = firstDate;
     if (lastDate != null) this.lastDate = lastDate;
-    if (this.firstDate.isAfter(save) == true) {
+    debugPrint('initDate=$initDate  save=$save  isAfter=${this.firstDate.isAfter(save)}');
+    if (this.firstDate.isAfter(save)) {
       pickDate.value = this.firstDate;
     } else {
       pickDate.value = save;

@@ -133,9 +133,6 @@ class _ComponentHandoverPageState extends State<ComponentHandoverPage> {
                   child: NumberEditText(
                     hasFocus: true,
                     hint: 'process_report_input_people_number'.tr,
-                    onClear: () {
-                      logic.clearPeople();
-                    },
                     onChanged: (s) {
                       if (s.length >= 6) {
                         logic.getWorkerInfo(
@@ -151,6 +148,9 @@ class _ComponentHandoverPageState extends State<ComponentHandoverPage> {
                           },
                           error: (msg) => showSnackBar(message: msg),
                         );
+                      }
+                      if(s.isEmpty){
+                        logic.clearPeople();
                       }
                     },
                   ),

@@ -12,11 +12,13 @@ class EditText extends StatelessWidget {
     this.controller,
     this.onChanged,
     this.isEnable = true,
+    this.hasClose = true,
   });
 
   final String? initStr;
   final bool hasFocus;
   final bool isEnable;
+  final bool hasClose;
   final String? hint;
   final Function(String v)? onChanged;
   final TextEditingController? controller;
@@ -58,13 +60,13 @@ class EditText extends StatelessWidget {
           ),
           labelText: hint,
           labelStyle: const TextStyle(color: Colors.black54),
-          suffixIcon: IconButton(
+          suffixIcon:hasClose? IconButton(
             icon: const Icon(Icons.close, color: Colors.grey),
             onPressed: () {
               onChanged?.call('');
               (this.controller ?? controller).clear();
             },
-          ),
+          ):null,
         ),
       ),
     );
@@ -82,7 +84,7 @@ class NumberDecimalEditText extends StatelessWidget {
     this.helperText,
     this.hasFocus = false,
     this.resetQty = 0,
-    required this.onChanged,
+    this.onChanged,
     this.controller,
     this.inputEnable=true,
   });
@@ -94,7 +96,7 @@ class NumberDecimalEditText extends StatelessWidget {
   final double? initQty;
   final bool hasFocus;
   final double resetQty;
-  final Function(double) onChanged;
+  final Function(double)? onChanged;
   final TextEditingController? controller;
   final bool? inputEnable;
 
@@ -143,13 +145,13 @@ class NumberDecimalEditText extends StatelessWidget {
                   TextPosition(offset: c.text.length),
                 );
               }
-              onChanged.call(max!);
+              onChanged?.call(max!);
             } else {
               c.text = v.toDoubleTry().toShowString();
               c.selection = TextSelection.fromPosition(
                 TextPosition(offset: c.text.length),
               );
-              onChanged.call(v.toDoubleTry());
+              onChanged?.call(v.toDoubleTry());
             }
           }
         },
@@ -177,7 +179,7 @@ class NumberDecimalEditText extends StatelessWidget {
           prefixIcon: resetQty!=0?IconButton(
             onPressed: () {
               controller == null ? c.text=resetQty.toShowString() : controller?.text=resetQty.toShowString();
-              onChanged.call(resetQty);
+              onChanged?.call(resetQty);
             },
             icon: const Icon(
               Icons.replay_circle_filled,
@@ -189,7 +191,7 @@ class NumberDecimalEditText extends StatelessWidget {
             icon: const Icon(Icons.close, color: Colors.grey),
             onPressed: () {
               controller == null ? c.clear() : controller?.clear();
-              onChanged.call(0);
+              onChanged?.call(0);
             },
           ),
         ),
@@ -205,8 +207,7 @@ class NumberEditText extends StatelessWidget {
     this.hint,
     this.hasFocus = false,
     this.showClean = true,
-    required this.onChanged,
-    this.onClear,
+    this.onChanged,
     this.initQty = 0,
     this.controller,
   });
@@ -215,8 +216,7 @@ class NumberEditText extends StatelessWidget {
   final bool showClean;
   final String? hint;
   final int? initQty;
-  final Function(String) onChanged;
-  final Function()? onClear;
+  final Function(String)? onChanged;
   final TextEditingController? controller;
 
   @override
@@ -259,9 +259,9 @@ class NumberEditText extends StatelessWidget {
           labelStyle: const TextStyle(color: Colors.black54),
           suffixIcon: showClean?IconButton(
             icon: const Icon(Icons.close, color: Colors.grey),
-            onPressed: () => {
-              (controller ?? c).clear(),
-              onClear?.call(),
+            onPressed: (){
+              (controller ?? c).clear();
+              onChanged?.call('');
             },
           ):Container(),
         ),

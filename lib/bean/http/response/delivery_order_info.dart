@@ -507,7 +507,7 @@ class ReversalLabelInfo {
 }
 
 class DeliveryOrderLabelInfo {
-  RxBool isChecked=false.obs;
+  RxBool isChecked = false.obs;
   String? pieceNo; //ZPICECE_NO  件号
   String? labelNumber; //BQID  标签id
   String? outBoxLabelNumber; //ZDBBQID  外箱标ID
@@ -517,7 +517,8 @@ class DeliveryOrderLabelInfo {
   String? baseUnit; //MEINS  基本单位
   double? commonQty; //ERFMG  常用数量
   String? commonUnit; //ERFME  常用单位
-  bool isBind=false; //ISBIND  是否绑定
+  bool isBind = false; //ISBIND  是否绑定
+  String? size; //SIZE1  尺码
 
   DeliveryOrderLabelInfo({
     required this.pieceNo,
@@ -530,24 +531,30 @@ class DeliveryOrderLabelInfo {
     required this.commonQty,
     required this.commonUnit,
     required this.isBind,
+    required this.size,
   });
 
   factory DeliveryOrderLabelInfo.fromJson(dynamic json) {
     return DeliveryOrderLabelInfo(
-        pieceNo: json['ZPIECE_NO'],
-        labelNumber: json['BQID'],
-        outBoxLabelNumber: json['ZDBBQID'],
-        materialCode: json['MATNR'],
-        materialName: json['ZMAKTX'],
-        baseQty: json['ZXNUM'],
-        baseUnit: json['MEINS'],
-        commonQty: json['ERFMG'],
-        commonUnit: json['ERFME'],
-        isBind: json['ISBIND'] == 'X');
+      pieceNo: json['ZPIECE_NO'],
+      labelNumber: json['BQID'],
+      outBoxLabelNumber: json['ZDBBQID'],
+      materialCode: json['MATNR'],
+      materialName: json['ZMAKTX'],
+      baseQty: json['ZXNUM'],
+      baseUnit: json['MEINS'],
+      commonQty: json['ERFMG'],
+      commonUnit: json['ERFME'],
+      isBind: json['ISBIND'] == 'X',
+      size: json['SIZE1'],
+    );
   }
+  String sizeMaterial()=>'$materialCode$size';
 
   bool isOutBoxLabel() =>
       outBoxLabelNumber?.isEmpty == true &&
       materialCode?.isEmpty == true &&
       materialName?.isEmpty == true;
+
+  labelId()=>'$labelNumber-$materialCode-$size';
 }
