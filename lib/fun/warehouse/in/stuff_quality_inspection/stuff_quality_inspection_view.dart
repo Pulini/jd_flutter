@@ -133,6 +133,7 @@ class _StuffQualityInspectionPageState
                     //分色
                     text: '添加',
                     click: () {
+                      qtyController.text = state.unColorQty.value;
                       logic.addColor(colorController.text, qtyController.text);
                     },
                     combination: Combination.intact,

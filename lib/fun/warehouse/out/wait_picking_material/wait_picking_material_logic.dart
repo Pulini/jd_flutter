@@ -251,7 +251,7 @@ class WaitPickingMaterialLogic extends GetxController {
     state.getMaterialPrintInfo(
       orderNumber: orderNumber,
       success: (info) =>
-          Get.to(() => PreviewA4Paper(paperWidgets: createA4Paper(info))),
+          Get.to(() => PreviewA4Paper(paperWidgets: createA4Paper2(info))),
       error: (msg) => errorDialog(content: msg),
     );
   }

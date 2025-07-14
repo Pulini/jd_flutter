@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/part_report_ticket_info.dart';
@@ -6,7 +7,6 @@ import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
-import 'package:jd_flutter/widget/edit_text_widget.dart';
 import 'package:jd_flutter/widget/scanner.dart';
 
 class PartReportCancelPage extends StatefulWidget {
@@ -126,12 +126,24 @@ class _PartReportCancelPageState extends State<PartReportCancelPage> {
               children: [
                 Expanded(
                   flex: 5,
-                  child: EditTextSearch(
-                    hint: 'part_report_cancel_scan_ticket'.tr,
-                    onChanged: (v) => state.workTicket = v, //工票
-                    controller: controller,
-                    onSearch: () =>
-                        logic.getReportSummary(controller.text.toString()),
+                  child:  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 5), // 左右 5 像素
+                    child:  CupertinoSearchTextField( //工票
+                      prefixIcon: const SizedBox.shrink(),
+                      controller: controller,
+                      suffixIcon:const Icon(CupertinoIcons.search),
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade300,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      onChanged: (s){
+                        state.workTicket = s;
+                      },
+                      onSuffixTap:(){
+                        logic.getReportSummary(controller.text.toString());
+                      },
+                      placeholder: 'part_report_cancel_scan_ticket'.tr,
+                    ),
                   ),
                 ),
                 Expanded(

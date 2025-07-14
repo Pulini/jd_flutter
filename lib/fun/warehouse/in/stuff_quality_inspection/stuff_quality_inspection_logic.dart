@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/people_message_info.dart';
@@ -39,14 +40,21 @@ class StuffQualityInspectionLogic extends GetxController {
   //分色
   addColor(String batch, String qty) {
     if (batch.isNotEmpty && qty.isNotEmpty) {
-      state.inspectionColorList.add(ShowColorBatch(
-        batch: batch,
-        qty: qty,
-      ));
+        if(state.inspectionColorList.none((data)=> data.batch!=batch)){
+          if(state.unColorQty.toString().toDoubleTry() - qty.toDoubleTry()>=0){
+            state.inspectionColorList.add(ShowColorBatch(
+              batch: batch,
+              qty: qty,
+            ));
+            state.unColorQty.value =
+                (state.unColorQty.toString().toDoubleTry() - qty.toDoubleTry())
+                    .toStringAsFixed(3);
+          }
+        }else{
+          showSnackBar(message: '不能添加相同分色');
+        }
     }
-    state.unColorQty.value =
-        (state.unColorQty.toString().toDoubleTry() - qty.toDoubleTry())
-            .toStringAsFixed(3);
+
   }
 
   //移除分色

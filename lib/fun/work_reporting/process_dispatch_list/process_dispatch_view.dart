@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/process_work_card_list_info.dart';
@@ -98,11 +99,33 @@ class _ProcessDispatchPageState extends State<ProcessDispatchPage> {
   Widget build(BuildContext context) {
     return pageBodyWithDrawer(
       queryWidgets: [
-        EditTextSearch(
-            hint: 'process_dispatch_work_ticket'.tr,
-            onChanged: (v) => state.workTicket = v, //工票
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 5), // 左右 5 像素
+          child: CupertinoSearchTextField(
+            //工票
+            prefixIcon: const SizedBox.shrink(),
             controller: controller,
-            onSearch: () => {}),
+            suffixIcon: const Icon(Icons.qr_code_scanner_outlined),
+            decoration: BoxDecoration(
+              color: Colors.grey.shade300,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            onChanged: (s) {
+              state.workTicket = s;
+            },
+            onSuffixTap: () {
+              Get.to(() => const Scanner())?.then((v) {
+                if (v != null) {
+                  logic.getWorkCardList(
+                      workTicket: v,
+                      date: dispatchDate.getDateFormatYMD(),
+                      empNumber: numberController.text);
+                }
+              });
+            },
+            placeholder: 'process_dispatch_work_ticket'.tr,
+          ),
+        ),
         Center(child: Text('process_dispatch_or'.tr)),
         DatePicker(pickerController: dispatchDate),
         NumberEditText(

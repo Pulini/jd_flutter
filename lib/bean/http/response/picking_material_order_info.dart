@@ -521,50 +521,88 @@ class PickingMaterialOrderPrintInfo {
 class PickingMaterialOrderPrintMaterialInfo {
   String? materialCode; //MATNR  物料编码
   String? materialName; //ZMAKTX  物料描述
+  double? contractOweQty; //BDMNG_QS  合同欠数
+  String? basicUnit; //MEINS  基本单位
+  String? warehouseKeeper; //USNAM 仓库员
+  List<PickingMaterialOrderPrintMaterialSubInfo>? materialSubList;
+
+
+
+  PickingMaterialOrderPrintMaterialInfo({
+    this.materialCode,
+    this.materialName,
+    this.contractOweQty,
+    this.basicUnit,
+    this.warehouseKeeper,
+    this.materialSubList,
+
+  });
+
+  PickingMaterialOrderPrintMaterialInfo.fromJson(dynamic json) {
+    materialCode = json['MATNR'];
+    materialName = json['ZMAKTX'];
+    contractOweQty = json['BDMNG_QS'].toString().toDoubleTry();
+    basicUnit = json['MEINS'];
+    warehouseKeeper = json['USNAM'];
+    materialSubList = [];
+    if (json['ZTDLL_PRINT_MATNR_ITEM2'] != null) {
+      json['ZTDLL_PRINT_MATNR_ITEM2'].forEach((v) {
+        materialSubList!.add(PickingMaterialOrderPrintMaterialSubInfo.fromJson(v));
+      });
+    }
+  }
+}
+
+class PickingMaterialOrderPrintMaterialSubInfo {
+  String? typeBody; //ZZGCXT  型体
+  String? instruction; //VBELN  指令
+  String? colorInfo; //ZCOLOR  色系
+  String? size; //ZSIZE1  尺码
   String? batchNo; //CHARG  批次号
   String? warehouseNumber; //LGORT  库存仓库编号
   String? warehouseName; //LGOBE  库存仓库名称
   double? realTimeInventory; //LABST  即时库存
   String? location; //ZLOCAL  库位
   double? contractQty; //BDMNG_HT  合同数量
-  double? totalInventoryQty; //BDMNG_LJ  累计备货数
   double? shouldInventoryQty; //BDMNG  应备货数
+  double? totalInventoryQty; //BDMNG_LJ  累计备货数
   double? contractOweQty; //BDMNG_QS  合同欠数
-  String? basicUnit; //MEINS  基本单位
-  String? colorInfo; //ZCOLOR  色系
-  String? warehouseKeeper; //USNAM 仓库员
+  String? subBasicUnit; //MEINS  基本单位
 
-  PickingMaterialOrderPrintMaterialInfo({
-    this.materialCode,
-    this.materialName,
+
+  PickingMaterialOrderPrintMaterialSubInfo({
+    this.typeBody,
+    this.instruction,
+    this.colorInfo,
+    this.size,
     this.batchNo,
     this.warehouseNumber,
     this.warehouseName,
     this.realTimeInventory,
     this.location,
     this.contractQty,
-    this.totalInventoryQty,
     this.shouldInventoryQty,
+    this.totalInventoryQty,
     this.contractOweQty,
-    this.basicUnit,
-    this.colorInfo,
-    this.warehouseKeeper,
+    this.subBasicUnit,
+
   });
 
-  PickingMaterialOrderPrintMaterialInfo.fromJson(dynamic json) {
-    materialCode = json['MATNR'];
-    materialName = json['ZMAKTX'];
+  PickingMaterialOrderPrintMaterialSubInfo.fromJson(dynamic json) {
+    typeBody = json['ZZGCXT'];
+    instruction = json['VBELN'];
+    colorInfo = json['ZCOLOR'];
+    size = json['ZSIZE1'];
     batchNo = json['CHARG'];
     warehouseNumber = json['LGORT'];
     warehouseName = json['LGOBE'];
     realTimeInventory = json['LABST'].toString().toDoubleTry();
     location = json['ZLOCAL'];
     contractQty = json['BDMNG_HT'].toString().toDoubleTry();
-    totalInventoryQty = json['BDMNG_LJ'].toString().toDoubleTry();
     shouldInventoryQty = json['BDMNG'].toString().toDoubleTry();
+    totalInventoryQty = json['BDMNG_LJ'].toString().toDoubleTry();
     contractOweQty = json['BDMNG_QS'].toString().toDoubleTry();
-    basicUnit = json['MEINS'];
-    colorInfo = json['ZCOLOR'];
-    warehouseKeeper = json['USNAM'];
+    subBasicUnit = json['MEINS'];
+
   }
 }

@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -517,7 +516,7 @@ textSpan({
     TextSpan(
       children: [
         TextSpan(
-          text: isSpacing? '  $hint' :hint,
+          text: isSpacing ? '  $hint' : hint,
           style: TextStyle(
             fontSize: fontSize,
             fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
@@ -736,7 +735,6 @@ avatarPhoto(String? url) {
   );
 }
 
-
 //滚动选择器
 selectView({
   required List<dynamic> list,
@@ -885,7 +883,329 @@ Widget ratioBarChart({
   );
 }
 
-List<Widget> createA4Paper(PickingMaterialOrderPrintInfo data) {
+// List<Widget> createA4Paper(PickingMaterialOrderPrintInfo data) {
+//   //创建表格列item
+//   Widget paperTableRow(int flex, String text, CrossAxisAlignment alignment) =>
+//       Expanded(
+//         flex: flex,
+//         child: Container(
+//           height: double.infinity,
+//           padding: const EdgeInsets.only(left: 5, right: 5),
+//           decoration: BoxDecoration(
+//             border: Border.all(color: Colors.black, width: 0.5),
+//           ),
+//           child: Column(
+//             mainAxisAlignment: MainAxisAlignment.center,
+//             crossAxisAlignment: alignment,
+//             children: [
+//               Text(
+//                 text,
+//                 style: const TextStyle(
+//                   color: Colors.black,
+//                   fontSize: 16,
+//                 ),
+//                 maxLines: 1,
+//                 overflow: TextOverflow.ellipsis,
+//               ),
+//             ],
+//           ),
+//         ),
+//       );
+//
+//   //创建表格行item
+//   Widget paperTableLine({
+//     required Color backgroundColor,
+//     required String? materialCode,
+//     required String? materialName,
+//     required String? colorSystem,
+//     required String? location,
+//     required String? unit,
+//     required String? contractOweQty,
+//     required String? shouldInventoryQty,
+//     required String? actualInventoryQty,
+//     required String? picking,
+//     required String? actual,
+//   }) =>
+//       Container(
+//         height: 29,
+//         color: backgroundColor,
+//         child: Row(
+//           children: [
+//             paperTableRow(3, materialCode ?? '', CrossAxisAlignment.start),
+//             paperTableRow(11, materialName ?? '', CrossAxisAlignment.start),
+//             paperTableRow(3, colorSystem ?? '', CrossAxisAlignment.start),
+//             paperTableRow(3, location ?? '', CrossAxisAlignment.start),
+//             paperTableRow(1, unit ?? '', CrossAxisAlignment.center),
+//             paperTableRow(2, contractOweQty ?? '', CrossAxisAlignment.end),
+//             paperTableRow(2, shouldInventoryQty ?? '', CrossAxisAlignment.end),
+//             paperTableRow(2, actualInventoryQty ?? '', CrossAxisAlignment.end),
+//             paperTableRow(2, picking ?? '', CrossAxisAlignment.end),
+//             paperTableRow(2, actual ?? '', CrossAxisAlignment.end),
+//           ],
+//         ),
+//       );
+//
+//   //创建纸张
+//   Widget createPaper({
+//     required List<Widget> item,
+//     required int page,
+//     required int totalPage,
+//     required double paperWidth,
+//     required double paperHeight,
+//     required double paperPadding,
+//     required double paperTitleHeight,
+//     required double paperSubTitleHeight,
+//     required double paperFooterHeight,
+//     required String orderNumber,
+//     required String contractNo,
+//     required String factoryName,
+//     required String supplierName,
+//   }) =>
+//       Container(
+//         padding: EdgeInsets.all(paperPadding),
+//         width: paperWidth,
+//         height: paperHeight,
+//         color: Colors.white,
+//         child: Column(
+//           crossAxisAlignment: CrossAxisAlignment.stretch,
+//           children: [
+//             SizedBox(
+//               height: paperTitleHeight,
+//               child: const Center(
+//                 child: Text(
+//                   '仓库备料单',
+//                   style: TextStyle(
+//                     fontSize: 22,
+//                     fontWeight: FontWeight.bold,
+//                     color: Colors.black,
+//                   ),
+//                 ),
+//               ),
+//             ),
+//             SizedBox(
+//               height: paperSubTitleHeight,
+//               child: Row(
+//                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                 children: [
+//                   Text(
+//                     '领料单号：$orderNumber',
+//                     style: const TextStyle(fontSize: 20, color: Colors.black),
+//                   ),
+//                   Text(
+//                     '合同号：$contractNo',
+//                     style: const TextStyle(fontSize: 20, color: Colors.black),
+//                   ),
+//                   Text(
+//                     '工厂：$factoryName',
+//                     style: const TextStyle(fontSize: 20, color: Colors.black),
+//                   ),
+//                   Text(
+//                     '供应商：$supplierName',
+//                     style: const TextStyle(fontSize: 20, color: Colors.black),
+//                   ),
+//                 ],
+//               ),
+//             ),
+//             Container(
+//               decoration: BoxDecoration(
+//                 border: Border.all(color: Colors.black, width: 0.5),
+//               ),
+//               child: Column(
+//                 crossAxisAlignment: CrossAxisAlignment.stretch,
+//                 children: item,
+//               ),
+//             ),
+//             Expanded(child: Container()),
+//             Container(
+//               height: paperFooterHeight,
+//               padding: const EdgeInsets.only(right: 5),
+//               child: Row(
+//                 children: [
+//                   Text(
+//                     '打印日期：${getDateYMD()} ${getTimeHms()}',
+//                     style: const TextStyle(
+//                       color: Colors.black,
+//                       fontSize: 12,
+//                     ),
+//                     textAlign: TextAlign.end,
+//                   ),
+//                   const SizedBox(width: 50),
+//                   Text(
+//                     '打印人：(${userInfo?.number})${userInfo?.name}',
+//                     style: const TextStyle(
+//                       color: Colors.black,
+//                       fontSize: 12,
+//                     ),
+//                     textAlign: TextAlign.end,
+//                   ),
+//                   const Expanded(child: Center()),
+//                   Text(
+//                     '页码：$page/$totalPage',
+//                     style: const TextStyle(
+//                       fontWeight: FontWeight.bold,
+//                       color: Colors.black,
+//                       fontSize: 12,
+//                     ),
+//                     textAlign: TextAlign.end,
+//                   )
+//                 ],
+//               ),
+//             )
+//           ],
+//         ),
+//       );
+//
+//   var scale = 0.5; //纸张缩放比例
+//   double paperHeight = 2380 * scale; //A4纸高度
+//   double paperWidth = 3368 * scale; //A4纸宽度
+//   double paperTitleHeight = 30; //标题高度
+//   double paperSubTitleHeight = 25; //子标题高度
+//   double paperFooterHeight = 20; //底部高度
+//   double paperPadding = 20; //纸张内边距
+//   //表格高度
+//   double tableHeight = paperHeight -
+//       paperTitleHeight -
+//       paperSubTitleHeight -
+//       paperFooterHeight -
+//       paperPadding * 2;
+//
+//   var widgetList = <List<dynamic>>[];
+//
+//   //根据仓库进行物料分类
+//   var warehouseList = <List<PickingMaterialOrderPrintMaterialInfo>>[];
+//   groupBy(data.materialList!, (v) => v.warehouseNumber ?? '').forEach((k, v) {
+//     warehouseList.add(v);
+//   });
+//
+//   //根据物料组进行表格行控件的创建
+//   for (var item1 in warehouseList) {
+//     //添加仓库行
+//     widgetList.add([
+//       30,
+//       Container(
+//         height: 29,
+//         decoration: BoxDecoration(
+//           border: Border.all(color: Colors.black, width: 0.5),
+//         ),
+//         padding: const EdgeInsets.only(left: 5, right: 5),
+//         child: Column(
+//           mainAxisAlignment: MainAxisAlignment.center,
+//           crossAxisAlignment: CrossAxisAlignment.start,
+//           children: [
+//             Text(
+//               '仓库：${item1[0].warehouseName}',
+//               style: const TextStyle(
+//                 fontWeight: FontWeight.bold,
+//                 fontSize: 16,
+//                 color: Colors.black,
+//               ),
+//             )
+//           ],
+//         ),
+//       )
+//     ]);
+//     //添加表头行
+//     widgetList.add([
+//       30,
+//       paperTableLine(
+//         backgroundColor: Colors.grey.shade400,
+//         materialCode: '物料编号',
+//         materialName: '物料描述',
+//         colorSystem: '色系',
+//         location: '库位',
+//         unit: '单位',
+//         contractOweQty: '合同欠数',
+//         shouldInventoryQty: '应备货数',
+//         actualInventoryQty: '实备货数',
+//         picking: '应领料数',
+//         actual: '实领料数',
+//       )
+//     ]);
+//     //添加表头行下方空白
+//     widgetList.add([
+//       30]);
+//     //添加物料行
+//     for (var i = 0; i < item1.length; ++i) {
+//       widgetList.add([
+//         30,
+//         paperTableLine(
+//           backgroundColor: i % 2 == 0 ? Colors.white : Colors.grey.shade200,
+//           materialCode: item1[i].materialCode,
+//           materialName: item1[i].materialName,
+//           colorSystem: item1[i].colorInfo,
+//           location: item1[i].location,
+//           unit: item1[i].basicUnit,
+//           contractOweQty: item1[i].contractOweQty.toShowString(),
+//           shouldInventoryQty: item1[i].shouldInventoryQty.toShowString(),
+//           actualInventoryQty: '',
+//           picking: item1[i].totalInventoryQty.toShowString(),
+//           actual: '',
+//         )
+//       ]);
+//     }
+//   }
+//
+//   //控件总高度
+//   int totalHeight =
+//       widgetList.map((v) => (v[0] as int)).reduce((a, b) => a + b);
+//   var page = 1; //页码
+//   var totalPage = (totalHeight / tableHeight).ceil(); //总页数
+//   var height = 0.0; //当前控件总高度
+//   var item = <Widget>[]; //已添加的控件列表
+//   var paperList = <Widget>[]; //纸张列表
+//
+//   //累加控件行，并根据高度判断是否进行分页。
+//   for (var w in widgetList) {
+//     if (height + w[0] <= tableHeight) {
+//       //控件高度小于纸张高度，累加控件
+//       height += w[0];
+//       item.add(w[1]);
+//       if (widgetList.last == w) {
+//         //控件累加完毕，创建纸张
+//         paperList.add(createPaper(
+//           item: item,
+//           page: page,
+//           totalPage: totalPage,
+//           paperWidth: paperWidth,
+//           paperHeight: paperHeight,
+//           paperPadding: paperPadding,
+//           paperTitleHeight: paperTitleHeight,
+//           paperSubTitleHeight: paperSubTitleHeight,
+//           paperFooterHeight: paperFooterHeight,
+//           orderNumber: data.orderNumber ?? '',
+//           contractNo: data.contractNo ?? '',
+//           factoryName: data.factoryName ?? '',
+//           supplierName: data.supplierName ?? '',
+//         ));
+//         item = [];
+//       }
+//     } else {
+//       //控件高度大于纸张高度，创建纸张，进行分页。
+//       height = 0.0;
+//       item.add(w[1]);
+//       paperList.add(createPaper(
+//         item: item,
+//         page: page,
+//         totalPage: totalPage,
+//         paperWidth: paperWidth,
+//         paperHeight: paperHeight,
+//         paperPadding: paperPadding,
+//         paperTitleHeight: paperTitleHeight,
+//         paperSubTitleHeight: paperSubTitleHeight,
+//         paperFooterHeight: paperFooterHeight,
+//         orderNumber: data.orderNumber ?? '',
+//         contractNo: data.contractNo ?? '',
+//         factoryName: data.factoryName ?? '',
+//         supplierName: data.supplierName ?? '',
+//       ));
+//       page += 1;
+//       item = [];
+//     }
+//   }
+//   return paperList;
+// }
+
+List<Widget> createA4Paper2(PickingMaterialOrderPrintInfo data) {
   //创建表格列item
   Widget paperTableRow(int flex, String text, CrossAxisAlignment alignment) =>
       Expanded(
@@ -916,13 +1236,13 @@ List<Widget> createA4Paper(PickingMaterialOrderPrintInfo data) {
 
   //创建表格行item
   Widget paperTableLine({
+    required bool isTitle,
     required Color backgroundColor,
-    required String? materialCode,
-    required String? materialName,
+    required String? typeBody,
+    required String? instruction,
     required String? colorSystem,
+    required String? size,
     required String? location,
-    required String? unit,
-    required String? contractOweQty,
     required String? shouldInventoryQty,
     required String? actualInventoryQty,
     required String? picking,
@@ -933,16 +1253,28 @@ List<Widget> createA4Paper(PickingMaterialOrderPrintInfo data) {
         color: backgroundColor,
         child: Row(
           children: [
-            paperTableRow(3, materialCode ?? '', CrossAxisAlignment.start),
-            paperTableRow(11, materialName ?? '', CrossAxisAlignment.start),
-            paperTableRow(3, colorSystem ?? '', CrossAxisAlignment.start),
-            paperTableRow(3, location ?? '', CrossAxisAlignment.start),
-            paperTableRow(1, unit ?? '', CrossAxisAlignment.center),
-            paperTableRow(2, contractOweQty ?? '', CrossAxisAlignment.end),
-            paperTableRow(2, shouldInventoryQty ?? '', CrossAxisAlignment.end),
-            paperTableRow(2, actualInventoryQty ?? '', CrossAxisAlignment.end),
-            paperTableRow(2, picking ?? '', CrossAxisAlignment.end),
-            paperTableRow(2, actual ?? '', CrossAxisAlignment.end),
+            paperTableRow(3, typeBody ?? '', CrossAxisAlignment.center),
+            //型体
+            paperTableRow(2, instruction ?? '', CrossAxisAlignment.center),
+            //指令
+            paperTableRow(2, colorSystem ?? '', CrossAxisAlignment.center),
+            //色系
+            paperTableRow(1, size ?? '', CrossAxisAlignment.center),
+            //尺码
+            paperTableRow(1, location ?? '', CrossAxisAlignment.center),
+            //库位
+            paperTableRow(3, shouldInventoryQty ?? '',
+                isTitle ? CrossAxisAlignment.center : CrossAxisAlignment.end),
+            //应备数
+            paperTableRow(3, actualInventoryQty ?? '',
+                isTitle ? CrossAxisAlignment.center : CrossAxisAlignment.end),
+            //实备数
+            paperTableRow(3, picking ?? '',
+                isTitle ? CrossAxisAlignment.center : CrossAxisAlignment.end),
+            //应领数
+            paperTableRow(3, actual ?? '',
+                isTitle ? CrossAxisAlignment.center : CrossAxisAlignment.end),
+            //实领数
           ],
         ),
       );
@@ -990,7 +1322,7 @@ List<Widget> createA4Paper(PickingMaterialOrderPrintInfo data) {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    '领料单号：$orderNumber',
+                    '单号：$orderNumber',
                     style: const TextStyle(fontSize: 20, color: Colors.black),
                   ),
                   Text(
@@ -1002,7 +1334,7 @@ List<Widget> createA4Paper(PickingMaterialOrderPrintInfo data) {
                     style: const TextStyle(fontSize: 20, color: Colors.black),
                   ),
                   Text(
-                    '供应商：$supplierName',
+                    '领料部门/供应商：$supplierName',
                     style: const TextStyle(fontSize: 20, color: Colors.black),
                   ),
                 ],
@@ -1073,72 +1405,126 @@ List<Widget> createA4Paper(PickingMaterialOrderPrintInfo data) {
 
   var widgetList = <List<dynamic>>[];
 
-  //根据仓库进行物料分类
-  var warehouseList = <List<PickingMaterialOrderPrintMaterialInfo>>[];
-  groupBy(data.materialList!, (v) => v.warehouseNumber ?? '').forEach((k, v) {
-    warehouseList.add(v);
-  });
+  //添加表头行
+  widgetList.add([
+    30,
+    paperTableLine(
+      backgroundColor: Colors.grey.shade400,
+      typeBody: '型体',
+      instruction: '指令',
+      colorSystem: '色系',
+      size: '尺码',
+      location: '库位',
+      shouldInventoryQty: '应备数',
+      actualInventoryQty: '实备数/签名',
+      picking: '应领数',
+      actual: '实领数/签名',
+      isTitle: true,
+    )
+  ]);
 
-  //根据物料组进行表格行控件的创建
-  for (var item1 in warehouseList) {
-    //添加仓库行
+  //添加表头行
+  widgetList.add([
+    15,
+    const SizedBox(
+      height: 15,
+    )
+  ]);
+
+  // 根据物料组进行表格行控件的创建
+  for (var item1 in data.materialList!.asMap().entries) {
+    //添加物料行
     widgetList.add([
       30,
       Container(
         height: 29,
         decoration: BoxDecoration(
+          color: Colors.grey.shade400,
           border: Border.all(color: Colors.black, width: 0.5),
         ),
         padding: const EdgeInsets.only(left: 5, right: 5),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              '仓库：${item1[0].warehouseName}',
+              '物料：(${item1.value.materialCode})${item1.value.materialName}',
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
                 color: Colors.black,
               ),
-            )
+            ),
+            Text(
+              '领料员：${item1.value.warehouseKeeper}',
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+                color: Colors.black,
+              ),
+            ),
           ],
         ),
       )
     ]);
-    //添加表头行
-    widgetList.add([
-      30,
-      paperTableLine(
-        backgroundColor: Colors.grey.shade400,
-        materialCode: '物料编号',
-        materialName: '物料描述',
-        colorSystem: '色系',
-        location: '库位',
-        unit: '单位',
-        contractOweQty: '合同欠数',
-        shouldInventoryQty: '应备货数',
-        actualInventoryQty: '实备货数',
-        picking: '应领料数',
-        actual: '实领料数',
-      )
-    ]);
+
     //添加物料行
-    for (var i = 0; i < item1.length; ++i) {
+    for (var i = 0; i < item1.value.materialSubList!.length; ++i) {
       widgetList.add([
         30,
         paperTableLine(
           backgroundColor: i % 2 == 0 ? Colors.white : Colors.grey.shade200,
-          materialCode: item1[i].materialCode,
-          materialName: item1[i].materialName,
-          colorSystem: item1[i].colorInfo,
-          location: item1[i].location,
-          unit: item1[i].basicUnit,
-          contractOweQty: item1[i].contractOweQty.toShowString(),
-          shouldInventoryQty: item1[i].shouldInventoryQty.toShowString(),
+          typeBody: item1.value.materialSubList![i].typeBody,
+          instruction: item1.value.materialSubList![i].instruction,
+          colorSystem: item1.value.materialSubList![i].colorInfo,
+          size: item1.value.materialSubList![i].size,
+          location: item1.value.materialSubList![i].warehouseNumber,
+          shouldInventoryQty:
+              item1.value.materialSubList![i].shouldInventoryQty.toShowString(),
           actualInventoryQty: '',
-          picking: item1[i].totalInventoryQty.toShowString(),
-          actual: '',
+          picking:
+              item1.value.materialSubList![i].totalInventoryQty.toShowString(),
+          actual: '', isTitle: false,
+        )
+      ]);
+    }
+
+    var allShouldQty = item1.value.materialSubList
+        ?.map((v) => v.shouldInventoryQty ?? 0.0)
+        .reduce((a, b) => a.add(b));
+    var allPicking = item1.value.materialSubList
+        ?.map((v) => v.totalInventoryQty ?? 0.0)
+        .reduce((a, b) => a.add(b));
+
+    widgetList.add([
+      30,
+      Container(
+        height: 30,
+        color: Colors.white,
+        child: Row(
+          children: [
+            paperTableRow(
+                9,
+                '合同欠数：${item1.value.contractOweQty.toShowString()}',
+                CrossAxisAlignment.start), //合同欠数
+            paperTableRow(
+                3,
+                allShouldQty! > 0 ? allShouldQty.toShowString() : '',
+                CrossAxisAlignment.end), //应备数
+            paperTableRow(3, '', CrossAxisAlignment.end), //实备数
+            paperTableRow(3, allPicking! > 0 ? allPicking.toShowString() : '',
+                CrossAxisAlignment.end), //应领数
+            paperTableRow(3, '', CrossAxisAlignment.end), //实领数
+          ],
+        ),
+      )
+    ]);
+
+    if (item1.key != data.materialList!.length - 1) {
+      //添加表头行
+      widgetList.add([
+        30,
+        const SizedBox(
+          height: 30,
         )
       ]);
     }
