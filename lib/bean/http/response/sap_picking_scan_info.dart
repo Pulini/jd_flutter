@@ -242,6 +242,7 @@ class SapPackingScanAbnormalInfo {
       (materialName ?? '').contains(text) ||
       (pieceNumber ?? '').contains(text) ||
       (trackNo ?? '').contains(text);
+  String materialId()=>'($materialNumber)$materialName';
 
 }
 class SapPackingScanReverseLabelInfo{

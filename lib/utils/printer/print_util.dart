@@ -242,7 +242,6 @@ class PrintUtil {
   _scanBluetooth() {
     deviceList.clear();
     bluetoothChannel.invokeMethod('ScanBluetooth').then((value) {
-      errorDialog(content: '启动蓝牙搜索失败，请确认蓝牙及位置信息功能是否开启');
       isScanning.value = value;
     });
   }

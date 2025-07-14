@@ -133,7 +133,6 @@ fun bluetoothConnect(
     bleAdapter: BluetoothAdapter,
     mac: String,
 ): Int {
-
     try {
         if (bleAdapter.isDiscovering) {
             val cd = bleAdapter.cancelDiscovery()

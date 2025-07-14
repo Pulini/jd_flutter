@@ -40,33 +40,34 @@ class SapInnerBoxLabelSplitState {
       loading: 'inner_box_label_split_submit_label_split'.tr,
       method: webApiSapSubmitLabelSplit,
       body: [
-        {
-          'BQID': originalLabel!.labelID,
-          'ZPIECE_NO': originalLabel!.pieceID,
-          'USNAM': userInfo?.number,
-          'ZNAME_CN': userInfo?.name,
-          'ZZCJC': originalLabel!.long,
-          'ZZCJK': originalLabel!.width,
-          'ZZCJG': originalLabel!.height,
-          'ITEM': [
-            for (var material in (originalLabel!.subLabel!)
-                .where((v) => v.canSplitQty.value > 0))
-              {
-                'MATNR': material.materialNumber,
-                'MENGE': material.canSplitQty.value.toShowString(),
-                'MEINS': material.unit,
-              }
-          ],
-        },
+        if ((originalLabel!.subLabel!).any((v) => v.canSplitQty.value > 0))
+          {
+            'BQID': originalLabel!.labelID,
+            'ZPIECE_NO': originalLabel!.pieceID,
+            'USNAM': userInfo?.number,
+            'ZNAME_CN': userInfo?.name,
+            'ZZCJC': originalLabel!.long,
+            'ZZCJK': originalLabel!.width,
+            'ZZCJG': originalLabel!.height,
+            'ITEM': [
+              for (var material in (originalLabel!.subLabel!)
+                  .where((v) => v.canSplitQty.value > 0))
+                {
+                  'MATNR': material.materialNumber,
+                  'MENGE': material.canSplitQty.value.toShowString(),
+                  'MEINS': material.unit,
+                }
+            ],
+          },
         for (var label in splitLabelList)
           {
             'BQID': originalLabel!.labelID,
             'ZPIECE_NO': originalLabel!.pieceID,
             'USNAM': userInfo?.number,
             'ZNAME_CN': userInfo?.name,
-            'ZZCJC': label.long,
-            'ZZCJK': label.width,
-            'ZZCJG': label.height,
+            'ZZCJC': label.long.value.toShowString(),
+            'ZZCJK': label.width.value.toShowString(),
+            'ZZCJG': label.height.value.toShowString(),
             'ITEM': [
               for (var material in label.materials)
                 {

@@ -555,4 +555,6 @@ class DeliveryOrderLabelInfo {
       outBoxLabelNumber?.isEmpty == true &&
       materialCode?.isEmpty == true &&
       materialName?.isEmpty == true;
+
+  labelId()=>'$labelNumber-$materialCode-$size';
 }

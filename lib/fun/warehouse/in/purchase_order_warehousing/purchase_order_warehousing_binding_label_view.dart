@@ -34,7 +34,11 @@ class _PurchaseOrderWarehousingBindingLabelPageState
       ),
       child: Row(
         children: [
-          Expanded(child: Text(data.pieceNo ?? '')),
+          Expanded(
+            child: Text(
+              '${data.pieceNo}${data.size?.isNotEmpty == true ? '   ${data.size}#' : ''}',
+            ),
+          ),
           IconButton(
             onPressed: () => askDialog(
               content: 'purchase_order_warehousing_label_check_delete_tips'.tr,

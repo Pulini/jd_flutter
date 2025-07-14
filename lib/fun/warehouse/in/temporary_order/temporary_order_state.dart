@@ -81,7 +81,7 @@ class TemporaryOrderState {
       params: {
         'TempreNo': temporaryNo,
         'Reason': reason,
-        'EmpCode': temporaryNo,
+        'EmpCode': userInfo?.number,
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {

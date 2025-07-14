@@ -36,7 +36,7 @@ class _MyAppState extends State<MyApp> {
         dragDevices: {PointerDeviceKind.touch, PointerDeviceKind.mouse},
       ),
       onGenerateTitle: (context) => 'app_name'.tr,
-      debugShowCheckedModeBanner: isTestUrl(),
+      debugShowCheckedModeBanner: false,
       translations: Translation(),
       navigatorObservers: [GetObserver()],
       locale: View.of(context).platformDispatcher.locale,

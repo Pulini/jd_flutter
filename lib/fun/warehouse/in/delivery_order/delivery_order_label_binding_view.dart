@@ -32,7 +32,11 @@ class _DeliveryOrderLabelBindingPageState
         ),
         child: Row(
           children: [
-            Expanded(child: Text(data.pieceNo ?? '')),
+            Expanded(
+              child: Text(
+                '${data.pieceNo}${data.size?.isNotEmpty == true ? '   ${data.size}#' : ''}',
+              ),
+            ),
             IconButton(
               onPressed: () => askDialog(
                 content: 'delivery_order_label_check_delete_tips'.tr,
@@ -152,7 +156,6 @@ class _DeliveryOrderLabelBindingPageState
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.blue,
-
                           ),
                         ),
                       ),

@@ -5,7 +5,6 @@ import 'package:jd_flutter/bean/http/response/sap_picking_scan_info.dart';
 import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/fun/warehouse/out/sap_packing_scan/sap_packing_delivery_order_list_view.dart';
 import 'package:jd_flutter/fun/warehouse/out/sap_packing_scan/sap_packing_scan_label_view.dart';
-import 'package:jd_flutter/fun/warehouse/out/sap_packing_scan/sap_packing_scan_reverse_view.dart';
 import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
@@ -42,62 +41,18 @@ class _SapPackingScanPageState extends State<SapPackingScanPage> {
   var lopcFactoryAndWarehouse = LinkOptionsPickerController(
     PickerType.sapFactoryWarehouse,
     saveKey:
-        '${RouteConfig.pickingMaterialOrder.name}${PickerType.sapFactoryWarehouse}',
+        '${RouteConfig.sapPackingScan.name}${PickerType.sapFactoryWarehouse}',
   );
-
-  _muneSheet() {
-    showSheet(
-      context: context,
-      body: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          CombinationButton(
-            text: '查看扫码件',
-            click: () {
-              Get.back();
-              Get.to(() => const SapPackingScanLabelPage());
-            },
-          ),
-          const SizedBox(height: 5),
-          CombinationButton(
-            text: '封柜',
-            backgroundColor: Colors.green,
-            click: () {
-              Get.back();
-              logic.sealingCabinet();
-            },
-          ),
-          const SizedBox(height: 5),
-          CombinationButton(
-            text: '冲销',
-            backgroundColor: Colors.red,
-            click: () {
-              Get.back();
-              Get.to(() => const SapPackingScanReversePage())
-                  ?.then((_) => _initScan());
-            },
-          ),
-          const SizedBox(height: 5),
-          const Divider(),
-          CombinationButton(
-            text: '取消',
-            backgroundColor: Colors.grey.shade300,
-            foregroundColor: Colors.grey,
-            click: () => Get.back(),
-          ),
-        ],
-      ),
-    );
-  }
 
   _operationSheet() {
     var tecNumber = TextEditingController(
-        text: spGet(spSavePackingScanActualCabinet) ?? '');
+      text: spGet(spSavePackingScanActualCabinet) ?? '',
+    );
 
     var number = EditText(
       hint: '实际柜号',
       controller: tecNumber,
+      hasClose: false,
     );
 
     var cancel = CombinationButton(
@@ -110,29 +65,8 @@ class _SapPackingScanPageState extends State<SapPackingScanPage> {
       ),
     );
 
-    var viewError = Obx(() => CombinationButton(
-          combination: Combination.left,
-          backgroundColor:
-              state.isAbnormal.value ? Colors.green : Colors.orange,
-          text: state.isAbnormal.value ? '扫码装柜' : '查看出库报错',
-          click: () {
-            if (tecNumber.text.isEmpty) {
-              errorDialog(content: '请输入实际柜号!');
-              return;
-            }
-            if (!opcDestination.isReady()) {
-              errorDialog(content: '请选择目的地!');
-              return;
-            }
-            if (!lopcFactoryAndWarehouse.isReady()) {
-              errorDialog(content: '请选择工厂和仓库!');
-              return;
-            }
-            state.isAbnormal.value = !state.isAbnormal.value;
-          },
-        ));
     var deliveryOrderList = CombinationButton(
-      combination: Combination.right,
+      combination: Combination.middle,
       text: '交货单列表',
       click: () {
         if (tecNumber.text.isEmpty) {
@@ -178,14 +112,9 @@ class _SapPackingScanPageState extends State<SapPackingScanPage> {
         state.warehouse = lopcFactoryAndWarehouse.getPickItem2();
         state.actualCabinet = actualCabinet;
         spSave(spSavePackingScanActualCabinet, actualCabinet);
-        if (state.isAbnormal.value) {
-          state.abnormalSearchText.value = '';
-          logic.getAbnormalOrders(() => Get.back());
-        } else {
-          state.abnormalList.clear();
-          state.materialSearchText.value = '';
-          Get.back();
-        }
+        state.abnormalList.clear();
+        state.materialSearchText.value = '';
+        Get.back();
       },
     );
 
@@ -229,13 +158,8 @@ class _SapPackingScanPageState extends State<SapPackingScanPage> {
         ),
         Row(
           children: [
-            Expanded(child: viewError),
-            Expanded(child: deliveryOrderList),
-          ],
-        ),
-        Row(
-          children: [
             Expanded(child: cancel),
+            Expanded(child: deliveryOrderList),
             Expanded(child: confirm),
           ],
         ),
@@ -250,18 +174,14 @@ class _SapPackingScanPageState extends State<SapPackingScanPage> {
         const SizedBox(height: 20),
         Row(
           children: [
-            Expanded(child: viewError),
-            Expanded(child: deliveryOrderList),
-          ],
-        ),
-        Row(
-          children: [
             Expanded(child: cancel),
+            Expanded(child: deliveryOrderList),
             Expanded(child: confirm),
           ],
         ),
       ];
     }
+
     showModalBottomSheet(
       isDismissible: false,
       context: context,
@@ -359,255 +279,6 @@ class _SapPackingScanPageState extends State<SapPackingScanPage> {
     });
   }
 
-  _abnormalItem(List<List<SapPackingScanAbnormalInfo>> data, int index) {
-    var list = data[index];
-    double qty = list.isEmpty
-        ? 0
-        : list.map((v) => v.quality ?? 0).reduce((a, b) => a.add(b));
-    return Container(
-      padding: const EdgeInsets.only(left: 10, top: 5, bottom: 5),
-      margin: const EdgeInsets.only(bottom: 10),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(5),
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [Colors.blue.shade100, Colors.white],
-        ),
-      ),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              expandedTextSpan(
-                hint: '物料：',
-                text: '(${list[0].materialNumber})${list[0].materialName}',
-                maxLines: 2,
-              ),
-              textSpan(
-                hint: '数量：',
-                text: '${qty.toShowString()}${list[0].unit}',
-              ),
-              Obx(() => Checkbox(
-                    value: list.every((v) => v.isSelected.value),
-                    onChanged: (v) => logic.selectAbnormalItems(
-                      list: data,
-                      index: index,
-                      isSelected: v!,
-                    ),
-                  ))
-            ],
-          ),
-          for (var p in list) ...[
-            const Divider(height: 1, indent: 10, endIndent: 15),
-            Padding(
-              padding: const EdgeInsets.only(left: 10),
-              child: Row(
-                children: [
-                  Expanded(
-                    flex: 3,
-                    child: Text(
-                      '件ID：${p.pieceNumber}',
-                      style: const TextStyle(color: Colors.black54),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: Text(
-                      '日期：${p.date}',
-                      style: const TextStyle(color: Colors.black54),
-                    ),
-                  ),
-                  Obx(() => Checkbox(
-                        value: p.isSelected.value,
-                        onChanged: (v) => logic.selectAbnormalItem(
-                          list: data,
-                          item: p,
-                          isSelected: v!,
-                        ),
-                      )),
-                ],
-              ),
-            ),
-          ]
-        ],
-      ),
-    );
-  }
-
-  _bodyWidgets(bool isAbnormal) {
-    return isAbnormal
-        ? [
-            Row(
-              children: [
-                Expanded(
-                  child: CupertinoSearchTextField(
-                    decoration: BoxDecoration(
-                      color: Colors.white54,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    placeholder: '请输入物料编号货物料描或跟踪号述进行过滤',
-                    onChanged: (v) => state.abnormalSearchText.value = v,
-                  ),
-                ),
-                Obx(() {
-                  var list = logic.showAbnormalList();
-                  return Checkbox(
-                    value: list.isNotEmpty &&
-                        list.every((v) => v.every((v3) => v3.isSelected.value)),
-                    onChanged: (v) {
-                      for (var p in list) {
-                        for (var p2 in p) {
-                          p2.isSelected.value = v!;
-                        }
-                      }
-                    },
-                  );
-                })
-              ],
-            ),
-            Expanded(
-              child: Obx(() {
-                var list = logic.showAbnormalList();
-                return ListView.builder(
-                  itemCount: list.length,
-                  itemBuilder: (c, i) => _abnormalItem(list, i),
-                );
-              }),
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: Obx(() => CombinationButton(
-                        combination: Combination.left,
-                        backgroundColor: Colors.red,
-                        isEnabled: logic
-                            .selectedAbnormalItem()
-                            .any((v) => v.isSelected.value),
-                        text: '删除',
-                        click: () => askDialog(
-                          content: '确定要删除所选标签吗？',
-                          confirm: () => logic.deleteAbnormal(),
-                        ),
-                      )),
-                ),
-                Expanded(
-                  child: Obx(() => CombinationButton(
-                        combination: Combination.right,
-                        backgroundColor: Colors.orange,
-                        isEnabled: logic
-                            .selectedAbnormalItem()
-                            .any((v) => v.isSelected.value),
-                        text: '重处理',
-                        click: () => logic.checkAbnormalSubmitData(
-                          (list, maxDate) => _pickDate(
-                            date: maxDate,
-                            callback: (date) => logic.reSubmit(
-                              postingDate: date,
-                              submitList: list,
-                            ),
-                          ),
-                        ),
-                      )),
-                ),
-              ],
-            )
-          ]
-        : [
-            Row(
-              children: [
-                Obx(() => textSpan(
-                      hint: '件数：',
-                      text: logic.getScanned().toString(),
-                    )),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: CupertinoSearchTextField(
-                    decoration: BoxDecoration(
-                      color: Colors.white54,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    placeholder: '请输入物料编号货物料描或跟踪号述进行过滤',
-                    onChanged: (v) => state.materialSearchText.value = v,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            Row(
-              children: [
-                expandedFrameText(
-                  text: '跟踪号',
-                  borderColor: Colors.black,
-                  flex: 3,
-                  backgroundColor: Colors.green.shade100,
-                  alignment: Alignment.center,
-                ),
-                expandedFrameText(
-                  text: '待装柜数',
-                  borderColor: Colors.black,
-                  flex: 2,
-                  backgroundColor: Colors.green.shade100,
-                  alignment: Alignment.center,
-                ),
-                expandedFrameText(
-                  text: '单位',
-                  borderColor: Colors.black,
-                  flex: 1,
-                  backgroundColor: Colors.green.shade100,
-                  alignment: Alignment.center,
-                ),
-                expandedFrameText(
-                  text: '扫码数量',
-                  borderColor: Colors.black,
-                  flex: 2,
-                  backgroundColor: Colors.green.shade100,
-                  alignment: Alignment.center,
-                ),
-              ],
-            ),
-            Expanded(
-              child: Obx(() {
-                var list = logic.showMaterialList();
-                return ListView.builder(
-                  itemCount: list.length,
-                  itemBuilder: (c, i) => _item(list[i]),
-                );
-              }),
-            ),
-            Row(children: [
-              Expanded(
-                child: CombinationButton(
-                  text: '暂存',
-                  combination: Combination.left,
-                  click: () => logic.checkMaterialSubmitData(
-                    (list) => _pickDate(
-                      callback: (date) => logic.saveLog(
-                        postingDate: date,
-                        submitList: list,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              Expanded(
-                child: CombinationButton(
-                  text: '提交',
-                  combination: Combination.right,
-                  click: () => logic.checkMaterialSubmitData(
-                    (list) => _pickDate(
-                      callback: (date) => logic.submit(
-                        postingDate: date,
-                        submitList: list,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ])
-          ];
-  }
-
   _initScan() {
     pdaScanner(scan: (code) => logic.scanCode(code));
   }
@@ -627,8 +298,8 @@ class _SapPackingScanPageState extends State<SapPackingScanPage> {
       popTitle: '确定要退出装柜扫码吗？',
       actions: [
         IconButton(
-          icon: const Icon(Icons.menu),
-          onPressed: () => _muneSheet(),
+          icon: const Icon(Icons.lock_outline),
+          onPressed: () => logic.sealingCabinet(),
         ),
         IconButton(
           icon: const Icon(Icons.settings_outlined),
@@ -636,11 +307,108 @@ class _SapPackingScanPageState extends State<SapPackingScanPage> {
         )
       ],
       body: Padding(
-        padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
-        child: Obx(() => Column(
-              children: _bodyWidgets(state.isAbnormal.value),
-            )),
-      ),
+          padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Obx(() => textSpan(
+                        hint: '件数：',
+                        text: logic.getScanned().toString(),
+                      )),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: CupertinoSearchTextField(
+                      decoration: BoxDecoration(
+                        color: Colors.white54,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      placeholder: '请输入物料编号货物料描或跟踪号述进行过滤',
+                      onChanged: (v) => state.materialSearchText.value = v,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Row(
+                children: [
+                  expandedFrameText(
+                    text: '跟踪号',
+                    borderColor: Colors.black,
+                    flex: 3,
+                    backgroundColor: Colors.green.shade100,
+                    alignment: Alignment.center,
+                  ),
+                  expandedFrameText(
+                    text: '待装柜数',
+                    borderColor: Colors.black,
+                    flex: 2,
+                    backgroundColor: Colors.green.shade100,
+                    alignment: Alignment.center,
+                  ),
+                  expandedFrameText(
+                    text: '单位',
+                    borderColor: Colors.black,
+                    flex: 1,
+                    backgroundColor: Colors.green.shade100,
+                    alignment: Alignment.center,
+                  ),
+                  expandedFrameText(
+                    text: '扫码数量',
+                    borderColor: Colors.black,
+                    flex: 2,
+                    backgroundColor: Colors.green.shade100,
+                    alignment: Alignment.center,
+                  ),
+                ],
+              ),
+              Expanded(
+                child: Obx(() {
+                  var list = logic.showMaterialList();
+                  return ListView.builder(
+                    itemCount: list.length,
+                    itemBuilder: (c, i) => _item(list[i]),
+                  );
+                }),
+              ),
+              Row(children: [
+                Expanded(
+                    child: CombinationButton(
+                  text: '查看扫码件',
+                  combination: Combination.left,
+                  click: () => Get.to(() => const SapPackingScanLabelPage()),
+                )),
+                Expanded(
+                  child: CombinationButton(
+                    text: '暂存',
+                    combination: Combination.middle,
+                    click: () => logic.checkMaterialSubmitData(
+                      (list) => _pickDate(
+                        callback: (date) => logic.saveLog(
+                          postingDate: date,
+                          submitList: list,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: CombinationButton(
+                    text: '提交',
+                    combination: Combination.right,
+                    click: () => logic.checkMaterialSubmitData(
+                      (list) => _pickDate(
+                        callback: (date) => logic.submit(
+                          postingDate: date,
+                          submitList: list,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ]),
+            ],
+          )),
     );
   }
 

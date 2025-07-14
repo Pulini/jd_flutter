@@ -61,6 +61,8 @@ import 'package:jd_flutter/fun/warehouse/out/picking_material_order/picking_mate
 import 'package:jd_flutter/fun/warehouse/out/production_scan_picking_material/production_scan_picking_material_view.dart';
 import 'package:jd_flutter/fun/warehouse/out/sale_scan_out_warehouse/sale_scan_out_warehouse_view.dart';
 import 'package:jd_flutter/fun/warehouse/out/sap_packing_scan/sap_packing_scan_view.dart';
+import 'package:jd_flutter/fun/warehouse/out/sap_packing_scan_cache_list/sap_packing_scan_cache_list_view.dart';
+import 'package:jd_flutter/fun/warehouse/out/sap_packing_scan_reverse/sap_packing_scan_reverse_view.dart';
 import 'package:jd_flutter/fun/warehouse/out/sap_print_picking/sap_print_picking_view.dart';
 import 'package:jd_flutter/fun/warehouse/out/sap_production_picking/sap_production_picking_view.dart';
 import 'package:jd_flutter/fun/warehouse/out/sap_relocation_picking/sap_relocation_picking_view.dart';
@@ -80,7 +82,6 @@ import 'package:jd_flutter/home/home_view.dart';
 import 'package:jd_flutter/login/login_view.dart';
 import 'fun/warehouse/in/anti_counterfeiting/puma_anti_counterfeiting_view.dart';
 import 'fun/warehouse/out/forming_packing_scan/packing_scan_view.dart';
-
 
 class RouteConfig {
   static const String home = '/home';
@@ -232,7 +233,6 @@ class RouteConfig {
     99,
     const PackingScanPage(),
   );
-
 
   //湿印工序派工
   static Routes processDispatchRegister = Routes(
@@ -591,6 +591,20 @@ class RouteConfig {
     const SapPackingScanPage(),
   );
 
+  //SAP装柜出库暂存单列表
+  static Routes sapPackingScanCacheList = Routes(
+    '/sap_packing_scan_cache_list',
+    99,
+    const SapPackingScanCacheListPage(),
+  );
+
+  //SAP装柜出库冲销
+  static Routes sapPackingScanReverse = Routes(
+    '/sap_packing_scan_reverse',
+    99,
+    const SapPackingScanReversePage(),
+  );
+
   //SAP外箱标绑定
   static Routes sapCartonLabelBinding = Routes(
     '/sap_carton_label_binding',
@@ -619,14 +633,12 @@ class RouteConfig {
   //   const FormingBarcodeCollectionPage(),
   // );
 
-
   //车间计工
   static Routes workshopPlanning = Routes(
     '/workshop_planning',
     99,
     const WorkshopPlanningPage(),
   );
-
 
   //SAP标签重打
   static Routes sapLabelReprint = Routes(
@@ -707,6 +719,8 @@ class RouteConfig {
     qualityInspection,
     patrolInspection,
     sapPackingScan,
+    sapPackingScanCacheList,
+    sapPackingScanReverse,
     sapCartonLabelBinding,
     processDispatchList,
     qualityInspectionList,
@@ -1017,6 +1031,14 @@ class RouteConfig {
     GetPage(
       name: sapPackingScan.name,
       page: () => sapPackingScan.page,
+    ),
+    GetPage(
+      name: sapPackingScanCacheList.name,
+      page: () => sapPackingScanCacheList.page,
+    ),
+    GetPage(
+      name: sapPackingScanReverse.name,
+      page: () => sapPackingScanReverse.page,
     ),
     GetPage(
       name: sapCartonLabelBinding.name,

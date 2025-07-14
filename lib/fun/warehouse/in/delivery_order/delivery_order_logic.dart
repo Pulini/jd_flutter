@@ -259,7 +259,7 @@ class DeliveryOrderLogic extends GetxController {
       for (var label in list) {
         if (label.materialCode == k || label.isOutBoxLabel()) {
           if (!state.orderLabelList
-              .any((v2) => v2.labelNumber == label.labelNumber)) {
+              .any((v2) => v2.labelId() == label.labelId())) {
             state.orderLabelList.add(label);
           }
         }
@@ -281,9 +281,9 @@ class DeliveryOrderLogic extends GetxController {
         for (DeliveryOrderSizeInfo v3 in (v2.deliSize ?? [])) {
           try {
             var has = sizeList.firstWhere((v) => v[0] == (v3.size ?? ''));
-            has[1] = (has[1] as double).add(v3.baseQty.toDoubleTry());
+            has[1] = (has[1] as double).add(v3.qty.toDoubleTry());
           } on StateError catch (_) {
-            sizeList.add([v3.size ?? '', v3.baseQty.toDoubleTry()]);
+            sizeList.add([v3.size ?? '', v3.qty.toDoubleTry()]);
           }
         }
       }
@@ -390,13 +390,13 @@ class DeliveryOrderLogic extends GetxController {
         if (state.scannedLabelList.isNotEmpty) {
           for (var v in state.scannedLabelList
               .where((v) => v.sizeMaterial() == label.sizeMaterial())) {
-            sizeTotal = sizeTotal.add(v.baseQty ?? 0);
+            sizeTotal = sizeTotal.add(v.commonQty ?? 0);
           }
         }
         double quantity = 0;
         for (var v in labelData
             .where((v) => v.sizeMaterial() == label.sizeMaterial())) {
-          quantity = quantity.add(v.baseQty ?? 0);
+          quantity = quantity.add(v.commonQty ?? 0);
         }
 
         if (sizeTotal.add(quantity) > sizeMax) {
@@ -444,7 +444,7 @@ class DeliveryOrderLogic extends GetxController {
       for (var s in v) {
         var total = state.scannedLabelList
             .where((v2) => v2.sizeMaterial() == '$k${s[0]}')
-            .map((v3) => v3.baseQty ?? 0)
+            .map((v3) => v3.commonQty ?? 0)
             .reduce((a, b) => a.add(b));
         if (total > (s[1] as double)) {
           errorDialog(content: 'delivery_order_label_check_qty_exceed_tips'.tr);
@@ -493,7 +493,7 @@ class DeliveryOrderLogic extends GetxController {
   double getScanProgress() {
     var progress = 0.0;
     for (var v in state.scannedLabelList) {
-      progress = progress.add(v.baseQty ?? 0);
+      progress = progress.add(v.commonQty ?? 0);
     }
     return progress;
   }
@@ -501,7 +501,7 @@ class DeliveryOrderLogic extends GetxController {
   double getSizeScanProgress(String size) {
     var progress = 0.0;
     for (var v in state.scannedLabelList.where((v) => v.size == size)) {
-      progress = progress.add(v.baseQty ?? 0);
+      progress = progress.add(v.commonQty ?? 0);
     }
     return progress;
   }

@@ -1,3 +1,4 @@
+import 'package:get/get.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/picker/picker_item.dart';
 
@@ -124,3 +125,105 @@ class WorkshopPlanningSizeInfo {
     );
   }
 }
+//{
+//   "EmpID": 246223,
+//   "Number": "045683",
+//   "Name": "刘富万",
+//   "TypeOfWork": "组底普工",
+//   "BeginHireDate": "2025-06-07",
+//   "DayWorkTime": 11.0,
+//   "Base": 13.5,
+//   "MinBase": 13.5,
+//   "MaxBase": 13.5,
+//   "LeaveDate": "",
+//   "LeaveStatus": false,
+//   "AttendanceStatus": true
+// },
+class WorkshopPlanningWorkerInfo{
+  RxDouble money=(0.0).obs;
+  String? empID;
+  String? number;
+  String? name;
+  String? typeOfWork;
+  String? beginHireDate;
+  double? dayWorkTime;
+  double? base;
+  double? minBase;
+  double? maxBase;
+  String? leaveDate;
+  bool? leaveStatus;
+  bool? attendanceStatus;
+
+  WorkshopPlanningWorkerInfo({
+    this.empID,
+    this.number,
+    this.name,
+    this.typeOfWork,
+    this.beginHireDate,
+    this.dayWorkTime,
+    this.base,
+    this.minBase,
+    this.maxBase,
+    this.leaveDate,
+    this.leaveStatus,
+    this.attendanceStatus,
+  });
+  factory WorkshopPlanningWorkerInfo.fromJson(dynamic json) {
+    return WorkshopPlanningWorkerInfo(
+      empID: json['EmpID'].toString(),
+      number: json['Number'],
+      name: json['Name'],
+      typeOfWork: json['TypeOfWork'],
+      beginHireDate: json['BeginHireDate'],
+      dayWorkTime: json['DayWorkTime'].toString().toDoubleTry(),
+      base: json['Base'].toString().toDoubleTry(),
+      minBase: json['MinBase'].toString().toDoubleTry(),
+      maxBase: json['MaxBase'].toString().toDoubleTry(),
+      leaveDate: json['LeaveDate'],
+      leaveStatus: json['LeaveStatus'],
+      attendanceStatus: json['AttendanceStatus'],
+    );
+  }
+  WorkshopPlanningWorkerInfo deepCopy()=>WorkshopPlanningWorkerInfo(
+    empID: empID,
+    number: number,
+    name: name,
+    typeOfWork: typeOfWork,
+    beginHireDate: beginHireDate,
+    dayWorkTime: dayWorkTime,
+    base: base,
+    minBase: minBase,
+    maxBase: maxBase,
+    leaveDate: leaveDate,
+    leaveStatus: leaveStatus,
+    attendanceStatus: attendanceStatus,
+  );
+  double efficiency()=>base.mul(dayWorkTime??0);
+}
+
+class WorkshopPlanningWorkTypeInfo{
+  String? typeOfWork;
+  double? base;
+  double? minBase;
+  double? maxBase;
+
+  WorkshopPlanningWorkTypeInfo({
+    this.typeOfWork,
+    this.base,
+    this.minBase,
+    this.maxBase,
+  });
+  factory WorkshopPlanningWorkTypeInfo.fromJson(dynamic json) {
+    return WorkshopPlanningWorkTypeInfo(
+      typeOfWork: json['TypeOfWork'],
+      base: json['Base'].toString().toDoubleTry(),
+      minBase: json['MinBase'].toString().toDoubleTry(),
+      maxBase: json['MaxBase'].toString().toDoubleTry(),
+    );
+  }
+  @override
+  toString() {
+    return typeOfWork??'';
+  }
+}
+

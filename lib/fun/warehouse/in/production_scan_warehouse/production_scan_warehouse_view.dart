@@ -55,12 +55,12 @@ class _ProductionScanWarehousePageState
                           hasFocus: true,
                           hint: 'production_scan_operator_number'.tr,
                           controller: state.peopleNumber,
-                          onClear: () => {
-                            state.peopleName.value = '',
-                          },
                           onChanged: (s) {
                             if (s.length >= 6) {
                               logic.checkOrderInfo(number: s);
+                            }
+                            if(s.isEmpty){
+                              state.peopleName.value = '';
                             }
                           },
                         ),

@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/sap_picking_scan_info.dart';
-import 'package:jd_flutter/fun/warehouse/out/sap_packing_scan/sap_packing_scan_logic.dart';
-import 'package:jd_flutter/fun/warehouse/out/sap_packing_scan/sap_packing_scan_state.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/scanner.dart';
+
+import 'sap_packing_scan_reverse_logic.dart';
+import 'sap_packing_scan_reverse_state.dart';
 
 class SapPackingScanReversePage extends StatefulWidget {
   const SapPackingScanReversePage({super.key});
@@ -18,8 +19,10 @@ class SapPackingScanReversePage extends StatefulWidget {
 }
 
 class _SapPackingScanReversePageState extends State<SapPackingScanReversePage> {
-  final SapPackingScanLogic logic = Get.find<SapPackingScanLogic>();
-  final SapPackingScanState state = Get.find<SapPackingScanLogic>().state;
+  final SapPackingScanReverseLogic logic =
+      Get.put(SapPackingScanReverseLogic());
+  final SapPackingScanReverseState state =
+      Get.find<SapPackingScanReverseLogic>().state;
 
   Widget _item(SapPackingScanReverseLabelInfo data) => Container(
         padding: const EdgeInsets.all(7),
@@ -83,16 +86,15 @@ class _SapPackingScanReversePageState extends State<SapPackingScanReversePage> {
   @override
   Widget build(BuildContext context) {
     return pageBody(
-      title: '扫码冲销',
       actions: [
-        Obx(()=>textSpan(
+        Obx(() => textSpan(
             hint: '件数：',
             text: state.reverseLabelList.isEmpty
                 ? '0'
                 : state.reverseLabelList
-                .map((v) => v.pieceNo ?? 0)
-                .reduce((a, b) => a.add(b))
-                .toShowString())),
+                    .map((v) => v.pieceNo ?? 0)
+                    .reduce((a, b) => a.add(b))
+                    .toShowString())),
         const SizedBox(width: 10)
       ],
       body: Column(
@@ -115,5 +117,11 @@ class _SapPackingScanReversePageState extends State<SapPackingScanReversePage> {
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    Get.delete<SapPackingScanReverseLogic>();
+    super.dispose();
   }
 }

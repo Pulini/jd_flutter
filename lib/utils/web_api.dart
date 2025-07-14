@@ -239,7 +239,7 @@ Future<BaseData> _doHttp({
           : response.data;
       base.resultCode = json['ResultCode'];
       base.data = json['Data'];
-      base.message = json['Message'];
+      base.message = '接口提示：${json['Message']}';
     } else {
       if (loading != null && loading.isNotEmpty) Get.back();
       logger.e('网络异常');
@@ -1200,28 +1200,28 @@ const webApiCreateTemporary = 'api/DeliveryNote/TemporaryBatchGeneration';
 const webApiGetBarCodeReportDetails = 'api/ShearOff/GetBarCodeReportDetails';
 
 //条码报工
-const webApiBarCodeReport = "api/ShearOff/BarCodeReport";
+const webApiBarCodeReport = 'api/ShearOff/BarCodeReport';
 
 //获取制程
-const webApiGetHandoverProcessFlow = "api/WetPrinting/GetHandoverProcessFlow";
+const webApiGetHandoverProcessFlow = 'api/WetPrinting/GetHandoverProcessFlow';
 
 //获取交接工序_部件
-const webApiGetHandoverProcess = "api/WetPrinting/GetHandoverProcess";
+const webApiGetHandoverProcess = 'api/WetPrinting/GetHandoverProcess';
 
 //获取交接信息_部件
-const webApiGetHandoverInfo = "api/WetPrinting/GetHandoverInfo";
+const webApiGetHandoverInfo = 'api/WetPrinting/GetHandoverInfo';
 
 //提交交接信息生成交接单_部件
-const webApiSubmitHandoverInfo = "api/WetPrinting/SubmitHandoverInfo";
+const webApiSubmitHandoverInfo = 'api/WetPrinting/SubmitHandoverInfo';
 
 //员工获取可报工信息_部件
-const webApiGetCanReportSummary = "api/WetPrinting/GetCanReportSummary";
+const webApiGetCanReportSummary = 'api/WetPrinting/GetCanReportSummary';
 
 //员工报工_部件
-const webApiSubmitBarCode = "api/WetPrinting/SubmitBarCode";
+const webApiSubmitBarCode = 'api/WetPrinting/SubmitBarCode';
 
 //扫工票取消报工
-const webApiUnReportByWorkCard = "api/WetPrinting/UnReportByWorkCard";
+const webApiUnReportByWorkCard = 'api/WetPrinting/UnReportByWorkCard';
 
 //获取暂收单列表
 const webApiGetTemporaryList = 'api/Temporary/GetTemporaryList';
@@ -1310,56 +1310,56 @@ const webApiSapDeletePatrolInspectionRecord =
 const webApiSapGetPatrolInspectionReport = 'sap/zapp/ZFUN_APP_PJ_SUMQUERY2';
 
 //获取工序派工单列表
-const webApiGetProcessWorkCardList = "api/ShearOff/GetProcessWorkCardList";
+const webApiGetProcessWorkCardList = 'api/ShearOff/GetProcessWorkCardList';
 
 //部件拆分
-const webApiPartsDisassembly = "api/ShearOff/PartsDisassembly";
+const webApiPartsDisassembly = 'api/ShearOff/PartsDisassembly';
 
 //部件合并
-const webApiPartsMerging = "api/ShearOff/PartsMerging";
+const webApiPartsMerging = 'api/ShearOff/PartsMerging';
 
 //获取派工单贴标详情
-const webApiGetBarcodeDetails = "api/ShearOff/GetBarcodeDetails";
+const webApiGetBarcodeDetails = 'api/ShearOff/GetBarcodeDetails';
 
 //生成贴标条码
-const webApiCreateLabelingBarcode = "api/ShearOff/CreateLabelingBarcode";
+const webApiCreateLabelingBarcode = 'api/ShearOff/CreateLabelingBarcode';
 
 //删除条码
-const webApiDelLabelingBarcode = "api/ShearOff/DelLabelingBarcode";
+const webApiDelLabelingBarcode = 'api/ShearOff/DelLabelingBarcode';
 
 //打印传递打印次数
-const webApiUpdatePartsPrintTimes = "api/WetPrinting/UpdatePartsPrintTimes";
+const webApiUpdatePartsPrintTimes = 'api/WetPrinting/UpdatePartsPrintTimes';
 
 //获取组别工单列表
-const webApiGetProductionOrderST = "api/Package/GetProductionOrderST";
+const webApiGetProductionOrderST = 'api/Package/GetProductionOrderST';
 
 //获取品检单列表
-const webApiGetInspectionList = "api/Inspection/GetInspectionList";
+const webApiGetInspectionList = 'api/Inspection/GetInspectionList';
 
 //创建品检单(删除)
-const webApiCreateInspection = "api/Inspection/CreateInspection";
+const webApiCreateInspection = 'api/Inspection/CreateInspection';
 
 //采购订单条码扫描入库（SAP）
-const webApiPurchaseOrderStockInForQuality = "api/Package/PurchaseOrderStockIn";
-
+const webApiPurchaseOrderStockInForQuality = 'api/Package/PurchaseOrderStockIn';
 
 //微信,APP获取SAP品质检验单单条数据
-const webApiGetQualityInspection = "api/Inspection/GetQualityInspection";
+const webApiGetQualityInspection = 'api/Inspection/GetQualityInspection';
 
 //微信,APP获取SAP品质检验单单条数据(编辑)
-const webApiGetQualityInspectionList = "api/DeliveryNote/GetQualityInspectionList";
+const webApiGetQualityInspectionList =
+    'api/DeliveryNote/GetQualityInspectionList';
 
 //获取品检单分色及标签数据
-const webApiGetQualityInspectionColorLabelInfo = "sap/zapp/ZMM_GET_DELI_PIECE";
+const webApiGetQualityInspectionColorLabelInfo = 'sap/zapp/ZMM_GET_DELI_PIECE';
 
 //入库冲销获取色系信息
-const webApiForSapReceiptReversal = "sap/zapp/ZFUN_GET_ZCHECKB_COSEP";
+const webApiForSapReceiptReversal = 'sap/zapp/ZFUN_GET_ZCHECKB_COSEP';
 
 //品检单冲销xiao
-const webApiPurchaseOrderStockInNew = "api/Package/PurchaseOrderStockIn_Off";
+const webApiPurchaseOrderStockInNew = 'api/Package/PurchaseOrderStockIn_Off';
 
 //材料品质异常 品检不合格原因到OA
-const webApiAbnormalMaterialQuality = "api/Inspection/AbnormalMaterialQuality";
+const webApiAbnormalMaterialQuality = 'api/Inspection/AbnormalMaterialQuality';
 
 //获取标签信息
 const webApiSapGetLabelBindingInfo = 'sap/zapp/ZMM051_GET_BQSC';
@@ -1374,32 +1374,42 @@ const webApiSapGetPrintLabelListInfo = 'sap/zapp/ZMM051_BQ_SPLIT';
 const webApiSapSubmitLabelSplit = 'sap/zapp/ZMM051_SPLIT_SMALLBQ';
 
 //查询多少天内的派工数据
-const webApiGetWorkCardPriority = "api/Package/GetWorkCardPriority";
+const webApiGetWorkCardPriority = 'api/Package/GetWorkCardPriority';
 
 //提交优先级
-const webApiSubmitWorkCardPriority = "api/Package/SubmitWorkCardPriority";
+const webApiSubmitWorkCardPriority = 'api/Package/SubmitWorkCardPriority';
 
 //扫码提交鞋盒信息
-const webApiReceiveWorkCardDataST = "api/Package/ReceiveWorkCardDataST";
+const webApiReceiveWorkCardDataST = 'api/Package/ReceiveWorkCardDataST';
 
 //获得线别的当前的分析报告
-const webApiGetWorkLineAnalysisReportNowNew = "api/Package/GetWorkLineAnalysisReportNowNew";
+const webApiGetWorkLineAnalysisReportNowNew =
+    'api/Package/GetWorkLineAnalysisReportNowNew';
 
 //获得线别的分配信息
-const webApiGetDeptDistributeInfoNew = "api/Package/GetDeptDistributeInfoNew";
+const webApiGetDeptDistributeInfoNew = 'api/Package/GetDeptDistributeInfoNew';
 
 //获得该线别的所扫描的所有指令单信息【主要查看最后激活时间】
-const webApiGetDepartmentScanInfoNew = "api/Package/GetDepartmentSacnInfoNew";
+const webApiGetDepartmentScanInfoNew = 'api/Package/GetDepartmentSacnInfoNew';
 
 //根据指令单号 获得该指令单的报表明细
-const webApiGetMoReportByMoNo = "api/Package/GetMoReportByMoNo";
+const webApiGetMoReportByMoNo = 'api/Package/GetMoReportByMoNo';
 
 //根据指令单号获得尺码数据
-const webApiGetScMoSizeBarCodeByMONo = "api/Package/GetScMoSizeBarCodeByMONo";
+const webApiGetScMoSizeBarCodeByMONo = 'api/Package/GetScMoSizeBarCodeByMONo';
 
 //更新无规则条码到指令单尺码分录表中，并执行存储过程同步到表Sc_MO_InBoxBarCode中
-const webApiSubmitScMoSizeBarCodeNew = "api/BarCode/SubmitScMoSizeBarCodeNew";
+const webApiSubmitScMoSizeBarCodeNew = 'api/BarCode/SubmitScMoSizeBarCodeNew';
 
 //团件-扫描二维码获取工票信息
-const webApiProcessPlanningList  = "api/Piecework/GetProcessPlanningList";
+const webApiProcessPlanningList = 'api/Piecework/GetProcessPlanningList';
 
+//团件-通过部门获取员工基数信息
+const webApiGetDepartmentWorkerInfo = 'api/Piecework/GetEmpBaseByDepartmentID';
+
+//团件-根据生产单号获取工种
+const webApiGetTypeOfWorkListByProcess =
+    'api/Piecework/GetTypeOfWorkListByProcess';
+
+//团件-通过工号获取员工基数信息
+const webApiGetEmpBaseByNumber = 'api/Piecework/GetEmpBaseByNumber';

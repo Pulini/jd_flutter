@@ -107,8 +107,8 @@ class TemporaryOrderInfo {
     var sum = 0.0;
     var baseSum = 0.0;
     temporarySize?.forEach((v) {
-      sum += v.qty.toDoubleTry().add(sum);
-      baseSum += v.baseQty.toDoubleTry().add(baseSum);
+      sum = v.qty.toDoubleTry().add(sum);
+      baseSum = v.baseQty.toDoubleTry().add(baseSum);
     });
     return baseUnit == commUnit
         ? '${sum.toShowString()} $commUnit'

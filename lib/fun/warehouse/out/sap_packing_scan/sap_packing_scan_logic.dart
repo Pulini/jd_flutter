@@ -206,23 +206,17 @@ class SapPackingScanLogic extends GetxController {
   }
 
   sealingCabinet() {
-    if (state.materialList.any(
-      (v) => v.labelList!.any((v2) => v2.isScanned.value),
-    )) {
-      errorDialog(content: '请先提交条码！');
-    } else {
-      state.checkContainer(
-        success: (msg) => askDialog(
-          title: '封柜',
-          content: msg,
-          confirm: () => state.sealingCabinet(
-            success: (msg) => successDialog(content: msg),
-            error: (msg) => errorDialog(content: msg),
-          ),
+    state.checkContainer(
+      success: (msg) => askDialog(
+        title: '封柜',
+        content: msg,
+        confirm: () => state.sealingCabinet(
+          success: (msg) => successDialog(content: msg),
+          error: (msg) => errorDialog(content: msg),
         ),
-        error: (msg) => errorDialog(content: msg),
-      );
-    }
+      ),
+      error: (msg) => errorDialog(content: msg),
+    );
   }
 
   checkMaterialSubmitData(Function(List<String>) callback) {
@@ -278,168 +272,6 @@ class SapPackingScanLogic extends GetxController {
     );
   }
 
-  getAbnormalOrders(Function() success) {
-    state.getAbnormalOrders(
-      success: success,
-      error: (msg) => errorDialog(content: msg),
-    );
-  }
-
-  List<List<SapPackingScanAbnormalInfo>> showAbnormalList() {
-    if (state.abnormalSearchText.isEmpty) {
-      return state.abnormalList;
-    } else {
-      var list = selectedAbnormalItem();
-      var group = <List<SapPackingScanAbnormalInfo>>[];
-      groupBy(list, (v) => v.materialNumber ?? '').forEach((k, v) {
-        group.add(v);
-      });
-      return group;
-    }
-  }
-
-  List<SapPackingScanAbnormalInfo> selectedAbnormalItem() {
-    var list = <SapPackingScanAbnormalInfo>[
-      for (var g in state.abnormalList)
-        for (var s in g.where((v) => v.search(state.abnormalSearchText.value)))
-          s
-    ];
-    return list;
-  }
-
-  deleteAbnormal() {
-    state.deleteAbnormal(
-      success: (msg) => successDialog(content: msg),
-      error: (msg) => errorDialog(content: msg),
-    );
-  }
-
-  checkAbnormalSubmitData(
-      Function(List<SapPackingScanAbnormalInfo>, DateTime) callback) {
-    var list = <SapPackingScanAbnormalInfo>[
-      ...selectedAbnormalItem().where((v) => v.isSelected.value)
-    ];
-    var timeList = <String>[
-      ...selectedAbnormalItem()
-          .where((v) => v.isSelected.value)
-          .map((v) => v.date ?? '')
-    ];
-    _findMaxDate(timeList);
-    if (list.isEmpty) {
-      errorDialog(content: '没有可提交的数据!');
-      return;
-    }
-    if (state.actualCabinet.isEmpty) {
-      errorDialog(content: '请填写实际柜号!');
-      return;
-    }
-
-    callback.call(list, _findMaxDate(timeList));
-  }
-
-  DateTime _findMaxDate(List<String> dateList) {
-    var dateTimes = <DateTime>[];
-    for (String date in dateList) {
-      try {
-        dateTimes.add(DateTime(
-          date.substring(0, 4).toIntTry(),
-          date.substring(5, 7).toIntTry(),
-          date.substring(8, 10).toIntTry(),
-        ));
-      } catch (e) {
-        dateTimes.add(DateTime.now());
-      }
-    }
-    DateTime maxDate = dateTimes[0];
-    for (DateTime date in dateTimes.sublist(1)) {
-      if (date.isAfter(maxDate)) {
-        maxDate = date;
-      }
-    }
-    return maxDate;
-  }
-
-  reSubmit({
-    required String postingDate,
-    required List<SapPackingScanAbnormalInfo> submitList,
-  }) {
-    state.reSubmit(
-      postingDate: postingDate,
-      list: submitList,
-      success: (msg) => successDialog(content: msg),
-      error: (msg) => errorDialog(content: msg),
-    );
-  }
-
-  selectAbnormalItem({
-    required List<List<SapPackingScanAbnormalInfo>> list,
-    required SapPackingScanAbnormalInfo item,
-    required bool isSelected,
-  }) {
-    item.isSelected.value = isSelected;
-    for (var group in list) {
-      for (var i in group) {
-        if (i != item && i.pieceNumber == item.pieceNumber) {
-          i.isSelected.value = item.isSelected.value;
-        }
-      }
-    }
-  }
-
-  selectAbnormalItems({
-    required List<List<SapPackingScanAbnormalInfo>> list,
-    required int index,
-    required bool isSelected,
-  }) {
-    var pieceList = <String>[];
-    for (var item in list[index]) {
-      if (!pieceList.contains(item.pieceNumber ?? '')) {
-        pieceList.add(item.pieceNumber ?? '');
-      }
-    }
-    for (var piece in pieceList) {
-      for (var group in list) {
-        group
-            .where((v) => v.pieceNumber == piece)
-            .forEach((v) => v.isSelected.value = isSelected);
-      }
-    }
-  }
-
-  reverseScan(String code) {
-    state.getReverseLabelInfo(
-      code: code,
-      success: (label) {
-        if (state.reverseLabelList.isNotEmpty) {
-          if (state.reverseLabelList[0].deliveryOrderNo ==
-              label.deliveryOrderNo) {
-            if (state.reverseLabelList
-                .none((v) => v.pieceId == label.pieceId)) {
-              state.reverseLabelList.add(label);
-            } else {
-              errorDialog(content: '标签已存在！');
-            }
-          } else {
-            errorDialog(content: '不同交货单不能同时操作！');
-          }
-        } else {
-          state.reverseLabelList.add(label);
-        }
-      },
-      error: (msg) => errorDialog(content: msg),
-    );
-  }
-
-  deleteReverseLabel(SapPackingScanReverseLabelInfo data) {
-    state.reverseLabelList.remove(data);
-  }
-
-  reverseLabel() {
-    state.reverseLabel(
-      success: (msg) => successDialog(content: msg),
-      error: (msg) => errorDialog(content: msg),
-    );
-  }
 
   queryDeliveryOrders({
     required String plannedDate,

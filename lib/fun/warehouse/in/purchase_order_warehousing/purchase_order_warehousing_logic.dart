@@ -116,7 +116,7 @@ class PurchaseOrderWarehousingLogic extends GetxController {
             for (var label in labels) {
               if (label.materialCode == k &&
                   !state.orderLabelList
-                      .any((v2) => v2.labelNumber == label.labelNumber)) {
+                      .any((v2) => v2.labelId() == label.labelId())) {
                 state.orderLabelList.add(label);
               }
             }
@@ -206,13 +206,13 @@ class PurchaseOrderWarehousingLogic extends GetxController {
         if (state.scannedLabelList.isNotEmpty) {
           for (var v in state.scannedLabelList
               .where((v) => v.sizeMaterial() == label.sizeMaterial())) {
-            sizeTotal = sizeTotal.add(v.baseQty ?? 0);
+            sizeTotal = sizeTotal.add(v.commonQty ?? 0);
           }
         }
         double quantity = 0;
         for (var v
         in labelData.where((v) => v.sizeMaterial() == label.sizeMaterial())) {
-          quantity = quantity.add(v.baseQty ?? 0);
+          quantity = quantity.add(v.commonQty ?? 0);
         }
 
         if (sizeTotal.add(quantity) > sizeMax) {
@@ -263,7 +263,7 @@ class PurchaseOrderWarehousingLogic extends GetxController {
   double getScanProgress() {
     var progress = 0.0;
     for (var v in state.scannedLabelList) {
-      progress = progress.add(v.baseQty ?? 0);
+      progress = progress.add(v.commonQty ?? 0);
     }
     return progress;
   }
@@ -271,7 +271,7 @@ class PurchaseOrderWarehousingLogic extends GetxController {
   double getSizeScanProgress(String size) {
     var progress = 0.0;
     for (var v in state.scannedLabelList.where((v) => v.size == size)) {
-      progress = progress.add(v.baseQty ?? 0);
+      progress = progress.add(v.commonQty ?? 0);
     }
     return progress;
   }
@@ -281,7 +281,7 @@ class PurchaseOrderWarehousingLogic extends GetxController {
       for (var s in v) {
         var total = state.scannedLabelList
             .where((v2) => v2.sizeMaterial() == '$k${s[0]}')
-            .map((v3) => v3.baseQty ?? 0)
+            .map((v3) => v3.commonQty ?? 0)
             .reduce((a, b) => a.add(b));
         if (total > (s[1] as double)) {
           errorDialog(content: 'purchase_order_warehousing_qty_exceed_tips'.tr);

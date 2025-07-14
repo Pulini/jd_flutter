@@ -164,7 +164,14 @@ class MainActivity : FlutterActivity() {
                     if (it == null) {
                         result.success(3)
                     } else {
-                        result.success(bluetoothConnect(it, call.arguments.toString()))
+                        Thread {
+                            result.success(
+                                bluetoothConnect(
+                                    it,
+                                    call.arguments.toString()
+                                )
+                            )
+                        }.start()
                     }
                 }
 
@@ -210,12 +217,11 @@ class MainActivity : FlutterActivity() {
 //                    result.success(it)
 //                }
                 Log.e("Pan", "arguments=${call.arguments}")
-                printPdf(this,"拣货清单",(call.arguments as List<String>)){
+                printPdf(this, "拣货清单", (call.arguments as List<String>)) {
                     result.success(it)
                 }
             }
         }
-
 
 
     }
