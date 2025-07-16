@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/workshop_planning_info.dart';
 import 'package:jd_flutter/fun/work_reporting/workshop_planning/workshop_planning_logic.dart';
@@ -7,6 +8,7 @@ import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/check_box_widget.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
+import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/picker/picker_controller.dart';
 import 'package:jd_flutter/widget/picker/picker_view.dart';
 import 'package:marquee/marquee.dart';
@@ -20,17 +22,183 @@ class WorkshopPlanningSalaryCountPage extends StatefulWidget {
 }
 
 class _WorkshopPlanningSalaryCountPageState
-    extends State<WorkshopPlanningSalaryCountPage> {
+    extends State<WorkshopPlanningSalaryCountPage>
+    with SingleTickerProviderStateMixin {
   final WorkshopPlanningLogic logic = Get.put(WorkshopPlanningLogic());
   final WorkshopPlanningState state = Get.find<WorkshopPlanningLogic>().state;
-  int index = Get.arguments['index'];
-  var dpcDate = DatePickerController(PickerType.date, onChanged: (date) {});
+  late DatePickerController dpcDate;
+  late TabController tabController = TabController(length: 2, vsync: this);
+  var pageController = PageController();
 
-  _workerItem(WorkshopPlanningWorkerInfo data, String flowProcessID) =>
-      GestureDetector(
-        onTap: () => logic.modifyWorker(flowProcessID,data),
+  @override
+  initState() {
+    state.submitButtonName.value = '提交报工';
+    dpcDate = DatePickerController(PickerType.date, onChanged: (date) {
+      if (state.planInfo!.planTrackingNumber?.isNotEmpty == true) {
+        logic.getGroupData(date: getDateYMD(time: date));
+      }
+      if (state.planInfo!.allowEdit == false) {
+        state.planInfo!.sizeLists?.forEach((v) => v.qty = 0);
+      }
+    });
+    logic.calculateSalary();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      logic.getGroupData(date: dpcDate.getDateFormatYMD());
+    });
+    super.initState();
+  }
+
+  _processItemTitle() => Row(
+        children: [
+          expandedFrameText(
+            text: '尺码',
+            borderColor: Colors.white,
+            textColor: Colors.white,
+            padding: EdgeInsets.zero,
+            backgroundColor: Colors.deepPurpleAccent.shade200,
+            alignment: Alignment.center,
+          ),
+          expandedFrameText(
+            flex: 2,
+            text: '订单数量',
+            borderColor: Colors.white,
+            textColor: Colors.white,
+            padding: EdgeInsets.zero,
+            backgroundColor: Colors.deepPurpleAccent.shade200,
+            alignment: Alignment.center,
+          ),
+          expandedFrameText(
+            flex: 2,
+            text: '累计报工数',
+            borderColor: Colors.white,
+            textColor: Colors.white,
+            padding: EdgeInsets.zero,
+            backgroundColor: Colors.deepPurpleAccent.shade200,
+            alignment: Alignment.center,
+          ),
+          expandedFrameText(
+            flex: 2,
+            text: '未报工数',
+            borderColor: Colors.white,
+            textColor: Colors.white,
+            padding: EdgeInsets.zero,
+            backgroundColor: Colors.deepPurpleAccent.shade200,
+            alignment: Alignment.center,
+          ),
+          expandedFrameText(
+            flex: 2,
+            text: '本次报工数',
+            borderColor: Colors.white,
+            textColor: Colors.white,
+            padding: EdgeInsets.zero,
+            backgroundColor: Colors.deepPurpleAccent.shade200,
+            alignment: Alignment.center,
+          ),
+        ],
+      );
+
+  _processItem(WorkshopPlanningSizeInfo item) {
+    var controller = TextEditingController(text: item.qty.toShowString());
+    return Row(
+      children: [
+        expandedFrameText(
+          text: item.size ?? '',
+          borderColor: Colors.white,
+          backgroundColor: Colors.deepPurple.shade700,
+          textColor: Colors.white,
+          alignment: Alignment.center,
+        ),
+        expandedFrameText(
+          flex: 2,
+          text: item.processQty.toShowString(),
+          borderColor: Colors.white,
+          backgroundColor: Colors.deepPurple.shade700,
+          textColor: Colors.white,
+          alignment: Alignment.center,
+        ),
+        expandedFrameText(
+          flex: 2,
+          text: item.finishQty.toShowString(),
+          borderColor: Colors.white,
+          backgroundColor: Colors.deepPurple.shade700,
+          textColor: Colors.white,
+          alignment: Alignment.center,
+        ),
+        expandedFrameText(
+          flex: 2,
+          text: item.unFinishQty.toShowString(),
+          borderColor: Colors.white,
+          backgroundColor: Colors.deepPurple.shade700,
+          textColor: Colors.white,
+          alignment: Alignment.center,
+        ),
+        Expanded(
+          flex: 2,
+          child: Container(
+            height: 35,
+            padding: const EdgeInsets.all(3),
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.white),
+              color: Colors.deepPurple.shade700,
+            ),
+            alignment: Alignment.center,
+            child: state.planInfo!.allowEdit == true
+                ? TextField(
+                    style: TextStyle(color: Colors.deepPurple.shade700),
+                    textAlign: TextAlign.center,
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(RegExp('[0-9.]'))
+                    ],
+                    controller: controller,
+                    onChanged: (v) {
+                      if (!v.contains('.')) {
+                        controller.text = v.toDoubleTry().toShowString();
+                      }
+                      if (v.split('.').length > 2 && v.endsWith('.')) {
+                        controller.text = v.substring(0, v.length - 1);
+                      }
+                      // if (v.toDoubleTry() > (item.unFinishQty ?? 0)) {
+                      //   controller.text = item.unFinishQty.toShowString();
+                      // } else {
+                      //   item.qty = v.toDoubleTry();
+                      // }
+
+                      item.qty = v.toDoubleTry();
+                      logic.calculateSalary();
+                    },
+                    decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.only(
+                        top: 0,
+                        bottom: 0,
+                        left: 10,
+                        right: 10,
+                      ),
+                      filled: true,
+                      fillColor: Colors.grey[300],
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5),
+                        borderSide: const BorderSide(color: Colors.transparent),
+                      ),
+                      border: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                      ),
+                    ),
+                  )
+                : Text(
+                    item.qty.toShowString(),
+                    style: const TextStyle(color: Colors.white),
+                    textAlign: TextAlign.center,
+                  ),
+          ),
+        )
+      ],
+    );
+  }
+
+  _workerItem(WorkshopPlanningWorkerInfo data) => GestureDetector(
+        onTap: () => logic.modifyWorker(data),
         child: Container(
-          padding: const EdgeInsets.all(5),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8),
             gradient: LinearGradient(
@@ -41,54 +209,88 @@ class _WorkshopPlanningSalaryCountPageState
                 Colors.blue.shade100,
               ],
             ),
+            border: Border.all(
+              color: Colors.blue,
+              width: 2,
+            ),
           ),
           margin: const EdgeInsets.all(5),
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      '${data.name}(${data.number})<${data.typeOfWork}>',
+          child: IntrinsicHeight(
+            child: Row(
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(5),
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                '${data.name}(${data.number})<${data.typeOfWork}>',
+                              ),
+                            ),
+                            Text(
+                              data.attendanceStatus == true ? '已考勤' : '未考勤',
+                              style: TextStyle(
+                                color: data.attendanceStatus == true
+                                    ? Colors.green
+                                    : Colors.red,
+                              ),
+                            )
+                          ],
+                        ),
+                        Obx(() => Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                textSpan(
+                                  isBold: false,
+                                  hint: '系数：',
+                                  text: data.base.toShowString(),
+                                ),
+                                textSpan(
+                                  isBold: false,
+                                  hint: '工时：',
+                                  text: data.dayWorkTime.toShowString(),
+                                ),
+                                textSpan(
+                                  isBold: false,
+                                  hint: '金额：',
+                                  text: data.money.value.toShowString(),
+                                ),
+                              ],
+                            ))
+                      ],
                     ),
                   ),
-                  Text(
-                    data.attendanceStatus == true ? '已考勤' : '未考勤',
-                    style: TextStyle(
-                      color: data.attendanceStatus == true
-                          ? Colors.green
-                          : Colors.red,
+                ),
+                Container(
+                  width: 30,
+                  height: double.infinity,
+                  decoration: const BoxDecoration(
+                    color: Colors.red,
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(7),
+                      bottomRight: Radius.circular(7),
                     ),
-                  )
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  textSpan(
-                    isBold: false,
-                    hint: '系数：',
-                    text: data.base.toShowString(),
                   ),
-                  textSpan(
-                    isBold: false,
-                    hint: '工时：',
-                    text: data.dayWorkTime.toShowString(),
+                  child: IconButton(
+                    padding: EdgeInsets.zero,
+                    onPressed: () => askDialog(
+                      content: '确定要删除该组员数据吗？',
+                      confirm: () => logic.deleteReportWorker(data),
+                    ),
+                    icon: const Icon(Icons.delete_forever, color: Colors.white),
                   ),
-                  textSpan(
-                    isBold: false,
-                    hint: '金额：',
-                    text: data.money.value.toShowString(),
-                  ),
-                ],
-              )
-            ],
+                ),
+              ],
+            ),
           ),
         ),
       );
 
-  _addWorkerItem(String flowProcessID) => GestureDetector(
-        onTap: () => logic.addWorker(flowProcessID),
+  _addWorkerItem() => GestureDetector(
+        onTap: () => logic.addWorker(),
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8),
@@ -106,17 +308,7 @@ class _WorkshopPlanningSalaryCountPageState
       );
 
   @override
-  initState() {
-    logic.setReportQuantity(index);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      logic.getGroupData(index: index, date: dpcDate.getDateFormatYMD());
-    });
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    var data = state.planList[index];
     return pageBody(
       title: '团件计工',
       actions: [
@@ -125,7 +317,7 @@ class _WorkshopPlanningSalaryCountPageState
           icon: const Icon(Icons.save, color: Colors.blue),
         ),
         IconButton(
-          onPressed: () {},
+          onPressed: () => logic.getGroupData(date: dpcDate.getDateFormatYMD()),
           icon: const Icon(Icons.refresh, color: Colors.blue),
         ),
       ],
@@ -147,7 +339,7 @@ class _WorkshopPlanningSalaryCountPageState
                   ),
                   Expanded(
                     child: Marquee(
-                      text: data.materialName ?? '',
+                      text: state.planInfo!.materialName ?? '',
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Colors.green.shade700),
@@ -165,7 +357,7 @@ class _WorkshopPlanningSalaryCountPageState
               children: [
                 textSpan(
                   hint: '单号：',
-                  text: data.planTrackingNumber ?? '',
+                  text: state.planInfo!.planTrackingNumber ?? '',
                   isBold: false,
                   textColor: Colors.blue.shade900,
                 ),
@@ -182,16 +374,16 @@ class _WorkshopPlanningSalaryCountPageState
               children: [
                 textSpan(
                   hint: '工序：',
-                  text: data.processName ?? '',
+                  text: state.planInfo!.processName ?? '',
                   isBold: false,
                   textColor: Colors.blue.shade900,
                 ),
-                textSpan(
-                  hint: '数量：',
-                  text: state.reportQuantity.value.toShowString(),
-                  isBold: false,
-                  textColor: Colors.blue.shade900,
-                ),
+                Obx(() => textSpan(
+                      hint: '数量：',
+                      text: state.reportQuantity.value.toShowString(),
+                      isBold: false,
+                      textColor: Colors.blue.shade900,
+                    )),
               ],
             ),
             const SizedBox(height: 5),
@@ -224,47 +416,63 @@ class _WorkshopPlanningSalaryCountPageState
                 ],
               ),
             ),
+            TabBar(
+              dividerColor: Colors.blueAccent,
+              indicatorColor: Colors.blueAccent,
+              labelColor: Colors.blueAccent,
+              unselectedLabelColor: Colors.grey,
+              overlayColor: WidgetStateProperty.all(Colors.transparent),
+              controller: tabController,
+              tabs: [
+                Tab(text: '工序'),
+                Tab(text: '报工'),
+              ],
+              onTap: (i) => pageController.jumpToPage(i),
+            ),
             Expanded(
-              child: Container(
-                margin: const EdgeInsets.only(top: 5),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
-                    color: Colors.blue,
-                    width: 2,
+              child: PageView(
+                controller: pageController,
+                onPageChanged: (i) => tabController.animateTo(i),
+                scrollDirection: Axis.horizontal,
+                children: [
+                  Column(
+                    children: [
+                      const SizedBox(height: 5),
+                      _processItemTitle(),
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: state.planInfo!.sizeLists!.length,
+                          itemBuilder: (c, i) =>
+                              _processItem(state.planInfo!.sizeLists![i]),
+                        ),
+                      )
+                    ],
                   ),
-                ),
-                child: Obx(() => ListView(
-                      children: [
-                        for (var item in state.reportWorkerList)
-                          _workerItem(item, data.flowProcessID ?? ''),
-                        _addWorkerItem(data.flowProcessID ?? ''),
-                      ],
-                    )),
+                  Obx(() => ListView(
+                        children: [
+                          for (var item in state.reportWorkerList)
+                            _workerItem(item),
+                          _addWorkerItem(),
+                        ],
+                      )),
+                ],
               ),
             ),
             Row(
               children: [
                 Expanded(
                   child: CombinationButton(
-                    text: '查看工序',
-                    click: () {},
                     combination: Combination.left,
-                  ),
-                ),
-                Expanded(
-                  child: CombinationButton(
                     text: '报工列表',
-                    click: () {},
-                    combination: Combination.middle,
+                    click: () => logic.getGroupPayList(),
                   ),
                 ),
                 Expanded(
-                  child: CombinationButton(
-                    text: '提交报工',
-                    click: () {},
-                    combination: Combination.right,
-                  ),
+                  child: Obx(() => CombinationButton(
+                        text: state.submitButtonName.value,
+                        click: () => logic.submitWorkersReport(),
+                        combination: Combination.right,
+                      )),
                 ),
               ],
             )

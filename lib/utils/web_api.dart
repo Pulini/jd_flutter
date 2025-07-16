@@ -1413,3 +1413,16 @@ const webApiGetTypeOfWorkListByProcess =
 
 //团件-通过工号获取员工基数信息
 const webApiGetEmpBaseByNumber = 'api/Piecework/GetEmpBaseByNumber';
+
+//团件-获取团件列表
+const webApiGetGroupPayList = 'api/Piecework/GetGroupPayList';
+
+//团件-获取团件明细信息
+const webApiGetGroupPayDetail = 'api/Piecework/GetGroupPayDetail';
+
+//团件-删除团件
+const webApiDeleteGroupPay = 'api/Piecework/DeleteGroupPay';
+
+//团件--提交团体、个件计件工资
+const webApiSubmitGroupPay = 'api/Piecework/SubmitGroupPay';
+

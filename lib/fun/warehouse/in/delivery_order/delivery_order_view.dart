@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/bean/home_button.dart';
 import 'package:jd_flutter/bean/http/response/delivery_order_info.dart';
 import 'package:jd_flutter/fun/warehouse/in/delivery_order/delivery_order_check_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/delivery_order/delivery_order_detail_view.dart';
@@ -13,6 +14,7 @@ import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
 import 'package:jd_flutter/widget/picker/picker_controller.dart';
 import 'package:jd_flutter/widget/picker/picker_view.dart';
+import 'package:jd_flutter/widget/scanner.dart';
 import 'package:rotated_corner_decoration/rotated_corner_decoration.dart';
 
 import 'delivery_order_logic.dart';
@@ -93,17 +95,21 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
   }
 
   _checkOrder(bool isCheckOrder, List<DeliveryOrderInfo> group) {
-    var data = group[0];
     if (isCheckOrder) {
-      if (data.isScanPieces == 'X'&&data.isPackingMaterials==false) {
-        logic.getSupplierLabelInfo(group: group, refresh: () => _query());
+      if (group.first.isScanPieces == 'X' &&
+          group.first.isPackingMaterials == false) {
+        logic.getSupplierLabelInfo(
+            group: group,
+            refresh: (v) {
+              initScanner();
+              if (v) _query();
+            });
       } else {
         logic.getOrderDetail(
-          isExempt: data.isExempt ?? false,
+          isExempt: group.first.isExempt ?? false,
           isCheckOrder: isCheckOrder,
-          produceOrderNo: data.produceOrderNo ?? '',
-          factoryNumber: data.factoryNO ?? '',
-          deliNo: data.deliNo ?? '',
+          factoryNumber: group.first.factoryNO ?? '',
+          deliNo: group.first.deliNo ?? '',
           workCenterID:
               userInfo?.sapRole == '003' ? opcWorkCenter.selectedId.value : '',
           goTo: () => Get.to(() => const DeliveryOrderCheckPage())?.then((v) {
@@ -114,11 +120,10 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
       }
     } else {
       logic.getOrderDetail(
-        isExempt: data.isExempt ?? false,
+        isExempt: group.first.isExempt ?? false,
         isCheckOrder: isCheckOrder,
-        produceOrderNo: data.produceOrderNo ?? '',
-        factoryNumber: data.factoryNO ?? '',
-        deliNo: data.deliNo ?? '',
+        factoryNumber: group.first.factoryNO ?? '',
+        deliNo: group.first.deliNo ?? '',
         workCenterID:
             userInfo?.sapRole == '003' ? opcWorkCenter.selectedId.value : '',
         goTo: () => Get.to(() => const DeliveryOrderDetailPage()),
@@ -768,6 +773,19 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
 
   var width = 0.0;
 
+  initScanner() {
+    pdaScanner(scan: (code) {
+      tecPurchaseOrder.text = code;
+      _query();
+    });
+  }
+
+  @override
+  void initState() {
+    initScanner();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
@@ -780,7 +798,7 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
         backgroundColor: Colors.transparent,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
-          title: Text(getFunctionTitle()),
+          title: Text(functionTitle),
           actions: [
             Builder(
               builder: (context) => IconButton(

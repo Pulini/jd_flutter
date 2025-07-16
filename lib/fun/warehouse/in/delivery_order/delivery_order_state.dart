@@ -93,7 +93,6 @@ class DeliveryOrderState {
   }
 
   getDeliveryOrdersDetails({
-    required String produceOrderNo,
     required String deliNo,
     required String line,
     required Function() success,
@@ -103,7 +102,7 @@ class DeliveryOrderState {
       loading: 'delivery_order_querying_delivery_order_detail'.tr,
       method: webApiGetDeliveryOrdersDetails,
       params: {
-        'scWorkcardNo': produceOrderNo,
+        'scWorkcardNo': '',
         'DeliNO': deliNo,
         'Line': line,
       },
@@ -210,7 +209,7 @@ class DeliveryOrderState {
           for (var item in reversalList)
             {
               'MATNR': '',
-              'ZDELINO': item,
+              'ZDELINO': item.deliNo,
             }
         ]
       },
@@ -232,7 +231,7 @@ class DeliveryOrderState {
     required Function(String msg) success,
     required Function(String msg) error,
   }) {
-    sapPost(
+    httpPost(
       loading: 'delivery_order_reversing_stock_in'.tr,
       method: webApiReversalStockIn,
       body: {
@@ -261,7 +260,7 @@ class DeliveryOrderState {
     required Function(String msg) success,
     required Function(String msg) error,
   }) {
-    sapPost(
+    httpPost(
       loading: 'delivery_order_reversing_stock_out'.tr,
       method: webApiReversalStockOut,
       body: {
@@ -302,7 +301,6 @@ class DeliveryOrderState {
         'ZDELINO': deliveryOrderNumber,
       },
     ).then((response) {
-
       if (response.resultCode == resultSuccess) {
         success.call([
           for (var json in response.data) DeliveryOrderLabelInfo.fromJson(json)

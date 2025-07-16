@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/production_dispatch_order_detail_info.dart';
 import 'package:jd_flutter/bean/http/response/sap_surplus_material_info.dart';
+import 'package:jd_flutter/bean/http/response/workshop_planning_info.dart';
 import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/home/home_view.dart';
 import 'package:jd_flutter/login/login_view.dart';
@@ -61,6 +62,7 @@ class AppInitService extends GetxService {
       db.execute(SaveWorkProcedure.dbCreate);
       db.execute(BarCodeInfo.dbCreate);
       db.execute(SurplusMaterialLabelInfo.dbCreate);
+      db.execute(WorkshopPlanningWorkersCache.dbCreate);
       db.close();
     }, onUpgrade: (db, ov, nv) {
       debugPrint('onUpgrade-----------ov=$ov nv=$nv');
@@ -74,6 +76,10 @@ class AppInitService extends GetxService {
           case 3: // 版本2升级到版本3
             debugPrint('版本2升级到版本3');
             db.execute(SurplusMaterialLabelInfo.dbCreate);
+            break;
+          case 4: // 版本3升级到版本4
+            debugPrint('版本3升级到版本4');
+            db.execute(WorkshopPlanningWorkersCache.dbCreate);
             break;
           default:
             break;

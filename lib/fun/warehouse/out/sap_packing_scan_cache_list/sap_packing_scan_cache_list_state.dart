@@ -15,6 +15,7 @@ class SapPackingScanCacheListState {
     required String factory,
     required String warehouse,
     required String actualCabinet,
+    required Function() success,
     required Function(String) error,
   }) {
     sapPost(
@@ -36,7 +37,10 @@ class SapPackingScanCacheListState {
           response.data,
           SapPackingScanAbnormalInfo.fromJson,
         ),
-        ).then((list)=>abnormalList.value=list);
+        ).then((list){
+           abnormalList.value=list;
+           success.call();
+         });
       } else {
         error.call(response.message ?? 'query_default_error'.tr);
       }
@@ -105,6 +109,9 @@ class SapPackingScanCacheListState {
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
+        for (var label in list) {
+          abnormalList.removeWhere((v)=>v.labelNumber==label.labelNumber);
+        }
         success.call(response.message ?? '');
       } else {
         error.call(response.message ?? 'query_default_error'.tr);

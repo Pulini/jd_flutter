@@ -41,6 +41,7 @@ class SapPackingScanCacheListLogic extends GetxController {
     required String factory,
     required String warehouse,
     required String actualCabinet,
+    required Function() refresh,
   }) {
     state.getAbnormalOrders(
       plannedDate: plannedDate,
@@ -48,6 +49,7 @@ class SapPackingScanCacheListLogic extends GetxController {
       factory: factory,
       warehouse: warehouse,
       actualCabinet: actualCabinet,
+      success:refresh,
       error: (msg) => errorDialog(content: msg),
     );
   }
@@ -106,12 +108,14 @@ class SapPackingScanCacheListLogic extends GetxController {
     required String actualCabinet,
     required String postingDate,
     required List<SapPackingScanAbnormalInfo> submitList,
+    required Function() refresh,
   }) {
     state.reSubmit(
       actualCabinet: actualCabinet,
       postingDate: postingDate,
       list: submitList,
       success: (msg) {
+        refresh.call();
         successDialog(content: msg);
       },
       error: (msg) => errorDialog(content: msg),

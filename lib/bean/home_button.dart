@@ -1,3 +1,4 @@
+import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/home_function_info.dart';
 import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/utils/app_init_service.dart';
@@ -42,7 +43,13 @@ class HomeButton extends ButtonItem {
       }
     }
   }
+
+  toFunction() {
+    functionTitle=name;
+    Get.toNamed(route);
+  }
 }
+var functionTitle='';
 
 class HomeButtonGroup extends ButtonItem {
   List<HomeButton> functionGroup;
@@ -72,8 +79,7 @@ List<ButtonItem> formatButton(List<HomeFunctions> data) {
               id: sub.id ?? 0,
               version: sub.version ?? 0,
               route: sub.routeSrc ?? '',
-              hasPermission: isTestUrl() ||
-                      userInfo?.number == '013600'
+              hasPermission: isTestUrl() || userInfo?.number == '013600'
                   ? true
                   : sub.hasPermission ?? false,
             )
@@ -97,8 +103,7 @@ List<ButtonItem> formatButton(List<HomeFunctions> data) {
           id: fun.functionGroup![0].id ?? 0,
           version: fun.functionGroup![0].version ?? 0,
           route: fun.functionGroup![0].routeSrc ?? '',
-          hasPermission: isTestUrl() ||
-                  userInfo?.number == '013600'
+          hasPermission: isTestUrl() || userInfo?.number == '013600'
               ? true
               : fun.functionGroup![0].hasPermission ?? false,
         ));

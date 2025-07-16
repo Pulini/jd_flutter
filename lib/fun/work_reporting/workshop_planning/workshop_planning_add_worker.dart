@@ -19,7 +19,6 @@ class _WorkshopPlanningAddWorkerPageState
     extends State<WorkshopPlanningAddWorkerPage> {
   final WorkshopPlanningLogic logic = Get.put(WorkshopPlanningLogic());
   final WorkshopPlanningState state = Get.find<WorkshopPlanningLogic>().state;
-  var flowProcessID = Get.arguments['flowProcessID'];
   var cWorkerType = FixedExtentScrollController();
   var tecWorkerNumber = TextEditingController();
   var tecManHours = TextEditingController();
@@ -116,7 +115,6 @@ class _WorkshopPlanningAddWorkerPageState
                                 ],
                                 controller: tecWorkerNumber,
                                 onChanged: (v) => logic.getWorkerInfo(
-                                  processFlowID: flowProcessID,
                                   number: v,
                                   workerType: cWorkerType,
                                   workerNumber: tecWorkerNumber,

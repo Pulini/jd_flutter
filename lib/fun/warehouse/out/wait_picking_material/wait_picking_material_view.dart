@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/bean/home_button.dart';
 import 'package:jd_flutter/bean/http/response/wait_picking_material_info.dart';
 import 'package:jd_flutter/fun/warehouse/out/wait_picking_material/wait_picking_material_dialog.dart';
 import 'package:jd_flutter/route.dart';
@@ -715,7 +716,7 @@ class _WaitPickingMaterialPageState extends State<WaitPickingMaterialPage> {
         backgroundColor: Colors.transparent,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
-          title: Text(getFunctionTitle()),
+          title: Text(functionTitle),
           actions: [
             Builder(
               builder: (context) => IconButton(

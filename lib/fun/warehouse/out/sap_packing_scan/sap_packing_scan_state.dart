@@ -205,6 +205,7 @@ class SapPackingScanState {
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
+        materialList.clear();
         success.call(response.message ?? '');
       } else {
         error.call(response.message ?? 'query_default_error'.tr);

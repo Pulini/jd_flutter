@@ -1,25 +1,31 @@
-import 'dart:io';
-
+import 'dart:convert';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/workshop_planning_info.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 
 class WorkshopPlanningState {
+  var submitButtonName = ''.obs;
   var planList = <WorkshopPlanningInfo>[].obs;
+  var workTypeList = <WorkshopPlanningWorkTypeInfo>[].obs;
+  WorkshopPlanningInfo? planInfo;
   var reportWorkerList = <WorkshopPlanningWorkerInfo>[].obs;
   var workerList = <WorkshopPlanningWorkerInfo>[].obs;
   var workerListSelectedIndex = (-1).obs;
-  var workTypeList = <WorkshopPlanningWorkTypeInfo>[].obs;
   WorkshopPlanningWorkerInfo? worker;
   var reportQuantity = (0.0).obs;
-  var reportDate = ''.obs;
-  var price = (0.0).obs;
+  var reportDate = '';
+  var price = 0.0;
   var departmentID = '';
   var groupName = '';
+  var groupPayInterID = -1;
   var isDayShift = true.obs;
   var minCoefficient = (0.0).obs;
   var maxCoefficient = (0.0).obs;
+  var reportList = <WorkshopPlanningReportInfo>[].obs;
+  var hasDelete = false;
+  WorkshopPlanningReportDetailInfo? reportDetailInfo;
 
   getProcessPlanInfo({
     String? workCardInterID,
@@ -57,8 +63,8 @@ class WorkshopPlanningState {
 
   getDepartmentWorkerInfo({
     required String processFlowID,
-    required String departmentID,
     required String date,
+    required Function() refresh,
     required Function(String) error,
   }) {
     httpGet(
@@ -67,7 +73,7 @@ class WorkshopPlanningState {
       params: {
         // 'OrganizeID': userInfo?.organizeID,
         // 'ProcessFlowID': processFlowID,
-        // 'DepartmentID': departmentID,
+        // 'DepartmentID':  departmentID,
         // 'Date': date,
         'OrganizeID': 40,
         'ProcessFlowID': 35,
@@ -76,19 +82,21 @@ class WorkshopPlanningState {
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        reportDate.value = date;
+        reportDate = date;
         workerList.value = [
           for (var json in response.data)
             WorkshopPlanningWorkerInfo.fromJson(json)
         ];
       } else {
+        workerList.value = [];
         error.call(response.message ?? 'query_default_error'.tr);
       }
+      reportWorkerList.value = workerList;
+      refresh.call();
     });
   }
 
   getWorkTypeListByProcess({
-    required String processFlowID,
     required Function() success,
     required Function(String) error,
   }) {
@@ -97,7 +105,7 @@ class WorkshopPlanningState {
       method: webApiGetTypeOfWorkListByProcess,
       params: {
         'OrganizeID': userInfo?.organizeID,
-        'ProcessFlowID': processFlowID,
+        'ProcessFlowID': planInfo!.flowProcessID ?? '',
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
@@ -113,7 +121,6 @@ class WorkshopPlanningState {
   }
 
   getEmpBaseByNumber({
-    required String processFlowID,
     required String number,
     required Function(WorkshopPlanningWorkerInfo) success,
     required Function(String) error,
@@ -122,9 +129,9 @@ class WorkshopPlanningState {
       loading: '正在获取工种列表...',
       method: webApiGetEmpBaseByNumber,
       params: {
-        'FlowProcessID': processFlowID,
+        'FlowProcessID': planInfo!.flowProcessID ?? '',
         'Number': number,
-        'Date': reportDate.value,
+        'Date': reportDate,
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
@@ -133,9 +140,129 @@ class WorkshopPlanningState {
         if (index == -1) {
           workerList.add(worker);
           success.call(workerList.last);
-        }else{
+        } else {
           success.call(workerList[index]);
         }
+      } else {
+        error.call(response.message ?? 'query_default_error'.tr);
+      }
+    });
+  }
+
+  getGroupPayList({
+    Function()? success,
+    required Function(String) error,
+  }) {
+    httpGet(
+      loading: '正在获取报工列表...',
+      method: webApiGetGroupPayList,
+      params: {
+        'ID': planInfo!.id ?? '',
+        'DepartmentID': departmentID,
+      },
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        reportList.value = [
+          for (var item in response.data)
+            WorkshopPlanningReportInfo.fromJson(item)
+        ];
+        success?.call();
+      } else {
+        reportList.value = [];
+        error.call(response.message ?? 'query_default_error'.tr);
+      }
+    });
+  }
+
+  getGroupPayDetail({
+    required int groupPayInterID,
+    required Function() success,
+    required Function(String) error,
+  }) {
+    httpGet(
+      loading: '正在获取报工明细...',
+      method: webApiGetGroupPayDetail,
+      params: {
+        'GroupPayInterID': groupPayInterID,
+      },
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        reportDetailInfo =
+            WorkshopPlanningReportDetailInfo.fromJson(response.data);
+        this.groupPayInterID = groupPayInterID;
+        success.call();
+      } else {
+        error.call(response.message ?? 'query_default_error'.tr);
+      }
+    });
+  }
+
+  deleteGroupPay({
+    required int groupPayInterID,
+    required Function(String) success,
+    required Function(String) error,
+  }) {
+    httpPost(
+      loading: '正在删除报工...',
+      method: webApiDeleteGroupPay,
+      params: {
+        'GroupPayInterID': groupPayInterID,
+        'UserID': userInfo?.empID,
+      },
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        hasDelete = true;
+        success.call(response.message ?? '');
+      } else {
+        error.call(response.message ?? 'query_default_error'.tr);
+      }
+    });
+  }
+
+  submitGroupPay({
+    required Function(String ) success,
+    required Function(String ) error,
+  }) {
+    httpPost(
+      loading: '正在提交报工...',
+      method: webApiSubmitGroupPay,
+      body: {
+        'ID': planInfo!.id,
+        'IsGroupWork': planInfo!.isGroupWork,
+        'AllowEdit': planInfo!.allowEdit,
+        'DepartmentID': departmentID,
+        'WorkShift': isDayShift.value ? 0 : 1,
+        'CreatorID': userInfo?.userID,
+        'Date': reportDate,
+        'GroupPayInterID': groupPayInterID,
+        'SizeLists': [
+          for (var item in planInfo!.sizeLists!)
+            {
+              'ID': '',
+              'Size': item.size,
+              'Qty': item.qty,
+            }
+        ],
+        'EmpInfoReqList': [
+          for (var item in reportWorkerList)
+            {
+              'Base': item.base,
+              'DayWorkTime': item.dayWorkTime,
+              'EmpID': item.empID,
+              'Money': item.money.value,
+              'Price': price,
+              'TypeOfWork': item.typeOfWork,
+            }
+        ],
+      },
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        WorkshopPlanningWorkersCache(
+            group:departmentID,
+            day:getDateYMD(),
+            data:jsonEncode(reportWorkerList.map((v) => v.toJson()).toList()),
+        ).save();
+        success.call(response.message??'');
       } else {
         error.call(response.message ?? 'query_default_error'.tr);
       }
