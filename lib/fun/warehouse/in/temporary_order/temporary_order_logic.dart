@@ -1,4 +1,6 @@
+import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/bean/http/response/temporary_order_info.dart';
 import 'package:jd_flutter/fun/warehouse/in/temporary_order/temporary_order_detail_view.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
@@ -88,4 +90,10 @@ class TemporaryOrderLogic extends GetxController {
       return true;
     }
   }
+
+   selectAllMaterial(TemporaryOrderDetailReceiptInfo data,bool isSelected) {
+    state.detailInfo!.receipt!.where((v)=>v.materialCode==data.materialCode).forEach((v){
+      v.isSelected.value=isSelected;
+    });
+   }
 }
