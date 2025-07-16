@@ -29,7 +29,8 @@ class _TemporaryOrderDetailPageState extends State<TemporaryOrderDetailPage> {
       const TextStyle(color: Colors.black54, fontWeight: FontWeight.bold);
   var itemTextStyle = const TextStyle(color: Colors.black54);
 
-  Widget _item(TemporaryOrderDetailReceiptInfo data) {
+  Widget _item(int index) {
+    var data=state.detailInfo!.receipt![index];
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.all(5),
@@ -144,7 +145,7 @@ class _TemporaryOrderDetailPageState extends State<TemporaryOrderDetailPage> {
           Obx(() => (data.quantityTemporarilyReceived ?? 0) > 0
               ? Checkbox(
                   value: data.isSelected.value,
-                  onChanged: (v) => data.isSelected.value = v!,
+                  onChanged: (v)=>logic.selectAllMaterial(data,v!),
                 )
               : Container())
         ],
@@ -277,7 +278,7 @@ class _TemporaryOrderDetailPageState extends State<TemporaryOrderDetailPage> {
             Expanded(
               child: ListView.builder(
                 itemCount: detail.receipt!.length,
-                itemBuilder: (c, i) => _item(detail.receipt![i]),
+                itemBuilder: (c, i) => _item(i),
               ),
             ),
           ],
