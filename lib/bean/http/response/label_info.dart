@@ -45,6 +45,7 @@ class LabelInfo {
     this.barCodeTypeID,
     this.packType,
     this.interID,
+    this.labelType,
     this.departName,
     this.items,
   });
@@ -75,6 +76,7 @@ class LabelInfo {
     barCodeTypeID = json['BarCodeTypeID'];
     packType = json['PackType'];
     interID = json['InterID'];
+    labelType = json['LabelType'];
     departName = json['DepartName'];
     if (json['Items'] != null) {
       items = [];
@@ -106,6 +108,7 @@ class LabelInfo {
   int? barCodeTypeID;
   bool? packType;
   int? interID;
+  int? labelType;
   String? departName;
   List<LabelSizeInfo>? items;
 
@@ -134,6 +137,7 @@ class LabelInfo {
     map['BarCodeTypeID'] = barCodeTypeID;
     map['PackType'] = packType;
     map['InterID'] = interID;
+    map['LabelType'] = labelType;
     map['DepartName'] = departName;
     if (items != null) {
       map['Items'] = items?.map((v) => v.toJson()).toList();

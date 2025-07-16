@@ -6,6 +6,7 @@ import 'package:jd_flutter/bean/http/response/label_info.dart';
 import 'package:jd_flutter/bean/http/response/maintain_material_info.dart';
 import 'package:jd_flutter/bean/http/response/picking_bar_code_info.dart';
 import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/preview_label_list_widget.dart';
@@ -172,87 +173,87 @@ class MaintainLabelLogic extends GetxController {
     );
   }
 
+  printLabelState(
+      {required List<List<LabelInfo>> selectLabel,
+      required int type,
+      required Function(int) success}) {
+    state.setLabelState(
+      selectLabels: selectLabel,
+      labelType: type,
+      success: (int type) {
+        success.call(type);
+      },
+    );
+  }
+
   checkLanguage({
-    required Function(List<List<LabelInfo>>, List<String>) callback,
+    required Function(int labelType, List<List<LabelInfo>>, List<String>)
+        callback,
   }) {
     var languageList = <String>[];
+    var select = <LabelInfo>[];
+
     if (state.isMaterialLabel.value) {
-      var select = state.labelList.where((v) => v.select).toList();
+      logger.f('-----1-----------');
+        for (var data in state.labelGroupList) {
+          for (var value in data) {
+            if(value.select== true){
+              select.add(value);
+            }
+          }
+        }
       if (select.isEmpty) {
         errorDialog(content: 'maintain_label_select_label'.tr);
         return;
       }
-      for (var order in select) {
-        order.materialOtherName
-            ?.where((v) => v.languageName?.isNotEmpty == true)
-            .forEach((v) {
-          if (!languageList.contains(v.languageName)) {
-            languageList.add(v.languageName!);
-          }
-        });
-      }
-      if (languageList.isEmpty) {
-        errorDialog(content: 'maintain_label_label_language_empty_tips'.tr);
-        return;
-      }
-      for (var language in languageList) {
-        for (var label in select) {
-          if (label.materialOtherName
-                  ?.every((v) => v.languageName != language) ==
-              true) {
-            errorDialog(
-              content: 'maintain_label_label_language_lack_tips'.trArgs([
-                label.barCode ?? '',
-                language,
-              ]),
-            );
-            return;
-          }
-        }
-      }
-      callback.call([select], languageList);
     } else {
-      var select =
-          state.labelGroupList.where((v) => v.any((v2) => v2.select)).toList();
+      logger.f('-----2-----------');
+      select = state.labelList.where((v) => v.select).toList();
       if (select.isEmpty) {
-        errorDialog(content: 'maintain_label_select_label');
+        errorDialog(content: 'maintain_label_select_label'.tr);
         return;
       }
-
-      for (var list in select) {
-        for (var order in list) {
-          order.materialOtherName
-              ?.where((v) => v.languageName?.isNotEmpty == true)
-              .forEach((v) {
-            if (!languageList.contains(v.languageName)) {
-              languageList.add(v.languageName!);
-            }
-          });
-        }
-      }
-      if (languageList.isEmpty) {
-        errorDialog(content: 'maintain_label_label_language_empty_tips'.tr);
-        return;
-      }
-      for (var language in languageList) {
-        for (var list in select) {
-          for (var label in list) {
-            if (label.materialOtherName
-                    ?.every((v) => v.languageName != language) ==
-                true) {
-              errorDialog(
-                content: 'maintain_label_label_language_lack_tips'.trArgs([
-                  label.barCode ?? '',
-                  language,
-                ]),
-              );
-              return;
-            }
-          }
-        }
-      }
-      callback.call(select, languageList);
     }
+
+    var labelType = <String>[];
+
+    for (var type in select) {
+      if (!labelType.contains(type.labelType.toString())) {
+        labelType.add(type.labelType.toString());
+      }
+    }
+    if (labelType.length > 1) {
+      errorDialog(content: 'maintain_label_select_label_not_same'.tr);
+      return;
+    }
+    for (var order in select) {
+      order.materialOtherName
+          ?.where((v) => v.languageName?.isNotEmpty == true)
+          .forEach((v) {
+        if (!languageList.contains(v.languageName)) {
+          languageList.add(v.languageName!);
+        }
+      });
+    }
+    if (languageList.isEmpty) {
+      errorDialog(content: 'maintain_label_label_language_empty_tips'.tr);
+      return;
+    }
+    for (var language in languageList) {
+      for (var label in select) {
+        if (label.materialOtherName?.every((v) => v.languageName != language) ==
+            true) {
+          errorDialog(
+            content: 'maintain_label_label_language_lack_tips'.trArgs([
+              label.barCode ?? '',
+              language,
+            ]),
+          );
+          return;
+        }
+      }
+    }
+    callback.call(select[0].labelType!, [select], languageList);
   }
 
   Function(List<Widget>) labelsCallback = (label) {
@@ -264,50 +265,168 @@ class MaintainLabelLogic extends GetxController {
   };
 
   printLabel({
+    required int type,
     required List<List<LabelInfo>> select,
     String language = '',
   }) {
-    if (state.isMaterialLabel.value) {
-      var sizeList = <String>[];
-      var insNum = <String>[];
-      for (var order in select[0]) {
-        for (var item in order.items ?? <LabelSizeInfo>[]) {
-          if (item.billNo?.isNotEmpty == true &&
-              !insNum.contains(item.billNo)) {
-            insNum.add(item.billNo!);
-          }
-          if (item.size?.isNotEmpty == true && !sizeList.contains(item.size)) {
-            insNum.add(item.size!);
-          }
-        }
-      }
-      if (insNum.length <= 1 && sizeList.length <= 1) {
+    switch (type) {
+      case 101:
         createMaterialLabel(
           language: language,
           list: select[0],
           labels: labelsCallback,
         );
-      } else {
+        break;
+      case 102:
+        createGroupDynamicLabel(
+          language: language,
+          list: select,
+          labels: labelsCallback,
+        );
+        break;
+      case 103:
         createDynamicLabel(
           language: language,
           list: select[0],
           labels: labelsCallback,
         );
-      }
-    } else if (state.isSingleLabel) {
-      createFixedLabel(
-        language: language,
-        list: select,
-        labels: labelsCallback,
-      );
-    } else {
-      createGroupDynamicLabel(
-        language: language,
-        list: select,
-        labels: labelsCallback,
-      );
+        break;
+      // default:
+      //
+      //   break;
     }
+
+    // createSingleSizeLabel(
+    //   language: language,
+    //   list: select[0],
+    //   labels: labelsCallback,
+    // );
+    //
+    // createMultipleSizeLabel(
+    //   language: language,
+    //   list: select[0],
+    //   labels: labelsCallback,
+    // );
   }
+
+  //单一物料多尺码标
+  createMultipleSizeLabel({
+    String language = '',
+    required List<LabelInfo> list,
+    required Function(List<Widget>) labels,
+  }) {
+    var labelList = <Widget>[];
+    for (var data in list) {
+      labelList.add(myanmarSizeListLabel(data, false));
+    }
+    labels.call(labelList);
+  }
+
+  Widget myanmarSizeListLabel(LabelInfo label, bool hasNotes) =>
+      dynamicMyanmarSizeListLabel110xN(
+        labelID: label.barCode ?? '',
+        myanmarApprovalDocument: '------------',
+        typeBody: label.factoryType ?? '',
+        trackNo: '-----',
+        materialList: createSizeList(
+          label: label,
+          sizeTitle: 'Size',
+          totalTitle: 'Total',
+        ),
+        inBoxQty: label.items!
+            .map((v) => v.qty ?? 0)
+            .reduce((a, b) => a.add(b))
+            .toShowString(),
+        customsDeclarationUnit: '--------',
+        customsDeclarationType: '--------',
+        pieceNo: '-----',
+        pieceID: '-----',
+        grossWeight: label.grossWeight.toShowString(),
+        netWeight: label.netWeight.toShowString(),
+        specifications: label.meas ?? '',
+        volume: '-----',
+        supplier: label.departName ?? '',
+        manufactureDate: '-------',
+        hasNotes: hasNotes,
+        notes: '----',
+      );
+
+  Map<String, List> createSizeList({
+    required LabelInfo label,
+    required String sizeTitle,
+    required String totalTitle,
+  }) {
+    var materials = <String, List>{};
+    if (label.items!.any((v) => v.size?.isNotEmpty == true)) {
+      var sizeList = <String>[];
+      for (var label in label.items!) {
+        if (!sizeList.contains(label.size)) {
+          sizeList.add(label.size ?? '');
+        }
+      }
+      sizeList.sort();
+      materials[sizeTitle] = [...sizeList, totalTitle];
+      groupBy(
+        label.items!,
+        (v) => v.billNo ?? '',
+      ).forEach((k, labels) {
+        var list = [];
+        for (var size in sizeList) {
+          try {
+            list.add(labels
+                .firstWhere((label) => label.size == size)
+                .qty
+                .toShowString());
+          } on StateError catch (_) {
+            list.add(' ');
+          }
+        }
+        list.add(labels
+            .map((v) => v.qty ?? 0)
+            .reduce((a, b) => a.add(b))
+            .toShowString());
+        materials[k] = list;
+      });
+    }
+    return materials;
+  }
+
+  //单一物料单尺码标
+  createSingleSizeLabel({
+    String language = '',
+    required List<LabelInfo> list,
+    required Function(List<Widget>) labels,
+  }) {
+    var labelList = <Widget>[];
+    for (var data in list) {
+      labelList.add(myanmarSizeLabel(data, false));
+    }
+    labels.call(labelList);
+  }
+
+  Widget myanmarSizeLabel(LabelInfo label, bool hasNotes) =>
+      dynamicMyanmarSizeLabel110xN(
+        labelID: label.barCode ?? '',
+        myanmarApprovalDocument: '-------',
+        typeBody: label.factoryType ?? '',
+        trackNo: '--------',
+        instructionNo: label.billNo ?? '',
+        materialCode: label.materialCode ?? '',
+        size: label.items!.first.size ?? '',
+        inBoxQty: label.items!.first.qty.toShowString(),
+        customsDeclarationUnit: '------',
+        customsDeclarationType: '-------',
+        pieceNo: '------',
+        pieceID: '------',
+        grossWeight: label.grossWeight.toShowString(),
+        netWeight: label.netWeight.toShowString(),
+        specifications: label.meas ?? '',
+        volume: '------',
+        supplier: label.departName ?? '',
+        manufactureDate: '------',
+        hasNotes: hasNotes,
+        notes: '------',
+      );
 
   //物料标
   createMaterialLabel({
@@ -1153,7 +1272,7 @@ class MaintainLabelLogic extends GetxController {
     labels.call(labelList);
   }
 
- List<Widget> createSubItem({
+  List<Widget> createSubItem({
     required List<LabelInfo> data,
     required Widget Function(
       String text1,

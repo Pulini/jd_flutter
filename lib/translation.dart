@@ -1095,11 +1095,11 @@ class Translation extends Translations {
           'maintain_label_unprinted': '未打印',
           'maintain_label_instruction': '指令',
           'maintain_label_size': '尺码',
-          'maintain_label_picking qty': '装箱数',
+          'maintain_label_picking_qty': '装箱数',
           'maintain_label_instruction_error': '指令错误',
           'maintain_label_label_maintenance': '贴标维护',
           'maintain_label_material': '物料：',
-          'maintain_label_type_body': '形体：',
+          'maintain_label_type_body': '型体：',
           'maintain_label_create': '创建',
           'maintain_label_no_create_label_permission': '没有创建贴标权限',
           'maintain_label_delete': '删除',
@@ -1118,6 +1118,8 @@ class Translation extends Translations {
           'maintain_label_getting_packing_order_info': '正在获取包装清单箱容配置信息...',
           'maintain_label_getting_material_language_info': '正在获物料多语言信息...',
           'maintain_label_select_label': '请选择标签',
+          'maintain_label_select_label_not_same': '不同类型的标签不能一起打印！',
+          'maintain_label_select_label_set_state': '正在设置打印标识...',
           'maintain_label_label_language_empty_tips': '标签语言数据为空，请先维护语言数据。',
           'maintain_label_label_language_lack_tips':
               '标签 < %s > 缺少语言 < %s > 数据，请单独打印或维护语言数据。',
@@ -4514,7 +4516,7 @@ class Translation extends Translations {
           'maintain_label_unprinted': 'Unprinted',
           'maintain_label_instruction': 'Instruction',
           'maintain_label_size': 'Size',
-          'maintain_label_picking qty': 'Packing qty',
+          'maintain_label_picking_qty': 'Packing qty',
           'maintain_label_instruction_error': 'Instruction error',
           'maintain_label_label_maintenance': 'Label maintenance',
           'maintain_label_material': 'Material：',
@@ -4543,6 +4545,8 @@ class Translation extends Translations {
           'maintain_label_getting_material_language_info':
               'Getting multilingual information for materials...',
           'maintain_label_select_label': 'Please select a label',
+          'maintain_label_select_label_not_same': 'Different types of labels cannot be printed together！',
+          'maintain_label_select_label_set_state': 'Setting printing label...',
           'maintain_label_label_language_empty_tips':
               'The tag language data is empty, please maintain the language data first.',
           'maintain_label_label_language_lack_tips':

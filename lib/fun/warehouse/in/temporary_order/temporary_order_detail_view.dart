@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -26,7 +25,7 @@ class _TemporaryOrderDetailPageState extends State<TemporaryOrderDetailPage> {
   final TemporaryOrderLogic logic = Get.find<TemporaryOrderLogic>();
   final TemporaryOrderState state = Get.find<TemporaryOrderLogic>().state;
   var titleTextStyle =
-      const TextStyle(color: Colors.black54, fontWeight: FontWeight.bold);
+  const TextStyle(color: Colors.black54, fontWeight: FontWeight.bold);
   var itemTextStyle = const TextStyle(color: Colors.black54);
 
   Widget _item(TemporaryOrderDetailReceiptInfo data) {
@@ -124,12 +123,12 @@ class _TemporaryOrderDetailPageState extends State<TemporaryOrderDetailPage> {
                     )),
                     _itemText(
                         'temporary_order_detail_purchase_order_line_no'.trArgs(
-                      ['${data.purchaseOrderLineNumber}'],
-                    )),
+                          ['${data.purchaseOrderLineNumber}'],
+                        )),
                     _itemText(
                         'temporary_order_detail_delivery_order_line_no'.trArgs(
-                      ['${data.deliveryOrderLineNumber}'],
-                    )),
+                          ['${data.deliveryOrderLineNumber}'],
+                        )),
                     _itemText('temporary_order_detail_purchase_type'.trArgs(
                       ['${data.purchaseType}'],
                     )),
@@ -143,9 +142,11 @@ class _TemporaryOrderDetailPageState extends State<TemporaryOrderDetailPage> {
           ),
           Obx(() => (data.quantityTemporarilyReceived ?? 0) > 0
               ? Checkbox(
-                  value: data.isSelected.value,
-                  onChanged: (v) => data.isSelected.value = v!,
-                )
+            value: data.isSelected.value,
+            onChanged: (v) {
+              data.isSelected.value = v!;
+            },
+          )
               : Container())
         ],
       ),
@@ -160,47 +161,47 @@ class _TemporaryOrderDetailPageState extends State<TemporaryOrderDetailPage> {
   Widget build(BuildContext context) {
     var detail = state.detailInfo!;
     var itemCanSelect =
-        detail.receipt!.any((v) => (v.quantityTemporarilyReceived ?? 0) > 0);
+    detail.receipt!.any((v) => (v.quantityTemporarilyReceived ?? 0) > 0);
     return pageBody(
       title: 'temporary_order_detail_temporary_order_detail'.tr,
       actions: [
         if (itemCanSelect)
           Obx(() => CombinationButton(
-                combination: Combination.left,
-                isEnabled: detail.receipt!.any((v) => v.isSelected.value),
-                text: 'temporary_order_detail_test_application'.tr,
-                click: () => testApplicationDialog(
-                  temporaryOrderNumber: detail.temporaryNumber ?? '',
-                  selectedList:
-                      detail.receipt!.where((v) => v.isSelected.value).toList(),
-                ),
-              )),
+            combination: Combination.left,
+            isEnabled: detail.receipt!.any((v) => v.isSelected.value),
+            text: 'temporary_order_detail_test_application'.tr,
+            click: () => testApplicationDialog(
+              temporaryOrderNumber: detail.temporaryNumber ?? '',
+              selectedList:
+              detail.receipt!.where((v) => v.isSelected.value).toList(),
+            ),
+          )),
         if (itemCanSelect)
           Obx(() => CombinationButton(
-                combination: Combination.right,
-                isEnabled: detail.receipt!.any((v) => v.isSelected.value),
-                text: 'temporary_order_detail_inspection'.tr,
-                click: (){
-
-                  if(checkUserPermission('105180501')){
-                    if( logic.checkToInspection()){
-                      Get.to(() => const StuffQualityInspectionPage(), arguments: {
-                        'inspectionType': '2',
-                        'temporaryDetail': jsonEncode(state.detailInfo!.toJson()),
-                        //品检单列表
-                      })?.then((v) {
-                        if (v == true) {
-                          Get.back(result: true); //结束界面
-                        }
-                      });
-                    }
-                  }else{
-                    errorDialog(
-                      content: 'temporary_order_detail_no_permission'.tr,
-                    );
+              combination: Combination.right,
+              isEnabled: detail.receipt!.any((v) => v.isSelected.value),
+              text: 'temporary_order_detail_inspection'.tr,
+              click: () {
+                if (checkUserPermission('105180501')) {
+                  if (logic.checkToInspection()) {
+                    Get.to(() => const StuffQualityInspectionPage(),
+                        arguments: {
+                          'inspectionType': '2',
+                          'temporaryDetail':
+                          jsonEncode(state.detailInfo!.toJson()),
+                          //品检单列表
+                        })?.then((v) {
+                      if (v == true) {
+                        Get.back(result: true); //结束界面
+                      }
+                    });
                   }
+                } else {
+                  errorDialog(
+                    content: 'temporary_order_detail_no_permission'.tr,
+                  );
                 }
-              )),
+              })),
         const SizedBox(width: 10)
       ],
       body: Padding(
@@ -264,10 +265,10 @@ class _TemporaryOrderDetailPageState extends State<TemporaryOrderDetailPage> {
                       ),
                       Obx(() => itemCanSelect
                           ? CheckBox(
-                              onChanged: (v) => detail.selectedAll(v),
-                              name: 'temporary_order_detail_select_all'.tr,
-                              value: detail.isSelectedAll(),
-                            )
+                        onChanged: (v) => detail.selectedAll(v),
+                        name: 'temporary_order_detail_select_all'.tr,
+                        value: detail.isSelectedAll(),
+                      )
                           : Container(height: 40))
                     ],
                   ),

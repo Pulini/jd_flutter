@@ -7,6 +7,7 @@ import 'package:jd_flutter/bean/http/response/maintain_material_info.dart';
 import 'package:jd_flutter/bean/http/response/picking_bar_code_info.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
+import 'package:jd_flutter/widget/dialogs.dart';
 
 class MaintainLabelState {
   var materialCode = '';
@@ -68,7 +69,7 @@ class MaintainLabelState {
                     .name ??
                 '';
           }
-          if (isMaterialLabel.value) {
+          if (!isMaterialLabel.value) {
             list.sort((a, b) => a.labelState().compareTo(b.labelState()));
             labelList.value = list;
           } else {
@@ -263,6 +264,30 @@ class MaintainLabelState {
         ].obs);
       } else {
         error.call(response.message ?? '');
+      }
+    });
+  }
+
+  setLabelState({
+    required List<List<LabelInfo>> selectLabels,
+    required int labelType,
+    required Function(int type) success,
+  }) {
+    httpPost(
+      method: webApiSetPrintLabelFlag,
+      loading: 'maintain_label_select_label_set_state'.tr,
+      body: {
+        'InterID': selectLabels[0][0].interID,
+        'BarCodes': [
+          for (var code in selectLabels[0])
+            code.barCode
+        ]
+      },
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        success.call(labelType);
+      } else {
+        errorDialog(content: response.message);
       }
     });
   }

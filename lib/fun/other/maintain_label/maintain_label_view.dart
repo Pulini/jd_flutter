@@ -135,7 +135,7 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
         _subitem(
           'maintain_label_instruction'.tr,
           'maintain_label_size'.tr,
-          'maintain_label_picking'.tr,
+          'maintain_label_picking_qty'.tr,
           1,
         ),
         for (var i = 0; i < data.items!.length; ++i)
@@ -210,12 +210,10 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
                 ]),
                 Expanded(
                   child: ListView.builder(
-                    itemCount: state.isMaterialLabel.value
-                        ? state.getLabelList().length
-                        : state.getLabelGroupList().length,
+                    itemCount: state.isMaterialLabel.value ?  state.getLabelGroupList().length  : state.getLabelList().length,
                     itemBuilder: (context, index) => state.isMaterialLabel.value
-                        ? _item1(state.getLabelList()[index])
-                        : _item2(state.getLabelGroupList()[index]),
+                        ? _item2(state.getLabelGroupList()[index])
+                        : _item1(state.getLabelList()[index]),
                   ),
                 ),
                 Row(
@@ -282,22 +280,41 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
                       child: CombinationButton(
                         text: 'maintain_label_print'.tr,
                         click: () => logic.checkLanguage(
-                          callback: (select, language) {
+                          callback: (labelType, select, language) {
                             if (language.isEmpty) {
-                              logic.printLabel(select: select);
-                            } else if (language.length > 1) {
-                              selectLanguageDialog(
-                                list: language,
-                                callback: (s) => logic.printLabel(
-                                  select: select,
-                                  language: s,
-                                ),
-                              );
+                              logic.printLabelState(
+                                  type: labelType,
+                                  selectLabel: select,
+                                  success: (labelType) {
+                                    logic.printLabel(
+                                        type: labelType, select: select);
+                                  });
                             } else {
-                              logic.printLabel(
-                                select: select,
-                                language: language[0],
-                              );
+                              if (language.length == 1) {
+                                logic.printLabelState(
+                                    type: labelType,
+                                    selectLabel: select,
+                                    success: (labelType) {
+                                      logic.printLabel(
+                                        select: select,
+                                        language: language[0],
+                                        type: labelType,
+                                      );
+                                    });
+                              } else {
+                                selectLanguageDialog(
+                                    list: language,
+                                    callback: (s) => logic.printLabelState(
+                                        type: labelType,
+                                        selectLabel: select,
+                                        success: (labelType) {
+                                          logic.printLabel(
+                                            select: select,
+                                            language: s,
+                                            type: labelType,
+                                          );
+                                        }));
+                              }
                             }
                           },
                         ),

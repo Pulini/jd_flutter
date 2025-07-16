@@ -563,6 +563,9 @@ const webApiCleanLabel = 'api/CompoundDispatching/DelPackingListBarcode';
 //删除标签
 const webApiDeleteLabels = 'api/CompoundDispatching/DelBarcode';
 
+//设置打印标识
+const webApiSetPrintLabelFlag = 'api/NeedleCartDispatch/SetPrintLabelFlag';
+
 //获取物料属性
 const webApiGetMaterialProperties =
     'api/CompoundDispatching/GetMaterialProperties';
