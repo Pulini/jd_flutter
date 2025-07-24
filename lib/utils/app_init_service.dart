@@ -56,7 +56,7 @@ class AppInitService extends GetxService {
 
   initDatabase() async {
     var path = await getDatabasesPath();
-    openDatabase(join(path, jdDatabase), version: 3, onCreate: (db, v) {
+    openDatabase(join(path, jdDatabase), version: 4, onCreate: (db, v) {
       debugPrint('onCreate -----------v=$v');
       db.execute(SaveDispatch.dbCreate);
       db.execute(SaveWorkProcedure.dbCreate);

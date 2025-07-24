@@ -17,7 +17,7 @@ class WorkshopPlanningReportListPage extends StatefulWidget {
 
 class _WorkshopPlanningReportListPageState
     extends State<WorkshopPlanningReportListPage> {
-  final WorkshopPlanningLogic logic = Get.put(WorkshopPlanningLogic());
+  final WorkshopPlanningLogic logic = Get.find<WorkshopPlanningLogic>();
   final WorkshopPlanningState state = Get.find<WorkshopPlanningLogic>().state;
 
   _item(WorkshopPlanningReportInfo data) => GestureDetector(

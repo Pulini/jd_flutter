@@ -26,8 +26,9 @@ class BaseData {
     return map;
   }
 
-  print(String uri, Map<String, dynamic> queryParameters) {
+  print(String uri, String? loading, Map<String, dynamic> queryParameters) {
     Map<String, dynamic> map = <String, dynamic>{};
+    map['Loading'] = loading;
     map['Uri'] = uri;
     map['Parameters'] = queryParameters;
     map['ResponseTime'] = DateTime.now();

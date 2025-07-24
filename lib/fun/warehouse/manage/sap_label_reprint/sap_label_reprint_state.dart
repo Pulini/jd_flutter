@@ -4,20 +4,27 @@ import 'package:jd_flutter/utils/web_api.dart';
 
 class SapLabelReprintState {
   var labelList = <SapPrintLabelInfo>[].obs;
+  var isMaterialLabel = false.obs;
+  var labelHasNots = false.obs;
 
-  getLabelList({required String code, required Function(String) error}) {
+  getLabelList({
+    String? piece,
+    String? code,
+    required Function(List<SapPrintLabelInfo>) success,
+    required Function(String) error,
+  }) {
     sapPost(
       loading: 'label_reprint_getting_label_info'.tr,
       method: webApiSapGetPrintLabelListInfo,
       body: {
-        'BQID': code,
+        'BQID': code??'',
+        'ZPIECE_NO': piece??'',
         'OPERATE': '',
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        labelList.value = [
-          for (var json in response.data) SapPrintLabelInfo.fromJson(json)
-        ];
+        success.call(
+            [for (var json in response.data) SapPrintLabelInfo.fromJson(json)]);
       } else {
         error.call(response.message ?? 'query_default_error'.tr);
       }

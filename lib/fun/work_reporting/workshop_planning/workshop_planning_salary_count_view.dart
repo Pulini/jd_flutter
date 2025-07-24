@@ -24,29 +24,11 @@ class WorkshopPlanningSalaryCountPage extends StatefulWidget {
 class _WorkshopPlanningSalaryCountPageState
     extends State<WorkshopPlanningSalaryCountPage>
     with SingleTickerProviderStateMixin {
-  final WorkshopPlanningLogic logic = Get.put(WorkshopPlanningLogic());
+  final WorkshopPlanningLogic logic = Get.find<WorkshopPlanningLogic>();
   final WorkshopPlanningState state = Get.find<WorkshopPlanningLogic>().state;
   late DatePickerController dpcDate;
   late TabController tabController = TabController(length: 2, vsync: this);
   var pageController = PageController();
-
-  @override
-  initState() {
-    state.submitButtonName.value = '提交报工';
-    dpcDate = DatePickerController(PickerType.date, onChanged: (date) {
-      if (state.planInfo!.planTrackingNumber?.isNotEmpty == true) {
-        logic.getGroupData(date: getDateYMD(time: date));
-      }
-      if (state.planInfo!.allowEdit == false) {
-        state.planInfo!.sizeLists?.forEach((v) => v.qty = 0);
-      }
-    });
-    logic.calculateSalary();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      logic.getGroupData(date: dpcDate.getDateFormatYMD());
-    });
-    super.initState();
-  }
 
   _processItemTitle() => Row(
         children: [
@@ -158,14 +140,11 @@ class _WorkshopPlanningSalaryCountPageState
                       if (v.split('.').length > 2 && v.endsWith('.')) {
                         controller.text = v.substring(0, v.length - 1);
                       }
-                      // if (v.toDoubleTry() > (item.unFinishQty ?? 0)) {
-                      //   controller.text = item.unFinishQty.toShowString();
-                      // } else {
-                      //   item.qty = v.toDoubleTry();
-                      // }
-
+                      if (v.toDoubleTry() > (item.unFinishQty ?? 0)) {
+                        controller.text = item.unFinishQty.toShowString();
+                      }
                       item.qty = v.toDoubleTry();
-                      logic.calculateSalary();
+                      logic.setWorkerMoney();
                     },
                     decoration: InputDecoration(
                       contentPadding: const EdgeInsets.only(
@@ -289,8 +268,8 @@ class _WorkshopPlanningSalaryCountPageState
         ),
       );
 
-  _addWorkerItem() => GestureDetector(
-        onTap: () => logic.addWorker(),
+  addWorkerItem({required Function() click}) => GestureDetector(
+        onTap: click,
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8),
@@ -307,17 +286,43 @@ class _WorkshopPlanningSalaryCountPageState
         ),
       );
 
+  _queryGroupData() {
+    logic.getGroupData(date: dpcDate.getDateFormatYMD());
+  }
+
+  @override
+  initState() {
+    state.submitButtonName.value = '提交报工';
+    dpcDate = DatePickerController(PickerType.date, onChanged: (date) {
+      if (state.planInfo!.planTrackingNumber?.isNotEmpty == true) {
+        _queryGroupData();
+      }
+      if (state.planInfo!.allowEdit == false) {
+        state.planInfo!.sizeLists?.forEach((v) => v.qty = 0);
+      }
+    });
+    logic.setWorkerMoney();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _queryGroupData();
+    });
+    logic.getWorkshopPlanningWorkersCache();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return pageBody(
       title: '团件计工',
+      popTitle: '确定要退出本次团件计工吗？',
       actions: [
+        Obx(() => state.workersCache.isNotEmpty
+            ? IconButton(
+                onPressed: () => logic.useWorkersCache(),
+                icon: const Icon(Icons.save, color: Colors.blue),
+              )
+            : Container()),
         IconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.save, color: Colors.blue),
-        ),
-        IconButton(
-          onPressed: () => logic.getGroupData(date: dpcDate.getDateFormatYMD()),
+          onPressed: () => _queryGroupData(),
           icon: const Icon(Icons.refresh, color: Colors.blue),
         ),
       ],
@@ -452,7 +457,7 @@ class _WorkshopPlanningSalaryCountPageState
                         children: [
                           for (var item in state.reportWorkerList)
                             _workerItem(item),
-                          _addWorkerItem(),
+                          addWorkerItem(click: () => logic.addWorker()),
                         ],
                       )),
                 ],

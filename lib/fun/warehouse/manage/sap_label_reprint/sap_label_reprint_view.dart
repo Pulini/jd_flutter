@@ -4,6 +4,7 @@ import 'package:jd_flutter/bean/http/response/sap_carton_label_binding_info.dart
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/scanner.dart';
+import 'package:jd_flutter/widget/switch_button_widget.dart';
 
 import 'sap_label_reprint_logic.dart';
 import 'sap_label_reprint_state.dart';
@@ -18,6 +19,8 @@ class SapLabelReprintPage extends StatefulWidget {
 class _SapLabelReprintPageState extends State<SapLabelReprintPage> {
   final SapLabelReprintLogic logic = Get.put(SapLabelReprintLogic());
   final SapLabelReprintState state = Get.find<SapLabelReprintLogic>().state;
+
+  var tecPiece = TextEditingController();
 
   Widget _item(SapPrintLabelInfo label) {
     return Container(
@@ -133,20 +136,130 @@ class _SapLabelReprintPageState extends State<SapLabelReprintPage> {
   @override
   Widget build(BuildContext context) {
     return pageBody(
-      actions: [
-        Obx(() => state.labelList.isNotEmpty &&
-                state.labelList.any((v) => v.isSelected.value)
-            ? IconButton(
-                onPressed: () => logic.printLabel(),
-                icon: const Icon(Icons.print),
-              )
-            : Container()),
-      ],
-      body: Obx(() => ListView.builder(
-            padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
-            itemCount: state.labelList.length,
-            itemBuilder: (c, i) => _item(state.labelList[i]),
-          )),
+      body: Column(
+        children: [
+          Container(
+              margin: const EdgeInsets.only(left: 10, right: 10),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(25),
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      onSubmitted: (value) => logic.searchPiece(tecPiece.text),
+                      textAlign: TextAlign.center,
+                      keyboardType: TextInputType.number,
+                      controller: tecPiece,
+                      decoration: InputDecoration(
+                        contentPadding: const EdgeInsets.all(0),
+                        filled: true,
+                        fillColor: Colors.grey.shade300,
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(50),
+                          borderSide: const BorderSide(
+                            color: Colors.transparent,
+                          ),
+                        ),
+                        border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(50)),
+                        ),
+                        hintStyle: const TextStyle(color: Colors.white),
+                        suffixIcon: IconButton(
+                          onPressed: () => logic.searchPiece(tecPiece.text),
+                          icon: Container(
+                            padding: const EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                              color: Colors.green, // 背景色
+                              borderRadius: BorderRadius.circular(25), // 圆角（可选）
+                            ),
+                            child:
+                                const Icon(Icons.search, color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  IconButton(
+                    onPressed: () => logic.cleanLabels(),
+                    icon: Container(
+                      padding: const EdgeInsets.all(5),
+                      decoration: BoxDecoration(
+                        color: Colors.orange, // 背景色
+                        borderRadius: BorderRadius.circular(25), // 圆角（可选）
+                      ),
+                      child: const Icon(
+                        Icons.cleaning_services,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Transform.scale(
+                      scale: 1.8,
+                      child: Obx(
+                        () => Checkbox(
+                          value: logic.isSelectedAll(),
+                          shape: const CircleBorder(),
+                          onChanged: (v) => logic.selectAll(v!),
+                        ),
+                      )),
+                ],
+              )),
+          const SizedBox(height: 10),
+          Container(
+            margin: const EdgeInsets.only(left: 10, right: 10),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(25),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Expanded(
+                  child: SwitchButton(
+                    onChanged: (s) => state.isMaterialLabel.value = s,
+                    name: '打印物料表',
+                    value: state.isMaterialLabel.value,
+                  ),
+                ),
+                Expanded(
+                    child: SwitchButton(
+                  onChanged: (s) => state.isMaterialLabel.value = s,
+                  name: '打印备注行',
+                  value: state.isMaterialLabel.value,
+                )),
+                const SizedBox(width: 10),
+                IconButton(
+                  onPressed: () => logic.printLabel(),
+                  icon: Container(
+                    padding: const EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                      color: Colors.blue, // 背景色
+                      borderRadius: BorderRadius.circular(25), // 圆角（可选）
+                    ),
+                    child: const Icon(
+                      Icons.print,
+                      color: Colors.white,
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+          const SizedBox(height: 10),
+          Expanded(
+            child: Obx(() => ListView.builder(
+                  padding:
+                      const EdgeInsets.only(left: 10, right: 10, bottom: 10),
+                  itemCount: state.labelList.length,
+                  itemBuilder: (c, i) => _item(state.labelList[i]),
+                )),
+          )
+        ],
+      ),
     );
   }
 

@@ -272,7 +272,7 @@ class DeliveryDetailInfo {
   }
 
   bool hasDelivered() =>
-      workData?.isNullOrEmpty() ? false : workData!.any((v) => v.sendType == 1);
+      workData.isNullOrEmpty() ? false : workData!.any((v) => v.sendType == 1);
 
   double getMaxRound() =>
       partsSizeList == null

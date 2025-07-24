@@ -357,13 +357,13 @@ class _CreateDeliveryOrderPageState extends State<CreateDeliveryOrderPage> {
       actions: [
         if (bt1V)
           CombinationButton(
-            text: state.deliveryDetail?.workData.isNullOrEmpty()
+            text: state.deliveryDetail?.workData.isNullOrEmpty() == true
                 ? 'smart_delivery_create_order_reserve_shoe_tree'.tr
                 : 'smart_delivery_create_order_remake_order'.tr,
-            backgroundColor: state.deliveryDetail?.workData.isNullOrEmpty()
+            backgroundColor: state.deliveryDetail?.workData.isNullOrEmpty() == true
                 ? Colors.blue
                 : Colors.red,
-            click: () => state.deliveryDetail?.workData.isNullOrEmpty()
+            click: () => state.deliveryDetail?.workData.isNullOrEmpty() == true
                 ? reserveShoeTreeDialog(
                     state.deliveryDetail?.partsSizeList ?? [],
                     (list) => setState(() {
@@ -383,7 +383,7 @@ class _CreateDeliveryOrderPageState extends State<CreateDeliveryOrderPage> {
             text: 'smart_delivery_create_order_merge_delivery'.tr,
             click: () => logic.mergeDeliveryRound(() => setState(() {})),
           ),
-        if (bt3V)
+        if (bt3V == true)
           CombinationButton(
             backgroundColor: Colors.blue,
             text: 'smart_delivery_create_order_save_pre_sort'.tr,

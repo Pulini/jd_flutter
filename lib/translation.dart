@@ -3206,13 +3206,6 @@ class Translation extends Translations {
           'label_reprint_qty': '数量：',
           'label_reprint_select_all': '全选',
           'label_reprint_getting_label_info': '正在获取标签信息...',
-          'label_reprint_print_label': '打印标签',
-          'label_reprint_select_outer_label_print_type': '请选择外箱标打印类型',
-          'label_reprint_material_label': '物料标',
-          'label_reprint_common_label': '普通标',
-          'label_reprint_print_notes': '是否打印备注行？',
-          'label_reprint_yes': '是',
-          'label_reprint_no': '否',
         },
         localeEnglish.toString(): {
           'app_name': 'Gold Emperor',
@@ -7068,14 +7061,7 @@ class Translation extends Translations {
           'label_reprint_qty': 'Qty：',
           'label_reprint_select_all': 'Select all',
           'label_reprint_getting_label_info': 'Getting label info...',
-          'label_reprint_print_label': 'Print label',
-          'label_reprint_select_outer_label_print_type':
-              'Select outer label print type',
-          'label_reprint_material_label': 'Material label',
-          'label_reprint_common_label': 'Common label',
-          'label_reprint_print_notes': 'Do you want to print a note line？',
-          'label_reprint_yes': 'Yes',
-          'label_reprint_no': 'No',
+
         }
       };
 }

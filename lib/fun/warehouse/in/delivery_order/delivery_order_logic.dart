@@ -476,6 +476,15 @@ class DeliveryOrderLogic extends GetxController {
     return sizeList;
   }
 
+ // double sizeMaterialListTotal() {
+ //    var sizeList = sizeMaterialList();
+ //    var max = 0.0;
+ //    for (var size in sizeList) {
+ //
+ //      max = max.add(v.map((v2) => v2[1]).reduce((a, b) => a.add(b)));
+ //    }
+ //  }
+
   double getMaterialsTotal() {
     var max = 0.0;
     for (var v in state.materialList.values) {

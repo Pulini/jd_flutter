@@ -64,7 +64,7 @@ class _SwitchButtonState extends State<SwitchButton> {
       margin: const EdgeInsets.all(5),
       padding: const EdgeInsets.only(left: 10),
       decoration: BoxDecoration(
-        color: Colors.grey[300],
+        color: Colors.grey.shade300,
         borderRadius: BorderRadius.circular(20),
       ),
       child: Row(

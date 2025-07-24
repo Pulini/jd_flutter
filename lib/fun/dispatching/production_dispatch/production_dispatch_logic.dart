@@ -237,22 +237,22 @@ class ProductionDispatchLogic extends GetxController {
     var stubBarName = data['StubBarName'];
     state.getSelectOne((v) {
       Get.to(() => PreviewLabel(
-        labelWidget: surplusMaterialLabelTemplate(
-          qrCode: jsonEncode({
+            labelWidget: surplusMaterialLabelTemplate(
+              qrCode: jsonEncode({
                 'DispatchNumber': v.sapOrderBill,
                 'StubBar': stubBar,
                 'Factory': v.factory,
                 'Date': v.orderDate,
                 'NowTime': DateTime.now().millisecondsSinceEpoch,
               }),
-          machine:v.machine??'',
-          shift: v.shift??'',
-          startDate: v.planStartTime??'',
-          typeBody: v.plantBody??'',
-          materialName:stubBarName,
-          materialCode: stubBar,
-        ),
-      ));
+              machine: v.machine ?? '',
+              shift: v.shift ?? '',
+              startDate: v.planStartTime ?? '',
+              typeBody: v.plantBody ?? '',
+              materialName: stubBarName,
+              materialCode: stubBar,
+            ),
+          ));
     });
   }
 
@@ -315,7 +315,7 @@ class ProductionDispatchLogic extends GetxController {
       (order) => state.orderPush(
         order: order,
         success: (data) {
-          if (data.workCardList==null||data.workCardList?.isEmpty == true) {
+          if (data.workCardList == null || data.workCardList?.isEmpty == true) {
             errorDialog(content: 'production_dispatch_no_process_list'.tr);
           } else {
             state.workCardTitle.value = data.workCardTitle ?? WorkCardTitle();
@@ -813,7 +813,66 @@ class ProductionDispatchLogic extends GetxController {
   }
 
   sendDispatchToWechat() {
+    var msg = 'production_dispatch_wechat_dispatch_error1'.trArgs([
+      state.orderList.firstWhere((v) => v.select).planBill ?? '',
+      state.workCardTitle.value.plantBody ?? ''
+    ]);
+    var submitData = <Map>[];
+    for (var wp in state.workProcedure.where((v) => v.isOpen == 1)) {
+      //如果批量数据不为空，则说明当前是多工单同时派工，需要对员工进行工单分配
+      if (state.batchWorkProcedure.isNotEmpty) {
+        for (var bwp in state.batchWorkProcedure.where(
+              (v) => v.processNumber == wp.processNumber,
+        )) {
+          //指令已分配数量
+          var disQty = 0.0;
+
+          for (var worker in wp.dispatch) {
+            //人员的剩余可分配数量大于0 说明人员的数量上一个指令分配满后还有剩余  可以继续下一个指令分配
+            if (worker.remainder() > 0) {
+              //指令剩余可分配数量
+              var surplus = bwp.mustQty.sub(disQty);
+
+              //指令剩余数量大于0 说明指令的数量上一个员工分配满后还有剩余  可以继续下一个员工分配
+              if (surplus > 0) {
+                //可分配数=如果剩余数大于人员可分配数则分配人员可分配数 否则分配剩余数
+                var qty =
+                surplus > worker.remainder() ? worker.remainder() : surplus;
+
+                //分配人员数据到指令
+                submitData.add({
+                  'EmpID': worker.empID,
+                  'WorkOrderType': '$msg${wp.processName}',
+                  'WorkOrderContent':
+                  'production_dispatch_wechat_dispatch_error2'.trArgs([
+                    qty.toShowString(),
+                  ]),
+                });
+
+                //累加人员数据的分配数量
+                worker.dispatchQty = worker.dispatchQty.add(qty);
+
+                //累加指令的分配数量
+                disQty = disQty.add(qty);
+              }
+            }
+          }
+        }
+      } else {
+        for (var d in wp.dispatch) {
+          submitData.add({
+            'EmpID': d.empID,
+            'WorkOrderType': '$msg${d.processName}',
+            'WorkOrderContent':
+            'production_dispatch_wechat_dispatch_error2'.trArgs([
+              d.qty.toShowString(),
+            ]),
+          });
+        }
+      }
+    }
     state.sendDispatchToWechat(
+        submitData:submitData,
       success: (msg) => successDialog(content: msg),
       error: (msg) => errorDialog(content: msg),
     );
@@ -873,15 +932,107 @@ class ProductionDispatchLogic extends GetxController {
   }
 
   productionDispatch() {
-    state.productionDispatch(
-      success: (msg) {
-        SaveDispatch.delete(
-          processBillNumber: '${state.workCardTitle.value.processBillNumber}',
-        );
-        successDialog(content: msg);
-      },
-      error: (msg) => errorDialog(content: msg),
-    );
+
+      var submitData = <Map>[];
+      for (var wp in state.workProcedure.where((v) => v.isOpen == 1)) {
+        //如果批量数据不为空，则说明当前是多工单同时派工，需要对员工进行工单分配
+        if (state.batchWorkProcedure.isNotEmpty) {
+          for (var bwp in state.batchWorkProcedure.where(
+                (v) => v.processNumber == wp.processNumber,
+          )) {
+            //指令已分配数量
+            var disQty = 0.0;
+
+            for (var worker in wp.dispatch) {
+              //人员的剩余可分配数量大于0 说明人员的数量上一个指令分配满后还有剩余  可以继续下一个指令分配
+              if (worker.remainder() > 0) {
+                //指令剩余可分配数量
+                var surplus = bwp.mustQty.sub(disQty);
+
+                //指令剩余数量大于0 说明指令的数量上一个员工分配满后还有剩余  可以继续下一个员工分配
+                if (surplus > 0) {
+                  //可分配数=如果剩余数大于人员可分配数则分配人员可分配数 否则分配剩余数
+                  var qty =
+                  surplus > worker.remainder() ? worker.remainder() : surplus;
+
+                  //分配人员数据到指令
+                  submitData.add({
+                    'ID': bwp.id,
+                    'InterID': bwp.interID,
+                    'EntryID': bwp.entryID,
+                    'OperPlanningEntryFID': bwp.operPlanningEntryFID,
+                    'EmpID': worker.empID,
+                    'WorkerCode': worker.number,
+                    'WorkerName': worker.name,
+                    'SourceQty': bwp.sourceQty,
+                    'MustQty': bwp.mustQty,
+                    'PreSchedulingQty': bwp.preSchedulingQty,
+                    'Qty': qty,
+                    'FinishQty': bwp.finishQty,
+                    'SourceEntryID': bwp.sourceEntryID,
+                    'SourceInterID': bwp.sourceInterID,
+                    'SourceEntryFID': bwp.sourceEntryFID,
+                    'ProcessNumber': bwp.processNumber,
+                    'ProcessName': bwp.processName,
+                    'IsOpen': bwp.isOpen,
+                    'RoutingID': bwp.routingID,
+                  });
+
+                  //累加人员数据的分配数量
+                  worker.dispatchQty = worker.dispatchQty.add(qty);
+
+                  //累加指令的分配数量
+                  disQty = disQty.add(qty);
+                }
+              }
+            }
+          }
+          state.mergeOrderProductionDispatch(
+            submitData: submitData,
+            success: (msg) {
+              SaveDispatch.delete(
+                processBillNumber: '${state.workCardTitle.value.processBillNumber}',
+              );
+              successDialog(content: msg);
+            },
+            error: (msg) => errorDialog(content: msg),
+          );
+        } else {
+          for (var d in wp.dispatch) {
+            submitData.add({
+              'ID': wp.id,
+              'InterID': wp.interID,
+              'EntryID': wp.entryID,
+              'OperPlanningEntryFID': wp.operPlanningEntryFID,
+              'EmpID': d.empID,
+              'WorkerCode': d.number,
+              'WorkerName': d.name,
+              'SourceQty': wp.sourceQty,
+              'MustQty': wp.mustQty,
+              'PreSchedulingQty': wp.preSchedulingQty,
+              'Qty': d.qty,
+              'FinishQty': wp.finishQty,
+              'SourceEntryID': wp.sourceEntryID,
+              'SourceInterID': wp.sourceInterID,
+              'SourceEntryFID': wp.sourceEntryFID,
+              'ProcessNumber': wp.processNumber,
+              'ProcessName': wp.processName,
+              'IsOpen': wp.isOpen,
+              'RoutingID': wp.routingID,
+            });
+          }
+          state.productionDispatch(
+            submitData: submitData,
+            success: (msg) {
+              SaveDispatch.delete(
+                processBillNumber: '${state.workCardTitle.value.processBillNumber}',
+              );
+              successDialog(content: msg);
+            },
+            error: (msg) => errorDialog(content: msg),
+          );
+        }
+    }
   }
 
   queryProgress() {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/workshop_planning_info.dart';
 import 'package:jd_flutter/constant.dart';
+import 'package:jd_flutter/fun/work_reporting/workshop_planning/workshop_planning_last_process_view.dart';
 import 'package:jd_flutter/fun/work_reporting/workshop_planning/workshop_planning_salary_count_view.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
@@ -9,6 +10,7 @@ import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
 import 'package:jd_flutter/widget/picker/picker_controller.dart';
 import 'package:jd_flutter/widget/picker/picker_view.dart';
+import 'package:jd_flutter/widget/scanner.dart';
 import 'workshop_planning_logic.dart';
 import 'workshop_planning_state.dart';
 
@@ -19,7 +21,6 @@ class WorkshopPlanningPage extends StatefulWidget {
   State<WorkshopPlanningPage> createState() => _WorkshopPlanningPageState();
 }
 
-//权限码 1051321
 class _WorkshopPlanningPageState extends State<WorkshopPlanningPage> {
   final WorkshopPlanningLogic logic = Get.put(WorkshopPlanningLogic());
   final WorkshopPlanningState state = Get.find<WorkshopPlanningLogic>().state;
@@ -32,7 +33,6 @@ class _WorkshopPlanningPageState extends State<WorkshopPlanningPage> {
   _query() => logic.queryProcessPlan(
         productionOrderNo: tecProductionOrderNo.text,
         processName: tecProcessName.text,
-        callback: () => Get.back(),
       );
 
   _querySheet() {
@@ -56,7 +56,13 @@ class _WorkshopPlanningPageState extends State<WorkshopPlanningPage> {
                 child: CombinationButton(
                   combination: Combination.left,
                   text: '扫码',
-                  click: () {},
+                  click: () => Get.to(() => const Scanner())?.then(
+                    (code) => logic.scanCode(
+                      code,
+                      tecProductionOrderNo,
+                      tecProcessName,
+                    ),
+                  ),
                 ),
               ),
               Expanded(
@@ -76,9 +82,10 @@ class _WorkshopPlanningPageState extends State<WorkshopPlanningPage> {
 
   Widget _item(WorkshopPlanningInfo data) => GestureDetector(
         onTap: () {
-          state.planInfo = data;
+          state.planInfo = data.deepCopy();
           Get.to(() => const WorkshopPlanningSalaryCountPage())?.then((v) {
             state.planInfo = null;
+            state.workersCache.clear();
             if (v != null && v) _query();
           });
         },
@@ -202,7 +209,7 @@ class _WorkshopPlanningPageState extends State<WorkshopPlanningPage> {
         CombinationButton(
           combination: Combination.left,
           text: '末道计工',
-          click: () {},
+          click: () => Get.to(() => const WorkshopPlanningLastProcessPage()),
         ),
         CombinationButton(
           combination: Combination.right,

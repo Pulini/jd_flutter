@@ -16,6 +16,28 @@ class SapLabelReprintLogic extends GetxController {
   scanLabel(String code) {
     state.getLabelList(
       code: code,
+      success: (label) {
+        for (var newLabel in label) {
+          if (state.labelList.none((v) => v.labelID == newLabel.labelID)) {
+            state.labelList.add(newLabel);
+          }
+        }
+      },
+      error: (msg) => errorDialog(content: msg),
+    );
+  }
+
+  searchPiece(String piece) {
+    if (piece.isEmpty) return;
+    state.getLabelList(
+      piece: piece,
+      success: (label) {
+        for (var newLabel in label) {
+          if (state.labelList.none((v) => v.labelID == newLabel.labelID)) {
+            state.labelList.add(newLabel);
+          }
+        }
+      },
       error: (msg) => errorDialog(content: msg),
     );
   }
@@ -24,42 +46,12 @@ class SapLabelReprintLogic extends GetxController {
       .where((v) => v.isSelected.value)
       .any((v) => v.factoryNo == '1098');
 
-  printLabel({bool? hasNotes}) {
+  printLabel() {
     var selected = state.labelList.where((v) => v.isSelected.value).toList();
-    if (selected.any((v) => v.isBoxLabel)) {
-      askDialog(
-        title: 'label_reprint_print_label'.tr,
-        content: 'label_reprint_select_outer_label_print_type'.tr,
-        confirmText: 'label_reprint_material_label'.tr,
-        confirmColor: Colors.blue,
-        confirm: () =>
-            toPrintView(createLabels(labels: selected, isMaterialLabel: true)),
-        cancelText: 'label_reprint_common_label'.tr,
-        cancelColor: Colors.blue,
-        cancel: () =>
-            toPrintView(createLabels(labels: selected, isMaterialLabel: false)),
-      );
+    if (selected.isNotEmpty) {
+      createLabels(labels: selected, print: (labels) => toPrintView(labels));
     } else {
-      if (selected.any((v) => v.factoryNo == '1098')) {
-        askDialog(
-          title: 'label_reprint_print_label'.tr,
-          content: '是否打印备注行'.tr,
-          confirmText: 'label_reprint_yes'.tr,
-          confirmColor: Colors.blue,
-          confirm: () => toPrintView(createLabels(
-            labels: selected,
-            hasNotes: true,
-          )),
-          cancelText: 'label_reprint_no'.tr,
-          cancelColor: Colors.blue,
-          cancel: () => toPrintView(createLabels(
-            labels: selected,
-            hasNotes: false,
-          )),
-        );
-      } else {
-        toPrintView(createLabels(labels: selected));
-      }
+      errorDialog(content: '没有可打印的标签');
     }
   }
 
@@ -177,8 +169,8 @@ class SapLabelReprintLogic extends GetxController {
         typeBody: label.typeBody ?? '',
         trackNo: label.trackNo ?? '',
         instructionNo: label.instructionNo ?? '',
-        materialCode: label.subLabel!.first.generalMaterialNumber??'',
-        size: label.subLabel!.first.size??'',
+        materialCode: label.subLabel!.first.generalMaterialNumber ?? '',
+        size: label.subLabel!.first.size ?? '',
         inBoxQty: label.subLabel!
             .map((v) => v.inBoxQty ?? 0)
             .reduce((a, b) => a.add(b))
@@ -286,42 +278,66 @@ class SapLabelReprintLogic extends GetxController {
         consignee: label.shipToParty ?? '',
       );
 
-  List<Widget> createLabels({
+  createLabels({
     required List<SapPrintLabelInfo> labels,
-    bool? isMaterialLabel,
-    bool? hasNotes,
+    required Function(List<Widget>) print,
   }) {
-    var labelsView = <Widget>[];
-    for (var label in labels) {
-      if (label.factoryNo == '1098') {
-        if (label.subLabel!.any((v) => v.size?.isNotEmpty == true)) {
-          //缅甸标
-          if (label.subLabel!.length > 1) {
-            //多尺码物料标
-            labelsView.add(myanmarSizeListLabel(label, hasNotes ?? false));
+    var index=0;
+    try {
+      var labelsView = <Widget>[];
+      loadingShow('加载标签数据...');
+      for (var label in labels) {
+        if (label.factoryNo == '1098') {
+          if (label.subLabel!.any((v) => v.size?.isNotEmpty == true)) {
+            //缅甸标
+            if (label.subLabel!.length > 1) {
+              //多尺码物料标
+              labelsView
+                  .add(myanmarSizeListLabel(label, state.labelHasNots.value));
+            } else {
+              //单尺码物料标
+              labelsView.add(myanmarSizeLabel(label, state.labelHasNots.value));
+            }
           } else {
-            //单尺码物料标
-            labelsView.add(myanmarSizeLabel(label, hasNotes ?? false));
+            //面料标
+            labelsView.add(myanmarLabel(label, state.labelHasNots.value));
           }
         } else {
-          //面料标
-          labelsView.add(myanmarLabel(label, hasNotes ?? false));
-        }
-      } else {
-        if (label.isBoxLabel) {
-          //外箱大标
-          labelsView.add(outBoxLabel(label, isMaterialLabel!));
-        } else {
-          if (label.isMixMaterial) {
-            //小标
-            labelsView.add(inBoxLabel(label));
+          if (label.isBoxLabel) {
+            //外箱大标
+            labelsView.add(outBoxLabel(label, state.isMaterialLabel.value));
           } else {
-            //尺码物料标
-            labelsView.add(materialStandardLabel(label));
+            if (label.isMixMaterial) {
+              //小标
+              labelsView.add(inBoxLabel(label));
+            } else {
+              //尺码物料标
+              labelsView.add(materialStandardLabel(label));
+            }
           }
         }
+        index++;
       }
+      loadingDismiss();
+      print.call(labelsView);
+    } catch (e) {
+      loadingDismiss();
+      errorDialog(content:'第<${index+1}>张标签<${labels[index].pieceID}>数据异常!');
     }
-    return labelsView;
+  }
+
+  isSelectedAll() =>
+      state.labelList.isNotEmpty &&
+      state.labelList.every((v) => v.isSelected.value);
+
+
+  cleanLabels() {
+    askDialog(content: '确定要清空标签吗？', confirm: () => state.labelList.clear());
+  }
+
+  selectAll(bool isSelect) {
+    for (var v in state.labelList) {
+      v.isSelected.value = isSelect;
+    }
   }
 }

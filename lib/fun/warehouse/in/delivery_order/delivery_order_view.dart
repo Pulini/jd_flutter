@@ -865,7 +865,10 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
                                   workCenterID: opcWorkCenter.selectedId.value,
                                   reason: reason,
                                   labels: list,
-                                  refresh: _query,
+                                  refresh: (){
+                                    Get.back();
+                                    _query();
+                                  },
                                 ),
                               );
                             },
@@ -873,7 +876,10 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
                               callback: (reason) => logic.reversalStockIn(
                                 workCenterID: opcWorkCenter.selectedId.value,
                                 reason: reason,
-                                refresh: _query,
+                                refresh: (){
+                                  Get.back();
+                                  _query();
+                                },
                               ),
                             ),
                           ),

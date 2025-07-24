@@ -17,12 +17,14 @@ class WorkshopPlanningAddWorkerPage extends StatefulWidget {
 
 class _WorkshopPlanningAddWorkerPageState
     extends State<WorkshopPlanningAddWorkerPage> {
-  final WorkshopPlanningLogic logic = Get.put(WorkshopPlanningLogic());
+  final WorkshopPlanningLogic logic = Get.find<WorkshopPlanningLogic>();
   final WorkshopPlanningState state = Get.find<WorkshopPlanningLogic>().state;
   var cWorkerType = FixedExtentScrollController();
   var tecWorkerNumber = TextEditingController();
   var tecManHours = TextEditingController();
   var tecCoefficient = TextEditingController();
+  String flowProcessID = Get.arguments['flowProcessID'];
+  String date = Get.arguments['date'];
 
   _workerItem(int i) => Obx(() => GestureDetector(
         onTap: () => logic.selectWorker(
@@ -78,7 +80,7 @@ class _WorkshopPlanningAddWorkerPageState
   @override
   Widget build(BuildContext context) {
     return pageBody(
-      title: '添加员工',
+      title: state.worker == null ? '添加员工' : '修改员工',
       actions: [
         CombinationButton(
           text: state.worker == null ? '添加' : '修改',
@@ -115,7 +117,9 @@ class _WorkshopPlanningAddWorkerPageState
                                 ],
                                 controller: tecWorkerNumber,
                                 onChanged: (v) => logic.getWorkerInfo(
+                                  flowProcessID: flowProcessID,
                                   number: v,
+                                  date: date,
                                   workerType: cWorkerType,
                                   workerNumber: tecWorkerNumber,
                                   manHours: tecManHours,
