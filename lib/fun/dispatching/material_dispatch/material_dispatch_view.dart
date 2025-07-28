@@ -1,9 +1,13 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/material_dispatch_info.dart';
+import 'package:jd_flutter/bean/http/response/material_dispatch_label_detail.dart';
 import 'package:jd_flutter/route.dart';
+import 'package:jd_flutter/utils/printer/print_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/check_box_widget.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
@@ -11,8 +15,10 @@ import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
 import 'package:jd_flutter/widget/feishu_authorize.dart';
 import 'package:jd_flutter/widget/picker/picker_view.dart';
+import 'package:jd_flutter/widget/preview_label_widget.dart';
 import 'package:jd_flutter/widget/spinner_widget.dart';
 import 'package:rotated_corner_decoration/rotated_corner_decoration.dart';
+import '../../../widget/tsc_label_template.dart';
 import 'material_dispatch_dialogs.dart';
 import 'material_dispatch_logic.dart';
 
@@ -27,7 +33,122 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
   final logic = Get.put(MaterialDispatchLogic());
   final state = Get.find<MaterialDispatchLogic>().state;
 
-  _item1(MaterialDispatchInfo data) {
+  final PrintUtil pu = PrintUtil();
+
+  printLabel({
+    required MaterialDispatchInfo data,
+    required String billNo,
+    required String color,
+    required String guid,
+    required String pick,
+    required List<MaterialDispatchLabelDetail> bill,
+    required String qty,
+  }) async {
+    if (state.allInstruction.value) {
+      var list = <String>[];
+
+      billNo.split(',').forEach((data) {
+        if (data.isNotEmpty) {
+          list.add(data);
+        }
+      });
+      var chunked = [
+        for (int i = 0; i < list.length; i += 4)
+          list.sublist(i, (i + 4).clamp(0, list.length))
+      ];
+      var subList = <String>[];
+      for (var data in chunked) {
+        var splitData = '';
+        for (var subData in data) {
+          splitData = '$splitData$subData,';
+        }
+        subList.add(splitData.substring(0, splitData.length - 1));
+      }
+      var labelTable = Padding(
+        padding: const EdgeInsets.only(
+          left: 5,
+          right: 5,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            for (var i = 0; i < subList.length; ++i) ...[Text(subList[i],style: const TextStyle(fontSize: 14),)]
+          ],
+        ),
+      );
+      Get.to(() => PreviewLabel(
+              labelWidget: dynamicLabelTemplate75xN(
+            qrCode: guid,
+            title: Text(data.productName ?? '',style: const TextStyle(fontSize: 20)),
+            subTitle: Text(data.materialName ?? '',style: const TextStyle(fontSize: 16)),
+            header: Text(
+                '部件：${data.materialName}(${data.materialNumber})<${data.processName}>'),
+            table: labelTable,
+            footer: Column(
+              children: [
+                Row(
+                  children: [
+                    Expanded(child: Text(data.sapDecideArea ?? '',style: const TextStyle(fontSize: 16))),
+                    Expanded(child: Text('色系：$color',style: const TextStyle(fontSize: 16)))
+                  ],
+                ),
+                Row(
+                  children: [
+                    Expanded(child: Text(data.drillingCrewName ?? '',style: const TextStyle(fontSize: 16))),
+                    Expanded(child: Text('数量：$qty${data.unitName}',style: const TextStyle(fontSize: 16)))
+                  ],
+                )
+              ],
+            ),
+          )));
+    } else {
+      var ins = '';
+      var toPrint = '';
+      for (var data in bill) {
+        if (data.billNo!.isNotEmpty) {
+          ins = '$ins${data.billNo!},';
+        }
+      }
+      ins.split(',').forEachIndexed((i, s) {
+        if (i <= 1 && s.isNotEmpty) {
+          toPrint = '$toPrint$s,';
+          logger.f('toPrint:$toPrint');
+        }
+      });
+      if (toPrint.endsWith(',')) {
+        toPrint.substring(0, toPrint.length - 1);
+      }
+
+      Get.to(() => PreviewLabel(
+            labelWidget: fixedLabelTemplate75x45(
+              qrCode: guid,
+              title: Text(data.productName ?? '',style: const TextStyle(fontSize: 20)),
+              subTitle: Text('${data.partName}$toPrint<${data.processName}>',style: const TextStyle(fontSize: 16)),
+              content: Text('${data.materialName}(${data.materialNumber})'),
+              bottomLeft:
+                  Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+                Text('仓位：${state.palletNumber}',
+                    style: const TextStyle(fontSize: 12)),
+                Text(data.drillingCrewName ?? '',
+                    style: const TextStyle(fontSize: 12))
+              ]),
+              bottomMiddle: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text('$color/$qty${data.unitName}',
+                      style: const TextStyle(fontSize: 12)),
+                  Text('取件码：$pick', style: const TextStyle(fontSize: 12))
+                ],
+              ),
+              bottomRight: Center(
+                  child: Text(data.sapDecideArea ?? '',
+                      style: const TextStyle(fontSize: 12))),
+            ),
+          ));
+    }
+  }
+
+  _item1(MaterialDispatchInfo data, int index) {
     var style = const TextStyle(
       color: Colors.black87,
       fontWeight: FontWeight.bold,
@@ -175,7 +296,7 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
                 backgroundColor: Colors.blue.shade50,
               ),
               Container(
-                  height: 32,
+                  height: 35,
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.grey),
                     color: Colors.blue.shade50,
@@ -186,7 +307,9 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
                     maintainAnimation: true,
                     maintainSize: true,
                     maintainState: true,
-                    child: Row(children: _subItemButton(data: data)),
+                    child: Row(
+                        children: _subItemButton(
+                            data: data, titlePosition: index, position: -1)),
                   ))
             ],
           ),
@@ -223,15 +346,18 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
                   text: data.children![i].sapColorBatch ?? '',
                 ),
                 Container(
-                  height: 32,
+                  height: 35,
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.grey),
                     color: Colors.transparent,
                   ),
                   alignment: Alignment.centerLeft,
                   child: Row(
-                    children:
-                        _subItemButton(data: data, subData: data.children![i]),
+                    children: _subItemButton(
+                        data: data,
+                        subData: data.children![i],
+                        position: i,
+                        titlePosition: index),
                   ),
                 )
               ],
@@ -259,7 +385,7 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
                       style: style,
                     ),
                     SizedBox(
-                      width: 150,
+                      width: 100,
                       child: percentIndicator(
                         max: data.qty.toDoubleTry(),
                         value: data.finishQty.toDoubleTry(),
@@ -284,7 +410,7 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
                       style: style,
                     ),
                     SizedBox(
-                      width: 150,
+                      width: 100,
                       child: percentIndicator(
                         max: data.qty.toDoubleTry(),
                         value: data.codeQty.toDoubleTry(),
@@ -314,7 +440,36 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
               ),
               CombinationButton(
                 text: 'material_dispatch_label_list'.tr,
-                click: () => labelListDialog(context, data),
+                click: () =>
+                    labelListDialog(state.date,context, data, callback: (info, label) {
+                      var data = info.children!.firstWhere((data) => data.sapColorBatch == label.sapColorBatch && label.sapColorBatch!.isNotEmpty);
+                      if(state.allInstruction.value){
+                        printLabel(
+                            data: info,
+                            billNo: data.billNo!,
+                            color: data.sapColorBatch!,
+                            guid: label.guid!,
+                            pick: label.pickUpCode!,
+                            bill: <MaterialDispatchLabelDetail>[],
+                            qty: label.qty.toShowString());
+                      }else{
+                        state.getLabelDetail(
+                          guid: label.guid!,
+                          success: (List<MaterialDispatchLabelDetail> bill) {
+                            printLabel(
+                                data: info,
+                                billNo: data.billNo!,
+                                color: data.sapColorBatch!,
+                                guid: label.guid!,
+                                pick: label.pickUpCode!,
+                                bill: bill,
+                                qty: label.qty.toShowString());
+                          },
+                        );
+                      }
+                }, refreshCallBack: () {
+                  logic.refreshDataList();
+                }),
                 combination: Combination.middle,
               ),
               CombinationButton(
@@ -343,6 +498,8 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
   _subItemButton({
     required MaterialDispatchInfo data,
     Children? subData,
+    required int titlePosition,
+    required int position,
   }) {
     btReport() {
       if (subData != null) {
@@ -351,8 +508,18 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
           data,
           subData,
           (d) {
-            subData.qty = d.toShowString();
-            logic.subItemReport(data, subData, false);
+            logic.subItemReport(
+              qty: d.toShowString(),
+              titlePosition: titlePosition,
+              clickPosition: position,
+              isPrint: false,
+              success: (String guid, String pick,
+                  List<MaterialDispatchLabelDetail> bill) {
+                //不需要走打印
+              },
+              submitData: data,
+              subData: subData,
+            );
           },
         );
       }
@@ -374,8 +541,24 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
           data,
           subData,
           (d) {
-            subData.qty = d.toShowString();
-            logic.subItemReport(data, subData, true);
+            logic.subItemReport(
+                qty: d.toShowString(),
+                titlePosition: titlePosition,
+                clickPosition: position,
+                submitData: data,
+                subData: subData,
+                isPrint: true,
+                success: (String guid, String pick,
+                    List<MaterialDispatchLabelDetail> bills) {
+                  printLabel(
+                      data: data,
+                      billNo: subData.billNo!,
+                      color: subData.sapColorBatch!,
+                      guid: guid,
+                      pick: pick,
+                      bill: bills,
+                      qty: d.toShowString());
+                });
           },
         );
       }
@@ -562,13 +745,18 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
                 name: 'material_dispatch_show_not_stock_in'.tr,
                 value: state.unStockIn.value,
               )),
+          Obx(() => CheckBox(
+                onChanged: (c) => state.allInstruction.value = c,
+                name: 'material_dispatch_btn_print_all'.tr,
+                value: state.allInstruction.value,
+              )),
         ],
         query: () => logic.refreshDataList(),
         body: Obx(() => ListView.builder(
               padding: const EdgeInsets.all(8),
               itemCount: state.showOrderList.length,
               itemBuilder: (context, index) =>
-                  _item1(state.showOrderList[index]),
+                  _item1(state.showOrderList[index], index),
             )),
       );
     }

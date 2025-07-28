@@ -9,6 +9,7 @@ import 'package:jd_flutter/fun/warehouse/in/quality_inspection_list/quality_insp
 import 'package:jd_flutter/fun/warehouse/in/quality_inspection_list/quality_inspection_list_reverse_color_view.dart';
 import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/widget/check_box_widget.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
@@ -222,7 +223,7 @@ class _QualityInspectionListPageState extends State<QualityInspectionListPage> {
         subtitle: Row(
           children: [
             Expanded(
-              flex: 6,
+              flex: 7,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -383,7 +384,7 @@ class _QualityInspectionListPageState extends State<QualityInspectionListPage> {
       ),
       bindingLabel: () =>
           Get.to(() => const QualityInspectionColorListPage())?.then((v) {
-        if (v!=null&&v) _query();
+        if (v != null && v) _query();
       }),
     );
   }
@@ -400,6 +401,16 @@ class _QualityInspectionListPageState extends State<QualityInspectionListPage> {
   @override
   Widget build(BuildContext context) {
     return pageBodyWithDrawer(
+        actions: [
+          Obx(() => CheckBox(
+                onChanged: (c) {
+                  state.allSelect.value = c;
+                  logic.selectAllData(c);
+                },
+                name:  state.allSelect.value? 'quality_inspection_no_all_select'.tr:'quality_inspection_all_select'.tr,
+                value: state.allSelect.value,
+              )),
+        ],
         queryWidgets: [
           EditText(
             controller: typeBodyController,

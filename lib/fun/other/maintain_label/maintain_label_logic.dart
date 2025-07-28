@@ -173,10 +173,12 @@ class MaintainLabelLogic extends GetxController {
     );
   }
 
-  printLabelState(
-      {required List<List<LabelInfo>> selectLabel,
-      required int type,
-      required Function(int) success}) {
+  printLabelState({
+    required List<List<LabelInfo>> selectLabel,
+    required int type,
+    required String factoryId,
+    required Function(int) success,
+  }) {
     state.setLabelState(
       selectLabels: selectLabel,
       labelType: type,
@@ -187,27 +189,26 @@ class MaintainLabelLogic extends GetxController {
   }
 
   checkLanguage({
-    required Function(int labelType, List<List<LabelInfo>>, List<String>)
+    required Function(
+            String factory, int labelType, List<List<LabelInfo>>, List<String>)
         callback,
   }) {
     var languageList = <String>[];
     var select = <LabelInfo>[];
 
     if (state.isMaterialLabel.value) {
-      logger.f('-----1-----------');
-        for (var data in state.labelGroupList) {
-          for (var value in data) {
-            if(value.select== true){
-              select.add(value);
-            }
+      for (var data in state.labelGroupList) {
+        for (var value in data) {
+          if (value.select == true) {
+            select.add(value);
           }
         }
+      }
       if (select.isEmpty) {
         errorDialog(content: 'maintain_label_select_label'.tr);
         return;
       }
     } else {
-      logger.f('-----2-----------');
       select = state.labelList.where((v) => v.select).toList();
       if (select.isEmpty) {
         errorDialog(content: 'maintain_label_select_label'.tr);
@@ -253,7 +254,8 @@ class MaintainLabelLogic extends GetxController {
         }
       }
     }
-    callback.call(select[0].labelType!, [select], languageList);
+    callback.call(select[0].fCustomFactoryID!, select[0].labelType!, [select],
+        languageList);
   }
 
   Function(List<Widget>) labelsCallback = (label) {
@@ -265,49 +267,113 @@ class MaintainLabelLogic extends GetxController {
   };
 
   printLabel({
+    required String factoryId,
     required int type,
     required List<List<LabelInfo>> select,
     String language = '',
   }) {
-    switch (type) {
-      case 101:
-        createMaterialLabel(
-          language: language,
-          list: select[0],
-          labels: labelsCallback,
-        );
-        break;
-      case 102:
-        createGroupDynamicLabel(
-          language: language,
-          list: select,
-          labels: labelsCallback,
-        );
-        break;
-      case 103:
-        createDynamicLabel(
-          language: language,
-          list: select[0],
-          labels: labelsCallback,
-        );
-        break;
-      // default:
-      //
-      //   break;
+    if (factoryId.isNotEmpty) {
+      switch (factoryId) {
+        case '1098':
+          {
+            if (select[0][0].items!.isNotEmpty) {
+              if (select[0][0].items!.length == 1) {
+                createSingleSizeLabel(
+                  language: language,
+                  list: select[0],
+                  labels: labelsCallback,
+                );
+              } else {
+                createMultipleSizeLabel(
+                  language: language,
+                  list: select[0],
+                  labels: labelsCallback,
+                );
+              }
+            } else {
+              createNoSizeLabel(
+                  language: language, list: select[0], labels: labelsCallback);
+            }
+          }
+          break;
+        default:
+          break;
+      }
+    } else {
+      switch (type) {
+        case 101:
+          logger.f('101');
+          createMaterialLabel(
+            language: language,
+            list: select[0],
+            labels: labelsCallback,
+          );
+          break;
+        case 102:
+          logger.f('102');
+          createGroupDynamicLabel(
+            language: language,
+            list: select,
+            labels: labelsCallback,
+          );
+          break;
+        case 103:
+          logger.f('103');
+          createDynamicLabel(
+            language: language,
+            list: select[0],
+            labels: labelsCallback,
+          );
+          break;
+        default:
+          break;
+      }
     }
-
-    // createSingleSizeLabel(
-    //   language: language,
-    //   list: select[0],
-    //   labels: labelsCallback,
-    // );
-    //
-    // createMultipleSizeLabel(
-    //   language: language,
-    //   list: select[0],
-    //   labels: labelsCallback,
-    // );
   }
+
+  //单一物料无尺码标
+  createNoSizeLabel({
+    String language = '',
+    required List<LabelInfo> list,
+    required Function(List<Widget>) labels,
+  }) {
+    var labelList = <Widget>[];
+    for (var data in list) {
+      labelList.add(myanmarLabel(data, false));
+    }
+    labels.call(labelList);
+  }
+
+  // materialList: [
+  //   for (var m in label.items!)
+  //     [m.materialNumber ?? '', m.specifications ?? '']
+  // ],
+
+  Widget myanmarLabel(LabelInfo label, bool hasNotes) =>
+      dynamicMyanmarLabel110xN(
+        labelID: label.barCode ?? '',
+        myanmarApprovalDocument: label.myanmarApprovalDocument?? '',
+        typeBody: label.factoryType ?? '',
+        trackNo: label.trackNo?? '',
+        instructionNo: label.billNo ?? '',
+        materialList: [],
+        inBoxQty: label.items!
+            .map((v) => v.qty ?? 0)
+            .reduce((a, b) => a.add(b))
+            .toShowString(),
+        customsDeclarationUnit: label.customsDeclarationUnit?? '',
+        customsDeclarationType: label.customsDeclarationType?? '',
+        pieceNo: label.pieceNo??'',
+        pieceID: label.pieceID?? '',
+        grossWeight: label.grossWeight.toShowString(),
+        netWeight: label.netWeight.toShowString(),
+        specifications: label.meas ?? '',
+        volume: label.volume?? '',
+        supplier: label.departName ?? '',
+        manufactureDate: label.manufactureDate?? '',
+        hasNotes: hasNotes,
+        notes: '',
+      );
 
   //单一物料多尺码标
   createMultipleSizeLabel({
@@ -325,9 +391,9 @@ class MaintainLabelLogic extends GetxController {
   Widget myanmarSizeListLabel(LabelInfo label, bool hasNotes) =>
       dynamicMyanmarSizeListLabel110xN(
         labelID: label.barCode ?? '',
-        myanmarApprovalDocument: '------------',
+        myanmarApprovalDocument: label.myanmarApprovalDocument ?? '',
         typeBody: label.factoryType ?? '',
-        trackNo: '-----',
+        trackNo: label.trackNo ?? '',
         materialList: createSizeList(
           label: label,
           sizeTitle: 'Size',
@@ -337,18 +403,18 @@ class MaintainLabelLogic extends GetxController {
             .map((v) => v.qty ?? 0)
             .reduce((a, b) => a.add(b))
             .toShowString(),
-        customsDeclarationUnit: '--------',
-        customsDeclarationType: '--------',
-        pieceNo: '-----',
-        pieceID: '-----',
+        customsDeclarationUnit: label.customsDeclarationUnit ?? '',
+        customsDeclarationType: label.customsDeclarationType ?? '',
+        pieceNo: label.pieceNo ?? '',
+        pieceID: label.pieceID ?? '',
         grossWeight: label.grossWeight.toShowString(),
         netWeight: label.netWeight.toShowString(),
         specifications: label.meas ?? '',
-        volume: '-----',
+        volume: label.volume ?? '',
         supplier: label.departName ?? '',
-        manufactureDate: '-------',
+        manufactureDate: label.manufactureDate ?? '',
         hasNotes: hasNotes,
-        notes: '----',
+        notes: '',
       );
 
   Map<String, List> createSizeList({
@@ -407,25 +473,25 @@ class MaintainLabelLogic extends GetxController {
   Widget myanmarSizeLabel(LabelInfo label, bool hasNotes) =>
       dynamicMyanmarSizeLabel110xN(
         labelID: label.barCode ?? '',
-        myanmarApprovalDocument: '-------',
+        myanmarApprovalDocument: label.myanmarApprovalDocument ?? '',
         typeBody: label.factoryType ?? '',
-        trackNo: '--------',
+        trackNo: label.trackNo ?? '',
         instructionNo: label.billNo ?? '',
         materialCode: label.materialCode ?? '',
         size: label.items!.first.size ?? '',
         inBoxQty: label.items!.first.qty.toShowString(),
-        customsDeclarationUnit: '------',
-        customsDeclarationType: '-------',
-        pieceNo: '------',
-        pieceID: '------',
+        customsDeclarationUnit: label.customsDeclarationUnit ?? '',
+        customsDeclarationType: label.customsDeclarationType ?? '',
+        pieceNo: label.pieceNo ?? '',
+        pieceID: label.pieceID ?? '',
         grossWeight: label.grossWeight.toShowString(),
         netWeight: label.netWeight.toShowString(),
         specifications: label.meas ?? '',
-        volume: '------',
+        volume: label.volume ?? '',
         supplier: label.departName ?? '',
-        manufactureDate: '------',
+        manufactureDate: label.manufactureDate ?? '',
         hasNotes: hasNotes,
-        notes: '------',
+        notes: '',
       );
 
   //物料标

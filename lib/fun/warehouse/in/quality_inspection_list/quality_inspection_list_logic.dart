@@ -574,6 +574,15 @@ class QualityInspectionListLogic extends GetxController {
     }
   }
 
+  selectAllData(bool select){
+    for (var data in state.showDataList) {
+      for (var subData in data) {
+          subData.isSelected.value = select;
+      }
+    }
+    state.showDataList.refresh();
+  }
+
   submitColorLabelBinding({
     required String location,
     required String postDate,

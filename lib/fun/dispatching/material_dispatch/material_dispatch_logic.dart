@@ -1,6 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/material_dispatch_info.dart';
+import 'package:jd_flutter/bean/http/response/material_dispatch_label_detail.dart';
 import 'package:jd_flutter/route.dart';
+import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/picker/picker_controller.dart';
 import 'package:jd_flutter/widget/spinner_widget.dart';
@@ -22,8 +25,15 @@ class MaterialDispatchLogic extends GetxController {
   var dpcStartDate = DatePickerController(
     PickerType.startDate,
     saveKey: '${RouteConfig.materialDispatch.name}${PickerType.startDate}',
-  )..firstDate = DateTime(
-      DateTime.now().year - 5, DateTime.now().month, DateTime.now().day);
+  )
+    ..firstDate = DateTime(
+        DateTime
+            .now()
+            .year - 5, DateTime
+        .now()
+        .month, DateTime
+        .now()
+        .day);
 
   //日期选择器的控制器
   var dpcEndDate = DatePickerController(
@@ -60,10 +70,11 @@ class MaterialDispatchLogic extends GetxController {
 
   reportToSAP() {
     state.reportToSAP(
-      success: (msg) => successDialog(
-        content: msg,
-        back: () => refreshDataList(),
-      ),
+      success: (msg) =>
+          successDialog(
+            content: msg,
+            back: () => refreshDataList(),
+          ),
       error: (msg) => errorDialog(content: msg),
     );
   }
@@ -71,28 +82,28 @@ class MaterialDispatchLogic extends GetxController {
   batchWarehousing() {
     var submitList = state.createSubmitData();
     if (submitList.isEmpty) {
-      msgDialog(
-          content: 'material_dispatch_batch_stock_in_error_tips'.tr);
+      msgDialog(content: 'material_dispatch_batch_stock_in_error_tips'.tr);
     } else {
       state.batchWarehousing(
         submitList: submitList,
-        success: (msg) => successDialog(
-          content: msg,
-          back: () => refreshDataList(),
-        ),
+        success: (msg) =>
+            successDialog(
+              content: msg,
+              back: () => refreshDataList(),
+            ),
         error: (msg) => errorDialog(content: msg),
       );
     }
   }
 
-
   itemReport(MaterialDispatchInfo data) {
     state.itemReport(
       data: data,
-      success: (msg) => successDialog(
-        content: msg,
-        back: () => refreshDataList(),
-      ),
+      success: (msg) =>
+          successDialog(
+            content: msg,
+            back: () => refreshDataList(),
+          ),
       error: (msg) => errorDialog(content: msg),
     );
   }
@@ -100,10 +111,11 @@ class MaterialDispatchLogic extends GetxController {
   itemCancelReport(MaterialDispatchInfo data) {
     state.itemCancelReport(
       data: data,
-      success: (msg) => successDialog(
-        content: msg,
-        back: () => refreshDataList(),
-      ),
+      success: (msg) =>
+          successDialog(
+            content: msg,
+            back: () => refreshDataList(),
+          ),
       error: (msg) => errorDialog(content: msg),
     );
   }
@@ -112,37 +124,55 @@ class MaterialDispatchLogic extends GetxController {
     state.subItemWarehousing(
       data: data,
       sapDecideArea: sapDecideArea,
-      success: (msg) => successDialog(
-        content: msg,
-        back: () => refreshDataList(),
-      ),
+      success: (msg) =>
+          successDialog(
+            content: msg,
+            back: () => refreshDataList(),
+          ),
       error: (msg) => errorDialog(content: msg),
     );
   }
 
-  subItemReport(
-    MaterialDispatchInfo data,
-    Children subData,
-    bool isPrint,
-  ) {
+  subItemReport({
+    required MaterialDispatchInfo submitData,
+    required Children subData,
+    required bool isPrint,
+    required String qty,
+    required int titlePosition,
+    required int clickPosition,
+    required Function(String guid, String pick, List<
+        MaterialDispatchLabelDetail> bill) success,
+  }) {
     state.subItemReport(
-      data: data,
-      subData: subData,
-      success: (msg) => successDialog(
-        content: msg,
-        back: () => refreshDataList(),
-      ),
-      error: (msg) => errorDialog(content: msg),
+        reportQty: qty,
+        data: submitData,
+        subData: subData,
+        titlePosition: titlePosition,
+        clickPosition: clickPosition,
+        success: (guid, pick) {
+          if(state.allInstruction.value){
+            success.call(guid, pick, <MaterialDispatchLabelDetail>[]);
+          }else{
+            state.getLabelDetail(
+              guid: guid,
+              success: (List<MaterialDispatchLabelDetail> bill) {
+                success.call(guid, pick, bill);
+              },
+            );
+          }
+        },
+        error: (msg) => errorDialog(content: msg),
     );
   }
 
   subItemCancelReport(Children subData) {
     state.subItemCancelReport(
       subData: subData,
-      success: (msg) => successDialog(
-        content: msg,
-        back: () => refreshDataList(),
-      ),
+      success: (msg) =>
+          successDialog(
+            content: msg,
+            back: () => refreshDataList(),
+          ),
       error: (msg) => errorDialog(content: msg),
     );
   }

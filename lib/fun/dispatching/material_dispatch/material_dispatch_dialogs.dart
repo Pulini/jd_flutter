@@ -24,6 +24,7 @@ subItemReportDialog(
     qty = subData.noCodeQty.toDoubleTry();
     max = subData.qty.toDoubleTry().sub(subData.finishQty.toDoubleTry());
   } else {
+    qty = subData.qty.toDoubleTry().sub(subData.codeQty.toDoubleTry());
     max = subData.noCodeQty.toDoubleTry();
   }
   var controller = TextEditingController(
@@ -108,14 +109,15 @@ subItemReportDialog(
           ),
           TextButton(
             onPressed: () {
+              qty = controller.text.toDoubleTry();
               if (qty == 0.0) {
                 showSnackBar(
                   message: 'material_dispatch_dialog_enter_report_qty_tips'.tr,
                   isWarning: true,
                 );
               } else {
-                callback.call(qty);
                 Get.back();
+                callback.call(qty);
               }
             },
             child: Text('material_dispatch_dialog_submit_report'.tr),
@@ -148,9 +150,12 @@ showBillNoList(String data) {
 }
 
 labelListDialog(
+  int date,
   BuildContext context,
-  MaterialDispatchInfo mdi,
-) {
+  MaterialDispatchInfo mdi, {
+  required Function(MaterialDispatchInfo, LabelInfo) callback,
+  required Function() refreshCallBack,
+}) {
   var labelList = <LabelInfo>[].obs;
   Get.dialog(
     PopScope(
@@ -194,17 +199,51 @@ labelListDialog(
                                   hint: 'material_dispatch_dialog_qty'.tr,
                                   text: data.qty.toShowString(),
                                 ),
-                                CombinationButton(
-                                  text: 'material_dispatch_dialog_reprint'.tr,
-                                  click: () {},
-                                  combination: Combination.left,
+                                SizedBox(
+                                  width: 110,
+                                  child: CombinationButton(
+                                    text: 'material_dispatch_dialog_reprint'.tr,
+                                    click: () {
+                                      callback.call(mdi, data);
+                                    },
+                                    combination: Combination.left,
+                                  ),
                                 ),
-                                CombinationButton(
-                                  text: 'material_dispatch_dialog_delete_label'
-                                      .tr,
-                                  click: () {},
-                                  combination: Combination.right,
-                                ),
+                                SizedBox(
+                                  width: 110,
+                                  child: CombinationButton(
+                                    text:
+                                        'material_dispatch_dialog_delete_label'
+                                            .tr,
+                                    click: () {
+                                      askDialog(
+                                          content:
+                                              'material_dispatch_dialog_sure_delete_label'
+                                                  .tr,
+                                          confirm: () {
+                                            _deleteLabel(
+                                              guid: data.guid!,
+                                              callback: () {
+                                                _getLabelList(
+                                                  mdi.children?[0].interID ??
+                                                      '',
+                                                  mdi.children?[0]
+                                                          .routeEntryFIDs ??
+                                                      '',
+                                                  mdi.routeEntryFIDs ?? '',
+                                                  mdi.sapDecideArea ?? '',
+                                                  mdi.productName ?? '',
+                                                  (list) =>
+                                                      labelList.value = list,
+                                                );
+                                                refreshCallBack.call();
+                                              },
+                                            );
+                                          });
+                                    },
+                                    combination: Combination.right,
+                                  ),
+                                )
                               ],
                             ),
                           ),
@@ -225,18 +264,54 @@ labelListDialog(
                                   hint: 'material_dispatch_dialog_machine'.tr,
                                   text: data.drillingCrewName ?? '',
                                 ),
-                                CombinationButton(
-                                  text: 'material_dispatch_dialog_change_pallet'
-                                      .tr,
-                                  click: () {},
-                                  combination: Combination.left,
+                                SizedBox(
+                                  width: 110,
+                                  child: CombinationButton(
+                                    text:
+                                        'material_dispatch_dialog_change_pallet'
+                                            .tr,
+                                    click: () {},
+                                    combination: Combination.left,
+                                  ),
                                 ),
-                                CombinationButton(
-                                  text:
-                                      'material_dispatch_dialog_report_sap'.tr,
-                                  click: () {},
-                                  combination: Combination.right,
-                                ),
+                                SizedBox(
+                                  width: 110,
+                                  child: CombinationButton(
+                                    isEnabled:
+                                        (mdi.children![0].lastProcessNode ==
+                                                    '1' &&
+                                                data.billInterID! > 0)
+                                            ? true
+                                            : false,
+                                    text: data.reportStatus == '0'
+                                        ? 'material_dispatch_dialog_report_sap'
+                                            .tr
+                                        : 'material_dispatch_dialog_cancel_report_sap'
+                                            .tr,
+                                    click: () {
+                                      askDialog(
+                                          content: data.reportStatus == '0'
+                                              ? 'material_dispatch_dialog_sure_report_sap'
+                                                  .tr
+                                              : 'material_dispatch_dialog_sure_cancel_report_sap'
+                                                  .tr,
+                                          confirm: () {
+                                            _reportSapOrCancelReportSap(
+                                                billInterID: data.billInterID!,
+                                                outPutNumber:
+                                                    data.outPutNumber!,
+                                                isReport:
+                                                    data.reportStatus == '0',
+                                                guid: data.guid!,
+                                                upDate:getDateYMD(time: DateTime.fromMillisecondsSinceEpoch(date)),
+                                                callback: () {
+                                                  refreshCallBack.call();
+                                                });
+                                          });
+                                    },
+                                    combination: Combination.right,
+                                  ),
+                                )
                               ],
                             ),
                           ),
@@ -270,6 +345,55 @@ labelListDialog(
   );
 }
 
+_deleteLabel({
+  required String guid,
+  required Function() callback,
+}) {
+  httpPost(
+    method: webApiDelQRCode,
+    loading: 'material_dispatch_dialog_getting_label_list'.tr,
+    params: {
+      'Guid': guid,
+      'UserID': getUserInfo()!.userID,
+    },
+  ).then((response) {
+    if (response.resultCode == resultSuccess) {
+      callback.call();
+    } else {
+      errorDialog(content: response.message);
+    }
+  });
+}
+
+_reportSapOrCancelReportSap({
+  required int billInterID,
+  required String outPutNumber,
+  required bool isReport,
+  required String guid,
+  required String upDate,
+  required Function() callback,
+}) {
+  httpPost(
+    method: webApiProcessOutPutReportByBillInterIDStripDrawing,
+    loading: 'material_dispatch_dialog_submit_sap'.tr,
+    params: {
+      'BillInterID': billInterID,
+      'OutPutNumber': outPutNumber,
+      'Report': isReport ? 'X' : '',
+      'Guid': guid,
+      'Date': upDate,
+      'UserID': getUserInfo()!.userID,
+      'MovementType': '101',
+    },
+  ).then((response) {
+    if (response.resultCode == resultSuccess) {
+      callback.call();
+    } else {
+      errorDialog(content: response.message);
+    }
+  });
+}
+
 _getLabelList(
   String interId,
   String routeEntryFID,
@@ -295,6 +419,8 @@ _getLabelList(
           LabelInfo.fromJson(response.data[i])
       ]);
     } else {
+      callback.call([]);
+      Get.back();
       errorDialog(content: response.message);
     }
   });
@@ -642,7 +768,7 @@ class PickPalletController {
         'StartDate': '',
         'EndDate': '',
         'PalletNumber': '',
-        'Factory': userInfo?.factory,
+        'Factory': userInfo?.sapFactory,
         'StorageLocation': userInfo?.defaultStockNumber,
         'Location': location,
         'ProductionMachine': machine,

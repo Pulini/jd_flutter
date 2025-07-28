@@ -11,8 +11,11 @@ import 'package:jd_flutter/widget/widgets_to_image_widget.dart';
 import 'custom_widget.dart';
 
 class PreviewLabel extends StatefulWidget {
-  const PreviewLabel(
-      {super.key, required this.labelWidget, this.isDynamic = false});
+  const PreviewLabel({
+    super.key,
+    required this.labelWidget,
+    this.isDynamic = false,
+  });
 
   final Widget labelWidget;
   final bool isDynamic;

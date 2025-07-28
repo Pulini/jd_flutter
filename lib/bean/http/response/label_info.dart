@@ -45,9 +45,19 @@ class LabelInfo {
     this.barCodeTypeID,
     this.packType,
     this.interID,
+    this.fCustomFactoryID,
     this.labelType,
     this.departName,
     this.items,
+    this.myanmarApprovalDocument,
+    this.trackNo,
+    this.customsDeclarationUnit,
+    this.customsDeclarationType,
+    this.pieceNo,
+    this.pieceID,
+    this.volume,
+    this.manufactureDate,
+    this.notes,
   });
 
   LabelInfo.fromJson(dynamic json) {
@@ -76,6 +86,16 @@ class LabelInfo {
     barCodeTypeID = json['BarCodeTypeID'];
     packType = json['PackType'];
     interID = json['InterID'];
+    fCustomFactoryID = json['FCustomFactoryID'];
+    myanmarApprovalDocument = json['MyanmarApprovalDocument'];
+    trackNo = json['TrackNo'];
+    customsDeclarationUnit = json['CustomsDeclarationUnit'];
+    customsDeclarationType = json['CustomsDeclarationType'];
+    pieceNo = json['PieceNo'];
+    pieceID = json['PieceID'];
+    volume = json['Volume'];
+    manufactureDate = json['ManufactureDate'];
+    notes = json['Notes'];
     labelType = json['LabelType'];
     departName = json['DepartName'];
     if (json['Items'] != null) {
@@ -83,10 +103,12 @@ class LabelInfo {
       json['Items'].forEach((v) {
         items?.add(LabelSizeInfo.fromJson(v));
       });
-      items?.sort((a, b) => a.size.toDoubleTry().compareTo(b.size.toDoubleTry()));
+      items?.sort(
+          (a, b) => a.size.toDoubleTry().compareTo(b.size.toDoubleTry()));
     }
   }
-  bool select=false;
+
+  bool select = false;
 
   String? billNo;
   String? barCode;
@@ -108,9 +130,19 @@ class LabelInfo {
   int? barCodeTypeID;
   bool? packType;
   int? interID;
+  String? fCustomFactoryID;
   int? labelType;
   String? departName;
   List<LabelSizeInfo>? items;
+  String? myanmarApprovalDocument;
+  String? trackNo;
+  String? customsDeclarationUnit;
+  String? customsDeclarationType;
+  String? pieceNo;
+  String? pieceID;
+  String? volume;
+  String? manufactureDate;
+  String? notes;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -137,8 +169,18 @@ class LabelInfo {
     map['BarCodeTypeID'] = barCodeTypeID;
     map['PackType'] = packType;
     map['InterID'] = interID;
+    map['FCustomFactoryID'] = fCustomFactoryID;
     map['LabelType'] = labelType;
     map['DepartName'] = departName;
+    map['MyanmarApprovalDocument'] = myanmarApprovalDocument;
+    map['TrackNo'] = trackNo;
+    map['CustomsDeclarationUnit'] = customsDeclarationUnit;
+    map['CustomsDeclarationType'] = customsDeclarationType;
+    map['PieceNo'] = pieceNo;
+    map['PieceID'] = pieceID;
+    map['Volume'] = volume;
+    map['ManufactureDate'] = manufactureDate;
+    map['Notes'] = notes;
     if (items != null) {
       map['Items'] = items?.map((v) => v.toJson()).toList();
     }
@@ -171,7 +213,8 @@ class LabelSizeInfo {
     size = json['Size'];
     qty = json['Qty'];
   }
-  bool? isSubtotal=false;
+
+  bool? isSubtotal = false;
   String? billNo;
   String? size;
   double? qty;

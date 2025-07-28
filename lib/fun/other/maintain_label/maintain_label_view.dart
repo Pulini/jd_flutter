@@ -210,7 +210,9 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
                 ]),
                 Expanded(
                   child: ListView.builder(
-                    itemCount: state.isMaterialLabel.value ?  state.getLabelGroupList().length  : state.getLabelList().length,
+                    itemCount: state.isMaterialLabel.value
+                        ? state.getLabelGroupList().length
+                        : state.getLabelList().length,
                     itemBuilder: (context, index) => state.isMaterialLabel.value
                         ? _item2(state.getLabelGroupList()[index])
                         : _item1(state.getLabelList()[index]),
@@ -280,22 +282,33 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
                       child: CombinationButton(
                         text: 'maintain_label_print'.tr,
                         click: () => logic.checkLanguage(
-                          callback: (labelType, select, language) {
+                          callback: (
+                            factory,
+                            labelType,
+                            select,
+                            language,
+                          ) {
                             if (language.isEmpty) {
                               logic.printLabelState(
                                   type: labelType,
+                                  factoryId: factory,
                                   selectLabel: select,
                                   success: (labelType) {
                                     logic.printLabel(
-                                        type: labelType, select: select);
+                                      factoryId: factory,
+                                      type: labelType,
+                                      select: select,
+                                    );
                                   });
                             } else {
                               if (language.length == 1) {
                                 logic.printLabelState(
                                     type: labelType,
+                                    factoryId: factory,
                                     selectLabel: select,
                                     success: (labelType) {
                                       logic.printLabel(
+                                        factoryId: factory,
                                         select: select,
                                         language: language[0],
                                         type: labelType,
@@ -306,9 +319,11 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
                                     list: language,
                                     callback: (s) => logic.printLabelState(
                                         type: labelType,
+                                        factoryId: factory,
                                         selectLabel: select,
                                         success: (labelType) {
                                           logic.printLabel(
+                                            factoryId: factory,
                                             select: select,
                                             language: s,
                                             type: labelType,
