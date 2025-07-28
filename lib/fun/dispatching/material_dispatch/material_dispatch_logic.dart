@@ -1,9 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/material_dispatch_info.dart';
 import 'package:jd_flutter/bean/http/response/material_dispatch_label_detail.dart';
 import 'package:jd_flutter/route.dart';
-import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/picker/picker_controller.dart';
 import 'package:jd_flutter/widget/spinner_widget.dart';

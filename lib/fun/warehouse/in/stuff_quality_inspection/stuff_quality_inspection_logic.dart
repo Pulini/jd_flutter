@@ -394,7 +394,6 @@ class StuffQualityInspectionLogic extends GetxController {
 
     var upInspectionType = '';
     var upType = '';
-    var upGroupType = '';
     var upSubmitGroupType = '';
 
     if (state.inspectionTypeEnable.value) {
@@ -407,12 +406,6 @@ class StuffQualityInspectionLogic extends GetxController {
       upType = type;
     } else {
       upType = state.type.value;
-    }
-
-    if (state.groupTypeEnable.value) {
-      upGroupType = groupType;
-    } else {
-      upGroupType = state.groupType.value;
     }
 
     httpPost(
