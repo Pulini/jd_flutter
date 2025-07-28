@@ -93,7 +93,7 @@ class _QualityInspectionListPageState extends State<QualityInspectionListPage> {
       child: Row(
         children: [
           Expanded(
-              flex: 6,
+              flex: 7,
               child: Row(
                 children: [
                   Expanded(
@@ -278,21 +278,24 @@ class _QualityInspectionListPageState extends State<QualityInspectionListPage> {
     );
   }
 
-  _query() => logic.getInspectionList(
-        orderType: scOrderType.selectIndex,
-        typeBody: typeBodyController.text,
-        materialCode: materialCodeController.text,
-        instruction: instructionController.text,
-        inspectionOrder: inspectionOrderController.text,
-        temporaryReceipt: temporaryReceiptController.text,
-        receiptVoucher: receiptVoucherController.text,
-        trackingNumber: trackingNumberController.text,
-        startDate: dpcStartDate.getDateFormatYMD(),
-        endDate: dpcEndDate.getDateFormatYMD(),
-        supplier: supplierController.selectedId.value,
-        sapCompany: sapCompanyController.selectedId.value,
-        factory: factoryController.selectedId.value,
-      );
+  _query(){
+    logic.getInspectionList(
+      orderType: scOrderType.selectIndex,
+      typeBody: typeBodyController.text,
+      materialCode: materialCodeController.text,
+      instruction: instructionController.text,
+      inspectionOrder: inspectionOrderController.text,
+      temporaryReceipt: temporaryReceiptController.text,
+      receiptVoucher: receiptVoucherController.text,
+      trackingNumber: trackingNumberController.text,
+      startDate: dpcStartDate.getDateFormatYMD(),
+      endDate: dpcEndDate.getDateFormatYMD(),
+      supplier: supplierController.selectedId.value,
+      sapCompany: sapCompanyController.selectedId.value,
+      factory: factoryController.selectedId.value,
+    );
+    state.allSelect.value = false;
+  }
 
   _deleteOrder() {
     logic.checkDelete(
@@ -333,7 +336,7 @@ class _QualityInspectionListPageState extends State<QualityInspectionListPage> {
         isCanCancel: true,
         confirm: (reason) {
           Get.back();
-          logic.colorSubmit(reason: reason);
+          logic.colorSubmit(reason: reason, success: () { _query(); });
         },
       );
     }, toReverseColor: () {

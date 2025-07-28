@@ -392,12 +392,15 @@ class QualityInspectionListLogic extends GetxController {
   }
 
   //提交
-  colorSubmit({required String reason}) {
+  colorSubmit({
+    required String reason,
+    required Function() success,
+  }) {
     state.colorSubmit(
       reason: reason,
       success: (msg) => successDialog(
         content: msg,
-        back: () => Get.back(result: true),
+        back: () => success.call(),
       ),
       error: (msg) => errorDialog(content: msg),
     );
@@ -574,10 +577,10 @@ class QualityInspectionListLogic extends GetxController {
     }
   }
 
-  selectAllData(bool select){
+  selectAllData(bool select) {
     for (var data in state.showDataList) {
       for (var subData in data) {
-          subData.isSelected.value = select;
+        subData.isSelected.value = select;
       }
     }
     state.showDataList.refresh();

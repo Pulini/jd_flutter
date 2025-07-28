@@ -169,7 +169,7 @@ class _QualityInspectionReverseColorPageState
                         isCanCancel: true,
                         confirm: (reason) {
                           Get.back();
-                          logic.colorSubmit(reason: reason);
+                          logic.colorSubmit(reason: reason, success: () {  });
                         },
                       );
                     }
