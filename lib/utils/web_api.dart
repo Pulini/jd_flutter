@@ -196,6 +196,7 @@ Future<BaseData> _doHttp({
                 : response.data,
           )..print(
               '${response.realUri.origin}/$method',
+              loading,
               response.realUri.queryParameters,
             );
           if (baseData.resultCode == 2) {
@@ -490,6 +491,9 @@ const webApiSendDispatchToWechat = 'api/NeedleCartDispatch/WechatPostByFEmpID';
 
 //工序计工
 const webApiProductionDispatch = 'api/NeedleCartDispatch/ProcessCalculation';
+
+//工序计工
+const webApiProductionDispatchBatch = 'api/NeedleCartDispatch/ProcessCalculationBatch';
 
 //查询生产派工单生产进度表
 const webApiGetWorkCardDetailList = 'api/WorkCard/GetWorkCardDetailList';
@@ -1429,3 +1433,28 @@ const webApiGetTypeOfWorkListByProcess =
 
 //团件-通过工号获取员工基数信息
 const webApiGetEmpBaseByNumber = 'api/Piecework/GetEmpBaseByNumber';
+
+//团件-获取团件列表
+const webApiGetGroupPayList = 'api/Piecework/GetGroupPayList';
+
+//团件-获取团件明细信息
+const webApiGetGroupPayDetail = 'api/Piecework/GetGroupPayDetail';
+
+//团件-删除团件
+const webApiDeleteGroupPay = 'api/Piecework/DeleteGroupPay';
+
+//团件--提交团体、个件计件工资
+const webApiSubmitGroupPay = 'api/Piecework/SubmitGroupPay';
+
+//团件-获取当天扫码物料列表
+const webApiGetToDayItemInfo = 'api/Piecework/GetToDayItemInfo';
+
+//团件-获取各尺码扫码数量
+const webApiGetEndingProcessQty = 'api/Piecework/GetEndingProcessQty';
+
+//团件-获取团件末道工序列表
+const webApiGetGroupPayEndingProcessList = 'api/Piecework/GetGroupPayEndingProcessList';
+
+//团件-获取末道团件明细信息
+const webApiGetGroupPayEndingDetail = 'api/Piecework/GetGroupPayEndingDetail';
+

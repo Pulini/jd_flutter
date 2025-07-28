@@ -10,6 +10,7 @@ import 'package:jd_flutter/login/login_view.dart';
 import 'package:jd_flutter/utils/app_init_service.dart';
 
 import 'downloader.dart';
+import 'loading.dart';
 
 // 提示弹窗
 msgDialog({
@@ -96,6 +97,7 @@ successDialog({
   required String? content,
   Function()? back,
 }) {
+  loadingDismiss();
   Get.dialog(
     PopScope(
       //拦截返回键
@@ -125,6 +127,7 @@ errorDialog({
   required String? content,
   Function()? back,
 }) {
+  loadingDismiss();
   Get.dialog(
     PopScope(
       //拦截返回键
@@ -148,48 +151,47 @@ errorDialog({
   );
 }
 
-GlobalKey<NavigatorState>? loadingKey;
-//加载中弹窗
-loadingShow(String? content) {
-  if (loadingKey != null) {
-    debugPrint('loading is showing');
-    return;
-  }
-  loadingKey = GlobalKey();
-  debugPrint('loading show');
-  Get.dialog(
-    PopScope(
-      canPop: false,
-      child: Dialog(
-        key: loadingKey,
-        backgroundColor: Colors.white,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const CircularProgressIndicator(),
-              const SizedBox(height: 15),
-              Text(content ?? '')
-            ],
-          ),
-        ),
-      ),
-    ),
-    barrierDismissible: false, //拦截dialog外部点击
-  );
-}
-
-loadingDismiss() {
-  if (loadingKey != null && loadingKey!.currentContext != null) {
-    final routeDialog = ModalRoute.of(loadingKey!.currentContext!);
-    if (routeDialog != null) {
-      Navigator.removeRoute(Get.overlayContext!, routeDialog);
-      loadingKey = null;
-      debugPrint('loading dismiss');
-    }
-  }
-}
+// GlobalKey<NavigatorState>? loadingKey;
+// //加载中弹窗
+// loadingShow(String? content) {
+//   if (loadingKey != null) {
+//     debugPrint('loading is showing');
+//     return;
+//   }
+//   loadingKey = GlobalKey();
+//   debugPrint('loading show');
+//   Get.dialog(
+//     PopScope(
+//       canPop: false,
+//       child: Dialog(
+//         key: loadingKey,
+//         backgroundColor: Colors.white,
+//         child: Padding(
+//           padding: const EdgeInsets.symmetric(vertical: 20),
+//           child: Column(
+//             mainAxisSize: MainAxisSize.min,
+//             children: [
+//               const CircularProgressIndicator(),
+//               const SizedBox(height: 15),
+//               Text(content ?? '')
+//             ],
+//           ),
+//         ),
+//       ),
+//     ),
+//     barrierDismissible: false, //拦截dialog外部点击
+//   );
+// }
+// loadingDismiss() {
+//   if (loadingKey != null && loadingKey!.currentContext != null) {
+//     final routeDialog = ModalRoute.of(loadingKey!.currentContext!);
+//     if (routeDialog != null) {
+//       Navigator.removeRoute(Get.overlayContext!, routeDialog);
+//       loadingKey = null;
+//       debugPrint('loading dismiss');
+//     }
+//   }
+// }
 
 doUpdate({
   required VersionInfo version,
@@ -612,4 +614,12 @@ exitDialog({
       ),
     ],
   ));
+}
+
+loadingShow(String? content) {
+  LoadingSingleton().show(content);
+}
+
+loadingDismiss() {
+  LoadingSingleton().dismiss();
 }

@@ -203,7 +203,8 @@ class _QualityInspectionListPageState extends State<QualityInspectionListPage> {
         borderRadius: BorderRadius.circular(10),
         border: Border.all(color: Colors.grey, width: 2),
       ),
-      child: ExpansionTile(
+      child: Obx(()=>ExpansionTile(
+        initiallyExpanded: data.every((v) => v.isSelected.value),
         onExpansionChanged: (v) {
           for (var item in data) {
             item.isSelected.value = v;
@@ -230,7 +231,7 @@ class _QualityInspectionListPageState extends State<QualityInspectionListPage> {
                   Text('(${data[0].supplierNumber}) ${data[0].name1}'),
                   TextButton(
                     onPressed: () => Get.to(
-                        () => const QualityInspectionListDetailPage(),
+                            () => const QualityInspectionListDetailPage(),
                         arguments: {'index': index}),
                     child: Text(
                       'quality_inspection_view_detail'.tr,
@@ -273,7 +274,7 @@ class _QualityInspectionListPageState extends State<QualityInspectionListPage> {
           for (var sub in data) _subItem(sub),
           const SizedBox(height: 10),
         ],
-      ),
+      )),
     );
   }
 

@@ -1,4 +1,3 @@
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/temporary_order_info.dart';
 import 'package:jd_flutter/fun/warehouse/in/temporary_order/temporary_order_detail_view.dart';

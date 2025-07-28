@@ -51,6 +51,76 @@ class _DeliveryOrderLabelBindingPageState
         ),
       ));
 
+  List<Widget> _scanProgress() => logic.sizeMaterialList().isEmpty
+      ? [
+          Padding(
+            padding: const EdgeInsets.all(10),
+            child: Obx(() => Row(
+                  children: [
+                    Text(
+                      'delivery_order_label_check_progress'.tr,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.green,
+                      ),
+                    ),
+                    Expanded(
+                      child: progressIndicator(
+                        max: logic.getMaterialsTotal(),
+                        value: logic.getScanProgress(),
+                      ),
+                    )
+                  ],
+                )),
+          )
+        ]
+      : [
+          // Padding(
+          //   padding: const EdgeInsets.all(10),
+          //   child: Obx(() => Row(
+          //         children: [
+          //           Text(
+          //             'delivery_order_label_check_progress'.tr,
+          //             style: const TextStyle(
+          //               fontWeight: FontWeight.bold,
+          //               color: Colors.green,
+          //             ),
+          //           ),
+          //           Expanded(
+          //             child: progressIndicator(
+          //               max: logic.getMaterialsTotal(),
+          //               value: logic.getScanProgress(),
+          //             ),
+          //           )
+          //         ],
+          //       )),
+          // ),
+          for (var size in logic.sizeMaterialList())
+            Padding(
+              padding: const EdgeInsets.only(left: 10, right: 10, bottom: 5),
+              child: Obx(() => Row(
+                    children: [
+                      SizedBox(
+                        width: 40,
+                        child: Text(
+                          '${size[0]}#',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.blue,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: progressIndicator(
+                          max: size[1],
+                          value: logic.getSizeScanProgress(size[0] ?? ''),
+                        ),
+                      )
+                    ],
+                  )),
+            ),
+        ];
+
   @override
   void initState() {
     state.canAddPiece.value = false;
@@ -123,51 +193,7 @@ class _DeliveryOrderLabelBindingPageState
               ),
             ),
           ),
-          if (logic.sizeMaterialList().isEmpty)
-            Padding(
-              padding: const EdgeInsets.all(10),
-              child: Obx(() => Row(
-                    children: [
-                      Text(
-                        'delivery_order_label_check_progress'.tr,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.green,
-                        ),
-                      ),
-                      Expanded(
-                        child: progressIndicator(
-                          max: logic.getMaterialsTotal(),
-                          value: logic.getScanProgress(),
-                        ),
-                      )
-                    ],
-                  )),
-            ),
-          for (var size in logic.sizeMaterialList())
-            Padding(
-              padding: const EdgeInsets.only(left: 10, right: 10, bottom: 5),
-              child: Obx(() => Row(
-                    children: [
-                      SizedBox(
-                        width: 40,
-                        child: Text(
-                          '${size[0]}#',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.blue,
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: progressIndicator(
-                          max: size[1],
-                          value: logic.getSizeScanProgress(size[0] ?? ''),
-                        ),
-                      )
-                    ],
-                  )),
-            ),
+          ..._scanProgress(),
           Expanded(
             child: Obx(() => ListView.builder(
                   itemCount: state.scannedLabelList.length,

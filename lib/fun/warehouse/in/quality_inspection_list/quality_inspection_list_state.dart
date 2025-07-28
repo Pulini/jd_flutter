@@ -171,6 +171,8 @@ class QualityInspectionListState {
             'PurchaseVoucherNo': item.purchaseVoucherNo,
             'PostingDate': date,
             'StorageLocation': store1,
+            'UserName': getUserInfo()!.number,
+            'ChineseName': getUserInfo()!.name,
             'EnglishName': '',
             'MaterialDocumentLineItemNumber': '',
             'MaterialDocumentNo': '',

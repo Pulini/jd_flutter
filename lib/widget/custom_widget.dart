@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:jd_flutter/bean/home_button.dart';
 import 'package:jd_flutter/bean/http/response/picking_material_order_info.dart';
-import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/utils/app_init_service.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
@@ -43,7 +43,7 @@ pageBody({
       backgroundColor: Colors.transparent,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        title: Text(title ?? getFunctionTitle()),
+        title: Text(title ?? functionTitle),
         actions: [
           ...?actions,
         ],
@@ -77,7 +77,7 @@ pageBodyWithBottomSheet({
       backgroundColor: Colors.transparent,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        title: Text(title ?? getFunctionTitle()),
+        title: Text(title ?? functionTitle),
         actions: [
           ...?actions,
           Builder(
@@ -156,7 +156,7 @@ pageBodyWithDrawer({
       backgroundColor: Colors.transparent,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        title: Text(title ?? getFunctionTitle()),
+        title: Text(title ?? functionTitle),
         actions: [
           ...?actions,
           Builder(

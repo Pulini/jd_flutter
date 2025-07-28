@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/bean/home_button.dart';
 import 'package:jd_flutter/bean/http/response/production_tasks_info.dart';
-import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/utils/mqtt.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
@@ -610,7 +610,7 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
   @override
   Widget build(BuildContext context) {
     return pageBody(
-      title: '${getFunctionTitle()}  <${userInfo?.departmentName}>',
+      title: '$functionTitle  <${userInfo?.departmentName}>',
       actions: [
         Container(
           width: 260,

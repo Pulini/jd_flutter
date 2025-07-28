@@ -402,7 +402,7 @@ class SaveDispatch {
       )
       ''';
   static const dbInsertOrReplace = '''
-      INSERT OR REPLACE INTO dispatch (
+      INSERT OR REPLACE INTO $tableName (
       id, processBillNumber,
       cacheJson
       ) VALUES (?, ?, ?)

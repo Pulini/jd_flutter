@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/bean/home_button.dart';
 import 'package:jd_flutter/bean/http/response/temporary_order_info.dart';
 import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/utils/utils.dart';
@@ -300,7 +301,7 @@ class _TemporaryOrderPageState extends State<TemporaryOrderPage> {
         backgroundColor: Colors.transparent,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
-          title: Text(getFunctionTitle()),
+          title: Text(functionTitle),
           actions: [
             Builder(
               builder: (context) => IconButton(

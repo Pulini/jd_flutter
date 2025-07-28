@@ -48,7 +48,6 @@ class DeliveryOrderLogic extends GetxController {
     required bool isExempt,
     required bool isCheckOrder,
     required String factoryNumber,
-    required String produceOrderNo,
     required String deliNo,
     required String workCenterID,
     required Function() goTo,
@@ -58,7 +57,6 @@ class DeliveryOrderLogic extends GetxController {
     if (isCheckOrder) {
       if (isExempt) {
         state.getDeliveryOrdersDetails(
-          produceOrderNo: produceOrderNo,
           deliNo: deliNo,
           line: workCenterID,
           success: goTo,
@@ -68,7 +66,6 @@ class DeliveryOrderLogic extends GetxController {
         state.getTemporaryDetail(
           zno: deliNo,
           success: () => state.getDeliveryOrdersDetails(
-            produceOrderNo: produceOrderNo,
             deliNo: deliNo,
             line: workCenterID,
             success: goTo,
@@ -79,7 +76,6 @@ class DeliveryOrderLogic extends GetxController {
       }
     } else {
       state.getDeliveryOrdersDetails(
-        produceOrderNo: produceOrderNo,
         deliNo: deliNo,
         line: workCenterID,
         success: goTo,
@@ -272,7 +268,7 @@ class DeliveryOrderLogic extends GetxController {
 
   getSupplierLabelInfo({
     required List<DeliveryOrderInfo> group,
-    required Function() refresh,
+    required Function(bool) refresh,
   }) {
     state.materialList.clear();
     groupBy(group, (v) => v.materialCode ?? '').forEach((k, v) {
@@ -299,9 +295,7 @@ class DeliveryOrderLogic extends GetxController {
         _initLabelList(list);
         Get.to(() => const DeliveryOrderLabelBindingPage())?.then((v) {
           state.scannedLabelList.clear();
-          if (v != null && v) {
-            refresh.call();
-          }
+          refresh.call(v!=null&&v);
         });
       },
       error: (msg) => errorDialog(content: msg),
@@ -481,6 +475,15 @@ class DeliveryOrderLogic extends GetxController {
     });
     return sizeList;
   }
+
+ // double sizeMaterialListTotal() {
+ //    var sizeList = sizeMaterialList();
+ //    var max = 0.0;
+ //    for (var size in sizeList) {
+ //
+ //      max = max.add(v.map((v2) => v2[1]).reduce((a, b) => a.add(b)));
+ //    }
+ //  }
 
   double getMaterialsTotal() {
     var max = 0.0;

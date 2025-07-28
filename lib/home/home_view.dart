@@ -286,7 +286,7 @@ class HomeSubItem extends StatelessWidget {
                   message: '该功能暂未开放',
                   isWarning: true,
                 )
-              : Get.toNamed(item.route),
+              : item.toFunction(),
       enabled: item.hasUpdate ? true : item.hasPermission,
       leading: Image.network(
         item.icon,

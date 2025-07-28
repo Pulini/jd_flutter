@@ -422,7 +422,7 @@ extension RequestOptionsExt on RequestOptions {
 }
 
 extension ListExt on List? {
-  isNullOrEmpty() {
+ bool isNullOrEmpty() {
     if (this == null) return true;
     return this!.isEmpty;
   }

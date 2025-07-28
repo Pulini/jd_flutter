@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/bean/home_button.dart';
 import 'package:jd_flutter/bean/http/response/sap_picking_scan_info.dart';
 import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/route.dart';
@@ -65,7 +66,7 @@ class _SapPackingScanCacheListPageState
 
     var dpcDate = DatePickerController(
       PickerType.date,
-      buttonName: '计划船期',
+      buttonName: '过账日期',
       initDate: postingDate.millisecondsSinceEpoch,
       firstDate:
           DateTime(postingDate.year, postingDate.month - 1, postingDate.day),
@@ -76,7 +77,7 @@ class _SapPackingScanCacheListPageState
       PopScope(
         canPop: false,
         child: AlertDialog(
-          title: Text('sap_production_picking_dialog_picker_verify'.tr),
+          title: Text('重处理'),
           content: SizedBox(
             width: 300,
             child: Column(
@@ -101,6 +102,7 @@ class _SapPackingScanCacheListPageState
                     actualCabinet: confirmActualCabinet,
                     postingDate: dpcDate.getDateFormatYMD(),
                     submitList: submitList,
+                    refresh: () => Get.back(),
                   );
                 }
               },
@@ -195,85 +197,140 @@ class _SapPackingScanCacheListPageState
     );
   }
 
+  _searchSheet() => showSheet(
+        context: context,
+        body: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const SizedBox(height: 10),
+            EditText(hint: '实际柜号', controller: tecActualCabinet),
+            DatePicker(pickerController: dpcDate),
+            OptionsPicker(pickerController: opcDestination),
+            LinkOptionsPicker(pickerController: lopcFactoryAndWarehouse),
+            const SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.all(10),
+              child: SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blueAccent,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                  ),
+                  onPressed: () {
+                    logic.getAbnormalOrders(
+                      plannedDate: dpcDate.getDateFormatYMD(),
+                      destination: opcDestination.getPickItem().pickerId(),
+                      factory:
+                          lopcFactoryAndWarehouse.getPickItem1().pickerId(),
+                      warehouse:
+                          lopcFactoryAndWarehouse.getPickItem2().pickerId(),
+                      actualCabinet: tecActualCabinet.text,
+                      refresh: () => Navigator.pop(context),
+                    );
+                  },
+                  child: Text(
+                    'page_title_with_drawer_query'.tr,
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+        scrollControlled: true,
+      );
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) => _searchSheet());
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return pageBodyWithBottomSheet(
-      bottomSheet: [
-        EditText(hint: '实际柜号', controller: tecActualCabinet),
-        DatePicker(pickerController: dpcDate),
-        OptionsPicker(pickerController: opcDestination),
-        LinkOptionsPicker(pickerController: lopcFactoryAndWarehouse),
-      ],
-      query: () => logic.getAbnormalOrders(
-        plannedDate: dpcDate.getDateFormatYMD(),
-        destination: opcDestination.getPickItem().pickerId(),
-        factory: lopcFactoryAndWarehouse.getPickItem1().pickerId(),
-        warehouse: lopcFactoryAndWarehouse.getPickItem2().pickerId(),
-        actualCabinet: tecActualCabinet.text,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.only(left: 10, right: 10),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: CupertinoSearchTextField(
-                    decoration: BoxDecoration(
-                      color: Colors.white54,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    placeholder: '请输入物料编号货物料描或跟踪号述进行过滤',
-                    onChanged: (v) => state.abnormalSearchText.value = v,
-                  ),
-                ),
-                Obx(() => Checkbox(
-                      value: logic.isSelectedAllAbnormalItem(),
-                      onChanged: (v) => logic.selectAllAbnormalItem(v!),
-                    ))
-              ],
-            ),
-            Expanded(
-              child: Obx(() {
-                var list = logic.showAbnormalList();
-                return ListView.builder(
-                  itemCount: list.length,
-                  itemBuilder: (c, i) => _abnormalItem(list[i]),
-                );
-              }),
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: Obx(() => CombinationButton(
-                        combination: Combination.left,
-                        backgroundColor: Colors.red,
-                        isEnabled: logic.selectedAbnormalItem().isNotEmpty,
-                        text: '删除',
-                        click: () => askDialog(
-                          content: '确定要删除所选标签吗？',
-                          confirm: () => logic.deleteAbnormal(),
-                        ),
-                      )),
-                ),
-                Expanded(
-                  child: Obx(() => CombinationButton(
-                        combination: Combination.right,
-                        backgroundColor: Colors.orange,
-                        isEnabled: logic.selectedAbnormalItem().isNotEmpty,
-                        text: '重处理',
-                        click: () => logic.getReSubmitData(
-                          (list, maxDate) => reSubmitDataInput(
-                            postingDate: maxDate,
-                            submitList: list,
-                          ),
-                        ),
-                      )),
-                ),
-              ],
+    return Container(
+      decoration: backgroundColor(),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          title: Text(functionTitle),
+          actions: [
+            Builder(
+              builder: (context) => IconButton(
+                icon: const Icon(Icons.search),
+                onPressed: () => _searchSheet(),
+              ),
             )
           ],
+        ),
+        body: Padding(
+          padding: const EdgeInsets.only(left: 10, right: 10),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: CupertinoSearchTextField(
+                      decoration: BoxDecoration(
+                        color: Colors.white54,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      placeholder: '请输入物料编号货物料描或跟踪号述进行过滤',
+                      onChanged: (v) => state.abnormalSearchText.value = v,
+                    ),
+                  ),
+                  Obx(() => Checkbox(
+                        value: logic.isSelectedAllAbnormalItem(),
+                        onChanged: (v) => logic.selectAllAbnormalItem(v!),
+                      ))
+                ],
+              ),
+              Expanded(
+                child: Obx(() {
+                  var list = logic.showAbnormalList();
+                  return ListView.builder(
+                    itemCount: list.length,
+                    itemBuilder: (c, i) => _abnormalItem(list[i]),
+                  );
+                }),
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: Obx(() => CombinationButton(
+                          combination: Combination.left,
+                          backgroundColor: Colors.red,
+                          isEnabled: logic.selectedAbnormalItem().isNotEmpty,
+                          text: '删除',
+                          click: () => askDialog(
+                            content: '确定要删除所选标签吗？',
+                            confirm: () => logic.deleteAbnormal(),
+                          ),
+                        )),
+                  ),
+                  Expanded(
+                    child: Obx(() => CombinationButton(
+                          combination: Combination.right,
+                          backgroundColor: Colors.orange,
+                          isEnabled: logic.selectedAbnormalItem().isNotEmpty,
+                          text: '重处理',
+                          click: () => logic.getReSubmitData(
+                            (list, maxDate) => reSubmitDataInput(
+                              postingDate: maxDate,
+                              submitList: list,
+                            ),
+                          ),
+                        )),
+                  ),
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );
