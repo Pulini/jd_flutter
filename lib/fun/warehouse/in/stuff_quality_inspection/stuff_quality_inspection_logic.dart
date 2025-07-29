@@ -1301,7 +1301,7 @@ class StuffQualityInspectionLogic extends GetxController {
           list.map((v) => v.unqualified ?? 0).reduce((a, b) => a.add(b));
       var allShort = list.map((v) => v.short ?? 0).reduce((a, b) => a.add(b));
       if (allUnQty != state.labelUnQty || allShort != state.labelShortQty) {
-        showSnackBar(message: '贴标不合格数量或短码数量与品检的符！');
+        showSnackBar(message: '贴标不合格数量或短码数量与品检的不符合！');
         return false;
       } else {
         return true;
