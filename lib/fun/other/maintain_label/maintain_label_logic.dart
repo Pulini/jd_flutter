@@ -344,33 +344,32 @@ class MaintainLabelLogic extends GetxController {
     labels.call(labelList);
   }
 
-  // materialList: [
-  //   for (var m in label.items!)
-  //     [m.materialNumber ?? '', m.specifications ?? '']
-  // ],
-
   Widget myanmarLabel(LabelInfo label, bool hasNotes) =>
       dynamicMyanmarLabel110xN(
         labelID: label.barCode ?? '',
-        myanmarApprovalDocument: label.myanmarApprovalDocument?? '',
+        myanmarApprovalDocument: label.myanmarApprovalDocument ?? '',
         typeBody: label.factoryType ?? '',
-        trackNo: label.trackNo?? '',
+        trackNo: label.trackNo ?? '',
         instructionNo: label.billNo ?? '',
+        // materialList: [
+        //   for (var m in label.items!)
+        //     [m.materialNumber ?? '', m.specifications ?? '']
+        // ],
         materialList: [],
         inBoxQty: label.items!
             .map((v) => v.qty ?? 0)
             .reduce((a, b) => a.add(b))
             .toShowString(),
-        customsDeclarationUnit: label.customsDeclarationUnit?? '',
-        customsDeclarationType: label.customsDeclarationType?? '',
-        pieceNo: label.pieceNo??'',
-        pieceID: label.pieceID?? '',
+        customsDeclarationUnit: label.customsDeclarationUnit ?? '',
+        customsDeclarationType: label.customsDeclarationType ?? '',
+        pieceNo: label.pieceNo ?? '',
+        pieceID: label.pieceID ?? '',
         grossWeight: label.grossWeight.toShowString(),
         netWeight: label.netWeight.toShowString(),
         specifications: label.meas ?? '',
-        volume: label.volume?? '',
+        volume: label.volume ?? '',
         supplier: label.departName ?? '',
-        manufactureDate: label.manufactureDate?? '',
+        manufactureDate: label.manufactureDate ?? '',
         hasNotes: hasNotes,
         notes: '',
       );

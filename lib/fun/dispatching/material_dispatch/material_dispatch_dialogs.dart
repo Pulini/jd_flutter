@@ -16,9 +16,14 @@ subItemReportDialog(
   BuildContext context,
   MaterialDispatchInfo data,
   Children subData,
-  Function(double) callback,
+  Function(double, double, double, double, double, double) callback,
 ) {
   var qty = 0.0;
+  var longQty = 0.0;
+  var wideQty = 0.0;
+  var heightQty = 0.0;
+  var grossWeightQty = 0.0;
+  var netWeightQty = 0.0;
   var max = 0.0;
   if (subData.codeQty.toDoubleTry() == 0.0) {
     qty = subData.noCodeQty.toDoubleTry();
@@ -34,11 +39,14 @@ subItemReportDialog(
     TextPosition(offset: controller.text.length),
   );
   Get.dialog(
+    useSafeArea: true,
     PopScope(
       canPop: false,
       child: AlertDialog(
+        scrollable: true,
         title: Text('material_dispatch_dialog_label_progress'.tr),
         content: SizedBox(
+          height: 230,
           width: MediaQuery.of(context).size.width * 0.4 < 400
               ? 400
               : MediaQuery.of(context).size.width * 0.5,
@@ -48,25 +56,71 @@ subItemReportDialog(
             children: [
               Text(
                 data.materialName ?? '',
+                maxLines: 2,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
                   color: Colors.blue.shade900,
                 ),
               ),
-              textSpan(
-                hint: 'material_dispatch_dialog_color_batch'.tr,
-                text: subData.sapColorBatch ?? '',
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  textSpan(
+                    hint: 'material_dispatch_dialog_need_report_qty'.tr,
+                    text: subData.noCodeQty ?? '',
+                  ),
+                  textSpan(
+                    hint: 'material_dispatch_dialog_color_batch'.tr,
+                    text: subData.sapColorBatch ?? '',
+                  ),
+                ],
               ),
-              textSpan(
-                hint: 'material_dispatch_dialog_need_report_qty'.tr,
-                text: subData.noCodeQty ?? '',
+              Row(
+                children: [
+                  Expanded(
+                    child: NumberDecimalEditText(
+                      hint: 'material_dispatch_dialog_report_qty'.tr,
+                      max: max,
+                      onChanged: (d) => qty = d,
+                      controller: controller,
+                    ),
+                  ),
+                  Expanded(
+                    child: NumberDecimalEditText(
+                      hint: 'material_dispatch_dialog_gross_weight_qty'.tr,
+                      onChanged: (d) => grossWeightQty = d,
+                    ),
+                  ),
+                  Expanded(
+                    child: NumberDecimalEditText(
+                      hint: 'material_dispatch_dialog_net_weight_qty'.tr,
+                      onChanged: (d) => netWeightQty = d,
+                    ),
+                  ),
+                ],
               ),
-              NumberDecimalEditText(
-                hint: 'material_dispatch_dialog_report_qty'.tr,
-                max: max,
-                onChanged: (d) => qty = d,
-                controller: controller,
+              Row(
+                children: [
+                  Expanded(
+                    child: NumberDecimalEditText(
+                      hint: 'material_dispatch_dialog_long'.tr,
+                      onChanged: (d) => longQty = d,
+                    ),
+                  ),
+                  Expanded(
+                    child: NumberDecimalEditText(
+                      hint: 'material_dispatch_dialog_wide'.tr,
+                      onChanged: (d) => wideQty = d,
+                    ),
+                  ),
+                  Expanded(
+                    child: NumberDecimalEditText(
+                      hint: 'material_dispatch_dialog_height'.tr,
+                      onChanged: (d) => heightQty = d,
+                    ),
+                  ),
+                ],
               ),
               Row(
                 children: [
@@ -116,8 +170,26 @@ subItemReportDialog(
                   isWarning: true,
                 );
               } else {
-                Get.back();
-                callback.call(qty);
+                if (data.mustEnter == '1') {
+                  if (longQty == 0 ||
+                      wideQty == 0 ||
+                      heightQty == 0 ||
+                      grossWeightQty == 0 ||
+                      netWeightQty == 0) {
+                    showSnackBar(
+                      message: 'material_dispatch_dialog_need_qty_tips'.tr,
+                      isWarning: true,
+                    );
+                  } else {
+                    Get.back();
+                    callback.call(qty, longQty, wideQty, heightQty,
+                        grossWeightQty, netWeightQty);
+                  }
+                } else {
+                  Get.back();
+                  callback.call(qty, longQty, wideQty, heightQty,
+                      grossWeightQty, netWeightQty);
+                }
               }
             },
             child: Text('material_dispatch_dialog_submit_report'.tr),
@@ -303,7 +375,10 @@ labelListDialog(
                                                 isReport:
                                                     data.reportStatus == '0',
                                                 guid: data.guid!,
-                                                upDate:getDateYMD(time: DateTime.fromMillisecondsSinceEpoch(date)),
+                                                upDate: getDateYMD(
+                                                    time: DateTime
+                                                        .fromMillisecondsSinceEpoch(
+                                                            date)),
                                                 callback: () {
                                                   refreshCallBack.call();
                                                 });

@@ -45,6 +45,10 @@ class MaterialDispatchInfo {
     this.billStyle,
     this.stuffNumber,
     this.children,
+    this.mustEnter,
+    this.factoryID,
+    this.cusdeclaraType,
+    this.exitLabelType,
   });
 
   MaterialDispatchInfo.fromJson(dynamic json) {
@@ -68,6 +72,10 @@ class MaterialDispatchInfo {
     routeEntryFIDs = json['RouteEntryFIDs'];
     billStyle = json['BillStyle'];
     stuffNumber = json['StuffNumber'];
+    mustEnter = json['MustEnter'];
+    factoryID = json['FactoryID'];
+    cusdeclaraType = json['CusdeclaraType'];
+    exitLabelType = json['ExitLabelType'];
     if (json['Children'] != null) {
       children = [];
       json['Children'].forEach((v) {
@@ -96,6 +104,10 @@ class MaterialDispatchInfo {
   String? routeEntryFIDs; //工艺路线分录IDs
   String? billStyle; //正单补单
   String? stuffNumber; //材料代码
+  String? mustEnter; //是否需要必填
+  String? factoryID; //工厂ID
+  String? cusdeclaraType;
+  String? exitLabelType; //打标类型
   List<Children>? children;
 
   Map<String, dynamic> toJson() {
@@ -120,6 +132,10 @@ class MaterialDispatchInfo {
     map['RouteEntryFIDs'] = routeEntryFIDs;
     map['BillStyle'] = billStyle;
     map['StuffNumber'] = stuffNumber;
+    map['MustEnter'] = mustEnter;
+    map['FactoryID'] = factoryID;
+    map['CusdeclaraType'] = cusdeclaraType;
+    map['ExitLabelType'] = exitLabelType;
     if (children != null) {
       map['Children'] = children?.map((v) => v.toJson()).toList();
     }
