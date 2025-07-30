@@ -169,13 +169,36 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
           ),
         ));
       }
-    }else if(data.exitLabelType=='102'){
-
-    }else if(data.exitLabelType=='103'){
-
+    }else{
+      Get.to(() => PreviewLabel(
+        labelWidget: fixedLabelTemplate75x45(
+          qrCode: guid,
+          title: Text(data.productName ?? '',
+              style: const TextStyle(fontSize: 20)),
+          subTitle: Text('${data.partName}$toPrint<${data.processName}>',
+              style: const TextStyle(fontSize: 16)),
+          content: Text('${data.materialName}(${data.materialNumber})'),
+          bottomLeft:
+          Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+            Text('仓位：${state.palletNumber}',
+                style: const TextStyle(fontSize: 12)),
+            Text(data.drillingCrewName ?? '',
+                style: const TextStyle(fontSize: 12))
+          ]),
+          bottomMiddle: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Text('$color/$qty${data.unitName}',
+                  style: const TextStyle(fontSize: 12)),
+              Text('取件码：$pick', style: const TextStyle(fontSize: 12))
+            ],
+          ),
+          bottomRight: Center(
+              child: Text(data.sapDecideArea ?? '',
+                  style: const TextStyle(fontSize: 12))),
+        ),
+      ));
     }
-
-
   }
 
   _item1(MaterialDispatchInfo data, int index) {
