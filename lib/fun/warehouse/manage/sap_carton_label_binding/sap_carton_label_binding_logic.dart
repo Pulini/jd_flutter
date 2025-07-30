@@ -6,7 +6,7 @@ import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/preview_label_list_widget.dart';
 import 'package:jd_flutter/widget/preview_label_widget.dart';
-import 'package:jd_flutter/widget/tsc_label_template.dart';
+import 'package:jd_flutter/widget/tsc_label_templates/110w_dynamic_label.dart';
 
 import 'sap_carton_label_binding_state.dart';
 
@@ -224,7 +224,7 @@ class SapCartonLabelBindingLogic extends GetxController {
           ]);
         });
       }
-      labelView.add(dynamicOutBoxLabel110xN(
+      labelView.add(dynamicOutBoxLabel1095n1096(
         productName: label.materialDeclarationName ?? '',
         companyOrderType: '${label.factoryNo}${label.supplementType}',
         customsDeclarationType: label.customsDeclarationType ?? '',
@@ -234,11 +234,13 @@ class SapCartonLabelBindingLogic extends GetxController {
         netWeight: label.netWeight.toShowString(),
         qrCode: label.labelID ?? '',
         pieceID: label.pieceID ?? '',
-        specifications: label.getLWH(),
+        specifications: label.getLongWidthHeight(),
         volume: label.volume.toShowString(),
         supplier: label.supplierNumber ?? '',
         manufactureDate: label.manufactureDate ?? '',
         consignee: label.shipToParty ?? '',
+        hasNotes: true,
+        notes: label.remarks??''
       ));
     });
     return labelView;

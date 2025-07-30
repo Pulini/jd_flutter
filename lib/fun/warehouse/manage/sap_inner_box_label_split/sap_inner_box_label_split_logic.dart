@@ -6,7 +6,7 @@ import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/preview_label_list_widget.dart';
 import 'package:jd_flutter/widget/preview_label_widget.dart';
-import 'package:jd_flutter/widget/tsc_label_template.dart';
+import 'package:jd_flutter/widget/tsc_label_templates/110w_dynamic_label.dart';
 
 import 'sap_inner_box_label_split_state.dart';
 
@@ -102,12 +102,18 @@ class SapInnerBoxLabelSplitLogic extends GetxController {
           //面料标
           labelList.add(myanmarLabel(label, hasNotes ?? false));
         }
+      } else if (label.factoryNo == '1095' || label.factoryNo == '1096') {
+
+          if (label.isMixMaterial) {
+            //无尺码标
+            labelList.add(inBoxLabel(label,hasNotes??false));
+          } else {
+            //尺码物料标
+            labelList.add(materialStandardLabel(label,hasNotes??false));
+          }
       } else {
-        if (label.isMixMaterial) {
-          labelList.add(inBoxLabel(label));
-        } else {
-          labelList.add(materialStandardLabel(label));
-        }
+        //国内标签
+        labelList.add(materialLabel110xN(label,hasNotes??false));
       }
     });
     toPrintView(labelList);
@@ -118,11 +124,12 @@ class SapInnerBoxLabelSplitLogic extends GetxController {
         ? PreviewLabelList(labelWidgets: labelView, isDynamic: true)
         : PreviewLabel(labelWidget: labelView[0], isDynamic: true));
   }
+
   Widget myanmarSizeListLabel(SapPrintLabelInfo label, bool hasNotes) =>
-      dynamicMyanmarSizeListLabel110xN(
+      dynamicSizeMaterialLabel1098(
         labelID: label.labelID ?? '',
         myanmarApprovalDocument:
-        label.subLabel![0].myanmarApprovalDocument ?? '',
+            label.subLabel![0].myanmarApprovalDocument ?? '',
         typeBody: label.typeBody ?? '',
         trackNo: label.trackNo ?? '',
         materialList: createSizeList(
@@ -130,6 +137,9 @@ class SapInnerBoxLabelSplitLogic extends GetxController {
           sizeTitle: 'Size',
           totalTitle: 'Total',
         ),
+        instructionNo: '',
+        materialCode: '',
+        size: '',
         inBoxQty: label.subLabel!
             .map((v) => v.inBoxQty ?? 0)
             .reduce((a, b) => a.add(b))
@@ -140,7 +150,7 @@ class SapInnerBoxLabelSplitLogic extends GetxController {
         pieceID: label.pieceID ?? '',
         grossWeight: label.grossWeight.toShowString(),
         netWeight: label.netWeight.toShowString(),
-        specifications: label.getLWH(),
+        specifications: label.getLongWidthHeight(),
         volume: label.volume.toShowString(),
         supplier: label.supplierNumber ?? '',
         manufactureDate: label.formatManufactureDate(),
@@ -149,15 +159,16 @@ class SapInnerBoxLabelSplitLogic extends GetxController {
       );
 
   Widget myanmarSizeLabel(SapPrintLabelInfo label, bool hasNotes) =>
-      dynamicMyanmarSizeLabel110xN(
+      dynamicSizeMaterialLabel1098(
         labelID: label.labelID ?? '',
         myanmarApprovalDocument:
-        label.subLabel![0].myanmarApprovalDocument ?? '',
+            label.subLabel![0].myanmarApprovalDocument ?? '',
         typeBody: label.typeBody ?? '',
         trackNo: label.trackNo ?? '',
+        materialList: {},
         instructionNo: label.instructionNo ?? '',
-        materialCode: label.subLabel!.first.generalMaterialNumber??'',
-        size: label.subLabel!.first.size??'',
+        materialCode: label.subLabel!.first.generalMaterialNumber ?? '',
+        size: label.subLabel!.first.size ?? '',
         inBoxQty: label.subLabel!
             .map((v) => v.inBoxQty ?? 0)
             .reduce((a, b) => a.add(b))
@@ -168,7 +179,7 @@ class SapInnerBoxLabelSplitLogic extends GetxController {
         pieceID: label.pieceID ?? '',
         grossWeight: label.grossWeight.toShowString(),
         netWeight: label.netWeight.toShowString(),
-        specifications: label.getLWH(),
+        specifications: label.getLongWidthHeight(),
         volume: label.volume.toShowString(),
         supplier: label.supplierNumber ?? '',
         manufactureDate: label.formatManufactureDate(),
@@ -176,11 +187,45 @@ class SapInnerBoxLabelSplitLogic extends GetxController {
         notes: label.remarks ?? '',
       );
 
-  Widget materialStandardLabel(SapPrintLabelInfo label) =>
-      dynamicMaterialStandardLabel110xN(
+  Widget materialLabel110xN(SapPrintLabelInfo label,bool hasNotes) =>
+      dynamicDomesticMaterialLabel(
         labelID: label.labelID ?? '',
         productName: label.materialDeclarationName ?? '',
-        supplementType: '${label.factoryNo}${label.supplementType}',
+        orderType: '${label.factoryNo}${label.supplementType}',
+        typeBody: label.typeBody ?? '',
+        trackNo: label.trackNo ?? '',
+        instructionNo: label.instructionNo ?? '',
+        materialNumber: label.subLabel!.length == 1
+            ? label.subLabel!.first.materialNumber ?? ''
+            : label.subLabel!.first.generalMaterialNumber ?? '',
+        materialDescription: label.subLabel!.first.materialDescription ?? '',
+        materialList: label.subLabel!.length > 1
+            ? createSizeList(
+          label: label,
+          sizeTitle: '尺码',
+          totalTitle: '总计',
+        )
+            : {},
+        inBoxQty: label.getInBoxQty().toShowString(),
+        customsDeclarationUnit: label.subLabel!.first.customsDeclarationUnit ?? '',
+        customsDeclarationType: label.customsDeclarationType ?? '',
+        pieceID: label.pieceID ?? '',
+        pieceNo: label.pieceNo ?? '',
+        grossWeight: label.grossWeight.toShowString(),
+        netWeight: label.netWeight.toShowString(),
+        specifications: label.getLongWidthHeightDescription(),
+        volume: label.volume.toShowString(),
+        supplier: label.supplierNumber ?? '',
+        manufactureDate: label.formatManufactureDate(),
+        deliveryLocation: label.factory ?? '',
+        hasNotes: hasNotes,
+        notes: label.remarks ?? '',
+      );
+  Widget materialStandardLabel(SapPrintLabelInfo label,bool hasNotes) =>
+      dynamicSizeMaterialLabel1095n1096(
+        labelID: label.labelID ?? '',
+        productName: label.materialDeclarationName ?? '',
+        orderType: '${label.factoryNo}${label.supplementType}',
         typeBody: label.typeBody ?? '',
         trackNo: label.trackNo ?? '',
         instructionNo: label.instructionNo ?? '',
@@ -201,14 +246,16 @@ class SapInnerBoxLabelSplitLogic extends GetxController {
         pieceNo: label.pieceNo ?? '',
         grossWeight: label.grossWeight.toShowString(),
         netWeight: label.netWeight.toShowString(),
-        specifications: label.getLWH(),
+        specifications: label.getLongWidthHeight(),
         volume: label.volume.toShowString(),
         supplier: label.supplierNumber ?? '',
         manufactureDate: label.manufactureDate ?? '',
         consignee: label.shipToParty ?? '',
+        hasNotes: hasNotes,
+        notes: label.remarks ?? '',
       );
 
-  Widget inBoxLabel(SapPrintLabelInfo label) => dynamicInBoxLabel110xN(
+  Widget inBoxLabel(SapPrintLabelInfo label,bool hasNotes) => dynamicInBoxLabel1095n1096(
         productName: label.materialDeclarationName ?? '',
         companyOrderType: '${label.factoryNo}${label.supplementType}',
         customsDeclarationType: label.customsDeclarationType ?? '',
@@ -226,10 +273,12 @@ class SapInnerBoxLabelSplitLogic extends GetxController {
         pieceID: '${label.pieceID}',
         manufactureDate: label.manufactureDate ?? '',
         supplier: label.supplierNumber ?? '',
+    hasNotes: hasNotes,
+    notes: label.remarks ?? '',
       );
 
   Widget myanmarLabel(SapPrintLabelInfo label, bool hasNotes) =>
-      dynamicMyanmarLabel110xN(
+      dynamicMaterialLabel1098(
         labelID: label.labelID ?? '',
         myanmarApprovalDocument:
             label.subLabel![0].myanmarApprovalDocument ?? '',
@@ -238,23 +287,23 @@ class SapInnerBoxLabelSplitLogic extends GetxController {
         instructionNo: label.instructionNo ?? '',
         materialList: [
           for (var m in label.subLabel!)
-            [m.materialNumber ?? '', m.specifications ?? '']
+            [
+              m.materialNumber ?? '',
+              m.specifications ?? '',
+              (m.inBoxQty ?? 0).toShowString(),
+              m.customsDeclarationUnit ?? ''
+            ]
         ],
-        inBoxQty: label.subLabel!
-            .map((v) => v.inBoxQty ?? 0)
-            .reduce((a, b) => a.add(b))
-            .toShowString(),
-        customsDeclarationUnit: label.subLabel![0].customsDeclarationUnit ?? '',
         customsDeclarationType: label.customsDeclarationType ?? '',
         pieceNo: label.pieceNo ?? '',
         pieceID: label.pieceID ?? '',
         grossWeight: label.grossWeight.toShowString(),
         netWeight: label.netWeight.toShowString(),
-        specifications: label.getLWH(),
+        specifications: label.getLongWidthHeight(),
         volume: label.volume.toShowString(),
         supplier: label.supplierNumber ?? '',
         manufactureDate: label.formatManufactureDate(),
-        hasNotes: hasNotes ,
+        hasNotes: hasNotes,
         notes: label.remarks ?? '',
       );
 

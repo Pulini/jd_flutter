@@ -289,7 +289,7 @@ class PrintUtil {
   _closeBluetooth(BluetoothDevice device) {
     loadingShow('bluetooth_closing'.tr);
     bluetoothChannel
-        .invokeMethod('CloseBluetooth'.tr, device.deviceMAC)
+        .invokeMethod('CloseBluetooth', device.deviceMAC)
         .then((value) {
       loadingDismiss();
       if (value) {

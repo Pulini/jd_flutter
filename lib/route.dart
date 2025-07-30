@@ -62,6 +62,7 @@ import 'package:jd_flutter/fun/warehouse/out/production_scan_picking_material/pr
 import 'package:jd_flutter/fun/warehouse/out/sale_scan_out_warehouse/sale_scan_out_warehouse_view.dart';
 import 'package:jd_flutter/fun/warehouse/out/sap_packing_scan/sap_packing_scan_view.dart';
 import 'package:jd_flutter/fun/warehouse/out/sap_packing_scan_cache_list/sap_packing_scan_cache_list_view.dart';
+import 'package:jd_flutter/fun/warehouse/out/sap_packing_scan_reverse/sap_packing_scan_reverse_view.dart';
 import 'package:jd_flutter/fun/warehouse/out/sap_print_picking/sap_print_picking_view.dart';
 import 'package:jd_flutter/fun/warehouse/out/sap_production_picking/sap_production_picking_view.dart';
 import 'package:jd_flutter/fun/warehouse/out/sap_relocation_picking/sap_relocation_picking_view.dart';
@@ -597,6 +598,13 @@ class RouteConfig {
     const SapPackingScanCacheListPage(),
   );
 
+  //SAP装柜出库冲销
+  static Routes sapPackingScanReverse = Routes(
+    '/sap_packing_scan_reverse',
+    99,
+    const SapPackingScanReversePage(),
+  );
+
   //SAP外箱标绑定
   static Routes sapCartonLabelBinding = Routes(
     '/sap_carton_label_binding',
@@ -712,6 +720,7 @@ class RouteConfig {
     patrolInspection,
     sapPackingScan,
     sapPackingScanCacheList,
+    sapPackingScanReverse,
     sapCartonLabelBinding,
     processDispatchList,
     qualityInspectionList,
@@ -1026,6 +1035,10 @@ class RouteConfig {
     GetPage(
       name: sapPackingScanCacheList.name,
       page: () => sapPackingScanCacheList.page,
+    ),
+    GetPage(
+      name: sapPackingScanReverse.name,
+      page: () => sapPackingScanReverse.page,
     ),
     GetPage(
       name: sapCartonLabelBinding.name,

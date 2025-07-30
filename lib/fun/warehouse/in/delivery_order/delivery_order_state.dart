@@ -22,7 +22,7 @@ class DeliveryOrderState {
 
   var canAddPiece = false.obs;
   var orderItemInfo = <DeliveryOrderInfo>[];
-  var materialList = <String, List<List>>{};
+  var materialList = <String, Map<String, double>>{};
   var orderLabelList = <DeliveryOrderLabelInfo>[];
   var scannedLabelList = <DeliveryOrderLabelInfo>[].obs;
   var canSubmitLabelBinding = false.obs;

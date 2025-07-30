@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/home_button.dart';
 import 'package:jd_flutter/bean/http/response/home_function_info.dart';
+import 'package:jd_flutter/utils/app_init_service.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
+import 'package:jd_flutter/widget/tsc_label_templates/tsc_label_preview.dart';
 import 'home_logic.dart';
 import 'home_setting_view.dart';
 
@@ -33,10 +35,13 @@ class _HomePageState extends State<HomePage>
           Icons.email_outlined,
           color: Colors.blueAccent,
         ),
-        onPressed: () => showSnackBar(
-          title: '消息中心',
-          message: '进入消息中心',
-        ),
+        onPressed: () {
+          if (isTestUrl()) {
+            Get.to(() => const TscLabelPreview());
+          } else {
+            showSnackBar(title: '消息中心', message: '进入消息中心');
+          }
+        },
       ),
       title: CupertinoSearchTextField(
         decoration: BoxDecoration(
@@ -201,56 +206,57 @@ class _HomePageState extends State<HomePage>
     return Container(
       decoration: backgroundColor(),
       child: Scaffold(
-        backgroundColor: Colors.transparent,
-        appBar: _appBar(),
-        body: Obx(() => state.isLoading.value
-            ? const Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    CupertinoActivityIndicator(
-                      radius: 20,
-                    ),
-                    SizedBox(height: 10),
-                    Text(
-                      '读取功能列表中...',
-                      style: TextStyle(
-                        fontSize: 18,
-                        decoration: TextDecoration.none,
+          backgroundColor: Colors.transparent,
+          appBar: _appBar(),
+          body: Obx(() => state.isLoading.value
+              ? const Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CupertinoActivityIndicator(
+                        radius: 20,
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        '读取功能列表中...',
+                        style: TextStyle(
+                          fontSize: 18,
+                          decoration: TextDecoration.none,
+                        ),
+                      )
+                    ],
+                  ),
+                )
+              : state.navigationBar.isEmpty
+                  ? Center(
+                      child: IconButton(
+                        onPressed: () => logic.refreshFunList(),
+                        icon: const Icon(
+                          Icons.refresh,
+                          color: Colors.blueAccent,
+                          size: 50,
+                        ),
                       ),
                     )
-                  ],
-                ),
-              )
-            : state.navigationBar.isEmpty
-                ? Center(
-                    child: IconButton(
-                      onPressed: () => logic.refreshFunList(),
-                      icon: const Icon(
-                        Icons.refresh,
-                        color: Colors.blueAccent,
-                        size: 50,
-                      ),
-                    ),
-                  )
-                : ListView.builder(
-                    padding: const EdgeInsets.all(8),
-                    itemCount: state.buttons.length,
-                    itemBuilder: (context, index) =>
-                        _item(state.buttons[index]),
-                  )),
-        bottomNavigationBar: Obx(()=>state.navigationBar.isEmpty
-            ? Container()
-            : BottomNavigationBar(
-          type: BottomNavigationBarType.shifting,
-          items: [
-            for (var bar in state.navigationBar) _navigationBar(bar)
-          ],
-          currentIndex: state.nBarIndex,
-          selectedItemColor: state.navigationBar[0].getTextColor(),
-          onTap: (i) => setState(() => logic.navigationBarClick(i)),
-        ),)
-      ),
+                  : ListView.builder(
+                      padding: const EdgeInsets.all(8),
+                      itemCount: state.buttons.length,
+                      itemBuilder: (context, index) =>
+                          _item(state.buttons[index]),
+                    )),
+          bottomNavigationBar: Obx(
+            () => state.navigationBar.isEmpty
+                ? Container()
+                : BottomNavigationBar(
+                    type: BottomNavigationBarType.shifting,
+                    items: [
+                      for (var bar in state.navigationBar) _navigationBar(bar)
+                    ],
+                    currentIndex: state.nBarIndex,
+                    selectedItemColor: state.navigationBar[0].getTextColor(),
+                    onTap: (i) => setState(() => logic.navigationBarClick(i)),
+                  ),
+          )),
     );
   }
 

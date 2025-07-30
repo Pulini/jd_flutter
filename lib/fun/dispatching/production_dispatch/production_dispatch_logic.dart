@@ -17,7 +17,7 @@ import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/picker/picker_controller.dart';
 import 'package:jd_flutter/widget/preview_label_widget.dart';
-import 'package:jd_flutter/widget/tsc_label_template.dart';
+import 'package:jd_flutter/widget/tsc_label_templates/75w45h_fixed_label.dart';
 import 'production_dispatch_state.dart';
 
 class ProductionDispatchLogic extends GetxController {
@@ -237,7 +237,7 @@ class ProductionDispatchLogic extends GetxController {
     var stubBarName = data['StubBarName'];
     state.getSelectOne((v) {
       Get.to(() => PreviewLabel(
-            labelWidget: surplusMaterialLabelTemplate(
+            labelWidget: surplusMaterialLabel(
               qrCode: jsonEncode({
                 'DispatchNumber': v.sapOrderBill,
                 'StubBar': stubBar,

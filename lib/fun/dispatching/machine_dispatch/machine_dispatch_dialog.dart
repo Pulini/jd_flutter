@@ -13,7 +13,7 @@ import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
-import 'package:jd_flutter/widget/tsc_label_template.dart';
+import 'package:jd_flutter/widget/tsc_label_templates/75w45h_fixed_label.dart';
 import 'package:jd_flutter/widget/worker_check_widget.dart';
 import 'package:rotated_corner_decoration/rotated_corner_decoration.dart';
 
@@ -206,7 +206,7 @@ updateSurplusMaterialLabelState({
     },
   ).then((response) async {
     if (response.resultCode == resultSuccess) {
-      print.call(surplusMaterialLabelTemplate(
+      print.call(surplusMaterialLabel(
         qrCode: jsonEncode({
           'DispatchNumber': details.dispatchNumber,
           'StubBar': stuBarCode,

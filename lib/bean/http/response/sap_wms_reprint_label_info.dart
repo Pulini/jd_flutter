@@ -14,16 +14,16 @@ class ReprintLabelInfo {
   String? salesOrderNumber; //销售订单号  KDAUF
   int? salesOrderLineItem; //销售订单行号  KDPOS
   double? quantity; //数量 MENGE
-  String? unit; // MEINS
-  String? deliveryDate; //单位 EINDT
-  String? numPage; //交货日期  ZPQYM
-  String? dispatchNumber; //页码 DISPATCH_NO
-  String? decrementTableNumber; //派工单号 ZZDJBH
-  String? dispatchDate; //递减表号 DISPATCH_DATE
-  String? dayOrNightShift; //派工日期  ZZBC
-  String? machineNumber; //昼夜班 ZZPGJT
-  String? process; //机台号 KTSCH
-  String? isNewLabel; //制程 ISNEW
+  String? unit; //单位 MEINS
+  String? deliveryDate; //交货日期 EINDT
+  String? numPage; // 页码 ZPQYM
+  String? dispatchNumber; //派工单号 DISPATCH_NO
+  String? decrementTableNumber; //递减表号 ZZDJBH
+  String? dispatchDate; //派工日期 DISPATCH_DATE
+  String? dayOrNightShift; // 昼夜班 ZZBC
+  String? machineNumber; //机台号 ZZPGJT
+  String? process; //制程 KTSCH
+  String? isNewLabel; //是否新标 ISNEW
 
   ReprintLabelInfo({
     this.factory,

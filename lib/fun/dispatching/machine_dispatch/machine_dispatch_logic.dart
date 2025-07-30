@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/machine_dispatch_info.dart';
 import 'package:jd_flutter/bean/http/response/sap_label_info.dart';
@@ -6,7 +5,7 @@ import 'package:jd_flutter/fun/dispatching/machine_dispatch/machine_dispatch_his
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/preview_label_widget.dart';
-import 'package:jd_flutter/widget/tsc_label_template.dart';
+import 'package:jd_flutter/widget/tsc_label_templates/75w45h_fixed_label.dart';
 
 import 'machine_dispatch_report_view.dart';
 import 'machine_dispatch_state.dart';
@@ -242,9 +241,8 @@ class MachineDispatchLogic extends GetxController {
     );
   }
 
-  printSurplusMaterialLabel(){
+  printSurplusMaterialLabel() {}
 
-  }
   printHistoryLabel(int i) {
     printLabel(state.historyLabelInfo[i]);
   }
@@ -253,213 +251,39 @@ class MachineDispatchLogic extends GetxController {
     Get.to(() => PreviewLabel(labelWidget: fixedLabel(label: label)));
   }
 
-  fixedLabel({required MachineDispatchReprintLabelInfo label}) => label
-          .isEnglish
-      ? fixedLabelTemplate75x45(
-          qrCode: label.labelID,
-          title: Text(
-            label.factoryType,
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-          ),
-          subTitle: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                label.englishName,
-                maxLines: 2,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 24,
-                  height: 1,
-                ),
-              )
-            ],
-          ),
-          content: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'GW: ${label.grossWeight.toShowString()} KG',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                      height: 1,
-                    ),
-                  ),
-                  Text(
-                    'NW: ${label.netWeight.toShowString()} KG',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                      height: 1,
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'MEAS: ${label.specifications}',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                      height: 1,
-                    ),
-                  ),
-                  Text(
-                    'NO: ${label.number}',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                      height: 1,
-                    ),
-                  ),
-                ],
-              ),
-              Text(
-                'DISPATCH: ${label.dispatchNumber}',
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                  height: 1,
-                ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'DECREASE: ${label.decrementNumber}',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                      height: 1,
-                    ),
-                  ),
-                  Text(
-                    'DATE: ${label.date}',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                      height: 1,
-                    ),
-                  )
-                ],
-              )
-            ],
-          ),
-          bottomLeft: Center(
-            child: Text(
-              '${label.qty.toShowString()}${label.englishUnit}',
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
-              ),
-            ),
-          ),
-          bottomMiddle: const Center(
-            child: Text(
-              'Made in China',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
-              ),
-            ),
-          ),
-          bottomRight: Center(
-            child: Text(
-              '${label.size}#',
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
-              ),
-            ),
-          ),
-        )
-      : fixedLabelTemplate75x45(
-          qrCode: label.labelID,
-          title: Text(
-            label.factoryType,
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-          ),
-          subTitle: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                label.processes,
-                style:
-                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-              ),
-              Text(
-                '序号:${label.number}',
-                style:
-                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-              ),
-            ],
-          ),
-          content: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Expanded(
-                child: Text(
-                  label.materialName.allowWordTruncation(),
-                  style: const TextStyle(
-                    overflow: TextOverflow.ellipsis,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16.5,
-                    height: 1,
-                  ),
-                  maxLines: 2,
-                ),
-              ),
-              Text(
-                '派工号:${label.dispatchNumber}',
-                style:
-                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    '递减号:${label.decrementNumber}',
-                    style: const TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 18),
-                  ),
-                  Text(
-                    '日期:${label.date}',
-                    style: const TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 18),
-                  )
-                ],
-              )
-            ],
-          ),
-          bottomLeft: Center(
-            child: Text(
-              '${label.size}#${label.qty.toShowString()}${label.unit}',
-              style: const TextStyle(fontWeight: FontWeight.bold, height: 1),
-            ),
-          ),
-          bottomMiddle: Center(
-            child: Text(
-              '班次：${label.shift} 机台：${label.machine}',
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
-          ),
-          bottomRight: label.isLastLabel
-              ? const Center(
-                  child: Text(
-                    '尾',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                )
-              : Container(),
-        );
+  fixedLabel({required MachineDispatchReprintLabelInfo label}) =>
+      label.isEnglish
+          ? machineDispatchEnglishFixedLabel(
+              labelID: label.labelID,
+              factoryType: label.factoryType,
+              englishName: label.englishName,
+              grossWeight: label.grossWeight,
+              netWeight: label.netWeight,
+              specifications: label.specifications,
+              number: label.number,
+              dispatchNumber: label.dispatchNumber,
+              decrementNumber: label.decrementNumber,
+              date: label.date,
+              qty: label.qty,
+              englishUnit: label.englishUnit,
+              size: label.size,
+            )
+          : machineDispatchChineseFixedLabel(
+              labelID: label.labelID,
+              factoryType: label.factoryType,
+              processes: label.processes,
+              number: label.number,
+              materialName: label.materialName,
+              dispatchNumber: label.dispatchNumber,
+              decrementNumber: label.decrementNumber,
+              date: label.date,
+              size: label.size,
+              qty: label.qty,
+              unit: label.unit,
+              shift: label.shift,
+              machine: label.machine,
+              isLastLabel: label.isLastLabel,
+            );
 
   generateAndPrintLabel({
     required bool isPrintLast,
@@ -534,9 +358,6 @@ class MachineDispatchLogic extends GetxController {
                   grossWeight: label.grossWeight ?? 0,
                   englishName: label.name ?? '',
                   englishUnit: label.unit ?? '',
-                  // weight: isEnglish
-                  //     ? "GW: ${label.grossWeight} KG       NW: ${label.netWeight} KG"
-                  //     : '',
                 ),
               ),
             ));
