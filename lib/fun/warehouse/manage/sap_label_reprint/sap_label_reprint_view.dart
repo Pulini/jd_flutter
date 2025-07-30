@@ -52,7 +52,7 @@ class _SapLabelReprintPageState extends State<SapLabelReprintPage> {
                             children: [
                               expandedTextSpan(
                                 hint: '规格：',
-                                text: label.getLWH(),
+                                text: label.getLongWidthHeight(),
                               ),
                               textSpan(
                                 hint: '总数：',

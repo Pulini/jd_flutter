@@ -272,14 +272,14 @@ class DeliveryOrderLogic extends GetxController {
   }) {
     state.materialList.clear();
     groupBy(group, (v) => v.materialCode ?? '').forEach((k, v) {
-      var sizeList = <List>[];
+      var sizeList = <String, double>{};
       for (var v2 in v) {
         for (DeliveryOrderSizeInfo v3 in (v2.deliSize ?? [])) {
-          try {
-            var has = sizeList.firstWhere((v) => v[0] == (v3.size ?? ''));
-            has[1] = (has[1] as double).add(v3.qty.toDoubleTry());
-          } on StateError catch (_) {
-            sizeList.add([v3.size ?? '', v3.qty.toDoubleTry()]);
+          if (sizeList.keys.contains(v3.size ?? '')) {
+            sizeList[v3.size ?? ''] =
+                sizeList[v3.size ?? ''].add(v3.qty.toDoubleTry());
+          } else {
+            sizeList[v3.size ?? ''] = v3.qty.toDoubleTry();
           }
         }
       }
@@ -295,7 +295,7 @@ class DeliveryOrderLogic extends GetxController {
         _initLabelList(list);
         Get.to(() => const DeliveryOrderLabelBindingPage())?.then((v) {
           state.scannedLabelList.clear();
-          refresh.call(v!=null&&v);
+          refresh.call(v != null && v);
         });
       },
       error: (msg) => errorDialog(content: msg),
@@ -368,8 +368,8 @@ class DeliveryOrderLogic extends GetxController {
     ];
     var materialNumberList = <String>[];
     state.materialList.forEach((k, v) {
-      for (var v2 in v) {
-        materialNumberList.add('$k${v2[0]}');
+      for (var v2 in v.keys) {
+        materialNumberList.add('$k$v2');
       }
     });
     var labelMaterialList = <String>[];
@@ -378,8 +378,8 @@ class DeliveryOrderLogic extends GetxController {
     }
     if (materialNumberList.toSet().containsAll(labelMaterialList.toSet())) {
       for (var label in labelData) {
-        double sizeMax = state.materialList[label.materialCode]!
-            .firstWhere((v) => v[0] == label.size)[1];
+        double sizeMax =
+            state.materialList[label.materialCode]![label.size] ?? 0;
         double sizeTotal = 0.0;
         if (state.scannedLabelList.isNotEmpty) {
           for (var v in state.scannedLabelList
@@ -433,25 +433,25 @@ class DeliveryOrderLogic extends GetxController {
   }
 
   submitLabelBinding() {
-    for (var k in state.materialList.keys) {
-      var v = state.materialList[k] ?? [];
-      for (var s in v) {
+    state.materialList.forEach((materialCode, sizeList) {
+      sizeList.forEach((size, qty) {
         var total = state.scannedLabelList
-            .where((v2) => v2.sizeMaterial() == '$k${s[0]}')
+            .where((v2) => v2.sizeMaterial() == '$materialCode$size')
             .map((v3) => v3.commonQty ?? 0)
             .reduce((a, b) => a.add(b));
-        if (total > (s[1] as double)) {
+        if (total > qty) {
           errorDialog(content: 'delivery_order_label_check_qty_exceed_tips'.tr);
           return;
         }
 
-        if (total < (s[1] as double)) {
+        if (total < qty) {
           errorDialog(
               content: 'delivery_order_label_check_qty_insufficient'.tr);
           return;
         }
-      }
-    }
+      });
+    });
+
     Get.to(() => const LabelDetailPage())?.then((v) {
       if (v != null) {
         state.submitLabelBinding(
@@ -467,35 +467,13 @@ class DeliveryOrderLogic extends GetxController {
     });
   }
 
-  List<List> sizeMaterialList() {
-    var sizeList = <List>[];
-    state.materialList.forEach((k, v) {
-      sizeList.addAll(
-          v.where((v2) => v2[0] != null && v2[0].toString().isNotEmpty));
-    });
-    return sizeList;
-  }
+  double getMaterialsTotal(String materialCode) =>
+      state.materialList[materialCode]?.values.reduce((a, b) => a.add(b)) ?? 0;
 
- // double sizeMaterialListTotal() {
- //    var sizeList = sizeMaterialList();
- //    var max = 0.0;
- //    for (var size in sizeList) {
- //
- //      max = max.add(v.map((v2) => v2[1]).reduce((a, b) => a.add(b)));
- //    }
- //  }
-
-  double getMaterialsTotal() {
-    var max = 0.0;
-    for (var v in state.materialList.values) {
-      max = max.add(v.map((v2) => v2[1]).reduce((a, b) => a.add(b)));
-    }
-    return max;
-  }
-
-  double getScanProgress() {
+  double getScanProgress(String materialCode) {
     var progress = 0.0;
-    for (var v in state.scannedLabelList) {
+    for (var v in state.scannedLabelList
+        .where((v) => v.materialCode == materialCode)) {
       progress = progress.add(v.commonQty ?? 0);
     }
     return progress;
@@ -507,5 +485,19 @@ class DeliveryOrderLogic extends GetxController {
       progress = progress.add(v.commonQty ?? 0);
     }
     return progress;
+  }
+
+  List<Map<String, List<dynamic>>> getLabelList() {
+    var labelList = <Map<String, List<dynamic>>>[];
+    groupBy(state.scannedLabelList, (v) => v.materialCode ?? '')
+        .forEach((materialCode, list) {
+      var sizeList = [];
+      groupBy(list, (v) => v.size ?? '').forEach((size, labels) {
+        double sizeTotal = state.materialList[materialCode]![size]!;
+        sizeList.add([size, sizeTotal, labels]);
+      });
+      labelList.add({materialCode: sizeList});
+    });
+    return labelList;
   }
 }

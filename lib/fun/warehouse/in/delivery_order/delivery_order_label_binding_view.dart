@@ -23,11 +23,77 @@ class _DeliveryOrderLabelBindingPageState
   final DeliveryOrderState state = Get.find<DeliveryOrderLogic>().state;
   var pieceController = TextEditingController();
 
-  Widget _item(DeliveryOrderLabelInfo data) => Obx(() => Container(
-        margin: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
+  Widget _materialItem(Map<String, List<dynamic>> map) {
+    var materialCode = map.keys.first;
+    var list = map.values.first;
+    return Obx(() => Container(
+          margin: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [Colors.blue.shade100, Colors.green.shade50],
+            ),
+          ),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  textSpan(hint: '物料：', text: materialCode),
+                  const SizedBox(width: 5),
+                  Expanded(
+                    child: progressIndicator(
+                      max: logic.getMaterialsTotal(materialCode),
+                      value: logic.getScanProgress(materialCode),
+                    ),
+                  )
+                ],
+              ),
+              const SizedBox(height: 5),
+              for (var size in list) ..._sizeItem(size)
+            ],
+          ),
+        ));
+  }
+
+  _sizeItem(List<dynamic> size) {
+    return [
+      if ((size[0] as String).isNotEmpty)
+        Padding(
+          padding: const EdgeInsets.only(bottom: 5),
+          child: Row(
+            children: [
+              SizedBox(
+                width: 40,
+                child: Text(
+                  '${size[0]}#',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.blue,
+                  ),
+                ),
+              ),
+              Expanded(
+                child: progressIndicator(
+                  max: size[1],
+                  color: Colors.blue.shade300,
+                  value: logic.getSizeScanProgress(size[0] ?? ''),
+                ),
+              )
+            ],
+          ),
+        ),
+      for (DeliveryOrderLabelInfo label in size[2]) _labelItem(label)
+    ];
+  }
+
+  Widget _labelItem(DeliveryOrderLabelInfo data) => Container(
+        margin: const EdgeInsets.only(bottom: 10),
         padding: const EdgeInsets.only(left: 10),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15),
+          borderRadius: BorderRadius.circular(10),
           color: data.isChecked.value ? Colors.green.shade200 : Colors.white,
         ),
         child: Row(
@@ -49,77 +115,7 @@ class _DeliveryOrderLabelBindingPageState
             )
           ],
         ),
-      ));
-
-  List<Widget> _scanProgress() => logic.sizeMaterialList().isEmpty
-      ? [
-          Padding(
-            padding: const EdgeInsets.all(10),
-            child: Obx(() => Row(
-                  children: [
-                    Text(
-                      'delivery_order_label_check_progress'.tr,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.green,
-                      ),
-                    ),
-                    Expanded(
-                      child: progressIndicator(
-                        max: logic.getMaterialsTotal(),
-                        value: logic.getScanProgress(),
-                      ),
-                    )
-                  ],
-                )),
-          )
-        ]
-      : [
-          // Padding(
-          //   padding: const EdgeInsets.all(10),
-          //   child: Obx(() => Row(
-          //         children: [
-          //           Text(
-          //             'delivery_order_label_check_progress'.tr,
-          //             style: const TextStyle(
-          //               fontWeight: FontWeight.bold,
-          //               color: Colors.green,
-          //             ),
-          //           ),
-          //           Expanded(
-          //             child: progressIndicator(
-          //               max: logic.getMaterialsTotal(),
-          //               value: logic.getScanProgress(),
-          //             ),
-          //           )
-          //         ],
-          //       )),
-          // ),
-          for (var size in logic.sizeMaterialList())
-            Padding(
-              padding: const EdgeInsets.only(left: 10, right: 10, bottom: 5),
-              child: Obx(() => Row(
-                    children: [
-                      SizedBox(
-                        width: 40,
-                        child: Text(
-                          '${size[0]}#',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.blue,
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: progressIndicator(
-                          max: size[1],
-                          value: logic.getSizeScanProgress(size[0] ?? ''),
-                        ),
-                      )
-                    ],
-                  )),
-            ),
-        ];
+      );
 
   @override
   void initState() {
@@ -193,12 +189,15 @@ class _DeliveryOrderLabelBindingPageState
               ),
             ),
           ),
-          ..._scanProgress(),
+          // ..._scanProgress(),
           Expanded(
-            child: Obx(() => ListView.builder(
-                  itemCount: state.scannedLabelList.length,
-                  itemBuilder: (c, i) => _item(state.scannedLabelList[i]),
-                )),
+            child: Obx(() {
+              var list = logic.getLabelList();
+              return ListView.builder(
+                itemCount: list.length,
+                itemBuilder: (c, i) => _materialItem(list[i]),
+              );
+            }),
           ),
           Padding(
             padding: const EdgeInsets.only(left: 10, right: 10),

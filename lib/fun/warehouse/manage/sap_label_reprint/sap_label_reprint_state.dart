@@ -4,8 +4,9 @@ import 'package:jd_flutter/utils/web_api.dart';
 
 class SapLabelReprintState {
   var labelList = <SapPrintLabelInfo>[].obs;
-  var isMaterialLabel = false.obs;
-  var labelHasNots = false.obs;
+  var isMaterialLabel = true.obs;
+  var labelHasNots = true.obs;
+  var printInsNo = true.obs;
 
   getLabelList({
     String? piece,

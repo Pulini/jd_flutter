@@ -288,6 +288,7 @@ class SapPrintLabelInfo {
   String? typeBody; //工厂型体 ZZXTNOS
   String? instructionNo; //指令  KDAUFS
   String? pieceNo; //件号 件数 ZPACKAGES
+  String? factory; //厂区 ZQY
   List<SapPrintLabelSubInfo>? subLabel; //GT_OUT_ITEMS
 
   SapPrintLabelInfo({
@@ -321,6 +322,7 @@ class SapPrintLabelInfo {
     this.typeBody,
     this.instructionNo,
     this.pieceNo,
+    this.factory,
     this.subLabel,
   });
 
@@ -355,6 +357,7 @@ class SapPrintLabelInfo {
     typeBody = json['ZZXTNOS'];
     instructionNo = json['KDAUFS'];
     pieceNo = json['ZPACKAGES'];
+    factory = json['ZQY'];
     subLabel = [
       if (json['GT_OUT_ITEMS'] != null)
         for (var sub in json['GT_OUT_ITEMS']) SapPrintLabelSubInfo.fromJson(sub)
@@ -373,8 +376,11 @@ class SapPrintLabelInfo {
   String formatManufactureDate() =>
       '${manufactureDate?.substring(5, 7)}-${manufactureDate?.substring(8, 10)}-${manufactureDate?.substring(0, 4)}';
 
-  String getLWH() =>
-      '${long.toShowString()}x${width.toShowString()}x${height.toShowString()}CM (LxWxH)';
+  String getLongWidthHeight() =>
+      '${long.toShowString()}x${width.toShowString()}x${height.toShowString()}';
+
+  String getLongWidthHeightDescription() =>
+      '${long.toShowString()}x${width.toShowString()}x${height.toShowString()}CM(LxWxH)';
 
   double getInBoxQty() => subLabel!.isEmpty
       ? 0

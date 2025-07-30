@@ -906,7 +906,6 @@ class Translation extends Translations {
           'process_dispatch_register_select_operator_tips': '请选择操作员',
           'process_dispatch_register_delete_tips': '确定要删除该标签吗？',
           'process_dispatch_register_no_delete_permission': '缺少贴标删除权限',
-          'process_dispatch_register_print_number_tips': '序号：%s',
           'process_dispatch_register_print_number': '序号：',
           'process_dispatch_register_print_size': '尺码：',
           'process_dispatch_register_print_report_date': '报工日期：',
@@ -4108,7 +4107,6 @@ class Translation extends Translations {
               'Are you sure you want to delete this label ？',
           'process_dispatch_register_no_delete_permission':
               'Lack of label deletion permission',
-          'process_dispatch_register_print_number_tips': 'Serial no：%s',
           'process_dispatch_register_print_number': 'Serial no：',
           'process_dispatch_register_print_size': 'Size：',
           'process_dispatch_register_print_report_date': 'Report date：',
