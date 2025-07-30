@@ -601,7 +601,7 @@ abstract class PickerController {
     var response = await httpGet(
       method: webApiPickerSapWarehouseStorageLocation,
       params: {
-        'factory': userInfo?.factory,
+        'factory': userInfo?.sapFactory,
         'warehouse': userInfo?.defaultStockNumber,
       },
     );

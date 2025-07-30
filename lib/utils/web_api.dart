@@ -567,6 +567,9 @@ const webApiCleanLabel = 'api/CompoundDispatching/DelPackingListBarcode';
 //删除标签
 const webApiDeleteLabels = 'api/CompoundDispatching/DelBarcode';
 
+//设置打印标识
+const webApiSetPrintLabelFlag = 'api/NeedleCartDispatch/SetPrintLabelFlag';
+
 //获取物料属性
 const webApiGetMaterialProperties =
     'api/CompoundDispatching/GetMaterialProperties';
@@ -636,6 +639,13 @@ const webApiMetersConvert = 'api/CompoundDispatching/MetersConvert';
 //抽条获取贴标列表
 const webApiGetQRCodeList = 'api/BarCode/GetQRCodeList';
 
+//删除贴标
+const webApiDelQRCode = "api/CompoundDispatching/DelQRCode";
+
+//抽条贴标的报工与取消报工
+const webApiProcessOutPutReportByBillInterIDStripDrawing =
+    "api/CompoundDispatching/ProcessOutPutReportByBillInterIDStripDrawing";
+
 //抽条车间贴标打印记工
 const webApiCreateProcessOutPutStripDrawing =
     'api/CompoundDispatching/CreateProcessOutPutStripDrawing';
@@ -643,6 +653,9 @@ const webApiCreateProcessOutPutStripDrawing =
 //批量取消报工
 const webApiProcessOutPutReport =
     'api/CompoundDispatching/ProcessOutPutReport1';
+
+//获取机台指令对应数量列表
+const webApiGetMtoNoQty = 'api/CompoundDispatching/GetMtoNoQty';
 
 //取件码-生产入库
 const webApiPickCodeProductionWarehousing =
@@ -1364,6 +1377,9 @@ const webApiPurchaseOrderStockInNew = 'api/Package/PurchaseOrderStockIn_Off';
 
 //材料品质异常 品检不合格原因到OA
 const webApiAbnormalMaterialQuality = 'api/Inspection/AbnormalMaterialQuality';
+
+//获取提交品检时根据送货单及物料获取标签,用于不合格拆标
+const webApiSapGetLabelForUnqualified = 'sap/zapp/ZMM_GET_TEMPREBQ';
 
 //获取标签信息
 const webApiSapGetLabelBindingInfo = 'sap/zapp/ZMM051_GET_BQSC';

@@ -11,6 +11,7 @@ class QualityInspectionListState {
   var colorOrderList = <QualityInspectionColorInfo>[].obs;
   var labelList = <QualityInspectionLabelInfo>[].obs;
   var scanList = <QualityInspectionLabelBindingInfo>[].obs;
+  var allSelect = false.obs;
 
   var orderTypeList = <String, String>{
     'quality_inspection_not_in_stock'.tr: '04',

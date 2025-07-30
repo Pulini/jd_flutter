@@ -1,9 +1,10 @@
 import 'package:collection/collection.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/material_dispatch_info.dart';
+import 'package:jd_flutter/bean/http/response/material_dispatch_label_detail.dart';
+import 'package:jd_flutter/bean/http/response/material_dispatch_report_success_info.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
-
 
 
 class MaterialDispatchState {
@@ -15,6 +16,7 @@ class MaterialDispatchState {
   var typeBody = '';
   var lastProcess = false.obs;
   var unStockIn = false.obs;
+  var allInstruction = false.obs;
   var orderList = <MaterialDispatchInfo>[];
   var showOrderList = <MaterialDispatchInfo>[].obs;
 
@@ -198,7 +200,7 @@ class MaterialDispatchState {
     var list = <Map>[];
     groupBy(
       data.children!,
-      (v) => '${v.routeEntryFID}${v.routeEntryFIDs}',
+          (v) => '${v.routeEntryFID}${v.routeEntryFIDs}',
     ).forEach((k, v) {
       list.add({
         'ScProcessWorkCardInterID': v[0].interID,
@@ -251,19 +253,22 @@ class MaterialDispatchState {
   subItemReport({
     required MaterialDispatchInfo data,
     required Children subData,
-    required Function(String msg) success,
+    required String  reportQty,
+    required int  titlePosition,
+    required int  clickPosition,
+    required Function(String guid,String pick) success,
     required Function(String msg) error,
   }) {
     httpPost(
       loading: 'material_dispatch_reporting'.tr,
       method: webApiCreateProcessOutPutStripDrawing,
-      params: {
+      body: {
         'DrillingCrewID': machineId,
         'UserID': userInfo?.userID,
         'QrCodeList': [
           {
             'SAPColorBatch': subData.sapColorBatch,
-            'Qty': data.qty,
+            'Qty': reportQty,
             'InterID': subData.interID,
             'RouteEntryFID': subData.routeEntryFID,
             'SapDecideArea': data.sapDecideArea,
@@ -279,7 +284,25 @@ class MaterialDispatchState {
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        success.call(response.message ?? '');
+        if(clickPosition!=-1){
+          showOrderList[titlePosition].children![clickPosition].codeQty=(orderList[titlePosition].children![clickPosition].codeQty.toDoubleTry().add(reportQty.toDoubleTry())).toShowString();
+          showOrderList[titlePosition].children![clickPosition].noCodeQty=(orderList[titlePosition].children![clickPosition].noCodeQty.toDoubleTry().sub(reportQty.toDoubleTry()).toShowString());
+          showOrderList.refresh();
+        }
+        var guid = '';
+        var pick = '';
+        if (MaterialDispatchReportSuccessInfo.fromJson(response.data).guidList!.isNotEmpty && MaterialDispatchReportSuccessInfo
+            .fromJson(response.data)
+            .pickUpCodeList!
+            .isNotEmpty) {
+          guid = MaterialDispatchReportSuccessInfo
+              .fromJson(response.data)
+              .guidList![0];
+          pick = MaterialDispatchReportSuccessInfo
+              .fromJson(response.data)
+              .pickUpCodeList![0];
+        }
+        success.call(guid,pick);
       } else {
         error.call(response.message ?? '');
       }
@@ -307,6 +330,30 @@ class MaterialDispatchState {
         success.call(response.message ?? '');
       } else {
         error.call(response.message ?? '');
+      }
+    });
+  }
+
+  getLabelDetail({
+    required String guid,
+    required Function(List<MaterialDispatchLabelDetail> msg) success,
+  }) {
+    httpGet(
+      loading: 'material_dispatch_get_label_detail'.tr,
+      method: webApiGetMtoNoQty,
+      params: {
+        'GUID':guid
+      },
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        var list = <MaterialDispatchLabelDetail>[
+          for (var i = 0; i < response.data.length; ++i)
+            MaterialDispatchLabelDetail.fromJson(response.data[i])
+        ];
+        success.call(list);
+      } else {
+        var list =<MaterialDispatchLabelDetail>[];
+        success.call(list);
       }
     });
   }

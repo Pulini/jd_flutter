@@ -7,7 +7,6 @@ import 'package:jd_flutter/bean/http/response/visit_photo_bean.dart';
 import 'package:jd_flutter/fun/warehouse/in/stuff_quality_inspection/stuff_quality_inspection_logic.dart';
 import 'package:jd_flutter/fun/warehouse/in/stuff_quality_inspection/stuff_quality_inspection_state.dart';
 import 'package:jd_flutter/utils/utils.dart';
-import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/check_box_widget.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
@@ -81,7 +80,7 @@ class _StuffQualityInspectionPageState
 
     var colorController = TextEditingController(); //色系
     var qtyController = TextEditingController(); //数量
-
+    qtyController.text = qty;
     Get.dialog(
       PopScope(
         canPop: false,
@@ -133,8 +132,8 @@ class _StuffQualityInspectionPageState
                     //分色
                     text: '添加',
                     click: () {
-                      qtyController.text = state.unColorQty.value;
                       logic.addColor(colorController.text, qtyController.text);
+                      qtyController.text = state.unColorQty.value;
                     },
                     combination: Combination.intact,
                   ),
@@ -157,6 +156,13 @@ class _StuffQualityInspectionPageState
                 Get.back();
               },
               child: Text('dialog_default_confirm'.tr),
+            ),
+            TextButton(
+              onPressed: () => Get.back(),
+              child: Text(
+                'dialog_default_cancel'.tr,
+                style: const TextStyle(color: Colors.grey),
+              ),
             ),
           ],
         ),
@@ -475,7 +481,6 @@ class _StuffQualityInspectionPageState
         if (Get.arguments['inspectionType'] == '1') {
           logic.getData(Get.arguments['dataList']);
         } else {
-          logger.f('暂收单详情到品检');
           logic.getTemporary(Get.arguments['temporaryDetail']);
         }
       });

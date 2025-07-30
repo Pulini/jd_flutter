@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/people_message_info.dart';
 import 'package:jd_flutter/bean/http/response/show_color_batch.dart';
 import 'package:jd_flutter/bean/http/response/stuff_quality_inspection_info.dart';
+import 'package:jd_flutter/bean/http/response/stuff_quality_inspection_label_info.dart';
 import 'package:jd_flutter/bean/http/response/temporary_order_info.dart';
 import 'package:jd_flutter/bean/http/response/visit_photo_bean.dart';
 
@@ -45,12 +46,16 @@ class StuffQualityInspectionState {
 
   var hadSplit = false; //是否能分色
 
-  var defaultReviewer =''; //默认审核人
+  var defaultReviewer = ''; //默认审核人
 
   var fromInspectionType = '1'; //品检来源 //1 品检单列表  2 暂收单详情
 
-
- //--------------// 暂收单详情
+  //--------------// 暂收单详情
   TemporaryOrderDetailInfo? detailInfo;
 
+  var deliveryNoteNumberToSelect = ''; //送货单号
+  var inspectionNumberToSelect = ''; //暂收单号
+  var labelData = <StuffQualityInspectionLabelInfo>[].obs; //提交品检获取的贴标信息
+  var labelUnQty = 0.0; //贴标合格
+  var labelShortQty = 0.0; //贴标不合格
 }

@@ -9,6 +9,7 @@ import 'package:jd_flutter/fun/warehouse/in/quality_inspection_list/quality_insp
 import 'package:jd_flutter/fun/warehouse/in/quality_inspection_list/quality_inspection_list_reverse_color_view.dart';
 import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/widget/check_box_widget.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
@@ -92,7 +93,7 @@ class _QualityInspectionListPageState extends State<QualityInspectionListPage> {
       child: Row(
         children: [
           Expanded(
-              flex: 6,
+              flex: 7,
               child: Row(
                 children: [
                   Expanded(
@@ -223,7 +224,7 @@ class _QualityInspectionListPageState extends State<QualityInspectionListPage> {
         subtitle: Row(
           children: [
             Expanded(
-              flex: 6,
+              flex: 7,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -277,21 +278,24 @@ class _QualityInspectionListPageState extends State<QualityInspectionListPage> {
     );
   }
 
-  _query() => logic.getInspectionList(
-        orderType: scOrderType.selectIndex,
-        typeBody: typeBodyController.text,
-        materialCode: materialCodeController.text,
-        instruction: instructionController.text,
-        inspectionOrder: inspectionOrderController.text,
-        temporaryReceipt: temporaryReceiptController.text,
-        receiptVoucher: receiptVoucherController.text,
-        trackingNumber: trackingNumberController.text,
-        startDate: dpcStartDate.getDateFormatYMD(),
-        endDate: dpcEndDate.getDateFormatYMD(),
-        supplier: supplierController.selectedId.value,
-        sapCompany: sapCompanyController.selectedId.value,
-        factory: factoryController.selectedId.value,
-      );
+  _query(){
+    logic.getInspectionList(
+      orderType: scOrderType.selectIndex,
+      typeBody: typeBodyController.text,
+      materialCode: materialCodeController.text,
+      instruction: instructionController.text,
+      inspectionOrder: inspectionOrderController.text,
+      temporaryReceipt: temporaryReceiptController.text,
+      receiptVoucher: receiptVoucherController.text,
+      trackingNumber: trackingNumberController.text,
+      startDate: dpcStartDate.getDateFormatYMD(),
+      endDate: dpcEndDate.getDateFormatYMD(),
+      supplier: supplierController.selectedId.value,
+      sapCompany: sapCompanyController.selectedId.value,
+      factory: factoryController.selectedId.value,
+    );
+    state.allSelect.value = false;
+  }
 
   _deleteOrder() {
     logic.checkDelete(
@@ -332,7 +336,7 @@ class _QualityInspectionListPageState extends State<QualityInspectionListPage> {
         isCanCancel: true,
         confirm: (reason) {
           Get.back();
-          logic.colorSubmit(reason: reason);
+          logic.colorSubmit(reason: reason, success: () { _query(); });
         },
       );
     }, toReverseColor: () {
@@ -401,6 +405,16 @@ class _QualityInspectionListPageState extends State<QualityInspectionListPage> {
   @override
   Widget build(BuildContext context) {
     return pageBodyWithDrawer(
+        actions: [
+          Obx(() => CheckBox(
+                onChanged: (c) {
+                  state.allSelect.value = c;
+                  logic.selectAllData(c);
+                },
+                name:  state.allSelect.value? 'quality_inspection_no_all_select'.tr:'quality_inspection_all_select'.tr,
+                value: state.allSelect.value,
+              )),
+        ],
         queryWidgets: [
           EditText(
             controller: typeBodyController,

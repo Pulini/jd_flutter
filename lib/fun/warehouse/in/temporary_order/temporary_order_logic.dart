@@ -70,7 +70,7 @@ class TemporaryOrderLogic extends GetxController {
     );
   }
 
- bool checkToInspection() {
+  bool checkToInspection() {
     var checkNum = 0;
 
     state.detailInfo!.receipt
@@ -82,10 +82,10 @@ class TemporaryOrderLogic extends GetxController {
       }
     });
 
-    if(checkNum>=1){
+    if (checkNum >= 1) {
       showSnackBar(message: 'quality_inspection_have_already'.tr);
       return false;
-    }else{
+    } else {
       return true;
     }
   }

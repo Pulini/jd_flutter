@@ -153,15 +153,29 @@ hideKeyBoard() {
 //BuildContext扩展
 extension ContextExt on BuildContext {
   //是否是大屏幕
-  bool isLargeScreen() => MediaQuery.of(this).size.width > 768;
+  bool isLargeScreen() =>
+      MediaQuery
+          .of(this)
+          .size
+          .width > 768;
 
   //是否是中屏幕
   bool isMediumScreen() =>
-      MediaQuery.of(this).size.width > 425 &&
-      MediaQuery.of(this).size.width < 1200;
+      MediaQuery
+          .of(this)
+          .size
+          .width > 425 &&
+          MediaQuery
+              .of(this)
+              .size
+              .width < 1200;
 
   //是否是小屏幕
-  bool isSmallScreen() => MediaQuery.of(this).size.width < 768;
+  bool isSmallScreen() =>
+      MediaQuery
+          .of(this)
+          .size
+          .width < 768;
 }
 
 //Double扩展方法
@@ -274,8 +288,8 @@ extension StringExt on String? {
 
   bool isPallet() =>
       (this ?? '').startsWith('GE') &&
-      (this ?? '').length >= 10 &&
-      (this ?? '').length <= 13;
+          (this ?? '').length >= 10 &&
+          (this ?? '').length <= 13;
 
   //允许英文单词在换行时截断
   String allowWordTruncation() => Characters(this ?? '').join('\u{200B}');
@@ -378,7 +392,9 @@ extension StringExt on String? {
 }
 
 loggerF(Map<String, dynamic> map) {
-  if (map.toString().length > 500) {
+  if (map
+      .toString()
+      .length > 500) {
     map['日志类型'] = '异步打印日志';
     compute(_logF, map);
   } else {
@@ -443,8 +459,7 @@ Future<void> goLaunch(Uri uri) async {
 }
 
 //获取服务器版本信息
-getVersionInfo(
-  bool showLoading, {
+getVersionInfo(bool showLoading, {
   required Function noUpdate,
   required Function(VersionInfo) needUpdate,
   required Function(String) error,
@@ -757,9 +772,9 @@ String escapeEncode(String originalString) {
       .map((codeUnit) => '%u${codeUnit.toRadixString(16).padLeft(4, '0')}')
       .join()
       .replaceAllMapped(
-        RegExp(r'\\u([0-9A-Fa-f]{4})'),
+    RegExp(r'\\u([0-9A-Fa-f]{4})'),
         (match) => String.fromCharCode(int.parse(match.group(1)!, radix: 16)),
-      );
+  );
 }
 
 bool containsChinese(String input) {
@@ -832,7 +847,10 @@ livenFaceVerification({
     url: faceUrl,
     completed: (filePath) {
       try {
-        Permission.camera.request().isGranted.then((permission) {
+        Permission.camera
+            .request()
+            .isGranted
+            .then((permission) {
           if (permission) {
             const MethodChannel(channelFaceVerificationAndroidToFlutter)
                 .invokeMethod('StartDetect', filePath)
