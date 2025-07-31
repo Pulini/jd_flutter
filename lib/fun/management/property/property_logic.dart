@@ -8,35 +8,28 @@ import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/picker/picker_controller.dart';
 import 'property_state.dart';
 
-class PropertyLogic extends GetxController
-    with GetSingleTickerProviderStateMixin {
+class PropertyLogic extends GetxController {
   final PropertyState state = PropertyState();
 
-  //tab控制器
-  late TabController tabController = TabController(length: 3, vsync: this);
-
-  //日期选择器的控制器
-  var pickerControllerStartDate = DatePickerController(
-    PickerType.startDate,
-    saveKey: '${RouteConfig.property.name}${PickerType.startDate}',
-  );
-
-  //日期选择器的控制器
-  var pickerControllerEndDate = DatePickerController(
-    PickerType.endDate,
-    saveKey: '${RouteConfig.property.name}${PickerType.endDate}',
-  );
-
-  @override
-  void onReady() {
-    super.onReady();
-    queryProperty();
-  }
-
-  queryProperty() {
+  queryProperty({
+    required String propertyNumber,
+    required String propertyName,
+    required String serialNumber,
+    required String invoiceNumber,
+    required String name,
+    required String workerNumber,
+    required String startDate,
+    required String endDate,
+  }) {
     state.queryProperty(
-      startDate: pickerControllerStartDate.getDateFormatYMD(),
-      endDate: pickerControllerEndDate.getDateFormatYMD(),
+      propertyNumber: propertyNumber,
+      propertyName: propertyName,
+      serialNumber: serialNumber,
+      invoiceNumber: invoiceNumber,
+      name: name,
+      workerNumber: workerNumber,
+      startDate: startDate,
+      endDate: endDate,
       error: (msg) => errorDialog(content: msg),
     );
   }
@@ -250,9 +243,9 @@ class PropertyLogic extends GetxController
     return true;
   }
 
-  printLabel() {
+  printLabel(int pageIndex) {
     var selectItem = [];
-    switch (tabController.index) {
+    switch (pageIndex) {
       case 0:
         selectItem = state.propertyList
             .where((v) => v.processStatus == '2' && v.isChecked)

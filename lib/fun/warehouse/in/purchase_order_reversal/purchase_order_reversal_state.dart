@@ -6,11 +6,6 @@ import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 
 class PurchaseOrderReversalState {
-  var typeBody = ''.obs;
-  var materialVoucher = ''.obs;
-  var salesOrderNo = ''.obs;
-  var purchaseOrder = ''.obs;
-  var materielCode = ''.obs;
   var orderList = <PurchaseOrderReversalInfo>[].obs;
 
   getReceiptVoucherList({
@@ -19,6 +14,11 @@ class PurchaseOrderReversalState {
     required String supplierNumber,
     required String factory,
     required String warehouse,
+    required String materialVoucher,
+    required String typeBody,
+    required String salesOrderNo,
+    required String purchaseOrder,
+    required String materielCode,
     required Function(String) error,
   }) {
     sapPost(
@@ -27,12 +27,12 @@ class PurchaseOrderReversalState {
       body: {
         'DATEF': startDate, //开始时间
         'DATET': endDate, //结束时间
-        'MBLNR': materialVoucher.value, //物料凭证号
-        'ZZGCXT': typeBody.value, //型体
-        'VBELN': salesOrderNo.value, //销售订单号
+        'MBLNR': materialVoucher, //物料凭证号
+        'ZZGCXT': typeBody, //型体
+        'VBELN': salesOrderNo, //销售订单号
         'LIFNR': supplierNumber, //供应商
-        'EBELN': purchaseOrder.value, //采购凭证号
-        'MATNR': materielCode.value, //物料编号
+        'EBELN': purchaseOrder, //采购凭证号
+        'MATNR': materielCode, //物料编号
         'ZQY': factory, //厂区
         'WERKS': warehouse, //工厂
       },
@@ -49,6 +49,7 @@ class PurchaseOrderReversalState {
       }
     });
   }
+
   reversal({
     required List<PurchaseOrderReversalInfo> submitList,
     required Function(String) success,
@@ -59,13 +60,13 @@ class PurchaseOrderReversalState {
       method: webApiPurchaseOrderReversal,
       body: {
         'OffCGOrderInstock2SapList': [
-          for(PurchaseOrderReversalInfo item in submitList)
+          for (PurchaseOrderReversalInfo item in submitList)
             {
-              'MaterialDocumentNo':item.materialDocumentNo,
-              'MaterialVoucherYear':item.materialVoucherYear,
-              'MaterialDocumentLineItemNumber':item.materialVoucherItem,
-              'UserName':userInfo?.number,
-              'ChineseName':userInfo?.name,
+              'MaterialDocumentNo': item.materialDocumentNo,
+              'MaterialVoucherYear': item.materialVoucherYear,
+              'MaterialDocumentLineItemNumber': item.materialVoucherItem,
+              'UserName': userInfo?.number,
+              'ChineseName': userInfo?.name,
             }
         ],
       },
@@ -77,5 +78,4 @@ class PurchaseOrderReversalState {
       }
     });
   }
-
 }

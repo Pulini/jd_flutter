@@ -18,6 +18,12 @@ class PurchaseOrderWarehousingLogic extends GetxController {
     required String supplierNumber,
     required String factory,
     required String warehouse,
+    required String typeBody,
+    required String instruction,
+    required String purchaseOrder,
+    required String materielCode,
+    required String customerPO,
+    required String trackNo,
   }) {
     state.getPurchaseOrder(
       startDate: startDate,
@@ -25,6 +31,12 @@ class PurchaseOrderWarehousingLogic extends GetxController {
       supplier: supplierNumber,
       factory: factory,
       warehouse: warehouse,
+      typeBody: typeBody,
+      instruction: instruction,
+      purchaseOrder: purchaseOrder,
+      materielCode: materielCode,
+      customerPO: customerPO,
+      trackNo: trackNo,
       error: (msg) => errorDialog(content: msg),
     );
   }
@@ -85,11 +97,13 @@ class PurchaseOrderWarehousingLogic extends GetxController {
       return;
     }
     if (groupBy(selectOrder, (v) => v.isScanPieces).length > 1) {
-      errorDialog(content: 'purchase_order_warehousing_different_order_tips'.tr);
+      errorDialog(
+          content: 'purchase_order_warehousing_different_order_tips'.tr);
       return;
     }
     if (groupBy(selectOrder, (v) => v.supplier).length > 1) {
-      errorDialog(content: 'purchase_order_warehousing_different_supplier_tips'.tr);
+      errorDialog(
+          content: 'purchase_order_warehousing_different_supplier_tips'.tr);
       return;
     }
 
@@ -104,7 +118,7 @@ class PurchaseOrderWarehousingLogic extends GetxController {
               for (PurchaseOrderDetailsInfo v3 in (v2.details ?? [])) {
                 try {
                   var has = sizeList.firstWhere((v) => v[0] == (v3.size ?? ''));
-                  has[1] = (has[1]as double).add(v3.qty.value);
+                  has[1] = (has[1] as double).add(v3.qty.value);
                 } on StateError catch (_) {
                   sizeList.add([v3.size ?? '', v3.qty.value]);
                 }
@@ -170,7 +184,8 @@ class PurchaseOrderWarehousingLogic extends GetxController {
 
   _addLabels({required List<DeliveryOrderLabelInfo> labels}) {
     if (labels.isEmpty) {
-      errorDialog(content: 'purchase_order_warehousing_order_not_have_this_label'.tr);
+      errorDialog(
+          content: 'purchase_order_warehousing_order_not_have_this_label'.tr);
       return;
     }
 
@@ -185,7 +200,7 @@ class PurchaseOrderWarehousingLogic extends GetxController {
       return;
     }
 
-    var labelData =<DeliveryOrderLabelInfo>[
+    var labelData = <DeliveryOrderLabelInfo>[
       for (var label in labels)
         if (!state.scannedLabelList.contains(label)) label
     ];
@@ -201,7 +216,8 @@ class PurchaseOrderWarehousingLogic extends GetxController {
     }
     if (materialNumberList.toSet().containsAll(labelMaterialList.toSet())) {
       for (var label in labelData) {
-        double sizeMax = state.materialList[label.materialCode]!.firstWhere((v) => v[0] == label.size)[1];
+        double sizeMax = state.materialList[label.materialCode]!
+            .firstWhere((v) => v[0] == label.size)[1];
         double sizeTotal = 0.0;
         if (state.scannedLabelList.isNotEmpty) {
           for (var v in state.scannedLabelList
@@ -210,13 +226,14 @@ class PurchaseOrderWarehousingLogic extends GetxController {
           }
         }
         double quantity = 0;
-        for (var v
-        in labelData.where((v) => v.sizeMaterial() == label.sizeMaterial())) {
+        for (var v in labelData
+            .where((v) => v.sizeMaterial() == label.sizeMaterial())) {
           quantity = quantity.add(v.commonQty ?? 0);
         }
 
         if (sizeTotal.add(quantity) > sizeMax) {
-          errorDialog(content: 'purchase_order_warehousing_label_qty_exceed'.tr);
+          errorDialog(
+              content: 'purchase_order_warehousing_label_qty_exceed'.tr);
         } else {
           state.scannedLabelList.add(label..isChecked.value = true);
         }
@@ -225,6 +242,7 @@ class PurchaseOrderWarehousingLogic extends GetxController {
       errorDialog(content: 'purchase_order_warehousing_has_other_material'.tr);
     }
   }
+
   deletePiece({required DeliveryOrderLabelInfo pieceInfo}) {
     state.scannedLabelList.removeWhere((v) => v.pieceNo == pieceInfo.pieceNo);
   }
@@ -244,10 +262,12 @@ class PurchaseOrderWarehousingLogic extends GetxController {
     });
     return returnList;
   }
+
   List<List> sizeMaterialList() {
     var sizeList = <List>[];
     state.materialList.forEach((k, v) {
-      sizeList.addAll(v.where((v2)=>v2[0]!=null&&v2[0].toString().isNotEmpty));
+      sizeList.addAll(
+          v.where((v2) => v2[0] != null && v2[0].toString().isNotEmpty));
     });
     return sizeList;
   }
@@ -275,6 +295,7 @@ class PurchaseOrderWarehousingLogic extends GetxController {
     }
     return progress;
   }
+
   submitLabelBinding(Function() toDetail) {
     for (var k in state.materialList.keys) {
       var v = state.materialList[k] ?? [];

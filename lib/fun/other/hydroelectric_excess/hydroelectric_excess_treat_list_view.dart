@@ -18,10 +18,14 @@ class _HydroelectricExcessTreatListPageState
     extends State<HydroelectricExcessTreatListPage> {
   final logic = Get.find<HydroelectricExcessLogic>();
   final state = Get.find<HydroelectricExcessLogic>().state;
+  var tecDeviceNumber = TextEditingController();
+  var tecBedNumber = TextEditingController();
 
   _item(DeviceListInfo data) {
     return InkWell(
-      onTap: () {state.searchRoom(data,true);},
+      onTap: () {
+        logic.searchRoom(data: data, isBack: true);
+      },
       child: Container(
         height: 100,
         margin: const EdgeInsets.only(left: 5, right: 5, bottom: 10),
@@ -83,18 +87,18 @@ class _HydroelectricExcessTreatListPageState
         title: 'hydroelectric_water_reading'.tr,
         bottomSheet: [
           EditText(
-            onChanged: (v) => state.deviceNumber = v,
+            controller: tecDeviceNumber,
             hint: 'hydroelectric_equipment_number'.tr,
           ),
           EditText(
-            onChanged: (v) => state.bedNumber = v,
+            controller: tecBedNumber,
             hint: 'hydroelectric_bed_number'.tr,
           ),
           Obx(() => Row(children: [
                 Expanded(
                   flex: 1,
                   child: ListTile(
-                    title:  Text('hydroelectric_all'.tr),
+                    title: Text('hydroelectric_all'.tr),
                     leading: Radio(
                       value: '0',
                       groupValue: state.select.value,
@@ -109,7 +113,7 @@ class _HydroelectricExcessTreatListPageState
                 Expanded(
                   flex: 1,
                   child: ListTile(
-                    title:  Text('hydroelectric_to_be_copied'.tr),
+                    title: Text('hydroelectric_to_be_copied'.tr),
                     leading: Radio(
                       value: '1',
                       groupValue: state.select.value,
@@ -124,7 +128,7 @@ class _HydroelectricExcessTreatListPageState
                 Expanded(
                   flex: 1,
                   child: ListTile(
-                    title:  Text('hydroelectric_dorP'.tr),
+                    title: Text('hydroelectric_dorP'.tr),
                     leading: Radio(
                       value: '2',
                       groupValue: state.select.value,
@@ -138,7 +142,12 @@ class _HydroelectricExcessTreatListPageState
                 )
               ]))
         ],
-        query: () {logic.searchData();},
+        query: () {
+          logic.searchData(
+            deviceNumber: tecDeviceNumber.text,
+            bedNumber: tecBedNumber.text,
+          );
+        },
         body: Obx(
           () => ListView.builder(
             padding: const EdgeInsets.only(left: 5, right: 5),

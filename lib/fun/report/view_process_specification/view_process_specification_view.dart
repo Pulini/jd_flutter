@@ -6,7 +6,6 @@ import 'package:jd_flutter/widget/edit_text_widget.dart';
 import 'package:jd_flutter/widget/pdf_view.dart';
 import 'package:jd_flutter/widget/web_page.dart';
 
-
 import 'view_process_specification_logic.dart';
 
 class ViewProcessSpecificationPage extends StatefulWidget {
@@ -21,17 +20,18 @@ class _ViewProcessSpecificationPageState
     extends State<ViewProcessSpecificationPage> {
   final logic = Get.put(ViewProcessSpecificationLogic());
   final state = Get.find<ViewProcessSpecificationLogic>().state;
+  var tecTypeBody = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return pageBodyWithDrawer(
       queryWidgets: [
         EditText(
+          controller: tecTypeBody,
           hint: 'view_process_specification_query_hint'.tr,
-          onChanged: (v) => state.etTypeBody = v,
         ),
       ],
-      query: () => logic.queryProcessSpecification(),
+      query: () => logic.queryProcessSpecification(tecTypeBody.text),
       body: Obx(
         () => ListView.builder(
           padding: const EdgeInsets.all(8),

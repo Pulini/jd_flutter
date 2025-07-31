@@ -42,6 +42,8 @@ class _SapInkColorMatchingPageState extends State<SapInkColorMatchingPage> {
   );
   var controller = TextEditingController();
 
+  var tecTypeBody = TextEditingController();
+
   _item(int index) {
     SapInkColorMatchOrderInfo data = state.orderList[index];
     return GestureDetector(
@@ -194,6 +196,7 @@ class _SapInkColorMatchingPageState extends State<SapInkColorMatchingPage> {
     logic.queryOrder(
       startDate: dpcStartDate.getDateFormatSapYMD(),
       endDate: dpcEndDate.getDateFormatSapYMD(),
+      typeBody: tecTypeBody.text,
     );
   }
 
@@ -260,7 +263,7 @@ class _SapInkColorMatchingPageState extends State<SapInkColorMatchingPage> {
       queryWidgets: [
         EditText(
           hint: 'sap_ink_color_matching_input_type_body'.tr,
-          onChanged: (v) => state.typeBody.value = v,
+          controller: tecTypeBody,
         ),
         DatePicker(pickerController: dpcStartDate),
         DatePicker(pickerController: dpcEndDate),
@@ -273,10 +276,7 @@ class _SapInkColorMatchingPageState extends State<SapInkColorMatchingPage> {
               value: state.idTested.value,
             ))
       ],
-      query: () => logic.queryOrder(
-        startDate: dpcStartDate.getDateFormatSapYMD(),
-        endDate: dpcEndDate.getDateFormatSapYMD(),
-      ),
+      query: () =>_refreshOrder(),
       body: Obx(() => ListView.builder(
             itemCount: state.orderList.length,
             itemBuilder: (c, i) => _item(i),

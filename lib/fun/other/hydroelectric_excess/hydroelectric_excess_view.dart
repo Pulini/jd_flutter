@@ -22,15 +22,13 @@ class _HydroelectricExcessPageState extends State<HydroelectricExcessPage> {
 
   var hintStyle = const TextStyle(color: Colors.black);
   var textStyle = TextStyle(color: Colors.blue.shade900);
+  var textThisTime = TextEditingController(); //本次抄度
+  var textNumber = TextEditingController(); //房间号
 
-  textField(
-          {required TextEditingController controller,
-          required String hint,
-          required Function()? onClicked}) =>
-      SizedBox(
+  roomNumberSearchWidget() => SizedBox(
         height: 40,
         child: TextField(
-          controller: controller,
+          controller: textNumber,
           style: const TextStyle(color: Colors.black),
           decoration: InputDecoration(
             filled: true,
@@ -44,12 +42,23 @@ class _HydroelectricExcessPageState extends State<HydroelectricExcessPage> {
             border: const OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(20)),
             ),
-            hintText: hint,
+            hintText: 'hydroelectric_excess_room_number'.tr,
             hintStyle: const TextStyle(color: Colors.grey),
             suffixIcon: IconButton(
               icon: const Icon(Icons.search, color: Colors.grey),
               onPressed: () {
-                onClicked?.call();
+                if (textNumber.text.isNotEmpty) {
+                  logic.searchRoom(
+                    data: DeviceListInfo(
+                      number: textNumber.text,
+                    ),
+                    isBack: false,
+                    refresh: (number, nowDegree) {
+                      textNumber.text = number;
+                      textThisTime.text = nowDegree;
+                    },
+                  );
+                }
               },
             ),
           ),
@@ -83,12 +92,18 @@ class _HydroelectricExcessPageState extends State<HydroelectricExcessPage> {
   void initState() {
     pdaScanner(
       scan: (code) {
-        state.textThisTime.text = code;
-        if (code.isNotEmpty)
-          {
-            state.stateToSearch.value = '0';
-            state.searchRoom(DeviceListInfo(number: code), false);
-          }
+        textThisTime.text = code;
+        if (code.isNotEmpty) {
+          state.stateToSearch.value = '0';
+          logic.searchRoom(
+            data: DeviceListInfo(number: code),
+            isBack: false,
+            refresh: (number, nowDegree) {
+              textNumber.text = number;
+              textThisTime.text = nowDegree;
+            },
+          );
+        }
       },
     );
     super.initState();
@@ -106,7 +121,7 @@ class _HydroelectricExcessPageState extends State<HydroelectricExcessPage> {
               size: 35,
               color: Colors.white,
             ),
-            onTap: (){state.clickShow();},
+            onTap: () => state.isShow.toggle(),
           ),
         )
       ],
@@ -120,42 +135,32 @@ class _HydroelectricExcessPageState extends State<HydroelectricExcessPage> {
                 children: [
                   Row(
                     children: [
-                      Expanded(
-                          flex: 3,
-                          child: textField(
-                            controller: state.textNumber,
-                            hint: 'hydroelectric_excess_room_number'.tr,
-                            onClicked: () {
-                              if (state.textNumber.text.isNotEmpty) {
-                                state.searchRoom(
-                                    DeviceListInfo(
-                                        number: state.textNumber.text.toString()),
-                                    false);
-                              }
-                            },
-                          )),
+                      Expanded(flex: 3, child: roomNumberSearchWidget()),
                       Expanded(
                           flex: 1,
                           child: EditText(
                             hint: 'hydroelectric_this_copying_process'.tr,
-                            onChanged: (v)  {
-                              state.countMonth(v);
-                            },
-                            controller: state.textThisTime,
+                            onChanged: (v) => logic.countMonth(v),
+                            controller: textThisTime,
                           ))
                     ],
                   ),
-                  _text('hydroelectric_device_name'.tr, state.dataDetail.value.name.toString()),
-                  _text('hydroelectric_type'.tr, state.dataDetail.value.typeName.toString()),
-                  _text(
-                      'hydroelectric_organization_name'.tr, state.dataDetail.value.organizeName.toString()),
-                  _text(
-                      'hydroelectric_building_number'.tr, state.dataDetail.value.dormitoriesName.toString()),
-                  _text('hydroelectric_room_number'.tr, state.dataDetail.value.roomNumber.toString()),
+                  _text('hydroelectric_device_name'.tr,
+                      state.dataDetail.value.name.toString()),
+                  _text('hydroelectric_type'.tr,
+                      state.dataDetail.value.typeName.toString()),
+                  _text('hydroelectric_organization_name'.tr,
+                      state.dataDetail.value.organizeName.toString()),
+                  _text('hydroelectric_building_number'.tr,
+                      state.dataDetail.value.dormitoriesName.toString()),
+                  _text('hydroelectric_room_number'.tr,
+                      state.dataDetail.value.roomNumber.toString()),
                   _text('hydroelectric_last_copying_time'.tr,
                       state.dataDetail.value.lastDateTime.toString()),
-                  _text('hydroelectric_last_copying'.tr, state.dataDetail.value.lastDegree.toString()),
-                  _text('hydroelectric_usage_this_month'.tr, state.thisMonthUse.value),
+                  _text('hydroelectric_last_copying'.tr,
+                      state.dataDetail.value.lastDegree.toString()),
+                  _text('hydroelectric_usage_this_month'.tr,
+                      state.thisMonthUse.value),
                 ],
               )),
               Column(
@@ -173,8 +178,14 @@ class _HydroelectricExcessPageState extends State<HydroelectricExcessPage> {
                                 click: () =>
                                     Get.to(() => const Scanner())?.then((v) {
                                   if (v != null) {
-                                    state.searchRoom(
-                                        DeviceListInfo(number: v), false);
+                                    logic.searchRoom(
+                                      data: DeviceListInfo(number: v),
+                                      isBack: false,
+                                      refresh: (number, nowDegree) {
+                                        textNumber.text = number;
+                                        textThisTime.text = nowDegree;
+                                      },
+                                    );
                                   }
                                 }),
                               ),
@@ -185,7 +196,7 @@ class _HydroelectricExcessPageState extends State<HydroelectricExcessPage> {
                               child: CombinationButton(
                                 combination: Combination.right,
                                 text: 'hydroelectric_checked_list'.tr,
-                                click: (){
+                                click: () {
                                   state.isShow.value = false;
                                   Get.to(() =>
                                       const HydroelectricExcessTreatListPage());
@@ -198,8 +209,11 @@ class _HydroelectricExcessPageState extends State<HydroelectricExcessPage> {
                   Obx(() => SizedBox(
                         width: double.infinity,
                         child: CombinationButton(
-                          text: state.stateToSearch.value == '0' ? 'hydroelectric_submit'.tr : 'hydroelectric_change'.tr,
-                          click: () {state.submit();},
+                          text: state.stateToSearch.value == '0'
+                              ? 'hydroelectric_submit'.tr
+                              : 'hydroelectric_change'.tr,
+                          click: () =>
+                              state.submit(textThisTime: textThisTime.text),
                         ),
                       ))
                 ],

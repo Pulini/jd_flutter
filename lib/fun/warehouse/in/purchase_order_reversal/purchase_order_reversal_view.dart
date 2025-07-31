@@ -49,6 +49,12 @@ class _PurchaseOrderReversalPageState extends State<PurchaseOrderReversalPage> {
     saveKey: '${RouteConfig.purchaseOrderReversal.name}${PickerType.endDate}',
   );
 
+  var tecMaterialVoucher = TextEditingController();
+  var tecTypeBody = TextEditingController();
+  var tecSalesOrderNo = TextEditingController();
+  var tecPurchaseOrder = TextEditingController();
+  var tecMaterielCode = TextEditingController();
+
   _query() {
     logic.query(
       startDate: dpcStartDate.getDateFormatSapYMD(),
@@ -56,6 +62,11 @@ class _PurchaseOrderReversalPageState extends State<PurchaseOrderReversalPage> {
       supplierNumber: opcSupplier.selectedId.value,
       factory: factoryWarehouseController.getPickItem1().pickerId(),
       warehouse: factoryWarehouseController.getPickItem2().pickerId(),
+      materialVoucher: tecMaterialVoucher.text,
+      typeBody: tecTypeBody.text,
+      salesOrderNo: tecSalesOrderNo.text,
+      purchaseOrder: tecPurchaseOrder.text,
+      materielCode: tecMaterielCode.text,
     );
   }
 
@@ -170,28 +181,23 @@ class _PurchaseOrderReversalPageState extends State<PurchaseOrderReversalPage> {
       queryWidgets: [
         Obx(() => EditText(
               hint: 'purchase_order_reversal_material_voucher'.tr,
-              initStr: state.materialVoucher.value,
-              onChanged: (v) => state.materialVoucher.value = v,
+              controller: tecMaterialVoucher,
             )),
         Obx(() => EditText(
               hint: 'purchase_order_reversal_type_body'.tr,
-              initStr: state.typeBody.value,
-              onChanged: (v) => state.typeBody.value = v,
+              controller: tecTypeBody,
             )),
         Obx(() => EditText(
               hint: 'purchase_order_reversal_sales_order_no'.tr,
-              initStr: state.salesOrderNo.value,
-              onChanged: (v) => state.salesOrderNo.value = v,
+              controller: tecSalesOrderNo,
             )),
         Obx(() => EditText(
               hint: 'purchase_order_reversal_purchase_order_no'.tr,
-              initStr: state.purchaseOrder.value,
-              onChanged: (v) => state.purchaseOrder.value = v,
+              controller: tecPurchaseOrder,
             )),
         Obx(() => EditText(
               hint: 'purchase_order_reversal_material_code'.tr,
-              initStr: state.materielCode.value,
-              onChanged: (v) => state.materielCode.value = v,
+              controller: tecMaterielCode,
             )),
         OptionsPicker(pickerController: opcSupplier),
         LinkOptionsPicker(pickerController: factoryWarehouseController),

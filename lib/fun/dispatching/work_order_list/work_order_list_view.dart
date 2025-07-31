@@ -3,10 +3,12 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/work_order_info.dart';
 import 'package:jd_flutter/fun/dispatching/work_order_list/part_pick_view.dart';
 import 'package:jd_flutter/fun/other/maintain_label/maintain_label_view.dart';
+import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
+import 'package:jd_flutter/widget/picker/picker_controller.dart';
 import 'package:jd_flutter/widget/picker/picker_view.dart';
 import 'package:jd_flutter/widget/switch_button_widget.dart';
 
@@ -22,6 +24,26 @@ class WorkOrderListPage extends StatefulWidget {
 class _WorkOrderListPageState extends State<WorkOrderListPage> {
   final logic = Get.put(WorkOrderListLogic());
   final state = Get.find<WorkOrderListLogic>().state;
+  var tecWorkBarCode = TextEditingController();
+  var tecPlanOrderNumber = TextEditingController();
+
+  //组别选择器的控制器
+  var pcGroup = OptionsPickerController(
+    PickerType.sapGroup,
+    saveKey: '${RouteConfig.workOrderList.name}${PickerType.sapGroup}',
+  );
+
+  //日期选择器的控制器
+  var pcStartDate = DatePickerController(
+    PickerType.startDate,
+    saveKey: '${RouteConfig.workOrderList.name}${PickerType.startDate}',
+  );
+
+  //日期选择器的控制器
+  var pcEndDate = DatePickerController(
+    PickerType.endDate,
+    saveKey: '${RouteConfig.workOrderList.name}${PickerType.endDate}',
+  );
 
   _item(WorkOrderInfo data) {
     return Card(
@@ -136,7 +158,9 @@ class _WorkOrderListPageState extends State<WorkOrderListPage> {
                         Get.to(const PartPickPage());
                       } else {
                         showSnackBar(
-                          message: 'work_order_list_no_individual_item_label_permission'.tr,
+                          message:
+                              'work_order_list_no_individual_item_label_permission'
+                                  .tr,
                           isWarning: true,
                         );
                       }
@@ -196,15 +220,15 @@ class _WorkOrderListPageState extends State<WorkOrderListPage> {
       queryWidgets: [
         EditText(
           hint: 'work_order_list_work_ticket_barcode'.tr,
-          onChanged: (s) => state.workBarCode = s,
+          controller: tecWorkBarCode,
         ),
         EditText(
           hint: 'work_order_list_plan_track_number'.tr,
-          onChanged: (s) => state.planOrderNumber = s,
+          controller: tecPlanOrderNumber,
         ),
-        OptionsPicker(pickerController: logic.pcGroup),
-        DatePicker(pickerController: logic.pcStartDate),
-        DatePicker(pickerController: logic.pcEndDate),
+        OptionsPicker(pickerController: pcGroup),
+        DatePicker(pickerController: pcStartDate),
+        DatePicker(pickerController: pcEndDate),
         SwitchButton(
           onChanged: (isSelect) {
             setState(() => state.isOutsourcing = isSelect);
@@ -222,7 +246,13 @@ class _WorkOrderListPageState extends State<WorkOrderListPage> {
           value: state.isClosed,
         )
       ],
-      query: () => logic.query(),
+      query: () => logic.query(
+        startDate: pcStartDate.getDateFormatYMD(),
+        endDate: pcEndDate.getDateFormatYMD(),
+        group: pcGroup.selectedId.value,
+        workBarCode: tecWorkBarCode.text,
+        planOrderNumber: tecPlanOrderNumber.text,
+      ),
       body: Obx(() => ListView.builder(
             padding: const EdgeInsets.all(8),
             itemCount: state.dataList.length,

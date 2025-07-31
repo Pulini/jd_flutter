@@ -29,7 +29,7 @@ class _IncomingInspectionOrdersPageState
   final IncomingInspectionLogic logic = Get.find<IncomingInspectionLogic>();
   final IncomingInspectionState state =
       Get.find<IncomingInspectionLogic>().state;
-
+  var tecInspectionSuppler = TextEditingController();
   var dpcStartDate = DatePickerController(
     PickerType.startDate,
     saveKey: '${RouteConfig.incomingInspection.name}${PickerType.startDate}',
@@ -226,16 +226,15 @@ class _IncomingInspectionOrdersPageState
               ],
             ),
             EditText(
+              controller: tecInspectionSuppler,
               hint: 'incoming_inspection_order_suppler_query_tips'.tr,
-              initStr: state.inspectionSuppler.value,
-              onChanged: (s) => state.inspectionSuppler.value = s,
             ),
             Expanded(child: Container()),
             SizedBox(
               width: double.infinity,
               child: CombinationButton(
                 text: 'incoming_inspection_order_query'.tr,
-                click: ()=>_query(false),
+                click: () => _query(false),
               ),
             ),
           ],
@@ -249,17 +248,15 @@ class _IncomingInspectionOrdersPageState
     logic.queryInspectionOrders(
       startDate: dpcStartDate.getDateFormatYMD(),
       endDate: dpcEndDate.getDateFormatYMD(),
-      success: () =>isRefresh?null: Navigator.pop(context),
+      inspectionSuppler: tecInspectionSuppler.text,
+      success: () => isRefresh ? null : Navigator.pop(context),
     );
   }
 
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      logic.queryInspectionOrders(
-        startDate: dpcStartDate.getDateFormatYMD(),
-        endDate: dpcEndDate.getDateFormatYMD(),
-      );
+      _query(true);
     });
     super.initState();
   }
@@ -270,7 +267,7 @@ class _IncomingInspectionOrdersPageState
       title: 'incoming_inspection_order_inspection_list'.tr,
       actions: [
         IconButton(
-          onPressed:()=> _showSearch(),
+          onPressed: () => _showSearch(),
           icon: const Icon(Icons.search),
         ),
       ],

@@ -18,7 +18,8 @@ class _FormingBarcodeCollectionPriorityPageState
     extends State<FormingBarcodeCollectionPriorityPage> {
   final logic = Get.find<FormingBarcodeCollectionLogic>();
   final state = Get.find<FormingBarcodeCollectionLogic>().state;
-
+  //搜索天数
+  var controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return pageBody(
@@ -47,17 +48,17 @@ class _FormingBarcodeCollectionPriorityPageState
                   child: NumberEditText(
                     hint: 'forming_code_collection_input_days'.tr,
                     onChanged: (s) {
-                      if (logic.controller.text.toDoubleTry() > 365) {
-                        logic.controller.text = '365';
+                      if (controller.text.toDoubleTry() > 365) {
+                        controller.text = '365';
                       }
                     },
-                    controller: logic.controller,
+                    controller: controller,
                   ),
                 ),
                 Expanded(
                   child: TextButton(
                     onPressed: () {
-                      logic.getWorkCardPriority(day: logic.controller.text);
+                      logic.getWorkCardPriority(day: controller.text);
                     },
                     child: Text(
                       'forming_code_collection_search'.tr,
@@ -193,6 +194,7 @@ class _FormingBarcodeCollectionPriorityPageState
 
   @override
   void dispose() {
+    controller.clear();
     logic.clearData();
     super.dispose();
   }

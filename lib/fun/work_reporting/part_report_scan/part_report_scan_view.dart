@@ -18,7 +18,7 @@ class PartReportScanPage extends StatefulWidget {
 class _PartReportScanPageState extends State<PartReportScanPage> {
   final logic = Get.put(PartReportScanLogic());
   final state = Get.find<PartReportScanLogic>().state;
-
+var tecCode=TextEditingController();
   _item1(ComponentCodeInfo info) {
     return GestureDetector(
         onLongPress: () => {
@@ -66,7 +66,7 @@ class _PartReportScanPageState extends State<PartReportScanPage> {
                   flex: 5,
                   child: EditText(
                     hint: 'process_report_store_manual_input'.tr,
-                    onChanged: (v) => state.modifyCode = v,
+                controller: tecCode,
                   ),
                 ),
                 Expanded(
@@ -101,7 +101,7 @@ class _PartReportScanPageState extends State<PartReportScanPage> {
                     //手动添加
                     text: 'part_report_manually_add'.tr,
                     click: () => {
-                        logic.addCode(state.modifyCode)
+                        logic.addCode(tecCode.text)
                     },
                     combination: Combination.left,
                   ),

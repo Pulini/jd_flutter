@@ -1046,6 +1046,7 @@ class Translation extends Translations {
           'sap_ink_color_matching_detail_inkmaster': '油墨师：',
           'sap_ink_color_matching_detail_theoretical_loss': '理论耗量：',
           'sap_ink_color_matching_detail_offset': '实际差值 = 理论耗量 - 混合物重量 ：',
+          'sap_ink_color_matching_detail_remakes': '可填写备注信息',
           'sap_ink_color_matching_detail_add_material': '新增物料',
           'sap_ink_color_matching_detail_read_before_toning_weight': '读取调前重量',
           'sap_ink_color_matching_detail_read_after_toning_weight': '读取调后重量',
@@ -4461,6 +4462,7 @@ class Translation extends Translations {
           'sap_ink_color_matching_detail_theoretical_loss': 'Theoretical loss：',
           'sap_ink_color_matching_detail_offset':
               'Actual = Theoretical loss - Mixture ：',
+          'sap_ink_color_matching_detail_remakes': 'Remakes',
           'sap_ink_color_matching_detail_add_material': 'Add material',
           'sap_ink_color_matching_detail_read_before_toning_weight':
               'Read before toning weight',

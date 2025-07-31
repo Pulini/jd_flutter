@@ -12,6 +12,11 @@ class PurchaseOrderReversalLogic extends GetxController {
     required String supplierNumber,
     required String factory,
     required String warehouse,
+    required String materialVoucher,
+    required String typeBody,
+    required String salesOrderNo,
+    required String purchaseOrder,
+    required String materielCode,
   }) {
     state.getReceiptVoucherList(
       startDate: startDate,
@@ -19,6 +24,11 @@ class PurchaseOrderReversalLogic extends GetxController {
       supplierNumber: supplierNumber,
       factory: factory,
       warehouse: warehouse,
+        materialVoucher:materialVoucher,
+        typeBody:typeBody,
+        salesOrderNo:salesOrderNo,
+        purchaseOrder:purchaseOrder,
+        materielCode:materielCode,
       error: (msg) => errorDialog(content: msg),
     );
   }

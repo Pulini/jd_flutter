@@ -9,12 +9,9 @@ import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 
 class IncomingInspectionState {
-  var deliveryNo = '';
-  var materialCode = '';
   var deliveryList = <List<List<InspectionDeliveryInfo>>>[].obs;
   var addMaterialList = <InspectionDeliveryInfo>[].obs;
   var inspectionType = '1'.obs;
-  var inspectionSuppler = ''.obs;
   var inspectionOrderList = <InspectionOrderInfo>[].obs;
   InspectionDetailInfo? inspectionDetail;
   var inspectionPhotoList = <File>[].obs;
@@ -24,6 +21,8 @@ class IncomingInspectionState {
     String area = '',
     String factory = '',
     String supplier = '',
+    required String deliveryNo ,
+    required String materialCode ,
     required Function() success,
     required Function(String) error,
   }) {
@@ -101,6 +100,7 @@ class IncomingInspectionState {
   getInspectionOrders({
     required String startDate,
     required String endDate,
+    required String inspectionSuppler,
     Function()? success,
     required Function(String) error,
   }) {
@@ -110,7 +110,7 @@ class IncomingInspectionState {
       params: {
         'StartDate': startDate,
         'EndDate': endDate,
-        'Supplier': inspectionSuppler.value,
+        'Supplier': inspectionSuppler,
         'Type': inspectionType.value,
       },
     ).then((response) {

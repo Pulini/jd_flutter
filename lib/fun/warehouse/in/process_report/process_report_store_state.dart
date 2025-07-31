@@ -12,8 +12,6 @@ import 'package:jd_flutter/utils/web_api.dart';
 class ProcessReportStoreState {
 
   var showClick = false.obs;
-  var code = '';
-  var modifyCode = '';
   var type = 1.obs;  //搜索类型
   var scanNumber =""; //扫码人工号
   var instructionNumber =""; //指令号

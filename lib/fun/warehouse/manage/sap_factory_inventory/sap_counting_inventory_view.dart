@@ -156,6 +156,7 @@ class _SapCountingInventoryPageState extends State<SapCountingInventoryPage> {
       isScan: false,
       factory: factoryWarehouseController.getPickItem1().pickerId(),
       warehouse: factoryWarehouseController.getPickItem2().pickerId(),
+      area: ''
     );
   }
 

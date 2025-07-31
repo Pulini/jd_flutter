@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/molding_pack_area_report_info.dart';
+import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
+import 'package:jd_flutter/widget/picker/picker_controller.dart';
 import 'package:jd_flutter/widget/picker/picker_view.dart';
 import 'molding_pack_area_report_logic.dart';
 
@@ -18,6 +20,17 @@ class MoldingPackAreaReportPage extends StatefulWidget {
 class _MoldingPackAreaReportPageState extends State<MoldingPackAreaReportPage> {
   final logic = Get.put(MoldingPackAreaReportPageLogic());
   final state = Get.find<MoldingPackAreaReportPageLogic>().state;
+
+  late DatePickerController dateControllerStart;
+  late DatePickerController dateControllerEnd;
+  var checkBoxController = CheckBoxPickerController(
+    PickerType.mesMoldingPackAreaReportType,
+    saveKey:
+        '${RouteConfig.moldingPackAreaReport.name}${PickerType.mesMoldingPackAreaReportType}',
+  );
+  var tecInstruction = TextEditingController();
+  var tecOrderNumber = TextEditingController();
+  var tecTypeBody = TextEditingController();
 
   var textColor = const TextStyle(color: Colors.blueAccent);
   var tableDataColumn = <DataColumn>[
@@ -109,31 +122,56 @@ class _MoldingPackAreaReportPageState extends State<MoldingPackAreaReportPage> {
     );
   }
 
+  @override
+  void initState() {
+    var today = DateTime.now();
+    dateControllerStart = DatePickerController(
+      PickerType.startDate,
+      saveKey:
+          '${RouteConfig.moldingPackAreaReport.name}${PickerType.startDate}',
+      firstDate: DateTime(today.year, today.month - 2, today.day),
+      lastDate: today,
+    );
+    dateControllerEnd = DatePickerController(
+      PickerType.endDate,
+      saveKey: '${RouteConfig.moldingPackAreaReport.name}${PickerType.endDate}',
+      firstDate: DateTime(today.year, today.month - 2, today.day),
+      lastDate: today,
+    );
 
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return pageBodyWithDrawer(
       queryWidgets: [
         EditText(
+          controller: tecInstruction,
           hint: 'page_molding_pack_area_report_query_instruction'.tr,
-          onChanged: (v) => state.etInstruction = v,
         ),
         const SizedBox(height: 10),
         EditText(
+          controller: tecOrderNumber,
           hint: 'page_molding_pack_area_report_query_order_number'.tr,
-          onChanged: (v) => state.etOrderNumber = v,
         ),
         const SizedBox(height: 10),
         EditText(
+          controller: tecTypeBody,
           hint: 'page_molding_pack_area_report_query_type_body'.tr,
-          onChanged: (v) => state.etTypeBody = v,
         ),
-        DatePicker(pickerController: logic.dateControllerStart),
-        DatePicker(pickerController: logic.dateControllerEnd),
-        CheckBoxPicker(checkBoxController: logic.checkBoxController)
+        DatePicker(pickerController: dateControllerStart),
+        DatePicker(pickerController: dateControllerEnd),
+        CheckBoxPicker(checkBoxController: checkBoxController)
       ],
-      query: () => logic.query(),
+      query: () => logic.query(
+        startDate: dateControllerStart.getDateFormatYMD(),
+        endDate: dateControllerEnd.getDateFormatYMD(),
+        packAreaIDs: checkBoxController.selectedIds,
+        typeBody: tecTypeBody.text,
+        instruction: tecInstruction.text,
+        orderNumber: tecOrderNumber.text,
+      ),
       body: ListView(
         padding: const EdgeInsets.only(left: 10, right: 10),
         children: [

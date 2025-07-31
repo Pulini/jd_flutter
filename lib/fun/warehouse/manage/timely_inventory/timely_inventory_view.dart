@@ -26,6 +26,9 @@ class _TimelyInventoryPageState extends State<TimelyInventoryPage> {
     saveKey:
         '${RouteConfig.timelyInventory.name}${PickerType.sapFactoryWarehouse}',
   );
+  var tecInstructionNumber = TextEditingController();
+  var tecBatch = TextEditingController();
+  var tecMaterialCode = TextEditingController();
 
   _item(TimelyInventoryInfo data) {
     return Container(
@@ -56,7 +59,9 @@ class _TimelyInventoryPageState extends State<TimelyInventoryPage> {
               )
             ],
           ),
-          const SizedBox(height: 10,),
+          const SizedBox(
+            height: 10,
+          ),
           for (var v in data.items!)
             InkWell(
               child: Container(
@@ -78,7 +83,7 @@ class _TimelyInventoryPageState extends State<TimelyInventoryPage> {
                     ),
                     expandedTextSpan(
                       hint: 'timely_inventory_common_quantity'.tr,
-                      text: (v.stockQty1 ?? '')+ (v.unit1 ?? ''),
+                      text: (v.stockQty1 ?? '') + (v.unit1 ?? ''),
                       textColor: Colors.grey,
                     ),
                     expandedTextSpan(
@@ -110,16 +115,21 @@ class _TimelyInventoryPageState extends State<TimelyInventoryPage> {
                   confirm: (s) => {
                     Get.back(),
                     logic.modifyStorageLocation(
-                        success: logic.getImmediateStockList(
-                            factoryNumber: factoryWarehouseController
-                                .getPickItem1()
-                                .pickerId(),
-                            stockId: factoryWarehouseController
-                                .getPickItem2()
-                                .pickerId()),
-                        data: data,
-                        item: v,
-                        newLocation: s)
+                      success: (s) => logic.getImmediateStockList(
+                        factoryNumber: factoryWarehouseController
+                            .getPickItem1()
+                            .pickerId(),
+                        stockId: factoryWarehouseController
+                            .getPickItem2()
+                            .pickerId(),
+                        instructionNumber: tecInstructionNumber.text,
+                        materialCode: tecMaterialCode.text,
+                        batch: tecBatch.text,
+                      ),
+                      data: data,
+                      item: v,
+                      newLocation: s,
+                    )
                   },
                 )
               },
@@ -135,24 +145,27 @@ class _TimelyInventoryPageState extends State<TimelyInventoryPage> {
       queryWidgets: [
         EditText(
           hint: 'timely_inventory_input_command'.tr,
-          onChanged: (v) => state.instructionNumber = v,
+          controller: tecInstructionNumber,
         ),
         const SizedBox(height: 10),
         EditText(
           hint: 'timely_inventory_input_batch'.tr,
-          onChanged: (v) => state.batch = v,
+          controller: tecBatch,
         ),
         const SizedBox(height: 10),
         EditText(
           hint: 'timely_inventory_input_material_code'.tr,
-          onChanged: (v) => state.materialCode = v,
+          controller: tecMaterialCode,
         ),
         LinkOptionsPicker(pickerController: factoryWarehouseController),
       ],
       query: () => logic.getImmediateStockList(
-          factoryNumber:
-              factoryWarehouseController.getPickItem1().pickerId(),
-          stockId: factoryWarehouseController.getPickItem2().pickerId()),
+        factoryNumber: factoryWarehouseController.getPickItem1().pickerId(),
+        stockId: factoryWarehouseController.getPickItem2().pickerId(),
+        instructionNumber: tecInstructionNumber.text,
+        materialCode: tecMaterialCode.text,
+        batch: tecBatch.text,
+      ),
       body: Obx(() => ListView.builder(
             padding: const EdgeInsets.all(8),
             itemCount: state.dataList.length,

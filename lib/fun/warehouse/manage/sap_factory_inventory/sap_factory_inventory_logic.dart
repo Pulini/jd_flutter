@@ -9,20 +9,20 @@ import 'sap_factory_inventory_state.dart';
 class SapScanCodeInventoryLogic extends GetxController {
   final SapScanCodeInventoryState state = SapScanCodeInventoryState();
 
-
   queryInventoryOrder({
     required bool isScan,
     required String factory,
     required String warehouse,
+    required String area,
   }) {
     state.getInventoryPalletList(
-      isScan:isScan,
+      isScan: isScan,
       factory: factory,
       warehouse: warehouse,
+      area: area,
       error: (msg) => errorDialog(content: msg),
     );
   }
-
 
   scanCode(String code) {
     for (var v in state.palletList) {
@@ -46,7 +46,7 @@ class SapScanCodeInventoryLogic extends GetxController {
       signatureNumber: workerInfo.empCode ?? '',
       success: (msg) => successDialog(
         content: msg,
-        back: () =>finish.call(),
+        back: () => finish.call(),
       ),
       error: (msg) => errorDialog(content: msg),
     );

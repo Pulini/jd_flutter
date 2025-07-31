@@ -8,7 +8,6 @@ class SuppliersScanStoreState {
 
   var barCodeList = <BarCodeInfo>[].obs; //条码数据
   var usedBarCodeList = <UsedBarCodeInfo>[].obs; //入库过的条码数据
-  var handCode = '';
   PalletDetailItem2Info? pallet;
   var palletNumber = ''.obs;  //托盘号
   var peopleName = ''.obs;  //员工名字

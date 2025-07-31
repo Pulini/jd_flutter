@@ -44,6 +44,7 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
       'material_dispatch_report_state_generated_not_report'.tr,
     ],
   );
+  var tecMaterial = TextEditingController();
   var tecTypeBody = TextEditingController();
 
   //日期选择器的控制器
@@ -774,6 +775,7 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
         SizedBox(
           width: 400,
           child: EditText(
+            controller: tecMaterial,
             hint: 'material_dispatch_select_tips'.tr,
             onChanged: (s) => logic.search(s),
           ),

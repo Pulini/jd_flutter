@@ -7,9 +7,9 @@ import 'view_process_specification_state.dart';
 class ViewProcessSpecificationLogic extends GetxController {
   final ViewProcessSpecificationState state = ViewProcessSpecificationState();
 
-  queryProcessSpecification() {
+  queryProcessSpecification(String typeBody) {
     getProcessManual(
-      typeBody: state.etTypeBody,
+      typeBody: typeBody,
       error: (msg) => errorDialog(content: msg),
       manualList: (list) => state.pdfList.value = list,
     );

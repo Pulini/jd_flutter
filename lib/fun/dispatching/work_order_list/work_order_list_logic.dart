@@ -1,38 +1,26 @@
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/dispatching/work_order_list/part_label_view.dart';
-import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
-import 'package:jd_flutter/widget/picker/picker_controller.dart';
 
 import 'work_order_list_state.dart';
 
 class WorkOrderListLogic extends GetxController {
   final WorkOrderListState state = WorkOrderListState();
 
-  //组别选择器的控制器
-  var pcGroup = OptionsPickerController(
-    PickerType.sapGroup,
-    saveKey: '${RouteConfig.workOrderList.name}${PickerType.sapGroup}',
-  );
-
-  //日期选择器的控制器
-  var pcStartDate = DatePickerController(
-    PickerType.startDate,
-    saveKey: '${RouteConfig.workOrderList.name}${PickerType.startDate}',
-  );
-
-  //日期选择器的控制器
-  var pcEndDate = DatePickerController(
-    PickerType.endDate,
-    saveKey: '${RouteConfig.workOrderList.name}${PickerType.endDate}',
-  );
-
-  query() {
+  query({
+    required String startDate,
+    required String endDate,
+    required String group,
+    required String workBarCode,
+    required String planOrderNumber,
+  }) {
     state.query(
-      pcStartDate: pcStartDate.getDateFormatYMD(),
-      pcEndDate: pcEndDate.getDateFormatYMD(),
-      pcGroup: pcGroup.selectedId.value,
+      pcStartDate: startDate,
+      pcEndDate: endDate,
+      pcGroup: group,
+      workBarCode: workBarCode,
+      planOrderNumber: planOrderNumber,
       error: (msg) => errorDialog(content: msg),
     );
   }

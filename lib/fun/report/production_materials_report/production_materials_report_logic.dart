@@ -14,10 +14,14 @@ class ProductionMaterialsReportLogic extends GetxController {
         '${RouteConfig.productionMaterialsReport.name}${PickerType.sapProcessFlow}',
   );
 
-  query() {
-    if (state.etInstruction.isEmpty &&
-        state.etOrderNumber.isEmpty &&
-        state.etSizeOrderNumber.isEmpty) {
+  query({
+    required String instruction,
+    required String orderNumber,
+    required String sizeOrderNumber,
+  }) {
+    if (instruction.isEmpty &&
+       orderNumber.isEmpty &&
+        sizeOrderNumber.isEmpty) {
       showSnackBar(
         message: 'production_materials_report_query_error'.tr,
         isWarning: true,
@@ -26,9 +30,9 @@ class ProductionMaterialsReportLogic extends GetxController {
     }
     state.getSapMoPickList(
       showType: '0',
-      instruction: state.etInstruction,
-      order: state.etOrderNumber,
-      size: state.etSizeOrderNumber,
+      instruction: instruction,
+      order: orderNumber,
+      size: sizeOrderNumber,
       processId: pickerControllerSapProcessFlow.selectedId.value,
       error: (msg) => errorDialog(content: msg),
     );

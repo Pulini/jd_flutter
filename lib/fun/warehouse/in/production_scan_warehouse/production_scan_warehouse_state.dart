@@ -10,7 +10,6 @@ class ProductionScanWarehouseState {
   var barCodeList = <BarCodeInfo>[].obs; //条码数据
   var usedBarCodeList = <UsedBarCodeInfo>[].obs; //入库过的条码数据
   var red = false.obs;  //是否红冲
-  var handCode = '';  //手动输入
   var palletNumber = ''.obs;  //托盘号
   var usedList = <String>[];
   PalletDetailItem2Info? pallet; //托盘信息

@@ -11,10 +11,14 @@ class IncomingInspectionLogic extends GetxController {
 
   scanOrder({
     required String code,
+    required String deliveryNo ,
+    required String materialCode ,
     required Function() success,
   }) {
     state.queryIncomingInspectionList(
       barcode: code,
+      deliveryNo:deliveryNo,
+      materialCode:materialCode,
       success: success,
       error: (msg) => errorDialog(content: msg),
     );
@@ -23,6 +27,8 @@ class IncomingInspectionLogic extends GetxController {
   query({
     required String area,
     required String factory,
+    required String deliveryNo ,
+    required String materialCode ,
     required Function() success,
     required String supplier,
   }) {
@@ -30,6 +36,8 @@ class IncomingInspectionLogic extends GetxController {
       area: area,
       factory: factory,
       supplier: supplier,
+      deliveryNo:deliveryNo,
+      materialCode:materialCode,
       success: success,
       error: (msg) => errorDialog(content: msg),
     );
@@ -121,11 +129,13 @@ class IncomingInspectionLogic extends GetxController {
   queryInspectionOrders({
     required String startDate,
     required String endDate,
+    required String inspectionSuppler,
     Function()? success,
   }) {
     state.getInspectionOrders(
       startDate: startDate,
       endDate: endDate,
+      inspectionSuppler:inspectionSuppler,
       success: success,
       error: (msg) => errorDialog(content: msg),
     );

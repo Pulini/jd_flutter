@@ -41,6 +41,8 @@ class _IncomingInspectionPageState extends State<IncomingInspectionPage> {
     PickerType.sapSupplier,
     saveKey: '${RouteConfig.incomingInspection.name}${PickerType.sapSupplier}',
   );
+  var tecDeliveryNo=TextEditingController();
+  var tecMaterialCode=TextEditingController();
 
   Widget _deliveryItem(List<List<InspectionDeliveryInfo>> group) {
     var orderTotalNumPage = group
@@ -279,12 +281,12 @@ class _IncomingInspectionPageState extends State<IncomingInspectionPage> {
             ),
             OptionsPicker(pickerController: supplierController),
             EditText(
+              controller: tecDeliveryNo,
               hint: 'incoming_inspection_delivery_no'.tr,
-              onChanged: (s) => state.deliveryNo = s,
             ),
             EditText(
+              controller: tecMaterialCode,
               hint: 'incoming_inspection_material_code'.tr,
-              onChanged: (s) => state.materialCode = s,
             ),
             Expanded(child: Container()),
             Row(
@@ -295,6 +297,8 @@ class _IncomingInspectionPageState extends State<IncomingInspectionPage> {
                     text: 'incoming_inspection_scan_order'.tr,
                     click: () => scannerDialog(
                       detect: (code) => logic.scanOrder(
+                        deliveryNo:tecDeliveryNo.text,
+                        materialCode:tecMaterialCode.text,
                         code: code,
                         success: () => Navigator.pop(context),
                       ),
@@ -309,6 +313,8 @@ class _IncomingInspectionPageState extends State<IncomingInspectionPage> {
                       area: companyController.selectedId.value,
                       factory: factoryController.selectedId.value,
                       supplier: supplierController.selectedId.value,
+                      deliveryNo:tecDeliveryNo.text,
+                      materialCode:tecMaterialCode.text,
                       success: () => Navigator.pop(context),
                     ),
                   ),

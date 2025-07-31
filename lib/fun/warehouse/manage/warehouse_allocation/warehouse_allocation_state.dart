@@ -5,7 +5,6 @@ import 'package:jd_flutter/widget/custom_widget.dart';
 
 class WarehouseAllocationState {
 
-  var code = "";
   var dataList  =  <ScanCode>[].obs;
   var reportDataList = <ReportInfo>[].obs;
   var outStockId ="";

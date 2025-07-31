@@ -27,6 +27,7 @@ class _SapInkColorMatchingDetailPageState
       Get.find<SapInkColorMatchingLogic>().state;
   int index = Get.arguments['index'];
   var canAdd = false;
+  var tecRemarks = TextEditingController();
 
   _item(int i) {
     var data = state.inkColorList[i];
@@ -371,7 +372,10 @@ class _SapInkColorMatchingDetailPageState
   void initState() {
     canAdd = index < 0 || (index >= 0 && state.orderList[index].trialQty == 0);
     if (index >= 0) {
-      logic.initModifyBodyData(index);
+      logic.initModifyBodyData(
+        index: index,
+        refreshRemarks: (s) => tecRemarks.text = s,
+      );
     } else {
       state.mixDeviceSocket = SocketClientUtil(
         ip: state.mixDeviceServerIp,
@@ -400,9 +404,8 @@ class _SapInkColorMatchingDetailPageState
               SizedBox(
                 width: MediaQuery.of(context).size.width * 0.35,
                 child: EditText(
-                  hint: '可填写备注信息',
-                  initStr: state.remarks.value,
-                  onChanged: (v) => state.remarks.value = v,
+                  hint: 'sap_ink_color_matching_detail_remakes'.tr,
+                  controller: tecRemarks,
                 ),
               ),
               CombinationButton(
@@ -455,9 +458,10 @@ class _SapInkColorMatchingDetailPageState
                 text: 'sap_ink_color_matching_detail_color_toning_finish'.tr,
                 click: () {
                   if (index >= 0) {
-                    logic.submitModifyOrder(index);
+                    logic.submitModifyOrder(
+                        index: index, remarks: tecRemarks.text);
                   } else {
-                    logic.submitCreateOrder();
+                    logic.submitCreateOrder(remarks: tecRemarks.text);
                   }
                 },
                 combination: Combination.right,

@@ -7,10 +7,8 @@ import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 
 class SapInkColorMatchingState {
-  var typeBody = ''.obs;
   var idTested = false.obs;
   var orderList = <SapInkColorMatchOrderInfo>[].obs;
-  var remarks=''.obs;
 
   var mixDeviceName = '';
   var mixDeviceServerIp = '';
@@ -44,7 +42,6 @@ class SapInkColorMatchingState {
     typeBodyMaterialList = [];
     typeBodyServerIp = '';
     typeBodyScalePortList = [];
-    remarks.value='';
 
     mixDeviceName='';
     mixDeviceServerIp='';
@@ -74,6 +71,7 @@ class SapInkColorMatchingState {
   queryOrder({
     required String startDate,
     required String endDate,
+    required String typeBody,
     required Function(String) error,
   }) {
     sapPost(
@@ -81,7 +79,7 @@ class SapInkColorMatchingState {
       method: webApiSapGetInkColorMatchOrder,
       body: {
         'WERKS': userInfo?.sapFactory ?? '',
-        'ZZXTNO': typeBody.value,
+        'ZZXTNO': typeBody,
         'BUDAT_BEGIN': startDate,
         'BUDAT_END': endDate,
         'ZZDUZT': idTested.value ? 'X' : '',
@@ -153,6 +151,7 @@ class SapInkColorMatchingState {
     required String inkMaster,
     required double mixActualWeight,
     required double mixTheoreticalWeight,
+    required String remarks,
     required Function(String) success,
     required Function(String) error,
   }) {
@@ -164,7 +163,7 @@ class SapInkColorMatchingState {
         'WERKS': userInfo?.sapFactory ?? '',
         'ZCOLORNAM': inkMaster,
         'ZZXTNO': newTypeBody,
-        'ZZPART1': remarks.value,
+        'ZZPART1': remarks,
         'ZMIXNTGEW': mixActualWeight,
         'ZMIXNTGEW_IDEAL': mixTheoreticalWeight,
         'ITEM': [

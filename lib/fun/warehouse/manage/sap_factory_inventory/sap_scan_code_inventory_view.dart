@@ -30,6 +30,7 @@ class _SapScanCodeInventoryPageState extends State<SapScanCodeInventoryPage> {
     saveKey:
         '${RouteConfig.sapScanCodeInventory.name}${PickerType.sapFactoryWarehouse}',
   );
+  var tecArea = TextEditingController();
 
   _item(int index) {
     var data = state.palletList[index];
@@ -120,6 +121,7 @@ class _SapScanCodeInventoryPageState extends State<SapScanCodeInventoryPage> {
       isScan: true,
       factory: factoryWarehouseController.getPickItem1().pickerId(),
       warehouse: factoryWarehouseController.getPickItem2().pickerId(),
+      area: tecArea.text,
     );
   }
 
@@ -135,7 +137,7 @@ class _SapScanCodeInventoryPageState extends State<SapScanCodeInventoryPage> {
       bottomSheet: [
         EditText(
           hint: 'sap_inventory_area'.tr,
-          onChanged: (v) => state.area.value = v,
+          controller: tecArea,
         ),
         LinkOptionsPicker(pickerController: factoryWarehouseController),
         Row(

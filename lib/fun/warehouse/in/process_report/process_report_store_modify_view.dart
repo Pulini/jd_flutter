@@ -19,9 +19,9 @@ class ProcessReportModifyPage extends StatefulWidget {
 
 class _ProcessReportModifyPageState extends State<ProcessReportModifyPage> {
   final ProcessReportStoreLogic logic = Get.find<ProcessReportStoreLogic>();
-  final ProcessReportStoreState state = Get
-      .find<ProcessReportStoreLogic>()
-      .state;
+  final ProcessReportStoreState state =
+      Get.find<ProcessReportStoreLogic>().state;
+  var tecModifyCode = TextEditingController();
 
   _itemTitle() {
     return Row(
@@ -58,13 +58,10 @@ class _ProcessReportModifyPageState extends State<ProcessReportModifyPage> {
               textColor: Colors.white),
         ],
       ),
-      onTap: () =>
-      {
+      onTap: () => {
         logic.showInputDialog(
-            title: 'process_report_store_modify_input_real_number'.tr, confirm: (v) =>
-        {
-          logic.setModifyList(v, data)
-        })
+            title: 'process_report_store_modify_input_real_number'.tr,
+            confirm: (v) => {logic.setModifyList(v, data)})
       },
     );
   }
@@ -90,8 +87,7 @@ class _ProcessReportModifyPageState extends State<ProcessReportModifyPage> {
       title: 'process_report_store_modify_modify'.tr,
       actions: [
         TextButton(
-          onPressed: () =>
-          {
+          onPressed: () => {
             logic.clearModifyList(),
           },
           child: Text('process_report_store_modify_clear'.tr),
@@ -100,19 +96,18 @@ class _ProcessReportModifyPageState extends State<ProcessReportModifyPage> {
       body: Column(
         children: [
           EditText(
+            controller: tecModifyCode,
             hint: 'process_report_store_manual_input'.tr,
-            onChanged: (v) => state.modifyCode = v,
           ),
           _itemTitle(),
           Expanded(
             child: Obx(
-                  () =>
-                  ListView.builder(
-                    padding: const EdgeInsets.all(8),
-                    itemCount: state.modifyList.length,
-                    itemBuilder: (BuildContext context, int index) =>
-                        _itemSubTitle(state.modifyList[index]),
-                  ),
+              () => ListView.builder(
+                padding: const EdgeInsets.all(8),
+                itemCount: state.modifyList.length,
+                itemBuilder: (BuildContext context, int index) =>
+                    _itemSubTitle(state.modifyList[index]),
+              ),
             ),
           ),
           Row(
@@ -122,7 +117,7 @@ class _ProcessReportModifyPageState extends State<ProcessReportModifyPage> {
                 child: CombinationButton(
                   text: 'process_report_store_manually_add'.tr,
                   click: () {
-                    logic.modifyAdd(state.code);
+                    logic.modifyAdd(tecModifyCode.text);
                   },
                   combination: Combination.left,
                 ),
@@ -131,18 +126,17 @@ class _ProcessReportModifyPageState extends State<ProcessReportModifyPage> {
                 flex: 1,
                 child: CombinationButton(
                   text: 'process_report_store_submit_barcode'.tr,
-                  click: () =>
-                  {
+                  click: () => {
                     askDialog(
                       content: 'process_report_store_modify_submit'.tr,
                       confirm: () {
-                        logic.updateBarCodeInfo(success: (s) =>
-                        {
-                          successDialog(
-                            content: s,
-                            back: () => Get.back(),
-                          )
-                        });
+                        logic.updateBarCodeInfo(
+                            success: (s) => {
+                                  successDialog(
+                                    content: s,
+                                    back: () => Get.back(),
+                                  )
+                                });
                       },
                     ),
                   },

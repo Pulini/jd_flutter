@@ -21,7 +21,9 @@ class _ProductionMaterialsReportPageState
     extends State<ProductionMaterialsReportPage> {
   final logic = Get.put(ProductionMaterialsReportLogic());
   final state = Get.find<ProductionMaterialsReportLogic>().state;
-
+  var tecInstruction = TextEditingController();
+  var tecOrderNumber = TextEditingController();
+  var tecSizeOrderNumber = TextEditingController();
   var tableColumns = [
     DataColumn(label: Text('production_materials_report_table_hint1'.tr)),
     DataColumn(label: Text('production_materials_report_table_hint2'.tr)),
@@ -282,14 +284,17 @@ class _ProductionMaterialsReportPageState
                     ],
                   )),
               EditText(
-                  hint: 'production_materials_report_query_hint3'.tr,
-                  onChanged: (v) => state.etInstruction = v),
+                controller: tecInstruction,
+                hint: 'production_materials_report_query_hint3'.tr,
+              ),
               EditText(
-                  hint: 'production_materials_report_query_hint4'.tr,
-                  onChanged: (v) => state.etOrderNumber = v),
+                controller: tecOrderNumber,
+                hint: 'production_materials_report_query_hint4'.tr,
+              ),
               EditText(
-                  hint: 'production_materials_report_query_hint5'.tr,
-                  onChanged: (v) => state.etSizeOrderNumber = v),
+                controller: tecSizeOrderNumber,
+                hint: 'production_materials_report_query_hint5'.tr,
+              ),
               OptionsPicker(
                   pickerController: logic.pickerControllerSapProcessFlow),
               SwitchButton(
@@ -299,7 +304,11 @@ class _ProductionMaterialsReportPageState
                     state.isPickingMaterialCompleted.value = isSelect,
               ),
             ],
-            query: () => logic.query(),
+            query: () => logic.query(
+              instruction: tecInstruction.text,
+              orderNumber: tecOrderNumber.text,
+              sizeOrderNumber: tecSizeOrderNumber.text,
+            ),
             body: getPageBody(),
           )
         : pageBody(title: '用料清单', body: getPageBody());
