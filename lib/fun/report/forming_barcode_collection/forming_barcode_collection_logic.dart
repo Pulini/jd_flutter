@@ -1,5 +1,4 @@
 import 'package:collection/collection.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/forming_barcode_by_mono_info.dart';
 import 'package:jd_flutter/bean/http/response/forming_collection_info.dart';

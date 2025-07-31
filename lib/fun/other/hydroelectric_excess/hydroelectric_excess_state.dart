@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/device_detail_info.dart';
 import 'package:jd_flutter/bean/http/response/device_list_info.dart';
