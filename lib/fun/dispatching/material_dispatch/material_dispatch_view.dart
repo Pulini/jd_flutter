@@ -755,7 +755,7 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
 
   showPickPallet() {
     pickPallet().then((v) {
-      if (v) Get.back();
+      if (v!=null&&v) Get.back();
     });
   }
 
