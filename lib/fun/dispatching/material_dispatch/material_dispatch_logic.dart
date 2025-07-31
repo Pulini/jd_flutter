@@ -1,21 +1,19 @@
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/material_dispatch_info.dart';
 import 'package:jd_flutter/bean/http/response/material_dispatch_label_detail.dart';
-import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'material_dispatch_state.dart';
 
 class MaterialDispatchLogic extends GetxController {
   final MaterialDispatchState state = MaterialDispatchState();
 
-  @override
-  void onReady() {
-    userInfo?.empID = 175122;
-    userInfo?.factory = '1000';
-    userInfo?.defaultStockNumber = '1104';
-    super.onReady();
-  }
-
+  // @override
+  // void onReady() {
+  //   userInfo?.empID = 175122;
+  //   userInfo?.factory = '1000';
+  //   userInfo?.defaultStockNumber = '1104';
+  //   super.onReady();
+  // }
 
 
   refreshDataList({
