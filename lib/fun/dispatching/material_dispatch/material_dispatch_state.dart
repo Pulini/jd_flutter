@@ -6,63 +6,41 @@ import 'package:jd_flutter/bean/http/response/material_dispatch_report_success_i
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 
+const String spPalletDate = 'MaterialDispatchPickPalletDate';
+const String spMachine = 'MaterialDispatchPickMachine';
+const String spWarehouseLocation = 'MaterialDispatchPickWarehouseLocation';
+const String spPallet = 'MaterialDispatchPickPallet';
+
+int getMaterialDispatchDate() =>
+    spGet(spPalletDate) ?? DateTime.now().millisecondsSinceEpoch;
+
+saveMaterialDispatchDate(int date) => spSave(spPalletDate, date);
+
+String getMaterialDispatchMachineId() => spGet(spMachine) ?? '';
+
+saveMaterialDispatchMachineId(String id) => spSave(spMachine, id);
+
+String getMaterialDispatchLocationId() => spGet(spWarehouseLocation) ?? '';
+
+saveMaterialDispatchLocationId(String id) => spSave(spWarehouseLocation, id);
+
+String getMaterialDispatchPalletNumber() => spGet(spPallet) ?? '';
+
+saveMaterialDispatchPalletNumber(String number) => spSave(spPallet, number);
 
 class MaterialDispatchState {
-  final String spPalletDate = 'MaterialDispatchPickPalletDate';
-  final String spMachine = 'MaterialDispatchPickMachine';
-  final String spWarehouseLocation = 'MaterialDispatchPickWarehouseLocation';
-  final String spPallet = 'MaterialDispatchPickPallet';
-
-  var typeBody = '';
   var lastProcess = false.obs;
   var unStockIn = false.obs;
   var allInstruction = false.obs;
   var orderList = <MaterialDispatchInfo>[];
   var showOrderList = <MaterialDispatchInfo>[].obs;
 
-  int date = 0;
-  String machineId = '';
-  String locationId = '';
-  String palletNumber = '';
-
-  MaterialDispatchState() {
-    getSavePickData();
-  }
-
-  getSavePickData() {
-    date = spGet(spPalletDate) ?? DateTime.now().millisecondsSinceEpoch;
-    machineId = spGet(spMachine) ?? '';
-    locationId = spGet(spWarehouseLocation) ?? '';
-    palletNumber = spGet(spPallet) ?? '';
-  }
-
-  savePickData({
-    required int date,
-    required String machineId,
-    required String locationId,
-    required String palletNumber,
-  }) {
-    this.date = date;
-    this.machineId = machineId;
-    this.locationId = locationId;
-    this.palletNumber = palletNumber;
-    spSave(spPalletDate, date);
-    spSave(spMachine, machineId);
-    spSave(spWarehouseLocation, locationId);
-    spSave(spPallet, palletNumber);
-  }
-
-  isNeedSetInitData() {
-    return machineId.isEmpty ||
-        locationId.isEmpty ||
-        date == 0 ||
-        palletNumber.isEmpty;
-  }
 
   getScWorkCardProcess({
     required String startDate,
     required String endDate,
     required int status,
+    required String typeBody,
     required Function(String msg) error,
   }) {
     httpGet(
@@ -98,8 +76,8 @@ class MaterialDispatchState {
       method: webApiCreateLastProcessReport,
       loading: 'material_dispatch_reporting'.tr,
       params: {
-        'Date': getDateYMD(time: DateTime.fromMillisecondsSinceEpoch(date)),
-        'DrillingCrewID': machineId,
+        'Date': getDateYMD(time: DateTime.fromMillisecondsSinceEpoch(getMaterialDispatchDate())),
+        'DrillingCrewID': getMaterialDispatchMachineId(),
         'MovementType': '101',
         'DeptID': userInfo?.reportDeptmentID,
         'UserID': userInfo?.userID,
@@ -128,7 +106,7 @@ class MaterialDispatchState {
           'MovementType': '101',
           'Date': getDateYMD(),
           'RouteEntryFIDs': sub[j].routeEntryFIDs ?? '',
-          'Location': locationId,
+          'Location': getMaterialDispatchLocationId(),
           'UserID': (userInfo?.userID ?? 0).toString(),
         });
       }
@@ -163,7 +141,7 @@ class MaterialDispatchState {
       loading: 'material_dispatch_reporting'.tr,
       method: webApiCreateProcessOutPutStripDrawing,
       params: {
-        'DrillingCrewID': machineId,
+        'DrillingCrewID': getMaterialDispatchMachineId(),
         'UserID': userInfo?.userID,
         'QrCodeList': [
           for (var i = 0; i < data.children!.length; ++i)
@@ -175,8 +153,8 @@ class MaterialDispatchState {
               'SapDecideArea': data.sapDecideArea,
               'FactoryCode': userInfo?.sapFactory,
               'IssueWareHouse': userInfo?.defaultStockNumber,
-              'Location': locationId,
-              'PalletNumber': palletNumber,
+              'Location': getMaterialDispatchLocationId(),
+              'PalletNumber': getMaterialDispatchPalletNumber(),
               'StorageLocation': '',
               'RouteEntryFIDs': data.routeEntryFIDs,
               'ProductName': data.productName,
@@ -200,7 +178,7 @@ class MaterialDispatchState {
     var list = <Map>[];
     groupBy(
       data.children!,
-          (v) => '${v.routeEntryFID}${v.routeEntryFIDs}',
+      (v) => '${v.routeEntryFID}${v.routeEntryFIDs}',
     ).forEach((k, v) {
       list.add({
         'ScProcessWorkCardInterID': v[0].interID,
@@ -238,7 +216,7 @@ class MaterialDispatchState {
         'sapDecideArea': sapDecideArea,
         'MovementType': '101',
         'Date': getDateYMD(),
-        'Location': locationId,
+        'Location': getMaterialDispatchLocationId(),
         'UserID': userInfo?.userID,
       },
     ).then((response) {
@@ -253,22 +231,22 @@ class MaterialDispatchState {
   subItemReport({
     required MaterialDispatchInfo data,
     required Children subData,
-    required String  reportQty,
+    required String reportQty,
     required String longQty,
     required String wideQty,
     required String heightQty,
     required String gwQty,
     required String nwQty,
-    required int  titlePosition,
-    required int  clickPosition,
-    required Function(String guid,String pick) success,
+    required int titlePosition,
+    required int clickPosition,
+    required Function(String guid, String pick) success,
     required Function(String msg) error,
   }) {
     httpPost(
       loading: 'material_dispatch_reporting'.tr,
       method: webApiCreateProcessOutPutStripDrawing,
       body: {
-        'DrillingCrewID': machineId,
+        'DrillingCrewID': getMaterialDispatchMachineId(),
         'UserID': userInfo?.userID,
         'QrCodeList': [
           {
@@ -284,8 +262,8 @@ class MaterialDispatchState {
             'SapDecideArea': data.sapDecideArea,
             'FactoryCode': userInfo?.sapFactory,
             'IssueWareHouse': userInfo?.defaultStockNumber,
-            'Location': locationId,
-            'PalletNumber': palletNumber,
+            'Location': getMaterialDispatchLocationId(),
+            'PalletNumber': getMaterialDispatchPalletNumber(),
             'StorageLocation': '',
             'RouteEntryFIDs': data.routeEntryFIDs,
             'ProductName': data.productName,
@@ -294,25 +272,37 @@ class MaterialDispatchState {
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        if(clickPosition!=-1){
-          showOrderList[titlePosition].children![clickPosition].codeQty=(orderList[titlePosition].children![clickPosition].codeQty.toDoubleTry().add(reportQty.toDoubleTry())).toShowString();
-          showOrderList[titlePosition].children![clickPosition].noCodeQty=(orderList[titlePosition].children![clickPosition].noCodeQty.toDoubleTry().sub(reportQty.toDoubleTry()).toShowString());
+        if (clickPosition != -1) {
+          showOrderList[titlePosition].children![clickPosition].codeQty =
+              (orderList[titlePosition]
+                      .children![clickPosition]
+                      .codeQty
+                      .toDoubleTry()
+                      .add(reportQty.toDoubleTry()))
+                  .toShowString();
+          showOrderList[titlePosition].children![clickPosition].noCodeQty =
+              (orderList[titlePosition]
+                  .children![clickPosition]
+                  .noCodeQty
+                  .toDoubleTry()
+                  .sub(reportQty.toDoubleTry())
+                  .toShowString());
           showOrderList.refresh();
         }
         var guid = '';
         var pick = '';
-        if (MaterialDispatchReportSuccessInfo.fromJson(response.data).guidList!.isNotEmpty && MaterialDispatchReportSuccessInfo
-            .fromJson(response.data)
-            .pickUpCodeList!
-            .isNotEmpty) {
-          guid = MaterialDispatchReportSuccessInfo
-              .fromJson(response.data)
+        if (MaterialDispatchReportSuccessInfo.fromJson(response.data)
+                .guidList!
+                .isNotEmpty &&
+            MaterialDispatchReportSuccessInfo.fromJson(response.data)
+                .pickUpCodeList!
+                .isNotEmpty) {
+          guid = MaterialDispatchReportSuccessInfo.fromJson(response.data)
               .guidList![0];
-          pick = MaterialDispatchReportSuccessInfo
-              .fromJson(response.data)
+          pick = MaterialDispatchReportSuccessInfo.fromJson(response.data)
               .pickUpCodeList![0];
         }
-        success.call(guid,pick);
+        success.call(guid, pick);
       } else {
         error.call(response.message ?? '');
       }
@@ -351,9 +341,7 @@ class MaterialDispatchState {
     httpGet(
       loading: 'material_dispatch_get_label_detail'.tr,
       method: webApiGetMtoNoQty,
-      params: {
-        'GUID':guid
-      },
+      params: {'GUID': guid},
     ).then((response) {
       if (response.resultCode == resultSuccess) {
         var list = <MaterialDispatchLabelDetail>[
@@ -362,7 +350,7 @@ class MaterialDispatchState {
         ];
         success.call(list);
       } else {
-        var list =<MaterialDispatchLabelDetail>[];
+        var list = <MaterialDispatchLabelDetail>[];
         success.call(list);
       }
     });

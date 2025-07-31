@@ -1037,33 +1037,46 @@ Future<Uint8List> labelImageResize(Uint8List image) async {
   );
   return Uint8List.fromList(img.encodePng(reImage));
 }
-List<Uint8List> testLabel()=>[
-  _tscClearBuffer(),
-  _tscSetup(110, 50, sensorDistance: 0),
-  _tscQrCode(10, 10, '1234567890'),
-  _tscCutter(),
-  _tscPrint(),
-];
+
+List<Uint8List> testLabel() => [
+      _tscClearBuffer(),
+      _tscSetup(110, 50, sensorDistance: 0),
+      _tscQrCode(10, 10, '1234567890'),
+      _tscCutter(),
+      _tscPrint(),
+    ];
 
 Future<List<Uint8List>> imageResizeToLabel(Map<String, dynamic> image) async =>
     await compute(_imageResizeToLabel, image);
 
 Future<List<Uint8List>> _imageResizeToLabel(Map<String, dynamic> image) async {
-  double pixelRatio=image['pixelRatio']??1;
-  bool isDynamic=image['isDynamic']??false;
-  int width = ((image['width'] as int)/5.5/pixelRatio).toInt();
-  int height = ((image['height'] as int) /5.5/pixelRatio).toInt();
+  double pixelRatio = image['pixelRatio'] ?? 1;
+  bool isDynamic = image['isDynamic'] ?? false;
+  int width = ((image['width'] as int) / 5.5 / pixelRatio).toInt();
+  int height = ((image['height'] as int) / 5.5 / pixelRatio).toInt();
   debugPrint(
       'width: ${image['width']} - $width height: ${image['height']} - $height');
+  // var wImage = img.decodeImage(image['image'])!;
+  // for (int x = 0; x < wImage.width; x++) {
+  //   for (int y = 0; y < wImage.height; y++) {
+  //     var pixel = wImage.getPixel(x, y);
+  //     // 判断是否为白色（可以允许一定的容差）
+  //     if (pixel.r > 250 && pixel.g > 250 && pixel.b > 250) {
+  //       wImage.setPixelRgba(x, y, 0, 0, 0, 0);
+  //     }
+  //   }
+  // }
   var reImage = img.copyResize(
     img.decodeImage(image['image'])!,
     width: width * 8,
     height: height * 8,
+    backgroundColor: img.ColorRgb8(0, 0, 0),
   );
   var imageUint8List = Uint8List.fromList(img.encodePng(reImage));
+  debugPrint('imageUint8List: ${imageUint8List.lengthInBytes / (1024 * 1024)}');
   return [
     _tscClearBuffer(),
-    _tscSetup(width, height, density: 15,sensorDistance: isDynamic?0:2),
+    _tscSetup(width, height, density: 15, sensorDistance: isDynamic ? 0 : 2),
     await _tscBitmap(1, 1, imageUint8List),
     _tscCutter(),
     _tscPrint(),
@@ -1079,7 +1092,7 @@ Future<List<List<Uint8List>>> _imageResizeToLabels(
 ) async {
   List<List<Uint8List>> labelList = [];
   for (var image in images) {
-    bool isDynamic=image['isDynamic']??false;
+    bool isDynamic = image['isDynamic'] ?? false;
     int width = ((image['width'] as int) / 5.5).toInt();
     int height = ((image['height'] as int) / 5.5).toInt();
     var reImage = img.copyResize(
@@ -1090,7 +1103,7 @@ Future<List<List<Uint8List>>> _imageResizeToLabels(
     var imageUint8List = Uint8List.fromList(img.encodePng(reImage));
     labelList.add([
       _tscClearBuffer(),
-      _tscSetup(width, height, density: 15,sensorDistance: isDynamic?0:2),
+      _tscSetup(width, height, density: 15, sensorDistance: isDynamic ? 0 : 2),
       await _tscBitmap(1, 1, imageUint8List),
       _tscCutter(),
       _tscPrint(),
