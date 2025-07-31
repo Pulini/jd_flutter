@@ -74,20 +74,22 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
         }
 
         Get.to(() => PreviewLabel(
-                labelWidget: materialWorkshopDynamicLabel(
-              qrCode: guid,
-              productName: data.productName ?? '',
-              materialName: data.materialName ?? '',
-              partName: data.partName ?? '',
-              materialNumber: data.materialNumber ?? '',
-              processName: data.processName ?? '',
-              subList: subList,
-              sapDecideArea: data.sapDecideArea ?? '',
-              color: color,
-              drillingCrewName: data.drillingCrewName ?? '',
-              qty: qty,
-              unitName: data.unitName ?? '',
-            ), isDynamic: true));
+              labelWidget: materialWorkshopDynamicLabel(
+                qrCode: guid,
+                productName: data.productName ?? '',
+                materialName: data.materialName ?? '',
+                partName: data.partName ?? '',
+                materialNumber: data.materialNumber ?? '',
+                processName: data.processName ?? '',
+                subList: subList,
+                sapDecideArea: data.sapDecideArea ?? '',
+                color: color,
+                drillingCrewName: data.drillingCrewName ?? '',
+                qty: qty,
+                unitName: data.unitName ?? '',
+              ),
+              isDynamic: true,
+            ));
       } else {
         var ins = '';
         var toPrint = '';
@@ -107,7 +109,7 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
         }
 
         Get.to(() => PreviewLabel(
-            labelWidget: materialWorkshopFixedLabel(
+              labelWidget: materialWorkshopFixedLabel(
                 qrCode: guid,
                 productName: data.productName ?? '',
                 materialName: data.materialName ?? '',
@@ -121,73 +123,76 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
                 drillingCrewName: data.drillingCrewName ?? '',
                 qty: qty,
                 unitName: data.unitName ?? '',
-                pick: pick), isDynamic: true));
+                pick: pick,
+              ),
+            ));
       }
     } else if (data.exitLabelType == '102') {
-
       var order = '';
-      if(data.billStyle=='0'){
+      if (data.billStyle == '0') {
         order = '${data.factoryID} 正单';
-      }else{
+      } else {
         order = '${data.factoryID} 补单';
       }
 
-      var labelList = <Widget>[];
-      labelList.add(dynamicSizeMaterialLabel1095n1096(
-        labelID: guid,
-        productName: data.description?? '',
-        orderType: order,
-        typeBody: data.productName?? '',
-        trackNo: '',
-        instructionNo: billNo,
-        generalMaterialNumber: data.materialNumber?? '',
-        materialDescription: data.materialName?? '',
-        materialList: {},
-        inBoxQty: qty,
-        customsDeclarationUnit: data.unitName?? '',
-        customsDeclarationType: '',
-        pieceID: guid,
-        pieceNo: '1-1',
-        grossWeight: gw,
-        netWeight: ew,
-        specifications: '${specificationSplit}CM(LxWxH)',
-        volume: specifications,
-        supplier: data.sapSupplierNumber??'',
-        manufactureDate: getDateYMD(),
-        consignee: data.sourceFactoryName?? '',
-        hasNotes: false,
-        notes: '',
-      ));
-      Get.to(() => PreviewLabel(labelWidget: labelList[0]));
+      Get.to(() => PreviewLabel(
+            labelWidget: dynamicSizeMaterialLabel1095n1096(
+              labelID: guid,
+              productName: data.description ?? '',
+              orderType: order,
+              typeBody: data.productName ?? '',
+              trackNo: '',
+              instructionNo: billNo,
+              generalMaterialNumber: data.materialNumber ?? '',
+              materialDescription: data.materialName ?? '',
+              materialList: {},
+              inBoxQty: qty,
+              customsDeclarationUnit: data.unitName ?? '',
+              customsDeclarationType: '',
+              pieceID: guid,
+              pieceNo: '1-1',
+              grossWeight: gw,
+              netWeight: ew,
+              specifications: '${specificationSplit}CM(LxWxH)',
+              volume: specifications,
+              supplier: data.sapSupplierNumber ?? '',
+              manufactureDate: getDateYMD(),
+              consignee: data.sourceFactoryName ?? '',
+              hasNotes: false,
+              notes: '',
+            ),
+            isDynamic: true,
+          ));
     } else if (data.exitLabelType == '103') {
-      var labelList = <Widget>[];
-      labelList.add(dynamicMaterialLabel1098(
-        labelID: guid,
-        myanmarApprovalDocument: data.description ?? '',
-        typeBody: data.productName ?? '',
-        trackNo: '',
-        instructionNo: billNo,
-        materialList: [
-          [
-            data.materialNumber ?? '',
-            specificationSplit,
-            qty,
-            data.unitName,
-          ]
-        ],
-        customsDeclarationType: data.cusdeclaraType ?? '',
-        pieceNo: '1-1',
-        pieceID: guid,
-        grossWeight: gw,
-        netWeight: ew,
-        specifications: specifications,
-        volume: specificationSplit,
-        supplier: data.sapSupplierNumber ?? '',
-        manufactureDate: getDateYMD(),
-        hasNotes: false,
-        notes: '',
-      ));
-      Get.to(() => PreviewLabel(labelWidget: labelList[0]));
+      Get.to(() => PreviewLabel(
+            labelWidget: dynamicMaterialLabel1098(
+              labelID: guid,
+              myanmarApprovalDocument: data.description ?? '',
+              typeBody: data.productName ?? '',
+              trackNo: '',
+              instructionNo: billNo,
+              materialList: [
+                [
+                  data.materialNumber ?? '',
+                  specificationSplit,
+                  qty,
+                  data.unitName,
+                ]
+              ],
+              customsDeclarationType: data.cusdeclaraType ?? '',
+              pieceNo: '1-1',
+              pieceID: guid,
+              grossWeight: gw,
+              netWeight: ew,
+              specifications: specifications,
+              volume: specificationSplit,
+              supplier: data.sapSupplierNumber ?? '',
+              manufactureDate: getDateYMD(),
+              hasNotes: false,
+              notes: '',
+            ),
+            isDynamic: true,
+          ));
     }
   }
 
@@ -485,11 +490,11 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
                 text: 'material_dispatch_label_list'.tr,
                 click: () => labelListDialog(state.date, context, data,
                     callback: (info, label) {
-                  var bill ='';
-                  var batch ='';
-                  if(label.sapColorBatch!=''){
+                  var bill = '';
+                  var batch = '';
+                  if (label.sapColorBatch != '') {
                     var data = info.children!.firstWhere((data) =>
-                    data.sapColorBatch == label.sapColorBatch &&
+                        data.sapColorBatch == label.sapColorBatch &&
                         label.sapColorBatch!.isNotEmpty);
                     bill = data.billNo!;
                     batch = data.sapColorBatch!;
