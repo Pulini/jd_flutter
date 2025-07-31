@@ -113,7 +113,7 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
                 materialName: data.materialName ?? '',
                 partName: data.partName ?? '',
                 toPrint: toPrint,
-                palletNumber: state.palletNumber ?? '',
+                palletNumber: state.palletNumber,
                 materialNumber: data.materialNumber ?? '',
                 processName: data.processName ?? '',
                 sapDecideArea: data.sapDecideArea ?? '',
