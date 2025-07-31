@@ -298,6 +298,7 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
                                       factoryId: factory,
                                       type: labelType,
                                       select: select,
+                                      language: '',
                                     );
                                   });
                             } else {

@@ -7,11 +7,12 @@ import 'package:jd_flutter/bean/http/response/maintain_material_info.dart';
 import 'package:jd_flutter/bean/http/response/picking_bar_code_info.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
-import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/preview_label_list_widget.dart';
 import 'package:jd_flutter/widget/preview_label_widget.dart';
-import 'package:jd_flutter/widget/tsc_label_template.dart';
+import 'package:jd_flutter/widget/tsc_label_templates/110w_dynamic_label.dart';
+import 'package:jd_flutter/widget/tsc_label_templates/75w45h_fixed_label.dart';
+import 'package:jd_flutter/widget/tsc_label_templates/75w_dynamic_label.dart';
 
 import 'maintain_label_state.dart';
 
@@ -270,7 +271,7 @@ class MaintainLabelLogic extends GetxController {
     required String factoryId,
     required int type,
     required List<List<LabelInfo>> select,
-    String language = '',
+    required String language,
   }) {
     if (factoryId.isNotEmpty) {
       switch (factoryId) {
@@ -279,7 +280,6 @@ class MaintainLabelLogic extends GetxController {
             if (select[0][0].items!.isNotEmpty) {
               if (select[0][0].items!.length == 1) {
                 createSingleSizeLabel(
-                  language: language,
                   list: select[0],
                   labels: labelsCallback,
                 );
@@ -311,7 +311,7 @@ class MaintainLabelLogic extends GetxController {
           break;
         case 102:
           logger.f('102');
-          createGroupDynamicLabel(
+          createFixedLabel(
             language: language,
             list: select,
             labels: labelsCallback,
@@ -319,9 +319,9 @@ class MaintainLabelLogic extends GetxController {
           break;
         case 103:
           logger.f('103');
-          createDynamicLabel(
+          createGroupDynamicLabel(
             language: language,
-            list: select[0],
+            list: select,
             labels: labelsCallback,
           );
           break;
@@ -339,42 +339,30 @@ class MaintainLabelLogic extends GetxController {
   }) {
     var labelList = <Widget>[];
     for (var data in list) {
-      labelList.add(myanmarLabel(data, false));
+      labelList.add(dynamicMaterialLabel1098(
+        labelID: data.barCode ?? '',
+        myanmarApprovalDocument: data.myanmarApprovalDocument ?? '',
+        typeBody: data.factoryType ?? '',
+        trackNo: data.trackNo ?? '',
+        instructionNo: data.billNo ?? '',
+        materialList: [],
+        customsDeclarationType: data.customsDeclarationType ?? '',
+        pieceNo: data.pieceNo ?? '',
+        pieceID: data.pieceID ?? '',
+        grossWeight: data.grossWeight.toShowString(),
+        netWeight: data.netWeight.toShowString(),
+        specifications: data.meas ?? '',
+        volume: data.volume ?? '',
+        supplier: data.departName ?? '',
+        manufactureDate: data.manufactureDate ?? '',
+        hasNotes: false,
+        notes: '',
+      ));
     }
     labels.call(labelList);
   }
 
-  Widget myanmarLabel(LabelInfo label, bool hasNotes) =>
-      dynamicMyanmarLabel110xN(
-        labelID: label.barCode ?? '',
-        myanmarApprovalDocument: label.myanmarApprovalDocument ?? '',
-        typeBody: label.factoryType ?? '',
-        trackNo: label.trackNo ?? '',
-        instructionNo: label.billNo ?? '',
-        // materialList: [
-        //   for (var m in label.items!)
-        //     [m.materialNumber ?? '', m.specifications ?? '']
-        // ],
-        materialList: [],
-        inBoxQty: label.items!
-            .map((v) => v.qty ?? 0)
-            .reduce((a, b) => a.add(b))
-            .toShowString(),
-        customsDeclarationUnit: label.customsDeclarationUnit ?? '',
-        customsDeclarationType: label.customsDeclarationType ?? '',
-        pieceNo: label.pieceNo ?? '',
-        pieceID: label.pieceID ?? '',
-        grossWeight: label.grossWeight.toShowString(),
-        netWeight: label.netWeight.toShowString(),
-        specifications: label.meas ?? '',
-        volume: label.volume ?? '',
-        supplier: label.departName ?? '',
-        manufactureDate: label.manufactureDate ?? '',
-        hasNotes: hasNotes,
-        notes: '',
-      );
-
-  //单一物料多尺码标
+  ///单一物料多尺码标
   createMultipleSizeLabel({
     String language = '',
     required List<LabelInfo> list,
@@ -382,39 +370,39 @@ class MaintainLabelLogic extends GetxController {
   }) {
     var labelList = <Widget>[];
     for (var data in list) {
-      labelList.add(myanmarSizeListLabel(data, false));
-    }
-    labels.call(labelList);
-  }
-
-  Widget myanmarSizeListLabel(LabelInfo label, bool hasNotes) =>
-      dynamicMyanmarSizeListLabel110xN(
-        labelID: label.barCode ?? '',
-        myanmarApprovalDocument: label.myanmarApprovalDocument ?? '',
-        typeBody: label.factoryType ?? '',
-        trackNo: label.trackNo ?? '',
+      labelList.add(dynamicSizeMaterialLabel1098(
+        labelID: data.barCode ?? '',
+        myanmarApprovalDocument: data.myanmarApprovalDocument ?? '',
+        typeBody: data.factoryType ?? '',
+        trackNo: data.trackNo ?? '',
         materialList: createSizeList(
-          label: label,
+          label: data,
           sizeTitle: 'Size',
           totalTitle: 'Total',
         ),
-        inBoxQty: label.items!
+        instructionNo: '',
+        materialCode: '',
+        size: '',
+        inBoxQty: data.items!
             .map((v) => v.qty ?? 0)
             .reduce((a, b) => a.add(b))
             .toShowString(),
-        customsDeclarationUnit: label.customsDeclarationUnit ?? '',
-        customsDeclarationType: label.customsDeclarationType ?? '',
-        pieceNo: label.pieceNo ?? '',
-        pieceID: label.pieceID ?? '',
-        grossWeight: label.grossWeight.toShowString(),
-        netWeight: label.netWeight.toShowString(),
-        specifications: label.meas ?? '',
-        volume: label.volume ?? '',
-        supplier: label.departName ?? '',
-        manufactureDate: label.manufactureDate ?? '',
-        hasNotes: hasNotes,
+        customsDeclarationUnit: data.customsDeclarationUnit ?? '',
+        customsDeclarationType: data.customsDeclarationType ?? '',
+        pieceNo: data.pieceNo ?? '',
+        pieceID: data.pieceID ?? '',
+        grossWeight: data.grossWeight.toShowString(),
+        netWeight: data.netWeight.toShowString(),
+        specifications: data.meas ?? '',
+        volume: data.volume ?? '',
+        supplier: data.departName ?? '',
+        manufactureDate: data.manufactureDate ?? '',
+        hasNotes: false,
         notes: '',
-      );
+      ));
+    }
+    labels.call(labelList);
+  }
 
   Map<String, List> createSizeList({
     required LabelInfo label,
@@ -458,434 +446,75 @@ class MaintainLabelLogic extends GetxController {
 
   //单一物料单尺码标
   createSingleSizeLabel({
-    String language = '',
     required List<LabelInfo> list,
     required Function(List<Widget>) labels,
   }) {
     var labelList = <Widget>[];
     for (var data in list) {
-      labelList.add(myanmarSizeLabel(data, false));
+      labelList.add(dynamicSizeMaterialLabel1098(
+        labelID: data.barCode ?? '',
+        myanmarApprovalDocument: data.myanmarApprovalDocument ?? '',
+        typeBody: data.factoryType ?? '',
+        trackNo: data.trackNo ?? '',
+        materialList: {},
+        instructionNo: data.billNo ?? '',
+        materialCode: data.materialCode ?? '',
+        size: data.items!.first.size ?? '',
+        inBoxQty: data.items!.first.qty.toShowString(),
+        customsDeclarationUnit: data.customsDeclarationUnit ?? '',
+        customsDeclarationType: data.customsDeclarationType ?? '',
+        pieceNo: data.pieceNo ?? '',
+        pieceID: data.pieceID ?? '',
+        grossWeight: data.grossWeight.toShowString(),
+        netWeight: data.netWeight.toShowString(),
+        specifications: data.meas ?? '',
+        volume: data.volume ?? '',
+        supplier: data.departName ?? '',
+        manufactureDate: data.manufactureDate ?? '',
+        hasNotes: false,
+        notes: '',
+      ));
     }
     labels.call(labelList);
   }
-
-  Widget myanmarSizeLabel(LabelInfo label, bool hasNotes) =>
-      dynamicMyanmarSizeLabel110xN(
-        labelID: label.barCode ?? '',
-        myanmarApprovalDocument: label.myanmarApprovalDocument ?? '',
-        typeBody: label.factoryType ?? '',
-        trackNo: label.trackNo ?? '',
-        instructionNo: label.billNo ?? '',
-        materialCode: label.materialCode ?? '',
-        size: label.items!.first.size ?? '',
-        inBoxQty: label.items!.first.qty.toShowString(),
-        customsDeclarationUnit: label.customsDeclarationUnit ?? '',
-        customsDeclarationType: label.customsDeclarationType ?? '',
-        pieceNo: label.pieceNo ?? '',
-        pieceID: label.pieceID ?? '',
-        grossWeight: label.grossWeight.toShowString(),
-        netWeight: label.netWeight.toShowString(),
-        specifications: label.meas ?? '',
-        volume: label.volume ?? '',
-        supplier: label.departName ?? '',
-        manufactureDate: label.manufactureDate ?? '',
-        hasNotes: hasNotes,
-        notes: '',
-      );
 
   //物料标
   createMaterialLabel({
-    String language = '',
+    required String language,
     required List<LabelInfo> list,
     required Function(List<Widget>) labels,
   }) {
     var labelList = <Widget>[];
+
     for (var data in list) {
       var languageInfo =
           data.materialOtherName!.firstWhere((v) => v.languageName == language);
-      var labelTitle = Text(
-        data.factoryType ?? '',
-        style: const TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 24,
-        ),
-      );
-      var labelSubTitle = Text(
-        data.billNo ?? '',
-        style: const TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 24,
-        ),
-      );
-      var labelContent = Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Expanded(
-            child: Text(
-              '(${data.materialCode})${data.materialName}'
-                  .allowWordTruncation(),
-              style: const TextStyle(
-                overflow: TextOverflow.ellipsis,
-                fontWeight: FontWeight.bold,
-                fontSize: 16.5,
-                height: 1,
-              ),
-              maxLines: 3,
-            ),
-          ),
-          if (languageInfo.languageCode != 'zh')
-            Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    'GW:${data.grossWeight.toShowString()}KG',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Text(
-                    'NW:${data.netWeight.toShowString()}KG',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          if (languageInfo.languageCode != 'zh')
-            Text(
-              'MEAS:${data.meas}',
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 15,
-                height: 1,
-              ),
-            ),
-        ],
-      );
-      var labelBottomLeft = Center(
-        child: Text(
-          languageInfo.pageNumber ?? '',
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-          ),
-        ),
-      );
-
-      var labelBottomRight = Column(
-        children: [
-          Expanded(
-            child: Text(
-              data.items?.isEmpty == true
-                  ? '0'
-                  : data.items!
-                      .map((v) => v.qty ?? 0)
-                      .reduce((a, b) => a.add(b))
-                      .toShowString(),
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          Expanded(
-            child: Text(
-              languageInfo.unitName ?? '',
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        ],
-      );
-
-      labelList.add(fixedLabelTemplate75x45(
-        qrCode: data.barCode ?? '',
-        title: labelTitle,
-        subTitle: labelSubTitle,
-        content: labelContent,
-        bottomLeft: labelBottomLeft,
-        bottomRight: labelBottomRight,
-      ));
-    }
-    labels.call(labelList);
-  }
-
-  //动态标
-  createDynamicLabel({
-    String language = '',
-    required List<LabelInfo> list,
-    required Function(List<Widget>) labels,
-  }) {
-    var labelList = <Widget>[];
-    for (var data in list) {
-      //标签语言类型
-      var languageInfo =
-          data.materialOtherName!.firstWhere((v) => v.languageName == language);
-      //标签指令列表
-      var ins = groupBy(data.items ?? <LabelSizeInfo>[], (v) => v.billNo);
-      //标签装货总数
-      var total = data.items?.map((v) => v.qty ?? 0).reduce((a, b) => a.add(b));
-
-      //表格列表
-      Map<String, List<List<String>>> map = {};
-      ins.forEach((k, v1) {
-        map[k ?? ''] = [
-          for (var v2 in v1) [v2.size ?? '', v2.qty.toShowString()]
-        ];
-      });
-
-      //表格最大行数
-      var groupMax = ins.length > 1 ? ins.length + 2 : ins.length + 1;
-
-      //表格拆分后最大列数
-      var maxArrange = 7;
-
-      //表格拆分成列表
-      var table = labelTableFormat(
-        title: languageInfo.languageCode == 'zh' ? '尺码' : 'Size',
-        total: ins.length > 1
-            ? languageInfo.languageCode == 'zh'
-                ? '合计'
-                : 'Total'
-            : null,
-        list: map,
-      );
-
-      var labelTitle = Padding(
-        padding: const EdgeInsets.only(
-          left: 3,
-          right: 3,
-        ),
-        child: Text(
-          data.factoryType ?? '',
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 24,
-          ),
-        ),
-      );
-
-      var labelSubTitle = Padding(
-        padding: const EdgeInsets.only(
-          left: 3,
-          right: 3,
-        ),
-        child: Text(
-          languageInfo.languageCode == 'zh'
-              ? '${data.billNo}'.allowWordTruncation()
-              : '(${data.materialCode})${languageInfo.name}'
-                  .allowWordTruncation(),
-          style: const TextStyle(
-            height: 1,
-            fontWeight: FontWeight.bold,
-            fontSize: 24,
-          ),
-        ),
-      );
-
-      var labelHeader = Padding(
-        padding: const EdgeInsets.only(
-          left: 5,
-          right: 5,
-        ),
-        child: languageInfo.languageCode == 'zh'
-            ? Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Text(
-                        '${total.toShowString()}${languageInfo.unitName}',
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        ),
-                      )
-                    ],
-                  ),
-                  Text(
-                    '(${data.materialCode})${languageInfo.name}',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                    ),
-                  ),
-                ],
-              )
-            : Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          'GW:${data.grossWeight.toShowString()}KG',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: Text(
-                          'NW:${data.netWeight.toShowString()}KG',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          'MEAS:${data.meas} ',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: Text(
-                          '${total.toShowString()}${languageInfo.unitName}',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-      );
-
-      var labelTable = Padding(
-        padding: const EdgeInsets.only(
-          left: 5,
-          right: 5,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            for (var i = 0; i < table.length; ++i) ...[
-              Row(
-                children: [
-                  for (var j = 0; j < table[i].length; ++j)
-                    expandedFrameText(
-                      alignment: j == 0
-                          ? Alignment.centerLeft
-                          : i == 0 ||
-                                  (table[i].isEmpty ? i - 1 : i) %
-                                          (groupMax + 1) ==
-                                      0
-                              ? Alignment.center
-                              : Alignment.centerRight,
-                      flex: j == 0 ? 9 : 4,
-                      isBold: true,
-                      text: table[i][j],
-                    ),
-                  if (maxArrange - table[i].length > 0)
-                    for (var j = 0; j < maxArrange - table[i].length; ++j)
-                      Expanded(flex: 4, child: Container()),
-                ],
-              ),
-              if (table[i].isEmpty) const SizedBox(height: 10)
-            ]
-          ],
-        ),
-      );
-      var labelFooter = Padding(
-        padding: const EdgeInsets.only(left: 5, right: 5),
-        child: languageInfo.languageCode == 'zh'
-            ? Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      languageInfo.pageNumber ?? '',
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: Text(
-                      languageInfo.deliveryDate ?? '',
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                      ),
-                    ),
-                  ),
-                ],
-              )
-            : Column(
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          languageInfo.pageNumber ?? '',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: Text(
-                          languageInfo.deliveryDate ?? '',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          'Made in China',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: Text(
-                          'Gold Emperor',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-      );
-      labelList.add(dynamicLabelTemplate75xN(
-        qrCode: data.barCode ?? '',
-        title: labelTitle,
-        subTitle: labelSubTitle,
-        header: labelHeader,
-        table: labelTable,
-        footer: labelFooter,
-      ));
+      if (language == 'zh') {
+        labelList.add(maintainLabelMaterialChineseFixedLabel(
+          barCode: data.barCode ?? '',
+          factoryType: data.factoryType ?? '',
+          billNo: data.billNo ?? '',
+          materialCode: data.materialCode ?? '',
+          materialName: data.materialName ?? '',
+          pageNumber: languageInfo.pageNumber ?? '',
+          qty: data.items!.map((v) => v.qty ?? 0).reduce((a, b) => a.add(b)),
+          unit: languageInfo.unitName ?? '',
+        ));
+      } else {
+        maintainLabelMaterialEnglishFixedLabel(
+          barCode: data.barCode ?? '',
+          factoryType: data.factoryType ?? '',
+          billNo: data.billNo ?? '',
+          materialCode: data.materialCode ?? '',
+          materialName: data.materialName ?? '',
+          grossWeight: data.grossWeight!,
+          netWeight: data.netWeight!,
+          meas: data.meas!,
+          pageNumber: languageInfo.pageNumber!,
+          qty: data.items!.map((v) => v.qty ?? 0).reduce((a, b) => a.add(b)),
+          unit: languageInfo.unitName ?? '',
+        );
+      }
     }
     labels.call(labelList);
   }
@@ -901,155 +530,35 @@ class MaintainLabelLogic extends GetxController {
       var languageInfo = data[0]
           .materialOtherName!
           .firstWhere((v) => v.languageName == language);
-      var labelTitle = Padding(
-        padding: const EdgeInsets.only(
-          left: 3,
-          right: 3,
-        ),
-        child: Text(
-          data[0].factoryType ?? '',
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 24,
-          ),
-        ),
-      );
-      var labelSubTitle = Padding(
-        padding: const EdgeInsets.only(
-          left: 3,
-          right: 3,
-        ),
-        child: Text(
-          data[0].billNo ?? '',
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 24,
-          ),
-        ),
-      );
-      var labelContent = Padding(
-        padding: const EdgeInsets.only(
-          left: 3,
-          right: 3,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Expanded(
-              child: Text(
-                '(${data[0].materialCode})${languageInfo.name}'
-                    .allowWordTruncation(),
-                style: const TextStyle(
-                  overflow: TextOverflow.ellipsis,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16.5,
-                  height: 1,
-                ),
-                maxLines: 3,
-              ),
-            ),
-            if (languageInfo.languageCode != 'zh')
-              Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      'GW:${data[0].grossWeight.toShowString()}KG',
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: Text(
-                      'NW:${data[0].netWeight.toShowString()}KG',
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            if (languageInfo.languageCode != 'zh')
-              Text(
-                'MEAS:${data[0].meas}',
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 15,
-                  height: 1,
-                ),
-              ),
-          ],
-        ),
-      );
-      var labelBottomLeft = Padding(
-        padding: const EdgeInsets.only(
-          left: 3,
-          right: 3,
-        ),
-        child: Center(
-          child: Text(
-            languageInfo.languageCode == 'zh'
-                ? '${data[0].items?[0].size} #'
-                : '${data[0].items?[0].qty.toShowString()}',
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
-            ),
-          ),
-        ),
-      );
-      var labelBottomMiddle = Column(
-        children: [
-          Expanded(
-            child: Text(
-              languageInfo.pageNumber ?? '',
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          Expanded(
-            child: Text(
-              languageInfo.languageCode == 'zh'
-                  ? languageInfo.deliveryDate ?? ''
-                  : 'Made in China',
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        ],
-      );
 
-      var labelBottomRight = Padding(
-        padding: const EdgeInsets.only(
-          left: 3,
-          right: 3,
-        ),
-        child: Center(
-          child: Text(
-            languageInfo.languageCode == 'zh'
-                ? languageInfo.unitName ?? ''
-                : '${data[0].items?[0].size} #',
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
-            ),
-          ),
-        ),
-      );
+      if(language=='zh'){
+        labelList.add(maintainLabelSingleSizeChineseFixedLabel(
+          barCode:data[0].barCode ?? '',
+          factoryType:data[0].factoryType ?? '',
+          billNo:data[0].items![0].billNo?? '',
+          materialCode:data[0].materialCode?? '',
+          materialName:data[0].materialName?? '',
+          size:data[0].items?[0].size?? '',
+          pageNumber: languageInfo.pageNumber?? '',
+          date:languageInfo.deliveryDate?? '',
+          unit:(data[0].items?[0].qty.toShowString()?? '')+(languageInfo.unitName ?? ''),
+        ));
+      }else{
 
-      labelList.add(fixedLabelTemplate75x45(
-        qrCode: data[0].barCode ?? '',
-        title: labelTitle,
-        subTitle: labelSubTitle,
-        content: labelContent,
-        bottomLeft: labelBottomLeft,
-        bottomMiddle: labelBottomMiddle,
-        bottomRight: labelBottomRight,
-      ));
+        labelList.add(  maintainLabelSingleSizeEnglishFixedLabel(
+          barCode:data[0].barCode ?? '',
+          factoryType:data[0].factoryType ?? '',
+          billNo:data[0].items![0].billNo?? '',
+          materialCode:data[0].materialCode?? '',
+          materialName:data[0].materialName?? '',
+          grossWeight: data[0].grossWeight?? 0.0,
+          netWeight: data[0].netWeight?? 0.0,
+          meas: data[0].meas?? '',
+          qty:data[0].items?[0].qty?? 0.0,
+          pageNumber: languageInfo.pageNumber?? '',
+          size: data[0].items?[0].size?? '',
+        ));
+      }
     }
     labels.call(labelList);
   }
@@ -1075,9 +584,6 @@ class MaintainLabelLogic extends GetxController {
       //标签指令列表
       var ins = groupBy(insList, (v) => v.billNo);
 
-      //标签装货总数
-      var total = insList.map((v) => v.qty ?? 0).reduce((a, b) => a.add(b));
-
       //表格列表
       Map<String, List<List<String>>> map = {};
       ins.forEach((k, v1) {
@@ -1086,253 +592,37 @@ class MaintainLabelLogic extends GetxController {
         ];
       });
 
-      //表格最大行数
-      var groupMax = ins.length > 1 ? ins.length + 2 : ins.length + 1;
-
-      //表格拆分后最大列数
-      var maxArrange = 7;
-
-      //表格拆分成列表
-      var table = labelTableFormat(
-        title: languageInfo.languageCode == 'zh' ? '尺码' : 'Size',
-        total: ins.length > 1
-            ? languageInfo.languageCode == 'zh'
-                ? '合计'
-                : 'Total'
-            : null,
-        list: map,
-      );
-
-      var labelTitle = Padding(
-        padding: const EdgeInsets.only(
-          left: 3,
-          right: 3,
-        ),
-        child: Text(
-          data[0].factoryType ?? '',
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 24,
-          ),
-        ),
-      );
-
-      var labelSubTitle = Padding(
-        padding: const EdgeInsets.only(
-          left: 3,
-          right: 3,
-        ),
-        child: Text(
-          languageInfo.languageCode == 'zh'
-              ? '${data[0].billNo}'.allowWordTruncation()
-              : '(${data[0].materialCode})${languageInfo.name}'
-                  .allowWordTruncation(),
-          style: const TextStyle(
-            height: 1,
-            fontWeight: FontWeight.bold,
-            fontSize: 24,
-          ),
-        ),
-      );
-
-      var labelHeader = Padding(
-        padding: const EdgeInsets.only(
-          left: 5,
-          right: 5,
-        ),
-        child: languageInfo.languageCode == 'zh'
-            ? Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Text(
-                        '${total.toShowString()}${languageInfo.unitName}',
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        ),
-                      )
-                    ],
-                  ),
-                  Text(
-                    '(${data[0].materialCode})${languageInfo.name}',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                    ),
-                  ),
-                ],
-              )
-            : Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          'GW:${data[0].grossWeight.toShowString()}KG',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: Text(
-                          'NW:${data[0].netWeight.toShowString()}KG',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          'MEAS:${data[0].meas} ',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: Text(
-                          '${total.toShowString()}${languageInfo.unitName}',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-      );
-
-      var labelTable = Padding(
-        padding: const EdgeInsets.only(
-          left: 5,
-          right: 5,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            for (var i = 0; i < table.length; ++i) ...[
-              Row(
-                children: [
-                  for (var j = 0; j < table[i].length; ++j)
-                    expandedFrameText(
-                      alignment: j == 0
-                          ? Alignment.centerLeft
-                          : i == 0 ||
-                                  (table[i].isEmpty ? i - 1 : i) %
-                                          (groupMax + 1) ==
-                                      0
-                              ? Alignment.center
-                              : Alignment.centerRight,
-                      flex: j == 0 ? 9 : 4,
-                      isBold: true,
-                      text: table[i][j],
-                    ),
-                  if (maxArrange - table[i].length > 0)
-                    for (var j = 0; j < maxArrange - table[i].length; ++j)
-                      Expanded(flex: 4, child: Container()),
-                ],
-              ),
-              if (table[i].isEmpty) const SizedBox(height: 10)
-            ]
-          ],
-        ),
-      );
-      var labelFooter = Padding(
-        padding: const EdgeInsets.only(left: 5, right: 5),
-        child: languageInfo.languageCode == 'zh'
-            ? Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      languageInfo.pageNumber ?? '',
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: Text(
-                      languageInfo.deliveryDate ?? '',
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                      ),
-                    ),
-                  ),
-                ],
-              )
-            : Column(
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          languageInfo.pageNumber ?? '',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: Text(
-                          languageInfo.deliveryDate ?? '',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          'Made in China',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: Text(
-                          'Gold Emperor',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-      );
-      labelList.add(dynamicLabelTemplate75xN(
-        qrCode: data[0].barCode ?? '',
-        title: labelTitle,
-        subTitle: labelSubTitle,
-        header: labelHeader,
-        table: labelTable,
-        footer: labelFooter,
-      ));
+      if (language == 'zh') {
+        labelList.add(maintainLabelSizeMaterialChineseDynamicLabel(
+          barCode: data[0].barCode ?? '',
+          factoryType: data[0].factoryType ?? '',
+          billNo: data[0].departName ?? '',
+          total:
+              data[0].items!.map((v) => v.qty ?? 0).reduce((a, b) => a.add(b)),
+          unit: languageInfo.unitName ?? '',
+          materialCode: data[0].materialCode ?? '',
+          materialName: data[0].materialName ?? '',
+          map: map,
+          pageNumber: languageInfo.pageNumber ?? '',
+          deliveryDate: languageInfo.deliveryDate ?? '',
+        ));
+      } else {
+        labelList.add(maintainLabelMixEnglishDynamicLabel(
+          barCode: data[0].barCode ?? '',
+          factoryType: data[0].factoryType ?? '',
+          materialCode: data[0].materialCode ?? '',
+          materialName: data[0].materialName ?? '',
+          grossWeight: data[0].grossWeight ?? 0.0,
+          netWeight: data[0].netWeight ?? 0.0,
+          meas: data[0].meas ?? '',
+          total:
+              data[0].items!.map((v) => v.qty ?? 0).reduce((a, b) => a.add(b)),
+          unit: languageInfo.unitName ?? '',
+          map: map,
+          pageNumber: languageInfo.pageNumber ?? '',
+          deliveryDate: languageInfo.deliveryDate ?? '',
+        ));
+      }
     }
     labels.call(labelList);
   }

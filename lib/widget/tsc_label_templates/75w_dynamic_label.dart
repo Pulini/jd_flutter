@@ -4,7 +4,6 @@ import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
-
 //标签表格格式化
 List<List<String>> _labelTableFormat({
   required String title,
@@ -127,10 +126,10 @@ Widget _createTableWidget({
             alignment: j == 0
                 ? Alignment.centerLeft
                 : i == 0 || (table[i].isEmpty ? i - 1 : i) % (maxRow + 1) == 0
-                    ? Alignment.center
-                    : Alignment.centerRight,
+                ? Alignment.center
+                : Alignment.centerRight,
             flex: j == 0 ? 9 : 4,
-            padding: j==0?null:const EdgeInsets.all(3),
+            padding: j == 0 ? null : const EdgeInsets.all(3),
             isBold: true,
             text: table[i][j],
           ),
@@ -306,14 +305,14 @@ Widget maintainLabelSizeMaterialChineseDynamicLabel({
               child: Text(
                 pageNumber,
                 style:
-                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
               ),
             ),
             Expanded(
               child: Text(
                 deliveryDate,
                 style:
-                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
               ),
             ),
           ],
@@ -402,7 +401,7 @@ Widget maintainLabelSizeMaterialEnglishDynamicLabel({
         ),
       ),
       table:
-          _createTableWidget(titleText: 'Size', totalText: 'Total', map: map),
+      _createTableWidget(titleText: 'Size', totalText: 'Total', map: map),
       footer: Padding(
         padding: const EdgeInsets.only(left: 5, right: 5),
         child: Column(
@@ -510,14 +509,14 @@ Widget maintainLabelMixChineseDynamicLabel({
               child: Text(
                 pageNumber,
                 style:
-                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
               ),
             ),
             Expanded(
               child: Text(
                 deliveryDate,
                 style:
-                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
               ),
             ),
           ],
@@ -605,7 +604,7 @@ Widget maintainLabelMixEnglishDynamicLabel({
         ),
       ),
       table:
-          _createTableWidget(titleText: 'Size', totalText: 'Total', map: map),
+      _createTableWidget(titleText: 'Size', totalText: 'Total', map: map),
       footer: Padding(
         padding: const EdgeInsets.only(left: 5, right: 5),
         child: Column(
@@ -648,3 +647,57 @@ Widget maintainLabelMixEnglishDynamicLabel({
         ),
       ),
     );
+
+///材料车间动态标签
+Widget materialWorkshopDynamicLabel({
+  required String qrCode,
+  required String productName,
+  required String materialName,
+  required String partName,
+  required String materialNumber,
+  required String processName,
+  required List<String> subList,
+  required String sapDecideArea,
+  required String color,
+  required String drillingCrewName,
+  required String qty,
+  required String unitName,
+}) {
+  var textStyle = const TextStyle(fontSize: 16);
+  return _dynamicLabelTemplate75xN(
+    qrCode: qrCode,
+    title: Text(productName, style: const TextStyle(fontSize: 20)),
+    subTitle: Text(materialName, style: textStyle),
+    header: Text('部件：$partName($materialNumber)<$processName>'),
+    table: Padding(
+      padding: const EdgeInsets.only(left: 5, right: 5),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          for (var s in subList) Text(s, style: const TextStyle(fontSize: 14))
+        ],
+      ),
+    ),
+    footer: Column(
+      children: [
+        Row(
+          children: [
+            Expanded(child: Text(sapDecideArea, style: textStyle)),
+            Expanded(child: Text('色系：$color', style: textStyle))
+          ],
+        ),
+        Row(
+          children: [
+            Expanded(
+              child: Text(drillingCrewName, style: textStyle),
+            ),
+            Expanded(
+              child: Text('数量：$qty$unitName', style: textStyle),
+            )
+          ],
+        )
+      ],
+    ),
+  );
+}
+

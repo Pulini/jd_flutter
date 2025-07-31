@@ -254,6 +254,11 @@ class MaterialDispatchState {
     required MaterialDispatchInfo data,
     required Children subData,
     required String  reportQty,
+    required String longQty,
+    required String wideQty,
+    required String heightQty,
+    required String gwQty,
+    required String nwQty,
     required int  titlePosition,
     required int  clickPosition,
     required Function(String guid,String pick) success,
@@ -267,6 +272,11 @@ class MaterialDispatchState {
         'UserID': userInfo?.userID,
         'QrCodeList': [
           {
+            'Length': longQty.toDoubleTry(),
+            'Width': wideQty.toDoubleTry(),
+            'Height': heightQty.toDoubleTry(),
+            'GW': gwQty.toDoubleTry(),
+            'NW': nwQty.toDoubleTry(),
             'SAPColorBatch': subData.sapColorBatch,
             'Qty': reportQty,
             'InterID': subData.interID,

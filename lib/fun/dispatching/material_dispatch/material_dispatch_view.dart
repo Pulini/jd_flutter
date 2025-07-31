@@ -17,8 +17,10 @@ import 'package:jd_flutter/widget/feishu_authorize.dart';
 import 'package:jd_flutter/widget/picker/picker_view.dart';
 import 'package:jd_flutter/widget/preview_label_widget.dart';
 import 'package:jd_flutter/widget/spinner_widget.dart';
+import 'package:jd_flutter/widget/tsc_label_templates/110w_dynamic_label.dart';
+import 'package:jd_flutter/widget/tsc_label_templates/75w45h_fixed_label.dart';
+import 'package:jd_flutter/widget/tsc_label_templates/75w_dynamic_label.dart';
 import 'package:rotated_corner_decoration/rotated_corner_decoration.dart';
-import '../../../widget/tsc_label_template.dart';
 import 'material_dispatch_dialogs.dart';
 import 'material_dispatch_logic.dart';
 
@@ -48,8 +50,8 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
     required String gw,
     required String ew,
   }) async {
-
-    if(data.exitLabelType=='101'){ //国内标
+    if (data.exitLabelType == '101') {
+      //国内标
       if (state.allInstruction.value) {
         var list = <String>[];
 
@@ -70,58 +72,22 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
           }
           subList.add(splitData.substring(0, splitData.length - 1));
         }
-        var labelTable = Padding(
-          padding: const EdgeInsets.only(
-            left: 5,
-            right: 5,
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              for (var i = 0; i < subList.length; ++i) ...[
-                Text(
-                  subList[i],
-                  style: const TextStyle(fontSize: 14),
-                )
-              ]
-            ],
-          ),
-        );
+
         Get.to(() => PreviewLabel(
-            labelWidget: dynamicLabelTemplate75xN(
+                labelWidget: materialWorkshopDynamicLabel(
               qrCode: guid,
-              title: Text(data.productName ?? '',
-                  style: const TextStyle(fontSize: 20)),
-              subTitle: Text(data.materialName ?? '',
-                  style: const TextStyle(fontSize: 16)),
-              header: Text(
-                  '部件：${data.materialName}(${data.materialNumber})<${data.processName}>'),
-              table: labelTable,
-              footer: Column(
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                          child: Text(data.sapDecideArea ?? '',
-                              style: const TextStyle(fontSize: 16))),
-                      Expanded(
-                          child: Text('色系：$color',
-                              style: const TextStyle(fontSize: 16)))
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                          child: Text(data.drillingCrewName ?? '',
-                              style: const TextStyle(fontSize: 16))),
-                      Expanded(
-                          child: Text('数量：$qty${data.unitName}',
-                              style: const TextStyle(fontSize: 16)))
-                    ],
-                  )
-                ],
-              ),
-            )));
+              productName: data.productName ?? '',
+              materialName: data.materialName ?? '',
+              partName: data.partName ?? '',
+              materialNumber: data.materialNumber ?? '',
+              processName: data.processName ?? '',
+              subList: subList,
+              sapDecideArea: data.sapDecideArea ?? '',
+              color: color,
+              drillingCrewName: data.drillingCrewName ?? '',
+              qty: qty,
+              unitName: data.unitName ?? '',
+            ), isDynamic: true));
       } else {
         var ins = '';
         var toPrint = '';
@@ -141,63 +107,87 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
         }
 
         Get.to(() => PreviewLabel(
-          labelWidget: fixedLabelTemplate75x45(
-            qrCode: guid,
-            title: Text(data.productName ?? '',
-                style: const TextStyle(fontSize: 20)),
-            subTitle: Text('${data.partName}$toPrint<${data.processName}>',
-                style: const TextStyle(fontSize: 16)),
-            content: Text('${data.materialName}(${data.materialNumber})'),
-            bottomLeft:
-            Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-              Text('仓位：${state.palletNumber}',
-                  style: const TextStyle(fontSize: 12)),
-              Text(data.drillingCrewName ?? '',
-                  style: const TextStyle(fontSize: 12))
-            ]),
-            bottomMiddle: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text('$color/$qty${data.unitName}',
-                    style: const TextStyle(fontSize: 12)),
-                Text('取件码：$pick', style: const TextStyle(fontSize: 12))
-              ],
-            ),
-            bottomRight: Center(
-                child: Text(data.sapDecideArea ?? '',
-                    style: const TextStyle(fontSize: 12))),
-          ),
-        ));
+            labelWidget: materialWorkshopFixedLabel(
+                qrCode: guid,
+                productName: data.productName ?? '',
+                materialName: data.materialName ?? '',
+                partName: data.partName ?? '',
+                toPrint: toPrint,
+                palletNumber: state.palletNumber ?? '',
+                materialNumber: data.materialNumber ?? '',
+                processName: data.processName ?? '',
+                sapDecideArea: data.sapDecideArea ?? '',
+                color: color,
+                drillingCrewName: data.drillingCrewName ?? '',
+                qty: qty,
+                unitName: data.unitName ?? '',
+                pick: pick), isDynamic: true));
       }
-    }else{
-      Get.to(() => PreviewLabel(
-        labelWidget: fixedLabelTemplate75x45(
-          qrCode: guid,
-          title: Text(data.productName ?? '',
-              style: const TextStyle(fontSize: 20)),
-          subTitle: Text('${data.partName}$toPrint<${data.processName}>',
-              style: const TextStyle(fontSize: 16)),
-          content: Text('${data.materialName}(${data.materialNumber})'),
-          bottomLeft:
-          Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-            Text('仓位：${state.palletNumber}',
-                style: const TextStyle(fontSize: 12)),
-            Text(data.drillingCrewName ?? '',
-                style: const TextStyle(fontSize: 12))
-          ]),
-          bottomMiddle: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Text('$color/$qty${data.unitName}',
-                  style: const TextStyle(fontSize: 12)),
-              Text('取件码：$pick', style: const TextStyle(fontSize: 12))
-            ],
-          ),
-          bottomRight: Center(
-              child: Text(data.sapDecideArea ?? '',
-                  style: const TextStyle(fontSize: 12))),
-        ),
+    } else if (data.exitLabelType == '102') {
+
+      var order = '';
+      if(data.billStyle=='0'){
+        order = '${data.factoryID} 正单';
+      }else{
+        order = '${data.factoryID} 补单';
+      }
+
+      var labelList = <Widget>[];
+      labelList.add(dynamicSizeMaterialLabel1095n1096(
+        labelID: guid,
+        productName: data.description?? '',
+        orderType: order,
+        typeBody: data.productName?? '',
+        trackNo: '',
+        instructionNo: billNo,
+        generalMaterialNumber: data.materialNumber?? '',
+        materialDescription: data.materialName?? '',
+        materialList: {},
+        inBoxQty: qty,
+        customsDeclarationUnit: data.unitName?? '',
+        customsDeclarationType: '',
+        pieceID: guid,
+        pieceNo: '1-1',
+        grossWeight: gw,
+        netWeight: ew,
+        specifications: '${specificationSplit}CM(LxWxH)',
+        volume: specifications,
+        supplier: data.sapSupplierNumber??'',
+        manufactureDate: getDateYMD(),
+        consignee: data.sourceFactoryName?? '',
+        hasNotes: false,
+        notes: '',
       ));
+      Get.to(() => PreviewLabel(labelWidget: labelList[0]));
+    } else if (data.exitLabelType == '103') {
+      var labelList = <Widget>[];
+      labelList.add(dynamicMaterialLabel1098(
+        labelID: guid,
+        myanmarApprovalDocument: data.description ?? '',
+        typeBody: data.productName ?? '',
+        trackNo: '',
+        instructionNo: billNo,
+        materialList: [
+          [
+            data.materialNumber ?? '',
+            specificationSplit,
+            qty,
+            data.unitName,
+          ]
+        ],
+        customsDeclarationType: data.cusdeclaraType ?? '',
+        pieceNo: '1-1',
+        pieceID: guid,
+        grossWeight: gw,
+        netWeight: ew,
+        specifications: specifications,
+        volume: specificationSplit,
+        supplier: data.sapSupplierNumber ?? '',
+        manufactureDate: getDateYMD(),
+        hasNotes: false,
+        notes: '',
+      ));
+      Get.to(() => PreviewLabel(labelWidget: labelList[0]));
     }
   }
 
@@ -495,33 +485,32 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
                 text: 'material_dispatch_label_list'.tr,
                 click: () => labelListDialog(state.date, context, data,
                     callback: (info, label) {
-                  var data = info.children!.firstWhere((data) =>
-                      data.sapColorBatch == label.sapColorBatch &&
-                      label.sapColorBatch!.isNotEmpty);
-                  if (state.allInstruction.value) {
-                    // printLabel(
-                    //     data: info,
-                    //     billNo: data.billNo!,
-                    //     color: data.sapColorBatch!,
-                    //     guid: label.guid!,
-                    //     pick: label.pickUpCode!,
-                    //     bill: <MaterialDispatchLabelDetail>[],
-                    //     qty: label.qty.toShowString());
-                  } else {
-                    state.getLabelDetail(
-                      guid: label.guid!,
-                      success: (List<MaterialDispatchLabelDetail> bill) {
-                        // printLabel(
-                        //     data: info,
-                        //     billNo: data.billNo!,
-                        //     color: data.sapColorBatch!,
-                        //     guid: label.guid!,
-                        //     pick: label.pickUpCode!,
-                        //     bill: bill,
-                        //     qty: label.qty.toShowString());
-                      },
-                    );
+                  var bill ='';
+                  var batch ='';
+                  if(label.sapColorBatch!=''){
+                    var data = info.children!.firstWhere((data) =>
+                    data.sapColorBatch == label.sapColorBatch &&
+                        label.sapColorBatch!.isNotEmpty);
+                    bill = data.billNo!;
+                    batch = data.sapColorBatch!;
                   }
+                  printLabel(
+                      data: info,
+                      billNo: bill,
+                      color: batch,
+                      guid: label.guid!,
+                      pick: label.pickUpCode!,
+                      bill: <MaterialDispatchLabelDetail>[],
+                      qty: label.qty.toShowString(),
+                      specifications: label.length
+                          .div(100)
+                          .mul(label.width.div(100))
+                          .mul(label.height.div(100))
+                          .toShowString(),
+                      specificationSplit:
+                          '${label.length.toShowString()}x${label.width.toShowString()}x${label.height.toShowString()}',
+                      gw: label.gw.toShowString(),
+                      ew: label.nw.toShowString());
                 }, refreshCallBack: () {
                   logic.refreshDataList();
                 }),
@@ -630,20 +619,24 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
                   String gwQty,
                   String nwQty,
                 ) {
-                  var sp = '${long}x''${wide}x${height}CM\n(LxWxH)';
-                  var spQty = longQty.div(100).mul(wideQty.div(100)).mul(heightQty.div(100)).toShowString();
+                  var sp = '${long}x' '${wide}x$height';
+                  var spQty = longQty
+                      .div(100)
+                      .mul(wideQty.div(100))
+                      .mul(heightQty.div(100))
+                      .toShowString();
                   printLabel(
-                      data: data,
-                      billNo: subData.billNo!,
-                      color: subData.sapColorBatch!,
-                      guid: guid,
-                      pick: pick,
-                      bill: bills,
-                      qty: d.toShowString(),
-                      specifications:spQty,
-                      specificationSplit:sp,
-                      gw:gwQty,
-                      ew:nwQty,
+                    data: data,
+                    billNo: subData.billNo!,
+                    color: subData.sapColorBatch!,
+                    guid: guid,
+                    pick: pick,
+                    bill: bills,
+                    qty: d.toShowString(),
+                    specifications: spQty,
+                    specificationSplit: sp,
+                    gw: gwQty,
+                    ew: nwQty,
                   );
                 });
           },

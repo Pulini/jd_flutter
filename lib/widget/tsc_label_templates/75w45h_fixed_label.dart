@@ -1193,3 +1193,44 @@ Widget sapWmsSplitLabelOtherWarehouseLabel({
         style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
       ),
     );
+
+///材料车间固定标签
+Widget materialWorkshopFixedLabel({
+  required String qrCode,
+  required String productName,
+  required String materialName,
+  required String partName,
+  required String toPrint,
+  required String palletNumber,
+  required String materialNumber,
+  required String processName,
+  required String sapDecideArea,
+  required String color,
+  required String drillingCrewName,
+  required String qty,
+  required String unitName,
+  required String pick,
+}) {
+  var style = const TextStyle(fontSize: 12);
+  return _fixedLabelTemplate75x45(
+    qrCode: qrCode,
+    title: Text(productName, style: const TextStyle(fontSize: 20)),
+    subTitle: Text('$partName$toPrint<$processName>',
+        style: const TextStyle(fontSize: 16)),
+    content: Text('$materialName($materialNumber)'),
+    bottomLeft: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+      Text('仓位：$palletNumber', style: const TextStyle(fontSize: 12)),
+      Text(drillingCrewName, style: const TextStyle(fontSize: 12))
+    ]),
+    bottomMiddle: Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Text('$color/$qty$unitName', style: const TextStyle(fontSize: 12)),
+        Text('取件码：$pick', style: const TextStyle(fontSize: 12))
+      ],
+    ),
+    bottomRight: Center(
+        child: Text(sapDecideArea,
+            style:style)),
+  );
+}

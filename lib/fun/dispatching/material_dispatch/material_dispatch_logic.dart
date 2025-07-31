@@ -148,6 +148,11 @@ class MaterialDispatchLogic extends GetxController {
       subData: subData,
       titlePosition: titlePosition,
       clickPosition: clickPosition,
+      longQty: long,
+      wideQty: wide,
+      heightQty: height,
+      gwQty: gw,
+      nwQty: nw,
       success: (guid, pick) {
         if (state.allInstruction.value) {
           success.call(

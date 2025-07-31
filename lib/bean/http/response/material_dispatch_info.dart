@@ -49,6 +49,9 @@ class MaterialDispatchInfo {
     this.factoryID,
     this.cusdeclaraType,
     this.exitLabelType,
+    this.sapSupplierNumber,
+    this.description,
+    this.sourceFactoryName,
   });
 
   MaterialDispatchInfo.fromJson(dynamic json) {
@@ -76,6 +79,9 @@ class MaterialDispatchInfo {
     factoryID = json['FactoryID'];
     cusdeclaraType = json['CusdeclaraType'];
     exitLabelType = json['ExitLabelType'];
+    sapSupplierNumber = json['SAPSupplierNumber'];
+    description = json['Description'];
+    sourceFactoryName = json['SourceFactoryName'];
     if (json['Children'] != null) {
       children = [];
       json['Children'].forEach((v) {
@@ -108,6 +114,9 @@ class MaterialDispatchInfo {
   String? factoryID; //工厂ID
   String? cusdeclaraType;
   String? exitLabelType; //打标类型
+  String? sapSupplierNumber; //供应商
+  String? description; //品名，批文
+  String? sourceFactoryName; //收货方
   List<Children>? children;
 
   Map<String, dynamic> toJson() {
@@ -136,6 +145,9 @@ class MaterialDispatchInfo {
     map['FactoryID'] = factoryID;
     map['CusdeclaraType'] = cusdeclaraType;
     map['ExitLabelType'] = exitLabelType;
+    map['SAPSupplierNumber'] = sapSupplierNumber;
+    map['Description'] = description;
+    map['SourceFactoryName'] = sourceFactoryName;
     if (children != null) {
       map['Children'] = children?.map((v) => v.toJson()).toList();
     }
@@ -250,7 +262,8 @@ class MaterialInfo {
     this.name,
     this.unitName,
     this.batch,
-    this.needQty,});
+    this.needQty,
+  });
 
   MaterialInfo.fromJson(dynamic json) {
     number = json['Number'];
@@ -259,6 +272,7 @@ class MaterialInfo {
     batch = json['Batch'];
     needQty = json['NeedQty'];
   }
+
   String? number;
   String? name;
   String? unitName;
@@ -302,7 +316,13 @@ class LabelInfo {
     this.status,
     this.reportStatus,
     this.palletNumber,
-    this.location,});
+    this.location,
+    this.length,
+    this.width,
+    this.height,
+    this.gw,
+    this.nw,
+  });
 
   LabelInfo.fromJson(dynamic json) {
     drillingCrewName = json['DrillingCrewName'];
@@ -317,6 +337,11 @@ class LabelInfo {
     reportStatus = json['ReportStatus'];
     palletNumber = json['PalletNumber'];
     location = json['Location'];
+    length = json['Length'];
+    width = json['Width'];
+    height = json['Height'];
+    gw = json['GW'];
+    nw = json['NW'];
   }
 
   String? drillingCrewName;
@@ -331,6 +356,11 @@ class LabelInfo {
   String? reportStatus;
   String? palletNumber;
   String? location;
+  double? length;
+  double? width;
+  double? height;
+  double? gw;
+  double? nw;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -346,7 +376,11 @@ class LabelInfo {
     map['ReportStatus'] = reportStatus;
     map['PalletNumber'] = palletNumber;
     map['Location'] = location;
+    map['Length'] = length;
+    map['Width'] = width;
+    map['Height'] = height;
+    map['GW'] = gw;
+    map['NW'] = nw;
     return map;
   }
-
 }

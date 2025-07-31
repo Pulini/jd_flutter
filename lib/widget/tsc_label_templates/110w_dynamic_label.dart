@@ -319,11 +319,12 @@ Widget dynamicMaterialLabel1098({
             title: 'Note:',
             rw: [_paddingTextCenter(text: notes, flex: 15)],
           ),
-        _createRowText(
-          title: 'MADE IN CHINA',
-          flex: 15,
-          rw: [_paddingTextCenter(text: customsDeclarationType, flex: 5)],
-        ),
+        Row(
+          children: [
+            _paddingTextCenter(text: ' MADE IN CHINA', flex: 15),
+            _paddingTextCenter(text: customsDeclarationType, flex: 5)
+          ],
+        )
       ],
     );
 
@@ -956,7 +957,8 @@ Widget dynamicDomesticMaterialLabel({
   required String typeBody, //工厂型体
   required String trackNo, //跟踪号
   required String instructionNo, //指令
-  required String materialNumber, //物料编码。单尺码标 传入 物料编号(MATNR) ,无尺码或多尺码 传入 一般可配置物料(SATNR)
+  required String
+      materialNumber, //物料编码。单尺码标 传入 物料编号(MATNR) ,无尺码或多尺码 传入 一般可配置物料(SATNR)
   required String materialDescription, //物料描述
   required Map<String, List> materialList, //物料列表。多尺码 传入尺码列表map,单尺码或无尺码传空map{}
   required String inBoxQty, //装箱数量
