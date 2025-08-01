@@ -180,6 +180,7 @@ class StuffQualityInspectionLogic extends GetxController {
     }
   }
 
+  //提交品检时根据送货单及物料获取标签，用于不合格拆标
   getLabelsForOrder({
     required String inspectionType,
     required String type,
@@ -817,6 +818,7 @@ class StuffQualityInspectionLogic extends GetxController {
     }
   }
 
+  //暂收单详情数据
   getTemporary(String jsonDat) {
     state.detailInfo = TemporaryOrderDetailInfo.fromJson(jsonDecode(jsonDat));
 
@@ -874,7 +876,7 @@ class StuffQualityInspectionLogic extends GetxController {
     }
   }
 
-  //有不合格数量或短码走OA
+  //有不合格数量或短码走OA （暂收单详情）
   submitInspectionToOAFromDetail(
     String inspectionType,
     String type,
@@ -1287,20 +1289,19 @@ class StuffQualityInspectionLogic extends GetxController {
     state.labelData[position].volume = changeVolume;
     state.labelData[position].grossWeight = changeGrossWeight;
     state.labelData[position].netWeight = changeNetWeight;
-    state.labelData.refresh();
+    refreshLabel();
   }
 
+  //提交要品检的贴标信息
   bool submitSelect() {
     if (state.labelData.none((data) => data.select)) {
       showSnackBar(message: '请选中具体数据提交！');
       return false;
     } else {
-      var list =
-          state.labelData.where((data) => data.select && data.size != '合计');
-      var allUnQty =
-          list.map((v) => v.unqualified ?? 0).reduce((a, b) => a.add(b));
-      var allShort = list.map((v) => v.short ?? 0).reduce((a, b) => a.add(b));
-      if (allUnQty != state.labelUnQty || allShort != state.labelShortQty) {
+      var list = state.labelData.where((data) => data.select && data.size != '合计');
+      var allUnQty = list.map((v) => v.unqualified ?? 0).reduce((a, b) => a.add(b)).toStringAsFixed(3);
+      var allShort = list.map((v) => v.short ?? 0).reduce((a, b) => a.add(b)).toStringAsFixed(3);
+      if (allUnQty.toDoubleTry() != state.labelUnQty || allShort.toDoubleTry() != state.labelShortQty) {
         showSnackBar(message: '贴标不合格数量或短码数量与品检的不符合！');
         return false;
       } else {
@@ -1308,4 +1309,27 @@ class StuffQualityInspectionLogic extends GetxController {
       }
     }
   }
+
+  //全部合格或全部不合格
+  selectAllUnqualified(bool isAll) {
+    state.labelData.where((data) => data.select).forEach((subData) {
+      if (isAll) {
+        subData.unqualified = subData.boxQty;
+        subData.short = 0;
+      } else {
+        subData.unqualified = 0;
+        subData.short = subData.boxQty;
+      }
+    });
+    refreshLabel();
+  }
+
+  //计算合计，刷新界面
+  refreshLabel(){
+    var data= state.labelData.firstWhere((data)=>data.barCode == '合计');
+    data.short = state.labelData.where((data)=>data.barCode!='合计').map((v) => v.short ?? 0).reduce((a, b) => a.add(b));
+    data.unqualified = state.labelData.where((data)=>data.barCode!='合计').map((v) => v.unqualified ?? 0).reduce((a, b) => a.add(b));
+    state.labelData.refresh();
+  }
+
 }

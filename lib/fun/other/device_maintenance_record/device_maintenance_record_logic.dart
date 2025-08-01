@@ -217,6 +217,7 @@ class DeviceMaintenanceRecordLogic extends GetxController {
         },
       ).then((response) {
         if (response.resultCode == resultSuccess) {
+          state.custodianNumber.value = number;
           state.peoPleInfo.value = PeopleMessageInfo.fromJson(response.data);
         } else {
           errorDialog(content: response.message);

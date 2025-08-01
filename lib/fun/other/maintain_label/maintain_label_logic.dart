@@ -259,11 +259,11 @@ class MaintainLabelLogic extends GetxController {
         languageList);
   }
 
-  Function(List<Widget>) labelsCallback = (label) {
+  Function(List<Widget>,bool cut) labelsCallback = (label,cut) {
     if (label.length > 1) {
-      Get.to(() => PreviewLabelList(labelWidgets: label));
+      Get.to(() => PreviewLabelList(labelWidgets: label,isDynamic: cut,));
     } else {
-      Get.to(() => PreviewLabel(labelWidget: label[0]));
+      Get.to(() => PreviewLabel(labelWidget: label[0],isDynamic: cut,));
     }
   };
 
@@ -335,7 +335,7 @@ class MaintainLabelLogic extends GetxController {
   createNoSizeLabel({
     String language = '',
     required List<LabelInfo> list,
-    required Function(List<Widget>) labels,
+    required Function(List<Widget>,bool) labels,
   }) {
     var labelList = <Widget>[];
     for (var data in list) {
@@ -359,14 +359,14 @@ class MaintainLabelLogic extends GetxController {
         notes: '',
       ));
     }
-    labels.call(labelList);
+    labels.call(labelList,true);
   }
 
   ///单一物料多尺码标
   createMultipleSizeLabel({
     String language = '',
     required List<LabelInfo> list,
-    required Function(List<Widget>) labels,
+    required Function(List<Widget>,bool) labels,
   }) {
     var labelList = <Widget>[];
     for (var data in list) {
@@ -401,7 +401,7 @@ class MaintainLabelLogic extends GetxController {
         notes: '',
       ));
     }
-    labels.call(labelList);
+    labels.call(labelList,true);
   }
 
   Map<String, List> createSizeList({
@@ -447,7 +447,7 @@ class MaintainLabelLogic extends GetxController {
   //单一物料单尺码标
   createSingleSizeLabel({
     required List<LabelInfo> list,
-    required Function(List<Widget>) labels,
+    required Function(List<Widget>,bool) labels,
   }) {
     var labelList = <Widget>[];
     for (var data in list) {
@@ -475,14 +475,14 @@ class MaintainLabelLogic extends GetxController {
         notes: '',
       ));
     }
-    labels.call(labelList);
+    labels.call(labelList,true);
   }
 
   //物料标
   createMaterialLabel({
     required String language,
     required List<LabelInfo> list,
-    required Function(List<Widget>) labels,
+    required Function(List<Widget>,bool) labels,
   }) {
     var labelList = <Widget>[];
 
@@ -516,14 +516,14 @@ class MaintainLabelLogic extends GetxController {
         );
       }
     }
-    labels.call(labelList);
+    labels.call(labelList,false);
   }
 
   //固定单码标
   createFixedLabel({
     required String language,
     required List<List<LabelInfo>> list,
-    required Function(List<Widget>) labels,
+    required Function(List<Widget>,bool) labels,
   }) {
     var labelList = <Widget>[];
     for (var data in list) {
@@ -560,14 +560,14 @@ class MaintainLabelLogic extends GetxController {
         ));
       }
     }
-    labels.call(labelList);
+    labels.call(labelList,false);
   }
 
   //合并动态标签
   createGroupDynamicLabel({
     required String language,
     required List<List<LabelInfo>> list,
-    required Function(List<Widget>) labels,
+    required Function(List<Widget>,bool) labels,
   }) {
     var labelList = <Widget>[];
     for (var data in list) {
@@ -624,7 +624,7 @@ class MaintainLabelLogic extends GetxController {
         ));
       }
     }
-    labels.call(labelList);
+    labels.call(labelList,true);
   }
 
   List<Widget> createSubItem({

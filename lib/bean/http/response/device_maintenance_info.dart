@@ -172,9 +172,9 @@ class RepairEntryData {
   String? accessoriesName;
   String? manufacturer;
   String? specification;
-  int? quantity;
+  double? quantity;
   String? unit;
-  int? budget;
+  double? budget;
   String? remarks;
 
   Map<String, dynamic> toJson() {
