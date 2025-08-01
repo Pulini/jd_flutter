@@ -14,7 +14,6 @@ import 'package:jd_flutter/widget/dialogs.dart';
 
 class ProductionDispatchState {
 
-  var etInstruction = '';
   var isSelectedOutsourcing =
       spGet('${Get.currentRoute}/isSelectedOutsourcing') ?? false;
   var isSelectedClosed = spGet('${Get.currentRoute}/isSelectedClosed') ?? false;
@@ -100,6 +99,7 @@ class ProductionDispatchState {
   query({
     required String startTime,
     required String endTime,
+    required String instruction,
     required Function(String msg) error,
   }) {
     httpGet(
@@ -108,7 +108,7 @@ class ProductionDispatchState {
       params: {
         'startTime': startTime,
         'endTime': endTime,
-        'moNo': etInstruction,
+        'moNo': instruction,
         'isClose': isSelectedClosed,
         'isOutsourcing': isSelectedOutsourcing,
         'deptID': userInfo?.departmentID,
@@ -534,6 +534,7 @@ class ProductionDispatchState {
   queryProgress({
     required String startTime,
     required String endTime,
+    required String instruction,
     required Function(List<OrderProgressInfo>) success,
     required Function(String msg) error,
   }) {
@@ -543,7 +544,7 @@ class ProductionDispatchState {
       params: {
         'startTime': startTime,
         'endTime': endTime,
-        'moNo': etInstruction,
+        'moNo': instruction,
         'isClose': isSelectedClosed,
         'isOutsourcing': isSelectedOutsourcing,
         'deptID': userInfo?.departmentID,

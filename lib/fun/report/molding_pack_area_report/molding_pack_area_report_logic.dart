@@ -1,37 +1,27 @@
 import 'package:get/get.dart';
-import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
-import 'package:jd_flutter/widget/picker/picker_controller.dart';
 
 import 'molding_pack_area_detail_report_view.dart';
 import 'molding_pack_area_report_state.dart';
 
 class MoldingPackAreaReportPageLogic extends GetxController {
   final MoldingPackAreaReportPageState state = MoldingPackAreaReportPageState();
-  var today = DateTime.now();
-  late DatePickerController dateControllerStart = DatePickerController(
-    PickerType.startDate,
-    saveKey: '${RouteConfig.moldingPackAreaReport.name}${PickerType.startDate}',
-    firstDate: DateTime(today.year, today.month - 2, today.day),
-    lastDate: today,
-  );
-  late DatePickerController dateControllerEnd = DatePickerController(
-    PickerType.endDate,
-    saveKey: '${RouteConfig.moldingPackAreaReport.name}${PickerType.endDate}',
-    firstDate: DateTime(today.year, today.month - 2, today.day),
-    lastDate: today,
-  );
-  var checkBoxController = CheckBoxPickerController(
-    PickerType.mesMoldingPackAreaReportType,
-    saveKey:
-        '${RouteConfig.moldingPackAreaReport.name}${PickerType.mesMoldingPackAreaReportType}',
-  );
 
-  query() {
+  query({
+    required String startDate,
+    required String endDate,
+    required List<String> packAreaIDs,
+    required String typeBody,
+    required String instruction,
+    required String orderNumber,
+  }) {
     state.getMoldingPackAreaReport(
-      startDate: dateControllerStart.getDateFormatYMD(),
-      endDate: dateControllerEnd.getDateFormatYMD(),
-      packAreaIDs: checkBoxController.selectedIds,
+      startDate: startDate,
+      endDate: endDate,
+      packAreaIDs: packAreaIDs,
+      typeBody: typeBody,
+      instruction: instruction,
+      orderNumber: orderNumber,
       error: (msg) => errorDialog(content: msg),
     );
   }

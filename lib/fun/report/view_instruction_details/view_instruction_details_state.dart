@@ -4,10 +4,10 @@ import 'package:jd_flutter/widget/dialogs.dart';
 
 
 class ViewInstructionDetailsState {
-  var tetInstruction = '';
 
   getInstructionDetailsFile({
     required String processFlowID,
+    required String instruction,
     required Function(Uri uri) success,
     required Function(String msg) error,
   }) {
@@ -15,7 +15,7 @@ class ViewInstructionDetailsState {
       loading: 'view_instruction_details_querying'.tr,
       method: webApiGetInstructionDetailsFile,
       params: {
-        'MoNo': tetInstruction,
+        'MoNo': instruction,
         'ProcessFlowID': processFlowID,
       },
     ).then((response) {

@@ -34,6 +34,7 @@ class _WarehouseAllocationPageState extends State<WarehouseAllocationPage> {
     saveKey: '${RouteConfig.warehouseAllocation.name}${'onStockList'}',
   );
 
+  var tecCode=TextEditingController();
   @override
   Widget build(BuildContext context) {
     return pageBody(
@@ -62,14 +63,13 @@ class _WarehouseAllocationPageState extends State<WarehouseAllocationPage> {
               Expanded(
                 child: EditText(
                   hint: 'warehouse_allocation_input'.tr,
-                  onChanged: (v) => state.code = v,
+                controller: tecCode,
                 ),
               ),
               CombinationButton(
                 text: 'warehouse_allocation_manually_add'.tr,
-                click: () {
-                  state.addCode(state.code);
-                },
+                click: () =>state.addCode(tecCode.text)
+                ,
               ),
             ],
           ),

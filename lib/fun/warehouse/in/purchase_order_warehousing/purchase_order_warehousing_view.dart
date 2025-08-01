@@ -51,6 +51,12 @@ class _PurchaseOrderWarehousingPageState
         '${RouteConfig.purchaseOrderWarehousing.name}${PickerType.endDate}',
   );
   var distributionController = TextEditingController();
+  var tecTypeBody = TextEditingController();
+  var tecInstruction = TextEditingController();
+  var tecPurchaseOrder = TextEditingController();
+  var tecMaterielCode = TextEditingController();
+  var tecCustomerPO = TextEditingController();
+  var tecTrackNo = TextEditingController();
 
   _query() {
     logic.query(
@@ -59,6 +65,12 @@ class _PurchaseOrderWarehousingPageState
       supplierNumber: opcSupplier.selectedId.value,
       factory: factoryWarehouseController.getPickItem1().pickerId(),
       warehouse: factoryWarehouseController.getPickItem2().pickerId(),
+      typeBody: tecTypeBody.text,
+      instruction: tecInstruction.text,
+      purchaseOrder: tecPurchaseOrder.text,
+      materielCode: tecMaterielCode.text,
+      customerPO: tecCustomerPO.text,
+      trackNo: tecTrackNo.text,
     );
   }
 
@@ -486,33 +498,27 @@ class _PurchaseOrderWarehousingPageState
       queryWidgets: [
         Obx(() => EditText(
               hint: 'purchase_order_warehousing_input_type_body'.tr,
-              initStr: state.typeBody.value,
-              onChanged: (v) => state.typeBody.value = v,
+              controller: tecTypeBody,
             )),
         Obx(() => EditText(
               hint: 'purchase_order_warehousing_input_instruction'.tr,
-              initStr: state.instruction.value,
-              onChanged: (v) => state.instruction.value = v,
+              controller: tecInstruction,
             )),
         Obx(() => EditText(
               hint: 'purchase_order_warehousing_input_purchase_order'.tr,
-              initStr: state.purchaseOrder.value,
-              onChanged: (v) => state.purchaseOrder.value = v,
+              controller: tecPurchaseOrder,
             )),
         Obx(() => EditText(
               hint: 'purchase_order_warehousing_input_material_code'.tr,
-              initStr: state.materielCode.value,
-              onChanged: (v) => state.materielCode.value = v,
+              controller: tecMaterielCode,
             )),
         Obx(() => EditText(
               hint: 'purchase_order_warehousing_input_customer_po'.tr,
-              initStr: state.customerPO.value,
-              onChanged: (v) => state.customerPO.value = v,
+              controller: tecCustomerPO,
             )),
         Obx(() => EditText(
               hint: 'purchase_order_warehousing_input_track_no'.tr,
-              initStr: state.trackNo.value,
-              onChanged: (v) => state.trackNo.value = v,
+              controller: tecTrackNo,
             )),
         OptionsPicker(pickerController: opcSupplier),
         LinkOptionsPicker(pickerController: factoryWarehouseController),

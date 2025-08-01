@@ -22,11 +22,16 @@ class FormingBarcodeCollectionPage extends StatefulWidget {
 }
 
 class _FormingBarcodeCollectionPageState
-    extends State<FormingBarcodeCollectionPage> {
+    extends State<FormingBarcodeCollectionPage>    with SingleTickerProviderStateMixin{
   final FormingBarcodeCollectionLogic logic =
       Get.put(FormingBarcodeCollectionLogic());
   final FormingBarcodeCollectionState state =
       Get.find<FormingBarcodeCollectionLogic>().state;
+
+  //tab控制器
+  late TabController tabController = TabController(length: 2, vsync: this);
+
+
 
   // 其他功能
   showOther() {
@@ -439,7 +444,7 @@ class _FormingBarcodeCollectionPageState
       body: Scaffold(
           backgroundColor: Colors.transparent,
           appBar: TabBar(
-            controller: logic.tabController,
+            controller: tabController,
             dividerColor: Colors.blueAccent,
             indicatorColor: Colors.blueAccent,
             labelColor: Colors.blueAccent,
@@ -454,7 +459,7 @@ class _FormingBarcodeCollectionPageState
             children: [
               Expanded(
                 child: TabBarView(
-                  controller: logic.tabController,
+                  controller: tabController,
                   children: [_tabPage1(), _tabPage2()],
                 ),
               ),
@@ -465,7 +470,7 @@ class _FormingBarcodeCollectionPageState
 
   _scan() {
     pdaScanner(scan: (scanCode) {
-      if (logic.tabController.index == 0) {
+      if (tabController.index == 0) {
         if (scanCode.isNotEmpty && state.canScan == true) {
           // 条码不为空，可以扫描
           logic.checkCode(

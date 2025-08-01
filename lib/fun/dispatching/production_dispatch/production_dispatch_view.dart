@@ -6,12 +6,14 @@ import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
+import 'package:jd_flutter/widget/picker/picker_controller.dart';
 import 'package:jd_flutter/widget/picker/picker_view.dart';
 import 'package:jd_flutter/widget/switch_button_widget.dart';
 import 'package:jd_flutter/widget/web_page.dart';
 import 'package:marquee/marquee.dart';
 
 import 'production_dispatch_logic.dart';
+import 'package:jd_flutter/route.dart';
 
 class ProductionDispatchPage extends StatefulWidget {
   const ProductionDispatchPage({super.key});
@@ -33,14 +35,29 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
 
   var itemTitleStyle = const TextStyle(color: Colors.white, fontSize: 16);
 
+  //日期选择器的控制器
+  var dpcStartDate = DatePickerController(
+    PickerType.startDate,
+    saveKey: '${RouteConfig.productionDispatch.name}${PickerType.startDate}',
+  )..firstDate = DateTime(
+      DateTime.now().year - 5, DateTime.now().month, DateTime.now().day);
+
+  //日期选择器的控制器
+  var dpcEndDate = DatePickerController(
+    PickerType.endDate,
+    saveKey: '${RouteConfig.productionDispatch.name}${PickerType.endDate}',
+  );
+
+  var tecInstruction = TextEditingController();
+
   _queryWidgets() {
     return [
       EditText(
         hint: 'production_dispatch_instruction_hint'.tr,
-        onChanged: (v) => state.etInstruction = v,
+        controller: tecInstruction,
       ),
-      DatePicker(pickerController: logic.dpcStartDate),
-      DatePicker(pickerController: logic.dpcEndDate),
+      DatePicker(pickerController: dpcStartDate),
+      DatePicker(pickerController: dpcEndDate),
       if (!state.isSelectedMergeOrder)
         SwitchButton(
           onChanged: (bool isSelect) {
@@ -93,7 +110,11 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
         child: CombinationButton(
           text: 'production_dispatch_query_progress'.tr,
           backgroundColor: Colors.green,
-          click: () => logic.queryProgress(),
+          click: () => logic.queryProgress(
+            startTime: dpcStartDate.getDateFormatYMD(),
+            endTime: dpcEndDate.getDateFormatYMD(),
+            instruction: tecInstruction.text,
+          ),
         ),
       )
     ];
@@ -527,21 +548,21 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
                       combination: Combination.middle,
                       isEnabled: state.cbIsEnabledProcessOpen.value,
                       text: state.cbNameProcess.value,
-                      click: () => logic.offOnProcess(),
+                      click: () => logic.offOnProcess(refresh: ()=>_query()),
                     ),
                   if (!state.isSelectedMany)
                     CombinationButton(
                       combination: Combination.middle,
                       isEnabled: state.cbIsEnabledDeleteDownstream.value,
                       text: 'production_dispatch_bt_delete_downstream'.tr,
-                      click: () => logic.deleteDownstream(),
+                      click: () => logic.deleteDownstream(refresh: ()=>_query()),
                     ),
                   if (!state.isSelectedMany)
                     CombinationButton(
                       combination: Combination.middle,
                       isEnabled: state.cbIsEnabledDeleteLastReport.value,
                       text: 'production_dispatch_bt_delete_last_report'.tr,
-                      click: () => logic.deleteLastReport(),
+                      click: () => logic.deleteLastReport(refresh: ()=>_query()),
                     ),
                   if (!state.isSelectedMany)
                     CombinationButton(
@@ -555,7 +576,7 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
                       combination: Combination.middle,
                       isEnabled: state.cbIsEnabledUpdateSap.value,
                       text: 'production_dispatch_bt_update_sap'.tr,
-                      click: () => logic.updateSap(),
+                      click: () => logic.updateSap(refresh: ()=>_query()),
                     ),
                   if (!state.isSelectedMany)
                     CombinationButton(
@@ -565,7 +586,7 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
                       click: () => logic.getSurplusMaterial(
                         print: (list) => showSelectMaterialPopup(
                           surplusMaterialList: list,
-                          print: (data) =>logic.printSurplusMaterial(data),
+                          print: (data) => logic.printSurplusMaterial(data),
                         ),
                       ),
                     ),
@@ -576,7 +597,10 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
                       text: 'production_dispatch_bt_report_sap'.tr,
                       click: () => sapReportDialog(
                         initQty: logic.getReportMax(),
-                        callback: logic.reportToSap,
+                        callback: (qty) => logic.reportToSap(
+                          qty: qty,
+                          refresh: () => () => _query(),
+                        ),
                       ),
                     ),
                 ],
@@ -595,11 +619,16 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
     );
   }
 
+  _query() => logic.query(
+      startTime: dpcStartDate.getDateFormatYMD(),
+      endTime: dpcEndDate.getDateFormatYMD(),
+      instruction: tecInstruction.text);
+
   @override
   Widget build(BuildContext context) {
     return pageBodyWithDrawer(
       queryWidgets: _queryWidgets(),
-      query: () => logic.query(),
+      query: () => _query(),
       body: Obx(
         () => Column(
           children: [

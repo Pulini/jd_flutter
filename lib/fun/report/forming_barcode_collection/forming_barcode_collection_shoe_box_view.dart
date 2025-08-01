@@ -24,6 +24,9 @@ class _FormingBarcodeCollectionShoeBoxPageState
   final logic = Get.find<FormingBarcodeCollectionLogic>();
   final state = Get.find<FormingBarcodeCollectionLogic>().state;
 
+  //指令单号
+  var shoeController = TextEditingController();
+
   _item(FormingBarcodeByMonoInfo data,int position) {
     return GestureDetector(
       child: Container(
@@ -159,10 +162,7 @@ class _FormingBarcodeCollectionShoeBoxPageState
           children: [
             EditText(
               hint: 'forming_code_collection_enter_or_scan'.tr,
-              controller: logic.shoeController,
-              onChanged: (v) {
-                state.shoeInstruction = v;
-              },
+              controller: shoeController,
             ),
             Row(
               children: [
@@ -171,9 +171,9 @@ class _FormingBarcodeCollectionShoeBoxPageState
                   //查询
                   text: 'forming_code_collection_search_button'.tr,
                   click: () {
-                    if (logic.shoeController.text.isNotEmpty) {
+                    if (shoeController.text.isNotEmpty) {
                       logic.getScMoSizeBarCodeByMONo(
-                          shoeBill: logic.shoeController.text);
+                          shoeBill: shoeController.text);
                     }
                   },
                   combination: Combination.left,
@@ -187,7 +187,7 @@ class _FormingBarcodeCollectionShoeBoxPageState
                       successDialog(
                           content: mes,
                           back: () {
-                            Get.back(result: logic.shoeController.text);
+                            Get.back(result: shoeController.text);
                           });
                     });
                   },
@@ -231,8 +231,8 @@ class _FormingBarcodeCollectionShoeBoxPageState
   void initState() {
     pdaScanner(scan: (scanCode) {
       if (scanCode.length < 50) {
-        if (state.shoeInstruction.isNullOrEmpty() || state.barCodeByMonoData.isNullOrEmpty()) {
-          logic.shoeController.text = scanCode;
+        if (shoeController.text.isNullOrEmpty() || state.barCodeByMonoData.isNullOrEmpty()) {
+          shoeController.text = scanCode;
           logic.getScMoSizeBarCodeByMONo(shoeBill: scanCode);
         } else {
           if(logic.haveCode(scanCode)){  //不存在该条码可以继续
@@ -246,6 +246,7 @@ class _FormingBarcodeCollectionShoeBoxPageState
 
   @override
   void dispose() {
+    shoeController.clear();
     logic.quitShoe();
     super.dispose();
   }

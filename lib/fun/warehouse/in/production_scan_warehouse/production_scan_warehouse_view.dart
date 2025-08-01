@@ -27,7 +27,7 @@ class _ProductionScanWarehousePageState
       Get.find<ProductionScanWarehouseLogic>().state;
 
   var refreshController = EasyRefreshController(controlFinishRefresh: true);
-
+var tecCode=TextEditingController();
   void showCustomPickerDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -170,9 +170,7 @@ class _ProductionScanWarehousePageState
                       flex: 5,
                       child: EditText(
                         hint: 'warehouse_allocation_input'.tr,
-                        onChanged: (s) => {
-                          state.handCode = s,
-                        },
+                     controller: tecCode,
                       ),
                     ),
                     Expanded(
@@ -218,8 +216,8 @@ class _ProductionScanWarehousePageState
                   child: CombinationButton(
                     text: 'warehouse_allocation_manually_add'.tr,
                     click: () {
-                      if (state.handCode.isNotEmpty) {
-                        logic.scanCode(state.handCode);
+                      if (tecCode.text.isNotEmpty) {
+                        logic.scanCode(tecCode.text);
                       }
                     },
                     combination: Combination.left,

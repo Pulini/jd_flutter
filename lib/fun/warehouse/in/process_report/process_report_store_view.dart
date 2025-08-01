@@ -23,6 +23,7 @@ class _ProcessReportPageState extends State<ProcessReportStorePage> {
   final state = Get.find<ProcessReportStoreLogic>().state;
 
   var refreshController = EasyRefreshController(controlFinishRefresh: true);
+  var tecCode = TextEditingController();
 
   _item(BarCodeInfo code) {
     return GestureDetector(
@@ -82,7 +83,7 @@ class _ProcessReportPageState extends State<ProcessReportStorePage> {
                 Expanded(
                   child: EditText(
                     hint: 'process_report_store_manual_input'.tr,
-                    onChanged: (v) => state.code = v,
+                    controller: tecCode,
                   ),
                 ),
                 InkWell(
@@ -124,34 +125,34 @@ class _ProcessReportPageState extends State<ProcessReportStorePage> {
                     ],
                   ),
                 )),
-           Obx(()=> Visibility(
-             visible: state.showClick.value,
-             child: Row(
-               children: [
-                 Expanded(
-                     child: CombinationButton(
-                       text: 'process_report_store_change'.tr,
-                       click: () {
-                         Get.to(() => const ProcessReportModifyPage());
-                       },
-                       combination: Combination.left,
-                     )),
-                 Expanded(
-                     child: CombinationButton(
-                       text: 'process_report_store_clear_list'.tr,
-                       click: () {
-                         askDialog(
-                           content: 'code_list_report_sure_clean'.tr,
-                           confirm: () {
-                             logic.clearBarCodeList();
-                           },
-                         );
-                       },
-                       combination: Combination.right,
-                     ))
-               ],
-             ),
-           )),
+            Obx(() => Visibility(
+                  visible: state.showClick.value,
+                  child: Row(
+                    children: [
+                      Expanded(
+                          child: CombinationButton(
+                        text: 'process_report_store_change'.tr,
+                        click: () {
+                          Get.to(() => const ProcessReportModifyPage());
+                        },
+                        combination: Combination.left,
+                      )),
+                      Expanded(
+                          child: CombinationButton(
+                        text: 'process_report_store_clear_list'.tr,
+                        click: () {
+                          askDialog(
+                            content: 'code_list_report_sure_clean'.tr,
+                            confirm: () {
+                              logic.clearBarCodeList();
+                            },
+                          );
+                        },
+                        combination: Combination.right,
+                      ))
+                    ],
+                  ),
+                )),
             Row(
               children: [
                 Expanded(
@@ -159,7 +160,7 @@ class _ProcessReportPageState extends State<ProcessReportStorePage> {
                   child: CombinationButton(
                     text: 'process_report_store_manually_add'.tr,
                     click: () {
-                      logic.scanCode(state.code);
+                      logic.scanCode(tecCode.text);
                     },
                     combination: Combination.left,
                   ),

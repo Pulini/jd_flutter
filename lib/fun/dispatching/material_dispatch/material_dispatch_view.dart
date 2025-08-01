@@ -1,9 +1,10 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jd_flutter/bean/home_button.dart';
 import 'package:jd_flutter/bean/http/response/material_dispatch_info.dart';
 import 'package:jd_flutter/bean/http/response/material_dispatch_label_detail.dart';
+import 'package:jd_flutter/fun/dispatching/material_dispatch/material_dispatch_state.dart';
+import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/check_box_widget.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
@@ -11,6 +12,7 @@ import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
 import 'package:jd_flutter/widget/feishu_authorize.dart';
+import 'package:jd_flutter/widget/picker/picker_controller.dart';
 import 'package:jd_flutter/widget/picker/picker_view.dart';
 import 'package:jd_flutter/widget/spinner_widget.dart';
 import 'package:rotated_corner_decoration/rotated_corner_decoration.dart';
@@ -27,6 +29,30 @@ class MaterialDispatchPage extends StatefulWidget {
 class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
   final logic = Get.put(MaterialDispatchLogic());
   final state = Get.find<MaterialDispatchLogic>().state;
+  var scReportState = SpinnerController(
+    saveKey: RouteConfig.materialDispatch.name,
+    dataList: [
+      'material_dispatch_report_state_all'.tr,
+      'material_dispatch_report_state_not_report'.tr,
+      'material_dispatch_report_state_reported'.tr,
+      'material_dispatch_report_state_generated_not_report'.tr,
+    ],
+  );
+  var tecMaterial = TextEditingController();
+  var tecTypeBody = TextEditingController();
+
+  //日期选择器的控制器
+  var dpcStartDate = DatePickerController(
+    PickerType.startDate,
+    saveKey: '${RouteConfig.materialDispatch.name}${PickerType.startDate}',
+  )..firstDate = DateTime(
+      DateTime.now().year - 5, DateTime.now().month, DateTime.now().day);
+
+  //日期选择器的控制器
+  var dpcEndDate = DatePickerController(
+    PickerType.endDate,
+    saveKey: '${RouteConfig.materialDispatch.name}${PickerType.endDate}',
+  );
 
 
   _item1(MaterialDispatchInfo data, int index) {
@@ -321,7 +347,7 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
               ),
               CombinationButton(
                 text: 'material_dispatch_label_list'.tr,
-                click: () => labelListDialog(state.date, context, data,
+                click: () => labelListDialog(context, data,
                     callback: (info, label) {
                   var bill = '';
                   var batch = '';
@@ -350,7 +376,7 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
                       gw: label.gw.toShowString(),
                       ew: label.nw.toShowString());
                 }, refreshCallBack: () {
-                  logic.refreshDataList();
+                      _query();
                 }),
                 combination: Combination.middle,
               ),
@@ -358,7 +384,10 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
                 text: 'material_dispatch_report'.tr,
                 click: () => askDialog(
                   content: 'material_dispatch_report_tips'.tr,
-                  confirm: () => logic.itemReport(data),
+                  confirm: () => logic.itemReport(
+                    data: data,
+                    refresh: () => _query(),
+                  ),
                 ),
                 combination: Combination.middle,
               ),
@@ -366,7 +395,10 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
                 text: 'material_dispatch_cancel_report'.tr,
                 click: () => askDialog(
                   content: 'material_dispatch_cancel_all_report_tips'.tr,
-                  confirm: () => logic.itemCancelReport(data),
+                  confirm: () => logic.itemCancelReport(
+                    data: data,
+                    refresh: () => _query(),
+                  ),
                 ),
                 combination: Combination.right,
               )
@@ -423,7 +455,10 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
       if (subData != null) {
         askDialog(
           content: 'material_dispatch_cancel_report_tips'.tr,
-          confirm: () => logic.subItemCancelReport(subData),
+          confirm: () => logic.subItemCancelReport(
+            subData: subData,
+            refresh: () => _query(),
+          ),
         );
       }
     }
@@ -487,9 +522,9 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
         askDialog(
           content: 'material_dispatch_stock_in_tips'.tr,
           confirm: () => logic.subItemWarehousing(
-            subData,
-            data.sapDecideArea ?? '',
-          ),
+              data: subData,
+              sapDecideArea: data.sapDecideArea ?? '',
+              refresh: () => _query()),
         );
       }
     }
@@ -547,137 +582,101 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
     return buttons;
   }
 
+  _query() {
+    logic.refreshDataList(
+      startDate: dpcStartDate.getDateFormatYMD(),
+      endDate: dpcEndDate.getDateFormatYMD(),
+      status: scReportState.selectIndex - 1,
+      typeBody: tecTypeBody.text,
+    );
+  }
+
+  showPickPallet() {
+    pickPallet().then((v) {
+      if (v!=null&&v) Get.back();
+    });
+  }
+
   @override
   void initState() {
-    if (state.isNeedSetInitData()) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        pickPallet(
-          isFirst: true,
-          savePalletDate: state.date,
-          saveMachine: state.machineId,
-          saveWarehouseLocation: state.locationId,
-          savePallet: state.palletNumber,
-          context: context,
-          callback: (
-            date,
-            machineId,
-            locationId,
-            palletNumber,
-          ) =>
-              setState(() => state.savePickData(
-                    date: date,
-                    machineId: machineId,
-                    locationId: locationId,
-                    palletNumber: palletNumber,
-                  )),
-        );
-      });
-    }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (getMaterialDispatchPalletNumber().isEmpty) showPickPallet();
+    });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (state.isNeedSetInitData()) {
-      return Container(
-        decoration: backgroundColor(),
-        child: Scaffold(
-          backgroundColor: Colors.transparent,
-          appBar: AppBar(
-            backgroundColor: Colors.transparent,
-            title: Text(functionTitle),
+    return pageBodyWithDrawer(
+      actions: [
+        SizedBox(
+          width: 400,
+          child: EditText(
+            controller: tecMaterial,
+            hint: 'material_dispatch_select_tips'.tr,
+            onChanged: (s) => logic.search(s),
           ),
         ),
-      );
-    } else {
-      return pageBodyWithDrawer(
-        actions: [
-          SizedBox(
-            width: 400,
-            child: EditText(
-              hint: 'material_dispatch_select_tips'.tr,
-              onChanged: (s) => logic.search(s),
-            ),
+        CombinationButton(
+          text: 'material_dispatch_storage_pallet_select'.tr,
+          click: () => showPickPallet(),
+          combination: Combination.left,
+        ),
+        CombinationButton(
+          text: 'material_dispatch_batch_stock_in'.tr,
+          click: () => askDialog(
+            content: 'material_dispatch_batch_stock_in_tips'.tr,
+            confirm: () => logic.batchWarehousing(refresh: () => _query()),
           ),
-          CombinationButton(
-            text: 'material_dispatch_storage_pallet_select'.tr,
-            click: () => pickPallet(
-              savePalletDate: state.date,
-              saveMachine: state.machineId,
-              saveWarehouseLocation: state.locationId,
-              savePallet: state.palletNumber,
-              context: context,
-              callback: (
-                int date,
-                String machineId,
-                String locationId,
-                String palletNumber,
-              ) =>
-                  state.savePickData(
-                date: date,
-                machineId: machineId,
-                locationId: locationId,
-                palletNumber: palletNumber,
-              ),
-            ),
-            combination: Combination.left,
+          combination: Combination.middle,
+        ),
+        CombinationButton(
+          text: 'material_dispatch_map'.tr,
+          click: () => showAreaPhoto(context),
+          combination: Combination.middle,
+        ),
+        CombinationButton(
+          text: 'material_dispatch_report_to_sap'.tr,
+          click: () => askDialog(
+            content: 'material_dispatch_report_to_sap_tips'.tr,
+            confirm: () => logic.reportToSAP(refresh: () => _query()),
           ),
-          CombinationButton(
-            text: 'material_dispatch_batch_stock_in'.tr,
-            click: () => askDialog(
-              content: 'material_dispatch_batch_stock_in_tips'.tr,
-              confirm: () => logic.batchWarehousing(),
-            ),
-            combination: Combination.middle,
-          ),
-          CombinationButton(
-            text: 'material_dispatch_map'.tr,
-            click: () => showAreaPhoto(context),
-            combination: Combination.middle,
-          ),
-          CombinationButton(
-            text: 'material_dispatch_report_to_sap'.tr,
-            click: () => askDialog(
-              content: 'material_dispatch_report_to_sap_tips'.tr,
-              confirm: () => logic.reportToSAP(),
-            ),
-            combination: Combination.right,
-          ),
-          const SizedBox(width: 10),
-        ],
-        queryWidgets: [
-          EditText(
-            hint: 'material_dispatch_enter_type_body_tips'.tr,
-            onChanged: (s) => state.typeBody = s,
-          ),
-          DatePicker(pickerController: logic.dpcStartDate),
-          DatePicker(pickerController: logic.dpcEndDate),
-          Spinner(controller: logic.scReportState),
-          Obx(() => CheckBox(
-                onChanged: (c) => state.lastProcess.value = c,
-                name: 'material_dispatch_show_last'.tr,
-                value: state.lastProcess.value,
-              )),
-          Obx(() => CheckBox(
-                onChanged: (c) => state.unStockIn.value = c,
-                name: 'material_dispatch_show_not_stock_in'.tr,
-                value: state.unStockIn.value,
-              )),
-          Obx(() => CheckBox(
-                onChanged: (c) => state.allInstruction.value = c,
-                name: 'material_dispatch_btn_print_all'.tr,
-                value: state.allInstruction.value,
-              )),
-        ],
-        query: () => logic.refreshDataList(),
-        body: Obx(() => ListView.builder(
-              padding: const EdgeInsets.all(8),
-              itemCount: state.showOrderList.length,
-              itemBuilder: (context, index) =>
-                  _item1(state.showOrderList[index], index),
+          combination: Combination.right,
+        ),
+        const SizedBox(width: 10),
+      ],
+      queryWidgets: [
+        EditText(
+          hint: 'material_dispatch_enter_type_body_tips'.tr,
+          controller: tecTypeBody,
+        ),
+        DatePicker(pickerController: dpcStartDate),
+        DatePicker(pickerController: dpcEndDate),
+        Spinner(controller: scReportState),
+        Obx(() => CheckBox(
+              onChanged: (c) => state.lastProcess.value = c,
+              name: 'material_dispatch_show_last'.tr,
+              value: state.lastProcess.value,
             )),
-      );
-    }
+        Obx(() => CheckBox(
+              onChanged: (c) => state.unStockIn.value = c,
+              name: 'material_dispatch_show_not_stock_in'.tr,
+              value: state.unStockIn.value,
+            )),
+        Obx(() => CheckBox(
+              onChanged: (c) => state.allInstruction.value = c,
+              name: 'material_dispatch_btn_print_all'.tr,
+              value: state.allInstruction.value,
+            )),
+      ],
+      query: () => _query(),
+      body: Obx(() => ListView.builder(
+            padding: const EdgeInsets.all(8),
+            itemCount: state.showOrderList.length,
+            itemBuilder: (context, index) =>
+                _item1(state.showOrderList[index], index),
+          )),
+    );
   }
 
   @override

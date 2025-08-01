@@ -33,7 +33,6 @@ class FormingBarcodeCollectionState {
 
   var canScan = true; //可以进行扫描
 
-  var shoeInstruction=''; //鞋盒匹配用到的指令号
   var btnName='补零'.obs; //补零或清零
   var barCodeByMonoData = <FormingBarcodeByMonoInfo>[].obs;
 

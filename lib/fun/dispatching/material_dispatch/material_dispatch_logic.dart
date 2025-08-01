@@ -2,12 +2,9 @@ import 'package:collection/collection.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/material_dispatch_info.dart';
 import 'package:jd_flutter/bean/http/response/material_dispatch_label_detail.dart';
-import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
-import 'package:jd_flutter/widget/picker/picker_controller.dart';
 import 'package:jd_flutter/widget/preview_label_widget.dart';
-import 'package:jd_flutter/widget/spinner_widget.dart';
 import 'package:jd_flutter/widget/tsc_label_templates/110w_dynamic_label.dart';
 import 'package:jd_flutter/widget/tsc_label_templates/75w45h_fixed_label.dart';
 import 'package:jd_flutter/widget/tsc_label_templates/75w_dynamic_label.dart';
@@ -15,28 +12,6 @@ import 'material_dispatch_state.dart';
 
 class MaterialDispatchLogic extends GetxController {
   final MaterialDispatchState state = MaterialDispatchState();
-  var scReportState = SpinnerController(
-    saveKey: RouteConfig.materialDispatch.name,
-    dataList: [
-      'material_dispatch_report_state_all'.tr,
-      'material_dispatch_report_state_not_report'.tr,
-      'material_dispatch_report_state_reported'.tr,
-      'material_dispatch_report_state_generated_not_report'.tr,
-    ],
-  );
-
-  //日期选择器的控制器
-  var dpcStartDate = DatePickerController(
-    PickerType.startDate,
-    saveKey: '${RouteConfig.materialDispatch.name}${PickerType.startDate}',
-  )..firstDate = DateTime(
-      DateTime.now().year - 5, DateTime.now().month, DateTime.now().day);
-
-  //日期选择器的控制器
-  var dpcEndDate = DatePickerController(
-    PickerType.endDate,
-    saveKey: '${RouteConfig.materialDispatch.name}${PickerType.endDate}',
-  );
 
   // @override
   // void onReady() {
@@ -46,11 +21,18 @@ class MaterialDispatchLogic extends GetxController {
   //   super.onReady();
   // }
 
-  refreshDataList() {
+
+  refreshDataList({
+    required String startDate,
+    required String endDate,
+    required int status,
+    required String typeBody,
+  }) {
     state.getScWorkCardProcess(
-      startDate: dpcStartDate.getDateFormatYMD(),
-      endDate: dpcEndDate.getDateFormatYMD(),
-      status: scReportState.selectIndex - 1,
+      startDate: startDate,
+      endDate: endDate,
+      status: status,
+      typeBody: typeBody,
       error: (msg) => errorDialog(content: msg),
     );
   }
@@ -65,17 +47,17 @@ class MaterialDispatchLogic extends GetxController {
     }
   }
 
-  reportToSAP() {
+  reportToSAP({required Function() refresh}) {
     state.reportToSAP(
       success: (msg) => successDialog(
         content: msg,
-        back: () => refreshDataList(),
+        back: refresh,
       ),
       error: (msg) => errorDialog(content: msg),
     );
   }
 
-  batchWarehousing() {
+  batchWarehousing({required Function() refresh}) {
     var submitList = state.createSubmitData();
     if (submitList.isEmpty) {
       msgDialog(content: 'material_dispatch_batch_stock_in_error_tips'.tr);
@@ -84,42 +66,50 @@ class MaterialDispatchLogic extends GetxController {
         submitList: submitList,
         success: (msg) => successDialog(
           content: msg,
-          back: () => refreshDataList(),
+          back: refresh,
         ),
         error: (msg) => errorDialog(content: msg),
       );
     }
   }
 
-  itemReport(MaterialDispatchInfo data) {
+  itemReport(
+      {required MaterialDispatchInfo data, required Function() refresh}) {
     state.itemReport(
       data: data,
       success: (msg) => successDialog(
         content: msg,
-        back: () => refreshDataList(),
+        back: refresh,
       ),
       error: (msg) => errorDialog(content: msg),
     );
   }
 
-  itemCancelReport(MaterialDispatchInfo data) {
+  itemCancelReport({
+    required MaterialDispatchInfo data,
+    required Function() refresh,
+  }) {
     state.itemCancelReport(
       data: data,
       success: (msg) => successDialog(
         content: msg,
-        back: () => refreshDataList(),
+        back: refresh,
       ),
       error: (msg) => errorDialog(content: msg),
     );
   }
 
-  subItemWarehousing(Children data, String sapDecideArea) {
+  subItemWarehousing({
+    required Children data,
+    required String sapDecideArea,
+    required Function() refresh,
+  }) {
     state.subItemWarehousing(
       data: data,
       sapDecideArea: sapDecideArea,
       success: (msg) => successDialog(
         content: msg,
-        back: () => refreshDataList(),
+        back: refresh,
       ),
       error: (msg) => errorDialog(content: msg),
     );
@@ -193,12 +183,15 @@ class MaterialDispatchLogic extends GetxController {
     );
   }
 
-  subItemCancelReport(Children subData) {
+  subItemCancelReport({
+    required Children subData,
+    required Function() refresh,
+  }) {
     state.subItemCancelReport(
       subData: subData,
       success: (msg) => successDialog(
         content: msg,
-        back: () => refreshDataList(),
+        back:refresh ,
       ),
       error: (msg) => errorDialog(content: msg),
     );

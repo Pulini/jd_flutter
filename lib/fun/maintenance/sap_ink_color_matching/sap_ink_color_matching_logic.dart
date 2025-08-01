@@ -12,11 +12,13 @@ class SapInkColorMatchingLogic extends GetxController {
   queryOrder({
     required String startDate,
     required String endDate,
+    required String typeBody,
     Function()? refresh,
   }) {
     state.queryOrder(
       startDate: startDate,
       endDate: endDate,
+        typeBody:typeBody,
       error: (msg) => errorDialog(content: msg),
     );
   }
@@ -83,7 +85,7 @@ class SapInkColorMatchingLogic extends GetxController {
               v.isMix?.isEmpty == true)
           .toList();
 
-  initModifyBodyData(int index) {
+  initModifyBodyData({required int index,required Function(String) refreshRemarks}) {
     state.readMixDeviceWeight.value = state.orderList[index].mixtureWeight ?? 0;
     state.inkColorList.value = [
       for (var item in (state.orderList[index].materialList ??
@@ -99,7 +101,7 @@ class SapInkColorMatchingLogic extends GetxController {
           weightAfterColorMix: item.weightAfterColorMix,
         )..unit.value = item.unit ?? ''
     ];
-    state.remarks.value = state.orderList[index].remarks ?? '';
+    refreshRemarks.call( state.orderList[index].remarks ?? '');
   }
 
   readBeforeWeight() {
@@ -187,7 +189,7 @@ class SapInkColorMatchingLogic extends GetxController {
     submit.call();
   }
 
-  submitModifyOrder(int index) {
+  submitModifyOrder({required int index, required String remarks}) {
     checkSubmit(
         isModify: true,
         submit: () {
@@ -205,6 +207,7 @@ class SapInkColorMatchingLogic extends GetxController {
             inkMaster: state.orderList[index].inkMaster ?? '',
             mixActualWeight: mixActualWeight,
             mixTheoreticalWeight: mixTheoreticalWeight,
+            remarks: remarks,
             success: (msg) => successDialog(
               content: msg,
               back: () => Get.back(result: true),
@@ -214,7 +217,7 @@ class SapInkColorMatchingLogic extends GetxController {
         });
   }
 
-  submitCreateOrder() {
+  submitCreateOrder({required String remarks}) {
     checkSubmit(
         isModify: false,
         submit: () => state.submitOrder(
@@ -224,6 +227,7 @@ class SapInkColorMatchingLogic extends GetxController {
               mixTheoreticalWeight: state.inkColorList
                   .map((v) => v.consumption())
                   .reduce((a, b) => a.add(b)),
+              remarks: remarks,
               success: (msg) => successDialog(
                 content: msg,
                 back: () => Get.back(result: true),

@@ -9,7 +9,6 @@ import 'package:jd_flutter/utils/web_api.dart';
 
 class SapScanCodeInventoryState {
   var orderType = ''.obs;
-  var area = ''.obs;
   var palletList = <RxList<InventoryPalletInfo>>[].obs;
   var materialList = <InventoryPalletInfo>[].obs;
 
@@ -18,6 +17,7 @@ class SapScanCodeInventoryState {
     required bool isScan,
     required String factory,
     required String warehouse,
+    required String area,
     required Function(String message) error,
   }) {
     sapPost(
@@ -26,7 +26,7 @@ class SapScanCodeInventoryState {
       body: {
         'WERKS': factory,
         'LGORT': warehouse,
-        'ZLOCAL': isScan?area.value:'',
+        'ZLOCAL': isScan?area:'',
         'ZTYPE': orderType.value,
       },
     ).then((response) {

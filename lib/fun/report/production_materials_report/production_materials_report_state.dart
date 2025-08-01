@@ -8,9 +8,6 @@ class ProductionMaterialsReportState {
   var tableOpenIndex = <bool>[];
   var tableData = <List<ProductionMaterialsInfo>>[].obs;
   var isPickingMaterialCompleted = false.obs;
-  var etInstruction = '';
-  var etOrderNumber = '';
-  var etSizeOrderNumber = '';
   var select = 0.obs;
 
   getSapMoPickList({

@@ -5,8 +5,7 @@ import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 
 class WorkOrderListState {
-  var workBarCode = '';
-  var planOrderNumber = '';
+
   var dataList = <WorkOrderInfo>[].obs;
   var isOutsourcing = spGet('${Get.currentRoute}/isClosed') ?? false;
   var isClosed = spGet('${Get.currentRoute}/isClosed') ?? false;
@@ -19,6 +18,8 @@ class WorkOrderListState {
   query({
     required String pcStartDate,
     required String pcEndDate,
+    required String workBarCode,
+    required String planOrderNumber,
     required String pcGroup,
     required Function(String msg) error,
   }) {

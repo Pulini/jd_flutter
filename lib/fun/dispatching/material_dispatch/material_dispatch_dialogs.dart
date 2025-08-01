@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/material_dispatch_info.dart';
 import 'package:jd_flutter/bean/http/response/sap_pallet_info.dart';
+import 'package:jd_flutter/fun/dispatching/material_dispatch/material_dispatch_state.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
@@ -222,7 +223,6 @@ showBillNoList(String data) {
 }
 
 labelListDialog(
-  int date,
   BuildContext context,
   MaterialDispatchInfo mdi, {
   required Function(MaterialDispatchInfo, LabelInfo) callback,
@@ -376,9 +376,11 @@ labelListDialog(
                                                     data.reportStatus == '0',
                                                 guid: data.guid!,
                                                 upDate: getDateYMD(
-                                                    time: DateTime
-                                                        .fromMillisecondsSinceEpoch(
-                                                            date)),
+                                                  time: DateTime
+                                                      .fromMillisecondsSinceEpoch(
+                                                    getMaterialDispatchDate(),
+                                                  ),
+                                                ),
                                                 callback: () {
                                                   refreshCallBack.call();
                                                 });
@@ -666,24 +668,11 @@ showAreaPhoto(BuildContext context) => Get.dialog(
       barrierDismissible: false,
     );
 
-pickPallet({
-  required int savePalletDate,
-  required String saveMachine,
-  required String saveWarehouseLocation,
-  required String savePallet,
-  bool isFirst = false,
-  required BuildContext context,
-  required Function(
-    int date,
-    String machineId,
-    String locationId,
-    String palletNumber,
-  ) callback,
-}) {
-  var selectDate = 0;
-  var selectMachineId = '';
-  var selectLocationId = '';
-  var selectPalletNumber = '';
+Future pickPallet() {
+  var selectDate = getMaterialDispatchDate();
+  var selectMachineId = getMaterialDispatchMachineId();
+  var selectLocationId = getMaterialDispatchLocationId();
+  var selectPalletNumber = getMaterialDispatchPalletNumber();
 
   var dateNow = DateTime.now();
   var dpcDate = DatePickerController(
@@ -691,18 +680,18 @@ pickPallet({
     buttonName: 'material_dispatch_dialog_posting_date'.tr,
     firstDate: DateTime(dateNow.year, dateNow.month - 1, dateNow.day),
     lastDate: dateNow,
-    initDate: savePalletDate,
+    initDate: selectDate,
     onSelected: (d) => selectDate = d.millisecondsSinceEpoch,
   );
 
   var ppcPallet = PickPalletController(
-    initId: savePallet,
+    initId: selectPalletNumber,
     onSelected: (spi) => selectPalletNumber = spi.palletNumber ?? '',
   );
 
   var opcMachine = OptionsPickerController(
     PickerType.sapMachine,
-    initId: saveMachine,
+    initId: selectMachineId,
     onSelected: (i) {
       selectMachineId = i.pickerId();
       ppcPallet.refresh(selectLocationId, selectMachineId);
@@ -712,20 +701,20 @@ pickPallet({
   var opcWarehouseLocation = OptionsPickerController(
     PickerType.sapWarehouseStorageLocation,
     buttonName: 'material_dispatch_dialog_stock_in_warehouse_position'.tr,
-    initId: saveWarehouseLocation,
+    initId: selectLocationId,
     onSelected: (i) {
       selectLocationId = i.pickerId();
       ppcPallet.refresh(selectLocationId, selectMachineId);
     },
   );
 
-  Get.dialog(
+  return Get.dialog(
     PopScope(
       canPop: false,
       child: AlertDialog(
         title: Text('material_dispatch_dialog_pallet_select'.tr),
         content: SizedBox(
-          width: MediaQuery.of(context).size.width * 0.35,
+          width: 400,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -775,23 +764,22 @@ pickPallet({
                 );
                 return;
               }
-              callback.call(
-                selectDate,
-                selectMachineId,
-                selectLocationId,
-                selectPalletNumber,
-              );
+              saveMaterialDispatchDate(selectDate);
+              saveMaterialDispatchMachineId(selectMachineId);
+              saveMaterialDispatchLocationId(selectLocationId);
+              saveMaterialDispatchPalletNumber(selectPalletNumber);
               Get.back();
             },
             child: Text('dialog_default_confirm'.tr),
           ),
           TextButton(
             onPressed: () {
-              Get.back();
-              if (isFirst) Get.back();
+              Get.back(result: selectPalletNumber.isEmpty);
             },
             child: Text(
-              isFirst ? 'dialog_default_back'.tr : 'dialog_default_cancel'.tr,
+              selectPalletNumber.isEmpty
+                  ? 'dialog_default_back'.tr
+                  : 'dialog_default_cancel'.tr,
               style: const TextStyle(color: Colors.grey),
             ),
           ),

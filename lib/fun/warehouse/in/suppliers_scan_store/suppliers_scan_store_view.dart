@@ -25,6 +25,7 @@ class _SuppliersScanStorePageState extends State<SuppliersScanStorePage> {
       Get.find<SuppliersScanStoreLogic>().state;
 
   var refreshController = EasyRefreshController(controlFinishRefresh: true);
+  var tecCode = TextEditingController();
 
   _item(BarCodeInfo code) {
     return GestureDetector(
@@ -47,71 +48,72 @@ class _SuppliersScanStorePageState extends State<SuppliersScanStorePage> {
       context: context,
       builder: (BuildContext context) {
         return PopScope(
-            child: Dialog(
-              child: Container(
-                padding: const EdgeInsets.all(5),
-                height: 270,
-                width: 200,
-                child: Column(
-                  children: [
-                    const Text(
-                      '入库条件',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.blue,
-                          fontSize: 18),
-                    ),
-                    const SizedBox(height: 20),
-                    DatePicker(pickerController: logic.orderDate),
-                    OptionsPicker(
-                        pickerController: logic.billStockListController),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: NumberEditText(
-                            hasFocus: true,
-                            hint: '请输入操作人工号',
-                            controller: state.peopleNumber,
-                            onChanged: (s) {
-                              if (s.length >= 6) {
-                                logic.checkOrderInfo(number: s);
-                              }
-                              if(s.isEmpty){
-                                state.peopleName.value = '';
-                              }
-                            },
-                          ),
-                        ),
-                        Obx(() => Text(state.peopleName.value))
-                      ],
-                    ),
-                    const SizedBox(height: 10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        TextButton(
-                          onPressed: () => {
-                            if (state.peopleNumber.text.isEmpty)
-                              {showSnackBar(title: '警告', message: '请输入操作人工号')}
-                            else
-                              {Navigator.of(context).pop(), logic.goReport()}
+          child: Dialog(
+            child: Container(
+              padding: const EdgeInsets.all(5),
+              height: 270,
+              width: 200,
+              child: Column(
+                children: [
+                  const Text(
+                    '入库条件',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blue,
+                        fontSize: 18),
+                  ),
+                  const SizedBox(height: 20),
+                  DatePicker(pickerController: logic.orderDate),
+                  OptionsPicker(
+                      pickerController: logic.billStockListController),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: NumberEditText(
+                          hasFocus: true,
+                          hint: '请输入操作人工号',
+                          controller: state.peopleNumber,
+                          onChanged: (s) {
+                            if (s.length >= 6) {
+                              logic.checkOrderInfo(number: s);
+                            }
+                            if (s.isEmpty) {
+                              state.peopleName.value = '';
+                            }
                           },
-                          child: const Text('确定'),
                         ),
-                        TextButton(
-                          onPressed: () => {
-                            state.peopleName.value = '',
-                            state.peopleNumber.clear(),
-                            Navigator.of(context).pop()
-                          },
-                          child: const Text('取消'),
-                        )
-                      ],
-                    )
-                  ],
-                ),
+                      ),
+                      Obx(() => Text(state.peopleName.value))
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      TextButton(
+                        onPressed: () => {
+                          if (state.peopleNumber.text.isEmpty)
+                            {showSnackBar(title: '警告', message: '请输入操作人工号')}
+                          else
+                            {Navigator.of(context).pop(), logic.goReport()}
+                        },
+                        child: const Text('确定'),
+                      ),
+                      TextButton(
+                        onPressed: () => {
+                          state.peopleName.value = '',
+                          state.peopleNumber.clear(),
+                          Navigator.of(context).pop()
+                        },
+                        child: const Text('取消'),
+                      )
+                    ],
+                  )
+                ],
               ),
-            ),);
+            ),
+          ),
+        );
       },
     );
   }
@@ -119,117 +121,114 @@ class _SuppliersScanStorePageState extends State<SuppliersScanStorePage> {
   @override
   Widget build(BuildContext context) {
     return pageBody(
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(top: 10, right: 30),
-            child: InkWell(
-              child: Text('suppliers_scan_clean'.tr),
-              onTap: () => {
-                askDialog(
-                  title: 'dialog_default_title_information'.tr,
-                  content: 'suppliers_scan_sure_clean_code'.tr,
-                  confirm: () {
-                    logic.clearBarCodeList();
-                  },
-                ),
-              },
-            ),
-          )
-        ],
-
-        body: EasyRefresh(
-          controller: refreshController,
-          header: const MaterialHeader(),
-          onRefresh: () => logic.getBarCodeStatusByDepartmentID(refresh: () {
-            refreshController.finishRefresh();
-            refreshController.resetFooter();
-          }),
-          child: Column(
-            children: [
-              Obx(()=>Row(
-                children: [
-                  Expanded(
-                    flex: 5,
-                    child: EditText(
-                      hint: 'suppliers_scan_enter_register'.tr,
-                      onChanged: (s) => {
-                        state.handCode = s,
-                      },
-                    ),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: SwitchButton(
-                      onChanged: (s) => state.red.value = s,
-                      name: 'suppliers_scan_red'.tr,
-                      value: state.red.value,
-                    ),
-                  ),
-                ],
-              )),
-              Expanded(
-                child: Obx(
-                      () => ListView.builder(
-                    padding: const EdgeInsets.all(8),
-                    itemCount: state.barCodeList.length,
-                    itemBuilder: (BuildContext context, int index) =>
-                        _item(state.barCodeList[index]),
-                  ),
-                ),
+      actions: [
+        Padding(
+          padding: const EdgeInsets.only(top: 10, right: 30),
+          child: InkWell(
+            child: Text('suppliers_scan_clean'.tr),
+            onTap: () => {
+              askDialog(
+                title: 'dialog_default_title_information'.tr,
+                content: 'suppliers_scan_sure_clean_code'.tr,
+                confirm: () {
+                  logic.clearBarCodeList();
+                },
               ),
-              Obx(() => Padding(
-                padding: const EdgeInsets.only(left: 10, right: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            },
+          ),
+        )
+      ],
+      body: EasyRefresh(
+        controller: refreshController,
+        header: const MaterialHeader(),
+        onRefresh: () => logic.getBarCodeStatusByDepartmentID(refresh: () {
+          refreshController.finishRefresh();
+          refreshController.resetFooter();
+        }),
+        child: Column(
+          children: [
+            Obx(() => Row(
                   children: [
-                    textSpan(
-                      hint: 'suppliers_scan_is_scan'.tr,
-                      text: state.barCodeList.length.toString(),
+                    Expanded(
+                      flex: 5,
+                      child: EditText(
+                        hint: 'suppliers_scan_enter_register'.tr,
+                        controller: tecCode,
+                      ),
                     ),
-                    textSpan(
-                      hint: 'suppliers_scan_tray_number'.tr,
-                      text: state.palletNumber.value,
+                    Expanded(
+                      flex: 2,
+                      child: SwitchButton(
+                        onChanged: (s) => state.red.value = s,
+                        name: 'suppliers_scan_red'.tr,
+                        value: state.red.value,
+                      ),
                     ),
                   ],
+                )),
+            Expanded(
+              child: Obx(
+                () => ListView.builder(
+                  padding: const EdgeInsets.all(8),
+                  itemCount: state.barCodeList.length,
+                  itemBuilder: (BuildContext context, int index) =>
+                      _item(state.barCodeList[index]),
                 ),
-              )),
-              Row(
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: CombinationButton(
-                      text: 'suppliers_scan_manually_add'.tr,
-                      click: () {
-                        logic.scanCode(state.handCode);
-                      },
-                      combination: Combination.left,
-                    ),
+              ),
+            ),
+            Obx(() => Padding(
+                  padding: const EdgeInsets.only(left: 10, right: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      textSpan(
+                        hint: 'suppliers_scan_is_scan'.tr,
+                        text: state.barCodeList.length.toString(),
+                      ),
+                      textSpan(
+                        hint: 'suppliers_scan_tray_number'.tr,
+                        text: state.palletNumber.value,
+                      ),
+                    ],
                   ),
-                  Expanded(
-                    flex: 1,
-                    child: CombinationButton(
-                      text: 'suppliers_scan_submit'.tr,
-                      click: () {
-                        if (logic.haveCodeData()) {
-                          showCustomPickerDialog(context);
-                        } else {
-                          showSnackBar(title: 'shack_bar_warm'.tr, message: 'suppliers_scan_no_barcode'.tr);
-                        }
-                      },
-                      combination: Combination.right,
-                    ),
-                  )
-                ],
-              )
-            ],
-          ),
+                )),
+            Row(
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: CombinationButton(
+                    text: 'suppliers_scan_manually_add'.tr,
+                    click: () => logic.scanCode(tecCode.text),
+                    combination: Combination.left,
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: CombinationButton(
+                    text: 'suppliers_scan_submit'.tr,
+                    click: () {
+                      if (logic.haveCodeData()) {
+                        showCustomPickerDialog(context);
+                      } else {
+                        showSnackBar(
+                            title: 'shack_bar_warm'.tr,
+                            message: 'suppliers_scan_no_barcode'.tr);
+                      }
+                    },
+                    combination: Combination.right,
+                  ),
+                )
+              ],
+            )
+          ],
         ),
+      ),
     );
   }
 
   @override
   void initState() {
-    logic.getBarCodeStatusByDepartmentID(refresh: (){
+    logic.getBarCodeStatusByDepartmentID(refresh: () {
       refreshController.finishRefresh();
       refreshController.resetFooter();
     });
@@ -238,6 +237,4 @@ class _SuppliersScanStorePageState extends State<SuppliersScanStorePage> {
     });
     super.initState();
   }
-
-
 }

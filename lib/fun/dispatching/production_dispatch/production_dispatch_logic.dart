@@ -11,31 +11,15 @@ import 'package:jd_flutter/fun/dispatching/production_dispatch/production_dispat
 import 'package:jd_flutter/fun/dispatching/production_dispatch/production_dispatch_progress_view.dart';
 import 'package:jd_flutter/fun/other/maintain_label/maintain_label_view.dart';
 import 'package:jd_flutter/fun/report/production_materials_report/production_materials_report_view.dart';
-import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
-import 'package:jd_flutter/widget/picker/picker_controller.dart';
 import 'package:jd_flutter/widget/preview_label_widget.dart';
 import 'package:jd_flutter/widget/tsc_label_templates/75w45h_fixed_label.dart';
 import 'production_dispatch_state.dart';
 
 class ProductionDispatchLogic extends GetxController {
   final ProductionDispatchState state = ProductionDispatchState();
-
-  //日期选择器的控制器
-  var dpcStartDate = DatePickerController(
-    PickerType.startDate,
-    saveKey:
-        '${RouteConfig.workerProductionReport.name}${PickerType.startDate}',
-  )..firstDate = DateTime(
-      DateTime.now().year - 5, DateTime.now().month, DateTime.now().day);
-
-  //日期选择器的控制器
-  var dpcEndDate = DatePickerController(
-    PickerType.endDate,
-    saveKey: '${RouteConfig.workerProductionReport.name}${PickerType.endDate}',
-  );
 
   //工单列表非合并item点击事件
   item1click(int index) {
@@ -98,10 +82,15 @@ class ProductionDispatchLogic extends GetxController {
   }
 
   //工单查询
-  query() {
+  query({
+    required String startTime,
+    required String endTime,
+    required String instruction,
+  }) {
     state.query(
-      startTime: dpcStartDate.getDateFormatYMD(),
-      endTime: dpcEndDate.getDateFormatYMD(),
+      startTime: startTime,
+      endTime: endTime,
+      instruction: instruction,
       error: (msg) => errorDialog(content: msg),
     );
   }
@@ -153,25 +142,25 @@ class ProductionDispatchLogic extends GetxController {
   }
 
   //打开/关闭工序
-  offOnProcess() {
+  offOnProcess({required Function()refresh}) {
     state.offOnProcess(
-      success: () => query(),
+      success: refresh,
       error: (msg) => errorDialog(content: msg),
     );
   }
 
   //删除下游工序
-  deleteDownstream() {
+  deleteDownstream({required Function()refresh}) {
     state.deleteDownstream(
-      success: () => query(),
+      success: refresh,
       error: (msg) => errorDialog(content: msg),
     );
   }
 
   //删除上一次报工
-  deleteLastReport() {
+  deleteLastReport({required Function()refresh}) {
     state.deleteLastReport(
-      success: () => query(),
+      success: refresh,
       error: (msg) => errorDialog(content: msg),
     );
   }
@@ -211,9 +200,9 @@ class ProductionDispatchLogic extends GetxController {
   }
 
   //更新领料配套数
-  updateSap() {
+  updateSap({required Function() refresh}) {
     state.updateSap(
-      success: () => query(),
+      success: refresh,
       error: (msg) => errorDialog(content: msg),
     );
   }
@@ -265,10 +254,10 @@ class ProductionDispatchLogic extends GetxController {
   }
 
   //报工SAP
-  reportToSap(double qty) {
+  reportToSap({required double qty, required Function() refresh}) {
     state.reportToSap(
       qty: qty,
-      success: () => query(),
+      success: refresh,
       error: (msg) => errorDialog(content: msg),
     );
   }
@@ -822,7 +811,7 @@ class ProductionDispatchLogic extends GetxController {
       //如果批量数据不为空，则说明当前是多工单同时派工，需要对员工进行工单分配
       if (state.batchWorkProcedure.isNotEmpty) {
         for (var bwp in state.batchWorkProcedure.where(
-              (v) => v.processNumber == wp.processNumber,
+          (v) => v.processNumber == wp.processNumber,
         )) {
           //指令已分配数量
           var disQty = 0.0;
@@ -837,14 +826,14 @@ class ProductionDispatchLogic extends GetxController {
               if (surplus > 0) {
                 //可分配数=如果剩余数大于人员可分配数则分配人员可分配数 否则分配剩余数
                 var qty =
-                surplus > worker.remainder() ? worker.remainder() : surplus;
+                    surplus > worker.remainder() ? worker.remainder() : surplus;
 
                 //分配人员数据到指令
                 submitData.add({
                   'EmpID': worker.empID,
                   'WorkOrderType': '$msg${wp.processName}',
                   'WorkOrderContent':
-                  'production_dispatch_wechat_dispatch_error2'.trArgs([
+                      'production_dispatch_wechat_dispatch_error2'.trArgs([
                     qty.toShowString(),
                   ]),
                 });
@@ -864,7 +853,7 @@ class ProductionDispatchLogic extends GetxController {
             'EmpID': d.empID,
             'WorkOrderType': '$msg${d.processName}',
             'WorkOrderContent':
-            'production_dispatch_wechat_dispatch_error2'.trArgs([
+                'production_dispatch_wechat_dispatch_error2'.trArgs([
               d.qty.toShowString(),
             ]),
           });
@@ -872,7 +861,7 @@ class ProductionDispatchLogic extends GetxController {
       }
     }
     state.sendDispatchToWechat(
-        submitData:submitData,
+      submitData: submitData,
       success: (msg) => successDialog(content: msg),
       error: (msg) => errorDialog(content: msg),
     );
@@ -932,113 +921,119 @@ class ProductionDispatchLogic extends GetxController {
   }
 
   productionDispatch() {
+    var submitData = <Map>[];
+    for (var wp in state.workProcedure.where((v) => v.isOpen == 1)) {
+      //如果批量数据不为空，则说明当前是多工单同时派工，需要对员工进行工单分配
+      if (state.batchWorkProcedure.isNotEmpty) {
+        for (var bwp in state.batchWorkProcedure.where(
+          (v) => v.processNumber == wp.processNumber,
+        )) {
+          //指令已分配数量
+          var disQty = 0.0;
 
-      var submitData = <Map>[];
-      for (var wp in state.workProcedure.where((v) => v.isOpen == 1)) {
-        //如果批量数据不为空，则说明当前是多工单同时派工，需要对员工进行工单分配
-        if (state.batchWorkProcedure.isNotEmpty) {
-          for (var bwp in state.batchWorkProcedure.where(
-                (v) => v.processNumber == wp.processNumber,
-          )) {
-            //指令已分配数量
-            var disQty = 0.0;
+          for (var worker in wp.dispatch) {
+            //人员的剩余可分配数量大于0 说明人员的数量上一个指令分配满后还有剩余  可以继续下一个指令分配
+            if (worker.remainder() > 0) {
+              //指令剩余可分配数量
+              var surplus = bwp.mustQty.sub(disQty);
 
-            for (var worker in wp.dispatch) {
-              //人员的剩余可分配数量大于0 说明人员的数量上一个指令分配满后还有剩余  可以继续下一个指令分配
-              if (worker.remainder() > 0) {
-                //指令剩余可分配数量
-                var surplus = bwp.mustQty.sub(disQty);
+              //指令剩余数量大于0 说明指令的数量上一个员工分配满后还有剩余  可以继续下一个员工分配
+              if (surplus > 0) {
+                //可分配数=如果剩余数大于人员可分配数则分配人员可分配数 否则分配剩余数
+                var qty =
+                    surplus > worker.remainder() ? worker.remainder() : surplus;
 
-                //指令剩余数量大于0 说明指令的数量上一个员工分配满后还有剩余  可以继续下一个员工分配
-                if (surplus > 0) {
-                  //可分配数=如果剩余数大于人员可分配数则分配人员可分配数 否则分配剩余数
-                  var qty =
-                  surplus > worker.remainder() ? worker.remainder() : surplus;
+                //分配人员数据到指令
+                submitData.add({
+                  'ID': bwp.id,
+                  'InterID': bwp.interID,
+                  'EntryID': bwp.entryID,
+                  'OperPlanningEntryFID': bwp.operPlanningEntryFID,
+                  'EmpID': worker.empID,
+                  'WorkerCode': worker.number,
+                  'WorkerName': worker.name,
+                  'SourceQty': bwp.sourceQty,
+                  'MustQty': bwp.mustQty,
+                  'PreSchedulingQty': bwp.preSchedulingQty,
+                  'Qty': qty,
+                  'FinishQty': bwp.finishQty,
+                  'SourceEntryID': bwp.sourceEntryID,
+                  'SourceInterID': bwp.sourceInterID,
+                  'SourceEntryFID': bwp.sourceEntryFID,
+                  'ProcessNumber': bwp.processNumber,
+                  'ProcessName': bwp.processName,
+                  'IsOpen': bwp.isOpen,
+                  'RoutingID': bwp.routingID,
+                });
 
-                  //分配人员数据到指令
-                  submitData.add({
-                    'ID': bwp.id,
-                    'InterID': bwp.interID,
-                    'EntryID': bwp.entryID,
-                    'OperPlanningEntryFID': bwp.operPlanningEntryFID,
-                    'EmpID': worker.empID,
-                    'WorkerCode': worker.number,
-                    'WorkerName': worker.name,
-                    'SourceQty': bwp.sourceQty,
-                    'MustQty': bwp.mustQty,
-                    'PreSchedulingQty': bwp.preSchedulingQty,
-                    'Qty': qty,
-                    'FinishQty': bwp.finishQty,
-                    'SourceEntryID': bwp.sourceEntryID,
-                    'SourceInterID': bwp.sourceInterID,
-                    'SourceEntryFID': bwp.sourceEntryFID,
-                    'ProcessNumber': bwp.processNumber,
-                    'ProcessName': bwp.processName,
-                    'IsOpen': bwp.isOpen,
-                    'RoutingID': bwp.routingID,
-                  });
+                //累加人员数据的分配数量
+                worker.dispatchQty = worker.dispatchQty.add(qty);
 
-                  //累加人员数据的分配数量
-                  worker.dispatchQty = worker.dispatchQty.add(qty);
-
-                  //累加指令的分配数量
-                  disQty = disQty.add(qty);
-                }
+                //累加指令的分配数量
+                disQty = disQty.add(qty);
               }
             }
           }
-          state.mergeOrderProductionDispatch(
-            submitData: submitData,
-            success: (msg) {
-              SaveDispatch.delete(
-                processBillNumber: '${state.workCardTitle.value.processBillNumber}',
-              );
-              successDialog(content: msg);
-            },
-            error: (msg) => errorDialog(content: msg),
-          );
-        } else {
-          for (var d in wp.dispatch) {
-            submitData.add({
-              'ID': wp.id,
-              'InterID': wp.interID,
-              'EntryID': wp.entryID,
-              'OperPlanningEntryFID': wp.operPlanningEntryFID,
-              'EmpID': d.empID,
-              'WorkerCode': d.number,
-              'WorkerName': d.name,
-              'SourceQty': wp.sourceQty,
-              'MustQty': wp.mustQty,
-              'PreSchedulingQty': wp.preSchedulingQty,
-              'Qty': d.qty,
-              'FinishQty': wp.finishQty,
-              'SourceEntryID': wp.sourceEntryID,
-              'SourceInterID': wp.sourceInterID,
-              'SourceEntryFID': wp.sourceEntryFID,
-              'ProcessNumber': wp.processNumber,
-              'ProcessName': wp.processName,
-              'IsOpen': wp.isOpen,
-              'RoutingID': wp.routingID,
-            });
-          }
-          state.productionDispatch(
-            submitData: submitData,
-            success: (msg) {
-              SaveDispatch.delete(
-                processBillNumber: '${state.workCardTitle.value.processBillNumber}',
-              );
-              successDialog(content: msg);
-            },
-            error: (msg) => errorDialog(content: msg),
-          );
         }
+        state.mergeOrderProductionDispatch(
+          submitData: submitData,
+          success: (msg) {
+            SaveDispatch.delete(
+              processBillNumber:
+                  '${state.workCardTitle.value.processBillNumber}',
+            );
+            successDialog(content: msg);
+          },
+          error: (msg) => errorDialog(content: msg),
+        );
+      } else {
+        for (var d in wp.dispatch) {
+          submitData.add({
+            'ID': wp.id,
+            'InterID': wp.interID,
+            'EntryID': wp.entryID,
+            'OperPlanningEntryFID': wp.operPlanningEntryFID,
+            'EmpID': d.empID,
+            'WorkerCode': d.number,
+            'WorkerName': d.name,
+            'SourceQty': wp.sourceQty,
+            'MustQty': wp.mustQty,
+            'PreSchedulingQty': wp.preSchedulingQty,
+            'Qty': d.qty,
+            'FinishQty': wp.finishQty,
+            'SourceEntryID': wp.sourceEntryID,
+            'SourceInterID': wp.sourceInterID,
+            'SourceEntryFID': wp.sourceEntryFID,
+            'ProcessNumber': wp.processNumber,
+            'ProcessName': wp.processName,
+            'IsOpen': wp.isOpen,
+            'RoutingID': wp.routingID,
+          });
+        }
+        state.productionDispatch(
+          submitData: submitData,
+          success: (msg) {
+            SaveDispatch.delete(
+              processBillNumber:
+                  '${state.workCardTitle.value.processBillNumber}',
+            );
+            successDialog(content: msg);
+          },
+          error: (msg) => errorDialog(content: msg),
+        );
+      }
     }
   }
 
-  queryProgress() {
+  queryProgress({
+    required String startTime,
+    required String endTime,
+    required String instruction,
+  }) {
     state.queryProgress(
-      startTime: dpcStartDate.getDateFormatYMD(),
-      endTime: dpcEndDate.getDateFormatYMD(),
+      startTime: startTime,
+      endTime: endTime,
+      instruction: instruction,
       success: (list) {
         state.orderProgressList.value = formatProgress(list);
         state.orderProgressTableWeight.value =

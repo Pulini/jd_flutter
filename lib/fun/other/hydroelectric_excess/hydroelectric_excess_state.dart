@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/device_detail_info.dart';
 import 'package:jd_flutter/bean/http/response/device_list_info.dart';
@@ -8,27 +7,26 @@ import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
 class HydroelectricExcessState {
-
-
-  var dataList = <DeviceListInfo>[].obs;  //来访数据
+  var dataList = <DeviceListInfo>[].obs; //来访数据
   var isShow = false.obs;
   var select = '0'.obs; //选择查询的条件
-  var stateToSearch ='0'.obs;   //返回回去的状态
-  var deviceNumber ='';//设备编号
-  var bedNumber ='';//床铺编号
+  var stateToSearch = '0'.obs; //返回回去的状态
+
   var dataDetail = DeviceDetailInfo().obs;
   var thisMonthUse = ''.obs; //本月使用量
 
-  var textThisTime = TextEditingController(); //本次抄度
-  var textNumber = TextEditingController(); //房间号
 
 
 //搜索具体房间信息
-  searchRoom(DeviceListInfo data,bool  isBack){
-    if(select.value=='0' || select.value =='2'){
-      stateToSearch.value='1';
-    }else{
-      stateToSearch.value='0';
+  searchRoom({
+    required DeviceListInfo data,
+    required Function(List<DeviceDetailInfo>) success,
+    required Function(String) error,
+  }) {
+    if (select.value == '0' || select.value == '2') {
+      stateToSearch.value = '1';
+    } else {
+      stateToSearch.value = '0';
     }
     httpGet(
       method: webApiGetWaterEnergyMachineDetail,
@@ -39,70 +37,19 @@ class HydroelectricExcessState {
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        var list = <DeviceDetailInfo>[
-          for (var i = 0; i < response.data.length; ++i)
-            DeviceDetailInfo.fromJson(response.data[i])
-        ];
-        if(list.isNotEmpty) {
-          dataDetail.value = list[0];
-          textNumber.text = dataDetail.value.number!;
-          textThisTime.text = dataDetail.value.nowDegree!;
-        }
-
-        if (list.isNotEmpty) setDeviceUse(list[0]);  //设置本月使用量
-        if(isBack) Get.back();
+        success.call(
+            [for (var json in response.data) DeviceDetailInfo.fromJson(json)]);
       } else {
-        errorDialog(content: response.message);
+        error.call(response.message ?? 'query_default_error'.tr);
       }
     });
   }
 
-  //用户手动输入后，清理数据
-  clearData(){
-    dataDetail.value = DeviceDetailInfo();
-    textThisTime.clear();
-    thisMonthUse.value='';
-    stateToSearch.value='0';
-  }
-
-  //根据输入的度数，
-  countMonth(String thisTime){
-    var degree = thisTime.toIntTry();
-    var lastDegree = dataDetail.value.lastDegree.toIntTry();
-
-    if(lastDegree>=0 && degree >0 && degree>lastDegree){
-      thisMonthUse.value = (degree - lastDegree).toString();
-    }else{
-      thisMonthUse.value = '0';
-    }
-  }
-
-
-  //计算本月使用量
-  setDeviceUse(DeviceDetailInfo data){
-
-    var last = data.lastDegree.toIntTry();
-    var now = data.nowDegree.toIntTry();
-
-    if(now>0 && last>=0 && now> last){
-      thisMonthUse.value = (now-last).toString();
-    }else{
-      thisMonthUse.value='0';
-    }
-
-  }
-
-  //是否显示
-  clickShow(){
-    if(isShow.value == true){
-      isShow.value = false;
-    }else{
-      isShow.value = true;
-    }
-  }
-
   //获取所有设备信息
-  getWaterEnergyMachine() {
+  getWaterEnergyMachine({
+    required String deviceNumber,
+    required String bedNumber,
+  }) {
     httpGet(
       method: webApiGetWaterEnergyMachine,
       loading: 'hydroelectric_reading_device'.tr,
@@ -125,16 +72,18 @@ class HydroelectricExcessState {
   }
 
   //提交本次抄录数据
-  submit() {
-    if(textThisTime.text.isEmpty){
-      showSnackBar(title: 'shack_bar_warm'.tr, message:'hydroelectric_this_transcription'.tr);
-    }else{
+  submit({required String textThisTime}) {
+    if (textThisTime.isEmpty) {
+      showSnackBar(
+          title: 'shack_bar_warm'.tr,
+          message: 'hydroelectric_this_transcription'.tr);
+    } else {
       httpPost(
         method: webApiSubmitSsWaterEnergyMachineDetail,
         loading: 'hydroelectric_submitting_degree'.tr,
         params: {
           'LastDegree': dataDetail.value.lastDegree,
-          'NowDegree': textThisTime.text,
+          'NowDegree': textThisTime,
           'ItemID': dataDetail.value.itemID,
           'ID': dataDetail.value.id,
           'UserID': userInfo?.userID,
@@ -148,5 +97,4 @@ class HydroelectricExcessState {
       });
     }
   }
-
 }

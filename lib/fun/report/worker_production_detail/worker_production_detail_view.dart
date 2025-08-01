@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/worker_production_detail_info.dart';
+import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
+import 'package:jd_flutter/widget/picker/picker_controller.dart';
 import 'package:jd_flutter/widget/picker/picker_view.dart';
 import 'worker_production_detail_logic.dart';
 
@@ -19,6 +21,26 @@ class _WorkerProductionDetailPageState
     extends State<WorkerProductionDetailPage> {
   final logic = Get.put(WorkerProductionDetailLogic());
   final state = Get.find<WorkerProductionDetailLogic>().state;
+  var tecWorkerNumber = TextEditingController();
+  var pickerControllerStartDate = DatePickerController(
+    PickerType.startDate,
+    saveKey:
+        '${RouteConfig.workerProductionDetail.name}${PickerType.date}${PickerType.startDate}',
+    lastDate: DateTime.now(),
+  );
+
+  var pickerControllerEndDate = DatePickerController(
+    PickerType.endDate,
+    saveKey:
+        '${RouteConfig.workerProductionDetail.name}${PickerType.date}${PickerType.endDate}',
+    lastDate: DateTime.now(),
+  );
+
+  var pickerControllerReportType = OptionsPickerController(
+    PickerType.mesProductionReportType,
+    saveKey:
+        '${RouteConfig.workerProductionDetail.name}${PickerType.mesProductionReportType}',
+  );
 
   getTable(WorkerProductionDetailShow data) => SingleChildScrollView(
         scrollDirection: Axis.horizontal,
@@ -257,14 +279,21 @@ class _WorkerProductionDetailPageState
   Widget build(BuildContext context) {
     return pageBodyWithDrawer(
       queryWidgets: [
-        DatePicker(pickerController: logic.pickerControllerStartDate),
-        DatePicker(pickerController: logic.pickerControllerEndDate),
-        OptionsPicker(pickerController: logic.pickerControllerReportType),
+        DatePicker(pickerController: pickerControllerStartDate),
+        DatePicker(pickerController: pickerControllerEndDate),
+        OptionsPicker(pickerController: pickerControllerReportType),
         EditText(
-            hint: 'worker_production_detail_query_hint'.tr,
-            controller: logic.tecWorkerNumber),
+          hint: 'worker_production_detail_query_hint'.tr,
+          controller: tecWorkerNumber,
+        ),
       ],
-      query: () => logic.query(),
+      query: () => logic.query(
+        worker: tecWorkerNumber.text,
+        beginDate: pickerControllerStartDate.getDateFormatYMD(),
+        endDate: pickerControllerEndDate.getDateFormatYMD(),
+        itemID: pickerControllerReportType.selectedId.value,
+        reportType: pickerControllerReportType.selectedId.value,
+      ),
       body: Obx(
         () => ListView.builder(
           padding: const EdgeInsets.all(5),

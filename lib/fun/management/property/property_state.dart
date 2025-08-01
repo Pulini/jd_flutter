@@ -23,13 +23,6 @@ class PropertyState {
   var assetPicture = ''.obs;
   var ratingPlatePicture = ''.obs;
   bool canModify = false;
-  var etPropertyNumber = '';
-  var etPropertyName = '';
-  var etSerialNumber = '';
-  var etInvoiceNumber = '';
-  var etName = '';
-  var etWorkerNumber = '';
-
 
   setParticipator({String empCode = '', String empName = '', int empID = -1}) {
     detail.participatorCode = empCode;
@@ -52,6 +45,12 @@ class PropertyState {
   }
 
   queryProperty({
+    required String propertyNumber,
+    required String propertyName,
+    required String serialNumber,
+    required String invoiceNumber,
+    required String name,
+    required String workerNumber,
     required String startDate,
     required String endDate,
     required Function(String msg) error,
@@ -60,12 +59,12 @@ class PropertyState {
       method: webApiQueryProperty,
       loading: 'property_querying'.tr,
       params: {
-        'PropertyNumber': etPropertyNumber,
-        'PropertyName': etPropertyName,
-        'SerialNumber': etSerialNumber,
-        'InvoiceNumber': etInvoiceNumber,
-        'EmpName': etName,
-        'EmpCode': etWorkerNumber,
+        'PropertyNumber': propertyNumber,
+        'PropertyName': propertyName,
+        'SerialNumber': serialNumber,
+        'InvoiceNumber': invoiceNumber,
+        'EmpName': name,
+        'EmpCode': workerNumber,
         'StartDate': startDate,
         'EndDate': endDate,
       },

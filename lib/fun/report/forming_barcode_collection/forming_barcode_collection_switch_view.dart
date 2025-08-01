@@ -22,6 +22,7 @@ class _FormingBarcodeCollectionSwitchPageState
     extends State<FormingBarcodeCollectionSwitchPage> {
   final logic = Get.find<FormingBarcodeCollectionLogic>();
   final state = Get.find<FormingBarcodeCollectionLogic>().state;
+var tecInstruction=TextEditingController();
 
   _item(FormingCollectionInfo data, int position) {
     String? allQty = '';
@@ -101,6 +102,7 @@ class _FormingBarcodeCollectionSwitchPageState
       children: [
         EditText(
           hint: 'forming_code_collection_instruction_or_po'.tr,
+          controller: tecInstruction,
           onChanged: (c) {
             logic.searchData(c);
           },

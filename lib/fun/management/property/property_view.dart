@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/property_info.dart';
+import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
+import 'package:jd_flutter/widget/picker/picker_controller.dart';
 import 'package:jd_flutter/widget/picker/picker_view.dart';
 import 'property_logic.dart';
 
@@ -14,9 +16,31 @@ class PropertyPage extends StatefulWidget {
   State<PropertyPage> createState() => _PropertyPageState();
 }
 
-class _PropertyPageState extends State<PropertyPage> {
+class _PropertyPageState extends State<PropertyPage>
+    with SingleTickerProviderStateMixin {
   final logic = Get.put(PropertyLogic());
   final state = Get.find<PropertyLogic>().state;
+  var tecPropertyNumber = TextEditingController();
+  var tecPropertyName = TextEditingController();
+  var tecSerialNumber = TextEditingController();
+  var tecInvoiceNumber = TextEditingController();
+  var tecName = TextEditingController();
+  var tecWorkerNumber = TextEditingController();
+
+  //tab控制器
+  late TabController tabController = TabController(length: 3, vsync: this);
+
+  //日期选择器的控制器
+  var pickerControllerStartDate = DatePickerController(
+    PickerType.startDate,
+    saveKey: '${RouteConfig.property.name}${PickerType.startDate}',
+  );
+
+  //日期选择器的控制器
+  var pickerControllerEndDate = DatePickerController(
+    PickerType.endDate,
+    saveKey: '${RouteConfig.property.name}${PickerType.endDate}',
+  );
 
   _item(PropertyInfo data) {
     return GestureDetector(
@@ -132,19 +156,19 @@ class _PropertyPageState extends State<PropertyPage> {
       bottomSheet: [
         EditText(
           hint: 'property_query_et_property_number'.tr,
-          onChanged: (v) => state.etPropertyNumber = v,
+          controller: tecPropertyNumber,
         ),
         EditText(
           hint: 'property_query_et_property_name'.tr,
-          onChanged: (v) => state.etPropertyName = v,
+          controller: tecPropertyName,
         ),
         EditText(
           hint: 'property_query_et_serial_number'.tr,
-          onChanged: (v) => state.etSerialNumber = v,
+          controller: tecSerialNumber,
         ),
         EditText(
           hint: 'property_query_et_invoice_number'.tr,
-          onChanged: (v) => state.etInvoiceNumber = v,
+          controller: tecInvoiceNumber,
         ),
         Row(
           children: [
@@ -152,24 +176,33 @@ class _PropertyPageState extends State<PropertyPage> {
                 flex: 1,
                 child: EditText(
                   hint: 'property_query_et_name'.tr,
-                  onChanged: (v) => state.etName = v,
+                  controller: tecName,
                 )),
             Expanded(
                 flex: 1,
                 child: EditText(
                   hint: 'property_query_et_worker_number'.tr,
-                  onChanged: (v) => state.etWorkerNumber = v,
+                  controller: tecWorkerNumber,
                 )),
           ],
         ),
-        DatePicker(pickerController: logic.pickerControllerStartDate),
-        DatePicker(pickerController: logic.pickerControllerEndDate),
+        DatePicker(pickerController: pickerControllerStartDate),
+        DatePicker(pickerController: pickerControllerEndDate),
       ],
-      query:() => logic.queryProperty(),
+      query: () => logic.queryProperty(
+        propertyNumber: tecPropertyNumber.text,
+        propertyName: tecPropertyName.text,
+        serialNumber: tecSerialNumber.text,
+        invoiceNumber: tecInvoiceNumber.text,
+        name: tecName.text,
+        workerNumber: tecWorkerNumber.text,
+        startDate: pickerControllerStartDate.getDateFormatYMD(),
+        endDate: pickerControllerEndDate.getDateFormatYMD(),
+      ),
       body: Scaffold(
           backgroundColor: Colors.transparent,
           appBar: TabBar(
-            controller: logic.tabController,
+            controller: tabController,
             dividerColor: Colors.blueAccent,
             indicatorColor: Colors.blueAccent,
             labelColor: Colors.blueAccent,
@@ -185,7 +218,7 @@ class _PropertyPageState extends State<PropertyPage> {
             children: [
               Expanded(
                 child: Obx(() => TabBarView(
-                      controller: logic.tabController,
+                      controller: tabController,
                       children: [
                         listView('2'),
                         listView('0'),
@@ -197,7 +230,7 @@ class _PropertyPageState extends State<PropertyPage> {
                 padding: const EdgeInsets.only(left: 2, right: 2, bottom: 15),
                 child: CombinationButton(
                   text: 'property_bt_print'.tr,
-                  click: () => logic.printLabel(),
+                  click: () => logic.printLabel(tabController.index),
                 ),
               ),
             ],

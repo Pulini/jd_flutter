@@ -1,5 +1,4 @@
 import 'package:collection/collection.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/forming_barcode_by_mono_info.dart';
 import 'package:jd_flutter/bean/http/response/forming_collection_info.dart';
@@ -16,17 +15,9 @@ import 'forming_barcode_collection_search_detail_view.dart';
 import 'forming_barcode_collection_state.dart';
 
 class FormingBarcodeCollectionLogic extends GetxController
-    with GetSingleTickerProviderStateMixin {
+  {
   final FormingBarcodeCollectionState state = FormingBarcodeCollectionState();
 
-  //tab控制器
-  late TabController tabController = TabController(length: 2, vsync: this);
-
-  //搜索天数
-  var controller = TextEditingController();
-
-  //指令单号
-  var shoeController = TextEditingController();
 
   getProductionOrderST({
     required String first,
@@ -204,7 +195,7 @@ class FormingBarcodeCollectionLogic extends GetxController
 
   //更改优先级退出清理数据
   clearData() {
-    controller.clear();
+
     state.prioriInfoList.clear();
   }
 
@@ -539,7 +530,6 @@ class FormingBarcodeCollectionLogic extends GetxController
   //退出特殊条码匹配界面
   quitShoe() {
     state.barCodeByMonoData.clear();
-    shoeController.clear();
     state.btnName.value = '补零';
   }
 

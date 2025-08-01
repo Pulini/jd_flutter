@@ -6,12 +6,6 @@ import 'package:jd_flutter/bean/http/response/purchase_order_warehousing_info.da
 import 'package:jd_flutter/utils/web_api.dart';
 
 class PurchaseOrderWarehousingState {
-  var typeBody = ''.obs;
-  var instruction = ''.obs;
-  var purchaseOrder = ''.obs;
-  var materielCode = ''.obs;
-  var customerPO = ''.obs;
-  var trackNo = ''.obs;
   var orderList = <PurchaseOrderInfo>[].obs;
   RxDouble orderQty = 0.0.obs;
   RxDouble receivedQty = 0.0.obs;
@@ -21,12 +15,19 @@ class PurchaseOrderWarehousingState {
   var orderLabelList = <DeliveryOrderLabelInfo>[];
   var scannedLabelList = <DeliveryOrderLabelInfo>[].obs;
   var canAddPiece = false.obs;
+
   getPurchaseOrder({
     required String startDate,
     required String endDate,
     required String supplier,
     required String factory,
     required String warehouse,
+    required String typeBody,
+    required String instruction,
+    required String purchaseOrder,
+    required String materielCode,
+    required String customerPO,
+    required String trackNo,
     required Function(String) error,
   }) {
     httpGet(
@@ -35,16 +36,16 @@ class PurchaseOrderWarehousingState {
       params: {
         'StartDate': startDate,
         'EndDate': endDate,
-        'FactoryType': typeBody.value,
-        'SalesOrder': instruction.value,
+        'FactoryType': typeBody,
+        'SalesOrder': instruction,
         'SupplierNumber': supplier,
         'Type': '1',
-        'PurchaseOrderNumber': purchaseOrder.value,
-        'MaterialCode': materielCode.value,
+        'PurchaseOrderNumber': purchaseOrder,
+        'MaterialCode': materielCode,
         'FactoryCode': factory,
         'FactoryArea': warehouse,
-        'customerPO': customerPO.value,
-        'trackNo': trackNo.value,
+        'customerPO': customerPO,
+        'trackNo': trackNo,
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
@@ -85,5 +86,4 @@ class PurchaseOrderWarehousingState {
       }
     });
   }
-
 }

@@ -4,12 +4,8 @@ import 'package:jd_flutter/utils/web_api.dart';
 
 
 class MoldingPackAreaReportPageState {
-  var etInstruction = '';
-  var etOrderNumber = '';
-  var etTypeBody = '';
 
   var tableData = <MoldingPackAreaReportInfo>[].obs;
-
 
   var line = ''.obs;
   var typeBody = ''.obs;
@@ -20,6 +16,9 @@ class MoldingPackAreaReportPageState {
   getMoldingPackAreaReport({
     required String startDate,
     required String endDate,
+    required String typeBody,
+    required String instruction,
+    required String orderNumber,
     required List<String> packAreaIDs,
     required Function(String msg) error,
   }) {
@@ -29,9 +28,9 @@ class MoldingPackAreaReportPageState {
         params: {
           'startDate': startDate,
           'endDate': endDate,
-          'factoryType': etTypeBody,
-          'billNO': etInstruction,
-          'clientOrderNumber': etOrderNumber,
+          'factoryType': typeBody,
+          'billNO': instruction,
+          'clientOrderNumber': orderNumber,
           'packAreaIDs': packAreaIDs,
         }).then((response) {
       if (response.resultCode == resultSuccess) {
