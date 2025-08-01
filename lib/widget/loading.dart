@@ -21,8 +21,10 @@ class LoadingSingleton {
   }
 
   void dismiss() {
-    _overlayEntry?.remove();
-    _overlayEntry = null;
+    if(isShowing){
+      _overlayEntry?.remove();
+      _overlayEntry = null;
+    }
   }
 }
 

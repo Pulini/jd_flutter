@@ -1,14 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/home_button.dart';
-import 'package:jd_flutter/bean/http/response/base_data.dart';
 import 'package:jd_flutter/bean/http/response/department_info.dart';
 import 'package:jd_flutter/bean/http/response/home_function_info.dart';
 import 'package:jd_flutter/constant.dart';
-import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 
@@ -20,51 +17,25 @@ class HomeState {
   var buttons = <ButtonItem>[].obs;
   var selectedItemColor = Colors.white;
   var navigationBar = <HomeFunctions>[].obs;
-  var isLoading= false.obs;
+  var isLoading = false.obs;
 
   HomeState() {
     userPicUrl.value = userInfo?.picUrl ?? '';
     departmentName.value = userInfo?.departmentName ?? '';
   }
 
-  refreshFunList({
-    required Function() success,
-    required Function(String msg) error,
-  }) async {
-    isLoading.value=true;
+  getMenuFunction({
+    required Function(dynamic) success,
+    required Function(String) error,
+  }) {
     httpGet(
       method: webApiGetMenuFunction,
-      params: {
-        'empID': userInfo?.empID ?? 0,
-        'userID': userInfo?.userID?? 0,
-      },
-    ).then((response) {
+      params: {'empID': userInfo?.empID, 'userID': userInfo?.userID},
+    ).then((response) async {
       if (response.resultCode == resultSuccess) {
-        compute(
-          parseJsonToList<HomeFunctions>,
-          ParseJsonParams(
-            response.data,
-            HomeFunctions.fromJson,
-          ),
-        ).then((v1) {
-          nBarIndex = 0;
-          navigationBar.value = [
-            for (var b in v1)
-              HomeFunctions(
-                className: b.className,
-                backGroundColor: b.backGroundColor,
-                fontColor: b.fontColor,
-                icon: b.icon,
-              )
-          ];
-          functions = formatButton(v1);
-          isLoading.value=false;
-          success.call();
-        });
+        success.call(response.data);
       } else {
-
-        isLoading.value=false;
-        error.call(response.message ?? '');
+        error.call(response.message ?? 'query_default_error'.tr);
       }
     });
   }

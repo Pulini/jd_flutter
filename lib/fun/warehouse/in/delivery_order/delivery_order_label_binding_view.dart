@@ -52,13 +52,13 @@ class _DeliveryOrderLabelBindingPageState
                 ],
               ),
               const SizedBox(height: 5),
-              for (var size in list) ..._sizeItem(size)
+              for (var size in list) ..._sizeItem(size,materialCode)
             ],
           ),
         ));
   }
 
-  _sizeItem(List<dynamic> size) {
+  _sizeItem(List<dynamic> size, String materialCode) {
     return [
       if ((size[0] as String).isNotEmpty)
         Padding(
@@ -79,7 +79,7 @@ class _DeliveryOrderLabelBindingPageState
                 child: progressIndicator(
                   max: size[1],
                   color: Colors.blue.shade300,
-                  value: logic.getSizeScanProgress(size[0] ?? ''),
+                  value: logic.getSizeScanProgress(materialCode,size[0] ?? ''),
                 ),
               )
             ],

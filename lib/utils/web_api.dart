@@ -4,9 +4,9 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/base_data.dart';
-import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/utils/app_init_service.dart';
+import 'package:jd_flutter/utils/dio_manager.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:logger/logger.dart';
 import 'package:uuid/uuid.dart';
@@ -174,51 +174,8 @@ Future<BaseData> _doHttp({
   var base = BaseData()..resultCode = resultError;
 
   try {
-    //创建dio对象
-    var dio = Dio(BaseOptions(
-      baseUrl: baseUrl,
-      connectTimeout: const Duration(seconds: 10),
-      sendTimeout: const Duration(seconds: 10),
-      receiveTimeout: const Duration(minutes: 1),
-    ));
-
-    //接口拦截器
-    dio.interceptors.add(
-      InterceptorsWrapper(
-        onRequest: (options, handler) {
-          options.print();
-          handler.next(options);
-        },
-        onResponse: (response, handler) {
-          var baseData = BaseData.fromJson(
-            response.data.runtimeType == String
-                ? jsonDecode(response.data)
-                : response.data,
-          )..print(
-              '${response.realUri.origin}/$method',
-              loading,
-              response.realUri.queryParameters,
-            );
-          if (baseData.resultCode == 2) {
-            logger.e('需要重新登录');
-            spSave(spSaveUserInfo, '');
-            if (loading != null && loading.isNotEmpty) loadingDismiss();
-            handler.next(response);
-            reLoginPopup();
-          } else if (baseData.resultCode == 3) {
-            logger.e('需要更新版本');
-            if (loading != null && loading.isNotEmpty) loadingDismiss();
-            upData();
-          } else {
-            handler.next(response);
-          }
-        },
-        onError: (DioException e, handler) {
-          logger.e('error:$e');
-          handler.next(e);
-        },
-      ),
-    );
+    //获取单例Dio对象
+    var dio = DioManager().getDio(baseUrl);
 
     //发起post/get请求
     var response = isPost
@@ -242,7 +199,6 @@ Future<BaseData> _doHttp({
       base.data = json['Data'];
       base.message = '接口提示：${json['Message']}';
     } else {
-      if (loading != null && loading.isNotEmpty) Get.back();
       logger.e('网络异常');
       base.message = '网络异常';
     }
@@ -493,7 +449,8 @@ const webApiSendDispatchToWechat = 'api/NeedleCartDispatch/WechatPostByFEmpID';
 const webApiProductionDispatch = 'api/NeedleCartDispatch/ProcessCalculation';
 
 //工序计工
-const webApiProductionDispatchBatch = 'api/NeedleCartDispatch/ProcessCalculationBatch';
+const webApiProductionDispatchBatch =
+    'api/NeedleCartDispatch/ProcessCalculationBatch';
 
 //查询生产派工单生产进度表
 const webApiGetWorkCardDetailList = 'api/WorkCard/GetWorkCardDetailList';
@@ -1453,8 +1410,8 @@ const webApiGetToDayItemInfo = 'api/Piecework/GetToDayItemInfo';
 const webApiGetEndingProcessQty = 'api/Piecework/GetEndingProcessQty';
 
 //团件-获取团件末道工序列表
-const webApiGetGroupPayEndingProcessList = 'api/Piecework/GetGroupPayEndingProcessList';
+const webApiGetGroupPayEndingProcessList =
+    'api/Piecework/GetGroupPayEndingProcessList';
 
 //团件-获取末道团件明细信息
 const webApiGetGroupPayEndingDetail = 'api/Piecework/GetGroupPayEndingDetail';
-

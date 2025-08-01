@@ -479,9 +479,9 @@ class DeliveryOrderLogic extends GetxController {
     return progress;
   }
 
-  double getSizeScanProgress(String size) {
+  double getSizeScanProgress(String materialCode,String size) {
     var progress = 0.0;
-    for (var v in state.scannedLabelList.where((v) => v.size == size)) {
+    for (var v in state.scannedLabelList.where((v) =>v.materialCode==materialCode&& v.size == size)) {
       progress = progress.add(v.commonQty ?? 0);
     }
     return progress;

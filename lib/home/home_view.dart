@@ -3,11 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/home_button.dart';
 import 'package:jd_flutter/bean/http/response/home_function_info.dart';
-import 'package:jd_flutter/utils/app_init_service.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
-import 'package:jd_flutter/widget/tsc_label_templates/tsc_label_preview.dart';
 import 'home_logic.dart';
 import 'home_setting_view.dart';
 
@@ -36,11 +34,13 @@ class _HomePageState extends State<HomePage>
           color: Colors.blueAccent,
         ),
         onPressed: () {
-          if (isTestUrl()) {
-            Get.to(() => const TscLabelPreview());
-          } else {
-            showSnackBar(title: '消息中心', message: '进入消息中心');
-          }
+          restartApp();
+
+          // if (isTestUrl()) {
+          //   Get.to(() => const TscLabelPreview());
+          // } else {
+          //   showSnackBar(title: '消息中心', message: '进入消息中心');
+          // }
         },
       ),
       title: CupertinoSearchTextField(
@@ -65,7 +65,11 @@ class _HomePageState extends State<HomePage>
     return Card(
       color: item is HomeButton ? Colors.white : Colors.blue.shade50,
       child: item is HomeButton
-          ? HomeSubItem(isGroup: false, item: item)
+          ? HomeSubItem(
+              isGroup: false,
+              item: item,
+              checkUpData: () => logic.checkFunctionVersion(),
+            )
           : ExpansionTile(
               backgroundColor: Colors.white,
               shape: const RoundedRectangleBorder(
@@ -92,7 +96,11 @@ class _HomePageState extends State<HomePage>
               children: [
                 for (var item in item.functionGroup) ...[
                   const Divider(indent: 20, endIndent: 20),
-                  HomeSubItem(isGroup: true, item: item)
+                  HomeSubItem(
+                    isGroup: true,
+                    item: item,
+                    checkUpData: () => logic.checkFunctionVersion(),
+                  )
                 ]
               ],
             ),
@@ -142,67 +150,6 @@ class _HomePageState extends State<HomePage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    // return Container(
-    //   decoration: backgroundColor(),
-    //   child: Obx(() => state.isLoading.value
-    //       ? Scaffold(
-    //           backgroundColor: Colors.transparent,
-    //           appBar: _appBar(),
-    //           body: const Center(
-    //             child: Column(
-    //               mainAxisAlignment: MainAxisAlignment.center,
-    //               children: [
-    //                 CupertinoActivityIndicator(
-    //                   radius: 20,
-    //                 ),
-    //                 SizedBox(height: 10),
-    //                 Text(
-    //                   '读取功能列表中...',
-    //                   style: TextStyle(
-    //                     fontSize: 18,
-    //                     decoration: TextDecoration.none,
-    //                   ),
-    //                 )
-    //               ],
-    //             ),
-    //           ),
-    //         )
-    //       : state.navigationBar.isEmpty
-    //           ? Scaffold(
-    //               backgroundColor: Colors.transparent,
-    //               appBar: _appBar(),
-    //               body: Center(
-    //                 child: IconButton(
-    //                   onPressed: () => logic.refreshFunList(),
-    //                   icon: const Icon(
-    //                     Icons.refresh,
-    //                     color: Colors.blueAccent,
-    //                     size: 50,
-    //                   ),
-    //                 ),
-    //               ),
-    //             )
-    //           : Scaffold(
-    //               backgroundColor: Colors.transparent,
-    //               appBar: _appBar(),
-    //               body: ListView.builder(
-    //                 padding: const EdgeInsets.all(8),
-    //                 itemCount: state.buttons.length,
-    //                 itemBuilder: (context, index) =>
-    //                     _item(state.buttons[index]),
-    //               ),
-    //               bottomNavigationBar: BottomNavigationBar(
-    //                 type: BottomNavigationBarType.shifting,
-    //                 items: [
-    //                   for (var bar in state.navigationBar) _navigationBar(bar)
-    //                 ],
-    //                 currentIndex: state.nBarIndex,
-    //                 selectedItemColor: state.navigationBar[0].getTextColor(),
-    //                 onTap: (i) => setState(() => logic.navigationBarClick(i)),
-    //               ),
-    //             )),
-    // );
-
     return Container(
       decoration: backgroundColor(),
       child: Scaffold(
@@ -268,10 +215,16 @@ class _HomePageState extends State<HomePage>
 }
 
 class HomeSubItem extends StatelessWidget {
-  const HomeSubItem({super.key, required this.isGroup, required this.item});
+  const HomeSubItem({
+    super.key,
+    required this.isGroup,
+    required this.item,
+    required this.checkUpData,
+  });
 
   final bool isGroup;
   final HomeButton item;
+  final Function() checkUpData;
 
   Color _color(HomeButton item) {
     return item.hasUpdate
@@ -292,7 +245,7 @@ class HomeSubItem extends StatelessWidget {
                   message: '该功能暂未开放',
                   isWarning: true,
                 )
-              : item.toFunction(),
+              : item.toFunction(checkUpData: checkUpData),
       enabled: item.hasUpdate ? true : item.hasPermission,
       leading: Image.network(
         item.icon,
