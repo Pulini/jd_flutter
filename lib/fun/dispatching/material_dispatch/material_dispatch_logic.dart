@@ -274,7 +274,7 @@ class MaterialDispatchLogic extends GetxController {
             materialName: data.materialName ?? '',
             partName: data.partName ?? '',
             toPrint: toPrint,
-            palletNumber: state.palletNumber,
+            palletNumber: getMaterialDispatchPalletNumber(),
             materialNumber: data.materialNumber ?? '',
             processName: data.processName ?? '',
             sapDecideArea: data.sapDecideArea ?? '',
