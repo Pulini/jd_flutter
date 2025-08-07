@@ -110,12 +110,12 @@ class MainActivity : FlutterActivity() {
                 startOneselfFaceVerification(
                     this,
                     call.arguments.toString()
-                ) { code, bitmap ->
-                    Log.e("Pan", "code=$code")
+                ) { code, bitmap ,msg->
+                    Log.e("Pan", "code=$code msg=$msg")
                     if (code == FACE_VERIFY_SUCCESS) {
                         result.success(bitmapToByteArray(bitmap!!, Bitmap.CompressFormat.JPEG))
                     } else {
-                        result.error(code.toString(), null, null)
+                        result.error(code.toString(), msg, null)
                     }
                 }
             }

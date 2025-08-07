@@ -10,6 +10,10 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
+    <!-- 华为HMS所需权限 -->
+    <uses-permission android:name="com.huawei.appmarket.service.commondata.permission.GET_COMMON_DATA" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -38,6 +42,8 @@
             android:hardwareAccelerated="true"
             android:launchMode="singleTop"
             android:theme="@style/LaunchTheme"
+            android:usesCleartextTraffic="true"
+            android:requestLegacyExternalStorage="true"
             android:windowSoftInputMode="adjustResize">
             <!-- Specifies an Android theme to apply to this Activity as soon as
                  the Android process has started. This theme is visible to the user
@@ -117,6 +123,19 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+
+        <!-- 华为HMS配置 -->
+        <meta-data
+            android:name="com.huawei.hms.client.appid"
+            android:value="appid=108888888" />
+
+        <meta-data
+            android:name="com.huawei.hms.ml.faceverify.enable"
+            android:value="true" />
+
+        <meta-data
+            android:name="com.huawei.hms.ml.livenessdetection.enable"
+            android:value="true" />
 
         <!--串口协议-->
         <meta-data

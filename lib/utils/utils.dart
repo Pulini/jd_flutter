@@ -20,8 +20,6 @@ import 'package:jd_flutter/bean/http/response/version_info.dart';
 import 'package:jd_flutter/bean/http/response/worker_info.dart';
 import 'package:jd_flutter/bean/http/response/workshop_planning_info.dart';
 import 'package:jd_flutter/constant.dart';
-import 'package:jd_flutter/home/home_view.dart';
-import 'package:jd_flutter/login/login_view.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/downloader.dart';
@@ -851,22 +849,19 @@ livenFaceVerification({
   Downloader(
     url: faceUrl,
     completed: (filePath) {
-      try {
-        Permission.camera.request().isGranted.then((permission) {
-          if (permission) {
-            const MethodChannel(channelFaceVerificationAndroidToFlutter)
-                .invokeMethod('StartDetect', filePath)
-                .then((v) {
-              // Get.dialog( AlertDialog( content: Image.memory(v)));
-              verifySuccess.call((v as Uint8List).toBase64());
-            }).catchError((e) => errorDialog(content: '人脸验证错误：$e'));
-          } else {
-            errorDialog(content: '缺少相机权限');
-          }
-        });
-      } on PlatformException {
-        errorDialog(content: '人脸验证程序启动失败');
-      }
+      Permission.camera.request().isGranted.then((permission) {
+        if (permission) {
+          const MethodChannel(channelFaceVerificationAndroidToFlutter)
+              .invokeMethod('StartDetect', filePath)
+              .then((v) {
+            // Get.dialog( AlertDialog( content: Image.memory(v)));
+            verifySuccess.call((v as Uint8List).toBase64());
+          }).catchError((e) => errorDialog(
+                  content: '人脸验证错误：${(e as PlatformException).message}'));
+        } else {
+          errorDialog(content: '缺少相机权限');
+        }
+      });
     },
   );
 }
@@ -931,8 +926,5 @@ String textToKey(String text) {
   return digest.toString();
 }
 
-restartApp() {
-  Get.reset();
-  Get.offAll(
-      () => getUserInfo() == null ? const LoginPage() : const HomePage());
-}
+
+

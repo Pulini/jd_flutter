@@ -344,13 +344,26 @@ class DeliveryOrderLogic extends GetxController {
     _addLabels(labels: labels);
   }
 
+  ///有权限
+  ///有部分标签
+  ///扫已绑定标签，标签变色
+  ///扫未绑定标签，标签列表添加标签并变色
+  ///没有标签
+  ///扫未绑定标签，标签列表添加标签并变色
+  ///提交时 要么都校验标签，要么都不校验标签
+
+  ///没有权限
+  ///有部分标签
+  ///扫已绑定标签，标签变色
+  ///扫未绑定标签，标签列表添加标签并变色
+  ///没有标签
+  ///扫未绑定标签，标签列表添加标签并变色
   _addLabels({required List<DeliveryOrderLabelInfo> labels}) {
     if (labels.isEmpty) {
       errorDialog(
           content: 'delivery_order_label_check_order_not_have_this_label'.tr);
       return;
     }
-
     if (labels.every((v) => state.scannedLabelList.contains(v))) {
       if (labels.every((v) => v.isChecked.value)) {
         errorDialog(content: 'delivery_order_label_check_label_scanned'.tr);
@@ -433,8 +446,12 @@ class DeliveryOrderLogic extends GetxController {
   }
 
   submitLabelBinding() {
-    state.materialList.forEach((materialCode, sizeList) {
-      sizeList.forEach((size, qty) {
+    for (var ml in state.materialList.entries) {
+      var materialCode = ml.key;
+      var sizeList = ml.value;
+      for (var sl in sizeList.entries) {
+        var size = sl.key;
+        var qty = sl.value;
         var total = state.scannedLabelList
             .where((v2) => v2.sizeMaterial() == '$materialCode$size')
             .map((v3) => v3.commonQty ?? 0)
@@ -443,15 +460,13 @@ class DeliveryOrderLogic extends GetxController {
           errorDialog(content: 'delivery_order_label_check_qty_exceed_tips'.tr);
           return;
         }
-
         if (total < qty) {
           errorDialog(
               content: 'delivery_order_label_check_qty_insufficient'.tr);
           return;
         }
-      });
-    });
-
+      }
+    }
     Get.to(() => const LabelDetailPage())?.then((v) {
       if (v != null) {
         state.submitLabelBinding(
@@ -479,9 +494,10 @@ class DeliveryOrderLogic extends GetxController {
     return progress;
   }
 
-  double getSizeScanProgress(String materialCode,String size) {
+  double getSizeScanProgress(String materialCode, String size) {
     var progress = 0.0;
-    for (var v in state.scannedLabelList.where((v) =>v.materialCode==materialCode&& v.size == size)) {
+    for (var v in state.scannedLabelList
+        .where((v) => v.materialCode == materialCode && v.size == size)) {
       progress = progress.add(v.commonQty ?? 0);
     }
     return progress;
@@ -500,4 +516,12 @@ class DeliveryOrderLogic extends GetxController {
     });
     return labelList;
   }
+
+  ///有权限 要么都校验标签，要么都不校验标签  没有标签 提交时 都校验标签
+  isCanSubmitBinding() => state.hasPassPermission
+      ? state.scannedLabelList.isNotEmpty &&
+          (state.scannedLabelList.every((v) => v.isChecked.value) ||
+              state.scannedLabelList.every((v) => !v.isChecked.value))
+      : state.scannedLabelList.isNotEmpty &&
+          (state.scannedLabelList.every((v) => v.isChecked.value));
 }

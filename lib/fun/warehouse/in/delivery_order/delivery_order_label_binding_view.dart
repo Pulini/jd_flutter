@@ -229,11 +229,7 @@ class _DeliveryOrderLabelBindingPageState
               Expanded(
                 child: Obx(() => CombinationButton(
                       combination: Combination.right,
-                      isEnabled: state.scannedLabelList.isNotEmpty &&
-                          (state.scannedLabelList
-                                  .every((v) => v.isChecked.value) ||
-                              state.scannedLabelList
-                                  .every((v) => !v.isChecked.value)),
+                      isEnabled:logic.isCanSubmitBinding(),
                       text: 'delivery_order_label_check_submit'.tr,
                       click: () => logic.submitLabelBinding(),
                     )),

@@ -26,7 +26,7 @@ class DeliveryOrderState {
   var orderLabelList = <DeliveryOrderLabelInfo>[];
   var scannedLabelList = <DeliveryOrderLabelInfo>[].obs;
   var canSubmitLabelBinding = false.obs;
-
+  var hasPassPermission=checkUserPermission('105180106');
   getDeliveryOrders({
     required String startDate,
     required String endDate,

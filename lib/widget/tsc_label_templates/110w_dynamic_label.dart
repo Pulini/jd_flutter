@@ -72,51 +72,50 @@ _createRowText({
       ),
     );
 
-List<Widget> _createSizeList(Map<String, List> materialList) {
-  var strutStyle = const StrutStyle(forceStrutHeight: true, leading: 0.7);
-
-  paddingTextCenter(String text) => Padding(
-        padding: _textPadding,
-        child: Text(
-          text,
-          style: _textStyle,
-          strutStyle: strutStyle,
-          textAlign: TextAlign.center,
+List<Widget> _createSizeList({
+  required Map<String, List> list,
+  TextStyle? style,
+}) {
+  frameText({
+    int flex = 1,
+    Alignment alignment = Alignment.centerLeft,
+    required String text,
+  }) =>
+      Expanded(
+        flex: flex,
+        child: Container(
+          decoration: _border,
+          alignment: alignment,
+          child: Text(
+            maxLines: 1,
+            text,
+            style: style ?? _textStyle,
+            strutStyle: const StrutStyle(forceStrutHeight: true, leading: 0.8),
+            textAlign: TextAlign.center,
+          ),
         ),
       );
+
   var tableList = <Widget>[];
-  if (materialList.isNotEmpty) {
+  if (list.isNotEmpty) {
     int max = 5;
-    final maxColumns = (materialList.values.toList()[0].length / max).ceil();
+    final maxColumns = (list.values.toList()[0].length / max).ceil();
     for (int i = 0; i < maxColumns; i++) {
       //轮次
-      materialList.forEach((ins, data) {
+      list.forEach((ins, data) {
         var line = <Widget>[];
         //添加表格第一列指令列
-        line.add(Expanded(
-          flex: 2,
-          child: Container(
-            decoration: _border,
-            child: paddingTextCenter(ins),
-          ),
-        ));
+        line.add(frameText(flex: 2, text: ins));
+
         var sizeList = data.sublist(0, data.length - 1);
         var start = i * max;
         var surplus = sizeList.length - start;
         var to = surplus > max ? start + max : start + surplus;
         for (var j = start; j < to; ++j) {
           //添加尺码列
-          line.add(Expanded(
-            child: Container(
-              decoration: _border,
-              child: Text(
-                maxLines: 1,
-                sizeList[j],
-                style: _textStyle,
-                strutStyle: strutStyle,
-                textAlign: TextAlign.center,
-              ),
-            ),
+          line.add(frameText(
+            alignment: Alignment.center,
+            text: sizeList[j],
           ));
         }
         var fill = max - ((to + 1) - start);
@@ -130,19 +129,7 @@ List<Widget> _createSizeList(Map<String, List> materialList) {
 
         if (to - start < max) {
           //添加末尾列（合计）
-          line.add(Expanded(
-            child: Container(
-              decoration: _border,
-              child: Text(
-                maxLines: 1,
-                data.last,
-                style:
-                    const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                strutStyle: strutStyle,
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ));
+          line.add(frameText( alignment: Alignment.center,text: data.last));
         }
         tableList.add(IntrinsicHeight(child: Row(children: line)));
       });
@@ -398,7 +385,7 @@ Widget dynamicSizeMaterialLabel1098({
                   _paddingTextCenter(style: _bigStyle, text: '$size#', flex: 6),
                 ],
               ),
-        if (materialList.isNotEmpty) ..._createSizeList(materialList),
+        if (materialList.isNotEmpty) ..._createSizeList(list: materialList),
         _createRowText(
           title: 'Quantity:',
           style: _bigStyle,
@@ -841,7 +828,7 @@ Widget dynamicSizeMaterialLabel1095n1096({
             )
           ],
         ),
-        if (materialList.isNotEmpty) ..._createSizeList(materialList),
+        if (materialList.isNotEmpty) ..._createSizeList(list: materialList),
         _createRowText(
           title: '数量/Qty/kuantitas:',
           style: _bigStyle,
@@ -954,9 +941,6 @@ Widget dynamicDomesticMaterialLabel({
   required String labelID, //二维码ID
   required String productName, //品名
   required String orderType, //补单
-  required String typeBody, //工厂型体
-  required String trackNo, //跟踪号
-  required String instructionNo, //指令
   required String
       materialNumber, //物料编码。单尺码标 传入 物料编号(MATNR) ,无尺码或多尺码 传入 一般可配置物料(SATNR)
   required String materialDescription, //物料描述
@@ -970,9 +954,9 @@ Widget dynamicDomesticMaterialLabel({
   required String netWeight, //净重
   required String specifications, //规格型号
   required String volume, //体积
-  required String supplier, //供应商
+  required String supplierName, //供应商
   required String manufactureDate, //生产日期
-  required String deliveryLocation, //送货地点
+  required String factoryWarehouse, //厂区 仓库
   required bool hasNotes, //是否打印备注行
   required String notes, //备注
 }) =>
@@ -985,19 +969,6 @@ Widget dynamicDomesticMaterialLabel({
             _paddingTextCenter(text: orderType, flex: 5),
           ],
         ),
-        _createRowText(
-          title: '型体:',
-          rw: [_paddingTextCenter(text: typeBody, flex: 15)],
-        ),
-        _createRowText(
-          title: '批次:',
-          rw: [_paddingTextCenter(text: trackNo, flex: 15)],
-        ),
-        if (materialList.isEmpty)
-          _createRowText(
-            title: '指令号:',
-            rw: [_paddingTextCenter(text: instructionNo, flex: 15)],
-          ),
         _createRowText(
           title: '物编',
           rw: [_paddingTextCenter(text: '物料描述', flex: 15)],
@@ -1014,24 +985,11 @@ Widget dynamicDomesticMaterialLabel({
             )
           ],
         ),
-        if (materialList.isNotEmpty) ..._createSizeList(materialList),
-        _createRowText(
-          title: materialList.isNotEmpty ? '总数:' : '数量:',
-          style: _bigStyle,
-          rw: [
-            _paddingTextCenter(style: _bigStyle, text: inBoxQty, flex: 5),
-            _paddingTextCenter(
-              style: _bigStyle,
-              text: customsDeclarationUnit,
-              flex: 5,
-            ),
-            _paddingTextCenter(
-              style: _bigStyle,
-              text: customsDeclarationType,
-              flex: 5,
-            ),
-          ],
-        ),
+        if (materialList.isNotEmpty)
+          ..._createSizeList(
+            list: materialList,
+            style: _bigStyle,
+          ),
         IntrinsicHeight(
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -1040,6 +998,27 @@ Widget dynamicDomesticMaterialLabel({
                 flex: 15,
                 child: Column(
                   children: [
+                    Expanded(
+                      child: Row(
+                        children: [
+                          _paddingTextLeft(
+                            style: _bigStyle,
+                            text: materialList.isNotEmpty ? '总数:' : '数量:',
+                            flex: 5,
+                          ),
+                          _paddingTextCenter(
+                            style: _bigStyle,
+                            text: inBoxQty,
+                            flex: 5,
+                          ),
+                          _paddingTextCenter(
+                            style: _bigStyle,
+                            text: customsDeclarationUnit,
+                            flex: 5,
+                          ),
+                        ],
+                      ),
+                    ),
                     Expanded(
                       child: Row(
                         children: [
@@ -1102,8 +1081,14 @@ Widget dynamicDomesticMaterialLabel({
         _createRowText(
           title: '供应商:',
           rw: [
-            _paddingTextCenter(text: supplier, flex: 5),
-            _paddingTextCenter(text: '生产日期:', flex: 5),
+            _paddingTextCenter(text: supplierName, flex: 10),
+            _paddingTextCenter(text: '生产日期', flex: 5),
+          ],
+        ),
+        _createRowText(
+          title: '收货方:',
+          rw: [
+            _paddingTextCenter(text: factoryWarehouse, flex: 10),
             _paddingTextCenter(text: manufactureDate, flex: 5),
           ],
         ),
@@ -1112,12 +1097,5 @@ Widget dynamicDomesticMaterialLabel({
             title: 'Note:',
             rw: [_paddingTextCenter(text: notes, flex: 15)],
           ),
-        _createRowText(
-          title: '收货方:',
-          rw: [
-            _paddingTextCenter(text: deliveryLocation, flex: 10),
-            _paddingTextCenter(text: '中国制造', flex: 5),
-          ],
-        ),
       ],
     );

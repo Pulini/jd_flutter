@@ -5,7 +5,7 @@ import CoreBluetooth
 
 @main
 @objc class AppDelegate: FlutterAppDelegate {
-    var channel="com.jd.pzx.jd_flutter_flutter_send"
+    var channel="channel_bluetooth_flutter_to_android"
     override func application(
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
@@ -17,6 +17,8 @@ import CoreBluetooth
             (call: FlutterMethodCall, result: FlutterResult) -> Void in
             print("method=\(call.method)")
             switch call.method {
+            case "IsEnable":
+                self.bleHelper.startScan()
             case "GetScannedDevices":
                 self.bleHelper.startScan()
             default:

@@ -6,11 +6,11 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/base_data.dart';
 import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/utils/app_init_service.dart';
-import 'package:jd_flutter/utils/dio_manager.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:logger/logger.dart';
 import 'package:uuid/uuid.dart';
 
+import 'dio_manager.dart';
 import 'utils.dart';
 
 //接口返回异常
@@ -52,73 +52,6 @@ var logger = Logger();
 //当前语言
 var language = 'zh';
 
-//post请求
-Future<BaseData> httpPost({
-  String? loading,
-  required String method,
-  Map<String, dynamic>? params,
-  Object? body,
-}) {
-  return _doHttp(
-    loading: loading,
-    params: params,
-    body: body,
-    baseUrl: baseUrlForMES,
-    isPost: true,
-    method: method,
-  );
-}
-
-//get请求
-Future<BaseData> httpGet({
-  String? loading,
-  required String method,
-  Map<String, dynamic>? params,
-  Object? body,
-}) {
-  return _doHttp(
-    loading: loading,
-    params: params,
-    body: body,
-    baseUrl: baseUrlForMES,
-    isPost: false,
-    method: method,
-  );
-}
-
-//post请求
-Future<BaseData> sapPost({
-  String? loading,
-  required String method,
-  Map<String, dynamic>? params,
-  Object? body,
-}) {
-  return _doHttp(
-    loading: loading,
-    params: {...?params},
-    body: body,
-    baseUrl: baseUrlForSAP,
-    isPost: true,
-    method: method,
-  );
-}
-
-//get请求
-Future<BaseData> sapGet({
-  String? loading,
-  required String method,
-  Map<String, dynamic>? params,
-  Object? body,
-}) {
-  return _doHttp(
-    loading: loading,
-    params: {...?params},
-    body: body,
-    baseUrl: baseUrlForSAP,
-    isPost: false,
-    method: method,
-  );
-}
 
 //初始化网络请求
 Future<BaseData> _doHttp({
@@ -199,6 +132,7 @@ Future<BaseData> _doHttp({
       base.data = json['Data'];
       base.message = '接口提示：${json['Message']}';
     } else {
+      if (loading != null && loading.isNotEmpty) Get.back();
       logger.e('网络异常');
       base.message = '网络异常';
     }
@@ -241,6 +175,74 @@ Future<BaseData> _doHttp({
     base.baseUrl = baseUrl;
   }
   return base;
+}
+
+//post请求
+Future<BaseData> httpPost({
+  String? loading,
+  required String method,
+  Map<String, dynamic>? params,
+  Object? body,
+}) {
+  return _doHttp(
+    loading: loading,
+    params: params,
+    body: body,
+    baseUrl: baseUrlForMES,
+    isPost: true,
+    method: method,
+  );
+}
+
+//get请求
+Future<BaseData> httpGet({
+  String? loading,
+  required String method,
+  Map<String, dynamic>? params,
+  Object? body,
+}) {
+  return _doHttp(
+    loading: loading,
+    params: params,
+    body: body,
+    baseUrl: baseUrlForMES,
+    isPost: false,
+    method: method,
+  );
+}
+
+//post请求
+Future<BaseData> sapPost({
+  String? loading,
+  required String method,
+  Map<String, dynamic>? params,
+  Object? body,
+}) {
+  return _doHttp(
+    loading: loading,
+    params: {...?params},
+    body: body,
+    baseUrl: baseUrlForSAP,
+    isPost: true,
+    method: method,
+  );
+}
+
+//get请求
+Future<BaseData> sapGet({
+  String? loading,
+  required String method,
+  Map<String, dynamic>? params,
+  Object? body,
+}) {
+  return _doHttp(
+    loading: loading,
+    params: {...?params},
+    body: body,
+    baseUrl: baseUrlForSAP,
+    isPost: false,
+    method: method,
+  );
 }
 
 //网络测试接口
@@ -449,8 +451,7 @@ const webApiSendDispatchToWechat = 'api/NeedleCartDispatch/WechatPostByFEmpID';
 const webApiProductionDispatch = 'api/NeedleCartDispatch/ProcessCalculation';
 
 //工序计工
-const webApiProductionDispatchBatch =
-    'api/NeedleCartDispatch/ProcessCalculationBatch';
+const webApiProductionDispatchBatch = 'api/NeedleCartDispatch/ProcessCalculationBatch';
 
 //查询生产派工单生产进度表
 const webApiGetWorkCardDetailList = 'api/WorkCard/GetWorkCardDetailList';
@@ -1360,8 +1361,7 @@ const webApiSubmitWorkCardPriority = 'api/Package/SubmitWorkCardPriority';
 const webApiReceiveWorkCardDataST = 'api/Package/ReceiveWorkCardDataST';
 
 //获得线别的当前的分析报告
-const webApiGetWorkLineAnalysisReportNowNew =
-    'api/Package/GetWorkLineAnalysisReportNowNew';
+const webApiGetWorkLineAnalysisReportNowNew = 'api/Package/GetWorkLineAnalysisReportNowNew';
 
 //获得线别的分配信息
 const webApiGetDeptDistributeInfoNew = 'api/Package/GetDeptDistributeInfoNew';
@@ -1410,8 +1410,8 @@ const webApiGetToDayItemInfo = 'api/Piecework/GetToDayItemInfo';
 const webApiGetEndingProcessQty = 'api/Piecework/GetEndingProcessQty';
 
 //团件-获取团件末道工序列表
-const webApiGetGroupPayEndingProcessList =
-    'api/Piecework/GetGroupPayEndingProcessList';
+const webApiGetGroupPayEndingProcessList = 'api/Piecework/GetGroupPayEndingProcessList';
 
 //团件-获取末道团件明细信息
 const webApiGetGroupPayEndingDetail = 'api/Piecework/GetGroupPayEndingDetail';
+

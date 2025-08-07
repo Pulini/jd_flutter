@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/base_data.dart';
 import 'package:jd_flutter/bean/http/response/delivery_order_info.dart';
 import 'package:jd_flutter/bean/http/response/purchase_order_warehousing_info.dart';
+import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 
 class PurchaseOrderWarehousingState {
@@ -15,7 +16,7 @@ class PurchaseOrderWarehousingState {
   var orderLabelList = <DeliveryOrderLabelInfo>[];
   var scannedLabelList = <DeliveryOrderLabelInfo>[].obs;
   var canAddPiece = false.obs;
-
+  var hasPassPermission=checkUserPermission('105180106');
   getPurchaseOrder({
     required String startDate,
     required String endDate,
