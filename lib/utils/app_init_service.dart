@@ -36,7 +36,7 @@ class AppInitService extends GetxService {
   late SharedPreferences sharedPreferences;
   late PackageInfo packageInfo;
   late BaseDeviceInfo deviceInfo;
-  late List<CameraDescription> cameras;
+  List<CameraDescription>? cameras;
 
   static AppInitService get to => Get.find();
 
@@ -46,7 +46,9 @@ class AppInitService extends GetxService {
     sharedPreferences = await SharedPreferences.getInstance();
     packageInfo = await PackageInfo.fromPlatform();
     deviceInfo = await DeviceInfoPlugin().deviceInfo;
-    cameras = await availableCameras();
+    if(GetPlatform.isMobile){
+      cameras = await availableCameras();
+    }
     userInfo = getUserInfo();
     var save = spGet('isTestUrl');
     if (save == null) {
@@ -122,8 +124,8 @@ class AppInitService extends GetxService {
   }
 
   bool hasFrontCamera() =>
-      cameras.any((v) => v.lensDirection == CameraLensDirection.front);
+      cameras==null?false:cameras!.any((v) => v.lensDirection == CameraLensDirection.front);
 
   bool hasBackCamera() =>
-      cameras.any((v) => v.lensDirection == CameraLensDirection.back);
+      cameras==null?false:cameras!.any((v) => v.lensDirection == CameraLensDirection.back);
 }
