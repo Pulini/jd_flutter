@@ -44,9 +44,9 @@ class HomeButton extends ButtonItem {
     }
   }
 
-  toFunction() {
+  toFunction({required Function() checkUpData}) {
     functionTitle=name;
-    Get.toNamed(route);
+    Get.toNamed(route)?.then((_)=>checkUpData.call());
   }
 }
 var functionTitle='';

@@ -1,4 +1,4 @@
-import 'package:jd_flutter/utils/utils.dart';
+import 'dart:convert';
 
 class BaseData {
   BaseData({
@@ -7,7 +7,8 @@ class BaseData {
     this.message,
   });
 
-  BaseData.fromJson(dynamic json) {
+  BaseData.fromJson(dynamic jsonData) {
+    var json = jsonData.runtimeType == String ? jsonDecode(jsonData) : jsonData;
     resultCode = json['ResultCode'];
     data = json['Data'] ?? '';
     message = json['Message'];
@@ -25,20 +26,7 @@ class BaseData {
     map['Message'] = message;
     return map;
   }
-
-  print(String uri, String? loading, Map<String, dynamic> queryParameters) {
-    Map<String, dynamic> map = <String, dynamic>{};
-    map['Loading'] = loading;
-    map['Uri'] = uri;
-    map['Parameters'] = queryParameters;
-    map['ResponseTime'] = DateTime.now();
-    map['ResultCode'] = resultCode;
-    map['Data'] = data;
-    map['Message'] = message;
-    loggerF(map);
-  }
 }
-
 
 class ParseJsonParams<T> {
   final dynamic data;

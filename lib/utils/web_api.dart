@@ -4,13 +4,13 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/base_data.dart';
-import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/utils/app_init_service.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:logger/logger.dart';
 import 'package:uuid/uuid.dart';
 
+import 'dio_manager.dart';
 import 'utils.dart';
 
 //接口返回异常
@@ -51,6 +51,131 @@ var logger = Logger();
 
 //当前语言
 var language = 'zh';
+
+
+//初始化网络请求
+Future<BaseData> _doHttp({
+  required bool isPost,
+  required String method,
+  required String baseUrl,
+  String? loading,
+  Map<String, dynamic>? params,
+  Object? body,
+}) async {
+  if (isTestUrl()) {
+    if (baseUrl == baseUrlForMES) {
+      baseUrl = testUrlForMES;
+    } else if (baseUrl == baseUrlForSAP) {
+      baseUrl = developUrlForSAP;
+    }
+  }
+  if (baseUrl == baseUrlForSAP || baseUrl == developUrlForSAP) {
+    params = {
+      'sap-client':
+          baseUrl == baseUrlForSAP ? baseClientForSAP : developClientForSAP,
+      ...?params,
+    };
+  }
+
+  try {
+    debugPrint('SnackbarStatus=$snackbarStatus');
+    if (Get.isSnackbarOpen) {
+      snackbarController?.close(withAnimations: false);
+    }
+  } catch (e) {
+    debugPrint('销毁snackbar异常');
+  }
+
+  if (loading != null && loading.isNotEmpty) {
+    loadingShow(loading);
+  }
+
+  //根据路由获取当前所在的功能
+  var nowFunction = getNowFunction();
+
+  //设置请求的headers
+  var options = Options(headers: {
+    'Content-Type': 'application/json',
+    'FunctionID': nowFunction?.id ?? '0',
+    'Version': nowFunction?.version ?? 0,
+    'Language': language,
+    'Token': userInfo?.token ?? '',
+    'GUID': const Uuid().v1(),
+  });
+
+  //创建返回数据载体
+  var base = BaseData()..resultCode = resultError;
+
+  try {
+    //获取单例Dio对象
+    var dio = DioManager().getDio(baseUrl);
+
+    //发起post/get请求
+    var response = isPost
+        ? await dio.post(
+            method,
+            queryParameters: params,
+            data: body,
+            options: options,
+          )
+        : await dio.get(
+            method,
+            queryParameters: params,
+            data: body,
+            options: options,
+          );
+    if (response.statusCode == 200) {
+      var json = response.data.runtimeType == String
+          ? jsonDecode(response.data)
+          : response.data;
+      base.resultCode = json['ResultCode'];
+      base.data = json['Data'];
+      base.message = '接口提示：${json['Message']}';
+    } else {
+      if (loading != null && loading.isNotEmpty) Get.back();
+      logger.e('网络异常');
+      base.message = '网络异常';
+    }
+  } on DioException catch (e) {
+    logger.e('error:${e.toString()}');
+    switch (e.type) {
+      case DioExceptionType.connectionTimeout:
+        base.message = '连接服务器超时';
+        break;
+      case DioExceptionType.sendTimeout:
+        base.message = '发送数据超时';
+        break;
+      case DioExceptionType.receiveTimeout:
+        base.message = '接收数据超时';
+        break;
+      case DioExceptionType.badResponse:
+        base.message = '请求配置错误';
+        break;
+      case DioExceptionType.cancel:
+        base.message = '取消请求';
+        break;
+      case DioExceptionType.connectionError:
+        base.message = '连接服务器异常';
+        break;
+      case DioExceptionType.badCertificate:
+        base.message = '服务器证书错误';
+        break;
+      case DioExceptionType.unknown:
+        base.message = '未知异常';
+        break;
+    }
+  } on Exception catch (e) {
+    logger.e('error:${e.toString()}');
+    base.message = '发生错误：${e.toString()}';
+  } on Error catch (e) {
+    logger.e('error:${e.toString()}');
+    base.message = '发生异常：${e.toString()}';
+  } finally {
+    if (loading != null && loading.isNotEmpty) loadingDismiss();
+    base.baseUrl = baseUrl;
+  }
+  return base;
+}
 
 //post请求
 Future<BaseData> httpPost({
@@ -118,173 +243,6 @@ Future<BaseData> sapGet({
     isPost: false,
     method: method,
   );
-}
-
-//初始化网络请求
-Future<BaseData> _doHttp({
-  required bool isPost,
-  required String method,
-  required String baseUrl,
-  String? loading,
-  Map<String, dynamic>? params,
-  Object? body,
-}) async {
-  if (isTestUrl()) {
-    if (baseUrl == baseUrlForMES) {
-      baseUrl = testUrlForMES;
-    } else if (baseUrl == baseUrlForSAP) {
-      baseUrl = developUrlForSAP;
-    }
-  }
-  if (baseUrl == baseUrlForSAP || baseUrl == developUrlForSAP) {
-    params = {
-      'sap-client':
-          baseUrl == baseUrlForSAP ? baseClientForSAP : developClientForSAP,
-      ...?params,
-    };
-  }
-
-  try {
-    debugPrint('SnackbarStatus=$snackbarStatus');
-    if (Get.isSnackbarOpen) {
-      snackbarController?.close(withAnimations: false);
-    }
-  } catch (e) {
-    debugPrint('销毁snackbar异常');
-  }
-
-  if (loading != null && loading.isNotEmpty) {
-    loadingShow(loading);
-  }
-
-  //根据路由获取当前所在的功能
-  var nowFunction = getNowFunction();
-
-  //设置请求的headers
-  var options = Options(headers: {
-    'Content-Type': 'application/json',
-    'FunctionID': nowFunction?.id ?? '0',
-    'Version': nowFunction?.version ?? 0,
-    'Language': language,
-    'Token': userInfo?.token ?? '',
-    'GUID': const Uuid().v1(),
-  });
-
-  //创建返回数据载体
-  var base = BaseData()..resultCode = resultError;
-
-  try {
-    //创建dio对象
-    var dio = Dio(BaseOptions(
-      baseUrl: baseUrl,
-      connectTimeout: const Duration(seconds: 10),
-      sendTimeout: const Duration(seconds: 10),
-      receiveTimeout: const Duration(minutes: 1),
-    ));
-
-    //接口拦截器
-    dio.interceptors.add(
-      InterceptorsWrapper(
-        onRequest: (options, handler) {
-          options.print();
-          handler.next(options);
-        },
-        onResponse: (response, handler) {
-          var baseData = BaseData.fromJson(
-            response.data.runtimeType == String
-                ? jsonDecode(response.data)
-                : response.data,
-          )..print(
-              '${response.realUri.origin}/$method',
-              loading,
-              response.realUri.queryParameters,
-            );
-          if (baseData.resultCode == 2) {
-            logger.e('需要重新登录');
-            spSave(spSaveUserInfo, '');
-            if (loading != null && loading.isNotEmpty) loadingDismiss();
-            handler.next(response);
-            reLoginPopup();
-          } else if (baseData.resultCode == 3) {
-            logger.e('需要更新版本');
-            if (loading != null && loading.isNotEmpty) loadingDismiss();
-            upData();
-          } else {
-            handler.next(response);
-          }
-        },
-        onError: (DioException e, handler) {
-          logger.e('error:$e');
-          handler.next(e);
-        },
-      ),
-    );
-
-    //发起post/get请求
-    var response = isPost
-        ? await dio.post(
-            method,
-            queryParameters: params,
-            data: body,
-            options: options,
-          )
-        : await dio.get(
-            method,
-            queryParameters: params,
-            data: body,
-            options: options,
-          );
-    if (response.statusCode == 200) {
-      var json = response.data.runtimeType == String
-          ? jsonDecode(response.data)
-          : response.data;
-      base.resultCode = json['ResultCode'];
-      base.data = json['Data'];
-      base.message = '接口提示：${json['Message']}';
-    } else {
-      if (loading != null && loading.isNotEmpty) Get.back();
-      logger.e('网络异常');
-      base.message = '网络异常';
-    }
-  } on DioException catch (e) {
-    logger.e('error:${e.toString()}');
-    switch (e.type) {
-      case DioExceptionType.connectionTimeout:
-        base.message = '连接服务器超时';
-        break;
-      case DioExceptionType.sendTimeout:
-        base.message = '发送数据超时';
-        break;
-      case DioExceptionType.receiveTimeout:
-        base.message = '接收数据超时';
-        break;
-      case DioExceptionType.badResponse:
-        base.message = '请求配置错误';
-        break;
-      case DioExceptionType.cancel:
-        base.message = '取消请求';
-        break;
-      case DioExceptionType.connectionError:
-        base.message = '连接服务器异常';
-        break;
-      case DioExceptionType.badCertificate:
-        base.message = '服务器证书错误';
-        break;
-      case DioExceptionType.unknown:
-        base.message = '未知异常';
-        break;
-    }
-  } on Exception catch (e) {
-    logger.e('error:${e.toString()}');
-    base.message = '发生错误：${e.toString()}';
-  } on Error catch (e) {
-    logger.e('error:${e.toString()}');
-    base.message = '发生异常：${e.toString()}';
-  } finally {
-    if (loading != null && loading.isNotEmpty) loadingDismiss();
-    base.baseUrl = baseUrl;
-  }
-  return base;
 }
 
 //网络测试接口
@@ -1403,8 +1361,7 @@ const webApiSubmitWorkCardPriority = 'api/Package/SubmitWorkCardPriority';
 const webApiReceiveWorkCardDataST = 'api/Package/ReceiveWorkCardDataST';
 
 //获得线别的当前的分析报告
-const webApiGetWorkLineAnalysisReportNowNew =
-    'api/Package/GetWorkLineAnalysisReportNowNew';
+const webApiGetWorkLineAnalysisReportNowNew = 'api/Package/GetWorkLineAnalysisReportNowNew';
 
 //获得线别的分配信息
 const webApiGetDeptDistributeInfoNew = 'api/Package/GetDeptDistributeInfoNew';

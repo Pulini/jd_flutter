@@ -265,6 +265,7 @@ class SapPrintLabelInfo {
   String? labelID; //标签ID BQID
   String? factoryNo; //工厂  WERKS
   String? supplierNumber; //供应商编号  LIFNR
+  String? supplierName; //供应商名称  NAME1
   String? pieceID; //	件号  ZPIECE_NO
   double? volume; //装载体积  LADEVOL
   double? grossWeight; //	毛重  BRGEW
@@ -289,6 +290,7 @@ class SapPrintLabelInfo {
   String? instructionNo; //指令  KDAUFS
   String? pieceNo; //件号 件数 ZPACKAGES
   String? factory; //厂区 ZQY
+  String? warehouse; //仓库编号及描述 ZLGOBS
   List<SapPrintLabelSubInfo>? subLabel; //GT_OUT_ITEMS
 
   SapPrintLabelInfo({
@@ -299,6 +301,7 @@ class SapPrintLabelInfo {
     this.labelID,
     this.factoryNo,
     this.supplierNumber,
+    this.supplierName,
     this.pieceID,
     this.volume,
     this.grossWeight,
@@ -323,6 +326,7 @@ class SapPrintLabelInfo {
     this.instructionNo,
     this.pieceNo,
     this.factory,
+    this.warehouse,
     this.subLabel,
   });
 
@@ -334,6 +338,7 @@ class SapPrintLabelInfo {
     labelID = json['BQID'];
     factoryNo = json['WERKS'];
     supplierNumber = json['LIFNR'];
+    supplierName = json['NAME1'];
     pieceID = json['ZPIECE_NO'];
     volume = json['LADEVOL'].toString().toDoubleTry();
     grossWeight = json['BRGEW'].toString().toDoubleTry();
@@ -358,6 +363,7 @@ class SapPrintLabelInfo {
     instructionNo = json['KDAUFS'];
     pieceNo = json['ZPACKAGES'];
     factory = json['ZQY'];
+    warehouse = json['ZLGOBS'];
     subLabel = [
       if (json['GT_OUT_ITEMS'] != null)
         for (var sub in json['GT_OUT_ITEMS']) SapPrintLabelSubInfo.fromJson(sub)

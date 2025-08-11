@@ -184,11 +184,7 @@ class _PurchaseOrderWarehousingBindingLabelPageState
           ),
           Obx(() => CombinationButton(
                 combination: Combination.right,
-            isEnabled: state.scannedLabelList.isNotEmpty &&
-                (state.scannedLabelList
-                    .every((v) => v.isChecked.value) ||
-                    state.scannedLabelList
-                        .every((v) => !v.isChecked.value)),
+            isEnabled: logic.isCanSubmitBinding(),
                 text: 'purchase_order_warehousing_label_check_submit'.tr,
                 click: () =>
                     logic.submitLabelBinding(() => Get.back(result: true)),

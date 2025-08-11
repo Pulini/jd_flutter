@@ -96,7 +96,7 @@ showDispatchList(
                       ),
                     ),
                     Text(
-                      '${items[index].name}(${isLast ? 'production_dispatch_dialog_recorded_working'.tr : 'production_dispatch_dialog_record_working.tr'}${items[index].qty})',
+                      '${items[index].name}(${isLast ? 'production_dispatch_dialog_recorded_working'.tr : 'production_dispatch_dialog_record_working'.tr}${items[index].qty})',
                       style: const TextStyle(color: Colors.black),
                     ),
                   ],

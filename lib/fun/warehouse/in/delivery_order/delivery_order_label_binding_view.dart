@@ -52,13 +52,13 @@ class _DeliveryOrderLabelBindingPageState
                 ],
               ),
               const SizedBox(height: 5),
-              for (var size in list) ..._sizeItem(size)
+              for (var size in list) ..._sizeItem(size,materialCode)
             ],
           ),
         ));
   }
 
-  _sizeItem(List<dynamic> size) {
+  _sizeItem(List<dynamic> size, String materialCode) {
     return [
       if ((size[0] as String).isNotEmpty)
         Padding(
@@ -79,7 +79,7 @@ class _DeliveryOrderLabelBindingPageState
                 child: progressIndicator(
                   max: size[1],
                   color: Colors.blue.shade300,
-                  value: logic.getSizeScanProgress(size[0] ?? ''),
+                  value: logic.getSizeScanProgress(materialCode,size[0] ?? ''),
                 ),
               )
             ],
@@ -229,11 +229,7 @@ class _DeliveryOrderLabelBindingPageState
               Expanded(
                 child: Obx(() => CombinationButton(
                       combination: Combination.right,
-                      isEnabled: state.scannedLabelList.isNotEmpty &&
-                          (state.scannedLabelList
-                                  .every((v) => v.isChecked.value) ||
-                              state.scannedLabelList
-                                  .every((v) => !v.isChecked.value)),
+                      isEnabled:logic.isCanSubmitBinding(),
                       text: 'delivery_order_label_check_submit'.tr,
                       click: () => logic.submitLabelBinding(),
                     )),

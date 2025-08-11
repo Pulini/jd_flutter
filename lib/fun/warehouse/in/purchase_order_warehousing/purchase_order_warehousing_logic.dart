@@ -316,9 +316,17 @@ class PurchaseOrderWarehousingLogic extends GetxController {
         }
       }
     }
+
     Get.to(() => const PurchaseOrderWarehousingBindingLabelDetailPage())
         ?.then((v) {
       if (v) toDetail.call();
     });
   }
+  ///有权限 要么都校验标签，要么都不校验标签  没有标签 提交时 都校验标签
+  isCanSubmitBinding() => state.hasPassPermission
+      ? state.scannedLabelList.isNotEmpty &&
+      (state.scannedLabelList.every((v) => v.isChecked.value) ||
+          state.scannedLabelList.every((v) => !v.isChecked.value))
+      : state.scannedLabelList.isNotEmpty &&
+      (state.scannedLabelList.every((v) => v.isChecked.value));
 }

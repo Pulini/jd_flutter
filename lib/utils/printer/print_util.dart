@@ -193,11 +193,13 @@ class PrintUtil {
       errorDialog(content: '位置信息权限未开启');
       return false;
     }
-    if (!statuses[Permission.bluetoothConnect]!.isGranted) {
+    if (GetPlatform.isAndroid &&
+        !statuses[Permission.bluetoothConnect]!.isGranted) {
       errorDialog(content: '蓝牙连接权限未开启');
       return false;
     }
-    if (!statuses[Permission.bluetoothScan]!.isGranted) {
+    if (GetPlatform.isAndroid &&
+        !statuses[Permission.bluetoothScan]!.isGranted) {
       errorDialog(content: '蓝牙扫描权限未开启');
       return false;
     }
@@ -205,18 +207,21 @@ class PrintUtil {
       errorDialog(content: '蓝牙权限未开启');
       return false;
     }
-    if (!statuses[Permission.bluetoothAdvertise]!.isGranted) {
+    if (GetPlatform.isAndroid &&
+        !statuses[Permission.bluetoothAdvertise]!.isGranted) {
       errorDialog(content: '蓝牙广播权限未开启');
       return false;
     }
+
     if (statuses[Permission.location]!.isGranted &&
-        statuses[Permission.bluetoothConnect]!.isGranted &&
-        statuses[Permission.bluetoothScan]!.isGranted &&
-        statuses[Permission.bluetooth]!.isGranted &&
-        statuses[Permission.bluetoothAdvertise]!.isGranted) {
+        statuses[Permission.bluetooth]!.isGranted) {
+      if (GetPlatform.isAndroid) {
+        return statuses[Permission.bluetoothConnect]!.isGranted &&
+            statuses[Permission.bluetoothScan]!.isGranted &&
+            statuses[Permission.bluetoothAdvertise]!.isGranted;
+      }
       return true;
     }
-
     return false;
   }
 
@@ -321,11 +326,14 @@ class PrintUtil {
   }) async {
     start?.call();
     var code = await bluetoothChannel.invokeMethod('SendTSC', label);
-    if (code == 1000) {//发送完成
+    if (code == 1000) {
+      //发送完成
       success?.call();
-    } else if (code == 1003) {//发送失败
+    } else if (code == 1003) {
+      //发送失败
       failed?.call();
-    } else if (code == 1007) {//通道断开
+    } else if (code == 1007) {
+      //通道断开
       Future.delayed(const Duration(milliseconds: 500), () {
         _connectBluetooth(
           deviceList.firstWhere((v) => v.deviceIsConnected),

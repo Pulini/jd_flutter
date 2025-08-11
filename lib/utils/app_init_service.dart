@@ -1,3 +1,4 @@
+import 'package:camera/camera.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/cupertino.dart';
@@ -26,11 +27,16 @@ SharedPreferences sharedPreferences() => AppInitService.to.sharedPreferences;
 
 PackageInfo packageInfo() => AppInitService.to.packageInfo;
 
+bool hasFrontCamera() => AppInitService.to.hasFrontCamera();
+
+bool hasBackCamera() => AppInitService.to.hasFrontCamera();
+
 class AppInitService extends GetxService {
   RxBool isTestUrl = false.obs;
   late SharedPreferences sharedPreferences;
   late PackageInfo packageInfo;
   late BaseDeviceInfo deviceInfo;
+  List<CameraDescription>? cameras;
 
   static AppInitService get to => Get.find();
 
@@ -40,6 +46,9 @@ class AppInitService extends GetxService {
     sharedPreferences = await SharedPreferences.getInstance();
     packageInfo = await PackageInfo.fromPlatform();
     deviceInfo = await DeviceInfoPlugin().deviceInfo;
+    if(GetPlatform.isMobile){
+      cameras = await availableCameras();
+    }
     userInfo = getUserInfo();
     var save = spGet('isTestUrl');
     if (save == null) {
@@ -113,4 +122,10 @@ class AppInitService extends GetxService {
     networkStatus.value = result;
     debugPrint('网络状态: $result');
   }
+
+  bool hasFrontCamera() =>
+      cameras==null?false:cameras!.any((v) => v.lensDirection == CameraLensDirection.front);
+
+  bool hasBackCamera() =>
+      cameras==null?false:cameras!.any((v) => v.lensDirection == CameraLensDirection.back);
 }

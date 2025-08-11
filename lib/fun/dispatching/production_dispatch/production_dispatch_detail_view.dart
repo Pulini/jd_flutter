@@ -74,17 +74,17 @@ class _ProductionDispatchDetailPageState
               children: [
                 CheckBox(
                   onChanged: (c) => setState(() => logic.checkAutoCount(c)),
-                  name: 'production_dispatch_detail_sharing'.tr,
+                  name: 'production_dispatch_detail_auto_input'.tr,
                   value: state.isCheckedAutoCount,
                 ),
                 CheckBox(
                   onChanged: (c) => setState(() => logic.checkDivideEqually(c)),
-                  name: 'production_dispatch_detail_round_up'.tr,
+                  name: 'production_dispatch_detail_sharing'.tr,
                   value: state.isCheckedDivideEqually,
                 ),
                 CheckBox(
                   onChanged: (c) => setState(() => logic.checkRounding(c)),
-                  name: 'production_dispatch_detail_next_process'.tr,
+                  name: 'production_dispatch_detail_round_up'.tr,
                   value: state.isCheckedRounding,
                 ),
               ],
@@ -93,14 +93,14 @@ class _ProductionDispatchDetailPageState
           const SizedBox(width: 10),
           Obx(() => CombinationButton(
                 combination: Combination.left,
-                text: 'production_dispatch_detail_batch_record_working'.tr,
+                text: 'production_dispatch_detail_next_process'.tr,
                 isEnabled: state.isEnabledNextWorkProcedure.value,
                 click: () => logic.detailViewNextWorkProcedure(),
               )),
           Obx(() => CombinationButton(
                 combination: Combination.right,
                 isEnabled: state.isEnabledBatchDispatch.value,
-                text: 'production_dispatch_detail_add_worker'.tr,
+                text: 'production_dispatch_detail_batch_record_working'.tr,
                 click: () => logic.detailViewBatchModifyDispatchClick(
                   (v1, v2) => batchModifyDispatchQtyDialog(
                     state.isCheckedDivideEqually,
@@ -306,7 +306,7 @@ class _ProductionDispatchDetailPageState
                   child: Row(
                     children: [
                       Obx(() => CombinationButton(
-                            text: 'production_dispatch_detail_clean_tips'.tr,
+                            text: 'production_dispatch_detail_add_worker'.tr,
                             isEnabled: state.isEnabledAddOne.value,
                             click: () => addWorkerDialog(
                               state.workerList,
@@ -319,7 +319,7 @@ class _ProductionDispatchDetailPageState
                           logic.detailViewAddAllWorker(
                             () => askDialog(
                               content:
-                                  'production_dispatch_detail_add_all_worker'
+                                  'production_dispatch_detail_clean_tips'
                                       .tr,
                               confirm: () =>
                                   logic.cleanDispatchFromWorkProcedure(),
@@ -327,14 +327,14 @@ class _ProductionDispatchDetailPageState
                           );
                         },
                         needSave: false,
-                        name: 'production_dispatch_detail_select_all_worker'.tr,
+                        name: 'production_dispatch_detail_add_all_worker'.tr,
                         isEnabled: state.isEnabledAddAllDispatch,
                         value: state.isCheckedAddAllDispatch,
                       ),
                       CheckBox(
                         onChanged: (c) => logic.checkSelectAllDispatch(c),
                         needSave: false,
-                        name: 'production_dispatch_detail_close_all_process'.tr,
+                        name: 'production_dispatch_detail_select_all_worker'.tr,
                         isEnabled: state.isEnabledSelectAllDispatch,
                         value: state.isCheckedSelectAllDispatch,
                       ),
@@ -454,8 +454,8 @@ class _ProductionDispatchDetailPageState
                 Obx(() => CombinationButton(
                       combination: Combination.left,
                       text: state.isOpenedAllWorkProcedure.value
-                          ? 'production_dispatch_detail_open_all_process'.tr
-                          : 'production_dispatch_detail_last_dispatch'.tr,
+                          ? 'production_dispatch_detail_close_all_process'.tr
+                          : 'production_dispatch_detail_open_all_process'.tr,
                       click: () => logic.detailViewWorkProcedureLockAll(),
                     )),
                 CombinationButton(

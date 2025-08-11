@@ -5,7 +5,7 @@ import 'dart:math';
 import 'package:crypto/crypto.dart';
 import 'package:decimal/decimal.dart';
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:dio/dio.dart';
+import 'package:dio/dio.dart' as dio;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -153,29 +153,15 @@ hideKeyBoard() {
 //BuildContext扩展
 extension ContextExt on BuildContext {
   //是否是大屏幕
-  bool isLargeScreen() =>
-      MediaQuery
-          .of(this)
-          .size
-          .width > 768;
+  bool isLargeScreen() => MediaQuery.of(this).size.width > 768;
 
   //是否是中屏幕
   bool isMediumScreen() =>
-      MediaQuery
-          .of(this)
-          .size
-          .width > 425 &&
-          MediaQuery
-              .of(this)
-              .size
-              .width < 1200;
+      MediaQuery.of(this).size.width > 425 &&
+      MediaQuery.of(this).size.width < 1200;
 
   //是否是小屏幕
-  bool isSmallScreen() =>
-      MediaQuery
-          .of(this)
-          .size
-          .width < 768;
+  bool isSmallScreen() => MediaQuery.of(this).size.width < 768;
 }
 
 //Double扩展方法
@@ -288,8 +274,8 @@ extension StringExt on String? {
 
   bool isPallet() =>
       (this ?? '').startsWith('GE') &&
-          (this ?? '').length >= 10 &&
-          (this ?? '').length <= 13;
+      (this ?? '').length >= 10 &&
+      (this ?? '').length <= 13;
 
   //允许英文单词在换行时截断
   String allowWordTruncation() => Characters(this ?? '').join('\u{200B}');
@@ -392,9 +378,7 @@ extension StringExt on String? {
 }
 
 loggerF(Map<String, dynamic> map) {
-  if (map
-      .toString()
-      .length > 500) {
+  if (map.toString().length > 500) {
     map['日志类型'] = '异步打印日志';
     compute(_logF, map);
   } else {
@@ -407,9 +391,10 @@ _logF(Map<String, dynamic> data) {
   logger.f(data);
 }
 
-extension RequestOptionsExt on RequestOptions {
+extension RequestOptionsExt on dio.RequestOptions {
   print() {
     Map<String, dynamic> map = <String, dynamic>{};
+    map['Type'] = '===发送请求===';
     map['RequestTime'] = DateTime.now();
     map['Method'] = method;
     map['BaseUrl'] = baseUrl;
@@ -421,8 +406,25 @@ extension RequestOptionsExt on RequestOptions {
   }
 }
 
+extension ApiResponseExtensions<T> on dio.Response<T> {
+  BaseData getBaseData() {
+    var base = BaseData.fromJson(data);
+    Map<String, dynamic> map = <String, dynamic>{};
+    map['Type'] = '===收到响应===';
+    map['ResponseTime'] = DateTime.now();
+    map['BaseUrl'] = requestOptions.baseUrl;
+    map['Path'] = requestOptions.path;
+    map['Status'] = '$statusCode';
+    map['ResultCode'] = base.resultCode;
+    map['Data'] = base.data;
+    map['Message'] = base.message;
+    loggerF(map);
+    return base;
+  }
+}
+
 extension ListExt on List? {
- bool isNullOrEmpty() {
+  bool isNullOrEmpty() {
     if (this == null) return true;
     return this!.isEmpty;
   }
@@ -459,8 +461,9 @@ Future<void> goLaunch(Uri uri) async {
 }
 
 //获取服务器版本信息
-getVersionInfo(bool showLoading, {
-  required Function noUpdate,
+getVersionInfo(
+  bool showLoading, {
+  Function? noUpdate,
   required Function(VersionInfo) needUpdate,
   required Function(String) error,
 }) {
@@ -474,7 +477,7 @@ getVersionInfo(bool showLoading, {
       if (packageInfo().buildNumber.toIntTry() < versionInfo.versionCode!) {
         needUpdate.call(versionInfo);
       } else {
-        noUpdate.call();
+        noUpdate?.call();
       }
     } else {
       error.call(versionInfoCallback.message ?? '');
@@ -772,9 +775,9 @@ String escapeEncode(String originalString) {
       .map((codeUnit) => '%u${codeUnit.toRadixString(16).padLeft(4, '0')}')
       .join()
       .replaceAllMapped(
-    RegExp(r'\\u([0-9A-Fa-f]{4})'),
+        RegExp(r'\\u([0-9A-Fa-f]{4})'),
         (match) => String.fromCharCode(int.parse(match.group(1)!, radix: 16)),
-  );
+      );
 }
 
 bool containsChinese(String input) {
@@ -846,25 +849,19 @@ livenFaceVerification({
   Downloader(
     url: faceUrl,
     completed: (filePath) {
-      try {
-        Permission.camera
-            .request()
-            .isGranted
-            .then((permission) {
-          if (permission) {
-            const MethodChannel(channelFaceVerificationAndroidToFlutter)
-                .invokeMethod('StartDetect', filePath)
-                .then((v) {
-              // Get.dialog( AlertDialog( content: Image.memory(v)));
-              verifySuccess.call((v as Uint8List).toBase64());
-            }).catchError((e) => errorDialog(content: '人脸验证错误：$e'));
-          } else {
-            errorDialog(content: '缺少相机权限');
-          }
-        });
-      } on PlatformException {
-        errorDialog(content: '人脸验证程序启动失败');
-      }
+      Permission.camera.request().isGranted.then((permission) {
+        if (permission) {
+          const MethodChannel(channelFaceVerificationAndroidToFlutter)
+              .invokeMethod('StartDetect', filePath)
+              .then((v) {
+            // Get.dialog( AlertDialog( content: Image.memory(v)));
+            verifySuccess.call((v as Uint8List).toBase64());
+          }).catchError((e) => errorDialog(
+                  content: '人脸验证错误：${(e as PlatformException).message}'));
+        } else {
+          errorDialog(content: '缺少相机权限');
+        }
+      });
     },
   );
 }
@@ -921,3 +918,13 @@ Future getResponsibleDepartmentList(int userID) async {
 hidKeyboard() {
   FocusScope.of(Get.overlayContext!).requestFocus(FocusNode());
 }
+
+String textToKey(String text) {
+  if (text.isEmpty) return 'empty';
+  final bytes = utf8.encode(text);
+  final digest = sha256.convert(bytes);
+  return digest.toString();
+}
+
+
+

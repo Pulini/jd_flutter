@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/delivery_order_info.dart';
 import 'package:jd_flutter/bean/http/response/sap_purchase_stock_in_info.dart';
 import 'package:jd_flutter/constant.dart';
+import 'package:jd_flutter/utils/app_init_service.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
@@ -64,7 +65,7 @@ stockInDialog({
     PickerType.ghost,
     buttonName: 'delivery_order_dialog_location'.tr,
     saveKey: spSaveDeliveryOrderStockInCheckLocation,
-    dataList:()=> getStorageLocationList(submitList[0].factoryNO ?? ''),
+    dataList: () => getStorageLocationList(submitList[0].factoryNO ?? ''),
     onSelected: (v) => _checkFaceInfo(
       billType: '入库单',
       sapFactoryNumber: (v as LocationInfo).factoryNumber ?? '',
@@ -107,7 +108,7 @@ stockInDialog({
   stockIn() {
     if (leaderEnable.value) {
       var leader = leaderList[leaderController.selectedItem];
-      if (submitList[0].isScanPieces?.isEmpty == true) {
+      if (submitList[0].isScanPieces?.isEmpty == true && hasFrontCamera()) {
         livenFaceVerification(
           faceUrl: userInfo?.picUrl ?? '',
           verifySuccess: (pickerB64) => livenFaceVerification(
@@ -243,7 +244,7 @@ stockOutDialog({
   var locationController = OptionsPickerController(
     PickerType.ghost,
     buttonName: 'delivery_order_dialog_location'.tr,
-    dataList:()=> getStorageLocationList(submitList[0].factoryNO ?? ''),
+    dataList: () => getStorageLocationList(submitList[0].factoryNO ?? ''),
   );
   var departmentController = OptionsPickerController(
     PickerType.sapDepartment,
@@ -364,8 +365,8 @@ _checkLeader({
   required List<DeliveryOrderInfo> submitList,
   required LeaderInfo leader,
   required Function() refresh,
-}) {
-  if (submitList[0].isScanPieces?.isEmpty == true) {
+}) async {
+  if (submitList[0].isScanPieces?.isEmpty == true && await hasFrontCamera()) {
     livenFaceVerification(
       faceUrl: userInfo?.picUrl ?? '',
       verifySuccess: (pickerB64) => livenFaceVerification(

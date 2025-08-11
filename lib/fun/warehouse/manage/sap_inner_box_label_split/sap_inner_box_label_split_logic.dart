@@ -192,9 +192,6 @@ class SapInnerBoxLabelSplitLogic extends GetxController {
         labelID: label.labelID ?? '',
         productName: label.materialDeclarationName ?? '',
         orderType: '${label.factoryNo}${label.supplementType}',
-        typeBody: label.typeBody ?? '',
-        trackNo: label.trackNo ?? '',
-        instructionNo: label.instructionNo ?? '',
         materialNumber: label.subLabel!.length == 1
             ? label.subLabel!.first.materialNumber ?? ''
             : label.subLabel!.first.generalMaterialNumber ?? '',
@@ -215,9 +212,9 @@ class SapInnerBoxLabelSplitLogic extends GetxController {
         netWeight: label.netWeight.toShowString(),
         specifications: label.getLongWidthHeightDescription(),
         volume: label.volume.toShowString(),
-        supplier: label.supplierNumber ?? '',
+        supplierName: label.supplierName ?? '',
         manufactureDate: label.formatManufactureDate(),
-        deliveryLocation: label.factory ?? '',
+        factoryWarehouse: '${label.factory} ${label.warehouse}',
         hasNotes: hasNotes,
         notes: label.remarks ?? '',
       );

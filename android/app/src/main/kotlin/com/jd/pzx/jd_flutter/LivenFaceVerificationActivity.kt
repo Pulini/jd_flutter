@@ -42,11 +42,11 @@ import java.io.FileInputStream
 class LivenFaceVerificationActivity : Activity() {
 
     companion object {
-        lateinit var verifyResult: (Int, Bitmap?) -> Unit
+        lateinit var verifyResult: (Int, Bitmap?, String?) -> Unit
         fun startOneselfFaceVerification(
             context: Context,
             photo: String,
-            result: (Int, Bitmap?) -> Unit
+            result: (Int, Bitmap?, String?) -> Unit
         ) {
             verifyResult = result
             context.startActivity(
@@ -58,7 +58,7 @@ class LivenFaceVerificationActivity : Activity() {
 
         fun startLivingVerification(
             context: Context,
-            result: (Int, Bitmap?) -> Unit
+            result: (Int, Bitmap?, String?) -> Unit
         ) {
             verifyResult = result
             context.startActivity(
@@ -95,8 +95,6 @@ class LivenFaceVerificationActivity : Activity() {
     //活体检测结果bitmap
     private var faceBitmap: Bitmap? = null
 
-    private var errorCode= FACE_VERIFY_SUCCESS
-
     @SuppressLint("SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -125,7 +123,7 @@ class LivenFaceVerificationActivity : Activity() {
                     TipsDialog(this@LivenFaceVerificationActivity).show(
                         getString(R.string.liven_detection_living_verification_successful)
                     ) {
-                        verifyResult.invoke(a, b)
+                        verifyResult.invoke(a, b, null)
                         finish()
                     }
                 }.onResume()
@@ -140,7 +138,7 @@ class LivenFaceVerificationActivity : Activity() {
                         face.setImageBitmap(faceBitmap)
                         compare(verifyResult)
                     } else {
-                        verifyResult.invoke(code, null)
+                        verifyResult.invoke(code, null, "")
                     }
                 }.onResume()
             }
@@ -150,6 +148,12 @@ class LivenFaceVerificationActivity : Activity() {
 
     private fun initLivingDetectView(callback: (Int, Bitmap?) -> Unit): MLLivenessDetectView {
         val display = display()
+        Log.e(
+            "Pan",
+            "Rect= ${isPad()} widthPixels=${display.widthPixels} heightPixels=${display.heightPixels} dp=${
+                dp2px(480f)
+            }"
+        )
         return MLLivenessDetectView.Builder()
             .setContext(this)
             .setOptions(MLLivenessDetectView.DETECT_MASK)
@@ -169,18 +173,20 @@ class LivenFaceVerificationActivity : Activity() {
                         //活体检测成功
                         callback.invoke(FACE_VERIFY_SUCCESS, result.bitmap)
                     } else {
-                        errorCode= FACE_VERIFY_FAIL_NOT_LIVE
                         //活体检测失败
-                        showFailDialog(getString(R.string.liven_detection_liven_fail))
+                        showFailDialog(
+                            getString(R.string.liven_detection_liven_fail),
+                            FACE_VERIFY_FAIL_NOT_LIVE
+                        )
                     }
                 }
 
                 //活体检测异常
                 override fun onError(error: Int) {
                     Log.e("Pan", "活体检测异常：$error")
-                    errorCode= FACE_VERIFY_FAIL_ERROR
                     showFailDialog(
-                        String.format(getString(R.string.liven_detection_liven_error), error)
+                        String.format(getString(R.string.liven_detection_liven_error), error),
+                        FACE_VERIFY_FAIL_ERROR
                     )
                 }
 
@@ -200,7 +206,7 @@ class LivenFaceVerificationActivity : Activity() {
     /**
      * 人脸照片对比
      */
-    private fun compare(callback: (Int, Bitmap?) -> Unit) {
+    private fun compare(callback: (Int, Bitmap?, String?) -> Unit) {
         try {  //设置被对比照片bitmap
             val analyzer = MLFaceVerificationAnalyzerFactory
                 .getInstance()
@@ -220,43 +226,55 @@ class LivenFaceVerificationActivity : Activity() {
             Log.e("Pan", "face2 ${face2 == null}")
 
             val results = analyzer.setTemplateFace(face1)
-            if (results.isEmpty()) Log.e("Pan", "照片载入失败")
-
-            analyzer.asyncAnalyseFrame(face2)
-                .addOnSuccessListener { mlCompareList ->
-                    if (mlCompareList.isNotEmpty()) {
-                        mlCompareList[0]?.run {
-                            tvSimilarity.text = String.format(
-                                getString(R.string.liven_detection_similarity),
-                                "${similarity * 100} %"
-                            )
-                            if (similarity > 0.75) {
-                                TipsDialog(this@LivenFaceVerificationActivity).show(
-                                    getString(
-                                        R.string.liven_detection_face_verification_successful
+            if (results.isEmpty()) {
+                Log.e("Pan", "照片载入失败")
+                callback.invoke(FACE_VERIFY_FAIL_ERROR, null, "照片载入失败")
+                finish()
+            } else {
+                analyzer.asyncAnalyseFrame(face2)
+                    .addOnSuccessListener { mlCompareList ->
+                        if (mlCompareList.isNotEmpty()) {
+                            mlCompareList[0]?.run {
+                                tvSimilarity.text = String.format(
+                                    getString(R.string.liven_detection_similarity),
+                                    "${similarity * 100} %"
+                                )
+                                if (similarity > 0.75) {
+                                    TipsDialog(this@LivenFaceVerificationActivity).show(
+                                        getString(
+                                            R.string.liven_detection_face_verification_successful
+                                        )
+                                    ) {
+                                        callback.invoke(
+                                            FACE_VERIFY_SUCCESS,
+                                            faceBitmap!!,
+                                            "验证成功"
+                                        )
+                                        finish()
+                                    }
+                                } else {
+                                    showFailDialog(
+                                        getString(R.string.liven_detection_photo_not_me),
+                                        FACE_VERIFY_FAIL_NOT_ME
                                     )
-                                ) {
-                                    callback.invoke(FACE_VERIFY_SUCCESS, faceBitmap!!)
-                                    finish()
                                 }
-                            } else {
-                                errorCode= FACE_VERIFY_FAIL_NOT_ME
-                                showFailDialog(getString(R.string.liven_detection_photo_not_me))
                             }
                         }
+                    }.addOnFailureListener {
+                        Log.e("Pan", it.toString())
+                        showFailDialog(
+                            getString(R.string.liven_detection_photo_not_me),
+                            FACE_VERIFY_FAIL_NOT_ME
+                        )
                     }
-                }.addOnFailureListener {
-                    Log.e("Pan", it.toString())
-                    errorCode= FACE_VERIFY_FAIL_NOT_ME
-                    showFailDialog(getString(R.string.liven_detection_photo_not_me))
-                }
+            }
         } catch (e: RuntimeException) {
             Log.e("Pan", e.toString())
-            callback.invoke(FACE_VERIFY_FAIL_ERROR, null)
+            callback.invoke(FACE_VERIFY_FAIL_ERROR, null, e.toString())
         }
     }
 
-    private fun showFailDialog(msg: String, retry: Boolean = true) {
+    private fun showFailDialog(msg: String, code: Int, retry: Boolean = true) {
         if (retry) {
             InquiryDialog(this@LivenFaceVerificationActivity).show {
                 title(R.string.liven_detection_validation_failed)
@@ -265,7 +283,7 @@ class LivenFaceVerificationActivity : Activity() {
                     startFaceVerification()
                 }
                 cancel {
-                    verifyResult.invoke(errorCode, null)
+                    verifyResult.invoke(code, null, msg)
                     finish()
                 }
             }
