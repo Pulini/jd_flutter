@@ -748,7 +748,7 @@ Future pickPallet() {
                 );
                 return;
               }
-              if (selectLocationId.isEmpty) {
+              if (selectLocationId.isEmpty) { 
                 showSnackBar(
                   message:
                       'material_dispatch_dialog_select_storage_location_tops'

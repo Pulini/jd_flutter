@@ -146,7 +146,7 @@ class _DeviceMaintenanceRecordRepairPageState
     var partNorms = ''; // 零部件的规格
     var partRemark = ''; // 零部件的备注
     Get.dialog(PopScope(
-      canPop: false,
+      canPop: true,
       child: StatefulBuilder(builder: (context, dialogSetState) {
         return AlertDialog(
           title: Text('device_maintenance_add_components'.tr),

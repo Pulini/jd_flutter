@@ -141,7 +141,7 @@ class MaterialDispatchState {
       loading: 'material_dispatch_reporting'.tr,
       method: webApiCreateProcessOutPutStripDrawing,
       params: {
-        'DrillingCrewID': getMaterialDispatchMachineId(),
+        'DrillingCrewID': data.drillingCrewID,
         'UserID': userInfo?.userID,
         'QrCodeList': [
           for (var i = 0; i < data.children!.length; ++i)
@@ -246,7 +246,7 @@ class MaterialDispatchState {
       loading: 'material_dispatch_reporting'.tr,
       method: webApiCreateProcessOutPutStripDrawing,
       body: {
-        'DrillingCrewID': getMaterialDispatchMachineId(),
+        'DrillingCrewID': data.drillingCrewID,
         'UserID': userInfo?.userID,
         'QrCodeList': [
           {

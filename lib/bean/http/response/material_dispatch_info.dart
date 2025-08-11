@@ -30,6 +30,7 @@ class MaterialDispatchInfo {
     this.partName,
     this.depName,
     this.drillingCrewName,
+    this.drillingCrewID,
     this.materialID,
     this.materialNumber,
     this.materialName,
@@ -52,6 +53,7 @@ class MaterialDispatchInfo {
     this.sapSupplierNumber,
     this.description,
     this.sourceFactoryName,
+
   });
 
   MaterialDispatchInfo.fromJson(dynamic json) {
@@ -61,6 +63,7 @@ class MaterialDispatchInfo {
     partName = json['PartName'];
     depName = json['DepName'];
     drillingCrewName = json['DrillingCrewName'];
+    drillingCrewID = json['DrillingCrewID'];
     materialID = json['MaterialID'];
     materialNumber = json['MaterialNumber'];
     materialName = json['MaterialName'];
@@ -96,6 +99,7 @@ class MaterialDispatchInfo {
   String? partName; //部位
   String? depName; //机台组别
   String? drillingCrewName; //机台名称
+  String? drillingCrewID; //机台ID
   String? materialID; //物料ID
   String? materialNumber; //物料代码
   String? materialName; //物料名称
@@ -127,6 +131,7 @@ class MaterialDispatchInfo {
     map['PartName'] = partName;
     map['DepName'] = depName;
     map['DrillingCrewName'] = drillingCrewName;
+    map['DrillingCrewID'] = drillingCrewID;
     map['MaterialID'] = materialID;
     map['MaterialNumber'] = materialNumber;
     map['MaterialName'] = materialName;
