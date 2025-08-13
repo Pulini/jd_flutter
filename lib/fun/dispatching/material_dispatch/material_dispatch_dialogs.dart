@@ -748,7 +748,7 @@ Future pickPallet() {
                 );
                 return;
               }
-              if(getUserInfo()!.useStorageLocation == '1'){
+              if(getUserInfo()!.useStorageLocation == 1){
                 if (selectLocationId.isEmpty) {
                   showSnackBar(
                     message:

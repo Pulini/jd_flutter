@@ -158,6 +158,7 @@ class MaterialDispatchState {
               'StorageLocation': '',
               'RouteEntryFIDs': data.routeEntryFIDs,
               'ProductName': data.productName,
+              'UseStorageLocation': userInfo?.useStorageLocation,
             }
         ].toList(),
       },
@@ -267,6 +268,7 @@ class MaterialDispatchState {
             'StorageLocation': '',
             'RouteEntryFIDs': data.routeEntryFIDs,
             'ProductName': data.productName,
+            'UseStorageLocation': userInfo?.useStorageLocation,
           }
         ].toList(),
       },
