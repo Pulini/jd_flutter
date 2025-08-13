@@ -6,6 +6,7 @@ import 'package:jd_flutter/bean/http/response/material_dispatch_label_detail.dar
 import 'package:jd_flutter/fun/dispatching/material_dispatch/material_dispatch_state.dart';
 import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/check_box_widget.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
@@ -492,6 +493,9 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
                   String gwQty,
                   String nwQty,
                 ) {
+
+                  logger.f('------走打印');
+
                   var sp = '${long}x' '${wide}x$height';
                   var spQty = longQty
                       .div(100)

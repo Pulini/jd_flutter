@@ -143,6 +143,7 @@ class MaterialDispatchState {
       params: {
         'DrillingCrewID': data.drillingCrewID,
         'UserID': userInfo?.userID,
+        'UseStorageLocation': userInfo?.useStorageLocation,
         'QrCodeList': [
           for (var i = 0; i < data.children!.length; ++i)
             {
@@ -158,7 +159,7 @@ class MaterialDispatchState {
               'StorageLocation': '',
               'RouteEntryFIDs': data.routeEntryFIDs,
               'ProductName': data.productName,
-              'UseStorageLocation': userInfo?.useStorageLocation,
+
             }
         ].toList(),
       },
@@ -249,6 +250,7 @@ class MaterialDispatchState {
       body: {
         'DrillingCrewID': data.drillingCrewID,
         'UserID': userInfo?.userID,
+        'UseStorageLocation': userInfo?.useStorageLocation,
         'QrCodeList': [
           {
             'Length': longQty.toDoubleTry(),
@@ -268,7 +270,6 @@ class MaterialDispatchState {
             'StorageLocation': '',
             'RouteEntryFIDs': data.routeEntryFIDs,
             'ProductName': data.productName,
-            'UseStorageLocation': userInfo?.useStorageLocation,
           }
         ].toList(),
       },
