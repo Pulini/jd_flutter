@@ -41,142 +41,121 @@ class _IncomingInspectionPageState extends State<IncomingInspectionPage> {
     PickerType.sapSupplier,
     saveKey: '${RouteConfig.incomingInspection.name}${PickerType.sapSupplier}',
   );
-  var tecDeliveryNo=TextEditingController();
-  var tecMaterialCode=TextEditingController();
+  var tecDeliveryNo = TextEditingController();
+  var tecMaterialCode = TextEditingController();
 
-  Widget _deliveryItem(List<List<InspectionDeliveryInfo>> group) {
-    var orderTotalNumPage = group
-        .map((v) => v.map((v2) => v2.numPage ?? 0).reduce((a, b) => a + b))
-        .reduce((a, b) => a + b);
-
-    return Card(
-      child: ExpansionTile(
-        initiallyExpanded: true,
-        backgroundColor: Colors.white,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-        ),
-        title: textSpan(
-          hint: 'incoming_inspection_order_no'.tr,
-          text: group[0][0].billNo ?? '',
-          textColor: Colors.green,
-        ),
-        subtitle: textSpan(
-          hint: 'incoming_inspection_delivery_qty'.tr,
-          text: 'incoming_inspection_delivery_detail'.trArgs([
-            orderTotalNumPage.toString(),
-            group[0][0].numPage.toString(),
-            group[0][0].unitName ?? '',
-          ]),
-          textColor: Colors.green,
-        ),
-        leading: IconButton(
-          onPressed: () => askDialog(
-            content: 'incoming_inspection_delete_order_tips'.tr,
-            confirm: () => logic.deleteDeliveryOrder(group),
+  Widget _deliveryItem(List<List<InspectionDeliveryInfo>> group) => Card(
+        child: ExpansionTile(
+          initiallyExpanded: true,
+          backgroundColor: Colors.white,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
           ),
-          icon: const Icon(
-            Icons.delete_forever,
-            color: Colors.red,
+          title: textSpan(
+            hint: 'incoming_inspection_order_no'.tr,
+            text: group.first.first.billNo ?? '',
+            textColor: Colors.green,
           ),
+          subtitle: textSpan(
+            hint: 'incoming_inspection_delivery_qty'.tr,
+            text: 'incoming_inspection_delivery_detail'.trArgs([
+              group.first.first.numPage.toString(),
+              logic.getItemQty(group).toShowString(),
+              group.first.first.unitName ?? '',
+            ]),
+            textColor: Colors.green,
+          ),
+          leading: IconButton(
+            onPressed: () => askDialog(
+              content: 'incoming_inspection_delete_order_tips'.tr,
+              confirm: () => logic.deleteDeliveryOrder(group),
+            ),
+            icon: const Icon(
+              Icons.delete_forever,
+              color: Colors.red,
+            ),
+          ),
+          children: [for (var item in group) _subItem(item)],
         ),
-        children: [for (var item in group) _subItem(item)],
-      ),
-    );
-  }
+      );
 
-  Widget _subItem(List<InspectionDeliveryInfo> item) {
-    var materialGroupQty =
-        item.map((v) => v.qty ?? 0).reduce((a, b) => a.add(b)).toShowString();
-
-    var materialGroupNumPage =
-        item.map((v) => v.numPage ?? 0).reduce((a, b) => a + b);
-
-    return Container(
-      margin: const EdgeInsets.all(5),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            Colors.green.shade50,
-            Colors.blue.shade100,
+  Widget _subItem(List<InspectionDeliveryInfo> item) => Container(
+        margin: const EdgeInsets.all(5),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Colors.green.shade50,
+              Colors.blue.shade100,
+            ],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+          // color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: Colors.blue, width: 2),
+        ),
+        child: ExpansionTile(
+          backgroundColor: Colors.transparent,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          title: textSpan(
+            maxLines: 2,
+            hint: 'incoming_inspection_material'.tr,
+            text: '(${item.first.materialCode}) ${item.first.materialName}'
+                .allowWordTruncation(),
+          ),
+          subtitle: textSpan(
+              hint: 'incoming_inspection_material_delivery_qty'.tr,
+              text:
+                  '${logic.getItemMaterialQty(item).toShowString()} ${item.first.unitName}'),
+          leading: IconButton(
+            onPressed: () => askDialog(
+              content: 'incoming_inspection_delete_material_tips'.tr,
+              confirm: () => logic.deleteDeliveryMaterialGroupOrder(item),
+            ),
+            icon: const Icon(
+              Icons.delete_forever,
+              color: Colors.red,
+            ),
+          ),
+          children: [
+            for (var subItem in item)
+              Column(
+                children: [
+                  const Divider(indent: 10, endIndent: 10),
+                  InkWell(
+                    onTap: () => modifySubItemMaterialDialog(
+                        item: subItem, modify: () => logic.modify()),
+                    child: Row(
+                      children: [
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: textSpan(
+                            hint: 'incoming_inspection_detail_delivery_qty'.tr,
+                            text:
+                                '${subItem.qty.toShowString()} ${subItem.unitName}',
+                            textColor: Colors.black54,
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () => askDialog(
+                            content: 'incoming_inspection_delete_item_tips'.tr,
+                            confirm: () => logic.deleteDeliveryItem(subItem),
+                          ),
+                          icon: const Icon(
+                            Icons.delete_forever,
+                            color: Colors.red,
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              )
           ],
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
         ),
-        // color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: Colors.blue, width: 2),
-      ),
-      child: ExpansionTile(
-        backgroundColor: Colors.transparent,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-        ),
-        title: textSpan(
-          maxLines: 2,
-          hint: 'incoming_inspection_material'.tr,
-          text: '(${item[0].materialCode}) ${item[0].materialName}'
-              .allowWordTruncation(),
-        ),
-        subtitle: textSpan(
-          hint: 'incoming_inspection_material_delivery_qty'.tr,
-          text: 'incoming_inspection_delivery_detail'.trArgs([
-            materialGroupNumPage.toString(),
-            materialGroupQty.toString(),
-            item[0].unitName ?? '',
-          ]),
-        ),
-        leading: IconButton(
-          onPressed: () => askDialog(
-            content: 'incoming_inspection_delete_material_tips'.tr,
-            confirm: () => logic.deleteDeliveryMaterialGroupOrder(item),
-          ),
-          icon: const Icon(
-            Icons.delete_forever,
-            color: Colors.red,
-          ),
-        ),
-        children: [
-          for (var subItem in item)
-            Column(
-              children: [
-                const Divider(indent: 10, endIndent: 10),
-                InkWell(
-                  onTap: () => modifySubItemMaterialDialog(
-                      item: subItem, modify: () => logic.modify()),
-                  child: Row(
-                    children: [
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: textSpan(
-                          hint: 'incoming_inspection_detail_delivery_qty'.tr,
-                          text: 'incoming_inspection_delivery_detail'.trArgs([
-                            subItem.numPage.toString(),
-                            subItem.qty.toShowString(),
-                            subItem.unitName ?? '',
-                          ]),
-                          textColor: Colors.black54,
-                        ),
-                      ),
-                      IconButton(
-                        onPressed: () => askDialog(
-                          content: 'incoming_inspection_delete_item_tips'.tr,
-                          confirm: () => logic.deleteDeliveryItem(subItem),
-                        ),
-                        icon: const Icon(
-                          Icons.delete_forever,
-                          color: Colors.red,
-                        ),
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            )
-        ],
-      ),
-    );
-  }
+      );
 
   Widget _addMaterialItem(InspectionDeliveryInfo item) {
     return InkWell(
@@ -250,7 +229,6 @@ class _IncomingInspectionPageState extends State<IncomingInspectionPage> {
   }
 
   Widget initSearch() => Container(
-        height: MediaQuery.of(context).size.height * 0.4,
         padding:
             const EdgeInsets.only(left: 10, top: 20, right: 10, bottom: 20),
         decoration: BoxDecoration(
@@ -265,6 +243,7 @@ class _IncomingInspectionPageState extends State<IncomingInspectionPage> {
           ),
         ),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -288,7 +267,7 @@ class _IncomingInspectionPageState extends State<IncomingInspectionPage> {
               controller: tecMaterialCode,
               hint: 'incoming_inspection_material_code'.tr,
             ),
-            Expanded(child: Container()),
+            const SizedBox(height: 50),
             Row(
               children: [
                 Expanded(
@@ -297,8 +276,8 @@ class _IncomingInspectionPageState extends State<IncomingInspectionPage> {
                     text: 'incoming_inspection_scan_order'.tr,
                     click: () => scannerDialog(
                       detect: (code) => logic.scanOrder(
-                        deliveryNo:tecDeliveryNo.text,
-                        materialCode:tecMaterialCode.text,
+                        deliveryNo: tecDeliveryNo.text,
+                        materialCode: tecMaterialCode.text,
                         code: code,
                         success: () => Navigator.pop(context),
                       ),
@@ -313,8 +292,8 @@ class _IncomingInspectionPageState extends State<IncomingInspectionPage> {
                       area: companyController.selectedId.value,
                       factory: factoryController.selectedId.value,
                       supplier: supplierController.selectedId.value,
-                      deliveryNo:tecDeliveryNo.text,
-                      materialCode:tecMaterialCode.text,
+                      deliveryNo: tecDeliveryNo.text,
+                      materialCode: tecMaterialCode.text,
                       success: () => Navigator.pop(context),
                     ),
                   ),
@@ -347,7 +326,7 @@ class _IncomingInspectionPageState extends State<IncomingInspectionPage> {
     return pageBody(
       actions: [
         IconButton(
-          onPressed:() =>_showSearch(),
+          onPressed: () => _showSearch(),
           icon: const Icon(Icons.search),
         ),
         IconButton(

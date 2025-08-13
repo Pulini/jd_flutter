@@ -840,6 +840,9 @@ const webApiSapPuttingOnShelves = 'sap/zapp/ZWMS_INTERFACE';
 //sap获取托盘明细
 const webApiSapGetPalletDetails = 'sap/zapp/ZWMS_BARCODE_LIST';
 
+//sap获取托盘信息
+const webApiSapGetPalletInfo = 'sap/zapp/ZNQWMS_BARCODE_LIST';
+
 //sap移库领料
 const webApiSapRelocationPicking = 'sap/zapp/ZWMS_BARCODE_YK';
 

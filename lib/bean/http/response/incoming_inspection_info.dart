@@ -59,7 +59,6 @@ class InspectionDeliveryInfo {
     return data;
   }
 
-  identifying() => '$billNo - $materialName';
 }
 
 class InspectionOrderInfo {

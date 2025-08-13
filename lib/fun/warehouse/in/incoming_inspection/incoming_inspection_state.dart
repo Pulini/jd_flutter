@@ -56,7 +56,7 @@ class IncomingInspectionState {
         var list = <InspectionDeliveryInfo>[
           for (var json in response.data) InspectionDeliveryInfo.fromJson(json)
         ];
-        groupBy(list, (v1) => v1.identifying()).forEach((k1, v1) {
+        groupBy(list, (v1) => v1.billNo??'').forEach((k1, v1) {
           var mList = <List<InspectionDeliveryInfo>>[];
           groupBy(v1, (v2) => v2.materialName).forEach((k2, v2) {
             mList.add(v2);

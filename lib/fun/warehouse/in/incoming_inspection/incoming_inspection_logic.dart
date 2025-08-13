@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/incoming_inspection_info.dart';
 import 'package:jd_flutter/bean/http/response/worker_info.dart';
+import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
 import 'incoming_inspection_state.dart';
@@ -11,14 +12,14 @@ class IncomingInspectionLogic extends GetxController {
 
   scanOrder({
     required String code,
-    required String deliveryNo ,
-    required String materialCode ,
+    required String deliveryNo,
+    required String materialCode,
     required Function() success,
   }) {
     state.queryIncomingInspectionList(
       barcode: code,
-      deliveryNo:deliveryNo,
-      materialCode:materialCode,
+      deliveryNo: deliveryNo,
+      materialCode: materialCode,
       success: success,
       error: (msg) => errorDialog(content: msg),
     );
@@ -27,8 +28,8 @@ class IncomingInspectionLogic extends GetxController {
   query({
     required String area,
     required String factory,
-    required String deliveryNo ,
-    required String materialCode ,
+    required String deliveryNo,
+    required String materialCode,
     required Function() success,
     required String supplier,
   }) {
@@ -36,12 +37,18 @@ class IncomingInspectionLogic extends GetxController {
       area: area,
       factory: factory,
       supplier: supplier,
-      deliveryNo:deliveryNo,
-      materialCode:materialCode,
+      deliveryNo: deliveryNo,
+      materialCode: materialCode,
       success: success,
       error: (msg) => errorDialog(content: msg),
     );
   }
+
+  double getItemQty(List<List<InspectionDeliveryInfo>> group) =>
+      group.map((v) => getItemMaterialQty(v)).reduce((a, b) => a.add(b));
+
+  double getItemMaterialQty(List<InspectionDeliveryInfo> item) =>
+      item.map((v) => v.qty ?? 0).reduce((a, b) => a.add(b));
 
   deleteDeliveryOrder(List<List<InspectionDeliveryInfo>> order) {
     state.deliveryList.remove(order);
@@ -135,7 +142,7 @@ class IncomingInspectionLogic extends GetxController {
     state.getInspectionOrders(
       startDate: startDate,
       endDate: endDate,
-      inspectionSuppler:inspectionSuppler,
+      inspectionSuppler: inspectionSuppler,
       success: success,
       error: (msg) => errorDialog(content: msg),
     );

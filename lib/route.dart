@@ -45,6 +45,7 @@ import 'package:jd_flutter/fun/warehouse/in/temporary_order/temporary_order_view
 import 'package:jd_flutter/fun/warehouse/manage/carton_label_scan/carton_label_scan_progress_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/carton_label_scan/carton_label_scan_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/patrol_inspection/patrol_inspection_view.dart';
+import 'package:jd_flutter/fun/warehouse/manage/print_pallet/print_pallet_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/quality_inspection/quality_inspection_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/sap_carton_label_binding/sap_carton_label_binding_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/sap_factory_inventory/sap_counting_inventory_view.dart';
@@ -426,7 +427,7 @@ class RouteConfig {
   //来料稽查
   static Routes incomingInspection = Routes(
     '/incoming_inspection',
-    99,
+    100,
     const IncomingInspectionPage(),
   );
 
@@ -520,7 +521,6 @@ class RouteConfig {
     100,
     const DeliveryOrderPage(),
   );
-
 
   //暂收单
   static Routes temporaryOrder = Routes(
@@ -648,6 +648,13 @@ class RouteConfig {
     const SapLabelReprintPage(),
   );
 
+  //打印托盘清单
+  static Routes printPallet = Routes(
+    '/print_pallet',
+    99,
+    const PrintPalletPage(),
+  );
+
   //本地功能入口列表
   static List<Routes> routeList = [
     dailyReport,
@@ -729,6 +736,7 @@ class RouteConfig {
     formingBarcodeCollection,
     workshopPlanning,
     sapLabelReprint,
+    printPallet,
   ];
 
   static List<GetPage> appRoutes = [
@@ -1060,6 +1068,10 @@ class RouteConfig {
     GetPage(
       name: sapLabelReprint.name,
       page: () => sapLabelReprint.page,
+    ),
+    GetPage(
+      name: printPallet.name,
+      page: () => printPallet.page,
     ),
   ];
 }
