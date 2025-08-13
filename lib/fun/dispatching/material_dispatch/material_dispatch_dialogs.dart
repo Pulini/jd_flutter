@@ -748,21 +748,23 @@ Future pickPallet() {
                 );
                 return;
               }
-              if (selectLocationId.isEmpty) {
-                showSnackBar(
-                  message:
-                      'material_dispatch_dialog_select_storage_location_tops'
-                          .tr,
-                  isWarning: true,
-                );
-                return;
-              }
-              if (selectPalletNumber.isEmpty) {
-                showSnackBar(
-                  message: 'material_dispatch_dialog_select_pallet_tips'.tr,
-                  isWarning: true,
-                );
-                return;
+              if(getUserInfo()!.useStorageLocation == '1'){
+                if (selectLocationId.isEmpty) {
+                  showSnackBar(
+                    message:
+                    'material_dispatch_dialog_select_storage_location_tops'
+                        .tr,
+                    isWarning: true,
+                  );
+                  return;
+                }
+                if (selectPalletNumber.isEmpty) {
+                  showSnackBar(
+                    message: 'material_dispatch_dialog_select_pallet_tips'.tr,
+                    isWarning: true,
+                  );
+                  return;
+                }
               }
               saveMaterialDispatchDate(selectDate);
               saveMaterialDispatchMachineId(selectMachineId);

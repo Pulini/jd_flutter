@@ -28,10 +28,25 @@ class _DeviceMaintenanceRecordRepairPageState
   addWorkerItem() {
     return InkWell(
       onTap: () {
-        addWorkerDialog(click: () {
-          state.addRepairEntryData(success: () {
-            Navigator.of(context).pop();
-          });
+        addWorkerDialog(click: (
+          brand,
+          partName,
+          partNumber,
+          partUnit,
+          partNorms,
+          partRemark,
+        ) {
+          state.addRepairEntryData(
+            brand: brand,
+            partName: partName,
+            partNumber: partNumber,
+            partUnit: partUnit,
+            partNorms: partNorms,
+            partRemark: partRemark,
+            success: () {
+              Get.back();
+            },
+          );
         });
       },
       child: const Center(
@@ -122,66 +137,83 @@ class _DeviceMaintenanceRecordRepairPageState
   }
 
   addWorkerDialog({
-    Function()? click,
+    Function(String, String, String, String, String, String)? click,
   }) {
+    var brand = ''; // 零部件的品牌
+    var partName = ''; // 零部件的名字
+    var partNumber = ''; // 零部件的数量
+    var partUnit = ''; // 零部件的单位
+    var partNorms = ''; // 零部件的规格
+    var partRemark = ''; // 零部件的备注
     Get.dialog(PopScope(
-      canPop: false,
+      canPop: true,
       child: StatefulBuilder(builder: (context, dialogSetState) {
         return AlertDialog(
           title: Text('device_maintenance_add_components'.tr),
-          content: Column(
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 15),
-              _inputSearchText(
-                hint: 'device_maintenance_manufacturer_brand'.tr,
-                onChanged: (s) {
-                  state.brand = s;
-                },
-              ),
-              const SizedBox(height: 5),
-              _inputSearchText(
-                hint: 'device_maintenance_replace_accessory_name'.tr,
-                onChanged: (s) {
-                  state.partName = s;
-                },
-              ),
-              const SizedBox(height: 5),
-              _inputSearchText(
-                hint: 'device_maintenance_quantity'.tr,
-                inputType: inputNumber,
-                onChanged: (s){
-                  state.partNumber = s;
-                },
-              ),
-              const SizedBox(height: 5),
-              _inputSearchText(
-                hint: 'device_maintenance_unit'.tr,
-                onChanged: (s) {
-                  state.partUnit = s;
-                },
-              ),
-              const SizedBox(height: 5),
-              _inputSearchText(
-                hint: 'device_maintenance_specifications'.tr,
-                onChanged: (s) {
-                  state.partNorms = s;
-                },
-              ),
-              const SizedBox(height: 5),
-              _inputSearchText(
-                hint: 'device_maintenance_remarks'.tr,
-                onChanged: (s)  {
-                  state.partRemark = s;
-                },
-              ),
-            ],
+          content: SizedBox(
+            width: 300,
+            height: 260,
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 15),
+                _inputSearchText(
+                  hint: 'device_maintenance_manufacturer_brand'.tr,
+                  onChanged: (s) {
+                    brand = s;
+                  },
+                ),
+                const SizedBox(height: 5),
+                _inputSearchText(
+                  hint: 'device_maintenance_replace_accessory_name'.tr,
+                  onChanged: (s) {
+                    partName = s;
+                  },
+                ),
+                const SizedBox(height: 5),
+                _inputSearchText(
+                  hint: 'device_maintenance_quantity'.tr,
+                  inputType: inputNumber,
+                  onChanged: (s) {
+                    partNumber = s;
+                  },
+                ),
+                const SizedBox(height: 5),
+                _inputSearchText(
+                  hint: 'device_maintenance_unit'.tr,
+                  onChanged: (s) {
+                    partUnit = s;
+                  },
+                ),
+                const SizedBox(height: 5),
+                _inputSearchText(
+                  hint: 'device_maintenance_specifications'.tr,
+                  onChanged: (s) {
+                    partNorms = s;
+                  },
+                ),
+                const SizedBox(height: 5),
+                _inputSearchText(
+                  hint: 'device_maintenance_remarks'.tr,
+                  onChanged: (s) {
+                    partRemark = s;
+                  },
+                ),
+              ],
+            ),
           ),
           actions: [
             TextButton(
               onPressed: () {
-                click?.call();
+                click?.call(
+                  brand,
+                  partName,
+                  partNumber,
+                  partUnit,
+                  partNorms,
+                  partRemark,
+                );
               },
               child: Text('dialog_default_confirm'.tr),
             ),
@@ -210,7 +242,9 @@ class _DeviceMaintenanceRecordRepairPageState
                   flex: 3,
                   child: EditText(
                       hint: 'device_maintenance_holding_artificial_number'.tr,
-                      onChanged: (s) {logic.searchPeople(s);}),
+                      onChanged: (s) {
+                        logic.searchPeople(s);
+                      }),
                 ),
                 Obx(() => Expanded(
                     child: Text(state.peoPleInfo.value.empName == null
@@ -220,19 +254,27 @@ class _DeviceMaintenanceRecordRepairPageState
             ),
             EditText(
                 hint: 'device_maintenance_maintenance_organization'.tr,
-                onChanged: (s){state.repairUnit = s;}),
+                onChanged: (s) {
+                  state.maintenanceUnit.value = s;
+                }),
             EditText(
                 hint: 'device_maintenance_maintenance_location'.tr,
-                onChanged: (s){state.repairPart = s;}),
+                onChanged: (s) {
+                  state.repairParts.value = s;
+                }),
             EditText(
                 hint: 'device_maintenance_fault_description'.tr,
-                onChanged: (s){state.repairReason = s;}),
+                onChanged: (s) {
+                  state.faultDescription.value = s;
+                }),
             DatePicker(pickerController: logic.repairStartDate),
             DatePicker(pickerController: logic.repairEndDate),
             Spinner(controller: logic.spinnerControllerWorkShop),
             EditText(
                 hint: 'device_maintenance_prevention'.tr,
-                onChanged: (s){state.repairPrevent = s;}),
+                onChanged: (s) {
+                  state.assessmentPrevention.value = s;
+                }),
             Expanded(
               child: Obx(
                 () => ListView.builder(
@@ -247,7 +289,7 @@ class _DeviceMaintenanceRecordRepairPageState
               width: double.maxFinite,
               child: CombinationButton(
                 text: 'device_maintenance_submit'.tr,
-                click: ()  {
+                click: () {
                   logic.submitRecordData(
                     success: (s) => {
                       successDialog(

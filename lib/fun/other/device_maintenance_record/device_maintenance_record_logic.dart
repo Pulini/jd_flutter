@@ -99,24 +99,24 @@ class DeviceMaintenanceRecordLogic extends GetxController {
         'FaultDescription': state.faultDescription.value,
         'RepairTime': repairEndDate.getDateFormatYMD(), //修复时间
         'InspectionTime': repairStartDate.getDateFormatYMD(), //报修时间
-        'IssueCause': state.issueCauseId,
-        'AssessmentPrevention': state.assessmentPrevention.value,
+        'IssueCause': state.issueCauseId,  //故障原因判断
+        'AssessmentPrevention': state.assessmentPrevention.value,  //维修后评估及预防
         'CustodianID':
-            state.deviceData.value.deviceMessage!.custodianID.toString(),
+            state.deviceData.value.deviceMessage!.custodianID.toString(), //使用人
         'CustodianNumber':
-            state.deviceData.value.deviceMessage!.custodianCode.toString(),
+            state.deviceData.value.deviceMessage!.custodianCode.toString(), //工号
         'UserID': userInfo?.userID.toString(),
-        'RepairParts': state.repairParts.value,
-        'MaintenanceUnit': state.maintenanceUnit.value,
+        'RepairParts': state.repairParts.value,  //检修部件
+        'MaintenanceUnit': state.maintenanceUnit.value,  //维修单位
         'RepairEntryData': [
           for (var i = 0; i < state.repairEntryData.length; ++i)
             {
-              'AccessoriesName': state.repairEntryData[i].accessoriesName,
-              'Manufacturer': state.repairEntryData[i].manufacturer,
-              'Specification': state.repairEntryData[i].specification,
-              'Quantity': state.repairEntryData[i].quantity,
-              'Unit': state.repairEntryData[i].unit,
-              'Remarks': state.repairEntryData[i].remarks,
+              'AccessoriesName': state.repairEntryData[i].accessoriesName,  //更换配件名称
+              'Manufacturer': state.repairEntryData[i].manufacturer, //厂商/品牌
+              'Specification': state.repairEntryData[i].specification, //规格
+              'Quantity': state.repairEntryData[i].quantity, //数量
+              'Unit': state.repairEntryData[i].unit, //单位
+              'Remarks': state.repairEntryData[i].remarks, //备注
             }
         ]
       }).then((response) {
@@ -217,6 +217,7 @@ class DeviceMaintenanceRecordLogic extends GetxController {
         },
       ).then((response) {
         if (response.resultCode == resultSuccess) {
+          state.custodianNumber.value = number;
           state.peoPleInfo.value = PeopleMessageInfo.fromJson(response.data);
         } else {
           errorDialog(content: response.message);

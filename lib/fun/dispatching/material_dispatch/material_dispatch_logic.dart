@@ -1,7 +1,13 @@
+import 'package:collection/collection.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/material_dispatch_info.dart';
 import 'package:jd_flutter/bean/http/response/material_dispatch_label_detail.dart';
+import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
+import 'package:jd_flutter/widget/preview_label_widget.dart';
+import 'package:jd_flutter/widget/tsc_label_templates/110w_dynamic_label.dart';
+import 'package:jd_flutter/widget/tsc_label_templates/75w45h_fixed_label.dart';
+import 'package:jd_flutter/widget/tsc_label_templates/75w_dynamic_label.dart';
 import 'material_dispatch_state.dart';
 
 class MaterialDispatchLogic extends GetxController {
@@ -189,5 +195,163 @@ class MaterialDispatchLogic extends GetxController {
       ),
       error: (msg) => errorDialog(content: msg),
     );
+  }
+
+  printLabel({
+    required MaterialDispatchInfo data,
+    required String billNo,
+    required String color,
+    required String guid,
+    required String pick,
+    required List<MaterialDispatchLabelDetail> bill,
+    required String qty,
+    required String specifications,
+    required String specificationSplit,
+    required String gw,
+    required String ew,
+  }) {
+    if (data.exitLabelType == '101') {
+      //国内标
+      if (state.allInstruction.value) {
+        var list = <String>[];
+
+        billNo.split(',').forEach((data) {
+          if (data.isNotEmpty) {
+            list.add(data);
+          }
+        });
+        var chunked = [
+          for (int i = 0; i < list.length; i += 4)
+            list.sublist(i, (i + 4).clamp(0, list.length))
+        ];
+        var subList = <String>[];
+        for (var data in chunked) {
+          var splitData = '';
+          for (var subData in data) {
+            splitData = '$splitData$subData,';
+          }
+          subList.add(splitData.substring(0, splitData.length - 1));
+        }
+
+        Get.to(() => PreviewLabel(
+          labelWidget: materialWorkshopDynamicLabel(
+            qrCode: guid,
+            productName: data.productName ?? '',
+            materialName: data.materialName ?? '',
+            partName: data.partName ?? '',
+            materialNumber: data.materialNumber ?? '',
+            processName: data.processName ?? '',
+            subList: subList,
+            sapDecideArea: data.sapDecideArea ?? '',
+            color: color,
+            drillingCrewName: data.drillingCrewName ?? '',
+            qty: qty,
+            unitName: data.unitName ?? '',
+          ),
+          isDynamic: true,
+        ));
+      } else {
+        var ins = '';
+        var toPrint = '';
+        for (var data in bill) {
+          if (data.billNo!.isNotEmpty) {
+            ins = '$ins${data.billNo!},';
+          }
+        }
+        ins.split(',').forEachIndexed((i, s) {
+          if (i <= 1 && s.isNotEmpty) {
+            toPrint = '$toPrint$s,';
+          }
+        });
+        if (toPrint.endsWith(',')) {
+          toPrint.substring(0, toPrint.length - 1);
+        }
+
+        Get.to(() => PreviewLabel(
+          labelWidget: materialWorkshopFixedLabel(
+            qrCode: guid,
+            productName: data.productName ?? '',
+            materialName: data.materialName ?? '',
+            partName: data.partName ?? '',
+            toPrint: toPrint,
+            palletNumber: getMaterialDispatchPalletNumber(),
+            materialNumber: data.materialNumber ?? '',
+            processName: data.processName ?? '',
+            sapDecideArea: data.sapDecideArea ?? '',
+            color: color,
+            drillingCrewName: data.drillingCrewName ?? '',
+            qty: qty,
+            unitName: data.unitName ?? '',
+            pick: pick,
+          ),
+        ));
+      }
+    } else if (data.exitLabelType == '102') {
+      var order = '';
+      if (data.billStyle == '0') {
+        order = '${data.factoryID} 正单';
+      } else {
+        order = '${data.factoryID} 补单';
+      }
+
+      Get.to(() => PreviewLabel(
+        labelWidget: dynamicSizeMaterialLabel1095n1096(
+          labelID: guid,
+          productName: data.description ?? '',
+          orderType: order,
+          typeBody: data.productName ?? '',
+          trackNo: '',
+          instructionNo: billNo,
+          generalMaterialNumber: data.materialNumber ?? '',
+          materialDescription: data.materialName ?? '',
+          materialList: {},
+          inBoxQty: qty,
+          customsDeclarationUnit: data.unitName ?? '',
+          customsDeclarationType: '',
+          pieceID: guid,
+          pieceNo: '1-1',
+          grossWeight: gw,
+          netWeight: ew,
+          specifications: '${specificationSplit}CM(LxWxH)',
+          volume: specifications,
+          supplier: data.sapSupplierNumber ?? '',
+          manufactureDate: getDateYMD(),
+          consignee: data.sourceFactoryName ?? '',
+          hasNotes: false,
+          notes: '',
+        ),
+        isDynamic: true,
+      ));
+    } else if (data.exitLabelType == '103') {
+      Get.to(() => PreviewLabel(
+        labelWidget: dynamicMaterialLabel1098(
+          labelID: guid,
+          myanmarApprovalDocument: data.description ?? '',
+          typeBody: data.productName ?? '',
+          trackNo: '',
+          instructionNo: billNo,
+          materialList: [
+            [
+              data.materialNumber ?? '',
+              specificationSplit,
+              qty,
+              data.unitName,
+            ]
+          ],
+          customsDeclarationType: data.cusdeclaraType ?? '',
+          pieceNo: '1-1',
+          pieceID: guid,
+          grossWeight: gw,
+          netWeight: ew,
+          specifications: specifications,
+          volume: specificationSplit,
+          supplier: data.sapSupplierNumber ?? '',
+          manufactureDate: getDateYMD(),
+          hasNotes: false,
+          notes: '',
+        ),
+        isDynamic: true,
+      ));
+    }
   }
 }

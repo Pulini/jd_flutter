@@ -23,6 +23,8 @@ class _StuffQualityInspectionLabelPageState
   final StuffQualityInspectionState state =
       Get.find<StuffQualityInspectionLogic>().state;
 
+  var borders = const BorderSide(color: Colors.grey, width: 1);
+
   _showChangeDialog(StuffQualityInspectionLabelInfo data, int position) {
     var changeQty = data.unqualified;
     var changeShort = data.short;
@@ -112,7 +114,7 @@ class _StuffQualityInspectionLabelPageState
     );
   }
 
-  _item(StuffQualityInspectionLabelInfo data, int position) {
+  Widget _item(StuffQualityInspectionLabelInfo data, int position) {
     var backColors = Colors.white;
     if (data.barCode == '合计') {
       backColors = Colors.yellow.shade200;
@@ -123,75 +125,99 @@ class _StuffQualityInspectionLabelPageState
         backColors = Colors.white;
       }
     }
-    return InkWell(
-      onTap: () => {
-        setState(() {
-          data.select = !data.select;
-        })
-      },
-      child: Row(
-        children: [
-          Expanded(
-              flex: 3,
-              child: _text(
-                  //标签
-                  mes: data.barCode ?? '',
-                  backColor: backColors,
-                  head: false,
-                  paddingNumber: 5)),
-          Expanded(
-              flex: 1,
-              child: _text(
-                  //标签数量
-                  mes: data.boxQty.toShowString(),
-                  backColor: backColors,
-                  head: false,
-                  paddingNumber: 5)),
-          Expanded(
-              flex: 1,
-              child: _text(
-                  //不合格数量
-                  mes: data.unqualified.toShowString(),
-                  backColor: backColors,
-                  head: false,
-                  paddingNumber: 5)),
-          Expanded(
-              flex: 1,
-              child: _text(
-                  //短码
-                  mes: data.short.toShowString(),
-                  backColor: backColors,
-                  head: false,
-                  paddingNumber: 5)),
-          Expanded(
-              flex: 1,
-              child: _text(
-                  //体积
-                  mes: data.volume.toShowString(),
-                  backColor: backColors,
-                  head: false,
-                  paddingNumber: 5)),
-          Expanded(
-              flex: 1,
-              child: _text(
-                  //毛重
-                  mes: data.grossWeight.toShowString(),
-                  backColor: backColors,
-                  head: false,
-                  paddingNumber: 5)),
-          Expanded(
-              flex: 1,
-              child: _text(
-                  //净重
-                  mes: data.netWeight.toShowString(),
-                  backColor: backColors,
-                  head: false,
-                  paddingNumber: 5)),
-        ],
+    return SizedBox(
+      width: 120 * 9,
+      child: SizedBox(
+        height: 35,
+        child: InkWell(
+          onTap: () => {
+            setState(() {
+              data.select = !data.select;
+            })
+          },
+          child: Row(
+            children: [
+              Expanded(
+                  flex: 7,
+                  child: _text(
+                      //标签
+                      mes: data.barCode ?? '',
+                      backColor: backColors,
+                      head: false,
+                      paddingNumber: 5)),
+              Expanded(
+                  flex: 2,
+                  child: _text(
+                      //装箱数量
+                      mes: data.barCode=='合计'? '':data.boxQty.toShowString(),
+                      backColor: backColors,
+                      head: false,
+                      paddingNumber: 5)),
+              Expanded(
+                  flex: 1,
+                  child: _text(
+                      //尺码
+                      mes: data.size ?? '',
+                      backColor: backColors,
+                      head: false,
+                      paddingNumber: 5)),
+              Expanded(
+                  flex: 2,
+                  child: _text(
+                      //不合格数量
+                      mes: data.unqualified.toShowString(),
+                      backColor: backColors,
+                      head: false,
+                      paddingNumber: 5)),
+              Expanded(
+                  flex: 2,
+                  child: _text(
+                      //短码
+                      mes: data.short.toShowString(),
+                      backColor: backColors,
+                      head: false,
+                      paddingNumber: 5)),
+              Expanded(
+                  flex: 2,
+                  child: _text(
+                      //体积
+                      mes: data.barCode=='合计'? '':data.volume.toShowString(),
+                      backColor: backColors,
+                      head: false,
+                      paddingNumber: 5)),
+              Expanded(
+                  flex: 2,
+                  child: _text(
+                      //毛重
+                      mes:  data.barCode=='合计'? '':data.grossWeight.toShowString(),
+                      backColor: backColors,
+                      head: false,
+                      paddingNumber: 5)),
+              Expanded(
+                  flex: 2,
+                  child: _text(
+                      //净重
+                      mes: data.barCode=='合计'? '':data.netWeight.toShowString(),
+                      backColor: backColors,
+                      head: false,
+                      paddingNumber: 5)),
+              Expanded(
+                  flex: 14,
+                  child: _text(
+                      //物料名称
+                      mes: data.barCode=='合计'? '':'(${data.materialCode ?? ''})${data.materialName ?? ''}',
+                      backColor: backColors,
+                      head: false,
+                      paddingNumber: 5)),
+            ],
+          ),
+          onLongPress: () {
+            if(data.barCode!='合计'){
+              _showChangeDialog(data, position);
+            }
+          },
+        ),
       ),
-      onLongPress: () {
-        _showChangeDialog(data, position);
-      },
     );
   }
 
@@ -220,129 +246,169 @@ class _StuffQualityInspectionLabelPageState
         padding: EdgeInsets.only(top: paddingNumber, bottom: paddingNumber),
         child: Center(
           child: Text(
+            maxLines: 1,
             mes,
-            style: TextStyle(color: textColor),
+            style: TextStyle(color: textColor,),
           ),
         ),
       ),
     );
   }
 
-  _title() {
-    const borders = BorderSide(color: Colors.grey, width: 1);
-    return Column(
-      children: [
-        Container(
-          decoration: BoxDecoration(
-            border: const Border(top: borders, left: borders, right: borders),
-            color: Colors.blue.shade300,
-          ),
-          child: Row(
-            children: [
-              Expanded(
-                  flex: 3,
-                  child: _text(
-                      //标签
-                      mes: 'quality_inspection_label'.tr,
-                      backColor: Colors.blueAccent.shade100,
-                      head: true,
-                      paddingNumber: 5)),
-              Expanded(
-                  flex: 1,
-                  child: _text(
-                      //标签数量
-                      mes: 'quality_inspection_label_qty'.tr,
-                      backColor: Colors.blueAccent.shade100,
-                      head: true,
-                      paddingNumber: 5)),
-              Expanded(
-                  flex: 1,
-                  child: _text(
-                      //不合格数量
-                      mes: 'quality_inspection_unQuality'.tr,
-                      backColor: Colors.blueAccent.shade100,
-                      head: true,
-                      paddingNumber: 5)),
-              Expanded(
-                  flex: 1,
-                  child: _text(
-                      //短码
-                      mes: 'quality_inspection_short'.tr,
-                      backColor: Colors.blueAccent.shade100,
-                      head: true,
-                      paddingNumber: 5)),
-              Expanded(
-                  flex: 1,
-                  child: _text(
-                      //体积
-                      mes: 'quality_inspection_volume'.tr,
-                      backColor: Colors.blueAccent.shade100,
-                      head: true,
-                      paddingNumber: 5)),
-              Expanded(
-                  flex: 1,
-                  child: _text(
-                      //毛重
-                      mes: 'quality_inspection_gross_weight'.tr,
-                      backColor: Colors.blueAccent.shade100,
-                      head: true,
-                      paddingNumber: 5)),
-              Expanded(
-                  flex: 1,
-                  child: _text(
-                      //净重
-                      mes: 'quality_inspection_net_weight'.tr,
-                      backColor: Colors.blueAccent.shade100,
-                      head: true,
-                      paddingNumber: 5)),
-            ],
-          ),
-        )
-      ],
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return pageBody(
-        title: 'quality_inspection_unqualified_details'.tr,
-        body: Column(
-          children: [
-            Row(
-              children: [
-                const SizedBox(width: 20),
-                //送货单号
-                expandedTextSpan(
-                    hint: 'quality_inspection_delivery_number'.tr,
-                    text: state.deliveryNoteNumberToSelect),
-                //品检单号
-                expandedTextSpan(
-                    hint: 'quality_inspection_inspection_split_number'.tr,
-                    text: state.inspectionNumberToSelect)
-              ],
-            ),
-            _title(),
-            Obx(() => Expanded(
-                  child: ListView.builder(
-                    itemCount: state.labelData.length,
-                    itemBuilder: (BuildContext context, int index) =>
-                        _item(state.labelData[index], index),
+      title: 'quality_inspection_unqualified_details'.tr,
+      body: Obx(() => SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: SizedBox(
+              width: 150 * 10,
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      const SizedBox(width: 20),
+                      //送货单号
+                      expandedTextSpan(
+                          hint: 'quality_inspection_delivery_number'.tr,
+                          text: state.deliveryNoteNumberToSelect),
+                      //品检单号
+                      expandedTextSpan(
+                          hint: 'quality_inspection_inspection_split_number'.tr,
+                          text: state.inspectionNumberToSelect)
+                    ],
                   ),
-                )),
-            SizedBox(
-              width: double.maxFinite,
-              child: CombinationButton(
-                //提交
-                text: 'quality_inspection_submit'.tr,
-                click: () {
-                  if(logic.submitSelect()){
-                    Get.back(result: true);
-                  }
-                },
-                combination: Combination.intact,
+                  Container(
+                    height: 35,
+                    decoration: BoxDecoration(
+                      border:
+                          Border(top: borders, left: borders, right: borders),
+                      color: Colors.blue.shade300,
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                            flex: 7,
+                            child: _text(
+                                //标签
+                                mes: 'quality_inspection_label'.tr,
+                                backColor: Colors.blueAccent.shade100,
+                                head: true,
+                                paddingNumber: 5)),
+                        Expanded(
+                            flex: 2,
+                            child: _text(
+                                //标签数量
+                                mes: 'quality_inspection_label_box_number'.tr,
+                                backColor: Colors.blueAccent.shade100,
+                                head: true,
+                                paddingNumber: 5)),
+                        Expanded(
+                            flex: 1,
+                            child: _text(
+                                //尺码
+                                mes: 'quality_inspection_size'.tr,
+                                backColor: Colors.blueAccent.shade100,
+                                head: true,
+                                paddingNumber: 5)),
+                        Expanded(
+                            flex: 2,
+                            child: _text(
+                                //不合格数量
+                                mes: 'quality_inspection_unQuality'.tr,
+                                backColor: Colors.blueAccent.shade100,
+                                head: true,
+                                paddingNumber: 5)),
+                        Expanded(
+                            flex: 2,
+                            child: _text(
+                                //短码
+                                mes: 'quality_inspection_short'.tr,
+                                backColor: Colors.blueAccent.shade100,
+                                head: true,
+                                paddingNumber: 5)),
+                        Expanded(
+                            flex: 2,
+                            child: _text(
+                                //体积
+                                mes: 'quality_inspection_volume'.tr,
+                                backColor: Colors.blueAccent.shade100,
+                                head: true,
+                                paddingNumber: 5)),
+                        Expanded(
+                            flex: 2,
+                            child: _text(
+                                //毛重
+                                mes: 'quality_inspection_gross_weight'.tr,
+                                backColor: Colors.blueAccent.shade100,
+                                head: true,
+                                paddingNumber: 5)),
+                        Expanded(
+                            flex: 2,
+                            child: _text(
+                                //净重
+                                mes: 'quality_inspection_net_weight'.tr,
+                                backColor: Colors.blueAccent.shade100,
+                                head: true,
+                                paddingNumber: 5)),
+                        Expanded(
+                            flex: 14,
+                            child: _text(
+                                //物料名称
+                                mes: 'quality_inspection_material'.tr,
+                                backColor: Colors.blueAccent.shade100,
+                                head: true,
+                                paddingNumber: 5)),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: state.labelData.length,
+                      itemBuilder: (BuildContext context, int index) =>
+                          _item(state.labelData[index], index),
+                    ),
+                  ),
+                  SizedBox(
+                    width: double.maxFinite,
+                    child: Row(
+                      children: [
+                        Expanded(
+                            child: CombinationButton(
+                          //全部不合格
+                          text: 'quality_inspection_all_unqualified'.tr,
+                          click: () {
+                              logic.selectAllUnqualified(true);
+                          },
+                          combination: Combination.left,
+                        )),
+                        Expanded(
+                            child: CombinationButton(
+                          //全部短码
+                          text: 'quality_inspection_all_short'.tr,
+                          click: () {
+                            logic.selectAllUnqualified(false);
+                          },
+                          combination: Combination.middle,
+                        )),
+                        Expanded(
+                            child: CombinationButton(
+                          //提交
+                          text: 'quality_inspection_submit'.tr,
+                          click: () {
+                            if (logic.submitSelect()) {
+                              Get.back(result: true);
+                            }
+                          },
+                          combination: Combination.right,
+                        )),
+                      ],
+                    ),
+                  )
+                ],
               ),
-            )
-          ],
-        ));
+            ),
+          )),
+    );
   }
 }

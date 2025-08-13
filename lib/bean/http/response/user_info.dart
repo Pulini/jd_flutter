@@ -53,6 +53,7 @@ class UserInfo {
     this.sapFactory,
     this.jurisdictionList,
     this.reportDeptmentID,
+    this.useStorageLocation,
   });
 
   UserInfo.fromJson(dynamic json) {
@@ -80,6 +81,7 @@ class UserInfo {
     sapRole = json['SAPRole'];
     sapLineNumber = json['SAPLineNumber'];
     sapFactory = json['SAPFactory'];
+    useStorageLocation = json['UseStorageLocation'];
     if (json['JurisdictionList'] != null) {
       jurisdictionList = [];
       json['JurisdictionList'].forEach((v) {
@@ -113,6 +115,7 @@ class UserInfo {
   String? sapRole;
   String? sapLineNumber;
   String? sapFactory;
+  int? useStorageLocation; //是否启用库位管理
   List<JurisdictionList>? jurisdictionList;
   int? reportDeptmentID;
 
@@ -141,6 +144,7 @@ class UserInfo {
     map['IsAppAutoLock'] = isAppAutoLock;
     map['SAPRole'] = sapRole;
     map['SAPLineNumber'] = sapLineNumber;
+    map['UseStorageLocation'] = useStorageLocation;
     map['SAPFactory'] = sapFactory;
     if (jurisdictionList != null) {
       map['JurisdictionList'] =
