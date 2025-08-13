@@ -96,8 +96,7 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
 
   _checkOrder(bool isCheckOrder, List<DeliveryOrderInfo> group) {
     if (isCheckOrder) {
-      if (group.first.isScanPieces == 'X' &&
-          group.first.isPackingMaterials == false) {
+      if (group.first.isNeedBindingLabel()) {
         logic.getSupplierLabelInfo(
             group: group,
             refresh: (v) {
@@ -220,11 +219,11 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
           ),
           Obx(() => Checkbox(
                 value: data.every((v) => v.isSelected.value),
-                onChanged: (c) {
-                  for (var v in data) {
-                    v.isSelected.value = c!;
-                  }
-                },
+            onChanged: (c) {
+              for (var v in data) {
+                v.isSelected.value = c!;
+              }
+            },
               )),
         ],
       ),

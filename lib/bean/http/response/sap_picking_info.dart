@@ -531,18 +531,16 @@ class PalletDetailInfo {
   PalletDetailInfo({this.item1, this.item2});
 
   PalletDetailInfo.fromJson(dynamic json) {
-    if (json['ITEM'] != null) {
-      item1 = [];
-      json['ITEM'].forEach((v) {
-        item1?.add(PalletDetailItem1Info.fromJson(v));
-      });
-    }
-    if (json['ITEM2'] != null) {
-      item2 = [];
-      json['ITEM2'].forEach((v) {
-        item2?.add(PalletDetailItem2Info.fromJson(v));
-      });
-    }
+      item1 = [
+        if (json['ITEM'] != null)
+          for (var v in json['ITEM'])
+            PalletDetailItem1Info.fromJson(v)
+      ];
+      item2 = [
+        if (json['ITEM2'] != null)
+          for (var v in json['ITEM2'])
+            PalletDetailItem2Info.fromJson(v)
+      ];
   }
 
   Map<String, dynamic> toJson() {

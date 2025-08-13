@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/delivery_order_info.dart';
 import 'package:jd_flutter/bean/http/response/sap_purchase_stock_in_info.dart';
+import 'package:jd_flutter/bean/http/response/sap_put_on_shelves_info.dart';
 import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/utils/app_init_service.dart';
 import 'package:jd_flutter/utils/utils.dart';
@@ -29,12 +30,24 @@ stockInDialog({
       notScanList.add(v.deliNo ?? '');
     }
   });
+
   if (notScanList.isNotEmpty) {
     errorDialog(
       content: 'delivery_order_dialog_not_binding_label_tips'.trArgs([
         notScanList.join('、'),
       ]),
     );
+    return;
+  }
+
+  if (groupBy(submitList, (v) => v.isNeedBindingLabel()).length > 1) {
+    errorDialog(
+      content: '启用标签管理的工单不能与未启用标签管理的工单同时操作！',
+    );
+    return;
+  }
+  if (groupBy(submitList, (v) => v.factoryNO ?? '').keys.length > 1) {
+    errorDialog(content: '工厂不同的工单不能同时操作！');
     return;
   }
   var matchCode = <String>[];
@@ -54,49 +67,69 @@ stockInDialog({
   }
 
   var leaderEnable = false.obs;
-  var errorMsg = ''.obs;
+  var faceErrorMsg = ''.obs;
   var leaderList = <LeaderInfo>[].obs;
   String saveLeaderNumber = spGet(spSaveDeliveryOrderStockInCheckLeader) ?? '';
+
+  var locationErrorMsg = ''.obs;
+  var locationList = <RecommendLocationInfo>[].obs;
 
   var postDate = DatePickerController(PickerType.date,
       buttonName: 'delivery_order_dialog_post_date'.tr);
   var leaderController = FixedExtentScrollController();
-  var locationController = OptionsPickerController(
+  var locationController = FixedExtentScrollController();
+
+  var warehouseController = OptionsPickerController(
     PickerType.ghost,
     buttonName: 'delivery_order_dialog_location'.tr,
     saveKey: spSaveDeliveryOrderStockInCheckLocation,
-    dataList: () => getStorageLocationList(submitList[0].factoryNO ?? ''),
-    onSelected: (v) => _checkFaceInfo(
-      billType: '入库单',
-      sapFactoryNumber: (v as LocationInfo).factoryNumber ?? '',
-      sapStockNumber: v.storageLocationNumber ?? '',
-      faceInfoError: (msg) {
-        errorMsg.value = msg;
-        leaderEnable.value = false;
-        leaderList.value = [];
-      },
-      disableFace: () {
-        errorMsg.value = '';
-        leaderEnable.value = false;
-        leaderList.value = [];
-      },
-      haveLeaderList: (leaders) {
-        errorMsg.value = '';
-        leaderEnable.value = true;
-        leaderList.value = leaders;
-        var saveLeaderIndex = leaderList.indexWhere(
-          (v) => v.liableEmpCode == saveLeaderNumber,
-        );
-        if (saveLeaderIndex != -1) {
-          leaderController.jumpToItem(saveLeaderIndex);
-        }
-      },
-      leaderNull: (msg) {
-        errorMsg.value = msg;
-        leaderEnable.value = true;
-        leaderList.value = [];
-      },
-    ),
+    dataList: () => getStorageLocationList(submitList.first.factoryNO ?? ''),
+    onSelected: (v) {
+      var location = (v as LocationInfo);
+      _getStockInLocationList(
+        factory: location.factoryNumber ?? '',
+        warehouse: location.storageLocationNumber ?? '',
+        locationList: (list) {
+          locationErrorMsg.value = '';
+          locationList.value = list;
+        },
+        error: (msg) {
+          locationErrorMsg.value = msg;
+          locationList.clear();
+        },
+      );
+      _checkFaceInfo(
+        billType: '入库单',
+        sapFactoryNumber: location.factoryNumber ?? '',
+        sapStockNumber: location.storageLocationNumber ?? '',
+        faceInfoError: (msg) {
+          faceErrorMsg.value = msg;
+          leaderEnable.value = false;
+          leaderList.value = [];
+        },
+        disableFace: () {
+          faceErrorMsg.value = '';
+          leaderEnable.value = false;
+          leaderList.value = [];
+        },
+        haveLeaderList: (leaders) {
+          faceErrorMsg.value = '';
+          leaderEnable.value = true;
+          leaderList.value = leaders;
+          var saveLeaderIndex = leaderList.indexWhere(
+            (v) => v.liableEmpCode == saveLeaderNumber,
+          );
+          if (saveLeaderIndex != -1) {
+            leaderController.jumpToItem(saveLeaderIndex);
+          }
+        },
+        leaderNull: (msg) {
+          faceErrorMsg.value = msg;
+          leaderEnable.value = true;
+          leaderList.value = [];
+        },
+      );
+    },
   );
   stockInSuccess(String msg) => successDialog(
         content: msg,
@@ -106,6 +139,9 @@ stockInDialog({
         },
       );
   stockIn() {
+    String location = submitList.first.isNeedBindingLabel()
+        ? locationList[locationController.selectedItem].location ?? ''
+        : '';
     if (leaderEnable.value) {
       var leader = leaderList[leaderController.selectedItem];
       if (submitList[0].isScanPieces?.isEmpty == true && hasFrontCamera()) {
@@ -115,8 +151,9 @@ stockInDialog({
             faceUrl: leader.liablePicturePath ?? '',
             verifySuccess: (leaderB64) => _stockInDeliveryOrder(
               workerCenterId: workerCenterId,
-              stockID: locationController.selectedId.value,
+              stockID: warehouseController.selectedId.value,
               postDate: postDate.getDateFormatSapYMD(),
+              location: location,
               pickerNumber: userInfo?.number,
               pickerB64: pickerB64,
               leaderNumber: leader.liableEmpCode ?? '',
@@ -135,9 +172,10 @@ stockInDialog({
                       name: leader.liableEmpName ?? '',
                       callback: (leaderSignature) => _stockInDeliveryOrder(
                             workerCenterId: workerCenterId,
-                            stockID: locationController.selectedId.value,
+                            stockID: warehouseController.selectedId.value,
                             postDate: postDate.getDateFormatSapYMD(),
                             pickerNumber: userInfo?.number,
+                            location: location,
                             pickerB64: base64Encode(
                                 pickerSignature.buffer.asUint8List()),
                             leaderNumber: leader.liableEmpCode ?? '',
@@ -153,8 +191,9 @@ stockInDialog({
     } else {
       _stockInDeliveryOrder(
         workerCenterId: workerCenterId,
-        stockID: locationController.selectedId.value,
+        stockID: warehouseController.selectedId.value,
         postDate: postDate.getDateFormatSapYMD(),
+        location: location,
         data: submitList,
         success: stockInSuccess,
       );
@@ -173,12 +212,38 @@ stockInDialog({
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               DatePicker(pickerController: postDate),
-              OptionsPicker(pickerController: locationController),
+              OptionsPicker(pickerController: warehouseController),
+              if (submitList.first.isNeedBindingLabel())
+                Obx(() => locationErrorMsg.value.isNotEmpty
+                    ? Text(
+                        locationErrorMsg.value,
+                        style: const TextStyle(
+                          color: Colors.red,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      )
+                    : SizedBox(
+                        height: 130,
+                        child: CupertinoPicker(
+                          scrollController: locationController,
+                          diameterRatio: 1.5,
+                          magnification: 1.2,
+                          squeeze: 1.2,
+                          useMagnifier: true,
+                          itemExtent: 32,
+                          onSelectedItemChanged: (v) {},
+                          children: locationList
+                              .map((data) => Center(
+                                    child: Text('${data.location}'),
+                                  ))
+                              .toList(),
+                        ),
+                      )),
               Obx(
                 () => leaderEnable.value
-                    ? errorMsg.value.isNotEmpty
+                    ? faceErrorMsg.value.isNotEmpty
                         ? Text(
-                            errorMsg.value,
+                            faceErrorMsg.value,
                             style: const TextStyle(
                               color: Colors.red,
                               fontWeight: FontWeight.bold,
@@ -216,7 +281,9 @@ stockInDialog({
         ),
         actions: [
           Obx(
-            () => errorMsg.value.isNotEmpty
+            () => faceErrorMsg.value.isNotEmpty ||
+                    (submitList.first.isNeedBindingLabel() &&
+                        locationErrorMsg.value.isNotEmpty)
                 ? Container()
                 : TextButton(
                     onPressed: stockIn,
@@ -469,6 +536,7 @@ _stockInDeliveryOrder({
   required String workerCenterId,
   required String stockID,
   required String postDate,
+  String? location,
   String? pickerNumber,
   String? pickerB64,
   String? leaderNumber,
@@ -486,6 +554,7 @@ _stockInDeliveryOrder({
     body: {
       'EmpCode': userInfo?.number,
       'ChineseName': userInfo?.name,
+      'SAPZLocal': location,
       'Line': userInfo?.sapRole == '003' ? workerCenterId : '',
       'SAPStockID': stockID,
       'PostingDate': postDate,
@@ -599,6 +668,34 @@ _createTemporaryOder({
       success.call(response.message ?? '');
     } else {
       errorDialog(content: response.message ?? 'query_default_error'.tr);
+    }
+  });
+}
+
+_getStockInLocationList({
+  required String factory,
+  required String warehouse,
+  required Function(List<RecommendLocationInfo>) locationList,
+  required Function(String) error,
+}) {
+  sapPost(
+    method: webApiSapGetLocationList,
+    body: {
+      'ZCZLX_WMS': 'WM01',
+      'ITEM': [
+        {
+          'WERKS': factory,
+          'LGORT': warehouse,
+        }
+      ]
+    },
+  ).then((response) {
+    if (response.resultCode == resultSuccess) {
+      locationList.call([
+        for (var json in response.data) RecommendLocationInfo.fromJson(json)
+      ]);
+    } else {
+      error.call(response.message ?? 'query_default_error'.tr);
     }
   });
 }

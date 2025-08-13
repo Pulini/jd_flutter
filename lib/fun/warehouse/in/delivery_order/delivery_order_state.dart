@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/base_data.dart';
 import 'package:jd_flutter/bean/http/response/delivery_order_info.dart';
+import 'package:jd_flutter/bean/http/response/sap_picking_info.dart';
 import 'package:jd_flutter/bean/http/response/sap_purchase_stock_in_info.dart';
 import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/utils/utils.dart';
@@ -26,7 +27,9 @@ class DeliveryOrderState {
   var orderLabelList = <DeliveryOrderLabelInfo>[];
   var scannedLabelList = <DeliveryOrderLabelInfo>[].obs;
   var canSubmitLabelBinding = false.obs;
-  var hasPassPermission=checkUserPermission('105180106');
+  var palletNumber = ''.obs;
+  String bindingFactoryNO = '';
+
   getDeliveryOrders({
     required String startDate,
     required String endDate,
@@ -381,6 +384,7 @@ class DeliveryOrderState {
           for (var item in scannedLabelList)
             {
               'ZPIECE_NO': item.pieceNo,
+              'ZFTRAYNO': item.palletNo.value,
               'ZDELINO': orderItemInfo[0].deliNo,
             }
         ],
@@ -388,6 +392,41 @@ class DeliveryOrderState {
     ).then((response) {
       if (response.resultCode == resultSuccess) {
         success.call(response.message ?? "");
+      } else {
+        error.call(response.message ?? 'query_default_error'.tr);
+      }
+    });
+  }
+
+  checkPallet({
+    required List<String> pallets,
+    required Function(PalletDetailInfo) success,
+    required Function(String) error,
+  }) {
+    sapPost(
+      loading: 'sap_injection_molding_stock_in_getting_pallet_info'.tr,
+      method: webApiSapGetPalletList,
+      body: {
+        'WERKS': bindingFactoryNO,
+        'LGORT': userInfo?.defaultStockNumber,
+        'ZTRAY_CFM': 'X',
+        'ITEM': [
+          for (var pallet in pallets)
+            {
+              'ZLOCAL': '',
+              'ZFTRAYNO': pallet,
+              'BQID': '',
+              'SATNR': '',
+              'MATNR': '',
+              'SIZE1': '',
+              'ZVBELN_ORI': '',
+              'KDAUF': '',
+            }
+        ]
+      },
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        success.call(PalletDetailInfo.fromJson(response.data));
       } else {
         error.call(response.message ?? 'query_default_error'.tr);
       }

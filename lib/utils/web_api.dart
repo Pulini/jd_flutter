@@ -892,6 +892,9 @@ const webApiSapProductionReceiptWriteOff = 'sap/zapp/ZFUN_APP_PO_CANCEL_1500A';
 //sap获取推荐库位
 const webApiSapGetRecommendLocation = 'sap/zapp/ZWMS_LOCATION_RECOMMEND';
 
+//sap获取库位列表
+const webApiSapGetLocationList = 'sap/zapp/ZNQWMS_LOCATION_RECOMMEND';
+
 //sap获取贴标列表
 const webApiSapGetLabels = 'sap/zapp/ZFUN_APP_BARCODE_PRINT';
 

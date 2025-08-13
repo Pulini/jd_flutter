@@ -18,9 +18,11 @@ class DeliveryOrderLabelBindingPage extends StatefulWidget {
 }
 
 class _DeliveryOrderLabelBindingPageState
-    extends State<DeliveryOrderLabelBindingPage> {
+    extends State<DeliveryOrderLabelBindingPage>
+    with SingleTickerProviderStateMixin {
   final DeliveryOrderLogic logic = Get.find<DeliveryOrderLogic>();
   final DeliveryOrderState state = Get.find<DeliveryOrderLogic>().state;
+  late TabController tabController = TabController(length: 2, vsync: this);
   var pieceController = TextEditingController();
 
   Widget _materialItem(Map<String, List<dynamic>> map) {
@@ -52,13 +54,13 @@ class _DeliveryOrderLabelBindingPageState
                 ],
               ),
               const SizedBox(height: 5),
-              for (var size in list) ..._sizeItem(size,materialCode)
+              for (var size in list) ..._sizeItem(size, materialCode)
             ],
           ),
         ));
   }
 
-  _sizeItem(List<dynamic> size, String materialCode) {
+  List<Widget> _sizeItem(List<dynamic> size, String materialCode) {
     return [
       if ((size[0] as String).isNotEmpty)
         Padding(
@@ -79,7 +81,7 @@ class _DeliveryOrderLabelBindingPageState
                 child: progressIndicator(
                   max: size[1],
                   color: Colors.blue.shade300,
-                  value: logic.getSizeScanProgress(materialCode,size[0] ?? ''),
+                  value: logic.getSizeScanProgress(materialCode, size[0] ?? ''),
                 ),
               )
             ],
@@ -94,13 +96,18 @@ class _DeliveryOrderLabelBindingPageState
         padding: const EdgeInsets.only(left: 10),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          color: data.isChecked.value ? Colors.green.shade200 : Colors.white,
+          color: data.isChecked.value
+              ? Colors.green.shade200
+              : Colors.grey.shade300,
         ),
         child: Row(
           children: [
             Expanded(
               child: Text(
                 '${data.pieceNo}${data.size?.isNotEmpty == true ? '   ${data.size}#' : ''}',
+                style: TextStyle(
+                  color: data.isChecked.value ? Colors.black87 : Colors.black38,
+                ),
               ),
             ),
             IconButton(
@@ -116,6 +123,66 @@ class _DeliveryOrderLabelBindingPageState
           ],
         ),
       );
+
+  Widget _palletItem(Map<String, List<DeliveryOrderLabelInfo>> map) {
+    var palletNo = map.keys.first;
+    var labelList = map.values.first;
+    return Obx(
+      () => palletNo.isNotEmpty
+          ? Container(
+              margin: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [Colors.blue.shade100, Colors.green.shade50],
+                ),
+              ),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      textSpan(hint: '托盘：', text: palletNo),
+                      textSpan(
+                        hint: '件数：',
+                        hintColor: Colors.black45,
+                        text: labelList.length.toString(),
+                        textColor: Colors.black87,
+                      )
+                    ],
+                  ),
+                  const SizedBox(height: 5),
+                  for (var label in labelList) _labelItem(label)
+                ],
+              ),
+            )
+          : Padding(
+              padding: const EdgeInsetsGeometry.only(left: 10, right: 10),
+              child: Column(
+                children: [for (var label in labelList) _labelItem(label)],
+              ),
+            ),
+    );
+  }
+
+  Widget _scanningList() {
+    var list = logic.getLabelList();
+    return ListView.builder(
+      itemCount: list.length,
+      itemBuilder: (c, i) => _materialItem(list[i]),
+    );
+  }
+
+  Widget _palletList() {
+    var list = logic.getPalletList();
+    return ListView.builder(
+      itemCount: list.length,
+      itemBuilder: (c, i) => _palletItem(list[i]),
+    );
+  }
 
   @override
   void initState() {
@@ -189,15 +256,37 @@ class _DeliveryOrderLabelBindingPageState
               ),
             ),
           ),
-          // ..._scanProgress(),
+          Padding(
+            padding:
+                const EdgeInsetsGeometry.only(left: 10, right: 10, bottom: 5),
+            child: Row(
+              children: [
+                Obx(() => textSpan(
+                      hint: 'delivery_order_label_check_scanned'.tr,
+                      text: state.scannedLabelList.where((v)=>v.isChecked.value).length.toString(),
+                    )),
+                Expanded(
+                  child: TabBar(
+                    controller: tabController,
+                    dividerColor: Colors.blueAccent,
+                    indicatorColor: Colors.blueAccent,
+                    labelColor: Colors.blueAccent,
+                    unselectedLabelColor: Colors.black54,
+                    overlayColor: WidgetStateProperty.all(Colors.transparent),
+                    tabs: [
+                      Tab(text: '清点进度'),
+                      Tab(text: '托盘明细'),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
           Expanded(
-            child: Obx(() {
-              var list = logic.getLabelList();
-              return ListView.builder(
-                itemCount: list.length,
-                itemBuilder: (c, i) => _materialItem(list[i]),
-              );
-            }),
+            child: Obx(() => TabBarView(
+                  controller: tabController,
+                  children: [_scanningList(), _palletList()],
+                )),
           ),
           Padding(
             padding: const EdgeInsets.only(left: 10, right: 10),
@@ -205,8 +294,9 @@ class _DeliveryOrderLabelBindingPageState
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Obx(() => textSpan(
-                      hint: 'delivery_order_label_check_scanned'.tr,
-                      text: state.scannedLabelList.length.toString(),
+                      hint: '当前托盘：',
+                      text: state.palletNumber.value,
+                      textColor: Colors.green.shade700,
                     )),
                 textSpan(
                   hint: 'delivery_order_label_check_order_no'.tr,
@@ -229,7 +319,7 @@ class _DeliveryOrderLabelBindingPageState
               Expanded(
                 child: Obx(() => CombinationButton(
                       combination: Combination.right,
-                      isEnabled:logic.isCanSubmitBinding(),
+                      isEnabled: logic.isCanSubmitBinding(),
                       text: 'delivery_order_label_check_submit'.tr,
                       click: () => logic.submitLabelBinding(),
                     )),

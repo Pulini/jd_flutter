@@ -152,6 +152,9 @@ class DeliveryOrderInfo {
     });
     return deliveryBaseQty;
   }
+
+  bool isNeedBindingLabel() =>
+      isScanPieces == 'X' && isPackingMaterials == false;
 }
 
 class DeliveryOrderSizeInfo {
@@ -508,6 +511,7 @@ class ReversalLabelInfo {
 
 class DeliveryOrderLabelInfo {
   RxBool isChecked = false.obs;
+  RxString palletNo = ''.obs;
   String? pieceNo; //ZPICECE_NO  件号
   String? labelNumber; //BQID  标签id
   String? outBoxLabelNumber; //ZDBBQID  外箱标ID
@@ -549,12 +553,14 @@ class DeliveryOrderLabelInfo {
       size: json['SIZE1'],
     );
   }
-  String sizeMaterial()=>'$materialCode$size';
+
+  String sizeMaterial() => '$materialCode$size';
 
   bool isOutBoxLabel() =>
       outBoxLabelNumber?.isEmpty == true &&
       materialCode?.isEmpty == true &&
       materialName?.isEmpty == true;
 
-  labelId()=>'$labelNumber-$materialCode-$size';
+  labelId() => '$labelNumber-$materialCode-$size';
 }
+

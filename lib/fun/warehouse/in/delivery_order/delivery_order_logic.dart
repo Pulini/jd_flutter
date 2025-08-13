@@ -1,9 +1,11 @@
 import 'package:collection/collection.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/delivery_order_info.dart';
 import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/fun/warehouse/in/delivery_order/delivery_order_binding_label_detail_view.dart';
 import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
 import 'delivery_order_label_binding_view.dart';
@@ -292,6 +294,7 @@ class DeliveryOrderLogic extends GetxController {
       supplierNumber: group[0].supplierCode ?? '',
       deliveryOrderNumber: group[0].deliNo ?? '',
       success: (list) {
+        state.bindingFactoryNO = group[0].factoryNO ?? '';
         _initLabelList(list);
         Get.to(() => const DeliveryOrderLabelBindingPage())?.then((v) {
           state.scannedLabelList.clear();
@@ -327,21 +330,54 @@ class DeliveryOrderLogic extends GetxController {
   }
 
   scanLabel(String code) {
-    DeliveryOrderLabelInfo? outBox;
-    try {
-      outBox = state.orderLabelList
-          .firstWhere((v) => v.labelNumber == code && v.isOutBoxLabel());
-    } on StateError catch (_) {}
-    var labels = <DeliveryOrderLabelInfo>[];
-    if (outBox == null) {
-      labels =
-          state.orderLabelList.where((v) => v.labelNumber == code).toList();
+    if (code.isPallet()) {
+      state.checkPallet(
+        pallets: [code],
+        success: (data) {
+          if (data.item2!.first.palletExistence == 'X') {
+            switch (data.item2!.first.palletState) {
+              case '':
+                state.palletNumber.value = code;
+                break;
+              case 'X':
+                showSnackBar(
+                  message: 'sap_injection_molding_stock_in_use_empty_pallet'.tr,
+                  isWarning: true,
+                );
+                break;
+              case 'Y':
+                showSnackBar(
+                  message: 'sap_injection_molding_stock_in_pallet_occupied'.tr,
+                  isWarning: true,
+                );
+                break;
+            }
+          } else {
+            showSnackBar(
+              message: 'sap_injection_molding_stock_in_pallet_not_exists'.tr,
+              isWarning: true,
+            );
+          }
+        },
+        error: (msg) => errorDialog(content: msg),
+      );
     } else {
-      labels = state.orderLabelList
-          .where((v) => v.outBoxLabelNumber == code)
-          .toList();
+      DeliveryOrderLabelInfo? outBox;
+      try {
+        outBox = state.orderLabelList
+            .firstWhere((v) => v.labelNumber == code && v.isOutBoxLabel());
+      } on StateError catch (_) {}
+      var labels = <DeliveryOrderLabelInfo>[];
+      if (outBox == null) {
+        labels =
+            state.orderLabelList.where((v) => v.labelNumber == code).toList();
+      } else {
+        labels = state.orderLabelList
+            .where((v) => v.outBoxLabelNumber == code)
+            .toList();
+      }
+      _addLabels(labels: labels);
     }
-    _addLabels(labels: labels);
   }
 
   ///有权限
@@ -366,10 +402,21 @@ class DeliveryOrderLogic extends GetxController {
     }
     if (labels.every((v) => state.scannedLabelList.contains(v))) {
       if (labels.every((v) => v.isChecked.value)) {
-        errorDialog(content: 'delivery_order_label_check_label_scanned'.tr);
+        if (labels.first.palletNo.value == state.palletNumber.value) {
+          errorDialog(content: 'delivery_order_label_check_label_scanned'.tr);
+        } else {
+          var pallet = labels.first.palletNo.value;
+          for (var l in labels) {
+            l.palletNo.value = state.palletNumber.value;
+          }
+          successDialog(
+              content:
+                  '修改标签托盘号\r\n[$pallet]\r\n->\r\n[${state.palletNumber.value}]\r\n成功。');
+        }
       } else {
         for (var v in labels) {
           v.isChecked.value = true; //标记为已查验
+          v.palletNo.value = state.palletNumber.value;
         }
       }
       return;
@@ -410,7 +457,9 @@ class DeliveryOrderLogic extends GetxController {
           errorDialog(
               content: 'delivery_order_label_check_label_qty_exceed'.tr);
         } else {
-          state.scannedLabelList.add(label..isChecked.value = true);
+          state.scannedLabelList.add(label
+            ..isChecked.value = true
+            ..palletNo.value = state.palletNumber.value);
         }
       }
     } else {
@@ -517,11 +566,43 @@ class DeliveryOrderLogic extends GetxController {
     return labelList;
   }
 
-  ///有权限 要么都校验标签，要么都不校验标签  没有标签 提交时 都校验标签
-  isCanSubmitBinding() => state.hasPassPermission
-      ? state.scannedLabelList.isNotEmpty &&
-          (state.scannedLabelList.every((v) => v.isChecked.value) ||
-              state.scannedLabelList.every((v) => !v.isChecked.value))
-      : state.scannedLabelList.isNotEmpty &&
-          (state.scannedLabelList.every((v) => v.isChecked.value));
+  List<Map<String, List<DeliveryOrderLabelInfo>>> getPalletList() {
+    var labelList = <Map<String, List<DeliveryOrderLabelInfo>>>[];
+    groupBy(state.scannedLabelList, (v) => v.palletNo.value)
+        .forEach((pallet, pList) {
+      labelList.add({pallet: pList});
+    });
+    return labelList;
+  }
+
+  isCanSubmitBinding() =>
+      state.scannedLabelList.isNotEmpty &&
+      (state.scannedLabelList.every((v) => v.isChecked.value));
+
+  selectItem(List<DeliveryOrderInfo> data, bool isSelected) {
+    if (state.deliveryOrderList.every((v) => !v.first.isSelected.value)) {
+      for (var v in data) {
+        v.isSelected.value = isSelected;
+      }
+    } else {
+      if (state.deliveryOrderList.first.first.isNeedBindingLabel()) {
+        if (data.first.isNeedBindingLabel() !=
+            state.deliveryOrderList.first.first.isNeedBindingLabel()) {
+          errorDialog(
+            content: '启用标签管理的工单不能与未启用标签管理的工单同时操作！',
+          );
+          return;
+        }
+        if (data.first.factoryNO !=
+            state.deliveryOrderList.first.first.factoryNO) {
+          errorDialog(content: '工厂不同的工单不能同时操作！');
+          return;
+        }
+      } else {
+        for (var v in data) {
+          v.isSelected.value = isSelected;
+        }
+      }
+    }
+  }
 }
