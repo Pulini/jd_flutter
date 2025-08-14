@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/material_dispatch_info.dart';
 import 'package:jd_flutter/bean/http/response/material_dispatch_label_detail.dart';
 import 'package:jd_flutter/utils/utils.dart';
-import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/preview_label_widget.dart';
 import 'package:jd_flutter/widget/tsc_label_templates/110w_dynamic_label.dart';
@@ -284,7 +283,7 @@ class MaterialDispatchLogic extends GetxController {
             qty: qty,
             unitName: data.unitName ?? '',
             pick: pick,
-          ),
+          ),isDynamic: true,
         ));
       }
     } else if (data.exitLabelType == '102') {
