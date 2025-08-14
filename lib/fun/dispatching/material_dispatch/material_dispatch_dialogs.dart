@@ -45,7 +45,7 @@ subItemReportDialog(
       canPop: false,
       child: AlertDialog(
         scrollable: true,
-        title: Text('material_dispatch_dialog_label_progress'.tr),
+        title: data.mustEnter=='1'? Text('material_dispatch_dialog_label_progress'.tr) :Text('material_dispatch_dialog_label_progress_must'.tr) ,
         content: SizedBox(
           height: 230,
           width: MediaQuery.of(context).size.width * 0.4 < 400
@@ -748,7 +748,7 @@ Future pickPallet() {
                 );
                 return;
               }
-              if(getUserInfo()!.useStorageLocation == '1'){
+              if(getUserInfo()!.useStorageLocation == 1){
                 if (selectLocationId.isEmpty) {
                   showSnackBar(
                     message:

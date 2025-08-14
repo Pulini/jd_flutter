@@ -761,6 +761,7 @@ class Translation extends Translations {
           'material_dispatch_cancel_report': '取消报工',
           'material_dispatch_cancel_all_report_tips': '确定要整组取消报工吗？',
           'material_dispatch_cancel_report_tips': '确定要取消报工吗？',
+          'material_dispatch__no_qty_tips': '没有剩余可生成贴标数量！',
           'material_dispatch_stock_in_tips': '确定要提交入库吗？',
           'material_dispatch_print_label': '打印标签',
           'material_dispatch_stock_in': '入库',
@@ -787,6 +788,7 @@ class Translation extends Translations {
           'material_dispatch_report_state_generated_not_report': '已生成贴标未报工',
           'material_dispatch_batch_stock_in_error_tips': '没有需要入库的数据',
           'material_dispatch_dialog_label_progress': '打标工序',
+          'material_dispatch_dialog_label_progress_must': '打标工序(毛净重，长宽高，必填！)',
           'material_dispatch_dialog_color_batch': '色系：',
           'material_dispatch_dialog_need_report_qty': '应汇报数：',
           'material_dispatch_dialog_report_qty': '本次汇报数量',
@@ -3955,6 +3957,7 @@ class Translation extends Translations {
               'Are you sure you want to cancel the job application for the entire group?',
           'material_dispatch_cancel_report_tips':
               'Are you sure you want to cancel the job application?',
+          'material_dispatch__no_qty_tips': 'There are no remaining labels that can be generated！',
           'material_dispatch_stock_in_tips':
               'Are you sure you want to submit for storage?',
           'material_dispatch_print_label': 'Print label',
@@ -3987,6 +3990,7 @@ class Translation extends Translations {
           'material_dispatch_batch_stock_in_error_tips':
               'No data needs to stock in ',
           'material_dispatch_dialog_label_progress': 'Label progress',
+          'material_dispatch_dialog_label_progress_must': 'Marking process (gross weight, length, width, height, required!)',
           'material_dispatch_dialog_color_batch': 'Color：',
           'material_dispatch_dialog_need_report_qty': 'Need report qty：',
           'material_dispatch_dialog_report_qty': 'Report qty',

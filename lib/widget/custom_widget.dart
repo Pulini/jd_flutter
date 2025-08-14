@@ -10,6 +10,7 @@ import 'package:jd_flutter/bean/home_button.dart';
 import 'package:jd_flutter/bean/http/response/picking_material_order_info.dart';
 import 'package:jd_flutter/utils/app_init_service.dart';
 import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
 //app 背景渐变色
@@ -544,7 +545,9 @@ percentIndicator({
   Color? color,
   Color? backgroundColor,
   Color? textColor,
+  bool? print,
 }) {
+
   var percent = (value.div(max).toStringAsFixed(3)).toDoubleTry();
   return Stack(
     children: [
