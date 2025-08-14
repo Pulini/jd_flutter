@@ -283,7 +283,7 @@ class MaterialDispatchLogic extends GetxController {
             qty: qty,
             unitName: data.unitName ?? '',
             pick: pick,
-          ),
+          ),isDynamic: true,
         ));
       }
     } else if (data.exitLabelType == '102') {
