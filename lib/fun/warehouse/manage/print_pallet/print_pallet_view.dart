@@ -33,7 +33,7 @@ class _PrintPalletPageState extends State<PrintPalletPage> {
     var materialList = groupBy(pallet, (v) => v.materialCode).values.toList();
     return Container(
         margin: const EdgeInsets.only(bottom: 10),
-        padding: const EdgeInsetsGeometry.only(left: 10, right: 10),
+        padding:  EdgeInsetsGeometry.only(left: 10, right: 10),
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [Colors.grey.shade200, Colors.blue.shade200],
