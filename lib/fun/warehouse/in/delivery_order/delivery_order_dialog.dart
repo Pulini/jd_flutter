@@ -433,7 +433,7 @@ _checkLeader({
   required LeaderInfo leader,
   required Function() refresh,
 }) async {
-  if (submitList[0].isScanPieces?.isEmpty == true && await hasFrontCamera()) {
+  if (submitList[0].isScanPieces?.isEmpty == true &&  hasFrontCamera()) {
     livenFaceVerification(
       faceUrl: userInfo?.picUrl ?? '',
       verifySuccess: (pickerB64) => livenFaceVerification(

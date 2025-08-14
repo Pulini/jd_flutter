@@ -672,9 +672,11 @@ workerSignature(
   Function() refresh,
 ) {
   final control = HandSignatureControl(
-    threshold: 3.0,
-    smoothRatio: 0.65,
-    velocityRange: 2.0,
+    initialSetup: const SignaturePathSetup(
+      threshold: 3,
+      smoothRatio: 0.65,
+      velocityRange: 2,
+    ),
   );
   RxBool reSignature;
   if (data.signature == null) {
@@ -734,10 +736,11 @@ workerSignature(
                   child: reSignature.value || data.signature == null
                       ? HandSignature(
                           control: control,
-                          color: Colors.blueGrey,
-                          width: 1.0,
-                          maxWidth: 10.0,
-                          type: SignatureDrawType.shape,
+                          drawer: const ShapeSignatureDrawer(
+                            width: 1,
+                            maxWidth: 10,
+                            color: Colors.blueGrey,
+                          ),
                         )
                       : Image.memory(
                           fit: BoxFit.cover,
@@ -906,7 +909,8 @@ selectLabelTypeDialog({
   required Function(double, String) print,
 }) {
   if (englishLabel.specificationsList?.isEmpty == true) {
-    errorDialog(content: 'machine_dispatch_dialog_label_specifications_empty'.tr);
+    errorDialog(
+        content: 'machine_dispatch_dialog_label_specifications_empty'.tr);
     return;
   }
   var workerNumberController = TextEditingController();
@@ -994,7 +998,8 @@ selectLabelTypeDialog({
                 Obx(() => Expanded(
                       child: isCheckedManager.value
                           ? NumberDecimalEditText(
-                              hint: 'machine_dispatch_dialog_weight_input_tips'.tr,
+                              hint: 'machine_dispatch_dialog_weight_input_tips'
+                                  .tr,
                               initQty: outerBoxWeight,
                               onChanged: (v) {
                                 outerBoxWeight = v;
@@ -1113,7 +1118,8 @@ selectLabelTypeDialog({
                       '',
                 );
               } else {
-                errorDialog(content: 'machine_dispatch_dialog_weight_error_tips'.tr);
+                errorDialog(
+                    content: 'machine_dispatch_dialog_weight_error_tips'.tr);
               }
             },
             child: Text('machine_dispatch_dialog_print_last'.tr),
@@ -1129,7 +1135,8 @@ selectLabelTypeDialog({
                       '',
                 );
               } else {
-                errorDialog(content: 'machine_dispatch_dialog_weight_error_tips'.tr);
+                errorDialog(
+                    content: 'machine_dispatch_dialog_weight_error_tips'.tr);
               }
             },
             child: Text('machine_dispatch_dialog_print'.tr),

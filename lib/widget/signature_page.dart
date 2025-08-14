@@ -26,9 +26,11 @@ class SignaturePage extends StatefulWidget {
 
 class _SignaturePageState extends State<SignaturePage> {
   var control = HandSignatureControl(
-    threshold: 3.0,
-    smoothRatio: 0.65,
-    velocityRange: 2.0,
+    initialSetup: const SignaturePathSetup(
+      threshold: 3,
+      smoothRatio: 0.65,
+      velocityRange: 2,
+    ),
   );
   late RxBool reSignature;
   var nDOC = NativeDeviceOrientationCommunicator();
@@ -129,10 +131,11 @@ class _SignaturePageState extends State<SignaturePage> {
                       child: reSignature.value || widget.signature == null
                           ? HandSignature(
                               control: control,
-                              color: Colors.blueGrey,
-                              width: 1.0,
-                              maxWidth: 10.0,
-                              type: SignatureDrawType.shape,
+                              drawer: const ShapeSignatureDrawer(
+                                width: 1,
+                                maxWidth: 10,
+                                color: Colors.blueGrey,
+                              ),
                             )
                           : Image.memory(
                               fit: BoxFit.cover,
@@ -166,9 +169,11 @@ class SignatureWithWorkerNumberPage extends StatefulWidget {
 class _SignatureWithWorkerNumberPageState
     extends State<SignatureWithWorkerNumberPage> {
   var control = HandSignatureControl(
-    threshold: 3.0,
-    smoothRatio: 0.65,
-    velocityRange: 2.0,
+    initialSetup: const SignaturePathSetup(
+      threshold: 3,
+      smoothRatio: 0.65,
+      velocityRange: 2,
+    ),
   );
   var nDOC = NativeDeviceOrientationCommunicator();
   var quarterTurns = 0.obs;
@@ -239,10 +244,11 @@ class _SignatureWithWorkerNumberPageState
       constraints: const BoxConstraints.expand(),
       child: HandSignature(
         control: control,
-        color: Colors.blueGrey,
-        width: 1.0,
-        maxWidth: 10.0,
-        type: SignatureDrawType.shape,
+        drawer: const ShapeSignatureDrawer(
+          width: 1,
+          maxWidth: 10,
+          color: Colors.blueGrey,
+        ),
       ),
     );
 
