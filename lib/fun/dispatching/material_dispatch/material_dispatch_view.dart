@@ -297,6 +297,7 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
                       child: percentIndicator(
                         max: data.qty.toDoubleTry(),
                         value: data.finishQty.toDoubleTry(),
+                        print: true,
                       ),
                     ),
                     Padding(
@@ -322,6 +323,7 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
                       child: percentIndicator(
                         max: data.qty.toDoubleTry(),
                         value: data.codeQty.toDoubleTry(),
+                        print: true,
                       ),
                     ),
                     Padding(
@@ -449,6 +451,8 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
                 });
           },
         );
+      }else{
+        showSnackBar(message: 'material_dispatch__no_qty_tips'.tr);
       }
     }
 
@@ -493,9 +497,6 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
                   String gwQty,
                   String nwQty,
                 ) {
-
-                  logger.f('------走打印');
-
                   var sp = '${long}x' '${wide}x$height';
                   var spQty = longQty
                       .div(100)
@@ -518,6 +519,8 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
                 });
           },
         );
+      }else{
+        showSnackBar(message: 'material_dispatch__no_qty_tips'.tr);
       }
     }
 

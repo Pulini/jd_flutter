@@ -35,7 +35,6 @@ class MaterialDispatchState {
   var orderList = <MaterialDispatchInfo>[];
   var showOrderList = <MaterialDispatchInfo>[].obs;
 
-
   getScWorkCardProcess({
     required String startDate,
     required String endDate,
@@ -76,7 +75,9 @@ class MaterialDispatchState {
       method: webApiCreateLastProcessReport,
       loading: 'material_dispatch_reporting'.tr,
       params: {
-        'Date': getDateYMD(time: DateTime.fromMillisecondsSinceEpoch(getMaterialDispatchDate())),
+        'Date': getDateYMD(
+            time:
+                DateTime.fromMillisecondsSinceEpoch(getMaterialDispatchDate())),
         'DrillingCrewID': getMaterialDispatchMachineId(),
         'MovementType': '101',
         'DeptID': userInfo?.reportDeptmentID,
@@ -159,7 +160,6 @@ class MaterialDispatchState {
               'StorageLocation': '',
               'RouteEntryFIDs': data.routeEntryFIDs,
               'ProductName': data.productName,
-
             }
         ].toList(),
       },
@@ -291,17 +291,23 @@ class MaterialDispatchState {
                   .sub(reportQty.toDoubleTry())
                   .toShowString());
           showOrderList.refresh();
+
+          showOrderList[titlePosition].codeQty =(orderList[titlePosition].codeQty
+              .toDoubleTry()
+              .add(reportQty.toDoubleTry()))
+              .toShowString();
         }
         var guid = '';
         var pick = '';
         if (MaterialDispatchReportSuccessInfo.fromJson(response.data)
-                .guidList!
-                .isNotEmpty &&
-            MaterialDispatchReportSuccessInfo.fromJson(response.data)
-                .pickUpCodeList!
-                .isNotEmpty) {
+            .guidList!
+            .isNotEmpty) {
           guid = MaterialDispatchReportSuccessInfo.fromJson(response.data)
               .guidList![0];
+        }
+        if (MaterialDispatchReportSuccessInfo.fromJson(response.data)
+            .pickUpCodeList!
+            .isNotEmpty) {
           pick = MaterialDispatchReportSuccessInfo.fromJson(response.data)
               .pickUpCodeList![0];
         }

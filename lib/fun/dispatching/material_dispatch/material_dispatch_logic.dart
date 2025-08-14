@@ -166,7 +166,6 @@ class MaterialDispatchLogic extends GetxController {
           state.getLabelDetail(
             guid: guid,
             success: (List<MaterialDispatchLabelDetail> bill) {
-              logger.f('----------0---------');
               success.call(
                 guid,
                 pick,
