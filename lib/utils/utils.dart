@@ -645,12 +645,7 @@ getWaitInStockBarCodeReport({
 }
 
 String getDateYMD({DateTime? time}) {
-  DateTime now;
-  if (time == null) {
-    now = DateTime.now();
-  } else {
-    now = time;
-  }
+  DateTime now=time??DateTime.now();
   var y = now.year.toString();
   var m = now.month.toString();
   if (m.length == 1) m = '0$m';
@@ -660,12 +655,7 @@ String getDateYMD({DateTime? time}) {
 }
 
 String getTimeHms({DateTime? time}) {
-  DateTime now;
-  if (time == null) {
-    now = DateTime.now();
-  } else {
-    now = time;
-  }
+  DateTime now=time??DateTime.now();
   var h = now.hour.toString();
   if (h.length == 1) h = '0$h';
   var m = now.minute.toString();

@@ -716,6 +716,7 @@ class SapPalletDetailInfo {
   String? size; //SIZE1 尺码
   double? quantity; //MENGE 数量
   String? unit; //MEINS 单位
+  String? pieceNo; //ZPIECE_NO 件号
 
   SapPalletDetailInfo.fromJson(dynamic json) {
     factory = json['WERKS'];
@@ -733,6 +734,7 @@ class SapPalletDetailInfo {
     size = json['SIZE1'];
     quantity = json['MENGE'];
     unit = json['MEINS'];
+    pieceNo = json['ZPIECE_NO'];
     pickQty=quantity??0;
   }
 
@@ -753,6 +755,7 @@ class SapPalletDetailInfo {
     map['SIZE1'] = size;
     map['MENGE'] = quantity;
     map['MEINS'] = unit;
+    map['ZPIECE_NO'] = pieceNo;
     return map;
   }
 }

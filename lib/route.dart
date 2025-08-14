@@ -210,7 +210,7 @@ class RouteConfig {
   //材料车间派工
   static Routes materialDispatch = Routes(
     '/material_dispatch_page',
-    99,
+    100,
     const MaterialDispatchPage(),
   );
 
@@ -518,7 +518,7 @@ class RouteConfig {
   //送货单列表
   static Routes deliveryOrder = Routes(
     '/delivery_order',
-    100,
+    101,
     const DeliveryOrderPage(),
   );
 

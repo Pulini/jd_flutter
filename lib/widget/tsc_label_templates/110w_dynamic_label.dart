@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jd_flutter/utils/utils.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 var _border = BoxDecoration(border: Border.all(color: Colors.black, width: 1));
@@ -46,6 +47,7 @@ _paddingTextLeft({
 
 _createRowText({
   required String title,
+  AlignmentGeometry? titleAlignment,
   int flex = 5,
   TextStyle? style,
   EdgeInsetsGeometry? padding,
@@ -60,7 +62,7 @@ _createRowText({
             child: Container(
               decoration: _border,
               padding: padding ?? _textPadding,
-              alignment: Alignment.centerLeft,
+              alignment: titleAlignment ?? Alignment.centerLeft,
               child: Text(
                 title,
                 style: style ?? _textStyle,
@@ -129,7 +131,7 @@ List<Widget> _createSizeList({
 
         if (to - start < max) {
           //添加末尾列（合计）
-          line.add(frameText( alignment: Alignment.center,text: data.last));
+          line.add(frameText(alignment: Alignment.center, text: data.last));
         }
         tableList.add(IntrinsicHeight(child: Row(children: line)));
       });
@@ -1099,3 +1101,176 @@ Widget dynamicDomesticMaterialLabel({
           ),
       ],
     );
+
+///动态格式 国内物料标  单尺码 多尺码 无尺码
+/// 标准物料清单  [['物料编码','单位',[件1数量,件2数量,...]],...]
+/// 混装物料清单  [[['物料编码',数量,'单位'],['物料编码',数量,'单位']],...]
+///110 x N（高度由内容决定）
+Widget dynamicPalletDetail({
+  required String palletNo, //托盘号
+  required List<List> materialList, //标准物料清单
+  required List<List> mixMaterialList, //混装物料清单
+}) {
+  var index = 1;
+  var materialWidgetList = <Widget>[];
+  for (var item in materialList) {
+    materialWidgetList.add(_createRowText(
+      title: index.toString(),
+      titleAlignment: Alignment.center,
+      style: _bigStyle,
+      rw: [
+        Expanded(
+          flex: 25,
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  _paddingTextLeft(
+                    text: (item[0] as String),
+                    flex: 12,
+                    style: _bigStyle,
+                  ),
+                  _paddingTextCenter(
+                    text: (item[2] as List).length.toString(),
+                    flex: 4,
+                    style: _bigStyle,
+                  ),
+                  _paddingTextCenter(
+                    text: (item[2] as List)
+                        .map((v) => (v as double))
+                        .reduce((a, b) => a.add(b))
+                        .toShowString(),
+                    flex: 5,
+                    style: _bigStyle,
+                  ),
+                  _paddingTextCenter(
+                    text: (item[1] as String),
+                    flex: 4,
+                    style: _bigStyle,
+                  ),
+                ],
+              ),
+              _paddingTextLeft(
+                text: (item[2] as List)
+                    .map((v) => (v as double).toShowString())
+                    .join('+'),
+                flex: 0,
+              ),
+            ],
+          ),
+        )
+      ],
+    ));
+    index++;
+  }
+  var mixMaterialWidgetList = <Widget>[];
+  for (var item in mixMaterialList) {
+    materialWidgetList.add(_createRowText(
+      title: '$index(混)',
+      titleAlignment: Alignment.center,
+      style: _bigStyle,
+      rw: [
+        Expanded(
+          flex: 12,
+          child: Column(
+            children: [
+              for (var line in item)
+                _paddingTextLeft(
+                  text: (line[0] as String),
+                  flex: 0,
+                  style: _bigStyle,
+                ),
+            ],
+          ),
+        ),
+        _paddingTextCenter(
+          text: '1',
+          flex: 4,
+          style: _bigStyle,
+        ),
+        Expanded(
+          flex: 5,
+          child: Column(
+            children: [
+              for (var line in item)
+                _paddingTextCenter(
+                  text: (line[1] as double).toShowString(),
+                  flex: 0,
+                  style: _bigStyle,
+                ),
+            ],
+          ),
+        ),
+        Expanded(
+          flex: 4,
+          child: Column(
+            children: [
+              for (var line in item)
+                _paddingTextCenter(
+                  text: (line[2] as String),
+                  flex: 0,
+                  style: _bigStyle,
+                ),
+            ],
+          ),
+        ),
+      ],
+    ));
+    index++;
+  }
+
+  return _labelContainer(
+    widgets: [
+      _createRowText(
+        title: '托盘号',
+        titleAlignment: Alignment.center,
+        style: _bigStyle,
+        rw: [
+          _paddingTextCenter(
+            text: palletNo,
+            flex: 12,
+            style: _bigStyle,
+          ),
+          _paddingTextCenter(
+            text: '${userInfo?.name}(${getPrintTime()})',
+            flex: 13,
+          ),
+        ],
+      ),
+      _createRowText(
+        title: '序号',
+        titleAlignment: Alignment.center,
+        style: _bigStyle,
+        rw: [
+          _paddingTextCenter(
+            text: '物料代码',
+            flex: 12,
+            style: _bigStyle,
+          ),
+          _paddingTextCenter(
+            text: '件数',
+            flex: 4,
+            style: _bigStyle,
+          ),
+          _paddingTextCenter(
+            text: '数量',
+            flex: 5,
+            style: _bigStyle,
+          ),
+          _paddingTextCenter(
+            text: '单位',
+            flex: 4,
+            style: _bigStyle,
+          ),
+        ],
+      ),
+      ...materialWidgetList,
+      ...mixMaterialWidgetList,
+    ],
+  );
+}
+
+String getPrintTime({DateTime? time}) {
+  DateTime now = time ?? DateTime.now();
+  return '${now.year}.${now.month}.${now.day} ${now.hour}:${now.minute}';
+}

@@ -46,10 +46,10 @@ class _PrintPalletPageState extends State<PrintPalletPage> {
           children: [
             Row(
               children: [
-                Obx(()=>Checkbox(
-                  value: isSelected.value,
-                  onChanged: (v) => isSelected.value = v!,
-                )),
+                Obx(() => Checkbox(
+                      value: isSelected.value,
+                      onChanged: (v) => isSelected.value = v!,
+                    )),
                 expandedTextSpan(
                   hint: '托盘号：',
                   text: pallet.first.palletNumber ?? '',
@@ -76,27 +76,38 @@ class _PrintPalletPageState extends State<PrintPalletPage> {
       padding: const EdgeInsets.all(5),
       decoration: BoxDecoration(
         border: Border.all(
-          color: Colors.blue.shade300,
+          color: Colors.blue,
           width: 2,
         ),
-        borderRadius: const BorderRadius.all(Radius.circular(5)),
+        borderRadius: const BorderRadius.all(Radius.circular(7)),
       ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            '(${material.first.materialCode})${material.first.materialName}',
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-            ),
+          Row(
+            children: [
+              expandedTextSpan(
+                hint: '物料：',
+                maxLines: 3,
+                text:
+                    '(${material.first.materialCode})${material.first.materialName}',
+                textColor: Colors.green.shade700,
+              ),
+              textSpan(
+                hint: '总数：',
+                text:
+                    '${material.map((v) => v.quantity ?? 0).reduce((a, b) => a.add(b)).toShowString()} ${material.first.unit}',
+                textColor: Colors.green.shade700,
+              ),
+            ],
           ),
           for (var item in material) ...[
             const Divider(),
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                expandedTextSpan(hint: '标签号：', text: item.labelCode ?? ''),
-                textSpan(
-                    hint: '数量：',
-                    text: '${item.quantity.toShowString()} ${item.unit}'),
+                Text('件号：${item.pieceNo}'),
+                Text('数量：${item.quantity.toShowString()} ${item.unit}')
               ],
             )
           ]
@@ -122,9 +133,9 @@ class _PrintPalletPageState extends State<PrintPalletPage> {
   Widget build(BuildContext context) {
     return pageBody(
       actions: [
-        Obx(() => state.selectedList.any((v)=>v.value)
+        Obx(() => state.selectedList.any((v) => v.value)
             ? IconButton(
-                onPressed: () {},
+                onPressed: () => logic.printPallet(),
                 icon: const Icon(
                   Icons.print,
                   color: Colors.blueAccent,
@@ -147,6 +158,8 @@ class _PrintPalletPageState extends State<PrintPalletPage> {
                 child: Obx(() => TextField(
                       controller: controller,
                       onChanged: (v) => state.palletNo.value = v,
+                      onSubmitted: (v) =>
+                          logic.addPallet(() => controller.clear()),
                       decoration: InputDecoration(
                         contentPadding: const EdgeInsets.only(
                           top: 0,
@@ -180,7 +193,8 @@ class _PrintPalletPageState extends State<PrintPalletPage> {
                             : null,
                         suffixIcon: state.palletNo.value.isNotEmpty
                             ? IconButton(
-                                onPressed: () => logic.addPallet(),
+                                onPressed: () =>
+                                    logic.addPallet(() => controller.clear()),
                                 icon: const Icon(
                                   Icons.add_circle,
                                   color: Colors.blueAccent,
@@ -194,8 +208,7 @@ class _PrintPalletPageState extends State<PrintPalletPage> {
           ),
           Expanded(
             child: Obx(() => ListView.builder(
-                  padding: const EdgeInsetsGeometry.all(10
-                  ),
+                  padding: const EdgeInsetsGeometry.all(10),
                   itemCount: state.palletList.length,
                   itemBuilder: (c, i) => _item(i),
                 )),
