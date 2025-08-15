@@ -434,18 +434,7 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
                 gw: gwQty.toShowString(),
                 nw: nwQty.toShowString(),
                 isPrint: false,
-                success: (
-                  String guid,
-                  String pick,
-                  List<MaterialDispatchLabelDetail> bill,
-                  String long,
-                  String wide,
-                  String height,
-                  String gwQty,
-                  String nwQty,
-                ) {
-                  //不需要走打印
-                });
+            );
           },
         );
       }else{
@@ -484,36 +473,7 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
                 height: heightQty.toShowString(),
                 gw: gwQty.toShowString(),
                 nw: nwQty.toShowString(),
-                success: (
-                  String guid,
-                  String pick,
-                  List<MaterialDispatchLabelDetail> bills,
-                  String long,
-                  String wide,
-                  String height,
-                  String gwQty,
-                  String nwQty,
-                ) {
-                  var sp = '${long}x' '${wide}x$height';
-                  var spQty = longQty
-                      .div(100)
-                      .mul(wideQty.div(100))
-                      .mul(heightQty.div(100))
-                      .toShowString();
-                  logic.printLabel(
-                    data: data,
-                    billNo: subData.billNo!,
-                    color: subData.sapColorBatch!,
-                    guid: guid,
-                    pick: pick,
-                    bill: bills,
-                    qty: d.toShowString(),
-                    specifications: spQty,
-                    specificationSplit: sp,
-                    gw: gwQty,
-                    ew: nwQty,
-                  );
-                });
+             );
           },
         );
       }else{

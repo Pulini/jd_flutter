@@ -273,6 +273,8 @@ class MaintainLabelLogic extends GetxController {
     required List<List<LabelInfo>> select,
     required String language,
   }) {
+
+    logger.f('factoryId:$factoryId');
     if (factoryId.isNotEmpty) {
       switch (factoryId) {
         case '1098':
@@ -300,9 +302,10 @@ class MaintainLabelLogic extends GetxController {
           break;
       }
     } else {
+      logger.f('type:$type');
+
       switch (type) {
         case 101:
-          logger.f('101');
           createMaterialLabel(
             language: language,
             list: select[0],
@@ -310,7 +313,6 @@ class MaintainLabelLogic extends GetxController {
           );
           break;
         case 102:
-          logger.f('102');
           createFixedLabel(
             language: language,
             list: select,
@@ -318,7 +320,6 @@ class MaintainLabelLogic extends GetxController {
           );
           break;
         case 103:
-          logger.f('103');
           createGroupDynamicLabel(
             language: language,
             list: select,

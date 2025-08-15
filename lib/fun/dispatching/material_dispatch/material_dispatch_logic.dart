@@ -127,16 +127,6 @@ class MaterialDispatchLogic extends GetxController {
     required String nw,
     required int titlePosition,
     required int clickPosition,
-    required Function(
-      String guid,
-      String pick,
-      List<MaterialDispatchLabelDetail> bill,
-      String long,
-      String wide,
-      String height,
-      String gwQty,
-      String nwQty,
-    ) success,
   }) {
     state.subItemReport(
       reportQty: qty,
@@ -150,33 +140,47 @@ class MaterialDispatchLogic extends GetxController {
       gwQty: gw,
       nwQty: nw,
       success: (guid, pick) {
-        if (state.allInstruction.value) {
-          success.call(
-            guid,
-            pick,
-            <MaterialDispatchLabelDetail>[],
-            long,
-            wide,
-            height,
-            gw,
-            nw,
-          );
-        } else {
-          state.getLabelDetail(
-            guid: guid,
-            success: (List<MaterialDispatchLabelDetail> bill) {
-              success.call(
-                guid,
-                pick,
-                bill,
-                long,
-                wide,
-                height,
-                gw,
-                nw,
-              );
-            },
-          );
+        if(isPrint){
+          var sp = '${long}x' '${wide}x$height';
+          var spQty = long.toDoubleTry()
+              .div(100)
+              .mul(wide.toDoubleTry().div(100))
+              .mul(height.toDoubleTry().div(100))
+              .toShowString();
+          if (state.allInstruction.value) {
+            printLabel(
+              data: submitData,
+              billNo: subData.billNo!,
+              color: subData.sapColorBatch!,
+              guid: guid,
+              pick: pick,
+              bill: <MaterialDispatchLabelDetail>[],
+              qty: qty,
+              specifications: spQty,
+              specificationSplit: sp,
+              gw: gw,
+              ew: nw,
+            );
+          } else {
+            state.getLabelDetail(
+              guid: guid,
+              success: (List<MaterialDispatchLabelDetail> bill) {
+                printLabel(
+                  data: submitData,
+                  billNo: subData.billNo!,
+                  color: subData.sapColorBatch!,
+                  guid: guid,
+                  pick: pick,
+                  bill: bill,
+                  qty: qty,
+                  specifications: spQty,
+                  specificationSplit: sp,
+                  gw: gw,
+                  ew: nw,
+                );
+              },
+            );
+          }
         }
       },
       error: (msg) => errorDialog(content: msg),

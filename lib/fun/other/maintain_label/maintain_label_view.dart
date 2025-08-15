@@ -289,6 +289,7 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
                             language,
                           ) {
                             if (language.isEmpty) {
+                              logger.f('-------0');
                               logic.printLabelState(
                                   type: labelType,
                                   factoryId: factory,
@@ -302,6 +303,7 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
                                     );
                                   });
                             } else {
+                              logger.f('-------1');
                               if (language.length == 1) {
                                 logic.printLabelState(
                                     type: labelType,

@@ -1211,26 +1211,26 @@ Widget materialWorkshopFixedLabel({
   required String unitName,
   required String pick,
 }) {
-  var style = const TextStyle(fontSize: 12);
+  var textStyle =  const TextStyle(fontWeight:FontWeight.bold,fontSize: 13);
   return _fixedLabelTemplate75x45(
     qrCode: qrCode,
-    title: Text(productName, style: const TextStyle(fontSize: 20)),
+    title: Text(productName, style: const TextStyle(fontWeight:FontWeight.bold,fontSize: 20)),
     subTitle: Text('$partName$toPrint<$processName>',
-        style: const TextStyle(fontSize: 16)),
-    content: Text('$materialName($materialNumber)'),
+        style: const TextStyle(fontWeight:FontWeight.bold,fontSize: 18)),
+    content: Text('$materialName($materialNumber)', style:  const TextStyle(fontWeight:FontWeight.bold,fontSize: 16)),
     bottomLeft: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-      Text('仓位：$palletNumber', style: const TextStyle(fontSize: 12)),
-      Text(drillingCrewName, style: const TextStyle(fontSize: 12))
+      Text('仓位：$palletNumber', style: textStyle,),
+      Text(drillingCrewName, style: textStyle)
     ]),
     bottomMiddle: Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        Text('$color/$qty$unitName', style: const TextStyle(fontSize: 12)),
-        Text('取件码：$pick', style: const TextStyle(fontSize: 12))
+        Text('$color/$qty$unitName', style: textStyle),
+        Text('取件码：$pick', style: textStyle)
       ],
     ),
     bottomRight: Center(
         child: Text(sapDecideArea,
-            style:style)),
+            style:textStyle)),
   );
 }
