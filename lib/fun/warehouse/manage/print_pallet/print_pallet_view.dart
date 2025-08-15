@@ -145,66 +145,56 @@ class _PrintPalletPageState extends State<PrintPalletPage> {
       ],
       body: Column(
         children: [
-          Row(
-            children: [
-              Expanded(
-                child: OptionsPicker(pickerController: factoryController),
-              ),
-              Container(
-                margin: const EdgeInsets.all(5),
-                padding: const EdgeInsetsGeometry.only(left: 10, right: 10),
-                height: 40,
-                width: 230,
-                child: Obx(() => TextField(
-                      controller: controller,
-                      onChanged: (v) => state.palletNo.value = v,
-                      onSubmitted: (v) =>
-                          logic.addPallet(() => controller.clear()),
-                      decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.only(
-                          top: 0,
-                          bottom: 0,
-                          left: 15,
-                          right: 10,
-                        ),
-                        filled: true,
-                        fillColor: Colors.grey.shade300,
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20),
-                          borderSide: const BorderSide(
-                            color: Colors.transparent,
-                          ),
-                        ),
-                        border: const OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(20)),
-                        ),
-                        labelText: '输入托盘号',
-                        prefixIcon: state.palletNo.value.isNotEmpty
-                            ? IconButton(
-                                onPressed: () {
-                                  controller.clear();
-                                  state.palletNo.value = '';
-                                },
-                                icon: const Icon(
-                                  Icons.replay_circle_filled,
-                                  color: Colors.red,
-                                ),
-                              )
-                            : null,
-                        suffixIcon: state.palletNo.value.isNotEmpty
-                            ? IconButton(
-                                onPressed: () =>
-                                    logic.addPallet(() => controller.clear()),
-                                icon: const Icon(
-                                  Icons.add_circle,
-                                  color: Colors.blueAccent,
-                                ),
-                              )
-                            : null,
+          OptionsPicker(pickerController: factoryController),
+          Container(
+            padding: const EdgeInsetsGeometry.only(left: 5, right: 5),
+            child: Obx(() => TextField(
+                  controller: controller,
+                  onChanged: (v) => state.palletNo.value = v,
+                  onSubmitted: (v) => logic.addPallet(() => controller.clear()),
+                  decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.only(
+                      top: 0,
+                      bottom: 0,
+                      left: 15,
+                      right: 10,
+                    ),
+                    filled: true,
+                    fillColor: Colors.grey.shade300,
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(25),
+                      borderSide: const BorderSide(
+                        color: Colors.transparent,
                       ),
-                    )),
-              ),
-            ],
+                    ),
+                    border: const OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(25)),
+                    ),
+                    labelText: '输入托盘号',
+                    prefixIcon: state.palletNo.value.isNotEmpty
+                        ? IconButton(
+                            onPressed: () {
+                              controller.clear();
+                              state.palletNo.value = '';
+                            },
+                            icon: const Icon(
+                              Icons.replay_circle_filled,
+                              color: Colors.red,
+                            ),
+                          )
+                        : null,
+                    suffixIcon: state.palletNo.value.isNotEmpty
+                        ? IconButton(
+                            onPressed: () =>
+                                logic.addPallet(() => controller.clear()),
+                            icon: const Icon(
+                              Icons.add_circle,
+                              color: Colors.blueAccent,
+                            ),
+                          )
+                        : null,
+                  ),
+                )),
           ),
           Expanded(
             child: Obx(() => ListView.builder(

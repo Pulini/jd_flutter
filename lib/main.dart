@@ -8,8 +8,12 @@ import 'translation.dart';
 import 'utils/web_api.dart';
 
 main() async {
+  // 确保Flutter框架正确初始化
+  WidgetsFlutterBinding.ensureInitialized();
+  
   // 启用性能叠加层
   debugProfileBuildsEnabled = true;
+  
   runApp(const MyApp());
 }
 
@@ -23,9 +27,8 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   void initState() {
-    super.initState();
-    // //添加全局网络状态管理
     Get.put(AppInitService(), permanent: true);
+    super.initState();
   }
 
   @override
