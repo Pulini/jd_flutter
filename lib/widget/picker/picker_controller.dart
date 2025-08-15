@@ -444,6 +444,7 @@ abstract class PickerController {
               name: '全部',
               sapNumber: '',
               sapCostCenterNumber: '',
+              deptID: 0,
             )
         ];
         list.addAll(await compute(

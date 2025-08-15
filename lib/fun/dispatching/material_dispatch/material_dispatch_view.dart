@@ -296,7 +296,6 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
                       child: percentIndicator(
                         max: data.qty.toDoubleTry(),
                         value: data.finishQty.toDoubleTry(),
-                        print: true,
                       ),
                     ),
                     Padding(
@@ -322,7 +321,6 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
                       child: percentIndicator(
                         max: data.qty.toDoubleTry(),
                         value: data.codeQty.toDoubleTry(),
-                        print: true,
                       ),
                     ),
                     Padding(
@@ -599,9 +597,13 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
 
   showPickPallet() {
     pickPallet().then((v) {
-      if (v!=null&&v) {
-        Get.back();
-        _query();
+      if (v!=null) {
+        if(v==true){
+          Get.back();
+        }else{
+          Get.back();
+          _query();
+        }
       }
     });
   }

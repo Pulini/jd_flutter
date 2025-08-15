@@ -544,7 +544,6 @@ percentIndicator({
   Color? color,
   Color? backgroundColor,
   Color? textColor,
-  bool? print,
 }) {
 
   var percent = (value.div(max).toStringAsFixed(3)).toDoubleTry();
