@@ -10,13 +10,14 @@ const String spPalletDate = 'MaterialDispatchPickPalletDate';
 const String spMachine = 'MaterialDispatchPickMachine';
 const String spWarehouseLocation = 'MaterialDispatchPickWarehouseLocation';
 const String spPallet = 'MaterialDispatchPickPallet';
+const String spDepart = 'MaterialDispatchDepart';
 
 int getMaterialDispatchDate() =>
     spGet(spPalletDate) ?? DateTime.now().millisecondsSinceEpoch;
 
 saveMaterialDispatchDate(int date) => spSave(spPalletDate, date);
 
-String getMaterialDispatchMachineId() => spGet(spMachine) ?? '';
+ getMaterialDispatchMachineId() => spGet(spMachine) ?? '';
 
 saveMaterialDispatchMachineId(String id) => spSave(spMachine, id);
 
@@ -27,6 +28,10 @@ saveMaterialDispatchLocationId(String id) => spSave(spWarehouseLocation, id);
 String getMaterialDispatchPalletNumber() => spGet(spPallet) ?? '';
 
 saveMaterialDispatchPalletNumber(String number) => spSave(spPallet, number);
+
+String getMaterialDispatchDepart() => spGet(spDepart) ?? '';
+
+saveMaterialDispatchDepart(String departId) => spSave(spDepart, departId);
 
 class MaterialDispatchState {
   var lastProcess = false.obs;
@@ -80,8 +85,8 @@ class MaterialDispatchState {
                 DateTime.fromMillisecondsSinceEpoch(getMaterialDispatchDate())),
         'DrillingCrewID': getMaterialDispatchMachineId(),
         'MovementType': '101',
-        'DeptID': userInfo?.reportDeptmentID,
-        'UserID': userInfo?.userID,
+        'DeptID': getMaterialDispatchDepart(),
+        'UserID': userInfo?.userID.toString(),
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {

@@ -337,6 +337,7 @@ class PickerSapMachine extends PickerItem {
     required this.name,
     required this.sapNumber,
     required this.sapCostCenterNumber,
+    required this.deptID,
   });
 
   PickerSapMachine.fromJson(dynamic json) {
@@ -345,6 +346,7 @@ class PickerSapMachine extends PickerItem {
     name = json['FName'];
     sapNumber = json['SAPNumber'];
     sapCostCenterNumber = json['FSAPCostCenterNumber'];
+    deptID = json['DeptID'];
   }
 
   int? id;
@@ -352,6 +354,7 @@ class PickerSapMachine extends PickerItem {
   String? name;
   String? sapNumber;
   String? sapCostCenterNumber;
+  int? deptID;
 
   @override
   String pickerId() {

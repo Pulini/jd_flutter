@@ -11,6 +11,7 @@ import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
 import 'package:jd_flutter/widget/picker/picker_controller.dart';
+import 'package:jd_flutter/widget/picker/picker_item.dart';
 import 'package:jd_flutter/widget/picker/picker_view.dart';
 
 subItemReportDialog(
@@ -431,7 +432,7 @@ _deleteLabel({
     loading: 'material_dispatch_dialog_getting_label_list'.tr,
     params: {
       'Guid': guid,
-      'UserID': getUserInfo()!.userID,
+      'UserID': getUserInfo()!.userID.toString(),
     },
   ).then((response) {
     if (response.resultCode == resultSuccess) {
@@ -459,7 +460,7 @@ _reportSapOrCancelReportSap({
       'Report': isReport ? 'X' : '',
       'Guid': guid,
       'Date': upDate,
-      'UserID': getUserInfo()!.userID,
+      'UserID': getUserInfo()!.userID.toString(),
       'MovementType': '101',
     },
   ).then((response) {
@@ -673,6 +674,7 @@ Future pickPallet() {
   var selectMachineId = getMaterialDispatchMachineId();
   var selectLocationId = getMaterialDispatchLocationId();
   var selectPalletNumber = getMaterialDispatchPalletNumber();
+  var selectDepart = getMaterialDispatchDepart();
 
   var dateNow = DateTime.now();
   var dpcDate = DatePickerController(
@@ -694,6 +696,7 @@ Future pickPallet() {
     initId: selectMachineId,
     onSelected: (i) {
       selectMachineId = i.pickerId();
+      selectDepart= (i as PickerSapMachine).deptID!.toString();
       ppcPallet.refresh(selectLocationId, selectMachineId);
     },
   );
@@ -767,6 +770,7 @@ Future pickPallet() {
                 }
               }
               saveMaterialDispatchDate(selectDate);
+              saveMaterialDispatchDepart(selectDepart);
               saveMaterialDispatchMachineId(selectMachineId);
               saveMaterialDispatchLocationId(selectLocationId);
               saveMaterialDispatchPalletNumber(selectPalletNumber);
