@@ -74,3 +74,5 @@ const spSavePurchaseOrderWarehousingBindingLabelLocation =
     'purchase_order_warehousing_binding_label_location';
 const spSaveWorkshopPlanningDepartment ='workshop_planning_department';
 const spSaveMenuInfo ='menu_info';
+const spSavePrintSpeed ='save_print_speed';
+const spSavePrintDensity ='save_print_density';

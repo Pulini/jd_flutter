@@ -18,9 +18,9 @@ const _halfDpi = 4;
 //设置打印参数
 //[width] 纸宽
 //[height] 纸高
-//[speed] 打印速度
-//[density] 打印浓度
-//[sensor] 感应器类型
+//[speed] 打印速度  1.0 1.5 2 3 4 6 8 10
+//[density] 打印浓度  0~15
+//[sensor] 感应器类型  0:垂直間距感測器(gap sensor) 1:黑標感測器(black mark )
 //[sensorDistance] 感应器距离
 //[sensorOffset] 感应器偏移
 Uint8List _tscSetup(
@@ -1051,9 +1051,12 @@ Future<List<Uint8List>> imageResizeToLabel(Map<String, dynamic> image) async =>
 
 Future<List<Uint8List>> _imageResizeToLabel(Map<String, dynamic> image) async {
   double pixelRatio = image['pixelRatio'] ?? 1;
+  int speed = image['speed'] ?? 4;
+  int density = image['density'] ?? 15;
   bool isDynamic = image['isDynamic'] ?? false;
   int width = ((image['width'] as int) / 5.5 / pixelRatio).toInt();
   int height = ((image['height'] as int) / 5.5 / pixelRatio).toInt();
+
   debugPrint(
       'width: ${image['width']} - $width height: ${image['height']} - $height');
   // var wImage = img.decodeImage(image['image'])!;
@@ -1076,38 +1079,16 @@ Future<List<Uint8List>> _imageResizeToLabel(Map<String, dynamic> image) async {
   debugPrint('imageUint8List: ${imageUint8List.lengthInBytes / (1024 * 1024)}');
   return [
     _tscClearBuffer(),
-    _tscSetup(width, height, density: 15, sensorDistance: isDynamic ? 0 : 2),
+    _tscSetup(
+      width,
+      height,
+      density: density,
+      speed: speed,
+      sensorDistance: isDynamic ? 0 : 2,
+    ),
     await _tscBitmap(1, 1, imageUint8List),
     _tscCutter(),
     _tscPrint(),
   ];
 }
 
-Future<List<List<Uint8List>>> imageResizeToLabels(
-        List<Map<String, dynamic>> images) async =>
-    await compute(_imageResizeToLabels, images);
-
-Future<List<List<Uint8List>>> _imageResizeToLabels(
-  List<Map<String, dynamic>> images,
-) async {
-  List<List<Uint8List>> labelList = [];
-  for (var image in images) {
-    bool isDynamic = image['isDynamic'] ?? false;
-    int width = ((image['width'] as int) / 5.5).toInt();
-    int height = ((image['height'] as int) / 5.5).toInt();
-    var reImage = img.copyResize(
-      img.decodeImage((image['image'] as Uint8List))!,
-      width: width * 8,
-      height: height * 8,
-    );
-    var imageUint8List = Uint8List.fromList(img.encodePng(reImage));
-    labelList.add([
-      _tscClearBuffer(),
-      _tscSetup(width, height, density: 15, sensorDistance: isDynamic ? 0 : 2),
-      await _tscBitmap(1, 1, imageUint8List),
-      _tscCutter(),
-      _tscPrint(),
-    ]);
-  }
-  return labelList;
-}

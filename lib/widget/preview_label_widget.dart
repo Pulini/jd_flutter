@@ -2,9 +2,11 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/constant.dart';
 
 import 'package:jd_flutter/utils/printer/print_util.dart';
 import 'package:jd_flutter/utils/printer/tsc_util.dart';
+import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/widgets_to_image_widget.dart';
 
@@ -27,6 +29,8 @@ class PreviewLabel extends StatefulWidget {
 class _PreviewLabelState extends State<PreviewLabel> {
   var pu = PrintUtil();
   var label = <Uint8List>[].obs;
+  RxDouble printSpeed = 0.0.obs;
+  RxDouble printDensity = 0.0.obs;
 
   printLabel() async {
     if (label.isEmpty) return;
@@ -47,8 +51,16 @@ class _PreviewLabelState extends State<PreviewLabel> {
   }
 
   @override
+  void initState() {
+    printSpeed.value = spGet(spSavePrintSpeed) ?? 4;
+    printDensity.value = spGet(spSavePrintDensity) ?? 15;
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Obx(() => pageBody(
+    return Obx(
+      () => pageBody(
           title: '标签预览',
           actions: [
             label.isNotEmpty
@@ -63,20 +75,75 @@ class _PreviewLabelState extends State<PreviewLabel> {
                     child: const CircularProgressIndicator(),
                   ),
           ],
-          body: Center(
-            child: SingleChildScrollView(
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: WidgetsToImage(
-                  image: (map) async => label.value = await imageResizeToLabel({
-                    ...map,
-                    'isDynamic': widget.isDynamic,
-                  }),
-                  child: widget.labelWidget,
+          body: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsetsGeometry.only(left: 10, right: 10),
+                child: Row(
+                  children: [
+                    Text('打印速度：'),
+                    Expanded(
+                      child: Obx(() => Slider(
+                            value: printSpeed.value,
+                            min: 1,
+                            max: 10,
+                            divisions: 9,
+                            thumbColor: Colors.blueAccent,
+                            activeColor: Colors.green.shade300,
+                            onChanged: (v) {
+                              printSpeed.value = v;
+                              spSave(spSavePrintSpeed, v);
+                            },
+                          )),
+                    ),
+                    Obx(() => Text(printSpeed.value.toShowString())),
+                  ],
                 ),
               ),
-            ),
-          ),
-        ));
+              Padding(
+                padding: const EdgeInsetsGeometry.only(left: 10, right: 10),
+                child: Row(
+                  children: [
+                    Text('打印浓度：'),
+                    Expanded(
+                      child: Obx(() => Slider(
+                            value: printDensity.value,
+                            min: 1,
+                            max: 15,
+                            divisions: 14,
+                            thumbColor: Colors.blueAccent,
+                            activeColor: Colors.green.shade300,
+                            onChanged: (v) {
+                              printDensity.value = v;
+                              spSave(spSavePrintDensity, v);
+                            },
+                          )),
+                    ),
+                    Obx(() => Text(printDensity.value.toShowString())),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Center(
+                  child: SingleChildScrollView(
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: WidgetsToImage(
+                        image: (map) async =>
+                        label.value = await imageResizeToLabel({
+                          ...map,
+                          'isDynamic': widget.isDynamic,
+                          'speed': printSpeed.value.toInt(),
+                          'density': printDensity.value.toInt(),
+                        }),
+                        child: widget.labelWidget,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          )),
+    );
   }
 }

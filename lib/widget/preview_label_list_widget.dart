@@ -1,8 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/utils/printer/print_util.dart';
 import 'package:jd_flutter/utils/printer/tsc_util.dart';
+import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/widgets_to_image_widget.dart';
 import 'custom_widget.dart';
 import 'dialogs.dart';
@@ -22,6 +24,8 @@ class _PreviewLabelListState extends State<PreviewLabelList> {
   var pu = PrintUtil();
   var widgetList = <Widget>[].obs;
   var labelList = <List<Uint8List>>[].obs;
+  RxDouble printSpeed = 0.0.obs;
+  RxDouble printDensity = 0.0.obs;
 
   printLabel() async {
     if (labelList.isEmpty) return;
@@ -39,11 +43,15 @@ class _PreviewLabelListState extends State<PreviewLabelList> {
   @override
   void initState() {
     super.initState();
+    printSpeed.value = spGet(spSavePrintSpeed) ?? 4;
+    printDensity.value = spGet(spSavePrintDensity) ?? 15;
     for (var v in widget.labelWidgets) {
       widgetList.add(WidgetsToImage(
         image: (map) async => labelList.add(await imageResizeToLabel({
           ...map,
           'isDynamic': widget.isDynamic,
+          'speed': printSpeed.value.toInt(),
+          'density': printDensity.value.toInt(),
         })),
         child: v,
       ));
@@ -52,7 +60,8 @@ class _PreviewLabelListState extends State<PreviewLabelList> {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() => pageBody(
+    return Obx(
+      () => pageBody(
           title: '标签预览',
           actions: [
             labelList.isNotEmpty
@@ -75,21 +84,73 @@ class _PreviewLabelListState extends State<PreviewLabelList> {
                     ),
                   ),
           ],
-          body: SingleChildScrollView(
-            padding: const EdgeInsets.all(10),
-            child: Center(
-              child: Column(
-                children: [
-                  for (var v in widgetList)
-                    SingleChildScrollView(
-                      padding: const EdgeInsets.only(bottom: 10),
-                      scrollDirection: Axis.horizontal,
-                      child: v,
-                    )
-                ],
+          body: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsetsGeometry.only(left: 10, right: 10),
+                child: Row(
+                  children: [
+                    Text('打印速度：'),
+                    Expanded(
+                      child: Obx(() => Slider(
+                            value: printSpeed.value,
+                            min: 1,
+                            max: 10,
+                            divisions: 9,
+                            thumbColor: Colors.blueAccent,
+                            activeColor: Colors.green.shade300,
+                            onChanged: (v) {
+                              printSpeed.value = v;
+                              spSave(spSavePrintSpeed, v);
+                            },
+                          )),
+                    ),
+                    Obx(() => Text(printSpeed.value.toShowString())),
+                  ],
+                ),
               ),
-            ),
-          ),
-        ));
+              Padding(
+                padding: const EdgeInsetsGeometry.only(left: 10, right: 10),
+                child: Row(
+                  children: [
+                    Text('打印浓度：'),
+                    Expanded(
+                      child: Obx(() => Slider(
+                            value: printDensity.value,
+                            min: 1,
+                            max: 15,
+                            divisions: 14,
+                            thumbColor: Colors.blueAccent,
+                            activeColor: Colors.green.shade300,
+                            onChanged: (v) {
+                              printDensity.value = v;
+                              spSave(spSavePrintDensity, v);
+                            },
+                          )),
+                    ),
+                    Obx(() => Text(printDensity.value.toShowString())),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.all(10),
+                  child: Center(
+                    child: Column(
+                      children: [
+                        for (var v in widgetList)
+                          SingleChildScrollView(
+                            padding: const EdgeInsets.only(bottom: 10),
+                            scrollDirection: Axis.horizontal,
+                            child: v,
+                          )
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          )),
+    );
   }
 }
