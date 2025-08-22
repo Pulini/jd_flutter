@@ -257,7 +257,7 @@ class MaintainLabelLogic extends GetxController {
       }
     }
     if(select[0].labelType!=101 && select[0].labelType!=102 && select[0].labelType!=103){
-        showSnackBar(message: 'maintain_label_error'.trArgs([select[0].labelType.toString() ?? '']));
+        showSnackBar(message: 'maintain_label_error'.trArgs([select[0].labelType.toString()]));
     }else{
       callback.call(select[0].fCustomFactoryID!, select[0].labelType!, [select],
           languageList);
