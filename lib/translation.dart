@@ -1139,6 +1139,7 @@ class Translation extends Translations {
           'maintain_label_label_language_lack_tips':
               '标签 < %s > 缺少语言 < %s > 数据，请单独打印或维护语言数据。',
           'maintain_label_sub_item_instruction': '指令',
+          'maintain_label_error': '标签类型错误:(%s)',
           'maintain_label_sub_item_size': '尺码',
           'maintain_label_sub_item_packing_qty': '装箱数',
           'maintain_label_sub_item_instruction_error': '指令错误',
@@ -4592,6 +4593,7 @@ class Translation extends Translations {
           'maintain_label_label_language_lack_tips':
               'Label < %s > is missing language < %s > data, please print or maintain language data separately.',
           'maintain_label_sub_item_instruction': 'Instruction',
+          'maintain_label_error': 'Label type error:(%s)',
           'maintain_label_sub_item_size': 'Size',
           'maintain_label_sub_item_packing_qty': 'Packing qty',
           'maintain_label_sub_item_instruction_error': 'Instruction error',

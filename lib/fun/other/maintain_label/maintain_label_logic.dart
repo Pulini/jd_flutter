@@ -7,6 +7,7 @@ import 'package:jd_flutter/bean/http/response/maintain_material_info.dart';
 import 'package:jd_flutter/bean/http/response/picking_bar_code_info.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
+import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/preview_label_list_widget.dart';
 import 'package:jd_flutter/widget/preview_label_widget.dart';
@@ -255,8 +256,12 @@ class MaintainLabelLogic extends GetxController {
         }
       }
     }
-    callback.call(select[0].fCustomFactoryID!, select[0].labelType!, [select],
-        languageList);
+    if(select[0].labelType!=101 && select[0].labelType!=102 && select[0].labelType!=103){
+        showSnackBar(message: 'maintain_label_error'.trArgs([select[0].labelType.toString() ?? '']));
+    }else{
+      callback.call(select[0].fCustomFactoryID!, select[0].labelType!, [select],
+          languageList);
+    }
   }
 
   Function(List<Widget>,bool cut) labelsCallback = (label,cut) {
