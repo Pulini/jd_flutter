@@ -18,6 +18,7 @@ import com.huawei.hms.mlsdk.common.MLFrame
 import com.huawei.hms.mlsdk.faceverify.MLFaceVerificationAnalyzerFactory
 import com.huawei.hms.mlsdk.faceverify.MLFaceVerificationAnalyzerSetting
 import com.huawei.hms.mlsdk.livenessdetection.MLLivenessCaptureResult
+import com.huawei.hms.mlsdk.livenessdetection.MLLivenessDetectInfo
 import com.huawei.hms.mlsdk.livenessdetection.MLLivenessDetectView
 import com.huawei.hms.mlsdk.livenessdetection.OnMLLivenessDetectCallback
 import com.jd.pzx.jd_flutter.dialogs.InquiryDialog
@@ -26,10 +27,6 @@ import com.jd.pzx.jd_flutter.utils.FACE_VERIFY_FAIL_ERROR
 import com.jd.pzx.jd_flutter.utils.FACE_VERIFY_FAIL_NOT_LIVE
 import com.jd.pzx.jd_flutter.utils.FACE_VERIFY_FAIL_NOT_ME
 import com.jd.pzx.jd_flutter.utils.FACE_VERIFY_SUCCESS
-import com.jd.pzx.jd_flutter.utils.display
-import com.jd.pzx.jd_flutter.utils.dp2px
-import com.jd.pzx.jd_flutter.utils.isPad
-import java.io.FileInputStream
 
 
 /**
@@ -99,16 +96,8 @@ class LivenFaceVerificationActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bundle = savedInstanceState
-        //判断是否是平板
-        if (isPad()) {
-            //加载平板的主界面并强制横屏
-            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-            setContentView(R.layout.activity_liveness_custom_detection_pad)
-        } else {
-            //加载手机的主界面并强制竖屏
-            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-            setContentView(R.layout.activity_liveness_custom_detection_phone)
-        }
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        setContentView(R.layout.activity_liveness_custom_detection)
         ivBack.setOnClickListener { finish() }
         previewContainer.postDelayed(300) {
             //预览界面加载存在位置偏移bug,需要延迟加载预览界面
@@ -147,25 +136,10 @@ class LivenFaceVerificationActivity : Activity() {
 
 
     private fun initLivingDetectView(callback: (Int, Bitmap?) -> Unit): MLLivenessDetectView {
-        val display = display()
-        Log.e(
-            "Pan",
-            "Rect= ${isPad()} widthPixels=${display.widthPixels} heightPixels=${display.heightPixels} dp=${
-                dp2px(480f)
-            }"
-        )
         return MLLivenessDetectView.Builder()
             .setContext(this)
             .setOptions(MLLivenessDetectView.DETECT_MASK)
-            .setFaceFrameRect(
-                //平板和手机区分检测区域大小
-                Rect(
-                    0,
-                    0,
-                    display.widthPixels,
-                    if (isPad()) display.heightPixels else dp2px(480f)
-                )
-            )
+            .setFaceFrameRect(Rect(0, 0, 0, 1000))
             .setDetectCallback(object : OnMLLivenessDetectCallback {
                 //活体检测完成
                 override fun onCompleted(result: MLLivenessCaptureResult) {
@@ -190,7 +164,16 @@ class LivenFaceVerificationActivity : Activity() {
                     )
                 }
 
-                override fun onInfo(infoCode: Int, bundle: Bundle) {}
+                override fun onInfo(infoCode: Int, bundle: Bundle) {
+                    Log.e("Pan", "infoCode=$infoCode")
+                    tvSimilarity.text = when (infoCode) {
+                        MLLivenessDetectInfo.NO_FACE_WAS_DETECTED -> "未识别到人脸"
+                        MLLivenessDetectInfo.MASK_WAS_DETECTED -> "检测到口罩"
+                        MLLivenessDetectInfo.SUNGLASS_WAS_DETECTED -> "检测到墨镜"
+                        MLLivenessDetectInfo.FACE_ROTATION -> "脸部旋转"
+                        else -> ""
+                    }
+                }
                 override fun onStateChange(state: Int, bundle: Bundle) {}
             })
             .build()
