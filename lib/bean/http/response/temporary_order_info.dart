@@ -342,6 +342,7 @@ class TemporaryOrderDetailReceiptInfo {
   String? hasLengthCheckData;
   String? colorSeparation;
   String? result1;
+  String? barCode;
   double? samplingQuantity;
 
   TemporaryOrderDetailReceiptInfo({
@@ -377,6 +378,7 @@ class TemporaryOrderDetailReceiptInfo {
     this.hasLengthCheckData,
     this.colorSeparation,
     this.result1,
+    this.barCode,
     this.samplingQuantity,
   });
 
@@ -413,6 +415,7 @@ class TemporaryOrderDetailReceiptInfo {
     hasLengthCheckData = json['HasLengthCheckData'];
     colorSeparation = json['ColorSeparation'];
     result1 = json['Result1'];
+    barCode = json['BQID_Org'];
     samplingQuantity = json['SamplingQuantity'];
     isSelected.value = json['isSelected']??false;
   }
@@ -451,6 +454,7 @@ class TemporaryOrderDetailReceiptInfo {
     map['HasLengthCheckData'] = hasLengthCheckData;
     map['ColorSeparation'] = colorSeparation;
     map['Result1'] = result1;
+    map['BQID_Org'] = barCode;
     map['SamplingQuantity'] = samplingQuantity;
     map['isSelected'] = isSelected.value;
 

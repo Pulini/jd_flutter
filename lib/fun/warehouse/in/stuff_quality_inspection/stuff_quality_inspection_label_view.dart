@@ -132,7 +132,9 @@ class _StuffQualityInspectionLabelPageState
         child: InkWell(
           onTap: () => {
             setState(() {
-              data.select = !data.select;
+              if(data.barCode!='合计'){
+                data.select = !data.select;
+              }
             })
           },
           child: Row(
@@ -275,7 +277,13 @@ class _StuffQualityInspectionLabelPageState
                       //品检单号
                       expandedTextSpan(
                           hint: 'quality_inspection_inspection_split_number'.tr,
-                          text: state.inspectionNumberToSelect)
+                          text: state.inspectionNumberToSelect),
+                      expandedTextSpan(
+                          hint: 'quality_inspection_unqualified'.tr,
+                          text: state.labelUnQty.toShowString()),
+                      expandedTextSpan(
+                          hint: 'quality_inspection_short_quality'.tr,
+                          text: state.labelShortQty.toShowString())
                     ],
                   ),
                   Container(

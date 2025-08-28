@@ -3085,6 +3085,8 @@ class Translation extends Translations {
           'quality_inspection_material': '物料名称',
           'quality_inspection_delivery_number': '送货单号：',
           'quality_inspection_inspection_split_number': '暂收单号：',
+          'quality_inspection_unqualified': '不合格数量：',
+          'quality_inspection_short_quality': '短码数量：',
           'product_quality_inspection_inspection_unit': '生产单位：',
           'product_quality_inspection_abnormal_qty': '异常数：',
           'product_quality_inspection_reinspection_qty': '复检数：',
@@ -6929,6 +6931,8 @@ class Translation extends Translations {
           'quality_inspection_material': 'Material name',
           'quality_inspection_delivery_number': 'Delivery note number：',
           'quality_inspection_inspection_split_number': 'Temporary receipt number：',
+          'quality_inspection_unqualified': 'unqualified quantity：',
+          'quality_inspection_short_quality': 'short code：',
           'quality_inspection_color_label_binding_color': 'Color：',
           'quality_inspection_color_label_binding_scanned': 'Scanned：',
           'quality_inspection_color_label_binding_scanned_material_qty':

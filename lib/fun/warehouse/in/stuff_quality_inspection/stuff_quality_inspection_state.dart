@@ -57,5 +57,5 @@ class StuffQualityInspectionState {
   var inspectionNumberToSelect = ''; //暂收单号
   var labelData = <StuffQualityInspectionLabelInfo>[].obs; //提交品检获取的贴标信息
   var labelUnQty = 0.0; //贴标合格
-  var labelShortQty = 0.0; //贴标不合格
+  var labelShortQty = 0.0; //贴标短码
 }

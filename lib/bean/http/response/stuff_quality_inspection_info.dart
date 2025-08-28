@@ -122,6 +122,8 @@ class StuffQualityInspectionInfo {
     this.isPiece, //是否  X启用
     this.trackNo, //跟踪号
     this.colorDistinguishEnable, //是否需要分色扫码
+    this.barCode, //标签
+
   });
 
   StuffQualityInspectionInfo.fromJson(dynamic json) {
@@ -185,6 +187,7 @@ class StuffQualityInspectionInfo {
     isPiece = json['IsPiece'];
     trackNo = json['TrackNo'];
     colorDistinguishEnable = json['ColorDistinguishEnable'] == 'X';
+    barCode = json['BQID_Org'];
   }
 
   String? orderType;
@@ -247,6 +250,7 @@ class StuffQualityInspectionInfo {
   String? trackNo;
   bool? colorDistinguishEnable;
   RxBool isSelected = false.obs;
+  String? barCode;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -310,6 +314,7 @@ class StuffQualityInspectionInfo {
     map['IsPiece'] = isPiece;
     map['TrackNo'] = trackNo;
     map['ColorDistinguishEnable'] = colorDistinguishEnable;
+    map['BQID_Org'] = barCode;
     return map;
   }
 
