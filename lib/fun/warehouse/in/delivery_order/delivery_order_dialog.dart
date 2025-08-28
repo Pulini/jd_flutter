@@ -40,12 +40,12 @@ stockInDialog({
     return;
   }
 
-  if (groupBy(submitList, (v) => v.isNeedBindingLabel()).length > 1) {
-    errorDialog(
-      content: '启用标签管理的工单不能与未启用标签管理的工单同时操作！',
-    );
-    return;
-  }
+  // if (groupBy(submitList, (v) => v.isNeedBindingLabel()).length > 1) {
+  //   errorDialog(
+  //     content: '启用标签管理的工单不能与未启用标签管理的工单同时操作！',
+  //   );
+  //   return;
+  // }
   if (groupBy(submitList, (v) => v.factoryNO ?? '').keys.length > 1) {
     errorDialog(content: '工厂不同的工单不能同时操作！');
     return;
@@ -71,13 +71,13 @@ stockInDialog({
   var leaderList = <LeaderInfo>[].obs;
   String saveLeaderNumber = spGet(spSaveDeliveryOrderStockInCheckLeader) ?? '';
 
-  var locationErrorMsg = ''.obs;
-  var locationList = <RecommendLocationInfo>[].obs;
+  // var locationErrorMsg = ''.obs;
+  // var locationList = <RecommendLocationInfo>[].obs;
 
   var postDate = DatePickerController(PickerType.date,
       buttonName: 'delivery_order_dialog_post_date'.tr);
   var leaderController = FixedExtentScrollController();
-  var locationController = FixedExtentScrollController();
+  // var locationController = FixedExtentScrollController();
 
   var warehouseController = OptionsPickerController(
     PickerType.ghost,
@@ -86,18 +86,18 @@ stockInDialog({
     dataList: () => getStorageLocationList(submitList.first.factoryNO ?? ''),
     onSelected: (v) {
       var location = (v as LocationInfo);
-      _getStockInLocationList(
-        factory: location.factoryNumber ?? '',
-        warehouse: location.storageLocationNumber ?? '',
-        locationList: (list) {
-          locationErrorMsg.value = '';
-          locationList.value = list;
-        },
-        error: (msg) {
-          locationErrorMsg.value = msg;
-          locationList.clear();
-        },
-      );
+      // _getStockInLocationList(
+      //   factory: location.factoryNumber ?? '',
+      //   warehouse: location.storageLocationNumber ?? '',
+      //   locationList: (list) {
+      //     locationErrorMsg.value = '';
+      //     locationList.value = list;
+      //   },
+      //   error: (msg) {
+      //     locationErrorMsg.value = msg;
+      //     locationList.clear();
+      //   },
+      // );
       _checkFaceInfo(
         billType: '入库单',
         sapFactoryNumber: location.factoryNumber ?? '',
@@ -139,9 +139,11 @@ stockInDialog({
         },
       );
   stockIn() {
-    String location = submitList.first.isNeedBindingLabel()
-        ? locationList[locationController.selectedItem].location ?? ''
-        : '';
+    // String location = submitList.first.isNeedBindingLabel()
+    //     ? locationList[locationController.selectedItem].location ?? ''
+    //     : '';
+    String location ='';
+
     if (leaderEnable.value) {
       var leader = leaderList[leaderController.selectedItem];
       if (submitList[0].isScanPieces?.isEmpty == true && hasFrontCamera()) {
@@ -213,32 +215,32 @@ stockInDialog({
             children: [
               DatePicker(pickerController: postDate),
               OptionsPicker(pickerController: warehouseController),
-              if (submitList.first.isNeedBindingLabel())
-                Obx(() => locationErrorMsg.value.isNotEmpty
-                    ? Text(
-                        locationErrorMsg.value,
-                        style: const TextStyle(
-                          color: Colors.red,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      )
-                    : SizedBox(
-                        height: 130,
-                        child: CupertinoPicker(
-                          scrollController: locationController,
-                          diameterRatio: 1.5,
-                          magnification: 1.2,
-                          squeeze: 1.2,
-                          useMagnifier: true,
-                          itemExtent: 32,
-                          onSelectedItemChanged: (v) {},
-                          children: locationList
-                              .map((data) => Center(
-                                    child: Text('${data.location}'),
-                                  ))
-                              .toList(),
-                        ),
-                      )),
+              // if (submitList.first.isNeedBindingLabel())
+              //   Obx(() => locationErrorMsg.value.isNotEmpty
+              //       ? Text(
+              //           locationErrorMsg.value,
+              //           style: const TextStyle(
+              //             color: Colors.red,
+              //             fontWeight: FontWeight.bold,
+              //           ),
+              //         )
+              //       : SizedBox(
+              //           height: 130,
+              //           child: CupertinoPicker(
+              //             scrollController: locationController,
+              //             diameterRatio: 1.5,
+              //             magnification: 1.2,
+              //             squeeze: 1.2,
+              //             useMagnifier: true,
+              //             itemExtent: 32,
+              //             onSelectedItemChanged: (v) {},
+              //             children: locationList
+              //                 .map((data) => Center(
+              //                       child: Text('${data.location}'),
+              //                     ))
+              //                 .toList(),
+              //           ),
+              //         )),
               Obx(
                 () => leaderEnable.value
                     ? faceErrorMsg.value.isNotEmpty
@@ -281,9 +283,8 @@ stockInDialog({
         ),
         actions: [
           Obx(
-            () => faceErrorMsg.value.isNotEmpty ||
-                    (submitList.first.isNeedBindingLabel() &&
-                        locationErrorMsg.value.isNotEmpty)
+            // () => faceErrorMsg.value.isNotEmpty || (submitList.first.isNeedBindingLabel() && locationErrorMsg.value.isNotEmpty)
+            () => faceErrorMsg.value.isNotEmpty
                 ? Container()
                 : TextButton(
                     onPressed: stockIn,

@@ -29,13 +29,16 @@ const resultToUpdate = 3;
 const baseUrlForMES = 'https://geapp.goldemperor.com:1226/';
 
 //MES测试库
-const testUrlForMES = 'https://geapptest.goldemperor.com:1224/';
+// const testUrlForMES = 'https://geapptest.goldemperor.com:1224/';
+const testUrlForMES = 'https://apptest.goldemperor.com:1207/';
 
 //SAP正式库
 const baseUrlForSAP = 'https://erpprd01.goldemperor.com:8003/';
 
-//SAP测试库
-const testUrlForSAP = 'https://erpqas01.goldemperor.com:8002/';
+// //SAP测试库
+// const testUrlForSAP = 'https://erpqas01.goldemperor.com:8002/';
+const testUrlForSAP = 'https://s4devapp01.goldemperor.com:8005/';
+
 
 //SAP开发库
 const developUrlForSAP = 'https://erpdev01.goldemperor.com:8001/';
