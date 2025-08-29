@@ -1,7 +1,6 @@
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 
-
 // WorkCardList : [{"ID":0,"InterID":0,"EntryID":1,"OperPlanningEntryFID":3714871,"EmpID":0,"WorkerCode":"0","WorkerName":"","SourceQty":1463,"MustQty":1463,"PreSchedulingQty":0,"Qty":1463,"FinishQty":0,"SourceEntryID":2,"SourceInterID":213014,"SourceEntryFID":555546,"ProcessNumber":"YT","ProcessName":"沿条","IsOpen":1,"RoutingID":162132}]
 // WorkCardTitle : {"FQtyPass":1463,"FQtyProcessPass":0,"DayWorkCardPlanQty":0,"FCardNoReportStatus":0,"PlantBody":"","ProcessBillNumber":"P2048549","DispatchingNumber":1463}
 
@@ -12,12 +11,10 @@ class ProductionDispatchOrderDetailInfo {
   });
 
   ProductionDispatchOrderDetailInfo.fromJson(dynamic json) {
-    if (json['WorkCardList'] != null) {
-      workCardList = [];
-      json['WorkCardList'].forEach((v) {
-        workCardList?.add(WorkCardList.fromJson(v));
-      });
-    }
+    workCardList = [
+      if (json['WorkCardList'] != null)
+        for (var json in json['WorkCardList']) WorkCardList.fromJson(json)
+    ];
     workCardTitle = json['WorkCardTitle'] != null
         ? WorkCardTitle.fromJson(json['WorkCardTitle'])
         : null;
@@ -67,13 +64,13 @@ class WorkCardTitle {
     dispatchingNumber = json['DispatchingNumber'];
   }
 
-  double? qtyPass;//已汇报数
-  double? qtyProcessPass;//累计计工数
-  double? dayWorkCardPlanQty;//今日目标数
-  int? cardNoReportStatus;//Status=1委外
+  double? qtyPass; //已汇报数
+  double? qtyProcessPass; //累计计工数
+  double? dayWorkCardPlanQty; //今日目标数
+  int? cardNoReportStatus; //Status=1委外
   String? plantBody;
   String? processBillNumber;
-  double? dispatchingNumber;//派工总数
+  double? dispatchingNumber; //派工总数
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -143,6 +140,28 @@ class WorkCardList {
     this.isOpen,
     this.routingID,
   });
+
+  WorkCardList copy() => WorkCardList(
+        id: id,
+        interID: interID,
+        entryID: entryID,
+        operPlanningEntryFID: operPlanningEntryFID,
+        empID: empID,
+        workerCode: workerCode,
+        workerName: workerName,
+        sourceQty: sourceQty,
+        mustQty: mustQty,
+        preSchedulingQty: preSchedulingQty,
+        qty: qty,
+        finishQty: finishQty,
+        sourceEntryID: sourceEntryID,
+        sourceInterID: sourceInterID,
+        sourceEntryFID: sourceEntryFID,
+        processNumber: processNumber,
+        processName: processName,
+        isOpen: isOpen,
+        routingID: routingID,
+      );
 
   WorkCardList.fromJson(dynamic json) {
     id = json['ID'];

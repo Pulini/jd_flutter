@@ -142,7 +142,7 @@ class ProductionDispatchLogic extends GetxController {
   }
 
   //打开/关闭工序
-  offOnProcess({required Function()refresh}) {
+  offOnProcess({required Function() refresh}) {
     state.offOnProcess(
       success: refresh,
       error: (msg) => errorDialog(content: msg),
@@ -150,7 +150,7 @@ class ProductionDispatchLogic extends GetxController {
   }
 
   //删除下游工序
-  deleteDownstream({required Function()refresh}) {
+  deleteDownstream({required Function() refresh}) {
     state.deleteDownstream(
       success: refresh,
       error: (msg) => errorDialog(content: msg),
@@ -158,7 +158,7 @@ class ProductionDispatchLogic extends GetxController {
   }
 
   //删除上一次报工
-  deleteLastReport({required Function()refresh}) {
+  deleteLastReport({required Function() refresh}) {
     state.deleteLastReport(
       success: refresh,
       error: (msg) => errorDialog(content: msg),
@@ -298,6 +298,33 @@ class ProductionDispatchLogic extends GetxController {
     }
   }
 
+  List<WorkCardList> _setWorkProcedure(List<WorkCardList> workCardList) {
+    var wpList = <WorkCardList>[];
+    groupBy(workCardList, (v) => '${v.processName}_${v.processNumber}')
+        .forEach((k, v) {
+      wpList.add(v.first.copy()
+        ..finishQty =
+            v.map((v2) => v2.finishQty ?? 0).reduce((a, b) => a.add(b))
+        ..mustQty = v.map((v2) => v2.mustQty ?? 0).reduce((a, b) => a.add(b))
+        ..qty = 0
+        ..empID = 0
+        ..workerCode = ''
+        ..workerName = ''
+        ..dispatch = [
+          for (var dis in v.where((v2) => v2.empID != null && v2.empID != 0))
+            DispatchInfo(
+              processName: dis.processName,
+              processNumber: dis.processNumber,
+              number: dis.workerCode,
+              name: dis.workerName,
+              empID: dis.empID,
+              qty: dis.qty,
+            )
+        ]);
+    });
+    return wpList;
+  }
+
   //工单下推
   push() {
     pushCheck(
@@ -308,7 +335,7 @@ class ProductionDispatchLogic extends GetxController {
             errorDialog(content: 'production_dispatch_no_process_list'.tr);
           } else {
             state.workCardTitle.value = data.workCardTitle ?? WorkCardTitle();
-            state.workProcedure.value = data.workCardList!;
+            state.workProcedure.value = _setWorkProcedure(data.workCardList!);
             Get.to(() => const ProductionDispatchDetailPage());
           }
         },
@@ -324,22 +351,18 @@ class ProductionDispatchLogic extends GetxController {
             state.batchWorkProcedure = data.workCardList!;
             var workProcedure = <WorkCardList>[];
             groupBy(data.workCardList!, (v) => v.processNumber).forEach((k, v) {
-              var qty = 0.0;
-              var finishQty = 0.0;
-              var mustQty = 0.0;
-              for (var v2 in v) {
-                qty = qty.add(v2.qty ?? 0);
-                finishQty = finishQty.add(v2.finishQty ?? 0);
-                mustQty = mustQty.add(v2.mustQty ?? 0);
-              }
+              var qty = v.map((v2)=>v2.qty??0).reduce((a,b)=>a.add(b));
+              var finishQty =  v.map((v2)=>v2.finishQty??0).reduce((a,b)=>a.add(b));
+              var mustQty = v.map((v2)=>v2.mustQty??0).reduce((a,b)=>a.add(b));
+
               workProcedure.add(WorkCardList(
                 mustQty: mustQty,
                 qty: qty,
                 finishQty: finishQty,
-                processNumber: v[0].processNumber,
-                processName: v[0].processName,
+                processNumber: v.first.processNumber,
+                processName: v.first.processName,
                 isOpen: v.any((v3) => v3.isOpen == 1) ? 1 : 0,
-                routingID: v[0].routingID,
+                routingID: v.first.routingID,
               ));
             });
             state.workProcedure.value = workProcedure;
