@@ -43,6 +43,7 @@ Uint8List _tscSetup(
     sensorValue = 'BLINE $sensorDistance mm, $sensorOffset mm';
   }
   message = '$size\r\n$speedValue\r\n$densityValue\r\n$sensorValue\r\n';
+  debugPrint(message);
   return utf8.encode(message);
 }
 
@@ -333,6 +334,7 @@ Future<Uint8List> _tscBitmap(
     }
   }
 
+  debugPrint('image.width=${image.width}  width=${(image.width + 7) ~/ 8} image.height=${image.height} height=${(image.height + 7) ~/ 8}');
   return Uint8List.fromList(List.from(
     utf8.encode(
         'BITMAP $xAxis,$yAxis,${(image.width + 7) ~/ 8},${image.height},0,'),

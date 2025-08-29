@@ -1,3 +1,4 @@
+import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -23,6 +24,7 @@ class _HomePageState extends State<HomePage>
     with AutomaticKeepAliveClientMixin {
   final logic = Get.put(HomeLogic());
   final state = Get.find<HomeLogic>().state;
+  var refreshController = EasyRefreshController(controlFinishRefresh: true);
 
   @override
   bool get wantKeepAlive => true; // 启用保活
@@ -47,7 +49,7 @@ class _HomePageState extends State<HomePage>
                   cacheHeight: 75,
                   cacheWidth: 75,
                   color: Colors.blueAccent,
-                  errorBuilder: (ctx, err, stackTrace) => Image.asset(
+                  errorBuilder: (c, e, s) => Image.asset(
                     _logo,
                     height: 30,
                     width: 30,
@@ -71,6 +73,8 @@ class _HomePageState extends State<HomePage>
               ),
       );
 
+  _refreshFunList() =>
+      logic.refreshFunList(() => refreshController.finishRefresh());
 
   @override
   void initState() {
@@ -78,13 +82,10 @@ class _HomePageState extends State<HomePage>
     WidgetsBinding.instance.addPostFrameCallback((_) {
       getVersionInfo(
         false,
-        noUpdate: () => logic.refreshFunList(),
+        noUpdate: () => _refreshFunList(),
         needUpdate: (v) =>
-            doUpdate(version: v, ignore: () => logic.refreshFunList()),
-        error: (msg) {
-          errorDialog(content: msg);
-          state.isLoading.value = false;
-        },
+            doUpdate(version: v, ignore: () => _refreshFunList()),
+        error: (msg) => errorDialog(content: msg),
       );
     });
   }
@@ -126,71 +127,46 @@ class _HomePageState extends State<HomePage>
               )
             ],
           ),
-          body: Obx(() => state.isLoading.value
-              ? const Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CupertinoActivityIndicator(
-                        radius: 20,
-                      ),
-                      SizedBox(height: 10),
-                      Text(
-                        '读取功能列表中...',
-                        style: TextStyle(
-                          fontSize: 18,
-                          decoration: TextDecoration.none,
-                        ),
-                      )
-                    ],
-                  ),
-                )
-              : state.navigationBar.isEmpty
-                  ? Center(
-                      child: IconButton(
-                        onPressed: () => logic.refreshFunList(),
-                        icon: const Icon(
-                          Icons.refresh,
-                          color: Colors.blueAccent,
-                          size: 50,
-                        ),
-                      ),
-                    )
-                  : ListView.builder(
-                      padding: const EdgeInsets.all(8),
-                      itemCount: state.buttons.length,
-                      itemBuilder: (context, index) =>
-                          _item(state.buttons[index]),
-                    )),
+          body: EasyRefresh(
+            controller: refreshController,
+            header: const MaterialHeader(),
+            onRefresh: () => _refreshFunList(),
+            child: Obx(() => ListView.builder(
+                  padding: const EdgeInsets.all(8),
+                  itemCount: state.buttons.length,
+                  itemBuilder: (context, index) => _item(state.buttons[index]),
+                )),
+          ),
           bottomNavigationBar: Obx(
             () => state.navigationBar.isEmpty
                 ? Container()
                 : BottomNavigationBar(
                     type: BottomNavigationBarType.shifting,
                     items: [
-                      for (var bar in state.navigationBar)BottomNavigationBarItem(
-                        icon: Image.network(
-                          bar.icon ?? '',
-                          width: 30,
-                          height: 30,
-                          cacheHeight: 75,
-                          cacheWidth: 75,
-                          color: bar.getTextColor(),
-                          errorBuilder: (ctx, err, stackTrace) => Image.asset(
-                            _logo,
-                            height: 30,
+                      for (var bar in state.navigationBar)
+                        BottomNavigationBarItem(
+                          icon: Image.network(
+                            bar.icon ?? '',
                             width: 30,
+                            height: 30,
                             cacheHeight: 75,
                             cacheWidth: 75,
                             color: bar.getTextColor(),
+                            errorBuilder: (ctx, err, stackTrace) => Image.asset(
+                              _logo,
+                              height: 30,
+                              width: 30,
+                              cacheHeight: 75,
+                              cacheWidth: 75,
+                              color: bar.getTextColor(),
+                            ),
                           ),
-                        ),
-                        label: bar.className ?? 'Fun',
-                        backgroundColor: bar.getBKGColor(),
-                      )
+                          label: bar.className ?? 'Fun',
+                          backgroundColor: bar.getBKGColor(),
+                        )
                     ],
                     currentIndex: state.nBarIndex,
-                    selectedItemColor: state.navigationBar[0].getTextColor(),
+                    selectedItemColor: state.navigationBar.first.getTextColor(),
                     onTap: (i) => setState(() => logic.navigationBarClick(i)),
                   ),
           )),

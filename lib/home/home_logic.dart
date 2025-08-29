@@ -43,15 +43,14 @@ class HomeLogic extends GetxController {
     );
   }
 
-  refreshFunList() {
-    state.isLoading.value = true;
+  refreshFunList(Function()finish) {
     state.getMenuFunction(success: (json) async {
-      state.isLoading.value = false;
       spSave(spSaveMenuInfo, textToKey(json.toString()));
       functions = await _jsonToMenuFunction(json);
+      finish.call();
       refreshButton();
     }, error: (msg) {
-      state.isLoading.value = false;
+      finish.call();
       errorDialog(content: msg);
     });
   }

@@ -37,11 +37,12 @@ const baseUrlForSAP = 'https://erpprd01.goldemperor.com:8003/';
 
 // //SAP测试库
 // const testUrlForSAP = 'https://erpqas01.goldemperor.com:8002/';
-const testUrlForSAP = 'https://s4devapp01.goldemperor.com:8005/';
-
 
 //SAP开发库
-const developUrlForSAP = 'https://erpdev01.goldemperor.com:8001/';
+// const developUrlForSAP = 'https://erpdev01.goldemperor.com:8001/';
+const developUrlForSAP = 'https://s4devapp01.goldemperor.com:8005/';
+const sfUser = 'PI_USER';
+const sfPassword = 'PI@Passw0rd';
 
 //SAP正式库
 const baseClientForSAP = 800;
@@ -54,7 +55,6 @@ var logger = Logger();
 
 //当前语言
 var language = 'zh';
-
 
 //初始化网络请求
 Future<BaseData> _doHttp({
@@ -104,6 +104,8 @@ Future<BaseData> _doHttp({
     'Language': language,
     'Token': userInfo?.token ?? '',
     'GUID': const Uuid().v1(),
+    'Authorization': 'Basic ${base64Encode(utf8.encode("$sfUser:$sfPassword"))}',
+
   });
 
   //创建返回数据载体
