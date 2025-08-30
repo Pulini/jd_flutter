@@ -156,7 +156,7 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
               ),
               expandedTextSpan(
                 hint: 'material_dispatch_factory'.tr,
-                text: '${data.sapDecideArea}',
+                text: data.sourceFactoryName!.isNotEmpty? data.sourceFactoryName! : data.sapDecideArea!,
                 textColor: Colors.redAccent,
               ),
               expandedTextSpan(

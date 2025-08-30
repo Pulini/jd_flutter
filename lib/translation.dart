@@ -3017,6 +3017,7 @@ class Translation extends Translations {
           'quality_inspection_change_success': '修改成功！',
           'quality_inspection_change_failed': '修改失败！',
           'quality_inspection_color_message': '分色信息(长按删除)',
+          'quality_inspection_have_no_color': '还有未分色数量！',
           'quality_inspection_get_color': '正在获取色系信息...',
           'quality_inspection_get_label': '正在获取标签...',
           'quality_inspection_color_scheme': '色系分配',
@@ -6851,6 +6852,7 @@ class Translation extends Translations {
           'quality_inspection_change_failed': 'Modification failed！',
           'quality_inspection_color_message':
               'Color separation information (long press to delete)',
+          'quality_inspection_have_no_color': 'There are still unsorted quantities！',
           'quality_inspection_get_color':
               'Obtaining color scheme information...',
           'quality_inspection_get_label': 'Getting tags...',

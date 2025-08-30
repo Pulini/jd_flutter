@@ -119,7 +119,7 @@ class _StuffQualityInspectionPageState
                       hint: '数量'.tr,
                       controller: qtyController,
                       onChanged: (qty) {
-                        if(qty>state.unColorQty.value.toDoubleTry()){
+                        if (qty > state.unColorQty.value.toDoubleTry()) {
                           qtyController.text = state.unColorQty.value;
                         }
                       },
@@ -153,7 +153,11 @@ class _StuffQualityInspectionPageState
           actions: [
             TextButton(
               onPressed: () {
-                Get.back();
+                if (state.unColorQty.value.toDoubleTry() > 0) {
+                  showSnackBar(message: 'quality_inspection_have_no_color'.tr);
+                } else {
+                  Get.back();
+                }
               },
               child: Text('dialog_default_confirm'.tr),
             ),
@@ -491,7 +495,7 @@ class _StuffQualityInspectionPageState
     state.picture.clear();
     state.picture.add(VisitPhotoBean(photo: "", typeAdd: "0"));
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      logic.searchPeople(userInfo?.number??'');
+      logic.searchPeople(userInfo?.number ?? '');
     });
   }
 
