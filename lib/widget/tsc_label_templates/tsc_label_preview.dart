@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
+import 'package:jd_flutter/widget/preview_label_widget.dart';
 import 'package:jd_flutter/widget/tsc_label_templates/110w_dynamic_label.dart';
 import 'package:jd_flutter/widget/tsc_label_templates/75w45h_fixed_label.dart';
 import 'package:jd_flutter/widget/tsc_label_templates/75w_dynamic_label.dart';
@@ -670,7 +672,12 @@ class _TscLabelPreviewState extends State<TscLabelPreview> {
                 SingleChildScrollView(
                   padding: const EdgeInsets.only(bottom: 10),
                   scrollDirection: Axis.horizontal,
-                  child: item.last,
+                  child: GestureDetector(
+                    onTap: (){
+                      Get.to(() =>  PreviewLabel(labelWidget: item.last, isDynamic: true));
+                    },
+                    child: item.last,
+                  ),
                 ),
               ]
             ],
