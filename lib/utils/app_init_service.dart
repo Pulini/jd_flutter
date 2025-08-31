@@ -1,5 +1,4 @@
 import 'package:camera/camera.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -123,23 +122,6 @@ class AppInitService extends GetxService {
     spSave('isTestUrl', isTestUrl.value);
   }
 
-  final Connectivity _connectivity = Connectivity();
-  RxList<ConnectivityResult> networkStatus = [ConnectivityResult.none].obs;
-
-  AppInitService() {
-    _connectivity.onConnectivityChanged.listen(_notifyStatus);
-  }
-
-  checkConnectivity() {
-    _connectivity.checkConnectivity().then(_notifyStatus);
-  }
-
-  bool isOnLine() => networkStatus.any((v) => v != ConnectivityResult.none);
-
-  _notifyStatus(List<ConnectivityResult> result) {
-    networkStatus.value = result;
-    debugPrint('网络状态: $result');
-  }
 
   bool hasFrontCamera() => cameras == null
       ? false

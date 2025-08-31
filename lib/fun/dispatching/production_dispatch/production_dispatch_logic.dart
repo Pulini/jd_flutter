@@ -998,17 +998,7 @@ class ProductionDispatchLogic extends GetxController {
             }
           }
         }
-        state.mergeOrderProductionDispatch(
-          submitData: submitData,
-          success: (msg) {
-            SaveDispatch.delete(
-              processBillNumber:
-                  '${state.workCardTitle.value.processBillNumber}',
-            );
-            successDialog(content: msg);
-          },
-          error: (msg) => errorDialog(content: msg),
-        );
+
       } else {
         for (var d in wp.dispatch) {
           submitData.add({
@@ -1033,18 +1023,18 @@ class ProductionDispatchLogic extends GetxController {
             'RoutingID': wp.routingID,
           });
         }
-        state.productionDispatch(
-          submitData: submitData,
-          success: (msg) {
-            SaveDispatch.delete(
-              processBillNumber:
-                  '${state.workCardTitle.value.processBillNumber}',
-            );
-            successDialog(content: msg);
-          },
-          error: (msg) => errorDialog(content: msg),
-        );
       }
+      state.mergeOrderProductionDispatch(
+        submitData: submitData,
+        success: (msg) {
+          SaveDispatch.delete(
+            processBillNumber:
+            '${state.workCardTitle.value.processBillNumber}',
+          );
+          successDialog(content: msg);
+        },
+        error: (msg) => errorDialog(content: msg),
+      );
     }
   }
 

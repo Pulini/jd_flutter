@@ -108,15 +108,10 @@ dependencies:
   mqtt_client: ^10.5.1
   #设备方向
   native_device_orientation: ^2.0.3
-  #网络监听
-  connectivity_plus: ^6.1.3
   #轮播侧滑控件
   card_swiper: ^3.0.1
   camera: ^0.11.2
 
-#强制使用固定版本插件
-#dependency_overrides:
-#  fading_edge_scrollview: ^4.1.1
 
 dev_dependencies:
   flutter_test:

@@ -214,24 +214,25 @@ addWorkerDialog(
           ],
         ),
         content: SizedBox(
-          width: MediaQuery.of(context).size.width * 0.5,
-          height: MediaQuery.of(context).size.height * 0.5,
+          width: MediaQuery.of(context).size.width ,
+          height: MediaQuery.of(context).size.height ,
           child: GridView.builder(
             itemCount: workers.length,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 4, // 网格的列数
+              crossAxisCount: 8, // 网格的列数
+              childAspectRatio: 3 /4,
             ),
             itemBuilder: (BuildContext context, int index) {
               var item = workers[index];
               return GestureDetector(
                 onTap: () {
-                  dialogSetState(() {
                     if (select.contains(item.empID)) {
                       select.remove(item.empID);
                     } else {
                       select.add(item.empID ?? 0);
                     }
-                  });
+                    Get.back();
+                    callback.call(select);
                 },
                 child: Card(
                   color: select.contains(item.empID)
@@ -280,13 +281,6 @@ addWorkerDialog(
           ),
         ),
         actions: [
-          TextButton(
-            onPressed: () {
-              Get.back();
-              callback.call(select);
-            },
-            child: Text('dialog_default_confirm'.tr),
-          ),
           TextButton(
             onPressed: () => Get.back(),
             child: Text(
