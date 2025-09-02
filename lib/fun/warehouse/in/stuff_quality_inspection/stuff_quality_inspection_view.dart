@@ -77,7 +77,7 @@ class _StuffQualityInspectionPageState
 
   showColor(String qty) {
     if(state.inspectionColorList.isNotEmpty){
-      state.unColorQty.value = qty.toDoubleTry().sub(state.inspectionColorList.map((v2)=>v2.qty.toDoubleTry()?? 0).reduce((a,b)=>a.add(b))).toStringAsFixed(3);
+      state.unColorQty.value = qty.toDoubleTry().sub(state.inspectionColorList.map((v2)=>v2.qty.toDoubleTry()).reduce((a,b)=>a.add(b))).toStringAsFixed(3);
     }else{
       state.unColorQty.value = qty;
     }
