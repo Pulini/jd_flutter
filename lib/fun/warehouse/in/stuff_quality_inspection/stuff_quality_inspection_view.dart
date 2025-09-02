@@ -76,11 +76,14 @@ class _StuffQualityInspectionPageState
   }
 
   showColor(String qty) {
-    state.unColorQty.value = qty;
-
+    if(state.inspectionColorList.isNotEmpty){
+      state.unColorQty.value = qty.toDoubleTry().sub(state.inspectionColorList.map((v2)=>v2.qty.toDoubleTry()).reduce((a,b)=>a.add(b))).toStringAsFixed(3);
+    }else{
+      state.unColorQty.value = qty;
+    }
     var colorController = TextEditingController(); //色系
     var qtyController = TextEditingController(); //数量
-    qtyController.text = qty;
+    qtyController.text =  state.unColorQty.value;
     Get.dialog(
       PopScope(
         canPop: false,
