@@ -33,12 +33,12 @@ android {
     useLibrary 'org.apache.http.legacy'
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
 
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = '11'
     }
 
     sourceSets {
@@ -73,7 +73,7 @@ android {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig signingConfigs.release
-            
+
             // 启用代码混淆
             minifyEnabled true
             // 启用资源压缩
@@ -92,7 +92,7 @@ dependencies {
     implementation 'androidx.activity:activity-ktx:1.10.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
     //JDK编译异常处理
-    implementation(platform("org.jetbrains.kotlin:kotlin-bom:1.8.22"))
+    implementation(platform("org.jetbrains.kotlin:kotlin-bom:2.1.0"))
     implementation 'androidx.multidex:multidex:2.0.1'
 
     //json解析 https://github.com/google/gson
