@@ -126,7 +126,7 @@ class _StuffQualityInspectionLabelPageState
       }
     }
     return SizedBox(
-      width: 120 * 9,
+      width: 100 * 9,
       child: SizedBox(
         height: 35,
         child: InkWell(
@@ -140,10 +140,10 @@ class _StuffQualityInspectionLabelPageState
           child: Row(
             children: [
               Expanded(
-                  flex: 7,
+                  flex: 5,
                   child: _text(
                       //标签
-                      mes: data.barCode ?? '',
+                      mes: data.label ?? '',
                       backColor: backColors,
                       head: false,
                       paddingNumber: 5)),
@@ -156,7 +156,7 @@ class _StuffQualityInspectionLabelPageState
                       head: false,
                       paddingNumber: 5)),
               Expanded(
-                  flex: 1,
+                  flex: 2,
                   child: _text(
                       //尺码
                       mes: data.size ?? '',
@@ -264,7 +264,7 @@ class _StuffQualityInspectionLabelPageState
       body: Obx(() => SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: SizedBox(
-              width: 150 * 10,
+              width: 130 * 10,
               child: Column(
                 children: [
                   Row(
@@ -296,7 +296,7 @@ class _StuffQualityInspectionLabelPageState
                     child: Row(
                       children: [
                         Expanded(
-                            flex: 7,
+                            flex: 5,
                             child: _text(
                                 //标签
                                 mes: 'quality_inspection_label'.tr,
@@ -312,7 +312,7 @@ class _StuffQualityInspectionLabelPageState
                                 head: true,
                                 paddingNumber: 5)),
                         Expanded(
-                            flex: 1,
+                            flex: 2,
                             child: _text(
                                 //尺码
                                 mes: 'quality_inspection_size'.tr,

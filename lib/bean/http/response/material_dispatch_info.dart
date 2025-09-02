@@ -120,7 +120,7 @@ class MaterialDispatchInfo {
   String? exitLabelType; //打标类型
   String? sapSupplierNumber; //供应商
   String? description; //品名，批文
-  String? sourceFactoryName; //收货方
+  String? sourceFactoryName; //工厂名字
   List<Children>? children;
 
   Map<String, dynamic> toJson() {

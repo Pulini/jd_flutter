@@ -41,7 +41,9 @@ class StuffQualityInspectionLogic extends GetxController {
   //分色
   addColor(String batch, String qty) {
     if (batch.isNotEmpty && qty.isNotEmpty) {
-      if (state.inspectionColorList.none((data) => data.batch != batch)) {
+      if (state.inspectionColorList.any((data) => data.batch == batch)) {
+        showSnackBar(message: '不能添加相同分色');
+      } else {
         if (state.unColorQty.toString().toDoubleTry() - qty.toDoubleTry() >=
                 0 &&
             qty.toDoubleTry() > 0) {
@@ -53,8 +55,6 @@ class StuffQualityInspectionLogic extends GetxController {
               (state.unColorQty.toString().toDoubleTry() - qty.toDoubleTry())
                   .toStringAsFixed(3);
         }
-      } else {
-        showSnackBar(message: '不能添加相同分色');
       }
     }
   }
@@ -169,13 +169,11 @@ class StuffQualityInspectionLogic extends GetxController {
           });
     } else {
       if (state.fromInspectionType == '1') {
-        createInspectionFromList(false, inspectionType,  type,
-            success: (s) {
+        createInspectionFromList(false, inspectionType, type, success: (s) {
           success!.call(s);
         });
       } else {
-        createInspectionFromDetail(false, inspectionType, type,
-            success: (s) {
+        createInspectionFromDetail(false, inspectionType, type, success: (s) {
           success!.call(s);
         });
       }
@@ -373,13 +371,11 @@ class StuffQualityInspectionLogic extends GetxController {
       } else {
         if (state.fromInspectionType == '1') {
           //选择了贴标
-          createInspectionFromList(false, inspectionType, type,
-              success: (s) {
+          createInspectionFromList(false, inspectionType, type, success: (s) {
             success!.call(s);
           });
         } else {
-          createInspectionFromDetail(false, inspectionType, type,
-              success: (s) {
+          createInspectionFromDetail(false, inspectionType, type, success: (s) {
             success!.call(s);
           });
         }
@@ -1066,7 +1062,7 @@ class StuffQualityInspectionLogic extends GetxController {
     ).then((response) {
       if (response.resultCode == resultSuccess) {
         state.toCreateOrderMes = response.message ?? '';
-        createInspectionFromDetail(labelSubmit, upInspectionType,upType,
+        createInspectionFromDetail(labelSubmit, upInspectionType, upType,
             success: (s) {
           success!.call(s);
         });
