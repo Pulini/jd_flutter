@@ -295,12 +295,12 @@ class MaterialDispatchState {
                   .toDoubleTry()
                   .sub(reportQty.toDoubleTry())
                   .toShowString());
-          showOrderList.refresh();
 
           showOrderList[titlePosition].codeQty =(orderList[titlePosition].codeQty
               .toDoubleTry()
               .add(reportQty.toDoubleTry()))
               .toShowString();
+          showOrderList.refresh();
         }
         var guid = '';
         var pick = '';

@@ -67,8 +67,8 @@ showDispatchList(
           ],
         ),
         content: SizedBox(
-          width: MediaQuery.of(context).size.width * 0.8,
-          height: MediaQuery.of(context).size.height * 0.8,
+          width: context.getScreenSize().width * 0.8,
+          height: context.getScreenSize().height * 0.8,
           child: ListView.builder(
             padding: const EdgeInsets.all(8),
             itemCount: items.length,
@@ -214,8 +214,8 @@ addWorkerDialog(
           ],
         ),
         content: SizedBox(
-          width: MediaQuery.of(context).size.width ,
-          height: MediaQuery.of(context).size.height ,
+          width: context.getScreenSize().width ,
+          height: context.getScreenSize().height ,
           child: GridView.builder(
             itemCount: workers.length,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -249,7 +249,7 @@ addWorkerDialog(
                                   Icons.account_circle_rounded,
                                   color: Colors.grey.shade400,
                                   size:
-                                      MediaQuery.of(context).size.width * 0.08,
+                                      context.getScreenSize().width * 0.08,
                                 )
                               : ClipRRect(
                                   borderRadius: BorderRadius.circular(7),
@@ -475,8 +475,8 @@ typeBodySaveDialog(
       return AlertDialog(
         title: Text('production_dispatch_dialog_select_type_body'.tr),
         content: SizedBox(
-          width: MediaQuery.of(context).size.width * 0.5,
-          height: MediaQuery.of(context).size.height * 0.5,
+          width: context.getScreenSize().width * 0.5,
+          height: context.getScreenSize().height * 0.5,
           child: ListView.builder(
             padding: const EdgeInsets.all(8),
             itemCount: list.length + 1,
@@ -580,8 +580,8 @@ manufactureInstructionsDialog(List<ManufactureInstructionsInfo> files) {
             return AlertDialog(
               title: Text('production_dispatch_dialog_select_manual'.tr),
               content: SizedBox(
-                width: MediaQuery.of(context).size.width * 0.5,
-                height: MediaQuery.of(context).size.height * 0.5,
+                width: context.getScreenSize().width * 0.5,
+                height: context.getScreenSize().height * 0.5,
                 child: ListView.builder(
                   padding: const EdgeInsets.all(8),
                   itemCount: files.length,
@@ -656,8 +656,8 @@ colorListDialog(List<OrderColorList> files, Function(String) callback) {
             return AlertDialog(
               title: Text('production_dispatch_dialog_color_list'.tr),
               content: SizedBox(
-                width: MediaQuery.of(context).size.width * 0.5,
-                height: MediaQuery.of(context).size.height * 0.5,
+                width: context.getScreenSize().width * 0.5,
+                height: context.getScreenSize().height * 0.5,
                 child: ListView.builder(
                   padding: const EdgeInsets.all(8),
                   itemCount: files.length,
@@ -772,8 +772,8 @@ workPlanMaterialDialog(List<WorkPlanMaterialInfo> list) {
             return AlertDialog(
               title: Text('production_dispatch_dialog_material_list'.tr),
               content: SizedBox(
-                width: MediaQuery.of(context).size.width * 0.6,
-                height: MediaQuery.of(context).size.height * 0.6,
+                width: context.getScreenSize().width * 0.6,
+                height: context.getScreenSize().height * 0.6,
                 child: ListView.builder(
                   padding: const EdgeInsets.all(8),
                   itemCount: list.length,

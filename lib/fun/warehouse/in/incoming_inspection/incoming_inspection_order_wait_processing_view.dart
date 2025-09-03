@@ -102,7 +102,7 @@ class _OrderWaitProcessingPageState extends State<OrderWaitProcessingPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
-            height: MediaQuery.of(context).size.height * 0.25,
+            height: context.getScreenSize().height * 0.25,
             child: Swiper(
               itemBuilder: (c, i) =>
                   _photoItem((state.inspectionDetail?.pictureList ?? [])[i]),

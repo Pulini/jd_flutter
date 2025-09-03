@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/warehouse/manage/sap_factory_inventory/sap_scan_code_inventory_detail_view.dart';
 import 'package:jd_flutter/route.dart';
+import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
@@ -34,7 +35,7 @@ class _SapScanCodeInventoryPageState extends State<SapScanCodeInventoryPage> {
 
   _item(int index) {
     var data = state.palletList[index];
-    var width = MediaQuery.of(context).size.width - 20;
+    var width = context.getScreenSize().width - 20;
     bool isScannedAll = data.every((v) => v.isSelected.value);
     int scanned = data.where((v) => v.isSelected.value).length;
     return Column(

@@ -46,12 +46,14 @@ subItemReportDialog(
       canPop: false,
       child: AlertDialog(
         scrollable: true,
-        title: data.mustEnter=='1'? Text('material_dispatch_dialog_label_progress'.tr) :Text('material_dispatch_dialog_label_progress_must'.tr) ,
+        title: data.mustEnter == '1'
+            ? Text('material_dispatch_dialog_label_progress'.tr)
+            : Text('material_dispatch_dialog_label_progress_must'.tr),
         content: SizedBox(
           height: 230,
-          width: MediaQuery.of(context).size.width * 0.4 < 400
+          width: context.getScreenSize().width * 0.4 < 400
               ? 400
-              : MediaQuery.of(context).size.width * 0.5,
+              : context.getScreenSize().width * 0.5,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
@@ -230,14 +232,15 @@ labelListDialog(
   required Function() refreshCallBack,
 }) {
   var labelList = <LabelInfo>[].obs;
+
   Get.dialog(
     PopScope(
       canPop: false,
       child: AlertDialog(
         title: Text('material_dispatch_dialog_label_list'.tr),
         content: SizedBox(
-          width: MediaQuery.of(context).size.width * 0.9,
-          height: MediaQuery.of(context).size.height * 0.9,
+          width: context.getScreenSize().width * 0.9,
+          height: context.getScreenSize().height * 0.9,
           child: Obx(() => ListView.builder(
                 padding: const EdgeInsets.all(8),
                 itemCount: labelList.length,
@@ -515,8 +518,8 @@ materialListDialog(
         child: AlertDialog(
           title: Text('material_dispatch_dialog_material_list'.tr),
           content: SizedBox(
-            width: MediaQuery.of(context).size.width * 0.6,
-            height: MediaQuery.of(context).size.height * 0.6,
+            width: context.getScreenSize().width * 0.6,
+            height: context.getScreenSize().height * 0.6,
             child: Obx(
               () => ListView.builder(
                 padding: const EdgeInsets.all(8),
@@ -696,7 +699,7 @@ Future pickPallet() {
     initId: selectMachineId,
     onSelected: (i) {
       selectMachineId = i.pickerId();
-      selectDepart= (i as PickerSapMachine).deptID!.toString();
+      selectDepart = (i as PickerSapMachine).deptID!.toString();
       ppcPallet.refresh(selectLocationId, selectMachineId);
     },
   );
@@ -751,12 +754,12 @@ Future pickPallet() {
                 );
                 return;
               }
-              if(getUserInfo()!.useStorageLocation == 1){
+              if (getUserInfo()!.useStorageLocation == 1) {
                 if (selectLocationId.isEmpty) {
                   showSnackBar(
                     message:
-                    'material_dispatch_dialog_select_storage_location_tops'
-                        .tr,
+                        'material_dispatch_dialog_select_storage_location_tops'
+                            .tr,
                     isWarning: true,
                   );
                   return;

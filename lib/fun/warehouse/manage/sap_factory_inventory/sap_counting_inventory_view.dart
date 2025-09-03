@@ -32,7 +32,7 @@ class _SapCountingInventoryPageState extends State<SapCountingInventoryPage> {
   );
 
   _item(InventoryPalletInfo data) {
-    var width = MediaQuery.of(context).size.width - 20;
+    var width = context.getScreenSize().width - 20;
     var textButtonPadding =
         const EdgeInsets.only(left: 7, top: 3, right: 7, bottom: 3);
     return Column(

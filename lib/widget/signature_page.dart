@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:hand_signature/signature.dart';
 import 'package:jd_flutter/bean/http/response/worker_info.dart';
+import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/worker_check_widget.dart';
 import 'package:native_device_orientation/native_device_orientation.dart';
 
@@ -208,8 +209,8 @@ class _SignatureWithWorkerNumberPageState
 
   @override
   Widget build(BuildContext context) {
-    var width = MediaQuery.of(context).size.width;
-    var height = MediaQuery.of(context).size.height;
+    var width = context.getScreenSize().width;
+    var height = context.getScreenSize().height;
 
     var workerCheck = WorkerCheck(
       init: worker?.empCode ?? '',
@@ -335,7 +336,7 @@ class _SignatureWithWorkerNumberPageState
                       left: 0,
                       top: 30,
                       child: SizedBox(
-                        width: MediaQuery.of(context).size.width - 220,
+                        width: context.getScreenSize().width - 220,
                         child: workerCheck,
                       ),
                     ),

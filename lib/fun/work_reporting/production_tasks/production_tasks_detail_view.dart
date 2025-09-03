@@ -208,7 +208,7 @@ class _ProductionTasksDetailPageState extends State<ProductionTasksDetailPage> {
         child: Column(
           children: [
             SizedBox(
-              height: (MediaQuery.of(context).size.width * 0.5)/16*9,
+              height: (context.getScreenSize().width * 0.5)/16*9,
               child: Row(
                 children: [
                   Container(

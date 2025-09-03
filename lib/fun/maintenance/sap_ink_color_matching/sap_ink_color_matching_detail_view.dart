@@ -402,7 +402,7 @@ class _SapInkColorMatchingDetailPageState
       actions: canAdd
           ? [
               SizedBox(
-                width: MediaQuery.of(context).size.width * 0.35,
+                width: context.getScreenSize().width * 0.35,
                 child: EditText(
                   hint: 'sap_ink_color_matching_detail_remakes'.tr,
                   controller: tecRemarks,

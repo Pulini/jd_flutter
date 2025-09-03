@@ -314,7 +314,7 @@ class _TemporaryOrderPageState extends State<TemporaryOrderPage> {
           ],
         ),
         endDrawer: SizedBox(
-          width: MediaQuery.of(context).size.width * 0.6,
+          width: context.getScreenSize().width * 0.6,
           child: Drawer(
             child: ListView(
               children: [

@@ -787,7 +787,7 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
 
   @override
   Widget build(BuildContext context) {
-    width = MediaQuery.of(context).size.width;
+    width = context.getScreenSize().width;
 
     return Container(
       decoration: backgroundColor(),

@@ -10,6 +10,7 @@ import 'package:jd_flutter/fun/warehouse/in/incoming_inspection/incoming_inspect
 import 'package:jd_flutter/fun/warehouse/in/incoming_inspection/incoming_inspection_order_wait_processing_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/incoming_inspection/incoming_inspection_state.dart';
 import 'package:jd_flutter/route.dart';
+import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
@@ -170,7 +171,7 @@ class _IncomingInspectionOrdersPageState
       bodyPadding: const EdgeInsets.all(0),
       context: context,
       body: Container(
-        height: MediaQuery.of(context).size.height * 0.38,
+        height: context.getScreenSize().height * 0.38,
         padding:
             const EdgeInsets.only(left: 10, top: 20, right: 10, bottom: 20),
         decoration: BoxDecoration(

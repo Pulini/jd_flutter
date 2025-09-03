@@ -195,7 +195,7 @@ class _SapPackingScanPageState extends State<SapPackingScanPage> {
       ),
       barrierColor: Colors.black.withValues(alpha: 0.25),
       constraints: BoxConstraints(
-        maxHeight: MediaQuery.of(context).size.height -
+        maxHeight: context.getScreenSize().height -
             MediaQuery.of(context).viewInsets.top,
       ),
       isScrollControlled: true,
