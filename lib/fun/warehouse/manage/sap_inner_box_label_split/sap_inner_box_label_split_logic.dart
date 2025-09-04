@@ -253,6 +253,7 @@ class SapInnerBoxLabelSplitLogic extends GetxController {
       );
 
   Widget inBoxLabel(SapPrintLabelInfo label,bool hasNotes) => dynamicInBoxLabel1095n1096(
+    haveSupplier: true,
         productName: label.materialDeclarationName ?? '',
         companyOrderType: '${label.factoryNo}${label.supplementType}',
         customsDeclarationType: label.customsDeclarationType ?? '',

@@ -67,6 +67,7 @@ class MaterialDispatchState {
         showOrderList.value = orderList;
       } else {
         orderList = [];
+        showOrderList.value=[];
         error.call(response.message ?? '');
       }
     });

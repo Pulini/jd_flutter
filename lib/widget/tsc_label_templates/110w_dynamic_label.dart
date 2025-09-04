@@ -651,6 +651,7 @@ Widget dynamicInBoxLabel1095n1096({
   required String qrCode, //二维码ID
   required String pieceID, //标签码ID
   required String supplier, //供应商
+  required bool haveSupplier, //供应商
   required String manufactureDate, //生产日期
   required bool hasNotes, //是否打印备注行
   required String notes, //备注
@@ -716,18 +717,19 @@ Widget dynamicInBoxLabel1095n1096({
                         ],
                       ),
                     ),
-                    Expanded(
-                      flex: 2,
-                      child: Row(
-                        children: [
-                          _paddingTextLeft(
-                            text: '供应商/Supplier/Pemasok',
-                            flex: 5,
-                          ),
-                          _paddingTextCenter(text: supplier, flex: 10),
-                        ],
+                    if(haveSupplier)
+                      Expanded(
+                        flex: 2,
+                        child: Row(
+                          children: [
+                            _paddingTextLeft(
+                              text: '供应商/Supplier/Pemasok',
+                              flex: 5,
+                            ),
+                            _paddingTextCenter(text: supplier, flex: 10),
+                          ],
+                        ),
                       ),
-                    ),
                   ],
                 ),
               ),
@@ -738,7 +740,7 @@ Widget dynamicInBoxLabel1095n1096({
                   child: Column(
                     children: [
                       SizedBox(
-                        height: 130,
+                        height: haveSupplier ? 130 :110,
                         child: QrImageView(
                           data: qrCode,
                           padding: const EdgeInsets.all(5),
@@ -764,7 +766,6 @@ Widget dynamicInBoxLabel1095n1096({
           ),
       ],
     );
-
 ///动态格式尺码物料标
 ///110 x N（高度由内容决定）
 ///物料列表格式 [['物料编码','物料名称','数量','单位'],['物料编码','物料名称','数量','单位'],['物料编码','物料名称','数量','单位']]
@@ -835,10 +836,15 @@ Widget dynamicSizeMaterialLabel1095n1096({
           title: '数量/Qty/kuantitas:',
           style: _bigStyle,
           rw: [
-            _paddingTextCenter(style: _bigStyle, text: inBoxQty, flex: 10),
+            _paddingTextCenter(style: _bigStyle, text: inBoxQty, flex: 5),
             _paddingTextCenter(
               style: _bigStyle,
               text: customsDeclarationUnit,
+              flex: 5,
+            ),
+            _paddingTextCenter(
+              style: _bigStyle,
+              text: customsDeclarationType,
               flex: 5,
             ),
           ],

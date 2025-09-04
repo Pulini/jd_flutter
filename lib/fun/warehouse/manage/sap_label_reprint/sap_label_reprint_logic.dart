@@ -227,6 +227,7 @@ class SapLabelReprintLogic extends GetxController {
 
   Widget inBoxLabel1095n1096(SapPrintLabelInfo label) =>
       dynamicInBoxLabel1095n1096(
+        haveSupplier: true,
         productName: label.materialDeclarationName ?? '',
         companyOrderType: '${label.factoryNo}${label.supplementType}',
         customsDeclarationType: label.customsDeclarationType ?? '',
