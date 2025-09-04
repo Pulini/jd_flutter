@@ -54,7 +54,6 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
     saveKey: '${RouteConfig.materialDispatch.name}${PickerType.endDate}',
   );
 
-
   _item1(MaterialDispatchInfo data, int index) {
     var style = const TextStyle(
       color: Colors.black87,
@@ -156,7 +155,9 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
               ),
               expandedTextSpan(
                 hint: 'material_dispatch_factory'.tr,
-                text: data.sourceFactoryName!.isNotEmpty? data.sourceFactoryName! : data.sapDecideArea!,
+                text: data.sourceFactoryName!.isNotEmpty
+                    ? data.sourceFactoryName!
+                    : data.sapDecideArea!,
                 textColor: Colors.redAccent,
               ),
               expandedTextSpan(
@@ -347,18 +348,15 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
               ),
               CombinationButton(
                 text: 'material_dispatch_label_list'.tr,
-                click: () => labelListDialog(context, data,
-                    callback: (info, label) {
+                click: () =>
+                    labelListDialog(context, data, callback: (info, label) {
                   var bill = '';
                   var batch = '';
-                  if (label.sapColorBatch != '') {
-                    var data = info.children!.firstWhere((data) =>
-                        data.sapColorBatch == label.sapColorBatch &&
-                        label.sapColorBatch!.isNotEmpty);
-                    bill = data.billNo!;
-                    batch = data.sapColorBatch!;
-                  }
-                 logic.printLabel(
+                  var data = info.children!.firstWhere(
+                      (data) => data.codeQty.toDoubleTry() == label.qty);
+                  bill = data.billNo!;
+                  batch = data.sapColorBatch!;
+                  logic.printLabel(
                       data: info,
                       billNo: bill,
                       color: batch,
@@ -376,7 +374,7 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
                       gw: label.gw.toShowString(),
                       ew: label.nw.toShowString());
                 }, refreshCallBack: () {
-                      _query();
+                  _query();
                 }),
                 combination: Combination.middle,
               ),
@@ -423,21 +421,21 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
           subData,
           (d, longQty, wideQty, heightQty, gwQty, nwQty) {
             logic.subItemReport(
-                qty: d.toShowString(),
-                titlePosition: titlePosition,
-                clickPosition: position,
-                submitData: data,
-                subData: subData,
-                long: longQty.toShowString(),
-                wide: wideQty.toShowString(),
-                height: heightQty.toShowString(),
-                gw: gwQty.toShowString(),
-                nw: nwQty.toShowString(),
-                isPrint: false,
+              qty: d.toShowString(),
+              titlePosition: titlePosition,
+              clickPosition: position,
+              submitData: data,
+              subData: subData,
+              long: longQty.toShowString(),
+              wide: wideQty.toShowString(),
+              height: heightQty.toShowString(),
+              gw: gwQty.toShowString(),
+              nw: nwQty.toShowString(),
+              isPrint: false,
             );
           },
         );
-      }else{
+      } else {
         showSnackBar(message: 'material_dispatch__no_qty_tips'.tr);
       }
     }
@@ -462,21 +460,21 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
           subData,
           (d, longQty, wideQty, heightQty, gwQty, nwQty) {
             logic.subItemReport(
-                qty: d.toShowString(),
-                titlePosition: titlePosition,
-                clickPosition: position,
-                submitData: data,
-                subData: subData,
-                isPrint: true,
-                long: longQty.toShowString(),
-                wide: wideQty.toShowString(),
-                height: heightQty.toShowString(),
-                gw: gwQty.toShowString(),
-                nw: nwQty.toShowString(),
-             );
+              qty: d.toShowString(),
+              titlePosition: titlePosition,
+              clickPosition: position,
+              submitData: data,
+              subData: subData,
+              isPrint: true,
+              long: longQty.toShowString(),
+              wide: wideQty.toShowString(),
+              height: heightQty.toShowString(),
+              gw: gwQty.toShowString(),
+              nw: nwQty.toShowString(),
+            );
           },
         );
-      }else{
+      } else {
         showSnackBar(message: 'material_dispatch__no_qty_tips'.tr);
       }
     }
@@ -557,10 +555,10 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
 
   showPickPallet() {
     pickPallet().then((v) {
-      if (v!=null) {
-        if(v==true){
+      if (v != null) {
+        if (v == true) {
           Get.back();
-        }else{
+        } else {
           Get.back();
           _query();
         }

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/material_dispatch_info.dart';
 import 'package:jd_flutter/bean/http/response/material_dispatch_label_detail.dart';
 import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/preview_label_widget.dart';
 import 'package:jd_flutter/widget/tsc_label_templates/110w_dynamic_label.dart';
@@ -20,7 +21,6 @@ class MaterialDispatchLogic extends GetxController {
   //   userInfo?.defaultStockNumber = '1104';
   //   super.onReady();
   // }
-
 
   refreshDataList({
     required String startDate,
@@ -140,9 +140,10 @@ class MaterialDispatchLogic extends GetxController {
       gwQty: gw,
       nwQty: nw,
       success: (guid, pick) {
-        if(isPrint){
+        if (isPrint) {
           var sp = '${long}x' '${wide}x$height';
-          var spQty = long.toDoubleTry()
+          var spQty = long
+              .toDoubleTry()
               .div(100)
               .mul(wide.toDoubleTry().div(100))
               .mul(height.toDoubleTry().div(100))
@@ -195,7 +196,7 @@ class MaterialDispatchLogic extends GetxController {
       subData: subData,
       success: (msg) => successDialog(
         content: msg,
-        back:refresh ,
+        back: refresh,
       ),
       error: (msg) => errorDialog(content: msg),
     );
@@ -214,6 +215,7 @@ class MaterialDispatchLogic extends GetxController {
     required String gw,
     required String ew,
   }) {
+    logger.f('指令：' + billNo);
     if (data.exitLabelType == '101') {
       //国内标
       if (state.allInstruction.value) {
@@ -238,22 +240,22 @@ class MaterialDispatchLogic extends GetxController {
         }
 
         Get.to(() => PreviewLabel(
-          labelWidget: materialWorkshopDynamicLabel(
-            qrCode: guid,
-            productName: data.productName ?? '',
-            materialName: data.materialName ?? '',
-            partName: data.partName ?? '',
-            materialNumber: data.materialNumber ?? '',
-            processName: data.processName ?? '',
-            subList: subList,
-            sapDecideArea: data.sapDecideArea ?? '',
-            color: color,
-            drillingCrewName: data.drillingCrewName ?? '',
-            qty: qty,
-            unitName: data.unitName ?? '',
-          ),
-          isDynamic: true,
-        ));
+              labelWidget: materialWorkshopDynamicLabel(
+                qrCode: guid,
+                productName: data.productName ?? '',
+                materialName: data.materialName ?? '',
+                partName: data.partName ?? '',
+                materialNumber: data.materialNumber ?? '',
+                processName: data.processName ?? '',
+                subList: subList,
+                sapDecideArea: data.sapDecideArea ?? '',
+                color: color,
+                drillingCrewName: data.drillingCrewName ?? '',
+                qty: qty,
+                unitName: data.unitName ?? '',
+              ),
+              isDynamic: true,
+            ));
       } else {
         var ins = '';
         var toPrint = '';
@@ -272,23 +274,24 @@ class MaterialDispatchLogic extends GetxController {
         }
 
         Get.to(() => PreviewLabel(
-          labelWidget: materialWorkshopFixedLabel(
-            qrCode: guid,
-            productName: data.productName ?? '',
-            materialName: data.materialName ?? '',
-            partName: data.partName ?? '',
-            toPrint: toPrint,
-            palletNumber: getMaterialDispatchPalletNumber(),
-            materialNumber: data.materialNumber ?? '',
-            processName: data.processName ?? '',
-            sapDecideArea: data.sapDecideArea ?? '',
-            color: color,
-            drillingCrewName: data.drillingCrewName ?? '',
-            qty: qty,
-            unitName: data.unitName ?? '',
-            pick: pick,
-          ),isDynamic: true,
-        ));
+              labelWidget: materialWorkshopFixedLabel(
+                qrCode: guid,
+                productName: data.productName ?? '',
+                materialName: data.materialName ?? '',
+                partName: data.partName ?? '',
+                toPrint: toPrint,
+                palletNumber: getMaterialDispatchPalletNumber(),
+                materialNumber: data.materialNumber ?? '',
+                processName: data.processName ?? '',
+                sapDecideArea: data.sapDecideArea ?? '',
+                color: color,
+                drillingCrewName: data.drillingCrewName ?? '',
+                qty: qty,
+                unitName: data.unitName ?? '',
+                pick: pick,
+              ),
+              isDynamic: true,
+            ));
       }
     } else if (data.exitLabelType == '102') {
       var order = '';
@@ -299,63 +302,53 @@ class MaterialDispatchLogic extends GetxController {
       }
 
       Get.to(() => PreviewLabel(
-        labelWidget: dynamicSizeMaterialLabel1095n1096(
-          labelID: guid,
-          productName: data.description ?? '',
-          orderType: order,
-          typeBody: data.productName ?? '',
-          trackNo: '',
-          instructionNo: billNo,
-          generalMaterialNumber: data.materialNumber ?? '',
-          materialDescription: data.materialName ?? '',
-          materialList: {},
-          inBoxQty: qty,
-          customsDeclarationUnit: data.unitName ?? '',
-          customsDeclarationType: '',
-          pieceID: guid,
-          pieceNo: '1-1',
-          grossWeight: gw,
-          netWeight: ew,
-          specifications: '${specificationSplit}CM(LxWxH)',
-          volume: specifications,
-          supplier: data.sapSupplierNumber ?? '',
-          manufactureDate: getDateYMD(),
-          consignee: data.sourceFactoryName ?? '',
-          hasNotes: false,
-          notes: '',
-        ),
-        isDynamic: true,
-      ));
+            labelWidget: dynamicInBoxLabel1095n1096(
+                haveSupplier: false,
+                productName: data.description ?? '',
+                companyOrderType: order,
+                customsDeclarationType: data.cusdeclaraType ?? '',
+                pieceNo: '1-1',
+                qrCode: guid,
+                materialList: [
+                  [data.materialNumber!, data.materialName, qty, data.unitName]
+                ],
+                pieceID: guid,
+                manufactureDate: getDateYMD(),
+                hasNotes: false,
+                notes: '',
+                supplier: ''),
+            isDynamic: true,
+          ));
     } else if (data.exitLabelType == '103') {
       Get.to(() => PreviewLabel(
-        labelWidget: dynamicMaterialLabel1098(
-          labelID: guid,
-          myanmarApprovalDocument: data.description ?? '',
-          typeBody: data.productName ?? '',
-          trackNo: '',
-          instructionNo: billNo,
-          materialList: [
-            [
-              data.materialNumber ?? '',
-              specificationSplit,
-              qty,
-              data.unitName,
-            ]
-          ],
-          customsDeclarationType: data.cusdeclaraType ?? '',
-          pieceNo: '1-1',
-          pieceID: guid,
-          grossWeight: gw,
-          netWeight: ew,
-          specifications: specifications,
-          volume: specificationSplit,
-          supplier: data.sapSupplierNumber ?? '',
-          manufactureDate: getDateYMD(),
-          hasNotes: false,
-          notes: '',
-        ),
-        isDynamic: true,
-      ));
+            labelWidget: dynamicMaterialLabel1098(
+              labelID: guid,
+              myanmarApprovalDocument: data.description ?? '',
+              typeBody: data.productName ?? '',
+              trackNo: '',
+              instructionNo: billNo,
+              materialList: [
+                [
+                  data.materialNumber ?? '',
+                  specificationSplit,
+                  qty,
+                  data.unitName,
+                ]
+              ],
+              customsDeclarationType: data.cusdeclaraType ?? '',
+              pieceNo: '1-1',
+              pieceID: guid,
+              grossWeight: gw,
+              netWeight: ew,
+              specifications: specifications,
+              volume: specificationSplit,
+              supplier: data.sapSupplierNumber ?? '',
+              manufactureDate: getDateYMD(),
+              hasNotes: false,
+              notes: '',
+            ),
+            isDynamic: true,
+          ));
     }
   }
 }

@@ -502,6 +502,7 @@ class _TscLabelPreviewState extends State<TscLabelPreview> {
       [
         '(110 x N)mm 1095 1096 小标（无尺码标）',
         dynamicInBoxLabel1095n1096(
+          haveSupplier: true,
           productName: 'productName',
           companyOrderType: 'factoryNo supplementType',
           customsDeclarationType: 'customsDeclarationType',
