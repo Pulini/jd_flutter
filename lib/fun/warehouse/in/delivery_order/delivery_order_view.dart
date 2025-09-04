@@ -17,7 +17,6 @@ import 'package:jd_flutter/widget/picker/picker_view.dart';
 import 'package:jd_flutter/widget/scanner.dart';
 import 'package:rotated_corner_decoration/rotated_corner_decoration.dart';
 
-import '../../../../utils/screen_util.dart';
 import 'delivery_order_logic.dart';
 import 'delivery_order_state.dart';
 
