@@ -163,7 +163,15 @@ extension ContextExt on BuildContext {
   //是否是小屏幕
   bool isSmallScreen() => MediaQuery.of(this).size.width < 768;
 
-  Size getScreenSize() => (findRenderObject() as RenderBox).size;
+  Size getScreenSize() {
+    final renderObject = findRenderObject();
+    if (renderObject is RenderBox) {
+      return renderObject.size;
+    } else {
+      // 如果无法获取RenderBox，则使用MediaQuery获取屏幕尺寸
+      return MediaQuery.of(this).size;
+    }
+  }
 
 }
 
