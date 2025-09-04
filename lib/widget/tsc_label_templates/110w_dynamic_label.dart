@@ -766,7 +766,6 @@ Widget dynamicInBoxLabel1095n1096({
           ),
       ],
     );
-
 ///动态格式尺码物料标
 ///110 x N（高度由内容决定）
 ///物料列表格式 [['物料编码','物料名称','数量','单位'],['物料编码','物料名称','数量','单位'],['物料编码','物料名称','数量','单位']]
@@ -838,14 +837,14 @@ Widget dynamicSizeMaterialLabel1095n1096({
           style: _bigStyle,
           rw: [
             _paddingTextCenter(style: _bigStyle, text: inBoxQty, flex: 5),
-            // _paddingTextCenter(
-            //   style: _bigStyle,
-            //   text: ,
-            //   flex: 5,
-            // ),
             _paddingTextCenter(
               style: _bigStyle,
               text: customsDeclarationUnit,
+              flex: 5,
+            ),
+            _paddingTextCenter(
+              style: _bigStyle,
+              text: customsDeclarationType,
               flex: 5,
             ),
           ],

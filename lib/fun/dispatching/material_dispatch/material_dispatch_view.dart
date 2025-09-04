@@ -352,10 +352,10 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
                     labelListDialog(context, data, callback: (info, label) {
                   var bill = '';
                   var batch = '';
-                  var data = info.children!.firstWhere(
-                      (data) => data.codeQty.toDoubleTry() == label.qty);
-                  bill = data.billNo!;
-                  batch = data.sapColorBatch!;
+                  if(info.children!.isNotEmpty){
+                    bill = info.children![0].billNo!;
+                    batch = info.children![0].sapColorBatch!;
+                  }
                   logic.printLabel(
                       data: info,
                       billNo: bill,
