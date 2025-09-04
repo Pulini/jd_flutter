@@ -43,7 +43,7 @@ selectSupplierAndDepartmentDialog({
             title: Text('production_scan_picking_material_submit_picking'.tr),
             contentPadding: const EdgeInsets.only(left: 10, right: 10),
             content: SizedBox(
-              width: context.getScreenSize().width * 0.8,
+              width: getScreenSize().width * 0.8,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [

@@ -444,7 +444,7 @@ Future<T?> showSheet<T>({
     shape: RoundedRectangleBorder(borderRadius: borderRadius),
     barrierColor: Colors.black.withValues(alpha: 0.25),
     constraints: BoxConstraints(
-        maxHeight: context.getScreenSize().height -
+        maxHeight: getScreenSize().height -
             MediaQuery.of(context).viewInsets.top),
     isScrollControlled: scrollControlled,
     builder: (ctx) => SingleChildScrollView(

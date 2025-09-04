@@ -117,8 +117,8 @@ showSurplusMaterialListDialog(
       child: AlertDialog(
         title: Text('machine_dispatch_dialog_surplus_material_info'.tr),
         content: SizedBox(
-          width: context.getScreenSize().width * 0.5,
-          height: context.getScreenSize().height * 0.5,
+          width: getScreenSize().width * 0.5,
+          height: getScreenSize().height * 0.5,
           child: ListView.builder(
             padding: const EdgeInsets.all(8),
             itemCount: state.surplusMaterialList.length,
@@ -428,8 +428,8 @@ showLabelListDialog({
       child: AlertDialog(
         title: Text('machine_dispatch_dialog_label_list'.tr),
         content: SizedBox(
-          width: context.getScreenSize().width * 0.9,
-          height: context.getScreenSize().height * 0.9,
+          width: getScreenSize().width * 0.9,
+          height: getScreenSize().height * 0.9,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -716,8 +716,8 @@ workerSignature(
           ],
         ),
         content: Container(
-          width: context.getScreenSize().width * 0.5,
-          height: context.getScreenSize().height * 0.5,
+          width: getScreenSize().width * 0.5,
+          height: getScreenSize().height * 0.5,
           color: Colors.grey.shade200,
           child: Obx(
             () => Stack(

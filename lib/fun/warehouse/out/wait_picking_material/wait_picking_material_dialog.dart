@@ -259,8 +259,8 @@ realTimeInventoryDialog({
           title: Text(
               'picking_material_order_dialog_title_real_time_inventory'.tr),
           content: SizedBox(
-            width: context.getScreenSize().width * 0.7,
-            height: context.getScreenSize().height * 0.7,
+            width: getScreenSize().width * 0.7,
+            height: getScreenSize().height * 0.7,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [

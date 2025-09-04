@@ -17,6 +17,7 @@ import 'package:jd_flutter/widget/picker/picker_view.dart';
 import 'package:jd_flutter/widget/scanner.dart';
 import 'package:rotated_corner_decoration/rotated_corner_decoration.dart';
 
+import '../../../../utils/screen_util.dart';
 import 'delivery_order_logic.dart';
 import 'delivery_order_state.dart';
 
@@ -787,7 +788,7 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
 
   @override
   Widget build(BuildContext context) {
-    width = context.getScreenSize().width;
+    width = getScreenSize().width;
 
     return Container(
       decoration: backgroundColor(),

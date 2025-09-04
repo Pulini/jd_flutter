@@ -148,7 +148,7 @@ pickFilePopup({required List<Map> fileList, required Function(Map) viewFile}) {
             bottom: MediaQuery.of(context).viewInsets.bottom,
           ),
           child: Container(
-            height: context.getScreenSize().height * 0.35,
+            height: getScreenSize().height * 0.35,
             padding: const EdgeInsets.all(8.0),
             decoration: const BoxDecoration(
               borderRadius: BorderRadius.only(

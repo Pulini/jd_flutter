@@ -23,7 +23,7 @@ modifySubItemMaterialDialog({
           contentPadding: const EdgeInsets.all(7),
           title: Text('incoming_inspection_dialog_modify_material'.tr),
           content: SizedBox(
-            width: context.getScreenSize().width * 0.8,
+            width: getScreenSize().width * 0.8,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -142,7 +142,7 @@ addOrModifyMaterialDialog({
           contentPadding: const EdgeInsets.all(7),
           title: Text('incoming_inspection_dialog_add_material'.tr),
           content: SizedBox(
-            width: context.getScreenSize().width * 0.8,
+            width: getScreenSize().width * 0.8,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,

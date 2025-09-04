@@ -10,6 +10,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/utils/screen_util.dart';
 import 'package:jd_flutter/bean/http/response/bar_code.dart';
 import 'package:jd_flutter/bean/http/response/base_data.dart';
 import 'package:jd_flutter/bean/http/response/leader_info.dart';
@@ -162,17 +163,6 @@ extension ContextExt on BuildContext {
 
   //是否是小屏幕
   bool isSmallScreen() => MediaQuery.of(this).size.width < 768;
-
-  Size getScreenSize() {
-    final renderObject = findRenderObject();
-    if (renderObject is RenderBox) {
-      return renderObject.size;
-    } else {
-      // 如果无法获取RenderBox，则使用MediaQuery获取屏幕尺寸
-      return MediaQuery.of(this).size;
-    }
-  }
-
 }
 
 //Double扩展方法
@@ -656,7 +646,7 @@ getWaitInStockBarCodeReport({
 }
 
 String getDateYMD({DateTime? time}) {
-  DateTime now=time??DateTime.now();
+  DateTime now = time ?? DateTime.now();
   var y = now.year.toString();
   var m = now.month.toString();
   if (m.length == 1) m = '0$m';
@@ -666,7 +656,7 @@ String getDateYMD({DateTime? time}) {
 }
 
 String getTimeHms({DateTime? time}) {
-  DateTime now=time??DateTime.now();
+  DateTime now = time ?? DateTime.now();
   var h = now.hour.toString();
   if (h.length == 1) h = '0$h';
   var m = now.minute.toString();
@@ -927,5 +917,34 @@ String textToKey(String text) {
   return digest.toString();
 }
 
+/// 获取屏幕逻辑尺寸（考虑了设备像素比）
+Size getScreenSize() {
+  final view = WidgetsBinding.instance.platformDispatcher.implicitView;
+  if (view != null) {
+    final physicalSize = view.physicalSize;
+    final devicePixelRatio = view.devicePixelRatio;
+    return physicalSize / devicePixelRatio;
+  } else {
+    final physicalSize = WidgetsBinding.instance.window.physicalSize;
+    final devicePixelRatio = WidgetsBinding.instance.window.devicePixelRatio;
+    return physicalSize / devicePixelRatio;
+  }
+}
 
+/// 获取屏幕宽度（逻辑像素）
+double getScreenWidth() {
+  return getScreenSize().width;
+}
 
+/// 获取屏幕高度（逻辑像素）
+double getScreenHeight() {
+  return getScreenSize().height;
+}
+
+/// 获取屏幕方向
+Orientation getScreenOrientation() {
+  final size = getScreenSize();
+  return size.width > size.height
+      ? Orientation.landscape
+      : Orientation.portrait;
+}

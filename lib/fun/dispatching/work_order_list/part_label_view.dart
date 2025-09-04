@@ -161,8 +161,8 @@ class _PartLabelPageState extends State<PartLabelPage> {
                 ],
               ),
               content: SizedBox(
-                width: context.getScreenSize().width * 0.8,
-                height: context.getScreenSize().height * 0.8,
+                width: getScreenSize().width * 0.8,
+                height: getScreenSize().height * 0.8,
                 child: ListView.builder(
                   padding: const EdgeInsets.all(8),
                   itemCount: data.length,

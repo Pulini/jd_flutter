@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/constant.dart';
@@ -23,14 +22,23 @@ class PreviewLabelList extends StatefulWidget {
 class _PreviewLabelListState extends State<PreviewLabelList> {
   var pu = PrintUtil();
   var widgetList = <Widget>[].obs;
-  var labelList = <List<Uint8List>>[].obs;
+  var imageList = <Map<String, dynamic>>[].obs;
   RxDouble printSpeed = 0.0.obs;
   RxDouble printDensity = 0.0.obs;
 
   printLabel() async {
-    if (labelList.isEmpty) return;
+    if (imageList.isEmpty) return;
+
     pu.printLabelList(
-      labelList: labelList,
+      labelList: [
+        for (var label in imageList)
+          await imageResizeToLabel({
+            ...label,
+            'isDynamic': widget.isDynamic,
+            'speed': printSpeed.value.toInt(),
+            'density': printDensity.value.toInt(),
+          }),
+      ],
       finished: (success, fail) {
         successDialog(
           title: '标签下发结束',
@@ -47,12 +55,7 @@ class _PreviewLabelListState extends State<PreviewLabelList> {
     printDensity.value = spGet(spSavePrintDensity) ?? 15;
     for (var v in widget.labelWidgets) {
       widgetList.add(WidgetsToImage(
-        image: (map) async => labelList.add(await imageResizeToLabel({
-          ...map,
-          'isDynamic': widget.isDynamic,
-          'speed': printSpeed.value.toInt(),
-          'density': printDensity.value.toInt(),
-        })),
+        image: (map) => imageList.add(map),
         child: v,
       ));
     }
@@ -64,7 +67,7 @@ class _PreviewLabelListState extends State<PreviewLabelList> {
       () => pageBody(
           title: '标签预览',
           actions: [
-            labelList.isNotEmpty
+            imageList.isNotEmpty
                 ? IconButton(
                     onPressed: () => printLabel(),
                     icon: const Icon(Icons.print),
@@ -79,7 +82,7 @@ class _PreviewLabelListState extends State<PreviewLabelList> {
                           margin: const EdgeInsets.only(right: 10),
                           child: const CircularProgressIndicator(),
                         ),
-                        Text('${labelList.length}/${widgetList.length}')
+                        Text('${imageList.length}/${widgetList.length}')
                       ],
                     ),
                   ),

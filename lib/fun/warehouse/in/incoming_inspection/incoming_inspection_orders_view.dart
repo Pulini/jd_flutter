@@ -171,7 +171,7 @@ class _IncomingInspectionOrdersPageState
       bodyPadding: const EdgeInsets.all(0),
       context: context,
       body: Container(
-        height: context.getScreenSize().height * 0.38,
+        height: getScreenSize().height * 0.38,
         padding:
             const EdgeInsets.only(left: 10, top: 20, right: 10, bottom: 20),
         decoration: BoxDecoration(

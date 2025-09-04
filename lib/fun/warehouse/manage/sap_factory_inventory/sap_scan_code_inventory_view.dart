@@ -35,7 +35,7 @@ class _SapScanCodeInventoryPageState extends State<SapScanCodeInventoryPage> {
 
   _item(int index) {
     var data = state.palletList[index];
-    var width = context.getScreenSize().width - 20;
+    var width = getScreenSize().width - 20;
     bool isScannedAll = data.every((v) => v.isSelected.value);
     int scanned = data.where((v) => v.isSelected.value).length;
     return Column(

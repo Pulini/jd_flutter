@@ -1,4 +1,3 @@
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -28,14 +27,19 @@ class PreviewLabel extends StatefulWidget {
 
 class _PreviewLabelState extends State<PreviewLabel> {
   var pu = PrintUtil();
-  var label = <Uint8List>[].obs;
+  var image = <String, dynamic>{}.obs;
   RxDouble printSpeed = 0.0.obs;
   RxDouble printDensity = 0.0.obs;
 
   printLabel() async {
-    if (label.isEmpty) return;
+    if (image.isEmpty) return;
     pu.printLabel(
-      label: label,
+      label: await imageResizeToLabel({
+        ...image,
+        'isDynamic': widget.isDynamic,
+        'speed': printSpeed.value.toInt(),
+        'density': printDensity.value.toInt(),
+      }),
       start: () {
         loadingShow('正在下发标签...');
       },
@@ -63,7 +67,7 @@ class _PreviewLabelState extends State<PreviewLabel> {
       () => pageBody(
           title: '标签预览',
           actions: [
-            label.isNotEmpty
+            image.isNotEmpty
                 ? IconButton(
                     onPressed: () => printLabel(),
                     icon: const Icon(Icons.print),
@@ -129,13 +133,7 @@ class _PreviewLabelState extends State<PreviewLabel> {
                     child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: WidgetsToImage(
-                        image: (map) async =>
-                        label.value = await imageResizeToLabel({
-                          ...map,
-                          'isDynamic': widget.isDynamic,
-                          'speed': printSpeed.value.toInt(),
-                          'density': printDensity.value.toInt(),
-                        }),
+                        image: (map) => image.value = map,
                         child: widget.labelWidget,
                       ),
                     ),

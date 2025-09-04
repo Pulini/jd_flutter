@@ -99,7 +99,7 @@ class _OrderClosedPageState extends State<OrderClosedPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
-            height: context.getScreenSize().height * 0.25,
+            height: getScreenSize().height * 0.25,
             child: Swiper(
               itemBuilder: (c, i) =>
                   _photoItem((state.inspectionDetail?.pictureList ?? [])[i]),

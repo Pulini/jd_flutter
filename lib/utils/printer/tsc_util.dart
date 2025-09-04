@@ -1060,7 +1060,8 @@ Future<List<Uint8List>> _imageResizeToLabel(Map<String, dynamic> image) async {
   int height = ((image['height'] as int) / 5.5 / pixelRatio).toInt();
 
   debugPrint(
-      'width: ${image['width']} - $width height: ${image['height']} - $height');
+    'pixelRatio=$pixelRatio speed=$speed density=$density width=$width height=$height'
+  );
   // var wImage = img.decodeImage(image['image'])!;
   // for (int x = 0; x < wImage.width; x++) {
   //   for (int y = 0; y < wImage.height; y++) {

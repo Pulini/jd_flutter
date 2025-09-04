@@ -70,7 +70,7 @@ class _LastProcessModifyReportPageState
       );
 
   _processItem(WorkshopPlanningLastProcessInfo data) {
-    var width = context.getScreenSize().width - 20;
+    var width = getScreenSize().width - 20;
     return Column(
       children: [
         Container(
