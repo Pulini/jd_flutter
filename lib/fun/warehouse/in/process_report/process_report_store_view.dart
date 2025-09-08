@@ -168,7 +168,7 @@ class _ProcessReportPageState extends State<ProcessReportStorePage> {
                 Expanded(
                   flex: 1,
                   child: CombinationButton(
-                    text: 'process_report_store_sure_clean_code'.tr,
+                    text: 'process_report_store_submit_barcode'.tr,
                     click: () => {
                       checkBarCodeProcessDialog(
                         list: state.barCodeList,
