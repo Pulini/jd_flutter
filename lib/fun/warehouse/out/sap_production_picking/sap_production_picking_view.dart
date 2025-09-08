@@ -9,6 +9,7 @@ import 'package:jd_flutter/widget/edit_text_widget.dart';
 import 'package:jd_flutter/widget/picker/picker_controller.dart';
 import 'package:jd_flutter/widget/picker/picker_view.dart';
 import 'package:rotated_corner_decoration/rotated_corner_decoration.dart';
+
 import 'sap_production_picking_logic.dart';
 import 'sap_production_picking_state.dart';
 
@@ -158,7 +159,7 @@ class _SapProductionPickingPageState extends State<SapProductionPickingPage> {
                 style: const TextStyle(color: Colors.black),
               ),
               Obx(() => Switch(
-                    activeColor: Colors.green,
+                    activeThumbColor: Colors.green,
                     inactiveThumbColor: Colors.blueAccent,
                     inactiveTrackColor: Colors.blue.shade200,
                     thumbIcon: WidgetStateProperty.resolveWith<Icon>(

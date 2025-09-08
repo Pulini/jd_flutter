@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/warehouse/in/sap_picking_receipt_reversal/sap_picking_receipt_reversal_dialog.dart';
 import 'package:jd_flutter/route.dart';
-import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
@@ -151,32 +151,28 @@ class _SapPickingReceiptReversalPageState
           controller: materialCodeController,
           hint: 'sap_picking_receipt_reversal_input_material_code_tips'.tr,
         ),
-        Obx(() => Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text('sap_picking_receipt_reversal_produce_picking'.tr),
-                    Radio(
+        Obx(() => RadioGroup(
+              groupValue: orderType.value,
+              onChanged: (v) => orderType.value = v!,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Expanded(
+                    child: RadioListTile(
+                      title: Text(
+                          'sap_picking_receipt_reversal_produce_picking'.tr),
                       value: 1,
-                      onChanged: (v) => orderType.value = v!,
-                      groupValue: orderType.value,
-                    )
-                  ],
-                ),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text('sap_picking_receipt_reversal_produce_take'.tr),
-                    Radio(
+                    ),
+                  ),
+                  Expanded(
+                    child: RadioListTile(
+                      title:
+                          Text('sap_picking_receipt_reversal_produce_take'.tr),
                       value: 2,
-                      onChanged: (v) => orderType.value = v!,
-                      groupValue: orderType.value,
-                    )
-                  ],
-                ),
-              ],
+                    ),
+                  ),
+                ],
+              ),
             )),
         DatePicker(pickerController: dpcStartDate),
         DatePicker(pickerController: dpcEndDate),

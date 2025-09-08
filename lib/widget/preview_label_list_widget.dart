@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/constant.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/printer/print_util.dart';
 import 'package:jd_flutter/utils/printer/tsc_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/widgets_to_image_widget.dart';
+
 import 'custom_widget.dart';
 import 'dialogs.dart';
 
@@ -26,6 +28,7 @@ class _PreviewLabelListState extends State<PreviewLabelList> {
   RxDouble printSpeed = 0.0.obs;
   RxDouble printDensity = 0.0.obs;
 
+  static bool _isAlreadyOpen = false;
   printLabel() async {
     if (imageList.isEmpty) return;
 
@@ -51,6 +54,15 @@ class _PreviewLabelListState extends State<PreviewLabelList> {
   @override
   void initState() {
     super.initState();
+    if (_isAlreadyOpen) {
+      // 如果已经打开，则关闭当前重复的实例
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Get.back();
+        Get.snackbar('提示', '标签预览页面已经打开');
+      });
+      return;
+    }
+    _isAlreadyOpen = true;
     printSpeed.value = spGet(spSavePrintSpeed) ?? 4;
     printDensity.value = spGet(spSavePrintDensity) ?? 15;
     for (var v in widget.labelWidgets) {
@@ -93,7 +105,7 @@ class _PreviewLabelListState extends State<PreviewLabelList> {
                 padding: const EdgeInsetsGeometry.only(left: 10, right: 10),
                 child: Row(
                   children: [
-                    Text('打印速度：'),
+                    const Text('打印速度：'),
                     Expanded(
                       child: Obx(() => Slider(
                             value: printSpeed.value,
@@ -116,7 +128,7 @@ class _PreviewLabelListState extends State<PreviewLabelList> {
                 padding: const EdgeInsetsGeometry.only(left: 10, right: 10),
                 child: Row(
                   children: [
-                    Text('打印浓度：'),
+                    const Text('打印浓度：'),
                     Expanded(
                       child: Obx(() => Slider(
                             value: printDensity.value,
@@ -155,5 +167,10 @@ class _PreviewLabelListState extends State<PreviewLabelList> {
             ],
           )),
     );
+  }
+  @override
+  void dispose() {
+    _isAlreadyOpen = false; // 页面关闭时重置状态
+    super.dispose();
   }
 }

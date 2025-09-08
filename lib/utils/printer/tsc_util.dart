@@ -7,7 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image/image.dart' as img;
-import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 
 //dpi
 const _dpi = 8;
@@ -162,11 +162,11 @@ List<int> _tscText(
 //[fontSize] 字体大小
 //[text] 文本内容
 Future<Uint8List> _tscBitmapText(
-  int xAxis,
-  int yAxis,
-  double fontSize,
-  String text,
-) async {
+    int xAxis,
+    int yAxis,
+    double fontSize,
+    String text,
+    ) async {
   var recorder = ui.PictureRecorder();
   var canvas = Canvas(recorder);
   var tp = TextPainter()
@@ -236,12 +236,12 @@ Future<Uint8List> _tscBitmapText(
   Uint8List stream = Uint8List(widthByte * height);
 
   //初始化二值图数据
-  int y;
-  for (y = 0; y < height * widthByte; ++y) {
-    stream[y] = -1;
+  for (int i = 0; i < height * widthByte; ++i) {
+    stream[i] = -1;
   }
+
   //遍历二值图，转换成tsc打印机可识别的数据
-  for (y = 0; y < height; ++y) {
+  for (int y = 0; y < height; ++y) {
     for (int x = 0; x < width; ++x) {
       var pixelColor = grayImage.getPixel(x, y);
       var red = pixelColor.r;
@@ -267,80 +267,81 @@ Future<Uint8List> _tscBitmapText(
     ..addAll(utf8.encode('\r\n')));
 }
 
+
 Future<Uint8List> _tscBitmap(
   int xAxis,
   int yAxis,
   Uint8List bitmapData,
 ) async {
-  //创建图像处理器
-  var image = img.decodeImage(bitmapData)!;
+  debugPrint('imageData=${bitmapData.lengthInBytes}');
+  // 1. 将原始位图转换为灰度图像
+  img.Image grayBitmap = img.grayscale(img.decodeImage(bitmapData)!);
 
-  //创建一个灰阶图，大小与原图相同
-  var grayImage = img.Image(width: image.width, height: image.height);
+  debugPrint('grayBitmap=${grayBitmap.lengthInBytes}');
+  // 2. 将灰度图像转换为二值图像
+  img.Image binaryBitmap = img.copyResize(grayBitmap,
+      width: grayBitmap.width, height: grayBitmap.height);
 
-  //设置灰阶阈值
-  const int threshold = 127;
-
-  // 遍历图像的每个像素
-  for (int y = 0; y < image.height; y++) {
-    for (int x = 0; x < image.width; x++) {
-      // 获取当前像素的RGBA值
-      final pixel = image.getPixel(x, y);
-
-      // 计算灰度值
-      var gray = (pixel.r * 0.3 + pixel.g * 0.59 + pixel.b * 0.11).round();
-
-      // 将灰阶图二值化
-      var newPixel = gray > threshold
-          ? img.ColorRgba8(255, 255, 255, 255) // 白色
-          : img.ColorRgba8(0, 0, 0, 255); // 黑色
-
-      // 设置二值化后的图像的像素
-      grayImage.setPixel(x, y, newPixel);
+  debugPrint('binaryBitmap=${grayBitmap.lengthInBytes}');
+  // 手动进行二值化处理
+  const threshold = 127;
+  for (int y = 0; y < binaryBitmap.height; y++) {
+    for (int x = 0; x < binaryBitmap.width; x++) {
+      final pixel = binaryBitmap.getPixel(x, y);
+      final grayValue = (pixel.r + pixel.g + pixel.b) / 3;
+      final newValue = grayValue > threshold
+          ? img.ColorRgb8(255, 255, 255) // 白色
+          : img.ColorRgb8(0, 0, 0); // 黑色
+      binaryBitmap.setPixel(x, y, newValue);
     }
   }
+  debugPrint('binaryBitmap=${grayBitmap.lengthInBytes}');
 
-  //二值图位宽
-  var widthByte = (grayImage.width + 7) ~/ 8;
+  // 3. 构建命令字符串
+  String pictureWidth = ((binaryBitmap.width + 7) ~/ 8).toString();
+  String pictureHeight = binaryBitmap.height.toString();
+  String mode = "0"; // 模式固定为0
+  String command = "BITMAP $xAxis,$yAxis,$pictureWidth,$pictureHeight,$mode,";
 
-  var width = grayImage.width;
-  var height = grayImage.height;
+  // 4. 创建字节流
+  int widthBytes = (binaryBitmap.width + 7) ~/ 8;
+  int width = binaryBitmap.width;
+  int height = binaryBitmap.height;
 
-  //二值图数据
-  Uint8List stream = Uint8List(widthByte * height);
+  Uint8List stream = Uint8List(widthBytes * height);
 
-  //初始化二值图数据
-  int y;
-  for (y = 0; y < height * widthByte; ++y) {
-    stream[y] = -1;
+  // 初始化字节流，默认值为0xFF (全1，表示白色)
+  for (int i = 0; i < stream.length; i++) {
+    stream[i] = 0xFF;
   }
-  //遍历二值图，转换成tsc打印机可识别的数据
-  for (y = 0; y < height; ++y) {
+  debugPrint('stream=${stream.lengthInBytes}');
+  // 5. 根据像素值处理字节流
+  for (int y = 0; y < height; ++y) {
     for (int x = 0; x < width; ++x) {
-      var pixelColor = grayImage.getPixel(x, y);
-      var red = pixelColor.r;
-      var green = pixelColor.g;
-      var blue = pixelColor.b;
-      var total = (red + green + blue) / 3;
-      // 像素为黑色时，将二值图数据置为1
+      final pixel = binaryBitmap.getPixel(x, y);
+      final total = (pixel.r + pixel.g + pixel.b) ~/ 3;
+
+      // 像素为黑色时，将对应位设为0
       if (total == 0) {
-        //找到二值图数据在stream中的索引
-        int byteIndex = y * ((width + 7) ~/ 8) + x ~/ 8;
-        // 找到二值图数据在stream中的位掩码
-        int targetBitMask = (128 >> (x % 8)).toInt();
-        // 将二值图数据置为1
-        stream[byteIndex] ^= targetBitMask;
+        final byteIndex = y * widthBytes + x ~/ 8;
+        final bitIndex = x % 8;
+        final mask = 0x80 >> bitIndex;
+        stream[byteIndex] &= ~mask; // 将对应位设为0（黑色）
       }
     }
   }
+  debugPrint('stream=${stream.lengthInBytes}');
+  // 6. 组合完整的TSC命令
+  final commandBytes = Uint8List.fromList(utf8.encode(command));
+  final fullCommand = Uint8List(commandBytes.length + stream.length + 2);
 
-  debugPrint('image.width=${image.width}  width=${(image.width + 7) ~/ 8} image.height=${image.height} height=${(image.height + 7) ~/ 8}');
-  return Uint8List.fromList(List.from(
-    utf8.encode(
-        'BITMAP $xAxis,$yAxis,${(image.width + 7) ~/ 8},${image.height},0,'),
-  )
-    ..addAll(stream)
-    ..addAll(utf8.encode('\r\n')));
+  fullCommand.setRange(0, commandBytes.length, commandBytes);
+  fullCommand.setRange(
+      commandBytes.length, commandBytes.length + stream.length, stream);
+  fullCommand[commandBytes.length + stream.length] = 13; // \r
+  fullCommand[commandBytes.length + stream.length + 1] = 10; // \n
+
+  return fullCommand;
 }
 
 //创建一个文本列表，将传入的文本根据字体大小和限宽进行拆分换行
@@ -1072,6 +1073,8 @@ Future<List<Uint8List>> _imageResizeToLabel(Map<String, dynamic> image) async {
   //     }
   //   }
   // }
+  debugPrint('--------image: ${(image['image']as Uint8List).lengthInBytes} ');
+
   var reImage = img.copyResize(
     img.decodeImage(image['image'])!,
     width: width * 8,
@@ -1079,7 +1082,7 @@ Future<List<Uint8List>> _imageResizeToLabel(Map<String, dynamic> image) async {
     backgroundColor: img.ColorRgb8(0, 0, 0),
   );
   var imageUint8List = Uint8List.fromList(img.encodePng(reImage));
-  debugPrint('imageUint8List: ${imageUint8List.lengthInBytes / (1024 * 1024)}');
+  debugPrint('imageUint8List: ${imageUint8List.lengthInBytes}');
   return [
     _tscClearBuffer(),
     _tscSetup(

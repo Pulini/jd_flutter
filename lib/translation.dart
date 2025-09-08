@@ -1758,6 +1758,7 @@ class Translation extends Translations {
               '正在查询待出货列表...',
           'sap_sales_shipment_submitting_sales_stock_out_tips': '正在提交销售出库...',
           'sap_sales_shipment_getting_pallet_info_tips': '正在获取托盘信息...',
+          'sap_sales_shipment_delete_label': '正在删除标签绑定关系...',
           'sap_sales_shipment_scan_wrong_barcode_tips': '请扫描正确的条码！',
           'sap_sales_shipment_pallet_number': '托盘号：',
           'sap_sales_shipment_pallet_label_no': '标签号：',
@@ -5337,6 +5338,7 @@ class Translation extends Translations {
               'Submitting sales outbound shipment...',
           'sap_sales_shipment_getting_pallet_info_tips':
               'Obtaining tray information...',
+          'sap_sales_shipment_delete_label': 'Deleting tag binding relationship...',
           'sap_sales_shipment_scan_wrong_barcode_tips':
               'SPlease scan the correct barcode !',
           'sap_sales_shipment_pallet_number': 'Pallet no：',

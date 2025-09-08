@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/report_info.dart';
-import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 
 class CodeListReportState {
   var reportDataList = <ReportInfo>[].obs;

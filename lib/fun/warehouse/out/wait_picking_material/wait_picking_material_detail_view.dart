@@ -4,7 +4,7 @@ import 'package:jd_flutter/bean/http/response/wait_picking_material_info.dart';
 import 'package:jd_flutter/fun/warehouse/out/wait_picking_material/wait_picking_material_dialog.dart';
 import 'package:jd_flutter/fun/warehouse/out/wait_picking_material/wait_picking_material_logic.dart';
 import 'package:jd_flutter/fun/warehouse/out/wait_picking_material/wait_picking_material_state.dart';
-import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';

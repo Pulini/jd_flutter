@@ -17,7 +17,7 @@
 //   ]
 // }
 import 'package:get/get.dart';
-import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 
 class SapPackingScanMaterialInfo {
   String? isDutyFree; //是否免税 DUTY_FREE

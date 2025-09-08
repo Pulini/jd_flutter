@@ -1,4 +1,4 @@
-import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 
 // BillNo : "JZ2300102"
 // BarCode : "20488980010236/002"

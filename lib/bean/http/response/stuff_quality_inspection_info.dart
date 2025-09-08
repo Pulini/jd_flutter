@@ -1,5 +1,5 @@
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
-import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 
 /// OrderType : "Z001"
 /// CompanyCode : "1000"

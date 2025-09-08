@@ -6,6 +6,7 @@ import 'package:jd_flutter/bean/http/response/order_color_info.dart';
 import 'package:jd_flutter/bean/http/response/production_dispatch_order_detail_info.dart';
 import 'package:jd_flutter/bean/http/response/work_plan_material_info.dart';
 import 'package:jd_flutter/bean/http/response/worker_info.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';

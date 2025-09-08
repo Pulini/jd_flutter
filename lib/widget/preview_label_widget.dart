@@ -1,10 +1,10 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/constant.dart';
 
 import 'package:jd_flutter/utils/printer/print_util.dart';
 import 'package:jd_flutter/utils/printer/tsc_util.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/widgets_to_image_widget.dart';
@@ -30,16 +30,20 @@ class _PreviewLabelState extends State<PreviewLabel> {
   var image = <String, dynamic>{}.obs;
   RxDouble printSpeed = 0.0.obs;
   RxDouble printDensity = 0.0.obs;
+  static bool _isAlreadyOpen = false;
 
   printLabel() async {
     if (image.isEmpty) return;
+    loadingShow('正在生成标签...');
+    var label = await imageResizeToLabel({
+      ...image,
+      'isDynamic': widget.isDynamic,
+      'speed': printSpeed.value.toInt(),
+      'density': printDensity.value.toInt(),
+    });
+    loadingDismiss();
     pu.printLabel(
-      label: await imageResizeToLabel({
-        ...image,
-        'isDynamic': widget.isDynamic,
-        'speed': printSpeed.value.toInt(),
-        'density': printDensity.value.toInt(),
-      }),
+      label: label,
       start: () {
         loadingShow('正在下发标签...');
       },
@@ -56,6 +60,15 @@ class _PreviewLabelState extends State<PreviewLabel> {
 
   @override
   void initState() {
+    if (_isAlreadyOpen) {
+      // 如果已经打开，则关闭当前重复的实例
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Get.back();
+        Get.snackbar('提示', '标签预览页面已经打开');
+      });
+      return;
+    }
+    _isAlreadyOpen = true;
     printSpeed.value = spGet(spSavePrintSpeed) ?? 4;
     printDensity.value = spGet(spSavePrintDensity) ?? 15;
     super.initState();
@@ -85,7 +98,7 @@ class _PreviewLabelState extends State<PreviewLabel> {
                 padding: const EdgeInsetsGeometry.only(left: 10, right: 10),
                 child: Row(
                   children: [
-                    Text('打印速度：'),
+                    const Text('打印速度：'),
                     Expanded(
                       child: Obx(() => Slider(
                             value: printSpeed.value,
@@ -108,7 +121,7 @@ class _PreviewLabelState extends State<PreviewLabel> {
                 padding: const EdgeInsetsGeometry.only(left: 10, right: 10),
                 child: Row(
                   children: [
-                    Text('打印浓度：'),
+                    const Text('打印浓度：'),
                     Expanded(
                       child: Obx(() => Slider(
                             value: printDensity.value,
@@ -143,5 +156,11 @@ class _PreviewLabelState extends State<PreviewLabel> {
             ],
           )),
     );
+  }
+
+  @override
+  void dispose() {
+    _isAlreadyOpen = false; // 页面关闭时重置状态
+    super.dispose();
   }
 }

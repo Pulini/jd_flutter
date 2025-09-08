@@ -5,6 +5,7 @@ import 'package:jd_flutter/fun/warehouse/manage/quality_inspection/quality_inspe
 import 'package:jd_flutter/fun/warehouse/manage/quality_inspection/quality_inspection_dialog.dart';
 import 'package:jd_flutter/fun/warehouse/manage/quality_inspection/quality_inspection_logic.dart';
 import 'package:jd_flutter/fun/warehouse/manage/quality_inspection/quality_inspection_state.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';

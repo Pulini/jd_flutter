@@ -6,6 +6,7 @@ import 'package:jd_flutter/bean/home_button.dart';
 import 'package:jd_flutter/bean/http/response/sap_picking_scan_info.dart';
 import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/route.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
@@ -77,7 +78,7 @@ class _SapPackingScanCacheListPageState
       PopScope(
         canPop: false,
         child: AlertDialog(
-          title: Text('重处理'),
+          title: const Text('重处理'),
           content: SizedBox(
             width: 300,
             child: Column(

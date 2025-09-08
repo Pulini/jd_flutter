@@ -5,6 +5,7 @@ import 'package:jd_flutter/fun/work_reporting/workshop_planning/workshop_plannin
 import 'package:jd_flutter/fun/work_reporting/workshop_planning/workshop_planning_logic.dart';
 import 'package:jd_flutter/fun/work_reporting/workshop_planning/workshop_planning_state.dart';
 import 'package:jd_flutter/route.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/check_box_widget.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
@@ -340,7 +341,7 @@ class _WorkshopPlanningLastProcessPageState
               unselectedLabelColor: Colors.grey,
               overlayColor: WidgetStateProperty.all(Colors.transparent),
               controller: tabController,
-              tabs: [
+              tabs: const [
                 Tab(text: '物料'),
                 Tab(text: '工序'),
                 Tab(text: '报工'),

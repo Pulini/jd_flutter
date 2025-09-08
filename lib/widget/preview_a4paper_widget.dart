@@ -22,6 +22,7 @@ class PreviewA4Paper extends StatefulWidget {
 class _PreviewA4PaperState extends State<PreviewA4Paper> {
   var widgetList = <Widget>[].obs;
   var a4PaperList = <String>[].obs;
+  static bool _isAlreadyOpen = false;
 
   printA4Paper() async {
     if (a4PaperList.isEmpty) return;
@@ -45,6 +46,15 @@ class _PreviewA4PaperState extends State<PreviewA4Paper> {
   @override
   void initState() {
     super.initState();
+    if (_isAlreadyOpen) {
+      // 如果已经打开，则关闭当前重复的实例
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Get.back();
+        Get.snackbar('提示', '标签预览页面已经打开');
+      });
+      return;
+    }
+    _isAlreadyOpen = true;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       for (var paper in widget.paperWidgets) {
         widgetList.add(WidgetsToImage(
@@ -92,4 +102,10 @@ class _PreviewA4PaperState extends State<PreviewA4Paper> {
           ),
         ));
   }
+  @override
+  void dispose() {
+    _isAlreadyOpen = false; // 页面关闭时重置状态
+    super.dispose();
+  }
+
 }

@@ -2,12 +2,14 @@ import 'package:collection/collection.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/material_dispatch_info.dart';
 import 'package:jd_flutter/bean/http/response/material_dispatch_label_detail.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/preview_label_widget.dart';
-import 'package:jd_flutter/widget/tsc_label_templates/110w_dynamic_label.dart';
-import 'package:jd_flutter/widget/tsc_label_templates/75w45h_fixed_label.dart';
-import 'package:jd_flutter/widget/tsc_label_templates/75w_dynamic_label.dart';
+import 'package:jd_flutter/widget/tsc_label_templates/dynamic_label_110w.dart';
+import 'package:jd_flutter/widget/tsc_label_templates/fixed_label_75w45h.dart';
+import 'package:jd_flutter/widget/tsc_label_templates/dynamic_label_75w.dart';
+
 import 'material_dispatch_state.dart';
 
 class MaterialDispatchLogic extends GetxController {

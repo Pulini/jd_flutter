@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:dio/dio.dart';
@@ -7,10 +8,10 @@ import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:path_provider/path_provider.dart';
 
-
 class Downloader {
   var url = '';
   late String fileName;
+  String savePath = '';
   var progress = 0.0.obs;
   final cancel = CancelToken();
   final Function(String filePath) completed;
@@ -61,9 +62,17 @@ class Downloader {
                           children: [
                             if (!isDownloading.value)
                               TextButton(
+                                onPressed: () => completed.call(savePath),
+                                child: const Text(
+                                  '安装',
+                                  style: TextStyle(color: Colors.blue),
+                                ),
+                              ),
+                            if (!isDownloading.value)
+                              TextButton(
                                 onPressed: () => startDownload(),
                                 child: const Text(
-                                  '重试',
+                                  '重新下载',
                                   style: TextStyle(color: Colors.green),
                                 ),
                               ),
@@ -87,7 +96,24 @@ class Downloader {
         );
       },
     );
-    startDownload();
+    getApkSavePath(url).then((path) async {
+      savePath = path;
+      var file = File(path);
+      if (await file.exists() && await file.length() > 0) {
+        progress.value = 1;
+        completed.call(savePath);
+      } else {
+        startDownload();
+      }
+    });
+  }
+
+  Future<String> getApkSavePath(String url) async {
+    var fileName = url.substring(url.lastIndexOf('/') + 1);
+    var temporary = await getTemporaryDirectory();
+    var savePath = '${temporary.path}/$fileName';
+    logger.i('url:$url \nsavePath：$savePath\nfileName：$fileName');
+    return savePath;
   }
 
   //下載文件
@@ -95,11 +121,6 @@ class Downloader {
     isDownloading.value = true;
     progress.value = 0.0;
     try {
-      var fileName = url.substring(url.lastIndexOf('/') + 1);
-      var temporary = await getTemporaryDirectory();
-      var savePath = '${temporary.path}/$fileName';
-      logger.i('url:$url \nsavePath：$savePath\nfileName：$fileName');
-
       await Dio().download(
         url,
         savePath,

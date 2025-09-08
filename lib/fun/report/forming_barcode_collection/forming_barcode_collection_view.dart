@@ -4,6 +4,7 @@ import 'package:jd_flutter/bean/http/response/forming_collection_info.dart';
 import 'package:jd_flutter/fun/report/forming_barcode_collection/forming_barcode_collection_logic.dart';
 import 'package:jd_flutter/fun/report/forming_barcode_collection/forming_barcode_collection_priority_view.dart';
 import 'package:jd_flutter/fun/report/forming_barcode_collection/forming_barcode_collection_state.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';

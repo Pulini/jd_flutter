@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/show_process_plan_detail_info.dart';
 import 'package:jd_flutter/fun/dispatching/injection_scan_report/injection_scan_report_logic.dart';
-import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/scanner.dart';
+
 import 'injection_scan_report_label_view.dart';
 
 class InjectionScanReportPage extends StatefulWidget {

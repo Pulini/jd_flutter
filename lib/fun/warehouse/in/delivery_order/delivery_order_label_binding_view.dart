@@ -273,7 +273,7 @@ class _DeliveryOrderLabelBindingPageState
                     labelColor: Colors.blueAccent,
                     unselectedLabelColor: Colors.black54,
                     overlayColor: WidgetStateProperty.all(Colors.transparent),
-                    tabs: [
+                    tabs: const [
                       Tab(text: '清点进度'),
                       Tab(text: '托盘明细'),
                     ],

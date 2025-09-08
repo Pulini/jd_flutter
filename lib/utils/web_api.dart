@@ -848,6 +848,9 @@ const webApiSapGetPalletDetails = 'sap/zapp/ZWMS_BARCODE_LIST';
 //sap获取托盘信息
 const webApiSapGetPalletInfo = 'sap/zapp/ZNQWMS_BARCODE_LIST';
 
+//sap删除标签与托盘的绑定关系
+const webApiSapDeleteLabelFormPallet = 'sap/zapp/ZMM_RES_ZFTRA_PIECE_CLEAR';
+
 //sap移库领料
 const webApiSapRelocationPicking = 'sap/zapp/ZWMS_BARCODE_YK';
 

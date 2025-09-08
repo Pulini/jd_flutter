@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/material_dispatch_info.dart';
 import 'package:jd_flutter/bean/http/response/material_dispatch_label_detail.dart';
 import 'package:jd_flutter/bean/http/response/material_dispatch_report_success_info.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 
@@ -147,7 +148,7 @@ class MaterialDispatchState {
     httpPost(
       loading: 'material_dispatch_reporting'.tr,
       method: webApiCreateProcessOutPutStripDrawing,
-      params: {
+      body: {
         'DrillingCrewID': data.drillingCrewID,
         'UserID': userInfo?.userID,
         'UseStorageLocation': userInfo?.useStorageLocation,

@@ -4,7 +4,7 @@ import 'package:jd_flutter/bean/http/response/delivery_order_info.dart';
 import 'package:jd_flutter/bean/http/response/purchase_order_warehousing_info.dart';
 import 'package:jd_flutter/fun/warehouse/in/purchase_order_warehousing/purchase_order_warehousing_binding_label_detail_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/purchase_order_warehousing/purchase_order_warehousing_binding_label_view.dart';
-import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
 import 'purchase_order_warehousing_state.dart';
