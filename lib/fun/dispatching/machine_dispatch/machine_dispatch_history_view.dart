@@ -25,6 +25,8 @@ class _MachineDispatchHistoryPageState
         itemCount: state.historyInfo.length,
         itemBuilder: (c, i) => GestureDetector(
           child: Container(
+            margin: const EdgeInsets.only(left: 10, right: 10, bottom: 5),
+            padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
@@ -85,6 +87,8 @@ class _MachineDispatchHistoryDetailPageState
         itemCount: state.historyLabelInfo.length,
         itemBuilder: (c, i) => GestureDetector(
           child: Container(
+              margin: const EdgeInsets.only(left: 10, right: 10, bottom: 5),
+              padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,

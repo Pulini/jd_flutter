@@ -236,7 +236,7 @@ class MachineDispatchLogic extends GetxController {
       index: index,
       success: () => Get.to(
         () => const MachineDispatchHistoryDetailPage(),
-        arguments: {'index', index},
+        arguments: {'index': index},
       ),
       error: (msg) => errorDialog(content: msg),
     );

@@ -215,12 +215,12 @@ class MachineDispatchState {
     _getSapMaterialDispatchLabels(
       labelType: '10',
       labelStatus: '',
-      dispatchNumber: historyInfo[index].decrementNumber ?? '',
+      dispatchNumber: historyInfo[index].dispatchNumber ?? '',
     ).then((response) {
       if (response.resultCode == resultSuccess) {
         var list = [
           for (var json in response.data)
-            SapLabelInfo.fromJson(response.data[json])
+            SapLabelInfo.fromJson(json)
         ];
         var labelList = <MachineDispatchReprintLabelInfo>[];
         for (var v1 in list) {
