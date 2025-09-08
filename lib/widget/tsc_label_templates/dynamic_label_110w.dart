@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
@@ -1117,6 +1118,8 @@ Widget dynamicPalletDetail({
   required List<List> materialList, //标准物料清单
   required List<List> mixMaterialList, //混装物料清单
 }) {
+  var supBigStyle1 = const TextStyle(fontSize: 26, fontWeight: FontWeight.bold);
+  var supBigStyle2 = const TextStyle(fontSize: 32, fontWeight: FontWeight.bold);
   var index = 1;
   var materialWidgetList = <Widget>[];
   for (var item in materialList) {
@@ -1124,9 +1127,10 @@ Widget dynamicPalletDetail({
       title: index.toString(),
       titleAlignment: Alignment.center,
       style: _bigStyle,
+      flex: 4,
       rw: [
         Expanded(
-          flex: 25,
+          flex: 26,
           child: Column(
             children: [
               Row(
@@ -1134,32 +1138,33 @@ Widget dynamicPalletDetail({
                   _paddingTextLeft(
                     text: (item[0] as String),
                     flex: 12,
-                    style: _bigStyle,
+                    style: supBigStyle1,
                   ),
                   _paddingTextCenter(
                     text: (item[2] as List).length.toString(),
                     flex: 4,
-                    style: _bigStyle,
+                    style: supBigStyle1,
                   ),
                   _paddingTextCenter(
                     text: (item[2] as List)
                         .map((v) => (v as double))
                         .reduce((a, b) => a.add(b))
                         .toShowString(),
-                    flex: 5,
-                    style: _bigStyle,
+                    flex: 6,
+                    style: supBigStyle1,
                   ),
                   _paddingTextCenter(
                     text: (item[1] as String),
                     flex: 4,
-                    style: _bigStyle,
+                    style: supBigStyle1,
                   ),
                 ],
               ),
               _paddingTextLeft(
                 text: (item[2] as List)
                     .map((v) => (v as double).toShowString())
-                    .join('+'),
+                    .join('  +  '),
+                style: supBigStyle2,
                 flex: 0,
               ),
             ],
@@ -1175,6 +1180,7 @@ Widget dynamicPalletDetail({
       title: '$index(混)',
       titleAlignment: Alignment.center,
       style: _bigStyle,
+      flex: 4,
       rw: [
         Expanded(
           flex: 12,
@@ -1184,7 +1190,7 @@ Widget dynamicPalletDetail({
                 _paddingTextLeft(
                   text: (line[0] as String),
                   flex: 0,
-                  style: _bigStyle,
+                  style: supBigStyle1,
                 ),
             ],
           ),
@@ -1192,17 +1198,17 @@ Widget dynamicPalletDetail({
         _paddingTextCenter(
           text: '1',
           flex: 4,
-          style: _bigStyle,
+          style: supBigStyle1,
         ),
         Expanded(
-          flex: 5,
+          flex: 6,
           child: Column(
             children: [
               for (var line in item)
                 _paddingTextCenter(
                   text: (line[1] as double).toShowString(),
                   flex: 0,
-                  style: _bigStyle,
+                  style: supBigStyle1,
                 ),
             ],
           ),
@@ -1215,7 +1221,7 @@ Widget dynamicPalletDetail({
                 _paddingTextCenter(
                   text: (line[2] as String),
                   flex: 0,
-                  style: _bigStyle,
+                  style: supBigStyle1,
                 ),
             ],
           ),
@@ -1231,6 +1237,7 @@ Widget dynamicPalletDetail({
         title: '托盘号',
         titleAlignment: Alignment.center,
         style: _bigStyle,
+        flex: 4,
         rw: [
           _paddingTextCenter(
             text: palletNo,
@@ -1239,7 +1246,7 @@ Widget dynamicPalletDetail({
           ),
           _paddingTextCenter(
             text: '${userInfo?.name}(${getPrintTime()})',
-            flex: 13,
+            flex: 14,
           ),
         ],
       ),
@@ -1247,6 +1254,7 @@ Widget dynamicPalletDetail({
         title: '序号',
         titleAlignment: Alignment.center,
         style: _bigStyle,
+        flex: 4,
         rw: [
           _paddingTextCenter(
             text: '物料代码',
@@ -1260,7 +1268,7 @@ Widget dynamicPalletDetail({
           ),
           _paddingTextCenter(
             text: '数量',
-            flex: 5,
+            flex: 6,
             style: _bigStyle,
           ),
           _paddingTextCenter(

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/device_list_info.dart';
 import 'package:jd_flutter/fun/other/hydroelectric_excess/hydroelectric_excess_logic.dart';
-import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
 
@@ -94,53 +93,32 @@ class _HydroelectricExcessTreatListPageState
             controller: tecBedNumber,
             hint: 'hydroelectric_bed_number'.tr,
           ),
-          Obx(() => Row(children: [
-                Expanded(
-                  flex: 1,
-                  child: ListTile(
-                    title: Text('hydroelectric_all'.tr),
-                    leading: Radio(
-                      value: '0',
-                      groupValue: state.select.value,
-                      onChanged: (v) {
-                        state.select.value = v!;
-                        state.stateToSearch.value = '1';
-                        logger.d(v);
-                      },
+          Obx(() => RadioGroup(
+                groupValue: state.select.value,
+                onChanged: (v) => state.select.value = v!,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: ListTile(
+                        title: Text('hydroelectric_all'.tr),
+                        leading: const Radio(value: '0'),
+                      ),
                     ),
-                  ),
+                    Expanded(
+                      child: ListTile(
+                        title: Text('hydroelectric_to_be_copied'.tr),
+                        leading: const Radio(value: '1'),
+                      ),
+                    ),
+                    Expanded(
+                      child: ListTile(
+                        title: Text('hydroelectric_dorP'.tr),
+                        leading: const Radio(value: '2'),
+                      ),
+                    )
+                  ],
                 ),
-                Expanded(
-                  flex: 1,
-                  child: ListTile(
-                    title: Text('hydroelectric_to_be_copied'.tr),
-                    leading: Radio(
-                      value: '1',
-                      groupValue: state.select.value,
-                      onChanged: (v) {
-                        state.select.value = v!;
-                        state.stateToSearch.value = '0';
-                        logger.d(v);
-                      },
-                    ),
-                  ),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: ListTile(
-                    title: Text('hydroelectric_dorP'.tr),
-                    leading: Radio(
-                      value: '2',
-                      groupValue: state.select.value,
-                      onChanged: (v) {
-                        state.select.value = v!;
-                        state.stateToSearch.value = '1';
-                        logger.d(v);
-                      },
-                    ),
-                  ),
-                )
-              ]))
+              )),
         ],
         query: () {
           logic.searchData(

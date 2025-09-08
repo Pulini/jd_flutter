@@ -10,7 +10,6 @@ import 'package:jd_flutter/fun/warehouse/in/incoming_inspection/incoming_inspect
 import 'package:jd_flutter/fun/warehouse/in/incoming_inspection/incoming_inspection_order_wait_processing_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/incoming_inspection/incoming_inspection_state.dart';
 import 'package:jd_flutter/route.dart';
-import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
@@ -148,30 +147,12 @@ class _IncomingInspectionOrdersPageState
     );
   }
 
-  Widget _radio({required String text, required String value}) {
-    return Expanded(
-      child: InkWell(
-        onTap: () => state.inspectionType.value = value,
-        child: Row(
-          children: [
-            Obx(() => Radio(
-                  value: value,
-                  onChanged: (v) => state.inspectionType.value = v!,
-                  groupValue: state.inspectionType.value,
-                )),
-            Text(text),
-          ],
-        ),
-      ),
-    );
-  }
-
   _showSearch() {
     showSheet(
       bodyPadding: const EdgeInsets.all(0),
       context: context,
       body: Container(
-        height: getScreenSize().height * 0.38,
+        height: 300,
         padding:
             const EdgeInsets.only(left: 10, top: 20, right: 10, bottom: 20),
         decoration: BoxDecoration(
@@ -187,39 +168,64 @@ class _IncomingInspectionOrdersPageState
         ),
         child: Column(
           children: [
-            Row(
-              children: [
-                _radio(
-                  text: 'incoming_inspection_order_wait_inspection'.tr,
-                  value: '1',
-                ),
-                _radio(
-                  text: 'incoming_inspection_order_wait_processing'.tr,
-                  value: '2',
-                ),
-                _radio(
-                  text: 'incoming_inspection_order_signed'.tr,
-                  value: '3',
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                _radio(
-                  text:
-                      'incoming_inspection_order_exception_wait_processing'.tr,
-                  value: '4',
-                ),
-                _radio(
-                  text: 'incoming_inspection_order_exception_processed'.tr,
-                  value: '5',
-                ),
-                _radio(
-                  text: 'incoming_inspection_order_closed'.tr,
-                  value: '6',
-                ),
-              ],
-            ),
+            Obx(() => RadioGroup(
+                  groupValue: state.inspectionType.value,
+                  onChanged: (v) => state.inspectionType.value = v!,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: RadioListTile(
+                          title: Text(
+                              'incoming_inspection_order_wait_inspection'.tr),
+                          value: 1,
+                        ),
+                      ),
+                      Expanded(
+                        child: RadioListTile(
+                          title: Text(
+                              'incoming_inspection_order_wait_processing'.tr),
+                          value: 2,
+                        ),
+                      ),
+                      Expanded(
+                        child: RadioListTile(
+                          title: Text('incoming_inspection_order_signed'.tr),
+                          value: 3,
+                        ),
+                      ),
+                    ],
+                  ),
+                )),
+            Obx(() => RadioGroup(
+                  groupValue: state.inspectionType.value,
+                  onChanged: (v) => state.inspectionType.value = v!,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: RadioListTile(
+                          title: Text(
+                              'incoming_inspection_order_exception_wait_processing'
+                                  .tr),
+                          value: 4,
+                        ),
+                      ),
+                      Expanded(
+                        child: RadioListTile(
+                          title: Text(
+                              'incoming_inspection_order_exception_processed'
+                                  .tr),
+                          value: 5,
+                        ),
+                      ),
+                      Expanded(
+                        child: RadioListTile(
+                          title: Text('incoming_inspection_order_closed'.tr),
+                          value: 6,
+                        ),
+                      ),
+                    ],
+                  ),
+                )),
             Row(
               children: [
                 Expanded(child: DatePicker(pickerController: dpcStartDate)),
