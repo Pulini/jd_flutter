@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -11,11 +12,17 @@ import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class PrintUtil {
+  static final PrintUtil _instance = PrintUtil._internal();
   var bluetoothChannel = const MethodChannel(channelBluetoothFlutterToAndroid);
   var deviceList = <BluetoothDevice>[].obs;
   var isScanning = false.obs;
+  var _dialogIsShowing = false;
 
-  PrintUtil() {
+  factory PrintUtil() => _instance;
+
+  static PrintUtil get instance => _instance;
+
+  PrintUtil._internal() {
     setChannelListener();
   }
 
@@ -34,6 +41,8 @@ class PrintUtil {
       return;
     }
     deviceList.value = await _getScannedDevices();
+    debugPrint(
+        'label.size=${label.map((v) => v.lengthInBytes).reduce((a, b) => a + b)}');
     if (deviceList.any((v) => v.deviceIsConnected)) {
       _send(label: label, start: start, success: success, failed: failed);
     } else {
@@ -366,6 +375,12 @@ class PrintUtil {
     finished?.call(success, fail);
   }
 
+  bool isConnected() => deviceList.any((v) => v.deviceIsConnected);
+
+  disconnected() => isConnected()
+      ? _closeBluetooth(deviceList.firstWhere((v) => v.deviceIsConnected))
+      : null;
+
   _item(int index, Function() connected) {
     var device = deviceList[index];
     return Card(
@@ -404,6 +419,8 @@ class PrintUtil {
   }
 
   _showBluetoothDialog(Function() connected) {
+    if (_dialogIsShowing) return;
+    _dialogIsShowing = true;
     Get.dialog(
       Obx(() => pageBody(
             title: '连接蓝牙',
@@ -467,6 +484,6 @@ class PrintUtil {
               ],
             ),
           )),
-    );
+    ).then((_) => _dialogIsShowing = false);
   }
 }

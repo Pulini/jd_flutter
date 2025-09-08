@@ -35,7 +35,7 @@ class _SapScanCodeInventoryPageState extends State<SapScanCodeInventoryPage> {
 
   _item(int index) {
     var data = state.palletList[index];
-    var width = context.getScreenSize().width - 20;
+    var width = getScreenSize().width - 20;
     bool isScannedAll = data.every((v) => v.isSelected.value);
     int scanned = data.where((v) => v.isSelected.value).length;
     return Column(
@@ -141,34 +141,32 @@ class _SapScanCodeInventoryPageState extends State<SapScanCodeInventoryPage> {
           controller: tecArea,
         ),
         LinkOptionsPicker(pickerController: factoryWarehouseController),
-        Row(
-          children: [
-            Expanded(
-              child: Obx(() => RadioListTile(
-                    title: Text('sap_inventory_null'.tr),
-                    value: '',
-                    groupValue: state.orderType.value,
-                    onChanged: (v) => state.orderType.value = v!,
-                  )),
-            ),
-            Expanded(
-              child: Obx(() => RadioListTile(
-                    title: Text('sap_inventory_first_count'.tr),
-                    value: '10',
-                    groupValue: state.orderType.value,
-                    onChanged: (v) => state.orderType.value = v!,
-                  )),
-            ),
-            Expanded(
-              child: Obx(() => RadioListTile(
-                    title: Text('sap_inventory_second_count'.tr),
-                    value: '11',
-                    groupValue: state.orderType.value,
-                    onChanged: (v) => state.orderType.value = v!,
-                  )),
-            ),
-          ],
-        )
+        Obx(() => RadioGroup(
+              groupValue: state.orderType.value,
+              onChanged: (v) => state.orderType.value = v!,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: RadioListTile(
+                      title: Text('sap_inventory_null'.tr),
+                      value: '',
+                    ),
+                  ),
+                  Expanded(
+                    child: RadioListTile(
+                      title: Text('sap_inventory_first_count'.tr),
+                      value: '10',
+                    ),
+                  ),
+                  Expanded(
+                    child: RadioListTile(
+                      title: Text('sap_inventory_second_count'.tr),
+                      value: '11',
+                    ),
+                  ),
+                ],
+              ),
+            )),
       ],
       query: () => _queryOrder(),
       body: Column(

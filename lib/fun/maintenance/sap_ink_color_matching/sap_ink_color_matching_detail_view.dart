@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/fun/maintenance/sap_ink_color_matching/sap_ink_color_matching_dialog.dart';
 import 'package:jd_flutter/fun/maintenance/sap_ink_color_matching/sap_ink_color_matching_recreate_view.dart';
 import 'package:jd_flutter/fun/maintenance/sap_ink_color_matching/sap_ink_color_matching_state.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/socket_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
@@ -402,7 +403,7 @@ class _SapInkColorMatchingDetailPageState
       actions: canAdd
           ? [
               SizedBox(
-                width: context.getScreenSize().width * 0.35,
+                width: getScreenSize().width * 0.35,
                 child: EditText(
                   hint: 'sap_ink_color_matching_detail_remakes'.tr,
                   controller: tecRemarks,

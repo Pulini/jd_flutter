@@ -3,11 +3,12 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/fun/dispatching/process_dispatch_register/process_dispatch_register_dialog.dart';
 import 'package:jd_flutter/fun/dispatching/process_dispatch_register/process_dispatch_register_modify_label_worker_view.dart';
 import 'package:jd_flutter/fun/dispatching/process_dispatch_register/process_dispatch_register_state.dart';
-import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
 import 'package:jd_flutter/widget/scanner.dart';
+
 import 'process_dispatch_register_logic.dart';
 
 class ProcessDispatchRegisterPage extends StatefulWidget {

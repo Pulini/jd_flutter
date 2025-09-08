@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/visit_add_record_info.dart';
 import 'package:jd_flutter/bean/http/response/visit_photo_bean.dart';
 import 'package:jd_flutter/fun/management/visit_register/visit_register_logic.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
@@ -207,101 +208,63 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
     );
   }
 
-  _checkCar() {
-    return Obx(() => Row(children: [
-          Expanded(
-            flex: 1,
-            child: ListTile(
+  _checkCar() => Obx(() => RadioGroup(
+        groupValue: state.carType.value,
+        onChanged: (v) {
+          state.carType.value = v!;
+          if (v == '') {
+            state.showWeight.value = false;
+            state.showCarNumber.value = false;
+          }
+          if (v == '小桥车' || v == '货车') {
+            state.showWeight.value = false;
+            state.showCarNumber.value = true;
+          }
+          if (v == '拖车') {
+            state.showWeight.value = true;
+            state.showCarNumber.value = true;
+          }
+        },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            ListTile(
               title: Text('visit_no_car'.tr),
-              leading: Radio(
-                value: "",
-                groupValue: state.carType.value,
-                onChanged: (v) {
-                  state.carType.value = v!;
-                  state.showWeight.value = false;
-                  state.showCarNumber.value = false;
-                },
-              ),
+              leading: const Radio(value: ''),
             ),
-          ),
-          Expanded(
-            flex: 1,
-            child: ListTile(
+            ListTile(
               title: Text('visit_sedan'.tr),
-              leading: Radio(
-                value: "小桥车",
-                groupValue: state.carType.value,
-                onChanged: (v) {
-                  state.carType.value = v!;
-                  state.showWeight.value = false;
-                  state.showCarNumber.value = true;
-                },
-              ),
+              leading: const Radio(value: '小桥车'),
             ),
-          ),
-          Expanded(
-            flex: 1,
-            child: ListTile(
+            ListTile(
               title: Text('visit_goods_train'.tr),
-              leading: Radio(
-                value: "货车",
-                groupValue: state.carType.value,
-                onChanged: (v) {
-                  state.carType.value = v!;
-                  state.showWeight.value = false;
-                  state.showCarNumber.value = true;
-                },
-              ),
+              leading: const Radio(value: '货车'),
             ),
-          ),
-          Expanded(
-            flex: 1,
-            child: ListTile(
+            ListTile(
               title: Text('visit_trailer'.tr),
-              leading: Radio(
-                value: "拖车",
-                groupValue: state.carType.value,
-                onChanged: (v) {
-                  state.carType.value = v!;
-                  state.showWeight.value = true;
-                  state.showCarNumber.value = true;
-                },
-              ),
+              leading: const Radio(value: '拖车'),
             ),
-          )
-        ]));
-  }
+          ],
+        ),
+      ));
 
-  _checkDoor() {
-    return Obx(() => Row(children: [
-          Expanded(
-            flex: 1,
-            child: ListTile(
+  _checkDoor() => Obx(() => RadioGroup(
+        groupValue: state.doorType.value,
+        onChanged: (v) => state.doorType.value = v!,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            ListTile(
               title: Text('visit_gate_one'.tr),
-              leading: Radio(
-                value: "1号门",
-                groupValue: state.doorType.value,
-                onChanged: (v) {
-                  state.doorType.value = v!;
-                },
-              ),
+              leading: const Radio(value: '1号门'),
             ),
-          ),
-          Expanded(
-            flex: 1,
-            child: ListTile(
+            ListTile(
               title: Text('visit_gate_two'.tr),
-              leading: Radio(
-                value: "2号门",
-                groupValue: state.doorType.value,
-                onChanged: (v) {
-                  state.doorType.value = v!;
-                },
-              ),
+              leading: const Radio(value: '2号门'),
             ),
-          ),
-        ]));
-  }
+          ],
+        ),
+      ));
 
   _showCarNumber() {
     return Obx(
@@ -565,7 +528,7 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
 
   @override
   Widget build(BuildContext context) {
-   return pageBody(
+    return pageBody(
       title: 'visit_details_new_visits'.tr,
       body: ListView(
         padding: const EdgeInsets.only(left: 20, right: 20),

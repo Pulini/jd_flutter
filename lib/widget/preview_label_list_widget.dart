@@ -1,11 +1,12 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/constant.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/printer/print_util.dart';
 import 'package:jd_flutter/utils/printer/tsc_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/widgets_to_image_widget.dart';
+
 import 'custom_widget.dart';
 import 'dialogs.dart';
 
@@ -23,14 +24,24 @@ class PreviewLabelList extends StatefulWidget {
 class _PreviewLabelListState extends State<PreviewLabelList> {
   var pu = PrintUtil();
   var widgetList = <Widget>[].obs;
-  var labelList = <List<Uint8List>>[].obs;
+  var imageList = <Map<String, dynamic>>[].obs;
   RxDouble printSpeed = 0.0.obs;
   RxDouble printDensity = 0.0.obs;
 
+  static bool _isAlreadyOpen = false;
   printLabel() async {
-    if (labelList.isEmpty) return;
+    if (imageList.isEmpty) return;
+
     pu.printLabelList(
-      labelList: labelList,
+      labelList: [
+        for (var label in imageList)
+          await imageResizeToLabel({
+            ...label,
+            'isDynamic': widget.isDynamic,
+            'speed': printSpeed.value.toInt(),
+            'density': printDensity.value.toInt(),
+          }),
+      ],
       finished: (success, fail) {
         successDialog(
           title: '标签下发结束',
@@ -43,16 +54,20 @@ class _PreviewLabelListState extends State<PreviewLabelList> {
   @override
   void initState() {
     super.initState();
+    if (_isAlreadyOpen) {
+      // 如果已经打开，则关闭当前重复的实例
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Get.back();
+        Get.snackbar('提示', '标签预览页面已经打开');
+      });
+      return;
+    }
+    _isAlreadyOpen = true;
     printSpeed.value = spGet(spSavePrintSpeed) ?? 4;
     printDensity.value = spGet(spSavePrintDensity) ?? 15;
     for (var v in widget.labelWidgets) {
       widgetList.add(WidgetsToImage(
-        image: (map) async => labelList.add(await imageResizeToLabel({
-          ...map,
-          'isDynamic': widget.isDynamic,
-          'speed': printSpeed.value.toInt(),
-          'density': printDensity.value.toInt(),
-        })),
+        image: (map) => imageList.add(map),
         child: v,
       ));
     }
@@ -64,7 +79,7 @@ class _PreviewLabelListState extends State<PreviewLabelList> {
       () => pageBody(
           title: '标签预览',
           actions: [
-            labelList.isNotEmpty
+            imageList.isNotEmpty
                 ? IconButton(
                     onPressed: () => printLabel(),
                     icon: const Icon(Icons.print),
@@ -79,7 +94,7 @@ class _PreviewLabelListState extends State<PreviewLabelList> {
                           margin: const EdgeInsets.only(right: 10),
                           child: const CircularProgressIndicator(),
                         ),
-                        Text('${labelList.length}/${widgetList.length}')
+                        Text('${imageList.length}/${widgetList.length}')
                       ],
                     ),
                   ),
@@ -90,7 +105,7 @@ class _PreviewLabelListState extends State<PreviewLabelList> {
                 padding: const EdgeInsetsGeometry.only(left: 10, right: 10),
                 child: Row(
                   children: [
-                    Text('打印速度：'),
+                    const Text('打印速度：'),
                     Expanded(
                       child: Obx(() => Slider(
                             value: printSpeed.value,
@@ -113,7 +128,7 @@ class _PreviewLabelListState extends State<PreviewLabelList> {
                 padding: const EdgeInsetsGeometry.only(left: 10, right: 10),
                 child: Row(
                   children: [
-                    Text('打印浓度：'),
+                    const Text('打印浓度：'),
                     Expanded(
                       child: Obx(() => Slider(
                             value: printDensity.value,
@@ -152,5 +167,10 @@ class _PreviewLabelListState extends State<PreviewLabelList> {
             ],
           )),
     );
+  }
+  @override
+  void dispose() {
+    _isAlreadyOpen = false; // 页面关闭时重置状态
+    super.dispose();
   }
 }

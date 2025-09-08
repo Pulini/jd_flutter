@@ -1,11 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/home_button.dart';
 import 'package:jd_flutter/bean/http/response/department_info.dart';
 import 'package:jd_flutter/bean/http/response/home_function_info.dart';
 import 'package:jd_flutter/constant.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 

@@ -1,4 +1,5 @@
 import 'dart:ui' as ui;
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
@@ -36,6 +37,7 @@ class _WidgetsToImageState extends State<WidgetsToImage> {
         return capture(key); // 递归调用直到组件绘制完成
       }
       ui.Image image = boundary.toImageSync(pixelRatio: pixelRatio);
+
       ByteData? byte;
       if (widget.isRotate90) {
         //旋转图片
@@ -88,7 +90,7 @@ class _WidgetsToImageState extends State<WidgetsToImage> {
     final paint = ui.Paint();
 
     final matrix = Matrix4.rotationZ(1.5708) //90度=pi / 2 弧度
-      ..translate(-rotatedSize.height / 2, -rotatedSize.width / 2);
+      ..translateByDouble(-rotatedSize.height / 2, -rotatedSize.width / 2, 0, 1.0);
 
     // 设置画布大小
     canvas.translate(rotatedSize.width / 2, rotatedSize.height / 2);

@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/material_dispatch_info.dart';
 import 'package:jd_flutter/bean/http/response/sap_pallet_info.dart';
 import 'package:jd_flutter/fun/dispatching/material_dispatch/material_dispatch_state.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
@@ -51,9 +52,9 @@ subItemReportDialog(
             : Text('material_dispatch_dialog_label_progress_must'.tr),
         content: SizedBox(
           height: 230,
-          width: context.getScreenSize().width * 0.4 < 400
+          width: getScreenSize().width * 0.4 < 400
               ? 400
-              : context.getScreenSize().width * 0.5,
+              : getScreenSize().width * 0.5,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
@@ -239,8 +240,8 @@ labelListDialog(
       child: AlertDialog(
         title: Text('material_dispatch_dialog_label_list'.tr),
         content: SizedBox(
-          width: context.getScreenSize().width * 0.9,
-          height: context.getScreenSize().height * 0.9,
+          width: getScreenSize().width * 0.9,
+          height: getScreenSize().height * 0.9,
           child: Obx(() => ListView.builder(
                 padding: const EdgeInsets.all(8),
                 itemCount: labelList.length,
@@ -518,8 +519,8 @@ materialListDialog(
         child: AlertDialog(
           title: Text('material_dispatch_dialog_material_list'.tr),
           content: SizedBox(
-            width: context.getScreenSize().width * 0.6,
-            height: context.getScreenSize().height * 0.6,
+            width: getScreenSize().width * 0.6,
+            height: getScreenSize().height * 0.6,
             child: Obx(
               () => ListView.builder(
                 padding: const EdgeInsets.all(8),

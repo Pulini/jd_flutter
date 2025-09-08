@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/sap_wms_reprint_label_info.dart';
-import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/preview_label_list_widget.dart';
 import 'package:jd_flutter/widget/preview_label_widget.dart';
-import 'package:jd_flutter/widget/tsc_label_templates/75w45h_fixed_label.dart';
+import 'package:jd_flutter/widget/tsc_label_templates/fixed_label_75w45h.dart';
 
 import 'sap_wms_split_label_state.dart';
 

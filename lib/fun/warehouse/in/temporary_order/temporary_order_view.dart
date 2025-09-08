@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/home_button.dart';
 import 'package:jd_flutter/bean/http/response/temporary_order_info.dart';
 import 'package:jd_flutter/route.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/check_box_widget.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
@@ -314,7 +315,7 @@ class _TemporaryOrderPageState extends State<TemporaryOrderPage> {
           ],
         ),
         endDrawer: SizedBox(
-          width: context.getScreenSize().width * 0.6,
+          width: getScreenSize().width * 0.6,
           child: Drawer(
             child: ListView(
               children: [

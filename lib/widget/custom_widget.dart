@@ -9,6 +9,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:jd_flutter/bean/home_button.dart';
 import 'package:jd_flutter/bean/http/response/picking_material_order_info.dart';
 import 'package:jd_flutter/utils/app_init_service.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
@@ -444,7 +445,7 @@ Future<T?> showSheet<T>({
     shape: RoundedRectangleBorder(borderRadius: borderRadius),
     barrierColor: Colors.black.withValues(alpha: 0.25),
     constraints: BoxConstraints(
-        maxHeight: context.getScreenSize().height -
+        maxHeight: getScreenSize().height -
             MediaQuery.of(context).viewInsets.top),
     isScrollControlled: scrollControlled,
     builder: (ctx) => SingleChildScrollView(

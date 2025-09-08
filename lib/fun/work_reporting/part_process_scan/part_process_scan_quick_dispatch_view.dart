@@ -4,7 +4,7 @@ import 'package:jd_flutter/bean/http/response/scan_barcode_info.dart';
 import 'package:jd_flutter/bean/http/response/worker_info.dart';
 import 'package:jd_flutter/fun/work_reporting/part_process_scan/part_process_scan_dispatch_view.dart';
 import 'package:jd_flutter/fun/work_reporting/part_process_scan/part_process_scan_logic.dart';
-import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';

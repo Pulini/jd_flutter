@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/wait_picking_material_info.dart';
 import 'package:jd_flutter/bean/http/response/worker_info.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/check_box_widget.dart';
@@ -259,8 +260,8 @@ realTimeInventoryDialog({
           title: Text(
               'picking_material_order_dialog_title_real_time_inventory'.tr),
           content: SizedBox(
-            width: context.getScreenSize().width * 0.7,
-            height: context.getScreenSize().height * 0.7,
+            width: getScreenSize().width * 0.7,
+            height: getScreenSize().height * 0.7,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [

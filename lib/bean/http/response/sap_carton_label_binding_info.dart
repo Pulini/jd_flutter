@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 
 class SapLabelBindingInfo {
   bool isBoxLabel = false; //	标签类型  ZBQLX (05大标 其余小标)

@@ -46,6 +46,7 @@
 // }]
 import 'package:get/get.dart';
 import 'package:jd_flutter/constant.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 
 class PatrolInspectionInfo {

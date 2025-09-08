@@ -6,6 +6,7 @@ import 'package:jd_flutter/utils/app_init_service.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
+
 import 'login_state.dart';
 
 class LoginLogic extends GetxController {

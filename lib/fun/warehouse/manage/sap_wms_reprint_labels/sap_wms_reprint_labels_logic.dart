@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
 import 'sap_wms_reprint_labels_state.dart';

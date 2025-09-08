@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/dispatch_info.dart';
 import 'package:jd_flutter/bean/http/response/worker_info.dart';
 import 'package:jd_flutter/fun/work_reporting/process_report/process_report_state.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';

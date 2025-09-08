@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/workshop_planning_info.dart';
 import 'package:jd_flutter/fun/work_reporting/workshop_planning/workshop_planning_logic.dart';
 import 'package:jd_flutter/fun/work_reporting/workshop_planning/workshop_planning_state.dart';
-import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 

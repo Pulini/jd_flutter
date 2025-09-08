@@ -37,7 +37,7 @@ class _SapPackingDeliveryOrderListPageState
           canPop: true,
           child: AlertDialog(
             contentPadding: const EdgeInsets.only(left: 10, right: 10),
-            title: Text('修改交货日期'),
+            title: const Text('修改交货日期'),
             content: SizedBox(
               width: 300,
               child: Column(
@@ -60,7 +60,7 @@ class _SapPackingDeliveryOrderListPageState
                   modifyDate: epcDate.getDateFormatYMD(),
                   callback: () => Get.back(),
                 ),
-                child: Text('提交修改'),
+                child: const Text('提交修改'),
               ),
               TextButton(
                 onPressed: () => Get.back(),

@@ -1,5 +1,5 @@
 import 'package:jd_flutter/bean/http/response/sap_picking_info.dart';
-import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 
 class SapSalesShipmentInfo {
   String? factory; //工厂  WERKS

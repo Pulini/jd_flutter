@@ -7,6 +7,7 @@ import 'package:jd_flutter/bean/http/response/process_plan_info.dart';
 import 'package:jd_flutter/bean/http/response/show_process_barcode_info.dart';
 import 'package:jd_flutter/bean/http/response/show_process_plan_detail_info.dart';
 import 'package:jd_flutter/bean/http/response/stock_in_barcode_info.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 
 import 'package:jd_flutter/utils/web_api.dart';
@@ -27,7 +28,7 @@ class InjectionScanReportLogic extends GetxController {
     httpGet(
       method: webApiGetScWorkCardList,
       loading: 'injection_scan_getting_process_plan'.tr,
-      params: {"DispatchingMachine": userInfo?.number},
+      params: {'DispatchingMachine': userInfo?.number},
     ).then((response) {
       if (response.resultCode == resultSuccess) {
         var list = <ProcessPlanInfo>[

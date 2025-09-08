@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/production_dispatch_order_info.dart';
 import 'package:jd_flutter/fun/dispatching/production_dispatch/production_dispatch_dialogs.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
@@ -140,7 +141,7 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
                 Expanded(
                   child: Text(
                     'production_dispatch_dispatch_order_no'.trArgs([
-                      data.sapOrderBill ?? data.orderBill ?? '',
+                      data.sapOrderBill.ifEmpty(data.orderBill??''),
                     ]),
                     style: itemTitleStyle,
                   ),

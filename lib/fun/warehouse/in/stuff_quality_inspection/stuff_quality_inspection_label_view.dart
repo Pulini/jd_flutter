@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/stuff_quality_inspection_label_info.dart';
 import 'package:jd_flutter/fun/warehouse/in/stuff_quality_inspection/stuff_quality_inspection_logic.dart';
 import 'package:jd_flutter/fun/warehouse/in/stuff_quality_inspection/stuff_quality_inspection_state.dart';
-import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';

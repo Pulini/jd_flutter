@@ -5,8 +5,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/delivery_order_info.dart';
+import 'package:jd_flutter/bean/http/response/leader_info.dart';
 import 'package:jd_flutter/bean/http/response/sap_purchase_stock_in_info.dart';
-import 'package:jd_flutter/bean/http/response/sap_put_on_shelves_info.dart';
 import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/utils/app_init_service.dart';
 import 'package:jd_flutter/utils/utils.dart';
@@ -14,7 +14,6 @@ import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/picker/picker_controller.dart';
 import 'package:jd_flutter/widget/picker/picker_view.dart';
-import 'package:jd_flutter/bean/http/response/leader_info.dart';
 import 'package:jd_flutter/widget/signature_page.dart';
 
 stockInDialog({
@@ -669,34 +668,6 @@ _createTemporaryOder({
       success.call(response.message ?? '');
     } else {
       errorDialog(content: response.message ?? 'query_default_error'.tr);
-    }
-  });
-}
-
-_getStockInLocationList({
-  required String factory,
-  required String warehouse,
-  required Function(List<RecommendLocationInfo>) locationList,
-  required Function(String) error,
-}) {
-  sapPost(
-    method: webApiSapGetLocationList,
-    body: {
-      'ZCZLX_WMS': 'WM01',
-      'ITEM': [
-        {
-          'WERKS': factory,
-          'LGORT': warehouse,
-        }
-      ]
-    },
-  ).then((response) {
-    if (response.resultCode == resultSuccess) {
-      locationList.call([
-        for (var json in response.data) RecommendLocationInfo.fromJson(json)
-      ]);
-    } else {
-      error.call(response.message ?? 'query_default_error'.tr);
     }
   });
 }

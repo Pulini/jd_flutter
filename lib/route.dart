@@ -14,8 +14,8 @@ import 'package:jd_flutter/fun/management/property/property_view.dart';
 import 'package:jd_flutter/fun/management/visit_register/visit_register_view.dart';
 import 'package:jd_flutter/fun/other/device_maintenance_record/device_maintenance_record_view.dart';
 import 'package:jd_flutter/fun/other/hydroelectric_excess/hydroelectric_excess_view.dart';
-import 'package:jd_flutter/fun/report/forming_barcode_collection/forming_barcode_collection_view.dart';
 import 'package:jd_flutter/fun/report/daily_report/daily_report_view.dart';
+import 'package:jd_flutter/fun/report/forming_barcode_collection/forming_barcode_collection_view.dart';
 import 'package:jd_flutter/fun/report/molding_pack_area_report/molding_pack_area_report_view.dart';
 import 'package:jd_flutter/fun/report/molding_scan_bulletin_report/molding_scan_bulletin_report_maximize_view.dart';
 import 'package:jd_flutter/fun/report/molding_scan_bulletin_report/molding_scan_bulletin_report_view.dart';
@@ -81,6 +81,7 @@ import 'package:jd_flutter/fun/work_reporting/production_tasks/production_tasks_
 import 'package:jd_flutter/fun/work_reporting/workshop_planning/workshop_planning_view.dart';
 import 'package:jd_flutter/home/home_view.dart';
 import 'package:jd_flutter/login/login_view.dart';
+
 import 'fun/warehouse/in/anti_counterfeiting/puma_anti_counterfeiting_view.dart';
 import 'fun/warehouse/out/forming_packing_scan/packing_scan_view.dart';
 
@@ -91,567 +92,567 @@ class RouteConfig {
   //扫码日产量报表
   static Routes dailyReport = Routes(
     '/daily_report',
-    99,
+    200,
     const DailyReportPage(),
   );
 
   //产量汇总表
   static Routes productionSummaryTable = Routes(
     '/production_summary_table',
-    99,
+    200,
     const ProductionSummaryReportPage(),
   );
 
   //日生产报表
   static Routes productionDayReport = Routes(
     '/production_day_report',
-    99,
+    200,
     const ProductionDayReportPage(),
   );
 
   //查看指令明细
   static Routes viewInstructionDetails = Routes(
     '/view_instruction_details',
-    99,
+    200,
     const ViewInstructionDetailsPage(),
   );
 
   //员工计件产量查询
   static Routes workerProductionReport = Routes(
     '/worker_production_report',
-    99,
+    200,
     const WorkerProductionReportPage(),
   );
 
   //员工计件明细
   static Routes workerProductionDetail = Routes(
     '/worker_production_detail',
-    99,
+    200,
     const WorkerProductionDetailPage(),
   );
 
   //查看工艺说明书
   static Routes viewProcessSpecification = Routes(
     '/view_process_specification',
-    99,
+    200,
     const ViewProcessSpecificationPage(),
   );
 
   //打包区报表
   static Routes moldingPackAreaReport = Routes(
     '/molding_pack_area_report',
-    99,
+    200,
     const MoldingPackAreaReportPage(),
   );
 
   //成型后段扫描看板
   static Routes moldingScanBulletinReport = Routes(
     '/molding_scan_bulletin_report',
-    99,
+    200,
     const MoldingScanBulletinReportPage(),
   );
 
   //来访登记
   static Routes visitRegister = Routes(
     '/visitor_registration',
-    99,
+    200,
     const VisitRegisterPage(),
   );
 
   //成型后段扫描看板最大化
   static Routes moldingScanBulletinReportMaximize = Routes(
     '/molding_scan_bulletin_report_maximize',
-    99,
+    200,
     const MoldingScanBulletinReportMaximize(),
   );
 
   //生产派工
   static Routes productionDispatch = Routes(
     '/production_dispatch',
-    101,
+    201,
     const ProductionDispatchPage(),
   );
 
   //生产派工-派工明细
   static Routes productionDispatchDetail = Routes(
     '/production_dispatch',
-    99,
+    200,
     const ProductionDispatchDetailPage(),
   );
 
   //财产管理
   static Routes property = Routes(
     '/property',
-    99,
+    200,
     const PropertyPage(),
   );
 
   //生产订单用料表
   static Routes productionMaterialsReport = Routes(
     '/production_materials_report',
-    99,
+    200,
     const ProductionMaterialsReportPage(),
   );
 
   //工单列表
   static Routes workOrderList = Routes(
     '/work_order_list',
-    99,
+    200,
     const WorkOrderListPage(),
   );
 
   //部件工序扫码
   static Routes partProcessScan = Routes(
     '/part_process_scan',
-    99,
+    200,
     const PartProcessScanPage(),
   );
 
   //材料车间派工
   static Routes materialDispatch = Routes(
     '/material_dispatch_page',
-    106,
+    200,
     const MaterialDispatchPage(),
   );
 
   //机台派工单
   static Routes machineDispatch = Routes(
     '/machine_dispatch_page',
-    99,
+    200,
     const MachineDispatchPage(),
   );
 
   //机台派工单汇报
   static Routes machineDispatchReport = Routes(
     '/machine_dispatch_report_page',
-    99,
+    200,
     const MachineDispatchReportPage(),
   );
 
   //成型装箱扫码
   static Routes packingScan = Routes(
     '/scan_packing_page',
-    99,
+    200,
     const PackingScanPage(),
   );
 
   //湿印工序派工
   static Routes processDispatchRegister = Routes(
     '/process_dispatch_register_page',
-    99,
+    200,
     const ProcessDispatchRegisterPage(),
   );
 
   //智能仓库配送
   static Routes smartDelivery = Routes(
     '/smart_delivery_page',
-    99,
+    200,
     const SmartDeliveryPage(),
   );
 
   //外箱标扫码
   static Routes cartonLabelScan = Routes(
     '/carton_label_scan_page',
-    100,
+    200,
     const CartonLabelScanPage(),
   );
 
   //外箱标扫码进度
   static Routes cartonLabelScanProgress = Routes(
     '/carton_label_scan_progress_page',
-    99,
+    200,
     const CartonLabelScanProgressPage(),
   );
 
   //水电抄度
   static Routes hydroelectricExcess = Routes(
     '/hydroelectric_excess_page',
-    99,
+    200,
     const HydroelectricExcessPage(),
   );
 
   //设备维修记录
   static Routes deviceMaintenance = Routes(
     '/device_maintenance_record',
-    99,
+    200,
     const DeviceMaintenanceRecordPage(),
   );
 
   //仓库调拨
   static Routes warehouseAllocation = Routes(
     '/warehouse_allocation_page',
-    99,
+    200,
     const WarehouseAllocationPage(),
   );
 
   //即时库存查询
   static Routes timelyInventory = Routes(
     '/timely_inventory_page',
-    99,
+    200,
     const TimelyInventoryPage(),
   );
 
   //PUMA防伪标管理
   static Routes antiCounterfeiting = Routes(
     '/anti_counterfeiting',
-    99,
+    200,
     const PumaAntiCounterfeitingPage(),
   );
 
   //sap采购入库
   static Routes sapPurchaseStockIn = Routes(
     '/sap_purchase_stock_in',
-    99,
+    200,
     const SapPurchaseStockInPage(),
   );
 
   //sap生产领料
   static Routes sapProductionPicking = Routes(
     '/sap_production_picking',
-    99,
+    200,
     const SapProductionPickingPage(),
   );
 
   //sap喷漆领料
   static Routes sapPrintPicking = Routes(
     '/sap_print_picking',
-    99,
+    200,
     const SapPrintPickingPage(),
   );
 
   //sap移库领料
   static Routes sapRelocationPicking = Routes(
     '/sap_relocation_picking',
-    99,
+    200,
     const SapRelocationPickingPage(),
   );
 
   //sap无标入库
   static Routes sapNoLabelStockIn = Routes(
     '/sap_no_label_stock_in',
-    99,
+    200,
     const SapNoLabelStockInPage(),
   );
 
   //sap注塑入库
   static Routes sapInjectionMoldingStockIn = Routes(
     '/sap_injection_molding_stock_in',
-    99,
+    200,
     const SapInjectionMoldingStockInPage(),
   );
 
   //sap料头入库
   static Routes sapSurplusMaterialStockIn = Routes(
     '/sap_surplus_material_stock_in',
-    99,
+    200,
     const SapSurplusMaterialStockInPage(),
   );
 
   //sap生产入库
   static Routes sapProduceStockIn = Routes(
     '/sap_produce_stock_in',
-    99,
+    200,
     const SapProduceStockInPage(),
   );
 
   //sap销售出库
   static Routes sapSalesShipment = Routes(
     '/sap_sales_shipment',
-    99,
+    200,
     const SapSalesShipmentPage(),
   );
 
   //sap领料入库冲销
   static Routes sapPickingReceiptReversal = Routes(
     '/sap_picking_receipt_reversal',
-    99,
+    200,
     const SapPickingReceiptReversalPage(),
   );
 
   //sap贴标上架
   static Routes sapPutOnShelves = Routes(
     '/sap_put_on_shelves',
-    99,
+    200,
     const SapPutOnShelvesPage(),
   );
 
   //sap移库
   static Routes sapStockTransfer = Routes(
     '/sap_stock_transfer',
-    99,
+    200,
     const SapStockTransferPage(),
   );
 
   //sap贴标重打
   static Routes sapWmsReprintLabels = Routes(
     '/sap_wms_reprint_labels',
-    99,
+    200,
     const SapWmsReprintLabelsPage(),
   );
 
   //sap贴标拆分
   static Routes sapWmsSplitLabel = Routes(
     '/sap_wms_split_label',
-    99,
+    200,
     const SapWmsSplitLabelPage(),
   );
 
   //sap油墨调色
   static Routes sapInkColorMatching = Routes(
     '/sap_ink_color_matching',
-    100,
+    200,
     const SapInkColorMatchingPage(),
   );
 
   //成型生产任务
   static Routes productionTasks = Routes(
     '/production_tasks',
-    103,
+    200,
     const ProductionTasksPage(),
   );
 
   //供应商扫码入库
   static Routes suppliersScanStore = Routes(
     '/suppliers_scan_store',
-    99,
+    200,
     const SuppliersScanStorePage(),
   );
 
   //生产扫码入库
   static Routes productionScanWarehouse = Routes(
     '/production_scan_warehouse',
-    99,
+    200,
     const ProductionScanWarehousePage(),
   );
 
   //来料稽查
   static Routes incomingInspection = Routes(
     '/incoming_inspection',
-    100,
+    200,
     const IncomingInspectionPage(),
   );
 
   //扫码领料出库
   static Routes scanPickingMaterial = Routes(
     '/scan_picking_material',
-    99,
+    200,
     const ScanPickingMaterialPage(),
   );
 
   //工序汇报入库
   static Routes processReportWarehouse = Routes(
     '/process_report_warehouse',
-    99,
+    200,
     const ProcessReportStorePage(),
   );
 
   //注塑车间扫码报工
   static Routes injectionScanReport = Routes(
     '/injection_scan_report',
-    99,
+    200,
     const InjectionScanReportPage(),
   );
 
   //销售扫码出库
   static Routes saleScanOutWarehouse = Routes(
     '/sale_scan_out_warehouse',
-    99,
+    200,
     const SaleScanOutWarehousePage(),
   );
 
   //生产扫码领料
   static Routes productionScanPickingMaterial = Routes(
     '/production_scan_picking_material',
-    99,
+    200,
     const ProductionScanPickingMaterialPage(),
   );
 
   //待领料列表
   static Routes waitPickingMaterial = Routes(
     '/wait_picking_material',
-    99,
+    200,
     const WaitPickingMaterialPage(),
   );
 
   //已配料列表
   static Routes pickingMaterialOrder = Routes(
     '/picking_material_order',
-    99,
+    200,
     const PickingMaterialOrderPage(),
   );
 
   //sap扫码盘点
   static Routes sapScanCodeInventory = Routes(
     '/sap_scan_code_inventory',
-    99,
+    200,
     const SapScanCodeInventoryPage(),
   );
 
   //sap计数盘点
   static Routes sapCountingInventory = Routes(
     '/sap_counting_inventory',
-    99,
+    200,
     const SapCountingInventoryPage(),
   );
 
   //报工交接确认列表
   static Routes handoverReportList = Routes(
     '/handover_report_list',
-    99,
+    200,
     const HandoverReportListPage(),
   );
 
   //工序汇报
   static Routes processReport = Routes(
     '/process_report',
-    99,
+    200,
     const ProcessReportPage(),
   );
 
   //部件报工扫描
   static Routes partReportScan = Routes(
     '/part_report_scan',
-    99,
+    200,
     const PartReportScanPage(),
   );
 
   //送货单列表
   static Routes deliveryOrder = Routes(
     '/delivery_order',
-    102,
+    200,
     const DeliveryOrderPage(),
   );
 
   //暂收单
   static Routes temporaryOrder = Routes(
     '/temporary_order',
-    99,
+    200,
     const TemporaryOrderPage(),
   );
 
   //生产部件交接单
   static Routes componentHandover = Routes(
     '/component_handover_order',
-    99,
+    200,
     const ComponentHandoverPage(),
   );
 
   //部件报工或取消
   static Routes partReportOrCancel = Routes(
     '/part_report_cancel',
-    99,
+    200,
     const PartReportCancelPage(),
   );
 
   //采购订单入库
   static Routes purchaseOrderWarehousing = Routes(
     '/purchase_order_warehousing',
-    99,
+    200,
     const PurchaseOrderWarehousingPage(),
   );
 
   //采购订单凭证列表
   static Routes purchaseOrderReversal = Routes(
     '/purchase_order_reversal',
-    99,
+    200,
     const PurchaseOrderReversalPage(),
   );
 
   //工序派工单列表
   static Routes processDispatchList = Routes(
     '/process_dispatch_list',
-    99,
+    200,
     const ProcessDispatchPage(),
   );
 
   //品检单列表
   static Routes qualityInspectionList = Routes(
     '/quality_inspection_list',
-    99,
+    200,
     const QualityInspectionListPage(),
   );
 
   //生产车间质检
   static Routes qualityInspection = Routes(
     '/quality_inspection',
-    99,
+    200,
     const QualityInspectionPage(),
   );
 
   //生产车间巡检
   static Routes patrolInspection = Routes(
     '/patrol_inspection',
-    99,
+    200,
     const PatrolInspectionPage(),
   );
 
   //SAP装柜出库
   static Routes sapPackingScan = Routes(
     '/sap_packing_scan',
-    99,
+    200,
     const SapPackingScanPage(),
   );
 
   //SAP装柜出库暂存单列表
   static Routes sapPackingScanCacheList = Routes(
     '/sap_packing_scan_cache_list',
-    99,
+    200,
     const SapPackingScanCacheListPage(),
   );
 
   //SAP装柜出库冲销
   static Routes sapPackingScanReverse = Routes(
     '/sap_packing_scan_reverse',
-    99,
+    200,
     const SapPackingScanReversePage(),
   );
 
   //SAP外箱标绑定
   static Routes sapCartonLabelBinding = Routes(
     '/sap_carton_label_binding',
-    99,
+    200,
     const SapCartonLabelBindingPage(),
   );
 
   //SAP内箱标拆分
   static Routes sapInnerBoxLabelSplit = Routes(
     '/sap_inner_box_label_split',
-    99,
+    200,
     const SapInnerBoxLabelSplitPage(),
   );
 
   //成型条码采集
   static Routes formingBarcodeCollection = Routes(
     '/forming_barcode_collection',
-    99,
+    200,
     const FormingBarcodeCollectionPage(),
   );
 
   //品质管理
   // static Routes formingBarcodeCollection = Routes(
   //   '/forming_barcode_collection',
-  //   99,
+  //   200,
   //   const FormingBarcodeCollectionPage(),
   // );
 
   //车间计工
   static Routes workshopPlanning = Routes(
     '/workshop_planning',
-    99,
+    200,
     const WorkshopPlanningPage(),
   );
 
   //SAP标签重打
   static Routes sapLabelReprint = Routes(
     '/sap_label_reprint',
-    99,
+    200,
     const SapLabelReprintPage(),
   );
 
   //打印托盘清单
   static Routes printPallet = Routes(
     '/print_pallet',
-    99,
+    100,
     const PrintPalletPage(),
   );
 

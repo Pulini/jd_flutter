@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/picking_material_order_info.dart';
 import 'package:jd_flutter/fun/warehouse/out/picking_material_order/picking_material_order_logic.dart';
 import 'package:jd_flutter/fun/warehouse/out/picking_material_order/picking_material_order_state.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/check_box_widget.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';

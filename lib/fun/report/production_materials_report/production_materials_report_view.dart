@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/production_materials_info.dart';
-import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
 import 'package:jd_flutter/widget/picker/picker_view.dart';
@@ -219,14 +219,6 @@ class _ProductionMaterialsReportPageState
     );
   }
 
-  _radioClick() {
-    if (state.select.value == 1) {
-      state.select.value = 0;
-    } else {
-      state.select.value = 1;
-    }
-  }
-
   @override
   void initState() {
     if (Get.arguments != null) {
@@ -243,45 +235,27 @@ class _ProductionMaterialsReportPageState
         ? pageBodyWithDrawer(
             title: '用料清单',
             queryWidgets: [
-              Obx(() => Row(
-                    children: [
-                      Expanded(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Radio(
-                              value: 0,
-                              groupValue: state.select.value,
-                              onChanged: (v) => state.select.value = v!,
-                            ),
-                            GestureDetector(
-                              onTap: _radioClick,
-                              child: Text(
-                                'production_materials_report_query_hint1'.tr,
-                              ),
-                            ),
-                          ],
+              Obx(() => RadioGroup(
+                    groupValue: state.select.value,
+                    onChanged: (v) => state.select.value = v!,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: RadioListTile(
+                            title: Text(
+                                'production_materials_report_query_hint1'.tr),
+                            value: 0,
+                          ),
                         ),
-                      ),
-                      Expanded(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Radio(
-                              value: 1,
-                              groupValue: state.select.value,
-                              onChanged: (v) => state.select.value = v!,
-                            ),
-                            GestureDetector(
-                              onTap: _radioClick,
-                              child: Text(
-                                'production_materials_report_query_hint2'.tr,
-                              ),
-                            ),
-                          ],
+                        Expanded(
+                          child: RadioListTile(
+                            title: Text(
+                                'production_materials_report_query_hint2'.tr),
+                            value: 1,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   )),
               EditText(
                 controller: tecInstruction,

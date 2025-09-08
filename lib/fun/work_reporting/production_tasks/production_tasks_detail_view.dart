@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/production_tasks_info.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 
@@ -208,7 +209,7 @@ class _ProductionTasksDetailPageState extends State<ProductionTasksDetailPage> {
         child: Column(
           children: [
             SizedBox(
-              height: (context.getScreenSize().width * 0.5)/16*9,
+              height: (getScreenSize().width * 0.5)/16*9,
               child: Row(
                 children: [
                   Container(

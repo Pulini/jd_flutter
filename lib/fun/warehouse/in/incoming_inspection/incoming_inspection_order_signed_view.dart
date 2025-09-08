@@ -5,6 +5,7 @@ import 'package:jd_flutter/bean/http/response/incoming_inspection_info.dart';
 import 'package:jd_flutter/bean/http/response/photo_bean.dart';
 import 'package:jd_flutter/fun/warehouse/in/incoming_inspection/incoming_inspection_logic.dart';
 import 'package:jd_flutter/fun/warehouse/in/incoming_inspection/incoming_inspection_state.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/view_photo.dart';
@@ -99,7 +100,7 @@ class _OrderSignedPageState extends State<OrderSignedPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
-            height: context.getScreenSize().height * 0.25,
+            height: getScreenSize().height * 0.25,
             child: Swiper(
               itemBuilder: (c, i) =>
                   _photoItem((state.inspectionDetail?.pictureList ?? [])[i]),

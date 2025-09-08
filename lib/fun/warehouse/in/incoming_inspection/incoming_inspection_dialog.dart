@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/incoming_inspection_info.dart';
 import 'package:jd_flutter/bean/http/response/worker_info.dart';
 import 'package:jd_flutter/constant.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
@@ -23,7 +24,7 @@ modifySubItemMaterialDialog({
           contentPadding: const EdgeInsets.all(7),
           title: Text('incoming_inspection_dialog_modify_material'.tr),
           content: SizedBox(
-            width: context.getScreenSize().width * 0.8,
+            width: getScreenSize().width * 0.8,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -142,7 +143,7 @@ addOrModifyMaterialDialog({
           contentPadding: const EdgeInsets.all(7),
           title: Text('incoming_inspection_dialog_add_material'.tr),
           content: SizedBox(
-            width: context.getScreenSize().width * 0.8,
+            width: getScreenSize().width * 0.8,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,

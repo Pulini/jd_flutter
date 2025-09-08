@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/device_detail_info.dart';
 import 'package:jd_flutter/bean/http/response/device_list_info.dart';
 import 'package:jd_flutter/fun/other/hydroelectric_excess/hydroelectric_excess_state.dart';
-import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
 class HydroelectricExcessLogic extends GetxController {

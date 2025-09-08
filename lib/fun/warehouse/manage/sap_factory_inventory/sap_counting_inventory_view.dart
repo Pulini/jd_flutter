@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/sap_scan_code_inventory_info.dart';
 import 'package:jd_flutter/route.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
@@ -32,7 +33,7 @@ class _SapCountingInventoryPageState extends State<SapCountingInventoryPage> {
   );
 
   _item(InventoryPalletInfo data) {
-    var width = context.getScreenSize().width - 20;
+    var width = getScreenSize().width - 20;
     var textButtonPadding =
         const EdgeInsets.only(left: 7, top: 3, right: 7, bottom: 3);
     return Column(
@@ -122,9 +123,10 @@ class _SapCountingInventoryPageState extends State<SapCountingInventoryPage> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.only(
                       bottomLeft: const Radius.circular(5),
-                      bottomRight: data.inventoryQty.value >= (data.quantity??0)
-                          ? const Radius.circular(5)
-                          : Radius.zero,
+                      bottomRight:
+                          data.inventoryQty.value >= (data.quantity ?? 0)
+                              ? const Radius.circular(5)
+                              : Radius.zero,
                     ),
                     color: Colors.blue,
                   ),
@@ -153,11 +155,10 @@ class _SapCountingInventoryPageState extends State<SapCountingInventoryPage> {
 
   _queryOrder() {
     logic.queryInventoryOrder(
-      isScan: false,
-      factory: factoryWarehouseController.getPickItem1().pickerId(),
-      warehouse: factoryWarehouseController.getPickItem2().pickerId(),
-      area: ''
-    );
+        isScan: false,
+        factory: factoryWarehouseController.getPickItem1().pickerId(),
+        warehouse: factoryWarehouseController.getPickItem2().pickerId(),
+        area: '');
   }
 
   @override
@@ -165,34 +166,32 @@ class _SapCountingInventoryPageState extends State<SapCountingInventoryPage> {
     return pageBodyWithBottomSheet(
       bottomSheet: [
         LinkOptionsPicker(pickerController: factoryWarehouseController),
-        Row(
-          children: [
-            Expanded(
-              child: Obx(() => RadioListTile(
-                    title: Text('sap_inventory_null'.tr),
-                    value: '',
-                    groupValue: state.orderType.value,
-                    onChanged: (v) => state.orderType.value = v!,
-                  )),
-            ),
-            Expanded(
-              child: Obx(() => RadioListTile(
-                    title: Text('sap_inventory_first_count'.tr),
-                    value: '10',
-                    groupValue: state.orderType.value,
-                    onChanged: (v) => state.orderType.value = v!,
-                  )),
-            ),
-            Expanded(
-              child: Obx(() => RadioListTile(
-                    title: Text('sap_inventory_second_count'.tr),
-                    value: '11',
-                    groupValue: state.orderType.value,
-                    onChanged: (v) => state.orderType.value = v!,
-                  )),
-            ),
-          ],
-        )
+        Obx(() => RadioGroup(
+              groupValue: state.orderType.value,
+              onChanged: (v) => state.orderType.value = v!,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: RadioListTile(
+                      title: Text('sap_inventory_null'.tr),
+                      value: '',
+                    ),
+                  ),
+                  Expanded(
+                    child: RadioListTile(
+                      title: Text('sap_inventory_first_count'.tr),
+                      value: '10',
+                    ),
+                  ),
+                  Expanded(
+                    child: RadioListTile(
+                      title: Text('sap_inventory_second_count'.tr),
+                      value: '11',
+                    ),
+                  ),
+                ],
+              ),
+            ))
       ],
       query: () => _queryOrder(),
       body: Column(

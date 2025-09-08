@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/feishu_info.dart';
 import 'package:jd_flutter/constant.dart';
 
+import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
@@ -148,7 +149,7 @@ pickFilePopup({required List<Map> fileList, required Function(Map) viewFile}) {
             bottom: MediaQuery.of(context).viewInsets.bottom,
           ),
           child: Container(
-            height: context.getScreenSize().height * 0.35,
+            height: getScreenSize().height * 0.35,
             padding: const EdgeInsets.all(8.0),
             decoration: const BoxDecoration(
               borderRadius: BorderRadius.only(

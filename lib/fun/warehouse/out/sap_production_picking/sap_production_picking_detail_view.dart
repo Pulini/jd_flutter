@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/sap_picking_info.dart';
 import 'package:jd_flutter/fun/warehouse/out/sap_production_picking/sap_production_picking_bar_code_list_view.dart';
 import 'package:jd_flutter/fun/warehouse/out/sap_production_picking/sap_production_picking_dialog.dart';
-import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';

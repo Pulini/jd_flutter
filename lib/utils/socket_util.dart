@@ -1,6 +1,7 @@
 import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
-import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 
 //socket连接状态枚举类
 enum ConnectState {

@@ -5,6 +5,7 @@ import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/scanner.dart';
+
 import 'carton_label_scan_logic.dart';
 import 'carton_label_scan_state.dart';
 

@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
-import 'package:jd_flutter/bean/http/response/show_process_plan_detail_info.dart';
 import 'package:jd_flutter/bean/http/response/process_plan_detail_info.dart';
 import 'package:jd_flutter/bean/http/response/show_process_barcode_info.dart';
+import 'package:jd_flutter/bean/http/response/show_process_plan_detail_info.dart';
 
 class InjectionScanReportState {
 

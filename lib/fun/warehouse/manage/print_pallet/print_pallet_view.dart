@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/sap_picking_info.dart';
 import 'package:jd_flutter/route.dart';
-import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/picker/picker_controller.dart';
@@ -33,7 +33,7 @@ class _PrintPalletPageState extends State<PrintPalletPage> {
     var materialList = groupBy(pallet, (v) => v.materialCode).values.toList();
     return Container(
         margin: const EdgeInsets.only(bottom: 10),
-        padding:  EdgeInsetsGeometry.only(left: 10, right: 10),
+        padding: const EdgeInsetsGeometry.only(left: 10, right: 10),
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [Colors.grey.shade200, Colors.blue.shade200],
@@ -63,6 +63,10 @@ class _PrintPalletPageState extends State<PrintPalletPage> {
                     color: Colors.red,
                   ),
                 ),
+                Obx(() => Checkbox(
+                      value: logic.isSelectedAllItem(index),
+                      onChanged: (v) => logic.selectAllSubItem(index, v!),
+                    ))
               ],
             ),
             for (var item in materialList) _materialItem(item)
@@ -107,7 +111,10 @@ class _PrintPalletPageState extends State<PrintPalletPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text('件号：${item.pieceNo}'),
-                Text('数量：${item.quantity.toShowString()} ${item.unit}')
+                Text('数量：${item.quantity.toShowString()} ${item.unit}'),
+                Obx(() => Checkbox(
+                    value: item.isSelect.value,
+                    onChanged: (v) => item.isSelect.value = v!))
               ],
             )
           ]
@@ -139,6 +146,18 @@ class _PrintPalletPageState extends State<PrintPalletPage> {
                 icon: const Icon(
                   Icons.print,
                   color: Colors.blueAccent,
+                ),
+              )
+            : Container()),
+        Obx(() => state.palletList.any((v) => v.any((v2) => v2.isSelect.value))
+            ? IconButton(
+                onPressed: () => askDialog(
+                  content: '确定要从托盘移除该标签吗？',
+                  confirm: () => logic.deleteLabel(),
+                ),
+                icon: const Icon(
+                  Icons.link_off_outlined,
+                  color: Colors.red,
                 ),
               )
             : Container())

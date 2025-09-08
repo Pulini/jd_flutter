@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/production_tasks_info.dart';
 import 'package:jd_flutter/fun/work_reporting/production_tasks/production_tasks_detail_view.dart';
 import 'package:jd_flutter/fun/work_reporting/production_tasks/production_tasks_pack_material_view.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';

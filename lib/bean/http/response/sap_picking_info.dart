@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
-import 'package:jd_flutter/utils/utils.dart';
+import 'package:get/get.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 
 // {
 //   "ZTYPE": "1",
@@ -700,6 +701,7 @@ class SapPalletDetailInfo {
   });
 
   double pickQty=0.0;
+  RxBool isSelect=false.obs;
 
   String? factory; //WERKS  工厂
   String? palletNumber; //ZFTRAYNO 托盘号

@@ -2,7 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/workshop_planning_info.dart';
-import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
 materialDialog({
@@ -27,7 +27,7 @@ materialDialog({
       canPop: false,
       child: StatefulBuilder(builder: (context, dialogSetState) {
         return AlertDialog(
-          title: Text('物料列表'),
+          title: const Text('物料列表'),
           content: SizedBox(
             width: 400,
             height: 300,

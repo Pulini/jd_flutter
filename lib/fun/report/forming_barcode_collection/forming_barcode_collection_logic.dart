@@ -6,6 +6,7 @@ import 'package:jd_flutter/bean/http/response/forming_mono_detail_info.dart';
 import 'package:jd_flutter/bean/http/response/forming_scan_info.dart';
 import 'package:jd_flutter/bean/http/response/work_card_priority_info.dart';
 import 'package:jd_flutter/fun/report/forming_barcode_collection/forming_barcode_collection_history_view.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';

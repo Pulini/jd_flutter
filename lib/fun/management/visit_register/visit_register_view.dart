@@ -20,9 +20,7 @@ class VisitRegisterPage extends StatefulWidget {
 
 class _VisitRegisterPageState extends State<VisitRegisterPage> {
   final logic = Get.put(VisitRegisterLogic());
-  final state = Get
-      .find<VisitRegisterLogic>()
-      .state;
+  final state = Get.find<VisitRegisterLogic>().state;
 
   var controller = EasyRefreshController(controlFinishRefresh: true);
 
@@ -61,18 +59,24 @@ class _VisitRegisterPageState extends State<VisitRegisterPage> {
     return GestureDetector(
       onTap: () => {
         logger.d(data.toJson()),
-        if(state.lastAdd){
-          logic.getVisitorDetailInfo(data.interID.toString(),false),
-          logger.d('1')
-        }else{
-          if(data.submitType==0){
-            logic.getVisitorDetailInfo(data.interID.toString(),true),
-            logger.d('2')
-          }else{
-            logic.getVisitorDetailInfo(data.interID.toString(),false),
-            logger.d('3')
+        if (state.lastAdd)
+          {
+            logic.getVisitorDetailInfo(data.interID.toString(), false),
+            logger.d('1')
           }
-        }
+        else
+          {
+            if (data.submitType == 0)
+              {
+                logic.getVisitorDetailInfo(data.interID.toString(), true),
+                logger.d('2')
+              }
+            else
+              {
+                logic.getVisitorDetailInfo(data.interID.toString(), false),
+                logger.d('3')
+              }
+          }
       }, //获取详情点击事件
       child: Container(
           margin: const EdgeInsets.only(bottom: 10),
@@ -86,7 +90,7 @@ class _VisitRegisterPageState extends State<VisitRegisterPage> {
               Row(
                 children: [
                   Expanded(
-                    //来访人
+                      //来访人
                       flex: 1,
                       child: Row(
                         children: [
@@ -101,7 +105,7 @@ class _VisitRegisterPageState extends State<VisitRegisterPage> {
                         ],
                       )),
                   Expanded(
-                    //被访人
+                      //被访人
                       flex: 1,
                       child: Row(
                         children: [
@@ -116,7 +120,7 @@ class _VisitRegisterPageState extends State<VisitRegisterPage> {
               Row(
                 children: [
                   Expanded(
-                    //来访单位
+                      //来访单位
                       flex: 1,
                       child: Row(
                         children: [
@@ -129,7 +133,7 @@ class _VisitRegisterPageState extends State<VisitRegisterPage> {
                         ],
                       )),
                   Expanded(
-                    //车牌号码
+                      //车牌号码
                       flex: 1,
                       child: Row(
                         children: [
@@ -148,7 +152,7 @@ class _VisitRegisterPageState extends State<VisitRegisterPage> {
               Row(
                 children: [
                   Expanded(
-                    //来访时间
+                      //来访时间
                       flex: 1,
                       child: Row(
                         children: [
@@ -163,7 +167,7 @@ class _VisitRegisterPageState extends State<VisitRegisterPage> {
                         ],
                       )),
                   Expanded(
-                    //离场时间
+                      //离场时间
                       flex: 1,
                       child: Row(
                         children: [
@@ -183,7 +187,7 @@ class _VisitRegisterPageState extends State<VisitRegisterPage> {
                       flex: 1,
                       child: Row(
                         children: [
-                          if(data.submitType == 1)
+                          if (data.submitType == 1)
                             Text('visit_item_visiting_supplement'.tr,
                                 style: const TextStyle(color: Colors.red)),
                         ],
@@ -207,9 +211,9 @@ class _VisitRegisterPageState extends State<VisitRegisterPage> {
         ),
         Expanded(
             child: CupertinoTextField(
-              controller: controller,
-              inputFormatters: inputType,
-            )),
+          controller: controller,
+          inputFormatters: inputType,
+        )),
       ],
     );
   }
@@ -224,7 +228,7 @@ class _VisitRegisterPageState extends State<VisitRegisterPage> {
       barrierDismissible: true,
       builder: (BuildContext context) {
         return CupertinoAlertDialog(
-          title:  Text("visit_recent_visit_records".tr),
+          title: Text("visit_recent_visit_records".tr),
           content: Column(
             mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -248,20 +252,19 @@ class _VisitRegisterPageState extends State<VisitRegisterPage> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child:  Text('dialog_default_cancel'.tr),
+              child: Text('dialog_default_cancel'.tr),
             ),
             CupertinoDialogAction(
                 onPressed: () {
                   click?.call();
                   Navigator.of(context).pop();
                 },
-                child:  Text('dialog_default_confirm'.tr)),
+                child: Text('dialog_default_confirm'.tr)),
           ],
         );
       },
     );
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -269,105 +272,83 @@ class _VisitRegisterPageState extends State<VisitRegisterPage> {
         bottomSheet: [
           visitButtonWidget(
               title: 'visit_button_scan_invitation_code'.tr,
-              click: () =>
-              {
-                // Get.to(() => const DailyReportPage()),   //跳转界面
-              }),
+              click: () => {
+                    // Get.to(() => const DailyReportPage()),   //跳转界面
+                  }),
           visitButtonWidget(
               title: 'visit_button_search_recent_records'.tr,
-              click: () =>
-              {
-                Get.back(),
-                showDialogLastRecord(   //搜索最近来访记录，带数据进行新增
-                    context: context,
-                    click: () {
-                      state.lastAdd = true;
-                      logic.getVisitLastList(refresh: () => controller.finishRefresh());
-                    }),
-              }),
+              click: () => {
+                    Get.back(),
+                    showDialogLastRecord(
+                        //搜索最近来访记录，带数据进行新增
+                        context: context,
+                        click: () {
+                          state.lastAdd = true;
+                          logic.getVisitLastList(
+                              refresh: () => controller.finishRefresh());
+                        }),
+                  }),
           visitButtonWidget(
               title: 'visit_button_add_record'.tr,
-              click: () async =>
-              {
-                Get.back(), //搜索框缩回
-                logic.getToAddPage(),
-              }),
+              click: () async => {
+                    Get.back(), //搜索框缩回
+                    logic.getToAddPage(),
+                  }),
           DatePicker(pickerController: logic.pickerControllerStartDate),
           DatePicker(pickerController: logic.pickerControllerEndDate),
-          Obx(() =>
-              Row(children: [
-                Expanded(
-                  flex: 1,
-                  child: ListTile(
-                    title:  Text('visit_all'.tr),
-                    leading: Radio(
-                      value: "",
-                      groupValue: state.select.value,
-                      onChanged: (v) {
-                        state.select.value = v!;
-                        logger.d(v);
-                      },
+          Obx(() => RadioGroup(
+                groupValue: state.select.value,
+                onChanged: (v) => state.select.value = v!,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: RadioListTile(
+                        title: Text('visit_all'.tr),
+                        value: '',
+                      ),
                     ),
-                  ),
+                    Expanded(
+                      child: RadioListTile(
+                        title: Text('visit_not_leaving_yet'.tr),
+                        value: '0',
+                      ),
+                    ),
+                    Expanded(
+                      child: RadioListTile(
+                        title: Text('visit_already_left'.tr),
+                        value: '1',
+                      ),
+                    ),
+                  ],
                 ),
-                Expanded(
-                  flex: 1,
-                  child: ListTile(
-                    title:  Text('visit_not_leaving_yet'.tr),
-                    leading: Radio(
-                      value: "0",
-                      groupValue: state.select.value,
-                      onChanged: (v) {
-                        state.select.value = v!;
-                        logger.d(v);
-                      },
-                    ),
-                  ),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: ListTile(
-                    title:  Text('visit_already_left'.tr),
-                    leading: Radio(
-                      value: "1",
-                      groupValue: state.select.value,
-                      onChanged: (v) {
-                        state.select.value = v!;
-                        logger.d(v);
-                      },
-                    ),
-                  ),
-                )
-              ]))
+              ))
         ],
         query: () => {
-          logic.refreshGetVisitList(
-              startTime: logic.pickerControllerStartDate.getDateFormatYMD(),
-              endTime: logic.pickerControllerEndDate.getDateFormatYMD(),
-              leave: state.select.value.toString())
-        },
-        body: Obx(() => Scaffold(
-          backgroundColor: Colors.transparent,
-          body: EasyRefresh(
-            controller: controller,
-            onRefresh: () =>
-            {
-              logic.refreshGetVisitList( leave: "0",
-                refresh: () => controller.finishRefresh(),
-              )
+              logic.refreshGetVisitList(
+                  startTime: logic.pickerControllerStartDate.getDateFormatYMD(),
+                  endTime: logic.pickerControllerEndDate.getDateFormatYMD(),
+                  leave: state.select.value.toString())
             },
-            header: const MaterialHeader(),
-            child: ListView.builder(
-              padding: const EdgeInsets.all(8),
-              itemCount: state.dataList.length,
-              itemBuilder: (BuildContext context, int index) =>
-                  _item(state.dataList.toList()[index]),
-            ),
-          ),
-        ))
-    );
+        body: Obx(() => Scaffold(
+              backgroundColor: Colors.transparent,
+              body: EasyRefresh(
+                controller: controller,
+                onRefresh: () => {
+                  logic.refreshGetVisitList(
+                    leave: "0",
+                    refresh: () => controller.finishRefresh(),
+                  )
+                },
+                header: const MaterialHeader(),
+                child: ListView.builder(
+                  padding: const EdgeInsets.all(8),
+                  itemCount: state.dataList.length,
+                  itemBuilder: (BuildContext context, int index) =>
+                      _item(state.dataList.toList()[index]),
+                ),
+              ),
+            )));
   }
-
 
   @override
   void dispose() {

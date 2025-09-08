@@ -1,7 +1,8 @@
 import 'package:get/get.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
-import 'package:jd_flutter/widget/picker/picker_item.dart';
 import 'package:jd_flutter/utils/web_api.dart';
+import 'package:jd_flutter/widget/picker/picker_item.dart';
 
 class ResponsibleDepartmentInfo extends PickerItem {
   int? departmentID;

@@ -4,14 +4,13 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/base_data.dart';
 import 'package:jd_flutter/bean/http/response/worker_info.dart';
 import 'package:jd_flutter/constant.dart';
-
+import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
+import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/picker/picker_item.dart';
 import 'package:jd_flutter/widget/worker_check_widget.dart';
-
-import 'package:jd_flutter/widget/dialogs.dart';
 
 selectSupplierAndDepartmentDialog({
   required Function(
@@ -43,7 +42,7 @@ selectSupplierAndDepartmentDialog({
             title: Text('production_scan_picking_material_submit_picking'.tr),
             contentPadding: const EdgeInsets.only(left: 10, right: 10),
             content: SizedBox(
-              width: context.getScreenSize().width * 0.8,
+              width: getScreenSize().width * 0.8,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [

@@ -203,6 +203,7 @@ doUpdate({
   update() {
     if (GetPlatform.isAndroid) {
       debugPrint('Android_Update');
+      Get.back();
       Downloader(
         url: version.url!,
         completed: (path) => const MethodChannel(channelUsbAndroidToFlutter)

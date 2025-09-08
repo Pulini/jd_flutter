@@ -29,7 +29,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 
 class TemporaryOrderInfo {
   String? companyCode;

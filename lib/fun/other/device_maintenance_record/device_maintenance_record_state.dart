@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/device_maintenance_info.dart';
 import 'package:jd_flutter/bean/http/response/device_maintenance_list_info.dart';
 import 'package:jd_flutter/bean/http/response/people_message_info.dart';
-import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 
 class DeviceMaintenanceRecordState {

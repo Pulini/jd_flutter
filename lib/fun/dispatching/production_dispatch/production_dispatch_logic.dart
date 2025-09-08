@@ -11,11 +11,13 @@ import 'package:jd_flutter/fun/dispatching/production_dispatch/production_dispat
 import 'package:jd_flutter/fun/dispatching/production_dispatch/production_dispatch_progress_view.dart';
 import 'package:jd_flutter/fun/other/maintain_label/maintain_label_view.dart';
 import 'package:jd_flutter/fun/report/production_materials_report/production_materials_report_view.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/preview_label_widget.dart';
-import 'package:jd_flutter/widget/tsc_label_templates/75w45h_fixed_label.dart';
+import 'package:jd_flutter/widget/tsc_label_templates/fixed_label_75w45h.dart';
+
 import 'production_dispatch_state.dart';
 
 class ProductionDispatchLogic extends GetxController {

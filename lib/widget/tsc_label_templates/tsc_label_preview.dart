@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/preview_label_widget.dart';
-import 'package:jd_flutter/widget/tsc_label_templates/110w_dynamic_label.dart';
-import 'package:jd_flutter/widget/tsc_label_templates/75w45h_fixed_label.dart';
-import 'package:jd_flutter/widget/tsc_label_templates/75w_dynamic_label.dart';
+import 'package:jd_flutter/widget/tsc_label_templates/dynamic_label_110w.dart';
+import 'package:jd_flutter/widget/tsc_label_templates/fixed_label_75w45h.dart';
+import 'package:jd_flutter/widget/tsc_label_templates/dynamic_label_75w.dart';
 
 class TscLabelPreview extends StatefulWidget {
   const TscLabelPreview({super.key});

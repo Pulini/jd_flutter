@@ -1,4 +1,4 @@
-import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 
 // Size : "35"
 // NetWeight : "5.000"

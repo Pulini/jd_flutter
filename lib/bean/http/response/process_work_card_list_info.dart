@@ -1,4 +1,4 @@
-import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 
 // InterID : 2243812
 // EntryIDs : [2,3]

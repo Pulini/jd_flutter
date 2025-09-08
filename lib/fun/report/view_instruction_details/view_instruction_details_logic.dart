@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/report/view_instruction_details/view_instruction_details_state.dart';
-
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 

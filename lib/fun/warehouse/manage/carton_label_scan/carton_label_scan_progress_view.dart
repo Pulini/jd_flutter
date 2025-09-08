@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/warehouse/manage/carton_label_scan/carton_label_scan_state.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
+
 import 'carton_label_scan_logic.dart';
 
 class CartonLabelScanProgressPage extends StatefulWidget {

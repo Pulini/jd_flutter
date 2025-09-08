@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/workshop_planning_info.dart';
 import 'package:jd_flutter/fun/work_reporting/workshop_planning/workshop_planning_logic.dart';
 import 'package:jd_flutter/fun/work_reporting/workshop_planning/workshop_planning_state.dart';
-import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/widget/check_box_widget.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
@@ -335,9 +335,9 @@ class _WorkshopPlanningSalaryCountPageState
               height: 30,
               child: Row(
                 children: [
-                  Text(
+                  const Text(
                     '物料：',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Colors.black,
                     ),
@@ -428,7 +428,7 @@ class _WorkshopPlanningSalaryCountPageState
               unselectedLabelColor: Colors.grey,
               overlayColor: WidgetStateProperty.all(Colors.transparent),
               controller: tabController,
-              tabs: [
+              tabs: const [
                 Tab(text: '工序'),
                 Tab(text: '报工'),
               ],

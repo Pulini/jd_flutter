@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/report_info.dart';
 import 'package:jd_flutter/fun/warehouse/code_list_report/code_list_report_logic.dart';
 import 'package:jd_flutter/fun/warehouse/code_list_report/code_list_report_state.dart';
-import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';

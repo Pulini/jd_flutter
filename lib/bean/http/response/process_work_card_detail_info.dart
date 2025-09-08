@@ -1,4 +1,4 @@
-import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 
 // ProductName : "MDWG202652-21"
 // Mtonos : "0010044148"

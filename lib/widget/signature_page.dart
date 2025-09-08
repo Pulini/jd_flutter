@@ -209,8 +209,8 @@ class _SignatureWithWorkerNumberPageState
 
   @override
   Widget build(BuildContext context) {
-    var width = context.getScreenSize().width;
-    var height = context.getScreenSize().height;
+    var width = getScreenSize().width;
+    var height = getScreenSize().height;
 
     var workerCheck = WorkerCheck(
       init: worker?.empCode ?? '',
@@ -336,7 +336,7 @@ class _SignatureWithWorkerNumberPageState
                       left: 0,
                       top: 30,
                       child: SizedBox(
-                        width: context.getScreenSize().width - 220,
+                        width: getScreenSize().width - 220,
                         child: workerCheck,
                       ),
                     ),
