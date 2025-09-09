@@ -427,9 +427,9 @@ class MachineDispatchState {
           'ZBARCODE_TYPE': isEnglish ? '01' : '',
           'item': [
             {
-              'ZDHMNG': sizeMaterialNumber,
+              'ZDHMNG':  isEnglish ? weight : '',
               'MATNR': sizeMaterialNumber,
-              'SIZE1_ATINN': isEnglish ? weight : '',
+              'SIZE1_ATINN': size,
               'MENGE': printQty,
             }
           ]
