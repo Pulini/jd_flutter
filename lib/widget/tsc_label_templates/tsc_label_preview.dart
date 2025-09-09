@@ -18,6 +18,7 @@ class _TscLabelPreviewState extends State<TscLabelPreview> {
   Widget build(BuildContext context) {
     var labels = <List>[
       [
+        false,
         '(75 x 45)mm 料头标签 中文标签',
         surplusMaterialLabel(
           qrCode: '12345678987654321234567890',
@@ -30,6 +31,7 @@ class _TscLabelPreviewState extends State<TscLabelPreview> {
         )
       ],
       [
+        false,
         '(75 x 45)mm 机台派工 中文标签',
         machineDispatchChineseFixedLabel(
           labelID: 'labelID',
@@ -49,6 +51,7 @@ class _TscLabelPreviewState extends State<TscLabelPreview> {
         )
       ],
       [
+        false,
         '(75 x 45)mm 机台派工 尾标 中文标签',
         machineDispatchChineseFixedLabel(
           labelID: 'labelID',
@@ -68,6 +71,7 @@ class _TscLabelPreviewState extends State<TscLabelPreview> {
         )
       ],
       [
+        false,
         '(75 x 45)mm 机台派工 英文标签',
         machineDispatchEnglishFixedLabel(
           labelID: 'labelID',
@@ -86,6 +90,7 @@ class _TscLabelPreviewState extends State<TscLabelPreview> {
         )
       ],
       [
+        false,
         '(75 x 45)mm 湿印工序派工单标签',
         processDispatchRegisterLabel(
           barCode: 'barCode',
@@ -100,6 +105,7 @@ class _TscLabelPreviewState extends State<TscLabelPreview> {
         )
       ],
       [
+        false,
         '(75 x 45)mm 贴标维护物料 中文标签',
         maintainLabelMaterialChineseFixedLabel(
           barCode: 'barCode',
@@ -113,6 +119,7 @@ class _TscLabelPreviewState extends State<TscLabelPreview> {
         )
       ],
       [
+        false,
         '(75 x 45)mm 贴标维护物料 英文标签',
         maintainLabelMaterialEnglishFixedLabel(
           barCode: 'barCode',
@@ -129,6 +136,7 @@ class _TscLabelPreviewState extends State<TscLabelPreview> {
         )
       ],
       [
+        false,
         '(75 x 45)mm 贴标维护单件尺码 中文标签',
         maintainLabelSingleSizeChineseFixedLabel(
           barCode: 'barCode',
@@ -143,6 +151,7 @@ class _TscLabelPreviewState extends State<TscLabelPreview> {
         )
       ],
       [
+        false,
         '(75 x 45)mm 贴标维护单件尺码 英文标签',
         maintainLabelSingleSizeEnglishFixedLabel(
           barCode: 'barCode',
@@ -159,6 +168,7 @@ class _TscLabelPreviewState extends State<TscLabelPreview> {
         )
       ],
       [
+        false,
         '(75 x 45)mm sap wms标签拆分 1101仓库标签',
         sapWmsSplitLabel1101WarehouseLabel(
           labelNumber: 'labelNumber',
@@ -177,6 +187,7 @@ class _TscLabelPreviewState extends State<TscLabelPreview> {
         )
       ],
       [
+        false,
         '(75 x 45)mm sap wms标签拆分 1102 1105仓库标签',
         sapWmsSplitLabel1102And1105WarehouseLabel(
           labelNumber: 'labelNumber',
@@ -189,6 +200,7 @@ class _TscLabelPreviewState extends State<TscLabelPreview> {
         )
       ],
       [
+        false,
         '(75 x 45)mm sap wms标签拆分 1200仓库标签',
         sapWmsSplitLabel1200WarehouseLabel(
           labelNumber: 'labelNumber',
@@ -206,6 +218,7 @@ class _TscLabelPreviewState extends State<TscLabelPreview> {
         )
       ],
       [
+        false,
         '(75 x 45)mm sap wms标签拆分 其他仓库标签',
         sapWmsSplitLabelOtherWarehouseLabel(
           labelNumber: 'labelNumber',
@@ -219,6 +232,7 @@ class _TscLabelPreviewState extends State<TscLabelPreview> {
         )
       ],
       [
+        true,
         '(75 x N)mm 标签维护尺码物料中文标',
         maintainLabelSizeMaterialChineseDynamicLabel(
           barCode: 'barCode',
@@ -250,6 +264,7 @@ class _TscLabelPreviewState extends State<TscLabelPreview> {
         )
       ],
       [
+        true,
         '(75 x N)mm 标签维护尺码物料英文标',
         maintainLabelSizeMaterialEnglishDynamicLabel(
           barCode: 'barCode',
@@ -284,6 +299,7 @@ class _TscLabelPreviewState extends State<TscLabelPreview> {
         )
       ],
       [
+        true,
         '(75 x N)mm 贴标维护混合中文标签',
         maintainLabelMixChineseDynamicLabel(
           barCode: 'barCode',
@@ -315,7 +331,8 @@ class _TscLabelPreviewState extends State<TscLabelPreview> {
         )
       ],
       [
-        '贴标维护混合英文标签',
+        true,
+        '(75 x N)mm 贴标维护混合英文标签',
         maintainLabelMixEnglishDynamicLabel(
           barCode: 'barCode',
           factoryType: 'factoryType',
@@ -350,6 +367,7 @@ class _TscLabelPreviewState extends State<TscLabelPreview> {
 
       //----------------1098----------------
       [
+        true,
         '(110 x N)mm 1098 无尺码物料标',
         dynamicMaterialLabel1098(
           labelID: 'labelID',
@@ -385,6 +403,7 @@ class _TscLabelPreviewState extends State<TscLabelPreview> {
         )
       ],
       [
+        true,
         '(110 x N)mm 1098 尺码物料标 单尺码',
         dynamicSizeMaterialLabel1098(
           labelID: 'labelID',
@@ -411,6 +430,7 @@ class _TscLabelPreviewState extends State<TscLabelPreview> {
         )
       ],
       [
+        true,
         '(110 x N)mm 1098 尺码物料标   多尺码',
         dynamicSizeMaterialLabel1098(
           labelID: 'labelID',
@@ -445,6 +465,7 @@ class _TscLabelPreviewState extends State<TscLabelPreview> {
       //----------------1095 1096----------------
 
       [
+        true,
         '(110 x N)mm 1095 1096 外箱标 有物料列表',
         dynamicOutBoxLabel1095n1096(
           productName: 'productName',
@@ -479,6 +500,7 @@ class _TscLabelPreviewState extends State<TscLabelPreview> {
         )
       ],
       [
+        true,
         '(110 x N)mm 1095 1096 外箱标  无物料列表',
         dynamicOutBoxLabel1095n1096(
           productName: 'productName',
@@ -498,8 +520,8 @@ class _TscLabelPreviewState extends State<TscLabelPreview> {
           notes: 'notes',
         )
       ],
-
       [
+        true,
         '(110 x N)mm 1095 1096 小标（无尺码标）',
         dynamicInBoxLabel1095n1096(
           haveSupplier: true,
@@ -535,8 +557,8 @@ class _TscLabelPreviewState extends State<TscLabelPreview> {
           notes: 'notes',
         )
       ],
-
       [
+        true,
         '(110 x N)mm 1095 1096 多尺码物料标',
         dynamicSizeMaterialLabel1095n1096(
           labelID: 'labelID',
@@ -569,8 +591,8 @@ class _TscLabelPreviewState extends State<TscLabelPreview> {
           notes: 'notes',
         )
       ],
-
       [
+        true,
         '(110 x N)mm 1095 1096 单尺码/无尺码物料标',
         dynamicSizeMaterialLabel1095n1096(
           labelID: 'labelID',
@@ -600,6 +622,7 @@ class _TscLabelPreviewState extends State<TscLabelPreview> {
       ],
       //--------------国内标签----------
       [
+        true,
         '(110 x N)mm 国内 无尺码物料标',
         dynamicDomesticMaterialLabel(
           labelID: 'labelID',
@@ -625,6 +648,7 @@ class _TscLabelPreviewState extends State<TscLabelPreview> {
         )
       ],
       [
+        true,
         '(110 x N)mm 国内 多尺码物料标',
         dynamicDomesticMaterialLabel(
           labelID: 'labelID',
@@ -664,7 +688,7 @@ class _TscLabelPreviewState extends State<TscLabelPreview> {
             children: [
               for (var item in labels) ...[
                 Text(
-                  item.first,
+                  item[1],
                   style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -675,7 +699,7 @@ class _TscLabelPreviewState extends State<TscLabelPreview> {
                   scrollDirection: Axis.horizontal,
                   child: GestureDetector(
                     onTap: (){
-                      Get.to(() =>  PreviewLabel(labelWidget: item.last, isDynamic: true));
+                      Get.to(() =>  PreviewLabel(labelWidget: item.last, isDynamic: item.first));
                     },
                     child: item.last,
                   ),

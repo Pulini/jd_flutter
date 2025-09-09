@@ -652,7 +652,7 @@ class RouteConfig {
   //打印托盘清单
   static Routes printPallet = Routes(
     '/print_pallet',
-    100,
+    201,
     const PrintPalletPage(),
   );
 
