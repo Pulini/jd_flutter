@@ -273,7 +273,7 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
           ),
         Container(
           padding: const EdgeInsets.all(5),
-          height: 50,
+          height: 55,
           margin: const EdgeInsets.only(bottom: 10),
           decoration: const BoxDecoration(
             color: Colors.white,
@@ -285,51 +285,60 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
           child: Row(
             children: [
               Expanded(
-                child: Row(
+                child: Column(
                   children: [
-                    Text(
-                      'material_dispatch_completion_amount'
-                          .trArgs([data.unitName ?? '']),
-                      style: style,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'material_dispatch_completion_amount'
+                              .trArgs([data.unitName ?? '']),
+                          style: style,
+                        ),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 10, right: 10),
+                            child: percentIndicator(
+                              max: data.qty.toDoubleTry(),
+                              value: data.finishQty.toDoubleTry(),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10, right: 10),
+                          child: Text(
+                            '${data.finishQty} / ${data.qty}',
+                            style: style,
+                          ),
+                        ),
+                      ],
                     ),
-                    SizedBox(
-                      width: 100,
-                      child: percentIndicator(
-                        max: data.qty.toDoubleTry(),
-                        value: data.finishQty.toDoubleTry(),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10, right: 10),
-                      child: Text(
-                        '${data.finishQty} / ${data.qty}',
-                        style: style,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Expanded(
-                child: Row(
-                  children: [
-                    Text(
-                      'material_dispatch_label_generation_amount'
-                          .trArgs([data.unitName ?? '']),
-                      style: style,
-                    ),
-                    SizedBox(
-                      width: 100,
-                      child: percentIndicator(
-                        max: data.qty.toDoubleTry(),
-                        value: data.codeQty.toDoubleTry(),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10, right: 10),
-                      child: Text(
-                        '${data.codeQty} / ${data.qty}',
-                        style: style,
-                      ),
+                    const SizedBox(height: 3),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'material_dispatch_label_generation_amount'
+                              .trArgs([data.unitName ?? '']),
+                          style: style,
+                        ),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 10, right: 10),
+                            child: percentIndicator(
+                              max: data.qty.toDoubleTry(),
+                              value: data.codeQty.toDoubleTry(),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10, right: 10),
+                          child: Text(
+                            '${data.codeQty} / ${data.qty}',
+                            style: style,
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -352,7 +361,7 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
                     labelListDialog(context, data, callback: (info, label) {
                   var bill = '';
                   var batch = '';
-                  if(info.children!.isNotEmpty){
+                  if (info.children!.isNotEmpty) {
                     bill = info.children![0].billNo!;
                     batch = info.children![0].sapColorBatch!;
                   }
@@ -579,7 +588,7 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
     return pageBodyWithDrawer(
       actions: [
         SizedBox(
-          width: 400,
+          width: 300,
           child: EditText(
             controller: tecMaterial,
             hint: 'material_dispatch_select_tips'.tr,
