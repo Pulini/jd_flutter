@@ -254,7 +254,6 @@ class MaterialDispatchLogic extends GetxController {
                 qty: qty,
                 unitName: data.unitName ?? '',
               ),
-              isDynamic: true,
             ));
       } else {
         var ins = '';
