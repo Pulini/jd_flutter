@@ -10,7 +10,7 @@ import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 
 class MachineDispatchState {
-  var dataList = <String>[].obs;
+  var hasDetails = false.obs;
   MachineDispatchDetailsInfo? detailsInfo;
   var sizeItemList = <Items>[].obs;
   var selectList = <RxBool>[];
@@ -116,10 +116,10 @@ class MachineDispatchState {
       leaderVerify.value = false;
       if (response.resultCode == resultSuccess) {
         detailsInfo = MachineDispatchDetailsInfo.fromJson(response.data);
-        sizeItemList = <Items>[
+        sizeItemList.value = <Items>[
           for (var i = 0; i < (detailsInfo?.items ?? []).length; ++i)
             detailsInfo!.items![i]
-        ].obs;
+        ];
         selectList = [
           for (var i = 0; i < (detailsInfo?.items ?? []).length; ++i) false.obs
         ];
@@ -147,8 +147,10 @@ class MachineDispatchState {
               'InterID': detailsInfo!.interID,
             }
         ];
+        hasDetails.value=true;
         success.call();
       } else {
+        hasDetails.value=false;
         detailsInfo = null;
         sizeItemList.clear();
         selectList = [];

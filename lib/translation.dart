@@ -735,6 +735,8 @@ class Translation extends Translations {
           'machine_dispatch_dialog_create_and_print': '生成并打印',
           'machine_dispatch_dialog_print_tips': '确定要打印标签吗',
           'machine_dispatch_dialog_print_last_label': '打印尾箱',
+          'machine_dispatch_input_number': '内容为空！',
+          'machine_dispatch_input_molds': '请输入模具数！',
           'material_dispatch_last': '末道',
           'material_dispatch_material': '物料：<%s> %s',
           'material_dispatch_type_body': '工厂型体：%s',
@@ -3931,6 +3933,8 @@ class Translation extends Translations {
           'machine_dispatch_dialog_print_tips':
               'Are you sure you want to print the label?',
           'machine_dispatch_dialog_print_last_label': 'Print last label',
+          'machine_dispatch_input_number': 'The content is empty！',
+          'machine_dispatch_input_molds': 'Please enter the number of molds！',
           'machine_dispatch_dialog_print': 'Print',
           'material_dispatch_last': 'Last progress',
           'material_dispatch_material': 'Material：<%s> %s',

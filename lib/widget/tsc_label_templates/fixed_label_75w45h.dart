@@ -354,18 +354,18 @@ machineDispatchChineseFixedLabel({
       bottomLeft: Center(
         child: Text(
           '$size#${qty.toShowString()}$unit',
-          style: const TextStyle(fontWeight: FontWeight.bold, height: 1),
+          style: const TextStyle(fontWeight: FontWeight.bold, height: 1,fontSize: 16),
         ),
       ),
       bottomMiddle: Center(
         child: Text(
           '班次：$shift 机台：$machine',
-          style: const TextStyle(fontWeight: FontWeight.bold),
+          style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 16),
         ),
       ),
       bottomRight: isLastLabel
           ? const Center(
-              child: Text('尾', style: TextStyle(fontWeight: FontWeight.bold)),
+              child: Text('尾', style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16)),
             )
           : Container(),
     );
@@ -1219,14 +1219,13 @@ Widget materialWorkshopFixedLabel({
         style: const TextStyle(fontWeight:FontWeight.bold,fontSize: 18)),
     content: Text('$materialName($materialNumber)', style:  const TextStyle(fontWeight:FontWeight.bold,fontSize: 16)),
     bottomLeft: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-      Text('仓位：$palletNumber', style: textStyle,),
       Text(drillingCrewName, style: textStyle)
     ]),
     bottomMiddle: Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Text('$color/$qty$unitName', style: textStyle),
-        Text('取件码：$pick', style: textStyle)
+        Text(pick, style: textStyle)
       ],
     ),
     bottomRight: Center(

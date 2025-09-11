@@ -1,6 +1,5 @@
 import 'dart:async';
-import 'dart:convert';
-
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -15,7 +14,6 @@ import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
-import 'package:jd_flutter/widget/tsc_label_templates/fixed_label_75w45h.dart';
 import 'package:jd_flutter/widget/worker_check_widget.dart';
 import 'package:rotated_corner_decoration/rotated_corner_decoration.dart';
 
@@ -110,7 +108,7 @@ showWorkCardListDialog(
 
 showSurplusMaterialListDialog(
   BuildContext context, {
-  required Function(Widget) print,
+  required Function(String, String, MachineDispatchDetailsInfo) print,
 }) {
   final state = Get.find<MachineDispatchLogic>().state;
   Get.dialog(
@@ -159,9 +157,9 @@ showSurplusMaterialListDialog(
                       confirm: () => updateSurplusMaterialLabelState(
                         surplusMaterial: state.surplusMaterialList[index],
                         details: state.detailsInfo!,
-                        print: (label) {
+                        print: (code, name, detail) {
                           Get.back();
-                          print.call(label);
+                          print.call(code, name, detail);
                         },
                       ),
                     ),
@@ -192,7 +190,7 @@ showSurplusMaterialListDialog(
 updateSurplusMaterialLabelState({
   required Map<String, dynamic> surplusMaterial,
   required MachineDispatchDetailsInfo details,
-  required Function(Widget) print,
+  required Function(String, String, MachineDispatchDetailsInfo) print,
 }) {
   var stuBarCode = surplusMaterial['StuBarCode'] ?? '';
   var stuBarName = surplusMaterial['StuBarName'] ?? '';
@@ -208,21 +206,7 @@ updateSurplusMaterialLabelState({
     },
   ).then((response) async {
     if (response.resultCode == resultSuccess) {
-      print.call(surplusMaterialLabel(
-        qrCode: jsonEncode({
-          'DispatchNumber': details.dispatchNumber,
-          'StubBar': stuBarCode,
-          'Factory': details.factory ?? '',
-          'Date': details.startDate ?? '',
-          'NowTime': DateTime.now().millisecond,
-        }),
-        machine: details.machine ?? '',
-        shift: details.shift ?? '',
-        startDate: details.startDate ?? '',
-        typeBody: details.factoryType ?? '',
-        materialName: stuBarName,
-        materialCode: stuBarCode,
-      ));
+      print.call(stuBarCode, stuBarName, details);
     } else {
       errorDialog(content: response.message ?? 'query_default_error'.tr);
     }
@@ -234,17 +218,9 @@ showLabelListDialog({
   required Function(MachineDispatchReprintLabelInfo) print,
 }) {
   final state = Get.find<MachineDispatchLogic>().state;
-  var notScan = state.labelList.where((v) => !v.isScanned).toList();
-  var notScanLabelList = <String>[
-    for (var i = 0; i < notScan.length; ++i) notScan[i].number
-  ];
-  var lastAndNotScan = notScan.where((v) => v.isLastLabel).toList();
-  var lastLabelList = <String>[
-    for (var i = 0; i < lastAndNotScan.length; ++i) lastAndNotScan[i].size ?? ''
-  ];
 
   createLabel(Item label) {
-    label.type = '01';
+    label.type = label.type;
     print.call(MachineDispatchReprintLabelInfo(
       isLastLabel: label.isLastLabel,
       isEnglish: label.type == '01',
@@ -253,7 +229,7 @@ showLabelListDialog({
       processes: state.detailsInfo?.processflow ?? '',
       qty: label.qty ?? 0,
       size: label.size ?? '',
-      factoryType: label.typeBody ?? '',
+      factoryType: state.detailsInfo?.factoryType ?? '',
       date: state.detailsInfo?.startDate ?? '',
       materialName: label.type == '01'
           ? label.englishName ?? ''
@@ -269,42 +245,6 @@ showLabelListDialog({
       englishName: label.englishName ?? '',
       englishUnit: label.englishUnit ?? '',
     ));
-
-    // if (label.type == '01') {
-    //   //英文标
-    //   print.call(await labelMultipurposeEnglishFixed(
-    //     qrCode: label.subLabelID ?? '',
-    //     title: label.typeBody ?? '',
-    //     subTitle: label.englishName ?? '',
-    //     subTitleWrap: false,
-    //     content: 'GW: ${label.grossWeight} KG    NW: ${label.netWeight} KG',
-    //     specification:
-    //         'MEAS:  ${label.specifications}                       NO.${label.number}',
-    //     subContent1: 'DISPATCH:${state.nowDispatchNumber}',
-    //     subContent2:
-    //         'DECREASE:${state.detailsInfo?.decrementNumber}   DATE:${state.detailsInfo?.startDate}',
-    //     bottomLeftText1: '${label.qty.toString()}${label.englishUnit}',
-    //     bottomMiddleText1: '   Made in China',
-    //     bottomRightText1: '${label.size}#',
-    //   ));
-    // } else {
-    //   print.call(await labelMultipurposeFixed(
-    //     qrCode: label.subLabelID ?? '',
-    //     title: label.typeBody ?? '',
-    //     subTitle:
-    //         '${state.detailsInfo?.processflow}         序号:${label.number}',
-    //     subTitleWrap: false,
-    //     content: state.detailsInfo?.materialName ?? '',
-    //     subContent1: '派工单:${state.nowDispatchNumber}',
-    //     subContent2:
-    //         '递减号:${state.detailsInfo?.decrementNumber}      日期:${state.detailsInfo?.startDate}',
-    //     bottomLeftText1:
-    //         '${label.size}#${label.qty.toShowString()}${label.unit}',
-    //     bottomMiddleText1:
-    //         '班次:${state.detailsInfo?.shift}机台:${state.detailsInfo?.machine}',
-    //     bottomRightText1: label.isLastLabel ? '尾' : '',
-    //   ));
-    // }
   }
 
   item(int i) => Container(
@@ -341,9 +281,10 @@ showLabelListDialog({
                 text: state.detailsInfo?.materialName ?? '',
               ),
               expandedTextSpan(
-                hint: 'machine_dispatch_dialog_process'.tr,
+                hint: '制程：',
                 text: state.detailsInfo?.processflow ?? '',
               ),
+
             ],
           ),
           subtitle: Row(
@@ -424,54 +365,70 @@ showLabelListDialog({
         ),
       );
 
-  Get.dialog(
-    PopScope(
-      canPop: false,
-      child: AlertDialog(
-        title: Text('machine_dispatch_dialog_label_list'.tr),
-        content: SizedBox(
-          width: getScreenSize().width * 0.9,
-          height: getScreenSize().height * 0.9,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (notScanLabelList.isEmpty && lastLabelList.isNotEmpty)
-                textSpan(
-                  hint: 'machine_dispatch_dialog_size_not_scan_error_tips'.tr,
-                  text: lastLabelList.join(','),
-                  textColor: Colors.red,
-                  fontSize: 20,
+  state.getSapLabelList(
+    success: () {
+      var notScan = state.labelList.where((v) => !v.isScanned).toList();
+      var notScanLabelList = <String>[
+        for (var i = 0; i < notScan.length; ++i) notScan[i].number
+      ];
+      var lastAndNotScan = notScan.where((v) => v.isLastLabel).toList();
+      var lastLabelList = <String>[
+        for (var i = 0; i < lastAndNotScan.length; ++i)
+          lastAndNotScan[i].size ?? ''
+      ];
+      Get.dialog(
+        PopScope(
+          canPop: false,
+          child: AlertDialog(
+            title: Text('machine_dispatch_dialog_label_list'.tr),
+            content: SizedBox(
+              width: getScreenSize().width * 0.9,
+              height: getScreenSize().height * 0.9,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (notScanLabelList.isEmpty && lastLabelList.isNotEmpty)
+                    textSpan(
+                      hint:
+                          'machine_dispatch_dialog_size_not_scan_error_tips'.tr,
+                      text: lastLabelList.join(','),
+                      textColor: Colors.red,
+                      fontSize: 20,
+                    ),
+                  if (notScanLabelList.isNotEmpty && lastLabelList.isEmpty)
+                    textSpan(
+                      hint: 'machine_dispatch_dialog_number_not_scan_error_tips'
+                          .tr,
+                      text: notScanLabelList.join(','),
+                      textColor: Colors.red,
+                      fontSize: 20,
+                    ),
+                  Expanded(
+                    child: Obx(
+                      () => ListView.builder(
+                        padding: const EdgeInsets.all(8),
+                        itemCount: state.labelList.length,
+                        itemBuilder: (_, i) => item(i),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Get.back(),
+                child: Text(
+                  'dialog_default_back'.tr,
+                  style: const TextStyle(color: Colors.grey),
                 ),
-              if (notScanLabelList.isNotEmpty && lastLabelList.isEmpty)
-                textSpan(
-                  hint: 'machine_dispatch_dialog_number_not_scan_error_tips'.tr,
-                  text: notScanLabelList.join(','),
-                  textColor: Colors.red,
-                  fontSize: 20,
-                ),
-              Expanded(
-                child: Obx(
-                  () => ListView.builder(
-                    padding: const EdgeInsets.all(8),
-                    itemCount: state.labelList.length,
-                    itemBuilder: (_, i) => item(i),
-                  ),
-                ),
-              )
+              ),
             ],
           ),
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Get.back(),
-            child: Text(
-              'dialog_default_back'.tr,
-              style: const TextStyle(color: Colors.grey),
-            ),
-          ),
-        ],
-      ),
-    ),
+      );
+    },
+    error: (msg) => errorDialog(content: msg),
   );
 }
 
@@ -504,7 +461,7 @@ teamLeaderVerifyDialog() {
   var countDown = 0;
   var workerNumber = '';
   var verificationCode = '';
-  // state.leaderVerify.value = true; //测试用
+  state.leaderVerify.value = true; //测试用
   Get.dialog(
     PopScope(
       canPop: false,
@@ -1153,5 +1110,257 @@ selectLabelTypeDialog({
         ],
       ),
     ),
+  );
+}
+
+//修改模具
+showMachineInputDialog({
+  required Items data,
+  required int? maxMould,
+  required Function() confirm,
+}) {
+  var mould = 0.0;
+  var qty = (0.0).obs;
+  Get.dialog(
+    PopScope(
+      //拦截返回键
+      canPop: false,
+      child: AlertDialog(
+        title: const Text('请输入数据',
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+        content: SizedBox(
+          width: 300,
+          height: 150,
+          child: ListView(
+            children: [
+              Text('尺码：${data.size}',
+                  style: const TextStyle(
+                      color: Colors.red, fontWeight: FontWeight.bold)),
+              Text('建议模具数：$maxMould',
+                  style: const TextStyle(
+                      color: Colors.red, fontWeight: FontWeight.bold)),
+              Text('可用模具数：${data.availableMouldsQty.toShowString()}',
+                  style: const TextStyle(
+                      color: Colors.red, fontWeight: FontWeight.bold)),
+              Obx(() => Text('派工数量：${qty.value}')),
+              NumberDecimalEditText(
+                initQty: data.mould ?? 0,
+                max: data.availableMouldsQty,
+                hint: '输入模具数',
+                onChanged: (s) {
+                  mould = s;
+                  qty.value = data.mantissaMark == 'X'
+                      ? data.sumUnderQty ?? 0
+                      : s.mul(data.capacityPerMold ?? 0);
+                },
+              ),
+            ],
+          ),
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              if (mould > 0) {
+                Get.back();
+                data.mould = mould;
+                data.todayDispatchQty = qty.value;
+                confirm.call();
+              } else {
+                showSnackBar(message: 'machine_dispatch_input_number'.tr);
+              }
+            },
+            child: Text('dialog_default_confirm'.tr),
+          ),
+          TextButton(
+            onPressed: () {
+              Get.back();
+            },
+            child: Text(
+              'dialog_default_cancel'.tr,
+              style: const TextStyle(color: Colors.grey),
+            ),
+          ),
+        ],
+      ),
+    ),
+    barrierDismissible: false, //拦截dialog外部点击
+  );
+}
+
+//当日派工数量
+showInputDayReportDialog({
+  required Items data,
+  required Function() confirm,
+}) {
+  var qty = 0.0;
+  Get.dialog(
+    PopScope(
+      //拦截返回键
+      canPop: false,
+      child: AlertDialog(
+        title: const Text('请输入当日派工数量',
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+        content: SizedBox(
+          width: 300,
+          height: 60,
+          child: ListView(
+            children: [
+              Text('尺码：${data.size}',
+                  style: const TextStyle(
+                      color: Colors.red, fontWeight: FontWeight.bold)),
+              NumberDecimalEditText(
+                initQty: data.todayDispatchQty,
+                max: data.todayDispatchQty,
+                onChanged: (s) {
+                  qty = s;
+                },
+              ),
+            ],
+          ),
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              if (qty > 0) {
+                Get.back();
+                data.todayDispatchQty = qty;
+                confirm.call();
+              } else {
+                showSnackBar(message: '当日派工数量不能为空');
+              }
+            },
+            child: Text('dialog_default_confirm'.tr),
+          ),
+          TextButton(
+            onPressed: () {
+              Get.back();
+            },
+            child: Text(
+              'dialog_default_cancel'.tr,
+              style: const TextStyle(color: Colors.grey),
+            ),
+          ),
+        ],
+      ),
+    ),
+    barrierDismissible: false, //拦截dialog外部点击
+  );
+}
+
+//修改箱容
+showInputCapacityDialog({
+  required Items data,
+  required Function() confirm,
+}) {
+  var newCapacity = 0.0;
+  Get.dialog(
+    PopScope(
+      //拦截返回键
+      canPop: false,
+      child: AlertDialog(
+        title: const Text('请输入箱容',
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+        content: SizedBox(
+          width: 300,
+          height: 60,
+          child: ListView(
+            children: [
+              Text('尺码：${data.size}',
+                  style: const TextStyle(
+                      color: Colors.red, fontWeight: FontWeight.bold)),
+              NumberDecimalEditText(
+                initQty: data.capacity,
+                onChanged: (s) {
+                  newCapacity = s;
+                },
+              ),
+            ],
+          ),
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              if (newCapacity > 0) {
+                Get.back();
+                data.capacity = newCapacity;
+                confirm.call();
+              } else {
+                showSnackBar(message: 'machine_dispatch_input_number'.tr);
+              }
+            },
+            child: Text('dialog_default_confirm'.tr),
+          ),
+          TextButton(
+            onPressed: () {
+              Get.back();
+            },
+            child: Text(
+              'dialog_default_cancel'.tr,
+              style: const TextStyle(color: Colors.grey),
+            ),
+          ),
+        ],
+      ),
+    ),
+    barrierDismissible: false, //拦截dialog外部点击
+  );
+}
+
+//修改尾箱
+showInputLastNumDialog({
+  required Items data,
+  required Function() confirm,
+}) {
+  var lastNum = 0.0;
+  Get.dialog(
+    PopScope(
+      //拦截返回键
+      canPop: false,
+      child: AlertDialog(
+        title: const Text('请输入尾箱',
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+        content: SizedBox(
+          width: 300,
+          height: 60,
+          child: ListView(
+            children: [
+              Text('尺码：${data.size}',
+                  style: const TextStyle(
+                      color: Colors.red, fontWeight: FontWeight.bold)),
+              NumberDecimalEditText(
+                initQty: 0,
+                onChanged: (s) {
+                  lastNum = s;
+                },
+              ),
+            ],
+          ),
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              if (lastNum > 0) {
+                Get.back();
+                data.notFullQty = lastNum;
+                confirm.call();
+              } else {
+                showSnackBar(message: 'machine_dispatch_input_number'.tr);
+              }
+            },
+            child: Text('dialog_default_confirm'.tr),
+          ),
+          TextButton(
+            onPressed: () {
+              Get.back();
+            },
+            child: Text(
+              'dialog_default_cancel'.tr,
+              style: const TextStyle(color: Colors.grey),
+            ),
+          ),
+        ],
+      ),
+    ),
+    barrierDismissible: false, //拦截dialog外部点击
   );
 }
