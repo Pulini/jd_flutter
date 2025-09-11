@@ -9,8 +9,6 @@ import 'package:jd_flutter/utils/printer/tsc_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
-import 'package:jd_flutter/widget/preview_label_widget.dart';
-import 'package:jd_flutter/widget/tsc_label_templates/fixed_label_75w45h.dart';
 
 import 'machine_dispatch_report_view.dart';
 import 'machine_dispatch_state.dart';
@@ -253,7 +251,7 @@ class MachineDispatchLogic extends GetxController {
   printLabel(MachineDispatchReprintLabelInfo label) {
     labelMultipurposeFixed(
       isEnglish: label.isEnglish,
-      qrCode: label.labelID ?? '',
+      qrCode: label.labelID,
       title: state.detailsInfo?.factoryType ?? '',
       subTitle: label.isEnglish
           ? state.detailsInfo?.materialName ?? ''
@@ -271,7 +269,7 @@ class MachineDispatchLogic extends GetxController {
           : '递减号:${state.detailsInfo?.decrementNumber}      日期:${state.detailsInfo?.startDate}',
       bottomLeftText1: label.isEnglish
           ? '${label.qty}${label.englishUnit}'
-          : '${label.size ?? ''}${label.qty}${label.unit}',
+          : '${label.size}${label.qty}${label.unit}',
       bottomMiddleText1: label.isEnglish
           ? '   Made in China'
           : '       机台：${state.detailsInfo?.machine ?? ''}',
