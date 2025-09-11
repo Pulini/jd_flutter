@@ -610,7 +610,7 @@ class RouteConfig {
   //SAP外箱标绑定
   static Routes sapCartonLabelBinding = Routes(
     '/sap_carton_label_binding',
-    200,
+    201,
     const SapCartonLabelBindingPage(),
   );
 
