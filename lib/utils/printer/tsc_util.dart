@@ -557,11 +557,13 @@ Future<List<Uint8List>> labelForSurplusMaterial({
 //[bottomRightText1] 右下文本1
 //[bottomRightText2] 右下文本2
 Future<List<Uint8List>> labelMultipurposeFixed({
+  bool isEnglish = false,
   String qrCode = '',
   String title = '',
   String subTitle = '',
   bool subTitleWrap = true,
   String content = '',
+  String specification = '',
   String subContent1 = '',
   String subContent2 = '',
   String bottomLeftText1 = '',
@@ -574,11 +576,10 @@ Future<List<Uint8List>> labelMultipurposeFixed({
   var list = <Uint8List>[];
 
   list.add(_tscClearBuffer());
-  list.add(_tscSetup(75, 45));
+  list.add(_tscSetup(75, 45,density: 12,speed: 3));
   if (qrCode.isNotEmpty) {
     list.add(_tscQrCode(2 * _dpi, 2 * _dpi + _halfDpi,
-        qrCode.contains('"') ? qrCode.replaceAll('"', '\\["]') : qrCode,
-        cell: '5'));
+        qrCode.contains('"') ? qrCode.replaceAll('"', '\\["]') : qrCode));
     list.add(await _tscBitmapText(19 * _dpi + _halfDpi, 2 * _dpi, 16, qrCode));
   }
   if (title.isNotEmpty) {
@@ -599,24 +600,40 @@ Future<List<Uint8List>> labelMultipurposeFixed({
     list.add(
         await _tscBitmapText(19 * _dpi + _halfDpi, 12 * _dpi, 40, subTitle));
   }
-  if (content.isNotEmpty) {
-    var format = contextFormat(content, 30, 71.0 * _dpi);
-    for (var i = 0; i < format.length; ++i) {
-      //如子内容不为空，则主内容限制行数为2
-      if (subContent1.isNotEmpty && subContent2.isNotEmpty && i >= 2) {
-        break;
+  if(!isEnglish){
+    if (content.isNotEmpty) {
+      var format = contextFormat(content, 30, 71.0 * _dpi);
+      for (var i = 0; i < format.length; ++i) {
+        //如子内容不为空，则主内容限制行数为2
+        if (subContent1.isNotEmpty && subContent2.isNotEmpty && i >= 2) {
+          break;
+        }
+        //如子内容2不为空，则主内容限制行数为3
+        if (subContent1.isEmpty && subContent2.isNotEmpty && i >= 3) break;
+        //如子内容为空则限制主内容行数为4
+        if (i >= 4) break;
+        list.add(
+            await _tscBitmapText(2 * _dpi, (20 + 4 * i) * _dpi, 30, format[i]));
       }
-      //如子内容2不为空，则主内容限制行数为3
-      if (subContent1.isEmpty && subContent2.isNotEmpty && i >= 3) break;
-      //如子内容为空则限制主内容行数为4
-      if (i >= 4) break;
-      list.add(
-          await _tscBitmapText(2 * _dpi, (20 + 4 * i) * _dpi, 30, format[i]));
+    }
+  }else{
+    list.add(await _tscBitmapText(2 * _dpi, 20 * _dpi, 30, content));
+  }
+  if(!isEnglish){
+    if (subContent1.isNotEmpty) {
+      list.add(await _tscBitmapText(2 * _dpi, 28 * _dpi, 28, subContent1));
+    }
+  }else{
+
+    if (specification.isNotEmpty) {
+      list.add(await _tscBitmapText(2 * _dpi, 24 * _dpi, 28, specification));
+    }
+
+    if (subContent1.isNotEmpty) {
+      list.add(await _tscBitmapText(2 * _dpi, 28 * _dpi, 28, subContent1));
     }
   }
-  if (subContent1.isNotEmpty) {
-    list.add(await _tscBitmapText(2 * _dpi, 28 * _dpi, 28, subContent1));
-  }
+
   if (subContent2.isNotEmpty) {
     list.add(await _tscBitmapText(2 * _dpi, 32 * _dpi, 28, subContent2));
   }
@@ -636,7 +653,7 @@ Future<List<Uint8List>> labelMultipurposeFixed({
           23 * _dpi + _halfDpi, 40 * _dpi, 24, bottomMiddleText2));
     } else {
       list.add(await _tscBitmapText(
-          23 * _dpi + _halfDpi, 38 * _dpi, 36, bottomMiddleText1));
+          23 * _dpi + _halfDpi, 38 * _dpi, 34, bottomMiddleText1));
     }
   }
   if (bottomRightText1.isNotEmpty) {

@@ -1,9 +1,13 @@
+import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/machine_dispatch_info.dart';
 import 'package:jd_flutter/bean/http/response/sap_label_info.dart';
 import 'package:jd_flutter/fun/dispatching/machine_dispatch/machine_dispatch_history_view.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
+import 'package:jd_flutter/utils/printer/print_util.dart';
+import 'package:jd_flutter/utils/printer/tsc_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/preview_label_widget.dart';
 import 'package:jd_flutter/widget/tsc_label_templates/fixed_label_75w45h.dart';
@@ -242,49 +246,113 @@ class MachineDispatchLogic extends GetxController {
     );
   }
 
-  printSurplusMaterialLabel() {}
-
   printHistoryLabel(int i) {
     printLabel(state.historyLabelInfo[i]);
   }
 
   printLabel(MachineDispatchReprintLabelInfo label) {
-    Get.to(() => PreviewLabel(labelWidget: fixedLabel(label: label)));
+    labelMultipurposeFixed(
+      isEnglish: label.isEnglish,
+      qrCode: label.labelID ?? '',
+      title: state.detailsInfo?.factoryType ?? '',
+      subTitle: label.isEnglish
+          ? state.detailsInfo?.materialName ?? ''
+          : (state.detailsInfo?.processflow ?? '       序号：${label.number}'),
+      subTitleWrap: false,
+      content: label.isEnglish
+          ? ('GW:${label.grossWeight}KG   NW:${label.netWeight}KG')
+          : state.detailsInfo?.materialName ?? '',
+      specification: label.isEnglish ? 'MEAS:  ${label.specifications}' : '',
+      subContent1: label.isEnglish
+          ? 'DISPATCH:${state.detailsInfo?.dispatchNumber.toString()}'
+          : '派工单号：${state.detailsInfo?.dispatchNumber ?? ''}       班次：${state.detailsInfo?.shift ?? ''}',
+      subContent2: label.isEnglish
+          ? 'DECREASE:${state.detailsInfo?.decrementNumber}    DATE:${state.detailsInfo?.startDate}'
+          : '递减号:${state.detailsInfo?.decrementNumber}      日期:${state.detailsInfo?.startDate}',
+      bottomLeftText1: label.isEnglish
+          ? '${label.qty}${label.englishUnit}'
+          : '${label.size ?? ''}${label.qty}${label.unit}',
+      bottomMiddleText1: label.isEnglish
+          ? '   Made in China'
+          : '       机台：${state.detailsInfo?.machine ?? ''}',
+      bottomRightText1:
+          label.isEnglish ? "${label.size}#" : (label.isLastLabel ? '尾' : ''),
+    ).then((printLabel) {
+      PrintUtil().printLabel(label: printLabel,start: (){
+        loadingShow('正在打印');
+      },success: (){
+        loadingDismiss();
+        showSnackBar(message: '打印成功');
+      },failed:(){
+        loadingDismiss();
+        showSnackBar(message: '打印失败');
+      } );
+    });
   }
 
-  fixedLabel({required MachineDispatchReprintLabelInfo label}) =>
-      label.isEnglish
-          ? machineDispatchEnglishFixedLabel(
-              labelID: label.labelID,
-              factoryType: label.factoryType,
-              englishName: label.englishName,
-              grossWeight: label.grossWeight,
-              netWeight: label.netWeight,
-              specifications: label.specifications,
-              number: label.number,
-              dispatchNumber: label.dispatchNumber,
-              decrementNumber: label.decrementNumber,
-              date: label.date,
-              qty: label.qty,
-              englishUnit: label.englishUnit,
-              size: label.size,
-            )
-          : machineDispatchChineseFixedLabel(
-              labelID: label.labelID,
-              factoryType: label.factoryType,
-              processes: label.processes,
-              number: label.number,
-              materialName: label.materialName,
-              dispatchNumber: label.dispatchNumber,
-              decrementNumber: label.decrementNumber,
-              date: label.date,
-              size: label.size,
-              qty: label.qty,
-              unit: label.unit,
-              shift: label.shift,
-              machine: label.machine,
-              isLastLabel: label.isLastLabel,
-            );
+  //
+  // fixedLabel({required MachineDispatchReprintLabelInfo label}) =>
+  //     label.isEnglish
+  //         ? machineDispatchEnglishFixedLabel(
+  //             labelID: label.labelID,
+  //             factoryType: label.factoryType,
+  //             englishName: label.englishName,
+  //             grossWeight: label.grossWeight,
+  //             netWeight: label.netWeight,
+  //             specifications: label.specifications,
+  //             number: label.number,
+  //             dispatchNumber: label.dispatchNumber,
+  //             decrementNumber: label.decrementNumber,
+  //             date: label.date,
+  //             qty: label.qty,
+  //             englishUnit: label.englishUnit,
+  //             size: label.size,
+  //           )
+  //         : machineDispatchChineseFixedLabel(
+  //             labelID: label.labelID,
+  //             factoryType: label.factoryType,
+  //             processes: label.processes,
+  //             number: label.number,
+  //             materialName: label.materialName,
+  //             dispatchNumber: label.dispatchNumber,
+  //             decrementNumber: label.decrementNumber,
+  //             date: label.date,
+  //             size: label.size,
+  //             qty: label.qty,
+  //             unit: label.unit,
+  //             shift: label.shift,
+  //             machine: label.machine,
+  //             isLastLabel: label.isLastLabel,
+  //           );
+
+  printMaterialHeadLabel(
+      String code, String name, MachineDispatchDetailsInfo details) {
+    labelForSurplusMaterial(
+            qrCode: jsonEncode({
+              'DispatchNumber': details.dispatchNumber,
+              'StubBar': code,
+              'Factory': details.factory ?? '',
+              'Date': details.startDate ?? '',
+              'NowTime': DateTime.now().millisecond,
+            }),
+            machine: details.machine ?? '',
+            shift: details.shift ?? '',
+            startDate: details.startDate ?? '',
+            factoryType: details.factoryType ?? '',
+            stubBar: name,
+            stuBarCode: code)
+        .then((printLabel) {
+      PrintUtil().printLabel(label: printLabel,start: (){
+        loadingShow('正在打印');
+      },success: (){
+        loadingDismiss();
+        showSnackBar(message: '打印成功');
+      },failed:(){
+        loadingDismiss();
+        showSnackBar(message: '打印失败');
+      } );
+    });
+  }
 
   generateAndPrintLabel({
     required bool isPrintLast,
@@ -334,34 +402,45 @@ class MachineDispatchLogic extends GetxController {
       specifications: specifications,
       weight: weight,
       success: (label) {
-        Get.to(() => PreviewLabel(
-              labelWidget: fixedLabel(
-                label: MachineDispatchReprintLabelInfo(
-                  isLastLabel: isEnglish ? false : printQty != item.capacity,
-                  number: label.number ?? '',
-                  labelID: label.labelID ?? '',
-                  processes: state.detailsInfo?.processflow ?? '',
-                  qty: printQty,
-                  size: item.size ?? '',
-                  factoryType: state.detailsInfo?.factoryType ?? '',
-                  date: state.detailsInfo?.startDate ?? '',
-                  materialName: isEnglish
-                      ? label.name ?? ''
-                      : state.detailsInfo?.materialName ?? '',
-                  unit: isEnglish ? label.unit ?? '' : item.bUoM ?? '',
-                  machine: state.detailsInfo?.machine ?? '',
-                  shift: state.detailsInfo?.shift ?? '',
-                  dispatchNumber: state.detailsInfo?.dispatchNumber ?? '',
-                  decrementNumber: state.detailsInfo?.decrementNumber ?? '',
-                  isEnglish: isEnglish,
-                  specifications: label.specifications ?? '',
-                  netWeight: label.netWeight ?? 0,
-                  grossWeight: label.grossWeight ?? 0,
-                  englishName: label.name ?? '',
-                  englishUnit: label.unit ?? '',
-                ),
-              ),
-            ));
+        labelMultipurposeFixed(
+          isEnglish: isEnglish,
+          qrCode: label.labelID ?? '',
+          title: state.detailsInfo?.factoryType ?? '',
+          subTitle: isEnglish
+              ? state.detailsInfo?.materialName ?? ''
+              : (state.detailsInfo?.processflow ?? '       序号：${label.number}'),
+          subTitleWrap: false,
+          content: isEnglish
+              ? ('GW:${label.grossWeight}KG   NW:${label.netWeight}KG')
+              : state.detailsInfo?.materialName ?? '',
+          specification: isEnglish ? 'MEAS:  ${label.specifications}' : '',
+          subContent1: isEnglish
+              ? 'DISPATCH:${state.detailsInfo?.dispatchNumber.toString()}'
+              :  '派工单号：${state.detailsInfo?.dispatchNumber ?? ''}       班次：${state.detailsInfo?.shift ?? ''}',
+          subContent2: isEnglish
+              ? 'DECREASE:${state.detailsInfo?.decrementNumber}    DATE:${state.detailsInfo?.startDate}'
+              : '递减号:${state.detailsInfo?.decrementNumber}    日期:${state.detailsInfo?.startDate}',
+          bottomLeftText1: isEnglish
+              ? ((printQty.toShowString()) + (item.bUoM ?? ''))
+              : ((item.size ?? '') +
+                  (printQty.toShowString()) +
+                  (item.bUoM ?? '')),
+          bottomMiddleText1: isEnglish
+              ? '   Made in China'
+              : '       机台：${state.detailsInfo?.machine ?? ''}',
+          bottomRightText1:
+              isEnglish ? "${item.size}#" : (isPrintLast ? '尾' : ''),
+        ).then((printLabel) {
+          PrintUtil().printLabel(label: printLabel,start: (){
+            loadingShow('正在打印');
+          },success: (){
+            loadingDismiss();
+            showSnackBar(message: '打印成功');
+          },failed:(){
+            loadingDismiss();
+            showSnackBar(message: '打印失败');
+          } );
+        });
       },
       error: (msg) => errorDialog(content: msg),
     );
@@ -408,5 +487,44 @@ class MachineDispatchLogic extends GetxController {
       success: callback,
       error: (msg) => errorDialog(content: msg),
     );
+  }
+
+  //更改模具数
+  changeMould(String size, String moulds, String qty) {
+    for (var data in state.sizeItemList) {
+      if (data.size == size) {
+        data.mould = moulds.toDoubleTry();
+        data.todayDispatchQty = qty.toDoubleTry();
+      }
+    }
+    state.sizeItemList.refresh();
+  }
+
+  //更改当日派工数量
+  changeTodayNum(String size, String qty) {
+    for (var data in state.sizeItemList) {
+      if (data.size == size) {
+        data.todayDispatchQty = qty.toDoubleTry();
+      }
+    }
+    state.sizeItemList.refresh();
+  }
+
+  //更改箱容
+  changeCapacity(String size, String capacity) {
+    for (var data in state.sizeItemList) {
+      if (data.size == size) {
+        data.capacity = capacity.toDoubleTry();
+      }
+    }
+    state.sizeItemList.refresh();
+  }
+
+  changeLastNum(String size, String qty) {
+    for (var data in state.sizeItemList) {
+      if (data.size == size) {
+        data.notFullQty = qty.toDoubleTry();
+      }
+    }
   }
 }

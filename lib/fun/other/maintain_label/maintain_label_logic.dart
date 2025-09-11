@@ -278,8 +278,6 @@ class MaintainLabelLogic extends GetxController {
     required List<List<LabelInfo>> select,
     required String language,
   }) {
-
-    logger.f('factoryId:$factoryId');
     if (factoryId.isNotEmpty) {
       switch (factoryId) {
         case '1098':
@@ -303,6 +301,14 @@ class MaintainLabelLogic extends GetxController {
             }
           }
           break;
+        case '1095':
+          {
+
+          }
+        case '1096':
+          {
+
+          }
         default:
           break;
       }

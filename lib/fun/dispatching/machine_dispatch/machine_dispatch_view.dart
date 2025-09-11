@@ -7,7 +7,6 @@ import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/feishu_authorize.dart';
-import 'package:jd_flutter/widget/preview_label_widget.dart';
 import 'machine_dispatch_logic.dart';
 
 class MachineDispatchPage extends StatefulWidget {
@@ -21,8 +20,6 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
   final logic = Get.put(MachineDispatchLogic());
   final state = Get.find<MachineDispatchLogic>().state;
 
-  // PrintUtil pu = PrintUtil();
-
   refreshOrder() => logic.getWorkCardList((list) {
         if (list.length > 1) {
           showWorkCardListDialog(
@@ -34,7 +31,7 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
           );
         } else {
           state.nowDispatchNumber.value = list[0].dispatchNumber ?? '';
-          logic.refreshWorkCardDetail();
+          logic.refreshWorkCardDetail(refreshUI: () => setState(() {}));
         }
       });
 
@@ -43,7 +40,7 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
         child: Obx(() => Column(
               children: [
                 Container(
-                  height: 40,
+                  height: 30,
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.grey),
                   ),
@@ -140,7 +137,7 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
         child: Column(
           children: [
             Container(
-              height: 40,
+              height: 30,
               decoration: BoxDecoration(border: Border.all(color: Colors.grey)),
               alignment: Alignment.center,
               child: Checkbox(
@@ -177,7 +174,13 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
               textColor: Colors.white,
               alignment: Alignment.center,
               click: () {
-                showSnackBar(message: '模具');
+                if (state.leaderVerify.value) {
+                  showMachineInputDialog(
+                      data: data,
+                      maxMould: state.detailsInfo?.getProposalMoulds().floor() ?? 0,
+                      confirm: () => setState(() {})
+                  );
+                }
               },
             ),
             expandedFrameText(
@@ -188,7 +191,11 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
               textColor: state.leaderVerify.value ? Colors.white : Colors.red,
               alignment: Alignment.center,
               click: () {
-                showSnackBar(message: '当日派工数');
+                if (state.leaderVerify.value) {
+                  showInputDayReportDialog(
+                      data: data,
+                      confirm: () => setState(() {}));
+                }
               },
             ),
             expandedFrameText(
@@ -207,7 +214,12 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
                   state.leaderVerify.value ? Colors.white : Colors.black87,
               alignment: Alignment.center,
               click: () {
-                showSnackBar(message: '箱容');
+                if (state.leaderVerify.value) {
+                  showInputCapacityDialog(
+                      data: data,
+                      confirm: () => setState(() {})
+                    );
+                }
               },
             ),
             expandedFrameText(
@@ -220,9 +232,6 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
               backgroundColor: Colors.green.shade200,
               textColor: Colors.white,
               alignment: Alignment.center,
-              click: () {
-                showSnackBar(message: '箱数');
-              },
             ),
             expandedFrameText(
               text: data.notFullQty.toShowString(),
@@ -230,7 +239,15 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
               textColor: Colors.white,
               alignment: Alignment.center,
               click: () {
-                showSnackBar(message: '本班未满箱数');
+                if (logic.statusReportedAndGenerate()) {
+                  msgDialog(
+                    content: '无法再次产量汇报',
+                  );
+                } else {
+                  showInputLastNumDialog(
+                      data: data,
+                      confirm: () => setState(() {}));
+                }
               },
             ),
             expandedFrameText(
@@ -273,7 +290,7 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
         child: Column(
           children: [
             Container(
-              height: 40,
+              height: 30,
               decoration: BoxDecoration(border: Border.all(color: Colors.grey)),
               alignment: Alignment.center,
             ),
@@ -359,7 +376,7 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
 
   pageTitle() => Container(
         margin: const EdgeInsets.only(left: 10, bottom: 5, right: 10),
-        padding: const EdgeInsets.all(10),
+        padding: const EdgeInsets.all(5),
         width: double.infinity,
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -443,15 +460,23 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
             textSpan(
               hint: 'machine_dispatch_material_name'.tr,
               text: state.detailsInfo?.materialName ?? '',
-              fontSize: 18,
+              fontSize: 16,
             ),
-            textSpan(
-              hint: 'machine_dispatch_remarks'.tr,
-              hintColor: Colors.red,
-              text: state.detailsInfo?.remarks ?? '',
-              textColor: Colors.red,
-              fontSize: 18,
-            ),
+            if (state.leaderVerify.value)
+              Text(
+                'machine_dispatch_tips'.tr,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.red,
+                ),
+              )
+            else
+              textSpan(
+                hint: 'machine_dispatch_remarks'.tr,
+                hintColor: Colors.red,
+                text: state.detailsInfo?.remarks ?? '',
+                textColor: Colors.red,
+              ),
           ],
         ),
       );
@@ -510,66 +535,55 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
               ),
               combination: Combination.middle,
             ),
-            if (state.leaderVerify.value)
-              CombinationButton(
-                text: 'machine_dispatch_generate_and_print'.tr,
-                isEnabled: logic.isSelectedOne(),
-                click: () {
-                  if (logic.statusReportedAndGenerate()) {
-                    msgDialog(
-                      content: '已经进行过员工汇报，无法再打标',
-                    );
-                  } else {
-                    generateAndPrintDialog(
-                      printLast: () =>
-                          logic.generateAndPrintLabel(isPrintLast: true),
-                      print: () =>
-                          logic.generateAndPrintLabel(isPrintLast: false),
-                    );
-                  }
-                },
-                combination: Combination.middle,
-              ),
-            if (state.leaderVerify.value)
-              CombinationButton(
-                text: 'machine_dispatch_generate_and_print_english'.tr,
-                isEnabled: logic.isSelectedOne(),
-                click: () {
-                  if (logic.statusReportedAndGenerate()) {
-                    msgDialog(
-                      content: '已经进行过员工汇报，无法再打标',
-                    );
-                  } else {
-                    logic.getEnglishLabel((label) {
-                      selectLabelTypeDialog(
-                        englishLabel: label,
-                        printLast: (weight, specifications) =>
-                            logic.generateAndPrintLabel(
-                          isPrintLast: true,
-                          isEnglish: true,
-                          weight: weight,
-                          specifications: specifications,
-                        ),
-                        print: (weight, specifications) =>
-                            logic.generateAndPrintLabel(
-                          isPrintLast: false,
-                          isEnglish: true,
-                          weight: weight,
-                          specifications: specifications,
-                        ),
-                      );
-                    });
-                  }
-                },
-                combination: Combination.middle,
-              ),
             CombinationButton(
-              text: 'machine_dispatch_production_report'.tr,
-              isEnabled: logic.hasReported(),
-              click: () => askDialog(
-                content: '确定要汇报产量吗？',
-                confirm: () => logic.productionReport(),
-              ),
+              text: 'machine_dispatch_generate_and_print'.tr,
+              isEnabled: logic.isSelectedOne(),
+              click: () {
+                if (logic.statusReportedAndGenerate()) {
+                  msgDialog(
+                    content: '已经进行过员工汇报，无法再打标',
+                  );
+                } else {
+                  generateAndPrintDialog(
+                    printLast: () =>
+                        logic.generateAndPrintLabel(isPrintLast: true),
+                    print: () =>
+                        logic.generateAndPrintLabel(isPrintLast: false),
+                  );
+                }
+              },
+              combination: Combination.middle,
+            ),
+            CombinationButton(
+              text: 'machine_dispatch_generate_and_print_english'.tr,
+              isEnabled: logic.isSelectedOne(),
+              click: () {
+                if (logic.statusReportedAndGenerate()) {
+                  msgDialog(
+                    content: '已经进行过员工汇报，无法再打标',
+                  );
+                } else {
+                  logic.getEnglishLabel((label) {
+                    selectLabelTypeDialog(
+                      englishLabel: label,
+                      printLast: (weight, specifications) =>
+                          logic.generateAndPrintLabel(
+                        isPrintLast: true,
+                        isEnglish: true,
+                        weight: weight,
+                        specifications: specifications,
+                      ),
+                      print: (weight, specifications) =>
+                          logic.generateAndPrintLabel(
+                        isPrintLast: false,
+                        isEnglish: true,
+                        weight: weight,
+                        specifications: specifications,
+                      ),
+                    );
+                  });
+                }
+              },
               combination: Combination.middle,
             ),
             CombinationButton(
@@ -605,25 +619,6 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
         ),
       );
 
-  // printLabel(List<Uint8List> label) {
-  //   pu.printLabel(
-  //     label: label,
-  //     start: () => loadingShow('正在下发标签...'),
-  //     success: () {
-  //       loadingDismiss();
-  //       showSnackBar(title: '打印', message: '标签下发完成。');
-  //     },
-  //     failed: () {
-  //       loadingDismiss();
-  //       showSnackBar(
-  //         title: '打印',
-  //         message: '标签下发失败。',
-  //         isWarning: true,
-  //       );
-  //     },
-  //   );
-  // }
-
   @override
   void initState() {
     super.initState();
@@ -632,82 +627,72 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(
-      () => pageBody(
-          actions: [
-            if (state.detailsInfo != null)
-              CombinationButton(
-                text: 'machine_dispatch_surplus_material_info'.tr,
-                click: () => showSurplusMaterialListDialog(
-                  context,
-                  print: (label) {
-                    Get.to(() => PreviewLabel(
-                        labelWidget:label
-                    ));
-                  },
-                ),
-                combination: Combination.left,
-              ),
-            if (state.detailsInfo != null)
-              CombinationButton(
-                text: 'machine_dispatch_label_list'.tr,
-                click: () {
-                  if (state.labelErrorMsg.isNotEmpty) {
-                    errorDialog(content: state.labelErrorMsg);
-                  } else {
-                    showLabelListDialog(
-                      context: context,
-                      print: (label) => logic.printLabel(label),
-                    );
-                  }
-                },
-                combination: Combination.middle,
-              ),
-            CombinationButton(
-              text: 'machine_dispatch_change_order'.tr,
-              click: refreshOrder,
-              combination: state.detailsInfo != null
-                  ? Combination.middle
-                  : state.nowDispatchNumber.value.isEmpty
-                      ? Combination.intact
-                      : Combination.left,
-            ),
-            if (state.nowDispatchNumber.value.isNotEmpty)
-              CombinationButton(
-                text: 'machine_dispatch_refresh'.tr,
-                click: () => logic.refreshWorkCardDetail(),
-                combination: Combination.right,
-              ),
-          ],
-          body: Column(
-            children: [
-              if (state.detailsInfo != null) pageTitle(),
-              if (state.leaderVerify.value)
-                Text(
-                  'machine_dispatch_tips'.tr,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.red,
-                    fontSize: 18,
+    return pageBody(
+        actions: [
+          Obx(() => state.hasDetails.value
+              ? CombinationButton(
+                  text: 'machine_dispatch_surplus_material_info'.tr,
+                  click: () => showSurplusMaterialListDialog(
+                    context,
+                    print: (code, name, detail) {
+                      logic.printMaterialHeadLabel(code, name, detail);
+                    },
                   ),
-                ),
-              Expanded(
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.only(left: 10, top: 5, right: 10),
-                  children: [
-                    if (state.sizeItemList.isNotEmpty) itemTitle(),
-                    for (var i = 0; i < state.sizeItemList.length; ++i)
-                      item(state.sizeItemList[i], state.selectList[i]),
-                    if (state.sizeItemList.isNotEmpty)
-                      totalItem(state.sizeItemList)
-                  ],
-                ),
-              ),
-              if (state.detailsInfo != null) bottomButton()
-            ],
-          )),
-    );
+                  combination: Combination.left,
+                )
+              : Container()),
+          Obx(() => state.hasDetails.value
+              ? CombinationButton(
+                  text: 'machine_dispatch_label_list'.tr,
+                  click: () {
+                    if (state.labelErrorMsg.isNotEmpty) {
+                      errorDialog(content: state.labelErrorMsg);
+                    } else {
+                      showLabelListDialog(
+                        context: context,
+                        print: (label) => logic.printLabel(label),
+                      );
+                    }
+                  },
+                  combination: Combination.middle,
+                )
+              : Container()),
+          Obx(() => CombinationButton(
+                text: 'machine_dispatch_change_order'.tr,
+                click: refreshOrder,
+                combination: state.hasDetails.value
+                    ? Combination.middle
+                    : state.nowDispatchNumber.value.isEmpty
+                        ? Combination.intact
+                        : Combination.left,
+              )),
+          Obx(() => state.nowDispatchNumber.value.isNotEmpty
+              ? CombinationButton(
+                  text: 'machine_dispatch_refresh'.tr,
+                  click: () => logic.refreshWorkCardDetail(),
+                  combination: Combination.right,
+                )
+              : Container())
+        ],
+        body: Column(
+          children: [
+            Obx(() => state.hasDetails.value ? pageTitle() : Container()),
+            Expanded(
+              child: Obx(() => ListView(
+                    scrollDirection: Axis.horizontal,
+                    padding: const EdgeInsets.only(left: 10, top: 5, right: 10),
+                    children: [
+                      if (state.sizeItemList.isNotEmpty) itemTitle(),
+                      for (var i = 0; i < state.sizeItemList.length; ++i)
+                        item(state.sizeItemList[i], state.selectList[i]),
+                      if (state.sizeItemList.isNotEmpty)
+                        totalItem(state.sizeItemList)
+                    ],
+                  )),
+            ),
+            Obx(() => state.hasDetails.value ? bottomButton() : Container())
+          ],
+        ));
   }
 
   @override

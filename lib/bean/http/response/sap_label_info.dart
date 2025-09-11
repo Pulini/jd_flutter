@@ -48,8 +48,8 @@ class SapLabelInfo {
           number ?? '',
           type ?? '',
           specifications ?? '',
-          netWeight ?? '',
-          grossWeight ?? '',
+          netWeight.toString(),
+          grossWeight.toString(),
           sizeList,
           barCodeList,
         ));
@@ -65,8 +65,8 @@ class SapLabelInfo {
   List<Item>? item;
   String? type;
   String? specifications;
-  String? netWeight;
-  String? grossWeight;
+  int? netWeight;
+  int? grossWeight;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
