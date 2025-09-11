@@ -353,9 +353,11 @@ class ProductionDispatchLogic extends GetxController {
             state.batchWorkProcedure = data.workCardList!;
             var workProcedure = <WorkCardList>[];
             groupBy(data.workCardList!, (v) => v.processNumber).forEach((k, v) {
-              var qty = v.map((v2)=>v2.qty??0).reduce((a,b)=>a.add(b));
-              var finishQty =  v.map((v2)=>v2.finishQty??0).reduce((a,b)=>a.add(b));
-              var mustQty = v.map((v2)=>v2.mustQty??0).reduce((a,b)=>a.add(b));
+              var qty = v.map((v2) => v2.qty ?? 0).reduce((a, b) => a.add(b));
+              var finishQty =
+                  v.map((v2) => v2.finishQty ?? 0).reduce((a, b) => a.add(b));
+              var mustQty =
+                  v.map((v2) => v2.mustQty ?? 0).reduce((a, b) => a.add(b));
 
               workProcedure.add(WorkCardList(
                 mustQty: mustQty,
@@ -946,10 +948,11 @@ class ProductionDispatchLogic extends GetxController {
   }
 
   productionDispatch() {
-    var submitData = <Map>[];
-    for (var wp in state.workProcedure.where((v) => v.isOpen == 1)) {
-      //如果批量数据不为空，则说明当前是多工单同时派工，需要对员工进行工单分配
-      if (state.batchWorkProcedure.isNotEmpty) {
+    if (state.batchWorkProcedure.isNotEmpty) {
+      //多工单计工
+      var mapList = <Map>[];
+      for (var wp in state.workProcedure.where((v) => v.isOpen == 1)) {
+        var submitData = <Map>[];
         for (var bwp in state.batchWorkProcedure.where(
           (v) => v.processNumber == wp.processNumber,
         )) {
@@ -1000,8 +1003,23 @@ class ProductionDispatchLogic extends GetxController {
             }
           }
         }
+        mapList.add({'UserID': userInfo?.userID, 'List': submitData});
+      }
+      state.mergeOrderProductionDispatch(
+        submitData: mapList,
+        success: (msg) {
+          SaveDispatch.delete(
+            processBillNumber: '${state.workCardTitle.value.processBillNumber}',
+          );
+          successDialog(content: msg);
+        },
+        error: (msg) => errorDialog(content: msg),
+      );
 
-      } else {
+    } else {
+      //单一工单计工
+      var submitData = <Map>[];
+      for (var wp in state.workProcedure.where((v) => v.isOpen == 1)) {
         for (var d in wp.dispatch) {
           submitData.add({
             'ID': wp.id,
@@ -1026,12 +1044,11 @@ class ProductionDispatchLogic extends GetxController {
           });
         }
       }
-      state.mergeOrderProductionDispatch(
+      state.productionDispatch(
         submitData: submitData,
         success: (msg) {
           SaveDispatch.delete(
-            processBillNumber:
-            '${state.workCardTitle.value.processBillNumber}',
+            processBillNumber: '${state.workCardTitle.value.processBillNumber}',
           );
           successDialog(content: msg);
         },

@@ -522,7 +522,7 @@ class ProductionDispatchState {
     httpPost(
       method: webApiProductionDispatchBatch,
       loading: 'production_dispatch_dispatching'.tr,
-      body: {'UserID': userInfo?.userID, 'List': submitData},
+      body:submitData
     ).then((response) {
       if (response.resultCode == resultSuccess) {
         success.call(response.message ?? '');

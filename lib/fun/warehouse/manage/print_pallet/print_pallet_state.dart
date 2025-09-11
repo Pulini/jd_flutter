@@ -7,7 +7,6 @@ import 'package:jd_flutter/utils/web_api.dart';
 
 class PrintPalletState {
   var palletNo = ''.obs;
-  var factory = '';
   var palletList = <List<SapPalletDetailInfo>>[].obs;
   var selectedList = <RxBool>[].obs;
 
@@ -27,7 +26,7 @@ class PrintPalletState {
             'BQID': '',
             'ZZVBELN': '',
             'MATNR': '',
-            'WERKS': factory,
+            'WERKS': '',
           }
         ],
       },

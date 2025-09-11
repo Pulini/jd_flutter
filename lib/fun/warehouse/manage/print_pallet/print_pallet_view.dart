@@ -2,13 +2,9 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/sap_picking_info.dart';
-import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
-import 'package:jd_flutter/widget/picker/picker_controller.dart';
-import 'package:jd_flutter/widget/picker/picker_item.dart';
-import 'package:jd_flutter/widget/picker/picker_view.dart';
 import 'package:jd_flutter/widget/scanner.dart';
 
 import 'print_pallet_logic.dart';
@@ -25,7 +21,6 @@ class _PrintPalletPageState extends State<PrintPalletPage> {
   final PrintPalletLogic logic = Get.put(PrintPalletLogic());
   final PrintPalletState state = Get.find<PrintPalletLogic>().state;
   var controller = TextEditingController();
-  late OptionsPickerController factoryController;
 
   _item(int index) {
     var pallet = state.palletList[index];
@@ -125,13 +120,6 @@ class _PrintPalletPageState extends State<PrintPalletPage> {
 
   @override
   void initState() {
-    factoryController = OptionsPickerController(
-      PickerType.sapFactory,
-      saveKey: '${RouteConfig.printPallet.name}${PickerType.sapFactory}',
-      onSelected: (pi) {
-        state.factory = (pi as PickerSapFactory).pickerId();
-      },
-    );
     pdaScanner(scan: (code) => logic.scanPallet(code));
     super.initState();
   }
@@ -164,9 +152,9 @@ class _PrintPalletPageState extends State<PrintPalletPage> {
       ],
       body: Column(
         children: [
-          OptionsPicker(pickerController: factoryController),
           Container(
             padding: const EdgeInsetsGeometry.only(left: 5, right: 5),
+            margin: const EdgeInsets.only(bottom: 10),
             child: Obx(() => TextField(
                   controller: controller,
                   onChanged: (v) => state.palletNo.value = v,
