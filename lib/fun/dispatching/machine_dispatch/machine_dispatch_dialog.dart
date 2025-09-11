@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -461,7 +460,7 @@ teamLeaderVerifyDialog() {
   var countDown = 0;
   var workerNumber = '';
   var verificationCode = '';
-  state.leaderVerify.value = true; //测试用
+  // state.leaderVerify.value = true; //测试用
   Get.dialog(
     PopScope(
       canPop: false,

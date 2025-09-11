@@ -304,7 +304,6 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
                                     );
                                   });
                             } else {
-                              logger.f('-------1');
                               if (language.length == 1) {
                                 logic.printLabelState(
                                     type: labelType,

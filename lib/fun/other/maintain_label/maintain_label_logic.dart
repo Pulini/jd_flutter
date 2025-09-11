@@ -190,10 +190,15 @@ class MaintainLabelLogic extends GetxController {
     );
   }
 
+  checkPrintType({
+    required Function(bool old)callback,
+  }){
+
+  }
+
   checkLanguage({
     required Function(
-            String factory, int labelType, List<List<LabelInfo>>, List<String>)
-        callback,
+            String factory, int labelType, List<List<LabelInfo>>, List<String>)callback,
   }) {
     var languageList = <String>[];
     var select = <LabelInfo>[];

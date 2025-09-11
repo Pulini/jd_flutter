@@ -257,7 +257,7 @@ class MachineDispatchLogic extends GetxController {
       title: state.detailsInfo?.factoryType ?? '',
       subTitle: label.isEnglish
           ? state.detailsInfo?.materialName ?? ''
-          : (state.detailsInfo?.processflow ?? '       序号：${label.number}'),
+          : ((state.detailsInfo?.processflow ?? '') + ('     序号：${label.number}')),
       subTitleWrap: false,
       content: label.isEnglish
           ? ('GW:${label.grossWeight}KG   NW:${label.netWeight}KG')
@@ -271,7 +271,7 @@ class MachineDispatchLogic extends GetxController {
           : '递减号:${state.detailsInfo?.decrementNumber}      日期:${state.detailsInfo?.startDate}',
       bottomLeftText1: label.isEnglish
           ? '${label.qty}${label.englishUnit}'
-          : '${label.size ?? ''}${label.qty}${label.unit}',
+          : '${label.size}码${label.qty}${label.unit}',
       bottomMiddleText1: label.isEnglish
           ? '   Made in China'
           : '       机台：${state.detailsInfo?.machine ?? ''}',
@@ -289,41 +289,6 @@ class MachineDispatchLogic extends GetxController {
       } );
     });
   }
-
-  //
-  // fixedLabel({required MachineDispatchReprintLabelInfo label}) =>
-  //     label.isEnglish
-  //         ? machineDispatchEnglishFixedLabel(
-  //             labelID: label.labelID,
-  //             factoryType: label.factoryType,
-  //             englishName: label.englishName,
-  //             grossWeight: label.grossWeight,
-  //             netWeight: label.netWeight,
-  //             specifications: label.specifications,
-  //             number: label.number,
-  //             dispatchNumber: label.dispatchNumber,
-  //             decrementNumber: label.decrementNumber,
-  //             date: label.date,
-  //             qty: label.qty,
-  //             englishUnit: label.englishUnit,
-  //             size: label.size,
-  //           )
-  //         : machineDispatchChineseFixedLabel(
-  //             labelID: label.labelID,
-  //             factoryType: label.factoryType,
-  //             processes: label.processes,
-  //             number: label.number,
-  //             materialName: label.materialName,
-  //             dispatchNumber: label.dispatchNumber,
-  //             decrementNumber: label.decrementNumber,
-  //             date: label.date,
-  //             size: label.size,
-  //             qty: label.qty,
-  //             unit: label.unit,
-  //             shift: label.shift,
-  //             machine: label.machine,
-  //             isLastLabel: label.isLastLabel,
-  //           );
 
   printMaterialHeadLabel(
       String code, String name, MachineDispatchDetailsInfo details) {
@@ -406,9 +371,7 @@ class MachineDispatchLogic extends GetxController {
           isEnglish: isEnglish,
           qrCode: label.labelID ?? '',
           title: state.detailsInfo?.factoryType ?? '',
-          subTitle: isEnglish
-              ? state.detailsInfo?.materialName ?? ''
-              : (state.detailsInfo?.processflow ?? '       序号：${label.number}'),
+          subTitle: isEnglish ? state.detailsInfo?.materialName ?? '' :  ((state.detailsInfo?.processflow ?? '') + ('     序号：${label.number}')),
           subTitleWrap: false,
           content: isEnglish
               ? ('GW:${label.grossWeight}KG   NW:${label.netWeight}KG')
@@ -421,10 +384,7 @@ class MachineDispatchLogic extends GetxController {
               ? 'DECREASE:${state.detailsInfo?.decrementNumber}    DATE:${state.detailsInfo?.startDate}'
               : '递减号:${state.detailsInfo?.decrementNumber}    日期:${state.detailsInfo?.startDate}',
           bottomLeftText1: isEnglish
-              ? ((printQty.toShowString()) + (item.bUoM ?? ''))
-              : ((item.size ?? '') +
-                  (printQty.toShowString()) +
-                  (item.bUoM ?? '')),
+              ? ((printQty.toShowString()) + (item.bUoM ?? '')) : ('${item.size ?? ''}码${printQty.toShowString()}${item.bUoM ?? ''}'),
           bottomMiddleText1: isEnglish
               ? '   Made in China'
               : '       机台：${state.detailsInfo?.machine ?? ''}',
