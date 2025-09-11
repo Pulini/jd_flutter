@@ -139,7 +139,7 @@ class ProcessReportStoreLogic extends GetxController {
         refresh.call();
       } else {
         showSnackBar(title: 'dialog_default_title_information'.tr, message: response.message ?? '');
-        refresh.call;
+        refresh.call();
       }
     });
   }
