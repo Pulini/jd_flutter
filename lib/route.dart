@@ -169,7 +169,7 @@ class RouteConfig {
   //生产派工
   static Routes productionDispatch = Routes(
     '/production_dispatch',
-    202,
+    203,
     const ProductionDispatchPage(),
   );
 
@@ -519,7 +519,7 @@ class RouteConfig {
   //送货单列表
   static Routes deliveryOrder = Routes(
     '/delivery_order',
-    200,
+    201,
     const DeliveryOrderPage(),
   );
 

@@ -829,6 +829,7 @@ class ProductionDispatchLogic extends GetxController {
   }
 
   sendDispatchToWechat() {
+    _clearWorkerDispatch();
     var msg = 'production_dispatch_wechat_dispatch_error1'.trArgs([
       state.orderList.firstWhere((v) => v.select).planBill ?? '',
       state.workCardTitle.value.plantBody ?? ''
@@ -946,8 +947,15 @@ class ProductionDispatchLogic extends GetxController {
       errorDialog(content: msg.join('\r\n'));
     }
   }
-
+  _clearWorkerDispatch(){
+    for (var v in state.workProcedure) {
+      for (var v2 in v.dispatch) {
+        v2.dispatchQty=0;
+      }
+    }
+  }
   productionDispatch() {
+    _clearWorkerDispatch();
     if (state.batchWorkProcedure.isNotEmpty) {
       //多工单计工
       var mapList = <Map>[];
@@ -958,19 +966,16 @@ class ProductionDispatchLogic extends GetxController {
         )) {
           //指令已分配数量
           var disQty = 0.0;
-
           for (var worker in wp.dispatch) {
             //人员的剩余可分配数量大于0 说明人员的数量上一个指令分配满后还有剩余  可以继续下一个指令分配
             if (worker.remainder() > 0) {
               //指令剩余可分配数量
               var surplus = bwp.mustQty.sub(disQty);
-
               //指令剩余数量大于0 说明指令的数量上一个员工分配满后还有剩余  可以继续下一个员工分配
               if (surplus > 0) {
                 //可分配数=如果剩余数大于人员可分配数则分配人员可分配数 否则分配剩余数
                 var qty =
                     surplus > worker.remainder() ? worker.remainder() : surplus;
-
                 //分配人员数据到指令
                 submitData.add({
                   'ID': bwp.id,

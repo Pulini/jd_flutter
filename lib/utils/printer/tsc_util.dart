@@ -162,11 +162,11 @@ List<int> _tscText(
 //[fontSize] 字体大小
 //[text] 文本内容
 Future<Uint8List> _tscBitmapText(
-    int xAxis,
-    int yAxis,
-    double fontSize,
-    String text,
-    ) async {
+  int xAxis,
+  int yAxis,
+  double fontSize,
+  String text,
+) async {
   var recorder = ui.PictureRecorder();
   var canvas = Canvas(recorder);
   var tp = TextPainter()
@@ -267,22 +267,18 @@ Future<Uint8List> _tscBitmapText(
     ..addAll(utf8.encode('\r\n')));
 }
 
-
 Future<Uint8List> _tscBitmap(
   int xAxis,
   int yAxis,
   Uint8List bitmapData,
 ) async {
-  debugPrint('imageData=${bitmapData.lengthInBytes}');
   // 1. 将原始位图转换为灰度图像
   img.Image grayBitmap = img.grayscale(img.decodeImage(bitmapData)!);
 
-  debugPrint('grayBitmap=${grayBitmap.lengthInBytes}');
   // 2. 将灰度图像转换为二值图像
   img.Image binaryBitmap = img.copyResize(grayBitmap,
       width: grayBitmap.width, height: grayBitmap.height);
 
-  debugPrint('binaryBitmap=${grayBitmap.lengthInBytes}');
   // 手动进行二值化处理
   const threshold = 127;
   for (int y = 0; y < binaryBitmap.height; y++) {
@@ -295,7 +291,6 @@ Future<Uint8List> _tscBitmap(
       binaryBitmap.setPixel(x, y, newValue);
     }
   }
-  debugPrint('binaryBitmap=${grayBitmap.lengthInBytes}');
 
   // 3. 构建命令字符串
   String pictureWidth = ((binaryBitmap.width + 7) ~/ 8).toString();
@@ -314,7 +309,7 @@ Future<Uint8List> _tscBitmap(
   for (int i = 0; i < stream.length; i++) {
     stream[i] = 0xFF;
   }
-  debugPrint('stream=${stream.lengthInBytes}');
+
   // 5. 根据像素值处理字节流
   for (int y = 0; y < height; ++y) {
     for (int x = 0; x < width; ++x) {
@@ -330,14 +325,17 @@ Future<Uint8List> _tscBitmap(
       }
     }
   }
-  debugPrint('stream=${stream.lengthInBytes}');
+
   // 6. 组合完整的TSC命令
   final commandBytes = Uint8List.fromList(utf8.encode(command));
   final fullCommand = Uint8List(commandBytes.length + stream.length + 2);
 
   fullCommand.setRange(0, commandBytes.length, commandBytes);
   fullCommand.setRange(
-      commandBytes.length, commandBytes.length + stream.length, stream);
+    commandBytes.length,
+    commandBytes.length + stream.length,
+    stream,
+  );
   fullCommand[commandBytes.length + stream.length] = 13; // \r
   fullCommand[commandBytes.length + stream.length + 1] = 10; // \n
 
@@ -576,7 +574,7 @@ Future<List<Uint8List>> labelMultipurposeFixed({
   var list = <Uint8List>[];
 
   list.add(_tscClearBuffer());
-  list.add(_tscSetup(75, 45,density: 12,speed: 3));
+  list.add(_tscSetup(75, 45, density: 12, speed: 3));
   if (qrCode.isNotEmpty) {
     list.add(_tscQrCode(2 * _dpi, 2 * _dpi + _halfDpi,
         qrCode.contains('"') ? qrCode.replaceAll('"', '\\["]') : qrCode));
@@ -600,7 +598,7 @@ Future<List<Uint8List>> labelMultipurposeFixed({
     list.add(
         await _tscBitmapText(19 * _dpi + _halfDpi, 12 * _dpi, 40, subTitle));
   }
-  if(!isEnglish){
+  if (!isEnglish) {
     if (content.isNotEmpty) {
       var format = contextFormat(content, 30, 71.0 * _dpi);
       for (var i = 0; i < format.length; ++i) {
@@ -616,15 +614,14 @@ Future<List<Uint8List>> labelMultipurposeFixed({
             await _tscBitmapText(2 * _dpi, (20 + 4 * i) * _dpi, 30, format[i]));
       }
     }
-  }else{
+  } else {
     list.add(await _tscBitmapText(2 * _dpi, 20 * _dpi, 30, content));
   }
-  if(!isEnglish){
+  if (!isEnglish) {
     if (subContent1.isNotEmpty) {
       list.add(await _tscBitmapText(2 * _dpi, 28 * _dpi, 28, subContent1));
     }
-  }else{
-
+  } else {
     if (specification.isNotEmpty) {
       list.add(await _tscBitmapText(2 * _dpi, 24 * _dpi, 28, specification));
     }
@@ -1078,8 +1075,7 @@ Future<List<Uint8List>> _imageResizeToLabel(Map<String, dynamic> image) async {
   int height = ((image['height'] as int) / 5.5 / pixelRatio).toInt();
 
   debugPrint(
-    'pixelRatio=$pixelRatio speed=$speed density=$density isDynamic=$isDynamic width=$width height=$height'
-  );
+      'pixelRatio=$pixelRatio speed=$speed density=$density isDynamic=$isDynamic width=$width height=$height');
   // var wImage = img.decodeImage(image['image'])!;
   // for (int x = 0; x < wImage.width; x++) {
   //   for (int y = 0; y < wImage.height; y++) {
@@ -1090,7 +1086,7 @@ Future<List<Uint8List>> _imageResizeToLabel(Map<String, dynamic> image) async {
   //     }
   //   }
   // }
-  debugPrint('--------image: ${(image['image']as Uint8List).lengthInBytes} ');
+  debugPrint('--------image: ${(image['image'] as Uint8List).lengthInBytes} ');
 
   var reImage = img.copyResize(
     img.decodeImage(image['image'])!,
@@ -1114,4 +1110,3 @@ Future<List<Uint8List>> _imageResizeToLabel(Map<String, dynamic> image) async {
     _tscPrint(),
   ];
 }
-

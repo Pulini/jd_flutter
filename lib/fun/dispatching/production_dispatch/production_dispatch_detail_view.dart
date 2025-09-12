@@ -390,30 +390,27 @@ class _ProductionDispatchDetailPageState
         child: Row(
           children: [
             Expanded(
-              child: GestureDetector(
-                onTap: () {},
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Text(
-                        data.getName(),
-                        style: TextStyle(
-                          color: Colors.blue.shade900,
-                          fontWeight: FontWeight.bold,
-                        ),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Text(
+                      data.getName(),
+                      style: TextStyle(
+                        color: Colors.blue.shade900,
+                        fontWeight: FontWeight.bold,
                       ),
-                      Text(
-                        data.getQty(),
-                        style: TextStyle(
-                          color:
-                              data.qty == 0 ? Colors.red : Colors.grey.shade600,
-                        ),
+                    ),
+                    Text(
+                      data.getQty(),
+                      style: TextStyle(
+                        color:
+                        data.qty == 0 ? Colors.red : Colors.grey.shade600,
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),

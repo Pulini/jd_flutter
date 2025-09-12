@@ -29,8 +29,8 @@ const resultToUpdate = 3;
 const baseUrlForMES = 'https://geapp.goldemperor.com:1226/';
 
 //MES测试库
-const testUrlForMES = 'https://geapptest.goldemperor.com:1224/';
-// const testUrlForMES = 'https://geapptest.goldemperor.com:1207/';
+// const testUrlForMES = 'https://geapptest.goldemperor.com:1224/';
+const testUrlForMES = 'https://geapptest.goldemperor.com:1207/';
 
 //SAP正式库
 const baseUrlForSAP = 'https://erpprd01.goldemperor.com:8003/';
@@ -838,6 +838,9 @@ const webApiSapPrintPicking = 'sap/zapp/ZFUN_RES_ZLINGYONG_1500A';
 
 //sap待上架列表
 const webApiSapGetPalletList = 'sap/zapp/ZWMS_STOCK_FETCH';
+
+//sap获取托盘信息
+const webApiSapGetLabelBindingPalletInfo = 'sap/zapp/ZNQWMS_STOCK_FETCH';
 
 //sap上架移库
 const webApiSapPuttingOnShelves = 'sap/zapp/ZWMS_INTERFACE';
