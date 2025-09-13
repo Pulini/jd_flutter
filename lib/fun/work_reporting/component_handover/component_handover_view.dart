@@ -122,7 +122,7 @@ class _ComponentHandoverPageState extends State<ComponentHandoverPage> {
         actions: [
           TextButton(
               //清空
-              onPressed: () => {},
+              onPressed: () {},
               child: Text('component_handover_clean'.tr))
         ],
         body: Column(
@@ -214,7 +214,7 @@ class _ComponentHandoverPageState extends State<ComponentHandoverPage> {
                       text: state.outProcess.value),
                   Expanded(
                       child: InkWell(
-                          onTap: () => {logic.getProcessList()},
+                          onTap: () {logic.getProcessList();},
                           child: const Icon(
                             Icons.ads_click_sharp,
                             color: Colors.blueAccent,
@@ -253,7 +253,7 @@ class _ComponentHandoverPageState extends State<ComponentHandoverPage> {
               child: CombinationButton(
                 //查看汇总
                 text: 'component_handover_view_summary'.tr,
-                click: () => {
+                click: () {
                   if (state.summaryDataList.isNotEmpty)
                     {
                       Get.to(() => const ComponentHandoverSummaryPage())?.then(
@@ -279,12 +279,12 @@ class _ComponentHandoverPageState extends State<ComponentHandoverPage> {
                                 ));
                           }
                         },
-                      ),
+                      );
                     }
                   else
                     {
                       showSnackBar(
-                          message: 'component_handover_summary_empty'.tr)
+                          message: 'component_handover_summary_empty'.tr);
                     }
                 },
                 combination: Combination.intact,
@@ -297,7 +297,7 @@ class _ComponentHandoverPageState extends State<ComponentHandoverPage> {
   @override
   void initState() {
     pdaScanner(
-      scan: (code) => {logic.addCode(code)},
+      scan: (code) {logic.addCode(code);},
     );
     super.initState();
   }

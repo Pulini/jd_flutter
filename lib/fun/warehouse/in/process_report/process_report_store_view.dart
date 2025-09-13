@@ -27,9 +27,9 @@ class _ProcessReportPageState extends State<ProcessReportStorePage> {
 
   _item(BarCodeInfo code) {
     return GestureDetector(
-        onLongPress: () => {
-              logic.deleteCode(code),
-            },
+        onLongPress: () {
+          logic.deleteCode(code);
+        },
         child: Container(
           padding: const EdgeInsets.all(5),
           margin: const EdgeInsets.only(bottom: 5),
@@ -64,7 +64,9 @@ class _ProcessReportPageState extends State<ProcessReportStorePage> {
           padding: const EdgeInsets.only(top: 10, right: 30),
           child: InkWell(
             child: const Icon(Icons.menu, color: Colors.blueAccent),
-            onTap: () => {state.showClick.value = !state.showClick.value},
+            onTap: () {
+              state.showClick.value = !state.showClick.value;
+            },
           ),
         )
       ],
@@ -88,12 +90,12 @@ class _ProcessReportPageState extends State<ProcessReportStorePage> {
                 ),
                 InkWell(
                   child: const Icon(Icons.qr_code_scanner, color: Colors.grey),
-                  onTap: () => {
+                  onTap: () {
                     Get.to(() => const Scanner())?.then((v) {
                       if (v != null) {
                         logic.scanCode(v);
                       }
-                    }),
+                    });
                   },
                 ),
                 const SizedBox(width: 5)
@@ -160,7 +162,7 @@ class _ProcessReportPageState extends State<ProcessReportStorePage> {
                   child: CombinationButton(
                     text: 'process_report_store_manually_add'.tr,
                     click: () {
-                      logic.scanCode(tecCode.text);
+                      if (tecCode.text.isNotEmpty) logic.scanCode(tecCode.text);
                     },
                     combination: Combination.left,
                   ),
@@ -169,11 +171,13 @@ class _ProcessReportPageState extends State<ProcessReportStorePage> {
                   flex: 1,
                   child: CombinationButton(
                     text: 'process_report_store_submit_barcode'.tr,
-                    click: () => {
+                    click: () {
                       checkBarCodeProcessDialog(
                         list: state.barCodeList,
-                        submit: (w, p) => {logic.submit(worker: w, process: p)},
-                      ),
+                        submit: (w, p) {
+                          logic.submit(worker: w, process: p);
+                        },
+                      );
                     },
                     combination: Combination.right,
                   ),

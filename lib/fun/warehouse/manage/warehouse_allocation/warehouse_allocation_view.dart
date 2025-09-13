@@ -43,14 +43,14 @@ class _WarehouseAllocationPageState extends State<WarehouseAllocationPage> {
           padding: const EdgeInsets.only(top: 10, right: 30),
           child: InkWell(
             child: Text('warehouse_allocation_clean'.tr),
-            onTap: () => {
+            onTap: () {
               askDialog(
                 title: 'dialog_default_title_information'.tr,
                 content: 'warehouse_allocation_clean_code'.tr,
                 confirm: () {
                   state.clearData();
                 },
-              ),
+              );
             },
           ),
         )

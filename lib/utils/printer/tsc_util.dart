@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image/image.dart' as img;
 import 'package:jd_flutter/utils/extension_util.dart';
+import 'package:jd_flutter/utils/web_api.dart';
 
 //dpi
 const _dpi = 8;
@@ -162,11 +163,11 @@ List<int> _tscText(
 //[fontSize] 字体大小
 //[text] 文本内容
 Future<Uint8List> _tscBitmapText(
-    int xAxis,
-    int yAxis,
-    double fontSize,
-    String text,
-    ) async {
+  int xAxis,
+  int yAxis,
+  double fontSize,
+  String text,
+) async {
   var recorder = ui.PictureRecorder();
   var canvas = Canvas(recorder);
   var tp = TextPainter()
@@ -266,7 +267,6 @@ Future<Uint8List> _tscBitmapText(
     ..addAll(stream)
     ..addAll(utf8.encode('\r\n')));
 }
-
 
 Future<Uint8List> _tscBitmap(
   int xAxis,
@@ -572,11 +572,12 @@ Future<List<Uint8List>> labelMultipurposeFixed({
   String bottomMiddleText2 = '',
   String bottomRightText1 = '',
   String bottomRightText2 = '',
+  double speed = 3.0,
+  double density = 15.0,
 }) async {
   var list = <Uint8List>[];
-
   list.add(_tscClearBuffer());
-  list.add(_tscSetup(75, 45,density: 12,speed: 3));
+  list.add(_tscSetup(75, 45, density: density.toInt(), speed: speed.toInt()));
   if (qrCode.isNotEmpty) {
     list.add(_tscQrCode(2 * _dpi, 2 * _dpi + _halfDpi,
         qrCode.contains('"') ? qrCode.replaceAll('"', '\\["]') : qrCode));
@@ -600,9 +601,9 @@ Future<List<Uint8List>> labelMultipurposeFixed({
     list.add(
         await _tscBitmapText(19 * _dpi + _halfDpi, 12 * _dpi, 40, subTitle));
   }
-  if(!isEnglish){
+  if (!isEnglish) {
     if (content.isNotEmpty) {
-      var format = contextFormat(content, 30, 71.0 * _dpi);
+      var format = contextFormat(content, 29, 71.0 * _dpi);
       for (var i = 0; i < format.length; ++i) {
         //如子内容不为空，则主内容限制行数为2
         if (subContent1.isNotEmpty && subContent2.isNotEmpty && i >= 2) {
@@ -616,15 +617,14 @@ Future<List<Uint8List>> labelMultipurposeFixed({
             await _tscBitmapText(2 * _dpi, (20 + 4 * i) * _dpi, 30, format[i]));
       }
     }
-  }else{
+  } else {
     list.add(await _tscBitmapText(2 * _dpi, 20 * _dpi, 30, content));
   }
-  if(!isEnglish){
+  if (!isEnglish) {
     if (subContent1.isNotEmpty) {
       list.add(await _tscBitmapText(2 * _dpi, 28 * _dpi, 28, subContent1));
     }
-  }else{
-
+  } else {
     if (specification.isNotEmpty) {
       list.add(await _tscBitmapText(2 * _dpi, 24 * _dpi, 28, specification));
     }
@@ -678,6 +678,7 @@ Future<List<Uint8List>> labelMultipurposeFixed({
   list.add(_tscLine(_dpi, 20 * _dpi - _halfDpi, 73 * _dpi, 2));
   list.add(_tscLine(_dpi, 36 * _dpi + _halfDpi, 73 * _dpi, 2));
 
+  list.add(_tscCutterOff());
   list.add(_tscPrint());
 
   return list;
@@ -1078,8 +1079,7 @@ Future<List<Uint8List>> _imageResizeToLabel(Map<String, dynamic> image) async {
   int height = ((image['height'] as int) / 5.5 / pixelRatio).toInt();
 
   debugPrint(
-    'pixelRatio=$pixelRatio speed=$speed density=$density isDynamic=$isDynamic width=$width height=$height'
-  );
+      'pixelRatio=$pixelRatio speed=$speed density=$density isDynamic=$isDynamic width=$width height=$height');
   // var wImage = img.decodeImage(image['image'])!;
   // for (int x = 0; x < wImage.width; x++) {
   //   for (int y = 0; y < wImage.height; y++) {
@@ -1090,7 +1090,7 @@ Future<List<Uint8List>> _imageResizeToLabel(Map<String, dynamic> image) async {
   //     }
   //   }
   // }
-  debugPrint('--------image: ${(image['image']as Uint8List).lengthInBytes} ');
+  debugPrint('--------image: ${(image['image'] as Uint8List).lengthInBytes} ');
 
   var reImage = img.copyResize(
     img.decodeImage(image['image'])!,
@@ -1114,4 +1114,3 @@ Future<List<Uint8List>> _imageResizeToLabel(Map<String, dynamic> image) async {
     _tscPrint(),
   ];
 }
-

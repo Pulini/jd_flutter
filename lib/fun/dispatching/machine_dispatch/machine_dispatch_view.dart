@@ -631,6 +631,15 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
         actions: [
           Obx(() => state.hasDetails.value
               ? CombinationButton(
+            text: '打印机设置',
+            click: () => showPrintSetting(
+              context,
+            ),
+            combination: Combination.left,
+          )
+              : Container()),
+          Obx(() => state.hasDetails.value
+              ? CombinationButton(
                   text: 'machine_dispatch_surplus_material_info'.tr,
                   click: () => showSurplusMaterialListDialog(
                     context,
@@ -638,7 +647,7 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
                       logic.printMaterialHeadLabel(code, name, detail);
                     },
                   ),
-                  combination: Combination.left,
+                  combination: Combination.middle,
                 )
               : Container()),
           Obx(() => state.hasDetails.value

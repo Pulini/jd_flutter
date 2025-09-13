@@ -351,9 +351,9 @@ class VisitRegisterLogic extends GetxController {
       if (response.resultCode == resultSuccess) {
         successDialog(
             content: response.message,
-            back: () => {
-                  refreshGetVisitList(),
-                  Get.back(),
+            back: () {
+                  refreshGetVisitList();
+                  Get.back();
                 });
       } else {
         errorDialog(content: response.message);

@@ -105,13 +105,13 @@ class _PumaAntiCounterfeitingOutboundPageState
   void initState() {
     logic.getBarCodeListByEmp();
     pdaScanner(
-      scan: (code) => {
+      scan: (code)  {
         logic.haveCode(
           code: code,
           have: () {
             playAudio(as1);
           },
-        ),
+        );
       },
     );
     super.initState();

@@ -58,10 +58,10 @@ class _ProcessReportModifyPageState extends State<ProcessReportModifyPage> {
               textColor: Colors.white),
         ],
       ),
-      onTap: () => {
+      onTap: () {
         logic.showInputDialog(
             title: 'process_report_store_modify_input_real_number'.tr,
-            confirm: (v) => {logic.setModifyList(v, data)})
+            confirm: (v) {logic.setModifyList(v, data);});
       },
     );
   }
@@ -87,8 +87,8 @@ class _ProcessReportModifyPageState extends State<ProcessReportModifyPage> {
       title: 'process_report_store_modify_modify'.tr,
       actions: [
         TextButton(
-          onPressed: () => {
-            logic.clearModifyList(),
+          onPressed: () {
+            logic.clearModifyList();
           },
           child: Text('process_report_store_modify_clear'.tr),
         )
@@ -126,19 +126,19 @@ class _ProcessReportModifyPageState extends State<ProcessReportModifyPage> {
                 flex: 1,
                 child: CombinationButton(
                   text: 'process_report_store_submit_barcode'.tr,
-                  click: () => {
+                  click: () {
                     askDialog(
                       content: 'process_report_store_modify_submit'.tr,
                       confirm: () {
                         logic.updateBarCodeInfo(
-                            success: (s) => {
+                            success: (s)  {
                                   successDialog(
                                     content: s,
                                     back: () => Get.back(),
-                                  )
+                                  );
                                 });
                       },
-                    ),
+                    );
                   },
                   combination: Combination.right,
                 ),
@@ -153,7 +153,7 @@ class _ProcessReportModifyPageState extends State<ProcessReportModifyPage> {
   @override
   void initState() {
     pdaScanner(
-      scan: (code) => {logic.modifyAdd(code)},
+      scan: (code) {logic.modifyAdd(code);},
     );
     super.initState();
   }

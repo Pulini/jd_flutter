@@ -44,12 +44,12 @@ class _CodeListReportPageState extends State<CodeListReportPage> {
               width: double.infinity,
               child: CombinationButton(
                 text: 'code_list_report_submit'.tr,
-                click: () => {
+                click: () {
                   askDialog(
                     title: 'code_list_report_tips'.tr,
                     content: 'code_list_report_submit_code'.tr,
                     confirm: () => Get.back(result: true),
-                  )
+                  );
                 },
               ),
             )

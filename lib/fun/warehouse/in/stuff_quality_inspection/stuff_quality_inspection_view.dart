@@ -455,7 +455,7 @@ class _StuffQualityInspectionPageState
                   click: () {
                     askDialog(
                         content: 'quality_inspection_sure_submit'.tr,
-                        confirm: () => {
+                        confirm: () {
                               logic.submitInspection(
                                   spinnerController1.select.value,
                                   spinnerController2.select.value,
@@ -466,7 +466,7 @@ class _StuffQualityInspectionPageState
                                     back: () {
                                       Get.back(result: true);
                                     });
-                              }),
+                              });
                             });
                   },
                   combination: Combination.intact,

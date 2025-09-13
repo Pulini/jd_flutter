@@ -29,8 +29,8 @@ class _SuppliersScanStorePageState extends State<SuppliersScanStorePage> {
 
   _item(BarCodeInfo code) {
     return GestureDetector(
-        onLongPress: () => {
-              logic.deleteCode(code),
+        onLongPress: ()  {
+              logic.deleteCode(code);
             },
         child: Container(
           padding: const EdgeInsets.all(5),
@@ -91,19 +91,19 @@ class _SuppliersScanStorePageState extends State<SuppliersScanStorePage> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       TextButton(
-                        onPressed: () => {
+                        onPressed: () {
                           if (state.peopleNumber.text.isEmpty)
-                            {showSnackBar(title: '警告', message: '请输入操作人工号')}
+                            {showSnackBar(title: '警告', message: '请输入操作人工号');}
                           else
-                            {Navigator.of(context).pop(), logic.goReport()}
+                            {Navigator.of(context).pop(); logic.goReport();}
                         },
                         child: const Text('确定'),
                       ),
                       TextButton(
-                        onPressed: () => {
-                          state.peopleName.value = '',
-                          state.peopleNumber.clear(),
-                          Navigator.of(context).pop()
+                        onPressed: ()  {
+                          state.peopleName.value = '';
+                          state.peopleNumber.clear();
+                          Navigator.of(context).pop();
                         },
                         child: const Text('取消'),
                       )
@@ -126,14 +126,14 @@ class _SuppliersScanStorePageState extends State<SuppliersScanStorePage> {
           padding: const EdgeInsets.only(top: 10, right: 30),
           child: InkWell(
             child: Text('suppliers_scan_clean'.tr),
-            onTap: () => {
+            onTap: ()  {
               askDialog(
                 title: 'dialog_default_title_information'.tr,
                 content: 'suppliers_scan_sure_clean_code'.tr,
                 confirm: () {
                   logic.clearBarCodeList();
                 },
-              ),
+              );
             },
           ),
         )

@@ -99,7 +99,7 @@ class _TimelyInventoryPageState extends State<TimelyInventoryPage> {
                   ],
                 ),
               ),
-              onTap: () => {
+              onTap: () {
                 reasonInputPopup(
                   title: [
                     Center(
@@ -112,8 +112,8 @@ class _TimelyInventoryPageState extends State<TimelyInventoryPage> {
                   ],
                   hintText: 'timely_inventory_new_warehouse_location'.tr,
                   isCanCancel: true,
-                  confirm: (s) => {
-                    Get.back(),
+                  confirm: (s) {
+                    Get.back();
                     logic.modifyStorageLocation(
                       success: (s) => logic.getImmediateStockList(
                         factoryNumber: factoryWarehouseController
@@ -129,9 +129,9 @@ class _TimelyInventoryPageState extends State<TimelyInventoryPage> {
                       data: data,
                       item: v,
                       newLocation: s,
-                    )
+                    );
                   },
-                )
+                );
               },
             ),
         ],

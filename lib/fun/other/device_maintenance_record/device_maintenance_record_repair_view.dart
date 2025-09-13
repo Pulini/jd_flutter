@@ -130,7 +130,7 @@ class _DeviceMaintenanceRecordRepairPageState
         Expanded(
             child: CupertinoTextField(
           inputFormatters: inputType,
-          onChanged: (s) => {onChanged?.call(s)},
+          onChanged: (s){onChanged?.call(s);},
         )),
       ],
     );
@@ -291,11 +291,11 @@ class _DeviceMaintenanceRecordRepairPageState
                 text: 'device_maintenance_submit'.tr,
                 click: () {
                   logic.submitRecordData(
-                    success: (s) => {
+                    success: (s){
                       successDialog(
                         content: s,
                         back: () => Get.back(),
-                      ),
+                      );
                     },
                   );
                 },

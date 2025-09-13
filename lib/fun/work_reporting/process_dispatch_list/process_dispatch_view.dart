@@ -162,11 +162,11 @@ class _ProcessDispatchPageState extends State<ProcessDispatchPage> {
                         confirm: () => logic.splitPart(success: (mes) {
                           successDialog(
                               content: mes,
-                              back: () => {
+                              back: () {
                                     logic.getWorkCardList(
                                         workTicket: controller.text,
                                         date: dispatchDate.getDateFormatYMD(),
-                                        empNumber: numberController.text)
+                                        empNumber: numberController.text);
                                   });
                         }),
                       );
@@ -215,14 +215,14 @@ class _ProcessDispatchPageState extends State<ProcessDispatchPage> {
   @override
   void initState() {
     pdaScanner(
-      scan: (code) => {
+      scan: (code) {
         if (code.isNotEmpty)
           {
-            controller.text = code,
+            controller.text = code;
             logic.getWorkCardList(
                 workTicket: code,
                 date: dispatchDate.getDateFormatYMD(),
-                empNumber: '')
+                empNumber: '');
           }
       },
     );

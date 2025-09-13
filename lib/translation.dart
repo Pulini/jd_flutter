@@ -2339,7 +2339,7 @@ class Translation extends Translations {
           'injection_scan_no_label_data': '无贴标数据！',
           'injection_scan_scan_real_label': '请扫描正确的贴标!',
           'injection_scan_unable_find_barcode': '找不到该条码信息!',
-          'injection_scan_up': '扫描想数达到贴标上限!',
+          'injection_scan_up': '扫描箱数达到贴标上限!',
           'injection_scan_please_scan_last': '请扫描尾箱条码!',
           'injection_scan_want_production_report': '确定要产量汇报吗?',
           'injection_scan_modifying_dispatch_data': '正在修改派工单数据...',

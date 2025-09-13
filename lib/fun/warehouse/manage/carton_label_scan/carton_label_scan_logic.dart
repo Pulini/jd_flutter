@@ -139,9 +139,9 @@ class CartonLabelScanLogic extends GetxController {
       showSnackBar(message:'carton_label_scan_input_or_scan'.tr  );
     }else{
       state.changePOPriority(success: (mes) {
-        successDialog(content: mes, back: () => {
-          scanController.clear(),
-          state.clearPriority()});
+        successDialog(content: mes, back: () {
+          scanController.clear();
+          state.clearPriority();});
       }, poNumber: scanController.text.length!=20? scanController.text.toString() : state.priorityCartonLabelInfo!.custOrderNumber!.toString());
     }
   }

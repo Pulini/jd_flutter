@@ -219,7 +219,7 @@ class _HandoverReportListPageState extends State<HandoverReportListPage> {
           ],
         ),
       ),
-      onTap: () => {logic.selectPosition(position)},
+      onTap: () {logic.selectPosition(position);},
     );
   }
 
@@ -229,7 +229,7 @@ class _HandoverReportListPageState extends State<HandoverReportListPage> {
         title: 'handover_report_title'.tr,
         actions: [
           TextButton(
-              onPressed: () => {logic.getInstructionDetailsFile()},
+              onPressed: (){logic.getInstructionDetailsFile();},
               child: Text('handover_report_query'.tr))
         ],
         body: Column(
@@ -271,7 +271,7 @@ class _HandoverReportListPageState extends State<HandoverReportListPage> {
                   child: CombinationButton(
                     //提交汇报
                     text: 'handover_report_submit_report'.tr,
-                    click: () => {},
+                    click: ()  {},
                     combination: Combination.left,
                   ),
                 ),
@@ -280,7 +280,7 @@ class _HandoverReportListPageState extends State<HandoverReportListPage> {
                   child: CombinationButton(
                     //取消报工
                     text: 'handover_report_cancel_report'.tr,
-                    click: () => {
+                    click: () {
                       if (logic.haveSelect())
                         {
                           askDialog(
@@ -293,7 +293,7 @@ class _HandoverReportListPageState extends State<HandoverReportListPage> {
                                 );
                               });
                             },
-                          )
+                          );
                         }
                     },
                     combination: Combination.middle,
@@ -304,7 +304,7 @@ class _HandoverReportListPageState extends State<HandoverReportListPage> {
                   child: CombinationButton(
                     //删除报工
                     text: 'handover_report_delete_report'.tr,
-                    click: () => {
+                    click: () {
                       if (logic.haveSelect())
                         {
                           askDialog(
@@ -317,7 +317,7 @@ class _HandoverReportListPageState extends State<HandoverReportListPage> {
                                 );
                               });
                             },
-                          )
+                          );
                         }
                     },
                     combination: Combination.right,

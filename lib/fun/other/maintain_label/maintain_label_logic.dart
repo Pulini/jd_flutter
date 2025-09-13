@@ -178,7 +178,6 @@ class MaintainLabelLogic extends GetxController {
   printLabelState({
     required List<List<LabelInfo>> selectLabel,
     required int type,
-    required String factoryId,
     required Function(int) success,
   }) {
     state.setLabelState(
@@ -191,14 +190,62 @@ class MaintainLabelLogic extends GetxController {
   }
 
   checkPrintType({
-    required Function(bool old)callback,
-  }){
+    required Function(bool abroad, List<List<LabelInfo>>) callback,
+  }) {
+    var select = <LabelInfo>[];
+    if (state.isMaterialLabel.value) {
+      for (var data in state.labelGroupList) {
+        for (var value in data) {
+          if (value.select == true) {
+            select.add(value);
+          }
+        }
+      }
+      if (select.isEmpty) {
+        errorDialog(content: 'maintain_label_select_label'.tr);
+        return;
+      }
+    } else {
+      select = state.labelList.where((v) => v.select).toList();
+      if (select.isEmpty) {
+        errorDialog(content: 'maintain_label_select_label'.tr);
+        return;
+      }
+    }
+    if (select[0].labelType == 1002 || select[0].labelType == 1003) {
+      callback.call(
+        true,
+        [select],
+      );
+    } else {
+      callback.call(false, []);
+    }
+  }
 
+  //打缅甸，印尼标
+  printAbroadLabel({
+    required int type,
+    required List<List<LabelInfo>> select,
+    required String language,
+  }) {
+    var printType = select[0][0].labelType;
+    switch (printType) {
+      case 1002:
+        {
+          createIndonesiaLabel(list: select[0], labels: labelsCallback);
+        }
+      case 1003:
+        {
+          // createMyanmarLabel();
+        }
+        break;
+      default:
+        break;
+    }
   }
 
   checkLanguage({
-    required Function(
-            String factory, int labelType, List<List<LabelInfo>>, List<String>)callback,
+    required Function(int labelType, List<List<LabelInfo>>, List<String>)callback,
   }) {
     var languageList = <String>[];
     var select = <LabelInfo>[];
@@ -264,7 +311,7 @@ class MaintainLabelLogic extends GetxController {
     if(select[0].labelType!=101 && select[0].labelType!=102 && select[0].labelType!=103){
         showSnackBar(message: 'maintain_label_error'.trArgs([select[0].labelType.toString()]));
     }else{
-      callback.call(select[0].fCustomFactoryID!, select[0].labelType!, [select],
+      callback.call(select[0].labelType!, [select],
           languageList);
     }
   }
@@ -278,74 +325,65 @@ class MaintainLabelLogic extends GetxController {
   };
 
   printLabel({
-    required String factoryId,
     required int type,
     required List<List<LabelInfo>> select,
     required String language,
   }) {
-    if (factoryId.isNotEmpty) {
-      switch (factoryId) {
-        case '1098':
-          {
-            if (select[0][0].items!.isNotEmpty) {
-              if (select[0][0].items!.length == 1) {
-                createSingleSizeLabel(
-                  list: select[0],
-                  labels: labelsCallback,
-                );
-              } else {
-                createMultipleSizeLabel(
-                  language: language,
-                  list: select[0],
-                  labels: labelsCallback,
-                );
-              }
-            } else {
-              createNoSizeLabel(
-                  language: language, list: select[0], labels: labelsCallback);
-            }
-          }
-          break;
-        case '1095':
-          {
-
-          }
-        case '1096':
-          {
-
-          }
-        default:
-          break;
-      }
-    } else {
-      logger.f('type:$type');
-
-      switch (type) {
-        case 101:
-          createMaterialLabel(
-            language: language,
-            list: select[0],
-            labels: labelsCallback,
-          );
-          break;
-        case 102:
-          createFixedLabel(
-            language: language,
-            list: select,
-            labels: labelsCallback,
-          );
-          break;
-        case 103:
-          createGroupDynamicLabel(
-            language: language,
-            list: select,
-            labels: labelsCallback,
-          );
-          break;
-        default:
-          break;
-      }
+    switch (type) {
+      case 101:
+        createMaterialLabel(
+          language: language,
+          list: select[0],
+          labels: labelsCallback,
+        );
+        break;
+      case 102:
+        createFixedLabel(
+          language: language,
+          list: select,
+          labels: labelsCallback,
+        );
+        break;
+      case 103:
+        createGroupDynamicLabel(
+          language: language,
+          list: select,
+          labels: labelsCallback,
+        );
+        break;
+      default:
+        break;
     }
+
+    // if (factoryId.isNotEmpty) {
+    //   switch (factoryId) {
+    //     case '1098':    == 1003 。缅甸
+    //       {
+    //         if (select[0][0].items!.isNotEmpty) {
+    //           if (select[0][0].items!.length == 1) {
+    //             createSingleSizeLabel(
+    //               list: select[0],
+    //               labels: labelsCallback,
+    //             );
+    //           } else {
+    //             createMultipleSizeLabel(
+    //               language: language,
+    //               list: select[0],
+    //               labels: labelsCallback,
+    //             );
+    //           }
+    //         } else {
+    //           createNoSizeLabel(
+    //               language: language, list: select[0], labels: labelsCallback);
+    //         }
+    //       }
+    //       break;
+    //     default:
+    //       break;
+    //   }
+    // } else {
+    //
+    // }
   }
 
   //单一物料无尺码标
@@ -688,4 +726,57 @@ class MaintainLabelLogic extends GetxController {
     });
     return widgetList;
   }
+}
+
+
+//缅甸标
+createMyanmarLabel({
+  required List<LabelInfo> list,
+  required Function(List<Widget>,bool) labels,
+}) {
+
+}
+//印尼标
+createIndonesiaLabel({
+  required List<LabelInfo> list,
+  required Function(List<Widget>,bool) labels,
+}) {
+  var labelList = <Widget>[];
+  for (var data in list) {
+    if(data.items!.isEmpty){ // 无尺码
+
+
+    }else if(data.items!.length==1){   //单尺码
+
+
+    }else if(data.items!.length>1){    //多尺码
+
+    }
+    labelList.add(dynamicSizeMaterialLabel1095n1096(
+      labelID: data.barCode ?? '',
+      productName: 'productName',
+      orderType: 'orderType',
+      typeBody: 'typeBody',
+      trackNo: '1234567',
+      instructionNo: 'instructionNo',
+      generalMaterialNumber: 'generalMaterialNumber',
+      materialDescription: 'materialDescription',
+      materialList: {},
+      inBoxQty: '999.99',
+      customsDeclarationUnit: '报关单位',
+      customsDeclarationType: '报关形式',
+      pieceID: '1234567890',
+      pieceNo: '2-10',
+      grossWeight: '99.9',
+      netWeight: '88.8',
+      specifications: '10x20x30',
+      volume: '400',
+      supplier: '供应商134567',
+      manufactureDate: '2025-01-01',
+      consignee: '收货方123456',
+      hasNotes: true,
+      notes: 'notes',
+    ));
+  }
+  labels.call(labelList,true);
 }

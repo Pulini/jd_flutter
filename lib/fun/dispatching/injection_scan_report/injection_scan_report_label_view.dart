@@ -32,10 +32,9 @@ class _InjectionScanReportLabelPageState extends State<InjectionScanReportLabelP
         border: Border.all(color: Colors.grey, width: 1),
       ),
       child: Column(
-        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('injection_scan_outer_box_barcode'
-              .trArgs([data.barCode.toString()]),style: const TextStyle(color: Colors.white),),
+          Text('外箱条码：${data.barCode}',style: const TextStyle(  fontWeight: FontWeight.bold,),),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

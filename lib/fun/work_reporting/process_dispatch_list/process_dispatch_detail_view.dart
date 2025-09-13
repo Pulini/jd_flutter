@@ -211,19 +211,19 @@ class _ProcessDispatchDetailPageState extends State<ProcessDispatchDetailPage> {
               head: false,
               isSelect: data.select,
               all: data.size!),
-          onTap: () => {
+          onTap: () {
             if (data.size != '总')
               {
                 _inputDialog(
                     initNum: data.qty.toShowString(),
                     title: '${'process_dispatch_tab1_size'.tr}<${data.size!}>',
-                    confirm: (number) => logic.inputCapacity(number, position))
+                    confirm: (number) => logic.inputCapacity(number, position));
               }
           },
         )),
         Expanded(
             child: InkWell(
-          onTap: () => {logic.selectSize(position)},
+          onTap: (){logic.selectSize(position);},
           child: _text(
               mes: 'process_dispatch_tab1_click'.tr,
               head: false,
@@ -535,9 +535,9 @@ class _ProcessDispatchDetailPageState extends State<ProcessDispatchDetailPage> {
                   child: CombinationButton(
                 //指令
                 text: 'process_dispatch_tab1_instruction'.tr,
-                click: () => {
+                click: () {
                   if (state.instructionList.isNotEmpty)
-                    {logic.sortInstructionData()}
+                    {logic.sortInstructionData();}
                 },
                 combination: Combination.middle,
               )),

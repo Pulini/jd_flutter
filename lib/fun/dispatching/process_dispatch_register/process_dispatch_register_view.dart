@@ -282,7 +282,7 @@ class _ProcessDispatchRegisterPageState
   @override
   void initState() {
     pdaScanner(
-      scan: (code) => {controller.text = code, logic.queryOrder(code)},
+      scan: (code) {controller.text = code; logic.queryOrder(code);},
     );
     super.initState();
   }

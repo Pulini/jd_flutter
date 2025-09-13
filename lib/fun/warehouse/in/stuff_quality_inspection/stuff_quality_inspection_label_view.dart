@@ -130,12 +130,12 @@ class _StuffQualityInspectionLabelPageState
       child: SizedBox(
         height: 35,
         child: InkWell(
-          onTap: () => {
+          onTap: () {
             setState(() {
               if(data.barCode!='合计'){
                 data.select = !data.select;
               }
-            })
+            });
           },
           child: Row(
             children: [

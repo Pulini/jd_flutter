@@ -54,7 +54,7 @@ class PumaAntiCounterfeitingLogic extends GetxController {
       if (response.resultCode == resultSuccess) {
         successDialog(
             content: response.message,
-            back: () => {state.clearData(), state.setScanNum()});
+            back: () {state.clearData(); state.setScanNum();});
       } else {
         errorDialog(content: response.message);
       }
