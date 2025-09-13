@@ -273,16 +273,13 @@ Future<Uint8List> _tscBitmap(
   int yAxis,
   Uint8List bitmapData,
 ) async {
-  debugPrint('imageData=${bitmapData.lengthInBytes}');
   // 1. 将原始位图转换为灰度图像
   img.Image grayBitmap = img.grayscale(img.decodeImage(bitmapData)!);
 
-  debugPrint('grayBitmap=${grayBitmap.lengthInBytes}');
   // 2. 将灰度图像转换为二值图像
   img.Image binaryBitmap = img.copyResize(grayBitmap,
       width: grayBitmap.width, height: grayBitmap.height);
 
-  debugPrint('binaryBitmap=${grayBitmap.lengthInBytes}');
   // 手动进行二值化处理
   const threshold = 127;
   for (int y = 0; y < binaryBitmap.height; y++) {
@@ -295,7 +292,6 @@ Future<Uint8List> _tscBitmap(
       binaryBitmap.setPixel(x, y, newValue);
     }
   }
-  debugPrint('binaryBitmap=${grayBitmap.lengthInBytes}');
 
   // 3. 构建命令字符串
   String pictureWidth = ((binaryBitmap.width + 7) ~/ 8).toString();
@@ -314,7 +310,7 @@ Future<Uint8List> _tscBitmap(
   for (int i = 0; i < stream.length; i++) {
     stream[i] = 0xFF;
   }
-  debugPrint('stream=${stream.lengthInBytes}');
+
   // 5. 根据像素值处理字节流
   for (int y = 0; y < height; ++y) {
     for (int x = 0; x < width; ++x) {
@@ -330,14 +326,17 @@ Future<Uint8List> _tscBitmap(
       }
     }
   }
-  debugPrint('stream=${stream.lengthInBytes}');
+
   // 6. 组合完整的TSC命令
   final commandBytes = Uint8List.fromList(utf8.encode(command));
   final fullCommand = Uint8List(commandBytes.length + stream.length + 2);
 
   fullCommand.setRange(0, commandBytes.length, commandBytes);
   fullCommand.setRange(
-      commandBytes.length, commandBytes.length + stream.length, stream);
+    commandBytes.length,
+    commandBytes.length + stream.length,
+    stream,
+  );
   fullCommand[commandBytes.length + stream.length] = 13; // \r
   fullCommand[commandBytes.length + stream.length + 1] = 10; // \n
 

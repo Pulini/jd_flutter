@@ -10,7 +10,7 @@ class Scanner extends StatefulWidget {
   const Scanner({super.key, this.title = '扫描二维码'});
 
   final String title;
-
+  String getClassName() =>runtimeType.toString();
   @override
   State<Scanner> createState() => _ScannerState();
 }
@@ -19,11 +19,12 @@ class _ScannerState extends State<Scanner> {
   var nativeDeviceOrientationCommunicator =
       NativeDeviceOrientationCommunicator();
   var quarterTurns = 0.obs;
-  var scanner = MobileScanner(
+  late var scanner = MobileScanner(
     onDetect: (v) {
       var data = v.barcodes.firstOrNull?.displayValue ?? '';
-      debugPrint('scanner code=$data');
-      if (data.isNotEmpty) {
+      //flutter 渲染引擎会导致ImpellerValidationBreak偶发异常，导致onDetect被多次触发，
+      //需要添加判断当前页是否处于栈内
+      if (data.isNotEmpty && Get.currentRoute.contains(widget.getClassName())) {
         Get.back(result: data);
       }
     },

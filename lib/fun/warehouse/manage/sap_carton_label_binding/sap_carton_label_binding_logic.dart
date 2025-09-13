@@ -229,7 +229,7 @@ class SapCartonLabelBindingLogic extends GetxController {
         companyOrderType: '${label.factoryNo}${label.supplementType}',
         customsDeclarationType: label.customsDeclarationType ?? '',
         materialList: materialList,
-        pieceNo: label.pieceID ?? '',
+        pieceNo: label.pieceNo ?? '',
         grossWeight: label.grossWeight.toShowString(),
         netWeight: label.netWeight.toShowString(),
         qrCode: label.labelID ?? '',

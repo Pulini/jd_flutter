@@ -406,7 +406,7 @@ class DeliveryOrderState {
   }) {
     sapPost(
       loading: 'sap_injection_molding_stock_in_getting_pallet_info'.tr,
-      method: webApiSapGetPalletList,
+      method: webApiSapGetLabelBindingPalletInfo,
       body: {
         'WERKS': bindingFactoryNO,
         'LGORT': userInfo?.defaultStockNumber,

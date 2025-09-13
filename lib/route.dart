@@ -169,7 +169,7 @@ class RouteConfig {
   //生产派工
   static Routes productionDispatch = Routes(
     '/production_dispatch',
-    202,
+    203,
     const ProductionDispatchPage(),
   );
 
@@ -442,7 +442,7 @@ class RouteConfig {
   //工序汇报入库
   static Routes processReportWarehouse = Routes(
     '/process_report_warehouse',
-    201,
+    202,
     const ProcessReportStorePage(),
   );
 
@@ -519,7 +519,7 @@ class RouteConfig {
   //送货单列表
   static Routes deliveryOrder = Routes(
     '/delivery_order',
-    200,
+    201,
     const DeliveryOrderPage(),
   );
 
@@ -610,7 +610,7 @@ class RouteConfig {
   //SAP外箱标绑定
   static Routes sapCartonLabelBinding = Routes(
     '/sap_carton_label_binding',
-    200,
+    201,
     const SapCartonLabelBindingPage(),
   );
 

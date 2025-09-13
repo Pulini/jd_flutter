@@ -90,13 +90,7 @@ class _ProcessReportPageState extends State<ProcessReportStorePage> {
                 ),
                 InkWell(
                   child: const Icon(Icons.qr_code_scanner, color: Colors.grey),
-                  onTap: () {
-                    Get.to(() => const Scanner())?.then((v) {
-                      if (v != null) {
-                        logic.scanCode(v);
-                      }
-                    });
-                  },
+                  onTap: () =>  Get.to(() => const Scanner())?.then((v)=> logic.scanCode(v)),
                 ),
                 const SizedBox(width: 5)
               ],

@@ -203,10 +203,11 @@ class _DeliveryOrderLabelBindingPageState
       popTitle: 'delivery_order_label_check_exit_tips'.tr,
       actions: [
         TextButton(
-          onPressed: () => askDialog(
-            content: 'delivery_order_label_check_clear_tips'.tr,
-            confirm: () => state.scannedLabelList.clear(),
-          ),
+          onPressed: ()=>logic.scanLabel('GE10029136'),
+          // onPressed: () => askDialog(
+          //   content: 'delivery_order_label_check_clear_tips'.tr,
+          //   confirm: () => state.scannedLabelList.clear(),
+          // ),
           child: Text('delivery_order_label_check_clear'.tr),
         )
       ],
