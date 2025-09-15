@@ -200,42 +200,6 @@ doUpdate({
   var height = MediaQuery.of(Get.overlayContext!).size.height;
   var width = MediaQuery.of(Get.overlayContext!).size.width;
   final double dialogWidth = min(height, width) * 0.618;
-  update() {
-    if (GetPlatform.isAndroid) {
-      debugPrint('Android_Update');
-      Get.back();
-      Downloader(
-        url: version.url!,
-        completed: (path) => const MethodChannel(channelUsbAndroidToFlutter)
-            .invokeMethod('OpenFile', path),
-      );
-      return;
-    }
-    if (GetPlatform.isIOS) {
-      debugPrint('IOS_Update');
-      return;
-    }
-    if (GetPlatform.isWeb) {
-      debugPrint('Web_Update');
-      return;
-    }
-    if (GetPlatform.isWindows) {
-      debugPrint('Windows_Update');
-      return;
-    }
-    if (GetPlatform.isLinux) {
-      debugPrint('Linux_Update');
-      return;
-    }
-    if (GetPlatform.isMacOS) {
-      debugPrint('MacOS_Update');
-      return;
-    }
-    if (GetPlatform.isFuchsia) {
-      debugPrint('Fuchsia_Update');
-      return;
-    }
-  }
 
   var dialog = Material(
     type: MaterialType.transparency,
@@ -300,7 +264,42 @@ doUpdate({
                       elevation: WidgetStateProperty.all(5),
                       backgroundColor: WidgetStateProperty.all(Colors.red),
                     ),
-                    onPressed: update,
+                    onPressed: () {
+                      if (GetPlatform.isAndroid) {
+                        debugPrint('Android_Update');
+                        Get.back();
+                        Downloader(
+                          url: version.url!,
+                          completed: (path) => const MethodChannel(channelUsbAndroidToFlutter)
+                              .invokeMethod('OpenFile', path),
+                        );
+                        return;
+                      }
+                      if (GetPlatform.isIOS) {
+                        debugPrint('IOS_Update');
+                        return;
+                      }
+                      if (GetPlatform.isWeb) {
+                        debugPrint('Web_Update');
+                        return;
+                      }
+                      if (GetPlatform.isWindows) {
+                        debugPrint('Windows_Update');
+                        return;
+                      }
+                      if (GetPlatform.isLinux) {
+                        debugPrint('Linux_Update');
+                        return;
+                      }
+                      if (GetPlatform.isMacOS) {
+                        debugPrint('MacOS_Update');
+                        return;
+                      }
+                      if (GetPlatform.isFuchsia) {
+                        debugPrint('Fuchsia_Update');
+                        return;
+                      }
+                    },
                     child: Text('update_dialog_confirm'.tr),
                   ),
                 ),
