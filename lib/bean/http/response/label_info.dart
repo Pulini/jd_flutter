@@ -87,14 +87,14 @@ class LabelInfo {
     packType = json['PackType'];
     interID = json['InterID'];
     fCustomFactoryID = json['FCustomFactoryID'];
-    myanmarApprovalDocument = json['MyanmarApprovalDocument'];
+    myanmarApprovalDocument = json['MyanmarApprovaLDocument'];
     trackNo = json['TrackNo'];
     customsDeclarationUnit = json['CustomsDeclarationUnit'];
     customsDeclarationType = json['CustomsDeclarationType'];
     pieceNo = json['PieceNo'];
     pieceID = json['PieceID'];
     volume = json['Volume'];
-    manufactureDate = json['ManufactureDate'];
+    manufactureDate = json['manufactureDate'];
     notes = json['Notes'];
     labelType = json['LabelType'];
     departName = json['DepartName'];
@@ -172,14 +172,14 @@ class LabelInfo {
     map['FCustomFactoryID'] = fCustomFactoryID;
     map['LabelType'] = labelType;
     map['DepartName'] = departName;
-    map['MyanmarApprovalDocument'] = myanmarApprovalDocument;
+    map['MyanmarApprovaLDocument'] = myanmarApprovalDocument;
     map['TrackNo'] = trackNo;
     map['CustomsDeclarationUnit'] = customsDeclarationUnit;
     map['CustomsDeclarationType'] = customsDeclarationType;
     map['PieceNo'] = pieceNo;
     map['PieceID'] = pieceID;
     map['Volume'] = volume;
-    map['ManufactureDate'] = manufactureDate;
+    map['manufactureDate'] = manufactureDate;
     map['Notes'] = notes;
     if (items != null) {
       map['Items'] = items?.map((v) => v.toJson()).toList();

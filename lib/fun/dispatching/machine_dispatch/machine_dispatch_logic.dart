@@ -109,7 +109,7 @@ class MachineDispatchLogic extends GetxController {
             } else {
               var totalReport = 0.0;
               for (var v in state.sizeItemList) {
-                if ((v.reportQty ?? 0.0) < 0) {
+                if (v.getReportQty() < 0) {
                   errorDialog(
                     content:
                         'machine_dispatch_input_size_report_qty_tips'.trArgs([

@@ -282,10 +282,10 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
                     Expanded(
                       child: CombinationButton(
                         text: 'maintain_label_print'.tr,
-                        click: ()=>logic.checkPrintType(callback: (abroad,select){
+                        click: ()=>logic.checkPrintType(callback: (abroad,select,labelType){
                           if(abroad){
                             logic.printLabelState(
-                                type: -1,
+                                type: labelType,
                                 selectLabel: select,
                                 success: (labelType) {
                                   logic.printAbroadLabel(
