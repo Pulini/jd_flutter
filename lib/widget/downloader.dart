@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:path_provider/path_provider.dart';
@@ -111,14 +112,6 @@ class Downloader {
     });
   }
 
-  Future<String> getFileSavePath(String url) async {
-    var fileName = url.substring(url.lastIndexOf('/') + 1);
-    var temporary = await getTemporaryDirectory();
-    var savePath = '${temporary.path}/$fileName';
-    logger.i('url:$url \nsavePath：$savePath\nfileName：$fileName');
-    return savePath;
-  }
-
   //下載文件
   startDownload() async {
     isDownloading.value = true;
@@ -156,4 +149,36 @@ class Downloader {
       errorDialog(content: '发生异常：${e.toString()}');
     }
   }
+}
+
+deleteExistsAPK() async {
+  var temporary = await getTemporaryDirectory();
+  Directory directory = Directory('${temporary.path}/');
+  if (await directory.exists()) {
+    debugPrint('文件夹存在:${directory.path}');
+    var files = await directory.list().toList();
+    for (var f in files) {
+      if (f is File) {
+        debugPrint('文件：${f.path} 大小：${await f.size()}');
+      }
+    }
+    var apkFiles = files.where((entity) {
+      if (entity is File) {
+        return entity.path.toLowerCase().endsWith('.apk');
+      }
+      return false;
+    }).toList();
+    for (var file in apkFiles) {
+      file.deleteSync();
+      debugPrint('删除文件:${file.path}');
+    }
+  }
+}
+
+Future<String> getFileSavePath(String url) async {
+  var fileName = url.substring(url.lastIndexOf('/') + 1);
+  var temporary = await getTemporaryDirectory();
+  var savePath = '${temporary.path}/$fileName';
+  logger.i('url:$url \nsavePath：$savePath\nfileName：$fileName');
+  return savePath;
 }
