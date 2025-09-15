@@ -148,13 +148,33 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
           color: Colors.white,
           child: Row(
             children: [
-              InkWell(child: expandedTextSpan(
-                hint: 'material_dispatch_material_code'.tr,
-                text: '${data.stuffNumber}',
-                textColor: Colors.black54,
-              ),onTap: (){
-                msgDialog(content: data.stuffNumber);
-              },),
+              Expanded(
+                child: GestureDetector(
+                  onTap: (){
+                   if(!data.stuffNumber.isNullOrEmpty()){
+                     msgDialog(content: data.stuffNumber);
+                   }
+                  },
+                  child: Text.rich(
+                    overflow: TextOverflow.ellipsis,
+                    TextSpan(
+                      children: [
+                        TextSpan(
+                          text: 'material_dispatch_material_code'.tr,
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        TextSpan(
+                          text: data.stuffNumber,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.blueAccent,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
               expandedTextSpan(
                 hint: 'material_dispatch_factory'.tr,
                 text: data.sourceFactoryName!.isNotEmpty
