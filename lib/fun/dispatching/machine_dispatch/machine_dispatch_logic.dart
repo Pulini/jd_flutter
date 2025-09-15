@@ -8,7 +8,6 @@ import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/printer/print_util.dart';
 import 'package:jd_flutter/utils/printer/tsc_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
-import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
@@ -273,7 +272,7 @@ class MachineDispatchLogic extends GetxController {
           : '递减号:${state.detailsInfo?.decrementNumber}      日期:${state.detailsInfo?.startDate}',
       bottomLeftText1: label.isEnglish
           ? '${label.qty}${label.englishUnit}'
-          : '机台:${state.detailsInfo?.machine}' ?? '',
+          : '机台:${state.detailsInfo?.machine}',
       bottomMiddleText1: label.isEnglish
           ? '   Made in China'
           : '     ${label.size}码${label.qty}${label.unit}',
