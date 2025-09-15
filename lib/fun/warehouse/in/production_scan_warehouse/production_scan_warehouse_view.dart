@@ -72,24 +72,24 @@ var tecCode=TextEditingController();
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       TextButton(
-                        onPressed: () => {
+                        onPressed: () {
                           if (state.peopleNumber.text.isEmpty)
                             {
-                              showSnackBar(title: 'shack_bar_warm'.tr, message: 'production_scan_operator_number'.tr),
+                              showSnackBar(title: 'shack_bar_warm'.tr, message: 'production_scan_operator_number'.tr);
                             }
                           else
                             {
-                              Navigator.of(context).pop(),
-                              logic.goReport(),
+                              Navigator.of(context).pop();
+                              logic.goReport();
                             }
                         },
                         child:  Text('dialog_default_confirm'.tr),
                       ),
                       TextButton(
-                        onPressed: () => {
-                          state.peopleName.value = '',
-                          state.peopleNumber.clear(),
-                          Navigator.of(context).pop()
+                        onPressed: ()  {
+                          state.peopleName.value = '';
+                          state.peopleNumber.clear();
+                          Navigator.of(context).pop();
                         },
                         child:  Text('dialog_default_cancel'.tr),
                       )
@@ -106,8 +106,8 @@ var tecCode=TextEditingController();
 
   _item(BarCodeInfo code) {
     return GestureDetector(
-        onLongPress: () => {
-              logic.deleteCode(code),
+        onLongPress: () {
+              logic.deleteCode(code);
             },
         child: Container(
           padding: const EdgeInsets.all(5),
@@ -143,14 +143,14 @@ var tecCode=TextEditingController();
           padding: const EdgeInsets.only(top: 10, right: 30),
           child: InkWell(
             child:  Text('production_scan_clear'.tr),
-            onTap: () => {
+            onTap: () {
               askDialog(
                 title: 'dialog_default_title_information'.tr,
                 content: 'production_scan_clear_the_barcode'.tr,
                 confirm: () {
                   logic.clearBarCodeList();
                 },
-              ),
+              );
             },
           ),
         )

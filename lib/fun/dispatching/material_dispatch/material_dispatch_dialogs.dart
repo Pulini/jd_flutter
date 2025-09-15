@@ -529,7 +529,7 @@ materialListDialog(
                   var data = materialList[index];
                   var title = Expanded(
                     child: Text(
-                      data.name ?? '',
+                      '<${data.number}>${data.name}',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(

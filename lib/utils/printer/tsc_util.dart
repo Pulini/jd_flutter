@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image/image.dart' as img;
 import 'package:jd_flutter/utils/extension_util.dart';
+import 'package:jd_flutter/utils/web_api.dart';
 
 //dpi
 const _dpi = 8;
@@ -570,11 +571,12 @@ Future<List<Uint8List>> labelMultipurposeFixed({
   String bottomMiddleText2 = '',
   String bottomRightText1 = '',
   String bottomRightText2 = '',
+  double speed = 3.0,
+  double density = 15.0,
 }) async {
   var list = <Uint8List>[];
-
   list.add(_tscClearBuffer());
-  list.add(_tscSetup(75, 45, density: 12, speed: 3));
+  list.add(_tscSetup(75, 45, density: density.toInt(), speed: speed.toInt()));
   if (qrCode.isNotEmpty) {
     list.add(_tscQrCode(2 * _dpi, 2 * _dpi + _halfDpi,
         qrCode.contains('"') ? qrCode.replaceAll('"', '\\["]') : qrCode));
@@ -600,7 +602,7 @@ Future<List<Uint8List>> labelMultipurposeFixed({
   }
   if (!isEnglish) {
     if (content.isNotEmpty) {
-      var format = contextFormat(content, 30, 71.0 * _dpi);
+      var format = contextFormat(content, 29, 71.0 * _dpi);
       for (var i = 0; i < format.length; ++i) {
         //如子内容不为空，则主内容限制行数为2
         if (subContent1.isNotEmpty && subContent2.isNotEmpty && i >= 2) {
@@ -675,6 +677,7 @@ Future<List<Uint8List>> labelMultipurposeFixed({
   list.add(_tscLine(_dpi, 20 * _dpi - _halfDpi, 73 * _dpi, 2));
   list.add(_tscLine(_dpi, 36 * _dpi + _halfDpi, 73 * _dpi, 2));
 
+  list.add(_tscCutterOff());
   list.add(_tscPrint());
 
   return list;

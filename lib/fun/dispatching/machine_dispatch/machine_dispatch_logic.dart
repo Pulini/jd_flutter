@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/machine_dispatch_info.dart';
 import 'package:jd_flutter/bean/http/response/sap_label_info.dart';
+import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/fun/dispatching/machine_dispatch/machine_dispatch_history_view.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/printer/print_util.dart';
@@ -248,6 +249,7 @@ class MachineDispatchLogic extends GetxController {
     printLabel(state.historyLabelInfo[i]);
   }
 
+  //重新打印
   printLabel(MachineDispatchReprintLabelInfo label) {
     labelMultipurposeFixed(
       isEnglish: label.isEnglish,
@@ -255,7 +257,8 @@ class MachineDispatchLogic extends GetxController {
       title: state.detailsInfo?.factoryType ?? '',
       subTitle: label.isEnglish
           ? state.detailsInfo?.materialName ?? ''
-          : (state.detailsInfo?.processflow ?? '       序号：${label.number}'),
+          : ((state.detailsInfo?.processflow ?? '') +
+              ('       序号：${label.number}')),
       subTitleWrap: false,
       content: label.isEnglish
           ? ('GW:${label.grossWeight}KG   NW:${label.netWeight}KG')
@@ -269,59 +272,30 @@ class MachineDispatchLogic extends GetxController {
           : '递减号:${state.detailsInfo?.decrementNumber}      日期:${state.detailsInfo?.startDate}',
       bottomLeftText1: label.isEnglish
           ? '${label.qty}${label.englishUnit}'
-          : '${label.size}${label.qty}${label.unit}',
+          : '机台:${state.detailsInfo?.machine}',
       bottomMiddleText1: label.isEnglish
           ? '   Made in China'
-          : '       机台：${state.detailsInfo?.machine ?? ''}',
+          : '     ${label.size}码${label.qty}${label.unit}',
       bottomRightText1:
           label.isEnglish ? "${label.size}#" : (label.isLastLabel ? '尾' : ''),
+      speed: spGet(spSavePrintSpeed) ?? 3.0,
+      density: spGet(spSavePrintDensity) ?? 15.0,
     ).then((printLabel) {
-      PrintUtil().printLabel(label: printLabel,start: (){
-        loadingShow('正在打印');
-      },success: (){
-        loadingDismiss();
-        showSnackBar(message: '打印成功');
-      },failed:(){
-        loadingDismiss();
-        showSnackBar(message: '打印失败');
-      } );
+      PrintUtil().printLabel(
+          label: printLabel,
+          start: () {
+            loadingShow('正在打印');
+          },
+          success: () {
+            loadingDismiss();
+            showSnackBar(message: '打印成功');
+          },
+          failed: () {
+            loadingDismiss();
+            showSnackBar(message: '打印失败');
+          });
     });
   }
-
-  //
-  // fixedLabel({required MachineDispatchReprintLabelInfo label}) =>
-  //     label.isEnglish
-  //         ? machineDispatchEnglishFixedLabel(
-  //             labelID: label.labelID,
-  //             factoryType: label.factoryType,
-  //             englishName: label.englishName,
-  //             grossWeight: label.grossWeight,
-  //             netWeight: label.netWeight,
-  //             specifications: label.specifications,
-  //             number: label.number,
-  //             dispatchNumber: label.dispatchNumber,
-  //             decrementNumber: label.decrementNumber,
-  //             date: label.date,
-  //             qty: label.qty,
-  //             englishUnit: label.englishUnit,
-  //             size: label.size,
-  //           )
-  //         : machineDispatchChineseFixedLabel(
-  //             labelID: label.labelID,
-  //             factoryType: label.factoryType,
-  //             processes: label.processes,
-  //             number: label.number,
-  //             materialName: label.materialName,
-  //             dispatchNumber: label.dispatchNumber,
-  //             decrementNumber: label.decrementNumber,
-  //             date: label.date,
-  //             size: label.size,
-  //             qty: label.qty,
-  //             unit: label.unit,
-  //             shift: label.shift,
-  //             machine: label.machine,
-  //             isLastLabel: label.isLastLabel,
-  //           );
 
   printMaterialHeadLabel(
       String code, String name, MachineDispatchDetailsInfo details) {
@@ -340,15 +314,19 @@ class MachineDispatchLogic extends GetxController {
             stubBar: name,
             stuBarCode: code)
         .then((printLabel) {
-      PrintUtil().printLabel(label: printLabel,start: (){
-        loadingShow('正在打印');
-      },success: (){
-        loadingDismiss();
-        showSnackBar(message: '打印成功');
-      },failed:(){
-        loadingDismiss();
-        showSnackBar(message: '打印失败');
-      } );
+      PrintUtil().printLabel(
+          label: printLabel,
+          start: () {
+            loadingShow('正在打印');
+          },
+          success: () {
+            loadingDismiss();
+            showSnackBar(message: '打印成功');
+          },
+          failed: () {
+            loadingDismiss();
+            showSnackBar(message: '打印失败');
+          });
     });
   }
 
@@ -406,7 +384,8 @@ class MachineDispatchLogic extends GetxController {
           title: state.detailsInfo?.factoryType ?? '',
           subTitle: isEnglish
               ? state.detailsInfo?.materialName ?? ''
-              : (state.detailsInfo?.processflow ?? '       序号：${label.number}'),
+              : ((state.detailsInfo?.processflow ?? '') +
+                  ('       序号：${label.number}')),
           subTitleWrap: false,
           content: isEnglish
               ? ('GW:${label.grossWeight}KG   NW:${label.netWeight}KG')
@@ -414,30 +393,34 @@ class MachineDispatchLogic extends GetxController {
           specification: isEnglish ? 'MEAS:  ${label.specifications}' : '',
           subContent1: isEnglish
               ? 'DISPATCH:${state.detailsInfo?.dispatchNumber.toString()}'
-              :  '派工单号：${state.detailsInfo?.dispatchNumber ?? ''}       班次：${state.detailsInfo?.shift ?? ''}',
+              : '派工单号：${state.detailsInfo?.dispatchNumber ?? ''}       班次：${state.detailsInfo?.shift ?? ''}',
           subContent2: isEnglish
               ? 'DECREASE:${state.detailsInfo?.decrementNumber}    DATE:${state.detailsInfo?.startDate}'
               : '递减号:${state.detailsInfo?.decrementNumber}    日期:${state.detailsInfo?.startDate}',
           bottomLeftText1: isEnglish
               ? ((printQty.toShowString()) + (item.bUoM ?? ''))
-              : ((item.size ?? '') +
-                  (printQty.toShowString()) +
-                  (item.bUoM ?? '')),
+              : '机台:${state.detailsInfo?.machine}',
           bottomMiddleText1: isEnglish
               ? '   Made in China'
-              : '       机台：${state.detailsInfo?.machine ?? ''}',
+              : ('     ${item.size ?? ''}码${printQty.toShowString()}${item.bUoM ?? ''}'),
           bottomRightText1:
               isEnglish ? "${item.size}#" : (isPrintLast ? '尾' : ''),
+          speed: spGet(spSavePrintSpeed) ?? 3.0,
+          density: spGet(spSavePrintDensity) ?? 15.0,
         ).then((printLabel) {
-          PrintUtil().printLabel(label: printLabel,start: (){
-            loadingShow('正在打印');
-          },success: (){
-            loadingDismiss();
-            showSnackBar(message: '打印成功');
-          },failed:(){
-            loadingDismiss();
-            showSnackBar(message: '打印失败');
-          } );
+          PrintUtil().printLabel(
+              label: printLabel,
+              start: () {
+                loadingShow('正在打印');
+              },
+              success: () {
+                loadingDismiss();
+                showSnackBar(message: '打印成功');
+              },
+              failed: () {
+                loadingDismiss();
+                showSnackBar(message: '打印失败');
+              });
         });
       },
       error: (msg) => errorDialog(content: msg),

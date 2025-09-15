@@ -152,17 +152,17 @@ class _ProcessReportPageState extends State<ProcessReportPage> {
           ],
         ),
       ),
-      onLongPress: () => {
+      onLongPress: () {
         askDialog(
             content: 'process_report_sure_delete_data'.tr,
             confirm: () {
               logic.removeItem(position);
-            }),
+            });
       },
-      onTap: () => {
+      onTap: () {
         addWorkerDialog(callback: (WorkerInfo wi) {
             logic.setPeople(wi,position);
-        })
+        });
       },
     );
   }
@@ -205,12 +205,12 @@ class _ProcessReportPageState extends State<ProcessReportPage> {
               child: CombinationButton(
                 //摄像头扫码
                 text: 'process_report_scan'.tr,
-                click: () => {
+                click: () {
                   Get.to(() => const Scanner())?.then((v) {
                     if (v != null) {
                       logic.getDispatchInfo(v);
                     }
-                  }),
+                  });
                 },
                 combination: Combination.left,
               ),
@@ -220,14 +220,14 @@ class _ProcessReportPageState extends State<ProcessReportPage> {
               child: CombinationButton(
                 //提交
                 text: 'process_report_submit'.tr,
-                click: () => {
+                click: ()  {
                   askDialog(
                       content: 'process_report_sure_to_submit'.tr,
                       confirm: () {
                         logic.submitProcess(success: (String msg) {
                           logic.cleanData();
                         });
-                      }),
+                      });
                 },
                 combination: Combination.right,
               ),

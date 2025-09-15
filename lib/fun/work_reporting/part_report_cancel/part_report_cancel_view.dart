@@ -127,20 +127,22 @@ class _PartReportCancelPageState extends State<PartReportCancelPage> {
               children: [
                 Expanded(
                   flex: 5,
-                  child:  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 5), // 左右 5 像素
-                    child:  CupertinoSearchTextField( //工票
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 5),
+                    // 左右 5 像素
+                    child: CupertinoSearchTextField(
+                      //工票
                       prefixIcon: const SizedBox.shrink(),
                       controller: controller,
-                      suffixIcon:const Icon(CupertinoIcons.search),
+                      suffixIcon: const Icon(CupertinoIcons.search),
                       decoration: BoxDecoration(
                         color: Colors.grey.shade300,
                         borderRadius: BorderRadius.circular(20),
                       ),
-                      onChanged: (s){
+                      onChanged: (s) {
                         state.workTicket = s;
                       },
-                      onSuffixTap:(){
+                      onSuffixTap: () {
                         logic.getReportSummary(controller.text.toString());
                       },
                       placeholder: 'part_report_cancel_scan_ticket'.tr,
@@ -149,14 +151,12 @@ class _PartReportCancelPageState extends State<PartReportCancelPage> {
                 ),
                 Expanded(
                   child: IconButton(
-                    onPressed: () => {
-                      Get.to(() => const Scanner())?.then((v) {
-                        if (v != null) {
-                          controller.text = v;
-                          logic.getReportSummary(v);
-                        }
-                      }),
-                    },
+                    onPressed: () => Get.to(() => const Scanner())?.then((v) {
+                      if (v != null) {
+                        controller.text = v;
+                        logic.getReportSummary(v);
+                      }
+                    }),
                     icon: const Icon(
                       Icons.qr_code_scanner_outlined,
                       color: Colors.grey,
@@ -205,15 +205,15 @@ class _PartReportCancelPageState extends State<PartReportCancelPage> {
                   //取消报工
                   child: CombinationButton(
                     text: 'part_report_cancel_cancel_job'.tr,
-                    click: () => {
+                    click: ()  {
                       askDialog(
                         content: 'part_report_cancel_sure_cancel'.tr,
                         confirm: () {
-                          logic.cancelPart(success: (s)=> successDialog(content: s,back: ()=>{
-                              logic.cleanData()
-                          }));
+                          logic.cancelPart(
+                              success: (s) => successDialog(
+                                  content: s, back: () => {logic.cleanData()}));
                         },
-                      )
+                      );
                     },
                     combination: Combination.middle,
                   ),
@@ -222,13 +222,13 @@ class _PartReportCancelPageState extends State<PartReportCancelPage> {
                   child: CombinationButton(
                     //提交
                     text: 'part_report_cancel_cancel_submit'.tr,
-                    click: () => {
-                      if (logic.checkPeople())
+                    click: () {
+                      if (logic.checkPeople()) {
                         logic.submitPart(success: (s) {
                           successDialog(
                               content: s, back: () => logic.cleanData());
-                        })
-                      else
+                        });
+                      } else
                         {
                           askDialog(
                             content: 'part_report_cancel_confirm_job'.tr,
@@ -238,7 +238,7 @@ class _PartReportCancelPageState extends State<PartReportCancelPage> {
                                     content: s, back: () => logic.cleanData());
                               });
                             },
-                          )
+                          );
                         }
                     },
                     combination: Combination.right,
@@ -253,7 +253,7 @@ class _PartReportCancelPageState extends State<PartReportCancelPage> {
   @override
   void initState() {
     pdaScanner(
-      scan: (code) => {controller.text = code, logic.getReportSummary(code)},
+      scan: (code) {controller.text = code; logic.getReportSummary(code);},
     );
     super.initState();
   }

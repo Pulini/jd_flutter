@@ -28,9 +28,9 @@ class HandoverReportListLogic extends GetxController {
       'handover_report_report_spinner_hint1'.tr,
       'handover_report_report_spinner_hint2'.tr,
     ],
-    onChanged: (index) => {
-      state.reportPosition = index,
-      if (state.handoverDataList.isNotEmpty) {arrangeData()}
+    onChanged: (index) {
+      state.reportPosition = index;
+      if (state.handoverDataList.isNotEmpty) {arrangeData();}
     },
   );
 
@@ -42,9 +42,9 @@ class HandoverReportListLogic extends GetxController {
         'handover_report_shift_spinner_hint2'.tr,
         'handover_report_shift_spinner_hint3'.tr,
       ],
-      onChanged: (index) => {
-            state.shiftType = index,
-            if (state.handoverDataList.isNotEmpty) {arrangeData()}
+      onChanged: (index) {
+            state.shiftType = index;
+            if (state.handoverDataList.isNotEmpty) {arrangeData();}
           });
 
   //全选或者反选

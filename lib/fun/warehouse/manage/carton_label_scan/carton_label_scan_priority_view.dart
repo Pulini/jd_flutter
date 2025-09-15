@@ -163,8 +163,8 @@ class _CartonLabelScanPriorityPageState extends State<CartonLabelScanPriorityPag
           ),
           CombinationButton(
             text: 'carton_label_scan_submit'.tr,
-            click: () => {
-                  logic.changePriority()
+            click: () {
+                  logic.changePriority();
             },
           )
         ],

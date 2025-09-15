@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -7,6 +6,7 @@ import 'package:hand_signature/signature.dart';
 import 'package:jd_flutter/bean/http/response/machine_dispatch_info.dart';
 import 'package:jd_flutter/bean/http/response/sap_label_info.dart';
 import 'package:jd_flutter/bean/http/response/worker_info.dart';
+import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
@@ -90,6 +90,88 @@ showWorkCardListDialog(
                 ),
               );
             },
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(),
+            child: Text(
+              'dialog_default_back'.tr,
+              style: const TextStyle(color: Colors.grey),
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+showPrintSetting(BuildContext context) {
+  RxDouble printSpeed = 3.0.obs;
+  RxDouble printDensity = 15.0.obs;
+  if( spGet(spSavePrintSpeed) !=null){
+    printSpeed.value = spGet(spSavePrintSpeed);
+  }
+  if(spGet(spSavePrintDensity)!=null){
+    printDensity.value = spGet(spSavePrintDensity);
+  }
+  Get.dialog(
+    PopScope(
+      canPop: false,
+      child: AlertDialog(
+        title: Text('machine_dispatch_dialog_surplus_material_info'.tr),
+        content: SizedBox(
+          width: 500,
+          height: 200,
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsetsGeometry.only(left: 10, right: 10),
+                child: Row(
+                  children: [
+                    const Text('打印速度：'),
+                    Expanded(
+                      child: Obx(() => Slider(
+                            value: printSpeed.value,
+                            min: 1,
+                            max: 10,
+                            divisions: 9,
+                            thumbColor: Colors.blueAccent,
+                            activeColor: Colors.green.shade300,
+                            onChanged: (v) {
+                              printSpeed.value = v;
+                              spSave(spSavePrintSpeed, v);
+                            },
+                          )),
+                    ),
+                    Obx(() => Text(printSpeed.value.toShowString())),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsetsGeometry.only(left: 10, right: 10),
+                child: Row(
+                  children: [
+                    const Text('打印浓度：'),
+                    Expanded(
+                      child: Obx(() => Slider(
+                            value: printDensity.value,
+                            min: 1,
+                            max: 15,
+                            divisions: 14,
+                            thumbColor: Colors.blueAccent,
+                            activeColor: Colors.green.shade300,
+                            onChanged: (v) {
+                              printDensity.value = v;
+                              spSave(spSavePrintDensity, v);
+                            },
+                          )),
+                    ),
+                    Obx(() => Text(printDensity.value.toShowString())),
+                  ],
+                ),
+              ),
+            ],
           ),
         ),
         actions: [
@@ -284,7 +366,6 @@ showLabelListDialog({
                 hint: '制程：',
                 text: state.detailsInfo?.processflow ?? '',
               ),
-
             ],
           ),
           subtitle: Row(

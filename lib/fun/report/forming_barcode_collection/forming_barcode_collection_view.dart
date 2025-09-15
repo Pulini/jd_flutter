@@ -410,14 +410,14 @@ class _FormingBarcodeCollectionPageState
                   child: CombinationButton(
                 //切换订单
                 text: 'forming_code_collection_switch'.tr,
-                click: () => {
+                click: ()  {
                   Get.to(() => const FormingBarcodeCollectionSwitchPage())
                       ?.then((v) {
                     if (v != null) {
                       logic.setShowScanData(v);
                     }
                     _scan();
-                  })
+                  });
                 },
                 combination: Combination.intact,
               )),

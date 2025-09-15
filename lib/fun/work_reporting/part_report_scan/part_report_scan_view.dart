@@ -21,8 +21,8 @@ class _PartReportScanPageState extends State<PartReportScanPage> {
 var tecCode=TextEditingController();
   _item1(ComponentCodeInfo info) {
     return GestureDetector(
-        onLongPress: () => {
-          logic.deleteCode(info),
+        onLongPress: ()  {
+          logic.deleteCode(info);
         },
         child: Container(
           padding: const EdgeInsets.all(5),
@@ -71,12 +71,12 @@ var tecCode=TextEditingController();
                 ),
                 Expanded(
                   child: IconButton(
-                    onPressed: () => {
+                    onPressed: ()  {
                       Get.to(() => const Scanner())?.then((v) {
                         if (v != null) {
                           logic.addCode(v);
                         }
-                      }),
+                      });
                     },
                     icon: const Icon(
                       Icons.qr_code_scanner_outlined,
@@ -100,8 +100,8 @@ var tecCode=TextEditingController();
                   child: CombinationButton(
                     //手动添加
                     text: 'part_report_manually_add'.tr,
-                    click: () => {
-                        logic.addCode(tecCode.text)
+                    click: () {
+                        logic.addCode(tecCode.text);
                     },
                     combination: Combination.left,
                   ),
@@ -123,7 +123,7 @@ var tecCode=TextEditingController();
                   child: CombinationButton(
                     //提交
                     text: 'part_report_submit'.tr,
-                    click: () => {
+                    click: () {
                       if( logic.haveBarCode()){
                         askDialog(
                           content: 'part_report_select_summary_type'.tr,
@@ -135,7 +135,7 @@ var tecCode=TextEditingController();
                           cancel: () {
                             logic.getBarCodeReportDetails('2');
                           },
-                        ),
+                        );
                       }
                     },
                     combination: Combination.right,
@@ -150,7 +150,7 @@ var tecCode=TextEditingController();
   @override
   void initState() {
     pdaScanner(
-      scan: (code) => {logic.addCode(code)},
+      scan: (code) {logic.addCode(code);},
     );
     super.initState();
   }

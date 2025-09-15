@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -13,6 +15,7 @@ import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
+import 'package:jd_flutter/widget/edit_text_widget.dart';
 import 'injection_scan_report_state.dart';
 
 class InjectionScanReportLogic extends GetxController {
@@ -130,6 +133,23 @@ class InjectionScanReportLogic extends GetxController {
     }
   }
 
+  //整理合计数
+  arrangeDataAll() {
+    var list = state.showDataList.where((data) => data.size != '合计');
+    for (var data in state.showDataList) {
+      if (data.size == '合计') {
+        data.capacity =
+            list.map((v) => v.capacity ?? 0.0).reduce((a, b) => a.add(b));
+        data.box = list.map((v) => v.box ?? 0).reduce((a, b) => a + b);
+        data.lastMantissa =
+            list.map((v) => v.lastMantissa ?? 0.0).reduce((a, b) => a + b);
+        data.mantissa =
+            list.map((v) => v.mantissa ?? 0.0).reduce((a, b) => a + b);
+        data.allQty = list.map((v) => v.subtotal()).reduce((a, b) => a + b);
+      }
+    }
+  }
+
   arrangeData(ProcessPlanDetailInfo data) {
     state.machine.value = data.machine!;
     state.factoryType.value = data.factoryType!;
@@ -215,6 +235,7 @@ class InjectionScanReportLogic extends GetxController {
         ],
       ).then((response) {
         if (response.resultCode == resultSuccess) {
+          state.showBarCodeList.clear();
           var list = <StockInBarcodeInfo>[
             for (var i = 0; i < response.data.length; ++i)
               StockInBarcodeInfo.fromJson(response.data[i])
@@ -229,9 +250,10 @@ class InjectionScanReportLogic extends GetxController {
                   barCode: c.subBarcode,
                   size: c.size,
                   dispatchNo: v.dispatchNo,
-                  qty: c.qty,
+                  qty: c.qty.toString(),
                   num: v.num,
                   unit: c.unit,
+                  use: false,
                 ),
               );
             });
@@ -287,15 +309,20 @@ class InjectionScanReportLogic extends GetxController {
           title: Text(title,
               style: const TextStyle(
                   color: Colors.black, fontWeight: FontWeight.bold)),
-          content: CupertinoTextField(
-            inputFormatters: inputNumber,
+          content: NumberDecimalEditText(
             controller: textNumber,
+            onChanged: (d) {
+              if(d>clickData.capacity!){
+                textNumber.text = clickData.capacity.toShowString();
+              }
+            },
+            initQty: 0,
           ),
           actions: <Widget>[
             TextButton(
               onPressed: () {
                 if (textNumber.text.toString().isEmpty) {
-                  showSnackBar(message: 'injection_scan_input_number'.tr);
+                  showSnackBar(message: '内容为空');
                 } else {
                   Get.back();
                   confirm?.call(textNumber.text.toString(), clickData);
@@ -321,16 +348,17 @@ class InjectionScanReportLogic extends GetxController {
   }
 
   setSizeNumber(String lastNum, ShowProcessPlanDetailInfo data) {
-    for (var i = 0; i < state.showDataList.length; ++i) {
-      if (data.size == state.showDataList[i].size) {
-        state.showDataList[i].mantissa = lastNum.toDoubleTry();
-      }
-      if (state.showDataList[i].size == '合计') {
-        state.showDataList[i].mantissa =
-            state.showDataList[i].mantissa! + lastNum.toDoubleTry();
+
+    for (var list in state.showDataList) {
+      if(list.size == data.size){
+        list.mantissa = lastNum.toDoubleTry();
+        logger.f('box：'+ list.box.toString());
+        logger.f('capacity：'+ list.capacity.toString());
+        logger.f('mantissa：'+ list.mantissa.toString());
+        logger.f('lastMantissa：'+ list.lastMantissa.toString());
       }
     }
-
+    arrangeDataAll();
     state.showDataList.refresh();
   }
 
@@ -357,21 +385,32 @@ class InjectionScanReportLogic extends GetxController {
 
   //扫码刷新界面
   findSizeData(String code) {
+    logger.f('扫到的贴标：$code');
     if (state.showBarCodeList.isNotEmpty) {
+      logger.f('-----------0---------');
       if (code.length == 32) {
+        logger.f('-----------1---------');
         if (state.showBarCodeList.every((list) => list.barCode != code)) {
+          logger.f('-----------2---------');
           //找不到条码
           showSnackBar(message: 'injection_scan_unable_find_barcode'.tr);
         } else {
+          logger.f('-----------3---------');
           for (var v in state.showBarCodeList) {
             if (v.barCode == code && v.use == false) {
+              logger.f('找到条码了--------');
               for (var c in state.showDataList) {
                 if (c.dispatchNumber == v.dispatchNo && c.size == v.size) {
+                  logger.f('显示数据找到了--------');
                   if (c.capacity == v.qty.toDoubleTry()) {
+                    logger.f('箱容匹配成功--------');
                     if ((c.box! + (1.0)) <= c.maxBox) {
+                      logger.f('未超过最大箱--------');
                       c.box = c.box! + 1;
                       v.use = true;
                       showScanTips();
+                      arrangeDataAll();
+                      state.showDataList.refresh();
                     } else {
                       showSnackBar(message: 'injection_scan_up'.tr);
                     }
@@ -379,17 +418,22 @@ class InjectionScanReportLogic extends GetxController {
                     c.mantissa = v.qty.toDoubleTry();
                     v.use = true;
                     showScanTips();
+                    arrangeDataAll();
+                    state.showDataList.refresh();
                   }
                 }
               }
+            } else if (v.barCode == code && v.use == true) {
+              showSnackBar(message: '该贴标已扫描');
             }
           }
-          state.showDataList.refresh();
         }
       } else {
+        logger.f('-----------4---------');
         showSnackBar(message: 'injection_scan_scan_real_label'.tr);
       }
     } else {
+      logger.f('-----------5---------');
       showSnackBar(message: 'injection_scan_no_label_data'.tr);
     }
   }
@@ -429,12 +473,20 @@ class InjectionScanReportLogic extends GetxController {
           loading: 'injection_scan_modifying_dispatch_data'.tr,
           body: {
             'InterID': state.dataBean.interID,
+            'NextShiftEmpID': '',
+            'OnDutyEmpID': '',
             'Items': [
-              for (var item in state.showDataList)
+              for (var item in state.showDataList
+                  .where((data) => data.size != '合计')
+                  .toList())
                 {
-                  'EntryID': item.entryID,
-                  'BoxesQty': item.box,
-                  'NotFullQty': item.mantissa
+                  'Capacity': "NULL",
+                  'Mould': "NULL",
+                  'TodayDispatchQty': "NULL",
+                  'EntryID': item.entryID.toString(),
+                  'BoxesQty': item.box.toString(),
+                  'NotFullQty': item.mantissa.toString(),
+                  'MantissaFlag': '0'
                 }
             ],
             'BarCodeList': [
@@ -443,23 +495,27 @@ class InjectionScanReportLogic extends GetxController {
                 item.barCode
             ],
             'Output': {
-              'EntryID': state.dataBean.interID,
+              'InterID': state.dataBean.interID,
               'Shift': state.dataBean.shift,
               'DecrementNumber': state.dataBean.decrementNumber,
               'DispatchNumber': state.dataBean.dispatchNumber,
               'MaterialNumber': state.dataBean.materialNumber,
               'Date': state.dataBean.startDate,
+              'UserID': getUserInfo()!.userID,
               'WorkCenter': state.dataBean.machine,
+              'EmpList': [],
               'Items': [
-                for (var items in state.showDataList)
+                for (var items in state.showDataList
+                    .where((data) => data.size != '合计')
+                    .toList())
                   {
                     'EntryID': items.entryID,
                     'Size': items.size,
                     'StandardTextCode': state.dataBean.processflow,
                     'ConfirmedQty': items.subtotal(),
                     'LastNotFullQty': items.lastMantissa,
-                    'Mantissa': items.mantissa,
-                    'BoxesQty': items.box,
+                    'Mantissa': items.mantissa.toString(),
+                    'BoxesQty': items.box.toString(),
                     'Capacity': items.capacity,
                     'BUoM': items.bUoM,
                     'ConfirmCurrentWorkingHours':
@@ -467,7 +523,8 @@ class InjectionScanReportLogic extends GetxController {
                     'WorkingHoursUnit': items.workingHoursUnit
                   }
               ],
-            }
+            },
+            'PictureList': [],
           },
         ).then((response) {
           if (response.resultCode == resultSuccess) {

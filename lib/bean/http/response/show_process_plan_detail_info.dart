@@ -40,7 +40,7 @@ class ShowProcessPlanDetailInfo {
   String? confirmCurrentWorkingHours;  //确认当前工时
   String? workingHoursUnit;  //工时单位
 
-  double subtotal() => (box ?? 0)*(capacity?? 0).add(mantissa?? 0.0).sub(lastMantissa?? 0.0);
+  double subtotal() => ((box ?? 0)*(capacity?? 0)).toString().toDoubleTry().add(mantissa?? 0.0).sub(lastMantissa?? 0.0);
 
 }
 

@@ -273,8 +273,8 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
               children: [
                 _inputText('visit_details_license_plate_number'.tr, '', [],
                     controller: logic.textCarNo,
-                    onChange: (s) => {
-                          state.upAddDetail.value.carNo = s,
+                    onChange: (s) {
+                          state.upAddDetail.value.carNo = s;
                         }),
                 line,
               ],
@@ -291,41 +291,41 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
                 _inputText(
                     'visit_details_wheel_area_inspection'.tr, '', inputNumber,
                     controller: logic.textWheel,
-                    onChange: (s) => {
-                          state.upAddDetail.value.carBottom = s,
+                    onChange: (s) {
+                          state.upAddDetail.value.carBottom = s;
                         }),
                 line,
                 _inputText(
                     'visit_details_external_inspection'.tr, '', inputNumber,
                     controller: logic.textExternal,
-                    onChange: (s) => {
-                          state.upAddDetail.value.carExterior = s,
+                    onChange: (s) {
+                          state.upAddDetail.value.carExterior = s;
                         }),
                 line,
                 _inputText(
                     'visit_details_Driver_cab_inspection'.tr, '', inputNumber,
                     controller: logic.textCab,
-                    onChange: (s) => {
-                          state.upAddDetail.value.carCab = s,
+                    onChange: (s) {
+                          state.upAddDetail.value.carCab = s;
                         }),
                 line,
                 _inputText(
                     'visit_details_Driver_cab_inspection'.tr, '', inputNumber,
                     controller: logic.textTail,
-                    onChange: (s) => {
-                          state.upAddDetail.value.carRear = s,
+                    onChange: (s) {
+                          state.upAddDetail.value.carRear = s;
                         }),
                 line,
                 _inputText('visit_details_landing_gear'.tr, '', inputNumber,
                     controller: logic.textLandingGear,
-                    onChange: (s) => {
-                          state.upAddDetail.value.landingGear = s,
+                    onChange: (s) {
+                          state.upAddDetail.value.landingGear = s;
                         }),
                 line,
                 _inputText('visit_details_remark'.tr, '', inputNumber,
                     controller: logic.textRemark,
-                    onChange: (s) => {
-                          state.upAddDetail.value.note = s,
+                    onChange: (s) {
+                          state.upAddDetail.value.note = s;
                         }),
                 line,
               ],
@@ -415,33 +415,33 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
     return [
       _inputText('visit_details_id_card'.tr, data.iDCard, inputNumber,
           controller: logic.textIdCard,
-          onChange: (s) => {
-                state.upAddDetail.value.iDCard = s,
+          onChange: (s) {
+                state.upAddDetail.value.iDCard = s;
               }),
       line,
       _inputText('visit_details_name'.tr, data.name, [],
           controller: logic.textPersonName,
-          onChange: (s) => {
-                state.upAddDetail.value.name = s,
+          onChange: (s) {
+                state.upAddDetail.value.name = s;
               }),
       line,
       _inputText('visit_details_phone'.tr, data.phone, inputNumber,
           controller: logic.textPhone,
-          onChange: (s) => {
-                state.upAddDetail.value.phone = s,
+          onChange: (s){
+                state.upAddDetail.value.phone = s;
               }),
       line,
       _inputText('visit_details_unit'.tr, data.unit, [],
           controller: logic.textUnit,
-          onChange: (s) => {
-                state.upAddDetail.value.unit = s,
+          onChange: (s){
+                state.upAddDetail.value.unit = s;
               }),
       line,
       _inputText(
           'visit_details_number_of_visitors'.tr, data.visitorNum, inputNumber,
           controller: logic.textVisitors,
-          onChange: (s) => {
-                state.upAddDetail.value.visitorNum = s,
+          onChange: (s){
+                state.upAddDetail.value.visitorNum = s;
               }),
       line,
       _text('visit_details_factory_area'.tr, userInfo?.factory),
@@ -459,15 +459,15 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
                   logic.searchPeople();
                 });
           },
-          onChange: (s) => {
-                if (s.isNotEmpty) {state.searchMes = s}
+          onChange: (s) {
+                if (s.isNotEmpty) {state.searchMes = s;}
               }),
       line,
       _inputText(
           'visit_details_interviewed_department'.tr, data.visitedDept, [],
           controller: logic.textVisitedDept,
-          onChange: (s) => {
-                state.upAddDetail.value.visitedDept = s,
+          onChange: (s) {
+                state.upAddDetail.value.visitedDept = s;
               }),
       line,
       Obx(() => Row(
@@ -496,14 +496,14 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
       line,
       _inputText('visit_details_visitor_id_number'.tr, data.credentials, [],
           controller: logic.textVisitNumber,
-          onChange: (s) => {
-                state.upAddDetail.value.credentials = s,
+          onChange: (s) {
+                state.upAddDetail.value.credentials = s;
               }),
       line,
       _inputText('visit_details_reason_for_visit'.tr, data.subjectMatter, [],
           controller: logic.textReason,
-          onChange: (s) => {
-                state.upAddDetail.value.subjectMatter = s,
+          onChange: (s) {
+                state.upAddDetail.value.subjectMatter = s;
               }),
       _peoplePhotos(),
       _subTitle('visit_details_vehicle_information'.tr), //车辆信息
@@ -512,8 +512,8 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
       _showCarNumber(), //选择是否填车牌号
       _showInspectList(),
       _inputText('visit_details_bring_your_own_goods'.tr, data.ownGoods, [],
-          onChange: (s) => {
-                state.upAddDetail.value.ownGoods = s,
+          onChange: (s) {
+                state.upAddDetail.value.ownGoods = s;
               }),
       line,
       _inputText('visit_details_on_duty_security_guard'.tr,

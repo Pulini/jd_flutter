@@ -57,24 +57,20 @@ class _VisitRegisterPageState extends State<VisitRegisterPage> {
 
   _item(VisitDataListInfo data) {
     return GestureDetector(
-      onTap: () => {
-        logger.d(data.toJson()),
+      onTap: () {
         if (state.lastAdd)
           {
-            logic.getVisitorDetailInfo(data.interID.toString(), false),
-            logger.d('1')
+            logic.getVisitorDetailInfo(data.interID.toString(), false);
           }
         else
           {
             if (data.submitType == 0)
               {
-                logic.getVisitorDetailInfo(data.interID.toString(), true),
-                logger.d('2')
+                logic.getVisitorDetailInfo(data.interID.toString(), true);
               }
             else
               {
-                logic.getVisitorDetailInfo(data.interID.toString(), false),
-                logger.d('3')
+                logic.getVisitorDetailInfo(data.interID.toString(), false);
               }
           }
       }, //获取详情点击事件
@@ -272,13 +268,13 @@ class _VisitRegisterPageState extends State<VisitRegisterPage> {
         bottomSheet: [
           visitButtonWidget(
               title: 'visit_button_scan_invitation_code'.tr,
-              click: () => {
+              click: () {
                     // Get.to(() => const DailyReportPage()),   //跳转界面
                   }),
           visitButtonWidget(
               title: 'visit_button_search_recent_records'.tr,
-              click: () => {
-                    Get.back(),
+              click: () {
+                    Get.back();
                     showDialogLastRecord(
                         //搜索最近来访记录，带数据进行新增
                         context: context,
@@ -286,13 +282,13 @@ class _VisitRegisterPageState extends State<VisitRegisterPage> {
                           state.lastAdd = true;
                           logic.getVisitLastList(
                               refresh: () => controller.finishRefresh());
-                        }),
+                        });
                   }),
           visitButtonWidget(
               title: 'visit_button_add_record'.tr,
-              click: () async => {
-                    Get.back(), //搜索框缩回
-                    logic.getToAddPage(),
+              click: () async {
+                    Get.back(); //搜索框缩回
+                    logic.getToAddPage();
                   }),
           DatePicker(pickerController: logic.pickerControllerStartDate),
           DatePicker(pickerController: logic.pickerControllerEndDate),
@@ -323,21 +319,21 @@ class _VisitRegisterPageState extends State<VisitRegisterPage> {
                 ),
               ))
         ],
-        query: () => {
+        query: () {
               logic.refreshGetVisitList(
                   startTime: logic.pickerControllerStartDate.getDateFormatYMD(),
                   endTime: logic.pickerControllerEndDate.getDateFormatYMD(),
-                  leave: state.select.value.toString())
+                  leave: state.select.value.toString());
             },
         body: Obx(() => Scaffold(
               backgroundColor: Colors.transparent,
               body: EasyRefresh(
                 controller: controller,
-                onRefresh: () => {
+                onRefresh: ()  {
                   logic.refreshGetVisitList(
                     leave: "0",
                     refresh: () => controller.finishRefresh(),
-                  )
+                  );
                 },
                 header: const MaterialHeader(),
                 child: ListView.builder(

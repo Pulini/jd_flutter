@@ -83,7 +83,7 @@ class Item {
   }
 
   String? subBarcode;  //条码
-  String? qty; //贴标数量
+  double? qty; //贴标数量
   String? size;  //尺码
   String? typeBody;  //型体
   String? unit;  //单位

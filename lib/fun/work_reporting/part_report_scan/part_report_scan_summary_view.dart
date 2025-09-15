@@ -208,16 +208,16 @@ class _PartReportScanSummaryPageState extends State<PartReportScanSummaryPage> {
           child: CombinationButton(
             //提交
             text: 'part_report_submit'.tr,
-            click: () => {
+            click: () {
               askDialog(
                 content: 'part_report_summary_sure_submit'.tr,
                 confirm: () {
                   logic.submitBarCodeReport(submitSuccess: (mes) {
                     successDialog(
-                        content: mes, back: () => {Get.back(result: true)});
+                        content: mes, back: (){Get.back(result: true);});
                   });
                 },
-              ),
+              );
             },
           ),
         )

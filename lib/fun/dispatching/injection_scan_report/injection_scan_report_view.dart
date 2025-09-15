@@ -20,7 +20,9 @@ class InjectionScanReportPage extends StatefulWidget {
 
 class _InjectionScanReportPageState extends State<InjectionScanReportPage> {
   final logic = Get.put(InjectionScanReportLogic());
-  final state = Get.find<InjectionScanReportLogic>().state;
+  final state = Get
+      .find<InjectionScanReportLogic>()
+      .state;
 
   _item1(ShowProcessPlanDetailInfo data) {
     var backColors = Colors.white;
@@ -30,7 +32,7 @@ class _InjectionScanReportPageState extends State<InjectionScanReportPage> {
       backColors = Colors.blue.shade200;
     } else {
       lastColor = Colors.greenAccent;
-      backColors =Colors.white;
+      backColors = Colors.white;
     }
     return InkWell(
       child: Row(
@@ -72,27 +74,28 @@ class _InjectionScanReportPageState extends State<InjectionScanReportPage> {
           ),
           Expanded(
             child: _text(
-                mes: data.allQty.toShowString(),
+                mes: data.size=='合计'? data.allQty.toShowString():data.subtotal().toShowString(),
                 backColor: backColors,
                 head: false,
                 paddingNumber: 8),
           )
         ],
       ),
-      onTap: () => {
-        if (data.size != '合计')
-          {
-            if (logic.lastNum(data.size!, data.capacity!))
-              {showSnackBar(message: 'injection_scan_please_scan_last'.tr)}
-            else
-              {
-                logic.showInputDialog(
-                    clickData: data,
-                    title: 'injection_scan_input_number'
-                        .trArgs([data.size.toString()]),
-                    confirm: (s, data) => {logic.setSizeNumber(s, data)})
-              }
+      onTap: () {
+        if (data.size != '合计') {
+          if (logic.lastNum(data.size!, data.capacity!)) {
+            showSnackBar(message: 'injection_scan_please_scan_last'.tr);
           }
+          else {
+            logic.showInputDialog(
+                clickData: data,
+                title: 'injection_scan_input_number'
+                    .trArgs([data.size.toString()]),
+                confirm: (s, data) {
+                  logic.setSizeNumber(s, data);
+                });
+          }
+        }
       },
     );
   }
@@ -140,14 +143,15 @@ class _InjectionScanReportPageState extends State<InjectionScanReportPage> {
           decoration: BoxDecoration(
             border: const Border(top: borders, left: borders, right: borders),
             borderRadius:
-                const BorderRadius.only(topLeft: radius, topRight: radius),
+            const BorderRadius.only(topLeft: radius, topRight: radius),
             gradient: LinearGradient(
               colors: [Colors.blue.shade300, Colors.blue.shade100],
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
             ),
           ),
-          child: Obx(() => Column(
+          child: Obx(() =>
+              Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
@@ -173,7 +177,7 @@ class _InjectionScanReportPageState extends State<InjectionScanReportPage> {
                   ),
                   Padding(
                     padding:
-                        const EdgeInsets.only(left: 5, right: 5, bottom: 5),
+                    const EdgeInsets.only(left: 5, right: 5, bottom: 5),
                     child: Row(
                       children: [
                         expandedTextSpan(
@@ -234,12 +238,13 @@ class _InjectionScanReportPageState extends State<InjectionScanReportPage> {
   @override
   Widget build(BuildContext context) {
     return pageBody(
-      title: 'injection_scan_title'.tr,
+        title: 'injection_scan_title'.tr,
         actions: [
           TextButton(
             //查询具体订单
-            onPressed: () => logic.getScWorkCardDetail(
-                dispatchNumber: state.dispatchNumber.value),
+            onPressed: () =>
+                logic.getScWorkCardDetail(
+                    dispatchNumber: state.dispatchNumber.value),
             child: Text('injection_scan_query'.tr),
           ),
         ],
@@ -247,7 +252,8 @@ class _InjectionScanReportPageState extends State<InjectionScanReportPage> {
           children: [
             _title(),
             Expanded(
-              child: Obx(() => ListView.builder(
+              child: Obx(() =>
+                  ListView.builder(
                     shrinkWrap: true,
                     itemCount: state.showDataList.length,
                     itemBuilder: (context, index) =>
@@ -270,7 +276,7 @@ class _InjectionScanReportPageState extends State<InjectionScanReportPage> {
                   child: CombinationButton(
                     text: 'injection_scan_detail'.tr,
                     click: () {
-                      if(state.showBarCodeList.isNotEmpty){
+                      if (state.showBarCodeList.isNotEmpty) {
                         Get.to(() => const InjectionScanReportLabelPage());
                       }
                     },
@@ -297,11 +303,12 @@ class _InjectionScanReportPageState extends State<InjectionScanReportPage> {
                   child: CombinationButton(
                     //清空
                     text: 'injection_scan_clean'.tr,
-                    click: (){
+                    click: () {
                       askDialog(
                         content: 'injection_scan_sure_clean_box_and_label'.tr,
-                        confirm: () => logic.clearBarCodeAndBoxQty(
-                            success: (s) => logic.getScWorkCardList()),
+                        confirm: () =>
+                            logic.clearBarCodeAndBoxQty(
+                                success: (s) => logic.getScWorkCardList()),
                       );
                     },
                     combination: Combination.middle,
@@ -311,16 +318,18 @@ class _InjectionScanReportPageState extends State<InjectionScanReportPage> {
                   flex: 1,
                   child: CombinationButton(
                     text: 'injection_scan_production_report'.tr,
-                    click: (){
+                    click: () {
                       askDialog(
                         content: 'injection_scan_want_production_report'.tr,
                         confirm: () {
                           logic.productionReport(
-                              success: (s) => successDialog(
+                              success: (s) =>
+                                  successDialog(
                                     //成功后刷新界面
                                     content: s,
-                                    back: () => logic.getScWorkCardDetail(
-                                        dispatchNumber:
+                                    back: () =>
+                                        logic.getScWorkCardDetail(
+                                            dispatchNumber:
                                             state.dispatchNumber.value),
                                   ));
                         },
