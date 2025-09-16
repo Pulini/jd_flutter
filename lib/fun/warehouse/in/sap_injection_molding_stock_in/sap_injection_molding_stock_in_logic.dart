@@ -79,23 +79,29 @@ class SapInjectionMoldingStockInLogic extends GetxController {
         );
         return;
       }
+      if (!state.reportedList.contains(code)) {
+        showSnackBar(
+          message: 'sap_injection_molding_stock_in_label_state_error'.tr,
+          isWarning: true,
+        );
+        return;
+      }
       BarCodeInfo(
         code: code,
         type: BarCodeReportType.injectionMoldingStockIn.text,
       )
         ..palletNo = state.palletNumber.value
-        ..isUsed = state.usedList.contains(code)
         ..save(callback: (newBarCode) => state.barCodeList.add(newBarCode));
     }
   }
 
-  refreshBarCodeStatus({required void Function() refresh}) {
+  refreshBarCodeStatus({Function()? refresh}) {
     state.getSapLabelList(
       error: (msg) => showSnackBar(
         message: msg,
         isWarning: true,
       ),
-      refresh: refresh,
+      refresh:()=> refresh?.call(),
     );
   }
 
@@ -106,15 +112,13 @@ class SapInjectionMoldingStockInLogic extends GetxController {
   }
 
   goStockInReport() {
-    var list = state.barCodeList.where((v) => !v.isUsed).toList();
-    if (list.isEmpty) {
+    if (state.barCodeList.isEmpty) {
       showSnackBar(
         message: 'sap_injection_molding_stock_in_no_stock_in_label'.tr,
         isWarning: true,
       );
     } else {
       state.getStockInReport(
-        list: list,
         success: () =>
             Get.to(() => const SapInjectionMoldingStockInReportPage()),
         error: (msg) => errorDialog(content: msg),
@@ -137,7 +141,7 @@ class SapInjectionMoldingStockInLogic extends GetxController {
       postingDate: postingDate,
       success: (msg) {
         clearBarCodeList();
-        successDialog(content: msg);
+        successDialog(content: msg,back: ()=>Get.back());
       },
       error: (msg) => errorDialog(content: msg),
     );
