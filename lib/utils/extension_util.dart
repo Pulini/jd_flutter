@@ -78,9 +78,18 @@ extension Uint8ListExt on Uint8List {
 extension FileExt on File {
   //图片转 base64
   String toBase64() => base64Encode(readAsBytesSync());
-
-
-
+  Future<String> size() async {
+    var bytes= await length();
+    if (bytes < 1024) {
+      return '$bytes B';
+    } else if (bytes < 1024 * 1024) {
+      return '${(bytes / 1024).toStringAsFixed(2)} KB';
+    } else if (bytes < 1024 * 1024 * 1024) {
+      return '${(bytes / (1024 * 1024)).toStringAsFixed(2)} MB';
+    } else {
+      return '${(bytes / (1024 * 1024 * 1024)).toStringAsFixed(2)} GB';
+    }
+  }
 }
 
 //String扩展方法

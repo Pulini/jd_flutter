@@ -14,7 +14,7 @@ import 'package:jd_flutter/utils/web_api.dart';
 
 class SapInjectionMoldingStockInState {
   var barCodeList = <BarCodeInfo>[].obs;
-  var usedList = <String>[];
+  var reportedList = <String>[];
   var palletNumber = ''.obs;
   PalletDetailItem2Info? pallet;
   var reportList = <List<SapInjectionMoldingStockInInfo>>[];
@@ -81,22 +81,19 @@ class SapInjectionMoldingStockInState {
           parseJsonToList<SapLabelInfo>,
           ParseJsonParams(response.data, SapLabelInfo.fromJson),
         ).then((list) {
-          usedList = list.map((v) => v.labelID ?? '').toList();
-          for (var v in barCodeList) {
-            v.isUsed = usedList.contains(v.code);
-          }
+          reportedList = list.map((v) => v.labelID ?? '').toList();
           barCodeList.refresh();
+          refresh.call();
         });
       } else {
-        usedList.clear();
+        reportedList.clear();
         error.call(response.message ?? '');
       }
-      refresh.call();
+
     });
   }
 
   getStockInReport({
-    required List<BarCodeInfo> list,
     required Function() success,
     required Function(String) error,
   }) {
@@ -104,7 +101,7 @@ class SapInjectionMoldingStockInState {
       loading: 'sap_injection_molding_stock_in_getting_summary_info'.tr,
       method: webApiSapGetStockInReport,
       body: [
-        for (var v in list)
+        for (var v in barCodeList)
           {
             'DISPATCH_NO': '',
             'KTSCH': '',
@@ -115,6 +112,7 @@ class SapInjectionMoldingStockInState {
       ],
     ).then((response) {
       if (response.resultCode == resultSuccess) {
+        reportList.clear();
         groupBy([
           for (var json in response.data)
             SapInjectionMoldingStockInInfo.fromJson(json)
@@ -123,7 +121,7 @@ class SapInjectionMoldingStockInState {
         });
         success.call();
       } else {
-        usedList.clear();
+        reportedList.clear();
         error.call(response.message ?? '');
       }
     });

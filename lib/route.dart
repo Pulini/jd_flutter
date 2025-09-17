@@ -337,7 +337,7 @@ class RouteConfig {
   //sap注塑入库
   static Routes sapInjectionMoldingStockIn = Routes(
     '/sap_injection_molding_stock_in',
-    200,
+    201,
     const SapInjectionMoldingStockInPage(),
   );
 
@@ -519,7 +519,7 @@ class RouteConfig {
   //送货单列表
   static Routes deliveryOrder = Routes(
     '/delivery_order',
-    201,
+    202,
     const DeliveryOrderPage(),
   );
 

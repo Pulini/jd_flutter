@@ -1271,6 +1271,7 @@ class Translation extends Translations {
           'sap_injection_molding_stock_in_pallet_occupied': '此托盘已在其他仓库使用！！',
           'sap_injection_molding_stock_in_pallet_not_exists': '此托盘不存在！！',
           'sap_injection_molding_stock_in_scan_pallet_tips': '请先扫描托盘！！',
+          'sap_injection_molding_stock_in_label_state_error': '不是待入库标签！！',
           'sap_injection_molding_stock_in_no_stock_in_label': '没有未入库的标签！！',
           'sap_injection_molding_stock_in_report_dispatch_no': '派工单号',
           'sap_injection_molding_stock_in_report_type_body': '型体',
@@ -1281,6 +1282,7 @@ class Translation extends Translations {
           'sap_injection_molding_stock_in_report_report_qty': '报工数',
           'sap_injection_molding_stock_in_report_stock_in_summary': '入库汇总',
           'sap_injection_molding_stock_in_report_confirm_stock_in': '确认入库',
+          'sap_injection_molding_stock_in_report_total': '合计',
           'sap_picking_receipt_reversal_material_voucher': '物料凭证：',
           'sap_picking_receipt_reversal_dispatch_date': '派工日期：',
           'sap_picking_receipt_reversal_dispatch_no': '派工单号：',
@@ -4758,6 +4760,7 @@ class Translation extends Translations {
               'Pallet not exists！！',
           'sap_injection_molding_stock_in_scan_pallet_tips':
               'Scan pallet tips！！',
+          'sap_injection_molding_stock_in_label_state_error': 'Not a pending inventory label！！',
           'sap_injection_molding_stock_in_no_stock_in_label':
               'No stock in label！！',
           'sap_injection_molding_stock_in_report_dispatch_no': 'Dispatch no',
@@ -4768,6 +4771,7 @@ class Translation extends Translations {
               'Not stocked qty',
           'sap_injection_molding_stock_in_report_stocked_qty': 'Stocked qty',
           'sap_injection_molding_stock_in_report_report_qty': 'Report qty',
+          'sap_injection_molding_stock_in_report_total': 'Total',
           'sap_injection_molding_stock_in_report_stock_in_summary':
               'Stock in summary',
           'sap_injection_molding_stock_in_report_confirm_stock_in':

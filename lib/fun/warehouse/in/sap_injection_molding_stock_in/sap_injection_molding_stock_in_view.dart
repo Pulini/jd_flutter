@@ -66,13 +66,9 @@ class _SapInjectionMoldingStockInPageState
 
   @override
   void initState() {
-    pdaScanner(scan: (code) {
-      logic.scanCode(code);
-    });
+    pdaScanner(scan: (code) => logic.scanCode(code));
     WidgetsBinding.instance.addPostFrameCallback(
-      (_) => logic.refreshBarCodeStatus(refresh: () {
-        // logic.scanCode('GE10023611');
-      }),
+      (_) => logic.refreshBarCodeStatus(),
     );
     super.initState();
   }
