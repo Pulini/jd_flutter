@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -38,8 +39,7 @@ class InjectionScanReportLogic extends GetxController {
         if (list.isNotEmpty) {
           if (list.length == 1) {
             state.dispatchNumber.value = list[0].dispatchNumber.toString();
-            getScWorkCardDetail(
-                dispatchNumber: list[0].dispatchNumber.toString());
+            getScWorkCardDetail();
           } else {
             //创建选择器控制器
             var controller = FixedExtentScrollController(
@@ -62,10 +62,10 @@ class InjectionScanReportLogic extends GetxController {
             var confirm = TextButton(
               onPressed: () {
                 Get.back();
-                getScWorkCardDetail(
-                    dispatchNumber: list[controller.selectedItem]
-                        .dispatchNumber
-                        .toString());
+                state.dispatchNumber.value = list[controller.selectedItem]
+                    .dispatchNumber
+                    .toString();
+                getScWorkCardDetail();
                 // list[controller.selectedItem]
               },
               child: Text(
@@ -108,8 +108,8 @@ class InjectionScanReportLogic extends GetxController {
     });
   }
 
-  getScWorkCardDetail({required String dispatchNumber}) {
-    if (state.dispatchNumber.value.isEmpty) {
+  getScWorkCardDetail() {
+    if (state.dispatchNumber.isEmpty) {
       getScWorkCardList();
     } else {
       httpGet(
@@ -117,7 +117,7 @@ class InjectionScanReportLogic extends GetxController {
           loading: 'injection_scan_getting_process_plan_detail'.tr,
           params: {
             'DispatchingMachine': '',
-            'DispatchNumber': dispatchNumber,
+            'DispatchNumber': state.dispatchNumber.value,
           }).then((response) {
         if (response.resultCode == resultSuccess) {
           state.dataBean = ProcessPlanDetailInfo.fromJson(response.data);
@@ -135,13 +135,10 @@ class InjectionScanReportLogic extends GetxController {
     var list = state.showDataList.where((data) => data.size != '合计');
     for (var data in state.showDataList) {
       if (data.size == '合计') {
-        data.capacity =
-            list.map((v) => v.capacity ?? 0.0).reduce((a, b) => a.add(b));
+        data.capacity = list.map((v) => v.capacity ?? 0.0).reduce((a, b) => a.add(b));
         data.box = list.map((v) => v.box ?? 0).reduce((a, b) => a + b);
-        data.lastMantissa =
-            list.map((v) => v.lastMantissa ?? 0.0).reduce((a, b) => a + b);
-        data.mantissa =
-            list.map((v) => v.mantissa ?? 0.0).reduce((a, b) => a + b);
+        data.lastMantissa = list.map((v) => v.lastMantissa ?? 0.0).reduce((a, b) => a + b);
+        data.mantissa = list.map((v) => v.mantissa ?? 0.0).reduce((a, b) => a + b);
         data.allQty = list.map((v) => v.subtotal()).reduce((a, b) => a + b);
       }
     }
@@ -154,7 +151,6 @@ class InjectionScanReportLogic extends GetxController {
     var list = <ShowProcessPlanDetailInfo>[];
     var allLastMantissa = 0.0;
     var allMantissa = 0.0;
-    var allQtyNumber = 0.0;
     var allBox = 0.0;
     var allCapacity = 0.0;
 
@@ -162,12 +158,6 @@ class InjectionScanReportLogic extends GetxController {
       for (var i = 0; i < data.items!.length; ++i) {
         allLastMantissa += data.items![i].lastNotFullQty!;
         allMantissa += data.items![i].notFullQty!;
-        allQtyNumber += data.items![i].boxesQty
-            .toString()
-            .toDoubleTry()
-            .mul(data.items![i].capacity.toString().toDoubleTry())
-            .add(data.items![i].notFullQty.toString().toDoubleTry())
-            .sub(data.items![i].lastNotFullQty.toString().toDoubleTry());
         allBox += data.items![i].boxesQty!;
         allCapacity += data.items![i].capacity!;
 
@@ -186,7 +176,7 @@ class InjectionScanReportLogic extends GetxController {
               .mul(data.items![i].capacity.toString().toDoubleTry())
               .add(data.items![i].notFullQty.toString().toDoubleTry())
               .sub(data.items![i].lastNotFullQty.toString().toDoubleTry()),
-          box: data.items?[i].boxesQty.toString().toIntTry(),
+          box: data.items?[i].boxesQty,
           maxBox: 0,
           capacity: data.items?[i].capacity,
           processFlow: data.processflow,
@@ -206,8 +196,9 @@ class InjectionScanReportLogic extends GetxController {
         size: '合计',
         lastMantissa: allLastMantissa,
         mantissa: allMantissa,
-        allQty: allQtyNumber,
-        box: allBox.toString().toIntTry(),
+        allQty: list.map((v) => v.subtotal())
+            .reduce((a, b) => a.add(b)),
+        box: allBox,
         capacity: allCapacity,
       ),
     );
@@ -349,10 +340,6 @@ class InjectionScanReportLogic extends GetxController {
     for (var list in state.showDataList) {
       if(list.size == data.size){
         list.mantissa = lastNum.toDoubleTry();
-        logger.f('box：'+ list.box.toString());
-        logger.f('capacity：'+ list.capacity.toString());
-        logger.f('mantissa：'+ list.mantissa.toString());
-        logger.f('lastMantissa：'+ list.lastMantissa.toString());
       }
     }
     arrangeDataAll();

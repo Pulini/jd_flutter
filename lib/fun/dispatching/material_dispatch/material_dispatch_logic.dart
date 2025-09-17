@@ -1,4 +1,4 @@
-import 'package:collection/collection.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/material_dispatch_info.dart';
 import 'package:jd_flutter/bean/http/response/material_dispatch_label_detail.dart';
@@ -117,6 +117,7 @@ class MaterialDispatchLogic extends GetxController {
   }
 
   subItemReport({
+    required BuildContext context,
     required MaterialDispatchInfo submitData,
     required Children subData,
     required bool isPrint,
@@ -151,6 +152,7 @@ class MaterialDispatchLogic extends GetxController {
               .toShowString();
           if (state.allInstruction.value) {
             printLabel(
+              context: context,
               data: submitData,
               billNo: subData.billNo!,
               color: subData.sapColorBatch!,
@@ -168,6 +170,7 @@ class MaterialDispatchLogic extends GetxController {
               guid: guid,
               success: (List<MaterialDispatchLabelDetail> bill) {
                 printLabel(
+                  context: context,
                   data: submitData,
                   billNo: subData.billNo!,
                   color: subData.sapColorBatch!,
@@ -204,6 +207,7 @@ class MaterialDispatchLogic extends GetxController {
   }
 
   printLabel({
+    required BuildContext context,
     required MaterialDispatchInfo data,
     required String billNo,
     required String color,
@@ -227,8 +231,8 @@ class MaterialDispatchLogic extends GetxController {
           }
         });
         var chunked = [
-          for (int i = 0; i < list.length; i += 4)
-            list.sublist(i, (i + 4).clamp(0, list.length))
+          for (int i = 0; i < list.length; i += 6)
+            list.sublist(i, (i + 6).clamp(0, list.length))
         ];
         var subList = <String>[];
         for (var data in chunked) {
@@ -238,47 +242,38 @@ class MaterialDispatchLogic extends GetxController {
           }
           subList.add(splitData.substring(0, splitData.length - 1));
         }
-
-        Get.to(() => PreviewLabel(
-              labelWidget: materialWorkshopDynamicLabel(
-                qrCode: guid,
-                productName: data.productName ?? '',
-                materialName: data.materialName ?? '',
-                partName: data.partName ?? '',
-                materialNumber: data.materialNumber ?? '',
-                processName: data.processName ?? '',
-                subList: subList,
-                sapDecideArea: data.sapDecideArea ?? '',
-                color: color,
-                drillingCrewName: data.drillingCrewName ?? '',
-                qty: qty,
-                unitName: data.unitName ?? '',
-              ),
-            ));
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => PreviewLabel(
+                labelWidget: materialWorkshopDynamicLabel(
+                  isBig: state.isBigLabel.value,
+                  qrCode: guid,
+                  productName: data.productName ?? '',
+                  materialName: data.materialName ?? '',
+                  partName: data.partName ?? '',
+                  materialNumber: data.materialNumber ?? '',
+                  processName: data.processName ?? '',
+                  subList: subList,
+                  sapDecideArea: data.sapDecideArea ?? '',
+                  color: color,
+                  drillingCrewName: data.drillingCrewName ?? '',
+                  qty: qty,
+                  unitName: data.unitName ?? '',
+                ),
+                isDynamic: true),
+          ),
+        );
       } else {
-        var ins = '';
-        var toPrint = '';
-        for (var data in bill) {
-          if (data.billNo!.isNotEmpty) {
-            ins = '$ins${data.billNo!},';
-          }
-        }
-        ins.split(',').forEachIndexed((i, s) {
-          if (i <= 1 && s.isNotEmpty) {
-            toPrint = '$toPrint$s,';
-          }
-        });
-        if (toPrint.endsWith(',')) {
-          toPrint.substring(0, toPrint.length - 1);
-        }
-
-        Get.to(() => PreviewLabel(
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => PreviewLabel(
               labelWidget: materialWorkshopFixedLabel(
+                isBig: state.isBigLabel.value,
                 qrCode: guid,
                 productName: data.productName ?? '',
                 materialName: data.materialName ?? '',
                 partName: data.partName ?? '',
-                toPrint: toPrint,
+                toPrint: billNo,
                 palletNumber: getMaterialDispatchPalletNumber(),
                 materialNumber: data.materialNumber ?? '',
                 processName: data.processName ?? '',
@@ -289,8 +284,10 @@ class MaterialDispatchLogic extends GetxController {
                 unitName: data.unitName ?? '',
                 pick: pick,
               ),
-              isDynamic: true,
-            ));
+              isDynamic: state.isBigLabel.value ? true : false,
+            ),
+          ),
+        );
       }
     } else if (data.exitLabelType == '202') {
       //小标
@@ -300,8 +297,9 @@ class MaterialDispatchLogic extends GetxController {
       } else {
         order = '${data.factoryID} 补单';
       }
-
-      Get.to(() => PreviewLabel(
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => PreviewLabel(
             labelWidget: dynamicInBoxLabel1095n1096(
               haveSupplier: false,
               productName: data.description ?? '',
@@ -319,9 +317,13 @@ class MaterialDispatchLogic extends GetxController {
               notes: '',
             ),
             isDynamic: true,
-          ));
+          ),
+        ),
+      );
     } else if (data.exitLabelType == '103') {
-      Get.to(() => PreviewLabel(
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => PreviewLabel(
             labelWidget: dynamicMaterialLabel1098(
               labelID: guid,
               myanmarApprovalDocument: data.description ?? '',
@@ -349,7 +351,9 @@ class MaterialDispatchLogic extends GetxController {
               notes: '',
             ),
             isDynamic: true,
-          ));
+          ),
+        ),
+      );
     } else if (data.exitLabelType == '102') {
       var order = '';
       if (data.billStyle == '0') {
@@ -357,8 +361,9 @@ class MaterialDispatchLogic extends GetxController {
       } else {
         order = '${data.factoryID} 补单';
       }
-
-      Get.to(() => PreviewLabel(
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => PreviewLabel(
             labelWidget: dynamicSizeMaterialLabel1095n1096(
               labelID: guid,
               productName: data.description ?? '',
@@ -385,7 +390,9 @@ class MaterialDispatchLogic extends GetxController {
               notes: '',
             ),
             isDynamic: true,
-          ));
+          ),
+        ),
+      );
     }
   }
 }

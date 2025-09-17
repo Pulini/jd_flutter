@@ -324,6 +324,7 @@ class Items {
     this.lastMantissaFlag,
     this.availableMouldsQty,
     this.capacityPerMold,
+    this.mantissaIdentification,
   });
 
   Items.fromJson(dynamic json) {
@@ -371,6 +372,7 @@ class Items {
   int? lastMantissaFlag; //尾数标识
   double? availableMouldsQty; //可用模具数
   double? capacityPerMold; //产能每模
+  bool? mantissaIdentification; //是否有尾箱标
 
   int labelQty = 0;//贴标总数
 
@@ -511,6 +513,13 @@ class MachineDispatchHistoryItemInfo {
   }
 }
 
+class HandoverInfo {
+  var personal = ''; //交接人
+  var handoverInfoDispatchList = <DispatchInfo>[];
+  HandoverInfo(
+      this.personal,
+      );
+}
 
 class DispatchProcessInfo {
   var processNumber = ''; //工序ID

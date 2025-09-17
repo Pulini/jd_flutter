@@ -11,6 +11,7 @@ import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
+import 'machine_dispatch_handover_view.dart';
 import 'machine_dispatch_report_view.dart';
 import 'machine_dispatch_state.dart';
 
@@ -26,10 +27,9 @@ class MachineDispatchLogic extends GetxController {
 
   bool hasSelected() => state.selectList.any((v) => v.value);
 
-  bool hasReported() =>
-      state.detailsInfo?.items?.any((v) => (v.boxesQty ?? 0) > 0) == true;
-
   bool statusReportedAndGenerate() => state.detailsInfo?.status == 2;
+
+  bool canHandover() => state.detailsInfo?.status == 2; //可以两班交接
 
   getWorkCardList(Function(List<MachineDispatchInfo>) callback) {
     state.getWorkCardList(
@@ -68,71 +68,97 @@ class MachineDispatchLogic extends GetxController {
     );
   }
 
-  workerDispatchConfirmation() {
+  workerDispatchConfirmation({
+    required bool isHandover,
+    required Function() callback,
+  }) {
     refreshWorkCardDetail(refreshUI: () {
       state.getSapLabelList(
         success: () {
-          if (state.labelList.isEmpty) {
-            errorDialog(content: 'machine_dispatch_order_not_scanned_tips'.tr);
-            return;
-          }
-          var notScan = state.labelList.where((v) => !v.isScanned).toList();
-          var notScanLabelList = <String>[
-            for (var i = 0; i < notScan.length; ++i) notScan[i].number
-          ];
-          var lastAndNotScan = notScan.where((v) => v.isLastLabel).toList();
-          var lastLabelList = <String>[
-            for (var i = 0; i < lastAndNotScan.length; ++i)
-              lastAndNotScan[i].size ?? ''
-          ];
-          if (notScanLabelList.isNotEmpty && lastLabelList.isNotEmpty) {
-            errorDialog(
-              content: 'machine_dispatch_not_scanned_all_tips'.trArgs([
-                notScanLabelList.join(','),
-                lastLabelList.join(','),
-              ]),
-            );
+          if (isHandover) {
+            for (var data in state.labelList) {
+              for (var size in state.sizeItemList) {
+                if (data.size == size.size && data.qty != size.capacity) {
+                  size.mantissaIdentification = true;
+                }
+              }
+            }
+            gotoHandover(callback: () {
+              callback.call();
+            });
           } else {
-            if (notScanLabelList.isNotEmpty) {
+            if (state.labelList.isEmpty) {
               errorDialog(
-                content: 'machine_dispatch_not_scanned_box_tips'.trArgs([
+                  content: 'machine_dispatch_order_not_scanned_tips'.tr);
+              return;
+            }
+            var notScan = state.labelList.where((v) => !v.isScanned).toList();
+            var notScanLabelList = <String>[
+              for (var i = 0; i < notScan.length; ++i) notScan[i].number
+            ];
+            var lastAndNotScan = notScan.where((v) => v.isLastLabel).toList();
+            var lastLabelList = <String>[
+              for (var i = 0; i < lastAndNotScan.length; ++i)
+                lastAndNotScan[i].size ?? ''
+            ];
+            if (notScanLabelList.isNotEmpty && lastLabelList.isNotEmpty) {
+              errorDialog(
+                content: 'machine_dispatch_not_scanned_all_tips'.trArgs([
                   notScanLabelList.join(','),
-                ]),
-              );
-            } else if (lastLabelList.isNotEmpty) {
-              errorDialog(
-                content: 'machine_dispatch_not_scanned_last_tips'.trArgs([
                   lastLabelList.join(','),
                 ]),
               );
             } else {
-              var totalReport = 0.0;
-              for (var v in state.sizeItemList) {
-                if (v.getReportQty() < 0) {
-                  errorDialog(
-                    content:
-                        'machine_dispatch_input_size_report_qty_tips'.trArgs([
-                      v.size ?? '',
-                    ]),
-                  );
-                  return;
-                }
-                totalReport = totalReport.add(v.getReportQty());
-              }
-              if (totalReport == 0) {
+              if (notScanLabelList.isNotEmpty) {
                 errorDialog(
-                    content: 'machine_dispatch_input_report_qty_tips'.tr);
-                return;
+                  content: 'machine_dispatch_not_scanned_box_tips'.trArgs([
+                    notScanLabelList.join(','),
+                  ]),
+                );
+              } else if (lastLabelList.isNotEmpty) {
+                errorDialog(
+                  content: 'machine_dispatch_not_scanned_last_tips'.trArgs([
+                    lastLabelList.join(','),
+                  ]),
+                );
               } else {
-                if (statusReportedAndGenerate()) {
-                  askDialog(
+                var totalReport = 0.0;
+                for (var v in state.sizeItemList) {
+                  if (v.getReportQty() < 0) {
+                    errorDialog(
                       content:
-                          'machine_dispatch_worker_number_report_again_tips'.tr,
-                      confirm: () {
-                        Get.to(() => const MachineDispatchReportPage());
-                      });
+                          'machine_dispatch_input_size_report_qty_tips'.trArgs([
+                        v.size ?? '',
+                      ]),
+                    );
+                    return;
+                  }
+                  totalReport = totalReport.add(v.getReportQty());
+                }
+                if (totalReport == 0) {
+                  errorDialog(
+                      content: 'machine_dispatch_input_report_qty_tips'.tr);
+                  return;
                 } else {
-                  errorDialog(content: '');
+                  if (statusReportedAndGenerate()) {
+                    askDialog(
+                        content:
+                            'machine_dispatch_worker_number_report_again_tips'
+                                .tr,
+                        confirm: () {
+                          Get.to(() => const MachineDispatchReportPage())?.then((v){
+                            if(v== true){
+                              callback.call();
+                            }
+                          });
+                        });
+                  } else {
+                    Get.to(() => const MachineDispatchReportPage())?.then((v){
+                      if(v== true){
+                        callback.call();
+                      }
+                    });
+                  }
                 }
               }
             }
@@ -140,6 +166,19 @@ class MachineDispatchLogic extends GetxController {
         },
         error: (msg) => errorDialog(content: msg),
       );
+    });
+  }
+
+  gotoHandover({
+    required Function() callback,
+  }) {
+    state.handoverList.clear();
+    state.handoverList.add(HandoverInfo('当班交接人员'));
+    state.handoverList.add(HandoverInfo('接收尾数人员'));
+    Get.to(() => const MachineDispatchHandoverPage())?.then((v) {
+      if (v != null) {
+        callback.call();
+      }
     });
   }
 
@@ -447,14 +486,55 @@ class MachineDispatchLogic extends GetxController {
     );
   }
 
-  handoverShifts() {
-    if (state.detailsInfo?.stubBar1PrintFlag != 1) {
-      errorDialog(content: '料头一未打印');
-      return;
+  bool checkAllTotal() {
+    var reportQty = 0.0;
+    for (var v in state.sizeItemList) {
+      reportQty = reportQty.add(v.getReportQty());
     }
-    if (state.detailsInfo?.stubBar2PrintFlag != 1) {
+    if (reportQty < 0) {
+      showSnackBar(
+        message: '合计报工数小于0',
+        isWarning: true,
+      );
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  bool checkSizeTotal() {
+    if (state.sizeItemList.any((v) => v.getReportQty() < 0)) {
+      showSnackBar(
+        message: '含有尺码报工数小于0',
+        isWarning: true,
+      );
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  //验证料头
+  bool handoverShifts() {
+    var stuBar = true;
+    var stuBar2 = true;
+
+    if (state.detailsInfo?.stubBarName1 != '' &&
+        state.detailsInfo?.stubBar1PrintFlag != 1) {
+      errorDialog(content: '料头一未打印');
+      stuBar = false;
+    }
+
+    if (state.detailsInfo?.stubBarName2 != '' &&
+        state.detailsInfo?.stubBar2PrintFlag != 1) {
       errorDialog(content: '料头二未打印');
-      return;
+      stuBar2 = false;
+    }
+
+    if (stuBar && stuBar2) {
+      return true;
+    } else {
+      return false;
     }
   }
 
@@ -470,7 +550,7 @@ class MachineDispatchLogic extends GetxController {
     );
   }
 
-  //更改模具数
+//更改模具数
   changeMould(String size, String moulds, String qty) {
     for (var data in state.sizeItemList) {
       if (data.size == size) {
@@ -481,7 +561,7 @@ class MachineDispatchLogic extends GetxController {
     state.sizeItemList.refresh();
   }
 
-  //更改当日派工数量
+//更改当日派工数量
   changeTodayNum(String size, String qty) {
     for (var data in state.sizeItemList) {
       if (data.size == size) {
@@ -491,7 +571,7 @@ class MachineDispatchLogic extends GetxController {
     state.sizeItemList.refresh();
   }
 
-  //更改箱容
+//更改箱容
   changeCapacity(String size, String capacity) {
     for (var data in state.sizeItemList) {
       if (data.size == size) {
@@ -507,5 +587,16 @@ class MachineDispatchLogic extends GetxController {
         data.notFullQty = qty.toDoubleTry();
       }
     }
+  }
+
+  handover() {
+    state.handover(success: (mes) {
+      successDialog(
+        content: mes,
+        back: () {
+          Get.back(result: true);
+        },
+      );
+    });
   }
 }

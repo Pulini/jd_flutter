@@ -177,9 +177,9 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
                 if (state.leaderVerify.value) {
                   showMachineInputDialog(
                       data: data,
-                      maxMould: state.detailsInfo?.getProposalMoulds().floor() ?? 0,
-                      confirm: () => setState(() {})
-                  );
+                      maxMould:
+                          state.detailsInfo?.getProposalMoulds().floor() ?? 0,
+                      confirm: () => setState(() {}));
                 }
               },
             ),
@@ -193,8 +193,7 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
               click: () {
                 if (state.leaderVerify.value) {
                   showInputDayReportDialog(
-                      data: data,
-                      confirm: () => setState(() {}));
+                      data: data, confirm: () => setState(() {}));
                 }
               },
             ),
@@ -216,9 +215,7 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
               click: () {
                 if (state.leaderVerify.value) {
                   showInputCapacityDialog(
-                      data: data,
-                      confirm: () => setState(() {})
-                    );
+                      data: data, confirm: () => setState(() {}));
                 }
               },
             ),
@@ -245,8 +242,7 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
                   );
                 } else {
                   showInputLastNumDialog(
-                      data: data,
-                      confirm: () => setState(() {}));
+                      data: data, confirm: () => setState(() {}));
                 }
               },
             ),
@@ -589,7 +585,11 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
             CombinationButton(
               text: 'machine_dispatch_number_confirmation'.tr,
               isEnabled: state.detailsInfo?.barCodeList?.isNotEmpty == true,
-              click: () => logic.workerDispatchConfirmation(),
+              click: () => logic.workerDispatchConfirmation(
+                  isHandover: false,
+                  callback: () {
+                    refreshOrder();
+                  }),
               combination: Combination.middle,
             ),
             CombinationButton(
@@ -611,8 +611,16 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
             ),
             CombinationButton(
               text: 'machine_dispatch_handover_shifts'.tr,
-              isEnabled: logic.hasReported(),
-              click: () => logic.handoverShifts(),
+              // isEnabled: logic.canHandover(),
+              click: () {
+                if (logic.handoverShifts() && logic.checkAllTotal() && logic.checkSizeTotal()) {
+                  logic.workerDispatchConfirmation(
+                      isHandover: true,
+                      callback: () {
+                        refreshOrder();
+                      });
+                }
+              },
               combination: Combination.right,
             ),
           ],
@@ -631,12 +639,12 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
         actions: [
           Obx(() => state.hasDetails.value
               ? CombinationButton(
-            text: '打印机设置',
-            click: () => showPrintSetting(
-              context,
-            ),
-            combination: Combination.left,
-          )
+                  text: '打印机设置',
+                  click: () => showPrintSetting(
+                    context,
+                  ),
+                  combination: Combination.left,
+                )
               : Container()),
           Obx(() => state.hasDetails.value
               ? CombinationButton(

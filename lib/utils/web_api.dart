@@ -1109,7 +1109,7 @@ const webApiGetScWorkCardDetail =
 const webApiClearBarCodeAndBoxQty =
     'api/CompoundDispatching/ClearBarCodeAndBoxQtyJinZhen';
 
-//修改派工表_金臻 (产量汇报)
+//修改派工表_金臻 (产量汇报)(两班交接)
 const webApiUpdateScWorkCard =
     'api/CompoundDispatching/UpdateScWorkCardJinZhen';
 

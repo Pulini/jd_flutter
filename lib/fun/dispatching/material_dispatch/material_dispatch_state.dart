@@ -38,6 +38,7 @@ class MaterialDispatchState {
   var lastProcess = false.obs;
   var unStockIn = false.obs;
   var allInstruction = false.obs;
+  var isBigLabel = false.obs;
   var orderList = <MaterialDispatchInfo>[];
   var showOrderList = <MaterialDispatchInfo>[].obs;
 

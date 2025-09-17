@@ -229,7 +229,7 @@ showBillNoList(String data) {
 labelListDialog(
   BuildContext context,
   MaterialDispatchInfo mdi, {
-  required Function(MaterialDispatchInfo, LabelInfo) callback,
+  required Function(MaterialDispatchInfo, LabelInfo) printCallback,
   required Function() refreshCallBack,
 }) {
   var labelList = <LabelInfo>[].obs;
@@ -280,9 +280,7 @@ labelListDialog(
                                   width: 110,
                                   child: CombinationButton(
                                     text: 'material_dispatch_dialog_reprint'.tr,
-                                    click: () {
-                                      callback.call(mdi, data);
-                                    },
+                                    click: () =>printCallback.call(mdi, data),
                                     combination: Combination.left,
                                   ),
                                 ),
@@ -294,9 +292,7 @@ labelListDialog(
                                             .tr,
                                     click: () {
                                       askDialog(
-                                          content:
-                                              'material_dispatch_dialog_sure_delete_label'
-                                                  .tr,
+                                          content: 'material_dispatch_dialog_sure_delete_label'.tr,
                                           confirm: () {
                                             _deleteLabel(
                                               guid: data.guid!,
