@@ -223,7 +223,7 @@ Widget _dynamicLabelTemplate75xN({
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             SizedBox(
-              height: 19 * 5.5,
+              height: isBig? 27 * 5.5 :19 * 5.5,
               child: titleWidget,
             ),
             if (header != null) header,
@@ -651,7 +651,7 @@ Widget maintainLabelMixEnglishDynamicLabel({
 
 ///材料车间动态标签
 Widget materialWorkshopDynamicLabel({
-  required bool isBig,
+   bool isBig = false,
   required String qrCode,
   required String productName,
   required String materialName,
@@ -665,19 +665,19 @@ Widget materialWorkshopDynamicLabel({
   required String qty,
   required String unitName,
 }) {
-  var textStyle = const TextStyle(fontSize: 16);
+  var textStyle =  TextStyle(fontSize: isBig? 18: 16);
   return _dynamicLabelTemplate75xN(
     isBig: isBig,
     qrCode: qrCode,
-    title: Text(productName, style: const TextStyle(fontSize: 20)),
+    title: Text(productName, style: TextStyle(fontSize:isBig ? 22: 20)),
     subTitle: Text(materialName, style: textStyle),
     header: Text('部件：$partName($materialNumber)<$processName>'),
     table: Padding(
       padding: const EdgeInsets.only(left: 5, right: 5),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          for (var s in subList) Text(s, style: const TextStyle(fontSize: 14))
+          for (var s in subList) Text(s, style: TextStyle(fontSize: isBig? 16 : 14))
         ],
       ),
     ),

@@ -152,7 +152,7 @@ class MaterialDispatchLogic extends GetxController {
               .toShowString();
           if (state.allInstruction.value) {
             printLabel(
-              context:context,
+              context: context,
               data: submitData,
               billNo: subData.billNo!,
               color: subData.sapColorBatch!,
@@ -231,8 +231,8 @@ class MaterialDispatchLogic extends GetxController {
           }
         });
         var chunked = [
-          for (int i = 0; i < list.length; i += 4)
-            list.sublist(i, (i + 4).clamp(0, list.length))
+          for (int i = 0; i < list.length; i += 6)
+            list.sublist(i, (i + 6).clamp(0, list.length))
         ];
         var subList = <String>[];
         for (var data in chunked) {
@@ -245,22 +245,22 @@ class MaterialDispatchLogic extends GetxController {
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) => PreviewLabel(
-              labelWidget: materialWorkshopDynamicLabel(
-                isBig: state.isBigLabel.value,
-                qrCode: guid,
-                productName: data.productName ?? '',
-                materialName: data.materialName ?? '',
-                partName: data.partName ?? '',
-                materialNumber: data.materialNumber ?? '',
-                processName: data.processName ?? '',
-                subList: subList,
-                sapDecideArea: data.sapDecideArea ?? '',
-                color: color,
-                drillingCrewName: data.drillingCrewName ?? '',
-                qty: qty,
-                unitName: data.unitName ?? '',
-              ),
-            ),
+                labelWidget: materialWorkshopDynamicLabel(
+                  isBig: state.isBigLabel.value,
+                  qrCode: guid,
+                  productName: data.productName ?? '',
+                  materialName: data.materialName ?? '',
+                  partName: data.partName ?? '',
+                  materialNumber: data.materialNumber ?? '',
+                  processName: data.processName ?? '',
+                  subList: subList,
+                  sapDecideArea: data.sapDecideArea ?? '',
+                  color: color,
+                  drillingCrewName: data.drillingCrewName ?? '',
+                  qty: qty,
+                  unitName: data.unitName ?? '',
+                ),
+                isDynamic: true),
           ),
         );
       } else {
@@ -284,7 +284,7 @@ class MaterialDispatchLogic extends GetxController {
                 unitName: data.unitName ?? '',
                 pick: pick,
               ),
-              isDynamic: state.isBigLabel.value? true :false,
+              isDynamic: state.isBigLabel.value ? true : false,
             ),
           ),
         );
@@ -320,7 +320,6 @@ class MaterialDispatchLogic extends GetxController {
           ),
         ),
       );
-
     } else if (data.exitLabelType == '103') {
       Navigator.of(context).push(
         MaterialPageRoute(
@@ -394,7 +393,6 @@ class MaterialDispatchLogic extends GetxController {
           ),
         ),
       );
-
     }
   }
 }
