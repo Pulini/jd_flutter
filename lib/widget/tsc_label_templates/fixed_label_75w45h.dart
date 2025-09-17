@@ -1219,8 +1219,8 @@ Widget materialWorkshopFixedLabel({
     isBig: isBig,
     title: Text(productName, style: TextStyle(fontWeight:FontWeight.bold,fontSize: isBig? 25 :20)),
       subTitle: Text('$partName <$processName>    $toPrint',
-        style: const TextStyle(fontWeight:FontWeight.bold,fontSize: 18),maxLines: 2,),
-    content: Text('$materialName($materialNumber)', style:   TextStyle(fontWeight:FontWeight.bold,fontSize: isBig? 18 :16)),
+        style:  TextStyle(fontWeight:FontWeight.bold,fontSize: isBig? 24 : 18),maxLines: 2,),
+    content: Text('$materialName($materialNumber)', style:   TextStyle(fontWeight:FontWeight.bold,fontSize: isBig? 20 :16)),
     bottomLeft: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
       Text(drillingCrewName, style: textStyle)
     ]),
