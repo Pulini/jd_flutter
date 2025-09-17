@@ -29,8 +29,8 @@ const resultToUpdate = 3;
 const baseUrlForMES = 'https://geapp.goldemperor.com:1226/';
 
 //MES测试库
-const testUrlForMES = 'https://geapptest.goldemperor.com:1224/';
-// const testUrlForMES = 'https://geapptest.goldemperor.com:1207/';
+// const testUrlForMES = 'https://geapptest.goldemperor.com:1224/';
+const testUrlForMES = 'https://geapptest.goldemperor.com:1207/';
 
 //SAP正式库
 const baseUrlForSAP = 'https://erpprd01.goldemperor.com:8003/';
@@ -1109,7 +1109,7 @@ const webApiGetScWorkCardDetail =
 const webApiClearBarCodeAndBoxQty =
     'api/CompoundDispatching/ClearBarCodeAndBoxQtyJinZhen';
 
-//修改派工表_金臻 (产量汇报)
+//修改派工表_金臻 (产量汇报)(两班交接)
 const webApiUpdateScWorkCard =
     'api/CompoundDispatching/UpdateScWorkCardJinZhen';
 

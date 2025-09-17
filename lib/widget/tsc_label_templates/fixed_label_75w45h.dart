@@ -7,6 +7,7 @@ import 'package:qr_flutter/qr_flutter.dart';
 ///75*45大小
 Widget _fixedLabelTemplate75x45({
   required String qrCode,
+  bool isBig = false,
   Widget? title,
   Widget? subTitle,
   Widget? content,
@@ -117,8 +118,8 @@ Widget _fixedLabelTemplate75x45({
 
   return Container(
     color: Colors.white,
-    width: 75 * 5.5,
-    height: 45 * 5.5,
+    width: isBig ? 108 * 5.5 : 75 * 4.5,
+    height: isBig? 66 * 4.5: 45 * 5.5,
     child: Padding(
       padding: const EdgeInsets.all(4),
       child: Container(
@@ -1196,6 +1197,7 @@ Widget sapWmsSplitLabelOtherWarehouseLabel({
 
 ///材料车间固定标签
 Widget materialWorkshopFixedLabel({
+  bool isBig = false,
   required String qrCode,
   required String productName,
   required String materialName,
@@ -1211,13 +1213,14 @@ Widget materialWorkshopFixedLabel({
   required String unitName,
   required String pick,
 }) {
-  var textStyle =  const TextStyle(fontWeight:FontWeight.bold,fontSize: 13);
+  var textStyle =   TextStyle(fontWeight:FontWeight.bold,fontSize: isBig? 15:13);
   return _fixedLabelTemplate75x45(
     qrCode: qrCode,
-    title: Text(productName, style: const TextStyle(fontWeight:FontWeight.bold,fontSize: 20)),
-    subTitle: Text('$partName$toPrint<$processName>',
-        style: const TextStyle(fontWeight:FontWeight.bold,fontSize: 18)),
-    content: Text('$materialName($materialNumber)', style:  const TextStyle(fontWeight:FontWeight.bold,fontSize: 16)),
+    isBig: isBig,
+    title: Text(productName, style: TextStyle(fontWeight:FontWeight.bold,fontSize: isBig? 25 :20)),
+      subTitle: Text('$partName <$processName>    $toPrint',
+        style: const TextStyle(fontWeight:FontWeight.bold,fontSize: 18),maxLines: 2,),
+    content: Text('$materialName($materialNumber)', style:   TextStyle(fontWeight:FontWeight.bold,fontSize: isBig? 18 :16)),
     bottomLeft: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
       Text(drillingCrewName, style: textStyle)
     ]),

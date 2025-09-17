@@ -32,8 +32,8 @@ class ShowProcessPlanDetailInfo {
   double? lastMantissa;  //上班尾数
   double? mantissa;  //当班尾数
   double? allQty;  //单码小计
-  int? box;  //箱数
-  int maxBox=0;  //最大箱数
+  double? box;  //箱数
+  double maxBox=0;  //最大箱数
   double? capacity;  //箱容
   String? processFlow;  //制程
   String? bUoM;  //基本计量单位

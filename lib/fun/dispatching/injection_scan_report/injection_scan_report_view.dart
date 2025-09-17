@@ -74,7 +74,7 @@ class _InjectionScanReportPageState extends State<InjectionScanReportPage> {
           ),
           Expanded(
             child: _text(
-                mes: data.size=='合计'? data.allQty.toShowString():data.subtotal().toShowString(),
+                mes: data.allQty.toShowString(),
                 backColor: backColors,
                 head: false,
                 paddingNumber: 8),
@@ -243,8 +243,7 @@ class _InjectionScanReportPageState extends State<InjectionScanReportPage> {
           TextButton(
             //查询具体订单
             onPressed: () =>
-                logic.getScWorkCardDetail(
-                    dispatchNumber: state.dispatchNumber.value),
+                logic.getScWorkCardDetail(),
             child: Text('injection_scan_query'.tr),
           ),
         ],
@@ -328,9 +327,7 @@ class _InjectionScanReportPageState extends State<InjectionScanReportPage> {
                                     //成功后刷新界面
                                     content: s,
                                     back: () =>
-                                        logic.getScWorkCardDetail(
-                                            dispatchNumber:
-                                            state.dispatchNumber.value),
+                                        logic.getScWorkCardDetail(),
                                   ));
                         },
                       );

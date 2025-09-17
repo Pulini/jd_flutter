@@ -844,8 +844,9 @@ addDispatchWorker(DispatchProcessInfo data, Function() refresh) {
         title: Text('machine_dispatch_dialog_add_worker'.tr),
         content: SizedBox(
           width: 200,
+          height: 300,
           child: Obx(
-            () => Column(
+            () => ListView(children: [Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Center(
@@ -857,10 +858,10 @@ addDispatchWorker(DispatchProcessInfo data, Function() refresh) {
                       child: avatar.isNotEmpty
                           ? Image.network(avatar.value, fit: BoxFit.fill)
                           : Icon(
-                              Icons.account_circle,
-                              size: 150,
-                              color: Colors.grey.shade300,
-                            ),
+                        Icons.account_circle,
+                        size: 150,
+                        color: Colors.grey.shade300,
+                      ),
                     ),
                   ),
                 ),
@@ -871,9 +872,7 @@ addDispatchWorker(DispatchProcessInfo data, Function() refresh) {
                 NumberDecimalEditText(
                   controller: controller,
                   hint:
-                      'machine_dispatch_dialog_enter_allocation_number_tips'.tr,
-                  helperText: 'machine_dispatch_dialog_allocation_tips'
-                      .trArgs([surplusQty.toShowString()]),
+                  'machine_dispatch_dialog_enter_allocation_number_tips'.tr,
                   onChanged: (d) {
                     if (d > max) {
                       controller.text = max.toShowString();
@@ -884,7 +883,7 @@ addDispatchWorker(DispatchProcessInfo data, Function() refresh) {
                   },
                 )
               ],
-            ),
+            )],),
           ),
         ),
         actions: [
@@ -921,6 +920,85 @@ addDispatchWorker(DispatchProcessInfo data, Function() refresh) {
                 workerName: worker!.empName,
                 workerAvatar: worker!.picUrl,
                 dispatchQty: dispatchQty,
+                signature: null,
+              ));
+              Get.back();
+              refresh.call();
+            },
+            child: Text(
+              'dialog_default_confirm'.tr,
+            ),
+          ),
+          TextButton(
+            onPressed: () => Get.back(),
+            child: Text(
+              'dialog_default_back'.tr,
+              style: const TextStyle(color: Colors.grey),
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+addHandoverWorker(HandoverInfo data, Function() refresh) {
+  WorkerInfo? worker;
+  var avatar = ''.obs;
+  Get.dialog(
+    PopScope(
+      canPop: false,
+      child: AlertDialog(
+        title: Text('machine_dispatch_dialog_add_worker'.tr),
+        content: SizedBox(
+          width: 200,
+          height: 300,
+          child: Obx(
+                () => ListView(children: [Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Center(
+                  child: SizedBox(
+                    width: 150,
+                    height: 150,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(7),
+                      child: avatar.isNotEmpty
+                          ? Image.network(avatar.value, fit: BoxFit.fill)
+                          : Icon(
+                        Icons.account_circle,
+                        size: 150,
+                        color: Colors.grey.shade300,
+                      ),
+                    ),
+                  ),
+                ),
+                WorkerCheck(onChanged: (w) {
+                  worker = w;
+                  avatar.value = w?.picUrl ?? '';
+                }),
+              ],
+            )],),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              if (worker == null) {
+                showSnackBar(
+                  message:
+                  'machine_dispatch_dialog_enter_worker_number_tips'.tr,
+                  isWarning: true,
+                );
+                return;
+              }
+              data.handoverInfoDispatchList.clear();
+              data.handoverInfoDispatchList.add(DispatchInfo(
+                workerEmpID: worker!.empID,
+                workerNumber: worker!.empCode,
+                workerName: worker!.empName,
+                workerAvatar: worker!.picUrl,
+                dispatchQty: 0,
                 signature: null,
               ));
               Get.back();

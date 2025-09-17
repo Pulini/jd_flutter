@@ -9,15 +9,15 @@ import 'package:jd_flutter/widget/dialogs.dart';
 import 'machine_dispatch_dialog.dart';
 import 'machine_dispatch_logic.dart';
 
-class MachineDispatchReportPage extends StatefulWidget {
-  const MachineDispatchReportPage({super.key});
+class MachineDispatchHandoverPage extends StatefulWidget {
+  const MachineDispatchHandoverPage({super.key});
 
   @override
-  State<MachineDispatchReportPage> createState() =>
+  State<MachineDispatchHandoverPage> createState() =>
       _MachineDispatchReportPageState();
 }
 
-class _MachineDispatchReportPageState extends State<MachineDispatchReportPage> {
+class _MachineDispatchReportPageState extends State<MachineDispatchHandoverPage> {
   final logic = Get.find<MachineDispatchLogic>();
   final state = Get.find<MachineDispatchLogic>().state;
 
@@ -101,7 +101,7 @@ class _MachineDispatchReportPageState extends State<MachineDispatchReportPage> {
     );
   }
 
-  processItem(DispatchProcessInfo data) {
+  handoverItem(HandoverInfo data, int index) {
     return Container(
       height: 140,
       margin: const EdgeInsets.only(left: 5, right: 5, bottom: 10),
@@ -116,38 +116,10 @@ class _MachineDispatchReportPageState extends State<MachineDispatchReportPage> {
           Row(
             children: [
               expandedTextSpan(
-                hint: 'machine_dispatch_report_process'.tr,
-                text: '<${data.processNumber}> ${data.processName}',
+                hint: '',
+                text: data.personal,
                 fontSize: 20,
               ),
-              Text.rich(
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                TextSpan(
-                  children: [
-                    TextSpan(text: 'machine_dispatch_report_dispatched_1'.tr),
-                    TextSpan(
-                      text: data.dispatchList.length.toString(),
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.green,
-                      ),
-                    ),
-                    TextSpan(text: 'machine_dispatch_report_dispatched_2'.tr),
-                    TextSpan(
-                      text: data.getSurplus().toShowString(),
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: data.getSurplus() == 0
-                            ? Colors.green
-                            : data.getSurplus() < 0
-                                ? Colors.redAccent
-                                : Colors.blue,
-                      ),
-                    ),
-                  ],
-                ),
-              )
             ],
           ),
           Expanded(
@@ -156,17 +128,12 @@ class _MachineDispatchReportPageState extends State<MachineDispatchReportPage> {
                 Expanded(
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    itemCount: data.dispatchList.length,
+                    itemCount: data.handoverInfoDispatchList.length,
                     itemBuilder: (_, i) => workerItem(data, i),
                   ),
                 ),
                 GestureDetector(
-                  onTap: () => data.totalProduction > 1
-                      ? addDispatchWorker(data, () => setState(() {}))
-                      : errorDialog(
-                          content:
-                              'machine_dispatch_report_no_surplus_allocation_qty_tips'
-                                  .tr),
+                  onTap: () => addHandoverWorker(data, () => setState(() {})),
                   child: Container(
                     width: 50,
                     height: double.infinity,
@@ -189,8 +156,8 @@ class _MachineDispatchReportPageState extends State<MachineDispatchReportPage> {
     );
   }
 
-  workerItem(DispatchProcessInfo dpi, int index) {
-    var data = dpi.dispatchList[index];
+  workerItem(HandoverInfo dpi, int index) {
+    var data = dpi.handoverInfoDispatchList[index];
     var avatar = Padding(
       padding: const EdgeInsets.all(5),
       child: avatarPhoto(data.workerAvatar),
@@ -230,19 +197,13 @@ class _MachineDispatchReportPageState extends State<MachineDispatchReportPage> {
                     textColor: Colors.blue.shade900,
                     fontSize: 14,
                   ),
-                  textSpan(
-                    hint: 'machine_dispatch_report_production'.tr,
-                    text: data.dispatchQty.toShowString(),
-                    textColor: Colors.red,
-                    fontSize: 14,
-                  )
                 ],
               ),
             ),
             GestureDetector(
               onTap: () {
                 if (data.signature == null) {
-                  dpi.dispatchList.removeAt(index);
+                  dpi.handoverInfoDispatchList.removeAt(index);
                   setState(() {});
                 } else {
                   askDialog(
@@ -251,7 +212,7 @@ class _MachineDispatchReportPageState extends State<MachineDispatchReportPage> {
                       data.workerName ?? '',
                     ]),
                     confirm: () {
-                      dpi.dispatchList.removeAt(index);
+                      dpi.handoverInfoDispatchList.removeAt(index);
                       setState(() {});
                     },
                   );
@@ -292,9 +253,9 @@ class _MachineDispatchReportPageState extends State<MachineDispatchReportPage> {
     return pageBody(
       actions: [
         CombinationButton(
-            text: 'machine_dispatch_report_report'.tr,
-            click: () => askDialog(content: '确定要工资汇报吗?',confirm: (){
-              logic.report();
+            text: '交接',
+            click: () => askDialog(content: '确认要进行交接吗?',confirm: (){
+              logic.handover();
             }))
       ],
       body: Column(
@@ -316,9 +277,9 @@ class _MachineDispatchReportPageState extends State<MachineDispatchReportPage> {
             child: Obx(
               () => ListView.builder(
                 padding: const EdgeInsets.only(left: 5, right: 5),
-                itemCount: state.processList.length,
+                itemCount: state.handoverList.length,
                 itemBuilder: (context, index) =>
-                    processItem(state.processList[index]),
+                    handoverItem(state.handoverList[index],index),
               ),
             ),
           ),

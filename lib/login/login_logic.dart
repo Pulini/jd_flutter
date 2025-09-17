@@ -93,7 +93,7 @@ class LoginLogic extends GetxController {
       return;
     }
     state.login(
-      jiGuangID: '',
+      jiGuangID: 'JID_Empty',
       phone: machine,
       password: password,
       vCode: '',

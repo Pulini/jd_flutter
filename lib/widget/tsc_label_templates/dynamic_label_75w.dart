@@ -126,8 +126,8 @@ Widget _createTableWidget({
             alignment: j == 0
                 ? Alignment.centerLeft
                 : i == 0 || (table[i].isEmpty ? i - 1 : i) % (maxRow + 1) == 0
-                ? Alignment.center
-                : Alignment.centerRight,
+                    ? Alignment.center
+                    : Alignment.centerRight,
             flex: j == 0 ? 9 : 4,
             padding: j == 0 ? null : const EdgeInsets.all(3),
             isBold: true,
@@ -153,6 +153,7 @@ Widget _createTableWidget({
 ///75 x N（高度由内容决定）
 Widget _dynamicLabelTemplate75xN({
   required String qrCode,
+  bool isBig = false,
   Widget? title,
   Widget? subTitle,
   Widget? header,
@@ -208,7 +209,7 @@ Widget _dynamicLabelTemplate75xN({
 
   return Container(
     color: Colors.white,
-    width: 75 * 5.5,
+    width: isBig ? 108 * 5.5 : 75 * 5.5,
     child: Padding(
       padding: const EdgeInsets.all(4),
       child: Container(
@@ -305,14 +306,14 @@ Widget maintainLabelSizeMaterialChineseDynamicLabel({
               child: Text(
                 pageNumber,
                 style:
-                const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
               ),
             ),
             Expanded(
               child: Text(
                 deliveryDate,
                 style:
-                const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
               ),
             ),
           ],
@@ -401,7 +402,7 @@ Widget maintainLabelSizeMaterialEnglishDynamicLabel({
         ),
       ),
       table:
-      _createTableWidget(titleText: 'Size', totalText: 'Total', map: map),
+          _createTableWidget(titleText: 'Size', totalText: 'Total', map: map),
       footer: Padding(
         padding: const EdgeInsets.only(left: 5, right: 5),
         child: Column(
@@ -509,14 +510,14 @@ Widget maintainLabelMixChineseDynamicLabel({
               child: Text(
                 pageNumber,
                 style:
-                const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
               ),
             ),
             Expanded(
               child: Text(
                 deliveryDate,
                 style:
-                const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
               ),
             ),
           ],
@@ -604,7 +605,7 @@ Widget maintainLabelMixEnglishDynamicLabel({
         ),
       ),
       table:
-      _createTableWidget(titleText: 'Size', totalText: 'Total', map: map),
+          _createTableWidget(titleText: 'Size', totalText: 'Total', map: map),
       footer: Padding(
         padding: const EdgeInsets.only(left: 5, right: 5),
         child: Column(
@@ -650,6 +651,7 @@ Widget maintainLabelMixEnglishDynamicLabel({
 
 ///材料车间动态标签
 Widget materialWorkshopDynamicLabel({
+  required bool isBig,
   required String qrCode,
   required String productName,
   required String materialName,
@@ -665,6 +667,7 @@ Widget materialWorkshopDynamicLabel({
 }) {
   var textStyle = const TextStyle(fontSize: 16);
   return _dynamicLabelTemplate75xN(
+    isBig: isBig,
     qrCode: qrCode,
     title: Text(productName, style: const TextStyle(fontSize: 20)),
     subTitle: Text(materialName, style: textStyle),
@@ -700,4 +703,3 @@ Widget materialWorkshopDynamicLabel({
     ),
   );
 }
-

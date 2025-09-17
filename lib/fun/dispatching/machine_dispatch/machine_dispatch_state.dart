@@ -8,6 +8,8 @@ import 'package:jd_flutter/bean/http/response/sap_label_info.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
+import 'package:jd_flutter/widget/custom_widget.dart' show showSnackBar;
+import 'package:jd_flutter/widget/dialogs.dart';
 
 class MachineDispatchState {
   var hasDetails = false.obs;
@@ -21,6 +23,7 @@ class MachineDispatchState {
   var surplusMaterialList = <Map<String, dynamic>>[].obs;
 
   var processList = <DispatchProcessInfo>[].obs;
+  var handoverList = <HandoverInfo>[].obs;
   var processSelect = 0.obs;
 
   var historyInfo = <MachineDispatchHistoryInfo>[].obs;
@@ -147,10 +150,10 @@ class MachineDispatchState {
               'InterID': detailsInfo!.interID,
             }
         ];
-        hasDetails.value=true;
+        hasDetails.value = true;
         success.call();
       } else {
-        hasDetails.value=false;
+        hasDetails.value = false;
         detailsInfo = null;
         sizeItemList.clear();
         selectList = [];
@@ -197,7 +200,9 @@ class MachineDispatchState {
         ];
         labelList.value = [for (var v in list) ...v.item ?? []];
         detailsInfo?.items?.forEach((v1) {
-          v1.labelQty = labelList.where((v2) => v2.size == v1.size).length;
+          v1.labelQty = labelList
+              .where((v2) => v2.size == v1.size)
+              .length;
         });
         labelErrorMsg = '';
         success.call();
@@ -233,7 +238,7 @@ class MachineDispatchState {
               processes: historyInfo[index].processFlow ?? '',
               qty: v2.qty ?? 0,
               size: v2.size ?? '',
-              factoryType: historyInfo[index].factoryType??'',
+              factoryType: historyInfo[index].factoryType ?? '',
               date: v1.date ?? '',
               materialName: historyInfo[index].materialName ?? '',
               unit: v2.unit ?? '',
@@ -242,12 +247,12 @@ class MachineDispatchState {
               dispatchNumber: nowDispatchNumber.value,
               decrementNumber: historyInfo[index].decrementNumber ?? '',
               isLastLabel: v2.isLastLabel,
-              isEnglish: v2.type=='01',
+              isEnglish: v2.type == '01',
               specifications: v2.specifications,
-              netWeight:v2.netWeight.toDoubleTry(),
-              grossWeight:v2.grossWeight.toDoubleTry(),
-              englishName:v2.englishName??'',
-              englishUnit:v2.englishUnit??'',
+              netWeight: v2.netWeight.toDoubleTry(),
+              grossWeight: v2.grossWeight.toDoubleTry(),
+              englishName: v2.englishName ?? '',
+              englishUnit: v2.englishUnit ?? '',
             ));
           });
         }
@@ -367,7 +372,7 @@ class MachineDispatchState {
               'BUoM': detailsInfo!.items![i].bUoM,
               //MEINS 基本计量单位
               'ConfirmCurrentWorkingHours':
-                  detailsInfo!.items![i].confirmCurrentWorkingHours,
+              detailsInfo!.items![i].confirmCurrentWorkingHours,
               //ISM01 确认当前工时
               'WorkingHoursUnit': detailsInfo!.items![i].workingHoursUnit,
               //工时单位
@@ -429,7 +434,7 @@ class MachineDispatchState {
           'ZBARCODE_TYPE': isEnglish ? '01' : '',
           'item': [
             {
-              'ZDHMNG':  isEnglish ? weight : '',
+              'ZDHMNG': isEnglish ? weight : '',
               'MATNR': sizeMaterialNumber,
               'SIZE1_ATINN': size,
               'MENGE': printQty,
@@ -536,5 +541,58 @@ class MachineDispatchState {
         error.call(response.message ?? 'query_default_error'.tr);
       }
     });
+  }
+
+  //两班交接
+  handover({
+    required Function(String msg) success,
+  }) {
+    if (handoverList
+        .any((data) => data.handoverInfoDispatchList.isEmpty)) {
+      showSnackBar(message: '交接人员为空！');
+    } else if (handoverList.any((data)=> data.handoverInfoDispatchList[0].signature == null)) {
+      showSnackBar(message: '含有未签字人员！');
+    } else {
+      httpPost(
+        method: webApiUpdateScWorkCard,
+        loading: '正在交接...',
+        body: {
+          'InterID': detailsInfo?.interID,
+          'NextShiftEmpID': handoverList[0].handoverInfoDispatchList[0]
+              .workerEmpID,
+          'OnDutyEmpID': handoverList[1].handoverInfoDispatchList[0]
+              .workerEmpID,
+          'Items': [
+            for (var item in sizeItemList
+                .where((data) => data.size != '合计')
+                .toList())
+              {
+                'Capacity': "NULL",
+                'Mould': "NULL",
+                'TodayDispatchQty': "NULL",
+                'EntryID': item.entryID.toString(),
+                'BoxesQty': item.boxesQty.toString(),
+                'NotFullQty': 'NULL',
+                'MantissaFlag': item.mantissaIdentification == true ? '1' : '0',
+              }
+          ],
+          'PictureList': [
+            for (var item in handoverList)
+              {
+                'EmpCode': item.handoverInfoDispatchList[0].workerEmpID,
+                'Photo': base64Encode(
+                    item.handoverInfoDispatchList[0].signature!.buffer
+                        .asUint8List()),
+              }
+          ],
+        },
+      ).then((response) {
+        if (response.resultCode == resultSuccess) {
+          success.call(response.message ?? '');
+        } else {
+          errorDialog(content: response.message);
+        }
+      });
+    }
   }
 }

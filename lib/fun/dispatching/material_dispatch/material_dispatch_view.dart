@@ -6,6 +6,7 @@ import 'package:jd_flutter/bean/http/response/material_dispatch_label_detail.dar
 import 'package:jd_flutter/fun/dispatching/material_dispatch/material_dispatch_state.dart';
 import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
+import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/check_box_widget.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
@@ -150,10 +151,10 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
             children: [
               Expanded(
                 child: GestureDetector(
-                  onTap: (){
-                   if(!data.stuffNumber.isNullOrEmpty()){
-                     msgDialog(content: data.stuffNumber);
-                   }
+                  onTap: () {
+                    if (!data.stuffNumber.isNullOrEmpty()) {
+                      msgDialog(content: data.stuffNumber);
+                    }
                   },
                   child: Text.rich(
                     overflow: TextOverflow.ellipsis,
@@ -380,7 +381,7 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
               CombinationButton(
                 text: 'material_dispatch_label_list'.tr,
                 click: () =>
-                    labelListDialog(context, data, callback: (info, label) {
+                    labelListDialog(context,data, printCallback: (info, label) {
                   var bill = '';
                   var batch = '';
                   if (info.children!.isNotEmpty) {
@@ -388,6 +389,7 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
                     batch = info.children![0].sapColorBatch!;
                   }
                   logic.printLabel(
+                      context: context,
                       data: info,
                       billNo: bill,
                       color: batch,
@@ -452,6 +454,7 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
           subData,
           (d, longQty, wideQty, heightQty, gwQty, nwQty) {
             logic.subItemReport(
+                context:context,
               qty: d.toShowString(),
               titlePosition: titlePosition,
               clickPosition: position,
@@ -490,7 +493,9 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
           data,
           subData,
           (d, longQty, wideQty, heightQty, gwQty, nwQty) {
+            logger.f(subData.billNo);
             logic.subItemReport(
+              context: context,
               qty: d.toShowString(),
               titlePosition: titlePosition,
               clickPosition: position,
@@ -667,6 +672,11 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
               onChanged: (c) => state.allInstruction.value = c,
               name: 'material_dispatch_btn_print_all'.tr,
               value: state.allInstruction.value,
+            )),
+        Obx(() => CheckBox(
+              onChanged: (c) => state.isBigLabel.value = c,
+              name: '是否国内新标签',
+              value: state.isBigLabel.value,
             )),
       ],
       query: () => _query(),
