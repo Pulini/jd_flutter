@@ -72,7 +72,6 @@ class AppInitService extends GetxService {
       if (GetPlatform.isMobile) {
         await initDatabase();
       }
-      await deleteExistsAPK();
     } catch (e) {
       debugPrint('应用初始化过程中出现错误: $e');
     } finally {

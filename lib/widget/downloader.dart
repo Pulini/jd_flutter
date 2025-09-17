@@ -99,16 +99,15 @@ class Downloader {
     );
     getFileSavePath(url).then((path) async {
       savePath = path;
-      var file = File(path);
+      startDownload();
       //是apk的话需要检查文件是否已下载，且不关闭弹窗。否则一律走下载流程
-      if (path.endsWith('.apk') &&
-          await file.exists() &&
-          await file.length() > 0) {
-        progress.value = 1;
-        completed.call(savePath);
-      } else {
-        startDownload();
-      }
+      // if (path.endsWith('.apk') &&
+      //     await file.exists() &&
+      //     await file.length() > 0) {
+      //   progress.value = 1;
+      // } else {
+      //   startDownload();
+      // }
     });
   }
 

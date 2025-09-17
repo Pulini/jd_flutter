@@ -337,7 +337,7 @@ class RouteConfig {
   //sap注塑入库
   static Routes sapInjectionMoldingStockIn = Routes(
     '/sap_injection_molding_stock_in',
-    201,
+    202,
     const SapInjectionMoldingStockInPage(),
   );
 

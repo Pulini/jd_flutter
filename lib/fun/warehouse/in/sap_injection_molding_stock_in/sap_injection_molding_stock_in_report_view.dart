@@ -180,9 +180,7 @@ class _SapInjectionMoldingStockInReportPageState
           expandedFrameText(
             flex: 2,
             text: state.reportList
-                .map((v) => v
-                    .map((v2) => v2.receivedQty ?? 0)
-                    .reduce((a, b) => a.add(b)))
+                .map((v) => v.first.receivedQty ?? 0)
                 .reduce((a, b) => a.add(b))
                 .toShowString(),
             backgroundColor: Colors.white,
@@ -193,8 +191,7 @@ class _SapInjectionMoldingStockInReportPageState
           expandedFrameText(
             flex: 2,
             text: state.reportList
-                .map((v) =>
-                    v.map((v2) => v2.reportQty ?? 0).reduce((a, b) => a.add(b)))
+                .map((v) => v.first.reportQty ?? 0)
                 .reduce((a, b) => a.add(b))
                 .toShowString(),
             backgroundColor: Colors.white,

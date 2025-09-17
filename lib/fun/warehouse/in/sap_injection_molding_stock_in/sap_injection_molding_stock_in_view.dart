@@ -35,31 +35,21 @@ class _SapInjectionMoldingStockInPageState
       margin: const EdgeInsets.only(left: 4, right: 4, bottom: 10),
       padding: const EdgeInsets.only(left: 4, right: 4),
       decoration: BoxDecoration(
-        color: bci.isUsed ? Colors.grey.shade300 : Colors.blue.shade100,
+        color: Colors.blue.shade100,
         borderRadius: BorderRadius.circular(10),
-        border: bci.isUsed
-            ? Border.all(color: Colors.red, width: 2)
-            : Border.all(color: Colors.blue.shade300, width: 2),
+        border: Border.all(color: Colors.blue.shade300, width: 2),
       ),
-      child: Row(
-        children: [
-          Expanded(
-            child: bci.palletNo?.isNotEmpty == true
-                ? Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      barCode,
-                      Text(bci.palletNo ?? ''),
-                    ],
-                  )
-                : barCode,
-          ),
-          if (bci.isUsed)
-            Text(
-              'sap_injection_molding_stock_in_submitted'.tr,
-              style: const TextStyle(color: Colors.red),
-            ),
-        ],
+      child: SizedBox(
+        width: double.infinity,
+        child: bci.palletNo?.isNotEmpty == true
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  barCode,
+                  Text(bci.palletNo ?? ''),
+                ],
+              )
+            : barCode,
       ),
     );
   }

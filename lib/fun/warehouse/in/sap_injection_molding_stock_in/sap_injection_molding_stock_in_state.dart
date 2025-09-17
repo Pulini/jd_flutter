@@ -21,7 +21,7 @@ class SapInjectionMoldingStockInState {
 
   SapInjectionMoldingStockInState() {
     BarCodeInfo.getSave(
-      type:  BarCodeReportType.injectionMoldingStockIn.text,
+      type: BarCodeReportType.injectionMoldingStockIn.text,
       callback: (list) => barCodeList.value = list,
     );
   }
@@ -89,7 +89,6 @@ class SapInjectionMoldingStockInState {
         reportedList.clear();
         error.call(response.message ?? '');
       }
-
     });
   }
 
@@ -136,6 +135,7 @@ class SapInjectionMoldingStockInState {
     required Function(String) success,
     required Function(String) error,
   }) {
+
     sapPost(
       loading: 'sap_injection_molding_stock_in_submitting_stock_in'.tr,
       method: webApiSapInjectionMoldingStockIn,
@@ -144,27 +144,27 @@ class SapInjectionMoldingStockInState {
         'BUDAT': postingDate,
         'ITEM': [
           for (var item in reportList)
-            {
-              'DISPATCH_NO': item[0].dispatchNumber,
-              'DISPATCH_ITEM': item[0].dispatchLineNumber,
-              'WEMNG': item
-                  .map((v) => v.dispatchQty ?? 0)
-                  .reduce((a, b) => a.add(b)),
-              'MENGE': item
-                  .map((v) => v.dispatchQty ?? 0)
-                  .reduce((a, b) => a.add(b)),
-              'WERKS': item[0].factoryNo,
-              'AUFNR': item[0].productionOrderNo,
-              'LGORT': '1101',
-              'USNAM': userInfo?.number,
-              'ZNAME_CN': userInfo?.name,
-              'ZNAME_EN': '',
-              'MEINS': item[0].basicUnit,
-              'MATNR': item[0].materialCode,
-              'ZFTRAYNO': item[0].palletNumber,
-              'ZBQID': item[0].labelNumber,
-              'ZLOCAL': '9999',
-            }
+            for (var sub in item)
+              {
+                'DISPATCH_NO': sub.dispatchNumber ?? '',
+                'DISPATCH_ITEM': sub.dispatchLineNumber ?? '',
+                'WEMNG': item
+                    .map((v) => v.dispatchQty ?? 0)
+                    .reduce((a, b) => a.add(b))
+                    .toShowString(),
+                'MENGE': sub.dispatchQty.toShowString(),
+                'WERKS': sub.factoryNo ?? '',
+                'AUFNR': sub.productionOrderNo ?? '',
+                'LGORT': '1101',
+                'USNAM': userInfo?.number ?? '',
+                'ZNAME_CN': userInfo?.name ?? '',
+                'ZNAME_EN': '',
+                'MEINS': sub.basicUnit ?? '',
+                'MATNR': sub.materialCode ?? '',
+                'ZFTRAYNO': sub.palletNumber ?? '',
+                'ZBQID': sub.labelNumber ?? '',
+                'ZLOCAL': '9999',
+              }
         ],
         'PICTURE': [
           {
