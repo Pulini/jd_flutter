@@ -669,9 +669,9 @@ Widget materialWorkshopDynamicLabel({
   return _dynamicLabelTemplate75xN(
     isBig: isBig,
     qrCode: qrCode,
-    title: Text(productName, style: TextStyle(fontSize:isBig ? 22: 20)),
+    title: Text(productName, style: TextStyle(fontSize:isBig ? 28: 20)),
     subTitle: Text(materialName, style: textStyle),
-    header: Text('部件：$partName($materialNumber)<$processName>'),
+    header: Text('部件：$partName($materialNumber)<$processName>',style: textStyle,),
     table: Padding(
       padding: const EdgeInsets.only(left: 5, right: 5),
       child: Column(
