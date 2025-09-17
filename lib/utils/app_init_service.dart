@@ -10,7 +10,6 @@ import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/home/home_view.dart';
 import 'package:jd_flutter/login/login_view.dart';
 import 'package:jd_flutter/utils/utils.dart';
-import 'package:jd_flutter/widget/downloader.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
