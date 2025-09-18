@@ -371,25 +371,17 @@ class InjectionScanReportLogic extends GetxController {
   findSizeData(String code) {
     logger.f('扫到的贴标：$code');
     if (state.showBarCodeList.isNotEmpty) {
-      logger.f('-----------0---------');
       if (code.length == 32) {
-        logger.f('-----------1---------');
         if (state.showBarCodeList.every((list) => list.barCode != code)) {
-          logger.f('-----------2---------');
           //找不到条码
           showSnackBar(message: 'injection_scan_unable_find_barcode'.tr);
         } else {
-          logger.f('-----------3---------');
           for (var v in state.showBarCodeList) {
             if (v.barCode == code && v.use == false) {
-              logger.f('找到条码了--------');
               for (var c in state.showDataList) {
                 if (c.dispatchNumber == v.dispatchNo && c.size == v.size) {
-                  logger.f('显示数据找到了--------');
                   if (c.capacity == v.qty.toDoubleTry()) {
-                    logger.f('箱容匹配成功--------');
                     if ((c.box! + (1.0)) <= c.maxBox) {
-                      logger.f('未超过最大箱--------');
                       c.box = c.box! + 1;
                       v.use = true;
                       showScanTips();
@@ -413,11 +405,9 @@ class InjectionScanReportLogic extends GetxController {
           }
         }
       } else {
-        logger.f('-----------4---------');
         showSnackBar(message: 'injection_scan_scan_real_label'.tr);
       }
     } else {
-      logger.f('-----------5---------');
       showSnackBar(message: 'injection_scan_no_label_data'.tr);
     }
   }

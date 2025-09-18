@@ -26,7 +26,7 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
             list,
             (mdi) {
               state.nowDispatchNumber.value = mdi.dispatchNumber ?? '';
-              logic.refreshWorkCardDetail();
+              logic.refreshWorkCardDetail(refreshUI: () => setState(() {}));
             },
           );
         } else {
@@ -611,9 +611,11 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
             ),
             CombinationButton(
               text: 'machine_dispatch_handover_shifts'.tr,
-              // isEnabled: logic.canHandover(),
+              isEnabled: logic.canHandover(),
               click: () {
-                if (logic.handoverShifts() && logic.checkAllTotal() && logic.checkSizeTotal()) {
+                if (logic.handoverShifts() &&
+                    logic.checkAllTotal() &&
+                    logic.checkSizeTotal()) {
                   logic.workerDispatchConfirmation(
                       isHandover: true,
                       callback: () {
@@ -652,7 +654,8 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
                   click: () => showSurplusMaterialListDialog(
                     context,
                     print: (code, name, detail) {
-                      logic.printMaterialHeadLabel(code, name, detail);
+                      logic.printMaterialHeadLabel(code, name, detail,
+                          callback: () => setState(() {}));
                     },
                   ),
                   combination: Combination.middle,
@@ -686,7 +689,8 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
           Obx(() => state.nowDispatchNumber.value.isNotEmpty
               ? CombinationButton(
                   text: 'machine_dispatch_refresh'.tr,
-                  click: () => logic.refreshWorkCardDetail(),
+                  click: () => logic.refreshWorkCardDetail(
+                      refreshUI: () => setState(() {})),
                   combination: Combination.right,
                 )
               : Container())

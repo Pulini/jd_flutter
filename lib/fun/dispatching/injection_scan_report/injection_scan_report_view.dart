@@ -74,7 +74,7 @@ class _InjectionScanReportPageState extends State<InjectionScanReportPage> {
           ),
           Expanded(
             child: _text(
-                mes: data.allQty.toShowString(),
+                mes: data.size == '合计'? data.allQty.toShowString() : data.subtotal().toShowString(),
                 backColor: backColors,
                 head: false,
                 paddingNumber: 8),
