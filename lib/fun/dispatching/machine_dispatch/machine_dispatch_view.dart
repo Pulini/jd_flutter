@@ -665,14 +665,10 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
               ? CombinationButton(
                   text: 'machine_dispatch_label_list'.tr,
                   click: () {
-                    if (state.labelErrorMsg.isNotEmpty) {
-                      errorDialog(content: state.labelErrorMsg);
-                    } else {
-                      showLabelListDialog(
-                        context: context,
-                        print: (label) => logic.printLabel(label),
-                      );
-                    }
+                    showLabelListDialog(
+                      context: context,
+                      print: (label) => logic.printLabel(label),
+                    );
                   },
                   combination: Combination.middle,
                 )
