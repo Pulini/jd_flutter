@@ -146,15 +146,16 @@ class MachineDispatchLogic extends GetxController {
                             'machine_dispatch_worker_number_report_again_tips'
                                 .tr,
                         confirm: () {
-                          Get.to(() => const MachineDispatchReportPage())?.then((v){
-                            if(v== true){
+                          Get.to(() => const MachineDispatchReportPage())
+                              ?.then((v) {
+                            if (v == true) {
                               callback.call();
                             }
                           });
                         });
                   } else {
-                    Get.to(() => const MachineDispatchReportPage())?.then((v){
-                      if(v== true){
+                    Get.to(() => const MachineDispatchReportPage())?.then((v) {
+                      if (v == true) {
                         callback.call();
                       }
                     });
@@ -337,7 +338,11 @@ class MachineDispatchLogic extends GetxController {
   }
 
   printMaterialHeadLabel(
-      String code, String name, MachineDispatchDetailsInfo details) {
+    String code,
+    String name,
+    MachineDispatchDetailsInfo details, {
+    required Function() callback,
+  }) {
     labelForSurplusMaterial(
             qrCode: jsonEncode({
               'DispatchNumber': details.dispatchNumber,
@@ -514,7 +519,7 @@ class MachineDispatchLogic extends GetxController {
     }
   }
 
-  //验证料头
+//验证料头
   bool handoverShifts() {
     var stuBar = true;
     var stuBar2 = true;
