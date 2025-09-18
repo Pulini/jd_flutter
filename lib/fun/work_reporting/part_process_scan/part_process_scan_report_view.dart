@@ -178,7 +178,7 @@ class _PartProcessScanReportPageState extends State<PartProcessScanReportPage>
         ),
         expandedFrameText(
           flex: 10,
-          text: item.mtono ?? '',
+          text: item.instruction ?? '',
           backgroundColor: Colors.white,
         ),
         expandedFrameText(
@@ -188,7 +188,7 @@ class _PartProcessScanReportPageState extends State<PartProcessScanReportPage>
         ),
         expandedFrameText(
           flex: 7,
-          text: item.mtonoQty.toShowString(),
+          text: item.instructionQty.toShowString(),
           backgroundColor: Colors.white,
         ),
         expandedFrameText(
@@ -206,7 +206,7 @@ class _PartProcessScanReportPageState extends State<PartProcessScanReportPage>
         ),
         expandedFrameText(
           flex: 10,
-          text: item.mtono ?? '',
+          text: item.instruction ?? '',
           backgroundColor: Colors.orange.shade100,
         ),
         expandedFrameText(
@@ -216,7 +216,7 @@ class _PartProcessScanReportPageState extends State<PartProcessScanReportPage>
         ),
         expandedFrameText(
           flex: 7,
-          text: item.mtonoQty.toShowString(),
+          text: item.instructionQty.toShowString(),
           backgroundColor: Colors.orange.shade100,
         ),
         expandedFrameText(
@@ -244,7 +244,7 @@ class _PartProcessScanReportPageState extends State<PartProcessScanReportPage>
         ),
         expandedFrameText(
           flex: 7,
-          text: item.mtonoQty.toShowString(),
+          text: item.instructionQty.toShowString(),
           backgroundColor: Colors.greenAccent.shade100,
         ),
         expandedFrameText(

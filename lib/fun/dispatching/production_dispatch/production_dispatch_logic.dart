@@ -349,27 +349,55 @@ class ProductionDispatchLogic extends GetxController {
           if (data.workCardList?.isEmpty == true) {
             errorDialog(content: 'production_dispatch_no_process_list'.tr);
           } else {
-            state.workCardTitle.value = data.workCardTitle ?? WorkCardTitle();
-            state.batchWorkProcedure = data.workCardList!;
             var workProcedure = <WorkCardList>[];
+            var batchWorkProcedure = <WorkCardList>[];
+            state.workCardTitle.value = data.workCardTitle ?? WorkCardTitle();
             groupBy(data.workCardList!, (v) => v.processNumber).forEach((k, v) {
-              var qty = v.map((v2) => v2.qty ?? 0).reduce((a, b) => a.add(b));
-              var finishQty =
-                  v.map((v2) => v2.finishQty ?? 0).reduce((a, b) => a.add(b));
-              var mustQty =
-                  v.map((v2) => v2.mustQty ?? 0).reduce((a, b) => a.add(b));
-
               workProcedure.add(WorkCardList(
-                mustQty: mustQty,
-                qty: qty,
-                finishQty: finishQty,
+                mustQty: v.length == 1
+                    ? v.first.mustQty
+                    : v.map((v2) => v2.mustQty ?? 0).reduce((a, b) => a.add(b)),
+                qty: v.length == 1
+                    ? v.first.qty
+                    : v.map((v2) => v2.qty ?? 0).reduce((a, b) => a.add(b)),
+                finishQty: v.length == 1
+                    ? v.first.finishQty
+                    : v
+                        .map((v2) => v2.finishQty ?? 0)
+                        .reduce((a, b) => a.add(b)),
                 processNumber: v.first.processNumber,
                 processName: v.first.processName,
                 isOpen: v.any((v3) => v3.isOpen == 1) ? 1 : 0,
                 routingID: v.first.routingID,
               ));
+
+              groupBy(v, (v2) => v2.uniqueID()).forEach((k2, v2) {
+                if (v2.length == 1) {
+                  batchWorkProcedure.add(v2.first);
+                } else {
+                  batchWorkProcedure.add(
+                    v2.first.copy()
+                      ..qty = v2.length == 1
+                          ? v2.first.qty
+                          : v2
+                              .map((v3) => v3.qty ?? 0)
+                              .reduce((a, b) => a.add(b))
+                      ..finishQty = v2.length == 1
+                          ? v2.first.finishQty
+                          : v2
+                              .map((v3) => v3.finishQty ?? 0)
+                              .reduce((a, b) => a.add(b))
+                      ..mustQty = v2.length == 1
+                          ? v2.first.mustQty
+                          : v2
+                              .map((v3) => v3.mustQty ?? 0)
+                              .reduce((a, b) => a.add(b)),
+                  );
+                }
+              });
             });
             state.workProcedure.value = workProcedure;
+            state.batchWorkProcedure = batchWorkProcedure;
             Get.to(() => const ProductionDispatchDetailPage());
           }
         },
@@ -947,26 +975,40 @@ class ProductionDispatchLogic extends GetxController {
       errorDialog(content: msg.join('\r\n'));
     }
   }
-  _clearWorkerDispatch(){
+
+  _clearWorkerDispatch() {
     for (var v in state.workProcedure) {
       for (var v2 in v.dispatch) {
-        v2.dispatchQty=0;
+        v2.dispatchQty = 0;
       }
     }
   }
+
+  List<WorkCardList> _workProcedure() {
+    var selectedWorkProcedure = <WorkCardList>[];
+    for (var wp in state.workProcedure.where((v) => v.isOpen == 1)) {
+      state.batchWorkProcedure
+          .where(
+        (v) => v.processNumber == wp.processNumber,
+      )
+          .forEach((bwp) {
+        selectedWorkProcedure.add(bwp.copy()..dispatch = wp.dispatch);
+      });
+    }
+    return selectedWorkProcedure;
+  }
+
   productionDispatch() {
     _clearWorkerDispatch();
     if (state.batchWorkProcedure.isNotEmpty) {
       //多工单计工
       var mapList = <Map>[];
-      for (var wp in state.workProcedure.where((v) => v.isOpen == 1)) {
+      groupBy(_workProcedure(), (v) => v.sourceInterID ?? 0).forEach((k, v) {
         var submitData = <Map>[];
-        for (var bwp in state.batchWorkProcedure.where(
-          (v) => v.processNumber == wp.processNumber,
-        )) {
+        for (var bwp in v) {
           //指令已分配数量
           var disQty = 0.0;
-          for (var worker in wp.dispatch) {
+          for (var worker in bwp.dispatch) {
             //人员的剩余可分配数量大于0 说明人员的数量上一个指令分配满后还有剩余  可以继续下一个指令分配
             if (worker.remainder() > 0) {
               //指令剩余可分配数量
@@ -1009,7 +1051,8 @@ class ProductionDispatchLogic extends GetxController {
           }
         }
         mapList.add({'UserID': userInfo?.userID, 'List': submitData});
-      }
+      });
+
       state.mergeOrderProductionDispatch(
         submitData: mapList,
         success: (msg) {
@@ -1020,7 +1063,6 @@ class ProductionDispatchLogic extends GetxController {
         },
         error: (msg) => errorDialog(content: msg),
       );
-
     } else {
       //单一工单计工
       var submitData = <Map>[];

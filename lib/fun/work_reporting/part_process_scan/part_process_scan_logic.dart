@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/scan_barcode_info.dart';
 import 'package:jd_flutter/bean/http/response/worker_info.dart';
@@ -211,7 +212,13 @@ class PartProcessScanLogic extends GetxController {
     );
   }
 
-  reportModifySubmit() {
+  reportModifySubmit() {}
 
+  barCodeSubmit() {
+    debugPrint('state.barCodeList=${state.barCodeList.length}');
+    state.getPartProductionReportTable(
+      success: () {},
+      error: (msg) => errorDialog(content: msg),
+    );
   }
 }

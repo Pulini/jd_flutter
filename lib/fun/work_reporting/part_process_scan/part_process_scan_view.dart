@@ -99,21 +99,23 @@ class _PartProcessScanPageState extends State<PartProcessScanPage> {
           Row(
             children: [
               Expanded(
-                child: CombinationButton(
+                child:Obx(()=> CombinationButton(
+                  isEnabled: state.barCodeList.isNotEmpty,
                   text: 'part_process_scan_modify'.tr,
                   click: () => logic.barCodeModify(),
                   combination: Combination.left,
-                ),
+                )),
               ),
               Expanded(
-                child: CombinationButton(
+                child: Obx(()=>CombinationButton(
+                  isEnabled: state.barCodeList.isNotEmpty,
                   text: 'part_process_scan_submit'.tr,
-                  click: () {},
+                  click: () =>logic.barCodeSubmit(),
                   combination: Combination.right,
-                ),
+                )),
               ),
             ],
-          )
+          ),
         ],
       ),
     );

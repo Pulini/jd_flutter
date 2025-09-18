@@ -699,8 +699,11 @@ const webApiSapContainerScanner = 'sap/zapp/ZMM_ZXCFSM_SUMM';
 const webApiSapContainerShipmentScanner = 'sap/zapp/ZMM_ZXCFSM_D';
 
 //贴标工序报工_修改已报工
-const webApiProductionDispatchReportSubmit =
+const webApiPartProductionReportModify =
     'api/WetPrinting/BarCodeProcessReportSubmit_Reported';
+
+//贴标工序报工_获取报工汇总表
+const webApiGetPartProductionReportTable = 'api/WetPrinting/GetPartProcessReport_Barcode';
 
 //获取工序派工单信息
 const webApiGetProcessWorkCard = 'api/WetPrinting/GetProcessWorkCardByBarcode';

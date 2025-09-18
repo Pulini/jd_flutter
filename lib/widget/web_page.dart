@@ -111,22 +111,23 @@ class WebPage extends StatelessWidget {
           NavigationDelegate(
             onPageStarted: (String url) {
               debugPrint('onPageStarted------$url');
-              loadingShow('加載中');
+              loadingShow('加载中');
             },
             onPageFinished: (String url) {
-              debugPrint('${Get.isDialogOpen}  onPageFinished------$url');
-              if (Get.isDialogOpen == true) Get.back();
+              debugPrint('onPageFinished------$url');
+              loadingDismiss();
               addInstructionsLog(fileId);
             },
             onHttpError: (HttpResponseError error) {
-              debugPrint(
-                  '${Get.isDialogOpen}  onHttpError------${error.response?.statusCode}');
-              if (Get.isDialogOpen == true) Get.back();
+              debugPrint('onHttpError------${error.response?.statusCode}');
+              debugPrint('onHttpError URL------${error.response?.uri}');
+              loadingDismiss();
             },
             onWebResourceError: (WebResourceError error) {
-              debugPrint(
-                  '${Get.isDialogOpen}  onWebResourceError------${error.description}');
-              if (Get.isDialogOpen == true) Get.back();
+              debugPrint('onWebResourceError------${error.description}');
+              debugPrint('onWebResourceError Type------${error.errorType}');
+              debugPrint('onWebResourceError URL------${error.url}');
+              loadingDismiss();
             },
           ),
         );
