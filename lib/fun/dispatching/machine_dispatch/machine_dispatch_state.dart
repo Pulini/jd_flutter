@@ -18,7 +18,6 @@ class MachineDispatchState {
   var selectList = <RxBool>[];
   var nowDispatchNumber = ''.obs;
   var labelList = <Item>[].obs;
-  var labelErrorMsg = '';
   var leaderVerify = false.obs;
   var surplusMaterialList = <Map<String, dynamic>>[].obs;
 
@@ -189,7 +188,9 @@ class MachineDispatchState {
       labelStatus: '20',
       dispatchNumber: detailsInfo?.dispatchNumber ?? '',
     ).then((response) {
+      logger.f('---------');
       if (response.resultCode == resultSuccess) {
+        logger.f('------成功---');
         var list = <SapLabelInfo>[
           for (var json in response.data)
             SapLabelInfo.fromJsonWithState(
@@ -204,12 +205,11 @@ class MachineDispatchState {
               .where((v2) => v2.size == v1.size)
               .length;
         });
-        labelErrorMsg = '';
         success.call();
       } else {
+        logger.f('------失败---');
         labelList.clear();
-        labelErrorMsg = response.message ?? '';
-        error.call(labelErrorMsg);
+        error.call(response.message ?? '');
       }
     });
   }

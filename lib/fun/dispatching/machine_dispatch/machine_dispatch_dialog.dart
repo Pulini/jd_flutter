@@ -542,7 +542,7 @@ teamLeaderVerifyDialog() {
   var countDown = 0;
   var workerNumber = '';
   var verificationCode = '';
-  // state.leaderVerify.value = true; //测试用
+  state.leaderVerify.value = true; //测试用
   Get.dialog(
     PopScope(
       canPop: false,
