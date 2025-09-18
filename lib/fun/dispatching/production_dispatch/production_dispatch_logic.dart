@@ -13,6 +13,7 @@ import 'package:jd_flutter/fun/other/maintain_label/maintain_label_view.dart';
 import 'package:jd_flutter/fun/report/production_materials_report/production_materials_report_view.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/preview_label_widget.dart';
@@ -308,10 +309,6 @@ class ProductionDispatchLogic extends GetxController {
         ..finishQty =
             v.map((v2) => v2.finishQty ?? 0).reduce((a, b) => a.add(b))
         ..mustQty = v.map((v2) => v2.mustQty ?? 0).reduce((a, b) => a.add(b))
-        ..qty = 0
-        ..empID = 0
-        ..workerCode = ''
-        ..workerName = ''
         ..dispatch = [
           for (var dis in v.where((v2) => v2.empID != null && v2.empID != 0))
             DispatchInfo(
@@ -372,6 +369,7 @@ class ProductionDispatchLogic extends GetxController {
               ));
 
               groupBy(v, (v2) => v2.uniqueID()).forEach((k2, v2) {
+                logger.f(v2.first.toJson());
                 if (v2.length == 1) {
                   batchWorkProcedure.add(v2.first);
                 } else {

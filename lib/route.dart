@@ -169,7 +169,7 @@ class RouteConfig {
   //生产派工
   static Routes productionDispatch = Routes(
     '/production_dispatch',
-    204,
+    205,
     const ProductionDispatchPage(),
   );
 
