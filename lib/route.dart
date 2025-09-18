@@ -218,7 +218,7 @@ class RouteConfig {
   //机台派工单
   static Routes machineDispatch = Routes(
     '/machine_dispatch_page',
-    203,
+    204,
     const MachineDispatchPage(),
   );
 
@@ -449,7 +449,7 @@ class RouteConfig {
   //注塑车间扫码报工
   static Routes injectionScanReport = Routes(
     '/injection_scan_report',
-    201,
+    202,
     const InjectionScanReportPage(),
   );
 
