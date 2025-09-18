@@ -91,24 +91,24 @@ class ReportInfo {
     this.type,
     this.name,
     this.size,
-    this.mtono,
-    this.mtonoQty,
+    this.instruction,
+    this.instructionQty,
     this.qty,
   });
 
   int? type; //类型 0.工序 1.指令合计 2.部件合计
   String? name; //工序
   String? size; //尺码
-  String? mtono; //指令
-  double? mtonoQty; //指令数
+  String? instruction; //指令
+  double? instructionQty; //指令数
   double? qty; //贴标数
 
   ReportInfo.fromJson(dynamic json) {
     type = json['Type'];
     name = json['Name'];
     size = json['Size'];
-    mtono = json['Mtono'];
-    mtonoQty = json['MtonoQty'];
+    instruction = json['Mtono'];
+    instructionQty = json['MtonoQty'];
     qty = json['Qty'];
   }
 
@@ -117,8 +117,8 @@ class ReportInfo {
     map['Type'] = type;
     map['Name'] = name;
     map['Size'] = size;
-    map['Mtono'] = mtono;
-    map['MtonoQty'] = mtonoQty;
+    map['Mtono'] = instruction;
+    map['MtonoQty'] = instructionQty;
     map['Qty'] = qty;
     return map;
   }

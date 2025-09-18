@@ -43,8 +43,9 @@ class LoadingSingleton {
   }
 
   bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
-    debugPrint("-----BACK BUTTON!-----");
-    return true;
+    debugPrint("-----BACK BUTTON intercepted by Loading-----");
+    // 当loading显示时，完全拦截返回键，不执行任何操作
+    return isShowing;
   }
 }
 

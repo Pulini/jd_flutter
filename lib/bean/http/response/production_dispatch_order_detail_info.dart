@@ -231,6 +231,7 @@ class WorkCardList {
     map['RoutingID'] = routingID;
     return map;
   }
+  String uniqueID()=>'$operPlanningEntryFID$sourceInterID';
 
   getProcess() => '< $processNumber > $processName';
 

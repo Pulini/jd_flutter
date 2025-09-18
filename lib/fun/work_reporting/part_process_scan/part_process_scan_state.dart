@@ -8,6 +8,7 @@ import 'package:jd_flutter/widget/dialogs.dart';
 
 class PartProcessScanState {
   var barCodeList = <String>[].obs;
+  var reportList = <ReportInfo>[].obs;
   var modifyEmpList = <EmpInfo>[].obs;
   var modifyDistributionList = <ReportItemData>[].obs;
   var modifyReportList = <ReportInfo>[].obs;
@@ -63,7 +64,7 @@ class PartProcessScanState {
   }) {
     httpPost(
       loading: 'part_process_scan_submitting_process_report'.tr,
-      method: webApiProductionDispatchReportSubmit,
+      method: webApiPartProductionReportModify,
       body: [
         {
           'Date': getDateYMD(),
@@ -76,6 +77,28 @@ class PartProcessScanState {
     ).then((response) {
       if (response.resultCode == resultSuccess) {
         success.call(response.message ?? '');
+      } else {
+        error.call(response.message ?? '');
+      }
+    });
+  }
+
+  getPartProductionReportTable({
+    required Function() success,
+    required Function(String msg) error,
+  }) {
+    httpPost(
+      loading: 'part_process_scan_submitting_process_report'.tr,
+      method: webApiGetPartProductionReportTable,
+      body: {
+        'BarCodeList': barCodeList.toList(),
+      },
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        reportList.value = [
+          for (var json in response.data) ReportInfo.fromJson(json)
+        ];
+        success.call();
       } else {
         error.call(response.message ?? '');
       }
