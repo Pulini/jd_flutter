@@ -26,7 +26,7 @@ class ProductionDispatchLogic extends GetxController {
 
   //工单列表非合并item点击事件
   item1click(int index) {
-    if (state.isSelectedMany) {
+    if (state.isSelectedMany.value) {
       if (state.orderList[index].select) {
         state.orderList[index].select = false;
       } else {
@@ -147,7 +147,7 @@ class ProductionDispatchLogic extends GetxController {
   //打开/关闭工序
   offOnProcess({required Function() refresh}) {
     state.offOnProcess(
-      success: refresh,
+      success:(msg)=>successDialog(content: msg,back: refresh),
       error: (msg) => errorDialog(content: msg),
     );
   }
@@ -155,7 +155,7 @@ class ProductionDispatchLogic extends GetxController {
   //删除下游工序
   deleteDownstream({required Function() refresh}) {
     state.deleteDownstream(
-      success: refresh,
+      success:(msg)=>successDialog(content: msg,back: refresh),
       error: (msg) => errorDialog(content: msg),
     );
   }
@@ -163,7 +163,7 @@ class ProductionDispatchLogic extends GetxController {
   //删除上一次报工
   deleteLastReport({required Function() refresh}) {
     state.deleteLastReport(
-      success: refresh,
+      success:(msg)=>successDialog(content: msg,back: refresh),
       error: (msg) => errorDialog(content: msg),
     );
   }
@@ -205,7 +205,7 @@ class ProductionDispatchLogic extends GetxController {
   //更新领料配套数
   updateSap({required Function() refresh}) {
     state.updateSap(
-      success: refresh,
+      success:(msg)=>successDialog(content: msg,back: refresh),
       error: (msg) => errorDialog(content: msg),
     );
   }
@@ -420,18 +420,12 @@ class ProductionDispatchLogic extends GetxController {
 
   checkAutoCount(bool isChecked) {
     state.isCheckedAutoCount = isChecked;
-    state.isCheckedDivideEqually = isChecked;
-    state.isCheckedRounding = isChecked;
   }
 
   checkDivideEqually(bool isChecked) {
     state.isCheckedDivideEqually = isChecked;
     if (isChecked) {
       state.isCheckedAutoCount = isChecked;
-    } else {
-      if (state.isCheckedRounding == isChecked) {
-        state.isCheckedAutoCount = isChecked;
-      }
     }
   }
 
@@ -439,10 +433,6 @@ class ProductionDispatchLogic extends GetxController {
     state.isCheckedRounding = isChecked;
     if (isChecked) {
       state.isCheckedAutoCount = isChecked;
-    } else {
-      if (state.isCheckedDivideEqually == isChecked) {
-        state.isCheckedAutoCount = isChecked;
-      }
     }
   }
 
@@ -575,17 +565,12 @@ class ProductionDispatchLogic extends GetxController {
             }
           }
         } else {
-          var sum = 0.0;
-          for (var v in workerList) {
-            sum = sum.add(v.qty!);
-          }
-          if (workerList.where((v) => v.qty == 0).length == 1) {
-            var qty = wp.mustQty! - (sum - workerList.last.qty!);
-            if (state.isCheckedRounding) {
-              workerList.last.qty = qty.toInt().toDouble();
-            } else {
-              workerList.last.qty = qty;
-            }
+          var sum = workerList.map((v) => v.qty ?? 0).reduce((a, b) => a.add(b));
+          var qty = wp.mustQty! - (sum - workerList.last.qty!);
+          if (state.isCheckedRounding) {
+            workerList.last.qty = qty.toInt().toDouble();
+          } else {
+            workerList.last.qty = qty;
           }
         }
       }
@@ -713,7 +698,9 @@ class ProductionDispatchLogic extends GetxController {
     for (var dis in wp.dispatch) {
       ids.add(dis.empID!);
     }
-    detailViewModifyDispatch(works: ids);
+    state.dispatchInfo.remove(dispatchInfo);
+    state.isEnabledSelectAllDispatch = state.dispatchInfo.isNotEmpty;
+    state.workProcedure.refresh();
   }
 
   //从汇总列表跳转到指定工序并打开指定员工到派工数据

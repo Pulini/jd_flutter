@@ -14,13 +14,10 @@ import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
 class ProductionDispatchState {
-
-  var isSelectedOutsourcing =
-      spGet('${Get.currentRoute}/isSelectedOutsourcing') ?? false;
-  var isSelectedClosed = spGet('${Get.currentRoute}/isSelectedClosed') ?? false;
-  var isSelectedMany = spGet('${Get.currentRoute}/isSelectedMany') ?? false;
-  var isSelectedMergeOrder =
-      spGet('${Get.currentRoute}/isSelectedMergeOrder') ?? false;
+  RxBool isSelectedOutsourcing = false.obs;
+  RxBool isSelectedClosed = false.obs;
+  RxBool isSelectedMany = false.obs;
+  RxBool isSelectedMergeOrder = false.obs;
   var orderList = <ProductionDispatchOrderInfo>[].obs;
   var orderGroupList = <String, List<ProductionDispatchOrderInfo>>{}.obs;
 
@@ -59,6 +56,16 @@ class ProductionDispatchState {
   var isEnabledBatchDispatch = false.obs;
   var isEnabledNextWorkProcedure = true.obs;
   var isEnabledAddOne = true.obs;
+
+  ProductionDispatchState() {
+    isSelectedOutsourcing.value =
+        spGet('${Get.currentRoute}/isSelectedOutsourcing') ?? false;
+    isSelectedClosed.value =
+        spGet('${Get.currentRoute}/isSelectedClosed') ?? false;
+    isSelectedMany.value = spGet('${Get.currentRoute}/isSelectedMany') ?? false;
+    isSelectedMergeOrder.value =
+        spGet('${Get.currentRoute}/isSelectedMergeOrder') ?? false;
+  }
 
   //获取组员列表数据
   detailViewGetWorkerList() {
@@ -225,7 +232,7 @@ class ProductionDispatchState {
 
   //打开/关闭工序
   offOnProcess({
-    required Function() success,
+    required Function(String msg) success,
     required Function(String msg) error,
   }) {
     getSelectOne((v) {
@@ -242,7 +249,7 @@ class ProductionDispatchState {
         },
       ).then((response) {
         if (response.resultCode == resultSuccess) {
-          success.call();
+          success.call(response.message??'');
         } else {
           error.call(response.message ?? '');
         }
@@ -252,7 +259,7 @@ class ProductionDispatchState {
 
   //删除下游工序
   deleteDownstream({
-    required Function() success,
+    required Function(String msg) success,
     required Function(String msg) error,
   }) {
     getSelectOne((v) {
@@ -262,7 +269,7 @@ class ProductionDispatchState {
         params: {'WorkCardID': v.interID},
       ).then((response) {
         if (response.resultCode == resultSuccess) {
-          success.call();
+          success.call(response.message??'');
         } else {
           error.call(response.message ?? '');
         }
@@ -272,7 +279,7 @@ class ProductionDispatchState {
 
   //删除上一次报工
   deleteLastReport({
-    required Function() success,
+    required Function(String msg) success,
     required Function(String msg) error,
   }) {
     getSelectOne((v) {
@@ -285,7 +292,7 @@ class ProductionDispatchState {
         },
       ).then((response) {
         if (response.resultCode == resultSuccess) {
-          success.call();
+          success.call(response.message??'');
         } else {
           error.call(response.message ?? '');
         }
@@ -295,7 +302,7 @@ class ProductionDispatchState {
 
   //更新领料配套数
   updateSap({
-    required Function() success,
+    required Function(String msg) success,
     required Function(String msg) error,
   }) {
     getSelectOne((v) {
@@ -305,7 +312,7 @@ class ProductionDispatchState {
         params: {'InterID': v.interID},
       ).then((response) {
         if (response.resultCode == resultSuccess) {
-          success.call();
+          success.call(response.message?? '');
         } else {
           error.call(response.message ?? '');
         }
@@ -514,16 +521,17 @@ class ProductionDispatchState {
       }
     });
   }
+
   mergeOrderProductionDispatch({
     required List<Map> submitData,
     required Function(String msg) success,
     required Function(String msg) error,
   }) {
     httpPost(
-      method: webApiProductionDispatchBatch,
-      loading: 'production_dispatch_dispatching'.tr,
-      body:submitData
-    ).then((response) {
+            method: webApiProductionDispatchBatch,
+            loading: 'production_dispatch_dispatching'.tr,
+            body: submitData)
+        .then((response) {
       if (response.resultCode == resultSuccess) {
         success.call(response.message ?? '');
       } else {
@@ -552,9 +560,8 @@ class ProductionDispatchState {
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        success.call([
-          for (var json in response.data) OrderProgressInfo.fromJson(json)
-        ]);
+        success.call(
+            [for (var json in response.data) OrderProgressInfo.fromJson(json)]);
       } else {
         error.call(response.message ?? '');
       }
