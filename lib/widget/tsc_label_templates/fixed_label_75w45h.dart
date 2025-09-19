@@ -119,7 +119,7 @@ Widget _fixedLabelTemplate75x45({
   return Container(
     color: Colors.white,
     width: isBig ? 108 * 5.5 : 75 * 4.5,
-    height: isBig? 66 * 4.5: 45 * 5.5,
+    height: isBig ? 66 * 4.5 : 45 * 5.5,
     child: Padding(
       padding: const EdgeInsets.all(4),
       child: Container(
@@ -355,18 +355,20 @@ machineDispatchChineseFixedLabel({
       bottomLeft: Center(
         child: Text(
           '$size#${qty.toShowString()}$unit',
-          style: const TextStyle(fontWeight: FontWeight.bold, height: 1,fontSize: 16),
+          style: const TextStyle(
+              fontWeight: FontWeight.bold, height: 1, fontSize: 16),
         ),
       ),
       bottomMiddle: Center(
         child: Text(
           '班次：$shift 机台：$machine',
-          style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 16),
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
         ),
       ),
       bottomRight: isLastLabel
           ? const Center(
-              child: Text('尾', style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16)),
+              child: Text('尾',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
             )
           : Container(),
     );
@@ -1213,17 +1215,22 @@ Widget materialWorkshopFixedLabel({
   required String unitName,
   required String pick,
 }) {
-  var textStyle =   TextStyle(fontWeight:FontWeight.bold,fontSize: isBig? 15:13);
+  var textStyle =
+      TextStyle(fontWeight: FontWeight.bold, fontSize: isBig ? 11 : 9);
   return _fixedLabelTemplate75x45(
     qrCode: qrCode,
     isBig: isBig,
-    title: Text(productName, style: TextStyle(fontWeight:FontWeight.bold,fontSize: isBig? 25 :20)),
-      subTitle: Text('$partName <$processName>    $toPrint',
-        style:  TextStyle(fontWeight:FontWeight.bold,fontSize: isBig? 24 : 18),maxLines: 2,),
-    content: Text('$materialName($materialNumber)', style:   TextStyle(fontWeight:FontWeight.bold,fontSize: isBig? 20 :16)),
-    bottomLeft: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-      Text(drillingCrewName, style: textStyle)
-    ]),
+    title: Text(productName, style: TextStyle(fontWeight: FontWeight.bold, fontSize: isBig ? 23 : 18)),
+    subTitle: Text(
+      '$partName <$processName>    $toPrint', style: TextStyle(fontWeight: FontWeight.bold, fontSize: isBig ? 15 : 10),
+      maxLines: 2,
+    ),
+    content: Text('$materialName($materialNumber)',
+        style:
+            TextStyle(fontWeight: FontWeight.bold, fontSize: isBig ? 15 : 10)),
+    bottomLeft: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [Text(drillingCrewName, style: textStyle)]),
     bottomMiddle: Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
@@ -1231,8 +1238,6 @@ Widget materialWorkshopFixedLabel({
         Text(pick, style: textStyle)
       ],
     ),
-    bottomRight: Center(
-        child: Text(sapDecideArea,
-            style:textStyle)),
+    bottomRight: Center(child: Text(sapDecideArea, style: textStyle)),
   );
 }

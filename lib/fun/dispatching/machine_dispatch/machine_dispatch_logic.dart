@@ -427,23 +427,21 @@ class MachineDispatchLogic extends GetxController {
           qrCode: label.labelID ?? '',
           title: state.detailsInfo?.factoryType ?? '',
           subTitle: isEnglish
-              ? state.detailsInfo?.materialName ?? ''
+              ? label.name ?? ''
               : ((state.detailsInfo?.processflow ?? '') +
                   ('       序号：${label.number}')),
           subTitleWrap: false,
           content: isEnglish
               ? ('GW:${label.grossWeight}KG   NW:${label.netWeight}KG')
               : state.detailsInfo?.materialName ?? '',
-          specification: isEnglish ? 'MEAS:  ${label.specifications}' : '',
+          specification: isEnglish ? 'MEAS:  ${label.specifications}    No.${label.number?? ''}': '',
           subContent1: isEnglish
               ? 'DISPATCH:${state.detailsInfo?.dispatchNumber.toString()}'
               : '派工单号：${state.detailsInfo?.dispatchNumber ?? ''}       班次：${state.detailsInfo?.shift ?? ''}',
           subContent2: isEnglish
               ? 'DECREASE:${state.detailsInfo?.decrementNumber}    DATE:${state.detailsInfo?.startDate}'
               : '递减号:${state.detailsInfo?.decrementNumber}    日期:${state.detailsInfo?.startDate}',
-          bottomLeftText1: isEnglish
-              ? ((printQty.toShowString()) + (item.bUoM ?? ''))
-              : '机台:${state.detailsInfo?.machine}',
+          bottomLeftText1: isEnglish ? ((printQty.toShowString()) + (label.unit ?? '')) : '机台:${state.detailsInfo?.machine}',
           bottomMiddleText1: isEnglish
               ? '   Made in China'
               : ('     ${item.size ?? ''}码${printQty.toShowString()}${item.bUoM ?? ''}'),

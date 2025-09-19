@@ -206,7 +206,7 @@ class _HandoverReportListPageState extends State<HandoverReportListPage> {
                 expandedTextSpan(
                   //派工单号
                   hint: 'handover_report_dispatch_number'.tr,
-                  text: data.factoryType ?? '',
+                  text: data.dispatchNumber ?? '',
                   textColor: Colors.blue.shade500,
                   hintColor: Colors.black,
                 ),
@@ -219,7 +219,7 @@ class _HandoverReportListPageState extends State<HandoverReportListPage> {
           ],
         ),
       ),
-      onTap: () {logic.selectPosition(position);},
+      onTap: () => logic.selectPosition(position),
     );
   }
 
@@ -229,7 +229,7 @@ class _HandoverReportListPageState extends State<HandoverReportListPage> {
         title: 'handover_report_title'.tr,
         actions: [
           TextButton(
-              onPressed: (){logic.getInstructionDetailsFile();},
+              onPressed: () => logic.getInstructionDetailsFile(),
               child: Text('handover_report_query'.tr))
         ],
         body: Column(
@@ -271,7 +271,21 @@ class _HandoverReportListPageState extends State<HandoverReportListPage> {
                   child: CombinationButton(
                     //提交汇报
                     text: 'handover_report_submit_report'.tr,
-                    click: ()  {},
+                    click: () {
+                      if (logic.haveSelect()) {
+                        askDialog(
+                            content: '确定要提交汇报吗?',
+                            confirm: () {
+                              logic.checkWork(success: (s) {
+                                successDialog(
+                                    content: s,
+                                    back: () {
+                                      logic.getInstructionDetailsFile();
+                                    });
+                              });
+                            });
+                      }
+                    },
                     combination: Combination.left,
                   ),
                 ),
@@ -281,20 +295,19 @@ class _HandoverReportListPageState extends State<HandoverReportListPage> {
                     //取消报工
                     text: 'handover_report_cancel_report'.tr,
                     click: () {
-                      if (logic.haveSelect())
-                        {
-                          askDialog(
-                            content: 'handover_report_sure_reverse'.tr,
-                            confirm: () {
-                              logic.reverseWork(success: (s) {
-                                successDialog(
-                                  content: s,
-                                  back: () => logic.getInstructionDetailsFile(),
-                                );
-                              });
-                            },
-                          );
-                        }
+                      if (logic.haveSelect()) {
+                        askDialog(
+                          content: 'handover_report_sure_reverse'.tr,
+                          confirm: () {
+                            logic.reverseWork(success: (s) {
+                              successDialog(
+                                content: s,
+                                back: () => logic.getInstructionDetailsFile(),
+                              );
+                            });
+                          },
+                        );
+                      }
                     },
                     combination: Combination.middle,
                   ),
@@ -305,20 +318,19 @@ class _HandoverReportListPageState extends State<HandoverReportListPage> {
                     //删除报工
                     text: 'handover_report_delete_report'.tr,
                     click: () {
-                      if (logic.haveSelect())
-                        {
-                          askDialog(
-                            content: 'handover_report_sure_delete'.tr,
-                            confirm: () {
-                              logic.deleteWork(success: (s) {
-                                successDialog(
-                                  content: s,
-                                  back: () => logic.getInstructionDetailsFile(),
-                                );
-                              });
-                            },
-                          );
-                        }
+                      if (logic.haveSelect()) {
+                        askDialog(
+                          content: 'handover_report_sure_delete'.tr,
+                          confirm: () {
+                            logic.deleteWork(success: (s) {
+                              successDialog(
+                                content: s,
+                                back: () => logic.getInstructionDetailsFile(),
+                              );
+                            });
+                          },
+                        );
+                      }
                     },
                     combination: Combination.right,
                   ),

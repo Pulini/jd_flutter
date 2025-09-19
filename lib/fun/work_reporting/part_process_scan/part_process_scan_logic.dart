@@ -212,7 +212,13 @@ class PartProcessScanLogic extends GetxController {
     );
   }
 
-  reportModifySubmit() {}
+  reportModifySubmit() {
+    state.submitChangeReport(success: (s){
+
+    }, error: (e){
+
+    });
+  }
 
   barCodeSubmit() {
     debugPrint('state.barCodeList=${state.barCodeList.length}');

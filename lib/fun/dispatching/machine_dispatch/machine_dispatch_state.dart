@@ -249,8 +249,8 @@ class MachineDispatchState {
               isLastLabel: v2.isLastLabel,
               isEnglish: v2.type == '01',
               specifications: v2.specifications,
-              netWeight: v2.netWeight.toDoubleTry(),
-              grossWeight: v2.grossWeight.toDoubleTry(),
+              netWeight: v2.netWeight,
+              grossWeight: v2.grossWeight,
               englishName: v2.englishName ?? '',
               englishUnit: v2.englishUnit ?? '',
             ));

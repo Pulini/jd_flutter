@@ -2,8 +2,8 @@ import 'package:jd_flutter/utils/extension_util.dart';
 
 import 'machine_dispatch_info.dart';
 
-class SapLabelInfo {
-  SapLabelInfo({
+class MachineLabelInfo {
+  MachineLabelInfo({
     this.labelID,
     this.dispatchNo,
     this.date,
@@ -12,7 +12,7 @@ class SapLabelInfo {
     this.item,
   });
 
-  SapLabelInfo.fromJson(dynamic json) {
+  MachineLabelInfo.fromJson(dynamic json) {
     labelID = json['BQID'];
     dispatchNo = json['DISPATCH_NO'];
     date = json['AEDAT'];
@@ -26,7 +26,7 @@ class SapLabelInfo {
     }
   }
 
-  SapLabelInfo.fromJsonWithState(
+  MachineLabelInfo.fromJsonWithState(
     dynamic json,
     List<Items> sizeList,
     List<String> barCodeList,
@@ -48,8 +48,8 @@ class SapLabelInfo {
           number ?? '',
           type ?? '',
           specifications ?? '',
-          netWeight?? 0.0,
-          grossWeight?? 0.0,
+          netWeight.toString(),
+          grossWeight.toString(),
           sizeList,
           barCodeList,
         ));
@@ -65,8 +65,8 @@ class SapLabelInfo {
   List<Item>? item;
   String? type;
   String? specifications;
-  double? netWeight;
-  double? grossWeight;
+  int? netWeight;
+  int? grossWeight;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -137,8 +137,8 @@ class Item {
   bool isLastLabel = false;
   String type = '';
   String specifications = '';
-  double netWeight = 0.0;
-  double grossWeight = 0.0;
+  String netWeight = '';
+  String grossWeight = '';
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};

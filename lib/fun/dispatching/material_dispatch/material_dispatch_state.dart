@@ -12,6 +12,7 @@ const String spMachine = 'MaterialDispatchPickMachine';
 const String spWarehouseLocation = 'MaterialDispatchPickWarehouseLocation';
 const String spPallet = 'MaterialDispatchPickPallet';
 const String spDepart = 'MaterialDispatchDepart';
+const String spBigLabel = 'MaterialDispatchDepartIsBigLabel';
 
 int getMaterialDispatchDate() =>
     spGet(spPalletDate) ?? DateTime.now().millisecondsSinceEpoch;
@@ -34,11 +35,15 @@ String getMaterialDispatchDepart() => spGet(spDepart) ?? '';
 
 saveMaterialDispatchDepart(String departId) => spSave(spDepart, departId);
 
+saveMaterialIsBigLabel(bool label) => spSave(spBigLabel, label);
+
+bool getMaterialIsBigLabel() => spGet(spBigLabel) ?? false;
+
 class MaterialDispatchState {
   var lastProcess = false.obs;
   var unStockIn = false.obs;
   var allInstruction = false.obs;
-  var isBigLabel = false.obs;
+  var isBigLabel = getMaterialIsBigLabel().obs;
   var orderList = <MaterialDispatchInfo>[];
   var showOrderList = <MaterialDispatchInfo>[].obs;
 
