@@ -6,7 +6,6 @@ import 'package:jd_flutter/bean/http/response/material_dispatch_label_detail.dar
 import 'package:jd_flutter/fun/dispatching/material_dispatch/material_dispatch_state.dart';
 import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
-import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/check_box_widget.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
