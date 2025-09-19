@@ -70,6 +70,10 @@ class _SapPackingScanPageState extends State<SapPackingScanPage> {
       combination: Combination.middle,
       text: '交货单列表',
       click: () {
+        if (tecNumber.text.trim().length>11) {
+          errorDialog(content: '实际柜号长度不能超过11位');
+          return;
+        }
         if (tecNumber.text.isEmpty) {
           errorDialog(content: '请输入实际柜号!');
           return;

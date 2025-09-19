@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:collection/collection.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/sap_picking_info.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
@@ -49,6 +50,17 @@ class SapPrintPickingLogic extends GetxController {
     );
   }
 
+  List<PrintPickingDetailInfo> _getOrder(
+    SapPickingDetailLabelInfo label,
+  ) =>
+      state.orderDetailOrderList.where((v) {
+        if (v.order.orderType == '3') {
+          return v.order.sizeMaterialNumber == label.sizeMaterialCode;
+        } else {
+          return v.order.materialNumber == label.materialCode;
+        }
+      }).toList();
+
   scanCode(String code) {
     if (state.orderDetailOrderList.any((v) => v.order.location == '1001') ==
         true) {
@@ -79,14 +91,7 @@ class SapPrintPickingLogic extends GetxController {
         }
         //标签类型为整箱领料需要判断是否超过需求数量
         if (label.pickingType == 'B0') {
-          double materialRemainder = state.orderDetailOrderList
-              .where((v) {
-                if (v.order.orderType == '3') {
-                  return v.order.sizeMaterialNumber == label.sizeMaterialCode;
-                } else {
-                  return v.order.materialNumber == label.materialCode;
-                }
-              })
+          double materialRemainder = _getOrder(label)
               .map((v) => v.order.getRemainder())
               .reduce((a, b) => a.add(b));
 
@@ -101,16 +106,8 @@ class SapPrintPickingLogic extends GetxController {
         }
         distributionLabel(label);
         if (label.distribution.isEmpty) {
-          var surplus = state.orderDetailOrderList
-              .where((v) {
-                if (v.order.orderType == '3') {
-                  return v.order.sizeMaterialNumber == label.sizeMaterialCode;
-                } else {
-                  return v.order.materialNumber == label.materialCode;
-                }
-              })
-              .map((v) => v.pickQty)
-              .reduce((a, b) => a.add(b));
+          var surplus =
+              _getOrder(label).map((v) => v.pickQty).reduce((a, b) => a.add(b));
           successDialog(
             content: 'sap_print_picking_contents_cargo_box_exceed_pick_qty_tips'
                 .trArgs([
@@ -138,6 +135,7 @@ class SapPrintPickingLogic extends GetxController {
               v.palletNumber == code &&
               (v.pickingType == 'B0' || v.pickingType == 'B1'))
           .toList();
+      debugPrint('pallet=${pallet.length}');
       if (pallet.isEmpty) {
         showSnackBar(
           message: 'sap_print_picking_label_not_belong_pick_order'.tr,
@@ -154,14 +152,7 @@ class SapPrintPickingLogic extends GetxController {
       }
       pallet.where((v) => v.distribution.isEmpty).forEach((label) {
         if (label.pickingType == 'B0') {
-          double materialRemainder = state.orderDetailOrderList
-              .where((v) {
-                if (v.order.orderType == '3') {
-                  return v.order.sizeMaterialNumber == label.sizeMaterialCode;
-                } else {
-                  return v.order.materialNumber == label.materialCode;
-                }
-              })
+          double materialRemainder = _getOrder(label)
               .map((v) => v.order.getRemainder())
               .reduce((a, b) => a.add(b));
           if (materialRemainder >= (label.quantity ?? 0)) {
@@ -171,18 +162,11 @@ class SapPrintPickingLogic extends GetxController {
           distributionLabel(label);
         }
       });
+      debugPrint('----------');
       var msgList = <String>[];
       pallet.where((v) => v.distribution.isEmpty).forEach((label) {
-        var surplus = state.orderDetailOrderList
-            .where((v) {
-              if (v.order.orderType == '3') {
-                return v.order.sizeMaterialNumber == label.sizeMaterialCode;
-              } else {
-                return v.order.materialNumber == label.materialCode;
-              }
-            })
-            .map((v) => v.pickQty)
-            .reduce((a, b) => a.add(b));
+        var surplus =
+            _getOrder(label).map((v) => v.pickQty).reduce((a, b) => a.add(b));
         msgList.add(
           'sap_print_picking_label_exceed_order_surplus_qty_tips'.trArgs([
             label.size ?? '',
@@ -195,10 +179,8 @@ class SapPrintPickingLogic extends GetxController {
       if (msgList.isNotEmpty) {
         errorDialog(content: msgList.join('\n'));
       }
-
       showScanTips();
       state.orderDetailLabels.refresh();
-
       return;
     }
     showSnackBar(
@@ -209,21 +191,15 @@ class SapPrintPickingLogic extends GetxController {
 
   distributionLabel(SapPickingDetailLabelInfo label) {
     //整箱分配
-    state.orderDetailOrderList.where((v) {
-      if (v.order.orderType == '3') {
-        return v.order.sizeMaterialNumber == label.sizeMaterialCode;
-      } else {
-        return v.order.materialNumber == label.materialCode;
-      }
-    }).forEach((v) {
+    _getOrder(label).forEach((v) {
       //剩余可领 >= 本箱数量 说明本箱物料可以分配给此行工单
       if (v.order.getRemainder() >= (label.quantity ?? 0) &&
           label.distribution.isEmpty) {
         //给标签添加分配信息
         label.distribution.add(
-            //全部分完 分配数量为箱容
-            DistributableInfo(v.dataId, label.quantity ?? 0));
-
+          //全部分完 分配数量为箱容
+          DistributableInfo(v.dataId, label.quantity ?? 0),
+        );
         //累加所有分配到此工单箱容
         v.pickQty = getSum(v.dataId);
       }
@@ -232,13 +208,7 @@ class SapPrintPickingLogic extends GetxController {
     //分配失败 拆箱分配
     if (label.distribution.isEmpty == true) {
       var disQty = 0.0;
-      state.orderDetailOrderList.where((v) {
-        if (v.order.orderType == '3') {
-          return v.order.sizeMaterialNumber == label.sizeMaterialCode;
-        } else {
-          return v.order.materialNumber == label.materialCode;
-        }
-      }).forEach((v) {
+      _getOrder(label).forEach((v) {
         var surplus = label.quantity.sub(disQty);
         if (surplus > 0) {
           var qty = 0.0;
@@ -258,14 +228,13 @@ class SapPrintPickingLogic extends GetxController {
 
   getSum(int dataId) {
     var sum = 0.0;
-    sum = state.orderDetailLabels.map((v) {
-      return v.distribution.isEmpty
-          ? 0.0
-          : v.distribution
-              .where((v2) => v2.ascriptionId == dataId)
-              .map((v2) => v2.qty)
-              .reduce((a, b) => a.add(b));
-    }).reduce((a, b) => a.add(b));
+    for (var label in state.orderDetailLabels) {
+      for(var d in label.distribution){
+        if(d.ascriptionId == dataId){
+          sum = sum.add(d.qty);
+        }
+      }
+    }
     return sum;
   }
 
@@ -457,7 +426,9 @@ class SapPrintPickingLogic extends GetxController {
                   }
                   if (list.isEmpty) {
                     successDialog(
-                      content: 'sap_print_picking_all_material_transfer_completed'.tr,
+                      content:
+                          'sap_print_picking_all_material_transfer_completed'
+                              .tr,
                       back: () => Get.back(),
                     );
                   } else {
@@ -472,7 +443,8 @@ class SapPrintPickingLogic extends GetxController {
               );
               break;
             case 'Y':
-              errorDialog(content: 'sap_print_picking_pallet_already_occupied'.tr);
+              errorDialog(
+                  content: 'sap_print_picking_pallet_already_occupied'.tr);
               break;
           }
         } else {

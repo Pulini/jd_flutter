@@ -319,8 +319,7 @@ class _ProductionDispatchDetailPageState
                           logic.detailViewAddAllWorker(
                             () => askDialog(
                               content:
-                                  'production_dispatch_detail_clean_tips'
-                                      .tr,
+                                  'production_dispatch_detail_clean_tips'.tr,
                               confirm: () =>
                                   logic.cleanDispatchFromWorkProcedure(),
                             ),
@@ -407,7 +406,7 @@ class _ProductionDispatchDetailPageState
                       data.getQty(),
                       style: TextStyle(
                         color:
-                        data.qty == 0 ? Colors.red : Colors.grey.shade600,
+                            data.qty == 0 ? Colors.red : Colors.grey.shade600,
                       ),
                     ),
                   ],
@@ -415,7 +414,8 @@ class _ProductionDispatchDetailPageState
               ),
             ),
             GestureDetector(
-              onTap: () => logic.detailViewDispatchItemDeleteClick(data),
+              onTap: () =>
+                  setState(() => logic.detailViewDispatchItemDeleteClick(data)),
               child: Container(
                 height: double.infinity,
                 decoration: const BoxDecoration(
@@ -583,7 +583,7 @@ class _ProductionDispatchDetailPageState
                 ],
               ),
             ),
-            state.isSelectedMergeOrder ? Container() : _bottomButtons()
+            state.isSelectedMergeOrder.value ? Container() : _bottomButtons()
           ],
         ),
         actions: [

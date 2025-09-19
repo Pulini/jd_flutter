@@ -169,7 +169,7 @@ class RouteConfig {
   //生产派工
   static Routes productionDispatch = Routes(
     '/production_dispatch',
-    204,
+    206,
     const ProductionDispatchPage(),
   );
 
@@ -316,7 +316,7 @@ class RouteConfig {
   //sap喷漆领料
   static Routes sapPrintPicking = Routes(
     '/sap_print_picking',
-    200,
+    201,
     const SapPrintPickingPage(),
   );
 
@@ -589,7 +589,7 @@ class RouteConfig {
   //SAP装柜出库
   static Routes sapPackingScan = Routes(
     '/sap_packing_scan',
-    200,
+    202,
     const SapPackingScanPage(),
   );
 

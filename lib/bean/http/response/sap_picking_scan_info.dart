@@ -99,7 +99,7 @@ class SapPackingScanLabelInfo {
     labelNumber = json['BQID'];
     pieceQuality = json['CLABS'];
     unit = json['ERFME'];
-    quality = json['ERFMG'];
+    quality = json['ERFMG'].toString().toDoubleTry();
     pieceNumber = json['ZPIECE_NO'];
   }
 
@@ -230,7 +230,7 @@ class SapPackingScanAbnormalInfo {
     containerNumber = json['ZZKHXH1'];
     orderLine = json['BQITEM'];
     unit = json['ERFME'];
-    quality = json['ERFMG'];
+    quality = json['ERFMG'].toString().toDoubleTry();
     materialNumber = json['MATNR'];
     materialName = json['ZMAKTG'];
     pieceNumber = json['ZPIECE_NO'];

@@ -8,6 +8,7 @@ import 'package:jd_flutter/bean/http/response/work_plan_material_info.dart';
 import 'package:jd_flutter/bean/http/response/worker_info.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
@@ -20,7 +21,9 @@ showDispatchList(
   Function(int i1, int i2) modify,
 ) {
   var items = <ShowDispatch>[];
+
   list.forEachIndexed((i1, wc) {
+    logger.f(wc.toJson());
     if (isLast) {
       if (wc.finishQty! > 0) {
         items.add(ShowDispatch(
@@ -97,7 +100,7 @@ showDispatchList(
                       ),
                     ),
                     Text(
-                      '${items[index].name}(${isLast ? 'production_dispatch_dialog_recorded_working'.tr : 'production_dispatch_dialog_record_working'.tr}${items[index].qty})',
+                      '${items[index].name}(${isLast ? 'production_dispatch_dialog_recorded_working'.tr : 'production_dispatch_dialog_record_working'.tr}${items[index].qty.toShowString()})',
                       style: const TextStyle(color: Colors.black),
                     ),
                   ],
@@ -215,25 +218,25 @@ addWorkerDialog(
           ],
         ),
         content: SizedBox(
-          width: getScreenSize().width ,
-          height: getScreenSize().height ,
+          width: getScreenSize().width,
+          height: getScreenSize().height,
           child: GridView.builder(
             itemCount: workers.length,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 8, // 网格的列数
-              childAspectRatio: 3 /4,
+              childAspectRatio: 3 / 4,
             ),
             itemBuilder: (BuildContext context, int index) {
               var item = workers[index];
               return GestureDetector(
                 onTap: () {
-                    if (select.contains(item.empID)) {
-                      select.remove(item.empID);
-                    } else {
-                      select.add(item.empID ?? 0);
-                    }
-                    Get.back();
-                    callback.call(select);
+                  if (select.contains(item.empID)) {
+                    select.remove(item.empID);
+                  } else {
+                    select.add(item.empID ?? 0);
+                  }
+                  Get.back();
+                  callback.call(select);
                 },
                 child: Card(
                   color: select.contains(item.empID)
@@ -249,8 +252,7 @@ addWorkerDialog(
                               ? Icon(
                                   Icons.account_circle_rounded,
                                   color: Colors.grey.shade400,
-                                  size:
-                                      getScreenSize().width * 0.08,
+                                  size: getScreenSize().width * 0.08,
                                 )
                               : ClipRRect(
                                   borderRadius: BorderRadius.circular(7),
@@ -927,7 +929,7 @@ showSelectMaterialPopup({
           width: 300,
           height: 200,
           child: getCupertinoPicker(
-           items: surplusMaterialList.map((data) {
+            items: surplusMaterialList.map((data) {
               return Center(child: Text(data['StubBarName']));
             }).toList(),
             controller: controller,
