@@ -58,7 +58,7 @@ class PartProcessScanState {
     });
   }
 
-  subItemCancelReport({
+  submitChangeReport({
     required Function(String msg) success,
     required Function(String msg) error,
   }) {

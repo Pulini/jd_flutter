@@ -211,14 +211,14 @@ class RouteConfig {
   //材料车间派工
   static Routes materialDispatch = Routes(
     '/material_dispatch_page',
-    205,
+    206,
     const MaterialDispatchPage(),
   );
 
   //机台派工单
   static Routes machineDispatch = Routes(
     '/machine_dispatch_page',
-    204,
+    205,
     const MachineDispatchPage(),
   );
 
@@ -442,7 +442,7 @@ class RouteConfig {
   //工序汇报入库
   static Routes processReportWarehouse = Routes(
     '/process_report_warehouse',
-    202,
+    203,
     const ProcessReportStorePage(),
   );
 
@@ -498,7 +498,7 @@ class RouteConfig {
   //报工交接确认列表
   static Routes handoverReportList = Routes(
     '/handover_report_list',
-    200,
+    201,
     const HandoverReportListPage(),
   );
 

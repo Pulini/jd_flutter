@@ -62,7 +62,7 @@ class HandoverReportListLogic extends GetxController {
       loading: 'handover_report_get_handover_list'.tr,
       method: webApiGetScWorkCardReportCheckList,
       params: {
-        'Date': pickerControllerDate.getDateFormatSapYMD(),
+        'Date': pickerControllerDate.getDateFormatYMD(),
         'UserID': userInfo?.userID,
       },
     ).then((response) {
@@ -113,14 +113,12 @@ class HandoverReportListLogic extends GetxController {
   //整理显示数据
   arrangeShowData(String type, bool isState) {
     var data = <ShowHandoverReportList>[];
-    var list = <SubList>[];
-    data.clear();
-    list.clear();
+    logger.f('type:$type');
     if (type.isEmpty) {
+      logger.f('-------------');
       state.handoverDataList
           .where((data) => data.status == isState)
           .forEach((v) {
-        list.clear();
         var processNames = '';
 
         v.empList?.forEachIndexed((c, v) {
@@ -133,6 +131,7 @@ class HandoverReportListLogic extends GetxController {
           }
         });
 
+        var list = <SubList>[];
         v.sizeList?.forEach((s) {
           list.add(SubList(
               subSize: s.size,
@@ -176,10 +175,10 @@ class HandoverReportListLogic extends GetxController {
             subList: list));
       });
     } else {
+      logger.f('-------0------');
       state.handoverDataList
           .where((data) => data.status == isState && data.shift == type)
           .forEach((v) {
-        list.clear();
         var processNames = '';
 
         v.empList?.forEachIndexed((c, v) {
@@ -191,7 +190,7 @@ class HandoverReportListLogic extends GetxController {
                 '$processNames${v.processName}:${v.empName}    数量：${v.qty.toShowString()}${v.unit}\n';
           }
         });
-
+        var list = <SubList>[];
         v.sizeList?.forEach((s) {
           list.add(SubList(
               subSize: s.size,

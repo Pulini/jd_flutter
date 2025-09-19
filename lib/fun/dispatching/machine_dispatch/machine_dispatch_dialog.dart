@@ -322,8 +322,8 @@ showLabelListDialog({
       dispatchNumber: state.nowDispatchNumber.value,
       decrementNumber: state.detailsInfo?.decrementNumber ?? '',
       specifications: label.specifications,
-      netWeight: label.netWeight.toDoubleTry(),
-      grossWeight: label.grossWeight.toDoubleTry(),
+      netWeight: label.netWeight,
+      grossWeight: label.grossWeight,
       englishName: label.englishName ?? '',
       englishUnit: label.englishUnit ?? '',
     ));
@@ -1034,12 +1034,11 @@ selectLabelTypeDialog({
   var workerNumberController = TextEditingController();
   var vCodeController = TextEditingController();
   var btName = 'get_verify_code'.tr.obs;
-  var isCheckedManager = false.obs;
+  var isCheckedManager = true.obs;
   var countTimer = 0;
   var select = 0.obs;
   double outerBoxWeight = englishLabel.outerBoxWeight ?? 0;
 
-  outerBoxWeight = 10;
   Get.dialog(
     PopScope(
       canPop: false,
@@ -1047,7 +1046,7 @@ selectLabelTypeDialog({
         title: Row(
           children: [
             Expanded(
-              child: Text('machine_dispatch_dialog_select_dispatch_order'.tr),
+              child: Text('打印英文标签'.tr),
             ),
             Container(
               width: 210,
@@ -1083,8 +1082,7 @@ selectLabelTypeDialog({
                   suffixIcon: Obx(() => CombinationButton(
                         text: btName.value,
                         isEnabled: btName.value == 'get_verify_code'.tr,
-                        click: () =>
-                            _sendManagerCode(workerNumberController.text, () {
+                        click: () => _sendManagerCode(workerNumberController.text, () {
                           isCheckedManager.value = true;
                           Timer.periodic(
                             const Duration(milliseconds: 1000),

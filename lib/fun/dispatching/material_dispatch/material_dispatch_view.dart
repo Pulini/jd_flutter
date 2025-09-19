@@ -674,8 +674,11 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
               value: state.allInstruction.value,
             )),
         Obx(() => CheckBox(
-              onChanged: (c) => state.isBigLabel.value = c,
-              name: '是否国内新标签',
+              onChanged: (c){
+                state.isBigLabel.value = c;
+                saveMaterialIsBigLabel(c);
+              },
+              name: 'material_dispatch_check_new_label'.tr,
               value: state.isBigLabel.value,
             )),
       ],

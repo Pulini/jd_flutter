@@ -56,27 +56,32 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
                 ),
                 expandedFrameText(
                   text: 'machine_dispatch_size'.tr,
+                  isBold: true,
                   backgroundColor: Colors.blue.shade300,
                   textColor: Colors.white,
                   alignment: Alignment.center,
                 ),
                 expandedFrameText(
                   text: 'machine_dispatch_total_qty'.tr,
+                  isBold: true,
                   backgroundColor: Colors.orange.shade100,
                   alignment: Alignment.center,
                 ),
                 expandedFrameText(
                   text: 'machine_dispatch_shortage_summary'.tr,
+                  isBold: true,
                   backgroundColor: Colors.orange.shade100,
                   alignment: Alignment.center,
                 ),
                 expandedFrameText(
                   text: 'machine_dispatch_sum_report'.tr,
+                  isBold: true,
                   backgroundColor: Colors.orange.shade100,
                   alignment: Alignment.center,
                 ),
                 expandedFrameText(
                   text: 'machine_dispatch_mould'.tr,
+                  isBold: true,
                   backgroundColor: state.leaderVerify.value
                       ? Colors.green.shade200
                       : Colors.blue.shade300,
@@ -85,6 +90,7 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
                 ),
                 expandedFrameText(
                   text: 'machine_dispatch_day_qty'.tr,
+                  isBold: true,
                   backgroundColor: state.leaderVerify.value
                       ? Colors.green.shade200
                       : Colors.blue.shade300,
@@ -94,11 +100,13 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
                 ),
                 expandedFrameText(
                   text: 'machine_dispatch_last_not_fill'.tr,
+                  isBold: true,
                   backgroundColor: Colors.orange.shade100,
                   alignment: Alignment.center,
                 ),
                 expandedFrameText(
                   text: 'machine_dispatch_box_capacity'.tr,
+                  isBold: true,
                   backgroundColor: state.leaderVerify.value
                       ? Colors.green.shade200
                       : Colors.orange.shade100,
@@ -108,23 +116,27 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
                 ),
                 expandedFrameText(
                   text: 'machine_dispatch_label_total'.tr,
+                  isBold: true,
                   backgroundColor: Colors.orange.shade100,
                   alignment: Alignment.center,
                 ),
                 expandedFrameText(
                   text: 'machine_dispatch_boxes'.tr,
+                  isBold: true,
                   backgroundColor: Colors.green.shade200,
                   textColor: Colors.white,
                   alignment: Alignment.center,
                 ),
                 expandedFrameText(
                   text: 'machine_dispatch_duty_not_fill'.tr,
+                  isBold: true,
                   backgroundColor: Colors.green.shade200,
                   textColor: Colors.white,
                   alignment: Alignment.center,
                 ),
                 expandedFrameText(
                   text: 'machine_dispatch_report_qty'.tr,
+                  isBold: true,
                   backgroundColor: Colors.orange.shade100,
                   alignment: Alignment.center,
                 ),
@@ -147,27 +159,32 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
             ),
             expandedFrameText(
               text: data.size ?? '',
+              isBold:true,
               backgroundColor: Colors.blue.shade300,
               textColor: Colors.white,
               alignment: Alignment.center,
             ),
             expandedFrameText(
               text: data.sumQty.toShowString(),
+              isBold:true,
               backgroundColor: Colors.orange.shade100,
               alignment: Alignment.center,
             ),
             expandedFrameText(
               text: data.sumUnderQty.toShowString(),
               backgroundColor: Colors.orange.shade100,
+              isBold:true,
               alignment: Alignment.center,
             ),
             expandedFrameText(
               text: data.sumReportQty.toShowString(),
               backgroundColor: Colors.orange.shade100,
+              isBold:true,
               alignment: Alignment.center,
             ),
             expandedFrameText(
               text: data.mould.toShowString(),
+              isBold:true,
               backgroundColor: state.leaderVerify.value
                   ? Colors.green.shade200
                   : Colors.blue.shade300,
@@ -185,6 +202,7 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
             ),
             expandedFrameText(
               text: data.getTodayDispatchQty().toShowString(),
+              isBold:true,
               backgroundColor: state.leaderVerify.value
                   ? Colors.green.shade200
                   : Colors.blue.shade300,
@@ -199,6 +217,7 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
             ),
             expandedFrameText(
               text: data.lastNotFullQty.toShowString(),
+              isBold:true,
               backgroundColor: Colors.orange.shade100,
               textColor:
                   data.lastMantissaFlag == 1 ? Colors.red : Colors.black87,
@@ -206,6 +225,7 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
             ),
             expandedFrameText(
               text: data.capacity.toShowString(),
+              isBold:true,
               backgroundColor: state.leaderVerify.value
                   ? Colors.green.shade200
                   : Colors.orange.shade100,
@@ -221,17 +241,20 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
             ),
             expandedFrameText(
               text: data.labelQty.toString(),
+              isBold:true,
               backgroundColor: Colors.orange.shade100,
               alignment: Alignment.center,
             ),
             expandedFrameText(
               text: data.boxesQty.toShowString(),
+              isBold:true,
               backgroundColor: Colors.green.shade200,
               textColor: Colors.white,
               alignment: Alignment.center,
             ),
             expandedFrameText(
               text: data.notFullQty.toShowString(),
+              isBold:true,
               backgroundColor: Colors.green.shade200,
               textColor: Colors.white,
               alignment: Alignment.center,
@@ -248,6 +271,7 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
             ),
             expandedFrameText(
               text: data.getReportQty().toShowString(),
+              isBold:true,
               backgroundColor: Colors.orange.shade100,
               alignment: Alignment.center,
             ),
@@ -292,27 +316,32 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
             ),
             expandedFrameText(
               text: 'machine_dispatch_total'.tr,
+              isBold: true,
               backgroundColor: Colors.blue.shade300,
               textColor: Colors.white,
               alignment: Alignment.center,
             ),
             expandedFrameText(
               text: sumQty.toShowString(),
+              isBold: true,
               backgroundColor: Colors.orange.shade100,
               alignment: Alignment.center,
             ),
             expandedFrameText(
               text: sumUnderQty.toShowString(),
+              isBold: true,
               backgroundColor: Colors.orange.shade100,
               alignment: Alignment.center,
             ),
             expandedFrameText(
               text: sumReportQty.toShowString(),
+              isBold: true,
               backgroundColor: Colors.orange.shade100,
               alignment: Alignment.center,
             ),
             expandedFrameText(
               text: mould.toShowString(),
+              isBold: true,
               backgroundColor: state.leaderVerify.value
                   ? Colors.green.shade200
                   : Colors.blue.shade300,
@@ -321,6 +350,7 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
             ),
             expandedFrameText(
               text: todayDispatchQty.toShowString(),
+              isBold: true,
               backgroundColor: state.leaderVerify.value
                   ? Colors.green.shade200
                   : Colors.blue.shade300,
@@ -329,12 +359,14 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
             ),
             expandedFrameText(
               text: lastNotFullQty.toShowString(),
+              isBold: true,
               backgroundColor: Colors.orange.shade100,
               textColor: Colors.black87,
               alignment: Alignment.center,
             ),
             expandedFrameText(
               text: capacity.toShowString(),
+              isBold: true,
               backgroundColor: state.leaderVerify.value
                   ? Colors.green.shade200
                   : Colors.orange.shade100,
@@ -344,23 +376,27 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
             ),
             expandedFrameText(
               text: labelQty.toString(),
+              isBold: true,
               backgroundColor: Colors.orange.shade100,
               alignment: Alignment.center,
             ),
             expandedFrameText(
               text: boxesQty.toShowString(),
+              isBold: true,
               backgroundColor: Colors.green.shade200,
               textColor: Colors.white,
               alignment: Alignment.center,
             ),
             expandedFrameText(
               text: notFullQty.toShowString(),
+              isBold: true,
               backgroundColor: Colors.green.shade200,
               textColor: Colors.white,
               alignment: Alignment.center,
             ),
             expandedFrameText(
               text: reportQty.toShowString(),
+              isBold: true,
               backgroundColor: Colors.orange.shade100,
               alignment: Alignment.center,
             ),
@@ -535,18 +571,12 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
               text: 'machine_dispatch_generate_and_print'.tr,
               isEnabled: logic.isSelectedOne(),
               click: () {
-                if (logic.statusReportedAndGenerate()) {
-                  msgDialog(
-                    content: '已经进行过员工汇报，无法再打标',
-                  );
-                } else {
-                  generateAndPrintDialog(
-                    printLast: () =>
-                        logic.generateAndPrintLabel(isPrintLast: true),
-                    print: () =>
-                        logic.generateAndPrintLabel(isPrintLast: false),
-                  );
-                }
+                generateAndPrintDialog(
+                  printLast: () =>
+                      logic.generateAndPrintLabel(isPrintLast: true),
+                  print: () =>
+                      logic.generateAndPrintLabel(isPrintLast: false),
+                );
               },
               combination: Combination.middle,
             ),
@@ -554,31 +584,25 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
               text: 'machine_dispatch_generate_and_print_english'.tr,
               isEnabled: logic.isSelectedOne(),
               click: () {
-                if (logic.statusReportedAndGenerate()) {
-                  msgDialog(
-                    content: '已经进行过员工汇报，无法再打标',
+                logic.getEnglishLabel((label) {
+                  selectLabelTypeDialog(
+                    englishLabel: label,
+                    printLast: (weight, specifications) =>
+                        logic.generateAndPrintLabel(
+                          isPrintLast: true,
+                          isEnglish: true,
+                          weight: weight,
+                          specifications: specifications,
+                        ),
+                    print: (weight, specifications) =>
+                        logic.generateAndPrintLabel(
+                          isPrintLast: false,
+                          isEnglish: true,
+                          weight: weight,
+                          specifications: specifications,
+                        ),
                   );
-                } else {
-                  logic.getEnglishLabel((label) {
-                    selectLabelTypeDialog(
-                      englishLabel: label,
-                      printLast: (weight, specifications) =>
-                          logic.generateAndPrintLabel(
-                        isPrintLast: true,
-                        isEnglish: true,
-                        weight: weight,
-                        specifications: specifications,
-                      ),
-                      print: (weight, specifications) =>
-                          logic.generateAndPrintLabel(
-                        isPrintLast: false,
-                        isEnglish: true,
-                        weight: weight,
-                        specifications: specifications,
-                      ),
-                    );
-                  });
-                }
+                });
               },
               combination: Combination.middle,
             ),

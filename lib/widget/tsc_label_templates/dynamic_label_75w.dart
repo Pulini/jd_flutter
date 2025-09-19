@@ -665,19 +665,19 @@ Widget materialWorkshopDynamicLabel({
   required String qty,
   required String unitName,
 }) {
-  var textStyle =  TextStyle(fontSize: isBig? 18: 16,fontWeight:FontWeight.bold);
+  var textStyle =   TextStyle(fontSize: isBig?10 :8,fontWeight:FontWeight.bold);
   return _dynamicLabelTemplate75xN(
     isBig: isBig,
     qrCode: qrCode,
-    title: Text(productName, style: TextStyle(fontWeight:FontWeight.bold,fontSize:isBig ? 28: 20)),
+    title: Text(productName, style: TextStyle(fontWeight:FontWeight.bold,fontSize:isBig ? 23: 18)),
     subTitle: Text(materialName, style: textStyle),
-    header: Text('部件：$partName($materialNumber)<$processName>',style: textStyle,),
+    header: Text('部件：$partName($materialNumber)<$processName>',style:  TextStyle(fontSize: isBig?14 : 10,fontWeight:FontWeight.bold),),
     table: Padding(
       padding: const EdgeInsets.only(left: 5, right: 5),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          for (var s in subList) Text(s, style: TextStyle(fontSize: isBig? 16 : 14,fontWeight:FontWeight.bold))
+          for (var s in subList) Text(s, style: TextStyle(fontSize: isBig? 13 : 9,fontWeight:FontWeight.bold))
         ],
       ),
     ),
