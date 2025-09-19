@@ -106,7 +106,9 @@ class ProcessReportStoreState {
       body: {
         'BarCodeList': [
           for (var item in barCodeList.where((v) => !v.isUsed))
-            {'BarCode': item.code}
+            {'BarCode': item.code,
+              'PalletNo': item.palletNo,
+            }
         ],
         'EmpCode': worker.empID,
         'ProcessFlowID': process.processFlowID,
