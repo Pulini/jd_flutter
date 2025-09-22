@@ -38,8 +38,8 @@ class SapLabelInfo {
     number = json['ZPQYM'];
     type = json['ZBARCODE_TYPE'];
     specifications = json['ZZCJGG'];
-    netWeight = json['NTGEW'];
-    grossWeight = json['BRGEW'];
+    netWeight = json['NTGEW'].toString().toDoubleTry();
+    grossWeight = json['BRGEW'].toString().toDoubleTry();
     if (json['ITEM'] != null) {
       item = [];
       json['ITEM'].forEach((v) {

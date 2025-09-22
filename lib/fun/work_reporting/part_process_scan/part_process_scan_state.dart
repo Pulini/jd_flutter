@@ -4,6 +4,7 @@ import 'package:jd_flutter/bean/http/response/scan_barcode_info.dart';
 import 'package:jd_flutter/bean/http/response/worker_info.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
+import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
 class PartProcessScanState {
@@ -22,7 +23,7 @@ class PartProcessScanState {
     getWorkerInfo(
       department: userInfo?.departmentID.toString(),
       workers: (list) => workerList.value = list,
-      error: (msg) => errorDialog(content: msg),
+      error: (msg) => showSnackBar( message: msg),
     );
   }
 

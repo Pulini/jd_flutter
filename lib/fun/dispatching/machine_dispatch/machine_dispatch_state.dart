@@ -188,9 +188,7 @@ class MachineDispatchState {
       labelStatus: '20',
       dispatchNumber: detailsInfo?.dispatchNumber ?? '',
     ).then((response) {
-      logger.f('---------');
       if (response.resultCode == resultSuccess) {
-        logger.f('------成功---');
         var list = <SapLabelInfo>[
           for (var json in response.data)
             SapLabelInfo.fromJsonWithState(
