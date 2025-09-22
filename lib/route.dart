@@ -218,7 +218,7 @@ class RouteConfig {
   //机台派工单
   static Routes machineDispatch = Routes(
     '/machine_dispatch_page',
-    205,
+    206,
     const MachineDispatchPage(),
   );
 
