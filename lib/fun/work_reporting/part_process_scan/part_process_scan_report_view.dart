@@ -59,10 +59,16 @@ class _PartProcessScanReportPageState extends State<PartProcessScanReportPage>
                 IconButton(
                   padding: const EdgeInsets.all(0),
                   iconSize: 35,
-                  onPressed: () => Get.to(
-                    () => const PartProcessScanDispatchPage(),
-                    arguments: {'Index': index},
-                  ),
+                  onPressed: (){
+                    if(data.getProcessMax().sub(data.getDistributionMax())>0){
+                      Get.to(
+                            () => const PartProcessScanDispatchPage(),
+                        arguments: {'Index': index},
+                      );
+                    }else{
+                      showSnackBar(message: '无剩余可分配数量');
+                    }
+                  },
                   icon: const Icon(
                     Icons.note_alt_outlined,
                     color: Colors.blue,

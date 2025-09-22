@@ -158,6 +158,14 @@ class MaterialDispatchInfo {
     }
     return map;
   }
+
+  getShowFactory(){
+    if(sapDecideArea!='' || sourceFactoryName!=''){
+      return '$sapDecideArea - $sourceFactoryName';
+    }else{
+      return '';
+    }
+  }
 }
 
 // BillNo : "J2403330,J2403976,J2403977,J2404036,J2404067,J2407528"

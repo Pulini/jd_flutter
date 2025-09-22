@@ -30,6 +30,9 @@ class MaterialDispatchPage extends StatefulWidget {
 class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
   final logic = Get.put(MaterialDispatchLogic());
   final state = Get.find<MaterialDispatchLogic>().state;
+
+  late SpinnerController spController;
+
   var scReportState = SpinnerController(
     saveKey: RouteConfig.materialDispatch.name,
     dataList: [
@@ -238,9 +241,7 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
                     maintainAnimation: true,
                     maintainSize: true,
                     maintainState: true,
-                    child: Row(
-                        children: _subItemButton(
-                            data: data, titlePosition: index, position: -1)),
+                    child: Row(children: _subItemButton(data: data)),
                   ))
             ],
           ),
@@ -284,11 +285,8 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
                   ),
                   alignment: Alignment.centerLeft,
                   child: Row(
-                    children: _subItemButton(
-                        data: data,
-                        subData: data.children![i],
-                        position: i,
-                        titlePosition: index),
+                    children:
+                        _subItemButton(data: data, subData: data.children![i]),
                   ),
                 )
               ],
@@ -380,8 +378,8 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
               ),
               CombinationButton(
                 text: 'material_dispatch_label_list'.tr,
-                click: () =>
-                    labelListDialog(context,data, printCallback: (info, label) {
+                click: () => labelListDialog(context, data,
+                    printCallback: (info, label) {
                   var bill = '';
                   var batch = '';
                   if (info.children!.isNotEmpty) {
@@ -443,8 +441,6 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
   _subItemButton({
     required MaterialDispatchInfo data,
     Children? subData,
-    required int titlePosition,
-    required int position,
   }) {
     btReport() {
       if (subData != null && subData.noCodeQty.toDoubleTry() > 0.0) {
@@ -454,10 +450,8 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
           subData,
           (d, longQty, wideQty, heightQty, gwQty, nwQty) {
             logic.subItemReport(
-                context:context,
+              context: context,
               qty: d.toShowString(),
-              titlePosition: titlePosition,
-              clickPosition: position,
               submitData: data,
               subData: subData,
               long: longQty.toShowString(),
@@ -497,8 +491,6 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
             logic.subItemReport(
               context: context,
               qty: d.toShowString(),
-              titlePosition: titlePosition,
-              clickPosition: position,
               submitData: data,
               subData: subData,
               isPrint: true,
@@ -587,6 +579,13 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
       status: scReportState.selectIndex - 1,
       typeBody: tecTypeBody.text,
     );
+    setState(() {
+      spController = SpinnerController(
+          dataList: state.factoryList,
+          onChanged: (index) {
+            logic.selectShow(index);
+          });
+    });
   }
 
   showPickPallet() {
@@ -607,6 +606,7 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (getMaterialDispatchPalletNumber().isEmpty) showPickPallet();
     });
+    spController = SpinnerController(dataList: ['全部工厂']);
     super.initState();
   }
 
@@ -615,13 +615,14 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
     return pageBodyWithDrawer(
       actions: [
         SizedBox(
-          width: 300,
+          width: 200,
           child: EditText(
             controller: tecMaterial,
             hint: 'material_dispatch_select_tips'.tr,
             onChanged: (s) => logic.search(s),
           ),
         ),
+        SizedBox(width: 200, child: Spinner(controller: spController)),
         CombinationButton(
           text: 'material_dispatch_storage_pallet_select'.tr,
           click: () => showPickPallet(),
@@ -674,7 +675,7 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
               value: state.allInstruction.value,
             )),
         Obx(() => CheckBox(
-              onChanged: (c){
+              onChanged: (c) {
                 state.isBigLabel.value = c;
                 saveMaterialIsBigLabel(c);
               },

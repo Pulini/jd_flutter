@@ -16,6 +16,7 @@ class PartProcessScanLogic extends GetxController {
   final PartProcessScanState state = PartProcessScanState();
 
   addBarCode({required String code, Function()? callback}) {
+    code ='67FF7DE2-0091-46F9-849C-7F9C408758DD';
     if (code.isEmpty) {
       showSnackBar(
         message: 'part_process_scan_report_input_label_tips'.tr,

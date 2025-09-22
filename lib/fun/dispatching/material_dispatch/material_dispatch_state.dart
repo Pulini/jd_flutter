@@ -19,7 +19,7 @@ int getMaterialDispatchDate() =>
 
 saveMaterialDispatchDate(int date) => spSave(spPalletDate, date);
 
- getMaterialDispatchMachineId() => spGet(spMachine) ?? '';
+getMaterialDispatchMachineId() => spGet(spMachine) ?? '';
 
 saveMaterialDispatchMachineId(String id) => spSave(spMachine, id);
 
@@ -46,6 +46,8 @@ class MaterialDispatchState {
   var isBigLabel = getMaterialIsBigLabel().obs;
   var orderList = <MaterialDispatchInfo>[];
   var showOrderList = <MaterialDispatchInfo>[].obs;
+  var allOrderList = <MaterialDispatchInfo>[]; //所有内容
+  var factoryList = <String>['全部']; //所有工厂
 
   getScWorkCardProcess({
     required String startDate,
@@ -71,13 +73,31 @@ class MaterialDispatchState {
         orderList = [
           for (var json in response.data) MaterialDispatchInfo.fromJson(json)
         ];
+        allOrderList = orderList;
         showOrderList.value = orderList;
+        arrangeFactory();
       } else {
+        factoryList.clear();
+        allOrderList = [];
         orderList = [];
-        showOrderList.value=[];
+        showOrderList.value = [];
         error.call(response.message ?? '');
       }
     });
+  }
+
+  arrangeFactory() {
+    var list = <String>[];
+    list.add('全部工厂');
+    for (var data in allOrderList) {
+      if (data.getShowFactory()!='' && !list.contains(data.getShowFactory())) {
+        list.add(data.getShowFactory());
+      }
+    }
+    for (var element in list) {
+      logger.f('element:$element');
+    }
+    factoryList = list;
   }
 
   reportToSAP({
@@ -252,8 +272,6 @@ class MaterialDispatchState {
     required String heightQty,
     required String gwQty,
     required String nwQty,
-    required int titlePosition,
-    required int clickPosition,
     required Function(String guid, String pick) success,
     required Function(String msg) error,
   }) {
@@ -288,28 +306,19 @@ class MaterialDispatchState {
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        if (clickPosition != -1) {
-          showOrderList[titlePosition].children![clickPosition].codeQty =
-              (orderList[titlePosition]
-                      .children![clickPosition]
-                      .codeQty
-                      .toDoubleTry()
-                      .add(reportQty.toDoubleTry()))
-                  .toShowString();
-          showOrderList[titlePosition].children![clickPosition].noCodeQty =
-              (orderList[titlePosition]
-                  .children![clickPosition]
-                  .noCodeQty
-                  .toDoubleTry()
-                  .sub(reportQty.toDoubleTry())
-                  .toShowString());
+        subData.codeQty = subData.codeQty
+            .toDoubleTry()
+            .add(reportQty.toDoubleTry())
+            .toShowString();
+        subData.noCodeQty = (subData.noCodeQty
+            .toDoubleTry()
+            .sub(reportQty.toDoubleTry())
+            .toShowString());
 
-          showOrderList[titlePosition].codeQty =(orderList[titlePosition].codeQty
-              .toDoubleTry()
-              .add(reportQty.toDoubleTry()))
-              .toShowString();
-          showOrderList.refresh();
-        }
+        subData.finishQty =
+            (subData.finishQty.toDoubleTry().add(reportQty.toDoubleTry()))
+                .toShowString();
+        showOrderList.refresh();
         var guid = '';
         var pick = '';
         if (MaterialDispatchReportSuccessInfo.fromJson(response.data)

@@ -4,6 +4,7 @@ import 'package:jd_flutter/bean/http/response/material_dispatch_info.dart';
 import 'package:jd_flutter/bean/http/response/material_dispatch_label_detail.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/preview_label_widget.dart';
 import 'package:jd_flutter/widget/tsc_label_templates/dynamic_label_110w.dart';
@@ -22,6 +23,17 @@ class MaterialDispatchLogic extends GetxController {
   //   userInfo?.defaultStockNumber = '1104';
   //   super.onReady();
   // }
+  selectShow(int index) {
+    logger.f("筛选："+index.toString());
+    if (index == 0) {
+      state.showOrderList.value = state.allOrderList;
+    } else {
+      state.showOrderList.value = state.allOrderList
+          .where((data) => data.getShowFactory() == state.factoryList[index])
+          .toList();
+    }
+    state.showOrderList.refresh();
+  }
 
   refreshDataList({
     required String startDate,
@@ -127,15 +139,11 @@ class MaterialDispatchLogic extends GetxController {
     required String height,
     required String gw,
     required String nw,
-    required int titlePosition,
-    required int clickPosition,
   }) {
     state.subItemReport(
       reportQty: qty,
       data: submitData,
       subData: subData,
-      titlePosition: titlePosition,
-      clickPosition: clickPosition,
       longQty: long,
       wideQty: wide,
       heightQty: height,
