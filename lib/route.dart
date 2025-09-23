@@ -113,7 +113,7 @@ class RouteConfig {
   //查看指令明细
   static Routes viewInstructionDetails = Routes(
     '/view_instruction_details',
-    200,
+    201,
     const ViewInstructionDetailsPage(),
   );
 
@@ -169,7 +169,7 @@ class RouteConfig {
   //生产派工
   static Routes productionDispatch = Routes(
     '/production_dispatch',
-    206,
+    207,
     const ProductionDispatchPage(),
   );
 

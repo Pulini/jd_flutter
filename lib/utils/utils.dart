@@ -680,3 +680,29 @@ Orientation getScreenOrientation() {
       ? Orientation.landscape
       : Orientation.portrait;
 }
+String getFileName(String url, {int num = 2}) {
+  final code = unicodeDecode(url.replaceAll('%u', '\\u'));
+  logger.f('url=$code');
+  var name = code;
+  for (var i = 1; i < num; i++) {
+    name = name.substring(0, name.lastIndexOf('/'));
+    if (i == num - 1) {
+      name = code.substring(name.lastIndexOf('/') + 1);
+    }
+  }
+  return name;
+}
+String unicodeDecode(String string) {
+  var str = string;
+  final regex = RegExp(r'(\\u(\w{4}))');
+  final matches = regex.allMatches(str);
+
+  for (final match in matches) {
+    final unicodeHex = match.group(2)!;
+    final unicodeInt = int.parse(unicodeHex, radix: 16);
+    final unicodeChar = String.fromCharCode(unicodeInt);
+    str = str.replaceFirst(match.group(1)!, unicodeChar);
+  }
+
+  return str;
+}

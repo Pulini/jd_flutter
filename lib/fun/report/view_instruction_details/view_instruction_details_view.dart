@@ -43,10 +43,10 @@ class _ViewInstructionDetailsPageState
               loadingShow('view_instruction_details_reading'.tr);
             },
             onPageFinished: (String url) {
-              if (Get.isDialogOpen == true) Get.back();
+              loadingDismiss();
             },
             onWebResourceError: (WebResourceError error) {
-              if (Get.isDialogOpen == true) Get.back();
+              loadingDismiss();
             },
           ),
         );

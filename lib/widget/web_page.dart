@@ -101,6 +101,46 @@ class WebPage extends StatelessWidget {
     });
   }
 
+  // 直接加载URL，保持原始URL不变
+  void _loadUrl(String urlString) {
+    // 对于包含%u的特殊URL，使用特殊方式加载以避免WebView自动编码
+    if (urlString.contains('%u')) {
+      // 使用HTML和JavaScript直接加载，避免WebView对URL进行编码
+      webViewController.loadHtmlString(_generateHtmlForUrl(urlString));
+    } else {
+      // 普通URL直接加载
+      webViewController.loadRequest(Uri.parse(urlString));
+    }
+  }
+
+  String _generateHtmlForUrl(String urlString) {
+    // 使用iframe加载URL
+    return '''
+  <!DOCTYPE html>
+  <html>
+  <head>
+      <meta charset="UTF-8">
+      <style>
+        body, html {
+          margin: 0;
+          padding: 0;
+          height: 100%;
+          overflow: hidden;
+        }
+        iframe {
+          border: none;
+          width: 100%;
+          height: 100%;
+        }
+      </style>
+  </head>
+  <body>
+      <iframe src="$urlString"></iframe>
+  </body>
+  </html>
+  ''';
+  }
+
   @override
   Widget build(BuildContext context) {
     if (GetPlatform.isAndroid || GetPlatform.isIOS) {
@@ -136,7 +176,7 @@ class WebPage extends StatelessWidget {
       if (needCheckAuthorize) {
         checkAuthorize();
       } else {
-        webViewController.loadRequest(Uri.parse(url));
+        webViewController.clearCache().then((_) => _loadUrl(url));
       }
     });
     return Container(
