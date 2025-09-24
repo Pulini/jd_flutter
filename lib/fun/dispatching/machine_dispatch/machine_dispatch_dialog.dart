@@ -542,7 +542,7 @@ teamLeaderVerifyDialog() {
   var countDown = 0;
   var workerNumber = '';
   var verificationCode = '';
-  state.leaderVerify.value = true; //测试用
+  // state.leaderVerify.value = true; //测试用
   Get.dialog(
     PopScope(
       canPop: false,
@@ -933,7 +933,6 @@ addDispatchWorker(DispatchProcessInfo data, Function() refresh) {
             onPressed: () => Get.back(),
             child: Text(
               'dialog_default_back'.tr,
-              style: const TextStyle(color: Colors.grey),
             ),
           ),
         ],

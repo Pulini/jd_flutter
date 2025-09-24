@@ -256,7 +256,7 @@ class MachineDispatchLogic extends GetxController {
       confirm: () => state.reportDispatch(
         success: (msg) => successDialog(
           content: msg,
-          back: () => Get.back(),
+          back: () => Get.back(result: true),
         ),
         error: (msg) => errorDialog(content: msg),
       ),
@@ -383,17 +383,15 @@ class MachineDispatchLogic extends GetxController {
     Items item =
         state.detailsInfo!.items![state.selectList.indexWhere((v) => v.value)];
 
+
     var printQty = 0.0;
-    if (state.detailsInfo?.status == 1 || state.detailsInfo?.status == 2) {
+    if ((state.detailsInfo?.status == 1 || state.detailsInfo?.status == 2 ) && state.leaderVerify.value) {
       printQty = item.notFullQty ?? 0;
     } else {
       if (isPrintLast) {
         if ((item.capacity ?? 0) > 0) {
           if (item.mantissaMark == 'X') {
-            printQty = item.sumUnderQty != 0
-                ? (item.sumUnderQty.add(item.lastNotFullQty ?? 0) %
-                    (item.capacity ?? 0))
-                : item.notFullQty ?? 0;
+            printQty = item.sumUnderQty != 0 ? (item.sumUnderQty.add(item.lastNotFullQty ?? 0) % (item.capacity ?? 0)) : item.notFullQty ?? 0;
           } else {
             printQty = item.capacity ?? 0;
           }
