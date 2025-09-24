@@ -574,6 +574,15 @@ typeBodySaveDialog(
 }
 
 manufactureInstructionsDialog(List<ManufactureInstructionsInfo> files) {
+  if (files.length == 1) {
+    Get.to(() => WebPage(
+          title: files.first.name ?? '',
+          url:files.first.url??'',
+          fileId: files.first.interID.toString(),
+        ));
+    return;
+  }
+
   var selected = -1.obs;
   Get.dialog(
     PopScope(
@@ -650,6 +659,10 @@ manufactureInstructionsDialog(List<ManufactureInstructionsInfo> files) {
 }
 
 colorListDialog(List<OrderColorList> files, Function(String) callback) {
+  if (files.length == 1) {
+    callback.call(files.first.materialCode ?? '');
+    return;
+  }
   var selected = -1.obs;
   Get.dialog(
     PopScope(
