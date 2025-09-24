@@ -40,11 +40,14 @@ class HydroelectricExcessLogic extends GetxController {
   }
 
   searchRoom({
+    required String  searchType,
     required DeviceListInfo data,
     required bool isBack,
      Function(String, String)? refresh,
+     Function()? setRoom,
   }) {
     state.searchRoom(
+      type: searchType,
       data: data,
       success: (list) {
         if (list.isNotEmpty) {
@@ -52,7 +55,7 @@ class HydroelectricExcessLogic extends GetxController {
           refresh?.call(list.first.number!, list.first.nowDegree!);
         }
         if (list.isNotEmpty) setDeviceUse(list.first); //设置本月使用量
-        if (isBack) Get.back();
+        if (isBack) Get.back(result: true);
       },
       error: (msg) => errorDialog(content: msg),
     );

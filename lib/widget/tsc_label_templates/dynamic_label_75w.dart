@@ -153,7 +153,6 @@ Widget _createTableWidget({
 ///75 x N（高度由内容决定）
 Widget _dynamicLabelTemplate75xN({
   required String qrCode,
-  bool isBig = false,
   Widget? title,
   Widget? subTitle,
   Widget? header,
@@ -209,7 +208,7 @@ Widget _dynamicLabelTemplate75xN({
 
   return Container(
     color: Colors.white,
-    width: isBig ? 108 * 5.5 : 75 * 5.5,
+    width: 75 * 5.5,
     child: Padding(
       padding: const EdgeInsets.all(4),
       child: Container(
@@ -223,7 +222,7 @@ Widget _dynamicLabelTemplate75xN({
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             SizedBox(
-              height: isBig? 27 * 5.5 :19 * 5.5,
+              height: 19 * 5.5,
               child: titleWidget,
             ),
             if (header != null) header,
@@ -648,58 +647,3 @@ Widget maintainLabelMixEnglishDynamicLabel({
         ),
       ),
     );
-
-///材料车间动态标签
-Widget materialWorkshopDynamicLabel({
-   bool isBig = false,
-  required String qrCode,
-  required String productName,
-  required String materialName,
-  required String partName,
-  required String materialNumber,
-  required String processName,
-  required List<String> subList,
-  required String sapDecideArea,
-  required String color,
-  required String drillingCrewName,
-  required String qty,
-  required String unitName,
-}) {
-  var textStyle =   TextStyle(fontSize: isBig?10 :8,fontWeight:FontWeight.bold);
-  return _dynamicLabelTemplate75xN(
-    isBig: isBig,
-    qrCode: qrCode,
-    title: Text(productName, style: TextStyle(fontWeight:FontWeight.bold,fontSize:isBig ? 23: 18)),
-    subTitle: Text(materialName, style: textStyle),
-    header: Text('部件：$partName($materialNumber)<$processName>',style:  TextStyle(fontSize: isBig?14 : 10,fontWeight:FontWeight.bold),),
-    table: Padding(
-      padding: const EdgeInsets.only(left: 5, right: 5),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          for (var s in subList) Text(s, style: TextStyle(fontSize: isBig? 13 : 9,fontWeight:FontWeight.bold))
-        ],
-      ),
-    ),
-    footer: Column(
-      children: [
-        Row(
-          children: [
-            Expanded(child: Text(sapDecideArea, style: textStyle)),
-            Expanded(child: Text('色系：$color', style: textStyle))
-          ],
-        ),
-        Row(
-          children: [
-            Expanded(
-              child: Text(drillingCrewName, style: textStyle),
-            ),
-            Expanded(
-              child: Text('数量：$qty$unitName', style: textStyle),
-            )
-          ],
-        )
-      ],
-    ),
-  );
-}

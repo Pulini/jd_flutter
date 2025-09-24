@@ -3,8 +3,11 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/material_dispatch_info.dart';
 import 'package:jd_flutter/bean/http/response/material_dispatch_label_detail.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
+import 'package:jd_flutter/utils/printer/print_util.dart';
+import 'package:jd_flutter/utils/printer/tsc_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
+import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/preview_label_widget.dart';
 import 'package:jd_flutter/widget/tsc_label_templates/dynamic_label_110w.dart';
@@ -24,7 +27,7 @@ class MaterialDispatchLogic extends GetxController {
   //   super.onReady();
   // }
   selectShow(int index) {
-    logger.f("筛选："+index.toString());
+    logger.f("筛选：" + index.toString());
     if (index == 0) {
       state.showOrderList.value = state.allOrderList;
     } else {
@@ -229,18 +232,17 @@ class MaterialDispatchLogic extends GetxController {
     required String ew,
   }) {
     if (data.exitLabelType == '101') {
-      //国内标
+
       if (state.allInstruction.value) {
         var list = <String>[];
-
         billNo.split(',').forEach((data) {
           if (data.isNotEmpty) {
             list.add(data);
           }
         });
         var chunked = [
-          for (int i = 0; i < list.length; i += 6)
-            list.sublist(i, (i + 6).clamp(0, list.length))
+          for (int i = 0; i < list.length; i += 4)
+            list.sublist(i, (i + 4).clamp(0, list.length))
         ];
         var subList = <String>[];
         for (var data in chunked) {
@@ -250,52 +252,120 @@ class MaterialDispatchLogic extends GetxController {
           }
           subList.add(splitData.substring(0, splitData.length - 1));
         }
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => PreviewLabel(
-                labelWidget: materialWorkshopDynamicLabel(
-                  isBig: state.isBigLabel.value,
-                  qrCode: guid,
-                  productName: data.productName ?? '',
-                  materialName: data.materialName ?? '',
-                  partName: data.partName ?? '',
-                  materialNumber: data.materialNumber ?? '',
-                  processName: data.processName ?? '',
-                  subList: subList,
-                  sapDecideArea: data.sapDecideArea ?? '',
-                  color: color,
-                  drillingCrewName: data.drillingCrewName ?? '',
-                  qty: qty,
-                  unitName: data.unitName ?? '',
-                ),
-                isDynamic: true),
-          ),
-        );
+        if (state.isBigLabel.value) {   //国内大标的连标
+
+          labelMultipurposeBigDynamicFixed(
+            qrCode: guid,
+            title: data.productName ?? '',
+            subTitle: '${data.partName}<${data.processName}>$billNo',
+            subTitleWrap: true,
+            tableSubTitle2: subList,
+            content: '${data.materialName}  (${data.materialNumber})',
+            bottomLeftText1: data.drillingCrewName ?? '',
+            bottomMiddleText1: '$color/$qty${data.unitName}',
+            bottomRightText1: data.sapDecideArea ?? '',
+            speed: 3.0,
+            density: 14.0,
+          ).then((printLabel) {
+            PrintUtil().printLabel(
+                label: printLabel,
+                start: () {
+                  loadingShow('正在打印');
+                },
+                success: () {
+                  loadingDismiss();
+                  showSnackBar(message: '打印成功');
+                },
+                failed: () {
+                  loadingDismiss();
+                  showSnackBar(message: '打印失败');
+                });
+          });
+        } else {
+          labelMultipurposeDynamic(
+            qrCode: guid,
+            title: data.productName ?? '',
+            subTitle: data.materialName ?? '',
+            tableTitle:
+                '部件：${data.partName}(${data.materialNumber})<${data.processName}>',
+            tableSubTitle2: list,
+            bottomLeftText1: data.sapDecideArea ?? '',
+            bottomLeftText2: data.drillingCrewName ?? '',
+            bottomRightText1: '色系：$color',
+            bottomRightText2: '数量：$qty${data.unitName}',
+          ).then((printLabel) {
+            PrintUtil().printLabel(
+                label: printLabel,
+                start: () {
+                  loadingShow('正在打印');
+                },
+                success: () {
+                  loadingDismiss();
+                  showSnackBar(message: '打印成功');
+                },
+                failed: () {
+                  loadingDismiss();
+                  showSnackBar(message: '打印失败');
+                });
+          });
+        }
       } else {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => PreviewLabel(
-              labelWidget: materialWorkshopFixedLabel(
-                isBig: state.isBigLabel.value,
-                qrCode: guid,
-                productName: data.productName ?? '',
-                materialName: data.materialName ?? '',
-                partName: data.partName ?? '',
-                toPrint: billNo,
-                palletNumber: getMaterialDispatchPalletNumber(),
-                materialNumber: data.materialNumber ?? '',
-                processName: data.processName ?? '',
-                sapDecideArea: data.sapDecideArea ?? '',
-                color: color,
-                drillingCrewName: data.drillingCrewName ?? '',
-                qty: qty,
-                unitName: data.unitName ?? '',
-                pick: pick,
-              ),
-              isDynamic: state.isBigLabel.value ? true : false,
-            ),
-          ),
-        );
+        if (state.isBigLabel.value) {
+          labelMultipurposeBigFixed(
+            qrCode: guid,
+            title: data.productName ?? '',
+            subTitle: '${data.partName}<${data.processName}>$billNo',
+            subTitleWrap: true,
+            content: '${data.materialName}  (${data.materialNumber})',
+            bottomLeftText1: data.drillingCrewName ?? '',
+            bottomMiddleText1: '$color/$qty${data.unitName}',
+            bottomRightText1: data.sapDecideArea ?? '',
+            speed: 3.0,
+            density: 14.0,
+          ).then((printLabel) {
+            PrintUtil().printLabel(
+                label: printLabel,
+                start: () {
+                  loadingShow('正在打印');
+                },
+                success: () {
+                  loadingDismiss();
+                  showSnackBar(message: '打印成功');
+                },
+                failed: () {
+                  loadingDismiss();
+                  showSnackBar(message: '打印失败');
+                });
+          });
+        } else {
+          labelMultipurposeFixed( //国内小标
+            qrCode: guid,
+            title: data.productName ?? '',
+            subTitleWrap:true,
+            subTitle:'${data.partName}<${data.processName}>$billNo',
+            content:'(${data.materialNumber})${data.materialName}',
+            bottomLeftText1: data.drillingCrewName ?? '',
+            bottomMiddleText1: '$qty${data.unitName}',
+            bottomMiddleText2: '色系：$color',
+            bottomRightText1: data.sapDecideArea ?? '',
+            speed: 3.0,
+            density: 14.0,
+          ).then((printLabel) {
+            PrintUtil().printLabel(
+                label: printLabel,
+                start: () {
+                  loadingShow('正在打印');
+                },
+                success: () {
+                  loadingDismiss();
+                  showSnackBar(message: '打印成功');
+                },
+                failed: () {
+                  loadingDismiss();
+                  showSnackBar(message: '打印失败');
+                });
+          });
+        }
       }
     } else if (data.exitLabelType == '202') {
       //小标

@@ -23,7 +23,18 @@ class _HydroelectricExcessTreatListPageState
   _item(DeviceListInfo data) {
     return InkWell(
       onTap: () {
-        logic.searchRoom(data: data, isBack: true);
+        var type = '0';
+        if(state.select.value=='0'){
+          state.stateToSearch.value = '1';
+          type = '1';
+        }else if (state.select.value=='1'){
+          state.stateToSearch.value = '0';
+          type = '0';
+        }else if (state.select.value=='2'){
+          state.stateToSearch.value = '1';
+          type = '1';
+        }
+        logic.searchRoom(searchType:type,data: data, isBack: true);
       },
       child: Container(
         height: 100,
@@ -44,7 +55,7 @@ class _HydroelectricExcessTreatListPageState
             Row(
               children: [
                 expandedTextSpan(
-                  hint: 'hydroelectric_account_number'.tr,
+                  hint: 'hydroelectric_account_numbers'.tr,
                   text: data.number.toString(),
                   textColor: Colors.blue,
                 ),
@@ -83,7 +94,7 @@ class _HydroelectricExcessTreatListPageState
   @override
   Widget build(BuildContext context) {
     return pageBodyWithBottomSheet(
-        title: 'hydroelectric_water_reading'.tr,
+        title: 'hydroelectric_water_copy'.tr,
         bottomSheet: [
           EditText(
             controller: tecDeviceNumber,
@@ -133,5 +144,11 @@ class _HydroelectricExcessTreatListPageState
             itemBuilder: (context, index) => _item(state.dataList[index]),
           ),
         ));
+  }
+
+  @override
+  void dispose() {
+    state.dataList.clear();
+    super.dispose();
   }
 }

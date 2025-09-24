@@ -7,7 +7,6 @@ import 'package:qr_flutter/qr_flutter.dart';
 ///75*45大小
 Widget _fixedLabelTemplate75x45({
   required String qrCode,
-  bool isBig = false,
   Widget? title,
   Widget? subTitle,
   Widget? content,
@@ -118,8 +117,8 @@ Widget _fixedLabelTemplate75x45({
 
   return Container(
     color: Colors.white,
-    width: isBig ? 108 * 5.5 : 75 * 4.5,
-    height: isBig ? 66 * 4.5 : 45 * 5.5,
+    width: 75 * 5.5,
+    height: 45 * 5.5,
     child: Padding(
       padding: const EdgeInsets.all(4),
       child: Container(
@@ -1196,48 +1195,3 @@ Widget sapWmsSplitLabelOtherWarehouseLabel({
         style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
       ),
     );
-
-///材料车间固定标签
-Widget materialWorkshopFixedLabel({
-  bool isBig = false,
-  required String qrCode,
-  required String productName,
-  required String materialName,
-  required String partName,
-  required String toPrint,
-  required String palletNumber,
-  required String materialNumber,
-  required String processName,
-  required String sapDecideArea,
-  required String color,
-  required String drillingCrewName,
-  required String qty,
-  required String unitName,
-  required String pick,
-}) {
-  var textStyle =
-      TextStyle(fontWeight: FontWeight.bold, fontSize: isBig ? 11 : 9);
-  return _fixedLabelTemplate75x45(
-    qrCode: qrCode,
-    isBig: isBig,
-    title: Text(productName, style: TextStyle(fontWeight: FontWeight.bold, fontSize: isBig ? 23 : 18)),
-    subTitle: Text(
-      '$partName <$processName>    $toPrint', style: TextStyle(fontWeight: FontWeight.bold, fontSize: isBig ? 15 : 10),
-      maxLines: 2,
-    ),
-    content: Text('$materialName($materialNumber)',
-        style:
-            TextStyle(fontWeight: FontWeight.bold, fontSize: isBig ? 15 : 10)),
-    bottomLeft: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [Text(drillingCrewName, style: textStyle)]),
-    bottomMiddle: Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        Text('$color/$qty$unitName', style: textStyle),
-        Text(pick, style: textStyle)
-      ],
-    ),
-    bottomRight: Center(child: Text(sapDecideArea, style: textStyle)),
-  );
-}

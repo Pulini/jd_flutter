@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/device_list_info.dart';
 import 'package:jd_flutter/fun/other/hydroelectric_excess/hydroelectric_excess_logic.dart';
 import 'package:jd_flutter/fun/other/hydroelectric_excess/hydroelectric_excess_treat_list_view.dart';
+import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
@@ -49,6 +50,7 @@ class _HydroelectricExcessPageState extends State<HydroelectricExcessPage> {
               onPressed: () {
                 if (textNumber.text.isNotEmpty) {
                   logic.searchRoom(
+                    searchType: '0',
                     data: DeviceListInfo(
                       number: textNumber.text,
                     ),
@@ -94,8 +96,8 @@ class _HydroelectricExcessPageState extends State<HydroelectricExcessPage> {
       scan: (code) {
         textThisTime.text = code;
         if (code.isNotEmpty) {
-          state.stateToSearch.value = '0';
           logic.searchRoom(
+            searchType: '0',
             data: DeviceListInfo(number: code),
             isBack: false,
             refresh: (number, nowDegree) {
@@ -179,6 +181,7 @@ class _HydroelectricExcessPageState extends State<HydroelectricExcessPage> {
                                     Get.to(() => const Scanner())?.then((v) {
                                   if (v != null) {
                                     logic.searchRoom(
+                                      searchType: '0',
                                       data: DeviceListInfo(number: v),
                                       isBack: false,
                                       refresh: (number, nowDegree) {
@@ -199,7 +202,12 @@ class _HydroelectricExcessPageState extends State<HydroelectricExcessPage> {
                                 click: () {
                                   state.isShow.value = false;
                                   Get.to(() =>
-                                      const HydroelectricExcessTreatListPage());
+                                      const HydroelectricExcessTreatListPage())?.then((v){
+                                        if(v == true){
+                                          textNumber.text = state.dataDetail.value.roomNumber!;
+                                          textThisTime.text = state.dataDetail.value.nowDegree!;
+                                        }
+                                  });
                                 },
                               ),
                             ))

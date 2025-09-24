@@ -211,7 +211,7 @@ class RouteConfig {
   //材料车间派工
   static Routes materialDispatch = Routes(
     '/material_dispatch_page',
-    207,
+    208,
     const MaterialDispatchPage(),
   );
 
@@ -267,7 +267,7 @@ class RouteConfig {
   //水电抄度
   static Routes hydroelectricExcess = Routes(
     '/hydroelectric_excess_page',
-    200,
+    201,
     const HydroelectricExcessPage(),
   );
 
