@@ -11,8 +11,6 @@ import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/preview_label_widget.dart';
 import 'package:jd_flutter/widget/tsc_label_templates/dynamic_label_110w.dart';
-import 'package:jd_flutter/widget/tsc_label_templates/fixed_label_75w45h.dart';
-import 'package:jd_flutter/widget/tsc_label_templates/dynamic_label_75w.dart';
 
 import 'material_dispatch_state.dart';
 

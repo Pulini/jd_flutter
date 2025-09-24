@@ -19,21 +19,17 @@ class HydroelectricExcessState {
 
 //搜索具体房间信息
   searchRoom({
+    required String  type,
     required DeviceListInfo data,
     required Function(List<DeviceDetailInfo>) success,
     required Function(String) error,
   }) {
-    if (select.value == '0' || select.value == '2') {
-      stateToSearch.value = '1';
-    } else {
-      stateToSearch.value = '0';
-    }
     httpGet(
       method: webApiGetWaterEnergyMachineDetail,
       loading: 'hydroelectric_reading_room_information'.tr,
       params: {
         'Number': data.number,
-        'EditState': stateToSearch.value,
+        'EditState': type,
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
