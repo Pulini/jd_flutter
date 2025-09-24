@@ -82,12 +82,12 @@ class ProcessReportLogic extends GetxController {
           'BarCodeList': [
             for (var c in state.dataList) {
             'BarCode':c.cardNo,
-            'EmpID':c.empID,
-            'Qty':c.qty,
+            'EmpID':c.empID.toString(),
+            'Qty':c.qty.toString(),
           }],
-          'UserID': userInfo?.userID,
-          'EmpID': userInfo?.empID,
-          'OrganizeID': userInfo?.organizeID,
+          'UserID': userInfo?.userID.toString(),
+          'EmpID': userInfo?.empID.toString(),
+          'OrganizeID': userInfo?.organizeID.toString(),
         },
       ).then((response) {
         if (response.resultCode == resultSuccess) {
