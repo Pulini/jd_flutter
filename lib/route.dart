@@ -505,7 +505,7 @@ class RouteConfig {
   //工序汇报
   static Routes processReport = Routes(
     '/process_report',
-    200,
+    201,
     const ProcessReportPage(),
   );
 
