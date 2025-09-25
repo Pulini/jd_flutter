@@ -588,9 +588,6 @@ Future<List<Uint8List>> labelMultipurposeFixed({
   }
   if (subTitleWrap) {
     if (subTitle.isNotEmpty) {
-      logger.f('打印内容：$subTitle');
-      logger.f('打印内容：$content');
-
       var format = contextFormat(subTitle, 24, 52.0 * _dpi);
       // 限制子标题行数为2
       var maxLines = format.length > 2 ? 2 : format.length;
@@ -670,7 +667,7 @@ Future<List<Uint8List>> labelMultipurposeFixed({
             }
         }
       }else{
-        list.add(await _tscBitmapText(2 * _dpi, 38 * _dpi, 36, bottomLeftText1));
+        list.add(await _tscBitmapText(2 * _dpi, 37 * _dpi, 42, bottomLeftText1));
       }
     }
   }
@@ -696,7 +693,6 @@ Future<List<Uint8List>> labelMultipurposeFixed({
       if(bottomRightText1.length>4){
         var format = contextFormat(bottomRightText1, 23, 11.0 * _dpi);
         for (var i = 0; i < format.length; ++i) {
-          logger.f('车间打印出来的内容：'+format[i]);
           if(i==0){
             list.add(await _tscBitmapText(62 * _dpi, 37 * _dpi, 23, format[0]));
           }else if(i==1){

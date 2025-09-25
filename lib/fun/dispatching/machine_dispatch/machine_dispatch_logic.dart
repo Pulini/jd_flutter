@@ -312,7 +312,7 @@ class MachineDispatchLogic extends GetxController {
           : '递减号:${state.detailsInfo?.decrementNumber}      日期:${state.detailsInfo?.startDate}',
       bottomLeftText1: label.isEnglish
           ? '${label.qty}${label.englishUnit}'
-          : '机台:${state.detailsInfo?.machine}',
+          : '${state.detailsInfo?.machine}',
       bottomMiddleText1: label.isEnglish
           ? '   Made in China'
           : '     ${label.size}码${label.qty}${label.unit}',
@@ -439,7 +439,7 @@ class MachineDispatchLogic extends GetxController {
           subContent2: isEnglish
               ? 'DECREASE:${state.detailsInfo?.decrementNumber}    DATE:${state.detailsInfo?.startDate}'
               : '递减号:${state.detailsInfo?.decrementNumber}    日期:${state.detailsInfo?.startDate}',
-          bottomLeftText1: isEnglish ? ((printQty.toShowString()) + (label.unit ?? '')) : '机台:${state.detailsInfo?.machine}',
+          bottomLeftText1: isEnglish ? ((printQty.toShowString()) + (label.unit ?? '')) : '${state.detailsInfo?.machine}',
           bottomMiddleText1: isEnglish
               ? '   Made in China'
               : ('     ${item.size ?? ''}码${printQty.toShowString()}${item.bUoM ?? ''}'),
