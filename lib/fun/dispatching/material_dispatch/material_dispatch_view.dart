@@ -383,14 +383,19 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
                     printCallback: (info, label) {
                   var bill = '';
                   var batch = '';
+                  var labelDate = '';
                   if (info.children!.isNotEmpty) {
                     bill = info.children![0].billNo!;
                     batch = info.children![0].sapColorBatch!;
                   }
+                  if (label.insertDateTime != '' &&
+                      label.insertDateTime!.length > 10) {
+                    labelDate = label.insertDateTime!.substring(0, 10);
+                  } else {
+                    labelDate = getDateYMD();
+                  }
                   logic.printLabel(
-                      date: label.insertDateTime != ''
-                          ? label.insertDateTime!.substring(0, 10)
-                          : getDateYMD(),
+                      date: labelDate,
                       context: context,
                       data: info,
                       billNo: bill,

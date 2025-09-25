@@ -901,6 +901,13 @@ setLabelCapacityDialog(
   int id,
   Function() callback,
 ) {
+
+  // 为每个列表项创建 TextEditingController
+  final controllers = List.generate(
+    list.length,
+        (index) => TextEditingController(text: list[index].capacity.toString()),
+  );
+
   Get.dialog(
     PopScope(
         canPop: false,
@@ -927,7 +934,10 @@ setLabelCapacityDialog(
                         for (var data in list) {
                           data.capacity = d;
                         }
-                        list.refresh();
+                        // 直接更新所有控制器的文本值
+                        for (var controller in controllers) {
+                          controller.text = d.toString();
+                        }
                       }),
                     ),
                     const SizedBox(
@@ -952,6 +962,7 @@ setLabelCapacityDialog(
                                 SizedBox(
                                   width: 180,
                                   child: NumberDecimalEditText(
+                                    controller: controllers[index],
                                     initQty: list[index].capacity,
                                     onChanged: (d) => list[index].capacity = d,
                                   ),
@@ -967,7 +978,13 @@ setLabelCapacityDialog(
           ),
           actions: [
             TextButton(
-              onPressed: () => Get.back(),
+              onPressed: () {
+                // 释放所有控制器
+                for (var controller in controllers) {
+                  controller.dispose();
+                }
+                Get.back();
+              } ,
               child: Text(
                 'maintain_label_dialog_back'.tr,
                 style: const TextStyle(color: Colors.grey),
@@ -975,6 +992,10 @@ setLabelCapacityDialog(
             ),
             TextButton(
               onPressed: () {
+                // 释放所有控制器
+                for (var controller in controllers) {
+                  controller.dispose();
+                }
                 _setMaterialCapacity(
                   list,
                   () {
