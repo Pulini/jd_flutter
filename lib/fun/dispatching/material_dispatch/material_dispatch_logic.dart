@@ -173,6 +173,7 @@ class MaterialDispatchLogic extends GetxController {
               specificationSplit: sp,
               gw: gw,
               ew: nw,
+              date: getDateYMD(),
             );
           } else {
             state.getLabelDetail(
@@ -191,6 +192,7 @@ class MaterialDispatchLogic extends GetxController {
                   specificationSplit: sp,
                   gw: gw,
                   ew: nw,
+                  date: getDateYMD(),
                 );
               },
             );
@@ -219,6 +221,7 @@ class MaterialDispatchLogic extends GetxController {
     required BuildContext context,
     required MaterialDispatchInfo data,
     required String billNo,
+    required String date,
     required String color,
     required String guid,
     required String pick,
@@ -230,7 +233,6 @@ class MaterialDispatchLogic extends GetxController {
     required String ew,
   }) {
     if (data.exitLabelType == '101') {
-
       if (state.allInstruction.value) {
         var list = <String>[];
         billNo.split(',').forEach((data) {
@@ -250,7 +252,8 @@ class MaterialDispatchLogic extends GetxController {
           }
           subList.add(splitData.substring(0, splitData.length - 1));
         }
-        if (state.isBigLabel.value) {   //国内大标的连标
+        if (state.isBigLabel.value) {
+          //国内大标的连标
 
           labelMultipurposeBigDynamicFixed(
             qrCode: guid,
@@ -336,12 +339,13 @@ class MaterialDispatchLogic extends GetxController {
                 });
           });
         } else {
-          labelMultipurposeFixed( //国内小标
+          labelMultipurposeFixed(
+            //国内小标
             qrCode: guid,
             title: data.productName ?? '',
-            subTitleWrap:true,
-            subTitle:'${data.partName}<${data.processName}>$billNo',
-            content:'(${data.materialNumber})${data.materialName}',
+            subTitleWrap: true,
+            subTitle: '${data.partName}<${data.processName}>$billNo',
+            content: '(${data.materialNumber})${data.materialName}',
             bottomLeftText1: data.drillingCrewName ?? '',
             bottomMiddleText1: '$qty${data.unitName}',
             bottomMiddleText2: '色系：$color',
@@ -387,7 +391,7 @@ class MaterialDispatchLogic extends GetxController {
                 [data.materialNumber!, data.materialName, qty, data.unitName]
               ],
               pieceID: guid,
-              manufactureDate: getDateYMD(),
+              manufactureDate: date,
               supplier: '',
               hasNotes: false,
               notes: '',
@@ -422,7 +426,7 @@ class MaterialDispatchLogic extends GetxController {
               specifications: specifications,
               volume: specificationSplit,
               supplier: data.sapSupplierNumber ?? '',
-              manufactureDate: getDateYMD(),
+              manufactureDate: date,
               hasNotes: false,
               notes: '',
             ),
@@ -460,7 +464,7 @@ class MaterialDispatchLogic extends GetxController {
               specifications: '${specificationSplit}CM(LxWxH)',
               volume: specifications,
               supplier: data.sapSupplierNumber ?? '',
-              manufactureDate: getDateYMD(),
+              manufactureDate: date,
               consignee: data.sourceFactoryName ?? '',
               hasNotes: false,
               notes: '',

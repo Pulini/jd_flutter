@@ -6,6 +6,7 @@ import 'package:jd_flutter/bean/http/response/material_dispatch_label_detail.dar
 import 'package:jd_flutter/fun/dispatching/material_dispatch/material_dispatch_state.dart';
 import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
+import 'package:jd_flutter/utils/utils.dart' show getDateYMD;
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/check_box_widget.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
@@ -387,6 +388,9 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
                     batch = info.children![0].sapColorBatch!;
                   }
                   logic.printLabel(
+                      date: label.insertDateTime != ''
+                          ? label.insertDateTime!.substring(0, 10)
+                          : getDateYMD(),
                       context: context,
                       data: info,
                       billNo: bill,
