@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/report/forming_barcode_collection/forming_barcode_collection_logic.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
+import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
@@ -18,11 +19,15 @@ class _FormingBarcodeCollectionPriorityPageState
     extends State<FormingBarcodeCollectionPriorityPage> {
   final logic = Get.find<FormingBarcodeCollectionLogic>();
   final state = Get.find<FormingBarcodeCollectionLogic>().state;
+
   //搜索天数
-  var controller = TextEditingController();
+  var controller =
+      TextEditingController(text: spGet('${Get.currentRoute}/day') ?? '');
+
   @override
   Widget build(BuildContext context) {
     return pageBody(
+        title: '更改优先级',
         actions: [
           TextButton(
             onPressed: () {
@@ -58,6 +63,7 @@ class _FormingBarcodeCollectionPriorityPageState
                 Expanded(
                   child: TextButton(
                     onPressed: () {
+                      spSave('${Get.currentRoute}/day', controller.text);
                       logic.getWorkCardPriority(day: controller.text);
                     },
                     child: Text(
@@ -81,38 +87,32 @@ class _FormingBarcodeCollectionPriorityPageState
                           title: Container(
                             padding: const EdgeInsets.all(5),
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
+                              borderRadius: BorderRadius.circular(5),
                               color: Colors.white,
                               border: Border.all(
                                 color: Colors.blue,
                                 width: 2,
                               ),
                             ),
-                            height: 80,
+                            height: 102,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Row(
-                                  children: [
-                                    Expanded(
-                                        child: textSpan(
-                                            //销售订单
-                                            hint: 'forming_code_collection_sale_order'.tr,
-                                            text: state.prioriInfoList[index]
-                                                    .sONo ??
-                                                '')),
-                                    Expanded(
-                                        child: textSpan(
-                                            //客户订单
-                                            hint:
-                                                'forming_code_collection_customer_orders'
-                                                    .tr,
-                                            text: state.prioriInfoList[index]
-                                                    .clientOrderNumber ??
-                                                ''))
-                                  ],
-                                ),
+                                textSpan(
+                                    //销售订单
+                                    hint:
+                                        'forming_code_collection_sale_order'.tr,
+                                    text:
+                                        state.prioriInfoList[index].sONo ?? ''),
+                                textSpan(
+                                    //客户订单
+                                    hint:
+                                        'forming_code_collection_customer_orders'
+                                            .tr,
+                                    text: state.prioriInfoList[index]
+                                            .clientOrderNumber ??
+                                        ''),
                                 Row(
                                   children: [
                                     Expanded(
@@ -126,28 +126,6 @@ class _FormingBarcodeCollectionPriorityPageState
                                                 '')),
                                     Expanded(
                                         child: textSpan(
-                                            //派工数量
-                                            hint:
-                                                'forming_code_collection_dispatch_qty'
-                                                    .tr,
-                                            text: state.prioriInfoList[index]
-                                                .requireQty
-                                                .toShowString()))
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Expanded(
-                                        child: textSpan(
-                                            //欠数
-                                            hint:
-                                                'forming_code_collection_owing_amounts'
-                                                    .tr,
-                                            text: state.prioriInfoList[index]
-                                                .requireQty
-                                                .toShowString())),
-                                    Expanded(
-                                        child: textSpan(
                                             //序号
                                             hint:
                                                 'forming_code_collection_serial_number'
@@ -155,6 +133,28 @@ class _FormingBarcodeCollectionPriorityPageState
                                             text: state
                                                 .prioriInfoList[index].index
                                                 .toString())),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                        child: textSpan(
+                                            //派工数量
+                                            hint:
+                                                'forming_code_collection_dispatch_qty'
+                                                    .tr,
+                                            text: state.prioriInfoList[index]
+                                                .requireQty
+                                                .toShowString())),
+                                    Expanded(
+                                        child: textSpan(
+                                            //欠数
+                                            hint:
+                                                'forming_code_collection_owing_amounts'
+                                                    .tr,
+                                            text: state
+                                                .prioriInfoList[index].undoneQty
+                                                .toShowString())),
                                   ],
                                 )
                               ],
@@ -176,15 +176,13 @@ class _FormingBarcodeCollectionPriorityPageState
 
                           // 获取被拖动的 Item 和目标位置的 Item
                           final movedItem =
-                          state.prioriInfoList.removeAt(oldIndex);
-
+                              state.prioriInfoList.removeAt(oldIndex);
 
                           // 插入被拖动的 Item 到新位置
                           state.prioriInfoList.insert(newIndex, movedItem);
-                          
+
                           state.prioriInfoList[newIndex].isChange = true;
                           state.prioriInfoList[oldIndex].isChange = true;
-
                         });
                       },
                     )))

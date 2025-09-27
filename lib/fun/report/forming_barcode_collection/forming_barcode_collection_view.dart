@@ -473,6 +473,7 @@ class _FormingBarcodeCollectionPageState
     pdaScanner(scan: (scanCode) {
       if (tabController.index == 0) {
         if (scanCode.isNotEmpty && state.canScan == true) {
+          state.canScan = true;
           // 条码不为空，可以扫描
           logic.checkCode(
               code: scanCode,

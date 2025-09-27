@@ -15,10 +15,8 @@ import 'package:jd_flutter/widget/dialogs.dart';
 import 'forming_barcode_collection_search_detail_view.dart';
 import 'forming_barcode_collection_state.dart';
 
-class FormingBarcodeCollectionLogic extends GetxController
-  {
+class FormingBarcodeCollectionLogic extends GetxController {
   final FormingBarcodeCollectionState state = FormingBarcodeCollectionState();
-
 
   getProductionOrderST({
     required String first,
@@ -46,9 +44,15 @@ class FormingBarcodeCollectionLogic extends GetxController
     for (var data in state.dataList) {
       data.scWorkCardSizeInfos?.add(ScWorkCardSizeInfos(
         size: '合计',
-        qty: data.scWorkCardSizeInfos?.map((v) => v.qty ?? 0.0).reduce((a, b) => a.add(b)),
-        scannedQty: data.scWorkCardSizeInfos?.map((v) => v.scannedQty ?? 0.0).reduce((a, b) => a.add(b)),
-        todayScannedQty: data.scWorkCardSizeInfos?.map((v) => v.todayScannedQty ?? 0.0).reduce((a, b) => a.add(b)),
+        qty: data.scWorkCardSizeInfos
+            ?.map((v) => v.qty ?? 0.0)
+            .reduce((a, b) => a.add(b)),
+        scannedQty: data.scWorkCardSizeInfos
+            ?.map((v) => v.scannedQty ?? 0.0)
+            .reduce((a, b) => a.add(b)),
+        todayScannedQty: data.scWorkCardSizeInfos
+            ?.map((v) => v.todayScannedQty ?? 0.0)
+            .reduce((a, b) => a.add(b)),
       ));
     }
   }
@@ -122,17 +126,6 @@ class FormingBarcodeCollectionLogic extends GetxController
   getWorkCardPriority({
     required String day,
   }) {
-    var list = <WorkCardPriorityInfo>[];
-
-    list.add(WorkCardPriorityInfo(requireQty: 1, isChange: false, index: 1));
-    list.add(WorkCardPriorityInfo(requireQty: 2, isChange: false, index: 2));
-    list.add(WorkCardPriorityInfo(requireQty: 3, isChange: false, index: 3));
-    list.add(WorkCardPriorityInfo(requireQty: 4, isChange: false, index: 4));
-    list.add(WorkCardPriorityInfo(requireQty: 5, isChange: false, index: 5));
-
-    state.prioriInfoList.value = list;
-    state.prioriInfoList.refresh();
-
     httpGet(
       method: webApiGetWorkCardPriority,
       loading: 'forming_code_collection_get_data'.tr,
@@ -143,7 +136,8 @@ class FormingBarcodeCollectionLogic extends GetxController
     ).then((response) {
       if (response.resultCode == resultSuccess) {
         state.prioriInfoList.value = [
-          for (var item in response.data) WorkCardPriorityInfo.fromJson(item)
+          for (var i = 0; i < response.data.length; i++)
+            WorkCardPriorityInfo.fromJson(response.data[i])..index = i
         ];
       } else {
         state.prioriInfoList.value = [];
@@ -162,28 +156,19 @@ class FormingBarcodeCollectionLogic extends GetxController
       httpPost(
         method: webApiSubmitWorkCardPriority,
         loading: 'forming_code_collection_submitting'.tr,
-        body: {
+        body:
           [
-            for (var i = 0;
-                i <
-                    state.prioriInfoList
-                        .where((data) => data.isChange == true)
-                        .toList()
-                        .length;
-                ++i)
-              {
-                'WorkCardInterID': state.prioriInfoList
-                    .where((data) => data.isChange == true)
-                    .toList()[i]
-                    .workCardInterID,
-                'ClientOrderNumber': state.prioriInfoList
-                    .where((data) => data.isChange == true)
-                    .toList()[i]
-                    .clientOrderNumber,
-                'Priority': i + 1,
-              }
+
+            for (var i = 0; i < state.prioriInfoList.length; ++i)
+              for (var j = 0; j < state.prioriInfoList.length; ++j)
+                if (state.prioriInfoList[i].sONo == state.prioriInfoList[j].sONo && i!= state.prioriInfoList[j].index)
+                  {
+                    'WorkCardInterID': state.prioriInfoList[i].workCardInterID.toString(),
+                    'ClientOrderNumber': state.prioriInfoList[i].clientOrderNumber,
+                    'Priority': i+1,
+                  }
           ]
-        },
+        ,
       ).then((response) {
         if (response.resultCode == resultSuccess) {
           success.call();
@@ -196,7 +181,6 @@ class FormingBarcodeCollectionLogic extends GetxController
 
   //更改优先级退出清理数据
   clearData() {
-
     state.prioriInfoList.clear();
   }
 
@@ -221,13 +205,13 @@ class FormingBarcodeCollectionLogic extends GetxController
       state.dataList.addAll(state.copyDataList);
     } else {
       for (var data in state.copyDataList) {
-        if (data.mtoNo!.contains(search) ||
-            data.clientOrderNumber!.contains(search)) {
+        if (data.mtoNo!.contains(search) || data.clientOrderNumber!.contains(search)) {
           list.add(data);
         }
       }
       state.dataList.value = list;
     }
+    state.dataList.refresh();
   }
 
   //设置扫码清尾数据
@@ -299,6 +283,7 @@ class FormingBarcodeCollectionLogic extends GetxController
         }
       }
     }
+    state.canScan = true;
   }
 
   //提交扫到的条码

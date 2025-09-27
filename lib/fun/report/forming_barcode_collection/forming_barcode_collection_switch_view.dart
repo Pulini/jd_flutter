@@ -22,7 +22,7 @@ class _FormingBarcodeCollectionSwitchPageState
     extends State<FormingBarcodeCollectionSwitchPage> {
   final logic = Get.find<FormingBarcodeCollectionLogic>();
   final state = Get.find<FormingBarcodeCollectionLogic>().state;
-var tecInstruction=TextEditingController();
+  var tecInstruction = TextEditingController();
 
   _item(FormingCollectionInfo data, int position) {
     String? allQty = '';
@@ -48,7 +48,7 @@ var tecInstruction=TextEditingController();
           },
           child: Container(
             margin: const EdgeInsets.only(bottom: 10),
-            padding: const EdgeInsets.all(10),
+            padding: const EdgeInsets.all(5),
             decoration: BoxDecoration(
               color: data.isSelect.value ? Colors.blue.shade100 : Colors.white,
               borderRadius: BorderRadius.circular(10),
@@ -64,9 +64,13 @@ var tecInstruction=TextEditingController();
                     expandedTextSpan(
                         hint: 'forming_code_collection_factory'.tr,
                         text: data.productName ?? ''),
+                  ],
+                ),
+                Row(
+                  children: [
                     expandedTextSpan(
                         hint: 'forming_code_collection_sale_order'.tr,
-                        text: data.mtoNo ?? '')
+                        text: data.mtoNo ?? ''),
                   ],
                 ),
                 Row(
@@ -98,45 +102,45 @@ var tecInstruction=TextEditingController();
   @override
   Widget build(BuildContext context) {
     return pageBody(
+        title: '切换订单',
         body: Column(
-      children: [
-        EditText(
-          hint: 'forming_code_collection_instruction_or_po'.tr,
-          controller: tecInstruction,
-          onChanged: (c) {
-            logic.searchData(c);
-          },
-        ),
-        Expanded(
-          child: Obx(
-            () => ListView.builder(
-              itemCount: state.dataList.length,
-              itemBuilder: (context, index) =>
-                  _item(state.dataList[index], index),
-            ),
-          ),
-        ),
-        Row(
           children: [
-            Expanded(
-                child: CombinationButton(
-              //切换订单
-              text: 'forming_code_collection_switch'.tr,
-              click: () => {
-                if (state.dataList.none((data) => data.isSelect.value == true))
-                  showSnackBar(message: '请选择要切换的订单')
-                else
-                  Get.back(result: logic.getSelect())
+            EditText(
+              hint: 'forming_code_collection_instruction_or_po'.tr,
+              controller: tecInstruction,
+              onChanged: (c) {
+                logic.searchData(c);
               },
-              combination: Combination.intact,
-            )),
+            ),
+            Expanded(
+              child: Obx(
+                () => ListView.builder(
+                  itemCount: state.dataList.length,
+                  itemBuilder: (context, index) =>
+                      _item(state.dataList[index], index),
+                ),
+              ),
+            ),
+            Row(
+              children: [
+                Expanded(
+                    child: CombinationButton(
+                  //切换订单
+                  text: 'forming_code_collection_switch'.tr,
+                  click: () => {
+                    if (state.dataList
+                        .none((data) => data.isSelect.value == true))
+                      showSnackBar(message: '请选择要切换的订单')
+                    else
+                      Get.back(result: logic.getSelect())
+                  },
+                  combination: Combination.intact,
+                )),
+              ],
+            )
           ],
-        )
-      ],
-    ));
+        ));
   }
-
-
 
   @override
   void initState() {
