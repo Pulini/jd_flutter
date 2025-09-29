@@ -901,113 +901,102 @@ setLabelCapacityDialog(
   int id,
   Function() callback,
 ) {
-
-  // 为每个列表项创建 TextEditingController
-  final controllers = List.generate(
-    list.length,
-        (index) => TextEditingController(text: list[index].capacity.toString()),
-  );
-
   Get.dialog(
     PopScope(
-        canPop: false,
-        child: AlertDialog(
-          title: Text('maintain_label_dialog_modify_label_box_capacity'.tr),
-          content: SizedBox(
-            width: MediaQuery.of(Get.overlayContext!).size.width * 0.8,
-            height: MediaQuery.of(Get.overlayContext!).size.height * 0.8,
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text(
-                      'maintain_label_dialog_batch_modify_tips'.tr,
-                      style: TextStyle(
-                          color: Colors.blue.shade900,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16),
-                    ),
-                    SizedBox(
-                      width: 180,
-                      child: NumberDecimalEditText(onChanged: (d) {
-                        for (var data in list) {
-                          data.capacity = d;
-                        }
-                        // 直接更新所有控制器的文本值
-                        for (var controller in controllers) {
-                          controller.text = d.toString();
-                        }
-                      }),
-                    ),
-                    const SizedBox(
-                      width: 20,
-                    )
-                  ],
-                ),
-                Expanded(
-                  child: Obx(() => ListView.builder(
-                        padding: const EdgeInsets.all(8),
-                        itemCount: list.length,
-                        itemBuilder: (context, index) => Card(
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 10, right: 10),
-                            child: Row(
-                              children: [
-                                expandedTextSpan(
-                                  hint: 'maintain_label_dialog_size'.tr,
-                                  text: list[index].size ?? '',
+      canPop: false,
+      child: AlertDialog(
+        title: Text('maintain_label_dialog_modify_label_box_capacity'.tr),
+        content: SizedBox(
+          width: MediaQuery.of(Get.overlayContext!).size.width * 0.8,
+          height: MediaQuery.of(Get.overlayContext!).size.height * 0.8,
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(
+                    'maintain_label_dialog_batch_modify_tips'.tr,
+                    style: TextStyle(
+                        color: Colors.blue.shade900,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16),
+                  ),
+                  SizedBox(
+                    width: 180,
+                    child: NumberDecimalEditText(
+                        key: const ValueKey('batch_edit_input'),
+                        onChanged: (d) {
+                          for (var data in list) {
+                            data.capacity = d;
+                          }
+                          // 直接刷新列表而不是使用控制器
+                          list.refresh();
+                        }),
+                  ),
+                  const SizedBox(
+                    width: 20,
+                  )
+                ],
+              ),
+              Expanded(
+                child: Obx(() => ListView.builder(
+                      padding: const EdgeInsets.all(8),
+                      itemCount: list.length,
+                      itemBuilder: (context, index) => Card(
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 10, right: 10),
+                          child: Row(
+                            children: [
+                              expandedTextSpan(
+                                hint: 'maintain_label_dialog_size'.tr,
+                                text: list[index].size ?? '',
+                              ),
+                              Text('maintain_label_dialog_box_capacity'.tr),
+                              SizedBox(
+                                width: 180,
+                                child: NumberDecimalEditText(
+                                  key: ValueKey(
+                                      'single_edit_${index}_${list[index].capacity}'),
+                                  initQty: list[index].capacity,
+                                  onChanged: (d) {
+                                    list[index].capacity = d;
+                                  },
                                 ),
-                                Text('maintain_label_dialog_box_capacity'.tr),
-                                SizedBox(
-                                  width: 180,
-                                  child: NumberDecimalEditText(
-                                    controller: controllers[index],
-                                    initQty: list[index].capacity,
-                                    onChanged: (d) => list[index].capacity = d,
-                                  ),
-                                )
-                              ],
-                            ),
+                              )
+                            ],
                           ),
                         ),
-                      )),
-                )
-              ],
+                      ),
+                    )),
+              )
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Get.back();
+            },
+            child: Text(
+              'maintain_label_dialog_back'.tr,
+              style: const TextStyle(color: Colors.grey),
             ),
           ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                // 释放所有控制器
-                for (var controller in controllers) {
-                  controller.dispose();
-                }
-                Get.back();
-              } ,
-              child: Text(
-                'maintain_label_dialog_back'.tr,
-                style: const TextStyle(color: Colors.grey),
-              ),
-            ),
-            TextButton(
-              onPressed: () {
-                // 释放所有控制器
-                for (var controller in controllers) {
-                  controller.dispose();
-                }
-                _setMaterialCapacity(
-                  list,
-                  () {
-                    Get.back();
-                    callback.call();
-                  },
-                );
-              },
-              child: Text('maintain_label_dialog_modify'.tr),
-            ),
-          ],
-        )),
+          TextButton(
+            onPressed: () {
+              _setMaterialCapacity(
+                list,
+                () {
+                  Get.back();
+                  callback.call();
+                },
+              );
+            },
+            child: Text('maintain_label_dialog_modify'.tr),
+          ),
+        ],
+      ),
+    ),
   );
 }
 
@@ -1139,7 +1128,7 @@ selectMaterialDialog(List<String> list, Function(String) callback) {
           width: 200,
           height: 100,
           child: getCupertinoPicker(
-            items:list.map((data) {
+            items: list.map((data) {
               return Center(child: Text(data));
             }).toList(),
             controller: controller,
@@ -1182,10 +1171,10 @@ selectLanguageDialog(
           width: 200,
           height: 100,
           child: getCupertinoPicker(
-           items: list.map((data) {
+            items: list.map((data) {
               return Center(child: Text(data));
             }).toList(),
-            controller:  controller,
+            controller: controller,
           ),
         ),
         actions: <Widget>[

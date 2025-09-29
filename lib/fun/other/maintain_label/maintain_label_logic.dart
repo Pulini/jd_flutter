@@ -33,7 +33,7 @@ class MaintainLabelLogic extends GetxController {
 
   selectPrinted(bool c) {
     state.cbPrinted.value = c;
-    if (state.isMaterialLabel.value) {
+    if (!state.isMaterialLabel.value) {
       for (var v in state.getLabelList().where((v) => v.isBillPrint ?? false)) {
         v.select = c;
       }
@@ -52,7 +52,7 @@ class MaintainLabelLogic extends GetxController {
 
   selectUnprinted(bool c) {
     state.cbUnprinted.value = c;
-    if (state.isMaterialLabel.value) {
+    if (!state.isMaterialLabel.value) {
       for (var v
           in state.getLabelList().where((v) => !(v.isBillPrint ?? false))) {
         v.select = c;
@@ -72,7 +72,7 @@ class MaintainLabelLogic extends GetxController {
 
   List<String> getSizeList() {
     var list = <String>['maintain_label_all'.tr];
-    if (state.isMaterialLabel.value) {
+    if (!state.isMaterialLabel.value) {
       for (var v in state.labelList) {
         v.items?.forEach((v2) {
           if (!list.contains(v2.size)) {
@@ -97,7 +97,7 @@ class MaintainLabelLogic extends GetxController {
 
   List<String> getSelectData() {
     var list = <String>[];
-    if (state.isMaterialLabel.value) {
+    if (!state.isMaterialLabel.value) {
       state.getLabelList().where((v) => v.select).forEach((data) {
         list.add(data.barCode ?? '');
       });
@@ -189,7 +189,8 @@ class MaintainLabelLogic extends GetxController {
   }
 
   checkPrintType({
-    required Function(bool abroad, List<List<LabelInfo>>,int labelType) callback,
+    required Function(bool abroad, List<List<LabelInfo>>, int labelType)
+        callback,
   }) {
     var select = <LabelInfo>[];
     if (state.isMaterialLabel.value) {
@@ -212,13 +213,9 @@ class MaintainLabelLogic extends GetxController {
       }
     }
     if (select[0].labelType == 1002 || select[0].labelType == 1003) {
-      callback.call(
-        true,
-        [select],
-        select[0].labelType!
-      );
+      callback.call(true, [select], select[0].labelType!);
     } else {
-      callback.call(false, [],0);
+      callback.call(false, [], 0);
     }
   }
 
@@ -311,7 +308,8 @@ class MaintainLabelLogic extends GetxController {
     }
     if (select[0].labelType != 101 &&
         select[0].labelType != 102 &&
-        select[0].labelType != 103) {
+        select[0].labelType != 103 &&
+        select[0].labelType != 1) {
       showSnackBar(
           message:
               'maintain_label_error'.trArgs([select[0].labelType.toString()]));
@@ -536,7 +534,7 @@ class MaintainLabelLogic extends GetxController {
           unit: languageInfo.unitName ?? '',
         ));
       } else {
-        maintainLabelMaterialEnglishFixedLabel(
+        labelList.add(maintainLabelMaterialEnglishFixedLabel(
           barCode: data.barCode ?? '',
           factoryType: data.factoryType ?? '',
           billNo: data.billNo ?? '',
@@ -548,7 +546,7 @@ class MaintainLabelLogic extends GetxController {
           pageNumber: languageInfo.pageNumber!,
           qty: data.items!.map((v) => v.qty ?? 0).reduce((a, b) => a.add(b)),
           unit: languageInfo.unitName ?? '',
-        );
+        ));
       }
     }
     labels.call(labelList, false);
@@ -723,41 +721,41 @@ createMyanmarLabel({
     } else if (data.items!.length == 1) {
       //单尺码
       qty = data.items![0].qty!.toShowString();
-      size = data.items![0].size??'';
+      size = data.items![0].size ?? '';
     } else if (data.items!.length > 1) {
       //多尺码
-      qty=  data.items!
+      qty = data.items!
           .map((v) => v.qty ?? 0)
           .reduce((a, b) => a.add(b))
           .toShowString();
-      dataList =  createSizeList(
+      dataList = createSizeList(
         list: data.items!,
         sizeTitle: '尺码/Size/ukuran',
         totalTitle: '总计/total',
       );
     }
-    labelList.add( dynamicSizeMaterialLabel1098(
-      labelID: data.barCode?? '',
-      myanmarApprovalDocument: data.myanmarApprovalDocument?? '',
-      typeBody: data.factoryType?? '',
-      trackNo: data.trackNo?? '',
+    labelList.add(dynamicSizeMaterialLabel1098(
+      labelID: data.barCode ?? '',
+      myanmarApprovalDocument: data.myanmarApprovalDocument ?? '',
+      typeBody: data.factoryType ?? '',
+      trackNo: data.trackNo ?? '',
       materialList: dataList,
       instructionNo: data.billNo ?? '',
-      materialCode: data.materialCode?? '',
+      materialCode: data.materialCode ?? '',
       size: size,
       inBoxQty: qty,
-      customsDeclarationUnit: data.customsDeclarationUnit?? '',
-      customsDeclarationType: data.customsDeclarationType?? '',
-      pieceNo: data.pieceNo?? '',
-      pieceID: data.pieceID?? '',
+      customsDeclarationUnit: data.customsDeclarationUnit ?? '',
+      customsDeclarationType: data.customsDeclarationType ?? '',
+      pieceNo: data.pieceNo ?? '',
+      pieceID: data.pieceID ?? '',
       grossWeight: data.grossWeight.toShowString(),
       netWeight: data.netWeight.toShowString(),
-      specifications: data.meas?? '',
-      volume: data.volume?? '',
+      specifications: data.meas ?? '',
+      volume: data.volume ?? '',
       supplier: '供应商123456',
-      manufactureDate: data.manufactureDate?? '',
+      manufactureDate: data.manufactureDate ?? '',
       hasNotes: true,
-      notes: data.notes?? '',
+      notes: data.notes ?? '',
     ));
   }
   labels.call(labelList, true);
@@ -822,11 +820,11 @@ createIndonesiaLabel({
     } else if (data.items!.length > 1) {
       //多尺码
       typeBody = data.factoryType ?? '';
-      qty=  data.items!
+      qty = data.items!
           .map((v) => v.qty ?? 0)
           .reduce((a, b) => a.add(b))
           .toShowString();
-      dataList =  createSizeList(
+      dataList = createSizeList(
         list: data.items!,
         sizeTitle: '尺码/Size/ukuran',
         totalTitle: '总计/total',

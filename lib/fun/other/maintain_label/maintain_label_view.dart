@@ -209,14 +209,17 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
                     value: state.cbUnprinted.value,
                   ),
                 ]),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: state.isMaterialLabel.value
-                        ? state.getLabelGroupList().length
-                        : state.getLabelList().length,
-                    itemBuilder: (context, index) => state.isMaterialLabel.value
-                        ? _item2(state.getLabelGroupList()[index])
-                        : _item1(state.getLabelList()[index]),
+                Obx(
+                  () => Expanded(
+                    child: ListView.builder(
+                      itemCount: state.isMaterialLabel.value
+                          ? state.getLabelGroupList().length
+                          : state.getLabelList().length,
+                      itemBuilder: (context, index) =>
+                          state.isMaterialLabel.value
+                              ? _item2(state.getLabelGroupList()[index])
+                              : _item1(state.getLabelList()[index]),
+                    ),
                   ),
                 ),
                 Row(
@@ -282,8 +285,9 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
                     Expanded(
                       child: CombinationButton(
                         text: 'maintain_label_print'.tr,
-                        click: ()=>logic.checkPrintType(callback: (abroad,select,labelType){
-                          if(abroad){
+                        click: () => logic.checkPrintType(
+                            callback: (abroad, select, labelType) {
+                          if (abroad) {
                             logic.printLabelState(
                                 type: labelType,
                                 selectLabel: select,
@@ -294,13 +298,13 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
                                     language: '',
                                   );
                                 });
-                          }else{
+                          } else {
                             logic.checkLanguage(
                               callback: (
-                                  labelType,
-                                  select,
-                                  language,
-                                  ) {
+                                labelType,
+                                select,
+                                language,
+                              ) {
                                 if (language.isEmpty) {
                                   logic.printLabelState(
                                       type: labelType,

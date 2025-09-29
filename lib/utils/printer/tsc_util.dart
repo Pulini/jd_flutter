@@ -166,8 +166,9 @@ Future<Uint8List> _tscBitmapText(
   int xAxis,
   int yAxis,
   double fontSize,
-  String text,
-) async {
+  String text, {
+  bool isBold = true,
+}) async {
   var recorder = ui.PictureRecorder();
   var canvas = Canvas(recorder);
   var tp = TextPainter()
@@ -176,7 +177,7 @@ Future<Uint8List> _tscBitmapText(
       style: TextStyle(
         color: Colors.black,
         fontSize: fontSize,
-        fontWeight: FontWeight.bold,
+        fontWeight: isBold? FontWeight.bold : FontWeight.normal,
       ),
     )
     ..textDirection = TextDirection.ltr
@@ -596,7 +597,6 @@ Future<List<Uint8List>> labelMultipurposeFixed({
       var printCommands = <Future<Uint8List>>[];
 
       for (var i = 0; i < maxLines; ++i) {
-        logger.f('打印换行的内容：${format[i]}');
         // 收集所有打印指令
         printCommands.add(_tscBitmapText(19 * _dpi + _halfDpi,
             (11 + 4 * i) * _dpi - _halfDpi, 24, format[i]));
@@ -614,7 +614,7 @@ Future<List<Uint8List>> labelMultipurposeFixed({
   }
   if (!isEnglish) {
     if (content.isNotEmpty) {
-      var format = contextFormat(content, 29, 71.0 * _dpi);
+      var format = contextFormat(content, 29, 69.0 * _dpi);
       for (var i = 0; i < format.length; ++i) {
         //如子内容不为空，则主内容限制行数为2
         if (subContent1.isNotEmpty && subContent2.isNotEmpty && i >= 2) {
@@ -625,7 +625,7 @@ Future<List<Uint8List>> labelMultipurposeFixed({
         //如子内容为空则限制主内容行数为4
         if (i >= 4) break;
         list.add(
-            await _tscBitmapText(2 * _dpi, (20 + 4 * i) * _dpi, 30, format[i]));
+            await _tscBitmapText(2 * _dpi, (19 + 5 * i) * _dpi, 30, format[i],isBold: false));
       }
     }
   } else {
@@ -651,23 +651,24 @@ Future<List<Uint8List>> labelMultipurposeFixed({
 
   if (bottomLeftText1.isNotEmpty) {
     if (bottomLeftText2.isNotEmpty) {
-      list.add(await _tscBitmapText(2 * _dpi, 37 * _dpi, 23, bottomLeftText1));
-      list.add(await _tscBitmapText(2 * _dpi, 40 * _dpi, 23, bottomLeftText2));
+      list.add(await _tscBitmapText(2 * _dpi, 37 * _dpi, 23, bottomLeftText1,isBold: false));
+      list.add(await _tscBitmapText(2 * _dpi, 40 * _dpi, 23, bottomLeftText2,isBold: false));
     } else {
       logger.f('字符长度：${bottomLeftText1.length}');
-      if(bottomLeftText1.length>6){
-        var format = contextFormat(bottomLeftText1, 23, 20.0 * _dpi);
+      if (bottomLeftText1.length > 6) {
+        var format = contextFormat(bottomLeftText1, 23, 20.0 * _dpi,);
         for (var i = 0; i < format.length; ++i) {
-            if(i==0){
-              list.add(await _tscBitmapText(2 * _dpi, 37 * _dpi, 23, format[0]));
-            }else if(i==1){
-              list.add(await _tscBitmapText(2 * _dpi, 40 * _dpi, 23, format[1]));
-            } else {
-              break;
-            }
+          if (i == 0) {
+            list.add(await _tscBitmapText(2 * _dpi, 36 * _dpi, 23, format[0],isBold: false));
+          } else if (i == 1) {
+            list.add(await _tscBitmapText(2 * _dpi, 40 * _dpi, 23, format[1],isBold: false));
+          } else {
+            break;
+          }
         }
-      }else{
-        list.add(await _tscBitmapText(2 * _dpi, 37 * _dpi, 42, bottomLeftText1));
+      } else {
+        list.add(
+            await _tscBitmapText(2 * _dpi, 37 * _dpi, 42, bottomLeftText1));
       }
     }
   }
@@ -675,9 +676,9 @@ Future<List<Uint8List>> labelMultipurposeFixed({
   if (bottomMiddleText1.isNotEmpty) {
     if (bottomMiddleText2.isNotEmpty) {
       list.add(await _tscBitmapText(
-          23 * _dpi + _halfDpi, 37 * _dpi, 23, bottomMiddleText1));
+          23 * _dpi + _halfDpi, 36 * _dpi, 23, bottomMiddleText1,isBold: false));
       list.add(await _tscBitmapText(
-          23 * _dpi + _halfDpi, 40 * _dpi, 23, bottomMiddleText2));
+          23 * _dpi + _halfDpi, 40 * _dpi, 23, bottomMiddleText2,isBold: false));
     } else {
       list.add(await _tscBitmapText(
           23 * _dpi + _halfDpi, 38 * _dpi, 34, bottomMiddleText1));
@@ -686,22 +687,22 @@ Future<List<Uint8List>> labelMultipurposeFixed({
   if (bottomRightText1.isNotEmpty) {
     if (bottomRightText2.isNotEmpty) {
       list.add(
-          await _tscBitmapText(62 * _dpi, 37 * _dpi, 24, bottomRightText1));
+          await _tscBitmapText(62 * _dpi, 37 * _dpi, 24, bottomRightText1,isBold: false));
       list.add(
-          await _tscBitmapText(62 * _dpi, 40 * _dpi, 24, bottomRightText2));
+          await _tscBitmapText(62 * _dpi, 40 * _dpi, 24, bottomRightText2,isBold: false));
     } else {
-      if(bottomRightText1.length>4){
+      if (bottomRightText1.length > 4) {
         var format = contextFormat(bottomRightText1, 23, 11.0 * _dpi);
         for (var i = 0; i < format.length; ++i) {
-          if(i==0){
-            list.add(await _tscBitmapText(62 * _dpi, 37 * _dpi, 23, format[0]));
-          }else if(i==1){
-            list.add(await _tscBitmapText(62 * _dpi, 40 * _dpi, 23, format[1]));
+          if (i == 0) {
+            list.add(await _tscBitmapText(62 * _dpi, 37 * _dpi, 23, format[0],isBold: false));
+          } else if (i == 1) {
+            list.add(await _tscBitmapText(62 * _dpi, 40 * _dpi, 23, format[1],isBold: false));
           } else {
             break;
           }
         }
-      }else{
+      } else {
         list.add(
             await _tscBitmapText(62 * _dpi, 38 * _dpi, 36, bottomRightText1));
       }
@@ -1201,10 +1202,12 @@ Future<List<Uint8List>> labelMultipurposeBigFixed({
 }) async {
   var list = <Uint8List>[];
   list.add(_tscClearBuffer());
-  list.add(_tscSetup(110, 66, density: density.toInt(), speed: speed.toInt(),sensorDistance:0));
+  list.add(_tscSetup(110, 66,
+      density: density.toInt(), speed: speed.toInt(), sensorDistance: 0));
   if (qrCode.isNotEmpty) {
     list.add(_tscQrCode(2 * _dpi, 2 * _dpi + _halfDpi,
-        qrCode.contains('"') ? qrCode.replaceAll('"', '\\["]') : qrCode,cell: '6'));
+        qrCode.contains('"') ? qrCode.replaceAll('"', '\\["]') : qrCode,
+        cell: '6'));
     list.add(await _tscBitmapText(28 * _dpi + _halfDpi, 2 * _dpi, 22, qrCode));
   }
   if (title.isNotEmpty) {
@@ -1240,51 +1243,46 @@ Future<List<Uint8List>> labelMultipurposeBigFixed({
 
   if (bottomLeftText1.isNotEmpty) {
     var format = contextFormat(bottomLeftText1, 30, 30.0 * _dpi);
-    if(format.length>1){
+    if (format.length > 1) {
       for (var i = 0; i < format.length; ++i) {
-
         if (i >= 3) break;
         list.add(
             await _tscBitmapText(2 * _dpi, (54 + 5 * i) * _dpi, 30, format[i]));
       }
-    }else if(format.length == 1){
-      list.add(
-          await _tscBitmapText(2 * _dpi, 56 * _dpi, 30, format[0]));
+    } else if (format.length == 1) {
+      list.add(await _tscBitmapText(2 * _dpi, 56 * _dpi, 30, format[0]));
     }
   }
 
   if (bottomMiddleText1.isNotEmpty) {
     var format = contextFormat(bottomMiddleText1, 30, 65.0 * _dpi);
-    if(format.length>1){
+    if (format.length > 1) {
       for (var i = 0; i < format.length; ++i) {
-
         if (i >= 3) break;
-        list.add(
-            await _tscBitmapText(34 * _dpi, (54 + 5 * i) * _dpi, 30, format[i]));
+        list.add(await _tscBitmapText(
+            34 * _dpi, (54 + 5 * i) * _dpi, 30, format[i]));
       }
-    }else if(format.length == 1){
-      list.add(
-          await _tscBitmapText(34 * _dpi, 56 * _dpi, 30, format[0]));
+    } else if (format.length == 1) {
+      list.add(await _tscBitmapText(34 * _dpi, 56 * _dpi, 30, format[0]));
     }
   }
   if (bottomRightText1.isNotEmpty) {
     var format = contextFormat(bottomRightText1, 30, 15.0 * _dpi);
-    if(format.length>1){
+    if (format.length > 1) {
       for (var i = 0; i < format.length; ++i) {
-
         if (i >= 3) break;
-        list.add(
-            await _tscBitmapText(91 * _dpi, (54 + 5 * i) * _dpi, 30, format[i]));
+        list.add(await _tscBitmapText(
+            91 * _dpi, (54 + 5 * i) * _dpi, 30, format[i]));
       }
-    }else if(format.length == 1){
-      list.add(
-          await _tscBitmapText(91 * _dpi, 56 * _dpi, 30, format[0]));
+    } else if (format.length == 1) {
+      list.add(await _tscBitmapText(91 * _dpi, 56 * _dpi, 30, format[0]));
     }
   }
   list.add(_tscBox(_dpi, _dpi, 106 * _dpi, 64 * _dpi, crude: 2));
   list.add(_tscLine(27 * _dpi, _dpi, 3, 28 * _dpi - _halfDpi));
   list.add(_tscLine(33 * _dpi, 52 * _dpi + _halfDpi, 3, 12 * _dpi - _halfDpi));
-  list.add(_tscLine(89 * _dpi + _halfDpi, 52 * _dpi + _halfDpi, 3, 12 * _dpi - _halfDpi));
+  list.add(_tscLine(
+      89 * _dpi + _halfDpi, 52 * _dpi + _halfDpi, 3, 12 * _dpi - _halfDpi));
   //
   list.add(_tscLine(27 * _dpi, 6 * _dpi + 3, 79 * _dpi, 3));
   list.add(_tscLine(27 * _dpi, 14 * _dpi + 3, 79 * _dpi, 3));
@@ -1296,7 +1294,6 @@ Future<List<Uint8List>> labelMultipurposeBigFixed({
 
   return list;
 }
-
 
 //动态国内大标标签
 //[qrCode] 二维码内容
@@ -1321,15 +1318,17 @@ Future<List<Uint8List>> labelMultipurposeBigDynamicFixed({
   double speed = 3.0,
   double density = 15.0,
 }) async {
- var table = (tableSubTitle2.length )*6;
- var contentHigh = (4-contextFormat(content, 35, 100.0 * _dpi).length)*6;
+  var table = (tableSubTitle2.length) * 6;
+  var contentHigh = (4 - contextFormat(content, 35, 100.0 * _dpi).length) * 6;
 
   var list = <Uint8List>[];
   list.add(_tscClearBuffer());
-  list.add(_tscSetup(110, 66+table-contentHigh, density: density.toInt(), speed: speed.toInt(),sensorDistance:0));
+  list.add(_tscSetup(110, 66 + table - contentHigh,
+      density: density.toInt(), speed: speed.toInt(), sensorDistance: 0));
   if (qrCode.isNotEmpty) {
     list.add(_tscQrCode(2 * _dpi, 2 * _dpi + _halfDpi,
-        qrCode.contains('"') ? qrCode.replaceAll('"', '\\["]') : qrCode,cell: '6'));
+        qrCode.contains('"') ? qrCode.replaceAll('"', '\\["]') : qrCode,
+        cell: '6'));
     list.add(await _tscBitmapText(28 * _dpi + _halfDpi, 2 * _dpi, 22, qrCode));
   }
   if (title.isNotEmpty) {
@@ -1364,66 +1363,70 @@ Future<List<Uint8List>> labelMultipurposeBigDynamicFixed({
     list.add(await _tscBitmapText(2 * _dpi, 29 * _dpi, 35, content));
   }
 
-  if(tableSubTitle2.isNotEmpty){
+  if (tableSubTitle2.isNotEmpty) {
     for (var i = 0; i < tableSubTitle2.length; ++i) {
       //如子内容为空则限制主内容行数为4
       if (i >= 4) break;
-      list.add(
-          await _tscBitmapText(2 * _dpi, (59-contentHigh+ 6 * i) * _dpi, 35, tableSubTitle2[i]));
+      list.add(await _tscBitmapText(
+          2 * _dpi, (59 - contentHigh + 6 * i) * _dpi, 35, tableSubTitle2[i]));
     }
   }
 
   if (bottomLeftText1.isNotEmpty) {
     var format = contextFormat(bottomLeftText1, 30, 30.0 * _dpi);
-    if(format.length>1){
+    if (format.length > 1) {
       for (var i = 0; i < format.length; ++i) {
-
         if (i >= 3) break;
-        list.add(
-            await _tscBitmapText(2 * _dpi, (54+table-contentHigh  + 5 * i) * _dpi, 30, format[i]));
+        list.add(await _tscBitmapText(2 * _dpi,
+            (54 + table - contentHigh + 5 * i) * _dpi, 30, format[i]));
       }
-    }else if(format.length == 1){
-      list.add(
-          await _tscBitmapText(2 * _dpi, (56+table-contentHigh)  * _dpi, 30, format[0]));
+    } else if (format.length == 1) {
+      list.add(await _tscBitmapText(
+          2 * _dpi, (56 + table - contentHigh) * _dpi, 30, format[0]));
     }
   }
 
   if (bottomMiddleText1.isNotEmpty) {
     var format = contextFormat(bottomMiddleText1, 30, 65.0 * _dpi);
-    if(format.length>1){
+    if (format.length > 1) {
       for (var i = 0; i < format.length; ++i) {
-
         if (i >= 3) break;
-        list.add(
-            await _tscBitmapText(34 * _dpi, (54+table-contentHigh + 5 * i) * _dpi, 30, format[i]));
+        list.add(await _tscBitmapText(34 * _dpi,
+            (54 + table - contentHigh + 5 * i) * _dpi, 30, format[i]));
       }
-    }else if(format.length == 1){
-      list.add(
-          await _tscBitmapText(34 * _dpi, (56+table-contentHigh) * _dpi, 30, format[0]));
+    } else if (format.length == 1) {
+      list.add(await _tscBitmapText(
+          34 * _dpi, (56 + table - contentHigh) * _dpi, 30, format[0]));
     }
   }
   if (bottomRightText1.isNotEmpty) {
     var format = contextFormat(bottomRightText1, 30, 15.0 * _dpi);
-    if(format.length>1){
+    if (format.length > 1) {
       for (var i = 0; i < format.length; ++i) {
-
         if (i >= 3) break;
-        list.add(
-            await _tscBitmapText(91 * _dpi, (54+table-contentHigh + 5 * i) * _dpi, 30, format[i]));
+        list.add(await _tscBitmapText(91 * _dpi,
+            (54 + table - contentHigh + 5 * i) * _dpi, 30, format[i]));
       }
-    }else if(format.length == 1){
-      list.add(
-          await _tscBitmapText(91 * _dpi, (56+table-contentHigh) * _dpi, 30, format[0]));
+    } else if (format.length == 1) {
+      list.add(await _tscBitmapText(
+          91 * _dpi, (56 + table - contentHigh) * _dpi, 30, format[0]));
     }
   }
-  list.add(_tscBox(_dpi, _dpi, 106 * _dpi, (64+table-contentHigh) * _dpi, crude: 2));
+  list.add(_tscBox(_dpi, _dpi, 106 * _dpi, (64 + table - contentHigh) * _dpi,
+      crude: 2));
   list.add(_tscLine(27 * _dpi, _dpi, 3, 28 * _dpi - _halfDpi));
-  list.add(_tscLine(33 * _dpi, (52+table-contentHigh) * _dpi + _halfDpi, 3, 12 * _dpi - _halfDpi));  //第一根竖线
-  list.add(_tscLine(89 * _dpi + _halfDpi, (52+table-contentHigh) * _dpi + _halfDpi, 3, 12 * _dpi - _halfDpi)); //第二根竖线
+  list.add(_tscLine(33 * _dpi, (52 + table - contentHigh) * _dpi + _halfDpi, 3,
+      12 * _dpi - _halfDpi)); //第一根竖线
+  list.add(_tscLine(
+      89 * _dpi + _halfDpi,
+      (52 + table - contentHigh) * _dpi + _halfDpi,
+      3,
+      12 * _dpi - _halfDpi)); //第二根竖线
   list.add(_tscLine(27 * _dpi, 6 * _dpi + 3, 79 * _dpi, 3));
   list.add(_tscLine(27 * _dpi, 14 * _dpi + 3, 79 * _dpi, 3));
   list.add(_tscLine(_dpi, 29 * _dpi - _halfDpi, 105 * _dpi, 3)); //二维码下面的横线
-  list.add(_tscLine(_dpi, (52+table-contentHigh) * _dpi + _halfDpi, 105 * _dpi, 3)); //底部上面的横线
+  list.add(_tscLine(_dpi, (52 + table - contentHigh) * _dpi + _halfDpi,
+      105 * _dpi, 3)); //底部上面的横线
 
   list.add(_tscCutter());
   list.add(_tscPrint());

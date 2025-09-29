@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/material_dispatch_info.dart';
 import 'package:jd_flutter/bean/http/response/material_dispatch_label_detail.dart';
+import 'package:jd_flutter/fun/dispatching/machine_dispatch/machine_dispatch_dialog.dart';
 import 'package:jd_flutter/fun/dispatching/material_dispatch/material_dispatch_state.dart';
 import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
@@ -636,6 +637,13 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
           text: 'material_dispatch_storage_pallet_select'.tr,
           click: () => showPickPallet(),
           combination: Combination.left,
+        ),
+        CombinationButton(
+          text: '打印机设置',
+          click: () => showPrintSetting(
+            context,
+          ),
+          combination: Combination.middle,
         ),
         CombinationButton(
           text: 'material_dispatch_batch_stock_in'.tr,

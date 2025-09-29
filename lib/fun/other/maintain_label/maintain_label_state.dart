@@ -82,8 +82,10 @@ class MaintainLabelState {
           }
         });
       } else {
-        if (isMaterialLabel.value) {
+        debugPrint('isMaterialLabel=${isMaterialLabel.value}');
+        if (!isMaterialLabel.value) {
           labelList.clear();
+          debugPrint('labelList=${labelList.length}');
         } else {
           labelGroupList.clear();
         }

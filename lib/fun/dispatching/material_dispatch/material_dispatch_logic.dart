@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/material_dispatch_info.dart';
 import 'package:jd_flutter/bean/http/response/material_dispatch_label_detail.dart';
+import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/printer/print_util.dart';
 import 'package:jd_flutter/utils/printer/tsc_util.dart';
@@ -265,8 +266,8 @@ class MaterialDispatchLogic extends GetxController {
             bottomLeftText1: data.drillingCrewName ?? '',
             bottomMiddleText1: '$color/$qty${data.unitName}',
             bottomRightText1: data.sapDecideArea ?? '',
-            speed: 3.0,
-            density: 14.0,
+            speed: spGet(spSavePrintSpeed) ?? 3.0,
+            density: spGet(spSavePrintDensity) ?? 13.0,
           ).then((printLabel) {
             PrintUtil().printLabel(
                 label: printLabel,
@@ -321,8 +322,8 @@ class MaterialDispatchLogic extends GetxController {
             bottomLeftText1: data.drillingCrewName ?? '',
             bottomMiddleText1: '$color/$qty${data.unitName}',
             bottomRightText1: data.sapDecideArea ?? '',
-            speed: 3.0,
-            density: 14.0,
+            speed: spGet(spSavePrintSpeed) ?? 3.0,
+            density: spGet(spSavePrintDensity) ?? 13.0,
           ).then((printLabel) {
             PrintUtil().printLabel(
                 label: printLabel,
@@ -350,8 +351,8 @@ class MaterialDispatchLogic extends GetxController {
             bottomMiddleText1: '$qty${data.unitName}',
             bottomMiddleText2: '色系：$color',
             bottomRightText1: data.sapDecideArea ?? '',
-            speed: 3.0,
-            density: 14.0,
+            speed: spGet(spSavePrintSpeed) ?? 3.0,
+            density: spGet(spSavePrintDensity) ?? 13.0,
           ).then((printLabel) {
             PrintUtil().printLabel(
                 label: printLabel,
