@@ -26,7 +26,6 @@ class MaterialDispatchLogic extends GetxController {
   //   super.onReady();
   // }
   selectShow(int index) {
-    logger.f("筛选：" + index.toString());
     if (index == 0) {
       state.showOrderList.value = state.allOrderList;
     } else {
@@ -285,6 +284,7 @@ class MaterialDispatchLogic extends GetxController {
           });
         } else {
           labelMultipurposeDynamic(
+            isCut: false,
             qrCode: guid,
             title: data.productName ?? '',
             subTitle: data.materialName ?? '',

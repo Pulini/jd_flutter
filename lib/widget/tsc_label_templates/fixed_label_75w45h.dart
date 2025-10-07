@@ -840,6 +840,7 @@ Widget maintainLabelSingleSizeEnglishFixedLabel({
   required double qty,
   required String pageNumber,
   required String size,
+  required String unit,
 }) =>
     _fixedLabelTemplate75x45(
       qrCode: barCode,
@@ -911,7 +912,7 @@ Widget maintainLabelSingleSizeEnglishFixedLabel({
         padding: const EdgeInsets.only(left: 3, right: 3),
         child: Center(
           child: Text(
-            qty.toShowString(),
+            qty.toShowString()+unit,
             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
           ),
         ),

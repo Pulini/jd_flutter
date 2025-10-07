@@ -165,6 +165,7 @@ class _TscLabelPreviewState extends State<TscLabelPreview> {
           qty: 999.99,
           pageNumber: '1-1',
           size: '35',
+          unit: 'PAA'
         )
       ],
       [

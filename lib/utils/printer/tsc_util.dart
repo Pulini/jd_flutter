@@ -856,6 +856,7 @@ Future<List<Uint8List>> labelMultipurposeEnglishFixed({
 //[bottomRightText1] 右下文本1
 //[bottomRightText2] 右下文本2
 Future<List<Uint8List>> labelMultipurposeDynamic({
+  bool isCut = true,
   String qrCode = '',
   String title = '',
   String subTitle = '',
@@ -1108,7 +1109,8 @@ Future<List<Uint8List>> labelMultipurposeDynamic({
     list.add(_tscLine(i * _dpi, height * _dpi - 2, _dpi, 2));
   }
 
-  list.add(_tscCutter());
+  if (isCut) list.add(_tscCutter());
+
   list.add(_tscPrint());
 
   return list;
