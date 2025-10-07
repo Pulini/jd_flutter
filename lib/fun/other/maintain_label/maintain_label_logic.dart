@@ -6,6 +6,7 @@ import 'package:jd_flutter/bean/http/response/label_info.dart';
 import 'package:jd_flutter/bean/http/response/maintain_material_info.dart';
 import 'package:jd_flutter/bean/http/response/picking_bar_code_info.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
+import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/preview_label_list_widget.dart';
@@ -308,8 +309,7 @@ class MaintainLabelLogic extends GetxController {
     }
     if (select[0].labelType != 101 &&
         select[0].labelType != 102 &&
-        select[0].labelType != 103 &&
-        select[0].labelType != 1) {
+        select[0].labelType != 103) {
       showSnackBar(
           message:
               'maintain_label_error'.trArgs([select[0].labelType.toString()]));
@@ -348,14 +348,14 @@ class MaintainLabelLogic extends GetxController {
       case 102:
         createFixedLabel(
           language: language,
-          list: select,
+          list: select[0],
           labels: labelsCallback,
         );
         break;
       case 103:
         createGroupDynamicLabel(
           language: language,
-          list: select,
+          list: select[0],
           labels: labelsCallback,
         );
         break;
@@ -522,7 +522,7 @@ class MaintainLabelLogic extends GetxController {
     for (var data in list) {
       var languageInfo =
           data.materialOtherName!.firstWhere((v) => v.languageName == language);
-      if (language == 'zh') {
+      if (languageInfo.languageCode == 'zh') {
         labelList.add(maintainLabelMaterialChineseFixedLabel(
           barCode: data.barCode ?? '',
           factoryType: data.factoryType ?? '',
@@ -555,41 +555,43 @@ class MaintainLabelLogic extends GetxController {
   //固定单码标
   createFixedLabel({
     required String language,
-    required List<List<LabelInfo>> list,
+    required List<LabelInfo> list,
     required Function(List<Widget>, bool) labels,
   }) {
     var labelList = <Widget>[];
-    for (var data in list) {
-      var languageInfo = data[0]
-          .materialOtherName!
-          .firstWhere((v) => v.languageName == language);
 
-      if (language == 'zh') {
+    for (var data in list) {
+      var languageInfo =
+          data.materialOtherName!.firstWhere((v) => v.languageName == language);
+
+      if (languageInfo.languageCode == 'zh') {
+        logger.f('-----中文');
         labelList.add(maintainLabelSingleSizeChineseFixedLabel(
-          barCode: data[0].barCode ?? '',
-          factoryType: data[0].factoryType ?? '',
-          billNo: data[0].items![0].billNo ?? '',
-          materialCode: data[0].materialCode ?? '',
-          materialName: data[0].materialName ?? '',
-          size: data[0].items?[0].size ?? '',
+          barCode: data.barCode ?? '',
+          factoryType: data.factoryType ?? '',
+          billNo: data.items?[0].billNo ?? '',
+          materialCode: data.materialCode ?? '',
+          materialName: data.materialName ?? '',
+          size: data.items?[0].size ?? '',
           pageNumber: languageInfo.pageNumber ?? '',
           date: languageInfo.deliveryDate ?? '',
-          unit: (data[0].items?[0].qty.toShowString() ?? '') +
+          unit: (data.items?[0].qty.toShowString() ?? '') +
               (languageInfo.unitName ?? ''),
         ));
       } else {
         labelList.add(maintainLabelSingleSizeEnglishFixedLabel(
-          barCode: data[0].barCode ?? '',
-          factoryType: data[0].factoryType ?? '',
-          billNo: data[0].items![0].billNo ?? '',
-          materialCode: data[0].materialCode ?? '',
-          materialName: data[0].materialName ?? '',
-          grossWeight: data[0].grossWeight ?? 0.0,
-          netWeight: data[0].netWeight ?? 0.0,
-          meas: data[0].meas ?? '',
-          qty: data[0].items?[0].qty ?? 0.0,
+          barCode: data.barCode ?? '',
+          factoryType: data.factoryType ?? '',
+          billNo: data.items?[0].billNo ?? '',
+          materialCode: data.materialCode ?? '',
+          materialName: languageInfo.name ?? '',
+          grossWeight: data.grossWeight ?? 0.0,
+          netWeight: data.netWeight ?? 0.0,
+          meas: data.meas ?? '',
+          qty: data.items?[0].qty ?? 0.0,
           pageNumber: languageInfo.pageNumber ?? '',
-          size: data[0].items?[0].size ?? '',
+          size: data.items?[0].size ?? '',
+          unit: languageInfo.unitName ?? '',
         ));
       }
     }
@@ -599,20 +601,17 @@ class MaintainLabelLogic extends GetxController {
   //合并动态标签
   createGroupDynamicLabel({
     required String language,
-    required List<List<LabelInfo>> list,
+    required List<LabelInfo> list,
     required Function(List<Widget>, bool) labels,
   }) {
     var labelList = <Widget>[];
     for (var data in list) {
       //标签语言类型
-      var languageInfo = data[0]
-          .materialOtherName!
-          .firstWhere((v) => v.languageName == language);
+      var languageInfo =
+          data.materialOtherName!.firstWhere((v) => v.languageName == language);
       var insList = <LabelSizeInfo>[];
-      for (var item in data) {
-        if (!item.items.isNullOrEmpty()) {
-          insList.addAll(item.items!);
-        }
+      if (!data.items.isNullOrEmpty()) {
+        insList.addAll(data.items!);
       }
       //标签指令列表
       var ins = groupBy(insList, (v) => v.billNo);
@@ -625,31 +624,29 @@ class MaintainLabelLogic extends GetxController {
         ];
       });
 
-      if (language == 'zh') {
+      if (languageInfo.languageCode == 'zh') {
         labelList.add(maintainLabelSizeMaterialChineseDynamicLabel(
-          barCode: data[0].barCode ?? '',
-          factoryType: data[0].factoryType ?? '',
-          billNo: data[0].departName ?? '',
-          total:
-              data[0].items!.map((v) => v.qty ?? 0).reduce((a, b) => a.add(b)),
+          barCode: data.barCode ?? '',
+          factoryType: data.factoryType ?? '',
+          billNo: data.departName ?? '',
+          total: data.items!.map((v) => v.qty ?? 0).reduce((a, b) => a.add(b)),
           unit: languageInfo.unitName ?? '',
-          materialCode: data[0].materialCode ?? '',
-          materialName: data[0].materialName ?? '',
+          materialCode: data.materialCode ?? '',
+          materialName: data.materialName ?? '',
           map: map,
           pageNumber: languageInfo.pageNumber ?? '',
           deliveryDate: languageInfo.deliveryDate ?? '',
         ));
       } else {
         labelList.add(maintainLabelMixEnglishDynamicLabel(
-          barCode: data[0].barCode ?? '',
-          factoryType: data[0].factoryType ?? '',
-          materialCode: data[0].materialCode ?? '',
-          materialName: data[0].materialName ?? '',
-          grossWeight: data[0].grossWeight ?? 0.0,
-          netWeight: data[0].netWeight ?? 0.0,
-          meas: data[0].meas ?? '',
-          total:
-              data[0].items!.map((v) => v.qty ?? 0).reduce((a, b) => a.add(b)),
+          barCode: data.barCode ?? '',
+          factoryType: data.factoryType ?? '',
+          materialCode: data.materialCode ?? '',
+          materialName: data.materialName ?? '',
+          grossWeight: data.grossWeight ?? 0.0,
+          netWeight: data.netWeight ?? 0.0,
+          meas: data.meas ?? '',
+          total: data.items!.map((v) => v.qty ?? 0).reduce((a, b) => a.add(b)),
           unit: languageInfo.unitName ?? '',
           map: map,
           pageNumber: languageInfo.pageNumber ?? '',

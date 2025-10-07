@@ -7,7 +7,6 @@ import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/printer/print_util.dart';
 import 'package:jd_flutter/utils/printer/tsc_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
-import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/preview_label_widget.dart';
@@ -26,7 +25,6 @@ class MaterialDispatchLogic extends GetxController {
   //   super.onReady();
   // }
   selectShow(int index) {
-    logger.f("筛选：" + index.toString());
     if (index == 0) {
       state.showOrderList.value = state.allOrderList;
     } else {
@@ -285,6 +283,7 @@ class MaterialDispatchLogic extends GetxController {
           });
         } else {
           labelMultipurposeDynamic(
+            isCut: false,
             qrCode: guid,
             title: data.productName ?? '',
             subTitle: data.materialName ?? '',
