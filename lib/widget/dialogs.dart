@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -270,8 +269,9 @@ doUpdate({
                         Get.back();
                         Downloader(
                           url: version.url!,
-                          completed: (path) => const MethodChannel(channelUsbAndroidToFlutter)
-                              .invokeMethod('OpenFile', path),
+                          completed: (path) =>
+                              const MethodChannel(channelUsbAndroidToFlutter)
+                                  .invokeMethod('OpenFile', path),
                         );
                         return;
                       }
@@ -623,3 +623,4 @@ loadingShow(String? content) {
 loadingDismiss() {
   LoadingSingleton().dismiss();
 }
+

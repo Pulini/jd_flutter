@@ -706,3 +706,7 @@ String unicodeDecode(String string) {
 
   return str;
 }
+String getPrintTime({DateTime? time}) {
+  DateTime now = time ?? DateTime.now();
+  return '${now.year}.${now.month}.${now.day} ${now.hour}:${now.minute}';
+}

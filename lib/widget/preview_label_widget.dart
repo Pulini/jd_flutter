@@ -1,6 +1,9 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/constant.dart';
+import 'package:jd_flutter/utils/printer/online_print_util.dart';
 
 import 'package:jd_flutter/utils/printer/print_util.dart';
 import 'package:jd_flutter/utils/printer/tsc_util.dart';
@@ -28,6 +31,7 @@ class PreviewLabel extends StatefulWidget {
 class _PreviewLabelState extends State<PreviewLabel> {
   var pu = PrintUtil();
   var image = <String, dynamic>{}.obs;
+  var imageByteList = <Uint8List>[].obs;
   RxDouble printSpeed = 0.0.obs;
   RxDouble printDensity = 0.0.obs;
   static bool _isAlreadyOpen = false;
@@ -58,6 +62,7 @@ class _PreviewLabelState extends State<PreviewLabel> {
     );
   }
 
+
   @override
   void initState() {
     if (_isAlreadyOpen) {
@@ -81,10 +86,18 @@ class _PreviewLabelState extends State<PreviewLabel> {
           title: '标签预览',
           actions: [
             image.isNotEmpty
-                ? IconButton(
-                    onPressed: () => printLabel(),
-                    icon: const Icon(Icons.print),
-                  )
+                ? Row(
+              children: [
+                IconButton(
+                  onPressed: () => onLinePrintDialog(imageByteList,true),
+                  icon: const Icon(Icons.network_check),
+                ),
+                IconButton(
+                  onPressed: () => printLabel(),
+                  icon: const Icon(Icons.print),
+                ),
+              ],
+            )
                 : Container(
                     width: 25,
                     height: 25,
@@ -146,7 +159,10 @@ class _PreviewLabelState extends State<PreviewLabel> {
                     child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: WidgetsToImage(
-                        image: (map) => image.value = map,
+                        image: (map) async {
+                          image.value = map;
+                          imageByteList.add(map['image']);
+                        },
                         child: widget.labelWidget,
                       ),
                     ),
@@ -163,4 +179,6 @@ class _PreviewLabelState extends State<PreviewLabel> {
     _isAlreadyOpen = false; // 页面关闭时重置状态
     super.dispose();
   }
+
+
 }

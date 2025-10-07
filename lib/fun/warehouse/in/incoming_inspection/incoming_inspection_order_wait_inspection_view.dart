@@ -157,20 +157,16 @@ class _OrderWaitInspectionPageState extends State<OrderWaitInspectionPage> {
           Padding(
             padding: const EdgeInsets.all(10),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                textSpan(
+                expandedTextSpan(
                   hint: 'incoming_inspection_order_suppler'.tr,
                   text: state.inspectionDetail?.supplier ?? '',
+                  maxLines: 2,
                   textColor: Colors.red,
                 ),
                 textSpan(
                   hint: 'incoming_inspection_order_delivery_qty'.tr,
-                  text: state.inspectionDetail?.materielList
-                          ?.map((v) => v.numPage ?? 0)
-                          .reduce((a, b) => a + b)
-                          .toString() ??
-                      '',
+                  text:logic.getNumPageTotal(),
                   textColor: Colors.red,
                 ),
               ],

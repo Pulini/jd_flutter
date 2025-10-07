@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/wait_picking_material_info.dart';
 import 'package:jd_flutter/fun/warehouse/out/wait_picking_material/wait_picking_material_detail_view.dart';
-import 'package:jd_flutter/widget/custom_widget.dart';
+import 'package:jd_flutter/utils/printer/a4_paper_template.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/preview_a4paper_widget.dart';
 

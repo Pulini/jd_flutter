@@ -1,7 +1,10 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
+import 'package:jd_flutter/utils/printer/online_print_util.dart';
 import 'package:jd_flutter/utils/printer/print_util.dart';
 import 'package:jd_flutter/utils/printer/tsc_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
@@ -25,10 +28,12 @@ class _PreviewLabelListState extends State<PreviewLabelList> {
   var pu = PrintUtil();
   var widgetList = <Widget>[].obs;
   var imageList = <Map<String, dynamic>>[].obs;
+  var imageByteList = <Uint8List>[].obs;
   RxDouble printSpeed = 0.0.obs;
   RxDouble printDensity = 0.0.obs;
 
   static bool _isAlreadyOpen = false;
+
   printLabel() async {
     if (imageList.isEmpty) return;
 
@@ -67,11 +72,16 @@ class _PreviewLabelListState extends State<PreviewLabelList> {
     printDensity.value = spGet(spSavePrintDensity) ?? 15;
     for (var v in widget.labelWidgets) {
       widgetList.add(WidgetsToImage(
-        image: (map) => imageList.add(map),
+        image: (map) {
+          imageList.add(map);
+          imageByteList.add(map['image']);
+        },
         child: v,
       ));
     }
   }
+
+  printLabelOnline() {}
 
   @override
   Widget build(BuildContext context) {
@@ -80,9 +90,17 @@ class _PreviewLabelListState extends State<PreviewLabelList> {
           title: '标签预览',
           actions: [
             imageList.isNotEmpty
-                ? IconButton(
-                    onPressed: () => printLabel(),
-                    icon: const Icon(Icons.print),
+                ? Row(
+                    children: [
+                      IconButton(
+                        onPressed: () => onLinePrintDialog(imageByteList,true),
+                        icon: const Icon(Icons.network_check),
+                      ),
+                      IconButton(
+                        onPressed: () => printLabel(),
+                        icon: const Icon(Icons.print),
+                      ),
+                    ],
                   )
                 : Padding(
                     padding: const EdgeInsets.only(right: 10),
@@ -168,6 +186,7 @@ class _PreviewLabelListState extends State<PreviewLabelList> {
           )),
     );
   }
+
   @override
   void dispose() {
     _isAlreadyOpen = false; // 页面关闭时重置状态

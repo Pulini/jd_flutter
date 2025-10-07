@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:core';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,11 +10,17 @@ import 'package:jd_flutter/widget/widgets_to_image_widget.dart';
 import 'package:image/image.dart' as img;
 
 import 'custom_widget.dart';
+import '../utils/printer/online_print_util.dart';
 
 class PreviewA4Paper extends StatefulWidget {
-  const PreviewA4Paper({super.key, required this.paperWidgets});
-
+  final bool isRotate90;
   final List<Widget> paperWidgets;
+
+  const PreviewA4Paper({
+    super.key,
+    this.isRotate90 = false,
+    required this.paperWidgets,
+  });
 
   @override
   State<PreviewA4Paper> createState() => _PreviewA4PaperState();
@@ -21,19 +28,22 @@ class PreviewA4Paper extends StatefulWidget {
 
 class _PreviewA4PaperState extends State<PreviewA4Paper> {
   var widgetList = <Widget>[].obs;
-  var a4PaperList = <String>[].obs;
+  var a4PaperBase64List = <String>[].obs;
+  var a4PaperByteList = <Uint8List>[].obs;
   static bool _isAlreadyOpen = false;
 
   printA4Paper() async {
-    if (a4PaperList.isEmpty) return;
+    if (a4PaperBase64List.isEmpty) return;
     const MethodChannel(channelPrinterFlutterToAndroid)
-        .invokeMethod('PrintFile', a4PaperList)
+        .invokeMethod('PrintFile', a4PaperBase64List)
         .then((detectCallback) {
       logger.i(detectCallback);
     }).catchError((e) {
       logger.i(e);
     });
   }
+
+
   Future<Uint8List> a4PaperImageResize(Uint8List image) async {
     var reImage = img.copyResize(
       img.decodeImage(image)!,
@@ -58,10 +68,13 @@ class _PreviewA4PaperState extends State<PreviewA4Paper> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       for (var paper in widget.paperWidgets) {
         widgetList.add(WidgetsToImage(
-          isRotate90: true,
-          image: (map) async => a4PaperList.add(
-            base64Encode(await a4PaperImageResize(map['image'])),
-          ),
+          isRotate90: widget.isRotate90,
+          image: (map) async {
+            var img = map['image'];
+            var rImg = await a4PaperImageResize(img);
+            a4PaperBase64List.add(base64Encode(rImg));
+            a4PaperByteList.add(img);
+          },
           child: paper,
         ));
       }
@@ -73,10 +86,18 @@ class _PreviewA4PaperState extends State<PreviewA4Paper> {
     return Obx(() => pageBody(
           title: 'A4打印预览',
           actions: [
-            a4PaperList.isNotEmpty
-                ? IconButton(
-                    onPressed: () => printA4Paper(),
-                    icon: const Icon(Icons.print),
+            a4PaperBase64List.isNotEmpty
+                ? Row(
+                    children: [
+                      IconButton(
+                        onPressed: () => onLinePrintDialog(a4PaperByteList,false),
+                        icon: const Icon(Icons.network_check),
+                      ),
+                      IconButton(
+                        onPressed: () => printA4Paper(),
+                        icon: const Icon(Icons.print),
+                      ),
+                    ],
                   )
                 : Container(
                     width: 25,
@@ -85,27 +106,29 @@ class _PreviewA4PaperState extends State<PreviewA4Paper> {
                     child: const CircularProgressIndicator(),
                   ),
           ],
-          body: SingleChildScrollView(
-            padding: const EdgeInsets.all(5),
+          body: Center(
             child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Column(
-                children: [
-                  for (var v in widgetList)
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 30),
-                      child: v,
-                    )
-                ],
+              padding: const EdgeInsets.all(5),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Column(
+                  children: [
+                    for (var v in widgetList)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 30),
+                        child: v,
+                      )
+                  ],
+                ),
               ),
             ),
           ),
         ));
   }
+
   @override
   void dispose() {
     _isAlreadyOpen = false; // 页面关闭时重置状态
     super.dispose();
   }
-
 }

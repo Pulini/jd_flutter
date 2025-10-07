@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/picking_material_order_info.dart';
-import 'package:jd_flutter/widget/custom_widget.dart';
+import 'package:jd_flutter/utils/printer/a4_paper_template.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/preview_a4paper_widget.dart';
 

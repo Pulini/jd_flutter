@@ -76,3 +76,6 @@ const spSaveWorkshopPlanningDepartment ='workshop_planning_department';
 const spSaveMenuInfo ='menu_info';
 const spSavePrintSpeed ='save_print_speed';
 const spSavePrintDensity ='save_print_density';
+const onlinePrinterDepartmentName ='online_printer_department_name';
+const onlinePrinterDeviceID ='online_printer_device_id';
+const onlinePrinterPaperType='online_printer_paper_type';

@@ -79,13 +79,13 @@ class SapInjectionMoldingStockInLogic extends GetxController {
         );
         return;
       }
-      if (!state.reportedList.contains(code)) {
-        showSnackBar(
-          message: 'sap_injection_molding_stock_in_label_state_error'.tr,
-          isWarning: true,
-        );
-        return;
-      }
+      // if (!state.reportedList.contains(code)) {
+      //   showSnackBar(
+      //     message: 'sap_injection_molding_stock_in_label_state_error'.tr,
+      //     isWarning: true,
+      //   );
+      //   return;
+      // }
       BarCodeInfo(
         code: code,
         type: BarCodeReportType.injectionMoldingStockIn.text,

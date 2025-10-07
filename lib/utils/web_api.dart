@@ -39,8 +39,9 @@ const baseUrlForSAP = 'https://erpprd01.goldemperor.com:8003/';
 // const testUrlForSAP = 'https://erpqas01.goldemperor.com:8002/';
 
 //SAP开发库
-// const developUrlForSAP = 'https://erpdev01.goldemperor.com:8001/';
-const developUrlForSAP = 'https://s4devapp01.goldemperor.com:8005/';
+const developUrlForSAP = 'https://erpdev01.goldemperor.com:8001/';
+// const developUrlForSAP = 'https://s4devapp01.goldemperor.com:8005/';
+
 const sfUser = 'PI_USER';
 const sfPassword = 'PI@Passw0rd';
 

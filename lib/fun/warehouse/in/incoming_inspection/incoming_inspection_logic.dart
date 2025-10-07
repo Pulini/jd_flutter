@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:collection/collection.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/incoming_inspection_info.dart';
 import 'package:jd_flutter/bean/http/response/worker_info.dart';
@@ -201,5 +202,13 @@ class IncomingInspectionLogic extends GetxController {
       success: (msg) => successDialog(content: msg, back: () => Get.back()),
       error: (msg) => errorDialog(content: msg),
     );
+  }
+
+  String getNumPageTotal() {
+    var total = 0;
+    if (state.inspectionDetail == null) return '0';
+    groupBy(state.inspectionDetail!.materielList!, (v) => v.billNo ?? '')
+        .forEach((k, v) => total += v.first.numPage ?? 0);
+    return total.toString();
   }
 }

@@ -13,24 +13,6 @@ var _smallStyle = const TextStyle(
 );
 var _textPadding = const EdgeInsets.only(left: 3, right: 3);
 
-_paddingTextCenter({
-  required String text,
-  required int flex,
-  TextStyle? style,
-}) {
-  var container = Container(
-    decoration: _border,
-    padding: _textPadding,
-    alignment: Alignment.center,
-    child: Text(
-      text,
-      style: style ?? _textStyle,
-      textAlign: TextAlign.center,
-    ),
-  );
-  return flex == 0 ? container : Expanded(flex: flex, child: container);
-}
-
 _paddingTextLeft({
   required String text,
   required int flex,
@@ -42,6 +24,26 @@ _paddingTextLeft({
     padding: padding ?? _textPadding,
     alignment: Alignment.centerLeft,
     child: Text(text, style: style ?? _textStyle),
+  );
+  return flex == 0 ? container : Expanded(flex: flex, child: container);
+}
+
+_paddingTextCenter({
+  required String text,
+  required int flex,
+  TextStyle? style,
+}) {
+  var container = Container(
+    decoration: _border,
+    padding: _textPadding,
+    alignment: Alignment.center,
+    child: text.isNullOrEmpty()
+        ? null
+        : Text(
+            text,
+            style: style ?? _textStyle,
+            textAlign: TextAlign.center,
+          ),
   );
   return flex == 0 ? container : Expanded(flex: flex, child: container);
 }
@@ -718,7 +720,7 @@ Widget dynamicInBoxLabel1095n1096({
                         ],
                       ),
                     ),
-                    if(haveSupplier)
+                    if (haveSupplier)
                       Expanded(
                         flex: 2,
                         child: Row(
@@ -741,7 +743,7 @@ Widget dynamicInBoxLabel1095n1096({
                   child: Column(
                     children: [
                       SizedBox(
-                        height: haveSupplier ? 130 :110,
+                        height: haveSupplier ? 130 : 110,
                         child: QrImageView(
                           data: qrCode,
                           padding: const EdgeInsets.all(5),
@@ -767,6 +769,7 @@ Widget dynamicInBoxLabel1095n1096({
           ),
       ],
     );
+
 ///动态格式尺码物料标
 ///110 x N（高度由内容决定）
 ///物料列表格式 [['物料编码','物料名称','数量','单位'],['物料编码','物料名称','数量','单位'],['物料编码','物料名称','数量','单位']]
@@ -1284,7 +1287,357 @@ Widget dynamicPalletDetail({
   );
 }
 
-String getPrintTime({DateTime? time}) {
-  DateTime now = time ?? DateTime.now();
-  return '${now.year}.${now.month}.${now.day} ${now.hour}:${now.minute}';
+
+
+List<Widget> getTableWidget({required List table}) {
+  //尺码列数
+  var column = 5;
+  //表格头指令号
+  String ins = table[0];
+  //表格单码装数据
+  List<Map<String, List<double>>> singleDataList = table[1];
+  //表格单码装总数
+  double singleListTotalQty = table[2];
+  //表格单码装总件数
+  int singleListTotalPiece = table[3];
+  //表格混码装数据
+  List<Map<String, List<List>>> mixDataList = table[4];
+  //表格混码装总数
+  double mixListTotalQty = table[5];
+  //表格混码装总件数
+  int mixListTotalPiece = table[6];
+  //需要根据列数拆分成多少组
+  var singleGroupCount = (singleDataList.length / column).ceil();
+  //需要根据列数拆分成多少组
+  var mixGroupCount = (mixDataList.length / column).ceil();
+
+  //拆分重组单码装数据
+  var singleDataGroupList = List.generate(
+    singleGroupCount,
+    (i) {
+      var start = i * column;
+      var end = (start + column < singleDataList.length)
+          ? start + column
+          : singleDataList.length;
+      return singleDataList.sublist(start, end);
+    },
+  );
+  //如果最后一组数据不足列数，则填充空数据
+  for (var i = 0; i < singleGroupCount; i++) {
+    if (singleDataGroupList[i].length < column) {
+      singleDataGroupList[i].addAll(
+        List.generate(
+          column - singleDataGroupList[i].length,
+          (index) => {},
+        ),
+      );
+    }
+  }
+
+  List<Map<String, List<List<List>>>> mixDataGroupList = [];
+  for (var piece in mixDataList) {
+    var pieceNo = piece.keys.first;
+    var sizeList = piece.values.first.toList();
+    //拆分重组单码装数据
+    var list =sizeList.length>column? List.generate(
+      mixGroupCount,
+      (i) {
+        var start = i * column;
+        var end = (start + column < sizeList.length)
+            ? start + column
+            : sizeList.length;
+        return sizeList.sublist(start, end);
+      },
+    ):[sizeList];
+    //如果最后一组数据不足列数，则填充空数据
+    for (var i = 0; i < mixGroupCount; i++) {
+      if (list[i].length < column) {
+        list[i].addAll(
+          List.generate(
+            column - list[i].length,
+            (index) => [],
+          ),
+        );
+      }
+    }
+    list.removeWhere((v) =>
+        v.every((v2) => v2.isEmpty || v2.last.toString().toDoubleTry() == 0));
+    mixDataGroupList.add({pieceNo: list});
+  }
+
+  // logger.f(singleDataGroupList);
+  // logger.f(mixDataGroupList);
+  var singleMaterialWidget = IntrinsicHeight(
+    child: Row(
+      children: [
+        _paddingTextCenter(text: '单', flex: 1,  style: _bigStyle,),
+        Expanded(
+          flex: 10,
+          child: Column(
+            children: [
+              for (var item in singleDataGroupList)
+                IntrinsicHeight(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      for (var line in item)
+                        Expanded(
+                          flex: 2,
+                          child: Column(
+                            children: line.isEmpty||line.values.first.isEmpty
+                                ? [
+                                    _paddingTextCenter(text: '', flex: 1),
+                                    _paddingTextCenter(text: '', flex: 1),
+                                    _paddingTextCenter(text: '', flex: 1),
+                                  ]
+                                : [
+                                    _paddingTextCenter(
+                                      text: '${line.keys.first}#',
+                                      flex: 1,
+                                      style: _bigStyle,
+                                    ),
+                                    _paddingTextCenter(
+                                      text: line.values.first.isEmpty
+                                          ? ''
+                                          : line.values.first
+                                              .map((v) => v)
+                                              .reduce((a, b) => a.add(b))
+                                              .toShowString(),
+                                      flex: 1,
+                                      style: _bigStyle,
+                                    ),
+                                    _paddingTextCenter(
+                                      text: line.values.first.isEmpty
+                                          ? ''
+                                          : line.values.first.length.toString(),
+                                      flex: 1,
+                                      style: _bigStyle,
+                                    ),
+                                  ],
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+            ],
+          ),
+        ),
+        Expanded(
+          flex: 2,
+          child: Column(
+            children: [
+              _paddingTextCenter(
+                text: '双数',
+                flex: 0,
+                style: _bigStyle,
+              ),
+              _paddingTextCenter(
+                text: singleListTotalQty.toShowString(),
+                flex: 1,
+                style: _bigStyle,
+              ),
+            ],
+          ),
+        ),
+        Expanded(
+          flex: 2,
+          child: Column(
+            children: [
+              _paddingTextCenter(
+                text: '件数',
+                flex: 0,
+                style: _bigStyle,
+              ),
+              _paddingTextCenter(
+                text: singleListTotalPiece.toString(),
+                flex: 1,
+                style: _bigStyle,
+              ),
+            ],
+          ),
+        ),
+      ],
+    ),
+  );
+  var mixMaterialWidget = IntrinsicHeight(
+    child: Row(
+      children: [
+        _paddingTextCenter(text: '混', flex: 1,  style: _bigStyle,),
+        Expanded(
+          flex: 14,
+          child: Column(
+            children: [
+              for (var item in mixDataGroupList)
+                IntrinsicHeight(
+                  child: Row(
+                    children: [
+                      Expanded(
+                        flex: 10,
+                        child: Column(
+                          children: [
+                            for (var line in item.values.first) ...[
+                              IntrinsicHeight(
+                                child: Row(
+                                  children: [
+                                    for (var sub in line)
+                                      _paddingTextCenter(
+                                        text: sub.isEmpty ||
+                                                sub.last
+                                                        .toString()
+                                                        .toDoubleTry() ==
+                                                    0
+                                            ? ''
+                                            : '${sub.first}#',
+                                        flex: 2,
+                                        style: _bigStyle,
+                                      ),
+                                  ],
+                                ),
+                              ),
+                              IntrinsicHeight(
+                                child: Row(
+                                  children: [
+                                    for (var sub in line)
+                                      _paddingTextCenter(
+                                        text: sub.isEmpty
+                                            ? ''
+                                            : (sub.last as double) == 0
+                                                ? ''
+                                                : (sub.last as double)
+                                                    .toShowString(),
+                                        flex: 2,
+                                        style: _bigStyle,
+                                      ),
+                                  ],
+                                ),
+                              ),
+                            ]
+                          ],
+                        ),
+                      ),
+                      _paddingTextCenter(
+                        text: item.values
+                            .toList()
+                            .map((v) => v.first
+                                .map((v2) => v2.isEmpty
+                                    ? 0.0
+                                    : v2.last.toString().toDoubleTry())
+                                .reduce((a, b) => a.add(b)))
+                            .reduce((a, b) => a.add(b))
+                            .toShowString(),
+                        flex: 2,
+                        style: _bigStyle,
+                      ),
+                      _paddingTextCenter(
+                        text: '1',
+                        flex: 2,
+                        style: _bigStyle,
+                      ),
+                    ],
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ],
+    ),
+  );
+  return [
+    _createRowText(
+      title: '指令号',
+      titleAlignment: Alignment.center,
+      style: _bigStyle,
+      flex: 3,
+      rw: [
+        _paddingTextCenter(
+          text: ins,
+          flex: 12,
+          style: _bigStyle,
+        ),
+      ],
+    ),
+    //单码装表格
+    singleMaterialWidget,
+    //混码装表格
+    mixMaterialWidget,
+    _createRowText(
+      title: '小计',
+      titleAlignment: Alignment.center,
+      style: _bigStyle,
+      flex: 11,
+      rw: [
+        _paddingTextCenter(
+          text: singleListTotalQty.add(mixListTotalQty).toShowString(),
+          flex: 2,
+          style: _bigStyle,
+        ),
+        _paddingTextCenter(
+          text: (singleListTotalPiece + mixListTotalPiece).toString(),
+          flex: 2,
+          style: _bigStyle,
+        ),
+      ],
+    ),
+    Container(
+      decoration: _border,
+      height: 10,
+    )
+  ];
+}
+
+///动态格式 国内物料标  单尺码 多尺码 无尺码
+/// 表格列表
+///110 x N（高度由内容决定）
+Widget dynamicPalletSizeMaterialDetail({
+  required String palletNo, //托盘号
+  required List<List> tableList, //表格列表
+}) {
+  return _labelContainer(
+    widgets: [
+      _createRowText(
+        title: '托盘号',
+        titleAlignment: Alignment.center,
+        style: _bigStyle,
+        flex: 3,
+        rw: [
+          _paddingTextCenter(
+            text: palletNo,
+            flex: 6,
+            style: _bigStyle,
+          ),
+          _paddingTextCenter(
+            text: '${userInfo?.name}(${getPrintTime()})',
+            flex: 6,
+          ),
+        ],
+      ),
+      for (var table in tableList) ...[
+        ...getTableWidget(table: table),
+      ],
+      _createRowText(
+        title: '合计',
+        titleAlignment: Alignment.center,
+        style: _bigStyle,
+        flex: 11,
+        rw: [
+          _paddingTextCenter(
+            text: tableList
+                .map((v) => (v[2] as double).add((v[5] as double)))
+                .reduce((a, b) => a.add(b))
+                .toShowString(),
+            style: _bigStyle,
+            flex: 2,
+          ),
+          _paddingTextCenter(
+            text: tableList
+                .map((v) => (v[3] as int) + (v[6] as int))
+                .reduce((a, b) => a + b)
+                .toString(),
+            style: _bigStyle,
+            flex: 2,
+          ),
+        ],
+      ),
+    ],
+  );
 }
