@@ -4,6 +4,7 @@ const Map<String, String> dadPhone = {
   '15257154610': '123',//何蓓蓓
   '13506644569': '123456',//张幸民
   '18435177877': '123456',//张欣
+  '15167419616': '123',//毛维翰
 };
 const jdDatabase = 'jd_app.db';
 const spSaveLoginPhone = 'login_phone';

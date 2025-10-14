@@ -43,7 +43,6 @@ class _PreviewA4PaperState extends State<PreviewA4Paper> {
     });
   }
 
-
   Future<Uint8List> a4PaperImageResize(Uint8List image) async {
     var reImage = img.copyResize(
       img.decodeImage(image)!,
@@ -90,7 +89,10 @@ class _PreviewA4PaperState extends State<PreviewA4Paper> {
                 ? Row(
                     children: [
                       IconButton(
-                        onPressed: () => onLinePrintDialog(a4PaperByteList,false),
+                        onPressed: () => onLinePrintDialog(
+                          a4PaperByteList,
+                          PrintType.jpg,
+                        ),
                         icon: const Icon(Icons.network_check),
                       ),
                       IconButton(

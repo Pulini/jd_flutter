@@ -496,30 +496,30 @@ class _PurchaseOrderWarehousingPageState
         const SizedBox(width: 20),
       ],
       queryWidgets: [
-        Obx(() => EditText(
-              hint: 'purchase_order_warehousing_input_type_body'.tr,
-              controller: tecTypeBody,
-            )),
-        Obx(() => EditText(
-              hint: 'purchase_order_warehousing_input_instruction'.tr,
-              controller: tecInstruction,
-            )),
-        Obx(() => EditText(
-              hint: 'purchase_order_warehousing_input_purchase_order'.tr,
-              controller: tecPurchaseOrder,
-            )),
-        Obx(() => EditText(
-              hint: 'purchase_order_warehousing_input_material_code'.tr,
-              controller: tecMaterielCode,
-            )),
-        Obx(() => EditText(
-              hint: 'purchase_order_warehousing_input_customer_po'.tr,
-              controller: tecCustomerPO,
-            )),
-        Obx(() => EditText(
-              hint: 'purchase_order_warehousing_input_track_no'.tr,
-              controller: tecTrackNo,
-            )),
+        EditText(
+          hint: 'purchase_order_warehousing_input_type_body'.tr,
+          controller: tecTypeBody,
+        ),
+        EditText(
+          hint: 'purchase_order_warehousing_input_instruction'.tr,
+          controller: tecInstruction,
+        ),
+        EditText(
+          hint: 'purchase_order_warehousing_input_purchase_order'.tr,
+          controller: tecPurchaseOrder,
+        ),
+        EditText(
+          hint: 'purchase_order_warehousing_input_material_code'.tr,
+          controller: tecMaterielCode,
+        ),
+        EditText(
+          hint: 'purchase_order_warehousing_input_customer_po'.tr,
+          controller: tecCustomerPO,
+        ),
+        EditText(
+          hint: 'purchase_order_warehousing_input_track_no'.tr,
+          controller: tecTrackNo,
+        ),
         OptionsPicker(pickerController: opcSupplier),
         LinkOptionsPicker(pickerController: factoryWarehouseController),
         DatePicker(pickerController: dpcStartDate),

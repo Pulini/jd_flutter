@@ -110,10 +110,10 @@ class SapCartonLabelBindingState {
     required Function(String) success,
     required Function(String) error,
   }) {
-    sapPost(
+    httpPost(
       loading: 'carton_label_binding_submitting_label'
           .trArgs([operationTypeText.value]),
-      method: webApiSapSubmitLabelBindingOperation,
+      method: webApiSubmitLabelBindingOperation,
       body: {
         'USNAM': userInfo?.number,
         'ZNAME_CN': userInfo?.name,

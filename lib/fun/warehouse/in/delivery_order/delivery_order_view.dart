@@ -220,11 +220,11 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
           ),
           Obx(() => Checkbox(
                 value: data.every((v) => v.isSelected.value),
-            onChanged: (c) {
-              for (var v in data) {
-                v.isSelected.value = c!;
-              }
-            },
+                onChanged: (c) {
+                  for (var v in data) {
+                    v.isSelected.value = c!;
+                  }
+                },
               )),
         ],
       ),
@@ -800,6 +800,11 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
           backgroundColor: Colors.transparent,
           title: Text(functionTitle),
           actions: [
+            Obx(() => CheckBox(
+                  onChanged: (v) => logic.selectAllChecked(v),
+                  name: '勾选所有已清点',
+                  value: state.selectAllChecked.value,
+                )),
             Builder(
               builder: (context) => IconButton(
                 icon: const Icon(Icons.search),
@@ -865,7 +870,7 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
                                   workCenterID: opcWorkCenter.selectedId.value,
                                   reason: reason,
                                   labels: list,
-                                  refresh: (){
+                                  refresh: () {
                                     Get.back();
                                     _query();
                                   },
@@ -876,7 +881,7 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
                               callback: (reason) => logic.reversalStockIn(
                                 workCenterID: opcWorkCenter.selectedId.value,
                                 reason: reason,
-                                refresh: (){
+                                refresh: () {
                                   Get.back();
                                   _query();
                                 },

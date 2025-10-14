@@ -62,7 +62,6 @@ class _PreviewLabelState extends State<PreviewLabel> {
     );
   }
 
-
   @override
   void initState() {
     if (_isAlreadyOpen) {
@@ -79,6 +78,19 @@ class _PreviewLabelState extends State<PreviewLabel> {
     super.initState();
   }
 
+  onlinePrint() async {
+    onLinePrintDialog([
+      mergeUint8List(
+        await imageResizeToLabel({
+          ...image,
+          'isDynamic': widget.isDynamic,
+          'speed': printSpeed.value.toInt(),
+          'density': printDensity.value.toInt(),
+        }),
+      )
+    ], PrintType.label);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Obx(
@@ -87,17 +99,17 @@ class _PreviewLabelState extends State<PreviewLabel> {
           actions: [
             image.isNotEmpty
                 ? Row(
-              children: [
-                IconButton(
-                  onPressed: () => onLinePrintDialog(imageByteList,true),
-                  icon: const Icon(Icons.network_check),
-                ),
-                IconButton(
-                  onPressed: () => printLabel(),
-                  icon: const Icon(Icons.print),
-                ),
-              ],
-            )
+                    children: [
+                      IconButton(
+                        onPressed: () => onlinePrint(),
+                        icon: const Icon(Icons.network_check),
+                      ),
+                      IconButton(
+                        onPressed: () => printLabel(),
+                        icon: const Icon(Icons.print),
+                      ),
+                    ],
+                  )
                 : Container(
                     width: 25,
                     height: 25,
@@ -179,6 +191,4 @@ class _PreviewLabelState extends State<PreviewLabel> {
     _isAlreadyOpen = false; // 页面关闭时重置状态
     super.dispose();
   }
-
-
 }

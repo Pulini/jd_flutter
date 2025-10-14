@@ -128,13 +128,6 @@ class _PrintPalletPageState extends State<PrintPalletPage> {
   Widget build(BuildContext context) {
     return pageBody(
       actions: [
-        // IconButton(
-        //   onPressed: () => logic.scanPallet('GE10000244'),
-        //   icon: const Icon(
-        //     Icons.add,
-        //     color: Colors.blueAccent,
-        //   ),
-        // ),
         Obx(() => state.selectedList.any((v) => v.value)
             ? IconButton(
                 // onPressed: () => logic.printPalletSizeMaterial(),

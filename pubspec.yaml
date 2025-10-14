@@ -114,6 +114,7 @@ dependencies:
   camera: ^0.11.2
   #全局返回键监听
   back_button_interceptor: ^8.0.4
+  pdf: ^3.11.3
 
 
 dev_dependencies:
@@ -132,7 +133,6 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
@@ -143,6 +143,7 @@ flutter:
     - assets/
     - assets/images/
     - assets/audios/
+    - assets/fonts/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -156,10 +157,10 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
+  fonts:
+    - family: SourceHanSansCN
+      fonts:
+        - asset: assets/fonts/SourceHanSansCN-Medium.ttf
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro

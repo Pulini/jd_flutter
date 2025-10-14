@@ -93,7 +93,10 @@ class _PreviewLabelListState extends State<PreviewLabelList> {
                 ? Row(
                     children: [
                       IconButton(
-                        onPressed: () => onLinePrintDialog(imageByteList,true),
+                        onPressed: () => onLinePrintDialog(
+                          imageByteList,
+                          PrintType.label,
+                        ),
                         icon: const Icon(Icons.network_check),
                       ),
                       IconButton(

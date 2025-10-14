@@ -3,13 +3,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/sap_picking_info.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
-import 'package:jd_flutter/utils/printer/a4_paper_template.dart';
+import 'package:jd_flutter/utils/printer/pdf_paper_template.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
-import 'package:jd_flutter/widget/preview_a4paper_widget.dart';
 import 'package:jd_flutter/widget/preview_label_list_widget.dart';
 import 'package:jd_flutter/widget/preview_label_widget.dart';
 import 'package:jd_flutter/widget/tsc_label_templates/dynamic_label_110w.dart';
+import 'package:jd_flutter/widget/web_page.dart';
 
 import 'print_pallet_state.dart';
 
@@ -95,20 +95,21 @@ class PrintPalletLogic extends GetxController {
   }
 
   printPalletSizeMaterial() {
-    var list = <Widget>[];
+    // var pdf = pw.Document();
+    // var a4PaperByteList = <Uint8List>[];
+    var printTask = <List>[];
     for (var i = 0; i < state.selectedList.length; ++i) {
       if (state.selectedList[i].value) {
+        // palletList.add(state.palletList[i].first.palletNumber ?? '');
         //尺码物料组
         var sizeMaterialTable = <List>[];
-        var sizeMaterials = state.palletList[i]
-            .where((v) => !v.size.isNullOrEmpty())
-            .toList();
+        var sizeMaterials =
+            state.palletList[i].where((v) => !v.size.isNullOrEmpty()).toList();
 
         //一般物理组
         var materialTable = <List>[];
-        var materials = state.palletList[i]
-            .where((v) => v.size.isNullOrEmpty())
-            .toList();
+        var materials =
+            state.palletList[i].where((v) => v.size.isNullOrEmpty()).toList();
 
         groupBy(sizeMaterials, (v) => v.instructionsNo ?? '').forEach((k1, v1) {
           var sizeList = groupBy(v1, (v) => v.size ?? '').keys.toList();
@@ -161,8 +162,8 @@ class PrintPalletLogic extends GetxController {
             });
           }
 
-          debugPrint('----------singleDataList：$singleDataList');
-          debugPrint('----------mixDataList：$mixDataList');
+          // debugPrint('----------singleDataList：$singleDataList');
+          // debugPrint('----------mixDataList：$mixDataList');
 
           sizeMaterialTable.add([
             k1,
@@ -183,20 +184,23 @@ class PrintPalletLogic extends GetxController {
           ]);
         });
 
-        list.addAll(createA4PaperMaterialList(
-          paperTitle: '金帝集团股份有限公司托盘清单',
-          orderType: '进料加工',
-          palletNumber: state.palletList[i].first.palletNumber ?? '',
-          sizeMaterialTable: sizeMaterialTable,
-          materialTable: materialTable,
-        ));
+        printTask.add([
+          createA4PaperMaterialListPdf(
+            paperTitle: '金帝集团股份有限公司托盘清单',
+            factoryName: state.palletList[i].first.factoryName ?? '',
+            orderType: state.palletList[i].first.orderType ?? '',
+            customsDeclarationType:
+                state.palletList[i].first.customsDeclarationType ?? '',
+            palletNumber: state.palletList[i].first.palletNumber ?? '',
+            sizeMaterialTable: sizeMaterialTable,
+            materialTable: materialTable,
+          ),
+          state.palletList[i].first.palletNumber ?? ''
+        ]);
       }
     }
-    Get.to(() => PreviewA4Paper(
-          paperWidgets: list,
-          isRotate90: false,
-        ));
-    // toPrintView(list);
+    debugPrint('printTask=${printTask.length}');
+    Get.to(() => WebPrinter(palletTaskList: printTask));
   }
 
   toPrintView(List<Widget> labelView) {
