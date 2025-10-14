@@ -713,43 +713,44 @@ List<Widget> createA4Paper2(PickingMaterialOrderPrintInfo data) {
   return paperList;
 }
 
+/// 生成多页A4纸报表
 /// paperTitle 单据标题
 /// orderType  工单类型
 /// palletNumber 托盘号
 /// sizeMaterialTable 尺码物料表格数据
-/// [
-///    指令号(String),
-///    单尺码装数据(List),
-///    单尺码装总货数(double),
-///    单尺码装总件数(int),
-///    混码装数据(List),
-///    混码装总货数(double),
-///    混码装总件数(int),
-/// ]
-///  单尺码装数据(List)
-///  [   { 尺码: [件货数]}
-///      { 4.5: [20.0, 20.0] },
-///      { 5: [20.0, 20.0] },
-///      { 5.5: [20.0] }
-///  ]
-///  混码装数据(List)
-///  [   { 件码: [ [尺码,数量],[尺码,数量],[尺码,数量]]}
-///      { 25092000000013:
-///        [
-///          [3, 25.0], [4, 25.0], [5, 25.0], [5.5, 25.0], [6.5, 25.0]
-///        ]
-///      },
-///      { 25092000000014:
-///        [
-///          [6.5, 10.0], [7, 10.0]
-///        ]
-///      },
-///      { 25092000000015:
-///        [
-///          [3, 20.0], [3.5, 20.0], [4, 20.0]
-///        ]
-///      }
-///  ]
+///     [
+///        指令号(String),
+///        单尺码装数据(List),
+///        单尺码装总货数(double),
+///        单尺码装总件数(int),
+///        混码装数据(List),
+///        混码装总货数(double),
+///        混码装总件数(int),
+///     ]
+///      单尺码装数据(List)：[{ 尺码: [件货数]}]
+///     [
+///          { 4.5: [20.0, 20.0] },
+///          { 5: [20.0, 20.0] },
+///          { 5.5: [20.0] }
+///     ]
+///      混码装数据(List)：[ { 件码: [ [尺码,数量],[尺码,数量],[尺码,数量]]} ]
+///     [
+///          { 25092000000013:
+///            [
+///              [3, 25.0], [4, 25.0], [5, 25.0], [5.5, 25.0],
+///            ]
+///          },
+///          { 25092000000014:
+///            [
+///              [6.5, 10.0], [7, 10.0]
+///            ]
+///          },
+///          { 25092000000015:
+///            [
+///              [3, 20.0], [3.5, 20.0], [4, 20.0]
+///            ]
+///          }
+///     ]
 /// materialTable  物料表格数据
 /// [
 ///   [
@@ -765,7 +766,9 @@ List<Widget> createA4Paper2(PickingMaterialOrderPrintInfo data) {
 /// ]
 List<Widget> createA4PaperMaterialList({
   required String paperTitle,
+  required String factoryName,
   required String orderType,
+  required String customsDeclarationType,
   required String palletNumber,
   required List<List> sizeMaterialTable,
   required List<List> materialTable,
@@ -781,108 +784,6 @@ List<Widget> createA4PaperMaterialList({
       paperHeight - paperTitleHeight - paperFooterHeight - paperPadding * 2;
   //表格宽度
   double tableWidth = paperWidth - paperPadding * 2;
-
-  //创建纸张
-  Widget createPaper({
-    required String title,
-    required String subTitle,
-    required String qrCode,
-    required List<Widget> item,
-    required int page,
-    required int totalPage,
-  }) =>
-      Container(
-        padding: EdgeInsets.all(paperPadding),
-        width: paperWidth,
-        height: paperHeight,
-        color: Colors.white,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            SizedBox(
-              height: paperTitleHeight,
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  Positioned(
-                    bottom: 35,
-                    left: 0,
-                    child: Text(
-                      subTitle,
-                      style: const TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    top: 0,
-                    child: Text(
-                      title,
-                      style: const TextStyle(
-                        fontSize: 40,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 0,
-                    right: paperTitleHeight + 10,
-                    child: Text(
-                      '${userInfo?.name}(${getPrintTime()})',
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    top: 0,
-                    right: 0,
-                    bottom: 0,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          child: QrImageView(
-                            data: qrCode,
-                            padding: const EdgeInsets.all(5),
-                            version: QrVersions.auto,
-                          ),
-                        ),
-                        Text(
-                          palletNumber,
-                          style: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            ...item,
-            Expanded(child: Container()),
-            SizedBox(
-              height: paperFooterHeight,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text(
-                    '$page / $totalPage',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 17,
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ],
-        ),
-      );
 
   //控件列表
   var widgetList = <List>[];
@@ -1003,9 +904,17 @@ List<Widget> createA4PaperMaterialList({
 
 // 然后为每组创建纸张
   for (int i = 0; i < pages.length; i++) {
-    paperList.add(createPaper(
+    paperList.add(_createPaper(
+      paperWidth: paperWidth,
+      paperHeight: paperHeight,
+      tablePadding: paperPadding,
+      tableTitleHeight: paperTitleHeight,
+      tableFooterHeight: paperFooterHeight,
+      palletNumber: palletNumber,
       title: paperTitle,
-      subTitle: orderType,
+      factoryName: factoryName,
+      orderType: orderType,
+      customsDeclarationType: customsDeclarationType,
       qrCode: palletNumber,
       item: pages[i],
       page: i + 1,
@@ -1015,7 +924,156 @@ List<Widget> createA4PaperMaterialList({
   return paperList;
 }
 
-///创建边框文本
+/// 创建A4纸报表
+/// paperWidth  纸张宽度
+/// paperHeight 纸张高度
+/// tablePadding  表格边距
+/// tableTitleHeight  标题头高度
+/// tableFooterHeight 结尾页码高度
+/// palletNumber  托盘编号
+/// title 标题文本
+/// factoryName 原料工厂名称
+/// orderType 单据类型
+/// customsDeclarationType 报关形式
+/// qrCode  二维码内容
+/// item  表格行块
+/// page  当前页码
+/// totalPage 总页数
+Widget _createPaper({
+  required double paperWidth,
+  required double paperHeight,
+  required double tablePadding,
+  required double tableTitleHeight,
+  required double tableFooterHeight,
+  required String palletNumber,
+  required String title,
+  required String factoryName,
+  required String orderType,
+  required String customsDeclarationType,
+  required String qrCode,
+  required List<Widget> item,
+  required int page,
+  required int totalPage,
+}) =>
+    Container(
+      padding: EdgeInsets.all(tablePadding),
+      width: paperWidth,
+      height: paperHeight,
+      color: Colors.white,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          SizedBox(
+            height: tableTitleHeight,
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                Positioned(
+                  bottom: 35,
+                  left: 0,
+                  right: tableTitleHeight,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        customsDeclarationType,
+                        style: const TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        '原料厂区：$factoryName',
+                        style: const TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        orderType,
+                        style: const TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Positioned(
+                  top: 0,
+                  child: Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 40,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                Positioned(
+                  bottom: 0,
+                  right: tableTitleHeight + 10,
+                  child: Text(
+                    '${userInfo?.name}(${getPrintTime()})',
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                Positioned(
+                  top: 0,
+                  right: 0,
+                  bottom: 0,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: QrImageView(
+                          data: qrCode,
+                          padding: const EdgeInsets.all(5),
+                          version: QrVersions.auto,
+                        ),
+                      ),
+                      Text(
+                        palletNumber,
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          ...item,
+          Expanded(child: Container()),
+          SizedBox(
+            height: tableFooterHeight,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text(
+                  '$page / $totalPage',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 17,
+                  ),
+                )
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+
+///创建带边框的文本
+/// text  文本内容
+/// flex  Expanded占比
+/// style 字体样式
+/// titleAlignment  文本对齐方向
+/// padding 文本框内边距
 Widget _borderText({
   required String text,
   int? flex,
@@ -1039,8 +1097,42 @@ Widget _borderText({
   return flex == null ? widget : Expanded(flex: flex, child: widget);
 }
 
-///创建表格
+/// 创建尺码物料表格
 /// tableData: 表格数据
+/// sizeMaterialTable 尺码物料表格数据：
+///     [
+///        指令号(String),
+///        单尺码装数据(List),
+///        单尺码装总货数(double),
+///        单尺码装总件数(int),
+///        混码装数据(List),
+///        混码装总货数(double),
+///        混码装总件数(int),
+///     ]
+///      单尺码装数据(List)：[{ 尺码: [件货数]}]
+///     [
+///          { 4.5: [20.0, 20.0] },
+///          { 5: [20.0, 20.0] },
+///          { 5.5: [20.0] }
+///     ]
+///      混码装数据(List)：[ { 件码: [ [尺码,数量],[尺码,数量],[尺码,数量]]} ]
+///     [
+///          { 25092000000013:
+///            [
+///              [3, 25.0], [4, 25.0], [5, 25.0], [5.5, 25.0],
+///            ]
+///          },
+///          { 25092000000014:
+///            [
+///              [6.5, 10.0], [7, 10.0]
+///            ]
+///          },
+///          { 25092000000015:
+///            [
+///              [3, 20.0], [3.5, 20.0], [4, 20.0]
+///            ]
+///          }
+///     ]
 /// callback: 回调 表格widget 行数
 _createSizeMaterialTable({
   required List tableData,
@@ -1319,8 +1411,9 @@ _createSizeMaterialTable({
                                       .reduce((a, b) => a.add(b))
                                       .toShowString(),
                                   style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 26),
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 26,
+                                  ),
                                 ),
                               ),
                             ),
@@ -1328,8 +1421,10 @@ _createSizeMaterialTable({
                               flex: 5,
                               child: Container(
                                 decoration: BoxDecoration(
-                                  border:
-                                      Border.all(color: Colors.black, width: 1),
+                                  border: Border.all(
+                                    color: Colors.black,
+                                    width: 1,
+                                  ),
                                 ),
                                 padding:
                                     const EdgeInsets.only(left: 3, right: 3),
@@ -1337,8 +1432,9 @@ _createSizeMaterialTable({
                                 child: const Text(
                                   '1',
                                   style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 26),
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 26,
+                                  ),
                                 ),
                               ),
                             ),
@@ -1407,17 +1503,22 @@ _createSizeMaterialTable({
   );
 }
 
+///创建物料表格
+/// index 索引
+/// tableWidth  表格宽度
+/// tableData   表格数据
+///   [
+///       物料代码,
+///       单位,
+///       [10,20,30,40],
+///   ],
+/// callback: 回调 表格widget 行数
 _createMaterialTable({
   required int index,
   required double tableWidth,
   required List tableData,
   required Function(Widget, int) callback,
 }) {
-//[
-//   物料代码,
-//   单位,
-//   [10,20,30,40],
-// ],
   String materialCode = tableData.first;
   String unit = tableData[1];
   List<double> qtyList = tableData[2];
@@ -1458,7 +1559,11 @@ _createMaterialTable({
                   height: 40,
                   child: Row(
                     children: [
-                      _borderText(text: materialCode, flex: 16),
+                      _borderText(
+                        text: materialCode,
+                        flex: 16,
+                        titleAlignment: Alignment.centerLeft,
+                      ),
                       _borderText(text: qtyList.length.toString(), flex: 2),
                       _borderText(text: total.toShowString(), flex: 5),
                       _borderText(text: unit, flex: 2),
@@ -1488,6 +1593,10 @@ _createMaterialTable({
   callback.call(tableItem, (textSize.height).toInt() + 40 + 4);
 }
 
+///获取文本尺寸
+/// text  文本
+/// maxWidth  最大宽度限制
+/// style 字体样式
 Size getTextSize({
   required String text,
   required double maxWidth,

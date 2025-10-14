@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
+import 'dart:typed_data';
 import 'package:crypto/crypto.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
@@ -23,6 +25,7 @@ import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/downloader.dart';
 import 'package:jd_flutter/widget/picker/picker_item.dart';
 import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -709,4 +712,31 @@ String unicodeDecode(String string) {
 String getPrintTime({DateTime? time}) {
   DateTime now = time ?? DateTime.now();
   return '${now.year}.${now.month}.${now.day} ${now.hour}:${now.minute}';
+}
+Uint8List mergeUint8List(List<Uint8List> lists) {
+  final buffer = BytesBuilder();
+  for (var list in lists) {
+    buffer.add(list);
+  }
+  return buffer.toBytes();
+}
+/// 删除文档目录下所有PDF文件
+Future<Directory> deleteAllPdfFiles() async {
+  final directory = await getApplicationDocumentsDirectory();
+  try {
+    final pdfFiles = directory.listSync().where((file) =>
+        file.path.endsWith('.pdf')
+    );
+
+    for (var file in pdfFiles) {
+      if (file is File) {
+        await file.delete();
+        logger.i('Deleted PDF file: ${file.path}');
+      }
+    }
+
+  } catch (e) {
+    logger.e('Failed to delete PDF files: $e');
+  }
+  return directory;
 }

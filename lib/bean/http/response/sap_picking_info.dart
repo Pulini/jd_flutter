@@ -649,6 +649,9 @@ class PalletDetailItem2Info {
   String? warehouseNumber; //仓库  LGORT
   String? location; //库位 ZLOCAL
   String? palletNumber; //托盘号  ZFTRAYNO
+  String? factoryName; //NAME1_WRK  工厂名称
+  String? orderType;//ZISBD 单据类型
+  String? customsDeclarationType;//ZCUSDECLARATYPE 报关形式
   String? palletExistence; //托盘是否存在  空 托盘不存在、 X 托盘存在 ZTRAY_CFMRT1
   String? palletState; //托盘状态  空 托盘无货、 X 当前条件下有货、Y 托盘有货但不在当前查询条件下  ZTRAY_CFMRT2
 
@@ -657,6 +660,9 @@ class PalletDetailItem2Info {
     this.warehouseNumber,
     this.location,
     this.palletNumber,
+    this.factoryName,
+    this.orderType,
+    this.customsDeclarationType,
     this.palletExistence,
     this.palletState,
   });
@@ -666,6 +672,9 @@ class PalletDetailItem2Info {
     warehouseNumber = json['LGORT'];
     location = json['ZLOCAL'];
     palletNumber = json['ZFTRAYNO'];
+    factoryName = json['NAME1_WRK'];
+    orderType = json['ZISBD'];
+    customsDeclarationType = json['ZCUSDECLARATYPE'];
     palletExistence = json['ZTRAY_CFMRT1'];
     palletState = json['ZTRAY_CFMRT2'];
   }
@@ -676,6 +685,9 @@ class PalletDetailItem2Info {
     map['LGORT'] = warehouseNumber;
     map['ZLOCAL'] = location;
     map['ZFTRAYNO'] = palletNumber;
+    map['NAME1_WRK'] = factoryName;
+    map['ZISBD'] = orderType;
+    map['ZCUSDECLARATYPE'] = customsDeclarationType;
     map['ZTRAY_CFMRT1'] = palletExistence;
     map['ZTRAY_CFMRT2'] = palletState;
     return map;
@@ -704,6 +716,9 @@ class SapPalletDetailInfo {
   RxBool isSelect=false.obs;
 
   String? factory; //WERKS  工厂
+  String? factoryName; //NAME1_WRK  工厂名称
+  String? orderType;//ZISBD 单据类型
+  String? customsDeclarationType;//ZCUSDECLARATYPE 报关形式
   String? palletNumber; //ZFTRAYNO 托盘号
   String? labelCode; //BQID  贴标号
   String? location; //LGORT 存储位置
@@ -722,6 +737,9 @@ class SapPalletDetailInfo {
 
   SapPalletDetailInfo.fromJson(dynamic json) {
     factory = json['WERKS'];
+    factoryName = json['NAME1_WRK'];
+    orderType = json['ZISBD'];
+    customsDeclarationType = json['ZCUSDECLARATYPE'];
     palletNumber = json['ZFTRAYNO'];
     labelCode = json['BQID'];
     location = json['LGORT'];
@@ -743,6 +761,9 @@ class SapPalletDetailInfo {
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['WERKS'] = factory;
+    map['NAME1_WRK'] = factoryName;
+    map['ZISBD'] = orderType;
+    map['ZCUSDECLARATYPE'] = customsDeclarationType;
     map['ZFTRAYNO'] = palletNumber;
     map['BQID'] = labelCode;
     map['LGORT'] = location;

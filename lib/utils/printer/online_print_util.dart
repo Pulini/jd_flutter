@@ -11,7 +11,22 @@ import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
-const String printUrl = 'http://192.168.99.103:9098/m';
+const String printUrl = 'http://192.168.99.103:9095/m';
+
+
+enum PrintType {
+  label('', 'label', '.text'),
+  jpg('1', 'image', '.jpg'),
+  pdf('0', 'file', '.pdf');
+
+  final String code;
+  final String prefix;
+  final String suffix;
+
+  const PrintType(this.code, this.prefix, this.suffix);
+
+  String getFileName(String name) => '$prefix$name$suffix';
+}
 
 class PrinterInfo {
   String? departName;
@@ -69,7 +84,8 @@ class DeviceInfo {
   }
 }
 
-onLinePrintDialog(List<Uint8List> papers, bool isLabel) {
+
+onLinePrintDialog(List<Uint8List> papers, PrintType printType) {
   var printDio = Dio()
     ..interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) {
@@ -98,37 +114,37 @@ onLinePrintDialog(List<Uint8List> papers, bool isLabel) {
       var departmentIndex = (-1).obs;
       var deviceIndex = (-1).obs;
       var paperIndex = (-1).obs;
-      var printerLier = <PrinterInfo>[].obs;
-      var printerList = <PrinterInfo>[];
+      var printerList = <PrinterInfo>[].obs;
+      var list = <PrinterInfo>[];
       for (var p in devices) {
         var deviceList = <DeviceInfo>[];
-        if (isLabel) {
+        if (printType == PrintType.label) {
           deviceList = p.devices!.where((d) => d.printerType == 1).toList();
         } else {
           deviceList = p.devices!.where((d) => d.printerType == 0).toList();
         }
         if (deviceList.isNotEmpty) {
           p.devices = deviceList;
-          printerList.add(p);
+          list.add(p);
         }
       }
-      printerLier.value = printerList;
+      printerList.value = list;
 
       departmentIndex.value =
-          printerLier.indexWhere((v) => v.departName == saveDepartmentName);
+          printerList.indexWhere((v) => v.departName == saveDepartmentName);
       if (departmentIndex.value == -1) {
         departmentIndex.value = 0;
         deviceIndex.value = 0;
         paperIndex.value = 0;
       } else {
-        deviceIndex.value = printerLier[departmentIndex.value]
+        deviceIndex.value = printerList[departmentIndex.value]
             .devices!
             .indexWhere((v) => v.deviceId == saveDeviceId);
         if (deviceIndex.value == -1) {
           deviceIndex.value = 0;
           paperIndex.value = 0;
         } else {
-          paperIndex.value = printerLier[departmentIndex.value]
+          paperIndex.value = printerList[departmentIndex.value]
               .devices![deviceIndex.value]
               .paperTypes!
               .indexOf(savePaperType);
@@ -140,24 +156,24 @@ onLinePrintDialog(List<Uint8List> papers, bool isLabel) {
         if (departmentIndex.value != -1) {
           spSave(
             onlinePrinterDepartmentName,
-            printerLier[departmentIndex.value].toString(),
+            printerList[departmentIndex.value].toString(),
           );
           if (deviceIndex.value != -1) {
             spSave(
               onlinePrinterDeviceID,
-              printerLier[departmentIndex.value]
+              printerList[departmentIndex.value]
                   .devices![deviceIndex.value]
                   .deviceId!,
             );
             if (paperIndex.value != -1 &&
-                printerLier[departmentIndex.value]
+                printerList[departmentIndex.value]
                         .devices![deviceIndex.value]
                         .paperTypes
                         ?.isNotEmpty ==
                     true) {
               spSave(
                 onlinePrinterPaperType,
-                printerLier[departmentIndex.value]
+                printerList[departmentIndex.value]
                     .devices![deviceIndex.value]
                     .paperTypes![paperIndex.value],
               );
@@ -166,15 +182,20 @@ onLinePrintDialog(List<Uint8List> papers, bool isLabel) {
         }
         _printImg(
           printDio: printDio,
-          deviceId: printerLier[departmentIndex.value]
+          deviceId: printerList[departmentIndex.value]
               .devices![deviceIndex.value]
               .deviceId!,
-          paperType: paperIndex.value == -1
+          paperType: printerList[departmentIndex.value]
+                      .devices![deviceIndex.value]
+                      .paperTypes
+                      ?.isEmpty ==
+                  true
               ? ''
-              : printerLier[departmentIndex.value]
+              : printerList[departmentIndex.value]
                   .devices![deviceIndex.value]
                   .paperTypes![paperIndex.value],
-          imgList: papers,
+          printType: printType,
+          dataList: papers,
           success: (msg) => successDialog(content: msg, back: () => Get.back()),
           error: (msg) => errorDialog(content: msg),
         );
@@ -192,21 +213,21 @@ onLinePrintDialog(List<Uint8List> papers, bool isLabel) {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   selectView(
-                    list: printerLier,
+                    list: printerList,
                     hint: '部门',
                     select: (i) => departmentIndex.value = i,
                   ),
                   Obx(() => selectView(
-                        list: printerLier[departmentIndex.value].devices!,
+                        list: printerList[departmentIndex.value].devices!,
                         hint: '打印机',
                         select: (i) => deviceIndex.value = i,
                       )),
-                  Obx(() => printerLier[departmentIndex.value]
+                  Obx(() => printerList[departmentIndex.value]
                           .devices![deviceIndex.value]
                           .paperTypes!
                           .isNotEmpty
                       ? selectView(
-                          list: printerLier[departmentIndex.value]
+                          list: printerList[departmentIndex.value]
                               .devices![deviceIndex.value]
                               .paperTypes!,
                           hint: '纸张类型',
@@ -249,7 +270,8 @@ _getOnlinePrintDeviceList({
     queryParameters: {
       'xwl': 'public/interfaces/MES/AppPrintService',
       'xaction': 'getPrinterList',
-      'deptId': ''
+      'deptId': userInfo?.departmentID,
+      // 'deptId':'554911',
     },
   ).then((response) {
     loadingDismiss();
@@ -271,7 +293,8 @@ _printImg({
   required Dio printDio,
   required String deviceId,
   required String paperType,
-  required List<Uint8List> imgList,
+  required PrintType printType,
+  required List<Uint8List> dataList,
   required Function(String) success,
   required Function(String) error,
 }) {
@@ -284,14 +307,20 @@ _printImg({
       'xaction': 'print',
       'deviceId': deviceId,
       'paperType': paperType,
+      'printType': printType.code,
     },
     options: Options(headers: {'Content-Type': 'application/octet-stream'}),
-    data:  FormData.fromMap({
-            'printFiles': imgList
-                .map((img) => MultipartFile.fromBytes(img,
-                    filename: 'image${img.length}.jpg'))
-                .toList()
-          }),
+    data: FormData.fromMap({
+      'printFiles': dataList
+          .map((data){
+            debugPrint('打印文件名：${printType.getFileName(data.length.toString())}');
+            return MultipartFile.fromBytes(
+              data,
+              filename: printType.getFileName(data.length.toString()),
+            );
+      })
+          .toList()
+    }),
   )
       .then((response) {
     loadingDismiss();

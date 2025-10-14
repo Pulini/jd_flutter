@@ -30,7 +30,9 @@ const baseUrlForMES = 'https://geapp.goldemperor.com:1226/';
 
 //MES测试库
 // const testUrlForMES = 'https://geapptest.goldemperor.com:1224/';
-const testUrlForMES = 'https://geapptest.goldemperor.com:1207/';
+// const testUrlForMES = 'https://geapptest.goldemperor.com:1207/';
+const testUrlForMES = 'https://apptest.goldemperor.com:1207/';
+// const testUrlForMES = 'https://apptest.goldemperor.com:1208/';
 
 //SAP正式库
 const baseUrlForSAP = 'https://erpprd01.goldemperor.com:8003/';
@@ -1364,7 +1366,8 @@ const webApiSapGetLabelForUnqualified = 'sap/zapp/ZMM_GET_TEMPREBQ';
 const webApiSapGetLabelBindingInfo = 'sap/zapp/ZMM051_GET_BQSC';
 
 //提交标签绑定操作
-const webApiSapSubmitLabelBindingOperation = 'sap/zapp/ZMM051_RES_ZDBDX';
+// const webApiSapSubmitLabelBindingOperation = 'sap/zapp/ZMM051_RES_ZDBDX';
+const webApiSubmitLabelBindingOperation = 'api/Package/ZMM051_RES_ZDBDX';
 
 //根据标签id查找原标及新标
 const webApiSapGetPrintLabelListInfo = 'sap/zapp/ZMM051_BQ_SPLIT';

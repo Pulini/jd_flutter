@@ -2703,7 +2703,11 @@ class Translation extends Translations {
           'delivery_order_dialog_different_order_tips':
               '扫码送货单与非扫码送货单不能一同生成暂收单!',
           'delivery_order_label_check_order_not_have_this_label': '该件不属于当前送货单!',
+          'delivery_order_label_check_label_different_factory': '标签 <%s> 与当前托盘上的货物的原料工厂不同！',
+          'delivery_order_label_check_label_different_order_type': '标签 <%s> 与当前托盘上的货物的单据类型不同！',
+          'delivery_order_label_check_label_different_customs_declaration_type': '标签 <%s> 与当前托盘上的货物的报关形式不同！',
           'delivery_order_label_check_label_scanned': '该标签已扫!',
+          'delivery_order_label_change_pallet_no_success': '修改标签托盘号\r\n[%s]\r\n->\r\n[%s]\r\n成功。',
           'delivery_order_label_check_label_qty_exceed':
               '该件货物料数量超出，请扫瞄数量更小的标签。',
           'delivery_order_label_check_has_other_material':
@@ -6505,8 +6509,12 @@ class Translation extends Translations {
               'Scanned delivery notes and non scanned delivery notes cannot generate temporary receipts together!',
           'delivery_order_label_check_order_not_have_this_label':
               'This piece does not belong to the order!',
+          'delivery_order_label_check_label_different_factory': 'The label <%s> does not match the raw material factory of the goods on the current tray!',
+          'delivery_order_label_check_label_different_order_type': 'The label <%s> does not match the document type of the goods on the current tray!',
+          'delivery_order_label_check_label_different_customs_declaration_type': 'The label <%s> differs from the customs declaration form of the goods on the current tray!',
           'delivery_order_label_check_label_scanned':
               'This label has been scanned!',
+          'delivery_order_label_change_pallet_no_success': 'Successfully modified pallet number\r\n[%s]\r\n->\r\n[%s]',
           'delivery_order_label_check_label_qty_exceed':
               'The quantity of materials in this item exceeds the limit. Please scan the label with a smaller quantity.',
           'delivery_order_label_check_has_other_material':

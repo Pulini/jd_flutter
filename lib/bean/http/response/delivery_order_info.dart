@@ -523,6 +523,9 @@ class DeliveryOrderLabelInfo {
   String? commonUnit; //ERFME  常用单位
   bool isBind = false; //ISBIND  是否绑定
   String? size; //SIZE1  尺码
+  String? factoryName; //NAME1_WRK  工厂名称
+  String? orderType; //ZISBD 单据类型
+  String? customsDeclarationType; //ZCUSDECLARATYPE 报关形式
 
   DeliveryOrderLabelInfo({
     required this.pieceNo,
@@ -536,6 +539,9 @@ class DeliveryOrderLabelInfo {
     required this.commonUnit,
     required this.isBind,
     required this.size,
+    required this.factoryName,
+    required this.orderType,
+    required this.customsDeclarationType,
   });
 
   factory DeliveryOrderLabelInfo.fromJson(dynamic json) {
@@ -551,6 +557,9 @@ class DeliveryOrderLabelInfo {
       commonUnit: json['ERFME'],
       isBind: json['ISBIND'] == 'X',
       size: json['SIZE1'],
+      factoryName: json['NAME1_WRK'],
+      orderType: json['ZISBD'],
+      customsDeclarationType: json['ZCUSDECLARATYPE'],
     );
   }
 
@@ -561,6 +570,7 @@ class DeliveryOrderLabelInfo {
       materialCode?.isEmpty == true &&
       materialName?.isEmpty == true;
 
-  labelId() => '$labelNumber-$materialCode-$size';
-}
+  String labelId() => '$labelNumber-$materialCode-$size';
 
+  String labelType() => '$factoryName-$orderType-$customsDeclarationType';
+}

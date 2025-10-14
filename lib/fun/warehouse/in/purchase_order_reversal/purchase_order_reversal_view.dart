@@ -179,26 +179,26 @@ class _PurchaseOrderReversalPageState extends State<PurchaseOrderReversalPage> {
             ))
       ],
       queryWidgets: [
-        Obx(() => EditText(
-              hint: 'purchase_order_reversal_material_voucher'.tr,
-              controller: tecMaterialVoucher,
-            )),
-        Obx(() => EditText(
-              hint: 'purchase_order_reversal_type_body'.tr,
-              controller: tecTypeBody,
-            )),
-        Obx(() => EditText(
-              hint: 'purchase_order_reversal_sales_order_no'.tr,
-              controller: tecSalesOrderNo,
-            )),
-        Obx(() => EditText(
-              hint: 'purchase_order_reversal_purchase_order_no'.tr,
-              controller: tecPurchaseOrder,
-            )),
-        Obx(() => EditText(
-              hint: 'purchase_order_reversal_material_code'.tr,
-              controller: tecMaterielCode,
-            )),
+        EditText(
+          hint: 'purchase_order_reversal_material_voucher'.tr,
+          controller: tecMaterialVoucher,
+        ),
+        EditText(
+          hint: 'purchase_order_reversal_type_body'.tr,
+          controller: tecTypeBody,
+        ),
+        EditText(
+          hint: 'purchase_order_reversal_sales_order_no'.tr,
+          controller: tecSalesOrderNo,
+        ),
+        EditText(
+          hint: 'purchase_order_reversal_purchase_order_no'.tr,
+          controller: tecPurchaseOrder,
+        ),
+        EditText(
+          hint: 'purchase_order_reversal_material_code'.tr,
+          controller: tecMaterielCode,
+        ),
         OptionsPicker(pickerController: opcSupplier),
         LinkOptionsPicker(pickerController: factoryWarehouseController),
         DatePicker(pickerController: dpcStartDate),

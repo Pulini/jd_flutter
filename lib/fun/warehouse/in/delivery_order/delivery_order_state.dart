@@ -11,6 +11,7 @@ import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 
 class DeliveryOrderState {
+  var selectAllChecked = false.obs;
   var stockType = 0.obs;
   var orderType = 1.obs;
   var deliveryOrderList = <List<DeliveryOrderInfo>>[].obs;
@@ -87,8 +88,9 @@ class DeliveryOrderState {
             newList.add(v);
           });
           deliveryOrderList.value = newList;
+          selectAllChecked.value = false;
+          success.call(response.message ?? '');
         });
-        success.call(response.message ?? '');
       } else {
         deliveryOrderList.value = [];
         error.call(response.message ?? 'query_default_error'.tr);

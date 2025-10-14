@@ -400,6 +400,54 @@ class DeliveryOrderLogic extends GetxController {
           content: 'delivery_order_label_check_order_not_have_this_label'.tr);
       return;
     }
+    if (state.palletNumber.value.isNotEmpty) {
+      var scannedChecked = state.scannedLabelList.where((v) =>
+          v.isChecked.value && v.palletNo.value == state.palletNumber.value);
+      if (scannedChecked.isNotEmpty) {
+        var differentFactory = <DeliveryOrderLabelInfo>[];
+        var differentOrderType = <DeliveryOrderLabelInfo>[];
+        var differentCustomsDeclarationType = <DeliveryOrderLabelInfo>[];
+        for (var l in labels) {
+          if (l.factoryName != scannedChecked.first.factoryName) {
+            differentFactory.add(l);
+          } else if (l.orderType != scannedChecked.first.orderType) {
+            differentOrderType.add(l);
+          } else if (l.customsDeclarationType !=
+              scannedChecked.first.customsDeclarationType) {
+            differentCustomsDeclarationType.add(l);
+          }
+        }
+        if (differentFactory.isNotEmpty) {
+          errorDialog(
+            content:
+                'delivery_order_label_check_label_different_factory'.trArgs(
+              [differentFactory.map((v) => v.pieceNo).join('、')],
+            ),
+          );
+          return;
+        }
+        if (differentOrderType.isNotEmpty) {
+          errorDialog(
+            content:
+                'delivery_order_label_check_label_different_order_type'.trArgs(
+              [differentOrderType.map((v) => v.pieceNo).join('、')],
+            ),
+          );
+          return;
+        }
+        if (differentCustomsDeclarationType.isNotEmpty) {
+          errorDialog(
+            content:
+                'delivery_order_label_check_label_different_customs_declaration_type'
+                    .trArgs(
+              [differentCustomsDeclarationType.map((v) => v.pieceNo).join('、')],
+            ),
+          );
+          return;
+        }
+      }
+    }
+
     if (labels.every((v) => state.scannedLabelList.contains(v))) {
       if (labels.every((v) => v.isChecked.value)) {
         if (labels.first.palletNo.value == state.palletNumber.value) {
@@ -410,8 +458,11 @@ class DeliveryOrderLogic extends GetxController {
             l.palletNo.value = state.palletNumber.value;
           }
           successDialog(
-              content:
-                  '修改标签托盘号\r\n[$pallet]\r\n->\r\n[${state.palletNumber.value}]\r\n成功。');
+            content: 'delivery_order_label_change_pallet_no_success'.trArgs([
+              pallet,
+              state.palletNumber.value,
+            ]),
+          );
         }
       } else {
         for (var v in labels) {
@@ -608,5 +659,18 @@ class DeliveryOrderLogic extends GetxController {
         }
       }
     }
+  }
+
+  selectAllChecked(bool select) {
+    state.selectAllChecked.value=select;
+    state.deliveryOrderList
+        .where((v) =>
+            v.first.isGenerate.isNullOrEmpty() &&
+            !v.first.inspector.isNullOrEmpty())
+        .forEach((v) {
+      for (var item in v) {
+        item.isSelected.value = select;
+      }
+    });
   }
 }

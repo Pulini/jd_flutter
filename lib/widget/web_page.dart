@@ -1,9 +1,17 @@
+import 'dart:convert';
+import 'dart:core';
+import 'dart:typed_data';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:get/get.dart' hide FormData;
+import 'package:jd_flutter/utils/extension_util.dart';
+import 'package:jd_flutter/utils/printer/online_print_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
 import 'custom_widget.dart';
 import 'dialogs.dart';
 
@@ -191,6 +199,139 @@ class WebPage extends StatelessWidget {
             ? WebViewWidget(controller: webViewController)
             : null,
       ),
+    );
+  }
+}
+
+class WebPrinter extends StatefulWidget {
+  const WebPrinter({
+    super.key,
+    required this.palletTaskList,
+  });
+
+  final List<List> palletTaskList;
+
+  @override
+  State<WebPrinter> createState() => _WebPrinterState();
+}
+
+class _WebPrinterState extends State<WebPrinter> {
+  final webViewController = WebViewController();
+  var a4PaperByteList = <Uint8List>[];
+  var ready = false.obs;
+
+  runTask() {
+    var dio = Dio()
+      ..interceptors.add(InterceptorsWrapper(
+        onRequest: (options, handler) {
+          options.print();
+          handler.next(options);
+        },
+        onResponse: (response, handler) {
+          if (response.data is String) {
+            logger.f('Response data: ${response.data}');
+          } else {
+            loggerF(response.data);
+          }
+          handler.next(response);
+        },
+        onError: (DioException e, handler) {
+          logger.f('error: $e');
+          handler.next(e);
+        },
+      ));
+
+    loadingShow('正在生成物料清单预览...');
+    dio.post(
+      'https://mestest.goldemperor.com:9099/m',
+      queryParameters: {
+        'xwl': 'public/interfaces/app/getPalletListHTML',
+        'palletNumber': widget.palletTaskList
+            .map((v) => v.last.toString())
+            .toList()
+            .toString(),
+      },
+    ).then((response) {
+      loadingDismiss();
+      webViewController.loadHtmlString(jsonDecode(response.data)['data']);
+    });
+    ready.value = false;
+
+    for (var task in widget.palletTaskList) {
+      (task.first as Future<List<pw.Widget>>).then((pdfWidgets) async {
+        var pdf = pw.Document();
+        for (var widget in pdfWidgets) {
+          pdf.addPage(pw.Page(
+            pageFormat: PdfPageFormat.a4,
+            margin: const pw.EdgeInsets.all(0),
+            build: (c) => widget,
+          ));
+        }
+        a4PaperByteList.add(await pdf.save());
+      });
+    }
+    ready.value = true;
+  }
+
+  @override
+  void initState() {
+    if (GetPlatform.isAndroid || GetPlatform.isIOS) {
+      webViewController
+        ..setJavaScriptMode(JavaScriptMode.unrestricted)
+        ..setBackgroundColor(Colors.transparent)
+        ..setNavigationDelegate(
+          NavigationDelegate(
+            onPageStarted: (String url) {
+              debugPrint('onPageStarted------$url');
+              loadingShow('加载中');
+            },
+            onPageFinished: (String url) {
+              debugPrint('onPageFinished------$url');
+              loadingDismiss();
+            },
+            onHttpError: (HttpResponseError error) {
+              debugPrint('onHttpError------${error.response?.statusCode}');
+              debugPrint('onHttpError URL------${error.response?.uri}');
+              loadingDismiss();
+            },
+            onWebResourceError: (WebResourceError error) {
+              debugPrint('onWebResourceError------${error.description}');
+              debugPrint('onWebResourceError Type------${error.errorType}');
+              debugPrint('onWebResourceError URL------${error.url}');
+              loadingDismiss();
+            },
+          ),
+        );
+      WidgetsBinding.instance.addPostFrameCallback((_) => runTask());
+    }
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: backgroundColor(),
+      child: Obx(() => Scaffold(
+            backgroundColor: Colors.transparent,
+            appBar: AppBar(
+              backgroundColor: Colors.transparent,
+              title: Text('打印清单预览'),
+              actions: [
+                ready.value
+                    ? IconButton(
+                        onPressed: () => onLinePrintDialog(
+                          a4PaperByteList,
+                          PrintType.pdf,
+                        ),
+                        icon: const Icon(Icons.print, color: Colors.blueAccent),
+                      )
+                    : const CircularProgressIndicator(),
+              ],
+            ),
+            body: GetPlatform.isAndroid || GetPlatform.isIOS
+                ? WebViewWidget(controller: webViewController)
+                : null,
+          )),
     );
   }
 }

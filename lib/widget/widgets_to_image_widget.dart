@@ -36,7 +36,7 @@ class _WidgetsToImageState extends State<WidgetsToImage> {
         await Future.delayed(const Duration(milliseconds: 30));
         return capture(key); // 递归调用直到组件绘制完成
       }
-      ui.Image image = boundary.toImageSync(pixelRatio: pixelRatio);
+      ui.Image image = await boundary.toImage(pixelRatio: pixelRatio);
 
       ByteData? byte;
       if (widget.isRotate90) {

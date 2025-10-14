@@ -428,7 +428,7 @@ class RouteConfig {
   //来料稽查
   static Routes incomingInspection = Routes(
     '/incoming_inspection',
-    202,
+    203,
     const IncomingInspectionPage(),
   );
 
@@ -519,7 +519,7 @@ class RouteConfig {
   //送货单列表
   static Routes deliveryOrder = Routes(
     '/delivery_order',
-    202,
+    203,
     const DeliveryOrderPage(),
   );
 
@@ -547,14 +547,14 @@ class RouteConfig {
   //采购订单入库
   static Routes purchaseOrderWarehousing = Routes(
     '/purchase_order_warehousing',
-    200,
+    201,
     const PurchaseOrderWarehousingPage(),
   );
 
   //采购订单凭证列表
   static Routes purchaseOrderReversal = Routes(
     '/purchase_order_reversal',
-    200,
+    201,
     const PurchaseOrderReversalPage(),
   );
 
@@ -610,7 +610,7 @@ class RouteConfig {
   //SAP外箱标绑定
   static Routes sapCartonLabelBinding = Routes(
     '/sap_carton_label_binding',
-    201,
+    202,
     const SapCartonLabelBindingPage(),
   );
 

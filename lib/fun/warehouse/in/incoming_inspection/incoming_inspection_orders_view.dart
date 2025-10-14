@@ -152,7 +152,6 @@ class _IncomingInspectionOrdersPageState
       bodyPadding: const EdgeInsets.all(0),
       context: context,
       body: Container(
-        height: 300,
         padding:
             const EdgeInsets.only(left: 10, top: 20, right: 10, bottom: 20),
         decoration: BoxDecoration(
@@ -167,65 +166,75 @@ class _IncomingInspectionOrdersPageState
           ),
         ),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Obx(() => RadioGroup(
-                  groupValue: state.inspectionType.value,
-                  onChanged: (v) => state.inspectionType.value = v!,
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: RadioListTile(
-                          title: Text(
-                              'incoming_inspection_order_wait_inspection'.tr),
-                          value: 1,
+                groupValue: state.inspectionType.value,
+                onChanged: (v) => state.inspectionType.value = v!,
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: RadioListTile(
+                            title: Text(
+                                'incoming_inspection_order_wait_inspection'.tr),
+                            value: 1,
+                            contentPadding: const EdgeInsets.all(0),
+                          ),
                         ),
-                      ),
-                      Expanded(
-                        child: RadioListTile(
-                          title: Text(
-                              'incoming_inspection_order_wait_processing'.tr),
-                          value: 2,
+                        Expanded(
+                          child: RadioListTile(
+                            title: Text(
+                                'incoming_inspection_order_wait_processing'.tr),
+                            value: 2,
+                            contentPadding: const EdgeInsets.all(0),
+                          ),
                         ),
-                      ),
-                      Expanded(
-                        child: RadioListTile(
-                          title: Text('incoming_inspection_order_signed'.tr),
-                          value: 3,
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: RadioListTile(
+                            title: Text('incoming_inspection_order_signed'.tr),
+                            value: 3,
+                            contentPadding: const EdgeInsets.all(0),
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                )),
-            Obx(() => RadioGroup(
-                  groupValue: state.inspectionType.value,
-                  onChanged: (v) => state.inspectionType.value = v!,
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: RadioListTile(
-                          title: Text(
-                              'incoming_inspection_order_exception_wait_processing'
-                                  .tr),
-                          value: 4,
+                        Expanded(
+                          child: RadioListTile(
+                            title: Text(
+                                'incoming_inspection_order_exception_wait_processing'
+                                    .tr),
+                            value: 4,
+                            contentPadding: const EdgeInsets.all(0),
+                          ),
                         ),
-                      ),
-                      Expanded(
-                        child: RadioListTile(
-                          title: Text(
-                              'incoming_inspection_order_exception_processed'
-                                  .tr),
-                          value: 5,
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: RadioListTile(
+                            title: Text(
+                                'incoming_inspection_order_exception_processed'
+                                    .tr),
+                            value: 5,
+                            contentPadding: const EdgeInsets.all(0),
+                          ),
                         ),
-                      ),
-                      Expanded(
-                        child: RadioListTile(
-                          title: Text('incoming_inspection_order_closed'.tr),
-                          value: 6,
+                        Expanded(
+                          child: RadioListTile(
+                            title: Text('incoming_inspection_order_closed'.tr),
+                            value: 6,
+                            contentPadding: const EdgeInsets.all(0),
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                )),
+                      ],
+                    ),
+                  ],
+                ))),
             Row(
               children: [
                 Expanded(child: DatePicker(pickerController: dpcStartDate)),
@@ -236,7 +245,7 @@ class _IncomingInspectionOrdersPageState
               controller: tecInspectionSuppler,
               hint: 'incoming_inspection_order_suppler_query_tips'.tr,
             ),
-            Expanded(child: Container()),
+            const SizedBox(height: 20),
             SizedBox(
               width: double.infinity,
               child: CombinationButton(
