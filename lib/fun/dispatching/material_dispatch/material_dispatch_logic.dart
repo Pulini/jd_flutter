@@ -292,8 +292,8 @@ class MaterialDispatchLogic extends GetxController {
             tableSubTitle2: list,
             bottomLeftText1: data.sapDecideArea ?? '',
             bottomLeftText2: data.drillingCrewName ?? '',
-            bottomRightText1: '色系：$color',
-            bottomRightText2: '数量：$qty${data.unitName}',
+            bottomRightText1: '色系:$color/$qty${data.unitName}',
+            bottomRightText2: '取件码:$pick',
           ).then((printLabel) {
             PrintUtil().printLabel(
                 label: printLabel,
@@ -347,11 +347,12 @@ class MaterialDispatchLogic extends GetxController {
             subTitle: '${data.partName}<${data.processName}>$billNo',
             content: '(${data.materialNumber})${data.materialName}',
             bottomLeftText1: data.drillingCrewName ?? '',
-            bottomMiddleText1: '$qty${data.unitName}',
-            bottomMiddleText2: '色系：$color',
+            bottomMiddleText1: '色系:$color/$qty${data.unitName}',
+            // bottomMiddleText2: '取件码：$pick',
+            bottomMiddleText2: '取件码:2903-20250928-0225',
             bottomRightText1: data.sapDecideArea ?? '',
             speed: spGet(spSavePrintSpeed) ?? 3.0,
-            density: spGet(spSavePrintDensity) ?? 13.0,
+            density: spGet(spSavePrintDensity) ?? 12.0,
           ).then((printLabel) {
             PrintUtil().printLabel(
                 label: printLabel,
@@ -370,7 +371,6 @@ class MaterialDispatchLogic extends GetxController {
         }
       }
     } else if (data.exitLabelType == '202') {
-      //小标
       var order = '';
       if (data.billStyle == '0') {
         order = '${data.factoryID} 正单';
