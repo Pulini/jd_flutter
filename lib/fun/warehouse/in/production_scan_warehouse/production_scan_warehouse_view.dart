@@ -126,7 +126,12 @@ var tecCode=TextEditingController();
                     color: code.isUsed ? Colors.red.shade700 : Colors.black),
               ),
               Text(
-                code.isUsed ? 'production_scan_not_reported'.tr : '',
+                code.isUsed ? '已提交'.tr : '',
+                style: TextStyle(
+                    color: code.isUsed ? Colors.red.shade700 : Colors.black),
+              ),
+              Text(
+                code.isHave ? 'production_scan_not_reported'.tr : '',
                 style: TextStyle(
                     color: code.isUsed ? Colors.red.shade700 : Colors.black),
               ),
@@ -229,27 +234,15 @@ var tecCode=TextEditingController();
                     text: 'production_scan_submit'.tr,
                     click: () {
                       if (logic.haveCodeData()) {
-                        if (state.isCheck == true) {
-                          //已验证过再次验证
-                          askDialog(
-                              content: 'production_scan_verify_again'.tr,
-                              confirmText: 'production_scan_check'.tr,
-                              confirmColor: Colors.red,
-                              confirm: () {
-                                logic.checkCodeList(
-                                  checkBack: (s) => errorDialog(content: s),
-                                ); //再次验证条码
-                              },
-                              cancelText: 'production_scan_submit'.tr,
-                              cancelColor: Colors.blue,
-                              cancel: () {
-                                showCustomPickerDialog(context);
-                              });
-                        } else {
-                          logic.checkCodeList(
-                            checkBack: (s) => errorDialog(content: s),
-                          ); //没验证过，首次验证条码
-                        }
+                        logic.checkCodeList(
+                          checkBack: (s) => askDialog(
+                            content: s,
+                            confirmText: '继续提交',
+                            confirm: () {
+                              showCustomPickerDialog(context);
+                            },
+                          ),
+                        );
                       } else {
                         showSnackBar(title: 'shack_bar_warm'.tr, message: 'production_scan_no_barcode'.tr);
                       }

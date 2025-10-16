@@ -289,7 +289,7 @@ class MaterialDispatchLogic extends GetxController {
             subTitle: data.materialName ?? '',
             tableTitle:
                 '部件：${data.partName}(${data.materialNumber})<${data.processName}>',
-            tableSubTitle2: list,
+            tableSubTitle2: subList,
             bottomLeftText1: data.sapDecideArea ?? '',
             bottomLeftText2: data.drillingCrewName ?? '',
             bottomRightText1: '色系:$color/$qty${data.unitName}',

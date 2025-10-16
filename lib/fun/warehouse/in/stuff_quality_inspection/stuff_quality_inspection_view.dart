@@ -77,14 +77,19 @@ class _StuffQualityInspectionPageState
   }
 
   showColor(String qty) {
-    if(state.inspectionColorList.isNotEmpty){
-      state.unColorQty.value = qty.toDoubleTry().sub(state.inspectionColorList.map((v2)=>v2.qty.toDoubleTry()).reduce((a,b)=>a.add(b))).toStringAsFixed(3);
-    }else{
+    if (state.inspectionColorList.isNotEmpty) {
+      state.unColorQty.value = qty
+          .toDoubleTry()
+          .sub(state.inspectionColorList
+              .map((v2) => v2.qty.toDoubleTry())
+              .reduce((a, b) => a.add(b)))
+          .toStringAsFixed(3);
+    } else {
       state.unColorQty.value = qty;
     }
     var colorController = TextEditingController(); //色系
     var qtyController = TextEditingController(); //数量
-    qtyController.text =  state.unColorQty.value;
+    qtyController.text = state.unColorQty.value;
     Get.dialog(
       PopScope(
         canPop: false,
@@ -293,187 +298,189 @@ class _StuffQualityInspectionPageState
       ],
       body: Padding(
         padding: const EdgeInsets.only(left: 10, right: 10),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                const SizedBox(
-                  width: 30,
-                ),
-                Visibility(
-                  child: expandedTextSpan(
-                      flex: 2,
-                      hint: '选择不同物料时，只支持填写全部合格,如有不合格，必须分开填写!!',
-                      text: '',
-                      hintColor: Colors.red,
-                      fontSize: 16),
-                  visible: state.isShowTips.value,
-                ),
-                const SizedBox(
-                  width: 30,
-                ),
-                Obx(
-                  () => expandedTextSpan(
-                    hint: '默认审核人:'.tr,
-                    text:
-                        '${state.peoPleInfo.value.liableEmpName ?? ''}(${state.peoPleInfo.value.liableEmpCode ?? ''})',
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  const SizedBox(
+                    width: 30,
                   ),
-                )
-              ],
-            ),
-            const SizedBox(height: 20),
-            Row(
-              children: [
-                Expanded(
-                  child: Obx(
-                    () => state.inspectionTypeEnable.value
-                        ? Spinner(controller: spinnerController1)
-                        : spText(
-                            name: 'quality_inspection_method'.tr,
-                            text: state.inspectionType.value,
-                          ),
+                  Visibility(
+                    child: expandedTextSpan(
+                        flex: 2,
+                        hint: '选择不同物料时，只支持填写全部合格,如有不合格，必须分开填写!!',
+                        text: '',
+                        hintColor: Colors.red,
+                        fontSize: 16),
+                    visible: state.isShowTips.value,
                   ),
-                ),
-                const SizedBox(width: 20),
-                Expanded(
-                  child: Obx(
-                    () => state.typeEnable.value
-                        ? Spinner(controller: spinnerController2)
-                        : spText(
-                            name: 'quality_inspection_category'.tr,
-                            text: state.type.value,
-                          ),
+                  const SizedBox(
+                    width: 30,
                   ),
-                ),
-                const SizedBox(width: 20),
-                Expanded(
-                  child: Obx(
-                    () => state.groupTypeEnable.value
-                        ? Spinner(controller: spinnerController3)
-                        : spText(
-                            name: 'quality_inspection_accepting_unit'.tr,
-                            text: state.groupType.value,
-                          ),
+                  Obx(
+                    () => expandedTextSpan(
+                      hint: '默认审核人:'.tr,
+                      text:
+                          '${state.peoPleInfo.value.liableEmpName ?? ''}(${state.peoPleInfo.value.liableEmpCode ?? ''})',
+                    ),
+                  )
+                ],
+              ),
+              const SizedBox(height: 20),
+              Row(
+                children: [
+                  Expanded(
+                    child: Obx(
+                      () => state.inspectionTypeEnable.value
+                          ? Spinner(controller: spinnerController1)
+                          : spText(
+                              name: 'quality_inspection_method'.tr,
+                              text: state.inspectionType.value,
+                            ),
+                    ),
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            Row(
-              children: [
-                Expanded(
-                  child: Obx(() => NumberDecimalEditText(
-                      hint: 'quality_inspection_inspection_quantity'.tr,
-                      controller: logic.inspectionQuantityController,
-                      inputEnable: state.inspectionEnable.value,
-                      onChanged: (d) {})),
-                ),
-                Expanded(
-                  child: Obx(() => NumberDecimalEditText(
-                      hint: 'quality_inspection_sampling_quantity'.tr,
-                      controller: logic.waitInspectionQuantityController,
-                      inputEnable: state.waitInputInspectionEnable.value,
-                      onChanged: (d) {})),
-                ),
-                Expanded(
-                  child: NumberDecimalEditText(
-                      hint: 'quality_inspection_qualified_quantity'.tr,
-                      controller: logic.qualifiedController,
-                      inputEnable: false,
-                      onChanged: (d) {}),
-                ),
-                Expanded(
-                  child: Obx(() => NumberDecimalEditText(
-                      hint: 'quality_inspection_unqualified_quantity'.tr,
-                      controller: logic.unqualifiedQualifiedController,
-                      inputEnable: state.unqualifiedQuantityEnable.value,
-                      onChanged: (d) {
-                        logic.inputUnqualified(d);
-                      })),
-                ),
-                Expanded(
-                  child: Obx(() => NumberDecimalEditText(
-                      hint: 'quality_inspection_short_quantity'.tr,
-                      controller: logic.shortQualifiedController,
-                      inputEnable: state.shortQuantityEnable.value,
-                      onChanged: (d) {
-                        logic.inputShort(d);
-                      })),
-                ),
-                Expanded(
-                  child: NumberDecimalEditText(
-                      hint: 'quality_inspection_reviewer'.tr,
-                      controller: logic.reviewerController,
-                      onChanged: (d) {}),
-                )
-              ],
-            ),
-            const SizedBox(height: 20),
-            Row(
-              children: [
-                Expanded(
-                    child: Obx(() => EditText(
-                          isEnable: state.abnormalExplanationEnable.value,
-                          hint: 'quality_inspection_exception_description'.tr,
-                          controller: logic.exceptionDescriptionController,
-                        ))),
-                Expanded(
-                    child: Obx(() => EditText(
-                          isEnable: state.processingMethodEnable.value,
-                          hint: 'quality_inspection_processing_method'.tr,
-                          controller: logic.processingMethodController,
-                        ))),
-                Expanded(
+                  const SizedBox(width: 20),
+                  Expanded(
+                    child: Obx(
+                      () => state.typeEnable.value
+                          ? Spinner(controller: spinnerController2)
+                          : spText(
+                              name: 'quality_inspection_category'.tr,
+                              text: state.type.value,
+                            ),
+                    ),
+                  ),
+                  const SizedBox(width: 20),
+                  Expanded(
+                    child: Obx(
+                      () => state.groupTypeEnable.value
+                          ? Spinner(controller: spinnerController3)
+                          : spText(
+                              name: 'quality_inspection_accepting_unit'.tr,
+                              text: state.groupType.value,
+                            ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              Row(
+                children: [
+                  Expanded(
+                    child: Obx(() => NumberDecimalEditText(
+                        hint: 'quality_inspection_inspection_quantity'.tr,
+                        controller: logic.inspectionQuantityController,
+                        inputEnable: state.inspectionEnable.value,
+                        onChanged: (d) {})),
+                  ),
+                  Expanded(
+                    child: Obx(() => NumberDecimalEditText(
+                        hint: 'quality_inspection_sampling_quantity'.tr,
+                        controller: logic.waitInspectionQuantityController,
+                        inputEnable: state.waitInputInspectionEnable.value,
+                        onChanged: (d) {})),
+                  ),
+                  Expanded(
                     child: NumberDecimalEditText(
-                  hint: 'quality_inspection_availability'.tr,
-                  controller: logic.availabilityController,
-                  onChanged: (d) {
-                    if (d < 0) {
-                      logic.availabilityController.text = '0';
-                    }
-                  },
-                  max: 100,
-                ))
-              ],
-            ),
-            const SizedBox(height: 10),
-            Text('quality_inspection_photo'.tr,
-                style: const TextStyle(
-                    color: Colors.red,
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold)),
-            const SizedBox(height: 20),
-            _photoListView(),
-            const SizedBox(height: 80),
-            Row(
-              children: [
-                Expanded(
-                    child: CombinationButton(
-                  //提交
-                  text: 'quality_inspection_submit'.tr,
-                  click: () {
-                    askDialog(
-                        content: 'quality_inspection_sure_submit'.tr,
-                        confirm: () {
-                              logic.submitInspection(
-                                  spinnerController1.select.value,
-                                  spinnerController2.select.value,
-                                  spinnerController3.select.value,
-                                  success: (mes) {
-                                successDialog(
-                                    content: mes,
-                                    back: () {
-                                      Get.back(result: true);
-                                    });
-                              });
+                        hint: 'quality_inspection_qualified_quantity'.tr,
+                        controller: logic.qualifiedController,
+                        inputEnable: false,
+                        onChanged: (d) {}),
+                  ),
+                  Expanded(
+                    child: Obx(() => NumberDecimalEditText(
+                        hint: 'quality_inspection_unqualified_quantity'.tr,
+                        controller: logic.unqualifiedQualifiedController,
+                        inputEnable: state.unqualifiedQuantityEnable.value,
+                        onChanged: (d) {
+                          logic.inputUnqualified(d);
+                        })),
+                  ),
+                  Expanded(
+                    child: Obx(() => NumberDecimalEditText(
+                        hint: 'quality_inspection_short_quantity'.tr,
+                        controller: logic.shortQualifiedController,
+                        inputEnable: state.shortQuantityEnable.value,
+                        onChanged: (d) {
+                          logic.inputShort(d);
+                        })),
+                  ),
+                  Expanded(
+                    child: NumberDecimalEditText(
+                        hint: 'quality_inspection_reviewer'.tr,
+                        controller: logic.reviewerController,
+                        onChanged: (d) {}),
+                  )
+                ],
+              ),
+              const SizedBox(height: 20),
+              Row(
+                children: [
+                  Expanded(
+                      child: Obx(() => EditText(
+                            isEnable: state.abnormalExplanationEnable.value,
+                            hint: 'quality_inspection_exception_description'.tr,
+                            controller: logic.exceptionDescriptionController,
+                          ))),
+                  Expanded(
+                      child: Obx(() => EditText(
+                            isEnable: state.processingMethodEnable.value,
+                            hint: 'quality_inspection_processing_method'.tr,
+                            controller: logic.processingMethodController,
+                          ))),
+                  Expanded(
+                      child: NumberDecimalEditText(
+                    hint: 'quality_inspection_availability'.tr,
+                    controller: logic.availabilityController,
+                    onChanged: (d) {
+                      if (d < 0) {
+                        logic.availabilityController.text = '0';
+                      }
+                    },
+                    max: 100,
+                  ))
+                ],
+              ),
+              const SizedBox(height: 10),
+              Text('quality_inspection_photo'.tr,
+                  style: const TextStyle(
+                      color: Colors.red,
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold)),
+              const SizedBox(height: 20),
+              _photoListView(),
+              const SizedBox(height: 80),
+              Row(
+                children: [
+                  Expanded(
+                      child: CombinationButton(
+                    //提交
+                    text: 'quality_inspection_submit'.tr,
+                    click: () {
+                      askDialog(
+                          content: 'quality_inspection_sure_submit'.tr,
+                          confirm: () {
+                            logic.submitInspection(
+                                spinnerController1.select.value,
+                                spinnerController2.select.value,
+                                spinnerController3.select.value,
+                                success: (mes) {
+                              successDialog(
+                                  content: mes,
+                                  back: () {
+                                    Get.back(result: true);
+                                  });
                             });
-                  },
-                  combination: Combination.intact,
-                ))
-              ],
-            )
-          ],
+                          });
+                    },
+                    combination: Combination.intact,
+                  ))
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );
