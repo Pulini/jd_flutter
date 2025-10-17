@@ -761,13 +761,6 @@ Future pickPallet() {
                   );
                   return;
                 }
-                if (selectPalletNumber.isEmpty) {
-                  showSnackBar(
-                    message: 'material_dispatch_dialog_select_pallet_tips'.tr,
-                    isWarning: true,
-                  );
-                  return;
-                }
               }
               saveMaterialDispatchDate(selectDate);
               saveMaterialDispatchDepart(selectDepart);
