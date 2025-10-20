@@ -289,7 +289,7 @@ class MaterialDispatchLogic extends GetxController {
             subTitle: data.materialName ?? '',
             tableTitle:
                 '部件：${data.partName}(${data.materialNumber})<${data.processName}>',
-            tableSubTitle2: list,
+            tableSubTitle2: subList,
             bottomLeftText1: data.sapDecideArea ?? '',
             bottomLeftText2: data.drillingCrewName ?? '',
             bottomRightText1: '色系:$color/$qty${data.unitName}',
@@ -348,8 +348,7 @@ class MaterialDispatchLogic extends GetxController {
             content: '(${data.materialNumber})${data.materialName}',
             bottomLeftText1: data.drillingCrewName ?? '',
             bottomMiddleText1: '色系:$color/$qty${data.unitName}',
-            // bottomMiddleText2: '取件码：$pick',
-            bottomMiddleText2: '取件码:2903-20250928-0225',
+            bottomMiddleText2: '取件码：$pick',
             bottomRightText1: data.sapDecideArea ?? '',
             speed: spGet(spSavePrintSpeed) ?? 3.0,
             density: spGet(spSavePrintDensity) ?? 12.0,

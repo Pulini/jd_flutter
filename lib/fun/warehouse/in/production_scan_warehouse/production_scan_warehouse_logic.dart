@@ -16,7 +16,7 @@ class ProductionScanWarehouseLogic extends GetxController {
   //添加条码
   scanCode(String code) {
     if (state.barCodeList.any((v) => v.code == code)) {
-      showSnackBar( message: 'production_scan_hava_barcode'.tr, isWarning: true);
+      showSnackBar(message: 'production_scan_hava_barcode'.tr, isWarning: true);
     } else {
       if (code.isPallet()) {
         checkPallet(
@@ -30,15 +30,18 @@ class ProductionScanWarehouseLogic extends GetxController {
                   break;
                 case 'X':
                   showSnackBar(
-                       message: 'production_scan_use_empty_pallets'.tr, isWarning: true);
+                      message: 'production_scan_use_empty_pallets'.tr,
+                      isWarning: true);
                   break;
                 case 'Y':
                   showSnackBar(
-                   message: 'production_scan_used_pallets'.tr, isWarning: true);
+                      message: 'production_scan_used_pallets'.tr,
+                      isWarning: true);
                   break;
               }
             } else {
-              showSnackBar( message: 'production_scan_not_exist'.tr, isWarning: true);
+              showSnackBar(
+                  message: 'production_scan_not_exist'.tr, isWarning: true);
             }
           },
           error: (msg) => errorDialog(content: msg),
@@ -81,7 +84,9 @@ class ProductionScanWarehouseLogic extends GetxController {
         refresh.call();
       } else {
         refresh.call();
-        showSnackBar(title: 'dialog_default_title_information'.tr, message: response.message ?? '');
+        showSnackBar(
+            title: 'dialog_default_title_information'.tr,
+            message: response.message ?? '');
       }
     });
   }
@@ -148,13 +153,14 @@ class ProductionScanWarehouseLogic extends GetxController {
   //清空生产扫码入库的条码
   clearBarCodeList() {
     BarCodeInfo.clear(
-      type:BarCodeReportType.productionScanInStock.text,
+      type: BarCodeReportType.productionScanInStock.text,
       callback: (v) {
         if (v == state.barCodeList.length) {
           state.isCheck = false;
           state.barCodeList.clear();
         } else {
-          showSnackBar( message: 'production_scan_delete_failed'.tr, isWarning: true);
+          showSnackBar(
+              message: 'production_scan_delete_failed'.tr, isWarning: true);
         }
       },
     );
@@ -189,7 +195,9 @@ class ProductionScanWarehouseLogic extends GetxController {
             if (v == null) {
               state.peopleNumber.text = '';
               state.peopleName.value = '';
-              showSnackBar(title: 'dialog_default_title_information'.tr, message: '检查未完成');
+              showSnackBar(
+                  title: 'dialog_default_title_information'.tr,
+                  message: '检查未完成');
             } else if (v == true) {
               submitCode();
             }
@@ -199,7 +207,9 @@ class ProductionScanWarehouseLogic extends GetxController {
         }
       });
     } else {
-      showSnackBar(title: 'shack_bar_warm'.tr, message: 'production_scan_not_barcode'.tr);
+      showSnackBar(
+          title: 'shack_bar_warm'.tr,
+          message: 'production_scan_not_barcode'.tr);
     }
   }
 
@@ -241,7 +251,7 @@ class ProductionScanWarehouseLogic extends GetxController {
           for (var barCode in state.barCodeList) {
             for (var used in codeList) {
               if (barCode.code == used) {
-                barCode.isUsed = true;
+                barCode.isHave = true;
               } else {
                 message += '$used，\n';
               }
@@ -256,7 +266,9 @@ class ProductionScanWarehouseLogic extends GetxController {
         }
       });
     } else {
-      showSnackBar(title: 'shack_bar_warm'.tr, message: 'production_scan_not_barcode'.tr);
+      showSnackBar(
+          title: 'shack_bar_warm'.tr,
+          message: 'production_scan_not_barcode'.tr);
     }
   }
 
@@ -265,10 +277,11 @@ class ProductionScanWarehouseLogic extends GetxController {
     httpPost(method: webApiUploadProductionScanning, body: {
       'BarCodeList': [
         for (var i = 0; i < state.barCodeList.length; ++i)
-          {
-            'BarCode': state.barCodeList[i].code,
-            'PalletNo': state.barCodeList[i].palletNo,
-          }
+          if (!state.barCodeList[i].isUsed == true)
+            {
+              'BarCode': state.barCodeList[i].code,
+              'PalletNo': state.barCodeList[i].palletNo,
+            }
       ],
       'Red': state.red.value ? -1 : 1,
       'EmpCode': state.peopleNumber.text.toString(),

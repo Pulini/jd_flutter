@@ -838,7 +838,7 @@ const webApiGetProductionPickingBarCodeList =
 const webApiMixBarCodePicking =
     'api/CompoundDispatching/MaterialOutStockJinZhen';
 
-//sap喷漆领料过账/**/
+//sap喷漆领料过账
 const webApiSapPrintPicking = 'sap/zapp/ZFUN_RES_ZLINGYONG_1500A';
 
 //sap待上架列表
