@@ -27,7 +27,8 @@ class _ProductionScanWarehousePageState
       Get.find<ProductionScanWarehouseLogic>().state;
 
   var refreshController = EasyRefreshController(controlFinishRefresh: true);
-var tecCode=TextEditingController();
+  var tecCode = TextEditingController();
+
   void showCustomPickerDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -40,7 +41,7 @@ var tecCode=TextEditingController();
               width: 200,
               child: Column(
                 children: [
-                   Text(
+                  Text(
                     'production_scan_storage_conditions'.tr,
                     style: const TextStyle(
                         fontWeight: FontWeight.bold,
@@ -59,7 +60,7 @@ var tecCode=TextEditingController();
                             if (s.length >= 6) {
                               logic.checkOrderInfo(number: s);
                             }
-                            if(s.isEmpty){
+                            if (s.isEmpty) {
                               state.peopleName.value = '';
                             }
                           },
@@ -73,25 +74,24 @@ var tecCode=TextEditingController();
                     children: [
                       TextButton(
                         onPressed: () {
-                          if (state.peopleNumber.text.isEmpty)
-                            {
-                              showSnackBar(title: 'shack_bar_warm'.tr, message: 'production_scan_operator_number'.tr);
-                            }
-                          else
-                            {
-                              Navigator.of(context).pop();
-                              logic.goReport();
-                            }
+                          if (state.peopleNumber.text.isEmpty) {
+                            showSnackBar(
+                                title: 'shack_bar_warm'.tr,
+                                message: 'production_scan_operator_number'.tr);
+                          } else {
+                            Navigator.of(context).pop();
+                            logic.goReport();
+                          }
                         },
-                        child:  Text('dialog_default_confirm'.tr),
+                        child: Text('dialog_default_confirm'.tr),
                       ),
                       TextButton(
-                        onPressed: ()  {
+                        onPressed: () {
                           state.peopleName.value = '';
                           state.peopleNumber.clear();
                           Navigator.of(context).pop();
                         },
-                        child:  Text('dialog_default_cancel'.tr),
+                        child: Text('dialog_default_cancel'.tr),
                       )
                     ],
                   )
@@ -107,8 +107,8 @@ var tecCode=TextEditingController();
   _item(BarCodeInfo code) {
     return GestureDetector(
         onLongPress: () {
-              logic.deleteCode(code);
-            },
+          logic.deleteCode(code);
+        },
         child: Container(
           padding: const EdgeInsets.all(5),
           margin: const EdgeInsets.only(bottom: 5),
@@ -128,12 +128,12 @@ var tecCode=TextEditingController();
               Text(
                 code.isUsed ? '已提交'.tr : '',
                 style: TextStyle(
-                    color: code.isUsed ? Colors.red.shade700 : Colors.black),
+                    color: code.isUsed ? Colors.red.shade700 : Colors.red),
               ),
               Text(
                 code.isHave ? 'production_scan_not_reported'.tr : '',
                 style: TextStyle(
-                    color: code.isUsed ? Colors.red.shade700 : Colors.black),
+                    color: code.isUsed ? Colors.red.shade700 : Colors.red),
               ),
             ],
           ),
@@ -147,7 +147,7 @@ var tecCode=TextEditingController();
         Padding(
           padding: const EdgeInsets.only(top: 10, right: 30),
           child: InkWell(
-            child:  Text('production_scan_clear'.tr),
+            child: Text('production_scan_clear'.tr),
             onTap: () {
               askDialog(
                 title: 'dialog_default_title_information'.tr,
@@ -175,7 +175,7 @@ var tecCode=TextEditingController();
                       flex: 5,
                       child: EditText(
                         hint: 'warehouse_allocation_input'.tr,
-                     controller: tecCode,
+                        controller: tecCode,
                       ),
                     ),
                     Expanded(
@@ -235,8 +235,14 @@ var tecCode=TextEditingController();
                     click: () {
                       if (logic.haveCodeData()) {
                         logic.checkCodeList(
+                          success: (s) => successDialog(
+                              content: s,
+                              back: () {
+                                showCustomPickerDialog(context);
+                              }),
                           checkBack: (s) => askDialog(
-                            content: s,
+                            title: '温馨提示',
+                            content: '未汇报的标签有：$s',
                             confirmText: '继续提交',
                             confirm: () {
                               showCustomPickerDialog(context);
@@ -244,7 +250,9 @@ var tecCode=TextEditingController();
                           ),
                         );
                       } else {
-                        showSnackBar(title: 'shack_bar_warm'.tr, message: 'production_scan_no_barcode'.tr);
+                        showSnackBar(
+                            title: 'shack_bar_warm'.tr,
+                            message: 'production_scan_no_barcode'.tr);
                       }
                     },
                     combination: Combination.right,

@@ -1,3 +1,4 @@
+
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/bar_code.dart';
 import 'package:jd_flutter/bean/http/response/check_code_info.dart';
@@ -65,7 +66,7 @@ class ProductionScanWarehouseLogic extends GetxController {
     required Function() refresh,
   }) {
     httpGet(method: webApiGetBarCodeStatusByDepartmentID, params: {
-      'Type': "SupplierScanInStock",
+      'Type': BarCodeReportType.productionScanInStock.text,
       'DepartmentID': userInfo?.departmentID,
     }).then((response) {
       if (response.resultCode == resultSuccess) {
@@ -156,7 +157,6 @@ class ProductionScanWarehouseLogic extends GetxController {
       type: BarCodeReportType.productionScanInStock.text,
       callback: (v) {
         if (v == state.barCodeList.length) {
-          state.isCheck = false;
           state.barCodeList.clear();
         } else {
           showSnackBar(
@@ -223,7 +223,10 @@ class ProductionScanWarehouseLogic extends GetxController {
   }
 
   //验证生产扫码入库的数据
-  checkCodeList({required Function(String) checkBack}) {
+  checkCodeList({
+    required Function(String) checkBack,
+    required Function(String) success,
+  }) {
     if (state.barCodeList.isNotEmpty) {
       httpPost(
         method: webApiGetUnReportedBarCode,
@@ -236,7 +239,6 @@ class ProductionScanWarehouseLogic extends GetxController {
             }
         ],
       ).then((response) {
-        state.isCheck = true;
         if (response.resultCode == resultSuccess) {
           var message = '';
           var codeList = <String>[];
@@ -252,14 +254,18 @@ class ProductionScanWarehouseLogic extends GetxController {
             for (var used in codeList) {
               if (barCode.code == used) {
                 barCode.isHave = true;
-              } else {
-                message += '$used，\n';
+                message += '$used,\n';
               }
             }
           }
           state.barCodeList.refresh();
           if (message.isNotEmpty) {
+            logger.f('0000000000');
+            logger.f('message:$message');
             checkBack.call(message);
+          }else{
+            logger.f('11111111');
+            success.call(response.message!);
           }
         } else {
           errorDialog(content: response.message);
@@ -290,14 +296,15 @@ class ProductionScanWarehouseLogic extends GetxController {
       'OrganizeID': userInfo?.organizeID,
       'UserID': userInfo?.userID,
     }).then((response) {
-      state.isCheck = false;
       if (response.resultCode == resultSuccess) {
         clearBarCodeList();
         successDialog(
             content: response.message,
             back: () => getBarCodeStatusByDepartmentID(refresh: () {}));
       } else {
-        showSnackBar(title: 'dialog_default_title_information'.tr, message: response.message ?? '');
+        showSnackBar(
+            title: 'dialog_default_title_information'.tr,
+            message: response.message ?? '');
       }
     });
   }

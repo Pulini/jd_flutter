@@ -16,7 +16,6 @@ class ProductionScanWarehouseState {
   var peopleName = ''.obs;  //员工名字
 
   var peopleNumber = TextEditingController(); //员工工号
-  var isCheck = false;
 
   var codeDataInfo = CheckCodeInfo().obs;
 
