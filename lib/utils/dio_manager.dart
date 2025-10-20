@@ -31,13 +31,13 @@ class DioManager {
           },
           onResponse: (response, handler) {
             var baseData = response.getBaseData();
-            if (baseData.resultCode == 2) {
+            if (baseData.resultCode == resultReLogin) {
               logger.e('需要重新登录');
               spSave(spSaveUserInfo, '');
               loadingDismiss();
               handler.next(response);
               reLoginPopup();
-            } else if (baseData.resultCode == 3) {
+            } else if (baseData.resultCode == resultToUpdate) {
               logger.e('需要更新版本');
               loadingDismiss();
               upData();
