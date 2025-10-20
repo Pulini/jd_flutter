@@ -29,10 +29,9 @@ const resultToUpdate = 3;
 const baseUrlForMES = 'https://geapp.goldemperor.com:1226/';
 
 //MES测试库
-const testUrlForMES = 'https://geapptest.goldemperor.com:1224/';
-// const testUrlForMES = 'https://geapptest.goldemperor.com:1207/';
+// const testUrlForMES = 'https://geapptest.goldemperor.com:1224/';
 // const testUrlForMES = 'https://apptest.goldemperor.com:1207/';
-// const testUrlForMES = 'https://apptest.goldemperor.com:1208/';
+const testUrlForMES = 'https://apptest.goldemperor.com:1208/';
 
 //SAP正式库
 const baseUrlForSAP = 'https://erpprd01.goldemperor.com:8003/';
@@ -41,8 +40,8 @@ const baseUrlForSAP = 'https://erpprd01.goldemperor.com:8003/';
 // const testUrlForSAP = 'https://erpqas01.goldemperor.com:8002/';
 
 //SAP开发库
-const developUrlForSAP = 'https://erpdev01.goldemperor.com:8001/';
-// const developUrlForSAP = 'https://s4devapp01.goldemperor.com:8005/';
+// const developUrlForSAP = 'https://erpdev01.goldemperor.com:8001/';
+const developUrlForSAP = 'https://s4qasapp01.goldemperor.com:8006/';
 
 const sfUser = 'PI_USER';
 const sfPassword = 'PI@Passw0rd';
@@ -75,13 +74,13 @@ Future<BaseData> _doHttp({
       baseUrl = developUrlForSAP;
     }
   }
-  if (baseUrl == baseUrlForSAP || baseUrl == developUrlForSAP) {
-    params = {
-      'sap-client':
-          baseUrl == baseUrlForSAP ? baseClientForSAP : developClientForSAP,
-      ...?params,
-    };
-  }
+  // if (baseUrl == baseUrlForSAP || baseUrl == developUrlForSAP) {
+  //   params = {
+  //     'sap-client':
+  //         baseUrl == baseUrlForSAP ? baseClientForSAP : developClientForSAP,
+  //     ...?params,
+  //   };
+  // }
 
   try {
     debugPrint('SnackbarStatus=$snackbarStatus');

@@ -392,21 +392,21 @@ class _StuffQualityInspectionLabelPageState
                         )),
                         Expanded(
                             child: CombinationButton(
+                              //提交
+                              text: 'quality_inspection_submit'.tr,
+                              click: () {
+                                if (logic.submitSelect()) {
+                                  Get.back(result: true);
+                                }
+                              },
+                              combination: Combination.middle,
+                            )),
+                        Expanded(
+                            child: CombinationButton(
                           //全部短码
                           text: 'quality_inspection_all_short'.tr,
                           click: () {
                             logic.selectAllUnqualified(false);
-                          },
-                          combination: Combination.middle,
-                        )),
-                        Expanded(
-                            child: CombinationButton(
-                          //提交
-                          text: 'quality_inspection_submit'.tr,
-                          click: () {
-                            if (logic.submitSelect()) {
-                              Get.back(result: true);
-                            }
                           },
                           combination: Combination.right,
                         )),
