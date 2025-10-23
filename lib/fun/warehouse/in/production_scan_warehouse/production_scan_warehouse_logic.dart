@@ -1,4 +1,3 @@
-
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/bar_code.dart';
 import 'package:jd_flutter/bean/http/response/check_code_info.dart';
@@ -260,15 +259,12 @@ class ProductionScanWarehouseLogic extends GetxController {
           }
           state.barCodeList.refresh();
           if (message.isNotEmpty) {
-            logger.f('0000000000');
-            logger.f('message:$message');
             checkBack.call(message);
-          }else{
-            logger.f('11111111');
+          } else {
             success.call(response.message!);
           }
         } else {
-          errorDialog(content: response.message);
+          success.call(response.message!);
         }
       });
     } else {
@@ -280,7 +276,7 @@ class ProductionScanWarehouseLogic extends GetxController {
 
   //生产扫码入库的提交
   submitCode() {
-    httpPost(method: webApiUploadProductionScanning, body: {
+    httpPost(method: webApiUploadProductionScanning, loading: '正在提交...', body: {
       'BarCodeList': [
         for (var i = 0; i < state.barCodeList.length; ++i)
           if (!state.barCodeList[i].isUsed == true)

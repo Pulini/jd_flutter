@@ -421,7 +421,7 @@ class RouteConfig {
   //生产扫码入库
   static Routes productionScanWarehouse = Routes(
     '/production_scan_warehouse',
-    200,
+    201,
     const ProductionScanWarehousePage(),
   );
 

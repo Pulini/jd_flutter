@@ -40,6 +40,7 @@ class MaterialDispatchLogic extends GetxController {
     required String endDate,
     required int status,
     required String typeBody,
+    required Function() success,
   }) {
     state.getScWorkCardProcess(
       startDate: startDate,
@@ -47,6 +48,7 @@ class MaterialDispatchLogic extends GetxController {
       status: status,
       typeBody: typeBody,
       error: (msg) => errorDialog(content: msg),
+      success: ()=> success.call(),
     );
   }
 

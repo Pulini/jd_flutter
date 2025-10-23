@@ -48,6 +48,7 @@ class MaterialDispatchState {
   var showOrderList = <MaterialDispatchInfo>[].obs;
   var allOrderList = <MaterialDispatchInfo>[]; //所有内容
   var factoryList = <String>['全部']; //所有工厂
+  var searchMes =''; //查询的内容
 
   getScWorkCardProcess({
     required String startDate,
@@ -55,6 +56,7 @@ class MaterialDispatchState {
     required int status,
     required String typeBody,
     required Function(String msg) error,
+    required Function() success,
   }) {
     httpGet(
       method: webApiGetScWorkCardProcess,
@@ -75,7 +77,7 @@ class MaterialDispatchState {
         ];
         allOrderList = orderList;
         showOrderList.value = orderList;
-        arrangeFactory();
+        arrangeFactory(success: () => success.call());
       } else {
         factoryList.clear();
         allOrderList = [];
@@ -86,11 +88,14 @@ class MaterialDispatchState {
     });
   }
 
-  arrangeFactory() {
+  arrangeFactory({
+    required Function() success,
+  }) {
     var list = <String>[];
     list.add('全部工厂');
     for (var data in allOrderList) {
-      if (data.getShowFactory()!='' && !list.contains(data.getShowFactory())) {
+      if (data.getShowFactory() != '' &&
+          !list.contains(data.getShowFactory())) {
         list.add(data.getShowFactory());
       }
     }
@@ -98,6 +103,7 @@ class MaterialDispatchState {
       logger.f('element:$element');
     }
     factoryList = list;
+    success.call();
   }
 
   reportToSAP({

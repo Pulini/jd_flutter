@@ -466,6 +466,10 @@ class FormingBarcodeCollectionLogic extends GetxController {
   }) {
     if (click) {
       state.barCodeByMonoData[position].barCode = code;
+      for (var data in state.barCodeByMonoData) {
+          data.isSelect.value = false;
+      }
+      state.barCodeByMonoData[position].isSelect.value = true;
     } else {
       var position = -1;
       state.barCodeByMonoData.forEachIndexed((i, data) {

@@ -377,9 +377,14 @@ class StuffQualityInspectionLogic extends GetxController {
             success!.call(s);
           });
         } else {
-          createInspectionFromDetail(false, inspectionType, type, success: (s) {
-            success!.call(s);
-          });
+          msgDialog(
+              content: response.message,
+              back: () {
+                createInspectionFromDetail(false, inspectionType, type,
+                    success: (s) {
+                  success!.call(s);
+                });
+              });
         }
       }
     });

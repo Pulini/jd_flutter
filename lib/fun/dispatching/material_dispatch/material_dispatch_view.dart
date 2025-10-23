@@ -584,18 +584,20 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
 
   _query() {
     logic.refreshDataList(
-      startDate: dpcStartDate.getDateFormatYMD(),
-      endDate: dpcEndDate.getDateFormatYMD(),
-      status: scReportState.selectIndex - 1,
-      typeBody: tecTypeBody.text,
-    );
-    setState(() {
-      spController = SpinnerController(
-          dataList: state.factoryList,
-          onChanged: (index) {
-            logic.selectShow(index);
-          });
-    });
+        startDate: dpcStartDate.getDateFormatYMD(),
+        endDate: dpcEndDate.getDateFormatYMD(),
+        status: scReportState.selectIndex - 1,
+        typeBody: tecTypeBody.text,
+        success: () => {
+              setState(() {
+                spController = SpinnerController(
+                    dataList: state.factoryList,
+                    onChanged: (index) {
+                      logic.selectShow(index);
+                    });
+              }),
+              logic.search(state.searchMes),
+            });
   }
 
   showPickPallet() {
@@ -629,7 +631,10 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
           child: EditText(
             controller: tecMaterial,
             hint: 'material_dispatch_select_tips'.tr,
-            onChanged: (s) => logic.search(s),
+            onChanged: (s) {
+              state.searchMes = s;
+              logic.search(s);
+            },
           ),
         ),
         SizedBox(width: 200, child: Spinner(controller: spController)),
