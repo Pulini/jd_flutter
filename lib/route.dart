@@ -645,7 +645,7 @@ class RouteConfig {
   //SAP标签重打
   static Routes sapLabelReprint = Routes(
     '/sap_label_reprint',
-    200,
+    201,
     const SapLabelReprintPage(),
   );
 

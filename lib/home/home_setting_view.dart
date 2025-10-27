@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:get/get.dart' hide FormData;
 import 'package:jd_flutter/bean/http/response/department_info.dart';
 import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/login/login_view.dart';
@@ -347,12 +347,14 @@ class _UserSettingState extends State<UserSetting> {
           ),
           GestureDetector(
             onTap: () {
+              // Get.to(()=>PreviewWebLabelList(labelCodes: ['00505685E5761FD0A6B41F6C6832A270','00505685E5761FE0A9AF611246AC0B11','00505685E5761FE0A9B63B849A43B67C'],));
               // Get.to(() =>  const Scanner())?.then((v) {
               //   if(v!=null){
               //     showSnackBar(title: '扫码', message: v);
               //   }
               // });
               // scannerDialog( detect: (String code)=>showSnackBar(title: 'title', message: code));
+
               if (!GetPlatform.isWeb) {
                 getVersionInfo(
                   true,
