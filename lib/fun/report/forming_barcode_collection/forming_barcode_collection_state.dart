@@ -33,7 +33,7 @@ class FormingBarcodeCollectionState {
 
   var canScan = true; //可以进行扫描
 
-  var btnName='补零'.obs; //补零或清零
+  var btnName='forming_code_collection_add_zero'.tr.obs; //补零或清零
   var barCodeByMonoData = <FormingBarcodeByMonoInfo>[].obs;
 
 }

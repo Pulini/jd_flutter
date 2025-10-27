@@ -118,7 +118,10 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
                 ),
               ),
               Expanded(
-                child: Text( data.billStyle=='0'? '正单':'补单',
+                child: Text(
+                  data.billStyle == '0'
+                      ? 'material_dispatch_positive_list'.tr
+                      : 'material_dispatch_order_replenishment'.tr,
                   style: itemTitleStyle,
                 ),
               ),
@@ -617,7 +620,7 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (getMaterialDispatchPalletNumber().isEmpty) showPickPallet();
     });
-    spController = SpinnerController(dataList: ['全部工厂']);
+    spController = SpinnerController(dataList: ['add_all_factory'.tr]);
     super.initState();
   }
 
@@ -643,7 +646,7 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
           combination: Combination.left,
         ),
         CombinationButton(
-          text: '打印机设置',
+          text: 'Printer_settings'.tr,
           click: () => showPrintSetting(
             context,
           ),

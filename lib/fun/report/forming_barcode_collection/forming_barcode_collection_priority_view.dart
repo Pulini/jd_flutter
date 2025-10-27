@@ -27,7 +27,7 @@ class _FormingBarcodeCollectionPriorityPageState
   @override
   Widget build(BuildContext context) {
     return pageBody(
-        title: '更改优先级',
+        title: 'forming_code_collection_change_priority'.tr,
         actions: [
           TextButton(
             onPressed: () {

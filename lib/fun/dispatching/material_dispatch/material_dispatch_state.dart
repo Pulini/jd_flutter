@@ -92,15 +92,12 @@ class MaterialDispatchState {
     required Function() success,
   }) {
     var list = <String>[];
-    list.add('全部工厂');
+    list.add('add_all_factory'.tr);
     for (var data in allOrderList) {
       if (data.getShowFactory() != '' &&
           !list.contains(data.getShowFactory())) {
         list.add(data.getShowFactory());
       }
-    }
-    for (var element in list) {
-      logger.f('element:$element');
     }
     factoryList = list;
     success.call();
@@ -161,7 +158,7 @@ class MaterialDispatchState {
   }) {
     httpPost(
       method: webApiPickCodeBatchProductionWarehousing,
-      loading: '正在批量入库...',
+      loading: 'material_dispatch_batching'.tr,
       body: submitList,
     ).then((response) {
       if (response.resultCode == resultSuccess) {

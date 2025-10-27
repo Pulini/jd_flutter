@@ -271,7 +271,7 @@ class FormingBarcodeCollectionLogic extends GetxController {
     for (var data in state.dataList) {
       if (data.isShow == true) {
         if (data.sizeRelations!.none((v) => v.barCode == code)) {
-          showSnackBar(message: '找不到该条码');
+          showSnackBar(message: 'forming_code_collection_no_find'.tr);
           break;
         } else {
           for (var data in data.sizeRelations!) {
@@ -495,16 +495,16 @@ class FormingBarcodeCollectionLogic extends GetxController {
 
   //补零
   addZero() {
-    if (state.btnName.value == '补零') {
+    if (state.btnName.value == 'forming_code_collection_add_zero'.tr) {
       for (var data in state.barCodeByMonoData) {
         data.barCode = '0${data.barCode ?? ''}';
       }
-      state.btnName.value = '清零';
+      state.btnName.value = 'forming_code_collection_clear_zero'.tr;
     } else {
       for (var data in state.barCodeByMonoData) {
         data.barCode = data.barCode!.substring(1);
       }
-      state.btnName.value = '补零';
+      state.btnName.value = 'forming_code_collection_add_zero'.tr;
     }
     state.barCodeByMonoData.refresh();
   }
@@ -520,7 +520,7 @@ class FormingBarcodeCollectionLogic extends GetxController {
   //退出特殊条码匹配界面
   quitShoe() {
     state.barCodeByMonoData.clear();
-    state.btnName.value = '补零';
+    state.btnName.value = 'forming_code_collection_add_zero'.tr;
   }
 
   //特殊条码匹配提交

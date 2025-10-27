@@ -90,7 +90,9 @@ class _FormingBarcodeCollectionSwitchPageState
                         text: data.clientOrderNumber ?? ''),
                     expandedTextSpan(
                         hint: 'forming_code_collection_order_type'.tr,
-                        text: data.isClose == true ? '已关闭' : '未关闭')
+                        text: data.isClose == true
+                            ? 'forming_code_collection_closed'.tr
+                            : 'forming_code_collection_no_closed'.tr)
                   ],
                 )
               ],
@@ -102,7 +104,7 @@ class _FormingBarcodeCollectionSwitchPageState
   @override
   Widget build(BuildContext context) {
     return pageBody(
-        title: '切换订单',
+        title: 'forming_code_collection_switch_order'.tr,
         body: Column(
           children: [
             EditText(
@@ -130,7 +132,7 @@ class _FormingBarcodeCollectionSwitchPageState
                   click: () => {
                     if (state.dataList
                         .none((data) => data.isSelect.value == true))
-                      showSnackBar(message: '请选择要切换的订单')
+                      showSnackBar(message: 'forming_code_collection_switch_order_tip'.tr)
                     else
                       Get.back(result: logic.getSelect())
                   },

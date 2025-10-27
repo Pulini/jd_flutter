@@ -272,15 +272,15 @@ class MaterialDispatchLogic extends GetxController {
             PrintUtil().printLabel(
                 label: printLabel,
                 start: () {
-                  loadingShow('正在打印');
+                  loadingShow('print_printing'.tr);
                 },
                 success: () {
                   loadingDismiss();
-                  showSnackBar(message: '打印成功');
+                  showSnackBar(message: 'print_printing_success'.tr);
                 },
                 failed: () {
                   loadingDismiss();
-                  showSnackBar(message: '打印失败');
+                  showSnackBar(message: 'print_printing_fail'.tr);
                 });
           });
         } else {
@@ -300,15 +300,15 @@ class MaterialDispatchLogic extends GetxController {
             PrintUtil().printLabel(
                 label: printLabel,
                 start: () {
-                  loadingShow('正在打印');
+                  loadingShow('print_printing'.tr);
                 },
                 success: () {
                   loadingDismiss();
-                  showSnackBar(message: '打印成功');
+                  showSnackBar(message: 'print_printing_success'.tr);
                 },
                 failed: () {
                   loadingDismiss();
-                  showSnackBar(message: '打印失败');
+                  showSnackBar(message: 'print_printing_fail'.tr);
                 });
           });
         }
@@ -329,15 +329,15 @@ class MaterialDispatchLogic extends GetxController {
             PrintUtil().printLabel(
                 label: printLabel,
                 start: () {
-                  loadingShow('正在打印');
+                  loadingShow('print_printing'.tr);
                 },
                 success: () {
                   loadingDismiss();
-                  showSnackBar(message: '打印成功');
+                  showSnackBar(message: 'print_printing_success'.tr);
                 },
                 failed: () {
                   loadingDismiss();
-                  showSnackBar(message: '打印失败');
+                  showSnackBar(message: 'print_printing_fail'.tr);
                 });
           });
         } else {
@@ -358,15 +358,15 @@ class MaterialDispatchLogic extends GetxController {
             PrintUtil().printLabel(
                 label: printLabel,
                 start: () {
-                  loadingShow('正在打印');
+                  loadingShow('print_printing'.tr);
                 },
                 success: () {
                   loadingDismiss();
-                  showSnackBar(message: '打印成功');
+                  showSnackBar(message: 'print_printing_success'.tr);
                 },
                 failed: () {
                   loadingDismiss();
-                  showSnackBar(message: '打印失败');
+                  showSnackBar(message: 'print_printing_fail'.tr);
                 });
           });
         }
