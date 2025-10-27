@@ -81,7 +81,20 @@ class _PreviewLabelListState extends State<PreviewLabelList> {
     }
   }
 
-  printLabelOnline() {}
+  printLabelOnline() async {
+    var list = <Uint8List>[];
+    for (var image in imageList) {
+      list.add(mergeUint8List(
+        await imageResizeToLabel({
+          ...image,
+          'isDynamic': widget.isDynamic,
+          'speed': printSpeed.value.toInt(),
+          'density': printDensity.value.toInt(),
+        }),
+      ));
+    }
+    onLinePrintDialog(list, PrintType.label);
+  }
 
   @override
   Widget build(BuildContext context) {

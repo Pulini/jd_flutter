@@ -66,8 +66,8 @@ dependencies:
   #UUID
   uuid: ^4.1.0
   #webview控件
-  webview_flutter: ^4.10.0
-  webview_flutter_web: ^0.2.3+2
+  webview_flutter: ^4.13.0
+  webview_flutter_web: ^0.2.3+4
   #高精度小数计算
   decimal: ^3.0.2
   #下拉刷新控件
@@ -115,6 +115,9 @@ dependencies:
   #全局返回键监听
   back_button_interceptor: ^8.0.4
   pdf: ^3.11.3
+  webcontent_converter: ^0.0.9+4
+#  native_screenshot_widget: ^0.0.8
+#  screenshot: ^3.0.0
 
 
 dev_dependencies:

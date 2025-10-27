@@ -6,6 +6,7 @@ import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/preview_label_list_widget.dart';
 import 'package:jd_flutter/widget/preview_label_widget.dart';
+import 'package:jd_flutter/widget/preview_web_label_widget.dart';
 import 'package:jd_flutter/widget/tsc_label_templates/dynamic_label_110w.dart';
 
 import 'sap_label_reprint_state.dart';
@@ -49,7 +50,10 @@ class SapLabelReprintLogic extends GetxController {
   printLabel() {
     var selected = state.labelList.where((v) => v.isSelected.value).toList();
     if (selected.isNotEmpty) {
-      createLabels(labels: selected, print: (labels) => toPrintView(labels));
+      Get.to(() => PreviewWebLabelList(
+            labelCodes: selected.map((v) => v.labelID ?? '').toList(),
+          ));
+      // createLabels(labels: selected, print: (labels) => toPrintView(labels));
     } else {
       errorDialog(content: '没有可打印的标签');
     }
@@ -297,7 +301,8 @@ class SapLabelReprintLogic extends GetxController {
               )
             : {},
         inBoxQty: label.getInBoxQty().toShowString(),
-        customsDeclarationUnit: label.subLabel!.first.customsDeclarationUnit ?? '',
+        customsDeclarationUnit:
+            label.subLabel!.first.customsDeclarationUnit ?? '',
         customsDeclarationType: label.customsDeclarationType ?? '',
         pieceID: label.pieceID ?? '',
         pieceNo: label.pieceNo ?? '',
@@ -305,7 +310,7 @@ class SapLabelReprintLogic extends GetxController {
         netWeight: label.netWeight.toShowString(),
         specifications: label.getLongWidthHeightDescription(),
         volume: label.volume.toShowString(),
-        supplierName: label.supplierName?? '',
+        supplierName: label.supplierName ?? '',
         manufactureDate: label.formatManufactureDate(),
         factoryWarehouse: '${label.factory} ${label.warehouse}',
         hasNotes: state.labelHasNots.value,

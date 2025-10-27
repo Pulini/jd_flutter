@@ -17,7 +17,7 @@ extension ContextExt on BuildContext {
   //是否是中屏幕
   bool isMediumScreen() =>
       MediaQuery.of(this).size.width > 425 &&
-          MediaQuery.of(this).size.width < 1200;
+      MediaQuery.of(this).size.width < 1200;
 
   //是否是小屏幕
   bool isSmallScreen() => MediaQuery.of(this).size.width < 768;
@@ -78,8 +78,9 @@ extension Uint8ListExt on Uint8List {
 extension FileExt on File {
   //图片转 base64
   String toBase64() => base64Encode(readAsBytesSync());
+
   Future<String> size() async {
-    var bytes= await length();
+    var bytes = await length();
     if (bytes < 1024) {
       return '$bytes B';
     } else if (bytes < 1024 * 1024) {
@@ -145,8 +146,8 @@ extension StringExt on String? {
 
   bool isPallet() =>
       (this ?? '').startsWith('GE') &&
-          (this ?? '').length >= 10 &&
-          (this ?? '').length <= 13;
+      (this ?? '').length >= 10 &&
+      (this ?? '').length <= 13;
 
   //允许英文单词在换行时截断
   String allowWordTruncation() => Characters(this ?? '').join('\u{200B}');
@@ -247,6 +248,7 @@ extension StringExt on String? {
     return Colors.transparent;
   }
 }
+
 extension RequestOptionsExt on RequestOptions {
   print() {
     Map<String, dynamic> map = <String, dynamic>{};

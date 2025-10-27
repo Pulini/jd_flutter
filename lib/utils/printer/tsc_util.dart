@@ -1133,6 +1133,41 @@ List<Uint8List> testLabel() => [
       _tscPrint(),
     ];
 
+Future<List<Uint8List>> htmlResizeToLabel(Map<String, dynamic> image) async =>
+    await compute(_htmlResizeToLabel, image);
+
+Future<List<Uint8List>> _htmlResizeToLabel(Map<String, dynamic> image) async {
+  double dpi = image['dpi'] ?? 1.0;
+  int speed = image['speed'] ?? 4;
+  int density = image['density'] ?? 15;
+  bool isDynamic = image['isDynamic'] ?? false;
+  double width = (image['width'] * 25.4) / dpi;
+  double height =  (image['height'] * 25.4) / dpi;
+  debugPrint('dpi=$dpi speed=$speed density=$density isDynamic=$isDynamic width=$width height=$height');
+  debugPrint('--------image: ${(image['image'] as Uint8List).lengthInBytes} ');
+  var reImage = img.copyResize(
+    img.decodeImage(image['image'])!,
+    width: (width * 8).toInt(),
+    height:(height * 8).toInt(),
+    backgroundColor: img.ColorRgb8(0, 0, 0),
+  );
+  var imageUint8List = Uint8List.fromList(img.encodePng(reImage));
+  debugPrint('--------imageUint8List: ${imageUint8List.lengthInBytes}');
+  return [
+    _tscClearBuffer(),
+    _tscSetup(
+      width.toInt(),
+      height.toInt(),
+      density: density,
+      speed: speed,
+      sensorDistance: isDynamic ? 0 : 2,
+    ),
+    await _tscBitmap(1, 1, imageUint8List),
+    _tscCutter(),
+    _tscPrint(),
+  ];
+}
+
 Future<List<Uint8List>> imageResizeToLabel(Map<String, dynamic> image) async =>
     await compute(_imageResizeToLabel, image);
 
