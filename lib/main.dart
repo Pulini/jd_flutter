@@ -10,10 +10,10 @@ import 'utils/web_api.dart';
 main() async {
   // 确保Flutter框架正确初始化
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   // 启用性能叠加层
   debugProfileBuildsEnabled = true;
-  
+
   runApp(const MyApp());
 }
 
@@ -46,7 +46,9 @@ class _MyAppState extends State<MyApp> {
       localeListResolutionCallback: (locales, supportedLocales) {
         language = locales?.first.languageCode == localeChinese.languageCode
             ? 'zh'
-            : 'en';
+            : locales?.first.languageCode == localeEnglish.languageCode
+                ? 'en'
+                : 'id';
         return null;
       },
       localizationsDelegates: const [
