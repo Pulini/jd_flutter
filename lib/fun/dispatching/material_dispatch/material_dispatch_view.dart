@@ -117,12 +117,11 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
                   style: itemTitleStyle,
                 ),
               ),
-              // Expanded(
-              //   child: Text(
-              //     '厂区：${data.sapDecideArea}',
-              //     style: itemTitleStyle,
-              //   ),
-              // ),
+              Expanded(
+                child: Text( data.billStyle=='0'? '正单':'补单',
+                  style: itemTitleStyle,
+                ),
+              ),
             ],
           ),
         ),
