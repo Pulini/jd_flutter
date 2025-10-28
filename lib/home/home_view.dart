@@ -208,8 +208,8 @@ class HomeSubItem extends StatelessWidget {
           ? upData()
           : item.route.isEmpty
               ? showSnackBar(
-                  title: '无路由',
-                  message: '该功能暂未开放',
+                  title: 'home_no_route'.tr,
+                  message: 'home_this_function_is_not_open'.tr,
                   isWarning: true,
                 )
               : item.toFunction(checkUpData: checkUpData),

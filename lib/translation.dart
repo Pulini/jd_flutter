@@ -797,7 +797,8 @@ class Translation extends Translations {
           'material_dispatch_dialog_label_progress': '打标工序',
           'material_dispatch_dialog_label_progress_must': '打标工序(毛净重，长宽高，必填！)',
           'material_dispatch_dialog_color_batch': '色系：',
-          'material_dispatch_dialog_need_report_qty': 'Jumlah yang harus dilaporkan：',
+          'material_dispatch_dialog_need_report_qty':
+              'Jumlah yang harus dilaporkan：',
           'material_dispatch_dialog_report_qty': '本次汇报数量',
           'material_dispatch_dialog_long': '长(cm)',
           'material_dispatch_dialog_wide': '宽(cm)',
@@ -3266,15 +3267,17 @@ class Translation extends Translations {
           'label_reprint_qty': '数量：',
           'label_reprint_select_all': '全选',
           'label_reprint_getting_label_info': '正在获取标签信息...',
-          'print_printing':'正在打印...',
-          'print_printing_success':'打印成功!',
-              'print_printing_fail':'打印失败!',
-              'add_all_factory':'全部工厂',
-              'Printer_settings':'打印机设置',
-              'forming_code_collection_closed':'已关闭',
-              'forming_code_collection_no_closed':'未关闭',
-              'forming_code_collection_switch_order':'切换订单',
-              'forming_code_collection_switch_order_tip':'请选择要切换的订单',
+          'print_printing': '正在打印...',
+          'print_printing_success': '打印成功!',
+          'print_printing_fail': '打印失败!',
+          'add_all_factory': '全部工厂',
+          'Printer_settings': '打印机设置',
+          'forming_code_collection_closed': '已关闭',
+          'forming_code_collection_no_closed': '未关闭',
+          'forming_code_collection_switch_order': '切换订单',
+          'forming_code_collection_switch_order_tip': '请选择要切换的订单',
+          'home_no_route': '无路由',
+          'home_this_function_is_not_open': '该功能暂未开放',
 
         },
         localeEnglish.toString(): {
@@ -7202,16 +7205,18 @@ class Translation extends Translations {
           'label_reprint_qty': 'Qty：',
           'label_reprint_select_all': 'Select all',
           'label_reprint_getting_label_info': 'Getting label info...',
-          'print_printing':'Printing in progress...',
-              'print_printing_success':'Print successful!',
-          'print_printing_fail':'Print failed!',
-              'add_all_factory':'All factories',
-          'Printer_settings':'Printer settings',
-          'forming_code_collection_closed':'Closed',
-          'forming_code_collection_no_closed':'not closed',
-          'forming_code_collection_switch_order':'Switch orders',
-          'forming_code_collection_switch_order_tip':'Please select the order to switch',
-
+          'print_printing': 'Printing in progress...',
+          'print_printing_success': 'Print successful!',
+          'print_printing_fail': 'Print failed!',
+          'add_all_factory': 'All factories',
+          'Printer_settings': 'Printer settings',
+          'forming_code_collection_closed': 'Closed',
+          'forming_code_collection_no_closed': 'not closed',
+          'forming_code_collection_switch_order': 'Switch orders',
+          'forming_code_collection_switch_order_tip':
+              'Please select the order to switch',
+          'home_no_route': 'No route',
+          'home_this_function_is_not_open': 'This feature is currently not open',
         },
         localeIndonesian.toString(): {
           'app_name': 'Gold Emperor',
@@ -7220,27 +7225,27 @@ class Translation extends Translations {
           'feishu_authorize_file_list': 'File list',
           'feishu_authorize_wiki_searching': 'Searching for knowledge base...',
           'feishu_authorize_not_find_file':
-          'Unable to find the corresponding file',
+              'Unable to find the corresponding file',
           'feishu_authorize_wiki_search_failed':
-          'wiki Knowledge base search failed：%s',
+              'wiki Knowledge base search failed：%s',
           'feishu_authorize_wiki_visit_failed':
-          'wiki Knowledge base access failed：%s',
+              'wiki Knowledge base access failed：%s',
           'feishu_authorize_cloud_doc_searching':
-          'Searching for cloud documents...',
+              'Searching for cloud documents...',
           'feishu_authorize_cloud_doc_search_failed':
-          'Cloud document search failed：%s',
+              'Cloud document search failed：%s',
           'feishu_authorize_cloud_doc_visit_failed':
-          'Cloud document access failed：%s',
+              'Cloud document access failed：%s',
           'feishu_authorize_getting_file_detail': 'Getting file details...',
           'feishu_authorize_cloud_doc_get_metafile_failed':
-          'Cloud document Failed to retrieve the meta file：%s',
+              'Cloud document Failed to retrieve the meta file：%s',
           'feishu_authorize_getting_user_token': 'Obtaining user token...',
           'feishu_authorize_authorize_success': 'Authorization successful',
           'feishu_authorize_authorize_failed_code':
-          'Failed to obtain token: Feishu error code：%s',
+              'Failed to obtain token: Feishu error code：%s',
           'feishu_authorize_authorize_failed': 'Failed to obtain token：',
           'feishu_authorize_get_authorize_code_failed':
-          'Failed to obtain authorization code !',
+              'Failed to obtain authorization code !',
           'signature_tips': 'Please sign in the blank space',
           'key_board_done': 'Done',
           'json_format_error': 'data format error',
@@ -7261,61 +7266,62 @@ class Translation extends Translations {
           'take_photo_sheet_take_photo': 'Take photo',
           'take_photo_sheet_select_photo': 'Select from album',
           'language': 'Language:',
-          'login_hint_phone': 'Phone number',
-          'login_hint_machine': 'Machine number',
-          'login_hint_work_number': 'Work number',
-          'login_hint_password': 'Password',
-          'login_hint_verify_code': 'verify code',
-          'login_tips_phone': 'Please enter your phone number',
-          'login_tips_machine': 'Please enter the machine account',
-          'login_tips_work_number': 'Please enter the work number',
-          'login_tips_password': 'Please enter your password',
-          'login_tips_verify_code': 'Please enter your verify code',
-          'get_verify_code': 'Get verify',
-          'login': 'Login',
+          'login_hint_phone': 'Nomor ponsel',
+          'login_hint_machine': 'Nomor stasiun',
+          'login_hint_work_number': 'Nomor pekerja',
+          'login_hint_password': 'Kata sandi',
+          'login_hint_verify_code': 'Kode verifikasi',
+          'login_tips_phone': 'Silakan masukkan nomor ponsel',
+          'login_tips_machine': 'Silakan masukkan nomor akun',
+          'login_tips_work_number': 'Silakan masukkan nomor pekerjaan',
+          'login_tips_password': 'Silakan masukkan kata sandi',
+          'login_tips_verify_code': 'Silakan masukkan kode verifikasi',
+          'get_verify_code': 'Dapatkan kode verifikasi',
+          'login': 'Masuk',
           'logging': 'Logging...',
-          'login_failed': 'Login failed',
+          'login_failed': 'Login Gagal',
           're_login': 'ReLogin',
           'query_default_error': 'Pencarian Gagal',
-          'phone_login_getting_verify_code': 'Sending verify code...',
-          'phone_login_get_verify_code_success':
-          'Verify code sent successfully',
-          'phone_login_get_verify_code_failed': 'Verify code sending failed',
+          'phone_login_getting_verify_code': 'Mengirim kode verifikasi...',
+          'phone_login_get_verify_code_success': 'Verifikasi dikirim berhasil',
+          'phone_login_get_verify_code_failed':
+              'Pengiriman kode verifikasi gagal',
           'face_login_no_camera_permission': 'No camera permissions',
           'face_login_failed': 'Failed to start facial recognition',
-          'face_login_getting_photo_path': 'Getting photo information...',
-          'face_login_get_photo_path_failed': 'Get photo information failed',
-          'home_top_search': 'Quick search function',
+          'face_login_getting_photo_path': 'Mendapatkan informasi foto...',
+          'face_login_get_photo_path_failed':
+              'Gagal mendapatkan informasi foto',
+          'home_top_search': 'Cari fitur dengan cepat',
           'home_getting_function_list': 'Getting function list...',
-          'home_button_no_permission': 'No permission',
-          'home_button_has_update': 'New version',
+          'home_button_no_permission': 'Tidak diizinkan',
+          'home_button_has_update': 'Versi Baru',
           'home_bottom_bar_produce': 'Produce',
           'home_bottom_bar_warehouse': 'Warehouse',
           'home_bottom_bar_manage': 'Manage',
-          'home_user_setting_logout': 'Logout',
-          'home_user_setting_password_change': 'Password change',
-          'home_user_setting_check_version': 'Check version',
+          'home_user_setting_logout': 'Daftar keluar',
+          'home_user_setting_password_change': 'Ubah kata sandi',
+          'home_user_setting_check_version': 'Periksa Pembaruan',
           'is_already_latest_version':
-          'The current version is already the latest version',
-          'home_user_setting_factory': 'Factory:',
+              'Versi saat ini adalah versi terbaru.',
+          'home_user_setting_factory': 'Pabrik:',
           'home_user_setting_department': 'Department:',
-          'home_user_setting_position': 'Position:',
-          'home_user_setting_avatar_photo_sheet_title': 'Change avatar',
+          'home_user_setting_position': 'Pekerjaan:',
+          'home_user_setting_avatar_photo_sheet_title': 'Tidak diizinkan',
           'cropper_title': 'Crop Picture',
           'cropper_cancel': 'Cancel',
           'cropper_confirm': 'Done',
-          'home_user_setting_avatar_photo_submitting': 'Photo submitting...',
-          'change_password_dialog_title': 'Modify password',
+          'home_user_setting_avatar_photo_submitting': 'Mengirim foto...',
+          'change_password_dialog_title': 'Ubah kata sandi',
           'change_password_dialog_old_password':
-          'Please enter the original password',
+              'Silakan masukkan kata sandi asli',
           'change_password_dialog_old_password_error':
-          'Original password error',
-          'change_password_dialog_new_password': 'Please enter a new password',
-          'change_password_dialog_submit': 'Modify',
+              'Kata sandi asli salah',
+          'change_password_dialog_new_password': 'Silakan masukkan kata sandi baru',
+          'change_password_dialog_submit': 'Modifikasi',
           'change_password_dialog_submitting':
-          'Password modification in progress...',
-          'getting_group': 'Obtaining department group information...',
-          'modifying_group': 'Modifying group...',
+              'Kata sandi sedang diubah...',
+          'getting_group': 'Mendapatkan informasi kelompok departemen...',
+          'modifying_group': 'Mengubah informasi kelompok...',
           'checking_version': 'Checking version...',
           'update_dialog_title': 'New version',
           'update_dialog_confirm': 'Update Now',
@@ -7360,24 +7366,24 @@ class Translation extends Translations {
           'page_daily_report_table_title_hint3': 'Working procedure',
           'page_daily_report_table_title_hint4': 'Quantity',
           'page_production_day_report_querying':
-          'Querying real-time production summary report...',
+              'Querying real-time production summary report...',
           'page_production_day_report_table_title_hint1': 'Department name',
           'page_production_day_report_table_title_hint2': 'Head',
           'page_production_day_report_table_title_hint3':
-          'Today target production',
+              'Today target production',
           'page_production_day_report_table_title_hint4': 'Today production',
           'page_production_day_report_table_title_hint5':
-          'Today Completion rate',
+              'Today Completion rate',
           'page_production_day_report_table_title_hint6':
-          'Today Incomplete rate',
+              'Today Incomplete rate',
           'page_production_day_report_table_title_hint7':
-          'Monthly target production',
+              'Monthly target production',
           'page_production_day_report_table_title_hint8':
-          'Monthly cumulative output',
+              'Monthly cumulative output',
           'page_production_day_report_table_title_hint9':
-          'Monthly cumulative achievement rate',
+              'Monthly cumulative achievement rate',
           'page_production_day_report_table_title_hint10':
-          'Monthly cumulative incomplete rate',
+              'Monthly cumulative incomplete rate',
           'page_production_day_report_table_title_hint11': 'Expected workers',
           'page_production_day_report_table_title_hint12': 'Actual workers',
           'page_production_day_report_table_title_hint13': 'Failure analysis',
@@ -7386,32 +7392,32 @@ class Translation extends Translations {
           'page_production_day_report_reason_dialog_hint3': 'Worker Name',
           'page_production_day_report_reason_dialog_hint4': 'Position',
           'page_production_day_report_reason_dialog_error':
-          'Daily data cannot be modified after 9:00 am the next day !',
+              'Daily data cannot be modified after 9:00 am the next day !',
           'page_production_day_report_reason_dialog_save': 'Saving...',
           'page_production_day_report_reason_dialog_save_error': 'Save failed',
           'page_production_summary_report_querying':
-          'Querying real-time production summary report...',
+              'Querying real-time production summary report...',
           'page_production_summary_report_table_title_hint1': 'Workshop',
           'page_production_summary_report_table_title_hint2': 'Group',
           'page_production_summary_report_table_title_hint3': 'Cadres',
           'page_production_summary_report_table_title_hint4':
-          'Today target production',
+              'Today target production',
           'page_production_summary_report_table_title_hint5':
-          'Today production',
+              'Today production',
           'page_production_summary_report_table_title_hint6': 'Completion rate',
           'page_production_summary_report_table_title_hint7':
-          'Monthly target production',
+              'Monthly target production',
           'page_production_summary_report_table_title_hint8':
-          'Monthly cumulative output',
+              'Monthly cumulative output',
           'page_production_summary_report_table_title_hint9':
-          'Monthly cumulative rate',
+              'Monthly cumulative rate',
           'page_production_summary_report_table_title_hint10': 'Actual workers',
           'page_molding_pack_area_report_query_instruction':
-          'Please enter the instruction',
+              'Please enter the instruction',
           'page_molding_pack_area_report_query_order_number':
-          'Please enter the purchase order',
+              'Please enter the purchase order',
           'page_molding_pack_area_report_query_type_body':
-          'Please enter the type',
+              'Please enter the type',
           'page_molding_pack_area_report_table_hint1': 'Line',
           'page_molding_pack_area_report_table_hint2': 'Sales No',
           'page_molding_pack_area_report_table_hint3': 'Customer order',
@@ -7423,32 +7429,32 @@ class Translation extends Translations {
           'page_molding_pack_area_report_table_hint9': 'Entered pack area',
           'page_molding_pack_area_report_table_hint10': 'Not enter pack area',
           'page_molding_pack_area_report_table_hint11':
-          'Configurable boxes(Pair)',
+              'Configurable boxes(Pair)',
           'page_molding_pack_area_report_table_hint12':
-          'Configurable boxes(Piece)',
+              'Configurable boxes(Piece)',
           'page_molding_pack_area_report_table_hint13': 'Biased size',
           'page_molding_pack_area_report_table_hint14': 'SAP Posted qty(Pair)',
           'page_molding_pack_area_report_table_hint15': 'SAP Posted qty(Piece)',
           'page_molding_pack_area_report_table_hint16':
-          'SAP UnPosted qty(Pair)',
+              'SAP UnPosted qty(Pair)',
           'page_molding_pack_area_report_table_hint17':
-          'SAP UnPosted qty(Piece)',
+              'SAP UnPosted qty(Piece)',
           'page_molding_pack_area_report_detail_table_hint1': 'Customer order',
           'page_molding_pack_area_report_detail_table_hint2': 'Line No',
           'page_molding_pack_area_report_detail_table_hint3': 'Size',
           'page_molding_pack_area_report_detail_table_hint4': 'Order qty(Pair)',
           'page_molding_pack_area_report_detail_table_hint5':
-          'Order qty(Piece)',
+              'Order qty(Piece)',
           'page_molding_pack_area_report_detail_table_hint6':
-          'Configurable boxes(Pair)',
+              'Configurable boxes(Pair)',
           'page_molding_pack_area_report_detail_table_hint7':
-          'Configurable boxes(Piece)',
+              'Configurable boxes(Piece)',
           'page_molding_pack_area_report_detail_table_hint8': 'Biased size',
           'page_molding_pack_area_report_query': 'Querying regional report...',
           'page_molding_pack_area_report_query_detail':
-          'Getting report details...',
+              'Getting report details...',
           'molding_scan_bulletin_report_refresh_interval':
-          'Refresh interval (seconds)',
+              'Refresh interval (seconds)',
           'molding_scan_bulletin_report_top_up': 'Top up',
           'molding_scan_bulletin_report_never': 'Never',
           'molding_scan_bulletin_report_table_hint1': 'Size',
@@ -7474,14 +7480,14 @@ class Translation extends Translations {
           'visit_already_left': 'Already left',
           'visit_getting_visitor_list': 'Getting visitor list...',
           'visit_latest_visit_history':
-          'Searching for the latest visit history...',
+              'Searching for the latest visit history...',
           'visit_obtaining_visitor_id': 'Obtaining visitor ID...',
           'visit_obtaining_visit_details': 'Obtaining visit details...',
           'visit_submitting_departure_information':
-          'Submitting departure information...',
+              'Submitting departure information...',
           'visit_submitting_new_records': 'Submitting new records...',
           'visit_obtaining_employee_information':
-          'Obtaining employee information...',
+              'Obtaining employee information...',
           'visit_getting_activity_area': 'Getting activity area...',
           'visit_no_car': 'no car',
           'visit_sedan': 'sedan',
@@ -7491,7 +7497,7 @@ class Translation extends Translations {
           'visit_gate_two': 'Gate 2',
           'visit_newly_added': 'newly added',
           'production_dispatch_instruction_hint':
-          'Tracking number , instruction , type body',
+              'Tracking number , instruction , type body',
           'production_dispatch_query_progress': 'Query progress',
           'production_dispatch_query_show_outsourcing': 'Outsourcing',
           'production_dispatch_query_show_close': 'Close',
@@ -7514,27 +7520,27 @@ class Translation extends Translations {
           'property_lack_data_name': 'Please enter a name',
           'property_lack_data_number': 'Please enter the number',
           'property_lack_data_model':
-          'Please enter the specifications and models',
+              'Please enter the specifications and models',
           'property_lack_data_price': 'Please enter the unit price',
           'property_lack_data_original': 'Please enter the original value',
           'property_lack_data_manufacturer': 'Please enter the manufacturer',
           'property_lack_data_warranty_period':
-          'Please enter the warranty period(month)',
+              'Please enter the warranty period(month)',
           'property_lack_data_expected_usage_duration':
-          'Please enter the expected usage duration(month)',
+              'Please enter the expected usage duration(month)',
           'property_lack_data_inspector_number':
-          'Please enter the inspection personnel number',
+              'Please enter the inspection personnel number',
           'property_lack_data_keeper_number':
-          'Please enter the custodian ID number',
+              'Please enter the custodian ID number',
           'property_lack_data_supervisor_number':
-          'Please enter the supervisor ID number',
+              'Please enter the supervisor ID number',
           'property_lack_data_registration_date':
-          'Please select the registration date',
+              'Please select the registration date',
           'property_lack_data_storage_location':
-          'Please enter the storage location',
+              'Please enter the storage location',
           'property_lack_data_on_site_photos': 'Please take on-site photos',
           'property_lack_data_nameplate_photo':
-          'Please take a photo of the nameplate',
+              'Please take a photo of the nameplate',
           'property_select_time': 'Please select a tim',
           'property_tab_type_1': 'Audited',
           'property_tab_type_2': 'UnAudited',
@@ -7553,17 +7559,17 @@ class Translation extends Translations {
           'property_item_hint4': 'Printed:',
           'property_bt_print': 'Print Label',
           'property_print_no_selected':
-          'Please check the property to be printed !',
+              'Please check the property to be printed !',
           'property_detail_title': 'Property registration',
           'property_detail_bt_close': 'Stock in confirmation',
           'property_detail_hint_close':
-          'Are you sure to close the case and enter it into the database ?',
+              'Are you sure to close the case and enter it into the database ?',
           'property_detail_closing': 'Submitting the closing...',
           'property_detail_bt_no_acceptance': 'No acceptance',
           'property_detail_hint_no_acceptance':
-          'Are you sure not to accept the property on this order ?',
+              'Are you sure not to accept the property on this order ?',
           'property_detail_skipping_acceptance':
-          'Skipping the acceptance process...',
+              'Skipping the acceptance process...',
           'property_detail_bt_submit': 'Initiate review',
           'property_detail_hint_submit': 'Are you sure to initiate the audit ?',
           'property_detail_submitting': 'Submitting audit data...',
@@ -7616,10 +7622,10 @@ class Translation extends Translations {
           'production_materials_report_query_hint3': 'instructions',
           'production_materials_report_query_hint4': 'Production order number',
           'production_materials_report_query_hint5':
-          'Size Production Order Number',
+              'Size Production Order Number',
           'production_materials_report_query_hint6': 'Packing completed',
           'production_materials_report_query_error':
-          'Please enter the query criteria',
+              'Please enter the query criteria',
           'production_materials_report_querying': 'Querying material list...',
           'production_materials_report_table_hint1': 'Sales order',
           'production_materials_report_table_hint2': 'Production order',
@@ -7650,9 +7656,9 @@ class Translation extends Translations {
           'production_materials_report_table_hint27': 'Unclaimed qty',
           'production_materials_report_table_hint28': 'Supplement qty',
           'view_instruction_details_query_hint':
-          'Please enter the instruction number',
+              'Please enter the instruction number',
           'view_instruction_details_querying':
-          'Querying instruction details...',
+              'Querying instruction details...',
           'view_instruction_details_reading': 'Loading in progress...',
           'view_process_specification_query_hint': 'Please enter the shape',
           'view_process_specification_querying': 'Querying process manual...',
@@ -7669,7 +7675,7 @@ class Translation extends Translations {
           'worker_production_report_item_title_order_no': 'Order no',
           'worker_production_report_item_title_date': 'Date',
           'worker_production_report_item_title_report_department_name':
-          'Report department name',
+              'Report department name',
           'worker_production_report_item_title_report_group': 'Report group',
           'worker_production_report_item_title_dispatch_no': 'Dispatch no',
           'worker_production_report_item_title_process': 'Process',
@@ -7680,17 +7686,17 @@ class Translation extends Translations {
           'worker_production_report_item_title_price': 'Price',
           'worker_production_report_item_title_amount': 'Amount',
           'worker_production_report_item_title_small_order_subsidy':
-          'Small order subsidy',
+              'Small order subsidy',
           'worker_production_report_item_title_amount_total': 'Amount total',
           'worker_production_report_item_title_small_order_subsidy_rate':
-          'Small order subsidy rate',
+              'Small order subsidy rate',
           'worker_production_report_item_title_worker_number': 'Worker number',
           'worker_production_report_item_title_worker_name': 'Worker name',
           'quality_restriction_title': 'quality restriction',
           'visit_details_card_picture': 'ID',
           'visit_details_face_picture': 'face picture',
           'visit_details_license_plate_number':
-          'Please enter the license plate number',
+              'Please enter the license plate number',
           'visit_details_wheel_area_inspection': 'Wheel area inspection:',
           'visit_details_external_inspection': 'External inspection:',
           'visit_details_Driver_cab_inspection': 'Cabin inspection:',
@@ -7705,7 +7711,7 @@ class Translation extends Translations {
           'visit_details_number_of_visitors': 'Number of visitors:',
           'visit_details_factory_area': 'Visited factory area:',
           'visit_details_name_of_interviewee':
-          'Please enter the name of the interviewee:',
+              'Please enter the name of the interviewee:',
           'visit_details_to_search': 'Search personnel',
           'visit_details_interviewed_department': 'Visited department:',
           'visit_details_zone_of_action': 'Area',
@@ -7758,99 +7764,99 @@ class Translation extends Translations {
           'machine_dispatch_restore_last': 'Restore last',
           'machine_dispatch_modify_order': 'Modify order',
           'machine_dispatch_modify_error_tips':
-          'Salary report has been submitted, please delete the work report first!',
+              'Salary report has been submitted, please delete the work report first!',
           'machine_dispatch_modify_tips':
-          'Are you sure you want to modify the mold and box capacity of the current work order?',
+              'Are you sure you want to modify the mold and box capacity of the current work order?',
           'machine_dispatch_label_history': 'Label history',
           'machine_dispatch_generate_and_print': 'Print chinese label',
           'machine_dispatch_generate_and_print_english': 'Print english label',
           'machine_dispatch_process_manual': 'Process manual',
           'machine_dispatch_production_report': 'Production report',
           'machine_dispatch_cancel_number_confirmation':
-          'cancel_number_confirmation',
+              'cancel_number_confirmation',
           'machine_dispatch_number_confirmation': 'number_confirmation',
           'machine_dispatch_handover_shifts': 'Handover shifts',
           'machine_dispatch_tips':
-          'Note: 1. To clean or restore the last digits of work, you need to first check the size column to be modified. 2. Click on the mold or box size corresponding to the size to modify the quantity, and then click on the \'Modify Work Order\' to submit the modification.',
+              'Note: 1. To clean or restore the last digits of work, you need to first check the size column to be modified. 2. Click on the mold or box size corresponding to the size to modify the quantity, and then click on the \'Modify Work Order\' to submit the modification.',
           'machine_dispatch_surplus_material_info': 'Surplus material info',
           'machine_dispatch_label_list': 'Label list',
           'machine_dispatch_change_order': 'Change order',
           'machine_dispatch_refresh': 'Refresh',
           'machine_dispatch_getting_process_plan_list_tips':
-          'Obtaining the list of process plans...',
+              'Obtaining the list of process plans...',
           'machine_dispatch_getting_process_plan_detail_tips':
-          'Obtaining process plan details...',
+              'Obtaining process plan details...',
           'machine_dispatch_getting_label_list_tips': 'Getting tag list...',
           'machine_dispatch_cleaning_last_tips': 'Clearing working digits...',
           'machine_dispatch_restoring_last_tips': 'Restoring working digits...',
           'machine_dispatch_modifying_dispatch_order_tips':
-          'Modifying dispatch order data...',
+              'Modifying dispatch order data...',
           'machine_dispatch_generating_production_report_tips':
-          'Generating production report table...',
+              'Generating production report table...',
           'machine_dispatch_order_not_scanned_tips':
-          'This order has not been scanned！',
+              'This order has not been scanned！',
           'machine_dispatch_not_scanned_all_tips':
-          'The whole box containing the following serial numbers has not been scanned:%s\nThe tail label containing the following sizes has not been scanned:%s',
+              'The whole box containing the following serial numbers has not been scanned:%s\nThe tail label containing the following sizes has not been scanned:%s',
           'machine_dispatch_not_scanned_box_tips':
-          'The whole box containing the following serial numbers has not been scanned:%s',
+              'The whole box containing the following serial numbers has not been scanned:%s',
           'machine_dispatch_not_scanned_last_tips':
-          'The tail label containing the following sizes has not been scanned:%s',
+              'The tail label containing the following sizes has not been scanned:%s',
           'machine_dispatch_input_size_report_qty_tips':
-          'Please fill in the reported work quantity for size <%s>',
+              'Please fill in the reported work quantity for size <%s>',
           'machine_dispatch_input_report_qty_tips':
-          'Please fill in the quantity of work reported',
+              'Please fill in the quantity of work reported',
           'machine_dispatch_worker_number_report_again_tips':
-          'Do you want to report the work number again ？',
+              'Do you want to report the work number again ？',
           'machine_dispatch_precess_not_allocation_tips':
-          'Precess <%s>%s not allocation！',
+              'Precess <%s>%s not allocation！',
           'machine_dispatch_worker_not_signature_tips':
-          'Worker <%s>%s not signature',
+              'Worker <%s>%s not signature',
           'machine_dispatch_process_unsigned_tips': 'Precess <%s>%s\n%s',
           'machine_dispatch_process_no_allocation_qty_tips':
-          'Precess <%s>%s no allocation qty！',
+              'Precess <%s>%s no allocation qty！',
           'machine_dispatch_process_still_surplus_qty_tips':
-          'Precess <%s>%s still surplus qty！',
+              'Precess <%s>%s still surplus qty！',
           'machine_dispatch_report_tips':
-          'Are you sure you want a salary report？',
+              'Are you sure you want a salary report？',
           'machine_dispatch_report_size': 'Size',
           'machine_dispatch_report_report_qty': 'Report qty',
           'machine_dispatch_report_current_shift_under_qty':
-          'Current shift under qty',
+              'Current shift under qty',
           'machine_dispatch_report_total': 'Total',
           'machine_dispatch_report_process': 'Precess：',
           'machine_dispatch_report_dispatched_1': 'Assigned < ',
           'machine_dispatch_report_dispatched_2':
-          ' > worker，Remaining distributable output ：',
+              ' > worker，Remaining distributable output ：',
           'machine_dispatch_report_no_surplus_allocation_qty_tips':
-          'No remaining distributable output ！',
+              'No remaining distributable output ！',
           'machine_dispatch_report_name': 'Name：',
           'machine_dispatch_report_worker': 'Worker：',
           'machine_dispatch_report_production': 'Production：',
           'machine_dispatch_report_delete_signed_tips':
-          'Worker < %s > signed！！！\nAre you sure you want to delete this worker ?',
+              'Worker < %s > signed！！！\nAre you sure you want to delete this worker ?',
           'machine_dispatch_report_report': 'Report',
           'machine_dispatch_dialog_label_specifications_empty':
-          'Label specifications is empty !',
+              'Label specifications is empty !',
           'machine_dispatch_dialog_select_dispatch_order':
-          'Select dispatch order',
+              'Select dispatch order',
           'machine_dispatch_dialog_weight_input_tips':
-          'Actual weight of a pair (grams)',
+              'Actual weight of a pair (grams)',
           'machine_dispatch_dialog_weight': 'Actual weight of a pair (grams)：',
           'machine_dispatch_dialog_leader_number': 'Leader number',
           'machine_dispatch_dialog_carton_size': 'Carton Size',
           'machine_dispatch_dialog_print_last': 'Print last',
           'machine_dispatch_dialog_weight_error_tips':
-          'The actual weight of a pair must be greater than 0 !',
+              'The actual weight of a pair must be greater than 0 !',
           'machine_dispatch_dialog_verify_leader': 'Verify leader',
           'machine_dispatch_dialog_surplus_material_info':
-          'Surplus material info',
+              'Surplus material info',
           'machine_dispatch_dialog_surplus_material_print_tips':
-          'Are you sure you want to print header< %s >?',
+              'Are you sure you want to print header< %s >?',
           'machine_dispatch_dialog_label_list': 'Label list',
           'machine_dispatch_dialog_size_not_scan_error_tips':
-          'Label size has not been scanned:',
+              'Label size has not been scanned:',
           'machine_dispatch_dialog_number_not_scan_error_tips':
-          'Label serial numbers has not been scanned:',
+              'Label serial numbers has not been scanned:',
           'machine_dispatch_dialog_scanned': 'Scanned',
           'machine_dispatch_dialog_not_scanned': 'Not scanned',
           'machine_dispatch_dialog_material_name': 'Material name',
@@ -7862,41 +7868,41 @@ class Translation extends Translations {
           'machine_dispatch_dialog_tail_label': 'Tail label',
           'machine_dispatch_dialog_number': 'Number',
           'machine_dispatch_dialog_label_print_tips':
-          'Are you sure you want to print the label?',
+              'Are you sure you want to print the label?',
           'machine_dispatch_dialog_delete_label_error_tips':
-          'The production has been reported to MES, and the label cannot be deleted!',
+              'The production has been reported to MES, and the label cannot be deleted!',
           'machine_dispatch_dialog_delete_label_tips':
-          'Are you sure you want to delete the tag?',
+              'Are you sure you want to delete the tag?',
           'machine_dispatch_dialog_deleting_labels': 'Deleting labels...',
           'machine_dispatch_dialog_update_surplus_material_label_state':
-          'Updating surplus material information status...',
+              'Updating surplus material information status...',
           'machine_dispatch_dialog_leader_id_verify': 'Leader id verify',
           'machine_dispatch_dialog_verify_code': 'Verify code',
           'machine_dispatch_dialog_enter_number':
-          'Please enter the worker number',
+              'Please enter the worker number',
           'machine_dispatch_dialog_sending_verify_code':
-          'Sending verification code...',
+              'Sending verification code...',
           'machine_dispatch_dialog_enter_verify_code':
-          'Please enter the verification code',
+              'Please enter the verification code',
           'machine_dispatch_dialog_verifying_leader': 'Verifying leader...',
           'machine_dispatch_dialog_worker_photos': 'Worker photos',
           'machine_dispatch_dialog_sign_tips_below':
-          'Please sign in the blank space below',
+              'Please sign in the blank space below',
           'machine_dispatch_dialog_sign_tips': 'Please sign in the blank space',
           'machine_dispatch_dialog_add_worker': 'Add worker',
           'machine_dispatch_dialog_enter_allocation_number_tips':
-          'Please enter the allocation number',
+              'Please enter the allocation number',
           'machine_dispatch_dialog_allocation_tips':
-          'Remaining %s available for allocation',
+              'Remaining %s available for allocation',
           'machine_dispatch_dialog_enter_worker_number_tips':
-          'Please enter the correct worker ID number',
+              'Please enter the correct worker ID number',
           'machine_dispatch_dialog_worker_has_been_assigned':
-          'The worker has been assigned',
+              'The worker has been assigned',
           'machine_dispatch_dialog_enter_quantity_tips':
-          'Please fill in the allocation quantity correctly',
+              'Please fill in the allocation quantity correctly',
           'machine_dispatch_dialog_create_and_print': 'Create and print',
           'machine_dispatch_dialog_print_tips':
-          'Are you sure you want to print the label?',
+              'Are you sure you want to print the label?',
           'machine_dispatch_dialog_print_last_label': 'Print last label',
           'machine_dispatch_input_number': 'The content is empty！',
           'machine_dispatch_input_molds': 'Please enter the number of molds！',
@@ -7915,43 +7921,45 @@ class Translation extends Translations {
           'material_dispatch_ins_number': 'Nomor perintah',
           'material_dispatch_quantity': 'Jumlah',
           'material_dispatch_completed_qty': 'Jumlah selesai',
-          'material_dispatch_progress_dispatch_order':
-          'Surat tugas proses',
+          'material_dispatch_progress_dispatch_order': 'Surat tugas proses',
           'material_dispatch_printed_qty': 'Jumlah yang dicetak',
           'material_dispatch_not_printed_qty': 'Jumlah yang tidak dicetak',
           'material_dispatch_color_batch': 'Batch warna',
-          'material_dispatch_completion_amount': 'Jumlah tugas yang selesai (%s)',
+          'material_dispatch_completion_amount':
+              'Jumlah tugas yang selesai (%s)',
           'material_dispatch_label_generation_amount': 'Produksi tag (%s)',
           'material_dispatch_material_list': 'Daftar bahan',
           'material_dispatch_progress_manual': 'Instruksi proses',
           'material_dispatch_label_list': 'Daftar Label',
           'material_dispatch_report': 'Pendaftaran pekerjaan',
           'material_dispatch_report_tips':
-          'Kau yakin kau ingin mendaftarkan seluruh kelompok?',
+              'Kau yakin kau ingin mendaftarkan seluruh kelompok?',
           'material_dispatch_cancel_report': 'Pembatalan pendaftaran...',
           'material_dispatch_cancel_all_report_tips':
-          'Kau yakin kau ingin membatalkan seluruh kelompok?',
+              'Kau yakin kau ingin membatalkan seluruh kelompok?',
           'material_dispatch_cancel_report_tips':
-          'Kau yakin ingin membatalkan pendaftaran?',
+              'Kau yakin ingin membatalkan pendaftaran?',
           'material_dispatch__no_qty_tips':
-          'Tidak ada label yang tersisa untuk dibuat!',
+              'Tidak ada label yang tersisa untuk dibuat!',
           'material_dispatch_stock_in_tips':
-          'Apakah Anda yakin ingin mengirimkannya ke perpustakaan?',
+              'Apakah Anda yakin ingin mengirimkannya ke perpustakaan?',
           'material_dispatch_print_label': 'Cetak Label',
           'material_dispatch_stock_in': 'Perdagangan',
           'material_dispatch_select_tips':
-          'Masukkan nomor bahan untuk disaring',
-          'material_dispatch_storage_pallet_select': 'Pilihan Pallet Perdagangan',
+              'Masukkan nomor bahan untuk disaring',
+          'material_dispatch_storage_pallet_select':
+              'Pilihan Pallet Perdagangan',
           'material_dispatch_batch_stock_in': 'Batch stock in',
           'material_dispatch_batch_stock_in_tips':
-          'Apakah Anda yakin ingin mengirimkan batch ke perpustakaan?',
+              'Apakah Anda yakin ingin mengirimkan batch ke perpustakaan?',
           'material_dispatch_map': 'Map',
           'material_dispatch_report_to_sap': 'Daftar ke SAP',
           'material_dispatch_report_to_sap_tips':
-          'Apakah Anda yakin ingin mendaftar ke SAP?',
+              'Apakah Anda yakin ingin mendaftar ke SAP?',
           'material_dispatch_enter_type_body_tips': 'Masukkan nama tipe',
           'material_dispatch_show_last': 'Tampilkan proses akhir',
-          'material_dispatch_show_not_stock_in': 'Tampilkan yang tidak terdapat di perpustakaan',
+          'material_dispatch_show_not_stock_in':
+              'Tampilkan yang tidak terdapat di perpustakaan',
           'material_dispatch_btn_print_all': 'Cetak semua perintah',
           'material_dispatch_check_new_label': 'Apakah label domestik baru',
           'material_dispatch_get_label_detail': 'Mendapatkan rincian label...',
@@ -7965,12 +7973,12 @@ class Translation extends Translations {
           'material_dispatch_report_state_not_report': 'Tidak dilaporkan',
           'material_dispatch_report_state_reported': 'Terdaftar',
           'material_dispatch_report_state_generated_not_report':
-          'Label dibuat tidak dilaporkan',
+              'Label dibuat tidak dilaporkan',
           'material_dispatch_batch_stock_in_error_tips':
-          'Tidak ada data yang perlu disimpan',
+              'Tidak ada data yang perlu disimpan',
           'material_dispatch_dialog_label_progress': 'Proses penandaan',
           'material_dispatch_dialog_label_progress_must':
-          'Proses penandaan (berat bersih, panjang, lebar, tinggi, diperlukan!)',
+              'Proses penandaan (berat bersih, panjang, lebar, tinggi, diperlukan!)',
           'material_dispatch_dialog_color_batch': 'Sistem warna：',
           'material_dispatch_dialog_need_report_qty': 'Need report qty：',
           'material_dispatch_dialog_report_qty': 'Jumlah laporan ini',
@@ -7983,9 +7991,9 @@ class Translation extends Translations {
           'material_dispatch_dialog_read_device': 'Membaca Kode Running',
           'material_dispatch_dialog_clear_device': 'Kosongkan coder',
           'material_dispatch_dialog_enter_report_qty_tips':
-          'Silakan isi jumlah daftar',
+              'Silakan isi jumlah daftar',
           'material_dispatch_dialog_need_qty_tips':
-          'Panjang, lebar, tinggi, berat bersih rambut tidak bisa 0!',
+              'Panjang, lebar, tinggi, berat bersih rambut tidak bisa 0!',
           'material_dispatch_dialog_submit_report': 'Kirim laporan pekerjaan',
           'material_dispatch_dialog_ins_number': 'Nomor perintah',
           'material_dispatch_dialog_label_list': 'Daftar Label',
@@ -7996,56 +8004,57 @@ class Translation extends Translations {
           'material_dispatch_dialog_reprint': 'Cetak ulang',
           'material_dispatch_dialog_delete_label': 'Hapus Label',
           'material_dispatch_dialog_sure_delete_label':
-          'Apakah Anda yakin ingin menghapus label?',
+              'Apakah Anda yakin ingin menghapus label?',
           'material_dispatch_dialog_pallet_number': 'Nomor Pallet：',
           'material_dispatch_dialog_pick_code': 'Pengambilan kode：',
           'material_dispatch_dialog_machine': 'Stasiun Mesin：',
           'material_dispatch_dialog_change_pallet': 'Ganti Pallet',
           'material_dispatch_dialog_report_sap': 'Daftar SAP',
           'material_dispatch_dialog_sure_report_sap':
-          'Apakah Anda yakin ingin mendaftar ke SAP?',
+              'Apakah Anda yakin ingin mendaftar ke SAP?',
           'material_dispatch_dialog_sure_cancel_report_sap':
-          'Apakah Anda yakin ingin membatalkan pendaftaran SAP?',
+              'Apakah Anda yakin ingin membatalkan pendaftaran SAP?',
           'material_dispatch_dialog_cancel_report_sap':
-          'Pembatalan pendaftaran SAP',
+              'Pembatalan pendaftaran SAP',
           'material_dispatch_dialog_getting_label_list':
-          'Mendapatkan Daftar Label...',
+              'Mendapatkan Daftar Label...',
           'material_dispatch_dialog_submit_sap': 'Dikirimkan ke SAP...',
           'material_dispatch_dialog_material_list': 'Daftar bahan',
           'material_dispatch_dialog_back': 'Kembali',
           'material_dispatch_dialog_getting_order_material_list':
-          'Mendapatkan daftar bahan surat kerja...',
+              'Mendapatkan daftar bahan surat kerja...',
           'material_dispatch_dialog_correcting_meters_qry':
-          'Mengoreksi jumlah meter ukuran...',
+              'Mengoreksi jumlah meter ukuran...',
           'material_dispatch_dialog_map': 'Cocok dengan peta daerah',
           'material_dispatch_dialog_posting_date': 'Tanggal pembayaran',
           'material_dispatch_dialog_stock_in_warehouse_position':
-          'Posisi gudang',
-          'material_dispatch_dialog_pallet_select': 'Pilihan Pallet Perdagangan',
+              'Posisi gudang',
+          'material_dispatch_dialog_pallet_select':
+              'Pilihan Pallet Perdagangan',
           'material_dispatch_dialog_factory_and_storage_location':
-          'Pabrik dan lokasi penyimpanan：',
+              'Pabrik dan lokasi penyimpanan：',
           'material_dispatch_dialog_select_posting_date_tips':
-          'Silakan pilih tanggal pembayaran',
+              'Silakan pilih tanggal pembayaran',
           'material_dispatch_dialog_select_machine_tips': 'Silakan pilih SAP',
           'material_dispatch_dialog_select_storage_location_tops':
-          'Silakan pilih posisi',
+              'Silakan pilih posisi',
           'material_dispatch_dialog_select_pallet_tips': 'Select pallet',
           'material_dispatch_dialog_select_machine_and_storage_location_tops':
-          'Silakan pilih platform dan posisi terlebih dahulu.',
+              'Silakan pilih platform dan posisi terlebih dahulu.',
           'material_dispatch_dialog_reading_pallet_list':
-          'Membaca Daftar Pallet...',
+              'Membaca Daftar Pallet...',
           'material_dispatch_dialog_inventory': ' %s - persediaan %s',
           'material_dispatch_dialog_select_pallet': 'Pilih Pallet',
           'part_process_scan_clean_tips':
-          'Are you sure you want to clear the barcode？',
+              'Are you sure you want to clear the barcode？',
           'part_process_scan_clean': 'Clean',
           'part_process_scan_delete_tips':
-          'Are you sure you want to delete this barcode？',
+              'Are you sure you want to delete this barcode？',
           'part_process_scan_modify': 'Modify',
           'part_process_scan_submit': 'Submit',
           'part_process_scan_report_process': 'Process：',
           'part_process_scan_report_allocation_situation':
-          'Allocation situation：',
+              'Allocation situation：',
           'part_process_scan_report_worker': 'Worker：',
           'part_process_scan_report_record_working': 'Record working：',
           'part_process_scan_report_title_process': 'Process',
@@ -8058,7 +8067,7 @@ class Translation extends Translations {
           'part_process_scan_report_part_total': 'Part total',
           'part_process_scan_report_bar_code': 'Barcode：',
           'part_process_scan_report_day_report':
-          'Workshop daily report worker (modified)',
+              'Workshop daily report worker (modified)',
           'part_process_scan_report_all': 'All',
           'part_process_scan_report_tab_allocation': 'Allocation',
           'part_process_scan_report_tab_process': 'Process',
@@ -8066,50 +8075,50 @@ class Translation extends Translations {
           'part_process_scan_report_quick_allocation': 'Quick allocation',
           'part_process_scan_report_submit': 'Submit',
           'part_process_scan_report_submit_tips':
-          'Are you sure you want to submit this job application ?',
+              'Are you sure you want to submit this job application ?',
           'part_process_scan_report_input_label_tips':
-          'Please enter the sticker number',
+              'Please enter the sticker number',
           'part_process_scan_report_label_exists': 'Label exists',
           'part_process_scan_report_no_submit_code':
-          'No barcode available for submission',
+              'No barcode available for submission',
           'part_process_scan_report_save_ratio_success':
-          'Save current ratio successfully.',
+              'Save current ratio successfully.',
           'part_process_scan_report_no_save_data':
-          'No record of saved proportion !',
+              'No record of saved proportion !',
           'part_process_scan_report_apply_last_ratio':
-          'Successfully loaded the last saved proportion.',
+              'Successfully loaded the last saved proportion.',
           'part_process_scan_quick_allocation_success':
-          'Quick allocation completed!',
+              'Quick allocation completed!',
           'part_process_scan_quick_dispatch_worker': 'Worker：',
           'part_process_scan_quick_dispatch_input_tips':
-          'Please fill in the allocation ratio',
+              'Please fill in the allocation ratio',
           'part_process_scan_quick_dispatch_quick_allocation':
-          'Quick allocation',
+              'Quick allocation',
           'part_process_scan_quick_dispatch_allocation': 'Allocation',
           'part_process_scan_quick_dispatch_save': 'Save current ratio',
           'part_process_scan_quick_dispatch_apply':
-          'Apply the previous proportion',
+              'Apply the previous proportion',
           'part_process_scan_dispatch_add_temp': 'Add temp members',
           'part_process_scan_dispatch_members_exists': 'Members exists',
           'part_process_scan_dispatch_members_can_add': 'Members can add',
           'part_process_scan_dispatch_input_worker_number_tips':
-          'Please enter the correct job number！',
+              'Please enter the correct job number！',
           'part_process_scan_dispatch_worker_exists': ' worker exists！',
           'part_process_scan_dispatch_add': 'Add',
           'part_process_scan_dispatch_allocation_qty_zero_tips':
-          'Assignable number is 0',
+              'Assignable number is 0',
           'part_process_scan_dispatch_worker': 'Worker：',
           'part_process_scan_dispatch_input_allocation_qty_tips':
-          'Please fill in the allocation amount',
+              'Please fill in the allocation amount',
           'part_process_scan_dispatch_allocation_this_worker':
-          'Click to assign this worker',
+              'Click to assign this worker',
           'part_process_scan_dispatch_allocation_report': 'Allocation report',
           'part_process_scan_dispatch_sharing': 'sharing',
           'part_process_scan_dispatch_surplus_allocation_qty':
-          'Surplus allocation qty：',
+              'Surplus allocation qty：',
           'part_process_scan_getting_summary': 'getting summary information...',
           'part_process_scan_submitting_process_report':
-          'Submitting process report...',
+              'Submitting process report...',
           'process_dispatch_register_sales_order_no': 'Sales order no',
           'process_dispatch_register_size': 'Size',
           'process_dispatch_register_daily_dispatch_qty': 'Daily dispatch qty',
@@ -8118,7 +8127,7 @@ class Translation extends Translations {
           'process_dispatch_register_total': 'Total',
           'process_dispatch_register_report': 'Report',
           'process_dispatch_register_work_ticket_or_production_dispatch_order':
-          'Work ticket or dispatch order',
+              'Work ticket or dispatch order',
           'process_dispatch_register_type_body：': 'Type body：',
           'process_dispatch_register_process：': 'Process：',
           'process_dispatch_register_query': 'Query',
@@ -8127,21 +8136,21 @@ class Translation extends Translations {
           'process_dispatch_register_detail': 'Detail',
           'process_dispatch_register_print_label': 'Print label',
           'process_dispatch_register_getting_dispatch_order_info':
-          'Getting dispatch order info...',
+              'Getting dispatch order info...',
           'process_dispatch_register_getting_label_info':
-          'Getting label info...',
+              'Getting label info...',
           'process_dispatch_register_submitting_modify': 'Submitting modify...',
           'process_dispatch_register_detecting_label': 'Detecting_label...',
           'process_dispatch_register_no_permission_tips':
-          'Lack of labeling operation permission',
+              'Lack of labeling operation permission',
           'process_dispatch_register_no_label_info_tips':
-          'Please check the label information first',
+              'Please check the label information first',
           'process_dispatch_register_select_operator_tips':
-          'Please select operator',
+              'Please select operator',
           'process_dispatch_register_delete_tips':
-          'Are you sure you want to delete this label ？',
+              'Are you sure you want to delete this label ？',
           'process_dispatch_register_no_delete_permission':
-          'Lack of label deletion permission',
+              'Lack of label deletion permission',
           'process_dispatch_register_print_number': 'Serial no：',
           'process_dispatch_register_print_size': 'Size：',
           'process_dispatch_register_print_report_date': 'Report date：',
@@ -8155,16 +8164,16 @@ class Translation extends Translations {
           'process_dispatch_register_modify_change_operator': 'Change operator',
           'process_dispatch_register_modify_tips': 'tips：',
           'process_dispatch_register_modify_tips_msg':
-          'Scan tags for personnel modification ！',
+              'Scan tags for personnel modification ！',
           'process_dispatch_register_modify_ins_number': 'Instruction no：',
           'process_dispatch_register_modify_process': 'Process',
           'process_dispatch_register_modify_operator': 'Operator：',
           'process_dispatch_register_modify_quantity_or_box_capacity':
-          'Qty / Box capacity：',
+              'Qty / Box capacity：',
           'process_dispatch_register_modify_submit_modify': 'Submit modify',
           'process_dispatch_register_dialog_sales_order_no': 'Sales order no',
           'process_dispatch_register_dialog_add_temp_worker':
-          'Add temp members',
+              'Add temp members',
           'process_dispatch_register_dialog_worker_exists': 'Worker exists',
           'production_dispatch_print_type_printed': 'Printed',
           'production_dispatch_print_type_unprinted': 'Unprinted',
@@ -8182,9 +8191,9 @@ class Translation extends Translations {
           'production_dispatch_stock_in_qty': 'Stock in qty：%s',
           'production_dispatch_report_qty': 'Report qty：%s',
           'production_dispatch_reported_not_record_working':
-          'Reported not record work：%s',
+              'Reported not record work：%s',
           'production_dispatch_record_working_not_stock_in':
-          'Record work not stock in：%s',
+              'Record work not stock in：%s',
           'production_dispatch_group': 'Group：%s',
           'production_dispatch_size': 'Size：%s',
           'production_dispatch_type_body': 'Type body：%s',
@@ -8195,9 +8204,9 @@ class Translation extends Translations {
           'production_dispatch_completed_tips': 'Completed',
           'production_dispatch_querying_order': 'Querying order...',
           'production_dispatch_querying_instruction_list':
-          'Querying instruction list...',
+              'Querying instruction list...',
           'production_dispatch_querying_process_manual':
-          'Querying process manual...',
+              'Querying process manual...',
           'production_dispatch_getting_color_info': 'Getting color info...',
           'production_dispatch_getting_color_file': 'Getting color file...',
           'production_dispatch_closing_process': 'Closing process...',
@@ -8208,77 +8217,77 @@ class Translation extends Translations {
           'production_dispatch_report_to_sap': 'Report to SAP...',
           'production_dispatch_pushing': 'Pushing...',
           'production_dispatch_querying_material_list':
-          'Querying material list...',
+              'Querying material list...',
           'production_dispatch_querying_manual': 'Querying manual...',
           'production_dispatch_wechat_dispatch_error1':
-          'Instruction no：%s\r\nType body：%s\r\nProcess：',
+              'Instruction no：%s\r\nType body：%s\r\nProcess：',
           'production_dispatch_wechat_dispatch_error2': 'Report qty：%s',
           'production_dispatch_wechat_dispatching':
-          'Sending dispatch information to worker...',
+              'Sending dispatch information to worker...',
           'production_dispatch_dispatching': 'Sending dispatch data...',
           'production_dispatch_unclose': 'Unclose',
           'production_dispatch_select_error': 'Select error',
           'production_dispatch_different_type_body':
-          'Orders that do not belong to the same type',
+              'Orders that do not belong to the same type',
           'production_dispatch_no_label_print_permission':
-          'You do not have label printing permission',
+              'You do not have label printing permission',
           'production_dispatch_no_material_header':
-          'No Surplus material information',
+              'No Surplus material information',
           'production_dispatch_selected_has_close_order':
-          'The selected work order includes closed work orders',
+              'The selected work order includes closed work orders',
           'production_dispatch_selected_has_timeout_order':
-          'The selected work order contains expired work orders',
+              'The selected work order contains expired work orders',
           'production_dispatch_push_tips':
-          'Are you sure you want to select %s dispatch orders to push down?',
+              'Are you sure you want to select %s dispatch orders to push down?',
           'production_dispatch_select_order_closed':
-          'The selected work order has been closed',
+              'The selected work order has been closed',
           'production_dispatch_no_push_permission': 'No push permission',
           'production_dispatch_no_process_list': 'No process list',
           'production_dispatch_tips': 'Tips',
           'production_dispatch_cant_select_closed_process':
-          'Cannot select closed processes',
+              'Cannot select closed processes',
           'production_dispatch_database': 'Database',
           'production_dispatch_save_dispatch_success':
-          'Temporary dispatch successful',
+              'Temporary dispatch successful',
           'production_dispatch_process_correct': 'Correct process ！',
           'production_dispatch_process_miss': 'Process < %s _ %s > is missing!',
           'production_dispatch_process_no_dispatch':
-          'Process < %s _ %s > No dispatch',
+              'Process < %s _ %s > No dispatch',
           'production_dispatch_process_worker_dispatch_zero':
-          'Process < %s _ %s > Worker %s has zero work count',
+              'Process < %s _ %s > Worker %s has zero work count',
           'production_dispatch_process_less_report':
-          'Process < %s _ %s > less than reported quantity %s',
+              'Process < %s _ %s > less than reported quantity %s',
           'production_dispatch_process_more_report':
-          'Process < %s _ %s > exceeding %s reports',
+              'Process < %s _ %s > exceeding %s reports',
           'production_dispatch_dialog_last_dispatch': 'Last dispatch',
           'production_dispatch_dialog_now_dispatch': 'This dispatch',
           'production_dispatch_dialog_recorded_working': 'Recorded work qty：',
           'production_dispatch_dialog_record_working': 'Record work qty：',
           'production_dispatch_dialog_add_worker': 'Add temp worker',
           'production_dispatch_dialog_input_worker_number':
-          'Please enter worker number',
+              'Please enter worker number',
           'production_dispatch_dialog_worker_exists': 'Worker < %s >exists。',
           'production_dispatch_dialog_select_worker': 'Select worker',
           'production_dispatch_dialog_dispatch': 'Dispatch',
           'production_dispatch_dialog_now_surplus_dispatch':
-          'This calculation (remaining calculation quantity: %s)',
+              'This calculation (remaining calculation quantity: %s)',
           'production_dispatch_dialog_input_dispatch_qty':
-          'Please enter the quantity of work to be calculated',
+              'Please enter the quantity of work to be calculated',
           'production_dispatch_dialog_dispatch_round_up_qty_tips':
-          'Divide %s equally and round to the nearest whole, a total of %s people, %s each, with the remaining %s allocated to the first person.',
+              'Divide %s equally and round to the nearest whole, a total of %s people, %s each, with the remaining %s allocated to the first person.',
           'production_dispatch_dialog_dispatch_qty_tips':
-          'An average %s, a total of %s people, with %s each.',
+              'An average %s, a total of %s people, with %s each.',
           'production_dispatch_dialog_dispatch_total_tips':
-          'There are a total of %s people, each assigned %s workers. A total of %s workers were dispatched.',
+              'There are a total of %s people, each assigned %s workers. A total of %s workers were dispatched.',
           'production_dispatch_dialog_select_type_body':
-          'Choose the form you want to apply',
+              'Choose the form you want to apply',
           'production_dispatch_dialog_save_process': 'Save current process',
           'production_dispatch_dialog_apply': 'Apply',
           'production_dispatch_dialog_select_manual':
-          'Select the process manual to view',
+              'Select the process manual to view',
           'production_dispatch_dialog_view_manual': 'View the process manual',
           'production_dispatch_dialog_select_file':
-          'Please select the file to view',
+              'Please select the file to view',
           'production_dispatch_dialog_view': 'View',
           'production_dispatch_dialog_color_list': 'Color List',
           'production_dispatch_dialog_back': 'Back',
@@ -8294,17 +8303,17 @@ class Translation extends Translations {
           'production_dispatch_dialog_instruction_report': 'Instruction report',
           'production_dispatch_dialog_size_report': 'Size report',
           'production_dispatch_dialog_select_print_surplus_material':
-          'Select print surplus material',
+              'Select print surplus material',
           'production_dispatch_dialog_print': 'Print',
           'production_dispatch_detail_auto_input': 'Auto input',
           'production_dispatch_detail_sharing': 'Sharing',
           'production_dispatch_detail_round_up': 'Round up',
           'production_dispatch_detail_next_process': 'Next process',
           'production_dispatch_detail_batch_record_working':
-          'Batch record work',
+              'Batch record work',
           'production_dispatch_detail_add_worker': 'Add worker',
           'production_dispatch_detail_clean_tips':
-          'Are you sure you want to clear all dispatch data for this process?',
+              'Are you sure you want to clear all dispatch data for this process?',
           'production_dispatch_detail_add_all_worker': 'Add all worker',
           'production_dispatch_detail_select_all_worker': 'Select all worker',
           'production_dispatch_detail_close_all_process': 'Close all process',
@@ -8319,7 +8328,7 @@ class Translation extends Translations {
           'production_dispatch_detail_worker_check': 'Worker check',
           'production_dispatch_detail_process_dispatch': 'Process dispatch',
           'production_dispatch_detail_has_save_tips':
-          'Detected temporary data in this work order, should it be applied?',
+              'Detected temporary data in this work order, should it be applied?',
           'production_dispatch_detail_dispatch': 'Dispatch',
           'production_dispatch_detail_outsourcing': 'Outsourcing',
           'work_order_list_dispatch_order_no': 'Dispatch order no：',
@@ -8333,31 +8342,31 @@ class Translation extends Translations {
           'work_order_list_generated_label': 'Generated label',
           'work_order_list_last_label': 'Last label',
           'work_order_list_no_last_label_permission':
-          'no last label operation permission',
+              'no last label operation permission',
           'work_order_list_individual_item_label': 'Individual item label',
           'work_order_list_no_individual_item_label_permission':
-          'No individual item label permission',
+              'No individual item label permission',
           'work_order_list_back': 'Back',
           'work_order_list_work_ticket_barcode': 'Work ticket barcode',
           'work_order_list_plan_track_number': 'Plan track number',
           'work_order_list_outsource': 'Outsourcing',
           'work_order_list_is_closed': 'Is closed',
           'work_order_list_getting_packing_list_box_capacity':
-          'Getting packaging list and box capacity configuration information...',
+              'Getting packaging list and box capacity configuration information...',
           'work_order_list_getting_part_list': 'Getting parts list...',
           'work_order_list_getting_part_detail': 'Getting component details...',
           'work_order_list_creating_label': 'Creating label...',
           'work_order_list_deleting_label': 'Deleting label...',
           'work_order_list_select_component_tips':
-          'Select at least one component',
+              'Select at least one component',
           'work_order_list_and': 'And',
           'work_order_list_merge_tips': 'Are you sure you want to merge: %s?',
           'work_order_list_input_box_capacity_tips':
-          'Please enter box capacity！',
+              'Please enter box capacity！',
           'work_order_list_input_create_qty':
-          'Please enter the creation quantity！',
+              'Please enter the creation quantity！',
           'work_order_list_input_worker_tips':
-          'Please enter the assigned worker number',
+              'Please enter the assigned worker number',
           'part_pick_part': 'Part',
           'part_pick_select_part': 'Select part',
           'part_pick_submit': 'Submit',
@@ -8369,10 +8378,10 @@ class Translation extends Translations {
           'part_label_dispatch_worker_number': 'Dispatch worker number',
           'part_label_create': 'Create',
           'part_label_label_list_delete_tips':
-          'Label List (Long press to delete)',
+              'Label List (Long press to delete)',
           'part_label_all': 'All',
           'part_label_delete_tips':
-          'Are you sure you want to delete the label<%s>?',
+              'Are you sure you want to delete the label<%s>?',
           'part_label_no_delete_permission': 'No delete permission！',
           'part_label_label': 'Label：',
           'part_label_size': 'Size：',
@@ -8383,7 +8392,7 @@ class Translation extends Translations {
           'part_label_unreported': 'Unreported',
           'part_label_print': 'Print',
           'part_label_no_label_operation_permission':
-          'No label operation permission!',
+              'No label operation permission!',
           'part_label_sales_order_no': 'Sales order no：',
           'part_label_dispatched': 'Dispatched：',
           'part_label_total': 'Total',
@@ -8394,13 +8403,13 @@ class Translation extends Translations {
           'part_label_part': 'Part：',
           'part_label_process': 'Process：',
           'sap_ink_color_matching_no_color':
-          'This color toning has no color information ！',
+              'This color toning has no color information ！',
           'sap_ink_color_matching_type_body': 'Type body：',
           'sap_ink_color_matching_factory': 'Factory：',
           'sap_ink_color_matching_toning_order': 'Toning order：',
           'sap_ink_color_matching_remarks': 'Remarks：',
           'sap_ink_color_matching_remarks_tips':
-          'Can fill in remarks information',
+              'Can fill in remarks information',
           'sap_ink_color_matching_inkmaster': 'Inkmaster：',
           'sap_ink_color_matching_toning_date': 'Toning date：',
           'sap_ink_color_matching_mix_weight': 'Mix weight：',
@@ -8415,99 +8424,99 @@ class Translation extends Translations {
           'sap_ink_color_matching_new_toning_order': 'New toning order',
           'sap_ink_color_matching_input_type_body': 'Please enter the shape',
           'sap_ink_color_matching_getting_color_list':
-          'Getting color toning order list...',
+              'Getting color toning order list...',
           'sap_ink_color_matching_getting_material_info':
-          'Getting profile and material data...',
+              'Getting profile and material data...',
           'sap_ink_color_matching_submitting_toning_order':
-          'Submitting toning order...',
+              'Submitting toning order...',
           'sap_ink_color_matching_input_type_body_tips':
-          'Please enter the shape ！',
+              'Please enter the shape ！',
           'sap_ink_color_matching_no_material_submit':
-          'No material information available for submission！',
+              'No material information available for submission！',
           'sap_ink_color_matching_not_read_before_toning':
-          '(%s)Not read before toning！',
+              '(%s)Not read before toning！',
           'sap_ink_color_matching_not_read_after_toning':
-          '(%s)Not read after toning！',
+              '(%s)Not read after toning！',
           'sap_ink_color_matching_loss_cant_be_zero':
-          '(%s)loss cannot be zero！',
+              '(%s)loss cannot be zero！',
           'sap_ink_color_matching_server_not_config_mix_device':
-          'The current server has not yet been configured with a mixing device！',
+              'The current server has not yet been configured with a mixing device！',
           'sap_ink_color_matching_mix_weight_not_read':
-          '(%s)The weight of the mixture has not been read yet！',
+              '(%s)The weight of the mixture has not been read yet！',
           'sap_ink_color_matching_detail_device': 'Device：',
           'sap_ink_color_matching_detail_delete_tips':
-          'Are you sure you want to delete the material<%s>?',
+              'Are you sure you want to delete the material<%s>?',
           'sap_ink_color_matching_detail_null': 'Null',
           'sap_ink_color_matching_detail_material': 'Material：',
           'sap_ink_color_matching_detail_before_toning_weight':
-          'Before toning weight：',
+              'Before toning weight：',
           'sap_ink_color_matching_detail_after_toning_weight':
-          'After toning weight：',
+              'After toning weight：',
           'sap_ink_color_matching_detail_loss': 'Loss：',
           'sap_ink_color_matching_detail_device_unit_error':
-          'Device unit error！',
+              'Device unit error！',
           'sap_ink_color_matching_detail_type_body': 'Type body：',
           'sap_ink_color_matching_detail_color_toning_order_no':
-          'Color toning order no：',
+              'Color toning order no：',
           'sap_ink_color_matching_detail_color_toning_date':
-          'Color toning date：',
+              'Color toning date：',
           'sap_ink_color_matching_detail_inkmaster': 'inkmaster：',
           'sap_ink_color_matching_detail_theoretical_loss': 'Theoretical loss：',
           'sap_ink_color_matching_detail_offset':
-          'Actual = Theoretical loss - Mixture ：',
+              'Actual = Theoretical loss - Mixture ：',
           'sap_ink_color_matching_detail_remakes': 'Remakes',
           'sap_ink_color_matching_detail_add_material': 'Add material',
           'sap_ink_color_matching_detail_read_before_toning_weight':
-          'Read before toning weight',
+              'Read before toning weight',
           'sap_ink_color_matching_detail_read_after_toning_weight':
-          'Read after toning weight',
+              'Read after toning weight',
           'sap_ink_color_matching_detail_read_mix_weight': 'Read mix weight',
           'sap_ink_color_matching_detail_color_toning_finish':
-          'Color toning finish',
+              'Color toning finish',
           'sap_ink_color_matching_detail_toning_again': 'Toning again',
           'sap_ink_color_matching_detail_color_toning_detail':
-          'Color toning detail',
+              'Color toning detail',
           'sap_ink_color_matching_detail_modify_color_toning':
-          'Modify color toning',
+              'Modify color toning',
           'sap_ink_color_matching_detail_create_color_toning':
-          'Create color toning',
+              'Create color toning',
           'sap_ink_color_matching_detail_exit_modify_tips':
-          'Are you sure you want to exit <Modify Color Toning>?',
+              'Are you sure you want to exit <Modify Color Toning>?',
           'sap_ink_color_matching_detail_exit_create_tips':
-          'Are you sure you want to exit <Create Color Toning>?',
+              'Are you sure you want to exit <Create Color Toning>?',
           'sap_ink_color_matching_recreate_pre_toning_weight_tips':
-          'Please set the pre adjusted weight first！',
+              'Please set the pre adjusted weight first！',
           'sap_ink_color_matching_recreate_null': 'Null',
           'sap_ink_color_matching_recreate_material': 'Material：',
           'sap_ink_color_matching_recreate_pre_toning_weight':
-          'Pre toning weight：',
+              'Pre toning weight：',
           'sap_ink_color_matching_recreate_actual_weight': 'Actual weight：',
           'sap_ink_color_matching_recreate_need_supplemented_weight':
-          'Need supplemented weight：',
+              'Need supplemented weight：',
           'sap_ink_color_matching_recreate_pre_toning_weight_unit':
-          'Pre toning weight (kg):',
+              'Pre toning weight (kg):',
           'sap_ink_color_matching_recreate_restart_tips':
-          'Are you sure you want to start over？',
+              'Are you sure you want to start over？',
           'sap_ink_color_matching_recreate_recurrent_color_toning':
-          'Recurrent color toning',
+              'Recurrent color toning',
           'sap_ink_color_matching_recreate_exit_tips':
-          'Are you sure you want to exit<Reproduce Color Toning>?',
+              'Are you sure you want to exit<Reproduce Color Toning>?',
           'sap_ink_color_matching_recreate_type_body': 'Type body：',
           'sap_ink_color_matching_recreate_inkmaster': 'Inkmaster：',
           'sap_ink_color_matching_recreate_final_weight': 'Final weight：',
           'sap_ink_color_matching_dialog_add_color_toning_material':
-          'Add color toning material',
+              'Add color toning material',
           'sap_ink_color_matching_dialog_input_material_name':
-          'Please enter the material name',
+              'Please enter the material name',
           'sap_ink_color_matching_dialog_add_material': 'Add material',
           'sap_ink_color_matching_dialog_no_available_devices':
-          'No available devices！',
+              'No available devices！',
           'sap_ink_color_matching_dialog_select_material': 'Select material！',
           'sap_ink_color_matching_dialog_no_available_material':
-          'No available material!',
+              'No available material!',
           'sap_ink_color_matching_dialog_trial_result': 'Trial result',
           'sap_ink_color_matching_dialog_color_toning_order':
-          'Color toning order：',
+              'Color toning order：',
           'sap_ink_color_matching_dialog_type_body': 'Type body：',
           'sap_ink_color_matching_dialog_usage': 'Usage：',
           'sap_ink_color_matching_dialog_trial_qty': 'Trial qty：',
@@ -8515,18 +8524,18 @@ class Translation extends Translations {
           'sap_ink_color_matching_dialog_mix_trial_weight': 'Mix trial weight：',
           'sap_ink_color_matching_dialog_loss': 'Loss：',
           'sap_ink_color_matching_dialog_input_trial_qty':
-          'Please fill in the trial quantity！',
+              'Please fill in the trial quantity！',
           'sap_ink_color_matching_dialog_input_mix_trial_weight':
-          'Please fill in the weight of the mixture after trial production！',
+              'Please fill in the weight of the mixture after trial production！',
           'sap_ink_color_matching_dialog_weight_error':
-          'The weight of the mixture after trial production cannot be equal to the weight of the mixture！',
+              'The weight of the mixture after trial production cannot be equal to the weight of the mixture！',
           'sap_ink_color_matching_dialog_submitting_trial':
-          'Submitting trial results...',
+              'Submitting trial results...',
           'sap_ink_color_matching_dialog_null': 'Null',
           'sap_ink_color_matching_dialog_material': 'Material：',
           'sap_ink_color_matching_dialog_connecting': 'Connecting...',
           'sap_ink_color_matching_dialog_device_unit_error':
-          'Device unit error!',
+              'Device unit error!',
           'sap_ink_color_matching_dialog_connected': 'Connect successfully!',
           'sap_ink_color_matching_dialog_device_exception': 'Device exception!',
           'sap_ink_color_matching_dialog_mix_weight': 'Mix weight：',
@@ -8548,12 +8557,12 @@ class Translation extends Translations {
           'maintain_label_type_body': 'Type body：',
           'maintain_label_create': 'Create',
           'maintain_label_no_create_label_permission':
-          'No create label permission',
+              'No create label permission',
           'maintain_label_delete': 'Delete',
           'maintain_label_delete_packing_tips':
-          'Are you sure you want to delete the packaging list ?',
+              'Are you sure you want to delete the packaging list ?',
           'maintain_label_delete_label_tips':
-          'Are you sure you want to delete these tags ?',
+              'Are you sure you want to delete these tags ?',
           'maintain_label_print': 'Print',
           'maintain_label_set': 'Set',
           'maintain_label_filter': 'Filter',
@@ -8564,19 +8573,19 @@ class Translation extends Translations {
           'maintain_label_deleting_packing_order': 'Deleting packaging list...',
           'maintain_label_deleting_label': 'Deleting label...',
           'maintain_label_getting_material_info':
-          'Getting material attribute information...',
+              'Getting material attribute information...',
           'maintain_label_getting_packing_order_info':
-          'Getting packaging list and box capacity configuration information...',
+              'Getting packaging list and box capacity configuration information...',
           'maintain_label_getting_material_language_info':
-          'Getting multilingual information for materials...',
+              'Getting multilingual information for materials...',
           'maintain_label_select_label': 'Please select a label',
           'maintain_label_select_label_not_same':
-          'Different types of labels cannot be printed together！',
+              'Different types of labels cannot be printed together！',
           'maintain_label_select_label_set_state': 'Setting printing label...',
           'maintain_label_label_language_empty_tips':
-          'The tag language data is empty, please maintain the language data first.',
+              'The tag language data is empty, please maintain the language data first.',
           'maintain_label_label_language_lack_tips':
-          'Label < %s > is missing language < %s > data, please print or maintain language data separately.',
+              'Label < %s > is missing language < %s > data, please print or maintain language data separately.',
           'maintain_label_sub_item_instruction': 'Instruction',
           'maintain_label_error': 'Label type error:(%s)',
           'maintain_label_sub_item_size': 'Size',
@@ -8587,16 +8596,16 @@ class Translation extends Translations {
           'maintain_label_dialog_back': 'Back',
           'maintain_label_dialog_create': 'Create',
           'maintain_label_dialog_select_instruction_and_size':
-          'Please check the instructions and sizes to be created',
+              'Please check the instructions and sizes to be created',
           'maintain_label_dialog_cant_generate':
-          'The number of labels that can be produced is not zero',
+              'The number of labels that can be produced is not zero',
           'maintain_label_dialog_generating_label': 'Generating labels...',
           'maintain_label_dialog_size': 'Size：',
           'maintain_label_dialog_instruction': 'Instruction：',
           'maintain_label_dialog_surplus_qty': 'Surplus qty：%s',
           'maintain_label_dialog_packing_qty': 'Packing qty：',
           'maintain_label_dialog_create_customize_label':
-          'Create customize label',
+              'Create customize label',
           'maintain_label_dialog_generated_label': 'Generated label：',
           'maintain_label_dialog_generate': 'Generate：',
           'maintain_label_dialog_total_qty': 'Goods total qty：',
@@ -8606,33 +8615,33 @@ class Translation extends Translations {
           'maintain_label_dialog_generated_goods_qty': 'Generated goods qty：',
           'maintain_label_dialog_full': 'Full',
           'maintain_label_dialog_select_size_tips':
-          'Please check the size to be created',
+              'Please check the size to be created',
           'maintain_label_dialog_label_attribute_config':
-          'Label attribute configuration',
+              'Label attribute configuration',
           'maintain_label_dialog_batch_modify': 'Batch modify',
           'maintain_label_dialog_weight_mast_greater_zero':
-          'Weight mast greater zero',
+              'Weight mast greater zero',
           'maintain_label_dialog_modify': 'Modify',
           'maintain_label_dialog_net_weight': 'Net weight：',
           'maintain_label_dialog_gross_weight': 'Gross weight：',
           'maintain_label_dialog_specifications': 'Specifications：',
           'maintain_label_dialog_unit': 'Unit：',
           'maintain_label_dialog_batch_modify_attribute':
-          'Batch modify attribute',
+              'Batch modify attribute',
           'maintain_label_dialog_last_save': 'Last save',
           'maintain_label_dialog_input_tips':
-          'Please fill in the modified content completely',
+              'Please fill in the modified content completely',
           'maintain_label_dialog_setting_material_attribute':
-          'Setting material attribute information...',
+              'Setting material attribute information...',
           'maintain_label_dialog_modify_label_box_capacity':
-          'Modify label box capacity',
+              'Modify label box capacity',
           'maintain_label_dialog_batch_modify_tips': 'Batch modify：',
           'maintain_label_dialog_setting_material_box_capacity':
-          'Setting material box capacity information...',
+              'Setting material box capacity information...',
           'maintain_label_dialog_modify_label_language':
-          'Modify label language',
+              'Modify label language',
           'maintain_label_dialog_setting_material_language':
-          'Setting material language information...',
+              'Setting material language information...',
           'maintain_label_dialog_select_size': 'Select size',
           'maintain_label_dialog_select_language': 'Select language',
           'maintain_label_dialog_create_label': 'Create label',
@@ -8673,16 +8682,16 @@ class Translation extends Translations {
           'production_tasks_packaged_box_qty': 'Packaged qty：',
           'production_tasks_unpackaged_box_qty': 'Unpackaged qty：',
           'production_tasks_querying_tasks':
-          'Querying production task schedule...',
+              'Querying production task schedule...',
           'production_tasks_modifying_order_sort':
-          'Modifying work order sorting...',
+              'Modifying work order sorting...',
           'production_tasks_querying_task_detail':
-          'Querying production task progress details...',
+              'Querying production task progress details...',
           'production_tasks_getting_pack_material_info':
-          'Getting pack material info...',
+              'Getting pack material info...',
           'production_tasks_total': 'Total',
           'production_tasks_no_operation_permission':
-          'No operation permission！',
+              'No operation permission！',
           'production_tasks_size_tips': '%s# +%s',
           'production_tasks_detail_size': 'Size',
           'production_tasks_detail_production_qty': 'Production qty',
@@ -8702,56 +8711,56 @@ class Translation extends Translations {
           'production_tasks_detail_packaged': 'Packaged：',
           'production_tasks_detail_unpackaged': 'Unpackaged：',
           'production_tasks_pack_material_material_and_unit':
-          'Material < unit > ：',
+              'Material < unit > ：',
           'production_tasks_pack_material_customer_po': 'Customer po：',
           'production_tasks_pack_material_customer_goods_no':
-          'Customer goods no：',
+              'Customer goods no：',
           'production_tasks_pack_material_purchase_type': 'Purchase type：',
           'production_tasks_pack_material_demand_qty': 'Demand qty：',
           'production_tasks_pack_material_inventory_qty': 'Inventory qty：',
           'production_tasks_pack_material_received_qty': 'Received qty：',
           'production_tasks_pack_material_packing_list': 'Packing list',
           'production_tasks_pack_material_quick_filter':
-          'Enter material code for quick filtering',
+              'Enter material code for quick filtering',
           'sap_injection_molding_stock_in_submitted': 'Submitted',
           'sap_injection_molding_stock_in_clear': 'Clear',
           'sap_injection_molding_stock_in_scanned': 'Scanned：',
           'sap_injection_molding_stock_in_pallet_no': 'Pallet no：',
           'sap_injection_molding_stock_in_stock_in': 'Stock in',
           'sap_injection_molding_stock_in_getting_pallet_info':
-          'Getting pallet info...',
+              'Getting pallet info...',
           'sap_injection_molding_stock_in_getting_label_status':
-          'Getting label status...',
+              'Getting label status...',
           'sap_injection_molding_stock_in_getting_summary_info':
-          'Getting summary info...',
+              'Getting summary info...',
           'sap_injection_molding_stock_in_submitting_stock_in':
-          'Submitting stock in...',
+              'Submitting stock in...',
           'sap_injection_molding_stock_in_delete_failed': 'Delete failed',
           'sap_injection_molding_stock_in_bar_code_exists': 'Bar code exists',
           'sap_injection_molding_stock_in_use_empty_pallet':
-          'Use empty pallet！！',
+              'Use empty pallet！！',
           'sap_injection_molding_stock_in_pallet_occupied': 'Pallet occupied！！',
           'sap_injection_molding_stock_in_pallet_not_exists':
-          'Pallet not exists！！',
+              'Pallet not exists！！',
           'sap_injection_molding_stock_in_scan_pallet_tips':
-          'Scan pallet tips！！',
+              'Scan pallet tips！！',
           'sap_injection_molding_stock_in_label_state_error':
-          'Not a pending inventory label！！',
+              'Not a pending inventory label！！',
           'sap_injection_molding_stock_in_no_stock_in_label':
-          'No stock in label！！',
+              'No stock in label！！',
           'sap_injection_molding_stock_in_report_dispatch_no': 'Dispatch no',
           'sap_injection_molding_stock_in_report_type_body': 'Type body',
           'sap_injection_molding_stock_in_report_size': 'Size',
           'sap_injection_molding_stock_in_report_unit': 'Unit',
           'sap_injection_molding_stock_in_report_not_stocked_qty':
-          'Not stocked qty',
+              'Not stocked qty',
           'sap_injection_molding_stock_in_report_stocked_qty': 'Stocked qty',
           'sap_injection_molding_stock_in_report_report_qty': 'Report qty',
           'sap_injection_molding_stock_in_report_total': 'Total',
           'sap_injection_molding_stock_in_report_stock_in_summary':
-          'Stock in summary',
+              'Stock in summary',
           'sap_injection_molding_stock_in_report_confirm_stock_in':
-          'Confirm stock in',
+              'Confirm stock in',
           'sap_picking_receipt_reversal_material_voucher': 'Material voucher：',
           'sap_picking_receipt_reversal_dispatch_date': 'Dispatch date：',
           'sap_picking_receipt_reversal_dispatch_no': 'Dispatch no：',
@@ -8759,23 +8768,23 @@ class Translation extends Translations {
           'sap_picking_receipt_reversal_storage_location': 'Storage location：',
           'sap_picking_receipt_reversal_quantity': 'Quantity：',
           'sap_picking_receipt_reversal_input_dispatch_no_tips':
-          'Please enter the dispatch order number',
+              'Please enter the dispatch order number',
           'sap_picking_receipt_reversal_input_material_code_tips':
-          'Please enter the material code',
+              'Please enter the material code',
           'sap_picking_receipt_reversal_produce_picking': 'Produce picking',
           'sap_picking_receipt_reversal_produce_take': 'Produce take',
           'sap_picking_receipt_reversal_reverse': 'Reverse',
           'sap_picking_receipt_reversal_reverse_tips':
-          'Are you sure you want to reverse it ?',
+              'Are you sure you want to reverse it ?',
           'sap_picking_receipt_reversal_getting_picking_list':
-          'Getting picking list...',
+              'Getting picking list...',
           'sap_picking_receipt_reversal_getting_take_list':
-          'Getting take list...',
+              'Getting take list...',
           'sap_picking_receipt_reversal_dialog_posting_date': 'Posting date',
           'sap_picking_receipt_reversal_dialog_picker_signature':
-          'Picker signature',
+              'Picker signature',
           'sap_picking_receipt_reversal_dialog_leader_signature':
-          'Leader signature',
+              'Leader signature',
           'sap_picking_receipt_reversal_dialog_picker_number': 'Picker number',
           'sap_picking_receipt_reversal_dialog_leader_number': 'Leader number',
           'sap_purchase_stock_in_temporarily_received': 'Temporarily received',
@@ -8798,15 +8807,15 @@ class Translation extends Translations {
           'sap_purchase_stock_in_stock_in_reversal': 'Stock in reversal',
           'sap_purchase_stock_in_temporarily_receive': 'Temporarily receive',
           'sap_purchase_stock_in_getting_delivery_order_list':
-          'Getting delivery order list...',
+              'Getting delivery order list...',
           'sap_purchase_stock_in_getting_delivery_order_details':
-          'Getting delivery order details...',
+              'Getting delivery order details...',
           'sap_purchase_stock_in_checking_delivery_order':
-          'Checking delivery order...',
+              'Checking delivery order...',
           'sap_purchase_stock_in_select_item_includes_exempt_and_not_exempt':
-          'Select item includes exempt and not exempt',
+              'Select item includes exempt and not exempt',
           'sap_purchase_stock_in_exempt_material_cannot_temporary_collection':
-          'Exempt material cannot temporary collection！',
+              'Exempt material cannot temporary collection！',
           'sap_purchase_stock_in_contains_uncounted': 'Contains uncounted！',
           'sap_purchase_stock_in_dialog_material': 'Material：',
           'sap_purchase_stock_in_dialog_purchase_no': 'Purchase no：',
@@ -8816,29 +8825,29 @@ class Translation extends Translations {
           'sap_purchase_stock_in_dialog_delivery_date': 'Delivery date：',
           'sap_purchase_stock_in_dialog_piece_qty': 'Piece qty：',
           'sap_purchase_stock_in_dialog_delivery_order_detail':
-          'Delivery order detail',
+              'Delivery order detail',
           'sap_purchase_stock_in_dialog_suppler': 'Suppler：',
           'sap_purchase_stock_in_dialog_reviewer': 'Reviewer：',
           'sap_purchase_stock_in_dialog_delivery_order_no':
-          'Delivery order no：',
+              'Delivery order no：',
           'sap_purchase_stock_in_dialog_delivery_location':
-          'Delivery location：',
+              'Delivery location：',
           'sap_purchase_stock_in_check_material': 'Material：',
           'sap_purchase_stock_in_check_purchase_no': 'Purchase no：',
           'sap_purchase_stock_in_check_delivery_qty': 'Delivery qty：',
           'sap_purchase_stock_in_check_check_qty': 'Check qty：',
           'sap_purchase_stock_in_check_piece_qty': 'Piece qty：',
           'sap_purchase_stock_in_check_delivery_order_verify':
-          'Delivery order verify',
+              'Delivery order verify',
           'sap_purchase_stock_in_check_submit': 'Submit',
           'sap_purchase_stock_in_dialog_save_verify': 'Save verify',
           'sap_purchase_stock_in_dialog_verifier': 'Verifier',
           'sap_purchase_stock_in_dialog_get_storage_location_failed':
-          'Get storage location failed',
+              'Get storage location failed',
           'sap_purchase_stock_in_dialog_storage_location': 'Storage location：',
           'sap_purchase_stock_in_dialog_post_date': 'Post date',
           'sap_purchase_stock_in_dialog_checking_face_info':
-          'Checking face info...',
+              'Checking face info...',
           'sap_purchase_stock_in_dialog_stock_in_order': 'Stock in order',
           'sap_purchase_stock_in_dialog_not_set_face_info': 'Not set face info',
           'sap_purchase_stock_in_dialog_stock_in': 'Stock in',
@@ -8846,30 +8855,30 @@ class Translation extends Translations {
           'sap_purchase_stock_in_dialog_stock_in_reversal': 'Stock in reversal',
           'sap_purchase_stock_in_dialog_reversal_reason': 'Reversal reason',
           'sap_purchase_stock_in_dialog_input_reversal_reason':
-          'Input reversal reason',
+              'Input reversal reason',
           'sap_purchase_stock_in_dialog_querying_superintendent_info':
-          'Querying superintendent info...',
+              'Querying superintendent info...',
           'sap_purchase_stock_in_dialog_temporarily_order': 'Temporarily order',
           'sap_purchase_stock_in_dialog_generate_temporarily_order':
-          'Generate temporarily order',
+              'Generate temporarily order',
           'sap_purchase_stock_in_dialog_getting_warehouse_config':
-          'Getting warehouse config...',
+              'Getting warehouse config...',
           'sap_purchase_stock_in_dialog_submitting_stock_in':
-          'Submitting stock in...',
+              'Submitting stock in...',
           'sap_purchase_stock_in_dialog_creating_temporary_order':
-          'Creating temporary order...',
+              'Creating temporary order...',
           'sap_put_on_shelves_pallet_no': 'Pallet no：',
           'sap_put_on_shelves_material': 'Material：',
           'sap_put_on_shelves_getting_wait_put_on_shelves_list':
-          'Getting wait put on shelves list...',
+              'Getting wait put on shelves list...',
           'sap_put_on_shelves_getting_recommended_storage_location_info':
-          'Getting recommended storage location info...',
+              'Getting recommended storage location info...',
           'sap_put_on_shelves_submitting_put_on_shelves':
-          'Submitting put on shelves...',
+              'Submitting put on shelves...',
           'sap_put_on_shelves_not_find_pallet': 'Not find pallet',
           'sap_put_on_shelves_not_find_label': 'Not find label',
           'sap_put_on_shelves_input_storage_location':
-          'Input storage location！',
+              'Input storage location！',
           'sap_put_on_shelves_scan_label': 'Label：',
           'sap_put_on_shelves_scan_put_on_shelves': 'Put on shelves',
           'sap_put_on_shelves_scan_pallet': 'Pallet：%s',
@@ -8879,37 +8888,38 @@ class Translation extends Translations {
           'carton_label_scan_label_qty': 'Jumlah label：',
           'carton_label_scan_scanned_qty': 'Jumlah yang disapu：',
           'carton_label_scan_scan_code_or_input_outside_code':
-          'Scan code or input outside code',
+              'Scan code or input outside code',
           'carton_label_scan_input_or_scan':
-          'Silakan memindai atau memasukkan label kotak luar secara manual atau memasukkan PO',
+              'Silakan memindai atau memasukkan label kotak luar secara manual atau memasukkan PO',
           'carton_label_scan_outside_code': 'Kode bar kotak luar：',
           'carton_label_scan_po_number': 'PO：',
           'carton_label_scan_rescan_code': 'Rescan barcode',
           'carton_label_scan_rescan_inside_code': 'Rescan inside barcode',
           'carton_label_scan_submit': 'Kirimkan',
           'carton_label_scan_querying_outside_label_detail':
-          'Mencari rincian label kotak luar...',
+              'Mencari rincian label kotak luar...',
           'carton_label_scan_submitting_scan_progress':
-          'Kirim kemajuan pemindaian...',
+              'Kirim kemajuan pemindaian...',
           'carton_label_scan_submitting_change_priority':
-          'Mengubah Prioritas...',
+              'Mengubah Prioritas...',
           'carton_label_scan_label_scan_completed_tips':
-          'Kode batang [%s] telah dipindai penuh, pastikan jika ada kesalahan atau ulangan.',
+              'Kode batang [%s] telah dipindai penuh, pastikan jika ada kesalahan atau ulangan.',
           'carton_label_scan_label_placement_error_tips':
-          'Kode batang [%s] bukan korespondensi kotak luar, silakan periksa jika ada kesalahan.',
+              'Kode batang [%s] bukan korespondensi kotak luar, silakan periksa jika ada kesalahan.',
           'carton_label_scan_success': 'Operasi berhasil',
-          'carton_label_scan_progress_title': 'Kemajuan kode pemindaian kotak luar',
+          'carton_label_scan_progress_title':
+              'Kemajuan kode pemindaian kotak luar',
           'carton_label_scan_progress_input_sales_order_or_customer_po':
-          'Silakan masukkan pesanan penjualan atau PO pelanggan',
+              'Silakan masukkan pesanan penjualan atau PO pelanggan',
           'carton_label_scan_progress_sales_order_or_customer_order':
-          'Penjualan / Pesanan Pelanggan：',
+              'Penjualan / Pesanan Pelanggan：',
           'carton_label_scan_progress_scan_state': 'Situasi Scan：',
           'carton_label_scan_progress_detail_outside_label': 'Kotak luar：',
           'carton_label_scan_progress_detail_size': 'Ukuran：',
           'carton_label_scan_progress_detail_title': 'Detail kode pemindaian',
           'carton_label_scan_change_priority': 'Ubah Prioritas',
           'carton_label_scan_please_input':
-          'Please enter the outer box number or PO number',
+              'Please enter the outer box number or PO number',
           'carton_label_scan_change_successful': 'Perubahan berhasil',
           'smart_delivery_sales_order': 'Sales order：',
           'smart_delivery_type_body': 'Type body：',
@@ -8917,43 +8927,43 @@ class Translation extends Translations {
           'smart_delivery_dispatch_no': 'Dispatch no(Date)：',
           'smart_delivery_order_total_qty': 'Order total qty：',
           'smart_delivery_material_issuance_status':
-          'Material issuance status：',
+              'Material issuance status：',
           'smart_delivery_not_issuance': 'Not issuance',
           'smart_delivery_issued': 'Issued',
           'smart_delivery_input_instruction': 'Input instruction',
           'smart_delivery_no_more_data': 'No more data!',
           'smart_delivery_getting_dispatch_data': 'Getting dispatch data...',
           'smart_delivery_getting_dispatch_order_material_list':
-          'Getting dispatch order material list...',
+              'Getting dispatch order material list...',
           'smart_delivery_getting_material_issuance_details':
-          'Getting material issuance details...',
+              'Getting material issuance details...',
           'smart_delivery_saving_pre_sort_info': 'Saving pre sort info...',
           'smart_delivery_clearing_ingredient_info':
-          'Clearing ingredient info...',
+              'Clearing ingredient info...',
           'smart_delivery_saving_temporary_iteration':
-          'Saving temporary iteration...',
+              'Saving temporary iteration...',
           'smart_delivery_cancelling_temporary_iteration':
-          'Cancelling temporary iteration...',
+              'Cancelling temporary iteration...',
           'smart_delivery_check_rounds_merged':
-          'Please check the rounds to be merged !',
+              'Please check the rounds to be merged !',
           'smart_delivery_save_temporary_iteration_and_use_later_tips':
-          'Are you sure you want to save the selected round and merge the delivery in subsequent work orders ?',
+              'Are you sure you want to save the selected round and merge the delivery in subsequent work orders ?',
           'smart_delivery_save_temporary_iteration_tips':
-          'Are you sure you want to temporarily store the selected round ?',
+              'Are you sure you want to temporarily store the selected round ?',
           'smart_delivery_cancel_temporary_iteration_tips':
-          'Are you sure you want to cancel the temporary storage round ?',
+              'Are you sure you want to cancel the temporary storage round ?',
           'smart_delivery_material_part': 'Part：',
           'smart_delivery_material_code': 'Code：',
           'smart_delivery_material_name': 'Name：',
           'smart_delivery_material_state': 'State：',
           'smart_delivery_material_list': 'List',
           'smart_delivery_material_shoe_tree_maintenance':
-          'Shoe tree maintenance',
+              'Shoe tree maintenance',
           'smart_delivery_material_input_code': 'Input code',
           'smart_delivery_create_order_size': 'Size',
           'smart_delivery_create_order_total': 'Total',
           'smart_delivery_create_order_shoe_tree_inventory':
-          'Shoe tree inventory',
+              'Shoe tree inventory',
           'smart_delivery_create_order_order_qty': 'Order qty',
           'smart_delivery_create_order_round_star': '★ Round %s',
           'smart_delivery_create_order_round': 'Round %s',
@@ -8963,7 +8973,7 @@ class Translation extends Translations {
           'smart_delivery_create_order_part': 'Part：',
           'smart_delivery_create_order_goods_no': 'Goods no：',
           'smart_delivery_create_order_create_delivery_order':
-          'Create delivery order',
+              'Create delivery order',
           'smart_delivery_create_order_reserve_shoe_tree': 'Reserve shoe tree',
           'smart_delivery_create_order_remake_order': 'Remake order',
           'smart_delivery_create_order_merge_delivery': 'Merge delivery',
@@ -8971,36 +8981,36 @@ class Translation extends Translations {
           'smart_delivery_create_order_save_temporary': 'Save temporary',
           'smart_delivery_create_order_cancel_temporary': 'Cancel temporary',
           'smart_delivery_create_order_create_material_issuance_task':
-          'Create material issuance task',
+              'Create material issuance task',
           'smart_delivery_create_order_cancel_merge': 'Cancel merge',
           'smart_delivery_dialog_shoe_tree_maintenance':
-          'Shoe tree maintenance',
+              'Shoe tree maintenance',
           'smart_delivery_dialog_type_body': 'Type body：',
           'smart_delivery_dialog_shoe_tree_no': 'Shoe tree no：',
           'smart_delivery_dialog_size': 'Size：',
           'smart_delivery_dialog_inventory': 'Inventory：',
           'smart_delivery_dialog_save': 'Save',
           'smart_delivery_dialog_size_reserve_shoe_tree':
-          'Size reserve shoe tree',
+              'Size reserve shoe tree',
           'smart_delivery_dialog_reserve_two': 'Reserve 2',
           'smart_delivery_dialog_reset': 'Reset',
           'smart_delivery_dialog_reserve': 'Reserve：',
           'smart_delivery_dialog_pre_sort': 'Pre sort：',
           'smart_delivery_dialog_select_delivery_round':
-          'Select delivery round',
+              'Select delivery round',
           'smart_delivery_dialog_null': 'Null',
           'smart_delivery_dialog_create_task': 'Create task',
           'smart_delivery_dialog_unable_query_device_info':
-          'Unable query device info',
+              'Unable query device info',
           'smart_delivery_dialog_execute_device': 'Execute device：',
           'smart_delivery_dialog_unable_query_mode_info':
-          'Unable query mode info',
+              'Unable query mode info',
           'smart_delivery_dialog_task_mode': 'Task mode：',
           'smart_delivery_dialog_unable_query_starting_point_info':
-          'Unable query starting point info',
+              'Unable query starting point info',
           'smart_delivery_dialog_task_starting_point': 'Task starting point：',
           'smart_delivery_dialog_unable_query_endpoint_info':
-          'Unable query endpoint info',
+              'Unable query endpoint info',
           'smart_delivery_dialog_task_endpoint': 'Task endpoint：',
           'smart_delivery_dialog_start_delivery': 'Start delivery',
           'smart_delivery_dialog_creat': 'Creat',
@@ -9011,12 +9021,12 @@ class Translation extends Translations {
           'smart_delivery_dialog_task_detail': 'Task detail',
           'smart_delivery_dialog_task_state': 'Task state：',
           'smart_delivery_dialog_checking_shoe_tree_inventory':
-          'Checking shoe tree inventory...',
+              'Checking shoe tree inventory...',
           'smart_delivery_dialog_saving_shoe_tree_inventory':
-          'Saving shoe tree inventory...',
+              'Saving shoe tree inventory...',
           'smart_delivery_dialog_getting_device_info': 'Getting device info...',
           'smart_delivery_dialog_creating_delivery_task':
-          'Creating delivery task...',
+              'Creating delivery task...',
           'smart_delivery_dialog_getting_now_task': 'Getting now task...',
           'smart_delivery_dialog_canceling_now_task': 'Canceling now task...',
           'smart_delivery_dialog_set': 'Set',
@@ -9027,7 +9037,7 @@ class Translation extends Translations {
           'sap_wms_reprint_label_reprint_label': 'Reprint label',
           'sap_wms_reprint_label_getting_label_info': 'Getting label info...',
           'sap_wms_reprint_label_scan_wrong_barcode':
-          'Please scan the correct barcode !',
+              'Please scan the correct barcode !',
           'sap_wms_split_label_material': 'Material：',
           'sap_wms_split_label_type_body': 'Type body：',
           'sap_wms_split_label_size': 'Size：',
@@ -9035,22 +9045,22 @@ class Translation extends Translations {
           'sap_wms_split_label_split_qty': 'Can split qty：',
           'sap_wms_split_label_split': 'Split qty',
           'sap_wms_split_label_submit_split_info_tips':
-          'Are you sure you want to submit the current split status ?',
+              'Are you sure you want to submit the current split status ?',
           'sap_wms_split_label_submit': 'Submit',
           'sap_wms_split_label_delete_label': 'Delete label',
           'sap_wms_split_label_reprint_label': 'Reprint label',
           'sap_wms_split_label_getting_label_info':
-          'Getting labeling information...',
+              'Getting labeling information...',
           'sap_wms_split_label_splitting_label': 'Splitting label...',
           'sap_wms_split_label_split_label_complete': 'Label split complete',
           'sap_wms_split_label_input_split_qty_tips':
-          'Please enter the quantity to be dismantled !',
+              'Please enter the quantity to be dismantled !',
           'sap_wms_split_label_split_qty_error_tops':
-          'The quantity of disassembly cannot be the same as the quantity that can be disassembled !',
+              'The quantity of disassembly cannot be the same as the quantity that can be disassembled !',
           'sap_wms_split_label_select_warehouse_before_print_label_tips':
-          'Please select the corresponding warehouse before labeling and printing !',
+              'Please select the corresponding warehouse before labeling and printing !',
           'sap_wms_split_label_select_label_fo_print':
-          'Please select the label to print !',
+              'Please select the label to print !',
           'sap_print_picking_supplementary_order': 'Supplementary',
           'sap_print_picking_normal_order': 'Normal',
           'sap_print_picking_outsourcing_order': 'Outsourcing',
@@ -9067,39 +9077,39 @@ class Translation extends Translations {
           'sap_print_picking_picker_number': 'Picker number',
           'sap_print_picking_scan_picking': 'Scan picking',
           'sap_print_picking_getting_pick_order_list':
-          'Getting pick order list...',
+              'Getting pick order list...',
           'sap_print_picking_getting_dispatch_order_list_detail':
-          'Getting dispatch order list detail...',
+              'Getting dispatch order list detail...',
           'sap_print_picking_submitting_picking': 'Submitting picking...',
           'sap_print_picking_getting_pallet_info': 'Getting pallet info...',
           'sap_print_picking_submitting_transfer': 'Submitting transfer...',
           'sap_print_picking_raw_material_no_need_scan':
-          'Raw material no need scan',
+              'Raw material no need scan',
           'sap_print_picking_label_not_belong_pick_order':
-          'Label not belong pick order',
+              'Label not belong pick order',
           'sap_print_picking_label_scanned': 'Label scanned',
           'sap_print_picking_exceed_material_pick_requirements_tips':
-          'Exceed material pick requirements！',
+              'Exceed material pick requirements！',
           'sap_print_picking_contents_cargo_box_exceed_pick_qty_tips':
-          'This box of materials exceeds the remaining total amount of %s that can be collected on the work order. Please replace the available box of goods.',
+              'This box of materials exceeds the remaining total amount of %s that can be collected on the work order. Please replace the available box of goods.',
           'sap_print_picking_pallet_scanned': 'Pallet scanned',
           'sap_print_picking_label_exceed_order_surplus_qty_tips':
-          'Label %s size %s %s, exceeding the remaining amount of %s that can be claimed on the work order',
+              'Label %s size %s %s, exceeding the remaining amount of %s that can be claimed on the work order',
           'sap_print_picking_scan_wrong_barcode_tips':
-          'Please scan the correct barcode !',
+              'Please scan the correct barcode !',
           'sap_print_picking_select_pick_material': 'Select pick material',
           'sap_print_picking_material_size_type_different_tips':
-          'Size materials cannot be submitted together with non size materials !!',
+              'Size materials cannot be submitted together with non size materials !!',
           'sap_print_picking_pick_still_unfinished_tips':
-          'Type body < %s > still %s unclaimed picking',
+              'Type body < %s > still %s unclaimed picking',
           'sap_print_picking_submit_pick_tips':
-          '%s。Are you sure you want to submit the material requisition ?',
+              '%s。Are you sure you want to submit the material requisition ?',
           'sap_print_picking_pallet_has_material_cannot_transfer':
-          'Detected pallets with unclaimed materials, do you need to move them to the warehouse ?',
+              'Detected pallets with unclaimed materials, do you need to move them to the warehouse ?',
           'sap_print_picking_all_material_transfer_completed':
-          'All material transfer completed !',
+              'All material transfer completed !',
           'sap_print_picking_pallet_already_occupied':
-          'This pallet is already in use in another warehouse !!',
+              'This pallet is already in use in another warehouse !!',
           'sap_print_picking_pallet_not_exists': 'This pallet not exists !!',
           'sap_print_picking_transfer_new_pallet': 'New pallet',
           'sap_print_picking_transfer_pallet_no': 'Pallet no：',
@@ -9107,9 +9117,9 @@ class Translation extends Translations {
           'sap_print_picking_transfer_type_body': 'Type body:',
           'sap_print_picking_transfer_size_or_qty': 'Size/qty：',
           'sap_print_picking_transfer_surplus_material_transfer':
-          'Surplus material transfer',
+              'Surplus material transfer',
           'sap_print_picking_transfer_scan_or_select_label_fo_transfer_tips':
-          'Please scan or check the label of the goods to be transferred to the warehouse !',
+              'Please scan or check the label of the goods to be transferred to the warehouse !',
           'sap_print_picking_transfer_transfer': 'Transfer',
           'sap_print_picking_detail_material': 'Material：',
           'sap_print_picking_detail_type_body': 'Type body：',
@@ -9118,7 +9128,7 @@ class Translation extends Translations {
           'sap_print_picking_detail_pick': 'Pick：',
           'sap_print_picking_detail_label_qty': 'Label qty：',
           'sap_print_picking_detail_recommend_storage_location':
-          'Recommend storage location：',
+              'Recommend storage location：',
           'sap_print_picking_detail_print_pick': 'Sap Print pick',
           'sap_print_picking_detail_label_list': 'Label list',
           'sap_print_picking_detail_scanned': 'Scanned：',
@@ -9126,13 +9136,13 @@ class Translation extends Translations {
           'sap_print_picking_barcode_list_label_no': 'Label no：',
           'sap_print_picking_barcode_list_pallet_no': 'Pallet no：',
           'sap_print_picking_barcode_list_pick_or_box_capacity':
-          'Pick/box capacity：',
+              'Pick/box capacity：',
           'sap_print_picking_barcode_list_type_body': 'Type body：',
           'sap_print_picking_barcode_list_size': 'Size：',
           'sap_print_picking_barcode_list_delete_label_tips':
-          'Delete label tips ?',
+              'Delete label tips ?',
           'sap_print_picking_barcode_list_scanned_label_list':
-          'Scanned label list',
+              'Scanned label list',
           'sap_production_picking_supplementary_order': 'Supplementary ',
           'sap_production_picking_normal_order': 'Normal',
           'sap_production_picking_notification_no': 'Notification no：',
@@ -9143,25 +9153,25 @@ class Translation extends Translations {
           'sap_production_picking_notification_no_tips': 'Notification no',
           'sap_production_picking_stock_in': 'Stock in',
           'sap_production_picking_getting_picking_notification_order_list_tips':
-          'Getting picking notification order list...',
+              'Getting picking notification order list...',
           'sap_production_picking_getting_dispatch_order_list_detail_tips':
-          'Getting dispatch order list detail...',
+              'Getting dispatch order list detail...',
           'sap_production_picking_submitting_picking_tips':
-          'Submitting picking...',
+              'Submitting picking...',
           'sap_production_picking_use_sap_print_picking_tips':
-          'Please use the <SAP Print Pick> function to collect spray paint materials！',
+              'Please use the <SAP Print Pick> function to collect spray paint materials！',
           'sap_production_picking_different_warehouses_cannot_pick_together_tips':
-          'Different warehouses cannot pick together！',
+              'Different warehouses cannot pick together！',
           'sap_production_picking_has_label_material_use_scan_picking_tips':
-          'Has label material use scan_ picking！',
+              'Has label material use scan_ picking！',
           'sap_production_picking_scan_picking': 'Scan picking',
           'sap_production_picking_artificial_picking': 'Artificial picking',
           'sap_production_picking_getting_barcode_list_tips':
-          'Getting barcode list...',
+              'Getting barcode list...',
           'sap_production_picking_label_info_error_tips':
-          'The tag data is empty, please refresh the tag list',
+              'The tag data is empty, please refresh the tag list',
           'sap_production_picking_this_label_not_belong_pick_order_tips':
-          'This label not belong pick order!!',
+              'This label not belong pick order!!',
           'sap_production_picking_label_scanned': 'Label scanned !!',
           'sap_production_picking_detail_dispatch_no': 'Dispatch no：',
           'sap_production_picking_detail_dispatch_machine': 'Dispatch machine：',
@@ -9174,16 +9184,16 @@ class Translation extends Translations {
           'sap_production_picking_detail_scene_warehouse': 'Scene warehouse：',
           'sap_production_picking_detail_pick': 'Pick：',
           'sap_production_picking_detail_cannot_select_error_material_tips':
-          'Cannot select materials with a material requisition quantity of 0 or a line warehouse inventory of 0',
+              'Cannot select materials with a material requisition quantity of 0 or a line warehouse inventory of 0',
           'sap_production_picking_detail_sap_production_picking':
-          'SAP production pick',
+              'SAP production pick',
           'sap_production_picking_detail_label_list': 'Label list',
           'sap_production_picking_detail_refresh_label': 'Refresh label',
           'sap_production_picking_detail_pick_material': 'Pick material',
           'sap_production_picking_detail_select_material_tips':
-          'Please select the materials to be picked up !',
+              'Please select the materials to be picked up !',
           'sap_production_picking_barcode_list_scanned_barcode_list':
-          'Scanned barcode list',
+              'Scanned barcode list',
           'sap_production_picking_barcode_list_barcode': 'Barcode：',
           'sap_production_picking_barcode_list_material': 'Material：',
           'sap_production_picking_dialog_modify_pick_qty': 'Modify pick qty',
@@ -9213,100 +9223,100 @@ class Translation extends Translations {
           'sap_no_label_stock_in_material_code': 'Material code',
           'sap_no_label_stock_in_submit_stock_in': 'Submit stock in',
           'sap_no_label_stock_in_getting_wait_stock_in_order_list_tips':
-          'Getting wait stock in order list...',
+              'Getting wait stock in order list...',
           'sap_no_label_stock_in_submitting_stock_in_tips':
-          'Submitting stock in...',
+              'Submitting stock in...',
           'sap_no_label_stock_in_dialog_modify_stock_in_qty':
-          'Modify stock in qty',
+              'Modify stock in qty',
           'sap_no_label_stock_in_dialog_report_qty': 'Report qty',
           'sap_no_label_stock_in_dialog_posting_date': 'Posting date',
           'sap_no_label_stock_in_dialog_leader_confirm': 'Leader confirm',
           'sap_no_label_stock_in_dialog_leader_number': 'Leader Number',
           'sap_surplus_material_stock_in_select_surplus_material_type':
-          'Select surplus material type',
+              'Select surplus material type',
           'sap_surplus_material_stock_in_material': 'Material：',
           'sap_surplus_material_stock_in_surplus_material_weight':
-          'Surplus material weight：',
+              'Surplus material weight：',
           'sap_surplus_material_stock_in_delete_surplus_material_tips':
-          'Are you sure you want to delete this material head data?',
+              'Are you sure you want to delete this material head data?',
           'sap_surplus_material_stock_in_surplus_material': 'Surplus material：',
           'sap_surplus_material_stock_in_type_body': 'Type body：',
           'sap_surplus_material_stock_in_total_weight': 'Total weight：',
           'sap_surplus_material_stock_in_dispatch_order_no':
-          'Dispatch order no：',
+              'Dispatch order no：',
           'sap_surplus_material_stock_in_submit_date': 'Submit date：',
           'sap_surplus_material_stock_in_machine': 'Machine：',
           'sap_surplus_material_stock_in_surplus_material_type':
-          'Surplus material type：',
+              'Surplus material type：',
           'sap_surplus_material_stock_in_total': 'Total：',
           'sap_surplus_material_stock_in_usb_monitor': 'Usb monitor',
           'sap_surplus_material_stock_in_monitor_usb_insert':
-          'Detected USB device insertion',
+              'Detected USB device insertion',
           'sap_surplus_material_stock_in_reconnect': 'Reconnect',
           'sap_surplus_material_stock_in_posting': 'Posting',
           'sap_surplus_material_stock_in_query_history': 'Query history',
           'sap_surplus_material_stock_in_production': 'Production',
           'sap_surplus_material_stock_in_research': 'Research',
           'sap_surplus_material_stock_in_sole_factory_scrap':
-          'Sole factory scrap',
+              'Sole factory scrap',
           'sap_surplus_material_stock_in_shoe_factory_scrap':
-          'Shoe factory scrap',
+              'Shoe factory scrap',
           'sap_surplus_material_stock_in_floor_waste': 'Floor waste',
           'sap_surplus_material_stock_in_supplementary': 'Supplementary',
           'sap_surplus_material_stock_in_workshop_material_return':
-          'Workshop material return',
+              'Workshop material return',
           'sap_surplus_material_stock_in_querying_history_tips':
-          'Querying history...',
+              'Querying history...',
           'sap_surplus_material_stock_in_getting_surplus_material_info_tips':
-          'Getting surplus material info...',
+              'Getting surplus material info...',
           'sap_surplus_material_stock_in_weighbridge_disconnect':
-          'Weighbridge disconnect',
+              'Weighbridge disconnect',
           'sap_surplus_material_stock_in_weighbridge_unconnected':
-          'Weighbridge unconnected',
+              'Weighbridge unconnected',
           'sap_surplus_material_stock_in_weighbridge_connected':
-          'Weighbridge connected',
+              'Weighbridge connected',
           'sap_surplus_material_stock_in_weighbridge_connect_failed':
-          'Weighbridge connect failed',
+              'Weighbridge connect failed',
           'sap_surplus_material_stock_in_weighbridge_connect_error':
-          'Weighbridge connect error',
+              'Weighbridge connect error',
           'sap_surplus_material_stock_in_scan_wrong_order_label_tips':
-          'Please scan the material head labels on the same work order !!',
+              'Please scan the material head labels on the same work order !!',
           'sap_surplus_material_stock_in_surplus_material_already_scanned':
-          'Surplus material already scanned !!',
+              'Surplus material already scanned !!',
           'sap_surplus_material_stock_in_surplus_material_stock_in_tips':
-          'Only 3 types of material heads can be stored at a time !!',
+              'Only 3 types of material heads can be stored at a time !!',
           'sap_surplus_material_stock_in_label_already_stock_in':
-          'Label already stock in !!',
+              'Label already stock in !!',
           'sap_surplus_material_stock_in_analysis_label_failed':
-          'Analysis label failed !!',
+              'Analysis label failed !!',
           'sap_surplus_material_stock_in_no_data_submit':
-          'No data to submit !!',
+              'No data to submit !!',
           'sap_surplus_material_stock_in_input_surplus_material_weight_tips':
-          'Please fill in the weight of the material head !!',
+              'Please fill in the weight of the material head !!',
           'sap_stock_transfer_label': 'Label',
           'sap_stock_transfer_pallet': 'Pallet：',
           'sap_stock_transfer_storage_location': 'Storage location：',
           'sap_stock_transfer_scan_storage_location_or_pallet_tips':
-          'Please scan the destination storage location label or pallet label !',
+              'Please scan the destination storage location label or pallet label !',
           'sap_stock_transfer_transfer': 'Transfer',
           'sap_stock_transfer_getting_wait_put_on_list_tips':
-          'Getting wait put on list...',
+              'Getting wait put on list...',
           'sap_stock_transfer_pallet_already_occupied_tips':
-          'This pallet is already in use in another warehouse !!',
+              'This pallet is already in use in another warehouse !!',
           'sap_stock_transfer_pallet_not_exists_tips': 'Pallet not exists !!',
           'sap_stock_transfer_submitting_put_on_tips': 'Submitting put on...',
           'sap_stock_transfer_scan_wrong_label_tips':
-          'Please scan the correct barcode !!',
+              'Please scan the correct barcode !!',
           'sap_stock_transfer_scan_pallet_or_label_tips':
-          'Please scan the pallet or label',
+              'Please scan the pallet or label',
           'sap_stock_transfer_need_scan_all_label_tips':
-          'The entire pallet transfer must check all labels !!',
+              'The entire pallet transfer must check all labels !!',
           'sap_stock_transfer_scan_or_select_goods_fo_transfer_tips':
-          'Please scan or select the goods to be moved to the warehouse !!',
+              'Please scan or select the goods to be moved to the warehouse !!',
           'sap_stock_transfer_dialog_empty_pallet_storage_location_registration':
-          'Registration of empty pallet storage locations',
+              'Registration of empty pallet storage locations',
           'sap_stock_transfer_dialog_scan_or_enter_storage_location_tips':
-          'Please scan or fill in the warehouse location number',
+              'Please scan or fill in the warehouse location number',
           'sap_sales_shipment_delivery_date_tips': 'Delivery date tips',
           'sap_sales_shipment_instruction': 'Instruction：',
           'sap_sales_shipment_type_body': 'Type body：',
@@ -9317,60 +9327,60 @@ class Translation extends Translations {
           'sap_sales_shipment_instruction_no': 'Instruction no',
           'sap_sales_shipment_submit_stock_out': 'Submit stock out',
           'sap_sales_shipment_querying_wait_stock_out_list_tips':
-          'Resetting label status is querying the list of pending shipments...',
+              'Resetting label status is querying the list of pending shipments...',
           'sap_sales_shipment_submitting_sales_stock_out_tips':
-          'Submitting sales outbound shipment...',
+              'Submitting sales outbound shipment...',
           'sap_sales_shipment_getting_pallet_info_tips':
-          'Obtaining tray information...',
+              'Obtaining tray information...',
           'sap_sales_shipment_delete_label':
-          'Deleting tag binding relationship...',
+              'Deleting tag binding relationship...',
           'sap_sales_shipment_scan_wrong_barcode_tips':
-          'SPlease scan the correct barcode !',
+              'SPlease scan the correct barcode !',
           'sap_sales_shipment_pallet_number': 'Pallet no：',
           'sap_sales_shipment_pallet_label_no': 'Label no：',
           'sap_sales_shipment_pallet_quantity': 'Quantity：',
           'sap_sales_shipment_pallet_reset_label_status_tips':
-          'Are you sure you want to reset the label status ?',
+              'Are you sure you want to reset the label status ?',
           'sap_sales_shipment_pallet_scan_or_select_label_tips':
-          'Scan or check the corresponding label',
+              'Scan or check the corresponding label',
           'incoming_inspection_order_no': 'Order no：',
           'incoming_inspection_delivery_qty': 'Delivery qty：',
           'incoming_inspection_delivery_detail': '%sPieces  %s %s',
           'incoming_inspection_delete_order_tips':
-          'Are you sure you want to delete the delivery note for this group ?',
+              'Are you sure you want to delete the delivery note for this group ?',
           'incoming_inspection_material': 'Material：',
           'incoming_inspection_material_delivery_qty': 'Material delivery qty：',
           'incoming_inspection_delete_material_tips':
-          'Are you sure you want to delete this group of materials ?',
+              'Are you sure you want to delete this group of materials ?',
           'incoming_inspection_detail_delivery_qty': 'Detail delivery qty：',
           'incoming_inspection_delivery_detail_tips': 'Delivery info：',
           'incoming_inspection_delete_item_tips':
-          'Are you sure you want to delete this option ?',
+              'Are you sure you want to delete this option ?',
           'incoming_inspection_delivery_no': 'Delivery no',
           'incoming_inspection_material_code': 'Material code',
           'incoming_inspection_scan_order': 'Scan order',
           'incoming_inspection_query_delivery': 'Query',
           'incoming_inspection_clean_delivery': 'Clean delivery',
           'incoming_inspection_clean_delivery_tips':
-          'Are you sure you want to clear the form ?',
+              'Are you sure you want to clear the form ?',
           'incoming_inspection_apply_inspection': 'Apply inspection',
           'incoming_inspection_querying_delivery_list_tips':
-          'Querying_delivery_list_tips Querying the incoming material list...',
+              'Querying_delivery_list_tips Querying the incoming material list...',
           'incoming_inspection_submitting_inspection_apply_tips':
-          'Submitting_inspection_apply_tips Submitting inspection application...',
+              'Submitting_inspection_apply_tips Submitting inspection application...',
           'incoming_inspection_querying_inspection_list_tips':
-          'Querying_inspection_list_tips Querying the list of inspection forms...',
+              'Querying_inspection_list_tips Querying the list of inspection forms...',
           'incoming_inspection_getting_inspection_detail_tips':
-          'Getting_inspection_detail_tips Obtaining inspection form details...',
+              'Getting_inspection_detail_tips Obtaining inspection form details...',
           'incoming_inspection_submitting_inspection_result_tips':
-          'Submitting_inspection_result_tips Submitting inspection results...',
+              'Submitting_inspection_result_tips Submitting inspection results...',
           'incoming_inspection_signing': 'Signing Signing for delivery...',
           'incoming_inspection_reporting_exception':
-          'Reporting_exception Reporting exception...',
+              'Reporting_exception Reporting exception...',
           'incoming_inspection_submitting_processing':
-          'Submitting_processing Submitting for processing...',
+              'Submitting_processing Submitting for processing...',
           'incoming_inspection_submitting_close_case':
-          'Submitting_close_case Submitting case closure...',
+              'Submitting_close_case Submitting case closure...',
           'incoming_inspection_order_order_no': 'Order no：',
           'incoming_inspection_order_applicant': 'Applicant：',
           'incoming_inspection_order_suppler': 'Suppler：',
@@ -9379,48 +9389,48 @@ class Translation extends Translations {
           'incoming_inspection_order_wait_processing': 'Wait processing',
           'incoming_inspection_order_signed': 'Signed',
           'incoming_inspection_order_exception_wait_processing':
-          'Exception wait processing',
+              'Exception wait processing',
           'incoming_inspection_order_exception_processed':
-          'Exception processed',
+              'Exception processed',
           'incoming_inspection_order_closed': 'Closed case',
           'incoming_inspection_order_suppler_query_tips': 'Suppler query',
           'incoming_inspection_order_query': 'Query',
           'incoming_inspection_order_inspection_list': 'Inspection list',
           'incoming_inspection_order_inspection_site_photos':
-          'Inspection site photos',
+              'Inspection site photos',
           'incoming_inspection_order_material': 'Material：',
           'incoming_inspection_order_inspection': 'Inspection',
           'incoming_inspection_order_delivery_qty': 'Delivery piece：',
           'incoming_inspection_order_application_info': 'Application info：',
           'incoming_inspection_order_submit_inspection': 'Submit inspection',
           'incoming_inspection_order_no_photos_tips':
-          'Please take at least one on-site photo !',
+              'Please take at least one on-site photo !',
           'incoming_inspection_order_dispose': 'Dispose',
           'incoming_inspection_order_inspection_info': 'Inspection info：',
           'incoming_inspection_order_inspection_result': 'Inspection result：',
           'incoming_inspection_order_sign': 'Sign',
           'incoming_inspection_order_sign_tips':
-          'Are you sure you want to sign for it ?',
+              'Are you sure you want to sign for it ?',
           'incoming_inspection_order_exception': 'Exception',
           'incoming_inspection_order_input_exception_tips':
-          'Exception description',
+              'Exception description',
           'incoming_inspection_order_report_exception': 'Report exception',
           'incoming_inspection_order_sign_info': 'Sign info',
           'incoming_inspection_order_exception_dispose': 'Exception dispose',
           'incoming_inspection_order_exception_info': 'Exception info：',
           'incoming_inspection_order_exception_reason': 'Exception reason：',
           'incoming_inspection_order_input_exception_result':
-          'Fill in the processing result',
+              'Fill in the processing result',
           'incoming_inspection_order_submit_processing_result':
-          'Submit processing result',
+              'Submit processing result',
           'incoming_inspection_order_disposed_exception': 'Disposed exception',
           'incoming_inspection_order_exception_disposed_info':
-          'Exception disposed info：',
+              'Exception disposed info：',
           'incoming_inspection_order_exception_disposed_result':
-          'Exception disposed result：',
+              'Exception disposed result：',
           'incoming_inspection_order_close_case': 'Close case',
           'incoming_inspection_order_close_tips':
-          'Are you sure you want to submit the case for closure ?',
+              'Are you sure you want to submit the case for closure ?',
           'incoming_inspection_order_close_case_info': 'Close case info',
           'incoming_inspection_dialog_metre': 'Metre',
           'incoming_inspection_dialog_modify_material': 'Modify material',
@@ -9428,33 +9438,33 @@ class Translation extends Translations {
           'incoming_inspection_dialog_total_pieces': 'Total pieces',
           'incoming_inspection_dialog_unit': 'Unit',
           'incoming_inspection_dialog_input_quantity_tips':
-          'Please enter the correct quantity',
+              'Please enter the correct quantity',
           'incoming_inspection_dialog_input_pieces_tips':
-          'Please enter the correct number of items',
+              'Please enter the correct number of items',
           'incoming_inspection_dialog_input_unit_tips': 'Please enter the unit',
           'incoming_inspection_dialog_modify': 'Modify',
           'incoming_inspection_dialog_add_material': 'Add material',
           'incoming_inspection_dialog_order_no': 'Order no',
           'incoming_inspection_dialog_select_material':
-          'Select the materials to be added',
+              'Select the materials to be added',
           'incoming_inspection_dialog_material_name': 'Material name',
           'incoming_inspection_dialog_input_order_no_tips':
-          'Please enter the tracking number',
+              'Please enter the tracking number',
           'incoming_inspection_dialog_input_material_name_tips':
-          'Please enter the material name',
+              'Please enter the material name',
           'incoming_inspection_dialog_add': 'Add',
           'incoming_inspection_dialog_inspection_application':
-          'Inspection application',
+              'Inspection application',
           'incoming_inspection_dialog_input_applicant_no_tips':
-          'Please enter the applicant labor number',
+              'Please enter the applicant labor number',
           'incoming_inspection_dialog_submit': 'Submit',
           'incoming_inspection_dialog_submit_inspection_result':
-          'Submit inspection result',
+              'Submit inspection result',
           'incoming_inspection_dialog_input_inspector_tips':
-          'Please enter the inspector work ID',
+              'Please enter the inspector work ID',
           'incoming_inspection_dialog_inspection_result': 'Inspection result',
           'incoming_inspection_dialog_input_inspection_result_tips':
-          'Please enter the inspection result',
+              'Please enter the inspection result',
           'sap_inventory_pallet': 'Pallet：',
           'sap_inventory_label_qty': 'Label qty：',
           'sap_inventory_inventory_qty': 'Inventory qty：',
@@ -9472,9 +9482,9 @@ class Translation extends Translations {
           'sap_inventory_status': 'Status：',
           'sap_inventory_pallet_number': 'Pallet：%s',
           'sap_inventory_getting_inventory_detail':
-          'Getting inventory detail...',
+              'Getting inventory detail...',
           'sap_inventory_submitting_inventory_result':
-          'Submitting inventory count result...',
+              'Submitting inventory count result...',
           'sap_inventory_status_10': 'Initiate first inventory count',
           'sap_inventory_status_11': 'First inventory count complete',
           'sap_inventory_status_12': 'First inventory count post',
@@ -9486,7 +9496,7 @@ class Translation extends Translations {
           'wait_picking_material_order_post_date': 'Post date',
           'wait_picking_material_order_factory_warehouse': 'Factory warehouse',
           'wait_picking_material_order_workshop_warehouse':
-          'Workshop warehouse',
+              'Workshop warehouse',
           'wait_picking_material_order_modify_selected': 'Modify selected',
           'wait_picking_material_order_view_batch': 'View batch',
           'wait_picking_material_order_location': 'Location：',
@@ -9495,7 +9505,7 @@ class Translation extends Translations {
           'wait_picking_material_order_take_more': 'Take more',
           'wait_picking_material_order_line_inventory': 'Line inventory：',
           'wait_picking_material_order_real_time_inventory':
-          'Real time inventory：%s',
+              'Real time inventory：%s',
           'wait_picking_material_order_total': 'Total',
           'wait_picking_material_order_not_dispatch': 'Not dispatch',
           'wait_picking_material_order_received_qty': 'Received qty',
@@ -9504,57 +9514,57 @@ class Translation extends Translations {
           'wait_picking_material_order_instruction': 'Instruction：',
           'wait_picking_material_order_part': 'Part：',
           'wait_picking_material_order_error_tips':
-          'Do not use the material preparation function for non outsourced work orders.',
+              'Do not use the material preparation function for non outsourced work orders.',
           'wait_picking_material_order_print': 'Print Materials',
           'wait_picking_material_order_type_body': 'Type body',
           'wait_picking_material_order_sales_order_no': 'Sales order no',
           'wait_picking_material_order_material_code': 'Material code',
           'wait_picking_material_order_customer_purchase_order_no':
-          'Customer purchase order no',
+              'Customer purchase order no',
           'wait_picking_material_order_purchasing_documents':
-          'Purchasing documents',
+              'Purchasing documents',
           'wait_picking_material_order_production_demand_qty':
-          'Production demand qty',
+              'Production demand qty',
           'wait_picking_material_order_picker_number': 'Picker number',
           'wait_picking_material_order_all': 'All',
           'wait_picking_material_order_positive_order': 'Positive order',
           'wait_picking_material_order_positive_order_outsource':
-          'Positive order outsource',
+              'Positive order outsource',
           'wait_picking_material_order_supplement_order': 'Supplement order',
           'wait_picking_material_order_supplement_order_outsource':
-          'Supplement order outsource',
+              'Supplement order outsource',
           'wait_picking_material_order_all_can_pick_material':
-          'All can pick material',
+              'All can pick material',
           'wait_picking_material_order_show_no_inventory': 'Show no inventory',
           'wait_picking_material_order_show_received': 'Show received',
           'wait_picking_material_order_show_all_material': 'Show all material',
           'wait_picking_material_order_clear': 'Clear',
           'wait_picking_material_order_exit_tips':
-          'Are you sure you want to withdraw from this material requisition？',
+              'Are you sure you want to withdraw from this material requisition？',
           'wait_picking_material_order_move_deliver': 'Move deliver',
           'wait_picking_material_order_preparing_materials':
-          'Preparing materials',
+              'Preparing materials',
           'wait_picking_material_order_picking_posting': 'Picking posting',
           'wait_picking_material_order_search_all_need_supplier_or_process':
-          'The document type is all, and a supplier or process needs to be selected.',
+              'The document type is all, and a supplier or process needs to be selected.',
           'wait_picking_material_order_search_not_outsource_need_process':
-          'The document type is either regular or supplementary, and the process needs to be selected.',
+              'The document type is either regular or supplementary, and the process needs to be selected.',
           'wait_picking_material_order_search_outsource_need_supplier':
-          'The document type is outsourcing, and a supplier needs to be selected.',
+              'The document type is outsourcing, and a supplier needs to be selected.',
           'wait_picking_material_order_not_select':
-          'Please select the materials to be collected.',
+              'Please select the materials to be collected.',
           'wait_picking_material_order_selected_order_type_different':
-          'Please select materials of the same document type.',
+              'Please select materials of the same document type.',
           'wait_picking_material_order_querying_picker_info':
-          'Querying picker info...',
+              'Querying picker info...',
           'wait_picking_material_order_getting_picking_material_data':
-          'Getting picking material data...',
+              'Getting picking material data...',
           'wait_picking_material_order_getting_inventory_data':
-          'Getting inventory data...',
+              'Getting inventory data...',
           'wait_picking_material_order_posting_picking_material':
-          'Posting picking material...',
+              'Posting picking material...',
           'wait_picking_material_order_getting_material_print_info':
-          'Getting material print info...',
+              'Getting material print info...',
           'wait_picking_material_order_detail_instruction': 'Instructions：',
           'wait_picking_material_order_detail_type_body': 'Type body：',
           'wait_picking_material_order_detail_batch_set': 'Batch set：',
@@ -9567,24 +9577,24 @@ class Translation extends Translations {
           'wait_picking_material_order_detail_un_release_qty': 'Un-release qty',
           'wait_picking_material_order_detail_received_qty': 'Received qty',
           'wait_picking_material_order_detail_un_received_qty':
-          'Un-received qty',
+              'Un-received qty',
           'wait_picking_material_order_detail_picking_qty': 'Picking qty',
           'wait_picking_material_order_detail_workshop_warehouse_picking_qty':
-          'Workshop warehouse picking qty',
+              'Workshop warehouse picking qty',
           'wait_picking_material_order_detail_this_issued_qty':
-          'This issued qty',
+              'This issued qty',
           'picking_material_order_dialog_pick_title_can_tack_more':
-          'Picking(allow take more)',
+              'Picking(allow take more)',
           'picking_material_order_dialog_pick_title_cant_tack_more':
-          'Picking(prohibit take more)',
+              'Picking(prohibit take more)',
           'picking_material_order_dialog_picking_qty': 'This picking',
           'picking_material_order_dialog_title_instruction_detail':
-          'Instructions detail',
+              'Instructions detail',
           'picking_material_order_dialog_title_color_detail': 'Color detail',
           'picking_material_order_dialog_instruction': 'Instructions',
           'picking_material_order_dialog_color_system': 'Color system',
           'picking_material_order_dialog_title_real_time_inventory':
-          'Real time inventory',
+              'Real time inventory',
           'picking_material_order_dialog_warehouse': 'Warehouse',
           'picking_material_order_dialog_qty': 'Quantity',
           'picking_material_order_dialog_batch': 'Batch',
@@ -9593,14 +9603,14 @@ class Translation extends Translations {
           'picking_material_order_dialog_title_picker_check': 'Picker check',
           'picking_material_order_dialog_picker_number': 'Picker number',
           'picking_material_order_dialog_number_error':
-          'Please fill in the material requisition employee number correctly.',
+              'Please fill in the material requisition employee number correctly.',
           'picking_material_order_dialog_picker_avatar_not_upload_tips':
-          'The material requisition officer facial photo has not been uploaded. Please go to the human resources department to upload a full face photo.',
+              'The material requisition officer facial photo has not been uploaded. Please go to the human resources department to upload a full face photo.',
           'picking_material_order_dialog_title_modify_location':
-          'Modify location',
+              'Modify location',
           'picking_material_order_dialog_modify_success': 'Modify success!',
           'picking_material_order_dialog_submitting_picking':
-          'Submitting picking...',
+              'Submitting picking...',
           'picking_material_order_factory_warehouse': 'Factory warehouse',
           'picking_material_order_print_material': 'Print materials',
           'picking_material_order_create_out': 'Create out ticket',
@@ -9621,10 +9631,10 @@ class Translation extends Translations {
           'picking_material_order_color_info': 'Color',
           'picking_material_order_out_ticket': 'Out ticket',
           'picking_material_order_report_preparing_materials_info':
-          'Report preparing materials info',
+              'Report preparing materials info',
           'picking_material_order_posting': 'Posting',
           'picking_material_order_exit_tips':
-          'Are you sure you want to release this shipment ?',
+              'Are you sure you want to release this shipment ?',
           'picking_material_order_sales_order': 'Sales order',
           'picking_material_order_picking_no': 'Picking no',
           'picking_material_order_all': 'All',
@@ -9635,26 +9645,26 @@ class Translation extends Translations {
           'picking_material_order_prepared': 'Prepared',
           'picking_material_order_preparing': 'Preparing',
           'picking_material_order_querying_wait_deliver_order':
-          'Querying wait deliver order...',
+              'Querying wait deliver order...',
           'picking_material_order_getting_material_print_info':
-          'Getting material print info...',
+              'Getting material print info...',
           'picking_material_order_submitting_posting': 'Submitting posting...',
           'picking_material_order_reporting_preparing_materials':
-          'Reporting preparing materials...',
+              'Reporting preparing materials...',
           'picking_material_order_material_tips': 'Material：',
           'picking_material_order_preparing_material_qty':
-          'Preparing material qty：',
+              'Preparing material qty：',
           'picking_material_order_report_preparing_materials_progress':
-          'Report preparing materials progress',
+              'Report preparing materials progress',
           'picking_material_order_report': 'Report',
           'picking_material_order_posting_qty': 'Posting qty：',
           'picking_material_order_login_account_avatar_not_upload':
-          'Login account face photo not uploaded',
+              'Login account face photo not uploaded',
           'picking_material_order_posting_check': 'Posting check',
           'picking_material_order_submit_posting': 'Submit posting',
           'scan_picking_material_submitted': 'Submitted：',
           'scan_picking_material_delete_tips':
-          'Are you sure you want to delete this barcode ?',
+              'Are you sure you want to delete this barcode ?',
           'scan_picking_material_reverse': 'Reverse',
           'scan_picking_material_manual_input': 'Manual input',
           'scan_picking_material_input_code': 'Input code',
@@ -9662,21 +9672,21 @@ class Translation extends Translations {
           'scan_picking_material_qty': '%s',
           'scan_picking_material_clear': 'Clear',
           'scan_picking_material_clear_tips':
-          'Are you sure you want to clear the barcode?',
+              'Are you sure you want to clear the barcode?',
           'scan_picking_material_submit': 'Submit',
           'scan_picking_material_data_delete_fail': 'Data delete fail',
           'scan_picking_material_code_exists': 'Code exists',
           'scan_picking_material_no_code_submit': 'No code submit',
           'scan_picking_material_submitting_label': 'Verifying code...',
           'scan_picking_material_submitting_picking':
-          'Submitting picking material...',
+              'Submitting picking material...',
           'scan_picking_material_submit_picking': 'Submit picking',
           'scan_picking_material_input_picker_number': 'Input picker number',
           'scan_picking_material_process': 'Process：',
           'scan_picking_material_select_process': 'Select process',
           'production_scan_picking_material_submitted': 'Submitted：',
           'production_scan_picking_material_delete_tips':
-          'Are you sure you want to delete this barcode ?',
+              'Are you sure you want to delete this barcode ?',
           'production_scan_picking_material_reverse': 'Reverse',
           'production_scan_picking_material_manual_input': 'Manual input',
           'production_scan_picking_material_input_code': 'Input code',
@@ -9684,36 +9694,36 @@ class Translation extends Translations {
           'production_scan_picking_material_qty': '%s',
           'production_scan_picking_material_clear': 'Clear',
           'production_scan_picking_material_clear_tips':
-          'Are you sure you want to clear the barcode?',
+              'Are you sure you want to clear the barcode?',
           'production_scan_picking_material_submit': 'Submit',
           'production_scan_picking_material_submit_picking': 'Submit picking',
           'production_scan_picking_material_input_picker_number':
-          'Input picker number',
+              'Input picker number',
           'production_scan_picking_material_select_supplier_or_department':
-          'Select supplier or department',
+              'Select supplier or department',
           'production_scan_picking_material_supplier': 'Supplier：',
           'production_scan_picking_material_department': 'Department：',
           'production_scan_picking_material_getting_supplier_and_department':
-          'Getting supplier and department...',
+              'Getting supplier and department...',
           'production_scan_picking_material_data_delete_fail':
-          'Data delete fail',
+              'Data delete fail',
           'production_scan_picking_material_code_exists': 'Code exists',
           'production_scan_picking_material_no_code_submit': 'No code submit',
           'production_scan_picking_material_submitting_picking':
-          'Submitting picking...',
+              'Submitting picking...',
           'sale_scan_out_warehouse_submit_picking': 'Submit picking',
           'sale_scan_out_warehouse_input_picker_number': 'Input picker number',
           'sale_scan_out_warehouse_submit': 'Submit',
           'sale_scan_out_warehouse_submitted': 'Submitted：',
           'sale_scan_out_warehouse_delete_tips':
-          'Are you sure you want to delete this barcode ?',
+              'Are you sure you want to delete this barcode ?',
           'sale_scan_out_warehouse_manual_input': 'Manual input',
           'sale_scan_out_warehouse_input_code': 'Input code',
           'sale_scan_out_warehouse_scanned': 'Scanned：',
           'sale_scan_out_warehouse_qty': '%s',
           'sale_scan_out_warehouse_clear': 'Clear',
           'sale_scan_out_warehouse_clear_tips':
-          'Are you sure you want to clear the barcode?',
+              'Are you sure you want to clear the barcode?',
           'sale_scan_out_warehouse_data_delete_fail': 'Data delete fail',
           'sale_scan_out_warehouse_code_exists': 'Code exists',
           'sale_scan_out_warehouse_no_code_submit': 'No code submit',
@@ -9724,37 +9734,37 @@ class Translation extends Translations {
           'quality_management_quantity': 'Quantity:',
           'quality_management_line_number': 'Line number:',
           'quality_management_sure_delete_abnormal':
-          'Are you sure you want to delete this exception?',
+              'Are you sure you want to delete this exception?',
           'quality_management_serial_number': 'Serial Number:',
           'quality_management_quality_inspection_time':
-          'Quality inspection time:',
+              'Quality inspection time:',
           'quality_management_quality_inspector': 'Quality inspector:',
           'quality_management_quality_state': 'State:',
           'quality_management_quality_defect': 'Defect:',
           'quality_management_modify_personnel':
-          'Modify quality control personnel',
+              'Modify quality control personnel',
           'quality_management_manual_input': 'Manual input',
           'quality_management_submit': 'Submit',
           'quality_management_three_seconds':
-          'Automatically submit within three seconds...',
+              'Automatically submit within three seconds...',
           'quality_management_enter_tracking_number': 'Enter tracking number',
           'quality_management_autocommit': 'Autocommit',
           'quality_management_slight': 'Slight',
           'quality_management_serious': 'Serious',
           'quality_management_obtaining_data_details':
-          'Obtaining data details...',
+              'Obtaining data details...',
           'quality_management_exception_type': 'Getting exception type...',
           'quality_management_select_defective_items':
-          'Please select defective items before submitting!',
+              'Please select defective items before submitting!',
           'quality_management_uploading_data':
-          'Uploading quality anomaly data...',
+              'Uploading quality anomaly data...',
           'quality_management_delete_data': 'Deleting quality anomaly data...',
           'quality_management_delete_success': 'Delete successfully!',
           'device_maintenance_nullify': 'nullify',
           'device_maintenance_no_invalidation_permission':
-          'No invalidation permission',
+              'No invalidation permission',
           'device_maintenance_reason_for_invalidation':
-          'Please enter the reason for invalidation',
+              'Please enter the reason for invalidation',
           'shack_bar_warm': 'warm',
           'device_maintenance_equipment_name': 'Equipment name:',
           'device_maintenance_equipment_number': 'Equipment number:',
@@ -9765,60 +9775,60 @@ class Translation extends Translations {
           'device_maintenance_keeper': 'Keeper:',
           'device_maintenance_long_press_to_void': 'Long press to void！',
           'device_maintenance_equipment_maintenance_records':
-          'Equipment maintenance records',
+              'Equipment maintenance records',
           'device_maintenance_equipment_numbers': 'Equipment number',
           'device_maintenance_scan_device_qr_code': 'Scan the device QR code',
           'device_maintenance_component_brand_empty':
-          'The component brand is empty',
+              'The component brand is empty',
           'device_maintenance_component_name_empty':
-          'The component name is empty',
+              'The component name is empty',
           'device_maintenance_component_qty_empty':
-          'The number of components is empty',
+              'The number of components is empty',
           'device_maintenance_component_specification_empty':
-          'The component specification is empty',
+              'The component specification is empty',
           'device_maintenance_component_unit_empty':
-          'The unit of the component is empty',
+              'The unit of the component is empty',
           'device_maintenance_manufacturer_brand': 'Manufacturer/Brand:',
           'device_maintenance_replace_accessory_name':
-          'Replace accessory name:',
+              'Replace accessory name:',
           'device_maintenance_quantity': 'Quantity:',
           'device_maintenance_specifications': 'Specifications:',
           'device_maintenance_unit': 'Unit:',
           'device_maintenance_remarks': 'Remarks:',
           'device_maintenance_add_components': 'Add Components',
           'device_maintenance_equipment_repair_report':
-          'Equipment repair report',
+              'Equipment repair report',
           'device_maintenance_holding_artificial_number':
-          'Holding an artificial number',
+              'Holding an artificial number',
           'device_maintenance_maintenance_organization':
-          'Maintenance organization',
+              'Maintenance organization',
           'device_maintenance_maintenance_location': 'Maintenance location',
           'device_maintenance_fault_description': 'Fault description',
           'device_maintenance_prevention':
-          'Post maintenance evaluation and prevention',
+              'Post maintenance evaluation and prevention',
           'device_maintenance_submit': 'Submit',
           'device_maintenance_repair_time': 'Repair time',
           'device_maintenance_fixed_time': 'Fixed time',
           'device_maintenance_repair_orders_list':
-          'Obtaining the list of equipment repair orders...',
+              'Obtaining the list of equipment repair orders...',
           'device_maintenance_holder_input_error': 'Holder input error!',
           'device_maintenance_repair_unit': 'Please enter the repair unit!',
           'device_maintenance_input_fault_description':
-          'Please enter the fault description!',
+              'Please enter the fault description!',
           'device_maintenance_evaluation_prevention':
-          'Please enter post repair evaluation and prevention!',
+              'Please enter post repair evaluation and prevention!',
           'device_maintenance_submitting_repair_information':
-          'Submitting repair information!',
+              'Submitting repair information!',
           'device_maintenance_record_malfunction':
-          'Obtaining equipment maintenance record and cause of malfunction...',
+              'Obtaining equipment maintenance record and cause of malfunction...',
           'device_maintenance_cancelling_record_sheet':
-          'Cancelling record sheet...',
+              'Cancelling record sheet...',
           'device_maintenance_device_information':
-          'Obtaining device information...',
+              'Obtaining device information...',
           'device_maintenance_personnel_information':
-          'Reading personnel information...',
+              'Reading personnel information...',
           'device_maintenance_title_device_information':
-          'Equipment information',
+              'Equipment information',
           'device_maintenance_repair': 'Repair',
           'device_maintenance_equipment_model': 'Equipment model：',
           'device_maintenance_custodian_unit': 'Custodian Unit：',
@@ -9829,16 +9839,16 @@ class Translation extends Translations {
           'device_maintenance_document_number': 'Document Number：',
           'device_maintenance_title_fault_description': 'Fault description：',
           'device_maintenance_fault_cause_determination':
-          'Fault cause determination：',
+              'Fault cause determination：',
           'device_maintenance_title_repair_time': 'Repair time：',
           'device_maintenance_title_maintenance_organization':
-          'Maintenance organization：',
+              'Maintenance organization：',
           'device_maintenance_title_prevention':
-          'Post maintenance evaluation and prevention：',
+              'Post maintenance evaluation and prevention：',
           'device_maintenance_title_fixed_time': 'Fixed Time：',
           'packing_shipment_title': 'Scan code for molded packaging',
           'packing_shipment_out_title':
-          'Scan the QR code for forming, shipping, packing, and packaging',
+              'Scan the QR code for forming, shipping, packing, and packaging',
           'packing_shipment_scan_detail': 'Barcode scanning details',
           'packing_shipment_cabinet_number': 'Cabinet Number：',
           'packing_shipment_code': 'bar code：',
@@ -9848,7 +9858,7 @@ class Translation extends Translations {
           'packing_shipment_title_cabinet_number': 'Cabinet Number：',
           'packing_shipment_getting_summary_data': 'Getting summary data...',
           'packing_shipment_shipping_information':
-          'Obtaining shipping information for formed containers...',
+              'Obtaining shipping information for formed containers...',
           'packing_shipment_add_failed': 'Add failed',
           'hydroelectric_excess_room_number': 'room number',
           'hydroelectric_this_copying_process': 'This copying process',
@@ -9874,16 +9884,16 @@ class Translation extends Translations {
           'hydroelectric_to_be_copied': 'To be copied',
           'hydroelectric_dorP': 'DorP',
           'hydroelectric_reading_room_information':
-          'Reading room information...',
+              'Reading room information...',
           'hydroelectric_reading_device': 'Reading device',
           'hydroelectric_this_transcription':
-          'Please enter the degree of this transcription!',
+              'Please enter the degree of this transcription!',
           'hydroelectric_submitting_degree': 'Submitting degree...',
           'code_list_report': 'Barcode Summary Table',
           'code_list_report_submit': 'Submit',
           'code_list_report_tips': 'Tips',
           'code_list_report_submit_code':
-          'Are you sure you want to submit the barcode?',
+              'Are you sure you want to submit the barcode?',
           'code_list_report_scan': 'Scan',
           'code_list_report_instruction_number': 'Instruction number',
           'code_list_report_factory_type_body': 'Factory type body',
@@ -9892,30 +9902,30 @@ class Translation extends Translations {
           'code_list_report_strip': 'Strip',
           'code_list_report_clean': 'Clean',
           'code_list_report_sure_clean':
-          'Kau yakin ingin mengosongkan kode batang?',
+              'Kau yakin ingin mengosongkan kode batang?',
           'code_list_report_sure_store':
-          'Are you sure you want to store it in the warehouse?',
+              'Are you sure you want to store it in the warehouse?',
           'code_list_report_no_barcode': 'No barcode available for submission!',
           'code_list_report_please_scan_code': 'Please scan the barcode!',
           'code_list_report_have_code': 'Barcode already exists!',
           'code_list_report_outbound': 'Outbound',
           'code_list_report_obtain_barcode': 'Obtain barcode',
           'code_list_report_getting_barcode':
-          'Are you sure you want to obtain the barcode?',
+              'Are you sure you want to obtain the barcode?',
           'code_list_report_sure_outbound':
-          'Are you sure you want to leave the warehouse?',
+              'Are you sure you want to leave the warehouse?',
           'code_list_report_obtaining_box_label_details':
-          'Obtaining box label details...',
+              'Obtaining box label details...',
           'code_list_report_box_label_error': 'Box label error',
           'code_list_report_in_storage': 'In storage...',
           'code_list_report_obtaining_sorting_data':
-          'Obtaining sorting data...',
+              'Obtaining sorting data...',
           'code_list_report_barcode_is_empty': 'Barcode is empty',
           'code_list_report_sorting_empty': 'Sorting data is empty',
           'code_list_report_out_of_stock': 'Out of stock...',
           'timely_inventory_warehouse_location': 'Warehouse location',
           'timely_inventory_new_warehouse_location':
-          'Please enter a new storage location',
+              'Please enter a new storage location',
           'timely_inventory_material_name': 'Material name：',
           'timely_inventory_material_code': 'Material code：',
           'timely_inventory_factory': 'Factory：',
@@ -9926,85 +9936,85 @@ class Translation extends Translations {
           'timely_inventory_input_command': 'Please enter the command number',
           'timely_inventory_input_batch': 'Please enter batch',
           'timely_inventory_input_material_code':
-          'Please enter the material code',
+              'Please enter the material code',
           'timely_inventory_get_inventory_data':
-          'Obtaining timely inventory data...',
+              'Obtaining timely inventory data...',
           'timely_inventory_submitting_modifications':
-          'Submitting modifications...',
+              'Submitting modifications...',
           'warehouse_allocation_clean': 'Clean',
           'warehouse_allocation_clean_code':
-          'Are you sure you want to clear the barcode?',
+              'Are you sure you want to clear the barcode?',
           'warehouse_allocation_manually_add': 'Manually add',
           'warehouse_allocation_scan': 'Scan：',
           'warehouse_allocation_strip': 'Strip',
           'warehouse_allocation_out_of_warehouse': 'Out of warehouse：',
           'warehouse_allocation_entering_the_warehouse':
-          'Entering the warehouse：',
+              'Entering the warehouse：',
           'warehouse_allocation_submit': 'Submit',
           'warehouse_allocation_input_code': 'Please enter barcode！',
           'warehouse_allocation_have_code': 'Barcode already exists！',
           'warehouse_allocation_select_warehouse':
-          'Please choose to enter/exit the warehouse！',
+              'Please choose to enter/exit the warehouse！',
           'warehouse_allocation_summary_information':
-          'Obtaining summary information...',
+              'Obtaining summary information...',
           'warehouse_allocation_not_completed': '检查未完成!',
           'warehouse_allocation_not_barcode': 'No barcode to submit!',
           'warehouse_allocation_submitting_transfer': 'Submitting transfer...',
           'production_scan_storage_conditions': 'Storage conditions',
           'production_scan_operator_number':
-          'Please enter the operator number!',
+              'Please enter the operator number!',
           'production_scan_not_reported': 'Belum dilaporkan',
           'production_scan_clear': 'clear',
           'production_scan_clear_the_barcode':
-          'Are you sure you want to clear the barcode?',
+              'Are you sure you want to clear the barcode?',
           'production_scan_red': 'Red Chong',
           'production_scan_scan': 'scan：',
           'production_scan_tray_number': 'Tray number：',
           'production_scan_submit': 'Submit',
           'production_scan_verify_again':
-          'Are you sure you want to verify again?',
+              'Are you sure you want to verify again?',
           'production_scan_check': 'Check',
           'production_scan_no_barcode': 'No barcode available for submission!',
           'production_scan_hava_barcode': 'Kode bar sudah ada!',
-          'production_scan_use_empty_pallets':
-          'Silakan gunakan tray kosong!',
+          'production_scan_use_empty_pallets': 'Silakan gunakan tray kosong!',
           'production_scan_used_pallets':
-          'Pallet ini sudah digunakan di gudang lain!',
+              'Pallet ini sudah digunakan di gudang lain!',
           'production_scan_not_exist': 'Pallet ini tidak ada!',
           'production_scan_obtaining_tray_information':
-          'Mengambil Informasi Pallet...',
+              'Mengambil Informasi Pallet...',
           'production_scan_delete_failed': 'Local database deletion failed',
           'production_scan_not_barcode': 'No barcode to submit!',
           'production_scan_verification_barcode':
-          'Obtaining verification barcode...',
-          'process_report_store_manual_input': 'Pencatatan kode batang secara manual',
+              'Obtaining verification barcode...',
+          'process_report_store_manual_input':
+              'Pencatatan kode batang secara manual',
           'process_report_store_hava_barcode': 'Barcode already exists!',
           'process_report_store_use_empty_pallets':
-          'Please use empty pallets for storage!',
+              'Please use empty pallets for storage!',
           'process_report_store_used_pallets':
-          'This pallet is already in use in another warehouse!',
+              'This pallet is already in use in another warehouse!',
           'process_report_store_submit_process_store':
-          'Kirim Laporan Proses ke Perpustakaan',
+              'Kirim Laporan Proses ke Perpustakaan',
           'process_report_store_input_operator_id':
-          'Silakan masukkan nomor operasi',
+              'Silakan masukkan nomor operasi',
           'process_report_store_process_procedure': 'Process/procedure：',
           'process_report_store_select_process_procedure':
-          'Please select process and procedure：',
+              'Please select process and procedure：',
           'process_report_store_submit': 'Kirimkan',
           'process_report_store_verifying_tags': 'Memverifikasi kode batang...',
           'process_report_store_no_barcode':
-          'Tidak ada kode batang yang dapat dikirimkan!',
+              'Tidak ada kode batang yang dapat dikirimkan!',
           'process_report_store_obtaining_summary_information':
-          'Mendapatkan informasi ringkasan...',
+              'Mendapatkan informasi ringkasan...',
           'process_report_store_submitting_process_store':
-          'Kirim laporan proses ke perpustakaan...',
+              'Kirim laporan proses ke perpustakaan...',
           'process_report_store_delete_failed':
-          'Gagal menghapus label database lokal!',
+              'Gagal menghapus label database lokal!',
           'process_report_store_change': 'Modifikasi',
           'process_report_store_historical_records': 'Historical Records',
           'process_report_store_clear_list': 'Kosongkan daftar',
           'process_report_store_sure_clean_code':
-          'Are you sure you want to clear the barcode？',
+              'Are you sure you want to clear the barcode？',
           'process_report_store_manually_add': 'Tambahkan secara manual',
           'process_report_store_submit_barcode': 'Kirimkan',
           'process_report_store_modify_clear': 'Kosongkan',
@@ -10015,17 +10025,17 @@ class Translation extends Translations {
           'process_report_store_modify_real_number': 'Jumlah nyata',
           'process_report_store_modify_reading_database': 'Membaca database...',
           'process_report_store_modify_input_real_number':
-          'Silakan masukkan angka nyata',
+              'Silakan masukkan angka nyata',
           'process_report_store_modify_submit':
-          'Apakah Anda yakin mengirimkan perubahan?',
+              'Apakah Anda yakin mengirimkan perubahan?',
           'process_report_store_modify_scan_real_barcode':
-          'Silakan scan kode batang yang benar?',
+              'Silakan scan kode batang yang benar?',
           'process_report_is_scan': 'Dipindai：',
           'process_report_pallet_no': 'Nomor Pallet：',
           'injection_scan_getting_process_plan':
-          'Obtaining the list of process plans...',
+              'Obtaining the list of process plans...',
           'injection_scan_getting_process_plan_detail':
-          'Obtaining the list of process plans detail...',
+              'Obtaining the list of process plans detail...',
           'injection_scan_switch': 'Switch',
           'injection_scan_detail': 'Detail',
           'injection_scan_scan': 'Scan',
@@ -10041,37 +10051,37 @@ class Translation extends Translations {
           'injection_scan_on_duty': 'Last digit on duty',
           'injection_scan_single_code_subtotal': 'Single code subtotal',
           'injection_scan_input_number':
-          'Please enter %s the last digit of the current shift',
+              'Please enter %s the last digit of the current shift',
           'injection_scan_query': 'Query',
           'injection_scan_clean_box_and_label':
-          'Clearing the number of work order boxes and labels...',
+              'Clearing the number of work order boxes and labels...',
           'injection_scan_sure_clean_box_and_label':
-          'Are you sure you want to clear the number of boxes and barcodes?',
+              'Are you sure you want to clear the number of boxes and barcodes?',
           'injection_scan_first_query_detail':
-          'Please first check the details of the process dispatch order!',
+              'Please first check the details of the process dispatch order!',
           'injection_scan_reading_label_data': 'Reading label data...',
           'injection_scan_no_label_data': 'No labeling data available！',
           'injection_scan_scan_real_label': 'Please scan the correct label！',
           'injection_scan_unable_find_barcode':
-          'Unable to find the barcode information!',
+              'Unable to find the barcode information!',
           'injection_scan_up': 'Scan to reach the maximum labeling limit!',
           'injection_scan_please_scan_last':
-          'Please scan the barcode of the trunk!',
+              'Please scan the barcode of the trunk!',
           'injection_scan_want_production_report':
-          'Are you sure you want a production report?',
+              'Are you sure you want a production report?',
           'injection_scan_modifying_dispatch_data':
-          'Modifying dispatch order data...',
+              'Modifying dispatch order data...',
           'injection_scan_dispatch_no': 'Dispatch Order Number：',
           'injection_scan_dispatch_date': 'Dispatch date：',
           'injection_scan_outer_box_barcode': 'Outer box barcode：',
           'injection_scan_label_size': 'Size：',
           'injection_scan_label_capacity': 'Box capacity：',
           'injection_scan_title':
-          'Scan the code to report work in the injection molding workshop',
+              'Scan the code to report work in the injection molding workshop',
           'injection_scan_label_list_title': 'Labeling List',
           'suppliers_scan_clean': 'Clean',
           'suppliers_scan_sure_clean_code':
-          'Are you sure you want to clear the barcode?',
+              'Are you sure you want to clear the barcode?',
           'suppliers_scan_enter_register': 'Manually enter and register',
           'suppliers_scan_red': 'Red Chong',
           'suppliers_scan_is_scan': 'Scan：',
@@ -10083,17 +10093,17 @@ class Translation extends Translations {
           'suppliers_scan_delete_error': 'Local database deletion failed',
           'suppliers_scan_have_code': 'Barcode already exists！',
           'suppliers_scan_use_empty_pallets':
-          'Please use empty pallets for storage！',
+              'Please use empty pallets for storage！',
           'suppliers_scan_use_other':
-          'This pallet is already in use in another warehouse！',
+              'This pallet is already in use in another warehouse！',
           'suppliers_scan_does_not_exist': 'This tray does not exist！',
           'suppliers_scan_get_summary': 'Obtaining summary information...',
           'suppliers_scan_not_completed': 'Inspection not completed!',
           'suppliers_scan_no_barcode_to_submit': 'No barcode to submit!',
           'suppliers_scan_obtaining_tray_information':
-          'Obtaining tray information...',
+              'Obtaining tray information...',
           'handover_report_title':
-          'Confirmation list for work reporting and handover',
+              'Confirmation list for work reporting and handover',
           'handover_report_date': 'Report date',
           'handover_report_report_spinner_hint1': 'Reported work',
           'handover_report_report_spinner_hint2': 'Unreported work',
@@ -10104,7 +10114,7 @@ class Translation extends Translations {
           'handover_report_cancel_report': 'Cancel job application',
           'handover_report_delete_report': 'Delete job application',
           'handover_report_get_handover_list':
-          'Obtaining the handover list for team leaders...',
+              'Obtaining the handover list for team leaders...',
           'handover_report_reported': 'Reported work',
           'handover_report_unreported': 'Unreported work',
           'handover_report_machine': 'Machine：',
@@ -10118,21 +10128,21 @@ class Translation extends Translations {
           'handover_report_now_number': 'Last digit on duty',
           'handover_report_single_subtotal': 'Single code subtotal',
           'handover_report_select_data':
-          'Please select at least one piece of data！',
+              'Please select at least one piece of data！',
           'handover_report_sure_reverse':
-          'Are you sure you want to reverse audit and delete the report form?',
+              'Are you sure you want to reverse audit and delete the report form?',
           'handover_report_delete_and_reverse':
-          'We are reviewing and deleting the process report...',
+              'We are reviewing and deleting the process report...',
           'handover_report_sure_delete':
-          'Are you sure you want to delete the report form?',
+              'Are you sure you want to delete the report form?',
           'handover_report_delete': 'Deleting process report...',
           'handover_report_review_and_generate':
-          'Reviewing and generating process report...',
+              'Reviewing and generating process report...',
           'handover_report_query': 'Query',
           'process_report_scan': 'Scan',
           'process_report_submit': 'Submit',
           'process_report_get_information':
-          'Reading process dispatch information...',
+              'Reading process dispatch information...',
           'process_report_order_number': 'Order Number：',
           'process_report_qty': 'Quantity：',
           'process_report_name': 'Full Name：',
@@ -10142,14 +10152,14 @@ class Translation extends Translations {
           'process_report_number_of_barcodes': 'Number of barcodes：',
           'process_report_total_products': 'Total number of products',
           'process_report_sure_delete_data':
-          'Are you sure you want to delete this data?',
+              'Are you sure you want to delete this data?',
           'process_report_change_people': 'Add employee',
           'process_report_input_people_number':
-          'Please enter employee ID number',
+              'Please enter employee ID number',
           'process_report_sure_to_submit': 'Are you sure to submit?',
           'process_report_to_submit_data': 'Submitting barcode data...',
           'process_report_click_item':
-          'There are work orders that have not been bound to employees. Please click on the work order to bind employees!',
+              'There are work orders that have not been bound to employees. Please click on the work order to bind employees!',
           'process_report_success_submit': 'Submitted successfully！',
           'process_report_error_submit': 'Submission failed！',
           'part_report_manually_add': 'Manually add',
@@ -10162,14 +10172,14 @@ class Translation extends Translations {
           'part_report_code_is_not_have': 'The barcode cannot be found！',
           'part_report_getting_summary': 'Getting summary table...',
           'part_report_select_summary_type':
-          'Please select the type of summary table！',
+              'Please select the type of summary table！',
           'part_report_select_instruction': 'Instruction',
           'part_report_select_size': 'Size',
           'part_report_clear': 'Clean',
           'part_report_sure_clear':
-          'Are you sure you want to clear the barcode?',
+              'Are you sure you want to clear the barcode?',
           'part_report_barcode_is_empty':
-          'No barcode available for submission！',
+              'No barcode available for submission！',
           'part_report_acquisition_failed': 'Acquisition failed！',
           'part_report_summary_process': 'Process',
           'part_report_summary_instruction': 'Instruction',
@@ -10181,9 +10191,9 @@ class Translation extends Translations {
           'part_report_summary_total_components': 'Total Components',
           'part_report_summary_reporting': 'Reporting for work...',
           'part_report_summary_not_submit':
-          'Please note that the barcode has not been submitted！',
+              'Please note that the barcode has not been submitted！',
           'part_report_summary_sure_submit':
-          'Are you sure you want to submit a barcode report?',
+              'Are you sure you want to submit a barcode report?',
           'part_report_summary_submit_report': 'Successful job application！',
           'part_report_summary_table': 'Barcode Summary Table',
           'component_handover_title': 'Production Component Handover Form',
@@ -10199,7 +10209,7 @@ class Translation extends Translations {
           'component_handover_get_process_list': 'Getting process list...',
           'component_handover_first_flow': 'Please select the process first！',
           'component_handover_receipt_information':
-          'Obtaining handover receipt information...',
+              'Obtaining handover receipt information...',
           'component_handover_index': 'Serial Number',
           'component_handover_barcode': 'Bar Code',
           'component_handover_size': 'Size',
@@ -10216,9 +10226,9 @@ class Translation extends Translations {
           'component_handover_part_name_empty': 'The component name is empty',
           'component_handover_summary_submit': 'Submit',
           'component_handover_summary_sure_submit':
-          'Are you sure to submit the handover?',
+              'Are you sure to submit the handover?',
           'component_handover_not_handover':
-          'Please note that handover has not been selected??',
+              'Please note that handover has not been selected??',
           'component_handover_handover_failed': 'Handover failed！',
           'component_handover_handover_success': 'Handover successful！',
           'part_report_cancel_title': 'Component reporting or cancellation！',
@@ -10233,7 +10243,7 @@ class Translation extends Translations {
           'part_report_cancel_title_size': 'Size',
           'part_report_cancel_title_qty': 'Quantity',
           'part_report_cancel_ticket_is_empty':
-          'Please scan or manually enter the work ticket!',
+              'Please scan or manually enter the work ticket!',
           'part_report_cancel_query': 'Query',
           'part_report_cancel_cancel_job': 'Cancel job application',
           'part_report_cancel_cancel_submit': 'Submit',
@@ -10243,10 +10253,10 @@ class Translation extends Translations {
           'part_report_cancel_report_success': 'Successful job application！',
           'part_report_cancel_cancelling': 'Cancelling job application...',
           'part_report_cancel_sure_cancel':
-          'Are you sure you want to cancel the job application?',
+              'Are you sure you want to cancel the job application?',
           'part_report_cancel_fail_cancel': 'Cancel job application failed！',
           'part_report_cancel_success_cancel':
-          'Cancel job application successfully！',
+              'Cancel job application successfully！',
           'temporary_order_supplier': 'Supplier：',
           'temporary_order_final_customer': 'Final customer：',
           'temporary_order_temporary_no': 'Temporary no：',
@@ -10257,11 +10267,11 @@ class Translation extends Translations {
           'temporary_order_remark': 'Remark：',
           'temporary_order_delete': 'Delete',
           'temporary_order_delete_reason':
-          'Please fill in the reason for deletion.',
+              'Please fill in the reason for deletion.',
           'temporary_order_delete_tips':
-          'All documents with the same temporary receipt number will be deleted !',
+              'All documents with the same temporary receipt number will be deleted !',
           'temporary_order_no_permission':
-          'You do not have permission to delete temporary receipts ！',
+              'You do not have permission to delete temporary receipts ！',
           'temporary_order_material': 'Material：',
           'temporary_order_temporary_qty': 'Temporary qty：',
           'temporary_order_type_body': 'Type body：',
@@ -10278,11 +10288,11 @@ class Translation extends Translations {
           'temporary_order_type_inspected': 'Inspected',
           'temporary_order_deleted': 'Deleted',
           'temporary_order_exit_tips':
-          'Are you sure you want to exit the temporary receipt list ？',
+              'Are you sure you want to exit the temporary receipt list ？',
           'temporary_order_querying_order': 'Querying temporary order...',
           'temporary_order_deleting_order': 'Deleting temporary receipts...',
           'temporary_order_querying_order_detail':
-          'Querying temporary details...',
+              'Querying temporary details...',
           'temporary_order_detail_material': 'Material：',
           'temporary_order_detail_test_status': 'Test status：',
           'temporary_order_detail_type_body': 'Type body：%s',
@@ -10302,17 +10312,17 @@ class Translation extends Translations {
           'temporary_order_detail_specification': 'Specification：%s',
           'temporary_order_detail_contract_no': 'Contract no：%s',
           'temporary_order_detail_purchase_order_line_no':
-          'Purchase order line no：%s',
+              'Purchase order line no：%s',
           'temporary_order_detail_delivery_order_line_no':
-          'Delivery order line no：%s',
+              'Delivery order line no：%s',
           'temporary_order_detail_purchase_type': 'Purchase type：%s',
           'temporary_order_detail_remark': 'Remark：%s',
           'temporary_order_detail_temporary_order_detail':
-          'Temporary order detail',
+              'Temporary order detail',
           'temporary_order_detail_test_application': 'Test application',
           'temporary_order_detail_inspection': 'Inspection',
           'temporary_order_detail_no_permission':
-          'You do not have quality inspection permission ！',
+              'You do not have quality inspection permission ！',
           'temporary_order_detail_company': 'Company：%s',
           'temporary_order_detail_producer': 'Producer：%s',
           'temporary_order_detail_producer_date': 'Producer date：%s',
@@ -10329,17 +10339,17 @@ class Translation extends Translations {
           'temporary_order_test_state_refuse': 'Refuse',
           'temporary_order_test_state_cancel': 'Cancel',
           'temporary_order_dialog_different_material':
-          'Different materials cannot be tested and created simultaneously ！',
+              'Different materials cannot be tested and created simultaneously ！',
           'temporary_order_dialog_complete_date': 'Complete date',
           'temporary_order_dialog_division': 'Division：',
           'temporary_order_dialog_part': 'Part',
           'temporary_order_dialog_inspection_qty': 'Inspection qty：',
           'temporary_order_dialog_getting_standard':
-          'Getting testing standards...',
+              'Getting testing standards...',
           'temporary_order_dialog_standard': 'Test standards',
           'temporary_order_dialog_test_application': 'Test application',
           'temporary_order_dialog_inspection_qty_error':
-          'Please fill in the correct quantity for inspection！',
+              'Please fill in the correct quantity for inspection！',
           'temporary_order_dialog_standard_error': 'Test standard error！',
           'temporary_order_dialog_application_test': 'Test application',
           'delivery_order_checked': 'Checked',
@@ -10383,33 +10393,33 @@ class Translation extends Translations {
           'delivery_order_wait_stock_out': 'Wait stock out',
           'delivery_order_stock_outed': 'Stock outed',
           'delivery_order_exit_tips':
-          'Are you sure you want to exit the delivery list？',
+              'Are you sure you want to exit the delivery list？',
           'delivery_order_stock_in': 'Stock in',
           'delivery_order_stock_in_reverse': 'Stock in reverse',
           'delivery_order_stock_out': 'Stock out',
           'delivery_order_stock_out_reverse': 'Stock out reverse',
           'delivery_order_create_temporary': 'Create temporary',
           'delivery_order_querying_delivery_orders':
-          'Querying delivery orders...',
+              'Querying delivery orders...',
           'delivery_order_querying_delivery_order_detail':
-          'Querying delivery order detail...',
+              'Querying delivery order detail...',
           'delivery_order_getting_storage_location':
-          'Getting storage location...',
+              'Getting storage location...',
           'delivery_order_selected_contains_exempt_and_not_exempt':
-          'Selected contains exempt and not exempt ！',
+              'Selected contains exempt and not exempt ！',
           'delivery_order_selected_contains_not_in_and_in':
-          'Selected contains not in and in ！',
+              'Selected contains not in and in ！',
           'delivery_order_checking_data': 'Checking data...',
           'delivery_order_checking_stock_in_order':
-          'Checking stock in order...',
+              'Checking stock in order...',
           'delivery_order_reversing_stock_in': 'Reversing stock in...',
           'delivery_order_reversing_stock_out': 'Reversing stock out...',
           'delivery_order_getting_order_scan_detail':
-          'Getting order scan detail...',
+              'Getting order scan detail...',
           'delivery_order_getting_temporary_label':
-          'Getting temporary label...',
+              'Getting temporary label...',
           'delivery_order_submitting_temporary_label':
-          'Submitting temporary label...',
+              'Submitting temporary label...',
           'delivery_order_submitting_label_bind': 'Submitting label bind...',
           'delivery_order_detail_material': 'Material：%s',
           'delivery_order_detail_delivery_qty': 'Delivery qty：%s',
@@ -10425,22 +10435,22 @@ class Translation extends Translations {
           'delivery_order_detail_instruction_no': 'Instruction no：%s',
           'delivery_order_detail_stock_out_voucher': 'Stock out voucher：%s',
           'delivery_order_detail_stock_out_reverse_voucher':
-          'Stock out reverse voucher：%s',
+              'Stock out reverse voucher：%s',
           'delivery_order_detail_stock_out_reverse_reason':
-          'Stock out reverse reason：%s',
+              'Stock out reverse reason：%s',
           'delivery_order_detail_delivery_detail': 'Delivery detail',
           'delivery_order_detail_supplier': 'Supplier：',
           'delivery_order_detail_delivery_no': 'Delivery no：',
           'delivery_order_detail_delivery_location': 'Delivery location：',
           'delivery_order_detail_purchase_no': 'Purchase no：',
           'delivery_order_detail_create_instruction_no':
-          'Create instruction no：',
+              'Create instruction no：',
           'delivery_order_detail_coefficient': 'Coefficient：',
           'delivery_order_detail_stock_in_voucher': 'Stock in voucher：%s',
           'delivery_order_detail_stock_in_reverse_voucher':
-          'Stock in reverse voucher：%s',
+              'Stock in reverse voucher：%s',
           'delivery_order_detail_stock_in_reverse_reason':
-          'Stock in reverse reason：%s',
+              'Stock in reverse reason：%s',
           'delivery_order_detail_build_info': 'Build info：%s',
           'delivery_order_detail_modify_info': 'Modify info：%s',
           'delivery_order_detail_audit_info': 'Audit info：%s',
@@ -10450,61 +10460,61 @@ class Translation extends Translations {
           'delivery_order_check_storage_location': 'Storage location',
           'delivery_order_check_get_storage_location': 'Get storage location',
           'delivery_order_check_getting_storage_location':
-          'Getting storage location...',
+              'Getting storage location...',
           'delivery_order_check_inspector': 'Inspector：%s',
           'delivery_order_check_inspector_number': 'Inspector number',
           'delivery_order_check_save': 'Save',
           'delivery_order_dialog_exempt_type_different':
-          'Selected contains exempt and not exempt ！',
+              'Selected contains exempt and not exempt ！',
           'delivery_order_dialog_match_code_different':
-          'Different codes cannot be stored simultaneously！',
+              'Different codes cannot be stored simultaneously！',
           'delivery_order_dialog_post_date': 'Post date',
           'delivery_order_dialog_location': 'Location',
           'delivery_order_dialog_stock_in': 'Stock in',
           'delivery_order_dialog_disable_face':
-          'The current warehouse has not enabled facial recognition',
+              'The current warehouse has not enabled facial recognition',
           'delivery_order_dialog_picking_department': 'Picking department',
           'delivery_order_dialog_stock_out': 'Stock out',
           'delivery_order_dialog_leader': 'Leader',
           'delivery_order_dialog_getting_leader':
-          'Getting information on the warehouse manager...',
+              'Getting information on the warehouse manager...',
           'delivery_order_dialog_submitting_stock_in': 'Submitting stock in...',
           'delivery_order_dialog_submitting_stock_out':
-          'Submitting stock out...',
+              'Submitting stock out...',
           'delivery_order_dialog_creating_temporary': 'Creating temporary...',
           'delivery_order_dialog_not_binding_label_tips':
-          'Delivery note (%s) has not been scanned and labeled yet!',
+              'Delivery note (%s) has not been scanned and labeled yet!',
           'delivery_order_dialog_has_not_check_data_tips':
-          'Contains uncounted data!',
+              'Contains uncounted data!',
           'delivery_order_dialog_different_order_tips':
-          'Scanned delivery notes and non scanned delivery notes cannot generate temporary receipts together!',
+              'Scanned delivery notes and non scanned delivery notes cannot generate temporary receipts together!',
           'delivery_order_label_check_order_not_have_this_label':
-          'This piece does not belong to the order!',
+              'This piece does not belong to the order!',
           'delivery_order_label_check_label_different_factory':
-          'The label <%s> does not match the raw material factory of the goods on the current tray!',
+              'The label <%s> does not match the raw material factory of the goods on the current tray!',
           'delivery_order_label_check_label_different_order_type':
-          'The label <%s> does not match the document type of the goods on the current tray!',
+              'The label <%s> does not match the document type of the goods on the current tray!',
           'delivery_order_label_check_label_different_customs_declaration_type':
-          'The label <%s> differs from the customs declaration form of the goods on the current tray!',
+              'The label <%s> differs from the customs declaration form of the goods on the current tray!',
           'delivery_order_label_check_label_scanned':
-          'This label has been scanned!',
+              'This label has been scanned!',
           'delivery_order_label_change_pallet_no_success':
-          'Successfully modified pallet number\r\n[%s]\r\n->\r\n[%s]',
+              'Successfully modified pallet number\r\n[%s]\r\n->\r\n[%s]',
           'delivery_order_label_check_label_qty_exceed':
-          'The quantity of materials in this item exceeds the limit. Please scan the label with a smaller quantity.',
+              'The quantity of materials in this item exceeds the limit. Please scan the label with a smaller quantity.',
           'delivery_order_label_check_has_other_material':
-          'This item contains materials from other work orders, please split and pick them.',
+              'This item contains materials from other work orders, please split and pick them.',
           'delivery_order_label_check_qty_exceed_tips':
-          'The quantity exceeds the submission limit for this time, please delete the corresponding tags.',
+              'The quantity exceeds the submission limit for this time, please delete the corresponding tags.',
           'delivery_order_label_check_qty_insufficient':
-          'The quantity is insufficient for this submission, please continue scanning the labels.',
+              'The quantity is insufficient for this submission, please continue scanning the labels.',
           'delivery_order_label_check_delete_tips':
-          'Are you sure you want to delete this label?',
+              'Are you sure you want to delete this label?',
           'delivery_order_label_check_title': 'Delivery check',
           'delivery_order_label_check_exit_tips':
-          'Are you sure you want to exit the delivery inventory？',
+              'Are you sure you want to exit the delivery inventory？',
           'delivery_order_label_check_clear_tips':
-          'Are you sure you want to clear the scanned label?',
+              'Are you sure you want to clear the scanned label?',
           'delivery_order_label_check_clear': 'Clear',
           'delivery_order_label_check_piece_id': 'Piece ID',
           'delivery_order_label_check_add_piece': 'Add piece',
@@ -10517,14 +10527,14 @@ class Translation extends Translations {
           'delivery_order_label_check_detail_inspector': 'Inspector',
           'delivery_order_label_check_detail_confirm_submit': 'Confirm submit',
           'delivery_order_label_check_detail_confirm_checked_tips':
-          'Are you sure you have checked the labels ？',
+              'Are you sure you have checked the labels ？',
           'delivery_order_label_check_detail_material': 'Material',
           'delivery_order_label_check_detail_quantity': 'Quantity',
           'process_dispatch_work_ticket': 'Kode Bar Tiket Kerja',
           'process_dispatch_or': 'or',
           'process_dispatch_dispatch_date': 'Dispatch date',
           'process_dispatch_get_list':
-          'Obtaining the list of process dispatch orders...',
+              'Obtaining the list of process dispatch orders...',
           'process_dispatch_part_split': 'component disassembly',
           'process_dispatch_part_merge': 'Component merging',
           'process_dispatch_generate_label': 'Generate labels',
@@ -10537,21 +10547,21 @@ class Translation extends Translations {
           'process_dispatch_job_name': 'Job ID Name：',
           'process_dispatch_job_total': 'Total job number：',
           'process_dispatch_sure_split_part':
-          'Are you sure you want to split the components?',
+              'Are you sure you want to split the components?',
           'process_dispatch_please_select_data': 'Please select data！',
           'process_dispatch_only_select_one':
-          'Select at most one piece of data！',
+              'Select at most one piece of data！',
           'process_dispatch_splitting_part': 'Splitting components...',
           'process_dispatch_no_part_split':
-          'No merged components can be split！',
+              'No merged components can be split！',
           'process_dispatch_success_split': 'Split successfully！',
           'process_dispatch_fail_split': 'Splitting failed！',
           'process_dispatch_select_more':
-          'Please select multiple pieces of data！',
+              'Please select multiple pieces of data！',
           'process_dispatch_select_same':
-          'Please select the same work order for operation！',
+              'Please select the same work order for operation！',
           'process_dispatch_sure_merge_part':
-          'Are you sure you want to merge the components?',
+              'Are you sure you want to merge the components?',
           'process_dispatch_merge_part': 'Merging components...',
           'process_dispatch_merge_success': 'Merge successful！',
           'process_dispatch_merge_fail': 'Merge failed！',
@@ -10570,7 +10580,7 @@ class Translation extends Translations {
           'process_dispatch_tab1_create': 'Generate labels',
           'process_dispatch_tab1_select_size': 'Please choose a size！',
           'process_dispatch_tab1_select_capacity_empty':
-          'The selected size contains data with empty box capacity, please check！',
+              'The selected size contains data with empty box capacity, please check！',
           'process_dispatch_tab1_create_label': 'Creating labels...',
           'process_dispatch_tab1_create_success': 'Created successfully！',
           'process_dispatch_tab1_create_fail': 'Creation failed！',
@@ -10587,24 +10597,24 @@ class Translation extends Translations {
           'process_dispatch_label_size_mes': 'Size instruction information：',
           'process_dispatch_label_print_type': 'PRINT STATUS：',
           'process_dispatch_label_sure_print':
-          'Are you sure you want to print the label?',
+              'Are you sure you want to print the label?',
           'process_dispatch_label_sure_delete':
-          'Are you sure you want to delete the label?',
+              'Are you sure you want to delete the label?',
           'process_dispatch_label_deleting': 'Removing labels...',
           'process_dispatch_label_delete_success': 'Delete successfully！',
           'process_dispatch_label_delete_fail': 'Delete failed！',
           'process_dispatch_label_delete': 'Delete',
           'process_dispatch_label_print': 'Print',
           'process_dispatch_label_update_print_fail':
-          'Upload print status failed!',
+              'Upload print status failed!',
           'purchase_order_warehousing_type_body': 'Type body：%s',
           'purchase_order_warehousing_original_sales_order':
-          'Original sales order：%s',
+              'Original sales order：%s',
           'purchase_order_warehousing_item_purchase_order': 'Purchase order',
           'purchase_order_warehousing_item_customer_po': 'Customer po',
           'purchase_order_warehousing_item_track_no': 'Track no',
           'purchase_order_warehousing_item_purchase_order_line':
-          'Purchase order line',
+              'Purchase order line',
           'purchase_order_warehousing_item_size': 'Size',
           'purchase_order_warehousing_item_order_qty': 'Order qty',
           'purchase_order_warehousing_item_received_qty': 'Received qty',
@@ -10614,55 +10624,55 @@ class Translation extends Translations {
           'purchase_order_warehousing_qty': 'Qty',
           'purchase_order_warehousing_distribution': 'Distribution',
           'purchase_order_warehousing_distribution_finish':
-          'Distribution finish',
+              'Distribution finish',
           'purchase_order_warehousing_warehousing': 'Warehousing',
           'purchase_order_warehousing_select_all': 'Select all',
           'purchase_order_warehousing_input_type_body': 'Input type body',
           'purchase_order_warehousing_input_instruction': 'Input instruction',
           'purchase_order_warehousing_input_purchase_order':
-          'Input purchase order',
+              'Input purchase order',
           'purchase_order_warehousing_input_material_code':
-          'Input material code',
+              'Input material code',
           'purchase_order_warehousing_input_customer_po': 'Input customer po',
           'purchase_order_warehousing_input_track_no': 'Input track no',
           'purchase_order_warehousing_getting_purchase_orders':
-          'Getting purchase orders...',
+              'Getting purchase orders...',
           'purchase_order_warehousing_getting_orders_scan_detail':
-          'Getting order scan detail...',
+              'Getting order scan detail...',
           'purchase_order_warehousing_dialog_not_select_order':
-          'Please check the order to be stored and fill in the current storage quantity !',
+              'Please check the order to be stored and fill in the current storage quantity !',
           'purchase_order_warehousing_dialog_post_date': 'Post date',
           'purchase_order_warehousing_dialog_storage_location':
-          'Storage location',
+              'Storage location',
           'purchase_order_warehousing_dialog_warehousing': 'Warehousing',
           'purchase_order_warehousing_dialog_disable_face': 'Not enabled face',
           'purchase_order_warehousing_dialog_getting_leader':
-          'Getting leader ...',
+              'Getting leader ...',
           'purchase_order_warehousing_dialog_submitting_warehousing':
-          'Submitting warehousing...',
+              'Submitting warehousing...',
           'purchase_order_warehousing_different_order_tips':
-          'Scanning and non scanning work orders cannot be operated simultaneously!',
+              'Scanning and non scanning work orders cannot be operated simultaneously!',
           'purchase_order_warehousing_different_supplier_tips':
-          'Different suppliers cannot be operated simultaneously!',
+              'Different suppliers cannot be operated simultaneously!',
           'purchase_order_warehousing_order_not_have_this_label':
-          'This item does not belong to the current order!',
+              'This item does not belong to the current order!',
           'purchase_order_warehousing_label_scanned':
-          'This tag has been scanned!',
+              'This tag has been scanned!',
           'purchase_order_warehousing_label_qty_exceed':
-          'The quantity of the goods exceeds the limit. Please scan the label with a smaller quantity.',
+              'The quantity of the goods exceeds the limit. Please scan the label with a smaller quantity.',
           'purchase_order_warehousing_has_other_material':
-          'This item contains materials from other work orders, please split and pick them separately.',
+              'This item contains materials from other work orders, please split and pick them separately.',
           'purchase_order_warehousing_qty_exceed_tips':
-          'The quantity exceeds the submission limit for this time, please delete the corresponding tags.',
+              'The quantity exceeds the submission limit for this time, please delete the corresponding tags.',
           'purchase_order_warehousing_qty_insufficient':
-          'The quantity is insufficient for this submission, please continue scanning the labels.',
+              'The quantity is insufficient for this submission, please continue scanning the labels.',
           'purchase_order_warehousing_label_check_delete_tips':
-          'Are you sure you want to exit the delivery inventory？',
+              'Are you sure you want to exit the delivery inventory？',
           'purchase_order_warehousing_label_check_title': 'Check Label',
           'purchase_order_warehousing_label_check_exit_tips':
-          'Are you sure you want to exit the delivery inventory？',
+              'Are you sure you want to exit the delivery inventory？',
           'purchase_order_warehousing_label_check_clear_tips':
-          'Are you sure you want to clear the scanned label？',
+              'Are you sure you want to clear the scanned label？',
           'purchase_order_warehousing_label_check_clear': 'Clear',
           'purchase_order_warehousing_label_check_piece_id': 'Piece ID：',
           'purchase_order_warehousing_label_check_add_piece': 'Add  piece',
@@ -10682,14 +10692,13 @@ class Translation extends Translations {
           'purchase_order_reversal_purchase_order_no': 'Purchase order no',
           'purchase_order_reversal_material_code': 'Material code',
           'purchase_order_reversal_not_select_order':
-          'Please check the material voucher to be reversed ！',
+              'Please check the material voucher to be reversed ！',
           'purchase_order_reversal_getting_receipt_voucher_list':
-          'Getting  receipt voucher list...',
+              'Getting  receipt voucher list...',
           'purchase_order_reversal_reversing_receipt': 'Reversing receipt...',
           'forming_code_collection_title': 'Pengambilan kode bar pembentukan',
           'forming_code_collection_scan': 'Kode pemindaian saat ini',
-          'forming_code_collection_clear_tail':
-          'Menghapus Kode',
+          'forming_code_collection_clear_tail': 'Menghapus Kode',
           'forming_code_collection_factory': 'Jenis Pabrik：',
           'forming_code_collection_group': 'Kelompok saat ini：',
           'forming_code_collection_code': 'Kode kotak sepatu：',
@@ -10707,30 +10716,29 @@ class Translation extends Translations {
           'forming_code_collection_other': 'Fungsi lainnya',
           'forming_code_collection_refresh': 'Pembaruan',
           'forming_code_collection_input_days':
-          'Silakan masukkan ruang lingkup yang Anda inginkan!  (Jumlah hari)',
+              'Silakan masukkan ruang lingkup yang Anda inginkan!  (Jumlah hari)',
           'forming_code_collection_sale_order': 'Pesanan Penjualan：',
           'forming_code_collection_customer_orders': 'Pesanan Pelanggan：',
           'forming_code_collection_type_body': 'Jenis：',
-          'forming_code_collection_dispatch_qty':
-          'Jumlah pekerjaan：',
+          'forming_code_collection_dispatch_qty': 'Jumlah pekerjaan：',
           'forming_code_collection_owing_amounts': 'Jumlah Utang：',
           'forming_code_collection_serial_number': 'Nomor Serial：',
           'forming_code_collection_submit': 'Kirimkan',
           'forming_code_collection_sure_submit':
-          'Apakah Anda yakin ingin mengubah prioritas?',
+              'Apakah Anda yakin ingin mengubah prioritas?',
           'forming_code_collection_search': 'Pencarian',
           'forming_code_collection_no_submit_data':
-          'Tidak ada data prioritas yang dapat disampaikan！',
+              'Tidak ada data prioritas yang dapat disampaikan！',
           'forming_code_collection_submitting': 'Kirim prioritas...',
-          'forming_code_collection_no_find': 'Tidak dapat menemukan kode batang！',
+          'forming_code_collection_no_find':
+              'Tidak dapat menemukan kode batang！',
           'forming_code_collection_order_quantity': 'Jumlah pesanan:',
-          'forming_code_collection_completion_quantity':
-          'Akumulasi Selesai:',
+          'forming_code_collection_completion_quantity': 'Akumulasi Selesai:',
           'forming_code_collection_scan_quantity':
-          'Kekurangan kode pemindaian:',
+              'Kekurangan kode pemindaian:',
           'forming_code_collection_order_type': 'Status pesanan:',
           'forming_code_collection_no_search':
-          'Tidak dapat menemukan nomor pesanan penjualan ini！',
+              'Tidak dapat menemukan nomor pesanan penjualan ini！',
           'forming_code_collection_instruction_or_po': 'Instruksi atau PO!',
           'forming_code_collection_other_functions': 'Fungsi lainnya',
           'forming_code_collection_analysis': 'Laporan Analisis',
@@ -10738,26 +10746,27 @@ class Translation extends Translations {
           'forming_code_collection_special': 'Cocokan kode batang khusus',
           'forming_code_collection_getting': 'Mendapatkan...',
           'forming_code_collection_history_body': 'Jenis：',
-          'forming_code_collection_history_first_time': 'Pertama kali diaktifkan：',
+          'forming_code_collection_history_first_time':
+              'Pertama kali diaktifkan：',
           'forming_code_collection_history_instruction_number':
-          'Nomor perintah：',
+              'Nomor perintah：',
           'forming_code_collection_history_last_time': 'Terakhir diaktifkan：',
           'forming_code_collection_history_state': 'Status：',
           'forming_code_collection_history_factory': 'Jenis Pabrik',
           'forming_code_collection_instruction_details':
-          'Cari rincian perintah',
+              'Cari rincian perintah',
           'forming_code_collection_shoe_box': 'Kotak sepatu barcode koleksi',
           'forming_code_collection_enter_or_scan':
-          'Masukkan atau pemindai nomor perintah',
+              'Masukkan atau pemindai nomor perintah',
           'forming_code_collection_search_button': 'Pertanyaan',
           'forming_code_collection_submit_button': 'Kirimkan',
           'forming_code_collection_clear_button': 'Kosongkan kode batang',
           'forming_code_collection_shoe_size': 'Ukuran',
           'forming_code_collection_shoe_barcode': 'Kode batang kotak sepatu',
           'forming_code_collection_input_shoe_barcode':
-          'Masukkan kode batang kotak sepatu',
+              'Masukkan kode batang kotak sepatu',
           'forming_code_collection_have_code':
-          'Kode bar ini telah dipindai, jangan ulangi pemindaian!',
+              'Kode bar ini telah dipindai, jangan ulangi pemindaian!',
           'forming_code_collection_add_zero': 'Mengumpulkan nol',
           'forming_code_collection_clear_zero': 'Bersihkan nol',
           'forming_code_collection_submit_code': 'Kirim data kode batang...',
@@ -10780,7 +10789,7 @@ class Translation extends Translations {
           'quality_inspection_all_not_delete': 'All (excluding deletion)',
           'quality_inspection_all_not_returned': 'Not returned',
           'quality_inspection_list_quality_inspection':
-          'Obtaining the list of quality inspection forms...',
+              'Obtaining the list of quality inspection forms...',
           'quality_inspection_view_detail': 'Detail',
           'quality_inspection_select_all': 'Expand and select all',
           'quality_inspection_factory_type': 'Factory type：',
@@ -10822,11 +10831,11 @@ class Translation extends Translations {
           'quality_inspection_item_color_total': 'Color total',
           'quality_inspection_item_reverse_total': 'Reverse total',
           'quality_inspection_different_order':
-          'There are different quality inspection forms available！',
+              'There are different quality inspection forms available！',
           'quality_inspection_input_delete_reason':
-          'Please enter the reason for deletion!',
+              'Please enter the reason for deletion!',
           'quality_inspection_different_taxCode':
-          'There are different tax numbers that cannot be stored together！',
+              'There are different tax numbers that cannot be stored together！',
           'quality_inspection_deleting': 'Deleting quality inspection form...',
           'quality_inspection_success_deleting': 'Delete successfully',
           'quality_inspection_fail_deleting': 'Delete failed',
@@ -10838,23 +10847,23 @@ class Translation extends Translations {
           'quality_inspection_storing_fail': 'Storage failed！',
           'quality_inspection_store_location': 'Storage location',
           'quality_inspection_store_location_empty':
-          'The storage warehouse cannot be empty',
+              'The storage warehouse cannot be empty',
           'quality_inspection_quality_detail':
-          'Obtaining details of the quality inspection form...',
+              'Obtaining details of the quality inspection form...',
           'quality_inspection_change_location_title': 'Modify cargo location',
           'quality_inspection_input_location':
-          'Please enter the storage location',
+              'Please enter the storage location',
           'quality_inspection_change_location': 'Modifying cargo location...',
           'quality_inspection_getting_color_info':
-          'Getting color information...',
+              'Getting color information...',
           'quality_inspection_change_success': 'Modified successfully！',
           'quality_inspection_change_failed': 'Modification failed！',
           'quality_inspection_color_message':
-          'Color separation information (long press to delete)',
+              'Color separation information (long press to delete)',
           'quality_inspection_have_no_color':
-          'There are still unsorted quantities！',
+              'There are still unsorted quantities！',
           'quality_inspection_get_color':
-          'Obtaining color scheme information...',
+              'Obtaining color scheme information...',
           'quality_inspection_get_label': 'Getting tags...',
           'quality_inspection_color_scheme': 'Color scheme allocation',
           'quality_inspection_material_name': 'Material name',
@@ -10869,25 +10878,25 @@ class Translation extends Translations {
           'quality_inspection_input_qty': 'Please enter the quantity',
           'quality_inspection_input_color': 'Please enter the color scheme',
           'quality_inspection_color_no_same':
-          'The quantity of color separation does not match the quantity of order reversal！',
+              'The quantity of color separation does not match the quantity of order reversal！',
           'quality_inspection_eliminating': 'Eliminating...',
           'quality_inspection_reversal_successful': 'Reversal successful！',
           'quality_inspection_reversal_failed': 'Reversal failed！',
           'quality_inspection_no_inspection':
-          'No quality inspection authority！',
+              'No quality inspection authority！',
           'quality_inspection_no_store_inspection': 'No storage permission！',
           'quality_inspection_label_exists_tips': 'Label has already exists!',
           'quality_inspection_label_error_tips':
-          'The scanned label is not within the scope of this operation label!',
+              'The scanned label is not within the scope of this operation label!',
           'quality_inspection_label_color_error_tips':
-          'The material in the scanned label does not belong to the original color system!',
+              'The material in the scanned label does not belong to the original color system!',
           'quality_inspection_label_has_bond_tips':
-          'The material of this label has been bound by color scheme<%s>!',
+              'The material of this label has been bound by color scheme<%s>!',
           'quality_inspection_label_qty_exceed_tips':
-          'The number of materials in this label is %s, which exceeds the remaining quantity of the original color by %s！',
+              'The number of materials in this label is %s, which exceeds the remaining quantity of the original color by %s！',
           'quality_inspection_reviewer': 'Reviewer',
           'quality_inspection_photo':
-          'Abnormal quality inspection image (long press to delete)',
+              'Abnormal quality inspection image (long press to delete)',
           'quality_inspection_exception_description': 'Exception Description',
           'quality_inspection_processing_method': 'Processing method',
           'quality_inspection_availability': 'Availability',
@@ -10897,26 +10906,26 @@ class Translation extends Translations {
           'quality_inspection_compromise': 'Should we make concessions',
           'quality_inspection_title': 'Quality inspection',
           'quality_inspection_sure_submit':
-          'Are you sure to submit for quality inspection？',
+              'Are you sure to submit for quality inspection？',
           'quality_inspection_submit_abnormal': 'Submitting exception..',
           'quality_inspection_submit_failed': 'Submission exception failed！',
           'quality_inspection_create_inspection':
-          'Creating quality inspection form...',
+              'Creating quality inspection form...',
           'quality_inspection_create_success': 'Created successfully！',
           'quality_inspection_create_fail': 'Creation failed！',
           'quality_inspection_have_already':
-          'Contains materials that have already been inspected！',
+              'Contains materials that have already been inspected！',
           'quality_inspection_label_color': 'Color：',
           'quality_inspection_label_scanned': 'Scanned：',
           'quality_inspection_label_scanned_material_qty': 'Material qty：',
           'quality_inspection_label_title': 'Color Label Binding',
           'quality_inspection_label_exit_tips':
-          'Are you sure you want to exit the color label binding？',
+              'Are you sure you want to exit the color label binding？',
           'quality_inspection_label_submit': 'Submit',
           'quality_inspection_binding_piece_id': 'Piece ID：',
           'quality_inspection_binding_qty': 'quantity：',
           'quality_inspection_binding_delete_label_tips':
-          'Are you sure you want to delete this label？',
+              'Are you sure you want to delete this label？',
           'quality_inspection_binding_title': 'Color：%s',
           'quality_inspection_binding_scanned_material_qty': 'Material qty：',
           'quality_inspection_binding_label_qty': 'Labels：',
@@ -10933,16 +10942,16 @@ class Translation extends Translations {
           'quality_inspection_material': 'Material name',
           'quality_inspection_delivery_number': 'Delivery note number：',
           'quality_inspection_inspection_split_number':
-          'Temporary receipt number：',
+              'Temporary receipt number：',
           'quality_inspection_unqualified': 'unqualified quantity：',
           'quality_inspection_short_quality': 'short code：',
           'quality_inspection_color_label_binding_color': 'Color：',
           'quality_inspection_color_label_binding_scanned': 'Scanned：',
           'quality_inspection_color_label_binding_scanned_material_qty':
-          'Material qty：',
+              'Material qty：',
           'quality_inspection_color_label_binding_title': 'Color Label Binding',
           'quality_inspection_color_label_binding_exit_tips':
-          'Are you sure you want to exit the color label binding？',
+              'Are you sure you want to exit the color label binding？',
           'quality_inspection_color_label_binding_submit': 'Submit',
           'product_quality_inspection_inspection_unit': 'Inspection unit：',
           'product_quality_inspection_abnormal_qty': 'Abnormal qty：',
@@ -10953,83 +10962,83 @@ class Translation extends Translations {
           'product_quality_inspection_inspection_date': 'Inspection date：%s',
           'product_quality_inspection_inspector': 'Inspector：%s',
           'product_quality_inspection_inspection_complete':
-          'Inspection complete',
+              'Inspection complete',
           'product_quality_inspection_start_inspection': 'Start inspection',
           'product_quality_inspection_view_report': 'View report',
           'product_quality_inspection_instruction': 'Instruction',
           'product_quality_inspection_type_body': 'Type body',
           'product_quality_inspection_customer_po': 'PO',
           'product_quality_inspection_getting_line_info':
-          'Getting line info...',
+              'Getting line info...',
           'product_quality_inspection_getting_work_order_detail':
-          'Getting work order detail...',
+              'Getting work order detail...',
           'product_quality_inspection_submitting_abnormal':
-          'Submitting abnormal...',
+              'Submitting abnormal...',
           'product_quality_inspection_submitting_reinspection':
-          'Submitting reinspection...',
+              'Submitting reinspection...',
           'product_quality_inspection_withdrawing_abnormal':
-          'Withdrawing abnormal...',
+              'Withdrawing abnormal...',
           'product_quality_inspection_submitting_inspection_complete':
-          'Submitting inspection complete...',
+              'Submitting inspection complete...',
           'product_quality_inspection_getting_inspection_report':
-          'Getting inspection report...',
+              'Getting inspection report...',
           'product_quality_inspection_report_total_inspections_qty':
-          'Total inspections qty：',
+              'Total inspections qty：',
           'product_quality_inspection_report_total_reinspections_qty':
-          'Total reinspections qty：',
+              'Total reinspections qty：',
           'product_quality_inspection_report_order_number': 'Order number：',
           'product_quality_inspection_report_last_modify_date':
-          'Last modify date：%s',
+              'Last modify date：%s',
           'product_quality_inspection_report_abnormal_description':
-          'Abnormal description',
+              'Abnormal description',
           'product_quality_inspection_report_inspector': 'Inspector',
           'product_quality_inspection_report_inspection_time':
-          'Inspection time',
+              'Inspection time',
           'product_quality_inspection_report_reinspector': 'Reinspector',
           'product_quality_inspection_report_reinspection_time':
-          'Reinspection time',
+              'Reinspection time',
           'product_quality_inspection_report_state': 'State',
           'product_quality_inspection_report_inspection_summary':
-          'Inspection summary',
+              'Inspection summary',
           'product_quality_inspection_detail_defective_projects':
-          'Defective projects',
+              'Defective projects',
           'product_quality_inspection_detail_monthly_defect_rate':
-          'Monthly defect rate',
+              'Monthly defect rate',
           'product_quality_inspection_detail_record': 'Record%s',
           'product_quality_inspection_detail_quality_inspection':
-          'Quality inspection',
+              'Quality inspection',
           'product_quality_inspection_detail_inspection_completed':
-          'Inspection completed',
+              'Inspection completed',
           'product_quality_inspection_detail_inspection_completed_tips':
-          'Are you sure the quality inspection is completed ？',
+              'Are you sure the quality inspection is completed ？',
           'product_quality_inspection_detail_inspection_records':
-          'Inspection records',
+              'Inspection records',
           'product_quality_inspection_detail_total': 'Total：',
           'product_quality_inspection_detail_inspector': 'Inspector：',
           'product_quality_inspection_detail_abnormal_defects_qty':
-          'Defects qty：',
+              'Defects qty：',
           'product_quality_inspection_detail_abnormal_delete_tips':
-          'Are you sure you want to delete this exception record ？',
+              'Are you sure you want to delete this exception record ？',
           'product_quality_inspection_detail_abnormal_withdraw': 'Withdraw',
           'product_quality_inspection_detail_abnormal_scrap_tips':
-          'Is the retest result confirmed as scrap ？',
+              'Is the retest result confirmed as scrap ？',
           'product_quality_inspection_detail_abnormal_reinspection_scrap':
-          'Reinspection scrap',
+              'Reinspection scrap',
           'product_quality_inspection_detail_abnormal_qualified_tips':
-          'Is the retest result confirmed as qualified ？',
+              'Is the retest result confirmed as qualified ？',
           'product_quality_inspection_detail_abnormal_reinspection_qualified':
-          'Reinspection qualified',
+              'Reinspection qualified',
           'product_quality_inspection_detail_abnormal_inspection_exception_record':
-          'Inspection exception record',
+              'Inspection exception record',
           'product_quality_inspection_dialog_modify_label_no':
-          'Modify label no',
+              'Modify label no',
           'product_quality_inspection_dialog_label_no': 'Label no',
           'product_quality_inspection_dialog_input_key': 'Input key',
           'product_patrol_inspection_inspection_date': 'Inspection date',
           'product_patrol_inspection_qualified': 'Qualified',
           'product_patrol_inspection_defective_projects': 'Defective projects：',
           'product_patrol_inspection_monthly_defect_rate':
-          'Monthly defect rate：',
+              'Monthly defect rate：',
           'product_patrol_inspection_record': 'Record%s',
           'product_patrol_inspection_refresh': 'Refresh',
           'product_patrol_inspection_switching_lines': 'Switching lines',
@@ -11037,31 +11046,31 @@ class Translation extends Translations {
           'product_patrol_inspection_view_inspection_summary': 'View summary',
           'product_patrol_inspection_getting_line_info': 'Getting line info...',
           'product_patrol_inspection_adding_patrol_records':
-          'Adding patrol records...',
+              'Adding patrol records...',
           'product_patrol_inspection_withdrawing_abnormal':
-          'Withdrawing abnormal...',
+              'Withdrawing abnormal...',
           'product_patrol_inspection_getting_patrol_report':
-          'Getting patrol report...',
+              'Getting patrol report...',
           'product_patrol_inspection_report_inspected_unit': 'Inspected unit：',
           'product_patrol_inspection_report_total_inspections_qty':
-          'Total inspection qty：',
+              'Total inspection qty：',
           'product_patrol_inspection_report_inspection_summary':
-          'Inspection summary',
+              'Inspection summary',
           'product_patrol_inspection_report_morning':
-          'Morning (00:00:00-11:59:59)',
+              'Morning (00:00:00-11:59:59)',
           'product_patrol_inspection_report_inspections_qty':
-          'Inspections qty：',
+              'Inspections qty：',
           'product_patrol_inspection_report_qualified_qty': 'Qualified qty：',
           'product_patrol_inspection_report_defects_qty': 'Defects qty：',
           'product_patrol_inspection_report_afternoon':
-          'Afternoon (12:00:00-23:59:59)',
+              'Afternoon (12:00:00-23:59:59)',
           'product_patrol_inspection_abnormal_delete_tips':
-          'Are you sure you want to delete this exception record?',
+              'Are you sure you want to delete this exception record?',
           'product_patrol_inspection_abnormal_withdraw': 'Withdraw',
           'product_patrol_inspection_abnormal_inspection_qualified':
-          'Inspection qualified',
+              'Inspection qualified',
           'product_patrol_inspection_abnormal_inspection_abnormal_records':
-          'Inspection abnormal records',
+              'Inspection abnormal records',
           'product_patrol_inspection_dialog_switching_lines': 'Switching lines',
           'product_patrol_inspection_dialog_select_unit': 'Select unit',
           'product_patrol_inspection_dialog_modify_label_no': 'Modify label no',
@@ -11069,9 +11078,9 @@ class Translation extends Translations {
           'product_patrol_inspection_dialog_input_key': 'Input key',
           'carton_label_binding_piece_no': 'Piece no：',
           'carton_label_binding_delete_label_tips':
-          'Are you sure you want to delete the label？',
+              'Are you sure you want to delete the label？',
           'carton_label_binding_out_box_label_piece_no':
-          'Outer box label piece no：',
+              'Outer box label piece no：',
           'carton_label_binding_print_out_box_label': 'Print label',
           'carton_label_binding_operation_type_unknown': 'Unknown',
           'carton_label_binding_operation_type_create': 'Create',
@@ -11080,30 +11089,30 @@ class Translation extends Translations {
           'carton_label_binding_operation_type_transfer': 'Transfer',
           'carton_label_binding_getting_label_info': 'Getting label info...',
           'carton_label_binding_error_tips':
-          'Label suppliers, factories, material categories, customs declaration forms, and document types are different and cannot be operated simultaneously!',
+              'Label suppliers, factories, material categories, customs declaration forms, and document types are different and cannot be operated simultaneously!',
           'carton_label_binding_no_label': 'Label empty',
           'carton_label_binding_submitting_label': 'Submitting label %s...',
           'carton_label_binding_label_exists': 'Label exists !',
           'carton_label_binding_print_out_box_label_tips':
-          'Do you want to print a new outer box label ？',
+              'Do you want to print a new outer box label ？',
           'carton_label_binding_print_label': 'Print label',
           'carton_label_binding_select_label_type': 'Select print type',
           'carton_label_binding_material_label': 'Material label',
           'carton_label_binding_common_label': 'Common label',
           'carton_label_binding_label_binding_new_piece_tips':
-          'Are you sure you want to merge and bind all labels to a brand new outer box label ?',
+              'Are you sure you want to merge and bind all labels to a brand new outer box label ?',
           'carton_label_binding_label_binding_tips':
-          'Are you sure you want to bind all labels to the outer box label of part number<%s>?',
+              'Are you sure you want to bind all labels to the outer box label of part number<%s>?',
           'carton_label_binding_label_unbind_tips':
-          'Are you sure you want to unbind all tags in part number<% s>?',
+              'Are you sure you want to unbind all tags in part number<% s>?',
           'carton_label_binding_label_transfer_tips':
-          'Are you sure you want to transfer all labels to the outer box label with part number<% s>?',
+              'Are you sure you want to transfer all labels to the outer box label with part number<% s>?',
           'carton_label_binding_long': 'Long',
           'carton_label_binding_width': 'Width',
           'carton_label_binding_height': 'Height',
           'carton_label_binding_out_weight': 'Outer box weight',
           'carton_label_binding_data_not_input_tips':
-          'The trade factory label must be filled with length, width, height, and outer packaging weight !',
+              'The trade factory label must be filled with length, width, height, and outer packaging weight !',
           'inner_box_label_split_trade_tag': 'Trade',
           'inner_box_label_split_consignee': 'Consignee：',
           'inner_box_label_split_piece_id': 'Piece_id：',
@@ -11118,17 +11127,17 @@ class Translation extends Translations {
           'inner_box_label_split_pre_split': 'PreSplit',
           'inner_box_label_split_submit_split': 'Submit split',
           'inner_box_label_split_submit_split_tips':
-          'Are you sure you want to submit the pre split label？',
+              'Are you sure you want to submit the pre split label？',
           'inner_box_label_split_print': 'Print',
           'inner_box_label_split_print_label': 'Print label',
           'inner_box_label_split_print_notes': 'Do you want to print a note？',
           'inner_box_label_split_yes': 'Yes',
           'inner_box_label_split_no': 'No',
           'inner_box_label_split_exit_split_tips':
-          'Are you sure you want to exit label splitting？',
+              'Are you sure you want to exit label splitting？',
           'inner_box_label_split_getting_label_info': 'Getting label info...',
           'inner_box_label_split_submit_label_split':
-          'Submitting label split...',
+              'Submitting label split...',
           'label_reprint_outer_box_label_id': 'Outer box label id：',
           'label_reprint_specifications': 'Specifications：',
           'label_reprint_total': 'Total：',
@@ -11138,15 +11147,18 @@ class Translation extends Translations {
           'label_reprint_qty': 'Qty：',
           'label_reprint_select_all': 'Select all',
           'label_reprint_getting_label_info': 'Getting label info...',
-          'print_printing':'Mencetak...',
-          'print_printing_success':'Cetak berhasil!',
-          'print_printing_fail':'Gagal mencetak!',
-          'add_all_factory':'Semua Pabrik',
-          'Printer_settings':'Pengaturan Printer',
-          'forming_code_collection_closed':'Ditutup',
-          'forming_code_collection_no_closed':'Tidak ditutup',
-          'forming_code_collection_switch_order':'Ganti pesanan',
-          'forming_code_collection_switch_order_tip':'Silakan pilih pesanan yang ingin ditukar',
+          'print_printing': 'Mencetak...',
+          'print_printing_success': 'Cetak berhasil!',
+          'print_printing_fail': 'Gagal mencetak!',
+          'add_all_factory': 'Semua Pabrik',
+          'Printer_settings': 'Pengaturan Printer',
+          'forming_code_collection_closed': 'Ditutup',
+          'forming_code_collection_no_closed': 'Tidak ditutup',
+          'forming_code_collection_switch_order': 'Ganti pesanan',
+          'forming_code_collection_switch_order_tip':
+              'Silakan pilih pesanan yang ingin ditukar',
+          'home_no_route': 'Tidak ada rute',
+          'home_this_function_is_not_open': 'Fungsi ini belum terbuka',
         },
       };
 }
