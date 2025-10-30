@@ -8,6 +8,7 @@ import android.util.Log
 import com.jd.pzx.jd_flutter.LivenFaceVerificationActivity.Companion.startOneselfFaceVerification
 import com.jd.pzx.jd_flutter.utils.CHANNEL_BLUETOOTH_ANDROID_TO_FLUTTER
 import com.jd.pzx.jd_flutter.utils.CHANNEL_BLUETOOTH_FLUTTER_TO_ANDROID
+import com.jd.pzx.jd_flutter.utils.CHANNEL_DISPLAY_METRICS_FLUTTER_TO_ANDROID
 import com.jd.pzx.jd_flutter.utils.CHANNEL_FACE_VERIFICATION_FLUTTER_TO_ANDROID
 import com.jd.pzx.jd_flutter.utils.CHANNEL_PRINTER_FLUTTER_TO_ANDROID
 import com.jd.pzx.jd_flutter.utils.CHANNEL_SCAN_FLUTTER_TO_ANDROID
@@ -223,6 +224,18 @@ class MainActivity : FlutterActivity() {
             }
         }
 
+        //设备信息通道
+        MethodChannel(
+            flutterEngine.dartExecutor.binaryMessenger,
+            CHANNEL_DISPLAY_METRICS_FLUTTER_TO_ANDROID
+        ).setMethodCallHandler { call, result ->
+            if (call.method == "GetXDpi") {
+                val dpi = resources.displayMetrics.xdpi
+                result.success(dpi)
+            } else {
+                result.notImplemented()
+            }
+        }
 
     }
 

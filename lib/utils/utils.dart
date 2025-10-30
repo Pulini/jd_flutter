@@ -740,3 +740,5 @@ Future<Directory> deleteAllPdfFiles() async {
   }
   return directory;
 }
+
+Future<double> getAndroidXDpi() async =>await const MethodChannel(channelDisplayMetricsFlutterToAndroid).invokeMethod('GetXDpi');

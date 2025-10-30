@@ -33,6 +33,7 @@ const channelBluetoothFlutterToIos = 'channel_bluetooth_flutter_to_ios';
 const channelBluetoothIosToFlutter = 'channel_bluetooth_ios_to_flutter';
 const channelPrinterAndroidToFlutter = 'channel_printer_android_to_flutter';
 const channelPrinterFlutterToAndroid = 'channel_printer_flutter_to_android';
+const channelDisplayMetricsFlutterToAndroid = 'channel_display_metrics_flutter_to_android';
 const spSaveMoldingScanBulletinReportTimeDuration =
     'molding_scan_bulletin_report_time_duration';
 const spSaveFeishuUserWikiTokenData = 'feishu_user_wiki_token_data';

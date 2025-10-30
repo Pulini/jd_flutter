@@ -33,6 +33,7 @@ const val CHANNEL_WEIGHBRIDGE_ANDROID_TO_FLUTTER = "channel_weighbridge_android_
 const val CHANNEL_FACE_VERIFICATION_FLUTTER_TO_ANDROID = "channel_face_verification_flutter_to_android"
 const val CHANNEL_PRINTER_ANDROID_TO_FLUTTER = "channel_printer_android_to_flutter"
 const val CHANNEL_PRINTER_FLUTTER_TO_ANDROID = "channel_printer_flutter_to_android"
+const val CHANNEL_DISPLAY_METRICS_FLUTTER_TO_ANDROID = "channel_display_metrics_flutter_to_android"
 const val FACE_VERIFY_SUCCESS = 1
 const val FACE_VERIFY_FAIL_NOT_LIVE = 2
 const val FACE_VERIFY_FAIL_NOT_ME = 3

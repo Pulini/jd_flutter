@@ -75,7 +75,7 @@ dependencies:
   #隔离区子线程
   #  flutter_isolate: ^2.0.4
   #获取设备信息
-  device_info_plus: ^10.1.0
+  device_info_plus: ^12.2.0
   #跑马灯文本
   marquee: ^2.2.3
   #意图启动器
@@ -114,8 +114,10 @@ dependencies:
   camera: ^0.11.2
   #全局返回键监听
   back_button_interceptor: ^8.0.4
+  #PDF生成工具
   pdf: ^3.11.3
-  webcontent_converter: ^0.0.9+4
+  #网页转图片
+  webcontent_converter: ^0.0.9+5
 #  native_screenshot_widget: ^0.0.8
 #  screenshot: ^3.0.0
 

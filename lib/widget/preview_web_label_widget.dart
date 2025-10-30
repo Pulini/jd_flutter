@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 import 'dart:typed_data';
 
@@ -14,7 +13,6 @@ import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:webcontent_converter/webcontent_converter.dart';
-import 'package:image/image.dart' as img;
 
 class PreviewWebLabelList extends StatefulWidget {
   const PreviewWebLabelList({super.key, required this.labelCodes});
@@ -28,12 +26,13 @@ class PreviewWebLabelList extends StatefulWidget {
 class _PreviewWebLabelListState extends State<PreviewWebLabelList> {
   RxDouble printSpeed = 0.0.obs;
   RxDouble printDensity = 0.0.obs;
-  var labelList = <String>[];
+  var labelList = <String>[].obs;
   var htmlImages = <Uint8List>[].obs;
-  var labelByteList = <Uint8List>[].obs;
+  var reImageList = <Map<String, dynamic>>[];
+  var labelByteMap = <Uint8List>[];
   late MediaQueryData mediaQueryData;
 
-  runTask() async {
+  runTask() {
     var dio = Dio()
       ..interceptors.add(InterceptorsWrapper(
         onRequest: (options, handler) {
@@ -63,22 +62,16 @@ class _PreviewWebLabelListState extends State<PreviewWebLabelList> {
       },
     ).then((response) async {
       loadingDismiss();
-      labelList = [for (var json in jsonDecode(response.data)['data']) json];
+      labelList.value = [for (var json in jsonDecode(response.data)['data']) json];
       for (var web in labelList) {
         var bytes = await WebcontentConverter.contentToImage(content: web);
+        var map = await htmlImageResize(bytes);
+        reImageList.add({
+          'width': 110,
+          'height': (map['height'] / (map['width'] / 110)).toInt(),
+          'image': map['image'],
+        });
         htmlImages.add(bytes);
-        img.Image image = img.decodeImage(bytes)!;
-        labelByteList.add(mergeUint8List(
-          await htmlResizeToLabel({
-            'dpi': mediaQueryData.devicePixelRatio * 96,
-            'image': bytes,
-            'width': image.width,
-            'height': image.height,
-            'isDynamic': true,
-            'speed': 3,
-            'density': 15,
-          }),
-        ));
       }
     });
   }
@@ -103,35 +96,54 @@ class _PreviewWebLabelListState extends State<PreviewWebLabelList> {
     }
   }
 
+  printLabel() async {
+    if (labelByteMap.isEmpty) {
+      for (var i = 0; i < reImageList.length; ++i) {
+        loadingShow('正在生成标签数据( $i / ${reImageList.length} )...');
+        labelByteMap.add(mergeUint8List(
+          await htmlImageToLabel({
+            ...reImageList[i],
+            'isDynamic': true,
+            'speed': printSpeed.value.toInt(),
+            'density': printDensity.value.toInt(),
+          }),
+        ));
+      }
+      loadingDismiss();
+    }
+    onLinePrintDialog(
+      labelByteMap,
+      PrintType.label,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     mediaQueryData = MediaQuery.of(context);
     return Container(
       decoration: backgroundColor(),
       child: Obx(
-            () => Scaffold(
+        () => Scaffold(
           backgroundColor: Colors.transparent,
           appBar: AppBar(
             backgroundColor: Colors.transparent,
             title: Text('打印标签预览'),
             actions: [
-              labelByteList.length == labelList.length && labelList.isNotEmpty
+              htmlImages.length == labelList.length && labelList.isNotEmpty
                   ? IconButton(
-                onPressed: () => onLinePrintDialog(
-                  labelByteList,
-                  PrintType.label,
-                ),
-                icon: const Icon(Icons.print, color: Colors.blueAccent),
-              )
+                      onPressed: () => printLabel(),
+                      icon: const Icon(Icons.print, color: Colors.blueAccent),
+                    )
                   : Row(
-                children: [
-                  Text('正在生成标签：${labelByteList.length}/${labelList.length}   '),
-                  const CircularProgressIndicator(
-                    color: Colors.green,
-                  ),
-                  const SizedBox(width: 10)
-                ],
-              ),
+                      children: [
+                        Text(
+                            '正在生成标签：${htmlImages.length}/${labelList.length}   '),
+                        const CircularProgressIndicator(
+                          color: Colors.green,
+                        ),
+                        const SizedBox(width: 10)
+                      ],
+                    ),
             ],
           ),
           body: Column(
@@ -142,7 +154,7 @@ class _PreviewWebLabelListState extends State<PreviewWebLabelList> {
                   children: [
                     const Text('打印速度：'),
                     Expanded(
-                      child: Obx(() => Slider(
+                      child: Slider(
                         value: printSpeed.value,
                         min: 1,
                         max: 10,
@@ -152,10 +164,11 @@ class _PreviewWebLabelListState extends State<PreviewWebLabelList> {
                         onChanged: (v) {
                           printSpeed.value = v;
                           spSave(spSavePrintSpeed, v);
+                          labelByteMap.clear();
                         },
-                      )),
+                      ),
                     ),
-                    Obx(() => Text(printSpeed.value.toShowString())),
+                    Text(printSpeed.value.toShowString()),
                   ],
                 ),
               ),
@@ -165,7 +178,7 @@ class _PreviewWebLabelListState extends State<PreviewWebLabelList> {
                   children: [
                     const Text('打印浓度：'),
                     Expanded(
-                      child: Obx(() => Slider(
+                      child: Slider(
                         value: printDensity.value,
                         min: 1,
                         max: 15,
@@ -175,10 +188,11 @@ class _PreviewWebLabelListState extends State<PreviewWebLabelList> {
                         onChanged: (v) {
                           printDensity.value = v;
                           spSave(spSavePrintDensity, v);
+                          labelByteMap.clear();
                         },
-                      )),
+                      ),
                     ),
-                    Obx(() => Text(printDensity.value.toShowString())),
+                    Text(printDensity.value.toShowString()),
                   ],
                 ),
               ),

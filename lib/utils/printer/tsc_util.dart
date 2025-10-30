@@ -177,7 +177,7 @@ Future<Uint8List> _tscBitmapText(
       style: TextStyle(
         color: Colors.black,
         fontSize: fontSize,
-        fontWeight: isBold? FontWeight.bold : FontWeight.normal,
+        fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
       ),
     )
     ..textDirection = TextDirection.ltr
@@ -624,8 +624,9 @@ Future<List<Uint8List>> labelMultipurposeFixed({
         if (subContent1.isEmpty && subContent2.isNotEmpty && i >= 3) break;
         //如子内容为空则限制主内容行数为4
         if (i >= 4) break;
-        list.add(
-            await _tscBitmapText(2 * _dpi, (19 + 5 * i) * _dpi, 30, format[i],isBold: false));
+        list.add(await _tscBitmapText(
+            2 * _dpi, (19 + 5 * i) * _dpi, 30, format[i],
+            isBold: false));
       }
     }
   } else {
@@ -651,17 +652,25 @@ Future<List<Uint8List>> labelMultipurposeFixed({
 
   if (bottomLeftText1.isNotEmpty) {
     if (bottomLeftText2.isNotEmpty) {
-      list.add(await _tscBitmapText(2 * _dpi, 37 * _dpi, 23, bottomLeftText1,isBold: false));
-      list.add(await _tscBitmapText(2 * _dpi, 40 * _dpi, 23, bottomLeftText2,isBold: false));
+      list.add(await _tscBitmapText(2 * _dpi, 37 * _dpi, 23, bottomLeftText1,
+          isBold: false));
+      list.add(await _tscBitmapText(2 * _dpi, 40 * _dpi, 23, bottomLeftText2,
+          isBold: false));
     } else {
       logger.f('字符长度：${bottomLeftText1.length}');
       if (bottomLeftText1.length > 6) {
-        var format = contextFormat(bottomLeftText1, 23, 20.0 * _dpi,);
+        var format = contextFormat(
+          bottomLeftText1,
+          23,
+          20.0 * _dpi,
+        );
         for (var i = 0; i < format.length; ++i) {
           if (i == 0) {
-            list.add(await _tscBitmapText(2 * _dpi, 36 * _dpi, 23, format[0],isBold: false));
+            list.add(await _tscBitmapText(2 * _dpi, 36 * _dpi, 23, format[0],
+                isBold: false));
           } else if (i == 1) {
-            list.add(await _tscBitmapText(2 * _dpi, 40 * _dpi, 23, format[1],isBold: false));
+            list.add(await _tscBitmapText(2 * _dpi, 40 * _dpi, 23, format[1],
+                isBold: false));
           } else {
             break;
           }
@@ -676,9 +685,11 @@ Future<List<Uint8List>> labelMultipurposeFixed({
   if (bottomMiddleText1.isNotEmpty) {
     if (bottomMiddleText2.isNotEmpty) {
       list.add(await _tscBitmapText(
-          23 * _dpi + _halfDpi, 36 * _dpi, 23, bottomMiddleText1,isBold: false));
+          23 * _dpi + _halfDpi, 36 * _dpi, 23, bottomMiddleText1,
+          isBold: false));
       list.add(await _tscBitmapText(
-          23 * _dpi + _halfDpi, 40 * _dpi, 23, bottomMiddleText2,isBold: false));
+          23 * _dpi + _halfDpi, 40 * _dpi, 23, bottomMiddleText2,
+          isBold: false));
     } else {
       list.add(await _tscBitmapText(
           23 * _dpi + _halfDpi, 38 * _dpi, 34, bottomMiddleText1));
@@ -686,18 +697,20 @@ Future<List<Uint8List>> labelMultipurposeFixed({
   }
   if (bottomRightText1.isNotEmpty) {
     if (bottomRightText2.isNotEmpty) {
-      list.add(
-          await _tscBitmapText(62 * _dpi, 37 * _dpi, 24, bottomRightText1,isBold: false));
-      list.add(
-          await _tscBitmapText(62 * _dpi, 40 * _dpi, 24, bottomRightText2,isBold: false));
+      list.add(await _tscBitmapText(62 * _dpi, 37 * _dpi, 24, bottomRightText1,
+          isBold: false));
+      list.add(await _tscBitmapText(62 * _dpi, 40 * _dpi, 24, bottomRightText2,
+          isBold: false));
     } else {
       if (bottomRightText1.length > 4) {
         var format = contextFormat(bottomRightText1, 23, 11.0 * _dpi);
         for (var i = 0; i < format.length; ++i) {
           if (i == 0) {
-            list.add(await _tscBitmapText(62 * _dpi, 37 * _dpi, 23, format[0],isBold: false));
+            list.add(await _tscBitmapText(62 * _dpi, 37 * _dpi, 23, format[0],
+                isBold: false));
           } else if (i == 1) {
-            list.add(await _tscBitmapText(62 * _dpi, 40 * _dpi, 23, format[1],isBold: false));
+            list.add(await _tscBitmapText(62 * _dpi, 40 * _dpi, 23, format[1],
+                isBold: false));
           } else {
             break;
           }
@@ -1133,36 +1146,46 @@ List<Uint8List> testLabel() => [
       _tscPrint(),
     ];
 
-Future<List<Uint8List>> htmlResizeToLabel(Map<String, dynamic> image) async =>
-    await compute(_htmlResizeToLabel, image);
+Future<Map<String, dynamic>> htmlImageResize(Uint8List bytes) async =>
+    await compute(_htmlImageResize, bytes);
 
-Future<List<Uint8List>> _htmlResizeToLabel(Map<String, dynamic> image) async {
-  double dpi = image['dpi'] ?? 1.0;
-  int speed = image['speed'] ?? 4;
-  int density = image['density'] ?? 15;
-  bool isDynamic = image['isDynamic'] ?? false;
-  double width = (image['width'] * 25.4) / dpi;
-  double height =  (image['height'] * 25.4) / dpi;
-  debugPrint('dpi=$dpi speed=$speed density=$density isDynamic=$isDynamic width=$width height=$height');
-  debugPrint('--------image: ${(image['image'] as Uint8List).lengthInBytes} ');
+Future<Map<String, dynamic>> _htmlImageResize(Uint8List bytes) async {
+  img.Image image = img.decodeImage(bytes)!;
   var reImage = img.copyResize(
-    img.decodeImage(image['image'])!,
-    width: (width * 8).toInt(),
-    height:(height * 8).toInt(),
+    img.decodeImage(bytes)!,
+    width: (110 * 8).toInt(),
+    height: (image.height / (image.width / 110) * 8).toInt(),
     backgroundColor: img.ColorRgb8(0, 0, 0),
   );
-  var imageUint8List = Uint8List.fromList(img.encodePng(reImage));
-  debugPrint('--------imageUint8List: ${imageUint8List.lengthInBytes}');
+  return {
+    'width': 110,
+    'height': (image.height / (image.width / 110)).toInt(),
+    'image': Uint8List.fromList(img.encodePng(reImage)),
+  };
+}
+
+Future<List<Uint8List>> htmlImageToLabel(Map<String, dynamic> image) async =>
+    await compute(_htmlImageToLabel, image);
+
+Future<List<Uint8List>> _htmlImageToLabel(Map<String, dynamic> data) async {
+  int speed = data['speed'] ?? 4;
+  int density = data['density'] ?? 15;
+  bool isDynamic = data['isDynamic'] ?? false;
+  Uint8List image = data['image'];
+  int width = data['width'];
+  int height = data['height'];
+  debugPrint(
+      'speed=$speed density=$density isDynamic=$isDynamic  width=$width height=$height');
   return [
     _tscClearBuffer(),
     _tscSetup(
-      width.toInt(),
-      height.toInt(),
+      width,
+      height,
       density: density,
       speed: speed,
       sensorDistance: isDynamic ? 0 : 2,
     ),
-    await _tscBitmap(1, 1, imageUint8List),
+    await _tscBitmap(1, 1, image),
     _tscCutter(),
     _tscPrint(),
   ];
@@ -1181,16 +1204,6 @@ Future<List<Uint8List>> _imageResizeToLabel(Map<String, dynamic> image) async {
 
   debugPrint(
       'pixelRatio=$pixelRatio speed=$speed density=$density isDynamic=$isDynamic width=$width height=$height');
-  // var wImage = img.decodeImage(image['image'])!;
-  // for (int x = 0; x < wImage.width; x++) {
-  //   for (int y = 0; y < wImage.height; y++) {
-  //     var pixel = wImage.getPixel(x, y);
-  //     // 判断是否为白色（可以允许一定的容差）
-  //     if (pixel.r > 250 && pixel.g > 250 && pixel.b > 250) {
-  //       wImage.setPixelRgba(x, y, 0, 0, 0, 0);
-  //     }
-  //   }
-  // }
   debugPrint('--------image: ${(image['image'] as Uint8List).lengthInBytes} ');
 
   var reImage = img.copyResize(
