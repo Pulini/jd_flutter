@@ -36,17 +36,19 @@ class _PreviewLabelListState extends State<PreviewLabelList> {
 
   printLabel() async {
     if (imageList.isEmpty) return;
-
+    loadingShow('正在生成标签...');
+    var labelList = <List<Uint8List>>[];
+    for (var label in imageList) {
+      labelList.add(await imageResizeToLabel({
+        ...label,
+        'isDynamic': widget.isDynamic,
+        'speed': printSpeed.value.toInt(),
+        'density': printDensity.value.toInt(),
+      }));
+    }
+    loadingDismiss();
     pu.printLabelList(
-      labelList: [
-        for (var label in imageList)
-          await imageResizeToLabel({
-            ...label,
-            'isDynamic': widget.isDynamic,
-            'speed': printSpeed.value.toInt(),
-            'density': printDensity.value.toInt(),
-          }),
-      ],
+      labelList: labelList,
       finished: (success, fail) {
         successDialog(
           title: '标签下发结束',
@@ -54,6 +56,23 @@ class _PreviewLabelListState extends State<PreviewLabelList> {
         );
       },
     );
+  }
+
+  printLabelOnline() async {
+    var list = <Uint8List>[];
+    loadingShow('正在生成标签...');
+    for (var image in imageList) {
+      list.add(mergeUint8List(
+        await imageResizeToLabel({
+          ...image,
+          'isDynamic': widget.isDynamic,
+          'speed': printSpeed.value.toInt(),
+          'density': printDensity.value.toInt(),
+        }),
+      ));
+    }
+    loadingDismiss();
+    onLinePrintDialog(list, PrintType.label);
   }
 
   @override
@@ -79,21 +98,6 @@ class _PreviewLabelListState extends State<PreviewLabelList> {
         child: v,
       ));
     }
-  }
-
-  printLabelOnline() async {
-    var list = <Uint8List>[];
-    for (var image in imageList) {
-      list.add(mergeUint8List(
-        await imageResizeToLabel({
-          ...image,
-          'isDynamic': widget.isDynamic,
-          'speed': printSpeed.value.toInt(),
-          'density': printDensity.value.toInt(),
-        }),
-      ));
-    }
-    onLinePrintDialog(list, PrintType.label);
   }
 
   @override

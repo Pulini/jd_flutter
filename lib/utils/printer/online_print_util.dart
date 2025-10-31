@@ -208,18 +208,17 @@ onLinePrintDialog(List<Uint8List> papers, PrintType printType) {
             title: Text('选择打印机'),
             content: SizedBox(
               width: 400,
-              height: 400,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   selectView(
                     list: printerList,
-                    hint: '部门',
+                    hint: '部门：',
                     select: (i) => departmentIndex.value = i,
                   ),
                   Obx(() => selectView(
                         list: printerList[departmentIndex.value].devices!,
-                        hint: '打印机',
+                        hint: '打印机：',
                         select: (i) => deviceIndex.value = i,
                       )),
                   Obx(() => printerList[departmentIndex.value]

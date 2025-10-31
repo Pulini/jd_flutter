@@ -43,7 +43,12 @@ pageBody({
       backgroundColor: Colors.transparent,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        title: Text(title ?? functionTitle),
+        title: AutoSizeText(
+          title ?? functionTitle,
+          maxLines: 1,
+          minFontSize: 8,
+          maxFontSize: 20,
+        ),
         actions: [
           ...?actions,
         ],
@@ -77,7 +82,12 @@ pageBodyWithBottomSheet({
       backgroundColor: Colors.transparent,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        title: Text(title ?? functionTitle),
+        title: AutoSizeText(
+          title ?? functionTitle,
+          maxLines: 1,
+          minFontSize: 8,
+          maxFontSize: 20,
+        ),
         actions: [
           ...?actions,
           Builder(
@@ -156,7 +166,12 @@ pageBodyWithDrawer({
       backgroundColor: Colors.transparent,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        title: Text(title ?? functionTitle),
+        title: AutoSizeText(
+          title ?? functionTitle,
+          maxLines: 1,
+          minFontSize: 8,
+          maxFontSize: 20,
+        ),
         actions: [
           ...?actions,
           Builder(
@@ -791,19 +806,14 @@ selectView({
                 crossAxisAlignment: CrossAxisAlignment.start, children: weights)
             : Row(children: weights)
         : list.isEmpty
-            ? Row(
-                children: [
-                  Expanded(
-                      child: AutoSizeText(
-                    errorMsg,
-                    style: const TextStyle(color: Colors.red),
-                    maxLines: 2,
-                    minFontSize: 12,
-                    maxFontSize: 16,
-                  ))
-                ],
+            ? AutoSizeText(
+                errorMsg,
+                style: const TextStyle(color: Colors.red),
+                maxLines: 2,
+                minFontSize: 12,
+                maxFontSize: 16,
               )
-            : Row(children: [textSpan(hint: hint, text: list[0].toString())]),
+            : textSpan(hint: hint, text: list[0].toString(), maxLines: 2),
   );
 }
 

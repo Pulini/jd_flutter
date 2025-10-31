@@ -136,78 +136,86 @@ class _SapLabelReprintPageState extends State<SapLabelReprintPage> {
   @override
   Widget build(BuildContext context) {
     return pageBody(
+      actions: [
+        IconButton(
+          onPressed: () => logic.cleanLabels(),
+          icon: Container(
+            padding: const EdgeInsets.all(5),
+            decoration: BoxDecoration(
+              color: Colors.orange, // 背景色
+              borderRadius: BorderRadius.circular(25), // 圆角（可选）
+            ),
+            child: const Icon(
+              Icons.cleaning_services,
+              color: Colors.white,
+            ),
+          ),
+        ),
+        Transform.scale(
+            scale: 1.8,
+            child: Obx(
+              () => Checkbox(
+                value: logic.isSelectedAll(),
+                shape: const CircleBorder(),
+                onChanged: (v) => logic.selectAll(v!),
+              ),
+            )),
+        IconButton(
+          onPressed: () => logic.printLabel(),
+          icon: Container(
+            padding: const EdgeInsets.all(5),
+            decoration: BoxDecoration(
+              color: Colors.blue, // 背景色
+              borderRadius: BorderRadius.circular(25), // 圆角（可选）
+            ),
+            child: const Icon(
+              Icons.print,
+              color: Colors.white,
+            ),
+          ),
+        )
+      ],
       body: Column(
         children: [
           Container(
-              margin: const EdgeInsets.only(left: 10, right: 10),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(25),
+            margin: const EdgeInsets.only(left: 10, right: 10),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(25),
+            ),
+            child:TextField(
+              onSubmitted: (value) => logic.searchPiece(tecPiece.text),
+              textAlign: TextAlign.center,
+              keyboardType: TextInputType.number,
+              controller: tecPiece,
+              decoration: InputDecoration(
+                contentPadding: const EdgeInsets.all(0),
+                filled: true,
+                fillColor: Colors.grey.shade300,
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(50),
+                  borderSide: const BorderSide(
+                    color: Colors.transparent,
+                  ),
+                ),
+                border: const OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(50)),
+                ),
+                hintStyle: const TextStyle(color: Colors.white),
+                suffixIcon: IconButton(
+                  onPressed: () => logic.searchPiece(tecPiece.text),
+                  icon: Container(
+                    padding: const EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                      color: Colors.green, // 背景色
+                      borderRadius: BorderRadius.circular(25), // 圆角（可选）
+                    ),
+                    child: const Icon(Icons.search, color: Colors.white),
+                  ),
+                ),
               ),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      onSubmitted: (value) => logic.searchPiece(tecPiece.text),
-                      textAlign: TextAlign.center,
-                      keyboardType: TextInputType.number,
-                      controller: tecPiece,
-                      decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.all(0),
-                        filled: true,
-                        fillColor: Colors.grey.shade300,
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(50),
-                          borderSide: const BorderSide(
-                            color: Colors.transparent,
-                          ),
-                        ),
-                        border: const OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(50)),
-                        ),
-                        hintStyle: const TextStyle(color: Colors.white),
-                        suffixIcon: IconButton(
-                          onPressed: () => logic.searchPiece(tecPiece.text),
-                          icon: Container(
-                            padding: const EdgeInsets.all(5),
-                            decoration: BoxDecoration(
-                              color: Colors.green, // 背景色
-                              borderRadius: BorderRadius.circular(25), // 圆角（可选）
-                            ),
-                            child:
-                                const Icon(Icons.search, color: Colors.white),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  IconButton(
-                    onPressed: () => logic.cleanLabels(),
-                    icon: Container(
-                      padding: const EdgeInsets.all(5),
-                      decoration: BoxDecoration(
-                        color: Colors.orange, // 背景色
-                        borderRadius: BorderRadius.circular(25), // 圆角（可选）
-                      ),
-                      child: const Icon(
-                        Icons.cleaning_services,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Transform.scale(
-                      scale: 1.8,
-                      child: Obx(
-                        () => Checkbox(
-                          value: logic.isSelectedAll(),
-                          shape: const CircleBorder(),
-                          onChanged: (v) => logic.selectAll(v!),
-                        ),
-                      )),
-                ],
-              )),
+            ),
+          ),
           const SizedBox(height: 10),
           Container(
             margin: const EdgeInsets.only(left: 10, right: 10),
@@ -231,21 +239,6 @@ class _SapLabelReprintPageState extends State<SapLabelReprintPage> {
                   name: '打印备注行',
                   value: state.isMaterialLabel.value,
                 )),
-                const SizedBox(width: 10),
-                IconButton(
-                  onPressed: () => logic.printLabel(),
-                  icon: Container(
-                    padding: const EdgeInsets.all(5),
-                    decoration: BoxDecoration(
-                      color: Colors.blue, // 背景色
-                      borderRadius: BorderRadius.circular(25), // 圆角（可选）
-                    ),
-                    child: const Icon(
-                      Icons.print,
-                      color: Colors.white,
-                    ),
-                  ),
-                )
               ],
             ),
           ),

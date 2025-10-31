@@ -29,10 +29,13 @@ bool hasFrontCamera() => AppInitService.to.hasFrontCamera();
 
 bool hasBackCamera() => AppInitService.to.hasFrontCamera();
 
+double getDpi()=>AppInitService.to.androidXDpi;
+
 class AppInitService extends GetxService {
   RxBool isTestUrl = false.obs;
   late SharedPreferences sharedPreferences;
   late PackageInfo packageInfo;
+  double androidXDpi=0.0;
   late BaseDeviceInfo deviceInfo;
   List<CameraDescription>? cameras;
 
@@ -49,7 +52,8 @@ class AppInitService extends GetxService {
       sharedPreferences = await SharedPreferences.getInstance();
       packageInfo = await PackageInfo.fromPlatform();
       deviceInfo = await DeviceInfoPlugin().deviceInfo;
-
+      androidXDpi=await getAndroidXDpi();
+      debugPrint('androidXDpi: $androidXDpi');
       if (GetPlatform.isMobile) {
         try {
           cameras = await availableCameras();
