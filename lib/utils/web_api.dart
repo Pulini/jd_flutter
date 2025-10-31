@@ -29,19 +29,19 @@ const resultToUpdate = 3;
 const baseUrlForMES = 'https://geapp.goldemperor.com:1226/';
 
 //MES测试库
-const testUrlForMES = 'https://geapptest.goldemperor.com:1224/';//ECC-300
+// const testUrlForMES = 'https://geapptest.goldemperor.com:1224/';//ECC-300
 // const testUrlForMES = 'https://apptest.goldemperor.com:1207/';//S4-300
-// const testUrlForMES = 'https://apptest.goldemperor.com:1208/';//S4-600
+const testUrlForMES = 'https://apptest.goldemperor.com:1208/';//S4-600
 
 //SAP正式库
 const baseUrlForSAP = 'https://erpprd01.goldemperor.com:8003/';//ECC-800
 
 // //SAP测试库
 // const testUrlForSAP = 'https://erpqas01.goldemperor.com:8002/';//ECC-600
-// const developUrlForSAP = 'https://s4qasapp01.goldemperor.com:8006/';//S4-600
+const developUrlForSAP = 'https://s4qasapp01.goldemperor.com:8006/';//S4-600
 
 //SAP开发库
-const developUrlForSAP = 'https://erpdev01.goldemperor.com:8001/';//ECC-300
+// const developUrlForSAP = 'https://erpdev01.goldemperor.com:8001/';//ECC-300
 // const developUrlForSAP = 'https://s4devapp01.goldemperor.com:8005/';//S4-300
 
 
