@@ -8,7 +8,9 @@ import android.content.pm.ActivityInfo
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Rect
+import android.os.Build
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.util.Log
 import android.widget.FrameLayout
 import android.widget.ImageView
@@ -27,6 +29,8 @@ import com.jd.pzx.jd_flutter.utils.FACE_VERIFY_FAIL_ERROR
 import com.jd.pzx.jd_flutter.utils.FACE_VERIFY_FAIL_NOT_LIVE
 import com.jd.pzx.jd_flutter.utils.FACE_VERIFY_FAIL_NOT_ME
 import com.jd.pzx.jd_flutter.utils.FACE_VERIFY_SUCCESS
+import com.jd.pzx.jd_flutter.utils.dp2px
+import com.jd.pzx.jd_flutter.utils.isPad
 
 
 /**
@@ -98,6 +102,15 @@ class LivenFaceVerificationActivity : Activity() {
         bundle = savedInstanceState
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         setContentView(R.layout.activity_liveness_custom_detection)
+//        if (isPad()) {
+//            //加载平板的主界面并强制横屏
+//            setContentView(R.layout.activity_liveness_custom_detection_pad)
+//            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+//        } else {
+//            //加载手机的主界面并强制竖屏
+//            setContentView(R.layout.activity_liveness_custom_detection_phone)
+//            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+//        }
         ivBack.setOnClickListener { finish() }
         previewContainer.postDelayed(300) {
             //预览界面加载存在位置偏移bug,需要延迟加载预览界面
@@ -139,7 +152,14 @@ class LivenFaceVerificationActivity : Activity() {
         return MLLivenessDetectView.Builder()
             .setContext(this)
             .setOptions(MLLivenessDetectView.DETECT_MASK)
-            .setFaceFrameRect(Rect(0, 0, 0, 1000))
+            .setFaceFrameRect(
+                Rect(
+                    0,
+                    0,
+                    resources.displayMetrics.heightPixels,
+                    resources.displayMetrics.widthPixels,
+                )
+            )
             .setDetectCallback(object : OnMLLivenessDetectCallback {
                 //活体检测完成
                 override fun onCompleted(result: MLLivenessCaptureResult) {
@@ -290,5 +310,15 @@ class LivenFaceVerificationActivity : Activity() {
     override fun onResume() {
         super.onResume()
         mlLivenDetectView?.onResume()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        mlLivenDetectView?.onStart()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        mlLivenDetectView?.onStop()
     }
 }

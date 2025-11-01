@@ -232,7 +232,9 @@ class DeliveryOrderLogic extends GetxController {
           content: 'delivery_order_selected_contains_exempt_and_not_exempt'.tr);
       return;
     }
+    reversal.call();
   }
+
 
   reversalStockOut({
     required String workCenterID,

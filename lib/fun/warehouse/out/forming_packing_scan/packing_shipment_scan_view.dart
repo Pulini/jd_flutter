@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/packing_shipment_scan_info.dart';
 import 'package:jd_flutter/fun/warehouse/out/forming_packing_scan/packing_scan_logic.dart';
-import 'package:jd_flutter/utils/app_init_service.dart';
+import 'package:jd_flutter/utils/app_init.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/scanner.dart';

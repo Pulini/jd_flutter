@@ -2,15 +2,28 @@ import 'dart:ui';
 
 import 'package:get/get.dart';
 
-var localeChinese = const Locale('zh', 'Hans_CN');
-var localeEnglish = const Locale('en', 'US');
-var localeIndonesian = const Locale('id', 'ID');
-
+// var localeChinese = const Locale('zh', 'Hans_CN');
+// var localeEnglish = const Locale('en', 'US');
+// var localeIndonesian = const Locale('id', 'ID');
+var localeChinese = const Locale('zh');
+var localeEnglish = const Locale('en');
+var localeIndonesian = const Locale('id');
+var locales = <Locale>[
+  localeChinese, //中文
+  localeEnglish, //英文
+  localeIndonesian, //印度尼西亚
+];
+var languages = <String>[
+  '简体中文',
+  'English',
+  'Indonesian',
+];
 class Translation extends Translations {
   @override
   Map<String, Map<String, String>> get keys => {
         localeChinese.toString(): {
           'app_name': '金帝集团',
+          'app_language': '当前语言:',
           'feishu_authorize_login': '飞书授权登陆',
           'feishu_authorize_query_empty': '查询内容不能为空！',
           'feishu_authorize_file_list': '文件列表',
@@ -3282,6 +3295,7 @@ class Translation extends Translations {
         },
         localeEnglish.toString(): {
           'app_name': 'Gold Emperor',
+          'app_language': 'Language:',
           'feishu_authorize_login': 'Feishu Authorize Login',
           'feishu_authorize_query_empty': 'The query content cannot be empty !',
           'feishu_authorize_file_list': 'File list',
@@ -7222,6 +7236,7 @@ class Translation extends Translations {
         },
         localeIndonesian.toString(): {
           'app_name': 'Gold Emperor',
+          'app_language': 'Bahasa:',
           'feishu_authorize_login': 'Feishu Authorize Login',
           'feishu_authorize_query_empty': 'The query content cannot be empty !',
           'feishu_authorize_file_list': 'File list',
@@ -7280,7 +7295,7 @@ class Translation extends Translations {
           'login_tips_work_number': 'Silakan masukkan nomor pekerjaan',
           'login_tips_password': 'Silakan masukkan kata sandi',
           'login_tips_verify_code': 'Silakan masukkan kode verifikasi',
-          'get_verify_code': 'Dapatkan kode verifikasi',
+          'get_verify_code': 'Dapat OTP',
           'login': 'Masuk',
           'logging': 'Logging...',
           'login_failed': 'Login Gagal',

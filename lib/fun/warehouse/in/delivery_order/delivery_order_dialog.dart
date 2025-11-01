@@ -8,7 +8,7 @@ import 'package:jd_flutter/bean/http/response/delivery_order_info.dart';
 import 'package:jd_flutter/bean/http/response/leader_info.dart';
 import 'package:jd_flutter/bean/http/response/sap_purchase_stock_in_info.dart';
 import 'package:jd_flutter/constant.dart';
-import 'package:jd_flutter/utils/app_init_service.dart';
+import 'package:jd_flutter/utils/app_init.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/dialogs.dart';

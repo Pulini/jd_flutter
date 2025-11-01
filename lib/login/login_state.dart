@@ -7,11 +7,10 @@ import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
-
 class LoginState {
-  var buttonName = 'get_verify_code'.tr.obs;
-  var countTimer = 0;
+  var countTimer = 0.obs;
   var isReLogin = false;
+
   // 添加计时相关变量
   late Stopwatch stopwatch;
   int longPressCount = 0;
@@ -48,21 +47,16 @@ class LoginState {
       if (verifyCodeCallback.resultCode == resultSuccess) {
         success.call();
         //开始倒计时
-        Timer.periodic(
-          const Duration(milliseconds: 1000),
-              (timer) {
-            countTimer++;
-            if (countTimer == 60) {
-              timer.cancel();
-              countTimer = 0;
-              buttonName.value = 'get_verify_code'.tr;
-            } else {
-             buttonName.value = (60 - countTimer).toString();
-            }
-          },
-        );
+        Timer.periodic(const Duration(milliseconds: 1000), (timer) {
+          countTimer.value++;
+          if (countTimer.value == 60) {
+            timer.cancel();
+            countTimer.value = 0;
+          }
+        });
       } else {
-        error.call(verifyCodeCallback.message ?? 'phone_login_get_verify_code_failed'.tr);
+        error.call(verifyCodeCallback.message ??
+            'phone_login_get_verify_code_failed'.tr);
       }
     });
   }
@@ -87,7 +81,7 @@ class LoginState {
         'Type': type,
       },
     ).then((response) {
-      reLoginDialogIsShowing=false;
+      reLoginDialogIsShowing = false;
       if (response.resultCode == resultSuccess) {
         spSave(spSaveUserInfo, jsonEncode(response.data).toString());
         userInfo = UserInfo.fromJson(response.data);

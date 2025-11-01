@@ -30,7 +30,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'app_init_service.dart';
+import 'app_init.dart';
 import 'web_api.dart';
 
 SnackbarController? snackbarController;

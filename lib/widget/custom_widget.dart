@@ -7,7 +7,8 @@ import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:jd_flutter/bean/home_button.dart';
-import 'package:jd_flutter/utils/app_init_service.dart';
+import 'package:jd_flutter/translation.dart';
+import 'package:jd_flutter/utils/app_init.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
@@ -372,6 +373,7 @@ showScanTips({
 Widget getCupertinoPicker({
   required List<Widget> items,
   required FixedExtentScrollController controller,
+  Function(int)? itemChanged,
 }) {
   return CupertinoPicker(
     scrollController: controller,
@@ -380,7 +382,7 @@ Widget getCupertinoPicker({
     squeeze: 1.2,
     useMagnifier: true,
     itemExtent: 32,
-    onSelectedItemChanged: (value) {},
+    onSelectedItemChanged: itemChanged,
     children: items,
   );
 }
@@ -422,19 +424,18 @@ Widget getLinkCupertinoPicker({
 }
 
 //popup工具
-showPopup(Widget widget, {double? height}) {
+showPopup(Widget widget, {BuildContext? context, double? height}) {
   showCupertinoModalPopup(
-    context: Get.overlayContext!,
-    builder: (BuildContext context) {
-      return AnimatedPadding(
-          padding: MediaQuery.of(context).viewInsets,
-          duration: const Duration(milliseconds: 100),
-          child: Container(
-            height: height ?? 260,
-            color: Colors.grey[200],
-            child: widget,
-          ));
-    },
+    context: context ?? Get.overlayContext!,
+    builder: (context) => AnimatedPadding(
+      padding: MediaQuery.of(context).viewInsets,
+      duration: const Duration(milliseconds: 100),
+      child: Container(
+        height: height ?? 260,
+        color: Colors.grey[200],
+        child: widget,
+      ),
+    ),
   );
 }
 
@@ -890,5 +891,80 @@ Widget ratioBarChart({
       ),
     ),
     child: Row(children: list),
+  );
+}
+
+//切换语言
+changeLanguagePopup({required Function() changed}) {
+  var localeIndex = locales.indexWhere((v)=>v.languageCode==Get.locale!.languageCode);
+  var controller = FixedExtentScrollController(initialItem: localeIndex);
+  String getCancel(int index) => locales[index] == localeChinese
+      ? '取消'
+      : locales[index] == localeIndonesian
+          ? 'Batalkan'
+          : 'Cancel';
+  String getConfirm(int index) => locales[index] == localeChinese
+      ? '确定'
+      : locales[index] == localeIndonesian
+          ? 'Pasti'
+          : 'confirm';
+  var cancelText = getCancel(localeIndex).obs;
+  var confirmText = getConfirm(localeIndex).obs;
+  showCupertinoModalPopup(
+    context: Get.overlayContext!,
+    builder: (context) => Container(
+      height: 260,
+      color: Colors.grey[200],
+      child: Column(
+        children: <Widget>[
+          Container(
+            height: 45,
+            color: Colors.grey[200],
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                TextButton(
+                  onPressed: () {
+                    Get.back();
+                  },
+                  child: Obx(() => Text(
+                        cancelText.value,
+                        style: const TextStyle(
+                          color: Colors.grey,
+                          fontSize: 20,
+                        ),
+                      )),
+                ),
+                TextButton(
+                  onPressed: () {
+                    LanguageController.to
+                        .changeLanguage(locales[controller.selectedItem]);
+                    Get.back();
+                    changed.call();
+                  },
+                  child: Obx(() => Text(
+                        confirmText.value,
+                        style: const TextStyle(
+                          color: Colors.blueAccent,
+                          fontSize: 20,
+                        ),
+                      )),
+                )
+              ],
+            ),
+          ),
+          Expanded(
+            child: getCupertinoPicker(
+              items: languages.map((s) => Center(child: Text(s))).toList(),
+              controller: controller,
+              itemChanged: (index) {
+                cancelText.value = getCancel(index);
+                confirmText.value = getConfirm(index);
+              },
+            ),
+          )
+        ],
+      ),
+    ),
   );
 }

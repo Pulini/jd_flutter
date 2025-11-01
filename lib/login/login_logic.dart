@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/home/home_view.dart';
 import 'package:jd_flutter/login/login_view.dart';
-import 'package:jd_flutter/utils/app_init_service.dart';
+import 'package:jd_flutter/utils/app_init.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
@@ -110,7 +110,7 @@ class LoginLogic extends GetxController {
   //获取验证码
   getVerifyCode(String phone) {
     //按钮名称不是获取验证码，直接返回
-    if (state.buttonName.value != 'get_verify_code'.tr) return;
+    if (state.countTimer.value > 0) return;
 
     //手机号为空，提示
     if (phone.isEmpty) {

@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/home_function_info.dart';
 import 'package:jd_flutter/route.dart';
-import 'package:jd_flutter/utils/app_init_service.dart';
+import 'package:jd_flutter/utils/app_init.dart';
 import 'package:jd_flutter/utils/utils.dart';
 
 abstract class ButtonItem {
