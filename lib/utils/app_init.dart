@@ -9,6 +9,7 @@ import 'package:jd_flutter/bean/http/response/workshop_planning_info.dart';
 import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/home/home_view.dart';
 import 'package:jd_flutter/login/login_view.dart';
+import 'package:jd_flutter/translation.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart';
@@ -50,6 +51,7 @@ class AppInitService extends GetxService {
   Future<void> _initializeApp() async {
     try {
       sharedPreferences = await SharedPreferences.getInstance();
+      Get.put(LanguageController());
       packageInfo = await PackageInfo.fromPlatform();
       deviceInfo = await DeviceInfoPlugin().deviceInfo;
       androidXDpi=await getAndroidXDpi();
@@ -134,4 +136,25 @@ class AppInitService extends GetxService {
   bool hasBackCamera() => cameras == null
       ? false
       : cameras!.any((v) => v.lensDirection == CameraLensDirection.back);
+}
+
+class LanguageController extends GetxController {
+  static LanguageController get to => Get.find();
+
+  var currentLocale = const Locale('zh', '').obs;
+
+  @override
+  onReady() {
+    var save = spGet('language');
+    if (save == null) {
+      spSave('language',localeChinese.languageCode);
+    } else {
+      changeLanguage(Locale(save));
+    }
+  }
+  changeLanguage(Locale locale) {
+    currentLocale.value = locale;
+    spSave('language', locale.languageCode);
+    Get.updateLocale(locale);
+  }
 }

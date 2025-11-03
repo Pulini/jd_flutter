@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/home_button.dart';
-import 'package:jd_flutter/utils/app_init_service.dart';
+import 'package:jd_flutter/utils/app_init.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
@@ -108,7 +108,7 @@ class _HomePageState extends State<HomePage>
                 if (isTestUrl()) {
                   Get.to(() => const TscLabelPreview());
                 } else {
-                  showSnackBar(title: '消息中心', message: '进入消息中心');
+                  showSnackBar(title: '消息中心', message: '功能开发中');
                 }
               },
             ),
@@ -124,7 +124,7 @@ class _HomePageState extends State<HomePage>
             actions: [
               IconButton(
                 icon: Hero(tag: 'user', child: logic.userAvatar),
-                onPressed: () => Get.to(() => const UserSetting()),
+                onPressed: () => Get.to(() => const UserSetting())!.then((v){}),
               )
             ],
           ),

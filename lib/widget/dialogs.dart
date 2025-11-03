@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/version_info.dart';
 import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/login/login_view.dart';
-import 'package:jd_flutter/utils/app_init_service.dart';
+import 'package:jd_flutter/utils/app_init.dart';
 
 import 'downloader.dart';
 import 'loading.dart';

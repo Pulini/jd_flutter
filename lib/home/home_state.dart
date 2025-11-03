@@ -7,13 +7,16 @@ import 'package:jd_flutter/bean/home_button.dart';
 import 'package:jd_flutter/bean/http/response/department_info.dart';
 import 'package:jd_flutter/bean/http/response/home_function_info.dart';
 import 'package:jd_flutter/constant.dart';
+import 'package:jd_flutter/translation.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 
 class HomeState {
+
   var userPicUrl = ''.obs;
   var departmentName = ''.obs;
+  var language = ''.obs;
   String search = '';
   var nBarIndex = 0;
   var buttons = <ButtonItem>[].obs;
@@ -23,6 +26,10 @@ class HomeState {
   HomeState() {
     userPicUrl.value = userInfo?.picUrl ?? '';
     departmentName.value = userInfo?.departmentName ?? '';
+    refreshLanguage();
+  }
+  refreshLanguage() {
+    language.value=languages[locales.indexWhere((v)=>v.languageCode==Get.locale!.languageCode)];
   }
 
   getMenuFunction({

@@ -6,8 +6,7 @@ buildscript {
         maven {url 'https://developer.huawei.com/repo/'}
     }
     dependencies {
-        // 增加AGC插件配置，请您参见AGC插件依赖关系选择合适的AGC插件版本。
-        classpath 'com.huawei.agconnect:agcp:1.9.0.300'
+
     }
 }
 allprojects {

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/constant.dart';
-import 'package:jd_flutter/utils/app_init_service.dart';
+import 'package:jd_flutter/translation.dart';
+import 'package:jd_flutter/utils/app_init.dart';
 import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/number_text_field_widget.dart';
 import 'login_logic.dart';
 
@@ -14,6 +16,18 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  var language = ''.obs;
+
+  refreshLanguage() {
+    language.value = languages[locales.indexWhere((v)=>v.languageCode==Get.locale!.languageCode)];
+  }
+
+  @override
+  void initState() {
+    refreshLanguage();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -33,7 +47,24 @@ class _LoginPageState extends State<LoginPage> {
       child: ListView(
         //添加登录UI
         children: [
-          const SizedBox(height: 30),
+          GestureDetector(
+            onTap: () => changeLanguagePopup(changed: () => refreshLanguage()),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Obx(() => Text(
+                      language.value,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        decoration: TextDecoration.none,
+                        color: Colors.white,
+                      ),
+                    )),
+                const Icon(Icons.arrow_drop_down, color: Colors.white)
+              ],
+            ),
+          ),
           Image.asset(
             'assets/images/ic_logo.png',
             width: 130,
@@ -50,7 +81,7 @@ class _LoginPageState extends State<LoginPage> {
             textAlign: TextAlign.center,
           ),
           const Center(child: LoginPick(isReLogin: false)),
-          const SizedBox(height: 40),
+          const SizedBox(height: 20),
         ],
       ),
     );
@@ -72,7 +103,7 @@ class _LoginPickState extends State<LoginPick>
   var state = Get.find<LoginLogic>().state;
 
   //tab控制器
-  late TabController tabController= TabController(
+  late TabController tabController = TabController(
     length: hasFrontCamera() && GetPlatform.isMobile ? 4 : 3,
     vsync: this,
   );
@@ -183,16 +214,17 @@ class _LoginPickState extends State<LoginPick>
                   const SizedBox(width: 20),
                   Obx(() => ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                              state.buttonName.value == 'get_verify_code'.tr
-                                  ? Colors.white
-                                  : Colors.grey.shade400,
+                          backgroundColor: state.countTimer.value == 0
+                              ? Colors.white
+                              : Colors.grey.shade400,
                         ),
                         onPressed: () => logic.getVerifyCode(
                           phoneLoginPhoneController.text,
                         ),
                         child: Text(
-                          state.buttonName.value,
+                          state.countTimer.value == 0
+                              ? 'get_verify_code'.tr
+                              : (60 - state.countTimer.value).toString(),
                           style: const TextStyle(
                             color: Color.fromARGB(255, 213, 41, 42),
                           ),
@@ -271,98 +303,97 @@ class _LoginPickState extends State<LoginPick>
     return SizedBox(
       width: 320,
       height: 400,
-      child:Scaffold(
-            resizeToAvoidBottomInset: false,
-            backgroundColor: Colors.transparent,
-            appBar: TabBar(
-              controller: tabController,
-              dividerColor: Colors.transparent,
-              indicatorColor: Colors.greenAccent,
-              labelColor: Colors.greenAccent,
-              unselectedLabelColor: Colors.white,
-              overlayColor: WidgetStateProperty.all(Colors.transparent),
-              tabs: [
-                const Tab(icon: Icon(Icons.phone)),
-                if (hasFrontCamera() && GetPlatform.isMobile)
-                  const Tab(icon: Icon(Icons.account_circle_outlined)),
-                const Tab(icon: Icon(Icons.precision_manufacturing)),
-                const Tab(icon: Icon(Icons.assignment_ind_outlined))
-              ],
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        backgroundColor: Colors.transparent,
+        appBar: TabBar(
+          controller: tabController,
+          dividerColor: Colors.transparent,
+          indicatorColor: Colors.greenAccent,
+          labelColor: Colors.greenAccent,
+          unselectedLabelColor: Colors.white,
+          overlayColor: WidgetStateProperty.all(Colors.transparent),
+          tabs: [
+            const Tab(icon: Icon(Icons.phone)),
+            if (hasFrontCamera() && GetPlatform.isMobile)
+              const Tab(icon: Icon(Icons.account_circle_outlined)),
+            const Tab(icon: Icon(Icons.precision_manufacturing)),
+            const Tab(icon: Icon(Icons.assignment_ind_outlined))
+          ],
+        ),
+        body: Column(
+          children: [
+            Expanded(
+              child: TabBarView(
+                controller: tabController,
+                children: [
+                  _phoneLogin(),
+                  if (hasFrontCamera() && GetPlatform.isMobile) _faceLogin(),
+                  _machineLogin(),
+                  _workLogin()
+                ],
+              ),
             ),
-            body: Column(
-              children: [
-                Expanded(
-                  child: TabBarView(
-                    controller: tabController,
-                    children: [
-                      _phoneLogin(),
-                      if (hasFrontCamera() && GetPlatform.isMobile) _faceLogin(),
-                      _machineLogin(),
-                      _workLogin()
-                    ],
+            Padding(
+              padding: const EdgeInsets.only(left: 10, right: 10, bottom: 20),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  minimumSize: const Size(double.infinity, 50),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25),
                   ),
                 ),
-                Padding(
-                  padding:
-                      const EdgeInsets.only(left: 10, right: 10, bottom: 20),
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      minimumSize: const Size(double.infinity, 50),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(25),
-                      ),
-                    ),
-                    onLongPress: () => logic.handleLongPressStart(),
-                    onPressed: () {
-                      if (tabController.index == 0) {
-                        logic.phoneLogin(
-                          phoneLoginPhoneController.text,
-                          phoneLoginPasswordController.text,
-                          phoneLoginVCodeController.text,
-                        );
-                        return;
-                      }
-                      if (tabController.index == 1) {
-                        if (hasFrontCamera() && GetPlatform.isMobile) {
-                          logic.faceLogin(faceLoginPhoneController.text);
-                        } else {
-                          logic.machineLogin(
-                            machineLoginMachineController.text,
-                            machineLoginPasswordController.text,
-                          );
-                        }
-                        return;
-                      }
-                      if (tabController.index == 2) {
-                        if (hasFrontCamera() && GetPlatform.isMobile) {
-                          logic.machineLogin(
-                            machineLoginMachineController.text,
-                            machineLoginPasswordController.text,
-                          );
-                        } else {
-                          logic.workNumberLogin(
-                            workLoginWorkNumberController.text,
-                            workLoginPasswordController.text,
-                          );
-                        }
-                        return;
-                      }
-                      if (tabController.index == 3) {
-                        logic.workNumberLogin(
-                          workLoginWorkNumberController.text,
-                          workLoginPasswordController.text,
-                        );
-                        return;
-                      }
-                    },
-                    child: Text(
-                      'login'.tr,
-                      style: const TextStyle(fontSize: 20),
-                    ),
-                  ),
+                onLongPress: () => logic.handleLongPressStart(),
+                onPressed: () {
+                  if (tabController.index == 0) {
+                    logic.phoneLogin(
+                      phoneLoginPhoneController.text,
+                      phoneLoginPasswordController.text,
+                      phoneLoginVCodeController.text,
+                    );
+                    return;
+                  }
+                  if (tabController.index == 1) {
+                    if (hasFrontCamera() && GetPlatform.isMobile) {
+                      logic.faceLogin(faceLoginPhoneController.text);
+                    } else {
+                      logic.machineLogin(
+                        machineLoginMachineController.text,
+                        machineLoginPasswordController.text,
+                      );
+                    }
+                    return;
+                  }
+                  if (tabController.index == 2) {
+                    if (hasFrontCamera() && GetPlatform.isMobile) {
+                      logic.machineLogin(
+                        machineLoginMachineController.text,
+                        machineLoginPasswordController.text,
+                      );
+                    } else {
+                      logic.workNumberLogin(
+                        workLoginWorkNumberController.text,
+                        workLoginPasswordController.text,
+                      );
+                    }
+                    return;
+                  }
+                  if (tabController.index == 3) {
+                    logic.workNumberLogin(
+                      workLoginWorkNumberController.text,
+                      workLoginPasswordController.text,
+                    );
+                    return;
+                  }
+                },
+                child: Text(
+                  'login'.tr,
+                  style: const TextStyle(fontSize: 20),
                 ),
-              ],
+              ),
             ),
+          ],
+        ),
       ),
     );
   }

@@ -33,6 +33,7 @@ class HomeLogic extends GetxController {
               child: ClipOval(
                 child: Image.network(
                   userInfo!.picUrl!,
+                  fit: BoxFit.cover,
                   cacheHeight: 200,
                   cacheWidth: 200,
                   errorBuilder: (ctx, err, st) => Image.asset(
@@ -43,9 +44,20 @@ class HomeLogic extends GetxController {
               ),
             ),
     );
+    state.language.listen((v) {
+      Future.delayed(const Duration(milliseconds: 500), () {
+        state.getMenuFunction(success: (json) async {
+          spSave(spSaveMenuInfo, textToKey(json.toString()));
+          functions = await _jsonToMenuFunction(json);
+          refreshButton();
+        }, error: (msg) {
+          errorDialog(content: msg);
+        });
+      });
+    });
   }
 
-  refreshFunList(Function()finish) {
+  refreshFunList(Function() finish) {
     state.getMenuFunction(success: (json) async {
       spSave(spSaveMenuInfo, textToKey(json.toString()));
       functions = await _jsonToMenuFunction(json);

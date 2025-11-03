@@ -4,7 +4,8 @@ import 'package:get/get.dart' hide FormData;
 import 'package:jd_flutter/bean/http/response/department_info.dart';
 import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/login/login_view.dart';
-import 'package:jd_flutter/utils/app_init_service.dart';
+import 'package:jd_flutter/translation.dart';
+import 'package:jd_flutter/utils/app_init.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
@@ -48,28 +49,15 @@ class _UserSettingState extends State<UserSetting> {
     ],
   );
 
-  //返回按钮
-  backArrow() {
-    return Positioned(
-      top: 50,
-      left: 20,
-      child: IconButton(
-        onPressed: () => Get.back(),
-        icon: const Icon(
-          Icons.arrow_back_ios,
-          color: Colors.black54,
-        ),
-      ),
-    );
-  }
-
   //头像
-  avatarImage() {
-    return Positioned(
-      top: 100,
-      child: SizedBox(
-        width: 200,
-        height: 200,
+  avatarImage() => Container(
+        height: 150,
+        width: 150,
+        padding: const EdgeInsets.all(7),
+        decoration: const BoxDecoration(
+          shape: BoxShape.circle,
+          color: Colors.white,
+        ),
         child: GestureDetector(
           onTap: () => logic.takeAvatarPhoto(),
           child: Hero(
@@ -77,80 +65,68 @@ class _UserSettingState extends State<UserSetting> {
             child: logic.userAvatar,
           ),
         ),
-      ),
-    );
-  }
+      );
 
-  //名字
-  name() {
-    return Text(
-      '${userInfo?.name ?? ''}(${userInfo?.number ?? ''})',
-      style: const TextStyle(
-          fontSize: 24,
+  //名字工号
+  name() => Text(
+        '${userInfo?.name ?? ''}\r\n${userInfo?.number ?? ''}',
+        style: const TextStyle(
+          fontSize: 20,
           fontWeight: FontWeight.bold,
           decoration: TextDecoration.none,
-          color: Colors.black),
-    );
-  }
+          color: Colors.black,
+        ),
+      );
 
   //工厂
-  factory() {
-    return SizedBox(
-      width: 260,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          Text(
-            'home_user_setting_factory'.tr,
-            style: hintTextStyle,
-          ),
-          Text(
-            userInfo?.factory ?? '',
-            style: hintTextStyle,
-          ),
-        ],
-      ),
-    );
-  }
+  factory() => SizedBox(
+        width: 260,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Text(
+              'home_user_setting_factory'.tr,
+              style: hintTextStyle,
+            ),
+            Text(
+              userInfo?.factory ?? '',
+              style: hintTextStyle,
+            ),
+          ],
+        ),
+      );
 
   //部门
-  department() {
-    return SizedBox(
-      width: 260,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          Text(
-            'home_user_setting_department'.tr,
-            style: hintTextStyle,
-          ),
-          GestureDetector(
-            onTap: () => logic.getDepartment(
-              (l, i) => showChangeDepartmentPopup(l, i),
+  department() => SizedBox(
+        width: 260,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Text(
+              'home_user_setting_department'.tr,
+              style: hintTextStyle,
             ),
-            child: Row(
-              children: [
-                Obx(
-                  () => Text(
-                    state.departmentName.value,
-                    style: clickTextStyle,
-                  ),
-                ),
-                const Icon(Icons.arrow_drop_down, color: Colors.black45)
-              ],
-            ),
-          )
-        ],
-      ),
-    );
-  }
+            GestureDetector(
+              onTap: () => logic.getDepartment(
+                (l, i) => showChangeDepartmentPopup(l, i),
+              ),
+              child: Row(
+                children: [
+                  Obx(() =>
+                      Text(state.departmentName.value, style: clickTextStyle)),
+                  const Icon(Icons.arrow_drop_down, color: Colors.black45)
+                ],
+              ),
+            )
+          ],
+        ),
+      );
 
   showChangeDepartmentPopup(List<Department> list, int selected) {
     //创建选择器控制器
     var controller = FixedExtentScrollController(initialItem: selected);
-
     //创建底部弹窗
     showPopup(Column(
       children: <Widget>[
@@ -202,54 +178,50 @@ class _UserSettingState extends State<UserSetting> {
   }
 
   //职位
-  position() {
-    return SizedBox(
-      width: 260,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          Text(
-            'home_user_setting_position'.tr,
-            style: hintTextStyle,
-          ),
-          Text(
-            userInfo?.position ?? '',
-            style: hintTextStyle,
-          )
-        ],
-      ),
-    );
-  }
+  position() => SizedBox(
+        width: 260,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Text(
+              'home_user_setting_position'.tr,
+              style: hintTextStyle,
+            ),
+            Text(
+              userInfo?.position ?? '',
+              style: hintTextStyle,
+            )
+          ],
+        ),
+      );
 
   //修改密码
-  changePassword() {
-    return SizedBox(
-      width: 260,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          Text(
-            'home_user_setting_password_change'.tr,
-            style: hintTextStyle,
-          ),
-          SizedBox(
-            width: 100,
-            child: GestureDetector(
-              onTap: () => changePasswordDialog(),
-              child: Container(
-                color: Colors.transparent,
-                alignment: Alignment.centerRight,
-                child:
-                    const Icon(Icons.arrow_forward_ios, color: Colors.black45),
-              ),
+  changePassword() => SizedBox(
+        width: 260,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Text(
+              'home_user_setting_password_change'.tr,
+              style: hintTextStyle,
             ),
-          )
-        ],
-      ),
-    );
-  }
+            SizedBox(
+              width: 100,
+              child: GestureDetector(
+                onTap: () => changePasswordDialog(),
+                child: Container(
+                  color: Colors.transparent,
+                  alignment: Alignment.centerRight,
+                  child: const Icon(Icons.arrow_forward_ios,
+                      color: Colors.black45),
+                ),
+              ),
+            )
+          ],
+        ),
+      );
 
   //修改密码弹窗
   changePasswordDialog() {
@@ -334,106 +306,150 @@ class _UserSettingState extends State<UserSetting> {
   }
 
   //检查版本更新
-  checkVersion() {
-    return SizedBox(
-      width: 260,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          Text(
-            'home_user_setting_check_version'.tr,
-            style: hintTextStyle,
-          ),
-          GestureDetector(
-            onTap: () {
-              // Get.to(()=>PreviewWebLabelList(labelCodes: ['00505685E5761FD0A6B41F6C6832A270','00505685E5761FE0A9AF611246AC0B11','00505685E5761FE0A9B63B849A43B67C'],));
-              // Get.to(() =>  const Scanner())?.then((v) {
-              //   if(v!=null){
-              //     showSnackBar(title: '扫码', message: v);
-              //   }
-              // });
-              // scannerDialog( detect: (String code)=>showSnackBar(title: 'title', message: code));
-
-              if (!GetPlatform.isWeb) {
-                getVersionInfo(
-                  true,
-                  noUpdate: () {
-                    showSnackBar(
-                      title: 'home_user_setting_check_version'.tr,
-                      message: 'is_already_latest_version'.tr,
-                    );
-                  },
-                  needUpdate: (v) => doUpdate(version: v),
-                  error: (msg) => errorDialog(content: msg),
-                );
-              }
-            },
-            child: Row(
-              children: [
-                Text(
-                  packageInfo().version,
-                  style: clickTextStyle,
-                ),
-                const Icon(Icons.arrow_forward_ios, color: Colors.black45)
-              ],
+  checkVersion() => SizedBox(
+        width: 260,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Text(
+              'home_user_setting_check_version'.tr,
+              style: hintTextStyle,
             ),
-          )
-        ],
-      ),
-    );
-  }
+            GestureDetector(
+              onTap: () {
+                // Get.to(()=>PreviewWebLabelList(labelCodes: ['00505685E5761FD0A6B41F6C6832A270','00505685E5761FE0A9AF611246AC0B11','00505685E5761FE0A9B63B849A43B67C'],));
+                // Get.to(() =>  const Scanner())?.then((v) {
+                //   if(v!=null){
+                //     showSnackBar(title: '扫码', message: v);
+                //   }
+                // });
+                // scannerDialog( detect: (String code)=>showSnackBar(title: 'title', message: code));
+                if (Get.locale == localeEnglish) {
+                  LanguageController.to.changeLanguage(localeChinese);
+                } else {
+                  LanguageController.to.changeLanguage(localeEnglish);
+                }
+
+                if (!GetPlatform.isWeb) {
+                  getVersionInfo(
+                    true,
+                    noUpdate: () {
+                      showSnackBar(
+                        title: 'home_user_setting_check_version'.tr,
+                        message: 'is_already_latest_version'.tr,
+                      );
+                    },
+                    needUpdate: (v) => doUpdate(version: v),
+                    error: (msg) => errorDialog(content: msg),
+                  );
+                }
+              },
+              child: Row(
+                children: [
+                  Text(
+                    packageInfo().version,
+                    style: clickTextStyle,
+                  ),
+                  const Icon(Icons.arrow_forward_ios, color: Colors.black45)
+                ],
+              ),
+            )
+          ],
+        ),
+      );
+
+  //切换语言
+  changeLanguage() => SizedBox(
+        width: 260,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Text(
+              'app_language'.tr,
+              style: hintTextStyle,
+            ),
+            GestureDetector(
+              onTap: () =>
+                  changeLanguagePopup(changed: () => state.refreshLanguage()),
+              child: Row(
+                children: [
+                  Obx(() => Text(state.language.value, style: clickTextStyle)),
+                  const Icon(Icons.arrow_drop_down, color: Colors.black45)
+                ],
+              ),
+            )
+          ],
+        ),
+      );
 
   //注销
-  logout() {
-    return Positioned(
-      bottom: 30,
-      child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-              minimumSize: const Size(320, 50),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(25))),
-          onPressed: () {
-            spSave(spSaveUserInfo, '');
-            spSave(spSaveFeishuUserWikiTokenData, '');
-            spSave(spSaveFeishuUserCloudDocTokenData, '');
-            Get.offAll(() => const LoginPage());
-          },
-          child: Text('home_user_setting_logout'.tr,
-              style: const TextStyle(fontSize: 20))),
-    );
-  }
+  logout() => ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          minimumSize: const Size(320, 50),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(25),
+          ),
+          backgroundColor: Colors.red,
+          foregroundColor: Colors.white,
+        ),
+        onPressed: () {
+          spSave(spSaveUserInfo, '');
+          spSave(spSaveFeishuUserWikiTokenData, '');
+          spSave(spSaveFeishuUserCloudDocTokenData, '');
+          Get.offAll(() => const LoginPage());
+        },
+        child: Text('home_user_setting_logout'.tr,
+            style: const TextStyle(fontSize: 20)),
+      );
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: backgroundColor(),
-      alignment: Alignment.center,
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          backArrow(),
-          avatarImage(),
-          Positioned(
-            top: 320,
-            child: Column(
+    return pageBody(
+      body: SingleChildScrollView(
+        child: Center(
+          child: SizedBox(
+            width: 300,
+            child: Stack(
               children: [
-                name(),
-                const SizedBox(height: 20),
-                factory(),
-                line,
-                department(),
-                line,
-                position(),
-                line,
-                changePassword(),
-                line,
-                checkVersion(),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  margin: const EdgeInsets.only(top: 75),
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      name(),
+                      const SizedBox(height: 10),
+                      factory(),
+                      line,
+                      department(),
+                      line,
+                      position(),
+                      line,
+                      changePassword(),
+                      line,
+                      checkVersion(),
+                      line,
+                      changeLanguage(),
+                      const SizedBox(height: 30),
+                      logout(),
+                    ],
+                  ),
+                ),
+                Positioned(
+                  child: avatarImage(),
+                  right: 30,
+                ),
               ],
             ),
           ),
-          logout()
-        ],
+        ),
       ),
     );
   }
