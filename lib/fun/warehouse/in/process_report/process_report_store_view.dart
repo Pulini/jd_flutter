@@ -26,34 +26,44 @@ class _ProcessReportPageState extends State<ProcessReportStorePage> {
   var tecCode = TextEditingController();
 
   _item(BarCodeInfo code) {
-    return GestureDetector(
-        onLongPress: () {
-          logic.deleteCode(code);
-        },
-        child: Container(
-          padding: const EdgeInsets.all(5),
-          margin: const EdgeInsets.only(bottom: 5),
-          decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(5),
-              border: Border.all(
-                  width: 1, color: code.isUsed ? Colors.red : Colors.black)),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                code.code.toString(),
-                style: TextStyle(
-                    color: code.isUsed ? Colors.red.shade700 : Colors.black),
-              ),
-              Text(
-                code.isUsed ? 'production_scan_not_reported'.tr : '',
-                style: TextStyle(
-                    color: code.isUsed ? Colors.red.shade700 : Colors.black),
-              ),
-            ],
+    return Container(
+      margin: const EdgeInsets.only(bottom: 5),
+      height: 40,
+      padding: const EdgeInsets.only(left: 5),
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(5),
+          border: Border.all(
+              width: 1, color: code.isUsed ? Colors.red : Colors.black)),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            flex: 9,
+            child: Text(
+              code.code.toString(),
+              style: TextStyle(
+                  color: code.isUsed ? Colors.red.shade700 : Colors.black),
+            ),
           ),
-        ));
+          Text(
+            code.isUsed ? 'production_scan_is_submit'.tr : '',
+            style: TextStyle(
+                color: code.isUsed ? Colors.red.shade700 : Colors.black),
+          ),
+          IconButton(
+            onPressed: () => askDialog(
+              content: 'sale_scan_out_warehouse_delete_tips'.tr,
+              confirm: () => logic.deleteCode(code),
+            ),
+            icon: const Icon(
+              Icons.delete_forever,
+              color: Colors.red,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -90,7 +100,8 @@ class _ProcessReportPageState extends State<ProcessReportStorePage> {
                 ),
                 InkWell(
                   child: const Icon(Icons.qr_code_scanner, color: Colors.grey),
-                  onTap: () =>  Get.to(() => const Scanner())?.then((v)=> logic.scanCode(v)),
+                  onTap: () => Get.to(() => const Scanner())
+                      ?.then((v) => logic.scanCode(v)),
                 ),
                 const SizedBox(width: 5)
               ],
@@ -98,7 +109,7 @@ class _ProcessReportPageState extends State<ProcessReportStorePage> {
             Expanded(
               child: Obx(
                 () => ListView.builder(
-                  padding: const EdgeInsets.all(8),
+                  padding: const EdgeInsets.all(5),
                   itemCount: state.barCodeList.length,
                   itemBuilder: (BuildContext context, int index) =>
                       _item(state.barCodeList[index]),

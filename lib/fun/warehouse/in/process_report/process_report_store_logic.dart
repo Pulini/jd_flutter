@@ -67,6 +67,7 @@ class ProcessReportStoreLogic extends GetxController {
         ..isUsed = state.usedList.contains(code)
         ..save(callback: (newBarCode) {
           state.barCodeList.add(newBarCode);
+          state.barCodeList.refresh();
         });
     }
   }
@@ -151,7 +152,7 @@ class ProcessReportStoreLogic extends GetxController {
   }) {
     state.getBarCodeStatus(
       processFlowID: process.processFlowID ?? 0,
-      processName: process.processFlowName ?? '',
+      processName: process.processNodeName ?? '',
       success: (data) {
         for (var v in state.barCodeList) {
           if ((data.list2 ?? []).any((v2) => v2.barCode == v.code)) {
@@ -164,6 +165,7 @@ class ProcessReportStoreLogic extends GetxController {
           }
         }
         if (state.barCodeList.every((v) => v.isUsed)) {
+          state.barCodeList.refresh();
           errorDialog(content: 'process_report_store_no_barcode'.tr);
         } else {
           state.getBarCodeReport(

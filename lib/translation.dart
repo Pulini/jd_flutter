@@ -2285,6 +2285,7 @@ class Translation extends Translations {
           'production_scan_storage_conditions': '入库条件',
           'production_scan_operator_number': '请输入操作人工号!',
           'production_scan_not_reported': '未汇报',
+          'production_scan_is_submit': '已提交',
           'production_scan_clear': '清空',
           'production_scan_clear_the_barcode': '确定要清空条码吗?',
           'production_scan_red': '红冲',
@@ -6037,6 +6038,7 @@ class Translation extends Translations {
           'production_scan_operator_number':
               'Please enter the operator number!',
           'production_scan_not_reported': 'Not reported',
+          'production_scan_is_submit': 'Submitted',
           'production_scan_clear': 'clear',
           'production_scan_clear_the_barcode':
               'Are you sure you want to clear the barcode?',
@@ -9983,6 +9985,7 @@ class Translation extends Translations {
           'production_scan_operator_number':
               'Please enter the operator number!',
           'production_scan_not_reported': 'Belum dilaporkan',
+          'production_scan_is_submit': 'Submitted',
           'production_scan_clear': 'clear',
           'production_scan_clear_the_barcode':
               'Are you sure you want to clear the barcode?',

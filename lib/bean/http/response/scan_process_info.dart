@@ -27,8 +27,8 @@ class ScanProcessReportSub1Info {
   ScanProcessReportSub1Info({this.barCode, this.name});
 
   ScanProcessReportSub1Info.fromJson(Map<String, dynamic> json) {
-    barCode = json['barCode'];
-    name = json['name'];
+    barCode = json['BarCode'];
+    name = json['Name'];
   }
 }
 
@@ -38,6 +38,6 @@ class ScanProcessReportSub2Info {
   ScanProcessReportSub2Info(this.barCode);
 
   ScanProcessReportSub2Info.fromJson(Map<String, dynamic> json) {
-    barCode = json['barCode'];
+    barCode = json['BarCode'];
   }
 }
