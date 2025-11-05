@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
 import 'package:jd_flutter/widget/pdf_view.dart';
@@ -40,14 +41,17 @@ class _ViewProcessSpecificationPageState
             child: ListTile(
               onTap: () => checkUrlType(
                 url: state.pdfList[index].fullName ?? '',
-                jdPdf: (url) => PDFViewerCachedFromUrl(
+                jdPdf: (url) => Get.to(()=>PDFViewerCachedFromUrl(
                   title: state.pdfList[index].name ?? '',
                   url: url,
-                ),
-                web: (url) => WebPage(
-                  title: state.pdfList[index].name ?? '',
-                  url: url,
-                ),
+                )),
+                web: (url) {
+                  Get.to(() => WebPage(
+                        title: state.pdfList[index].name ?? '',
+                        url: url,
+                      ));
+                  ;
+                },
               ),
               title: textSpan(
                 hint: 'view_process_specification_item_hint1'.tr,

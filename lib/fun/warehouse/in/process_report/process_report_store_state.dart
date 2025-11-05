@@ -91,8 +91,6 @@ class ProcessReportStoreState {
     });
   }
 
-
-
   //提交条码信息
   submitBarCode({
     required WorkerInfo worker,
