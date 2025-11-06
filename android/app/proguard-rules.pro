@@ -20,3 +20,7 @@
 # 保留Bitmap相关类不被混淆
 -keep class android.graphics.Bitmap { *; }
 -keep class android.graphics.BitmapFactory { *; }
+
+# 保留极光推送相关类不被混淆
+-dontwarn cn.jpush.**
+-keep class cn.jpush.** { *; }

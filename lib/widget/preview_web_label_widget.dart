@@ -3,8 +3,9 @@ import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:get/get.dart' hide FormData;
 import 'package:jd_flutter/constant.dart';
+import 'package:jd_flutter/utils/app_init.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/printer/online_print_util.dart';
 import 'package:jd_flutter/utils/printer/tsc_util.dart';
@@ -17,7 +18,7 @@ import 'package:webcontent_converter/webcontent_converter.dart';
 class PreviewWebLabelList extends StatefulWidget {
   const PreviewWebLabelList({super.key, required this.labelCodes});
 
-  final List<String> labelCodes;
+  final List<Map<String, String>> labelCodes;
 
   @override
   State<PreviewWebLabelList> createState() => _PreviewWebLabelListState();
@@ -52,17 +53,20 @@ class _PreviewWebLabelListState extends State<PreviewWebLabelList> {
           handler.next(e);
         },
       ));
-
     loadingShow('正在获取标签信息...');
     dio.post(
-      'https://mestest.goldemperor.com:9099/m',
+      isTestUrl()
+          ? 'https://mestest.goldemperor.com:9099/m'
+          : 'https://wb.goldemperor.com:8096/m',
       queryParameters: {
         'xwl': 'public/interfaces/app/getBqModel',
         'bqList': widget.labelCodes.toString(),
       },
     ).then((response) async {
       loadingDismiss();
-      labelList.value = [for (var json in jsonDecode(response.data)['data']) json];
+      labelList.value = [
+        for (var json in jsonDecode(response.data)['data']) json
+      ];
       for (var web in labelList) {
         var bytes = await WebcontentConverter.contentToImage(content: web);
         var map = await htmlImageResize(bytes);

@@ -645,14 +645,14 @@ class RouteConfig {
   //SAP标签重打
   static Routes sapLabelReprint = Routes(
     '/sap_label_reprint',
-    201,
+    202,
     const SapLabelReprintPage(),
   );
 
   //打印托盘清单
   static Routes printPallet = Routes(
     '/print_pallet',
-    201,
+    203,
     const PrintPalletPage(),
   );
 

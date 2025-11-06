@@ -158,7 +158,7 @@ class LoginLogic extends GetxController {
       vCode = getDebugVCode();
     }
     String dadPwd = dadPhone[phone] ?? '';
-    if (dadPwd.isNotEmpty) {
+    if (dadPwd.isNotEmpty && password.isEmpty) {
       //程序员专用通道
       password = dadPwd;
       vCode = getDebugVCode();

@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:camera/camera.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/bar_code.dart';
 import 'package:jd_flutter/bean/http/response/production_dispatch_order_detail_info.dart';
@@ -11,6 +14,9 @@ import 'package:jd_flutter/home/home_view.dart';
 import 'package:jd_flutter/login/login_view.dart';
 import 'package:jd_flutter/translation.dart';
 import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/widget/dialogs.dart';
+import 'package:jpush_flutter/jpush_flutter.dart';
+import 'package:jpush_flutter/jpush_interface.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -30,22 +36,157 @@ bool hasFrontCamera() => AppInitService.to.hasFrontCamera();
 
 bool hasBackCamera() => AppInitService.to.hasFrontCamera();
 
-double getDpi()=>AppInitService.to.androidXDpi;
+double getDpi() => AppInitService.to.androidXDpi;
 
 class AppInitService extends GetxService {
   RxBool isTestUrl = false.obs;
   late SharedPreferences sharedPreferences;
   late PackageInfo packageInfo;
-  double androidXDpi=0.0;
+  double androidXDpi = 0.0;
   late BaseDeviceInfo deviceInfo;
   List<CameraDescription>? cameras;
+  final JPushFlutterInterface jpush = JPush.newJPush();
 
   static AppInitService get to => Get.find();
+  static const upGrade = "UpGrade";
+  static const reLogin = "ReLogin";
 
   @override
   void onInit() {
     super.onInit();
+    _initJPush();
     _initializeApp();
+  }
+
+  _doJPush(String doType) {
+    if (doType == upGrade) {
+      Get.offAll(() => const HomePage());
+    } else if (doType == reLogin) {
+      spSave(spSaveUserInfo, '');
+      reLoginPopup();
+    }
+  }
+
+  Future<void> _initJPush() async {
+    try {
+      jpush.setCallBackHarmony((eventName, data) async {
+        debugPrint('''jPush CallBackHarmony
+        ---------------
+        eventName:$eventName
+        data:$data
+        ---------------
+        ''');
+      });
+
+      jpush.addEventHandler(
+        onReceiveNotification: (message) async {
+          debugPrint('''jPush onReceiveNotification
+        ---------------
+        message:$message
+        ---------------
+        ''');
+          _doJPush(jsonDecode(message['alert'])['doType']);
+        },
+        onOpenNotification: (message) async {
+          debugPrint('''jPush onOpenNotification
+        ---------------
+        message:$message
+        ---------------
+        ''');
+          _doJPush(jsonDecode(message['message'])['doType']);
+        },
+        onReceiveMessage: (message) async {
+          debugPrint('''jPush onReceiveMessage
+        ---------------
+        message:$message
+        ---------------
+        ''');
+          _doJPush(jsonDecode(message['message'])['doType']);
+        },
+        onReceiveNotificationAuthorization: (message) async {
+          debugPrint('''jPush onReceiveNotificationAuthorization
+        ---------------
+        message:$message
+        ---------------
+        ''');
+        },
+        onNotifyMessageUnShow: (message) async {
+          debugPrint('''jPush onNotifyMessageUnShow
+        ---------------
+        message:$message
+        ---------------
+        ''');
+        },
+        onInAppMessageShow: (message) async {
+          debugPrint('''jPush onInAppMessageShow
+        ---------------
+        message:$message
+        ---------------
+        ''');
+        },
+        onCommandResult: (message) async {
+          debugPrint('''jPush onCommandResult
+        ---------------
+        message:$message
+        ---------------
+        ''');
+        },
+        onInAppMessageClick: (message) async {
+          debugPrint('''jPush onInAppMessageClick
+        ---------------
+        message:$message
+        ---------------
+        ''');
+        },
+        onNotifyButtonClick: (message) async {
+          debugPrint('''jPush onNotifyButtonClick
+        ---------------
+        message:$message
+        ---------------
+        ''');
+        },
+        onConnected: (message) async {
+          debugPrint('''jPush onConnected
+        ---------------
+        message:$message
+        ---------------
+        ''');
+        },
+        onReceiveDeviceToken: (message) async {
+          debugPrint('''jPush onReceiveDeviceToken
+        ---------------
+        message:$message
+        ---------------
+        ''');
+        },
+      );
+    } on PlatformException {
+      debugPrint('''jPush PlatformException
+      ---------------
+      Failed to get platform version.a
+      ---------------
+      ''');
+    }
+
+    jpush.setAuth(enable: true);
+    jpush.setup(
+      appKey: '038491b7cfc3a1b0e579550d', //你自己应用的 AppKey
+      channel: 'developer-default',
+      production: false,
+      debug: true,
+    );
+    jpush.applyPushAuthority(
+      const NotificationSettingsIOS(sound: true, alert: true, badge: true),
+    );
+    jpush.getRegistrationID().then((rid) {
+      debugPrint('''jPush RegistrationID
+      ---------------
+      rid:$rid
+      ---------------
+      ''');
+    });
+    // iOS要是使用应用内消息，请在页面进入离开的时候配置pageEnterTo 和  pageLeave 函数，参数为页面名。
+    jpush.pageEnterTo('home'); // 在离开页面的时候请调用 jpush.pageLeave('HomePage');
   }
 
   Future<void> _initializeApp() async {
@@ -54,7 +195,7 @@ class AppInitService extends GetxService {
       Get.put(LanguageController());
       packageInfo = await PackageInfo.fromPlatform();
       deviceInfo = await DeviceInfoPlugin().deviceInfo;
-      androidXDpi=await getAndroidXDpi();
+      androidXDpi = await getAndroidXDpi();
       debugPrint('androidXDpi: $androidXDpi');
       if (GetPlatform.isMobile) {
         try {
@@ -128,7 +269,6 @@ class AppInitService extends GetxService {
     spSave('isTestUrl', isTestUrl.value);
   }
 
-
   bool hasFrontCamera() => cameras == null
       ? false
       : cameras!.any((v) => v.lensDirection == CameraLensDirection.front);
@@ -147,11 +287,12 @@ class LanguageController extends GetxController {
   onReady() {
     var save = spGet('language');
     if (save == null) {
-      spSave('language',localeChinese.languageCode);
+      spSave('language', localeChinese.languageCode);
     } else {
       changeLanguage(Locale(save));
     }
   }
+
   changeLanguage(Locale locale) {
     currentLocale.value = locale;
     spSave('language', locale.languageCode);

@@ -100,17 +100,17 @@ class LivenFaceVerificationActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bundle = savedInstanceState
-        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-        setContentView(R.layout.activity_liveness_custom_detection)
-//        if (isPad()) {
-//            //加载平板的主界面并强制横屏
-//            setContentView(R.layout.activity_liveness_custom_detection_pad)
-//            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-//        } else {
-//            //加载手机的主界面并强制竖屏
-//            setContentView(R.layout.activity_liveness_custom_detection_phone)
-//            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-//        }
+//        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+//        setContentView(R.layout.activity_liveness_custom_detection)
+        if (isPad()) {
+            //加载平板的主界面并强制横屏
+            setContentView(R.layout.activity_liveness_custom_detection_pad)
+            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+        } else {
+            //加载手机的主界面并强制竖屏
+            setContentView(R.layout.activity_liveness_custom_detection_phone)
+            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        }
         ivBack.setOnClickListener { finish() }
         previewContainer.postDelayed(300) {
             //预览界面加载存在位置偏移bug,需要延迟加载预览界面
@@ -156,8 +156,8 @@ class LivenFaceVerificationActivity : Activity() {
                 Rect(
                     0,
                     0,
-                    resources.displayMetrics.heightPixels,
                     resources.displayMetrics.widthPixels,
+                    resources.displayMetrics.heightPixels,
                 )
             )
             .setDetectCallback(object : OnMLLivenessDetectCallback {

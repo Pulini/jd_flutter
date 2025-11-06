@@ -130,8 +130,8 @@ class _PrintPalletPageState extends State<PrintPalletPage> {
       actions: [
         Obx(() => state.selectedList.any((v) => v.value)
             ? IconButton(
-                // onPressed: () => logic.printPalletSizeMaterial(),
-                onPressed: () => logic.printPallet(),
+                onPressed: () => logic.printPalletSizeMaterial(),
+                // onPressed: () => logic.printPallet(),
                 icon: const Icon(
                   Icons.print,
                   color: Colors.blueAccent,

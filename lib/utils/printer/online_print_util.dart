@@ -11,7 +11,8 @@ import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
-const String printUrl = 'http://192.168.99.103:9095/m';
+// const String printUrl = 'http://192.168.99.103:9095/m';
+const String printUrl = 'https://erp.goldemperor.com:9051/m';
 
 
 enum PrintType {
@@ -128,10 +129,14 @@ onLinePrintDialog(List<Uint8List> papers, PrintType printType) {
           list.add(p);
         }
       }
+      debugPrint('deviceList=${list.length}');
       printerList.value = list;
-
+      if(printerList.isEmpty){
+        return errorDialog(content: '当前打印类型没有设备可打印');
+      }
       departmentIndex.value =
           printerList.indexWhere((v) => v.departName == saveDepartmentName);
+
       if (departmentIndex.value == -1) {
         departmentIndex.value = 0;
         deviceIndex.value = 0;

@@ -51,16 +51,16 @@ android {
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
         minSdkVersion flutter.minSdkVersion
-//        minSdkVersion 21
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         multiDexEnabled true
-//        manifestPlaceholders = [
-//                JPUSH_PKGNAME : applicationId,
-//                JPUSH_APPKEY : "038491b7cfc3a1b0e579550d", // NOTE: JPush 上注册的包名对应的 Appkey.
-//                JPUSH_CHANNEL : "developer-default", //暂时填写默认值即可.
-//        ]
+        manifestPlaceholders = [
+                JPUSH_PKGNAME : applicationId,
+                JPUSH_APPKEY : "038491b7cfc3a1b0e579550d", // NOTE: JPush 上注册的包名对应的 Appkey.
+                JPUSH_CHANNEL : "developer-default", //暂时填写默认值即可.
+                applicationName : "android.app.Application"  // 添加这一行
+        ]
     }
 
     signingConfigs {
