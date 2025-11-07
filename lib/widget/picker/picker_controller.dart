@@ -95,7 +95,7 @@ abstract class PickerController {
     }
   }
 
- Future getDataList() async {
+  Future getDataList() async {
     switch (pickerType) {
       case PickerType.sapSupplier:
         return getSapSupplier();
@@ -757,7 +757,7 @@ class OptionsPickerController extends PickerController {
   final Function(PickerItem)? onSelected;
   String initId;
 
- bool isReady()=>pickerItems.isNotEmpty;
+  bool isReady() => pickerItems.isNotEmpty;
 
   OptionsPickerController(
     super.pickerType, {
@@ -777,8 +777,8 @@ class OptionsPickerController extends PickerController {
     if (saveKey != null && saveKey!.isNotEmpty) {
       spSave(saveKey!, pickerItems[item].pickerId());
     }
-    onSelected?.call(pickerItems[selectItem]);
-    onChanged?.call(pickerItems[selectItem]);
+    onSelected?.call(pickerData[selectItem]);
+    onChanged?.call(pickerData[selectItem]);
   }
 
   search(String text) {
@@ -857,7 +857,7 @@ class LinkOptionsPickerController extends PickerController {
   final Function(PickerItem, PickerItem)? onChanged;
   final Function(PickerItem, PickerItem)? onSelected;
 
-  isReady()=>pickerData.isNotEmpty;
+  isReady() => pickerData.isNotEmpty;
 
   LinkOptionsPickerController(
     super.pickerType, {
@@ -871,8 +871,7 @@ class LinkOptionsPickerController extends PickerController {
 
   PickerItem getPickItem1() => pickerData[selectItem1];
 
-  PickerItem getPickItem2() =>
-      pickerData[selectItem1].subList()[selectItem2];
+  PickerItem getPickItem2() => pickerData[selectItem1].subList()[selectItem2];
 
   select(int item1, int item2) {
     if (pickerItems1.isEmpty) return;
@@ -1020,7 +1019,8 @@ class DatePickerController extends PickerController {
         : getSave();
     if (firstDate != null) this.firstDate = firstDate;
     if (lastDate != null) this.lastDate = lastDate;
-    debugPrint('initDate=$initDate  save=$save  isAfter=${this.firstDate.isAfter(save)}');
+    debugPrint(
+        'initDate=$initDate  save=$save  isAfter=${this.firstDate.isAfter(save)}');
     if (this.firstDate.isAfter(save)) {
       pickDate.value = this.firstDate;
     } else {

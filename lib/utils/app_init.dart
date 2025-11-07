@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:camera/camera.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,6 +7,7 @@ import 'package:jd_flutter/bean/http/response/bar_code.dart';
 import 'package:jd_flutter/bean/http/response/production_dispatch_order_detail_info.dart';
 import 'package:jd_flutter/bean/http/response/sap_surplus_material_info.dart';
 import 'package:jd_flutter/bean/http/response/workshop_planning_info.dart';
+import 'package:jd_flutter/bean/jpush_notification.dart';
 import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/home/home_view.dart';
 import 'package:jd_flutter/login/login_view.dart';
@@ -38,6 +37,8 @@ bool hasBackCamera() => AppInitService.to.hasFrontCamera();
 
 double getDpi() => AppInitService.to.androidXDpi;
 
+String getJPushID() => AppInitService.to.jpushID ?? 'Flutter_JPushID_isEmpty';
+
 class AppInitService extends GetxService {
   RxBool isTestUrl = false.obs;
   late SharedPreferences sharedPreferences;
@@ -46,10 +47,9 @@ class AppInitService extends GetxService {
   late BaseDeviceInfo deviceInfo;
   List<CameraDescription>? cameras;
   final JPushFlutterInterface jpush = JPush.newJPush();
+  String? jpushID;
 
   static AppInitService get to => Get.find();
-  static const upGrade = "UpGrade";
-  static const reLogin = "ReLogin";
 
   @override
   void onInit() {
@@ -58,10 +58,15 @@ class AppInitService extends GetxService {
     _initializeApp();
   }
 
-  _doJPush(String doType) {
-    if (doType == upGrade) {
-      Get.offAll(() => const HomePage());
-    } else if (doType == reLogin) {
+  _doJPush(Map<String, dynamic> json) {
+    var push = JPushNotification.fromJson(json);
+    if (push.isUpgrade()) {
+      getVersionInfo(
+        false,
+        needUpdate: (v) => doUpdate(version: v),
+        error: (msg) => errorDialog(content: msg),
+      );
+    } else if (push.isReLogin()) {
       spSave(spSaveUserInfo, '');
       reLoginPopup();
     }
@@ -85,7 +90,7 @@ class AppInitService extends GetxService {
         message:$message
         ---------------
         ''');
-          _doJPush(jsonDecode(message['alert'])['doType']);
+          _doJPush(message);
         },
         onOpenNotification: (message) async {
           debugPrint('''jPush onOpenNotification
@@ -93,7 +98,7 @@ class AppInitService extends GetxService {
         message:$message
         ---------------
         ''');
-          _doJPush(jsonDecode(message['message'])['doType']);
+          _doJPush(message);
         },
         onReceiveMessage: (message) async {
           debugPrint('''jPush onReceiveMessage
@@ -101,7 +106,6 @@ class AppInitService extends GetxService {
         message:$message
         ---------------
         ''');
-          _doJPush(jsonDecode(message['message'])['doType']);
         },
         onReceiveNotificationAuthorization: (message) async {
           debugPrint('''jPush onReceiveNotificationAuthorization
@@ -184,6 +188,7 @@ class AppInitService extends GetxService {
       rid:$rid
       ---------------
       ''');
+      jpushID = rid;
     });
     // iOS要是使用应用内消息，请在页面进入离开的时候配置pageEnterTo 和  pageLeave 函数，参数为页面名。
     jpush.pageEnterTo('home'); // 在离开页面的时候请调用 jpush.pageLeave('HomePage');
