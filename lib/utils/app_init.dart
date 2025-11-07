@@ -11,6 +11,7 @@ import 'package:jd_flutter/bean/jpush_notification.dart';
 import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/home/home_view.dart';
 import 'package:jd_flutter/login/login_view.dart';
+import 'package:jd_flutter/message_center/message_info.dart';
 import 'package:jd_flutter/translation.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
@@ -234,13 +235,14 @@ class AppInitService extends GetxService {
 
   initDatabase() async {
     var path = await getDatabasesPath();
-    openDatabase(join(path, jdDatabase), version: 4, onCreate: (db, v) {
+    openDatabase(join(path, jdDatabase), version: 5, onCreate: (db, v) {
       debugPrint('onCreate -----------v=$v');
       db.execute(SaveDispatch.dbCreate);
       db.execute(SaveWorkProcedure.dbCreate);
       db.execute(BarCodeInfo.dbCreate);
       db.execute(SurplusMaterialLabelInfo.dbCreate);
       db.execute(WorkshopPlanningWorkersCache.dbCreate);
+      db.execute(MessageInfo.dbCreate);
       db.close();
     }, onUpgrade: (db, ov, nv) {
       debugPrint('onUpgrade-----------ov=$ov nv=$nv');
@@ -258,6 +260,10 @@ class AppInitService extends GetxService {
           case 4: // 版本3升级到版本4
             debugPrint('版本3升级到版本4');
             db.execute(WorkshopPlanningWorkersCache.dbCreate);
+            break;
+          case 5: // 版本4升级到版本5
+            debugPrint('版本4升级到版本5');
+            db.execute(MessageInfo.dbCreate);
             break;
           default:
             break;

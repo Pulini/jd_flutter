@@ -1,3 +1,6 @@
+import 'package:jd_flutter/message_center/message_info.dart';
+import 'package:jd_flutter/utils/web_api.dart';
+
 enum JPushDoType {
   upGrade('UpGrade'),
   reLogin('ReLogin');
@@ -25,14 +28,19 @@ class JPushNotification {
   JPushNotification({this.data, this.doType});
 
   JPushNotification.fromJson(Map<String, dynamic> json) {
-    var extra= json['extras']['cn.jpush.android.EXTRA'];
+    var extra = json['extras']['cn.jpush.android.EXTRA'];
     data = extra['message'];
     doType = JPushDoType.fromString(extra['doType'].toString());
+    MessageInfo(message: json['alert'], doType: doType).save(
+      callback: (v) => logger.f('------存储推送信息成功：DataID:${v.toJson()}------'),
+    );
   }
 
   UpDataInfo? getUpDataList() =>
       doType == JPushDoType.upGrade ? UpDataInfo.fromJson(data) : null;
+
   bool isUpgrade() => doType == JPushDoType.upGrade;
+
   bool isReLogin() => doType == JPushDoType.reLogin;
 }
 

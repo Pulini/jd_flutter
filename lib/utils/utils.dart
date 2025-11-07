@@ -448,8 +448,8 @@ Future<Database> openDb() async {
   return openDatabase(join(await getDatabasesPath(), jdDatabase));
 }
 
-String getCurrentTime() {
-  final now = DateTime.now();
+String getCurrentTime({DateTime? time}) {
+  DateTime now = time ?? DateTime.now();
   var year = now.year.toString();
   var month = now.month.toString();
   if (month.length == 1) month = '0$month';

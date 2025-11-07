@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/home_button.dart';
+import 'package:jd_flutter/message_center/message_center_view.dart';
 import 'package:jd_flutter/utils/app_init.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
@@ -110,7 +111,7 @@ class _HomePageState extends State<HomePage>
                 if (isTestUrl()) {
                   Get.to(() => const TscLabelPreview());
                 } else {
-                  showSnackBar(title: '消息中心', message: '功能开发中');
+                  Get.to(()=> const MessageCenterPage());
                 }
               },
             ),
