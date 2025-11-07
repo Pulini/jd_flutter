@@ -325,12 +325,6 @@ class _UserSettingState extends State<UserSetting> {
                 //   }
                 // });
                 // scannerDialog( detect: (String code)=>showSnackBar(title: 'title', message: code));
-                if (Get.locale == localeEnglish) {
-                  LanguageController.to.changeLanguage(localeChinese);
-                } else {
-                  LanguageController.to.changeLanguage(localeEnglish);
-                }
-
                 if (!GetPlatform.isWeb) {
                   getVersionInfo(
                     true,
