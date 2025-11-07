@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide FormData;
+import 'package:jd_flutter/utils/app_init.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/printer/online_print_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
@@ -243,7 +244,9 @@ class _WebPrinterState extends State<WebPrinter> {
 
     loadingShow('正在生成物料清单预览...');
     dio.post(
-      'https://mestest.goldemperor.com:9099/m',
+      isTestUrl()
+          ? 'https://mestest.goldemperor.com:9099/m'
+          : 'https://wb.goldemperor.com:8096/m',
       queryParameters: {
         'xwl': 'public/interfaces/app/getPalletListHTML',
         'palletNumber': widget.palletTaskList

@@ -74,7 +74,7 @@ class ReceiverUtil(
     private val bleStateOpen: () -> Unit,
     private val scanCode: (String) -> Unit,
 ) {
-
+    //东集扫码枪密码:4007770876
     private var permissionListener: (Boolean) -> Unit = {}
     private var serialMulti: PL2303GMultiLib? = null
     private var readThread: WeighbridgeReadThread? = null

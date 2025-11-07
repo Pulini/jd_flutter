@@ -51,7 +51,10 @@ class SapLabelReprintLogic extends GetxController {
     var selected = state.labelList.where((v) => v.isSelected.value).toList();
     if (selected.isNotEmpty) {
       Get.to(() => PreviewWebLabelList(
-            labelCodes: selected.map((v) => v.labelID ?? '').toList(),
+            labelCodes: selected.map((v) =>{
+              'BQID':v.labelID ?? '',
+              'ZBQLX':v.labelType ?? '',
+            }).toList(),
           ));
       // createLabels(labels: selected, print: (labels) => toPrintView(labels));
     } else {

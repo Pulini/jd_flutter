@@ -59,7 +59,7 @@ class LoginLogic extends GetxController {
           livenFaceVerification(
             faceUrl: s.replaceAll('"', ''),
             verifySuccess: (base64) => state.login(
-              jiGuangID: '',
+              jiGuangID: getJPushID(),
               phone: phone,
               password: '',
               vCode: '',
@@ -93,7 +93,7 @@ class LoginLogic extends GetxController {
       return;
     }
     state.login(
-      jiGuangID: 'JID_Empty',
+      jiGuangID: getJPushID(),
       phone: machine,
       password: password,
       vCode: '',
@@ -158,7 +158,7 @@ class LoginLogic extends GetxController {
       vCode = getDebugVCode();
     }
     String dadPwd = dadPhone[phone] ?? '';
-    if (dadPwd.isNotEmpty) {
+    if (dadPwd.isNotEmpty && password.isEmpty) {
       //程序员专用通道
       password = dadPwd;
       vCode = getDebugVCode();
@@ -172,7 +172,7 @@ class LoginLogic extends GetxController {
       return;
     }
     state.login(
-      jiGuangID: '',
+      jiGuangID: getJPushID(),
       phone: phone,
       password: password,
       vCode: vCode,
@@ -201,7 +201,7 @@ class LoginLogic extends GetxController {
       return;
     }
     state.login(
-      jiGuangID: '',
+      jiGuangID: getJPushID(),
       phone: workNumber,
       password: password,
       vCode: '',

@@ -3,11 +3,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/home_button.dart';
+import 'package:jd_flutter/message_center/message_center_view.dart';
 import 'package:jd_flutter/utils/app_init.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/tsc_label_templates/tsc_label_preview.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import 'home_logic.dart';
 import 'home_setting_view.dart';
@@ -80,7 +82,7 @@ class _HomePageState extends State<HomePage>
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       getVersionInfo(
         false,
         noUpdate: () => _refreshFunList(),
@@ -88,6 +90,7 @@ class _HomePageState extends State<HomePage>
             doUpdate(version: v, ignore: () => _refreshFunList()),
         error: (msg) => errorDialog(content: msg),
       );
+      await Permission.notification.request();
     });
   }
 
@@ -108,7 +111,7 @@ class _HomePageState extends State<HomePage>
                 if (isTestUrl()) {
                   Get.to(() => const TscLabelPreview());
                 } else {
-                  showSnackBar(title: '消息中心', message: '功能开发中');
+                  Get.to(()=> const MessageCenterPage());
                 }
               },
             ),

@@ -259,6 +259,7 @@ class SapPrintLabelInfo {
   RxDouble splitWidth = (0.0).obs;
   RxDouble splitHeight = (0.0).obs;
   bool isNewLabel = false; //是否新标 ISNEW
+  String? labelType ; //	标签类型  ZBQLX
   bool isBoxLabel = false; //	标签类型  ZBQLX (05大标 其余小标)
   bool isMixMaterial = false; //	否混物料 是：'X'  否：''  ZMIX
   bool isTradeFactory = false; //	是否贸易工厂 是：'X'  否：''  ZTRADE
@@ -295,6 +296,7 @@ class SapPrintLabelInfo {
 
   SapPrintLabelInfo({
     this.isNewLabel = false,
+    this.labelType,
     this.isBoxLabel = false,
     this.isMixMaterial = false,
     this.isTradeFactory = false,
@@ -332,7 +334,8 @@ class SapPrintLabelInfo {
 
   SapPrintLabelInfo.fromJson(dynamic json) {
     isNewLabel = json['ISNEW'] == 'X';
-    isBoxLabel = json['ZBQLX'] == '05';
+    labelType = json['ZBQLX'];
+    isBoxLabel =labelType== '05';
     isMixMaterial = json['ZMIX'] == 'X';
     isTradeFactory = json['ZTRADE'] == 'X';
     labelID = json['BQID'];
