@@ -5,16 +5,17 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
+import android.content.res.Configuration.ORIENTATION_LANDSCAPE
+import android.content.res.Configuration.ORIENTATION_PORTRAIT
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Rect
-import android.os.Build
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.util.Log
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.view.postDelayed
 import com.huawei.hms.mlsdk.common.MLFrame
 import com.huawei.hms.mlsdk.faceverify.MLFaceVerificationAnalyzerFactory
@@ -29,8 +30,6 @@ import com.jd.pzx.jd_flutter.utils.FACE_VERIFY_FAIL_ERROR
 import com.jd.pzx.jd_flutter.utils.FACE_VERIFY_FAIL_NOT_LIVE
 import com.jd.pzx.jd_flutter.utils.FACE_VERIFY_FAIL_NOT_ME
 import com.jd.pzx.jd_flutter.utils.FACE_VERIFY_SUCCESS
-import com.jd.pzx.jd_flutter.utils.dp2px
-import com.jd.pzx.jd_flutter.utils.isPad
 
 
 /**
@@ -100,17 +99,23 @@ class LivenFaceVerificationActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bundle = savedInstanceState
-//        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-//        setContentView(R.layout.activity_liveness_custom_detection)
-        if (isPad()) {
-            //加载平板的主界面并强制横屏
-            setContentView(R.layout.activity_liveness_custom_detection_pad)
-            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-        } else {
-            //加载手机的主界面并强制竖屏
-            setContentView(R.layout.activity_liveness_custom_detection_phone)
-            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-        }
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        setContentView(R.layout.activity_liveness_custom_detection)
+//        if (isPad()) {
+//            //加载平板的主界面并强制横屏
+//            setContentView(R.layout.activity_liveness_custom_detection_pad)
+//            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+//        } else {
+//            //加载手机的主界面并强制竖屏
+//            setContentView(R.layout.activity_liveness_custom_detection_phone)
+//            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+//        }
+//        val orientation = resources.configuration.orientation
+//        if (orientation ==ORIENTATION_LANDSCAPE) {
+//            tvSimilarity.text="横屏"
+//        } else if (orientation == ORIENTATION_PORTRAIT) {
+//            tvSimilarity.text="竖屏"
+//        }
         ivBack.setOnClickListener { finish() }
         previewContainer.postDelayed(300) {
             //预览界面加载存在位置偏移bug,需要延迟加载预览界面
@@ -156,8 +161,8 @@ class LivenFaceVerificationActivity : Activity() {
                 Rect(
                     0,
                     0,
-                    resources.displayMetrics.widthPixels,
                     resources.displayMetrics.heightPixels,
+                    resources.displayMetrics.widthPixels,
                 )
             )
             .setDetectCallback(object : OnMLLivenessDetectCallback {
@@ -191,7 +196,7 @@ class LivenFaceVerificationActivity : Activity() {
                         MLLivenessDetectInfo.MASK_WAS_DETECTED -> "检测到口罩"
                         MLLivenessDetectInfo.SUNGLASS_WAS_DETECTED -> "检测到墨镜"
                         MLLivenessDetectInfo.FACE_ROTATION -> "脸部旋转"
-                        else -> ""
+                        else -> "请将脸部对准框内，确保光线充足"
                     }
                 }
                 override fun onStateChange(state: Int, bundle: Bundle) {}

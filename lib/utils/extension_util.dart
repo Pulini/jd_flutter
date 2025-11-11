@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:jd_flutter/bean/http/response/base_data.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
+import 'package:path_provider/path_provider.dart';
 
 extension ContextExt on BuildContext {
   //是否是大屏幕
@@ -72,6 +73,24 @@ extension Uint8ListExt on Uint8List {
   }
 
   String toBase64() => base64Encode(this);
+
+  Future<String> saveToFile(String fileName) async {
+    try {
+      // 获取临时目录
+      final directory = await getTemporaryDirectory();
+
+      // 创建完整文件路径
+      final filePath = '${directory.path}/$fileName';
+
+      // 创建文件并写入数据
+      final file = File(filePath);
+      await file.writeAsBytes(this);
+
+      return filePath;
+    } catch (e) {
+      throw Exception('保存临时文件失败: $e');
+    }
+  }
 }
 
 //File扩展方法

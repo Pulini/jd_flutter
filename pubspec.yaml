@@ -122,6 +122,8 @@ dependencies:
   webcontent_converter: ^0.0.9+5
 #  native_screenshot_widget: ^0.0.8
 #  screenshot: ^3.0.0
+  # 华为官方肢体识别库
+#  huawei_ml_body: ^3.12.0
 
 dev_dependencies:
   flutter_test:
@@ -177,3 +179,26 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+# 启动页白屏配置，配置好启动页后运行：flutter pub run flutter_native_splash:create
+flutter_native_splash:
+  # 1. 通用背景与图标
+  color: "#00B0FF"                   # 正常模式背景
+  image: assets/images/ic_logo_android12.png    # 居中图标（1024 px 以内）
+  # 2. 暗黑模式
+  color_dark: "#121212"
+  image_dark: assets/images/ic_logo_android12.png
+  # 3. 全屏 & 品牌图标（可选）
+  fullscreen: true                   # 隐藏状态栏/导航栏
+  branding: assets/images/ic_logo_android12.png  # 底部品牌 logo
+  branding_dark: assets/images/ic_logo_android12.png
+  # 4. 安卓 12 专用
+  android_12:
+    image: assets/images/ic_logo_android12.png
+    icon_background_color: "#00B0FF"
+    image_dark: assets/images/ic_logo_android12.png
+    icon_background_color_dark: "#121212"
+  # 5. 其他
+  web: false                         # 不需要可关闭
+  ios: true
+  android: true

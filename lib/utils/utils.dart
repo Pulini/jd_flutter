@@ -9,6 +9,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+// import 'package:huawei_ml_body/huawei_ml_body.dart';
 import 'package:jd_flutter/bean/http/response/bar_code.dart';
 import 'package:jd_flutter/bean/http/response/base_data.dart';
 import 'package:jd_flutter/bean/http/response/leader_info.dart';
@@ -568,6 +569,34 @@ int dp2Px(double dp, BuildContext context) {
   return (dp * pixelRatio + 1).toInt();
 }
 
+///华为flutter肢体库 活体检测+人脸对比，！！！官方活体检测只能竖屏开启！！！
+// Future<void> livenFaceVerify({
+//   required String templateFacePath,
+//   required Function(Uint8List) verifySuccess,
+//   required Function(String) verifyError,
+// }) async {
+//   var livenessResult = await MLLivenessCapture().startDetect(detectMask: true);
+//   if (livenessResult.isLive != null && livenessResult.isLive!) {
+//     var livenessFace = await livenessResult.bitmap?.saveToFile('LivenessFace');
+//     if (livenessFace != null) {
+//       var analyzer = MLFaceVerificationAnalyzer();
+//       await analyzer.setTemplateFace(templateFacePath, 1);
+//       var result = await analyzer.asyncAnalyseFrame(livenessFace);
+//       await analyzer.stop();
+//       if (result.first.similarity > 0.75) {
+//         verifySuccess.call(livenessResult.bitmap!);
+//       } else {
+//         verifyError.call(
+//             '人脸对比相似度：${(result.first.similarity * 100 as double).toFixed(2)}%，照片与本人不符！');
+//       }
+//     } else {
+//       verifyError.call('文件保存失败！');
+//     }
+//   } else {
+//     verifyError.call('不是活体！');
+//   }
+// }
+
 livenFaceVerification({
   required String faceUrl,
   required Function(String) verifySuccess,
@@ -577,13 +606,21 @@ livenFaceVerification({
     completed: (filePath) {
       Permission.camera.request().isGranted.then((permission) {
         if (permission) {
+          // livenFaceVerify(
+          //   templateFacePath: filePath,
+          //   verifySuccess: (u8l) => verifySuccess.call(u8l.toBase64()),
+          //   verifyError: (msg) => errorDialog(content: '人脸验证失败：$msg'),
+          // );
           const MethodChannel(channelFaceVerificationAndroidToFlutter)
               .invokeMethod('StartDetect', filePath)
-              .then((v) {
-            // Get.dialog( AlertDialog( content: Image.memory(v)));
-            verifySuccess.call((v as Uint8List).toBase64());
-          }).catchError((e) => errorDialog(
-                  content: '人脸验证错误：${(e as PlatformException).message}'));
+              .then(
+                (v) => verifySuccess.call((v as Uint8List).toBase64()),
+              )
+              .catchError(
+                (e) => errorDialog(
+                  content: '人脸验证错误：${(e as PlatformException).message}',
+                ),
+              );
         } else {
           errorDialog(content: '缺少相机权限');
         }
@@ -660,7 +697,7 @@ Size getScreenSize() {
     final devicePixelRatio = view.devicePixelRatio;
     return physicalSize / devicePixelRatio;
   } else {
-    final physicalSize =  View.of(Get.context!).physicalSize;
+    final physicalSize = View.of(Get.context!).physicalSize;
     final devicePixelRatio = View.of(Get.context!).devicePixelRatio;
     return physicalSize / devicePixelRatio;
   }
@@ -683,6 +720,7 @@ Orientation getScreenOrientation() {
       ? Orientation.landscape
       : Orientation.portrait;
 }
+
 String getFileName(String url, {int num = 2}) {
   final code = unicodeDecode(url.replaceAll('%u', '\\u'));
   logger.f('url=$code');
@@ -695,6 +733,7 @@ String getFileName(String url, {int num = 2}) {
   }
   return name;
 }
+
 String unicodeDecode(String string) {
   var str = string;
   final regex = RegExp(r'(\\u(\w{4}))');
@@ -709,10 +748,12 @@ String unicodeDecode(String string) {
 
   return str;
 }
+
 String getPrintTime({DateTime? time}) {
   DateTime now = time ?? DateTime.now();
   return '${now.year}.${now.month}.${now.day} ${now.hour}:${now.minute}';
 }
+
 Uint8List mergeUint8List(List<Uint8List> lists) {
   final buffer = BytesBuilder();
   for (var list in lists) {
@@ -720,13 +761,13 @@ Uint8List mergeUint8List(List<Uint8List> lists) {
   }
   return buffer.toBytes();
 }
+
 /// 删除文档目录下所有PDF文件
 Future<Directory> deleteAllPdfFiles() async {
   final directory = await getApplicationDocumentsDirectory();
   try {
-    final pdfFiles = directory.listSync().where((file) =>
-        file.path.endsWith('.pdf')
-    );
+    final pdfFiles =
+        directory.listSync().where((file) => file.path.endsWith('.pdf'));
 
     for (var file in pdfFiles) {
       if (file is File) {
@@ -734,11 +775,12 @@ Future<Directory> deleteAllPdfFiles() async {
         logger.i('Deleted PDF file: ${file.path}');
       }
     }
-
   } catch (e) {
     logger.e('Failed to delete PDF files: $e');
   }
   return directory;
 }
 
-Future<double> getAndroidXDpi() async =>await const MethodChannel(channelDisplayMetricsFlutterToAndroid).invokeMethod('GetXDpi');
+Future<double> getAndroidXDpi() async =>
+    await const MethodChannel(channelDisplayMetricsFlutterToAndroid)
+        .invokeMethod('GetXDpi');
