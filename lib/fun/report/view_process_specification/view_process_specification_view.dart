@@ -40,14 +40,17 @@ class _ViewProcessSpecificationPageState
             child: ListTile(
               onTap: () => checkUrlType(
                 url: state.pdfList[index].fullName ?? '',
-                jdPdf: (url) => PDFViewerCachedFromUrl(
+                jdPdf: (url) => Get.to(()=>PDFViewerCachedFromUrl(
                   title: state.pdfList[index].name ?? '',
                   url: url,
-                ),
-                web: (url) => WebPage(
-                  title: state.pdfList[index].name ?? '',
-                  url: url,
-                ),
+                )),
+                web: (url) {
+                  Get.to(() => WebPage(
+                        title: state.pdfList[index].name ?? '',
+                        url: url,
+                      ));
+                  ;
+                },
               ),
               title: textSpan(
                 hint: 'view_process_specification_item_hint1'.tr,
