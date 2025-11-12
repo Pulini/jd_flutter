@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 2.2.5+225
+version: 2.2.6+226
 
 environment:
   sdk: '>=3.4.3 <4.0.0'
@@ -46,16 +46,26 @@ dependencies:
   permission_handler: ^11.0.0
   #文件地址工具
   path_provider: ^2.1.1
+  #路径工具
+  path: ^1.9.0
   #shared存储工具
   shared_preferences: ^2.2.1
+  #本地数据库
+  sqflite: ^2.3.3+1
   #图片选择器工具
   image_picker: ^1.0.4
   #图片裁剪工具
   image_cropper: ^8.0.1
+  #Image处理工具集
+  image: ^4.1.7
   #图片预览
   photo_view: ^0.15.0
   #获取app基础信息
   package_info_plus: ^8.0.0
+  #获取设备信息
+  device_info_plus: ^12.2.0
+  #设备方向
+  native_device_orientation: ^2.0.3
   #加密工具
   crypto: ^3.0.3
   #白屏启动页工具
@@ -74,10 +84,6 @@ dependencies:
   decimal: ^3.0.2
   #下拉刷新控件
   easy_refresh: ^3.4.0
-  #隔离区子线程
-  #  flutter_isolate: ^2.0.4
-  #获取设备信息
-  device_info_plus: ^12.2.0
   #跑马灯文本
   marquee: ^2.2.3
   #意图启动器
@@ -86,14 +92,8 @@ dependencies:
   collection: ^1.18.0
   #GBK编码
   fast_gbk: ^1.0.0
-  #Image处理工具集
-  image: ^4.1.7
   #角标
   rotated_corner_decoration: ^2.1.0+1
-  #本地数据库
-  sqflite: ^2.3.3+1
-  #路径工具
-  path: ^1.9.0
   #手写签字控件
   hand_signature: ^3.0.3
   #二维码生成
@@ -108,8 +108,6 @@ dependencies:
   mobile_scanner: ^6.0.6
   #mqtt服务端
   mqtt_client: ^10.5.1
-  #设备方向
-  native_device_orientation: ^2.0.3
   #轮播侧滑控件
   card_swiper: ^3.0.1
   #相机工具
@@ -120,8 +118,8 @@ dependencies:
   pdf: ^3.11.3
   #网页转图片
   webcontent_converter: ^0.0.9+5
-#  native_screenshot_widget: ^0.0.8
-#  screenshot: ^3.0.0
+  #隔离区子线程
+#  flutter_isolate: ^2.0.4
   # 华为官方肢体识别库
 #  huawei_ml_body: ^3.12.0
 
