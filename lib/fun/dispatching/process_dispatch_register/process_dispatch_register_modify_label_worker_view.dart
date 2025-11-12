@@ -72,7 +72,7 @@ class _ModifyLabelWorkerPageState extends State<ModifyLabelWorkerPage> {
       department: userInfo?.departmentID.toString(),
       workers: (list) => state.workerList.value = list,
       error: (msg) => showSnackBar(
-        title: 'process_dispatch_register_modify_query_failed',
+        title: 'process_dispatch_register_modify_query_failed'.tr,
         message: msg,
         isWarning: true,
       ),
@@ -82,7 +82,7 @@ class _ModifyLabelWorkerPageState extends State<ModifyLabelWorkerPage> {
   @override
   Widget build(BuildContext context) {
     return pageBody(
-      title: 'process_dispatch_register_modify_change_operator',
+      title: 'process_dispatch_register_modify_change_operator'.tr,
       actions: [
         IconButton(
           icon: const Icon(

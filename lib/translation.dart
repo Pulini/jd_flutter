@@ -953,7 +953,7 @@ class Translation extends Translations {
           'process_dispatch_register_print_print': '打印',
           'process_dispatch_register_modify_query_failed': '查询失败',
           'process_dispatch_register_modify_change_operator': '修改操作员',
-          'process_dispatch_register_modify_tips': '温馨提示：',
+          'process_dispatch_register_modify_tips': '温馨提示',
           'process_dispatch_register_modify_tips_msg': '扫描标签进行人员修改！',
           'process_dispatch_register_modify_ins_number': '指令号：',
           'process_dispatch_register_modify_process': '工序：',
