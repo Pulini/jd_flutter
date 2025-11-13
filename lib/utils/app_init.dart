@@ -14,6 +14,7 @@ import 'package:jd_flutter/login/login_view.dart';
 import 'package:jd_flutter/message_center/message_info.dart';
 import 'package:jd_flutter/translation.dart';
 import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jpush_flutter/jpush_flutter.dart';
 import 'package:jpush_flutter/jpush_interface.dart';
@@ -22,9 +23,6 @@ import 'package:path/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 
-bool isTestUrl() => AppInitService.to.isTestUrl.value;
-
-void toggleTestUrl() => AppInitService.to.toggle();
 
 BaseDeviceInfo deviceInfo() => AppInitService.to.deviceInfo;
 
@@ -41,7 +39,7 @@ double getDpi() => AppInitService.to.androidXDpi;
 String getJPushID() => AppInitService.to.jpushID ?? 'Flutter_JPushID_isEmpty';
 
 class AppInitService extends GetxService {
-  RxBool isTestUrl = false.obs;
+
   late SharedPreferences sharedPreferences;
   late PackageInfo packageInfo;
   double androidXDpi = 0.0;
@@ -213,14 +211,8 @@ class AppInitService extends GetxService {
       }
 
       userInfo = getUserInfo();
-      var save = spGet('isTestUrl');
-      if (save == null) {
-        spSave('isTestUrl', false);
-        isTestUrl.value = false;
-      } else {
-        isTestUrl.value = save;
-      }
-
+      mesBaseUrl = getMesBaseUrl().value;
+      sapBaseUrl = getSapBaseUrl().value;
       if (GetPlatform.isMobile) {
         await initDatabase();
       }
@@ -275,11 +267,6 @@ class AppInitService extends GetxService {
     });
   }
 
-  toggle() {
-    isTestUrl.toggle();
-    spSave('isTestUrl', isTestUrl.value);
-  }
-
   bool hasFrontCamera() => cameras == null
       ? false
       : cameras!.any((v) => v.lensDirection == CameraLensDirection.front);
@@ -287,6 +274,8 @@ class AppInitService extends GetxService {
   bool hasBackCamera() => cameras == null
       ? false
       : cameras!.any((v) => v.lensDirection == CameraLensDirection.back);
+
+
 }
 
 class LanguageController extends GetxController {

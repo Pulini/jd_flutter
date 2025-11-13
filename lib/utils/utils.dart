@@ -230,7 +230,7 @@ upData() {
   ).then((versionInfoCallback) {
     if (versionInfoCallback.resultCode == resultSuccess) {
       logger.i(packageInfo());
-      if (versionInfoCallback.baseUrl == baseUrlForMES) {
+      if (versionInfoCallback.baseUrl == getMesBaseUrl().value) {
         doUpdate(version: VersionInfo.fromJson(versionInfoCallback.data));
       }
     } else {
@@ -784,3 +784,21 @@ Future<Directory> deleteAllPdfFiles() async {
 Future<double> getAndroidXDpi() async =>
     await const MethodChannel(channelDisplayMetricsFlutterToAndroid)
         .invokeMethod('GetXDpi');
+
+BaseUrl getMesBaseUrl(){
+  var save=spGet(spSaveMesBaseUrl);
+  if(save==null||save==''){
+    return BaseUrl.BASE_MES;
+  }else {
+    return BaseUrl.values.firstWhere((v) => v.value==save);
+  }
+}
+BaseUrl getSapBaseUrl(){
+  var save=spGet(spSaveSapBaseUrl);
+  if(save==null||save==''){
+    return BaseUrl.BASE_SAP;
+  }else {
+    return BaseUrl.values.firstWhere((v) => v.value==save);
+  }
+}
+bool isPad()=> MediaQuery.of(Get.overlayContext!).size.width >= 600;

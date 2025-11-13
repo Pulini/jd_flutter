@@ -5,7 +5,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/base_data.dart';
 import 'package:jd_flutter/route.dart';
-import 'package:jd_flutter/utils/app_init.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:logger/logger.dart';
 import 'package:uuid/uuid.dart';
@@ -25,25 +24,43 @@ const resultReLogin = 2;
 //版本升级
 const resultToUpdate = 3;
 
-//MES正式库
-const baseUrlForMES = 'https://geapp.goldemperor.com:1226/';
+String mesBaseUrl = BaseUrl.BASE_MES.value;
+String sapBaseUrl = BaseUrl.BASE_SAP.value;
+bool isTestUrl() => mesBaseUrl != BaseUrl.BASE_MES.value;
+enum BaseUrl {
+  ///MES正式库
+  BASE_MES('https://geapp.goldemperor.com:1226/','MES'),
 
-//MES测试库
-// const testUrlForMES = 'https://geapptest.goldemperor.com:1224/';//ECC-300
-const testUrlForMES = 'https://apptest.goldemperor.com:1207/';//S4-300
-// const testUrlForMES = 'https://apptest.goldemperor.com:1208/';//S4-600
+  ///SAP正式库
+  BASE_SAP('https://erpprd01.goldemperor.com:8003/','SAP'),
 
-//SAP正式库
-const baseUrlForSAP = 'https://erpprd01.goldemperor.com:8003/';//ECC-800
+  ///MES测试库 对接 SAP ECC 300
+  MES_ECC_300('https://geapptest.goldemperor.com:1224/','MES'),
 
-// //SAP测试库
-// const testUrlForSAP = 'https://erpqas01.goldemperor.com:8002/';//ECC-600
-// const developUrlForSAP = 'https://s4qasapp01.goldemperor.com:8006/';//S4-600
+  ///MES测试库 对接 SAP S4 300
+  MES_S4_300('https://apptest.goldemperor.com:1207/','MES'),
 
-//SAP开发库
-// const developUrlForSAP = 'https://erpdev01.goldemperor.com:8001/';//ECC-300
-const developUrlForSAP = 'https://s4devapp01.goldemperor.com:8005/';//S4-300
+  ///MES测试库 对接 SAP S4 600
+  MES_S4_600('https://apptest.goldemperor.com:1208/','MES'),
 
+  ///SAP开发库 ECC 300
+  SAP_ECC_300('https://erpdev01.goldemperor.com:8001/','SAP'),
+
+  ///SAP测试库 ECC 600
+  SAP_ECC_600('https://erpqas01.goldemperor.com:8002/','SAP'),
+
+  ///SAP开发库 S4 300
+  SAP_S4_300('https://s4devapp01.goldemperor.com:8005/','SAP'),
+
+  ///SAP测试库 S4 300
+  SAP_S4_600('https://s4devapp01.goldemperor.com:8006/','SAP');
+
+  final String value;
+  final String type;
+
+  const BaseUrl(this.value,this.type);
+
+}
 
 const sfUser = 'PI_USER';
 const sfPassword = 'PI@Passw0rd';
@@ -69,13 +86,6 @@ Future<BaseData> _doHttp({
   Map<String, dynamic>? params,
   Object? body,
 }) async {
-  if (isTestUrl()) {
-    if (baseUrl == baseUrlForMES) {
-      baseUrl = testUrlForMES;
-    } else if (baseUrl == baseUrlForSAP) {
-      baseUrl = developUrlForSAP;
-    }
-  }
   // if (baseUrl == baseUrlForSAP || baseUrl == developUrlForSAP) {
   //   params = {
   //     'sap-client':
@@ -108,8 +118,8 @@ Future<BaseData> _doHttp({
     'Language': language,
     'Token': userInfo?.token ?? '',
     'GUID': const Uuid().v1(),
-    'Authorization': 'Basic ${base64Encode(utf8.encode("$sfUser:$sfPassword"))}',
-
+    'Authorization':
+        'Basic ${base64Encode(utf8.encode("$sfUser:$sfPassword"))}',
   });
 
   //创建返回数据载体
@@ -192,16 +202,15 @@ Future<BaseData> httpPost({
   required String method,
   Map<String, dynamic>? params,
   Object? body,
-}) {
-  return _doHttp(
-    loading: loading,
-    params: params,
-    body: body,
-    baseUrl: baseUrlForMES,
-    isPost: true,
-    method: method,
-  );
-}
+}) =>
+    _doHttp(
+      loading: loading,
+      params: params,
+      body: body,
+      baseUrl: getMesBaseUrl().value,
+      isPost: true,
+      method: method,
+    );
 
 //get请求
 Future<BaseData> httpGet({
@@ -209,50 +218,46 @@ Future<BaseData> httpGet({
   required String method,
   Map<String, dynamic>? params,
   Object? body,
-}) {
-  return _doHttp(
-    loading: loading,
-    params: params,
-    body: body,
-    baseUrl: baseUrlForMES,
-    isPost: false,
-    method: method,
-  );
-}
+}) =>
+    _doHttp(
+      loading: loading,
+      params: params,
+      body: body,
+      baseUrl: getMesBaseUrl().value,
+      isPost: false,
+      method: method,
+    );
 
-//post请求
+//sap post请求
 Future<BaseData> sapPost({
   String? loading,
   required String method,
   Map<String, dynamic>? params,
   Object? body,
-}) {
-  return _doHttp(
-    loading: loading,
-    params: {...?params},
-    body: body,
-    baseUrl: baseUrlForSAP,
-    isPost: true,
-    method: method,
-  );
-}
-
-//get请求
+}) =>
+    _doHttp(
+      loading: loading,
+      params: {...?params},
+      body: body,
+      baseUrl: getSapBaseUrl().value,
+      isPost: true,
+      method: method,
+    );
+//sap get请求
 Future<BaseData> sapGet({
   String? loading,
   required String method,
   Map<String, dynamic>? params,
   Object? body,
-}) {
-  return _doHttp(
-    loading: loading,
-    params: {...?params},
-    body: body,
-    baseUrl: baseUrlForSAP,
-    isPost: false,
-    method: method,
-  );
-}
+}) =>
+    _doHttp(
+      loading: loading,
+      params: {...?params},
+      body: body,
+      baseUrl: getSapBaseUrl().value,
+      isPost: false,
+      method: method,
+    );
 
 //网络测试接口
 const webApiLNetTest = 'api/Public/NetTest';
@@ -460,7 +465,8 @@ const webApiSendDispatchToWechat = 'api/NeedleCartDispatch/WechatPostByFEmpID';
 const webApiProductionDispatch = 'api/NeedleCartDispatch/ProcessCalculation';
 
 //工序计工
-const webApiProductionDispatchBatch = 'api/NeedleCartDispatch/ProcessCalculationBatch';
+const webApiProductionDispatchBatch =
+    'api/NeedleCartDispatch/ProcessCalculationBatch';
 
 //查询生产派工单生产进度表
 const webApiGetWorkCardDetailList = 'api/WorkCard/GetWorkCardDetailList';
@@ -707,7 +713,8 @@ const webApiPartProductionReportModify =
     'api/WetPrinting/BarCodeProcessReportSubmit_Reported';
 
 //贴标工序报工_获取报工汇总表
-const webApiGetPartProductionReportTable = 'api/WetPrinting/GetPartProcessReport_Barcode';
+const webApiGetPartProductionReportTable =
+    'api/WetPrinting/GetPartProcessReport_Barcode';
 
 //获取工序派工单信息
 const webApiGetProcessWorkCard = 'api/WetPrinting/GetProcessWorkCardByBarcode';
@@ -1386,7 +1393,8 @@ const webApiSubmitWorkCardPriority = 'api/Package/SubmitWorkCardPriority';
 const webApiReceiveWorkCardDataST = 'api/Package/ReceiveWorkCardDataST';
 
 //获得线别的当前的分析报告
-const webApiGetWorkLineAnalysisReportNowNew = 'api/Package/GetWorkLineAnalysisReportNowNew';
+const webApiGetWorkLineAnalysisReportNowNew =
+    'api/Package/GetWorkLineAnalysisReportNowNew';
 
 //获得线别的分配信息
 const webApiGetDeptDistributeInfoNew = 'api/Package/GetDeptDistributeInfoNew';
@@ -1435,8 +1443,8 @@ const webApiGetToDayItemInfo = 'api/Piecework/GetToDayItemInfo';
 const webApiGetEndingProcessQty = 'api/Piecework/GetEndingProcessQty';
 
 //团件-获取团件末道工序列表
-const webApiGetGroupPayEndingProcessList = 'api/Piecework/GetGroupPayEndingProcessList';
+const webApiGetGroupPayEndingProcessList =
+    'api/Piecework/GetGroupPayEndingProcessList';
 
 //团件-获取末道团件明细信息
 const webApiGetGroupPayEndingDetail = 'api/Piecework/GetGroupPayEndingDetail';
-

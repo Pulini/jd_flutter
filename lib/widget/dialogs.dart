@@ -6,7 +6,8 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/version_info.dart';
 import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/login/login_view.dart';
-import 'package:jd_flutter/utils/app_init.dart';
+import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/web_api.dart';
 
 import 'downloader.dart';
 import 'loading.dart';
@@ -408,11 +409,11 @@ reasonInputPopup({
   required Function(String reason) confirm,
   Function()? cancel,
 }) {
-  var isPad = MediaQuery.of(Get.overlayContext!).size.width >= 600;
+
   TextEditingController reasonController = TextEditingController();
   var confirmButton = ElevatedButton(
     style: ElevatedButton.styleFrom(
-      shape: isPad && isCanCancel
+      shape: isPad() && isCanCancel
           ? const RoundedRectangleBorder(
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(25),
@@ -440,7 +441,7 @@ reasonInputPopup({
   if (isCanCancel) {
     cancelButton = ElevatedButton(
       style: ElevatedButton.styleFrom(
-        shape: isPad && isCanCancel
+        shape: isPad() && isCanCancel
             ? const RoundedRectangleBorder(
                 borderRadius: BorderRadius.only(
                   topRight: Radius.circular(25),
@@ -494,7 +495,7 @@ reasonInputPopup({
     ),
     const SizedBox(height: 30),
     isCanCancel
-        ? isPad
+        ? isPad()
             ? Row(
                 children: [
                   Expanded(child: confirmButton),
@@ -528,7 +529,7 @@ reasonInputPopup({
     child: Container(
       padding: const EdgeInsets.all(8.0),
       decoration: BoxDecoration(
-        borderRadius: isPad
+        borderRadius: isPad()
             ? const BorderRadius.all(Radius.circular(20))
             : const BorderRadius.only(
                 topLeft: Radius.circular(20),
@@ -540,7 +541,7 @@ reasonInputPopup({
           end: Alignment.topRight,
         ),
       ),
-      child: isPad
+      child: isPad()
           ? ListView(children: children)
           : Column(
               mainAxisSize: MainAxisSize.min,
@@ -549,7 +550,7 @@ reasonInputPopup({
             ),
     ),
   );
-  if (isPad) {
+  if (isPad()) {
     Get.dialog(PopScope(
       canPop: false,
       child: AlertDialog(
