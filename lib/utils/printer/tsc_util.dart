@@ -625,12 +625,12 @@ Future<List<Uint8List>> labelMultipurposeFixed({
         //如子内容为空则限制主内容行数为4
         if (i >= 4) break;
         list.add(await _tscBitmapText(
-            2 * _dpi, (19 + 4 * i) * _dpi, 30, format[i],
+            2 * _dpi, (19 + 4 * i) * _dpi, 29, format[i],
             isBold: false));
       }
     }
   } else {
-    list.add(await _tscBitmapText(2 * _dpi, 20 * _dpi, 30, content));
+    list.add(await _tscBitmapText(2 * _dpi, 20 * _dpi, 29, content));
   }
   if (!isEnglish) {
     if (subContent1.isNotEmpty) {
@@ -689,7 +689,7 @@ Future<List<Uint8List>> labelMultipurposeFixed({
           isBold: true));
       list.add(await _tscBitmapText(
           23 * _dpi + _halfDpi, 40 * _dpi, 23, bottomMiddleText2,
-          isBold: true));
+          isBold: false));
     } else {
       list.add(await _tscBitmapText(
           23 * _dpi + _halfDpi, 38 * _dpi, 34, bottomMiddleText1,isBold: true));

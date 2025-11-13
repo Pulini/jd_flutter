@@ -80,7 +80,7 @@ class StuffQualityInspectionLogic extends GetxController {
       state.abnormalExplanationEnable.value = false;
       state.processingMethodEnable.value = false;
 
-      state.showAllBtnName.value == '全部不合格';
+      state.showAllBtnName.value = '全部不合格';
     } else {
       //数量全部不合格
       unqualifiedQualifiedController.text = inspectionQuantityController.text;
@@ -90,7 +90,7 @@ class StuffQualityInspectionLogic extends GetxController {
       state.abnormalExplanationEnable.value = true;
       state.processingMethodEnable.value = true;
 
-      state.showAllBtnName.value == '全部合格';
+      state.showAllBtnName.value = '全部合格';
     }
   }
 
@@ -1139,6 +1139,7 @@ class StuffQualityInspectionLogic extends GetxController {
               .forEach((subData) {
             if (qty >= subData.quantityTemporarilyReceived!) {
               subData.unqualifiedQuantity = subData.quantityTemporarilyReceived;
+              qty=qty.sub(subData.quantityTemporarilyReceived!);
             } else {
               subData.unqualifiedQuantity = qty;
               qty = 0.0;
@@ -1154,12 +1155,9 @@ class StuffQualityInspectionLogic extends GetxController {
               .where((v) => v.barCode == label.barCode)
               .forEach((subData) {
             if (qty >=
-                subData.quantityTemporarilyReceived!
-                    .sub(subData.unqualifiedQuantity!)) {
-              subData.missingQuantity = subData.quantityTemporarilyReceived!
-                  .sub(subData.unqualifiedQuantity!);
-              qty = qty.sub(subData.quantityTemporarilyReceived!
-                  .sub(subData.unqualifiedQuantity!));
+                subData.quantityTemporarilyReceived!.sub(subData.unqualifiedQuantity!)) {
+              subData.missingQuantity = subData.quantityTemporarilyReceived!.sub(subData.unqualifiedQuantity!);
+              qty = qty.sub(subData.quantityTemporarilyReceived!.sub(subData.unqualifiedQuantity!));
             } else {
               subData.missingQuantity = qty;
               qty = 0.0;
