@@ -132,17 +132,17 @@ Future<BaseData> _doHttp({
     //发起post/get请求
     var response = isPost
         ? await dio.post(
-            method,
-            queryParameters: params,
-            data: body,
-            options: options,
-          )
+      method,
+      queryParameters: params,
+      data: body,
+      options: options,
+    )
         : await dio.get(
-            method,
-            queryParameters: params,
-            data: body,
-            options: options,
-          );
+      method,
+      queryParameters: params,
+      data: body,
+      options: options,
+    );
     if (response.statusCode == 200) {
       var json = response.data.runtimeType == String
           ? jsonDecode(response.data)

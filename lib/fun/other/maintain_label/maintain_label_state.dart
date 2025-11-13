@@ -63,11 +63,14 @@ class MaintainLabelState {
         ).then((list) {
           typeBody.value = list[0].factoryType ?? '';
           if (list[0].materialOtherName?.isNotEmpty == true) {
-            materialName.value = list[0]
-                    .materialOtherName!
-                    .firstWhere((v) => v.languageCode == 'zh')
-                    .name ??
-                '';
+            final zhMaterial = list[0]
+                .materialOtherName!
+                .firstWhereOrNull((v) => v.languageCode == 'zh');
+            if (zhMaterial != null) {
+              materialName.value = zhMaterial.name ?? '';
+            } else {
+              materialName.value = '';
+            }
           }
           if (!isMaterialLabel.value) {
             list.sort((a, b) => a.labelState().compareTo(b.labelState()));

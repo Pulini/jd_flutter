@@ -614,7 +614,7 @@ Future<List<Uint8List>> labelMultipurposeFixed({
   }
   if (!isEnglish) {
     if (content.isNotEmpty) {
-      var format = contextFormat(content, 29, 69.0 * _dpi);
+      var format = contextFormat(content, 28, 69.0 * _dpi);
       for (var i = 0; i < format.length; ++i) {
         //如子内容不为空，则主内容限制行数为2
         if (subContent1.isNotEmpty && subContent2.isNotEmpty && i >= 2) {
@@ -625,7 +625,7 @@ Future<List<Uint8List>> labelMultipurposeFixed({
         //如子内容为空则限制主内容行数为4
         if (i >= 4) break;
         list.add(await _tscBitmapText(
-            2 * _dpi, (19 + 4 * i) * _dpi, 29, format[i],
+            2 * _dpi, (19 + 4 * i) * _dpi, 28, format[i],
             isBold: false));
       }
     }
