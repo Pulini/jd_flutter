@@ -69,7 +69,7 @@ Container pageBody({
 }
 
 //页面简单框架 底部弹出Popup
-pageBodyWithBottomSheet({
+Widget pageBodyWithBottomSheet({
   String? title,
   List<Widget>? actions,
   bool? isShow,
@@ -151,7 +151,7 @@ pageBodyWithBottomSheet({
 }
 
 //页面简单框架 右侧弹出Drawer
-pageBodyWithDrawer({
+Widget pageBodyWithDrawer({
   String? title,
   List<Widget>? actions,
   required List<Widget> queryWidgets,
@@ -235,7 +235,7 @@ pageBodyWithDrawer({
 }
 
 //照片选择器
-takePhoto({required Function(File) callback, String? title}) {
+void takePhoto({required Function(File) callback, String? title}) {
   showCupertinoModalPopup(
     context: Get.overlayContext!,
     builder: (BuildContext context) => CupertinoActionSheet(
@@ -274,7 +274,7 @@ takePhoto({required Function(File) callback, String? title}) {
 }
 
 //获取照片
-_takePhoto(bool isGallery, Function(File) callback) async {
+Future<void> _takePhoto(bool isGallery, Function(File) callback) async {
   //获取照片
   var xFile = await ImagePicker().pickImage(
     imageQuality: 75,
@@ -309,7 +309,7 @@ _takePhoto(bool isGallery, Function(File) callback) async {
 }
 
 //显示SnackBar
-showSnackBar({
+void showSnackBar({
   bool? isWarning,
   String? title,
   required String message,
@@ -337,7 +337,7 @@ showSnackBar({
 }
 
 //显示SnackBar
-showScanTips({
+void showScanTips({
   String tips = '+1',
   Color color = Colors.blueAccent,
   Duration duration = const Duration(milliseconds: 300),
@@ -425,7 +425,7 @@ Widget getLinkCupertinoPicker({
 }
 
 //popup工具
-showPopup(Widget widget, {BuildContext? context, double? height}) {
+void showPopup(Widget widget, {BuildContext? context, double? height}) {
   showCupertinoModalPopup(
     context: context ?? Get.overlayContext!,
     builder: (context) => AnimatedPadding(
@@ -479,7 +479,7 @@ Future<T?> showSheet<T>({
 }
 
 //带占比带文本提示的文本
-expandedTextSpan({
+Widget expandedTextSpan({
   required String hint,
   Color hintColor = Colors.black,
   required String text,
@@ -554,7 +554,7 @@ textSpan({
 }
 
 //进度条、百分比
-percentIndicator({
+Widget percentIndicator({
   required double max,
   required double value,
   double? height,
@@ -588,7 +588,7 @@ percentIndicator({
 }
 
 //进度条、带文本
-progressIndicator({
+Widget progressIndicator({
   required double max,
   required double value,
   double? height,
@@ -626,7 +626,7 @@ progressIndicator({
 }
 
 //带框、带点击事件带文本
-expandedFrameText({
+Widget expandedFrameText({
   Function? click,
   Color? borderColor,
   Color? backgroundColor,
@@ -680,7 +680,7 @@ expandedFrameText({
 }
 
 //带框、带点击事件带文本
-frameText({
+Widget frameText({
   Function? click,
   Color? borderColor,
   Color? backgroundColor,
@@ -730,7 +730,7 @@ frameText({
 }
 
 //固定宽高1比1的头像
-avatarPhoto(String? url) {
+Widget avatarPhoto(String? url) {
   return AspectRatio(
     aspectRatio: 1 / 1,
     child: ClipRRect(
@@ -753,7 +753,7 @@ avatarPhoto(String? url) {
 }
 
 //滚动选择器
-selectView({
+Widget selectView({
   required List<dynamic> list,
   FixedExtentScrollController? controller,
   String errorMsg = '',
@@ -896,7 +896,7 @@ Widget ratioBarChart({
 }
 
 //切换语言
-changeLanguagePopup({required Function() changed}) {
+void changeLanguagePopup({required Function() changed}) {
   var localeIndex = locales.indexWhere((v)=>v.languageCode==Get.locale!.languageCode);
   var controller = FixedExtentScrollController(initialItem: localeIndex);
   String getCancel(int index) => locales[index] == localeChinese

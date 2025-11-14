@@ -60,7 +60,7 @@ extension DoubleExt on double? {
 }
 
 extension Uint8ListExt on Uint8List {
-  toHexString() {
+  String toHexString() {
     var hexString = '';
     for (int i = 0; i < length; i++) {
       String hex = this[i].toRadixString(16);
@@ -269,7 +269,7 @@ extension StringExt on String? {
 }
 
 extension RequestOptionsExt on RequestOptions {
-  print() {
+  void print() {
     Map<String, dynamic> map = <String, dynamic>{};
     map['Type'] = '===发送请求===';
     map['RequestTime'] = DateTime.now();
