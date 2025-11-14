@@ -13,7 +13,7 @@ class ProductionScanPickingMaterialLogic extends GetxController {
   final ProductionScanPickingMaterialState state =
       ProductionScanPickingMaterialState();
 
-  clearBarCodeList() {
+  void clearBarCodeList() {
     BarCodeInfo.clear(
       type: BarCodeReportType.productionScanPicking.name,
       callback: (v) {
@@ -29,7 +29,7 @@ class ProductionScanPickingMaterialLogic extends GetxController {
     );
   }
 
-  scanCode(String code) {
+  void scanCode(String code) {
     if (state.barCodeList.any((v) => v.code == code)) {
       showSnackBar(
         message: 'production_scan_picking_material_code_exists'.tr,
@@ -45,11 +45,11 @@ class ProductionScanPickingMaterialLogic extends GetxController {
     }
   }
 
-  deleteItem(BarCodeInfo barCodeList) {
+  void deleteItem(BarCodeInfo barCodeList) {
     barCodeList.delete(callback: () => state.barCodeList.remove(barCodeList));
   }
 
-  submit({
+  void submit({
     required WorkerInfo worker,
     required PickerSapSupplier? supplier,
     required PickerSapDepartment? department,
@@ -84,7 +84,7 @@ class ProductionScanPickingMaterialLogic extends GetxController {
     }
   }
 
-  refreshBarCodeStatus({required Function() refresh}) {
+  void refreshBarCodeStatus({required Function() refresh}) {
     getAlreadyInStockBarCode(
       type: BarCodeReportType.productionScanPicking,
       success: (list) {

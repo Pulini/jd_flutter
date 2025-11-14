@@ -91,7 +91,7 @@ class _PumaAntiCounterfeitingOutboundPageState
         ));
   }
 
-  playAudio(String as) {
+  void playAudio(String as) {
     if (player.state != PlayerState.completed) {
       player.stop();
       player.setSource(AssetSource(as));

@@ -17,7 +17,7 @@ class SmartDeliveryState {
 
 
 
-  querySmartDeliveryOrder({
+  void querySmartDeliveryOrder({
     required bool showLoading,
     required String instructions,
     required String startTime,
@@ -54,7 +54,7 @@ class SmartDeliveryState {
     });
   }
 
-  getOrderMaterialList({
+  void getOrderMaterialList({
     required int workCardInterID,
     required Function() success,
     required Function(String) error,
@@ -77,7 +77,7 @@ class SmartDeliveryState {
     });
   }
 
-  searchMaterial(String searchText) {
+  void searchMaterial(String searchText) {
     if (searchText.isEmpty) {
       materialShowList.value = materialList;
     } else {
@@ -87,7 +87,7 @@ class SmartDeliveryState {
     }
   }
 
-  getDeliveryDetail({
+  void getDeliveryDetail({
     required SmartDeliveryMaterialInfo sdmi,
     required int departmentID,
     required Function() success,
@@ -113,7 +113,7 @@ class SmartDeliveryState {
     });
   }
 
-  addPartsStock({
+  void addPartsStock({
     required String date,
     required Function(String) success,
     required Function(String) error,
@@ -147,7 +147,7 @@ class SmartDeliveryState {
     });
   }
 
-  deletePartsStock({
+  void deletePartsStock({
     required Function(String) success,
     required Function(String) error,
   }) {
@@ -171,7 +171,7 @@ class SmartDeliveryState {
     });
   }
 
-  cacheDelivery({
+  void cacheDelivery({
     required bool isCache,
     required Function(String) success,
     required Function(String) error,

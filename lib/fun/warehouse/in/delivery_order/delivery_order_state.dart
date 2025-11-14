@@ -32,7 +32,7 @@ class DeliveryOrderState {
   var palletNumber = ''.obs;
   String bindingFactoryNO = '';
 
-  getDeliveryOrders({
+  void getDeliveryOrders({
     required String startDate,
     required String endDate,
     required String typeBody,
@@ -98,7 +98,7 @@ class DeliveryOrderState {
     });
   }
 
-  getDeliveryOrdersDetails({
+  void getDeliveryOrdersDetails({
     required String deliNo,
     required String line,
     required Function() success,
@@ -127,7 +127,7 @@ class DeliveryOrderState {
     });
   }
 
-  getTemporaryDetail({
+  void getTemporaryDetail({
     required String zno,
     required Function() success,
     required Function(String) error,
@@ -150,7 +150,7 @@ class DeliveryOrderState {
     });
   }
 
-  getStorageLocationList() {
+  void getStorageLocationList() {
     locationName.value = 'delivery_order_getting_storage_location'.tr;
     httpGet(
       method: webApiGetStorageLocationList,
@@ -173,7 +173,7 @@ class DeliveryOrderState {
     });
   }
 
-  saveCheck({
+  void saveCheck({
     required Function(String) success,
     required Function(String) error,
   }) {
@@ -202,7 +202,7 @@ class DeliveryOrderState {
     });
   }
 
-  checkReversalStockIn({
+  void checkReversalStockIn({
     required List<DeliveryOrderInfo> reversalList,
     required Function(List<ReversalLabelInfo>) reversalWithCode,
     required Function() reversal,
@@ -229,7 +229,7 @@ class DeliveryOrderState {
     });
   }
 
-  reversalStockIn({
+  void reversalStockIn({
     required String workCenterID,
     required String reason,
     required List<DeliveryOrderInfo> reversalList,
@@ -259,7 +259,7 @@ class DeliveryOrderState {
     });
   }
 
-  reversalStockOut({
+  void reversalStockOut({
     required String workCenterID,
     required String reason,
     required List<DeliveryOrderInfo> reversalList,
@@ -291,7 +291,7 @@ class DeliveryOrderState {
     });
   }
 
-  getSupplierLabelInfo({
+  void getSupplierLabelInfo({
     required String factoryNumber,
     required String supplierNumber,
     required String deliveryOrderNumber,
@@ -317,7 +317,7 @@ class DeliveryOrderState {
     });
   }
 
-  getLabelBindingStaging({
+  void getLabelBindingStaging({
     required Function(List<DeliveryOrderLabelInfo>) success,
     required Function(String msg) error,
   }) {
@@ -340,7 +340,7 @@ class DeliveryOrderState {
     });
   }
 
-  stagingLabelBinding({
+  void stagingLabelBinding({
     required Function(String) success,
     required Function(String) error,
   }) {
@@ -369,7 +369,7 @@ class DeliveryOrderState {
     });
   }
 
-  submitLabelBinding({
+  void submitLabelBinding({
     required String storageLocation,
     required String inspectorNumber,
     required Function(String) success,
@@ -401,7 +401,7 @@ class DeliveryOrderState {
     });
   }
 
-  checkPallet({
+  void checkPallet({
     required List<String> pallets,
     required Function(PalletDetailInfo) success,
     required Function(String) error,

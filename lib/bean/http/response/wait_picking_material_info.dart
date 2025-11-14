@@ -220,7 +220,7 @@ class WaitPickingMaterialOrderInfo {
   bool canViewBatch() => items!.any((v) => v.models!
       .any((v2) => v2.isSelected.value && v2.batch?.isNotEmpty == true));
 
-  getPostBody(String pickerNumber) {
+  List<Map<String, String?>> getPostBody(String pickerNumber) {
     return [
       for (var item2 in items!)
         for (var item3 in item2.getEffectiveSelection())
@@ -340,7 +340,7 @@ class WaitPickingMaterialOrderInfo {
           }
     ];
   }
-  getSapPostBody(String pickerNumber) {
+  List<Map<String, String?>> getSapPostBody(String pickerNumber) {
     return [
       for (var item2 in items!)
         for (var item3 in item2.getEffectiveSelection())

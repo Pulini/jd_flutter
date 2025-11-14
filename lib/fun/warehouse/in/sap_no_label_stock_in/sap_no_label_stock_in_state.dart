@@ -13,7 +13,7 @@ class SapNoLabelStockInState {
   var orderList = <List<SapNoLabelStockInItemInfo>>[].obs;
 
 
-  queryOrderList({
+  void queryOrderList({
     required String reportStartDate,
     required String reportEndDate,
     required String dispatchNumber,
@@ -53,7 +53,7 @@ class SapNoLabelStockInState {
     });
   }
 
-  submitNoLabelStockIn({
+  void submitNoLabelStockIn({
     required String leaderNumber,
     required ByteData leaderSignature,
     required String userNumber,

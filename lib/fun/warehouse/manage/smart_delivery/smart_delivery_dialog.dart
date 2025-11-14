@@ -10,7 +10,7 @@ import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/switch_button_widget.dart';
 
-modifyShoeTreeDialog(String typeBody, int departmentID) {
+void modifyShoeTreeDialog(String typeBody, int departmentID) {
   _getShoeTreeList(
     typeBody: typeBody,
     departmentID: departmentID,
@@ -78,7 +78,7 @@ modifyShoeTreeDialog(String typeBody, int departmentID) {
   );
 }
 
-_modifyShoeTreeItem(List<SizeInfo> list, int index) {
+Card _modifyShoeTreeItem(List<SizeInfo> list, int index) {
   var controller = TextEditingController(text: list[index].qty.toString());
   var data = list[index];
   return Card(
@@ -127,7 +127,7 @@ _modifyShoeTreeItem(List<SizeInfo> list, int index) {
   );
 }
 
-reserveShoeTreeDialog(
+void reserveShoeTreeDialog(
   List<PartsSizeList> shoeTreeList,
   Function(List<PartsSizeList>) set,
 ) {
@@ -199,7 +199,7 @@ reserveShoeTreeDialog(
   );
 }
 
-_reserveShoeTreeItem(PartsSizeList data, StateSetter dialogSetState) {
+Card _reserveShoeTreeItem(PartsSizeList data, StateSetter dialogSetState) {
   var controller =
       TextEditingController(text: data.reserveShoeTreeQty.toString());
   return Card(
@@ -304,7 +304,7 @@ const agvTaskTypeSelect = 'AGV_TASK_TYPE_SELECT';
 const agvTaskStartSelect = 'AGV_TASK_START_SELECT';
 const agvTaskEndSelect = 'AGV_TASK_END_SELECT';
 
-createDeliveryTaskDialog({
+void createDeliveryTaskDialog({
   required String nowOrderId,
   required String nowOrderPartsId,
   required List<WorkData> nowOrderRoundList,
@@ -469,7 +469,7 @@ createDeliveryTaskDialog({
   );
 }
 
-checkAgvTask({
+void checkAgvTask({
   required String taskId,
   required String agvNumber,
   required Function(String) cancelTask,
@@ -595,7 +595,7 @@ checkAgvTask({
   );
 }
 
-_getShoeTreeList({
+void _getShoeTreeList({
   required String typeBody,
   required int departmentID,
   required Function(SmartDeliveryShorTreeInfo) success,
@@ -617,7 +617,7 @@ _getShoeTreeList({
   });
 }
 
-_saveShoeTree({
+void _saveShoeTree({
   required SmartDeliveryShorTreeInfo sti,
   required String shoeTreeNo,
   required int departmentID,
@@ -647,7 +647,7 @@ _saveShoeTree({
   });
 }
 
-_getAgvInfo({
+void _getAgvInfo({
   required Function(AgvInfo) success,
 }) {
   httpGet(
@@ -662,7 +662,7 @@ _getAgvInfo({
   });
 }
 
-_createAgvTask({
+void _createAgvTask({
   required String agvNumber,
   required String nowOrderId,
   required String nowOrderPartsId,
@@ -709,7 +709,7 @@ _createAgvTask({
   });
 }
 
-_getAgvTaskInfo({
+void _getAgvTaskInfo({
   required String taskId,
   required Function(AgvTaskInfo) success,
 }) {
@@ -726,7 +726,7 @@ _getAgvTaskInfo({
   });
 }
 
-_cancelAgvTask({
+void _cancelAgvTask({
   required String taskId,
   required Function() success,
 }) {
@@ -743,7 +743,7 @@ _cancelAgvTask({
   });
 }
 
-_stopAgvTask({
+void _stopAgvTask({
   required String agvNumber,
   required Function() success,
 }) {
@@ -765,7 +765,7 @@ _stopAgvTask({
   });
 }
 
-_resumeAgvTask({
+void _resumeAgvTask({
   required String agvNumber,
   required Function() success,
 }) {

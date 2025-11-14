@@ -42,7 +42,7 @@ class WorkshopPlanningState {
   var modifyReportReportQuantity = (0.0).obs;
   var modifyReportPrice = (0.0).obs;
 
-  getProcessPlanInfo({
+  void getProcessPlanInfo({
     String? workCardInterID,
     String? routeEntryID,
     String? productionOrderNo,
@@ -71,7 +71,7 @@ class WorkshopPlanningState {
     });
   }
 
-  getGroupInfo({
+  void getGroupInfo({
     required String processFlowID,
     required String date,
     Function(List<WorkshopPlanningWorkerInfo>)? success,
@@ -100,7 +100,7 @@ class WorkshopPlanningState {
     });
   }
 
-  getWorkTypeListByProcess({
+  void getWorkTypeListByProcess({
     required String processFlowID,
     required Function() success,
     required Function(String) error,
@@ -125,7 +125,7 @@ class WorkshopPlanningState {
     });
   }
 
-  getEmpBaseByNumber({
+  void getEmpBaseByNumber({
     required String flowProcessID,
     required String number,
     required String date,
@@ -156,7 +156,7 @@ class WorkshopPlanningState {
     });
   }
 
-  getGroupPayList({
+  void getGroupPayList({
     Function()? success,
     required Function(String) error,
   }) {
@@ -181,7 +181,7 @@ class WorkshopPlanningState {
     });
   }
 
-  getGroupPayDetail({
+  void getGroupPayDetail({
     required int groupPayInterID,
     required Function() success,
     required Function(String) error,
@@ -204,7 +204,7 @@ class WorkshopPlanningState {
     });
   }
 
-  deleteGroupPay({
+  void deleteGroupPay({
     required int groupPayInterID,
     required Function(String) success,
     required Function(String) error,
@@ -225,7 +225,7 @@ class WorkshopPlanningState {
     });
   }
 
-  submitGroupPay({
+  void submitGroupPay({
     required Map body,
     required Function(String) success,
     required Function(String) error,
@@ -243,7 +243,7 @@ class WorkshopPlanningState {
     });
   }
 
-  getToDayItemInfo({
+  void getToDayItemInfo({
     required String date,
     required Function() success,
     required Function(String) error,
@@ -268,7 +268,7 @@ class WorkshopPlanningState {
     });
   }
 
-  getEndingProcessInfo({
+  void getEndingProcessInfo({
     required String date,
     required String processFlowID,
     required Function(List<WorkshopPlanningLastProcessInfo>) success,
@@ -297,7 +297,7 @@ class WorkshopPlanningState {
     });
   }
 
-  getGroupPayEndingProcessList({
+  void getGroupPayEndingProcessList({
     required String date,
     required String processFlowID,
     Function()? success,
@@ -323,7 +323,7 @@ class WorkshopPlanningState {
     });
   }
 
-  getGroupPayEndingDetail({
+  void getGroupPayEndingDetail({
     required int groupPayInterID,
     required Function(LastProcessReportInfo) success,
     required Function(String) error,

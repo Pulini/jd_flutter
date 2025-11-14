@@ -21,7 +21,7 @@ class _FormingBarcodeCollectionSearchDetailPageState
 
   var controller = TextEditingController();
 
-  _text({
+  Container _text({
     required String mes,
     required Color backColor,
     required bool head,
@@ -53,7 +53,7 @@ class _FormingBarcodeCollectionSearchDetailPageState
       ),
     );
   }
-  _item(FormingMonoDetailInfo data){
+  Row _item(FormingMonoDetailInfo data){
     return Row(
       children: [
         Expanded(
@@ -97,7 +97,7 @@ class _FormingBarcodeCollectionSearchDetailPageState
     );
   }
 
-  _title() {
+  Column _title() {
     const borders = BorderSide(color: Colors.grey, width: 1);
     return Column(
       children: [

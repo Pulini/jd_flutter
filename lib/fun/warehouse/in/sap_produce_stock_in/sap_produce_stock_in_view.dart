@@ -31,7 +31,7 @@ class _SapProduceStockInPageState extends State<SapProduceStockInPage> {
         Get.find<SapProduceStockInLogic>().state.factoryId.value = f.pickerId(),
   );
 
-  item(SapProduceStockInLabelInfo data) {
+  Container item(SapProduceStockInLabelInfo data) {
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.only(left: 5),

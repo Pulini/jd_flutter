@@ -24,7 +24,7 @@ class _InjectionScanReportPageState extends State<InjectionScanReportPage> {
       .find<InjectionScanReportLogic>()
       .state;
 
-  _item1(ShowProcessPlanDetailInfo data) {
+  Widget _item1(ShowProcessPlanDetailInfo data) {
     var backColors = Colors.white;
     var lastColor = Colors.white;
     if (data.size == '合计') {
@@ -100,7 +100,7 @@ class _InjectionScanReportPageState extends State<InjectionScanReportPage> {
     );
   }
 
-  _text({
+  Widget _text({
     required String mes,
     required Color backColor,
     required bool head,
@@ -133,7 +133,7 @@ class _InjectionScanReportPageState extends State<InjectionScanReportPage> {
     );
   }
 
-  _title() {
+  Widget _title() {
     const radius = Radius.circular(5);
     const borders = BorderSide(color: Colors.grey, width: 1);
     return Column(

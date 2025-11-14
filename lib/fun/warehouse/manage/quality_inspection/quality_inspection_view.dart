@@ -46,7 +46,7 @@ class _QualityInspectionPageState extends State<QualityInspectionPage> {
         '${RouteConfig.qualityInspection.name}${PickerType.endDate}_report',
   );
 
-  _query() {
+  void _query() {
     logic.queryOrders(
       instructionNo: instructionNoController.text,
       typeBody: typeBodyController.text,
@@ -98,7 +98,7 @@ class _QualityInspectionPageState extends State<QualityInspectionPage> {
     );
   }
 
-  _subItem(QualityInspectionOrderInfo data) {
+  Row _subItem(QualityInspectionOrderInfo data) {
     var textStyle = const TextStyle(color: Colors.black54);
     return Row(
       children: [

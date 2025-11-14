@@ -10,7 +10,7 @@ class ProductionMaterialsReportState {
   var isPickingMaterialCompleted = false.obs;
   var select = 0.obs;
 
-  getSapMoPickList({
+  void getSapMoPickList({
     String showType = '',
     int interID = 0,
     String instruction = '',

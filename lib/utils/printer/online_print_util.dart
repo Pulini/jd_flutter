@@ -86,7 +86,7 @@ class DeviceInfo {
 }
 
 
-onLinePrintDialog(List<Uint8List> papers, PrintType printType) {
+void onLinePrintDialog(List<Uint8List> papers, PrintType printType) {
   var printDio = Dio()
     ..interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) {
@@ -263,7 +263,7 @@ onLinePrintDialog(List<Uint8List> papers, PrintType printType) {
   );
 }
 
-_getOnlinePrintDeviceList({
+void _getOnlinePrintDeviceList({
   required Dio printDio,
   required Function(List<PrinterInfo>) success,
   required Function(String) error,
@@ -293,7 +293,7 @@ _getOnlinePrintDeviceList({
   });
 }
 
-_printImg({
+void _printImg({
   required Dio printDio,
   required String deviceId,
   required String paperType,

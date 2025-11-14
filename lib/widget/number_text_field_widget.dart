@@ -54,7 +54,7 @@ class _NumberTextFieldState extends State<NumberTextField> {
   }
 
   //显示done键
-  showOverlay() {
+  void showOverlay() {
     if (_overlayEntry != null) return;
     OverlayState? overlayState = Overlay.of(context);
     _overlayEntry = OverlayEntry(builder: (context) => doneButton(context));
@@ -62,7 +62,7 @@ class _NumberTextFieldState extends State<NumberTextField> {
   }
 
   //移除 done 键
-  removeOverlay() {
+  void removeOverlay() {
     if (_overlayEntry != null) {
       _overlayEntry!.remove();
       _overlayEntry = null;

@@ -25,7 +25,7 @@ class _QualityInspectionReverseColorPageState
   final QualityInspectionListState state =
       Get.find<QualityInspectionListLogic>().state;
 
-  _item(List<QualityInspectionShowColor> list, int position) {
+  Row _item(List<QualityInspectionShowColor> list, int position) {
     Color backColors;
     if (list[position].subItem == '2' || list[position].subItem == '3') {
       backColors = Colors.greenAccent;

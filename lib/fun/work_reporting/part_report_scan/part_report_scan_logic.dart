@@ -14,7 +14,7 @@ class PartReportScanLogic extends GetxController {
   final PartReportScanState state = PartReportScanState();
 
   //扫码
-  addCode(String newCode) {
+  void addCode(String newCode) {
     if (newCode.isNotEmpty) {
       if (state.buttonType.value) {
         //新增
@@ -49,13 +49,13 @@ class PartReportScanLogic extends GetxController {
   }
 
   //删除该条码
-  deleteCode(ComponentCodeInfo code) {
+  void deleteCode(ComponentCodeInfo code) {
     state.dataList.remove(code);
     state.dataList.refresh();
   }
 
   //获取汇总表
-  getBarCodeReportDetails(String type) {
+  void getBarCodeReportDetails(String type) {
     httpPost(
       method: webApiGetBarCodeReportDetails,
       loading: 'part_report_getting_summary'.tr,
@@ -111,7 +111,7 @@ class PartReportScanLogic extends GetxController {
   }
 
   //条码报工
-  submitBarCodeReport({
+  void submitBarCodeReport({
     required Function(String) submitSuccess,
   }) {
     httpPost(
@@ -137,7 +137,7 @@ class PartReportScanLogic extends GetxController {
   }
 
   //清空条码. 清空汇总表
-  clearData() {
+  void clearData() {
     state.dataList.clear();
     state.reportInfo.clear();
   }

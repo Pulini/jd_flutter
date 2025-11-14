@@ -11,7 +11,7 @@ import 'quality_inspection_state.dart';
 class QualityInspectionLogic extends GetxController {
   final QualityInspectionState state = QualityInspectionState();
 
-  queryOrders({
+  void queryOrders({
    required String instructionNo,
    required String typeBody,
    required String customerPO,
@@ -28,7 +28,7 @@ class QualityInspectionLogic extends GetxController {
     );
   }
 
-  getOrderDetail({required String workOrderNo, required Function() refresh}) {
+  void getOrderDetail({required String workOrderNo, required Function() refresh}) {
     state.getOrderDetail(
       workOrderNo: workOrderNo,
       success: () => Get.to(
@@ -38,7 +38,7 @@ class QualityInspectionLogic extends GetxController {
     );
   }
 
-  addAbnormalRecord({
+  void addAbnormalRecord({
     required QualityInspectionAbnormalItemInfo abnormalItem,
   }) {
     state.addAbnormalRecord(
@@ -58,7 +58,7 @@ class QualityInspectionLogic extends GetxController {
     );
   }
 
-  modifyAbnormalRecordStatus({
+  void modifyAbnormalRecordStatus({
     required QualityInspectionAbnormalRecordInfo abnormalRecord,
     required int status,
   }) {
@@ -76,7 +76,7 @@ class QualityInspectionLogic extends GetxController {
     );
   }
 
-  deleteAbnormalRecord({
+  void deleteAbnormalRecord({
     required QualityInspectionAbnormalRecordInfo abnormalRecord,
   }) {
     state.deleteAbnormalRecord(
@@ -97,7 +97,7 @@ class QualityInspectionLogic extends GetxController {
       state.qiDetailAbnormalRecords
           .every((v) => v.abnormalStatus == 2 || v.abnormalStatus == 3);
 
-  inspectionCompleted() {
+  void inspectionCompleted() {
     state.submitInspectionCompleted(
       success: (msg) => successDialog(
         content: msg,
@@ -107,7 +107,7 @@ class QualityInspectionLogic extends GetxController {
     );
   }
 
-  getInspectionReport({
+  void getInspectionReport({
     required String startDate,
     required String endDate,
   }) {

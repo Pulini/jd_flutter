@@ -30,7 +30,7 @@ class _ProductionScanPickingMaterialPageState
   var inputController = TextEditingController();
   var refreshController = EasyRefreshController(controlFinishRefresh: true);
 
-  _item(BarCodeInfo item) {
+  Container _item(BarCodeInfo item) {
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.only(left: 10),

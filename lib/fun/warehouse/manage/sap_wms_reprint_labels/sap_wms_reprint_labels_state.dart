@@ -8,7 +8,7 @@ class SapWmsReprintLabelsState {
 
 
 
-  getLabels({
+  void getLabels({
     required String warehouse,
     String? palletNumber,
     String? labelNumber,

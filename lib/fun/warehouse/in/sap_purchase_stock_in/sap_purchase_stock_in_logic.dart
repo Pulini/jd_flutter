@@ -9,7 +9,7 @@ import 'sap_purchase_stock_in_state.dart';
 class SapPurchaseStockInLogic extends GetxController {
   final SapPurchaseStockInState state = SapPurchaseStockInState();
 
-  queryOrder({
+  void queryOrder({
     required String deliNo,
     required String startDate,
     required String endDate,
@@ -30,7 +30,7 @@ class SapPurchaseStockInLogic extends GetxController {
     );
   }
 
-  queryDetail(int index, String deliveryNumber) {
+  void queryDetail(int index, String deliveryNumber) {
     state.getDeliveryDetail(
       deliveryNumber: deliveryNumber,
       success: () => Get.to(() => const SapPurchaseStockInDetailPage()),
@@ -38,7 +38,7 @@ class SapPurchaseStockInLogic extends GetxController {
     );
   }
 
-  checkOrder({
+  void checkOrder({
     required int index,
     required SapPurchaseStockInInfo list,
     required Function() refresh,
@@ -53,7 +53,7 @@ class SapPurchaseStockInLogic extends GetxController {
     );
   }
 
-  saveDeliveryCheck({
+  void saveDeliveryCheck({
     required String location,
     required String inspector,
     required List<SapPurchaseStockInInfo> list,
@@ -81,7 +81,7 @@ class SapPurchaseStockInLogic extends GetxController {
     return list;
   }
 
-  checkStockInWriteOffSelected(
+  void checkStockInWriteOffSelected(
       Function(List<SapPurchaseStockInInfo>) callback) {
     var exempt = <SapPurchaseStockInInfo>[];
     var notExempt = <SapPurchaseStockInInfo>[];
@@ -105,7 +105,7 @@ class SapPurchaseStockInLogic extends GetxController {
     }
   }
 
-  checkTemporarySelected(Function(List<SapPurchaseStockInInfo>) callback) {
+  void checkTemporarySelected(Function(List<SapPurchaseStockInInfo>) callback) {
     var noInspector = 0;
     var isExempt = 0;
     var selectList = <SapPurchaseStockInInfo>[];

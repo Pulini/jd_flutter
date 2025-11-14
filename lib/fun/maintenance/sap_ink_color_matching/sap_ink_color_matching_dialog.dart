@@ -9,7 +9,7 @@ import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
 
-selectMaterialDialog({
+void selectMaterialDialog({
   required String deviceIp,
   required List<SapInkColorMatchTypeBodyMaterialInfo> materialList,
   required List<SapInkColorMatchTypeBodyScalePortInfo> scalePortList,
@@ -221,7 +221,7 @@ selectMaterialDialog({
   );
 }
 
-trialFinishDialog({
+void trialFinishDialog({
   required String typeBody,
   required String orderNumber,
   required double mixWeight,
@@ -381,7 +381,7 @@ trialFinishDialog({
   );
 }
 
-_submitTrialFinish({
+void _submitTrialFinish({
   required String orderNumber,
   required double trialQty,
   required double mixWeight,
@@ -411,7 +411,7 @@ _submitTrialFinish({
   });
 }
 
-puttingDialog({
+void puttingDialog({
   required SapRecreateInkColorItemInfo data,
   required String deviceName,
   required String deviceServerIp,

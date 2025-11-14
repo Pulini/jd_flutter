@@ -58,7 +58,7 @@ class _PurchaseOrderWarehousingPageState
   var tecCustomerPO = TextEditingController();
   var tecTrackNo = TextEditingController();
 
-  _query() {
+  void _query() {
     logic.query(
       startDate: dpcStartDate.getDateFormatYMD(),
       endDate: dpcEndDate.getDateFormatYMD(),
@@ -222,7 +222,7 @@ class _PurchaseOrderWarehousingPageState
     );
   }
 
-  _subItem(PurchaseOrderDetailsInfo data) {
+  Row _subItem(PurchaseOrderDetailsInfo data) {
     return Row(
       children: [
         expandedFrameText(

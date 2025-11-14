@@ -55,7 +55,7 @@ class _PurchaseOrderReversalPageState extends State<PurchaseOrderReversalPage> {
   var tecPurchaseOrder = TextEditingController();
   var tecMaterielCode = TextEditingController();
 
-  _query() {
+  void _query() {
     logic.query(
       startDate: dpcStartDate.getDateFormatSapYMD(),
       endDate: dpcEndDate.getDateFormatSapYMD(),

@@ -20,7 +20,7 @@ class _PartReportScanSummaryPageState extends State<PartReportScanSummaryPage> {
   final PartReportScanLogic logic = Get.find<PartReportScanLogic>();
   final PartReportScanState state = Get.find<PartReportScanLogic>().state;
 
-  _text({
+  Container _text({
     required String mes,
     required Color textColor,
     required Color backColor,
@@ -53,7 +53,7 @@ class _PartReportScanSummaryPageState extends State<PartReportScanSummaryPage> {
     );
   }
 
-  _title() {
+  Row _title() {
     return Row(
       children: [
         Expanded(
@@ -102,7 +102,7 @@ class _PartReportScanSummaryPageState extends State<PartReportScanSummaryPage> {
     );
   }
 
-  _item1(SummaryLists data) {
+  Row _item1(SummaryLists data) {
     var backColors = Colors.black;
     var textColors = Colors.black;
     var processColors = Colors.black;

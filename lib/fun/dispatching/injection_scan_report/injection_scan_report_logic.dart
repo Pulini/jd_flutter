@@ -25,7 +25,7 @@ class InjectionScanReportLogic extends GetxController {
     FilteringTextInputFormatter.allow(RegExp('[0-9]')),
   ];
 
-  getScWorkCardList() {
+  void getScWorkCardList() {
     httpGet(
       method: webApiGetScWorkCardList,
       loading: 'injection_scan_getting_process_plan'.tr,
@@ -108,7 +108,7 @@ class InjectionScanReportLogic extends GetxController {
     });
   }
 
-  getScWorkCardDetail() {
+  void getScWorkCardDetail() {
     if (state.dispatchNumber.isEmpty) {
       getScWorkCardList();
     } else {
@@ -131,7 +131,7 @@ class InjectionScanReportLogic extends GetxController {
   }
 
   //整理合计数
-  arrangeDataAll() {
+  void arrangeDataAll() {
     var list = state.showDataList.where((data) => data.size != '合计');
     for (var data in state.showDataList) {
       if (data.size == '合计') {
@@ -144,7 +144,7 @@ class InjectionScanReportLogic extends GetxController {
     }
   }
 
-  arrangeData(ProcessPlanDetailInfo data) {
+  void arrangeData(ProcessPlanDetailInfo data) {
     state.machine.value = data.machine!;
     state.factoryType.value = data.factoryType!;
 
@@ -207,7 +207,7 @@ class InjectionScanReportLogic extends GetxController {
     getBarCodeStatus();
   }
 
-  getBarCodeStatus() {
+  void getBarCodeStatus() {
     if (state.dispatchNumber.value.isEmpty) {
       showSnackBar(message: 'injection_scan_first_query_detail'.tr);
     } else {
@@ -258,7 +258,7 @@ class InjectionScanReportLogic extends GetxController {
   }
 
   //设置显示数据
-  setShowDataList(List<ShowProcessBarcodeInfo> data) {
+  void setShowDataList(List<ShowProcessBarcodeInfo> data) {
     for (var showData in state.showDataList) {
       showData.maxBox = 0;
     }
@@ -283,7 +283,7 @@ class InjectionScanReportLogic extends GetxController {
   }
 
   //  当班尾数
-  showInputDialog({
+  void showInputDialog({
     required ShowProcessPlanDetailInfo clickData,
     required String title,
     Function(String, ShowProcessPlanDetailInfo)? confirm,
@@ -335,7 +335,7 @@ class InjectionScanReportLogic extends GetxController {
     );
   }
 
-  setSizeNumber(String lastNum, ShowProcessPlanDetailInfo data) {
+  void setSizeNumber(String lastNum, ShowProcessPlanDetailInfo data) {
 
     for (var list in state.showDataList) {
       if(list.size == data.size){
@@ -347,7 +347,7 @@ class InjectionScanReportLogic extends GetxController {
   }
 
   //根据派工单ID删除贴标和框数
-  clearBarCodeAndBoxQty({
+  void clearBarCodeAndBoxQty({
     required Function(String msg) success,
   }) {
     if (state.dispatchNumber.value != '') {
@@ -368,7 +368,7 @@ class InjectionScanReportLogic extends GetxController {
   }
 
   //扫码刷新界面
-  findSizeData(String code) {
+  void findSizeData(String code) {
     logger.f('扫到的贴标：$code');
     if (state.showBarCodeList.isNotEmpty) {
       if (code.length == 32) {
@@ -423,7 +423,7 @@ class InjectionScanReportLogic extends GetxController {
   }
 
   //产量汇报
-  productionReport({
+  void productionReport({
     required Function(String msg) success,
   }) {
     if (state.dispatchNumber.value.isEmpty) {

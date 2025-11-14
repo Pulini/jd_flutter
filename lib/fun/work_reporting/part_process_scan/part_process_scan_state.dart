@@ -18,7 +18,7 @@ class PartProcessScanState {
   var isSelectAll = false.obs;
 
   //获取组员列表数据
-  reportViewGetWorkerList() {
+  void reportViewGetWorkerList() {
     getWorkerInfo(
       department: userInfo?.departmentID.toString(),
       workers: (list) => workerList.value = list,
@@ -26,7 +26,7 @@ class PartProcessScanState {
     );
   }
 
-  getPartProcessReportedReport({
+  void getPartProcessReportedReport({
     required Function() success,
     required Function(String msg) error,
   }) {
@@ -58,7 +58,7 @@ class PartProcessScanState {
     });
   }
 
-  submitChangeReport({
+  void submitChangeReport({
     required Function(String msg) success,
     required Function(String msg) error,
   }) {
@@ -83,7 +83,7 @@ class PartProcessScanState {
     });
   }
 
-  getPartProductionReportTable({
+  void getPartProductionReportTable({
     required Function() success,
     required Function(String msg) error,
   }) {
@@ -105,7 +105,7 @@ class PartProcessScanState {
     });
   }
 
-  cleanReportData() {
+  void cleanReportData() {
     modifyEmpList.value = [];
     modifyDistributionList.value = [];
     modifyReportList.value = [];

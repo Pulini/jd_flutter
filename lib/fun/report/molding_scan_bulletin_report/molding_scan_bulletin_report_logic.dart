@@ -14,13 +14,13 @@ class MoldingScanBulletinReportLogic extends GetxController {
 
   Timer? timer;
 
-  setRefresh(int duration) {
+  void setRefresh(int duration) {
     state.refreshDuration.value = duration;
     spSave(spSaveMoldingScanBulletinReportTimeDuration, duration);
     refreshTable(true);
   }
 
-  refreshTable(bool isRefresh) {
+  void refreshTable(bool isRefresh) {
     timer?.cancel();
     timer = null;
     state.getMoldingScanBulletinReport(
@@ -41,7 +41,7 @@ class MoldingScanBulletinReportLogic extends GetxController {
     );
   }
 
-  changeSort({required int oldIndex, required int newIndex}) {
+  void changeSort({required int oldIndex, required int newIndex}) {
     if (oldIndex < newIndex) {
       newIndex -= 1;
     }

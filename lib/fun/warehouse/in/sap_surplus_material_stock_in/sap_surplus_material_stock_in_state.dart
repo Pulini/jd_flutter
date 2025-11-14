@@ -26,7 +26,7 @@ class SapSurplusMaterialStockInState {
     'sap_surplus_material_stock_in_supplementary'.tr,
     'sap_surplus_material_stock_in_workshop_material_return'.tr,
   ];
-  getSurplusMaterialHistory({
+  void getSurplusMaterialHistory({
     required String startDate,
     required String endDate,
     required Function(String) error,
@@ -60,7 +60,7 @@ class SapSurplusMaterialStockInState {
     });
   }
 
-  getMaterialInfoByCode({
+  void getMaterialInfoByCode({
     required String dispatchNumber,
     required String code,
     required Function(MaterialDetailInfo) success,
@@ -82,7 +82,7 @@ class SapSurplusMaterialStockInState {
     });
   }
 
-  submitSurplusMaterialStockIn({
+  void submitSurplusMaterialStockIn({
     required String surplusMaterialType,
     required Function(String) success,
     required Function(String) error,

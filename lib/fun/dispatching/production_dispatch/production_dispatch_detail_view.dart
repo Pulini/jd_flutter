@@ -22,7 +22,7 @@ class _ProductionDispatchDetailPageState
   final logic = Get.find<ProductionDispatchLogic>();
   final state = Get.find<ProductionDispatchLogic>().state;
 
-  _titleDetails() {
+  Widget _titleDetails() {
     return Padding(
       padding: const EdgeInsets.only(left: 10, right: 10),
       child: Obx(() => Row(
@@ -62,7 +62,7 @@ class _ProductionDispatchDetailPageState
     );
   }
 
-  _operationButtons() {
+  Widget _operationButtons() {
     return SizedBox(
       height: 40,
       child: Row(
@@ -116,7 +116,7 @@ class _ProductionDispatchDetailPageState
     );
   }
 
-  _workProcedure() {
+  Widget _workProcedure() {
     return Obx(
       () => Container(
         decoration: BoxDecoration(
@@ -138,7 +138,7 @@ class _ProductionDispatchDetailPageState
     );
   }
 
-  _workProcedureItem(WorkCardList data, int index) {
+  Widget _workProcedureItem(WorkCardList data, int index) {
     return Obx(() => Container(
           margin: const EdgeInsets.only(bottom: 5),
           height: 50,
@@ -274,7 +274,7 @@ class _ProductionDispatchDetailPageState
         ));
   }
 
-  _dispatch() {
+  Widget _dispatch() {
     return Obx(() => Padding(
           padding: const EdgeInsets.only(left: 5, right: 5),
           child: Container(
@@ -438,7 +438,7 @@ class _ProductionDispatchDetailPageState
     );
   }
 
-  _bottomButtons() {
+  Widget _bottomButtons() {
     return SizedBox(
       height: 40,
       child: Row(

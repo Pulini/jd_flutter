@@ -12,7 +12,7 @@ import 'patrol_inspection_state.dart';
 
 class PatrolInspectionLogic extends GetxController {
   final PatrolInspectionState state = PatrolInspectionState();
-  getPatrolInspectionInfo() {
+  void getPatrolInspectionInfo() {
     state.getPatrolInspectionInfo(
       success: (selected) => selectLine(selected == -1 ? 0 : selected),
     );
@@ -33,7 +33,7 @@ class PatrolInspectionLogic extends GetxController {
     }
   }
 
-  addPatrolInspectionAbnormalRecord({
+  void addPatrolInspectionAbnormalRecord({
     PatrolInspectionAbnormalItemInfo? abnormalItem,
   }) {
     if (abnormalItem == null) {
@@ -66,7 +66,7 @@ class PatrolInspectionLogic extends GetxController {
     );
   }
 
-  changeLine(int index) {
+  void changeLine(int index) {
     final oldIndex = state.inspectionList.indexWhere((v) => v.isSelected.value);
     // 如果选中的是同一项则直接返回
     if (oldIndex == index) return;
@@ -77,7 +77,7 @@ class PatrolInspectionLogic extends GetxController {
     selectLine(index);
   }
 
-  selectLine(int index) {
+  void selectLine(int index) {
     // 设置新选中项
     final selectedItem = state.inspectionList[index];
     selectedItem.isSelected.value = true;
@@ -99,7 +99,7 @@ class PatrolInspectionLogic extends GetxController {
     );
   }
 
-  deleteAbnormalRecord({
+  void deleteAbnormalRecord({
     required PatrolInspectionAbnormalRecordInfo abnormalRecord,
   }) {
     state.deleteAbnormalRecord(
@@ -119,7 +119,7 @@ class PatrolInspectionLogic extends GetxController {
     ).values.toList();
   }
 
-  getPatrolInspectionReport(String patrolInspectDate) {
+  void getPatrolInspectionReport(String patrolInspectDate) {
     state.getPatrolInspectionReport(
       patrolInspectDate: patrolInspectDate,
       success: () => Get.to(() => const PatrolInspectionReportPage()),

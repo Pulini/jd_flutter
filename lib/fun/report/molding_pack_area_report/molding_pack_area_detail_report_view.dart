@@ -44,7 +44,7 @@ class _MoldingPackAreaDetailReportPageState
         numeric: true),
   ];
 
-  detailTableDataRow(
+  DataRow detailTableDataRow(
     MoldingPackAreaReportDetailInfo data,
     Color color,
   ) {

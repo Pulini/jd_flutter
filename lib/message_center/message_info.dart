@@ -44,7 +44,7 @@ class MessageInfo {
   }
   String getPushTime()=>getCurrentTime(time: DateTime.fromMillisecondsSinceEpoch(pushDate??0));
 
-  save({required Function(MessageInfo) callback}) {
+  void save({required Function(MessageInfo) callback}) {
     openDb().then(
       (db) => db
           .insert(
@@ -66,7 +66,7 @@ class MessageInfo {
     );
   }
 
-  static getSave({
+  static void getSave({
     required Function(List<MessageInfo>) callback,
   }) {
     openDb().then((db) {
@@ -81,7 +81,7 @@ class MessageInfo {
     });
   }
 
-  delete({required Function() callback}) {
+  void delete({required Function() callback}) {
     openDb().then((db) {
       db.delete(tableName, where: 'id = ?', whereArgs: [id]).then((value) {
         db.close();
@@ -93,7 +93,7 @@ class MessageInfo {
     });
   }
 
-  static clean({
+  static void clean({
     required Function(int) callback,
   }) {
     openDb().then((db) {

@@ -19,7 +19,7 @@ class _PartReportScanPageState extends State<PartReportScanPage> {
   final logic = Get.put(PartReportScanLogic());
   final state = Get.find<PartReportScanLogic>().state;
 var tecCode=TextEditingController();
-  _item1(ComponentCodeInfo info) {
+  GestureDetector _item1(ComponentCodeInfo info) {
     return GestureDetector(
         onLongPress: ()  {
           logic.deleteCode(info);

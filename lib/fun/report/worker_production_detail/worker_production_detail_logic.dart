@@ -6,7 +6,7 @@ import 'worker_production_detail_state.dart';
 class WorkerProductionDetailLogic extends GetxController {
   final WorkerProductionDetailState state = WorkerProductionDetailState();
 
-  query({
+  void query({
     required String worker,
     required String beginDate,
     required String endDate,

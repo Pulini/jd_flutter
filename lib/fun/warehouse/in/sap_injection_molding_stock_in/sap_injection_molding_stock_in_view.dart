@@ -26,7 +26,7 @@ class _SapInjectionMoldingStockInPageState
       Get.find<SapInjectionMoldingStockInLogic>().state;
   var controller = EasyRefreshController(controlFinishRefresh: true);
 
-  _item(BarCodeInfo bci) {
+  Container _item(BarCodeInfo bci) {
     var barCode = Text(
       bci.code ?? '',
       style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.blue),
@@ -86,7 +86,6 @@ class _SapInjectionMoldingStockInPageState
                     itemCount: state.barCodeList.length,
                     itemBuilder: (c, i) => Slidable(
                       key: ValueKey(i),
-                      child: _item(state.barCodeList[i]),
                       endActionPane: ActionPane(
                         motion: const ScrollMotion(),
                         children: [
@@ -100,6 +99,7 @@ class _SapInjectionMoldingStockInPageState
                           ),
                         ],
                       ),
+                      child: _item(state.barCodeList[i]),
                     ),
                   ),
                 ),

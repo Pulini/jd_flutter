@@ -10,7 +10,7 @@ import 'sap_put_on_shelves_state.dart';
 class SapPutOnShelvesLogic extends GetxController {
   final SapPutOnShelvesState state = SapPutOnShelvesState();
 
-  refreshLabelList({
+  void refreshLabelList({
     required String warehouse,
     required Function() refresh,
   }) {
@@ -21,7 +21,7 @@ class SapPutOnShelvesLogic extends GetxController {
     );
   }
 
-  scanCode({
+  void scanCode({
     required String code,
     required String warehouse,
     required Function() refresh,
@@ -48,7 +48,7 @@ class SapPutOnShelvesLogic extends GetxController {
     }
   }
 
-  _goScan(int index, String warehouse, Function() refresh) {
+  void _goScan(int index, String warehouse, Function() refresh) {
     Get.to(
       () => const SapPutOnShelvesScanPage(),
       arguments: {'index': index, 'warehouse': warehouse},
@@ -59,7 +59,7 @@ class SapPutOnShelvesLogic extends GetxController {
     });
   }
 
-  initLabelList({
+  void initLabelList({
     required int index,
     required Function(String) location,
   }) {
@@ -78,7 +78,7 @@ class SapPutOnShelvesLogic extends GetxController {
     );
   }
 
-  puttingOnShelves({
+  void puttingOnShelves({
     required String location,
     required String warehouse,
     required Function() refresh,

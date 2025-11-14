@@ -57,7 +57,7 @@ class HomeLogic extends GetxController {
     });
   }
 
-  refreshFunList(Function() finish) {
+  void refreshFunList(Function() finish) {
     state.getMenuFunction(success: (json) async {
       spSave(spSaveMenuInfo, textToKey(json.toString()));
       functions = await _jsonToMenuFunction(json);
@@ -69,7 +69,7 @@ class HomeLogic extends GetxController {
     });
   }
 
-  checkFunctionVersion() {
+  void checkFunctionVersion() {
     PrintUtil().disconnected();
     state.getMenuFunction(
       success: (json) async {
@@ -110,17 +110,17 @@ class HomeLogic extends GetxController {
     return formatButton(list);
   }
 
-  search(String text) {
+  void search(String text) {
     state.search = text;
     refreshButton();
   }
 
-  navigationBarClick(int index) {
+  void navigationBarClick(int index) {
     state.nBarIndex = index;
     refreshButton();
   }
 
-  refreshButton() {
+  void refreshButton() {
     var list = <ButtonItem>[];
     if (state.search.isEmpty) {
       list.addAll(
@@ -146,7 +146,7 @@ class HomeLogic extends GetxController {
   }
 
   //底部弹窗
-  takeAvatarPhoto() {
+  void takeAvatarPhoto() {
     takePhoto(
         callback: (f) {
           state.changeUserAvatar(
@@ -162,7 +162,7 @@ class HomeLogic extends GetxController {
   }
 
   //部门列表弹窗
-  getDepartment(Function(List<Department> list, int index) callback) {
+  void getDepartment(Function(List<Department> list, int index) callback) {
     state.getDepartment(
       success: (list) {
         //查询当前部门下标
@@ -176,7 +176,7 @@ class HomeLogic extends GetxController {
     );
   }
 
-  changeDepartment(Department data) {
+  void changeDepartment(Department data) {
     state.changeDepartment(
       departmentID: data.itemID ?? 0,
       success: () => Get.back(),
@@ -184,7 +184,7 @@ class HomeLogic extends GetxController {
     );
   }
 
-  changePassword(String oldPassword, String newPassword) {
+  void changePassword(String oldPassword, String newPassword) {
     if (oldPassword.isEmpty) {
       errorDialog(content: 'change_password_dialog_old_password'.tr);
       return;

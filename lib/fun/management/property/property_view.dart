@@ -42,7 +42,7 @@ class _PropertyPageState extends State<PropertyPage>
     saveKey: '${RouteConfig.property.name}${PickerType.endDate}',
   );
 
-  _item(PropertyInfo data) {
+  GestureDetector _item(PropertyInfo data) {
     return GestureDetector(
       onTap: () => logic.getPropertyDetail(data.interID ?? -1),
       child: Container(
@@ -139,7 +139,7 @@ class _PropertyPageState extends State<PropertyPage>
     );
   }
 
-  listView(String status) {
+  ListView listView(String status) {
     return ListView.builder(
       padding: const EdgeInsets.all(8),
       itemCount:

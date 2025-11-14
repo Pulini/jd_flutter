@@ -25,27 +25,27 @@ class PropertyState {
   var ratingPlatePicture = ''.obs;
   bool canModify = false;
 
-  setParticipator({String empCode = '', String empName = '', int empID = -1}) {
+  void setParticipator({String empCode = '', String empName = '', int empID = -1}) {
     detail.participatorCode = empCode;
     detail.participatorName = empName;
     detail.participator = empID;
     participatorName.value = empName;
   }
 
-  setCustodian({String empCode = '', String empName = '', int empID = -1}) {
+  void setCustodian({String empCode = '', String empName = '', int empID = -1}) {
     detail.custodianCode = empCode;
     detail.custodianName = empName;
     custodianName.value = empName;
   }
 
-  setLiable({String empCode = '', String empName = '', int empID = -1}) {
+  void setLiable({String empCode = '', String empName = '', int empID = -1}) {
     detail.liableEmpCode = empCode;
     detail.liableEmpName = empName;
     detail.liableEmpID = empID;
     liableEmpName.value = empName;
   }
 
-  queryProperty({
+  void queryProperty({
     required String propertyNumber,
     required String propertyName,
     required String serialNumber,
@@ -81,7 +81,7 @@ class PropertyState {
     });
   }
 
-  getPropertyDetail({
+  void getPropertyDetail({
     required int detailId,
     required Function() success,
     required Function(String msg) error,
@@ -106,7 +106,7 @@ class PropertyState {
     });
   }
 
-  propertyClose({
+  void propertyClose({
     required int detailId,
     required Function(String msg) success,
     required Function(String msg) error,
@@ -124,7 +124,7 @@ class PropertyState {
     });
   }
 
-  skipAcceptance({
+  void skipAcceptance({
     required int detailId,
     required Function(String msg) success,
     required Function(String msg) error,
@@ -142,7 +142,7 @@ class PropertyState {
     });
   }
 
-  updatePropertyInfo({
+  void updatePropertyInfo({
     required Function(String msg) success,
     required Function(String msg) error,
   }) {

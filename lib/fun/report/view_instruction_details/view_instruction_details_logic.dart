@@ -6,7 +6,7 @@ import 'package:jd_flutter/widget/dialogs.dart';
 class ViewInstructionDetailsLogic extends GetxController {
   final ViewInstructionDetailsState state = ViewInstructionDetailsState();
 
-  queryPDF({
+  void queryPDF({
     required String processFlowId,
     required String instruction,
     required Function(Uri) loadUri,

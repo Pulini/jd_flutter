@@ -15,7 +15,7 @@ import 'package:jd_flutter/widget/picker/picker_controller.dart';
 import 'package:jd_flutter/widget/picker/picker_item.dart';
 import 'package:jd_flutter/widget/picker/picker_view.dart';
 
-subItemReportDialog(
+void subItemReportDialog(
   BuildContext context,
   MaterialDispatchInfo data,
   Children subData,
@@ -205,7 +205,7 @@ subItemReportDialog(
   );
 }
 
-showBillNoList(String data) {
+void showBillNoList(String data) {
   Get.dialog(
     PopScope(
       canPop: false,
@@ -226,7 +226,7 @@ showBillNoList(String data) {
   );
 }
 
-labelListDialog(
+void labelListDialog(
   BuildContext context,
   MaterialDispatchInfo mdi, {
   required Function(MaterialDispatchInfo, LabelInfo) printCallback,
@@ -423,7 +423,7 @@ labelListDialog(
   );
 }
 
-_deleteLabel({
+void _deleteLabel({
   required String guid,
   required Function() callback,
 }) {
@@ -443,7 +443,7 @@ _deleteLabel({
   });
 }
 
-_reportSapOrCancelReportSap({
+void _reportSapOrCancelReportSap({
   required int billInterID,
   required String outPutNumber,
   required bool isReport,
@@ -472,7 +472,7 @@ _reportSapOrCancelReportSap({
   });
 }
 
-_getLabelList(
+void _getLabelList(
   String interId,
   String routeEntryFID,
   String routeEntryFIDs,
@@ -504,7 +504,7 @@ _getLabelList(
   });
 }
 
-materialListDialog(
+void materialListDialog(
   BuildContext context,
   MaterialDispatchInfo mdi,
 ) {
@@ -599,7 +599,7 @@ materialListDialog(
   _getMaterialList(mdi, (list) => materialList.value = list);
 }
 
-_getMaterialList(
+void _getMaterialList(
   MaterialDispatchInfo data,
   Function(List<MaterialInfo>) callback,
 ) {
@@ -624,7 +624,7 @@ _getMaterialList(
   });
 }
 
-_materialMetersConvert(
+void _materialMetersConvert(
   String interId,
   String materialName,
   Function() callback,
@@ -645,7 +645,7 @@ _materialMetersConvert(
   });
 }
 
-showAreaPhoto(BuildContext context) => Get.dialog(
+Future<dynamic> showAreaPhoto(BuildContext context) => Get.dialog(
       PopScope(
         canPop: false,
         child: AlertDialog(
@@ -811,7 +811,7 @@ class PickPalletController {
           .obs;
   SapPalletInfo? select;
 
-  refresh(String location, String machine) {
+  void refresh(String location, String machine) {
     if (location.isNotEmpty && machine.isNotEmpty) {
       this.location = location;
       this.machine = machine;
@@ -819,7 +819,7 @@ class PickPalletController {
     }
   }
 
-  _getPalletList() {
+  void _getPalletList() {
     if (location.isEmpty || machine.isEmpty) {
       return;
     }
@@ -851,19 +851,19 @@ class PickPalletController {
     });
   }
 
-  _selectPalletNumber(String number) {
+  void _selectPalletNumber(String number) {
     if (number.isEmpty) return;
     var index = palletDataList.indexWhere((v) => v.palletNumber == number);
     if (index != -1) _selectIndex(index);
   }
 
-  _selectIndex(int index) {
+  void _selectIndex(int index) {
     select = palletDataList[index];
     msg.value = select?.palletNumber ?? '';
     onSelected.call(select!);
   }
 
-  _showOptions() {
+  void _showOptions() {
     if (palletDataList.isNotEmpty) {
       //创建选择器控制器
       var controller = FixedExtentScrollController(

@@ -23,7 +23,7 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
   final logic = Get.put(MaintainLabelLogic());
   final state = Get.find<MaintainLabelLogic>().state;
 
-  _itemWidget({
+  Card _itemWidget({
     required bool selected,
     required bool isPrint,
     required bool isReport,
@@ -77,7 +77,7 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
     );
   }
 
-  _subitem(String text1, String text2, String text3, int type) {
+  Container _subitem(String text1, String text2, String text3, int type) {
     return Container(
       margin: EdgeInsets.only(
         left: 10,
@@ -121,7 +121,7 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
     );
   }
 
-  _item1(LabelInfo data) {
+  dynamic _item1(LabelInfo data) {
     return _itemWidget(
       selected: data.select,
       isPrint: data.isBillPrint ?? false,
@@ -150,7 +150,7 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
     );
   }
 
-  _item2(List<LabelInfo> data) {
+  dynamic _item2(List<LabelInfo> data) {
     for (var v in data) {
       logger.f(v.toJson());
     }

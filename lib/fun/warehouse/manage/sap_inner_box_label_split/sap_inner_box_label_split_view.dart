@@ -29,7 +29,7 @@ class _SapInnerBoxLabelSplitPageState extends State<SapInnerBoxLabelSplitPage> {
   var controller = TextEditingController();
   var fn = FocusNode();
 
-  _newLabelItem(SapPrintLabelInfo label) => Container(
+  Container _newLabelItem(SapPrintLabelInfo label) => Container(
         margin: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
@@ -96,7 +96,7 @@ class _SapInnerBoxLabelSplitPageState extends State<SapInnerBoxLabelSplitPage> {
         ),
       );
 
-  _splitLabelItem(SapLabelSplitInfo newLabel) {
+  Container _splitLabelItem(SapLabelSplitInfo newLabel) {
     var textBold = const TextStyle(fontWeight: FontWeight.bold);
     return Container(
       margin: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
@@ -180,7 +180,7 @@ class _SapInnerBoxLabelSplitPageState extends State<SapInnerBoxLabelSplitPage> {
     );
   }
 
-  _originalLabelItem() {
+  Container _originalLabelItem() {
     var textBold = const TextStyle(fontWeight: FontWeight.bold);
     var oData = state.originalLabel!;
     return Container(

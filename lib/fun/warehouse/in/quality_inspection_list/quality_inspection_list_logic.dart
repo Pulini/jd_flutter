@@ -20,7 +20,7 @@ class QualityInspectionListLogic extends GetxController {
       ];
 
   //获取品检单列表
-  getInspectionList({
+  void getInspectionList({
     required int orderType,
     required String typeBody,
     required String materialCode,
@@ -54,7 +54,7 @@ class QualityInspectionListLogic extends GetxController {
   }
 
   //删除判断
-  checkDelete({
+  void checkDelete({
     required Function success,
   }) {
     if (checkUserPermission('105180503')) {
@@ -81,7 +81,7 @@ class QualityInspectionListLogic extends GetxController {
       1;
 
   //删除品检单
-  deleteData({
+  void deleteData({
     required String reason,
     required Function() refresh,
   }) {
@@ -93,7 +93,7 @@ class QualityInspectionListLogic extends GetxController {
   }
 
   //入库
-  store({
+  void store({
     required String date,
     required String store1,
     required Function() refresh,
@@ -110,7 +110,7 @@ class QualityInspectionListLogic extends GetxController {
   }
 
   //验证是否是同一个检验单
-  checkSame({
+  void checkSame({
     required Function success,
   }) {
     if (state.showDataList.any((v) => v.any((v2) => v2.isSelected.value))) {
@@ -125,7 +125,7 @@ class QualityInspectionListLogic extends GetxController {
   }
 
   //获取品检单货位信息
-  getLocation({
+  void getLocation({
     required String store,
     required Function(List<StuffQualityInspectionDetailInfo>) success,
   }) {
@@ -137,7 +137,7 @@ class QualityInspectionListLogic extends GetxController {
   }
 
   //更改货位
-  changeLocation({
+  void changeLocation({
     required String location,
     required List<StuffQualityInspectionDetailInfo> locationList,
     required Function() refresh,
@@ -151,7 +151,7 @@ class QualityInspectionListLogic extends GetxController {
   }
 
   //获取分色信息
-  getColor({required Function(List<StuffColorSeparationList>) callback}) {
+  void getColor({required Function(List<StuffColorSeparationList>) callback}) {
     state.getLocation(
       success: (list) {
         var colors = <StuffColorSeparationList>[];
@@ -173,7 +173,7 @@ class QualityInspectionListLogic extends GetxController {
   }
 
   //验证是否可以冲销
-  receiptReversal(
+  void receiptReversal(
       {required Function() reason, required Function() toReverseColor}) {
     if (state.showDataList.any((v) => v.any((v2) => v2.isSelected.value))) {
       if (checkSameData()) {
@@ -241,7 +241,7 @@ class QualityInspectionListLogic extends GetxController {
   }
 
   //选中分色数据
-  selectColorSubItem(int position) {
+  void selectColorSubItem(int position) {
     for (var sub in state.showReceiptColorList.where((v) => v.subItem == '1')) {
       sub.isSelected.value = false;
     }
@@ -261,7 +261,7 @@ class QualityInspectionListLogic extends GetxController {
   }
 
   //新增
-  colorAdd() {
+  void colorAdd() {
     if (havaColorSelect()) {
       var position = 0;
       var selectCode = '';
@@ -317,14 +317,14 @@ class QualityInspectionListLogic extends GetxController {
   }
 
   //设置分色数量
-  colorInputQty(double qty, int position, String code) {
+  void colorInputQty(double qty, int position, String code) {
     state.showReceiptColorList[position].qty = qty;
     state.showReceiptColorList.refresh();
     setShowColorAllQty(code);
   }
 
   //设置分色合计
-  setShowColorAllQty(String selectCode) {
+  void setShowColorAllQty(String selectCode) {
     var allQty = 0.0;
 
     if (state.showReceiptColorList
@@ -345,13 +345,13 @@ class QualityInspectionListLogic extends GetxController {
   }
 
   //输入色系
-  inputColor(String inputColor, int position) {
+  void inputColor(String inputColor, int position) {
     state.showReceiptColorList[position].color = inputColor;
     state.showReceiptColorList.refresh();
   }
 
   //删除
-  colorDelete() {
+  void colorDelete() {
     var position = 0;
     var selectCode = '';
 
@@ -394,7 +394,7 @@ class QualityInspectionListLogic extends GetxController {
   }
 
   //提交
-  colorSubmit({
+  void colorSubmit({
     required String reason,
     required Function() success,
   }) {
@@ -409,7 +409,7 @@ class QualityInspectionListLogic extends GetxController {
   }
 
 //验证是否可以品检
-  inspection({
+  void inspection({
     required Function() refresh,
   }) {
     if (checkUserPermission('105180502')) {
@@ -465,7 +465,7 @@ class QualityInspectionListLogic extends GetxController {
       .reduce((a, b) => a.add(b))
       .toShowString();
 
-  checkOrderType({
+  void checkOrderType({
     required Function() bindingLabel,
     required Function() stockIn,
   }) {
@@ -529,7 +529,7 @@ class QualityInspectionListLogic extends GetxController {
     return labelList.where((v) => v.materialNumber == material).toList();
   }
 
-  scanLabel(String code, QualityInspectionColorInfo colorInfo) {
+  void scanLabel(String code, QualityInspectionColorInfo colorInfo) {
     if (colorInfo.bindingLabels.isNotEmpty &&
         colorInfo.bindingLabels.any((v) => v.labelID == code)) {
       errorDialog(content: 'quality_inspection_label_exists_tips'.tr);
@@ -579,7 +579,7 @@ class QualityInspectionListLogic extends GetxController {
     }
   }
 
-  selectAllData(bool select) {
+  void selectAllData(bool select) {
     for (var data in state.showDataList) {
       for (var subData in data) {
         subData.isSelected.value = select;
@@ -588,7 +588,7 @@ class QualityInspectionListLogic extends GetxController {
     state.showDataList.refresh();
   }
 
-  submitColorLabelBinding({
+  void submitColorLabelBinding({
     required String location,
     required String postDate,
   }) {
@@ -606,7 +606,7 @@ class QualityInspectionListLogic extends GetxController {
     );
   }
 
-  toColorLabelBinding(int index) {
+  void toColorLabelBinding(int index) {
     state.scanList.value = getColorMaterialLabelList(index);
     Get.to(() => const ColorBindingLabelPage(), arguments: {'index': index});
   }

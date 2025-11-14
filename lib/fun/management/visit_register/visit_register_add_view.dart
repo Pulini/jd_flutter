@@ -35,7 +35,7 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
   ];
 
   //  搜索弹窗
-  searchDialog({
+  void searchDialog({
     required String title,
     required String hintTitle,
     Function()? confirm,
@@ -75,7 +75,7 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
     );
   }
 
-  _text(String title, String? text1) {
+  Row _text(String title, String? text1) {
     return Row(
       children: [
         Container(
@@ -91,7 +91,7 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
     );
   }
 
-  _subTitle(String title) {
+  Text _subTitle(String title) {
     return Text(
       //子标题
       textAlign: TextAlign.center,
@@ -101,7 +101,7 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
     );
   }
 
-  _inputText(
+  Row _inputText(
     String hint,
     String? text1,
     List<TextInputFormatter>? inputType, {
@@ -141,7 +141,7 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
     );
   }
 
-  _peoplePhotos() {
+  Padding _peoplePhotos() {
     return Padding(
       padding: const EdgeInsets.only(top: 20, bottom: 20),
       child: Obx(() => Row(
@@ -208,7 +208,7 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
     );
   }
 
-  _checkCar() => Obx(() => RadioGroup(
+  Obx _checkCar() => Obx(() => RadioGroup(
         groupValue: state.carType.value,
         onChanged: (v) {
           state.carType.value = v!;
@@ -248,7 +248,7 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
         ),
       ));
 
-  _checkDoor() => Obx(() => RadioGroup(
+  Obx _checkDoor() => Obx(() => RadioGroup(
         groupValue: state.doorType.value,
         onChanged: (v) => state.doorType.value = v!,
         child: Row(
@@ -266,7 +266,7 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
         ),
       ));
 
-  _showCarNumber() {
+  Obx _showCarNumber() {
     return Obx(
       () => state.showCarNumber.value
           ? Column(
@@ -283,7 +283,7 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
     );
   }
 
-  _showInspectList() {
+  Obx _showInspectList() {
     return Obx(
       () => state.showWeight.value
           ? Column(
@@ -334,7 +334,7 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
     );
   }
 
-  _comePhotoItem(VisitPhotoBean data, int index) {
+  Container _comePhotoItem(VisitPhotoBean data, int index) {
     return Container(
         margin: const EdgeInsets.only(left: 20),
         child: GestureDetector(
@@ -368,7 +368,7 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
         ));
   }
 
-  comeListView() {
+  Obx comeListView() {
     return Obx(() => Container(
         margin: const EdgeInsets.only(left: 20, right: 20),
         height: 100,
@@ -388,7 +388,7 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
         )));
   }
 
-  _clickButton() {
+  Padding _clickButton() {
     return Padding(
       padding: const EdgeInsets.all(10),
       child: SizedBox(
@@ -411,7 +411,7 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
     );
   }
 
-  _textList(VisitAddRecordInfo data) {
+  List<dynamic> _textList(VisitAddRecordInfo data) {
     return [
       _inputText('visit_details_id_card'.tr, data.iDCard, inputNumber,
           controller: logic.textIdCard,

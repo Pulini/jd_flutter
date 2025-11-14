@@ -25,7 +25,7 @@ class ProductionDispatchLogic extends GetxController {
   final ProductionDispatchState state = ProductionDispatchState();
 
   //工单列表非合并item点击事件
-  item1click(int index) {
+  void item1click(int index) {
     if (state.isSelectedMany.value) {
       if (state.orderList[index].select) {
         state.orderList[index].select = false;
@@ -59,7 +59,7 @@ class ProductionDispatchLogic extends GetxController {
     refreshBottomButtons();
   }
 
-  refreshBottomButtons() {
+  void refreshBottomButtons() {
     var hasSelect = state.orderList.any((e) => e.select);
     state.cbIsEnabledMaterialList.value = hasSelect;
     state.cbIsEnabledInstruction.value = hasSelect;
@@ -85,7 +85,7 @@ class ProductionDispatchLogic extends GetxController {
   }
 
   //工单查询
-  query({
+  void query({
     required String startTime,
     required String endTime,
     required String instruction,
@@ -99,7 +99,7 @@ class ProductionDispatchLogic extends GetxController {
   }
 
   //生产订单用料表
-  orderMaterialList() {
+  void orderMaterialList() {
     state.getSelectOne(
       (v) => Get.to(
         () => const ProductionMaterialsReportPage(),
@@ -109,7 +109,7 @@ class ProductionDispatchLogic extends GetxController {
   }
 
   //指令表
-  instructionList(Function(String url) callback) {
+  void instructionList(Function(String url) callback) {
     state.instructionList(
       success: callback,
       error: (msg) => errorDialog(content: msg),
@@ -117,7 +117,7 @@ class ProductionDispatchLogic extends GetxController {
   }
 
   //工艺指导书
-  processSpecification(Function(List<ManufactureInstructionsInfo>) callback) {
+  void processSpecification(Function(List<ManufactureInstructionsInfo>) callback) {
     state.getSelectOne(
       (v) => state.getManufactureInstructions(
         routeID: v.routingID.toIntTry(),
@@ -128,14 +128,14 @@ class ProductionDispatchLogic extends GetxController {
   }
 
   //配色单列表
-  colorMatching(Function(List<OrderColorList>, String) callback) {
+  void colorMatching(Function(List<OrderColorList>, String) callback) {
     state.colorMatching(
       success: callback,
       error: (msg) => errorDialog(content: msg),
     );
   }
 
-  getColorPdf(String code, String id, Function(String) callback) {
+  void getColorPdf(String code, String id, Function(String) callback) {
     state.getColorPdf(
       code: code,
       id: id,
@@ -145,7 +145,7 @@ class ProductionDispatchLogic extends GetxController {
   }
 
   //打开/关闭工序
-  offOnProcess({required Function() refresh}) {
+  void offOnProcess({required Function() refresh}) {
     state.offOnProcess(
       success:(msg)=>successDialog(content: msg,back: refresh),
       error: (msg) => errorDialog(content: msg),
@@ -153,7 +153,7 @@ class ProductionDispatchLogic extends GetxController {
   }
 
   //删除下游工序
-  deleteDownstream({required Function() refresh}) {
+  void deleteDownstream({required Function() refresh}) {
     state.deleteDownstream(
       success:(msg)=>successDialog(content: msg,back: refresh),
       error: (msg) => errorDialog(content: msg),
@@ -161,7 +161,7 @@ class ProductionDispatchLogic extends GetxController {
   }
 
   //删除上一次报工
-  deleteLastReport({required Function() refresh}) {
+  void deleteLastReport({required Function() refresh}) {
     state.deleteLastReport(
       success:(msg)=>successDialog(content: msg,back: refresh),
       error: (msg) => errorDialog(content: msg),
@@ -169,7 +169,7 @@ class ProductionDispatchLogic extends GetxController {
   }
 
   //贴标维护
-  labelMaintenance() {
+  void labelMaintenance() {
     if (checkUserPermission('1051106')) {
       state.getSelectOne((v) {
         Get.to(() => const MaintainLabelPage(), arguments: {
@@ -187,7 +187,7 @@ class ProductionDispatchLogic extends GetxController {
   }
 
   //物料贴标维护
-  materialLabelMaintenance(ProductionDispatchOrderInfo data) {
+  void materialLabelMaintenance(ProductionDispatchOrderInfo data) {
     if (checkUserPermission('1051106')) {
       Get.to(() => const MaintainLabelPage(), arguments: {
         'materialCode': data.materialCode,
@@ -203,14 +203,14 @@ class ProductionDispatchLogic extends GetxController {
   }
 
   //更新领料配套数
-  updateSap({required Function() refresh}) {
+  void updateSap({required Function() refresh}) {
     state.updateSap(
       success:(msg)=>successDialog(content: msg,back: refresh),
       error: (msg) => errorDialog(content: msg),
     );
   }
 
-  getSurplusMaterial({required Function(List<Map>) print}) {
+  void getSurplusMaterial({required Function(List<Map>) print}) {
     state.getSurplusMaterial((list) {
       if (list.isNotEmpty) {
         print.call(list);
@@ -224,7 +224,7 @@ class ProductionDispatchLogic extends GetxController {
   }
 
   //料头打印
-  printSurplusMaterial(Map data) {
+  void printSurplusMaterial(Map data) {
     var stubBar = data['StubBar'];
     var stubBarName = data['StubBarName'];
     state.getSelectOne((v) {
@@ -257,7 +257,7 @@ class ProductionDispatchLogic extends GetxController {
   }
 
   //报工SAP
-  reportToSap({required double qty, required Function() refresh}) {
+  void reportToSap({required double qty, required Function() refresh}) {
     state.reportToSap(
       qty: qty,
       success: refresh,
@@ -266,7 +266,7 @@ class ProductionDispatchLogic extends GetxController {
   }
 
   //工单下推检查
-  pushCheck(
+  void pushCheck(
     Function(ProductionDispatchOrderInfo) orderPush,
     Function(List<ProductionDispatchOrderInfo>) ordersPush,
   ) {
@@ -325,7 +325,7 @@ class ProductionDispatchLogic extends GetxController {
   }
 
   //工单下推
-  push() {
+  void push() {
     pushCheck(
       (order) => state.orderPush(
         order: order,
@@ -418,18 +418,18 @@ class ProductionDispatchLogic extends GetxController {
     return select;
   }
 
-  checkAutoCount(bool isChecked) {
+  void checkAutoCount(bool isChecked) {
     state.isCheckedAutoCount = isChecked;
   }
 
-  checkDivideEqually(bool isChecked) {
+  void checkDivideEqually(bool isChecked) {
     state.isCheckedDivideEqually = isChecked;
     if (isChecked) {
       state.isCheckedAutoCount = isChecked;
     }
   }
 
-  checkRounding(bool isChecked) {
+  void checkRounding(bool isChecked) {
     state.isCheckedRounding = isChecked;
     if (isChecked) {
       state.isCheckedAutoCount = isChecked;
@@ -437,7 +437,7 @@ class ProductionDispatchLogic extends GetxController {
   }
 
   //选中本工序中的所有派工人员数据
-  checkSelectAllDispatch(bool isChecked) {
+  void checkSelectAllDispatch(bool isChecked) {
     if (state.dispatchInfo.where((v) => v.select!).length ==
         state.dispatchInfo.length) {
       for (var di in state.dispatchInfo) {
@@ -455,7 +455,7 @@ class ProductionDispatchLogic extends GetxController {
   }
 
   //跳转到下一道工序
-  detailViewNextWorkProcedure() {
+  void detailViewNextWorkProcedure() {
     if (state.workProcedure.where((v) => v.isOpen == 1).length > 1) {
       var start = state.workProcedureSelect.value;
       var max = state.workProcedure.lastIndexWhere((v) => v.isOpen == 1);
@@ -477,7 +477,7 @@ class ProductionDispatchLogic extends GetxController {
   }
 
   //派工数据item点击，修改派工
-  detailViewDispatchItemClick(
+  void detailViewDispatchItemClick(
     DispatchInfo di,
     Function(double surplus) callback,
   ) {
@@ -489,7 +489,7 @@ class ProductionDispatchLogic extends GetxController {
   }
 
   //批量修改派工数据
-  detailViewBatchModifyDispatchClick(
+  void detailViewBatchModifyDispatchClick(
     Function(List<DispatchInfo> selectLis, double surplus) callback,
   ) {
     var wp = state.workProcedure[state.workProcedureSelect.value];
@@ -504,7 +504,7 @@ class ProductionDispatchLogic extends GetxController {
   }
 
   //批量修改派工数据
-  detailViewBatchModifyDispatch(List<DispatchInfo> selectList, double qty) {
+  void detailViewBatchModifyDispatch(List<DispatchInfo> selectList, double qty) {
     if (state.isCheckedDivideEqually) {
       if (state.isCheckedRounding) {
         var integer = qty ~/ selectList.length;
@@ -579,7 +579,7 @@ class ProductionDispatchLogic extends GetxController {
     return wp;
   }
 
-  detailViewModifyDispatch({
+  void detailViewModifyDispatch({
     WorkCardList? wcl,
     required List<int> works,
   }) {
@@ -594,7 +594,7 @@ class ProductionDispatchLogic extends GetxController {
   }
 
   //派工剩余组员或删除所有派工
-  detailViewAddAllWorker(Function() clean) {
+  void detailViewAddAllWorker(Function() clean) {
     var exist = <int>[];
     var workers = <int>[];
     var wp = state.workProcedure[state.workProcedureSelect.value];
@@ -613,7 +613,7 @@ class ProductionDispatchLogic extends GetxController {
   }
 
   //打开或关闭该工序
-  detailViewWorkProcedureLock(int index) {
+  void detailViewWorkProcedureLock(int index) {
     if (state.workProcedure[index].isOpen == 1) {
       state.workProcedure[index].isOpen = 0;
     } else {
@@ -629,7 +629,7 @@ class ProductionDispatchLogic extends GetxController {
   }
 
   //打开或关闭全部工序
-  detailViewWorkProcedureLockAll() {
+  void detailViewWorkProcedureLockAll() {
     var hasOpen = state.workProcedure.any((v) => v.isOpen == 1);
     for (var wp in state.workProcedure) {
       wp.isOpen = hasOpen ? 0 : 1;
@@ -643,7 +643,7 @@ class ProductionDispatchLogic extends GetxController {
   }
 
   //工序列表点击，选中工序进行派工
-  detailViewWorkProcedureClick(int index) {
+  void detailViewWorkProcedureClick(int index) {
     if (state.workProcedure[index].isOpen == 0) {
       showSnackBar(
         title: 'production_dispatch_tips'.tr,
@@ -661,7 +661,7 @@ class ProductionDispatchLogic extends GetxController {
   }
 
   //根据选中状态刷新界面UI
-  refreshSelectState() {
+  void refreshSelectState() {
     if (state.workProcedureSelect.value == -1) {
       state.isEnabledAddOne.value = false;
       state.isEnabledAddAllDispatch = false;
@@ -691,7 +691,7 @@ class ProductionDispatchLogic extends GetxController {
   }
 
   //删除派工人员数据
-  detailViewDispatchItemDeleteClick(DispatchInfo dispatchInfo) {
+  void detailViewDispatchItemDeleteClick(DispatchInfo dispatchInfo) {
     var wp = state.workProcedure[state.workProcedureSelect.value];
     wp.dispatch.remove(dispatchInfo);
     var ids = <int>[];
@@ -704,7 +704,7 @@ class ProductionDispatchLogic extends GetxController {
   }
 
   //从汇总列表跳转到指定工序并打开指定员工到派工数据
-  detailViewJumpToDispatchOnWorkProcedure(
+  void detailViewJumpToDispatchOnWorkProcedure(
     int i1,
     int i2,
     Function(dynamic data, dynamic surplus) modify,
@@ -722,7 +722,7 @@ class ProductionDispatchLogic extends GetxController {
   }
 
   //暂存该派工单的派工数据
-  saveDispatch() {
+  void saveDispatch() {
     var cacheList = <CacheJson>[];
     for (var wp in state.workProcedure.where((v) => v.isOpen == 1)) {
       cacheList.add(CacheJson(
@@ -739,7 +739,7 @@ class ProductionDispatchLogic extends GetxController {
   }
 
   //应用暂存派工单的派工数据
-  applySaveDispatch(SaveDispatch sd) {
+  void applySaveDispatch(SaveDispatch sd) {
     var json = jsonDecode(sd.cacheJson!);
     for (var i = 0; i < json.length; ++i) {
       var cache = CacheJson.fromJson(json[i]);
@@ -767,7 +767,7 @@ class ProductionDispatchLogic extends GetxController {
     )..save((v) {});
   }
 
-  applySaveWorkProcedure(SaveWorkProcedure swp) {
+  void applySaveWorkProcedure(SaveWorkProcedure swp) {
     var json = jsonDecode(swp.dispatchJson!);
     state.workProcedureSelect.value = -1;
     state.dispatchInfo.value = [];
@@ -799,7 +799,7 @@ class ProductionDispatchLogic extends GetxController {
   }
 
   //工艺书
-  detailViewGetManufactureInstructions(
+  void detailViewGetManufactureInstructions(
     Function(List<ManufactureInstructionsInfo>) callback,
   ) {
     state.getManufactureInstructions(
@@ -809,7 +809,7 @@ class ProductionDispatchLogic extends GetxController {
     );
   }
 
-  getWorkPlanMaterial(
+  void getWorkPlanMaterial(
     Function(List<WorkPlanMaterialInfo>) callback,
   ) {
     state.getWorkPlanMaterial(
@@ -818,7 +818,7 @@ class ProductionDispatchLogic extends GetxController {
     );
   }
 
-  getPrdRouteInfo() {
+  void getPrdRouteInfo() {
     state.getPrdRouteInfo(
       success: (list) {
         for (var wp in state.workProcedure) {
@@ -841,7 +841,7 @@ class ProductionDispatchLogic extends GetxController {
     );
   }
 
-  sendDispatchToWechat() {
+  void sendDispatchToWechat() {
     _clearWorkerDispatch();
     var msg = 'production_dispatch_wechat_dispatch_error1'.trArgs([
       state.orderList.firstWhere((v) => v.select).planBill ?? '',
@@ -908,7 +908,7 @@ class ProductionDispatchLogic extends GetxController {
     );
   }
 
-  checkDispatch(Function callback) {
+  void checkDispatch(Function callback) {
     //委外工单计工数可以少于上限但不能高于上限，非委外工单计工数必须等于上限。
     var msg = <String>[];
     state.workProcedure.where((v) => v.isOpen == 1).forEach((wp) {
@@ -961,7 +961,7 @@ class ProductionDispatchLogic extends GetxController {
     }
   }
 
-  _clearWorkerDispatch() {
+  void _clearWorkerDispatch() {
     for (var v in state.workProcedure) {
       for (var v2 in v.dispatch) {
         v2.dispatchQty = 0;
@@ -983,7 +983,7 @@ class ProductionDispatchLogic extends GetxController {
     return selectedWorkProcedure;
   }
 
-  productionDispatch() {
+  void productionDispatch() {
     _clearWorkerDispatch();
     if (state.batchWorkProcedure.isNotEmpty) {
       //多工单计工
@@ -1089,7 +1089,7 @@ class ProductionDispatchLogic extends GetxController {
     }
   }
 
-  queryProgress({
+  void queryProgress({
     required String startTime,
     required String endTime,
     required String instruction,

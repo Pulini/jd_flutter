@@ -14,7 +14,7 @@ import 'package:jd_flutter/widget/worker_check_widget.dart';
 const String checkStockInHandoverDialogNumber =
     'CHECK_STOCK_IN_HANDOVER_DIALOG_NUMBER';
 
-modifyMaterialStockInQtyDialog({
+void modifyMaterialStockInQtyDialog({
   required double max,
   required double qty,
   required Function(double) callback,
@@ -60,7 +60,7 @@ modifyMaterialStockInQtyDialog({
   );
 }
 
-checkStockInHandoverDialog({
+void checkStockInHandoverDialog({
   required Function(
     String leaderNumber,
     ByteData leaderSignature,

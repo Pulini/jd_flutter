@@ -16,7 +16,7 @@ class LoginState {
   int longPressCount = 0;
   bool isCounting = false;
 
-  faceLogin({
+  void faceLogin({
     required String phone,
     required Function(String s) success,
     required Function(String msg) error,
@@ -34,7 +34,7 @@ class LoginState {
     });
   }
 
-  getVerificationCode({
+  void getVerificationCode({
     required String phone,
     required Function() success,
     required Function(String msg) error,
@@ -61,7 +61,7 @@ class LoginState {
     });
   }
 
-  login({
+  void login({
     required String jiGuangID,
     required String phone,
     required String password,

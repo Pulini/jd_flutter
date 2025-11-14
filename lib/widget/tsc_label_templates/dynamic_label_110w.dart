@@ -13,7 +13,7 @@ var _smallStyle = const TextStyle(
 );
 var _textPadding = const EdgeInsets.only(left: 3, right: 3);
 
-_paddingTextLeft({
+Widget _paddingTextLeft({
   required String text,
   required int flex,
   TextStyle? style,
@@ -28,7 +28,7 @@ _paddingTextLeft({
   return flex == 0 ? container : Expanded(flex: flex, child: container);
 }
 
-_paddingTextCenter({
+Widget _paddingTextCenter({
   required String text,
   required int flex,
   TextStyle? style,
@@ -48,7 +48,7 @@ _paddingTextCenter({
   return flex == 0 ? container : Expanded(flex: flex, child: container);
 }
 
-_createRowText({
+IntrinsicHeight _createRowText({
   required String title,
   AlignmentGeometry? titleAlignment,
   int flex = 5,

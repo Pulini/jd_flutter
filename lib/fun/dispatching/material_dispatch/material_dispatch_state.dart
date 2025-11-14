@@ -17,25 +17,25 @@ const String spBigLabel = 'MaterialDispatchDepartIsBigLabel';
 int getMaterialDispatchDate() =>
     spGet(spPalletDate) ?? DateTime.now().millisecondsSinceEpoch;
 
-saveMaterialDispatchDate(int date) => spSave(spPalletDate, date);
+void saveMaterialDispatchDate(int date) => spSave(spPalletDate, date);
 
-getMaterialDispatchMachineId() => spGet(spMachine) ?? '';
+String getMaterialDispatchMachineId() => spGet(spMachine) ?? '';
 
-saveMaterialDispatchMachineId(String id) => spSave(spMachine, id);
+void saveMaterialDispatchMachineId(String id) => spSave(spMachine, id);
 
 String getMaterialDispatchLocationId() => spGet(spWarehouseLocation) ?? '';
 
-saveMaterialDispatchLocationId(String id) => spSave(spWarehouseLocation, id);
+void saveMaterialDispatchLocationId(String id) => spSave(spWarehouseLocation, id);
 
 String getMaterialDispatchPalletNumber() => spGet(spPallet) ?? '';
 
-saveMaterialDispatchPalletNumber(String number) => spSave(spPallet, number);
+void saveMaterialDispatchPalletNumber(String number) => spSave(spPallet, number);
 
 String getMaterialDispatchDepart() => spGet(spDepart) ?? '';
 
-saveMaterialDispatchDepart(String departId) => spSave(spDepart, departId);
+void saveMaterialDispatchDepart(String departId) => spSave(spDepart, departId);
 
-saveMaterialIsBigLabel(bool label) => spSave(spBigLabel, label);
+void saveMaterialIsBigLabel(bool label) => spSave(spBigLabel, label);
 
 bool getMaterialIsBigLabel() => spGet(spBigLabel) ?? false;
 
@@ -50,7 +50,7 @@ class MaterialDispatchState {
   var factoryList = <String>['全部']; //所有工厂
   var searchMes =''; //查询的内容
 
-  getScWorkCardProcess({
+  void getScWorkCardProcess({
     required String startDate,
     required String endDate,
     required int status,
@@ -88,7 +88,7 @@ class MaterialDispatchState {
     });
   }
 
-  arrangeFactory({
+  void arrangeFactory({
     required Function() success,
   }) {
     var list = <String>[];
@@ -103,7 +103,7 @@ class MaterialDispatchState {
     success.call();
   }
 
-  reportToSAP({
+  void reportToSAP({
     required Function(String msg) success,
     required Function(String msg) error,
   }) {
@@ -151,7 +151,7 @@ class MaterialDispatchState {
     return submitList;
   }
 
-  batchWarehousing({
+  void batchWarehousing({
     required List<Map<String, String>> submitList,
     required Function(String msg) success,
     required Function(String msg) error,
@@ -169,7 +169,7 @@ class MaterialDispatchState {
     });
   }
 
-  itemReport({
+  void itemReport({
     required MaterialDispatchInfo data,
     required Function(String msg) success,
     required Function(String msg) error,
@@ -208,7 +208,7 @@ class MaterialDispatchState {
     });
   }
 
-  itemCancelReport({
+  void itemCancelReport({
     required MaterialDispatchInfo data,
     required Function(String msg) success,
     required Function(String msg) error,
@@ -238,7 +238,7 @@ class MaterialDispatchState {
     });
   }
 
-  subItemWarehousing({
+  void subItemWarehousing({
     required Children data,
     required String sapDecideArea,
     required Function(String msg) success,
@@ -266,7 +266,7 @@ class MaterialDispatchState {
     });
   }
 
-  subItemReport({
+  void subItemReport({
     required MaterialDispatchInfo data,
     required Children subData,
     required String reportQty,
@@ -343,7 +343,7 @@ class MaterialDispatchState {
     });
   }
 
-  subItemCancelReport({
+  void subItemCancelReport({
     required Children subData,
     required Function(String msg) success,
     required Function(String msg) error,
@@ -368,7 +368,7 @@ class MaterialDispatchState {
     });
   }
 
-  getLabelDetail({
+  void getLabelDetail({
     required String guid,
     required Function(List<MaterialDispatchLabelDetail> msg) success,
   }) {

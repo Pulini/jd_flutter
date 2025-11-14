@@ -7,7 +7,7 @@ import 'sap_wms_reprint_labels_state.dart';
 class SapWmsReprintLabelsLogic extends GetxController {
   final SapWmsReprintLabelsState state = SapWmsReprintLabelsState();
 
-  scanCode({
+  void scanCode({
     required String warehouse,
     required String code,
   }) {
@@ -47,7 +47,7 @@ class SapWmsReprintLabelsLogic extends GetxController {
     errorDialog(content: 'sap_wms_reprint_label_scan_wrong_barcode'.tr);
   }
 
-  clean() {
+  void clean() {
     state.labelList.clear();
     state.palletNumber.value = '';
   }

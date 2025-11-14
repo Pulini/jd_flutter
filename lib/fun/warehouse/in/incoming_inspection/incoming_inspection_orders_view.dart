@@ -147,7 +147,7 @@ class _IncomingInspectionOrdersPageState
     );
   }
 
-  _showSearch() {
+  void _showSearch() {
     showSheet(
       bodyPadding: const EdgeInsets.all(0),
       context: context,
@@ -260,7 +260,7 @@ class _IncomingInspectionOrdersPageState
     );
   }
 
-  _query(bool isRefresh) {
+  void _query(bool isRefresh) {
     logic.queryInspectionOrders(
       startDate: dpcStartDate.getDateFormatYMD(),
       endDate: dpcEndDate.getDateFormatYMD(),

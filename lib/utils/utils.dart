@@ -39,7 +39,7 @@ SnackbarStatus? snackbarStatus;
 UserInfo? userInfo;
 
 // 保存SP数据
-spSave(String key, Object value) {
+void spSave(String key, Object value) {
   if (value is String) {
     sharedPreferences().setString(key, value);
     logger.d('save\nclass:${value.runtimeType}\nkey:$key\nvalue:$value');
@@ -148,11 +148,11 @@ String getDeviceName() {
 }
 
 //隐藏键盘而不丢失文本字段焦点：
-hideKeyBoard() {
+void hideKeyBoard() {
   SystemChannels.textInput.invokeMethod('TextInput.hide');
 }
 
-loggerF(Map<String, dynamic> map) {
+void loggerF(Map<String, dynamic> map) {
   if (map.toString().length > 500) {
     map['日志类型'] = '异步打印日志';
     compute(_logF, map);
@@ -162,12 +162,12 @@ loggerF(Map<String, dynamic> map) {
   }
 }
 
-_logF(Map<String, dynamic> data) {
+void _logF(Map<String, dynamic> data) {
   logger.f(data);
 }
 
 class TapUtil {
-  static debounce(Function() fn) {
+  static Function() debounce(Function() fn) {
     Timer? debounce;
     return () {
       // 还在时间之内，抛弃上一次
@@ -197,7 +197,7 @@ Future<void> goLaunch(Uri uri) async {
 }
 
 //获取服务器版本信息
-getVersionInfo(
+void getVersionInfo(
   bool showLoading, {
   Function? noUpdate,
   required Function(VersionInfo) needUpdate,
@@ -223,7 +223,7 @@ getVersionInfo(
 }
 
 //更新app
-upData() {
+void upData() {
   httpGet(
     method: webApiCheckVersion,
     loading: 'checking_version'.tr,
@@ -240,7 +240,7 @@ upData() {
 }
 
 //获取员工信息
-getWorkerInfo({
+void getWorkerInfo({
   String? number,
   String? department,
   required Function(List<WorkerInfo>) workers,
@@ -258,7 +258,7 @@ getWorkerInfo({
   });
 }
 
-checkStockLeaderConfig({
+void checkStockLeaderConfig({
   String? showLoading,
   required String type,
   required String number,
@@ -291,7 +291,7 @@ checkStockLeaderConfig({
   });
 }
 
-getProcessManual({
+void getProcessManual({
   required String typeBody,
   required Function(List<ProcessSpecificationInfo>) manualList,
   required Function(String) error,
@@ -317,7 +317,7 @@ getProcessManual({
   });
 }
 
-getAlreadyInStockBarCode({
+void getAlreadyInStockBarCode({
   required BarCodeReportType type,
   required Function(List<UsedBarCodeInfo>) success,
   required Function(String) error,
@@ -343,7 +343,7 @@ getAlreadyInStockBarCode({
   });
 }
 
-getWaitInStockBarCodeReport({
+void getWaitInStockBarCodeReport({
   required List<BarCodeInfo> barCodeList,
   required BarCodeReportType type,
   bool reverse = false,
@@ -418,7 +418,7 @@ String getDateSapYMD({DateTime? time}) {
   return '$y$m$d';
 }
 
-visitButtonWidget({
+Widget visitButtonWidget({
   required String title,
   required Function click,
 }) {
@@ -465,7 +465,7 @@ String getCurrentTime({DateTime? time}) {
   return '$year-$month-$day $hour:$minute:$second';
 }
 
-checkUrlType({
+void checkUrlType({
   required String url,
   required Function(String) jdPdf,
   required Function(String) web,
@@ -515,12 +515,12 @@ bool containsChinese(String input) {
   return chineseRegex.hasMatch(input);
 }
 
-weighbridgeOpen() async {
+Future<void> weighbridgeOpen() async {
   await const MethodChannel(channelWeighbridgeAndroidToFlutter)
       .invokeMethod('OpenDevice');
 }
 
-weighbridgeListener({
+void weighbridgeListener({
   required Function() usbAttached,
   required Function(String) weighbridgeState,
   required Function(double) readWeight,
@@ -557,7 +557,7 @@ weighbridgeListener({
   });
 }
 
-randomDouble(double min, double max) =>
+double randomDouble(double min, double max) =>
     min + Random().nextDouble() * (max - min);
 
 //dp转换成px
@@ -597,7 +597,7 @@ int dp2Px(double dp, BuildContext context) {
 //   }
 // }
 
-livenFaceVerification({
+void livenFaceVerification({
   required String faceUrl,
   required Function(String) verifySuccess,
 }) {
@@ -630,7 +630,7 @@ livenFaceVerification({
 }
 
 //获取Sap供应商列表
-Future getStorageLocationList(String factoryNumber) async {
+Future<dynamic> getStorageLocationList(String factoryNumber) async {
   var response = await httpGet(
       method: webApiGetStorageLocationList,
       params: {'FactoryNumber': factoryNumber});
@@ -655,7 +655,7 @@ Future getStorageLocationList(String factoryNumber) async {
 }
 
 //根据userId获取负责部门列表
-Future getResponsibleDepartmentList(int userID) async {
+Future<dynamic> getResponsibleDepartmentList(int userID) async {
   var response = await httpGet(
       method: webApiGetResponsibleDepartmentList, params: {'UserID': userID});
   if (response.resultCode == resultSuccess) {
@@ -678,7 +678,7 @@ Future getResponsibleDepartmentList(int userID) async {
   }
 }
 
-hidKeyboard() {
+void hidKeyboard() {
   FocusScope.of(Get.overlayContext!).requestFocus(FocusNode());
 }
 
@@ -788,7 +788,7 @@ Future<double> getAndroidXDpi() async =>
 BaseUrl getMesBaseUrl(){
   var save=spGet(spSaveMesBaseUrl);
   if(save==null||save==''){
-    return BaseUrl.BASE_MES;
+    return BaseUrl.baseUrlMes;
   }else {
     return BaseUrl.values.firstWhere((v) => v.value==save);
   }
@@ -796,7 +796,7 @@ BaseUrl getMesBaseUrl(){
 BaseUrl getSapBaseUrl(){
   var save=spGet(spSaveSapBaseUrl);
   if(save==null||save==''){
-    return BaseUrl.BASE_SAP;
+    return BaseUrl.baseUrlSap;
   }else {
     return BaseUrl.values.firstWhere((v) => v.value==save);
   }

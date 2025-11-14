@@ -26,7 +26,7 @@ class ProductionSummaryReportLogic extends GetxController {
   );
 
   //获取产量汇总表接口
-  query() {
+  void query() {
     state.getPrdShopDayReport(
       date: pickerControllerDate.getDateFormatYMD(),
       workShopID: spinnerControllerWorkShop.selectIndex + 1,

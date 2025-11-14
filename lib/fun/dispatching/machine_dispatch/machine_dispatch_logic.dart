@@ -31,14 +31,14 @@ class MachineDispatchLogic extends GetxController {
 
   bool canHandover() => state.detailsInfo?.status == 2; //可以两班交接
 
-  getWorkCardList(Function(List<MachineDispatchInfo>) callback) {
+  void getWorkCardList(Function(List<MachineDispatchInfo>) callback) {
     state.getWorkCardList(
       success: callback,
       error: (s) => errorDialog(content: s),
     );
   }
 
-  refreshWorkCardDetail({Function()? refreshUI}) {
+  void refreshWorkCardDetail({Function()? refreshUI}) {
     state.refreshWorkCardDetail(
       success: () => refreshUI?.call(),
       error: (msg) {
@@ -47,7 +47,7 @@ class MachineDispatchLogic extends GetxController {
     );
   }
 
-  cleanOrRecoveryLastQty(bool isClean) {
+  void cleanOrRecoveryLastQty(bool isClean) {
     state.cleanOrRecoveryLastQty(
       isClean: isClean,
       success: (msg) => successDialog(
@@ -58,7 +58,7 @@ class MachineDispatchLogic extends GetxController {
     );
   }
 
-  modifyWorkCardItem() {
+  void modifyWorkCardItem() {
     state.modifyWorkCardItem(
       success: (msg) => successDialog(
         content: msg,
@@ -68,7 +68,7 @@ class MachineDispatchLogic extends GetxController {
     );
   }
 
-  workerDispatchConfirmation({
+  void workerDispatchConfirmation({
     required bool isHandover,
     required Function() callback,
   }) {
@@ -170,7 +170,7 @@ class MachineDispatchLogic extends GetxController {
     });
   }
 
-  gotoHandover({
+  void gotoHandover({
     required Function() callback,
   }) {
     state.handoverList.clear();
@@ -183,7 +183,7 @@ class MachineDispatchLogic extends GetxController {
     });
   }
 
-  cancelWorkerDispatchConfirmation() {
+  void cancelWorkerDispatchConfirmation() {
     state.cancelConfirmation(
       success: (msg) => successDialog(
         content: msg,
@@ -193,7 +193,7 @@ class MachineDispatchLogic extends GetxController {
     );
   }
 
-  signatureIdenticalWorker(DispatchInfo data) {
+  void signatureIdenticalWorker(DispatchInfo data) {
     for (var v in state.processList) {
       for (var v2 in v.dispatchList) {
         if (v2.workerEmpID == data.workerEmpID) {
@@ -204,7 +204,7 @@ class MachineDispatchLogic extends GetxController {
     state.processList.refresh();
   }
 
-  report() {
+  void report() {
     for (var v in state.processList) {
       if (v.dispatchList.isEmpty) {
         errorDialog(
@@ -263,7 +263,7 @@ class MachineDispatchLogic extends GetxController {
     );
   }
 
-  getHistoryInfo() {
+  void getHistoryInfo() {
     state.getWorkCardListByDate(
       startDate: getDateYMD(
         time: DateTime.now().subtract(const Duration(days: 7)),
@@ -274,7 +274,7 @@ class MachineDispatchLogic extends GetxController {
     );
   }
 
-  getHistoryStockInLabelInfo(int index) {
+  void getHistoryStockInLabelInfo(int index) {
     state.getHistoryLabelList(
       index: index,
       success: () => Get.to(
@@ -285,12 +285,12 @@ class MachineDispatchLogic extends GetxController {
     );
   }
 
-  printHistoryLabel(int i) {
+  void printHistoryLabel(int i) {
     printLabel(state.historyLabelInfo[i]);
   }
 
   //重新打印
-  printLabel(MachineDispatchReprintLabelInfo label) {
+  void printLabel(MachineDispatchReprintLabelInfo label) {
     labelMultipurposeFixed(
       isEnglish: label.isEnglish,
       qrCode: label.labelID,
@@ -337,7 +337,7 @@ class MachineDispatchLogic extends GetxController {
     });
   }
 
-  printMaterialHeadLabel(
+  void printMaterialHeadLabel(
     String code,
     String name,
     MachineDispatchDetailsInfo details, {
@@ -374,7 +374,7 @@ class MachineDispatchLogic extends GetxController {
     });
   }
 
-  generateAndPrintLabel({
+  void generateAndPrintLabel({
     required bool isPrintLast,
     bool isEnglish = false,
     String specifications = '',
@@ -467,7 +467,7 @@ class MachineDispatchLogic extends GetxController {
     );
   }
 
-  productionReport() {
+  void productionReport() {
     var noWorkingHours = state.detailsInfo?.items
         ?.where((v) =>
             v.getReportQty() > 0 &&
@@ -539,7 +539,7 @@ class MachineDispatchLogic extends GetxController {
     }
   }
 
-  getEnglishLabel(Function(EnglishLabelInfo) callback) {
+  void getEnglishLabel(Function(EnglishLabelInfo) callback) {
     state.getEnglishLabel(
       code: state
               .detailsInfo!
@@ -552,7 +552,7 @@ class MachineDispatchLogic extends GetxController {
   }
 
 //更改模具数
-  changeMould(String size, String moulds, String qty) {
+  void changeMould(String size, String moulds, String qty) {
     for (var data in state.sizeItemList) {
       if (data.size == size) {
         data.mould = moulds.toDoubleTry();
@@ -563,7 +563,7 @@ class MachineDispatchLogic extends GetxController {
   }
 
 //更改当日派工数量
-  changeTodayNum(String size, String qty) {
+  void changeTodayNum(String size, String qty) {
     for (var data in state.sizeItemList) {
       if (data.size == size) {
         data.todayDispatchQty = qty.toDoubleTry();
@@ -573,7 +573,7 @@ class MachineDispatchLogic extends GetxController {
   }
 
 //更改箱容
-  changeCapacity(String size, String capacity) {
+  void changeCapacity(String size, String capacity) {
     for (var data in state.sizeItemList) {
       if (data.size == size) {
         data.capacity = capacity.toDoubleTry();
@@ -582,7 +582,7 @@ class MachineDispatchLogic extends GetxController {
     state.sizeItemList.refresh();
   }
 
-  changeLastNum(String size, String qty) {
+  void changeLastNum(String size, String qty) {
     for (var data in state.sizeItemList) {
       if (data.size == size) {
         data.notFullQty = qty.toDoubleTry();
@@ -590,7 +590,7 @@ class MachineDispatchLogic extends GetxController {
     }
   }
 
-  handover() {
+  void handover() {
     state.handover(success: (mes) {
       successDialog(
         content: mes,

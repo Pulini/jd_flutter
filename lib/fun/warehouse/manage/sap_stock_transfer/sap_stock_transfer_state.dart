@@ -14,7 +14,7 @@ class SapStockTransferState {
 
 
 
-  checkPallet({
+  void checkPallet({
     String? palletNo,
     String? labelNo,
     String? targetPalletNo,
@@ -78,7 +78,7 @@ class SapStockTransferState {
     });
   }
 
-  transferToLocation({
+  void transferToLocation({
     required String warehouse,
     required String locationOrPalletNumber,
     required Function(String) success,
@@ -94,7 +94,7 @@ class SapStockTransferState {
     );
   }
 
-  transferToTargetPallet({
+  void transferToTargetPallet({
     required String warehouse,
     required List<PalletDetailItem1Info> list,
     required Function(String) success,
@@ -109,7 +109,7 @@ class SapStockTransferState {
       error: error,
     );
   }
-  transferToNewPallet({
+  void transferToNewPallet({
     required String warehouse,
     required String tLocation,
     required List<PalletDetailItem1Info> list,
@@ -130,7 +130,7 @@ class SapStockTransferState {
   // 1、托盘A移动全部货物到新库位      (有原托盘号 有原库位 扫描新库)
   // 2、托盘A移动部分货物至托盘B      (有原托盘号 有原库位 扫描目标托盘 获取目标托盘库位  获取目标托盘)
   // 3、托盘A移动部分货物至新托盘      (有原托盘号 有原库位 扫描目标托盘  获取托盘号 扫描目标库位  获取新库位)
-  _submitTransfer({
+  void _submitTransfer({
     required String tLocation,
     required String tPallet,
     required String warehouse,

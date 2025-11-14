@@ -8,7 +8,7 @@ class SapLabelReprintState {
   var labelHasNots = true.obs;
   var printInsNo = true.obs;
 
-  getLabelList({
+  void getLabelList({
     String? piece,
     String? code,
     required Function(List<SapPrintLabelInfo>) success,

@@ -18,7 +18,7 @@ class _MoldingScanBulletinReportMaximizeState
     extends State<MoldingScanBulletinReportMaximize> {
   final state = Get.find<MoldingScanBulletinReportLogic>().state;
 
-  _header() {
+  Obx _header() {
     return Obx(() {
       var textStyle =
           const TextStyle(fontSize: 20, fontWeight: FontWeight.bold);
@@ -60,7 +60,7 @@ class _MoldingScanBulletinReportMaximizeState
     },
   );
 
-  getTable() {
+  Obx getTable() {
     var greenText = const TextStyle(
       color: Colors.green,
       fontWeight: FontWeight.bold,

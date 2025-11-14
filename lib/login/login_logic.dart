@@ -25,7 +25,7 @@ class LoginLogic extends GetxController {
   }
 
   // 长按开始计时,5秒内长按3次为成功
-  handleLongPressStart({required Function() changeBaseUrl}) {
+  void handleLongPressStart({required Function() changeBaseUrl}) {
     if (!state.isCounting) {
       state.isCounting = true;
       state.longPressCount = 1;
@@ -46,7 +46,7 @@ class LoginLogic extends GetxController {
   }
 
   //根据手机号码获取用户头像并登录
-  faceLogin(String phone) {
+  void faceLogin(String phone) {
     hideKeyBoard();
     if (phone.isEmpty) {
       errorDialog(content: 'login_tips_phone'.tr);
@@ -78,7 +78,7 @@ class LoginLogic extends GetxController {
   }
 
   //机台账号登录
-  machineLogin(
+  void machineLogin(
     String machine,
     String password,
   ) {
@@ -107,7 +107,7 @@ class LoginLogic extends GetxController {
   }
 
   //获取验证码
-  getVerifyCode(String phone) {
+  void getVerifyCode(String phone) {
     //按钮名称不是获取验证码，直接返回
     if (state.countTimer.value > 0) return;
 
@@ -142,7 +142,7 @@ class LoginLogic extends GetxController {
   }
 
   // 手机号码登录
-  phoneLogin(
+  void phoneLogin(
     String phone,
     String password,
     String vCode,
@@ -186,7 +186,7 @@ class LoginLogic extends GetxController {
   }
 
   //工号登录
-  workNumberLogin(
+  void workNumberLogin(
     String workNumber,
     String password,
   ) {

@@ -24,7 +24,7 @@ class _ComponentHandoverPageState extends State<ComponentHandoverPage> {
   final logic = Get.put(ComponentHandoverLogic());
   final state = Get.find<ComponentHandoverLogic>().state;
 
-  _item1(ShowHandoverInfo data, int position) {
+  Row _item1(ShowHandoverInfo data, int position) {
     return Row(
       children: [
         const SizedBox(width: 5),
@@ -52,7 +52,7 @@ class _ComponentHandoverPageState extends State<ComponentHandoverPage> {
     );
   }
 
-  _text({
+  Container _text({
     required String mes,
     required bool head,
   }) {
@@ -87,7 +87,7 @@ class _ComponentHandoverPageState extends State<ComponentHandoverPage> {
     );
   }
 
-  _title() {
+  Row _title() {
     return Row(
       children: [
         const SizedBox(width: 5),

@@ -18,7 +18,7 @@ import 'forming_barcode_collection_state.dart';
 class FormingBarcodeCollectionLogic extends GetxController {
   final FormingBarcodeCollectionState state = FormingBarcodeCollectionState();
 
-  getProductionOrderST({
+  void getProductionOrderST({
     required String first,
     required String shoeBoxBillNo,
   }) {
@@ -40,7 +40,7 @@ class FormingBarcodeCollectionLogic extends GetxController {
   }
 
   //为每一个工单添加合计行
-  setDataList() {
+  void setDataList() {
     for (var data in state.dataList) {
       data.scWorkCardSizeInfos?.add(ScWorkCardSizeInfos(
         size: '合计',
@@ -58,7 +58,7 @@ class FormingBarcodeCollectionLogic extends GetxController {
   }
 
   //设置显示的第一个工单
-  setFirstData({
+  void setFirstData({
     required String first,
     required String entryFid,
     required String shoeBoxBill,
@@ -123,7 +123,7 @@ class FormingBarcodeCollectionLogic extends GetxController {
   }
 
   //查询多少天内的派工单
-  getWorkCardPriority({
+  void getWorkCardPriority({
     required String day,
   }) {
     httpGet(
@@ -147,7 +147,7 @@ class FormingBarcodeCollectionLogic extends GetxController {
   }
 
   //提交更改优先级
-  prioritySubmit({
+  void prioritySubmit({
     required Function() success,
   }) {
     if (state.prioriInfoList.none((data) => data.isChange == true)) {
@@ -180,12 +180,12 @@ class FormingBarcodeCollectionLogic extends GetxController {
   }
 
   //更改优先级退出清理数据
-  clearData() {
+  void clearData() {
     state.prioriInfoList.clear();
   }
 
   //复制一份原本数据
-  copyData() {
+  void copyData() {
     var list = <FormingCollectionInfo>[];
 
     for (var data in state.dataList) {
@@ -196,7 +196,7 @@ class FormingBarcodeCollectionLogic extends GetxController {
   }
 
   //寻找订单
-  searchData(String search) {
+  void searchData(String search) {
     var list = <FormingCollectionInfo>[];
 
     state.dataList.clear();
@@ -215,7 +215,7 @@ class FormingBarcodeCollectionLogic extends GetxController {
   }
 
   //设置扫码清尾数据
-  setShowScanData(String entryId) {
+  void setShowScanData(String entryId) {
     for (var data in state.dataList) {
       data.isScanShow = false;
       if (data.entryFID == entryId) {
@@ -243,7 +243,7 @@ class FormingBarcodeCollectionLogic extends GetxController {
   }
 
   //切换订单选中
-  selectSwitch(int position) {
+  void selectSwitch(int position) {
     for (var data in state.dataList) {
       data.isSelect.value = false;
     }
@@ -264,7 +264,7 @@ class FormingBarcodeCollectionLogic extends GetxController {
   }
 
   //验证是否含有条码
-  checkCode({
+  void checkCode({
     required String code,
     required Function(String, SizeRelations) success,
   }) {
@@ -287,7 +287,7 @@ class FormingBarcodeCollectionLogic extends GetxController {
   }
 
   //提交扫到的条码
-  submitCode({
+  void submitCode({
     required SizeRelations bean,
     required Function() success,
   }) {
@@ -322,7 +322,7 @@ class FormingBarcodeCollectionLogic extends GetxController {
   }
 
   //扫码成功设置数据
-  setShowData(SizeRelations bean) {
+  void setShowData(SizeRelations bean) {
     for (var data in state.showDataList) {
       if (data.size == bean.size) {
         data.scannedQty = data.scannedQty! + 1;
@@ -337,7 +337,7 @@ class FormingBarcodeCollectionLogic extends GetxController {
   }
 
   //线别分析报告
-  getWorkLineReport({
+  void getWorkLineReport({
     required Function(String) success,
   }) {
     httpGet(
@@ -356,7 +356,7 @@ class FormingBarcodeCollectionLogic extends GetxController {
   }
 
   //线别分析报告
-  getHistory() {
+  void getHistory() {
     httpGet(
       loading: 'forming_code_collection_getting'.tr,
       method: webApiGetDeptDistributeInfoNew,
@@ -375,7 +375,7 @@ class FormingBarcodeCollectionLogic extends GetxController {
   }
 
   //扫描信息
-  getScanInfo() {
+  void getScanInfo() {
     httpGet(
       loading: 'forming_code_collection_getting'.tr,
       method: webApiGetDepartmentScanInfoNew,
@@ -397,7 +397,7 @@ class FormingBarcodeCollectionLogic extends GetxController {
   }
 
   //扫描信息
-  getMoNoReport({required String commandNumber, required bool goPage}) {
+  void getMoNoReport({required String commandNumber, required bool goPage}) {
     httpGet(
       loading: 'forming_code_collection_getting'.tr,
       method: webApiGetMoReportByMoNo,
@@ -422,7 +422,7 @@ class FormingBarcodeCollectionLogic extends GetxController {
   }
 
   //根据指令单号获得尺码数据
-  getScMoSizeBarCodeByMONo({required String shoeBill}) {
+  void getScMoSizeBarCodeByMONo({required String shoeBill}) {
     httpGet(
       loading: 'forming_code_collection_getting'.tr,
       method: webApiGetScMoSizeBarCodeByMONo,
@@ -459,7 +459,7 @@ class FormingBarcodeCollectionLogic extends GetxController {
   }
 
   //添加条码，然后选中下一条
-  addCode({
+  void addCode({
     required String code,
     required bool click,
     required int position,
@@ -494,7 +494,7 @@ class FormingBarcodeCollectionLogic extends GetxController {
   }
 
   //补零
-  addZero() {
+  void addZero() {
     if (state.btnName.value == 'forming_code_collection_add_zero'.tr) {
       for (var data in state.barCodeByMonoData) {
         data.barCode = '0${data.barCode ?? ''}';
@@ -510,7 +510,7 @@ class FormingBarcodeCollectionLogic extends GetxController {
   }
 
   //清掉条形码
-  clearCode() {
+  void clearCode() {
     for (var data in state.barCodeByMonoData) {
       data.barCode = '';
     }
@@ -518,13 +518,13 @@ class FormingBarcodeCollectionLogic extends GetxController {
   }
 
   //退出特殊条码匹配界面
-  quitShoe() {
+  void quitShoe() {
     state.barCodeByMonoData.clear();
     state.btnName.value = 'forming_code_collection_add_zero'.tr;
   }
 
   //特殊条码匹配提交
-  shoeSubmit({
+  void shoeSubmit({
     required Function(String) success,
   }) {
     httpPost(

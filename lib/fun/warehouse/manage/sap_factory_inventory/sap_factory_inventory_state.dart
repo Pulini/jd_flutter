@@ -13,7 +13,7 @@ class SapScanCodeInventoryState {
   var materialList = <InventoryPalletInfo>[].obs;
 
 
-  getInventoryPalletList({
+  void getInventoryPalletList({
     required bool isScan,
     required String factory,
     required String warehouse,
@@ -55,7 +55,7 @@ class SapScanCodeInventoryState {
     });
   }
 
-  submitInventory({
+  void submitInventory({
     required bool isScan,
     required ByteData signature,
     required String signatureNumber,

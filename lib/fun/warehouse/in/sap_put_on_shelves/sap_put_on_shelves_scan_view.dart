@@ -23,7 +23,7 @@ class _SapPutOnShelvesScanPageState extends State<SapPutOnShelvesScanPage> {
   String warehouse = Get.arguments['warehouse'];
   var controller = TextEditingController();
 
-  _item(PalletDetailItem1Info label) {
+  Container _item(PalletDetailItem1Info label) {
     return Container(
       margin: const EdgeInsets.only(left: 4, right: 4, bottom: 10),
       padding: const EdgeInsets.all(5),

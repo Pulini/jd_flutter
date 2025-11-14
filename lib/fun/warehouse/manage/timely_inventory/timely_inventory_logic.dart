@@ -6,7 +6,7 @@ import 'package:jd_flutter/widget/dialogs.dart';
 class TimelyInventoryLogic extends GetxController {
   final TimelyInventoryState state = TimelyInventoryState();
 
-  getImmediateStockList({
+  void getImmediateStockList({
     required String factoryNumber,
     required String stockId,
     required String instructionNumber,
@@ -23,7 +23,7 @@ class TimelyInventoryLogic extends GetxController {
     );
   }
 
-  modifyStorageLocation({
+  void modifyStorageLocation({
     required TimelyInventoryInfo data,
     required TimeItems item,
     required String newLocation,

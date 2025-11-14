@@ -23,7 +23,7 @@ class _SapPurchaseStockInCheckPageState
       Get.find<SapPurchaseStockInLogic>().state;
   int index = Get.arguments['index'];
 
-  _item(SapPurchaseStockInInfo info) {
+  Container _item(SapPurchaseStockInInfo info) {
     var controller = TextEditingController(text: info.editQty.toShowString());
     return Container(
       margin: const EdgeInsets.only(bottom: 10),

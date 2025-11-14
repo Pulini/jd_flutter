@@ -31,12 +31,12 @@ class _WorkshopPlanningPageState extends State<WorkshopPlanningPage> {
   var tecProductionOrderNo = TextEditingController();
   var tecProcessName = TextEditingController();
 
-  _query() => logic.queryProcessPlan(
+  dynamic _query() => logic.queryProcessPlan(
         productionOrderNo: tecProductionOrderNo.text,
         processName: tecProcessName.text,
       );
 
-  _querySheet() {
+  void _querySheet() {
     showSheet(
       context: context,
       body: Column(

@@ -86,7 +86,7 @@ class _MoldingPackAreaReportPageState extends State<MoldingPackAreaReportPage> {
     ),
   ];
 
-  tableDataRow(
+  DataRow tableDataRow(
     MoldingPackAreaReportInfo data,
     Color color,
   ) {

@@ -11,12 +11,12 @@ class WarehouseAllocationState {
   var onStockId ="";
 
 
-  clearData(){
+  void clearData(){
     dataList.clear();
   }
 
   //添加条码
-  addCode( String code ) {
+  void addCode( String code ) {
       if(code.isNotEmpty){ //如果条码不为空
           if(isExists(code)){
             showSnackBar(title: 'shack_bar_warm'.tr, message: 'warehouse_allocation_have_code'.tr);

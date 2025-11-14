@@ -21,7 +21,7 @@ class _PumaAntiCounterfeitingPageState
   final logic = Get.put(PumaAntiCounterfeitingLogic());
   final state = Get.find<PumaAntiCounterfeitingLogic>().state;
 
-  _title(String title) {
+  Container _title(String title) {
     return Container(
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
@@ -31,7 +31,7 @@ class _PumaAntiCounterfeitingPageState
     );
   }
 
-  _subTitle(String title) {
+  Container _subTitle(String title) {
     return Container(
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
@@ -41,7 +41,7 @@ class _PumaAntiCounterfeitingPageState
     );
   }
 
-  _item(PumaBoxCodeInfo data) {
+  Row _item(PumaBoxCodeInfo data) {
     return Row(
       children: [
         Expanded(child: _subTitle(data.fCommandNumber.toString())),
@@ -118,7 +118,7 @@ class _PumaAntiCounterfeitingPageState
         ));
   }
 
-  _scan() {
+  void _scan() {
     pdaScanner(
       scan: (code) => logic.getBarCodeListByBoxNumber(code),
     );

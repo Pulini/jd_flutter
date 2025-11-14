@@ -24,7 +24,7 @@ class _FormingBarcodeCollectionSwitchPageState
   final state = Get.find<FormingBarcodeCollectionLogic>().state;
   var tecInstruction = TextEditingController();
 
-  _item(FormingCollectionInfo data, int position) {
+  Obx _item(FormingCollectionInfo data, int position) {
     String? allQty = '';
     String? scanAllQty = '';
 

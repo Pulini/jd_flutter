@@ -5,7 +5,7 @@ import 'package:jd_flutter/widget/dialogs.dart';
 
 class ViewInstructionDetailsState {
 
-  getInstructionDetailsFile({
+  void getInstructionDetailsFile({
     required String processFlowID,
     required String instruction,
     required Function(Uri uri) success,

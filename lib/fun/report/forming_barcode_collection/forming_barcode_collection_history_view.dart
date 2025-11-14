@@ -18,7 +18,7 @@ class _FormingBarcodeCollectionHistoryPageState
   final logic = Get.find<FormingBarcodeCollectionLogic>();
   final state = Get.find<FormingBarcodeCollectionLogic>().state;
 
-  _item(FormingScanInfo data) {
+  GestureDetector _item(FormingScanInfo data) {
     return GestureDetector(
       onTap: () {
         logic.getMoNoReport(commandNumber: data.commandNumber ?? '', goPage: true);

@@ -23,7 +23,7 @@ class _PartProcessScanQuickDispatchPageState
   final logic = Get.find<PartProcessScanLogic>();
   final state = Get.find<PartProcessScanLogic>().state;
 
-  _workerItem(WorkerInfo wi, Distribution dis) {
+  Column _workerItem(WorkerInfo wi, Distribution dis) {
     return Column(
       children: [
         GestureDetector(

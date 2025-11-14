@@ -16,7 +16,7 @@ class TemporaryOrderState {
     ///Initialize variables
   }
 
-  getTemporaryList({
+  void getTemporaryList({
     required String startDate,
     required String endDate,
     required String temporaryNo,
@@ -69,7 +69,7 @@ class TemporaryOrderState {
     });
   }
 
-  deleteTemporaryOrder({
+  void deleteTemporaryOrder({
     required String reason,
     required String temporaryNo,
     required Function(String) success,
@@ -92,7 +92,7 @@ class TemporaryOrderState {
     });
   }
 
-  getTemporaryOrderDetail({
+  void getTemporaryOrderDetail({
     required String temporaryNo,
     required String materialCode,
     required Function() success,

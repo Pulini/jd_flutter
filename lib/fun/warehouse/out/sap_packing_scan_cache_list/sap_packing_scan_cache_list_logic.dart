@@ -29,13 +29,13 @@ class SapPackingScanCacheListLogic extends GetxController {
     return list.isNotEmpty && list.every((v) => v.isSelected.value);
   }
 
-  selectAllAbnormalItem(bool select) {
+  void selectAllAbnormalItem(bool select) {
     for (var v in getAbnormalSearchData()) {
       v.isSelected.value = select;
     }
   }
 
-  getAbnormalOrders({
+  void getAbnormalOrders({
     required String plannedDate,
     required String destination,
     required String factory,
@@ -54,7 +54,7 @@ class SapPackingScanCacheListLogic extends GetxController {
     );
   }
 
-  deleteAbnormal() {
+  void deleteAbnormal() {
     state.deleteAbnormal(
       list: selectedAbnormalItem(),
       success: (list, msg) {
@@ -69,7 +69,7 @@ class SapPackingScanCacheListLogic extends GetxController {
     );
   }
 
-  getReSubmitData(
+  void getReSubmitData(
     Function(List<SapPackingScanAbnormalInfo>, DateTime) callback,
   ) {
     var list = <SapPackingScanAbnormalInfo>[...selectedAbnormalItem()];
@@ -104,7 +104,7 @@ class SapPackingScanCacheListLogic extends GetxController {
     return maxDate;
   }
 
-  reSubmit({
+  void reSubmit({
     required String actualCabinet,
     required String postingDate,
     required List<SapPackingScanAbnormalInfo> submitList,
@@ -122,7 +122,7 @@ class SapPackingScanCacheListLogic extends GetxController {
     );
   }
 
-  selectAbnormalItem({
+  void selectAbnormalItem({
     required List<List<SapPackingScanAbnormalInfo>> list,
     required SapPackingScanAbnormalInfo item,
     required bool isSelected,
@@ -137,7 +137,7 @@ class SapPackingScanCacheListLogic extends GetxController {
     }
   }
 
-  selectAbnormalItems({
+  void selectAbnormalItems({
     required List<List<SapPackingScanAbnormalInfo>> list,
     required int index,
     required bool isSelected,
@@ -157,9 +157,9 @@ class SapPackingScanCacheListLogic extends GetxController {
     }
   }
 
-  queryCache() {}
+  void queryCache() {}
 
-  selectAbnormalMaterialItem(bool isSelect, String materialId) {
+  void selectAbnormalMaterialItem(bool isSelect, String materialId) {
     groupBy(
       getAbnormalSearchData().where((v) => v.materialId() == materialId),
       (v) => v.pieceNumber ?? '',
@@ -170,7 +170,7 @@ class SapPackingScanCacheListLogic extends GetxController {
     });
   }
 
-  selectAbnormalPieceItem(bool isSelect, String pieceNumber) {
+  void selectAbnormalPieceItem(bool isSelect, String pieceNumber) {
     getAbnormalSearchData()
         .where((v) => v.pieceNumber == pieceNumber)
         .forEach((v) => v.isSelected.value = isSelect);

@@ -20,7 +20,7 @@ class _SapPurchaseStockInDetailPageState
   final SapPurchaseStockInState state =
       Get.find<SapPurchaseStockInLogic>().state;
 
-  _item(SapPurchaseStockInDetailInfo info) {
+  Container _item(SapPurchaseStockInDetailInfo info) {
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.all(10),

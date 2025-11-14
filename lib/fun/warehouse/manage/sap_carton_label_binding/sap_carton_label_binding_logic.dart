@@ -19,7 +19,7 @@ class SapCartonLabelBindingLogic extends GetxController {
     super.onReady();
   }
 
-  getOperationType() {
+  void getOperationType() {
     ever(state.labelList, (v) {
       var list = _getBoxLabelListAndLabelList();
       List<List<SapLabelBindingInfo>> boxLabelList = list[0];
@@ -68,7 +68,7 @@ class SapCartonLabelBindingLogic extends GetxController {
     });
   }
 
-  scanLabel(String code) {
+  void scanLabel(String code) {
     if (state.labelList.any((v) => v.labelID == code || v.boxLabelID == code)) {
       errorDialog(content: 'carton_label_binding_label_exists'.tr);
     } else {
@@ -118,7 +118,7 @@ class SapCartonLabelBindingLogic extends GetxController {
     ];
   }
 
-  deleteLabel(SapLabelBindingInfo sub) {
+  void deleteLabel(SapLabelBindingInfo sub) {
     state.labelList.remove(sub);
   }
 
@@ -133,7 +133,7 @@ class SapCartonLabelBindingLogic extends GetxController {
     }
   }
 
-  operationSubmit({
+  void operationSubmit({
     required double long,
     required double width,
     required double height,
@@ -180,7 +180,7 @@ class SapCartonLabelBindingLogic extends GetxController {
     );
   }
 
-  printNewBoxLabel() {
+  void printNewBoxLabel() {
     state.getLabelPrintInfo(
       success: (labelsData) {
         askDialog(
@@ -198,7 +198,7 @@ class SapCartonLabelBindingLogic extends GetxController {
     );
   }
 
-  toPrintView(List<Widget> labelView) {
+  void toPrintView(List<Widget> labelView) {
     Get.to(() => labelView.length > 1
         ? PreviewLabelList(labelWidgets: labelView, isDynamic: true)
         : PreviewLabel(labelWidget: labelView[0], isDynamic: true));

@@ -41,7 +41,7 @@ class ProductionTasksState {
   var packMaterialList = <ProductionTasksPackMaterialInfo>[];
   var packMaterialShowList = <ProductionTasksPackMaterialInfo>[].obs;
 
-  getProductionOrderSchedule({
+  void getProductionOrderSchedule({
     required Function() success,
     required Function(String msg) error,
   }) {
@@ -67,7 +67,7 @@ class ProductionTasksState {
     });
   }
 
-  refreshUiData() {
+  void refreshUiData() {
     if (orderList.isNotEmpty) {
       typeBody.value = orderList[0].productName ?? '';
       instructionNo.value = orderList[0].mtoNo ?? '';
@@ -94,7 +94,7 @@ class ProductionTasksState {
     }
   }
 
-  changeSort({
+  void changeSort({
     required List<ProductionTasksSubInfo> newLine,
     required Function(String msg) success,
     required Function(String msg) error,
@@ -119,7 +119,7 @@ class ProductionTasksState {
     });
   }
 
-  getProductionOrderScheduleDetail({
+  void getProductionOrderScheduleDetail({
     required String ins,
     required String po,
     required Function() success,
@@ -148,7 +148,7 @@ class ProductionTasksState {
     });
   }
 
-  getPackMaterialInfo({
+  void getPackMaterialInfo({
     required String ins,
     required Function() success,
     required Function(String) error,

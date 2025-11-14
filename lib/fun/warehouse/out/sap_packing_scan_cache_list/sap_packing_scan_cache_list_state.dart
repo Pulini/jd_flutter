@@ -9,7 +9,7 @@ class SapPackingScanCacheListState {
   var abnormalSearchText = ''.obs;
   var abnormalList =<SapPackingScanAbnormalInfo>[].obs;
 
-  getAbnormalOrders({
+  void getAbnormalOrders({
     required String plannedDate,
     required String destination,
     required String factory,
@@ -47,7 +47,7 @@ class SapPackingScanCacheListState {
     });
   }
 
-  deleteAbnormal({
+  void deleteAbnormal({
     required List<SapPackingScanAbnormalInfo> list,
     required Function(List<SapPackingScanAbnormalInfo>,String) success,
     required Function(String) error,
@@ -77,7 +77,7 @@ class SapPackingScanCacheListState {
     });
   }
 
-  reSubmit({
+  void reSubmit({
     required String actualCabinet,
     required String postingDate,
     required List<SapPackingScanAbnormalInfo> list,

@@ -60,7 +60,7 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
     saveKey: '${RouteConfig.materialDispatch.name}${PickerType.endDate}',
   );
 
-  _item1(MaterialDispatchInfo data, int index) {
+  Widget _item1(MaterialDispatchInfo data, int index) {
     var style = const TextStyle(
       color: Colors.black87,
       fontWeight: FontWeight.bold,
@@ -450,7 +450,7 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
     );
   }
 
-  _subItemButton({
+  List<Widget> _subItemButton({
     required MaterialDispatchInfo data,
     Children? subData,
   }) {
@@ -584,7 +584,7 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
     return buttons;
   }
 
-  _query() {
+  void _query() {
     logic.refreshDataList(
         startDate: dpcStartDate.getDateFormatYMD(),
         endDate: dpcEndDate.getDateFormatYMD(),
@@ -602,8 +602,8 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
             });
   }
 
-  showPickPallet() {
-    pickPallet().then((v) {
+  Future<dynamic> showPickPallet() {
+    return pickPallet().then((v) {
       if (v != null) {
         if (v == true) {
           Get.back();

@@ -7,7 +7,7 @@ import 'package:jd_flutter/utils/web_api.dart';
 class WorkerProductionReportState {
   RxList<WorkerProductionInfo> dataList = <WorkerProductionInfo>[].obs;
 
-  getWorkerProductionReport(
+  void getWorkerProductionReport(
   {
     required String departmentID,
     required String date,

@@ -22,7 +22,7 @@ class _ColorBindingLabelPageState extends State<ColorBindingLabelPage> {
       Get.find<QualityInspectionListLogic>().state;
   var index = Get.arguments['index'];
 
-  _item(QualityInspectionLabelBindingInfo data) => Obx(() => Container(
+  Obx _item(QualityInspectionLabelBindingInfo data) => Obx(() => Container(
         height: 40,
         padding: const EdgeInsets.only(left: 10, right: 5),
         margin: const EdgeInsets.only(bottom: 10),

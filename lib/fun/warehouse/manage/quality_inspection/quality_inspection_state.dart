@@ -22,7 +22,7 @@ class QualityInspectionState {
     ///Initialize variables
   }
 
-  queryOrders({
+  void queryOrders({
     required String instructionNo,
     required String typeBody,
     required String customerPO,
@@ -53,7 +53,7 @@ class QualityInspectionState {
     });
   }
 
-  getOrderDetail({
+  void getOrderDetail({
     required String workOrderNo,
     required Function() success,
     required Function(String msg) error,
@@ -90,7 +90,7 @@ class QualityInspectionState {
     });
   }
 
-  addAbnormalRecord({
+  void addAbnormalRecord({
     required QualityInspectionAbnormalItemInfo abnormalItem,
     required Function(NewAbnormalRecordInfo) success,
     required Function(String) error,
@@ -113,7 +113,7 @@ class QualityInspectionState {
     });
   }
 
-  modifyAbnormalRecordStatus({
+  void modifyAbnormalRecordStatus({
     required QualityInspectionAbnormalRecordInfo abnormalRecord,
     required int status,
     required Function(String) success,
@@ -137,7 +137,7 @@ class QualityInspectionState {
     });
   }
 
-  deleteAbnormalRecord({
+  void deleteAbnormalRecord({
     required QualityInspectionAbnormalRecordInfo abnormalRecord,
     required Function(String) success,
     required Function(String) error,
@@ -157,7 +157,7 @@ class QualityInspectionState {
     });
   }
 
-  submitInspectionCompleted({
+  void submitInspectionCompleted({
     required Function(String) success,
     required Function(String) error,
   }) {
@@ -176,7 +176,7 @@ class QualityInspectionState {
     });
   }
 
-  queryInspectionReport({
+  void queryInspectionReport({
     required String startDate,
     required String endDate,
     required Function() success,

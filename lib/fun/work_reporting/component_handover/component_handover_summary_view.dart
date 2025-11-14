@@ -20,7 +20,7 @@ class _ComponentHandoverSummaryPageState
   final logic = Get.find<ComponentHandoverLogic>();
   final state = Get.find<ComponentHandoverLogic>().state;
 
-  _text({
+  Container _text({
     required String mes,
     required bool head,
   }) {
@@ -55,7 +55,7 @@ class _ComponentHandoverSummaryPageState
     );
   }
 
-  _title() {
+  Row _title() {
     return Row(
       children: [
         const SizedBox(width: 5),
@@ -95,7 +95,7 @@ class _ComponentHandoverSummaryPageState
     );
   }
 
-  _item1(
+  InkWell _item1(
     SummaryList data,
   ) {
     return InkWell(

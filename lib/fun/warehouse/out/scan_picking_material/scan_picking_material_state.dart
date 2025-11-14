@@ -15,7 +15,7 @@ class ScanPickingMaterialState {
     );
   }
 
-  getBarCodeStatus({
+  void getBarCodeStatus({
     required int processFlowID,
     required String processName,
     required Function(ScanPickingMaterialReportInfo) success,
@@ -42,7 +42,7 @@ class ScanPickingMaterialState {
   }
 
 
-  submitBarCode({
+  void submitBarCode({
     required Function(String) success,
     required Function(String) error,
   }) {

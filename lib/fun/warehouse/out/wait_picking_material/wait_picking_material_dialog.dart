@@ -12,7 +12,7 @@ import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
 import 'package:jd_flutter/widget/worker_check_widget.dart';
 
-modifyDetailPickingQtyDialog({
+void modifyDetailPickingQtyDialog({
   required WaitPickingMaterialOrderInfo order,
   required List<WaitPickingMaterialOrderModelInfo> data,
 }) {
@@ -128,7 +128,7 @@ modifyDetailPickingQtyDialog({
   );
 }
 
-batchAndColorSystemDialog({
+void batchAndColorSystemDialog({
   required List<WaitPickingMaterialOrderModelInfo> data,
 }) {
   var isShowBatch = true;
@@ -242,7 +242,7 @@ batchAndColorSystemDialog({
   );
 }
 
-realTimeInventoryDialog({
+void realTimeInventoryDialog({
   required List<ImmediateInventoryInfo> list,
 }) {
   var titleTextStyle = const TextStyle(
@@ -395,7 +395,7 @@ realTimeInventoryDialog({
   );
 }
 
-checkPickerDialog({required Function(WorkerInfo) confirm}) {
+void checkPickerDialog({required Function(WorkerInfo) confirm}) {
   WorkerInfo? worker;
   var avatar = ''.obs;
   Get.dialog(
@@ -520,7 +520,7 @@ Widget _modifyContextEditText(WaitPickingMaterialOrderInfo info) {
   );
 }
 
-modifyLocationDialog({
+void modifyLocationDialog({
   required List<WaitPickingMaterialOrderInfo> list,
   required Function() back,
 }) {
@@ -574,7 +574,7 @@ modifyLocationDialog({
   );
 }
 
-_modifyLocation({
+void _modifyLocation({
   required List<WaitPickingMaterialOrderInfo> materialList,
   required Function() success,
   required Function(String) error,

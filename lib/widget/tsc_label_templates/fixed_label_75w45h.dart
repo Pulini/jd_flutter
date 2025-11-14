@@ -280,7 +280,7 @@ Widget surplusMaterialLabel({
 }
 
 ///机台派工 中文标签
-machineDispatchChineseFixedLabel({
+Widget machineDispatchChineseFixedLabel({
   required String labelID,
   required String factoryType,
   required String processes,

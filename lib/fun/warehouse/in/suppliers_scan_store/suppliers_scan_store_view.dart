@@ -27,7 +27,7 @@ class _SuppliersScanStorePageState extends State<SuppliersScanStorePage> {
   var refreshController = EasyRefreshController(controlFinishRefresh: true);
   var tecCode = TextEditingController();
 
-  _item(BarCodeInfo code) {
+  GestureDetector _item(BarCodeInfo code) {
     return GestureDetector(
         onLongPress: ()  {
               logic.deleteCode(code);

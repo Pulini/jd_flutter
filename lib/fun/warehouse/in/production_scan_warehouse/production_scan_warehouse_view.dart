@@ -104,7 +104,7 @@ class _ProductionScanWarehousePageState
     );
   }
 
-  _item(BarCodeInfo code) {
+  GestureDetector _item(BarCodeInfo code) {
     return GestureDetector(
         onLongPress: () {
           logic.deleteCode(code);

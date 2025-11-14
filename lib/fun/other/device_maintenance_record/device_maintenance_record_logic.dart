@@ -47,7 +47,7 @@ class DeviceMaintenanceRecordLogic extends GetxController {
       DateTime.now().year, DateTime.now().month + 2, DateTime.now().day);
 
   //搜索按钮的分辨事件
-  search() {
+  void search() {
     if (state.deviceNumber.isNotEmpty) {
       searchDeviceInfo(state.deviceNumber);
     } else {
@@ -59,7 +59,7 @@ class DeviceMaintenanceRecordLogic extends GetxController {
   late SpinnerController spinnerControllerWorkShop;
 
   //获取维修列表
-  searchDeviceList() {
+  void searchDeviceList() {
     httpGet(
       method: webApiGetRepairOrderList,
       loading: 'device_maintenance_repair_orders_list'.tr,
@@ -81,7 +81,7 @@ class DeviceMaintenanceRecordLogic extends GetxController {
   }
 
   //设备报修提交数据
-  submitRecordData({
+  void submitRecordData({
     required Function(String msg) success,
   }) {
     if (state.custodianNumber.toString().length != 6 ||
@@ -130,7 +130,7 @@ class DeviceMaintenanceRecordLogic extends GetxController {
   }
 
   //设备维修记录单故障原因
-  goRepair() {
+  void goRepair() {
     httpGet(
       method: webApiGetIssueCauseType,
       loading: 'device_maintenance_record_malfunction'.tr,
@@ -161,7 +161,7 @@ class DeviceMaintenanceRecordLogic extends GetxController {
   }
 
   //作废记录单
-  repairOrderVoid({
+  void repairOrderVoid({
     required String interId,
     required String reason,
     required Function(String msg) success,
@@ -184,7 +184,7 @@ class DeviceMaintenanceRecordLogic extends GetxController {
   }
 
   //获取设备详情
-  searchDeviceInfo(String deviceNumber) {
+  void searchDeviceInfo(String deviceNumber) {
     httpGet(
       method: webApiGetDeviceInformationByFNumber,
       loading: 'device_maintenance_device_information'.tr,
@@ -207,7 +207,7 @@ class DeviceMaintenanceRecordLogic extends GetxController {
   }
 
   //根据工号获取人员信息
-  searchPeople(String number) {
+  void searchPeople(String number) {
     if (number.isNotEmpty && number.length == 6) {
       httpGet(
         method: webApiGetEmpAndLiableByEmpCode,

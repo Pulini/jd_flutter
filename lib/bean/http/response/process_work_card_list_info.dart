@@ -95,7 +95,7 @@ class ProcessWorkCardListInfo {
     return map;
   }
 
-  getParts() {
+  String getParts() {
     var name = '';
     partNames?.forEach((v) {
       name = '$name$v、';
@@ -107,7 +107,7 @@ class ProcessWorkCardListInfo {
     return name;
   }
 
-  getSales() {
+  String getSales() {
     var name = '';
     mtonos?.forEach((v) {
       name = '$name$v、';
@@ -119,7 +119,7 @@ class ProcessWorkCardListInfo {
     return name;
   }
 
-  getPersonal() {
+  String getPersonal() {
     var name = '';
     emps?.forEach((v) {
       name = '$name${v.empName}(${v.empNumber})、';
@@ -131,7 +131,7 @@ class ProcessWorkCardListInfo {
     return name;
   }
 
-  getProcess() {
+  String getProcess() {
     var name = '';
     processes?.forEach((v) {
       name = '$name<${v.processName},${v.qty.toShowString()}${v.unit}>';

@@ -58,7 +58,7 @@ class BarCodeInfo {
     return map;
   }
 
-  save({required Function(BarCodeInfo) callback}) {
+  void save({required Function(BarCodeInfo) callback}) {
     openDb().then((db) {
       db.insert(
         tableName,
@@ -78,7 +78,7 @@ class BarCodeInfo {
     });
   }
 
-  static getSave({
+  static void getSave({
     required String type,
     required Function(List<BarCodeInfo>) callback,
   }) {
@@ -98,7 +98,7 @@ class BarCodeInfo {
     });
   }
 
-  delete({required Function() callback}) {
+  void delete({required Function() callback}) {
     openDb().then((db) {
       db.delete(tableName, where: 'id = ?', whereArgs: [id]).then((value) {
         db.close();
@@ -110,7 +110,7 @@ class BarCodeInfo {
     });
   }
 
-  deleteByCode({required Function() callback}) {
+  void deleteByCode({required Function() callback}) {
     openDb().then((db) {
       db.delete(tableName, where: 'code = ?', whereArgs: [code]).then((value) {
         db.close();
@@ -122,7 +122,7 @@ class BarCodeInfo {
     });
   }
 
-  static clear({
+  static void clear({
     required String type,
     required Function(int) callback,
   }) {
@@ -179,7 +179,7 @@ class BarCodeProcessInfo {
   }
 
   @override
-  toString() {
+  String toString() {
     return '$processFlowName/$processNodeName';
   }
 }

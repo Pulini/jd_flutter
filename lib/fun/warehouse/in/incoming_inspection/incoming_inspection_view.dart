@@ -312,7 +312,7 @@ class _IncomingInspectionPageState extends State<IncomingInspectionPage> {
     super.initState();
   }
 
-  _showSearch() {
+  void _showSearch() {
     showSheet(
       bodyPadding: const EdgeInsets.all(0),
       context: context,

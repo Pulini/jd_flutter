@@ -174,7 +174,7 @@ class _QualityInspectionListPageState extends State<QualityInspectionListPage> {
     );
   }
 
-  _item(int index) {
+  Container _item(int index) {
     var data = state.showDataList[index];
     itemSubTitle({required String title, required String data}) => Expanded(
           child: Column(
@@ -278,7 +278,7 @@ class _QualityInspectionListPageState extends State<QualityInspectionListPage> {
     );
   }
 
-  _query(){
+  void _query(){
     logic.getInspectionList(
       orderType: scOrderType.selectIndex,
       typeBody: typeBodyController.text,
@@ -297,7 +297,7 @@ class _QualityInspectionListPageState extends State<QualityInspectionListPage> {
     state.allSelect.value = false;
   }
 
-  _deleteOrder() {
+  void _deleteOrder() {
     logic.checkDelete(
       success: () => reasonInputPopup(
         title: [
@@ -321,7 +321,7 @@ class _QualityInspectionListPageState extends State<QualityInspectionListPage> {
     );
   }
 
-  _orderReverse() {
+  void _orderReverse() {
     logic.receiptReversal(reason: () {
       reasonInputPopup(
         title: [
@@ -346,7 +346,7 @@ class _QualityInspectionListPageState extends State<QualityInspectionListPage> {
     });
   }
 
-  _location() {
+  void _location() {
     logic.checkSame(
       success: () => qualityInspectionListLocationDialog(
         success: (location) => logic.getLocation(
@@ -377,7 +377,7 @@ class _QualityInspectionListPageState extends State<QualityInspectionListPage> {
     );
   }
 
-  _stockIn() {
+  void _stockIn() {
     logic.checkOrderType(
       stockIn: () => qualityInspectionListStoreDialog(
         success: (date, store1) => logic.store(

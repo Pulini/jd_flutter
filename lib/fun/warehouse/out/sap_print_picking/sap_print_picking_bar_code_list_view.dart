@@ -33,7 +33,7 @@ class _SapPrintPickingBarCodeListPageState
     super.initState();
   }
 
-  _item(SapPickingDetailLabelInfo label) {
+  Container _item(SapPickingDetailLabelInfo label) {
     return Container(
       margin: const EdgeInsets.only(left: 4, right: 4, bottom: 10),
       padding: const EdgeInsets.only(left: 4, right: 4),

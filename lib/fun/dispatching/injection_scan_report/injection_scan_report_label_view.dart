@@ -18,7 +18,7 @@ class _InjectionScanReportLabelPageState extends State<InjectionScanReportLabelP
       .find<InjectionScanReportLogic>()
       .state;
 
-  _item(ShowProcessBarcodeInfo data) {
+  Widget _item(ShowProcessBarcodeInfo data) {
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
       padding: const EdgeInsets.all(8.0),

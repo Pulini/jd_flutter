@@ -13,7 +13,7 @@ import 'package:jd_flutter/widget/edit_text_widget.dart';
 import 'package:jd_flutter/widget/picker/picker_controller.dart';
 import 'package:jd_flutter/widget/picker/picker_view.dart';
 
-testApplicationDialog({
+void testApplicationDialog({
   required String temporaryOrderNumber,
   required List<TemporaryOrderDetailReceiptInfo> selectedList,
 }) {
@@ -201,7 +201,7 @@ testApplicationDialog({
 }
 
 //获取Sap测试标准
-_getTestStandards({
+void _getTestStandards({
   required String businessUnit,
   required Function(List<TestStandardsInfo>) success,
   required Function(String) error,
@@ -227,7 +227,7 @@ _getTestStandards({
 }
 
 //暂收单提交测试申请
-_createTestApplication({
+void _createTestApplication({
   required String temporaryOrderNumber,
   required String temporaryOrderLine,
   required double inspectionQty,

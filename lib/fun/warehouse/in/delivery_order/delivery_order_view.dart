@@ -77,7 +77,7 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
     saveKey: '${RouteConfig.deliveryOrder.name}${PickerType.endDate}',
   );
 
-  _query() {
+  void _query() {
     scaffoldKey.currentState?.closeEndDrawer();
     logic.queryDeliveryOrders(
       startDate: dpcStartDate.getDateFormatYMD(),
@@ -95,7 +95,7 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
     );
   }
 
-  _checkOrder(bool isCheckOrder, List<DeliveryOrderInfo> group) {
+  void _checkOrder(bool isCheckOrder, List<DeliveryOrderInfo> group) {
     if (isCheckOrder) {
       if (group.first.isNeedBindingLabel()) {
         logic.getSupplierLabelInfo(
@@ -525,7 +525,7 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
     return width < 600 ? phoneSubItem : pdaSubItem;
   }
 
-  _inputReason({required Function(String) callback}) {
+  void _inputReason({required Function(String) callback}) {
     reasonInputPopup(
       title: [
         Center(
@@ -545,7 +545,7 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
     );
   }
 
-  _getQueryWidget(bool isPhone) => isPhone
+  List<Widget> _getQueryWidget(bool isPhone) => isPhone
       ? [
           const SizedBox(height: 20),
           EditText(
@@ -773,7 +773,7 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
 
   var width = 0.0;
 
-  initScanner() {
+  void initScanner() {
     pdaScanner(scan: (code) {
       tecPurchaseOrder.text = code;
       _query();

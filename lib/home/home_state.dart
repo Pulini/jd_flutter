@@ -28,11 +28,11 @@ class HomeState {
     departmentName.value = userInfo?.departmentName ?? '';
     refreshLanguage();
   }
-  refreshLanguage() {
+  void refreshLanguage() {
     language.value=languages[locales.indexWhere((v)=>v.languageCode==Get.locale!.languageCode)];
   }
 
-  getMenuFunction({
+  void getMenuFunction({
     required Function(dynamic) success,
     required Function(String) error,
   }) {
@@ -48,7 +48,7 @@ class HomeState {
     });
   }
 
-  changeUserAvatar({
+  void changeUserAvatar({
     required File file,
     required Function(String msg) success,
     required Function(String msg) error,
@@ -70,7 +70,7 @@ class HomeState {
     });
   }
 
-  getDepartment({
+  void getDepartment({
     required Function(List<Department> dep) success,
     required Function(String msg) error,
   }) {
@@ -88,7 +88,7 @@ class HomeState {
     });
   }
 
-  changeDepartment({
+  void changeDepartment({
     required int departmentID,
     required Function() success,
     required Function(String msg) error,
@@ -115,7 +115,7 @@ class HomeState {
     });
   }
 
-  changePassword({
+  void changePassword({
     required String oldPassword,
     required String newPassword,
     required String account,

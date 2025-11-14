@@ -7,7 +7,7 @@ import 'molding_pack_area_report_state.dart';
 class MoldingPackAreaReportPageLogic extends GetxController {
   final MoldingPackAreaReportPageState state = MoldingPackAreaReportPageState();
 
-  query({
+  void query({
     required String startDate,
     required String endDate,
     required List<String> packAreaIDs,
@@ -26,7 +26,7 @@ class MoldingPackAreaReportPageLogic extends GetxController {
     );
   }
 
-  getDetails(int interID, String clientOrderNumber) {
+  void getDetails(int interID, String clientOrderNumber) {
     state.getMoldingPackAreaReportDetail(
       interID: interID,
       clientOrderNumber: clientOrderNumber,

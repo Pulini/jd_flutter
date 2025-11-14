@@ -12,14 +12,14 @@ import 'sap_wms_split_label_state.dart';
 class SapWmsSplitLabelLogic extends GetxController {
   final SapWmsSplitLabelState state = SapWmsSplitLabelState();
 
-  scanCode(String code) {
+  void scanCode(String code) {
     state.getLabels(
       labelNumber: code,
       error: (msg) => errorDialog(content: msg),
     );
   }
 
-  split({
+  void split({
     required double splitQty,
     required Function() input,
     required Function() finish,
@@ -47,7 +47,7 @@ class SapWmsSplitLabelLogic extends GetxController {
     finish.call();
   }
 
-  deleteLabel() {
+  void deleteLabel() {
     var removeQty = state.labelList
         .where((v) => v.isNewLabel == 'X' && v.select)
         .map((v) => v.quantity ?? 0)
@@ -57,14 +57,14 @@ class SapWmsSplitLabelLogic extends GetxController {
         state.originalLabel?.quantity.add(removeQty);
   }
 
-  submitSplit() {
+  void submitSplit() {
     state.submitSplit(
       success: (msg) => successDialog(content: msg),
       error: (msg) => errorDialog(content: msg),
     );
   }
 
-  reprintLabel({required String factory, required String warehouse}) {
+  void reprintLabel({required String factory, required String warehouse}) {
     if (factory != '1500' &&
         warehouse != '1200' &&
         warehouse != '1101' &&

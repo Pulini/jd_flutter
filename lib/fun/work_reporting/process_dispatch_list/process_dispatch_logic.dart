@@ -21,7 +21,7 @@ class ProcessDispatchLogic extends GetxController
   var textNumber = TextEditingController(); //异常数量
 
   //工序派工单列表
-  getWorkCardList({
+  void getWorkCardList({
     required String workTicket,
     required String date,
     required String empNumber,
@@ -49,7 +49,7 @@ class ProcessDispatchLogic extends GetxController
   }
 
   //选择数据
-  selectData(int position) {
+  void selectData(int position) {
     state.dataList[position].select = !state.dataList[position].select;
     state.dataList.refresh();
   }
@@ -95,7 +95,7 @@ class ProcessDispatchLogic extends GetxController
   }
 
   //拆分部件
-  splitPart({
+  void splitPart({
     required Function(String) success,
   }) {
     var havePart = false;
@@ -134,7 +134,7 @@ class ProcessDispatchLogic extends GetxController
   }
 
   //合并部件
-  mergePart({
+  void mergePart({
     required Function(String) success,
   }) {
     var list = [];
@@ -163,7 +163,7 @@ class ProcessDispatchLogic extends GetxController
   }
 
   //获取详情
-  getDetail({
+  void getDetail({
     required bool toPage,
   }) {
     httpPost(
@@ -206,7 +206,7 @@ class ProcessDispatchLogic extends GetxController
   }
 
   //设置尺码的数据  然后筛选色系
-  setSizeList() {
+  void setSizeList() {
     state.showDetailList.clear();
     state.showDetailList.value = state.workCardDetail!.sizes!;
     addAll();
@@ -223,7 +223,7 @@ class ProcessDispatchLogic extends GetxController
   }
 
   //添加汇总
-  addAll() {
+  void addAll() {
     state.showDetailList.add(SizeLists(
       size: '总',
       fIDs: [],
@@ -241,7 +241,7 @@ class ProcessDispatchLogic extends GetxController
   }
 
   //是否全选
-  selectAllData() {
+  void selectAllData() {
     for (var v in state.showDetailList) {
       v.select = state.selectAllList.value;
     }
@@ -249,21 +249,21 @@ class ProcessDispatchLogic extends GetxController
   }
 
   //选择具体尺码
-  selectSize(int position) {
+  void selectSize(int position) {
     state.showDetailList[position].select =
         !state.showDetailList[position].select;
     state.showDetailList.refresh();
   }
 
   //输入箱容
-  inputCapacity(String capacity, int position) {
+  void inputCapacity(String capacity, int position) {
     state.showDetailList[position].boxCapacity = capacity;
     state.showDetailList[position].select = true;
     state.showDetailList.refresh();
   }
 
   //色系排序
-  sortColorData() {
+  void sortColorData() {
     if (state.colorList.isNotEmpty) {
       //创建选择器控制器
       var controller = FixedExtentScrollController(
@@ -339,7 +339,7 @@ class ProcessDispatchLogic extends GetxController
   }
 
   //指令筛选
-  sortInstructionData() {
+  void sortInstructionData() {
     if (state.colorList.isNotEmpty) {
       //创建选择器控制器
       var controller = FixedExtentScrollController(
@@ -415,7 +415,7 @@ class ProcessDispatchLogic extends GetxController
   }
 
   //创建贴标
-  createLabel({
+  void createLabel({
     required Function(String) success,
   }) {
     if (state.showDetailList.none((data) => data.select == true)) {
@@ -457,7 +457,7 @@ class ProcessDispatchLogic extends GetxController
   }
 
   //切换单混码
-  clickType() {
+  void clickType() {
     if (state.submitType.value == '单码') {
       state.submitType.value = '混码';
     } else {
@@ -466,14 +466,14 @@ class ProcessDispatchLogic extends GetxController
   }
 
   //选择贴标
-  selectLabel(int position) {
+  void selectLabel(int position) {
     state.showLabelList[position].select =
         !state.showLabelList[position].select;
     state.showLabelList.refresh();
   }
 
   //删除贴标
-  deleteLabel({
+  void deleteLabel({
     required bool batch,
     required int position,
     required Function(String) success,
@@ -508,7 +508,7 @@ class ProcessDispatchLogic extends GetxController
 
 
   //更新打印状态
-  updatePartsPrintTimes({
+  void updatePartsPrintTimes({
     required bool select,
     required int position,
     required Function() success,
@@ -551,7 +551,7 @@ class ProcessDispatchLogic extends GetxController
 
 
   //选择所有未打印的贴标
-  selectNoPrint(bool selectType){
+  void selectNoPrint(bool selectType){
     logger.f('是否选择：$selectType');
     state.showLabelList.where((label)=> label.printTimes! <=0).forEach((c){
       c.select = selectType;
@@ -560,7 +560,7 @@ class ProcessDispatchLogic extends GetxController
   }
 
   //选择所有数据
-  selectAllLabel(bool isSelect){
+  void selectAllLabel(bool isSelect){
     for (var v in state.showLabelList) {
         v.select = isSelect;
     }

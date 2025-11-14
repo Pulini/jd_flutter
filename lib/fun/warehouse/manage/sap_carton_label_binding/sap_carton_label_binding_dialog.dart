@@ -5,7 +5,7 @@ import 'package:jd_flutter/fun/warehouse/manage/sap_carton_label_binding/sap_car
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
 
-modifyBoxInfo({
+void modifyBoxInfo({
   required ScanLabelOperationType operationType,
   required SapLabelBindingInfo? targetBoxLabel,
   required Function(

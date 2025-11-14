@@ -134,7 +134,7 @@ class _ProductionTasksDetailPageState extends State<ProductionTasksDetailPage> {
     );
   }
 
-  _packetWay() => Column(
+  Column _packetWay() => Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const SizedBox(height: 10),
@@ -163,7 +163,7 @@ class _ProductionTasksDetailPageState extends State<ProductionTasksDetailPage> {
         ],
       );
 
-  _specificRequirements() => Column(
+  Column _specificRequirements() => Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const SizedBox(height: 10),

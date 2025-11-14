@@ -14,7 +14,7 @@ class ProductionScanWarehouseLogic extends GetxController {
   final ProductionScanWarehouseState state = ProductionScanWarehouseState();
 
   //添加条码
-  scanCode(String code) {
+  void scanCode(String code) {
     if (state.barCodeList.any((v) => v.code == code)) {
       showSnackBar(message: 'production_scan_hava_barcode'.tr, isWarning: true);
     } else {
@@ -61,7 +61,7 @@ class ProductionScanWarehouseLogic extends GetxController {
   }
 
   //获得已入库条形码数据
-  getBarCodeStatusByDepartmentID({
+  void getBarCodeStatusByDepartmentID({
     required Function() refresh,
   }) {
     httpGet(method: webApiGetBarCodeStatusByDepartmentID, params: {
@@ -92,7 +92,7 @@ class ProductionScanWarehouseLogic extends GetxController {
   }
 
   //验证托盘
-  checkPallet({
+  void checkPallet({
     required List<String> pallets,
     required Function(PalletDetailInfo) success,
     required Function(String) error,
@@ -128,7 +128,7 @@ class ProductionScanWarehouseLogic extends GetxController {
   }
 
   //检查工号是否合法
-  checkOrderInfo({
+  void checkOrderInfo({
     String? number,
   }) {
     httpGet(method: webApiJudgeEmpNumber, params: {
@@ -144,14 +144,14 @@ class ProductionScanWarehouseLogic extends GetxController {
   }
 
   //删除对应条码
-  deleteCode(BarCodeInfo barCodeList) {
+  void deleteCode(BarCodeInfo barCodeList) {
     barCodeList.deleteByCode(callback: () {
       state.barCodeList.remove(barCodeList);
     });
   }
 
   //清空生产扫码入库的条码
-  clearBarCodeList() {
+  void clearBarCodeList() {
     BarCodeInfo.clear(
       type: BarCodeReportType.productionScanInStock.text,
       callback: (v) {
@@ -166,7 +166,7 @@ class ProductionScanWarehouseLogic extends GetxController {
   }
 
   //获取汇总表
-  goReport() {
+  void goReport() {
     if (state.barCodeList.isNotEmpty) {
       httpPost(
         method: webApiNewGetSubmitBarCodeReport,
@@ -222,7 +222,7 @@ class ProductionScanWarehouseLogic extends GetxController {
   }
 
   //验证生产扫码入库的数据
-  checkCodeList({
+  void checkCodeList({
     required Function(String) checkBack,
     required Function(String) success,
   }) {
@@ -275,7 +275,7 @@ class ProductionScanWarehouseLogic extends GetxController {
   }
 
   //生产扫码入库的提交
-  submitCode() {
+  void submitCode() {
     httpPost(method: webApiUploadProductionScanning, loading: '正在提交...', body: {
       'BarCodeList': [
         for (var i = 0; i < state.barCodeList.length; ++i)

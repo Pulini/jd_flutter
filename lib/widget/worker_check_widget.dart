@@ -30,7 +30,7 @@ class _WorkerCheckState extends State<WorkerCheck> {
     super.initState();
   }
 
-  checkWorker(String number) {
+  void checkWorker(String number) {
     if (number.length >= 6) {
       getWorkerInfo(
           number:number

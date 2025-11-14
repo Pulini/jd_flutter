@@ -16,7 +16,7 @@ import 'package:jd_flutter/widget/picker/picker_controller.dart';
 import 'package:jd_flutter/widget/picker/picker_view.dart';
 import 'package:jd_flutter/widget/signature_page.dart';
 
-stockInDialog({
+void stockInDialog({
   required String workerCenterId,
   required List<DeliveryOrderInfo> submitList,
   required Function() refresh,
@@ -303,7 +303,7 @@ stockInDialog({
   );
 }
 
-stockOutDialog({
+void stockOutDialog({
   required String workerCenterId,
   required List<DeliveryOrderInfo> submitList,
   required Function() refresh,
@@ -357,7 +357,7 @@ stockOutDialog({
   ));
 }
 
-createTemporaryDialog({
+void createTemporaryDialog({
   required List<DeliveryOrderInfo> submitList,
   required Function() refresh,
 }) {
@@ -428,7 +428,7 @@ createTemporaryDialog({
   );
 }
 
-_checkLeader({
+Future<void> _checkLeader({
   required List<DeliveryOrderInfo> submitList,
   required LeaderInfo leader,
   required Function() refresh,
@@ -482,7 +482,7 @@ _checkLeader({
   }
 }
 
-_checkFaceInfo({
+void _checkFaceInfo({
   required String billType,
   required String sapFactoryNumber,
   required String sapStockNumber,
@@ -532,7 +532,7 @@ _checkFaceInfo({
   });
 }
 
-_stockInDeliveryOrder({
+void _stockInDeliveryOrder({
   required String workerCenterId,
   required String stockID,
   required String postDate,
@@ -581,7 +581,7 @@ _stockInDeliveryOrder({
   });
 }
 
-_stockOutDeliveryOrder({
+void _stockOutDeliveryOrder({
   required String workerCenterId,
   required String factory,
   required String department,
@@ -618,7 +618,7 @@ _stockOutDeliveryOrder({
   });
 }
 
-_createTemporaryOder({
+void _createTemporaryOder({
   String? pickerNumber,
   String? pickerB64,
   String? leaderNumber,

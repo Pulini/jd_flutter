@@ -12,7 +12,7 @@ import 'scan_picking_material_state.dart';
 class ScanPickingMaterialLogic extends GetxController {
   final ScanPickingMaterialState state = ScanPickingMaterialState();
 
-  clearBarCodeList() {
+  void clearBarCodeList() {
     BarCodeInfo.clear(
       type: BarCodeReportType.jinCanMaterialOutStock.name,
       callback: (v) {
@@ -28,7 +28,7 @@ class ScanPickingMaterialLogic extends GetxController {
     );
   }
 
-  scanCode(String code) {
+  void scanCode(String code) {
     if (state.barCodeList.any((v) => v.code == code)) {
       showSnackBar(
         message: 'scan_picking_material_code_exists'.tr,
@@ -42,11 +42,11 @@ class ScanPickingMaterialLogic extends GetxController {
     }
   }
 
-  deleteItem(BarCodeInfo barCodeList) {
+  void deleteItem(BarCodeInfo barCodeList) {
     barCodeList.delete(callback: () => state.barCodeList.remove(barCodeList));
   }
 
-  submit({
+  void submit({
     required WorkerInfo worker,
     required BarCodeProcessInfo process,
   }) {

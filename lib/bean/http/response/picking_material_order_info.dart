@@ -374,15 +374,15 @@ class PickingMaterialOrderMaterialInfo {
   String getCommonPickingQtyText() =>
       '${getCommonPickingQty().toFixed(3).toShowString()}$commonUnit';
 
-  setLinesBasicPickingQty(double pickingQty) {
+  void setLinesBasicPickingQty(double pickingQty) {
     _setLinesPickingQty(pickingQty);
   }
 
-  setLinesCommonPickingQty(double pickingQty) {
+  void setLinesCommonPickingQty(double pickingQty) {
     _setLinesPickingQty(pickingQty.mul(getProportion()));
   }
 
-  _setLinesPickingQty(double pickingQty) {
+  void _setLinesPickingQty(double pickingQty) {
     var total = pickingQty;
     lineList?.forEach((v) {
       var canPick = v.canPickingQty();
@@ -396,15 +396,15 @@ class PickingMaterialOrderMaterialInfo {
     });
   }
 
-  setLinesBasicPreparedMaterialsQty(double qty) {
+  void setLinesBasicPreparedMaterialsQty(double qty) {
     _setLinesPreparedMaterialsQty(qty);
   }
 
-  setLinesCommonPreparedMaterialsQty(double qty) {
+  void setLinesCommonPreparedMaterialsQty(double qty) {
     _setLinesPreparedMaterialsQty(qty.mul(getProportion()));
   }
 
-  _setLinesPreparedMaterialsQty(double qty) {
+  void _setLinesPreparedMaterialsQty(double qty) {
     var total = qty;
     lineList?.forEach((v) {
       var canPreparing = v.demandQty ?? 0;

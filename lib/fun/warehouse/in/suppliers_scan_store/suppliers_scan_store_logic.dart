@@ -29,7 +29,7 @@ class SuppliersScanStoreLogic extends GetxController {
   );
 
   //清空供应商扫码入库的条码
-  clearBarCodeList() {
+  void clearBarCodeList() {
     BarCodeInfo.clear(
       type: BarCodeReportType.supplierScanInStock.text,
       callback: (v) {
@@ -43,7 +43,7 @@ class SuppliersScanStoreLogic extends GetxController {
   }
 
   //添加条码
-  scanCode(String code) {
+  void scanCode(String code) {
     if (state.barCodeList.any((v) => v.code == code)) {
       showSnackBar(message: 'suppliers_scan_have_code'.tr, isWarning: true);
     } else {
@@ -91,13 +91,13 @@ class SuppliersScanStoreLogic extends GetxController {
   }
 
   //删除对应条码
-  deleteCode(BarCodeInfo barCodeList) {
+  void deleteCode(BarCodeInfo barCodeList) {
     barCodeList.deleteByCode(callback: () {
       state.barCodeList.remove(barCodeList);
     });
   }
 
-  goReport() {
+  void goReport() {
     if (state.barCodeList.isNotEmpty) {
       httpPost(
         method: webApiNewGetSubmitBarCodeReport,
@@ -139,7 +139,7 @@ class SuppliersScanStoreLogic extends GetxController {
   }
 
   //验证托盘
-  checkPallet({
+  void checkPallet({
     required List<String> pallets,
     required Function(PalletDetailInfo) success,
     required Function(String) error,
@@ -175,7 +175,7 @@ class SuppliersScanStoreLogic extends GetxController {
   }
 
   //检查工号是否合法
-  checkOrderInfo({
+  void checkOrderInfo({
     String? number,
   }) {
     httpGet(method: webApiJudgeEmpNumber, params: {
@@ -191,7 +191,7 @@ class SuppliersScanStoreLogic extends GetxController {
   }
 
   //获得已入库条形码数据
-  getBarCodeStatusByDepartmentID({
+  void getBarCodeStatusByDepartmentID({
     required Function() refresh,
   }) {
     httpGet(method: webApiGetBarCodeStatusByDepartmentID, params: {
@@ -221,7 +221,7 @@ class SuppliersScanStoreLogic extends GetxController {
   }
 
   //提交条形码数据,自动生成外购入库单
-  submitCode() {
+  void submitCode() {
     httpPost(method: webApiUploadSupplierBarCode, body: {
       'BarCodeList': [
         for (var i = 0; i < state.barCodeList.length; ++i)

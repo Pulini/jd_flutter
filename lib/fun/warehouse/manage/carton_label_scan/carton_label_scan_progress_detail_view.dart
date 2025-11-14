@@ -18,7 +18,7 @@ class _CartonLabelScanProgressDetailViewState
   final CartonLabelScanLogic logic = Get.find<CartonLabelScanLogic>();
   final CartonLabelScanState state = Get.find<CartonLabelScanLogic>().state;
 
-  _item(List<CartonLabelScanProgressDetailInfo> list) {
+  Card _item(List<CartonLabelScanProgressDetailInfo> list) {
     return Card(
       child: list.length == 1
           ? Padding(

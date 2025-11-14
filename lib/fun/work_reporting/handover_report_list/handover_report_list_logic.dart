@@ -48,7 +48,7 @@ class HandoverReportListLogic extends GetxController {
           });
 
   //全选或者反选
-  selectAll(bool select) {
+  void selectAll(bool select) {
     for (var c in state.dataList) {
       c.select = select;
     }
@@ -57,7 +57,7 @@ class HandoverReportListLogic extends GetxController {
   }
 
   //获取报工交接列表
-  getInstructionDetailsFile() {
+  void getInstructionDetailsFile() {
     httpGet(
       loading: 'handover_report_get_handover_list'.tr,
       method: webApiGetScWorkCardReportCheckList,
@@ -80,7 +80,7 @@ class HandoverReportListLogic extends GetxController {
   }
 
   //spinner 点击后的筛选
-  arrangeData() {
+  void arrangeData() {
     if (reportType.selectIndex == 0) {
       //已报工
       switch (shiftType.selectIndex) {
@@ -111,7 +111,7 @@ class HandoverReportListLogic extends GetxController {
   }
 
   //整理显示数据
-  arrangeShowData(String type, bool isState) {
+  void arrangeShowData(String type, bool isState) {
     var data = <ShowHandoverReportList>[];
     logger.f('type:$type');
     if (type.isEmpty) {
@@ -239,7 +239,7 @@ class HandoverReportListLogic extends GetxController {
   }
 
   //选中第几条数据
-  selectPosition(position) {
+  void selectPosition(int position) {
     state.dataList[position].select = !state.dataList[position].select!;
     state.dataList.refresh();
   }
@@ -255,7 +255,7 @@ class HandoverReportListLogic extends GetxController {
   }
 
   //删除并反审核
-  reverseWork({
+  void reverseWork({
     required Function(String) success,
   }) {
     var interList = <int>[];
@@ -279,7 +279,7 @@ class HandoverReportListLogic extends GetxController {
   }
 
   //删除
-  deleteWork({
+  void deleteWork({
     required Function(String) success,
   }) {
     var interList = <int>[];
@@ -321,7 +321,7 @@ class HandoverReportListLogic extends GetxController {
   }
 
   //审核生成工序汇报单
-  checkWork({
+  void checkWork({
     required Function(String) success,
   }) {
     var interList = <int>[];

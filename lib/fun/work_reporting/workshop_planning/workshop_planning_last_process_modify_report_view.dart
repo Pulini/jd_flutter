@@ -26,7 +26,7 @@ class _LastProcessModifyReportPageState
   late TabController tabController = TabController(length: 3, vsync: this);
   var pageController = PageController();
 
-  _materialItem(LastProcessReportMaterialInfo data) => Container(
+  Container _materialItem(LastProcessReportMaterialInfo data) => Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
           gradient: LinearGradient(
@@ -70,7 +70,7 @@ class _LastProcessModifyReportPageState
         ),
       );
 
-  _processItem(WorkshopPlanningLastProcessInfo data) {
+  Column _processItem(WorkshopPlanningLastProcessInfo data) {
     var width = getScreenSize().width - 20;
     return Column(
       children: [
@@ -152,7 +152,7 @@ class _LastProcessModifyReportPageState
     );
   }
 
-  _workerItem(WorkshopPlanningWorkerInfo data) => GestureDetector(
+  GestureDetector _workerItem(WorkshopPlanningWorkerInfo data) => GestureDetector(
         onTap: () => logic.modifyReportModifyWorker(data),
         child: Container(
           decoration: BoxDecoration(
@@ -239,7 +239,7 @@ class _LastProcessModifyReportPageState
         ),
       );
 
-  _addItem({required Function() click}) => GestureDetector(
+  GestureDetector _addItem({required Function() click}) => GestureDetector(
         onTap: click,
         child: Container(
           decoration: BoxDecoration(

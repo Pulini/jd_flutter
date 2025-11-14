@@ -23,12 +23,12 @@ class DeviceMaintenanceRecordState {
   var issueCauseId = ''; //故障原因id
 
   //删除零部件信息
-  deleteRepairEntry(RepairEntryData data) {
+  void deleteRepairEntry(RepairEntryData data) {
     repairEntryData.remove(data);
   }
 
   //添加零部件信息
-  addRepairEntryData({
+  void addRepairEntryData({
     required String brand,
     required String partName,
     required String partNumber,

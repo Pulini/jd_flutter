@@ -6,7 +6,7 @@ import 'package:jd_flutter/utils/web_api.dart';
 class SapPackingScanReverseState {
   var reverseLabelList = <SapPackingScanReverseLabelInfo>[].obs;
 
-  getReverseLabelInfo({
+  void getReverseLabelInfo({
     required String code,
     required Function(SapPackingScanReverseLabelInfo) success,
     required Function(String) error,
@@ -25,7 +25,7 @@ class SapPackingScanReverseState {
     });
   }
 
-  reverseLabel({
+  void reverseLabel({
     required Function(String) success,
     required Function(String) error,
   }) {

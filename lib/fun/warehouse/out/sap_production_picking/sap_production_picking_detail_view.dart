@@ -27,7 +27,7 @@ class _SapProductionPickingDetailPageState
       Get.find<SapProductionPickingLogic>().state;
   bool isScan = Get.arguments['scan'];
 
-  _item(PickingOrderMaterialInfo data) {
+  Container _item(PickingOrderMaterialInfo data) {
     return Container(
       margin: const EdgeInsets.only(left: 5, right: 5, bottom: 10),
       padding: const EdgeInsets.only(left: 7, top: 10, right: 7, bottom: 10),

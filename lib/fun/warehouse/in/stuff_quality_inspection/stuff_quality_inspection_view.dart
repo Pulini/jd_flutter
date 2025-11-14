@@ -34,7 +34,7 @@ class _StuffQualityInspectionPageState
   late SpinnerController spinnerController2;
   late SpinnerController spinnerController3;
 
-  _text({required String mes}) {
+  Container _text({required String mes}) {
     return Container(
       height: 35,
       decoration: BoxDecoration(
@@ -56,7 +56,7 @@ class _StuffQualityInspectionPageState
     );
   }
 
-  _colorItem(ShowColorBatch data, int position) {
+  GestureDetector _colorItem(ShowColorBatch data, int position) {
     return GestureDetector(
       onLongPress: () {
         logic.removeColor(position);
@@ -76,7 +76,7 @@ class _StuffQualityInspectionPageState
     );
   }
 
-  showColor(String qty) {
+  void showColor(String qty) {
     if (state.inspectionColorList.isNotEmpty) {
       state.unColorQty.value = qty
           .toDoubleTry()
@@ -183,7 +183,7 @@ class _StuffQualityInspectionPageState
     );
   }
 
-  _leavePhotoItem(VisitPhotoBean data, int index) {
+  Container _leavePhotoItem(VisitPhotoBean data, int index) {
     return Container(
         margin: const EdgeInsets.only(left: 20),
         child: GestureDetector(
@@ -216,7 +216,7 @@ class _StuffQualityInspectionPageState
         ));
   }
 
-  _photoListView() {
+  Obx _photoListView() {
     return Obx(() => Container(
         margin: const EdgeInsets.only(left: 20, right: 20),
         height: 140,
@@ -235,7 +235,7 @@ class _StuffQualityInspectionPageState
         )));
   }
 
-  spText({required String name, required String text}) => Container(
+  Container spText({required String name, required String text}) => Container(
         height: 40,
         margin: const EdgeInsets.all(5),
         padding: const EdgeInsets.only(left: 10, right: 10),
@@ -308,13 +308,13 @@ class _StuffQualityInspectionPageState
                     width: 30,
                   ),
                   Visibility(
+                    visible: state.isShowTips.value,
                     child: expandedTextSpan(
                         flex: 2,
                         hint: '选择不同物料时，只支持填写全部合格,如有不合格，必须分开填写!!',
                         text: '',
                         hintColor: Colors.red,
                         fontSize: 16),
-                    visible: state.isShowTips.value,
                   ),
                   const SizedBox(
                     width: 30,

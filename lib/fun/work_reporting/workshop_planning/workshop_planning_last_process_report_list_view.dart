@@ -19,7 +19,7 @@ class _LastProcessReportListPageState extends State<LastProcessReportListPage> {
   final WorkshopPlanningLogic logic = Get.find<WorkshopPlanningLogic>();
   final WorkshopPlanningState state = Get.find<WorkshopPlanningLogic>().state;
 
-  _item(LastProcessGroupPayInfo data) => GestureDetector(
+  GestureDetector _item(LastProcessGroupPayInfo data) => GestureDetector(
     onTap: ()=>logic.getLastProcessDetails(data.groupPayInterID??-1),
     child: Container(
       decoration: BoxDecoration(

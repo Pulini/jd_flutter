@@ -10,7 +10,7 @@ import 'package:jd_flutter/widget/dialogs.dart';
 class WarehouseAllocationLogic extends GetxController {
   final WarehouseAllocationState state = WarehouseAllocationState();
 
-  goReport({required String outStockId, required String onStockId}) {
+  void goReport({required String outStockId, required String onStockId}) {
     if (state.dataList.isNotEmpty) {
       if (outStockId == '' || onStockId == '') {
         showSnackBar(title: 'shack_bar_warm'.tr, message: 'warehouse_allocation_select_warehouse'.tr);
@@ -55,12 +55,12 @@ class WarehouseAllocationLogic extends GetxController {
   }
 
   //删除条码
-  deleteCode(int position){
+  void deleteCode(int position){
     state.dataList.removeAt(position);
   }
 
   //提交条码
-  submit(
+  void submit(
   ) {
     httpPost(
       method: webApiUploadWarehouseAllocation,

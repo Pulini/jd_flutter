@@ -14,7 +14,7 @@ class WorkerProductionDetailState {
   RxList<WorkerProductionDetailShow> dataList =
       <WorkerProductionDetailShow>[].obs;
 
-  getProductionReport({
+  void getProductionReport({
     required String worker,
     required String beginDate,
     required String endDate,

@@ -103,7 +103,7 @@ class TemporaryOrderInfo {
     }
   }
 
-  temporaryQty() {
+  String temporaryQty() {
     var sum = 0.0;
     var baseSum = 0.0;
     temporarySize?.forEach((v) {
@@ -266,7 +266,7 @@ class TemporaryOrderDetailInfo {
       .where((v) => (v.quantityTemporarilyReceived ?? 0) > 0)
       .every((v) => v.isSelected.value);
 
-  selectedAll(bool select) {
+  void selectedAll(bool select) {
     for (var v in receipt!) {
       v.isSelected.value = select;
     }

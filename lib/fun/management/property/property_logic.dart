@@ -9,7 +9,7 @@ import 'property_state.dart';
 class PropertyLogic extends GetxController {
   final PropertyState state = PropertyState();
 
-  queryProperty({
+  void queryProperty({
     required String propertyNumber,
     required String propertyName,
     required String serialNumber,
@@ -32,7 +32,7 @@ class PropertyLogic extends GetxController {
     );
   }
 
-  getPropertyDetail(int detailId) {
+  void getPropertyDetail(int detailId) {
     state.getPropertyDetail(
       detailId: detailId,
       success: () => Get.to(() => const PropertyDetailPage()),
@@ -40,7 +40,7 @@ class PropertyLogic extends GetxController {
     );
   }
 
-  setParticipator(String str) {
+  void setParticipator(String str) {
     if (str.length >= 6) {
       getWorkerInfo(
         number: str,
@@ -58,7 +58,7 @@ class PropertyLogic extends GetxController {
     }
   }
 
-  setCustodian(String str) {
+  void setCustodian(String str) {
     if (str.length >= 6) {
       getWorkerInfo(
         number: str,
@@ -76,7 +76,7 @@ class PropertyLogic extends GetxController {
     }
   }
 
-  setLiable(String str) {
+  void setLiable(String str) {
     if (str.length >= 6) {
       getWorkerInfo(
         number: str,
@@ -94,7 +94,7 @@ class PropertyLogic extends GetxController {
     }
   }
 
-  propertyClose(int detailId) {
+  void propertyClose(int detailId) {
     state.propertyClose(
       detailId: detailId,
       success: (msg) => successDialog(content: msg),
@@ -102,7 +102,7 @@ class PropertyLogic extends GetxController {
     );
   }
 
-  skipAcceptance(int detailId) {
+  void skipAcceptance(int detailId) {
     state.skipAcceptance(
       detailId: detailId,
       success: (msg) => successDialog(content: msg),
@@ -110,7 +110,7 @@ class PropertyLogic extends GetxController {
     );
   }
 
-  updatePropertyInfo() {
+  void updatePropertyInfo() {
     state.updatePropertyInfo(
       success: (msg) => successDialog(content: msg),
       error: (msg) => errorDialog(content: msg),
@@ -241,7 +241,7 @@ class PropertyLogic extends GetxController {
     return true;
   }
 
-  printLabel(int pageIndex) {
+  void printLabel(int pageIndex) {
     var selectItem = [];
     switch (pageIndex) {
       case 0:

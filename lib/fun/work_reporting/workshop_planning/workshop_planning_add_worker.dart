@@ -26,7 +26,7 @@ class _WorkshopPlanningAddWorkerPageState
   String flowProcessID = Get.arguments['flowProcessID'];
   String date = Get.arguments['date'];
 
-  _workerItem(int i) => Obx(() => GestureDetector(
+  Obx _workerItem(int i) => Obx(() => GestureDetector(
         onTap: () => logic.selectWorker(
           worker: state.workerList[i].deepCopy(),
           workerType: cWorkerType,

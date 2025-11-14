@@ -13,7 +13,7 @@ class PumaAntiCounterfeitingState {
   var sortingList = <PumaCodeListInfo>[].obs;
 
   //添加条码
-  addCode(String newCode) {
+  void addCode(String newCode) {
     if (newCode.isEmpty) {
       showSnackBar(title: 'shack_bar_warm'.tr, message: 'code_list_report_please_scan_code'.tr);
     } else {
@@ -45,29 +45,29 @@ class PumaAntiCounterfeitingState {
 
 
   //计算扫码条数
-  setScanNum() {
+  void setScanNum() {
     scanNum.value = dataCodeList.length.toString();
   }
 
   //计算分拣扫码条数
-  setSortingScanNum() {
+  void setSortingScanNum() {
     outScanNum.value = sortingList.length.toString();
   }
 
   //清空条码,更新条码条数
-  clearData() {
+  void clearData() {
     dataCodeList.clear();
     setScanNum();
   }
 
   //删除条码
-  deleteCode(ScanCode data) {
+  void deleteCode(ScanCode data) {
     dataCodeList.remove(data);
     scanNum.value = dataCodeList.length.toString();
   }
 
   //清空分拣条码信息,更新条码条数
-  clearSortingList(){
+  void clearSortingList(){
     sortingList.clear();
     setSortingScanNum();
   }

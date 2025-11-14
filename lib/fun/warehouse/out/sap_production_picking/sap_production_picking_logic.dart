@@ -12,7 +12,7 @@ import 'sap_production_picking_state.dart';
 class SapProductionPickingLogic extends GetxController {
   final SapProductionPickingState state = SapProductionPickingState();
 
-  queryOrder({
+  void queryOrder({
     required String noticeNo,
     required String startDate,
     required String endDate,
@@ -41,7 +41,7 @@ class SapProductionPickingLogic extends GetxController {
     );
   }
 
-  checkPickingSelected(Function(bool) picking) {
+  void checkPickingSelected(Function(bool) picking) {
     var select = state.pickOrderList.where((v) => v.select);
     if (groupBy(select, (v) => v.location ?? '').length > 1) {
       errorDialog(
@@ -63,14 +63,14 @@ class SapProductionPickingLogic extends GetxController {
     }
   }
 
-  getOrderDetail(bool isScan) {
+  void getOrderDetail(bool isScan) {
     state.getMaterialPickingOrderDetail(
       isScan: isScan,
       error: (msg) => errorDialog(content: msg),
     );
   }
 
-  getBarCodeList() {
+  void getBarCodeList() {
     state.getProductionPickingBarCodeList(
       loading: 'sap_production_picking_getting_barcode_list_tips'.tr,
       error: (msg) => errorDialog(content: msg),
@@ -88,7 +88,7 @@ class SapProductionPickingLogic extends GetxController {
     return false;
   }
 
-  submitPicking({
+  void submitPicking({
     required String pickerNumber,
     required ByteData pickerSignature,
     required String userNumber,
@@ -111,7 +111,7 @@ class SapProductionPickingLogic extends GetxController {
     );
   }
 
-  checkMixCode(String code) {
+  void checkMixCode(String code) {
     if (state.barCodeList.isEmpty) {
       errorDialog(content: 'sap_production_picking_label_info_error_tips'.tr);
       return;

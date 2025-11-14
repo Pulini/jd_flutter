@@ -12,7 +12,7 @@ class SapPickingReceiptReversalState {
   var select = -1.obs;
 
 
-  queryOrderList({
+  void queryOrderList({
     required String order,
     required String materialCode,
     required int orderType,
@@ -48,7 +48,7 @@ class SapPickingReceiptReversalState {
     });
   }
 
-  productionReceiptWriteOff({
+  void productionReceiptWriteOff({
     required String leaderNumber,
     required ByteData leaderSignature,
     required String userNumber,

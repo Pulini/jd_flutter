@@ -23,7 +23,7 @@ class _ProcessReportModifyPageState extends State<ProcessReportModifyPage> {
       Get.find<ProcessReportStoreLogic>().state;
   var tecModifyCode = TextEditingController();
 
-  _itemTitle() {
+  Row _itemTitle() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
@@ -35,7 +35,7 @@ class _ProcessReportModifyPageState extends State<ProcessReportModifyPage> {
     );
   }
 
-  _itemSubTitle(ProcessModifyInfo data) {
+  InkWell _itemSubTitle(ProcessModifyInfo data) {
     return InkWell(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -66,7 +66,7 @@ class _ProcessReportModifyPageState extends State<ProcessReportModifyPage> {
     );
   }
 
-  _titleText({
+  Widget _titleText({
     required String title,
     Color? backgroundColor,
     Color? textColor,

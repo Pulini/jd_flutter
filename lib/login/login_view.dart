@@ -21,7 +21,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   var language = ''.obs;
 
-  refreshLanguage() {
+  void refreshLanguage() {
     language.value = languages[
         locales.indexWhere((v) => v.languageCode == Get.locale!.languageCode)];
   }
@@ -140,7 +140,7 @@ class _LoginPickState extends State<LoginPick>
   //工号登录密码输入框控制器
   var workLoginPasswordController = TextEditingController();
 
-  textField({
+  TextField textField({
     required TextEditingController controller,
     required String hint,
     required Icon leftIcon,
@@ -166,7 +166,7 @@ class _LoginPickState extends State<LoginPick>
         maxLength: maxLength,
       );
 
-  _box(Widget child) => Wrap(
+  Wrap _box(Widget child) => Wrap(
         children: [
           Container(
             decoration: BoxDecoration(
@@ -180,7 +180,7 @@ class _LoginPickState extends State<LoginPick>
         ],
       );
 
-  _phoneLogin() => _box(
+  dynamic _phoneLogin() => _box(
         Column(
           children: [
             textField(
@@ -240,7 +240,7 @@ class _LoginPickState extends State<LoginPick>
         ),
       );
 
-  _faceLogin() => _box(
+  dynamic _faceLogin() => _box(
         textField(
           controller: faceLoginPhoneController,
           hint: 'login_hint_phone'.tr,
@@ -249,7 +249,7 @@ class _LoginPickState extends State<LoginPick>
         ),
       );
 
-  _machineLogin() => _box(
+  dynamic _machineLogin() => _box(
         Column(
           children: [
             textField(
@@ -270,7 +270,7 @@ class _LoginPickState extends State<LoginPick>
         ),
       );
 
-  _workLogin() => _box(
+  dynamic _workLogin() => _box(
         Column(
           children: [
             textField(
@@ -289,7 +289,7 @@ class _LoginPickState extends State<LoginPick>
           ],
         ),
       );
-  _changeBaseUrlDialog() {
+  void _changeBaseUrlDialog() {
     var mesList = BaseUrl.values.where((v) => v.type == 'MES').toList();
     var sapList = BaseUrl.values.where((v) => v.type == 'SAP').toList();
     var initMes = mesList.indexWhere((v) => v.value == mesBaseUrl);

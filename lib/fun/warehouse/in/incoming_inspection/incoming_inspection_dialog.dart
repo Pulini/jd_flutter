@@ -9,7 +9,7 @@ import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
 import 'package:jd_flutter/widget/worker_check_widget.dart';
 
-modifySubItemMaterialDialog({
+void modifySubItemMaterialDialog({
   required InspectionDeliveryInfo item,
   required Function() modify,
 }) {
@@ -98,7 +98,7 @@ modifySubItemMaterialDialog({
   );
 }
 
-addOrModifyMaterialDialog({
+void addOrModifyMaterialDialog({
   Function(InspectionDeliveryInfo)? add,
   InspectionDeliveryInfo? item,
   Function()? modify,
@@ -278,7 +278,7 @@ addOrModifyMaterialDialog({
   );
 }
 
-applyInspectionDialog({
+void applyInspectionDialog({
   required Function(WorkerInfo) submit,
 }) {
   WorkerInfo? worker;
@@ -326,7 +326,7 @@ applyInspectionDialog({
   );
 }
 
-submitInspectionDialog({
+void submitInspectionDialog({
   required Function(WorkerInfo, String) submit,
 }) {
   WorkerInfo? worker;

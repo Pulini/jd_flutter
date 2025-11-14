@@ -145,7 +145,7 @@ class Barcodes {
     return map;
   }
 
-  getMessage (){
+  String getMessage (){
     var mes ='';
 
     sizes?.forEach((v){

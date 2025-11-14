@@ -24,41 +24,42 @@ const resultReLogin = 2;
 //版本升级
 const resultToUpdate = 3;
 
-String mesBaseUrl = BaseUrl.BASE_MES.value;
-String sapBaseUrl = BaseUrl.BASE_SAP.value;
-bool isTestUrl() => mesBaseUrl != BaseUrl.BASE_MES.value;
+String mesBaseUrl = BaseUrl.baseUrlMes.value;
+String sapBaseUrl = BaseUrl.baseUrlSap.value;
+bool isTestUrl() => mesBaseUrl != BaseUrl.baseUrlMes.value;
 enum BaseUrl {
   ///MES正式库
-  BASE_MES('https://geapp.goldemperor.com:1226/','MES'),
+  baseUrlMes('MES正式库','https://geapp.goldemperor.com:1226/','MES'),
 
   ///SAP正式库
-  BASE_SAP('https://erpprd01.goldemperor.com:8003/','SAP'),
+  baseUrlSap('SAP正式库','https://erpprd01.goldemperor.com:8003/','SAP'),
 
   ///MES测试库 对接 SAP ECC 300
-  MES_ECC_300('https://geapptest.goldemperor.com:1224/','MES'),
+  mesEccTest('MES ECC 300','https://geapptest.goldemperor.com:1224/','MES'),
 
   ///MES测试库 对接 SAP S4 300
-  MES_S4_300('https://apptest.goldemperor.com:1207/','MES'),
+  mesS4Dev('MES S4 300','https://apptest.goldemperor.com:1207/','MES'),
 
   ///MES测试库 对接 SAP S4 600
-  MES_S4_600('https://apptest.goldemperor.com:1208/','MES'),
+  mesS4Test('MES S4 600','https://apptest.goldemperor.com:1208/','MES'),
 
   ///SAP开发库 ECC 300
-  SAP_ECC_300('https://erpdev01.goldemperor.com:8001/','SAP'),
+  sapEccDev('SAP ECC 300','https://erpdev01.goldemperor.com:8001/','SAP'),
 
   ///SAP测试库 ECC 600
-  SAP_ECC_600('https://erpqas01.goldemperor.com:8002/','SAP'),
+  sapEccTest('SAP ECC 600','https://erpqas01.goldemperor.com:8002/','SAP'),
 
   ///SAP开发库 S4 300
-  SAP_S4_300('https://s4devapp01.goldemperor.com:8005/','SAP'),
+  sapS4Dev('SAP S4 300','https://s4devapp01.goldemperor.com:8005/','SAP'),
 
-  ///SAP测试库 S4 300
-  SAP_S4_600('https://s4qasapp01.goldemperor.com:8006/','SAP');
+  ///SAP测试库 S4 600
+  sapS4Test('SAP S4 600','https://s4devapp01.goldemperor.com:8006/','SAP');
 
+  final String name;
   final String value;
   final String type;
 
-  const BaseUrl(this.value,this.type);
+  const BaseUrl(this.name,this.value,this.type);
 
 }
 

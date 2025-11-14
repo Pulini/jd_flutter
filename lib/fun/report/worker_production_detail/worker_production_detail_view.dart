@@ -43,7 +43,7 @@ class _WorkerProductionDetailPageState
         '${RouteConfig.workerProductionDetail.name}${PickerType.mesProductionReportType}',
   );
 
-  getTable(WorkerProductionDetailShow data) => SingleChildScrollView(
+  SingleChildScrollView getTable(WorkerProductionDetailShow data) => SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Container(
           decoration: BoxDecoration(

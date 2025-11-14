@@ -69,7 +69,7 @@ class VisitRegisterLogic extends GetxController {
     saveKey: '${RouteConfig.property.name}${PickerType.endDate}',
   );
 
-  refreshGetVisitList(
+  void refreshGetVisitList(
       {String name = "",
       String iDCard = "",
       String interviewee = "",
@@ -115,7 +115,7 @@ class VisitRegisterLogic extends GetxController {
     });
   }
 
-  getVisitLastList({Function()? refresh}) {
+  void getVisitLastList({Function()? refresh}) {
     httpPost(
         method: webApiGetVisitInfoByJsonStr,
         loading: 'visit_latest_visit_history'.tr,
@@ -141,7 +141,7 @@ class VisitRegisterLogic extends GetxController {
     });
   }
 
-  getInviteCode() {
+  void getInviteCode() {
     httpGet(
       method: webApiGetInviteCode,
       loading: 'visit_obtaining_visitor_id'.tr,
@@ -157,7 +157,7 @@ class VisitRegisterLogic extends GetxController {
     });
   }
 
-  getVisitorDetailInfo(String interId, bool isLeave) {
+  void getVisitorDetailInfo(String interId, bool isLeave) {
     httpGet(
         method: webApiGetVisitorInfo,
         loading: 'visit_obtaining_visit_details'.tr,
@@ -207,7 +207,7 @@ class VisitRegisterLogic extends GetxController {
     });
   }
 
-  addPicture(String bitmapBase64, bool isCome) {
+  void addPicture(String bitmapBase64, bool isCome) {
     if (isCome) {
       logger.d('添加来访图片');
       state.upComePicture
@@ -219,7 +219,7 @@ class VisitRegisterLogic extends GetxController {
     }
   }
 
-  updateLeaveFVisit() {
+  void updateLeaveFVisit() {
     var body = <PhotoBean>[];
     for (var value1 in state.upLeavePicture) {
       body.add(PhotoBean(photo: value1.photo));
@@ -241,7 +241,7 @@ class VisitRegisterLogic extends GetxController {
     });
   }
 
-  addVisitRecord() {
+  void addVisitRecord() {
     var body = <PhotoBean>[];
     for (var value1 in state.upLeavePicture) {
       body.add(PhotoBean(photo: value1.photo));
@@ -361,7 +361,7 @@ class VisitRegisterLogic extends GetxController {
     });
   }
 
-  getToAddPage() {
+  void getToAddPage() {
     //跳转到新增的时候需要建立的数据
     state.upAddDetail.value = VisitAddRecordInfo(
         visitedFactory: userInfo?.organizeID.toString(),
@@ -390,7 +390,7 @@ class VisitRegisterLogic extends GetxController {
     Get.to(() => const VisitRegisterAddPage());
   }
 
-  searchPeople() async {
+  Future<void> searchPeople() async {
     if (textSearch.text.isNotEmpty) {
       //获取人员信息
       var searchPeopleCallback = await httpGet(
@@ -482,7 +482,7 @@ class VisitRegisterLogic extends GetxController {
     }
   }
 
-  visitorPlace() {
+  void visitorPlace() {
     httpGet(
         method: webApiGetReceiveVisitorPlace,
         loading: 'visit_getting_activity_area'.tr,

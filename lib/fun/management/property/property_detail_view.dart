@@ -25,7 +25,7 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
   var hintStyle = const TextStyle(color: Colors.black);
   var textStyle = TextStyle(color: Colors.blue.shade900);
 
-  _text(
+  Row _text(
     String hint,
     String? text1, {
     Function(String)? onChange,
@@ -51,7 +51,7 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
     );
   }
 
-  _timePick(DateTime? initialDate, Function(String) pickDate) {
+  void _timePick(DateTime? initialDate, Function(String) pickDate) {
     var now = DateTime.now();
     showDatePicker(
       locale: View.of(Get.overlayContext!).platformDispatcher.locale,
@@ -66,7 +66,7 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
     });
   }
 
-  _textDate(String hint, String? date, Function(String) time) {
+  Row _textDate(String hint, String? date, Function(String) time) {
     DateTime? dateTime;
     if (date?.isNotEmpty == true) dateTime = DateTime.parse(date ?? '');
     return Row(
@@ -105,7 +105,7 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
     );
   }
 
-  _orderState(int processStatus) {
+  Text _orderState(int processStatus) {
     String text;
     Color color;
     if (processStatus == 0) {
@@ -136,7 +136,7 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
     );
   }
 
-  _textList(PropertyDetailInfo data) {
+  List<Widget> _textList(PropertyDetailInfo data) {
     var line = const Divider(
       height: 10,
     );
@@ -290,7 +290,7 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
     ];
   }
 
-  _remake() {
+  Padding _remake() {
     return Padding(
       padding: const EdgeInsets.only(
         top: 10,
@@ -326,7 +326,7 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
     );
   }
 
-  _photos() {
+  Padding _photos() {
     return Padding(
       padding: const EdgeInsets.only(top: 20, bottom: 20),
       child: Obx(() => Row(
@@ -397,7 +397,7 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
     );
   }
 
-  _affiliated(List<CardEntry> devices) {
+  List<dynamic> _affiliated(List<CardEntry> devices) {
     var list = [];
     for (var device in devices) {
       list.add(Container(
@@ -513,7 +513,7 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
     return list;
   }
 
-  _sheet(BuildContext context, bool hasSubmit) {
+  void _sheet(BuildContext context, bool hasSubmit) {
     showSheet(
       context: context,
       body: Column(

@@ -29,7 +29,7 @@ class _SaleScanOutWarehousePageState extends State<SaleScanOutWarehousePage> {
   var inputController = TextEditingController();
   var refreshController = EasyRefreshController(controlFinishRefresh: true);
 
-  inputWorkerDialog({required Function(WorkerInfo) submit}) {
+  void inputWorkerDialog({required Function(WorkerInfo) submit}) {
     WorkerInfo? worker;
     Get.dialog(
       PopScope(
@@ -73,7 +73,7 @@ class _SaleScanOutWarehousePageState extends State<SaleScanOutWarehousePage> {
     );
   }
 
-  _item(BarCodeInfo item) {
+  Container _item(BarCodeInfo item) {
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.only(left: 10),

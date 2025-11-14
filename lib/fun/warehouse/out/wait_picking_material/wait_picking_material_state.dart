@@ -23,7 +23,7 @@ class WaitPickingMaterialState {
 
   WaitPickingMaterialState();
 
-  getPickerInfo({
+  void getPickerInfo({
     required String pickerNumber,
     required Function() success,
     required Function(String) error,
@@ -46,7 +46,7 @@ class WaitPickingMaterialState {
     });
   }
 
-  queryPickingMaterialList({
+  void queryPickingMaterialList({
     required String typeBody,
     required String instruction,
     required String materialCode,
@@ -109,7 +109,7 @@ class WaitPickingMaterialState {
     });
   }
 
-  getMaterialInventory({
+  void getMaterialInventory({
     required String factoryCode,
     required String materialCode,
     required Function(List<ImmediateInventoryInfo>) success,
@@ -133,7 +133,7 @@ class WaitPickingMaterialState {
     });
   }
 
-  submitPickingMaterial({
+  void submitPickingMaterial({
     required bool isMove,
     required bool isPosting,
     String? pickerNumber,
@@ -176,7 +176,7 @@ class WaitPickingMaterialState {
     });
   }
 
-  getMaterialPrintInfo({
+  void getMaterialPrintInfo({
     required String orderNumber,
     required Function(PickingMaterialOrderPrintInfo) success,
     required Function(String) error,

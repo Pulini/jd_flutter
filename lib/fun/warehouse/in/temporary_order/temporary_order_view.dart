@@ -61,7 +61,7 @@ class _TemporaryOrderPageState extends State<TemporaryOrderPage> {
     saveKey: '${RouteConfig.temporaryOrder.name}${PickerType.endDate}',
   );
 
-  _query() {
+  void _query() {
     scaffoldKey.currentState?.closeEndDrawer();
     logic.queryTemporaryOrders(
       startDate: dpcStartDate.getDateFormatYMD(),

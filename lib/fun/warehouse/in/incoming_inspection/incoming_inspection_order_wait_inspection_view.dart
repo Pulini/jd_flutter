@@ -86,7 +86,7 @@ class _OrderWaitInspectionPageState extends State<OrderWaitInspectionPage> {
         ),
       );
 
-  _materialItem(InspectionMaterielInfo item) => Container(
+  Container _materialItem(InspectionMaterielInfo item) => Container(
         margin: const EdgeInsets.only(bottom: 10),
         padding: const EdgeInsets.all(5),
         decoration: BoxDecoration(

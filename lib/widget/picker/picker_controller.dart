@@ -145,7 +145,7 @@ abstract class PickerController {
   }
 
   //获取Sap供应商列表
-  getSapSupplier() async {
+  Future<Object?>? getSapSupplier() async {
     var response = await httpGet(method: webApiPickerSapSupplier);
     if (response.resultCode == resultSuccess) {
       try {
@@ -770,7 +770,7 @@ class OptionsPickerController extends PickerController {
     this.initId = '',
   });
 
-  select(int item) {
+  void select(int item) {
     selectedName.value = pickerItems[item].pickerName();
     selectedId.value = pickerItems[item].pickerId();
     selectItem = pickerData.indexWhere((v) => v.pickerId() == selectedId.value);
@@ -781,7 +781,7 @@ class OptionsPickerController extends PickerController {
     onChanged?.call(pickerData[selectItem]);
   }
 
-  search(String text) {
+  Future<void> search(String text) async {
     searchText = text;
     if (text.trim().isEmpty) {
       pickerItems.value = pickerData;
@@ -816,7 +816,7 @@ class OptionsPickerController extends PickerController {
     return select;
   }
 
-  getData() {
+  void getData() {
     if (pickerItems.isEmpty) {
       loadingError.value = 'picker_loading'.tr;
       Future fun = dataList?.call() ?? getDataList();
@@ -857,7 +857,7 @@ class LinkOptionsPickerController extends PickerController {
   final Function(PickerItem, PickerItem)? onChanged;
   final Function(PickerItem, PickerItem)? onSelected;
 
-  isReady() => pickerData.isNotEmpty;
+  bool isReady() => pickerData.isNotEmpty;
 
   LinkOptionsPickerController(
     super.pickerType, {
@@ -873,7 +873,7 @@ class LinkOptionsPickerController extends PickerController {
 
   PickerItem getPickItem2() => pickerData[selectItem1].subList()[selectItem2];
 
-  select(int item1, int item2) {
+  void select(int item1, int item2) {
     if (pickerItems1.isEmpty) return;
     var pick1 = pickerItems1[item1];
     var pick2 = pickerItems2[item2];
@@ -890,7 +890,7 @@ class LinkOptionsPickerController extends PickerController {
     onChanged?.call(getPickItem1(), getPickItem2());
   }
 
-  refreshItem2(int index) {
+  void refreshItem2(int index) {
     if (searchText.isNotEmpty) {
       var list = (pickerItems1[index] as LinkPickerItem).subList();
       var searchList = list
@@ -934,7 +934,7 @@ class LinkOptionsPickerController extends PickerController {
     return [select1, select2];
   }
 
-  getData() {
+  void getData() {
     if (pickerItems1.isEmpty && pickerItems2.isEmpty) {
       loadingError.value = 'picker_loading'.tr;
       Future fun = dataList ?? getDataList();
@@ -960,7 +960,7 @@ class LinkOptionsPickerController extends PickerController {
     }
   }
 
-  search(String text) {
+  void search(String text) {
     searchText = text;
     if (text.trim().isEmpty && pickerData.isNotEmpty) {
       pickerItems1.value = pickerData;
@@ -1029,7 +1029,7 @@ class DatePickerController extends PickerController {
     onSelected?.call(pickDate.value);
   }
 
-  select(DateTime date) {
+  void select(DateTime date) {
     pickDate.value = date;
     if (saveKey != null && saveKey!.isNotEmpty) {
       spSave(saveKey!, date.millisecondsSinceEpoch);
@@ -1086,7 +1086,7 @@ class CheckBoxPickerController extends PickerController {
     this.onSelected,
   });
 
-  select() {
+  void select() {
     var list = checkboxItems
         .where((v) => (v as PickerMesMoldingPackArea).isChecked)
         .toList();
@@ -1104,7 +1104,7 @@ class CheckBoxPickerController extends PickerController {
     onChanged?.call(selectedIds);
   }
 
-  search(String text) {
+  void search(String text) {
     if (text.trim().isEmpty) {
       checkboxItems.value = checkboxData;
     } else {
@@ -1117,12 +1117,12 @@ class CheckBoxPickerController extends PickerController {
     refreshCheckedAll();
   }
 
-  refreshCheckedAll() {
+  void refreshCheckedAll() {
     isSelectAll.value =
         checkboxItems.every((v) => (v as PickerMesMoldingPackArea).isChecked);
   }
 
-  refreshCheckedList(bool checked) {
+  void refreshCheckedList(bool checked) {
     isSelectAll.value = checked;
     for (var v in checkboxItems) {
       (v as PickerMesMoldingPackArea).isChecked = checked;
@@ -1130,7 +1130,7 @@ class CheckBoxPickerController extends PickerController {
     checkboxItems.refresh();
   }
 
-  refreshCheckedItem(int index, bool checked) {
+  void refreshCheckedItem(int index, bool checked) {
     (checkboxItems[index] as PickerMesMoldingPackArea).isChecked = checked;
     checkboxItems.refresh();
     refreshCheckedAll();
@@ -1150,7 +1150,7 @@ class CheckBoxPickerController extends PickerController {
     return list;
   }
 
-  initSelectState() {
+  void initSelectState() {
     for (var s in checkboxItems) {
       (s as PickerMesMoldingPackArea).isChecked = false;
     }
@@ -1163,7 +1163,7 @@ class CheckBoxPickerController extends PickerController {
     refreshCheckedAll();
   }
 
-  getData() {
+  void getData() {
     if (checkboxItems.isEmpty) {
       loadingError.value = 'picker_loading'.tr;
       Future fun = dataList ?? getDataList();

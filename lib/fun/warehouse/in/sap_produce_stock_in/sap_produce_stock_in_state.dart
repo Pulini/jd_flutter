@@ -22,7 +22,7 @@ class SapProduceStockInState {
     // )..scanQty=1);
   }
 
-  getOrderInfoFromCode({
+  void getOrderInfoFromCode({
     required String labelCode,
     required Function(String) error,
   }) {

@@ -5,7 +5,7 @@ import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
 
-modifyTagKeyDialog({required QualityInspectionAbnormalItemInfo data}) {
+void modifyTagKeyDialog({required QualityInspectionAbnormalItemInfo data}) {
   var controller = TextEditingController(text: data.tag.value);
   Get.dialog(
     PopScope(

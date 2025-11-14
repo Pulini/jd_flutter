@@ -8,7 +8,7 @@ import 'package:jd_flutter/utils/web_api.dart';
 class PurchaseOrderReversalState {
   var orderList = <PurchaseOrderReversalInfo>[].obs;
 
-  getReceiptVoucherList({
+  void getReceiptVoucherList({
     required String startDate,
     required String endDate,
     required String supplierNumber,
@@ -50,7 +50,7 @@ class PurchaseOrderReversalState {
     });
   }
 
-  reversal({
+  void reversal({
     required List<PurchaseOrderReversalInfo> submitList,
     required Function(String) success,
     required Function(String) error,

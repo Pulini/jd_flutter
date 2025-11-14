@@ -37,7 +37,7 @@ const String cloudDocGetFileInfo =
     'https://open.feishu.cn/open-apis/drive/v1/metas/batch_query'; //云文档获取文件元数据
 
 /// 飞书授权并查看知识库文件
-feishuViewWikiFiles({required String query}) {
+void feishuViewWikiFiles({required String query}) {
   if (query.isEmpty) {
     showSnackBar(message: 'feishu_authorize_query_empty'.tr);
   } else {
@@ -77,7 +77,7 @@ feishuViewWikiFiles({required String query}) {
 }
 
 /// 飞书授权并查看知识库文件
-feishuViewCloudDocFiles({required String query}) {
+void feishuViewCloudDocFiles({required String query}) {
   if (query.isEmpty) {
     showSnackBar(message: 'feishu_authorize_query_empty'.tr);
   } else {
@@ -133,7 +133,7 @@ feishuViewCloudDocFiles({required String query}) {
 }
 
 /// 飞书文件选择popup
-pickFilePopup({required List<Map> fileList, required Function(Map) viewFile}) {
+void pickFilePopup({required List<Map> fileList, required Function(Map) viewFile}) {
   debugPrint(fileList.toString());
   if (fileList.length == 1) {
     viewFile.call(fileList.first);
@@ -220,7 +220,7 @@ pickFilePopup({required List<Map> fileList, required Function(Map) viewFile}) {
 }
 
 /// 飞书授权检查
-feishuWikiAuthorizeCheck({
+void feishuWikiAuthorizeCheck({
   required Function() notAuthorize,
   required Function(String token) authorized,
 }) {
@@ -239,7 +239,7 @@ feishuWikiAuthorizeCheck({
 }
 
 /// 飞书授权检查
-feishuCloudDocAuthorizeCheck({
+void feishuCloudDocAuthorizeCheck({
   required Function() notAuthorize,
   required Function(String token) authorized,
 }) {
@@ -258,7 +258,7 @@ feishuCloudDocAuthorizeCheck({
 }
 
 /// 飞书wiki搜索
-feishuWikiSearch({
+void feishuWikiSearch({
   required String token,
   required String query,
   required Function(List<FeishuWikiSearchItemInfo> list) success,
@@ -323,7 +323,7 @@ feishuWikiSearch({
 }
 
 /// 飞书云文档搜索
-feishuCloudDocSearch({
+void feishuCloudDocSearch({
   required String token,
   required String query,
   required Function(List<FeishuCloudDocSearchItemInfo> list) success,
@@ -383,7 +383,7 @@ feishuCloudDocSearch({
 }
 
 /// 飞书云文档获取文件明细
-feishuGetCloudDocInfo({
+void feishuGetCloudDocInfo({
   required String token,
   required FeishuCloudDocSearchItemInfo cloudDocInfo,
   required Function(List<FeishuCloudDocFileMetasInfo> list) success,
@@ -457,7 +457,7 @@ class FeishuAuthorize extends StatelessWidget {
   final bool isWikiPermission;
   final WebViewController webViewController = WebViewController();
 
-  _getUserAccessToken(String code) {
+  void _getUserAccessToken(String code) {
     loadingShow('feishu_authorize_getting_user_token'.tr);
     Dio()
       ..interceptors.add(InterceptorsWrapper(

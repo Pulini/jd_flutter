@@ -30,7 +30,7 @@ class _SapStockTransferPageState extends State<SapStockTransferPage> {
         '${RouteConfig.sapStockTransfer.name}${PickerType.sapFactoryWarehouse}',
   );
 
-  _item(PalletDetailItem1Info label) {
+  GestureDetector _item(PalletDetailItem1Info label) {
     return GestureDetector(
       onTap: () => setState(() => label.select = !label.select),
       child: Container(

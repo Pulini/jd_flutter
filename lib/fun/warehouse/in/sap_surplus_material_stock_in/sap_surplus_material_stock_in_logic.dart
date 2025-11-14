@@ -11,7 +11,7 @@ import 'sap_surplus_material_stock_in_state.dart';
 class SapSurplusMaterialStockInLogic extends GetxController {
   final SapSurplusMaterialStockInState state = SapSurplusMaterialStockInState();
 
-  setWeighbridgeState(String weighbridgeState) {
+  void setWeighbridgeState(String weighbridgeState) {
     state.weighbridgeStateText.value =
         getWeighbridgeStateText(weighbridgeState);
     state.weighbridgeStateTextColor.value =
@@ -71,7 +71,7 @@ class SapSurplusMaterialStockInLogic extends GetxController {
     }
   }
 
-  queryHistory({
+  void queryHistory({
     required String startDate,
     required String endDate,
   }) {
@@ -82,7 +82,7 @@ class SapSurplusMaterialStockInLogic extends GetxController {
     );
   }
 
-  scanCode(String code) async {
+  Future<void> scanCode(String code) async {
     try {
       var codeData = SurplusMaterialLabelInfo.fromJson(jsonDecode(code));
       if (state.materialList.isNotEmpty &&
@@ -148,7 +148,7 @@ class SapSurplusMaterialStockInLogic extends GetxController {
     return true;
   }
 
-  submitSurplusMaterial({required String type}) {
+  void submitSurplusMaterial({required String type}) {
     state.submitSurplusMaterialStockIn(
       surplusMaterialType: type,
       success: (msg) {

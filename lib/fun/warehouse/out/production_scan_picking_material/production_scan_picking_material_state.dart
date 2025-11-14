@@ -16,7 +16,7 @@ class ProductionScanPickingMaterialState {
   }
 
 
-  submitBarCode({
+  void submitBarCode({
     required String worker,
     required String supplier,
     required int department,

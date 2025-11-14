@@ -17,7 +17,7 @@ class IncomingInspectionState {
   InspectionDetailInfo? inspectionDetail;
   var inspectionPhotoList = <File>[].obs;
 
-  queryIncomingInspectionList({
+  void queryIncomingInspectionList({
     String barcode = '',
     String area = '',
     String factory = '',
@@ -71,7 +71,7 @@ class IncomingInspectionState {
     });
   }
 
-  applyInspection({
+  void applyInspection({
     required String number,
     required Function(String) success,
     required Function(String) error,
@@ -98,7 +98,7 @@ class IncomingInspectionState {
     });
   }
 
-  getInspectionOrders({
+  void getInspectionOrders({
     required String startDate,
     required String endDate,
     required String inspectionSuppler,
@@ -127,7 +127,7 @@ class IncomingInspectionState {
     });
   }
 
-  getInspectionOrderDetails({
+  void getInspectionOrderDetails({
     required String interID,
     required Function() success,
     required Function(String) error,
@@ -148,7 +148,7 @@ class IncomingInspectionState {
     });
   }
 
-  submitInspection({
+  void submitInspection({
     required String inspector,
     required String results,
     required Function(String) success,
@@ -173,7 +173,7 @@ class IncomingInspectionState {
     });
   }
 
-  signOrder({
+  void signOrder({
     required Function(String) success,
     required Function(String msg) error,
   }) {
@@ -193,7 +193,7 @@ class IncomingInspectionState {
     });
   }
 
-  reportException({
+  void reportException({
     required String exceptionInfo,
     required Function(String) success,
     required Function(String msg) error,
@@ -215,7 +215,7 @@ class IncomingInspectionState {
     });
   }
 
-  exceptionHandling({
+  void exceptionHandling({
     required String handlingResult,
     required Function(String) success,
     required Function(String) error,
@@ -237,7 +237,7 @@ class IncomingInspectionState {
     });
   }
 
-  submitCloseOrder({
+  void submitCloseOrder({
     required Function(String) success,
     required Function(String) error,
   }) {

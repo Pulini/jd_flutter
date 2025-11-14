@@ -49,7 +49,6 @@ class _ViewProcessSpecificationPageState
                         title: state.pdfList[index].name ?? '',
                         url: url,
                       ));
-                  ;
                 },
               ),
               title: textSpan(

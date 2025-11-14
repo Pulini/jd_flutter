@@ -30,7 +30,7 @@ class _ScannerState extends State<Scanner> {
     },
   );
 
-  _setOrientation(NativeDeviceOrientation orientation) {
+  void _setOrientation(NativeDeviceOrientation orientation) {
     if (orientation == NativeDeviceOrientation.landscapeLeft) {
       quarterTurns.value = 3;
     } else if (orientation == NativeDeviceOrientation.landscapeRight) {
@@ -75,7 +75,7 @@ class _ScannerState extends State<Scanner> {
   }
 }
 
-scannerDialog({
+void scannerDialog({
   String title = '请扫描二维码',
   required Function(String code) detect,
 }) {
@@ -143,7 +143,7 @@ scannerDialog({
   );
 }
 
-pdaScanner({required Function(String) scan}) {
+void pdaScanner({required Function(String) scan}) {
   debugPrint('PdaScanner 注册监听');
   const MethodChannel(channelScanFlutterToAndroid).setMethodCallHandler((call) {
     switch (call.method) {

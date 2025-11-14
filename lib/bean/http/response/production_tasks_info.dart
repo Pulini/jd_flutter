@@ -235,17 +235,17 @@ class WorkCardSizeInfos {
 
   double scannedNotInstalled() => scannedQty.sub(installedQty ?? 0);
 
-  addProductScannedQty(double qty) {
+  void addProductScannedQty(double qty) {
     productScannedQty = productScannedQty.add(qty);
     scannedQty = scannedQty.add(qty);
   }
 
-  addManualScannedQty(double qty) {
+  void addManualScannedQty(double qty) {
     manualScannedQty = manualScannedQty.add(qty);
     scannedQty = scannedQty.add(qty);
   }
 
-  addInstalledQty(double qty) {
+  void addInstalledQty(double qty) {
     installedQty = installedQty.add(qty);
   }
 }

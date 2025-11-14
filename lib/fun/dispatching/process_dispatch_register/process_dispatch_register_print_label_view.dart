@@ -26,7 +26,7 @@ class _PrintLabelPageState extends State<PrintLabelPage> {
 
   PrintUtil pu = PrintUtil();
 
-  _previewLabel(Barcode data) {
+  void _previewLabel(Barcode data) {
     Get.to(() => PreviewLabel(
           labelWidget: processDispatchRegisterLabel(
             barCode: data.barCode ?? '',
@@ -44,7 +44,7 @@ class _PrintLabelPageState extends State<PrintLabelPage> {
     });
   }
 
-  _item(Barcode data) {
+  Widget _item(Barcode data) {
     return GestureDetector(
       onTap: () {
         setState(() {
@@ -138,7 +138,7 @@ class _PrintLabelPageState extends State<PrintLabelPage> {
     );
   }
 
-  _previewLabelList() {
+  void _previewLabelList() {
     var selected = state.labelList.where((v) => v.isSelected).toList();
     Get.to(
       () => PreviewLabelList(

@@ -22,7 +22,7 @@ class _ModifyLabelWorkerPageState extends State<ModifyLabelWorkerPage> {
   final ProcessDispatchRegisterState state =
       Get.find<ProcessDispatchRegisterLogic>().state;
 
-  _item(WorkerInfo wi, int index) {
+  Widget _item(WorkerInfo wi, int index) {
     return Obx(() => GestureDetector(
           onTap: () {
             state.select.value = index;

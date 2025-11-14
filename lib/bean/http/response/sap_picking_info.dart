@@ -99,12 +99,12 @@ class SapPickingInfo {
     return map;
   }
 
-  orderHint() {
+  String orderHint() {
     return dispatchNumber?.isEmpty == true ? '补料单号：' : '派工单号：';
   }
 
-  orderNumber() {
-    return dispatchNumber?.isEmpty == true ? pickingOrderNo : dispatchNumber;
+  String orderNumber() {
+    return dispatchNumber?.isEmpty == true ? pickingOrderNo??'' : dispatchNumber??'';
   }
 }
 

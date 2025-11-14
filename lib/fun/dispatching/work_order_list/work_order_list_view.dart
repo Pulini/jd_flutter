@@ -46,7 +46,7 @@ class _WorkOrderListPageState extends State<WorkOrderListPage> {
     saveKey: '${RouteConfig.workOrderList.name}${PickerType.endDate}',
   );
 
-  _item(WorkOrderInfo data) {
+  Card _item(WorkOrderInfo data) {
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(10),
@@ -177,7 +177,7 @@ class _WorkOrderListPageState extends State<WorkOrderListPage> {
     );
   }
 
-  _labelListDialog(List<CodeInfo> labels) {
+  void _labelListDialog(List<CodeInfo> labels) {
     Get.dialog(
       PopScope(
           canPop: false,

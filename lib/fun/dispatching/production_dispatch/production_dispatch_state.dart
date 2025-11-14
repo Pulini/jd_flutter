@@ -68,7 +68,7 @@ class ProductionDispatchState {
   }
 
   //获取组员列表数据
-  detailViewGetWorkerList() {
+  void detailViewGetWorkerList() {
     getWorkerInfo(
       department: userInfo?.departmentID.toString(),
       workers: (list) => workerList = list,
@@ -77,7 +77,7 @@ class ProductionDispatchState {
   }
 
   // ProductionDispatchState() {}
-  getSelectOne(Function(ProductionDispatchOrderInfo) callback) {
+  void getSelectOne(Function(ProductionDispatchOrderInfo) callback) {
     List<ProductionDispatchOrderInfo> select =
         orderList.where((v) => v.select).toList();
     if (select.isNotEmpty) {
@@ -85,7 +85,7 @@ class ProductionDispatchState {
     }
   }
 
-  remake() {
+  void remake() {
     workCardTitle.value = WorkCardTitle();
     workProcedure.value = [];
     batchWorkProcedure = [];
@@ -104,7 +104,7 @@ class ProductionDispatchState {
     isEnabledBatchDispatch.value = false;
   }
 
-  query({
+  void query({
     required String startTime,
     required String endTime,
     required String instruction,
@@ -140,7 +140,7 @@ class ProductionDispatchState {
   }
 
   //指令表
-  instructionList({
+  void instructionList({
     required Function(String url) success,
     required Function(String msg) error,
   }) {
@@ -162,7 +162,7 @@ class ProductionDispatchState {
   }
 
   //工艺书
-  getManufactureInstructions({
+  void getManufactureInstructions({
     required int routeID,
     required Function(List<ManufactureInstructionsInfo> data) success,
     required Function(String msg) error,
@@ -184,7 +184,7 @@ class ProductionDispatchState {
   }
 
   //配色单列表
-  colorMatching({
+  void colorMatching({
     required Function(List<OrderColorList> data, String planBill) success,
     required Function(String msg) error,
   }) {
@@ -208,7 +208,7 @@ class ProductionDispatchState {
     );
   }
 
-  getColorPdf({
+  void getColorPdf({
     required String code,
     required String id,
     required Function(String uri) success,
@@ -231,7 +231,7 @@ class ProductionDispatchState {
   }
 
   //打开/关闭工序
-  offOnProcess({
+  void offOnProcess({
     required Function(String msg) success,
     required Function(String msg) error,
   }) {
@@ -258,7 +258,7 @@ class ProductionDispatchState {
   }
 
   //删除下游工序
-  deleteDownstream({
+  void deleteDownstream({
     required Function(String msg) success,
     required Function(String msg) error,
   }) {
@@ -278,7 +278,7 @@ class ProductionDispatchState {
   }
 
   //删除上一次报工
-  deleteLastReport({
+  void deleteLastReport({
     required Function(String msg) success,
     required Function(String msg) error,
   }) {
@@ -301,7 +301,7 @@ class ProductionDispatchState {
   }
 
   //更新领料配套数
-  updateSap({
+  void updateSap({
     required Function(String msg) success,
     required Function(String msg) error,
   }) {
@@ -320,7 +320,7 @@ class ProductionDispatchState {
     });
   }
 
-  getSurplusMaterial(Function(List<Map>) callback) {
+  void getSurplusMaterial(Function(List<Map>) callback) {
     getSelectOne((v) {
       callback.call([
         if (v.stubBar1?.isNotEmpty == true &&
@@ -346,7 +346,7 @@ class ProductionDispatchState {
   }
 
   //报工SAP
-  reportToSap({
+  void reportToSap({
     required double qty,
     required Function() success,
     required Function(String msg) error,
@@ -370,7 +370,7 @@ class ProductionDispatchState {
     });
   }
 
-  orderPush({
+  void orderPush({
     required ProductionDispatchOrderInfo order,
     required Function(ProductionDispatchOrderDetailInfo detailInfo) success,
     required Function(String msg) error,
@@ -396,7 +396,7 @@ class ProductionDispatchState {
     });
   }
 
-  ordersPush({
+  void ordersPush({
     required List<ProductionDispatchOrderInfo> orders,
     required Function(ProductionDispatchOrderDetailInfo data) success,
     required Function(String msg) error,
@@ -432,7 +432,7 @@ class ProductionDispatchState {
     });
   }
 
-  getWorkPlanMaterial({
+  void getWorkPlanMaterial({
     required Function(List<WorkPlanMaterialInfo> data) success,
     required Function(String msg) error,
   }) {
@@ -451,7 +451,7 @@ class ProductionDispatchState {
     });
   }
 
-  getPrdRouteInfo({
+  void getPrdRouteInfo({
     required Function(List<PrdRouteInfo> data) success,
     required Function(String msg) error,
   }) {
@@ -486,7 +486,7 @@ class ProductionDispatchState {
     });
   }
 
-  sendDispatchToWechat({
+  void sendDispatchToWechat({
     required List<Map> submitData,
     required Function(String msg) success,
     required Function(String msg) error,
@@ -504,7 +504,7 @@ class ProductionDispatchState {
     });
   }
 
-  productionDispatch({
+  void productionDispatch({
     required List<Map> submitData,
     required Function(String msg) success,
     required Function(String msg) error,
@@ -522,7 +522,7 @@ class ProductionDispatchState {
     });
   }
 
-  mergeOrderProductionDispatch({
+  void mergeOrderProductionDispatch({
     required List<Map> submitData,
     required Function(String msg) success,
     required Function(String msg) error,
@@ -540,7 +540,7 @@ class ProductionDispatchState {
     });
   }
 
-  queryProgress({
+  void queryProgress({
     required String startTime,
     required String endTime,
     required String instruction,

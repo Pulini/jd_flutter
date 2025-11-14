@@ -22,7 +22,7 @@ class SapPrintPickingState {
 
 
 
-  getMaterialPickingOrderList({
+  void getMaterialPickingOrderList({
     String? noticeNo,
     String? instructionNo,
     String? typeBody,
@@ -66,7 +66,7 @@ class SapPrintPickingState {
     });
   }
 
-  getMaterialPickingOrderDetail({
+  void getMaterialPickingOrderDetail({
     required Function(String) error,
   }) {
     sapPost(
@@ -102,7 +102,7 @@ class SapPrintPickingState {
     });
   }
 
-  submitMaterialPrintPicking({
+  void submitMaterialPrintPicking({
     required String pickerNumber,
     required ByteData pickerSignature,
     required String userNumber,
@@ -157,7 +157,7 @@ class SapPrintPickingState {
     });
   }
 
-  submitSizeMaterialPrintPicking({
+  void submitSizeMaterialPrintPicking({
     required String pickerNumber,
     required ByteData pickerSignature,
     required String userNumber,
@@ -241,7 +241,7 @@ class SapPrintPickingState {
     });
   }
 
-  checkPallet({
+  void checkPallet({
     required List<String> pallets,
     required Function(PalletDetailInfo) success,
     required Function(String) error,
@@ -276,7 +276,7 @@ class SapPrintPickingState {
     });
   }
 
-  transfer({
+  void transfer({
     required PalletDetailItem2Info targetPallet,
     required Function() success,
     required Function(String) error,

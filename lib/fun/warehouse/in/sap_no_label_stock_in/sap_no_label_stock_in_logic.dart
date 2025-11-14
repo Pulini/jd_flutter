@@ -10,7 +10,7 @@ class SapNoLabelStockInLogic extends GetxController {
   final SapNoLabelStockInState state = SapNoLabelStockInState();
 
 
-  query({
+  void query({
     required String reportStartDate,
     required String reportEndDate,
     required String dispatchNumber,
@@ -27,7 +27,7 @@ class SapNoLabelStockInLogic extends GetxController {
     );
   }
 
-  modifyMaterialStockInQty(double qty, SapNoLabelStockInItemInfo data) {
+  void modifyMaterialStockInQty(double qty, SapNoLabelStockInItemInfo data) {
     double surplus = qty;
     for (var v in data.materialList) {
       var needStockInQty = (v.reportQty ?? 0).sub(v.receivedQty ?? 0);
@@ -42,7 +42,7 @@ class SapNoLabelStockInLogic extends GetxController {
     state.orderList.refresh();
   }
 
-  submitStockIn({
+  void submitStockIn({
     required String leaderNumber,
     required ByteData leaderSignature,
     required String userNumber,

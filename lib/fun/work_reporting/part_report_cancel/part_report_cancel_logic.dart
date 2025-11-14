@@ -11,7 +11,7 @@ class PartReportCancelLogic extends GetxController {
   final PartReportCancelState state = PartReportCancelState();
 
   //获取工票详情
-  getReportSummary(String code) {
+  void getReportSummary(String code) {
     if (code.isEmpty) {
       showSnackBar(message: 'part_report_cancel_ticket_is_empty'.tr);
     } else {
@@ -41,7 +41,7 @@ class PartReportCancelLogic extends GetxController {
   }
 
   //清除数据
-  cleanData() {
+  void cleanData() {
     state.factory.value = '';
     state.part.value = '';
     state.processName.value = '';
@@ -51,7 +51,7 @@ class PartReportCancelLogic extends GetxController {
   }
 
   //是否登录人提交
-  checkPeople() {
+  bool checkPeople() {
     if (userInfo?.empID.toString() == state.empID) {
       return true;
     } else {
@@ -60,7 +60,7 @@ class PartReportCancelLogic extends GetxController {
   }
 
   //取消报工
-  cancelPart({
+  void cancelPart({
     required Function(String msg) success,
   }) {
     if (state.part.isEmpty) {
@@ -85,7 +85,7 @@ class PartReportCancelLogic extends GetxController {
     }
   }
   //提交报工
-  submitPart({
+  void submitPart({
     required Function(String msg) success,
   }) {
     if (state.part.isEmpty) {

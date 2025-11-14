@@ -35,7 +35,7 @@ class _SapInkColorMatchingRecreatePageState
   var fn = FocusNode();
   var hasSet = false.obs;
 
-  _item(SapRecreateInkColorItemInfo data, int index) {
+  GestureDetector _item(SapRecreateInkColorItemInfo data, int index) {
     var ballColor = data.materialColor.getColorByDescription();
     return GestureDetector(
       onTap: () {
@@ -120,7 +120,7 @@ class _SapInkColorMatchingRecreatePageState
     );
   }
 
-  setPresetWeight() {
+  void setPresetWeight() {
     if (!hasSet.value) {
       hidKeyboard();
       logic.setPresetWeight(controller.text.toDoubleTry());

@@ -28,7 +28,7 @@ class _ProcessDispatchRegisterPageState
 
   TextEditingController controller = TextEditingController();
 
-  itemList1() {
+  List<Widget> itemList1() {
     var listWidget = <Widget>[];
     var totalDayMustQty = 0.0;
     var totalMustQty = 0.0;
@@ -148,7 +148,7 @@ class _ProcessDispatchRegisterPageState
     return listWidget;
   }
 
-  itemList2() {
+  List<Widget> itemList2() {
     var listWidget = <Widget>[];
     var totalDayMustQty = 0.0;
     var totalMustQty = 0.0;
@@ -308,17 +308,17 @@ class _ProcessDispatchRegisterPageState
             ),
             if (state.typeBody.isNotEmpty)
               Container(
+                margin: const EdgeInsets.only(left: 8, right: 8),
                 child: textSpan(
                     hint: 'process_dispatch_register_type_body'.tr,
                     text: state.typeBody.value),
-                margin: const EdgeInsets.only(left: 8, right: 8),
               ),
             if (state.progress.isNotEmpty)
               Container(
+                margin: const EdgeInsets.only(left: 8, right: 8),
                 child: textSpan(
                     hint: 'process_dispatch_register_process'.tr,
                     text: state.progress.value),
-                margin: const EdgeInsets.only(left: 8, right: 8),
               ),
             Expanded(
               child: ListView(

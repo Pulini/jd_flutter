@@ -200,7 +200,7 @@ class SurplusMaterialLabelInfo {
       )
       ''';
 
-  save() {
+  void save() {
     openDb().then((db) async {
       await db.insert(tableName, toJson());
       db.close();
@@ -217,7 +217,7 @@ class SurplusMaterialLabelInfo {
     return list.isNotEmpty;
   }
 
-  delete({required Function() callback}) {
+  void delete({required Function() callback}) {
     openDb().then((db) {
       db.delete(tableName, where: 'id = ?', whereArgs: [id]).then((value) {
         db.close();
@@ -229,7 +229,7 @@ class SurplusMaterialLabelInfo {
     });
   }
 
-  static clear({
+  static void clear({
     required String type,
     required Function(int) callback,
   }) {

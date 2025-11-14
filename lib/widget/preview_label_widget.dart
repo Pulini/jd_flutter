@@ -36,7 +36,7 @@ class _PreviewLabelState extends State<PreviewLabel> {
   RxDouble printDensity = 0.0.obs;
   static bool _isAlreadyOpen = false;
 
-  printLabel() async {
+  Future<void> printLabel() async {
     if (image.isEmpty) return;
     loadingShow('正在生成标签...');
     var label = await imageResizeToLabel({
@@ -78,7 +78,7 @@ class _PreviewLabelState extends State<PreviewLabel> {
     super.initState();
   }
 
-  onlinePrint() async {
+  Future<void> onlinePrint() async {
     onLinePrintDialog([
       mergeUint8List(
         await imageResizeToLabel({

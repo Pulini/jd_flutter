@@ -8,7 +8,7 @@ import 'sap_packing_scan_reverse_state.dart';
 class SapPackingScanReverseLogic extends GetxController {
   final SapPackingScanReverseState state = SapPackingScanReverseState();
 
-  reverseScan(String code) {
+  void reverseScan(String code) {
     state.getReverseLabelInfo(
       code: code,
       success: (label) {
@@ -32,11 +32,11 @@ class SapPackingScanReverseLogic extends GetxController {
     );
   }
 
-  deleteReverseLabel(SapPackingScanReverseLabelInfo data) {
+  void deleteReverseLabel(SapPackingScanReverseLabelInfo data) {
     state.reverseLabelList.remove(data);
   }
 
-  reverseLabel() {
+  void reverseLabel() {
     state.reverseLabel(
       success: (msg) => successDialog(content: msg),
       error: (msg) => errorDialog(content: msg),

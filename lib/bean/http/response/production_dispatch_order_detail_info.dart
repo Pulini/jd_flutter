@@ -85,17 +85,17 @@ class WorkCardTitle {
     return map;
   }
 
-  getDispatchTotal() => '派工总数：${dispatchingNumber.toShowString()}';
+  String getDispatchTotal() => '派工总数：${dispatchingNumber.toShowString()}';
 
-  getTodayGoal() => '今日目标：${dayWorkCardPlanQty.toShowString()}';
+  String getTodayGoal() => '今日目标：${dayWorkCardPlanQty.toShowString()}';
 
-  getReported() => '已汇报数：${qtyPass.toShowString()}';
+  String getReported() => '已汇报数：${qtyPass.toShowString()}';
 
-  getUnderCount() => '汇报欠数：${dispatchingNumber.sub(qtyPass!).toShowString()}';
+  String getUnderCount() => '汇报欠数：${dispatchingNumber.sub(qtyPass!).toShowString()}';
 
-  getAccumulateReportCount() => '累计计工数：${qtyProcessPass.toShowString()}';
+  String getAccumulateReportCount() => '累计计工数：${qtyProcessPass.toShowString()}';
 
-  getReportedCount() =>
+  String getReportedCount() =>
       '已汇报未计工数：${qtyPass.sub(qtyProcessPass!).toShowString()}';
 }
 
@@ -233,7 +233,7 @@ class WorkCardList {
   }
   String uniqueID()=>'$operPlanningEntryFID$sourceInterID';
 
-  getProcess() => '< $processNumber > $processName';
+  String getProcess() => '< $processNumber > $processName';
 
   double getTotal() {
     var total = 0.0;
@@ -243,15 +243,15 @@ class WorkCardList {
     return total;
   }
 
-  getTotalString() => '计工：${getTotal().toShowString()}';
+  String getTotalString() => '计工：${getTotal().toShowString()}';
 
-  getFinishQtyString() => '已计工：${finishQty.toShowString()}';
+  String getFinishQtyString() => '已计工：${finishQty.toShowString()}';
 
-  getSurplusQtyString() => '剩余：${mustQty.toShowString()}';
+  String getSurplusQtyString() => '剩余：${mustQty.toShowString()}';
 
-  isShowWarning() => getTotal() > mustQty!;
+  bool isShowWarning() => getTotal() > mustQty!;
 
-  isShowFlag() => getTotal() == mustQty!;
+  bool isShowFlag() => getTotal() == mustQty!;
 }
 
 class DispatchInfo {
@@ -364,7 +364,7 @@ class SaveWorkProcedure {
     return map;
   }
 
-  save(Function(SaveWorkProcedure) callback) {
+  void save(Function(SaveWorkProcedure) callback) {
     openDb().then((db) {
       db.insert(tableName, toJson()).then((value) {
         db.close();
@@ -376,7 +376,7 @@ class SaveWorkProcedure {
     });
   }
 
-  static getSave(String plantBody, Function(List<SaveWorkProcedure>) callback) {
+  static void getSave(String plantBody, Function(List<SaveWorkProcedure>) callback) {
     openDb().then((db) {
       db.query(
         tableName,
@@ -397,7 +397,7 @@ class SaveWorkProcedure {
     });
   }
 
-  delete(Function() callback) {
+  void delete(Function() callback) {
     openDb().then((db) {
       db.delete(tableName, where: 'id = ?', whereArgs: [id]).then((value) {
         db.close();
@@ -449,7 +449,7 @@ class SaveDispatch {
     return map;
   }
 
-  save(Function(SaveDispatch) callback) {
+  void save(Function(SaveDispatch) callback) {
     openDb().then((db) {
       db.rawInsert(
         dbInsertOrReplace,
@@ -464,7 +464,7 @@ class SaveDispatch {
     });
   }
 
-  static delete({
+  static void delete({
     required String processBillNumber,
     Function()? callback,
   }) {
@@ -483,7 +483,7 @@ class SaveDispatch {
     });
   }
 
-  static getSave(
+  static void getSave(
     String processBillNumber,
     Function(SaveDispatch) callback,
   ) {

@@ -13,7 +13,7 @@ class SapPutOnShelvesState {
 
 
 
-  getPalletList({
+  void getPalletList({
     required String warehouse,
     required Function() refresh,
     required Function(String) error,
@@ -75,7 +75,7 @@ class SapPutOnShelvesState {
   //    WM08	并筐合标
   //    WM09	注塑换标出库
   //    WM10	喷漆换标入库
-  getRecommendLocation({
+  void getRecommendLocation({
     required String factory,
     required String warehouse,
     required String palletNumber,
@@ -110,7 +110,7 @@ class SapPutOnShelvesState {
     });
   }
 
-  puttingOnShelves({
+  void puttingOnShelves({
     required String warehouse,
     required String location,
     required Function(String) success,
