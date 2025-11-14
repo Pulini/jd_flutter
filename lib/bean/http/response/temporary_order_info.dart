@@ -103,7 +103,7 @@ class TemporaryOrderInfo {
     }
   }
 
-  temporaryQty() {
+  String temporaryQty() {
     var sum = 0.0;
     var baseSum = 0.0;
     temporarySize?.forEach((v) {

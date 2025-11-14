@@ -419,7 +419,7 @@ class WorkshopPlanningWorkersCache {
       ) VALUES (?,?,?,?)
       ''';
 
-  save(Function()callback) {
+  void save(Function()callback) {
     openDb().then((db) {
       db.rawInsert(
         dbInsertOrReplace,
@@ -435,7 +435,7 @@ class WorkshopPlanningWorkersCache {
     });
   }
 
-  static getSave({
+  static void getSave({
     required String departmentID,
     required Function(List<WorkshopPlanningWorkersCache>) callback,
   }) {
@@ -457,7 +457,7 @@ class WorkshopPlanningWorkersCache {
     });
   }
 
-  delete({required Function() callback}) {
+  Future<void> delete({required Function() callback}) async {
     openDb().then((db) {
       db.delete(tableName, where: 'ID = ?', whereArgs: [id]).then((value) {
         db.close();
@@ -469,10 +469,6 @@ class WorkshopPlanningWorkersCache {
     });
   }
 }
-
-//   "ItemID": 1028316,
-//   "Number": "062200952",
-//   "Name": "PDS大底(MO1217模)黑色 中底 IP:Grippy IMEVA(52±2C)+黑色 RB底片(57±2A耐磨100)"
 
 class WorkshopPlanningMaterialInfo{
   int? itemID;
@@ -547,10 +543,7 @@ class WorkshopPlanningLastProcessInfo{
   }
   double getMoney()=>qty.mul(price??0);
 }
-// "GroupPayInterID": 4156766,
-//  "Number": "GXTJ2518760",
-//  "Date": "2025-07-21",
-//  "FinishQty": 1708.0
+
 class LastProcessGroupPayInfo{
   int? groupPayInterID;
   String? number;

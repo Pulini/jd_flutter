@@ -57,7 +57,7 @@ class HomeLogic extends GetxController {
     });
   }
 
-  refreshFunList(Function() finish) {
+  void refreshFunList(Function() finish) {
     state.getMenuFunction(success: (json) async {
       spSave(spSaveMenuInfo, textToKey(json.toString()));
       functions = await _jsonToMenuFunction(json);

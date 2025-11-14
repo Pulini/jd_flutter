@@ -18,7 +18,7 @@ class HydroelectricExcessState {
 
 
 //搜索具体房间信息
-  searchRoom({
+  void searchRoom({
     required String  type,
     required DeviceListInfo data,
     required Function(List<DeviceDetailInfo>) success,
@@ -42,7 +42,7 @@ class HydroelectricExcessState {
   }
 
   //获取所有设备信息
-  getWaterEnergyMachine({
+  void getWaterEnergyMachine({
     required String deviceNumber,
     required String bedNumber,
   }) {
@@ -68,7 +68,7 @@ class HydroelectricExcessState {
   }
 
   //提交本次抄录数据
-  submit({required String textThisTime}) {
+  void submit({required String textThisTime}) {
     if (textThisTime.isEmpty) {
       showSnackBar(
           title: 'shack_bar_warm'.tr,

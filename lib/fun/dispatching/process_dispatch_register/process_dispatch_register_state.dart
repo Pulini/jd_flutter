@@ -25,7 +25,7 @@ class ProcessDispatchRegisterState {
 
   ProcessDispatchRegisterState();
 
-  getProcessWorkCardByBarcode({
+  void getProcessWorkCardByBarcode({
     required String barCode,
     required Function(String msg) error,
   }) {
@@ -60,7 +60,7 @@ class ProcessDispatchRegisterState {
     });
   }
 
-  queryLabelData({
+  void queryLabelData({
     required String code,
     required Function(String msg) error,
   }) {
@@ -84,7 +84,7 @@ class ProcessDispatchRegisterState {
     });
   }
 
-  modifyLabelWorker({
+  void modifyLabelWorker({
     required Function(String msg) success,
     required Function(String msg) error,
   }) {
@@ -105,7 +105,7 @@ class ProcessDispatchRegisterState {
     });
   }
 
-  deleteLabel({
+  void deleteLabel({
     required String barCode,
     required Function(String msg) success,
     required Function(String msg) error,

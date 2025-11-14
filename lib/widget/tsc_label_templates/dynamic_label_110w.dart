@@ -13,7 +13,7 @@ var _smallStyle = const TextStyle(
 );
 var _textPadding = const EdgeInsets.only(left: 3, right: 3);
 
-_paddingTextLeft({
+Widget _paddingTextLeft({
   required String text,
   required int flex,
   TextStyle? style,

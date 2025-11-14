@@ -1,57 +1,3 @@
-//   "EINDT_QR": "",
-//  [
-//       "": "0000",//ETENR
-//       "": "0199001",//MATNR
-//       "": "2025-04-24",//EINDT_QR
-//       "": "",//ZXT
-//       "": "",//ZZBZ
-//       "": "218",//W_WEMNG
-//  ]
-
-//{
-//   "CompanyCode": "1000",
-//   "FactoryNumber": "1098",
-//   "FactoryDescription": "金帝贸易仓库",
-//   "PurchaseOrderNumber": "",
-//   "MaterialNo": "0199001",//SATNR
-//   "MaterialName": "0.8mm厚废PU",//MAKTX_YB
-//   "FactoryArea": "",//ZQY
-//   "TypeBody": "XD13552-5A",//ZZXTNO
-//   "SalesOrder": "M2200731",//VBELN
-//   "Supplier": "0000500289",//LIFNR
-//   "SupplierName": "浙江冠亚鞋业有限公司",//NAME1
-//   "Unit": "千克",//MEINS
-//   "IsScanPieces": "",
-//   "IsNoCheck": "",
-//   "CustomerPO": "",
-//   "Type": "  1",
-//   "Details": [//ZCGSLTZD_ITEM
-//     {
-//       "PurchaseOrder": "4510010321",//EBELN
-//       "PurchaseOrderLineItem": "00010",//EBELP
-//       "Remark": "",//ZREMARK
-//       "Size": "0",//SIZE1
-//       "OrderQty": "228",//MENGE
-//       "ReceivedQty": "10",//WEMNG
-//       "UnderNum": "0",
-//       "IssuedDeliveryOrderNum": "228",
-//       "UnqualifiedNum": "0",
-//       "Location": "1001",
-//       "LocationDescription": "面料仓",
-//       "CustomerPO": "",
-//       "TrackNo": "",
-//       "ReceiptVoucher": [//GT_ITEMS
-//         {
-//           "MaterialDocumentNo": "5000014951",//MBLNR
-//           "MaterialVoucherYear": "2025",//MJAHR
-//           "MaterialVoucherItem": "0001",//ZEILE
-//           "Quantity": "10.0",//MENGE
-//           "Unit": "米"//MEINS
-//         }
-//       ]
-//     }
-//   ]
-// }
 import 'package:get/get.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 
@@ -121,7 +67,7 @@ class PurchaseOrderInfo {
 
   bool isSelectAll() => details!.every((v) => v.isSelected.value);
 
-  selectAll(bool select) {
+  void selectAll(bool select) {
     for (var v in details!) {
       v.isSelected.value = select;
     }

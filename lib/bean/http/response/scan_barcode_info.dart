@@ -172,7 +172,7 @@ class ReportItemData {
     }
   }
 
-  sharingDistribution() {
+  void sharingDistribution() {
     if (distribution.isNotEmpty) {
       var disTotal = getProcessMax();
       var integer = disTotal ~/ distribution.length;

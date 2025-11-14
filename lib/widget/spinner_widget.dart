@@ -33,7 +33,7 @@ class SpinnerController {
     return select;
   }
 
-  changeSelected(String? value) {
+  void changeSelected(String? value) {
     if (value != null && value.isNotEmpty) {
       select.value = value;
       var index = dataList.indexOf(value);

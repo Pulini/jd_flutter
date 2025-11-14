@@ -32,7 +32,7 @@ class _PreviewWebLabelListState extends State<PreviewWebLabelList> {
   var labelByteMap = <Uint8List>[];
   late MediaQueryData mediaQueryData;
 
-  runTask() {
+  void runTask() {
     var dio = Dio()
       ..interceptors.add(InterceptorsWrapper(
         onRequest: (options, handler) {
@@ -99,7 +99,7 @@ class _PreviewWebLabelListState extends State<PreviewWebLabelList> {
     }
   }
 
-  printLabel() async {
+  Future<void> printLabel() async {
     if (labelByteMap.isEmpty) {
       for (var i = 0; i < reImageList.length; ++i) {
         loadingShow('正在生成标签数据( $i / ${reImageList.length} )...');

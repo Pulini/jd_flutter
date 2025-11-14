@@ -200,7 +200,7 @@ class SurplusMaterialLabelInfo {
       )
       ''';
 
-  save() {
+  void save() {
     openDb().then((db) async {
       await db.insert(tableName, toJson());
       db.close();
@@ -229,7 +229,7 @@ class SurplusMaterialLabelInfo {
     });
   }
 
-  static clear({
+  static void clear({
     required String type,
     required Function(int) callback,
   }) {

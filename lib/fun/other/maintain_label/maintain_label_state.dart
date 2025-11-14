@@ -45,7 +45,7 @@ class MaintainLabelState {
             .toList();
   }
 
-  getLabelInfoList({
+  void getLabelInfoList({
     required Function(String msg) error,
   }) {
     httpGet(
@@ -94,7 +94,7 @@ class MaintainLabelState {
     });
   }
 
-  createSingleLabel({
+  void createSingleLabel({
     required Function() success,
     required Function(String msg) error,
   }) {
@@ -116,7 +116,7 @@ class MaintainLabelState {
     });
   }
 
-  barCodeCount({
+  void barCodeCount({
     required bool isMix,
     required Function(List<PickingBarCodeInfo> list) success,
     required Function(String msg) error,
@@ -165,7 +165,7 @@ class MaintainLabelState {
     });
   }
 
-  deleteAllLabel({
+  void deleteAllLabel({
     required Function(String msg) success,
     required Function(String msg) error,
   }) {
@@ -184,7 +184,7 @@ class MaintainLabelState {
     });
   }
 
-  deleteLabels({
+  void deleteLabels({
     required List<String> select,
     required Function(String msg) success,
     required Function(String msg) error,
@@ -205,7 +205,7 @@ class MaintainLabelState {
     });
   }
 
-  getMaterialProperties({
+  void getMaterialProperties({
     required Function(RxList<MaintainMaterialPropertiesInfo>) success,
     required Function(String msg) error,
   }) {
@@ -228,7 +228,7 @@ class MaintainLabelState {
     });
   }
 
-  getMaterialCapacity({
+  void getMaterialCapacity({
     required Function(RxList<MaintainMaterialCapacityInfo>) success,
     required Function(String msg) error,
   }) {
@@ -250,7 +250,7 @@ class MaintainLabelState {
     });
   }
 
-  getMaterialLanguages({
+  void getMaterialLanguages({
     required Function(RxList<MaintainMaterialLanguagesInfo>) success,
     required Function(String msg) error,
   }) {
@@ -270,7 +270,7 @@ class MaintainLabelState {
     });
   }
 
-  setLabelState({
+  void setLabelState({
     required List<List<LabelInfo>> selectLabels,
     required int labelType,
     required Function(int type) success,

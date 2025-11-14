@@ -32,7 +32,7 @@ class _VisitRegisterDetailPageState extends State<VisitRegisterDetailPage> {
     FilteringTextInputFormatter.allow(RegExp('[0-9]')),
   ];
 
-  _text(String title, String? text1) {
+  Row _text(String title, String? text1) {
     return Row(
       children: [
         Container(
@@ -48,7 +48,7 @@ class _VisitRegisterDetailPageState extends State<VisitRegisterDetailPage> {
     );
   }
 
-  _peoplePhotos() {
+  Padding _peoplePhotos() {
     return Padding(
       padding: const EdgeInsets.only(top: 20, bottom: 20),
       child: Obx(() => Row(

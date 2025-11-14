@@ -56,7 +56,7 @@ class _PartLabelPageState extends State<PartLabelPage> {
     );
   }
 
-  _createLabelDialog(SizeInfo data) {
+  void _createLabelDialog(SizeInfo data) {
     var max = data.qty.sub(data.createQty ?? 0);
     var boxCapacity = max;
     var createQty = max;
@@ -123,7 +123,7 @@ class _PartLabelPageState extends State<PartLabelPage> {
     );
   }
 
-  _printLabelDialog(List<BarCodeInfo> dataList) {
+  void _printLabelDialog(List<BarCodeInfo> dataList) {
     var select = <RxBool>[];
     var data = <BarCodeInfo>[].obs;
     for (var v in dataList) {
@@ -261,7 +261,7 @@ class _PartLabelPageState extends State<PartLabelPage> {
     );
   }
 
-  _paddingText(String text) {
+  Padding _paddingText(String text) {
     return Padding(
       padding: const EdgeInsets.only(left: 10),
       child: Text(
@@ -274,7 +274,7 @@ class _PartLabelPageState extends State<PartLabelPage> {
     );
   }
 
-  _item(SizeInfo data) {
+  GestureDetector _item(SizeInfo data) {
     return GestureDetector(
       onTap: () {
         if (checkUserPermission('1052501')) {
@@ -326,7 +326,7 @@ class _PartLabelPageState extends State<PartLabelPage> {
     );
   }
 
-  _itemTotal(SizeInfo data) {
+  Card _itemTotal(SizeInfo data) {
     return Card(
       color: Colors.blueAccent,
       child: Padding(

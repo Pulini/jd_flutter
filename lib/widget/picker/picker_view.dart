@@ -24,7 +24,7 @@ class DatePicker extends StatelessWidget {
   final double margin;
   final Color bkgColor;
 
-  _showOptions() {
+  void _showOptions() {
     showDatePicker(
       locale: View.of(Get.overlayContext!).platformDispatcher.locale,
       context: Get.overlayContext!,
@@ -99,7 +99,7 @@ class OptionsPicker extends StatelessWidget {
   final double margin;
   final Color bkgColor;
 
-  _showOptions() {
+  void _showOptions() {
     if (pickerController.enable.value == false) return;
     if (pickerController.pickerItems.isNotEmpty) {
       //创建选择器控制器
@@ -250,7 +250,7 @@ class LinkOptionsPicker extends StatelessWidget {
     );
   }
 
-  _showOptions() {
+  void _showOptions() {
     if (pickerController.enable.value == false) return;
     if (pickerController.pickerItems1.isNotEmpty) {
       var select = pickerController.getSave();
@@ -416,7 +416,7 @@ class CheckBoxPicker extends StatelessWidget {
   final double margin;
   final Color bkgColor;
 
-  _showCheckBoxList() {
+  void _showCheckBoxList() {
     if (checkBoxController.enable.value == false) return;
     if (checkBoxController.checkboxItems.isNotEmpty) {
       checkBoxController.initSelectState();

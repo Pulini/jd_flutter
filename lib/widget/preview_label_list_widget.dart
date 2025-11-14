@@ -34,7 +34,7 @@ class _PreviewLabelListState extends State<PreviewLabelList> {
 
   static bool _isAlreadyOpen = false;
 
-  printLabel() async {
+  Future<void> printLabel() async {
     if (imageList.isEmpty) return;
     loadingShow('正在生成标签...');
     var labelList = <List<Uint8List>>[];
@@ -58,7 +58,7 @@ class _PreviewLabelListState extends State<PreviewLabelList> {
     );
   }
 
-  printLabelOnline() async {
+  Future<void> printLabelOnline() async {
     var list = <Uint8List>[];
     loadingShow('正在生成标签...');
     for (var image in imageList) {

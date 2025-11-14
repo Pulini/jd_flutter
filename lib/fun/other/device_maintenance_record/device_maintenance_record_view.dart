@@ -23,7 +23,7 @@ class _DeviceMaintenanceRecordViewState
   final logic = Get.put(DeviceMaintenanceRecordLogic());
   final state = Get.find<DeviceMaintenanceRecordLogic>().state;
 
-  _item(DeviceMaintenanceListInfo data) {
+  InkWell _item(DeviceMaintenanceListInfo data) {
     return InkWell(
       onTap: () {logic.searchDeviceInfo(data.deviceNo.toString());},
       onLongPress: (){

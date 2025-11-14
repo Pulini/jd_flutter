@@ -13,7 +13,7 @@ import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
 
-createMixLabelDialog(
+void createMixLabelDialog(
     List<PickingBarCodeInfo> list, int id, Function() callback) {
   var group = <List<PickingBarCodeInfo>>[];
   groupBy(list, (v) => v.size).forEach((key, value) {
@@ -92,7 +92,7 @@ createMixLabelDialog(
   );
 }
 
-_createMixLabel(
+void _createMixLabel(
   List<List<RxBool>> selected,
   List<List<PickingBarCodeInfo>> list,
   int maxLabel,
@@ -142,7 +142,7 @@ _createMixLabel(
   });
 }
 
-_createMixLabelItem(
+Obx _createMixLabelItem(
   List<List<RxBool>> selected,
   List<List<PickingBarCodeInfo>> list,
   int index,
@@ -202,7 +202,7 @@ _createMixLabelItem(
       ));
 }
 
-_createMixLabelSubItem(
+Column _createMixLabelSubItem(
   List<List<RxBool>> selected,
   List<List<PickingBarCodeInfo>> list,
   int index,
@@ -290,7 +290,7 @@ int _getLabelMax(
   return max;
 }
 
-createCustomLabelDialog(
+void createCustomLabelDialog(
   List<PickingBarCodeInfo> list,
   int id,
   isMaterialLabel,
@@ -361,7 +361,7 @@ createCustomLabelDialog(
   );
 }
 
-_createCustomLabelItem(
+Obx _createCustomLabelItem(
   int index,
   List<PickingBarCodeInfo> list,
   RxList<bool> selected,
@@ -505,7 +505,7 @@ _createCustomLabelItem(
   );
 }
 
-_createCustomLabel(
+void _createCustomLabel(
   List<PickingBarCodeInfo> list,
   RxList<bool> selected,
   RxList<double> capacity,
@@ -566,7 +566,7 @@ int _createLabel(double capacity, double createGoods) {
   }
 }
 
-setLabelPropertyDialog(
+void setLabelPropertyDialog(
   RxList<MaintainMaterialPropertiesInfo> list,
   int id,
   String materialCode,
@@ -657,7 +657,7 @@ setLabelPropertyDialog(
   );
 }
 
-_setLabelPropertyItem(MaintainMaterialPropertiesInfo data) {
+Card _setLabelPropertyItem(MaintainMaterialPropertiesInfo data) {
   return Card(
     child: Padding(
       padding: const EdgeInsets.all(10),
@@ -726,7 +726,7 @@ _setLabelPropertyItem(MaintainMaterialPropertiesInfo data) {
   );
 }
 
-batchSetLabelPropertyDialog(
+void batchSetLabelPropertyDialog(
   Function(
     double netWeight,
     double grossWeight,
@@ -816,7 +816,7 @@ batchSetLabelPropertyDialog(
   );
 }
 
-_setMaterialProperties(
+void _setMaterialProperties(
   List<Map> list,
   int id,
   String materialCode,
@@ -840,7 +840,7 @@ _setMaterialProperties(
   });
 }
 
-_expandedNumberEditText(
+Expanded _expandedNumberEditText(
   String hint,
   double initQty,
   Function(double) callback,
@@ -868,7 +868,7 @@ _expandedNumberEditText(
   );
 }
 
-_expandedEditText(
+Expanded _expandedEditText(
   String hint,
   String initStr,
   Function(String) callback,
@@ -896,7 +896,7 @@ _expandedEditText(
   );
 }
 
-setLabelCapacityDialog(
+void setLabelCapacityDialog(
   RxList<MaintainMaterialCapacityInfo> list,
   int id,
   Function() callback,
@@ -1000,7 +1000,7 @@ setLabelCapacityDialog(
   );
 }
 
-_setMaterialCapacity(
+void _setMaterialCapacity(
   RxList<MaintainMaterialCapacityInfo> list,
   Function() callback,
 ) {
@@ -1029,7 +1029,7 @@ _setMaterialCapacity(
   });
 }
 
-setLabelLanguageDialog(
+void setLabelLanguageDialog(
   RxList<MaintainMaterialLanguagesInfo> list,
   String materialCode,
   Function() callback,
@@ -1087,7 +1087,7 @@ setLabelLanguageDialog(
   );
 }
 
-_setMaterialLanguages(
+void _setMaterialLanguages(
   RxList<MaintainMaterialLanguagesInfo> list,
   String materialCode,
   Function() callback,
@@ -1158,7 +1158,7 @@ selectMaterialDialog(List<String> list, Function(String) callback) {
   );
 }
 
-selectLanguageDialog(
+void selectLanguageDialog(
     {required List<String> list, required Function(String) callback}) {
   var controller = FixedExtentScrollController();
   Get.dialog(
@@ -1201,7 +1201,7 @@ selectLanguageDialog(
   );
 }
 
-createLabelSelect({
+void createLabelSelect({
   required Function() single,
   required Function() mix,
   required Function() custom,
@@ -1255,7 +1255,7 @@ createLabelSelect({
   );
 }
 
-setLabelSelect({
+void setLabelSelect({
   required Function() property,
   required Function() boxCapacity,
   required Function() language,

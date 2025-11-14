@@ -91,7 +91,7 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
     );
   }
 
-  _subTitle(String title) {
+  Text _subTitle(String title) {
     return Text(
       //子标题
       textAlign: TextAlign.center,
@@ -101,7 +101,7 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
     );
   }
 
-  _inputText(
+  Row _inputText(
     String hint,
     String? text1,
     List<TextInputFormatter>? inputType, {

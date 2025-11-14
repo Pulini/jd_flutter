@@ -16,7 +16,7 @@ class HydroelectricExcessLogic extends GetxController {
   }
 
   //根据输入的度数，
-  countMonth(String thisTime) {
+  void countMonth(String thisTime) {
     var degree = thisTime.toIntTry();
     var lastDegree = state.dataDetail.value.lastDegree.toIntTry();
 
@@ -28,7 +28,7 @@ class HydroelectricExcessLogic extends GetxController {
   }
 
   //计算本月使用量
-  setDeviceUse(DeviceDetailInfo data) {
+  void setDeviceUse(DeviceDetailInfo data) {
     var last = data.lastDegree.toIntTry();
     var now = data.nowDegree.toIntTry();
 
@@ -39,7 +39,7 @@ class HydroelectricExcessLogic extends GetxController {
     }
   }
 
-  searchRoom({
+  void searchRoom({
     required String  searchType,
     required DeviceListInfo data,
     required bool isBack,
@@ -61,7 +61,7 @@ class HydroelectricExcessLogic extends GetxController {
     );
   }
 
-  searchData({
+  void searchData({
     required String deviceNumber,
     required String bedNumber,
   }) {

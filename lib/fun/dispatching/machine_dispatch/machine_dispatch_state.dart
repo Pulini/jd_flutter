@@ -64,7 +64,7 @@ class MachineDispatchState {
     });
   }
 
-  getWorkCardListByDate({
+  void getWorkCardListByDate({
     required String startDate,
     required String endDate,
     required Function() success,
@@ -91,7 +91,7 @@ class MachineDispatchState {
     });
   }
 
-  refreshWorkCardDetail({
+  void refreshWorkCardDetail({
     required Function() success,
     required Function(String msg) error,
   }) {

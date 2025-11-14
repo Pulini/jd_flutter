@@ -31,7 +31,7 @@ class WebPage extends StatelessWidget {
 
   final webViewController = WebViewController();
 
-  checkAuthorize() {
+  void checkAuthorize() {
     httpPost(
       loading: '正在查询授权信息...',
       method: webApiCheckAuthorize,
@@ -69,7 +69,7 @@ class WebPage extends StatelessWidget {
     });
   }
 
-  applyAuthorization(String reason) {
+  void applyAuthorization(String reason) {
     httpPost(
       loading: '正在提交授权申请...',
       method: webApiAuthorizedApplication,
@@ -93,7 +93,7 @@ class WebPage extends StatelessWidget {
     );
   }
 
-  addInstructionsLog(String fileItemId) {
+  void addInstructionsLog(String fileItemId) {
     if (fileItemId.isEmpty) return;
     httpPost(
       method: webApiInstructionsLog,
@@ -220,7 +220,7 @@ class _WebPrinterState extends State<WebPrinter> {
   var a4PaperByteList = <Uint8List>[];
   var ready = false.obs;
 
-  runTask() {
+  void runTask() {
     var dio = Dio()
       ..interceptors.add(InterceptorsWrapper(
         onRequest: (options, handler) {

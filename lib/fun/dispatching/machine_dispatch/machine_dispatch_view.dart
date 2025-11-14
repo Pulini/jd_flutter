@@ -20,7 +20,7 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
   final logic = Get.put(MachineDispatchLogic());
   final state = Get.find<MachineDispatchLogic>().state;
 
-  refreshOrder() => logic.getWorkCardList((list) {
+  dynamic refreshOrder() => logic.getWorkCardList((list) {
         if (list.length > 1) {
           showWorkCardListDialog(
             list,
@@ -35,7 +35,7 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
         }
       });
 
-  itemTitle() => SizedBox(
+  SizedBox itemTitle() => SizedBox(
         width: 100,
         child: Obx(() => Column(
               children: [

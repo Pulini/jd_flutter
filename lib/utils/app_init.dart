@@ -57,7 +57,7 @@ class AppInitService extends GetxService {
     _initializeApp();
   }
 
-  _doJPush(Map<String, dynamic> json) {
+  void _doJPush(Map<String, dynamic> json) {
     var push = JPushNotification.fromJson(json);
     if (push.isUpgrade()) {
       getVersionInfo(

@@ -182,7 +182,7 @@ class _SignatureWithWorkerNumberPageState
   var avatar = ''.obs;
   var name = ''.obs;
 
-  _setOrientation(NativeDeviceOrientation orientation) {
+  void _setOrientation(NativeDeviceOrientation orientation) {
     if (orientation == NativeDeviceOrientation.landscapeLeft) {
       quarterTurns.value = 3;
     } else if (orientation == NativeDeviceOrientation.landscapeRight) {

@@ -54,7 +54,7 @@ class _VisitRegisterPageState extends State<VisitRegisterPage> {
     );
   }
 
-  _item(VisitDataListInfo data) {
+  GestureDetector _item(VisitDataListInfo data) {
     return GestureDetector(
       onTap: () {
         if (state.lastAdd)

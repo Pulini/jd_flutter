@@ -21,7 +21,7 @@ class _MachineDispatchReportPageState extends State<MachineDispatchReportPage> {
   final logic = Get.find<MachineDispatchLogic>();
   final state = Get.find<MachineDispatchLogic>().state;
 
-  itemTitle() => SizedBox(
+  SizedBox itemTitle() => SizedBox(
         width: 100,
         child: Column(
           children: [

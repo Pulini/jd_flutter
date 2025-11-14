@@ -92,7 +92,7 @@ void askDialog({
 }
 
 // 提示弹窗
-successDialog({
+void successDialog({
   String title = '',
   required String? content,
   Function()? back,
@@ -122,7 +122,7 @@ successDialog({
 }
 
 //错误弹窗
-errorDialog({
+void errorDialog({
   String title = '',
   required String? content,
   Function()? back,
@@ -193,7 +193,7 @@ errorDialog({
 //   }
 // }
 
-doUpdate({
+void doUpdate({
   required VersionInfo version,
   Function()? ignore,
 }) {
@@ -351,7 +351,7 @@ doUpdate({
 
 bool reLoginDialogIsShowing = false;
 
-reLoginPopup() {
+void reLoginPopup() {
   if (reLoginDialogIsShowing) return;
   reLoginDialogIsShowing = true;
   showCupertinoModalPopup(
@@ -400,7 +400,7 @@ reLoginPopup() {
   );
 }
 
-reasonInputPopup({
+void reasonInputPopup({
   String? hintText,
   String? tips,
   bool isCanCancel = false,
@@ -580,7 +580,7 @@ reasonInputPopup({
   }
 }
 
-exitDialog({
+void exitDialog({
   required String content,
   Function()? confirm,
   Function()? cancel,
@@ -617,11 +617,11 @@ exitDialog({
   ));
 }
 
-loadingShow(String? content) {
+void loadingShow(String? content) {
   LoadingSingleton().show(content);
 }
 
-loadingDismiss() {
+void loadingDismiss() {
   LoadingSingleton().dismiss();
 }
 

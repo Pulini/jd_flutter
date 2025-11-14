@@ -25,7 +25,7 @@ class _DeviceMaintenanceRecordRepairPageState
   final logic = Get.find<DeviceMaintenanceRecordLogic>();
   final state = Get.find<DeviceMaintenanceRecordLogic>().state;
 
-  addWorkerItem() {
+  InkWell addWorkerItem() {
     return InkWell(
       onTap: () {
         addWorkerDialog(click: (

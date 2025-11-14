@@ -74,7 +74,7 @@ class PatrolInspectionState {
     });
   }
 
-  deleteAbnormalRecord({
+  void deleteAbnormalRecord({
     required PatrolInspectionAbnormalRecordInfo abnormalRecord,
     required Function(String) success,
     required Function(String) error,

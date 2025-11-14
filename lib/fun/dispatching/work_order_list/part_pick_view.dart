@@ -17,7 +17,7 @@ class _PartPickPageState extends State<PartPickPage> {
   final logic = Get.find<WorkOrderListLogic>();
   final state = Get.find<WorkOrderListLogic>().state;
 
-  _item(PartInfo data) {
+  GestureDetector _item(PartInfo data) {
     var name = '';
     if (data.linkPartName?.isEmpty == true) {
       name = data.partName ?? '';

@@ -308,13 +308,13 @@ class _StuffQualityInspectionPageState
                     width: 30,
                   ),
                   Visibility(
+                    visible: state.isShowTips.value,
                     child: expandedTextSpan(
                         flex: 2,
                         hint: '选择不同物料时，只支持填写全部合格,如有不合格，必须分开填写!!',
                         text: '',
                         hintColor: Colors.red,
                         fontSize: 16),
-                    visible: state.isShowTips.value,
                   ),
                   const SizedBox(
                     width: 30,

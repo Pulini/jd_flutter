@@ -24,7 +24,7 @@ class MaterialDispatchLogic extends GetxController {
   //   userInfo?.defaultStockNumber = '1104';
   //   super.onReady();
   // }
-  selectShow(int index) {
+  void selectShow(int index) {
     if (index == 0) {
       state.showOrderList.value = state.allOrderList;
     } else {
@@ -35,7 +35,7 @@ class MaterialDispatchLogic extends GetxController {
     state.showOrderList.refresh();
   }
 
-  refreshDataList({
+  void refreshDataList({
     required String startDate,
     required String endDate,
     required int status,
@@ -52,7 +52,7 @@ class MaterialDispatchLogic extends GetxController {
     );
   }
 
-  search(String s) {
+  void search(String s) {
     if (s.isEmpty) {
       state.showOrderList.value = state.orderList;
     } else {
@@ -62,7 +62,7 @@ class MaterialDispatchLogic extends GetxController {
     }
   }
 
-  reportToSAP({required Function() refresh}) {
+  void reportToSAP({required Function() refresh}) {
     state.reportToSAP(
       success: (msg) => successDialog(
         content: msg,
@@ -72,7 +72,7 @@ class MaterialDispatchLogic extends GetxController {
     );
   }
 
-  batchWarehousing({required Function() refresh}) {
+  void batchWarehousing({required Function() refresh}) {
     var submitList = state.createSubmitData();
     if (submitList.isEmpty) {
       msgDialog(content: 'material_dispatch_batch_stock_in_error_tips'.tr);
@@ -88,7 +88,7 @@ class MaterialDispatchLogic extends GetxController {
     }
   }
 
-  itemReport(
+  void itemReport(
       {required MaterialDispatchInfo data, required Function() refresh}) {
     state.itemReport(
       data: data,
@@ -100,7 +100,7 @@ class MaterialDispatchLogic extends GetxController {
     );
   }
 
-  itemCancelReport({
+  void itemCancelReport({
     required MaterialDispatchInfo data,
     required Function() refresh,
   }) {
@@ -114,7 +114,7 @@ class MaterialDispatchLogic extends GetxController {
     );
   }
 
-  subItemWarehousing({
+  void subItemWarehousing({
     required Children data,
     required String sapDecideArea,
     required Function() refresh,
@@ -130,7 +130,7 @@ class MaterialDispatchLogic extends GetxController {
     );
   }
 
-  subItemReport({
+  void subItemReport({
     required BuildContext context,
     required MaterialDispatchInfo submitData,
     required Children subData,
@@ -204,7 +204,7 @@ class MaterialDispatchLogic extends GetxController {
     );
   }
 
-  subItemCancelReport({
+  void subItemCancelReport({
     required Children subData,
     required Function() refresh,
   }) {
@@ -218,7 +218,7 @@ class MaterialDispatchLogic extends GetxController {
     );
   }
 
-  printLabel({
+  void printLabel({
     required BuildContext context,
     required MaterialDispatchInfo data,
     required String billNo,

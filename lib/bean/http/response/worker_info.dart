@@ -60,7 +60,7 @@ class WorkerInfo {
     return map;
   }
 
-  deepCopy() {
+  WorkerInfo deepCopy() {
     return WorkerInfo.fromJson(toJson());
   }
 }

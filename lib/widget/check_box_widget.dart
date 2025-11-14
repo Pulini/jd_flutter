@@ -41,7 +41,7 @@ class _CheckBoxState extends State<CheckBox> {
     }
   }
 
-  _checked(bool checked) {
+  void _checked(bool checked) {
     if (widget.isEnabled == true) {
       isChecked = checked;
       if (widget.needSave == true) {

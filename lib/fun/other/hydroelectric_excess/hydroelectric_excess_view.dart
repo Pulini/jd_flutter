@@ -25,7 +25,7 @@ class _HydroelectricExcessPageState extends State<HydroelectricExcessPage> {
   var textThisTime = TextEditingController(); //本次抄度
   var textNumber = TextEditingController(); //房间号
 
-  roomNumberSearchWidget() => SizedBox(
+  SizedBox roomNumberSearchWidget() => SizedBox(
         height: 40,
         child: TextField(
           controller: textNumber,

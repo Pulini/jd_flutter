@@ -467,7 +467,7 @@ class SapLabelSplitInfo {
     required this.materials,
   });
 
-  hasSpecificationsData() => long > 0 && width > 0 && height > 0;
+  bool hasSpecificationsData() => long > 0 && width > 0 && height > 0;
 }
 
 class SapLabelSplitMaterialInfo {

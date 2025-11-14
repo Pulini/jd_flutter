@@ -15,7 +15,7 @@ import 'package:jd_flutter/widget/picker/picker_controller.dart';
 import 'package:jd_flutter/widget/picker/picker_item.dart';
 import 'package:jd_flutter/widget/picker/picker_view.dart';
 
-subItemReportDialog(
+void subItemReportDialog(
   BuildContext context,
   MaterialDispatchInfo data,
   Children subData,

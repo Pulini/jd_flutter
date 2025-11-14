@@ -69,7 +69,7 @@ class VisitRegisterLogic extends GetxController {
     saveKey: '${RouteConfig.property.name}${PickerType.endDate}',
   );
 
-  refreshGetVisitList(
+  void refreshGetVisitList(
       {String name = "",
       String iDCard = "",
       String interviewee = "",

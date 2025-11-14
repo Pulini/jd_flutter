@@ -49,7 +49,7 @@ class _UserSettingState extends State<UserSetting> {
   );
 
   //头像
-  avatarImage() => Container(
+  Container avatarImage() => Container(
         height: 150,
         width: 150,
         padding: const EdgeInsets.all(7),
@@ -67,7 +67,7 @@ class _UserSettingState extends State<UserSetting> {
       );
 
   //名字工号
-  name() => Text(
+  Text name() => Text(
         '${userInfo?.name ?? ''}\r\n${userInfo?.number ?? ''}',
         style: const TextStyle(
           fontSize: 20,
@@ -78,7 +78,7 @@ class _UserSettingState extends State<UserSetting> {
       );
 
   //工厂
-  factory() => SizedBox(
+  SizedBox factory() => SizedBox(
         width: 260,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -97,7 +97,7 @@ class _UserSettingState extends State<UserSetting> {
       );
 
   //部门
-  department() => SizedBox(
+  SizedBox department() => SizedBox(
         width: 260,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -123,7 +123,7 @@ class _UserSettingState extends State<UserSetting> {
         ),
       );
 
-  showChangeDepartmentPopup(List<Department> list, int selected) {
+  void showChangeDepartmentPopup(List<Department> list, int selected) {
     //创建选择器控制器
     var controller = FixedExtentScrollController(initialItem: selected);
     //创建底部弹窗
@@ -177,7 +177,7 @@ class _UserSettingState extends State<UserSetting> {
   }
 
   //职位
-  position() => SizedBox(
+  SizedBox position() => SizedBox(
         width: 260,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -196,7 +196,7 @@ class _UserSettingState extends State<UserSetting> {
       );
 
   //修改密码
-  changePassword() => SizedBox(
+  SizedBox changePassword() => SizedBox(
         width: 260,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -223,7 +223,7 @@ class _UserSettingState extends State<UserSetting> {
       );
 
   //修改密码弹窗
-  changePasswordDialog() {
+  void changePasswordDialog() {
     var oldPassword = TextEditingController();
     var newPassword = TextEditingController();
     showCupertinoModalPopup<void>(
@@ -305,7 +305,7 @@ class _UserSettingState extends State<UserSetting> {
   }
 
   //检查版本更新
-  checkVersion() => SizedBox(
+  SizedBox checkVersion() => SizedBox(
         width: 260,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -353,7 +353,7 @@ class _UserSettingState extends State<UserSetting> {
       );
 
   //切换语言
-  changeLanguage() => SizedBox(
+  SizedBox changeLanguage() => SizedBox(
         width: 260,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -378,7 +378,7 @@ class _UserSettingState extends State<UserSetting> {
       );
 
   //注销
-  logout() => ElevatedButton(
+  ElevatedButton logout() => ElevatedButton(
         style: ElevatedButton.styleFrom(
           minimumSize: const Size(320, 50),
           shape: RoundedRectangleBorder(
@@ -436,8 +436,8 @@ class _UserSettingState extends State<UserSetting> {
                   ),
                 ),
                 Positioned(
-                  child: avatarImage(),
                   right: 30,
+                  child: avatarImage(),
                 ),
               ],
             ),

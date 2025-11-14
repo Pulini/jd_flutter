@@ -112,7 +112,7 @@ class Downloader {
   }
 
   //下載文件
-  startDownload() async {
+  Future<void> startDownload() async {
     isDownloading.value = true;
     progress.value = 0.0;
     try {

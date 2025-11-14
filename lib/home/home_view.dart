@@ -32,7 +32,7 @@ class _HomePageState extends State<HomePage>
   @override
   bool get wantKeepAlive => true; // 启用保活
 
-  _item(ButtonItem item) => Card(
+  Card _item(ButtonItem item) => Card(
         color: item is HomeButton ? Colors.white : Colors.blue.shade50,
         child: item is HomeButton
             ? HomeSubItem(
@@ -76,7 +76,7 @@ class _HomePageState extends State<HomePage>
               ),
       );
 
-  _refreshFunList() =>
+  void _refreshFunList() =>
       logic.refreshFunList(() => refreshController.finishRefresh());
 
   @override

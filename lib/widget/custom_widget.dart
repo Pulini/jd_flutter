@@ -517,7 +517,7 @@ Widget expandedTextSpan({
 }
 
 //带文本提示带文本
-textSpan({
+Text textSpan({
   required String hint,
   Color hintColor = Colors.black,
   required String text,

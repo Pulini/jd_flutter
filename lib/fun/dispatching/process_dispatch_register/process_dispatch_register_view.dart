@@ -308,17 +308,17 @@ class _ProcessDispatchRegisterPageState
             ),
             if (state.typeBody.isNotEmpty)
               Container(
+                margin: const EdgeInsets.only(left: 8, right: 8),
                 child: textSpan(
                     hint: 'process_dispatch_register_type_body'.tr,
                     text: state.typeBody.value),
-                margin: const EdgeInsets.only(left: 8, right: 8),
               ),
             if (state.progress.isNotEmpty)
               Container(
+                margin: const EdgeInsets.only(left: 8, right: 8),
                 child: textSpan(
                     hint: 'process_dispatch_register_process'.tr,
                     text: state.progress.value),
-                margin: const EdgeInsets.only(left: 8, right: 8),
               ),
             Expanded(
               child: ListView(

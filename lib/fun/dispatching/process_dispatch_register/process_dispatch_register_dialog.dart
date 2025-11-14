@@ -4,7 +4,7 @@ import 'package:jd_flutter/bean/http/response/worker_info.dart';
 import 'package:jd_flutter/widget/worker_check_widget.dart';
 
 
-showSalesOrderListDialog(List<String> list) {
+void showSalesOrderListDialog(List<String> list) {
   Get.dialog(
     PopScope(
       canPop: false,

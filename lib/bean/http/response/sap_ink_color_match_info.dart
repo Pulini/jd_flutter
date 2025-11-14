@@ -307,7 +307,7 @@ class SapInkColorMatchItemInfo {
   double consumption() =>
       weightBeforeColorMix.value.sub(weightAfterColorMix.value);
 
-  connect() {
+  void connect() {
     if (!isConnect.value && !isConnecting.value) {
       isConnecting.value = true;
       logger.d('连接设备---Name:$deviceName Ip:$deviceIp Port:$scalePort');
@@ -315,7 +315,7 @@ class SapInkColorMatchItemInfo {
     }
   }
 
-  close() {
+  void close() {
     scu?.close();
     isConnect.value = false;
   }

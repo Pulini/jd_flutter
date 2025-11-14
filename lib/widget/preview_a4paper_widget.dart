@@ -32,7 +32,7 @@ class _PreviewA4PaperState extends State<PreviewA4Paper> {
   var a4PaperByteList = <Uint8List>[].obs;
   static bool _isAlreadyOpen = false;
 
-  printA4Paper() async {
+  Future<void> printA4Paper() async {
     if (a4PaperBase64List.isEmpty) return;
     const MethodChannel(channelPrinterFlutterToAndroid)
         .invokeMethod('PrintFile', a4PaperBase64List)

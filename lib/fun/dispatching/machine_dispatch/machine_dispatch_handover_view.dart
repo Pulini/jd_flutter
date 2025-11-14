@@ -45,7 +45,7 @@ class _MachineDispatchReportPageState extends State<MachineDispatchHandoverPage>
         ),
       );
 
-  item(Items data, RxBool isSelect) => SizedBox(
+  SizedBox item(Items data, RxBool isSelect) => SizedBox(
         width: 70,
         child: Column(
           children: [

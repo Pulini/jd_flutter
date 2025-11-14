@@ -20,7 +20,7 @@ class _DeviceMaintenanceRecordDetailPageState
   final logic = Get.find<DeviceMaintenanceRecordLogic>();
   final state = Get.find<DeviceMaintenanceRecordLogic>().state;
 
-  _item(RepairEntryData data) {
+  Container _item(RepairEntryData data) {
     return Container(
       height: 140,
       margin: const EdgeInsets.only(right: 15, bottom: 10),
@@ -114,53 +114,53 @@ class _DeviceMaintenanceRecordDetailPageState
                 ),
               ),
               Visibility(
+                visible: state.isHave.value,
                 child: textSpan(
                   hint: 'device_maintenance_document_number'.tr,
                   text: state.deviceData.value.repairOrder!.number?? '',
                 ),
-                visible: state.isHave.value,
               ),
               Visibility(
+                visible: state.isHave.value,
                 child: textSpan(
                   hint: 'device_maintenance_title_fault_description'.tr,
                   text: state.deviceData.value.repairOrder!.faultDescription?? '',
                 ),
-                visible: state.isHave.value,
               ),
               Visibility(
+                visible: state.isHave.value,
                 child: textSpan(
                   hint: 'device_maintenance_fault_cause_determination'.tr,
                   text: state.deviceData.value.repairOrder!.issueCause?? '',
                 ),
-                visible: state.isHave.value,
               ),
               Visibility(
+                visible: state.isHave.value,
                 child: textSpan(
                   hint: 'device_maintenance_title_maintenance_organization'.tr,
                   text: state.deviceData.value.repairOrder!.maintenanceUnit?? '',
                 ),
-                visible: state.isHave.value,
               ),
               Visibility(
+                visible: state.isHave.value,
                 child: textSpan(
                   hint: 'device_maintenance_title_prevention'.tr,
                   text: state.deviceData.value.repairOrder!.assessmentPrevention?? '',
                 ),
-                visible: state.isHave.value,
               ),
               Visibility(
+                visible: state.isHave.value,
                 child: textSpan(
                   hint: 'device_maintenance_title_repair_time'.tr,
                   text: state.deviceData.value.repairOrder!.inspectionTime?? '',
                 ),
-                visible: state.isHave.value,
               ),
               Visibility(
+                visible: state.isHave.value,
                 child: textSpan(
                   hint: 'device_maintenance_title_fixed_time'.tr,
                   text: state.deviceData.value.repairOrder!.repairTime?? '',
                 ),
-                visible: state.isHave.value,
               ),
               Expanded(
                 child: ListView.builder(

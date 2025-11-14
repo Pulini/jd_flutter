@@ -28,7 +28,7 @@ class ScanPickingMaterialLogic extends GetxController {
     );
   }
 
-  scanCode(String code) {
+  void scanCode(String code) {
     if (state.barCodeList.any((v) => v.code == code)) {
       showSnackBar(
         message: 'scan_picking_material_code_exists'.tr,

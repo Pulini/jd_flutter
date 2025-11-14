@@ -19,7 +19,7 @@ import 'package:rotated_corner_decoration/rotated_corner_decoration.dart';
 
 import 'machine_dispatch_logic.dart';
 
-generateAndPrintDialog({
+void generateAndPrintDialog({
   required Function() printLast,
   required Function() print,
 }) {
@@ -59,7 +59,7 @@ generateAndPrintDialog({
   );
 }
 
-showWorkCardListDialog(
+void showWorkCardListDialog(
   List<MachineDispatchInfo> list,
   Function(MachineDispatchInfo) callback,
 ) {
@@ -106,7 +106,7 @@ showWorkCardListDialog(
   );
 }
 
-showPrintSetting(BuildContext context) {
+void showPrintSetting(BuildContext context) {
   RxDouble printSpeed = 3.0.obs;
   RxDouble printDensity = 15.0.obs;
   if( spGet(spSavePrintSpeed) !=null){
@@ -188,7 +188,7 @@ showPrintSetting(BuildContext context) {
   );
 }
 
-showSurplusMaterialListDialog(
+void showSurplusMaterialListDialog(
   BuildContext context, {
   required Function(String, String, MachineDispatchDetailsInfo) print,
 }) {
@@ -269,7 +269,7 @@ showSurplusMaterialListDialog(
   );
 }
 
-updateSurplusMaterialLabelState({
+void updateSurplusMaterialLabelState({
   required Map<String, dynamic> surplusMaterial,
   required MachineDispatchDetailsInfo details,
   required Function(String, String, MachineDispatchDetailsInfo) print,
@@ -295,7 +295,7 @@ updateSurplusMaterialLabelState({
   });
 }
 
-showLabelListDialog({
+void showLabelListDialog({
   required BuildContext context,
   required Function(MachineDispatchReprintLabelInfo) print,
 }) {
@@ -513,7 +513,7 @@ showLabelListDialog({
   );
 }
 
-_deleteLabel({
+void _deleteLabel({
   required String labelId,
   required Function() callback,
 }) {
@@ -536,7 +536,7 @@ _deleteLabel({
   });
 }
 
-teamLeaderVerifyDialog() {
+void teamLeaderVerifyDialog() {
   final state = Get.find<MachineDispatchLogic>().state;
   var buttonName = 'get_verify_code'.tr.obs;
   var countDown = 0;
@@ -619,7 +619,7 @@ teamLeaderVerifyDialog() {
   );
 }
 
-_sendManagerCode(
+void _sendManagerCode(
   String workerNumber,
   Function() callback,
 ) {
@@ -651,7 +651,7 @@ _sendManagerCode(
   }
 }
 
-_checkManagerByCode(
+void _checkManagerByCode(
   String verificationCode,
   String workerNumber,
   Function() callback,
@@ -688,7 +688,7 @@ _checkManagerByCode(
   });
 }
 
-showWorkerAvatar(Widget workerAvatar) {
+void showWorkerAvatar(Widget workerAvatar) {
   Get.dialog(
     AlertDialog(
       title: Text('machine_dispatch_dialog_worker_photos'.tr),
@@ -706,7 +706,7 @@ showWorkerAvatar(Widget workerAvatar) {
   );
 }
 
-workerSignature(
+void workerSignature(
   BuildContext context,
   DispatchInfo data,
   Function() refresh,
@@ -824,7 +824,7 @@ workerSignature(
   );
 }
 
-addDispatchWorker(DispatchProcessInfo data, Function() refresh) {
+void addDispatchWorker(DispatchProcessInfo data, Function() refresh) {
   WorkerInfo? worker;
   var surplusQty = data.totalProduction.sub(
     data.dispatchList.isEmpty
@@ -941,7 +941,7 @@ addDispatchWorker(DispatchProcessInfo data, Function() refresh) {
   );
 }
 
-addHandoverWorker(HandoverInfo data, Function() refresh) {
+void addHandoverWorker(HandoverInfo data, Function() refresh) {
   WorkerInfo? worker;
   var avatar = ''.obs;
   Get.dialog(
@@ -1020,7 +1020,7 @@ addHandoverWorker(HandoverInfo data, Function() refresh) {
   );
 }
 
-selectLabelTypeDialog({
+void selectLabelTypeDialog({
   required EnglishLabelInfo englishLabel,
   required Function(double, String) printLast,
   required Function(double, String) print,
@@ -1270,7 +1270,7 @@ selectLabelTypeDialog({
 }
 
 //修改模具
-showMachineInputDialog({
+void showMachineInputDialog({
   required Items data,
   required int? maxMould,
   required Function() confirm,
@@ -1344,7 +1344,7 @@ showMachineInputDialog({
 }
 
 //当日派工数量
-showInputDayReportDialog({
+void showInputDayReportDialog({
   required Items data,
   required Function() confirm,
 }) {
@@ -1404,7 +1404,7 @@ showInputDayReportDialog({
 }
 
 //修改箱容
-showInputCapacityDialog({
+void showInputCapacityDialog({
   required Items data,
   required Function() confirm,
 }) {
@@ -1463,7 +1463,7 @@ showInputCapacityDialog({
 }
 
 //修改尾箱
-showInputLastNumDialog({
+void showInputLastNumDialog({
   required Items data,
   required Function() confirm,
 }) {

@@ -45,7 +45,7 @@ class _SwitchButtonState extends State<SwitchButton> {
     }
   }
 
-  _select(bool checked) {
+  void _select(bool checked) {
     if (widget.isEnabled == true && isChecked != checked) {
       setState(() {
         isChecked = checked;

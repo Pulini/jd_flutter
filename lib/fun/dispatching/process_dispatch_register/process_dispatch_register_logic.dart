@@ -11,7 +11,7 @@ class ProcessDispatchRegisterLogic extends GetxController {
 
 
 
-  queryOrder(String code) {
+  void queryOrder(String code) {
     if (code.isNotEmpty) {
       state.getProcessWorkCardByBarcode(
         barCode: code,
@@ -20,11 +20,11 @@ class ProcessDispatchRegisterLogic extends GetxController {
     }
   }
 
-  getLabelInfo(String code) {
+  void getLabelInfo(String code) {
     state.queryLabelData(code: code, error: (msg) => errorDialog(content: msg));
   }
 
-  goPrintLabel() {
+  void goPrintLabel() {
     if (checkUserPermission('1052501')) {
       Get.to(() => const PrintLabelPage());
     } else {
@@ -32,7 +32,7 @@ class ProcessDispatchRegisterLogic extends GetxController {
     }
   }
 
-  modifyLabelWorker() {
+  void modifyLabelWorker() {
     if (state.labelInfo == null) {
       errorDialog(content: 'process_dispatch_register_no_label_info_tips'.tr);
       return;
@@ -46,7 +46,7 @@ class ProcessDispatchRegisterLogic extends GetxController {
     );
   }
 
-  deleteLabel(Barcode data) {
+  void deleteLabel(Barcode data) {
     if (checkUserPermission('1052504')) {
       askDialog(
         content: 'process_dispatch_register_delete_tips'.tr,
