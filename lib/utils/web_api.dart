@@ -53,7 +53,7 @@ enum BaseUrl {
   sapS4Dev('SAP S4 300','https://s4devapp01.goldemperor.com:8005/','SAP'),
 
   ///SAP测试库 S4 600
-  sapS4Test('SAP S4 600','https://s4devapp01.goldemperor.com:8006/','SAP');
+  sapS4Test('SAP S4 600','https://s4qasapp01.goldemperor.com:8006/','SAP');
 
   final String name;
   final String value;
