@@ -350,7 +350,7 @@ class MaterialDispatchLogic extends GetxController {
             content: '(${data.materialNumber})${data.materialName}',
             bottomLeftText1: data.drillingCrewName ?? '',
             bottomMiddleText1: '色系:$color/$qty${data.unitName}',
-            bottomMiddleText2: '取件码：$pick',
+            bottomMiddleText2: '取件码:$pick',
             bottomRightText1: data.sapDecideArea ?? '',
             speed: spGet(spSavePrintSpeed) ?? 3.0,
             density: spGet(spSavePrintDensity) ?? 12.0,
