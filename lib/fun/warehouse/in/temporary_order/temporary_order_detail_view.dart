@@ -153,9 +153,9 @@ class _TemporaryOrderDetailPageState extends State<TemporaryOrderDetailPage> {
     );
   }
 
-  _itemText(String text) => Expanded(child: Text(text, style: itemTextStyle));
+  Expanded _itemText(String text) => Expanded(child: Text(text, style: itemTextStyle));
 
-  _titleText(String text) => Expanded(child: Text(text, style: titleTextStyle));
+  Expanded _titleText(String text) => Expanded(child: Text(text, style: titleTextStyle));
 
   @override
   Widget build(BuildContext context) {

@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
 
-inputLocationDialog({
+void inputLocationDialog({
   required TextEditingController controller,
   required Function() location,
 }) {

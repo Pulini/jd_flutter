@@ -63,7 +63,7 @@ class SapProductionPickingState {
     });
   }
 
-  getMaterialPickingOrderDetail({
+  void getMaterialPickingOrderDetail({
     required bool isScan,
     required Function(String) error,
   }) {
@@ -105,7 +105,7 @@ class SapProductionPickingState {
     });
   }
 
-  submitMaterialPrintPicking({
+  void submitMaterialPrintPicking({
     required String pickerNumber,
     required ByteData pickerSignature,
     required String userNumber,
@@ -172,7 +172,7 @@ class SapProductionPickingState {
     });
   }
 
-  mixBarCodePicking({
+  void mixBarCodePicking({
     required String voucherNo,
     required Function() success,
     required Function(String) error,
@@ -197,7 +197,7 @@ class SapProductionPickingState {
     });
   }
 
-  getProductionPickingBarCodeList({
+  void getProductionPickingBarCodeList({
     String? loading,
     required Function(String) error,
   }) {

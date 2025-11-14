@@ -24,7 +24,7 @@ class _PartProcessScanReportPageState extends State<PartProcessScanReportPage>
   final logic = Get.find<PartProcessScanLogic>();
   final state = Get.find<PartProcessScanLogic>().state;
 
-  _distributionItem(int index) {
+  Obx _distributionItem(int index) {
     ReportItemData data = state.modifyDistributionList[index];
     var style = const TextStyle(
       color: Colors.black87,
@@ -138,7 +138,7 @@ class _PartProcessScanReportPageState extends State<PartProcessScanReportPage>
         ));
   }
 
-  _reportItemTitle() => Row(children: [
+  Row _reportItemTitle() => Row(children: [
         expandedFrameText(
           flex: 20,
           text: 'part_process_scan_report_title_process'.tr,
@@ -176,7 +176,7 @@ class _PartProcessScanReportPageState extends State<PartProcessScanReportPage>
         ),
       ]);
 
-  _reportItem1(ReportInfo item) => Row(children: [
+  Row _reportItem1(ReportInfo item) => Row(children: [
         expandedFrameText(
           flex: 20,
           text: item.name ?? '',
@@ -204,7 +204,7 @@ class _PartProcessScanReportPageState extends State<PartProcessScanReportPage>
         ),
       ]);
 
-  _reportItem2(ReportInfo item) => Row(children: [
+  Row _reportItem2(ReportInfo item) => Row(children: [
         expandedFrameText(
           flex: 20,
           text: 'part_process_scan_report_ins_total'.tr,
@@ -232,7 +232,7 @@ class _PartProcessScanReportPageState extends State<PartProcessScanReportPage>
         ),
       ]);
 
-  _reportItem3(ReportInfo item) => Row(children: [
+  Row _reportItem3(ReportInfo item) => Row(children: [
         expandedFrameText(
           flex: 20,
           text: 'part_process_scan_report_part_total'.tr,
@@ -260,7 +260,7 @@ class _PartProcessScanReportPageState extends State<PartProcessScanReportPage>
         ),
       ]);
 
-  _barCodeItem(BarCodeInfo bci) {
+  Obx _barCodeItem(BarCodeInfo bci) {
     return Obx(() => Card(
           child: ListTile(
             title: textSpan(

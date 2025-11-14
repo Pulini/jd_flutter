@@ -1134,7 +1134,7 @@ Widget _borderText({
 ///          }
 ///     ]
 /// callback: 回调 表格widget 行数
-_createSizeMaterialTable({
+void _createSizeMaterialTable({
   required List tableData,
   required Function(Widget, int) callback,
 }) {
@@ -1513,7 +1513,7 @@ _createSizeMaterialTable({
 ///       [10,20,30,40],
 ///   ],
 /// callback: 回调 表格widget 行数
-_createMaterialTable({
+void _createMaterialTable({
   required int index,
   required double tableWidth,
   required List tableData,

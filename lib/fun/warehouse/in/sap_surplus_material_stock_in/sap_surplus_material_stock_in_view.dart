@@ -44,7 +44,7 @@ class _SapSurplusMaterialStockInPageState
         '${RouteConfig.sapSurplusMaterialStockIn.name}${PickerType.endDate}',
   );
 
-  _selectSurplusMaterialType(Function(String index) select) {
+  void _selectSurplusMaterialType(Function(String index) select) {
     var controller = FixedExtentScrollController();
     Get.dialog(
       PopScope(
@@ -81,7 +81,7 @@ class _SapSurplusMaterialStockInPageState
     );
   }
 
-  _item1(SurplusMaterialLabelInfo data) {
+  Container _item1(SurplusMaterialLabelInfo data) {
     var controller = TextEditingController(text: '${data.editQty}');
     return Container(
       margin: const EdgeInsets.only(right: 5, bottom: 10),
@@ -179,7 +179,7 @@ class _SapSurplusMaterialStockInPageState
     );
   }
 
-  _item2(List<SurplusMaterialHistoryInfo> list) {
+  Card _item2(List<SurplusMaterialHistoryInfo> list) {
     return Card(
       color: Colors.white,
       child: Column(

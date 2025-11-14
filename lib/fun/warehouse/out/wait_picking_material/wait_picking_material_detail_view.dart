@@ -23,7 +23,7 @@ class _WaitPickingMaterialDetailPageState
   final WaitPickingMaterialState state =
       Get.find<WaitPickingMaterialLogic>().state;
 
-  _modifyQty({
+  void _modifyQty({
     required List<WaitPickingMaterialOrderModelInfo> subItemList,
   }) {
     switch (state.detail.items?[0].msgType) {

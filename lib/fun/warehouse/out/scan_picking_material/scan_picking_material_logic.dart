@@ -42,11 +42,11 @@ class ScanPickingMaterialLogic extends GetxController {
     }
   }
 
-  deleteItem(BarCodeInfo barCodeList) {
+  void deleteItem(BarCodeInfo barCodeList) {
     barCodeList.delete(callback: () => state.barCodeList.remove(barCodeList));
   }
 
-  submit({
+  void submit({
     required WorkerInfo worker,
     required BarCodeProcessInfo process,
   }) {

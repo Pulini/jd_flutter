@@ -47,7 +47,7 @@ class _SapPickingReceiptReversalPageState
         '${RouteConfig.sapPickingReceiptReversal.name}${PickerType.sapFactoryWarehouse}',
   );
 
-  _item(int index) {
+  GestureDetector _item(int index) {
     return GestureDetector(
       onTap: () => setState(() {
         if (state.select == index) {
@@ -128,7 +128,7 @@ class _SapPickingReceiptReversalPageState
     );
   }
 
-  _query() {
+  void _query() {
     logic.query(
       order: orderController.text,
       materialCode: materialCodeController.text,

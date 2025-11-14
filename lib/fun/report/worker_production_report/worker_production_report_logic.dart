@@ -21,7 +21,7 @@ class WorkerProductionReportLogic extends GetxController {
     saveKey: '${RouteConfig.workerProductionReport.name}${PickerType.date}',
   );
 
-  query() {
+  void query() {
     state.getWorkerProductionReport(
       departmentID: pickerControllerDepartment.selectedId.value,
       date: pickerControllerDate.getDateFormatYMD(),

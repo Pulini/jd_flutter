@@ -15,7 +15,7 @@ class WorkOrderListState {
   var partDetailSizeList = <SizeInfo>[].obs;
 
 
-  query({
+  void query({
     required String pcStartDate,
     required String pcEndDate,
     required String workBarCode,
@@ -46,7 +46,7 @@ class WorkOrderListState {
     });
   }
 
-  queryPartList({
+  void queryPartList({
     required Function(String msg) error,
   }) {
     httpGet(
@@ -67,7 +67,7 @@ class WorkOrderListState {
     });
   }
 
-  queryPartDetail({
+  void queryPartDetail({
     required Function() success,
     required Function(String msg) error,
   }) {
@@ -97,7 +97,7 @@ class WorkOrderListState {
     });
   }
 
-  createPartLabel({
+  void createPartLabel({
     required double boxCapacity,
     required double qty,
     required String size,
@@ -137,7 +137,7 @@ class WorkOrderListState {
     });
   }
 
-  deleteLabel({
+  void deleteLabel({
     required String barCode,
     required Function() success,
     required Function(String msg) error,

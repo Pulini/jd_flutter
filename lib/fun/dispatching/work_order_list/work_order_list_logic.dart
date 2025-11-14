@@ -8,7 +8,7 @@ import 'work_order_list_state.dart';
 class WorkOrderListLogic extends GetxController {
   final WorkOrderListState state = WorkOrderListState();
 
-  query({
+  void query({
     required String startDate,
     required String endDate,
     required String group,
@@ -25,11 +25,11 @@ class WorkOrderListLogic extends GetxController {
     );
   }
 
-  queryPartList() {
+  void queryPartList() {
     state.queryPartList(error: (msg) => errorDialog(content: msg));
   }
 
-  submitCheck() {
+  void submitCheck() {
     var selected = state.partList.where((v) => v.select);
     if (selected.isEmpty) {
       showSnackBar(
@@ -55,14 +55,14 @@ class WorkOrderListLogic extends GetxController {
     }
   }
 
-  queryPartDetail({required Function() success}) {
+  void queryPartDetail({required Function() success}) {
     state.queryPartDetail(
       error: (msg) => errorDialog(content: msg),
       success: success,
     );
   }
 
-  createPartLabel(
+  void createPartLabel(
     double boxCapacity,
     double qty,
     String size,
@@ -99,7 +99,7 @@ class WorkOrderListLogic extends GetxController {
     );
   }
 
-  deleteLabel(String barCode, Function() callback) {
+  void deleteLabel(String barCode, Function() callback) {
     state.deleteLabel(
       barCode: barCode,
       success: callback,

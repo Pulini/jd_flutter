@@ -10,7 +10,7 @@ import 'package:jd_flutter/widget/signature_page.dart';
 import 'package:jd_flutter/widget/worker_check_widget.dart';
 
 const String checkPickerAndWarehouseDialogNumber = 'CHECK_PICKER_AND_WAREHOUSE_DIALOG_NUMBER';
-checkPickerAndWarehouseDialog({
+void checkPickerAndWarehouseDialog({
   required Function(
     String pickerNumber,
     ByteData pickerSignature,

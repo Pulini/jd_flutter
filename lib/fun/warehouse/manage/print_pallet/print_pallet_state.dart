@@ -10,7 +10,7 @@ class PrintPalletState {
   var palletList = <List<SapPalletDetailInfo>>[].obs;
   var selectedList = <RxBool>[].obs;
 
-  getPalletInfo({
+  void getPalletInfo({
     required String pallet,
     required Function(List<SapPalletDetailInfo>) success,
     required Function(String) error,
@@ -42,7 +42,7 @@ class PrintPalletState {
     });
   }
 
-  deleteLabel({
+  void deleteLabel({
     required List<List<String>> list,
     required Function(List<SapPalletDetailInfo>) success,
     required Function(String) error,

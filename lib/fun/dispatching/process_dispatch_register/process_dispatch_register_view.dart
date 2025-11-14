@@ -28,7 +28,7 @@ class _ProcessDispatchRegisterPageState
 
   TextEditingController controller = TextEditingController();
 
-  itemList1() {
+  List<Widget> itemList1() {
     var listWidget = <Widget>[];
     var totalDayMustQty = 0.0;
     var totalMustQty = 0.0;
@@ -148,7 +148,7 @@ class _ProcessDispatchRegisterPageState
     return listWidget;
   }
 
-  itemList2() {
+  List<Widget> itemList2() {
     var listWidget = <Widget>[];
     var totalDayMustQty = 0.0;
     var totalMustQty = 0.0;

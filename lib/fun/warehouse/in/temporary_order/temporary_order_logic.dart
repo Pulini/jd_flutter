@@ -9,7 +9,7 @@ import 'temporary_order_state.dart';
 class TemporaryOrderLogic extends GetxController {
   final TemporaryOrderState state = TemporaryOrderState();
 
-  queryTemporaryOrders({
+  void queryTemporaryOrders({
     required String startDate,
     required String endDate,
     required String temporaryNo,
@@ -38,7 +38,7 @@ class TemporaryOrderLogic extends GetxController {
     );
   }
 
-  deleteTemporaryOrder({
+  void deleteTemporaryOrder({
     required String temporaryNo,
     required String reason,
     required Function(String) success,
@@ -51,7 +51,7 @@ class TemporaryOrderLogic extends GetxController {
     );
   }
 
-  viewTemporaryOrderDetail({
+  void viewTemporaryOrderDetail({
     required String temporaryNo,
     required String materialCode,
     required Function()? success,
@@ -90,7 +90,7 @@ class TemporaryOrderLogic extends GetxController {
     }
   }
 
-   selectAllMaterial(TemporaryOrderDetailReceiptInfo data,bool isSelected) {
+   void selectAllMaterial(TemporaryOrderDetailReceiptInfo data,bool isSelected) {
     state.detailInfo!.receipt!.where((v)=>v.materialCode==data.materialCode).forEach((v){
       v.isSelected.value=isSelected;
     });

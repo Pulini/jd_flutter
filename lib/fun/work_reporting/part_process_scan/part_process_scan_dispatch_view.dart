@@ -18,7 +18,7 @@ class PartProcessScanDispatchPage extends StatefulWidget {
       _PartProcessScanDispatchPageState();
 }
 
-addWorkerItem(
+Obx addWorkerItem(
   RxList<WorkerInfo> workerList, {
   Function(WorkerInfo)? callback,
 }) {
@@ -160,7 +160,7 @@ class _PartProcessScanDispatchPageState
   var index = Get.arguments['Index'];
   bool isSharing = spGet('${Get.currentRoute}/isSharing') ?? false;
 
-  _workerItem(WorkerInfo wi) {
+  Column _workerItem(WorkerInfo wi) {
     var surplus =
         state.modifyDistributionList[index].getSurplusQty(wi.empID ?? 0);
     var dis = state.modifyDistributionList[index]

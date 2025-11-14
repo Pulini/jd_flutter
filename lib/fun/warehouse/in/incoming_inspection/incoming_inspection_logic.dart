@@ -11,7 +11,7 @@ import 'incoming_inspection_state.dart';
 class IncomingInspectionLogic extends GetxController {
   final IncomingInspectionState state = IncomingInspectionState();
 
-  scanOrder({
+  void scanOrder({
     required String code,
     required String deliveryNo,
     required String materialCode,
@@ -26,7 +26,7 @@ class IncomingInspectionLogic extends GetxController {
     );
   }
 
-  query({
+  void query({
     required String area,
     required String factory,
     required String deliveryNo,
@@ -51,11 +51,11 @@ class IncomingInspectionLogic extends GetxController {
   double getItemMaterialQty(List<InspectionDeliveryInfo> item) =>
       item.map((v) => v.qty ?? 0).reduce((a, b) => a.add(b));
 
-  deleteDeliveryOrder(List<List<InspectionDeliveryInfo>> order) {
+  void deleteDeliveryOrder(List<List<InspectionDeliveryInfo>> order) {
     state.deliveryList.remove(order);
   }
 
-  deleteDeliveryMaterialGroupOrder(List<InspectionDeliveryInfo> group) {
+  void deleteDeliveryMaterialGroupOrder(List<InspectionDeliveryInfo> group) {
     var isLastGroup = false;
     for (var g in state.deliveryList) {
       if (g.contains(group)) {
@@ -73,7 +73,7 @@ class IncomingInspectionLogic extends GetxController {
     }
   }
 
-  deleteDeliveryItem(InspectionDeliveryInfo item) {
+  void deleteDeliveryItem(InspectionDeliveryInfo item) {
     var isLastGroup = false;
     var isLastItem = false;
     for (var v in state.deliveryList) {
@@ -105,28 +105,28 @@ class IncomingInspectionLogic extends GetxController {
     }
   }
 
-  deleteMaterialItem(InspectionDeliveryInfo item) {
+  void deleteMaterialItem(InspectionDeliveryInfo item) {
     state.addMaterialList.remove(item);
   }
 
-  addMaterialItem(InspectionDeliveryInfo item) {
+  void addMaterialItem(InspectionDeliveryInfo item) {
     state.addMaterialList.add(item);
   }
 
-  modifyMaterialItem() {
+  void modifyMaterialItem() {
     state.addMaterialList.refresh();
   }
 
-  modify() {
+  void modify() {
     state.deliveryList.refresh();
   }
 
-  cleanDelivery() {
+  void cleanDelivery() {
     state.deliveryList.clear();
     state.addMaterialList.clear();
   }
 
-  applyInspection(WorkerInfo worker) {
+  void applyInspection(WorkerInfo worker) {
     state.applyInspection(
       number: worker.empCode ?? '',
       success: (msg) => successDialog(content: msg),
@@ -134,7 +134,7 @@ class IncomingInspectionLogic extends GetxController {
     );
   }
 
-  queryInspectionOrders({
+  void queryInspectionOrders({
     required String startDate,
     required String endDate,
     required String inspectionSuppler,
@@ -149,7 +149,7 @@ class IncomingInspectionLogic extends GetxController {
     );
   }
 
-  getInspectionOrderDetail({
+  void getInspectionOrderDetail({
     required String interID,
     required Function() success,
   }) {
@@ -160,11 +160,11 @@ class IncomingInspectionLogic extends GetxController {
     );
   }
 
-  deleteInspectionPhoto(File photo) {
+  void deleteInspectionPhoto(File photo) {
     state.inspectionPhotoList.remove(photo);
   }
 
-  submitInspection({required String inspector, required String results}) {
+  void submitInspection({required String inspector, required String results}) {
     state.submitInspection(
       inspector: inspector,
       results: results,
@@ -174,14 +174,14 @@ class IncomingInspectionLogic extends GetxController {
     );
   }
 
-  signOrder() {
+  void signOrder() {
     state.signOrder(
       success: (msg) => successDialog(content: msg, back: () => Get.back()),
       error: (msg) => errorDialog(content: msg),
     );
   }
 
-  reportException({required String exceptionInfo}) {
+  void reportException({required String exceptionInfo}) {
     state.reportException(
       exceptionInfo: exceptionInfo,
       success: (msg) => successDialog(content: msg, back: () => Get.back()),
@@ -189,7 +189,7 @@ class IncomingInspectionLogic extends GetxController {
     );
   }
 
-  exceptionHandling({required String handlingResult}) {
+  void exceptionHandling({required String handlingResult}) {
     state.exceptionHandling(
       handlingResult: handlingResult,
       success: (msg) => successDialog(content: msg, back: () => Get.back()),
@@ -197,7 +197,7 @@ class IncomingInspectionLogic extends GetxController {
     );
   }
 
-  submitCloseOrder() {
+  void submitCloseOrder() {
     state.submitCloseOrder(
       success: (msg) => successDialog(content: msg, back: () => Get.back()),
       error: (msg) => errorDialog(content: msg),

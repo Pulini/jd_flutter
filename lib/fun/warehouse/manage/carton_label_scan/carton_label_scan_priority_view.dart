@@ -21,7 +21,7 @@ class _CartonLabelScanPriorityPageState extends State<CartonLabelScanPriorityPag
   final CartonLabelScanState state = Get.find<CartonLabelScanLogic>().state;
 
 
-  _item(LinkDataSizeList data) {
+  Container _item(LinkDataSizeList data) {
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
       padding: const EdgeInsets.all(8.0),

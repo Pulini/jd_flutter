@@ -25,7 +25,7 @@ class ProcessReportStoreLogic extends GetxController {
   ];
 
   //添加条码
-  scanCode(String code) {
+  void scanCode(String code) {
     if (state.barCodeList.any((v) => v.code == code)) {
       showSnackBar(message: 'production_scan_hava_barcode'.tr, isWarning: true);
     } else {
@@ -73,14 +73,14 @@ class ProcessReportStoreLogic extends GetxController {
   }
 
   //删除对应条码
-  deleteCode(BarCodeInfo barCodeList) {
+  void deleteCode(BarCodeInfo barCodeList) {
     barCodeList.deleteByCode(callback: () {
       state.barCodeList.remove(barCodeList);
     });
   }
 
   //验证托盘
-  checkPallet({
+  void checkPallet({
     required List<String> pallets,
     required Function(PalletDetailInfo) success,
     required Function(String) error,
@@ -116,7 +116,7 @@ class ProcessReportStoreLogic extends GetxController {
   }
 
   //获得已入库条形码数据
-  getBarCodeStatusByDepartmentID({
+  void getBarCodeStatusByDepartmentID({
     required Function() refresh,
   }) {
     httpGet(method: webApiGetBarCodeStatusByDepartmentID, params: {
@@ -146,7 +146,7 @@ class ProcessReportStoreLogic extends GetxController {
   }
 
   //提交工序汇报入库
-  submit({
+  void submit({
     required WorkerInfo worker,
     required BarCodeProcessInfo process,
   }) {
@@ -197,7 +197,7 @@ class ProcessReportStoreLogic extends GetxController {
   }
 
   //清空条码
-  clearBarCodeList() {
+  void clearBarCodeList() {
     BarCodeInfo.clear(
       type: BarCodeReportType.processReportInStock.text,
       callback: (v) {
@@ -214,12 +214,12 @@ class ProcessReportStoreLogic extends GetxController {
   }
 
   //清理展示的内容
-  clearModifyList() {
+  void clearModifyList() {
     state.modifyList.clear();
   }
 
   //  输入数量
-  showInputDialog({
+  void showInputDialog({
     required String title,
     Function(String)? confirm,
     Function()? cancel,
@@ -267,7 +267,7 @@ class ProcessReportStoreLogic extends GetxController {
   }
 
   //获取工序汇报入库的条码信息
-  modifyAdd(String code) {
+  void modifyAdd(String code) {
     if(code.isNotEmpty){
       httpPost(
         method: webApiGetBarCodeInfo,
@@ -293,7 +293,7 @@ class ProcessReportStoreLogic extends GetxController {
   }
 
   //工序汇报入库，提交贴标数据
-  updateBarCodeInfo({
+  void updateBarCodeInfo({
     String? code,
     required Function(String) success,
   }) {
@@ -320,7 +320,7 @@ class ProcessReportStoreLogic extends GetxController {
     });
   }
 
-  setModifyList(String realQty, ProcessModifyInfo data) {
+  void setModifyList(String realQty, ProcessModifyInfo data) {
     for (var i = 0; i < state.modifyList.length; ++i) {
       if (state.modifyList[i].barCode == data.barCode) {
         state.modifyList[i].qty = realQty;

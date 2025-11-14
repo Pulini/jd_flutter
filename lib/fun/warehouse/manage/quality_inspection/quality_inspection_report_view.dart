@@ -137,7 +137,7 @@ class _QualityInspectionReportPageState
     );
   }
 
-  _tableLine(List<ReportAbnormalRecordsDetailInfo> list, int index) {
+  Row _tableLine(List<ReportAbnormalRecordsDetailInfo> list, int index) {
     var records = list[index];
     return Row(
       children: [

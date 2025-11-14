@@ -168,7 +168,7 @@ class _SapNoLabelStockInPageState extends State<SapNoLabelStockInPage> {
     );
   }
 
-  _query(String process) {
+  void _query(String process) {
     logic.query(
       reportStartDate: dpcStartDate.getDateFormatSapYMD(),
       reportEndDate: dpcEndDate.getDateFormatSapYMD(),

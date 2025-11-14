@@ -15,7 +15,7 @@ class SapPurchaseStockInState {
   var detailInfo = <SapPurchaseStockInDetailInfo>[].obs;
 
 
-  getDeliveryList({
+  void getDeliveryList({
     required String deliNo,
     required String startDate,
     required String endDate,
@@ -56,7 +56,7 @@ class SapPurchaseStockInState {
     });
   }
 
-  getDeliveryDetail({
+  void getDeliveryDetail({
     required String deliveryNumber,
     required Function() success,
     required Function(String) error,
@@ -78,7 +78,7 @@ class SapPurchaseStockInState {
     });
   }
 
-  checkTemporaryOrder({
+  void checkTemporaryOrder({
     required List<SapPurchaseStockInInfo> list,
     required Function() success,
     required Function(String) error,
@@ -102,7 +102,7 @@ class SapPurchaseStockInState {
     });
   }
 
-  saveDeliveryCheck({
+  void saveDeliveryCheck({
     required String location,
     required String inspector,
     required List<SapPurchaseStockInInfo> list,

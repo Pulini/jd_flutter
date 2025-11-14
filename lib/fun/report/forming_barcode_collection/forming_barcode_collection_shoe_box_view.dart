@@ -27,7 +27,7 @@ class _FormingBarcodeCollectionShoeBoxPageState
   //指令单号
   var shoeController = TextEditingController();
 
-  _item(FormingBarcodeByMonoInfo data,int position) {
+  GestureDetector _item(FormingBarcodeByMonoInfo data,int position) {
     return GestureDetector(
       child: Container(
         decoration: BoxDecoration(
@@ -81,7 +81,7 @@ class _FormingBarcodeCollectionShoeBoxPageState
     );
   }
 
-  _text({
+  Container _text({
     required String mes,
     required Color backColor,
     required bool head,
@@ -115,7 +115,7 @@ class _FormingBarcodeCollectionShoeBoxPageState
     );
   }
 
-  _title() {
+  Column _title() {
     const borders = BorderSide(color: Colors.grey, width: 1);
     return Column(
       children: [

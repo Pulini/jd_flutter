@@ -59,7 +59,7 @@ class _SapPrintPickingPageState extends State<SapPrintPickingPage> {
   );
   late LinkOptionsPickerController factoryWarehouseController;
 
-  _item(SapPickingInfo data) {
+  GestureDetector _item(SapPickingInfo data) {
     return GestureDetector(
       onTap: () => setState(() => data.select = !data.select),
       child: Container(
@@ -203,7 +203,7 @@ class _SapPrintPickingPageState extends State<SapPrintPickingPage> {
     );
   }
 
-  _query() {
+  void _query() {
     logic.queryOrder(
       instructionNo: instructionNoController.text,
       typeBody: typeBodyController.text,

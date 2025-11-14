@@ -212,7 +212,7 @@ class _SapProductionPickingPageState extends State<SapProductionPickingPage> {
     );
   }
 
-  _query() {
+  void _query() {
     logic.queryOrder(
       noticeNo: noticeNoController.text,
       startDate: dpcStartDate.getDateFormatSapYMD(),
@@ -224,7 +224,7 @@ class _SapProductionPickingPageState extends State<SapProductionPickingPage> {
     );
   }
 
-  _goPicking(bool scan) {
+  void _goPicking(bool scan) {
     Get.to(
       () => const SapProductionPickingDetailPage(),
       arguments: {'scan': scan},

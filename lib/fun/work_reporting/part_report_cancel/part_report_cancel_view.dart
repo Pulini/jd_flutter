@@ -23,7 +23,7 @@ class _PartReportCancelPageState extends State<PartReportCancelPage> {
 
   var controller = TextEditingController();
 
-  _text({
+  InkWell _text({
     required String mes,
     required bool head,
   }) {
@@ -61,7 +61,7 @@ class _PartReportCancelPageState extends State<PartReportCancelPage> {
     );
   }
 
-  _item1(TicketItem sub) {
+  Row _item1(TicketItem sub) {
     return Row(
       children: [
         Expanded(
@@ -88,7 +88,7 @@ class _PartReportCancelPageState extends State<PartReportCancelPage> {
     );
   }
 
-  _title() {
+  Row _title() {
     return Row(
       children: [
         Expanded(

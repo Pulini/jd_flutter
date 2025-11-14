@@ -88,7 +88,7 @@ class _ProductionDayReportPageState extends State<ProductionDayReportPage> {
     );
   }
 
-  reasonDialog() {
+  void reasonDialog() {
     logic.reasonDateController.pickDate.value = DateTime.now();
     reasonInputPopup(
       title: [
@@ -122,7 +122,7 @@ class _ProductionDayReportPageState extends State<ProductionDayReportPage> {
     );
   }
 
-  createDataRow(ProductionDayReportInfo data, Color color) {
+  DataRow createDataRow(ProductionDayReportInfo data, Color color) {
     bool isParty = data.number == userInfo?.number;
     return DataRow(
       color: WidgetStateProperty.resolveWith<Color?>((states) => color),

@@ -9,7 +9,7 @@ import 'picking_material_order_state.dart';
 class PickingMaterialOrderLogic extends GetxController {
   final PickingMaterialOrderState state = PickingMaterialOrderState();
 
-  printMaterialList(String orderNumber) {
+  void printMaterialList(String orderNumber) {
     state.getMaterialPrintInfo(
       orderNumber: orderNumber,
       success: (info) =>
@@ -18,7 +18,7 @@ class PickingMaterialOrderLogic extends GetxController {
     );
   }
 
-  queryPickingMaterialOrder({
+  void queryPickingMaterialOrder({
     required String startDate,
     required String endDate,
     required String instruction,
@@ -39,7 +39,7 @@ class PickingMaterialOrderLogic extends GetxController {
     );
   }
 
-  posting({
+  void posting({
     required String faceImage,
     required PickingMaterialOrderInfo order,
   }) {
@@ -52,7 +52,7 @@ class PickingMaterialOrderLogic extends GetxController {
     );
   }
 
-  reportPreparedMaterialsProgress(PickingMaterialOrderInfo order) {
+  void reportPreparedMaterialsProgress(PickingMaterialOrderInfo order) {
     state.reportPreparedMaterialsProgress(
       order: order,
       success: (msg) =>
@@ -61,7 +61,7 @@ class PickingMaterialOrderLogic extends GetxController {
     );
   }
 
-  uploadOutTicket({
+  void uploadOutTicket({
     required bool isCreate,
     required PickingMaterialOrderInfo data,
     required Function() refresh,

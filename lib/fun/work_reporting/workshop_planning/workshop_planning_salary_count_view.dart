@@ -30,7 +30,7 @@ class _WorkshopPlanningSalaryCountPageState
   late TabController tabController = TabController(length: 2, vsync: this);
   var pageController = PageController();
 
-  _processItemTitle() => Row(
+  Row _processItemTitle() => Row(
         children: [
           expandedFrameText(
             text: '尺码',
@@ -79,7 +79,7 @@ class _WorkshopPlanningSalaryCountPageState
         ],
       );
 
-  _processItem(WorkshopPlanningSizeInfo item) {
+  Row _processItem(WorkshopPlanningSizeInfo item) {
     var controller = TextEditingController(text: item.qty.toShowString());
     return Row(
       children: [
@@ -175,7 +175,7 @@ class _WorkshopPlanningSalaryCountPageState
     );
   }
 
-  _workerItem(WorkshopPlanningWorkerInfo data) => GestureDetector(
+  GestureDetector _workerItem(WorkshopPlanningWorkerInfo data) => GestureDetector(
         onTap: () => logic.modifyWorker(data),
         child: Container(
           decoration: BoxDecoration(
@@ -268,7 +268,7 @@ class _WorkshopPlanningSalaryCountPageState
         ),
       );
 
-  addWorkerItem({required Function() click}) => GestureDetector(
+  GestureDetector addWorkerItem({required Function() click}) => GestureDetector(
         onTap: click,
         child: Container(
           decoration: BoxDecoration(
@@ -286,7 +286,7 @@ class _WorkshopPlanningSalaryCountPageState
         ),
       );
 
-  _queryGroupData() {
+  void _queryGroupData() {
     logic.getGroupData(date: dpcDate.getDateFormatYMD());
   }
 

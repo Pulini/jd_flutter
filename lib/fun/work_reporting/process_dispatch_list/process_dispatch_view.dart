@@ -24,7 +24,7 @@ class _ProcessDispatchPageState extends State<ProcessDispatchPage> {
   final logic = Get.put(ProcessDispatchLogic());
   final state = Get.find<ProcessDispatchLogic>().state;
 
-  _item1(ProcessWorkCardListInfo data, int position) {
+  GestureDetector _item1(ProcessWorkCardListInfo data, int position) {
     return GestureDetector(
       onTap: () => logic.selectData(position),
       child: Container(

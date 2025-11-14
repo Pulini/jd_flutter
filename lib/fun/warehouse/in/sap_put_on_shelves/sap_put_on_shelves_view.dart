@@ -25,7 +25,7 @@ class _SapPutOnShelvesPageState extends State<SapPutOnShelvesPage> {
   var refreshController = EasyRefreshController(controlFinishRefresh: true);
   late LinkOptionsPickerController factoryWarehouseController;
 
-  _item(List<List<PalletDetailItem1Info>> pallet) {
+  GestureDetector _item(List<List<PalletDetailItem1Info>> pallet) {
     return GestureDetector(
       onTap: () => logic.scanCode(
         code: pallet[0][0].palletNumber ?? '',

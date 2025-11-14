@@ -8,7 +8,7 @@ import 'package:jd_flutter/widget/signature_page.dart';
 import 'package:jd_flutter/widget/worker_check_widget.dart';
 
 
-modifyPickingQty({
+void modifyPickingQty({
   required double quantity,
   required double coefficient,
   required String basicUnit,
@@ -157,7 +157,7 @@ modifyPickingQty({
 
 const String checkPickerDialogNumber = 'CHECK_PICKER_DIALOG_NUMBER';
 
-checkPickerDialog({
+void checkPickerDialog({
   required Function(
     String pickerNumber,
     ByteData pickerSignature,

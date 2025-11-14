@@ -9,7 +9,7 @@ import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/worker_check_widget.dart';
 
-checkBarCodeProcessDialog({
+void checkBarCodeProcessDialog({
   required List<BarCodeInfo> list,
   required Function(WorkerInfo, BarCodeProcessInfo) submit,
 }) {
@@ -93,7 +93,7 @@ checkBarCodeProcessDialog({
   );
 }
 
-getProcessFlowInfoByBarCode({
+void getProcessFlowInfoByBarCode({
   required List<BarCodeInfo> list,
   required Function(List<BarCodeProcessInfo>, String) callback,
 }) {

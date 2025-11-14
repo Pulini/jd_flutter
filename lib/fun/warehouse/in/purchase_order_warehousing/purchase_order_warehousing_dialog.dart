@@ -12,7 +12,7 @@ import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/picker/picker_controller.dart';
 import 'package:jd_flutter/widget/picker/picker_view.dart';
 
-stockInDialog({
+void stockInDialog({
   required String factoryNumber,
   required List<PurchaseOrderDetailsInfo> submitList,
   List<DeliveryOrderLabelInfo>? labelList,
@@ -177,7 +177,7 @@ stockInDialog({
   );
 }
 
-_checkFaceInfo({
+void _checkFaceInfo({
   required String billType,
   required String sapFactoryNumber,
   required String sapStockNumber,
@@ -224,7 +224,7 @@ _checkFaceInfo({
   });
 }
 
-_stockIn({
+void _stockIn({
   required String stockID,
   required String postDate,
   String? pickerNumber,

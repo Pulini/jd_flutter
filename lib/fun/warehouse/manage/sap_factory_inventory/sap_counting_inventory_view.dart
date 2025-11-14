@@ -32,7 +32,7 @@ class _SapCountingInventoryPageState extends State<SapCountingInventoryPage> {
         '${RouteConfig.sapCountingInventory.name}${PickerType.sapFactoryWarehouse}',
   );
 
-  _item(InventoryPalletInfo data) {
+  Column _item(InventoryPalletInfo data) {
     var width = getScreenSize().width - 20;
     var textButtonPadding =
         const EdgeInsets.only(left: 7, top: 3, right: 7, bottom: 3);
@@ -153,7 +153,7 @@ class _SapCountingInventoryPageState extends State<SapCountingInventoryPage> {
     );
   }
 
-  _queryOrder() {
+  void _queryOrder() {
     logic.queryInventoryOrder(
         isScan: false,
         factory: factoryWarehouseController.getPickItem1().pickerId(),

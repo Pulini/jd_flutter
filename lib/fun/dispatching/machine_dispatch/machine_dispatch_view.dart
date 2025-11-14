@@ -144,7 +144,7 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
             )),
       );
 
-  item(Items data, RxBool isSelect) => Obx(() => SizedBox(
+  Obx item(Items data, RxBool isSelect) => Obx(() => SizedBox(
         width: 70,
         child: Column(
           children: [
@@ -279,7 +279,7 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
         ),
       ));
 
-  totalItem(List<Items> data) {
+  Obx totalItem(List<Items> data) {
     var sumQty = 0.0;
     var sumUnderQty = 0.0;
     var sumReportQty = 0.0;
@@ -406,7 +406,7 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
     );
   }
 
-  pageTitle() => Container(
+  Container pageTitle() => Container(
         margin: const EdgeInsets.only(left: 10, bottom: 5, right: 10),
         padding: const EdgeInsets.all(5),
         width: double.infinity,
@@ -513,7 +513,7 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
         ),
       );
 
-  bottomButton() => Obx(
+  Obx bottomButton() => Obx(
         () => Row(
           children: [
             if (!state.leaderVerify.value)

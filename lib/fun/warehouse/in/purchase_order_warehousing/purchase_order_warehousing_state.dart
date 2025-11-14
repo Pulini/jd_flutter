@@ -17,7 +17,7 @@ class PurchaseOrderWarehousingState {
   var scannedLabelList = <DeliveryOrderLabelInfo>[].obs;
   var canAddPiece = false.obs;
   var hasPassPermission=checkUserPermission('105180106');
-  getPurchaseOrder({
+  void getPurchaseOrder({
     required String startDate,
     required String endDate,
     required String supplier,
@@ -65,7 +65,7 @@ class PurchaseOrderWarehousingState {
     });
   }
 
-  getSupplierLabelInfo({
+  void getSupplierLabelInfo({
     required Function(List<DeliveryOrderLabelInfo>) success,
     required Function(String msg) error,
   }) {

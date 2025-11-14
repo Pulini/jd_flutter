@@ -10,7 +10,7 @@ class PickingMaterialOrderState {
   var isPosted = 0.obs;
   var orderList = <PickingMaterialOrderInfo>[].obs;
 
-  getPickingMaterialOrderList({
+  void getPickingMaterialOrderList({
     required String startDate,
     required String endDate,
     required String instruction,
@@ -56,7 +56,7 @@ class PickingMaterialOrderState {
     });
   }
 
-  getMaterialPrintInfo({
+  void getMaterialPrintInfo({
     required String orderNumber,
     required Function(PickingMaterialOrderPrintInfo) success,
     required Function(String) error,
@@ -74,7 +74,7 @@ class PickingMaterialOrderState {
     });
   }
 
-  postingPickingMaterialOrder({
+  void postingPickingMaterialOrder({
     required String faceImage,
     required PickingMaterialOrderInfo order,
     required Function(String) success,
@@ -110,7 +110,7 @@ class PickingMaterialOrderState {
     });
   }
 
-  reportPreparedMaterialsProgress({
+  void reportPreparedMaterialsProgress({
     required PickingMaterialOrderInfo order,
     required Function(String) success,
     required Function(String) error,
@@ -138,7 +138,7 @@ class PickingMaterialOrderState {
     });
   }
 
-  uploadOutTicket({
+  void uploadOutTicket({
     required bool isCreate,
     required String orderNumber,
     required List<PickingMaterialOrderMaterialInfo> materialLines,

@@ -9,7 +9,7 @@ class SapPickingReceiptReversalLogic extends GetxController {
   final SapPickingReceiptReversalState state = SapPickingReceiptReversalState();
 
 
-  query({
+  void query({
     required String order,
     required String materialCode,
     required int orderType,
@@ -28,7 +28,7 @@ class SapPickingReceiptReversalLogic extends GetxController {
     );
   }
 
-  productionReceiptWriteOff({
+  void productionReceiptWriteOff({
     required String leaderNumber,
     required ByteData leaderSignature,
     required String userNumber,

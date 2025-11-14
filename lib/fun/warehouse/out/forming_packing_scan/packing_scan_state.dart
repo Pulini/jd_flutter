@@ -16,7 +16,7 @@ class PackingScanState {
   var canAdd = true; //可以进行扫描
 
   //  获取汇总信息
-  getAllData({
+  void getAllData({
     String? time,
     required Function(String msg) error,
   }) {
@@ -38,7 +38,7 @@ class PackingScanState {
   }
 
   //根据条件获取成型集装箱出货信息
-  getShipmentInformation({
+  void getShipmentInformation({
     String? time,
     String? cabinetNumber,
     String? order,
@@ -116,7 +116,7 @@ class PackingScanState {
   }
 
   //根据条件获取成型集装箱出货信息
-  addCode({
+  void addCode({
     required String code,
     required String orderNumber,
     required String deliveryNumber,

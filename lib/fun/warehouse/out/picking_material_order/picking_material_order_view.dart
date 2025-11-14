@@ -53,7 +53,7 @@ class _PickingMaterialOrderPageState extends State<PickingMaterialOrderPage> {
     buttonName: 'picking_material_order_factory_warehouse'.tr,
   );
 
-  _query() {
+  void _query() {
     logic.queryPickingMaterialOrder(
       startDate: dpcStartDate.getDateFormatSapYMD(),
       endDate: dpcEndDate.getDateFormatSapYMD(),
@@ -256,7 +256,7 @@ class _PickingMaterialOrderPageState extends State<PickingMaterialOrderPage> {
     );
   }
 
-  _subItem(PickingMaterialOrderMaterialInfo data) {
+  Container _subItem(PickingMaterialOrderMaterialInfo data) {
     return Container(
       margin: const EdgeInsets.only(left: 10, right: 10),
       child: Row(

@@ -20,7 +20,7 @@ class _WorkshopPlanningReportListPageState
   final WorkshopPlanningLogic logic = Get.find<WorkshopPlanningLogic>();
   final WorkshopPlanningState state = Get.find<WorkshopPlanningLogic>().state;
 
-  _item(WorkshopPlanningReportInfo data) => GestureDetector(
+  GestureDetector _item(WorkshopPlanningReportInfo data) => GestureDetector(
         onTap: () => logic.getReportDetailInfo(data.groupPayInterID ?? -1),
         child: Container(
           decoration: BoxDecoration(

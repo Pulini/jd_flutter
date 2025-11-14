@@ -6,11 +6,11 @@ import 'message_center_state.dart';
 class MessageCenterLogic extends GetxController {
   final MessageCenterState state = MessageCenterState();
 
-  cleanMessage() {
+  void cleanMessage() {
     MessageInfo.clean(callback: (v) => state.messageList.clear());
   }
 
-  deleteItem(int i) {
+  void deleteItem(int i) {
     state.messageList[i].delete(callback: () => state.messageList.removeAt(i));
   }
 }

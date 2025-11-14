@@ -20,7 +20,7 @@ class _PumaAntiCounterfeitingStorePageState
   final logic = Get.find<PumaAntiCounterfeitingLogic>();
   final state = Get.find<PumaAntiCounterfeitingLogic>().state;
 
-  _item(ScanCode data) {
+  GestureDetector _item(ScanCode data) {
     return GestureDetector(
       onLongPress: () {
         state.deleteCode(data);

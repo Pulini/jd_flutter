@@ -8,7 +8,7 @@ import 'package:jd_flutter/widget/edit_text_widget.dart';
 import 'package:jd_flutter/widget/picker/picker_controller.dart';
 import 'package:jd_flutter/widget/picker/picker_view.dart';
 
-qualityInspectionListLocationDialog({
+void qualityInspectionListLocationDialog({
   required Function(String) success,
 }) {
   var storeWarehouse = LinkOptionsPickerController(
@@ -58,7 +58,7 @@ qualityInspectionListLocationDialog({
   );
 }
 
-qualityInspectionListStoreDialog({
+void qualityInspectionListStoreDialog({
   required Function(String, String) success,
 }) {
   //过账日期
@@ -125,7 +125,7 @@ qualityInspectionListStoreDialog({
   );
 }
 
-showColor(List<StuffColorSeparationList> colorList) {
+void showColor(List<StuffColorSeparationList> colorList) {
   Get.dialog(
     PopScope(
       canPop: false,
@@ -190,7 +190,7 @@ showColor(List<StuffColorSeparationList> colorList) {
 }
 
 // 输入数量
-showInputDialog({
+void showInputDialog({
   required double allQty,
   required Function(double) callback,
 }) {

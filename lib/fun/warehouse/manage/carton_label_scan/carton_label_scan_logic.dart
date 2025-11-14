@@ -51,7 +51,7 @@ class CartonLabelScanLogic extends GetxController {
     refresh.call();
   }
 
-  cleanScanned() async {
+  Future<void> cleanScanned() async {
     for (var v in state.cartonInsideLabelList) {
       v.scanned = 0;
     }
@@ -59,7 +59,7 @@ class CartonLabelScanLogic extends GetxController {
     state.cartonInsideLabelList.refresh();
   }
 
-  scan({
+  void scan({
     required String code,
     required Function(String) outsideCode,
     required Function(String) insideCode,
@@ -118,7 +118,7 @@ class CartonLabelScanLogic extends GetxController {
     }
   }
 
-  submit(Function refresh) {
+  void submit(Function refresh) {
     if (isSubmitting) return;
     isSubmitting = true;
     state.submitScannedCartonLabel(
@@ -134,7 +134,7 @@ class CartonLabelScanLogic extends GetxController {
     );
   }
 
-  changePriority() {
+  void changePriority() {
     if(scanController.text.isEmpty && state.priorityCartonLabelInfo==null){
       showSnackBar(message:'carton_label_scan_input_or_scan'.tr  );
     }else{
@@ -146,14 +146,14 @@ class CartonLabelScanLogic extends GetxController {
     }
   }
 
-  queryScanHistory(String orderNo) {
+  void queryScanHistory(String orderNo) {
     state.getCartonLabelScanHistory(
       orderNo: orderNo,
       error: (msg) => errorDialog(content: msg),
     );
   }
 
-  getProgressDetail(CartonLabelScanProgressInfo data) {
+  void getProgressDetail(CartonLabelScanProgressInfo data) {
     state.getCartonLabelScanHistoryDetail(
       id: data.interID ?? 0,
       success: () => Get.to(() => const CartonLabelScanProgressDetailView()),

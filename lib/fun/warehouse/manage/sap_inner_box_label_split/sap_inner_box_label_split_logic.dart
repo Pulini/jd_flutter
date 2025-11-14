@@ -14,7 +14,7 @@ import 'sap_inner_box_label_split_state.dart';
 class SapInnerBoxLabelSplitLogic extends GetxController {
   final SapInnerBoxLabelSplitState state = SapInnerBoxLabelSplitState();
 
-  scanCode({required String code, required Function() refresh}) {
+  void scanCode({required String code, required Function() refresh}) {
     state.getLabelPrintInfo(
       code: code,
       error: (msg) => errorDialog(content: msg),
@@ -22,7 +22,7 @@ class SapInnerBoxLabelSplitLogic extends GetxController {
     );
   }
 
-  preSplit() {
+  void preSplit() {
     hidKeyboard();
     var splitList =
         (state.originalLabel!.subLabel!).where((v) => v.splitQty.value > 0);
@@ -46,7 +46,7 @@ class SapInnerBoxLabelSplitLogic extends GetxController {
     }
   }
 
-  deletePreSplit(SapLabelSplitInfo newLabel) {
+  void deletePreSplit(SapLabelSplitInfo newLabel) {
     for (var v in newLabel.materials) {
       var originalMaterial = state.originalLabel!.subLabel!
           .firstWhere((v2) => v2.materialNumber == v.materialNumber);
@@ -67,7 +67,7 @@ class SapInnerBoxLabelSplitLogic extends GetxController {
     return true;
   }
 
-  submitPreSplit() {
+  void submitPreSplit() {
     state.submitPreSplitLabel(
       error: (msg) => errorDialog(content: msg),
     );
@@ -77,7 +77,7 @@ class SapInnerBoxLabelSplitLogic extends GetxController {
       .where((v) => v.isSelected.value)
       .any((v) => v.factoryNo == '1098');
 
-  printLabel({bool? hasNotes}) {
+  void printLabel({bool? hasNotes}) {
 //1、缅甸工厂打专属标（只需判断工厂是否1098）
 //2、先打大标
 //    是否选择打印带物料标签 是 打印物料大标 否 打印大标
@@ -120,7 +120,7 @@ class SapInnerBoxLabelSplitLogic extends GetxController {
     toPrintView(labelList);
   }
 
-  toPrintView(List<Widget> labelView) {
+  void toPrintView(List<Widget> labelView) {
     Get.to(() => labelView.length > 1
         ? PreviewLabelList(labelWidgets: labelView, isDynamic: true)
         : PreviewLabel(labelWidget: labelView[0], isDynamic: true));

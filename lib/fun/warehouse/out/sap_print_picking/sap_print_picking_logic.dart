@@ -13,7 +13,7 @@ import 'sap_print_picking_state.dart';
 class SapPrintPickingLogic extends GetxController {
   final SapPrintPickingState state = SapPrintPickingState();
 
-  queryOrder({
+  void queryOrder({
     required String instructionNo,
     required String typeBody,
     required String picker,
@@ -44,7 +44,7 @@ class SapPrintPickingLogic extends GetxController {
     );
   }
 
-  getOrderDetail() {
+  void getOrderDetail() {
     state.getMaterialPickingOrderDetail(
       error: (msg) => errorDialog(content: msg),
     );
@@ -61,7 +61,7 @@ class SapPrintPickingLogic extends GetxController {
         }
       }).toList();
 
-  scanCode(String code) {
+  void scanCode(String code) {
     if (state.orderDetailOrderList.any((v) => v.order.location == '1001') ==
         true) {
       showSnackBar(
@@ -189,7 +189,7 @@ class SapPrintPickingLogic extends GetxController {
     );
   }
 
-  distributionLabel(SapPickingDetailLabelInfo label) {
+  void distributionLabel(SapPickingDetailLabelInfo label) {
     //整箱分配
     _getOrder(label).forEach((v) {
       //剩余可领 >= 本箱数量 说明本箱物料可以分配给此行工单
@@ -226,7 +226,7 @@ class SapPrintPickingLogic extends GetxController {
     state.orderDetailOrderList.refresh();
   }
 
-  getSum(int dataId) {
+  double getSum(int dataId) {
     var sum = 0.0;
     for (var label in state.orderDetailLabels) {
       for(var d in label.distribution){
@@ -238,7 +238,7 @@ class SapPrintPickingLogic extends GetxController {
     return sum;
   }
 
-  checkSubmitSelect({
+  void checkSubmitSelect({
     required Function(bool, List<PrintPickingDetailInfo>) pick,
   }) {
     var selectList = state.orderDetailOrderList
@@ -310,7 +310,7 @@ class SapPrintPickingLogic extends GetxController {
           }).toList();
   }
 
-  sizeMaterialPicking({
+  void sizeMaterialPicking({
     required String pickerNumber,
     required ByteData pickerSignature,
     required String userNumber,
@@ -345,7 +345,7 @@ class SapPrintPickingLogic extends GetxController {
     );
   }
 
-  materialPicking({
+  void materialPicking({
     required String pickerNumber,
     required ByteData pickerSignature,
     required String userNumber,
@@ -364,7 +364,7 @@ class SapPrintPickingLogic extends GetxController {
     );
   }
 
-  scannedLabelDelete(SapPickingDetailLabelInfo label) {
+  void scannedLabelDelete(SapPickingDetailLabelInfo label) {
     label.distribution.clear();
     state.orderDetailLabels
         .firstWhere((v) => v.labelCode == label.labelCode)
@@ -376,7 +376,7 @@ class SapPrintPickingLogic extends GetxController {
     }
   }
 
-  transferScanCode(String code) {
+  void transferScanCode(String code) {
     if (code.isLabel()) {
       for (var list in state.transferList) {
         list.where((v) => v.labelNumber == code).forEach((item) {
@@ -407,7 +407,7 @@ class SapPrintPickingLogic extends GetxController {
     );
   }
 
-  checkPalletAndTransfer({
+  void checkPalletAndTransfer({
     required String pallet,
     required Function() refresh,
   }) {

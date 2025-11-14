@@ -94,7 +94,7 @@ class PatrolInspectionState {
     });
   }
 
-  getPatrolInspectionReport({
+  void getPatrolInspectionReport({
     required String patrolInspectDate,
     required Function() success,
     required Function(String) error,

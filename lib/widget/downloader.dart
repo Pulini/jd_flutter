@@ -150,7 +150,7 @@ class Downloader {
   }
 }
 
-deleteExistsAPK() async {
+Future<void> deleteExistsAPK() async {
   var temporary = await getTemporaryDirectory();
   Directory directory = Directory('${temporary.path}/');
   if (await directory.exists()) {

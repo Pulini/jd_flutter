@@ -16,7 +16,7 @@ import 'print_pallet_state.dart';
 class PrintPalletLogic extends GetxController {
   final PrintPalletState state = PrintPalletState();
 
-  scanPallet(String code) {
+  void scanPallet(String code) {
     if (code.isPallet()) {
       state.getPalletInfo(
         pallet: code,
@@ -28,7 +28,7 @@ class PrintPalletLogic extends GetxController {
     }
   }
 
-  addPallet(Function() clearInput) {
+  void addPallet(Function() clearInput) {
     if (state.palletNo.value.isPallet()) {
       state.getPalletInfo(
         pallet: state.palletNo.value,
@@ -45,7 +45,7 @@ class PrintPalletLogic extends GetxController {
     }
   }
 
-  _setPalletList(List<SapPalletDetailInfo> list) {
+  void _setPalletList(List<SapPalletDetailInfo> list) {
     if (state.palletList
         .none((v) => v.first.palletNumber == list.first.palletNumber)) {
       state.palletList.add(list);
@@ -55,12 +55,12 @@ class PrintPalletLogic extends GetxController {
     }
   }
 
-  deletePallet(int index) {
+  void deletePallet(int index) {
     state.palletList.removeAt(index);
     state.selectedList.removeAt(index);
   }
 
-  printPallet() {
+  void printPallet() {
     var list = <Widget>[];
     for (var i = 0; i < state.selectedList.length; ++i) {
       if (state.selectedList[i].value) {
@@ -94,7 +94,7 @@ class PrintPalletLogic extends GetxController {
     toPrintView(list);
   }
 
-  printPalletSizeMaterial() {
+  void printPalletSizeMaterial() {
     // var pdf = pw.Document();
     // var a4PaperByteList = <Uint8List>[];
     var printTask = <List>[];
@@ -203,13 +203,13 @@ class PrintPalletLogic extends GetxController {
     Get.to(() => WebPrinter(palletTaskList: printTask));
   }
 
-  toPrintView(List<Widget> labelView) {
+  void toPrintView(List<Widget> labelView) {
     Get.to(() => labelView.length > 1
         ? PreviewLabelList(labelWidgets: labelView, isDynamic: true)
         : PreviewLabel(labelWidget: labelView[0], isDynamic: true));
   }
 
-  deleteLabel() {
+  void deleteLabel() {
     var list = <List<String>>[];
     for (var p in state.palletList) {
       for (var label in p.where((v) => v.isSelect.value)) {
@@ -233,10 +233,10 @@ class PrintPalletLogic extends GetxController {
     );
   }
 
-  isSelectedAllItem(int index) =>
+  bool isSelectedAllItem(int index) =>
       state.palletList[index].every((v) => v.isSelect.value);
 
-  selectAllSubItem(int index, bool isSelect) {
+  void selectAllSubItem(int index, bool isSelect) {
     for (var v in state.palletList[index]) {
       v.isSelect.value = isSelect;
     }

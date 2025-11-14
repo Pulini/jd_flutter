@@ -24,7 +24,7 @@ class _SapRelocationPickingPageState extends State<SapRelocationPickingPage> {
   final SapRelocationPickingState state =
       Get.find<SapRelocationPickingLogic>().state;
 
-  _item(SapPalletDetailInfo data) {
+  GestureDetector _item(SapPalletDetailInfo data) {
     return GestureDetector(
       onTap: () {
         modifyPickingQty(

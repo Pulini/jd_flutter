@@ -61,7 +61,7 @@ class ProductionDayReportLogic extends GetxController {
     return false;
   }
 
-  submitReason({
+  void submitReason({
     required String date,
     required String reason,
     required Function() refresh,

@@ -46,7 +46,7 @@ class _SmartDeliveryPageState extends State<SmartDeliveryPage> {
     controlFinishLoad: true,
   );
 
-  _item(SmartDeliveryOrderInfo data) {
+  GestureDetector _item(SmartDeliveryOrderInfo data) {
     return GestureDetector(
       onTap: () => logic.getOrderMaterialList(
         data.workCardInterID ?? 0,

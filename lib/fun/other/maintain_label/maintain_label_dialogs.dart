@@ -1116,7 +1116,7 @@ void _setMaterialLanguages(
   });
 }
 
-selectMaterialDialog(List<String> list, Function(String) callback) {
+void selectMaterialDialog(List<String> list, Function(String) callback) {
   var controller = FixedExtentScrollController();
   Get.dialog(
     PopScope(

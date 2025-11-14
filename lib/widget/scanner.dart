@@ -143,7 +143,7 @@ void scannerDialog({
   );
 }
 
-pdaScanner({required Function(String) scan}) {
+void pdaScanner({required Function(String) scan}) {
   debugPrint('PdaScanner 注册监听');
   const MethodChannel(channelScanFlutterToAndroid).setMethodCallHandler((call) {
     switch (call.method) {

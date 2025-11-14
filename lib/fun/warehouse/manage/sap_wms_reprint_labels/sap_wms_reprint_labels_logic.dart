@@ -47,7 +47,7 @@ class SapWmsReprintLabelsLogic extends GetxController {
     errorDialog(content: 'sap_wms_reprint_label_scan_wrong_barcode'.tr);
   }
 
-  clean() {
+  void clean() {
     state.labelList.clear();
     state.palletNumber.value = '';
   }

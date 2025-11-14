@@ -16,7 +16,7 @@ import 'workshop_planning_state.dart';
 class WorkshopPlanningLogic extends GetxController {
   final WorkshopPlanningState state = WorkshopPlanningState();
 
-  queryProcessPlan({
+  void queryProcessPlan({
     required String productionOrderNo,
     required String processName,
   }) {
@@ -32,7 +32,7 @@ class WorkshopPlanningLogic extends GetxController {
     }
   }
 
-  setWorkerMoney() {
+  void setWorkerMoney() {
     if (state.reportWorkerList.isNotEmpty) {
       var efficiency = state.reportWorkerList
           .map((v) => v.efficiency())
@@ -49,7 +49,7 @@ class WorkshopPlanningLogic extends GetxController {
     }
   }
 
-  getGroupData({required String date}) {
+  void getGroupData({required String date}) {
     state.getGroupInfo(
       processFlowID: state.planInfo!.flowProcessID ?? '',
       date: date,
@@ -77,7 +77,7 @@ class WorkshopPlanningLogic extends GetxController {
     );
   }
 
-  addWorker() {
+  void addWorker() {
     state.getWorkTypeListByProcess(
       processFlowID: state.planInfo!.flowProcessID ?? '',
       success: () => Get.to(
@@ -94,7 +94,7 @@ class WorkshopPlanningLogic extends GetxController {
     );
   }
 
-  getWorkerInfo({
+  void getWorkerInfo({
     required String flowProcessID,
     required String number,
     required String date,
@@ -134,7 +134,7 @@ class WorkshopPlanningLogic extends GetxController {
     }
   }
 
-  selectWorker({
+  void selectWorker({
     WorkshopPlanningWorkerInfo? worker,
     required FixedExtentScrollController workerType,
     required TextEditingController workerNumber,
@@ -168,7 +168,7 @@ class WorkshopPlanningLogic extends GetxController {
     }
   }
 
-  changeWorkerType({
+  void changeWorkerType({
     required TextEditingController coefficient,
     required int index,
   }) {
@@ -179,7 +179,7 @@ class WorkshopPlanningLogic extends GetxController {
     }
   }
 
-  addOrModifyWorkerData({
+  void addOrModifyWorkerData({
     required FixedExtentScrollController workerType,
     required TextEditingController workerNumber,
     required TextEditingController manHours,
@@ -211,7 +211,7 @@ class WorkshopPlanningLogic extends GetxController {
     Get.back();
   }
 
-  modifyWorker(WorkshopPlanningWorkerInfo worker) {
+  void modifyWorker(WorkshopPlanningWorkerInfo worker) {
     state.getWorkTypeListByProcess(
       processFlowID: state.planInfo!.flowProcessID ?? '',
       success: () {
@@ -231,7 +231,7 @@ class WorkshopPlanningLogic extends GetxController {
     );
   }
 
-  initAddWorker({
+  void initAddWorker({
     required FixedExtentScrollController workerType,
     required TextEditingController workerNumber,
     required TextEditingController manHours,
@@ -246,11 +246,11 @@ class WorkshopPlanningLogic extends GetxController {
     );
   }
 
-  deleteReportWorker(WorkshopPlanningWorkerInfo data) {
+  void deleteReportWorker(WorkshopPlanningWorkerInfo data) {
     state.reportWorkerList.remove(data);
   }
 
-  getGroupPayList() {
+  void getGroupPayList() {
     state.getGroupPayList(
       success: () {
         state.reportDetailInfo = null;
@@ -272,7 +272,7 @@ class WorkshopPlanningLogic extends GetxController {
     );
   }
 
-  getReportDetailInfo(int groupPayInterID) {
+  void getReportDetailInfo(int groupPayInterID) {
     state.getGroupPayDetail(
       groupPayInterID: groupPayInterID,
       success: () => Get.back(),
@@ -280,7 +280,7 @@ class WorkshopPlanningLogic extends GetxController {
     );
   }
 
-  deleteReportInfo(int id) {
+  void deleteReportInfo(int id) {
     state.deleteGroupPay(
       groupPayInterID: id,
       success: (msg) {
@@ -296,7 +296,7 @@ class WorkshopPlanningLogic extends GetxController {
     );
   }
 
-  submitWorkersReport() {
+  void submitWorkersReport() {
     if (state.reportQuantity.value <= 0) {
       errorDialog(content: '报工数不能为0');
       return;
@@ -346,14 +346,14 @@ class WorkshopPlanningLogic extends GetxController {
     );
   }
 
-  getWorkshopPlanningWorkersCache() {
+  void getWorkshopPlanningWorkersCache() {
     WorkshopPlanningWorkersCache.getSave(
       departmentID: state.departmentID,
       callback: (list) => state.workersCache.value = list,
     );
   }
 
-  useWorkersCache() {
+  void useWorkersCache() {
     var cacheList = <WorkshopPlanningWorkerInfo>[
       for (var json in jsonDecode(state.workersCache.first.data ?? ''))
         WorkshopPlanningWorkerInfo.fromJson(json)
@@ -372,12 +372,12 @@ class WorkshopPlanningLogic extends GetxController {
     state.reportWorkerList.value = list;
   }
 
-  scanCode(
-    code,
+  void scanCode(
+    String code,
     TextEditingController tecProductionOrderNo,
     TextEditingController tecProcessName,
   ) {
-    if (code != null) {
+    if (code.isNotEmpty) {
       try {
         var json = jsonDecode(code);
         String? workCardInterID = json['WorkCardInterID'];
@@ -401,7 +401,7 @@ class WorkshopPlanningLogic extends GetxController {
     }
   }
 
-  refreshMaterialAndProcessDetails({
+  void refreshMaterialAndProcessDetails({
     required String date,
     required String processFlow,
   }) {
@@ -422,7 +422,7 @@ class WorkshopPlanningLogic extends GetxController {
     );
   }
 
-  getLastProcessProduction({
+  void getLastProcessProduction({
     required String date,
     required String processFlow,
   }) {
@@ -458,7 +458,7 @@ class WorkshopPlanningLogic extends GetxController {
     );
   }
 
-  lastProcessAddWorker(String processFlowID, String date) {
+  void lastProcessAddWorker(String processFlowID, String date) {
     state.getWorkTypeListByProcess(
       processFlowID: processFlowID,
       success: () => Get.to(
@@ -475,7 +475,7 @@ class WorkshopPlanningLogic extends GetxController {
     );
   }
 
-  lastProcessModifyWorker(
+  void lastProcessModifyWorker(
       WorkshopPlanningWorkerInfo worker, String processFlowID, String date) {
     state.getWorkTypeListByProcess(
       processFlowID: processFlowID,
@@ -496,7 +496,7 @@ class WorkshopPlanningLogic extends GetxController {
     );
   }
 
-  getGroupPayEndingProcessList({
+  void getGroupPayEndingProcessList({
     required String date,
     required String processFlowID,
     required String processFlowName,
@@ -514,15 +514,15 @@ class WorkshopPlanningLogic extends GetxController {
     );
   }
 
-  addMaterial(List<WorkshopPlanningMaterialInfo> list) {
+  void addMaterial(List<WorkshopPlanningMaterialInfo> list) {
     state.lastProcessMaterialList.addAll(list);
   }
 
-  deleteMaterial(WorkshopPlanningMaterialInfo data) {
+  void deleteMaterial(WorkshopPlanningMaterialInfo data) {
     state.lastProcessMaterialList.remove(data);
   }
 
-  deleteLastProcessReportOrder({
+  void deleteLastProcessReportOrder({
     required int id,
   }) {
     state.deleteGroupPay(
@@ -542,7 +542,7 @@ class WorkshopPlanningLogic extends GetxController {
     );
   }
 
-  clearData() {
+  void clearData() {
     state.lastProcessMaterialsData.clear();
     state.lastProcessMaterialList.clear();
     state.lastProcessProductionList.clear();
@@ -553,7 +553,7 @@ class WorkshopPlanningLogic extends GetxController {
     state.reportWorkerList.clear();
   }
 
-  submitLastProcessReport(String date) {
+  void submitLastProcessReport(String date) {
     if (state.reportQuantity.value == 0.0) {
       errorDialog(content: '报工数不能为0');
       return;
@@ -597,7 +597,7 @@ class WorkshopPlanningLogic extends GetxController {
     );
   }
 
-  getLastProcessDetails(int id) {
+  void getLastProcessDetails(int id) {
     state.getGroupPayEndingDetail(
       groupPayInterID: id,
       success: (detail) {
@@ -628,7 +628,7 @@ class WorkshopPlanningLogic extends GetxController {
     );
   }
 
-  modifyReportSetWorkerMoney() {
+  void modifyReportSetWorkerMoney() {
     if (state.modifyReportReportWorkerList.isNotEmpty) {
       var efficiency = state.modifyReportReportWorkerList
           .map((v) => v.efficiency())
@@ -645,7 +645,7 @@ class WorkshopPlanningLogic extends GetxController {
     }
   }
 
-  modifyReportAddWorker() {
+  void modifyReportAddWorker() {
     state.getWorkTypeListByProcess(
       processFlowID: state.lastProcessFlowID,
       success: () => Get.to(
@@ -662,7 +662,7 @@ class WorkshopPlanningLogic extends GetxController {
     );
   }
 
-  modifyReportModifyWorker(WorkshopPlanningWorkerInfo worker) {
+  void modifyReportModifyWorker(WorkshopPlanningWorkerInfo worker) {
     state.getWorkTypeListByProcess(
       processFlowID: state.lastProcessFlowID,
       success: () {
@@ -682,15 +682,15 @@ class WorkshopPlanningLogic extends GetxController {
     );
   }
 
-  modifyReportDeleteReportWorker(WorkshopPlanningWorkerInfo data) {
+  void modifyReportDeleteReportWorker(WorkshopPlanningWorkerInfo data) {
     state.modifyReportReportWorkerList.remove(data);
   }
 
-  modifyReportDeleteMaterial(LastProcessReportMaterialInfo data) {
+  void modifyReportDeleteMaterial(LastProcessReportMaterialInfo data) {
     state.modifyReportMaterialList.remove(data);
   }
 
-  modifyReportSubmit() {
+  void modifyReportSubmit() {
     if (state.modifyReportReportQuantity.value == 0.0) {
       errorDialog(content: '报工数不能为0');
       return;

@@ -33,7 +33,7 @@ class _SapScanCodeInventoryPageState extends State<SapScanCodeInventoryPage> {
   );
   var tecArea = TextEditingController();
 
-  _item(int index) {
+  Column _item(int index) {
     var data = state.palletList[index];
     var width = getScreenSize().width - 20;
     bool isScannedAll = data.every((v) => v.isSelected.value);
@@ -117,7 +117,7 @@ class _SapScanCodeInventoryPageState extends State<SapScanCodeInventoryPage> {
     );
   }
 
-  _queryOrder() {
+  void _queryOrder() {
     logic.queryInventoryOrder(
       isScan: true,
       factory: factoryWarehouseController.getPickItem1().pickerId(),

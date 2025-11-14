@@ -193,7 +193,7 @@ class _DeliveryOrderCheckPageState extends State<DeliveryOrderCheckPage> {
     );
   }
 
-  _showLocation() {
+  void _showLocation() {
     showCupertinoModalPopup(
       context: context,
       builder: (c) => AlertDialog(

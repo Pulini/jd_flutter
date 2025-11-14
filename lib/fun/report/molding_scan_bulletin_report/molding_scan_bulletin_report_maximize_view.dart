@@ -60,7 +60,7 @@ class _MoldingScanBulletinReportMaximizeState
     },
   );
 
-  getTable() {
+  Obx getTable() {
     var greenText = const TextStyle(
       color: Colors.green,
       fontWeight: FontWeight.bold,

@@ -20,7 +20,7 @@ class ComponentHandoverLogic extends GetxController {
 
   late final LinkOptionsPickerController pickerController;
 
-  addCode(String code) {
+  void addCode(String code) {
     if (code.isNotEmpty) {
       var newCode = '';
 
@@ -42,12 +42,12 @@ class ComponentHandoverLogic extends GetxController {
   }
 
   //是否包含次条码
-  isExists(String newCode) {
+  bool isExists(String newCode) {
     return state.dataList.any((v) => v.code == newCode);
   }
 
   //获取制程
-  getHandoverProcessFlow() {
+  void getHandoverProcessFlow() {
     if (state.dataList.isNotEmpty) {
       httpPost(
         method: webApiGetHandoverProcessFlow,
@@ -134,7 +134,7 @@ class ComponentHandoverLogic extends GetxController {
   }
 
   //获取员工信息
-  getWorkerInfo({
+  void getWorkerInfo({
     String? number,
     String? department,
     required Function(List<WorkerInfo>) workers,
@@ -153,7 +153,7 @@ class ComponentHandoverLogic extends GetxController {
   }
 
   //获取工序列表
-  getProcessList() {
+  void getProcessList() {
     if (state.processId == 0) {
       if (state.dataList.isNotEmpty) {
         httpPost(
@@ -252,7 +252,7 @@ class ComponentHandoverLogic extends GetxController {
   }
 
   //获取交接信息_部件
-  getHandoverInfo(String processFlowID, String name) {
+  void getHandoverInfo(String processFlowID, String name) {
     httpPost(
       method: webApiGetHandoverInfo,
       loading: 'component_handover_receipt_information'.tr,
@@ -288,7 +288,7 @@ class ComponentHandoverLogic extends GetxController {
   }
 
   //清理输入人员信息
-  clearPeople() {
+  void clearPeople() {
     state.empName.value = '';
     state.departmentId = '';
     state.empId = '';
@@ -296,7 +296,7 @@ class ComponentHandoverLogic extends GetxController {
   }
 
   //提交交接
-  submitHandoverInfo({
+  void submitHandoverInfo({
     required String basePhoto,
     required Function(String) success,
   }) {
@@ -335,7 +335,7 @@ class ComponentHandoverLogic extends GetxController {
   }
 
   //清除所有数据
-  clearAllData(){
+  void clearAllData(){
     clearPeople();
     state.dataList.clear();
     state.summaryDataList.clear();

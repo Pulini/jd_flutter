@@ -10,14 +10,14 @@ import 'wait_picking_material_state.dart';
 class WaitPickingMaterialLogic extends GetxController {
   final WaitPickingMaterialState state = WaitPickingMaterialState();
 
-  selectedDepartment({required int group, required int sub}) {
+  void selectedDepartment({required int group, required int sub}) {
     state.selectedDepartment =
         state.companyDepartmentList[group].departmentList?[sub];
     state.queryParamDepartment.value =
         state.selectedDepartment?.departmentName ?? '';
   }
 
-  query({
+  void query({
     required String typeBody,
     required String instruction,
     required String materialCode,
@@ -80,7 +80,7 @@ class WaitPickingMaterialLogic extends GetxController {
     );
   }
 
-  goDetail(WaitPickingMaterialOrderInfo order, int index) {
+  void goDetail(WaitPickingMaterialOrderInfo order, int index) {
     state.detail = order;
     state.detailSubIndex = index;
     Get.to(() => const WaitPickingMaterialDetailPage())?.then((_) {
@@ -88,11 +88,11 @@ class WaitPickingMaterialLogic extends GetxController {
     });
   }
 
-  selectOrderAll(bool select, WaitPickingMaterialOrderInfo data) {
+  void selectOrderAll(bool select, WaitPickingMaterialOrderInfo data) {
     data.items?.forEach((v1) => selectSubItemAll(select, v1));
   }
 
-  selectSubItemAll(bool select, WaitPickingMaterialOrderSubInfo data) {
+  void selectSubItemAll(bool select, WaitPickingMaterialOrderSubInfo data) {
     data.models?.forEach((v2) {
       if (select) {
         if (v2.pickingQty.value > 0) v2.isSelected.value = true;
@@ -106,7 +106,7 @@ class WaitPickingMaterialLogic extends GetxController {
       ? state.detail.items![state.detailSubIndex].selectedCount() > 0
       : state.detail.hasSelected();
 
-  detailSelectAll(bool select) {
+  void detailSelectAll(bool select) {
     if (state.detailSubIndex >= 0) {
       state.detail.items![state.detailSubIndex].models?.forEach(
         (v) => v.isSelected.value = select,
@@ -118,7 +118,7 @@ class WaitPickingMaterialLogic extends GetxController {
     }
   }
 
-  refreshSelect() {
+  void refreshSelect() {
     if (state.detailSubIndex >= 0) {
       state.detail.items![state.detailSubIndex].models?.forEach(
         (v) {
@@ -168,7 +168,7 @@ class WaitPickingMaterialLogic extends GetxController {
     return list;
   }
 
-  getRealTimeInventory({
+  void getRealTimeInventory({
     required Function(List<ImmediateInventoryInfo>) show,
   }) {
     state.getMaterialInventory(
@@ -179,7 +179,7 @@ class WaitPickingMaterialLogic extends GetxController {
     );
   }
 
-  checkPickingMaterial({
+  void checkPickingMaterial({
     required Function() oneFaceCheck,
     required Function() twoFaceCheck,
   }) {
@@ -214,7 +214,7 @@ class WaitPickingMaterialLogic extends GetxController {
     }
   }
 
-  pickingMaterial({
+  void pickingMaterial({
     required bool isMove,
     required bool isPosting,
     String? pickerNumber,
@@ -247,7 +247,7 @@ class WaitPickingMaterialLogic extends GetxController {
     );
   }
 
-  printMaterialList(String orderNumber) {
+  void printMaterialList(String orderNumber) {
     state.getMaterialPrintInfo(
       orderNumber: orderNumber,
       success: (info) =>

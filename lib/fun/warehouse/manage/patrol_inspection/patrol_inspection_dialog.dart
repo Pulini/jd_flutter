@@ -5,7 +5,7 @@ import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
 
-changeLineDialog({required RxList<PatrolInspectionInfo> lines,required Function(int)change}) {
+void changeLineDialog({required RxList<PatrolInspectionInfo> lines,required Function(int)change}) {
   var index = lines.indexWhere((v) => v.isSelected.value);
   var controllerLines = FixedExtentScrollController(initialItem: index);
   Get.dialog(
@@ -49,7 +49,7 @@ changeLineDialog({required RxList<PatrolInspectionInfo> lines,required Function(
     ),
   );
 }
-modifyTagKeyDialog({required PatrolInspectionAbnormalItemInfo data}) {
+void modifyTagKeyDialog({required PatrolInspectionAbnormalItemInfo data}) {
   var controller=TextEditingController(text: data.tag.value);
   Get.dialog(
     PopScope(

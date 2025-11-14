@@ -25,7 +25,7 @@ class _StuffQualityInspectionLabelPageState
 
   var borders = const BorderSide(color: Colors.grey, width: 1);
 
-  _showChangeDialog(StuffQualityInspectionLabelInfo data, int position) {
+  void _showChangeDialog(StuffQualityInspectionLabelInfo data, int position) {
     var changeQty = data.unqualified;
     var changeShort = data.short;
     var changeVolume = data.volume;
@@ -223,7 +223,7 @@ class _StuffQualityInspectionLabelPageState
     );
   }
 
-  _text({
+  Container _text({
     required String mes,
     required Color backColor,
     required bool head,

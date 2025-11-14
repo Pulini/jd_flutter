@@ -18,7 +18,7 @@ import 'package:jd_flutter/widget/worker_check_widget.dart';
 const String checkSaveDialogNumber = 'CHECK_SAVE_DIALOG_NUMBER';
 const String checkSaveDialogLocation = 'CHECK_SAVE_DIALOG_LOCATION';
 
-checkSaveDialog({
+void checkSaveDialog({
   required String factoryNumber,
   required String location,
   required Function(String location, String inspector) callback,
@@ -114,7 +114,7 @@ checkSaveDialog({
   );
 }
 
-stockInDialog({
+void stockInDialog({
   required List<SapPurchaseStockInInfo> list,
   required Function() refresh,
 }) {
@@ -267,7 +267,7 @@ stockInDialog({
   );
 }
 
-stockInWriteOffDialog({
+void stockInWriteOffDialog({
   required List<SapPurchaseStockInInfo> list,
   required Function() refresh,
 }) {
@@ -349,7 +349,7 @@ stockInWriteOffDialog({
   );
 }
 
-temporaryDialog({
+void temporaryDialog({
   required List<SapPurchaseStockInInfo> list,
   required Function() refresh,
 }) {
@@ -462,7 +462,7 @@ temporaryDialog({
 }
 
 //根据工厂编号获取Mes存储位置列表
-_getStorageLocationList({
+void _getStorageLocationList({
   required String factoryNumber,
   required Function(List<LocationInfo>) success,
 }) {
@@ -484,7 +484,7 @@ _getStorageLocationList({
 }
 
 
-_stockIn({
+void _stockIn({
   required String location,
   required String date,
   required List<SapPurchaseStockInInfo> orderList,
@@ -532,7 +532,7 @@ _stockIn({
   });
 }
 
-_stockInWriteOff({
+void _stockInWriteOff({
   required String reason,
   required String date,
   required List<SapPurchaseStockInInfo> orderList,
@@ -563,7 +563,7 @@ _stockInWriteOff({
   });
 }
 
-_createTemporary({
+void _createTemporary({
   required List<SapPurchaseStockInInfo> orderList,
   String? workerNumber,
   ByteData? workerSignature,

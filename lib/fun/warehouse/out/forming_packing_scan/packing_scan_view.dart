@@ -19,7 +19,7 @@ class _PackingScanPageState extends State<PackingScanPage> {
   final state = Get.find<PackingScanLogic>().state;
 
 
-  _item(ContainerScanner data) {
+  GestureDetector _item(ContainerScanner data) {
     return GestureDetector(
       onTap: () {
         state.getShipmentInformation(
@@ -52,7 +52,7 @@ class _PackingScanPageState extends State<PackingScanPage> {
     );
   }
 
-  _text({
+  Container _text({
     required String mes,
     required Color backColor,
     required bool head,
@@ -86,7 +86,7 @@ class _PackingScanPageState extends State<PackingScanPage> {
     );
   }
 
-  _title() {
+  Column _title() {
     const borders = BorderSide(color: Colors.grey, width: 1);
     return Column(
       children: [

@@ -10,7 +10,7 @@ import 'sap_packing_scan_state.dart';
 class SapPackingScanLogic extends GetxController {
   final SapPackingScanState state = SapPackingScanState();
 
-  scanCode(String code) {
+  void scanCode(String code) {
     if (state.materialList.isEmpty) {
       _getMaterialInfo(code);
     } else {
@@ -84,7 +84,7 @@ class SapPackingScanLogic extends GetxController {
     }
   }
 
-  _addMaterial(String code, List<SapPackingScanMaterialInfo> list) {
+  void _addMaterial(String code, List<SapPackingScanMaterialInfo> list) {
     for (var material in list) {
       for (var label in material.labelList!) {
         if (label.labelNumber == code) {
@@ -117,7 +117,7 @@ class SapPackingScanLogic extends GetxController {
     return groupBy(scanned, (v) => v.labelNumber).length;
   }
 
-  _getMaterialInfo(String code) {
+  void _getMaterialInfo(String code) {
     state.getContainerLoadingInfo(
       code: code,
       success: (list) {
@@ -195,7 +195,7 @@ class SapPackingScanLogic extends GetxController {
     }
   }
 
-  deleteLabels() {
+  void deleteLabels() {
     for (var p in state.pieceList.where((v) => v.isSelected.value)) {
       for (var material in state.materialList) {
         material.labelList!
@@ -206,7 +206,7 @@ class SapPackingScanLogic extends GetxController {
     state.pieceList.removeWhere((v) => v.isSelected.value);
   }
 
-  sealingCabinet() {
+  void sealingCabinet() {
     state.checkContainer(
       success: (msg) => askDialog(
         title: '封柜',
@@ -220,7 +220,7 @@ class SapPackingScanLogic extends GetxController {
     );
   }
 
-  checkMaterialSubmitData(Function(List<String>) callback) {
+  void checkMaterialSubmitData(Function(List<String>) callback) {
     var list = <String>[];
     for (var material in state.materialList) {
       material.labelList!.where((v) => v.isScanned.value).forEach((v) {
@@ -240,7 +240,7 @@ class SapPackingScanLogic extends GetxController {
     callback.call(list);
   }
 
-  submit({
+  void submit({
     required String postingDate,
     required List<String> submitList,
   }) {
@@ -261,7 +261,7 @@ class SapPackingScanLogic extends GetxController {
     );
   }
 
-  saveLog({
+  void saveLog({
     required String postingDate,
     required List<String> submitList,
   }) {
@@ -274,7 +274,7 @@ class SapPackingScanLogic extends GetxController {
   }
 
 
-  queryDeliveryOrders({
+  void queryDeliveryOrders({
     required String plannedDate,
     required String destination,
     required String cabinetNumber,
@@ -301,7 +301,7 @@ class SapPackingScanLogic extends GetxController {
     }
   }
 
-  modifyDeliveryOrderDate({
+  void modifyDeliveryOrderDate({
     required String deliveryOrderNo,
     required String modifyDate,
     required Function() callback,

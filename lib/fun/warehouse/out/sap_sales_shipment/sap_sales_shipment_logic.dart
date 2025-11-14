@@ -9,7 +9,7 @@ class SapSalesShipmentLogic extends GetxController {
   final SapSalesShipmentState state = SapSalesShipmentState();
 
 
-  query(String ins, String date) {
+  void query(String ins, String date) {
     state.querySalesShipmentList(
       instructionNo: ins,
       deliveryDate: date,
@@ -17,13 +17,13 @@ class SapSalesShipmentLogic extends GetxController {
     );
   }
 
-  refreshPallet(int index) {
+  void refreshPallet(int index) {
     state.orderList[index].palletList.clear();
     state.palletList.clear();
     getPalletList(index);
   }
 
-  getPalletList(int index) {
+  void getPalletList(int index) {
     if (state.orderList[index].palletList.isEmpty) {
       state.checkPalletOrLabel(
         instructionNo:
@@ -48,7 +48,7 @@ class SapSalesShipmentLogic extends GetxController {
     }
   }
 
-  scanCode(String code) {
+  void scanCode(String code) {
     if (code.isPallet()) {
       state.palletList.where((v) => v[0].palletNumber == code).forEach((v) {});
       for (var pallet in state.palletList) {
@@ -77,7 +77,7 @@ class SapSalesShipmentLogic extends GetxController {
     errorDialog(content: 'sap_sales_shipment_scan_wrong_barcode_tips'.tr);
   }
 
-  postingShipment({required Function() refresh}) {
+  void postingShipment({required Function() refresh}) {
     state.postingSalesShipment(
       success: (msg) => successDialog(content: msg, back: refresh),
       error: (msg) => errorDialog(content: msg),

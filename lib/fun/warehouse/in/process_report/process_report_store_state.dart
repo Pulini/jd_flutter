@@ -34,7 +34,7 @@ class ProcessReportStoreState {
 
 
   //校验条码信息
-  getBarCodeStatus({
+  void getBarCodeStatus({
     required int processFlowID,
     required String processName,
     required Function(ScanProcessInfo) success,
@@ -61,7 +61,7 @@ class ProcessReportStoreState {
   }
 
   //获取汇总表
-  getBarCodeReport({
+  void getBarCodeReport({
     required int processFlowID,
     required Function(dynamic) success,
     required Function(String) error,
@@ -92,7 +92,7 @@ class ProcessReportStoreState {
   }
 
   //提交条码信息
-  submitBarCode({
+  void submitBarCode({
     required WorkerInfo worker,
     required BarCodeProcessInfo process,
     required Function(String) success,

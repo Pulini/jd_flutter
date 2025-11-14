@@ -15,7 +15,7 @@ import 'part_process_scan_state.dart';
 class PartProcessScanLogic extends GetxController {
   final PartProcessScanState state = PartProcessScanState();
 
-  addBarCode({required String code, Function()? callback}) {
+  void addBarCode({required String code, Function()? callback}) {
     code ='67FF7DE2-0091-46F9-849C-7F9C408758DD';
     if (code.isEmpty) {
       showSnackBar(
@@ -35,7 +35,7 @@ class PartProcessScanLogic extends GetxController {
     callback?.call();
   }
 
-  barCodeModify() {
+  void barCodeModify() {
     if (state.barCodeList.isEmpty) {
       showSnackBar(
         message: 'part_process_scan_report_no_submit_code'.tr,
@@ -59,11 +59,11 @@ class PartProcessScanLogic extends GetxController {
     return ids;
   }
 
-  deleteItem(int index) {
+  void deleteItem(int index) {
     state.barCodeList.removeAt(index);
   }
 
-  setSelectedAll(int index, bool isAll) {
+  void setSelectedAll(int index, bool isAll) {
     if (index == 0) {
       for (var v in state.modifyDistributionList) {
         v.isSelect.value = isAll;
@@ -78,7 +78,7 @@ class PartProcessScanLogic extends GetxController {
     state.isSelectAll.value = isAll;
   }
 
-  refreshSelectedAll(int index) {
+  void refreshSelectedAll(int index) {
     if (index == 0) {
       state.isSelectAll.value =
           state.modifyDistributionList.where((v) => v.isSelect.value).length ==
@@ -130,7 +130,7 @@ class PartProcessScanLogic extends GetxController {
     return '${(total * 10000).round().toDouble().div(100).toShowString()}%';
   }
 
-  initPercentageList() {
+  void initPercentageList() {
     state.workerPercentageList.value = [
       for (var w in state.workerList)
         Distribution(
@@ -142,7 +142,7 @@ class PartProcessScanLogic extends GetxController {
     ];
   }
 
-  addWorkerPercentage(WorkerInfo w) {
+  void addWorkerPercentage(WorkerInfo w) {
     state.workerPercentageList.add(Distribution(
       name: w.empName ?? '',
       number: w.empCode ?? '',
@@ -151,7 +151,7 @@ class PartProcessScanLogic extends GetxController {
     ));
   }
 
-  savePercentage() {
+  void savePercentage() {
     spSave(
       'WorkerPercentageList',
       jsonEncode(state.workerPercentageList.map((v) => v.toJson()).toList()),
@@ -159,7 +159,7 @@ class PartProcessScanLogic extends GetxController {
     successDialog(content: 'part_process_scan_report_save_ratio_success'.tr);
   }
 
-  usePercentage() {
+  void usePercentage() {
     var jsonString = spGet('WorkerPercentageList');
     if (jsonString == null) {
       showSnackBar(
@@ -186,7 +186,7 @@ class PartProcessScanLogic extends GetxController {
     }
   }
 
-  quickPercentage() {
+  void quickPercentage() {
     state.modifyDistributionList.where((v) => v.isSelect.value).forEach((v) {
       var total = 0.0;
       for (var r in v.reportList) {
@@ -213,7 +213,7 @@ class PartProcessScanLogic extends GetxController {
     );
   }
 
-  reportModifySubmit() {
+  void reportModifySubmit() {
     state.submitChangeReport(success: (s){
 
     }, error: (e){
@@ -221,7 +221,7 @@ class PartProcessScanLogic extends GetxController {
     });
   }
 
-  barCodeSubmit() {
+  void barCodeSubmit() {
     debugPrint('state.barCodeList=${state.barCodeList.length}');
     state.getPartProductionReportTable(
       success: () {},

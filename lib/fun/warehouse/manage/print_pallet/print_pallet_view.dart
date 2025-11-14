@@ -22,7 +22,7 @@ class _PrintPalletPageState extends State<PrintPalletPage> {
   final PrintPalletState state = Get.find<PrintPalletLogic>().state;
   var controller = TextEditingController();
 
-  _item(int index) {
+  Container _item(int index) {
     var pallet = state.palletList[index];
     var isSelected = state.selectedList[index];
     var materialList = groupBy(pallet, (v) => v.materialCode).values.toList();
@@ -69,7 +69,7 @@ class _PrintPalletPageState extends State<PrintPalletPage> {
         ));
   }
 
-  _materialItem(List<SapPalletDetailInfo> material) {
+  Container _materialItem(List<SapPalletDetailInfo> material) {
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.all(5),

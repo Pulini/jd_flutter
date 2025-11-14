@@ -12,7 +12,7 @@ import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/picker/picker_item.dart';
 import 'package:jd_flutter/widget/worker_check_widget.dart';
 
-selectSupplierAndDepartmentDialog({
+void selectSupplierAndDepartmentDialog({
   required Function(
     WorkerInfo,
     PickerSapSupplier?,
@@ -159,7 +159,7 @@ selectSupplierAndDepartmentDialog({
   });
 }
 
-getSapSupplierAndDepartment({
+void getSapSupplierAndDepartment({
   required Function(
     List<PickerSapSupplier>,
     String,

@@ -26,7 +26,7 @@ class _SmartDeliveryMaterialListPageState
   final typeBody = Get.arguments['typeBody'];
   final departmentID = Get.arguments['departmentID'];
 
-  _item(SmartDeliveryMaterialInfo data) {
+  GestureDetector _item(SmartDeliveryMaterialInfo data) {
     return GestureDetector(
       onTap: () {
         logic.getDeliveryDetail(

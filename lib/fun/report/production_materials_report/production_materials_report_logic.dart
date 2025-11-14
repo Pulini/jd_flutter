@@ -14,7 +14,7 @@ class ProductionMaterialsReportLogic extends GetxController {
         '${RouteConfig.productionMaterialsReport.name}${PickerType.sapProcessFlow}',
   );
 
-  query({
+  void query({
     required String instruction,
     required String orderNumber,
     required String sizeOrderNumber,
@@ -38,7 +38,7 @@ class ProductionMaterialsReportLogic extends GetxController {
     );
   }
 
-  otherInQuery(int interID) {
+  void otherInQuery(int interID) {
     state.getSapMoPickList(
       showType: '0',
       interID: interID,
@@ -46,7 +46,7 @@ class ProductionMaterialsReportLogic extends GetxController {
     );
   }
 
-  itemQuery(ProductionMaterialsInfo data) {
+  void itemQuery(ProductionMaterialsInfo data) {
     state.getSapMoPickList(
       showType: '1',
       salesOrderNumber: data.salesOrderNumber ?? '',

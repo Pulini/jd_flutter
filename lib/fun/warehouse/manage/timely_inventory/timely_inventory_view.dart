@@ -30,7 +30,7 @@ class _TimelyInventoryPageState extends State<TimelyInventoryPage> {
   var tecBatch = TextEditingController();
   var tecMaterialCode = TextEditingController();
 
-  _item(TimelyInventoryInfo data) {
+  Container _item(TimelyInventoryInfo data) {
     return Container(
       margin: const EdgeInsets.only(left: 5, right: 5, bottom: 10),
       padding: const EdgeInsets.all(10),

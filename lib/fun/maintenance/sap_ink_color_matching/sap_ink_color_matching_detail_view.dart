@@ -30,7 +30,7 @@ class _SapInkColorMatchingDetailPageState
   var canAdd = false;
   var tecRemarks = TextEditingController();
 
-  _item(int i) {
+  Container _item(int i) {
     var data = state.inkColorList[i];
     var ballColor = data.materialColor.getColorByDescription();
     return Container(
@@ -265,7 +265,7 @@ class _SapInkColorMatchingDetailPageState
     );
   }
 
-  _body() {
+  Padding _body() {
     return Padding(
       padding: const EdgeInsets.only(
         left: 10,

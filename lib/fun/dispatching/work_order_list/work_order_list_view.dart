@@ -177,7 +177,7 @@ class _WorkOrderListPageState extends State<WorkOrderListPage> {
     );
   }
 
-  _labelListDialog(List<CodeInfo> labels) {
+  void _labelListDialog(List<CodeInfo> labels) {
     Get.dialog(
       PopScope(
           canPop: false,

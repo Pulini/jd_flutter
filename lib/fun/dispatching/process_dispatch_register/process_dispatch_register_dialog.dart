@@ -38,7 +38,7 @@ void showSalesOrderListDialog(List<String> list) {
   );
 }
 
-addNewWorkerDialog(
+void addNewWorkerDialog(
   List<WorkerInfo> workers,
   Function(WorkerInfo wi) callback,
 ) {

@@ -20,7 +20,7 @@ class DailyReportLogic extends GetxController {
     saveKey: '${RouteConfig.dailyReport.name}${PickerType.date}',
   );
   //获取扫码日产量接口
-  query() {
+  void query() {
     state.getDayOutput(
       departmentID: pickerControllerDepartment.selectedId.value,
       date: pickerControllerDate.getDateFormatYMD(),

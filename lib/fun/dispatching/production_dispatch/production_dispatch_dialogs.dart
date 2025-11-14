@@ -14,7 +14,7 @@ import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
 import 'package:jd_flutter/widget/web_page.dart';
 
-showDispatchList(
+void showDispatchList(
   BuildContext context,
   bool isLast,
   List<WorkCardList> list,
@@ -115,7 +115,7 @@ showDispatchList(
   );
 }
 
-_addNewWorkerDialog(
+void _addNewWorkerDialog(
   List<WorkerInfo> workers,
   Function(WorkerInfo wi) callback,
 ) {
@@ -187,7 +187,7 @@ _addNewWorkerDialog(
   ));
 }
 
-addWorkerDialog(
+void addWorkerDialog(
   List<WorkerInfo> workers,
   List<int> select,
   Function(List<int>) callback,
@@ -297,7 +297,7 @@ addWorkerDialog(
   ));
 }
 
-modifyDispatchQtyDialog(
+void modifyDispatchQtyDialog(
   DispatchInfo di,
   double surplus,
   Function(DispatchInfo) callback,
@@ -391,7 +391,7 @@ String detailViewSetDispatchDialogText(
   }
 }
 
-batchModifyDispatchQtyDialog(
+void batchModifyDispatchQtyDialog(
   bool isCheckedDivideEqually,
   bool isCheckedRounding,
   List<DispatchInfo> dil,
@@ -466,7 +466,7 @@ batchModifyDispatchQtyDialog(
   ));
 }
 
-typeBodySaveDialog(
+void typeBodySaveDialog(
   List<SaveWorkProcedure> list,
   SaveWorkProcedure Function() save,
   Function(SaveWorkProcedure) apply,
@@ -573,7 +573,7 @@ typeBodySaveDialog(
   ));
 }
 
-manufactureInstructionsDialog(List<ManufactureInstructionsInfo> files) {
+void manufactureInstructionsDialog(List<ManufactureInstructionsInfo> files) {
   if (files.length == 1) {
     Get.to(() => WebPage(
           title: files.first.name ?? '',
@@ -658,7 +658,7 @@ manufactureInstructionsDialog(List<ManufactureInstructionsInfo> files) {
   );
 }
 
-colorListDialog(List<OrderColorList> files, Function(String) callback) {
+void colorListDialog(List<OrderColorList> files, Function(String) callback) {
   if (files.length == 1) {
     callback.call(files.first.materialCode ?? '');
     return;
@@ -737,7 +737,7 @@ colorListDialog(List<OrderColorList> files, Function(String) callback) {
   );
 }
 
-sapReportDialog({required double initQty, required Function(double) callback}) {
+void sapReportDialog({required double initQty, required Function(double) callback}) {
   var qty = initQty;
   Get.dialog(
     PopScope(
@@ -779,7 +779,7 @@ sapReportDialog({required double initQty, required Function(double) callback}) {
   );
 }
 
-workPlanMaterialDialog(List<WorkPlanMaterialInfo> list) {
+void workPlanMaterialDialog(List<WorkPlanMaterialInfo> list) {
   Get.dialog(
     PopScope(
         canPop: false,
@@ -860,7 +860,7 @@ workPlanMaterialDialog(List<WorkPlanMaterialInfo> list) {
 }
 
 //报功到sap
-reportToSap(Function(bool isInstructionReport) callback) {
+void reportToSap(Function(bool isInstructionReport) callback) {
   var isInstructionReport = true.obs;
   Get.dialog(
     PopScope(
@@ -926,7 +926,7 @@ reportToSap(Function(bool isInstructionReport) callback) {
   );
 }
 
-showSelectMaterialPopup({
+void showSelectMaterialPopup({
   required List<Map> surplusMaterialList,
   required Function(Map) print,
 }) {

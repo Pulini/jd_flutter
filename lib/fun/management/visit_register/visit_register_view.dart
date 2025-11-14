@@ -194,7 +194,7 @@ class _VisitRegisterPageState extends State<VisitRegisterPage> {
     );
   }
 
-  _inputSearchText(String hint, List<TextInputFormatter>? inputType,
+  Row _inputSearchText(String hint, List<TextInputFormatter>? inputType,
       TextEditingController? controller) {
     return Row(
       children: [
@@ -214,8 +214,8 @@ class _VisitRegisterPageState extends State<VisitRegisterPage> {
   }
 
   //最近来访记录
-  showDialogLastRecord({
-    context,
+  Future<dynamic> showDialogLastRecord({
+    required BuildContext context,
     Function()? click,
   }) {
     return showCupertinoDialog(

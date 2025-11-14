@@ -788,7 +788,7 @@ Future<double> getAndroidXDpi() async =>
 BaseUrl getMesBaseUrl(){
   var save=spGet(spSaveMesBaseUrl);
   if(save==null||save==''){
-    return BaseUrl.BASE_MES;
+    return BaseUrl.baseUrlMes;
   }else {
     return BaseUrl.values.firstWhere((v) => v.value==save);
   }
@@ -796,7 +796,7 @@ BaseUrl getMesBaseUrl(){
 BaseUrl getSapBaseUrl(){
   var save=spGet(spSaveSapBaseUrl);
   if(save==null||save==''){
-    return BaseUrl.BASE_SAP;
+    return BaseUrl.baseUrlSap;
   }else {
     return BaseUrl.values.firstWhere((v) => v.value==save);
   }

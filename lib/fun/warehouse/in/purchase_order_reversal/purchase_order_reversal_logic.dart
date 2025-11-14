@@ -6,7 +6,7 @@ import 'purchase_order_reversal_state.dart';
 class PurchaseOrderReversalLogic extends GetxController {
   final PurchaseOrderReversalState state = PurchaseOrderReversalState();
 
-  query({
+  void query({
     required String startDate,
     required String endDate,
     required String supplierNumber,
@@ -33,7 +33,7 @@ class PurchaseOrderReversalLogic extends GetxController {
     );
   }
 
-  reversal(Function(String) refresh) {
+  void reversal(Function(String) refresh) {
     var selectList = state.orderList.where((v) => v.isSelect.value).toList();
     if (selectList.isEmpty) {
       errorDialog(content: 'purchase_order_reversal_not_select_order'.tr);

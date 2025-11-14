@@ -23,7 +23,7 @@ class QualityInspectionListState {
   var orderType = 0.obs;
 
   //获取品检单列表
-  getInspectionList({
+  void getInspectionList({
     required String typeBody,
     required String materialCode,
     required String instruction,
@@ -71,7 +71,7 @@ class QualityInspectionListState {
     });
   }
 
-  deleteOrder({
+  void deleteOrder({
     required String reason,
     required Function(String) success,
     required Function(String) error,
@@ -146,7 +146,7 @@ class QualityInspectionListState {
   }
 
   //入库
-  store({
+  void store({
     required String date,
     required String store1,
     required Function(String) success,
@@ -190,7 +190,7 @@ class QualityInspectionListState {
     });
   }
 
-  reversal({
+  void reversal({
     required Function(List<QualityInspectionReceiptInfo>) success,
     required Function() error,
   }) {
@@ -222,7 +222,7 @@ class QualityInspectionListState {
   }
 
   //提交
-  colorSubmit({
+  void colorSubmit({
     required String reason,
     required Function(String) success,
     required Function(String) error,
@@ -272,7 +272,7 @@ class QualityInspectionListState {
   }
 
   //获取品检单货位信息
-  getLocation({
+  void getLocation({
     String? store,
     required Function(List<StuffQualityInspectionDetailInfo>) success,
     required Function(String) error,
@@ -302,7 +302,7 @@ class QualityInspectionListState {
   }
 
   //更改货位
-  changeLocation({
+  void changeLocation({
     required String location,
     required List<StuffQualityInspectionDetailInfo> locationList,
     required Function(String) success,
@@ -339,7 +339,7 @@ class QualityInspectionListState {
     });
   }
 
-  getOrderColorLabelInfo({
+  void getOrderColorLabelInfo({
     required List<String> selectList,
     required Function() success,
     required Function(String) error,
@@ -372,7 +372,7 @@ class QualityInspectionListState {
       }
     });
   }
-  colorLabelBindingStockIn({
+  void colorLabelBindingStockIn({
     required String location,
     required String postDate,
     required Function(String) success,

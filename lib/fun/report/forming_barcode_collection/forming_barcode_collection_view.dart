@@ -100,7 +100,7 @@ class _FormingBarcodeCollectionPageState
     );
   }
 
-  _item(ScWorkCardSizeInfos data) {
+  Row _item(ScWorkCardSizeInfos data) {
     return Row(
       children: [
         Expanded(
@@ -151,7 +151,7 @@ class _FormingBarcodeCollectionPageState
     );
   }
 
-  _text({
+  Container _text({
     required String mes,
     required Color backColor,
     required bool head,
@@ -184,7 +184,7 @@ class _FormingBarcodeCollectionPageState
     );
   }
 
-  _tabPage1() {
+  Container _tabPage1() {
     return Container(
       decoration: BoxDecoration(
         color: Colors.grey.shade100,
@@ -318,7 +318,7 @@ class _FormingBarcodeCollectionPageState
     );
   }
 
-  _tabPage2() {
+  Container _tabPage2() {
     return Container(
       decoration: BoxDecoration(
         color: Colors.grey.shade100,
@@ -469,7 +469,7 @@ class _FormingBarcodeCollectionPageState
     );
   }
 
-  _scan() {
+  void _scan() {
     pdaScanner(scan: (scanCode) {
       if (tabController.index == 0) {
         if (scanCode.isNotEmpty && state.canScan == true) {

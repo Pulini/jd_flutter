@@ -41,7 +41,7 @@ class MqttUtil {
     initClient();
   }
 
-  send({required String topic, String? msg}) {
+  void send({required String topic, String? msg}) {
     var builder = MqttClientPayloadBuilder();
     if (msg != null && msg.isNotEmpty) {
       builder.addString(msg);
@@ -54,7 +54,7 @@ class MqttUtil {
     debugPrint('发送消息=$message');
   }
 
-  initClient() {
+  void initClient() {
     client = MqttServerClient.withPort(
       server,
       '${userInfo?.token}-${DateTime.now().millisecondsSinceEpoch}',
@@ -138,7 +138,7 @@ class MqttUtil {
     };
   }
 
-  connect() async {
+  Future<void> connect() async {
     try {
       debugPrint('连接MQTT');
       await client.connect();
@@ -148,7 +148,7 @@ class MqttUtil {
     }
   }
 
-  disconnect() {
+  void disconnect() {
     client.disconnect();
   }
 }

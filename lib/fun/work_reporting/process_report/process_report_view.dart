@@ -22,7 +22,7 @@ class _ProcessReportPageState extends State<ProcessReportPage> {
   final logic = Get.put(ProcessReportLogic());
   final state = Get.find<ProcessReportLogic>().state;
 
-  addWorkerDialog({
+  void addWorkerDialog({
     required Function(WorkerInfo wi) callback,
   }) {
     var name = ''.obs;
@@ -85,7 +85,7 @@ class _ProcessReportPageState extends State<ProcessReportPage> {
     ));
   }
 
-  _item1(DispatchInfo data, int position) {
+  InkWell _item1(DispatchInfo data, int position) {
     return InkWell(
       child: Container(
         margin: const EdgeInsets.only(left: 5, right: 5, bottom: 10),

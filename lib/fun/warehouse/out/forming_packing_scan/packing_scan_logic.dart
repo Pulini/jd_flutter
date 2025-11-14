@@ -23,7 +23,7 @@ class PackingScanLogic extends GetxController {
         error: (msg) => errorDialog(content: msg));
   }
 
-  query() {
+  void query() {
     state.getAllData(
         time: pickerControllerDate
             .getDateFormatYMD()

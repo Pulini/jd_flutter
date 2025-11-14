@@ -143,7 +143,7 @@ class _PickingMaterialOrderPostingPageState
     );
   }
 
-  _posting(PickingMaterialOrderInfo data) {
+  void _posting(PickingMaterialOrderInfo data) {
     // if (userInfo?.picUrl == null || userInfo?.picUrl?.isEmpty == true) {
     //   errorDialog(
     //       content: 'picking_material_order_login_account_avatar_not_upload'.tr);

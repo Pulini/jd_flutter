@@ -105,7 +105,7 @@ class _VisitRegisterDetailPageState extends State<VisitRegisterDetailPage> {
     );
   }
 
-  _inspectWeight(
+  Row _inspectWeight(
     String title,
     String text,
     bool checkBool,
@@ -128,7 +128,7 @@ class _VisitRegisterDetailPageState extends State<VisitRegisterDetailPage> {
     );
   }
 
-  _inspectList(VisitGetDetailInfo data) {
+  List<dynamic> _inspectList(VisitGetDetailInfo data) {
     if (data.carType == "拖车") {
       return [
         _inspectWeight('visit_details_wheel_area_inspection'.tr,
@@ -158,7 +158,7 @@ class _VisitRegisterDetailPageState extends State<VisitRegisterDetailPage> {
     }
   }
 
-  _clickButton() {
+  Padding _clickButton() {
     return Padding(
       padding: const EdgeInsets.all(10),
       child: SizedBox(
@@ -181,7 +181,7 @@ class _VisitRegisterDetailPageState extends State<VisitRegisterDetailPage> {
     );
   }
 
-  _comePhotoItem(String? photoUrl) {
+  Container _comePhotoItem(String? photoUrl) {
     return Container(
         margin: const EdgeInsets.only(left: 20),
         child: GestureDetector(
@@ -204,7 +204,7 @@ class _VisitRegisterDetailPageState extends State<VisitRegisterDetailPage> {
         ));
   }
 
-  _comeListView() {
+  Widget _comeListView() {
     if (state.dataDetail.visitPics!.isNotEmpty) {
       return Obx(() => Container(
           margin: const EdgeInsets.only(left: 20, right: 20),
@@ -230,7 +230,7 @@ class _VisitRegisterDetailPageState extends State<VisitRegisterDetailPage> {
     }
   }
 
-  _leavePhotoItem(VisitPhotoBean data, int index) {
+  Container _leavePhotoItem(VisitPhotoBean data, int index) {
     return Container(
         margin: const EdgeInsets.only(left: 20),
         child: GestureDetector(
@@ -264,7 +264,7 @@ class _VisitRegisterDetailPageState extends State<VisitRegisterDetailPage> {
         ));
   }
 
-  _leaveListView() {
+  Obx _leaveListView() {
     return Obx(() => Container(
         margin: const EdgeInsets.only(left: 20, right: 20),
         height: 100,
@@ -284,7 +284,7 @@ class _VisitRegisterDetailPageState extends State<VisitRegisterDetailPage> {
         )));
   }
 
-  _subTitle(String title) {
+  Text _subTitle(String title) {
     return Text(
       //子标题
       textAlign: TextAlign.center,
@@ -294,7 +294,7 @@ class _VisitRegisterDetailPageState extends State<VisitRegisterDetailPage> {
     );
   }
 
-  _showCarList(VisitGetDetailInfo data) {
+  List<Widget> _showCarList(VisitGetDetailInfo data) {
     if (data.carType!.isEmpty) {
       return [
         const SizedBox(
@@ -311,7 +311,7 @@ class _VisitRegisterDetailPageState extends State<VisitRegisterDetailPage> {
     }
   }
 
-  _textList(VisitGetDetailInfo data) {
+  List<Widget> _textList(VisitGetDetailInfo data) {
     //是离场
     return <Widget>[
       _text('visit_details_id_card'.tr, data.iDCard),

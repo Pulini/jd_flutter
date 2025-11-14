@@ -35,7 +35,7 @@ class SapInkColorMatchingState {
   }
 
 
-  clean() {
+  void clean() {
     newTypeBody = '';
     readMixDeviceWeight.value=0;
     inkColorList.value = [];
@@ -53,7 +53,7 @@ class SapInkColorMatchingState {
     mixDeviceConnectState=ConnectState.unConnect;
   }
 
-  cleanRecreate() {
+  void cleanRecreate() {
     presetWeight = 0;
     finalWeight.value = 0;
     presetInkColorList=[];
@@ -68,7 +68,7 @@ class SapInkColorMatchingState {
     mixDeviceConnectState=ConnectState.unConnect;
   }
 
-  queryOrder({
+  void queryOrder({
     required String startDate,
     required String endDate,
     required String typeBody,
@@ -102,7 +102,7 @@ class SapInkColorMatchingState {
     });
   }
 
-  checkTypeBody({
+  void checkTypeBody({
     required bool isNew,
     required String newTypeBody,
     required Function() success,
@@ -146,7 +146,7 @@ class SapInkColorMatchingState {
     });
   }
 
-  submitOrder({
+  void submitOrder({
     required String orderNumber,
     required String inkMaster,
     required double mixActualWeight,

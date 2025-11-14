@@ -301,7 +301,7 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
     );
   }
 
-  _text(String text, Color backgroundColor) {
+  Expanded _text(String text, Color backgroundColor) {
     return Expanded(
       child: Container(
         padding: const EdgeInsets.all(3),
@@ -633,7 +633,7 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
     );
   }
 
-  _query() => logic.query(
+  dynamic _query() => logic.query(
       startTime: dpcStartDate.getDateFormatYMD(),
       endTime: dpcEndDate.getDateFormatYMD(),
       instruction: tecInstruction.text);

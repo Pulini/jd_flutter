@@ -14,7 +14,7 @@ class SapRelocationPickingLogic extends GetxController {
 
 
 
-  scanCode(String code) {
+  void scanCode(String code) {
     if (code.isPallet()) {
       state.checkPalletOrLabel(
         pallet: code,
@@ -37,7 +37,7 @@ class SapRelocationPickingLogic extends GetxController {
     }
   }
 
-  submitPicking({
+  void submitPicking({
     required String pickerNumber,
     required ByteData pickerSignature,
     required String userNumber,

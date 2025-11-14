@@ -9,7 +9,7 @@ class SapInnerBoxLabelSplitState {
   var splitLabelList = <SapLabelSplitInfo>[].obs;
   var newLabelList = <SapPrintLabelInfo>[].obs;
 
-  getLabelPrintInfo({
+  void getLabelPrintInfo({
     required String code,
     required Function() refresh,
     required Function(String) error,
@@ -34,7 +34,7 @@ class SapInnerBoxLabelSplitState {
     });
   }
 
-  submitPreSplitLabel({
+  void submitPreSplitLabel({
     required Function(String) error,
   }) {
     sapPost(

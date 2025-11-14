@@ -12,7 +12,7 @@ import 'purchase_order_warehousing_state.dart';
 class PurchaseOrderWarehousingLogic extends GetxController {
   final PurchaseOrderWarehousingState state = PurchaseOrderWarehousingState();
 
-  query({
+  void query({
     required String startDate,
     required String endDate,
     required String supplierNumber,
@@ -57,13 +57,13 @@ class PurchaseOrderWarehousingLogic extends GetxController {
     return qty;
   }
 
-  selectAll(bool v) {
+  void selectAll(bool v) {
     for (var item in state.orderList) {
       item.selectAll(v);
     }
   }
 
-  distribution({required double qty, required Function() refresh}) {
+  void distribution({required double qty, required Function() refresh}) {
     var total = qty;
     for (var v in state.orderList) {
       v.details!.where((v2) => v2.isSelected.value).forEach((v3) {
@@ -80,7 +80,7 @@ class PurchaseOrderWarehousingLogic extends GetxController {
     refresh.call();
   }
 
-  checkOrderIsNeedScan({
+  void checkOrderIsNeedScan({
     required Function(List<PurchaseOrderDetailsInfo>) stockIn,
   }) {
     var selectOrder = state.orderList
@@ -147,7 +147,7 @@ class PurchaseOrderWarehousingLogic extends GetxController {
     }
   }
 
-  addPiece({required String pieceNo}) {
+  void addPiece({required String pieceNo}) {
     DeliveryOrderLabelInfo? outBox;
     try {
       outBox = state.orderLabelList
@@ -164,7 +164,7 @@ class PurchaseOrderWarehousingLogic extends GetxController {
     _addLabels(labels: labels);
   }
 
-  scanLabel(String code) {
+  void scanLabel(String code) {
     DeliveryOrderLabelInfo? outBox;
     try {
       outBox = state.orderLabelList
@@ -182,7 +182,7 @@ class PurchaseOrderWarehousingLogic extends GetxController {
     _addLabels(labels: labels);
   }
 
-  _addLabels({required List<DeliveryOrderLabelInfo> labels}) {
+  void _addLabels({required List<DeliveryOrderLabelInfo> labels}) {
     if (labels.isEmpty) {
       errorDialog(
           content: 'purchase_order_warehousing_order_not_have_this_label'.tr);
@@ -243,7 +243,7 @@ class PurchaseOrderWarehousingLogic extends GetxController {
     }
   }
 
-  deletePiece({required DeliveryOrderLabelInfo pieceInfo}) {
+  void deletePiece({required DeliveryOrderLabelInfo pieceInfo}) {
     state.scannedLabelList.removeWhere((v) => v.pieceNo == pieceInfo.pieceNo);
   }
 
@@ -296,7 +296,7 @@ class PurchaseOrderWarehousingLogic extends GetxController {
     return progress;
   }
 
-  submitLabelBinding(Function() toDetail) {
+  void submitLabelBinding(Function() toDetail) {
     for (var k in state.materialList.keys) {
       var v = state.materialList[k] ?? [];
       for (var s in v) {
@@ -323,7 +323,7 @@ class PurchaseOrderWarehousingLogic extends GetxController {
     });
   }
   ///有权限 要么都校验标签，要么都不校验标签  没有标签 提交时 都校验标签
-  isCanSubmitBinding() => state.hasPassPermission
+  bool isCanSubmitBinding() => state.hasPassPermission
       ? state.scannedLabelList.isNotEmpty &&
       (state.scannedLabelList.every((v) => v.isChecked.value) ||
           state.scannedLabelList.every((v) => !v.isChecked.value))

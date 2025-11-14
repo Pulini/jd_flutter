@@ -31,17 +31,17 @@ class StuffQualityInspectionLogic extends GetxController {
   var availabilityController = TextEditingController(); //可利用率
 
   //添加照片
-  addPicture(String bitmapBase64) {
+  void addPicture(String bitmapBase64) {
     state.picture.add(VisitPhotoBean(photo: bitmapBase64, typeAdd: "1"));
   }
 
   //删除照片
-  removePicture(int position) {
+  void removePicture(int position) {
     state.picture.removeAt(position);
   }
 
   //分色
-  addColor(String batch, String qty) {
+  void addColor(String batch, String qty) {
     if (batch.isNotEmpty && qty.isNotEmpty) {
       if (state.inspectionColorList.any((data) => data.batch == batch)) {
         showSnackBar(message: '不能添加相同分色');
@@ -62,7 +62,7 @@ class StuffQualityInspectionLogic extends GetxController {
   }
 
   //移除分色
-  removeColor(int position) {
+  void removeColor(int position) {
     state.unColorQty.value = (state.unColorQty.toString().toDoubleTry() +
             state.inspectionColorList[position].qty.toDoubleTry())
         .toStringAsFixed(3);
@@ -70,7 +70,7 @@ class StuffQualityInspectionLogic extends GetxController {
   }
 
   //全部合格或者全部不合格
-  allBtn() {
+  void allBtn() {
     if (state.showAllBtnName.value == '全部合格') {
       //数量全部合格 无受理单位
       unqualifiedQualifiedController.text = '0';
@@ -95,7 +95,7 @@ class StuffQualityInspectionLogic extends GetxController {
   }
 
   //输入了不合格数量
-  inputUnqualified(double qty) {
+  void inputUnqualified(double qty) {
     if (unqualifiedQualifiedController.text.toDoubleTry() <= 0 &&
         shortQualifiedController.text.toDoubleTry() <= 0) {
       //如果没有不合格数量或短码，没有受理单位
@@ -124,7 +124,7 @@ class StuffQualityInspectionLogic extends GetxController {
   }
 
   //输入短码
-  inputShort(double qty) {
+  void inputShort(double qty) {
     if (unqualifiedQualifiedController.text.toDoubleTry() <= 0 &&
         shortQualifiedController.text.toDoubleTry() <= 0) {
       //如果没有不合格数量或短码，没有受理单位
@@ -152,7 +152,7 @@ class StuffQualityInspectionLogic extends GetxController {
   }
 
   //确定提交品检
-  submitInspection(
+  void submitInspection(
     String inspectionType,
     String type,
     String groupType, {
@@ -183,7 +183,7 @@ class StuffQualityInspectionLogic extends GetxController {
   }
 
   //提交品检时根据送货单及物料获取标签，用于不合格拆标
-  getLabelsForOrder({
+  void getLabelsForOrder({
     required String inspectionType,
     required String type,
     required String groupType,
@@ -391,7 +391,7 @@ class StuffQualityInspectionLogic extends GetxController {
   }
 
   //有不合格数量或短码走OA
-  submitInspectionToOAFromList(
+  void submitInspectionToOAFromList(
     bool labelSubmit,
     String inspectionType,
     String type,
@@ -477,7 +477,7 @@ class StuffQualityInspectionLogic extends GetxController {
   }
 
   //创建品检单  (品检单列表)
-  createInspectionFromList(
+  void createInspectionFromList(
     bool labelSubmit,
     String upInspectionType,
     String upType, {
@@ -833,7 +833,7 @@ class StuffQualityInspectionLogic extends GetxController {
   }
 
   //根据工号获取人员信息
-  searchPeople(String number) {
+  void searchPeople(String number) {
     if (number.isNotEmpty && number.length == 6) {
       httpGet(
         method: webApiGetEmpAndLiableByEmpCode,
@@ -853,7 +853,7 @@ class StuffQualityInspectionLogic extends GetxController {
   }
 
   //品检单列表
-  getData(jsonDat) {
+  void getData(dynamic jsonDat) {
     List<dynamic> jsonData = jsonDecode(jsonDat);
 
     state.inspectionsListData = jsonData
@@ -906,7 +906,7 @@ class StuffQualityInspectionLogic extends GetxController {
   }
 
   //暂收单详情数据
-  getTemporary(String jsonDat) {
+  void getTemporary(String jsonDat) {
     state.detailInfo = TemporaryOrderDetailInfo.fromJson(jsonDecode(jsonDat));
 
     var name = <String>[]; //子物料名称
@@ -964,7 +964,7 @@ class StuffQualityInspectionLogic extends GetxController {
   }
 
   //有不合格数量或短码走OA （暂收单详情）
-  submitInspectionToOAFromDetail(
+  void submitInspectionToOAFromDetail(
     bool labelSubmit,
     String inspectionType,
     String type,
@@ -1081,7 +1081,7 @@ class StuffQualityInspectionLogic extends GetxController {
   }
 
   //创建品检单  (暂收单详情)
-  createInspectionFromDetail(
+  void createInspectionFromDetail(
     bool labelSubmit,
     String upInspectionType,
     String upType, {
@@ -1422,7 +1422,7 @@ class StuffQualityInspectionLogic extends GetxController {
   }
 
   //修改贴标数据
-  changeLabel({
+  void changeLabel({
     required int position,
     required double changeQty,
     required double changeShort,
@@ -1465,7 +1465,7 @@ class StuffQualityInspectionLogic extends GetxController {
   }
 
   //全部合格或全部不合格
-  selectAllUnqualified(bool isAll) {
+  void selectAllUnqualified(bool isAll) {
     state.labelData.where((data) => data.select).forEach((subData) {
       if (isAll) {
         subData.unqualified = subData.boxQty;
@@ -1479,7 +1479,7 @@ class StuffQualityInspectionLogic extends GetxController {
   }
 
   //计算合计，刷新界面
-  refreshLabel() {
+  void refreshLabel() {
     var data = state.labelData.firstWhere((data) => data.barCode == '合计');
     data.short = state.labelData
         .where((data) => data.barCode != '合计')

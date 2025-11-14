@@ -28,11 +28,11 @@ class MaintainLabelLogic extends GetxController {
     super.onInit();
   }
 
-  refreshDataList() {
+  void refreshDataList() {
     state.getLabelInfoList(error: (msg) => errorDialog(content: msg));
   }
 
-  selectPrinted(bool c) {
+  void selectPrinted(bool c) {
     state.cbPrinted.value = c;
     if (!state.isMaterialLabel.value) {
       for (var v in state.getLabelList().where((v) => v.isBillPrint ?? false)) {
@@ -51,7 +51,7 @@ class MaintainLabelLogic extends GetxController {
     }
   }
 
-  selectUnprinted(bool c) {
+  void selectUnprinted(bool c) {
     state.cbUnprinted.value = c;
     if (!state.isMaterialLabel.value) {
       for (var v
@@ -112,14 +112,14 @@ class MaintainLabelLogic extends GetxController {
     return list;
   }
 
-  createSingleLabel() {
+  void createSingleLabel() {
     state.createSingleLabel(
       success: () => refreshDataList(),
       error: (msg) => errorDialog(content: msg),
     );
   }
 
-  getBarCodeCount(bool isMix, Function(List<PickingBarCodeInfo>) callback) {
+  void getBarCodeCount(bool isMix, Function(List<PickingBarCodeInfo>) callback) {
     state.barCodeCount(
       isMix: isMix,
       success: callback,
@@ -127,7 +127,7 @@ class MaintainLabelLogic extends GetxController {
     );
   }
 
-  deleteAllLabel() {
+  void deleteAllLabel() {
     state.deleteAllLabel(
       success: (msg) => successDialog(
         content: msg,
@@ -137,7 +137,7 @@ class MaintainLabelLogic extends GetxController {
     );
   }
 
-  deleteLabels(List<String> select) {
+  void deleteLabels(List<String> select) {
     state.deleteLabels(
       select: select,
       success: (msg) => successDialog(
@@ -148,7 +148,7 @@ class MaintainLabelLogic extends GetxController {
     );
   }
 
-  getMaterialProperties(
+  void getMaterialProperties(
     Function(RxList<MaintainMaterialPropertiesInfo>) callback,
   ) {
     state.getMaterialProperties(
@@ -157,7 +157,7 @@ class MaintainLabelLogic extends GetxController {
     );
   }
 
-  getMaterialCapacity(
+  void getMaterialCapacity(
     Function(RxList<MaintainMaterialCapacityInfo>) callback,
   ) {
     state.getMaterialCapacity(
@@ -166,7 +166,7 @@ class MaintainLabelLogic extends GetxController {
     );
   }
 
-  getMaterialLanguages(
+  void getMaterialLanguages(
     Function(RxList<MaintainMaterialLanguagesInfo>) callback,
   ) {
     state.getMaterialLanguages(
@@ -175,7 +175,7 @@ class MaintainLabelLogic extends GetxController {
     );
   }
 
-  printLabelState({
+  void printLabelState({
     required List<List<LabelInfo>> selectLabel,
     required int type,
     required Function(int) success,
@@ -189,7 +189,7 @@ class MaintainLabelLogic extends GetxController {
     );
   }
 
-  checkPrintType({
+  void checkPrintType({
     required Function(bool abroad, List<List<LabelInfo>>, int labelType)
         callback,
   }) {
@@ -221,7 +221,7 @@ class MaintainLabelLogic extends GetxController {
   }
 
   //打缅甸，印尼标
-  printAbroadLabel({
+  void printAbroadLabel({
     required int type,
     required List<List<LabelInfo>> select,
     required String language,
@@ -242,7 +242,7 @@ class MaintainLabelLogic extends GetxController {
     }
   }
 
-  checkLanguage({
+  void checkLanguage({
     required Function(int labelType, List<List<LabelInfo>>, List<String>)
         callback,
   }) {
@@ -332,7 +332,7 @@ class MaintainLabelLogic extends GetxController {
     }
   };
 
-  printLabel({
+  void printLabel({
     required int type,
     required List<List<LabelInfo>> select,
     required String language,
@@ -365,7 +365,7 @@ class MaintainLabelLogic extends GetxController {
   }
 
   //单一物料无尺码标
-  createNoSizeLabel({
+  void createNoSizeLabel({
     String language = '',
     required List<LabelInfo> list,
     required Function(List<Widget>, bool) labels,
@@ -396,7 +396,7 @@ class MaintainLabelLogic extends GetxController {
   }
 
   ///单一物料多尺码标
-  createMultipleSizeLabel({
+  void createMultipleSizeLabel({
     String language = '',
     required List<LabelInfo> list,
     required Function(List<Widget>, bool) labels,
@@ -478,7 +478,7 @@ class MaintainLabelLogic extends GetxController {
   }
 
   //单一物料单尺码标
-  createSingleSizeLabel({
+  void createSingleSizeLabel({
     required List<LabelInfo> list,
     required Function(List<Widget>, bool) labels,
   }) {
@@ -512,7 +512,7 @@ class MaintainLabelLogic extends GetxController {
   }
 
   //物料标
-  createMaterialLabel({
+  void createMaterialLabel({
     required String language,
     required List<LabelInfo> list,
     required Function(List<Widget>, bool) labels,
@@ -553,7 +553,7 @@ class MaintainLabelLogic extends GetxController {
   }
 
   //固定单码标
-  createFixedLabel({
+  void createFixedLabel({
     required String language,
     required List<LabelInfo> list,
     required Function(List<Widget>, bool) labels,
@@ -599,7 +599,7 @@ class MaintainLabelLogic extends GetxController {
   }
 
   //合并动态标签
-  createGroupDynamicLabel({
+  void createGroupDynamicLabel({
     required String language,
     required List<LabelInfo> list,
     required Function(List<Widget>, bool) labels,
@@ -704,7 +704,7 @@ class MaintainLabelLogic extends GetxController {
 }
 
 //缅甸标
-createMyanmarLabel({
+void createMyanmarLabel({
   required List<LabelInfo> list,
   required Function(List<Widget>, bool) labels,
 }) {
@@ -799,7 +799,7 @@ Map<String, List> createSizeList({
 }
 
 //印尼标
-createIndonesiaLabel({
+void createIndonesiaLabel({
   required List<LabelInfo> list,
   required Function(List<Widget>, bool) labels,
 }) {

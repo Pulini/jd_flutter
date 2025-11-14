@@ -66,7 +66,7 @@ class _HydroelectricExcessPageState extends State<HydroelectricExcessPage> {
         ),
       );
 
-  _text(String title, String text1) {
+  Row _text(String title, String text1) {
     return Row(
       children: [
         Container(

@@ -530,7 +530,7 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
     );
   }
 
-  _refreshTable() {
+  void _refreshTable() {
     setState(() {
       orderListKey.currentState!.removeAllItems((context, animation) {
         return _orderRemoveItem(animation);
@@ -541,7 +541,7 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
     });
   }
 
-  _packetWay() => Column(
+  Column _packetWay() => Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const SizedBox(height: 10),
@@ -570,7 +570,7 @@ class _ProductionTasksPageState extends State<ProductionTasksPage> {
         ],
       );
 
-  _specificRequirements() => Column(
+  Column _specificRequirements() => Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const SizedBox(height: 10),

@@ -17,7 +17,7 @@ class ProductionDayReportState {
     yesterday = DateTime(today.year, today.month, today.day - 1);
   }
 
-  getPrdDayReport({
+  void getPrdDayReport({
     required String date,
     required int workShopID,
     required Function(String msg) success,
@@ -43,7 +43,7 @@ class ProductionDayReportState {
     });
   }
 
-  submitReason({
+  void submitReason({
     required String date,
     required String reason,
     required Function(String msg) success,

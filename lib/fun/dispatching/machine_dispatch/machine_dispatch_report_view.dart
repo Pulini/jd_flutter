@@ -45,7 +45,7 @@ class _MachineDispatchReportPageState extends State<MachineDispatchReportPage> {
         ),
       );
 
-  item(Items data, RxBool isSelect) => SizedBox(
+  SizedBox item(Items data, RxBool isSelect) => SizedBox(
         width: 70,
         child: Column(
           children: [
@@ -69,7 +69,7 @@ class _MachineDispatchReportPageState extends State<MachineDispatchReportPage> {
         ),
       );
 
-  totalItem(List<Items> data) {
+  SizedBox totalItem(List<Items> data) {
     var notFullQty = 0.0;
     var reportQty = 0.0;
     for (var v in data) {
@@ -101,7 +101,7 @@ class _MachineDispatchReportPageState extends State<MachineDispatchReportPage> {
     );
   }
 
-  processItem(DispatchProcessInfo data) {
+  Container processItem(DispatchProcessInfo data) {
     return Container(
       height: 140,
       margin: const EdgeInsets.only(left: 5, right: 5, bottom: 10),
@@ -189,7 +189,7 @@ class _MachineDispatchReportPageState extends State<MachineDispatchReportPage> {
     );
   }
 
-  workerItem(DispatchProcessInfo dpi, int index) {
+  GestureDetector workerItem(DispatchProcessInfo dpi, int index) {
     var data = dpi.dispatchList[index];
     var avatar = Padding(
       padding: const EdgeInsets.all(5),

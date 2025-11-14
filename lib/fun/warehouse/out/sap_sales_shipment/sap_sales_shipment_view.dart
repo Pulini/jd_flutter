@@ -27,7 +27,7 @@ class _SapSalesShipmentPageState extends State<SapSalesShipmentPage> {
   var dpcDate = DatePickerController(PickerType.date,
       buttonName: 'sap_sales_shipment_delivery_date_tips'.tr);
 
-  _item(int index) {
+  GestureDetector _item(int index) {
     return GestureDetector(
       onTap: () {
         Get.to(
@@ -69,7 +69,7 @@ class _SapSalesShipmentPageState extends State<SapSalesShipmentPage> {
     );
   }
 
-  _subItem(SapSalesShipmentInfo item, int index) {
+  Column _subItem(SapSalesShipmentInfo item, int index) {
     var pickQty =
         state.orderList[index].materialPickQty(item.materialCode ?? '');
     return Column(

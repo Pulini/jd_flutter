@@ -16,7 +16,7 @@ class ProcessReportLogic extends GetxController {
   var textSearch = TextEditingController();
 
   //获取工序派工信息
-  getDispatchInfo(String code) {
+  void getDispatchInfo(String code) {
     httpGet(
       loading: 'process_report_get_information'.tr,
       method: webApiGetDispatchInfo,
@@ -33,14 +33,14 @@ class ProcessReportLogic extends GetxController {
   }
 
   //整理展示数据
-  screenData(DispatchInfo data) {
+  void screenData(DispatchInfo data) {
     state.dataList.add(data);
     countQty();
     state.dataList.refresh();
   }
 
   //计算总数
-  countQty() {
+  void countQty() {
     if (state.dataList.isEmpty) {
       state.allQty.value = 0.0;
     } else {
@@ -53,14 +53,14 @@ class ProcessReportLogic extends GetxController {
   }
 
   //删除
-  removeItem(int position) {
+  void removeItem(int position) {
     state.dataList.removeAt(position);
     countQty();
     state.dataList.refresh();
   }
 
   //设置人员信息  刷新界面
-  setPeople(WorkerInfo wi, int position) {
+  void setPeople(WorkerInfo wi, int position) {
     state.dataList[position].empID = wi.empID;
     state.dataList[position].empNumber = wi.empCode;
     state.dataList[position].empName = wi.empName;
@@ -68,7 +68,7 @@ class ProcessReportLogic extends GetxController {
   }
 
   //提交条码信息
-  submitProcess({
+  void submitProcess({
     required Function(String msg) success,
 }) {
     for (var data in state.dataList) {
@@ -102,7 +102,7 @@ class ProcessReportLogic extends GetxController {
   }
 
   //刷新显示界面
-  cleanData(){
+  void cleanData(){
     state.dataList.clear();
     state.dataList.refresh();
     countQty();

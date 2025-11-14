@@ -7,7 +7,7 @@ class TimelyInventoryState {
   var dataList = <TimelyInventoryInfo>[].obs;
 
   //获取及时库存
-  getImmediateStockList({
+  void getImmediateStockList({
     required String factoryNumber,
     required String stockId,
     required String instructionNumber,
@@ -36,7 +36,7 @@ class TimelyInventoryState {
   }
 
   //修改库位
-  modifyStorageLocation({
+  void modifyStorageLocation({
     required TimelyInventoryInfo data,
     required TimeItems item,
     required String newLocation,

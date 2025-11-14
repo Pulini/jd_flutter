@@ -225,7 +225,7 @@ class AppInitService extends GetxService {
     }
   }
 
-  initDatabase() async {
+  Future<void> initDatabase() async {
     var path = await getDatabasesPath();
     openDatabase(join(path, jdDatabase), version: 5, onCreate: (db, v) {
       debugPrint('onCreate -----------v=$v');
@@ -293,7 +293,7 @@ class LanguageController extends GetxController {
     }
   }
 
-  changeLanguage(Locale locale) {
+  void changeLanguage(Locale locale) {
     currentLocale.value = locale;
     spSave('language', locale.languageCode);
     Get.updateLocale(locale);

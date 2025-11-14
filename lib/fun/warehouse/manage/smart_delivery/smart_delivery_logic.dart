@@ -13,7 +13,7 @@ import 'smart_delivery_state.dart';
 class SmartDeliveryLogic extends GetxController {
   final SmartDeliveryState state = SmartDeliveryState();
 
-  refreshOrder({
+  void refreshOrder({
     required bool isQuery,
     required String instructions,
     required String startDate,
@@ -37,7 +37,7 @@ class SmartDeliveryLogic extends GetxController {
     );
   }
 
-  loadMoreOrder({
+  void loadMoreOrder({
     required String instructions,
     required String startDate,
     required String endDate,
@@ -60,7 +60,7 @@ class SmartDeliveryLogic extends GetxController {
     );
   }
 
-  getOrderMaterialList(
+  void getOrderMaterialList(
     int workCardInterID,
     String typeBody,
     int departmentID,
@@ -78,7 +78,7 @@ class SmartDeliveryLogic extends GetxController {
     );
   }
 
-  getDeliveryDetail(
+  void getDeliveryDetail(
     SmartDeliveryMaterialInfo data,
     int departmentID,
     Function() success,
@@ -91,7 +91,7 @@ class SmartDeliveryLogic extends GetxController {
     );
   }
 
-  setTableLineData() {
+  void setTableLineData() {
     state.deliveryQty = 0;
     if (state.deliveryDetail == null) return;
 
@@ -148,7 +148,7 @@ class SmartDeliveryLogic extends GetxController {
     }
   }
 
-  saveDelivery({
+  void saveDelivery({
     required String date,
     required Function refresh,
   }) {
@@ -162,7 +162,7 @@ class SmartDeliveryLogic extends GetxController {
     );
   }
 
-  resetDeliveryOrder({
+  void resetDeliveryOrder({
     required Function refresh,
   }) {
     state.deletePartsStock(
@@ -175,7 +175,7 @@ class SmartDeliveryLogic extends GetxController {
     );
   }
 
-  mergeDeliveryRound(Function success) {
+  void mergeDeliveryRound(Function success) {
     if (!state.deliveryList.any((v) => v.isSelected)) {
       errorDialog(content: 'smart_delivery_check_rounds_merged'.tr);
       return;
@@ -197,7 +197,7 @@ class SmartDeliveryLogic extends GetxController {
     );
   }
 
-  cancelMergeDelivery() {
+  void cancelMergeDelivery() {
     spSave('MergeDelivery', '');
     if (state.saveDeliveryDetail != null) {
       if (state.saveDeliveryDetail!.newWorkCardInterID ==
@@ -213,7 +213,7 @@ class SmartDeliveryLogic extends GetxController {
     }
   }
 
-  refreshCreated(String taskId, String agvNumber) {
+  void refreshCreated(String taskId, String agvNumber) {
     state.deliveryQty = 0;
     state.deliveryList.where((v) => v.isSelected).forEach((v) {
       v.sendType = 1;
@@ -239,7 +239,7 @@ class SmartDeliveryLogic extends GetxController {
     }
   }
 
-  callbackRefresh(SmartDeliveryMaterialInfo data) {
+  void callbackRefresh(SmartDeliveryMaterialInfo data) {
     if (state.deliveryQty > 0) {
       data.sendQty = state.deliveryQty.toDouble();
     }
@@ -269,7 +269,7 @@ class SmartDeliveryLogic extends GetxController {
     state.materialShowList.refresh();
   }
 
-  cacheDelivery(Function refresh) {
+  void cacheDelivery(Function refresh) {
     askDialog(
       content: isCanCache()
           ? 'smart_delivery_save_temporary_iteration_tips'.tr

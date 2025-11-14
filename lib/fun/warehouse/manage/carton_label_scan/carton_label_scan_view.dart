@@ -34,7 +34,7 @@ class _CartonLabelScanPageState extends State<CartonLabelScanPage> {
   var ae1 = 'audios/audio_error1.mp3';
   var ae2 = 'audios/audio_error2.mp3';
 
-  _item(LinkDataSizeList data) {
+  Container _item(LinkDataSizeList data) {
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
       padding: const EdgeInsets.all(8.0),
@@ -83,7 +83,7 @@ class _CartonLabelScanPageState extends State<CartonLabelScanPage> {
     );
   }
 
-  playAudio(String as) {
+  void playAudio(String as) {
     if ((deviceInfo() as AndroidDeviceInfo).version.release.toDoubleTry() >= 8) {
       //安卓8.0以上才能调用这个api
       //安卓5.1会出现 Didn't find class "android.media.AudioFocusRequest"
@@ -97,7 +97,7 @@ class _CartonLabelScanPageState extends State<CartonLabelScanPage> {
     }
   }
 
-  _scan() {
+  void _scan() {
     pdaScanner(scan: (barCode) {
       logic.scan(
         code: barCode,

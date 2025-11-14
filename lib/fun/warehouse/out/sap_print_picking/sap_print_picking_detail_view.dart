@@ -23,13 +23,13 @@ class _SapPrintPickingDetailPageState extends State<SapPrintPickingDetailPage> {
   final SapPrintPickingLogic logic = Get.find<SapPrintPickingLogic>();
   final SapPrintPickingState state = Get.find<SapPrintPickingLogic>().state;
 
-  _scanListener() {
+  void _scanListener() {
     pdaScanner(scan: (code) {
       logic.scanCode(code);
     });
   }
 
-  _goLabelList(int dataId) {
+  void _goLabelList(int dataId) {
     Get.to(
       () => const SapPrintPickingBarCodeListPage(),
       arguments: {'id': dataId},
@@ -45,7 +45,7 @@ class _SapPrintPickingDetailPageState extends State<SapPrintPickingDetailPage> {
     super.initState();
   }
 
-  _item(PrintPickingDetailInfo data) {
+  GestureDetector _item(PrintPickingDetailInfo data) {
     return GestureDetector(
       onTap: () {
         if (data.order.location == '1001') {

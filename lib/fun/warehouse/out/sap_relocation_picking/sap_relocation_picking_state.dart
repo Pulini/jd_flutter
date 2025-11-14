@@ -12,7 +12,7 @@ class SapRelocationPickingState {
   var materialList = <SapPalletDetailInfo>[].obs;
 
 
-  checkPalletOrLabel({
+  void checkPalletOrLabel({
     required String pallet,
     required String label,
     required Function(String) error,
@@ -47,7 +47,7 @@ class SapRelocationPickingState {
     });
   }
 
-  relocationPicking({
+  void relocationPicking({
     required String pickerNumber,
     required ByteData pickerSignature,
     required String userNumber,

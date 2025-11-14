@@ -8,7 +8,7 @@ class SapWmsSplitLabelState {
   ReprintLabelInfo? originalLabel;
   var hasOriginalLabel = false.obs;
 
-  dataFormat(BaseData response) {
+  void dataFormat(BaseData response) {
     List<ReprintLabelInfo> list = [
       for (var json in response.data) ReprintLabelInfo.fromJson(json)
     ];
@@ -24,7 +24,7 @@ class SapWmsSplitLabelState {
     hasOriginalLabel.value = originalLabel != null;
   }
 
-  getLabels({
+  void getLabels({
     required String labelNumber,
     required Function(String) error,
   }) {
@@ -43,7 +43,7 @@ class SapWmsSplitLabelState {
     });
   }
 
-  submitSplit({
+  void submitSplit({
     required Function(String msg) success,
     required Function(String msg) error,
   }) {

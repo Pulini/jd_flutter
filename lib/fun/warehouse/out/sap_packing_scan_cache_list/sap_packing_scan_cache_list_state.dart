@@ -47,7 +47,7 @@ class SapPackingScanCacheListState {
     });
   }
 
-  deleteAbnormal({
+  void deleteAbnormal({
     required List<SapPackingScanAbnormalInfo> list,
     required Function(List<SapPackingScanAbnormalInfo>,String) success,
     required Function(String) error,
@@ -77,7 +77,7 @@ class SapPackingScanCacheListState {
     });
   }
 
-  reSubmit({
+  void reSubmit({
     required String actualCabinet,
     required String postingDate,
     required List<SapPackingScanAbnormalInfo> list,

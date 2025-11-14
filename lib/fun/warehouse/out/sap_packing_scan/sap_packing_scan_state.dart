@@ -21,7 +21,7 @@ class SapPackingScanState {
 
   var deliveryOrderList = <PickingScanDeliveryOrderInfo>[].obs;
 
-  getContainerLoadingInfo({
+  void getContainerLoadingInfo({
     required String code,
     required Function(List<SapPackingScanMaterialInfo>) success,
     required Function(String) error,
@@ -54,7 +54,7 @@ class SapPackingScanState {
     });
   }
 
-  checkContainer({
+  void checkContainer({
     required Function(String) success,
     required Function(String) error,
   }) {
@@ -75,7 +75,7 @@ class SapPackingScanState {
     });
   }
 
-  sealingCabinet({
+  void sealingCabinet({
     required Function(String) success,
     required Function(String) error,
   }) {
@@ -102,7 +102,7 @@ class SapPackingScanState {
     });
   }
 
-  submit({
+  void submit({
     required String postingDate,
     required List<String> list,
     required Function(String) success,
@@ -152,7 +152,7 @@ class SapPackingScanState {
     });
   }
 
-  saveAbnormalPiece({
+  void saveAbnormalPiece({
     required List<SapPackingScanSubmitAbnormalInfo> abnormalList,
     required Function(String msg) success,
     required Function(String msg) error,
@@ -173,7 +173,7 @@ class SapPackingScanState {
 
 
 
-  saveLog({
+  void saveLog({
     required String postingDate,
     required List<String> list,
     required Function(String) success,
@@ -213,7 +213,7 @@ class SapPackingScanState {
     });
   }
 
-  queryDeliveryOrders({
+  void queryDeliveryOrders({
     required String plannedDate,
     required String destination,
     required String cabinetNumber,
@@ -241,7 +241,7 @@ class SapPackingScanState {
     });
   }
 
-  modifyDeliveryOrderDate({
+  void modifyDeliveryOrderDate({
     required List<String> deliveryOrders,
     required String modifyDate,
     required Function(String) success,

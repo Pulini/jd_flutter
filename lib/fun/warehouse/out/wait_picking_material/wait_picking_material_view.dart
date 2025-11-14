@@ -173,7 +173,7 @@ class _WaitPickingMaterialPageState extends State<WaitPickingMaterialPage> {
     );
   }
 
-  _clearQueryParam() {
+  void _clearQueryParam() {
     tecTypeBody.text = '';
     tecInstruction.text = '';
     tecMaterialCode.text = '';
@@ -195,7 +195,7 @@ class _WaitPickingMaterialPageState extends State<WaitPickingMaterialPage> {
     state.queryParamIsShowAll.value = false;
   }
 
-  _itemSubTitleFlag(String text, bool flag) => Text(
+  Text _itemSubTitleFlag(String text, bool flag) => Text(
         '$text：${flag ? '√' : 'X'}',
         style: TextStyle(
           color: flag ? Colors.green : Colors.red,
@@ -226,7 +226,7 @@ class _WaitPickingMaterialPageState extends State<WaitPickingMaterialPage> {
     );
   }
 
-  _item(WaitPickingMaterialOrderInfo data) {
+  Container _item(WaitPickingMaterialOrderInfo data) {
     var textButtonPadding =
         const EdgeInsets.only(left: 7, top: 3, right: 7, bottom: 3);
     var itemTitle = Row(
@@ -605,7 +605,7 @@ class _WaitPickingMaterialPageState extends State<WaitPickingMaterialPage> {
     );
   }
 
-  _pickingMaterial({required bool isMove, required bool isPosting}) {
+  void _pickingMaterial({required bool isMove, required bool isPosting}) {
     logic.checkPickingMaterial(
       oneFaceCheck: () {
         //委外
@@ -668,7 +668,7 @@ class _WaitPickingMaterialPageState extends State<WaitPickingMaterialPage> {
     );
   }
 
-  _picking({
+  void _picking({
     required bool isMove,
     required bool isPosting,
     String? pickerNumber,

@@ -205,7 +205,7 @@ void subItemReportDialog(
   );
 }
 
-showBillNoList(String data) {
+void showBillNoList(String data) {
   Get.dialog(
     PopScope(
       canPop: false,
@@ -226,7 +226,7 @@ showBillNoList(String data) {
   );
 }
 
-labelListDialog(
+void labelListDialog(
   BuildContext context,
   MaterialDispatchInfo mdi, {
   required Function(MaterialDispatchInfo, LabelInfo) printCallback,
@@ -423,7 +423,7 @@ labelListDialog(
   );
 }
 
-_deleteLabel({
+void _deleteLabel({
   required String guid,
   required Function() callback,
 }) {
@@ -443,7 +443,7 @@ _deleteLabel({
   });
 }
 
-_reportSapOrCancelReportSap({
+void _reportSapOrCancelReportSap({
   required int billInterID,
   required String outPutNumber,
   required bool isReport,
@@ -472,7 +472,7 @@ _reportSapOrCancelReportSap({
   });
 }
 
-_getLabelList(
+void _getLabelList(
   String interId,
   String routeEntryFID,
   String routeEntryFIDs,
@@ -504,7 +504,7 @@ _getLabelList(
   });
 }
 
-materialListDialog(
+void materialListDialog(
   BuildContext context,
   MaterialDispatchInfo mdi,
 ) {
@@ -599,7 +599,7 @@ materialListDialog(
   _getMaterialList(mdi, (list) => materialList.value = list);
 }
 
-_getMaterialList(
+void _getMaterialList(
   MaterialDispatchInfo data,
   Function(List<MaterialInfo>) callback,
 ) {
@@ -624,7 +624,7 @@ _getMaterialList(
   });
 }
 
-_materialMetersConvert(
+void _materialMetersConvert(
   String interId,
   String materialName,
   Function() callback,
@@ -645,7 +645,7 @@ _materialMetersConvert(
   });
 }
 
-showAreaPhoto(BuildContext context) => Get.dialog(
+Future<dynamic> showAreaPhoto(BuildContext context) => Get.dialog(
       PopScope(
         canPop: false,
         child: AlertDialog(
@@ -811,7 +811,7 @@ class PickPalletController {
           .obs;
   SapPalletInfo? select;
 
-  refresh(String location, String machine) {
+  void refresh(String location, String machine) {
     if (location.isNotEmpty && machine.isNotEmpty) {
       this.location = location;
       this.machine = machine;

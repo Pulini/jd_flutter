@@ -29,7 +29,7 @@ class _ProcessDispatchDetailPageState extends State<ProcessDispatchDetailPage> {
 
   final PrintUtil pu = PrintUtil();
 
-  printLabel(bool batch, int position) async {
+  Future<void> printLabel(bool batch, int position) async {
     //是否批量打印
     var labelList = <List<Uint8List>>[];
     var printList = <Barcodes>[];
@@ -128,7 +128,7 @@ class _ProcessDispatchDetailPageState extends State<ProcessDispatchDetailPage> {
   ];
 
   //  输入数量
-  _inputDialog({
+  void _inputDialog({
     required String initNum,
     required String title,
     Function(String)? confirm,
@@ -171,7 +171,7 @@ class _ProcessDispatchDetailPageState extends State<ProcessDispatchDetailPage> {
     );
   }
 
-  _page1Item(SizeLists data, position) {
+  Row _page1Item(SizeLists data, position) {
     return Row(
       children: [
         Expanded(
@@ -234,7 +234,7 @@ class _ProcessDispatchDetailPageState extends State<ProcessDispatchDetailPage> {
     );
   }
 
-  _page2Item(Barcodes data, position) {
+  GestureDetector _page2Item(Barcodes data, position) {
     return GestureDetector(
       onTap: () {
         logic.selectLabel(position);
@@ -355,7 +355,7 @@ class _ProcessDispatchDetailPageState extends State<ProcessDispatchDetailPage> {
     );
   }
 
-  _text({
+  Container _text({
     required String mes,
     required bool head,
     required String all,
@@ -396,7 +396,7 @@ class _ProcessDispatchDetailPageState extends State<ProcessDispatchDetailPage> {
     );
   }
 
-  _title() {
+  Row _title() {
     return Row(
       children: [
         Expanded(
@@ -445,7 +445,7 @@ class _ProcessDispatchDetailPageState extends State<ProcessDispatchDetailPage> {
     );
   }
 
-  _tabPage1() {
+  Container _tabPage1() {
     return Container(
       decoration: BoxDecoration(
         color: Colors.grey.shade100,
@@ -558,7 +558,7 @@ class _ProcessDispatchDetailPageState extends State<ProcessDispatchDetailPage> {
     );
   }
 
-  _tabPage2() {
+  Container _tabPage2() {
     return Container(
       decoration: BoxDecoration(
         color: Colors.grey.shade100,

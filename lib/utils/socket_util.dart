@@ -45,7 +45,7 @@ class SocketClientUtil {
     this.connectListener,
   });
 
-  connect() {
+  void connect() {
     debugPrint('连接设备:$ip $port');
     _stateListener(ConnectState.connecting);
     Socket.connect(ip, port).then((v) {
@@ -64,12 +64,12 @@ class SocketClientUtil {
     });
   }
 
-  _stateListener(ConnectState state) {
+  void _stateListener(ConnectState state) {
     connectState = state;
     connectListener?.call(state);
   }
 
-  close() {
+  void close() {
     if (socket != null && connectState == ConnectState.connected) {
       debugPrint('关闭设备并返回监听:$ip $port');
       socket?.close();
@@ -77,7 +77,7 @@ class SocketClientUtil {
     }
   }
 
-  clean() {
+  void clean() {
     if (socket != null && connectState == ConnectState.connected) {
       debugPrint('关闭设备:$ip $port');
       socket?.close();

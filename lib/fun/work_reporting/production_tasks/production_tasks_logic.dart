@@ -15,7 +15,7 @@ import 'production_tasks_state.dart';
 class ProductionTasksLogic extends GetxController {
   final ProductionTasksState state = ProductionTasksState();
 
-  refreshTable({
+  void refreshTable({
     required Function() refresh,
   }) {
     state.getProductionOrderSchedule(
@@ -63,7 +63,7 @@ class ProductionTasksLogic extends GetxController {
             .reduce((a, b) => a.add(b)),
       );
 
-  changeSort({
+  void changeSort({
     required int oldIndex,
     required int newIndex,
     required Function() refresh,
@@ -90,7 +90,7 @@ class ProductionTasksLogic extends GetxController {
     }
   }
 
-  getDetail({
+  void getDetail({
     String? ins,
     String? po,
     required String imageUrl,
@@ -121,7 +121,7 @@ class ProductionTasksLogic extends GetxController {
     );
   }
 
-  mqttRefresh({
+  void mqttRefresh({
     required String topic,
     required String data,
     required Function(String) refreshItem,
@@ -194,7 +194,7 @@ class ProductionTasksLogic extends GetxController {
     }
   }
 
-  getOrderPackMaterialInfo(String ins) {
+  void getOrderPackMaterialInfo(String ins) {
     state.getPackMaterialInfo(
       ins: ins,
       success: () => Get.to(
@@ -205,7 +205,7 @@ class ProductionTasksLogic extends GetxController {
     );
   }
 
-  searchPackMaterial(String text) {
+  void searchPackMaterial(String text) {
     if (text.trim().isEmpty) {
       state.packMaterialShowList.value = state.packMaterialList;
     } else {

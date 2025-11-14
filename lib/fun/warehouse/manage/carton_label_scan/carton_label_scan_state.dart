@@ -21,7 +21,7 @@ class CartonLabelScanState {
   var priorityPo = ''.obs;
   CartonLabelScanInfo? priorityCartonLabelInfo;
 
-  queryCartonLabelInfo({
+  void queryCartonLabelInfo({
     required String code,
     required Function(String) error,
   }) {
@@ -46,7 +46,7 @@ class CartonLabelScanState {
   }
 
   //清理优先级界面数据
-  clearPriority(){
+  void clearPriority(){
     priorityCartonLabelInfo = CartonLabelScanInfo();
     priorityCartonLabel.value = '';
     priorityPo.value='';
@@ -54,7 +54,7 @@ class CartonLabelScanState {
   }
 
   //更改优先级
-  changePOPriority({
+  void changePOPriority({
     required String poNumber,
     required Function(String) success,
   }) {
@@ -73,7 +73,7 @@ class CartonLabelScanState {
     });
   }
 
-  submitScannedCartonLabel({
+  void submitScannedCartonLabel({
     required Function(String) success,
     required Function(String) error,
   }) {
@@ -108,7 +108,7 @@ class CartonLabelScanState {
 
 
 
-  getCartonLabelScanHistory({
+  void getCartonLabelScanHistory({
     required String orderNo,
     required Function(String) error,
   }) {
@@ -128,7 +128,7 @@ class CartonLabelScanState {
     });
   }
 
-  getCartonLabelScanHistoryDetail({
+  void getCartonLabelScanHistoryDetail({
     required int id,
     required Function() success,
     required Function(String) error,

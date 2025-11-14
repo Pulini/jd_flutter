@@ -39,7 +39,7 @@ class SapCartonLabelBindingState {
       getOperationTypeText(ScanLabelOperationType.unKnown).obs;
   var newBoxLabelID = ''.obs;
 
-  getLabelInfo({
+  void getLabelInfo({
     required String labelCode,
     required Function(List<SapLabelBindingInfo>) success,
     required Function(String) error,
@@ -62,7 +62,7 @@ class SapCartonLabelBindingState {
     });
   }
 
-  getLabelPrintInfo({
+  void getLabelPrintInfo({
     required Function(Map<SapPrintLabelInfo, List<SapPrintLabelSubInfo>>)
         success,
     required Function(String) error,
@@ -98,7 +98,7 @@ class SapCartonLabelBindingState {
     });
   }
 
-  operationSubmit({
+  void operationSubmit({
     required double long,
     required double width,
     required double height,

@@ -45,7 +45,7 @@ class _SapInkColorMatchingPageState extends State<SapInkColorMatchingPage> {
 
   var tecTypeBody = TextEditingController();
 
-  _item(int index) {
+  GestureDetector _item(int index) {
     SapInkColorMatchOrderInfo data = state.orderList[index];
     return GestureDetector(
       onTap: () {
@@ -193,7 +193,7 @@ class _SapInkColorMatchingPageState extends State<SapInkColorMatchingPage> {
     );
   }
 
-  _refreshOrder() {
+  void _refreshOrder() {
     logic.queryOrder(
       startDate: dpcStartDate.getDateFormatSapYMD(),
       endDate: dpcEndDate.getDateFormatSapYMD(),

@@ -11,7 +11,7 @@ import 'sale_scan_out_warehouse_state.dart';
 class SaleScanOutWarehouseLogic extends GetxController {
   final SaleScanOutWarehouseState state = SaleScanOutWarehouseState();
 
-  clearBarCodeList() {
+  void clearBarCodeList() {
     BarCodeInfo.clear(
       type: BarCodeReportType.jinCanSalesScanningCode.name,
       callback: (v) {
@@ -27,7 +27,7 @@ class SaleScanOutWarehouseLogic extends GetxController {
     );
   }
 
-  scanCode(String code) {
+  void scanCode(String code) {
     if (state.barCodeList.any((v) => v.code == code)) {
       showSnackBar(
         message: 'sale_scan_out_warehouse_code_exists'.tr,
@@ -43,11 +43,11 @@ class SaleScanOutWarehouseLogic extends GetxController {
     }
   }
 
-  deleteItem(BarCodeInfo barCodeList) {
+  void deleteItem(BarCodeInfo barCodeList) {
     barCodeList.delete(callback: () => state.barCodeList.remove(barCodeList));
   }
 
-  submit({required WorkerInfo worker}) {
+  void submit({required WorkerInfo worker}) {
     if (state.barCodeList.every((v) => v.isUsed)) {
       errorDialog(content: 'sale_scan_out_warehouse_no_code_submit'.tr);
     } else {
@@ -75,7 +75,7 @@ class SaleScanOutWarehouseLogic extends GetxController {
     }
   }
 
-  refreshBarCodeStatus({required Function() refresh}) {
+  void refreshBarCodeStatus({required Function() refresh}) {
     getAlreadyInStockBarCode(
       type: BarCodeReportType.jinCanSalesScanningCode,
       success: (list) {

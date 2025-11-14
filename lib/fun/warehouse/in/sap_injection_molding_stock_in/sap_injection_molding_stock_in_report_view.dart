@@ -82,7 +82,7 @@ class _SapInjectionMoldingStockInReportPageState
         ],
       );
 
-  listItem(List<SapInjectionMoldingStockInInfo> list) => Row(
+  Row listItem(List<SapInjectionMoldingStockInInfo> list) => Row(
         children: [
           expandedFrameText(
             flex: 3,
@@ -144,7 +144,7 @@ class _SapInjectionMoldingStockInReportPageState
         ],
       );
 
-  listTotal() => Row(
+  Row listTotal() => Row(
         children: [
           expandedFrameText(
             flex: 3,

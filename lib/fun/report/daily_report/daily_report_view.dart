@@ -18,7 +18,7 @@ class _DailyReportPageState extends State<DailyReportPage> {
   final state = Get.find<DailyReportLogic>().state;
 
 
-  _item(DailyReport? item) {
+  Container _item(DailyReport? item) {
     return Container(
       color: item == null ? Colors.greenAccent : item.getItemColor(),
       child: Padding(

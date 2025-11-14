@@ -27,7 +27,7 @@ class _PackingShipmentScanPageState extends State<PackingShipmentScanPage> {
   var as3 = 'audios/audio_again_click.mp3';
   var as4 = 'audios/audio_add_fail.mp3';
 
-  _item(GtItem data) {
+  Row _item(GtItem data) {
     return Row(
       children: [
         expandedFrameText(
@@ -88,7 +88,7 @@ class _PackingShipmentScanPageState extends State<PackingShipmentScanPage> {
     );
   }
 
-  playAudio(String as) {
+  void playAudio(String as) {
     if ((deviceInfo() as AndroidDeviceInfo).version.release.toDoubleTry() >=
         8) {
       //安卓8.0以上才能调用这个api

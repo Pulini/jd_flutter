@@ -21,7 +21,7 @@ class _MachineDispatchReportPageState extends State<MachineDispatchHandoverPage>
   final logic = Get.find<MachineDispatchLogic>();
   final state = Get.find<MachineDispatchLogic>().state;
 
-  itemTitle() => SizedBox(
+  SizedBox itemTitle() => SizedBox(
         width: 100,
         child: Column(
           children: [
@@ -69,7 +69,7 @@ class _MachineDispatchReportPageState extends State<MachineDispatchHandoverPage>
         ),
       );
 
-  totalItem(List<Items> data) {
+  SizedBox totalItem(List<Items> data) {
     var notFullQty = 0.0;
     var reportQty = 0.0;
     for (var v in data) {
@@ -101,7 +101,7 @@ class _MachineDispatchReportPageState extends State<MachineDispatchHandoverPage>
     );
   }
 
-  handoverItem(HandoverInfo data, int index) {
+  Container handoverItem(HandoverInfo data, int index) {
     return Container(
       height: 140,
       margin: const EdgeInsets.only(left: 5, right: 5, bottom: 10),
@@ -156,7 +156,7 @@ class _MachineDispatchReportPageState extends State<MachineDispatchHandoverPage>
     );
   }
 
-  workerItem(HandoverInfo dpi, int index) {
+  GestureDetector workerItem(HandoverInfo dpi, int index) {
     var data = dpi.handoverInfoDispatchList[index];
     var avatar = Padding(
       padding: const EdgeInsets.all(5),

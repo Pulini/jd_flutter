@@ -75,7 +75,7 @@ class _ProductionMaterialsReportPageState
     ),
   ];
 
-  _tableDataRow(List<ProductionMaterialsInfo> list, int index) {
+  DataRow _tableDataRow(List<ProductionMaterialsInfo> list, int index) {
     return DataRow(
       color: WidgetStateProperty.resolveWith<Color?>(
         (Set<WidgetState> states) {
@@ -126,7 +126,7 @@ class _ProductionMaterialsReportPageState
     );
   }
 
-  getPageBody() {
+  Obx getPageBody() {
     return Obx(
       () => ListView.builder(
           padding: const EdgeInsets.all(5),

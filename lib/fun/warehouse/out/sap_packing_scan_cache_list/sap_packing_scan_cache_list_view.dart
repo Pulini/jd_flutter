@@ -50,7 +50,7 @@ class _SapPackingScanCacheListPageState
         '${RouteConfig.sapPackingScanCacheList.name}${PickerType.sapFactoryWarehouse}',
   );
 
-  reSubmitDataInput({
+  void reSubmitDataInput({
     required List<SapPackingScanAbnormalInfo> submitList,
     required DateTime postingDate,
   }) {
@@ -122,7 +122,7 @@ class _SapPackingScanCacheListPageState
     );
   }
 
-  _abnormalItem(List<SapPackingScanAbnormalInfo> list) {
+  Container _abnormalItem(List<SapPackingScanAbnormalInfo> list) {
     double qty = list.isEmpty
         ? 0
         : list.map((v) => v.quality ?? 0).reduce((a, b) => a.add(b));
@@ -198,7 +198,7 @@ class _SapPackingScanCacheListPageState
     );
   }
 
-  _searchSheet() => showSheet(
+  Future<dynamic> _searchSheet() => showSheet(
         context: context,
         body: Column(
           mainAxisSize: MainAxisSize.min,

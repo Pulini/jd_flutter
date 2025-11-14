@@ -45,7 +45,7 @@ class _SapPackingScanPageState extends State<SapPackingScanPage> {
         '${RouteConfig.sapPackingScan.name}${PickerType.sapFactoryWarehouse}',
   );
 
-  _operationSheet() {
+  void _operationSheet() {
     var tecNumber = TextEditingController(
       text: spGet(spSavePackingScanActualCabinet) ?? '',
     );
@@ -269,7 +269,7 @@ class _SapPackingScanPageState extends State<SapPackingScanPage> {
         ),
       );
 
-  _pickDate({DateTime? date, required Function(String) callback}) {
+  void _pickDate({DateTime? date, required Function(String) callback}) {
     var pickDate = date ?? DateTime.now();
     showDatePicker(
       locale: View.of(Get.overlayContext!).platformDispatcher.locale,
@@ -284,7 +284,7 @@ class _SapPackingScanPageState extends State<SapPackingScanPage> {
     });
   }
 
-  _initScan() {
+  void _initScan() {
     pdaScanner(scan: (code) => logic.scanCode(code));
   }
 

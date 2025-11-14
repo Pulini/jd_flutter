@@ -34,7 +34,7 @@ class _WorkshopPlanningLastProcessPageState
   var pageController = PageController();
   late Worker materialListener;
 
-  _materialItem(WorkshopPlanningMaterialInfo data) => Container(
+  Container _materialItem(WorkshopPlanningMaterialInfo data) => Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
           gradient: LinearGradient(
@@ -78,7 +78,7 @@ class _WorkshopPlanningLastProcessPageState
         ),
       );
 
-  _processItem(WorkshopPlanningLastProcessInfo data) {
+  Column _processItem(WorkshopPlanningLastProcessInfo data) {
     var width = getScreenSize().width - 20;
     return Column(
       children: [
@@ -160,7 +160,7 @@ class _WorkshopPlanningLastProcessPageState
     );
   }
 
-  _workerItem(WorkshopPlanningWorkerInfo data) => GestureDetector(
+  GestureDetector _workerItem(WorkshopPlanningWorkerInfo data) => GestureDetector(
         onTap: () => logic.lastProcessModifyWorker(
           data,
           opcProcessFlow.getPickItem().pickerId(),
@@ -251,7 +251,7 @@ class _WorkshopPlanningLastProcessPageState
         ),
       );
 
-  _addItem({required Function() click}) => GestureDetector(
+  GestureDetector _addItem({required Function() click}) => GestureDetector(
         onTap: click,
         child: Container(
           decoration: BoxDecoration(
@@ -269,7 +269,7 @@ class _WorkshopPlanningLastProcessPageState
         ),
       );
 
-  refreshMaterialAndProcessDetails() {
+  void refreshMaterialAndProcessDetails() {
     Future.delayed(const Duration(milliseconds: 500), () {
       logic.refreshMaterialAndProcessDetails(
         date: dpcDate.getDateFormatYMD(),

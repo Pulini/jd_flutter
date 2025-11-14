@@ -56,7 +56,7 @@ class _SapPurchaseStockInPageState extends State<SapPurchaseStockInPage> {
     saveKey: '${RouteConfig.sapPurchaseStockIn.name}${PickerType.sapSupplier}',
   );
 
-  _item(int index) {
+  Obx _item(int index) {
     var list = state.orderList[index];
     var materialList = <List<SapPurchaseStockInInfo>>[];
     groupBy(list, (v) => v.materialCode).forEach((k, v) {
@@ -368,7 +368,7 @@ class _SapPurchaseStockInPageState extends State<SapPurchaseStockInPage> {
     );
   }
 
-  queryOrder() {
+  void queryOrder() {
     logic.queryOrder(
       deliNo: deliveryOrderController.text,
       startDate: dpcStartDate.getDateFormatSapYMD(),

@@ -8,7 +8,7 @@ class MoldingScanBulletinReportState {
 
   var refreshDuration = 10.obs;
 
-  getMoldingScanBulletinReport({
+  void getMoldingScanBulletinReport({
     required int departmentID,
     required bool isRefresh,
     required bool isGetAllList,
@@ -41,7 +41,7 @@ class MoldingScanBulletinReportState {
     });
   }
 
-  changeSort({
+  void changeSort({
     required Function(String msg) success,
     required Function(String msg) error,
     required Function() refreshTimer,

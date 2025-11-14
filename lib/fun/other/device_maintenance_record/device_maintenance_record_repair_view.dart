@@ -59,7 +59,7 @@ class _DeviceMaintenanceRecordRepairPageState
     );
   }
 
-  _workerItem(RepairEntryData data) {
+  Container _workerItem(RepairEntryData data) {
     return Container(
       height: 140,
       margin: const EdgeInsets.only(right: 15, bottom: 10),
@@ -115,7 +115,7 @@ class _DeviceMaintenanceRecordRepairPageState
     FilteringTextInputFormatter.allow(RegExp('[0-9]')),
   ];
 
-  _inputSearchText(
+  Row _inputSearchText(
       {required String hint,
       Function(String v)? onChanged,
       List<TextInputFormatter>? inputType}) {
@@ -136,7 +136,7 @@ class _DeviceMaintenanceRecordRepairPageState
     );
   }
 
-  addWorkerDialog({
+  void addWorkerDialog({
     Function(String, String, String, String, String, String)? click,
   }) {
     var brand = ''; // 零部件的品牌

@@ -14,7 +14,7 @@ import 'delivery_order_state.dart';
 class DeliveryOrderLogic extends GetxController {
   final DeliveryOrderState state = DeliveryOrderState();
 
-  queryDeliveryOrders({
+  void queryDeliveryOrders({
     required String startDate,
     required String endDate,
     required String typeBody,
@@ -46,7 +46,7 @@ class DeliveryOrderLogic extends GetxController {
     );
   }
 
-  getOrderDetail({
+  void getOrderDetail({
     required bool isExempt,
     required bool isCheckOrder,
     required String factoryNumber,
@@ -86,7 +86,7 @@ class DeliveryOrderLogic extends GetxController {
     }
   }
 
-  checkWorkerNumber(String number) {
+  void checkWorkerNumber(String number) {
     if (number.trim().length >= 6) {
       getWorkerInfo(
         number: number,
@@ -108,7 +108,7 @@ class DeliveryOrderLogic extends GetxController {
     }
   }
 
-  cleanCheck() {
+  void cleanCheck() {
     state.locationList.value = [];
     state.locationName.value = '';
     state.locationId.value = '';
@@ -117,7 +117,7 @@ class DeliveryOrderLogic extends GetxController {
     state.factoryNumber = '';
   }
 
-  saveCheck() {
+  void saveCheck() {
     state.saveCheck(
       success: (msg) =>
           successDialog(content: msg, back: () => Get.back(result: true)),
@@ -131,7 +131,7 @@ class DeliveryOrderLogic extends GetxController {
     return index == -1 ? 0 : index;
   }
 
-  pickLocation(int index) {
+  void pickLocation(int index) {
     state.locationId.value =
         state.locationList[index].storageLocationNumber ?? '';
     state.locationName.value = state.locationList[index].name ?? '';
@@ -144,7 +144,7 @@ class DeliveryOrderLogic extends GetxController {
             if (v2.isSelected.value) v2
       ];
 
-  checkReversalStockIn({
+  void checkReversalStockIn({
     required Function(List<ReversalLabelInfo>) reversalWithCode,
     required Function() reversal,
   }) {
@@ -179,7 +179,7 @@ class DeliveryOrderLogic extends GetxController {
     );
   }
 
-  reversalStockIn({
+  void reversalStockIn({
     required String workCenterID,
     required String reason,
     List<ReversalLabelInfo>? labels,
@@ -201,7 +201,7 @@ class DeliveryOrderLogic extends GetxController {
     );
   }
 
-  checkReversalStockOut({
+  void checkReversalStockOut({
     required Function() reversal,
   }) {
     var notPackingMaterials = 0;
@@ -236,7 +236,7 @@ class DeliveryOrderLogic extends GetxController {
   }
 
 
-  reversalStockOut({
+  void reversalStockOut({
     required String workCenterID,
     required String reason,
     required Function() refresh,
@@ -254,7 +254,7 @@ class DeliveryOrderLogic extends GetxController {
     );
   }
 
-  _initLabelList(List<DeliveryOrderLabelInfo> list) {
+  void _initLabelList(List<DeliveryOrderLabelInfo> list) {
     state.materialList.forEach((k, v) {
       for (var label in list) {
         if (label.materialCode == k || label.isOutBoxLabel()) {
@@ -270,7 +270,7 @@ class DeliveryOrderLogic extends GetxController {
         .toList();
   }
 
-  getSupplierLabelInfo({
+  void getSupplierLabelInfo({
     required List<DeliveryOrderInfo> group,
     required Function(bool) refresh,
   }) {
@@ -307,14 +307,14 @@ class DeliveryOrderLogic extends GetxController {
     );
   }
 
-  getLabelBindingStaging() {
+  void getLabelBindingStaging() {
     state.getLabelBindingStaging(
       success: (list) => _initLabelList(list),
       error: (msg) => msgDialog(content: msg),
     );
   }
 
-  addPiece({required String pieceNo}) {
+  void addPiece({required String pieceNo}) {
     DeliveryOrderLabelInfo? outBox;
     try {
       outBox = state.orderLabelList
@@ -331,7 +331,7 @@ class DeliveryOrderLogic extends GetxController {
     _addLabels(labels: labels);
   }
 
-  scanLabel(String code) {
+  void scanLabel(String code) {
     if (code.isPallet()) {
       state.checkPallet(
         pallets: [code],
@@ -396,7 +396,7 @@ class DeliveryOrderLogic extends GetxController {
   ///扫未绑定标签，标签列表添加标签并变色
   ///没有标签
   ///扫未绑定标签，标签列表添加标签并变色
-  _addLabels({required List<DeliveryOrderLabelInfo> labels}) {
+  void _addLabels({required List<DeliveryOrderLabelInfo> labels}) {
     if (labels.isEmpty) {
       errorDialog(
           content: 'delivery_order_label_check_order_not_have_this_label'.tr);
@@ -520,11 +520,11 @@ class DeliveryOrderLogic extends GetxController {
     }
   }
 
-  deletePiece({required DeliveryOrderLabelInfo pieceInfo}) {
+  void deletePiece({required DeliveryOrderLabelInfo pieceInfo}) {
     state.scannedLabelList.removeWhere((v) => v.pieceNo == pieceInfo.pieceNo);
   }
 
-  stagingLabelBinding() {
+  void stagingLabelBinding() {
     state.stagingLabelBinding(
       success: (msg) => successDialog(content: msg),
       error: (msg) => errorDialog(content: msg),
@@ -547,7 +547,7 @@ class DeliveryOrderLogic extends GetxController {
     return returnList;
   }
 
-  submitLabelBinding() {
+  void submitLabelBinding() {
     for (var ml in state.materialList.entries) {
       var materialCode = ml.key;
       var sizeList = ml.value;
@@ -632,11 +632,11 @@ class DeliveryOrderLogic extends GetxController {
     return labelList;
   }
 
-  isCanSubmitBinding() =>
+  bool isCanSubmitBinding() =>
       state.scannedLabelList.isNotEmpty &&
       (state.scannedLabelList.every((v) => v.isChecked.value));
 
-  selectItem(List<DeliveryOrderInfo> data, bool isSelected) {
+  void selectItem(List<DeliveryOrderInfo> data, bool isSelected) {
     if (state.deliveryOrderList.every((v) => !v.first.isSelected.value)) {
       for (var v in data) {
         v.isSelected.value = isSelected;
@@ -663,7 +663,7 @@ class DeliveryOrderLogic extends GetxController {
     }
   }
 
-  selectAllChecked(bool select) {
+  void selectAllChecked(bool select) {
     state.selectAllChecked.value=select;
     state.deliveryOrderList
         .where((v) =>

@@ -12,7 +12,7 @@ import 'package:jd_flutter/widget/worker_check_widget.dart';
 const String checkPickingReceiptReversalDialogNumber =
     'CHECK_PICKING_RECEIPT_REVERSAL_DIALOG_NUMBER';
 
-checkPickingReceiptReversalDialog({
+void checkPickingReceiptReversalDialog({
   required int orderType,
   required Function(
     String leaderNumber,

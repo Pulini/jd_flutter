@@ -7,7 +7,7 @@ class DailyReportState {
   //报表数据
   RxList<DailyReport> dataList = <DailyReport>[].obs;
 
-  getDayOutput({
+  void getDayOutput({
     required String departmentID,
     required String date,
     required Function(String msg) error,

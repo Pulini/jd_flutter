@@ -109,7 +109,7 @@ class MachineDispatchState {
     );
   }
 
-  formatWorkCardDetailData({
+  void formatWorkCardDetailData({
     required Future<BaseData> doHttp,
     required Function() success,
     required Function(String msg) error,
@@ -179,7 +179,7 @@ class MachineDispatchState {
         ],
       );
 
-  getSapLabelList({
+  void getSapLabelList({
     required Function() success,
     required Function(String) error,
   }) {
@@ -212,7 +212,7 @@ class MachineDispatchState {
     });
   }
 
-  getHistoryLabelList({
+  void getHistoryLabelList({
     required int index,
     required Function() success,
     required Function(String) error,
@@ -263,7 +263,7 @@ class MachineDispatchState {
     });
   }
 
-  cleanOrRecoveryLastQty({
+  void cleanOrRecoveryLastQty({
     required bool isClean,
     required Function(String msg) success,
     required Function(String msg) error,
@@ -292,7 +292,7 @@ class MachineDispatchState {
     });
   }
 
-  modifyWorkCardItem({
+  void modifyWorkCardItem({
     required Function(String msg) success,
     required Function(String msg) error,
   }) {
@@ -323,7 +323,7 @@ class MachineDispatchState {
     });
   }
 
-  reportDispatch({
+  void reportDispatch({
     required Function(String msg) success,
     required Function(String msg) error,
   }) {
@@ -405,7 +405,7 @@ class MachineDispatchState {
     });
   }
 
-  labelMaintain({
+  void labelMaintain({
     required double printQty,
     required String sizeMaterialNumber,
     required String size,
@@ -449,7 +449,7 @@ class MachineDispatchState {
     });
   }
 
-  productionReport({
+  void productionReport({
     required Function(String msg) success,
     required Function(String msg) error,
   }) {
@@ -502,7 +502,7 @@ class MachineDispatchState {
     });
   }
 
-  cancelConfirmation({
+  void cancelConfirmation({
     required Function(String msg) success,
     required Function(String msg) error,
   }) {
@@ -521,7 +521,7 @@ class MachineDispatchState {
     });
   }
 
-  getEnglishLabel({
+  void getEnglishLabel({
     required String code,
     required Function(EnglishLabelInfo) success,
     required Function(String msg) error,
@@ -542,7 +542,7 @@ class MachineDispatchState {
   }
 
   //两班交接
-  handover({
+  void handover({
     required Function(String msg) success,
   }) {
     if (handoverList

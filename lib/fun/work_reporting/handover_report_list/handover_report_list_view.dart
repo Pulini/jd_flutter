@@ -22,7 +22,7 @@ class _HandoverReportListPageState extends State<HandoverReportListPage> {
   final logic = Get.put(HandoverReportListLogic());
   final state = Get.find<HandoverReportListLogic>().state;
 
-  _text({
+  Container _text({
     required String mes,
     required bool head,
     required bool judge,
@@ -61,7 +61,7 @@ class _HandoverReportListPageState extends State<HandoverReportListPage> {
     );
   }
 
-  _title() {
+  Row _title() {
     return Row(
       children: [
         Expanded(
@@ -104,7 +104,7 @@ class _HandoverReportListPageState extends State<HandoverReportListPage> {
     );
   }
 
-  _subTitle(SubList sub, bool judge) {
+  Row _subTitle(SubList sub, bool judge) {
     return Row(
       children: [
         Expanded(
@@ -147,7 +147,7 @@ class _HandoverReportListPageState extends State<HandoverReportListPage> {
     );
   }
 
-  _item1(ShowHandoverReportList data, int position) {
+  InkWell _item1(ShowHandoverReportList data, int position) {
     return InkWell(
       child: Container(
         margin: const EdgeInsets.only(left: 5, right: 5, bottom: 10),

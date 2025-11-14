@@ -26,7 +26,7 @@ class PrintUtil {
     setChannelListener();
   }
 
-  printLabel({
+  Future<void> printLabel({
     required List<Uint8List> label,
     Function()? start,
     Function()? success,
@@ -53,7 +53,7 @@ class PrintUtil {
     }
   }
 
-  printLabelList({
+  Future<void> printLabelList({
     required List<List<Uint8List>> labelList,
     Function()? start,
     Function(int, int)? progress,
@@ -89,7 +89,7 @@ class PrintUtil {
     }
   }
 
-  setChannelListener() {
+  void setChannelListener() {
     bluetoothChannel.setMethodCallHandler((call) {
       logger.d(
           'BluetoothChannelMethod：${call.method}  arguments:${call.arguments}');
@@ -241,7 +241,7 @@ class PrintUtil {
     ];
   }
 
-  bluetoothIsEnable(Function(bool) enable) {
+  void bluetoothIsEnable(Function(bool) enable) {
     bluetoothChannel.invokeMethod('IsEnable').then((value) => enable(value));
   }
 
@@ -253,20 +253,20 @@ class PrintUtil {
     return await bluetoothChannel.invokeMethod('IsLocationOn');
   }
 
-  _scanBluetooth() {
+  void _scanBluetooth() {
     deviceList.clear();
     bluetoothChannel.invokeMethod('ScanBluetooth').then((value) {
       isScanning.value = value;
     });
   }
 
-  _endScanBluetooth() {
+  void _endScanBluetooth() {
     bluetoothChannel.invokeMethod('EndScanBluetooth').then((value) {
       if (value) isScanning.value = false;
     });
   }
 
-  _connectBluetooth(BluetoothDevice device, Function() connected) {
+  void _connectBluetooth(BluetoothDevice device, Function() connected) {
     loadingShow('bluetooth_connecting'.tr);
     bluetoothChannel.invokeMethod('ConnectBluetooth', device.deviceMAC).then(
       (value) {
@@ -300,7 +300,7 @@ class PrintUtil {
     );
   }
 
-  _closeBluetooth(BluetoothDevice device) {
+  void _closeBluetooth(BluetoothDevice device) {
     loadingShow('bluetooth_closing'.tr);
     bluetoothChannel
         .invokeMethod('CloseBluetooth', device.deviceMAC)
@@ -327,7 +327,7 @@ class PrintUtil {
   //           stubBar: 'stubBarstubBarstubBarstubBar',
   //           stuBarCode: 'stuBarCode12345'));
   // }
-  _send({
+  Future<void> _send({
     required dynamic label,
     required Function()? start,
     required Function()? success,
@@ -353,7 +353,7 @@ class PrintUtil {
     }
   }
 
-  _sendList({
+  Future<void> _sendList({
     required List<dynamic> labels,
     required Function()? start,
     required Function(int, int)? progress,
@@ -377,11 +377,11 @@ class PrintUtil {
 
   bool isConnected() => deviceList.any((v) => v.deviceIsConnected);
 
-  disconnected() => isConnected()
+  dynamic disconnected() => isConnected()
       ? _closeBluetooth(deviceList.firstWhere((v) => v.deviceIsConnected))
       : null;
 
-  _item(int index, Function() connected) {
+  Card _item(int index, Function() connected) {
     var device = deviceList[index];
     return Card(
       child: ListTile(
@@ -418,7 +418,7 @@ class PrintUtil {
     );
   }
 
-  _showBluetoothDialog(Function() connected) {
+  void _showBluetoothDialog(Function() connected) {
     if (_dialogIsShowing) return;
     _dialogIsShowing = true;
     Get.dialog(

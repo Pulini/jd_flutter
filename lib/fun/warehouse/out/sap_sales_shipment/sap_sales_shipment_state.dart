@@ -12,7 +12,7 @@ class SapSalesShipmentState {
   var palletList = <List<SapPalletDetailInfo>>[].obs;
 
 
-  querySalesShipmentList({
+  void querySalesShipmentList({
     required String instructionNo,
     required String deliveryDate,
     required Function(String) error,
@@ -46,7 +46,7 @@ class SapSalesShipmentState {
     });
   }
 
-  postingSalesShipment({
+  void postingSalesShipment({
     required Function(String) success,
     required Function(String) error,
   }) {
@@ -71,7 +71,7 @@ class SapSalesShipmentState {
     });
   }
 
-  checkPalletOrLabel({
+  void checkPalletOrLabel({
     required String instructionNo,
     required Function(List<SapPalletDetailInfo>) success,
     required Function(String) error,

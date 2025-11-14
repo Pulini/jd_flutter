@@ -11,7 +11,7 @@ class SapStockTransferLogic extends GetxController {
   TextEditingController? locationDialogController;
   var locationOrPalletController = TextEditingController();
 
-  scanCode({
+  void scanCode({
     required String warehouse,
     required String code,
   }) {
@@ -71,7 +71,7 @@ class SapStockTransferLogic extends GetxController {
     );
   }
 
-  transfer(String warehouse) {
+  void transfer(String warehouse) {
     if (state.labelList.isEmpty) {
       msgDialog(
         content: 'sap_stock_transfer_scan_pallet_or_label_tips'.tr,

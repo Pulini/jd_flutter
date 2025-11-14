@@ -22,7 +22,7 @@ class _SapPackingDeliveryOrderListPageState
   final SapPackingScanLogic logic = Get.find<SapPackingScanLogic>();
   final SapPackingScanState state = Get.find<SapPackingScanLogic>().state;
 
-  _modifyDateDialog(PickingScanDeliveryOrderInfo data) {
+  void _modifyDateDialog(PickingScanDeliveryOrderInfo data) {
     var postingDate = DateTime.parse(data.orderDate ?? '');
     var epcDate = DatePickerController(
       PickerType.date,

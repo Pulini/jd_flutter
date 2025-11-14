@@ -21,7 +21,7 @@ class _CreateDeliveryOrderPageState extends State<CreateDeliveryOrderPage> {
   final logic = Get.find<SmartDeliveryLogic>();
   final state = Get.find<SmartDeliveryLogic>().state;
 
-  _saveDelivery() {
+  void _saveDelivery() {
     var pickDate = DateTime.now();
     showDatePicker(
       locale: View.of(Get.overlayContext!).platformDispatcher.locale,
@@ -200,7 +200,7 @@ class _CreateDeliveryOrderPageState extends State<CreateDeliveryOrderPage> {
     );
   }
 
-  mergeDeliveryTable(DeliveryDetailInfo ddi) {
+  SingleChildScrollView mergeDeliveryTable(DeliveryDetailInfo ddi) {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: SizedBox(
@@ -304,7 +304,7 @@ class _CreateDeliveryOrderPageState extends State<CreateDeliveryOrderPage> {
     );
   }
 
-  _cancelTack(String taskID) {
+  void _cancelTack(String taskID) {
     setState(() {
       state.deliveryList
           .where((v) => v.taskID == taskID)

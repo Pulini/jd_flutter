@@ -5,7 +5,7 @@ import 'package:jd_flutter/bean/http/response/workshop_planning_info.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
-materialDialog({
+void materialDialog({
   required List<WorkshopPlanningMaterialInfo> addedList,
   required List<WorkshopPlanningMaterialInfo> materialList,
   required Function(List<WorkshopPlanningMaterialInfo>) addMaterial,

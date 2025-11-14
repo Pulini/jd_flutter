@@ -40,7 +40,7 @@ class _MoldingScanBulletinReportPageState
     );
   }
 
-  subTable(List<ScWorkCardSizeInfos> sizeData) {
+  DataTable subTable(List<ScWorkCardSizeInfos> sizeData) {
     var greenText = const TextStyle(
       color: Colors.green,
       fontWeight: FontWeight.bold,
@@ -107,7 +107,7 @@ class _MoldingScanBulletinReportPageState
     );
   }
 
-  tableCard(int index) {
+  Card tableCard(int index) {
     MoldingScanBulletinReportInfo data = state.reportInfo[index];
     var textStyle = const TextStyle(
       fontSize: 20,

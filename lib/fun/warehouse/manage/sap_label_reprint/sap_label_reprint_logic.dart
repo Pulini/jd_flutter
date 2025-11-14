@@ -14,7 +14,7 @@ import 'sap_label_reprint_state.dart';
 class SapLabelReprintLogic extends GetxController {
   final SapLabelReprintState state = SapLabelReprintState();
 
-  scanLabel(String code) {
+  void scanLabel(String code) {
     state.getLabelList(
       code: code,
       success: (label) {
@@ -28,7 +28,7 @@ class SapLabelReprintLogic extends GetxController {
     );
   }
 
-  searchPiece(String piece) {
+  void searchPiece(String piece) {
     if (piece.isEmpty) return;
     state.getLabelList(
       piece: piece,
@@ -47,7 +47,7 @@ class SapLabelReprintLogic extends GetxController {
       .where((v) => v.isSelected.value)
       .any((v) => v.factoryNo == '1098');
 
-  printLabel() {
+  void printLabel() {
     var selected = state.labelList.where((v) => v.isSelected.value).toList();
     if (selected.isNotEmpty) {
       Get.to(() => PreviewWebLabelList(
@@ -62,7 +62,7 @@ class SapLabelReprintLogic extends GetxController {
     }
   }
 
-  toPrintView(List<Widget> labelView) {
+  void toPrintView(List<Widget> labelView) {
     Get.to(() => labelView.length > 1
         ? PreviewLabelList(labelWidgets: labelView, isDynamic: true)
         : PreviewLabel(labelWidget: labelView[0], isDynamic: true));
@@ -320,7 +320,7 @@ class SapLabelReprintLogic extends GetxController {
         notes: label.remarks ?? '',
       );
 
-  createLabels({
+  void createLabels({
     required List<SapPrintLabelInfo> labels,
     required Function(List<Widget>) print,
   }) {
@@ -369,15 +369,15 @@ class SapLabelReprintLogic extends GetxController {
     }
   }
 
-  isSelectedAll() =>
+  bool isSelectedAll() =>
       state.labelList.isNotEmpty &&
       state.labelList.every((v) => v.isSelected.value);
 
-  cleanLabels() {
+  void cleanLabels() {
     askDialog(content: '确定要清空标签吗？', confirm: () => state.labelList.clear());
   }
 
-  selectAll(bool isSelect) {
+  void selectAll(bool isSelect) {
     for (var v in state.labelList) {
       v.isSelected.value = isSelect;
     }

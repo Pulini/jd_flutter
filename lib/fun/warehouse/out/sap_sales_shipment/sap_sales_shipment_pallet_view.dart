@@ -22,7 +22,7 @@ class _SapSalesShipmentPalletViewState
   final SapSalesShipmentState state = Get.find<SapSalesShipmentLogic>().state;
   int index = Get.arguments['index'];
 
-  _item(List<SapPalletDetailInfo> p) {
+  Container _item(List<SapPalletDetailInfo> p) {
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.only(left: 5, right: 5, top: 5),

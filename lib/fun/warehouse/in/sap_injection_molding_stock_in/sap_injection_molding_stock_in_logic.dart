@@ -13,7 +13,7 @@ class SapInjectionMoldingStockInLogic extends GetxController {
   final SapInjectionMoldingStockInState state =
       SapInjectionMoldingStockInState();
 
-  clearBarCodeList() {
+  void clearBarCodeList() {
     BarCodeInfo.clear(
       type: BarCodeReportType.injectionMoldingStockIn.text,
       callback: (v) {
@@ -29,7 +29,7 @@ class SapInjectionMoldingStockInLogic extends GetxController {
     );
   }
 
-  scanCode(String code) {
+  void scanCode(String code) {
     if (state.barCodeList.any((v) => v.code == code)) {
       showSnackBar(
         message: 'sap_injection_molding_stock_in_bar_code_exists'.tr,
@@ -95,7 +95,7 @@ class SapInjectionMoldingStockInLogic extends GetxController {
     }
   }
 
-  refreshBarCodeStatus({Function()? refresh}) {
+  void refreshBarCodeStatus({Function()? refresh}) {
     state.getSapLabelList(
       error: (msg) => showSnackBar(
         message: msg,
@@ -105,13 +105,13 @@ class SapInjectionMoldingStockInLogic extends GetxController {
     );
   }
 
-  deleteItem(BarCodeInfo barCodeList) {
+  void deleteItem(BarCodeInfo barCodeList) {
     barCodeList.delete(callback: () {
       state.barCodeList.remove(barCodeList);
     });
   }
 
-  goStockInReport() {
+  void goStockInReport() {
     if (state.barCodeList.isEmpty) {
       showSnackBar(
         message: 'sap_injection_molding_stock_in_no_stock_in_label'.tr,
@@ -126,7 +126,7 @@ class SapInjectionMoldingStockInLogic extends GetxController {
     }
   }
 
-  submitStockIn({
+  void submitStockIn({
     required String leaderNumber,
     required ByteData leaderSignature,
     required String userNumber,

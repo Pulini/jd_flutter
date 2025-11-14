@@ -26,7 +26,7 @@ class LabelDetailPageState extends State<LabelDetailPage> {
   late OptionsPickerController locationController;
   late TextEditingController workerNumberController;
 
-  _submit() {
+  void _submit() {
     spSave(
       spSaveDeliveryOrderBindingLabelLocation,
       locationController.selectedId.value,
