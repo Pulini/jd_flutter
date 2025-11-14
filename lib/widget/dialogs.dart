@@ -618,10 +618,10 @@ void exitDialog({
 }
 
 void loadingShow(String? content) {
-  LoadingSingleton().show(content);
+  LoadingController().show(content);
 }
 
 void loadingDismiss() {
-  LoadingSingleton().dismiss();
+  LoadingController().dismiss();
 }
 

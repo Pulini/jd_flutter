@@ -37,27 +37,27 @@ dependencies:
   #极光推送
   jpush_flutter: 3.4.0
   #轻量架构工具
-  get: ^4.6.6
+  get: ^4.7.2
   #网络请求
-  dio: ^5.8.0+1
+  dio: ^5.9.0
   #log工具
-  logger: ^2.0.2+1
+  logger: ^2.6.2
   #权限工具
   permission_handler: ^12.0.1
   #文件地址工具
-  path_provider: ^2.1.1
+  path_provider: ^2.1.5
   #路径工具
-  path: ^1.9.0
+  path: ^1.9.1
   #shared存储工具
-  shared_preferences: ^2.2.1
+  shared_preferences: ^2.5.3
   #本地数据库
-  sqflite: ^2.3.3+1
+  sqflite: ^2.4.2
   #图片选择器工具
-  image_picker: ^1.0.4
+  image_picker: ^1.2.1
   #图片裁剪工具
   image_cropper: ^11.0.0
   #Image处理工具集
-  image: ^4.1.7
+  image: ^4.5.4
   #图片预览
   photo_view: ^0.15.0
   #获取app基础信息
@@ -65,59 +65,59 @@ dependencies:
   #获取设备信息
   device_info_plus: ^12.2.0
   #设备方向
-  native_device_orientation: ^2.0.3
+  native_device_orientation: ^2.0.4
   #加密工具
-  crypto: ^3.0.3
+  crypto: ^3.0.7
   #白屏启动页工具
-  flutter_native_splash: ^2.3.2
+  flutter_native_splash: ^2.4.7
   #国际化 时间选择器需要此包来显示汉化文本
   flutter_localizations:
     sdk: flutter
   #自适应字体大小
   auto_size_text: ^3.0.0
   #UUID
-  uuid: ^4.1.0
+  uuid: ^4.5.2
   #webview控件
   webview_flutter: ^4.13.0
   webview_flutter_web: ^0.2.3+4
   #高精度小数计算
-  decimal: ^3.0.2
+  decimal: ^3.2.4
   #下拉刷新控件
   easy_refresh: ^3.4.0
   #跑马灯文本
-  marquee: ^2.2.3
+  marquee: ^2.3.0
   #意图启动器
-  url_launcher: ^6.1.14
+  url_launcher: ^6.3.2
   #List扩展工具集
-  collection: ^1.18.0
+  collection: ^1.19.1
   #GBK编码
   fast_gbk: ^1.0.0
   #角标
   rotated_corner_decoration: ^2.1.0+1
   #手写签字控件
-  hand_signature: ^3.0.3
+  hand_signature: ^3.1.0+2
   #二维码生成
   qr_flutter: ^4.1.0
   #PDF控件
-  flutter_cached_pdfview: ^0.4.2
+  flutter_cached_pdfview: ^0.4.3
   #音频播放器
-  audioplayers: ^6.1.0
+  audioplayers: ^6.5.1
   #item侧滑控件
   flutter_slidable: ^4.0.3
   #二维码扫描
   mobile_scanner: ^7.1.3
   #mqtt服务端
-  mqtt_client: ^10.5.1
+  mqtt_client: ^10.11.1
   #轮播侧滑控件
   card_swiper: ^3.0.1
   #相机工具
-  camera: ^0.11.2
+  camera: ^0.11.3
   #全局返回键监听
   back_button_interceptor: ^8.0.4
   #PDF生成工具
   pdf: ^3.11.3
   #网页转图片
-  webcontent_converter: ^0.0.9+5
+  webcontent_converter: ^0.0.10+4
   #隔离区子线程
 #  flutter_isolate: ^2.0.4
   # 华为官方肢体识别库

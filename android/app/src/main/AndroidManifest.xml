@@ -32,6 +32,7 @@
         tools:ignore="ProtectedPermissions" />
 
     <application
+        android:enableOnBackInvokedCallback="false"
         android:name="android.app.Application"
         android:icon="@mipmap/ic_launcher_round"
         android:label="金帝">

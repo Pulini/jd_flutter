@@ -97,83 +97,93 @@ class _HomePageState extends State<HomePage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return Container(
-      decoration: backgroundColor(),
-      child: Scaffold(
-          backgroundColor: Colors.transparent,
-          appBar: AppBar(
-            leading: IconButton(
-              icon: const Icon(
-                Icons.email_outlined,
-                color: Colors.blueAccent,
-              ),
-              onPressed: () {
-                if (isTestUrl()) {
-                  Get.to(() => const TscLabelPreview());
-                } else {
-                  Get.to(()=> const MessageCenterPage());
-                }
-              },
-            ),
-            title: CupertinoSearchTextField(
-              decoration: BoxDecoration(
-                color: Colors.white54,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              placeholder: 'home_top_search'.tr,
-              onChanged: (v) => setState(() => logic.search(v)),
-            ),
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (!didPop) exitDialog(content: '确定要退出吗？');
+      },
+      child: Container(
+        decoration: backgroundColor(),
+        child: Scaffold(
             backgroundColor: Colors.transparent,
-            actions: [
-              IconButton(
-                icon: Hero(tag: 'user', child: logic.userAvatar),
-                onPressed: () => Get.to(() => const UserSetting())!.then((v){}),
-              )
-            ],
-          ),
-          body: EasyRefresh(
-            controller: refreshController,
-            header: const MaterialHeader(),
-            onRefresh: () => _refreshFunList(),
-            child: Obx(() => ListView.builder(
-                  padding: const EdgeInsets.all(8),
-                  itemCount: state.buttons.length,
-                  itemBuilder: (context, index) => _item(state.buttons[index]),
-                )),
-          ),
-          bottomNavigationBar: Obx(
-            () => state.navigationBar.isEmpty
-                ? Container()
-                : BottomNavigationBar(
-                    type: BottomNavigationBarType.shifting,
-                    items: [
-                      for (var bar in state.navigationBar)
-                        BottomNavigationBarItem(
-                          icon: Image.network(
-                            bar.icon ?? '',
-                            width: 30,
-                            height: 30,
-                            cacheHeight: 75,
-                            cacheWidth: 75,
-                            color: bar.getTextColor(),
-                            errorBuilder: (ctx, err, stackTrace) => Image.asset(
-                              _logo,
-                              height: 30,
+            appBar: AppBar(
+              leading: IconButton(
+                icon: const Icon(
+                  Icons.email_outlined,
+                  color: Colors.blueAccent,
+                ),
+                onPressed: () {
+                  if (isTestUrl()) {
+                    Get.to(() => const TscLabelPreview());
+                  } else {
+                    Get.to(() => const MessageCenterPage());
+                  }
+                },
+              ),
+              title: CupertinoSearchTextField(
+                decoration: BoxDecoration(
+                  color: Colors.white54,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                placeholder: 'home_top_search'.tr,
+                onChanged: (v) => setState(() => logic.search(v)),
+              ),
+              backgroundColor: Colors.transparent,
+              actions: [
+                IconButton(
+                  icon: Hero(tag: 'user', child: logic.userAvatar),
+                  onPressed: () =>
+                      Get.to(() => const UserSetting())!.then((v) {}),
+                )
+              ],
+            ),
+            body: EasyRefresh(
+              controller: refreshController,
+              header: const MaterialHeader(),
+              onRefresh: () => _refreshFunList(),
+              child: Obx(() => ListView.builder(
+                    padding: const EdgeInsets.all(8),
+                    itemCount: state.buttons.length,
+                    itemBuilder: (context, index) =>
+                        _item(state.buttons[index]),
+                  )),
+            ),
+            bottomNavigationBar: Obx(
+              () => state.navigationBar.isEmpty
+                  ? Container()
+                  : BottomNavigationBar(
+                      type: BottomNavigationBarType.shifting,
+                      items: [
+                        for (var bar in state.navigationBar)
+                          BottomNavigationBarItem(
+                            icon: Image.network(
+                              bar.icon ?? '',
                               width: 30,
+                              height: 30,
                               cacheHeight: 75,
                               cacheWidth: 75,
                               color: bar.getTextColor(),
+                              errorBuilder: (ctx, err, stackTrace) =>
+                                  Image.asset(
+                                _logo,
+                                height: 30,
+                                width: 30,
+                                cacheHeight: 75,
+                                cacheWidth: 75,
+                                color: bar.getTextColor(),
+                              ),
                             ),
-                          ),
-                          label: bar.className ?? 'Fun',
-                          backgroundColor: bar.getBKGColor(),
-                        )
-                    ],
-                    currentIndex: state.nBarIndex,
-                    selectedItemColor: state.navigationBar.first.getTextColor(),
-                    onTap: (i) => setState(() => logic.navigationBarClick(i)),
-                  ),
-          )),
+                            label: bar.className ?? 'Fun',
+                            backgroundColor: bar.getBKGColor(),
+                          )
+                      ],
+                      currentIndex: state.nBarIndex,
+                      selectedItemColor:
+                          state.navigationBar.first.getTextColor(),
+                      onTap: (i) => setState(() => logic.navigationBarClick(i)),
+                    ),
+            )),
+      ),
     );
   }
 
