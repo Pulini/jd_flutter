@@ -9,7 +9,7 @@ class HydroelectricExcessLogic extends GetxController {
   final HydroelectricExcessState state = HydroelectricExcessState();
 
   //用户手动输入后，清理数据
-  clearData() {
+  void clearData() {
     state.dataDetail.value = DeviceDetailInfo();
     state.thisMonthUse.value = '';
     state.stateToSearch.value = '0';

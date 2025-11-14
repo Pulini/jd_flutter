@@ -7,7 +7,7 @@ import 'package:jd_flutter/utils/app_init.dart';
 import 'translation.dart';
 import 'utils/web_api.dart';
 
-main() async {
+Future<void> main() async {
   // 确保Flutter框架正确初始化
   WidgetsFlutterBinding.ensureInitialized();
   // 启用性能叠加层

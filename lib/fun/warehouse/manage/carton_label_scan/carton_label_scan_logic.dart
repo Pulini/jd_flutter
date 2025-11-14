@@ -15,7 +15,7 @@ class CartonLabelScanLogic extends GetxController {
 
   var isSubmitting = false;
 
-  queryPriorityCartonLabelInfo({
+  void queryPriorityCartonLabelInfo({
     required String code,
   }) {
     httpGet(
@@ -37,21 +37,21 @@ class CartonLabelScanLogic extends GetxController {
     });
   }
 
-  queryCartonLabelInfo(String code) {
+  void queryCartonLabelInfo(String code) {
     state.queryCartonLabelInfo(
       code: code,
       error: (msg) => errorDialog(content: msg),
     );
   }
 
-  cleanAll(Function refresh) {
+  void cleanAll(Function refresh) {
     state.cartonInsideLabelList.value = [];
     state.cartonLabel.value = '';
     state.cartonLabelInfo = null;
     refresh.call();
   }
 
-  cleanScanned() {
+  cleanScanned() async {
     for (var v in state.cartonInsideLabelList) {
       v.scanned = 0;
     }

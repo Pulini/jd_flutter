@@ -40,7 +40,7 @@ class _SapNoLabelStockInPageState extends State<SapNoLabelStockInPage> {
 
   late OptionsPickerController processController;
 
-  _item(List<SapNoLabelStockInItemInfo> list) {
+  Container _item(List<SapNoLabelStockInItemInfo> list) {
     return Container(
       margin: const EdgeInsets.only(left: 5, right: 5, bottom: 10),
       padding: const EdgeInsets.only(left: 7, top: 10, right: 7, bottom: 10),

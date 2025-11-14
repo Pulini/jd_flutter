@@ -35,7 +35,7 @@ class _FormingBarcodeCollectionPageState
 
 
   // 其他功能
-  showOther() {
+  void showOther() {
     Get.dialog(
       PopScope(
         //拦截返回键

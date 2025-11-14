@@ -27,7 +27,7 @@ class _VisitRegisterPageState extends State<VisitRegisterPage> {
     FilteringTextInputFormatter.allow(RegExp('[0-9]')),
   ];
 
-  visitButtonWidget({
+  Padding visitButtonWidget({
     required String title,
     required Function click,
   }) {

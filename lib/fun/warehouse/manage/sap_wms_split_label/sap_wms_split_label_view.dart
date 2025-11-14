@@ -90,7 +90,7 @@ class _SapWmsSplitLabelPageState extends State<SapWmsSplitLabelPage> {
         ));
   }
 
-  _originalLabelItem() {
+  Container _originalLabelItem() {
     if (state.hasOriginalLabel.value) {
       return Container(
         margin: const EdgeInsets.only(bottom: 10),
@@ -201,7 +201,7 @@ class _SapWmsSplitLabelPageState extends State<SapWmsSplitLabelPage> {
     }
   }
 
-  split() {
+  void split() {
     hidKeyboard();
     logic.split(
       splitQty: controller.text.toDoubleTry(),

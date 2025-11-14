@@ -20,7 +20,7 @@ class _HydroelectricExcessTreatListPageState
   var tecDeviceNumber = TextEditingController();
   var tecBedNumber = TextEditingController();
 
-  _item(DeviceListInfo data) {
+  InkWell _item(DeviceListInfo data) {
     return InkWell(
       onTap: () {
         var type = '0';

@@ -11,7 +11,7 @@ class PumaAntiCounterfeitingLogic extends GetxController {
   final PumaAntiCounterfeitingState state = PumaAntiCounterfeitingState();
 
   //获取箱标详情
-  getBarCodeListByBoxNumber(String boxNumber) {
+  void getBarCodeListByBoxNumber(String boxNumber) {
     if (boxNumber.isEmpty) {
     } else {
       if (boxNumber.startsWith("GE") &&
@@ -38,7 +38,7 @@ class PumaAntiCounterfeitingLogic extends GetxController {
   }
 
   //提交入库
-  submitCode() {
+  void submitCode() {
     httpPost(
       method: webApiBarCodeInStock,
       loading: 'code_list_report_in_storage'.tr,
@@ -62,7 +62,7 @@ class PumaAntiCounterfeitingLogic extends GetxController {
   }
 
   //获取拣货标签列表
-  getBarCodeListByEmp() {
+  void getBarCodeListByEmp() {
     httpGet(
       method: webApiGetBarCodeListByEmp,
       loading: 'code_list_report_obtaining_sorting_data'.tr,
@@ -83,7 +83,7 @@ class PumaAntiCounterfeitingLogic extends GetxController {
   }
 
   //扫描条码判断是否扫过
-  haveCode({
+  void haveCode({
     required String code,
     required Function() have,
   }) {
@@ -110,7 +110,7 @@ class PumaAntiCounterfeitingLogic extends GetxController {
   }
 
   //PUMA防伪标出库
-  submitOutCode() {
+  void submitOutCode() {
     httpPost(
       method: webApiBarCodeOutStock,
       loading: 'code_list_report_out_of_stock'.tr,

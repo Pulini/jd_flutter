@@ -45,7 +45,7 @@ class _CreateDeliveryOrderPageState extends State<CreateDeliveryOrderPage> {
     super.initState();
   }
 
-  table(DeliveryDetailInfo ddi, List<WorkData> list) {
+  Expanded table(DeliveryDetailInfo ddi, List<WorkData> list) {
     return Expanded(
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,

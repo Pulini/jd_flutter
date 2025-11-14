@@ -13,7 +13,7 @@ class MoldingPackAreaReportPageState {
   var detailTableData = <MoldingPackAreaReportDetailInfo>[].obs;
 
 
-  getMoldingPackAreaReport({
+  void getMoldingPackAreaReport({
     required String startDate,
     required String endDate,
     required String typeBody,
@@ -44,7 +44,7 @@ class MoldingPackAreaReportPageState {
     });
   }
 
-  getMoldingPackAreaReportDetail({
+  void getMoldingPackAreaReportDetail({
     required int interID,
     required String clientOrderNumber,
     required Function() success,

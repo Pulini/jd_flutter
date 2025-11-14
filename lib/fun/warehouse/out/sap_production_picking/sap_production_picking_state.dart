@@ -19,7 +19,7 @@ class SapProductionPickingState {
   bool needRefresh = false;
 
 
-  getMaterialPickingOrderList({
+  void getMaterialPickingOrderList({
     String? noticeNo,
     String? instructionNo,
     String? typeBody,

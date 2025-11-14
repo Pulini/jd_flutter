@@ -10,7 +10,7 @@ class CodeListReportState {
 
   //列表宽度
 
-  getData(dynamic data) {
+  void getData(dynamic data) {
     reportDataList.value = [
       for (var i = 0; i < data.length; ++i) ReportInfo.fromJson(data[i])
     ];

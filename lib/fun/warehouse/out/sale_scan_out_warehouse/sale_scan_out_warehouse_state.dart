@@ -15,7 +15,7 @@ class SaleScanOutWarehouseState {
   }
 
 
-  submitBarCode({
+  void submitBarCode({
     required Function(String) success,
     required Function(String) error,
   }) {

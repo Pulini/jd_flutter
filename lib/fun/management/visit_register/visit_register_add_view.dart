@@ -35,7 +35,7 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
   ];
 
   //  搜索弹窗
-  searchDialog({
+  void searchDialog({
     required String title,
     required String hintTitle,
     Function()? confirm,
@@ -75,7 +75,7 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
     );
   }
 
-  _text(String title, String? text1) {
+  Row _text(String title, String? text1) {
     return Row(
       children: [
         Container(

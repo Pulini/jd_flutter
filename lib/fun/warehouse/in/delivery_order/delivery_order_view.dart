@@ -77,7 +77,7 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
     saveKey: '${RouteConfig.deliveryOrder.name}${PickerType.endDate}',
   );
 
-  _query() {
+  void _query() {
     scaffoldKey.currentState?.closeEndDrawer();
     logic.queryDeliveryOrders(
       startDate: dpcStartDate.getDateFormatYMD(),

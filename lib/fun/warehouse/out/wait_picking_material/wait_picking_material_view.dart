@@ -87,7 +87,7 @@ class _WaitPickingMaterialPageState extends State<WaitPickingMaterialPage> {
 
   Widget? drawer;
 
-  _showDepartmentOptions() {
+  void _showDepartmentOptions() {
     if (state.companyDepartmentList.isNotEmpty) {
       var groupController = FixedExtentScrollController();
       var subController = FixedExtentScrollController();
@@ -153,7 +153,7 @@ class _WaitPickingMaterialPageState extends State<WaitPickingMaterialPage> {
     }
   }
 
-  _query() {
+  void _query() {
     logic.query(
       typeBody: tecTypeBody.text,
       instruction: tecInstruction.text,

@@ -10,7 +10,7 @@ import 'sap_ink_color_matching_state.dart';
 class SapInkColorMatchingLogic extends GetxController {
   final SapInkColorMatchingState state = SapInkColorMatchingState();
 
-  queryOrder({
+  void queryOrder({
     required String startDate,
     required String endDate,
     required String typeBody,
@@ -24,7 +24,7 @@ class SapInkColorMatchingLogic extends GetxController {
     );
   }
 
-  createMixOrder({
+  void createMixOrder({
     required String newTypeBody,
     required Function refresh,
   }) {
@@ -49,7 +49,7 @@ class SapInkColorMatchingLogic extends GetxController {
     );
   }
 
-  modifyOrder({
+  void modifyOrder({
     required int index,
     required Function refresh,
   }) {
@@ -86,7 +86,7 @@ class SapInkColorMatchingLogic extends GetxController {
               v.isMix?.isEmpty == true)
           .toList();
 
-  initModifyBodyData({required int index,required Function(String) refreshRemarks}) {
+  void initModifyBodyData({required int index,required Function(String) refreshRemarks}) {
     state.readMixDeviceWeight.value = state.orderList[index].mixtureWeight ?? 0;
     state.inkColorList.value = [
       for (var item in (state.orderList[index].materialList ??
@@ -105,7 +105,7 @@ class SapInkColorMatchingLogic extends GetxController {
     refreshRemarks.call( state.orderList[index].remarks ?? '');
   }
 
-  readBeforeWeight() {
+  void readBeforeWeight() {
     for (var v in state.inkColorList) {
       if (!v.weightBeforeLock.value && v.isNewItem) {
         v.weightBeforeColorMix.value = v.weight.value;
@@ -116,7 +116,7 @@ class SapInkColorMatchingLogic extends GetxController {
     }
   }
 
-  readAfterWeight() {
+  void readAfterWeight() {
     for (var v in state.inkColorList) {
       if (v.weightBeforeColorMix.value > 0 &&
           !v.weightAfterLock.value &&
@@ -128,7 +128,7 @@ class SapInkColorMatchingLogic extends GetxController {
     }
   }
 
-  readMixWeight() {
+  void readMixWeight() {
     state.readMixDeviceWeight.value = state.mixDeviceWeight;
   }
 
@@ -140,7 +140,7 @@ class SapInkColorMatchingLogic extends GetxController {
       .where((v) => v.isNewItem)
       .any((v) => v.weightBeforeColorMix.value > 0);
 
-  checkSubmit({required bool isModify, required Function() submit}) {
+  void checkSubmit({required bool isModify, required Function() submit}) {
     var submitData = state.inkColorList.where((v) => v.isNewItem);
     if (submitData.isEmpty) {
       errorDialog(content: 'sap_ink_color_matching_no_material_submit'.tr);
@@ -190,7 +190,7 @@ class SapInkColorMatchingLogic extends GetxController {
     submit.call();
   }
 
-  submitModifyOrder({required int index, required String remarks}) {
+  void submitModifyOrder({required int index, required String remarks}) {
     checkSubmit(
         isModify: true,
         submit: () {
@@ -218,7 +218,7 @@ class SapInkColorMatchingLogic extends GetxController {
         });
   }
 
-  submitCreateOrder({required String remarks}) {
+  void submitCreateOrder({required String remarks}) {
     checkSubmit(
         isModify: false,
         submit: () => state.submitOrder(
@@ -245,7 +245,7 @@ class SapInkColorMatchingLogic extends GetxController {
     return ratioColorLine;
   }
 
-  initRecreateItemData(int index) {
+  void initRecreateItemData(int index) {
     state.presetInkColorList = [
       for (var item in (state.orderList[index].materialList ??
           <SapInkColorMatchMaterialInfo>[]))
@@ -266,7 +266,7 @@ class SapInkColorMatchingLogic extends GetxController {
     return ratioColorLine;
   }
 
-  setPresetWeight(double weight) {
+  void setPresetWeight(double weight) {
     state.finalWeight.value = weight;
     for (var v in state.presetInkColorList) {
       var preset = weight.mul(v.ratio.div(100));
@@ -294,7 +294,7 @@ class SapInkColorMatchingLogic extends GetxController {
     return nowWeight;
   }
 
-  refreshItemList(int index) {
+  void refreshItemList(int index) {
     var item = state.presetInkColorList[index];
     var preset = item.actualWeight.value.div((item.ratio.div(100)));
     if (preset > state.finalWeight.value) {
@@ -309,7 +309,7 @@ class SapInkColorMatchingLogic extends GetxController {
     }
   }
 
-  refreshAll() {
+  void refreshAll() {
     state.finalWeight.value = 0;
     for (var v in state.presetInkColorList) {
       v.actualWeight.value = 0;

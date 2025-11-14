@@ -46,7 +46,7 @@ class _QualityInspectionPageState extends State<QualityInspectionPage> {
         '${RouteConfig.qualityInspection.name}${PickerType.endDate}_report',
   );
 
-  _query() {
+  void _query() {
     logic.queryOrders(
       instructionNo: instructionNoController.text,
       typeBody: typeBodyController.text,

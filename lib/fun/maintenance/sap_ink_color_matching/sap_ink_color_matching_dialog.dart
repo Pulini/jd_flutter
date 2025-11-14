@@ -9,7 +9,7 @@ import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
 
-selectMaterialDialog({
+void selectMaterialDialog({
   required String deviceIp,
   required List<SapInkColorMatchTypeBodyMaterialInfo> materialList,
   required List<SapInkColorMatchTypeBodyScalePortInfo> scalePortList,

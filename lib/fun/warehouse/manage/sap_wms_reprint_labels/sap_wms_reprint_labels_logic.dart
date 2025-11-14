@@ -7,7 +7,7 @@ import 'sap_wms_reprint_labels_state.dart';
 class SapWmsReprintLabelsLogic extends GetxController {
   final SapWmsReprintLabelsState state = SapWmsReprintLabelsState();
 
-  scanCode({
+  void scanCode({
     required String warehouse,
     required String code,
   }) {

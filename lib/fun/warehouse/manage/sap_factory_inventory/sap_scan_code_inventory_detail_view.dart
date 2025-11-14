@@ -23,7 +23,7 @@ class _SapScanCodeInventoryDetailPageState
       Get.find<SapScanCodeInventoryLogic>().state;
   final index = Get.arguments['index'];
 
-  _item(InventoryPalletInfo data) {
+  InkWell _item(InventoryPalletInfo data) {
     return InkWell(
       onTap: () {
         data.isSelected.value = !data.isSelected.value;

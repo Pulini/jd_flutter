@@ -12,7 +12,7 @@ import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
 import 'package:jd_flutter/widget/worker_check_widget.dart';
 
-modifyDetailPickingQtyDialog({
+void modifyDetailPickingQtyDialog({
   required WaitPickingMaterialOrderInfo order,
   required List<WaitPickingMaterialOrderModelInfo> data,
 }) {

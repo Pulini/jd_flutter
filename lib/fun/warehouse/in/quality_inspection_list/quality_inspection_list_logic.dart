@@ -20,7 +20,7 @@ class QualityInspectionListLogic extends GetxController {
       ];
 
   //获取品检单列表
-  getInspectionList({
+  void getInspectionList({
     required int orderType,
     required String typeBody,
     required String materialCode,
@@ -54,7 +54,7 @@ class QualityInspectionListLogic extends GetxController {
   }
 
   //删除判断
-  checkDelete({
+  void checkDelete({
     required Function success,
   }) {
     if (checkUserPermission('105180503')) {

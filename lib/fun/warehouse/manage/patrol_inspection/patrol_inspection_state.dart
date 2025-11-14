@@ -25,7 +25,7 @@ class PatrolInspectionState {
     });
   }
 
-  getPatrolInspectionInfo({
+  void getPatrolInspectionInfo({
     required Function(int) success,
   }) {
     sapPost(
@@ -46,10 +46,11 @@ class PatrolInspectionState {
     });
   }
 
-  addPatrolInspectionRecord(
-      {required String abnormalItemId,
-      required Function(PatrolInspectionAbnormalRecordInfo) success,
-      required Function(String) error}) {
+  void addPatrolInspectionRecord({
+    required String abnormalItemId,
+    required Function(PatrolInspectionAbnormalRecordInfo) success,
+    required Function(String) error,
+  }) {
     sapPost(
       loading: 'product_patrol_inspection_adding_patrol_records'.tr,
       method: webApiSapAddPatrolInspectionRecord,

@@ -85,17 +85,17 @@ class WorkCardTitle {
     return map;
   }
 
-  getDispatchTotal() => '派工总数：${dispatchingNumber.toShowString()}';
+  String getDispatchTotal() => '派工总数：${dispatchingNumber.toShowString()}';
 
-  getTodayGoal() => '今日目标：${dayWorkCardPlanQty.toShowString()}';
+  String getTodayGoal() => '今日目标：${dayWorkCardPlanQty.toShowString()}';
 
-  getReported() => '已汇报数：${qtyPass.toShowString()}';
+  String getReported() => '已汇报数：${qtyPass.toShowString()}';
 
-  getUnderCount() => '汇报欠数：${dispatchingNumber.sub(qtyPass!).toShowString()}';
+  String getUnderCount() => '汇报欠数：${dispatchingNumber.sub(qtyPass!).toShowString()}';
 
-  getAccumulateReportCount() => '累计计工数：${qtyProcessPass.toShowString()}';
+  String getAccumulateReportCount() => '累计计工数：${qtyProcessPass.toShowString()}';
 
-  getReportedCount() =>
+  String getReportedCount() =>
       '已汇报未计工数：${qtyPass.sub(qtyProcessPass!).toShowString()}';
 }
 

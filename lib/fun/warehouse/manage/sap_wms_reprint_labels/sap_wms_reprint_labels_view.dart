@@ -31,7 +31,7 @@ class _SapWmsReprintLabelsPageState extends State<SapWmsReprintLabelsPage> {
         '${RouteConfig.sapWmsReprintLabels.name}${PickerType.sapFactoryWarehouse}',
   );
 
-  _item(ReprintLabelInfo label) {
+  GestureDetector _item(ReprintLabelInfo label) {
     return GestureDetector(
       onTap: () => setState(() => label.select = !label.select),
       child: Container(

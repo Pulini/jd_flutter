@@ -37,7 +37,7 @@ class _SignaturePageState extends State<SignaturePage> {
   var nDOC = NativeDeviceOrientationCommunicator();
   var quarterTurns = 0.obs;
 
-  _setOrientation(NativeDeviceOrientation orientation) {
+  void _setOrientation(NativeDeviceOrientation orientation) {
     if (orientation == NativeDeviceOrientation.landscapeLeft) {
       quarterTurns.value = 3;
     } else if (orientation == NativeDeviceOrientation.landscapeRight) {

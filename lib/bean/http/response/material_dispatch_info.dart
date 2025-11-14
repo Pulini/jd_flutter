@@ -159,7 +159,7 @@ class MaterialDispatchInfo {
     return map;
   }
 
-  getShowFactory(){
+  String getShowFactory(){
     if(sapDecideArea!='' || sourceFactoryName!=''){
       return '$sapDecideArea - $sourceFactoryName';
     }else{

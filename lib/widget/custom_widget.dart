@@ -15,7 +15,7 @@ import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
 //app 背景渐变色
-backgroundColor() => BoxDecoration(
+BoxDecoration backgroundColor() => BoxDecoration(
       gradient: LinearGradient(
         colors: isTestUrl()
             ? [
@@ -32,7 +32,7 @@ backgroundColor() => BoxDecoration(
     );
 
 //页面简单框架
-pageBody({
+Container pageBody({
   String? title,
   List<Widget>? actions,
   String popTitle = '',

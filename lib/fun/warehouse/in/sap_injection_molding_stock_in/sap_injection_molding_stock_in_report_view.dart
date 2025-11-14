@@ -23,7 +23,7 @@ class _SapInjectionMoldingStockInReportPageState
   final SapInjectionMoldingStockInState state =
       Get.find<SapInjectionMoldingStockInLogic>().state;
 
-  listTitle() => Row(
+  Row listTitle() => Row(
         children: [
           expandedFrameText(
             flex: 3,

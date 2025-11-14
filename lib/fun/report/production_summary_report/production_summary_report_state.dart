@@ -5,7 +5,7 @@ import 'package:jd_flutter/utils/web_api.dart';
 class ProductionSummaryReportState {
   var tableData = <ProductionSummaryInfo>[].obs;
 
-  getPrdShopDayReport({
+  void getPrdShopDayReport({
     required String date,
     required int workShopID,
     required Function(String msg) error,

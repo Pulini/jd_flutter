@@ -9,7 +9,7 @@ class SapPackingScanCacheListState {
   var abnormalSearchText = ''.obs;
   var abnormalList =<SapPackingScanAbnormalInfo>[].obs;
 
-  getAbnormalOrders({
+  void getAbnormalOrders({
     required String plannedDate,
     required String destination,
     required String factory,

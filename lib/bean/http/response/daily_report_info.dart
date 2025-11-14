@@ -32,7 +32,7 @@ class DailyReport {
     map['Qty'] = qty;
     return map;
   }
-  getItemColor() {
+  Color? getItemColor() {
     switch (type) {
       case 0:
         return Colors.greenAccent;

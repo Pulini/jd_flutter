@@ -26,7 +26,7 @@ class SapInjectionMoldingStockInState {
     );
   }
 
-  checkPallet({
+  void checkPallet({
     required List<String> pallets,
     required Function(PalletDetailInfo) success,
     required Function(String) error,
@@ -61,7 +61,7 @@ class SapInjectionMoldingStockInState {
     });
   }
 
-  getSapLabelList({
+  void getSapLabelList({
     required Function(String) error,
     required Function() refresh,
   }) {
@@ -92,7 +92,7 @@ class SapInjectionMoldingStockInState {
     });
   }
 
-  getStockInReport({
+  void getStockInReport({
     required Function() success,
     required Function(String) error,
   }) {
@@ -126,7 +126,7 @@ class SapInjectionMoldingStockInState {
     });
   }
 
-  submitInjectionMoldingStockIn({
+  void submitInjectionMoldingStockIn({
     required String leaderNumber,
     required ByteData leaderSignature,
     required String userNumber,

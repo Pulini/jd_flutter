@@ -74,7 +74,7 @@ class CartonLabelScanProgressDetailInfo {
     map['SendCustomSystemState'] = sendCustomSystemState;
     return map;
   }
-  stateColor(){
+  MaterialColor stateColor(){
     return sendCustomSystemState==1?Colors.yellow:sendCustomSystemState==2?Colors.green:Colors.grey;
   }
 

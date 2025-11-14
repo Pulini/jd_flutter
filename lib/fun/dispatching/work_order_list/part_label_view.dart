@@ -22,7 +22,7 @@ class _PartLabelPageState extends State<PartLabelPage> {
   final logic = Get.find<WorkOrderListLogic>();
   final state = Get.find<WorkOrderListLogic>().state;
 
-  _salesOrderListDialog(List<String> labels) {
+  void _salesOrderListDialog(List<String> labels) {
     Get.dialog(
       PopScope(
         canPop: false,

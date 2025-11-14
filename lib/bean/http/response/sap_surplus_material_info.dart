@@ -217,7 +217,7 @@ class SurplusMaterialLabelInfo {
     return list.isNotEmpty;
   }
 
-  delete({required Function() callback}) {
+  void delete({required Function() callback}) {
     openDb().then((db) {
       db.delete(tableName, where: 'id = ?', whereArgs: [id]).then((value) {
         db.close();

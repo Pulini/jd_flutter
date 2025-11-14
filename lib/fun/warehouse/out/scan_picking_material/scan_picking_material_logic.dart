@@ -12,7 +12,7 @@ import 'scan_picking_material_state.dart';
 class ScanPickingMaterialLogic extends GetxController {
   final ScanPickingMaterialState state = ScanPickingMaterialState();
 
-  clearBarCodeList() {
+  void clearBarCodeList() {
     BarCodeInfo.clear(
       type: BarCodeReportType.jinCanMaterialOutStock.name,
       callback: (v) {

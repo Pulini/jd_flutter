@@ -6,7 +6,7 @@ import 'sap_produce_stock_in_state.dart';
 class SapProduceStockInLogic extends GetxController {
   final SapProduceStockInState state = SapProduceStockInState();
 
-  scanCode(String code) {
+  void scanCode(String code) {
     try {
       var exists = state.barCodeList.firstWhere((v) => v.labelCode == code);
       var max = (exists.labelTotalQty ?? 0) - (exists.labelReceivedQty ?? 0);

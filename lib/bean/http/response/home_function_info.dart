@@ -46,9 +46,9 @@ class HomeFunctions {
     return map;
   }
 
-  getTextColor() => Color(fontColor ?? 0xffffffff);
+  Color getTextColor() => Color(fontColor ?? 0xffffffff);
 
-  getBKGColor() => Color(backGroundColor ?? 0xffffffff);
+  Color getBKGColor() => Color(backGroundColor ?? 0xffffffff);
 }
 
 // Name : "派工"

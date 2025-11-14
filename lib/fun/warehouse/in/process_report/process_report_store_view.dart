@@ -25,7 +25,7 @@ class _ProcessReportPageState extends State<ProcessReportStorePage> {
   var refreshController = EasyRefreshController(controlFinishRefresh: true);
   var tecCode = TextEditingController();
 
-  _item(BarCodeInfo code) {
+  Container _item(BarCodeInfo code)  {
     return Container(
       margin: const EdgeInsets.only(bottom: 5),
       height: 40,

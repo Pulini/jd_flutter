@@ -50,7 +50,7 @@ class _SapProductionPickingPageState extends State<SapProductionPickingPage> {
   );
   var isSupplementOrder = false.obs;
 
-  _item(SapPickingInfo data) {
+  GestureDetector _item(SapPickingInfo data) {
     return GestureDetector(
       onTap: () => setState(() => data.select = !data.select),
       child: Container(

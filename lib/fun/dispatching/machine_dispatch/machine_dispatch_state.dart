@@ -28,7 +28,7 @@ class MachineDispatchState {
   var historyInfo = <MachineDispatchHistoryInfo>[].obs;
   var historyLabelInfo = <MachineDispatchReprintLabelInfo>[].obs;
 
-  createDispatchProcess() {
+  void createDispatchProcess() {
     var totalProduction = 0.0;
     detailsInfo?.items?.forEach((v) {
       totalProduction = totalProduction.add(v.getReportQty());
@@ -43,7 +43,7 @@ class MachineDispatchState {
     ];
   }
 
-  getWorkCardList({
+  void getWorkCardList({
     required Function(List<MachineDispatchInfo> data) success,
     required Function(String msg) error,
   }) {

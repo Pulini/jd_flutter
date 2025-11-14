@@ -819,7 +819,7 @@ class PickPalletController {
     }
   }
 
-  _getPalletList() {
+  void _getPalletList() {
     if (location.isEmpty || machine.isEmpty) {
       return;
     }
@@ -851,19 +851,19 @@ class PickPalletController {
     });
   }
 
-  _selectPalletNumber(String number) {
+  void _selectPalletNumber(String number) {
     if (number.isEmpty) return;
     var index = palletDataList.indexWhere((v) => v.palletNumber == number);
     if (index != -1) _selectIndex(index);
   }
 
-  _selectIndex(int index) {
+  void _selectIndex(int index) {
     select = palletDataList[index];
     msg.value = select?.palletNumber ?? '';
     onSelected.call(select!);
   }
 
-  _showOptions() {
+  void _showOptions() {
     if (palletDataList.isNotEmpty) {
       //创建选择器控制器
       var controller = FixedExtentScrollController(

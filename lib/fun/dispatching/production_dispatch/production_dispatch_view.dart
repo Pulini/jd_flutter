@@ -51,7 +51,7 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
 
   var tecInstruction = TextEditingController();
 
-  _queryWidgets() {
+  List<Widget> _queryWidgets() {
     return [
       EditText(
         hint: 'production_dispatch_instruction_hint'.tr,
@@ -121,7 +121,7 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
     ];
   }
 
-  _item1(List<ProductionDispatchOrderInfo> list, int index) {
+  Widget _item1(List<ProductionDispatchOrderInfo> list, int index) {
     var data = list[index];
     return GestureDetector(
       onTap: () => logic.item1click(index),
@@ -317,7 +317,7 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
     );
   }
 
-  _printTextColor(String? printStatus) {
+  Color _printTextColor(String? printStatus) {
     return printStatus == null
         ? Colors.red
         : printStatus == '1'
@@ -337,7 +337,7 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
               ? 'production_dispatch_print_type_partial_printed'.tr
               : 'production_dispatch_print_type_error'.tr;
 
-  _item2(List<ProductionDispatchOrderInfo> list) {
+  Widget _item2(List<ProductionDispatchOrderInfo> list) {
     var data = list[0];
     var buttonStyle = ButtonStyle(
       shape: WidgetStateProperty.all(
@@ -485,7 +485,7 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
     );
   }
 
-  _bottomButtons() {
+  Widget _bottomButtons() {
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(

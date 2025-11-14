@@ -42,7 +42,7 @@ class WorkshopPlanningState {
   var modifyReportReportQuantity = (0.0).obs;
   var modifyReportPrice = (0.0).obs;
 
-  getProcessPlanInfo({
+  void getProcessPlanInfo({
     String? workCardInterID,
     String? routeEntryID,
     String? productionOrderNo,

@@ -961,7 +961,7 @@ class ProductionDispatchLogic extends GetxController {
     }
   }
 
-  _clearWorkerDispatch() {
+  void _clearWorkerDispatch() {
     for (var v in state.workProcedure) {
       for (var v2 in v.dispatch) {
         v2.dispatchQty = 0;

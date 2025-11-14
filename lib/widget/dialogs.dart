@@ -13,7 +13,7 @@ import 'downloader.dart';
 import 'loading.dart';
 
 // 提示弹窗
-msgDialog({
+void msgDialog({
   String title = '',
   required String? content,
   Function()? back,
@@ -44,7 +44,7 @@ msgDialog({
 }
 
 //  咨询弹窗
-askDialog({
+void askDialog({
   String title = '',
   required String? content,
   Color? contentColor,
