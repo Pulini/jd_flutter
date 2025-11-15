@@ -225,6 +225,7 @@ class AppInitService extends GetxService {
     }
   }
 
+
   Future<void> initDatabase() async {
     var path = await getDatabasesPath();
     openDatabase(join(path, jdDatabase), version: 5, onCreate: (db, v) {

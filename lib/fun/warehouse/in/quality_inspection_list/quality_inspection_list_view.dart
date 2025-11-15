@@ -341,7 +341,7 @@ class _QualityInspectionListPageState extends State<QualityInspectionListPage> {
       );
     }, toReverseColor: () {
       Get.to(() => const QualityInspectionReverseColorPage())?.then((v) {
-        if (v != null && v) _query();
+        if (v != null && v as  bool) _query();
       });
     });
   }
@@ -388,7 +388,7 @@ class _QualityInspectionListPageState extends State<QualityInspectionListPage> {
       ),
       bindingLabel: () =>
           Get.to(() => const QualityInspectionColorListPage())?.then((v) {
-        if (v != null && v) _query();
+        if (v != null && v as bool) _query();
       }),
     );
   }

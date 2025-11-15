@@ -181,7 +181,7 @@ class _HydroelectricExcessPageState extends State<HydroelectricExcessPage> {
                                   if (v != null) {
                                     logic.searchRoom(
                                       searchType: '0',
-                                      data: DeviceListInfo(number: v),
+                                      data: DeviceListInfo(number: v.toString()),
                                       isBack: false,
                                       refresh: (number, nowDegree) {
                                         textNumber.text = number;

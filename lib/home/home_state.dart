@@ -24,6 +24,7 @@ class HomeState {
   var navigationBar = <HomeFunctions>[].obs;
 
   HomeState() {
+
     userPicUrl.value = userInfo?.picUrl ?? '';
     departmentName.value = userInfo?.departmentName ?? '';
     refreshLanguage();

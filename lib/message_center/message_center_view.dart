@@ -37,14 +37,15 @@ class _MessageCenterPageState extends State<MessageCenterPage> {
             padding: const EdgeInsets.all(5),
             itemCount: state.messageList.length,
             itemBuilder: (c, i) => Container(
+              margin: EdgeInsets.only(bottom: 10),
               decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Colors.blue.shade100, Colors.white],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                ),
+                color: Colors.white,
                 borderRadius: const BorderRadius.all(
                   Radius.circular(10),
+                ),
+                border: Border.all(
+                  color: Colors.grey,
+                  width: 2,
                 ),
               ),
               child: ListTile(

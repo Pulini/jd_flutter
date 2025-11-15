@@ -37,7 +37,11 @@ dependencies:
   #极光推送
   jpush_flutter: 3.4.0
   #轻量架构工具
-  get: ^4.7.2
+#  get: ^4.7.2
+  get: #^4.7.2
+    git:
+      url: https://github.com/luis901101/getx_fork.git
+      ref: old-4.7.0
   #网络请求
   dio: ^5.9.0
   #log工具

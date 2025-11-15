@@ -409,7 +409,6 @@ void reasonInputPopup({
   required Function(String reason) confirm,
   Function()? cancel,
 }) {
-
   TextEditingController reasonController = TextEditingController();
   var confirmButton = ElevatedButton(
     style: ElevatedButton.styleFrom(
@@ -585,43 +584,48 @@ void exitDialog({
   Function()? confirm,
   Function()? cancel,
 }) {
-  Get.dialog(AlertDialog(
-    title: Text('dialog_default_exit_title'.tr),
-    content: Text(
-      content,
-      style: const TextStyle(
-        fontWeight: FontWeight.bold,
-        color: Colors.red,
-        fontSize: 18,
-      ),
-    ),
-    actions: [
-      TextButton(
-        onPressed: () {
-          Get.back(closeOverlays: true);
-          confirm?.call();
-        },
-        child: Text('dialog_default_confirm'.tr),
-      ),
-      TextButton(
-        onPressed: () {
-          Get.back();
-          cancel?.call();
-        },
-        child: Text(
-          'dialog_default_cancel'.tr,
-          style: const TextStyle(color: Colors.grey),
+  loadingDismiss();
+  Get.dialog(PopScope(
+    canPop: false,
+    child: AlertDialog(
+      title: Text('dialog_default_exit_title'.tr),
+      content: Text(
+        content,
+        style: const TextStyle(
+          fontWeight: FontWeight.bold,
+          color: Colors.red,
+          fontSize: 18,
         ),
       ),
-    ],
+      actions: [
+        TextButton(
+          onPressed: () {
+            Get.back(closeOverlays: true);
+            confirm?.call();
+          },
+          child: Text('dialog_default_confirm'.tr),
+        ),
+        TextButton(
+          onPressed: () {
+            Get.back();
+            cancel?.call();
+          },
+          child: Text(
+            'dialog_default_cancel'.tr,
+            style: const TextStyle(color: Colors.grey),
+          ),
+        ),
+      ],
+    ),
   ));
 }
 
 void loadingShow(String? content) {
+  // LoadingSingleton().show(content);
   LoadingController().show(content);
 }
 
 void loadingDismiss() {
+  // LoadingSingleton().dismiss();
   LoadingController().dismiss();
 }
-

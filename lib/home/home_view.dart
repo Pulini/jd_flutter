@@ -1,6 +1,7 @@
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/home_button.dart';
 import 'package:jd_flutter/message_center/message_center_view.dart';
@@ -79,6 +80,7 @@ class _HomePageState extends State<HomePage>
   void _refreshFunList() =>
       logic.refreshFunList(() => refreshController.finishRefresh());
 
+
   @override
   void initState() {
     super.initState();
@@ -86,8 +88,7 @@ class _HomePageState extends State<HomePage>
       getVersionInfo(
         false,
         noUpdate: () => _refreshFunList(),
-        needUpdate: (v) =>
-            doUpdate(version: v, ignore: () => _refreshFunList()),
+        needUpdate: (v) => doUpdate(version: v, ignore: () => _refreshFunList()),
         error: (msg) => errorDialog(content: msg),
       );
       await Permission.notification.request();
@@ -100,7 +101,12 @@ class _HomePageState extends State<HomePage>
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, result) {
-        if (!didPop) exitDialog(content: '确定要退出吗？');
+        if (!didPop) {
+          exitDialog(
+            content: '确定要退出吗？',
+            confirm: () => SystemNavigator.pop(),
+          );
+        }
       },
       child: Container(
         decoration: backgroundColor(),

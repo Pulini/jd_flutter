@@ -74,7 +74,7 @@ var tecCode=TextEditingController();
                     onPressed: ()  {
                       Get.to(() => const Scanner())?.then((v) {
                         if (v != null) {
-                          logic.addCode(v);
+                          logic.addCode(v.toString());
                         }
                       });
                     },

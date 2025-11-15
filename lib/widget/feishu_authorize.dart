@@ -59,7 +59,7 @@ void feishuViewWikiFiles({required String query}) {
       )?.then((token) {
         if (token != null) {
           feishuWikiSearch(
-            token: token,
+            token: token.toString(),
             query: query,
             success: querySuccess,
             failed: (msg) => errorDialog(content: msg),
@@ -110,9 +110,9 @@ void feishuViewCloudDocFiles({required String query}) {
         () => FeishuAuthorize(isWikiPermission: false),
       )?.then((token) {
         if (token != null) {
-          authorizeToken = token;
+          authorizeToken = token.toString();
           feishuCloudDocSearch(
-            token: token,
+            token: token.toString(),
             query: query,
             success: querySuccess,
             failed: (msg) => errorDialog(content: msg),
