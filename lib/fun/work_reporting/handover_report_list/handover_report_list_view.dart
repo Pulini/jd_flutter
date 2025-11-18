@@ -184,14 +184,18 @@ class _HandoverReportListPageState extends State<HandoverReportListPage> {
                     //机台
                     hint: 'handover_report_machine'.tr,
                     text: data.machine ?? '',
-                    textColor: Colors.blue.shade500,
+                    textColor: Colors.black,
                     hintColor: Colors.black),
+              ],
+            ),
+            Row(
+              children: [
                 expandedTextSpan(
-                  //班次
-                  hint: 'handover_report_shift'.tr,
-                  text: data.shift ?? '',
+                  //派工单号
+                  hint: 'handover_report_dispatch_number'.tr,
+                  text: data.dispatchNumber ?? '',
+                  textColor: Colors.black,
                   hintColor: Colors.black,
-                  textColor: Colors.blue.shade500,
                 ),
               ],
             ),
@@ -201,14 +205,14 @@ class _HandoverReportListPageState extends State<HandoverReportListPage> {
                     //型体
                     hint: 'handover_report_type_body'.tr,
                     text: data.factoryType ?? '',
-                    textColor: Colors.blue.shade500,
+                    textColor: Colors.black,
                     hintColor: Colors.black),
                 expandedTextSpan(
-                  //派工单号
-                  hint: 'handover_report_dispatch_number'.tr,
-                  text: data.dispatchNumber ?? '',
-                  textColor: Colors.blue.shade500,
+                  //班次
+                  hint: 'handover_report_shift'.tr,
+                  text: data.shift ?? '',
                   hintColor: Colors.black,
+                  textColor: Colors.black,
                 ),
               ],
             ),

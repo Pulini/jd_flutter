@@ -113,22 +113,15 @@ class HandoverReportListLogic extends GetxController {
   //整理显示数据
   void arrangeShowData(String type, bool isState) {
     var data = <ShowHandoverReportList>[];
-    logger.f('type:$type');
     if (type.isEmpty) {
-      logger.f('-------------');
       state.handoverDataList
           .where((data) => data.status == isState)
           .forEach((v) {
         var processNames = '';
 
         v.empList?.forEachIndexed((c, v) {
-          if (c % 2 == 0) {
-            processNames =
-                '$processNames${v.processName}:${v.empName}  数量：${v.qty.toShowString()}${v.unit}    ';
-          } else {
-            processNames =
-                '$processNames${v.processName}:${v.empName}    数量：${v.qty.toShowString()}${v.unit}\n';
-          }
+          processNames =
+          '$processNames${v.processName}:${v.empName}    数量：${v.qty.toShowString()}${v.unit}\n';
         });
 
         var list = <SubList>[];
