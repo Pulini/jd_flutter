@@ -278,7 +278,6 @@ class _WebPrinterState extends State<WebPrinter> {
   @override
   void initState() {
     if (GetPlatform.isAndroid || GetPlatform.isIOS) {
-      logger.f('------到这儿来2------');
       webViewController
         ..setJavaScriptMode(JavaScriptMode.unrestricted)
         ..setBackgroundColor(Colors.transparent)
@@ -338,3 +337,4 @@ class _WebPrinterState extends State<WebPrinter> {
     );
   }
 }
+

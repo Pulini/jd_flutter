@@ -324,7 +324,6 @@ import 'package:flutter/material.dart';
 import 'package:jd_flutter/bean/http/response/picking_material_order_info.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
-import 'package:jd_flutter/utils/web_api.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 List<Widget> createA4Paper2(PickingMaterialOrderPrintInfo data) {
@@ -869,8 +868,6 @@ List<Widget> createA4PaperMaterialList({
       callback: (tableWidget, height) => widgetList.add([height, tableWidget]),
     );
   }
-
-  logger.f(widgetList);
 
   var paperList = <Widget>[]; //纸张列表
   List<List<Widget>> pages = [];
@@ -1589,7 +1586,6 @@ void _createMaterialTable({
       ),
     ),
   );
-  debugPrint('tableItem height: ${textSize.height}');
   callback.call(tableItem, (textSize.height).toInt() + 40 + 4);
 }
 

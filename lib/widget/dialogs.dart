@@ -150,49 +150,6 @@ void errorDialog({
     barrierDismissible: false, //拦截dialog外部点击
   );
 }
-
-// GlobalKey<NavigatorState>? loadingKey;
-// //加载中弹窗
-// loadingShow(String? content) {
-//   if (loadingKey != null) {
-//     debugPrint('loading is showing');
-//     return;
-//   }
-//   loadingKey = GlobalKey();
-//   debugPrint('loading show');
-//   Get.dialog(
-//     PopScope(
-//       canPop: false,
-//       child: Dialog(
-//         key: loadingKey,
-//         backgroundColor: Colors.white,
-//         child: Padding(
-//           padding: const EdgeInsets.symmetric(vertical: 20),
-//           child: Column(
-//             mainAxisSize: MainAxisSize.min,
-//             children: [
-//               const CircularProgressIndicator(),
-//               const SizedBox(height: 15),
-//               Text(content ?? '')
-//             ],
-//           ),
-//         ),
-//       ),
-//     ),
-//     barrierDismissible: false, //拦截dialog外部点击
-//   );
-// }
-// loadingDismiss() {
-//   if (loadingKey != null && loadingKey!.currentContext != null) {
-//     final routeDialog = ModalRoute.of(loadingKey!.currentContext!);
-//     if (routeDialog != null) {
-//       Navigator.removeRoute(Get.overlayContext!, routeDialog);
-//       loadingKey = null;
-//       debugPrint('loading dismiss');
-//     }
-//   }
-// }
-
 void doUpdate({
   required VersionInfo version,
   Function()? ignore,

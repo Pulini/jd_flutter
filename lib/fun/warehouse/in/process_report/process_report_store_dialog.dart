@@ -106,7 +106,6 @@ void getProcessFlowInfoByBarCode({
       for (var json in response.data) {
         list.add(BarCodeProcessInfo.fromJson(json));
       }
-      debugPrint('list=${list.length}');
     } else {
       error = response.message ?? 'query_default_error'.tr;
     }

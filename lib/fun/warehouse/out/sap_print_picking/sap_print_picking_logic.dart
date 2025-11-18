@@ -1,7 +1,6 @@
 import 'dart:typed_data';
 
 import 'package:collection/collection.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/sap_picking_info.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
@@ -135,7 +134,6 @@ class SapPrintPickingLogic extends GetxController {
               v.palletNumber == code &&
               (v.pickingType == 'B0' || v.pickingType == 'B1'))
           .toList();
-      debugPrint('pallet=${pallet.length}');
       if (pallet.isEmpty) {
         showSnackBar(
           message: 'sap_print_picking_label_not_belong_pick_order'.tr,
@@ -162,7 +160,6 @@ class SapPrintPickingLogic extends GetxController {
           distributionLabel(label);
         }
       });
-      debugPrint('----------');
       var msgList = <String>[];
       pallet.where((v) => v.distribution.isEmpty).forEach((label) {
         var surplus =

@@ -113,9 +113,7 @@ class HandoverReportListLogic extends GetxController {
   //整理显示数据
   void arrangeShowData(String type, bool isState) {
     var data = <ShowHandoverReportList>[];
-    logger.f('type:$type');
     if (type.isEmpty) {
-      logger.f('-------------');
       state.handoverDataList
           .where((data) => data.status == isState)
           .forEach((v) {
@@ -175,7 +173,6 @@ class HandoverReportListLogic extends GetxController {
             subList: list));
       });
     } else {
-      logger.f('-------0------');
       state.handoverDataList
           .where((data) => data.status == isState && data.shift == type)
           .forEach((v) {

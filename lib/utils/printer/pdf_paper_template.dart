@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' as services;
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
-import 'package:jd_flutter/utils/web_api.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 
@@ -165,7 +164,6 @@ Future<List<pw.Widget>> createA4PaperMaterialListPdf({
     );
   }
 
-  logger.f(widgetList);
 
   var paperList = <pw.Widget>[]; //纸张列表
   List<List<pw.Widget>> pages = [];
@@ -466,8 +464,7 @@ void _createSizeMaterialTable({
   int mixListTotalPiece = tableData[6];
   //需要根据列数拆分成多少组
   var singleGroupCount = (singleDataList.length / column).ceil();
-  //需要根据列数拆分成多少组
-  var mixGroupCount = (mixDataList.length / column).ceil();
+
   //拆分重组单码装数据
   var singleDataGroupList = List.generate(
     singleGroupCount,
@@ -493,39 +490,37 @@ void _createSizeMaterialTable({
   }
 
   List<Map<String, List<List<List>>>> mixDataGroupList = [];
-
   for (var piece in mixDataList) {
     var pieceNo = piece.keys.first;
     var sizeList = piece.values.first.toList();
-    //拆分重组单码装数据
-    var list = sizeList.length > column
-        ? List.generate(
-            mixGroupCount,
-            (i) {
-              var start = i * column;
-              var end = (start + column < sizeList.length)
-                  ? start + column
-                  : sizeList.length;
-              return sizeList.sublist(start, end);
-            },
-          )
-        : [sizeList];
-
-    //如果最后一组数据不足列数，则填充空数据
-    for (var i = 0; i < mixGroupCount; i++) {
-      if (list.first.length < column) {
-        list[i].addAll(
-          List.generate(
-            column - list[i].length,
-            (index) => [],
-          ),
-        );
+    //尺码排序
+    sizeList.sort((a, b) => a.first
+        .toString()
+        .toDoubleTry()
+        .compareTo(b.first.toString().toDoubleTry()));
+    //需要根据列数拆分成多少组
+    var mixGroupCount = (sizeList.length / column).ceil();
+    int remainder = sizeList.length % column;
+    if (remainder > 0) {
+      for (int i = 0; i < column - remainder; i++) {
+        sizeList.add([]); // 添加空数组补齐成列的倍数
       }
     }
-    list.removeWhere((v) =>
-        v.every((v2) => v2.isEmpty || v2.last.toString().toDoubleTry() == 0));
-    mixDataGroupList.add({pieceNo: list});
+    //拆分重组成行数据
+    mixDataGroupList.add({
+      pieceNo: List.generate(mixGroupCount, (i) {
+        var start = i * column;
+        var end = (start + column < sizeList.length)
+            ? start + column
+            : sizeList.length;
+        return sizeList.sublist(start, end);
+      }),
+    });
   }
+  //混码总组数
+  var mixLineTotal = mixDataGroupList
+      .map((v) => v.values.map((v2) => v2.length).reduce((a, b) => a + b))
+      .reduce((a, b) => a + b);
 
   var singleMaterialWidget = singleDataGroupList.isEmpty
       ? pw.Container()
@@ -642,12 +637,97 @@ void _createSizeMaterialTable({
                 ),
               ),
             ],
-          ));
+          ),
+        );
+
+  pw.SizedBox createPieceTable(int column, Map<String, List<List<List>>> data) {
+    List<List<List>> pieceData = data.values.first;
+    double total = pieceData
+        .map(
+          (v) => v
+              .where((v2) => v2.isNotEmpty)
+              .map((v2) => v2.last.toString().toDoubleTry())
+              .reduce((a, b) => a.add(b)),
+        )
+        .reduce((a, b) => a.add(b));
+    return pw.SizedBox(
+      height: 20 * 2.0 * pieceData.length,
+      child: pw.Row(
+        children: [
+          for (var i = 0; i < column; ++i)
+            pw.Expanded(
+              flex: 4,
+              child: pw.Column(
+                children: [
+                  for (var item in pieceData) ...[
+                    _borderText(
+                      font: font,
+                      text: item[i].isEmpty ||
+                              item[i].last.toString().toDoubleTry() == 0
+                          ? ''
+                          : '${item[i].first}#',
+                      flex: 2,
+                    ),
+                    _borderText(
+                      font: font,
+                      text: item[i].isEmpty
+                          ? ''
+                          : (item[i].last as double) == 0
+                              ? ''
+                              : (item[i].last as double).toShowString(),
+                      flex: 2,
+                    ),
+                  ],
+                ],
+              ),
+            ),
+          pw.Expanded(
+            //双数
+            flex: 5,
+            child: pw.Container(
+              decoration: pw.BoxDecoration(
+                border: pw.Border.all(color: PdfColors.black, width: 1),
+              ),
+              padding: const pw.EdgeInsets.only(left: 3, right: 3),
+              alignment: pw.Alignment.center,
+              child: pw.Text(
+                total.toShowString(),
+                style: pw.TextStyle(
+                  fontWeight: pw.FontWeight.bold,
+                  fontSize: 12,
+                  font: font,
+                ),
+              ),
+            ),
+          ),
+          pw.Expanded(
+            //件数
+            flex: 5,
+            child: pw.Container(
+              decoration: pw.BoxDecoration(
+                border: pw.Border.all(color: PdfColors.black, width: 1),
+              ),
+              padding: const pw.EdgeInsets.only(left: 3, right: 3),
+              alignment: pw.Alignment.center,
+              child: pw.Text(
+                '1',
+                style: pw.TextStyle(
+                  fontWeight: pw.FontWeight.bold,
+                  fontSize: 12,
+                  font: font,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
   var mixMaterialWidget = mixDataGroupList.isEmpty
       ? pw.Container()
       : pw.SizedBox(
-          height: mixDataGroupList.length * 20 * 2,
+          height: mixLineTotal * 20 * 2,
           child: pw.Row(
             children: [
               pw.Expanded(
@@ -673,107 +753,13 @@ void _createSizeMaterialTable({
                 child: pw.Column(
                   children: [
                     for (var item in mixDataGroupList)
-                      pw.SizedBox(
-                          height: 20 * 2,
-                          child: pw.Row(
-                            children: [
-                              pw.Expanded(
-                                flex: column * 4,
-                                child: pw.Column(
-                                  children: [
-                                    for (var line in item.values.first) ...[
-                                      pw.Row(
-                                        children: [
-                                          for (var sub in line)
-                                            _borderText(
-                                              font: font,
-                                              text: sub.isEmpty ||
-                                                      sub.last
-                                                              .toString()
-                                                              .toDoubleTry() ==
-                                                          0
-                                                  ? ''
-                                                  : '${sub.first}#',
-                                              flex: 2,
-                                            ),
-                                        ],
-                                      ),
-                                      pw.Row(
-                                        children: [
-                                          for (var sub in line)
-                                            _borderText(
-                                              font: font,
-                                              text: sub.isEmpty
-                                                  ? ''
-                                                  : (sub.last as double) == 0
-                                                      ? ''
-                                                      : (sub.last as double)
-                                                          .toShowString(),
-                                              flex: 2,
-                                            ),
-                                        ],
-                                      )
-                                    ]
-                                  ],
-                                ),
-                              ),
-                              pw.Expanded(
-                                flex: 5,
-                                child: pw.Container(
-                                  decoration: pw.BoxDecoration(
-                                    border: pw.Border.all(
-                                        color: PdfColors.black, width: 1),
-                                  ),
-                                  padding: const pw.EdgeInsets.only(
-                                      left: 3, right: 3),
-                                  alignment: pw.Alignment.center,
-                                  child: pw.Text(
-                                    item.values
-                                        .toList()
-                                        .map((v) => v.first
-                                            .map((v2) => v2.isEmpty
-                                                ? 0.0
-                                                : v2.last
-                                                    .toString()
-                                                    .toDoubleTry())
-                                            .reduce((a, b) => a.add(b)))
-                                        .reduce((a, b) => a.add(b))
-                                        .toShowString(),
-                                    style: pw.TextStyle(
-                                      fontWeight: pw.FontWeight.bold,
-                                      fontSize: 12,
-                                      font: font,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              pw.Expanded(
-                                flex: 5,
-                                child: pw.Container(
-                                  decoration: pw.BoxDecoration(
-                                    border: pw.Border.all(
-                                        color: PdfColors.black, width: 1),
-                                  ),
-                                  padding: const pw.EdgeInsets.only(
-                                      left: 3, right: 3),
-                                  alignment: pw.Alignment.center,
-                                  child: pw.Text(
-                                    '1',
-                                    style: pw.TextStyle(
-                                      fontWeight: pw.FontWeight.bold,
-                                      fontSize: 12,
-                                      font: font,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ))
+                      createPieceTable(column, item)
                   ],
                 ),
               ),
             ],
-          ));
+          ),
+        );
 
   var tableWidget = pw.Container(
     decoration: const pw.BoxDecoration(
@@ -785,8 +771,8 @@ void _createSizeMaterialTable({
     child: pw.Column(
       children: [
         pw.SizedBox(
-          height: (singleDataGroupList.length * 20 * 3) +
-              (mixDataGroupList.length * 20 * 2),
+          height:
+              (singleDataGroupList.length * 20 * 3) + (mixLineTotal * 20 * 2),
           child: pw.Row(
             children: [
               pw.Expanded(
@@ -830,7 +816,7 @@ void _createSizeMaterialTable({
   callback.call(
     tableWidget,
     //(单码每组3行 + 混码每组2行 + 1组小计) x 行高20 +行间距5
-    (singleGroupCount * 3 + mixDataGroupList.length * 2 + 1) * 20 + 5,
+    (singleGroupCount * 3 + mixLineTotal * 2 + 1) * 20 + 5,
   );
 }
 

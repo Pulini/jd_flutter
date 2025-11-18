@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/quality_inspection_info.dart';
 import 'package:jd_flutter/fun/warehouse/manage/quality_inspection/quality_inspection_logic.dart';
 import 'package:jd_flutter/fun/warehouse/manage/quality_inspection/quality_inspection_state.dart';
-import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
@@ -231,7 +230,6 @@ class _QualityInspectionDetailAbnormalListPageState
   void initState() {
     for (var v in state.qiDetailAbnormalRecords) {
       v.isSelect.value = false;
-      logger.f(v.toJson());
     }
     super.initState();
   }

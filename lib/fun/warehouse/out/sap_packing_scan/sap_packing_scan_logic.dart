@@ -2,7 +2,6 @@ import 'package:collection/collection.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/sap_picking_scan_info.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
-import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
 import 'sap_packing_scan_state.dart';
@@ -46,7 +45,6 @@ class SapPackingScanLogic extends GetxController {
           errorDialog(content: '该标签已扫，请勿重复扫码！');
           return;
         }
-        logger.f(material.toJson());
         double total = material.labelList!.any((v) => v.isScanned.value)
             ? material.labelList!
                 .where((v) => v.isScanned.value)

@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image/image.dart' as img;
 import 'package:jd_flutter/utils/extension_util.dart';
-import 'package:jd_flutter/utils/web_api.dart';
 
 //dpi
 const _dpi = 8;
@@ -44,7 +43,6 @@ Uint8List _tscSetup(
     sensorValue = 'BLINE $sensorDistance mm, $sensorOffset mm';
   }
   message = '$size\r\n$speedValue\r\n$densityValue\r\n$sensorValue\r\n';
-  debugPrint(message);
   return utf8.encode(message);
 }
 
@@ -657,7 +655,6 @@ Future<List<Uint8List>> labelMultipurposeFixed({
       list.add(await _tscBitmapText(2 * _dpi, 40 * _dpi, 23, bottomLeftText2,
           isBold: false));
     } else {
-      logger.f('字符长度：${bottomLeftText1.length}');
       if (bottomLeftText1.length > 6) {
         var format = contextFormat(
           bottomLeftText1,
@@ -1174,8 +1171,6 @@ Future<List<Uint8List>> _htmlImageToLabel(Map<String, dynamic> data) async {
   Uint8List image = data['image'];
   int width = data['width'];
   int height = data['height'];
-  debugPrint(
-      'speed=$speed density=$density isDynamic=$isDynamic  width=$width height=$height');
   return [
     _tscClearBuffer(),
     _tscSetup(
@@ -1201,11 +1196,6 @@ Future<List<Uint8List>> _imageResizeToLabel(Map<String, dynamic> image) async {
   bool isDynamic = image['isDynamic'] ?? false;
   int width = ((image['width'] as int) / 5.5 / pixelRatio).toInt();
   int height = ((image['height'] as int) / 5.5 / pixelRatio).toInt();
-
-  debugPrint(
-      'pixelRatio=$pixelRatio speed=$speed density=$density isDynamic=$isDynamic width=$width height=$height');
-  debugPrint('--------image: ${(image['image'] as Uint8List).lengthInBytes} ');
-
   var reImage = img.copyResize(
     img.decodeImage(image['image'])!,
     width: width * 8,
@@ -1213,7 +1203,6 @@ Future<List<Uint8List>> _imageResizeToLabel(Map<String, dynamic> image) async {
     backgroundColor: img.ColorRgb8(0, 0, 0),
   );
   var imageUint8List = Uint8List.fromList(img.encodePng(reImage));
-  debugPrint('imageUint8List: ${imageUint8List.lengthInBytes}');
   return [
     _tscClearBuffer(),
     _tscSetup(

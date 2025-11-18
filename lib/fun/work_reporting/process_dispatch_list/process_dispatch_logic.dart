@@ -552,7 +552,6 @@ class ProcessDispatchLogic extends GetxController
 
   //选择所有未打印的贴标
   void selectNoPrint(bool selectType){
-    logger.f('是否选择：$selectType');
     state.showLabelList.where((label)=> label.printTimes! <=0).forEach((c){
       c.select = selectType;
     });
