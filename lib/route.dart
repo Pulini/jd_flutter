@@ -428,7 +428,7 @@ class RouteConfig {
   //来料稽查
   static Routes incomingInspection = Routes(
     '/incoming_inspection',
-    203,
+    204,
     const IncomingInspectionPage(),
   );
 
