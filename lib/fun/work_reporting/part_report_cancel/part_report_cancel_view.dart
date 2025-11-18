@@ -153,8 +153,8 @@ class _PartReportCancelPageState extends State<PartReportCancelPage> {
                   child: IconButton(
                     onPressed: () => Get.to(() => const Scanner())?.then((v) {
                       if (v != null) {
-                        controller.text = v;
-                        logic.getReportSummary(v);
+                        controller.text = v.toString();
+                        logic.getReportSummary(v.toString());
                       }
                     }),
                     icon: const Icon(

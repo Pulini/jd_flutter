@@ -59,7 +59,7 @@ class _WorkshopPlanningPageState extends State<WorkshopPlanningPage> {
                   text: '扫码',
                   click: () => Get.to(() => const Scanner())?.then(
                     (code) => logic.scanCode(
-                      code,
+                      code.toString(),
                       tecProductionOrderNo,
                       tecProcessName,
                     ),
@@ -87,7 +87,7 @@ class _WorkshopPlanningPageState extends State<WorkshopPlanningPage> {
           Get.to(() => const WorkshopPlanningSalaryCountPage())?.then((v) {
             state.planInfo = null;
             state.workersCache.clear();
-            if (v != null && v) _query();
+            if (v != null && v as  bool) _query();
           });
         },
         child: Container(

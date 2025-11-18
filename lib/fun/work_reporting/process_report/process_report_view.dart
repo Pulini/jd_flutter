@@ -208,7 +208,7 @@ class _ProcessReportPageState extends State<ProcessReportPage> {
                 click: () {
                   Get.to(() => const Scanner())?.then((v) {
                     if (v != null) {
-                      logic.getDispatchInfo(v);
+                      logic.getDispatchInfo(v.toString());
                     }
                   });
                 },

@@ -422,7 +422,7 @@ class QualityInspectionListLogic extends GetxController {
                 jsonEncode(getSelectData().map((v) => v.toJson()).toList()),
             //品检单列表
           })?.then((v) {
-            if (v) refresh.call();
+            if (v as  bool) refresh.call();
           });
         } else {
           showSnackBar(message: 'quality_inspection_different_order'.tr);

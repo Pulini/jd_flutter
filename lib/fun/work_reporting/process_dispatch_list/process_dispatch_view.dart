@@ -117,7 +117,7 @@ class _ProcessDispatchPageState extends State<ProcessDispatchPage> {
               Get.to(() => const Scanner())?.then((v) {
                 if (v != null) {
                   logic.getWorkCardList(
-                      workTicket: v,
+                      workTicket: v.toString(),
                       date: dispatchDate.getDateFormatYMD(),
                       empNumber: numberController.text);
                 }

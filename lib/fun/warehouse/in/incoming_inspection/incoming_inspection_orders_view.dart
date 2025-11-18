@@ -49,33 +49,33 @@ class _IncomingInspectionOrdersPageState
             switch (item.status) {
               case '1':
                 Get.to(() => const OrderWaitInspectionPage())?.then((refresh) {
-                  if (refresh) _query(true);
+                  if (refresh as bool) _query(true);
                 });
                 break;
               case '2':
                 Get.to(() => const OrderWaitProcessingPage())?.then((refresh) {
-                  if (refresh) _query(true);
+                  if (refresh  as bool) _query(true);
                 });
                 break;
               case '3':
                 Get.to(() => const OrderSignedPage())?.then((refresh) {
-                  if (refresh) _query(true);
+                  if (refresh  as bool) _query(true);
                 });
                 break;
               case '4':
                 Get.to(() => const OrderExceptionHandlingPage())
                     ?.then((refresh) {
-                  if (refresh) _query(true);
+                  if (refresh  as bool) _query(true);
                 });
                 break;
               case '5':
                 Get.to(() => const OrderExceptionClosePage())?.then((refresh) {
-                  if (refresh) _query(true);
+                  if (refresh  as bool) _query(true);
                 });
                 break;
               case '6':
                 Get.to(() => const OrderClosedPage())?.then((refresh) {
-                  if (refresh) _query(true);
+                  if (refresh  as bool) _query(true);
                 });
                 break;
             }

@@ -137,7 +137,7 @@ class PurchaseOrderWarehousingLogic extends GetxController {
           });
           Get.to(() => const PurchaseOrderWarehousingBindingLabelPage())
               ?.then((scanFinish) {
-            if (scanFinish) stockIn.call(select);
+            if (scanFinish as bool) stockIn.call(select);
           });
         },
         error: (msg) => errorDialog(content: msg),
@@ -319,7 +319,7 @@ class PurchaseOrderWarehousingLogic extends GetxController {
 
     Get.to(() => const PurchaseOrderWarehousingBindingLabelDetailPage())
         ?.then((v) {
-      if (v) toDetail.call();
+      if (v as bool) toDetail.call();
     });
   }
   ///有权限 要么都校验标签，要么都不校验标签  没有标签 提交时 都校验标签

@@ -114,7 +114,7 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
               userInfo?.sapRole == '003' ? opcWorkCenter.selectedId.value : '',
           goTo: () => Get.to(() => const DeliveryOrderCheckPage())?.then((v) {
             logic.cleanCheck();
-            if (v != null && v) _query();
+            if (v != null && (v as bool)) _query();
           }),
         );
       }

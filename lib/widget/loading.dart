@@ -6,11 +6,8 @@ import 'package:get/get.dart';
 
 class LoadingController {
   static final LoadingController _instance = LoadingController._internal();
-
   factory LoadingController() => _instance;
-
   LoadingController._internal();
-
   _LoadingOverlayState? _overlayState;
   bool _isShowing = false;
   static Completer? _currentCompleter;
@@ -18,11 +15,13 @@ class LoadingController {
   void show(String? text) {
     if (_isShowing) {
       _updateText(text);
-      return;
+     return;
     }
     _isShowing = true;
+
     Get.showOverlay(
       asyncFunction: () async {
+        BackButtonInterceptor.add(myInterceptor);
         // 保持显示直到手动关闭
         final completer = Completer();
         _currentCompleter = completer;
@@ -31,15 +30,70 @@ class LoadingController {
       loadingWidget: _LoadingOverlay(text, (state) => _overlayState = state),
     );
   }
+  void _updateText(String? text) {
+    debugPrint('_updateText  $text');
+    // 直接调用 state 的更新方法
+    _overlayState?._updateText(text);
+  }
+  void dismiss() {
+    if(!_isShowing)return;
+    BackButtonInterceptor.remove(myInterceptor);
+    _currentCompleter?.complete();
+    _overlayState=null;
+    _isShowing = false;
+  }
+  bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
+    debugPrint("-----BACK BUTTON intercepted by Loading-----");
+    // 当loading显示时，完全拦截返回键，不执行任何操作
+    return _isShowing;
+  }
+}
+
+class LoadingSingleton {
+  static final LoadingSingleton _instance = LoadingSingleton._internal();
+
+  factory LoadingSingleton() => _instance;
+
+  LoadingSingleton._internal();
+
+  OverlayEntry? _overlayEntry;
+  _LoadingOverlayState? _overlayState;
+
+  bool get isShowing => _overlayEntry != null;
+
+  void show(String? text) {
+    if (_overlayEntry != null) {
+      // 如果已经显示，则更新文本
+      _updateText(text);
+      return;
+    }
+    BackButtonInterceptor.add(myInterceptor);
+    _overlayEntry = OverlayEntry(
+      builder: (_) => _LoadingOverlay(text, (state) => _overlayState = state),
+    );
+    // Navigator.of(Get.overlayContext!).overlay?.insert(_overlayEntry!);
+    Overlay.of(Get.overlayContext!).insert(_overlayEntry!);
+  }
 
   void _updateText(String? text) {
+    debugPrint('_updateText  $text');
+    // 直接调用 state 的更新方法
     _overlayState?._updateText(text);
   }
 
   void dismiss() {
-    _currentCompleter?.complete();
-    _overlayState = null;
-    _isShowing = false;
+    if (isShowing) {
+      _overlayEntry?.remove();
+      _overlayEntry = null;
+      _overlayState = null;
+      BackButtonInterceptor.remove(myInterceptor);
+    }
+  }
+
+  bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
+    debugPrint("-----BACK BUTTON intercepted by Loading-----");
+    // 当loading显示时，完全拦截返回键，不执行任何操作
+    return isShowing;
   }
 }
 
@@ -62,7 +116,6 @@ class _LoadingOverlayState extends State<_LoadingOverlay>
   @override
   void initState() {
     super.initState();
-    BackButtonInterceptor.add(myInterceptor);
     _currentText = widget.content;
     widget.stateSetter.call(this);
     _ctrl = AnimationController(
@@ -76,8 +129,8 @@ class _LoadingOverlayState extends State<_LoadingOverlay>
     _ctrl.forward();
   }
 
+  // 提供一个方法来更新文本
   void _updateText(String? text) {
-    debugPrint("loading-----updateText($text)-----");
     if (_currentText != text && mounted) {
       setState(() {
         _currentText = text;
@@ -88,51 +141,38 @@ class _LoadingOverlayState extends State<_LoadingOverlay>
   @override
   void dispose() {
     _ctrl.dispose();
-    BackButtonInterceptor.remove(myInterceptor);
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        // 点击背景不关闭（如果需要可添加GestureDetector拦截点击）
-        AnimatedBuilder(
-          animation: _bgColor,
-          builder: (bc, w) => Container(
-            color: _bgColor.value,
-            width: double.infinity,
-            height: double.infinity,
+    return PopScope(
+      canPop: false,
+      child: Stack(
+        children: [
+          AnimatedBuilder(
+            animation: _bgColor,
+            builder: (bc, w) => Container(color: _bgColor.value),
           ),
-        ),
-        Center(
-          child: Dialog(
+          Dialog(
             backgroundColor: Colors.white,
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+              padding: const EdgeInsets.symmetric(vertical: 20),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const CircularProgressIndicator(
-                    color: Colors.blue, // 优化：指定进度条颜色
-                  ),
+                  const CircularProgressIndicator(),
                   const SizedBox(height: 15),
-                  Text(
-                    _currentText ?? '加载中...', // 优化：默认文本
-                    style: const TextStyle(fontSize: 16),
-                  )
+                  Text(_currentText ?? '')
                 ],
               ),
             ),
-          ),
-        ),
-      ],
+          )
+        ],
+      ),
     );
   }
-  bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
-    debugPrint("loading-----返回键拦截-----");
-    return true;
-  }
+
   @override
   void deactivate() {
     _ctrl.reverse();

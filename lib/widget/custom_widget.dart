@@ -322,6 +322,7 @@ void showSnackBar({
     snackbarController?.close(withAnimations: false);
   }
   snackbarController = Get.snackbar(
+    instantInit:false,
     title,
     message,
     margin: const EdgeInsets.all(10),

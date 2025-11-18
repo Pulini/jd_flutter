@@ -40,7 +40,7 @@ class SapInkColorMatchingLogic extends GetxController {
           () => const SapInkColorMatchingDetailPage(),
           arguments: {'index': -1},
         )?.then((v) {
-          if (v != null && v) {
+          if (v != null && (v as bool)) {
             refresh.call();
           }
         });
@@ -61,7 +61,7 @@ class SapInkColorMatchingLogic extends GetxController {
           () => const SapInkColorMatchingDetailPage(),
           arguments: {'index': index},
         )?.then((v) {
-          if (v != null && v) {
+          if (v != null && (v as bool)) {
             refresh.call();
           }
         });

@@ -57,7 +57,7 @@ class _PumaAntiCounterfeitingPageState
           TextButton(
             onPressed: () => Get.to(() => const Scanner())?.then((v) {
               if (v != null) {
-                logic.getBarCodeListByBoxNumber(v);
+                logic.getBarCodeListByBoxNumber(v.toString());
               }
             }),
             child: Text(

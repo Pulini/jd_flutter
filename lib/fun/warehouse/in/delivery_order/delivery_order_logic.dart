@@ -300,7 +300,7 @@ class DeliveryOrderLogic extends GetxController {
         _initLabelList(list);
         Get.to(() => const DeliveryOrderLabelBindingPage())?.then((v) {
           state.scannedLabelList.clear();
-          refresh.call(v != null && v);
+          refresh.call(v != null && (v as bool));
         });
       },
       error: (msg) => errorDialog(content: msg),
@@ -572,8 +572,8 @@ class DeliveryOrderLogic extends GetxController {
     Get.to(() => const LabelDetailPage())?.then((v) {
       if (v != null) {
         state.submitLabelBinding(
-          storageLocation: v[0],
-          inspectorNumber: v[1],
+          storageLocation: (v as List)[0],
+          inspectorNumber: (v)[1],
           success: (msg) => successDialog(
             content: msg,
             back: () => Get.back(result: true),

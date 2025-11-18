@@ -156,7 +156,7 @@ class _WorkOrderListPageState extends State<WorkOrderListPage> {
                     click: () {
                       state.orderId = data.orderBill ?? '';
                       if (checkUserPermission('1051107')) {
-                        Get.to(const PartPickPage());
+                        Get.to(()=>const PartPickPage());
                       } else {
                         showSnackBar(
                           message:

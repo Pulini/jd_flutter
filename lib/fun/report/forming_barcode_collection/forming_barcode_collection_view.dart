@@ -72,8 +72,8 @@ class _FormingBarcodeCollectionPageState
                       Get.to(() => const FormingBarcodeCollectionShoeBoxPage())
                           ?.then((v) {
                         if (v != null) {
-                            if(state.dataList.firstWhere((data)=> data.isShow==true).mtoNo == v){
-                              logic.getProductionOrderST(first: '2', shoeBoxBillNo: v);
+                            if(state.dataList.firstWhere((data)=> data.isShow==true).mtoNo == v.toString()){
+                              logic.getProductionOrderST(first: '2', shoeBoxBillNo: v.toString());
                             }
                         }
                         _scan();
@@ -281,7 +281,7 @@ class _FormingBarcodeCollectionPageState
                       ?.then((v) {
                     if (v != null) {
                       logic.setFirstData(
-                          first: '1', entryFid: v, shoeBoxBill: '');
+                          first: '1', entryFid: v.toString(), shoeBoxBill: '');
                     }
                     _scan();
                   });
@@ -414,7 +414,7 @@ class _FormingBarcodeCollectionPageState
                   Get.to(() => const FormingBarcodeCollectionSwitchPage())
                       ?.then((v) {
                     if (v != null) {
-                      logic.setShowScanData(v);
+                      logic.setShowScanData(v.toString());
                     }
                     _scan();
                   });

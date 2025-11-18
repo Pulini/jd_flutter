@@ -290,7 +290,7 @@ class _InjectionScanReportPageState extends State<InjectionScanReportPage> {
                     click: () {
                       Get.to(() => const Scanner())?.then((v) {
                         if (v != null) {
-                          logic.findSizeData(v);
+                          logic.findSizeData(v.toString());
                         }
                       });
                     },

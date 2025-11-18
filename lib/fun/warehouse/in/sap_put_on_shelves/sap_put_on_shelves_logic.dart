@@ -53,7 +53,7 @@ class SapPutOnShelvesLogic extends GetxController {
       () => const SapPutOnShelvesScanPage(),
       arguments: {'index': index, 'warehouse': warehouse},
     )?.then((v) {
-      if (v != null && v) {
+      if (v != null && v as  bool) {
         refreshLabelList(warehouse: warehouse, refresh: refresh);
       }
     });
