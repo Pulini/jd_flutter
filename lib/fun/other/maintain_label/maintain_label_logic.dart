@@ -7,7 +7,6 @@ import 'package:jd_flutter/bean/http/response/label_info.dart';
 import 'package:jd_flutter/bean/http/response/maintain_material_info.dart';
 import 'package:jd_flutter/bean/http/response/picking_bar_code_info.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
-import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/preview_label_list_widget.dart';
@@ -664,7 +663,6 @@ class MaintainLabelLogic extends GetxController {
           data.materialOtherName!.firstWhere((v) => v.languageName == language);
 
       if (languageInfo.languageCode == 'zh') {
-        logger.f('-----中文');
         labelList.add(maintainLabelSingleSizeChineseFixedLabel(
           barCode: data.barCode ?? '',
           factoryType: data.factoryType ?? '',

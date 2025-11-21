@@ -83,7 +83,6 @@ void feishuViewCloudDocFiles({required String query}) {
   } else {
     var authorizeToken = '';
     querySuccess(List<FeishuCloudDocSearchItemInfo> files) {
-      debugPrint('files=${files.length}');
       pickFilePopup(
         fileList: [
           for (var f in files) {'title': f.title, 'url': f.docsToken}
@@ -134,7 +133,6 @@ void feishuViewCloudDocFiles({required String query}) {
 
 /// 飞书文件选择popup
 void pickFilePopup({required List<Map> fileList, required Function(Map) viewFile}) {
-  debugPrint(fileList.toString());
   if (fileList.length == 1) {
     viewFile.call(fileList.first);
   } else {
@@ -556,7 +554,6 @@ class FeishuAuthorize extends StatelessWidget {
               if (url.startsWith(redirectUri)) {
                 // 提取授权码
                 final code = Uri.parse(url).queryParameters['code'];
-                debugPrint(code);
                 if (code != null) {
                   _getUserAccessToken(code);
                 } else {

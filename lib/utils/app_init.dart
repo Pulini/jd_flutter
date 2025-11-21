@@ -220,7 +220,6 @@ class AppInitService extends GetxService {
       debugPrint('应用初始化过程中出现错误: $e');
     } finally {
       // 确保无论如何都会导航到适当页面
-      debugPrint('--------${userInfo == null ? 'to Login' : 'to Home'}-------');
       Get.offAll(() => userInfo == null ? const LoginPage() : const HomePage());
     }
   }

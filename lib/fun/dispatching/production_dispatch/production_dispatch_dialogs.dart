@@ -8,7 +8,6 @@ import 'package:jd_flutter/bean/http/response/work_plan_material_info.dart';
 import 'package:jd_flutter/bean/http/response/worker_info.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
-import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
@@ -21,19 +20,19 @@ void showDispatchList(
   Function(int i1, int i2) modify,
 ) {
   var items = <ShowDispatch>[];
-
   list.forEachIndexed((i1, wc) {
-    logger.f(wc.toJson());
     if (isLast) {
       if (wc.finishQty! > 0) {
-        items.add(ShowDispatch(
-          groupIndex: 0,
-          subIndex: 0,
-          processName: wc.processName ?? '',
-          processNumber: wc.processNumber ?? '',
-          name: wc.workerName ?? '',
-          qty: wc.finishQty ?? 0.0,
-        ));
+        for (var v in wc.dispatch) {
+          items.add(ShowDispatch(
+            groupIndex: 0,
+            subIndex: 0,
+            processName: wc.processName ?? '',
+            processNumber: wc.processNumber ?? '',
+            name: v.name ?? '',
+            qty: v.finishQty ?? 0.0,
+          ));
+        }
       }
     } else {
       wc.dispatch.forEachIndexed((i2, d) {

@@ -129,7 +129,6 @@ void onLinePrintDialog(List<Uint8List> papers, PrintType printType) {
           list.add(p);
         }
       }
-      debugPrint('deviceList=${list.length}');
       printerList.value = list;
       if(printerList.isEmpty){
         return errorDialog(content: '当前打印类型没有设备可打印');

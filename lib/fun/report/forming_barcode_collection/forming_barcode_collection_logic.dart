@@ -63,8 +63,6 @@ class FormingBarcodeCollectionLogic extends GetxController {
     required String entryFid,
     required String shoeBoxBill,
   }) {
-    logger.f('first:$first');
-
     state.scanCode.value = '';
     for (var data in state.dataList) {
       data.isShow = false;
@@ -309,10 +307,8 @@ class FormingBarcodeCollectionLogic extends GetxController {
       if (response.resultCode == resultSuccess) {
         success.call();
         state.canScan = true;
-        logger.f('走接口提交鞋码-------成功--');
       } else {
         state.canScan = true;
-        logger.f('走接口提交鞋码-------失败--');
         showSnackBar(
           message: response.message!,
           isWarning: true,

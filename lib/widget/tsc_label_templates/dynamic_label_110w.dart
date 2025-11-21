@@ -1365,8 +1365,6 @@ List<Widget> getTableWidget({required List table}) {
     mixDataGroupList.add({pieceNo: list});
   }
 
-  // logger.f(singleDataGroupList);
-  // logger.f(mixDataGroupList);
   var singleMaterialWidget = IntrinsicHeight(
     child: Row(
       children: [

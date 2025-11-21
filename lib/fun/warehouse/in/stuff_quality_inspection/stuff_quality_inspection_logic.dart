@@ -1219,9 +1219,6 @@ class StuffQualityInspectionLogic extends GetxController {
           var lastQty = (data.quantityTemporarilyReceived!
               .sub(data.qualifiedQuantity!)
               .sub(data.missingQuantity!));
-
-          logger.f('lastQty：$lastQty');
-
           if (lastQty >= 0) {
             //可分配数量大于0 说明可以进行不合格数量分配
             if (countUnQuality >= lastQty) {
@@ -1230,8 +1227,6 @@ class StuffQualityInspectionLogic extends GetxController {
               data.unqualifiedQuantity = lastQty;
               //剩余不合格数量=不合格总数-剩余可分配数量
               countUnQuality = countUnQuality.sub(lastQty);
-
-              logger.f('不合格数量：$countUnQuality');
             } else {
               if (countUnQuality > 0) {
                 data.unqualifiedQuantity = countUnQuality;

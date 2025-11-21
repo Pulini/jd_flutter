@@ -8,7 +8,6 @@ import 'package:jd_flutter/fun/dispatching/material_dispatch/material_dispatch_s
 import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart' show getDateYMD;
-import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/check_box_widget.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
@@ -499,7 +498,6 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
           data,
           subData,
           (d, longQty, wideQty, heightQty, gwQty, nwQty) {
-            logger.f(subData.billNo);
             logic.subItemReport(
               context: context,
               qty: d.toShowString(),

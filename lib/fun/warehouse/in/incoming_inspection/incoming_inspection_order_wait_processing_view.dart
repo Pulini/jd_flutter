@@ -98,7 +98,7 @@ class _OrderWaitProcessingPageState extends State<OrderWaitProcessingPage> {
   @override
   Widget build(BuildContext context) {
     return pageBody(
-      title: '处理',
+      title: 'incoming_inspection_order_inspection'.tr,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -115,11 +115,7 @@ class _OrderWaitProcessingPageState extends State<OrderWaitProcessingPage> {
             padding: const EdgeInsets.all(10),
             child: textSpan(
               hint: 'incoming_inspection_order_delivery_qty'.tr,
-              text: state.inspectionDetail?.materielList
-                      ?.map((v) => v.numPage ?? 0)
-                      .reduce((a, b) => a + b)
-                      .toString() ??
-                  '',
+              text:logic.getNumPageTotal(),
               textColor: Colors.red,
             ),
           ),

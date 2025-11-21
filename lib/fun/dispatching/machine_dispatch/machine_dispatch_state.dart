@@ -205,7 +205,6 @@ class MachineDispatchState {
         });
         success.call();
       } else {
-        logger.f('------失败---');
         labelList.clear();
         error.call(response.message ?? '');
       }

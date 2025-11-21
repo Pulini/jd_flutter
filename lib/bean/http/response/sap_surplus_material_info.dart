@@ -27,7 +27,7 @@ class MaterialDetailInfo {
 
 class SurplusMaterialHistoryInfo {
   String? dispatchNo; //派工单号 DISPATCH_NO
-  String? factory = '1500'; //工厂  WERKS
+  String? factory =  isTestUrl()?'2000':'1500'; //工厂  WERKS
   String? warehouseNumber; //仓库  LGORT
   String? writeOff; //冲销标识 STOKZ
   String? submitDate; //提交日期 ERDAT

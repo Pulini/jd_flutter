@@ -95,8 +95,6 @@ class PrintPalletLogic extends GetxController {
   }
 
   void printPalletSizeMaterial() {
-    // var pdf = pw.Document();
-    // var a4PaperByteList = <Uint8List>[];
     var printTask = <List>[];
     for (var i = 0; i < state.selectedList.length; ++i) {
       if (state.selectedList[i].value) {
@@ -127,13 +125,11 @@ class PrintPalletLogic extends GetxController {
 
           groupBy(v1, (v) => v.pieceNo ?? '').forEach((k, v) {
             if (v.length > 1) {
-              // debugPrint('--件：$k 混装< ${v.map((v2)=>'尺码：${v2.size}  数量：${v2.quantity}').toList()} >');
               mixMaterialList.add(v);
               mixListTotalQty = mixListTotalQty.add(
                   v.map((v) => v.quantity ?? 0.0).reduce((a, b) => a.add(b)));
               mixListTotalPiece++;
             } else {
-              // debugPrint('--件：$k 单装< ${v.first.size}  数量：${v.first.quantity}>');
               sizeMaterialList.add(v.first);
               singleListTotalQty =
                   singleListTotalQty.add(v.first.quantity ?? 0.0);
@@ -161,9 +157,6 @@ class PrintPalletLogic extends GetxController {
               ]
             });
           }
-
-          // debugPrint('----------singleDataList：$singleDataList');
-          // debugPrint('----------mixDataList：$mixDataList');
 
           sizeMaterialTable.add([
             k1,
@@ -199,7 +192,6 @@ class PrintPalletLogic extends GetxController {
         ]);
       }
     }
-    debugPrint('printTask=${printTask.length}');
     Get.to(() => WebPrinter(palletTaskList: printTask));
   }
 

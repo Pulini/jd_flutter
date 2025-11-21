@@ -71,9 +71,6 @@ class ProcessReportLogic extends GetxController {
   void submitProcess({
     required Function(String msg) success,
 }) {
-    for (var data in state.dataList) {
-      logger.f(data.toJson());
-    }
     if (state.dataList.where((data) => data.empID == 0 || data.empName!.isEmpty || data.empNumber!.isEmpty).isEmpty) {
       httpPost(
         method: webApiSubmitProcessBarCode2CollectBill,

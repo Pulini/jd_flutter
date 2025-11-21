@@ -35,7 +35,7 @@ class SapInjectionMoldingStockInState {
       loading: 'sap_injection_molding_stock_in_getting_pallet_info'.tr,
       method: webApiSapGetPalletList,
       body: {
-        'WERKS': '1500',
+        'WERKS': isTestUrl()?'2000':'1500',
         'LGORT': userInfo?.defaultStockNumber,
         'ZTRAY_CFM': 'X',
         'ITEM': [

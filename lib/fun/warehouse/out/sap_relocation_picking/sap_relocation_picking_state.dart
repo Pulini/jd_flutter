@@ -28,7 +28,7 @@ class SapRelocationPickingState {
             'BQID': label,
             'ZZVBELN': '',
             'MATNR': '',
-            'WERKS': '1500',
+            'WERKS':  isTestUrl()?'2000':'1500',
           }
         ],
       },
@@ -60,7 +60,7 @@ class SapRelocationPickingState {
       loading: 'sap_relocation_pick_submitting_picking'.tr,
       method: webApiSapRelocationPicking,
       body: {
-        'WERKS': '1500',
+        'WERKS':  isTestUrl()?'2000':'1500',
         'LGORT': warehouse,
         'ZBILLER': userInfo?.number,
         'ZNAME_CN': userInfo?.name,

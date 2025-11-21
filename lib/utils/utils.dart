@@ -723,7 +723,6 @@ Orientation getScreenOrientation() {
 
 String getFileName(String url, {int num = 2}) {
   final code = unicodeDecode(url.replaceAll('%u', '\\u'));
-  logger.f('url=$code');
   var name = code;
   for (var i = 1; i < num; i++) {
     name = name.substring(0, name.lastIndexOf('/'));

@@ -369,7 +369,6 @@ class InjectionScanReportLogic extends GetxController {
 
   //扫码刷新界面
   void findSizeData(String code) {
-    logger.f('扫到的贴标：$code');
     if (state.showBarCodeList.isNotEmpty) {
       if (code.length == 32) {
         if (state.showBarCodeList.every((list) => list.barCode != code)) {
