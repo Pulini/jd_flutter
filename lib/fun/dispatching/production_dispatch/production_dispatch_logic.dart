@@ -317,6 +317,7 @@ class ProductionDispatchLogic extends GetxController {
               name: dis.workerName,
               empID: dis.empID,
               qty: dis.qty,
+              finishQty: dis.finishQty,
             )
         ]);
     });

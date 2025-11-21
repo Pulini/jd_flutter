@@ -18,7 +18,7 @@ class SapWmsReprintLabelsState {
       loading: 'sap_wms_reprint_label_getting_label_info'.tr,
       method: webApiSapGetLabels,
       body: {
-        'WERKS': '1500',
+        'WERKS':  isTestUrl()?'2000':'1500',
         'LGORT': '',
         'ITEM': [
           {

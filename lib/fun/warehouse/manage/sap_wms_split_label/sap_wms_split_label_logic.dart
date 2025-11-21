@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/sap_wms_reprint_label_info.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
+import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/preview_label_list_widget.dart';
 import 'package:jd_flutter/widget/preview_label_widget.dart';
@@ -65,7 +66,7 @@ class SapWmsSplitLabelLogic extends GetxController {
   }
 
   void reprintLabel({required String factory, required String warehouse}) {
-    if (factory != '1500' &&
+    if (factory !=  (isTestUrl()?'2000':'1500' )&&
         warehouse != '1200' &&
         warehouse != '1101' &&
         warehouse != '1102' &&

@@ -31,7 +31,7 @@ class SapPickingReceiptReversalState {
         'DISPATCH_NO': order,
         'DATEF': startDate,
         'DATET': endDate,
-        'WERKS': '1500',
+        'WERKS':  isTestUrl()?'2000':'1500',
         'LGORT': warehouse,
         'MATNR': materialCode,
       },

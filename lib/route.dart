@@ -169,7 +169,7 @@ class RouteConfig {
   //生产派工
   static Routes productionDispatch = Routes(
     '/production_dispatch',
-    210,
+    211,
     const ProductionDispatchPage(),
   );
 
@@ -302,7 +302,7 @@ class RouteConfig {
   //sap采购入库
   static Routes sapPurchaseStockIn = Routes(
     '/sap_purchase_stock_in',
-    200,
+    201,
     const SapPurchaseStockInPage(),
   );
 

@@ -112,19 +112,18 @@ class _SapPurchaseStockInCheckPageState
 
   @override
   Widget build(BuildContext context) {
-    var data = state.orderList[index];
     return Obx(() => pageBody(
           title: 'sap_purchase_stock_in_check_delivery_order_verify'.tr,
           actions: [
             TextButton(
               onPressed: () => checkSaveDialog(
-                factoryNumber: data[0].factory ?? '',
-                location: data[0].location ?? '',
+                factoryNumber: state.orderList[index][0].factory ?? '',
+                location: state.orderList[index][0].location ?? '',
                 callback: (location, inspector) {
                   logic.saveDeliveryCheck(
                     location: location,
                     inspector: inspector,
-                    list: data,
+                    list: state.orderList[index],
                   );
                 },
               ),
@@ -133,8 +132,8 @@ class _SapPurchaseStockInCheckPageState
           ],
           body: ListView.builder(
             padding: const EdgeInsets.all(8),
-            itemCount: data.length,
-            itemBuilder: (c, i) => _item(data[i]),
+            itemCount: state.orderList[index].length,
+            itemBuilder: (c, i) => _item(state.orderList[index][i]),
           ),
         ));
   }

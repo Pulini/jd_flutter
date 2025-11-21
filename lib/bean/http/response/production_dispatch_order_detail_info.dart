@@ -263,6 +263,7 @@ class DispatchInfo {
   String? name;
   int? empID;
   double? qty;
+  double? finishQty;
 
   double dispatchQty = 0.0;
 
@@ -275,6 +276,7 @@ class DispatchInfo {
     this.name = '',
     this.empID = 0,
     this.qty = 0.0,
+    this.finishQty = 0.0,
   });
 
   DispatchInfo.fromJson(dynamic json) {
@@ -286,6 +288,7 @@ class DispatchInfo {
     name = json['name'];
     empID = json['empID'];
     qty = json['qty'];
+    finishQty = json['finishQty'];
   }
 
   Map<String, dynamic> toJson() {
@@ -298,6 +301,7 @@ class DispatchInfo {
     map['name'] = name;
     map['empID'] = empID;
     map['qty'] = qty;
+    map['finishQty'] = finishQty;
     return map;
   }
 

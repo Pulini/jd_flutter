@@ -24,7 +24,7 @@ class SapSalesShipmentState {
         {
           'ZVBELN_ORI': instructionNo,
           'EDATU': deliveryDate,
-          'WERKS': '1500',
+          'WERKS':  isTestUrl()?'2000':'1500',
         }
       ],
     ).then((response) {
@@ -87,7 +87,7 @@ class SapSalesShipmentState {
             'BQID': '',
             'ZZVBELN': instructionNo,
             'MATNR': '',
-            'WERKS': '1500',
+            'WERKS':  isTestUrl()?'2000':'1500',
           }
         ],
       },
