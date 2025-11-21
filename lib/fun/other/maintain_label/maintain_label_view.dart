@@ -176,6 +176,47 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
     );
   }
 
+  void custom() {
+    logic.getBarCodeCount((list) {
+      if (list.length > 1) {
+        selectInstructDialog(list,
+            selectCallback: (list) {
+          createCustomLabelDialog(
+            list,
+            state.interID,
+            logic.getLabelType(LabelCreateType.customOneOrder),
+            () => logic.refreshDataList(),
+          );
+        }, allCallback: (list) {
+          createCustomLabelDialog(
+            list,
+            state.interID,
+            logic.getLabelType(LabelCreateType.customOrders),
+            () => logic.refreshDataList(),
+          );
+        });
+      } else {
+        //创建自定义标签
+        createCustomLabelDialog(
+          list[0],
+          state.interID,
+          logic.getLabelType(LabelCreateType.customOneOrder),
+          () => logic.refreshDataList(),
+        );
+      }
+    });
+  }
+
+  void mixed() {
+    logic.getBarCodeCountMix((list) {
+      createMixLabelDialog(
+          list,
+          state.interID,
+          logic.getLabelType(LabelCreateType.mixed),
+          () => logic.refreshDataList());
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return pageBody(
@@ -229,26 +270,23 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
                         text: 'maintain_label_create'.tr,
                         click: () {
                           if (checkUserPermission('1051105')) {
-                            createLabelSelect(
-                              single: () => logic.createSingleLabel(),
-                              mix: () => logic.getBarCodeCount(
-                                true,
-                                (data) => createMixLabelDialog(
-                                  data,
-                                  state.interID,
-                                  () => logic.refreshDataList(),
-                                ),
-                              ),
-                              custom: () => logic.getBarCodeCount(
-                                false,
-                                (data) => createCustomLabelDialog(
-                                  data,
-                                  state.interID,
-                                  state.isMaterialLabel.value,
-                                  () => logic.refreshDataList(),
-                                ),
-                              ),
-                            );
+                            logic.getCreateLabelType(onlyCustom: () {
+                              custom();
+                            }, allType: () {
+                              createLabelSelect(
+                                showAll: true,
+                                single: () => logic.createSingleLabel(),
+                                mix: () => mixed(),
+                                custom: () => custom(),
+                              );
+                            }, mixAndCustom: () {
+                              createLabelSelect(
+                                showAll: false,
+                                single: () {},
+                                mix: () => mixed(),
+                                custom: () => custom(),
+                              );
+                            });
                           } else {
                             showSnackBar(
                               message:

@@ -365,36 +365,36 @@ void reLoginPopup() {
         padding: EdgeInsets.only(
           bottom: MediaQuery.of(context).viewInsets.bottom,
         ),
-        child: Obx(() => Container(
-              padding: const EdgeInsets.all(8.0),
-              decoration: BoxDecoration(
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20),
-                ),
-                gradient: LinearGradient(
-                  colors: isTestUrl()
-                      ? [Colors.lightBlueAccent, Colors.greenAccent]
-                      : [Colors.lightBlueAccent, Colors.blueAccent],
-                  begin: Alignment.bottomLeft,
-                  end: Alignment.topRight,
+        child: Container(
+          padding: const EdgeInsets.all(8.0),
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(20),
+              topRight: Radius.circular(20),
+            ),
+            gradient: LinearGradient(
+              colors: isTestUrl()
+                  ? [Colors.lightBlueAccent, Colors.greenAccent]
+                  : [Colors.lightBlueAccent, Colors.blueAccent],
+              begin: Alignment.bottomLeft,
+              end: Alignment.topRight,
+            ),
+          ),
+          child: Column(
+            children: [
+              Center(
+                child: Text(
+                  're_login'.tr,
+                  style: const TextStyle(
+                      fontSize: 22,
+                      color: Colors.white,
+                      decoration: TextDecoration.none),
                 ),
               ),
-              child: Column(
-                children: [
-                  Center(
-                    child: Text(
-                      're_login'.tr,
-                      style: const TextStyle(
-                          fontSize: 22,
-                          color: Colors.white,
-                          decoration: TextDecoration.none),
-                    ),
-                  ),
-                  const Center(child: LoginPick(isReLogin: true)),
-                ],
-              ),
-            )),
+              const Center(child: LoginPick(isReLogin: true)),
+            ],
+          ),
+        ),
       ),
     ),
   );

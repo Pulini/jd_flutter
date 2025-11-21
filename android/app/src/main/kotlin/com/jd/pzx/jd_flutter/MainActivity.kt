@@ -14,10 +14,14 @@ import com.jd.pzx.jd_flutter.utils.CHANNEL_PRINTER_FLUTTER_TO_ANDROID
 import com.jd.pzx.jd_flutter.utils.CHANNEL_SCAN_FLUTTER_TO_ANDROID
 import com.jd.pzx.jd_flutter.utils.CHANNEL_USB_ANDROID_TO_FLUTTER
 import com.jd.pzx.jd_flutter.utils.CHANNEL_USB_FLUTTER_TO_ANDROID
+import com.jd.pzx.jd_flutter.utils.CHANNEL_USB_TSC_FLUTTER_TO_ANDROID
 import com.jd.pzx.jd_flutter.utils.CHANNEL_WEIGHBRIDGE_ANDROID_TO_FLUTTER
 import com.jd.pzx.jd_flutter.utils.CHANNEL_WEIGHBRIDGE_FLUTTER_TO_ANDROID
 import com.jd.pzx.jd_flutter.utils.FACE_VERIFY_SUCCESS
 import com.jd.pzx.jd_flutter.utils.REQUEST_ENABLE_BT
+import com.jd.pzx.jd_flutter.utils.SEND_COMMAND_STATE_BROKEN_PIPE
+import com.jd.pzx.jd_flutter.utils.SEND_COMMAND_STATE_FAILED
+import com.jd.pzx.jd_flutter.utils.SEND_COMMAND_STATE_SUCCESS
 import com.jd.pzx.jd_flutter.utils.bitmapToByteArray
 import com.jd.pzx.jd_flutter.utils.bluetoothAdapter
 import com.jd.pzx.jd_flutter.utils.bluetoothCancelScan
@@ -26,14 +30,17 @@ import com.jd.pzx.jd_flutter.utils.bluetoothConnect
 import com.jd.pzx.jd_flutter.utils.bluetoothIsEnable
 import com.jd.pzx.jd_flutter.utils.bluetoothSendCommand
 import com.jd.pzx.jd_flutter.utils.bluetoothStartScan
+import com.jd.pzx.jd_flutter.utils.bytesMerger
 import com.jd.pzx.jd_flutter.utils.deviceList
 import com.jd.pzx.jd_flutter.utils.locationOn
 import com.jd.pzx.jd_flutter.utils.openFile
+import com.jd.pzx.jd_flutter.utils.print.USBUtil
 import com.jd.pzx.jd_flutter.utils.print.printPdf
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 import java.io.File
+import java.io.IOException
 
 
 @SuppressLint("MissingPermission")
@@ -101,7 +108,7 @@ class MainActivity : FlutterActivity() {
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
-
+        val usbUtil = USBUtil(this, 4611)
         //人脸识别通道
         MethodChannel(
             flutterEngine.dartExecutor.binaryMessenger,
@@ -111,7 +118,7 @@ class MainActivity : FlutterActivity() {
                 startOneselfFaceVerification(
                     this,
                     call.arguments.toString()
-                ) { code, bitmap ,msg->
+                ) { code, bitmap, msg ->
                     Log.e("Pan", "code=$code msg=$msg")
                     if (code == FACE_VERIFY_SUCCESS) {
                         result.success(bitmapToByteArray(bitmap!!, Bitmap.CompressFormat.JPEG))
@@ -234,6 +241,20 @@ class MainActivity : FlutterActivity() {
                 result.success(dpi)
             } else {
                 result.notImplemented()
+            }
+        }
+
+        //USB TSC
+        MethodChannel(
+            flutterEngine.dartExecutor.binaryMessenger,
+            CHANNEL_USB_TSC_FLUTTER_TO_ANDROID
+        ).setMethodCallHandler { call, result ->
+            if (call.method == "isAttached") {
+                result.success(usbIsAttached)
+            } else if (call.method == "SendTSC") {
+                usbUtil.sendCommand(call.arguments as List<ByteArray>) {
+                    result.success(if (it) SEND_COMMAND_STATE_SUCCESS else SEND_COMMAND_STATE_FAILED)
+                }
             }
         }
 

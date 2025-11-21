@@ -103,7 +103,6 @@ class _ProcessDispatchDetailPageState extends State<ProcessDispatchDetailPage> {
         ));
       }
     }
-
     pu.printLabelList(
       labelList: labelList,
       start: () {

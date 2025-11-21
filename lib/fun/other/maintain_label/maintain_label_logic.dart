@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/bean/http/response/create_custom_label_data.dart';
 import 'package:jd_flutter/bean/http/response/label_info.dart';
 import 'package:jd_flutter/bean/http/response/maintain_material_info.dart';
 import 'package:jd_flutter/bean/http/response/picking_bar_code_info.dart';
@@ -17,6 +18,13 @@ import 'package:jd_flutter/widget/tsc_label_templates/dynamic_label_75w.dart';
 
 import 'maintain_label_state.dart';
 
+enum LabelCreateType {
+  single,
+  mixed,
+  customOneOrder,
+  customOrders,
+}
+
 class MaintainLabelLogic extends GetxController {
   final MaintainLabelState state = MaintainLabelState();
 
@@ -26,6 +34,91 @@ class MaintainLabelLogic extends GetxController {
       refreshDataList();
     });
     super.onInit();
+  }
+
+  void getCreateLabelType({
+    required VoidCallback onlyCustom,
+    required VoidCallback allType,
+    required VoidCallback mixAndCustom,
+  }) {
+    switch (state.sapProcessName) {
+      case 'BL':
+      case 'ZL':
+      case 'YT':
+        onlyCustom.call();
+        break;
+      case 'PQ':
+      case 'ZC':
+      case 'ZHUS':
+      case 'ZDJG':
+      case 'HDD':
+      case 'LLDM':
+      case 'BZD':
+      case 'BFST':
+      case 'TYT':
+      case 'ZD':
+      case 'BGDTP':
+      case 'BJC':
+      case 'ZS':
+      case 'MLCD':
+      case 'MLCD1':
+      case 'MLCD2':
+      case 'MLCD3':
+      case 'DLCD':
+      case 'DDCD':
+      case 'BDD':
+      case 'GP':
+        allType.call();
+        break;
+      case 'GBJG':
+        mixAndCustom.call();
+        break;
+    }
+  }
+
+  int getLabelType(LabelCreateType createType) {
+    int type = -1;
+
+    getCreateLabelType(
+      onlyCustom: () {
+        switch (createType) {
+          case LabelCreateType.single:
+          case LabelCreateType.mixed:
+            type = -1;
+            break;
+          case LabelCreateType.customOneOrder:
+          case LabelCreateType.customOrders:
+            type = 101;
+            break;
+        }
+      },
+      allType: () {
+        switch (createType) {
+          case LabelCreateType.single:
+          case LabelCreateType.customOneOrder:
+            type = 102;
+            break;
+          case LabelCreateType.mixed:
+          case LabelCreateType.customOrders:
+            type = 103;
+            break;
+        }
+      },
+      mixAndCustom: () {
+        switch (createType) {
+          case LabelCreateType.single:
+            type = -1;
+            break;
+          case LabelCreateType.mixed:
+          case LabelCreateType.customOneOrder:
+          case LabelCreateType.customOrders:
+            type = 103;
+            break;
+        }
+      },
+    );
+
+    return type;
   }
 
   void refreshDataList() {
@@ -119,9 +212,15 @@ class MaintainLabelLogic extends GetxController {
     );
   }
 
-  void getBarCodeCount(bool isMix, Function(List<PickingBarCodeInfo>) callback) {
-    state.barCodeCount(
-      isMix: isMix,
+  void getBarCodeCount(Function(List<List<CreateCustomLabelsData>>) callback) {
+    state.getOrderDetailsForCustom(
+      success: callback,
+      error: (msg) => errorDialog(content: msg),
+    );
+  }
+
+  void getBarCodeCountMix(Function(List<List<PickingBarCodeInfo>>) callback) {
+    state.getOrderDetailsForMix(
       success: callback,
       error: (msg) => errorDialog(content: msg),
     );

@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/base_data.dart';
+import 'package:jd_flutter/bean/http/response/create_custom_label_data.dart';
 import 'package:jd_flutter/bean/http/response/maintain_material_info.dart';
 import 'package:jd_flutter/bean/http/response/picking_bar_code_info.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
@@ -13,22 +14,11 @@ import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
 
-void createMixLabelDialog(
-    List<PickingBarCodeInfo> list, int id, Function() callback) {
-  var group = <List<PickingBarCodeInfo>>[];
-  groupBy(list, (v) => v.size).forEach((key, value) {
-    group.add(value);
-  });
+//创建混码标
+void createMixLabelDialog(List<List<PickingBarCodeInfo>> list, int id,
+    int labelType, Function() callback) {
   var maxLabel = 0.obs;
   var controller = TextEditingController();
-  var selected = <List<RxBool>>[];
-  for (var v1 in group) {
-    var select = <RxBool>[];
-    for (var _ in v1) {
-      select.add(false.obs);
-    }
-    selected.add(select);
-  }
   Get.dialog(
     PopScope(
         canPop: false,
@@ -58,9 +48,14 @@ void createMixLabelDialog(
                 Expanded(
                   child: ListView.builder(
                     padding: const EdgeInsets.all(8),
-                    itemCount: group.length,
-                    itemBuilder: (context, index) => _createMixLabelItem(
-                        selected, group, index, maxLabel, controller),
+                    itemCount: list.length,
+                    itemBuilder: (context, i) => _createMixLabelItem(
+                      list: list[i],
+                      select: () {
+                        maxLabel.value = _getLabelMax(list);
+                        controller.text = maxLabel.value.toString();
+                      },
+                    ),
                   ),
                 ),
               ],
@@ -76,11 +71,11 @@ void createMixLabelDialog(
             ),
             TextButton(
               onPressed: () => _createMixLabel(
-                selected,
-                group,
-                maxLabel.value,
-                id,
-                () {
+                list: list,
+                maxLabel: maxLabel.value,
+                id: id,
+                labelType: labelType,
+                callback: () {
                   Get.back();
                   callback.call();
                 },
@@ -92,14 +87,14 @@ void createMixLabelDialog(
   );
 }
 
-void _createMixLabel(
-  List<List<RxBool>> selected,
-  List<List<PickingBarCodeInfo>> list,
-  int maxLabel,
-  int id,
-  Function() callback,
-) {
-  if (!selected.any((v1) => v1.any((v2) => v2.value))) {
+void _createMixLabel({
+  required List<List<PickingBarCodeInfo>> list,
+  required int maxLabel,
+  required int id,
+  required int labelType,
+  required Function() callback,
+}) {
+  if (list.every((v1) => v1.every((v2) => !v2.isSelected.value))) {
     showSnackBar(
       message: 'maintain_label_dialog_select_instruction_and_size'.tr,
       isWarning: true,
@@ -114,6 +109,10 @@ void _createMixLabel(
     return;
   }
 
+  var submitList = <PickingBarCodeInfo>[];
+  for (var item in list) {
+    submitList.addAll(item.where((v) => v.isSelected.value).toList());
+  }
   httpPost(
     method: webApiCreateMixLabel,
     loading: 'maintain_label_dialog_generating_label'.tr,
@@ -122,16 +121,14 @@ void _createMixLabel(
       'BarcodeQty': maxLabel,
       'UserID': userInfo?.userID,
       'SizeList': [
-        for (var i = 0; i < selected.length; ++i)
-          for (var j = 0; j < selected[i].length; ++j)
-            if (selected[i][j].value)
-              {
-                'Size': list[i][j].size,
-                'Capacity': list[i][j].packingQty.toShowString(),
-                'MtoNo': list[i][j].interID.toString(),
-              }
+        for (var item in submitList)
+          {
+            'Size': item.size,
+            'Capacity': item.qty.toShowString(),
+            'MtoNo': item.mtono,
+          }
       ],
-      'LabelTyp': '3',
+      'LabelType': labelType,
     },
   ).then((response) {
     if (response.resultCode == resultSuccess) {
@@ -142,16 +139,12 @@ void _createMixLabel(
   });
 }
 
-Obx _createMixLabelItem(
-  List<List<RxBool>> selected,
-  List<List<PickingBarCodeInfo>> list,
-  int index,
-  RxInt maxLabel,
-  TextEditingController controller,
-) {
+Obx _createMixLabelItem({
+  required List<PickingBarCodeInfo> list,
+  required Function() select,
+}) {
   return Obx(() => Card(
-        color: selected[index].where((v) => v.value).length ==
-                selected[index].length
+        color: list.every((v) => v.isSelected.value)
             ? Colors.greenAccent.shade100
             : Colors.white,
         child: ExpansionTile(
@@ -160,14 +153,12 @@ Obx _createMixLabelItem(
             borderRadius: BorderRadius.all(Radius.circular(10)),
           ),
           leading: Checkbox(
-            value: selected[index].where((v) => v.value).length ==
-                selected[index].length,
+            value: list.every((v) => v.isSelected.value),
             onChanged: (c) {
-              for (var i = 0; i < selected[index].length; ++i) {
-                selected[index][i].value = c!;
+              for (var v in list) {
+                v.isSelected.value = c!;
               }
-              maxLabel.value = _getLabelMax(selected, list);
-              controller.text = maxLabel.toString();
+              select.call();
             },
           ),
           title: Text.rich(
@@ -178,7 +169,7 @@ Obx _createMixLabelItem(
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 TextSpan(
-                  text: list[index][0].size,
+                  text: list.first.size,
                   style: const TextStyle(
                     color: Colors.blueAccent,
                     fontWeight: FontWeight.bold,
@@ -188,44 +179,36 @@ Obx _createMixLabelItem(
             ),
           ),
           children: [
-            for (var i = 0; i < list[index].length; ++i)
+            for (var sub in list)
               _createMixLabelSubItem(
-                selected,
-                list,
-                index,
-                i,
-                maxLabel,
-                controller,
+                sub: sub,
+                isLast: list.last == sub,
+                select: select,
               )
           ],
         ),
       ));
 }
 
-Column _createMixLabelSubItem(
-  List<List<RxBool>> selected,
-  List<List<PickingBarCodeInfo>> list,
-  int index,
-  int i,
-  RxInt maxLabel,
-  TextEditingController controller,
-) {
+Column _createMixLabelSubItem({
+  required PickingBarCodeInfo sub,
+  required bool isLast,
+  required Function() select,
+}) {
   var style = const TextStyle(fontSize: 14, fontWeight: FontWeight.bold);
   var checkbox = Checkbox(
-    value: selected[index][i].value,
+    value: sub.isSelected.value,
     onChanged: (c) {
-      selected[index][i].value = c!;
-      maxLabel.value = _getLabelMax(selected, list);
-      controller.text = maxLabel.toString();
+      sub.isSelected.value = c!;
+      select.call();
     },
   );
   var number = NumberDecimalEditText(
     onChanged: (v) {
-      list[index][i].packingQty = v;
-      maxLabel.value = _getLabelMax(selected, list);
-      controller.text = maxLabel.toString();
+      sub.qty = v;
+      select.call();
     },
-    initQty: list[index][i].packingQty,
+    initQty: sub.qty,
   );
   return Column(
     children: [
@@ -239,7 +222,7 @@ Column _createMixLabelSubItem(
                 style: const TextStyle(fontWeight: FontWeight.bold),
               ),
               TextSpan(
-                text: list[index][i].mtono,
+                text: sub.mtono,
                 style: TextStyle(
                   color: Colors.green.shade900,
                   fontWeight: FontWeight.bold,
@@ -249,7 +232,7 @@ Column _createMixLabelSubItem(
           ),
         ),
         subtitle: Text('maintain_label_dialog_surplus_qty'.trArgs([
-          list[index][i].getSurplusQty().toShowString(),
+          sub.surplusQty.toShowString(),
         ])),
         trailing: SizedBox(
           width: 180,
@@ -257,43 +240,138 @@ Column _createMixLabelSubItem(
             children: [
               Text('maintain_label_dialog_packing_qty'.tr, style: style),
               Expanded(
-                  child: selected[index][i].value
-                      ? number
-                      : Text('0', style: style)),
+                  child:
+                      sub.isSelected.value ? number : Text('0', style: style)),
             ],
           ),
         ),
       ),
-      if (i < list[index].length - 1)
-        const Divider(
-          indent: 20,
-          endIndent: 20,
-          height: 1,
-        ),
+      if (isLast) const Divider(indent: 20, endIndent: 20, height: 1),
     ],
   );
 }
 
-int _getLabelMax(
-  List<List<RxBool>> selected,
-  List<List<PickingBarCodeInfo>> list,
-) {
-  var max = 0;
-  for (var i = 0; i < selected.length; ++i) {
-    for (var j = 0; j < selected[i].length; ++j) {
-      if (selected[i][j].value) {
-        var m = list[i][j].maxLabel();
-        if (max == 0 || max > m) max = m;
-      }
-    }
+int _getLabelMax(List<List<PickingBarCodeInfo>> list) {
+  var maxLabelList = <int>[];
+  for (var item in list) {
+    maxLabelList.addAll(
+      item.where((v) => v.isSelected.value).map((v) => v.maxLabel()).toList(),
+    );
   }
-  return max;
+  return maxLabelList.reduce((a, b) => a < b ? a : b);
 }
 
+List<CreateCustomLabelsData> createNewDataList(
+    List<List<CreateCustomLabelsData>> dataList) {
+  final cacheList = <CreateCustomLabelsData>[];
+
+  // 将所有指令数据合并到缓存列表中
+  for (var ins in dataList) {
+    cacheList.addAll(ins);
+  }
+
+  // 按尺寸分组并计算汇总数据
+  final grouped =
+      groupBy(cacheList, (CreateCustomLabelsData data) => data.size);
+
+  return grouped.entries.map((entry) {
+    final key = entry.key;
+    final value = entry.value;
+
+    // 计算剩余数量
+    final surplus = value
+        .map((s) => s.goodsTotal.sub(s.createdGoods))
+        .reduce((a, b) => a.add(b));
+
+    return CreateCustomLabelsData(
+      select: true,
+      size: key,
+      createdLabels: value.map((s) => s.createdLabels).reduce((a, b) => a + b),
+      goodsTotal: value.map((s) => s.goodsTotal).reduce((a, b) => a.add(b)),
+      createdGoods: value.map((s) => s.createdGoods).reduce((a, b) => a.add(b)),
+      surplusGoods: value.map((s) => s.surplusGoods).reduce((a, b) => a.add(b)),
+      capacity: surplus.toShowString(),
+      createGoods: surplus.toShowString(),
+      instruct: '',
+    );
+  }).toList();
+}
+
+//选择指令弹窗
+void selectInstructDialog(
+  List<List<CreateCustomLabelsData>> list, {
+  required void Function(List<CreateCustomLabelsData>) allCallback,
+  required void Function(List<CreateCustomLabelsData>) selectCallback,
+}) {
+  if (list.isNotEmpty) {
+    var selectedIndex = (-1).obs;
+
+    Get.dialog(
+      PopScope(
+        canPop: false,
+        child: AlertDialog(
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('选择指令'),
+              TextButton(onPressed: (){
+                Get.back();
+                allCallback.call(createNewDataList(list));
+              }, child: Text('整单生成'))
+            ],
+          ),
+          content: SizedBox(
+            width: 300,
+            height: 300,
+            child: ListView.builder(
+              itemCount: list.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  leading: Obx(() => Icon(
+                        selectedIndex.value == index
+                            ? Icons.radio_button_checked
+                            : Icons.radio_button_unchecked,
+                        color: selectedIndex.value == index
+                            ? Colors.blue
+                            : Colors.grey,
+                      )),
+                  title: Text(list[index][0].instruct ?? ''),
+                  onTap: () {
+                    selectedIndex.value = index;
+                  },
+                );
+              },
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Get.back(),
+              child: Text(
+                'dialog_default_cancel'.tr,
+                style: const TextStyle(color: Colors.grey),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                if (selectedIndex.value != -1) {
+                  Get.back();
+                  selectCallback.call(list[selectedIndex.value]);
+                }
+              },
+              child: Text('dialog_default_confirm'.tr),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+//创建自定义标签
 void createCustomLabelDialog(
-  List<PickingBarCodeInfo> list,
+  List<CreateCustomLabelsData> list,
   int id,
-  isMaterialLabel,
+  int labelType,
   Function() callback,
 ) {
   var selected = <bool>[].obs;
@@ -301,8 +379,8 @@ void createCustomLabelDialog(
   var createGoods = <double>[].obs;
   var create = <int>[].obs;
   for (var v in list) {
-    selected.add(false);
-    var surplus = v.totalQty.sub(v.qty ?? 0);
+    selected.add(v.select);
+    var surplus = v.goodsTotal.sub(v.createdGoods);
     if (surplus < 100) {
       capacity.add(surplus);
       createGoods.add(surplus);
@@ -348,7 +426,7 @@ void createCustomLabelDialog(
                 capacity,
                 createGoods,
                 id,
-                isMaterialLabel,
+                labelType,
                 () {
                   Get.back();
                   callback.call();
@@ -363,13 +441,13 @@ void createCustomLabelDialog(
 
 Obx _createCustomLabelItem(
   int index,
-  List<PickingBarCodeInfo> list,
+  List<CreateCustomLabelsData> list,
   RxList<bool> selected,
   RxList<double> capacity,
   RxList<double> createGoods,
   RxList<int> create,
 ) {
-  var surplus = list[index].totalQty.sub(list[index].qty ?? 0);
+  var surplus = list[index].goodsTotal.sub(list[index].createdGoods);
 
   return Obx(
     () => Card(
@@ -390,7 +468,7 @@ Obx _createCustomLabelItem(
             expandedTextSpan(
               flex: 2,
               hint: 'maintain_label_dialog_generated_label'.tr,
-              text: list[index].labelCount.toString(),
+              text: list[index].createdGoods.toShowString(),
               textColor: Colors.black45,
             ),
             expandedTextSpan(
@@ -407,12 +485,12 @@ Obx _createCustomLabelItem(
                 expandedTextSpan(
                   flex: 2,
                   hint: 'maintain_label_dialog_total_qty'.tr,
-                  text: list[index].totalQty.toShowString(),
+                  text: list[index].goodsTotal.toShowString(),
                 ),
                 expandedTextSpan(
                   flex: 2,
                   hint: 'maintain_label_dialog_generated_qty'.tr,
-                  text: list[index].qty.toShowString(),
+                  text: list[index].createdGoods.toShowString(),
                 ),
                 expandedTextSpan(
                   hint: 'maintain_label_dialog_surplus_goods_qty'.tr,
@@ -505,13 +583,14 @@ Obx _createCustomLabelItem(
   );
 }
 
+//创建物料贴标
 void _createCustomLabel(
-  List<PickingBarCodeInfo> list,
+  List<CreateCustomLabelsData> list,
   RxList<bool> selected,
   RxList<double> capacity,
   RxList<double> createGoods,
   int id,
-  bool isMaterialLabel,
+  int labelType,
   Function() callback,
 ) {
   if (!selected.any((v1) => v1)) {
@@ -523,7 +602,8 @@ void _createCustomLabel(
   }
   var body = {
     'InterID': id.toString(),
-    'UserID': userInfo?.userID ?? 0,
+    'SeOrderNo': list[0].instruct,
+    'UserID': getUserInfo()!.userID,
     'SizeList': [
       for (var i = 0; i < selected.length; ++i)
         if (selected[i])
@@ -533,22 +613,14 @@ void _createCustomLabel(
             'Qty': createGoods[i].toShowString(),
           }
     ],
-    'LabelTyp': '2',
+    'LabelType': labelType,
   };
   Future<BaseData> post;
-  if (isMaterialLabel) {
-    post = httpPost(
-      method: webApiCreateCustomLargeLabel,
-      loading: 'maintain_label_dialog_generating_label'.tr,
-      body: body,
-    );
-  } else {
-    post = httpPost(
-      method: webApiCreateCustomSizeLabel,
-      loading: 'maintain_label_dialog_generating_label'.tr,
-      body: body,
-    );
-  }
+  post = httpPost(
+    method: webApiCreateCustomLargeLabel,
+    loading: 'maintain_label_dialog_generating_label'.tr,
+    body: body,
+  );
   post.then((response) {
     if (response.resultCode == resultSuccess) {
       successDialog(content: response.message, back: () => callback.call());
@@ -1202,6 +1274,7 @@ void selectLanguageDialog(
 }
 
 void createLabelSelect({
+  required bool showAll,
   required Function() single,
   required Function() mix,
   required Function() custom,
@@ -1218,14 +1291,16 @@ void createLabelSelect({
       ),
       message: Text('maintain_label_dialog_select_label_type'.tr),
       actions: [
-        CupertinoActionSheetAction(
-          isDefaultAction: true,
-          onPressed: () {
-            Get.back();
-            single.call();
-          },
-          child: Text('maintain_label_dialog_singe'.tr),
-        ),
+        showAll
+            ? CupertinoActionSheetAction(
+                isDefaultAction: true,
+                onPressed: () {
+                  Get.back();
+                  single.call();
+                },
+                child: Text('maintain_label_dialog_singe'.tr),
+              )
+            : Container(),
         CupertinoActionSheetAction(
           isDefaultAction: true,
           onPressed: () {

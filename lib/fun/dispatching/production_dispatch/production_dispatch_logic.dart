@@ -176,6 +176,7 @@ class ProductionDispatchLogic extends GetxController {
           'materialCode': v.materialCode,
           'interID': v.interID,
           'isMaterialLabel': false,
+          'SapProcessName': v.sapProcessName,
         });
       });
     } else {
@@ -193,6 +194,7 @@ class ProductionDispatchLogic extends GetxController {
         'materialCode': data.materialCode,
         'interID': data.interID,
         'isMaterialLabel': true,
+        'SapProcessName': data.sapProcessName,
       });
     } else {
       showSnackBar(

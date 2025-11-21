@@ -55,6 +55,7 @@ enum class WeightState {
     WEIGHT_MSG_OPEN_DEVICE_FAILED,
     WEIGHT_MSG_READ_ERROR,
 }
+ var usbIsAttached:Boolean=false
 
 @SuppressLint("MissingPermission", "UnspecifiedRegisterReceiverFlag")
 class ReceiverUtil(
@@ -78,6 +79,7 @@ class ReceiverUtil(
     private var permissionListener: (Boolean) -> Unit = {}
     private var serialMulti: PL2303GMultiLib? = null
     private var readThread: WeighbridgeReadThread? = null
+
 
     /**
      * USB广播接收器
@@ -117,6 +119,7 @@ class ReceiverUtil(
 
                 ACTION_USB_DEVICE_ATTACHED, ACTION_USB_ACCESSORY_ATTACHED -> {
                     Log.e("Pan", "USB设备插入")
+                    usbIsAttached=true
                     usbAttached.invoke()
                 }
 
@@ -125,6 +128,7 @@ class ReceiverUtil(
                     if(intent.action==WEIGHT_DEVICE_DETACHED){
                         weighbridgeState.invoke(WeightState.WEIGHT_MSG_DEVICE_DETACHED)
                     }else{
+                        usbIsAttached=false
                         usbDetached.invoke()
                     }
                 }

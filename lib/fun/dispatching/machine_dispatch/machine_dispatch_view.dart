@@ -513,145 +513,168 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
         ),
       );
 
-  Obx bottomButton() => Obx(
-        () => Row(
+
+
+  Widget _bottomButtons() {
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Colors.white, Colors.green.shade100],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        ),
+      ),
+      height: 40,
+      child: Obx(
+            () => Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            if (!state.leaderVerify.value)
-              CombinationButton(
-                text: 'machine_dispatch_leader_operation'.tr,
-                click: () {
-                  if (logic.statusReportedAndGenerate()) {
-                    msgDialog(
-                      content: 'machine_dispatch_modify_error_tips'.tr,
-                    );
-                  } else {
-                    teamLeaderVerifyDialog();
-                  }
-                },
-              ),
-            if (state.leaderVerify.value)
-              CombinationButton(
-                text: 'machine_dispatch_clean_last'.tr,
-                isEnabled: logic.hasSelected(),
-                click: () => logic.cleanOrRecoveryLastQty(true),
-                combination: Combination.left,
-              ),
-            if (state.leaderVerify.value)
-              CombinationButton(
-                text: 'machine_dispatch_restore_last'.tr,
-                isEnabled: logic.hasSelected(),
-                click: () => logic.cleanOrRecoveryLastQty(false),
-                combination: Combination.middle,
-              ),
-            if (state.leaderVerify.value)
-              CombinationButton(
-                text: 'machine_dispatch_modify_order'.tr,
-                click: () {
-                  askDialog(
-                    content: 'machine_dispatch_modify_tips'.tr,
-                    confirm: () => logic.modifyWorkCardItem(),
-                  );
-                },
-                combination: Combination.right,
-              ),
-            Expanded(child: Container()),
-            CombinationButton(
-              text: 'machine_dispatch_label_history'.tr,
-              click: () => logic.getHistoryInfo(),
-              combination: Combination.left,
-            ),
-            CombinationButton(
-              text: 'machine_dispatch_process_manual'.tr,
-              click: () => feishuViewWikiFiles(
-                query: state.detailsInfo?.factoryType ?? '',
-              ),
-              combination: Combination.middle,
-            ),
-            CombinationButton(
-              text: 'machine_dispatch_generate_and_print'.tr,
-              isEnabled: logic.isSelectedOne(),
-              click: () {
-                generateAndPrintDialog(
-                  printLast: () =>
-                      logic.generateAndPrintLabel(isPrintLast: true),
-                  print: () =>
-                      logic.generateAndPrintLabel(isPrintLast: false),
-                );
-              },
-              combination: Combination.middle,
-            ),
-            CombinationButton(
-              text: 'machine_dispatch_generate_and_print_english'.tr,
-              isEnabled: logic.isSelectedOne(),
-              click: () {
-                logic.getEnglishLabel((label) {
-                  selectLabelTypeDialog(
-                    englishLabel: label,
-                    printLast: (weight, specifications) =>
-                        logic.generateAndPrintLabel(
-                          isPrintLast: true,
-                          isEnglish: true,
-                          weight: weight,
-                          specifications: specifications,
-                        ),
-                    print: (weight, specifications) =>
-                        logic.generateAndPrintLabel(
-                          isPrintLast: false,
-                          isEnglish: true,
-                          weight: weight,
-                          specifications: specifications,
-                        ),
-                  );
-                });
-              },
-              combination: Combination.middle,
-            ),
-            CombinationButton(
-              text: 'machine_dispatch_number_confirmation'.tr,
-              isEnabled: state.detailsInfo?.barCodeList?.isNotEmpty == true,
-              click: () => logic.workerDispatchConfirmation(
-                  isHandover: false,
-                  callback: () {
-                    refreshOrder();
-                  }),
-              combination: Combination.middle,
-            ),
-            CombinationButton(
-              text: 'machine_dispatch_cancel_number_confirmation'.tr,
-              isEnabled: state.detailsInfo?.barCodeList?.isNotEmpty == true,
-              click: () {
-                if (logic.statusReportedAndGenerate()) {
-                  msgDialog(
-                    content: '请先进行员工确认！',
-                  );
-                } else {
-                  askDialog(
-                    content: '确定要取消员工确认吗？',
-                    confirm: () => logic.cancelWorkerDispatchConfirmation(),
-                  );
-                }
-              },
-              combination: Combination.middle,
-            ),
-            CombinationButton(
-              text: 'machine_dispatch_handover_shifts'.tr,
-              isEnabled: logic.canHandover(),
-              click: () {
-                if (logic.handoverShifts() &&
-                    logic.checkAllTotal() &&
-                    logic.checkSizeTotal()) {
-                  logic.workerDispatchConfirmation(
-                      isHandover: true,
-                      callback: () {
-                        refreshOrder();
+            Expanded(
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: [
+                  if (!state.leaderVerify.value)
+                    CombinationButton(
+                      text: 'machine_dispatch_leader_operation'.tr,
+                      click: () {
+                        if (logic.statusReportedAndGenerate()) {
+                          msgDialog(
+                            content: 'machine_dispatch_modify_error_tips'.tr,
+                          );
+                        } else {
+                          teamLeaderVerifyDialog();
+                        }
+                      },
+                    ),
+                  if (state.leaderVerify.value)
+                    CombinationButton(
+                      text: 'machine_dispatch_clean_last'.tr,
+                      isEnabled: logic.hasSelected(),
+                      click: () => logic.cleanOrRecoveryLastQty(true),
+                      combination: Combination.left,
+                    ),
+                  if (state.leaderVerify.value)
+                    CombinationButton(
+                      text: 'machine_dispatch_restore_last'.tr,
+                      isEnabled: logic.hasSelected(),
+                      click: () => logic.cleanOrRecoveryLastQty(false),
+                      combination: Combination.middle,
+                    ),
+                  if (state.leaderVerify.value)
+                    CombinationButton(
+                      text: 'machine_dispatch_modify_order'.tr,
+                      click: () {
+                        askDialog(
+                          content: 'machine_dispatch_modify_tips'.tr,
+                          confirm: () => logic.modifyWorkCardItem(),
+                        );
+                      },
+                      combination: Combination.right,
+                    ),
+                  Expanded(child: Container()),
+                  CombinationButton(
+                    text: 'machine_dispatch_label_history'.tr,
+                    click: () => logic.getHistoryInfo(),
+                    combination: Combination.left,
+                  ),
+                  CombinationButton(
+                    text: 'machine_dispatch_process_manual'.tr,
+                    click: () => feishuViewWikiFiles(
+                      query: state.detailsInfo?.factoryType ?? '',
+                    ),
+                    combination: Combination.middle,
+                  ),
+                  CombinationButton(
+                    text: 'machine_dispatch_generate_and_print'.tr,
+                    isEnabled: logic.isSelectedOne(),
+                    click: () {
+                      generateAndPrintDialog(
+                        printLast: () =>
+                            logic.generateAndPrintLabel(isPrintLast: true),
+                        print: () =>
+                            logic.generateAndPrintLabel(isPrintLast: false),
+                      );
+                    },
+                    combination: Combination.middle,
+                  ),
+                  CombinationButton(
+                    text: 'machine_dispatch_generate_and_print_english'.tr,
+                    isEnabled: logic.isSelectedOne(),
+                    click: () {
+                      logic.getEnglishLabel((label) {
+                        selectLabelTypeDialog(
+                          englishLabel: label,
+                          printLast: (weight, specifications) =>
+                              logic.generateAndPrintLabel(
+                                isPrintLast: true,
+                                isEnglish: true,
+                                weight: weight,
+                                specifications: specifications,
+                              ),
+                          print: (weight, specifications) =>
+                              logic.generateAndPrintLabel(
+                                isPrintLast: false,
+                                isEnglish: true,
+                                weight: weight,
+                                specifications: specifications,
+                              ),
+                        );
                       });
-                }
-              },
-              combination: Combination.right,
+                    },
+                    combination: Combination.middle,
+                  ),
+                  CombinationButton(
+                    text: 'machine_dispatch_number_confirmation'.tr,
+                    isEnabled: state.detailsInfo?.barCodeList?.isNotEmpty == true,
+                    click: () => logic.workerDispatchConfirmation(
+                        isHandover: false,
+                        callback: () {
+                          refreshOrder();
+                        }),
+                    combination: Combination.middle,
+                  ),
+                  CombinationButton(
+                    text: 'machine_dispatch_cancel_number_confirmation'.tr,
+                    isEnabled: state.detailsInfo?.barCodeList?.isNotEmpty == true,
+                    click: () {
+                      if (logic.statusReportedAndGenerate()) {
+                        msgDialog(
+                          content: '请先进行员工确认！',
+                        );
+                      } else {
+                        askDialog(
+                          content: '确定要取消员工确认吗？',
+                          confirm: () => logic.cancelWorkerDispatchConfirmation(),
+                        );
+                      }
+                    },
+                    combination: Combination.middle,
+                  ),
+                  CombinationButton(
+                    text: 'machine_dispatch_handover_shifts'.tr,
+                    isEnabled: logic.canHandover(),
+                    click: () {
+                      if (logic.handoverShifts() &&
+                          logic.checkAllTotal() &&
+                          logic.checkSizeTotal()) {
+                        logic.workerDispatchConfirmation(
+                            isHandover: true,
+                            callback: () {
+                              refreshOrder();
+                            });
+                      }
+                    },
+                    combination: Combination.right,
+                  ),
+                ],
+              ),
             ),
+
           ],
         ),
-      );
+      ),
+    );
+  }
 
   @override
   void initState() {
@@ -731,7 +754,7 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
                     ],
                   )),
             ),
-            Obx(() => state.hasDetails.value ? bottomButton() : Container())
+            Obx(() => state.hasDetails.value ? _bottomButtons() : Container())
           ],
         ));
   }

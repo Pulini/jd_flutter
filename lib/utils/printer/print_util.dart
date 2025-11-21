@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -14,6 +13,7 @@ import 'package:permission_handler/permission_handler.dart';
 class PrintUtil {
   static final PrintUtil _instance = PrintUtil._internal();
   var bluetoothChannel = const MethodChannel(channelBluetoothFlutterToAndroid);
+  var usbChannel = const MethodChannel(channelUsbTscFlutterToAndroid);
   var deviceList = <BluetoothDevice>[].obs;
   var isScanning = false.obs;
   var _dialogIsShowing = false;
@@ -32,24 +32,43 @@ class PrintUtil {
     Function()? success,
     Function()? failed,
   }) async {
-    if (!await _getBluetoothPermission()) {
-      showSnackBar(title: '蓝牙错误', message: '缺少蓝牙权限');
-      return;
-    }
-    if (!await _bluetoothIsEnable()) {
-      showSnackBar(title: '蓝牙错误', message: '当前蓝牙不可用');
-      return;
-    }
-    deviceList.value = await _getScannedDevices();
-    debugPrint(
-        'label.size=${label.map((v) => v.lengthInBytes).reduce((a, b) => a + b)}');
-    if (deviceList.any((v) => v.deviceIsConnected)) {
-      _send(label: label, start: start, success: success, failed: failed);
-    } else {
-      _showBluetoothDialog(
-        () =>
-            _send(label: label, start: start, success: success, failed: failed),
+    if (await _getUsbState()) {
+      _send(
+        mChannel: usbChannel,
+        label: label,
+        start: start,
+        success: success,
+        failed: failed,
       );
+    } else {
+      if (!await _getBluetoothPermission()) {
+        showSnackBar(title: '蓝牙错误', message: '缺少蓝牙权限');
+        return;
+      }
+      if (!await _bluetoothIsEnable()) {
+        showSnackBar(title: '蓝牙错误', message: '当前蓝牙不可用');
+        return;
+      }
+      deviceList.value = await _getScannedDevices();
+      debugPrint(
+          'label.size=${label.map((v) => v.lengthInBytes).reduce((a, b) => a + b)}');
+      if (deviceList.any((v) => v.deviceIsConnected)) {
+        _send(
+            mChannel: bluetoothChannel,
+            label: label,
+            start: start,
+            success: success,
+            failed: failed);
+      } else {
+        _showBluetoothDialog(
+          () => _send(
+              mChannel: bluetoothChannel,
+              label: label,
+              start: start,
+              success: success,
+              failed: failed),
+        );
+      }
     }
   }
 
@@ -59,34 +78,50 @@ class PrintUtil {
     Function(int, int)? progress,
     Function(List<int>, List<int>)? finished,
   }) async {
-    if (!await _getBluetoothPermission()) {
-      showSnackBar(title: '蓝牙错误', message: '缺少蓝牙权限');
-      return;
-    }
-    if (!await _bluetoothIsEnable()) {
-      showSnackBar(title: '蓝牙错误', message: '当前蓝牙不可用');
-      return;
-    }
-    if (!await _bluetoothIsLocationOn()) {
-      showSnackBar(title: '蓝牙错误', message: '请打开位置信息');
-      return;
-    }
-    deviceList.value = await _getScannedDevices();
-    if (deviceList.any((v) => v.deviceIsConnected)) {
+    if (await _getUsbState()) {
       _sendList(
+        mChannel: usbChannel,
         labels: labelList,
         start: start,
         progress: progress,
         finished: finished,
       );
     } else {
-      _showBluetoothDialog(() => _sendList(
-            labels: labelList,
-            start: start,
-            progress: progress,
-            finished: finished,
-          ));
+      if (!await _getBluetoothPermission()) {
+        showSnackBar(title: '蓝牙错误', message: '缺少蓝牙权限');
+        return;
+      }
+      if (!await _bluetoothIsEnable()) {
+        showSnackBar(title: '蓝牙错误', message: '当前蓝牙不可用');
+        return;
+      }
+      if (!await _bluetoothIsLocationOn()) {
+        showSnackBar(title: '蓝牙错误', message: '请打开位置信息');
+        return;
+      }
+      deviceList.value = await _getScannedDevices();
+      if (deviceList.any((v) => v.deviceIsConnected)) {
+        _sendList(
+          mChannel: bluetoothChannel,
+          labels: labelList,
+          start: start,
+          progress: progress,
+          finished: finished,
+        );
+      } else {
+        _showBluetoothDialog(() => _sendList(
+              mChannel: bluetoothChannel,
+              labels: labelList,
+              start: start,
+              progress: progress,
+              finished: finished,
+            ));
+      }
     }
+  }
+
+  Future<bool> _getUsbState() async {
+    return await usbChannel.invokeMethod('isAttached');
   }
 
   void setChannelListener() {
@@ -328,13 +363,14 @@ class PrintUtil {
   //           stuBarCode: 'stuBarCode12345'));
   // }
   Future<void> _send({
+    required MethodChannel mChannel,
     required dynamic label,
     required Function()? start,
     required Function()? success,
     required Function()? failed,
   }) async {
     start?.call();
-    var code = await bluetoothChannel.invokeMethod('SendTSC', label);
+    var code = await mChannel.invokeMethod('SendTSC', label);
     if (code == 1000) {
       //发送完成
       success?.call();
@@ -347,13 +383,18 @@ class PrintUtil {
         _connectBluetooth(
           deviceList.firstWhere((v) => v.deviceIsConnected),
           () => _send(
-              label: label, start: start, success: success, failed: failed),
+              mChannel: mChannel,
+              label: label,
+              start: start,
+              success: success,
+              failed: failed),
         );
       });
     }
   }
 
   Future<void> _sendList({
+    required MethodChannel mChannel,
     required List<dynamic> labels,
     required Function()? start,
     required Function(int, int)? progress,
@@ -364,7 +405,7 @@ class PrintUtil {
     var fail = <int>[];
     for (var i = 0; i < labels.length; ++i) {
       progress?.call(i + 1, labels.length);
-      var code = await bluetoothChannel.invokeMethod('SendTSC', labels[i]);
+      var code = await mChannel.invokeMethod('SendTSC', labels[i]);
       if (code == 1000) {
         success.add(i);
       } else if (code == 1003 || code == 1007) {

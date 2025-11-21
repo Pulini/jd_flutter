@@ -12,6 +12,7 @@ import android.hardware.usb.UsbManager
 import android.os.Build
 import android.os.SystemClock
 import com.jd.pzx.jd_flutter.ACTION_USB_PERMISSION
+import com.jd.pzx.jd_flutter.utils.bytesMerger
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 
@@ -99,22 +100,11 @@ class USBUtil(
         return true
     }
 
-    /**
-     * 合并ByteArray
-     */
-    private fun bytesMerger(byteArray: ArrayList<ByteArray>) =
-        ByteArray(byteArray.sumOf { it.size }).apply {
-            var index = 0
-            for (bytes in byteArray) {
-                System.arraycopy(bytes, 0, this, index, bytes.size)
-                index += bytes.size
-            }
-        }
 
     /**
      * 发送长指令
      */
-    fun sendCommand(array: ArrayList<ByteArray>, callback: (Boolean) -> Unit) {
+    fun sendCommand(array: List<ByteArray>, callback: (Boolean) -> Unit) {
         Thread {
             if (openPort() && (usbConnection != null)) {
                 val byte = bytesMerger(array)
@@ -135,7 +125,7 @@ class USBUtil(
     /**
      * 发送长指令
      */
-    fun sendCommand(array: ArrayList<ByteArray>) =
+    fun sendCommand(array: List<ByteArray>) =
         if (openPort() && (usbConnection != null)) {
             bytesMerger(array).run {
                 usbConnection!!.bulkTransfer(usbEndpoint, this, size, 100)

@@ -67,6 +67,7 @@ class ProductionDispatchOrderInfo {
     this.checkDate,
     this.entryID,
     this.processFlowID,
+    this.sapProcessName,
     this.canReportByNoStockIn,
     this.workNumberTotal,
     this.routeBillNumber,
@@ -112,6 +113,7 @@ class ProductionDispatchOrderInfo {
     checkDate = json['CheckDate'];
     entryID = json['EntryID'];
     processFlowID = json['ProcessFlowID'];
+    sapProcessName = json['SAPProcessName'];
     canReportByNoStockIn = json['CanReportByNoStockIn'];
     workNumberTotal = json['WorkNumberTotal'];
     routeBillNumber = json['RouteBillNumber'];
@@ -163,6 +165,7 @@ class ProductionDispatchOrderInfo {
   String? checkDate;
   int? entryID;
   int? processFlowID;
+  String? sapProcessName;
   int? canReportByNoStockIn;
   double? workNumberTotal;
   String? routeBillNumber;
@@ -208,6 +211,7 @@ class ProductionDispatchOrderInfo {
     map['CheckDate'] = checkDate;
     map['EntryID'] = entryID;
     map['ProcessFlowID'] = processFlowID;
+    map['SAPProcessName'] = sapProcessName;
     map['CanReportByNoStockIn'] = canReportByNoStockIn;
     map['WorkNumberTotal'] = workNumberTotal;
     map['RouteBillNumber'] = routeBillNumber;

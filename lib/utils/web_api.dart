@@ -517,7 +517,7 @@ const webApiCreateSingleLabel =
 
 //获取可创建标签数据
 const webApiGetPackingListBarCodeCount =
-    'api/CompoundDispatching/GetPackingListBarCodeCount';
+    'api/CompoundDispatching/GetPackingListBarCodeCountNew';
 
 //获取可创建标签数据
 const webApiGetPackingListBarCodeCountBySize =
@@ -527,9 +527,9 @@ const webApiGetPackingListBarCodeCountBySize =
 const webApiCreateMixLabel =
     'api/CompoundDispatching/GeneratePackingListBarCodeBySizedMultiple';
 
-//创建自定义贴标
+//创建自定义贴标(物料标)
 const webApiCreateCustomLargeLabel =
-    'api/CompoundDispatching/GeneratePackingListLargeBarCode';
+    'api/CompoundDispatching/GeneratePackingListBarCodeNew';
 
 //创建自定义贴标
 const webApiCreateCustomSizeLabel =

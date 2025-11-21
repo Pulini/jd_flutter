@@ -66,40 +66,40 @@ class _HandoverReportListPageState extends State<HandoverReportListPage> {
       children: [
         Expanded(
             child: _text(
-          mes: 'handover_report_size'.tr,
-          head: true,
-          judge: false,
-        )),
+              mes: 'handover_report_size'.tr,
+              head: true,
+              judge: false,
+            )),
         Expanded(
             child: _text(
-          mes: 'handover_report_box_capacity'.tr,
-          head: true,
-          judge: false,
-        )),
+              mes: 'handover_report_box_capacity'.tr,
+              head: true,
+              judge: false,
+            )),
         Expanded(
             child: _text(
-          mes: 'handover_report_box_number'.tr,
-          head: true,
-          judge: false,
-        )),
+              mes: 'handover_report_box_number'.tr,
+              head: true,
+              judge: false,
+            )),
         Expanded(
             child: _text(
-          mes: 'handover_report_last_number'.tr,
-          head: true,
-          judge: false,
-        )),
+              mes: 'handover_report_last_number'.tr,
+              head: true,
+              judge: false,
+            )),
         Expanded(
             child: _text(
-          mes: 'handover_report_now_number'.tr,
-          head: true,
-          judge: false,
-        )),
+              mes: 'handover_report_now_number'.tr,
+              head: true,
+              judge: false,
+            )),
         Expanded(
             child: _text(
-          mes: 'handover_report_single_subtotal'.tr,
-          head: true,
-          judge: false,
-        )),
+              mes: 'handover_report_single_subtotal'.tr,
+              head: true,
+              judge: false,
+            )),
       ],
     );
   }
@@ -109,40 +109,40 @@ class _HandoverReportListPageState extends State<HandoverReportListPage> {
       children: [
         Expanded(
             child: _text(
-          mes: sub.subSize ?? '',
-          head: false,
-          judge: judge,
-        )),
+              mes: sub.subSize ?? '',
+              head: false,
+              judge: judge,
+            )),
         Expanded(
             child: _text(
-          mes: sub.subCapacity.toShowString(),
-          head: false,
-          judge: judge,
-        )),
+              mes: sub.subCapacity.toShowString(),
+              head: false,
+              judge: judge,
+            )),
         Expanded(
             child: _text(
-          mes: sub.subBox.toShowString(),
-          head: false,
-          judge: judge,
-        )),
+              mes: sub.subBox.toShowString(),
+              head: false,
+              judge: judge,
+            )),
         Expanded(
             child: _text(
-          mes: sub.subLastMantissa.toShowString(),
-          head: false,
-          judge: judge,
-        )),
+              mes: sub.subLastMantissa.toShowString(),
+              head: false,
+              judge: judge,
+            )),
         Expanded(
             child: _text(
-          mes: sub.subMantissa.toShowString(),
-          head: false,
-          judge: judge,
-        )),
+              mes: sub.subMantissa.toShowString(),
+              head: false,
+              judge: judge,
+            )),
         Expanded(
             child: _text(
-          mes: sub.subQty.toShowString(),
-          head: false,
-          judge: judge,
-        )),
+              mes: sub.subQty.toShowString(),
+              head: false,
+              judge: judge,
+            )),
       ],
     );
   }
@@ -181,7 +181,7 @@ class _HandoverReportListPageState extends State<HandoverReportListPage> {
             Row(
               children: [
                 expandedTextSpan(
-                    //机台
+                  //机台
                     hint: 'handover_report_machine'.tr,
                     text: data.machine ?? '',
                     textColor: Colors.blue.shade500,
@@ -198,7 +198,7 @@ class _HandoverReportListPageState extends State<HandoverReportListPage> {
             Row(
               children: [
                 expandedTextSpan(
-                    //型体
+                  //型体
                     hint: 'handover_report_type_body'.tr,
                     text: data.factoryType ?? '',
                     textColor: Colors.blue.shade500,
@@ -239,11 +239,11 @@ class _HandoverReportListPageState extends State<HandoverReportListPage> {
               children: [
                 DatePicker(pickerController: logic.pickerControllerDate),
                 Obx(() => CheckBox(
-                      onChanged: (c) =>
-                          {state.isChecked.value = c, logic.selectAll(c)},
-                      name: '',
-                      value: state.isChecked.value,
-                    ))
+                  onChanged: (c) =>
+                  {state.isChecked.value = c, logic.selectAll(c)},
+                  name: '',
+                  value: state.isChecked.value,
+                ))
               ],
             ),
             SizedBox(
@@ -258,11 +258,11 @@ class _HandoverReportListPageState extends State<HandoverReportListPage> {
             ),
             Expanded(
               child: Obx(() => ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: state.dataList.length,
-                    itemBuilder: (context, index) =>
-                        _item1(state.dataList[index], index),
-                  )),
+                shrinkWrap: true,
+                itemCount: state.dataList.length,
+                itemBuilder: (context, index) =>
+                    _item1(state.dataList[index], index),
+              )),
             ),
             Row(
               children: [
