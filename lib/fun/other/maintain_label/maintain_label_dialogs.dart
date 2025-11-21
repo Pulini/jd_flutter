@@ -335,7 +335,7 @@ void selectInstructDialog(
                             ? Colors.blue
                             : Colors.grey,
                       )),
-                  title: Text(list[index][0].instruct ?? ''),
+                  title: Text(list[index][0].instruct),
                   onTap: () {
                     selectedIndex.value = index;
                   },
@@ -462,7 +462,7 @@ Obx _createCustomLabelItem(
             expandedTextSpan(
               flex: 2,
               hint: 'maintain_label_dialog_size'.tr,
-              text: list[index].size ?? '',
+              text: list[index].size,
               textColor: Colors.redAccent,
             ),
             expandedTextSpan(
