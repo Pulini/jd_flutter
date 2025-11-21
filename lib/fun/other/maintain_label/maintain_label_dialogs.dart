@@ -608,7 +608,7 @@ void _createCustomLabel(
       for (var i = 0; i < selected.length; ++i)
         if (selected[i])
           {
-            'Size': list[i].size ?? '',
+            'Size': list[i].size,
             'Capacity': capacity[i].toShowString(),
             'Qty': createGoods[i].toShowString(),
           }
