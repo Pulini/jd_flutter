@@ -169,7 +169,7 @@ class RouteConfig {
   //生产派工
   static Routes productionDispatch = Routes(
     '/production_dispatch',
-    211,
+    213,
     const ProductionDispatchPage(),
   );
 
@@ -652,7 +652,7 @@ class RouteConfig {
   //打印托盘清单
   static Routes printPallet = Routes(
     '/print_pallet',
-    204,
+    205,
     const PrintPalletPage(),
   );
 

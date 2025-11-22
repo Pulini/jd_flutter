@@ -164,7 +164,6 @@ Future<List<pw.Widget>> createA4PaperMaterialListPdf({
     );
   }
 
-
   var paperList = <pw.Widget>[]; //纸张列表
   List<List<pw.Widget>> pages = [];
   List<pw.Widget> currentPage = [];
@@ -518,9 +517,11 @@ void _createSizeMaterialTable({
     });
   }
   //混码总组数
-  var mixLineTotal = mixDataGroupList
-      .map((v) => v.values.map((v2) => v2.length).reduce((a, b) => a + b))
-      .reduce((a, b) => a + b);
+  var mixLineTotal = mixDataGroupList.isEmpty
+      ? 0
+      : mixDataGroupList
+          .map((v) => v.values.map((v2) => v2.length).reduce((a, b) => a + b))
+          .reduce((a, b) => a + b);
 
   var singleMaterialWidget = singleDataGroupList.isEmpty
       ? pw.Container()

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 
@@ -29,7 +30,7 @@ class PickingBarCodeInfo {
     surplusQty=totalQty.sub(qty??0);
   }
 
-  RxBool isSelected = false.obs;
+  bool isSelected = false;
   int? interID;
   String? mtono;
   String? size;
@@ -38,6 +39,7 @@ class PickingBarCodeInfo {
   double? totalQty;
   double packingQty = 0.0;
   double surplusQty = 0.0;
+  TextEditingController controller = TextEditingController();
 
 
   Map<String, dynamic> toJson() {
@@ -51,6 +53,7 @@ class PickingBarCodeInfo {
     return map;
   }
 
-  int maxLabel()=> qty == 0.0 ? 0 : totalQty.div(qty ?? 0).ceil();
+  int maxLabel()=> packingQty == 0.0 ? 0 : totalQty.div(packingQty).ceil();
+
 
 }

@@ -17,72 +17,91 @@ import 'package:jd_flutter/widget/edit_text_widget.dart';
 //创建混码标
 void createMixLabelDialog(List<List<PickingBarCodeInfo>> list, int id,
     int labelType, Function() callback) {
-  var maxLabel = 0.obs;
+  var maxLabel = 0;
   var controller = TextEditingController();
   Get.dialog(
     PopScope(
         canPop: false,
-        child: AlertDialog(
-          title: Text('maintain_label_dialog_create_mix_label'.tr),
-          content: SizedBox(
-            width: MediaQuery.of(Get.overlayContext!).size.width * 0.8,
-            height: MediaQuery.of(Get.overlayContext!).size.height * 0.8,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Row(
-                  children: [
-                    Text('maintain_label_dialog_max_label_qty'.tr),
-                    Expanded(
-                      child: NumberEditText(
-                        onChanged: (s) {
-                          if (s.toDoubleTry() > maxLabel.value) {
-                            controller.text = maxLabel.value.toString();
-                          }
+        child: StatefulBuilder(
+          builder: (c, dialogState) => AlertDialog(
+            title: Text('maintain_label_dialog_create_mix_label'.tr),
+            content: SizedBox(
+              width: MediaQuery.of(c).size.width * 0.8,
+              height: MediaQuery.of(c).size.height * 0.8,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    children: [
+                      Text('maintain_label_dialog_max_label_qty'.tr),
+                      Expanded(
+                        child: NumberEditText(
+                          onChanged: (s) {
+                            if (s.toDoubleTry() > maxLabel) {
+                              controller.text = maxLabel.toString();
+                            }
+                          },
+                          controller: controller,
+                        ),
+                      ),
+                      TextButton(
+                          onPressed: () {
+                            dialogState(() {
+                              for (var v in list) {
+                                v.where((v) => v.isSelected).forEach((v2) {
+                                  v2.packingQty = v2.surplusQty;
+                                  v2.controller.text =
+                                      v2.packingQty.toShowString();
+                                });
+                              }
+                              maxLabel = _getLabelMax(list);
+                              controller.text = maxLabel.toString();
+                            });
+                          },
+                          child: Text('填满剩余量'))
+                    ],
+                  ),
+                  Expanded(
+                    child: ListView.builder(
+                      padding: const EdgeInsets.all(8),
+                      itemCount: list.length,
+                      itemBuilder: (context, i) => _createMixLabelItem(
+                        list: list[i],
+                        select: () {
+                          dialogState(() {
+                            maxLabel = _getLabelMax(list);
+                            controller.text = maxLabel.toString();
+                          });
                         },
-                        controller: controller,
                       ),
                     ),
-                  ],
-                ),
-                Expanded(
-                  child: ListView.builder(
-                    padding: const EdgeInsets.all(8),
-                    itemCount: list.length,
-                    itemBuilder: (context, i) => _createMixLabelItem(
-                      list: list[i],
-                      select: () {
-                        maxLabel.value = _getLabelMax(list);
-                        controller.text = maxLabel.value.toString();
-                      },
-                    ),
                   ),
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Get.back(),
+                child: Text(
+                  'maintain_label_dialog_back'.tr,
+                  style: const TextStyle(color: Colors.grey),
                 ),
-              ],
-            ),
+              ),
+              TextButton(
+                onPressed: () => _createMixLabel(
+                  list: list,
+                  maxLabel: maxLabel,
+                  id: id,
+                  labelType: labelType,
+                  callback: () {
+                    Get.back();
+                    callback.call();
+                  },
+                ),
+                child: Text('maintain_label_dialog_create'.tr),
+              ),
+            ],
           ),
-          actions: [
-            TextButton(
-              onPressed: () => Get.back(),
-              child: Text(
-                'maintain_label_dialog_back'.tr,
-                style: const TextStyle(color: Colors.grey),
-              ),
-            ),
-            TextButton(
-              onPressed: () => _createMixLabel(
-                list: list,
-                maxLabel: maxLabel.value,
-                id: id,
-                labelType: labelType,
-                callback: () {
-                  Get.back();
-                  callback.call();
-                },
-              ),
-              child: Text('maintain_label_dialog_create'.tr),
-            ),
-          ],
         )),
   );
 }
@@ -94,7 +113,7 @@ void _createMixLabel({
   required int labelType,
   required Function() callback,
 }) {
-  if (list.every((v1) => v1.every((v2) => !v2.isSelected.value))) {
+  if (list.every((v1) => v1.every((v2) => !v2.isSelected))) {
     showSnackBar(
       message: 'maintain_label_dialog_select_instruction_and_size'.tr,
       isWarning: true,
@@ -111,7 +130,7 @@ void _createMixLabel({
 
   var submitList = <PickingBarCodeInfo>[];
   for (var item in list) {
-    submitList.addAll(item.where((v) => v.isSelected.value).toList());
+    submitList.addAll(item.where((v) => v.isSelected).toList());
   }
   httpPost(
     method: webApiCreateMixLabel,
@@ -124,7 +143,7 @@ void _createMixLabel({
         for (var item in submitList)
           {
             'Size': item.size,
-            'Capacity': item.qty.toShowString(),
+            'Capacity': item.packingQty,
             'MtoNo': item.mtono,
           }
       ],
@@ -139,55 +158,55 @@ void _createMixLabel({
   });
 }
 
-Obx _createMixLabelItem({
+Widget _createMixLabelItem({
   required List<PickingBarCodeInfo> list,
   required Function() select,
 }) {
-  return Obx(() => Card(
-        color: list.every((v) => v.isSelected.value)
-            ? Colors.greenAccent.shade100
-            : Colors.white,
-        child: ExpansionTile(
-          initiallyExpanded: true,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          leading: Checkbox(
-            value: list.every((v) => v.isSelected.value),
-            onChanged: (c) {
-              for (var v in list) {
-                v.isSelected.value = c!;
-              }
-              select.call();
-            },
-          ),
-          title: Text.rich(
-            TextSpan(
-              children: [
-                TextSpan(
-                  text: 'maintain_label_dialog_size'.tr,
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
-                TextSpan(
-                  text: list.first.size,
-                  style: const TextStyle(
-                    color: Colors.blueAccent,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-          ),
+  return Card(
+    color: list.every((v) => v.isSelected)
+        ? Colors.greenAccent.shade100
+        : Colors.white,
+    child: ExpansionTile(
+      initiallyExpanded: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+      ),
+      leading: Checkbox(
+        value: list.every((v) => v.isSelected),
+        onChanged: (c) {
+          for (var v in list) {
+            v.isSelected = c!;
+          }
+          select.call();
+        },
+      ),
+      title: Text.rich(
+        TextSpan(
           children: [
-            for (var sub in list)
-              _createMixLabelSubItem(
-                sub: sub,
-                isLast: list.last == sub,
-                select: select,
-              )
+            TextSpan(
+              text: 'maintain_label_dialog_size'.tr,
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+            TextSpan(
+              text: list.first.size,
+              style: const TextStyle(
+                color: Colors.blueAccent,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ],
         ),
-      ));
+      ),
+      children: [
+        for (var sub in list)
+          _createMixLabelSubItem(
+            sub: sub,
+            isLast: list.last == sub,
+            select: select,
+          )
+      ],
+    ),
+  );
 }
 
 Column _createMixLabelSubItem({
@@ -197,18 +216,19 @@ Column _createMixLabelSubItem({
 }) {
   var style = const TextStyle(fontSize: 14, fontWeight: FontWeight.bold);
   var checkbox = Checkbox(
-    value: sub.isSelected.value,
+    value: sub.isSelected,
     onChanged: (c) {
-      sub.isSelected.value = c!;
+      sub.isSelected = c!;
       select.call();
     },
   );
+
   var number = NumberDecimalEditText(
     onChanged: (v) {
-      sub.qty = v;
+      sub.packingQty = v;
       select.call();
     },
-    initQty: sub.qty,
+    controller: sub.controller,
   );
   return Column(
     children: [
@@ -240,8 +260,7 @@ Column _createMixLabelSubItem({
             children: [
               Text('maintain_label_dialog_packing_qty'.tr, style: style),
               Expanded(
-                  child:
-                      sub.isSelected.value ? number : Text('0', style: style)),
+                  child: sub.isSelected ? number : Text('0', style: style)),
             ],
           ),
         ),
@@ -255,7 +274,7 @@ int _getLabelMax(List<List<PickingBarCodeInfo>> list) {
   var maxLabelList = <int>[];
   for (var item in list) {
     maxLabelList.addAll(
-      item.where((v) => v.isSelected.value).map((v) => v.maxLabel()).toList(),
+      item.where((v) => v.isSelected).map((v) => v.maxLabel()).toList(),
     );
   }
   return maxLabelList.reduce((a, b) => a < b ? a : b);
@@ -314,10 +333,12 @@ void selectInstructDialog(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text('选择指令'),
-              TextButton(onPressed: (){
-                Get.back();
-                allCallback.call(createNewDataList(list));
-              }, child: Text('整单生成'))
+              TextButton(
+                  onPressed: () {
+                    Get.back();
+                    allCallback.call(createNewDataList(list));
+                  },
+                  child: Text('整单生成'))
             ],
           ),
           content: SizedBox(
