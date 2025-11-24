@@ -101,7 +101,7 @@ class ProductionScanWarehouseLogic extends GetxController {
       loading: 'production_scan_obtaining_tray_information'.tr,
       method: webApiSapGetPalletList,
       body: {
-        'WERKS': '1500',
+        'WERKS':  isTestUrl()?'2000':'1500',
         'LGORT': userInfo?.defaultStockNumber,
         'ZTRAY_CFM': 'X',
         'ITEM': [

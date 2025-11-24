@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:get/get.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 
 // InterID : 67660

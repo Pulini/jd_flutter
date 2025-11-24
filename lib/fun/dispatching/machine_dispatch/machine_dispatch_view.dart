@@ -515,7 +515,7 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
 
 
 
-  Widget _bottomButtons() {
+  Widget bottomButton() {
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -571,7 +571,6 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
                       },
                       combination: Combination.right,
                     ),
-                  Expanded(child: Container()),
                   CombinationButton(
                     text: 'machine_dispatch_label_history'.tr,
                     click: () => logic.getHistoryInfo(),
@@ -754,7 +753,7 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
                     ],
                   )),
             ),
-            Obx(() => state.hasDetails.value ? _bottomButtons() : Container())
+            Obx(() => state.hasDetails.value ? bottomButton() : Container())
           ],
         ));
   }
