@@ -121,7 +121,7 @@ class SapProductionPickingState {
       body: {
         'DATA': [
           for (var i = 0; i < pickDetailList.length; ++i)
-            for (var j = 0; i < pickDetailList[i].materialList.length; ++j)
+            for (var j = 0; j < pickDetailList[i].materialList.length; ++j)
               if (pickDetailList[i].materialList[j].select)
                 {
                   'ZTYPE': pickDetailList[i].materialList[j].orderType,

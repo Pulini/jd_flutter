@@ -663,7 +663,11 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
                           _item1(state.orderList, index),
                     ),
             ),
-            state.isSelectedMergeOrder.value ? Container() : _bottomButtons()
+            state.isSelectedMergeOrder.value
+                ? Container()
+                : state.orderList.isEmpty
+                    ? Container()
+                    : _bottomButtons()
           ],
         ),
       ),

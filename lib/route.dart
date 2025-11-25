@@ -309,7 +309,7 @@ class RouteConfig {
   //sap生产领料
   static Routes sapProductionPicking = Routes(
     '/sap_production_picking',
-    200,
+    201,
     const SapProductionPickingPage(),
   );
 

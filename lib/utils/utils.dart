@@ -155,7 +155,9 @@ void hideKeyBoard() {
 void loggerF(Map<String, dynamic> map) {
   if (map.toString().length > 500) {
     map['日志类型'] = '异步打印日志';
-    compute(_logF, map);
+    compute(_logF, map).onError((e,s){
+      logger.f(map);
+    });
   } else {
     map['日志类型'] = '直接打印日志';
     logger.f(map);
