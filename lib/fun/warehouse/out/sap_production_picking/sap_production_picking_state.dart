@@ -8,8 +8,6 @@ import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 
-
-
 class SapProductionPickingState {
   var pickOrderList = <SapPickingInfo>[].obs;
   var dispatch = <SapProductionPickingDetailDispatchInfo>[].obs;
@@ -17,7 +15,6 @@ class SapProductionPickingState {
   var barCodeList = <SapPickingBarCodeInfo>[].obs;
   var pickDetailList = <PickingOrderMaterialInfo>[].obs;
   bool needRefresh = false;
-
 
   void getMaterialPickingOrderList({
     String? noticeNo,
@@ -35,7 +32,9 @@ class SapProductionPickingState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: 'sap_production_picking_getting_picking_notification_order_list_tips'.tr,
+      loading:
+          'sap_production_picking_getting_picking_notification_order_list_tips'
+              .tr,
       method: webApiSapGetPickingOrders,
       body: {
         'NOTICE_NO': noticeNo ?? '',
@@ -68,7 +67,8 @@ class SapProductionPickingState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: 'sap_production_picking_getting_dispatch_order_list_detail_tips'.tr,
+      loading:
+          'sap_production_picking_getting_dispatch_order_list_detail_tips'.tr,
       method: webApiSapGetPickingOrderDetail,
       body: [
         for (var data in pickOrderList.where((v) => v.select))
@@ -100,6 +100,9 @@ class SapProductionPickingState {
           getProductionPickingBarCodeList(error: error);
         }
       } else {
+        dispatch.value = [];
+        labels.value = [];
+        pickDetailList.value = [];
         error.call(response.message ?? 'query_default_error'.tr);
       }
     });
@@ -121,7 +124,7 @@ class SapProductionPickingState {
       body: {
         'DATA': [
           for (var i = 0; i < pickDetailList.length; ++i)
-            for (var j = 0; i < pickDetailList[i].materialList.length; ++j)
+            for (var j = 0; j < pickDetailList[i].materialList.length; ++j)
               if (pickDetailList[i].materialList[j].select)
                 {
                   'ZTYPE': pickDetailList[i].materialList[j].orderType,
@@ -138,7 +141,7 @@ class SapProductionPickingState {
                   'ZNAME_EN': '',
                   'MEINS': pickDetailList[i].materialList[j].basicUnit,
                   'MATNR': pickDetailList[i].materialList[j].materialNumber,
-                  'WERKS':  isTestUrl()?'2000':'1500',
+                  'WERKS': isTestUrl() ? '2000' : '1500',
                 }
         ],
         'DISPATCH': isPrint ? dispatch.toList() : [],
@@ -218,6 +221,7 @@ class SapProductionPickingState {
           for (var json in response.data) SapPickingBarCodeInfo.fromJson(json)
         ];
       } else {
+        barCodeList.value = [];
         error.call(response.message ?? 'query_default_error'.tr);
       }
     });
