@@ -10012,7 +10012,7 @@ class Translation extends Translations {
           'production_scan_verification_barcode':
               'Obtaining verification barcode...',
           'process_report_store_manual_input':
-              'Pencatatan kode batang secara manual',
+              'Serangan Merah',
           'process_report_store_hava_barcode': 'Barcode already exists!',
           'process_report_store_use_empty_pallets':
               'Please use empty pallets for storage!',

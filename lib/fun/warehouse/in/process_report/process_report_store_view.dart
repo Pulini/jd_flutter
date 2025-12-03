@@ -202,7 +202,7 @@ class _ProcessReportPageState extends State<ProcessReportStorePage> {
       refreshController.resetFooter();
     });
     pdaScanner(scan: (code) {
-      if (code.isNotEmpty) {
+      if (code.isNotEmpty && code != 'null') {
         logic.scanCode(code);
       }
     });
