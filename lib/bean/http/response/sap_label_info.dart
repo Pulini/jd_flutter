@@ -50,6 +50,7 @@ class SapLabelInfo {
           specifications ?? '',
           netWeight?? 0.0,
           grossWeight?? 0.0,
+          englishName,
           sizeList,
           barCodeList,
         ));
@@ -67,6 +68,7 @@ class SapLabelInfo {
   String? specifications;
   double? netWeight;
   double? grossWeight;
+  String? englishName;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -82,6 +84,7 @@ class SapLabelInfo {
     map['ZZCJGG'] = specifications;
     map['NTGEW'] = netWeight;
     map['BRGEW'] = grossWeight;
+    map['ZDECLARATION'] = englishName;
     return map;
   }
 }
@@ -93,6 +96,7 @@ class Item {
     this.size,
     this.typeBody,
     this.unit,
+    this.englishName,
   });
 
   Item.fromJsonWithState(
@@ -102,6 +106,7 @@ class Item {
     this.specifications,
     this.netWeight,
     this.grossWeight,
+      this.englishName,
     List<Items> sizeList,
     List<String> barCodeList,
   ) {
@@ -110,6 +115,7 @@ class Item {
     size = json['SIZE1_ATINN'];
     typeBody = json['ZZXTNO'];
     unit = json['MEINS'];
+    englishName = json['ZDECLARATION'];
     isScanned = barCodeList.contains(subLabelID);
     isLastLabel = sizeList.any((v) => v.size == size && v.capacity != qty);
   }
