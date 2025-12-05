@@ -126,7 +126,7 @@ class MaintainLabelLogic extends GetxController {
 
   void selectPrinted(bool c) {
     state.cbPrinted.value = c;
-    if (!state.isMaterialLabel.value) {
+    if (state.isMaterialLabel.value) {
       for (var v in state.getLabelList().where((v) => v.isBillPrint ?? false)) {
         v.select = c;
       }
@@ -145,7 +145,7 @@ class MaintainLabelLogic extends GetxController {
 
   void selectUnprinted(bool c) {
     state.cbUnprinted.value = c;
-    if (!state.isMaterialLabel.value) {
+    if (state.isMaterialLabel.value) {
       for (var v
           in state.getLabelList().where((v) => !(v.isBillPrint ?? false))) {
         v.select = c;
@@ -165,7 +165,7 @@ class MaintainLabelLogic extends GetxController {
 
   List<String> getSizeList() {
     var list = <String>['maintain_label_all'.tr];
-    if (!state.isMaterialLabel.value) {
+    if (state.isMaterialLabel.value) {
       for (var v in state.labelList) {
         v.items?.forEach((v2) {
           if (!list.contains(v2.size)) {
@@ -190,7 +190,7 @@ class MaintainLabelLogic extends GetxController {
 
   List<String> getSelectData() {
     var list = <String>[];
-    if (!state.isMaterialLabel.value) {
+    if (state.isMaterialLabel.value) {
       state.getLabelList().where((v) => v.select).forEach((data) {
         list.add(data.barCode ?? '');
       });
@@ -293,6 +293,12 @@ class MaintainLabelLogic extends GetxController {
   }) {
     var select = <LabelInfo>[];
     if (state.isMaterialLabel.value) {
+      select = state.labelList.where((v) => v.select).toList();
+      if (select.isEmpty) {
+        errorDialog(content: 'maintain_label_select_label'.tr);
+        return;
+      }
+    } else {
       for (var data in state.labelGroupList) {
         for (var value in data) {
           if (value.select == true) {
@@ -300,12 +306,6 @@ class MaintainLabelLogic extends GetxController {
           }
         }
       }
-      if (select.isEmpty) {
-        errorDialog(content: 'maintain_label_select_label'.tr);
-        return;
-      }
-    } else {
-      select = state.labelList.where((v) => v.select).toList();
       if (select.isEmpty) {
         errorDialog(content: 'maintain_label_select_label'.tr);
         return;
@@ -348,6 +348,12 @@ class MaintainLabelLogic extends GetxController {
     var select = <LabelInfo>[];
 
     if (state.isMaterialLabel.value) {
+      select = state.labelList.where((v) => v.select).toList();
+      if (select.isEmpty) {
+        errorDialog(content: 'maintain_label_select_label'.tr);
+        return;
+      }
+    } else {
       for (var data in state.labelGroupList) {
         for (var value in data) {
           if (value.select == true) {
@@ -355,12 +361,6 @@ class MaintainLabelLogic extends GetxController {
           }
         }
       }
-      if (select.isEmpty) {
-        errorDialog(content: 'maintain_label_select_label'.tr);
-        return;
-      }
-    } else {
-      select = state.labelList.where((v) => v.select).toList();
       if (select.isEmpty) {
         errorDialog(content: 'maintain_label_select_label'.tr);
         return;
