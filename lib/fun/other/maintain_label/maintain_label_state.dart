@@ -76,7 +76,7 @@ class MaintainLabelState {
               materialName.value = '';
             }
           }
-          if (!isMaterialLabel.value) {
+          if (isMaterialLabel.value) {
             list.sort((a, b) => a.labelState().compareTo(b.labelState()));
             labelList.value = list;
           } else {
@@ -89,7 +89,7 @@ class MaintainLabelState {
           }
         });
       } else {
-        if (!isMaterialLabel.value) {
+        if (isMaterialLabel.value) {
           labelList.clear();
         } else {
           labelGroupList.clear();

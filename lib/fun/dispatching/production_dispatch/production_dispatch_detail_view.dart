@@ -119,6 +119,7 @@ class _ProductionDispatchDetailPageState
   Widget _workProcedure() {
     return Obx(
       () => Container(
+        margin: EdgeInsets.only(left: 5),
         decoration: BoxDecoration(
           border: Border.all(
             color: Colors.grey.shade600,

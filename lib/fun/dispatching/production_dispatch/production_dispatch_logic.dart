@@ -13,6 +13,7 @@ import 'package:jd_flutter/fun/other/maintain_label/maintain_label_view.dart';
 import 'package:jd_flutter/fun/report/production_materials_report/production_materials_report_view.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/preview_label_widget.dart';
@@ -562,7 +563,7 @@ class ProductionDispatchLogic extends GetxController {
             workerList[0].qty = workerList[0].qty.add(remainder);
           } else {
             for (var v in workerList) {
-              v.qty = wp.qty! / workerList.length;
+              v.qty = wp.mustQty! / workerList.length;
             }
           }
         } else {

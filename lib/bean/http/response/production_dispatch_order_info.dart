@@ -238,13 +238,9 @@ class ProductionDispatchOrderInfo {
     return map;
   }
 
-  String getSizeText() {
-    var text = '';
-    for (var value in size!) {
-      text = '$text  <${value.size}/${value.num}>';
-    }
-    return 'production_dispatch_size'.trArgs([text]);
-  }
+  String getSizeText() => 'production_dispatch_size'.trArgs([
+        size?.map((v) => ' <${v.size}/${v.num.toShowString()}>').reduce((a, b) => a + b) ?? ''
+  ]);
 
   String getProgress() {
     return '${stockInQty.toShowString()}/${workNumberTotal.toShowString()}';
@@ -303,11 +299,12 @@ class OrderProgressInfo {
       });
     }
   }
- List<String> getMaxSizeList() {
+
+  List<String> getMaxSizeList() {
     var list = <String>[];
-    mtoNoItems?.forEach((item){
-      item.sizeItems?.forEach((sizeData){
-       if(!list.contains(sizeData.size))list.add(sizeData.size??'');
+    mtoNoItems?.forEach((item) {
+      item.sizeItems?.forEach((sizeData) {
+        if (!list.contains(sizeData.size)) list.add(sizeData.size ?? '');
       });
     });
     list.sorted();
@@ -366,21 +363,20 @@ class OrderProgressItemSizeInfo {
 }
 
 class OrderProgressShowInfo {
-  int itemType=0; //1、物料 2、体 3、合计 4、预补
-  int sizeMax=0; //尺码最大列数
-  bool preCompensation=false; //是否显示预补
+  int itemType = 0; //1、物料 2、体 3、合计 4、预补
+  int sizeMax = 0; //尺码最大列数
+  bool preCompensation = false; //是否显示预补
 
-  String material=''; //物料
-  String factoryType=''; //型体
-  String factory=''; //工厂
+  String material = ''; //物料
+  String factoryType = ''; //型体
+  String factory = ''; //工厂
 
-  String mtoNo=''; //指令
-  String unit=''; //单位
-  String qty=''; //数量
-  String inStockQty=''; //入库数量
-  String reportedQty=''; //已汇报数量
-  String priority=''; //优先级
+  String mtoNo = ''; //指令
+  String unit = ''; //单位
+  String qty = ''; //数量
+  String inStockQty = ''; //入库数量
+  String reportedQty = ''; //已汇报数量
+  String priority = ''; //优先级
 
-  List<String> sizeData=[];//尺码数据
-
+  List<String> sizeData = []; //尺码数据
 }

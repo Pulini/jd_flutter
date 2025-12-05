@@ -174,8 +174,7 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
   void custom() {
     logic.getBarCodeCount((list) {
       if (list.length > 1) {
-        selectInstructDialog(list,
-            selectCallback: (list) {
+        selectInstructDialog(list, selectCallback: (list) {
           createCustomLabelDialog(
             list,
             state.interID,
@@ -249,12 +248,12 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
                   () => Expanded(
                     child: ListView.builder(
                       itemCount: state.isMaterialLabel.value
-                          ? state.getLabelGroupList().length
-                          : state.getLabelList().length,
+                          ? state.getLabelList().length
+                          : state.getLabelGroupList().length,
                       itemBuilder: (context, index) =>
                           state.isMaterialLabel.value
-                              ? _item2(state.getLabelGroupList()[index])
-                              : _item1(state.getLabelList()[index]),
+                              ? _item1(state.getLabelList()[index])
+                              : _item2(state.getLabelGroupList()[index]),
                     ),
                   ),
                 ),
