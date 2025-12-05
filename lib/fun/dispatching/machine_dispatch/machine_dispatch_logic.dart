@@ -292,10 +292,6 @@ class MachineDispatchLogic extends GetxController {
 
   //重新打印
   void printLabel(MachineDispatchReprintLabelInfo label) {
-
-    logger.f('label.isEnglish：'+label.isEnglish.toString());
-    logger.f('subTitle：'+label.isEnglish.toString());
-
     labelMultipurposeFixed(
       isEnglish: label.isEnglish,
       qrCode: label.labelID,

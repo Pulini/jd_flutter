@@ -317,68 +317,7 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
                     Expanded(
                       child: CombinationButton(
                         text: 'maintain_label_print'.tr,
-                        click: () => logic.checkPrintType(
-                            callback: (abroad, select, labelType) {
-                          if (abroad) {
-                            logic.printLabelState(
-                                type: labelType,
-                                selectLabel: select,
-                                success: (labelType) {
-                                  logic.printAbroadLabel(
-                                    type: labelType,
-                                    select: select,
-                                    language: '',
-                                  );
-                                });
-                          } else {
-                            logic.checkLanguage(
-                              callback: (
-                                labelType,
-                                select,
-                                language,
-                              ) {
-                                if (language.isEmpty) {
-                                  logic.printLabelState(
-                                      type: labelType,
-                                      selectLabel: select,
-                                      success: (labelType) {
-                                        logic.printLabel(
-                                          type: labelType,
-                                          select: select,
-                                          language: '',
-                                        );
-                                      });
-                                } else {
-                                  if (language.length == 1) {
-                                    logic.printLabelState(
-                                        type: labelType,
-                                        selectLabel: select,
-                                        success: (labelType) {
-                                          logic.printLabel(
-                                            select: select,
-                                            language: language[0],
-                                            type: labelType,
-                                          );
-                                        });
-                                  } else {
-                                    selectLanguageDialog(
-                                        list: language,
-                                        callback: (s) => logic.printLabelState(
-                                            type: labelType,
-                                            selectLabel: select,
-                                            success: (labelType) {
-                                              logic.printLabel(
-                                                select: select,
-                                                language: s,
-                                                type: labelType,
-                                              );
-                                            }));
-                                  }
-                                }
-                              },
-                            );
-                          }
-                        }),
+                        click: () => logic.checkPrintType(),
                         combination: Combination.middle,
                       ),
                     ),

@@ -15,6 +15,7 @@ import 'package:jd_flutter/widget/tsc_label_templates/dynamic_label_110w.dart';
 import 'package:jd_flutter/widget/tsc_label_templates/fixed_label_75w45h.dart';
 import 'package:jd_flutter/widget/tsc_label_templates/dynamic_label_75w.dart';
 
+import 'maintain_label_dialogs.dart';
 import 'maintain_label_state.dart';
 
 enum LabelCreateType {
@@ -287,10 +288,7 @@ class MaintainLabelLogic extends GetxController {
     );
   }
 
-  void checkPrintType({
-    required Function(bool abroad, List<List<LabelInfo>>, int labelType)
-        callback,
-  }) {
+  void checkPrintType() {
     var select = <LabelInfo>[];
     if (state.isMaterialLabel.value) {
       select = state.labelList.where((v) => v.select).toList();
@@ -312,9 +310,18 @@ class MaintainLabelLogic extends GetxController {
       }
     }
     if (select[0].labelType == 1002 || select[0].labelType == 1003) {
-      callback.call(true, [select], select[0].labelType!);
+      printLabelState(
+          type: select[0].labelType!,
+          selectLabel: [select],
+          success: (labelType) {
+            printAbroadLabel(
+              type: labelType,
+              select: [select],
+              language: '',
+            );
+          });
     } else {
-      callback.call(false, [], 0);
+      checkLanguage();
     }
   }
 
@@ -340,10 +347,7 @@ class MaintainLabelLogic extends GetxController {
     }
   }
 
-  void checkLanguage({
-    required Function(int labelType, List<List<LabelInfo>>, List<String>)
-        callback,
-  }) {
+  void checkLanguage() {
     var languageList = <String>[];
     var select = <LabelInfo>[];
 
@@ -412,7 +416,44 @@ class MaintainLabelLogic extends GetxController {
           message:
               'maintain_label_error'.trArgs([select[0].labelType.toString()]));
     } else {
-      callback.call(select[0].labelType!, [select], languageList);
+      if (languageList.isEmpty) {
+        printLabelState(
+            type: select[0].labelType!,
+            selectLabel: [select],
+            success: (labelType) {
+              printLabel(
+                type: labelType,
+                select: [select],
+                language: '',
+              );
+            });
+      } else {
+        if (languageList.length == 1) {
+          printLabelState(
+              type: select[0].labelType!,
+              selectLabel: [select],
+              success: (labelType) {
+                printLabel(
+                  select: [select],
+                  language: languageList[0],
+                  type: labelType,
+                );
+              });
+        } else {
+          selectLanguageDialog(
+              list: languageList,
+              callback: (s) => printLabelState(
+                  type: select[0].labelType!,
+                  selectLabel: [select],
+                  success: (labelType) {
+                    printLabel(
+                      select: [select],
+                      language: s,
+                      type: labelType,
+                    );
+                  }));
+        }
+      }
     }
   }
 
