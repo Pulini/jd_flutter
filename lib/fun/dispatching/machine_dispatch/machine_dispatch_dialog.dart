@@ -302,6 +302,9 @@ void showLabelListDialog({
   final state = Get.find<MachineDispatchLogic>().state;
 
   createLabel(Item label) {
+    logger.f('labelType：'+label.type.toString());
+    logger.f('英文名字：'+label.englishName.toString());
+    logger.f('中文名字：'+state.detailsInfo!.materialName.toString());
     label.type = label.type;
     print.call(MachineDispatchReprintLabelInfo(
       isLastLabel: label.isLastLabel,

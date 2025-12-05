@@ -172,14 +172,14 @@ class _ProductionScanWarehousePageState
             Obx(() => Row(
                   children: [
                     Expanded(
-                      flex: 5,
+                      flex: 6,
                       child: EditText(
                         hint: 'warehouse_allocation_input'.tr,
                         controller: tecCode,
                       ),
                     ),
                     Expanded(
-                      flex: 2,
+                      flex: 3,
                       child: SwitchButton(
                         onChanged: (s) => state.red.value = s,
                         name: 'production_scan_red'.tr,
