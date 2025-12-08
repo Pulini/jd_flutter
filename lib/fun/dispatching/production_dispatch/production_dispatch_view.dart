@@ -377,7 +377,7 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
               Expanded(
                 child: Text(
                   'production_dispatch_dispatch_order_no'.trArgs([
-                    data.sapOrderBill ?? data.orderBill ?? '',
+                    data.sapOrderBill?.ifEmpty(data.orderBill ?? '')??'' ,
                   ]),
                   style: itemTitleStyle,
                 ),
