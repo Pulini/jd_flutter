@@ -7,6 +7,7 @@ import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
 import 'package:jd_flutter/widget/picker/picker_controller.dart';
 import 'package:jd_flutter/widget/picker/picker_view.dart';
+import 'package:jd_flutter/widget/scanner.dart';
 import 'property_logic.dart';
 
 class PropertyPage extends StatefulWidget {
@@ -34,7 +35,7 @@ class _PropertyPageState extends State<PropertyPage>
   var pickerControllerStartDate = DatePickerController(
     PickerType.startDate,
     saveKey: '${RouteConfig.property.name}${PickerType.startDate}',
-  );
+  )..firstDate = DateTime(1993, 1, 1);
 
   //日期选择器的控制器
   var pickerControllerEndDate = DatePickerController(
@@ -173,17 +174,26 @@ class _PropertyPageState extends State<PropertyPage>
         Row(
           children: [
             Expanded(
-                flex: 1,
+                flex: 2,
                 child: EditText(
                   hint: 'property_query_et_name'.tr,
                   controller: tecName,
                 )),
             Expanded(
-                flex: 1,
+                flex: 2,
                 child: EditText(
                   hint: 'property_query_et_worker_number'.tr,
                   controller: tecWorkerNumber,
                 )),
+            Expanded(
+                flex: 1,
+                child: TextButton(onPressed: (){
+                  Get.to(() => const Scanner())?.then((v) {
+                    if (v != null) {
+                      logic.getPropertyDetail(logic.interceptId(v));
+                    }
+                  });
+                }, child: Text('property_query_scan'.tr))),
           ],
         ),
         DatePicker(pickerController: pickerControllerStartDate),

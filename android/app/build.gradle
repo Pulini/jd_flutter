@@ -26,6 +26,15 @@ def keystoreProperties = new Properties()
 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
 android {
+    configurations.all {
+        resolutionStrategy {
+            force 'androidx.browser:browser:1.4.0'
+            force 'androidx.activity:activity:1.6.1'
+            force 'androidx.activity:activity-ktx:1.6.1'
+            force 'androidx.core:core:1.9.0'
+            force 'androidx.core:core-ktx:1.9.0'
+        }
+    }
     namespace "com.jd.pzx.jd_flutter"
     compileSdk flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion

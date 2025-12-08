@@ -192,8 +192,6 @@ flutter_native_splash:
   image_dark: assets/images/ic_logo_android12.png
   # 3. 全屏 & 品牌图标（可选）
   fullscreen: true                   # 隐藏状态栏/导航栏
-  branding: assets/images/ic_logo_android12.png  # 底部品牌 logo
-  branding_dark: assets/images/ic_logo_android12.png
   # 4. 安卓 12 专用
   android_12:
     image: assets/images/ic_logo_android12.png

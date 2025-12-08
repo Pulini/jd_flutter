@@ -265,4 +265,13 @@ class PropertyLogic extends GetxController {
       return;
     }
   }
+
+  int interceptId(String mes) {
+    if (mes.contains("FInterID=")) {
+      return int.tryParse(mes.split("=")[1]) ?? 0;
+    } else {
+      return 0;
+    }
+  }
+
 }
