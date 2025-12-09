@@ -273,7 +273,7 @@ class Translation extends Translations {
           'production_dispatch_record_working_not_stock_in': '已计工未入库数：%s',
           'production_dispatch_group': '所属课组：%s',
           'production_dispatch_size': '尺码：%s',
-          'production_dispatch_type_body': '型体：',
+          'production_dispatch_type_body': '型体：%s',
           'production_dispatch_plan_tracking_number_tips': '计划跟踪单号',
           'production_dispatch_dispatch_date_tips': '派工日期',
           'production_dispatch_plan_start_date_tips': '计划开工日期',
@@ -7556,7 +7556,7 @@ class Translation extends Translations {
               'Jumlah Dicatat Kerja Belum Masuk Gudang: %s',
           'production_dispatch_group': 'Kelompok Departemen: %s',
           'production_dispatch_size': 'Ukuran: %s',
-          'production_dispatch_type_body': 'Model:',
+          'production_dispatch_type_body': 'Model:%s',
           'production_dispatch_plan_tracking_number_tips':
               'Nomor Pelacakan Rencana',
           'production_dispatch_dispatch_date_tips': 'Tanggal Penugasan',
