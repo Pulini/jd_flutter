@@ -80,7 +80,6 @@ class _HomePageState extends State<HomePage>
   void _refreshFunList() =>
       logic.refreshFunList(() => refreshController.finishRefresh());
 
-
   @override
   void initState() {
     super.initState();
@@ -103,7 +102,7 @@ class _HomePageState extends State<HomePage>
       onPopInvokedWithResult: (didPop, result) {
         if (!didPop) {
           exitDialog(
-            content: '确定要退出吗？',
+            content: 'home_exit'.tr,
             confirm: () => SystemNavigator.pop(),
           );
         }
@@ -148,15 +147,15 @@ class _HomePageState extends State<HomePage>
               header: const MaterialHeader(),
               onRefresh: () => _refreshFunList(),
               child: Obx(() => ListView.builder(
-                    padding: const EdgeInsets.all(8),
-                    itemCount: state.buttons.length,
-                    itemBuilder: (context, index) =>
-                        _item(state.buttons[index]),
-                  )),
+                padding: const EdgeInsets.all(8),
+                itemCount: state.buttons.length,
+                itemBuilder: (context, index) =>
+                    _item(state.buttons[index]),
+              )),
             ),
             bottomNavigationBar: Obx(
               () => state.navigationBar.isEmpty
-                  ? Container()
+                  ? Container(height: 0)
                   : BottomNavigationBar(
                       type: BottomNavigationBarType.shifting,
                       items: [

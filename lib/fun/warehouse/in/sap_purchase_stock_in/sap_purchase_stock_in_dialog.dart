@@ -160,59 +160,64 @@ void stockInDialog({
 
       stockNumber.value = locationList[0].storageLocationNumber ?? '';
 
-      var submit = TextButton(
-        onPressed: () {
-          var location = locationList[locationController.selectedItem];
-          if (isNeedFaceVerify.value) {
-            var leader = leaderList[leaderController.selectedItem];
-            Get.to(() => SignaturePage(
-                  name: userInfo?.name ?? '',
-                  callback: (workerSignature) {
-                    Get.to(
-                      () => SignaturePage(
-                        name: leader.liableEmpName ?? '',
-                        callback: (leaderSignature) {
-                          _stockIn(
-                            location: location.storageLocationNumber ?? '',
-                            date: dpcDate.getDateFormatSapYMD(),
-                            orderList: list,
-                            workerNumber: userInfo?.number ?? '',
-                            workerSignature: workerSignature,
-                            leaderNumber: leader.liableEmpCode ?? '',
-                            leaderSignature: leaderSignature,
-                            error: (msg) => errorDialog(content: msg),
-                            success: (msg) => successDialog(
-                              content: msg,
-                              back: () {
-                                Get.back();
-                                refresh.call();
-                              },
-                            ),
-                          );
-                        },
-                      ),
-                    );
-                  },
-                ));
-          } else {
-            _stockIn(
-              location: location.storageLocationNumber ?? '',
-              date: dpcDate.getDateFormatSapYMD(),
-              orderList: list,
-              workerNumber: userInfo?.number ?? '',
-              error: (msg) => errorDialog(content: msg),
-              success: (msg) => successDialog(
-                content: msg,
-                back: () {
-                  Get.back();
-                  refresh.call();
+      submit() {
+        if (isNeedFaceVerify.value) {
+          Get.to(() => SignaturePage(
+                name: userInfo?.name ?? '',
+                callback: (workerSignature) {
+                  Get.to(
+                    () => SignaturePage(
+                      name: leaderList[leaderController.selectedItem]
+                              .liableEmpName ??
+                          '',
+                      callback: (leaderSignature) {
+                        _stockIn(
+                          location:
+                              locationList[locationController.selectedItem]
+                                      .storageLocationNumber ??
+                                  '',
+                          date: dpcDate.getDateFormatSapYMD(),
+                          orderList: list,
+                          workerNumber: userInfo?.number ?? '',
+                          workerSignature: workerSignature,
+                          leaderNumber:
+                              leaderList[leaderController.selectedItem]
+                                      .liableEmpCode ??
+                                  '',
+                          leaderSignature: leaderSignature,
+                          error: (msg) => errorDialog(content: msg),
+                          success: (msg) => successDialog(
+                            content: msg,
+                            back: () {
+                              Get.back();
+                              refresh.call();
+                            },
+                          ),
+                        );
+                      },
+                    ),
+                  );
                 },
-              ),
-            );
-          }
-        },
-        child: Text('dialog_default_confirm'.tr),
-      );
+              ));
+        } else {
+          _stockIn(
+            location: locationList[locationController.selectedItem]
+                    .storageLocationNumber ??
+                '',
+            date: dpcDate.getDateFormatSapYMD(),
+            orderList: list,
+            workerNumber: userInfo?.number ?? '',
+            error: (msg) => errorDialog(content: msg),
+            success: (msg) => successDialog(
+              content: msg,
+              back: () {
+                Get.back();
+                refresh.call();
+              },
+            ),
+          );
+        }
+      }
 
       Get.dialog(
         PopScope(
@@ -250,7 +255,11 @@ void stockInDialog({
               contentPadding: const EdgeInsets.only(left: 30, right: 30),
               actionsPadding: const EdgeInsets.only(right: 10, bottom: 10),
               actions: [
-                if (!isNeedFaceVerify.value || leaderList.isNotEmpty) submit,
+                if (!isNeedFaceVerify.value || leaderList.isNotEmpty)
+                  TextButton(
+                    onPressed: () => submit(),
+                    child: Text('dialog_default_confirm'.tr),
+                  ),
                 TextButton(
                   onPressed: () => Get.back(),
                   child: Text(
@@ -366,7 +375,8 @@ void temporaryDialog({
           PopScope(
             canPop: false,
             child: AlertDialog(
-              title: Text('sap_purchase_stock_in_dialog_generate_temporarily_order'.tr),
+              title: Text(
+                  'sap_purchase_stock_in_dialog_generate_temporarily_order'.tr),
               content: SizedBox(
                 width: 300,
                 child: selectView(
@@ -482,7 +492,6 @@ void _getStorageLocationList({
     }
   });
 }
-
 
 void _stockIn({
   required String location,

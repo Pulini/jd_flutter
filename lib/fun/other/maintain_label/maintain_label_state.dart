@@ -12,7 +12,7 @@ import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
 class MaintainLabelState {
-  var materialCode = '';
+  var materialCodes = <String>[];
   var sapProcessName = '';
   var interID = 0;
   var isMaterialLabel = false.obs;
@@ -27,7 +27,7 @@ class MaintainLabelState {
 
   MaintainLabelState() {
     sapProcessName = Get.arguments['SapProcessName'];
-    materialCode = Get.arguments['materialCode'];
+    materialCodes = Get.arguments['materialCodes'];
     interID = Get.arguments['interID'];
     isMaterialLabel.value = Get.arguments['isMaterialLabel'];
   }
@@ -259,7 +259,7 @@ class MaintainLabelState {
       method: webApiGetMaterialProperties,
       loading: 'maintain_label_getting_material_info'.tr,
       params: {
-        'MaterialCode': materialCode,
+        'MaterialCode': materialCodes.first,
         'InterID': interID,
       },
     ).then((response) {
@@ -303,7 +303,7 @@ class MaintainLabelState {
     httpGet(
       method: webApiGetMaterialLanguages,
       loading: 'maintain_label_getting_material_language_info'.tr,
-      params: {'MaterialCode': materialCode},
+      params: {'MaterialCode': materialCodes.first},
     ).then((response) {
       if (response.resultCode == resultSuccess) {
         success.call([

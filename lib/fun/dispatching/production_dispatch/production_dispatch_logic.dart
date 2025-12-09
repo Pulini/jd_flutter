@@ -13,6 +13,7 @@ import 'package:jd_flutter/fun/other/maintain_label/maintain_label_view.dart';
 import 'package:jd_flutter/fun/report/production_materials_report/production_materials_report_view.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/preview_label_widget.dart';
@@ -172,7 +173,7 @@ class ProductionDispatchLogic extends GetxController {
     if (checkUserPermission('1051106')) {
       state.getSelectOne((v) {
         Get.to(() => const MaintainLabelPage(), arguments: {
-          'materialCode': v.materialCode,
+          'materialCodes': [v.materialCode],
           'interID': v.interID,
           'isMaterialLabel': false,
           'SapProcessName': v.sapProcessName,
@@ -190,10 +191,28 @@ class ProductionDispatchLogic extends GetxController {
   void materialLabelMaintenance(ProductionDispatchOrderInfo data) {
     if (checkUserPermission('1051106')) {
       Get.to(() => const MaintainLabelPage(), arguments: {
-        'materialCode': data.materialCode,
+        'materialCodes': [data.materialCode],
         'interID': data.interID,
         'isMaterialLabel': true,
         'SapProcessName': data.sapProcessName,
+      });
+    } else {
+      showSnackBar(
+        message: 'production_dispatch_no_label_print_permission'.tr,
+        isWarning: true,
+      );
+    }
+  }
+  //物料贴标维护
+  void partOrderLabelMaintenance(List<ProductionDispatchOrderInfo> list) {
+    if (checkUserPermission('1051106')) {
+      logger.f( list.map((v)=>v.materialCode??'').toList());
+      Get.to(() => const MaintainLabelPage(), arguments: {
+        'materialCodes': list.map((v)=>v.materialCode??'').toList(),
+        'interID': list.first.interID,
+        'isMaterialLabel': true,
+        'isPartOrder': true,
+        'SapProcessName': list.first.sapProcessName,
       });
     } else {
       showSnackBar(

@@ -9,6 +9,7 @@ import 'package:jd_flutter/bean/http/response/picking_bar_code_info.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
+import 'package:jd_flutter/widget/check_box_widget.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
@@ -24,7 +25,28 @@ void createMixLabelDialog(List<List<PickingBarCodeInfo>> list, int id,
         canPop: false,
         child: StatefulBuilder(
           builder: (c, dialogState) => AlertDialog(
-            title: Text('maintain_label_dialog_create_mix_label'.tr),
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('maintain_label_dialog_create_mix_label'.tr),
+                CheckBox(
+                  onChanged: (c) {
+                    dialogState(() {
+                      for (var v in list) {
+                        for (var v2 in v) {
+                          v2.isSelected=c;
+                        }
+                      }
+                      maxLabel = _getLabelMax(list);
+                      controller.text = maxLabel.toString();
+                    });
+                  },
+                  name: 'maintain_label_dialog_select_all'.tr,
+                  needSave: false,
+                  value:list.isNotEmpty&& list.every((v)=>v.every((v2)=>v2.isSelected)),
+                ),
+              ],
+            ),
             content: SizedBox(
               width: MediaQuery.of(c).size.width * 0.8,
               height: MediaQuery.of(c).size.height * 0.8,
@@ -277,7 +299,7 @@ int _getLabelMax(List<List<PickingBarCodeInfo>> list) {
       item.where((v) => v.isSelected).map((v) => v.maxLabel()).toList(),
     );
   }
-  return maxLabelList.reduce((a, b) => a < b ? a : b);
+  return maxLabelList.isEmpty?0:maxLabelList.reduce((a, b) => a < b ? a : b);
 }
 
 List<CreateCustomLabelsData> createNewDataList(

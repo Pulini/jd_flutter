@@ -26,15 +26,6 @@ def keystoreProperties = new Properties()
 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
 android {
-    configurations.all {
-        resolutionStrategy {
-            force 'androidx.browser:browser:1.4.0'
-            force 'androidx.activity:activity:1.6.1'
-            force 'androidx.activity:activity-ktx:1.6.1'
-            force 'androidx.core:core:1.9.0'
-            force 'androidx.core:core-ktx:1.9.0'
-        }
-    }
     namespace "com.jd.pzx.jd_flutter"
     compileSdk flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
@@ -102,23 +93,24 @@ flutter {
 }
 
 dependencies {
-    implementation 'androidx.activity:activity-ktx:1.10.1'
+    implementation 'androidx.core:core-ktx:1.17.0'
+    implementation 'androidx.activity:activity-ktx:1.12.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
     //JDK编译异常处理
     implementation(platform("org.jetbrains.kotlin:kotlin-bom:2.1.0"))
     implementation 'androidx.multidex:multidex:2.0.1'
 
     //json解析 https://github.com/google/gson
-    implementation 'com.google.code.gson:gson:2.11.0'
+    implementation 'com.google.code.gson:gson:2.13.2'
     //华为HMS 静默活体验证 https://developer.huawei.com/consumer/cn/doc/hiai-Guides/liveness-detection-sdk-0000001052704932
     implementation 'com.huawei.hms:ml-computer-vision-livenessdetection:3.11.0.301'
     //华为HMS 人脸比对 https://developer.huawei.com/consumer/cn/doc/hiai-Guides/faceverify-sdk-0000001071768039
     implementation 'com.huawei.hms:ml-computer-vision-faceverify:3.11.0.302'
     implementation 'com.huawei.hms:ml-computer-vision-faceverify-model:3.11.0.302'
     //lottie动画 https://github.com/airbnb/lottie-android
-    implementation 'com.airbnb.android:lottie:6.3.0'
+    implementation 'com.airbnb.android:lottie:6.7.1'
     //485串口 https://github.com/licheedev/Android-SerialPort-API
-    implementation 'com.licheedev:android-serialport:2.1.4'
+    implementation 'com.licheedev:android-serialport:2.1.5'
     implementation files('libs/pl2303g_multilib.jar')
     implementation 'androidx.print:print:1.1.0'
 }

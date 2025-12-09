@@ -469,7 +469,7 @@ abstract class PickerController {
     var response = await httpGet(
       method: webApiPickerSapWorkCenterNew,
       params: {
-        'ShowType': 10,
+        'ShowType':'GetWorkcenterAndDevices',
         'UserID': userInfo?.userID ?? 0,
       },
     );

@@ -329,7 +329,7 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
                             (list) => setLabelPropertyDialog(
                               list,
                               state.interID,
-                              state.materialCode,
+                              state.materialCodes.first,
                               () => logic.refreshDataList(),
                             ),
                           ),
@@ -343,7 +343,7 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
                           language: () => logic.getMaterialLanguages(
                             (list) => setLabelLanguageDialog(
                               list,
-                              state.materialCode,
+                              state.materialCodes.first,
                               () => logic.refreshDataList(),
                             ),
                           ),

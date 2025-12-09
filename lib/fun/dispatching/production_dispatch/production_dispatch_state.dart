@@ -18,6 +18,7 @@ class ProductionDispatchState {
   RxBool isSelectedClosed = false.obs;
   RxBool isSelectedMany = false.obs;
   RxBool isSelectedMergeOrder = false.obs;
+  RxBool isPartOrder = false.obs;
   var orderList = <ProductionDispatchOrderInfo>[].obs;
   var orderGroupList = <String, List<ProductionDispatchOrderInfo>>{}.obs;
 
@@ -65,6 +66,7 @@ class ProductionDispatchState {
     isSelectedMany.value = spGet('${Get.currentRoute}/isSelectedMany') ?? false;
     isSelectedMergeOrder.value =
         spGet('${Get.currentRoute}/isSelectedMergeOrder') ?? false;
+    isPartOrder.value = spGet('${Get.currentRoute}/isPartOrder') ?? false;
   }
 
   //获取组员列表数据
@@ -120,6 +122,7 @@ class ProductionDispatchState {
         'isClose': isSelectedClosed,
         'isOutsourcing': isSelectedOutsourcing,
         'deptID': userInfo?.departmentID,
+        'FDataType': isPartOrder.value?'3':'2',
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
