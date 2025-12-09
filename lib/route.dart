@@ -302,7 +302,7 @@ class RouteConfig {
   //sap采购入库
   static Routes sapPurchaseStockIn = Routes(
     '/sap_purchase_stock_in',
-    202,
+    203,
     const SapPurchaseStockInPage(),
   );
 
