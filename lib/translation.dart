@@ -435,6 +435,8 @@ class Translation extends Translations {
           'property_detail_hint_close': '确定要结案入库吗？',
           'property_detail_closing': '正在提交结案...',
           'property_detail_bt_no_acceptance': '不验收',
+          'property_detail_laser_print': '激光打印',
+          'property_detail_laser_print_again': '已经打印过标签，是否继续打印',
           'property_detail_hint_no_acceptance': '确定不验收本单财产吗？',
           'property_detail_skipping_acceptance': '正在跳过验收流程...',
           'property_detail_bt_submit': '发起审核',
@@ -3647,6 +3649,8 @@ class Translation extends Translations {
               'Are you sure to close the case and enter it into the database ?',
           'property_detail_closing': 'Submitting the closing...',
           'property_detail_bt_no_acceptance': 'No acceptance',
+          'property_detail_laser_print': 'laser printing',
+          'property_detail_laser_print_again': 'The label has already been printed. Do you want to continue printing',
           'property_detail_hint_no_acceptance':
               'Are you sure not to accept the property on this order ?',
           'property_detail_skipping_acceptance':
@@ -7764,6 +7768,8 @@ class Translation extends Translations {
               'Apakah Anda yakin ingin menutup dan masuk gudang?',
           'property_detail_closing': 'Mengajukan penutupan...',
           'property_detail_bt_no_acceptance': 'Tidak Menerima',
+          'property_detail_laser_print_again': 'Label sudah dicetak, apakah akan terus dicetak',
+          'property_detail_laser_print': 'Pencetakan Laser',
           'property_detail_hint_no_acceptance':
               'Apakah Anda yakin tidak menerima properti pesanan ini?',
           'property_detail_skipping_acceptance':

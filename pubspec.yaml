@@ -126,6 +126,8 @@ dependencies:
 #  flutter_isolate: ^2.0.4
   # 华为官方肢体识别库
 #  huawei_ml_body: ^3.12.0
+  #wifi连接
+  wifi_iot: ^0.3.19+2
 
 dev_dependencies:
   flutter_test:
