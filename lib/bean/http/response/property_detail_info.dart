@@ -64,6 +64,7 @@ class PropertyDetailInfo {
     this.status,
     this.processStatus,
     this.labelPrintQty,
+    this.laserPrintQty,
     this.manufacturer,
     this.qty,
     this.currencyName,
@@ -116,6 +117,7 @@ class PropertyDetailInfo {
     status = json['Status'];
     processStatus = json['ProcessStatus'];
     labelPrintQty = json['LabelPrintQty'];
+    laserPrintQty = json['LaserPrintQty'];
     manufacturer = json['Manufacturer'];
     qty = json['Qty'];
     currencyName = json['CurrencyName'];
@@ -172,6 +174,7 @@ class PropertyDetailInfo {
   String? status;
   int? processStatus;
   int? labelPrintQty;
+  int? laserPrintQty; //激光打印次数
   String? manufacturer;
   double? qty;
   String? currencyName;
@@ -224,6 +227,7 @@ class PropertyDetailInfo {
     map['Status'] = status;
     map['ProcessStatus'] = processStatus;
     map['LabelPrintQty'] = labelPrintQty;
+    map['LaserPrintQty'] = laserPrintQty;
     map['Manufacturer'] = manufacturer;
     map['Qty'] = qty;
     map['CurrencyName'] = currencyName;

@@ -251,7 +251,9 @@ class ProcessDispatchLogic extends GetxController
   //选择具体尺码
   void selectSize(int position) {
     state.showDetailList[position].select =
-        !state.showDetailList[position].select;
+    !state.showDetailList[position].select;
+
+    state.showDetailList[position].boxCapacity = state.showDetailList[position].qty.toShowString();
     state.showDetailList.refresh();
   }
 
