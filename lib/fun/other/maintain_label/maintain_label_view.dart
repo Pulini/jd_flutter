@@ -365,6 +365,11 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
             style: const TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
+        Obx(() => CheckBox(
+              onChanged: (c) => state.isShowPreview.value = c,
+              name: 'maintain_label_preview'.tr,
+              value: state.isShowPreview.value,
+            ))
       ],
     );
   }

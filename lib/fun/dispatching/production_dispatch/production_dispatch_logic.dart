@@ -173,7 +173,7 @@ class ProductionDispatchLogic extends GetxController {
     if (checkUserPermission('1051106')) {
       state.getSelectOne((v) {
         Get.to(() => const MaintainLabelPage(), arguments: {
-          'materialCodes': [v.materialCode],
+          'materialCodes': [v.materialCode??''],
           'interID': v.interID,
           'isMaterialLabel': false,
           'SapProcessName': v.sapProcessName,
@@ -191,7 +191,7 @@ class ProductionDispatchLogic extends GetxController {
   void materialLabelMaintenance(ProductionDispatchOrderInfo data) {
     if (checkUserPermission('1051106')) {
       Get.to(() => const MaintainLabelPage(), arguments: {
-        'materialCodes': [data.materialCode],
+        'materialCodes': [data.materialCode?? ''],
         'interID': data.interID,
         'isMaterialLabel': true,
         'SapProcessName': data.sapProcessName,

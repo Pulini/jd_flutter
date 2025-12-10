@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +9,8 @@ import 'package:jd_flutter/bean/http/response/label_info.dart';
 import 'package:jd_flutter/bean/http/response/maintain_material_info.dart';
 import 'package:jd_flutter/bean/http/response/picking_bar_code_info.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
+import 'package:jd_flutter/utils/printer/print_util.dart';
+import 'package:jd_flutter/utils/printer/tsc_util.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/preview_label_list_widget.dart';
@@ -27,6 +31,8 @@ enum LabelCreateType {
 
 class MaintainLabelLogic extends GetxController {
   final MaintainLabelState state = MaintainLabelState();
+
+  var pu = PrintUtil();
 
   @override
   void onInit() {
@@ -651,44 +657,87 @@ class MaintainLabelLogic extends GetxController {
   }
 
   //物料标
-  void createMaterialLabel({
+  Future<void> createMaterialLabel({
     required String language,
     required List<LabelInfo> list,
     required Function(List<Widget>, bool) labels,
-  }) {
-    var labelList = <Widget>[];
+  }) async {
+    if (state.isShowPreview.value) {
+      var labelList = <Widget>[];
 
-    for (var data in list) {
-      var languageInfo =
-          data.materialOtherName!.firstWhere((v) => v.languageName == language);
-      if (languageInfo.languageCode == 'zh') {
-        labelList.add(maintainLabelMaterialChineseFixedLabel(
-          barCode: data.barCode ?? '',
-          factoryType: data.factoryType ?? '',
-          billNo: data.billNo ?? '',
-          materialCode: data.materialCode ?? '',
-          materialName: data.materialName ?? '',
-          pageNumber: languageInfo.pageNumber ?? '',
-          qty: data.items!.map((v) => v.qty ?? 0).reduce((a, b) => a.add(b)),
-          unit: languageInfo.unitName ?? '',
-        ));
-      } else {
-        labelList.add(maintainLabelMaterialEnglishFixedLabel(
-          barCode: data.barCode ?? '',
-          factoryType: data.factoryType ?? '',
-          billNo: data.billNo ?? '',
-          materialCode: data.materialCode ?? '',
-          materialName: data.materialName ?? '',
-          grossWeight: data.grossWeight!,
-          netWeight: data.netWeight!,
-          meas: data.meas!,
-          pageNumber: languageInfo.pageNumber!,
-          qty: data.items!.map((v) => v.qty ?? 0).reduce((a, b) => a.add(b)),
-          unit: languageInfo.unitName ?? '',
+      for (var data in list) {
+        var languageInfo = data.materialOtherName!
+            .firstWhere((v) => v.languageName == language);
+        if (languageInfo.languageCode == 'zh') {
+          labelList.add(maintainLabelMaterialChineseFixedLabel(
+            barCode: data.barCode ?? '',
+            factoryType: data.factoryType ?? '',
+            billNo: data.billNo ?? '',
+            materialCode: data.materialCode ?? '',
+            materialName: data.materialName ?? '',
+            pageNumber: languageInfo.pageNumber ?? '',
+            qty: data.items!.map((v) => v.qty ?? 0).reduce((a, b) => a.add(b)),
+            unit: languageInfo.unitName ?? '',
+          ));
+        } else {
+          labelList.add(maintainLabelMaterialEnglishFixedLabel(
+            barCode: data.barCode ?? '',
+            factoryType: data.factoryType ?? '',
+            billNo: data.billNo ?? '',
+            materialCode: data.materialCode ?? '',
+            materialName: data.materialName ?? '',
+            grossWeight: data.grossWeight!,
+            netWeight: data.netWeight!,
+            meas: data.meas!,
+            pageNumber: languageInfo.pageNumber!,
+            qty: data.items!.map((v) => v.qty ?? 0).reduce((a, b) => a.add(b)),
+            unit: languageInfo.unitName ?? '',
+          ));
+        }
+      }
+      labels.call(labelList, false);
+    } else {
+      //不显示预览
+      var labelList = <List<Uint8List>>[];
+      for (var data in list) {
+        var languageInfo = data.materialOtherName!
+            .firstWhere((v) => v.languageName == language);
+        labelList.add(await labelMultipurposeFixed(
+          qrCode: data.barCode ?? '',
+          title: data.factoryType ?? '',
+          subTitle: data.billNo ?? '',
+          content: '(${data.materialCode})${languageInfo.name}',
+          subContent1: languageInfo.languageCode == 'zh'
+              ? ''
+              : 'GW:${data.grossWeight.toShowString()}KG   NW:${data.netWeight.toShowString()}KG',
+          subContent2:
+              languageInfo.languageCode == 'zh' ? '' : 'MEAS:${data.meas}',
+          bottomLeftText1: languageInfo.pageNumber ?? '',
+          bottomRightText1: data.items!
+              .map((v) => v.qty ?? 0)
+              .reduce((a, b) => a.add(b))
+              .toShowString(),
+          bottomRightText2: languageInfo.unitName ?? '',
         ));
       }
+      pu.printLabelList(
+        labelList: labelList,
+        start: () {
+          loadingShow('正在下发标签...');
+        },
+        progress: (i, j) {
+          Get.back();
+          loadingShow('正在下发标签($i/$j)');
+        },
+        finished: (success, fail) {
+          Get.back();
+          successDialog(
+              title: '标签下发结束',
+              content: '完成${success.length}张, 失败${fail.length}张',
+              back: () {});
+        },
+      );
     }
-    labels.call(labelList, false);
   }
 
   //固定单码标
@@ -696,103 +745,211 @@ class MaintainLabelLogic extends GetxController {
     required String language,
     required List<LabelInfo> list,
     required Function(List<Widget>, bool) labels,
-  }) {
-    var labelList = <Widget>[];
+  }) async {
+    if (state.isShowPreview.value) {
+      var labelList = <Widget>[];
 
-    for (var data in list) {
-      var languageInfo =
-          data.materialOtherName!.firstWhere((v) => v.languageName == language);
+      for (var data in list) {
+        var languageInfo = data.materialOtherName!
+            .firstWhere((v) => v.languageName == language);
 
-      if (languageInfo.languageCode == 'zh') {
-        labelList.add(maintainLabelSingleSizeChineseFixedLabel(
-          barCode: data.barCode ?? '',
-          factoryType: data.factoryType ?? '',
-          billNo: data.items?[0].billNo ?? '',
-          materialCode: data.materialCode ?? '',
-          materialName: data.materialName ?? '',
-          size: data.items?[0].size ?? '',
-          pageNumber: languageInfo.pageNumber ?? '',
-          date: languageInfo.deliveryDate ?? '',
-          unit: (data.items?[0].qty.toShowString() ?? '') +
-              (languageInfo.unitName ?? ''),
-        ));
-      } else {
-        labelList.add(maintainLabelSingleSizeEnglishFixedLabel(
-          barCode: data.barCode ?? '',
-          factoryType: data.factoryType ?? '',
-          billNo: data.items?[0].billNo ?? '',
-          materialCode: data.materialCode ?? '',
-          materialName: languageInfo.name ?? '',
-          grossWeight: data.grossWeight ?? 0.0,
-          netWeight: data.netWeight ?? 0.0,
-          meas: data.meas ?? '',
-          qty: data.items?[0].qty ?? 0.0,
-          pageNumber: languageInfo.pageNumber ?? '',
-          size: data.items?[0].size ?? '',
-          unit: languageInfo.unitName ?? '',
+        if (languageInfo.languageCode == 'zh') {
+          labelList.add(maintainLabelSingleSizeChineseFixedLabel(
+            barCode: data.barCode ?? '',
+            factoryType: data.factoryType ?? '',
+            billNo: data.items?[0].billNo ?? '',
+            materialCode: data.materialCode ?? '',
+            materialName: data.materialName ?? '',
+            size: data.items?[0].size ?? '',
+            pageNumber: languageInfo.pageNumber ?? '',
+            date: languageInfo.deliveryDate ?? '',
+            unit: (data.items?[0].qty.toShowString() ?? '') +
+                (languageInfo.unitName ?? ''),
+          ));
+        } else {
+          labelList.add(maintainLabelSingleSizeEnglishFixedLabel(
+            barCode: data.barCode ?? '',
+            factoryType: data.factoryType ?? '',
+            billNo: data.items?[0].billNo ?? '',
+            materialCode: data.materialCode ?? '',
+            materialName: languageInfo.name ?? '',
+            grossWeight: data.grossWeight ?? 0.0,
+            netWeight: data.netWeight ?? 0.0,
+            meas: data.meas ?? '',
+            qty: data.items?[0].qty ?? 0.0,
+            pageNumber: languageInfo.pageNumber ?? '',
+            size: data.items?[0].size ?? '',
+            unit: languageInfo.unitName ?? '',
+          ));
+        }
+      }
+      labels.call(labelList, false);
+    } else {
+      //不显示预览
+      var labelList = <List<Uint8List>>[];
+      for (var data in list) {
+        var languageInfo = data.materialOtherName!
+            .firstWhere((v) => v.languageName == language);
+        labelList.add(await labelMultipurposeFixed(
+          qrCode: data.barCode ?? '',
+          title: data.factoryType ?? '',
+          subTitle: data.billNo ?? '',
+          subTitleWrap: false,
+          content: '(${data.materialCode})${languageInfo.name}',
+          subContent1: languageInfo.languageCode == 'zh'
+              ? ''
+              : 'GW:${data.grossWeight.toShowString()}KG  NW:${data.netWeight.toShowString()}KG',
+          subContent2:
+              languageInfo.languageCode == 'zh' ? '' : 'MEAS:${data.meas}',
+          bottomLeftText1: languageInfo.languageCode == 'zh'
+              ? (data.items?[0].size ?? '')
+              : ((data.items?[0].qty.toShowString() ?? '') +
+                  (languageInfo.unitName ?? '')),
+          bottomMiddleText1: languageInfo.pageNumber ?? '',
+          bottomMiddleText2: languageInfo.languageCode == 'zh'
+              ? (languageInfo.deliveryDate ?? '')
+              : 'Made in China',
+          bottomRightText1: languageInfo.languageCode == 'zh'
+              ? ((data.items?[0].qty.toShowString() ?? '') +
+                  (languageInfo.unitName ?? ''))
+              : ('${data.items?[0].size}#'),
         ));
       }
+      pu.printLabelList(
+        labelList: labelList,
+        start: () {
+          loadingShow('正在下发标签...');
+        },
+        progress: (i, j) {
+          Get.back();
+          loadingShow('正在下发标签($i/$j)');
+        },
+        finished: (success, fail) {
+          Get.back();
+          successDialog(
+              title: '标签下发结束',
+              content: '完成${success.length}张, 失败${fail.length}张',
+              back: () {});
+        },
+      );
     }
-    labels.call(labelList, false);
   }
 
   //合并动态标签
-  void createGroupDynamicLabel({
+  Future<void> createGroupDynamicLabel({
     required String language,
     required List<LabelInfo> list,
     required Function(List<Widget>, bool) labels,
-  }) {
-    var labelList = <Widget>[];
-    for (var data in list) {
-      //标签语言类型
-      var languageInfo =
-          data.materialOtherName!.firstWhere((v) => v.languageName == language);
-      var insList = <LabelSizeInfo>[];
-      if (!data.items.isNullOrEmpty()) {
-        insList.addAll(data.items!);
-      }
-      //标签指令列表
-      var ins = groupBy(insList, (v) => v.billNo);
+  }) async {
+    if (state.isShowPreview.value) {
+      var labelList = <Widget>[];
+      for (var data in list) {
+        //标签语言类型
+        var languageInfo = data.materialOtherName!
+            .firstWhere((v) => v.languageName == language);
+        var insList = <LabelSizeInfo>[];
+        if (!data.items.isNullOrEmpty()) {
+          insList.addAll(data.items!);
+        }
+        //标签指令列表
+        var ins = groupBy(insList, (v) => v.billNo);
 
-      //表格列表
-      Map<String, List<List<String>>> map = {};
-      ins.forEach((k, v1) {
-        map[k ?? ''] = [
-          for (var v2 in v1) [v2.size ?? '', v2.qty.toShowString()]
-        ];
-      });
+        //表格列表
+        Map<String, List<List<String>>> map = {};
+        ins.forEach((k, v1) {
+          map[k ?? ''] = [
+            for (var v2 in v1) [v2.size ?? '', v2.qty.toShowString()]
+          ];
+        });
 
-      if (languageInfo.languageCode == 'zh') {
-        labelList.add(maintainLabelSizeMaterialChineseDynamicLabel(
-          barCode: data.barCode ?? '',
-          factoryType: data.factoryType ?? '',
-          billNo: data.departName ?? '',
-          total: data.items!.map((v) => v.qty ?? 0).reduce((a, b) => a.add(b)),
-          unit: languageInfo.unitName ?? '',
-          materialCode: data.materialCode ?? '',
-          materialName: data.materialName ?? '',
-          map: map,
-          pageNumber: languageInfo.pageNumber ?? '',
-          deliveryDate: languageInfo.deliveryDate ?? '',
-        ));
-      } else {
-        labelList.add(maintainLabelMixEnglishDynamicLabel(
-          barCode: data.barCode ?? '',
-          factoryType: data.factoryType ?? '',
-          materialCode: data.materialCode ?? '',
-          materialName: data.materialName ?? '',
-          grossWeight: data.grossWeight ?? 0.0,
-          netWeight: data.netWeight ?? 0.0,
-          meas: data.meas ?? '',
-          total: data.items!.map((v) => v.qty ?? 0).reduce((a, b) => a.add(b)),
-          unit: languageInfo.unitName ?? '',
-          map: map,
-          pageNumber: languageInfo.pageNumber ?? '',
-          deliveryDate: languageInfo.deliveryDate ?? '',
+        if (languageInfo.languageCode == 'zh') {
+          labelList.add(maintainLabelSizeMaterialChineseDynamicLabel(
+            barCode: data.barCode ?? '',
+            factoryType: data.factoryType ?? '',
+            billNo: data.departName ?? '',
+            total:
+                data.items!.map((v) => v.qty ?? 0).reduce((a, b) => a.add(b)),
+            unit: languageInfo.unitName ?? '',
+            materialCode: data.materialCode ?? '',
+            materialName: data.materialName ?? '',
+            map: map,
+            pageNumber: languageInfo.pageNumber ?? '',
+            deliveryDate: languageInfo.deliveryDate ?? '',
+          ));
+        } else {
+          labelList.add(maintainLabelMixEnglishDynamicLabel(
+            barCode: data.barCode ?? '',
+            factoryType: data.factoryType ?? '',
+            materialCode: data.materialCode ?? '',
+            materialName: data.materialName ?? '',
+            grossWeight: data.grossWeight ?? 0.0,
+            netWeight: data.netWeight ?? 0.0,
+            meas: data.meas ?? '',
+            total:
+                data.items!.map((v) => v.qty ?? 0).reduce((a, b) => a.add(b)),
+            unit: languageInfo.unitName ?? '',
+            map: map,
+            pageNumber: languageInfo.pageNumber ?? '',
+            deliveryDate: languageInfo.deliveryDate ?? '',
+          ));
+        }
+      }
+      labels.call(labelList, true);
+    } else {
+      //不显示预览
+      var labelList = <List<Uint8List>>[];
+      for (var data in list) {
+        var languageInfo = data.materialOtherName!
+            .firstWhere((v) => v.languageName == language);
+        var insList = <LabelSizeInfo>[];
+        if (!data.items.isNullOrEmpty()) {
+          insList.addAll(data.items!);
+        }
+        //标签指令列表
+        var ins = groupBy(insList, (v) => v.billNo);
+
+        //表格列表
+        Map<String, List<List<String>>> map = {};
+        ins.forEach((k, v1) {
+          map[k ?? ''] = [
+            for (var v2 in v1) [v2.size ?? '', v2.qty.toShowString()]
+          ];
+        });
+        labelList.add(await labelMultipurposeDynamic(
+          isCut: true,
+          qrCode:  data.barCode ?? '',
+          title: data.factoryType ?? '',
+          subTitle: languageInfo.languageCode=='zh'? (data.departName?? '') : '(${data.materialCode})${languageInfo.name}',
+          tableFirstLineTitle: languageInfo.languageCode=='zh'?'尺码' :'Size',
+          tableLastLineTitle: languageInfo.languageCode=='zh'?'合计' :'Total',
+          tableTitle: languageInfo.languageCode=='zh'? '':'GW:${data.grossWeight.toShowString()}KG  NW:${data.netWeight.toShowString()}KG',
+          tableTitleTips: languageInfo.languageCode == 'zh' ? '${data.items!.map((v) => v.qty ?? 0).reduce((a, b) => a.add(b)).toShowString()}${languageInfo.unitName ?? ''}' : '',
+          tableSubTitle:languageInfo.languageCode == 'zh' ? '(${data.materialCode})${languageInfo.name}' : 'MEAS:${data.meas}     ${data.items!.map((v) => v.qty ?? 0).reduce((a, b) => a.add(b)).toShowString()}${languageInfo.unitName}',
+          tableData:map,
+          bottomLeftText1: languageInfo.pageNumber?? '',
+          bottomLeftText2: languageInfo.languageCode == 'zh' ? '':'Made in China',
+          bottomRightText1:  languageInfo.deliveryDate?? '',
+          bottomRightText2:languageInfo.languageCode == 'zh' ? '': 'Gold Emperor',
         ));
       }
+      pu.printLabelList(
+        labelList: labelList,
+        start: () {
+          loadingShow('正在下发标签...');
+        },
+        progress: (i, j) {
+          Get.back();
+          loadingShow('正在下发标签($i/$j)');
+        },
+        finished: (success, fail) {
+          Get.back();
+          successDialog(
+              title: '标签下发结束',
+              content: '完成${success.length}张, 失败${fail.length}张',
+              back: () {});
+        },
+      );
     }
-    labels.call(labelList, true);
   }
 
   List<Widget> createSubItem({
@@ -986,7 +1143,7 @@ void createIndonesiaLabel({
       volume: data.volume ?? '',
       supplier: '',
       manufactureDate: data.manufactureDate ?? '',
-      consignee: '收货方123456',
+      consignee: '',
       hasNotes: true,
       notes: data.notes ?? '',
     ));

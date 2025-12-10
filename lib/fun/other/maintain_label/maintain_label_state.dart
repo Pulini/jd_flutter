@@ -24,6 +24,7 @@ class MaintainLabelState {
   var labelList = <LabelInfo>[].obs;
   var labelGroupList = <List<LabelInfo>>[].obs;
   var filterSize = 'maintain_label_all'.tr.obs;
+  var isShowPreview = false.obs;
 
   MaintainLabelState() {
     sapProcessName = Get.arguments['SapProcessName'];
@@ -136,7 +137,6 @@ class MaintainLabelState {
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        logger.f('---------------------');
         final List<PickingBarCodeInfo> dataList = [
           for (var json in response.data) PickingBarCodeInfo.fromJson(json)
         ];
