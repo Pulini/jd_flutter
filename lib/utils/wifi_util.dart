@@ -24,7 +24,6 @@ class WiFiManager {
       List<WifiNetwork> networks = await WiFiForIoTPlugin.loadWifiList();
       return networks;
     } catch (e) {
-      print('扫描WiFi网络失败: $e');
       return [];
     }
   }
@@ -60,7 +59,6 @@ class WiFiManager {
 
       return false;
     } catch (e) {
-      print('连接WiFi失败: $e');
       return false;
     }
   }
@@ -78,7 +76,6 @@ class WiFiManager {
       String? currentSSID = await WiFiForIoTPlugin.getSSID();
       return currentSSID == expectedSSID;
     } catch (e) {
-      print('检查WiFi连接状态失败: $e');
       return false;
     }
   }
