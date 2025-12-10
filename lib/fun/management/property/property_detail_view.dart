@@ -551,10 +551,14 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
             text: 'property_detail_laser_print'.tr,
             backgroundColor: Colors.grey,
             click: () => askDialog(
-              content: (state.detail.laserPrintQty ?? -1) > 0 ? 'property_detail_laser_print_again'.tr : 'property_detail_laser_print'.tr,
+              content: (state.detail.laserPrintQty ?? -1) > 0
+                  ? 'property_detail_laser_print_again'.tr
+                  : 'property_detail_laser_print'.tr,
               confirm: () {
+                logic.connectToNetwork(
+                    success: () {
 
-
+                    }, ssid: 'LCWIFI', password: '');
               },
             ),
           ),

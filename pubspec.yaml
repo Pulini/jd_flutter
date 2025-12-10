@@ -128,6 +128,8 @@ dependencies:
 #  huawei_ml_body: ^3.12.0
   #wifi连接
   wifi_iot: ^0.3.19+2
+  #检查wifi连接状态
+  connectivity_plus: ^7.0.0
 
 dev_dependencies:
   flutter_test:

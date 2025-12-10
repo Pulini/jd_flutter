@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +8,11 @@ import 'package:jd_flutter/bean/http/response/create_custom_label_data.dart';
 import 'package:jd_flutter/bean/http/response/label_info.dart';
 import 'package:jd_flutter/bean/http/response/maintain_material_info.dart';
 import 'package:jd_flutter/bean/http/response/picking_bar_code_info.dart';
+import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
+import 'package:jd_flutter/utils/printer/print_util.dart';
+import 'package:jd_flutter/utils/printer/tsc_util.dart';
+import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
@@ -28,6 +34,8 @@ enum LabelCreateType {
 
 class MaintainLabelLogic extends GetxController {
   final MaintainLabelState state = MaintainLabelState();
+
+  var pu = PrintUtil();
 
   @override
   void onInit() {
@@ -520,25 +528,25 @@ class MaintainLabelLogic extends GetxController {
   }) {
     var labelList = <Widget>[];
     for (var data in list) {
-      // labelList.add(dynamicMaterialLabel1098(
-      //   labelID: data.barCode ?? '',
-      //   myanmarApprovalDocument: data.myanmarApprovalDocument ?? '',
-      //   typeBody: data.factoryType ?? '',
-      //   trackNo: data.trackNo ?? '',
-      //   instructionNo: data.billNo ?? '',
-      //   materialList: [],
-      //   customsDeclarationType: data.customsDeclarationType ?? '',
-      //   pieceNo: data.pieceNo ?? '',
-      //   pieceID: data.pieceID ?? '',
-      //   grossWeight: data.grossWeight.toShowString(),
-      //   netWeight: data.netWeight.toShowString(),
-      //   specifications: data.meas ?? '',
-      //   volume: data.volume ?? '',
-      //   supplier: data.departName ?? '',
-      //   manufactureDate: data.manufactureDate ?? '',
-      //   hasNotes: false,
-      //   notes: '',
-      // ));
+      labelList.add(dynamicMaterialLabel1098(
+        labelID: data.barCode ?? '',
+        myanmarApprovalDocument: data.myanmarApprovalDocument ?? '',
+        typeBody: data.factoryType ?? '',
+        trackNo: data.trackNo ?? '',
+        instructionNo: data.billNo ?? '',
+        materialList: [],
+        customsDeclarationType: data.customsDeclarationType ?? '',
+        pieceNo: data.pieceNo ?? '',
+        pieceID: data.pieceID ?? '',
+        grossWeight: data.grossWeight.toShowString(),
+        netWeight: data.netWeight.toShowString(),
+        specifications: data.meas ?? '',
+        volume: data.volume ?? '',
+        supplier: data.departName ?? '',
+        manufactureDate: data.manufactureDate ?? '',
+        hasNotes: false,
+        notes: '',
+      ));
     }
     labels.call(labelList, true);
   }
@@ -551,36 +559,36 @@ class MaintainLabelLogic extends GetxController {
   }) {
     var labelList = <Widget>[];
     for (var data in list) {
-      // labelList.add(dynamicSizeMaterialLabel1098(
-      //   labelID: data.barCode ?? '',
-      //   myanmarApprovalDocument: data.myanmarApprovalDocument ?? '',
-      //   typeBody: data.factoryType ?? '',
-      //   trackNo: data.trackNo ?? '',
-      //   materialList: createSizeList(
-      //     label: data,
-      //     sizeTitle: 'Size',
-      //     totalTitle: 'Total',
-      //   ),
-      //   instructionNo: '',
-      //   materialCode: '',
-      //   size: '',
-      //   inBoxQty: data.items!
-      //       .map((v) => v.qty ?? 0)
-      //       .reduce((a, b) => a.add(b))
-      //       .toShowString(),
-      //   customsDeclarationUnit: data.customsDeclarationUnit ?? '',
-      //   customsDeclarationType: data.customsDeclarationType ?? '',
-      //   pieceNo: data.pieceNo ?? '',
-      //   pieceID: data.pieceID ?? '',
-      //   grossWeight: data.grossWeight.toShowString(),
-      //   netWeight: data.netWeight.toShowString(),
-      //   specifications: data.meas ?? '',
-      //   volume: data.volume ?? '',
-      //   supplier: data.departName ?? '',
-      //   manufactureDate: data.manufactureDate ?? '',
-      //   hasNotes: false,
-      //   notes: '',
-      // ));
+      labelList.add(dynamicSizeMaterialLabel1098(
+        labelID: data.barCode ?? '',
+        myanmarApprovalDocument: data.myanmarApprovalDocument ?? '',
+        typeBody: data.factoryType ?? '',
+        trackNo: data.trackNo ?? '',
+        materialList: createSizeList(
+          label: data,
+          sizeTitle: 'Size',
+          totalTitle: 'Total',
+        ),
+        instructionNo: '',
+        materialCode: '',
+        size: '',
+        inBoxQty: data.items!
+            .map((v) => v.qty ?? 0)
+            .reduce((a, b) => a.add(b))
+            .toShowString(),
+        customsDeclarationUnit: data.customsDeclarationUnit ?? '',
+        customsDeclarationType: data.customsDeclarationType ?? '',
+        pieceNo: data.pieceNo ?? '',
+        pieceID: data.pieceID ?? '',
+        grossWeight: data.grossWeight.toShowString(),
+        netWeight: data.netWeight.toShowString(),
+        specifications: data.meas ?? '',
+        volume: data.volume ?? '',
+        supplier: data.departName ?? '',
+        manufactureDate: data.manufactureDate ?? '',
+        hasNotes: false,
+        notes: '',
+      ));
     }
     labels.call(labelList, true);
   }
@@ -591,37 +599,37 @@ class MaintainLabelLogic extends GetxController {
     required String totalTitle,
   }) {
     var materials = <String, List>{};
-    // if (label.items!.any((v) => v.size?.isNotEmpty == true)) {
-    //   var sizeList = <String>[];
-    //   for (var label in label.items!) {
-    //     if (!sizeList.contains(label.size)) {
-    //       sizeList.add(label.size ?? '');
-    //     }
-    //   }
-    //   sizeList.sort();
-    //   materials[sizeTitle] = [...sizeList, totalTitle];
-    //   groupBy(
-    //     label.items!,
-    //     (v) => v.billNo ?? '',
-    //   ).forEach((k, labels) {
-    //     var list = [];
-    //     for (var size in sizeList) {
-    //       try {
-    //         list.add(labels
-    //             .firstWhere((label) => label.size == size)
-    //             .qty
-    //             .toShowString());
-    //       } on StateError catch (_) {
-    //         list.add(' ');
-    //       }
-    //     }
-    //     list.add(labels
-    //         .map((v) => v.qty ?? 0)
-    //         .reduce((a, b) => a.add(b))
-    //         .toShowString());
-    //     materials[k] = list;
-    //   });
-    // }
+    if (label.items!.any((v) => v.size?.isNotEmpty == true)) {
+      var sizeList = <String>[];
+      for (var label in label.items!) {
+        if (!sizeList.contains(label.size)) {
+          sizeList.add(label.size ?? '');
+        }
+      }
+      sizeList.sort();
+      materials[sizeTitle] = [...sizeList, totalTitle];
+      groupBy(
+        label.items!,
+        (v) => v.billNo ?? '',
+      ).forEach((k, labels) {
+        var list = [];
+        for (var size in sizeList) {
+          try {
+            list.add(labels
+                .firstWhere((label) => label.size == size)
+                .qty
+                .toShowString());
+          } on StateError catch (_) {
+            list.add(' ');
+          }
+        }
+        list.add(labels
+            .map((v) => v.qty ?? 0)
+            .reduce((a, b) => a.add(b))
+            .toShowString());
+        materials[k] = list;
+      });
+    }
     return materials;
   }
 
@@ -632,72 +640,115 @@ class MaintainLabelLogic extends GetxController {
   }) {
     var labelList = <Widget>[];
     for (var data in list) {
-      // labelList.add(dynamicSizeMaterialLabel1098(
-      //   labelID: data.barCode ?? '',
-      //   myanmarApprovalDocument: data.myanmarApprovalDocument ?? '',
-      //   typeBody: data.factoryType ?? '',
-      //   trackNo: data.trackNo ?? '',
-      //   materialList: {},
-      //   instructionNo: data.billNo ?? '',
-      //   materialCode: data.materialCode ?? '',
-      //   size: data.items!.first.size ?? '',
-      //   inBoxQty: data.items!.first.qty.toShowString(),
-      //   customsDeclarationUnit: data.customsDeclarationUnit ?? '',
-      //   customsDeclarationType: data.customsDeclarationType ?? '',
-      //   pieceNo: data.pieceNo ?? '',
-      //   pieceID: data.pieceID ?? '',
-      //   grossWeight: data.grossWeight.toShowString(),
-      //   netWeight: data.netWeight.toShowString(),
-      //   specifications: data.meas ?? '',
-      //   volume: data.volume ?? '',
-      //   supplier: data.departName ?? '',
-      //   manufactureDate: data.manufactureDate ?? '',
-      //   hasNotes: false,
-      //   notes: '',
-      // ));
+      labelList.add(dynamicSizeMaterialLabel1098(
+        labelID: data.barCode ?? '',
+        myanmarApprovalDocument: data.myanmarApprovalDocument ?? '',
+        typeBody: data.factoryType ?? '',
+        trackNo: data.trackNo ?? '',
+        materialList: {},
+        instructionNo: data.billNo ?? '',
+        materialCode: data.materialCode ?? '',
+        size: data.items!.first.size ?? '',
+        inBoxQty: data.items!.first.qty.toShowString(),
+        customsDeclarationUnit: data.customsDeclarationUnit ?? '',
+        customsDeclarationType: data.customsDeclarationType ?? '',
+        pieceNo: data.pieceNo ?? '',
+        pieceID: data.pieceID ?? '',
+        grossWeight: data.grossWeight.toShowString(),
+        netWeight: data.netWeight.toShowString(),
+        specifications: data.meas ?? '',
+        volume: data.volume ?? '',
+        supplier: data.departName ?? '',
+        manufactureDate: data.manufactureDate ?? '',
+        hasNotes: false,
+        notes: '',
+      ));
     }
     labels.call(labelList, true);
   }
 
   //物料标
-  void createMaterialLabel({
+  Future<void> createMaterialLabel({
     required String language,
     required List<LabelInfo> list,
     required Function(List<Widget>, bool) labels,
-  }) {
-    var labelList = <Widget>[];
+  }) async {
+    if (state.isShowPreview.value) {
+      var labelList = <Widget>[];
 
-    // for (var data in list) {
-    //   var languageInfo =
-    //       data.materialOtherName!.firstWhere((v) => v.languageName == language);
-    //   if (languageInfo.languageCode == 'zh') {
-    //     labelList.add(maintainLabelMaterialChineseFixedLabel(
-    //       barCode: data.barCode ?? '',
-    //       factoryType: data.factoryType ?? '',
-    //       billNo: data.billNo ?? '',
-    //       materialCode: data.materialCode ?? '',
-    //       materialName: data.materialName ?? '',
-    //       pageNumber: languageInfo.pageNumber ?? '',
-    //       qty: data.items!.map((v) => v.qty ?? 0).reduce((a, b) => a.add(b)),
-    //       unit: languageInfo.unitName ?? '',
-    //     ));
-    //   } else {
-    //     labelList.add(maintainLabelMaterialEnglishFixedLabel(
-    //       barCode: data.barCode ?? '',
-    //       factoryType: data.factoryType ?? '',
-    //       billNo: data.billNo ?? '',
-    //       materialCode: data.materialCode ?? '',
-    //       materialName: data.materialName ?? '',
-    //       grossWeight: data.grossWeight!,
-    //       netWeight: data.netWeight!,
-    //       meas: data.meas!,
-    //       pageNumber: languageInfo.pageNumber!,
-    //       qty: data.items!.map((v) => v.qty ?? 0).reduce((a, b) => a.add(b)),
-    //       unit: languageInfo.unitName ?? '',
-    //     ));
-    //   }
-    // }
-    labels.call(labelList, false);
+      for (var data in list) {
+        var languageInfo = data.materialOtherName!
+            .firstWhere((v) => v.languageName == language);
+        if (languageInfo.languageCode == 'zh') {
+          labelList.add(maintainLabelMaterialChineseFixedLabel(
+            barCode: data.barCode ?? '',
+            factoryType: data.factoryType ?? '',
+            billNo: data.billNo ?? '',
+            materialCode: data.materialCode ?? '',
+            materialName: data.materialName ?? '',
+            pageNumber: languageInfo.pageNumber ?? '',
+            qty: data.items!.map((v) => v.qty ?? 0).reduce((a, b) => a.add(b)),
+            unit: languageInfo.unitName ?? '',
+          ));
+        } else {
+          labelList.add(maintainLabelMaterialEnglishFixedLabel(
+            barCode: data.barCode ?? '',
+            factoryType: data.factoryType ?? '',
+            billNo: data.billNo ?? '',
+            materialCode: data.materialCode ?? '',
+            materialName: data.materialName ?? '',
+            grossWeight: data.grossWeight!,
+            netWeight: data.netWeight!,
+            meas: data.meas!,
+            pageNumber: languageInfo.pageNumber!,
+            qty: data.items!.map((v) => v.qty ?? 0).reduce((a, b) => a.add(b)),
+            unit: languageInfo.unitName ?? '',
+          ));
+        }
+      }
+      labels.call(labelList, false);
+    } else {
+      //不显示预览
+      var labelList = <List<Uint8List>>[];
+      for (var data in list) {
+        var languageInfo = data.materialOtherName!
+            .firstWhere((v) => v.languageName == language);
+        labelList.add(await labelMultipurposeFixed(
+          qrCode: data.barCode ?? '',
+          title: data.factoryType ?? '',
+          subTitle: data.billNo ?? '',
+          content: '(${data.materialCode})${languageInfo.name}',
+          subContent1: languageInfo.languageCode == 'zh'
+              ? ''
+              : 'GW:${data.grossWeight.toShowString()}KG   NW:${data.netWeight.toShowString()}KG',
+          subContent2:
+              languageInfo.languageCode == 'zh' ? '' : 'MEAS:${data.meas}',
+          bottomLeftText1: languageInfo.pageNumber ?? '',
+          bottomRightText1: data.items!
+              .map((v) => v.qty ?? 0)
+              .reduce((a, b) => a.add(b))
+              .toShowString(),
+          bottomRightText2: languageInfo.unitName ?? '',
+          speed: spGet(spSavePrintSpeed) ?? 5.0,
+          density: spGet(spSavePrintDensity) ?? 10.0,
+        ));
+      }
+      pu.printLabelList(
+        labelList: labelList,
+        start: () {
+          loadingShow('正在下发标签...');
+        },
+        progress: (i, j) {
+          loadingShow('正在下发标签($i/$j)');
+        },
+        finished: (success, fail) {
+          successDialog(
+              title: '标签下发结束',
+              content: '完成${success.length}张, 失败${fail.length}张',
+              back: () {});
+        },
+      );
+    }
   }
 
   //固定单码标
@@ -705,103 +756,211 @@ class MaintainLabelLogic extends GetxController {
     required String language,
     required List<LabelInfo> list,
     required Function(List<Widget>, bool) labels,
-  }) {
-    var labelList = <Widget>[];
+  }) async {
+    if (state.isShowPreview.value) {
+      var labelList = <Widget>[];
 
-    // for (var data in list) {
-    //   var languageInfo =
-    //       data.materialOtherName!.firstWhere((v) => v.languageName == language);
-    //
-    //   if (languageInfo.languageCode == 'zh') {
-    //     labelList.add(maintainLabelSingleSizeChineseFixedLabel(
-    //       barCode: data.barCode ?? '',
-    //       factoryType: data.factoryType ?? '',
-    //       billNo: data.items?[0].billNo ?? '',
-    //       materialCode: data.materialCode ?? '',
-    //       materialName: data.materialName ?? '',
-    //       size: data.items?[0].size ?? '',
-    //       pageNumber: languageInfo.pageNumber ?? '',
-    //       date: languageInfo.deliveryDate ?? '',
-    //       unit: (data.items?[0].qty.toShowString() ?? '') +
-    //           (languageInfo.unitName ?? ''),
-    //     ));
-    //   } else {
-    //     labelList.add(maintainLabelSingleSizeEnglishFixedLabel(
-    //       barCode: data.barCode ?? '',
-    //       factoryType: data.factoryType ?? '',
-    //       billNo: data.items?[0].billNo ?? '',
-    //       materialCode: data.materialCode ?? '',
-    //       materialName: languageInfo.name ?? '',
-    //       grossWeight: data.grossWeight ?? 0.0,
-    //       netWeight: data.netWeight ?? 0.0,
-    //       meas: data.meas ?? '',
-    //       qty: data.items?[0].qty ?? 0.0,
-    //       pageNumber: languageInfo.pageNumber ?? '',
-    //       size: data.items?[0].size ?? '',
-    //       unit: languageInfo.unitName ?? '',
-    //     ));
-    //   }
-    // }
-    labels.call(labelList, false);
+      for (var data in list) {
+        var languageInfo = data.materialOtherName!
+            .firstWhere((v) => v.languageName == language);
+
+        if (languageInfo.languageCode == 'zh') {
+          labelList.add(maintainLabelSingleSizeChineseFixedLabel(
+            barCode: data.barCode ?? '',
+            factoryType: data.factoryType ?? '',
+            billNo: data.items?[0].billNo ?? '',
+            materialCode: data.materialCode ?? '',
+            materialName: data.materialName ?? '',
+            size: data.items?[0].size ?? '',
+            pageNumber: languageInfo.pageNumber ?? '',
+            date: languageInfo.deliveryDate ?? '',
+            unit: (data.items?[0].qty.toShowString() ?? '') +
+                (languageInfo.unitName ?? ''),
+          ));
+        } else {
+          labelList.add(maintainLabelSingleSizeEnglishFixedLabel(
+            barCode: data.barCode ?? '',
+            factoryType: data.factoryType ?? '',
+            billNo: data.items?[0].billNo ?? '',
+            materialCode: data.materialCode ?? '',
+            materialName: languageInfo.name ?? '',
+            grossWeight: data.grossWeight ?? 0.0,
+            netWeight: data.netWeight ?? 0.0,
+            meas: data.meas ?? '',
+            qty: data.items?[0].qty ?? 0.0,
+            pageNumber: languageInfo.pageNumber ?? '',
+            size: data.items?[0].size ?? '',
+            unit: languageInfo.unitName ?? '',
+          ));
+        }
+      }
+      labels.call(labelList, false);
+    } else {
+      //不显示预览
+      var labelList = <List<Uint8List>>[];
+      for (var data in list) {
+        var languageInfo = data.materialOtherName!
+            .firstWhere((v) => v.languageName == language);
+        labelList.add(await labelMultipurposeFixed(
+          qrCode: data.barCode ?? '',
+          title: data.factoryType ?? '',
+          subTitle: data.billNo ?? '',
+          subTitleWrap: false,
+          content: '(${data.materialCode})${languageInfo.name}',
+          subContent1: languageInfo.languageCode == 'zh'
+              ? ''
+              : 'GW:${data.grossWeight.toShowString()}KG  NW:${data.netWeight.toShowString()}KG',
+          subContent2:
+              languageInfo.languageCode == 'zh' ? '' : 'MEAS:${data.meas}',
+          bottomLeftText1: languageInfo.languageCode == 'zh'
+              ? (data.items?[0].size ?? '')
+              : ((data.items?[0].qty.toShowString() ?? '') +
+                  (languageInfo.unitName ?? '')),
+          bottomMiddleText1: languageInfo.pageNumber ?? '',
+          bottomMiddleText2: languageInfo.languageCode == 'zh'
+              ? (languageInfo.deliveryDate ?? '')
+              : 'Made in China',
+          bottomRightText1: languageInfo.languageCode == 'zh'
+              ? ((data.items?[0].qty.toShowString() ?? '') +
+                  (languageInfo.unitName ?? ''))
+              : ('${data.items?[0].size}#'),
+          speed: spGet(spSavePrintSpeed) ?? 5.0,
+          density: spGet(spSavePrintDensity) ?? 10.0,
+        ));
+      }
+      pu.printLabelList(
+        labelList: labelList,
+        start: () {
+          loadingShow('正在下发标签...');
+        },
+        progress: (i, j) {
+          loadingShow('正在下发标签($i/$j)');
+        },
+        finished: (success, fail) {
+          successDialog(
+              title: '标签下发结束',
+              content: '完成${success.length}张, 失败${fail.length}张',
+              back: () {});
+        },
+      );
+    }
   }
 
   //合并动态标签
-  void createGroupDynamicLabel({
+  Future<void> createGroupDynamicLabel({
     required String language,
     required List<LabelInfo> list,
     required Function(List<Widget>, bool) labels,
-  }) {
-    var labelList = <Widget>[];
-    // for (var data in list) {
-    //   //标签语言类型
-    //   var languageInfo =
-    //       data.materialOtherName!.firstWhere((v) => v.languageName == language);
-    //   var insList = <LabelSizeInfo>[];
-    //   if (!data.items.isNullOrEmpty()) {
-    //     insList.addAll(data.items!);
-    //   }
-    //   //标签指令列表
-    //   var ins = groupBy(insList, (v) => v.billNo);
-    //
-    //   //表格列表
-    //   Map<String, List<List<String>>> map = {};
-    //   ins.forEach((k, v1) {
-    //     map[k ?? ''] = [
-    //       for (var v2 in v1) [v2.size ?? '', v2.qty.toShowString()]
-    //     ];
-    //   });
-    //
-    //   if (languageInfo.languageCode == 'zh') {
-    //     labelList.add(maintainLabelSizeMaterialChineseDynamicLabel(
-    //       barCode: data.barCode ?? '',
-    //       factoryType: data.factoryType ?? '',
-    //       billNo: data.departName ?? '',
-    //       total: data.items!.map((v) => v.qty ?? 0).reduce((a, b) => a.add(b)),
-    //       unit: languageInfo.unitName ?? '',
-    //       materialCode: data.materialCode ?? '',
-    //       materialName: data.materialName ?? '',
-    //       map: map,
-    //       pageNumber: languageInfo.pageNumber ?? '',
-    //       deliveryDate: languageInfo.deliveryDate ?? '',
-    //     ));
-    //   } else {
-    //     labelList.add(maintainLabelMixEnglishDynamicLabel(
-    //       barCode: data.barCode ?? '',
-    //       factoryType: data.factoryType ?? '',
-    //       materialCode: data.materialCode ?? '',
-    //       materialName: data.materialName ?? '',
-    //       grossWeight: data.grossWeight ?? 0.0,
-    //       netWeight: data.netWeight ?? 0.0,
-    //       meas: data.meas ?? '',
-    //       total: data.items!.map((v) => v.qty ?? 0).reduce((a, b) => a.add(b)),
-    //       unit: languageInfo.unitName ?? '',
-    //       map: map,
-    //       pageNumber: languageInfo.pageNumber ?? '',
-    //       deliveryDate: languageInfo.deliveryDate ?? '',
-    //     ));
-    //   }
-    // }
-    labels.call(labelList, true);
+  }) async {
+    if (state.isShowPreview.value) {
+      var labelList = <Widget>[];
+      for (var data in list) {
+        //标签语言类型
+        var languageInfo = data.materialOtherName!
+            .firstWhere((v) => v.languageName == language);
+        var insList = <LabelSizeInfo>[];
+        if (!data.items.isNullOrEmpty()) {
+          insList.addAll(data.items!);
+        }
+        //标签指令列表
+        var ins = groupBy(insList, (v) => v.billNo);
+
+        //表格列表
+        Map<String, List<List<String>>> map = {};
+        ins.forEach((k, v1) {
+          map[k ?? ''] = [
+            for (var v2 in v1) [v2.size ?? '', v2.qty.toShowString()]
+          ];
+        });
+
+        if (languageInfo.languageCode == 'zh') {
+          labelList.add(maintainLabelSizeMaterialChineseDynamicLabel(
+            barCode: data.barCode ?? '',
+            factoryType: data.factoryType ?? '',
+            billNo: data.departName ?? '',
+            total:
+                data.items!.map((v) => v.qty ?? 0).reduce((a, b) => a.add(b)),
+            unit: languageInfo.unitName ?? '',
+            materialCode: data.materialCode ?? '',
+            materialName: data.materialName ?? '',
+            map: map,
+            pageNumber: languageInfo.pageNumber ?? '',
+            deliveryDate: languageInfo.deliveryDate ?? '',
+          ));
+        } else {
+          labelList.add(maintainLabelMixEnglishDynamicLabel(
+            barCode: data.barCode ?? '',
+            factoryType: data.factoryType ?? '',
+            materialCode: data.materialCode ?? '',
+            materialName: data.materialName ?? '',
+            grossWeight: data.grossWeight ?? 0.0,
+            netWeight: data.netWeight ?? 0.0,
+            meas: data.meas ?? '',
+            total:
+                data.items!.map((v) => v.qty ?? 0).reduce((a, b) => a.add(b)),
+            unit: languageInfo.unitName ?? '',
+            map: map,
+            pageNumber: languageInfo.pageNumber ?? '',
+            deliveryDate: languageInfo.deliveryDate ?? '',
+          ));
+        }
+      }
+      labels.call(labelList, true);
+    } else {
+      //不显示预览
+      var labelList = <List<Uint8List>>[];
+      for (var data in list) {
+        var languageInfo = data.materialOtherName!
+            .firstWhere((v) => v.languageName == language);
+        var insList = <LabelSizeInfo>[];
+        if (!data.items.isNullOrEmpty()) {
+          insList.addAll(data.items!);
+        }
+        //标签指令列表
+        var ins = groupBy(insList, (v) => v.billNo);
+
+        //表格列表
+        Map<String, List<List<String>>> map = {};
+        ins.forEach((k, v1) {
+          map[k ?? ''] = [
+            for (var v2 in v1) [v2.size ?? '', v2.qty.toShowString()]
+          ];
+        });
+        labelList.add(await labelMultipurposeDynamic(
+          isCut: true,
+          qrCode:  data.barCode ?? '',
+          title: data.factoryType ?? '',
+          subTitle: languageInfo.languageCode=='zh'? (data.departName?? '') : '(${data.materialCode})${languageInfo.name}',
+          tableFirstLineTitle: languageInfo.languageCode=='zh'?'尺码' :'Size',
+          tableLastLineTitle: languageInfo.languageCode=='zh'?'合计' :'Total',
+          tableTitle: languageInfo.languageCode=='zh'? '':'GW:${data.grossWeight.toShowString()}KG  NW:${data.netWeight.toShowString()}KG',
+          tableTitleTips: languageInfo.languageCode == 'zh' ? '${data.items!.map((v) => v.qty ?? 0).reduce((a, b) => a.add(b)).toShowString()}${languageInfo.unitName ?? ''}' : '',
+          tableSubTitle:languageInfo.languageCode == 'zh' ? '(${data.materialCode})${languageInfo.name}' : 'MEAS:${data.meas}     ${data.items!.map((v) => v.qty ?? 0).reduce((a, b) => a.add(b)).toShowString()}${languageInfo.unitName}',
+          tableData:map,
+          bottomLeftText1: languageInfo.pageNumber?? '',
+          bottomLeftText2: languageInfo.languageCode == 'zh' ? '':'Made in China',
+          bottomRightText1:  languageInfo.deliveryDate?? '',
+          bottomRightText2:languageInfo.languageCode == 'zh' ? '': 'Gold Emperor',
+          speed: spGet(spSavePrintSpeed) ?? 5.0,
+          density: spGet(spSavePrintDensity) ?? 10.0,
+        ));
+      }
+      pu.printLabelList(
+        labelList: labelList,
+        start: () {
+          loadingShow('正在下发标签...');
+        },
+        progress: (i, j) {
+          loadingShow('正在下发标签($i/$j)');
+        },
+        finished: (success, fail) {
+          successDialog(
+              title: '标签下发结束',
+              content: '完成${success.length}张, 失败${fail.length}张',
+              back: () {});
+        },
+      );
+    }
   }
 
   List<Widget> createSubItem({
@@ -882,52 +1041,52 @@ void createMyanmarLabel({
   required Function(List<Widget>, bool) labels,
 }) {
   var labelList = <Widget>[];
-  // for (var data in list) {
-  //   var qty = '';
-  //   var size = '';
-  //   var dataList = <String, List>{};
-  //   if (data.items!.isEmpty) {
-  //     // 无尺码
-  //   } else if (data.items!.length == 1) {
-  //     //单尺码
-  //     qty = data.items![0].qty!.toShowString();
-  //     size = data.items![0].size ?? '';
-  //   } else if (data.items!.length > 1) {
-  //     //多尺码
-  //     qty = data.items!
-  //         .map((v) => v.qty ?? 0)
-  //         .reduce((a, b) => a.add(b))
-  //         .toShowString();
-  //     dataList = createSizeList(
-  //       list: data.items!,
-  //       sizeTitle: '尺码/Size/ukuran',
-  //       totalTitle: '总计/total',
-  //     );
-  //   }
-  //   labelList.add(dynamicSizeMaterialLabel1098(
-  //     labelID: data.barCode ?? '',
-  //     myanmarApprovalDocument: data.myanmarApprovalDocument ?? '',
-  //     typeBody: data.factoryType ?? '',
-  //     trackNo: data.trackNo ?? '',
-  //     materialList: dataList,
-  //     instructionNo: data.billNo ?? '',
-  //     materialCode: data.materialCode ?? '',
-  //     size: size,
-  //     inBoxQty: qty,
-  //     customsDeclarationUnit: data.customsDeclarationUnit ?? '',
-  //     customsDeclarationType: data.customsDeclarationType ?? '',
-  //     pieceNo: data.pieceNo ?? '',
-  //     pieceID: data.pieceID ?? '',
-  //     grossWeight: data.grossWeight.toShowString(),
-  //     netWeight: data.netWeight.toShowString(),
-  //     specifications: data.meas ?? '',
-  //     volume: data.volume ?? '',
-  //     supplier: '供应商123456',
-  //     manufactureDate: data.manufactureDate ?? '',
-  //     hasNotes: true,
-  //     notes: data.notes ?? '',
-  //   ));
-  // }
+  for (var data in list) {
+    var qty = '';
+    var size = '';
+    var dataList = <String, List>{};
+    if (data.items!.isEmpty) {
+      // 无尺码
+    } else if (data.items!.length == 1) {
+      //单尺码
+      qty = data.items![0].qty!.toShowString();
+      size = data.items![0].size ?? '';
+    } else if (data.items!.length > 1) {
+      //多尺码
+      qty = data.items!
+          .map((v) => v.qty ?? 0)
+          .reduce((a, b) => a.add(b))
+          .toShowString();
+      dataList = createSizeList(
+        list: data.items!,
+        sizeTitle: '尺码/Size/ukuran',
+        totalTitle: '总计/total',
+      );
+    }
+    labelList.add(dynamicSizeMaterialLabel1098(
+      labelID: data.barCode ?? '',
+      myanmarApprovalDocument: data.myanmarApprovalDocument ?? '',
+      typeBody: data.factoryType ?? '',
+      trackNo: data.trackNo ?? '',
+      materialList: dataList,
+      instructionNo: data.billNo ?? '',
+      materialCode: data.materialCode ?? '',
+      size: size,
+      inBoxQty: qty,
+      customsDeclarationUnit: data.customsDeclarationUnit ?? '',
+      customsDeclarationType: data.customsDeclarationType ?? '',
+      pieceNo: data.pieceNo ?? '',
+      pieceID: data.pieceID ?? '',
+      grossWeight: data.grossWeight.toShowString(),
+      netWeight: data.netWeight.toShowString(),
+      specifications: data.meas ?? '',
+      volume: data.volume ?? '',
+      supplier: '供应商123456',
+      manufactureDate: data.manufactureDate ?? '',
+      hasNotes: true,
+      notes: data.notes ?? '',
+    ));
+  }
   labels.call(labelList, true);
 }
 
@@ -977,54 +1136,54 @@ void createIndonesiaLabel({
   required Function(List<Widget>, bool) labels,
 }) {
   var labelList = <Widget>[];
-  // for (var data in list) {
-  //   var qty = '';
-  //   var typeBody = '';
-  //   var dataList = <String, List>{};
-  //   if (data.items!.isEmpty) {
-  //     // 无尺码
-  //   } else if (data.items!.length == 1) {
-  //     //单尺码
-  //     typeBody = (data.factoryType ?? '') + (data.items![0].size ?? '');
-  //     qty = data.items![0].qty!.toShowString();
-  //   } else if (data.items!.length > 1) {
-  //     //多尺码
-  //     typeBody = data.factoryType ?? '';
-  //     qty = data.items!
-  //         .map((v) => v.qty ?? 0)
-  //         .reduce((a, b) => a.add(b))
-  //         .toShowString();
-  //     dataList = createSizeList(
-  //       list: data.items!,
-  //       sizeTitle: '尺码/Size/ukuran',
-  //       totalTitle: '总计/total',
-  //     );
-  //   }
-  //   labelList.add(dynamicSizeMaterialLabel1095n1096(
-  //     labelID: data.barCode ?? '',
-  //     productName: 'productName',
-  //     orderType: 'orderType',
-  //     typeBody: typeBody,
-  //     trackNo: data.trackNo ?? '',
-  //     instructionNo: data.billNo ?? '',
-  //     generalMaterialNumber: data.materialCode ?? '',
-  //     materialDescription: data.materialName ?? '',
-  //     materialList: dataList,
-  //     inBoxQty: qty,
-  //     customsDeclarationUnit: data.customsDeclarationUnit ?? '',
-  //     customsDeclarationType: data.customsDeclarationType ?? '',
-  //     pieceID: data.pieceID ?? '',
-  //     pieceNo: data.pieceNo ?? '',
-  //     grossWeight: data.grossWeight.toShowString(),
-  //     netWeight: data.netWeight.toShowString(),
-  //     specifications: data.meas ?? '',
-  //     volume: data.volume ?? '',
-  //     supplier: '',
-  //     manufactureDate: data.manufactureDate ?? '',
-  //     consignee: '收货方123456',
-  //     hasNotes: true,
-  //     notes: data.notes ?? '',
-  //   ));
-  // }
+  for (var data in list) {
+    var qty = '';
+    var typeBody = '';
+    var dataList = <String, List>{};
+    if (data.items!.isEmpty) {
+      // 无尺码
+    } else if (data.items!.length == 1) {
+      //单尺码
+      typeBody = (data.factoryType ?? '') + (data.items![0].size ?? '');
+      qty = data.items![0].qty!.toShowString();
+    } else if (data.items!.length > 1) {
+      //多尺码
+      typeBody = data.factoryType ?? '';
+      qty = data.items!
+          .map((v) => v.qty ?? 0)
+          .reduce((a, b) => a.add(b))
+          .toShowString();
+      dataList = createSizeList(
+        list: data.items!,
+        sizeTitle: '尺码/Size/ukuran',
+        totalTitle: '总计/total',
+      );
+    }
+    labelList.add(dynamicSizeMaterialLabel1095n1096(
+      labelID: data.barCode ?? '',
+      productName: 'productName',
+      orderType: 'orderType',
+      typeBody: typeBody,
+      trackNo: data.trackNo ?? '',
+      instructionNo: data.billNo ?? '',
+      generalMaterialNumber: data.materialCode ?? '',
+      materialDescription: data.materialName ?? '',
+      materialList: dataList,
+      inBoxQty: qty,
+      customsDeclarationUnit: data.customsDeclarationUnit ?? '',
+      customsDeclarationType: data.customsDeclarationType ?? '',
+      pieceID: data.pieceID ?? '',
+      pieceNo: data.pieceNo ?? '',
+      grossWeight: data.grossWeight.toShowString(),
+      netWeight: data.netWeight.toShowString(),
+      specifications: data.meas ?? '',
+      volume: data.volume ?? '',
+      supplier: '',
+      manufactureDate: data.manufactureDate ?? '',
+      consignee: '',
+      hasNotes: true,
+      notes: data.notes ?? '',
+    ));
+  }
   labels.call(labelList, true);
 }

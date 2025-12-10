@@ -438,6 +438,13 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
             )),
       ),
       actions: [
+        CombinationButton(
+          text: '打印机设置',
+          click: () => showPrintSetting(
+            context,
+          ),
+          combination: Combination.intact,
+        ),
         TextButton(
           onPressed: () => selectMaterialDialog(
               logic.getSizeList(), (s) => state.filterSize.value = s),
@@ -446,6 +453,11 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
             style: const TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
+        Obx(() => CheckBox(
+              onChanged: (c) => state.isShowPreview.value = c,
+              name: 'maintain_label_preview'.tr,
+              value: state.isShowPreview.value,
+            ))
       ],
     );
   }

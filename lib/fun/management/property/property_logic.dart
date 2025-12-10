@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/management/property/property_detail_view.dart';
 import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/wifi_util.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
@@ -8,6 +9,26 @@ import 'property_state.dart';
 
 class PropertyLogic extends GetxController {
   final PropertyState state = PropertyState();
+
+  final WiFiManager wifiManager = WiFiManager();
+
+  Future<void> connectToNetwork({
+    required String ssid,
+    required String password,
+    Function()? success, // 添加成功回调参数
+  }) async {
+    bool result = await wifiManager.connectToWiFi(
+      ssid: ssid,
+      password: password,
+    );
+
+    if (result) {
+      showSnackBar(message: '激光打印机连接成功');
+      success?.call();
+    } else {
+      showSnackBar(message: '激光打印机连接失败，请手动连接');
+    }
+  }
 
   void queryProperty({
     required String propertyNumber,
@@ -273,5 +294,4 @@ class PropertyLogic extends GetxController {
       return 0;
     }
   }
-
 }
