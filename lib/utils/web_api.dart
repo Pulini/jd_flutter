@@ -410,7 +410,7 @@ const webApiSubmitNewSort = 'api/Package/SubmitWorkCardPriority';
 
 //根据时间和部门信息获得生产派工单列表信息
 const webApiGetWorkCardCombinedSizeList =
-    'api/WorkCard/GetWorkCardCombinedSizeList';
+    'api/WorkCard/GetWorkCardCombinedSizeListNew';
 
 //生产派工单下推
 const webApiPushProductionOrder =
