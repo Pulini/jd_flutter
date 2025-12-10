@@ -132,7 +132,7 @@ class _WorkOrderListPageState extends State<WorkOrderListPage> {
                     click: () {
                       if (checkUserPermission('1051105')) {
                         Get.to(() => const MaintainLabelPage(), arguments: {
-                          'materialCodes':[data.materialCode],
+                          'materialCodes':[data.materialCode??''],
                           'interID': data.interID,
                           'isMaterialLabel': false,
                         });

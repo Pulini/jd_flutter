@@ -1,4 +1,5 @@
 import 'package:jd_flutter/utils/extension_util.dart';
+import 'package:jd_flutter/utils/utils.dart';
 
 // BillNo : "JZ2300102"
 // BarCode : "20488980010236/002"
@@ -25,16 +26,9 @@ import 'package:jd_flutter/utils/extension_util.dart';
 
 class LabelInfo {
   LabelInfo({
-    this.billNo,
     this.barCode,
-    this.materialOtherName,
     this.grossWeight,
     this.netWeight,
-    this.meas,
-    this.factoryType,
-    this.materialID,
-    this.materialCode,
-    this.materialName,
     this.isBillPrint,
     this.isTempRec,
     this.isInStock,
@@ -48,7 +42,6 @@ class LabelInfo {
     this.fCustomFactoryID,
     this.labelType,
     this.departName,
-    this.items,
     this.myanmarApprovalDocument,
     this.trackNo,
     this.customsDeclarationUnit,
@@ -61,21 +54,9 @@ class LabelInfo {
   });
 
   LabelInfo.fromJson(dynamic json) {
-    billNo = json['BillNo'];
     barCode = json['BarCode'];
-    if (json['MaterialOtherName'] != null) {
-      materialOtherName = [];
-      json['MaterialOtherName'].forEach((v) {
-        materialOtherName?.add(LabelMaterialInfo.fromJson(v));
-      });
-    }
     grossWeight = json['GrossWeight'];
     netWeight = json['NetWeight'];
-    meas = json['Meas'];
-    factoryType = json['FactoryType'];
-    materialID = json['MaterialID'];
-    materialCode = json['MaterialCode'];
-    materialName = json['MaterialName'];
     isBillPrint = json['IsBillPrint'];
     isTempRec = json['IsTempRec'];
     isInStock = json['IsInStock'];
@@ -98,28 +79,18 @@ class LabelInfo {
     notes = json['Notes'];
     labelType = json['LabelType'];
     departName = json['DepartName'];
-    if (json['Items'] != null) {
-      items = [];
-      json['Items'].forEach((v) {
-        items?.add(LabelSizeInfo.fromJson(v));
-      });
-      items?.sort(
-          (a, b) => a.size.toDoubleTry().compareTo(b.size.toDoubleTry()));
-    }
+    subList = [
+      if (json['SubList'] != null)
+        for (var item in json['SubList']) LabelMaterialInfo.fromJson(item)
+    ];
   }
 
   bool select = false;
 
-  String? billNo;
   String? barCode;
-  List<LabelMaterialInfo>? materialOtherName;
+  List<LabelMaterialInfo>? subList;
   double? grossWeight;
   double? netWeight;
-  String? meas;
-  String? factoryType;
-  int? materialID;
-  String? materialCode;
-  String? materialName;
   bool? isBillPrint;
   bool? isTempRec;
   bool? isInStock;
@@ -133,7 +104,6 @@ class LabelInfo {
   String? fCustomFactoryID;
   int? labelType;
   String? departName;
-  List<LabelSizeInfo>? items;
   String? myanmarApprovalDocument;
   String? trackNo;
   String? customsDeclarationUnit;
@@ -146,19 +116,9 @@ class LabelInfo {
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
-    map['BillNo'] = billNo;
     map['BarCode'] = barCode;
-    if (materialOtherName != null) {
-      map['MaterialOtherName'] =
-          materialOtherName?.map((v) => v.toJson()).toList();
-    }
     map['GrossWeight'] = grossWeight;
     map['NetWeight'] = netWeight;
-    map['Meas'] = meas;
-    map['FactoryType'] = factoryType;
-    map['MaterialID'] = materialID;
-    map['MaterialCode'] = materialCode;
-    map['MaterialName'] = materialName;
     map['IsBillPrint'] = isBillPrint;
     map['IsTempRec'] = isTempRec;
     map['IsInStock'] = isInStock;
@@ -181,9 +141,7 @@ class LabelInfo {
     map['Volume'] = volume;
     map['manufactureDate'] = manufactureDate;
     map['Notes'] = notes;
-    if (items != null) {
-      map['Items'] = items?.map((v) => v.toJson()).toList();
-    }
+    map['SubList'] = subList?.map((v) => v.toJson()).toList();
     return map;
   }
 
@@ -194,15 +152,82 @@ class LabelInfo {
             ? 2
             : 0;
   }
+
+  bool hasSize(String size) =>
+      subList!.any((v) => v.items!.any((v2) => v2.size == size));
+
+  double totalQty() => subList.isNullOrEmpty()
+      ? 0.0
+      : subList!.map((v) => v.totalQty()).reduce((a, b) => a.add(b));
 }
 
+class LabelMaterialInfo {
+  String? billNo;
+  List<LabelLanguageInfo>? materialOtherName;
+  String? meas;
+  String? factoryType;
+  int? materialID;
+  String? materialCode;
+  String? materialName;
+  List<LabelSizeInfo>? items;
+
+  LabelMaterialInfo.fromJson(dynamic json) {
+    billNo = json['BillNo'];
+    materialOtherName = [
+      if (json['MaterialOtherName'] != null)
+        for (var item in json['MaterialOtherName'])
+          LabelLanguageInfo.fromJson(item)
+    ];
+    meas = json['Meas'];
+    factoryType = json['FactoryType'];
+    materialID = json['MaterialID'];
+    materialCode = json['MaterialCode'];
+    materialName = json['MaterialName'];
+    items = [
+      if (json['Items'] != null)
+        for (var item in json['Items']) LabelSizeInfo.fromJson(item)
+    ];
+    items?.sort((a, b) => a.size.toDoubleTry().compareTo(b.size.toDoubleTry()));
+  }
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['BillNo'] = billNo;
+    if (materialOtherName != null) {
+      map['MaterialOtherName'] =
+          materialOtherName?.map((v) => v.toJson()).toList();
+    }
+    map['Meas'] = meas;
+    map['FactoryType'] = factoryType;
+    map['MaterialID'] = materialID;
+    map['MaterialCode'] = materialCode;
+    map['MaterialName'] = materialName;
+    map['Items'] = items?.map((v) => v.toJson()).toList();
+    return map;
+  }
+
+  String getMaterialLanguage() {
+    var material = materialName ?? '';
+    var language = spGet('language');
+    materialOtherName?.forEach((v) {
+      if (v.languageCode == language) {
+        material = v.name ?? '';
+        return;
+      }
+    });
+    return material;
+  }
+
+  double totalQty() => items.isNullOrEmpty()
+      ? 0.0
+      : items!.map((v) => v.qty ?? 0).reduce((a, b) => a.add(b));
+}
 // BillNo : "JZ2300102"
 // Size : "36"
 // Qty : 200.0
 
 class LabelSizeInfo {
   LabelSizeInfo({
-    this.isSubtotal,
     this.billNo,
     this.size,
     this.qty,
@@ -210,26 +235,31 @@ class LabelSizeInfo {
 
   LabelSizeInfo.fromJson(dynamic json) {
     billNo = json['BillNo'];
+    materialCode = json['MaterialCode'];
+    materialName = json['MaterialName'];
     size = json['Size'];
     qty = json['Qty'];
   }
 
-  bool? isSubtotal = false;
   String? billNo;
+  String? materialCode;
+  String? materialName;
   String? size;
   double? qty;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['BillNo'] = billNo;
+    map['MaterialCode'] = materialCode;
+    map['MaterialName'] = materialName;
     map['Size'] = size;
     map['Qty'] = qty;
     return map;
   }
 }
 
-class LabelMaterialInfo {
-  LabelMaterialInfo({
+class LabelLanguageInfo {
+  LabelLanguageInfo({
     this.deliveryDate,
     this.languageCode,
     this.languageName,
@@ -238,7 +268,7 @@ class LabelMaterialInfo {
     this.unitName,
   });
 
-  LabelMaterialInfo.fromJson(dynamic json) {
+  LabelLanguageInfo.fromJson(dynamic json) {
     deliveryDate = json['DeliveryDate'];
     languageCode = json['LanguageCode'];
     languageName = json['LanguageName'];

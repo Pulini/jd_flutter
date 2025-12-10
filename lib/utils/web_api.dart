@@ -509,7 +509,7 @@ const webApiReportSAPByWorkCardInterID =
     'api/CompoundDispatching/ReportSAPByWorkCardInterID';
 
 //获取贴标列表
-const webApiGetLabelList = 'api/CompoundDispatching/PackagePrintLabelList';
+const webApiGetLabelList = 'api/CompoundDispatching/PackagePrintLabelListV2';
 
 //创建单码贴标
 const webApiCreateSingleLabel =

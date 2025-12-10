@@ -16,6 +16,7 @@ class MaintainLabelState {
   var sapProcessName = '';
   var interID = 0;
   var isMaterialLabel = false.obs;
+  var isPartOrder = false;
   var isSingleLabel = false;
   var materialName = ''.obs;
   var typeBody = ''.obs;
@@ -26,27 +27,23 @@ class MaintainLabelState {
   var filterSize = 'maintain_label_all'.tr.obs;
 
   MaintainLabelState() {
-    sapProcessName = Get.arguments['SapProcessName'];
+    sapProcessName = Get.arguments['SapProcessName']??'';
     materialCodes = Get.arguments['materialCodes'];
     interID = Get.arguments['interID'];
     isMaterialLabel.value = Get.arguments['isMaterialLabel'];
+    isPartOrder = Get.arguments['isPartOrder']??false;
   }
 
   List<LabelInfo> getLabelList() {
     return filterSize.value == 'maintain_label_all'.tr
         ? labelList
-        : labelList
-            .where((v) => v.items!.any((v2) => v2.size == filterSize.value))
-            .toList();
+        : labelList.where((v) => v.hasSize(filterSize.value)).toList();
   }
 
   List<List<LabelInfo>> getLabelGroupList() {
     return filterSize.value == 'maintain_label_all'.tr
         ? labelGroupList
-        : labelGroupList
-            .where((v) => v.any(
-                (v2) => v2.items!.any((v3) => v3.size == filterSize.value)))
-            .toList();
+        : labelGroupList.where((v) => v.any((v2) => v2.hasSize(filterSize.value))).toList();
   }
 
   void getLabelInfoList({
@@ -65,28 +62,32 @@ class MaintainLabelState {
             LabelInfo.fromJson,
           ),
         ).then((list) {
-          typeBody.value = list[0].factoryType ?? '';
-          if (list[0].materialOtherName?.isNotEmpty == true) {
-            final zhMaterial = list[0]
-                .materialOtherName!
-                .firstWhereOrNull((v) => v.languageCode == 'zh');
-            if (zhMaterial != null) {
-              materialName.value = zhMaterial.name ?? '';
-            } else {
-              materialName.value = '';
+          typeBody.value = list.first.subList!.first.factoryType ?? '';
+          var materials = [];
+          for (var v in list) {
+            for (var v2 in v.subList!) {
+              if(!materials.contains( v2.getMaterialLanguage())){
+                materials.add( v2.getMaterialLanguage());
+              }
             }
+          }
+          if(materials.length > 1){
+            materialName.value = materials.join(',');
+          }else{
+            materialName.value =materials.first;
           }
           if (isMaterialLabel.value) {
             list.sort((a, b) => a.labelState().compareTo(b.labelState()));
             labelList.value = list;
           } else {
-            isSingleLabel = list[0].packType ?? false;
+            isSingleLabel = list.first.packType ?? false;
             var group = <List<LabelInfo>>[];
             groupBy(list, (v) => v.barCode).forEach((k, v) {
               group.add(v);
             });
             labelGroupList.value = group;
           }
+          debugPrint('isMaterialLabel=${isMaterialLabel.value} labelList=${labelList.length}  isSingleLabel=$isSingleLabel  labelGroupList=${labelGroupList.length}');
         });
       } else {
         if (isMaterialLabel.value) {
