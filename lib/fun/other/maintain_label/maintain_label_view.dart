@@ -357,6 +357,13 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
             )),
       ),
       actions: [
+        CombinationButton(
+          text: '打印机设置',
+          click: () => showPrintSetting(
+            context,
+          ),
+          combination: Combination.intact,
+        ),
         TextButton(
           onPressed: () => selectMaterialDialog(
               logic.getSizeList(), (s) => state.filterSize.value = s),

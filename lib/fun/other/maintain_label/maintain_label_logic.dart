@@ -8,9 +8,11 @@ import 'package:jd_flutter/bean/http/response/create_custom_label_data.dart';
 import 'package:jd_flutter/bean/http/response/label_info.dart';
 import 'package:jd_flutter/bean/http/response/maintain_material_info.dart';
 import 'package:jd_flutter/bean/http/response/picking_bar_code_info.dart';
+import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/printer/print_util.dart';
 import 'package:jd_flutter/utils/printer/tsc_util.dart';
+import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/preview_label_list_widget.dart';
@@ -718,6 +720,8 @@ class MaintainLabelLogic extends GetxController {
               .reduce((a, b) => a.add(b))
               .toShowString(),
           bottomRightText2: languageInfo.unitName ?? '',
+          speed: spGet(spSavePrintSpeed) ?? 5.0,
+          density: spGet(spSavePrintDensity) ?? 10.0,
         ));
       }
       pu.printLabelList(
@@ -726,11 +730,9 @@ class MaintainLabelLogic extends GetxController {
           loadingShow('正在下发标签...');
         },
         progress: (i, j) {
-          Get.back();
           loadingShow('正在下发标签($i/$j)');
         },
         finished: (success, fail) {
-          Get.back();
           successDialog(
               title: '标签下发结束',
               content: '完成${success.length}张, 失败${fail.length}张',
@@ -813,6 +815,8 @@ class MaintainLabelLogic extends GetxController {
               ? ((data.items?[0].qty.toShowString() ?? '') +
                   (languageInfo.unitName ?? ''))
               : ('${data.items?[0].size}#'),
+          speed: spGet(spSavePrintSpeed) ?? 5.0,
+          density: spGet(spSavePrintDensity) ?? 10.0,
         ));
       }
       pu.printLabelList(
@@ -821,11 +825,9 @@ class MaintainLabelLogic extends GetxController {
           loadingShow('正在下发标签...');
         },
         progress: (i, j) {
-          Get.back();
           loadingShow('正在下发标签($i/$j)');
         },
         finished: (success, fail) {
-          Get.back();
           successDialog(
               title: '标签下发结束',
               content: '完成${success.length}张, 失败${fail.length}张',
@@ -930,6 +932,8 @@ class MaintainLabelLogic extends GetxController {
           bottomLeftText2: languageInfo.languageCode == 'zh' ? '':'Made in China',
           bottomRightText1:  languageInfo.deliveryDate?? '',
           bottomRightText2:languageInfo.languageCode == 'zh' ? '': 'Gold Emperor',
+          speed: spGet(spSavePrintSpeed) ?? 5.0,
+          density: spGet(spSavePrintDensity) ?? 10.0,
         ));
       }
       pu.printLabelList(
@@ -938,11 +942,9 @@ class MaintainLabelLogic extends GetxController {
           loadingShow('正在下发标签...');
         },
         progress: (i, j) {
-          Get.back();
           loadingShow('正在下发标签($i/$j)');
         },
         finished: (success, fail) {
-          Get.back();
           successDialog(
               title: '标签下发结束',
               content: '完成${success.length}张, 失败${fail.length}张',

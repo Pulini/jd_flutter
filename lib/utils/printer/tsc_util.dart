@@ -881,6 +881,8 @@ Future<List<Uint8List>> labelMultipurposeDynamic({
   String bottomLeftText2 = '',
   String bottomRightText1 = '',
   String bottomRightText2 = '',
+  double speed = 3.0,
+  double density = 15.0,
 }) async {
   var list = <Uint8List>[];
 
@@ -993,7 +995,10 @@ Future<List<Uint8List>> labelMultipurposeDynamic({
 
   list.add(_tscCutter());
   list.add(_tscClearBuffer());
-  list.add(_tscSetup(width, height, sensorDistance: 0, density: 13));
+  list.add(_tscSetup(width, height, sensorDistance: 0, density: density.toInt(),speed: speed.toInt()));
+
+
+
 
   if (qrCode.isNotEmpty) {
     list.add(_tscQrCode(qrCodeX, qrCodeY,
