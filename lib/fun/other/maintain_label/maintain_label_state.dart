@@ -1,12 +1,9 @@
-import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/base_data.dart';
-import 'package:jd_flutter/bean/http/response/create_custom_label_data.dart';
 import 'package:jd_flutter/bean/http/response/label_info.dart';
 import 'package:jd_flutter/bean/http/response/maintain_material_info.dart';
 import 'package:jd_flutter/bean/http/response/picking_bar_code_info.dart';
-import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
@@ -16,6 +13,7 @@ class MaintainLabelState {
   var sapProcessName = '';
   var interID = 0;
   var isMaterialLabel = false.obs;
+  var isPartOrder = false;
   var isSingleLabel = false;
   var materialName = ''.obs;
   var typeBody = ''.obs;
@@ -27,30 +25,29 @@ class MaintainLabelState {
   var isShowPreview = false.obs;
 
   MaintainLabelState() {
-    sapProcessName = Get.arguments['SapProcessName'];
+    sapProcessName = Get.arguments['SapProcessName'] ?? '';
     materialCodes = Get.arguments['materialCodes'];
     interID = Get.arguments['interID'];
     isMaterialLabel.value = Get.arguments['isMaterialLabel'];
+    isPartOrder = Get.arguments['isPartOrder'] ?? false;
   }
 
   List<LabelInfo> getLabelList() {
     return filterSize.value == 'maintain_label_all'.tr
         ? labelList
-        : labelList
-            .where((v) => v.items!.any((v2) => v2.size == filterSize.value))
-            .toList();
+        : labelList.where((v) => v.hasSize(filterSize.value)).toList();
   }
 
   List<List<LabelInfo>> getLabelGroupList() {
     return filterSize.value == 'maintain_label_all'.tr
         ? labelGroupList
         : labelGroupList
-            .where((v) => v.any(
-                (v2) => v2.items!.any((v3) => v3.size == filterSize.value)))
+            .where((v) => v.any((v2) => v2.hasSize(filterSize.value)))
             .toList();
   }
 
   void getLabelInfoList({
+    required Function(List<LabelInfo>) success,
     required Function(String msg) error,
   }) {
     httpGet(
@@ -65,30 +62,7 @@ class MaintainLabelState {
             response.data,
             LabelInfo.fromJson,
           ),
-        ).then((list) {
-          typeBody.value = list[0].factoryType ?? '';
-          if (list[0].materialOtherName?.isNotEmpty == true) {
-            final zhMaterial = list[0]
-                .materialOtherName!
-                .firstWhereOrNull((v) => v.languageCode == 'zh');
-            if (zhMaterial != null) {
-              materialName.value = zhMaterial.name ?? '';
-            } else {
-              materialName.value = '';
-            }
-          }
-          if (isMaterialLabel.value) {
-            list.sort((a, b) => a.labelState().compareTo(b.labelState()));
-            labelList.value = list;
-          } else {
-            isSingleLabel = list[0].packType ?? false;
-            var group = <List<LabelInfo>>[];
-            groupBy(list, (v) => v.barCode).forEach((k, v) {
-              group.add(v);
-            });
-            labelGroupList.value = group;
-          }
-        });
+        ).then((list) =>success.call(list));
       } else {
         if (isMaterialLabel.value) {
           labelList.clear();
@@ -124,7 +98,7 @@ class MaintainLabelState {
 
   //获取包装清单贴标总数量
   void getOrderDetailsForMix({
-    required Function(List<List<PickingBarCodeInfo>> list) success,
+    required Function(List<PickingBarCodeInfo> list) success,
     required Function(String msg) error,
   }) {
     httpGet(
@@ -137,22 +111,9 @@ class MaintainLabelState {
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        final List<PickingBarCodeInfo> dataList = [
+        success.call([
           for (var json in response.data) PickingBarCodeInfo.fromJson(json)
-        ];
-
-        final List<List<PickingBarCodeInfo>> orderData = [];
-
-        groupBy(dataList, (item) => item.size ?? '').forEach((size, items) {
-          debugPrint('size=$size');
-          logger.f(items);
-          var totalSurplusQty =
-              items.map((v) => v.surplusQty).reduce((a, b) => a.add(b));
-          if (totalSurplusQty > 0) {
-            orderData.add(items.where((v) => v.surplusQty > 0).toList());
-          }
-        });
-        success(orderData);
+        ]);
       } else {
         error.call(response.message ?? '');
       }
@@ -161,7 +122,7 @@ class MaintainLabelState {
 
   //获取包装清单贴标总数量
   void getOrderDetailsForCustom({
-    required Function(List<List<CreateCustomLabelsData>> list) success,
+    required Function(List<PickingBarCodeInfo> list) success,
     required Function(String msg) error,
   }) {
     httpGet(
@@ -174,37 +135,9 @@ class MaintainLabelState {
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        final List<PickingBarCodeInfo> dataList = [
+        success.call([
           for (var json in response.data) PickingBarCodeInfo.fromJson(json)
-        ];
-
-        final List<List<CreateCustomLabelsData>> orderData = [];
-
-        final Map<String, List<PickingBarCodeInfo>> groupedByMto =
-            groupBy(dataList, (item) => item.mtono ?? '');
-
-        groupedByMto.forEach((mtono, items) {
-          final List<CreateCustomLabelsData> subList = [];
-          for (var item in items) {
-            final double surplus = (item.totalQty ?? 0.0) - (item.qty ?? 0.0);
-            subList.add(CreateCustomLabelsData(
-              select: dataList.length == 1,
-              // 假设 Data.size 是指整个列表长度
-              size: item.size ?? '0',
-              createdLabels: item.labelCount ?? 0,
-              goodsTotal: item.totalQty ?? 0.0,
-              createdGoods: item.qty ?? 0.0,
-              surplusGoods: surplus,
-              capacity: surplus < 100 ? surplus.toShowString() : "100",
-              createGoods: surplus < 100 ? surplus.toShowString() : "100",
-              instruct: mtono,
-            ));
-          }
-          orderData.add(subList);
-        });
-
-        // 调用 success 回调并传入处理后的结果
-        success(orderData);
+        ]);
       } else {
         error.call(response.message ?? '');
       }
@@ -317,20 +250,19 @@ class MaintainLabelState {
   }
 
   void setLabelState({
-    required List<List<LabelInfo>> selectLabels,
-    required int labelType,
-    required Function(int type) success,
+    required List<LabelInfo> selectLabels,
+    required Function() success,
   }) {
     httpPost(
       method: webApiSetPrintLabelFlag,
       loading: 'maintain_label_select_label_set_state'.tr,
       body: {
-        'InterID': selectLabels[0][0].interID,
-        'BarCodes': [for (var code in selectLabels[0]) code.barCode]
+        'InterID': selectLabels[0].interID,
+        'BarCodes': [for (var code in selectLabels) code.barCode]
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        success.call(labelType);
+        success.call();
       } else {
         errorDialog(content: response.message);
       }

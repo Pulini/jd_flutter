@@ -81,39 +81,100 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
       margin: EdgeInsets.only(
         left: 10,
         right: 10,
-        bottom: type == 3 ? 10 : 0,
       ),
       color: type == 1
           ? Colors.green[50]
           : type == 3
               ? Colors.blue[50]
-              : Colors.white,
+              : type == 4
+                  ? Colors.orange[50]
+                  : Colors.white,
       child: Row(
         children: [
           expandedFrameText(
             flex: 5,
             text: text1,
-            textColor: type == 1
-                ? Colors.black
-                : type == 3
+            textColor: type == 3
+                ? Colors.green.shade900
+                : type == 4
                     ? Colors.redAccent
-                    : Colors.green.shade900,
+                    : Colors.black,
           ),
           expandedFrameText(
             text: text2,
-            textColor: type == 1
-                ? Colors.black
-                : type == 3
+            textColor: type == 3
+                ? Colors.green.shade900
+                : type == 4
                     ? Colors.redAccent
-                    : Colors.green.shade900,
+                    : Colors.black,
           ),
           expandedFrameText(
             text: text3,
-            textColor: type == 1
-                ? Colors.black
-                : type == 3
+            textColor: type == 3
+                ? Colors.green.shade900
+                : type == 4
                     ? Colors.redAccent
-                    : Colors.green.shade900,
+                    : Colors.black,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Container _partOrderSubitem(
+    String text1,
+    String text2,
+    String text3,
+    String text4,
+    int type,
+  ) {
+    return Container(
+      margin: EdgeInsets.only(
+        left: 10,
+        right: 10,
+      ),
+      color: type == 1
+          ? Colors.green[50]
+          : type == 3
+              ? Colors.blue[50]
+              : type == 4
+                  ? Colors.orange[50]
+                  : Colors.white,
+      child: Row(
+        children: [
+          expandedFrameText(
+            flex: 3,
+            text: text1,
+            textColor: type == 3
+                ? Colors.green.shade900
+                : type == 4
+                    ? Colors.redAccent
+                    : Colors.black,
+          ),
+          expandedFrameText(
+            flex: 2,
+            text: text2,
+            textColor: type == 3
+                ? Colors.green.shade900
+                : type == 4
+                    ? Colors.redAccent
+                    : Colors.black,
+          ),
+          expandedFrameText(
+            text: text3,
+            textColor: type == 3
+                ? Colors.green.shade900
+                : type == 4
+                    ? Colors.redAccent
+                    : Colors.black,
+          ),
+          expandedFrameText(
+            text: text4,
+            textColor: type == 3
+                ? Colors.green.shade900
+                : type == 4
+                    ? Colors.redAccent
+                    : Colors.black,
           ),
         ],
       ),
@@ -127,41 +188,58 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
       isReport: data.isScProcessReport ?? false,
       onClick: (c) => setState(() => data.select = c),
       label: data.barCode ?? '',
-      total: (data.items ?? [])
-          .map((v) => v.qty ?? 0)
-          .reduce((a, b) => a.add(b))
-          .toShowString(),
-      subItem: [
-        _subitem(
-          'maintain_label_instruction'.tr,
-          'maintain_label_size'.tr,
-          'maintain_label_picking_qty'.tr,
-          1,
-        ),
-        for (var i = 0; i < data.items!.length; ++i)
-          _subitem(
-            data.items![i].billNo ?? 'maintain_label_instruction_error'.tr,
-            data.items![i].size ?? '',
-            data.items![i].qty.toShowString(),
-            2,
-          )
-      ],
+      total: data.totalQty().toShowString(),
+      subItem: state.isPartOrder
+          ? [
+              _partOrderSubitem(
+                'maintain_label_instruction'.tr,
+                'maintain_label_part_material'.tr,
+                'maintain_label_size'.tr,
+                'maintain_label_picking_qty'.tr,
+                1,
+              ),
+              for (var sub in data.subList!)
+                for (var item in sub.items!)
+                  _partOrderSubitem(
+                    sub.billNo ?? 'maintain_label_instruction_error'.tr,
+                    sub.materialName ?? '',
+                    item.size ?? '',
+                    item.qty.toShowString(),
+                    2,
+                  )
+            ]
+          : [
+              _subitem(
+                'maintain_label_instruction'.tr,
+                'maintain_label_size'.tr,
+                'maintain_label_picking_qty'.tr,
+                1,
+              ),
+              for (var sub in data.subList!)
+                for (var item in sub.items!)
+                  _subitem(
+                    sub.billNo ?? 'maintain_label_instruction_error'.tr,
+                    item.size ?? '',
+                    item.qty.toShowString(),
+                    2,
+                  )
+            ],
     );
   }
 
   dynamic _item2(List<LabelInfo> data) {
     return _itemWidget(
       selected: data.where((v) => v.select).length == data.length,
-      isPrint: data[0].isBillPrint ?? false,
-      isReport: data[0].isScProcessReport ?? false,
+      isPrint: data.first.isBillPrint ?? false,
+      isReport: data.first.isScProcessReport ?? false,
       onClick: (c) => setState(() {
         for (var v in data) {
           v.select = c;
         }
       }),
-      label: data[0].barCode ?? '',
+      label: data.first.barCode ?? '',
       total: data
-          .map((v) => v.items?[0].qty ?? 0)
+          .map((v) => v.totalQty())
           .reduce((a, b) => a.add(b))
           .toShowString(),
       subItem: logic.createSubItem(
@@ -211,8 +289,84 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
     });
   }
 
+  void labelCreate() {
+    if (checkUserPermission('1051105')) {
+      if (onlyCustomProcesses.contains(state.sapProcessName)) {
+        custom();
+      } else if (allTypeProcesses.contains(state.sapProcessName)) {
+        createLabelSelect(
+          showAll: true,
+          single: () => logic.createSingleLabel(),
+          mix: () => mixed(),
+          custom: () => custom(),
+        );
+      } else if (mixAndCustomProcesses.contains(state.sapProcessName)) {
+        createLabelSelect(
+          showAll: false,
+          single: () {},
+          mix: () => mixed(),
+          custom: () => custom(),
+        );
+      }
+    } else {
+      showSnackBar(
+        message: 'maintain_label_no_create_label_permission'.tr,
+        isWarning: true,
+      );
+    }
+  }
+
+  void labelDelete() {
+    var select = logic.getSelectData();
+    askDialog(
+      content: select.isEmpty
+          ? 'maintain_label_delete_packing_tips'.tr
+          : 'maintain_label_delete_label_tips'.tr,
+      confirm: () {
+        if (select.isEmpty) {
+          logic.deleteAllLabel();
+        } else {
+          logic.deleteLabels(select);
+        }
+      },
+    );
+  }
+
+  void labelSet() => setLabelSelect(
+        property: () => logic.getMaterialProperties(
+          (list) => setLabelPropertyDialog(
+            list,
+            state.interID,
+            state.materialCodes.first,
+            () => logic.refreshDataList(),
+          ),
+        ),
+        boxCapacity: () => logic.getMaterialCapacity(
+          (s) => setLabelCapacityDialog(
+            s,
+            state.interID,
+            () => logic.refreshDataList(),
+          ),
+        ),
+        language: () => logic.getMaterialLanguages(
+          (list) => setLabelLanguageDialog(
+            list,
+            state.materialCodes.first,
+            () => logic.refreshDataList(),
+          ),
+        ),
+      );
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      logic.refreshDataList();
+    });
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
+    debugPrint('state.isMaterialLabel.value=${state.isMaterialLabel.value}');
     return pageBody(
       title: 'maintain_label_label_maintenance'.tr,
       body: Padding(
@@ -222,7 +376,9 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
               children: [
                 textSpan(
                   hint: 'maintain_label_material'.tr,
-                  text: state.materialName.value,
+                  text: state.isPartOrder
+                      ? logic.getPartOrderMaterial()
+                      : state.materialName.value,
                   textColor: Colors.green.shade900,
                 ),
                 Row(children: [
@@ -262,55 +418,14 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
                     Expanded(
                       child: CombinationButton(
                         text: 'maintain_label_create'.tr,
-                        click: () {
-                          if (checkUserPermission('1051105')) {
-                            logic.getCreateLabelType(onlyCustom: () {
-                              custom();
-                            }, allType: () {
-                              createLabelSelect(
-                                showAll: true,
-                                single: () => logic.createSingleLabel(),
-                                mix: () => mixed(),
-                                custom: () => custom(),
-                              );
-                            }, mixAndCustom: () {
-                              createLabelSelect(
-                                showAll: false,
-                                single: () {},
-                                mix: () => mixed(),
-                                custom: () => custom(),
-                              );
-                            });
-                          } else {
-                            showSnackBar(
-                              message:
-                                  'maintain_label_no_create_label_permission'
-                                      .tr,
-                              isWarning: true,
-                            );
-                          }
-                        },
+                        click: () => labelCreate(),
                         combination: Combination.left,
                       ),
                     ),
                     Expanded(
                       child: CombinationButton(
                         text: 'maintain_label_delete'.tr,
-                        click: () {
-                          var select = logic.getSelectData();
-                          askDialog(
-                            content: select.isEmpty
-                                ? 'maintain_label_delete_packing_tips'.tr
-                                : 'maintain_label_delete_label_tips'.tr,
-                            confirm: () {
-                              if (select.isEmpty) {
-                                logic.deleteAllLabel();
-                              } else {
-                                logic.deleteLabels(select);
-                              }
-                            },
-                          );
-                        },
+                        click: () => labelDelete(),
                         combination: Combination.middle,
                       ),
                     ),
@@ -324,30 +439,7 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
                     Expanded(
                       child: CombinationButton(
                         text: 'maintain_label_set'.tr,
-                        click: () => setLabelSelect(
-                          property: () => logic.getMaterialProperties(
-                            (list) => setLabelPropertyDialog(
-                              list,
-                              state.interID,
-                              state.materialCodes.first,
-                              () => logic.refreshDataList(),
-                            ),
-                          ),
-                          boxCapacity: () => logic.getMaterialCapacity(
-                            (s) => setLabelCapacityDialog(
-                              s,
-                              state.interID,
-                              () => logic.refreshDataList(),
-                            ),
-                          ),
-                          language: () => logic.getMaterialLanguages(
-                            (list) => setLabelLanguageDialog(
-                              list,
-                              state.materialCodes.first,
-                              () => logic.refreshDataList(),
-                            ),
-                          ),
-                        ),
+                        click: () => labelSet(),
                         combination: Combination.right,
                       ),
                     ),
@@ -359,9 +451,7 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
       actions: [
         CombinationButton(
           text: '打印机设置',
-          click: () => showPrintSetting(
-            context,
-          ),
+          click: () => showPrintSetting(),
           combination: Combination.intact,
         ),
         TextButton(

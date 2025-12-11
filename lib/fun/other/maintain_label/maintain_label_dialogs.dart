@@ -1428,7 +1428,7 @@ void setLabelSelect({
   );
 }
 
-void showPrintSetting(BuildContext context) {
+void showPrintSetting() {
   RxDouble printSpeed = 5.0.obs;
   RxDouble printDensity = 10.0.obs;
   if( spGet(spSavePrintSpeed) !=null){

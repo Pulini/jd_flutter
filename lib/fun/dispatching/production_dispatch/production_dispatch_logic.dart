@@ -191,7 +191,7 @@ class ProductionDispatchLogic extends GetxController {
   void materialLabelMaintenance(ProductionDispatchOrderInfo data) {
     if (checkUserPermission('1051106')) {
       Get.to(() => const MaintainLabelPage(), arguments: {
-        'materialCodes': [data.materialCode?? ''],
+        'materialCodes': [data.materialCode??''],
         'interID': data.interID,
         'isMaterialLabel': true,
         'SapProcessName': data.sapProcessName,
@@ -206,7 +206,6 @@ class ProductionDispatchLogic extends GetxController {
   //物料贴标维护
   void partOrderLabelMaintenance(List<ProductionDispatchOrderInfo> list) {
     if (checkUserPermission('1051106')) {
-      logger.f( list.map((v)=>v.materialCode??'').toList());
       Get.to(() => const MaintainLabelPage(), arguments: {
         'materialCodes': list.map((v)=>v.materialCode??'').toList(),
         'interID': list.first.interID,
