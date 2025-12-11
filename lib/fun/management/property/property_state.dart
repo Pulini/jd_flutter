@@ -6,6 +6,7 @@ import 'package:jd_flutter/bean/http/response/property_info.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
+import 'package:jd_flutter/widget/custom_widget.dart';
 
 enum AuditedType { audited, unAudited, underAudit }
 
@@ -177,6 +178,26 @@ class PropertyState {
         success.call(response.message ?? '');
       } else {
         error.call(response.message ?? '');
+      }
+    });
+  }
+
+  void setPrintAssetsLaser() {
+    httpPost(
+      method: webApiPrintAssetsLaser,
+      loading: 'property_detail_update_print_times'.tr,
+      body: {
+        [
+          {
+            'InterID': detail.interID,
+          }
+        ]
+      },
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        showSnackBar(message: response.message?? '');
+      } else {
+        showSnackBar(message: response.message?? '');
       }
     });
   }

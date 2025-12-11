@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/management/property/property_detail_view.dart';
 import 'package:jd_flutter/utils/utils.dart';
@@ -11,6 +13,8 @@ class PropertyLogic extends GetxController {
   final PropertyState state = PropertyState();
 
   final WiFiManager wifiManager = WiFiManager();
+  SocketClient? socketClient;
+  bool isConnected = false;
 
   Future<void> connectToNetwork({
     required String ssid,
@@ -29,6 +33,121 @@ class PropertyLogic extends GetxController {
       showSnackBar(message: '激光打印机连接失败，请手动连接');
     }
   }
+
+  // 使用方式
+  void startSocketClient() {
+    final socketClient = SocketClient();
+    socketClient.remoteIP = "192.168.6.2"; // 设置IP
+    socketClient.remotePort = "8050"; // 设置端口
+    socketClient.connectionTimeout = 5 * 1000; // 设置超时时间
+    socketClient.charsetName = "UTF-8"; // 设置编码格式
+
+    socketClient.registerSocketClientDelegate(
+      SocketClientDelegate()
+        ..onConnected = (client) {
+          // 连接成功的处理
+          showSnackBar(message: "连接成功");
+
+        }
+        ..onDisconnected = (client) {
+          // 连接断开的处理
+          showSnackBar(message: "连接断开");
+        }
+        ..onResponse = (client, responsePacket) {
+          // 收到响应的处理
+          showSnackBar(message: "收到消息: ${responsePacket.message}");
+        },
+    );
+
+    socketClient.connect(); // 连接，异步进行
+  }
+
+  void laserToPrint() {
+    // 检查socket连接状态
+    if (socketClient != null) {
+      // 获取要发送的打印数据
+      final printMessage = getPrintMes();
+
+      // 转换为字节数组
+      final asciiBytes = utf8.encode(printMessage);
+
+      // 添加起始和结束标识
+      final startBytes = [0x02, 0x05];
+      final endBytes = [0x03];
+
+      // 组合完整的数据包
+      final completeData = [...startBytes, ...asciiBytes, ...endBytes];
+
+      // 发送数据
+      socketClient?.sendData(completeData,onComplete: (success){
+        if( success){
+          // 更新打印次数
+          state.setPrintAssetsLaser();
+        }else{}
+        showSnackBar(message: "数据发送失败");
+      });
+    }else{
+      showSnackBar(message: "请先连接激光打印机");
+    }
+  }
+
+  String getPrintMes() {
+    var name = "";
+    var nameLast = "";
+    var number = "";
+    var numberLast = "";
+    var mes = "";
+
+    // 假设 detail 是 PropertyState 中的某个对象
+    // 需要根据实际的数据结构进行调整
+    final detail = state.detail;
+    final detailName = detail.name ?? "";
+    final detailNumber = detail.number ?? "";
+
+    if (detailName.length <= 8) {
+      if (detailNumber.length <= 12) {
+        // 名称和编码长度都正常
+        mes = "seta:data#v1=$detailName;v2=$detailNumber;v3=${detail.buyDate};v4=${detail.interID};";
+      } else {
+        // 长度小于等于8    编码大于12
+        final numberList = _chunked(detailNumber, 12);
+        number = numberList[0];
+        if (numberList.length > 1) numberLast = numberList[1];
+        mes = "seta:data#v1=$detailName;v2=$number;v3=${detail.buyDate};v4=${detail.interID};v6=$nameLast";
+      }
+    } else {
+      if (detailNumber.length <= 12) {
+        // 名字大于8  编号小于等于12
+        final nameList = _chunked(detailName, 8);
+        name = nameList[0];
+        if (nameList.length > 1) nameLast = nameList[1];
+        mes = "seta:data#v1=$name;v2=$detailNumber;v3=${detail.buyDate};v4=${detail.interID};v5=$nameLast;";
+      } else {
+        // 名字大于8 编号大于12
+        final nameList = _chunked(detailName, 8);
+        final numberList = _chunked(detailNumber, 12);
+        name = nameList[0];
+        if (nameList.length > 1) nameLast = nameList[1];
+        number = numberList[0];
+        if (numberList.length > 1) numberLast = numberList[1];
+        mes = "seta:data#v1=$name;v2=$number;v3=${detail.buyDate};v4=${detail.interID};v5=$nameLast;v6=$numberLast;";
+      }
+    }
+
+    return mes;
+  }
+
+// 辅助方法：字符串分块
+  List<String> _chunked(String str, int chunkSize) {
+    final chunks = <String>[];
+    for (var i = 0; i < str.length; i += chunkSize) {
+      final end = (i + chunkSize < str.length) ? i + chunkSize : str.length;
+      chunks.add(str.substring(i, end));
+    }
+    return chunks;
+  }
+
+
 
   void queryProperty({
     required String propertyNumber,

@@ -445,6 +445,7 @@ class Translation extends Translations {
           'property_detail_bt_submit': '发起审核',
           'property_detail_hint_submit': '确定要发起审核吗？',
           'property_detail_submitting': '正在提交审核数据...',
+          'property_detail_update_print_times': '正在更新激光打标次数...',
           'property_detail_state1': '未审核',
           'property_detail_state2': '审核中',
           'property_detail_state3': '已审核',
@@ -3665,6 +3666,7 @@ class Translation extends Translations {
           'property_detail_bt_submit': 'Initiate review',
           'property_detail_hint_submit': 'Are you sure to initiate the audit ?',
           'property_detail_submitting': 'Submitting audit data...',
+          'property_detail_update_print_times': 'Preview is updating the number of laser marking times...',
           'property_detail_state1': 'UnReview',
           'property_detail_state2': 'Reviewing',
           'property_detail_state3': 'Reviewed',
@@ -7791,6 +7793,7 @@ class Translation extends Translations {
           'property_detail_hint_submit':
               'Apakah Anda yakin ingin mengajukan verifikasi?',
           'property_detail_submitting': 'Mengirim data verifikasi...',
+          'property_detail_update_print_times': 'Pratinjau memperbarui jumlah penandaan laser...',
           'property_detail_state1': 'Belum Diverifikasi',
           'property_detail_state2': 'Sedang Diverifikasi',
           'property_detail_state3': 'Telah Diverifikasi',

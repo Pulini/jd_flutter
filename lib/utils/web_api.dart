@@ -438,6 +438,9 @@ const webApiSkipAcceptance = 'api/FixedAsset/CloseAssets';
 //更新财产信息
 const webApiUpdateProperty = 'api/FixedAsset/UpdateAssets';
 
+//更新激光打印次数
+const webApiPrintAssetsLaser = 'api/FixedAsset/PrintAssetsLaser';
+
 //人员来访记录列表
 const webApiGetVisitDtBySqlWhere =
     'api/VisitorRegistration/GetVisitDtBySqlWhere';

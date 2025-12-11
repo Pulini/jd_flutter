@@ -9,7 +9,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-// import 'package:huawei_ml_body/huawei_ml_body.dart';
 import 'package:jd_flutter/bean/http/response/bar_code.dart';
 import 'package:jd_flutter/bean/http/response/base_data.dart';
 import 'package:jd_flutter/bean/http/response/leader_info.dart';
@@ -803,3 +802,77 @@ BaseUrl getSapBaseUrl(){
   }
 }
 bool isPad()=> MediaQuery.of(Get.overlayContext!).size.width >= 600;
+
+class SocketClient {
+  Socket? _socket;
+  String remoteIP = '';
+  String remotePort = '';
+  int connectionTimeout = 5000;
+  String charsetName = 'utf-8';
+  SocketClientDelegate? _delegate;
+
+  void registerSocketClientDelegate(SocketClientDelegate delegate) {
+    _delegate = delegate;
+  }
+
+  Future<void> connect() async {
+    try {
+      _socket = await Socket.connect(
+        remoteIP,
+        int.parse(remotePort),
+        timeout: Duration(milliseconds: connectionTimeout),
+      );
+
+      _socket!.encoding = utf8;
+
+      _socket!.listen(
+            (data) {
+          final message = utf8.decode(data);
+          _delegate?.onResponse?.call(this, SocketResponsePacket(message: message));
+        },
+        onError: (error) {
+          _delegate?.onDisconnected?.call(this);
+        },
+        onDone: () {
+          _delegate?.onDisconnected?.call(this);
+        },
+      );
+
+      _delegate?.onConnected?.call(this);
+    } catch (e) {
+      _delegate?.onDisconnected?.call(this);
+    }
+  }
+
+  void send(String message) {
+    _socket?.write(message);
+    _socket?.flush();
+  }
+  // 发送字节数组数据
+  void sendData(List<int> data, {Function(bool success)? onComplete}) {
+    try {
+      _socket?.add(Uint8List.fromList(data));
+      _socket?.flush();
+      onComplete?.call(true);
+    } catch (e) {
+      onComplete?.call(false);
+    }
+  }
+
+
+  void disconnect() {
+    _socket?.destroy();
+  }
+}
+
+class SocketClientDelegate {
+  Function(SocketClient client)? onConnected;
+  Function(SocketClient client)? onDisconnected;
+  Function(SocketClient client, SocketResponsePacket responsePacket)? onResponse;
+}
+
+class SocketResponsePacket {
+  String message;
+
+  SocketResponsePacket({required this.message});
+}
