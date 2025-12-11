@@ -1,5 +1,6 @@
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/web_api.dart';
 
 // BillNo : "JZ2300102"
 // BarCode : "20488980010236/002"
@@ -187,6 +188,10 @@ class LabelMaterialInfo {
       if (json['Items'] != null)
         for (var item in json['Items']) LabelSizeInfo.fromJson(item)
     ];
+    for (var v in items!) {
+      logger.f(v.toJson());
+    }
+
     items?.sort((a, b) => a.size.toDoubleTry().compareTo(b.size.toDoubleTry()));
   }
 
@@ -228,30 +233,20 @@ class LabelMaterialInfo {
 
 class LabelSizeInfo {
   LabelSizeInfo({
-    this.billNo,
     this.size,
     this.qty,
   });
 
   LabelSizeInfo.fromJson(dynamic json) {
-    billNo = json['BillNo'];
-    materialCode = json['MaterialCode'];
-    materialName = json['MaterialName'];
     size = json['Size'];
     qty = json['Qty'];
   }
 
-  String? billNo;
-  String? materialCode;
-  String? materialName;
   String? size;
   double? qty;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
-    map['BillNo'] = billNo;
-    map['MaterialCode'] = materialCode;
-    map['MaterialName'] = materialName;
     map['Size'] = size;
     map['Qty'] = qty;
     return map;
