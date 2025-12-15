@@ -233,6 +233,9 @@ class PrintUtil {
       errorDialog(content: '位置信息权限未开启');
       return false;
     }
+
+    logger.f('GetPlatform.isAndroid:${GetPlatform.isAndroid}');
+    logger.f('isGranted:${!statuses[Permission.bluetoothConnect]!.isGranted}');
     if (GetPlatform.isAndroid &&
         !statuses[Permission.bluetoothConnect]!.isGranted) {
       errorDialog(content: '蓝牙连接权限未开启');

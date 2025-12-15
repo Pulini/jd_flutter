@@ -731,7 +731,7 @@ class MaintainLabelLogic extends GetxController {
           title: data.subList!.first.factoryType ?? '',
           subTitle: data.subList!.first.billNo ?? '',
           subTitleWrap: false,
-          content: '(${data.subList!.first.materialCode})${languageInfo.name}',
+          content:languageInfo.languageCode == 'zh'? '(${data.subList!.first.materialCode})${data.subList!.first.materialName}' : (languageInfo.name ?? ''),
           subContent1: languageInfo.languageCode == 'zh'
               ? ''
               : 'GW:${data.grossWeight.toShowString()}KG  NW:${data.netWeight.toShowString()}KG',
@@ -739,7 +739,7 @@ class MaintainLabelLogic extends GetxController {
               ? ''
               : 'MEAS:${data.subList!.first.meas}',
           bottomLeftText1: languageInfo.languageCode == 'zh'
-              ? (data.subList!.first.items?[0].size ?? '')
+              ? ('${data.subList!.first.items?[0].size}#' ?? '')
               : ((data.subList!.first.items?[0].qty.toShowString() ?? '') +
                   (languageInfo.unitName ?? '')),
           bottomMiddleText1: languageInfo.pageNumber ?? '',
@@ -821,7 +821,7 @@ class MaintainLabelLogic extends GetxController {
             barCode: data.barCode ?? '',
             factoryType: data.subList!.first.factoryType ?? '',
             materialCode: data.subList!.first.materialCode ?? '',
-            materialName: data.subList!.first.materialName ?? '',
+            materialName: languageInfo.name ?? '',
             grossWeight: data.grossWeight ?? 0.0,
             netWeight: data.netWeight ?? 0.0,
             meas: data.subList!.first.meas ?? '',
