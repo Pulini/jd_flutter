@@ -591,7 +591,7 @@ class MaintainLabelLogic extends GetxController {
   }
 
   //物料标
-  Future<void> createMaterialLabel({
+  Future<void> createMaterialLabel({   //101
     required String language,
     required List<LabelInfo> list,
     required Function(List<Widget>, bool) labels,
@@ -607,7 +607,7 @@ class MaintainLabelLogic extends GetxController {
             factoryType: data.subList!.first.factoryType ?? '',
             billNo: data.subList!.first.billNo ?? '',
             materialCode: data.subList!.first.materialCode ?? '',
-            materialName: data.subList!.first.materialName ?? '',
+            materialName: languageInfo.name ?? '',
             pageNumber: languageInfo.pageNumber ?? '',
             qty: data.subList!.first.items!
                 .map((v) => v.qty ?? 0)
@@ -620,7 +620,7 @@ class MaintainLabelLogic extends GetxController {
             factoryType: data.subList!.first.factoryType ?? '',
             billNo: data.subList!.first.billNo ?? '',
             materialCode: data.subList!.first.materialCode ?? '',
-            materialName: data.subList!.first.materialName ?? '',
+            materialName: languageInfo.name ?? '',
             grossWeight: data.grossWeight!,
             netWeight: data.netWeight!,
             meas: data.subList!.first.meas!,
@@ -697,7 +697,7 @@ class MaintainLabelLogic extends GetxController {
             factoryType: data.subList!.first.factoryType ?? '',
             billNo: data.subList!.first.billNo ?? '',
             materialCode: data.subList!.first.materialCode ?? '',
-            materialName: data.subList!.first.materialName ?? '',
+            materialName: languageInfo.name ?? '',
             size: data.subList!.first.items?[0].size ?? '',
             pageNumber: languageInfo.pageNumber ?? '',
             date: languageInfo.deliveryDate ?? '',
@@ -733,7 +733,7 @@ class MaintainLabelLogic extends GetxController {
           title: data.subList!.first.factoryType ?? '',
           subTitle: data.subList!.first.billNo ?? '',
           subTitleWrap: false,
-          content:languageInfo.languageCode == 'zh'? '(${data.subList!.first.materialCode})${data.subList!.first.materialName}' : (languageInfo.name ?? ''),
+          content:'(${data.subList!.first.materialCode})${languageInfo.name}',
           subContent1: languageInfo.languageCode == 'zh'
               ? ''
               : 'GW:${data.grossWeight.toShowString()}KG  NW:${data.netWeight.toShowString()}KG',

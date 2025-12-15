@@ -623,7 +623,7 @@ Future<List<Uint8List>> labelMultipurposeFixed({
         //如子内容为空则限制主内容行数为4
         if (i >= 4) break;
         list.add(await _tscBitmapText(
-            2 * _dpi, (19 + 4 * i) * _dpi, 28, format[i],
+            2 * _dpi, (20 + 4 * i) * _dpi, 28, format[i],
             isBold: false));
       }
     }
@@ -682,7 +682,7 @@ Future<List<Uint8List>> labelMultipurposeFixed({
   if (bottomMiddleText1.isNotEmpty) {
     if (bottomMiddleText2.isNotEmpty) {
       list.add(await _tscBitmapText(
-          23 * _dpi + _halfDpi, 36 * _dpi, 23, bottomMiddleText1,
+          23 * _dpi + _halfDpi, 37 * _dpi, 23, bottomMiddleText1,
           isBold: true));
       list.add(await _tscBitmapText(
           23 * _dpi + _halfDpi, 40 * _dpi, 23, bottomMiddleText2,

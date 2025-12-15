@@ -137,6 +137,7 @@ class ProductionDispatchState {
         );
       } else {
         orderList.value = [];
+        orderGroupList.clear();
         error.call(response.message ?? '');
       }
     });
