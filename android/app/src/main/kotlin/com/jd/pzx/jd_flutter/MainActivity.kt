@@ -42,7 +42,6 @@ import io.flutter.plugin.common.MethodChannel
 import java.io.File
 import java.io.IOException
 
-
 @SuppressLint("MissingPermission")
 class MainActivity : FlutterActivity() {
     private val receiverUtil = ReceiverUtil(
@@ -106,9 +105,11 @@ class MainActivity : FlutterActivity() {
         super.onDestroy()
     }
 
+    lateinit var usbUtil: USBUtil
+
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
-        val usbUtil = USBUtil(this, 4611)
+        usbUtil= USBUtil(this, 4611)
         //人脸识别通道
         MethodChannel(
             flutterEngine.dartExecutor.binaryMessenger,
@@ -250,7 +251,9 @@ class MainActivity : FlutterActivity() {
             CHANNEL_USB_TSC_FLUTTER_TO_ANDROID
         ).setMethodCallHandler { call, result ->
             if (call.method == "isAttached") {
-                result.success(usbIsAttached)
+                // 直接检查当前是否有匹配的USB设备连接
+                val isAttached = usbUtil.findDevice(4611) != null
+                result.success(isAttached)
             } else if (call.method == "SendTSC") {
                 usbUtil.sendCommand(call.arguments as List<ByteArray>) {
                     result.success(if (it) SEND_COMMAND_STATE_SUCCESS else SEND_COMMAND_STATE_FAILED)

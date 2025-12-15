@@ -294,19 +294,19 @@ class MachineDispatchLogic extends GetxController {
     labelMultipurposeFixed(
       isEnglish: label.isEnglish,
       qrCode: label.labelID,
-      title: state.detailsInfo?.factoryType ?? '',
+      title: label.factoryType,
       subTitle: label.isEnglish
           ? label.materialName
-          : ((state.detailsInfo?.processflow ?? '') +
+          : ((label.processes) +
               ('       序号：${label.number}')),
       subTitleWrap: false,
       content: label.isEnglish
           ? ('GW:${label.grossWeight}KG   NW:${label.netWeight}KG')
-          : state.detailsInfo?.materialName ?? '',
+          : label.materialName,
       specification: label.isEnglish ? 'MEAS:  ${label.specifications}' : '',
       subContent1: label.isEnglish
-          ? 'DISPATCH:${state.detailsInfo?.dispatchNumber.toString()}'
-          : '派工单号：${state.detailsInfo?.dispatchNumber ?? ''}       班次：${state.detailsInfo?.shift ?? ''}',
+          ? 'DISPATCH:${label.dispatchNumber}'
+          : '派工单号：${label.dispatchNumber}       班次：${state.detailsInfo?.shift ?? ''}',
       subContent2: label.isEnglish
           ? 'DECREASE:${state.detailsInfo?.decrementNumber}    DATE:${state.detailsInfo?.startDate}'
           : '递减号:${state.detailsInfo?.decrementNumber}      日期:${state.detailsInfo?.startDate}',

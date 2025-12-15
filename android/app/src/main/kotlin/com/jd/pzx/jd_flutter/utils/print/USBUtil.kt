@@ -11,6 +11,7 @@ import android.hardware.usb.UsbInterface
 import android.hardware.usb.UsbManager
 import android.os.Build
 import android.os.SystemClock
+import android.widget.Toast
 import com.jd.pzx.jd_flutter.ACTION_USB_PERMISSION
 import com.jd.pzx.jd_flutter.utils.bytesMerger
 import kotlinx.coroutines.Dispatchers
@@ -35,6 +36,11 @@ class USBUtil(
     }
 
     private var permissionListener: (Boolean) -> Unit = {}
+
+    fun isAttached(): Boolean {
+        return findDevice(deviceVendorId) != null
+    }
+
 
     fun setState(state:Int) {usbState=state}
 
@@ -81,9 +87,31 @@ class USBUtil(
      */
     private fun openPort(): Boolean {
         val usbDevice = findDevice(deviceVendorId) ?: return false
+
+        usbManager.requestPermission(
+            usbDevice,
+            PendingIntent.getBroadcast(
+                context,
+                0,
+                Intent(ACTION_USB_PERMISSION),
+                PendingIntent.FLAG_IMMUTABLE
+            )
+        )
+
+        // 添加权限检查
+        if (!usbManager.hasPermission(usbDevice)) {
+            // 请求权限或返回false
+            return false
+        }
+
         usbInterface = usbDevice.getInterface(0)
         usbEndpoint = usbInterface!!.getEndpoint(0)
         usbConnection = usbManager.openDevice(usbDevice)
+
+        (context as? android.app.Activity)?.runOnUiThread {
+            Toast.makeText(context, "usbDevice=$usbDevice usbConnection=$usbConnection", Toast.LENGTH_SHORT).show()
+        }
+
         if (usbConnection == null) return false
 
         usbConnection!!.claimInterface(usbInterface, true)
@@ -105,19 +133,29 @@ class USBUtil(
      * 发送长指令
      */
     fun sendCommand(array: List<ByteArray>, callback: (Boolean) -> Unit) {
+
         Thread {
-            if (openPort() && (usbConnection != null)) {
-                val byte = bytesMerger(array)
-                usbConnection!!.bulkTransfer(usbEndpoint, byte, byte.size, 100)
-                SystemClock.sleep(500)
-                runBlocking(Dispatchers.Main) {
-                    callback.invoke(true)
+            try{
+                val open=openPort()
+                if ( open&& (usbConnection != null)) {
+                    val byte = bytesMerger(array)
+                    usbConnection!!.bulkTransfer(usbEndpoint, byte, byte.size, 100)
+                    SystemClock.sleep(500)
+                    runBlocking(Dispatchers.Main) {
+                        callback.invoke(true)
+                    }
+                } else {
+                    runBlocking(Dispatchers.Main) {
+                        callback.invoke(false)
+                    }
                 }
-            } else {
-                runBlocking(Dispatchers.Main) {
+            }catch (e:Exception){
+                (context as? android.app.Activity)?.runOnUiThread {
+                    Toast.makeText(context, "错误=${e.message}", Toast.LENGTH_SHORT).show()
                     callback.invoke(false)
                 }
             }
+
         }.start()
 
     }

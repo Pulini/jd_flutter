@@ -27,6 +27,7 @@ import android.util.Log
 import com.jd.pzx.jd_flutter.utils.BDevice
 import com.jd.pzx.jd_flutter.utils.deviceList
 import tw.com.prolific.pl2303gmultilib.PL2303GMultiLib
+import android.widget.Toast
 
 /**
  * File Name : USBReceiver
@@ -119,12 +120,14 @@ class ReceiverUtil(
 
                 ACTION_USB_DEVICE_ATTACHED, ACTION_USB_ACCESSORY_ATTACHED -> {
                     Log.e("Pan", "USB设备插入")
+                    Toast.makeText(context, "USB设备插入", Toast.LENGTH_SHORT).show()
                     usbIsAttached=true
                     usbAttached.invoke()
                 }
 
                 ACTION_USB_DEVICE_DETACHED, ACTION_USB_ACCESSORY_DETACHED,WEIGHT_DEVICE_DETACHED -> {
                     Log.e("Pan", "USB设备拔出")
+                    Toast.makeText(context, "USB设备拔出", Toast.LENGTH_SHORT).show()
                     if(intent.action==WEIGHT_DEVICE_DETACHED){
                         weighbridgeState.invoke(WeightState.WEIGHT_MSG_DEVICE_DETACHED)
                     }else{

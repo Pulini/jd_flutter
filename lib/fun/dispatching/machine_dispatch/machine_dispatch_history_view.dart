@@ -121,7 +121,7 @@ class _MachineDispatchHistoryDetailPageState
                       ),
                       expandedTextSpan(
                         hint: '尺码：',
-                        text: state.historyLabelInfo[i].shift,
+                        text: state.historyLabelInfo[i].size,
                       ),
                       expandedTextSpan(
                         hint: '数量：',
