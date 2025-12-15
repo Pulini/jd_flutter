@@ -108,10 +108,6 @@ class USBUtil(
         usbEndpoint = usbInterface!!.getEndpoint(0)
         usbConnection = usbManager.openDevice(usbDevice)
 
-        (context as? android.app.Activity)?.runOnUiThread {
-            Toast.makeText(context, "usbDevice=$usbDevice usbConnection=$usbConnection", Toast.LENGTH_SHORT).show()
-        }
-
         if (usbConnection == null) return false
 
         usbConnection!!.claimInterface(usbInterface, true)

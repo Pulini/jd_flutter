@@ -169,7 +169,7 @@ class RouteConfig {
   //生产派工
   static Routes productionDispatch = Routes(
     '/production_dispatch',
-    215,
+    216,
     const ProductionDispatchPage(),
   );
 
@@ -218,7 +218,7 @@ class RouteConfig {
   //机台派工单
   static Routes machineDispatch = Routes(
     '/machine_dispatch_page',
-    208,
+    209,
     const MachineDispatchPage(),
   );
 
