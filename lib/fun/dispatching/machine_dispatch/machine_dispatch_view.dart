@@ -624,7 +624,6 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
                   ),
                   CombinationButton(
                     text: 'machine_dispatch_number_confirmation'.tr,
-                    isEnabled: state.detailsInfo?.barCodeList?.isNotEmpty == true,
                     click: () => logic.workerDispatchConfirmation(
                         isHandover: false,
                         callback: () {

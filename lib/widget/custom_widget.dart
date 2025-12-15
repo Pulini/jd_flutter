@@ -313,7 +313,7 @@ void showSnackBar({
   bool? isWarning,
   String? title,
   required String message,
-  Duration duration = const Duration(seconds: 5), // 添加持续时间参数，默认3秒
+  Duration duration = const Duration(seconds: 3), // 添加持续时间参数，默认3秒
 }) {
   isWarning ??= false;
   title ??= isWarning

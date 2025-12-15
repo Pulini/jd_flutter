@@ -87,81 +87,84 @@ class MachineDispatchLogic extends GetxController {
               callback.call();
             });
           } else {
-            if (state.labelList.isEmpty) {
-              errorDialog(
-                  content: 'machine_dispatch_order_not_scanned_tips'.tr);
-              return;
-            }
-            var notScan = state.labelList.where((v) => !v.isScanned).toList();
-            var notScanLabelList = <String>[
-              for (var i = 0; i < notScan.length; ++i) notScan[i].number
-            ];
-            var lastAndNotScan = notScan.where((v) => v.isLastLabel).toList();
-            var lastLabelList = <String>[
-              for (var i = 0; i < lastAndNotScan.length; ++i)
-                lastAndNotScan[i].size ?? ''
-            ];
-            if (notScanLabelList.isNotEmpty && lastLabelList.isNotEmpty) {
-              errorDialog(
-                content: 'machine_dispatch_not_scanned_all_tips'.trArgs([
-                  notScanLabelList.join(','),
-                  lastLabelList.join(','),
-                ]),
-              );
-            } else {
-              if (notScanLabelList.isNotEmpty) {
+            if (state.detailsInfo!.barCodeList!.isNotEmpty) {
+              var notScan = state.labelList.where((v) => !v.isScanned).toList();
+              var notScanLabelList = <String>[
+                for (var i = 0; i < notScan.length; ++i) notScan[i].number
+              ];
+              var lastAndNotScan = notScan.where((v) => v.isLastLabel).toList();
+              var lastLabelList = <String>[
+                for (var i = 0; i < lastAndNotScan.length; ++i)
+                  lastAndNotScan[i].size ?? ''
+              ];
+              if (notScanLabelList.isNotEmpty && lastLabelList.isNotEmpty) {
                 errorDialog(
-                  content: 'machine_dispatch_not_scanned_box_tips'.trArgs([
+                  content: 'machine_dispatch_not_scanned_all_tips'.trArgs([
                     notScanLabelList.join(','),
-                  ]),
-                );
-              } else if (lastLabelList.isNotEmpty) {
-                errorDialog(
-                  content: 'machine_dispatch_not_scanned_last_tips'.trArgs([
                     lastLabelList.join(','),
                   ]),
                 );
               } else {
-                var totalReport = 0.0;
-                for (var v in state.sizeItemList) {
-                  if (v.getReportQty() < 0) {
-                    errorDialog(
-                      content:
-                          'machine_dispatch_input_size_report_qty_tips'.trArgs([
-                        v.size ?? '',
-                      ]),
-                    );
-                    return;
-                  }
-                  totalReport = totalReport.add(v.getReportQty());
-                }
-                if (totalReport == 0) {
+                if (notScanLabelList.isNotEmpty) {
                   errorDialog(
-                      content: 'machine_dispatch_input_report_qty_tips'.tr);
-                  return;
+                    content: 'machine_dispatch_not_scanned_box_tips'.trArgs([
+                      notScanLabelList.join(','),
+                    ]),
+                  );
+                } else if (lastLabelList.isNotEmpty) {
+                  errorDialog(
+                    content: 'machine_dispatch_not_scanned_last_tips'.trArgs([
+                      lastLabelList.join(','),
+                    ]),
+                  );
                 } else {
-                  if (statusReportedAndGenerate()) {
-                    askDialog(
+                  var totalReport = 0.0;
+                  for (var v in state.sizeItemList) {
+                    if (v.getReportQty() < 0) {
+                      errorDialog(
                         content:
-                            'machine_dispatch_worker_number_report_again_tips'
-                                .tr,
-                        confirm: () {
-                          Get.to(() => const MachineDispatchReportPage())
-                              ?.then((v) {
-                            if (v == true) {
-                              callback.call();
-                            }
-                          });
-                        });
+                        'machine_dispatch_input_size_report_qty_tips'.trArgs([
+                          v.size ?? '',
+                        ]),
+                      );
+                      return;
+                    }
+                    totalReport = totalReport.add(v.getReportQty());
+                  }
+                  if (totalReport == 0) {
+                    errorDialog(
+                        content: 'machine_dispatch_input_report_qty_tips'.tr);
+                    return;
                   } else {
-                    Get.to(() => const MachineDispatchReportPage())?.then((v) {
-                      if (v == true) {
-                        callback.call();
-                      }
-                    });
+                    if (statusReportedAndGenerate()) {
+                      askDialog(
+                          content:
+                          'machine_dispatch_worker_number_report_again_tips'
+                              .tr,
+                          confirm: () {
+                            Get.to(() => const MachineDispatchReportPage())
+                                ?.then((v) {
+                              if (v == true) {
+                                callback.call();
+                              }
+                            });
+                          });
+                    } else {
+                      Get.to(() => const MachineDispatchReportPage())?.then((v) {
+                        if (v == true) {
+                          callback.call();
+                        }
+                      });
+                    }
                   }
                 }
               }
+            }else{
+              Get.to(() => const MachineDispatchReportPage())?.then((v) {
+                if (v == true) {
+                  callback.call();
+                }
+              });
             }
           }
         },
@@ -349,7 +352,7 @@ class MachineDispatchLogic extends GetxController {
               'StubBar': code,
               'Factory': details.factory ?? '',
               'Date': details.startDate ?? '',
-              'NowTime': DateTime.now().millisecond,
+              'NowTime': DateTime.now(),
             }),
             machine: details.machine ?? '',
             shift: details.shift ?? '',
