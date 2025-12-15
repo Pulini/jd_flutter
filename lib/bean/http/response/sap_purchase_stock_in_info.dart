@@ -72,6 +72,7 @@ class SapPurchaseStockInInfo {
     inspector = json['ZINSPECTOR'];
     inspectionDate = json['ZINSPECTDATE'];
     inspectionTime = json['ZINSPECTTIME'];
+    editQty=qty??0;
   }
 
   String? deliveryNumber; //送货单号
