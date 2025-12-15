@@ -741,7 +741,7 @@ class MaintainLabelLogic extends GetxController {
               ? ''
               : 'MEAS:${data.subList!.first.meas}',
           bottomLeftText1: languageInfo.languageCode == 'zh'
-              ? ('${data.subList!.first.items?[0].size}#' ?? '')
+              ? ('${data.subList!.first.items?[0].size}#')
               : ((data.subList!.first.items?[0].qty.toShowString() ?? '') +
                   (languageInfo.unitName ?? '')),
           bottomMiddleText1: languageInfo.pageNumber ?? '',
