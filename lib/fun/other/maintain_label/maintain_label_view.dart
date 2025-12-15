@@ -7,6 +7,7 @@ import 'package:jd_flutter/widget/check_box_widget.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
+import 'package:jd_flutter/widget/switch_button_widget.dart';
 
 import 'maintain_label_dialogs.dart';
 import 'maintain_label_logic.dart';
@@ -364,6 +365,7 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
     });
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     debugPrint('state.isMaterialLabel.value=${state.isMaterialLabel.value}');
@@ -452,20 +454,18 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
         CombinationButton(
           text: '打印机设置',
           click: () => showPrintSetting(),
-          combination: Combination.intact,
+          combination: Combination.left,
         ),
-        TextButton(
-          onPressed: () => selectMaterialDialog(
+        CombinationButton(
+          text: 'maintain_label_filter'.tr,
+          click: () => selectMaterialDialog(
               logic.getSizeList(), (s) => state.filterSize.value = s),
-          child: Text(
-            'maintain_label_filter'.tr,
-            style: const TextStyle(fontWeight: FontWeight.bold),
-          ),
+          combination: Combination.right,
         ),
-        Obx(() => CheckBox(
+        Obx(() => SwitchButton(
               onChanged: (c) => state.isShowPreview.value = c,
-              name: 'maintain_label_preview'.tr,
               value: state.isShowPreview.value,
+              name: 'maintain_label_preview'.tr,
             ))
       ],
     );

@@ -78,7 +78,8 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   #自适应字体大小
-  auto_size_text: ^3.0.0
+#  auto_size_text: ^3.0.0
+  flutter_auto_size_text: ^4.1.0
   #UUID
   uuid: ^4.5.2
   #webview控件

@@ -4,6 +4,7 @@ import 'package:jd_flutter/bean/http/response/base_data.dart';
 import 'package:jd_flutter/bean/http/response/label_info.dart';
 import 'package:jd_flutter/bean/http/response/maintain_material_info.dart';
 import 'package:jd_flutter/bean/http/response/picking_bar_code_info.dart';
+import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
@@ -22,14 +23,19 @@ class MaintainLabelState {
   var labelList = <LabelInfo>[].obs;
   var labelGroupList = <List<LabelInfo>>[].obs;
   var filterSize = 'maintain_label_all'.tr.obs;
+  var language ='zh';
   var isShowPreview = false.obs;
-
   MaintainLabelState() {
     sapProcessName = Get.arguments['SapProcessName'] ?? '';
     materialCodes = Get.arguments['materialCodes'];
     interID = Get.arguments['interID'];
     isMaterialLabel.value = Get.arguments['isMaterialLabel'];
     isPartOrder = Get.arguments['isPartOrder'] ?? false;
+    isShowPreview.value=spGet(spSaveLabelMaintainIsPreview)??false;
+    language=spGet('language');
+    ever(isShowPreview, (value) {
+      spSave(spSaveLabelMaintainIsPreview, value);
+    });
   }
 
   List<LabelInfo> getLabelList() {

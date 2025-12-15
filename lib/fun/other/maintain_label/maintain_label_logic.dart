@@ -83,13 +83,14 @@ class MaintainLabelLogic extends GetxController {
   void refreshDataList() {
     state.getLabelInfoList(
       success: (List<LabelInfo> list) {
+
         state.typeBody.value = list.first.subList!.first.factoryType ?? '';
         var materials = [];
         var typeBodyList = [];
         for (var v in list) {
           for (var v2 in v.subList!) {
-            if (!materials.contains(v2.getMaterialLanguage())) {
-              materials.add(v2.getMaterialLanguage());
+            if (!materials.contains(v2.getMaterialLanguage(state.language))) {
+              materials.add(v2.getMaterialLanguage(state.language));
             }
             if (!typeBodyList.contains(v2.factoryType)) {
               typeBodyList.add(v2.factoryType);
@@ -109,6 +110,7 @@ class MaintainLabelLogic extends GetxController {
           state.labelGroupList.value =
               groupBy(list, (v) => v.barCode).values.toList();
         }
+        debugPrint('isMaterialLabel=${state.isMaterialLabel.value} labelList=${state.labelList.length} labelGroupList=${state.labelGroupList.length}');
       },
       error: (msg) => errorDialog(content: msg),
     );
