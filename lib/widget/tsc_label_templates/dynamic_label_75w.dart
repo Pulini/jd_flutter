@@ -123,19 +123,20 @@ Widget _createTableWidget({
       children: [
         for (var j = 0; j < table[i].length; ++j)
           expandedFrameText(
+            borderColor: Colors.black,
             alignment: j == 0
                 ? Alignment.centerLeft
                 : i == 0 || (table[i].isEmpty ? i - 1 : i) % (maxRow + 1) == 0
                     ? Alignment.center
                     : Alignment.centerRight,
-            flex: j == 0 ? 9 : 4,
-            padding: j == 0 ? null : const EdgeInsets.all(3),
+            flex: j == 0 ? 12 : 5,
+            padding: EdgeInsets.all(j == 0 ? 1:3),
             isBold: true,
             text: table[i][j],
           ),
         if (maxColumns - table[i].length > 0)
           for (var j = 0; j < maxColumns - table[i].length; ++j)
-            Expanded(flex: 4, child: Container()),
+            Expanded(flex: 5, child: Container()),
       ],
     ));
     if (table[i].isEmpty) list.add(const SizedBox(height: 10));
@@ -348,6 +349,7 @@ Widget maintainLabelSizeMaterialEnglishDynamicLabel({
       subTitle: Padding(
         padding: const EdgeInsets.only(left: 3, right: 3),
         child: Text(
+          maxLines: 2,
           '($materialCode)$materialName'.allowWordTruncation(),
           style: const TextStyle(
             height: 1,

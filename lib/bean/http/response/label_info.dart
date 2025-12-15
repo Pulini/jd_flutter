@@ -1,6 +1,4 @@
 import 'package:jd_flutter/utils/extension_util.dart';
-import 'package:jd_flutter/utils/utils.dart';
-import 'package:jd_flutter/utils/web_api.dart';
 
 // BillNo : "JZ2300102"
 // BarCode : "20488980010236/002"
@@ -188,10 +186,6 @@ class LabelMaterialInfo {
       if (json['Items'] != null)
         for (var item in json['Items']) LabelSizeInfo.fromJson(item)
     ];
-    for (var v in items!) {
-      logger.f(v.toJson());
-    }
-
     items?.sort((a, b) => a.size.toDoubleTry().compareTo(b.size.toDoubleTry()));
   }
 
@@ -211,9 +205,8 @@ class LabelMaterialInfo {
     return map;
   }
 
-  String getMaterialLanguage() {
+  String getMaterialLanguage(String language) {
     var material = materialName ?? '';
-    var language = spGet('language');
     materialOtherName?.forEach((v) {
       if (v.languageCode == language) {
         material = v.name ?? '';

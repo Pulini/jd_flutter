@@ -109,9 +109,9 @@ void onLinePrintDialog(List<Uint8List> papers, PrintType printType) {
   _getOnlinePrintDeviceList(
     printDio: printDio,
     success: (devices) {
-      String saveDepartmentName = spGet(onlinePrinterDepartmentName) ?? '';
-      String saveDeviceId = spGet(onlinePrinterDeviceID) ?? '';
-      String savePaperType = spGet(onlinePrinterPaperType) ?? '';
+      String saveDepartmentName = spGet(spSaveOnlinePrinterDepartmentName) ?? '';
+      String saveDeviceId = spGet(spSaveOnlinePrinterDeviceID) ?? '';
+      String savePaperType = spGet(spSaveOnlinePrinterPaperType) ?? '';
       var departmentIndex = (-1).obs;
       var deviceIndex = (-1).obs;
       var paperIndex = (-1).obs;
@@ -159,12 +159,12 @@ void onLinePrintDialog(List<Uint8List> papers, PrintType printType) {
       print() {
         if (departmentIndex.value != -1) {
           spSave(
-            onlinePrinterDepartmentName,
+            spSaveOnlinePrinterDepartmentName,
             printerList[departmentIndex.value].toString(),
           );
           if (deviceIndex.value != -1) {
             spSave(
-              onlinePrinterDeviceID,
+              spSaveOnlinePrinterDeviceID,
               printerList[departmentIndex.value]
                   .devices![deviceIndex.value]
                   .deviceId!,
@@ -176,7 +176,7 @@ void onLinePrintDialog(List<Uint8List> papers, PrintType printType) {
                         ?.isNotEmpty ==
                     true) {
               spSave(
-                onlinePrinterPaperType,
+                spSaveOnlinePrinterPaperType,
                 printerList[departmentIndex.value]
                     .devices![deviceIndex.value]
                     .paperTypes![paperIndex.value],
