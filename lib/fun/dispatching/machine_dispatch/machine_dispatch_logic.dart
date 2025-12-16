@@ -347,7 +347,6 @@ class MachineDispatchLogic extends GetxController {
     MachineDispatchDetailsInfo details, {
     required Function() callback,
   }) {
-    logger.f('料头时间：${DateTime.now().millisecondsSinceEpoch.toString()}');
     labelForSurplusMaterial(
             qrCode: jsonEncode({
               'DispatchNumber': details.dispatchNumber,
