@@ -161,7 +161,7 @@ class _MachineDispatchReportPageState extends State<MachineDispatchReportPage> {
                   ),
                 ),
                 GestureDetector(
-                  onTap: () => data.totalProduction > 1
+                  onTap: () => data.totalProduction > 0
                       ? addDispatchWorker(data, () => setState(() {}))
                       : errorDialog(
                           content:
