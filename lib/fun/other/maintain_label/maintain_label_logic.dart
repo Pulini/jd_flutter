@@ -879,6 +879,9 @@ class MaintainLabelLogic extends GetxController {
             for (var v2 in v1) [v2.size ?? '', v2.qty.toShowString()]
           ];
         });
+        map.forEach((k, v) {
+          debugPrint('size=$k v=$v');
+        });
         labelList.add(await labelMultipurposeDynamic(
           isCut: true,
           qrCode: data.barCode ?? '',
