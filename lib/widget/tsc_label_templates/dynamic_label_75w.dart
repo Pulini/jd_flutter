@@ -130,7 +130,7 @@ Widget _createTableWidget({
                     ? Alignment.center
                     : Alignment.centerRight,
             flex: j == 0 ? 12 : 5,
-            padding: EdgeInsets.all(j == 0 ? 1:3),
+            padding: EdgeInsets.all(j == 0 ? 1 : 3),
             isBold: true,
             text: table[i][j],
           ),
@@ -250,6 +250,8 @@ Widget maintainLabelSizeMaterialChineseDynamicLabel({
   required String materialCode,
   required String materialName,
   required Map<String, List<List<String>>> map,
+  required String titleText,
+  required String totalText,
   required String pageNumber,
   required String deliveryDate,
 }) =>
@@ -291,13 +293,15 @@ Widget maintainLabelSizeMaterialChineseDynamicLabel({
               ],
             ),
             Text(
-              '($materialCode)$materialName'.allowWordTruncation(),
+              materialCode.isNullOrEmpty()
+                  ? materialName.allowWordTruncation()
+                  : '($materialCode)$materialName'.allowWordTruncation(),
               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
             ),
           ],
         ),
       ),
-      table: _createTableWidget(titleText: '尺码', totalText: '合计', map: map),
+      table: _createTableWidget(titleText: titleText, totalText: totalText, map: map),
       footer: Padding(
         padding: const EdgeInsets.only(left: 5, right: 5),
         child: Row(

@@ -62,11 +62,15 @@ class _HomePageState extends State<HomePage>
                     color: Colors.blueAccent,
                   ),
                 ),
-                title: Text(item.name),
+                title: Text(item.name,style: const TextStyle(fontSize: 18)),
                 subtitle: Text(item.description),
                 children: [
                   for (var item in item.functionGroup) ...[
-                    const Divider(indent: 20, endIndent: 20),
+                    const Divider(
+                      indent: 50,
+                      endIndent: 20,
+                      height: 1,
+                    ),
                     HomeSubItem(
                       isGroup: true,
                       item: item,
@@ -87,7 +91,8 @@ class _HomePageState extends State<HomePage>
       getVersionInfo(
         false,
         noUpdate: () => _refreshFunList(),
-        needUpdate: (v) => doUpdate(version: v, ignore: () => _refreshFunList()),
+        needUpdate: (v) =>
+            doUpdate(version: v, ignore: () => _refreshFunList()),
         error: (msg) => errorDialog(content: msg),
       );
       await Permission.notification.request();
@@ -147,11 +152,11 @@ class _HomePageState extends State<HomePage>
               header: const MaterialHeader(),
               onRefresh: () => _refreshFunList(),
               child: Obx(() => ListView.builder(
-                padding: const EdgeInsets.all(8),
-                itemCount: state.buttons.length,
-                itemBuilder: (context, index) =>
-                    _item(state.buttons[index]),
-              )),
+                    padding: const EdgeInsets.all(8),
+                    itemCount: state.buttons.length,
+                    itemBuilder: (context, index) =>
+                        _item(state.buttons[index]),
+                  )),
             ),
             bottomNavigationBar: Obx(
               () => state.navigationBar.isEmpty
@@ -221,53 +226,56 @@ class HomeSubItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      onTap: () => item.hasUpdate
-          ? upData()
-          : item.route.isEmpty
-              ? showSnackBar(
-                  title: 'home_no_route'.tr,
-                  message: 'home_this_function_is_not_open'.tr,
-                  isWarning: true,
-                )
-              : item.toFunction(checkUpData: checkUpData),
-      enabled: item.hasUpdate ? true : item.hasPermission,
-      leading: Image.network(
-        item.icon,
-        width: isGroup ? 30 : 40,
-        height: isGroup ? 30 : 40,
-        cacheHeight: 75,
-        cacheWidth: 75,
-        color: _color(item),
-        errorBuilder: (context, url, error) => Image.asset(
-          _logo,
+    return Padding(
+      padding: EdgeInsetsGeometry.only(left: isGroup ? 40 : 0),
+      child: ListTile(
+        onTap: () => item.hasUpdate
+            ? upData()
+            : item.route.isEmpty
+                ? showSnackBar(
+                    title: 'home_no_route'.tr,
+                    message: 'home_this_function_is_not_open'.tr,
+                    isWarning: true,
+                  )
+                : item.toFunction(checkUpData: checkUpData),
+        enabled: item.hasUpdate ? true : item.hasPermission,
+        leading: Image.network(
+          item.icon,
           width: isGroup ? 30 : 40,
           height: isGroup ? 30 : 40,
           cacheHeight: 75,
           cacheWidth: 75,
           color: _color(item),
+          errorBuilder: (context, url, error) => Image.asset(
+            _logo,
+            width: isGroup ? 30 : 40,
+            height: isGroup ? 30 : 40,
+            cacheHeight: 75,
+            cacheWidth: 75,
+            color: _color(item),
+          ),
         ),
-      ),
-      title: Text(item.name),
-      subtitle: Text(item.description),
-      trailing: item.hasUpdate
-          ? Wrap(
-              crossAxisAlignment: WrapCrossAlignment.center,
-              direction: Axis.vertical,
-              children: [
-                Icon(Icons.cloud_upload, color: Colors.green.shade200),
-                Text(
-                  'home_button_has_update'.tr,
-                  style: TextStyle(
-                    color: _color(item),
-                    fontSize: 10,
+        title: Text(item.name, style: TextStyle(fontSize: 14)),
+        subtitle: Text(item.description, style: TextStyle(fontSize: 12)),
+        trailing: item.hasUpdate
+            ? Wrap(
+                crossAxisAlignment: WrapCrossAlignment.center,
+                direction: Axis.vertical,
+                children: [
+                  Icon(Icons.cloud_upload, color: Colors.green.shade200),
+                  Text(
+                    'home_button_has_update'.tr,
+                    style: TextStyle(
+                      color: _color(item),
+                      fontSize: 10,
+                    ),
                   ),
-                ),
-              ],
-            )
-          : item.hasPermission
-              ? const Icon(Icons.arrow_forward_ios, size: 15)
-              : Text('home_button_no_permission'.tr),
+                ],
+              )
+            : item.hasPermission
+                ? const Icon(Icons.arrow_forward_ios, size: 15)
+                : Text('home_button_no_permission'.tr),
+      ),
     );
   }
 }

@@ -462,11 +462,12 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
               logic.getSizeList(), (s) => state.filterSize.value = s),
           combination: Combination.right,
         ),
-        Obx(() => SwitchButton(
-              onChanged: (c) => state.isShowPreview.value = c,
-              value: state.isShowPreview.value,
-              name: 'maintain_label_preview'.tr,
-            ))
+         Obx(() => SwitchButton(
+          onChanged: (c) => state.isShowPreview.value = c,
+          value: state.isShowPreview.value,
+          name: 'maintain_label_preview'.tr,
+        ))
+
       ],
     );
   }

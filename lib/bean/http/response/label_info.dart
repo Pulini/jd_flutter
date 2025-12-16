@@ -82,6 +82,7 @@ class LabelInfo {
       if (json['SubList'] != null)
         for (var item in json['SubList']) LabelMaterialInfo.fromJson(item)
     ];
+
   }
 
   bool select = false;
@@ -209,7 +210,7 @@ class LabelMaterialInfo {
     var material = materialName ?? '';
     materialOtherName?.forEach((v) {
       if (v.languageCode == language) {
-        material = v.name ?? '';
+        material =  '($materialCode)${v.name}';
         return;
       }
     });

@@ -55,15 +55,17 @@ Container pageBody({
           ...?actions,
         ],
       ),
-      body: popTitle.isNotEmpty
-          ? PopScope(
-              canPop: false,
-              onPopInvokedWithResult: (didPop, result) {
-                if (!didPop) exitDialog(content: popTitle);
-              },
-              child: body,
-            )
-          : body,
+      body: SafeArea(
+        child: popTitle.isNotEmpty
+            ? PopScope(
+                canPop: false,
+                onPopInvokedWithResult: (didPop, result) {
+                  if (!didPop) exitDialog(content: popTitle);
+                },
+                child: body,
+              )
+            : body,
+      ),
     ),
   );
 }
@@ -137,15 +139,17 @@ Widget pageBodyWithBottomSheet({
           )
         ],
       ),
-      body: popTitle.isNotEmpty
-          ? PopScope(
-              canPop: false,
-              onPopInvokedWithResult: (didPop, result) {
-                if (!didPop) exitDialog(content: popTitle);
-              },
-              child: body,
-            )
-          : body,
+      body: SafeArea(
+        child: popTitle.isNotEmpty
+            ? PopScope(
+                canPop: false,
+                onPopInvokedWithResult: (didPop, result) {
+                  if (!didPop) exitDialog(content: popTitle);
+                },
+                child: body,
+              )
+            : body,
+      ),
     ),
   );
 }
@@ -217,19 +221,21 @@ Widget pageBodyWithDrawer({
           ),
         ]),
       ),
-      body: popTitle.isNotEmpty
-          ? PopScope(
-              canPop: false,
-              onPopInvokedWithResult: (didPop, result) {
-                if (scaffoldKey.currentState?.isEndDrawerOpen == true) {
-                  scaffoldKey.currentState?.closeEndDrawer();
-                } else {
-                  if (!didPop) exitDialog(content: popTitle);
-                }
-              },
-              child: body,
-            )
-          : body,
+      body: SafeArea(
+        child: popTitle.isNotEmpty
+            ? PopScope(
+                canPop: false,
+                onPopInvokedWithResult: (didPop, result) {
+                  if (scaffoldKey.currentState?.isEndDrawerOpen == true) {
+                    scaffoldKey.currentState?.closeEndDrawer();
+                  } else {
+                    if (!didPop) exitDialog(content: popTitle);
+                  }
+                },
+                child: body,
+              )
+            : body,
+      ),
     ),
   );
 }
@@ -323,7 +329,7 @@ void showSnackBar({
     snackbarController?.close(withAnimations: false);
   }
   snackbarController = Get.snackbar(
-    instantInit:false,
+    instantInit: false,
     title,
     message,
     margin: const EdgeInsets.all(10),
@@ -900,7 +906,8 @@ Widget ratioBarChart({
 
 //切换语言
 void changeLanguagePopup({required Function() changed}) {
-  var localeIndex = locales.indexWhere((v)=>v.languageCode==Get.locale!.languageCode);
+  var localeIndex =
+      locales.indexWhere((v) => v.languageCode == Get.locale!.languageCode);
   var controller = FixedExtentScrollController(initialItem: localeIndex);
   String getCancel(int index) => locales[index] == localeChinese
       ? '取消'

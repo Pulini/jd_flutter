@@ -62,6 +62,14 @@ class MaintainLabelLogic extends GetxController {
 
   var pu = PrintUtil();
 
+  Function(List<Widget>, bool cut) labelsCallback = (label, cut) {
+    if (label.length > 1) {
+      Get.to(() => PreviewLabelList(labelWidgets: label, isDynamic: cut));
+    } else {
+      Get.to(() => PreviewLabel(labelWidget: label.first, isDynamic: cut));
+    }
+  };
+
   int getLabelType(LabelCreateType createType) {
     int type = -1;
     if (onlyCustomProcesses.contains(state.sapProcessName)) {
@@ -83,7 +91,6 @@ class MaintainLabelLogic extends GetxController {
   void refreshDataList() {
     state.getLabelInfoList(
       success: (List<LabelInfo> list) {
-
         state.typeBody.value = list.first.subList!.first.factoryType ?? '';
         var materials = [];
         var typeBodyList = [];
@@ -110,7 +117,8 @@ class MaintainLabelLogic extends GetxController {
           state.labelGroupList.value =
               groupBy(list, (v) => v.barCode).values.toList();
         }
-        debugPrint('isMaterialLabel=${state.isMaterialLabel.value} labelList=${state.labelList.length} labelGroupList=${state.labelGroupList.length}');
+        debugPrint(
+            'isMaterialLabel=${state.isMaterialLabel.value} labelList=${state.labelList.length} labelGroupList=${state.labelGroupList.length}');
       },
       error: (msg) => errorDialog(content: msg),
     );
@@ -321,8 +329,7 @@ class MaintainLabelLogic extends GetxController {
     } else if (select.first.labelType == 1003) {
       state.setLabelState(
         selectLabels: select,
-        success: () =>
-            createMyanmarLabel(list: select, labels: labelsCallback),
+        success: () => createMyanmarLabel(list: select, labels: labelsCallback),
       );
     } else {
       var languageList = <String>[];
@@ -383,7 +390,7 @@ class MaintainLabelLogic extends GetxController {
               success: () => printLabel(
                 select: select,
                 language: s,
-                type:  select.first.labelType!,
+                type: select.first.labelType!,
               ),
             ),
           );
@@ -393,7 +400,7 @@ class MaintainLabelLogic extends GetxController {
             success: () => printLabel(
               select: select,
               language: languageList.isEmpty ? '' : languageList.first,
-              type:  select.first.labelType!,
+              type: select.first.labelType!,
             ),
           );
         }
@@ -401,13 +408,6 @@ class MaintainLabelLogic extends GetxController {
     }
   }
 
-  Function(List<Widget>, bool cut) labelsCallback = (label, cut) {
-    if (label.length > 1) {
-      Get.to(() => PreviewLabelList(labelWidgets: label, isDynamic: cut));
-    } else {
-      Get.to(() => PreviewLabel(labelWidget: label[0], isDynamic: cut));
-    }
-  };
 
   void printLabel({
     required int type,
@@ -430,11 +430,28 @@ class MaintainLabelLogic extends GetxController {
         );
         break;
       case 103:
-        createGroupDynamicLabel(
-          language: language,
-          list: select,
-          labels: labelsCallback,
-        );
+        if (state.isPartOrder) {
+          createPartOrderDynamicLabel(
+            language: language,
+            list: select,
+            labelViewPreview: labelsCallback,
+            labelCommandPrint: (labelList) => pu.printLabelList(
+              labelList: labelList,
+              start: () => loadingShow('正在下发标签...'),
+              progress: (i, j) => loadingShow('正在下发标签($i/$j)'),
+              finished: (success, fail) => successDialog(
+                title: '标签下发结束',
+                content: '完成${success.length}张, 失败${fail.length}张',
+              ),
+            ),
+          );
+        } else {
+          createGroupDynamicLabel(
+            language: language,
+            list: select,
+            labels: labelsCallback,
+          );
+        }
         break;
     }
   }
@@ -591,7 +608,8 @@ class MaintainLabelLogic extends GetxController {
   }
 
   //物料标
-  Future<void> createMaterialLabel({   //101
+  Future<void> createMaterialLabel({
+    //101
     required String language,
     required List<LabelInfo> list,
     required Function(List<Widget>, bool) labels,
@@ -733,7 +751,7 @@ class MaintainLabelLogic extends GetxController {
           title: data.subList!.first.factoryType ?? '',
           subTitle: data.subList!.first.billNo ?? '',
           subTitleWrap: false,
-          content:'(${data.subList!.first.materialCode})${languageInfo.name}',
+          content: '(${data.subList!.first.materialCode})${languageInfo.name}',
           subContent1: languageInfo.languageCode == 'zh'
               ? ''
               : 'GW:${data.grossWeight.toShowString()}KG  NW:${data.netWeight.toShowString()}KG',
@@ -815,6 +833,8 @@ class MaintainLabelLogic extends GetxController {
             materialCode: data.subList!.first.materialCode ?? '',
             materialName: data.subList!.first.materialName ?? '',
             map: map,
+            titleText: '尺码',
+            totalText: '合计',
             pageNumber: languageInfo.pageNumber ?? '',
             deliveryDate: languageInfo.deliveryDate ?? '',
           ));
@@ -1086,5 +1106,82 @@ class MaintainLabelLogic extends GetxController {
       ));
     }
     labels.call(labelList, true);
+  }
+
+  void createPartOrderDynamicLabel({
+    required String language,
+    required List<LabelInfo> list,
+    required Function(List<Widget>, bool cut) labelViewPreview,
+    required Function(List<List<Uint8List>>) labelCommandPrint,
+  }) async {
+    var labelViewList = <Widget>[];
+    var labelCommandList = <List<Uint8List>>[];
+    for (var data in list) {
+      var languageInfo = data.subList!.first.materialOtherName!
+          .firstWhere((v) => v.languageName == language);
+      var ins = groupBy(data.subList!, (v) => v.billNo ?? '').map(
+        (k, v) => MapEntry(k, v.expand((v2) => v2.items!).toList()),
+      );
+      var map = ins.map((k, v1) => MapEntry(
+            k,
+            v1
+                .map((v2) => [
+                      v2.size ?? '',
+                      v1
+                          .where((v3) => v3.size == v2.size)
+                          .map((v3) => v3.qty ?? 0)
+                          .reduce((a, b) => a.add(b))
+                          .toShowString()
+                    ])
+                .toList(),
+          ));
+      var materialList =
+          data.subList!.map((v) => v.getMaterialLanguage(language)).join('、');
+      var titleText = languageInfo.languageCode == 'zh'
+          ? '尺码'
+          : languageInfo.languageCode == 'id'
+              ? 'Ukuran'
+              : 'Size';
+      var totalText = languageInfo.languageCode == 'zh' ? '合计' : 'Total';
+
+      if (state.isShowPreview.value) {
+        labelViewList.add(maintainLabelSizeMaterialChineseDynamicLabel(
+          barCode: data.barCode ?? '',
+          factoryType: data.subList!.first.factoryType ?? '',
+          billNo: data.departName ?? '',
+          total: data.totalQty(),
+          unit: languageInfo.unitName ?? '',
+          materialCode: '',
+          materialName: materialList,
+          map: map,
+          titleText: titleText,
+          totalText: totalText,
+          pageNumber: languageInfo.pageNumber ?? '',
+          deliveryDate: languageInfo.deliveryDate ?? '',
+        ));
+      } else {
+        labelCommandList.add(await labelMultipurposeDynamic(
+          isCut: true,
+          qrCode: data.barCode ?? '',
+          title: data.subList!.first.factoryType ?? '',
+          subTitle: data.departName ?? '',
+          tableFirstLineTitle: titleText,
+          tableLastLineTitle: totalText,
+          tableTitleTips:
+              '${data.totalQty().toShowString()}${languageInfo.unitName}',
+          tableSubTitle: materialList,
+          tableData: map,
+          bottomLeftText1: languageInfo.pageNumber ?? '',
+          bottomRightText1: languageInfo.deliveryDate ?? '',
+          speed: spGet(spSavePrintSpeed) ?? 5.0,
+          density: spGet(spSavePrintDensity) ?? 10.0,
+        ));
+      }
+    }
+    if (state.isShowPreview.value) {
+      labelViewPreview.call(labelViewList, true);
+    } else {
+      labelCommandPrint.call(labelCommandList);
+    }
   }
 }

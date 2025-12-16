@@ -260,6 +260,8 @@ class _TscLabelPreviewState extends State<TscLabelPreview> {
               ['37', '77.7'],
             ],
           },
+          titleText: '尺码',
+          totalText: '合计',
           pageNumber: '1-1',
           deliveryDate: '2025-01-01',
         )
