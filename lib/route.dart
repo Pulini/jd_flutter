@@ -365,7 +365,7 @@ class RouteConfig {
   //sap领料入库冲销
   static Routes sapPickingReceiptReversal = Routes(
     '/sap_picking_receipt_reversal',
-    200,
+    201,
     const SapPickingReceiptReversalPage(),
   );
 

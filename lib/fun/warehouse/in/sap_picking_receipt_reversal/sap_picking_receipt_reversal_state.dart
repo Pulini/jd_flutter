@@ -60,7 +60,7 @@ class SapPickingReceiptReversalState {
     orderList[select].item?.forEach((v) => {});
     sapPost(
       loading: 'sap_picking_receipt_reversal_getting_take_list'.tr,
-      method: webApiSapProductionReceipt,
+      method: webApiSapProductionReceiptWriteOff,
       body: {
         'BUDAT': postingDate,
         'USNAM': userInfo?.number,
