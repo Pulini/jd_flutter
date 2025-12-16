@@ -179,7 +179,7 @@ fun sendCommand(
         } catch (e: Exception) {
             Log.e("Pan", "USB操作异常：发送数据", e)
             runBlocking(Dispatchers.Main) {
-                callback.invoke(true)
+                callback.invoke(false)
             }
         }
     }.start()
