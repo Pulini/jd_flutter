@@ -122,8 +122,8 @@ class MachineDispatchLogic extends GetxController {
                   for (var v in state.sizeItemList) {
                     if (v.getReportQty() < 0) {
                       errorDialog(
-                        content:
-                        'machine_dispatch_input_size_report_qty_tips'.trArgs([
+                        content: 'machine_dispatch_input_size_report_qty_tips'
+                            .trArgs([
                           v.size ?? '',
                         ]),
                       );
@@ -139,8 +139,8 @@ class MachineDispatchLogic extends GetxController {
                     if (statusReportedAndGenerate()) {
                       askDialog(
                           content:
-                          'machine_dispatch_worker_number_report_again_tips'
-                              .tr,
+                              'machine_dispatch_worker_number_report_again_tips'
+                                  .tr,
                           confirm: () {
                             Get.to(() => const MachineDispatchReportPage())
                                 ?.then((v) {
@@ -150,7 +150,8 @@ class MachineDispatchLogic extends GetxController {
                             });
                           });
                     } else {
-                      Get.to(() => const MachineDispatchReportPage())?.then((v) {
+                      Get.to(() => const MachineDispatchReportPage())
+                          ?.then((v) {
                         if (v == true) {
                           callback.call();
                         }
@@ -159,7 +160,7 @@ class MachineDispatchLogic extends GetxController {
                   }
                 }
               }
-            }else{
+            } else {
               Get.to(() => const MachineDispatchReportPage())?.then((v) {
                 if (v == true) {
                   callback.call();
@@ -300,8 +301,7 @@ class MachineDispatchLogic extends GetxController {
       title: label.factoryType,
       subTitle: label.isEnglish
           ? label.materialName
-          : ((label.processes) +
-              ('       序号：${label.number}')),
+          : ((label.processes) + ('       序号:${label.number}')),
       subTitleWrap: false,
       content: label.isEnglish
           ? ('GW:${label.grossWeight}KG   NW:${label.netWeight}KG')
@@ -309,7 +309,7 @@ class MachineDispatchLogic extends GetxController {
       specification: label.isEnglish ? 'MEAS:  ${label.specifications}' : '',
       subContent1: label.isEnglish
           ? 'DISPATCH:${label.dispatchNumber}'
-          : '派工单号：${label.dispatchNumber}       班次：${state.detailsInfo?.shift ?? ''}',
+          : '派工单号:${label.dispatchNumber}      班次:${state.detailsInfo?.shift ?? ''}',
       subContent2: label.isEnglish
           ? 'DECREASE:${state.detailsInfo?.decrementNumber}    DATE:${state.detailsInfo?.startDate}'
           : '递减号:${state.detailsInfo?.decrementNumber}      日期:${state.detailsInfo?.startDate}',
@@ -320,9 +320,9 @@ class MachineDispatchLogic extends GetxController {
           ? '   Made in China'
           : '     ${label.size}码${label.qty}${label.unit}',
       bottomRightText1:
-          label.isEnglish ? "${label.size}#" : (label.isLastLabel ? '尾' : ''),
+          label.isEnglish ? '${label.size}码' : (label.isLastLabel ? '尾' : ''),
       speed: spGet(spSavePrintSpeed) ?? 3.0,
-      density: spGet(spSavePrintDensity) ?? 15.0,
+      density: spGet(spSavePrintDensity) ?? 10.0,
     ).then((printLabel) {
       PrintUtil().printLabel(
           label: printLabel,
@@ -386,15 +386,18 @@ class MachineDispatchLogic extends GetxController {
     Items item =
         state.detailsInfo!.items![state.selectList.indexWhere((v) => v.value)];
 
-
     var printQty = 0.0;
-    if ((state.detailsInfo?.status == 1 || state.detailsInfo?.status == 2 ) && state.leaderVerify.value) {
+    if ((state.detailsInfo?.status == 1 || state.detailsInfo?.status == 2) &&
+        state.leaderVerify.value) {
       printQty = item.notFullQty ?? 0;
     } else {
       if (isPrintLast) {
         if ((item.capacity ?? 0) > 0) {
           if (item.mantissaMark == 'X') {
-            printQty = item.sumUnderQty != 0 ? (item.sumUnderQty.add(item.lastNotFullQty ?? 0) % (item.capacity ?? 0)) : item.notFullQty ?? 0;
+            printQty = item.sumUnderQty != 0
+                ? (item.sumUnderQty.add(item.lastNotFullQty ?? 0) %
+                    (item.capacity ?? 0))
+                : item.notFullQty ?? 0;
           } else {
             printQty = item.capacity ?? 0;
           }
@@ -435,14 +438,18 @@ class MachineDispatchLogic extends GetxController {
           content: isEnglish
               ? ('GW:${label.grossWeight}KG   NW:${label.netWeight}KG')
               : state.detailsInfo?.materialName ?? '',
-          specification: isEnglish ? 'MEAS:  ${label.specifications}    No.${label.number?? ''}': '',
+          specification: isEnglish
+              ? 'MEAS:  ${label.specifications}    No.${label.number ?? ''}'
+              : '',
           subContent1: isEnglish
               ? 'DISPATCH:${state.detailsInfo?.dispatchNumber.toString()}'
               : '派工单号：${state.detailsInfo?.dispatchNumber ?? ''}       班次：${state.detailsInfo?.shift ?? ''}',
           subContent2: isEnglish
               ? 'DECREASE:${state.detailsInfo?.decrementNumber}    DATE:${state.detailsInfo?.startDate}'
               : '递减号:${state.detailsInfo?.decrementNumber}    日期:${state.detailsInfo?.startDate}',
-          bottomLeftText1: isEnglish ? ((printQty.toShowString()) + (label.unit ?? '')) : '${state.detailsInfo?.machine}',
+          bottomLeftText1: isEnglish
+              ? ((printQty.toShowString()) + (label.unit ?? ''))
+              : '${state.detailsInfo?.machine}',
           bottomMiddleText1: isEnglish
               ? '   Made in China'
               : ('     ${item.size ?? ''}码${printQty.toShowString()}${item.bUoM ?? ''}'),
