@@ -2,6 +2,7 @@ import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/sap_picking_info.dart';
+import 'package:jd_flutter/fun/warehouse/in/sap_put_on_shelves/sap_put_on_shelves_scan_view.dart';
 import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
@@ -30,10 +31,7 @@ class _SapPutOnShelvesPageState extends State<SapPutOnShelvesPage> {
       onTap: () => logic.scanCode(
         code: pallet[0][0].palletNumber ?? '',
         warehouse: factoryWarehouseController.getPickItem2().pickerId(),
-        refresh: () {
-          refreshController.finishRefresh();
-          refreshController.resetFooter();
-        },
+        goScan: (index, warehouse)=>_goScan(index, warehouse),
       ),
       child: Container(
         margin: const EdgeInsets.only(bottom: 10),
@@ -73,19 +71,32 @@ class _SapPutOnShelvesPageState extends State<SapPutOnShelvesPage> {
       ),
     );
   }
-
-  @override
-  void initState() {
+  void _goScan(int index, String warehouse) {
+    Get.to(
+          () => const SapPutOnShelvesScanPage(),
+      arguments: {'index': index, 'warehouse': warehouse},
+    )?.then((v) {
+      if (v != null && v as bool) {
+        logic.refreshLabelList(warehouse: warehouse, refresh: (){
+          refreshController.finishRefresh();
+          refreshController.resetFooter();
+        });
+      }
+      initScan();
+    });
+  }
+  void initScan(){
     pdaScanner(
       scan: (code) => logic.scanCode(
         code: code,
         warehouse: factoryWarehouseController.getPickItem2().pickerId(),
-        refresh: () {
-          refreshController.finishRefresh();
-          refreshController.resetFooter();
-        },
+        goScan: (index, warehouse)=>_goScan(index, warehouse),
       ),
     );
+  }
+  @override
+  void initState() {
+    initScan();
     factoryWarehouseController = LinkOptionsPickerController(
         PickerType.sapFactoryWarehouse,
         saveKey:
