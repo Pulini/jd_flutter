@@ -2835,6 +2835,7 @@ class Translation extends Translations {
           'process_dispatch_label_print_type': '打印状态：',
           'process_dispatch_label_sure_print': '确认要打印贴标吗?',
           'process_dispatch_label_sure_delete': '确认要删除贴标吗?',
+          'process_dispatch_label_update_state': '正在更新打印状态...',
           'process_dispatch_label_deleting': '正在删除贴标...',
           'process_dispatch_label_delete_success': '删除成功',
           'process_dispatch_label_delete_fail': '删除失败',
@@ -6700,6 +6701,7 @@ class Translation extends Translations {
           'process_dispatch_label_sure_delete':
               'Are you sure you want to delete the label?',
           'process_dispatch_label_deleting': 'Removing labels...',
+          'process_dispatch_label_update_state': 'Updating printing status...',
           'process_dispatch_label_delete_success': 'Delete successfully！',
           'process_dispatch_label_delete_fail': 'Delete failed！',
           'process_dispatch_label_delete': 'Delete',
@@ -10843,6 +10845,7 @@ class Translation extends Translations {
           'process_dispatch_label_sure_delete':
               'Konfirmasi hapus label tempel?',
           'process_dispatch_label_deleting': 'Menghapus label tempel...',
+          'process_dispatch_label_update_state': 'process_dispatch_label_deleting...',
           'process_dispatch_label_delete_success': 'Hapus berhasil',
           'process_dispatch_label_delete_fail': 'Hapus gagal',
           'process_dispatch_label_delete': 'Hapus',

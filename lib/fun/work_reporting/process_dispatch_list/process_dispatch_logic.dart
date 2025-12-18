@@ -515,17 +515,17 @@ class ProcessDispatchLogic extends GetxController
     required int position,
     required Function() success,
   }) {
-    var list = <String>[];
+    var list = <Map<String, String>>[];
     if(select){
       state.showLabelList.where((label)=>label.select == true).forEach((v){
-        list.add(v.barcode!);
+        list.add({'BarCode': v.barcode!});
       });
     }else{
-      list.add(state.showLabelList[position].barcode!);
+      list.add({'BarCode': state.showLabelList[position].barcode!});
     }
     httpPost(
       method: webApiUpdatePartsPrintTimes,
-      loading: 'process_dispatch_label_deleting'.tr,
+      loading: 'process_dispatch_label_update_state'.tr,
       body: {
         'Barcodes': list,
         'DeptID': userInfo?.departmentID,
