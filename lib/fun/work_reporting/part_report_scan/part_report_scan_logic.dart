@@ -2,11 +2,9 @@ import 'dart:convert';
 
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/component_code_info.dart';
-import 'package:jd_flutter/bean/http/response/part_report_error_info.dart';
 import 'package:jd_flutter/bean/http/response/report_details_info.dart';
 import 'package:jd_flutter/fun/work_reporting/part_report_scan/part_report_scan_state.dart';
 import 'package:jd_flutter/fun/work_reporting/part_report_scan/part_report_scan_summary_view.dart';
-import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
