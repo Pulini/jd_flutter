@@ -30,7 +30,7 @@ class _PickingMaterialOrderProgressPageState
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [Colors.blue.shade100, Colors.green.shade50],
+          colors: [Colors.blue.shade50, Colors.white],
         ),
         borderRadius: BorderRadius.circular(50),
         border: Border.all(color: Colors.grey, width: 2),

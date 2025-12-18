@@ -408,8 +408,9 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: Colors.grey,width: 2),
           gradient: LinearGradient(
-            colors: [Colors.blue.shade100, Colors.white],
+            colors: [Colors.blue.shade50, Colors.white],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -426,7 +427,7 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
         textSpan(
           hint: 'delivery_order_material'.tr,
           text: '(${item.materialCode}) ${item.materialName}',
-          textColor: Colors.green.shade700,
+          textColor: Colors.blue.shade900,
         ),
         textSpan(
           hint: 'delivery_order_factory_type_body'.tr,
@@ -477,7 +478,7 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
         textSpan(
           hint: 'delivery_order_material'.tr,
           text: '(${item.materialCode}) ${item.materialName}',
-          textColor: Colors.green.shade700,
+          textColor: Colors.blue.shade900,
         ),
         Row(
           children: [

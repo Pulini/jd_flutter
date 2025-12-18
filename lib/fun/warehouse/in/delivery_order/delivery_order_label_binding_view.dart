@@ -33,10 +33,11 @@ class _DeliveryOrderLabelBindingPageState
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: Colors.grey, width: 2),
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
-              colors: [Colors.blue.shade100, Colors.green.shade50],
+              colors: [Colors.blue.shade50, Colors.white],
             ),
           ),
           child: Column(
@@ -134,10 +135,11 @@ class _DeliveryOrderLabelBindingPageState
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: Colors.grey, width: 2),
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
-                  colors: [Colors.blue.shade100, Colors.green.shade50],
+                  colors: [Colors.blue.shade50, Colors.white],
                 ),
               ),
               child: Column(

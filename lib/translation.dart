@@ -2537,7 +2537,7 @@ class Translation extends Translations {
           'part_report_cancel_sure_cancel': '确定要取消报工吗?',
           'part_report_cancel_fail_cancel': '取消报工失败！',
           'temporary_order_supplier': '供应商：',
-          'temporary_order_final_customer': '最总客户：',
+          'temporary_order_final_customer': '最终客户：',
           'temporary_order_temporary_no': '暂收单号：',
           'temporary_order_temporary_date': '暂收时间：',
           'temporary_order_temporary_worker': '暂收人：',
