@@ -3,10 +3,12 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/management/property/property_detail_view.dart';
 import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/utils/wifi_util.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
+import '../../../bean/http/response/people_message_info.dart';
 import 'property_state.dart';
 
 class PropertyLogic extends GetxController {
@@ -47,7 +49,6 @@ class PropertyLogic extends GetxController {
         ..onConnected = (client) {
           // 连接成功的处理
           showSnackBar(message: "连接成功");
-
         }
         ..onDisconnected = (client) {
           // 连接断开的处理
@@ -79,14 +80,14 @@ class PropertyLogic extends GetxController {
       final completeData = [...startBytes, ...asciiBytes, ...endBytes];
 
       // 发送数据
-      socketClient?.sendData(completeData,onComplete: (success){
-        if( success){
+      socketClient?.sendData(completeData, onComplete: (success) {
+        if (success) {
           // 更新打印次数
           state.setPrintAssetsLaser();
-        }else{}
+        } else {}
         showSnackBar(message: "数据发送失败");
       });
-    }else{
+    } else {
       showSnackBar(message: "请先连接激光打印机");
     }
   }
@@ -107,13 +108,15 @@ class PropertyLogic extends GetxController {
     if (detailName.length <= 8) {
       if (detailNumber.length <= 12) {
         // 名称和编码长度都正常
-        mes = "seta:data#v1=$detailName;v2=$detailNumber;v3=${detail.buyDate};v4=${detail.interID};";
+        mes =
+            "seta:data#v1=$detailName;v2=$detailNumber;v3=${detail.buyDate};v4=${detail.interID};";
       } else {
         // 长度小于等于8    编码大于12
         final numberList = _chunked(detailNumber, 12);
         number = numberList[0];
         if (numberList.length > 1) numberLast = numberList[1];
-        mes = "seta:data#v1=$detailName;v2=$number;v3=${detail.buyDate};v4=${detail.interID};v6=$nameLast";
+        mes =
+            "seta:data#v1=$detailName;v2=$number;v3=${detail.buyDate};v4=${detail.interID};v6=$nameLast";
       }
     } else {
       if (detailNumber.length <= 12) {
@@ -121,7 +124,8 @@ class PropertyLogic extends GetxController {
         final nameList = _chunked(detailName, 8);
         name = nameList[0];
         if (nameList.length > 1) nameLast = nameList[1];
-        mes = "seta:data#v1=$name;v2=$detailNumber;v3=${detail.buyDate};v4=${detail.interID};v5=$nameLast;";
+        mes =
+            "seta:data#v1=$name;v2=$detailNumber;v3=${detail.buyDate};v4=${detail.interID};v5=$nameLast;";
       } else {
         // 名字大于8 编号大于12
         final nameList = _chunked(detailName, 8);
@@ -130,7 +134,8 @@ class PropertyLogic extends GetxController {
         if (nameList.length > 1) nameLast = nameList[1];
         number = numberList[0];
         if (numberList.length > 1) numberLast = numberList[1];
-        mes = "seta:data#v1=$name;v2=$number;v3=${detail.buyDate};v4=${detail.interID};v5=$nameLast;v6=$numberLast;";
+        mes =
+            "seta:data#v1=$name;v2=$number;v3=${detail.buyDate};v4=${detail.interID};v5=$nameLast;v6=$numberLast;";
       }
     }
 
@@ -146,8 +151,6 @@ class PropertyLogic extends GetxController {
     }
     return chunks;
   }
-
-
 
   void queryProperty({
     required String propertyNumber,
@@ -198,25 +201,37 @@ class PropertyLogic extends GetxController {
     }
   }
 
-  void setCustodian(String str) {
+  void setCustodian(
+    String str, {
+    required Function() success,
+  }) {
     if (str.length >= 6) {
-      getWorkerInfo(
-        number: str,
-        workers: (list) {
-          state.setCustodian(
-            empCode: list[0].empCode ?? '',
-            empName: list[0].empName ?? '',
-            empID: list[0].empID ?? -1,
-          );
-        },
-        error: (msg) => errorDialog(content: msg),
-      );
+      state.searchPeople(
+          number: str,
+          people: (PeopleMessageInfo p1) {
+            state.detail.custodianCode = p1.empCode;
+            state.detail.custodianName = p1.empName;
+            state.detail.deptName = p1.deptName;
+            state.detail.liableEmpName = p1.liableEmpName;
+            state.detail.liableEmpCode = p1.liableEmpCode;
+            state.detail.deptID = p1.departmentID;
+            state.detail.liableEmpID = p1.liableEmpID;
+            state.custodianName.value = p1.empName ?? '';
+            setLiable(
+                p1.liableEmpCode.toString(),
+                success: () {
+                  success.call();
+                });
+          });
     } else {
       state.setCustodian();
     }
   }
 
-  void setLiable(String str) {
+  void setLiable(
+    String str, {
+    required Function() success,
+  }) {
     if (str.length >= 6) {
       getWorkerInfo(
         number: str,

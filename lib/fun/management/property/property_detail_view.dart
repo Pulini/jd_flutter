@@ -181,7 +181,16 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
         onChange: (s) => data.orgVal = s.toDoubleTry(),
       ),
       line,
-      _text('property_detail_hint11'.tr, data.vender),
+      InkWell(
+        child: _text('property_detail_hint11'.tr, data.vender),
+        onLongPress: () {
+          if (state.detail.processStatus == 0) {
+            setState(() {
+              state.detail.manufacturer = data.vender;
+            });
+          }
+        },
+      ),
       line,
       _text(
         'property_detail_hint12'.tr,
@@ -234,7 +243,11 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
             child: _text(
               'property_detail_hint18'.tr,
               data.custodianCode,
-              onChange: (s) => logic.setCustodian(s),
+              onChange: (s) => logic.setCustodian(s, success: () {
+                setState(() {
+
+                });
+              }),
             ),
           ),
           Obx(() => Container(
@@ -253,7 +266,7 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
             child: _text(
               'property_detail_hint19'.tr,
               data.liableEmpCode,
-              onChange: (s) => logic.setLiable(s),
+              onChange: (s) => logic.setLiable(s, success: () {  }),
             ),
           ),
           Obx(() => Container(
@@ -557,8 +570,10 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
               confirm: () {
                 logic.connectToNetwork(
                     success: () {
-                        logic.startSocketClient();
-                    }, ssid: 'LCWIFI', password: '');
+                      logic.startSocketClient();
+                    },
+                    ssid: 'LCWIFI',
+                    password: '');
               },
             ),
           ),
