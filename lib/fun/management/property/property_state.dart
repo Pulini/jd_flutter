@@ -7,6 +7,9 @@ import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
+import 'package:jd_flutter/widget/dialogs.dart';
+
+import '../../../bean/http/response/people_message_info.dart';
 
 enum AuditedType { audited, unAudited, underAudit }
 
@@ -25,8 +28,10 @@ class PropertyState {
   var assetPicture = ''.obs;
   var ratingPlatePicture = ''.obs;
   bool canModify = false;
+  var peoPleInfo = PeopleMessageInfo().obs; //员工详情
 
-  void setParticipator({String empCode = '', String empName = '', int empID = -1}) {
+  void setParticipator(
+      {String empCode = '', String empName = '', int empID = -1}) {
     detail.participatorCode = empCode;
     detail.participatorName = empName;
     detail.participator = empID;
@@ -37,6 +42,11 @@ class PropertyState {
     detail.custodianCode = empCode;
     detail.custodianName = empName;
     custodianName.value = empName;
+    detail.deptName = '';
+    detail.liableEmpName = '';
+    detail.liableEmpCode = '';
+    detail.deptID = -1;
+    detail.liableEmpID = -1;
   }
 
   void setLiable({String empCode = '', String empName = '', int empID = -1}) {
@@ -195,9 +205,30 @@ class PropertyState {
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        showSnackBar(message: response.message?? '');
+        showSnackBar(message: response.message ?? '');
       } else {
-        showSnackBar(message: response.message?? '');
+        showSnackBar(message: response.message ?? '');
+      }
+    });
+  }
+
+  //通过保管人工号获取保管人，监管人信息以及保管人部门
+  void searchPeople({
+    required String number,
+    required Function(PeopleMessageInfo) people,
+  }) {
+    httpGet(
+      method: webApiGetEmpAndLiableByEmpCode,
+      loading: 'device_maintenance_personnel_information'.tr,
+      params: {
+        'EmpCode': number,
+      },
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        peoPleInfo.value = PeopleMessageInfo.fromJson(response.data);
+        people.call(PeopleMessageInfo.fromJson(response.data));
+      } else {
+        errorDialog(content: response.message);
       }
     });
   }

@@ -14,7 +14,6 @@ import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
 
-
 class ProcessDispatchDetailPage extends StatefulWidget {
   const ProcessDispatchDetailPage({super.key});
 
@@ -109,11 +108,9 @@ class _ProcessDispatchDetailPageState extends State<ProcessDispatchDetailPage> {
         loadingShow('正在下发标签...');
       },
       progress: (i, j) {
-        Get.back();
         loadingShow('正在下发标签($i/$j)');
       },
       finished: (success, fail) {
-        Get.back();
         successDialog(
             title: '标签下发结束',
             content: '完成${success.length}张, 失败${fail.length}张',
@@ -211,18 +208,19 @@ class _ProcessDispatchDetailPageState extends State<ProcessDispatchDetailPage> {
               isSelect: data.select,
               all: data.size!),
           onTap: () {
-            if (data.size != '总')
-              {
-                _inputDialog(
-                    initNum: data.qty.toShowString(),
-                    title: '${'process_dispatch_tab1_size'.tr}<${data.size!}>',
-                    confirm: (number) => logic.inputCapacity(number, position));
-              }
+            if (data.size != '总') {
+              _inputDialog(
+                  initNum: data.qty.toShowString(),
+                  title: '${'process_dispatch_tab1_size'.tr}<${data.size!}>',
+                  confirm: (number) => logic.inputCapacity(number, position));
+            }
           },
         )),
         Expanded(
             child: InkWell(
-          onTap: (){logic.selectSize(position);},
+          onTap: () {
+            logic.selectSize(position);
+          },
           child: _text(
               mes: 'process_dispatch_tab1_click'.tr,
               head: false,
@@ -240,7 +238,7 @@ class _ProcessDispatchDetailPageState extends State<ProcessDispatchDetailPage> {
       },
       child: Container(
         margin: const EdgeInsets.only(bottom: 5),
-        height: 117,
+        height: 140,
         padding: const EdgeInsets.all(5),
         decoration: BoxDecoration(
             color: Colors.lightBlueAccent.shade100,
@@ -263,10 +261,6 @@ class _ProcessDispatchDetailPageState extends State<ProcessDispatchDetailPage> {
                     hint: 'process_dispatch_label_sale_order'.tr,
                     text: data.mtono ?? '',
                     textColor: Colors.black),
-                textSpan(
-                    hint: 'process_dispatch_label_code_num'.tr,
-                    text: data.index.toString(),
-                    textColor: Colors.black),
               ],
             ),
             Row(
@@ -282,6 +276,15 @@ class _ProcessDispatchDetailPageState extends State<ProcessDispatchDetailPage> {
                       fontWeight: FontWeight.bold,
                       color: data.received! ? Colors.green : Colors.red,
                     )),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                textSpan(
+                    hint: 'process_dispatch_label_code_num'.tr,
+                    text: data.index.toString(),
+                    textColor: Colors.black),
                 Text(data.printTimes! > 0 ? '已打印' : '未打印',
                     style: TextStyle(
                       fontSize: 14,
@@ -535,8 +538,9 @@ class _ProcessDispatchDetailPageState extends State<ProcessDispatchDetailPage> {
                 //指令
                 text: 'process_dispatch_tab1_instruction'.tr,
                 click: () {
-                  if (state.instructionList.isNotEmpty)
-                    {logic.sortInstructionData();}
+                  if (state.instructionList.isNotEmpty) {
+                    logic.sortInstructionData();
+                  }
                 },
                 combination: Combination.middle,
               )),

@@ -183,7 +183,7 @@ class RouteConfig {
   //财产管理
   static Routes property = Routes(
     '/property',
-    200,
+    201,
     const PropertyPage(),
   );
 
@@ -442,7 +442,7 @@ class RouteConfig {
   //工序汇报入库
   static Routes processReportWarehouse = Routes(
     '/process_report_warehouse',
-    204,
+    205,
     const ProcessReportStorePage(),
   );
 
@@ -512,7 +512,7 @@ class RouteConfig {
   //部件报工扫描
   static Routes partReportScan = Routes(
     '/part_report_scan',
-    201,
+    202,
     const PartReportScanPage(),
   );
 

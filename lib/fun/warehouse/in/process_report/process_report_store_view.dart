@@ -25,11 +25,10 @@ class _ProcessReportPageState extends State<ProcessReportStorePage> {
   var refreshController = EasyRefreshController(controlFinishRefresh: true);
   var tecCode = TextEditingController();
 
-  Container _item(BarCodeInfo code)  {
+  Container _item(BarCodeInfo code) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 5),
       height: 40,
-      padding: const EdgeInsets.only(left: 5),
+      padding: const EdgeInsets.only(left: 5, right: 5),
       decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(5),
@@ -39,28 +38,65 @@ class _ProcessReportPageState extends State<ProcessReportStorePage> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Expanded(
-            flex: 9,
-            child: Text(
-              code.code.toString(),
-              style: TextStyle(
-                  color: code.isUsed ? Colors.red.shade700 : Colors.black),
+            flex: 10,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start, // 左侧内容左对齐
+              children: [
+                Text(
+                  code.code.toString(),
+                  style: TextStyle(
+                      color: code.isUsed ? Colors.red.shade700 : Colors.black,
+                      fontSize: 15),
+                  overflow: TextOverflow.ellipsis,
+                ),
+                Visibility(
+                  visible: (code.department ?? '').isNotEmpty,
+                  child: Text(
+                    code.department ?? '',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 10,
+                      color: Colors.blue.shade900,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                    textAlign: TextAlign.left,
+                  ),
+                ),
+              ],
             ),
           ),
-          Text(
-            code.isUsed ? 'production_scan_is_submit'.tr : '',
-            style: TextStyle(
-                color: code.isUsed ? Colors.red.shade700 : Colors.black),
-          ),
-          IconButton(
-            onPressed: () => askDialog(
-              content: 'sale_scan_out_warehouse_delete_tips'.tr,
-              confirm: () => logic.deleteCode(code),
+          Expanded(
+            flex: 4,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end, // 右侧内容右对齐
+              children: [
+                Text(
+                  code.isUsed ? 'production_scan_is_submit'.tr : '',
+                  style: TextStyle(
+                      color: code.isUsed ? Colors.red.shade700 : Colors.black,
+                      fontSize: 13),
+                  overflow: TextOverflow.ellipsis,
+                ),
+                IconButton(
+                  onPressed: () => askDialog(
+                    content: 'sale_scan_out_warehouse_delete_tips'.tr,
+                    confirm: () => logic.deleteCode(code),
+                  ),
+                  icon: const Icon(
+                    Icons.delete_forever,
+                    color: Colors.red,
+                    size: 20,
+                  ),
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(
+                    maxWidth: 35,
+                    maxHeight: 35,
+                  ),
+                )
+              ],
             ),
-            icon: const Icon(
-              Icons.delete_forever,
-              color: Colors.red,
-            ),
-          ),
+          )
         ],
       ),
     );
