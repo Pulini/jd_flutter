@@ -41,7 +41,6 @@ class ProductionDayReportLogic extends GetxController {
     state.getPrdDayReport(
       date: pickerControllerDate.getDateFormatYMD(),
       workShopID: spinnerControllerWorkShop.selectIndex + 1,
-      success: (msg) => Get.back(closeOverlays: true),
       error: (msg) => errorDialog(content: msg),
     );
   }

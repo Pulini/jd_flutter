@@ -103,10 +103,10 @@ class RouteConfig {
     const ProductionSummaryReportPage(),
   );
 
-  //日生产报表
+  //生产日报表
   static Routes productionDayReport = Routes(
     '/production_day_report',
-    200,
+    201,
     const ProductionDayReportPage(),
   );
 
@@ -512,7 +512,7 @@ class RouteConfig {
   //部件报工扫描
   static Routes partReportScan = Routes(
     '/part_report_scan',
-    200,
+    201,
     const PartReportScanPage(),
   );
 

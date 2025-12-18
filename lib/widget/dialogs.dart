@@ -499,7 +499,7 @@ void reasonInputPopup({
         ),
       ),
       child: isPad()
-          ? ListView(children: children)
+          ? ListView(shrinkWrap: true, children: children)
           : Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -514,7 +514,6 @@ void reasonInputPopup({
         contentPadding: const EdgeInsets.all(0),
         content: SizedBox(
           width: 400,
-          height: 270,
           child: popup,
         ),
       ),
