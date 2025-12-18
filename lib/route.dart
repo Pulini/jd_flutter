@@ -512,7 +512,7 @@ class RouteConfig {
   //部件报工扫描
   static Routes partReportScan = Routes(
     '/part_report_scan',
-    201,
+    202,
     const PartReportScanPage(),
   );
 

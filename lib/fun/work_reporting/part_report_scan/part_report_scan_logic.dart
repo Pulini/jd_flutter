@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/component_code_info.dart';
 import 'package:jd_flutter/bean/http/response/part_report_error_info.dart';
@@ -70,8 +72,22 @@ class PartReportScanLogic extends GetxController {
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        state.reportInfo.value =
-            ReportDetailsInfo.fromJson(response.data).list ?? [];
+        var reportList = ReportDetailsInfo.fromJson(response.data).list ?? [];
+
+        // 创建自定义表头
+        var headerItem = SummaryLists(
+          type: -1, // 使用特殊type标识表头
+          mtono: '指令',
+          name: '工序',
+          size: '尺码',
+          empName: '员工',
+          // 设置其他需要的字段
+        );
+
+        // 在列表开头插入表头
+        reportList.insert(0, headerItem);
+
+        state.reportInfo.value = reportList;
         Get.to(() => const PartReportScanSummaryPage())?.then((v) {
           if (v == null) {
             showSnackBar(message: 'part_report_summary_not_submit'.tr);
@@ -90,24 +106,40 @@ class PartReportScanLogic extends GetxController {
         } else {
           var message = response.message;
           message?.replaceAll('\\', '');
+          String jsonPart = extractJsonFromString(message.toString());
+          try {
+            // 解析 JSON 字符串
+            Map<String, dynamic> jsonMap = json.decode(jsonPart);
 
-          state.errorInfo = PartReportErrorInfo.fromJson(response.data);
-
-          if (!state.errorInfo.barcodes.isNullOrEmpty()) {
-            state.errorInfo.barcodes?.forEach((c) {
-              for (var v in state.dataList) {
-                if (c == v.barCode) {
-                  v.use = true;
+            // 提取 Barcodes 数组
+            List<String> barcodes = List<String>.from(jsonMap['Barcodes']);
+            if (barcodes.isNotEmpty) {
+              for (var c in barcodes) {
+                for (var v in state.dataList) {
+                  if (c == v.barCode) {
+                    v.use = true;
+                  }
                 }
               }
-            });
-            state.dataList.refresh(); //刷新
-            showSnackBar(message: state.errorInfo.info.toString());
+              state.dataList.refresh(); //刷新
+            }
+            errorDialog(content:  jsonMap['Info']);
+          } catch (e) {
+            errorDialog(content:  '解析出错');
           }
-          errorDialog(content: state.errorInfo.info.toString());
         }
       }
     });
+  }
+
+  String extractJsonFromString(String input) {
+    // 查找第一个 '{' 的位置
+    int startIndex = input.indexOf('{');
+    if (startIndex != -1) {
+      // 返回从 '{' 开始到字符串结尾的部分
+      return input.substring(startIndex);
+    }
+    return input;
   }
 
   //条码报工

@@ -53,54 +53,6 @@ class _PartReportScanSummaryPageState extends State<PartReportScanSummaryPage> {
     );
   }
 
-  Row _title() {
-    return Row(
-      children: [
-        Expanded(
-            flex: 3,
-            child: _text(
-                backColor: Colors.blue.shade400,
-                mes: 'part_report_summary_process'.tr,
-                textColor: Colors.white,
-               )),
-        Expanded(
-            flex: 3,
-            child: _text(
-                backColor: Colors.blue.shade400,
-                mes: 'part_report_summary_instruction'.tr,
-                textColor: Colors.white,
-                )),
-        Expanded(
-            flex: 2,
-            child: _text(
-                backColor: Colors.blue.shade400,
-                mes: 'part_report_summary_size'.tr,
-                textColor: Colors.white,
-               )),
-        Expanded(
-            flex: 2,
-            child: _text(
-                backColor: Colors.blue.shade400,
-                mes: 'part_report_summary_instruction_qty'.tr,
-                textColor: Colors.white,
-               )),
-        Expanded(
-            flex: 2,
-            child: _text(
-                backColor: Colors.blue.shade400,
-                mes: 'part_report_summary_qty'.tr,
-                textColor: Colors.white,
-                )),
-        Expanded(
-            flex: 3,
-            child: _text(
-                backColor: Colors.blue.shade400,
-                mes: 'part_report_summary_personal'.tr,
-                textColor: Colors.white,
-               )),
-      ],
-    );
-  }
 
   Row _item1(SummaryLists data) {
     var backColors = Colors.black;
@@ -111,6 +63,7 @@ class _PartReportScanSummaryPageState extends State<PartReportScanSummaryPage> {
     var qtyColors = Colors.black;
     var process = '';
     var instruction = '';
+    var qty = '';
 
     switch (data.type) {
       case 0:
@@ -119,6 +72,7 @@ class _PartReportScanSummaryPageState extends State<PartReportScanSummaryPage> {
           textColors = Colors.black;
           process = data.name ?? '';
           instruction = data.mtonoQty.toShowString();
+          qty = data.qty.toShowString();
           break;
         }
       case 1:
@@ -127,6 +81,7 @@ class _PartReportScanSummaryPageState extends State<PartReportScanSummaryPage> {
           process = 'part_report_summary_total_instructions'.tr;
           processColors = Colors.black;
           instruction = data.name ?? '';
+          qty = data.qty.toShowString();
           break;
         }
       case 2:
@@ -136,6 +91,17 @@ class _PartReportScanSummaryPageState extends State<PartReportScanSummaryPage> {
           process = 'part_report_summary_total_components'.tr;
           processColors = Colors.black;
           instruction = data.name ?? '';
+          qty = data.qty.toShowString();
+          break;
+        }
+      case -1:
+        {
+
+          backColors = Colors.blue.shade200;
+          process = '工序';
+          processColors = Colors.black;
+          instruction =  '指令数';
+          qty = '数量';
           break;
         }
     }
@@ -173,7 +139,7 @@ class _PartReportScanSummaryPageState extends State<PartReportScanSummaryPage> {
         Expanded(
             flex: 2,
             child: _text(
-                mes: data.qty.toShowString(),
+                mes: qty,
                 textColor: qtyColors,
                 backColor: backColors,
                 )),
@@ -194,14 +160,20 @@ class _PartReportScanSummaryPageState extends State<PartReportScanSummaryPage> {
       title: 'part_report_summary_table'.tr,
         body: Column(
       children: [
-        _title(),
         Expanded(
-          child: Obx(() => ListView.builder(
+          child: Obx(() => SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: SizedBox(
+              width: 600, // 设置合适的宽度以容纳所有列
+              child: ListView.builder(
+                shrinkWrap: true,
                 padding: const EdgeInsets.all(0),
                 itemCount: state.reportInfo.length,
                 itemBuilder: (context, index) =>
                     _item1(state.reportInfo[index]),
-              )),
+              ),
+            ),
+          )),
         ),
         SizedBox(
           width: double.maxFinite,

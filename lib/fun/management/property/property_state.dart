@@ -42,6 +42,11 @@ class PropertyState {
     detail.custodianCode = empCode;
     detail.custodianName = empName;
     custodianName.value = empName;
+    detail.deptName = '';
+    detail.liableEmpName = '';
+    detail.liableEmpCode = '';
+    detail.deptID = -1;
+    detail.liableEmpID = -1;
   }
 
   void setLiable({String empCode = '', String empName = '', int empID = -1}) {
