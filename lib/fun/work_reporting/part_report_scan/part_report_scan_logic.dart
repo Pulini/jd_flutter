@@ -120,7 +120,7 @@ class PartReportScanLogic extends GetxController {
       body: {
         'UserID': userInfo?.userID,
         'DeptID': userInfo?.departmentID,
-        'Date': getDateSapYMD(),
+        'Date': getDateYMD(),
         'Barcodes': [
           for (var i = 0; i < state.dataList.length; ++i)
             state.dataList[i].barCode

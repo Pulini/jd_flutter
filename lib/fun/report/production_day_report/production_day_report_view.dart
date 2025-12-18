@@ -112,6 +112,7 @@ class _ProductionDayReportPageState extends State<ProductionDayReportPage> {
       ],
       hintText: 'dialog_reason_hint'.tr,
       confirmText: 'dialog_reason_submit'.tr,
+      isCanCancel: true,
       confirm: (reason) {
         logic.submitReason(
           date: logic.reasonDateController.getDateFormatYMD(),

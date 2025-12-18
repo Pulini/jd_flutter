@@ -20,7 +20,6 @@ class ProductionDayReportState {
   void getPrdDayReport({
     required String date,
     required int workShopID,
-    required Function(String msg) success,
     required Function(String msg) error,
   }) {
     httpGet(
@@ -36,7 +35,6 @@ class ProductionDayReportState {
         tableData.value = [
           for (var item in response.data) ProductionDayReportInfo.fromJson(item)
         ];
-        success.call(response.message??'');
       } else {
         error.call(response.message ?? 'query_default_error'.tr);
       }
