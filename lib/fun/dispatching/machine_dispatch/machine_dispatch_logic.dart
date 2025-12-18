@@ -8,6 +8,7 @@ import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/printer/print_util.dart';
 import 'package:jd_flutter/utils/printer/tsc_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
@@ -388,7 +389,8 @@ class MachineDispatchLogic extends GetxController {
 
     var printQty = 0.0;
     if ((state.detailsInfo?.status == 1 || state.detailsInfo?.status == 2) &&
-        state.leaderVerify.value) {
+        state.leaderVerify.value &&
+        isPrintLast) {
       printQty = item.notFullQty ?? 0;
     } else {
       if (isPrintLast) {
@@ -443,7 +445,7 @@ class MachineDispatchLogic extends GetxController {
               : '',
           subContent1: isEnglish
               ? 'DISPATCH:${state.detailsInfo?.dispatchNumber.toString()}'
-              : '派工单号：${state.detailsInfo?.dispatchNumber ?? ''}       班次：${state.detailsInfo?.shift ?? ''}',
+              : '派工单号:${state.detailsInfo?.dispatchNumber ?? ''}       班次:${state.detailsInfo?.shift ?? ''}',
           subContent2: isEnglish
               ? 'DECREASE:${state.detailsInfo?.decrementNumber}    DATE:${state.detailsInfo?.startDate}'
               : '递减号:${state.detailsInfo?.decrementNumber}    日期:${state.detailsInfo?.startDate}',
@@ -454,7 +456,7 @@ class MachineDispatchLogic extends GetxController {
               ? '   Made in China'
               : ('     ${item.size ?? ''}码${printQty.toShowString()}${item.bUoM ?? ''}'),
           bottomRightText1:
-              isEnglish ? "${item.size}#" : (isPrintLast ? '尾' : ''),
+              isEnglish ? "${item.size}码" : (isPrintLast ? '尾' : ''),
           speed: spGet(spSavePrintSpeed) ?? 3.0,
           density: spGet(spSavePrintDensity) ?? 15.0,
         ).then((printLabel) {

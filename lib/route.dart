@@ -624,7 +624,7 @@ class RouteConfig {
   //成型条码采集
   static Routes formingBarcodeCollection = Routes(
     '/forming_barcode_collection',
-    201,
+    202,
     const FormingBarcodeCollectionPage(),
   );
 

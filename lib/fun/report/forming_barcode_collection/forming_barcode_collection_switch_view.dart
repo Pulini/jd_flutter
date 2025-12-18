@@ -5,6 +5,7 @@ import 'package:jd_flutter/bean/http/response/forming_collection_info.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
+import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
 import 'package:jd_flutter/widget/scanner.dart';
 
@@ -143,12 +144,10 @@ class _FormingBarcodeCollectionSwitchPageState
           ],
         ));
   }
-
-  @override
-  void initState() {
+  void scan(){
     pdaScanner(scan: (barCode) {
       if (state.dataList.none((data) => data.mtoNo == barCode)) {
-        showSnackBar(message: 'forming_code_collection_no_search'.tr);
+        errorDialog(content: 'forming_code_collection_no_search'.tr);
       } else {
         for (var data in state.dataList) {
           if (data.mtoNo == barCode) {
@@ -158,7 +157,14 @@ class _FormingBarcodeCollectionSwitchPageState
         }
       }
     });
-    logic.copyData();
+  }
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      logic.copyData();
+      scan();
+    });
     super.initState();
   }
 }

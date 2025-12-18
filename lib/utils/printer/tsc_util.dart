@@ -681,10 +681,10 @@ Future<List<Uint8List>> labelMultipurposeFixed({
   if (bottomMiddleText1.isNotEmpty) {
     if (bottomMiddleText2.isNotEmpty) {
       list.add(await _tscBitmapText(
-          23 * _dpi + _halfDpi, 37 * _dpi, 23, bottomMiddleText1,
-          isBold: true));
+          23 * _dpi + _halfDpi, 36 * _dpi, 22, bottomMiddleText1,
+          isBold: false));
       list.add(await _tscBitmapText(
-          23 * _dpi + _halfDpi, 40 * _dpi, 23, bottomMiddleText2,
+          23 * _dpi + _halfDpi, 40 * _dpi, 22, bottomMiddleText2,
           isBold: false));
     } else {
       list.add(await _tscBitmapText(
