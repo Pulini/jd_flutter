@@ -147,7 +147,7 @@ class _ProductionTasksDetailPageState extends State<ProductionTasksDetailPage> {
             padding: const EdgeInsets.all(5),
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [Colors.blue.shade100, Colors.green.shade50],
+                colors: [Colors.blue.shade50, Colors.white],
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
               ),
@@ -176,7 +176,7 @@ class _ProductionTasksDetailPageState extends State<ProductionTasksDetailPage> {
             padding: const EdgeInsets.all(5),
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [Colors.blue.shade100, Colors.green.shade50],
+                colors: [Colors.blue.shade50, Colors.white],
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
               ),

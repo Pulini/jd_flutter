@@ -32,7 +32,7 @@ class _ScanPickingMaterialPageState extends State<ScanPickingMaterialPage> {
       padding: const EdgeInsets.only(left: 10),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [Colors.blue.shade100, Colors.green.shade50],
+          colors: [Colors.blue.shade50, Colors.white],
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
         ),

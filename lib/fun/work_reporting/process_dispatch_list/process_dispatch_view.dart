@@ -32,10 +32,11 @@ class _ProcessDispatchPageState extends State<ProcessDispatchPage> {
         padding: const EdgeInsets.all(5),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: Colors.grey,width: 2),
           gradient: LinearGradient(
             colors: data.select
                 ? [Colors.red.shade100, Colors.white]
-                : [Colors.blue.shade100, Colors.white],
+                : [Colors.blue.shade50, Colors.white],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),

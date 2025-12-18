@@ -134,7 +134,7 @@ class _SapPackingScanCacheListPageState
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [Colors.blue.shade100, Colors.white],
+          colors: [Colors.blue.shade50, Colors.white],
         ),
         border: Border.all(color: Colors.blue.shade300, width: 2),
       ),

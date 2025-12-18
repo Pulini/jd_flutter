@@ -184,21 +184,19 @@ class _QualityInspectionListPageState extends State<QualityInspectionListPage> {
                 title,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  color: Colors.green.shade700,
                 ),
               ),
-              Text(data, style: TextStyle(color: Colors.blue.shade900))
+              Text(data)
             ],
           ),
         );
-
     return Container(
       margin: const EdgeInsets.all(5),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [Colors.blue.shade100, Colors.green.shade50],
+          colors: [Colors.blue.shade50, Colors.white],
         ),
         borderRadius: BorderRadius.circular(10),
         border: Border.all(color: Colors.grey, width: 2),
@@ -218,7 +216,7 @@ class _QualityInspectionListPageState extends State<QualityInspectionListPage> {
           '(${data[0].materialCode}) ${data[0].materialDescription}',
           style: TextStyle(
             fontWeight: FontWeight.bold,
-            color: Colors.green.shade700,
+            color: Colors.blue.shade900,
           ),
         ),
         subtitle: Row(
@@ -236,7 +234,7 @@ class _QualityInspectionListPageState extends State<QualityInspectionListPage> {
                     child: Text(
                       'quality_inspection_view_detail'.tr,
                       style: TextStyle(
-                        color: Colors.blue.shade900,
+                        color: Colors.green.shade700,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
