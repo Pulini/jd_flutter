@@ -371,6 +371,25 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
     debugPrint('state.isMaterialLabel.value=${state.isMaterialLabel.value}');
     return pageBody(
       title: 'maintain_label_label_maintenance'.tr,
+      actions: [
+        CombinationButton(
+          text: '打印机设置',
+          click: () => showPrintSetting(),
+          combination: Combination.left,
+        ),
+        CombinationButton(
+          text: 'maintain_label_filter'.tr,
+          click: () => selectMaterialDialog(
+              logic.getSizeList(), (s) => state.filterSize.value = s),
+          combination: Combination.right,
+        ),
+        Obx(() => SwitchButton(
+          onChanged: (c) => state.isShowPreview.value = c,
+          value: state.isShowPreview.value,
+          name: 'maintain_label_preview'.tr,
+        ))
+
+      ],
       body: Padding(
         padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
         child: Obx(() => Column(
@@ -450,25 +469,7 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
               ],
             )),
       ),
-      actions: [
-        CombinationButton(
-          text: '打印机设置',
-          click: () => showPrintSetting(),
-          combination: Combination.left,
-        ),
-        CombinationButton(
-          text: 'maintain_label_filter'.tr,
-          click: () => selectMaterialDialog(
-              logic.getSizeList(), (s) => state.filterSize.value = s),
-          combination: Combination.right,
-        ),
-         Obx(() => SwitchButton(
-          onChanged: (c) => state.isShowPreview.value = c,
-          value: state.isShowPreview.value,
-          name: 'maintain_label_preview'.tr,
-        ))
 
-      ],
     );
   }
 }

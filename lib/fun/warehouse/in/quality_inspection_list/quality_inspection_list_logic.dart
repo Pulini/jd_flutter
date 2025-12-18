@@ -476,6 +476,8 @@ class QualityInspectionListLogic extends GetxController {
         if (name.length > 1) {
           showSnackBar(message: 'quality_inspection_different_order'.tr);
         } else {
+          stockIn.call();
+/*      现场反馈功能操作复杂，不想使用
           if (selected.any((v) => v.colorDistinguishEnable == true)) {
             state.getOrderColorLabelInfo(
               selectList: groupBy(
@@ -488,6 +490,7 @@ class QualityInspectionListLogic extends GetxController {
           } else {
             stockIn.call();
           }
+*/
         }
       } else {
         showSnackBar(message: 'quality_inspection_select_data'.tr);

@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/sap_picking_info.dart';
-import 'package:jd_flutter/fun/warehouse/in/sap_put_on_shelves/sap_put_on_shelves_scan_view.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
@@ -24,15 +23,19 @@ class SapPutOnShelvesLogic extends GetxController {
   void scanCode({
     required String code,
     required String warehouse,
-    required Function() refresh,
+    required Function(int index, String warehouse) goScan,
   }) {
+    if (state.labelList.isEmpty) {
+      errorDialog(content: 'sap_put_on_shelves_not_pallet'.tr);
+      return;
+    }
     if (code.isPallet()) {
       var index =
           state.labelList.indexWhere((v) => v[0][0].palletNumber == code);
       if (index == -1) {
         errorDialog(content: 'sap_put_on_shelves_not_find_pallet'.tr);
       } else {
-        _goScan(index, warehouse, refresh);
+        goScan.call(index,warehouse);
       }
       return;
     }
@@ -42,22 +45,13 @@ class SapPutOnShelvesLogic extends GetxController {
       if (index == -1) {
         errorDialog(content: 'sap_put_on_shelves_not_find_label'.tr);
       } else {
-        _goScan(index, warehouse, refresh);
+        goScan.call(index,warehouse);
       }
       return;
     }
   }
 
-  void _goScan(int index, String warehouse, Function() refresh) {
-    Get.to(
-      () => const SapPutOnShelvesScanPage(),
-      arguments: {'index': index, 'warehouse': warehouse},
-    )?.then((v) {
-      if (v != null && v as  bool) {
-        refreshLabelList(warehouse: warehouse, refresh: refresh);
-      }
-    });
-  }
+
 
   void initLabelList({
     required int index,

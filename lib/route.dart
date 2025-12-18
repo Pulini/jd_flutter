@@ -372,7 +372,7 @@ class RouteConfig {
   //sap贴标上架
   static Routes sapPutOnShelves = Routes(
     '/sap_put_on_shelves',
-    200,
+    201,
     const SapPutOnShelvesPage(),
   );
 
@@ -568,7 +568,7 @@ class RouteConfig {
   //品检单列表
   static Routes qualityInspectionList = Routes(
     '/quality_inspection_list',
-    201,
+    202,
     const QualityInspectionListPage(),
   );
 

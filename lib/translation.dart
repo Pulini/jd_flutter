@@ -1413,6 +1413,7 @@ class Translation extends Translations {
           'sap_put_on_shelves_getting_recommended_storage_location_info':
               '正在获取推荐库位信息...',
           'sap_put_on_shelves_submitting_put_on_shelves': '正在提交上架信息...',
+          'sap_put_on_shelves_not_pallet': '当前仓库没有待上架脱盘',
           'sap_put_on_shelves_not_find_pallet': '未找到此托盘',
           'sap_put_on_shelves_not_find_label': '未找到此标签',
           'sap_put_on_shelves_input_storage_location': '请填写库位！',
@@ -4971,7 +4972,8 @@ class Translation extends Translations {
               'Getting recommended storage location info...',
           'sap_put_on_shelves_submitting_put_on_shelves':
               'Submitting put on shelves...',
-          'sap_put_on_shelves_not_find_pallet': 'Not find pallet',
+          'sap_put_on_shelves_not_pallet': '当前仓库没有待上架脱盘',
+          'sap_put_on_shelves_not_find_pallet': 'There are no pending shelves or stock removal items in the current warehouse',
           'sap_put_on_shelves_not_find_label': 'Not find label',
           'sap_put_on_shelves_input_storage_location':
               'Input storage location！',
@@ -9036,6 +9038,7 @@ class Translation extends Translations {
               'Mengambil informasi lokasi penyimpanan yang direkomendasikan...',
           'sap_put_on_shelves_submitting_put_on_shelves':
               'Mengajukan informasi penempatan...',
+          'sap_put_on_shelves_not_pallet': 'Gudang saat ini tidak tersedia',
           'sap_put_on_shelves_not_find_pallet': 'Tidak menemukan palet ini',
           'sap_put_on_shelves_not_find_label': 'Tidak menemukan label ini',
           'sap_put_on_shelves_input_storage_location':

@@ -7,6 +7,7 @@ import 'package:jd_flutter/fun/warehouse/in/sap_put_on_shelves/sap_put_on_shelve
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
+import 'package:jd_flutter/widget/scanner.dart';
 
 class SapPutOnShelvesScanPage extends StatefulWidget {
   const SapPutOnShelvesScanPage({super.key});
@@ -58,6 +59,11 @@ class _SapPutOnShelvesScanPageState extends State<SapPutOnShelvesScanPage> {
 
   @override
   void initState() {
+    pdaScanner(scan: (code) {
+      if (code.length < 10) {
+        controller.text=code;
+      }
+    });
     WidgetsBinding.instance.addPostFrameCallback(
       (_) => logic.initLabelList(
         index: index,
