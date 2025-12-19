@@ -1,5 +1,4 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:jd_flutter/utils/web_api.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:wifi_iot/wifi_iot.dart';
 
