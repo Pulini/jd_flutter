@@ -125,6 +125,7 @@ class _ProcessDispatchPageState extends State<ProcessDispatchPage> {
               });
             },
             placeholder: 'process_dispatch_work_ticket'.tr,
+            suffixMode: OverlayVisibilityMode.always, // 添加这一行
           ),
         ),
         Center(child: Text('process_dispatch_or'.tr)),

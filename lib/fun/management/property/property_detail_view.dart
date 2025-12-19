@@ -244,7 +244,13 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
               'property_detail_hint18'.tr,
               data.custodianCode,
               onChange: (s) => logic.setCustodian(s, success: () {
+                setState(() {});
+              }, fail: () {
                 setState(() {
+                  data.liableEmpCode = '';
+                  data.liableEmpID = -1;
+                  data.liableEmpName = '';
+                  state.liableEmpName.value ='';
                 });
               }),
             ),
@@ -265,8 +271,9 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
             child: _text(
               'property_detail_hint19'.tr,
               data.liableEmpCode,
-              onChange: (s) => logic.setLiable(s, success: () {
+              onChange: (s) => logic.setLiable(s, success: (s) {
                 setState(() {
+                  data.liableEmpCode = s;
                 });
               }),
             ),

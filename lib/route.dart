@@ -183,7 +183,7 @@ class RouteConfig {
   //财产管理
   static Routes property = Routes(
     '/property',
-    201,
+    202,
     const PropertyPage(),
   );
 

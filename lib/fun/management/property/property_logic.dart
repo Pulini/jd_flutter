@@ -1,8 +1,8 @@
 import 'dart:convert';
-
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/management/property/property_detail_view.dart';
 import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/utils/wifi_util.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
@@ -203,6 +203,7 @@ class PropertyLogic extends GetxController {
   void setCustodian(
     String str, {
     required Function() success,
+    required Function() fail,
   }) {
     if (str.length >= 6) {
       state.searchPeople(
@@ -216,20 +217,19 @@ class PropertyLogic extends GetxController {
             state.detail.deptID = p1.departmentID;
             state.detail.liableEmpID = p1.liableEmpID;
             state.custodianName.value = p1.empName ?? '';
-            setLiable(
-                p1.liableEmpCode.toString(),
-                success: () {
-                  success.call();
-                });
+            setLiable(p1.liableEmpCode.toString(), success: (s) {
+              success.call();
+            });
           });
-    } else {
+    } else if(str.isEmpty){
+      fail.call();
       state.setCustodian();
     }
   }
 
   void setLiable(
     String str, {
-    required Function() success,
+    required Function(String empCode) success,
   }) {
     if (str.length >= 6) {
       getWorkerInfo(
@@ -240,6 +240,7 @@ class PropertyLogic extends GetxController {
             empName: list[0].empName ?? '',
             empID: list[0].empID ?? -1,
           );
+          success.call(list[0].empCode ?? '');
         },
         error: (msg) => errorDialog(content: msg),
       );
