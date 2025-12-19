@@ -2,10 +2,8 @@ import 'package:collection/collection.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/process_dispatch_register_info.dart';
 import 'package:jd_flutter/bean/http/response/worker_info.dart';
-import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
-
 
 class ProcessDispatchRegisterState {
   var typeBody = ''.obs;
@@ -22,6 +20,8 @@ class ProcessDispatchRegisterState {
   var processName = ''.obs;
   var qty = ''.obs;
   var selectedAll = false.obs;
+
+  var barCodeList = <ProcessDispatchLabelInfo>[].obs;
 
   ProcessDispatchRegisterState();
 
@@ -62,6 +62,7 @@ class ProcessDispatchRegisterState {
 
   void queryLabelData({
     required String code,
+    required Function(List<ProcessDispatchLabelInfo> labelInfo) success,
     required Function(String msg) error,
   }) {
     httpPost(
@@ -72,12 +73,10 @@ class ProcessDispatchRegisterState {
       ],
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        labelInfo = ProcessDispatchLabelInfo.fromJson(response.data[0]);
-        instructions.value = labelInfo!.instructions ?? '';
-        worker.value = '${labelInfo!.empName}(${labelInfo!.empNumber})';
-        processName.value = labelInfo!.processName ?? '';
-        qty.value =
-            '${labelInfo!.qty.toShowString()}/${labelInfo!.boxCapacity.toShowString()}';
+        success.call([
+          for (var json in response.data)
+            ProcessDispatchLabelInfo.fromJson(json)
+        ]);
       } else {
         error.call(response.message ?? '');
       }
@@ -123,6 +122,46 @@ class ProcessDispatchRegisterState {
         success.call(response.message ?? '');
       } else {
         error.call(response.message ?? '');
+      }
+    });
+  }
+
+  void submitReport({
+    required void Function(String) success,
+    required void Function(String) error,
+  }) {
+    httpPost(
+      method: webApiReportLabelingBarcodeBatch,
+      loading: '正在提交报工...',
+      body: [
+        for(var item in barCodeList)
+          {
+            'Size':item.size,
+            'Barcode':item.barCode,
+            'ProcessName':item.processName,
+            'EmpID':item.empID,
+            'Qty':item.qty!<=0?item.boxCapacity:item.qty,
+            'BillInterID':item.billInterID,
+            'BillEntryID':item.billEntryID,
+            'UserID':userInfo?.userID,
+            'DeptID':userInfo?.departmentID,
+          }
+      ],
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        success.call(response.message ?? '');
+      } else {
+        error.call(response.message ?? '');
+      }
+      if(!response.data.isBlank&&response.data is List<String>){
+          List<String> codes = response.data;
+          for (var code in codes) {
+            for (var v in barCodeList) {
+              if(v.barCode==code){
+                v.isReported.value=true;
+              }
+            }
+          }
       }
     });
   }

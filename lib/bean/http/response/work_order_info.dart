@@ -165,7 +165,7 @@ class CodeInfo {
   });
 
   CodeInfo.fromJson(dynamic json) {
-    codeQty = json['CodeQty'];
+    codeQty = json['CodeQty'].toString().toDoubleTry();
     partNames = json['PartNames'];
   }
 

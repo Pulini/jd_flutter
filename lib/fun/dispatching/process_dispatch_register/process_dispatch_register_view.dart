@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/dispatching/process_dispatch_register/process_dispatch_register_dialog.dart';
 import 'package:jd_flutter/fun/dispatching/process_dispatch_register/process_dispatch_register_modify_label_worker_view.dart';
+import 'package:jd_flutter/fun/dispatching/process_dispatch_register/process_dispatch_register_report_view.dart';
 import 'package:jd_flutter/fun/dispatching/process_dispatch_register/process_dispatch_register_state.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
@@ -106,8 +107,14 @@ class _ProcessDispatchRegisterPageState
             expandedFrameText(
               text: data.qty.sub(data.mustQty ?? 0).toShowString(),
               alignment: Alignment.centerRight,
+              textColor: Colors.blue,
               isBold: true,
               backgroundColor: Colors.white,
+              click: () => setCapacityDialog(
+                list: list,
+                isSummary: state.isDetails.value,
+                success: () => logic.queryOrder(controller.text),
+              ),
             ),
           ],
         ));
@@ -190,7 +197,7 @@ class _ProcessDispatchRegisterPageState
           textColor: Colors.white,
           alignment: Alignment.centerRight,
           isBold: true,
-        ),
+        )
       ],
     ));
 
@@ -235,8 +242,14 @@ class _ProcessDispatchRegisterPageState
           expandedFrameText(
             text: qty.toShowString(),
             alignment: Alignment.centerRight,
+            textColor: Colors.blue,
             isBold: true,
             backgroundColor: Colors.white,
+            click: () => setCapacityDialog(
+              list: list,
+              isSummary: state.isDetails.value,
+              success: () => logic.queryOrder(controller.text),
+            ),
           ),
         ],
       ));
@@ -279,11 +292,18 @@ class _ProcessDispatchRegisterPageState
     return listWidget;
   }
 
+  void _initScan() {
+    pdaScanner(
+      scan: (code) {
+        controller.text = code;
+        logic.queryOrder(code);
+      },
+    );
+  }
+
   @override
   void initState() {
-    pdaScanner(
-      scan: (code) {controller.text = code; logic.queryOrder(code);},
-    );
+    _initScan();
     super.initState();
   }
 
@@ -292,7 +312,8 @@ class _ProcessDispatchRegisterPageState
     return pageBody(
       actions: [
         TextButton(
-          onPressed: () => state.isDetails.value = !state.isDetails.value,
+          onPressed: () => Get.to(() => ProcessDispatchRegisterReportView())
+              ?.then((_) => _initScan()),
           child: Text('process_dispatch_register_report'.tr),
         )
       ],
@@ -331,7 +352,6 @@ class _ProcessDispatchRegisterPageState
                 Expanded(
                   child: CombinationButton(
                     text: 'process_dispatch_register_query'.tr,
-                    isEnabled: controller.text.isNotEmpty,
                     click: () => logic.queryOrder(controller.text),
                     combination: Combination.left,
                   ),

@@ -156,3 +156,7 @@ void pdaScanner({required Function(String) scan}) {
     return Future.value(call);
   });
 }
+void closePdaScanner() {
+  debugPrint('PdaScanner 取消监听');
+  const MethodChannel(channelScanFlutterToAndroid).setMethodCallHandler(null);
+}

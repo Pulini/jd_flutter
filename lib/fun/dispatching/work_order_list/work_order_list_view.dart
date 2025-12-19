@@ -11,6 +11,7 @@ import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
 import 'package:jd_flutter/widget/picker/picker_controller.dart';
 import 'package:jd_flutter/widget/picker/picker_view.dart';
+import 'package:jd_flutter/widget/scanner.dart';
 import 'package:jd_flutter/widget/switch_button_widget.dart';
 
 import 'work_order_list_logic.dart';
@@ -214,6 +215,25 @@ class _WorkOrderListPageState extends State<WorkOrderListPage> {
           )),
     );
   }
+  void _query(){
+    logic.query(
+      startDate: pcStartDate.getDateFormatYMD(),
+      endDate: pcEndDate.getDateFormatYMD(),
+      group: pcGroup.selectedId.value,
+      workBarCode: tecWorkBarCode.text,
+      planOrderNumber: tecPlanOrderNumber.text,
+    );
+  }
+
+  @override
+  void initState() {
+    pdaScanner(scan: (code){
+      tecWorkBarCode.text=code;
+      _query();
+    });
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -247,13 +267,7 @@ class _WorkOrderListPageState extends State<WorkOrderListPage> {
           value: state.isClosed,
         )
       ],
-      query: () => logic.query(
-        startDate: pcStartDate.getDateFormatYMD(),
-        endDate: pcEndDate.getDateFormatYMD(),
-        group: pcGroup.selectedId.value,
-        workBarCode: tecWorkBarCode.text,
-        planOrderNumber: tecPlanOrderNumber.text,
-      ),
+      query: () =>_query(),
       body: Obx(() => ListView.builder(
             padding: const EdgeInsets.all(8),
             itemCount: state.dataList.length,

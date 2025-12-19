@@ -26,41 +26,42 @@ const resultToUpdate = 3;
 
 String mesBaseUrl = BaseUrl.baseUrlMes.value;
 String sapBaseUrl = BaseUrl.baseUrlSap.value;
+
 bool isTestUrl() => mesBaseUrl != BaseUrl.baseUrlMes.value;
+
 enum BaseUrl {
   ///MES正式库
-  baseUrlMes('MES正式库','https://geapp.goldemperor.com:1226/','MES'),
+  baseUrlMes('MES正式库', 'https://geapp.goldemperor.com:1226/', 'MES'),
 
   ///SAP正式库
-  baseUrlSap('SAP正式库','https://erpprd01.goldemperor.com:8003/','SAP'),
+  baseUrlSap('SAP正式库', 'https://erpprd01.goldemperor.com:8003/', 'SAP'),
 
   ///MES测试库 对接 SAP ECC 300
-  mesEccTest('MES ECC 300','https://geapptest.goldemperor.com:1224/','MES'),
+  mesEccTest('MES ECC 300', 'https://geapptest.goldemperor.com:1224/', 'MES'),
 
   ///MES测试库 对接 SAP S4 300
-  mesS4Dev('MES S4 300','https://apptest.goldemperor.com:1207/','MES'),
+  mesS4Dev('MES S4 300', 'https://apptest.goldemperor.com:1207/', 'MES'),
 
   ///MES测试库 对接 SAP S4 600
-  mesS4Test('MES S4 600','https://apptest.goldemperor.com:1208/','MES'),
+  mesS4Test('MES S4 600', 'https://apptest.goldemperor.com:1208/', 'MES'),
 
   ///SAP开发库 ECC 300
-  sapEccDev('SAP ECC 300','https://erpdev01.goldemperor.com:8001/','SAP'),
+  sapEccDev('SAP ECC 300', 'https://erpdev01.goldemperor.com:8001/', 'SAP'),
 
   ///SAP测试库 ECC 600
-  sapEccTest('SAP ECC 600','https://erpqas01.goldemperor.com:8002/','SAP'),
+  sapEccTest('SAP ECC 600', 'https://erpqas01.goldemperor.com:8002/', 'SAP'),
 
   ///SAP开发库 S4 300
-  sapS4Dev('SAP S4 300','https://s4devapp01.goldemperor.com:8005/','SAP'),
+  sapS4Dev('SAP S4 300', 'https://s4devapp01.goldemperor.com:8005/', 'SAP'),
 
   ///SAP测试库 S4 600
-  sapS4Test('SAP S4 600','https://s4qasapp01.goldemperor.com:8006/','SAP');
+  sapS4Test('SAP S4 600', 'https://s4qasapp01.goldemperor.com:8006/', 'SAP');
 
   final String name;
   final String value;
   final String type;
 
-  const BaseUrl(this.name,this.value,this.type);
-
+  const BaseUrl(this.name, this.value, this.type);
 }
 
 const sfUser = 'PI_USER';
@@ -133,17 +134,17 @@ Future<BaseData> _doHttp({
     //发起post/get请求
     var response = isPost
         ? await dio.post(
-      method,
-      queryParameters: params,
-      data: body,
-      options: options,
-    )
+            method,
+            queryParameters: params,
+            data: body,
+            options: options,
+          )
         : await dio.get(
-      method,
-      queryParameters: params,
-      data: body,
-      options: options,
-    );
+            method,
+            queryParameters: params,
+            data: body,
+            options: options,
+          );
     if (response.statusCode == 200) {
       var json = response.data.runtimeType == String
           ? jsonDecode(response.data)
@@ -726,6 +727,9 @@ const webApiGetProcessWorkCard = 'api/WetPrinting/GetProcessWorkCardByBarcode';
 //获取报工信息
 const webApiGetReportDataByBarcode = 'api/WetPrinting/GetReportDataByBarcode';
 
+//生成贴标条码
+const webApiCreateLabelBarcode = 'api/WetPrinting/CreateLabelingBarcode';
+
 //修改操作员
 const webApiChangeLabelingBarcodeEmp =
     'api/WetPrinting/ChangeLabelingBarcodeEmp';
@@ -733,6 +737,10 @@ const webApiChangeLabelingBarcodeEmp =
 //删除标签
 const webApiUnReportAndDelLabelingBarcode =
     'api/WetPrinting/UnReportAndDelLabelingBarcode';
+
+//批量提交报工
+const webApiReportLabelingBarcodeBatch =
+    'api/WetPrinting/ReportLabelingBarcodeBatch';
 
 //智能AGV派送获取工单列表
 const webApiSmartDeliveryGetWorkCardList =

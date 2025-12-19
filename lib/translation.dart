@@ -18,6 +18,7 @@ var languages = <String>[
   'English',
   'Indonesian',
 ];
+
 class Translation extends Translations {
   @override
   Map<String, Map<String, String>> get keys => {
@@ -930,10 +931,11 @@ class Translation extends Translations {
           'process_dispatch_register_quantity': '数量',
           'process_dispatch_register_total': '合计',
           'process_dispatch_register_report': '报工',
+          'process_dispatch_register_query_tips': '请输入工票或生产派工单',
           'process_dispatch_register_work_ticket_or_production_dispatch_order':
               '工票或生产派工单',
-          'process_dispatch_register_type_body：': '工厂型体：',
-          'process_dispatch_register_process：': '工序：',
+          'process_dispatch_register_type_body': '工厂型体：',
+          'process_dispatch_register_process': '工序：',
           'process_dispatch_register_query': '查询',
           'process_dispatch_register_replace': '更换',
           'process_dispatch_register_summary': '汇总',
@@ -970,6 +972,18 @@ class Translation extends Translations {
           'process_dispatch_register_dialog_sales_order_no': '销售订单号',
           'process_dispatch_register_dialog_add_temp_worker': '添加临时组员',
           'process_dispatch_register_dialog_worker_exists': '员工已存在',
+          'process_dispatch_register_dialog_no_label_permission': '没有贴标操作权限',
+          'process_dispatch_register_dialog_please_fill_total': '请填写创建总数',
+          'process_dispatch_register_dialog_create_total_limit': '创建总数不能大于%s',
+          'process_dispatch_register_dialog_box_capacity_limit': '箱容不能大于%s',
+          'process_dispatch_register_dialog_please_fill_worker_number':
+              '请输入操作员工号',
+          'process_dispatch_register_dialog_please_fill_box_capacity': '请填写箱容',
+          'process_dispatch_register_dialog_create_label': '贴标创建',
+          'process_dispatch_register_dialog_box_capacity': '箱容(上限%s)',
+          'process_dispatch_register_dialog_create_total': '创建总数',
+          'process_dispatch_register_dialog_add_worker': '添加操作员',
+          'process_dispatch_register_dialog_creating_label': '正在创建条码...',
           'work_order_list_dispatch_order_no': '派工单号：',
           'work_order_list_type_body': '型体：',
           'work_order_list_dispatch_date': '派工日期：',
@@ -3305,7 +3319,6 @@ class Translation extends Translations {
           'forming_code_collection_switch_order_tip': '请选择要切换的订单',
           'home_no_route': '无路由',
           'home_this_function_is_not_open': '该功能暂未开放',
-
         },
         localeEnglish.toString(): {
           'app_name': 'Gold Emperor',
@@ -3661,7 +3674,8 @@ class Translation extends Translations {
           'property_detail_closing': 'Submitting the closing...',
           'property_detail_bt_no_acceptance': 'No acceptance',
           'property_detail_laser_print': 'laser printing',
-          'property_detail_laser_print_again': 'The label has already been printed. Do you want to continue printing',
+          'property_detail_laser_print_again':
+              'The label has already been printed. Do you want to continue printing',
           'property_detail_hint_no_acceptance':
               'Are you sure not to accept the property on this order ?',
           'property_detail_skipping_acceptance':
@@ -3669,7 +3683,8 @@ class Translation extends Translations {
           'property_detail_bt_submit': 'Initiate review',
           'property_detail_hint_submit': 'Are you sure to initiate the audit ?',
           'property_detail_submitting': 'Submitting audit data...',
-          'property_detail_update_print_times': 'Preview is updating the number of laser marking times...',
+          'property_detail_update_print_times':
+              'Preview is updating the number of laser marking times...',
           'property_detail_state1': 'UnReview',
           'property_detail_state2': 'Reviewing',
           'property_detail_state3': 'Reviewed',
@@ -4220,10 +4235,12 @@ class Translation extends Translations {
           'process_dispatch_register_quantity': 'Quantity',
           'process_dispatch_register_total': 'Total',
           'process_dispatch_register_report': 'Report',
+          'process_dispatch_register_query_tips':
+              'Please enter a work ticket or production dispatch order',
           'process_dispatch_register_work_ticket_or_production_dispatch_order':
               'Work ticket or dispatch order',
-          'process_dispatch_register_type_body：': 'Type body：',
-          'process_dispatch_register_process：': 'Process：',
+          'process_dispatch_register_type_body': 'Type body：',
+          'process_dispatch_register_process': 'Process：',
           'process_dispatch_register_query': 'Query',
           'process_dispatch_register_replace': 'Replace',
           'process_dispatch_register_summary': 'Summary',
@@ -4269,6 +4286,17 @@ class Translation extends Translations {
           'process_dispatch_register_dialog_add_temp_worker':
               'Add temp members',
           'process_dispatch_register_dialog_worker_exists': 'Worker exists',
+          'process_dispatch_register_dialog_no_label_permission':'No labeling operation permission',
+          'process_dispatch_register_dialog_please_fill_total':'Please fill in the total number of creations',
+          'process_dispatch_register_dialog_create_total_limit':'The total number of creations cannot exceed %s',
+          'process_dispatch_register_dialog_box_capacity_limit': 'The box capacity of creations cannot exceed %s',
+          'process_dispatch_register_dialog_please_fill_worker_number':'Please enter the worker number',
+          'process_dispatch_register_dialog_please_fill_box_capacity':'Please fill box capacity',
+          'process_dispatch_register_dialog_create_label':'Create label',
+          'process_dispatch_register_dialog_box_capacity':'Box capacity(upper limit %s)',
+          'process_dispatch_register_dialog_create_total':'Create total',
+          'process_dispatch_register_dialog_add_worker':'Add worker',
+          'process_dispatch_register_dialog_creating_label':'Creating  label...',
           'production_dispatch_print_type_printed': 'Printed',
           'production_dispatch_print_type_unprinted': 'Unprinted',
           'production_dispatch_print_type_partial_printed': 'Partial print',
@@ -4974,7 +5002,8 @@ class Translation extends Translations {
           'sap_put_on_shelves_submitting_put_on_shelves':
               'Submitting put on shelves...',
           'sap_put_on_shelves_not_pallet': '当前仓库没有待上架脱盘',
-          'sap_put_on_shelves_not_find_pallet': 'There are no pending shelves or stock removal items in the current warehouse',
+          'sap_put_on_shelves_not_find_pallet':
+              'There are no pending shelves or stock removal items in the current warehouse',
           'sap_put_on_shelves_not_find_label': 'Not find label',
           'sap_put_on_shelves_input_storage_location':
               'Input storage location！',
@@ -7789,7 +7818,8 @@ class Translation extends Translations {
               'Apakah Anda yakin ingin menutup dan masuk gudang?',
           'property_detail_closing': 'Mengajukan penutupan...',
           'property_detail_bt_no_acceptance': 'Tidak Menerima',
-          'property_detail_laser_print_again': 'Label sudah dicetak, apakah akan terus dicetak',
+          'property_detail_laser_print_again':
+              'Label sudah dicetak, apakah akan terus dicetak',
           'property_detail_laser_print': 'Pencetakan Laser',
           'property_detail_hint_no_acceptance':
               'Apakah Anda yakin tidak menerima properti pesanan ini?',
@@ -7799,7 +7829,8 @@ class Translation extends Translations {
           'property_detail_hint_submit':
               'Apakah Anda yakin ingin mengajukan verifikasi?',
           'property_detail_submitting': 'Mengirim data verifikasi...',
-          'property_detail_update_print_times': 'Pratinjau memperbarui jumlah penandaan laser...',
+          'property_detail_update_print_times':
+              'Pratinjau memperbarui jumlah penandaan laser...',
           'property_detail_state1': 'Belum Diverifikasi',
           'property_detail_state2': 'Sedang Diverifikasi',
           'property_detail_state3': 'Telah Diverifikasi',
@@ -8397,10 +8428,12 @@ class Translation extends Translations {
           'process_dispatch_register_quantity': 'Jumlah',
           'process_dispatch_register_total': 'Total',
           'process_dispatch_register_report': 'Laporkan Kerja',
+          'process_dispatch_register_query_tips':
+              'Silakan masukkan tiket atau surat pengiriman produksi',
           'process_dispatch_register_work_ticket_or_production_dispatch_order':
               'Tiket Kerja atau Order Penugasan Produksi',
-          'process_dispatch_register_type_body：': 'Model Pabrik:',
-          'process_dispatch_register_process：': 'Proses:',
+          'process_dispatch_register_type_body': 'Model Pabrik:',
+          'process_dispatch_register_process': 'Proses:',
           'process_dispatch_register_query': 'Kueri',
           'process_dispatch_register_replace': 'Ganti',
           'process_dispatch_register_summary': 'Ringkasan',
@@ -8450,6 +8483,17 @@ class Translation extends Translations {
               'Tambahkan Anggota Grup Sementara',
           'process_dispatch_register_dialog_worker_exists':
               'Karyawan sudah ada',
+          'process_dispatch_register_dialog_no_label_permission':'Tidak ada izin untuk mengoperasikan label',
+          'process_dispatch_register_dialog_please_fill_total':'Silakan isi jumlah yang dibuat',
+          'process_dispatch_register_dialog_create_total_limit':'Jumlah total yang dibuat tidak dapat lebih dari %s',
+          'process_dispatch_register_dialog_box_capacity_limit': 'Kompatibilitas tidak lebih dari %s',
+          'process_dispatch_register_dialog_please_fill_worker_number':'Masukkan nomor karyawan operasi',
+          'process_dispatch_register_dialog_please_fill_box_capacity':'Silakan isi kotak',
+          'process_dispatch_register_dialog_create_label':'Buat Label',
+          'process_dispatch_register_dialog_box_capacity':'Kapasitas(Batas %s)',
+          'process_dispatch_register_dialog_create_total':'Buat Jumlah Total',
+          'process_dispatch_register_dialog_add_worker':'Tambahkan operator',
+          'process_dispatch_register_dialog_creating_label':'Membuat kode batang...',
           'work_order_list_dispatch_order_no': 'Nomor Order Penugasan:',
           'work_order_list_type_body': 'Model:',
           'work_order_list_dispatch_date': 'Tanggal Penugasan:',
@@ -10845,7 +10889,8 @@ class Translation extends Translations {
           'process_dispatch_label_sure_delete':
               'Konfirmasi hapus label tempel?',
           'process_dispatch_label_deleting': 'Menghapus label tempel...',
-          'process_dispatch_label_update_state': 'process_dispatch_label_deleting...',
+          'process_dispatch_label_update_state':
+              'process_dispatch_label_deleting...',
           'process_dispatch_label_delete_success': 'Hapus berhasil',
           'process_dispatch_label_delete_fail': 'Hapus gagal',
           'process_dispatch_label_delete': 'Hapus',

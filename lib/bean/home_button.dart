@@ -3,6 +3,7 @@ import 'package:jd_flutter/bean/http/response/home_function_info.dart';
 import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
+import 'package:jd_flutter/widget/scanner.dart';
 
 abstract class ButtonItem {
   late String name;
@@ -46,7 +47,10 @@ class HomeButton extends ButtonItem {
 
   void toFunction({required Function() checkUpData}) {
     functionTitle=name;
-    Get.toNamed(route)?.then((_)=>checkUpData.call());
+    Get.toNamed(route)?.then((_){
+      closePdaScanner();
+      checkUpData.call();
+    });
   }
 }
 var functionTitle='';
