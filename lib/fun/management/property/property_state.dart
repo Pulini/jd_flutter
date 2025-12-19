@@ -6,7 +6,6 @@ import 'package:jd_flutter/bean/http/response/property_info.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
-import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
 import '../../../bean/http/response/people_message_info.dart';
@@ -38,7 +37,8 @@ class PropertyState {
     participatorName.value = empName;
   }
 
-  void setCustodian({String empCode = '', String empName = '', int empID = -1}) {
+  void setCustodian(
+      {String empCode = '', String empName = '', int empID = -1}) {
     detail.custodianCode = empCode;
     detail.custodianName = empName;
     custodianName.value = empName;
@@ -192,22 +192,23 @@ class PropertyState {
     });
   }
 
-  void setPrintAssetsLaser() {
+  void setPrintAssetsLaser({
+    required Function(String msg) success,
+    required Function(String msg) fail,
+}) {
     httpPost(
       method: webApiPrintAssetsLaser,
       loading: 'property_detail_update_print_times'.tr,
-      body: {
-        [
-          {
-            'InterID': detail.interID,
-          }
-        ]
-      },
+      body: [
+        {
+          'InterID': detail.interID,
+        }
+      ],
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        showSnackBar(message: response.message ?? '');
+        success.call('更新打标次数成功');
       } else {
-        showSnackBar(message: response.message ?? '');
+        fail.call(response.message ?? '');
       }
     });
   }

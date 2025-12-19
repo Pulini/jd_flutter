@@ -1,4 +1,5 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:jd_flutter/utils/web_api.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:wifi_iot/wifi_iot.dart';
 
@@ -29,17 +30,31 @@ class WiFiManager {
         security: security,
       );
 
-      if (result) {
-        // 等待连接建立
-        await Future.delayed(Duration(seconds: 3));
+      await Future.delayed(Duration(seconds: 3));
 
-        // 验证连接状态
-        bool isConnected = await isConnectedToWiFi(ssid);
-        return isConnected;
+      return result;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  /// 断开当前WiFi连接
+  Future<bool> disconnectFromWiFi({Function()? onSuccess}) async {
+    try {
+      bool permissionsGranted = await requestWifiPermissions();
+      if (!permissionsGranted) {
+        throw Exception('缺少必要的权限');
       }
 
-      return false;
+      // 断开当前WiFi连接
+      await WiFiForIoTPlugin.disconnect();
+
+      // 执行成功回调
+      onSuccess?.call();
+
+      return true;
     } catch (e) {
+      print('断开WiFi连接失败: $e');
       return false;
     }
   }

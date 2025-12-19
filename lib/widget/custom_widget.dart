@@ -326,7 +326,12 @@ void showSnackBar({
       ? 'snack_bar_default_wrong'.tr
       : 'dialog_default_title_information'.tr;
   if (Get.isSnackbarOpen) {
-    snackbarController?.close(withAnimations: false);
+    try {
+      snackbarController?.close(withAnimations: false);
+    } catch (e) {
+      // 忽略已处置的 Snackbar 错误
+      print('Snackbar already disposed: $e');
+    }
   }
   snackbarController = Get.snackbar(
     instantInit: false,

@@ -571,7 +571,6 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
           ),
           CombinationButton(
             text: 'property_detail_laser_print'.tr,
-            backgroundColor: Colors.grey,
             click: () => askDialog(
               content: (state.detail.laserPrintQty ?? -1) > 0
                   ? 'property_detail_laser_print_again'.tr

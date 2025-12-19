@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/management/property/property_detail_view.dart';
 import 'package:jd_flutter/utils/utils.dart';
-import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/utils/wifi_util.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
@@ -27,42 +26,42 @@ class PropertyLogic extends GetxController {
       password: password,
     );
 
-    await Future.delayed(Duration(seconds: 3));
-
     if (result) {
-      showSnackBar(message: '激光打印机连接成功');
       success?.call();
     } else {
-      showSnackBar(message: '激光打印机连接失败，请手动连接');
+      errorDialog(content: '连接失败。');
     }
   }
 
-  // 使用方式
+// 使用方式
   void startSocketClient() {
-    final socketClient = SocketClient();
-    socketClient.remoteIP = "192.168.6.2"; // 设置IP
-    socketClient.remotePort = "8050"; // 设置端口
-    socketClient.connectionTimeout = 5 * 1000; // 设置超时时间
-    socketClient.charsetName = "UTF-8"; // 设置编码格式
 
-    socketClient.registerSocketClientDelegate(
+    // 正确的赋值方式：直接给实例变量赋值，不使用 final
+    socketClient = SocketClient();
+    socketClient!.remoteIP = "192.168.6.2"; // 设置IP
+    socketClient!.remotePort = "8050"; // 设置端口
+    socketClient!.connectionTimeout = 5 * 1000; // 设置超时时间
+    socketClient!.charsetName = "UTF-8"; // 设置编码格式
+
+    socketClient!.registerSocketClientDelegate(
       SocketClientDelegate()
         ..onConnected = (client) {
+          successDialog(content: '开始下发数据-------');
           // 连接成功的处理
-          showSnackBar(message: "连接成功");
+          isConnected = true; // 更新连接状态
+          laserToPrint();
         }
         ..onDisconnected = (client) {
+          successDialog(content: '断开连接-------');
           // 连接断开的处理
-          showSnackBar(message: "连接断开");
+          isConnected = false; // 更新连接状态
         }
         ..onResponse = (client, responsePacket) {
-          // 收到响应的处理
-          showSnackBar(message: "收到消息: ${responsePacket.message}");
         },
     );
-
-    socketClient.connect(); // 连接，异步进行
+    socketClient!.connect(); // 连接，异步进行
   }
+
 
   void laserToPrint() {
     // 检查socket连接状态
@@ -84,40 +83,48 @@ class PropertyLogic extends GetxController {
       socketClient?.sendData(completeData, onComplete: (success) {
         if (success) {
           // 更新打印次数
-          state.setPrintAssetsLaser();
-        } else {}
-        showSnackBar(message: "数据发送失败");
+          wifiManager.disconnectFromWiFi(onSuccess: (){
+            Future.delayed(Duration(seconds: 1));  //下发数据成功后，延迟2秒更新下标签
+            state.setPrintAssetsLaser(success: (String msg) {
+              showSnackBar(message: msg);
+            }, fail: (String msg) {
+              showSnackBar(message: msg);
+            });
+          });
+        } else {
+          showSnackBar(message: '数据发送失败');
+        }
       });
     } else {
-      showSnackBar(message: "请先连接激光打印机");
+      showSnackBar(message: '请先连接激光打印机');
     }
   }
 
   String getPrintMes() {
-    var name = "";
-    var nameLast = "";
-    var number = "";
-    var numberLast = "";
-    var mes = "";
+    var name = '';
+    var nameLast = '';
+    var number = '';
+    var numberLast = '';
+    var mes = '';
 
     // 假设 detail 是 PropertyState 中的某个对象
     // 需要根据实际的数据结构进行调整
     final detail = state.detail;
-    final detailName = detail.name ?? "";
-    final detailNumber = detail.number ?? "";
+    final detailName = detail.name ?? '';
+    final detailNumber = detail.number ?? '';
 
     if (detailName.length <= 8) {
       if (detailNumber.length <= 12) {
         // 名称和编码长度都正常
         mes =
-            "seta:data#v1=$detailName;v2=$detailNumber;v3=${detail.buyDate};v4=${detail.interID};";
+            'seta:data#v1=$detailName;v2=$detailNumber;v3=${detail.buyDate};v4=${detail.interID};';
       } else {
         // 长度小于等于8    编码大于12
         final numberList = _chunked(detailNumber, 12);
         number = numberList[0];
         if (numberList.length > 1) numberLast = numberList[1];
         mes =
-            "seta:data#v1=$detailName;v2=$number;v3=${detail.buyDate};v4=${detail.interID};v6=$nameLast";
+            'seta:data#v1=$detailName;v2=$number;v3=${detail.buyDate};v4=${detail.interID};v6=$nameLast';
       }
     } else {
       if (detailNumber.length <= 12) {
@@ -126,7 +133,7 @@ class PropertyLogic extends GetxController {
         name = nameList[0];
         if (nameList.length > 1) nameLast = nameList[1];
         mes =
-            "seta:data#v1=$name;v2=$detailNumber;v3=${detail.buyDate};v4=${detail.interID};v5=$nameLast;";
+            'seta:data#v1=$name;v2=$detailNumber;v3=${detail.buyDate};v4=${detail.interID};v5=$nameLast;';
       } else {
         // 名字大于8 编号大于12
         final nameList = _chunked(detailName, 8);
@@ -136,7 +143,7 @@ class PropertyLogic extends GetxController {
         number = numberList[0];
         if (numberList.length > 1) numberLast = numberList[1];
         mes =
-            "seta:data#v1=$name;v2=$number;v3=${detail.buyDate};v4=${detail.interID};v5=$nameLast;v6=$numberLast;";
+            'seta:data#v1=$name;v2=$number;v3=${detail.buyDate};v4=${detail.interID};v5=$nameLast;v6=$numberLast;';
       }
     }
 
