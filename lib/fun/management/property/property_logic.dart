@@ -27,6 +27,8 @@ class PropertyLogic extends GetxController {
       password: password,
     );
 
+    await Future.delayed(Duration(seconds: 3));
+
     if (result) {
       showSnackBar(message: '激光打印机连接成功');
       success?.call();
