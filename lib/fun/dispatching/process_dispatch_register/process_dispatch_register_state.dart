@@ -112,7 +112,7 @@ class ProcessDispatchRegisterState {
     httpPost(
       method: webApiUnReportAndDelLabelingBarcode,
       loading: 'process_dispatch_register_detecting_label'.tr,
-      body: {
+      params: {
         'Barcode': barCode,
         'DeptID': userInfo!.departmentID,
         'UserID': userInfo!.userID,
