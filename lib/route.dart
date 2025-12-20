@@ -267,7 +267,7 @@ class RouteConfig {
   //水电抄度
   static Routes hydroelectricExcess = Routes(
     '/hydroelectric_excess_page',
-    201,
+    202,
     const HydroelectricExcessPage(),
   );
 

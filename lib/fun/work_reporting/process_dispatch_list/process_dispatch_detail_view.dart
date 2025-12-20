@@ -8,6 +8,7 @@ import 'package:jd_flutter/fun/work_reporting/process_dispatch_list/process_disp
 import 'package:jd_flutter/utils/printer/print_util.dart';
 import 'package:jd_flutter/utils/printer/tsc_util.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
+import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/check_box_widget.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
@@ -130,6 +131,7 @@ class _ProcessDispatchDetailPageState extends State<ProcessDispatchDetailPage> {
     Function(String)? confirm,
     Function()? cancel,
   }) {
+    logic.textNumber.text = initNum;
     Get.dialog(
       PopScope(
         //拦截返回键
@@ -209,6 +211,9 @@ class _ProcessDispatchDetailPageState extends State<ProcessDispatchDetailPage> {
               all: data.size!),
           onTap: () {
             if (data.size != '总') {
+              logger.f('打开弹窗输入内容-----------');
+              logger.f('弹窗需要输入的梳理：${data.qty}');
+              logger.f('打印内容:${data.toJson()}');
               _inputDialog(
                   initNum: data.qty.toShowString(),
                   title: '${'process_dispatch_tab1_size'.tr}<${data.size!}>',
