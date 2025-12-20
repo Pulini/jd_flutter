@@ -881,7 +881,7 @@ Future<List<Uint8List>> labelMultipurposeDynamic({
   String bottomRightText1 = '',
   String bottomRightText2 = '',
   double speed = 3.0,
-  double density = 15.0,
+  double density = 10.0,
 }) async {
   var list = <Uint8List>[];
 

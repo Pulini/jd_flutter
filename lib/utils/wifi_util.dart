@@ -29,8 +29,6 @@ class WiFiManager {
         security: security,
       );
 
-      await Future.delayed(Duration(seconds: 3));
-
       return result;
     } catch (e) {
       return false;

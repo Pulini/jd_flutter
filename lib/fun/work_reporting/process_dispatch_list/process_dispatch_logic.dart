@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -166,15 +168,26 @@ class ProcessDispatchLogic extends GetxController
   void getDetail({
     required bool toPage,
   }) {
+
+    var idList = <int>[];
+    var cardList = <String>[];
+    state.dataList.where((data) => data.select == true).forEach((c){
+        c.fIDs?.forEach((v){
+          idList.add(v);
+        });
+        c.cardNos?.forEach((b){
+          cardList.add(b);
+        });
+    });
+
     httpPost(
       method: webApiGetBarcodeDetails,
       loading: 'process_dispatch_get_detail'.tr,
       body: {
         'InterID':
             state.dataList.firstWhere((data) => data.select == true).interID,
-        'FIDs': state.dataList.firstWhere((data) => data.select == true).fIDs,
-        'CardNos':
-            state.dataList.firstWhere((data) => data.select == true).cardNos,
+        'FIDs': idList,
+        'CardNos':cardList,
         'UserID': userInfo?.userID,
       },
     ).then((response) {

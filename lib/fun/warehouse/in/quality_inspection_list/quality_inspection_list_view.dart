@@ -279,11 +279,11 @@ class _QualityInspectionListPageState extends State<QualityInspectionListPage> {
   void _query(){
     logic.getInspectionList(
       orderType: scOrderType.selectIndex,
-      typeBody: typeBodyController.text,
-      materialCode: materialCodeController.text,
-      instruction: instructionController.text,
-      inspectionOrder: inspectionOrderController.text,
-      temporaryReceipt: temporaryReceiptController.text,
+      typeBody: typeBodyController.text,   //型体
+      materialCode: materialCodeController.text,  //物料编号
+      instruction: instructionController.text,  //指令
+      inspectionOrder: inspectionOrderController.text,   //检验单号
+      temporaryReceipt: temporaryReceiptController.text,  //暂收单号
       receiptVoucher: receiptVoucherController.text,
       trackingNumber: trackingNumberController.text,
       startDate: dpcStartDate.getDateFormatYMD(),

@@ -22,11 +22,11 @@ class QualityInspectionListLogic extends GetxController {
   //获取品检单列表
   void getInspectionList({
     required int orderType,
-    required String typeBody,
-    required String materialCode,
-    required String instruction,
-    required String inspectionOrder,
-    required String temporaryReceipt,
+    required String typeBody, //型体
+    required String materialCode,  //物料编号
+    required String instruction,   //指令
+    required String inspectionOrder,   //检验单号
+    required String temporaryReceipt,   //暂收单号
     required String receiptVoucher,
     required String trackingNumber,
     required String startDate,
