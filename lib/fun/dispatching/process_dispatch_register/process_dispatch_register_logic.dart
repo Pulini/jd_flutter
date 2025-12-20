@@ -1,6 +1,8 @@
+import 'package:collection/collection.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/process_dispatch_register_info.dart';
 import 'package:jd_flutter/fun/dispatching/process_dispatch_register/process_dispatch_register_print_label_view.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
@@ -9,19 +11,31 @@ import 'process_dispatch_register_state.dart';
 class ProcessDispatchRegisterLogic extends GetxController {
   final ProcessDispatchRegisterState state = ProcessDispatchRegisterState();
 
-
-
   void queryOrder(String code) {
     if (code.isNotEmpty) {
       state.getProcessWorkCardByBarcode(
         barCode: code,
         error: (msg) => errorDialog(content: msg),
       );
+    } else {
+      errorDialog(content: 'process_dispatch_register_query_tips'.tr);
     }
   }
 
   void getLabelInfo(String code) {
-    state.queryLabelData(code: code, error: (msg) => errorDialog(content: msg));
+    state.queryLabelData(
+      code: code,
+      error: (msg) => errorDialog(content: msg),
+      success: (List<ProcessDispatchLabelInfo> labels) {
+        state.labelInfo = labels.first;
+        state.instructions.value = state.labelInfo!.instructions ?? '';
+        state.worker.value =
+            '${state.labelInfo!.empName}(${state.labelInfo!.empNumber})';
+        state.processName.value = state.labelInfo!.processName ?? '';
+        state.qty.value =
+            '${state.labelInfo!.qty!.toShowString()}/${state.labelInfo!.boxCapacity!.toShowString()}';
+      },
+    );
   }
 
   void goPrintLabel() {
@@ -62,5 +76,27 @@ class ProcessDispatchRegisterLogic extends GetxController {
     } else {
       msgDialog(content: 'process_dispatch_register_no_delete_permission'.tr);
     }
+  }
+
+  void scanCode(String code) {
+    state.queryLabelData(
+      code: code,
+      error: (msg) => errorDialog(content: msg),
+      success: (List<ProcessDispatchLabelInfo> labels) {
+        state.barCodeList.addAll(labels);
+        state.barCodeList.sortBy((v) => v.processName ?? '');
+      },
+    );
+  }
+
+  void submitReport() {
+    if(state.barCodeList.any((v)=>v.empID==0)){
+      errorDialog(content: '请填入报工人员信息');
+      return;
+    }
+    state.submitReport(
+      success: (msg) => successDialog(content: msg),
+      error: (msg) => errorDialog(content: msg),
+    );
   }
 }

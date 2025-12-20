@@ -71,6 +71,9 @@ class PrintUtil {
       }
     }
   }
+  void showBluetoothDialog(){
+    _showBluetoothDialog((){});
+  }
 
   Future<void> printLabelList({
     required List<List<Uint8List>> labelList,

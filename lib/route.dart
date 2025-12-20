@@ -197,7 +197,7 @@ class RouteConfig {
   //工单列表
   static Routes workOrderList = Routes(
     '/work_order_list',
-    201,
+    202,
     const WorkOrderListPage(),
   );
 
@@ -239,7 +239,7 @@ class RouteConfig {
   //湿印工序派工
   static Routes processDispatchRegister = Routes(
     '/process_dispatch_register_page',
-    200,
+    201,
     const ProcessDispatchRegisterPage(),
   );
 

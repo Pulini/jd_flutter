@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/part_detail_info.dart';
 import 'package:jd_flutter/bean/http/response/work_order_info.dart';
@@ -40,6 +41,7 @@ class WorkOrderListState {
         dataList.value = [
           for (var json in response.data) WorkOrderInfo.fromJson(json)
         ];
+        debugPrint('dataList=${dataList.length}');
       } else {
         error.call(response.message ?? '');
       }

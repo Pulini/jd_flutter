@@ -118,6 +118,7 @@ class _PreviewLabelListState extends State<PreviewLabelList> {
                       ),
                       IconButton(
                         onPressed: () => printLabel(),
+                        onLongPress: ()=>pu.showBluetoothDialog(),
                         icon: const Icon(Icons.print),
                       ),
                     ],
