@@ -634,7 +634,7 @@ Widget maintainLabelMaterialChineseFixedLabel({
         children: [
           Expanded(
             child: Text(
-              qty.toShowString(),
+              qty.truncate().toString(),
               style: const TextStyle(fontWeight: FontWeight.bold),
             ),
           ),
@@ -729,7 +729,7 @@ Widget maintainLabelMaterialEnglishFixedLabel({
         children: [
           Expanded(
             child: Text(
-              qty.toShowString(),
+              qty.truncate().toString(),
               style: const TextStyle(fontWeight: FontWeight.bold),
             ),
           ),

@@ -284,7 +284,7 @@ Widget maintainLabelSizeMaterialChineseDynamicLabel({
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Text(
-                  '${total.toShowString()}$unit',
+                  '${total.truncate().toString()}$unit',
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 18,
@@ -599,7 +599,7 @@ Widget maintainLabelMixEnglishDynamicLabel({
                 ),
                 Expanded(
                   child: Text(
-                    '${total.toShowString()} $unit',
+                    '${total.truncate().toString()} $unit',
                     style: const TextStyle(
                         fontWeight: FontWeight.bold, fontSize: 18),
                   ),

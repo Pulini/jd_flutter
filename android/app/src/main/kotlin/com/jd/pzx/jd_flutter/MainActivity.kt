@@ -41,6 +41,11 @@ import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 import java.io.File
 import java.io.IOException
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.Network
+import android.net.NetworkRequest
+import android.net.NetworkCapabilities
 
 @SuppressLint("MissingPermission")
 class MainActivity : FlutterActivity() {
@@ -260,6 +265,36 @@ class MainActivity : FlutterActivity() {
                 }
             }
         }
+
+        // WiFi绑定通道
+        MethodChannel(
+            flutterEngine.dartExecutor.binaryMessenger,
+            "wifi_binder"
+        ).setMethodCallHandler { call, result ->
+            val cm = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            when (call.method) {
+                "bindToWifi" -> {
+                    val req = NetworkRequest.Builder()
+                        .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
+                        .build()
+                    cm.requestNetwork(req, object : ConnectivityManager.NetworkCallback() {
+                        override fun onAvailable(network: Network) {
+                            result.success(cm.bindProcessToNetwork(network))
+                        }
+
+                        override fun onUnavailable() {
+                            result.success(false)
+                        }
+                    })
+                }
+                "unbind" -> {
+                    cm.bindProcessToNetwork(null)
+                    result.success(true)
+                }
+                else -> result.notImplemented()
+            }
+        }
+
 
     }
 

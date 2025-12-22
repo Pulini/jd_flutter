@@ -677,7 +677,7 @@ class MaintainLabelLogic extends GetxController {
               ? ''
               : 'MEAS:${data.subList!.first.meas}',
           bottomLeftText1: languageInfo.pageNumber ?? '',
-          bottomRightText1: allTotalQty.toShowString(),
+          bottomRightText1: allTotalQty.truncate().toString(),
           bottomRightText2: languageInfo.unitName ?? '',
           speed: spGet(spSavePrintSpeed) ?? 5.0,
           density: spGet(spSavePrintDensity) ?? 10.0,
@@ -915,11 +915,11 @@ class MaintainLabelLogic extends GetxController {
               ? ''
               : 'GW:${data.grossWeight.toShowString()}KG  NW:${data.netWeight.toShowString()}KG',
           tableTitleTips: languageInfo.languageCode == 'zh'
-              ? '$allTotalQty${languageInfo.unitName ?? ''}'
+              ? '${allTotalQty.truncate().toString()}${languageInfo.unitName ?? ''}'
               : '',
           tableSubTitle: languageInfo.languageCode == 'zh'
               ? '(${data.subList!.first.materialCode})${languageInfo.name}'
-              : 'MEAS:${data.subList!.first.meas}     $allTotalQty${languageInfo.unitName}',
+              : 'MEAS:${data.subList!.first.meas}     ${allTotalQty.truncate().toString()}${languageInfo.unitName}',
           tableData: map,
           bottomLeftText1: languageInfo.pageNumber ?? '',
           bottomLeftText2:
