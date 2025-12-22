@@ -193,12 +193,14 @@ class _PrintLabelPageState extends State<PrintLabelPage> {
                     Expanded(
                       child: CombinationButton(
                         text: 'process_dispatch_register_print_print'.tr,
+                        combination: Combination.left,
                         click: () => _printLabelList(),
                       ),
                     ),
                     Expanded(
                       child: CombinationButton(
                         text: 'process_dispatch_register_print_view_print'.tr,
+                        combination: Combination.right,
                         click: () => _previewLabelList(),
                       ),
                     ),
