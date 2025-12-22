@@ -359,7 +359,9 @@ class MachineDispatchLogic extends GetxController {
             startDate: details.startDate ?? '',
             factoryType: details.factoryType ?? '',
             stubBar: name,
-            stuBarCode: code)
+            stuBarCode: code,
+            speed: spGet(spSavePrintSpeed) ?? 3.0,
+            density: spGet(spSavePrintDensity) ?? 10.0)
         .then((printLabel) {
       PrintUtil().printLabel(
           label: printLabel,

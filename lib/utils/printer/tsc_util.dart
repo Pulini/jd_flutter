@@ -512,12 +512,14 @@ Future<List<Uint8List>> labelForSurplusMaterial({
   required String factoryType,
   required String stubBar,
   required String stuBarCode,
+  double speed = 3.0,
+  double density = 10.0,
 }) async {
   var list = <Uint8List>[];
 
   list.add(_tscClearBuffer());
   list.add(_tscCutterOff());
-  list.add(_tscSetup(75, 45, density: 8));
+  list.add(_tscSetup(75, 45, density: density.toInt(), speed: speed.toInt()));
   list.add(_tscQrCode(
       2 * _dpi, 2 * _dpi + _halfDpi, qrCode.replaceAll('"', '\\["]'),
       cell: '5'));
