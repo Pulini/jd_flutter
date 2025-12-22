@@ -7,9 +7,9 @@ import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/printer/print_util.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
+import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/preview_label_list_widget.dart';
 import 'package:jd_flutter/widget/preview_label_widget.dart';
-import 'package:jd_flutter/widget/tsc_label_templates/fixed_label_75w45h.dart';
 
 class PrintLabelPage extends StatefulWidget {
   const PrintLabelPage({super.key});
@@ -24,24 +24,40 @@ class _PrintLabelPageState extends State<PrintLabelPage> {
   final ProcessDispatchRegisterState state =
       Get.find<ProcessDispatchRegisterLogic>().state;
 
-  PrintUtil pu = PrintUtil();
+  PrintUtil pu = PrintUtil()..setChannelListener();
 
   void _previewLabel(Barcode data) {
-    Get.to(() => PreviewLabel(
-          labelWidget: processDispatchRegisterLabel(
-            barCode: data.barCode ?? '',
-            typeBody: state.typeBody.value,
-            processName: data.processName ?? '',
-            instructionsText: data.instructionsText(),
-            empNumber: data.empNumber ?? '',
-            empName: data.empName ?? '',
-            size: data.size ?? '',
-            mustQty: data.mustQty ?? 0,
-            rowID: data.rowID ?? 0,
-          ),
-        ))?.then((v) {
-      pu.setChannelListener();
-    });
+    Get.to(() => PreviewLabel(labelWidget: logic.createLabelView(data)));
+  }
+
+  Future<void> _printLabel(Barcode data) async {
+    pu.printLabel(
+      label: await logic.createLabel(data),
+      success: () => successDialog(content: '标签下发成功'),
+      failed: () => errorDialog(content: '标签下发失败'),
+    );
+  }
+
+  void _previewLabelList() {
+    Get.to(() => PreviewLabelList(labelWidgets: [
+          for (var data in state.labelList.where((v) => v.isSelected).toList())
+            logic.createLabelView(data)
+        ]));
+  }
+
+  Future<void> _printLabelList() async {
+    pu.printLabelList(
+      labelList: [
+        for (var data in state.labelList.where((v) => v.isSelected).toList())
+          await logic.createLabel(data)
+      ],
+      finished: (success, fail) {
+        successDialog(
+          title: '标签下发结束',
+          content: '完成${success.length}张, 失败${fail.length}张',
+        );
+      },
+    );
   }
 
   Widget _item(Barcode data) {
@@ -95,6 +111,24 @@ class _PrintLabelPageState extends State<PrintLabelPage> {
                     text: data.mustQty.toShowString(),
                   ),
                   GestureDetector(
+                    onTap: () => _printLabel(data),
+                    child: Container(
+                      padding: const EdgeInsets.only(left: 5, right: 5),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(color: Colors.blue, width: 2),
+                      ),
+                      child: Text(
+                        'process_dispatch_register_print_print'.tr,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.blue,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  GestureDetector(
                     onTap: () => _previewLabel(data),
                     child: Container(
                       padding: const EdgeInsets.only(left: 5, right: 5),
@@ -138,28 +172,6 @@ class _PrintLabelPageState extends State<PrintLabelPage> {
     );
   }
 
-  void _previewLabelList() {
-    var selected = state.labelList.where((v) => v.isSelected).toList();
-    Get.to(
-      () => PreviewLabelList(
-        labelWidgets: [
-          for (var i = 0; i < selected.length; ++i)
-            processDispatchRegisterLabel(
-              barCode: selected[i].barCode ?? '',
-              typeBody: state.typeBody.value,
-              processName: selected[i].processName ?? '',
-              instructionsText: selected[i].instructionsText(),
-              empNumber: selected[i].empNumber ?? '',
-              empName: selected[i].empName ?? '',
-              size: selected[i].size ?? '',
-              mustQty: selected[i].mustQty ?? 0,
-              rowID: selected[i].rowID ?? 0,
-            ),
-        ],
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return pageBody(
@@ -176,9 +188,21 @@ class _PrintLabelPageState extends State<PrintLabelPage> {
                 ),
               ),
               if (state.labelList.any((v) => v.isSelected))
-                CombinationButton(
-                  text: 'process_dispatch_register_print_print'.tr,
-                  click: () => _previewLabelList(),
+                Row(
+                  children: [
+                    Expanded(
+                      child: CombinationButton(
+                        text: 'process_dispatch_register_print_print'.tr,
+                        click: () => _printLabelList(),
+                      ),
+                    ),
+                    Expanded(
+                      child: CombinationButton(
+                        text: 'process_dispatch_register_print_view_print'.tr,
+                        click: () => _previewLabelList(),
+                      ),
+                    ),
+                  ],
                 )
             ],
           )),
