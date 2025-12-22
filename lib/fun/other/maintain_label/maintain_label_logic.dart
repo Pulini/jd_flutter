@@ -1156,8 +1156,10 @@ class MaintainLabelLogic extends GetxController {
                     ])
                 .toList(),
           ));
-      var materialList =
-          data.subList!.map((v) => v.getMaterialLanguage(language)).join('、');
+      var materialList = data.subList!
+          .map((v) => v.getMaterialLanguage(languageInfo.languageCode ?? ''))
+          .toSet()
+          .join('、');
       var titleText = languageInfo.languageCode == 'zh'
           ? '尺码'
           : languageInfo.languageCode == 'id'
