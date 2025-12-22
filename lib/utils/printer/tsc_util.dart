@@ -1217,7 +1217,7 @@ Future<List<Uint8List>> _imageResizeToLabel(Map<String, dynamic> image) async {
       sensorDistance: isDynamic ? 0 : 2,
     ),
     await _tscBitmap(1, 1, imageUint8List),
-    _tscCutter(),
+    isDynamic?_tscCutter(): _tscCutterOff(),
     _tscPrint(),
   ];
 }
