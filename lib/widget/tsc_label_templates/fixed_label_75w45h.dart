@@ -516,6 +516,7 @@ Widget processDispatchRegisterLabel({
   required String empName,
   required String size,
   required double mustQty,
+  required String unit,
   required int rowID,
 }) =>
     _fixedLabelTemplate75x45(

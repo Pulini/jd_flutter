@@ -1,10 +1,15 @@
+import 'dart:typed_data';
+
 import 'package:collection/collection.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/process_dispatch_register_info.dart';
 import 'package:jd_flutter/fun/dispatching/process_dispatch_register/process_dispatch_register_print_label_view.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
+import 'package:jd_flutter/utils/printer/tsc_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
+import 'package:jd_flutter/widget/tsc_label_templates/fixed_label_75w45h.dart';
 
 import 'process_dispatch_register_state.dart';
 
@@ -99,4 +104,28 @@ class ProcessDispatchRegisterLogic extends GetxController {
       error: (msg) => errorDialog(content: msg),
     );
   }
+
+  Widget createLabelView(Barcode data) => processDispatchRegisterLabel(
+    barCode: data.barCode ?? '',
+    typeBody: state.typeBody.value,
+    processName: data.processName ?? '',
+    instructionsText: data.instructionsText(),
+    empNumber: data.empNumber ?? '',
+    empName: data.empName ?? '',
+    size: data.size ?? '',
+    mustQty: data.mustQty ?? 0,
+    unit: data.unit ?? '',
+    rowID: data.rowID ?? 0,
+  );
+  Future<List<Uint8List>> createLabel(Barcode data) async =>await labelMultipurposeEnglishFixed(
+    qrCode: data.barCode ?? '',
+    title: state.typeBody.value,
+    subTitle: data.processName ?? '',
+    content: data.instructionsText(),
+    bottomLeftText1: data.empNumber ?? '',
+    bottomLeftText2: data.empName ?? '',
+    bottomMiddleText1:
+    '${data.size}# ${data.mustQty.toShowString()}${data.unit}',
+    bottomRightText1: '序号:${data.rowID}',
+  );
 }

@@ -101,6 +101,7 @@ class _TscLabelPreviewState extends State<TscLabelPreview> {
           empName: '张三',
           size: '35',
           mustQty: 99.9,
+          unit: '双',
           rowID: 10,
         )
       ],
