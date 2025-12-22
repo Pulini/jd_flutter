@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:wifi_iot/wifi_iot.dart';
@@ -8,6 +10,40 @@ class WiFiManager {
     var status = await Permission.location.request();
     return status == PermissionStatus.granted;
   }
+
+  /// 锁定当前WiFi连接，防止vivo等手机自动切换网络
+  Future<bool> lockCurrentNetwork() async {
+    try {
+      bool permissionsGranted = await requestWifiPermissions();
+      if (!permissionsGranted) {
+        throw Exception('缺少必要的权限');
+      }
+
+      // 获取当前WiFi信息
+      final currentSSID = await WiFiForIoTPlugin.getSSID();
+      if (currentSSID == null || currentSSID.isEmpty) {
+        return false;
+      }
+
+      // 重新连接到当前网络以刷新连接状态
+      await WiFiForIoTPlugin.connect(currentSSID);
+
+      // 在Android平台上添加特殊处理
+      if (Platform.isAndroid) {
+        // 设置网络优先级，防止自动切换
+        await WiFiForIoTPlugin.forceWifiUsage(true);
+
+        // 等待网络稳定
+        await Future.delayed(Duration(milliseconds: 1500));
+      }
+
+      return true;
+    } catch (e) {
+      print('锁定WiFi连接失败: $e');
+      return false;
+    }
+  }
+
 
   /// 连接到指定WiFi网络
   Future<bool> connectToWiFi({
@@ -28,8 +64,6 @@ class WiFiManager {
         joinOnce: true,
         security: security,
       );
-
-      await Future.delayed(Duration(seconds: 3));
 
       return result;
     } catch (e) {

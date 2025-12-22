@@ -169,7 +169,7 @@ class RouteConfig {
   //生产派工
   static Routes productionDispatch = Routes(
     '/production_dispatch',
-    217,
+    219,
     const ProductionDispatchPage(),
   );
 
@@ -267,7 +267,7 @@ class RouteConfig {
   //水电抄度
   static Routes hydroelectricExcess = Routes(
     '/hydroelectric_excess_page',
-    201,
+    202,
     const HydroelectricExcessPage(),
   );
 
@@ -568,7 +568,7 @@ class RouteConfig {
   //品检单列表
   static Routes qualityInspectionList = Routes(
     '/quality_inspection_list',
-    202,
+    203,
     const QualityInspectionListPage(),
   );
 

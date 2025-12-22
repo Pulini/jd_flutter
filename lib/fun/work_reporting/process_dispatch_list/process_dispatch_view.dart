@@ -202,7 +202,9 @@ class _ProcessDispatchPageState extends State<ProcessDispatchPage> {
                 child: CombinationButton(
                   text: 'process_dispatch_generate_label'.tr,
                   click: () {
-                    logic.getDetail(toPage: true);
+                    if(logic.selectOnlyOne()){
+                      logic.getDetail(toPage: true);
+                    }
                   },
                   combination: Combination.right,
                 ),

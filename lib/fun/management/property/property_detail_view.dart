@@ -578,7 +578,7 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
               confirm: () {
                 logic.connectToNetwork(
                     success: () {
-                      logic.startSocketClient();
+                      logic.connectAndSendData();
                     },
                     ssid: 'LCWIFI',
                     password: '');

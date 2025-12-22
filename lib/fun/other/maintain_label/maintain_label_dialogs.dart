@@ -60,8 +60,13 @@ void createMixLabelDialog(List<List<PickingBarCodeInfo>> list, int id,
                       Expanded(
                         child: NumberEditText(
                           onChanged: (s) {
-                            if (s.toDoubleTry() > maxLabel) {
+                            final inputVal = s.toDoubleTry();
+                            // 如果输入值大于当前maxLabel，则重置为maxLabel
+                            if (inputVal > maxLabel && maxLabel > 0) {
                               controller.text = maxLabel.toString();
+                            } else if (inputVal > 0) {
+                              // 如果输入有效值，则更新maxLabel
+                              maxLabel = inputVal.toInt();
                             }
                           },
                           controller: controller,
@@ -128,6 +133,7 @@ void createMixLabelDialog(List<List<PickingBarCodeInfo>> list, int id,
         )),
   );
 }
+
 
 void _createMixLabel({
   required List<List<PickingBarCodeInfo>> list,

@@ -138,7 +138,7 @@ class _HydroelectricExcessPageState extends State<HydroelectricExcessPage> {
                     children: [
                       Expanded(flex: 3, child: roomNumberSearchWidget()),
                       Expanded(
-                          flex: 1,
+                          flex: 2,
                           child: EditText(
                             hint: 'hydroelectric_this_copying_process'.tr,
                             onChanged: (v) => logic.countMonth(v),

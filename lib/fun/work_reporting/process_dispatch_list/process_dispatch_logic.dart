@@ -109,16 +109,20 @@ class ProcessDispatchLogic extends GetxController
         }
       }
     }
-
     if (havePart) {
+      var list = <int>[];
+      state.dataList.where((data) => data.select == true).forEach((c) {
+        c.partIDs?.forEach((v) {
+          list.add(v);
+        });
+      });
       httpPost(
         method: webApiPartsDisassembly,
         loading: 'process_dispatch_splitting_part'.tr,
         body: {
           'InterID':
               state.dataList.firstWhere((data) => data.select == true).interID,
-          'PartIDs':
-              state.dataList.firstWhere((data) => data.select == true).partIDs,
+          'PartIDs': list,
         },
       ).then((response) {
         if (response.resultCode == resultSuccess) {
@@ -166,15 +170,25 @@ class ProcessDispatchLogic extends GetxController
   void getDetail({
     required bool toPage,
   }) {
+    var idList = <int>[];
+    var cardList = <String>[];
+    state.dataList.where((data) => data.select == true).forEach((c) {
+      c.fIDs?.forEach((v) {
+        idList.add(v);
+      });
+      c.cardNos?.forEach((b) {
+        cardList.add(b);
+      });
+    });
+
     httpPost(
       method: webApiGetBarcodeDetails,
       loading: 'process_dispatch_get_detail'.tr,
       body: {
         'InterID':
             state.dataList.firstWhere((data) => data.select == true).interID,
-        'FIDs': state.dataList.firstWhere((data) => data.select == true).fIDs,
-        'CardNos':
-            state.dataList.firstWhere((data) => data.select == true).cardNos,
+        'FIDs': idList,
+        'CardNos': cardList,
         'UserID': userInfo?.userID,
       },
     ).then((response) {
@@ -250,11 +264,14 @@ class ProcessDispatchLogic extends GetxController
 
   //选择具体尺码
   void selectSize(int position) {
-    state.showDetailList[position].select =
-    !state.showDetailList[position].select;
+      if( state.showDetailList[position].size!='总'){
+        state.showDetailList[position].select =
+        !state.showDetailList[position].select;
 
-    state.showDetailList[position].boxCapacity = state.showDetailList[position].qty.toShowString();
-    state.showDetailList.refresh();
+        state.showDetailList[position].boxCapacity =
+            state.showDetailList[position].qty.toShowString();
+        state.showDetailList.refresh();
+      }
   }
 
   //输入箱容
@@ -481,11 +498,11 @@ class ProcessDispatchLogic extends GetxController
     required Function(String) success,
   }) {
     var list = <String>[];
-    if(batch){
-      state.showLabelList.where((label)=> label.select==true).forEach((c){
+    if (batch) {
+      state.showLabelList.where((label) => label.select == true).forEach((c) {
         list.add(c.barcode!);
       });
-    }else{
+    } else {
       list.add(state.showLabelList[position].barcode!);
     }
     httpPost(
@@ -508,7 +525,6 @@ class ProcessDispatchLogic extends GetxController
     });
   }
 
-
   //更新打印状态
   void updatePartsPrintTimes({
     required bool select,
@@ -516,11 +532,11 @@ class ProcessDispatchLogic extends GetxController
     required Function() success,
   }) {
     var list = <Map<String, String>>[];
-    if(select){
-      state.showLabelList.where((label)=>label.select == true).forEach((v){
+    if (select) {
+      state.showLabelList.where((label) => label.select == true).forEach((v) {
         list.add({'BarCode': v.barcode!});
       });
-    }else{
+    } else {
       list.add({'BarCode': state.showLabelList[position].barcode!});
     }
     httpPost(
@@ -542,30 +558,28 @@ class ProcessDispatchLogic extends GetxController
   }
 
   //批量
-  bool isBatch(){
-    if(state.showLabelList.where((label)=> label.select == true).isNotEmpty){
+  bool isBatch() {
+    if (state.showLabelList.where((label) => label.select == true).isNotEmpty) {
       return true;
-    }else{
+    } else {
       showSnackBar(message: 'process_dispatch_please_select_data'.tr);
       return false;
     }
   }
 
-
   //选择所有未打印的贴标
-  void selectNoPrint(bool selectType){
-    state.showLabelList.where((label)=> label.printTimes! <=0).forEach((c){
+  void selectNoPrint(bool selectType) {
+    state.showLabelList.where((label) => label.printTimes! <= 0).forEach((c) {
       c.select = selectType;
     });
     state.showLabelList.refresh();
   }
 
   //选择所有数据
-  void selectAllLabel(bool isSelect){
+  void selectAllLabel(bool isSelect) {
     for (var v in state.showLabelList) {
-        v.select = isSelect;
+      v.select = isSelect;
     }
     state.showLabelList.refresh();
   }
-
 }

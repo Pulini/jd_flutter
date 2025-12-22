@@ -615,9 +615,16 @@ class MaintainLabelLogic extends GetxController {
   }) async {
     if (state.isShowPreview.value) {
       var labelList = <Widget>[];
+
       for (var data in list) {
         var languageInfo = data.subList!.first.materialOtherName!
             .firstWhere((v) => v.languageName == language);
+        var allTotalQty = 0.0;
+        for (var v in data.subList!) {
+          v.items?.forEach((c) {
+            allTotalQty += c.qty ?? 0.0;
+          });
+        }
         if (languageInfo.languageCode == 'zh') {
           labelList.add(maintainLabelMaterialChineseFixedLabel(
             barCode: data.barCode ?? '',
@@ -626,9 +633,7 @@ class MaintainLabelLogic extends GetxController {
             materialCode: data.subList!.first.materialCode ?? '',
             materialName: languageInfo.name ?? '',
             pageNumber: languageInfo.pageNumber ?? '',
-            qty: data.subList!.first.items!
-                .map((v) => v.qty ?? 0)
-                .reduce((a, b) => a.add(b)),
+            qty: allTotalQty,
             unit: languageInfo.unitName ?? '',
           ));
         } else {
@@ -642,9 +647,7 @@ class MaintainLabelLogic extends GetxController {
             netWeight: data.netWeight!,
             meas: data.subList!.first.meas!,
             pageNumber: languageInfo.pageNumber!,
-            qty: data.subList!.first.items!
-                .map((v) => v.qty ?? 0)
-                .reduce((a, b) => a.add(b)),
+            qty: allTotalQty,
             unit: languageInfo.unitName ?? '',
           ));
         }
@@ -656,6 +659,12 @@ class MaintainLabelLogic extends GetxController {
       for (var data in list) {
         var languageInfo = data.subList!.first.materialOtherName!
             .firstWhere((v) => v.languageName == language);
+        var allTotalQty = 0.0;
+        for (var v in data.subList!) {
+          v.items?.forEach((c) {
+            allTotalQty += c.qty ?? 0.0;
+          });
+        }
         labelList.add(await labelMultipurposeFixed(
           qrCode: data.barCode ?? '',
           title: data.subList!.first.factoryType ?? '',
@@ -668,10 +677,7 @@ class MaintainLabelLogic extends GetxController {
               ? ''
               : 'MEAS:${data.subList!.first.meas}',
           bottomLeftText1: languageInfo.pageNumber ?? '',
-          bottomRightText1: data.subList!.first.items!
-              .map((v) => v.qty ?? 0)
-              .reduce((a, b) => a.add(b))
-              .toShowString(),
+          bottomRightText1: allTotalQty.toShowString(),
           bottomRightText2: languageInfo.unitName ?? '',
           speed: spGet(spSavePrintSpeed) ?? 5.0,
           density: spGet(spSavePrintDensity) ?? 10.0,
@@ -819,15 +825,22 @@ class MaintainLabelLogic extends GetxController {
             for (var v2 in v1) [v2.size ?? '', v2.qty.toShowString()]
           ];
         });
+        var allTotalQty = 0.0;
+        map.forEach((k, v) {
+          for (var sublist in v) {
+            // 假设第二个元素是需要转换为数字的字符串
+            if (sublist.length > 1) {
+              allTotalQty += double.tryParse(sublist[1]) ?? 0.0;
+            }
+          }
+        });
 
         if (languageInfo.languageCode == 'zh') {
           labelList.add(maintainLabelSizeMaterialChineseDynamicLabel(
             barCode: data.barCode ?? '',
             factoryType: data.subList!.first.factoryType ?? '',
             billNo: data.departName ?? '',
-            total: data.subList!.first.items!
-                .map((v) => v.qty ?? 0)
-                .reduce((a, b) => a.add(b)),
+            total: allTotalQty,
             unit: languageInfo.unitName ?? '',
             materialCode: data.subList!.first.materialCode ?? '',
             materialName: data.subList!.first.materialName ?? '',
@@ -846,9 +859,7 @@ class MaintainLabelLogic extends GetxController {
             grossWeight: data.grossWeight ?? 0.0,
             netWeight: data.netWeight ?? 0.0,
             meas: data.subList!.first.meas ?? '',
-            total: data.subList!.first.items!
-                .map((v) => v.qty ?? 0)
-                .reduce((a, b) => a.add(b)),
+            total: allTotalQty,
             unit: languageInfo.unitName ?? '',
             map: map,
             pageNumber: languageInfo.pageNumber ?? '',
@@ -878,9 +889,17 @@ class MaintainLabelLogic extends GetxController {
             for (var v2 in v1) [v2.size ?? '', v2.qty.toShowString()]
           ];
         });
+
+        var allTotalQty = 0.0;
         map.forEach((k, v) {
-          debugPrint('size=$k v=$v');
+          for (var sublist in v) {
+            // 假设第二个元素是需要转换为数字的字符串
+            if (sublist.length > 1) {
+              allTotalQty += double.tryParse(sublist[1]) ?? 0.0;
+            }
+          }
         });
+
         labelList.add(await labelMultipurposeDynamic(
           isCut: true,
           qrCode: data.barCode ?? '',
@@ -896,11 +915,11 @@ class MaintainLabelLogic extends GetxController {
               ? ''
               : 'GW:${data.grossWeight.toShowString()}KG  NW:${data.netWeight.toShowString()}KG',
           tableTitleTips: languageInfo.languageCode == 'zh'
-              ? '${data.subList!.first.items!.map((v) => v.qty ?? 0).reduce((a, b) => a.add(b)).toShowString()}${languageInfo.unitName ?? ''}'
+              ? '$allTotalQty${languageInfo.unitName ?? ''}'
               : '',
           tableSubTitle: languageInfo.languageCode == 'zh'
               ? '(${data.subList!.first.materialCode})${languageInfo.name}'
-              : 'MEAS:${data.subList!.first.meas}     ${data.subList!.first.items!.map((v) => v.qty ?? 0).reduce((a, b) => a.add(b)).toShowString()}${languageInfo.unitName}',
+              : 'MEAS:${data.subList!.first.meas}     $allTotalQty${languageInfo.unitName}',
           tableData: map,
           bottomLeftText1: languageInfo.pageNumber ?? '',
           bottomLeftText2:

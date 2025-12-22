@@ -45,10 +45,10 @@ class QualityInspectionListState {
         'StartDate': startDate,
         'EndDate': endDate,
         'FactoryType': typeBody, //型体
-        'InstructionNumber': inspectionOrder,
+        'InstructionNumber': instruction,
         'MaterialCode': materialCode,
         'SupplierNumber': supplier,
-        'InspectionNo': inspectionOrder,
+        'InspectionNo':  inspectionOrder,  //检验单号
         'TemporaryNo': temporaryReceipt,
         'imvoucher': receiptVoucher,
         'Type': orderTypeList[orderTypeList.keys.toList()[orderType.value]],

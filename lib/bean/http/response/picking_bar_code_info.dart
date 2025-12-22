@@ -52,7 +52,7 @@ class PickingBarCodeInfo {
     return map;
   }
 
-  int maxLabel()=> packingQty == 0.0 ? 0 : totalQty.div(packingQty).ceil();
+  int maxLabel()=> packingQty == 0.0 ? 0 : totalQty.sub(qty?? 0).div(packingQty).ceil();
 
 
 }

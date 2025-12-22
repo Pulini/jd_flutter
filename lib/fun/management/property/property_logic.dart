@@ -1,11 +1,12 @@
 import 'dart:convert';
+import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/management/property/property_detail_view.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/wifi_util.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
-
 import '../../../bean/http/response/people_message_info.dart';
 import 'property_state.dart';
 
@@ -13,8 +14,6 @@ class PropertyLogic extends GetxController {
   final PropertyState state = PropertyState();
 
   final WiFiManager wifiManager = WiFiManager();
-  SocketClient? socketClient;
-  bool isConnected = false;
 
   Future<void> connectToNetwork({
     required String ssid,
@@ -26,77 +25,51 @@ class PropertyLogic extends GetxController {
       password: password,
     );
 
+    await Future.delayed(Duration(seconds: 5));
+    loadingDismiss();
     if (result) {
+      // 连接成功后，锁定当前WiFi网络防止自动切换
+      bool locked = await wifiManager.lockCurrentNetwork();
+      if (!locked) {
+        // 如果锁定失败，给出警告但不中断流程
+        errorDialog(content: '警告：无法锁定WiFi网络，可能会出现连接不稳定');
+      }
+      await Future.delayed(Duration(seconds: 5));
       success?.call();
     } else {
       errorDialog(content: '连接失败。');
     }
   }
 
-// 使用方式
-  void startSocketClient() {
+  void connectAndSendData() async {
+    try {
+      loadingShow('正在连接到激光打印机，并下发内容...');
+      // 连接到指定地址和端口
+      final socket = await Socket.connect("192.168.6.2", 8050,
+          timeout: Duration(seconds: 10));
 
-    // 正确的赋值方式：直接给实例变量赋值，不使用 final
-    socketClient = SocketClient();
-    socketClient!.remoteIP = "192.168.6.2"; // 设置IP
-    socketClient!.remotePort = "8050"; // 设置端口
-    socketClient!.connectionTimeout = 5 * 1000; // 设置超时时间
-    socketClient!.charsetName = "UTF-8"; // 设置编码格式
+      // 监听数据响应
+      socket.listen((data) {
+        wifiManager.disconnectFromWiFi();
+      });
 
-    socketClient!.registerSocketClientDelegate(
-      SocketClientDelegate()
-        ..onConnected = (client) {
-          successDialog(content: '开始下发数据-------');
-          // 连接成功的处理
-          isConnected = true; // 更新连接状态
-          laserToPrint();
-        }
-        ..onDisconnected = (client) {
-          successDialog(content: '断开连接-------');
-          // 连接断开的处理
-          isConnected = false; // 更新连接状态
-        }
-        ..onResponse = (client, responsePacket) {
-        },
-    );
-    socketClient!.connect(); // 连接，异步进行
-  }
-
-
-  void laserToPrint() {
-    // 检查socket连接状态
-    if (socketClient != null) {
-      // 获取要发送的打印数据
+      // 准备发送的数据
       final printMessage = getPrintMes();
-
-      // 转换为字节数组
       final asciiBytes = utf8.encode(printMessage);
-
-      // 添加起始和结束标识
       final startBytes = [0x02, 0x05];
       final endBytes = [0x03];
-
-      // 组合完整的数据包
       final completeData = [...startBytes, ...asciiBytes, ...endBytes];
 
       // 发送数据
-      socketClient?.sendData(completeData, onComplete: (success) {
-        if (success) {
-          // 更新打印次数
-          wifiManager.disconnectFromWiFi(onSuccess: (){
-            Future.delayed(Duration(seconds: 1));  //下发数据成功后，延迟2秒更新下标签
-            state.setPrintAssetsLaser(success: (String msg) {
-              showSnackBar(message: msg);
-            }, fail: (String msg) {
-              showSnackBar(message: msg);
-            });
-          });
-        } else {
-          showSnackBar(message: '数据发送失败');
-        }
-      });
-    } else {
-      showSnackBar(message: '请先连接激光打印机');
+      socket.add(Uint8List.fromList(completeData));
+      await socket.flush();
+
+      // 延迟关闭连接
+      await Future.delayed(Duration(seconds: 3));
+      socket.destroy();
+      loadingDismiss();
+    } catch (e) {
+      errorDialog(content: '连接错误: $e');
     }
   }
 
@@ -230,7 +203,7 @@ class PropertyLogic extends GetxController {
               success.call();
             });
           });
-    } else if(str.isEmpty){
+    } else if (str.isEmpty) {
       fail.call();
       state.setCustodian();
     }
