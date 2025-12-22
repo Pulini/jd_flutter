@@ -208,7 +208,6 @@ class LabelMaterialInfo {
   }
 
   String getMaterialLanguage(String language) {
-    debugPrint('language=$language');
     var material = materialName ?? '';
     materialOtherName?.forEach((v) {
       if (v.languageCode == language) {
