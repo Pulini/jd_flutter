@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 
 // BillNo : "JZ2300102"
@@ -207,6 +208,7 @@ class LabelMaterialInfo {
   }
 
   String getMaterialLanguage(String language) {
+    debugPrint('language=$language');
     var material = materialName ?? '';
     materialOtherName?.forEach((v) {
       if (v.languageCode == language) {
