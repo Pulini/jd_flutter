@@ -31,8 +31,9 @@ class WorkshopPlanningLogic extends GetxController {
       );
     }
   }
-
   void setWorkerMoney() {
+    state.reportQuantity.value= state.planInfo?.sizeLists!.map((v)=>v.qty??0).reduce((a,b)=>a.add(b))??0;
+    state.price.value=state.reportQuantity.value.mul(state.planInfo?.price??0);
     if (state.reportWorkerList.isNotEmpty) {
       var efficiency = state.reportWorkerList
           .map((v) => v.efficiency())

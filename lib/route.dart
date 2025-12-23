@@ -638,7 +638,7 @@ class RouteConfig {
   //车间计工
   static Routes workshopPlanning = Routes(
     '/workshop_planning',
-    200,
+    201,
     const WorkshopPlanningPage(),
   );
 
