@@ -34,6 +34,25 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
     FilteringTextInputFormatter.allow(RegExp('[0-9]')),
   ];
 
+  Widget _buildRadioListTile(String value, String label) {
+    return RadioListTile<String>(
+      title: Text(label),
+      value: value,
+      groupValue: state.carType.value,
+      onChanged: (v) => state.carType.value = v!,
+    );
+  }
+
+  Widget _buildDoorRadioListTile(String value, String label) {
+    return RadioListTile<String>(
+      title: Text(label),
+      value: value,
+      groupValue: state.doorType.value,
+      onChanged: (v) => state.doorType.value = v!,
+    );
+  }
+
+
   //  搜索弹窗
   void searchDialog({
     required String title,
@@ -228,43 +247,26 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            ListTile(
-              title: Text('visit_no_car'.tr),
-              leading: const Radio(value: ''),
-            ),
-            ListTile(
-              title: Text('visit_sedan'.tr),
-              leading: const Radio(value: '小桥车'),
-            ),
-            ListTile(
-              title: Text('visit_goods_train'.tr),
-              leading: const Radio(value: '货车'),
-            ),
-            ListTile(
-              title: Text('visit_trailer'.tr),
-              leading: const Radio(value: '拖车'),
-            ),
+            Expanded(child: _buildRadioListTile('', 'visit_no_car'.tr)),
+            Expanded(child: _buildRadioListTile('小桥车', 'visit_sedan'.tr)),
+            Expanded(child: _buildRadioListTile('货车', 'visit_goods_train'.tr)),
+            Expanded(child: _buildRadioListTile('拖车', 'visit_trailer'.tr)),
           ],
         ),
       ));
 
   Obx _checkDoor() => Obx(() => RadioGroup(
-        groupValue: state.doorType.value,
-        onChanged: (v) => state.doorType.value = v!,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            ListTile(
-              title: Text('visit_gate_one'.tr),
-              leading: const Radio(value: '1号门'),
-            ),
-            ListTile(
-              title: Text('visit_gate_two'.tr),
-              leading: const Radio(value: '2号门'),
-            ),
-          ],
-        ),
-      ));
+    groupValue: state.doorType.value,
+    onChanged: (v) => state.doorType.value = v!,
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        Expanded(child: _buildDoorRadioListTile('1号门', 'visit_gate_one'.tr)),
+        Expanded(child: _buildDoorRadioListTile('2号门', 'visit_gate_two'.tr)),
+      ],
+    ),
+  ));
+
 
   Obx _showCarNumber() {
     return Obx(
@@ -272,10 +274,9 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
           ? Column(
               children: [
                 _inputText('visit_details_license_plate_number'.tr, '', [],
-                    controller: logic.textCarNo,
-                    onChange: (s) {
-                          state.upAddDetail.value.carNo = s;
-                        }),
+                    controller: logic.textCarNo, onChange: (s) {
+                  state.upAddDetail.value.carNo = s;
+                }),
                 line,
               ],
             )
@@ -290,43 +291,37 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
               children: [
                 _inputText(
                     'visit_details_wheel_area_inspection'.tr, '', inputNumber,
-                    controller: logic.textWheel,
-                    onChange: (s) {
-                          state.upAddDetail.value.carBottom = s;
-                        }),
+                    controller: logic.textWheel, onChange: (s) {
+                  state.upAddDetail.value.carBottom = s;
+                }),
                 line,
                 _inputText(
                     'visit_details_external_inspection'.tr, '', inputNumber,
-                    controller: logic.textExternal,
-                    onChange: (s) {
-                          state.upAddDetail.value.carExterior = s;
-                        }),
+                    controller: logic.textExternal, onChange: (s) {
+                  state.upAddDetail.value.carExterior = s;
+                }),
                 line,
                 _inputText(
                     'visit_details_Driver_cab_inspection'.tr, '', inputNumber,
-                    controller: logic.textCab,
-                    onChange: (s) {
-                          state.upAddDetail.value.carCab = s;
-                        }),
+                    controller: logic.textCab, onChange: (s) {
+                  state.upAddDetail.value.carCab = s;
+                }),
                 line,
                 _inputText(
                     'visit_details_Driver_cab_inspection'.tr, '', inputNumber,
-                    controller: logic.textTail,
-                    onChange: (s) {
-                          state.upAddDetail.value.carRear = s;
-                        }),
+                    controller: logic.textTail, onChange: (s) {
+                  state.upAddDetail.value.carRear = s;
+                }),
                 line,
                 _inputText('visit_details_landing_gear'.tr, '', inputNumber,
-                    controller: logic.textLandingGear,
-                    onChange: (s) {
-                          state.upAddDetail.value.landingGear = s;
-                        }),
+                    controller: logic.textLandingGear, onChange: (s) {
+                  state.upAddDetail.value.landingGear = s;
+                }),
                 line,
                 _inputText('visit_details_remark'.tr, '', inputNumber,
-                    controller: logic.textRemark,
-                    onChange: (s) {
-                          state.upAddDetail.value.note = s;
-                        }),
+                    controller: logic.textRemark, onChange: (s) {
+                  state.upAddDetail.value.note = s;
+                }),
                 line,
               ],
             )
@@ -414,35 +409,30 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
   List<dynamic> _textList(VisitAddRecordInfo data) {
     return [
       _inputText('visit_details_id_card'.tr, data.iDCard, inputNumber,
-          controller: logic.textIdCard,
-          onChange: (s) {
-                state.upAddDetail.value.iDCard = s;
-              }),
+          controller: logic.textIdCard, onChange: (s) {
+        state.upAddDetail.value.iDCard = s;
+      }),
       line,
       _inputText('visit_details_name'.tr, data.name, [],
-          controller: logic.textPersonName,
-          onChange: (s) {
-                state.upAddDetail.value.name = s;
-              }),
+          controller: logic.textPersonName, onChange: (s) {
+        state.upAddDetail.value.name = s;
+      }),
       line,
       _inputText('visit_details_phone'.tr, data.phone, inputNumber,
-          controller: logic.textPhone,
-          onChange: (s){
-                state.upAddDetail.value.phone = s;
-              }),
+          controller: logic.textPhone, onChange: (s) {
+        state.upAddDetail.value.phone = s;
+      }),
       line,
       _inputText('visit_details_unit'.tr, data.unit, [],
-          controller: logic.textUnit,
-          onChange: (s){
-                state.upAddDetail.value.unit = s;
-              }),
+          controller: logic.textUnit, onChange: (s) {
+        state.upAddDetail.value.unit = s;
+      }),
       line,
       _inputText(
           'visit_details_number_of_visitors'.tr, data.visitorNum, inputNumber,
-          controller: logic.textVisitors,
-          onChange: (s){
-                state.upAddDetail.value.visitorNum = s;
-              }),
+          controller: logic.textVisitors, onChange: (s) {
+        state.upAddDetail.value.visitorNum = s;
+      }),
       line,
       _text('visit_details_factory_area'.tr, userInfo?.factory),
       line,
@@ -450,25 +440,24 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
           'visit_details_name_of_interviewee'.tr, data.intervieweeName, [],
           search: true,
           canEnable: false,
-          controller: logic.textIntervieweeName,
-          click: () {
-            searchDialog(
-                title: 'visit_details_to_search'.tr,
-                hintTitle: 'visit_details_name_of_interviewee'.tr,
-                confirm: () {
-                  logic.searchPeople();
-                });
-          },
-          onChange: (s) {
-                if (s.isNotEmpty) {state.searchMes = s;}
-              }),
+          controller: logic.textIntervieweeName, click: () {
+        searchDialog(
+            title: 'visit_details_to_search'.tr,
+            hintTitle: 'visit_details_name_of_interviewee'.tr,
+            confirm: () {
+              logic.searchPeople();
+            });
+      }, onChange: (s) {
+        if (s.isNotEmpty) {
+          state.searchMes = s;
+        }
+      }),
       line,
       _inputText(
           'visit_details_interviewed_department'.tr, data.visitedDept, [],
-          controller: logic.textVisitedDept,
-          onChange: (s) {
-                state.upAddDetail.value.visitedDept = s;
-              }),
+          controller: logic.textVisitedDept, onChange: (s) {
+        state.upAddDetail.value.visitedDept = s;
+      }),
       line,
       Obx(() => Row(
             //监听活动区域是否可以输入
@@ -495,16 +484,14 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
           )),
       line,
       _inputText('visit_details_visitor_id_number'.tr, data.credentials, [],
-          controller: logic.textVisitNumber,
-          onChange: (s) {
-                state.upAddDetail.value.credentials = s;
-              }),
+          controller: logic.textVisitNumber, onChange: (s) {
+        state.upAddDetail.value.credentials = s;
+      }),
       line,
       _inputText('visit_details_reason_for_visit'.tr, data.subjectMatter, [],
-          controller: logic.textReason,
-          onChange: (s) {
-                state.upAddDetail.value.subjectMatter = s;
-              }),
+          controller: logic.textReason, onChange: (s) {
+        state.upAddDetail.value.subjectMatter = s;
+      }),
       _peoplePhotos(),
       _subTitle('visit_details_vehicle_information'.tr), //车辆信息
       _checkCar(), //选择车辆

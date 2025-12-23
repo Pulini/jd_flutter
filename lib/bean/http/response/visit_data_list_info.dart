@@ -58,7 +58,7 @@ class VisitDataListInfo {
     sourceID = json['SourceID'];
     submitType = json['SubmitType'];
   }
-  int? interID;
+  String? interID;
   String? number;
   String? name;
   String? iDCard;
@@ -70,7 +70,7 @@ class VisitDataListInfo {
   int? visitorNum;
   String? securityStaff;
   String? dateTime;
-  dynamic leaveTime;
+  String? leaveTime;
   String? carNo;
   String? carType;
   int? dataSourceType;

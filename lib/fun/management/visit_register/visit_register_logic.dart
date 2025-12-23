@@ -101,11 +101,10 @@ class VisitRegisterLogic extends GetxController {
         }).then((response) {
       if (response.resultCode == resultSuccess) {
         state.lastAdd = false;
-        var jsonList = jsonDecode(response.data);
-        var list = <VisitDataListInfo>[];
-        for (var i = 0; i < jsonList.length; ++i) {
-          list.add(VisitDataListInfo.fromJson(jsonList[i]));
-        }
+        var list = <VisitDataListInfo>[
+          for (var i = 0; i < response.data.length; ++i)
+            VisitDataListInfo.fromJson(response.data[i])
+        ];
         state.dataList.value = list;
       } else {
         state.dataList.value = [];
@@ -167,8 +166,7 @@ class VisitRegisterLogic extends GetxController {
       if (response.resultCode == resultSuccess) {
         if (isLeave) {
           //去点击离场
-          state.dataDetail =
-              VisitGetDetailInfo.fromJson(jsonDecode(response.data));
+          state.dataDetail = VisitGetDetailInfo.fromJson(response.data);
           Get.to(() => const VisitRegisterDetailPage());
         } else {
           //带数据的新增
@@ -176,7 +174,7 @@ class VisitRegisterLogic extends GetxController {
           if (state.lastAdd) {
             logger.d('带数据的新增');
             state.dataDetail =
-                VisitGetDetailInfo.fromJson(jsonDecode(response.data));
+                VisitGetDetailInfo.fromJson(response.data);
             textIdCard.text = state.dataDetail.iDCard ?? '';
             textPersonName.text = state.dataDetail.name ?? '';
             textPhone.text = state.dataDetail.phone ?? '';
@@ -188,7 +186,7 @@ class VisitRegisterLogic extends GetxController {
           } else {
             logger.d('走详情界面');
             state.dataDetail =
-                VisitGetDetailInfo.fromJson(jsonDecode(response.data));
+                VisitGetDetailInfo.fromJson(response.data);
             state.cardPicture.value = state.dataDetail.cardPic ?? '';
             state.facePicture.value = state.dataDetail.peoPic ?? '';
             state.upLeavePicture.clear();
@@ -248,8 +246,6 @@ class VisitRegisterLogic extends GetxController {
     }
     state.upAddDetail.value.securityStaff = userInfo?.empID.toString();
     state.upAddDetail.value.visitPics = body;
-
-    logger.d(state.upAddDetail.value.toJson());
 
     if (!isIDCorrect(state.upAddDetail.value.iDCard.toString())) {
       errorDialog(content: 'visit_search_idCard_error'.tr);
@@ -404,7 +400,7 @@ class VisitRegisterLogic extends GetxController {
       if (searchPeopleCallback.resultCode == resultSuccess) {
         //创建部门列表数据
         List<SearchPeopleInfo> list = [];
-        for (var item in jsonDecode(searchPeopleCallback.data)) {
+        for (var item in searchPeopleCallback.data as List) {
           list.add(SearchPeopleInfo.fromJson(item));
         }
         //创建选择器控制器

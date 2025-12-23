@@ -155,7 +155,7 @@ class RouteConfig {
   //来访登记
   static Routes visitRegister = Routes(
     '/visitor_registration',
-    200,
+    201,
     const VisitRegisterPage(),
   );
 
