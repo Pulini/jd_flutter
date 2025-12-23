@@ -26,7 +26,15 @@ class HomeLogic extends GetxController {
     super.onInit();
     userAvatar = Obx(
       () => state.userPicUrl.value.isEmpty
-          ? const Icon(Icons.flutter_dash, color: Colors.white)
+          ? Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: Colors.blue,
+                borderRadius: const BorderRadius.all(Radius.circular(100)),
+              ),
+              child: const Icon(Icons.flutter_dash, color: Colors.white),
+            )
           : AspectRatio(
               aspectRatio: 1 / 1,
               child: ClipOval(

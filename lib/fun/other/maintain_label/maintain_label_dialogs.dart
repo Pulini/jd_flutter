@@ -60,6 +60,7 @@ void createMixLabelDialog(List<List<PickingBarCodeInfo>> list, int id,
                       Expanded(
                         child: NumberEditText(
                           onChanged: (s) {
+                            debugPrint('maxLabel=$maxLabel');
                             final inputVal = s.toDoubleTry();
                             // 如果输入值大于当前maxLabel，则重置为maxLabel
                             if (inputVal > maxLabel && maxLabel > 0) {

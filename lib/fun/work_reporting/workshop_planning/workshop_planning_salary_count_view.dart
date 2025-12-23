@@ -301,6 +301,7 @@ class _WorkshopPlanningSalaryCountPageState
         state.planInfo!.sizeLists?.forEach((v) => v.qty = 0);
       }
     });
+    state.price.value=state.planInfo?.price??0;
     logic.setWorkerMoney();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _queryGroupData();
