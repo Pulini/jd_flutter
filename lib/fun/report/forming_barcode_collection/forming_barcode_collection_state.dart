@@ -23,6 +23,7 @@ class FormingBarcodeCollectionState {
   var customerOrderClear= ''.obs; //客户订单 ->扫码清尾
   var orderNumClear= ''.obs; //订单数量 ->扫码清尾
   var completionNumClear= ''.obs; //累计完成 ->扫码清尾
+  var switchEntryId= ''; //切换
 
   var prioriInfoList = <WorkCardPriorityInfo>[].obs;
 

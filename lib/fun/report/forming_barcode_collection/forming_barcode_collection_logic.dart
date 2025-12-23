@@ -70,15 +70,19 @@ class FormingBarcodeCollectionLogic extends GetxController {
     switch (first) {
       case '0':
         {
-          if (state.dataList.isNotEmpty) {
-            state.dataList[0].isShow = true;
-            state.factoryType.value = state.dataList[0].productName ?? '';
-            state.workCardInterID = state.dataList[0].workCardInterID ?? '';
-            state.saleOrder.value = state.dataList[0].mtoNo ?? '';
-            state.instruction = state.dataList[0].moID ?? '';
-            state.customerOrder.value =
-                state.dataList[0].clientOrderNumber ?? '';
-            state.showDataList.value = state.dataList[0].scWorkCardSizeInfos!;
+          if(state.switchEntryId.isNotEmpty){
+
+          }else{
+            if (state.dataList.isNotEmpty) {
+              state.dataList[0].isShow = true;
+              state.factoryType.value = state.dataList[0].productName ?? '';
+              state.workCardInterID = state.dataList[0].workCardInterID ?? '';
+              state.saleOrder.value = state.dataList[0].mtoNo ?? '';
+              state.instruction = state.dataList[0].moID ?? '';
+              state.customerOrder.value =
+                  state.dataList[0].clientOrderNumber ?? '';
+              state.showDataList.value = state.dataList[0].scWorkCardSizeInfos!;
+            }
           }
         }
         break;
@@ -88,6 +92,7 @@ class FormingBarcodeCollectionLogic extends GetxController {
             for (var data in state.dataList) {
               if (data.entryFID == entryFid) {
                 data.isShow = true;
+                state.switchEntryId = data.entryFID?? '';
                 state.factoryType.value = data.productName ?? '';
                 state.workCardInterID = data.workCardInterID ?? '';
                 state.instruction = data.moID ?? '';
