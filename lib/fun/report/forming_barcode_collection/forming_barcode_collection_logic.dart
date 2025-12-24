@@ -71,7 +71,17 @@ class FormingBarcodeCollectionLogic extends GetxController {
       case '0':
         {
           if(state.switchEntryId.isNotEmpty){
-
+            for (var data in state.dataList) {
+              if (data.entryFID == state.switchEntryId) {
+                data.isShow = true;
+                state.factoryType.value = data.productName ?? '';
+                state.workCardInterID = data.workCardInterID ?? '';
+                state.instruction = data.moID ?? '';
+                state.saleOrder.value = data.mtoNo ?? '';
+                state.customerOrder.value = data.clientOrderNumber ?? '';
+                state.showDataList.value = data.scWorkCardSizeInfos!.toList();
+              }
+            }
           }else{
             if (state.dataList.isNotEmpty) {
               state.dataList[0].isShow = true;

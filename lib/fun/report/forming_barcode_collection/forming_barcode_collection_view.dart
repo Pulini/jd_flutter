@@ -6,7 +6,6 @@ import 'package:jd_flutter/fun/report/forming_barcode_collection/forming_barcode
 import 'package:jd_flutter/fun/report/forming_barcode_collection/forming_barcode_collection_state.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
-import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
