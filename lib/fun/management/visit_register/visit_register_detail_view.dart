@@ -93,29 +93,6 @@ class _VisitRegisterDetailPageState extends State<VisitRegisterDetailPage> {
     );
   }
 
-  Row _inspectWeight(
-    String title,
-    String text,
-    bool checkBool,
-  ) {
-    return Row(
-      children: [
-        Container(
-          width: 30,
-          margin: const EdgeInsets.only(right: 10),
-          alignment: Alignment.centerRight,
-          child: Checkbox(
-            value: checkBool,
-            onChanged: (bool? value) {},
-          ),
-        ),
-        Expanded(
-          child: _text(title, text),
-        ),
-      ],
-    );
-  }
-
   List<dynamic> _inspectList(VisitGetDetailInfo data) {
     if (data.carType == '拖车') {
       return [
