@@ -252,7 +252,9 @@ class WorkshopPlanningLogic extends GetxController {
 
   void deleteReportWorker(WorkshopPlanningWorkerInfo data) {
     state.reportWorkerList.remove(data);
+    setWorkerMoney();
   }
+
 
   void getGroupPayList() {
     state.getGroupPayList(

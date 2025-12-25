@@ -70,14 +70,18 @@ class SapSalesShipmentInfo {
 class SapSalesShipmentPalletInfo {
   List<SapSalesShipmentInfo> instructionList = [];
   List<SapPalletDetailInfo> palletList = [];
+
   double materialPickQty(String materialCode) {
     if (palletList.isEmpty) {
       return 0;
-    } else {
-      return palletList
-          .where((v) => v.materialCode == materialCode)
-          .map((v) => v.pickQty)
-          .reduce((a, b) => a.add(b));
     }
+    if (palletList.every((v) => v.materialCode != materialCode)) {
+      return 0;
+    }
+    return palletList
+        .where((v) => v.materialCode == materialCode)
+        .map((v) => v.pickQty)
+        .reduce((a, b) => a.add(b));
+
   }
 }
