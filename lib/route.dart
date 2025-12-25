@@ -358,7 +358,7 @@ class RouteConfig {
   //sap销售出库
   static Routes sapSalesShipment = Routes(
     '/sap_sales_shipment',
-    200,
+    201,
     const SapSalesShipmentPage(),
   );
 

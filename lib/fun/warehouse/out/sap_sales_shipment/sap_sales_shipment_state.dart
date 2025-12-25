@@ -28,6 +28,7 @@ class SapSalesShipmentState {
         }
       ],
     ).then((response) {
+      orderList.clear();
       if (response.resultCode == resultSuccess) {
         compute(
           parseJsonToList<SapSalesShipmentInfo>,
