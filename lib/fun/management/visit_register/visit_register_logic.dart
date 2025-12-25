@@ -167,12 +167,12 @@ class VisitRegisterLogic extends GetxController {
         if (isLeave) {
           //去点击离场
           state.dataDetail = VisitGetDetailInfo.fromJson(response.data);
+          state.upLeavePicture.clear();
+          state.upLeavePicture.add(VisitPhotoBean(photo: "", typeAdd: "0"));
           Get.to(() => const VisitRegisterDetailPage());
         } else {
           //带数据的新增
-
           if (state.lastAdd) {
-            logger.d('带数据的新增');
             state.dataDetail =
                 VisitGetDetailInfo.fromJson(response.data);
             textIdCard.text = state.dataDetail.iDCard ?? '';
@@ -184,7 +184,6 @@ class VisitRegisterLogic extends GetxController {
             state.upAddDetail.value.securityStaff =
                 userInfo?.empID.toString();
           } else {
-            logger.d('走详情界面');
             state.dataDetail =
                 VisitGetDetailInfo.fromJson(response.data);
             state.cardPicture.value = state.dataDetail.cardPic ?? '';
@@ -220,7 +219,9 @@ class VisitRegisterLogic extends GetxController {
   void updateLeaveFVisit() {
     var body = <PhotoBean>[];
     for (var value1 in state.upLeavePicture) {
-      body.add(PhotoBean(photo: value1.photo));
+        if(value1.typeAdd!='0'){
+          body.add(PhotoBean(photo: value1.photo));
+        }
     }
     httpPost(
             method: webApiUpdateLeaveFVisit,
@@ -232,6 +233,8 @@ class VisitRegisterLogic extends GetxController {
         .then((response) {
       if (response.resultCode == resultSuccess) {
         refreshGetVisitList();
+        state.upAddDetail.value = VisitAddRecordInfo();
+        state.upLeavePicture.clear();
         successDialog(content: response.message, back: () => Get.back());
       } else {
         errorDialog(content: response.message);
@@ -241,8 +244,10 @@ class VisitRegisterLogic extends GetxController {
 
   void addVisitRecord() {
     var body = <PhotoBean>[];
-    for (var value1 in state.upLeavePicture) {
-      body.add(PhotoBean(photo: value1.photo));
+    for (var value1 in state.upComePicture) {
+        if(value1.typeAdd!='0'){
+          body.add(PhotoBean(photo: value1.photo));
+        }
     }
     state.upAddDetail.value.securityStaff = userInfo?.empID.toString();
     state.upAddDetail.value.visitPics = body;

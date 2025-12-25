@@ -9,6 +9,7 @@ import 'package:jd_flutter/bean/http/response/visit_photo_bean.dart';
 import 'package:jd_flutter/fun/management/visit_register/visit_register_logic.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
@@ -164,73 +165,95 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
     return Padding(
       padding: const EdgeInsets.only(top: 20, bottom: 20),
       child: Obx(() => Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              GestureDetector(
-                onTap: () {
-                  takePhoto(callback: (f) {
-                    state.upAddDetail.value.cardPic = f.toBase64(); //身份证照片
-                  });
-                },
-                child: Column(
-                  children: [
-                    state.cardPicture.value.isNotEmpty
-                        ? ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Image.network(
-                              state.cardPicture.value,
-                              gaplessPlayback: true,
-                              width: 150,
-                              height: 150,
-                              fit: BoxFit.cover,
-                            ),
-                          )
-                        : const Icon(
-                            Icons.add_a_photo_outlined,
-                            color: Colors.blueAccent,
-                            size: 150,
-                          ),
-                    Text('visit_details_card_picture'.tr),
-                  ],
-                ),
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          Expanded(  // 添加 Expanded 包装
+            child: GestureDetector(
+              onTap: () {
+                takePhoto(callback: (f) {
+                  state.upAddDetail.value.cardPic = f.toBase64();
+                  state.cardPicture.value = f.toBase64();
+                });
+              },
+              child: Column(
+                children: [
+                  state.cardPicture.value.isNotEmpty
+                      ? ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Image.memory(  // 改为 Image.memory
+                      base64Decode(state.cardPicture.value),
+                      gaplessPlayback: true,
+                      width: 100,  // 减小图片宽度
+                      height: 100, // 减小图片高度
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return const Icon(
+                          Icons.error_outline,
+                          color: Colors.red,
+                          size: 100,
+                        );
+                      },
+                    ),
+                  )
+                      : const Icon(
+                    Icons.add_a_photo_outlined,
+                    color: Colors.blueAccent,
+                    size: 100,  // 减小图标大小
+                  ),
+                  Text('visit_details_card_picture'.tr),
+                ],
               ),
-              GestureDetector(
-                onTap: () {
-                  takePhoto(callback: (f) {
-                    state.upAddDetail.value.peoPic = f.toBase64();
-                  });
-                },
-                child: Column(
-                  children: [
-                    state.facePicture.value.isNotEmpty
-                        ? ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Image.network(
-                              state.facePicture.value,
-                              gaplessPlayback: true,
-                              width: 150,
-                              height: 150,
-                              fit: BoxFit.cover,
-                            ),
-                          )
-                        : const Icon(
-                            Icons.add_a_photo_outlined,
-                            color: Colors.blueAccent,
-                            size: 150,
-                          ),
-                    Text('visit_details_face_picture'.tr),
-                  ],
-                ),
-              )
-            ],
-          )),
+            ),
+          ),
+          Expanded(  // 添加 Expanded 包装
+            child: GestureDetector(
+              onTap: () {
+                takePhoto(callback: (f) {
+                  state.upAddDetail.value.peoPic = f.toBase64();
+                  state.facePicture.value = f.toBase64();
+                });
+              },
+              child: Column(
+                children: [
+                  state.facePicture.value.isNotEmpty
+                      ? ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Image.memory(  // 改为 Image.memory
+                      base64Decode(state.facePicture.value),
+                      gaplessPlayback: true,
+                      width: 100,  // 减小图片宽度
+                      height: 100, // 减小图片高度
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return const Icon(
+                          Icons.error_outline,
+                          color: Colors.red,
+                          size: 100,
+                        );
+                      },
+                    ),
+                  )
+                      : const Icon(
+                    Icons.add_a_photo_outlined,
+                    color: Colors.blueAccent,
+                    size: 100,  // 减小图标大小
+                  ),
+                  Text('visit_details_face_picture'.tr),
+                ],
+              ),
+            ),
+          )
+        ],
+      )),
     );
   }
+
 
   Obx _checkCar() => Obx(() => RadioGroup(
         groupValue: state.carType.value,
         onChanged: (v) {
           state.carType.value = v!;
+          state.upAddDetail.value.carType = v;
           if (v == '') {
             state.showWeight.value = false;
             state.showCarNumber.value = false;
@@ -257,7 +280,10 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
 
   Obx _checkDoor() => Obx(() => RadioGroup(
     groupValue: state.doorType.value,
-    onChanged: (v) => state.doorType.value = v!,
+    onChanged: (v) => {
+      state.doorType.value = v!,
+      state.upAddDetail.value.gate = v
+    },
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
@@ -302,14 +328,14 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
                 }),
                 line,
                 _inputText(
-                    'visit_details_Driver_cab_inspection'.tr, '', inputNumber,
-                    controller: logic.textCab, onChange: (s) {
-                  state.upAddDetail.value.carCab = s;
+                    'visit_details_car_tail'.tr, '', inputNumber,
+                    controller: logic.textTail, onChange: (s) {
+                  state.upAddDetail.value.textTail = s;
                 }),
                 line,
                 _inputText(
                     'visit_details_Driver_cab_inspection'.tr, '', inputNumber,
-                    controller: logic.textTail, onChange: (s) {
+                    controller: logic.textCab, onChange: (s) {
                   state.upAddDetail.value.carRear = s;
                 }),
                 line,
@@ -527,4 +553,14 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
       ),
     );
   }
+
+  @override
+  void dispose() {
+    state.upComePicture.clear();
+    state.cardPicture.value='';
+    state.facePicture.value='';
+    state.upAddDetail.value = VisitAddRecordInfo();
+    super.dispose();
+  }
+
 }
