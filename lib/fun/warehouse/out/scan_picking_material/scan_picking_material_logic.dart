@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/bar_code.dart';
-import 'package:jd_flutter/bean/http/response/scan_picking_material_info.dart';
 import 'package:jd_flutter/bean/http/response/worker_info.dart';
 import 'package:jd_flutter/fun/warehouse/code_list_report/code_list_report_view.dart';
 import 'package:jd_flutter/utils/utils.dart';
