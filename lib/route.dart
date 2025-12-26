@@ -435,7 +435,7 @@ class RouteConfig {
   //扫码领料出库
   static Routes scanPickingMaterial = Routes(
     '/scan_picking_material',
-    200,
+    201,
     const ScanPickingMaterialPage(),
   );
 

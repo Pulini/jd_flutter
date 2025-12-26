@@ -18,15 +18,15 @@ class ScanPickingMaterialState {
   void getBarCodeStatus({
     required int processFlowID,
     required String processName,
-    required Function(ScanPickingMaterialReportInfo) success,
-    required Function(String) error,
+    required Function(ScanPickingMaterialReportInfo, String) success,
+    required Function() finish,
   }) {
     httpPost(
       loading: 'scan_picking_material_submitting_label'.tr,
       method: webApiGetBarCodeStatus,
       body: {
         'BarCodeList': [
-          for (var item in barCodeList) {'BarCode': item.code,'PalletNo':''}
+          for (var item in barCodeList) {'BarCode': item.code, 'PalletNo': ''}
         ],
         'ProcessFlowID': processFlowID,
         'ProcessName': processName,
@@ -34,13 +34,14 @@ class ScanPickingMaterialState {
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        success.call(ScanPickingMaterialReportInfo.fromJson(response.data));
-      } else {
-        error.call(response.message ?? 'query_default_error'.tr);
+        success.call(
+          ScanPickingMaterialReportInfo.fromJson(response.data),
+          response.message ?? 'query_default_error'.tr,
+        );
       }
+      finish.call();
     });
   }
-
 
   void submitBarCode({
     required Function(String) success,

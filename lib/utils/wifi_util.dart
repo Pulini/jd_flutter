@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:wifi_iot/wifi_iot.dart';
 
@@ -39,7 +40,7 @@ class WiFiManager {
 
       return true;
     } catch (e) {
-      print('锁定WiFi连接失败: $e');
+      debugPrint('锁定WiFi连接失败: $e');
       return false;
     }
   }
@@ -87,7 +88,7 @@ class WiFiManager {
 
       return true;
     } catch (e) {
-      print('断开WiFi连接失败: $e');
+      debugPrint('断开WiFi连接失败: $e');
       return false;
     }
   }
