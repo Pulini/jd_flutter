@@ -43,6 +43,7 @@ class VisitAddRecordInfo {
       this.actionZoneID='',
       this.carBottom='',
       this.carCab='',
+      this.textTail='',
       this.carExterior='',
       this.carNo='',
       this.carRear='',
@@ -80,6 +81,7 @@ class VisitAddRecordInfo {
     actionZoneID = json['ActionZoneID'];
     carBottom = json['CarBottom'];
     carCab = json['CarCab'];
+    textTail = json['TextTail'];
     carExterior = json['CarExterior'];
     carNo = json['CarNo'];
     carRear = json['CarRear'];
@@ -129,6 +131,7 @@ class VisitAddRecordInfo {
   String? carExterior;
   String? carNo;
   String? carRear;
+  String? textTail;
   String? carType;
   String? cardPic;
   String? credentials;
@@ -164,6 +167,7 @@ class VisitAddRecordInfo {
     map['ActionZoneID'] = actionZoneID;
     map['CarBottom'] = carBottom;
     map['CarCab'] = carCab;
+    map['TextTail'] = textTail;
     map['CarExterior'] = carExterior;
     map['CarNo'] = carNo;
     map['CarRear'] = carRear;

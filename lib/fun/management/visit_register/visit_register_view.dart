@@ -57,12 +57,9 @@ class _VisitRegisterPageState extends State<VisitRegisterPage> {
   GestureDetector _item(VisitDataListInfo data) {
     return GestureDetector(
       onTap: () {
-        if (state.lastAdd)
-          {
-            logic.getVisitorDetailInfo(data.interID.toString(), false);
-          }
-        else
-          {
+        if (state.lastAdd) {
+          logic.getVisitorDetailInfo(data.interID.toString(), false);
+        } else {
             if (data.submitType == 0)
               {
                 logic.getVisitorDetailInfo(data.interID.toString(), true);

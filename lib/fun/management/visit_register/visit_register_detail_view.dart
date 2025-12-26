@@ -51,102 +51,62 @@ class _VisitRegisterDetailPageState extends State<VisitRegisterDetailPage> {
   Padding _peoplePhotos() {
     return Padding(
       padding: const EdgeInsets.only(top: 20, bottom: 20),
-      child: Obx(() => Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              GestureDetector(
-                child: Column(
-                  children: [
-                    state.cardPicture.value.isNotEmpty
-                        ? ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Image.network(
-                              state.cardPicture.value,
-                              gaplessPlayback: true,
-                              width: 150,
-                              height: 150,
-                              fit: BoxFit.cover,
-                            ),
-                          )
-                        : const Icon(
-                            Icons.add_a_photo_outlined,
-                            color: Colors.blueAccent,
-                            size: 150,
-                          ),
-                    Text('visit_details_card_picture'.tr),
-                  ],
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          GestureDetector(
+            child: Column(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Image.network(
+                    state.dataDetail.cardPic!,
+                    gaplessPlayback: true,
+                    width: 150,
+                    height: 150,
+                    fit: BoxFit.cover,
+                  ),
                 ),
-              ),
-              GestureDetector(
-                child: Column(
-                  children: [
-                    state.facePicture.value.isNotEmpty
-                        ? ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Image.network(
-                              state.facePicture.value,
-                              gaplessPlayback: true,
-                              width: 150,
-                              height: 150,
-                              fit: BoxFit.cover,
-                            ),
-                          )
-                        : const Icon(
-                            Icons.add_a_photo_outlined,
-                            color: Colors.blueAccent,
-                            size: 150,
-                          ),
-                    Text('visit_details_face_picture'.tr),
-                  ],
-                ),
-              )
-            ],
-          )),
-    );
-  }
-
-  Row _inspectWeight(
-    String title,
-    String text,
-    bool checkBool,
-  ) {
-    return Row(
-      children: [
-        Container(
-          width: 30,
-          margin: const EdgeInsets.only(right: 10),
-          alignment: Alignment.centerRight,
-          child: Checkbox(
-            value: checkBool,
-            onChanged: (bool? value) {},
+                Text('visit_details_card_picture'.tr),
+              ],
+            ),
           ),
-        ),
-        Expanded(
-          child: _text(title, text),
-        ),
-      ],
+          GestureDetector(
+            child: Column(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Image.network(
+                    state.dataDetail.peoPic!,
+                    gaplessPlayback: true,
+                    width: 150,
+                    height: 150,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                Text('visit_details_face_picture'.tr),
+              ],
+            ),
+          )
+        ],
+      ),
     );
   }
 
   List<dynamic> _inspectList(VisitGetDetailInfo data) {
-    if (data.carType == "拖车") {
+    if (data.carType == '拖车') {
       return [
-        _inspectWeight('visit_details_wheel_area_inspection'.tr,
-            data.carBottom!, state.checkCarBottom),
+        _text('visit_details_wheel_area_inspection'.tr, data.carBottom),
         line,
-        _inspectWeight('visit_details_external_inspection'.tr,
-            data.carExterior!, state.checkCarExterior),
+        _text('visit_details_external_inspection'.tr, data.carExterior),
         line,
-        _inspectWeight('visit_details_tail_inspection'.tr, data.carRear!,
-            state.checkCarRear),
+        _text('visit_details_tail_inspection'.tr, data.carRear),
         line,
-        _inspectWeight('visit_details_Driver_cab_inspection'.tr, data.carCab!,
-            state.checkCarCab),
+        _text('visit_details_Driver_cab_inspection'.tr, data.carCab),
         line,
-        _inspectWeight('visit_details_landing_gear'.tr, data.landingGear!,
-            state.checkCarLandingGear),
+        _text('visit_details_landing_gear'.tr, data.landingGear),
         line,
-        _text('visit_details_remark'.tr, data.note!),
+        _text('visit_details_remark'.tr, data.note),
         line,
       ];
     } else {
@@ -194,6 +154,13 @@ class _VisitRegisterDetailPageState extends State<VisitRegisterDetailPage> {
                     width: 50,
                     height: 50,
                     fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return const Icon(
+                        Icons.error_outline,
+                        color: Colors.red,
+                        size: 50,
+                      );
+                    },
                   ),
                 )
               : const Icon(
@@ -205,15 +172,15 @@ class _VisitRegisterDetailPageState extends State<VisitRegisterDetailPage> {
   }
 
   Widget _comeListView() {
-    if (state.dataDetail.visitPics!.isNotEmpty) {
-      return Obx(() => Container(
+      if (state.dataDetail.visitPics!.isNotEmpty) {
+      return Container(
           margin: const EdgeInsets.only(left: 20, right: 20),
           height: 100,
           width: 100,
           decoration: BoxDecoration(
             //背景
             borderRadius: const BorderRadius.all(Radius.circular(4.0)),
-            //设置四周边框
+            //设置四边边框
             border: Border.all(width: 1, color: Colors.blue),
           ),
           child: ListView.builder(
@@ -222,11 +189,9 @@ class _VisitRegisterDetailPageState extends State<VisitRegisterDetailPage> {
             itemCount: state.dataDetail.visitPics?.length,
             itemBuilder: (BuildContext context, int index) =>
                 _comePhotoItem(state.dataDetail.visitPics?[index].photo!),
-          )));
+          ));
     } else {
-      return const SizedBox(
-        height: 1,
-      );
+      return const SizedBox(height: 1);
     }
   }
 
@@ -335,9 +300,8 @@ class _VisitRegisterDetailPageState extends State<VisitRegisterDetailPage> {
       _text('visit_details_visitor_id_number'.tr, data.credentials),
       line,
       _text('visit_details_reason_for_visit'.tr, data.subjectMatter),
-      line,
-      if (state.cardPicture.value.isNotEmpty ||
-          state.facePicture.value.isNotEmpty)
+      if (state.dataDetail.cardPic!.isNotEmpty ||
+          state.dataDetail.peoPic!.isNotEmpty)
         _peoplePhotos(),
       if (data.carNo!.isNotEmpty) ...[
         const SizedBox(height: 10),
@@ -345,18 +309,7 @@ class _VisitRegisterDetailPageState extends State<VisitRegisterDetailPage> {
         _subTitle('visit_details_vehicle_information'.tr),
         const SizedBox(height: 10),
       ],
-      Padding(
-        padding: const EdgeInsets.only(top: 10, bottom: 10),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            line,
-            _subTitle('visit_details_vehicle_information'.tr),
-          ],
-        ),
-      ),
-      _text('visit_details_entrance_ate'.tr, data.gate),
-      line,
+      ..._inspectList(state.dataDetail),
       ..._showCarList(data),
       if (state.dataDetail.ownGoods!.isNotEmpty) ...[
         _text(
@@ -366,9 +319,6 @@ class _VisitRegisterDetailPageState extends State<VisitRegisterDetailPage> {
       _text('visit_details_on_duty_security_guard'.tr,
           state.dataDetail.securityStaff),
       line,
-      ..._inspectList(state.dataDetail),
-      _subTitle('visit_details_departure_photos'.tr),
-      const SizedBox(height: 10),
       state.dataDetail.visitPics!.isNotEmpty
           ? _subTitle('visit_details_visits_photo'.tr)
           : const SizedBox(height: 1),
@@ -385,6 +335,8 @@ class _VisitRegisterDetailPageState extends State<VisitRegisterDetailPage> {
           const SizedBox(height: 10),
           ..._textList(state.dataDetail), //详情内容
           _comeListView(),
+          _subTitle('visit_details_departure_photos'.tr),
+          const SizedBox(height: 10),
           _leaveListView(),
           if (state.dataDetail.leaveTime!.isEmpty) _clickButton(),
         ],
