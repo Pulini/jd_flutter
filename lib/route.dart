@@ -330,7 +330,7 @@ class RouteConfig {
   //sap无标入库
   static Routes sapNoLabelStockIn = Routes(
     '/sap_no_label_stock_in',
-    201,
+    202,
     const SapNoLabelStockInPage(),
   );
 

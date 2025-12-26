@@ -43,7 +43,7 @@ class _SapNoLabelStockInPageState extends State<SapNoLabelStockInPage> {
   Container _item(List<SapNoLabelStockInItemInfo> list) {
     return Container(
       margin: const EdgeInsets.only(left: 5, right: 5, bottom: 10),
-      padding: const EdgeInsets.only(left: 7, top: 10, right: 7, bottom: 10),
+      padding: const EdgeInsets.all(5),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
@@ -70,12 +70,14 @@ class _SapNoLabelStockInPageState extends State<SapNoLabelStockInPage> {
                     Row(
                       children: [
                         expandedTextSpan(
+                          fontSize: 12,
                           hint: 'sap_no_label_stock_in_dispatch_date'.tr,
                           text: list[0].materialList[0].dispatchDate ?? '',
                           textColor: Colors.blue.shade700,
                           isBold: false,
                         ),
                         expandedTextSpan(
+                          fontSize: 12,
                           hint: 'sap_no_label_stock_in_report_date'.tr,
                           text: list[0].materialList[0].reportDate ?? '',
                           textColor: Colors.blue.shade700,
