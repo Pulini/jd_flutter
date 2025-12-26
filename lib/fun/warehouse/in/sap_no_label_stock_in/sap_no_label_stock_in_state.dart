@@ -73,7 +73,6 @@ class SapNoLabelStockInState {
         }
       },
     );
-
     sapPost(
       loading: 'sap_no_label_stock_in_submitting_stock_in_tips'.tr,
       method: webApiSapSubmitNoLabelStockIn,
@@ -81,7 +80,7 @@ class SapNoLabelStockInState {
         'KTSCH': process,
         'BUDAT': postingDate,
         'ITEM': [
-          for (var item in mList)
+          for (var item in mList.where((v)=>v.pickQty>0))
             {
               'DISPATCH_NO': item.dispatchNumber,
               'DISPATCH_ITEM': item.dispatchLineNumber,
