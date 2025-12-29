@@ -171,7 +171,7 @@ class _NumberDecimalEditTextState extends State<NumberDecimalEditText> {
         focusNode: _focusNode,
         controller: _controller,
         onChanged: (v) {
-          if (!v.endsWith('.')) {
+          if (!v.endsWith('.')&&!v.hasTrailingZero()) {
             if (double.tryParse(v) != null && v.toDoubleTry() > widget.max!) {
               if (widget.controller != null) {
                 widget.controller!.text = widget.max.toShowString();
@@ -248,6 +248,7 @@ class _NumberDecimalEditTextState extends State<NumberDecimalEditText> {
       ),
     );
   }
+
 }
 
 //数字输入框输入框

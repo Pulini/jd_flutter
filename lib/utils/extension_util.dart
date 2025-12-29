@@ -127,6 +127,14 @@ extension StringExt on String? {
     }
   }
 
+  bool hasTrailingZero() {
+    if (isNullOrEmpty()) return false;
+    if (this!.contains('.')) {
+      return this!.endsWith('0');
+    }
+    return false;
+  }
+
   int toIntTry() {
     try {
       return int.parse(this ?? '');
