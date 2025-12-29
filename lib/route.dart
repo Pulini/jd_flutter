@@ -84,6 +84,7 @@ import 'package:jd_flutter/login/login_view.dart';
 
 import 'fun/warehouse/in/anti_counterfeiting/puma_anti_counterfeiting_view.dart';
 import 'fun/warehouse/out/forming_packing_scan/packing_scan_view.dart';
+import 'fun/warehouse/out/material_label_scan/material_label_scan_view.dart';
 
 class RouteConfig {
   static const String home = '/home';
@@ -568,7 +569,7 @@ class RouteConfig {
   //品检单列表
   static Routes qualityInspectionList = Routes(
     '/quality_inspection_list',
-    203,
+    204,
     const QualityInspectionListPage(),
   );
 
@@ -656,6 +657,13 @@ class RouteConfig {
     const PrintPalletPage(),
   );
 
+  //物料标签扫码出库
+  static Routes materialLabelScan = Routes(
+    '/material_label_scan',
+    200,
+    const MaterialLabelScanPage(),
+  );
+
   //本地功能入口列表
   static List<Routes> routeList = [
     dailyReport,
@@ -738,6 +746,7 @@ class RouteConfig {
     workshopPlanning,
     sapLabelReprint,
     printPallet,
+    materialLabelScan
   ];
 
   static List<GetPage> appRoutes = [
@@ -1073,6 +1082,10 @@ class RouteConfig {
     GetPage(
       name: printPallet.name,
       page: () => printPallet.page,
+    ),
+    GetPage(
+      name: materialLabelScan.name,
+      page: () => materialLabelScan.page,
     ),
   ];
 }

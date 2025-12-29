@@ -19,7 +19,7 @@ class _QualityInspectionListDetailPageState
       Get.find<QualityInspectionListLogic>();
   final QualityInspectionListState state =
       Get.find<QualityInspectionListLogic>().state;
-  int index=Get.arguments['index'];
+  int index = Get.arguments['index'];
 
   Widget _item(StuffQualityInspectionInfo item) {
     return SizedBox(
@@ -122,10 +122,15 @@ class _QualityInspectionListDetailPageState
             ),
             Expanded(
               //不合格原因
-              flex: 3,
-              child: Text(
-                item.unqualifiedReason ?? '',
-                maxLines: 1,
+              flex: 6,
+              child: InkWell(
+                child: Text(
+                  item.unqualifiedReason ?? '',
+                  maxLines: 1,
+                ),
+                onTap: () {
+                  showSnackBar(message: item.unqualifiedReason.toString());
+                },
               ),
             ),
             Expanded(
@@ -314,7 +319,7 @@ class _QualityInspectionListDetailPageState
                       ),
                       Expanded(
                         //不合格原因
-                        flex: 3,
+                        flex: 6,
                         child: Text(
                           'quality_inspection_reason'.tr,
                         ),

@@ -3335,6 +3335,11 @@ class Translation extends Translations {
           'forming_code_collection_switch_order_tip': '请选择要切换的订单',
           'home_no_route': '无路由',
           'home_this_function_is_not_open': '该功能暂未开放',
+          'material_label_scan_title': '物料标签扫码出库',
+          'material_label_scan_number': '备料通知单号:',
+          'material_label_scan_processed': '加工物料:',
+          'material_label_scan_command': '指令号:',
+          'material_label_scan_time': '备料通知时间:',
         },
         localeEnglish.toString(): {
           'app_name': 'Gold Emperor',
@@ -7323,6 +7328,11 @@ class Translation extends Translations {
           'home_no_route': 'No route',
           'home_this_function_is_not_open':
               'This feature is currently not open',
+          'material_label_scan_title': 'Scan the material label for outbound delivery',
+          'material_label_scan_number': 'Material Preparation Notice Number:',
+          'material_label_scan_processed': 'processed materials:',
+          'material_label_scan_command': 'command number:',
+          'material_label_scan_time': 'Material preparation notification time:',
         },
         localeIndonesian.toString(): {
           'app_name': 'Golden Group',
@@ -11527,6 +11537,11 @@ class Translation extends Translations {
               'Pilih pesanan yang akan diganti',
           'home_no_route': 'Tidak Ada Rute',
           'home_this_function_is_not_open': 'Fungsi ini belum dibuka',
+          'material_label_scan_title': 'Bahan label pemindaian kode keluar gudang',
+          'material_label_scan_number': 'Nomor pemberitahuan cadangan:',
+          'material_label_scan_processed': 'Bahan pengolahan:',
+          'material_label_scan_command': 'Nomor perintah:',
+          'material_label_scan_time': 'Waktu pemberitahuan cadangan:',
         },
       };
 }
