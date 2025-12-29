@@ -58,6 +58,7 @@ import 'package:jd_flutter/fun/warehouse/manage/sap_wms_split_label/sap_wms_spli
 import 'package:jd_flutter/fun/warehouse/manage/smart_delivery/smart_delivery_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/timely_inventory/timely_inventory_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/warehouse_allocation/warehouse_allocation_view.dart';
+import 'package:jd_flutter/fun/warehouse/out/material_label_scan/material_label_scan_view.dart';
 import 'package:jd_flutter/fun/warehouse/out/picking_material_order/picking_material_order_view.dart';
 import 'package:jd_flutter/fun/warehouse/out/production_scan_picking_material/production_scan_picking_material_view.dart';
 import 'package:jd_flutter/fun/warehouse/out/sale_scan_out_warehouse/sale_scan_out_warehouse_view.dart';
@@ -84,7 +85,6 @@ import 'package:jd_flutter/login/login_view.dart';
 
 import 'fun/warehouse/in/anti_counterfeiting/puma_anti_counterfeiting_view.dart';
 import 'fun/warehouse/out/forming_packing_scan/packing_scan_view.dart';
-import 'fun/warehouse/out/material_label_scan/material_label_scan_view.dart';
 
 class RouteConfig {
   static const String home = '/home';

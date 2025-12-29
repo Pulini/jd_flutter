@@ -1,13 +1,11 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/material_label_scan_info.dart';
 import 'package:jd_flutter/route.dart';
-import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
+import 'package:jd_flutter/widget/edit_text_widget.dart';
 import 'package:jd_flutter/widget/picker/picker_controller.dart';
 import 'package:jd_flutter/widget/picker/picker_view.dart';
-import 'package:jd_flutter/widget/scanner.dart';
 
 import 'material_label_scan_logic.dart';
 
@@ -26,15 +24,30 @@ class _MaterialLabelScanPageState extends State<MaterialLabelScanPage> {
   var textStyle = TextStyle(color: Colors.blue.shade900);
 
   //日期选择器的控制器
-  var dispatchDate = DatePickerController(
-    buttonName: 'process_dispatch_dispatch_date'.tr,
-    PickerType.date,
-    saveKey: '${RouteConfig.materialLabelScan.name}${PickerType.date}',
+  var startDate = DatePickerController(
+    buttonName: 'material_label_scan_start_time'.tr,
+    PickerType.startDate,
+    saveKey: '${RouteConfig.materialLabelScan.name}${PickerType.startDate}',
   );
 
-  var controller = TextEditingController();
-  var numberController = TextEditingController();
+  //日期选择器的控制器
+  var endDate = DatePickerController(
+    buttonName: 'material_label_scan_end_time'.tr,
+    PickerType.startDate,
+    saveKey: '${RouteConfig.materialLabelScan.name}${PickerType.startDate}',
+  );
 
+  //工厂仓库
+  var factoryWarehouse = LinkOptionsPickerController(
+    hasAll: false,
+    PickerType.sapFactoryWarehouse,
+    saveKey:
+        '${RouteConfig.materialLabelScan.name}${PickerType.sapFactoryWarehouse}',
+    buttonName: 'material_label_scan_factory'.tr,
+  );
+
+  var controller = TextEditingController(); //工票
+  var materialNumber = TextEditingController(); //物料代码
 
   Row _text(String hint, String? text1) {
     return Row(
@@ -78,47 +91,22 @@ class _MaterialLabelScanPageState extends State<MaterialLabelScanPage> {
     );
   }
 
-  add() {
-    logger.f('点击了----------');
-    var list = <MaterialLabelScanInfo>[];
-    list.add(MaterialLabelScanInfo(interID: '1'));
-    state.dataList.value = list;
-  }
-
   @override
   Widget build(BuildContext context) {
     return pageBodyWithDrawer(
+      title: 'material_label_scan_title'.tr,
       queryWidgets: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 5), // 左右 5 像素
-          child: CupertinoSearchTextField(
-            //工票
-            prefixIcon: const SizedBox.shrink(),
-            controller: controller,
-            suffixIcon: const Icon(Icons.qr_code_scanner_outlined),
-            decoration: BoxDecoration(
-              color: Colors.grey.shade300,
-              borderRadius: BorderRadius.circular(20),
-            ),
-            onChanged: (s) {
-              state.materialListNumber = s;
-            },
-            onSuffixTap: () {
-              Get.to(() => const Scanner())?.then((v) {
-                if (v != null) {
-
-                }
-              });
-            },
-            placeholder: 'process_dispatch_work_ticket'.tr,
-            suffixMode: OverlayVisibilityMode.always, // 添加这一行
-          ),
+        DatePicker(pickerController: startDate),
+        DatePicker(pickerController: endDate),
+        LinkOptionsPicker(pickerController: factoryWarehouse),
+        EditText(
+          hint: 'material_label_scan_material_code'.tr,
+          controller: materialNumber,
         ),
-        Center(child: Text('process_dispatch_or'.tr)),
-        DatePicker(pickerController: dispatchDate),
-
       ],
-      query: () => {add()},
+      query: () => logic.query(
+          startDate: startDate.getDateFormatYMD(),
+          endDate: endDate.getDateFormatYMD()),
       body: Obx(() => ListView.builder(
             padding: const EdgeInsets.all(8),
             itemCount: state.dataList.length,

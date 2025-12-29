@@ -3340,6 +3340,12 @@ class Translation extends Translations {
           'material_label_scan_processed': '加工物料:',
           'material_label_scan_command': '指令号:',
           'material_label_scan_time': '备料通知时间:',
+          'material_label_scan_input_number': '请输入或扫描备料单号',
+          'material_label_scan_start_time': '开始时间',
+          'material_label_scan_end_time': '结束时间',
+          'material_label_scan_factory': '工厂-仓库',
+          'material_label_scan_material_code': '物料代码',
+          'material_label_scan_get_material_list': '正在获取备料任务清单...',
         },
         localeEnglish.toString(): {
           'app_name': 'Gold Emperor',
@@ -7333,6 +7339,12 @@ class Translation extends Translations {
           'material_label_scan_processed': 'processed materials:',
           'material_label_scan_command': 'command number:',
           'material_label_scan_time': 'Material preparation notification time:',
+          'material_label_scan_input_number': 'Please enter or scan the material preparation number',
+          'material_label_scan_start_time': 'Start time',
+          'material_label_scan_end_time': 'End time',
+          'material_label_scan_factory': 'Factory Warehouse',
+          'material_label_scan_material_code': 'Material Code',
+          'material_label_scan_get_material_list': 'Obtaining material preparation task list...',
         },
         localeIndonesian.toString(): {
           'app_name': 'Golden Group',
@@ -11542,6 +11554,12 @@ class Translation extends Translations {
           'material_label_scan_processed': 'Bahan pengolahan:',
           'material_label_scan_command': 'Nomor perintah:',
           'material_label_scan_time': 'Waktu pemberitahuan cadangan:',
+          'material_label_scan_input_number': 'Silakan masukkan atau memindai nomor cadangan',
+          'material_label_scan_start_time': 'Waktu Mulai',
+          'material_label_scan_end_time': 'Waktu berakhir',
+          'material_label_scan_factory': 'Pabrik - gudang',
+          'material_label_scan_material_code': 'Kode Bahan',
+          'material_label_scan_get_material_list': 'Mendapatkan daftar tugas cadangan...',
         },
       };
 }

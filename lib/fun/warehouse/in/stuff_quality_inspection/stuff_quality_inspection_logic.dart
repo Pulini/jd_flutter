@@ -334,18 +334,28 @@ class StuffQualityInspectionLogic extends GetxController {
         state.labelData.value = list;
         if (state.labelData.isNotEmpty) {
           if (upInspectionType == '抽检') {
-            state.labelShortQty = (shortQualifiedController.text.toDoubleTry() /
-                    waitInspectionQuantityController.text.toDoubleTry()) *
-                inspectionQuantityController.text.toDoubleTry();
-
-            state.labelUnQty =
-                (unqualifiedQualifiedController.text.toDoubleTry() /
+            state.labelShortQty = ((shortQualifiedController.text
+                            .toDoubleTry() /
                         waitInspectionQuantityController.text.toDoubleTry()) *
-                    inspectionQuantityController.text.toDoubleTry();
+                    inspectionQuantityController.text.toDoubleTry())
+                .toStringAsFixed(3)
+                .toDoubleTry();
+
+            state.labelUnQty = ((unqualifiedQualifiedController.text
+                            .toDoubleTry() /
+                        waitInspectionQuantityController.text.toDoubleTry()) *
+                    inspectionQuantityController.text.toDoubleTry())
+                .toStringAsFixed(3)
+                .toDoubleTry();
           } else {
-            state.labelShortQty = shortQualifiedController.text.toDoubleTry();
-            state.labelUnQty =
-                unqualifiedQualifiedController.text.toDoubleTry();
+            state.labelShortQty = shortQualifiedController.text
+                .toDoubleTry()
+                .toStringAsFixed(3)
+                .toDoubleTry();
+            state.labelUnQty = unqualifiedQualifiedController.text
+                .toDoubleTry()
+                .toStringAsFixed(3)
+                .toDoubleTry();
           }
 
           Get.to(() => const StuffQualityInspectionLabelPage())?.then((v) {
@@ -1139,7 +1149,7 @@ class StuffQualityInspectionLogic extends GetxController {
               .forEach((subData) {
             if (qty >= subData.quantityTemporarilyReceived!) {
               subData.unqualifiedQuantity = subData.quantityTemporarilyReceived;
-              qty=qty.sub(subData.quantityTemporarilyReceived!);
+              qty = qty.sub(subData.quantityTemporarilyReceived!);
             } else {
               subData.unqualifiedQuantity = qty;
               qty = 0.0;
@@ -1155,9 +1165,12 @@ class StuffQualityInspectionLogic extends GetxController {
               .where((v) => v.barCode == label.barCode)
               .forEach((subData) {
             if (qty >=
-                subData.quantityTemporarilyReceived!.sub(subData.unqualifiedQuantity!)) {
-              subData.missingQuantity = subData.quantityTemporarilyReceived!.sub(subData.unqualifiedQuantity!);
-              qty = qty.sub(subData.quantityTemporarilyReceived!.sub(subData.unqualifiedQuantity!));
+                subData.quantityTemporarilyReceived!
+                    .sub(subData.unqualifiedQuantity!)) {
+              subData.missingQuantity = subData.quantityTemporarilyReceived!
+                  .sub(subData.unqualifiedQuantity!);
+              qty = qty.sub(subData.quantityTemporarilyReceived!
+                  .sub(subData.unqualifiedQuantity!));
             } else {
               subData.missingQuantity = qty;
               qty = 0.0;

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/home_button.dart';
+import 'package:jd_flutter/fun/warehouse/out/material_label_scan/material_label_scan_view.dart';
 import 'package:jd_flutter/message_center/message_center_view.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
@@ -124,7 +125,8 @@ class _HomePageState extends State<HomePage>
                 ),
                 onPressed: () {
                   if (isTestUrl()) {
-                    Get.to(() => const TscLabelPreview());
+                    // Get.to(() => const TscLabelPreview());
+                    Get.to(() => const MaterialLabelScanPage());
                   } else {
                     Get.to(() => const MessageCenterPage());
                   }

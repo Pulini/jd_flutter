@@ -1460,3 +1460,8 @@ const webApiGetGroupPayEndingProcessList =
 
 //团件-获取末道团件明细信息
 const webApiGetGroupPayEndingDetail = 'api/Piecework/GetGroupPayEndingDetail';
+
+//备料任务清单
+const webApiGetPickMatList = 'api/PickMat/GetPickMatList';
+
+
