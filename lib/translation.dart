@@ -2415,6 +2415,7 @@ class Translation extends Translations {
           'injection_scan_title': '注塑车间扫码报工',
           'injection_scan_label_list_title': '贴标列表',
           'suppliers_scan_clean': '清空',
+          'suppliers_scan_delete_code': '确定删除该条码吗？',
           'suppliers_scan_sure_clean_code': '确定要清空条码吗?',
           'suppliers_scan_enter_register': '手动录入登记',
           'suppliers_scan_red': '红冲',
@@ -3346,6 +3347,7 @@ class Translation extends Translations {
           'material_label_scan_factory': '工厂-仓库',
           'material_label_scan_material_code': '物料代码',
           'material_label_scan_get_material_list': '正在获取备料任务清单...',
+          'material_label_scan_get_material_detail': '正在获取备料任务详情...',
           'material_label_scan_uncollected_materials': '未领料',
         },
         localeEnglish.toString(): {
@@ -6253,6 +6255,7 @@ class Translation extends Translations {
               'Scan the code to report work in the injection molding workshop',
           'injection_scan_label_list_title': 'Labeling List',
           'suppliers_scan_clean': 'Clean',
+          'suppliers_scan_delete_code': 'Are you sure to delete this barcode？',
           'suppliers_scan_sure_clean_code':
               'Are you sure you want to clear the barcode?',
           'suppliers_scan_enter_register': 'Manually enter and register',
@@ -7346,6 +7349,7 @@ class Translation extends Translations {
           'material_label_scan_factory': 'Factory Warehouse',
           'material_label_scan_material_code': 'Material Code',
           'material_label_scan_get_material_list': 'Obtaining material preparation task list...',
+          'material_label_scan_get_material_detail': 'Obtaining material preparation task details...',
           'material_label_scan_uncollected_materials': 'Uncollected materials',
         },
         localeIndonesian.toString(): {
@@ -10417,6 +10421,7 @@ class Translation extends Translations {
           'injection_scan_title': 'Pemindaian Laporan Kerja Bengkel Injeksi',
           'injection_scan_label_list_title': 'Daftar Label Tempel',
           'suppliers_scan_clean': 'Kosongkan',
+          'suppliers_scan_delete_code': 'Apakah Anda yakin menghapus kode batang ini？',
           'suppliers_scan_sure_clean_code':
               'Apakah Anda yakin ingin mengosongkan kode batang?',
           'suppliers_scan_enter_register': 'Pendaftaran Input Manual',
@@ -11562,6 +11567,7 @@ class Translation extends Translations {
           'material_label_scan_factory': 'Pabrik - gudang',
           'material_label_scan_material_code': 'Kode Bahan',
           'material_label_scan_get_material_list': 'Mendapatkan daftar tugas cadangan...',
+          'material_label_scan_get_material_detail': 'Mendapatkan rincian tugas cadangan...',
           'material_label_scan_uncollected_materials': 'Tidak diterima',
         },
       };

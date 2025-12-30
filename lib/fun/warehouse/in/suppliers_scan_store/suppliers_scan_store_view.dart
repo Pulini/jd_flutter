@@ -29,9 +29,13 @@ class _SuppliersScanStorePageState extends State<SuppliersScanStorePage> {
 
   GestureDetector _item(BarCodeInfo code) {
     return GestureDetector(
-        onLongPress: ()  {
-              logic.deleteCode(code);
-            },
+        onLongPress: () {
+          askDialog(
+              content: 'suppliers_scan_delete_code'.tr,
+              confirm: () {
+                logic.deleteCode(code);
+              });
+        },
         child: Container(
           padding: const EdgeInsets.all(5),
           margin: const EdgeInsets.only(bottom: 5),
@@ -92,15 +96,17 @@ class _SuppliersScanStorePageState extends State<SuppliersScanStorePage> {
                     children: [
                       TextButton(
                         onPressed: () {
-                          if (state.peopleNumber.text.isEmpty)
-                            {showSnackBar(title: '警告', message: '请输入操作人工号');}
-                          else
-                            {Navigator.of(context).pop(); logic.goReport();}
+                          if (state.peopleNumber.text.isEmpty) {
+                            showSnackBar(title: '警告', message: '请输入操作人工号');
+                          } else {
+                            Navigator.of(context).pop();
+                            logic.goReport();
+                          }
                         },
                         child: const Text('确定'),
                       ),
                       TextButton(
-                        onPressed: ()  {
+                        onPressed: () {
                           state.peopleName.value = '';
                           state.peopleNumber.clear();
                           Navigator.of(context).pop();
@@ -126,7 +132,7 @@ class _SuppliersScanStorePageState extends State<SuppliersScanStorePage> {
           padding: const EdgeInsets.only(top: 10, right: 30),
           child: InkWell(
             child: Text('suppliers_scan_clean'.tr),
-            onTap: ()  {
+            onTap: () {
               askDialog(
                 title: 'dialog_default_title_information'.tr,
                 content: 'suppliers_scan_sure_clean_code'.tr,
@@ -198,7 +204,11 @@ class _SuppliersScanStorePageState extends State<SuppliersScanStorePage> {
                   flex: 1,
                   child: CombinationButton(
                     text: 'suppliers_scan_manually_add'.tr,
-                    click: () => logic.scanCode(tecCode.text),
+                    click: () {
+                      if (tecCode.text.isNotEmpty) {
+                        logic.scanCode(tecCode.text);
+                      }
+                    },
                     combination: Combination.left,
                   ),
                 ),
@@ -233,9 +243,9 @@ class _SuppliersScanStorePageState extends State<SuppliersScanStorePage> {
       refreshController.resetFooter();
     });
     pdaScanner(scan: (code) {
-        if (code.isNotEmpty) {
-          logic.scanCode(code);
-        }
+      if (code.isNotEmpty) {
+        logic.scanCode(code);
+      }
     });
     super.initState();
   }

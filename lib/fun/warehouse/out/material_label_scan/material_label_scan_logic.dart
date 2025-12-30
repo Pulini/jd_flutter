@@ -10,4 +10,10 @@ class MaterialLabelScanLogic extends GetxController {
   }) {
     state.getQueryList(startDate: startDate, endDate: endDate, error: (String s) {});
   }
+
+  void queryDetail({
+    required String workCardNo,
+  }) {
+    state.getQueryDetail( workCardNo: workCardNo);
+  }
 }

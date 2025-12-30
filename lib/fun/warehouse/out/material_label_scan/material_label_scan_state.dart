@@ -2,6 +2,7 @@ import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:jd_flutter/bean/http/response/material_label_scan_info.dart';
 import 'package:jd_flutter/utils/web_api.dart';
+import 'package:jd_flutter/widget/dialogs.dart';
 
 class MaterialLabelState {
 
@@ -33,6 +34,30 @@ class MaterialLabelState {
         dataList.value = list;
       } else {
         error.call(response.message ?? 'query_default_error'.tr);
+      }
+    });
+  }
+
+
+  void getQueryDetail({
+    required String workCardNo,
+  }) {
+    httpGet(
+      loading: 'material_label_scan_get_material_detail'.tr,
+      method: webApiGetPickMatList,
+      params: {
+        'WorkCardNo': workCardNo,
+      },
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        var list = <MaterialLabelScanInfo>[
+          for (var i = 0; i < response.data.length; ++i)
+            MaterialLabelScanInfo.fromJson(response.data[i])
+        ];
+
+        dataList.value = list;
+      } else {
+        errorDialog(content: response.message ?? 'query_default_error'.tr);
       }
     });
   }

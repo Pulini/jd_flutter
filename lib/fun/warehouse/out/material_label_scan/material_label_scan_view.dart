@@ -6,6 +6,7 @@ import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
 import 'package:jd_flutter/widget/picker/picker_controller.dart';
 import 'package:jd_flutter/widget/picker/picker_view.dart';
+import 'package:jd_flutter/widget/scanner.dart';
 import 'package:rotated_corner_decoration/rotated_corner_decoration.dart';
 
 import 'material_label_scan_logic.dart';
@@ -129,5 +130,15 @@ class _MaterialLabelScanPageState extends State<MaterialLabelScanPage> {
             itemBuilder: (context, index) => _item1(state.dataList[index]),
           )),
     );
+  }
+
+  @override
+  void initState() {
+    pdaScanner(scan: (code) => {
+      if (code.isNotEmpty) {
+        logic.queryDetail( workCardNo: code)
+      }
+    });
+    super.initState();
   }
 }
