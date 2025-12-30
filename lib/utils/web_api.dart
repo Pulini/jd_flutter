@@ -410,8 +410,7 @@ const webApiGetMoldingScanBulletinReport = 'api/Package/GetProductionOrderST';
 const webApiSubmitNewSort = 'api/Package/SubmitWorkCardPriority';
 
 //根据时间和部门信息获得生产派工单列表信息
-const webApiGetWorkCardCombinedSizeList =
-    'api/WorkCard/GetWorkCardCombinedSizeListNew';
+const webApiGetWorkCardCombinedSizeList = 'api/WorkCard/GetWorkCardCombinedSizeList';
 
 //生产派工单下推
 const webApiPushProductionOrder =
@@ -513,7 +512,7 @@ const webApiReportSAPByWorkCardInterID =
     'api/CompoundDispatching/ReportSAPByWorkCardInterID';
 
 //获取贴标列表
-const webApiGetLabelList = 'api/CompoundDispatching/PackagePrintLabelListV2';
+const webApiGetLabelList = 'api/CompoundDispatching/PackagePrintLabelList';
 
 //创建单码贴标
 const webApiCreateSingleLabel =
@@ -522,10 +521,6 @@ const webApiCreateSingleLabel =
 //获取可创建标签数据
 const webApiGetPackingListBarCodeCount =
     'api/CompoundDispatching/GetPackingListBarCodeCountNew';
-
-//获取可创建标签数据
-const webApiGetPackingListBarCodeCountBySize =
-    'api/CompoundDispatching/GetPackingListBarCodeCountBySize';
 
 //创建混码贴标
 const webApiCreateMixLabel =

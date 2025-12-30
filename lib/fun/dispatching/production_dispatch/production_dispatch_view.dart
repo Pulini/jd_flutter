@@ -77,23 +77,14 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
             name: 'production_dispatch_query_show_close'.tr,
             value: state.isSelectedClosed.value,
           )),
-      Obx(() => SwitchButton(
-            onChanged: (bool isSelect) {
-              state.isPartOrder.value = isSelect;
-              spSave('${Get.currentRoute}/isPartOrder', isSelect);
-            },
-            name: 'production_dispatch_query_part_order'.tr,
-            value: state.isPartOrder.value,
-          )),
       Obx(() => state.isSelectedMergeOrder.value
           ? Container()
           : SwitchButton(
               onChanged: (bool isSelect) {
                 if (!isSelect && state.orderList.isNotEmpty) {
                   for (var value in state.orderList) {
-                    value.select = false;
+                    value.select.value = false;
                   }
-                  state.orderList.refresh();
                 }
                 logic.refreshBottomButtons();
                 state.isSelectedMany.value = isSelect;
@@ -138,7 +129,7 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
           Container(
             padding: const EdgeInsets.all(5),
             decoration: BoxDecoration(
-              color: data.select ? Colors.green : Colors.blue.shade900,
+              color: data.select.value ? Colors.green : Colors.blue.shade900,
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(10),
                 topRight: Radius.circular(10),
@@ -495,154 +486,6 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
     );
   }
 
-  Widget _item3(List<ProductionDispatchOrderInfo> list) {
-    var data = list.first;
-    var buttonStyle = ButtonStyle(
-      padding: WidgetStateProperty.all(EdgeInsetsGeometry.zero),
-      shape: WidgetStateProperty.all(
-        RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-      ),
-      side: WidgetStateProperty.all(
-        BorderSide(color: _printTextColor(data.printStatus), width: 2),
-      ),
-    );
-
-    var sumOfStockInQty = list
-        .map((item) => item.stockInQty)
-        .reduce((value, current) => value! + current!)
-        .toShowString();
-
-    var sumOfWorkNumberTotal = list
-        .map((item) => item.workNumberTotal)
-        .reduce((value, current) => value! + current!)
-        .toShowString();
-
-    return Column(
-      children: [
-        Container(
-          padding: const EdgeInsets.all(5),
-          decoration: BoxDecoration(
-            color: Colors.blue.shade900,
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(10),
-              topRight: Radius.circular(10),
-            ),
-          ),
-          child: Row(
-            children: [
-              Expanded(
-                child: Text(
-                  'production_dispatch_dispatch_order_no'.trArgs([
-                    data.sapOrderBill?.ifEmpty(data.orderBill ?? '') ?? '',
-                  ]),
-                  style: itemTitleStyle,
-                ),
-              ),
-              if (data.plantBody?.isNotEmpty == true)
-                Text(
-                  'production_dispatch_type_body'.trArgs([
-                    data.plantBody ?? '',
-                  ]),
-                  style: itemTitleStyle,
-                ),
-            ],
-          ),
-        ),
-
-        Container(
-          padding: const EdgeInsets.only(left: 5, top: 5, right: 5),
-          color: Colors.white,
-          child: Row(
-            children: [
-              _text(
-                'production_dispatch_material_tips'.tr,
-                Colors.blue.shade100,
-              ),
-              _text(
-                'production_dispatch_plan_tracking_number_tips'.tr,
-                Colors.blue.shade100,
-              ),
-              _text(
-                'production_dispatch_dispatch_date_tips'.tr,
-                Colors.blue.shade100,
-              ),
-              _text(
-                'production_dispatch_plan_start_date_tips'.tr,
-                Colors.blue.shade100,
-              ),
-              _text(
-                'production_dispatch_plan_end_date_tips'.tr,
-                Colors.blue.shade100,
-              ),
-              _text(
-                'production_dispatch_completed_tips'.tr,
-                Colors.blue.shade100,
-              ),
-            ],
-          ),
-        ),
-        for (var i = 0; i < list.length; ++i)
-          Container(
-            padding: const EdgeInsets.only(left: 5, right: 5),
-            color: Colors.white,
-            child: Row(
-              children: [
-                _text('<${list[i].materialCode ?? ''}>${list[i].materialName ?? ''}', Colors.white),
-                _text(list[i].planBill ?? '', Colors.white),
-                _text(list[i].orderDate ?? '', Colors.white),
-                _text(list[i].planStartTime ?? '', Colors.white),
-                _text(list[i].planEndTime ?? '', Colors.white),
-                _text(list[i].getProgress(), Colors.white),
-              ],
-            ),
-          ),
-        Container(
-          padding: const EdgeInsets.all(5),
-          height: 40,
-          margin: const EdgeInsets.only(bottom: 10),
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(10),
-              bottomRight: Radius.circular(10),
-            ),
-          ),
-          child: Row(
-            children: [
-              Expanded(
-                flex: 5,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'production_dispatch_group'.trArgs([
-                        data.group ?? '',
-                      ]),
-                    ),
-                    TextButton(
-                      onPressed: () => logic.partOrderLabelMaintenance(list),
-                      style: buttonStyle,
-                      child: Text(
-                        _printStatusText(data.printStatus ?? ''),
-                        style:
-                            TextStyle(color: _printTextColor(data.printStatus)),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 20),
-              Expanded(
-                flex: 1,
-                child: Text('$sumOfStockInQty/$sumOfWorkNumberTotal'),
-              )
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
   Widget _bottomButtons() {
     return Container(
       decoration: BoxDecoration(
@@ -661,15 +504,15 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 children: [
-                  Obx(() => state.isSelectedMany.value
+                  state.isSelectedMany.value
                       ? Container()
                       : CombinationButton(
                           combination: Combination.left,
                           isEnabled: state.cbIsEnabledMaterialList.value,
                           text: 'production_dispatch_bt_material_list'.tr,
                           click: () => logic.orderMaterialList(),
-                        )),
-                  Obx(() => state.isSelectedMany.value
+                        ),
+                  state.isSelectedMany.value
                       ? Container()
                       : CombinationButton(
                           combination: Combination.middle,
@@ -678,8 +521,8 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
                           click: () => logic.instructionList(
                             (url) => Get.to(() => WebPage(url: url)),
                           ),
-                        )),
-                  Obx(() => state.isSelectedMany.value
+                        ),
+                  state.isSelectedMany.value
                       ? Container()
                       : CombinationButton(
                           combination: Combination.middle,
@@ -687,8 +530,8 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
                           text: 'production_dispatch_bt_process_instruction'.tr,
                           click: () => logic.processSpecification(
                               manufactureInstructionsDialog),
-                        )),
-                  Obx(() => state.isSelectedMany.value
+                        ),
+                  state.isSelectedMany.value
                       ? Container()
                       : CombinationButton(
                           combination: Combination.middle,
@@ -704,8 +547,8 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
                               ),
                             ),
                           ),
-                        )),
-                  Obx(() => state.isSelectedMany.value
+                        ),
+                  state.isSelectedMany.value
                       ? Container()
                       : CombinationButton(
                           combination: Combination.middle,
@@ -713,8 +556,8 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
                           text: state.cbNameProcess.value,
                           click: () =>
                               logic.offOnProcess(refresh: () => _query()),
-                        )),
-                  Obx(() => state.isSelectedMany.value
+                        ),
+                  state.isSelectedMany.value
                       ? Container()
                       : CombinationButton(
                           combination: Combination.middle,
@@ -722,8 +565,8 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
                           text: 'production_dispatch_bt_delete_downstream'.tr,
                           click: () =>
                               logic.deleteDownstream(refresh: () => _query()),
-                        )),
-                  Obx(() => state.isSelectedMany.value
+                        ),
+                  state.isSelectedMany.value
                       ? Container()
                       : CombinationButton(
                           combination: Combination.middle,
@@ -731,24 +574,24 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
                           text: 'production_dispatch_bt_delete_last_report'.tr,
                           click: () =>
                               logic.deleteLastReport(refresh: () => _query()),
-                        )),
-                  Obx(() => state.isSelectedMany.value
+                        ),
+                  state.isSelectedMany.value
                       ? Container()
                       : CombinationButton(
                           combination: Combination.middle,
                           isEnabled: state.cbIsEnabledLabelMaintenance.value,
                           text: 'production_dispatch_bt_label_maintenance'.tr,
                           click: () => logic.labelMaintenance(),
-                        )),
-                  Obx(() => state.isSelectedMany.value
+                        ),
+                  state.isSelectedMany.value
                       ? Container()
                       : CombinationButton(
                           combination: Combination.middle,
                           isEnabled: state.cbIsEnabledUpdateSap.value,
                           text: 'production_dispatch_bt_update_sap'.tr,
                           click: () => logic.updateSap(refresh: () => _query()),
-                        )),
-                  Obx(() => state.isSelectedMany.value
+                        ),
+                  state.isSelectedMany.value
                       ? Container()
                       : CombinationButton(
                           combination: Combination.middle,
@@ -760,8 +603,8 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
                               print: (data) => logic.printSurplusMaterial(data),
                             ),
                           ),
-                        )),
-                  Obx(() => state.isSelectedMany.value
+                        ),
+                  state.isSelectedMany.value
                       ? Container()
                       : CombinationButton(
                           combination: Combination.right,
@@ -774,7 +617,7 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
                               refresh: () => () => _query(),
                             ),
                           ),
-                        )),
+                        ),
                 ],
               ),
             ),
@@ -809,24 +652,14 @@ class _ProductionDispatchPageState extends State<ProductionDispatchPage> {
                   ? ListView.builder(
                       padding: const EdgeInsets.all(8),
                       itemCount: state.orderGroupList.length,
-                      itemBuilder: (BuildContext context, int index) =>
-                          state.isPartOrder.value
-                              ? _item3(
-                                  state.orderGroupList.entries
-                                      .elementAt(index++)
-                                      .value,
-                                )
-                              : _item2(
-                                  state.orderGroupList.entries
-                                      .elementAt(index++)
-                                      .value,
-                                ),
+                      itemBuilder: (c, i) => _item2(
+                        state.orderGroupList.entries.elementAt(i++).value,
+                      ),
                     )
                   : ListView.builder(
                       padding: const EdgeInsets.all(8),
                       itemCount: state.orderList.length,
-                      itemBuilder: (BuildContext context, int index) =>
-                          _item1(state.orderList, index),
+                      itemBuilder: (c, i) => _item1(state.orderList, i),
                     ),
             ),
             state.isSelectedMergeOrder.value

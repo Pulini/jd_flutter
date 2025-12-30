@@ -142,7 +142,7 @@ class ProductionDispatchOrderInfo {
     pastDay = json['PastDay'];
   }
 
-  bool select = false;
+  RxBool select = false.obs;
 
   int? interID;
   String? state;

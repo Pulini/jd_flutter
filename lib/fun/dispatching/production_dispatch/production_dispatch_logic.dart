@@ -26,10 +26,10 @@ class ProductionDispatchLogic extends GetxController {
   //工单列表非合并item点击事件
   void item1click(int index) {
     if (state.isSelectedMany.value) {
-      if (state.orderList[index].select) {
-        state.orderList[index].select = false;
+      if (state.orderList[index].select.value) {
+        state.orderList[index].select.value = false;
       } else {
-        var selected = state.orderList.where((v) => v.select);
+        var selected = state.orderList.where((v) => v.select.value);
         if (selected.isNotEmpty &&
             selected
                 .none((v) => v.plantBody == state.orderList[index].plantBody)) {
@@ -40,16 +40,16 @@ class ProductionDispatchLogic extends GetxController {
           );
           return;
         } else {
-          state.orderList[index].select = true;
+          state.orderList[index].select.value = true;
         }
       }
     } else {
       for (var i = 0; i < state.orderList.length; ++i) {
         if (i == index) {
-          state.orderList[i].select = !state.orderList[i].select;
+          state.orderList[i].select.value = !state.orderList[i].select.value;
         } else {
-          if (state.orderList[i].select) {
-            state.orderList[i].select = false;
+          if (state.orderList[i].select.value) {
+            state.orderList[i].select.value = false;
           }
         }
       }
@@ -59,13 +59,13 @@ class ProductionDispatchLogic extends GetxController {
   }
 
   void refreshBottomButtons() {
-    var hasSelect = state.orderList.any((e) => e.select);
+    var hasSelect = state.orderList.any((e) => e.select.value);
     state.cbIsEnabledMaterialList.value = hasSelect;
     state.cbIsEnabledInstruction.value = hasSelect;
     state.cbIsEnabledColorMatching.value = hasSelect;
     state.cbIsEnabledProcessInstruction.value = hasSelect;
     if (hasSelect) {
-      var select = state.orderList.firstWhere((v) => v.select);
+      var select = state.orderList.firstWhere((v) => v.select.value);
       if (select.state?.contains('未关闭') == true) {
         state.cbNameProcess.value = 'production_dispatch_bt_process_close'.tr;
       } else {
@@ -116,7 +116,8 @@ class ProductionDispatchLogic extends GetxController {
   }
 
   //工艺指导书
-  void processSpecification(Function(List<ManufactureInstructionsInfo>) callback) {
+  void processSpecification(
+      Function(List<ManufactureInstructionsInfo>) callback) {
     state.getSelectOne(
       (v) => state.getManufactureInstructions(
         routeID: v.routingID.toIntTry(),
@@ -146,7 +147,7 @@ class ProductionDispatchLogic extends GetxController {
   //打开/关闭工序
   void offOnProcess({required Function() refresh}) {
     state.offOnProcess(
-      success:(msg)=>successDialog(content: msg,back: refresh),
+      success: (msg) => successDialog(content: msg, back: refresh),
       error: (msg) => errorDialog(content: msg),
     );
   }
@@ -154,7 +155,7 @@ class ProductionDispatchLogic extends GetxController {
   //删除下游工序
   void deleteDownstream({required Function() refresh}) {
     state.deleteDownstream(
-      success:(msg)=>successDialog(content: msg,back: refresh),
+      success: (msg) => successDialog(content: msg, back: refresh),
       error: (msg) => errorDialog(content: msg),
     );
   }
@@ -162,7 +163,7 @@ class ProductionDispatchLogic extends GetxController {
   //删除上一次报工
   void deleteLastReport({required Function() refresh}) {
     state.deleteLastReport(
-      success:(msg)=>successDialog(content: msg,back: refresh),
+      success: (msg) => successDialog(content: msg, back: refresh),
       error: (msg) => errorDialog(content: msg),
     );
   }
@@ -289,7 +290,7 @@ class ProductionDispatchLogic extends GetxController {
     Function(List<ProductionDispatchOrderInfo>) ordersPush,
   ) {
     if (checkUserPermission('1051102')) {
-      var selectList = state.orderList.where((v) => v.select).toList();
+      var selectList = state.orderList.where((v) => v.select.value).toList();
       if (selectList.length > 1) {
         if (selectList.any((v) => v.isClosed!)) {
           errorDialog(
@@ -522,7 +523,8 @@ class ProductionDispatchLogic extends GetxController {
   }
 
   //批量修改派工数据
-  void detailViewBatchModifyDispatch(List<DispatchInfo> selectList, double qty) {
+  void detailViewBatchModifyDispatch(
+      List<DispatchInfo> selectList, double qty) {
     if (state.isCheckedDivideEqually) {
       if (state.isCheckedRounding) {
         var integer = qty ~/ selectList.length;
@@ -583,7 +585,8 @@ class ProductionDispatchLogic extends GetxController {
             }
           }
         } else {
-          var sum = workerList.map((v) => v.qty ?? 0).reduce((a, b) => a.add(b));
+          var sum =
+              workerList.map((v) => v.qty ?? 0).reduce((a, b) => a.add(b));
           var qty = wp.mustQty! - (sum - workerList.last.qty!);
           if (state.isCheckedRounding) {
             workerList.last.qty = qty.toInt().toDouble();
@@ -862,7 +865,7 @@ class ProductionDispatchLogic extends GetxController {
   void sendDispatchToWechat() {
     _clearWorkerDispatch();
     var msg = 'production_dispatch_wechat_dispatch_error1'.trArgs([
-      state.orderList.firstWhere((v) => v.select).planBill ?? '',
+      state.orderList.firstWhere((v) => v.select.value).planBill ?? '',
       state.workCardTitle.value.plantBody ?? ''
     ]);
     var submitData = <Map>[];

@@ -301,10 +301,13 @@ class _SapSurplusMaterialStockInPageState
   @override
   void initState() {
     weighbridgeListener(
-      usbAttached: () => showSnackBar(
-        title: 'sap_surplus_material_stock_in_usb_monitor'.tr,
-        message: 'sap_surplus_material_stock_in_monitor_usb_insert'.tr,
-      ),
+      usbAttached: () {
+        showSnackBar(
+          title: 'sap_surplus_material_stock_in_usb_monitor'.tr,
+          message: 'sap_surplus_material_stock_in_monitor_usb_insert'.tr,
+        );
+        weighbridgeOpen();
+      },
       readWeight: (weight) => state.weight.value = weight,
       weighbridgeState: (state) => logic.setWeighbridgeState(state),
     );
@@ -368,7 +371,9 @@ class _SapSurplusMaterialStockInPageState
                       child: Obx(() => Row(
                             children: [
                               expandedTextSpan(
-                                  hint: 'sap_surplus_material_stock_in_dispatch_order_no'.tr,
+                                  hint:
+                                      'sap_surplus_material_stock_in_dispatch_order_no'
+                                          .tr,
                                   text: state.dispatchOrderNumber.value),
                               textSpan(
                                 hint: 'sap_surplus_material_stock_in_total'.tr,

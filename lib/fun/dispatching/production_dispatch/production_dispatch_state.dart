@@ -18,7 +18,6 @@ class ProductionDispatchState {
   RxBool isSelectedClosed = false.obs;
   RxBool isSelectedMany = false.obs;
   RxBool isSelectedMergeOrder = false.obs;
-  RxBool isPartOrder = false.obs;
   var orderList = <ProductionDispatchOrderInfo>[].obs;
   var orderGroupList = <String, List<ProductionDispatchOrderInfo>>{}.obs;
 
@@ -66,7 +65,6 @@ class ProductionDispatchState {
     isSelectedMany.value = spGet('${Get.currentRoute}/isSelectedMany') ?? false;
     isSelectedMergeOrder.value =
         spGet('${Get.currentRoute}/isSelectedMergeOrder') ?? false;
-    isPartOrder.value = spGet('${Get.currentRoute}/isPartOrder') ?? false;
   }
 
   //获取组员列表数据
@@ -81,7 +79,7 @@ class ProductionDispatchState {
   // ProductionDispatchState() {}
   void getSelectOne(Function(ProductionDispatchOrderInfo) callback) {
     List<ProductionDispatchOrderInfo> select =
-        orderList.where((v) => v.select).toList();
+        orderList.where((v) => v.select.value).toList();
     if (select.isNotEmpty) {
       callback.call(select[0]);
     }
@@ -122,7 +120,6 @@ class ProductionDispatchState {
         'isClose': isSelectedClosed,
         'isOutsourcing': isSelectedOutsourcing,
         'deptID': userInfo?.departmentID,
-        'FDataType': isPartOrder.value?'3':'2',
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
@@ -443,7 +440,7 @@ class ProductionDispatchState {
     httpGet(
       method: webApiGetWorkPlanMaterial,
       loading: 'production_dispatch_querying_material_list'.tr,
-      params: {'InterID': orderList.firstWhere((v) => v.select).interID},
+      params: {'InterID': orderList.firstWhere((v) => v.select.value).interID},
     ).then((response) {
       if (response.resultCode == resultSuccess) {
         success.call([
@@ -465,12 +462,12 @@ class ProductionDispatchState {
         method: webApiGetPrdRouteInfo,
         loading: 'production_dispatch_querying_manual'.tr,
         params: {
-          'BillNo': orderList.firstWhere((v) => v.select).routeBillNumber
+          'BillNo': orderList.firstWhere((v) => v.select.value).routeBillNumber
         },
       );
     } else {
       var list = <String>[
-        for (var data in orderList.where((v) => v.select))
+        for (var data in orderList.where((v) => v.select.value))
           data.routeBillNumber ?? ''
       ];
       http = httpPost(
