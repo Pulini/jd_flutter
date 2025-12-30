@@ -18,8 +18,10 @@ class MaterialLabelState {
       loading: 'material_label_scan_get_material_list'.tr,
       method: webApiGetPickMatList,
       params: {
-        'NoticeDateStart': '2025-01-26',
+        'NoticeDateStart': '2024-01-26',
         'NoticeDateEnd': '2025-12-26',
+        'ProductName': '',
+        'MaterialNumber': '',
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {

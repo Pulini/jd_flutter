@@ -3346,6 +3346,7 @@ class Translation extends Translations {
           'material_label_scan_factory': '工厂-仓库',
           'material_label_scan_material_code': '物料代码',
           'material_label_scan_get_material_list': '正在获取备料任务清单...',
+          'material_label_scan_uncollected_materials': '未领料',
         },
         localeEnglish.toString(): {
           'app_name': 'Gold Emperor',
@@ -7345,6 +7346,7 @@ class Translation extends Translations {
           'material_label_scan_factory': 'Factory Warehouse',
           'material_label_scan_material_code': 'Material Code',
           'material_label_scan_get_material_list': 'Obtaining material preparation task list...',
+          'material_label_scan_uncollected_materials': 'Uncollected materials',
         },
         localeIndonesian.toString(): {
           'app_name': 'Golden Group',
@@ -11560,6 +11562,7 @@ class Translation extends Translations {
           'material_label_scan_factory': 'Pabrik - gudang',
           'material_label_scan_material_code': 'Kode Bahan',
           'material_label_scan_get_material_list': 'Mendapatkan daftar tugas cadangan...',
+          'material_label_scan_uncollected_materials': 'Tidak diterima',
         },
       };
 }

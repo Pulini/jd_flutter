@@ -233,7 +233,9 @@ class _SuppliersScanStorePageState extends State<SuppliersScanStorePage> {
       refreshController.resetFooter();
     });
     pdaScanner(scan: (code) {
-      logic.scanCode(code);
+        if (code.isNotEmpty) {
+          logic.scanCode(code);
+        }
     });
     super.initState();
   }

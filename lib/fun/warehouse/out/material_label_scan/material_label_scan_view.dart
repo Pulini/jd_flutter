@@ -6,6 +6,7 @@ import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
 import 'package:jd_flutter/widget/picker/picker_controller.dart';
 import 'package:jd_flutter/widget/picker/picker_view.dart';
+import 'package:rotated_corner_decoration/rotated_corner_decoration.dart';
 
 import 'material_label_scan_logic.dart';
 
@@ -79,15 +80,31 @@ class _MaterialLabelScanPageState extends State<MaterialLabelScanPage> {
           end: Alignment.bottomCenter,
         ),
       ),
-      child: Column(
+      foregroundDecoration: RotatedCornerDecoration.withColor(
+        color: data.matReqStatus == 0 ? Colors.red : Colors.green,
+        badgeCornerRadius: const Radius.circular(8),
+        badgeSize: const Size(60, 60),
+        textSpan: TextSpan(
+          text: data.matReqStatus == 0
+              ? 'material_label_scan_uncollected_materials'.tr
+              : '',
+          style: const TextStyle(
+            fontSize: 14,
+            color: Colors.white,
+          ),
+        ),
+      ),
+      child: InkWell(child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          _text('material_label_scan_number'.tr, '1'),
-          _text('material_label_scan_processed'.tr, '2'),
-          _text('material_label_scan_command'.tr, '3'),
-          _text('material_label_scan_time'.tr, '4')
+          _text('material_label_scan_number'.tr, data.workCardNo ?? ''),
+          _text('material_label_scan_processed'.tr, '${data.materialNumber ?? ''} ${data.materialName ?? ''}'),
+          _text('material_label_scan_command'.tr, data.mtoNo ?? ''),
+          _text('material_label_scan_time'.tr, data.noticeDate ?? ''),
         ],
-      ),
+      ),onTap: () {
+        // logic.searchDetail(data);
+      },),
     );
   }
 
@@ -98,7 +115,6 @@ class _MaterialLabelScanPageState extends State<MaterialLabelScanPage> {
       queryWidgets: [
         DatePicker(pickerController: startDate),
         DatePicker(pickerController: endDate),
-        LinkOptionsPicker(pickerController: factoryWarehouse),
         EditText(
           hint: 'material_label_scan_material_code'.tr,
           controller: materialNumber,
