@@ -35,6 +35,7 @@ enum BaseUrl {
 
   ///SAP正式库
   baseUrlSap('SAP正式库', 'https://erpprd01.goldemperor.com:8003/', 'SAP'),
+  // baseUrlSap('SAP正式库', 'https://webdispatcher.goldemperor.com:8007/', 'SAP'),
 
   ///MES测试库 对接 SAP ECC 300
   mesEccTest('MES ECC 300', 'https://geapptest.goldemperor.com:1224/', 'MES'),
@@ -512,7 +513,7 @@ const webApiReportSAPByWorkCardInterID =
     'api/CompoundDispatching/ReportSAPByWorkCardInterID';
 
 //获取贴标列表
-const webApiGetLabelList = 'api/CompoundDispatching/PackagePrintLabelList';
+const webApiGetLabelList = 'api/CompoundDispatching/PackagePrintLabelListV2';
 
 //创建单码贴标
 const webApiCreateSingleLabel =
