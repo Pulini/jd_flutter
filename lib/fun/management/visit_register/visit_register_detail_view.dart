@@ -65,6 +65,13 @@ class _VisitRegisterDetailPageState extends State<VisitRegisterDetailPage> {
                     width: 150,
                     height: 150,
                     fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return const Icon(
+                        Icons.person_outline,
+                        color: Colors.black12,
+                        size: 50,
+                      );
+                    },
                   ),
                 ),
                 Text('visit_details_card_picture'.tr),
@@ -82,6 +89,13 @@ class _VisitRegisterDetailPageState extends State<VisitRegisterDetailPage> {
                     width: 150,
                     height: 150,
                     fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return const Icon(
+                        Icons.person_outline,
+                        color: Colors.black12,
+                        size: 50,
+                      );
+                    },
                   ),
                 ),
                 Text('visit_details_face_picture'.tr),
@@ -249,6 +263,30 @@ class _VisitRegisterDetailPageState extends State<VisitRegisterDetailPage> {
         )));
   }
 
+  Widget _showLeaveListView() {
+    if (state.dataDetail.leavePics!.isNotEmpty) {
+      return Container(
+          margin: const EdgeInsets.only(left: 20, right: 20),
+          height: 100,
+          width: 100,
+          decoration: BoxDecoration(
+            //背景
+            borderRadius: const BorderRadius.all(Radius.circular(4.0)),
+            //设置四边边框
+            border: Border.all(width: 1, color: Colors.blue),
+          ),
+          child: ListView.builder(
+            padding: const EdgeInsets.all(8),
+            scrollDirection: Axis.horizontal,
+            itemCount: state.dataDetail.leavePics?.length,
+            itemBuilder: (BuildContext context, int index) =>
+                _comePhotoItem(state.dataDetail.leavePics?[index].photo!),
+          ));
+    } else {
+      return const SizedBox(height: 1);
+    }
+  }
+
   Text _subTitle(String title) {
     return Text(
       //子标题
@@ -337,7 +375,7 @@ class _VisitRegisterDetailPageState extends State<VisitRegisterDetailPage> {
           _comeListView(),
           _subTitle('visit_details_departure_photos'.tr),
           const SizedBox(height: 10),
-          _leaveListView(),
+          state.dataDetail.leaveTime!.isEmpty ?  _leaveListView() : _showLeaveListView(),
           if (state.dataDetail.leaveTime!.isEmpty) _clickButton(),
         ],
       ),

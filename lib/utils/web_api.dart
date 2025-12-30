@@ -1459,4 +1459,7 @@ const webApiGetGroupPayEndingDetail = 'api/Piecework/GetGroupPayEndingDetail';
 //备料任务清单
 const webApiGetPickMatList = 'api/PickMat/GetPickMatList';
 
+//备料任务详情
+const webApiGetPickMatDetail = 'api/PickMat/GetPickMatDetail';
+
 

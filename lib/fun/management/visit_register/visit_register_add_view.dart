@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -23,9 +22,7 @@ class VisitRegisterAddPage extends StatefulWidget {
 
 class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
   final logic = Get.find<VisitRegisterLogic>();
-  final state = Get
-      .find<VisitRegisterLogic>()
-      .state;
+  final state = Get.find<VisitRegisterLogic>().state;
   var hintStyle = const TextStyle(color: Colors.black);
   var textStyle = TextStyle(color: Colors.blue.shade900);
 
@@ -35,7 +32,6 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
   var inputNumber = [
     FilteringTextInputFormatter.allow(RegExp('[0-9]')),
   ];
-
 
   //  搜索弹窗
   void searchDialog({
@@ -104,15 +100,16 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
     );
   }
 
-  Row _inputText(String hint,
-      String? text1,
-      List<TextInputFormatter>? inputType, {
-        TextEditingController? controller,
-        bool search = false,
-        bool canEnable = true,
-        Function()? click,
-        Function(String)? onChange,
-      }) {
+  Row _inputText(
+    String hint,
+    String? text1,
+    List<TextInputFormatter>? inputType, {
+    TextEditingController? controller,
+    bool search = false,
+    bool canEnable = true,
+    Function()? click,
+    Function(String)? onChange,
+  }) {
     return Row(
       children: [
         Container(
@@ -124,22 +121,21 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
         ),
         Expanded(
             child: CupertinoTextField(
-              inputFormatters: inputType,
-              enabled: canEnable,
-              onChanged: (str) => onChange?.call(str),
-              controller: controller ??
-                  TextEditingController(text: text1 ?? ""),
-            )),
+          inputFormatters: inputType,
+          enabled: canEnable,
+          onChanged: (str) => onChange?.call(str),
+          controller: controller ?? TextEditingController(text: text1 ?? ""),
+        )),
         search
             ? IconButton(
-          icon: const Icon(Icons.search, color: Colors.grey),
-          onPressed: () {
-            click?.call();
-          },
-        )
+                icon: const Icon(Icons.search, color: Colors.grey),
+                onPressed: () {
+                  click?.call();
+                },
+              )
             : const SizedBox(
-          height: 1,
-        )
+                height: 1,
+              )
       ],
     );
   }
@@ -147,11 +143,11 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
   Padding _peoplePhotos() {
     return Padding(
       padding: const EdgeInsets.only(top: 20, bottom: 20),
-      child: Obx(() =>
-          Row(
+      child: Obx(() => Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Expanded( // 添加 Expanded 包装
+              Expanded(
+                // 添加 Expanded 包装
                 child: GestureDetector(
                   onTap: () {
                     takePhoto(callback: (f) {
@@ -163,35 +159,37 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
                     children: [
                       state.cardPicture.value.isNotEmpty
                           ? ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: Image.memory( // 改为 Image.memory
-                          base64Decode(state.cardPicture.value),
-                          gaplessPlayback: true,
-                          width: 100,
-                          // 减小图片宽度
-                          height: 100,
-                          // 减小图片高度
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) {
-                            return const Icon(
-                              Icons.error_outline,
-                              color: Colors.red,
-                              size: 100,
-                            );
-                          },
-                        ),
-                      )
+                              borderRadius: BorderRadius.circular(10),
+                              child: Image.memory(
+                                // 改为 Image.memory
+                                base64Decode(state.cardPicture.value),
+                                gaplessPlayback: true,
+                                width: 100,
+                                // 减小图片宽度
+                                height: 100,
+                                // 减小图片高度
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return const Icon(
+                                    Icons.error_outline,
+                                    color: Colors.red,
+                                    size: 100,
+                                  );
+                                },
+                              ),
+                            )
                           : const Icon(
-                        Icons.add_a_photo_outlined,
-                        color: Colors.blueAccent,
-                        size: 100, // 减小图标大小
-                      ),
+                              Icons.add_a_photo_outlined,
+                              color: Colors.blueAccent,
+                              size: 100, // 减小图标大小
+                            ),
                       Text('visit_details_card_picture'.tr),
                     ],
                   ),
                 ),
               ),
-              Expanded( // 添加 Expanded 包装
+              Expanded(
+                // 添加 Expanded 包装
                 child: GestureDetector(
                   onTap: () {
                     takePhoto(callback: (f) {
@@ -203,29 +201,30 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
                     children: [
                       state.facePicture.value.isNotEmpty
                           ? ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: Image.memory( // 改为 Image.memory
-                          base64Decode(state.facePicture.value),
-                          gaplessPlayback: true,
-                          width: 100,
-                          // 减小图片宽度
-                          height: 100,
-                          // 减小图片高度
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) {
-                            return const Icon(
-                              Icons.error_outline,
-                              color: Colors.red,
-                              size: 100,
-                            );
-                          },
-                        ),
-                      )
+                              borderRadius: BorderRadius.circular(10),
+                              child: Image.memory(
+                                // 改为 Image.memory
+                                base64Decode(state.facePicture.value),
+                                gaplessPlayback: true,
+                                width: 100,
+                                // 减小图片宽度
+                                height: 100,
+                                // 减小图片高度
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return const Icon(
+                                    Icons.error_outline,
+                                    color: Colors.red,
+                                    size: 100,
+                                  );
+                                },
+                              ),
+                            )
                           : const Icon(
-                        Icons.add_a_photo_outlined,
-                        color: Colors.blueAccent,
-                        size: 100, // 减小图标大小
-                      ),
+                              Icons.add_a_photo_outlined,
+                              color: Colors.blueAccent,
+                              size: 100, // 减小图标大小
+                            ),
                       Text('visit_details_face_picture'.tr),
                     ],
                   ),
@@ -236,146 +235,135 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
     );
   }
 
-
-  Obx _checkCar() => Obx(() =>
-          RadioGroup(
-            groupValue: state.carType.value,
-            onChanged: (v) =>
+  Obx _checkCar() => Obx(() => RadioGroup(
+        groupValue: state.carType.value,
+        onChanged: (v) => {
+          state.carType.value = v!,
+          state.upAddDetail.value.carType = v,
+          if (v == '')
             {
-              state.carType.value = v!,
-              state.upAddDetail.value.carType = v,
-              if (v == '') {
-                state.showWeight.value = false,
-                state.showCarNumber.value = false,
-              },
-              if (v == '小桥车' || v == '货车') {
-                state.showWeight.value = false,
-                state.showCarNumber.value = true,
-              },
-              if (v == '拖车') {
-                state.showWeight.value = true,
-                state.showCarNumber.value = true,
-              }
+              state.showWeight.value = false,
+              state.showCarNumber.value = false,
             },
-            child: Row(
-              children: [
-                Expanded(
-                  child: RadioListTile(
-                    title: Text('visit_no_car'.tr),
-                    value: '',
-                  ),
-                ),
-                Expanded(
-                  child: RadioListTile(
-                    title: Text('visit_sedan'.tr),
-                    value: '小桥车',
-                  ),
-                ),
-                Expanded(
-                  child: RadioListTile(
-                    title: Text('visit_goods_train'.tr),
-                    value: '货车',
-                  ),
-                ),
-                Expanded(
-                  child: RadioListTile(
-                    title: Text('visit_trailer'.tr),
-                    value: '拖车',
-                  ),
-                ),
-              ],
-            ),
-          ));
-
-
-  Obx _checkDoor() =>
-      Obx(() =>
-          RadioGroup(
-            groupValue: state.doorType.value,
-            onChanged: (v) =>
+          if (v == '小桥车' || v == '货车')
             {
-              state.doorType.value = v!,
-              state.upAddDetail.value.gate = v
+              state.showWeight.value = false,
+              state.showCarNumber.value = true,
             },
-            child: Row(
-              children: [
-                Expanded(
-                  child: RadioListTile(
-                    title: Text('visit_gate_one'.tr),
-                    value: '1号门',
-                  ),
-                ),
-                Expanded(
-                  child: RadioListTile(
-                    title: Text('visit_gate_two'.tr),
-                    value: '2号门',
-                  ),
-                ),
-              ],
+          if (v == '拖车')
+            {
+              state.showWeight.value = true,
+              state.showCarNumber.value = true,
+            }
+        },
+        child: Row(
+          children: [
+            Expanded(
+              child: RadioListTile(
+                title: Text('visit_no_car'.tr),
+                value: '',
+              ),
             ),
-          )
-      );
+            Expanded(
+              child: RadioListTile(
+                title: Text('visit_sedan'.tr),
+                value: '小桥车',
+              ),
+            ),
+            Expanded(
+              child: RadioListTile(
+                title: Text('visit_goods_train'.tr),
+                value: '货车',
+              ),
+            ),
+            Expanded(
+              child: RadioListTile(
+                title: Text('visit_trailer'.tr),
+                value: '拖车',
+              ),
+            ),
+          ],
+        ),
+      ));
 
+  Obx _checkDoor() => Obx(() => RadioGroup(
+        groupValue: state.doorType.value,
+        onChanged: (v) =>
+            {state.doorType.value = v!, state.upAddDetail.value.gate = v},
+        child: Row(
+          children: [
+            Expanded(
+              child: RadioListTile(
+                title: Text('visit_gate_one'.tr),
+                value: '1号门',
+              ),
+            ),
+            Expanded(
+              child: RadioListTile(
+                title: Text('visit_gate_two'.tr),
+                value: '2号门',
+              ),
+            ),
+          ],
+        ),
+      ));
 
   Obx _showCarNumber() {
     return Obx(
-          () =>
-      state.showCarNumber.value
+      () => state.showCarNumber.value
           ? Column(
-        children: [
-          _inputText('visit_details_license_plate_number'.tr, '', [],
-              controller: logic.textCarNo, onChange: (s) {
-                state.upAddDetail.value.carNo = s;
-              }),
-          line,
-        ],
-      )
+              children: [
+                _inputText('visit_details_license_plate_number'.tr, '', [],
+                    controller: logic.textCarNo, onChange: (s) {
+                  state.upAddDetail.value.carNo = s;
+                }),
+                line,
+              ],
+            )
           : Container(),
     );
   }
 
   Obx _showInspectList() {
     return Obx(
-          () =>
-      state.showWeight.value
+      () => state.showWeight.value
           ? Column(
-        children: [
-          _inputText(
-              'visit_details_wheel_area_inspection'.tr, '', inputNumber,
-              controller: logic.textWheel, onChange: (s) {
-            state.upAddDetail.value.carBottom = s;
-          }),
-          line,
-          _inputText(
-              'visit_details_external_inspection'.tr, '', inputNumber,
-              controller: logic.textExternal, onChange: (s) {
-            state.upAddDetail.value.carExterior = s;
-          }),
-          line,
-          _inputText(
-              'visit_details_car_tail'.tr, '', inputNumber,
-              controller: logic.textTail, onChange: (s) {
-            state.upAddDetail.value.textTail = s;
-          }),
-          line,
-          _inputText(
-              'visit_details_Driver_cab_inspection'.tr, '', inputNumber,
-              controller: logic.textCab, onChange: (s) {
-            state.upAddDetail.value.carRear = s;
-          }),
-          line,
-          _inputText('visit_details_landing_gear'.tr, '', inputNumber,
-              controller: logic.textLandingGear, onChange: (s) {
-                state.upAddDetail.value.landingGear = s;
-              }),
-          line,
-          _inputText('visit_details_remark'.tr, '', inputNumber,
-              controller: logic.textRemark, onChange: (s) {
-                state.upAddDetail.value.note = s;
-              }),
-          line,
-        ],
-      )
+              children: [
+                _inputText(
+                    'visit_details_wheel_area_inspection'.tr, '', inputNumber,
+                    controller: logic.textWheel, onChange: (s) {
+                  state.upAddDetail.value.carBottom = s;
+                }),
+                line,
+                _inputText(
+                    'visit_details_external_inspection'.tr, '', inputNumber,
+                    controller: logic.textExternal, onChange: (s) {
+                  state.upAddDetail.value.carExterior = s;
+                }),
+                line,
+                _inputText('visit_details_car_tail'.tr, '', inputNumber,
+                    controller: logic.textTail, onChange: (s) {
+                  state.upAddDetail.value.textTail = s;
+                }),
+                line,
+                _inputText(
+                    'visit_details_Driver_cab_inspection'.tr, '', inputNumber,
+                    controller: logic.textCab, onChange: (s) {
+                  state.upAddDetail.value.carRear = s;
+                }),
+                line,
+                _inputText('visit_details_landing_gear'.tr, '', inputNumber,
+                    controller: logic.textLandingGear, onChange: (s) {
+                  state.upAddDetail.value.landingGear = s;
+                }),
+                line,
+                _inputText('visit_details_remark'.tr, '', inputNumber,
+                    controller: logic.textRemark, onChange: (s) {
+                  state.upAddDetail.value.note = s;
+                }),
+                line,
+              ],
+            )
           : Container(),
     );
   }
@@ -397,42 +385,41 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
           },
           child: data.typeAdd != '0'
               ? ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: Image.memory(
-              base64Decode(data.photo!),
-              gaplessPlayback: true,
-              width: 50,
-              height: 50,
-              fit: BoxFit.cover,
-            ),
-          )
+                  borderRadius: BorderRadius.circular(10),
+                  child: Image.memory(
+                    base64Decode(data.photo!),
+                    gaplessPlayback: true,
+                    width: 50,
+                    height: 50,
+                    fit: BoxFit.cover,
+                  ),
+                )
               : const Icon(
-            Icons.add_a_photo_outlined,
-            color: Colors.blueAccent,
-            size: 50,
-          ),
+                  Icons.add_a_photo_outlined,
+                  color: Colors.blueAccent,
+                  size: 50,
+                ),
         ));
   }
 
   Obx comeListView() {
-    return Obx(() =>
-        Container(
-            margin: const EdgeInsets.only(left: 20, right: 20),
-            height: 100,
-            width: 100,
-            decoration: BoxDecoration(
-              //背景
-              borderRadius: const BorderRadius.all(Radius.circular(4.0)),
-              //设置四周边框
-              border: Border.all(width: 1, color: Colors.blue),
-            ),
-            child: ListView.builder(
-              padding: const EdgeInsets.all(8),
-              scrollDirection: Axis.horizontal,
-              itemCount: state.upComePicture.length,
-              itemBuilder: (BuildContext context, int index) =>
-                  _comePhotoItem(state.upComePicture.toList()[index], index),
-            )));
+    return Obx(() => Container(
+        margin: const EdgeInsets.only(left: 20, right: 20),
+        height: 100,
+        width: 100,
+        decoration: BoxDecoration(
+          //背景
+          borderRadius: const BorderRadius.all(Radius.circular(4.0)),
+          //设置四周边框
+          border: Border.all(width: 1, color: Colors.blue),
+        ),
+        child: ListView.builder(
+          padding: const EdgeInsets.all(8),
+          scrollDirection: Axis.horizontal,
+          itemCount: state.upComePicture.length,
+          itemBuilder: (BuildContext context, int index) =>
+              _comePhotoItem(state.upComePicture.toList()[index], index),
+        )));
   }
 
   Padding _clickButton() {
@@ -462,23 +449,23 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
     return [
       _inputText('visit_details_id_card'.tr, data.iDCard, inputNumber,
           controller: logic.textIdCard, onChange: (s) {
-            state.upAddDetail.value.iDCard = s;
-          }),
+        state.upAddDetail.value.iDCard = s;
+      }),
       line,
       _inputText('visit_details_name'.tr, data.name, [],
           controller: logic.textPersonName, onChange: (s) {
-            state.upAddDetail.value.name = s;
-          }),
+        state.upAddDetail.value.name = s;
+      }),
       line,
       _inputText('visit_details_phone'.tr, data.phone, inputNumber,
           controller: logic.textPhone, onChange: (s) {
-            state.upAddDetail.value.phone = s;
-          }),
+        state.upAddDetail.value.phone = s;
+      }),
       line,
       _inputText('visit_details_unit'.tr, data.unit, [],
           controller: logic.textUnit, onChange: (s) {
-            state.upAddDetail.value.unit = s;
-          }),
+        state.upAddDetail.value.unit = s;
+      }),
       line,
       _inputText(
           'visit_details_number_of_visitors'.tr, data.visitorNum, inputNumber,
@@ -492,20 +479,18 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
           'visit_details_name_of_interviewee'.tr, data.intervieweeName, [],
           search: true,
           canEnable: false,
-          controller: logic.textIntervieweeName,
-          click: () {
-            searchDialog(
-                title: 'visit_details_to_search'.tr,
-                hintTitle: 'visit_details_name_of_interviewee'.tr,
-                confirm: () {
-                  logic.searchPeople();
-                });
-          },
-          onChange: (s) {
-            if (s.isNotEmpty) {
-              state.searchMes = s;
-            }
-          }),
+          controller: logic.textIntervieweeName, click: () {
+        searchDialog(
+            title: 'visit_details_to_search'.tr,
+            hintTitle: 'visit_details_name_of_interviewee'.tr,
+            confirm: () {
+              logic.searchPeople();
+            });
+      }, onChange: (s) {
+        if (s.isNotEmpty) {
+          state.searchMes = s;
+        }
+      }),
       line,
       _inputText(
           'visit_details_interviewed_department'.tr, data.visitedDept, [],
@@ -513,8 +498,7 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
         state.upAddDetail.value.visitedDept = s;
       }),
       line,
-      Obx(() =>
-          Row(
+      Obx(() => Row(
             //监听活动区域是否可以输入
             children: [
               Container(
@@ -522,13 +506,13 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
                 margin: const EdgeInsets.only(right: 10),
                 alignment: Alignment.centerRight,
                 child:
-                Text('visit_details_zone_of_action'.tr, style: hintStyle),
+                    Text('visit_details_zone_of_action'.tr, style: hintStyle),
               ),
               Expanded(
                   child: CupertinoTextField(
-                    enabled: state.canInput.value,
-                    controller: logic.textVisitorPlace,
-                  )),
+                enabled: state.canInput.value,
+                controller: logic.textVisitorPlace,
+              )),
               IconButton(
                 icon: const Icon(Icons.search, color: Colors.grey),
                 onPressed: () {
@@ -540,13 +524,13 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
       line,
       _inputText('visit_details_visitor_id_number'.tr, data.credentials, [],
           controller: logic.textVisitNumber, onChange: (s) {
-            state.upAddDetail.value.credentials = s;
-          }),
+        state.upAddDetail.value.credentials = s;
+      }),
       line,
       _inputText('visit_details_reason_for_visit'.tr, data.subjectMatter, [],
           controller: logic.textReason, onChange: (s) {
-            state.upAddDetail.value.subjectMatter = s;
-          }),
+        state.upAddDetail.value.subjectMatter = s;
+      }),
       _peoplePhotos(),
       _subTitle('visit_details_vehicle_information'.tr), //车辆信息
       _checkCar(), //选择车辆
@@ -555,12 +539,21 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
       _showInspectList(),
       _inputText('visit_details_bring_your_own_goods'.tr, data.ownGoods, [],
           onChange: (s) {
-            state.upAddDetail.value.ownGoods = s;
-          }),
+        state.upAddDetail.value.ownGoods = s;
+      }),
       line,
       _inputText('visit_details_on_duty_security_guard'.tr,
           data.securityStaffName, inputNumber,
-          canEnable: false),
+          canEnable: true, onChange: (s) {
+        if (s.isNotEmpty) {
+          logic.searchPeopleForId(number: s, refresh: () {
+            setState(() {
+              state.upAddDetail.value.examineID = state.peoPleInfo.value.empID.toString();
+              state.upAddDetail.value.securityStaffName = state.peoPleInfo.value.empName.toString();
+            });
+          });
+        }
+      }),
       const SizedBox(height: 10),
       _subTitle('visit_details_visits_photo'.tr), //来访照片
       const SizedBox(height: 10),
@@ -591,5 +584,4 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
     state.upAddDetail.value = VisitAddRecordInfo();
     super.dispose();
   }
-
 }

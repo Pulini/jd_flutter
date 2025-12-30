@@ -95,17 +95,21 @@ class _MaterialLabelScanPageState extends State<MaterialLabelScanPage> {
           ),
         ),
       ),
-      child: InkWell(child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _text('material_label_scan_number'.tr, data.workCardNo ?? ''),
-          _text('material_label_scan_processed'.tr, '${data.materialNumber ?? ''} ${data.materialName ?? ''}'),
-          _text('material_label_scan_command'.tr, data.mtoNo ?? ''),
-          _text('material_label_scan_time'.tr, data.noticeDate ?? ''),
-        ],
-      ),onTap: () {
-        // logic.searchDetail(data);
-      },),
+      child: InkWell(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _text('material_label_scan_number'.tr, data.workCardNo ?? ''),
+            _text('material_label_scan_processed'.tr,
+                '${data.materialNumber ?? ''} ${data.materialName ?? ''}'),
+            _text('material_label_scan_command'.tr, data.mtoNo ?? ''),
+            _text('material_label_scan_time'.tr, data.noticeDate ?? ''),
+          ],
+        ),
+        onTap: () {
+          logic.queryDetail(workCardNo: data.workCardNo ?? '');
+        },
+      ),
     );
   }
 
@@ -132,13 +136,15 @@ class _MaterialLabelScanPageState extends State<MaterialLabelScanPage> {
     );
   }
 
+  void scan() {
+    pdaScanner(scan: (code) {
+      if (code.isNotEmpty) logic.queryDetail(workCardNo: code);
+    });
+  }
+
   @override
   void initState() {
-    pdaScanner(scan: (code) => {
-      if (code.isNotEmpty) {
-        logic.queryDetail( workCardNo: code)
-      }
-    });
+    scan();
     super.initState();
   }
 }

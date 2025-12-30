@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:jd_flutter/bean/http/response/people_message_info.dart';
 import 'package:jd_flutter/bean/http/response/visit_add_record_info.dart';
 import 'package:jd_flutter/bean/http/response/visit_data_list_info.dart';
 import 'package:jd_flutter/bean/http/response/visit_get_detail_info.dart';
@@ -37,4 +38,6 @@ class VisitRegisterState {   //接口数据返回
   var  checkCarRearValue =  false.obs;  //尾部检查 checkBox
   var  checkCarCabValue =  false.obs;  //驾驶室检查 checkBox
   var  checkCarLandingGearValue=  false.obs;  //起落架检查 checkBox
+
+  var peoPleInfo = PeopleMessageInfo().obs; //员工详情
 }

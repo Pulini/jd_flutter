@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/leave_visit_record.dart';
+import 'package:jd_flutter/bean/http/response/people_message_info.dart';
 import 'package:jd_flutter/bean/http/response/photo_bean.dart';
 import 'package:jd_flutter/bean/http/response/search_people_info.dart';
 import 'package:jd_flutter/bean/http/response/visit_add_record_info.dart';
@@ -43,7 +44,6 @@ class VisitRegisterLogic extends GetxController {
   var textLandingGear = TextEditingController(); //起落架
   var textRemark = TextEditingController(); //备注
   var textCarNo = TextEditingController(); //车牌号码
-  var textSecurity = TextEditingController(); //车牌号码
 
   var textSearchName = TextEditingController();
   var textSearchPhone = TextEditingController();
@@ -69,19 +69,18 @@ class VisitRegisterLogic extends GetxController {
     saveKey: '${RouteConfig.property.name}${PickerType.endDate}',
   );
 
-  void refreshGetVisitList(
-      {String name = "",
-      String iDCard = "",
-      String interviewee = "",
-      String intervieweeName = "",
-      String securityStaff = "",
-      String startTime = "",
-      String endTime = "",
-      String leave = "",
-      String phone = "",
-      String carNo = "",
-      String credentials = "",
-      Function()? refresh}) {
+  void refreshGetVisitList({String name = "",
+    String iDCard = "",
+    String interviewee = "",
+    String intervieweeName = "",
+    String securityStaff = "",
+    String startTime = "",
+    String endTime = "",
+    String leave = "",
+    String phone = "",
+    String carNo = "",
+    String credentials = "",
+    Function()? refresh}) {
     httpPost(
         method: webApiGetVisitDtBySqlWhere,
         loading: 'visit_getting_visitor_list'.tr,
@@ -170,6 +169,7 @@ class VisitRegisterLogic extends GetxController {
           state.upLeavePicture.clear();
           state.upLeavePicture.add(VisitPhotoBean(photo: "", typeAdd: "0"));
           Get.to(() => const VisitRegisterDetailPage());
+          logger.f('11111');
         } else {
           //带数据的新增
           if (state.lastAdd) {
@@ -179,10 +179,10 @@ class VisitRegisterLogic extends GetxController {
             textPersonName.text = state.dataDetail.name ?? '';
             textPhone.text = state.dataDetail.phone ?? '';
             textUnit.text = state.dataDetail.unit ?? '';
-            textSecurity.text = userInfo?.name??'';
             state.upAddDetail.value.examineID = userInfo?.empID.toString();
             state.upAddDetail.value.securityStaff =
                 userInfo?.empID.toString();
+            logger.f('2222222');
           } else {
             state.dataDetail =
                 VisitGetDetailInfo.fromJson(response.data);
@@ -190,7 +190,9 @@ class VisitRegisterLogic extends GetxController {
             state.facePicture.value = state.dataDetail.peoPic ?? '';
             state.upLeavePicture.clear();
             state.upLeavePicture.add(VisitPhotoBean(photo: "", typeAdd: "0"));
+            logger.f('3333333');
           }
+          logger.f('444444');
           state.upAddDetail.value.examineID = userInfo?.empID.toString();
           state.upAddDetail.value.securityStaff =
               userInfo?.empID.toString();
@@ -202,6 +204,29 @@ class VisitRegisterLogic extends GetxController {
         Get.to(() => const VisitRegisterAddPage());
       }
     });
+  }
+
+  //根据工号获取人员信息
+  void searchPeopleForId({
+    required String number,
+    required Function() refresh
+  }) {
+    if (number.isNotEmpty && number.length == 6) {
+      httpGet(
+        method: webApiGetEmpAndLiableByEmpCode,
+        loading: 'device_maintenance_personnel_information'.tr,
+        params: {
+          'EmpCode': number,
+        },
+      ).then((response) {
+        if (response.resultCode == resultSuccess) {
+          state.peoPleInfo.value = PeopleMessageInfo.fromJson(response.data);
+          refresh.call();
+        } else {
+          errorDialog(content: response.message);
+        }
+      });
+    }
   }
 
   void addPicture(String bitmapBase64, bool isCome) {
@@ -219,17 +244,17 @@ class VisitRegisterLogic extends GetxController {
   void updateLeaveFVisit() {
     var body = <PhotoBean>[];
     for (var value1 in state.upLeavePicture) {
-        if(value1.typeAdd!='0'){
-          body.add(PhotoBean(photo: value1.photo));
-        }
+      if (value1.typeAdd != '0') {
+        body.add(PhotoBean(photo: value1.photo));
+      }
     }
     httpPost(
-            method: webApiUpdateLeaveFVisit,
-            loading: 'visit_submitting_departure_information'.tr,
-            body: LeaveVisitRecord(
-                interID: state.dataDetail.interID,
-                leaveTime: getDateYMD(),
-                leavePics: body))
+        method: webApiUpdateLeaveFVisit,
+        loading: 'visit_submitting_departure_information'.tr,
+        body: LeaveVisitRecord(
+            interID: state.dataDetail.interID,
+            leaveTime: getDateYMD(),
+            leavePics: body))
         .then((response) {
       if (response.resultCode == resultSuccess) {
         refreshGetVisitList();
@@ -245,9 +270,9 @@ class VisitRegisterLogic extends GetxController {
   void addVisitRecord() {
     var body = <PhotoBean>[];
     for (var value1 in state.upComePicture) {
-        if(value1.typeAdd!='0'){
-          body.add(PhotoBean(photo: value1.photo));
-        }
+      if (value1.typeAdd != '0') {
+        body.add(PhotoBean(photo: value1.photo));
+      }
     }
     state.upAddDetail.value.securityStaff = userInfo?.empID.toString();
     state.upAddDetail.value.visitPics = body;
@@ -345,17 +370,17 @@ class VisitRegisterLogic extends GetxController {
       }
     }
     httpPost(
-            method: webApiInsertIntoFVisit,
-            loading: 'visit_submitting_new_records'.tr,
-            body: state.upAddDetail.value)
+        method: webApiInsertIntoFVisit,
+        loading: 'visit_submitting_new_records'.tr,
+        body: state.upAddDetail.value)
         .then((response) {
       if (response.resultCode == resultSuccess) {
         successDialog(
             content: response.message,
             back: () {
-                  refreshGetVisitList();
-                  Get.back();
-                });
+              refreshGetVisitList();
+              Get.back();
+            });
       } else {
         errorDialog(content: response.message);
       }

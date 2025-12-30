@@ -51,3 +51,61 @@ class MaterialLabelScanInfo {
     return map;
   }
 }
+
+class MaterialLabelScanDetailInfo {
+  MaterialLabelScanDetailInfo({
+    this.interID,
+    this.materialID,
+    this.materialNumber,
+    this.materialName,
+    this.srcICMOInterID,
+    this.mtoNo,
+    this.size,
+    this.orderQty,
+    this.qtyReceived,
+    this.unclaimedQty,
+
+  });
+
+  MaterialLabelScanDetailInfo.fromJson(dynamic json) {
+    interID = json['InterID'];
+    materialID = json['MaterialID'];
+    materialNumber = json['MaterialNumber'];
+    materialName = json['MaterialName'];
+    srcICMOInterID = json['SrcICMOInterID'];
+    mtoNo = json['MtoNo'];
+    size = json['Size'];
+    orderQty = json['OrderQty'];
+    qtyReceived = json['QtyReceived'];
+    unclaimedQty = json['UnclaimedQty'];
+
+  }
+
+  int? interID;
+  int? materialID;
+  String? materialNumber;
+  String? materialName;
+  int? srcICMOInterID;
+  String? mtoNo;
+  String? size;
+  double? orderQty;
+  double? qtyReceived;
+  double? unclaimedQty;
+
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['InterID'] = interID;
+    map['MaterialID'] = materialID;
+    map['MaterialNumber'] = materialNumber;
+    map['MaterialName'] = materialName;
+    map['MtoNo'] = mtoNo;
+    map['Size'] = size;
+    map['OrderQty'] = orderQty;
+    map['QtyReceived'] = qtyReceived;
+    map['UnclaimedQty'] = unclaimedQty;
+
+    return map;
+  }
+}
+

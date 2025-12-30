@@ -1,12 +1,16 @@
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:jd_flutter/bean/http/response/material_label_scan_info.dart';
+import 'package:jd_flutter/fun/warehouse/out/material_label_scan/material_label_scan_detail_view.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
-class MaterialLabelState {
+class MaterialLabelScanState {
 
   var dataList = <MaterialLabelScanInfo>[].obs;
+  var dataDetailList = <MaterialLabelScanDetailInfo>[].obs;
 
   var materialListNumber=''; //备料单号
 
@@ -44,18 +48,18 @@ class MaterialLabelState {
   }) {
     httpGet(
       loading: 'material_label_scan_get_material_detail'.tr,
-      method: webApiGetPickMatList,
+      method: webApiGetPickMatDetail,
       params: {
         'WorkCardNo': workCardNo,
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        var list = <MaterialLabelScanInfo>[
+        var list = <MaterialLabelScanDetailInfo>[
           for (var i = 0; i < response.data.length; ++i)
-            MaterialLabelScanInfo.fromJson(response.data[i])
+            MaterialLabelScanDetailInfo.fromJson(response.data[i])
         ];
-
-        dataList.value = list;
+        dataDetailList.value = list;
+        Get.to(() => const MaterialLabelScanDetailPage());
       } else {
         errorDialog(content: response.message ?? 'query_default_error'.tr);
       }
