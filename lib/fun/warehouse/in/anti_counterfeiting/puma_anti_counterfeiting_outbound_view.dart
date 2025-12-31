@@ -7,7 +7,6 @@ import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/scanner.dart';
 
-
 class PumaAntiCounterfeitingOutboundPage extends StatefulWidget {
   const PumaAntiCounterfeitingOutboundPage({super.key});
 
@@ -31,12 +30,24 @@ class _PumaAntiCounterfeitingOutboundPageState
         body: Column(
           children: [
             Obx(() => Expanded(
-                  child: ListView.builder(
+                child: ListView.builder(
                     padding: const EdgeInsets.all(5),
-                    itemCount: state.dataCodeList.length,
-                    itemBuilder: (BuildContext context, int index) =>
-                        Text(state.dataCodeList[index].code.toString()),
-                  ),
+                    itemCount: state.sortingList.length,
+                    itemBuilder: (BuildContext context, int index) => Container(
+                          padding: const EdgeInsets.all(5),
+                          margin: const EdgeInsets.only(bottom: 5),
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(5),
+                              border:
+                                  Border.all(width: 1, color: Colors.blue)),
+                          child: Text(
+                            state.sortingList[index].fBarCode.toString(),
+                            style: TextStyle(color: Colors.black),
+                          ),
+                        ))
+
+                // Text(state.sortingList[index].fBarCode.toString()),),
                 )),
             Row(
               children: [
@@ -67,7 +78,7 @@ class _PumaAntiCounterfeitingOutboundPageState
                         },
                       );
                     },
-                    combination: Combination.right,
+                    combination: Combination.middle,
                   ),
                 ),
                 Expanded(
@@ -103,9 +114,8 @@ class _PumaAntiCounterfeitingOutboundPageState
 
   @override
   void initState() {
-    logic.getBarCodeListByEmp();
     pdaScanner(
-      scan: (code)  {
+      scan: (code) {
         logic.haveCode(
           code: code,
           have: () {

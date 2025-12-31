@@ -159,26 +159,18 @@ class MaterialLabelScanState {
         'pickMatDetailItems': [
           for (var c in dataDetailList..where((v) => v.size != '合计').toList())
             {
-              'SrcICMOInterID': '',
-              'MaterialID': '',
-              'Size': '',
-              'SubmitQty': '',
+              'SrcICMOInterID': c.srcICMOInterID,
+              'MaterialID': c.materialID,
+              'Size': c.size,
+              'SubmitQty': c.thisTime,
             }
         ]
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        var list = <MaterialLabelScanBarCodeInfo>[
-          for (var i = 0; i < response.data.length; ++i)
-            MaterialLabelScanBarCodeInfo.fromJson(response.data[i])
-        ];
-        setScanDetail(
-            lists: list,
-            success: () {
-              success.call();
-            });
+
       } else {
-        error.call(response.message ?? 'query_default_error'.tr);
+        errorDialog(content: response.message ?? 'query_default_error'.tr);
       }
     });
   }

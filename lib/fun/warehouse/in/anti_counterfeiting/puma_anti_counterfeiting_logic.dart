@@ -71,12 +71,15 @@ class PumaAntiCounterfeitingLogic extends GetxController {
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
+
         var list = <PumaCodeListInfo>[
           for (var i = 0; i < response.data.length; ++i)
             PumaCodeListInfo.fromJson(response.data[i])
         ];
+
         state.sortingList.value = list;
       } else {
+        state.sortingList.value = [];
         errorDialog(content: response.message);
       }
     });
