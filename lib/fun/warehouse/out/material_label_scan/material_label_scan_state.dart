@@ -1,5 +1,3 @@
-import 'dart:nativewrappers/_internal/vm/lib/ffi_allocation_patch.dart';
-
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
