@@ -64,7 +64,9 @@ class MaterialLabelScanDetailInfo {
     this.orderQty,
     this.qtyReceived,
     this.unclaimedQty,
-
+    this.productName,
+    this.workCardNo,
+    this.unitName,
   });
 
   MaterialLabelScanDetailInfo.fromJson(dynamic json) {
@@ -78,20 +80,26 @@ class MaterialLabelScanDetailInfo {
     orderQty = json['OrderQty'];
     qtyReceived = json['QtyReceived'];
     unclaimedQty = json['UnclaimedQty'];
-
+    productName = json['ProductName'];
+    workCardNo = json['WorkCardNo'];
+    unitName = json['UnitName'];
   }
 
   int? interID;
+  String? workCardNo;
   int? materialID;
+  String? productName;
   String? materialNumber;
   String? materialName;
   int? srcICMOInterID;
   String? mtoNo;
   String? size;
-  double? orderQty;
-  double? qtyReceived;
-  double? unclaimedQty;
-
+  double? orderQty;  //订单数量
+  double? qtyReceived; //已领
+  double? unclaimedQty; //未领
+  double? thisTime=0.0; //本次
+  String? unitName;
+  bool isScan = false;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -104,6 +112,53 @@ class MaterialLabelScanDetailInfo {
     map['OrderQty'] = orderQty;
     map['QtyReceived'] = qtyReceived;
     map['UnclaimedQty'] = unclaimedQty;
+    map['ProductName'] = productName;
+    map['WorkCardNo'] = workCardNo;
+    map['UnitName'] = unitName;
+
+    return map;
+  }
+}
+
+class MaterialLabelScanBarCodeInfo {
+  MaterialLabelScanBarCodeInfo({
+    this.materialID,
+    this.materialNumber,
+    this.materialName,
+    this.srcICMOInterID,
+    this.size,
+    this.barCodeQty,
+
+  });
+
+  MaterialLabelScanBarCodeInfo.fromJson(dynamic json) {
+    materialID = json['MaterialID'];
+    materialNumber = json['MaterialNumber'];
+    materialName = json['MaterialName'];
+    srcICMOInterID = json['SrcICMOInterID'];
+    size = json['Size'];
+    barCodeQty = json['BarCodeQty'];
+
+  }
+
+  int? srcICMOInterID;
+  int? materialID;
+  String? productName;
+  String? materialNumber;
+  String? materialName;
+  String? size;
+  double? barCodeQty;
+
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['SrcICMOInterID'] = srcICMOInterID;
+    map['MaterialID'] = materialID;
+    map['MaterialNumber'] = materialNumber;
+    map['MaterialName'] = materialName;
+    map['Size'] = size;
+    map['BarCodeQty'] = barCodeQty;
+
 
     return map;
   }

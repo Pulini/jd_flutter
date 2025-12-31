@@ -7,6 +7,7 @@ import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
+import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/worker_check_widget.dart';
 
 void checkBarCodeProcessDialog({
@@ -15,7 +16,7 @@ void checkBarCodeProcessDialog({
 }) {
   getProcessFlowInfoByBarCode(
     list: list,
-    callback: (list, error) {
+    callback: (list) {
       WorkerInfo? worker;
       var processSelect =
           spGet(spSaveProcessSelectProcess).toString().toIntTry();
@@ -42,7 +43,7 @@ void checkBarCodeProcessDialog({
                     selectView(
                       list: processList,
                       controller: processController,
-                      errorMsg: error,
+                      errorMsg: '',
                       hint: 'process_report_store_process_procedure'.tr,
                     ),
                   ],
@@ -52,11 +53,17 @@ void checkBarCodeProcessDialog({
                 TextButton(
                   onPressed: () {
                     if (worker == null) {
-                      showSnackBar(message: 'process_report_store_input_operator_id'.tr, isWarning: true);
+                      showSnackBar(
+                          message: 'process_report_store_input_operator_id'.tr,
+                          isWarning: true);
                       return;
                     }
                     if (processList.isEmpty) {
-                      showSnackBar(message: 'process_report_store_select_process_procedure', isWarning: true);
+                      showSnackBar(
+                          message:
+                              'process_report_store_select_process_procedure'
+                                  .tr,
+                          isWarning: true);
                       return;
                     }
                     processSelect = processList.length > 1
@@ -67,7 +74,6 @@ void checkBarCodeProcessDialog({
                     spSave(spSaveScanPickingMaterial, worker!.empCode ?? '');
                     Get.back();
                     submit.call(worker!, processList[processSelect]);
-
                   },
                   child: Text('process_report_store_submit'.tr),
                 ),
@@ -89,7 +95,7 @@ void checkBarCodeProcessDialog({
 
 void getProcessFlowInfoByBarCode({
   required List<BarCodeInfo> list,
-  required Function(List<BarCodeProcessInfo>, String) callback,
+  required Function(List<BarCodeProcessInfo>) callback,
 }) {
   httpPost(
     method: webApiGetProcessFlowInfoByBarCode,
@@ -101,14 +107,13 @@ void getProcessFlowInfoByBarCode({
     },
   ).then((response) {
     var list = <BarCodeProcessInfo>[];
-    var error = '';
     if (response.resultCode == resultSuccess) {
       for (var json in response.data) {
         list.add(BarCodeProcessInfo.fromJson(json));
       }
+      callback.call(list);
     } else {
-      error = response.message ?? 'query_default_error'.tr;
+      errorDialog(content: response.message ?? 'query_default_error'.tr);
     }
-    callback.call(list, error);
   });
 }

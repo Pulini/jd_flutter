@@ -1463,4 +1463,10 @@ const webApiGetPickMatList = 'api/PickMat/GetPickMatList';
 //备料任务详情
 const webApiGetPickMatDetail = 'api/PickMat/GetPickMatDetail';
 
+//备料通过条码获取指令尺码数量信息
+const webApiPickGetBarCodeInfo = 'api/PickMat/GetBarCodeInfo';
+
+//备料提交领料
+const webApiSubmitPickMatDetail = 'api/PickMat/SubmitPickMatDetail';
+
 
