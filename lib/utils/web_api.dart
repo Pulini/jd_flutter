@@ -34,8 +34,8 @@ enum BaseUrl {
   baseUrlMes('MES正式库', 'https://geapp.goldemperor.com:1226/', 'MES'),
 
   ///SAP正式库
-  baseUrlSap('SAP正式库', 'https://erpprd01.goldemperor.com:8003/', 'SAP'),
-  // baseUrlSap('SAP正式库', 'https://webdispatcher.goldemperor.com:8007/', 'SAP'),
+  // baseUrlSap('SAP正式库', 'https://erpprd01.goldemperor.com:8003/', 'SAP'),
+  baseUrlSap('SAP正式库', 'https://webdispatcher.goldemperor.com:8007/', 'SAP'),
 
   ///MES测试库 对接 SAP ECC 300
   mesEccTest('MES ECC 300', 'https://geapptest.goldemperor.com:1224/', 'MES'),
