@@ -520,6 +520,14 @@ Future<void> weighbridgeOpen() async {
   await const MethodChannel(channelWeighbridgeAndroidToFlutter)
       .invokeMethod('OpenDevice');
 }
+Future<void> weighbridgeDestroy() async {
+  await const MethodChannel(channelWeighbridgeAndroidToFlutter)
+      .invokeMethod('DestroyDevice');
+}
+Future<void> weighbridgeResume() async {
+  await const MethodChannel(channelWeighbridgeAndroidToFlutter)
+      .invokeMethod('ResumeDevice');
+}
 
 void weighbridgeListener({
   required Function() usbAttached,
