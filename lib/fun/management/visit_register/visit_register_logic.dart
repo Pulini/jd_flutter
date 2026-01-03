@@ -114,21 +114,23 @@ class VisitRegisterLogic extends GetxController {
   }
 
   void getVisitLastList({Function()? refresh}) {
+
+    logger.f('---------------------');
     httpPost(
         method: webApiGetVisitInfoByJsonStr,
         loading: 'visit_latest_visit_history'.tr,
-        body: VisitLastRecord(
-          name: textSearchName.text,
-          phone: textSearchPhone.text,
-          idCard: textSearchCar.text,
-          carNo: textSearchIdCard.text,
-        )).then((response) {
+        body: {
+          'Name':textSearchName.text,
+          'Phone':textSearchPhone.text,
+          'IDCard':textSearchCar.text,
+          'CarNo':textSearchIdCard.text,
+        }).then((response) {
       if (response.resultCode == resultSuccess) {
-        var jsonList = jsonDecode(response.data);
-        var list = <VisitDataListInfo>[];
-        for (var i = 0; i < jsonList.length; ++i) {
-          list.add(VisitDataListInfo.fromJson(jsonList[i]));
-        }
+        var list = <VisitDataListInfo>[
+          for (var i = 0; i < response.data.length; ++i)
+            VisitDataListInfo.fromJson(response.data[i])
+        ];
+
         state.dataList.clear();
         state.dataList.value = list;
       } else {
@@ -169,7 +171,6 @@ class VisitRegisterLogic extends GetxController {
           state.upLeavePicture.clear();
           state.upLeavePicture.add(VisitPhotoBean(photo: "", typeAdd: "0"));
           Get.to(() => const VisitRegisterDetailPage());
-          logger.f('11111');
         } else {
           //带数据的新增
           if (state.lastAdd) {
@@ -182,7 +183,6 @@ class VisitRegisterLogic extends GetxController {
             state.upAddDetail.value.examineID = userInfo?.empID.toString();
             state.upAddDetail.value.securityStaff =
                 userInfo?.empID.toString();
-            logger.f('2222222');
           } else {
             state.dataDetail =
                 VisitGetDetailInfo.fromJson(response.data);
@@ -190,9 +190,7 @@ class VisitRegisterLogic extends GetxController {
             state.facePicture.value = state.dataDetail.peoPic ?? '';
             state.upLeavePicture.clear();
             state.upLeavePicture.add(VisitPhotoBean(photo: "", typeAdd: "0"));
-            logger.f('3333333');
           }
-          logger.f('444444');
           state.upAddDetail.value.examineID = userInfo?.empID.toString();
           state.upAddDetail.value.securityStaff =
               userInfo?.empID.toString();
@@ -231,11 +229,9 @@ class VisitRegisterLogic extends GetxController {
 
   void addPicture(String bitmapBase64, bool isCome) {
     if (isCome) {
-      logger.d('添加来访图片');
       state.upComePicture
           .add(VisitPhotoBean(photo: bitmapBase64, typeAdd: "1"));
     } else {
-      logger.d('添加离场图片');
       state.upLeavePicture
           .add(VisitPhotoBean(photo: bitmapBase64, typeAdd: "1"));
     }
@@ -466,7 +462,6 @@ class VisitRegisterLogic extends GetxController {
             textVisitedDept.text =
                 list[controller.selectedItem].empDepartName.toString();
             textSearch.clear();
-            logger.d("访问部门：${state.upAddDetail.value.visitedDept}");
           },
           child: Text(
             'dialog_default_confirm'.tr,

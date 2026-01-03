@@ -3361,10 +3361,12 @@ class Translation extends Translations {
           'material_label_scan_detail_command': '指令号:',
           'material_label_scan_detail_quantity': '数量:',
           'material_label_scan_detail_clear_barcode': '清空条码',
+          'material_label_scan_detail_sure_clear_barcode': '确定要清空条码吗?',
           'material_label_scan_detail_submit': '提交',
           'material_label_scan_detail_get_barcode_message': '正在获取指令条码信息...',
           'material_label_scan_detail_quick': '请勿太快扫描',
           'material_label_scan_detail_submit_message': '正在提交备料信息...',
+          'material_label_scan_detail_input_picker_number': '请输入领料员工号',
         },
         localeEnglish.toString(): {
           'app_name': 'Gold Emperor',
@@ -7379,10 +7381,12 @@ class Translation extends Translations {
           'material_label_scan_detail_command': 'Command:',
           'material_label_scan_detail_quantity': 'Quantity:',
           'material_label_scan_detail_clear_barcode': 'Clear barcode',
+          'material_label_scan_detail_sure_clear_barcode': 'Are you sure you want to clear the barcode?',
           'material_label_scan_detail_submit': 'Submit',
           'material_label_scan_detail_get_barcode_message': 'Obtaining instruction barcode information...',
           'material_label_scan_detail_quick': 'Please do not scan too quickly',
           'material_label_scan_detail_submit_message': 'Submitting material preparation information...',
+          'material_label_scan_detail_input_picker_number': 'Please enter the employee ID for material requisition',
         },
         localeIndonesian.toString(): {
           'app_name': 'Golden Group',
@@ -11613,10 +11617,12 @@ class Translation extends Translations {
           'material_label_scan_detail_command': 'Nomor perintah:',
           'material_label_scan_detail_quantity': 'Jumlah:',
           'material_label_scan_detail_clear_barcode': 'Kosongkan kode batang',
+          'material_label_scan_detail_sure_clear_barcode': 'Kau yakin ingin mengosongkan kode batang?',
           'material_label_scan_detail_submit': 'Kirimkan',
           'material_label_scan_detail_get_barcode_message': 'Mendapatkan informasi kode batang perintah...',
           'material_label_scan_detail_quick': 'Jangan memindai terlalu cepat',
           'material_label_scan_detail_submit_message': 'Kirim informasi cadangan...',
+          'material_label_scan_detail_input_picker_number': 'Silakan masukkan nomor karyawan',
         },
       };
 }

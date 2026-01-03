@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/visit_data_list_info.dart';
+import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/picker/picker_view.dart';
 
+import '../../../utils/web_api.dart';
 import 'visit_register_logic.dart';
 
 class VisitRegisterPage extends StatefulWidget {
@@ -27,48 +29,18 @@ class _VisitRegisterPageState extends State<VisitRegisterPage> {
     FilteringTextInputFormatter.allow(RegExp('[0-9]')),
   ];
 
-  Padding visitButtonWidget({
-    required String title,
-    required Function click,
-  }) {
-    return Padding(
-      padding: const EdgeInsets.all(10),
-      child: SizedBox(
-        width: double.infinity,
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.lightBlueAccent,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(25),
-            ),
-          ),
-          onPressed: () {
-            click.call();
-          },
-          child: Text(
-            title,
-            style: const TextStyle(color: Colors.white),
-          ),
-        ),
-      ),
-    );
-  }
-
   GestureDetector _item(VisitDataListInfo data) {
     return GestureDetector(
       onTap: () {
         if (state.lastAdd) {
           logic.getVisitorDetailInfo(data.interID.toString(), false);
         } else {
-            if (data.submitType == 0)
-              {
-                logic.getVisitorDetailInfo(data.interID.toString(), true);
-              }
-            else
-              {
-                logic.getVisitorDetailInfo(data.interID.toString(), false);
-              }
+          if (data.submitType == 0) {
+            logic.getVisitorDetailInfo(data.interID.toString(), true);
+          } else {
+            logic.getVisitorDetailInfo(data.interID.toString(), false);
           }
+        }
       }, //获取详情点击事件
       child: Container(
           margin: const EdgeInsets.only(bottom: 10),
@@ -196,7 +168,7 @@ class _VisitRegisterPageState extends State<VisitRegisterPage> {
     return Row(
       children: [
         Container(
-          width: 50,
+          width: 80,
           margin: const EdgeInsets.only(right: 10),
           alignment: Alignment.centerRight,
           child: Text(hint, style: const TextStyle(color: Colors.black)),
@@ -210,82 +182,104 @@ class _VisitRegisterPageState extends State<VisitRegisterPage> {
     );
   }
 
-  //最近来访记录
-  Future<dynamic> showDialogLastRecord({
+  void showDialogLastRecord({
     required BuildContext context,
     Function()? click,
   }) {
-    return showCupertinoDialog(
-      context: context,
-      barrierDismissible: true,
-      builder: (BuildContext context) {
-        return CupertinoAlertDialog(
-          title: Text("visit_recent_visit_records".tr),
-          content: Column(
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 15),
-              _inputSearchText(
-                  'visit_search_record_name'.tr, [], logic.textSearchName),
-              const SizedBox(height: 5),
-              _inputSearchText(
-                  'visit_search_record_card'.tr, [], logic.textSearchIdCard),
-              const SizedBox(height: 5),
-              _inputSearchText('visit_search_record_phone'.tr, inputNumber,
-                  logic.textSearchPhone),
-              const SizedBox(height: 5),
-              _inputSearchText(
-                  'visit_search_record_car'.tr, [], logic.textSearchCar)
-            ],
+    Get.dialog(
+      PopScope(
+        canPop: true,
+        child: AlertDialog(
+          title: Text('visit_recent_visit_records'.tr),
+          content: Container(
+            width: 300,
+            height: 200,
+            child: Column(
+              mainAxisSize: MainAxisSize.min, // 关键：改为 min
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 15),
+                Expanded( // 包装内容区域
+                  child: SingleChildScrollView( // 添加滚动支持
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _inputSearchText(
+                            'visit_search_record_name'.tr, [], logic.textSearchName),
+                        const SizedBox(height: 5),
+                        _inputSearchText(
+                            'visit_search_record_card'.tr, [], logic.textSearchIdCard),
+                        const SizedBox(height: 5),
+                        _inputSearchText('visit_search_record_phone'.tr, inputNumber,
+                            logic.textSearchPhone),
+                        const SizedBox(height: 5),
+                        _inputSearchText(
+                            'visit_search_record_car'.tr, [], logic.textSearchCar)
+                      ],
+                    ),
+                  ),
+                )
+              ],
+            ),
           ),
           actions: [
-            CupertinoDialogAction(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('dialog_default_cancel'.tr),
+            TextButton(
+              onPressed: () => Get.back(),
+              child: Text(
+                'dialog_default_cancel'.tr,
+                style: const TextStyle(color: Colors.grey),
+              ),
             ),
-            CupertinoDialogAction(
-                onPressed: () {
-                  click?.call();
-                  Navigator.of(context).pop();
-                },
-                child: Text('dialog_default_confirm'.tr)),
+            TextButton(
+              onPressed: () {
+                click?.call();
+                Get.back();
+              },
+              child: Text('process_report_store_submit'.tr),
+            ),
           ],
-        );
-      },
+        ),
+      ),
     );
   }
+
 
   @override
   Widget build(BuildContext context) {
     return pageBodyWithBottomSheet(
         bottomSheet: [
-          visitButtonWidget(
-              title: 'visit_button_scan_invitation_code'.tr,
-              click: () {
-                    // Get.to(() => const DailyReportPage()),   //跳转界面
-                  }),
-          visitButtonWidget(
-              title: 'visit_button_search_recent_records'.tr,
-              click: () {
-                    Get.back();
-                    showDialogLastRecord(
-                        //搜索最近来访记录，带数据进行新增
-                        context: context,
-                        click: () {
-                          state.lastAdd = true;
-                          logic.getVisitLastList(
-                              refresh: () => controller.finishRefresh());
-                        });
-                  }),
-          visitButtonWidget(
-              title: 'visit_button_add_record'.tr,
-              click: () async {
-                    Get.back(); //搜索框缩回
-                    logic.getToAddPage();
-                  }),
+          CombinationButton(
+            text: 'visit_button_scan_invitation_code'.tr,
+            click: () {
+              // Get.to(() => const DailyReportPage()),   //跳转界面
+            },
+            combination: Combination.intact,
+          ),
+          CombinationButton(
+            text: 'visit_button_search_recent_records'.tr,
+            click: () {
+              logger.f('0000000000000');
+              Get.back();
+              showDialogLastRecord(
+                //搜索最近来访记录，带数据进行新增
+                  context: context,
+                  click: () {
+                    state.lastAdd = true;
+                    logic.getVisitLastList(
+                        refresh: () => controller.finishRefresh());
+                  });
+            },
+            combination: Combination.intact,
+          ),
+          CombinationButton(
+            text: 'visit_button_add_record'.tr,
+            click: () {
+              Get.back(); //搜索框缩回
+              logic.getToAddPage();
+            },
+            combination: Combination.intact,
+          ),
           DatePicker(pickerController: logic.pickerControllerStartDate),
           DatePicker(pickerController: logic.pickerControllerEndDate),
           Obx(() => RadioGroup(
@@ -316,16 +310,16 @@ class _VisitRegisterPageState extends State<VisitRegisterPage> {
               ))
         ],
         query: () {
-              logic.refreshGetVisitList(
-                  startTime: logic.pickerControllerStartDate.getDateFormatYMD(),
-                  endTime: logic.pickerControllerEndDate.getDateFormatYMD(),
-                  leave: state.select.value.toString());
-            },
+          logic.refreshGetVisitList(
+              startTime: logic.pickerControllerStartDate.getDateFormatYMD(),
+              endTime: logic.pickerControllerEndDate.getDateFormatYMD(),
+              leave: state.select.value.toString());
+        },
         body: Obx(() => Scaffold(
               backgroundColor: Colors.transparent,
               body: EasyRefresh(
                 controller: controller,
-                onRefresh: ()  {
+                onRefresh: () {
                   logic.refreshGetVisitList(
                     leave: "0",
                     refresh: () => controller.finishRefresh(),
