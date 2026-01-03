@@ -443,7 +443,7 @@ class RouteConfig {
   //工序汇报入库
   static Routes processReportWarehouse = Routes(
     '/process_report_warehouse',
-    205,
+    206,
     const ProcessReportStorePage(),
   );
 
@@ -456,6 +456,7 @@ class RouteConfig {
 
   //销售扫码出库
   static Routes saleScanOutWarehouse = Routes(
+
     '/sale_scan_out_warehouse',
     200,
     const SaleScanOutWarehousePage(),
@@ -639,7 +640,7 @@ class RouteConfig {
   //车间计工
   static Routes workshopPlanning = Routes(
     '/workshop_planning',
-    202,
+    203,
     const WorkshopPlanningPage(),
   );
 

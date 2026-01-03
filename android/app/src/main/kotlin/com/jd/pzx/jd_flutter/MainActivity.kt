@@ -220,6 +220,8 @@ class MainActivity : FlutterActivity() {
             CHANNEL_WEIGHBRIDGE_ANDROID_TO_FLUTTER
         ).setMethodCallHandler { call, _ ->
             if (call.method == "OpenDevice") receiverUtil.openDevice()
+            if (call.method == "DestroyDevice") receiverUtil.destroy()
+            if (call.method == "ResumeDevice") receiverUtil.resume()
         }
         //打印机通道
         MethodChannel(

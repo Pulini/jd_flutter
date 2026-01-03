@@ -34,8 +34,8 @@ enum BaseUrl {
   baseUrlMes('MES正式库', 'https://geapp.goldemperor.com:1226/', 'MES'),
 
   ///SAP正式库
-  baseUrlSap('SAP正式库', 'https://erpprd01.goldemperor.com:8003/', 'SAP'),
-  // baseUrlSap('SAP正式库', 'https://webdispatcher.goldemperor.com:8007/', 'SAP'),
+  // baseUrlSap('SAP正式库', 'https://erpprd01.goldemperor.com:8003/', 'SAP'),
+  baseUrlSap('SAP正式库', 'https://webdispatcher.goldemperor.com:8007/', 'SAP'),
 
   ///MES测试库 对接 SAP ECC 300
   mesEccTest('MES ECC 300', 'https://geapptest.goldemperor.com:1224/', 'MES'),
@@ -159,10 +159,12 @@ Future<BaseData> _doHttp({
       base.message = '网络异常';
     }
   } on DioException catch (e) {
-    logger.e('error:${e.toString()}');
     switch (e.type) {
       case DioExceptionType.connectionTimeout:
         base.message = '连接服务器超时';
+        break;
+      case DioExceptionType.connectionError:
+        base.message = '连接服务器异常';
         break;
       case DioExceptionType.sendTimeout:
         base.message = '发送数据超时';
@@ -170,14 +172,11 @@ Future<BaseData> _doHttp({
       case DioExceptionType.receiveTimeout:
         base.message = '接收数据超时';
         break;
-      case DioExceptionType.badResponse:
-        base.message = '请求配置错误';
-        break;
       case DioExceptionType.cancel:
         base.message = '取消请求';
         break;
-      case DioExceptionType.connectionError:
-        base.message = '连接服务器异常';
+      case DioExceptionType.badResponse:
+        base.message = badResponseErrorMessage(e.response?.statusCode);
         break;
       case DioExceptionType.badCertificate:
         base.message = '服务器证书错误';
@@ -198,7 +197,36 @@ Future<BaseData> _doHttp({
   }
   return base;
 }
-
+String badResponseErrorMessage(int? statusCode) {
+  switch (statusCode) {
+    case 400:
+      return '400:请求参数错误，请检查输入数据';
+    case 401:
+      return '401:未授权访问，请重新登录';
+    case 403:
+      return '403:权限不足，无法访问该资源';
+    case 404:
+      return '404:请求的资源不存在';
+    case 405:
+      return '405:请求方法不允许';
+    case 408:
+      return '408:请求超时，请稍后重试';
+    case 422:
+      return '422:请求格式错误，实体无法处理';
+    case 429:
+      return '429:请求过于频繁，请稍后再试';
+    case 500:
+      return '500:服务器内部错误，请联系管理员';
+    case 502:
+      return '502:网关错误，服务器暂时不可用';
+    case 503:
+      return '503:服务器繁忙，请稍后再试';
+    case 504:
+      return '504:网关超时，请稍后重试';
+    default:
+      return '网络请求失败，请检查网络连接';
+  }
+}
 //post请求
 Future<BaseData> httpPost({
   String? loading,
@@ -860,6 +888,9 @@ const webApiSapPrintPicking = 'sap/zapp/ZFUN_RES_ZLINGYONG_1500A';
 
 //sap待上架列表
 const webApiSapGetPalletList = 'sap/zapp/ZWMS_STOCK_FETCH';
+
+//mes托盘校验(sap升级S4期间临时使用)
+const webApiMesGetPallet = 'api/BaseInfo/GetPallet';
 
 //sap获取托盘信息
 const webApiSapGetLabelBindingPalletInfo = 'sap/zapp/ZNQWMS_STOCK_FETCH';

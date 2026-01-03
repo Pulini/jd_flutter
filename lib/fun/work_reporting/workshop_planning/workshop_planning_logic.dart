@@ -31,11 +31,18 @@ class WorkshopPlanningLogic extends GetxController {
       );
     }
   }
-  void refreshWorkerMoney(){
-    state.reportQuantity.value= state.planInfo?.sizeLists!.map((v)=>v.qty??0).reduce((a,b)=>a.add(b))??0;
-    state.price.value=state.reportQuantity.value.mul(state.planInfo?.price??0);
+
+  void refreshWorkerMoney() {
+    state.reportQuantity.value = state.planInfo?.sizeLists!
+            .map((v) => v.qty ?? 0)
+            .reduce((a, b) => a.add(b)) ??
+        0;
+    debugPrint('reportQuantity: ${state.reportQuantity.value}');
+    state.price.value =
+        state.reportQuantity.value.mul(state.planInfo?.price ?? 0);
     setWorkerMoney();
   }
+
   void setWorkerMoney() {
     if (state.reportWorkerList.isNotEmpty) {
       var efficiency = state.reportWorkerList
@@ -255,7 +262,6 @@ class WorkshopPlanningLogic extends GetxController {
     setWorkerMoney();
   }
 
-
   void getGroupPayList() {
     state.getGroupPayList(
       success: () {
@@ -342,12 +348,15 @@ class WorkshopPlanningLogic extends GetxController {
             }
         ],
       },
-      success: (msg) => WorkshopPlanningWorkersCache(
-        departmentID: state.departmentID,
-        day: getDateYMD(),
-        data:
-            jsonEncode(state.reportWorkerList.map((v) => v.toJson()).toList()),
-      ).save(() => Get.back(result: true)),
+      success: (msg) => successDialog(
+        content: msg,
+        back: () => WorkshopPlanningWorkersCache(
+          departmentID: state.departmentID,
+          day: getDateYMD(),
+          data: jsonEncode(
+              state.reportWorkerList.map((v) => v.toJson()).toList()),
+        ).save(() => Get.back(result: true)),
+      ),
       error: (msg) => errorDialog(content: msg),
     );
   }

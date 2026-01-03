@@ -329,6 +329,7 @@ class _SapSurplusMaterialStockInPageState
 
   @override
   Widget build(BuildContext context) {
+    weighbridgeResume();
     return KeyboardListener(
       onKeyEvent: (key) {
         if (key.logicalKey == LogicalKeyboardKey.enter) {
@@ -453,6 +454,7 @@ class _SapSurplusMaterialStockInPageState
   @override
   void dispose() {
     Get.delete<SapSurplusMaterialStockInLogic>();
+    weighbridgeDestroy();
     super.dispose();
   }
 }

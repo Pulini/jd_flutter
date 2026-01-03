@@ -143,8 +143,8 @@ class _WorkshopPlanningSalaryCountPageState
                       if (v.toDoubleTry() > (item.unFinishQty ?? 0)) {
                         controller.text = item.unFinishQty.toShowString();
                       }
-                      item.qty = v.toDoubleTry();
-                      logic.setWorkerMoney();
+                      item.qty = controller.text.toDoubleTry();
+                      logic.refreshWorkerMoney();
                     },
                     decoration: InputDecoration(
                       contentPadding: const EdgeInsets.only(

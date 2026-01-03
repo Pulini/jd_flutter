@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 
 import 'package:jd_flutter/bean/http/response/bar_code.dart';
 import 'package:jd_flutter/bean/http/response/process_modify_info.dart';
-import 'package:jd_flutter/bean/http/response/sap_picking_info.dart';
 import 'package:jd_flutter/bean/http/response/scan_process_info.dart';
 import 'package:jd_flutter/bean/http/response/worker_info.dart';
 import 'package:jd_flutter/utils/utils.dart';
@@ -22,7 +21,6 @@ class ProcessReportStoreState {
   var usedList = <String>[];
 
   var palletNumber = ''.obs;  //托盘号
-  PalletDetailItem2Info? pallet; //托盘信息
 
   //从数据库读取条码信息
   ProcessReportStoreState() {
