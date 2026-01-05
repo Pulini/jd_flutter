@@ -87,7 +87,13 @@ class _WorkshopPlanningPageState extends State<WorkshopPlanningPage> {
           Get.to(() => const WorkshopPlanningSalaryCountPage())?.then((v) {
             state.planInfo = null;
             state.workersCache.clear();
-            if (v != null && v as  bool) _query();
+            if (v != null && v as  bool){
+              if (state.scanJson != null) {
+                logic.refreshProcessPlan();
+              }else{
+                _query();
+              }
+            }
           });
         },
         child: Container(

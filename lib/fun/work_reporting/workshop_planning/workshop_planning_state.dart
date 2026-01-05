@@ -7,7 +7,7 @@ class WorkshopPlanningState {
   var submitButtonName = ''.obs;
   var planList = <WorkshopPlanningInfo>[].obs; //团件计工工单列表
   WorkshopPlanningInfo? planInfo;
-
+  dynamic scanJson;
   var workTypeList = <WorkshopPlanningWorkTypeInfo>[].obs; //工单工种列表
   var workerList = <WorkshopPlanningWorkerInfo>[].obs; //组员数据
   var workerListSelectedIndex = (-1).obs; //选择组员列表的下标
