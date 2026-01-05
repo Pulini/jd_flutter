@@ -31,7 +31,7 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
     height: 10,
   );
   var inputNumber = [
-    FilteringTextInputFormatter.allow(RegExp('[0-9]')),
+    FilteringTextInputFormatter.allow(RegExp('[0-9a-zA-Z]')),
   ];
 
   //  搜索弹窗
@@ -316,7 +316,6 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
       ));
 
   Obx _showCarNumber() {
-    logger.f('----------执行');
     return Obx(
       () => state.showCarNumber.value
           ? Column(

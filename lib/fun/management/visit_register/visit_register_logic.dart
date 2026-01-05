@@ -216,14 +216,16 @@ class VisitRegisterLogic extends GetxController {
             state.doorType.value = state.dataDetail.gate ?? ''; //显示门
             state.upAddDetail.value.gate = state.dataDetail.gate ?? ''; //上传门
 
-            if (state.dataDetail.carNo == '小轿车' ||
-                state.dataDetail.carNo == '火车') {
+            if (state.dataDetail.carType == '小轿车' || state.dataDetail.carType == '货车') {
               state.showCarNumber.value = true;
             }
 
-            if (state.dataDetail.carNo == '拖车') {
+            if (state.dataDetail.carType == '拖车') {
               state.showWeight.value = true;
             }
+
+            state.upComePicture.clear();
+            state.upComePicture.add(VisitPhotoBean(photo: "", typeAdd: "0"));
 
           } else {
             state.dataDetail = VisitGetDetailInfo.fromJson(response.data);

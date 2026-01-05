@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/forming_barcode_by_mono_info.dart';
 import 'package:jd_flutter/bean/http/response/forming_collection_info.dart';
@@ -70,7 +71,7 @@ class FormingBarcodeCollectionLogic extends GetxController {
     switch (first) {
       case '0':
         {
-          if(state.switchEntryId.isNotEmpty){
+          if (state.switchEntryId.isNotEmpty) {
             for (var data in state.dataList) {
               if (data.entryFID == state.switchEntryId) {
                 data.isShow = true;
@@ -82,7 +83,7 @@ class FormingBarcodeCollectionLogic extends GetxController {
                 state.showDataList.value = data.scWorkCardSizeInfos!.toList();
               }
             }
-          }else{
+          } else {
             if (state.dataList.isNotEmpty) {
               state.dataList[0].isShow = true;
               state.factoryType.value = state.dataList[0].productName ?? '';
@@ -102,7 +103,7 @@ class FormingBarcodeCollectionLogic extends GetxController {
             for (var data in state.dataList) {
               if (data.entryFID == entryFid) {
                 data.isShow = true;
-                state.switchEntryId = data.entryFID?? '';
+                state.switchEntryId = data.entryFID ?? '';
                 state.factoryType.value = data.productName ?? '';
                 state.workCardInterID = data.workCardInterID ?? '';
                 state.instruction = data.moID ?? '';
@@ -169,19 +170,20 @@ class FormingBarcodeCollectionLogic extends GetxController {
       httpPost(
         method: webApiSubmitWorkCardPriority,
         loading: 'forming_code_collection_submitting'.tr,
-        body:
-          [
-
-            for (var i = 0; i < state.prioriInfoList.length; ++i)
-              for (var j = 0; j < state.prioriInfoList.length; ++j)
-                if (state.prioriInfoList[i].sONo == state.prioriInfoList[j].sONo && i!= state.prioriInfoList[j].index)
-                  {
-                    'WorkCardInterID': state.prioriInfoList[i].workCardInterID.toString(),
-                    'ClientOrderNumber': state.prioriInfoList[i].clientOrderNumber,
-                    'Priority': i+1,
-                  }
-          ]
-        ,
+        body: [
+          for (var i = 0; i < state.prioriInfoList.length; ++i)
+            for (var j = 0; j < state.prioriInfoList.length; ++j)
+              if (state.prioriInfoList[i].sONo ==
+                      state.prioriInfoList[j].sONo &&
+                  i != state.prioriInfoList[j].index)
+                {
+                  'WorkCardInterID':
+                      state.prioriInfoList[i].workCardInterID.toString(),
+                  'ClientOrderNumber':
+                      state.prioriInfoList[i].clientOrderNumber,
+                  'Priority': i + 1,
+                }
+        ],
       ).then((response) {
         if (response.resultCode == resultSuccess) {
           success.call();
@@ -190,6 +192,56 @@ class FormingBarcodeCollectionLogic extends GetxController {
         }
       });
     }
+  }
+
+  void firstPrioritySubmit({
+    required String scan,
+    required Function() success,
+  }) {
+
+    logger.f('扫码的是：$scan');
+
+    // 检查是否存在匹配的工单
+    bool hasMatchingItem = state.prioriInfoList.any((item) => item.sONo == scan);
+
+    if (!hasMatchingItem) {
+      try {
+        Get.snackbar(
+          '提示',
+          '未找到匹配的工单',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.blueAccent,      // 背景颜色
+          colorText: Colors.white,         // 文字颜色
+          snackStyle: SnackStyle.FLOATING, // 样式
+          borderRadius: 8,                 // 圆角
+          margin: EdgeInsets.all(10),      // 边距
+        );
+      } catch (e) {
+        logger.e('显示Snackbar失败: $e');
+      }
+      return;
+    }
+
+    httpPost(
+      method: webApiSubmitWorkCardPriority,
+      loading: 'forming_code_collection_submitting'.tr,
+      body: [
+        for (var i = 0; i < state.prioriInfoList.length; ++i)
+          if (state.prioriInfoList[i].sONo == scan)
+            {
+              'WorkCardInterID':
+                  state.prioriInfoList[i].workCardInterID.toString(),
+              'ClientOrderNumber': state.prioriInfoList[i].clientOrderNumber,
+              'Priority': 0,
+            }
+      ],
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        success.call();
+      } else {
+        errorDialog(content: response.message);
+      }
+    });
   }
 
   //更改优先级退出清理数据
@@ -218,7 +270,8 @@ class FormingBarcodeCollectionLogic extends GetxController {
       state.dataList.addAll(state.copyDataList);
     } else {
       for (var data in state.copyDataList) {
-        if (data.mtoNo!.contains(search) || data.clientOrderNumber!.contains(search)) {
+        if (data.mtoNo!.contains(search) ||
+            data.clientOrderNumber!.contains(search)) {
           list.add(data);
         }
       }
@@ -478,7 +531,7 @@ class FormingBarcodeCollectionLogic extends GetxController {
     if (click) {
       state.barCodeByMonoData[position].barCode = code;
       for (var data in state.barCodeByMonoData) {
-          data.isSelect.value = false;
+        data.isSelect.value = false;
       }
       state.barCodeByMonoData[position].isSelect.value = true;
     } else {

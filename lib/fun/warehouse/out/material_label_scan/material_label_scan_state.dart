@@ -32,7 +32,7 @@ class MaterialLabelScanState {
       method: webApiGetPickMatList,
       params: {
         'NoticeDateStart': '2024-01-26',
-        'NoticeDateEnd': '2025-12-26',
+        'NoticeDateEnd': '2026-01-05',
         'ProductName': '',
         'MaterialNumber': '',
       },
@@ -114,6 +114,7 @@ class MaterialLabelScanState {
   }
 
   //设置扫码信息
+//设置扫码信息
   void setScanDetail({
     required List<MaterialLabelScanBarCodeInfo> lists,
     required Function() success,
@@ -123,6 +124,7 @@ class MaterialLabelScanState {
     // 遍历每个扫码信息
     for (var scanItem in lists) {
       bool found = false;
+      bool alreadyScanned = false;
 
       // 遍历所有物料分组
       for (var entry in dataDetailList.entries) {
@@ -132,23 +134,30 @@ class MaterialLabelScanState {
         // 在当前物料分组中查找匹配的尺码
         for (var detailItem in materialList) {
           if (detailItem.size == scanItem.size &&
-              detailItem.isScan == false &&
               detailItem.materialID == scanItem.materialID &&
               detailItem.srcICMOInterID == scanItem.srcICMOInterID) {
-            // 更新数据
-            detailItem.thisTime = scanItem.barCodeQty;
-            detailItem.isScan = true;
-            found = true;
-            break; // 找到后退出内层循环
+
+            if (detailItem.isScan == true) {
+              // 如果找到条码但已经扫描过了
+              alreadyScanned = true;
+              showSnackBar(message: '该条码已扫描过，不能重复扫描');
+              break;
+            } else {
+              // 更新数据
+              detailItem.thisTime = scanItem.barCodeQty;
+              detailItem.isScan = true;
+              found = true;
+              break; // 找到后退出内层循环
+            }
           }
         }
 
-        // 如果在当前物料分组中未找到，继续下一个分组
-        if (found) break;
+        // 如果在当前物料分组中已找到并处理，或已扫描过，继续下一个扫描项
+        if (found || alreadyScanned) break;
       }
 
       // 如果整个数据中都未找到匹配项
-      if (!found) {
+      if (!found && !alreadyScanned) {
         showSnackBar(message: '未找到匹配的物料信息');
         allFound = false;
       }
@@ -162,6 +171,7 @@ class MaterialLabelScanState {
       success.call();
     }
   }
+
 
   //备料提交领料
   void submitCodeDetail({

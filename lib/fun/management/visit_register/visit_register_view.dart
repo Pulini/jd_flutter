@@ -8,7 +8,6 @@ import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/picker/picker_view.dart';
 
-import '../../../utils/web_api.dart';
 import 'visit_register_logic.dart';
 
 class VisitRegisterPage extends StatefulWidget {
