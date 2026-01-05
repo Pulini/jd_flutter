@@ -259,7 +259,6 @@ class _VisitRegisterPageState extends State<VisitRegisterPage> {
           CombinationButton(
             text: 'visit_button_search_recent_records'.tr,
             click: () {
-              logger.f('0000000000000');
               Get.back();
               showDialogLastRecord(
                 //搜索最近来访记录，带数据进行新增

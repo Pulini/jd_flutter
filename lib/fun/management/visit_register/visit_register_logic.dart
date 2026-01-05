@@ -1,7 +1,7 @@
 import 'dart:convert';
-
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:get/get.dart' hide Response;
 import 'package:jd_flutter/bean/http/response/leave_visit_record.dart';
 import 'package:jd_flutter/bean/http/response/people_message_info.dart';
 import 'package:jd_flutter/bean/http/response/photo_bean.dart';
@@ -9,7 +9,6 @@ import 'package:jd_flutter/bean/http/response/search_people_info.dart';
 import 'package:jd_flutter/bean/http/response/visit_add_record_info.dart';
 import 'package:jd_flutter/bean/http/response/visit_data_list_info.dart';
 import 'package:jd_flutter/bean/http/response/visit_get_detail_info.dart';
-import 'package:jd_flutter/bean/http/response/visit_last_record.dart';
 import 'package:jd_flutter/bean/http/response/visit_photo_bean.dart';
 import 'package:jd_flutter/bean/http/response/visit_place_bean.dart';
 import 'package:jd_flutter/fun/management/visit_register/visit_register_add_view.dart';
@@ -20,7 +19,6 @@ import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/picker/picker_controller.dart';
-
 import 'visit_register_state.dart';
 
 class VisitRegisterLogic extends GetxController {
@@ -69,18 +67,19 @@ class VisitRegisterLogic extends GetxController {
     saveKey: '${RouteConfig.property.name}${PickerType.endDate}',
   );
 
-  void refreshGetVisitList({String name = "",
-    String iDCard = "",
-    String interviewee = "",
-    String intervieweeName = "",
-    String securityStaff = "",
-    String startTime = "",
-    String endTime = "",
-    String leave = "",
-    String phone = "",
-    String carNo = "",
-    String credentials = "",
-    Function()? refresh}) {
+  void refreshGetVisitList(
+      {String name = "",
+      String iDCard = "",
+      String interviewee = "",
+      String intervieweeName = "",
+      String securityStaff = "",
+      String startTime = "",
+      String endTime = "",
+      String leave = "",
+      String phone = "",
+      String carNo = "",
+      String credentials = "",
+      Function()? refresh}) {
     httpPost(
         method: webApiGetVisitDtBySqlWhere,
         loading: 'visit_getting_visitor_list'.tr,
@@ -114,16 +113,15 @@ class VisitRegisterLogic extends GetxController {
   }
 
   void getVisitLastList({Function()? refresh}) {
-
-    logger.f('---------------------');
     httpPost(
         method: webApiGetVisitInfoByJsonStr,
         loading: 'visit_latest_visit_history'.tr,
         body: {
-          'Name':textSearchName.text,
-          'Phone':textSearchPhone.text,
-          'IDCard':textSearchCar.text,
-          'CarNo':textSearchIdCard.text,
+          'Name': textSearchName.text,
+          'Phone': textSearchPhone.text,
+          'IDCard': textSearchIdCard.text,
+          'CarNo': textSearchCar.text,
+          'VisitedFactory': userInfo!.organizeID,
         }).then((response) {
       if (response.resultCode == resultSuccess) {
         var list = <VisitDataListInfo>[
@@ -163,7 +161,7 @@ class VisitRegisterLogic extends GetxController {
         loading: 'visit_obtaining_visit_details'.tr,
         params: {
           'InterID': interId,
-        }).then((response) {
+        }).then((response) async {
       if (response.resultCode == resultSuccess) {
         if (isLeave) {
           //去点击离场
@@ -174,26 +172,68 @@ class VisitRegisterLogic extends GetxController {
         } else {
           //带数据的新增
           if (state.lastAdd) {
-            state.dataDetail =
-                VisitGetDetailInfo.fromJson(response.data);
-            textIdCard.text = state.dataDetail.iDCard ?? '';
-            textPersonName.text = state.dataDetail.name ?? '';
-            textPhone.text = state.dataDetail.phone ?? '';
-            textUnit.text = state.dataDetail.unit ?? '';
+            state.dataDetail = VisitGetDetailInfo.fromJson(response.data);
+            textIdCard.text = state.dataDetail.iDCard ?? ''; //显示身份证
+            state.upAddDetail.value.iDCard = state.dataDetail.iDCard; //上传身份证
+
+            textPersonName.text = state.dataDetail.name ?? ''; //显示姓名
+            state.upAddDetail.value.name = state.dataDetail.name; //上传姓名
+
+            textPhone.text = state.dataDetail.phone ?? ''; //显示电话
+            state.upAddDetail.value.phone = state.dataDetail.phone; //上传电话
+
+            textUnit.text = state.dataDetail.unit ?? ''; //界面来访单位
+            state.upAddDetail.value.unit = state.dataDetail.unit; //上传来访单位
+
             state.upAddDetail.value.examineID = userInfo?.empID.toString();
-            state.upAddDetail.value.securityStaff =
-                userInfo?.empID.toString();
+            state.upAddDetail.value.securityStaffName =
+                userInfo?.name.toString();
+
+            state.cardPicture.value = await convertImageUrlToBase64(
+                state.dataDetail.cardPic ?? ''); //显示身份证照片
+            state.upAddDetail.value.cardPic = state.dataDetail.iDCard; //上传身份证照片
+
+            state.facePicture.value = await convertImageUrlToBase64(
+                state.dataDetail.peoPic ?? ''); //显示人脸照片
+            state.upAddDetail.value.peoPic = state.dataDetail.iDCard; //上传身份证照片
+
+            textVisitorPlace.text = state.dataDetail.actionZone ?? ''; //显示活动区域
+            state.upAddDetail.value.actionZoneID =
+                state.dataDetail.actionZoneID ?? ''; //上传的活动区域id
+
+            textReason.text = state.dataDetail.subjectMatter ?? ''; // 显示来访事由
+            state.upAddDetail.value.subjectMatter =
+                state.dataDetail.subjectMatter ?? ''; //上传的来访事由
+
+            state.carType.value = state.dataDetail.carType ?? ''; //显示车
+            state.upAddDetail.value.carType =
+                state.dataDetail.carType ?? ''; //上传车
+
+            textCarNo.text = state.dataDetail.carNo ?? ''; //显示车牌号码
+            state.upAddDetail.value.carNo =
+                state.dataDetail.carNo ?? ''; //上传车牌号码
+
+            state.doorType.value = state.dataDetail.gate ?? ''; //显示门
+            state.upAddDetail.value.gate = state.dataDetail.gate ?? ''; //上传门
+
+            if (state.dataDetail.carNo == '小轿车' ||
+                state.dataDetail.carNo == '火车') {
+              state.showCarNumber.value = true;
+            }
+
+            if (state.dataDetail.carNo == '拖车') {
+              state.showWeight.value = true;
+            }
+
           } else {
-            state.dataDetail =
-                VisitGetDetailInfo.fromJson(response.data);
+            state.dataDetail = VisitGetDetailInfo.fromJson(response.data);
             state.cardPicture.value = state.dataDetail.cardPic ?? '';
             state.facePicture.value = state.dataDetail.peoPic ?? '';
             state.upLeavePicture.clear();
             state.upLeavePicture.add(VisitPhotoBean(photo: "", typeAdd: "0"));
           }
           state.upAddDetail.value.examineID = userInfo?.empID.toString();
-          state.upAddDetail.value.securityStaff =
-              userInfo?.empID.toString();
+          state.upAddDetail.value.securityStaff = userInfo?.empID.toString();
 
           Get.to(() => const VisitRegisterAddPage());
         }
@@ -205,10 +245,8 @@ class VisitRegisterLogic extends GetxController {
   }
 
   //根据工号获取人员信息
-  void searchPeopleForId({
-    required String number,
-    required Function() refresh
-  }) {
+  void searchPeopleForId(
+      {required String number, required Function() refresh}) {
     if (number.isNotEmpty && number.length == 6) {
       httpGet(
         method: webApiGetEmpAndLiableByEmpCode,
@@ -245,12 +283,12 @@ class VisitRegisterLogic extends GetxController {
       }
     }
     httpPost(
-        method: webApiUpdateLeaveFVisit,
-        loading: 'visit_submitting_departure_information'.tr,
-        body: LeaveVisitRecord(
-            interID: state.dataDetail.interID,
-            leaveTime: getDateYMD(),
-            leavePics: body))
+            method: webApiUpdateLeaveFVisit,
+            loading: 'visit_submitting_departure_information'.tr,
+            body: LeaveVisitRecord(
+                interID: state.dataDetail.interID,
+                leaveTime: getDateYMD(),
+                leavePics: body))
         .then((response) {
       if (response.resultCode == resultSuccess) {
         refreshGetVisitList();
@@ -366,9 +404,9 @@ class VisitRegisterLogic extends GetxController {
       }
     }
     httpPost(
-        method: webApiInsertIntoFVisit,
-        loading: 'visit_submitting_new_records'.tr,
-        body: state.upAddDetail.value)
+            method: webApiInsertIntoFVisit,
+            loading: 'visit_submitting_new_records'.tr,
+            body: state.upAddDetail.value)
         .then((response) {
       if (response.resultCode == resultSuccess) {
         successDialog(
@@ -597,5 +635,29 @@ class VisitRegisterLogic extends GetxController {
       r'^(?:[+0]9)?[0-9]{10,12}$',
     );
     return phoneExp.hasMatch(phoneNumber);
+  }
+
+  Future<String> convertImageUrlToBase64(String imageUrl) async {
+    try {
+      // 使用 Dio 下载图片
+      final response = await Dio().get(
+        imageUrl,
+        options: Options(
+          responseType: ResponseType.bytes, // 以字节数组形式接收数据
+        ),
+      );
+
+      if (response.statusCode == 200 && response.data != null) {
+        // 将字节数组转换为 base64
+        List<int> imageBytes = response.data;
+        String base64Image = base64Encode(imageBytes);
+
+        return base64Image;
+      } else {
+        throw Exception('Failed to load image: ${response.statusCode}');
+      }
+    } catch (e) {
+      return '';
+    }
   }
 }
