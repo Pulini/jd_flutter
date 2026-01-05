@@ -117,8 +117,8 @@ class ProductionDispatchState {
         'startTime': startTime,
         'endTime': endTime,
         'moNo': instruction,
-        'isClose': isSelectedClosed,
-        'isOutsourcing': isSelectedOutsourcing,
+        'isClose': isSelectedClosed.value,
+        'isOutsourcing': isSelectedOutsourcing.value,
         'deptID': userInfo?.departmentID,
       },
     ).then((response) {

@@ -5,6 +5,7 @@ import 'package:jd_flutter/fun/dispatching/injection_scan_report/injection_scan_
 import 'package:jd_flutter/fun/dispatching/machine_dispatch/machine_dispatch_report_view.dart';
 import 'package:jd_flutter/fun/dispatching/machine_dispatch/machine_dispatch_view.dart';
 import 'package:jd_flutter/fun/dispatching/material_dispatch/material_dispatch_view.dart';
+import 'package:jd_flutter/fun/dispatching/part_production_dispatch/part_production_dispatch_view.dart';
 import 'package:jd_flutter/fun/dispatching/process_dispatch_register/process_dispatch_register_view.dart';
 import 'package:jd_flutter/fun/dispatching/production_dispatch/production_dispatch_detail_view.dart';
 import 'package:jd_flutter/fun/dispatching/production_dispatch/production_dispatch_view.dart';
@@ -345,7 +346,7 @@ class RouteConfig {
   //sap料头入库
   static Routes sapSurplusMaterialStockIn = Routes(
     '/sap_surplus_material_stock_in',
-    200,
+    201,
     const SapSurplusMaterialStockInPage(),
   );
 
@@ -456,7 +457,6 @@ class RouteConfig {
 
   //销售扫码出库
   static Routes saleScanOutWarehouse = Routes(
-
     '/sale_scan_out_warehouse',
     200,
     const SaleScanOutWarehousePage(),
@@ -640,7 +640,7 @@ class RouteConfig {
   //车间计工
   static Routes workshopPlanning = Routes(
     '/workshop_planning',
-    203,
+    204,
     const WorkshopPlanningPage(),
   );
 
@@ -663,6 +663,13 @@ class RouteConfig {
     '/material_label_scan',
     200,
     const MaterialLabelScanPage(),
+  );
+
+  //部件生产派工
+  static Routes partProductionDispatch = Routes(
+    '/part_production_dispatch',
+    200,
+    const PartProductionDispatchPage(),
   );
 
   //本地功能入口列表
@@ -747,7 +754,8 @@ class RouteConfig {
     workshopPlanning,
     sapLabelReprint,
     printPallet,
-    materialLabelScan
+    materialLabelScan,
+    partProductionDispatch,
   ];
 
   static List<GetPage> appRoutes = [
@@ -1087,6 +1095,10 @@ class RouteConfig {
     GetPage(
       name: materialLabelScan.name,
       page: () => materialLabelScan.page,
+    ),
+    GetPage(
+      name: partProductionDispatch.name,
+      page: () => partProductionDispatch.page,
     ),
   ];
 }

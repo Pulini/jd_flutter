@@ -32,6 +32,22 @@ class WorkshopPlanningLogic extends GetxController {
     }
   }
 
+  void refreshProcessPlan() {
+    String? workCardInterID = state.scanJson['WorkCardInterID'];
+    String? routeEntryID = state.scanJson['RouteEntryID'];
+    String? processName = state.scanJson['ProcessName'];
+    if (workCardInterID?.isNotEmpty == true &&
+        routeEntryID?.isNotEmpty == true &&
+        processName?.isNotEmpty == true) {
+      state.getProcessPlanInfo(
+        workCardInterID: workCardInterID,
+        routeEntryID: routeEntryID,
+        success: () {},
+        error: (msg) => errorDialog(content: msg),
+      );
+    }
+  }
+
   void refreshWorkerMoney() {
     state.reportQuantity.value = state.planInfo?.sizeLists!
             .map((v) => v.qty ?? 0)
@@ -394,10 +410,10 @@ class WorkshopPlanningLogic extends GetxController {
   ) {
     if (code.isNotEmpty) {
       try {
-        var json = jsonDecode(code);
-        String? workCardInterID = json['WorkCardInterID'];
-        String? routeEntryID = json['RouteEntryID'];
-        String? processName = json['ProcessName'];
+        state.scanJson = jsonDecode(code);
+        String? workCardInterID = state.scanJson['WorkCardInterID'];
+        String? routeEntryID = state.scanJson['RouteEntryID'];
+        String? processName = state.scanJson['ProcessName'];
         if (workCardInterID?.isNotEmpty == true &&
             routeEntryID?.isNotEmpty == true &&
             processName?.isNotEmpty == true) {
