@@ -796,6 +796,7 @@ class Translation extends Translations {
           'material_dispatch_label_generation_amount': '标签生成量(%s)',
           'material_dispatch_material_list': '用料清单',
           'material_dispatch_progress_manual': '工艺说明书',
+          'material_dispatch_request_permission': '请通过OA-[金帝信息管理流程]-[用户权限申请流程]发起权限申请',
           'material_dispatch_label_list': '贴标列表',
           'material_dispatch_report': '报工',
           'material_dispatch_report_tips': '确定要整组报工吗？',
@@ -885,6 +886,8 @@ class Translation extends Translations {
           'material_dispatch_dialog_reading_pallet_list': '正在读取托盘列表...',
           'material_dispatch_dialog_inventory': '%s - 库存%s',
           'material_dispatch_dialog_select_pallet': '选择托盘',
+          'material_dispatch_look_process_manual': '查看工艺说明书',
+          'material_dispatch_close': '关闭',
           'part_process_scan_clean_tips': '确定要清空条码吗？',
           'part_process_scan_clean': '清空',
           'part_process_scan_delete_tips': '确定要删除该条码吗？',
@@ -4105,6 +4108,7 @@ class Translation extends Translations {
           'material_dispatch_label_generation_amount': 'Label generation(%s)',
           'material_dispatch_material_list': 'Material list',
           'material_dispatch_progress_manual': 'Progress manual',
+          'material_dispatch_request_permission': 'Please initiate permission application through OA - [Jindi Information Management Process] - [User Permission Application Process]',
           'material_dispatch_label_list': 'Label list',
           'material_dispatch_report': 'Report',
           'material_dispatch_report_tips':
@@ -4217,6 +4221,8 @@ class Translation extends Translations {
               'reading pallet list...',
           'material_dispatch_dialog_inventory': '%s - inventory%s',
           'material_dispatch_dialog_select_pallet': 'Select pallet',
+          'material_dispatch_look_process_manual': 'View the process manual',
+          'material_dispatch_close': 'Close',
           'part_process_scan_clean_tips':
               'Are you sure you want to clear the barcode？',
           'part_process_scan_clean': 'Clean',
@@ -8338,6 +8344,7 @@ class Translation extends Translations {
               'Jumlah Pembuatan Label (%s)',
           'material_dispatch_material_list': 'Daftar Penggunaan Material',
           'material_dispatch_progress_manual': 'Spesifikasi Proses',
+          'material_dispatch_request_permission': 'Silakan mulai aplikasi izin melalui OA-[Proses Manajemen Informasi Jingdi]-[Proses Permohonan Hak Pengguna]',
           'material_dispatch_label_list': 'Daftar Label Tempel',
           'material_dispatch_report': 'Laporkan Kerja',
           'material_dispatch_report_tips':
@@ -8455,6 +8462,8 @@ class Translation extends Translations {
               'Membaca daftar palet...',
           'material_dispatch_dialog_inventory': '%s - Stok %s',
           'material_dispatch_dialog_select_pallet': 'Pilih Palet',
+          'material_dispatch_look_process_manual': 'Lihat instruksi proses',
+          'material_dispatch_close': 'Tutup',
           'part_process_scan_clean_tips':
               'Apakah Anda yakin ingin mengosongkan kode batang?',
           'part_process_scan_clean': 'Kosongkan',

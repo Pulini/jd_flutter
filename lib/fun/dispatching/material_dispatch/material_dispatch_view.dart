@@ -3,20 +3,24 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/material_dispatch_info.dart';
 import 'package:jd_flutter/bean/http/response/material_dispatch_label_detail.dart';
+import 'package:jd_flutter/bean/http/response/process_specification_info.dart';
 import 'package:jd_flutter/fun/dispatching/machine_dispatch/machine_dispatch_dialog.dart';
 import 'package:jd_flutter/fun/dispatching/material_dispatch/material_dispatch_state.dart';
 import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
-import 'package:jd_flutter/utils/utils.dart' show getDateYMD;
+import 'package:jd_flutter/utils/utils.dart'
+    show getDateYMD, getProcessManual, checkUrlType, checkUserPermission;
 import 'package:jd_flutter/widget/check_box_widget.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
 import 'package:jd_flutter/widget/feishu_authorize.dart';
+import 'package:jd_flutter/widget/pdf_view.dart';
 import 'package:jd_flutter/widget/picker/picker_controller.dart';
 import 'package:jd_flutter/widget/picker/picker_view.dart';
 import 'package:jd_flutter/widget/spinner_widget.dart';
+import 'package:jd_flutter/widget/web_page.dart';
 import 'package:rotated_corner_decoration/rotated_corner_decoration.dart';
 import 'material_dispatch_dialogs.dart';
 import 'material_dispatch_logic.dart';
@@ -58,6 +62,80 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
     PickerType.endDate,
     saveKey: '${RouteConfig.materialDispatch.name}${PickerType.endDate}',
   );
+
+  //查看工艺说明书
+  void showProcessManualDialog(
+    List<ProcessSpecificationInfo> manualList,
+  ) {
+    Get.dialog(
+      Dialog(
+        child: Container(
+          padding: const EdgeInsets.all(20),
+          width: 600,
+          height: 600,
+          child: Column(
+            children: [
+              Text(
+                'material_dispatch_look_process_manual'.tr,
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: 20),
+              Expanded(
+                child: ListView.builder(
+                  padding: const EdgeInsets.all(8),
+                  itemCount: manualList.length,
+                  itemBuilder: (context, index) => Card(
+                    child: ListTile(
+                      onTap: () => checkUrlType(
+                        url: manualList[index].fullName ?? '',
+                        jdPdf: (url) => Get.to(() => PDFViewerCachedFromUrl(
+                              title: manualList[index].name ?? '',
+                              url: url,
+                            )),
+                        web: (url) {
+                          Get.to(() => WebPage(
+                                title: manualList[index].name ?? '',
+                                url: url,
+                              ));
+                        },
+                      ),
+                      title: textSpan(
+                        hint: 'view_process_specification_item_hint1'.tr,
+                        text: manualList[index].name ?? '',
+                      ),
+                      subtitle: textSpan(
+                        hint: 'view_process_specification_item_hint2'.tr,
+                        text: manualList[index].typeName ?? '',
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  Get.back(); // 关闭弹窗
+                },
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                  // 增加内边距
+                  minimumSize: Size(100, 50),
+                  // 设置最小尺寸
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8), // 可选：调整圆角
+                  ),
+                ),
+                child: Text('material_dispatch_close'.tr),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 
   Widget _item1(MaterialDispatchInfo data, int index) {
     var style = const TextStyle(
@@ -372,11 +450,34 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
                 click: () => materialListDialog(context, data),
                 combination: Combination.left,
               ),
+              // CombinationButton(
+              //   text: 'material_dispatch_progress_manual'.tr,
+              //   click: () => feishuViewWikiFiles(
+              //     query: data.productName ?? '',
+              //   ),
+              //   combination: Combination.middle,
+              // ),
               CombinationButton(
+                //老版查看工艺说明书
                 text: 'material_dispatch_progress_manual'.tr,
-                click: () => feishuViewWikiFiles(
-                  query: data.productName ?? '',
-                ),
+                click: () {
+                  if (checkUserPermission('1053501')) {
+                    getProcessManual(
+                        typeBody: data.productName ?? '',
+                        manualList: (List<ProcessSpecificationInfo> list) {
+                          showProcessManualDialog(list);
+                        },
+                        error: (String msg) {
+                          errorDialog(content: msg);
+                        });
+                  } else {
+                    showSnackBar(
+                      message:
+                          'material_dispatch_request_permission'.tr,
+                      isWarning: true,
+                    );
+                  }
+                },
                 combination: Combination.middle,
               ),
               CombinationButton(
