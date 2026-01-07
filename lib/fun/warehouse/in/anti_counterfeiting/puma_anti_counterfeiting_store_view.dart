@@ -53,7 +53,9 @@ class _PumaAntiCounterfeitingStorePageState
             Obx(() => Row(
                   children: [
                     const SizedBox(width: 10),
-                    Expanded(child: Text(state.scanNum.value+'code_list_report_strip'.tr)),
+                    Expanded(
+                        child: Text(
+                            state.scanNum.value + 'code_list_report_strip'.tr)),
                     Expanded(child: Text(state.palletNumber.value)),
                     const SizedBox(width: 10),
                   ],
@@ -80,15 +82,17 @@ class _PumaAntiCounterfeitingStorePageState
                   child: CombinationButton(
                     text: 'code_list_report_store'.tr,
                     click: () {
-                      if(state.dataCodeList.isNotEmpty){
+                      if (state.dataCodeList.isNotEmpty) {
                         askDialog(
                           content: 'code_list_report_sure_store'.tr,
                           confirm: () {
                             logic.submitCode();
                           },
                         );
-                      }else{
-                        showSnackBar(title: 'shack_bar_warm'.tr, message: 'code_list_report_no_barcode'.tr);
+                      } else {
+                        showSnackBar(
+                            title: 'shack_bar_warm'.tr,
+                            message: 'code_list_report_no_barcode'.tr);
                       }
                     },
                     combination: Combination.right,
@@ -100,11 +104,15 @@ class _PumaAntiCounterfeitingStorePageState
         ));
   }
 
-  @override
-  void initState() {
+  void scan() {
     pdaScanner(
       scan: (code) => state.addCode(code),
     );
+  }
+
+  @override
+  void initState() {
+    scan();
     super.initState();
   }
 }

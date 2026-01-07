@@ -173,6 +173,7 @@ class VisitRegisterLogic extends GetxController {
           //带数据的新增
           if (state.lastAdd) {
             state.dataDetail = VisitGetDetailInfo.fromJson(response.data);
+            state.dataDetail.dateTime = getCurrentTime();
             textIdCard.text = state.dataDetail.iDCard ?? ''; //显示身份证
             state.upAddDetail.value.iDCard = state.dataDetail.iDCard; //上传身份证
 
@@ -229,6 +230,7 @@ class VisitRegisterLogic extends GetxController {
 
           } else {
             state.dataDetail = VisitGetDetailInfo.fromJson(response.data);
+            state.dataDetail.dateTime = getCurrentTime();
             state.cardPicture.value = state.dataDetail.cardPic ?? '';
             state.facePicture.value = state.dataDetail.peoPic ?? '';
             state.upLeavePicture.clear();
