@@ -90,22 +90,25 @@ class PumaAntiCounterfeitingLogic extends GetxController {
     required String code,
     required Function() have,
   }) {
+
     if (state.sortingList.isNotEmpty) {
       if (code.isEmpty) {
         showSnackBar(title: 'shack_bar_warm'.tr, message: 'code_list_report_barcode_is_empty'.tr);
       } else {
         for (int i = 0; i < state.sortingList.length; i++) {
           if (state.sortingList[i].fBarCode == code) {
-            state.sortingList[i].use = true;
             have.call();
+            state.sortingList[i].use = true;
+            state.sortingList.sort((a, b) {
+              if (a.use && !b.use) return -1;
+              if (!a.use && b.use) return 1;
+              return 0;
+            });
+            state.sortingList.refresh();
             break;
           }
         }
-        state.sortingList.sort((a, b) {
-          if (a.use && !b.use) return -1;
-          if (!a.use && b.use) return 1;
-          return 0;
-        });
+
       }
     } else {
       showSnackBar(title: 'shack_bar_warm'.tr, message: 'code_list_report_sorting_empty'.tr);

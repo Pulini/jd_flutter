@@ -1,7 +1,11 @@
 import 'package:audioplayers/audioplayers.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/fun/warehouse/in/anti_counterfeiting/puma_anti_counterfeiting_logic.dart';
+import 'package:jd_flutter/utils/app_init.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
+import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
@@ -40,7 +44,7 @@ class _PumaAntiCounterfeitingOutboundPageState
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(5),
                               border:
-                                  Border.all(width: 1, color: Colors.blue)),
+                                  Border.all(width: 1, color: state.sortingList[index].use ? Colors.red :Colors.blue)),
                           child: Text(
                             state.sortingList[index].fBarCode.toString(),
                             style: TextStyle(color: Colors.black),
@@ -112,8 +116,7 @@ class _PumaAntiCounterfeitingOutboundPageState
     }
   }
 
-  @override
-  void initState() {
+  void scan(){
     pdaScanner(
       scan: (code) {
         logic.haveCode(
@@ -124,6 +127,22 @@ class _PumaAntiCounterfeitingOutboundPageState
         );
       },
     );
+  }
+
+  @override
+  void initState() {
+    if ((deviceInfo() as AndroidDeviceInfo).version.release.toDoubleTry() >= 8) {
+      //安卓8.0以上才能调用这个api
+      player = AudioPlayer();
+    }
+    scan();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    player.dispose();
+    state.clearSortingList();
+    super.dispose();
   }
 }

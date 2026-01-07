@@ -136,7 +136,6 @@ class MaterialLabelScanState {
           if (detailItem.size == scanItem.size &&
               detailItem.materialID == scanItem.materialID &&
               detailItem.srcICMOInterID == scanItem.srcICMOInterID) {
-
             if (detailItem.isScan == true) {
               // 如果找到条码但已经扫描过了
               alreadyScanned = true;
@@ -172,7 +171,6 @@ class MaterialLabelScanState {
     }
   }
 
-
   //备料提交领料
   void submitCodeDetail({
     required int receiverEmpID,
@@ -189,16 +187,15 @@ class MaterialLabelScanState {
         'IssuerEmpID': userInfo!.empID,
         'pickMatDetailItems': [
           for (var entry in dataDetailList.entries)
-            {
-              // 获取当前物料分组下的所有明细
-              for (var detailItem in entry.value)
+            // 获取当前物料分组下的所有明细
+            for (var detailItem in entry.value)
+              if (detailItem.isScan == true)
                 {
                   'SrcICMOInterID': detailItem.srcICMOInterID,
                   'MaterialID': detailItem.materialID,
                   'Size': detailItem.size,
                   'SubmitQty': detailItem.thisTime,
                 }
-            }
         ]
       },
     ).then((response) {
