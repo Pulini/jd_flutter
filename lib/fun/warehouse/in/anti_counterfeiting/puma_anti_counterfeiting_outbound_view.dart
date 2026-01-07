@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/fun/warehouse/in/anti_counterfeiting/puma_anti_counterfeiting_logic.dart';
 import 'package:jd_flutter/utils/app_init.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
-import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
