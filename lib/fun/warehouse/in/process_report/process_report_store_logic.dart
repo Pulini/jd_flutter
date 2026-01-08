@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/bar_code.dart';
 import 'package:jd_flutter/bean/http/response/process_modify_info.dart';
+import 'package:jd_flutter/bean/http/response/sap_picking_info.dart';
 import 'package:jd_flutter/bean/http/response/scan_process_info.dart';
 import 'package:jd_flutter/bean/http/response/worker_info.dart';
 import 'package:jd_flutter/fun/warehouse/code_list_report/code_list_report_view.dart';
@@ -30,31 +31,31 @@ class ProcessReportStoreLogic extends GetxController {
     } else {
       if (code.isPallet()) {
         checkPallet(
-          pallet: code,
-          success: () =>state.palletNumber.value = code,
-          // success: (data) {
-          //   if (data.item2![0].palletExistence == 'X') {
-          //     switch (data.item2![0].palletState) {
-          //       case '':
-          //         state.pallet = data.item2![0];
-          //         state.palletNumber.value = code;
-          //         break;
-          //       case 'X':
-          //         showSnackBar(
-          //             message: 'production_scan_use_empty_pallets'.tr,
-          //             isWarning: true);
-          //         break;
-          //       case 'Y':
-          //         showSnackBar(
-          //             message: 'production_scan_used_pallets'.tr,
-          //             isWarning: true);
-          //         break;
-          //     }
-          //   } else {
-          //     showSnackBar(
-          //         message: 'production_scan_not_exist'.tr, isWarning: true);
-          //   }
-          // },
+          // pallet: code,
+          // success: () =>state.palletNumber.value = code,
+          pallets: [code],
+          success: (data) {
+            if (data.item2![0].palletExistence == 'X') {
+              switch (data.item2![0].palletState) {
+                case '':
+                  state.palletNumber.value = code;
+                  break;
+                case 'X':
+                  showSnackBar(
+                      message: 'production_scan_use_empty_pallets'.tr,
+                      isWarning: true);
+                  break;
+                case 'Y':
+                  showSnackBar(
+                      message: 'production_scan_used_pallets'.tr,
+                      isWarning: true);
+                  break;
+              }
+            } else {
+              showSnackBar(
+                  message: 'production_scan_not_exist'.tr, isWarning: true);
+            }
+          },
           error: (msg) => errorDialog(content: msg),
         );
         return;
@@ -78,62 +79,63 @@ class ProcessReportStoreLogic extends GetxController {
       state.barCodeList.remove(barCodeList);
     });
   }
-  void checkPallet({
-    required String pallet,
-    required Function() success,
-    required Function(String) error,
-  }) {
-
-    httpGet(
-    loading: 'production_scan_obtaining_tray_information'.tr,
-    method: webApiMesGetPallet,
-    params: {
-      'FTRAYNO':pallet
-    },
-    ).then((response) {
-      if (response.resultCode == resultSuccess) {
-        success.call();
-      } else {
-        error.call(response.message ?? 'query_default_error'.tr);
-      }
-    });
-  }
-
-  // //验证托盘
+  // SAP升级期间临时使用
   // void checkPallet({
-  //   required List<String> pallets,
-  //   required Function(PalletDetailInfo) success,
+  //   required String pallet,
+  //   required Function() success,
   //   required Function(String) error,
   // }) {
-  //   sapPost(
-  //     loading: 'production_scan_obtaining_tray_information'.tr,
-  //     method: webApiSapGetPalletList,
-  //     body: {
-  //       'WERKS':  isTestUrl()?'2000':'1500',
-  //       'LGORT': userInfo?.defaultStockNumber,
-  //       'ZTRAY_CFM': 'X',
-  //       'ITEM': [
-  //         for (var pallet in pallets)
-  //           {
-  //             'ZLOCAL': '',
-  //             'ZFTRAYNO': pallet,
-  //             'BQID': '',
-  //             'SATNR': '',
-  //             'MATNR': '',
-  //             'SIZE1': '',
-  //             'ZVBELN_ORI': '',
-  //             'KDAUF': '',
-  //           }
-  //       ]
-  //     },
+  //
+  //   httpGet(
+  //   loading: 'production_scan_obtaining_tray_information'.tr,
+  //   method: webApiMesGetPallet,
+  //   params: {
+  //     'FTRAYNO':pallet
+  //   },
   //   ).then((response) {
   //     if (response.resultCode == resultSuccess) {
-  //       success.call(PalletDetailInfo.fromJson(response.data));
+  //       success.call();
   //     } else {
   //       error.call(response.message ?? 'query_default_error'.tr);
   //     }
   //   });
   // }
+
+  //验证托盘
+  void checkPallet({
+    required List<String> pallets,
+    required Function(PalletDetailInfo) success,
+    required Function(String) error,
+  }) {
+    sapPost(
+      loading: 'production_scan_obtaining_tray_information'.tr,
+      method: webApiSapGetPalletList,
+      body: {
+        'WERKS':  isTestUrl()?'2000':'1500',
+        'LGORT': userInfo?.defaultStockNumber,
+        'ZTRAY_CFM': 'X',
+        'ITEM': [
+          for (var pallet in pallets)
+            {
+              'ZLOCAL': '',
+              'ZFTRAYNO': pallet,
+              'BQID': '',
+              'SATNR': '',
+              'MATNR': '',
+              'SIZE1': '',
+              'ZVBELN_ORI': '',
+              'KDAUF': '',
+            }
+        ]
+      },
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        success.call(PalletDetailInfo.fromJson(response.data));
+      } else {
+        error.call(response.message ?? 'query_default_error'.tr);
+      }
+    });
+  }
 
   //获得已入库条形码数据
   void getBarCodeStatusByDepartmentID({

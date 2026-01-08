@@ -28,8 +28,6 @@ class _SapInkColorMatchingPageState extends State<SapInkColorMatchingPage> {
   final SapInkColorMatchingState state =
       Get.find<SapInkColorMatchingLogic>().state;
 
-  //
-
   //日期选择器的控制器
   var dpcStartDate = DatePickerController(
     PickerType.startDate,

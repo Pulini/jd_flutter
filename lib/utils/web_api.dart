@@ -890,7 +890,7 @@ const webApiSapPrintPicking = 'sap/zapp/ZFUN_RES_ZLINGYONG_1500A';
 const webApiSapGetPalletList = 'sap/zapp/ZWMS_STOCK_FETCH';
 
 //mes托盘校验(sap升级S4期间临时使用)
-const webApiMesGetPallet = 'api/BaseInfo/GetPallet';
+// const webApiMesGetPallet = 'api/BaseInfo/GetPallet';
 
 //sap获取托盘信息
 const webApiSapGetLabelBindingPalletInfo = 'sap/zapp/ZNQWMS_STOCK_FETCH';
@@ -1503,5 +1503,9 @@ const webApiSubmitPickMatDetail = 'api/PickMat/SubmitPickMatDetail';
 
 //获取部件生产派工单
 const webApiGetPartProductionDispatchOrderList = 'api/WorkCard/GetPartWorkCardList';
+
+
+//获取部件生产派工单
+const webApiGetPartProductionDispatchOrdersDetail = 'api/WorkCard/GetMergeWorkCard';
 
 

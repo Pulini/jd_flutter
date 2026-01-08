@@ -17,7 +17,7 @@ import 'package:jd_flutter/widget/dialogs.dart';
 //app 背景渐变色
 BoxDecoration backgroundColor() => BoxDecoration(
       gradient: LinearGradient(
-        colors: isTestUrl()
+        colors: !isTestUrl()
             ? [
                 Colors.green,
                 Colors.blue.shade300,

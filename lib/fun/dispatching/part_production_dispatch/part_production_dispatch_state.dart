@@ -6,9 +6,13 @@ import 'package:jd_flutter/utils/web_api.dart';
 class PartProductionDispatchState {
   var isSelectedClosed = false.obs;
   var orderList = <PartProductionDispatchOrderInfo>[].obs;
+  PartProductionDispatchOrderDetailInfo? detailInfo;
+  List<List>instructionList=[];
+  var sizeList=<PartProductionDispatchOrderDetailSizeInfo>[].obs;
 
   PartProductionDispatchState() {
-    isSelectedClosed.value = spGet('${Get.currentRoute}/isSelectedClosed') ?? false;
+    isSelectedClosed.value =
+        spGet('${Get.currentRoute}/isSelectedClosed') ?? false;
   }
 
   void getPartProductionDispatchOrderList({
@@ -35,7 +39,28 @@ class PartProductionDispatchState {
             PartProductionDispatchOrderInfo.fromJson(json)
         ];
       } else {
-        orderList.value =[];
+        orderList.value = [];
+        error.call(response.message ?? '');
+      }
+    });
+  }
+
+  void getPartProductionDispatchOrdersDetail({
+    required List<int> orders,
+    required Function() success,
+    required Function(String msg) error,
+  }) {
+    httpGet(
+      method: webApiGetPartProductionDispatchOrdersDetail,
+      loading: 'material_dispatch_querying_order'.tr,
+      body: {'WorkCardIDs': orders},
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        detailInfo =
+            PartProductionDispatchOrderDetailInfo.fromJson(response.data);
+        success.call();
+      } else {
+        detailInfo = null;
         error.call(response.message ?? '');
       }
     });
