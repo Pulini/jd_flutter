@@ -131,7 +131,7 @@ class SapPrintPickingState {
               'ZNAME_EN': '',
               'MEINS': item.order.basicUnit,
               'MATNR': item.order.materialNumber,
-              'WERKS':  isTestUrl()?'2000':'1500',
+              'WERKS':  '2000',
             }
         ],
         'DISPATCH': orderDetailDispatch.map((v) => v.toJson()).toList(),
@@ -250,7 +250,7 @@ class SapPrintPickingState {
       loading: 'sap_print_picking_getting_pallet_info'.tr,
       method: webApiSapGetPalletList,
       body: {
-        'WERKS':  isTestUrl()?'2000':'1500',
+        'WERKS':  '2000',
         'LGORT': warehouse,
         'ZTRAY_CFM': '',
         'ITEM': [
@@ -286,7 +286,7 @@ class SapPrintPickingState {
       method: webApiSapPuttingOnShelves,
       body: {
         'ZCZLX_WMS': 'WM03',
-        'WERKS':  isTestUrl()?'2000':'1500',
+        'WERKS':  '2000',
         'LGORT': warehouse,
         'ITEM': [
           for (var pallet in transferList)

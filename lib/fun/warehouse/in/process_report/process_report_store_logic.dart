@@ -111,7 +111,7 @@ class ProcessReportStoreLogic extends GetxController {
       loading: 'production_scan_obtaining_tray_information'.tr,
       method: webApiSapGetPalletList,
       body: {
-        'WERKS':  isTestUrl()?'2000':'1500',
+        'WERKS': '2000',
         'LGORT': userInfo?.defaultStockNumber,
         'ZTRAY_CFM': 'X',
         'ITEM': [

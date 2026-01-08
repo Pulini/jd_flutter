@@ -25,7 +25,7 @@ class SapStockTransferState {
       loading: 'sap_stock_transfer_getting_wait_put_on_list_tips'.tr,
       method: webApiSapGetPalletList,
       body: {
-        'WERKS':  isTestUrl()?'2000':'1500',
+        'WERKS':  '2000',
         'LGORT': warehouse,
         'ZTRAY_CFM': targetPalletNo?.isNotEmpty == true ? 'X' : '',
         'ITEM': [
@@ -143,7 +143,7 @@ class SapStockTransferState {
       method: webApiSapPuttingOnShelves,
       body: {
         'ZCZLX_WMS': 'WM03',
-        'WERKS':  isTestUrl()?'2000':'1500',
+        'WERKS':  '2000',
         'LGORT': warehouse,
         'ITEM': [
           for (var item in list)

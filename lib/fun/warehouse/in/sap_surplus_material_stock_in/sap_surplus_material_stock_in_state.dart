@@ -37,7 +37,7 @@ class SapSurplusMaterialStockInState {
       body: {
         'DATEF': startDate,
         'DATET': endDate,
-        'I_WERKS':  isTestUrl()?'2000':'1500',
+        'I_WERKS':  '2000',
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
@@ -100,7 +100,7 @@ class SapSurplusMaterialStockInState {
         'I_MENGE2': materialList.length == 2 ? materialList[1].editQty : '',
         'I_MENGE3': materialList.length == 3 ? materialList[2].editQty : '',
         'I_BUDAT': '',
-        'I_WERKS':  isTestUrl()?'2000':'1500',
+        'I_WERKS':  '2000',
         'I_LGORT': '',
         'I_STOKZ': '',
       },

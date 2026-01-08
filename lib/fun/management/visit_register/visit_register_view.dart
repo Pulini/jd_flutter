@@ -190,7 +190,7 @@ class _VisitRegisterPageState extends State<VisitRegisterPage> {
         canPop: true,
         child: AlertDialog(
           title: Text('visit_recent_visit_records'.tr),
-          content: Container(
+          content: SizedBox(
             width: 300,
             height: 200,
             child: Column(

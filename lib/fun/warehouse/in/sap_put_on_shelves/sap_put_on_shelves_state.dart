@@ -22,7 +22,7 @@ class SapPutOnShelvesState {
       loading: 'sap_put_on_shelves_getting_wait_put_on_shelves_list'.tr,
       method: webApiSapGetPalletList,
       body: {
-        'WERKS':  isTestUrl()?'2000':'1500',
+        'WERKS':  '2000',
         'LGORT': warehouse,
         'ZTRAY_CFM': '',
         'ITEM': [
@@ -121,7 +121,7 @@ class SapPutOnShelvesState {
       method: webApiSapPuttingOnShelves,
       body: {
         'ZCZLX_WMS': 'WM01',
-        'WERKS':  isTestUrl()?'2000':'1500',
+        'WERKS':  '2000',
         'LGORT': warehouse,
         'ITEM': [
           {
