@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/water_mark.dart';
 
 class PDFViewerFromUrl extends StatelessWidget {
@@ -56,6 +57,7 @@ class PDFViewerCachedFromUrl extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    logger.f('跳转到看pfd--------');
     return Scaffold(
       appBar: AppBar(
         title: Text(title),

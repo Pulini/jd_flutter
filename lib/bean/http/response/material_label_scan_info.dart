@@ -52,10 +52,64 @@ class MaterialLabelScanInfo {
   }
 }
 
+/// Head : [{"InterID":213704,"WorkCardNo":"P2049423","ProductName":"PNS26312586-01","MaterialNumber":"58.00006","MaterialName":"火腿内外加大版","MtoNo":"JZ2500120, JZ2500119","UnitName":"双"}]
+/// Items : [{"InterID":213704,"WorkCardNo":"P2049423","MaterialID":1060013,"ProductName":"PNS26312586-01","MaterialNumber":"013800874","MaterialName":"0.7mm*1.37m 黑色 P000FMG纹热熔膜热压（无缝切）","SrcICMOInterID":177956,"MtoNo":"JZ2500120","Size":"9","OrderQty":2.69994,"QtyReceived":0.0,"UnclaimedQty":2.69994,"UnitName":"米"}]
+
 class MaterialLabelScanDetailInfo {
   MaterialLabelScanDetailInfo({
+    this.head,
+    this.items,});
+
+  MaterialLabelScanDetailInfo.fromJson(dynamic json) {
+    if (json['Head'] != null) {
+      head = [];
+      json['Head'].forEach((v) {
+        head?.add(Head.fromJson(v));
+      });
+    }
+    if (json['Items'] != null) {
+      items = [];
+      json['Items'].forEach((v) {
+        items?.add(Items.fromJson(v));
+      });
+    }
+  }
+  List<Head>? head;
+  List<Items>? items;
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    if (head != null) {
+      map['Head'] = head?.map((v) => v.toJson()).toList();
+    }
+    if (items != null) {
+      map['Items'] = items?.map((v) => v.toJson()).toList();
+    }
+    return map;
+  }
+
+}
+
+/// InterID : 213704
+/// WorkCardNo : "P2049423"
+/// MaterialID : 1060013
+/// ProductName : "PNS26312586-01"
+/// MaterialNumber : "013800874"
+/// MaterialName : "0.7mm*1.37m 黑色 P000FMG纹热熔膜热压（无缝切）"
+/// SrcICMOInterID : 177956
+/// MtoNo : "JZ2500120"
+/// Size : "9"
+/// OrderQty : 2.69994
+/// QtyReceived : 0.0
+/// UnclaimedQty : 2.69994
+/// UnitName : "米"
+
+class Items {
+  Items({
     this.interID,
+    this.workCardNo,
     this.materialID,
+    this.productName,
     this.materialNumber,
     this.materialName,
     this.srcICMOInterID,
@@ -64,14 +118,13 @@ class MaterialLabelScanDetailInfo {
     this.orderQty,
     this.qtyReceived,
     this.unclaimedQty,
-    this.productName,
-    this.workCardNo,
-    this.unitName,
-  });
+    this.unitName,});
 
-  MaterialLabelScanDetailInfo.fromJson(dynamic json) {
+  Items.fromJson(dynamic json) {
     interID = json['InterID'];
+    workCardNo = json['WorkCardNo'];
     materialID = json['MaterialID'];
+    productName = json['ProductName'];
     materialNumber = json['MaterialNumber'];
     materialName = json['MaterialName'];
     srcICMOInterID = json['SrcICMOInterID'];
@@ -80,11 +133,8 @@ class MaterialLabelScanDetailInfo {
     orderQty = json['OrderQty'];
     qtyReceived = json['QtyReceived'];
     unclaimedQty = json['UnclaimedQty'];
-    productName = json['ProductName'];
-    workCardNo = json['WorkCardNo'];
     unitName = json['UnitName'];
   }
-
   int? interID;
   String? workCardNo;
   int? materialID;
@@ -94,30 +144,84 @@ class MaterialLabelScanDetailInfo {
   int? srcICMOInterID;
   String? mtoNo;
   String? size;
-  double? orderQty;  //订单数量
-  double? qtyReceived; //已领
-  double? unclaimedQty; //未领
-  double? thisTime=0.0; //本次
+  double? orderQty;
+  double? qtyReceived;
+  double? unclaimedQty;
   String? unitName;
-  bool isScan = false;
+  double? thisTime;
+  bool? isScan = false;
+
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['InterID'] = interID;
+    map['WorkCardNo'] = workCardNo;
     map['MaterialID'] = materialID;
+    map['ProductName'] = productName;
     map['MaterialNumber'] = materialNumber;
     map['MaterialName'] = materialName;
+    map['SrcICMOInterID'] = srcICMOInterID;
     map['MtoNo'] = mtoNo;
     map['Size'] = size;
     map['OrderQty'] = orderQty;
     map['QtyReceived'] = qtyReceived;
     map['UnclaimedQty'] = unclaimedQty;
-    map['ProductName'] = productName;
-    map['WorkCardNo'] = workCardNo;
     map['UnitName'] = unitName;
-
     return map;
   }
+
+}
+
+/// InterID : 213704
+/// WorkCardNo : "P2049423"
+/// ProductName : "PNS26312586-01"
+/// MaterialNumber : "58.00006"
+/// MaterialName : "火腿内外加大版"
+/// MtoNo : "JZ2500120, JZ2500119"
+/// UnitName : "双"
+
+class Head {
+  Head({
+    this.interID,
+    this.workCardNo,
+    this.productName,
+    this.materialNumber,
+    this.materialName,
+    this.scWorkCardQty,
+    this.mtoNo,
+    this.unitName,});
+
+  Head.fromJson(dynamic json) {
+    interID = json['InterID'];
+    workCardNo = json['WorkCardNo'];
+    productName = json['ProductName'];
+    materialNumber = json['MaterialNumber'];
+    materialName = json['MaterialName'];
+    mtoNo = json['MtoNo'];
+    unitName = json['UnitName'];
+    scWorkCardQty = json['ScWorkCardQty'];
+  }
+  int? interID;
+  String? workCardNo;
+  String? productName;
+  String? materialNumber;
+  String? materialName;
+  String? mtoNo;
+  String? unitName;
+  double? scWorkCardQty;
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['InterID'] = interID;
+    map['WorkCardNo'] = workCardNo;
+    map['ProductName'] = productName;
+    map['MaterialNumber'] = materialNumber;
+    map['MaterialName'] = materialName;
+    map['MtoNo'] = mtoNo;
+    map['UnitName'] = unitName;
+    return map;
+  }
+
 }
 
 class MaterialLabelScanBarCodeInfo {

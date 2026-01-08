@@ -147,4 +147,11 @@ class _MaterialLabelScanPageState extends State<MaterialLabelScanPage> {
     scan();
     super.initState();
   }
+
+
+  @override
+  void dispose() {
+    Get.delete<MaterialLabelScanLogic>();
+    super.dispose();
+  }
 }

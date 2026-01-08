@@ -48,7 +48,9 @@ class VisitDataListInfo {
     visitedFactory = json['VisitedFactory'];
     visitedDept = json['VisitedDept'];
     intervieweeName = json['IntervieweeName'];
-    visitorNum = json['VisitorNum'];
+    visitorNum = json['VisitorNum'] is String
+        ? int.tryParse(json['VisitorNum'])
+        : json['VisitorNum'];
     securityStaff = json['SecurityStaff'];
     dateTime = json['DateTime'];
     leaveTime = json['LeaveTime'];
@@ -67,7 +69,7 @@ class VisitDataListInfo {
   String? visitedFactory;
   String? visitedDept;
   String? intervieweeName;
-  int? visitorNum;
+  dynamic visitorNum;
   String? securityStaff;
   String? dateTime;
   String? leaveTime;

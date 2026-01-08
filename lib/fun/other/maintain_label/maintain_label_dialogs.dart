@@ -893,17 +893,17 @@ void batchSetLabelPropertyDialog(
                       (s) => nw.value = s,
                     ),
                     _expandedNumberEditText(
-                      'maintain_label_dialog_gross_weight：.tr',
+                      'maintain_label_dialog_gross_weight'.tr,
                       gw.value,
                       (s) => gw.value = s,
                     ),
                     _expandedEditText(
-                      'maintain_label_dialog_specifications：.tr',
+                      'maintain_label_dialog_specifications'.tr,
                       meas,
                       (s) => meas = s,
                     ),
                     _expandedEditText(
-                      'maintain_label_dialog_unit：.tr',
+                      'maintain_label_dialog_unit'.tr,
                       unit,
                       (s) => unit = s,
                     ),

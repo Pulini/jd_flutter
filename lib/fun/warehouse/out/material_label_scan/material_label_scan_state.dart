@@ -1,23 +1,25 @@
+import 'package:flutter/cupertino.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:jd_flutter/bean/http/response/material_label_scan_info.dart';
 import 'package:jd_flutter/fun/warehouse/out/material_label_scan/material_label_scan_detail_view.dart';
-import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
+import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
 class MaterialLabelScanState {
   var dataList = <MaterialLabelScanInfo>[].obs;
-  var dataDetailList = <MaterialLabelScanDetailInfo>[].obs;
-  var scanDetailList = <MaterialLabelScanBarCodeInfo>[];
-  var commandNumber = ''.obs; //指令号
-  var allQty = ''.obs; //订单总量
+  var dataDetailList = <String, List<Items>>{}.obs;
+  var dataDetail = MaterialLabelScanDetailInfo();
+  var scanDetailList = <MaterialLabelScanBarCodeInfo>[].obs;
   var canScan = true; //是否能扫描
 
   var materialListNumber = ''; //备料单号
+  var peopleNumber = TextEditingController(); //员工工号
+  var peopleName = ''.obs; //员工姓名
 
   //备料任务清单
   void getQueryList({
@@ -30,7 +32,7 @@ class MaterialLabelScanState {
       method: webApiGetPickMatList,
       params: {
         'NoticeDateStart': '2024-01-26',
-        'NoticeDateEnd': '2025-12-26',
+        'NoticeDateEnd': '2026-01-05',
         'ProductName': '',
         'MaterialNumber': '',
       },
@@ -60,41 +62,21 @@ class MaterialLabelScanState {
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        var list = <MaterialLabelScanDetailInfo>[
-          for (var i = 0; i < response.data.length; ++i)
-            MaterialLabelScanDetailInfo.fromJson(response.data[i])
-        ];
-        allQty.value = list
-            .map((v) => v.orderQty ?? 0.0)
-            .reduce((a, b) => a.add(b))
-            .toShowString();
-        list.add(MaterialLabelScanDetailInfo(
-            size: '合计',
-            orderQty:
-                list.map((v) => v.orderQty ?? 0.0).reduce((a, b) => a.add(b)),
-            qtyReceived: list
-                .map((v) => v.qtyReceived ?? 0.0)
-                .reduce((a, b) => a.add(b)),
-            unclaimedQty: list
-                .map((v) => v.unclaimedQty ?? 0.0)
-                .reduce((a, b) => a.add(b))));
-        var nameList = <String>[];
-        for (var c in list) {
-          if (!nameList.contains(c.mtoNo) && c.mtoNo != null) {
-            nameList.add(c.mtoNo.toString());
+        dataDetail = MaterialLabelScanDetailInfo.fromJson(response.data);
+        // 按物料分组
+        var groupedByMaterial = <String, List<Items>>{};
+        for (var item in dataDetail.items!) {
+          String materialKey = item.materialID.toString();
+          if (!groupedByMaterial.containsKey(materialKey)) {
+            groupedByMaterial[materialKey] = [];
           }
+          groupedByMaterial[materialKey]?.add(item);
         }
-        var command = '';
-        for (var s in nameList) {
-          command += '$s,';
-        }
-        if (command.isNotEmpty) {
-          command = command.substring(0, command.length - 1);
-        }
-        commandNumber.value = command;
-        dataDetailList.value = list;
+
+        dataDetailList.value = groupedByMaterial;
         Get.to(() => const MaterialLabelScanDetailPage());
       } else {
+        dataDetail = MaterialLabelScanDetailInfo();
         errorDialog(content: response.message ?? 'query_default_error'.tr);
       }
     });
@@ -110,7 +92,7 @@ class MaterialLabelScanState {
       loading: 'material_label_scan_detail_get_barcode_message'.tr,
       method: webApiPickGetBarCodeInfo,
       params: {
-        'BarCode': '2049423001196.5/3001',
+        'BarCode': barCode,
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
@@ -123,32 +105,76 @@ class MaterialLabelScanState {
             success: () {
               success.call();
             });
+        canScan = true;
       } else {
+        canScan = true;
         error.call(response.message ?? 'query_default_error'.tr);
       }
     });
   }
 
   //设置扫码信息
+//设置扫码信息
   void setScanDetail({
     required List<MaterialLabelScanBarCodeInfo> lists,
     required Function() success,
   }) {
-    for (var c in lists) {
-      for (var d in dataDetailList) {
-        if (d.size == c.size) {
-          d.thisTime = c.barCodeQty;
-          d.isScan = true;
+    bool allFound = true;
+
+    // 遍历每个扫码信息
+    for (var scanItem in lists) {
+      bool found = false;
+      bool alreadyScanned = false;
+
+      // 遍历所有物料分组
+      for (var entry in dataDetailList.entries) {
+        // 获取当前物料分组下的所有明细
+        var materialList = entry.value;
+
+        // 在当前物料分组中查找匹配的尺码
+        for (var detailItem in materialList) {
+          if (detailItem.size == scanItem.size &&
+              detailItem.materialID == scanItem.materialID &&
+              detailItem.srcICMOInterID == scanItem.srcICMOInterID) {
+            if (detailItem.isScan == true) {
+              // 如果找到条码但已经扫描过了
+              alreadyScanned = true;
+              showSnackBar(message: '该条码已扫描过，不能重复扫描');
+              break;
+            } else {
+              // 更新数据
+              detailItem.thisTime = scanItem.barCodeQty;
+              detailItem.isScan = true;
+              found = true;
+              break; // 找到后退出内层循环
+            }
+          }
         }
+
+        // 如果在当前物料分组中已找到并处理，或已扫描过，继续下一个扫描项
+        if (found || alreadyScanned) break;
+      }
+
+      // 如果整个数据中都未找到匹配项
+      if (!found && !alreadyScanned) {
+        showSnackBar(message: '未找到匹配的物料信息');
+        allFound = false;
       }
     }
-    success.call();
+
+    // 刷新数据状态
+    dataDetailList.refresh();
+
+    // 只有当所有扫码信息都处理完才调用成功回调
+    if (allFound) {
+      success.call();
+    }
   }
 
   //备料提交领料
   void submitCodeDetail({
+    required int receiverEmpID,
     required Function() success,
-    required Function(String) error,
   }) {
     httpPost(
       loading: 'material_label_scan_detail_submit_message'.tr,
@@ -156,19 +182,24 @@ class MaterialLabelScanState {
       body: {
         'WorkCardInterID': '',
         'UserID': userInfo!.userID,
+        'StockID': userInfo!.defaultStockID,
+        'ReceiverEmpID': receiverEmpID, //手输
+        'IssuerEmpID': userInfo!.empID,
         'pickMatDetailItems': [
-          for (var c in dataDetailList..where((v) => v.size != '合计').toList())
-            {
-              'SrcICMOInterID': c.srcICMOInterID,
-              'MaterialID': c.materialID,
-              'Size': c.size,
-              'SubmitQty': c.thisTime,
-            }
+          for (var entry in dataDetailList.entries)
+            // 获取当前物料分组下的所有明细
+            for (var detailItem in entry.value)
+              if (detailItem.isScan == true)
+                {
+                  'SrcICMOInterID': detailItem.srcICMOInterID,
+                  'MaterialID': detailItem.materialID,
+                  'Size': detailItem.size,
+                  'SubmitQty': detailItem.thisTime,
+                }
         ]
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-
       } else {
         errorDialog(content: response.message ?? 'query_default_error'.tr);
       }

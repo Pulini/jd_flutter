@@ -6,6 +6,7 @@ import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
+import 'package:jd_flutter/widget/scanner.dart';
 
 class FormingBarcodeCollectionPriorityPage extends StatefulWidget {
   const FormingBarcodeCollectionPriorityPage({super.key});
@@ -188,6 +189,22 @@ class _FormingBarcodeCollectionPriorityPageState
                     )))
           ],
         ));
+  }
+
+  void scan() {
+    pdaScanner(scan: (scanCode) {
+        if(scanCode.isNotEmpty){
+          logic.firstPrioritySubmit(scan: scanCode, success: (){
+            Get.back(result: true);
+          });
+        }
+    });
+  }
+
+  @override
+  void initState() {
+    scan();
+    super.initState();
   }
 
   @override

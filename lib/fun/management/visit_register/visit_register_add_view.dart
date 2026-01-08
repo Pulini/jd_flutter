@@ -8,6 +8,7 @@ import 'package:jd_flutter/bean/http/response/visit_photo_bean.dart';
 import 'package:jd_flutter/fun/management/visit_register/visit_register_logic.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
@@ -30,7 +31,7 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
     height: 10,
   );
   var inputNumber = [
-    FilteringTextInputFormatter.allow(RegExp('[0-9]')),
+    FilteringTextInputFormatter.allow(RegExp('[0-9a-zA-Z]')),
   ];
 
   //  搜索弹窗
@@ -238,6 +239,7 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
   Obx _checkCar() => Obx(() => RadioGroup(
         groupValue: state.carType.value,
         onChanged: (v) => {
+          logger.f('选择了什么类型:$v'),
           state.carType.value = v!,
           state.upAddDetail.value.carType = v,
           if (v == '')
@@ -245,7 +247,12 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
               state.showWeight.value = false,
               state.showCarNumber.value = false,
             },
-          if (v == '小桥车' || v == '货车')
+          if (v == '小轿车')
+            {
+              state.showWeight.value = false,
+              state.showCarNumber.value = true,
+            },
+          if ( v == '货车')
             {
               state.showWeight.value = false,
               state.showCarNumber.value = true,
@@ -267,7 +274,7 @@ class _VisitRegisterAddPageState extends State<VisitRegisterAddPage> {
             Expanded(
               child: RadioListTile(
                 title: Text('visit_sedan'.tr),
-                value: '小桥车',
+                value: '小轿车',
               ),
             ),
             Expanded(

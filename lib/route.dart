@@ -157,7 +157,7 @@ class RouteConfig {
   //来访登记
   static Routes visitRegister = Routes(
     '/visitor_registration',
-    203,
+    204,
     const VisitRegisterPage(),
   );
 
@@ -297,7 +297,7 @@ class RouteConfig {
   //PUMA防伪标管理
   static Routes antiCounterfeiting = Routes(
     '/anti_counterfeiting',
-    200,
+    201,
     const PumaAntiCounterfeitingPage(),
   );
 
@@ -626,7 +626,7 @@ class RouteConfig {
   //成型条码采集
   static Routes formingBarcodeCollection = Routes(
     '/forming_barcode_collection',
-    203,
+    204,
     const FormingBarcodeCollectionPage(),
   );
 
