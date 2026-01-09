@@ -27,7 +27,7 @@ class MaterialLabelScanLogic extends GetxController {
     state.getQueryBarCodeDetail(
         barCode: barCode,
         success: () {
-          showScanTips();
+          showScanTips(tips: '+');
         },
         error: (String s) {
           showSnackBar(message: s);
