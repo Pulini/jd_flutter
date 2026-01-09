@@ -1028,7 +1028,7 @@ Future<List<Uint8List>> labelMultipurposeDynamic({
 
   if (tableTitleTips.isNotEmpty) {
     list.add(await _tscBitmapText(
-        tableTitleTipsX, tableTitleTipsY, 30, tableTitleTips));
+        tableTitleTipsX, tableTitleTipsY-2, 30, tableTitleTips));
   }
 
   if (tableSubTitle.isNotEmpty) {
