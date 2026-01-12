@@ -9,6 +9,7 @@ class PartProductionDispatchState {
   PartProductionDispatchOrderDetailInfo? detailInfo;
   List<List>instructionList=[];
   var sizeList=<PartProductionDispatchOrderDetailSizeInfo>[].obs;
+  var created=false.obs;
 
   PartProductionDispatchState() {
     isSelectedClosed.value =

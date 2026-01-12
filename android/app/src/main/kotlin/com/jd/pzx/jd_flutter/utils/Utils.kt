@@ -11,6 +11,8 @@ import android.os.Build
 import android.util.Base64
 import android.util.DisplayMetrics
 import android.util.Log
+import android.view.KeyCharacterMap
+import android.view.KeyEvent
 import android.view.View
 import androidx.core.content.FileProvider
 import java.io.ByteArrayOutputStream
@@ -714,4 +716,21 @@ fun bytesMerger(byteArray: List<ByteArray>) =
             System.arraycopy(bytes, 0, this, index, bytes.size)
             index += bytes.size
         }
+    }
+private var interceptorText = ""
+fun KeyEvent.keyInterceptor(code: (String) -> Unit) =
+    if (deviceId == KeyCharacterMap.VIRTUAL_KEYBOARD) {
+        false
+    } else {
+        if (action == KeyEvent.ACTION_DOWN) {
+            if (unicodeChar != 0) {//不排除0会导致ACSII码表内长度为2的字符码变成3位 导致数据长度与实际不符
+                if (keyCode == KeyEvent.KEYCODE_ENTER) {
+                    code.invoke(interceptorText)
+                    interceptorText = ""
+                } else {
+                    interceptorText += Char(unicodeChar)
+                }
+            }
+        }
+        true
     }

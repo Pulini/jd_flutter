@@ -1500,12 +1500,13 @@ const webApiPickGetBarCodeInfo = 'api/PickMat/GetBarCodeInfo';
 //备料提交领料
 const webApiSubmitPickMatDetail = 'api/PickMat/SubmitPickMatDetail';
 
-
 //获取部件生产派工单
 const webApiGetPartProductionDispatchOrderList = 'api/WorkCard/GetPartWorkCardList';
 
-
-//获取部件生产派工单
+//获取部件生产派工单明细
 const webApiGetPartProductionDispatchOrdersDetail = 'api/WorkCard/GetMergeWorkCard';
+
+//创建部件派工单贴标
+const webApiGetPartProductionDispatchCreateLabel = 'api/WorkCard/CreatePackageCardNo';
 
 

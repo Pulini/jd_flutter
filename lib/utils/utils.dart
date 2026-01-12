@@ -516,17 +516,74 @@ bool containsChinese(String input) {
   return chineseRegex.hasMatch(input);
 }
 
+class KeyboardInterceptors {
+  String _buffer = '';
+
+  bool handleKeyEvent(KeyEvent event, Function(String) callback) {
+    if (event is KeyDownEvent) {
+      String keyLabel = event.logicalKey.keyLabel;
+      debugPrint('key: $keyLabel  buffer: $_buffer');
+      // 处理回车键
+      if (event.logicalKey == LogicalKeyboardKey.enter) {
+        if (_buffer.isNotEmpty) {
+          callback(_buffer);
+          _buffer = '';
+        }
+        return true;
+      }
+
+      // 忽略修饰键
+      if (_isModifierKey(event.logicalKey)) {
+        return true; // 修饰键被处理，但不影响输入缓冲
+      }
+
+      // 只处理单字符输入
+      if (keyLabel.isNotEmpty && keyLabel.length == 1) {
+        _buffer += keyLabel;
+      }
+
+      return true;
+    }
+    return false;
+  }
+
+  bool _isModifierKey(LogicalKeyboardKey key) {
+    return key.keyId >= 0x00000000 && key.keyId <= 0x000000FF && (
+        key == LogicalKeyboardKey.shiftLeft ||
+            key == LogicalKeyboardKey.shiftRight ||
+            key == LogicalKeyboardKey.controlLeft ||
+            key == LogicalKeyboardKey.controlRight ||
+            key == LogicalKeyboardKey.altLeft ||
+            key == LogicalKeyboardKey.altRight ||
+            key == LogicalKeyboardKey.metaLeft ||
+            key == LogicalKeyboardKey.metaRight ||
+            key == LogicalKeyboardKey.capsLock ||
+            key == LogicalKeyboardKey.tab ||
+            key == LogicalKeyboardKey.escape ||
+            key == LogicalKeyboardKey.backspace ||
+            key == LogicalKeyboardKey.delete ||
+            key == LogicalKeyboardKey.arrowUp ||
+            key == LogicalKeyboardKey.arrowDown ||
+            key == LogicalKeyboardKey.arrowLeft ||
+            key == LogicalKeyboardKey.arrowRight
+    );
+  }
+
+  void clearBuffer() {
+    _buffer = '';
+  }
+}
 Future<void> weighbridgeOpen() async {
   await const MethodChannel(channelWeighbridgeAndroidToFlutter)
-      .invokeMethod('OpenDevice');
+      .invokeMethod('WeighbridgeOpen');
 }
 Future<void> weighbridgeDestroy() async {
   await const MethodChannel(channelWeighbridgeAndroidToFlutter)
-      .invokeMethod('DestroyDevice');
+      .invokeMethod('WeighbridgeDestroy');
 }
-Future<void> weighbridgeResume() async {
+Future<void> isStartKeyListener(bool isStartKeyListener) async {
   await const MethodChannel(channelWeighbridgeAndroidToFlutter)
-      .invokeMethod('ResumeDevice');
+      .invokeMethod('isStartKeyListener', isStartKeyListener);
 }
 
 void weighbridgeListener({

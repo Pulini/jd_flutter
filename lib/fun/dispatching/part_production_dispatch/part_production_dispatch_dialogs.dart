@@ -8,7 +8,7 @@ import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
 import 'package:jd_flutter/widget/worker_check_widget.dart';
 
-void selectInstructionDialog({
+void createLabelDialog({
   required List<Map> sizeList,
   required Function callback,
 }) {
@@ -28,13 +28,17 @@ void selectInstructionDialog({
       errorDialog(content: '请填写正确的生成贴标数');
       return;
     }
-    var map={
-      'EmpID': worker!.empID,
-      'CreateCount': count,
-      'PackageType': isSingle?'478':'479',
-      'SizeList': sizeList,
-    };
-    logger.f(map);
+    _createLabel(
+      empId: worker!.empID??0,
+      count: count,
+      isSingle: isSingle,
+      sizeList: sizeList,
+      success: (msg) =>successDialog(content: msg, back:(){
+        Get.back();
+        callback.call();
+      } ),
+      error: (msg) =>errorDialog(content: msg),
+    );
   }
 
   Get.dialog(
@@ -77,14 +81,14 @@ void selectInstructionDialog({
                       text: '创建单码',
                       combination: Combination.left,
                       backgroundColor: Colors.green,
-                      click: () =>createLabel(true),
+                      click: () => createLabel(true),
                     ),
                   ),
                   Expanded(
                     child: CombinationButton(
                       text: '创建混码',
                       combination: Combination.right,
-                      click: () =>createLabel(false),
+                      click: () => createLabel(false),
                     ),
                   ),
                 ],
@@ -96,4 +100,30 @@ void selectInstructionDialog({
     ),
     barrierDismissible: false, //拦截dialog外部点击
   );
+}
+
+void _createLabel({
+  required int empId,
+  required int count,
+  required bool isSingle,
+  required List<Map> sizeList,
+  required Function(String) success,
+  required Function(String) error,
+}) {
+  httpPost(
+    method: webApiGetPartProductionDispatchCreateLabel,
+    loading: '正在创建贴标...',
+    body: {
+      'EmpID': empId,
+      'CreateCount': count,
+      'PackageType': isSingle ? '478' : '479',
+      'SizeList': sizeList,
+    },
+  ).then((response) {
+    if (response.resultCode == resultSuccess) {
+      success.call(response.message ?? '');
+    } else {
+      error.call(response.message ?? '');
+    }
+  });
 }

@@ -56,7 +56,9 @@ class _SapSurplusMaterialStockInPageState
             width: 300,
             height: 160,
             child: getCupertinoPicker(
-            items:  state.surplusMaterialType.map((v) => Center(child: Text(v))).toList(),
+              items: state.surplusMaterialType
+                  .map((v) => Center(child: Text(v)))
+                  .toList(),
               controller: controller,
             ),
           ),
@@ -300,6 +302,8 @@ class _SapSurplusMaterialStockInPageState
 
   @override
   void initState() {
+    isStartKeyListener(true);
+    pdaScanner(scan: (code) => logic.scanCode(code));
     weighbridgeListener(
       usbAttached: () {
         showSnackBar(
@@ -311,141 +315,125 @@ class _SapSurplusMaterialStockInPageState
       readWeight: (weight) => state.weight.value = weight,
       weighbridgeState: (state) => logic.setWeighbridgeState(state),
     );
-    pdaScanner(scan: (code) => logic.scanCode(code));
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Future.delayed(const Duration(milliseconds: 500), () {
-        weighbridgeOpen();
-        Future.delayed(
-          const Duration(milliseconds: 500),
-          () => logic.queryHistory(
-            startDate: dpcStartDate.getDateFormatSapYMD(),
-            endDate: dpcEndDate.getDateFormatSapYMD(),
-          ),
-        );
-      });
+      weighbridgeOpen();
+      logic.queryHistory(
+        startDate: dpcStartDate.getDateFormatSapYMD(),
+        endDate: dpcEndDate.getDateFormatSapYMD(),
+      );
     });
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    weighbridgeResume();
-    return KeyboardListener(
-      onKeyEvent: (key) {
-        if (key.logicalKey == LogicalKeyboardKey.enter) {
-          logic.scanCode(state.interceptorText);
-          state.interceptorText = '';
-        } else if (key.logicalKey.keyLabel.isNotEmpty) {
-          state.interceptorText += key.logicalKey.keyLabel;
-        }
-      },
-      focusNode: FocusNode(),
-      child: pageBody(
-        actions: [
-          Obx(() => state.weighbridgeStateText.value.isEmpty
-              ? const CircularProgressIndicator()
-              : Text(
-                  state.weighbridgeStateText.value,
-                  style: TextStyle(
-                    color: state.weighbridgeStateTextColor.value,
-                    fontWeight: FontWeight.bold,
-                  ),
-                )),
-          const SizedBox(width: 50),
-          CombinationButton(
-            text: 'sap_surplus_material_stock_in_reconnect'.tr,
-            click: () {
-              state.weighbridgeStateText.value = '';
-              weighbridgeOpen();
-            },
-          )
-        ],
-        body: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Row(
-            children: [
-              Expanded(
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: 50,
-                      child: Obx(() => Row(
-                            children: [
-                              expandedTextSpan(
-                                  hint:
-                                      'sap_surplus_material_stock_in_dispatch_order_no'
-                                          .tr,
-                                  text: state.dispatchOrderNumber.value),
-                              textSpan(
-                                hint: 'sap_surplus_material_stock_in_total'.tr,
-                                text: state.weight.value.toShowString(),
-                                textColor: Colors.blueAccent,
-                              ),
-                              const SizedBox(width: 20),
-                            ],
-                          )),
-                    ),
-                    Expanded(
-                      child: Obx(() => ListView.builder(
-                            padding: const EdgeInsets.only(right: 10),
-                            itemCount: state.materialList.length,
-                            itemBuilder: (c, i) =>
-                                _item1(state.materialList[i]),
-                          )),
-                    ),
-                    SizedBox(
-                      width: double.infinity,
-                      child: CombinationButton(
-                        text: 'sap_surplus_material_stock_in_posting'.tr,
-                        click: () {
-                          if (logic.checkSubmitData()) {
-                            _selectSurplusMaterialType(
-                              (type) => logic.submitSurplusMaterial(type: type),
-                            );
-                          }
-                        },
-                        combination: Combination.left,
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              Expanded(
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: DatePicker(pickerController: dpcStartDate),
-                        ),
-                        Expanded(
-                          child: DatePicker(pickerController: dpcEndDate),
-                        ),
-                      ],
-                    ),
-                    Expanded(
-                      child: Obx(() => ListView.builder(
-                            padding: const EdgeInsets.only(left: 10),
-                            itemCount: state.historyList.length,
-                            itemBuilder: (c, i) => _item2(state.historyList[i]),
-                          )),
-                    ),
-                    SizedBox(
-                      width: double.infinity,
-                      child: CombinationButton(
-                        text: 'sap_surplus_material_stock_in_query_history'.tr,
-                        click: () => logic.queryHistory(
-                          startDate: dpcStartDate.getDateFormatSapYMD(),
-                          endDate: dpcEndDate.getDateFormatSapYMD(),
-                        ),
-                        combination: Combination.right,
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ],
+    return pageBody(
+      actions: [
+        Obx(() => state.weighbridgeStateText.value.isEmpty
+            ? const CircularProgressIndicator()
+            : Text(
+          state.weighbridgeStateText.value,
+          style: TextStyle(
+            color: state.weighbridgeStateTextColor.value,
+            fontWeight: FontWeight.bold,
           ),
+        )),
+        const SizedBox(width: 50),
+        CombinationButton(
+          text: 'sap_surplus_material_stock_in_reconnect'.tr,
+          click: () {
+            state.weighbridgeStateText.value = '';
+            weighbridgeOpen();
+          },
+        )
+      ],
+      body: Padding(
+        padding: const EdgeInsets.all(10),
+        child: Row(
+          children: [
+            Expanded(
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 50,
+                    child: Obx(() => Row(
+                      children: [
+                        expandedTextSpan(
+                            hint:
+                            'sap_surplus_material_stock_in_dispatch_order_no'
+                                .tr,
+                            text: state.dispatchOrderNumber.value),
+                        textSpan(
+                          hint: 'sap_surplus_material_stock_in_total'.tr,
+                          text: state.weight.value.toShowString(),
+                          textColor: Colors.blueAccent,
+                        ),
+                        const SizedBox(width: 20),
+                      ],
+                    )),
+                  ),
+                  Expanded(
+                    child: Obx(() => ListView.builder(
+                      padding: const EdgeInsets.only(right: 10),
+                      itemCount: state.materialList.length,
+                      itemBuilder: (c, i) =>
+                          _item1(state.materialList[i]),
+                    )),
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: CombinationButton(
+                      text: 'sap_surplus_material_stock_in_posting'.tr,
+                      click: () {
+                        if (logic.checkSubmitData()) {
+                          _selectSurplusMaterialType(
+                                (type) => logic.submitSurplusMaterial(type: type),
+                          );
+                        }
+                      },
+                      combination: Combination.left,
+                    ),
+                  )
+                ],
+              ),
+            ),
+            Expanded(
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: DatePicker(pickerController: dpcStartDate),
+                      ),
+                      Expanded(
+                        child: DatePicker(pickerController: dpcEndDate),
+                      ),
+                    ],
+                  ),
+                  Expanded(
+                    child: Obx(() => ListView.builder(
+                      padding: const EdgeInsets.only(left: 10),
+                      itemCount: state.historyList.length,
+                      itemBuilder: (c, i) => _item2(state.historyList[i]),
+                    )),
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: CombinationButton(
+                      text: 'sap_surplus_material_stock_in_query_history'.tr,
+                      click: () => logic.queryHistory(
+                        startDate: dpcStartDate.getDateFormatSapYMD(),
+                        endDate: dpcEndDate.getDateFormatSapYMD(),
+                      ),
+                      combination: Combination.right,
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -455,6 +443,7 @@ class _SapSurplusMaterialStockInPageState
   void dispose() {
     Get.delete<SapSurplusMaterialStockInLogic>();
     weighbridgeDestroy();
+    isStartKeyListener(false);
     super.dispose();
   }
 }

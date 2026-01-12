@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 
@@ -138,6 +139,13 @@ class SurplusMaterialHistoryInfo {
   }
 }
 
+///{
+///     "DispatchNumber": "000000162730",
+///     "StubBar": "460500005",
+///     "Factory": "2000",
+///     "Date": "2026-01-09",
+///     "NowTime": "1767971376277"
+/// }
 class SurplusMaterialLabelInfo {
   int? id;
   String? dispatchNumber;
@@ -169,12 +177,11 @@ class SurplusMaterialLabelInfo {
   }
 
   SurplusMaterialLabelInfo.fromJson(dynamic json) {
-    id = json['ID'];
     dispatchNumber = json['DispatchNumber'];
     stubBar = json['StubBar'];
     factory = json['Factory'];
     date = json['Date'];
-    nowTime = json['NowTime'];
+    nowTime = json['NowTime'].toString().toIntTry();
   }
 
   Map<String, dynamic> toJson() {

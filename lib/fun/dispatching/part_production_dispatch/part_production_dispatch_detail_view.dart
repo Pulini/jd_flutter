@@ -310,9 +310,9 @@ class _PartProductionDispatchDetailPageState
       actions: [
         CombinationButton(
           text: '创建贴标',
-          click: () => selectInstructionDialog(
+          click: () => createLabelDialog(
             sizeList: logic.getCreateLabelMap(),
-            callback: () {},
+            callback: () => logic.refreshOrderDetail(() {}),
           ),
         )
       ],
@@ -351,16 +351,23 @@ class _PartProductionDispatchDetailPageState
               ),
             ),
             SizedBox(height: 5),
-            _titleItem(),
+            Obx(() => state.sizeList.isEmpty ? Container() : _titleItem()),
             Expanded(
               child: Obx(() {
-                var list = state.sizeList.where((v) => v.isShow.value).toList();
-                var map = groupBy(list, (v) => v.size).values.toList();
-                return ListView.builder(
-                  itemCount: map.length + 1,
-                  itemBuilder: (c, i) =>
-                      i == map.length ? _totalItem() : _item(map[i]),
-                );
+                if (state.sizeList.isEmpty) {
+                  return Center(
+                    child: Text('贴标已全部创建完毕！'),
+                  );
+                } else {
+                  var list =
+                      state.sizeList.where((v) => v.isShow.value).toList();
+                  var map = groupBy(list, (v) => v.size).values.toList();
+                  return ListView.builder(
+                    itemCount: map.length + 1,
+                    itemBuilder: (c, i) =>
+                        i == map.length ? _totalItem() : _item(map[i]),
+                  );
+                }
               }),
             ),
           ],

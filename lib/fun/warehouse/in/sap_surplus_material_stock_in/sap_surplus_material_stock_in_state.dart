@@ -13,7 +13,6 @@ class SapSurplusMaterialStockInState {
   var weight = (0.0).obs;
   var materialList = <SurplusMaterialLabelInfo>[].obs;
   var historyList = <List<SurplusMaterialHistoryInfo>>[].obs;
-  var interceptorText = '';
   var weighbridgeStateText = ''.obs;
   var weighbridgeStateTextColor = Colors.black.obs;
 
@@ -61,7 +60,6 @@ class SapSurplusMaterialStockInState {
   }
 
   void getMaterialInfoByCode({
-    required String dispatchNumber,
     required String code,
     required Function(MaterialDetailInfo) success,
     required Function(String) error,
@@ -72,10 +70,9 @@ class SapSurplusMaterialStockInState {
       params: {'Code': code},
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        dispatchOrderNumber.value = dispatchNumber;
         success.call([
           for (var json in response.data) MaterialDetailInfo.fromJson(json)
-        ][0]);
+        ].first);
       } else {
         error.call(response.message ?? 'query_default_error'.tr);
       }

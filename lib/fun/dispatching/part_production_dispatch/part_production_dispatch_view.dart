@@ -14,7 +14,6 @@ import 'package:jd_flutter/widget/switch_button_widget.dart';
 import 'part_production_dispatch_logic.dart';
 import 'part_production_dispatch_state.dart';
 
-
 class PartProductionDispatchPage extends StatefulWidget {
   const PartProductionDispatchPage({super.key});
 
@@ -251,7 +250,9 @@ class _PartProductionDispatchPageState
                           child: CombinationButton(
                             text: '创建标签',
                             combination: Combination.left,
-                            click: () =>logic.toDetail(),
+                            click: () => logic.toDetail(
+                              refresh: () => _query(),
+                            ),
                           ),
                         ),
                         Expanded(
@@ -259,7 +260,7 @@ class _PartProductionDispatchPageState
                             text: '打印标签',
                             combination: Combination.right,
                             click: () {},
-                          ),
+                        ),
                         ),
                       ],
                     )

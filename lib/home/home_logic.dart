@@ -148,7 +148,6 @@ class HomeLogic extends GetxController {
             v.description.toUpperCase().contains(state.search.toUpperCase())),
       );
     }
-    //   HomeButton(
     state.buttons.value = list;
   }
 
