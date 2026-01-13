@@ -83,10 +83,11 @@ class SapSurplusMaterialStockInLogic extends GetxController {
   }
 
   Future<void> scanCode(String code) async {
+    if(code=='')return;
     try {
       var codeData = SurplusMaterialLabelInfo.fromJson(jsonDecode(code));
       if (state.materialList.isNotEmpty &&
-          state.materialList[0].dispatchNumber != codeData.dispatchNumber) {
+          state.materialList.first.dispatchNumber != codeData.dispatchNumber) {
         msgDialog(
           content:
               'sap_surplus_material_stock_in_scan_wrong_order_label_tips'.tr,
@@ -114,9 +115,9 @@ class SapSurplusMaterialStockInLogic extends GetxController {
         return;
       }
       state.getMaterialInfoByCode(
-        dispatchNumber: codeData.dispatchNumber ?? '',
         code: codeData.stubBar ?? '',
         success: (mi) {
+          state.dispatchOrderNumber.value = codeData.dispatchNumber ?? '';
           state.materialList.add(codeData
             ..number = mi.number ?? ''
             ..name = mi.name ?? '');
@@ -124,6 +125,7 @@ class SapSurplusMaterialStockInLogic extends GetxController {
         error: (msg) => errorDialog(content: msg),
       );
     } catch (e) {
+      debugPrint(e.toString());
       errorDialog(
         content: 'sap_surplus_material_stock_in_analysis_label_failed'.tr,
       );

@@ -311,7 +311,7 @@ class RouteConfig {
   //sap生产领料
   static Routes sapProductionPicking = Routes(
     '/sap_production_picking',
-    202,
+    203,
     const SapProductionPickingPage(),
   );
 
@@ -346,7 +346,7 @@ class RouteConfig {
   //sap料头入库
   static Routes sapSurplusMaterialStockIn = Routes(
     '/sap_surplus_material_stock_in',
-    201,
+    206,
     const SapSurplusMaterialStockInPage(),
   );
 

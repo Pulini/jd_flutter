@@ -19,7 +19,6 @@ import com.jd.pzx.jd_flutter.utils.CHANNEL_WEIGHBRIDGE_ANDROID_TO_FLUTTER
 import com.jd.pzx.jd_flutter.utils.CHANNEL_WEIGHBRIDGE_FLUTTER_TO_ANDROID
 import com.jd.pzx.jd_flutter.utils.FACE_VERIFY_SUCCESS
 import com.jd.pzx.jd_flutter.utils.REQUEST_ENABLE_BT
-import com.jd.pzx.jd_flutter.utils.SEND_COMMAND_STATE_BROKEN_PIPE
 import com.jd.pzx.jd_flutter.utils.SEND_COMMAND_STATE_FAILED
 import com.jd.pzx.jd_flutter.utils.SEND_COMMAND_STATE_SUCCESS
 import com.jd.pzx.jd_flutter.utils.bitmapToByteArray
@@ -30,7 +29,6 @@ import com.jd.pzx.jd_flutter.utils.bluetoothConnect
 import com.jd.pzx.jd_flutter.utils.bluetoothIsEnable
 import com.jd.pzx.jd_flutter.utils.bluetoothSendCommand
 import com.jd.pzx.jd_flutter.utils.bluetoothStartScan
-import com.jd.pzx.jd_flutter.utils.bytesMerger
 import com.jd.pzx.jd_flutter.utils.deviceList
 import com.jd.pzx.jd_flutter.utils.locationOn
 import com.jd.pzx.jd_flutter.utils.openFile
@@ -40,15 +38,17 @@ import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 import java.io.File
-import java.io.IOException
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkRequest
 import android.net.NetworkCapabilities
+import android.view.KeyEvent
+import com.jd.pzx.jd_flutter.utils.keyInterceptor
 
 @SuppressLint("MissingPermission")
 class MainActivity : FlutterActivity() {
+    private  var isStartKeyListener=false
     private val receiverUtil = ReceiverUtil(
         this,
         usbAttached = {
@@ -99,12 +99,6 @@ class MainActivity : FlutterActivity() {
         super.onCreate(savedInstanceState)
         receiverUtil.create()
     }
-
-    override fun onResume() {
-        receiverUtil.resume()
-        super.onResume()
-    }
-
     override fun onDestroy() {
         receiverUtil.destroy()
         super.onDestroy()
@@ -219,9 +213,9 @@ class MainActivity : FlutterActivity() {
             flutterEngine.dartExecutor.binaryMessenger,
             CHANNEL_WEIGHBRIDGE_ANDROID_TO_FLUTTER
         ).setMethodCallHandler { call, _ ->
-            if (call.method == "OpenDevice") receiverUtil.openDevice()
-            if (call.method == "DestroyDevice") receiverUtil.destroy()
-            if (call.method == "ResumeDevice") receiverUtil.resume()
+            if (call.method == "WeighbridgeOpen") receiverUtil.weighbridgeOpen()
+            if (call.method == "WeighbridgeDestroy") receiverUtil.weighbridgeDestroy()
+            if (call.method == "isStartKeyListener") isStartKeyListener=call.arguments as Boolean
         }
         //打印机通道
         MethodChannel(
@@ -313,6 +307,18 @@ class MainActivity : FlutterActivity() {
             Log.e("Pan", "method=$method data=$data")
             MethodChannel(messenger, channel).invokeMethod(method, data)
         }
+    }
+
+    override fun dispatchKeyEvent(event: KeyEvent): Boolean {
+        return if(isStartKeyListener){
+            event.keyInterceptor {
+                Log.e("Pan", "dispatchKeyEvent   $it")
+                sendFlutter(CHANNEL_SCAN_FLUTTER_TO_ANDROID, "PdaScanner", it)
+            }
+        }else{
+            super.dispatchKeyEvent(event)
+        }
+
     }
 //    private fun checkFeiShu() {
 //        val scopeList = ArrayList<String>()

@@ -1761,7 +1761,7 @@ class Translation extends Translations {
           'sap_surplus_material_stock_in_submit_date': '提交日期：',
           'sap_surplus_material_stock_in_machine': '机台：',
           'sap_surplus_material_stock_in_surplus_material_type': '料头类型：',
-          'sap_surplus_material_stock_in_total': '总量：',
+          'sap_surplus_material_stock_in_total': '重量：',
           'sap_surplus_material_stock_in_usb_monitor': 'USB监测',
           'sap_surplus_material_stock_in_monitor_usb_insert': '监测到USB设备插入',
           'sap_surplus_material_stock_in_reconnect': '重新连接',
@@ -5446,7 +5446,7 @@ class Translation extends Translations {
           'sap_surplus_material_stock_in_machine': 'Machine：',
           'sap_surplus_material_stock_in_surplus_material_type':
               'Surplus material type：',
-          'sap_surplus_material_stock_in_total': 'Total：',
+          'sap_surplus_material_stock_in_total': 'Weight：',
           'sap_surplus_material_stock_in_usb_monitor': 'Usb monitor',
           'sap_surplus_material_stock_in_monitor_usb_insert':
               'Detected USB device insertion',
@@ -9601,7 +9601,7 @@ class Translation extends Translations {
           'sap_surplus_material_stock_in_machine': 'Mesin:',
           'sap_surplus_material_stock_in_surplus_material_type':
               'Jenis Kepala Material:',
-          'sap_surplus_material_stock_in_total': 'Total:',
+          'sap_surplus_material_stock_in_total': 'Weight:',
           'sap_surplus_material_stock_in_usb_monitor': 'Monitor USB',
           'sap_surplus_material_stock_in_monitor_usb_insert':
               'Memantau perangkat USB terpasang',

@@ -36,24 +36,15 @@ class PartProductionDispatchLogic extends GetxController {
     );
   }
 
-  void toDetail() {
-    state.getPartProductionDispatchOrdersDetail(
-      orders: state.orderList
-          .where((v) => v.isSelected.value && v.workCardID != null)
-          .map((v) => v.workCardID!)
-          .toList(),
-      success: () {
-        state.instructionList = [];
-        state.detailInfo!.instruction?.split(',').forEach((data) {
-          if (data.isNotEmpty) {
-            state.instructionList.add([data, true.obs]);
-          }
-        });
-        state.sizeList.value = state.detailInfo!.sizeList!;
-        Get.to(() => PartProductionDispatchDetailPage());
-      },
-      error: (msg) => errorDialog(content: msg),
-    );
+  void toDetail({required Function() refresh}) {
+    refreshOrderDetail(() {
+      state.created.value = false;
+      Get.to(() => PartProductionDispatchDetailPage())?.then((v) {
+        if (v != null && v) {
+          refresh.call();
+        }
+      });
+    });
   }
 
   void changeClosedStatus(bool isSelect) {
@@ -120,7 +111,7 @@ class PartProductionDispatchLogic extends GetxController {
   }
 
   List<Map> getCreateLabelMap() {
-    var list=<Map>[];
+    var list = <Map>[];
     state.sizeList
         .where((v) => v.isSelected.value && v.qty.value > 0)
         .forEach((v) {
@@ -128,9 +119,34 @@ class PartProductionDispatchLogic extends GetxController {
         'WorkCardEntryFID': v.workCardEntryFID,
         'Size': v.size,
         'Capacity': v.qty.value,
-        'DispatchedQty':v.dispatchedQty,
+        'DispatchedQty': v.dispatchedQty,
       });
     });
     return list;
+  }
+
+  void refreshOrderDetail(Function() callBack) {
+    state.getPartProductionDispatchOrdersDetail(
+      orders: state.orderList
+          .where((v) => v.isSelected.value && v.workCardID != null)
+          .map((v) => v.workCardID!)
+          .toList(),
+      success: () {
+        state.instructionList = [];
+        state.detailInfo!.instruction?.split(',').forEach((data) {
+          if (data.isNotEmpty) {
+            state.instructionList.add([data, true.obs]);
+          }
+        });
+        state.sizeList.value = state.detailInfo!.sizeList!;
+        callBack.call();
+      },
+      error: (msg) => errorDialog(content: msg),
+    );
+  }
+
+  void createSuccess() {
+    state.created.value = true;
+    refreshOrderDetail(() {});
   }
 }

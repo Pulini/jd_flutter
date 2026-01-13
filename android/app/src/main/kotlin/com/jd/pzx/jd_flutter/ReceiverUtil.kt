@@ -22,6 +22,8 @@ import android.hardware.usb.UsbManager.ACTION_USB_ACCESSORY_DETACHED
 import android.hardware.usb.UsbManager.ACTION_USB_DEVICE_ATTACHED
 import android.hardware.usb.UsbManager.ACTION_USB_DEVICE_DETACHED
 import android.os.Build
+import android.os.Handler
+import android.os.Looper
 import android.os.SystemClock
 import android.util.Log
 import com.jd.pzx.jd_flutter.utils.BDevice
@@ -49,14 +51,17 @@ const val ACTION_ID4 = "android.intent.ACTION_DECODE_DATA"
 const val BarCode4 = "barcode_string"
 const val WEIGHT_DEVICE_DETACHED = "tw.PL2303MultiUSBMessage"
 const val WEIGHT_DEVICE_NAME = "com.prolific.pl2300G_multisimpletest.USB_PERMISSION"
+
 enum class WeightState {
+    WEIGHT_MSG_DEVICE_NOT_INITIALIZED,
     WEIGHT_MSG_DEVICE_DETACHED,
     WEIGHT_MSG_DEVICE_NOT_CONNECTED,
     WEIGHT_MSG_OPEN_DEVICE_SUCCESS,
     WEIGHT_MSG_OPEN_DEVICE_FAILED,
     WEIGHT_MSG_READ_ERROR,
 }
- var usbIsAttached:Boolean=false
+
+var usbIsAttached: Boolean = false
 
 @SuppressLint("MissingPermission", "UnspecifiedRegisterReceiverFlag")
 class ReceiverUtil(
@@ -80,13 +85,13 @@ class ReceiverUtil(
     private var permissionListener: (Boolean) -> Unit = {}
     private var serialMulti: PL2303GMultiLib? = null
     private var readThread: WeighbridgeReadThread? = null
-
+    val mainHandler = Handler(Looper.getMainLooper())
 
     /**
      * USB广播接收器
      */
     @Suppress("DEPRECATION")
-    private val usbReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+    private val broadcastReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             when (intent.action) {
                 ACTION_ID1 -> scanCode.invoke(intent.getStringExtra(BarCode1).toString())
@@ -121,17 +126,17 @@ class ReceiverUtil(
                 ACTION_USB_DEVICE_ATTACHED, ACTION_USB_ACCESSORY_ATTACHED -> {
                     Log.e("Pan", "USB设备插入")
                     Toast.makeText(context, "USB设备插入", Toast.LENGTH_SHORT).show()
-                    usbIsAttached=true
+                    usbIsAttached = true
                     usbAttached.invoke()
                 }
 
-                ACTION_USB_DEVICE_DETACHED, ACTION_USB_ACCESSORY_DETACHED,WEIGHT_DEVICE_DETACHED -> {
+                ACTION_USB_DEVICE_DETACHED, ACTION_USB_ACCESSORY_DETACHED, WEIGHT_DEVICE_DETACHED -> {
                     Log.e("Pan", "USB设备拔出")
                     Toast.makeText(context, "USB设备拔出", Toast.LENGTH_SHORT).show()
-                    if(intent.action==WEIGHT_DEVICE_DETACHED){
+                    if (intent.action == WEIGHT_DEVICE_DETACHED) {
                         weighbridgeState.invoke(WeightState.WEIGHT_MSG_DEVICE_DETACHED)
-                    }else{
-                        usbIsAttached=false
+                    } else {
+                        usbIsAttached = false
                         usbDetached.invoke()
                     }
                 }
@@ -143,7 +148,7 @@ class ReceiverUtil(
 
                 ACTION_ACL_DISCONNECTED -> {
                     Log.e("Pan", "蓝牙设备断开")
-                    val device = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                         intent.getParcelableExtra(
                             BluetoothDevice.EXTRA_DEVICE,
                             BluetoothDevice::class.java
@@ -247,7 +252,7 @@ class ReceiverUtil(
 
     fun create() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            context.registerReceiver(usbReceiver, IntentFilter(ACTION_USB_PERMISSION).apply {
+            context.registerReceiver(broadcastReceiver, IntentFilter(ACTION_USB_PERMISSION).apply {
                 addAction(ACTION_USB_DEVICE_ATTACHED)
                 addAction(ACTION_USB_ACCESSORY_ATTACHED)
                 addAction(ACTION_USB_DEVICE_DETACHED)
@@ -267,7 +272,7 @@ class ReceiverUtil(
                 addAction(WEIGHT_DEVICE_DETACHED)
             }, Context.RECEIVER_EXPORTED)
         } else {
-            context.registerReceiver(usbReceiver, IntentFilter(ACTION_USB_PERMISSION).apply {
+            context.registerReceiver(broadcastReceiver, IntentFilter(ACTION_USB_PERMISSION).apply {
                 addAction(ACTION_USB_DEVICE_ATTACHED)
                 addAction(ACTION_USB_ACCESSORY_ATTACHED)
                 addAction(ACTION_USB_DEVICE_DETACHED)
@@ -289,49 +294,81 @@ class ReceiverUtil(
         }
     }
 
+    fun destroy() {
+        context.unregisterReceiver(broadcastReceiver)
+    }
 
-    fun openDevice() {
-        if (serialMulti == null) {
+
+    fun weighbridgeOpen() {
+        if(serialMulti == null){
             serialMulti = PL2303GMultiLib(
                 context.getSystemService(Activity.USB_SERVICE) as UsbManager,
                 context,
                 WEIGHT_DEVICE_NAME
             )
         }
-        if (serialMulti?.PL2303IsDeviceConnectedByIndex(0) == false) {
-            weighbridgeState.invoke(WeightState.WEIGHT_MSG_DEVICE_NOT_CONNECTED)
-            return
-        }
-        serialMulti?.PL2303OpenDevByUARTSetting(
-            0,
-            PL2303GMultiLib.BaudRate.B9600,
-            PL2303GMultiLib.DataBits.D8,
-            PL2303GMultiLib.StopBits.S1,
-            PL2303GMultiLib.Parity.NONE,
-            PL2303GMultiLib.FlowControl.OFF
-        ).let {
-            if (it == true) {
-                weighbridgeState.invoke(WeightState.WEIGHT_MSG_OPEN_DEVICE_SUCCESS)
-                if (readThread != null) readThread?.interrupt()
-                WeighbridgeReadThread(
-                    serialMulti,
-                    read = { weight ->
-                        weighbridgeRead.invoke(weight)
-                    }, error = {
-                        weighbridgeState.invoke(WeightState.WEIGHT_MSG_READ_ERROR)
-                    }
-                ).apply {
-                    readThread = this
-                    readThread?.start()
-                }
+        serialMulti.let { util ->
+            if (util == null) {
+                weighbridgeState.invoke(WeightState.WEIGHT_MSG_DEVICE_NOT_INITIALIZED)
             } else {
-                weighbridgeState.invoke(WeightState.WEIGHT_MSG_OPEN_DEVICE_FAILED)
+                synchronized(this) {
+                    util.PL2303G_ReSetStatus()
+                    util.PL2303Enumerate()
+                }
+                if (util.PL2303IsDeviceConnectedByIndex(0)) {
+                    util.PL2303OpenDevByUARTSetting(
+                        0,
+                        PL2303GMultiLib.BaudRate.B9600,
+                        PL2303GMultiLib.DataBits.D8,
+                        PL2303GMultiLib.StopBits.S1,
+                        PL2303GMultiLib.Parity.NONE,
+                        PL2303GMultiLib.FlowControl.OFF
+                    ).let { device ->
+                        if (device) {
+                            weighbridgeState.invoke(WeightState.WEIGHT_MSG_OPEN_DEVICE_SUCCESS)
+                            try {
+                                if (readThread != null) readThread?.interrupt()
+                                WeighbridgeReadThread(
+                                    util,
+                                    read = { weight ->
+                                        mainHandler.post {
+                                            weighbridgeRead.invoke(weight)
+                                        }
+                                    }, error = {
+                                        mainHandler.post {
+                                            weighbridgeState.invoke(WeightState.WEIGHT_MSG_READ_ERROR)
+                                        }
+                                    }
+                                ).apply {
+                                    readThread = this
+                                    readThread?.start()
+                                }
+                            } catch (e: Exception) {
+                                Toast.makeText(context, e.toString(), Toast.LENGTH_LONG).show()
+                            }
+                        } else {
+                            weighbridgeState.invoke(WeightState.WEIGHT_MSG_OPEN_DEVICE_FAILED)
+                        }
+                    }
+                } else {
+                    weighbridgeState.invoke(WeightState.WEIGHT_MSG_DEVICE_NOT_CONNECTED)
+                }
             }
         }
     }
 
+    fun weighbridgeDestroy() {
+        serialMulti?.let {
+            it.PL2303Release()
+            readThread?.interrupt()
+            readThread = null
+            serialMulti = null
+        }
+    }
+
+
     class WeighbridgeReadThread(
-        private val device: PL2303GMultiLib?,
+        private val device: PL2303GMultiLib,
         private val read: (Double) -> Unit,
         private val error: () -> Unit
     ) : Thread() {
@@ -341,7 +378,7 @@ class ReceiverUtil(
             super.run()
             try {
                 while (!isInterrupted) {
-                    device?.PL2303Read(0, readByte)?.let { line ->
+                    device.PL2303Read(0, readByte).let { line ->
                         if (line > 0) {
                             readByte.forEach { text += it.toInt().toChar() }
                             read.invoke(getDoubleValue(text))
@@ -388,23 +425,5 @@ class ReceiverUtil(
         }
     }
 
-    fun destroy() {
-        serialMulti?.let {
-            it.PL2303Release()
-            readThread?.interrupt()
-            readThread = null
-            serialMulti = null
-        }
-        context.unregisterReceiver(usbReceiver)
-    }
-
-    fun resume() {
-        serialMulti?.let {
-            synchronized(this) {
-                it.PL2303G_ReSetStatus()
-                it.PL2303Enumerate()
-            }
-        }
-    }
 
 }

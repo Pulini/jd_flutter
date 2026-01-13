@@ -141,7 +141,7 @@ class SapProductionPickingState {
                   'ZNAME_EN': '',
                   'MEINS': pickDetailList[i].materialList[j].basicUnit,
                   'MATNR': pickDetailList[i].materialList[j].materialNumber,
-                  'WERKS': isTestUrl() ? '2000' : '1500',
+                  'WERKS': '2000',
                 }
         ],
         'DISPATCH': isPrint ? dispatch.toList() : [],
