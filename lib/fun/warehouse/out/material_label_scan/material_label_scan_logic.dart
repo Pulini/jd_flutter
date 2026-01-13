@@ -1,5 +1,4 @@
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
-import 'package:jd_flutter/bean/http/response/worker_info.dart';
 import 'package:jd_flutter/fun/warehouse/out/material_label_scan/material_label_scan_state.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 

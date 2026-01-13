@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/material_label_scan_info.dart';
-import 'package:jd_flutter/bean/http/response/worker_info.dart';
 import 'package:jd_flutter/fun/warehouse/out/material_label_scan/material_label_scan_logic.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
@@ -115,7 +114,6 @@ class _MaterialLabelScanDetailPageState
 
 
   void showPickerDialog(BuildContext context) {
-    WorkerInfo? newWorker;
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -148,7 +146,6 @@ class _MaterialLabelScanDetailPageState
                               getWorkerInfo(
                                 number: s,
                                 workers: (list) {
-                                  newWorker = list[0];
                                   state.peopleName.value = list[0].empName ?? '';
                                   state.peopleEmpId = list[0].empID ?? -1;
                                 },
