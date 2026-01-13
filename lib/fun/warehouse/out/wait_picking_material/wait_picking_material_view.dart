@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -15,7 +14,6 @@ import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
 import 'package:jd_flutter/widget/picker/picker_controller.dart';
 import 'package:jd_flutter/widget/picker/picker_view.dart';
-import 'package:jd_flutter/widget/signature_page.dart';
 
 import 'wait_picking_material_logic.dart';
 import 'wait_picking_material_state.dart';
@@ -609,58 +607,58 @@ class _WaitPickingMaterialPageState extends State<WaitPickingMaterialPage> {
     logic.checkPickingMaterial(
       oneFaceCheck: () {
         //委外
-        Get.to(() => SignaturePage(
-              name: userInfo?.name ?? '',
-              callback: (userBase64) => _picking(
-                isMove: isMove,
-                isPosting: isPosting,
-                userBase64: base64Encode(userBase64.buffer.asUint8List()),
-              ),
-            ));
-        // livenFaceVerification(
-        //   faceUrl: userInfo?.picUrl ?? '',
-        //   verifySuccess: (userBase64) => _picking(
-        //     isMove: isMove,
-        //     isPosting: isPosting,
-        //     userBase64: userBase64,
-        //   ),
-        // );
+        // Get.to(() => SignaturePage(
+        //       name: userInfo?.name ?? '',
+        //       callback: (userBase64) => _picking(
+        //         isMove: isMove,
+        //         isPosting: isPosting,
+        //         userBase64: base64Encode(userBase64.buffer.asUint8List()),
+        //       ),
+        //     ));
+        livenFaceVerification(
+          faceUrl: userInfo?.picUrl ?? '',
+          verifySuccess: (userBase64) => _picking(
+            isMove: isMove,
+            isPosting: isPosting,
+            userBase64: userBase64,
+          ),
+        );
       },
       twoFaceCheck: () {
         //厂内
         if (isPosting) {
-          checkPickerDialog(
-            confirm: (picker) => Get.to(() => SignaturePage(
-                  name: picker.empName ?? '',
-                  callback: (pickerBase64) => Get.to(() => SignaturePage(
-                        name: userInfo?.name ?? '',
-                        callback: (userBase64) => _picking(
-                          isMove: isMove,
-                          isPosting: isPosting,
-                          pickerNumber: picker.empCode ?? '',
-                          pickerBase64:
-                              base64Encode(pickerBase64.buffer.asUint8List()),
-                          userBase64:
-                              base64Encode(userBase64.buffer.asUint8List()),
-                        ),
-                      )),
-                )),
-          );
           // checkPickerDialog(
-          //   confirm: (picker) => livenFaceVerification(
-          //     faceUrl: picker.picUrl ?? '',
-          //     verifySuccess: (pickerBase64) => livenFaceVerification(
-          //       faceUrl: userInfo?.picUrl ?? '',
-          //       verifySuccess: (userBase64) => _picking(
-          //         isMove: isMove,
-          //         isPosting: isPosting,
-          //         pickerNumber: picker.empCode ?? '',
-          //         pickerBase64: pickerBase64,
-          //         userBase64: userBase64,
-          //       ),
-          //     ),
-          //   ),
+          //   confirm: (picker) => Get.to(() => SignaturePage(
+          //         name: picker.empName ?? '',
+          //         callback: (pickerBase64) => Get.to(() => SignaturePage(
+          //               name: userInfo?.name ?? '',
+          //               callback: (userBase64) => _picking(
+          //                 isMove: isMove,
+          //                 isPosting: isPosting,
+          //                 pickerNumber: picker.empCode ?? '',
+          //                 pickerBase64:
+          //                     base64Encode(pickerBase64.buffer.asUint8List()),
+          //                 userBase64:
+          //                     base64Encode(userBase64.buffer.asUint8List()),
+          //               ),
+          //             )),
+          //       )),
           // );
+          checkPickerDialog(
+            confirm: (picker) => livenFaceVerification(
+              faceUrl: picker.picUrl ?? '',
+              verifySuccess: (pickerBase64) => livenFaceVerification(
+                faceUrl: userInfo?.picUrl ?? '',
+                verifySuccess: (userBase64) => _picking(
+                  isMove: isMove,
+                  isPosting: isPosting,
+                  pickerNumber: picker.empCode ?? '',
+                  pickerBase64: pickerBase64,
+                  userBase64: userBase64,
+                ),
+              ),
+            ),
+          );
         } else {
           errorDialog(content: 'wait_picking_material_order_error_tips'.tr);
         }

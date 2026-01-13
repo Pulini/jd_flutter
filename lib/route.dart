@@ -255,7 +255,7 @@ class RouteConfig {
   //外箱标扫码
   static Routes cartonLabelScan = Routes(
     '/carton_label_scan_page',
-    200,
+    201,
     const CartonLabelScanPage(),
   );
 
@@ -472,7 +472,7 @@ class RouteConfig {
   //待领料列表
   static Routes waitPickingMaterial = Routes(
     '/wait_picking_material',
-    200,
+    201,
     const WaitPickingMaterialPage(),
   );
 

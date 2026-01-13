@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/label_info.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
+import 'package:jd_flutter/utils/printer/print_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/check_box_widget.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
@@ -374,7 +375,7 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
       actions: [
         CombinationButton(
           text: '打印机设置',
-          click: () => showPrintSetting(),
+          click: () => printSetDialog(),
           combination: Combination.left,
         ),
         CombinationButton(

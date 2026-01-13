@@ -48,6 +48,8 @@ class CartonLabelScanLogic extends GetxController {
     state.cartonInsideLabelList.value = [];
     state.cartonLabel.value = '';
     state.cartonLabelInfo = null;
+    state.labelTotal.value=0;
+    state.scannedLabelTotal.value=0;
     refresh.call();
   }
 

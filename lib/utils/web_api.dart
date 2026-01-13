@@ -1507,6 +1507,12 @@ const webApiGetPartProductionDispatchOrderList = 'api/WorkCard/GetPartWorkCardLi
 const webApiGetPartProductionDispatchOrdersDetail = 'api/WorkCard/GetMergeWorkCard';
 
 //创建部件派工单贴标
-const webApiGetPartProductionDispatchCreateLabel = 'api/WorkCard/CreatePackageCardNo';
+const webApiCreatePartProductionDispatchLabels = 'api/WorkCard/CreatePackageCardNo';
+
+//获得部件派工贴标
+const webApiGetPartProductionDispatchLabelList = 'api/WorkCard/GetMergeWorkCardCardNo';
+
+//删除部件派工贴标
+const webApiDeletePartProductionDispatchLabels = 'api/WorkCard/DeleteWorkCardCardNo';
 
 

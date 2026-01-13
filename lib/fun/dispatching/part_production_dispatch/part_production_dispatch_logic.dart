@@ -1,8 +1,12 @@
+import 'dart:typed_data';
+
 import 'package:collection/collection.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/part_production_dispatch_info.dart';
 import 'package:jd_flutter/fun/dispatching/part_production_dispatch/part_production_dispatch_detail_view.dart';
+import 'package:jd_flutter/fun/dispatching/part_production_dispatch/part_production_dispatch_label_view.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
+import 'package:jd_flutter/utils/printer/tsc_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
@@ -10,18 +14,6 @@ import 'part_production_dispatch_state.dart';
 
 class PartProductionDispatchLogic extends GetxController {
   final PartProductionDispatchState state = PartProductionDispatchState();
-
-  @override
-  void onReady() {
-    // TODO: implement onReady
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    // TODO: implement onClose
-    super.onClose();
-  }
 
   void queryOrders({
     required String startTime,
@@ -39,10 +31,8 @@ class PartProductionDispatchLogic extends GetxController {
   void toDetail({required Function() refresh}) {
     refreshOrderDetail(() {
       state.created.value = false;
-      Get.to(() => PartProductionDispatchDetailPage())?.then((v) {
-        if (v != null && v) {
-          refresh.call();
-        }
+      Get.to(() => PartProductionDispatchDetailPage())?.then((_) {
+        if (state.created.value) refresh.call();
       });
     });
   }
@@ -148,5 +138,62 @@ class PartProductionDispatchLogic extends GetxController {
   void createSuccess() {
     state.created.value = true;
     refreshOrderDetail(() {});
+  }
+
+  void queryLabelList({required Function() refresh}) {
+    refreshLabelList(() {
+      state.deleted.value = false;
+      Get.to(() => PartProductionDispatchLabelPage())?.then((_) {
+        if (state.deleted.value) refresh.call();
+      });
+    });
+  }
+
+  void refreshLabelList(Function() callBack) {
+    state.getPartProductionDispatchLabelList(
+      orders: state.orderList
+          .where((v) => v.isSelected.value && v.workCardID != null)
+          .map((v) => v.workCardID!)
+          .toList(),
+      success: callBack,
+      error: (msg) => errorDialog(content: msg),
+    );
+  }
+
+  List<List<Uint8List>> getLabelListData() {
+    var labels = <List<Uint8List>>[];
+    state.labelList.where((v) => v.isSelected.value).forEach((label) async {
+      // labels.add(await labelMultipurposeDynamic(
+      //     qrCode:label.barCode??'',
+      //     title:label.getPartList(),
+      //     subTitle:'${label.getTotalQty()}${label.unitName}/部件  ${label.partList?.length}',
+      //     tableTitle:'组别',
+      //     tableTitleTips:'',
+      //     tableSubTitle:label.typeBody??'',
+      //     tableSubTitle2:['工序：','${label.processName}'],
+      //     tableFirstLineTitle:'',
+      //     tableLastLineTitle:'',
+      //     tableData:'',
+      //     bottomLeftText1:'',
+      //     bottomLeftText2:'',
+      //     bottomRightText1:'',
+      //     bottomRightText2:'',
+      // ));
+    });
+    return labels;
+  }
+
+  void deleteLabels() {
+    state.deleteLabelList(
+      labelList: state.labelList
+          .where((v) => v.isSelected.value)
+          .map((v) => v.barCode!)
+          .toList(),
+      success: (msg) => successDialog(
+        content: msg,
+        back: () => refreshLabelList(() {}),
+      ),
+      error: (msg) => errorDialog(content: msg),
+    );
   }
 }

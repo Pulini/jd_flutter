@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/machine_dispatch_info.dart';
 import 'package:jd_flutter/fun/dispatching/machine_dispatch/machine_dispatch_dialog.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
+import 'package:jd_flutter/utils/printer/print_util.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
@@ -687,9 +688,7 @@ class _MachineDispatchPageState extends State<MachineDispatchPage> {
           Obx(() => state.hasDetails.value
               ? CombinationButton(
                   text: '打印机设置',
-                  click: () => showPrintSetting(
-                    context,
-                  ),
+                  click: () => printSetDialog(),
                   combination: Combination.left,
                 )
               : Container()),

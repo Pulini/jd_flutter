@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/home_button.dart';
-import 'package:jd_flutter/fun/warehouse/out/material_label_scan/material_label_scan_view.dart';
 import 'package:jd_flutter/message_center/message_center_view.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
+import 'package:jd_flutter/widget/tsc_label_templates/tsc_label_preview.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'home_logic.dart';
@@ -124,8 +124,7 @@ class _HomePageState extends State<HomePage>
                 ),
                 onPressed: () {
                   if (isTestUrl()) {
-                    // Get.to(() => const TscLabelPreview());
-                    Get.to(() => const MaterialLabelScanPage());
+                    Get.to(() => const TscLabelPreview());
                   } else {
                     Get.to(() => const MessageCenterPage());
                   }

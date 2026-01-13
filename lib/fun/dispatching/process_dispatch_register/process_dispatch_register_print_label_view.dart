@@ -24,7 +24,7 @@ class _PrintLabelPageState extends State<PrintLabelPage> {
   final ProcessDispatchRegisterState state =
       Get.find<ProcessDispatchRegisterLogic>().state;
 
-  PrintUtil pu = PrintUtil()..setChannelListener();
+  PrintUtil pu = PrintUtil();
 
   void _previewLabel(Barcode data) {
     Get.to(() => PreviewLabel(labelWidget: logic.createLabelView(data)));

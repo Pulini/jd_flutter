@@ -15,6 +15,7 @@
 //       "PartPictureUrls": "https://geapp.goldemperor.com:8084/部件图/2025/12/PNS26312586-01/db83587491b24c8f94cb645f2880bc3a.png",
 //       "ProcessName": "护眼下料,面裁报2"
 //     }
+import 'package:collection/collection.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 
@@ -189,6 +190,196 @@ class PartProductionDispatchOrderDetailSizeInfo {
       dispatchedQty: json['DispatchedQty'].toString().toDoubleTry(),
       completedQty: json['CompletedQty'].toString().toDoubleTry(),
       remainingQty: json['RemainingQty'].toString().toDoubleTry(),
+    );
+  }
+}
+// {
+//   "ProductName": "PNS26312586-01",
+//   "LargeCardNo": "",
+//   "MaterialList": [
+//     {
+//       "MaterialName": "反口里",
+//       "MtoNoList": [
+//         {
+//           "MtoNo": null,
+//           "SizeList": [
+//             {
+//               "Size": "4.5",
+//               "AuxQty": 100.0
+//             },
+//             {
+//               "Size": "5",
+//               "AuxQty": 200.0
+//             }
+//           ]
+//         }
+//       ]
+//     },
+//     {
+//       "MaterialName": "火腿内外加大版",
+//       "MtoNoList": [
+//         {
+//           "MtoNo": null,
+//           "SizeList": [
+//             {
+//               "Size": "6",
+//               "AuxQty": 200.0
+//             },
+//             {
+//               "Size": "6.5",
+//               "AuxQty": 202.0
+//             }
+//           ]
+//         }
+//       ]
+//     },
+//     {
+//       "MaterialName": "舌面",
+//       "MtoNoList": [
+//         {
+//           "MtoNo": null,
+//           "SizeList": [
+//             {
+//               "Size": "4.5",
+//               "AuxQty": 100.0
+//             },
+//             {
+//               "Size": "5",
+//               "AuxQty": 200.0
+//             }
+//           ]
+//         }
+//       ]
+//     }
+//   ]
+// },
+
+class PartProductionDispatchLabelInfo {
+  RxBool isSelected = false.obs;
+  bool? isInStock;
+  String? pictureUrl;
+  String? typeBody;
+  String? processName;
+  String? barCode;
+  String? unitName;
+  List<PartProductionDispatchLabelPartInfo>? partList;
+
+  PartProductionDispatchLabelInfo({
+    this.isInStock,
+    this.pictureUrl,
+    this.typeBody,
+    this.barCode,
+    this.unitName,
+    this.partList,
+  });
+
+  factory PartProductionDispatchLabelInfo.fromJson(dynamic json) {
+    return PartProductionDispatchLabelInfo(
+        isInStock: json['IsInStock'],
+        pictureUrl: json['PictureUrl'],
+        typeBody: json['ProductName'],
+        barCode: json['LargeCardNo'],
+        unitName: json['UnitName'],
+        partList: [
+          if (json['MaterialList'] != null)
+            for (var item in json['MaterialList'])
+              PartProductionDispatchLabelPartInfo.fromJson(item)
+        ]);
+  }
+
+  String getPartList() => [for (var v in partList!) v.partName ?? ''].join('、');
+
+  String getInstructionList() => [
+        for (var v in partList!)
+          for (var v2 in v.instruction!) v2.instruction ?? ''
+      ].join('、');
+
+  String getSizeList() => getTotalSizeList()
+      .map((v) => '${v.size}/${v.qty.toShowString()}')
+      .join(';');
+
+  double getTotalQty() =>
+      partList!.map((v) => v.getTotalQty()).reduce((a, b) => a.add(b));
+
+  List<PartProductionDispatchLabelSizeInfo> getTotalSizeList() {
+    var totalSizeList = <PartProductionDispatchLabelSizeInfo>[];
+    var sizeList = <PartProductionDispatchLabelSizeInfo>[];
+    for (var v1 in partList!) {
+      for (var v2 in v1.instruction!) {
+        sizeList.addAll(v2.sizeList!);
+      }
+    }
+    groupBy(sizeList, (v) => v.size ?? '').forEach((k, v) {
+      totalSizeList.add(
+        PartProductionDispatchLabelSizeInfo(
+          size: k,
+          qty: v.map((v2) => v2.qty ?? 0.0).reduce((a, b) => a.add(b)),
+        ),
+      );
+    });
+    return totalSizeList;
+  }
+}
+
+class PartProductionDispatchLabelPartInfo {
+  String? partName;
+  List<PartProductionDispatchLabelInstructionInfo>? instruction;
+
+  PartProductionDispatchLabelPartInfo({
+    this.partName,
+    this.instruction,
+  });
+
+  factory PartProductionDispatchLabelPartInfo.fromJson(dynamic json) {
+    return PartProductionDispatchLabelPartInfo(
+        partName: json['MaterialName'],
+        instruction: [
+          if (json['MtoNoList'] != null)
+            for (var item in json['MtoNoList'])
+              PartProductionDispatchLabelInstructionInfo.fromJson(item)
+        ]);
+  }
+
+  double getTotalQty() =>
+      instruction!.map((v) => v.getTotalQty()).reduce((a, b) => a.add(b));
+}
+
+class PartProductionDispatchLabelInstructionInfo {
+  String? instruction;
+  List<PartProductionDispatchLabelSizeInfo>? sizeList;
+
+  PartProductionDispatchLabelInstructionInfo({
+    this.instruction,
+    this.sizeList,
+  });
+
+  factory PartProductionDispatchLabelInstructionInfo.fromJson(dynamic json) {
+    return PartProductionDispatchLabelInstructionInfo(
+        instruction: json['MtoNo'],
+        sizeList: [
+          if (json['SizeList'] != null)
+            for (var item in json['SizeList'])
+              PartProductionDispatchLabelSizeInfo.fromJson(item)
+        ]);
+  }
+
+  double getTotalQty() =>
+      sizeList!.map((v) => v.qty ?? 0).reduce((a, b) => a.add(b));
+}
+
+class PartProductionDispatchLabelSizeInfo {
+  String? size;
+  double? qty;
+
+  PartProductionDispatchLabelSizeInfo({
+    this.size,
+    this.qty,
+  });
+
+  factory PartProductionDispatchLabelSizeInfo.fromJson(dynamic json) {
+    return PartProductionDispatchLabelSizeInfo(
+      size: json['Size'],
+      qty: json['AuxQty'].toString().toDoubleTry(),
     );
   }
 }

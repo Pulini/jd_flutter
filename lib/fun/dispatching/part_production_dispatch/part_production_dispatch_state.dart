@@ -7,9 +7,11 @@ class PartProductionDispatchState {
   var isSelectedClosed = false.obs;
   var orderList = <PartProductionDispatchOrderInfo>[].obs;
   PartProductionDispatchOrderDetailInfo? detailInfo;
-  List<List>instructionList=[];
-  var sizeList=<PartProductionDispatchOrderDetailSizeInfo>[].obs;
-  var created=false.obs;
+  List<List> instructionList = [];
+  var sizeList = <PartProductionDispatchOrderDetailSizeInfo>[].obs;
+  var created = false.obs;
+  var labelList = <PartProductionDispatchLabelInfo>[].obs;
+  var deleted = false.obs;
 
   PartProductionDispatchState() {
     isSelectedClosed.value =
@@ -62,6 +64,46 @@ class PartProductionDispatchState {
         success.call();
       } else {
         detailInfo = null;
+        error.call(response.message ?? '');
+      }
+    });
+  }
+
+  void getPartProductionDispatchLabelList({
+    required List<int> orders,
+    required Function() success,
+    required Function(String msg) error,
+  }) {
+    httpGet(
+      method: webApiGetPartProductionDispatchLabelList,
+      loading: '正常查询贴标列表...',
+      body: {'WorkCardIDs': orders},
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        labelList.value = [
+          for (var json in response.data)
+            PartProductionDispatchLabelInfo.fromJson(json)
+        ];
+        success.call();
+      } else {
+        labelList.value = [];
+        error.call(response.message ?? '');
+      }
+    });
+  }
+  void deleteLabelList({
+    required List<String> labelList,
+    required Function(String msg) success,
+    required Function(String msg) error,
+  }) {
+    httpGet(
+      method: webApiDeletePartProductionDispatchLabels,
+      loading: '正在删除贴标...',
+      body: {'CardNos': labelList},
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        success.call(response.message ?? '');
+      } else {
         error.call(response.message ?? '');
       }
     });
