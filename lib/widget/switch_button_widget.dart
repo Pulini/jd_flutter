@@ -70,11 +70,11 @@ class _SwitchButtonState extends State<SwitchButton> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
+          Expanded(flex: 3, child: Text(
             widget.name,
             style: const TextStyle(color: Colors.black),
-          ),
-          Switch(
+          )),
+          Expanded(flex: 2,child: Switch(
             thumbIcon: WidgetStateProperty.resolveWith<Icon>(
                   (Set<WidgetState> states) {
                 if (states.contains(WidgetState.selected)) {
@@ -85,7 +85,7 @@ class _SwitchButtonState extends State<SwitchButton> {
             ),
             value: isChecked,
             onChanged: _select,
-          ),
+          ),)
         ],
       ),
     );

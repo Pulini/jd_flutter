@@ -201,89 +201,115 @@ class _QualityInspectionListPageState extends State<QualityInspectionListPage> {
         borderRadius: BorderRadius.circular(10),
         border: Border.all(color: Colors.grey, width: 2),
       ),
-      child: Obx(()=>ExpansionTile(
-        initiallyExpanded: data.every((v) => v.isSelected.value),
-        onExpansionChanged: (v) {
-          for (var item in data) {
-            item.isSelected.value = v;
-          }
-        },
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-        ),
-        title: Text(
-          maxLines: 2,
-          '(${data[0].materialCode}) ${data[0].materialDescription}',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Colors.blue.shade900,
-          ),
-        ),
-        subtitle: Row(
-          children: [
-            Expanded(
-              flex: 7,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('(${data[0].supplierNumber}) ${data[0].name1}'),
-                  TextButton(
-                    onPressed: () => Get.to(
-                            () => const QualityInspectionListDetailPage(),
-                        arguments: {'index': index}),
-                    child: Text(
-                      'quality_inspection_view_detail'.tr,
-                      style: TextStyle(
-                        color: Colors.green.shade700,
-                        fontWeight: FontWeight.bold,
-                      ),
+      child: Obx(() => ExpansionTile(
+            initiallyExpanded: data.every((v) => v.isSelected.value),
+            onExpansionChanged: (v) {
+              for (var item in data) {
+                item.isSelected.value = v;
+              }
+            },
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            ),
+            title: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  maxLines: 2,
+                  '(${data[0].materialCode}) ${data[0].materialDescription}',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.blue.shade900,
+                  ),
+                ),
+                Row(
+                  children: [
+                    expandedTextSpan(
+                      isBold: true,
+                      hint: 'quality_inspection_command'.tr,
+                      text: data[0].salesAndDistributionVoucherNumber ?? '',
+                      textColor: Colors.redAccent,
                     ),
-                  )
-                ],
-              ),
+                    expandedTextSpan(
+                      isBold: true,
+                      hint: 'quality_inspection_factory_type'.tr,
+                      text: data[0].factoryType ?? '',
+                      textColor: Colors.redAccent,
+                    )
+                  ],
+                )
+              ],
             ),
-            itemSubTitle(
-              title: 'quality_inspection_inspection_quantity'.tr,
-              data: logic.inspectionTotalQtyText(data),
+            subtitle: Row(
+              children: [
+                Expanded(
+                  flex: 7,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('(${data[0].supplierNumber}) ${data[0].name1}'),
+                      TextButton(
+                        onPressed: () => Get.to(
+                            () => const QualityInspectionListDetailPage(),
+                            arguments: {'index': index}),
+                        child: Text(
+                          'quality_inspection_view_detail'.tr,
+                          style: TextStyle(
+                            color: Colors.green.shade700,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                itemSubTitle(
+                  title: 'quality_inspection_inspection_quantity'.tr,
+                  data: logic.inspectionTotalQtyText(data),
+                ),
+                itemSubTitle(
+                  title: 'quality_inspection_sampling_quantity'.tr,
+                  data: logic.samplingTotalQtyText(data),
+                ),
+                itemSubTitle(
+                  title: 'quality_inspection_unqualified_quantity'.tr,
+                  data: logic.unqualifiedTotalQtyText(data),
+                ),
+                itemSubTitle(
+                  title: 'quality_inspection_short_quantity'.tr,
+                  data: logic.shortCodesTotalQtyText(data),
+                ),
+                itemSubTitle(
+                  title: 'quality_inspection_qualified_quantity'.tr,
+                  data: logic.qualifiedTotalQtyText(data),
+                ),
+                itemSubTitle(
+                  title: 'quality_inspection_inventory_quantity'.tr,
+                  data: logic.storageTotalQtyText(data),
+                ),
+              ],
             ),
-            itemSubTitle(
-              title: 'quality_inspection_sampling_quantity'.tr,
-              data: logic.samplingTotalQtyText(data),
-            ),
-            itemSubTitle(
-              title: 'quality_inspection_unqualified_quantity'.tr,
-              data: logic.unqualifiedTotalQtyText(data),
-            ),
-            itemSubTitle(
-              title: 'quality_inspection_short_quantity'.tr,
-              data: logic.shortCodesTotalQtyText(data),
-            ),
-            itemSubTitle(
-              title: 'quality_inspection_qualified_quantity'.tr,
-              data: logic.qualifiedTotalQtyText(data),
-            ),
-            itemSubTitle(
-              title: 'quality_inspection_inventory_quantity'.tr,
-              data: logic.storageTotalQtyText(data),
-            ),
-          ],
-        ),
-        children: [
-          for (var sub in data) _subItem(sub),
-          const SizedBox(height: 10),
-        ],
-      )),
+            children: [
+              for (var sub in data) _subItem(sub),
+              const SizedBox(height: 10),
+            ],
+          )),
     );
   }
 
-  void _query(){
+  void _query() {
     logic.getInspectionList(
       orderType: scOrderType.selectIndex,
-      typeBody: typeBodyController.text,   //型体
-      materialCode: materialCodeController.text,  //物料编号
-      instruction: instructionController.text,  //指令
-      inspectionOrder: inspectionOrderController.text,   //检验单号
-      temporaryReceipt: temporaryReceiptController.text,  //暂收单号
+      typeBody: typeBodyController.text,
+      //型体
+      materialCode: materialCodeController.text,
+      //物料编号
+      instruction: instructionController.text,
+      //指令
+      inspectionOrder: inspectionOrderController.text,
+      //检验单号
+      temporaryReceipt: temporaryReceiptController.text,
+      //暂收单号
       receiptVoucher: receiptVoucherController.text,
       trackingNumber: trackingNumberController.text,
       startDate: dpcStartDate.getDateFormatYMD(),
@@ -334,12 +360,16 @@ class _QualityInspectionListPageState extends State<QualityInspectionListPage> {
         isCanCancel: true,
         confirm: (reason) {
           Get.back();
-          logic.colorSubmit(reason: reason, success: () { _query(); });
+          logic.colorSubmit(
+              reason: reason,
+              success: () {
+                _query();
+              });
         },
       );
     }, toReverseColor: () {
       Get.to(() => const QualityInspectionReverseColorPage())?.then((v) {
-        if (v != null && v as  bool) _query();
+        if (v != null && v as bool) _query();
       });
     });
   }
@@ -409,7 +439,9 @@ class _QualityInspectionListPageState extends State<QualityInspectionListPage> {
                   state.allSelect.value = c;
                   logic.selectAllData(c);
                 },
-                name:  state.allSelect.value? 'quality_inspection_no_all_select'.tr:'quality_inspection_all_select'.tr,
+                name: state.allSelect.value
+                    ? 'quality_inspection_no_all_select'.tr
+                    : 'quality_inspection_all_select'.tr,
                 value: state.allSelect.value,
               )),
         ],

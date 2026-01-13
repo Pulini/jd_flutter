@@ -99,8 +99,8 @@ class _SuppliersScanStorePageState extends State<SuppliersScanStorePage> {
                           if (state.peopleNumber.text.isEmpty) {
                             showSnackBar(title: '警告', message: '请输入操作人工号');
                           } else {
-                            Navigator.of(context).pop();
-                            logic.goReport();
+                           logic.goReport();
+                           Get.back();
                           }
                         },
                         child: const Text('确定'),
@@ -109,7 +109,7 @@ class _SuppliersScanStorePageState extends State<SuppliersScanStorePage> {
                         onPressed: () {
                           state.peopleName.value = '';
                           state.peopleNumber.clear();
-                          Navigator.of(context).pop();
+                          Get.back();
                         },
                         child: const Text('取消'),
                       )

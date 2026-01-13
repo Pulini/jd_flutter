@@ -19,7 +19,13 @@ class MaterialLabelScanState {
 
   var materialListNumber = ''; //备料单号
   var peopleNumber = TextEditingController(); //员工工号
+  var peopleEmpId = -1; //员工Id
   var peopleName = ''.obs; //员工姓名
+
+  var searchWorkCardNo = '';
+  var searchMaterialID = 0;
+
+
 
   //备料任务清单
   void getQueryList({
@@ -53,12 +59,14 @@ class MaterialLabelScanState {
   //备料任务详情
   void getQueryDetail({
     required String workCardNo,
+    required int materialID,
   }) {
     httpGet(
       loading: 'material_label_scan_get_material_detail'.tr,
       method: webApiGetPickMatDetail,
       params: {
         'WorkCardNo': workCardNo,
+        'materialID': materialID,
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
@@ -173,21 +181,22 @@ class MaterialLabelScanState {
 
   //备料提交领料
   void submitCodeDetail({
-    required int receiverEmpID,
     required Function() success,
   }) {
     httpPost(
       loading: 'material_label_scan_detail_submit_message'.tr,
       method: webApiSubmitPickMatDetail,
       body: {
-        'WorkCardInterID': '',
+        'WorkCardInterID': dataDetail.head?[0].interID,
+        'ProMaterialID': dataDetail.head?[0].proMaterialID,
+        'Red': 1,
         'UserID': userInfo!.userID,
         'StockID': userInfo!.defaultStockID,
-        'ReceiverEmpID': receiverEmpID, //手输
+        'ReceiverEmpID': peopleEmpId,
         'IssuerEmpID': userInfo!.empID,
         'pickMatDetailItems': [
           for (var entry in dataDetailList.entries)
-            // 获取当前物料分组下的所有明细
+          // 获取当前物料分组下的所有明细
             for (var detailItem in entry.value)
               if (detailItem.isScan == true)
                 {
@@ -199,8 +208,7 @@ class MaterialLabelScanState {
         ]
       },
     ).then((response) {
-      if (response.resultCode == resultSuccess) {
-      } else {
+      if (response.resultCode == resultSuccess) {} else {
         errorDialog(content: response.message ?? 'query_default_error'.tr);
       }
     });

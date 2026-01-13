@@ -3,12 +3,14 @@ class MaterialLabelScanInfo {
     this.interID,
     this.workCardNo,
     this.materialID,
-    this.materialNumber,
-    this.materialName,
+    this.proMaterialNumber,
+    this.proMaterialName,
+    this.productName,
     this.mtoNo,
     this.noticeDate,
     this.dispatchQty,
     this.matReqStatus,
+    this.proMaterialID,
 
   });
 
@@ -16,24 +18,28 @@ class MaterialLabelScanInfo {
     interID = json['InterID'];
     workCardNo = json['WorkCardNo'];
     materialID = json['MaterialID'];
-    materialNumber = json['MaterialNumber'];
-    materialName = json['MaterialName'];
+    proMaterialNumber = json['ProMaterialNumber'];
+    proMaterialName = json['ProMaterialName'];
+    productName = json['ProductName'];
     mtoNo = json['MtoNo'];
     noticeDate = json['NoticeDate'];
     dispatchQty = json['DispatchQty'];
     matReqStatus = json['MatReqStatus'];
+    proMaterialID = json['ProMaterialID'];
 
   }
 
   int? interID;
   String? workCardNo;
   int? materialID;
-  String? materialNumber;
-  String? materialName;
+  String? proMaterialNumber;
+  String? proMaterialName;
+  String? productName;
   String? mtoNo;
   String? noticeDate;
   double? dispatchQty;
   int? matReqStatus;
+  int? proMaterialID;
 
 
   Map<String, dynamic> toJson() {
@@ -41,12 +47,14 @@ class MaterialLabelScanInfo {
     map['InterID'] = interID;
     map['WorkCardNo'] = workCardNo;
     map['MaterialID'] = materialID;
-    map['MaterialNumber'] = materialNumber;
-    map['MaterialName'] = materialName;
+    map['ProMaterialNumber'] = proMaterialNumber;
+    map['ProMaterialName'] = proMaterialName;
+    map['ProductName'] = productName;
     map['MtoNo'] = mtoNo;
     map['NoticeDate'] = noticeDate;
     map['DispatchQty'] = dispatchQty;
     map['MatReqStatus'] = matReqStatus;
+    map['ProMaterialID'] = proMaterialID;
 
     return map;
   }
@@ -185,8 +193,9 @@ class Head {
     this.interID,
     this.workCardNo,
     this.productName,
-    this.materialNumber,
-    this.materialName,
+    this.proMaterialNumber,
+    this.proMaterialName,
+    this.proMaterialID,
     this.scWorkCardQty,
     this.mtoNo,
     this.unitName,});
@@ -195,8 +204,9 @@ class Head {
     interID = json['InterID'];
     workCardNo = json['WorkCardNo'];
     productName = json['ProductName'];
-    materialNumber = json['MaterialNumber'];
-    materialName = json['MaterialName'];
+    proMaterialNumber = json['ProMaterialNumber'];
+    proMaterialName = json['ProMaterialName'];
+    proMaterialID = json['ProMaterialID'];
     mtoNo = json['MtoNo'];
     unitName = json['UnitName'];
     scWorkCardQty = json['ScWorkCardQty'];
@@ -204,19 +214,22 @@ class Head {
   int? interID;
   String? workCardNo;
   String? productName;
-  String? materialNumber;
-  String? materialName;
+  String? proMaterialNumber;
+  int? proMaterialID;
+  String? proMaterialName;
   String? mtoNo;
   String? unitName;
   double? scWorkCardQty;
+
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['InterID'] = interID;
     map['WorkCardNo'] = workCardNo;
     map['ProductName'] = productName;
-    map['MaterialNumber'] = materialNumber;
-    map['MaterialName'] = materialName;
+    map['ProMaterialNumber'] = proMaterialNumber;
+    map['ProMaterialName'] = proMaterialName;
+    map['ProMaterialID'] = proMaterialID;
     map['MtoNo'] = mtoNo;
     map['UnitName'] = unitName;
     return map;

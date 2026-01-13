@@ -41,8 +41,8 @@ class _MaterialLabelScanDetailPageState
     Get.dialog(
       Dialog(
         child: Container(
-          padding: const EdgeInsets.all(20),
-          width: 400,
+          padding: const EdgeInsets.all(10),
+          width: 800,
           height: 500,
           child: Column(
             children: [
@@ -90,7 +90,7 @@ class _MaterialLabelScanDetailPageState
                     children: [
                       Icon(
                         Icons.image,
-                        size: 100,
+                        size: 200,
                         color: Colors.grey,
                       ),
                       SizedBox(height: 10),
@@ -149,8 +149,8 @@ class _MaterialLabelScanDetailPageState
                                 number: s,
                                 workers: (list) {
                                   newWorker = list[0];
-                                  state.peopleName.value =
-                                      list[0].empName ?? '';
+                                  state.peopleName.value = list[0].empName ?? '';
+                                  state.peopleEmpId = list[0].empID ?? -1;
                                 },
                                 error: (msg) => errorDialog(content: msg),
                               );
@@ -166,9 +166,11 @@ class _MaterialLabelScanDetailPageState
                     children: [
                       TextButton(
                         onPressed: () {
-                          if (newWorker != null) {
-                            Navigator.of(context).pop();
-                            logic.submit(newWorker!);
+                          if (state.peopleEmpId!=-1) {
+                            logic.submit(success: (){
+                              logic.queryDetail(workCardNo: state.searchWorkCardNo, materialID: state.searchMaterialID);
+                            });
+                            Get.back();
                           } else {
                             showSnackBar(
                                 title: 'shack_bar_warm'.tr,
@@ -181,8 +183,9 @@ class _MaterialLabelScanDetailPageState
                       TextButton(
                         onPressed: () {
                           state.peopleName.value = '';
+                          state.peopleEmpId = -1;
                           state.peopleNumber.clear();
-                          Navigator.of(context).pop();
+                          Get.back();
                         },
                         child: Text('dialog_default_cancel'.tr),
                       )
@@ -299,7 +302,7 @@ class _MaterialLabelScanDetailPageState
         ),
         Expanded(
           child: InkWell(
-            child: Text(text1 ?? '', style: textStyle),
+            child: Text(text1 ?? '', style: textStyle,maxLines: 1),
             onTap: () {
               if (text1!.isNotEmpty) {
                 showSnackBar(message: text1);
@@ -438,10 +441,7 @@ class _MaterialLabelScanDetailPageState
                 state.dataDetail.head?[0].workCardNo ?? ''),
             _text('material_label_scan_detail_type_body'.tr,
                 state.dataDetail.head?[0].productName ?? ''),
-            _text(
-                'material_label_scan_detail_material'.tr,
-                (state.dataDetail.head?[0].materialNumber ?? '') +
-                    (state.dataDetail.head?[0].materialName ?? '')),
+            _text('material_label_scan_detail_material'.tr, (state.dataDetail.head?[0].proMaterialNumber ?? '') + (state.dataDetail.head?[0].proMaterialName ?? '')),
             _text('material_label_scan_detail_command'.tr,
                 state.dataDetail.head?[0].mtoNo ?? ''),
             _text(

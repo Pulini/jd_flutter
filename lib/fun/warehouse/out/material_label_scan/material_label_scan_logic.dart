@@ -16,8 +16,11 @@ class MaterialLabelScanLogic extends GetxController {
 
   void queryDetail({
     required String workCardNo,
+    required int materialID,
   }) {
-    state.getQueryDetail(workCardNo: workCardNo);
+    state.searchWorkCardNo = workCardNo;
+    state.searchMaterialID = materialID;
+    state.getQueryDetail(workCardNo: workCardNo,materialID:materialID);
   }
 
   void queryBarCodeDetail({
@@ -80,7 +83,11 @@ class MaterialLabelScanLogic extends GetxController {
 
 
   //提交条码信息
-  void submit(WorkerInfo worker) {
-    state.submitCodeDetail(success: () {}, receiverEmpID: worker.empID ?? 0);
+  void submit({
+    required Function() success,
+}) {
+    state.submitCodeDetail(success: () {
+      success.call();
+    });
   }
 }
