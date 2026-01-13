@@ -4,10 +4,10 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/material_dispatch_info.dart';
 import 'package:jd_flutter/bean/http/response/material_dispatch_label_detail.dart';
 import 'package:jd_flutter/bean/http/response/process_specification_info.dart';
-import 'package:jd_flutter/fun/dispatching/machine_dispatch/machine_dispatch_dialog.dart';
 import 'package:jd_flutter/fun/dispatching/material_dispatch/material_dispatch_state.dart';
 import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
+import 'package:jd_flutter/utils/printer/print_util.dart';
 import 'package:jd_flutter/utils/utils.dart'
     show getDateYMD, getProcessManual, checkUrlType, checkUserPermission;
 import 'package:jd_flutter/widget/check_box_widget.dart';
@@ -745,9 +745,7 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
         ),
         CombinationButton(
           text: 'Printer_settings'.tr,
-          click: () => showPrintSetting(
-            context,
-          ),
+          click: () => printSetDialog(),
           combination: Combination.middle,
         ),
         CombinationButton(

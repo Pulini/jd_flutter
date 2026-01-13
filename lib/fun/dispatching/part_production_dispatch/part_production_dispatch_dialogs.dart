@@ -111,7 +111,7 @@ void _createLabel({
   required Function(String) error,
 }) {
   httpPost(
-    method: webApiGetPartProductionDispatchCreateLabel,
+    method: webApiCreatePartProductionDispatchLabels,
     loading: '正在创建贴标...',
     body: {
       'EmpID': empId,

@@ -259,8 +259,10 @@ class _PartProductionDispatchPageState
                           child: CombinationButton(
                             text: '打印标签',
                             combination: Combination.right,
-                            click: () {},
-                        ),
+                            click: () => logic.queryLabelList(
+                              refresh: () => _query(),
+                            ),
+                          ),
                         ),
                       ],
                     )

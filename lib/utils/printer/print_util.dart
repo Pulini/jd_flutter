@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/bluetooth_device.dart';
 import 'package:jd_flutter/constant.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
+import 'package:jd_flutter/utils/utils.dart';
 
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
@@ -71,8 +73,9 @@ class PrintUtil {
       }
     }
   }
-  void showBluetoothDialog(){
-    _showBluetoothDialog((){});
+
+  void showBluetoothDialog() {
+    _showBluetoothDialog(() {});
   }
 
   Future<void> printLabelList({
@@ -529,4 +532,92 @@ class PrintUtil {
           )),
     ).then((_) => _dialogIsShowing = false);
   }
+}
+
+void printSetDialog({Function()? print}) {
+  RxDouble printSpeed = 5.0.obs;
+  RxDouble printDensity = 10.0.obs;
+  if (spGet(spSavePrintSpeed) != null) {
+    printSpeed.value = spGet(spSavePrintSpeed);
+  }
+  if (spGet(spSavePrintDensity) != null) {
+    printDensity.value = spGet(spSavePrintDensity);
+  }
+  Get.dialog(
+    PopScope(
+      canPop: false,
+      child: AlertDialog(
+        title: Text('设定打印参数'),
+        content: SizedBox(
+          width: 300,
+          height: 200,
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsetsGeometry.only(left: 10, right: 10),
+                child: Row(
+                  children: [
+                    const Text('打印速度：'),
+                    Expanded(
+                      child: Obx(() => Slider(
+                            value: printSpeed.value,
+                            min: 1,
+                            max: 10,
+                            divisions: 9,
+                            thumbColor: Colors.blueAccent,
+                            activeColor: Colors.green.shade300,
+                            onChanged: (v) => printSpeed.value = v,
+                          )),
+                    ),
+                    Obx(() => Text(printSpeed.value.toShowString())),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsetsGeometry.only(left: 10, right: 10),
+                child: Row(
+                  children: [
+                    const Text('打印浓度：'),
+                    Expanded(
+                      child: Obx(() => Slider(
+                            value: printDensity.value,
+                            min: 1,
+                            max: 15,
+                            divisions: 14,
+                            thumbColor: Colors.blueAccent,
+                            activeColor: Colors.green.shade300,
+                            onChanged: (v) => printDensity.value = v,
+                          )),
+                    ),
+                    Obx(() => Text(printDensity.value.toShowString())),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              spSave(spSavePrintDensity, printDensity.value);
+              spSave(spSavePrintSpeed, printSpeed.value);
+              Get.back();
+              print?.call();
+            },
+            child: Text(
+              'dialog_default_confirm'.tr,
+              style: const TextStyle(color: Colors.blue),
+            ),
+          ),
+          TextButton(
+            onPressed: () => Get.back(),
+            child: Text(
+              'dialog_default_back'.tr,
+              style: const TextStyle(color: Colors.grey),
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
 }

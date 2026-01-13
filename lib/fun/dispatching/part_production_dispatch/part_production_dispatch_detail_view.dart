@@ -76,7 +76,7 @@ class _PartProductionDispatchDetailPageState
         ),
         expandedFrameText(
           backgroundColor: Colors.purple.shade100,
-          text: '以生成数',
+          text: '已生成数',
         ),
         expandedFrameText(
           backgroundColor: Colors.purple.shade100,
