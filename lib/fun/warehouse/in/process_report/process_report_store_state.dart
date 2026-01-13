@@ -106,7 +106,7 @@ class ProcessReportStoreState {
               'PalletNo': item.palletNo,
             }
         ],
-        'EmpCode': worker.empID,
+        'EmpCode': worker.empCode,
         'ProcessFlowID': process.processFlowID,
         'ProcessNodeName': process.processNodeName,
         'UserID': userInfo?.userID,
