@@ -162,13 +162,22 @@ class StuffQualityInspectionLogic extends GetxController {
     if (inspectionQuantityController.text.toDoubleTry() > 0 &&
             unqualifiedQualifiedController.text.toDoubleTry() > 0 ||
         shortQualifiedController.text.toDoubleTry() > 0) {
-      getLabelsForOrder(
-          inspectionType: inspectionType,
-          type: type,
-          groupType: groupType,
-          success: (mes) {
-            success!.call(mes);
-          });
+
+      if (state.isSizeCode == false &&
+          (inspectionQuantityController.text.toDoubleTry() != unqualifiedQualifiedController.text.toDoubleTry() &&
+              inspectionQuantityController.text.toDoubleTry() != shortQualifiedController.text.toDoubleTry())) {
+        // 不同物料并且不是全部不合格或全部短码
+        errorDialog(content: '不允许不同物料进行全部不合格或全部短码以外的操作');
+      } else {
+        logger.f('--------------1-------------');
+        getLabelsForOrder(
+            inspectionType: inspectionType,
+            type: type,
+            groupType: groupType,
+            success: (mes) {
+              success!.call(mes);
+            });
+      }
     } else {
       if (state.fromInspectionType == '1') {
         createInspectionFromList(false, inspectionType, type, success: (s) {
@@ -939,6 +948,12 @@ class StuffQualityInspectionLogic extends GetxController {
       }
     });
 
+    if (name.length > 1) {
+      state.isSizeCode = false;
+    } else {
+      state.isSizeCode = true;
+    }
+
     if (name.length > 1 && mainName.length > 1) {
       state.isSameCode = false;
       state.shortQuantityEnable.value = false;
@@ -1140,66 +1155,77 @@ class StuffQualityInspectionLogic extends GetxController {
     }
 
     if (labelSubmit) {
-      //不合格数>0  分配不合格数
-      if (countUnQuality > 0) {
-        for (var label in state.labelData.where((v) => v.select).toList()) {
-          var qty = label.unqualified!;
-          detailList
-              .where((v) => v.barCode == label.barCode)
-              .forEach((subData) {
-            if (qty >= subData.quantityTemporarilyReceived!) {
-              subData.unqualifiedQuantity = subData.quantityTemporarilyReceived;
-              qty = qty.sub(subData.quantityTemporarilyReceived!);
-            } else {
-              subData.unqualifiedQuantity = qty;
-              qty = 0.0;
-            }
-          });
+      if (state.isAllUnQty) {
+        for (var subData in detailList) {
+          subData.unqualifiedQuantity = subData.quantityTemporarilyReceived;
         }
-      }
-
-      if (countShortQuality > 0) {
-        for (var label in state.labelData.where((v) => v.select).toList()) {
-          var qty = label.short!;
-          detailList
-              .where((v) => v.barCode == label.barCode)
-              .forEach((subData) {
-            if (qty >=
-                subData.quantityTemporarilyReceived!
-                    .sub(subData.unqualifiedQuantity!)) {
-              subData.missingQuantity = subData.quantityTemporarilyReceived!
-                  .sub(subData.unqualifiedQuantity!);
-              qty = qty.sub(subData.quantityTemporarilyReceived!
-                  .sub(subData.unqualifiedQuantity!));
-            } else {
-              subData.missingQuantity = qty;
-              qty = 0.0;
-            }
-          });
+      } else if (state.isAllShortQty) {
+        for (var subData in detailList) {
+          subData.missingQuantity = subData.quantityTemporarilyReceived;
         }
-      }
+      } else {
+        //不合格数>0  分配不合格数
+        if (countUnQuality > 0) {
+          for (var label in state.labelData.where((v) => v.select).toList()) {
+            var qty = label.unqualified!;
+            detailList
+                .where((v) => v.barCode == label.barCode)
+                .forEach((subData) {
+              if (qty >= subData.quantityTemporarilyReceived!) {
+                subData.unqualifiedQuantity =
+                    subData.quantityTemporarilyReceived;
+                qty = qty.sub(subData.quantityTemporarilyReceived!);
+              } else {
+                subData.unqualifiedQuantity = qty;
+                qty = 0.0;
+              }
+            });
+          }
+        }
 
-      if (countQuality > 0) {
-        for (var data in detailList) {
-          //合格数量大于 检验数量-短码-不合格
-          if (countQuality >=
-              data.quantityTemporarilyReceived!
+        if (countShortQuality > 0) {
+          for (var label in state.labelData.where((v) => v.select).toList()) {
+            var qty = label.short!;
+            detailList
+                .where((v) => v.barCode == label.barCode)
+                .forEach((subData) {
+              if (qty >=
+                  subData.quantityTemporarilyReceived!
+                      .sub(subData.unqualifiedQuantity!)) {
+                subData.missingQuantity = subData.quantityTemporarilyReceived!
+                    .sub(subData.unqualifiedQuantity!);
+                qty = qty.sub(subData.quantityTemporarilyReceived!
+                    .sub(subData.unqualifiedQuantity!));
+              } else {
+                subData.missingQuantity = qty;
+                qty = 0.0;
+              }
+            });
+          }
+        }
+
+        if (countQuality > 0) {
+          for (var data in detailList) {
+            //合格数量大于 检验数量-短码-不合格
+            if (countQuality >=
+                data.quantityTemporarilyReceived!
+                    .sub(data.unqualifiedQuantity!)
+                    .sub(data.missingQuantity!)) {
+              //合格数量= 检验数量-短码-不合格
+              data.qualifiedQuantity = data.quantityTemporarilyReceived!
                   .sub(data.unqualifiedQuantity!)
-                  .sub(data.missingQuantity!)) {
-            //合格数量= 检验数量-短码-不合格
-            data.qualifiedQuantity = data.quantityTemporarilyReceived!
-                .sub(data.unqualifiedQuantity!)
-                .sub(data.missingQuantity!);
+                  .sub(data.missingQuantity!);
 
-            //剩余合格数量=总合格数量-检验数量
-            countQuality = countQuality.sub(data.quantityTemporarilyReceived!
-                .sub(data.unqualifiedQuantity!)
-                .sub(data.missingQuantity!));
-          } else {
-            //合格数量=剩余可分配合格数量
-            if (countQuality > 0) {
-              data.qualifiedQuantity = countQuality;
-              countQuality = 0.0;
+              //剩余合格数量=总合格数量-检验数量
+              countQuality = countQuality.sub(data.quantityTemporarilyReceived!
+                  .sub(data.unqualifiedQuantity!)
+                  .sub(data.missingQuantity!));
+            } else {
+              //合格数量=剩余可分配合格数量
+              if (countQuality > 0) {
+                data.qualifiedQuantity = countQuality;
+                countQuality = 0.0;
+              }
             }
           }
         }
@@ -1467,6 +1493,8 @@ class StuffQualityInspectionLogic extends GetxController {
         showSnackBar(message: '贴标不合格数量或短码数量与品检的不符合！');
         return false;
       } else {
+        state.isAllUnQty = allUnQty.toDoubleTry() == state.labelUnQty;
+        state.isAllShortQty = allShort.toDoubleTry() == state.labelShortQty;
         return true;
       }
     }

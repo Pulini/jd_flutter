@@ -44,6 +44,8 @@ class StuffQualityInspectionState {
 
   var isSameCode = true; //是否是同一物料
 
+  var isSizeCode = true; //是否是同一子物料
+
   var hadSplit = false; //是否能分色
 
   var defaultReviewer = ''; //默认审核人
@@ -58,4 +60,6 @@ class StuffQualityInspectionState {
   var labelData = <StuffQualityInspectionLabelInfo>[].obs; //提交品检获取的贴标信息
   var labelUnQty = 0.0; //贴标合格
   var labelShortQty = 0.0; //贴标短码
+  var isAllUnQty = false;
+  var isAllShortQty= false;
 }

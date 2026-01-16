@@ -59,8 +59,8 @@ class _SuppliersScanStorePageState extends State<SuppliersScanStorePage> {
               width: 200,
               child: Column(
                 children: [
-                  const Text(
-                    '入库条件',
+                   Text(
+                    'suppliers_scan_storage_conditions'.tr,
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.blue,
@@ -75,7 +75,7 @@ class _SuppliersScanStorePageState extends State<SuppliersScanStorePage> {
                       Expanded(
                         child: NumberEditText(
                           hasFocus: true,
-                          hint: '请输入操作人工号',
+                          hint: 'suppliers_scan_input_operator'.tr,
                           controller: state.peopleNumber,
                           onChanged: (s) {
                             if (s.length >= 6) {
@@ -97,13 +97,13 @@ class _SuppliersScanStorePageState extends State<SuppliersScanStorePage> {
                       TextButton(
                         onPressed: () {
                           if (state.peopleNumber.text.isEmpty) {
-                            showSnackBar(title: '警告', message: '请输入操作人工号');
+                            showSnackBar(title: 'shack_bar_warm'.tr, message: 'suppliers_scan_input_operator'.tr);
                           } else {
                            logic.goReport();
                            Get.back();
                           }
                         },
-                        child: const Text('确定'),
+                        child:  Text('dialog_default_confirm'.tr),
                       ),
                       TextButton(
                         onPressed: () {
@@ -111,7 +111,7 @@ class _SuppliersScanStorePageState extends State<SuppliersScanStorePage> {
                           state.peopleNumber.clear();
                           Get.back();
                         },
-                        child: const Text('取消'),
+                        child:  Text('dialog_default_cancel'.tr),
                       )
                     ],
                   )

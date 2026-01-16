@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/temporary_order_info.dart';
+import 'package:jd_flutter/fun/warehouse/in/stuff_quality_inspection/stuff_quality_inspection_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/temporary_order/temporary_order_detail_view.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
@@ -51,25 +54,6 @@ class TemporaryOrderLogic extends GetxController {
     );
   }
 
-  void viewTemporaryOrderDetail({
-    required String temporaryNo,
-    required String materialCode,
-    required Function()? success,
-  }) {
-    state.getTemporaryOrderDetail(
-      temporaryNo: temporaryNo,
-      materialCode: materialCode,
-      success: () {
-        Get.to(() => const TemporaryOrderDetailPage())?.then((v) {
-          if (v == true) {
-            success!.call();
-          }
-        });
-      },
-      error: (msg) => errorDialog(content: msg),
-    );
-  }
-
   bool checkToInspection() {
     var checkNum = 0;
 
@@ -90,9 +74,49 @@ class TemporaryOrderLogic extends GetxController {
     }
   }
 
-   void selectAllMaterial(TemporaryOrderDetailReceiptInfo data,bool isSelected) {
-    state.detailInfo!.receipt!.where((v)=>v.materialCode==data.materialCode).forEach((v){
-      v.isSelected.value=isSelected;
+  void viewTemporaryOrderDetail({
+    required String temporaryNo,
+    required String materialCode,
+    required bool inspection,
+    required Function()? success,
+  }) {
+    state.getTemporaryOrderDetail(
+      temporaryNo: temporaryNo,
+      materialCode: materialCode,
+      success: () {
+        if (inspection) {
+          state.detailInfo?.receipt?.forEach((c) {
+            c.isSelected.value = true;
+          });
+          if (checkToInspection()) {
+            Get.to(() => const StuffQualityInspectionPage(), arguments: {
+              'inspectionType': '2',
+              'temporaryDetail': jsonEncode(state.detailInfo!.toJson()),
+              //品检单列表
+            })?.then((v) {
+              if (v == true) {
+                Get.back(result: true); //结束界面
+              }
+            });
+          }
+        } else {
+          Get.to(() => const TemporaryOrderDetailPage())?.then((v) {
+            if (v == true) {
+              success!.call();
+            }
+          });
+        }
+      },
+      error: (msg) => errorDialog(content: msg),
+    );
+  }
+
+  void selectAllMaterial(
+      TemporaryOrderDetailReceiptInfo data, bool isSelected) {
+    state.detailInfo!.receipt!
+        .where((v) => v.materialCode == data.materialCode)
+        .forEach((v) {
+      v.isSelected.value = isSelected;
     });
-   }
+  }
 }
