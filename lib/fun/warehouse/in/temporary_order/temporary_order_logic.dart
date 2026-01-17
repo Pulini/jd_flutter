@@ -77,7 +77,7 @@ class TemporaryOrderLogic extends GetxController {
   void viewTemporaryOrderDetail({
     required String temporaryNo,
     required String materialCode,
-    required bool inspection,
+    required bool inspection,   //直接到品检
     required Function()? success,
   }) {
     state.getTemporaryOrderDetail(
@@ -92,11 +92,8 @@ class TemporaryOrderLogic extends GetxController {
             Get.to(() => const StuffQualityInspectionPage(), arguments: {
               'inspectionType': '2',
               'temporaryDetail': jsonEncode(state.detailInfo!.toJson()),
-              //品检单列表
             })?.then((v) {
-              if (v == true) {
-                Get.back(result: true); //结束界面
-              }
+              success!.call();
             });
           }
         } else {
