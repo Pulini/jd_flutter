@@ -1172,8 +1172,7 @@ class StuffQualityInspectionLogic extends GetxController {
                 .where((v) => v.barCode == label.barCode)
                 .forEach((subData) {
               if (qty >= subData.quantityTemporarilyReceived!) {
-                subData.unqualifiedQuantity =
-                    subData.quantityTemporarilyReceived;
+                subData.unqualifiedQuantity = subData.quantityTemporarilyReceived;
                 qty = qty.sub(subData.quantityTemporarilyReceived!);
               } else {
                 subData.unqualifiedQuantity = qty;
@@ -1493,8 +1492,6 @@ class StuffQualityInspectionLogic extends GetxController {
         showSnackBar(message: '贴标不合格数量或短码数量与品检的不符合！');
         return false;
       } else {
-        state.isAllUnQty = allUnQty.toDoubleTry() == state.labelUnQty;
-        state.isAllShortQty = allShort.toDoubleTry() == state.labelShortQty;
         return true;
       }
     }
