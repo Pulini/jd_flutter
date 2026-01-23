@@ -66,7 +66,9 @@ class MaterialLabelScanInfo {
 class MaterialLabelScanDetailInfo {
   MaterialLabelScanDetailInfo({
     this.head,
-    this.items,});
+    this.items,
+    this.picItems,
+  });
 
   MaterialLabelScanDetailInfo.fromJson(dynamic json) {
     if (json['Head'] != null) {
@@ -81,9 +83,16 @@ class MaterialLabelScanDetailInfo {
         items?.add(Items.fromJson(v));
       });
     }
+    if (json['PicItems'] != null) {
+      picItems = [];
+      json['PicItems'].forEach((v) {
+        picItems?.add(PicItems.fromJson(v));
+      });
+    }
   }
   List<Head>? head;
   List<Items>? items;
+  List<PicItems>? picItems;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -92,6 +101,9 @@ class MaterialLabelScanDetailInfo {
     }
     if (items != null) {
       map['Items'] = items?.map((v) => v.toJson()).toList();
+    }
+    if (picItems != null) {
+      map['PicItems'] = picItems?.map((v) => v.toJson()).toList();
     }
     return map;
   }
@@ -232,6 +244,40 @@ class Head {
     map['ProMaterialID'] = proMaterialID;
     map['MtoNo'] = mtoNo;
     map['UnitName'] = unitName;
+    return map;
+  }
+
+}
+
+class PicItems {
+  PicItems({
+    this.productID,
+    this.materialID,
+    this.pictureUrl,
+    this.pictureThumbnailUrl,
+});
+
+  PicItems.fromJson(dynamic json) {
+    productID = json['ProductID'];
+    materialID = json['MaterialID'];
+    pictureUrl = json['PictureUrl'];
+    pictureThumbnailUrl = json['PictureThumbnailUrl'];
+
+  }
+  int? productID;
+  int? materialID;
+  String? pictureUrl;
+  String? pictureThumbnailUrl;
+
+
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['ProductID'] = productID;
+    map['MaterialID'] = materialID;
+    map['PictureUrl'] = pictureUrl;
+    map['PictureThumbnailUrl'] = pictureThumbnailUrl;
+
     return map;
   }
 

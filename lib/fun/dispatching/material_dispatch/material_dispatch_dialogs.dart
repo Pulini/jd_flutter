@@ -47,9 +47,10 @@ void subItemReportDialog(
       canPop: false,
       child: AlertDialog(
         scrollable: true,
-        title: data.mustEnter == '1'
+        title: data.mustEnter == '0'
             ? Text('material_dispatch_dialog_label_progress'.tr)
-            : Text('material_dispatch_dialog_label_progress_must'.tr),
+            : Text('material_dispatch_dialog_label_progress_must'.tr,style: TextStyle(
+            color: Colors.red),),
         content: SizedBox(
           height: 230,
           width: getScreenSize().width * 0.4 < 400

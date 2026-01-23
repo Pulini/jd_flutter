@@ -488,7 +488,9 @@ class _MaterialLabelScanDetailPageState
                                             .first.materialName}');
                                   },),), Expanded(flex: 1,child:IconButton(
                                     onPressed: (){
-                                      showMaterialImageDialog(imageUrl: '');
+                                      logic.searchPic(success: () {
+                                        showMaterialImageDialog(imageUrl: '');
+                                      });
                                     },
                                     icon: const Icon(
                                       Icons.pageview,

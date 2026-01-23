@@ -834,8 +834,7 @@ class Translation extends Translations {
           'material_dispatch_dialog_label_progress': '打标工序',
           'material_dispatch_dialog_label_progress_must': '打标工序(毛净重，长宽高，必填！)',
           'material_dispatch_dialog_color_batch': '色系：',
-          'material_dispatch_dialog_need_report_qty':
-              'Jumlah yang harus dilaporkan：',
+          'material_dispatch_dialog_need_report_qty': '汇报数量：',
           'material_dispatch_dialog_report_qty': '本次汇报数量',
           'material_dispatch_dialog_long': '长(cm)',
           'material_dispatch_dialog_wide': '宽(cm)',

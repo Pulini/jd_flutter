@@ -89,4 +89,13 @@ class MaterialLabelScanLogic extends GetxController {
       success.call();
     });
   }
+
+  void searchPic({
+    required Function()? success,
+}){
+    state.dataDetail.picItems?.forEach((c){
+
+    });
+
+  }
 }
