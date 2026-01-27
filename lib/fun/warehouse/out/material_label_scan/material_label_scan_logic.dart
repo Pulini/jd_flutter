@@ -1,4 +1,6 @@
+
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
+import 'package:jd_flutter/bean/http/response/material_label_scan_info.dart';
 import 'package:jd_flutter/fun/warehouse/out/material_label_scan/material_label_scan_state.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 
@@ -19,7 +21,7 @@ class MaterialLabelScanLogic extends GetxController {
   }) {
     state.searchWorkCardNo = workCardNo;
     state.searchMaterialID = materialID;
-    state.getQueryDetail(workCardNo: workCardNo,materialID:materialID);
+    state.getQueryDetail(workCardNo: workCardNo, materialID: materialID);
   }
 
   void queryBarCodeDetail({
@@ -54,7 +56,7 @@ class MaterialLabelScanLogic extends GetxController {
 // 检查是否可以提交
   void checkSubmit({
     required Function()? success,
-}) {
+  }) {
     bool hasScannedItems = false;
 
     // 遍历所有物料分组
@@ -80,22 +82,31 @@ class MaterialLabelScanLogic extends GetxController {
     }
   }
 
-
   //提交条码信息
   void submit({
     required Function() success,
-}) {
+  }) {
     state.submitCodeDetail(success: () {
       success.call();
     });
   }
 
+  String getBeforeComma(String input) {
+    var parts = input.split(',');
+    return parts.isNotEmpty ? parts[0] : input;
+  }
+
   void searchPic({
-    required Function()? success,
-}){
-    state.dataDetail.picItems?.forEach((c){
-
+    required String id,
+    required Function(PicItems)? success,
+  }) {
+    var parts = id.split(',');
+    state.dataDetail.picItems?.forEach((c) {
+      if(parts.isNotEmpty){
+        if(c.materialID.toString() == parts[0] && c.productID.toString() == parts[1]){
+              success?.call(c);
+        }
+      }
     });
-
   }
 }

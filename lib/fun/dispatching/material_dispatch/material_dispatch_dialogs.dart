@@ -544,7 +544,7 @@ void materialListDialog(
                     ),
                     // onTap: ()=>materialList.value=[],
                     child: Container(
-                      height: data.batch?.isEmpty == true ? 35 : 55,
+                      height: data.batch?.isEmpty == true ? 35 : 75,
                       margin: const EdgeInsets.all(5),
                       padding: const EdgeInsets.only(
                           left: 10, top: 5, right: 10, bottom: 5),

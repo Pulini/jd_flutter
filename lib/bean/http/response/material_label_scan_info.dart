@@ -138,7 +138,9 @@ class Items {
     this.orderQty,
     this.qtyReceived,
     this.unclaimedQty,
-    this.unitName,});
+    this.unitName,
+    this.productID,
+  });
 
   Items.fromJson(dynamic json) {
     interID = json['InterID'];
@@ -154,6 +156,7 @@ class Items {
     qtyReceived = json['QtyReceived'];
     unclaimedQty = json['UnclaimedQty'];
     unitName = json['UnitName'];
+    productID = json['ProductID'];
   }
   int? interID;
   String? workCardNo;
@@ -162,6 +165,7 @@ class Items {
   String? materialNumber;
   String? materialName;
   int? srcICMOInterID;
+  int? productID;
   String? mtoNo;
   String? size;
   double? orderQty;
@@ -176,6 +180,7 @@ class Items {
     final map = <String, dynamic>{};
     map['InterID'] = interID;
     map['WorkCardNo'] = workCardNo;
+    map['ProductID'] = productID;
     map['MaterialID'] = materialID;
     map['ProductName'] = productName;
     map['MaterialNumber'] = materialNumber;

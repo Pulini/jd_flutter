@@ -23,9 +23,7 @@ class MaterialLabelScanDetailPage extends StatefulWidget {
 class _MaterialLabelScanDetailPageState
     extends State<MaterialLabelScanDetailPage> {
   final MaterialLabelScanLogic logic = Get.find<MaterialLabelScanLogic>();
-  final MaterialLabelScanState state = Get
-      .find<MaterialLabelScanLogic>()
-      .state;
+  final MaterialLabelScanState state = Get.find<MaterialLabelScanLogic>().state;
 
   var hintStyle = const TextStyle(color: Colors.black);
   var textStyle = TextStyle(color: Colors.blue.shade900);
@@ -56,47 +54,47 @@ class _MaterialLabelScanDetailPageState
               Expanded(
                 child: imageUrl != null && imageUrl.isNotEmpty
                     ? Image.network(
-                  imageUrl,
-                  fit: BoxFit.contain,
-                  errorBuilder: (context, error, stackTrace) {
-                    return Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.image_not_supported,
-                            size: 50,
-                            color: Colors.grey,
-                          ),
-                          SizedBox(height: 10),
-                          Text('图片加载失败'),
-                        ],
-                      ),
-                    );
-                  },
-                )
+                        imageUrl,
+                        fit: BoxFit.contain,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.image_not_supported,
+                                  size: 50,
+                                  color: Colors.grey,
+                                ),
+                                SizedBox(height: 10),
+                                Text('图片加载失败'),
+                              ],
+                            ),
+                          );
+                        },
+                      )
                     : Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.image,
-                        size: 200,
-                        color: Colors.grey,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.image,
+                              size: 200,
+                              color: Colors.grey,
+                            ),
+                            SizedBox(height: 10),
+                            Text('暂无图片'),
+                          ],
+                        ),
                       ),
-                      SizedBox(height: 10),
-                      Text('暂无图片'),
-                    ],
-                  ),
-                ),
               ),
               SizedBox(height: 20),
               ElevatedButton(
@@ -111,7 +109,6 @@ class _MaterialLabelScanDetailPageState
       ),
     );
   }
-
 
   void showPickerDialog(BuildContext context) {
     showDialog(
@@ -146,7 +143,8 @@ class _MaterialLabelScanDetailPageState
                               getWorkerInfo(
                                 number: s,
                                 workers: (list) {
-                                  state.peopleName.value = list[0].empName ?? '';
+                                  state.peopleName.value =
+                                      list[0].empName ?? '';
                                   state.peopleEmpId = list[0].empID ?? -1;
                                 },
                                 error: (msg) => errorDialog(content: msg),
@@ -163,16 +161,19 @@ class _MaterialLabelScanDetailPageState
                     children: [
                       TextButton(
                         onPressed: () {
-                          if (state.peopleEmpId!=-1) {
-                            logic.submit(success: (){
-                              logic.queryDetail(workCardNo: state.searchWorkCardNo, materialID: state.searchMaterialID);
+                          if (state.peopleEmpId != -1) {
+                            logic.submit(success: () {
+                              logic.queryDetail(
+                                  workCardNo: state.searchWorkCardNo,
+                                  materialID: state.searchMaterialID);
                             });
                             Get.back();
                           } else {
                             showSnackBar(
                                 title: 'shack_bar_warm'.tr,
-                                message: 'material_label_scan_detail_input_picker_number'
-                                    .tr);
+                                message:
+                                    'material_label_scan_detail_input_picker_number'
+                                        .tr);
                           }
                         },
                         child: Text('dialog_default_confirm'.tr),
@@ -244,7 +245,7 @@ class _MaterialLabelScanDetailPageState
               Expanded(
                   flex: 1,
                   child: _titleText(
-                    //尺码
+                      //尺码
                       mes: 'material_label_scan_detail_size'.tr,
                       backColor: Colors.lightBlueAccent,
                       paddingNumber: 5,
@@ -252,7 +253,7 @@ class _MaterialLabelScanDetailPageState
               Expanded(
                   flex: 1,
                   child: _titleText(
-                    //订单数
+                      //订单数
                       mes: 'material_label_scan_detail_order_qty'.tr,
                       backColor: Colors.lightBlueAccent,
                       textColor: blackText,
@@ -260,7 +261,7 @@ class _MaterialLabelScanDetailPageState
               Expanded(
                   flex: 1,
                   child: _titleText(
-                    //已领
+                      //已领
                       mes: 'material_label_scan_detail_claimed'.tr,
                       backColor: Colors.lightBlueAccent,
                       textColor: greenText,
@@ -268,7 +269,7 @@ class _MaterialLabelScanDetailPageState
               Expanded(
                   flex: 1,
                   child: _titleText(
-                    //未领
+                      //未领
                       mes: 'material_label_scan_detail_not_claimed'.tr,
                       backColor: Colors.lightBlueAccent,
                       textColor: redText,
@@ -276,7 +277,7 @@ class _MaterialLabelScanDetailPageState
               Expanded(
                   flex: 1,
                   child: _titleText(
-                    //本次领料
+                      //本次领料
                       mes: 'material_label_scan_detail_this_collar'.tr,
                       backColor: Colors.lightBlueAccent,
                       textColor: yellowText,
@@ -299,7 +300,7 @@ class _MaterialLabelScanDetailPageState
         ),
         Expanded(
           child: InkWell(
-            child: Text(text1 ?? '', style: textStyle,maxLines: 1),
+            child: Text(text1 ?? '', style: textStyle, maxLines: 1),
             onTap: () {
               if (text1!.isNotEmpty) {
                 showSnackBar(message: text1);
@@ -316,8 +317,7 @@ class _MaterialLabelScanDetailPageState
       children: [
         _title(),
         // 表格内容
-        ...data.map((item) =>
-            Row(
+        ...data.map((item) => Row(
               children: [
                 Expanded(
                     flex: 1,
@@ -438,7 +438,10 @@ class _MaterialLabelScanDetailPageState
                 state.dataDetail.head?[0].workCardNo ?? ''),
             _text('material_label_scan_detail_type_body'.tr,
                 state.dataDetail.head?[0].productName ?? ''),
-            _text('material_label_scan_detail_material'.tr, (state.dataDetail.head?[0].proMaterialNumber ?? '') + (state.dataDetail.head?[0].proMaterialName ?? '')),
+            _text(
+                'material_label_scan_detail_material'.tr,
+                (state.dataDetail.head?[0].proMaterialNumber ?? '') +
+                    (state.dataDetail.head?[0].proMaterialName ?? '')),
             _text('material_label_scan_detail_command'.tr,
                 state.dataDetail.head?[0].mtoNo ?? ''),
             _text(
@@ -448,66 +451,74 @@ class _MaterialLabelScanDetailPageState
             // 在 build 方法中替换原有的 ListView.builder
             Expanded(
               child: Obx(
-                    () =>
-                    ListView.builder(
-                      itemCount: state.dataDetailList.length,
-                      itemBuilder: (context, index) {
-                        var entry = state.dataDetailList.entries.elementAt(
-                            index);
-                        var materialKey = entry.key;
-                        var dataList = entry.value;
+                () => ListView.builder(
+                  itemCount: state.dataDetailList.length,
+                  itemBuilder: (context, index) {
+                    var entry = state.dataDetailList.entries.elementAt(index);
+                    var materialKey = entry.key;
+                    var dataList = entry.value;
 
-                        return Column(
-                          children: [
-                            // 材料标题
-                            Container(
-                              width: double.maxFinite,
-                              padding: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                color: Colors.blue[200],
-                                border: Border(
-                                  top: BorderSide(color: Colors.grey.shade300),
-                                  bottom: BorderSide(
-                                      color: Colors.grey.shade300),
-                                ),
-                              ),
-                              child: Row(
-                                children: [
-                                  Expanded(flex: 3, child: InkWell(child: Text(
-                                    '材料: <$materialKey> ${dataList.first
-                                        .materialName}',
+                    return Column(
+                      children: [
+                        // 材料标题
+                        Container(
+                          width: double.maxFinite,
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: Colors.blue[200],
+                            border: Border(
+                              top: BorderSide(color: Colors.grey.shade300),
+                              bottom: BorderSide(color: Colors.grey.shade300),
+                            ),
+                          ),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                flex: 3,
+                                child: InkWell(
+                                  child: Text(
+                                    '材料: <${logic.getBeforeComma(materialKey)}> ${dataList.first.materialName}',
                                     maxLines: 1,
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
                                       fontSize: 16,
                                     ),
-                                  ), onTap: () {
+                                  ),
+                                  onTap: () {
                                     msgDialog(
-                                        content: '材料: <$materialKey> ${dataList
-                                            .first.materialName}');
-                                  },),), Expanded(flex: 1,child:IconButton(
-                                    onPressed: (){
-                                      logic.searchPic(success: () {
-                                        showMaterialImageDialog(imageUrl: '');
-                                      });
-                                    },
-                                    icon: const Icon(
-                                      Icons.pageview,
-                                      color: Colors.white,
-                                      size: 20,
-                                    ),
-                                    padding: EdgeInsets.zero,
-                                  ),)
-                                ],
+                                        content:
+                                            '材料: <${logic.getBeforeComma(materialKey)}> ${dataList.first.materialName}');
+                                  },
+                                ),
                               ),
-                            ),
-                            // 表格内容
-                            _item(dataList),
-                          ],
-                        );
-                      },
-                    ),
+                              Expanded(
+                                flex: 1,
+                                child: IconButton(
+                                  onPressed: () {
+                                    logic.searchPic(
+                                        success: (PicItems pic) {
+                                          showMaterialImageDialog(imageUrl: pic.pictureUrl);
+                                        },
+                                        id: materialKey);
+                                  },
+                                  icon: const Icon(
+                                    Icons.pageview,
+                                    color: Colors.white,
+                                    size: 20,
+                                  ),
+                                  padding: EdgeInsets.zero,
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                        // 表格内容
+                        _item(dataList),
+                      ],
+                    );
+                  },
+                ),
               ),
             ),
             Row(
@@ -519,8 +530,8 @@ class _MaterialLabelScanDetailPageState
                     click: () {
                       askDialog(
                           content:
-                          'material_label_scan_detail_sure_clear_barcode'
-                              .tr,
+                              'material_label_scan_detail_sure_clear_barcode'
+                                  .tr,
                           confirm: () {
                             logic.clearBarCode();
                           });
@@ -570,7 +581,6 @@ class _MaterialLabelScanDetailPageState
       },
     );
   }
-
 
   @override
   void initState() {
