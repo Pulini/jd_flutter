@@ -65,8 +65,6 @@ void qualityInspectionListStoreDialog({
   var postAccountDate = DatePickerController(
     PickerType.startDate,
     buttonName: 'quality_inspection_date'.tr,
-    saveKey:
-        '${RouteConfig.qualityInspectionList.name}${PickerType.startDate}-store-date',
   );
 
   var storeWarehouse = LinkOptionsPickerController(
