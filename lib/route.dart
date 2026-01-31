@@ -5,7 +5,6 @@ import 'package:jd_flutter/fun/dispatching/injection_scan_report/injection_scan_
 import 'package:jd_flutter/fun/dispatching/machine_dispatch/machine_dispatch_report_view.dart';
 import 'package:jd_flutter/fun/dispatching/machine_dispatch/machine_dispatch_view.dart';
 import 'package:jd_flutter/fun/dispatching/material_dispatch/material_dispatch_view.dart';
-import 'package:jd_flutter/fun/dispatching/part_production_dispatch/part_production_dispatch_view.dart';
 import 'package:jd_flutter/fun/dispatching/process_dispatch_register/process_dispatch_register_view.dart';
 import 'package:jd_flutter/fun/dispatching/production_dispatch/production_dispatch_detail_view.dart';
 import 'package:jd_flutter/fun/dispatching/production_dispatch/production_dispatch_view.dart';
@@ -45,6 +44,7 @@ import 'package:jd_flutter/fun/warehouse/in/suppliers_scan_store/suppliers_scan_
 import 'package:jd_flutter/fun/warehouse/in/temporary_order/temporary_order_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/carton_label_scan/carton_label_scan_progress_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/carton_label_scan/carton_label_scan_view.dart';
+import 'package:jd_flutter/fun/warehouse/manage/part_dispatch_label_manage/part_dispatch_label_manage_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/patrol_inspection/patrol_inspection_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/print_pallet/print_pallet_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/quality_inspection/quality_inspection_view.dart';
@@ -521,7 +521,7 @@ class RouteConfig {
   //送货单列表
   static Routes deliveryOrder = Routes(
     '/delivery_order',
-    203,
+    204,
     const DeliveryOrderPage(),
   );
 
@@ -665,11 +665,11 @@ class RouteConfig {
     const MaterialLabelScanPage(),
   );
 
-  //部件生产派工
-  static Routes partProductionDispatch = Routes(
-    '/part_production_dispatch',
+  //部件派工标签管理
+  static Routes partDispatchLabelManage = Routes(
+    '/part_dispatch_label_manage',
     200,
-    const PartProductionDispatchPage(),
+    const PartDispatchLabelManagePage(),
   );
 
   //本地功能入口列表
@@ -755,7 +755,7 @@ class RouteConfig {
     sapLabelReprint,
     printPallet,
     materialLabelScan,
-    partProductionDispatch,
+    partDispatchLabelManage,
   ];
 
   static List<GetPage> appRoutes = [
@@ -1097,8 +1097,8 @@ class RouteConfig {
       page: () => materialLabelScan.page,
     ),
     GetPage(
-      name: partProductionDispatch.name,
-      page: () => partProductionDispatch.page,
+      name: partDispatchLabelManage.name,
+      page: () => partDispatchLabelManage.page,
     ),
   ];
 }

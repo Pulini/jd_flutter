@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +12,6 @@ import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/picker/picker_controller.dart';
 import 'package:jd_flutter/widget/picker/picker_view.dart';
-import 'package:jd_flutter/widget/signature_page.dart';
 
 void stockInDialog({
   required String workerCenterId,
@@ -145,7 +142,7 @@ void stockInDialog({
 
     if (leaderEnable.value) {
       var leader = leaderList[leaderController.selectedItem];
-      if (submitList[0].isScanPieces?.isEmpty == true && hasFrontCamera()) {
+      if(hasFrontCamera()){
         livenFaceVerification(
           faceUrl: userInfo?.picUrl ?? '',
           verifySuccess: (pickerB64) => livenFaceVerification(
@@ -164,31 +161,53 @@ void stockInDialog({
             ),
           ),
         );
-      } else {
-        Get.to(() => SignaturePage(
-              name: userInfo?.name ?? '',
-              callback: (pickerSignature) {
-                Get.to(
-                  () => SignaturePage(
-                      name: leader.liableEmpName ?? '',
-                      callback: (leaderSignature) => _stockInDeliveryOrder(
-                            workerCenterId: workerCenterId,
-                            stockID: warehouseController.selectedId.value,
-                            postDate: postDate.getDateFormatSapYMD(),
-                            pickerNumber: userInfo?.number,
-                            location: location,
-                            pickerB64: base64Encode(
-                                pickerSignature.buffer.asUint8List()),
-                            leaderNumber: leader.liableEmpCode ?? '',
-                            leaderB64: base64Encode(
-                                leaderSignature.buffer.asUint8List()),
-                            data: submitList,
-                            success: stockInSuccess,
-                          )),
-                );
-              },
-            ));
+      }else{
+        errorDialog(content: '当前设备没有前置摄像头。无法进行人脸识别！');
       }
+      // if (submitList[0].isScanPieces?.isEmpty == true && hasFrontCamera()) {
+      //   livenFaceVerification(
+      //     faceUrl: userInfo?.picUrl ?? '',
+      //     verifySuccess: (pickerB64) => livenFaceVerification(
+      //       faceUrl: leader.liablePicturePath ?? '',
+      //       verifySuccess: (leaderB64) => _stockInDeliveryOrder(
+      //         workerCenterId: workerCenterId,
+      //         stockID: warehouseController.selectedId.value,
+      //         postDate: postDate.getDateFormatSapYMD(),
+      //         location: location,
+      //         pickerNumber: userInfo?.number,
+      //         pickerB64: pickerB64,
+      //         leaderNumber: leader.liableEmpCode ?? '',
+      //         leaderB64: leaderB64,
+      //         data: submitList,
+      //         success: stockInSuccess,
+      //       ),
+      //     ),
+      //   );
+      // } else {
+      //   Get.to(() => SignaturePage(
+      //         name: userInfo?.name ?? '',
+      //         callback: (pickerSignature) {
+      //           Get.to(
+      //             () => SignaturePage(
+      //                 name: leader.liableEmpName ?? '',
+      //                 callback: (leaderSignature) => _stockInDeliveryOrder(
+      //                       workerCenterId: workerCenterId,
+      //                       stockID: warehouseController.selectedId.value,
+      //                       postDate: postDate.getDateFormatSapYMD(),
+      //                       pickerNumber: userInfo?.number,
+      //                       location: location,
+      //                       pickerB64: base64Encode(
+      //                           pickerSignature.buffer.asUint8List()),
+      //                       leaderNumber: leader.liableEmpCode ?? '',
+      //                       leaderB64: base64Encode(
+      //                           leaderSignature.buffer.asUint8List()),
+      //                       data: submitList,
+      //                       success: stockInSuccess,
+      //                     )),
+      //           );
+      //         },
+      //       ));
+      // }
     } else {
       _stockInDeliveryOrder(
         workerCenterId: workerCenterId,
@@ -433,7 +452,7 @@ Future<void> _checkLeader({
   required LeaderInfo leader,
   required Function() refresh,
 }) async {
-  if (submitList[0].isScanPieces?.isEmpty == true &&  hasFrontCamera()) {
+  if(hasFrontCamera()){
     livenFaceVerification(
       faceUrl: userInfo?.picUrl ?? '',
       verifySuccess: (pickerB64) => livenFaceVerification(
@@ -454,32 +473,57 @@ Future<void> _checkLeader({
         ),
       ),
     );
-  } else {
-    Get.to(() => SignaturePage(
-          name: userInfo?.name ?? '',
-          callback: (pickerSignature) {
-            Get.to(
-              () => SignaturePage(
-                name: leader.liableEmpName ?? '',
-                callback: (leaderSignature) => _createTemporaryOder(
-                  pickerNumber: userInfo?.number ?? '',
-                  pickerB64: base64Encode(pickerSignature.buffer.asUint8List()),
-                  leaderNumber: leader.liableEmpCode ?? '',
-                  leaderB64: base64Encode(leaderSignature.buffer.asUint8List()),
-                  data: submitList,
-                  success: (msg) => successDialog(
-                    content: msg,
-                    back: () {
-                      Get.back();
-                      refresh.call();
-                    },
-                  ),
-                ),
-              ),
-            );
-          },
-        ));
+  }else{
+    errorDialog(content: '当前设备没有前置摄像头。无法进行人脸识别！');
   }
+  //  2026年1月23日，张幸民：所有单据都必须使用人脸识别。
+  // if (submitList[0].isScanPieces?.isEmpty == true &&  hasFrontCamera()) {
+  //   livenFaceVerification(
+  //     faceUrl: userInfo?.picUrl ?? '',
+  //     verifySuccess: (pickerB64) => livenFaceVerification(
+  //       faceUrl: leader.liablePicturePath ?? '',
+  //       verifySuccess: (leaderB64) => _createTemporaryOder(
+  //         pickerNumber: userInfo?.number ?? '',
+  //         pickerB64: pickerB64,
+  //         leaderNumber: leader.liableEmpCode ?? '',
+  //         leaderB64: leaderB64,
+  //         data: submitList,
+  //         success: (msg) => successDialog(
+  //           content: msg,
+  //           back: () {
+  //             Get.back();
+  //             refresh.call();
+  //           },
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // } else {
+  //   Get.to(() => SignaturePage(
+  //         name: userInfo?.name ?? '',
+  //         callback: (pickerSignature) {
+  //           Get.to(
+  //             () => SignaturePage(
+  //               name: leader.liableEmpName ?? '',
+  //               callback: (leaderSignature) => _createTemporaryOder(
+  //                 pickerNumber: userInfo?.number ?? '',
+  //                 pickerB64: base64Encode(pickerSignature.buffer.asUint8List()),
+  //                 leaderNumber: leader.liableEmpCode ?? '',
+  //                 leaderB64: base64Encode(leaderSignature.buffer.asUint8List()),
+  //                 data: submitList,
+  //                 success: (msg) => successDialog(
+  //                   content: msg,
+  //                   back: () {
+  //                     Get.back();
+  //                     refresh.call();
+  //                   },
+  //                 ),
+  //               ),
+  //             ),
+  //           );
+  //         },
+  //       ));
+  // }
 }
 
 void _checkFaceInfo({
