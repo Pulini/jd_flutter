@@ -74,7 +74,7 @@ class MaterialLabelScanState {
         // 按物料分组
         var groupedByMaterial = <String, List<Items>>{};
         for (var item in dataDetail.items!) {
-          String materialKey = item.materialID.toString();
+          String materialKey = '${item.materialID},${item.productID}';
           if (!groupedByMaterial.containsKey(materialKey)) {
             groupedByMaterial[materialKey] = [];
           }
