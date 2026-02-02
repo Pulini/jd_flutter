@@ -32,14 +32,14 @@ class _PartProductionDispatchPageState
   //日期选择器的控制器
   var dpcStartDate = DatePickerController(
     PickerType.startDate,
-    saveKey:
-        '${RouteConfig.partProductionDispatch.name}${PickerType.startDate}',
+    // saveKey:
+    //     '${RouteConfig.partProductionDispatch.name}${PickerType.startDate}',
   );
 
   //日期选择器的控制器
   var dpcEndDate = DatePickerController(
     PickerType.endDate,
-    saveKey: '${RouteConfig.partProductionDispatch.name}${PickerType.endDate}',
+    // saveKey: '${RouteConfig.partProductionDispatch.name}${PickerType.endDate}',
   );
 
   var tecInstruction = TextEditingController();
