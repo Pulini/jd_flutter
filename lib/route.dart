@@ -44,7 +44,8 @@ import 'package:jd_flutter/fun/warehouse/in/suppliers_scan_store/suppliers_scan_
 import 'package:jd_flutter/fun/warehouse/in/temporary_order/temporary_order_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/carton_label_scan/carton_label_scan_progress_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/carton_label_scan/carton_label_scan_view.dart';
-// import 'package:jd_flutter/fun/warehouse/manage/part_dispatch_label_manage/part_dispatch_label_manage_view.dart';
+import 'package:jd_flutter/fun/warehouse/manage/part_dispatch_label_manage/pack_order_list/pack_order_list_view.dart';
+import 'package:jd_flutter/fun/warehouse/manage/part_dispatch_label_manage/part_dispatch_order_list/part_dispatch_order_list_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/patrol_inspection/patrol_inspection_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/print_pallet/print_pallet_view.dart';
 import 'package:jd_flutter/fun/warehouse/manage/quality_inspection/quality_inspection_view.dart';
@@ -665,12 +666,19 @@ class RouteConfig {
     const MaterialLabelScanPage(),
   );
 
-  // //部件派工标签管理
-  // static Routes partDispatchLabelManage = Routes(
-  //   '/part_dispatch_label_manage',
-  //   200,
-  //   const PartDispatchLabelManagePage(),
-  // );
+  //部件派工标签管理
+  static Routes partDispatchLabelManage = Routes(
+    '/part_dispatch_label_manage',
+    200,
+    const PartDispatchLabelManagePage(),
+  );
+
+  //包装清单列表
+  static Routes packOrderList = Routes(
+    '/pack_order_list',
+    200,
+    const PackOrderListPage(),
+  );
 
   //本地功能入口列表
   static List<Routes> routeList = [
@@ -755,7 +763,8 @@ class RouteConfig {
     sapLabelReprint,
     printPallet,
     materialLabelScan,
-    // partDispatchLabelManage,
+    partDispatchLabelManage,
+    packOrderList,
   ];
 
   static List<GetPage> appRoutes = [
@@ -1096,10 +1105,14 @@ class RouteConfig {
       name: materialLabelScan.name,
       page: () => materialLabelScan.page,
     ),
-    // GetPage(
-    //   name: partDispatchLabelManage.name,
-    //   page: () => partDispatchLabelManage.page,
-    // ),
+    GetPage(
+      name: partDispatchLabelManage.name,
+      page: () => partDispatchLabelManage.page,
+    ),
+    GetPage(
+      name: packOrderList.name,
+      page: () => packOrderList.page,
+    ),
   ];
 }
 

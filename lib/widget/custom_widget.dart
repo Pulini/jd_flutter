@@ -502,10 +502,12 @@ Widget expandedTextSpan({
   bool isBold = true,
   int maxLines = 1,
   int flex = 1,
+  TextAlign align = TextAlign.start,
 }) {
   return Expanded(
       flex: flex,
       child: Text.rich(
+        textAlign: align,
         maxLines: maxLines,
         overflow: TextOverflow.ellipsis,
         TextSpan(
@@ -646,6 +648,7 @@ Widget expandedFrameText({
   Color? backgroundColor,
   Color? textColor,
   int? flex,
+  int? lineHeight,
   EdgeInsetsGeometry? padding,
   AlignmentGeometry? alignment,
   bool isBold = false,
@@ -653,7 +656,7 @@ Widget expandedFrameText({
   int? maxLines = 1,
 }) {
   var widget = Container(
-    height: (maxLines! * 35).toDouble(),
+    height: (maxLines! * (lineHeight??35)).toDouble(),
     padding: padding ?? const EdgeInsets.all(5),
     decoration: BoxDecoration(
       border: Border.all(color: borderColor ?? Colors.grey),

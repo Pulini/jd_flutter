@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/utils/utils.dart';
 
-
 //选择器
 class SwitchButton extends StatefulWidget {
   final Function(bool isChecked) onChanged;
@@ -70,13 +69,13 @@ class _SwitchButtonState extends State<SwitchButton> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Expanded(flex: 3, child: Text(
+          Text(
             widget.name,
             style: const TextStyle(color: Colors.black),
-          )),
-          Expanded(flex: 2,child: Switch(
+          ),
+          Switch(
             thumbIcon: WidgetStateProperty.resolveWith<Icon>(
-                  (Set<WidgetState> states) {
+              (Set<WidgetState> states) {
                 if (states.contains(WidgetState.selected)) {
                   return const Icon(Icons.check);
                 }
@@ -84,8 +83,8 @@ class _SwitchButtonState extends State<SwitchButton> {
               },
             ),
             value: isChecked,
-            onChanged: _select,
-          ),)
+            onChanged: widget.isEnabled == true ? _select : null,
+          ),
         ],
       ),
     );

@@ -410,6 +410,7 @@ void createDeliveryTaskDialog({
                       hint: 'smart_delivery_dialog_task_endpoint'.tr,
                     ),
                     SwitchButton(
+                      value: isScheduling,
                       onChanged: (v) => isScheduling = v,
                       name: 'smart_delivery_dialog_start_delivery'.tr,
                     ),

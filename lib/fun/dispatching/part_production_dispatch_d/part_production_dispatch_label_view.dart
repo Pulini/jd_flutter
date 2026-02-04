@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/part_production_dispatch_info.dart';
-import 'package:jd_flutter/fun/dispatching/part_production_dispatch/part_production_dispatch_logic.dart';
-import 'package:jd_flutter/fun/dispatching/part_production_dispatch/part_production_dispatch_state.dart';
+import 'package:jd_flutter/fun/dispatching/part_production_dispatch_d/part_production_dispatch_logic.dart';
+import 'package:jd_flutter/fun/dispatching/part_production_dispatch_d/part_production_dispatch_state.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/printer/print_util.dart';
+import 'package:jd_flutter/widget/check_box_widget.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
+import 'package:jd_flutter/widget/view_photo.dart';
 import 'package:rotated_corner_decoration/rotated_corner_decoration.dart';
 
 class PartProductionDispatchLabelPage extends StatefulWidget {
@@ -51,11 +53,11 @@ class _PartProductionDispatchLabelPageState
               borderRadius: const BorderRadius.all(Radius.circular(10)),
             ),
             foregroundDecoration: RotatedCornerDecoration.withColor(
-              color: label.isInStock==true ? Colors.orange : Colors.blue,
+              color: label.isInStock == true ? Colors.orange : Colors.blue,
               badgeCornerRadius: const Radius.circular(8),
               badgeSize: const Size(50, 50),
               textSpan: TextSpan(
-                text: label.isInStock==true ? '已入库' : '未入库',
+                text: label.isInStock == true ? '已入库' : '未入库',
                 style: const TextStyle(fontSize: 14, color: Colors.white),
               ),
             ),
@@ -91,24 +93,27 @@ class _PartProductionDispatchLabelPageState
                     ],
                   ),
                 ),
-                Container(
-                  margin: EdgeInsetsGeometry.only(left: 10, right: 10),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.blue, width: 2),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: AspectRatio(
-                    aspectRatio: 2 / 1,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: Image.network(
-                        label.pictureUrl ?? '',
-                        fit: BoxFit.cover,
-                        cacheHeight: 200,
-                        cacheWidth: 100,
-                        errorBuilder: (ctx, err, st) => Image.asset(
-                          'assets/images/ic_logo.png',
-                          color: Colors.blue,
+                GestureDetector(
+                  onTap: ()=>Get.to(()=>ViewNetPhoto(photos: label.photoList)),
+                  child: Container(
+                    margin: EdgeInsetsGeometry.only(left: 10, right: 10),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.blue, width: 2),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: AspectRatio(
+                      aspectRatio: 2 / 1,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Image.network(
+                          label.photoList.first,
+                          fit: BoxFit.cover,
+                          cacheHeight: 200,
+                          cacheWidth: 100,
+                          errorBuilder: (ctx, err, st) => Image.asset(
+                            'assets/images/ic_logo.png',
+                            color: Colors.blue,
+                          ),
                         ),
                       ),
                     ),
@@ -131,6 +136,7 @@ class _PartProductionDispatchLabelPageState
                 children: [
                   CombinationButton(
                     text: '删除贴标',
+                    combination: Combination.left,
                     click: () => askDialog(
                       content: '确定要删除贴标吗？',
                       confirm: () => logic.deleteLabels(),
@@ -138,9 +144,10 @@ class _PartProductionDispatchLabelPageState
                   ),
                   CombinationButton(
                     text: '打印贴标',
+                    combination: Combination.right,
                     click: () => printSetDialog(
-                      print: () => pu.printLabelList(
-                        labelList: logic.getLabelListData(),
+                      print: () async => pu.printLabelList(
+                        labelList: await logic.getLabelListData(),
                         start: () => loadingShow('正在下发标签...'),
                         progress: (i, j) => loadingShow('正在下发标签($i/$j)'),
                         finished: (s, f) => successDialog(
@@ -152,13 +159,24 @@ class _PartProductionDispatchLabelPageState
                   ),
                 ],
               )
-            : Container())
+            : Container()),
+        Obx(() => state.labelList.isNotEmpty
+            ? CheckBox(
+                onChanged: (c) {
+                  for (var v in state.labelList) {
+                    v.isSelected.value = c;
+                  }
+                },
+                name: '全选',
+                value: state.labelList.every((v) => v.isSelected.value),
+              )
+            : Container()),
       ],
-      body: ListView.builder(
-        padding: EdgeInsetsGeometry.only(left: 10, right: 10, bottom: 10),
-        itemCount: state.labelList.length,
-        itemBuilder: (c, i) => _item(state.labelList[i]),
-      ),
+      body: Obx(() => ListView.builder(
+            padding: EdgeInsetsGeometry.only(left: 10, right: 10, bottom: 10),
+            itemCount: state.labelList.length,
+            itemBuilder: (c, i) => _item(state.labelList[i]),
+          )),
     );
   }
 }

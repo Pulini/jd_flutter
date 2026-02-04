@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/part_production_dispatch_info.dart';
-import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
@@ -33,7 +32,7 @@ class _PartProductionDispatchPageState
   var dpcStartDate = DatePickerController(
     PickerType.startDate,
     // saveKey:
-    //     '${RouteConfig.partProductionDispatch.name}${PickerType.startDate}',
+    // '${RouteConfig.partProductionDispatch.name}${PickerType.startDate}',
   );
 
   //日期选择器的控制器
@@ -83,8 +82,8 @@ class _PartProductionDispatchPageState
                 gradient: LinearGradient(
                   colors: [
                     data.isSelected.value
-                        ? Colors.green.shade50
-                        : Colors.blue.shade50,
+                        ? Colors.green.shade100
+                        : Colors.blue.shade100,
                     Colors.white
                   ],
                   begin: Alignment.topCenter,
@@ -221,10 +220,7 @@ class _PartProductionDispatchPageState
   Widget build(BuildContext context) {
     return pageBodyWithDrawer(
       queryWidgets: [
-        EditText(
-          hint: '计划跟踪单号、指令、型体',
-          controller: tecInstruction,
-        ),
+        EditText(hint: '型体', controller: tecInstruction),
         DatePicker(pickerController: dpcStartDate),
         DatePicker(pickerController: dpcEndDate),
         Obx(() => SwitchButton(
@@ -250,18 +246,14 @@ class _PartProductionDispatchPageState
                           child: CombinationButton(
                             text: '创建标签',
                             combination: Combination.left,
-                            click: () => logic.toDetail(
-                              refresh: () => _query(),
-                            ),
+                            click: () => logic.toDetail(() => _query()),
                           ),
                         ),
                         Expanded(
                           child: CombinationButton(
                             text: '打印标签',
                             combination: Combination.right,
-                            click: () => logic.queryLabelList(
-                              refresh: () => _query(),
-                            ),
+                            click: () => logic.queryLabelList(() => _query()),
                           ),
                         ),
                       ],

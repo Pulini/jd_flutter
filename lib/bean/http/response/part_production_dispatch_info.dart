@@ -118,20 +118,21 @@ class PartProductionDispatchOrderDetailInfo {
 
   factory PartProductionDispatchOrderDetailInfo.fromJson(dynamic json) {
     return PartProductionDispatchOrderDetailInfo(
-        isGenerateMaxLabelCount: json['IsGenerateMaxLabelCount'],
-        labelCount: json['LabelCount'],
-        workCardNo: json['WorkCardNo'],
-        productID: json['ProductID'],
-        productName: json['ProductName'],
-        instruction: json['MtoNo'],
-        materialNumber: json['MaterialNumber'],
-        materialName: json['MaterialName'],
-        capacityQty: json['CapacityQty'].toString().toDoubleTry(),
-        sizeList: [
-          if (json['SizeList'] != null)
-            for (var item in json['SizeList'])
-              PartProductionDispatchOrderDetailSizeInfo.fromJson(item)
-        ]);
+      isGenerateMaxLabelCount: json['IsGenerateMaxLabelCount'],
+      labelCount: json['LabelCount'],
+      workCardNo: json['WorkCardNo'],
+      productID: json['ProductID'],
+      productName: json['ProductName'],
+      instruction: json['MtoNo'],
+      materialNumber: json['MaterialNumber'],
+      materialName: json['MaterialName'],
+      capacityQty: json['CapacityQty'].toString().toDoubleTry(),
+      sizeList: [
+        if (json['SizeList'] != null)
+          for (var item in json['SizeList'])
+            PartProductionDispatchOrderDetailSizeInfo.fromJson(item)
+      ],
+    );
   }
 }
 
@@ -147,10 +148,6 @@ class PartProductionDispatchOrderDetailInfo {
 // "CompletedQty": 100.0,
 // "RemainingQty": 0.0
 class PartProductionDispatchOrderDetailSizeInfo {
-  RxBool isSelected = false.obs;
-  RxBool isShow = true.obs;
-  RxDouble qty = 0.0.obs;
-
   int? workCardEntryFID;
   int? workCardID;
   String? workCardNo;
@@ -193,6 +190,27 @@ class PartProductionDispatchOrderDetailSizeInfo {
     );
   }
 }
+
+class CreateLabelInfo {
+  RxBool isSelected = false.obs;
+  RxBool isShow = false.obs;
+  RxDouble qty = 0.0.obs;
+  RxInt createCount = 0.obs;
+  List<PartProductionDispatchOrderDetailSizeInfo> partList = [];
+
+  int canCreateCount() => remainingQty().div(qty.value).ceil();
+
+  String size() => partList.first.size ?? '';
+
+  String instruction() => partList.first.instruction ?? '';
+
+  double dispatchedQty() => partList.first.dispatchedQty ?? 0;
+
+  double completedQty() => partList.first.completedQty ?? 0;
+
+  double remainingQty() => partList.first.remainingQty ?? 0;
+}
+
 // {
 //   "ProductName": "PNS26312586-01",
 //   "LargeCardNo": "",
@@ -255,93 +273,96 @@ class PartProductionDispatchOrderDetailSizeInfo {
 // },
 
 class PartProductionDispatchLabelInfo {
-  RxBool isSelected = false.obs;
   bool? isInStock;
-  String? pictureUrl;
   String? typeBody;
-  String? processName;
   String? barCode;
-  String? unitName;
+  String? orderNo;
+  String? fetchDate;
+  String? deptName;
   List<PartProductionDispatchLabelPartInfo>? partList;
+
+  RxBool isSelected = false.obs;
+  String unitName = '';
+  List<String> photoList = [];
+  List<PartProductionDispatchLabelInstructionInfo> instructionList = [];
 
   PartProductionDispatchLabelInfo({
     this.isInStock,
-    this.pictureUrl,
     this.typeBody,
     this.barCode,
-    this.unitName,
+    this.orderNo,
+    this.fetchDate,
+    this.deptName,
     this.partList,
   });
 
   factory PartProductionDispatchLabelInfo.fromJson(dynamic json) {
-    return PartProductionDispatchLabelInfo(
-        isInStock: json['IsInStock'],
-        pictureUrl: json['PictureUrl'],
-        typeBody: json['ProductName'],
-        barCode: json['LargeCardNo'],
-        unitName: json['UnitName'],
-        partList: [
-          if (json['MaterialList'] != null)
-            for (var item in json['MaterialList'])
-              PartProductionDispatchLabelPartInfo.fromJson(item)
-        ]);
+    var partList = <PartProductionDispatchLabelPartInfo>[
+      if (json['MaterialList'] != null)
+        for (var item in json['MaterialList'])
+          PartProductionDispatchLabelPartInfo.fromJson(item)
+    ];
+    var instructionList = <PartProductionDispatchLabelInstructionInfo>[];
+    groupBy([for (var v in partList) ...v.instruction!], (v) => v.instruction)
+        .forEach((k, v) {
+      instructionList.add(v.first);
+    });
+    var label = PartProductionDispatchLabelInfo(
+      isInStock: json['IsInStock'],
+      typeBody: json['ProductName'],
+      barCode: json['LargeCardNo'],
+      orderNo: json['OrderNo'],
+      fetchDate: json['FetchDate'],
+      deptName: json['DeptName'],
+      partList: partList,
+    )
+      ..unitName = partList.first.unitName ?? ''
+      ..photoList = partList.map((v) => v.pictureUrl ?? '').toList()
+      ..instructionList = instructionList;
+
+    return label;
   }
 
   String getPartList() => [for (var v in partList!) v.partName ?? ''].join('、');
 
-  String getInstructionList() => [
-        for (var v in partList!)
-          for (var v2 in v.instruction!) v2.instruction ?? ''
-      ].join('、');
+  String getInstructionList() =>
+      [for (var v in instructionList) v.instruction ?? ''].join('、');
 
   String getSizeList() => getTotalSizeList()
       .map((v) => '${v.size}/${v.qty.toShowString()}')
       .join(';');
 
   double getTotalQty() =>
-      partList!.map((v) => v.getTotalQty()).reduce((a, b) => a.add(b));
+      getTotalSizeList().map((v) => v.qty ?? 0).reduce((a, b) => a.add(b));
 
-  List<PartProductionDispatchLabelSizeInfo> getTotalSizeList() {
-    var totalSizeList = <PartProductionDispatchLabelSizeInfo>[];
-    var sizeList = <PartProductionDispatchLabelSizeInfo>[];
-    for (var v1 in partList!) {
-      for (var v2 in v1.instruction!) {
-        sizeList.addAll(v2.sizeList!);
-      }
-    }
-    groupBy(sizeList, (v) => v.size ?? '').forEach((k, v) {
-      totalSizeList.add(
-        PartProductionDispatchLabelSizeInfo(
-          size: k,
-          qty: v.map((v2) => v2.qty ?? 0.0).reduce((a, b) => a.add(b)),
-        ),
-      );
-    });
-    return totalSizeList;
-  }
+  List<PartProductionDispatchLabelSizeInfo> getTotalSizeList() =>
+      [for (var v in instructionList) ...v.sizeList!];
 }
 
 class PartProductionDispatchLabelPartInfo {
   String? partName;
+  String? pictureUrl;
+  String? unitName;
   List<PartProductionDispatchLabelInstructionInfo>? instruction;
 
   PartProductionDispatchLabelPartInfo({
     this.partName,
+    this.pictureUrl,
     this.instruction,
+    this.unitName,
   });
 
   factory PartProductionDispatchLabelPartInfo.fromJson(dynamic json) {
     return PartProductionDispatchLabelPartInfo(
         partName: json['MaterialName'],
+        pictureUrl: json['PictureUrl'],
+        unitName: json['UnitName'],
         instruction: [
           if (json['MtoNoList'] != null)
             for (var item in json['MtoNoList'])
               PartProductionDispatchLabelInstructionInfo.fromJson(item)
         ]);
   }
-
-  double getTotalQty() =>
-      instruction!.map((v) => v.getTotalQty()).reduce((a, b) => a.add(b));
 }
 
 class PartProductionDispatchLabelInstructionInfo {
@@ -362,9 +383,6 @@ class PartProductionDispatchLabelInstructionInfo {
               PartProductionDispatchLabelSizeInfo.fromJson(item)
         ]);
   }
-
-  double getTotalQty() =>
-      sizeList!.map((v) => v.qty ?? 0).reduce((a, b) => a.add(b));
 }
 
 class PartProductionDispatchLabelSizeInfo {

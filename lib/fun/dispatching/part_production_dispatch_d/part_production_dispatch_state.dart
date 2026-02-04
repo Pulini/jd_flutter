@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/part_production_dispatch_info.dart';
+import 'package:jd_flutter/bean/http/response/worker_info.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 
@@ -7,8 +8,18 @@ class PartProductionDispatchState {
   var isSelectedClosed = false.obs;
   var orderList = <PartProductionDispatchOrderInfo>[].obs;
   PartProductionDispatchOrderDetailInfo? detailInfo;
-  List<List> instructionList = [];
-  var sizeList = <PartProductionDispatchOrderDetailSizeInfo>[].obs;
+  var instructionList = <String>[].obs;
+  var instructionSelect = 0.obs;
+  var sizeList = <CreateLabelInfo>[].obs;
+  var isSingleInstruction = true.obs;
+  var isSingleSize = true.obs;
+  var checkSizeQty = true.obs;
+  var createLastLabel = false.obs;
+  WorkerInfo? worker;
+  var createCount = 0.obs;
+  var createCountMax = 0.obs;
+  var errorMsg = ''.obs;
+  var workerName = ''.obs;
   var created = false.obs;
   var labelList = <PartProductionDispatchLabelInfo>[].obs;
   var deleted = false.obs;
@@ -69,6 +80,34 @@ class PartProductionDispatchState {
     });
   }
 
+  void createLabel({
+    required int count,
+    required List<Map> sizeMapList,
+    required Function(String) success,
+    required Function(String) error,
+  }) {
+
+    httpPost(
+      method: webApiCreatePartProductionDispatchLabels,
+      loading: '正在创建贴标...',
+      body: {
+        'EmpID': worker!.empID,
+        'CreateCount': count,
+        'SeOrderType': isSingleInstruction.value ? '1' : '2',
+        'PackageType': isSingleSize.value ? '478' : '479',
+        'IsCreateTailLabel': createLastLabel.value,
+        'SizeList': sizeMapList,
+      },
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        created.value = true;
+        success.call(response.message ?? '');
+      } else {
+        error.call(response.message ?? '');
+      }
+    });
+  }
+
   void getPartProductionDispatchLabelList({
     required List<int> orders,
     required Function() success,
@@ -91,6 +130,7 @@ class PartProductionDispatchState {
       }
     });
   }
+
   void deleteLabelList({
     required List<String> labelList,
     required Function(String msg) success,
@@ -102,6 +142,8 @@ class PartProductionDispatchState {
       body: {'CardNos': labelList},
     ).then((response) {
       if (response.resultCode == resultSuccess) {
+        deleted.value = true;
+
         success.call(response.message ?? '');
       } else {
         error.call(response.message ?? '');
