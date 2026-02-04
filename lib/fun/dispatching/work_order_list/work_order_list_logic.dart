@@ -41,7 +41,7 @@ class WorkOrderListLogic extends GetxController {
         var names = <String>[];
         var name = '';
         for (var data in selected) {
-          names.add(data.partName ?? '');
+          names.add(data.partNameData);
         }
         name = names.join('work_order_list_and'.tr);
         askDialog(
