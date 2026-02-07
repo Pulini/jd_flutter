@@ -1,3 +1,6 @@
+import 'package:collection/collection.dart';
+import 'package:get/get.dart';
+
 //{
 //   "InterID": 68154,
 //   "Date": "2026-02-02",
@@ -9,8 +12,6 @@
 //   "ProcessName": "面部裁断2",
 //   "UserName": "系统"
 // }
-import 'package:jd_flutter/utils/utils.dart';
-
 class PackOrderInfo {
   int? packageId;
   String? date;
@@ -64,6 +65,8 @@ class PackOrderInfo {
 // "IsOutStock": false,
 // "MaterialList": []
 class PartLabelInfo {
+  RxBool isSelected = false.obs;
+
   int? interID;
   String? productName;
   String? largeCardNo;
@@ -74,10 +77,17 @@ class PartLabelInfo {
   int? sumQty;
   String? packageType;
   String? packageUnitName;
+  int? pieceNo;
   bool? isPrint;
   bool? isInStock;
   bool? isOutStock;
   List<PartLabelMaterialInfo>? materialList;
+
+  List<String> partList = [];
+  List<PartLabelInstructionInfo> instructionList = [];
+  List<PartLabelSizeInfo> sizeList = [];
+  List<String> pictureUrlList = [];
+  List<String> pictureThumbnailUrlList = [];
 
   PartLabelInfo({
     this.interID,
@@ -90,11 +100,35 @@ class PartLabelInfo {
     this.sumQty,
     this.packageType,
     this.packageUnitName,
+    this.pieceNo,
     this.isPrint,
     this.isInStock,
     this.isOutStock,
     this.materialList,
-  });
+  }) {
+    partList = materialList!.map((v) => v.materialName ?? '').toSet().toList();
+    instructionList = materialList!
+        .expand((material) => material.instructionList!)
+        .toSet()
+        .toList();
+    sizeList = groupBy(
+            materialList!
+                .expand((m) => m.instructionList!)
+                .expand((i) => i.sizeList!),
+            (v) => v.size ?? '')
+        .values
+        .map((v) => PartLabelSizeInfo(
+              size: v.first.size ?? '',
+              auxQty: v.map((v2) => v2.auxQty ?? 0).reduce((a, b) => a + b),
+            ))
+        .toList();
+    pictureUrlList = materialList!
+        .map((v) =>  v.pictureUrl ?? '')
+        .toList();
+    pictureThumbnailUrlList = materialList!
+        .map((v) =>  v.pictureThumbnailUrl ?? '')
+        .toList();
+  }
 
   factory PartLabelInfo.fromJson(dynamic json) {
     return PartLabelInfo(
@@ -108,6 +142,7 @@ class PartLabelInfo {
       sumQty: json['SumQty'],
       packageType: json['PackageType'],
       packageUnitName: json['PackageUnitName'],
+      pieceNo: json['PieceNo'],
       isPrint: json['IsPrint'],
       isInStock: json['IsInStock'],
       isOutStock: json['IsOutStock'],
@@ -119,28 +154,11 @@ class PartLabelInfo {
     );
   }
 
-  List<String> getPartList() =>
-      materialList!.map((v) => v.materialName ?? '').toSet().toList();
+  String getPartsName() => partList.join(',');
 
-  List<String> getInstructionList() => materialList!
-      .expand((material) => material.instructionList!)
-      .map((instruction) => instruction.instruction ?? '')
-      .toSet()
-      .toList();
+  String getSize() => sizeList.map((v) => '${v.size}/${v.auxQty}').join(',');
 
-  List<String> getSizeList() {
-    var list = <String>[];
-    var map=<String, int>{};
-    for (var v in materialList!) {
-      for (var v2 in v.instructionList!) {
-        for (var v3 in v2.sizeList!) {
-          map[v3.size!]=(map[v3.size]??0)+(v3.auxQty??0);
-        }
-      }
-    }
-    loggerF( map);
-    return list;
-  }
+  int totalQty() =>(sumQty!/partList.length).toInt();
 }
 
 //"MaterialName": "火腿内外加大版",
@@ -176,6 +194,11 @@ class PartLabelMaterialInfo {
       ],
     );
   }
+
+  int totalQty() => instructionList!
+      .map((v) =>
+          v.sizeList!.map((v2) => v2.auxQty ?? 0).reduce((a, b) => a + b))
+      .reduce((a, b) => a + b);
 }
 
 //"MtoNo": "JZ2500120",

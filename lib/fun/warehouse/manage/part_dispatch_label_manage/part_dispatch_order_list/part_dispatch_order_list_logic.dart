@@ -109,7 +109,7 @@ class PartDispatchLabelManageLogic extends GetxController {
               .map((v) => CreateLabelInfo(v))
               .toList(),
         );
-        state.isSingleSize = selectList.first.packTypeID == 479;
+        state.isSingleSize = selectList.first.packTypeID == 478;
         state.hasLastLabel = false;
         Get.to(() => PartDispatchOrderCreateLabelPage());
       },

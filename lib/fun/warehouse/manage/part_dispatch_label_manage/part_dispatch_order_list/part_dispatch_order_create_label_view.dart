@@ -43,31 +43,31 @@ class _PartDispatchOrderCreateLabelPageState
           child: Text('尺码'),
         ),
         expandedFrameText(
-          flex: 2,
+          flex: 3,
           lineHeight: 45,
           backgroundColor: Colors.purple.shade100,
           text: '派工数',
         ),
         expandedFrameText(
-          flex: 2,
+          flex: 3,
           lineHeight: 45,
           backgroundColor: Colors.purple.shade100,
           text: '配套数',
         ),
         expandedFrameText(
-          flex: 2,
+          flex: 3,
           lineHeight: 45,
           backgroundColor: Colors.purple.shade100,
           text: '已生成数',
         ),
         expandedFrameText(
-          flex: 2,
+          flex: 3,
           lineHeight: 45,
           backgroundColor: Colors.purple.shade100,
           text: '剩余数',
         ),
         Expanded(
-          flex: state.isSingleSize ? 3 : 2,
+          flex: state.isSingleSize ?6 : 4,
           child: Container(
             height: 45,
             decoration: BoxDecoration(
@@ -125,7 +125,7 @@ class _PartDispatchOrderCreateLabelPageState
         ),
         if (state.isSingleSize)
           Expanded(
-            flex: 3,
+            flex: 6,
             child: Container(
               height: 45,
               decoration: BoxDecoration(
@@ -211,27 +211,27 @@ class _PartDispatchOrderCreateLabelPageState
           child: Text(data.size()),
         ),
         expandedFrameText(
-          flex: 2,
+          flex: 3,
           backgroundColor: backgroundColor,
           text: data.dispatchedQty().toString(),
         ),
         expandedFrameText(
-          flex: 2,
+          flex: 3,
           backgroundColor: backgroundColor,
           text: data.kitQty().toString(),
         ),
         expandedFrameText(
-          flex: 2,
+          flex: 3,
           backgroundColor: backgroundColor,
           text: data.completedQty().toString(),
         ),
         expandedFrameText(
-          flex: 2,
+          flex: 3,
           backgroundColor: backgroundColor,
           text: data.remainingQty().toString(),
         ),
         Expanded(
-          flex: state.isSingleSize ? 3 : 2,
+          flex: state.isSingleSize ? 6 : 4,
           child: Container(
             height: 35,
             color: backgroundColor,
@@ -259,7 +259,7 @@ class _PartDispatchOrderCreateLabelPageState
         ),
         if (state.isSingleSize)
           Expanded(
-            flex: 3,
+            flex: 6,
             child: Container(
               height: 35,
               color: backgroundColor,
@@ -269,7 +269,7 @@ class _PartDispatchOrderCreateLabelPageState
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(0),
                   ),
-                  contentPadding: EdgeInsets.only(bottom: 3),
+                  contentPadding: EdgeInsets.only(bottom: 3)
                 ),
                 style: TextStyle(color: Colors.blue),
                 controller: countController,
@@ -328,33 +328,33 @@ class _PartDispatchOrderCreateLabelPageState
               child: Text('合计'),
             ),
             expandedFrameText(
-              flex: 2,
+              flex: 3,
               backgroundColor: backgroundColor,
               text: dispatchedQty.toString(),
             ),
             expandedFrameText(
-              flex: 2,
+              flex: 3,
               backgroundColor: backgroundColor,
               text: kitQty.toString(),
             ),
             expandedFrameText(
-              flex: 2,
+              flex: 3,
               backgroundColor: backgroundColor,
               text: completedQty.toString(),
             ),
             expandedFrameText(
-              flex: 2,
+              flex: 3,
               backgroundColor: backgroundColor,
               text: remainingQty.toString(),
             ),
             expandedFrameText(
-              flex: state.isSingleSize ? 3 : 2,
+              flex: state.isSingleSize ? 6 : 4,
               backgroundColor: backgroundColor,
               text: qty.toString(),
             ),
             if (state.isSingleSize)
               expandedFrameText(
-                flex: 3,
+                flex: 6,
                 backgroundColor: backgroundColor,
                 text: labelCount.toString(),
               ),

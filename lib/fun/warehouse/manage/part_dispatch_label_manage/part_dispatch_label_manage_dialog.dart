@@ -440,7 +440,7 @@ void _createLabel({
   required Function(String) success,
   required Function(String) error,
 }) {
-  var instructionList = <Map>[];
+  var instructionList = <int>[];
   var sizeList = <Map>[];
 
   for (var group in list) {
@@ -455,9 +455,7 @@ void _createLabel({
           'CreateCount': isSingleSize ? group.labelCount.value : count,
           'RemainingQty': item.remainingQty,
         });
-        instructionList.add({
-          'WorkCardEntryFID': item.workCardEntryFID,
-        });
+        instructionList.add(item.workCardEntryFID ?? 0);
       }
     } else {
       sizeList.add({
@@ -469,9 +467,7 @@ void _createLabel({
         'RemainingQty': 0,
       });
       for (var item in group.sizeList) {
-        instructionList.add({
-          'WorkCardEntryFID': item.workCardEntryFID,
-        });
+        instructionList.add(item.workCardEntryFID ?? 0);
       }
     }
   }
@@ -486,7 +482,9 @@ void _createLabel({
       'PackageType': isSingleSize ? 478 : 479,
       'BatchNo': batchNo,
       'IsCreateTailLabel': createLastLabel,
-      'SeOrderList': instructionList,
+      'SeOrderList': instructionList.isNotEmpty
+          ? instructionList.toSet().map((v) => {'WorkCardEntryFID': v}).toList()
+          : [],
       'SizeList': sizeList,
     },
   ).then((response) {

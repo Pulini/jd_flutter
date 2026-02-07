@@ -3,7 +3,9 @@ import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/pack_order_list_info.dart';
 import 'package:jd_flutter/fun/warehouse/manage/part_dispatch_label_manage/part_dispatch_label_list/part_dispatch_label_list_view.dart';
 import 'package:jd_flutter/route.dart';
+import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
+import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
 import 'package:jd_flutter/widget/picker/picker_controller.dart';
 import 'package:jd_flutter/widget/picker/picker_view.dart';
@@ -23,7 +25,8 @@ class _PackOrderListPageState extends State<PackOrderListPage> {
   final PackOrderListLogic logic = Get.put(PackOrderListLogic());
   final PackOrderListState state = Get.find<PackOrderListLogic>().state;
   var tecDispatchOrderNo = TextEditingController();
-  var tecTypeBody = TextEditingController(text: 'PNS26312586-01');
+  // var tecTypeBody = TextEditingController(text: 'PNS26312586-01');
+  var tecTypeBody = TextEditingController();
   var dpcStartDate = DatePickerController(
     PickerType.startDate,
     saveKey: '${RouteConfig.productionDispatch.name}${PickerType.startDate}',
@@ -58,9 +61,15 @@ class _PackOrderListPageState extends State<PackOrderListPage> {
             children: [
               Expanded(
                 child: GestureDetector(
-                  onTap: () => Get.to(() => PartDispatchLabelListPage(
-                        packOrderId: data.packageId??0,
-                      )),
+                  onTap: () {
+                    if (checkUserPermission('601080111')) {
+                      Get.to(() => PartDispatchLabelListPage(
+                            packOrderId: data.packageId ?? 0,
+                          ));
+                    }else{
+                      errorDialog(content: '没有贴标预览和打印权限！');
+                    }
+                  },
                   child: Padding(
                     padding: EdgeInsetsGeometry.all(5),
                     child: Column(
@@ -70,16 +79,17 @@ class _PackOrderListPageState extends State<PackOrderListPage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             expandedTextSpan(
-                              flex: 3,
+                              flex: 5,
                               hint: '组织：',
                               text: data.organizeName ?? '',
                             ),
                             expandedTextSpan(
-                              flex: 3,
+                              flex:5,
                               hint: '包装清单号：',
                               text: data.packageNo ?? '',
                             ),
                             expandedTextSpan(
+                              flex: 2,
                               hint: '制单日期：',
                               text: data.date ?? '',
                             ),
@@ -91,16 +101,17 @@ class _PackOrderListPageState extends State<PackOrderListPage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             expandedTextSpan(
-                              flex: 3,
+                              flex: 5,
                               hint: '型体：',
                               text: data.productName ?? '',
                             ),
                             expandedTextSpan(
-                              flex: 3,
+                              flex: 5,
                               hint: '制程：',
                               text: data.processName ?? '',
                             ),
                             expandedTextSpan(
+                              flex: 2,
                               hint: '制单人：',
                               text: data.userName ?? '',
                             ),

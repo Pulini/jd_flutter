@@ -148,31 +148,6 @@ class HomeLogic extends GetxController {
             v.description.toUpperCase().contains(state.search.toUpperCase())),
       );
     }
-
-    // list.add(
-    //   HomeButton(
-    //     name: '部件派工标签管理',
-    //     description: '部件生产派工标签创建与打印',
-    //     icon: 'https://geapp.goldemperor.com:8084/AppResourceFile/icon/2025-08-13-10-29-45.jpg',
-    //     classify: '',
-    //     id: 999,
-    //     version: 200,
-    //     route: '/part_dispatch_label_manage',
-    //     hasPermission: true,
-    //   ),
-    // );
-    // list.add(
-    //   HomeButton(
-    //     name: '包装清单列表',
-    //     description: '部件生产派工包装清单标签打印',
-    //     icon: 'https://geapp.goldemperor.com:8084/AppResourceFile/icon/2025-08-13-10-29-45.jpg',
-    //     classify: '',
-    //     id: 999,
-    //     version: 200,
-    //     route: '/pack_order_list',
-    //     hasPermission: true,
-    //   ),
-    // );
     state.buttons.value = list;
   }
 

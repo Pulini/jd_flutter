@@ -1530,4 +1530,7 @@ const webApiGetOrderPackageList = 'api/WorkCard/GetOrderPackageList';
 //获得包装清单中的标签列表
 const webApiGetLargeCardNoList = 'api/WorkCard/GetLargeCardNoList';
 
+//锁定或者解锁标签
+const webApiPackageLabelLockOrUnLock = 'api/WorkCard/PackageLabelLockOrUnLock';
+
 

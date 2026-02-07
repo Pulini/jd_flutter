@@ -46,7 +46,8 @@ class _PartDispatchLabelManagePageState
     saveKey: '${RouteConfig.partDispatchLabelManage.name}${PickerType.endDate}',
   );
 
-  var tecInstruction = TextEditingController(text: 'PNS26312586-01');
+  // var tecInstruction = TextEditingController(text: 'PNS26312586-01');
+  var tecInstruction = TextEditingController();
 
   void _query({String? code}) {
     logic.queryInstruction(
@@ -96,7 +97,7 @@ class _PartDispatchLabelManagePageState
               borderRadius: BorderRadius.circular(10),
               color: data.isSelected.value
                   ? Colors.blue.shade100
-                  : Colors.transparent,
+                  : Colors.grey.shade100,
             ),
             foregroundDecoration: RotatedCornerDecoration.withColor(
               color: data.packTypeID == 478
@@ -263,15 +264,15 @@ class _PartDispatchLabelManagePageState
                       )),
                 ),
                 SizedBox(width: 5),
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black, width: 2),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: AspectRatio(
-                    aspectRatio: 2 / 1,
+                AspectRatio(
+                  aspectRatio: 2 / 1,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.black, width: 2),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(7),
                       child: Obx(() => Swiper(
                             itemBuilder: (c, i) => _imageItem(i),
                             itemCount: state.productUrlList.length,
@@ -288,7 +289,7 @@ class _PartDispatchLabelManagePageState
                   itemCount: state.partList.length,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 6,
-                    childAspectRatio: 3 / 2,
+                    childAspectRatio: 7 / 5,
                   ),
                   itemBuilder: (c, i) => _partItem(state.partList[i]),
                 )),
