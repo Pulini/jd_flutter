@@ -12,18 +12,6 @@ import 'part_dispatch_order_list_state.dart';
 class PartDispatchLabelManageLogic extends GetxController {
   final PartDispatchLabelManageState state = PartDispatchLabelManageState();
 
-  @override
-  void onReady() {
-    // TODO: implement onReady
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    // TODO: implement onClose
-    super.onClose();
-  }
-
   void queryInstruction({
     String? code,
     String? productName,
