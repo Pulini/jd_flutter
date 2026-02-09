@@ -34,7 +34,8 @@ class _EditTextState extends State<EditText> {
   @override
   void initState() {
     super.initState();
-    _controller = widget.controller ?? TextEditingController(text: widget.initStr);
+    _controller =
+        widget.controller ?? TextEditingController(text: widget.initStr);
     if (widget.hasFocus) {
       _focusNode = FocusNode()..requestFocus();
     }
@@ -135,7 +136,8 @@ class _NumberDecimalEditTextState extends State<NumberDecimalEditText> {
   @override
   void initState() {
     super.initState();
-    _controller = widget.controller ?? TextEditingController(text: widget.initQty?.toShowString() ?? '');
+    _controller = widget.controller ??
+        TextEditingController(text: widget.initQty?.toShowString() ?? '');
     _controller.selection = TextSelection.fromPosition(
       TextPosition(offset: _controller.text.length),
     );
@@ -171,7 +173,7 @@ class _NumberDecimalEditTextState extends State<NumberDecimalEditText> {
         focusNode: _focusNode,
         controller: _controller,
         onChanged: (v) {
-          if (!v.endsWith('.')&&!v.hasTrailingZero()) {
+          if (!v.endsWith('.') && !v.hasTrailingZero()) {
             if (double.tryParse(v) != null && v.toDoubleTry() > widget.max!) {
               if (widget.controller != null) {
                 widget.controller!.text = widget.max.toShowString();
@@ -228,7 +230,8 @@ class _NumberDecimalEditTextState extends State<NumberDecimalEditText> {
                   onPressed: () {
                     widget.controller == null
                         ? _controller.text = widget.resetQty.toShowString()
-                        : widget.controller?.text = widget.resetQty.toShowString();
+                        : widget.controller?.text =
+                            widget.resetQty.toShowString();
                     widget.onChanged?.call(widget.resetQty);
                   },
                   icon: const Icon(
@@ -240,7 +243,9 @@ class _NumberDecimalEditTextState extends State<NumberDecimalEditText> {
           suffixIcon: IconButton(
             icon: const Icon(Icons.close, color: Colors.grey),
             onPressed: () {
-              widget.controller == null ? _controller.clear() : widget.controller?.clear();
+              widget.controller == null
+                  ? _controller.clear()
+                  : widget.controller?.clear();
               widget.onChanged?.call(0);
             },
           ),
@@ -248,7 +253,6 @@ class _NumberDecimalEditTextState extends State<NumberDecimalEditText> {
       ),
     );
   }
-
 }
 
 //数字输入框输入框
@@ -259,7 +263,7 @@ class NumberEditText extends StatefulWidget {
     this.hasFocus = false,
     this.showClean = true,
     this.onChanged,
-    this.initQty = 0,
+    this.initQty,
     this.controller,
   });
 
@@ -281,7 +285,9 @@ class _NumberEditTextState extends State<NumberEditText> {
   @override
   void initState() {
     super.initState();
-    _controller = widget.controller ?? TextEditingController(text: widget.initQty.toString());
+    _controller = widget.controller ??
+        TextEditingController(
+            text: widget.initQty == null ? '' : widget.initQty.toString());
     if (widget.hasFocus) {
       _focusNode = FocusNode()..requestFocus();
     }

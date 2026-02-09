@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/part_detail_info.dart';
@@ -6,7 +7,6 @@ import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 
 class WorkOrderListState {
-
   var dataList = <WorkOrderInfo>[].obs;
   var isOutsourcing = spGet('${Get.currentRoute}/isClosed') ?? false;
   var isClosed = spGet('${Get.currentRoute}/isClosed') ?? false;
@@ -14,7 +14,6 @@ class WorkOrderListState {
   var partList = <PartInfo>[].obs;
   PartDetailInfo? partDetail;
   var partDetailSizeList = <SizeInfo>[].obs;
-
 
   void query({
     required String pcStartDate,
@@ -60,9 +59,9 @@ class WorkOrderListState {
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        partList.value = [
-          for (var json in response.data) PartInfo.fromJson(json)
-        ];
+        partList.value = groupBy(
+            <PartInfo>[for (var json in response.data) PartInfo.fromJson(json)],
+            (v) => v.partNameData).values.map((v) => v.first).toList();
       } else {
         error.call(response.message ?? '');
       }

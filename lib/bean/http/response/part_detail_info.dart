@@ -267,14 +267,13 @@ class PartInfo {
 
   PartInfo.fromJson(dynamic json) {
     partName = json['PartName'];
-    if (json['LinkPartName'] != null) {
-      linkPartName = [];
-      json['LinkPartName'].forEach((v) {
-        linkPartName?.add(v);
-      });
-    }
+    linkPartName = [
+      if (json['LinkPartName'] != null)
+        for (var item in json['LinkPartName']) item
+    ];
+    partNameData=  linkPartName!.isEmpty?partName??'':linkPartName!.join(',');
   }
-
+  String partNameData='';
   String? partName;
   List<String>? linkPartName;
   bool select = false;

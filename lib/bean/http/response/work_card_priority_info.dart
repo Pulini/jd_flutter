@@ -20,7 +20,7 @@ class WorkCardPriorityInfo {
     this.productName,
     this.sONo,
     this.clientOrderNumber,
-    this.mapNumber,
+    this.mapNumber, 
     this.requireQty,
     this.undoneQty,
     this.index=0,

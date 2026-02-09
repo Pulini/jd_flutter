@@ -1515,4 +1515,22 @@ const webApiGetPartProductionDispatchLabelList = 'api/WorkCard/GetMergeWorkCardC
 //删除部件派工贴标
 const webApiDeletePartProductionDispatchLabels = 'api/WorkCard/DeleteWorkCardCardNo';
 
+//通过二维码获取型体名称
+const webApiGetProductNameByWorkCardNo = 'api/WorkCard/GetProductNameByWorkCardNo';
+
+//通过型体、派工日期起止获取获取指令单批次信息
+const webApiGetWorkCardMtoNoList = 'api/WorkCard/GetWorkCardMtoNoList';
+
+//通过选中的派工单分录自增长ID获取派工单列表
+const webApiGetPartWorkCardListNew = 'api/WorkCard/GetPartWorkCardListNew';
+
+//获得包装清单
+const webApiGetOrderPackageList = 'api/WorkCard/GetOrderPackageList';
+
+//获得包装清单中的标签列表
+const webApiGetLargeCardNoList = 'api/WorkCard/GetLargeCardNoList';
+
+//锁定或者解锁标签
+const webApiPackageLabelLockOrUnLock = 'api/WorkCard/PackageLabelLockOrUnLock';
+
 

@@ -127,6 +127,7 @@ extension StringExt on String? {
     }
   }
 
+  ///取出尾部.0
   bool hasTrailingZero() {
     if (isNullOrEmpty()) return false;
     if (this!.contains('.')) {

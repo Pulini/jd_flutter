@@ -189,6 +189,7 @@ class _DeliveryOrderLabelBindingPageState
   @override
   void initState() {
     state.canAddPiece.value = false;
+    state.palletNumber.value='';
     WidgetsBinding.instance.addPostFrameCallback((_) {
       logic.getLabelBindingStaging();
     });
