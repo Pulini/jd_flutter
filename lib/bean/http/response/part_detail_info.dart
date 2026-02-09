@@ -198,6 +198,7 @@ class MtonoInfo {
 
 class BarCodeInfo {
   BarCodeInfo({
+    this.partName,
     this.barCode,
     this.printTimes,
     this.size,
@@ -207,6 +208,7 @@ class BarCodeInfo {
   });
 
   BarCodeInfo.fromJson(dynamic json) {
+    partName = json['PartName'];
     barCode = json['BarCode'];
     printTimes = json['PrintTimes'];
     size = json['Size'];
@@ -220,6 +222,7 @@ class BarCodeInfo {
     }
   }
 
+  String? partName;
   String? barCode;
   int? printTimes;
   String? size;
@@ -230,6 +233,7 @@ class BarCodeInfo {
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
+    map['PartName'] = partName;
     map['BarCode'] = barCode;
     map['PrintTimes'] = printTimes;
     map['Size'] = size;

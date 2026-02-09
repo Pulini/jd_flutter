@@ -419,6 +419,16 @@ String getDateSapYMD({DateTime? time}) {
   return '$y$m$d';
 }
 
+String getDateYMDHM({DateTime? time}) {
+  DateTime now = time ?? DateTime.now();
+  var y = now.year.toString();
+  var m = now.month.toString().padLeft(2, '0');
+  var d = now.day.toString().padLeft(2, '0');
+  var h = now.hour.toString().padLeft(2, '0');
+  var min = now.minute.toString().padLeft(2, '0');
+  return '$y-$m-$d $h:$min';
+}
+
 Widget visitButtonWidget({
   required String title,
   required Function click,

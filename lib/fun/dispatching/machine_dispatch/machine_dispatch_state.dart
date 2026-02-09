@@ -241,7 +241,7 @@ class MachineDispatchState {
               unit: v2.unit ?? '',
               machine: historyInfo[index].machine ?? '',
               shift: historyInfo[index].shift ?? '',
-              dispatchNumber: nowDispatchNumber.value,
+              dispatchNumber: historyInfo[index].dispatchNumber?? '',
               decrementNumber: historyInfo[index].decrementNumber ?? '',
               isLastLabel: v2.isLastLabel,
               isEnglish: v2.type == '01',

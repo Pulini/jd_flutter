@@ -250,7 +250,9 @@ class _PartLabelPageState extends State<PartLabelPage> {
                   ),
                 ),
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                      logic.printLabel( list: data);
+                  },
                   child: Text(
                     'part_label_print'.tr,
                   ),
