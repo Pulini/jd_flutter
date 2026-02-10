@@ -198,6 +198,7 @@ class PropertyLogic extends GetxController {
             state.detail.liableEmpCode = p1.liableEmpCode;
             state.detail.deptID = p1.departmentID;
             state.detail.liableEmpID = p1.liableEmpID;
+            state.detail.keepEmpID = p1.empID;
             state.custodianName.value = p1.empName ?? '';
             setLiable(p1.liableEmpCode.toString(), success: (s) {
               success.call();

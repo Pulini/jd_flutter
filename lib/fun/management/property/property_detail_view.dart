@@ -250,6 +250,8 @@ class _PropertyDetailPageState extends State<PropertyDetailPage> {
                   data.liableEmpCode = '';
                   data.liableEmpID = -1;
                   data.liableEmpName = '';
+                  data.keepEmpID = -1;
+                  data.deptID = -1;
                   state.liableEmpName.value ='';
                 });
               }),
