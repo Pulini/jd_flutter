@@ -228,9 +228,8 @@ void showBillNoList(String data) {
 }
 
 void labelListDialog(
-  BuildContext context,
   MaterialDispatchInfo mdi, {
-  required Function(MaterialDispatchInfo, LabelInfo) printCallback,
+  required Function(LabelInfo) printCallback,
   required Function() refreshCallBack,
 }) {
   var labelList = <LabelInfo>[].obs;
@@ -281,7 +280,7 @@ void labelListDialog(
                                   width: 110,
                                   child: CombinationButton(
                                     text: 'material_dispatch_dialog_reprint'.tr,
-                                    click: () =>printCallback.call(mdi, data),
+                                    click: () =>printCallback.call( data),
                                     combination: Combination.left,
                                   ),
                                 ),

@@ -180,6 +180,7 @@ class PrintPalletLogic extends GetxController {
         printTask.add([
           createA4PaperMaterialListPdf(
             paperTitle: '金帝集团股份有限公司托盘清单',
+            supplierName: state.palletList[i].first.supplierName ?? '',
             factoryName: state.palletList[i].first.factoryName ?? '',
             orderType: state.palletList[i].first.orderType ?? '',
             customsDeclarationType:
@@ -190,9 +191,24 @@ class PrintPalletLogic extends GetxController {
           ),
           state.palletList[i].first.palletNumber ?? ''
         ]);
+/*
+          //预览
+          paperList=createA4PaperMaterialList(
+          paperTitle: '金帝集团股份有限公司托盘清单',
+          supplierName: state.palletList[i].first.supplierName ?? '',
+          factoryName: state.palletList[i].first.factoryName ?? '',
+          orderType: state.palletList[i].first.orderType ?? '',
+          customsDeclarationType:
+          state.palletList[i].first.customsDeclarationType ?? '',
+          palletNumber: state.palletList[i].first.palletNumber ?? '',
+          sizeMaterialTable: sizeMaterialTable,
+          materialTable: materialTable,
+        );
+*/
       }
     }
     Get.to(() => WebPrinter(palletTaskList: printTask));
+//预览    Get.to(() => PdfPrintReview(paperList: paperList));
   }
 
   void toPrintView(List<Widget> labelView) {

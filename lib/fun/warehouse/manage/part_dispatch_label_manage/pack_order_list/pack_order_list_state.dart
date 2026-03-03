@@ -41,7 +41,7 @@ class PackOrderListState {
     required Function(String msg) error,
   }) {
     httpPost(
-      method: webApiCleanLabel,
+      method: webApiCleanLabelFormPackID,
       loading: '正在删除包装清单...',
       params: {'InterID': id},
     ).then((response) {

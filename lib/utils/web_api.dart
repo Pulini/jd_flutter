@@ -563,8 +563,11 @@ const webApiCreateCustomLargeLabel =
 const webApiCreateCustomSizeLabel =
     'api/CompoundDispatching/GeneratePackingListBarCodeBySize';
 
-//删除包装清单所有标签
+//根据包装工单号删除包装清单所有标签
 const webApiCleanLabel = 'api/CompoundDispatching/DelPackingListBarcode';
+
+//根据包装清单ID删除包装清单所有标签
+const webApiCleanLabelFormPackID = 'api/CompoundDispatching/DelPackingListBarcodeByPackInterID';
 
 //删除标签
 const webApiDeleteLabels = 'api/CompoundDispatching/DelBarcode';

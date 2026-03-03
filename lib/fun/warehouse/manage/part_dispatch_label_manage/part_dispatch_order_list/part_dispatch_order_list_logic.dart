@@ -87,6 +87,7 @@ class PartDispatchLabelManageLogic extends GetxController {
       errorDialog(content: '装箱方式不同，禁止同时操作！');
       return;
     }
+    state.partListId=selectList.map((p)=>p.workCardEntryIdList!.toSet().join(',')).toSet().join(',');
     state.createSizeList.clear();
     state.getDispatchOrdersSizeDetail(
       orders: selectList.expand((v) => v.workCardEntryIdList!).toList(),

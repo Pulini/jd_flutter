@@ -255,7 +255,11 @@ class _WebPrinterState extends State<WebPrinter> {
       },
     ).then((response) {
       loadingDismiss();
-      webViewController.loadHtmlString(jsonDecode(response.data)['data']);
+      if (jsonDecode(response.data)['successed']) {
+        webViewController.loadHtmlString(jsonDecode(response.data)['data']);
+      } else {
+        errorDialog(content: response.data['message']);
+      }
     });
     ready.value = false;
 
@@ -338,3 +342,39 @@ class _WebPrinterState extends State<WebPrinter> {
   }
 }
 
+class PdfPrintReview extends StatefulWidget {
+  const PdfPrintReview({
+    super.key,
+    required this.paperList,
+  });
+
+  final List<Widget> paperList;
+
+  @override
+  State<PdfPrintReview> createState() => _PdfPrintReviewState();
+}
+
+class _PdfPrintReviewState extends State<PdfPrintReview> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: backgroundColor(),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          title: Text('A4打印预览'),
+        ),
+        body: ListView.builder(
+          padding: EdgeInsetsGeometry.all(10),
+          itemCount: widget.paperList.length,
+          itemBuilder: (c, i) => Padding(
+            padding: EdgeInsetsGeometry.only(bottom: 20),
+            child: widget.paperList[i],
+          ),
+        ),
+      ),
+    );
+    ;
+  }
+}

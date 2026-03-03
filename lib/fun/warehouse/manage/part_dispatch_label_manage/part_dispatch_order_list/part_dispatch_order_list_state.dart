@@ -106,7 +106,6 @@ class PartDispatchLabelManageState {
       if (response.resultCode == resultSuccess) {
         var data = PartDispatchOrderCreateInfo.fromJson(response.data);
         part.value = data.materialName ?? '';
-        partListId=data.sizeList!.map((v)=>v.workCardEntryFID??0).toSet().join(',');
         success.call(data.sizeList!);
       } else {
         error.call(response.message ?? '');

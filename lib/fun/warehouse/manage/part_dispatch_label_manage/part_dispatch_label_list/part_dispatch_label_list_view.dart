@@ -195,6 +195,7 @@ class _PartDispatchLabelListPageState extends State<PartDispatchLabelListPage> {
                       combination: Combination.middle,
                       text: '打印锁定',
                       click: () => logic.printLockOrUnlock(
+                        isPrint: false,
                         isLock: true,
                         refresh: () => _query(),
                       ),
@@ -206,6 +207,7 @@ class _PartDispatchLabelListPageState extends State<PartDispatchLabelListPage> {
                       combination: Combination.middle,
                       text: '打印解锁',
                       click: () => logic.printLockOrUnlock(
+                        isPrint: false,
                         isLock: false,
                         refresh: () => _query(),
                       ),
@@ -250,6 +252,7 @@ class _PartDispatchLabelListPageState extends State<PartDispatchLabelListPage> {
                             title: '标签下发结束',
                             content: '完成${s.length}张, 失败${f.length}张',
                             back: () => logic.printLockOrUnlock(
+                              isPrint: true,
                               isLock: true,
                               refresh: () => _query(),
                             ),

@@ -63,6 +63,7 @@ Future<pw.Font> loadFont() async => pw.Font.ttf(
 Future<List<pw.Widget>> createA4PaperMaterialListPdf({
   required String paperTitle,
   required String factoryName,
+  required String supplierName,
   required String orderType,
   required String customsDeclarationType,
   required String palletNumber,
@@ -206,6 +207,7 @@ Future<List<pw.Widget>> createA4PaperMaterialListPdf({
       palletNumber: palletNumber,
       title: paperTitle,
       factoryName: factoryName,
+      supplierName: supplierName,
       orderType: orderType,
       customsDeclarationType: customsDeclarationType,
       qrCode: palletNumber,
@@ -242,6 +244,7 @@ pw.Widget _createPaper({
   required String palletNumber,
   required String title,
   required String factoryName,
+  required String supplierName,
   required String orderType,
   required String customsDeclarationType,
   required String qrCode,
@@ -301,6 +304,18 @@ pw.Widget _createPaper({
                     title,
                     style: pw.TextStyle(
                       fontSize: 20,
+                      fontWeight: pw.FontWeight.bold,
+                      font: font,
+                    ),
+                  ),
+                ),
+                pw.Positioned(
+                  bottom: 5,
+                  left: 0,
+                  child: pw.Text(
+                    supplierName,
+                    style: pw.TextStyle(
+                      fontSize: 14,
                       fontWeight: pw.FontWeight.bold,
                       font: font,
                     ),

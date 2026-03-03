@@ -481,14 +481,20 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
               ),
               CombinationButton(
                 text: 'material_dispatch_label_list'.tr,
-                click: () => labelListDialog(context, data,
-                    printCallback: (info, label) {
+                click: () => labelListDialog( data,
+                    printCallback: (label) {
                   var bill = '';
-                  var batch = '';
+                  // var batch = '';
                   var labelDate = '';
-                  if (info.children!.isNotEmpty) {
-                    bill = info.children![0].billNo!;
-                    batch = info.children![0].sapColorBatch!;
+                  // if (info.children!.isNotEmpty) {
+                  //   bill = info.children![0].billNo!;
+                  //   batch = info.children![0].sapColorBatch!;
+                  // }
+                  if(label.sapColorBatch.isNullOrEmpty()){
+                    bill = data.children!.first.billNo!;
+                  }else {
+                    bill = data.children!.firstWhere((v) =>
+                    v.sapColorBatch == label.sapColorBatch).billNo!;
                   }
                   if (label.insertDateTime != '' &&
                       label.insertDateTime!.length > 10) {
@@ -499,9 +505,9 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
                   logic.printLabel(
                       date: labelDate,
                       context: context,
-                      data: info,
+                      data: data,
                       billNo: bill,
-                      color: batch,
+                      color: label.sapColorBatch??'',
                       guid: label.guid!,
                       pick: label.pickUpCode!,
                       bill: <MaterialDispatchLabelDetail>[],

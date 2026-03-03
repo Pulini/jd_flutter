@@ -766,18 +766,18 @@ List<Widget> createA4Paper2(PickingMaterialOrderPrintInfo data) {
 List<Widget> createA4PaperMaterialList({
   required String paperTitle,
   required String factoryName,
+  required String supplierName,
   required String orderType,
   required String customsDeclarationType,
   required String palletNumber,
   required List<List> sizeMaterialTable,
   required List<List> materialTable,
 }) {
-  var scale = 0.5; //纸张缩放比例
-  double paperWidth = 2380 * scale; //A4纸高度
-  double paperHeight = 3368 * scale; //A4纸宽度
-  double paperPadding = 20; //纸张内边距
-  double paperTitleHeight = 140; //表头高度
-  double paperFooterHeight = 40; //底部分页行高度
+  double paperWidth = 595; //A4纸宽度
+  double paperHeight = 842; //A4纸高度
+  double paperPadding = 20; //边距
+  double paperTitleHeight = 70; //表头高度
+  double paperFooterHeight = 20; //底部分页行高度
   //表格高度
   double tableHeight =
       paperHeight - paperTitleHeight - paperFooterHeight - paperPadding * 2;
@@ -798,8 +798,7 @@ List<Widget> createA4PaperMaterialList({
   for (var sub in sizeMaterialTable) {
     _createSizeMaterialTable(
       tableData: sub,
-      callback: (tableWidget, line) =>
-          widgetList.add([line * (40 + 2), tableWidget]),
+      callback: (tableWidget, height) => widgetList.add([height, tableWidget]),
     );
     singleListTotalQty = singleListTotalQty.add((sub[2] as double));
     singleListTotalPiece += (sub[3] as int);
@@ -810,7 +809,7 @@ List<Widget> createA4PaperMaterialList({
   widgetList.sort((a, b) => (a.first as int).compareTo((b.first as int)));
   //末尾合计行
   widgetList.add([
-    40 + 2,
+    20,
     Container(
       decoration: const BoxDecoration(
         border: Border(
@@ -834,14 +833,9 @@ List<Widget> createA4PaperMaterialList({
   ]);
 
   if (materialTable.isNotEmpty) {
+    widgetList.add([30, SizedBox(height: 30)]);
     widgetList.add([
-      60,
-      Container(
-        height: 60,
-      )
-    ]);
-    widgetList.add([
-      40 + 2,
+      20,
       Container(
         decoration: const BoxDecoration(
           border: Border(
@@ -902,14 +896,15 @@ List<Widget> createA4PaperMaterialList({
 // 然后为每组创建纸张
   for (int i = 0; i < pages.length; i++) {
     paperList.add(_createPaper(
+      paperPadding: paperPadding,
       paperWidth: paperWidth,
       paperHeight: paperHeight,
-      tablePadding: paperPadding,
       tableTitleHeight: paperTitleHeight,
       tableFooterHeight: paperFooterHeight,
       palletNumber: palletNumber,
       title: paperTitle,
       factoryName: factoryName,
+      supplierName: supplierName,
       orderType: orderType,
       customsDeclarationType: customsDeclarationType,
       qrCode: palletNumber,
@@ -937,14 +932,15 @@ List<Widget> createA4PaperMaterialList({
 /// page  当前页码
 /// totalPage 总页数
 Widget _createPaper({
+  required double paperPadding,
   required double paperWidth,
   required double paperHeight,
-  required double tablePadding,
   required double tableTitleHeight,
   required double tableFooterHeight,
   required String palletNumber,
   required String title,
   required String factoryName,
+  required String supplierName,
   required String orderType,
   required String customsDeclarationType,
   required String qrCode,
@@ -953,7 +949,7 @@ Widget _createPaper({
   required int totalPage,
 }) =>
     Container(
-      padding: EdgeInsets.all(tablePadding),
+      padding: EdgeInsets.all(paperPadding),
       width: paperWidth,
       height: paperHeight,
       color: Colors.white,
@@ -966,7 +962,7 @@ Widget _createPaper({
               alignment: Alignment.center,
               children: [
                 Positioned(
-                  bottom: 35,
+                  bottom: 25,
                   left: 0,
                   right: tableTitleHeight,
                   child: Row(
@@ -974,22 +970,22 @@ Widget _createPaper({
                     children: [
                       Text(
                         customsDeclarationType,
-                        style: const TextStyle(
-                          fontSize: 30,
+                        style: TextStyle(
+                          fontSize: 15,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       Text(
                         '原料厂区：$factoryName',
-                        style: const TextStyle(
-                          fontSize: 30,
+                        style: TextStyle(
+                          fontSize: 15,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       Text(
                         orderType,
-                        style: const TextStyle(
-                          fontSize: 30,
+                        style: TextStyle(
+                          fontSize: 15,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -1000,19 +996,30 @@ Widget _createPaper({
                   top: 0,
                   child: Text(
                     title,
-                    style: const TextStyle(
-                      fontSize: 40,
+                    style: TextStyle(
+                      fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
                 Positioned(
-                  bottom: 0,
-                  right: tableTitleHeight + 10,
+                  bottom: 5,
+                  left: 0,
+                  child: Text(
+                    supplierName,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                Positioned(
+                  bottom: 5,
+                  right: tableTitleHeight + paperPadding,
                   child: Text(
                     '${userInfo?.name}(${getPrintTime()})',
-                    style: const TextStyle(
-                      fontSize: 20,
+                    style: TextStyle(
+                      fontSize: 10,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -1020,26 +1027,28 @@ Widget _createPaper({
                 Positioned(
                   top: 0,
                   right: 0,
-                  bottom: 0,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: QrImageView(
-                          data: qrCode,
-                          padding: const EdgeInsets.all(5),
-                          version: QrVersions.auto,
-                        ),
-                      ),
-                      Text(
-                        palletNumber,
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
+                  bottom: 5,
+                  child: SizedBox(
+                      width: tableTitleHeight,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            child: QrImageView(
+                              data: qrCode,
+                              padding: const EdgeInsets.all(5),
+                              version: QrVersions.auto,
+                            ),
+                          ),
+                          Text(
+                            palletNumber,
+                            style: TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      )),
                 ),
               ],
             ),
@@ -1053,9 +1062,9 @@ Widget _createPaper({
               children: [
                 Text(
                   '$page / $totalPage',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 17,
+                    fontSize: 12,
                   ),
                 )
               ],
@@ -1079,7 +1088,7 @@ Widget _borderText({
   EdgeInsets? padding,
 }) {
   var widget = Container(
-    height: 40,
+    height: 20,
     decoration: BoxDecoration(
       border: Border.all(color: Colors.black, width: 1),
     ),
@@ -1087,8 +1096,11 @@ Widget _borderText({
     alignment: titleAlignment ?? Alignment.center,
     child: Text(
       text,
-      style:
-          style ?? const TextStyle(fontWeight: FontWeight.bold, fontSize: 26),
+      style: style ??
+          TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 12,
+          ),
     ),
   );
   return flex == null ? widget : Expanded(flex: flex, child: widget);
@@ -1153,8 +1165,7 @@ void _createSizeMaterialTable({
   int mixListTotalPiece = tableData[6];
   //需要根据列数拆分成多少组
   var singleGroupCount = (singleDataList.length / column).ceil();
-  //需要根据列数拆分成多少组
-  var mixGroupCount = (mixDataList.length / column).ceil();
+
   //拆分重组单码装数据
   var singleDataGroupList = List.generate(
     singleGroupCount,
@@ -1180,43 +1191,44 @@ void _createSizeMaterialTable({
   }
 
   List<Map<String, List<List<List>>>> mixDataGroupList = [];
-
   for (var piece in mixDataList) {
     var pieceNo = piece.keys.first;
     var sizeList = piece.values.first.toList();
-    //拆分重组单码装数据
-    var list = sizeList.length > column
-        ? List.generate(
-            mixGroupCount,
-            (i) {
-              var start = i * column;
-              var end = (start + column < sizeList.length)
-                  ? start + column
-                  : sizeList.length;
-              return sizeList.sublist(start, end);
-            },
-          )
-        : [sizeList];
-
-    //如果最后一组数据不足列数，则填充空数据
-    for (var i = 0; i < mixGroupCount; i++) {
-      if (list.first.length < column) {
-        list[i].addAll(
-          List.generate(
-            column - list[i].length,
-            (index) => [],
-          ),
-        );
+    //尺码排序
+    sizeList.sort((a, b) => a.first
+        .toString()
+        .toDoubleTry()
+        .compareTo(b.first.toString().toDoubleTry()));
+    //需要根据列数拆分成多少组
+    var mixGroupCount = (sizeList.length / column).ceil();
+    int remainder = sizeList.length % column;
+    if (remainder > 0) {
+      for (int i = 0; i < column - remainder; i++) {
+        sizeList.add([]); // 添加空数组补齐成列的倍数
       }
     }
-    list.removeWhere((v) =>
-        v.every((v2) => v2.isEmpty || v2.last.toString().toDoubleTry() == 0));
-    mixDataGroupList.add({pieceNo: list});
+    //拆分重组成行数据
+    mixDataGroupList.add({
+      pieceNo: List.generate(mixGroupCount, (i) {
+        var start = i * column;
+        var end = (start + column < sizeList.length)
+            ? start + column
+            : sizeList.length;
+        return sizeList.sublist(start, end);
+      }),
+    });
   }
+  //混码总组数
+  var mixLineTotal = mixDataGroupList.isEmpty
+      ? 0
+      : mixDataGroupList
+          .map((v) => v.values.map((v2) => v2.length).reduce((a, b) => a + b))
+          .reduce((a, b) => a + b);
 
   var singleMaterialWidget = singleDataGroupList.isEmpty
       ? Container()
-      : IntrinsicHeight(
+      : SizedBox(
+          height: singleDataGroupList.length * 20 * 3,
           child: Row(
             children: [
               Expanded(
@@ -1227,9 +1239,12 @@ void _createSizeMaterialTable({
                   ),
                   padding: const EdgeInsets.only(left: 3, right: 3),
                   alignment: Alignment.center,
-                  child: const Text(
+                  child: Text(
                     '单',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 26),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12,
+                    ),
                   ),
                 ),
               ),
@@ -1238,47 +1253,48 @@ void _createSizeMaterialTable({
                 child: Column(
                   children: [
                     for (var item in singleDataGroupList)
-                      IntrinsicHeight(
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            for (var line in item)
-                              Expanded(
-                                child: Column(
-                                  children: line.isEmpty ||
-                                          line.values.first.isEmpty
-                                      ? [
-                                          _borderText(text: '', flex: 1),
-                                          _borderText(text: '', flex: 1),
-                                          _borderText(text: '', flex: 1),
-                                        ]
-                                      : [
-                                          _borderText(
-                                            text: '${line.keys.first}#',
-                                            flex: 1,
-                                          ),
-                                          _borderText(
-                                            text: line.values.first.isEmpty
-                                                ? ''
-                                                : line.values.first
-                                                    .map((v) => v)
-                                                    .reduce((a, b) => a.add(b))
-                                                    .toShowString(),
-                                            flex: 1,
-                                          ),
-                                          _borderText(
-                                            text: line.values.first.isEmpty
-                                                ? ''
-                                                : line.values.first.length
-                                                    .toString(),
-                                            flex: 1,
-                                          ),
-                                        ],
+                      SizedBox(
+                          height: 20 * 3,
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              for (var line in item)
+                                Expanded(
+                                  child: Column(
+                                    children: line.isEmpty ||
+                                            line.values.first.isEmpty
+                                        ? [
+                                            _borderText(text: '', flex: 1),
+                                            _borderText(text: '', flex: 1),
+                                            _borderText(text: '', flex: 1),
+                                          ]
+                                        : [
+                                            _borderText(
+                                              text: '${line.keys.first}#',
+                                              flex: 1,
+                                            ),
+                                            _borderText(
+                                              text: line.values.first.isEmpty
+                                                  ? ''
+                                                  : line.values.first
+                                                      .map((v) => v)
+                                                      .reduce(
+                                                          (a, b) => a.add(b))
+                                                      .toShowString(),
+                                              flex: 1,
+                                            ),
+                                            _borderText(
+                                              text: line.values.first.isEmpty
+                                                  ? ''
+                                                  : line.values.first.length
+                                                      .toString(),
+                                              flex: 1,
+                                            ),
+                                          ],
+                                  ),
                                 ),
-                              ),
-                          ],
-                        ),
-                      ),
+                            ],
+                          )),
                   ],
                 ),
               ),
@@ -1316,9 +1332,90 @@ void _createSizeMaterialTable({
           ),
         );
 
+  SizedBox createPieceTable(int column, Map<String, List<List<List>>> data) {
+    List<List<List>> pieceData = data.values.first;
+    double total = pieceData
+        .map(
+          (v) => v
+              .where((v2) => v2.isNotEmpty)
+              .map((v2) => v2.last.toString().toDoubleTry())
+              .reduce((a, b) => a.add(b)),
+        )
+        .reduce((a, b) => a.add(b));
+    return SizedBox(
+      height: 20 * 2.0 * pieceData.length,
+      child: Row(
+        children: [
+          for (var i = 0; i < column; ++i)
+            Expanded(
+              flex: 4,
+              child: Column(
+                children: [
+                  for (var item in pieceData) ...[
+                    _borderText(
+                      text: item[i].isEmpty ||
+                              item[i].last.toString().toDoubleTry() == 0
+                          ? ''
+                          : '${item[i].first}#',
+                      flex: 2,
+                    ),
+                    _borderText(
+                      text: item[i].isEmpty
+                          ? ''
+                          : (item[i].last as double) == 0
+                              ? ''
+                              : (item[i].last as double).toShowString(),
+                      flex: 2,
+                    ),
+                  ],
+                ],
+              ),
+            ),
+          Expanded(
+            //双数
+            flex: 5,
+            child: Container(
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.black, width: 1),
+              ),
+              padding: const EdgeInsets.only(left: 3, right: 3),
+              alignment: Alignment.center,
+              child: Text(
+                total.toShowString(),
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12,
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+            //件数
+            flex: 5,
+            child: Container(
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.black, width: 1),
+              ),
+              padding: const EdgeInsets.only(left: 3, right: 3),
+              alignment: Alignment.center,
+              child: Text(
+                '1',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   var mixMaterialWidget = mixDataGroupList.isEmpty
       ? Container()
-      : IntrinsicHeight(
+      : SizedBox(
+          height: mixLineTotal * 20 * 2,
           child: Row(
             children: [
               Expanded(
@@ -1329,9 +1426,12 @@ void _createSizeMaterialTable({
                   ),
                   padding: const EdgeInsets.only(left: 3, right: 3),
                   alignment: Alignment.center,
-                  child: const Text(
+                  child: Text(
                     '混',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 26),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12,
+                    ),
                   ),
                 ),
               ),
@@ -1340,104 +1440,7 @@ void _createSizeMaterialTable({
                 child: Column(
                   children: [
                     for (var item in mixDataGroupList)
-                      IntrinsicHeight(
-                        child: Row(
-                          children: [
-                            Expanded(
-                              flex: column * 4,
-                              child: Column(
-                                children: [
-                                  for (var line in item.values.first) ...[
-                                    IntrinsicHeight(
-                                      child: Row(
-                                        children: [
-                                          for (var sub in line)
-                                            _borderText(
-                                              text: sub.isEmpty ||
-                                                      sub.last
-                                                              .toString()
-                                                              .toDoubleTry() ==
-                                                          0
-                                                  ? ''
-                                                  : '${sub.first}#',
-                                              flex: 2,
-                                            ),
-                                        ],
-                                      ),
-                                    ),
-                                    IntrinsicHeight(
-                                      child: Row(
-                                        children: [
-                                          for (var sub in line)
-                                            _borderText(
-                                              text: sub.isEmpty
-                                                  ? ''
-                                                  : (sub.last as double) == 0
-                                                      ? ''
-                                                      : (sub.last as double)
-                                                          .toShowString(),
-                                              flex: 2,
-                                            ),
-                                        ],
-                                      ),
-                                    ),
-                                  ]
-                                ],
-                              ),
-                            ),
-                            Expanded(
-                              flex: 5,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  border:
-                                      Border.all(color: Colors.black, width: 1),
-                                ),
-                                padding:
-                                    const EdgeInsets.only(left: 3, right: 3),
-                                alignment: Alignment.center,
-                                child: Text(
-                                  item.values
-                                      .toList()
-                                      .map((v) => v.first
-                                          .map((v2) => v2.isEmpty
-                                              ? 0.0
-                                              : v2.last
-                                                  .toString()
-                                                  .toDoubleTry())
-                                          .reduce((a, b) => a.add(b)))
-                                      .reduce((a, b) => a.add(b))
-                                      .toShowString(),
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 26,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              flex: 5,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: Colors.black,
-                                    width: 1,
-                                  ),
-                                ),
-                                padding:
-                                    const EdgeInsets.only(left: 3, right: 3),
-                                alignment: Alignment.center,
-                                child: const Text(
-                                  '1',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 26,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                      createPieceTable(column, item)
                   ],
                 ),
               ),
@@ -1454,7 +1457,9 @@ void _createSizeMaterialTable({
     ),
     child: Column(
       children: [
-        IntrinsicHeight(
+        SizedBox(
+          height:
+              (singleDataGroupList.length * 20 * 3) + (mixLineTotal * 20 * 2),
           child: Row(
             children: [
               Expanded(
@@ -1489,14 +1494,14 @@ void _createSizeMaterialTable({
             flex: 5,
           ),
         ]),
+        SizedBox(height: 5),
       ],
     ),
   );
   callback.call(
     tableWidget,
-    singleGroupCount * 3 +
-        mixDataGroupList.length * 2 +
-        1, //单码每组3行 + 混码每组2行 + 1组小计
+    //(单码每组3行 + 混码每组2行 + 1组小计) x 行高20 +行间距5
+    (singleGroupCount * 3 + mixLineTotal * 2 + 1) * 20 + 5,
   );
 }
 
@@ -1507,7 +1512,7 @@ void _createSizeMaterialTable({
 ///   [
 ///       物料代码,
 ///       单位,
-///       [10,20,30,40],
+///       [10,20,30,20],
 ///   ],
 /// callback: 回调 表格widget 行数
 void _createMaterialTable({
@@ -1521,72 +1526,87 @@ void _createMaterialTable({
   List<double> qtyList = tableData[2];
   double total = qtyList.map((v) => v).reduce((a, b) => a.add(b));
   double expandedWidth = (25 / 27) * tableWidth;
-  String text = qtyList.join(' + ');
-  Size textSize = getTextSize(text: text, maxWidth: expandedWidth);
+  String text = qtyList.map((v) => v.toShowString()).join(' + ');
+  var sizeHeight =
+      getTextSize(text: text, maxWidth: expandedWidth).height / 18 * 20;
   var tableItem = Container(
+    height: sizeHeight + 20,
     decoration: const BoxDecoration(
       border: Border(
         left: BorderSide(color: Colors.black, width: 1),
         right: BorderSide(color: Colors.black, width: 1),
       ),
     ),
-    child: IntrinsicHeight(
-      child: Row(
-        children: [
-          Expanded(
-            flex: 2,
-            child: Container(
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.black, width: 1),
-              ),
-              padding: const EdgeInsets.only(left: 3, right: 3),
-              alignment: Alignment.center,
-              child: Text(
-                (index + 1).toString(),
-                style:
-                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 26),
+    child: Row(
+      children: [
+        Expanded(
+          flex: 2,
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.black, width: 1),
+            ),
+            padding: const EdgeInsets.only(left: 3, right: 3),
+            alignment: Alignment.center,
+            child: Text(
+              (index + 1).toString(),
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 12,
               ),
             ),
           ),
-          Expanded(
-            flex: 25,
-            child: Column(
-              children: [
-                SizedBox(
-                  height: 40,
-                  child: Row(
-                    children: [
-                      _borderText(
-                        text: materialCode,
-                        flex: 16,
-                        titleAlignment: Alignment.centerLeft,
-                      ),
-                      _borderText(text: qtyList.length.toString(), flex: 2),
-                      _borderText(text: total.toShowString(), flex: 5),
-                      _borderText(text: unit, flex: 2),
-                    ],
+        ),
+        Expanded(
+          flex: 25,
+          child: Column(
+            children: [
+              SizedBox(
+                height: 20,
+                child: Row(
+                  children: [
+                    _borderText(
+                      text: materialCode,
+                      flex: 16,
+                      titleAlignment: Alignment.centerLeft,
+                    ),
+                    _borderText(
+                      text: qtyList.length.toString(),
+                      flex: 2,
+                    ),
+                    _borderText(
+                      text: total.toShowString(),
+                      flex: 5,
+                    ),
+                    _borderText(
+                      text: unit,
+                      flex: 2,
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                height: sizeHeight,
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black, width: 1),
+                ),
+                padding: const EdgeInsets.only(left: 3, right: 3),
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  text,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12,
+                    // lineSpacing: 6,
                   ),
                 ),
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black, width: 1),
-                  ),
-                  padding: const EdgeInsets.only(left: 3, right: 3),
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    text,
-                    style: const TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 26),
-                  ),
-                ),
-              ],
-            ),
-          )
-        ],
-      ),
+              ),
+            ],
+          ),
+        )
+      ],
     ),
   );
-  callback.call(tableItem, (textSize.height).toInt() + 40 + 4);
+  callback.call(tableItem, sizeHeight.toInt() + 20);
 }
 
 ///获取文本尺寸

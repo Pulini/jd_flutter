@@ -42,7 +42,7 @@ class PartDispatchLabelListLogic extends GetxController {
       return;
     }
 
-    if (!checkUserPermission('601080203')) {
+    if (!checkUserPermission('601080103')) {
       errorDialog(content: '没有删除权限！');
       return;
     }
@@ -55,6 +55,7 @@ class PartDispatchLabelListLogic extends GetxController {
   }
 
   void printLockOrUnlock({
+    required bool isPrint,
     required bool isLock,
     required Function() refresh,
   }) {
@@ -73,8 +74,7 @@ class PartDispatchLabelListLogic extends GetxController {
       // errorDialog(content: '所选标签已解锁！');
       return;
     }
-
-    if (!checkUserPermission('601080212')) {
+    if (!isPrint && !checkUserPermission('601080112')) {
       errorDialog(content: '没有修改锁权限！');
       return;
     }
@@ -93,6 +93,7 @@ class PartDispatchLabelListLogic extends GetxController {
       v.isSelected.value = v.isPrint == true;
     }
   }
+  //40016125
 
   void selectAllNotPrintItem() {
     for (var v in state.labelList) {
