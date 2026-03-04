@@ -888,9 +888,9 @@ class StuffQualityInspectionLogic extends GetxController {
         name.add(c.materialCode.toString());
       }
     }
-    qualifiedController.text = qty.toShowString(); //合格数量
-    inspectionQuantityController.text = qty.toShowString(); //检验数量
-    waitInspectionQuantityController.text = qty.toShowString(); //待检验数量
+    qualifiedController.text = qty.toStringAsFixed(3); //合格数量
+    inspectionQuantityController.text = qty.toStringAsFixed(3); //检验数量
+    waitInspectionQuantityController.text = qty.toStringAsFixed(3); //待检验数量
 
     state.isSameCode = name.length == 1; //是否同物料
     state.isShowTips.value = name.length > 1; //多种物料的时候提示
