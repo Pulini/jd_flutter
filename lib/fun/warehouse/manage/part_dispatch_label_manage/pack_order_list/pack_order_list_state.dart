@@ -30,6 +30,7 @@ class PackOrderListState {
         ];
         success.call();
       } else {
+        packOrderList.value = [];
         error.call(response.message ?? '');
       }
     });

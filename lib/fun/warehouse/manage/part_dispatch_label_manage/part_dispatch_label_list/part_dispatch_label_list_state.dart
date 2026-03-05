@@ -26,6 +26,7 @@ class PartDispatchLabelListState {
         ];
         success.call();
       } else {
+        labelList.value = [];
         error.call(response.message ?? '');
       }
     });

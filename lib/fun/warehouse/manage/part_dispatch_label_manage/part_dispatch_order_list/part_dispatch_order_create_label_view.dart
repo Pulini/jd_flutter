@@ -10,7 +10,6 @@ import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/bean/http/response/part_dispatch_label_manage_info.dart';
 
-
 class PartDispatchOrderCreateLabelPage extends StatefulWidget {
   const PartDispatchOrderCreateLabelPage({super.key});
 
@@ -67,7 +66,7 @@ class _PartDispatchOrderCreateLabelPageState
           text: '剩余数',
         ),
         Expanded(
-          flex: state.isSingleSize ?6 : 4,
+          flex: state.isSingleSize ? 6 : 4,
           child: Container(
             height: 45,
             decoration: BoxDecoration(
@@ -266,11 +265,10 @@ class _PartDispatchOrderCreateLabelPageState
               child: TextField(
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                 decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(0),
-                  ),
-                  contentPadding: EdgeInsets.only(bottom: 3)
-                ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(0),
+                    ),
+                    contentPadding: EdgeInsets.only(bottom: 3)),
                 style: TextStyle(color: Colors.blue),
                 controller: countController,
                 onChanged: (v) => logic.setItemLabelCountListener(
@@ -414,7 +412,7 @@ class _PartDispatchOrderCreateLabelPageState
           combination: Combination.right,
           click: () => Get.to(
             () => PartDispatchLabelListPage(partIds: state.partListId),
-          ),
+          )?.then((_) => logic.refreshCreateLabel()),
         )
       ],
       body: Padding(
