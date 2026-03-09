@@ -11,9 +11,8 @@ import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
-// const String printUrl = 'http://192.168.99.103:9095/m';
+const String testPrintUrl = 'http://192.168.99.103:9095/m';
 const String printUrl = 'https://erp.goldemperor.com:9051/m';
-
 
 enum PrintType {
   label('', 'label', '.text'),
@@ -109,7 +108,8 @@ void onLinePrintDialog(List<Uint8List> papers, PrintType printType) {
   _getOnlinePrintDeviceList(
     printDio: printDio,
     success: (devices) {
-      String saveDepartmentName = spGet(spSaveOnlinePrinterDepartmentName) ?? '';
+      String saveDepartmentName =
+          spGet(spSaveOnlinePrinterDepartmentName) ?? '';
       String saveDeviceId = spGet(spSaveOnlinePrinterDeviceID) ?? '';
       String savePaperType = spGet(spSaveOnlinePrinterPaperType) ?? '';
       var departmentIndex = (-1).obs;
@@ -130,7 +130,7 @@ void onLinePrintDialog(List<Uint8List> papers, PrintType printType) {
         }
       }
       printerList.value = list;
-      if(printerList.isEmpty){
+      if (printerList.isEmpty) {
         return errorDialog(content: '当前打印类型没有设备可打印');
       }
       departmentIndex.value =
@@ -269,12 +269,12 @@ void _getOnlinePrintDeviceList({
 }) {
   loadingShow('正在获取打印机列表...');
   printDio.post(
-    printUrl,
+    isTestUrl() ? testPrintUrl : printUrl,
     queryParameters: {
       'xwl': 'public/interfaces/MES/AppPrintService',
       'xaction': 'getPrinterList',
       'deptId': userInfo?.departmentID,
-      // 'deptId':'554911',
+      // 'deptId': '554911',
     },
   ).then((response) {
     loadingDismiss();
@@ -304,7 +304,7 @@ void _printImg({
   loadingShow('正在发送打印命令...');
   printDio
       .post(
-    printUrl,
+    isTestUrl() ? testPrintUrl : printUrl,
     queryParameters: {
       'xwl': 'public/interfaces/MES/AppPrintService',
       'xaction': 'print',
@@ -314,15 +314,13 @@ void _printImg({
     },
     options: Options(headers: {'Content-Type': 'application/octet-stream'}),
     data: FormData.fromMap({
-      'printFiles': dataList
-          .map((data){
-            debugPrint('打印文件名：${printType.getFileName(data.length.toString())}');
-            return MultipartFile.fromBytes(
-              data,
-              filename: printType.getFileName(data.length.toString()),
-            );
-      })
-          .toList()
+      'printFiles': dataList.map((data) {
+        debugPrint('打印文件名：${printType.getFileName(data.length.toString())}');
+        return MultipartFile.fromBytes(
+          data,
+          filename: printType.getFileName(data.length.toString()),
+        );
+      }).toList()
     }),
   )
       .then((response) {

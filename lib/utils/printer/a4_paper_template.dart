@@ -766,12 +766,10 @@ List<Widget> createA4Paper2(PickingMaterialOrderPrintInfo data) {
 List<Widget> createA4PaperMaterialList({
   required String paperTitle,
   required String factoryName,
-  required String supplierName,
   required String orderType,
   required String customsDeclarationType,
   required String palletNumber,
-  required List<List> sizeMaterialTable,
-  required List<List> materialTable,
+  required List tableData,
 }) {
   double paperWidth = 595; //A4纸宽度
   double paperHeight = 842; //A4纸高度
@@ -794,73 +792,98 @@ List<Widget> createA4PaperMaterialList({
   double mixListTotalQty = 0.0;
   //表格混码装总件数
   int mixListTotalPiece = 0;
+  for (var table in tableData) {
+    var tables = <List>[];
+    for (var sub in table[1]) {
+      _createSizeMaterialTable(
+        tableData: sub,
+        callback: (tableWidget, height) => tables.add([height, tableWidget]),
+      );
+      singleListTotalQty = singleListTotalQty.add((sub[2] as double));
+      singleListTotalPiece += (sub[3] as int);
+      mixListTotalQty = mixListTotalQty.add((sub[5] as double));
+      mixListTotalPiece += (sub[6] as int);
+    }
+    //根据指令大小进行排序
+    tables.sort((a, b) => (a.first as int).compareTo((b.first as int)));
 
-  for (var sub in sizeMaterialTable) {
-    _createSizeMaterialTable(
-      tableData: sub,
-      callback: (tableWidget, height) => widgetList.add([height, tableWidget]),
-    );
-    singleListTotalQty = singleListTotalQty.add((sub[2] as double));
-    singleListTotalPiece += (sub[3] as int);
-    mixListTotalQty = mixListTotalQty.add((sub[5] as double));
-    mixListTotalPiece += (sub[6] as int);
-  }
-  //根据指令大小进行排序
-  widgetList.sort((a, b) => (a.first as int).compareTo((b.first as int)));
-  //末尾合计行
-  widgetList.add([
-    20,
-    Container(
-      decoration: const BoxDecoration(
-        border: Border(
-          left: BorderSide(color: Colors.black, width: 1),
-          bottom: BorderSide(color: Colors.black, width: 1),
-          right: BorderSide(color: Colors.black, width: 1),
+    //添加表头供应商
+    widgetList.add([
+      table == tableData.first ? 20 : 60,
+      Container(
+        height: table == tableData.first ? 20 : 60,
+        alignment: Alignment.bottomLeft,
+        child: Text(
+          table[0],
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
+          ),
         ),
-      ),
-      child: Row(children: [
-        _borderText(text: '合计', flex: 37),
-        _borderText(
-          text: singleListTotalQty.add(mixListTotalQty).toShowString(),
-          flex: 5,
-        ),
-        _borderText(
-          text: (singleListTotalPiece + mixListTotalPiece).toString(),
-          flex: 5,
-        ),
-      ]),
-    )
-  ]);
+      )
+    ]);
 
-  if (materialTable.isNotEmpty) {
-    widgetList.add([30, SizedBox(height: 30)]);
+    //添加标体
+    widgetList.addAll(tables);
+
+    //末尾合计行
     widgetList.add([
       20,
       Container(
         decoration: const BoxDecoration(
           border: Border(
             left: BorderSide(color: Colors.black, width: 1),
-            top: BorderSide(color: Colors.black, width: 1),
+            bottom: BorderSide(color: Colors.black, width: 1),
             right: BorderSide(color: Colors.black, width: 1),
           ),
         ),
         child: Row(children: [
-          _borderText(text: '序号', flex: 2),
-          _borderText(text: '物料代码', flex: 16),
-          _borderText(text: '件数', flex: 2),
-          _borderText(text: '数量', flex: 5),
-          _borderText(text: '单位', flex: 2),
+          _borderText(text: '合计', flex: 37),
+          _borderText(
+            text: singleListTotalQty.add(mixListTotalQty).toShowString(),
+            flex: 5,
+          ),
+          _borderText(
+            text: (singleListTotalPiece + mixListTotalPiece).toString(),
+            flex: 5,
+          ),
         ]),
-      ),
+      )
     ]);
-  }
-  for (var i = 0; i < materialTable.length; ++i) {
-    _createMaterialTable(
-      index: i,
-      tableWidth: tableWidth,
-      tableData: materialTable[i],
-      callback: (tableWidget, height) => widgetList.add([height, tableWidget]),
-    );
+
+    if (table[2].isNotEmpty) {
+      if (table[1].isNotEmpty) {
+        widgetList.add([30, SizedBox(height: 30)]);
+      }
+      widgetList.add([
+        20,
+        Container(
+          decoration: const BoxDecoration(
+            border: Border(
+              left: BorderSide(color: Colors.black, width: 1),
+              top: BorderSide(color: Colors.black, width: 1),
+              right: BorderSide(color: Colors.black, width: 1),
+            ),
+          ),
+          child: Row(children: [
+            _borderText(text: '序号', flex: 2),
+            _borderText(text: '物料代码', flex: 16),
+            _borderText(text: '件数', flex: 2),
+            _borderText(text: '数量', flex: 5),
+            _borderText(text: '单位', flex: 2),
+          ]),
+        ),
+      ]);
+    }
+    for (var i = 0; i < table[2].length; ++i) {
+      _createMaterialTable(
+        index: i,
+        tableWidth: tableWidth,
+        tableData: table[2][i],
+        callback: (tableWidget, height) =>
+            widgetList.add([height, tableWidget]),
+      );
+    }
   }
 
   var paperList = <Widget>[]; //纸张列表
@@ -904,7 +927,6 @@ List<Widget> createA4PaperMaterialList({
       palletNumber: palletNumber,
       title: paperTitle,
       factoryName: factoryName,
-      supplierName: supplierName,
       orderType: orderType,
       customsDeclarationType: customsDeclarationType,
       qrCode: palletNumber,
@@ -915,6 +937,7 @@ List<Widget> createA4PaperMaterialList({
   }
   return paperList;
 }
+
 
 /// 创建A4纸报表
 /// paperWidth  纸张宽度
@@ -940,7 +963,6 @@ Widget _createPaper({
   required String palletNumber,
   required String title,
   required String factoryName,
-  required String supplierName,
   required String orderType,
   required String customsDeclarationType,
   required String qrCode,
@@ -998,17 +1020,6 @@ Widget _createPaper({
                     title,
                     style: TextStyle(
                       fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                Positioned(
-                  bottom: 5,
-                  left: 0,
-                  child: Text(
-                    supplierName,
-                    style: TextStyle(
-                      fontSize: 14,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -1619,12 +1630,8 @@ Size getTextSize({
   TextStyle? style,
 }) {
   var textPainter = TextPainter(
-    text: TextSpan(
-      text: text,
-      style:
-          style ?? const TextStyle(fontWeight: FontWeight.bold, fontSize: 26),
-    ),
+    text: TextSpan(text: text, style: style),
     textDirection: TextDirection.ltr,
   )..layout(maxWidth: maxWidth);
-  return Size(textPainter.width, textPainter.height);
+  return textPainter.size;
 }

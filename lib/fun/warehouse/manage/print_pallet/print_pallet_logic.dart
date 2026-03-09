@@ -3,8 +3,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/sap_picking_info.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
+// import 'package:jd_flutter/utils/printer/a4_paper_template.dart';
+// import 'package:jd_flutter/utils/printer/a4_paper_template.dart';
 import 'package:jd_flutter/utils/printer/pdf_paper_template.dart';
 import 'package:jd_flutter/utils/utils.dart';
+// import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/preview_label_list_widget.dart';
 import 'package:jd_flutter/widget/preview_label_widget.dart';
@@ -94,121 +97,130 @@ class PrintPalletLogic extends GetxController {
     toPrintView(list);
   }
 
+
   void printPalletSizeMaterial() {
     var printTask = <List>[];
+    // var paperList = <Widget>[];
     for (var i = 0; i < state.selectedList.length; ++i) {
       if (state.selectedList[i].value) {
-        // palletList.add(state.palletList[i].first.palletNumber ?? '');
-        //尺码物料组
-        var sizeMaterialTable = <List>[];
-        var sizeMaterials =
-            state.palletList[i].where((v) => !v.size.isNullOrEmpty()).toList();
+        var tableData=[];
+        groupBy(state.palletList[i], (v) => v.supplierName).forEach((k, v) {
+          //尺码物料组
+          var sizeMaterialTable = <List>[];
+          var sizeMaterials = v
+              .where((v) => !v.size.isNullOrEmpty())
+              .toList();
 
-        //一般物理组
-        var materialTable = <List>[];
-        var materials =
-            state.palletList[i].where((v) => v.size.isNullOrEmpty()).toList();
+          //一般物理组
+          var materialTable = <List>[];
+          var materials =v.where((v) => v.size.isNullOrEmpty()).toList();
 
-        groupBy(sizeMaterials, (v) => v.instructionsNo ?? '').forEach((k1, v1) {
-          var sizeList = groupBy(v1, (v) => v.size ?? '').keys.toList();
-          sizeList.sort((a, b) => a.compareTo(b));
+          groupBy(sizeMaterials, (v) => v.instructionsNo ?? '')
+              .forEach((k1, v1) {
+            var sizeList = groupBy(v1, (v) => v.size ?? '').keys.toList();
+            sizeList.sort((a, b) => a.compareTo(b));
 
-          var sizeMaterialList = <SapPalletDetailInfo>[];
-          var singleDataList = <Map<String, List<double>>>[];
-          var singleListTotalQty = 0.0;
-          var singleListTotalPiece = 0;
+            var sizeMaterialList = <SapPalletDetailInfo>[];
+            var singleDataList = <Map<String, List<double>>>[];
+            var singleListTotalQty = 0.0;
+            var singleListTotalPiece = 0;
 
-          var mixMaterialList = <List<SapPalletDetailInfo>>[];
-          var mixDataList = <Map<String, List<List>>>[];
-          var mixListTotalQty = 0.0;
-          var mixListTotalPiece = 0;
+            var mixMaterialList = <List<SapPalletDetailInfo>>[];
+            var mixDataList = <Map<String, List<List>>>[];
+            var mixListTotalQty = 0.0;
+            var mixListTotalPiece = 0;
 
-          groupBy(v1, (v) => v.pieceNo ?? '').forEach((k, v) {
-            if (v.length > 1) {
-              mixMaterialList.add(v);
-              mixListTotalQty = mixListTotalQty.add(
-                  v.map((v) => v.quantity ?? 0.0).reduce((a, b) => a.add(b)));
-              mixListTotalPiece++;
-            } else {
-              sizeMaterialList.add(v.first);
-              singleListTotalQty =
-                  singleListTotalQty.add(v.first.quantity ?? 0.0);
-              singleListTotalPiece++;
+            groupBy(v1, (v) => v.pieceNo ?? '').forEach((k, v) {
+              if (v.length > 1) {
+                mixMaterialList.add(v);
+                mixListTotalQty = mixListTotalQty.add(
+                    v.map((v) => v.quantity ?? 0.0).reduce((a, b) => a.add(b)));
+                mixListTotalPiece++;
+              } else {
+                sizeMaterialList.add(v.first);
+                singleListTotalQty =
+                    singleListTotalQty.add(v.first.quantity ?? 0.0);
+                singleListTotalPiece++;
+              }
+            });
+
+            for (var size in sizeList) {
+              if (sizeMaterialList.any((v) => v.size == size)) {
+                singleDataList.add({
+                  size: sizeMaterialList
+                      .where((v) => v.size == size)
+                      .map((v) => v.quantity ?? 0)
+                      .toList()
+                });
+              }
             }
-          });
 
-          for (var size in sizeList) {
-            if (sizeMaterialList.any((v) => v.size == size)) {
-              singleDataList.add({
-                size: sizeMaterialList
-                    .where((v) => v.size == size)
-                    .map((v) => v.quantity ?? 0)
-                    .toList()
+            for (var m in mixMaterialList) {
+              mixDataList.add({
+                m.first.pieceNo ?? '': [
+                  for (var size in sizeList)
+                    if (m.any((v) => v.size == size))
+                      [
+                        size,
+                        m.firstWhere((v) => v.size == size).quantity ?? 0.0
+                      ]
+                ]
               });
             }
-          }
 
-          for (var m in mixMaterialList) {
-            mixDataList.add({
-              m.first.pieceNo ?? '': [
-                for (var size in sizeList)
-                  if (m.any((v) => v.size == size))
-                    [size, m.firstWhere((v) => v.size == size).quantity ?? 0.0]
-              ]
-            });
-          }
+            sizeMaterialTable.add([
+              k1,
+              singleDataList,
+              singleListTotalQty,
+              singleListTotalPiece,
+              mixDataList,
+              mixListTotalQty,
+              mixListTotalPiece,
+            ]);
+          });
 
-          sizeMaterialTable.add([
-            k1,
-            singleDataList,
-            singleListTotalQty,
-            singleListTotalPiece,
-            mixDataList,
-            mixListTotalQty,
-            mixListTotalPiece,
-          ]);
+          groupBy(materials, (v) => v.materialCode ?? '').forEach((k1, v1) {
+            materialTable.add([
+              k1,
+              v1.first.unit ?? '',
+              v1.map((v2) => v2.quantity ?? 0.0).toList(),
+            ]);
+          });
+
+          tableData.add([k,sizeMaterialTable,materialTable]);
+
         });
-
-        groupBy(materials, (v) => v.materialCode ?? '').forEach((k1, v1) {
-          materialTable.add([
-            k1,
-            v1.first.unit ?? '',
-            v1.map((v2) => v2.quantity ?? 0.0).toList(),
-          ]);
-        });
-
+        // logger.f(tableData);
         printTask.add([
           createA4PaperMaterialListPdf(
             paperTitle: '金帝集团股份有限公司托盘清单',
-            supplierName: state.palletList[i].first.supplierName ?? '',
             factoryName: state.palletList[i].first.factoryName ?? '',
             orderType: state.palletList[i].first.orderType ?? '',
             customsDeclarationType:
-                state.palletList[i].first.customsDeclarationType ?? '',
+            state.palletList[i].first.customsDeclarationType ?? '',
             palletNumber: state.palletList[i].first.palletNumber ?? '',
-            sizeMaterialTable: sizeMaterialTable,
-            materialTable: materialTable,
+            tableData: tableData,
           ),
           state.palletList[i].first.palletNumber ?? ''
         ]);
 /*
-          //预览
-          paperList=createA4PaperMaterialList(
-          paperTitle: '金帝集团股份有限公司托盘清单',
-          supplierName: state.palletList[i].first.supplierName ?? '',
-          factoryName: state.palletList[i].first.factoryName ?? '',
-          orderType: state.palletList[i].first.orderType ?? '',
-          customsDeclarationType:
-          state.palletList[i].first.customsDeclarationType ?? '',
-          palletNumber: state.palletList[i].first.palletNumber ?? '',
-          sizeMaterialTable: sizeMaterialTable,
-          materialTable: materialTable,
-        );
+
+        //预览
+          paperList.addAll(createA4PaperMaterialList(
+            paperTitle: '金帝集团股份有限公司托盘清单',
+            factoryName: state.palletList[i].first.factoryName ?? '',
+            orderType: state.palletList[i].first.orderType ?? '',
+            customsDeclarationType:
+            state.palletList[i].first.customsDeclarationType ?? '',
+            palletNumber: state.palletList[i].first.palletNumber ?? '',
+            tableData: tableData,
+          ));
 */
+
       }
     }
     Get.to(() => WebPrinter(palletTaskList: printTask));
-//预览    Get.to(() => PdfPrintReview(paperList: paperList));
+    // Get.to(() => PdfPrintReview(paperList: paperList));
   }
 
   void toPrintView(List<Widget> labelView) {
