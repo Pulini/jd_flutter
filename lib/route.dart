@@ -459,7 +459,7 @@ class RouteConfig {
   //销售扫码出库
   static Routes saleScanOutWarehouse = Routes(
     '/sale_scan_out_warehouse',
-    200,
+    201,
     const SaleScanOutWarehousePage(),
   );
 
