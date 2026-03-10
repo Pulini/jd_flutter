@@ -63,12 +63,10 @@ Future<pw.Font> loadFont() async => pw.Font.ttf(
 Future<List<pw.Widget>> createA4PaperMaterialListPdf({
   required String paperTitle,
   required String factoryName,
-  required String supplierName,
   required String orderType,
   required String customsDeclarationType,
   required String palletNumber,
-  required List<List> sizeMaterialTable,
-  required List<List> materialTable,
+  required List tableData,
 }) async {
   var font = await loadFont();
   double paperWidth = 595; //A4纸宽度
@@ -92,79 +90,102 @@ Future<List<pw.Widget>> createA4PaperMaterialListPdf({
   double mixListTotalQty = 0.0;
   //表格混码装总件数
   int mixListTotalPiece = 0;
+  for (var table in tableData) {
+    var tables = <List>[];
+    for (var sub in table[1]) {
+      _createSizeMaterialTable(
+        font: font,
+        tableData: sub,
+        callback: (tableWidget, height) => tables.add([height, tableWidget]),
+      );
+      singleListTotalQty = singleListTotalQty.add((sub[2] as double));
+      singleListTotalPiece += (sub[3] as int);
+      mixListTotalQty = mixListTotalQty.add((sub[5] as double));
+      mixListTotalPiece += (sub[6] as int);
+    }
+    //根据指令大小进行排序
+    tables.sort((a, b) => (a.first as int).compareTo((b.first as int)));
 
-  for (var sub in sizeMaterialTable) {
-    _createSizeMaterialTable(
-      font: font,
-      tableData: sub,
-      callback: (tableWidget, height) => widgetList.add([height, tableWidget]),
-    );
-    singleListTotalQty = singleListTotalQty.add((sub[2] as double));
-    singleListTotalPiece += (sub[3] as int);
-    mixListTotalQty = mixListTotalQty.add((sub[5] as double));
-    mixListTotalPiece += (sub[6] as int);
-  }
-  //根据指令大小进行排序
-  widgetList.sort((a, b) => (a.first as int).compareTo((b.first as int)));
-  //末尾合计行
-  widgetList.add([
-    20,
-    pw.Container(
-      decoration: const pw.BoxDecoration(
-        border: pw.Border(
-          left: pw.BorderSide(color: PdfColors.black, width: 1),
-          bottom: pw.BorderSide(color: PdfColors.black, width: 1),
-          right: pw.BorderSide(color: PdfColors.black, width: 1),
-        ),
-      ),
-      child: pw.Row(children: [
-        _borderText(font: font, text: '合计', flex: 37),
-        _borderText(
-          font: font,
-          text: singleListTotalQty.add(mixListTotalQty).toShowString(),
-          flex: 5,
-        ),
-        _borderText(
-          font: font,
-          text: (singleListTotalPiece + mixListTotalPiece).toString(),
-          flex: 5,
-        ),
-      ]),
-    )
-  ]);
 
-  if (materialTable.isNotEmpty) {
-    widgetList.add([30, pw.SizedBox(height: 30)]);
+    //添加表头供应商
+    widgetList.add([
+      table == tableData.first ? 20 : 60,
+      pw.Container(
+        height: table == tableData.first ? 20 : 60,
+        alignment: pw.Alignment.bottomLeft,
+        child: pw.Text(
+          table[0],
+          style: pw.TextStyle(
+            fontSize: 14,
+            fontWeight: pw.FontWeight.bold,
+          ),
+        ),
+      )
+    ]);
+
+    //添加标体
+    widgetList.addAll(tables);
+
+    //末尾合计行
     widgetList.add([
       20,
       pw.Container(
         decoration: const pw.BoxDecoration(
           border: pw.Border(
             left: pw.BorderSide(color: PdfColors.black, width: 1),
-            top: pw.BorderSide(color: PdfColors.black, width: 1),
+            bottom: pw.BorderSide(color: PdfColors.black, width: 1),
             right: pw.BorderSide(color: PdfColors.black, width: 1),
           ),
         ),
         child: pw.Row(children: [
-          _borderText(font: font, text: '序号', flex: 2),
-          _borderText(font: font, text: '物料代码', flex: 16),
-          _borderText(font: font, text: '件数', flex: 2),
-          _borderText(font: font, text: '数量', flex: 5),
-          _borderText(font: font, text: '单位', flex: 2),
+          _borderText(font: font, text: '合计', flex: 37),
+          _borderText(
+            font: font,
+            text: singleListTotalQty.add(mixListTotalQty).toShowString(),
+            flex: 5,
+          ),
+          _borderText(
+            font: font,
+            text: (singleListTotalPiece + mixListTotalPiece).toString(),
+            flex: 5,
+          ),
         ]),
-      ),
+      )
     ]);
-  }
-  for (var i = 0; i < materialTable.length; ++i) {
-    _createMaterialTable(
-      font: font,
-      index: i,
-      tableWidth: tableWidth,
-      tableData: materialTable[i],
-      callback: (tableWidget, height) => widgetList.add([height, tableWidget]),
-    );
-  }
 
+    if (table[2].isNotEmpty) {
+      widgetList.add([30, pw.SizedBox(height: 30)]);
+      widgetList.add([
+        20,
+        pw.Container(
+          decoration: const pw.BoxDecoration(
+            border: pw.Border(
+              left: pw.BorderSide(color: PdfColors.black, width: 1),
+              top: pw.BorderSide(color: PdfColors.black, width: 1),
+              right: pw.BorderSide(color: PdfColors.black, width: 1),
+            ),
+          ),
+          child: pw.Row(children: [
+            _borderText(font: font, text: '序号', flex: 2),
+            _borderText(font: font, text: '物料代码', flex: 16),
+            _borderText(font: font, text: '件数', flex: 2),
+            _borderText(font: font, text: '数量', flex: 5),
+            _borderText(font: font, text: '单位', flex: 2),
+          ]),
+        ),
+      ]);
+    }
+    for (var i = 0; i < table[2].length; ++i) {
+      _createMaterialTable(
+        font: font,
+        index: i,
+        tableWidth: tableWidth,
+        tableData: table[2][i],
+        callback: (tableWidget, height) =>
+            widgetList.add([height, tableWidget]),
+      );
+    }
+  }
   var paperList = <pw.Widget>[]; //纸张列表
   List<List<pw.Widget>> pages = [];
   List<pw.Widget> currentPage = [];
@@ -207,7 +228,6 @@ Future<List<pw.Widget>> createA4PaperMaterialListPdf({
       palletNumber: palletNumber,
       title: paperTitle,
       factoryName: factoryName,
-      supplierName: supplierName,
       orderType: orderType,
       customsDeclarationType: customsDeclarationType,
       qrCode: palletNumber,
@@ -218,7 +238,6 @@ Future<List<pw.Widget>> createA4PaperMaterialListPdf({
   }
   return paperList;
 }
-
 /// 创建A4纸报表
 /// paperWidth  纸张宽度
 /// paperHeight 纸张高度
@@ -244,7 +263,6 @@ pw.Widget _createPaper({
   required String palletNumber,
   required String title,
   required String factoryName,
-  required String supplierName,
   required String orderType,
   required String customsDeclarationType,
   required String qrCode,
@@ -304,18 +322,6 @@ pw.Widget _createPaper({
                     title,
                     style: pw.TextStyle(
                       fontSize: 20,
-                      fontWeight: pw.FontWeight.bold,
-                      font: font,
-                    ),
-                  ),
-                ),
-                pw.Positioned(
-                  bottom: 5,
-                  left: 0,
-                  child: pw.Text(
-                    supplierName,
-                    style: pw.TextStyle(
-                      fontSize: 14,
                       fontWeight: pw.FontWeight.bold,
                       font: font,
                     ),

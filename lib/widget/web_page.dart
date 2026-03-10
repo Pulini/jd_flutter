@@ -10,8 +10,8 @@ import 'package:jd_flutter/utils/printer/online_print_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-import 'package:pdf/pdf.dart';
-import 'package:pdf/widgets.dart' as pw;
+// import 'package:pdf/pdf.dart';
+// import 'package:pdf/widgets.dart' as pw;
 import 'custom_widget.dart';
 import 'dialogs.dart';
 
@@ -221,6 +221,7 @@ class _WebPrinterState extends State<WebPrinter> {
   var ready = false.obs;
 
   void runTask() {
+
     var dio = Dio()
       ..interceptors.add(InterceptorsWrapper(
         onRequest: (options, handler) {
@@ -242,6 +243,7 @@ class _WebPrinterState extends State<WebPrinter> {
       ));
 
     loadingShow('正在生成物料清单预览...');
+    ready.value = false;
     dio.post(
       isTestUrl()
           ? 'https://mestest.goldemperor.com:9099/m'
@@ -252,17 +254,22 @@ class _WebPrinterState extends State<WebPrinter> {
             .map((v) => v.last.toString())
             .toList()
             .toString(),
+        'userName':userInfo?.name,
       },
     ).then((response) {
       loadingDismiss();
       if (jsonDecode(response.data)['successed']) {
+        var bytes = jsonDecode(response.data)['blob'];
+        Uint8List uint8List = Uint8List.fromList(bytes.cast<int>());
+        a4PaperByteList.add(uint8List);
+        ready.value = true;
         webViewController.loadHtmlString(jsonDecode(response.data)['data']);
       } else {
         errorDialog(content: response.data['message']);
       }
     });
+/*
     ready.value = false;
-
     for (var task in widget.palletTaskList) {
       (task.first as Future<List<pw.Widget>>).then((pdfWidgets) async {
         var pdf = pw.Document();
@@ -277,6 +284,7 @@ class _WebPrinterState extends State<WebPrinter> {
       });
     }
     ready.value = true;
+*/
   }
 
   @override
@@ -375,6 +383,5 @@ class _PdfPrintReviewState extends State<PdfPrintReview> {
         ),
       ),
     );
-    ;
   }
 }
