@@ -39,7 +39,10 @@ class SaleScanOutWarehouseLogic extends GetxController {
         type: BarCodeReportType.jinCanSalesScanningCode.name,
       )
         ..isUsed = state.usedBarCodeList.any((v) => v.barCode == code)
-        ..save(callback: (newBarCode) => state.barCodeList.add(newBarCode));
+        ..save(callback: (newBarCode) {
+          state.barCodeList.add(newBarCode);
+          state.barCodeList.sort((a, b) => a.code!.compareTo(b.code!));
+        });
     }
   }
 

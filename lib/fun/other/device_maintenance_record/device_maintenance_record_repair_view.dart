@@ -25,6 +25,8 @@ class _DeviceMaintenanceRecordRepairPageState
   final logic = Get.find<DeviceMaintenanceRecordLogic>();
   final state = Get.find<DeviceMaintenanceRecordLogic>().state;
 
+
+
   InkWell addWorkerItem() {
     return InkWell(
       onTap: () {
@@ -130,7 +132,9 @@ class _DeviceMaintenanceRecordRepairPageState
         Expanded(
             child: CupertinoTextField(
           inputFormatters: inputType,
-          onChanged: (s){onChanged?.call(s);},
+          onChanged: (s) {
+            onChanged?.call(s);
+          },
         )),
       ],
     );
@@ -241,15 +245,18 @@ class _DeviceMaintenanceRecordRepairPageState
                 Expanded(
                   flex: 3,
                   child: EditText(
+                    controller: logic.numberController,
                       hint: 'device_maintenance_holding_artificial_number'.tr,
                       onChanged: (s) {
                         logic.searchPeople(s);
                       }),
                 ),
                 Obx(() => Expanded(
-                    child: Text(state.peoPleInfo.value.empName == null
-                        ? ''
-                        : state.peoPleInfo.value.empName.toString())))
+                    child: Text(
+                        state.deviceData.value.deviceMessage?.custodianName==null
+                            ? ''
+                            : state.deviceData.value.deviceMessage!.custodianName
+                                .toString())))
               ],
             ),
             EditText(
@@ -291,7 +298,7 @@ class _DeviceMaintenanceRecordRepairPageState
                 text: 'device_maintenance_submit'.tr,
                 click: () {
                   logic.submitRecordData(
-                    success: (s){
+                    success: (s) {
                       successDialog(
                         content: s,
                         back: () => Get.back(),
