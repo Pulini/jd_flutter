@@ -9,7 +9,6 @@ import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
-import 'package:jd_flutter/widget/switch_button_widget.dart';
 import 'package:jd_flutter/widget/worker_check_widget.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 
@@ -308,7 +307,6 @@ void createLabelDialog({
     return;
   }
   WorkerInfo? worker;
-  bool hasLastLabel = false;
   var avatar = ''.obs;
   var max = isSingleSize
       ? 0
@@ -319,19 +317,7 @@ void createLabelDialog({
   Get.dialog(AlertDialog(
     titlePadding: EdgeInsetsGeometry.all(5),
     contentPadding: EdgeInsetsGeometry.all(10),
-    title: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Padding(
-          padding: EdgeInsetsGeometry.only(left: 5),
-          child: Text('创建贴标'),
-        ),
-        IconButton(
-          onPressed: () => Get.back(),
-          icon: Icon(Icons.cancel, color: Colors.red),
-        )
-      ],
-    ),
+    title: Padding(padding: EdgeInsetsGeometry.all(5), child: Text('创建贴标')),
     content: SizedBox(
       width: 150,
       height: isSingleSize ? 270 : 330,
@@ -382,15 +368,19 @@ void createLabelDialog({
                     ),
                   ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    SwitchButton(
-                      value: hasLastLabel,
-                      onChanged: (v) => hasLastLabel = v,
-                      name: '附带尾标',
+                    Expanded(
+                      child: CombinationButton(
+                        text: '取消',
+                        backgroundColor: Colors.grey,
+                        combination: Combination.left,
+                        click: () => Get.back(),
+                      ),
                     ),
-                    CombinationButton(
+                    Expanded(
+                      child: CombinationButton(
                         text: '创建',
+                        combination: Combination.right,
                         click: () {
                           if (worker == null) {
                             errorDialog(content: '请输入创建人工号');
@@ -406,7 +396,6 @@ void createLabelDialog({
                             batchNo: batchNo,
                             isSingleSize: isSingleSize,
                             isSingleInstruction: isSingleInstruction,
-                            createLastLabel: hasLastLabel,
                             list: selectedList,
                             success: (msg) => successDialog(
                               content: msg,
@@ -417,7 +406,9 @@ void createLabelDialog({
                             ),
                             error: (msg) => errorDialog(content: msg),
                           );
-                        }),
+                        },
+                      ),
+                    )
                   ],
                 ),
               ],
@@ -435,7 +426,6 @@ void _createLabel({
   required String batchNo,
   required bool isSingleSize,
   required bool isSingleInstruction,
-  required bool createLastLabel,
   required List<CreateLabelInfo> list,
   required Function(String) success,
   required Function(String) error,
@@ -481,7 +471,7 @@ void _createLabel({
       'SeOrderType': isSingleInstruction ? '1' : '2',
       'PackageType': isSingleSize ? 478 : 479,
       'BatchNo': batchNo,
-      'IsCreateTailLabel': createLastLabel,
+      'IsCreateTailLabel': true,
       'SeOrderList': instructionList.isNotEmpty
           ? instructionList.toSet().map((v) => {'WorkCardEntryFID': v}).toList()
           : [],
