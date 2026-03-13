@@ -277,7 +277,7 @@ class RouteConfig {
   //设备维修记录
   static Routes deviceMaintenance = Routes(
     '/device_maintenance_record',
-    200,
+    201,
     const DeviceMaintenanceRecordPage(),
   );
 

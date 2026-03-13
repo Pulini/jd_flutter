@@ -5,8 +5,6 @@ import 'package:jd_flutter/fun/other/device_maintenance_record/device_maintenanc
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 
-
-
 class DeviceMaintenanceRecordDetailPage extends StatefulWidget {
   const DeviceMaintenanceRecordDetailPage({super.key});
 
@@ -71,9 +69,16 @@ class _DeviceMaintenanceRecordDetailPageState
   Widget build(BuildContext context) {
     return pageBody(
       title: 'device_maintenance_title_device_information'.tr,
-      actions: [CombinationButton(text: 'device_maintenance_repair'.tr, click: () {
-         logic.goRepair();
-      }),const SizedBox(width: 10,)],
+      actions: [
+        CombinationButton(
+            text: 'device_maintenance_repair'.tr,
+            click: () {
+              logic.goRepair();
+            }),
+        const SizedBox(
+          width: 10,
+        )
+      ],
       body: Obx(
         () => Container(
           margin: const EdgeInsets.only(left: 10),
@@ -83,27 +88,27 @@ class _DeviceMaintenanceRecordDetailPageState
             children: [
               textSpan(
                 hint: 'device_maintenance_equipment_name'.tr,
-                text: state.deviceData.value.deviceMessage!.deviceName?? '',
+                text: state.deviceData.value.deviceMessage!.deviceName ?? '',
               ),
               textSpan(
                 hint: 'device_maintenance_equipment_number'.tr,
-                text: state.deviceData.value.deviceMessage!.deviceNo?? '',
+                text: state.deviceData.value.deviceMessage!.deviceNo ?? '',
               ),
               textSpan(
                 hint: 'device_maintenance_equipment_model'.tr,
-                text: state.deviceData.value.deviceMessage!.model?? '',
+                text: state.deviceData.value.deviceMessage!.model ?? '',
               ),
               textSpan(
                 hint: 'device_maintenance_custodian_unit'.tr,
-                text: state.deviceData.value.deviceMessage!.custodianDept?? '',
+                text: state.deviceData.value.deviceMessage!.custodianDept ?? '',
               ),
               textSpan(
                 hint: 'device_maintenance_custodian'.tr,
-                text: state.deviceData.value.deviceMessage!.custodianName?? '',
+                text: state.deviceData.value.deviceMessage!.custodianName ?? '',
               ),
               textSpan(
                 hint: 'device_maintenance_custodian_phone'.tr,
-                text: state.deviceData.value.deviceMessage!.custodianTel?? '',
+                text: state.deviceData.value.deviceMessage!.custodianTel ?? '',
               ),
               Center(
                 child: Text(
@@ -117,59 +122,69 @@ class _DeviceMaintenanceRecordDetailPageState
                 visible: state.isHave.value,
                 child: textSpan(
                   hint: 'device_maintenance_document_number'.tr,
-                  text: state.deviceData.value.repairOrder!.number?? '',
+                  text: state.deviceData.value.repairOrder?.number ?? '',
                 ),
               ),
               Visibility(
                 visible: state.isHave.value,
                 child: textSpan(
                   hint: 'device_maintenance_title_fault_description'.tr,
-                  text: state.deviceData.value.repairOrder!.faultDescription?? '',
+                  text: state.deviceData.value.repairOrder?.faultDescription ??
+                      '',
                 ),
               ),
               Visibility(
                 visible: state.isHave.value,
                 child: textSpan(
                   hint: 'device_maintenance_fault_cause_determination'.tr,
-                  text: state.deviceData.value.repairOrder!.issueCause?? '',
+                  text: state.deviceData.value.repairOrder?.issueCause ?? '',
                 ),
               ),
               Visibility(
                 visible: state.isHave.value,
                 child: textSpan(
                   hint: 'device_maintenance_title_maintenance_organization'.tr,
-                  text: state.deviceData.value.repairOrder!.maintenanceUnit?? '',
+                  text:
+                      state.deviceData.value.repairOrder?.maintenanceUnit ?? '',
                 ),
               ),
               Visibility(
                 visible: state.isHave.value,
                 child: textSpan(
                   hint: 'device_maintenance_title_prevention'.tr,
-                  text: state.deviceData.value.repairOrder!.assessmentPrevention?? '',
+                  text: state
+                          .deviceData.value.repairOrder?.assessmentPrevention ??
+                      '',
                 ),
               ),
               Visibility(
                 visible: state.isHave.value,
                 child: textSpan(
                   hint: 'device_maintenance_title_repair_time'.tr,
-                  text: state.deviceData.value.repairOrder!.inspectionTime?? '',
+                  text:
+                      state.deviceData.value.repairOrder?.inspectionTime ?? '',
                 ),
               ),
               Visibility(
                 visible: state.isHave.value,
                 child: textSpan(
                   hint: 'device_maintenance_title_fixed_time'.tr,
-                  text: state.deviceData.value.repairOrder!.repairTime?? '',
+                  text: state.deviceData.value.repairOrder?.repairTime ?? '',
                 ),
               ),
               Expanded(
-                child: ListView.builder(
-                  padding: const EdgeInsets.all(5),
-                  itemCount: state
-                      .deviceData.value.repairOrder?.repairEntryData?.length,
-                  itemBuilder: (_, i) => _item(
-                      state.deviceData.value.repairOrder!.repairEntryData![i]),
-                ),
+                child: state.deviceData.value.repairOrder?.repairEntryData !=
+                            null &&
+                        state.deviceData.value.repairOrder!.repairEntryData!
+                            .isNotEmpty
+                    ? ListView.builder(
+                        padding: const EdgeInsets.all(5),
+                        itemCount: state.deviceData.value.repairOrder!
+                            .repairEntryData!.length,
+                        itemBuilder: (_, i) => _item(state
+                            .deviceData.value.repairOrder!.repairEntryData![i]),
+                      )
+                    : const SizedBox.shrink(),
               ),
             ],
           ),

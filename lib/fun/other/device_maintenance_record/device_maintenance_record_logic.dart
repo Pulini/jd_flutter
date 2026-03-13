@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/device_maintenance_info.dart';
 import 'package:jd_flutter/bean/http/response/device_maintenance_list_info.dart';
@@ -46,6 +47,8 @@ class DeviceMaintenanceRecordLogic extends GetxController {
   )..lastDate = DateTime(
       DateTime.now().year, DateTime.now().month + 2, DateTime.now().day);
 
+  var numberController = TextEditingController();
+
   //搜索按钮的分辨事件
   void search() {
     if (state.deviceNumber.isNotEmpty) {
@@ -84,8 +87,7 @@ class DeviceMaintenanceRecordLogic extends GetxController {
   void submitRecordData({
     required Function(String msg) success,
   }) {
-    if (state.custodianNumber.toString().length != 6 ||
-        state.peoPleInfo.value.empName == null) {
+    if (numberController.text.length !=6) {
       showSnackBar(title: 'shack_bar_warm'.tr, message: 'device_maintenance_holder_input_error'.tr);
     } else if (state.maintenanceUnit.toString().isEmpty) {
       showSnackBar(title: 'shack_bar_warm'.tr, message: 'device_maintenance_repair_unit'.tr);
@@ -199,6 +201,7 @@ class DeviceMaintenanceRecordLogic extends GetxController {
         } else {
           state.isHave.value = true;
         }
+        numberController.text = state.deviceData.value.deviceMessage?.custodianCode?.toString() ?? '';
         Get.to(() => const DeviceMaintenanceRecordDetailPage());
       } else {
         errorDialog(content: response.message);
@@ -217,7 +220,7 @@ class DeviceMaintenanceRecordLogic extends GetxController {
         },
       ).then((response) {
         if (response.resultCode == resultSuccess) {
-          state.custodianNumber.value = number;
+          numberController.text  = number;
           state.peoPleInfo.value = PeopleMessageInfo.fromJson(response.data);
         } else {
           errorDialog(content: response.message);
