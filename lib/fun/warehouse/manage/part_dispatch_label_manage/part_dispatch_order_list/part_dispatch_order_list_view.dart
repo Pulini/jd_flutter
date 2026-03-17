@@ -129,14 +129,15 @@ class _PartDispatchLabelManagePageState
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Expanded(
-                      child: Text(
-                        data.materialName ?? '',
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
+                    Expanded(child: Text(
+                      data.materialName ?? '',
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    ),),
                     Text(
                       '${data.remainingQty.toShowString()}/${data.dispatchQty.toShowString()}',
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
                     )
                   ],
                 ),
@@ -287,8 +288,11 @@ class _PartDispatchLabelManagePageState
           Expanded(
             child: Obx(() => GridView.builder(
                   itemCount: state.partList.length,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 6,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: MediaQuery.of(context).orientation ==
+                            Orientation.landscape
+                        ? 6
+                        : 4,
                     childAspectRatio: 7 / 5,
                   ),
                   itemBuilder: (c, i) => _partItem(state.partList[i]),
