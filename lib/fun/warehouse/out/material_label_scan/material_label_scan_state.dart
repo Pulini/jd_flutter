@@ -31,16 +31,16 @@ class MaterialLabelScanState {
   void getQueryList({
     required String startDate,
     required String endDate,
-    required Function(String) error,
+    required String code,
   }) {
     httpGet(
       loading: 'material_label_scan_get_material_list'.tr,
       method: webApiGetPickMatList,
       params: {
-        'NoticeDateStart': '2024-01-26',
-        'NoticeDateEnd': '2026-01-05',
+        'NoticeDateStart': startDate,
+        'NoticeDateEnd': endDate,
         'ProductName': '',
-        'MaterialNumber': '',
+        'MaterialNumber': code,
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
@@ -48,10 +48,10 @@ class MaterialLabelScanState {
           for (var i = 0; i < response.data.length; ++i)
             MaterialLabelScanInfo.fromJson(response.data[i])
         ];
-
         dataList.value = list;
       } else {
-        error.call(response.message ?? 'query_default_error'.tr);
+        dataList.value=[];
+        errorDialog(content: response.message ?? 'query_default_error'.tr);
       }
     });
   }

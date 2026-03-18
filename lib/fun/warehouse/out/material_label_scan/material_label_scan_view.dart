@@ -61,7 +61,11 @@ class _MaterialLabelScanPageState extends State<MaterialLabelScanPage> {
           child: Text(hint, style: hintStyle),
         ),
         Expanded(
-          child: Text(text1 ?? '', style: textStyle,maxLines: 1,),
+          child: Text(
+            text1 ?? '',
+            style: textStyle,
+            maxLines: 1,
+          ),
         ),
       ],
     );
@@ -100,15 +104,23 @@ class _MaterialLabelScanPageState extends State<MaterialLabelScanPage> {
           mainAxisSize: MainAxisSize.min,
           children: [
             _text('material_label_scan_number'.tr, data.workCardNo ?? ''),
-            InkWell(child:  _text('material_label_scan_processed'.tr, '${data.proMaterialNumber ?? ''} ${data.proMaterialName ?? ''}'),onTap: (){
-              showSnackBar(message:'${data.proMaterialNumber ?? ''} ${data.proMaterialName ?? ''}' );
-            },),
+            InkWell(
+              child: _text('material_label_scan_processed'.tr,
+                  '${data.proMaterialNumber ?? ''} ${data.proMaterialName ?? ''}'),
+              onTap: () {
+                showSnackBar(
+                    message:
+                        '${data.proMaterialNumber ?? ''} ${data.proMaterialName ?? ''}');
+              },
+            ),
             _text('material_label_scan_command'.tr, data.mtoNo ?? ''),
             _text('material_label_scan_time'.tr, data.noticeDate ?? ''),
           ],
         ),
         onTap: () {
-          logic.queryDetail(workCardNo: data.workCardNo ?? '',materialID: data.proMaterialID?? 0);
+          logic.queryDetail(
+              workCardNo: data.workCardNo ?? '',
+              materialID: data.proMaterialID ?? 0);
         },
       ),
     );
@@ -128,7 +140,8 @@ class _MaterialLabelScanPageState extends State<MaterialLabelScanPage> {
       ],
       query: () => logic.query(
           startDate: startDate.getDateFormatYMD(),
-          endDate: endDate.getDateFormatYMD()),
+          endDate: endDate.getDateFormatYMD(),
+          code: materialNumber.text.toString()),
       body: Obx(() => ListView.builder(
             padding: const EdgeInsets.all(8),
             itemCount: state.dataList.length,
@@ -148,7 +161,6 @@ class _MaterialLabelScanPageState extends State<MaterialLabelScanPage> {
     scan();
     super.initState();
   }
-
 
   @override
   void dispose() {
