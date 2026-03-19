@@ -289,10 +289,7 @@ class _PartDispatchLabelManagePageState
             child: Obx(() => GridView.builder(
                   itemCount: state.partList.length,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: MediaQuery.of(context).orientation ==
-                            Orientation.landscape
-                        ? 6
-                        : 4,
+                    crossAxisCount: 6,
                     childAspectRatio: 7 / 5,
                   ),
                   itemBuilder: (c, i) => _partItem(state.partList[i]),
