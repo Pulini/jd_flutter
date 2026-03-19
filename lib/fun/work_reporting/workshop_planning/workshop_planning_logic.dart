@@ -9,6 +9,7 @@ import 'package:jd_flutter/fun/work_reporting/workshop_planning/workshop_plannin
 import 'package:jd_flutter/fun/work_reporting/workshop_planning/workshop_planning_report_list_view.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
 import 'workshop_planning_state.dart';
@@ -212,6 +213,13 @@ class WorkshopPlanningLogic extends GetxController {
     required TextEditingController manHours,
     required TextEditingController coefficient,
   }) {
+
+    logger.f('workerType:'+manHours.text.toDoubleTry().toString());
+    logger.f('base:'+coefficient.text.toDoubleTry().toString());
+    logger.f('typeOfWork:'+state.workTypeList[workerType.selectedItem].typeOfWork.toString());
+
+    logger.f('当前所选组员信息：'+state.worker!.name.toString());
+
     if (state.worker == null) {
       errorDialog(content: '请填写工号或选择组员');
       return;
@@ -230,11 +238,27 @@ class WorkshopPlanningLogic extends GetxController {
         state.workTypeList[workerType.selectedItem].typeOfWork;
     var index = state.reportWorkerList.indexWhere((v) =>
         v.name == state.worker!.name && v.number == state.worker!.number);
+
     if (index >= 0) {
       state.reportWorkerList[index] = state.worker!.deepCopy();
+
+      // 在 modifyReportReportWorkerList 中找到该人员并更新
+      var modifyIndex = state.modifyReportReportWorkerList.indexWhere((v) =>
+      v.name == state.worker!.name && v.number == state.worker!.number);
+      if (modifyIndex >= 0) {
+        state.modifyReportReportWorkerList[modifyIndex] = state.worker!.deepCopy();
+      }
     } else {
       state.reportWorkerList.add(state.worker!);
+
+      // 在 modifyReportReportWorkerList 中添加该人员
+      state.modifyReportReportWorkerList.add(state.worker!.deepCopy());
     }
+    // if (index >= 0) {
+    //   state.reportWorkerList[index] = state.worker!.deepCopy();
+    // } else {
+    //   state.reportWorkerList.add(state.worker!);
+    // }
     Get.back();
   }
 
