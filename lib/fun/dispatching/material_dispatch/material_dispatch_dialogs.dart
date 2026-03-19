@@ -682,7 +682,6 @@ Future pickPallet() {
     buttonName: 'material_dispatch_dialog_posting_date'.tr,
     firstDate: DateTime(dateNow.year, dateNow.month - 1, dateNow.day),
     lastDate: dateNow,
-    initDate: selectDate,
     onSelected: (d) => selectDate = d.millisecondsSinceEpoch,
   );
 
@@ -701,6 +700,7 @@ Future pickPallet() {
     },
   );
 
+  //3.17号 改为不保存日期，默认当天。彭祖元需求
   var opcWarehouseLocation = OptionsPickerController(
     PickerType.sapWarehouseStorageLocation,
     buttonName: 'material_dispatch_dialog_stock_in_warehouse_position'.tr,
