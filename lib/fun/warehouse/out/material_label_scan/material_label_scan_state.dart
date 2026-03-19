@@ -12,6 +12,7 @@ import 'package:jd_flutter/widget/dialogs.dart';
 
 class MaterialLabelScanState {
   var dataList = <MaterialLabelScanInfo>[].obs;
+  var isScan = <String>[];
   var dataDetailList = <String, List<Items>>{}.obs;
   var dataDetail = MaterialLabelScanDetailInfo();
   var scanDetailList = <MaterialLabelScanBarCodeInfo>[].obs;
@@ -24,8 +25,6 @@ class MaterialLabelScanState {
 
   var searchWorkCardNo = '';
   var searchMaterialID = 0;
-
-
 
   //备料任务清单
   void getQueryList({
@@ -50,7 +49,7 @@ class MaterialLabelScanState {
         ];
         dataList.value = list;
       } else {
-        dataList.value=[];
+        dataList.value = [];
         errorDialog(content: response.message ?? 'query_default_error'.tr);
       }
     });
@@ -109,6 +108,7 @@ class MaterialLabelScanState {
             MaterialLabelScanBarCodeInfo.fromJson(response.data[i])
         ];
         setScanDetail(
+            scanCode: barCode,
             lists: list,
             success: () {
               success.call();
@@ -122,17 +122,22 @@ class MaterialLabelScanState {
   }
 
   //设置扫码信息
-//设置扫码信息
   void setScanDetail({
     required List<MaterialLabelScanBarCodeInfo> lists,
     required Function() success,
+    required String scanCode,
   }) {
     bool allFound = true;
+
+    // 判断条码是否已扫描过
+    if (isScan.contains(scanCode)) {
+      showSnackBar(message: '该条码已扫描过，不能重复扫描');
+      return;
+    }
 
     // 遍历每个扫码信息
     for (var scanItem in lists) {
       bool found = false;
-      bool alreadyScanned = false;
 
       // 遍历所有物料分组
       for (var entry in dataDetailList.entries) {
@@ -144,28 +149,20 @@ class MaterialLabelScanState {
           if (detailItem.size == scanItem.size &&
               detailItem.materialID == scanItem.materialID &&
               detailItem.srcICMOInterID == scanItem.srcICMOInterID) {
-            if (detailItem.isScan == true) {
-              // 如果找到条码但已经扫描过了
-              alreadyScanned = true;
-              showSnackBar(message: '该条码已扫描过，不能重复扫描');
-              break;
-            } else {
-              // 更新数据
-              detailItem.thisTime = scanItem.barCodeQty;
-              detailItem.isScan = true;
-              found = true;
-              break; // 找到后退出内层循环
-            }
+            // 更新数据
+            detailItem.thisTime =
+                (detailItem.thisTime ?? 0) + (scanItem.barCodeQty ?? 0);
+            found = true;
+            break; // 找到后退出内层循环
           }
         }
 
-        // 如果在当前物料分组中已找到并处理，或已扫描过，继续下一个扫描项
-        if (found || alreadyScanned) break;
+        // 如果已找到，继续下一个扫描项
+        if (found) break;
       }
 
       // 如果整个数据中都未找到匹配项
-      if (!found && !alreadyScanned) {
-        showSnackBar(message: '未找到匹配的物料信息');
+      if (!found) {
         allFound = false;
       }
     }
@@ -175,13 +172,31 @@ class MaterialLabelScanState {
 
     // 只有当所有扫码信息都处理完才调用成功回调
     if (allFound) {
+      isScan.add(scanCode);
       success.call();
+      // 按 thisTime 降序排序，有值的排在前面
+      final sortedMap = <String, List<Items>>{};
+      final entries = dataDetailList.entries.toList();
+      entries.sort((a, b) {
+        final aHasValue = a.value.any((item) => (item.thisTime ?? 0) > 0);
+        final bHasValue = b.value.any((item) => (item.thisTime ?? 0) > 0);
+        if (aHasValue && !bHasValue) return -1;
+        if (!aHasValue && bHasValue) return 1;
+        return 0;
+      });
+      for (var entry in entries) {
+        sortedMap[entry.key] = entry.value;
+      }
+      dataDetailList.value = sortedMap;
+    } else {
+      // 统一提示一次未找到匹配项
+      showSnackBar(message: '未找到匹配的物料信息');
     }
   }
 
   //备料提交领料
   void submitCodeDetail({
-    required Function() success,
+    required Function(String) success,
   }) {
     httpPost(
       loading: 'material_label_scan_detail_submit_message'.tr,
@@ -196,9 +211,9 @@ class MaterialLabelScanState {
         'IssuerEmpID': userInfo!.empID,
         'pickMatDetailItems': [
           for (var entry in dataDetailList.entries)
-          // 获取当前物料分组下的所有明细
+            // 获取当前物料分组下的所有明细
             for (var detailItem in entry.value)
-              if (detailItem.isScan == true)
+              if ((detailItem.thisTime ?? 0) > 0)
                 {
                   'SrcICMOInterID': detailItem.srcICMOInterID,
                   'MaterialID': detailItem.materialID,
@@ -208,7 +223,10 @@ class MaterialLabelScanState {
         ]
       },
     ).then((response) {
-      if (response.resultCode == resultSuccess) {} else {
+      if (response.resultCode == resultSuccess) {
+        success.call( response.message ?? 'dialog_default_title_success'.tr);
+        isScan.clear();
+      } else {
         errorDialog(content: response.message ?? 'query_default_error'.tr);
       }
     });

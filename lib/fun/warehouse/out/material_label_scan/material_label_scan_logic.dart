@@ -48,10 +48,10 @@ class MaterialLabelScanLogic extends GetxController {
       // 在当前物料分组中查找匹配的尺码
       for (var detailItem in materialList) {
         detailItem.thisTime = 0.0;
-        detailItem.isScan = false;
       }
     }
     state.dataDetailList.refresh();
+    state.isScan.clear();
   }
 
 // 检查是否可以提交
@@ -66,7 +66,7 @@ class MaterialLabelScanLogic extends GetxController {
       var materialList = entry.value;
       // 在当前物料分组中查找匹配的尺码
       for (var detailItem in materialList) {
-        if (detailItem.isScan == true) {
+        if ((detailItem.thisTime ?? 0) > 0) {
           hasScannedItems = true;
           break; // 找到后退出内层循环
         }
@@ -85,10 +85,10 @@ class MaterialLabelScanLogic extends GetxController {
 
   //提交条码信息
   void submit({
-    required Function() success,
+    required Function(String) success,
   }) {
-    state.submitCodeDetail(success: () {
-      success.call();
+    state.submitCodeDetail(success: (s) {
+      success.call(s);
     });
   }
 
@@ -97,17 +97,26 @@ class MaterialLabelScanLogic extends GetxController {
     return parts.isNotEmpty ? parts[0] : input;
   }
 
+  //查找对应图片
   void searchPic({
     required String id,
     required Function(PicItems)? success,
   }) {
     var parts = id.split(',');
+    bool found = false;
+
     state.dataDetail.picItems?.forEach((c) {
       if(parts.isNotEmpty){
         if(c.materialID.toString() == parts[0] && c.productID.toString() == parts[1]){
-              success?.call(c);
+          found = true;
+          success?.call(c);
         }
       }
     });
+
+    // 如果未找到对应的图片，显示提示
+    if (!found && (state.dataDetail.picItems?.isNotEmpty ?? false)) {
+      showSnackBar(message: '未找到对应的图片信息');
+    }
   }
 }

@@ -162,12 +162,18 @@ class _MaterialLabelScanDetailPageState
                       TextButton(
                         onPressed: () {
                           if (state.peopleEmpId != -1) {
-                            logic.submit(success: () {
-                              logic.queryDetail(
-                                  workCardNo: state.searchWorkCardNo,
-                                  materialID: state.searchMaterialID);
+                            logic.submit(success: (mes) {
+                              successDialog(
+                                content: mes,
+                                back: () {
+                                  logic.queryDetail(
+                                      workCardNo: state.searchWorkCardNo,
+                                      materialID: state.searchMaterialID);
+                                  state.isScan.clear();
+                                  Get.back();
+                                },
+                              );
                             });
-                            Get.back();
                           } else {
                             showSnackBar(
                                 title: 'shack_bar_warm'.tr,
@@ -203,6 +209,7 @@ class _MaterialLabelScanDetailPageState
     required Color backColor,
     required Color textColor,
     required double paddingNumber,
+    bool isBold = false,
   }) {
     return Container(
       height: 35,
@@ -219,7 +226,10 @@ class _MaterialLabelScanDetailPageState
           child: Text(
             mes,
             maxLines: 1,
-            style: TextStyle(color: textColor),
+            style: TextStyle(
+              color: textColor,
+              fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
+            ),
           ),
         ),
       ),
@@ -280,7 +290,7 @@ class _MaterialLabelScanDetailPageState
                       //本次领料
                       mes: 'material_label_scan_detail_this_collar'.tr,
                       backColor: Colors.lightBlueAccent,
-                      textColor: yellowText,
+                      textColor: redText,
                       paddingNumber: 5)),
             ],
           ),
@@ -352,8 +362,9 @@ class _MaterialLabelScanDetailPageState
                     child: _titleText(
                         mes: item.thisTime.toShowString(),
                         backColor: Colors.white,
-                        textColor: yellowText,
-                        paddingNumber: 5)),
+                        textColor: redText,
+                        paddingNumber: 5,
+                        isBold: true)),
               ],
             )),
 
@@ -406,8 +417,9 @@ class _MaterialLabelScanDetailPageState
                           .reduce((a, b) => a.add(b))
                           .toShowString(),
                       backColor: Colors.white,
-                      textColor: yellowText,
-                      paddingNumber: 5)),
+                      textColor: Colors.red,
+                      paddingNumber: 5,
+                      isBold: true)),
             ],
           )
       ],
@@ -498,7 +510,8 @@ class _MaterialLabelScanDetailPageState
                                   onPressed: () {
                                     logic.searchPic(
                                         success: (PicItems pic) {
-                                          showMaterialImageDialog(imageUrl: pic.pictureUrl);
+                                          showMaterialImageDialog(
+                                              imageUrl: pic.pictureUrl);
                                         },
                                         id: materialKey);
                                   },
@@ -587,5 +600,11 @@ class _MaterialLabelScanDetailPageState
     state.canScan = true;
     scanBarCode();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    state.isScan.clear();
+    super.dispose();
   }
 }

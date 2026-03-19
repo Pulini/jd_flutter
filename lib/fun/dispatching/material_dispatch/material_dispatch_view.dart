@@ -174,7 +174,7 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
           child: Row(
             children: [
               Expanded(
-                flex: 3,
+                flex: 4,
                 child: AutoSizeText(
                   'material_dispatch_material'.trArgs([
                     data.materialNumber ?? '',
@@ -187,6 +187,7 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
                 ),
               ),
               Expanded(
+                flex: 2,
                 child: Text(
                   'material_dispatch_type_body'
                       .trArgs([data.productName ?? '']),

@@ -35,8 +35,8 @@ class _MaterialLabelScanPageState extends State<MaterialLabelScanPage> {
   //日期选择器的控制器
   var endDate = DatePickerController(
     buttonName: 'material_label_scan_end_time'.tr,
-    PickerType.startDate,
-    saveKey: '${RouteConfig.materialLabelScan.name}${PickerType.startDate}',
+    PickerType.endDate,
+    saveKey: '${RouteConfig.materialLabelScan.name}${PickerType.endDate}',
   );
 
   //工厂仓库
