@@ -213,13 +213,6 @@ class WorkshopPlanningLogic extends GetxController {
     required TextEditingController manHours,
     required TextEditingController coefficient,
   }) {
-
-    logger.f('workerType:'+manHours.text.toDoubleTry().toString());
-    logger.f('base:'+coefficient.text.toDoubleTry().toString());
-    logger.f('typeOfWork:'+state.workTypeList[workerType.selectedItem].typeOfWork.toString());
-
-    logger.f('当前所选组员信息：'+state.worker!.name.toString());
-
     if (state.worker == null) {
       errorDialog(content: '请填写工号或选择组员');
       return;
@@ -241,7 +234,6 @@ class WorkshopPlanningLogic extends GetxController {
 
     if (index >= 0) {
       state.reportWorkerList[index] = state.worker!.deepCopy();
-
       // 在 modifyReportReportWorkerList 中找到该人员并更新
       var modifyIndex = state.modifyReportReportWorkerList.indexWhere((v) =>
       v.name == state.worker!.name && v.number == state.worker!.number);
@@ -250,15 +242,9 @@ class WorkshopPlanningLogic extends GetxController {
       }
     } else {
       state.reportWorkerList.add(state.worker!);
-
       // 在 modifyReportReportWorkerList 中添加该人员
       state.modifyReportReportWorkerList.add(state.worker!.deepCopy());
     }
-    // if (index >= 0) {
-    //   state.reportWorkerList[index] = state.worker!.deepCopy();
-    // } else {
-    //   state.reportWorkerList.add(state.worker!);
-    // }
     Get.back();
   }
 

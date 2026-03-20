@@ -57,10 +57,8 @@ class _PreviewWebLabelListState extends State<PreviewWebLabelList> {
       isTestUrl()
           ? 'https://mestest.goldemperor.com:9099/m'
           : 'https://wb.goldemperor.com:8096/m',
-      queryParameters: {
-        'xwl': 'public/interfaces/app/getBqModel',
-        'bqList': widget.labelCodes.toString(),
-      },
+      queryParameters: {'xwl': 'public/interfaces/app/getBqModel'},
+      data: {'bqList': widget.labelCodes},
     ).then((response) async {
       loadingDismiss();
       labelList.value = [
@@ -76,6 +74,9 @@ class _PreviewWebLabelListState extends State<PreviewWebLabelList> {
         });
         htmlImages.add(bytes);
       }
+    }, onError: (e) {
+      loadingDismiss();
+      errorDialog(content: '预览错误：${e.toString()}');
     });
   }
 
