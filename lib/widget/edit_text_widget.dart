@@ -13,6 +13,8 @@ class EditText extends StatefulWidget {
     this.onChanged,
     this.isEnable = true,
     this.hasClose = true,
+    this.allowNewLine = false,
+    this.trimTrailingSpace = true,
   });
 
   final String? initStr;
@@ -22,6 +24,8 @@ class EditText extends StatefulWidget {
   final String? hint;
   final Function(String v)? onChanged;
   final TextEditingController? controller;
+  final bool allowNewLine;
+  final bool trimTrailingSpace;
 
   @override
   State<EditText> createState() => _EditTextState();
@@ -43,7 +47,7 @@ class _EditTextState extends State<EditText> {
 
   @override
   void dispose() {
-    // 只有当我们自己创建controller时才需要dispose
+    // 只有当我们自己创建 controller 时才需要 dispose
     if (widget.controller == null) {
       _controller.dispose();
     }
@@ -55,12 +59,28 @@ class _EditTextState extends State<EditText> {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.all(5),
-      height: 40,
+      height: widget.allowNewLine ? null : 40,
       child: TextField(
         enabled: widget.isEnable,
         controller: _controller,
+        maxLines: widget.allowNewLine ? null : 1,
+        inputFormatters: widget.allowNewLine
+            ? null
+            : [
+          FilteringTextInputFormatter.deny(RegExp(r'[\n\r]')),
+        ],
         onChanged: (v) {
-          widget.onChanged?.call(v);
+          String newText = v;
+
+          if (widget.trimTrailingSpace && v.endsWith(' ')) {
+            newText = v.trimRight();
+            _controller.text = newText;
+            _controller.selection = TextSelection.fromPosition(
+              TextPosition(offset: newText.length),
+            );
+          }
+
+          widget.onChanged?.call(newText);
         },
         focusNode: _focusNode,
         decoration: InputDecoration(
@@ -85,18 +105,21 @@ class _EditTextState extends State<EditText> {
           labelStyle: const TextStyle(color: Colors.black54),
           suffixIcon: widget.hasClose
               ? IconButton(
-                  icon: const Icon(Icons.close, color: Colors.grey),
-                  onPressed: () {
-                    widget.onChanged?.call('');
-                    _controller.clear();
-                  },
-                )
+            icon: const Icon(Icons.close, color: Colors.grey),
+            onPressed: () {
+              widget.onChanged?.call('');
+              _controller.clear();
+            },
+          )
               : null,
         ),
       ),
     );
   }
 }
+
+// ... existing code ...
+
 
 //数字小数输入框输入框
 class NumberDecimalEditText extends StatefulWidget {

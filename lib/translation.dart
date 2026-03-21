@@ -2339,7 +2339,7 @@ class Translation extends Translations {
           'production_scan_verify_again': '确定要再次验证吗?',
           'production_scan_check': '校验',
           'production_scan_no_barcode': '没有可提交的条码!',
-          'production_scan_hava_barcode': '条码已存在!',
+          'production_scan_have_barcode': '条码已存在!',
           'production_scan_use_empty_pallets': '请使用空托盘入库!',
           'production_scan_used_pallets': '此托盘已在其他仓库使用!',
           'production_scan_not_exist': '此托盘不存在!',
@@ -6176,7 +6176,7 @@ class Translation extends Translations {
               'Are you sure you want to verify again?',
           'production_scan_check': 'Check',
           'production_scan_no_barcode': 'No barcode available for submission!',
-          'production_scan_hava_barcode': 'Barcode already exists!',
+          'production_scan_have_barcode': 'Barcode already exists!',
           'production_scan_use_empty_pallets':
               'Please use empty pallets for storage!',
           'production_scan_used_pallets':
@@ -10363,7 +10363,7 @@ class Translation extends Translations {
           'production_scan_check': 'Periksa',
           'production_scan_no_barcode':
               'Tidak ada kode batang yang dapat diajukan!',
-          'production_scan_hava_barcode': 'Kode batang sudah ada!',
+          'production_scan_have_barcode': 'Kode batang sudah ada!',
           'production_scan_use_empty_pallets':
               'Harap gunakan palet kosong untuk masuk gudang!',
           'production_scan_used_pallets':

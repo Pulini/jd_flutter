@@ -27,7 +27,7 @@ class ProcessReportStoreLogic extends GetxController {
   //添加条码
   void scanCode(String code) {
     if (state.barCodeList.any((v) => v.code == code)) {
-      showSnackBar(message: 'production_scan_hava_barcode'.tr, isWarning: true);
+      showSnackBar(message: 'production_scan_have_barcode'.tr, isWarning: true);
     } else {
       if (code.isPallet()) {
         checkPallet(
