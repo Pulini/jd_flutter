@@ -453,15 +453,14 @@ Future<void> _checkLeader({
   required Function() refresh,
 }) async {
   if(hasFrontCamera()){
-    livenFaceVerification(
-      faceUrl: userInfo?.picUrl ?? '',
-      verifySuccess: (pickerB64) => livenFaceVerification(
-        faceUrl: leader.liablePicturePath ?? '',
-        verifySuccess: (leaderB64) => _createTemporaryOder(
+    if (submitList.first.isNeedBindingLabel()) {
+      livenFaceVerification(
+        faceUrl: userInfo?.picUrl ?? '',
+        verifySuccess: (pickerB64) => _createTemporaryOder(
           pickerNumber: userInfo?.number ?? '',
           pickerB64: pickerB64,
           leaderNumber: leader.liableEmpCode ?? '',
-          leaderB64: leaderB64,
+          leaderB64: '',
           data: submitList,
           success: (msg) => successDialog(
             content: msg,
@@ -471,8 +470,29 @@ Future<void> _checkLeader({
             },
           ),
         ),
-      ),
-    );
+      );
+    }else{
+      livenFaceVerification(
+        faceUrl: userInfo?.picUrl ?? '',
+        verifySuccess: (pickerB64) => livenFaceVerification(
+          faceUrl: leader.liablePicturePath ?? '',
+          verifySuccess: (leaderB64) => _createTemporaryOder(
+            pickerNumber: userInfo?.number ?? '',
+            pickerB64: pickerB64,
+            leaderNumber: leader.liableEmpCode ?? '',
+            leaderB64: leaderB64,
+            data: submitList,
+            success: (msg) => successDialog(
+              content: msg,
+              back: () {
+                Get.back();
+                refresh.call();
+              },
+            ),
+          ),
+        ),
+      );
+    }
   }else{
     errorDialog(content: '当前设备没有前置摄像头。无法进行人脸识别！');
   }
