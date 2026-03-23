@@ -7,7 +7,6 @@ import 'package:jd_flutter/bean/http/response/department_info.dart';
 import 'package:jd_flutter/bean/http/response/home_function_info.dart';
 import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/route.dart';
-import 'package:jd_flutter/utils/printer/print_util.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
@@ -77,7 +76,6 @@ class HomeLogic extends GetxController {
   }
 
   void checkFunctionVersion() {
-    PrintUtil().disconnected();
     state.getMenuFunction(
       success: (json) async {
         var menuKey = textToKey(json.toString());

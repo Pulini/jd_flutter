@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:collection/collection.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/pack_order_list_info.dart';
 import 'package:jd_flutter/utils/printer/tsc_util.dart';
@@ -93,6 +94,7 @@ class PartDispatchLabelListLogic extends GetxController {
       v.isSelected.value = v.isPrint == true;
     }
   }
+
   //40016125
 
   void selectAllNotPrintItem() {
@@ -132,6 +134,16 @@ class PartDispatchLabelListLogic extends GetxController {
         bottomLeftText1: '序号：${label.pieceNo}',
         bottomRightText1: '交期：${label.fetchDate}',
       );
+
+  void printLabel(Function(List<List<Uint8List>>) labels) {
+    getLabelListData().then((l) {
+      if (l.isNotEmpty) {
+        askDialog(content: '确定要打印吗？', confirm: () => labels.call(l));
+      } else {
+        errorDialog(content: '没有未打印标签');
+      }
+    });
+  }
 
   ///获取标签列表数据
   Future<List<List<Uint8List>>> getLabelListData() async => [

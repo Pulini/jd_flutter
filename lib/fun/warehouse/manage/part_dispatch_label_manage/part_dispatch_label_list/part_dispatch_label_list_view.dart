@@ -83,7 +83,8 @@ class _PartDispatchLabelListPageState extends State<PartDispatchLabelListPage> {
             ),
           );
           var endWidget = GestureDetector(
-            onTap: () => Get.to(() => ViewNetPhoto(photos: data.pictureUrlList)),
+            onTap: () =>
+                Get.to(() => ViewNetPhoto(photos: data.pictureUrlList)),
             child: Container(
               height: 80,
               width: 160,
@@ -242,10 +243,9 @@ class _PartDispatchLabelListPageState extends State<PartDispatchLabelListPage> {
                       isEnabled: logic.buttonEnable(),
                       combination: Combination.right,
                       text: '批量打印',
-                      click: () => askDialog(
-                        content: '确定要打印吗？',
-                        confirm: () async => pu.printLabelList(
-                          labelList: await logic.getLabelListData(),
+                      click: () => logic.printLabel(
+                        (labels) async => pu.printLabelList(
+                          labelList: labels,
                           start: () => loadingShow('正在下发标签...'),
                           progress: (i, j) => loadingShow('正在下发标签($i/$j)'),
                           finished: (s, f) => successDialog(

@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/home_function_info.dart';
 import 'package:jd_flutter/route.dart';
+import 'package:jd_flutter/utils/printer/print_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/scanner.dart';
@@ -49,6 +50,7 @@ class HomeButton extends ButtonItem {
     functionTitle=name;
     Get.toNamed(route)?.then((_){
       closePdaScanner();
+      PrintUtil().disconnected();
       checkUpData.call();
     });
   }
