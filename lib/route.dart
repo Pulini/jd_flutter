@@ -571,7 +571,7 @@ class RouteConfig {
   //品检单列表
   static Routes qualityInspectionList = Routes(
     '/quality_inspection_list',
-    208,
+    209,
     const QualityInspectionListPage(),
   );
 

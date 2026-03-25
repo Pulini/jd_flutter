@@ -8,6 +8,7 @@ import 'package:jd_flutter/fun/warehouse/in/quality_inspection_list/quality_insp
 import 'package:jd_flutter/fun/warehouse/in/stuff_quality_inspection/stuff_quality_inspection_view.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
@@ -474,7 +475,7 @@ class QualityInspectionListLogic extends GetxController {
       if (selected.isNotEmpty) {
         var name = groupBy(selected, (v) => v.taxCode ?? '').keys;
         if (name.length > 1) {
-          showSnackBar(message: 'quality_inspection_different_order'.tr);
+          showSnackBar(message: 'quality_inspection_different_taxCode'.tr);
         } else {
           stockIn.call();
 /*      现场反馈功能操作复杂，不想使用
