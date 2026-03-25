@@ -156,55 +156,56 @@ class _DeviceMaintenanceRecordRepairPageState
           title: Text('device_maintenance_add_components'.tr),
           content: SizedBox(
             width: 300,
-            height: 260,
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 15),
-                _inputSearchText(
-                  hint: 'device_maintenance_manufacturer_brand'.tr,
-                  onChanged: (s) {
-                    brand = s;
-                  },
-                ),
-                const SizedBox(height: 5),
-                _inputSearchText(
-                  hint: 'device_maintenance_replace_accessory_name'.tr,
-                  onChanged: (s) {
-                    partName = s;
-                  },
-                ),
-                const SizedBox(height: 5),
-                _inputSearchText(
-                  hint: 'device_maintenance_quantity'.tr,
-                  inputType: inputNumber,
-                  onChanged: (s) {
-                    partNumber = s;
-                  },
-                ),
-                const SizedBox(height: 5),
-                _inputSearchText(
-                  hint: 'device_maintenance_unit'.tr,
-                  onChanged: (s) {
-                    partUnit = s;
-                  },
-                ),
-                const SizedBox(height: 5),
-                _inputSearchText(
-                  hint: 'device_maintenance_specifications'.tr,
-                  onChanged: (s) {
-                    partNorms = s;
-                  },
-                ),
-                const SizedBox(height: 5),
-                _inputSearchText(
-                  hint: 'device_maintenance_remarks'.tr,
-                  onChanged: (s) {
-                    partRemark = s;
-                  },
-                ),
-              ],
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 15),
+                  _inputSearchText(
+                    hint: 'device_maintenance_manufacturer_brand'.tr,
+                    onChanged: (s) {
+                      brand = s;
+                    },
+                  ),
+                  const SizedBox(height: 5),
+                  _inputSearchText(
+                    hint: 'device_maintenance_replace_accessory_name'.tr,
+                    onChanged: (s) {
+                      partName = s;
+                    },
+                  ),
+                  const SizedBox(height: 5),
+                  _inputSearchText(
+                    hint: 'device_maintenance_quantity'.tr,
+                    inputType: inputNumber,
+                    onChanged: (s) {
+                      partNumber = s;
+                    },
+                  ),
+                  const SizedBox(height: 5),
+                  _inputSearchText(
+                    hint: 'device_maintenance_unit'.tr,
+                    onChanged: (s) {
+                      partUnit = s;
+                    },
+                  ),
+                  const SizedBox(height: 5),
+                  _inputSearchText(
+                    hint: 'device_maintenance_specifications'.tr,
+                    onChanged: (s) {
+                      partNorms = s;
+                    },
+                  ),
+                  const SizedBox(height: 5),
+                  _inputSearchText(
+                    hint: 'device_maintenance_remarks'.tr,
+                    onChanged: (s) {
+                      partRemark = s;
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
           actions: [
@@ -233,6 +234,9 @@ class _DeviceMaintenanceRecordRepairPageState
       }),
     ));
   }
+
+// ... existing code ...
+
 
   @override
   Widget build(BuildContext context) {
