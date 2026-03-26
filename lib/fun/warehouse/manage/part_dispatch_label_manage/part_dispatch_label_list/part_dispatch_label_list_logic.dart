@@ -1,7 +1,6 @@
 import 'dart:typed_data';
 
 import 'package:collection/collection.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/pack_order_list_info.dart';
 import 'package:jd_flutter/utils/printer/tsc_util.dart';

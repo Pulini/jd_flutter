@@ -2,7 +2,8 @@
 
 class CheckCodeInfo {
   CheckCodeInfo({
-      this.items,});
+    this.items,
+  });
 
   CheckCodeInfo.fromJson(dynamic json) {
     if (json['Items'] != null) {
@@ -12,6 +13,7 @@ class CheckCodeInfo {
       });
     }
   }
+
   List<Items>? items;
 
   Map<String, dynamic> toJson() {
@@ -22,6 +24,9 @@ class CheckCodeInfo {
     return map;
   }
 
+  List<String> getAllBarCode() => (items ?? [])
+      .expand((item) => [item.barCode ?? '', ...?item.normalBarCodeList])
+      .toList();
 }
 
 // BarCode : "L24000000000004"
@@ -29,13 +34,17 @@ class CheckCodeInfo {
 
 class Items {
   Items({
-      this.barCode, 
-      this.normalBarCodeList,});
+    this.barCode,
+    this.normalBarCodeList,
+  });
 
   Items.fromJson(dynamic json) {
     barCode = json['BarCode'];
-    normalBarCodeList = json['NormalBarCodeList'] != null ? json['NormalBarCodeList'].cast<String>() : [];
+    normalBarCodeList = json['NormalBarCodeList'] != null
+        ? json['NormalBarCodeList'].cast<String>()
+        : [];
   }
+
   String? barCode;
   List<String>? normalBarCodeList;
 
@@ -45,5 +54,4 @@ class Items {
     map['NormalBarCodeList'] = normalBarCodeList;
     return map;
   }
-
 }

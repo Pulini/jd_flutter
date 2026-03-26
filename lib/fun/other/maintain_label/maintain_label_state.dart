@@ -1,10 +1,12 @@
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/base_data.dart';
+import 'package:jd_flutter/bean/http/response/create_custom_label_data.dart';
 import 'package:jd_flutter/bean/http/response/label_info.dart';
 import 'package:jd_flutter/bean/http/response/maintain_material_info.dart';
 import 'package:jd_flutter/bean/http/response/picking_bar_code_info.dart';
 import 'package:jd_flutter/constant.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
@@ -23,16 +25,20 @@ class MaintainLabelState {
   var labelList = <LabelInfo>[].obs;
   var labelGroupList = <List<LabelInfo>>[].obs;
   var filterSize = 'maintain_label_all'.tr.obs;
-  var language ='zh';
+  var language = 'zh';
   var isShowPreview = false.obs;
+  var createMixLabelsData = <List<PickingBarCodeInfo>>[].obs;
+  var maxLabel = 0.obs;
+  var createCustomLabelsData = <CreateCustomLabelsData>[].obs;
+
   MaintainLabelState() {
     sapProcessName = Get.arguments['SapProcessName'] ?? '';
     materialCodes = Get.arguments['materialCodes'];
     interID = Get.arguments['interID'];
     isMaterialLabel.value = Get.arguments['isMaterialLabel'];
     isPartOrder = Get.arguments['isPartOrder'] ?? false;
-    isShowPreview.value=spGet(spSaveLabelMaintainIsPreview)??false;
-    language=spGet('language');
+    isShowPreview.value = spGet(spSaveLabelMaintainIsPreview) ?? false;
+    language = spGet('language');
     ever(isShowPreview, (value) {
       spSave(spSaveLabelMaintainIsPreview, value);
     });
@@ -68,7 +74,7 @@ class MaintainLabelState {
             response.data,
             LabelInfo.fromJson,
           ),
-        ).then((list) =>success.call(list));
+        ).then((list) => success.call(list));
       } else {
         if (isMaterialLabel.value) {
           labelList.clear();
@@ -271,6 +277,69 @@ class MaintainLabelState {
         success.call();
       } else {
         errorDialog(content: response.message);
+      }
+    });
+  }
+
+  void createMixLabel({
+    required int maxLabel,
+    required List<PickingBarCodeInfo> submitList,
+    required int labelType,
+    required Function(String) success,
+  }) {
+    httpPost(
+      method: webApiCreateMixLabel,
+      loading: 'maintain_label_dialog_generating_label'.tr,
+      body: {
+        'InterID': interID.toString(),
+        'BarcodeQty': maxLabel,
+        'UserID': userInfo?.userID,
+        'SizeList': [
+          for (var item in submitList)
+            {
+              'Size': item.size,
+              'Capacity': item.packingQty.value.toShowString(),
+              'MtoNo': item.mtono,
+            }
+        ],
+        'LabelType': labelType,
+      },
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        success.call(response.message ?? '');
+      } else {
+        errorDialog(content: response.message);
+      }
+    });
+  }
+
+  void createCustomLabel({
+    required List<CreateCustomLabelsData> selectList,
+    required int labelType,
+    required Function(String) success,
+    required Function(String) error,
+  }) {
+    httpPost(
+      method: webApiCreateCustomLargeLabel,
+      loading: 'maintain_label_dialog_generating_label'.tr,
+      body: {
+        'InterID': interID,
+        'SeOrderNo': selectList.first.instruct,
+        'UserID': getUserInfo()!.userID,
+        'SizeList': selectList
+            .map((v) => {
+                  'Size': v.size,
+                  'Capacity': v.capacity.value,
+                  'Qty': v.createGoods.value,
+                })
+            .toList(),
+        'LabelType': labelType,
+      },
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        success.call(response.message ?? '');
+      } else {
+        error.call(response.message??'');
       }
     });
   }

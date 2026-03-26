@@ -1,354 +1,350 @@
-import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jd_flutter/bean/http/response/base_data.dart';
 import 'package:jd_flutter/bean/http/response/create_custom_label_data.dart';
 import 'package:jd_flutter/bean/http/response/maintain_material_info.dart';
-import 'package:jd_flutter/bean/http/response/picking_bar_code_info.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
-import 'package:jd_flutter/widget/check_box_widget.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
 
-//创建混码标
-void createMixLabelDialog(List<List<PickingBarCodeInfo>> list, int id,
-    int labelType, Function() callback) {
-  var maxLabel = 0;
-  var controller = TextEditingController();
-  Get.dialog(
-    PopScope(
-        canPop: false,
-        child: StatefulBuilder(
-          builder: (c, dialogState) => AlertDialog(
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('maintain_label_dialog_create_mix_label'.tr),
-                CheckBox(
-                  onChanged: (c) {
-                    dialogState(() {
-                      for (var v in list) {
-                        for (var v2 in v) {
-                          v2.isSelected=c;
-                        }
-                      }
-                      maxLabel = _getLabelMax(list);
-                      controller.text = maxLabel.toString();
-                    });
-                  },
-                  name: 'maintain_label_dialog_select_all'.tr,
-                  needSave: false,
-                  value:list.isNotEmpty&& list.every((v)=>v.every((v2)=>v2.isSelected)),
-                ),
-              ],
-            ),
-            content: SizedBox(
-              width: MediaQuery.of(c).size.width * 0.8,
-              height: MediaQuery.of(c).size.height * 0.8,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Row(
-                    children: [
-                      Text('maintain_label_dialog_max_label_qty'.tr),
-                      Expanded(
-                        child: NumberEditText(
-                          onChanged: (s) {
-                            debugPrint('maxLabel=$maxLabel');
-                            final inputVal = s.toDoubleTry();
-                            // 如果输入值大于当前maxLabel，则重置为maxLabel
-                            if (inputVal > maxLabel && maxLabel > 0) {
-                              controller.text = maxLabel.toString();
-                            } else if (inputVal > 0) {
-                              // 如果输入有效值，则更新maxLabel
-                              maxLabel = inputVal.toInt();
-                            }
-                          },
-                          controller: controller,
-                        ),
-                      ),
-                      TextButton(
-                          onPressed: () {
-                            dialogState(() {
-                              for (var v in list) {
-                                v.where((v) => v.isSelected).forEach((v2) {
-                                  v2.packingQty = v2.surplusQty;
-                                  v2.controller.text =
-                                      v2.packingQty.toShowString();
-                                });
-                              }
-                              maxLabel = _getLabelMax(list);
-                              controller.text = maxLabel.toString();
-                            });
-                          },
-                          child: Text('填满剩余量'))
-                    ],
-                  ),
-                  Expanded(
-                    child: ListView.builder(
-                      padding: const EdgeInsets.all(8),
-                      itemCount: list.length,
-                      itemBuilder: (context, i) => _createMixLabelItem(
-                        list: list[i],
-                        select: () {
-                          dialogState(() {
-                            maxLabel = _getLabelMax(list);
-                            controller.text = maxLabel.toString();
-                          });
-                        },
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Get.back(),
-                child: Text(
-                  'maintain_label_dialog_back'.tr,
-                  style: const TextStyle(color: Colors.grey),
-                ),
-              ),
-              TextButton(
-                onPressed: () => _createMixLabel(
-                  list: list,
-                  maxLabel: maxLabel,
-                  id: id,
-                  labelType: labelType,
-                  callback: () {
-                    Get.back();
-                    callback.call();
-                  },
-                ),
-                child: Text('maintain_label_dialog_create'.tr),
-              ),
-            ],
-          ),
-        )),
-  );
-}
+// //创建混码标
+// void createMixLabelDialog(List<List<PickingBarCodeInfo>> list, int id,
+//     int labelType, Function() callback) {
+//   var maxLabel = 0;
+//   var controller = TextEditingController();
+//   Get.dialog(
+//     PopScope(
+//         canPop: false,
+//         child: StatefulBuilder(
+//           builder: (c, dialogState) => AlertDialog(
+//             title: Row(
+//               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//               children: [
+//                 Text('maintain_label_dialog_create_mix_label'.tr),
+//                 CheckBox(
+//                   onChanged: (c) {
+//                     dialogState(() {
+//                       for (var v in list) {
+//                         for (var v2 in v) {
+//                           v2.isSelected=c;
+//                         }
+//                       }
+//                       maxLabel = _getLabelMax(list);
+//                       controller.text = maxLabel.toString();
+//                     });
+//                   },
+//                   name: 'maintain_label_dialog_select_all'.tr,
+//                   needSave: false,
+//                   value:list.isNotEmpty&& list.every((v)=>v.every((v2)=>v2.isSelected)),
+//                 ),
+//               ],
+//             ),
+//             content: SizedBox(
+//               width: MediaQuery.of(c).size.width * 0.8,
+//               height: MediaQuery.of(c).size.height * 0.8,
+//               child: Column(
+//                 mainAxisSize: MainAxisSize.min,
+//                 children: [
+//                   Row(
+//                     children: [
+//                       Text('maintain_label_dialog_max_label_qty'.tr),
+//                       Expanded(
+//                         child: NumberEditText(
+//                           onChanged: (s) {
+//                             debugPrint('maxLabel=$maxLabel');
+//                             final inputVal = s.toDoubleTry();
+//                             // 如果输入值大于当前maxLabel，则重置为maxLabel
+//                             if (inputVal > maxLabel && maxLabel > 0) {
+//                               controller.text = maxLabel.toString();
+//                             } else if (inputVal > 0) {
+//                               // 如果输入有效值，则更新maxLabel
+//                               maxLabel = inputVal.toInt();
+//                             }
+//                           },
+//                           controller: controller,
+//                         ),
+//                       ),
+//                       TextButton(
+//                           onPressed: () {
+//                             dialogState(() {
+//                               for (var v in list) {
+//                                 v.where((v) => v.isSelected).forEach((v2) {
+//                                   v2.packingQty = v2.surplusQty;
+//                                   v2.controller.text =
+//                                       v2.packingQty.toShowString();
+//                                 });
+//                               }
+//                               maxLabel = _getLabelMax(list);
+//                               controller.text = maxLabel.toString();
+//                             });
+//                           },
+//                           child: Text('填满剩余量'))
+//                     ],
+//                   ),
+//                   Expanded(
+//                     child: ListView.builder(
+//                       padding: const EdgeInsets.all(8),
+//                       itemCount: list.length,
+//                       itemBuilder: (context, i) => _createMixLabelItem(
+//                         list: list[i],
+//                         select: () {
+//                           dialogState(() {
+//                             maxLabel = _getLabelMax(list);
+//                             controller.text = maxLabel.toString();
+//                           });
+//                         },
+//                       ),
+//                     ),
+//                   ),
+//                 ],
+//               ),
+//             ),
+//             actions: [
+//               TextButton(
+//                 onPressed: () => Get.back(),
+//                 child: Text(
+//                   'maintain_label_dialog_back'.tr,
+//                   style: const TextStyle(color: Colors.grey),
+//                 ),
+//               ),
+//               TextButton(
+//                 onPressed: () => _createMixLabel(
+//                   list: list,
+//                   maxLabel: maxLabel,
+//                   id: id,
+//                   labelType: labelType,
+//                   callback: () {
+//                     Get.back();
+//                     callback.call();
+//                   },
+//                 ),
+//                 child: Text('maintain_label_dialog_create'.tr),
+//               ),
+//             ],
+//           ),
+//         )),
+//   );
+// }
+//
+//
+// void _createMixLabel({
+//   required List<List<PickingBarCodeInfo>> list,
+//   required int maxLabel,
+//   required int id,
+//   required int labelType,
+//   required Function() callback,
+// }) {
+//   if (list.every((v1) => v1.every((v2) => !v2.isSelected))) {
+//     showSnackBar(
+//       message: 'maintain_label_dialog_select_instruction_and_size'.tr,
+//       isWarning: true,
+//     );
+//     return;
+//   }
+//   if (maxLabel == 0) {
+//     showSnackBar(
+//       message: 'maintain_label_dialog_cant_generate'.tr,
+//       isWarning: true,
+//     );
+//     return;
+//   }
+//
+//   var submitList = <PickingBarCodeInfo>[];
+//   for (var item in list) {
+//     submitList.addAll(item.where((v) => v.isSelected).toList());
+//   }
+//   httpPost(
+//     method: webApiCreateMixLabel,
+//     loading: 'maintain_label_dialog_generating_label'.tr,
+//     body: {
+//       'InterID': id.toString(),
+//       'BarcodeQty': maxLabel,
+//       'UserID': userInfo?.userID,
+//       'SizeList': [
+//         for (var item in submitList)
+//           {
+//             'Size': item.size,
+//             'Capacity': item.packingQty,
+//             'MtoNo': item.mtono,
+//           }
+//       ],
+//       'LabelType': labelType,
+//     },
+//   ).then((response) {
+//     if (response.resultCode == resultSuccess) {
+//       successDialog(content: response.message, back: () => callback.call());
+//     } else {
+//       errorDialog(content: response.message);
+//     }
+//   });
+// }
+//
+// Widget _createMixLabelItem({
+//   required List<PickingBarCodeInfo> list,
+//   required Function() select,
+// }) {
+//   return Card(
+//     color: list.every((v) => v.isSelected)
+//         ? Colors.greenAccent.shade100
+//         : Colors.white,
+//     child: ExpansionTile(
+//       initiallyExpanded: true,
+//       shape: const RoundedRectangleBorder(
+//         borderRadius: BorderRadius.all(Radius.circular(10)),
+//       ),
+//       leading: Checkbox(
+//         value: list.every((v) => v.isSelected),
+//         onChanged: (c) {
+//           for (var v in list) {
+//             v.isSelected = c!;
+//           }
+//           select.call();
+//         },
+//       ),
+//       title: Text.rich(
+//         TextSpan(
+//           children: [
+//             TextSpan(
+//               text: 'maintain_label_dialog_size'.tr,
+//               style: const TextStyle(fontWeight: FontWeight.bold),
+//             ),
+//             TextSpan(
+//               text: list.first.size,
+//               style: const TextStyle(
+//                 color: Colors.blueAccent,
+//                 fontWeight: FontWeight.bold,
+//               ),
+//             ),
+//           ],
+//         ),
+//       ),
+//       children: [
+//         for (var sub in list)
+//           _createMixLabelSubItem(
+//             sub: sub,
+//             isLast: list.last == sub,
+//             select: select,
+//           )
+//       ],
+//     ),
+//   );
+// }
+//
+// Column _createMixLabelSubItem({
+//   required PickingBarCodeInfo sub,
+//   required bool isLast,
+//   required Function() select,
+// }) {
+//   var style = const TextStyle(fontSize: 14, fontWeight: FontWeight.bold);
+//   var checkbox = Checkbox(
+//     value: sub.isSelected,
+//     onChanged: (c) {
+//       sub.isSelected = c!;
+//       select.call();
+//     },
+//   );
+//
+//   var number = NumberDecimalEditText(
+//     onChanged: (v) {
+//       sub.packingQty = v;
+//       select.call();
+//     },
+//     controller: sub.controller,
+//   );
+//   return Column(
+//     children: [
+//       ListTile(
+//         leading: checkbox,
+//         title: Text.rich(
+//           TextSpan(
+//             children: [
+//               TextSpan(
+//                 text: 'maintain_label_dialog_instruction'.tr,
+//                 style: const TextStyle(fontWeight: FontWeight.bold),
+//               ),
+//               TextSpan(
+//                 text: sub.mtono,
+//                 style: TextStyle(
+//                   color: Colors.green.shade900,
+//                   fontWeight: FontWeight.bold,
+//                 ),
+//               ),
+//             ],
+//           ),
+//         ),
+//         subtitle: Text('maintain_label_dialog_surplus_qty'.trArgs([
+//           sub.surplusQty.toShowString(),
+//         ])),
+//         trailing: SizedBox(
+//           width: 180,
+//           child: Row(
+//             children: [
+//               Text('maintain_label_dialog_packing_qty'.tr, style: style),
+//               Expanded(
+//                   child: sub.isSelected ? number : Text('0', style: style)),
+//             ],
+//           ),
+//         ),
+//       ),
+//       if (isLast) const Divider(indent: 20, endIndent: 20, height: 1),
+//     ],
+//   );
+// }
+//
+// int _getLabelMax(List<List<PickingBarCodeInfo>> list) {
+//   var maxLabelList = <int>[];
+//   for (var item in list) {
+//     maxLabelList.addAll(
+//       item.where((v) => v.isSelected).map((v) => v.maxLabel()).toList(),
+//     );
+//   }
+//   return maxLabelList.isEmpty?0:maxLabelList.reduce((a, b) => a < b ? a : b);
+// }
 
-
-void _createMixLabel({
-  required List<List<PickingBarCodeInfo>> list,
-  required int maxLabel,
-  required int id,
-  required int labelType,
-  required Function() callback,
-}) {
-  if (list.every((v1) => v1.every((v2) => !v2.isSelected))) {
-    showSnackBar(
-      message: 'maintain_label_dialog_select_instruction_and_size'.tr,
-      isWarning: true,
-    );
-    return;
-  }
-  if (maxLabel == 0) {
-    showSnackBar(
-      message: 'maintain_label_dialog_cant_generate'.tr,
-      isWarning: true,
-    );
-    return;
-  }
-
-  var submitList = <PickingBarCodeInfo>[];
-  for (var item in list) {
-    submitList.addAll(item.where((v) => v.isSelected).toList());
-  }
-  httpPost(
-    method: webApiCreateMixLabel,
-    loading: 'maintain_label_dialog_generating_label'.tr,
-    body: {
-      'InterID': id.toString(),
-      'BarcodeQty': maxLabel,
-      'UserID': userInfo?.userID,
-      'SizeList': [
-        for (var item in submitList)
-          {
-            'Size': item.size,
-            'Capacity': item.packingQty,
-            'MtoNo': item.mtono,
-          }
-      ],
-      'LabelType': labelType,
-    },
-  ).then((response) {
-    if (response.resultCode == resultSuccess) {
-      successDialog(content: response.message, back: () => callback.call());
-    } else {
-      errorDialog(content: response.message);
-    }
-  });
-}
-
-Widget _createMixLabelItem({
-  required List<PickingBarCodeInfo> list,
-  required Function() select,
-}) {
-  return Card(
-    color: list.every((v) => v.isSelected)
-        ? Colors.greenAccent.shade100
-        : Colors.white,
-    child: ExpansionTile(
-      initiallyExpanded: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(10)),
-      ),
-      leading: Checkbox(
-        value: list.every((v) => v.isSelected),
-        onChanged: (c) {
-          for (var v in list) {
-            v.isSelected = c!;
-          }
-          select.call();
-        },
-      ),
-      title: Text.rich(
-        TextSpan(
-          children: [
-            TextSpan(
-              text: 'maintain_label_dialog_size'.tr,
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
-            TextSpan(
-              text: list.first.size,
-              style: const TextStyle(
-                color: Colors.blueAccent,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
-      ),
-      children: [
-        for (var sub in list)
-          _createMixLabelSubItem(
-            sub: sub,
-            isLast: list.last == sub,
-            select: select,
-          )
-      ],
-    ),
-  );
-}
-
-Column _createMixLabelSubItem({
-  required PickingBarCodeInfo sub,
-  required bool isLast,
-  required Function() select,
-}) {
-  var style = const TextStyle(fontSize: 14, fontWeight: FontWeight.bold);
-  var checkbox = Checkbox(
-    value: sub.isSelected,
-    onChanged: (c) {
-      sub.isSelected = c!;
-      select.call();
-    },
-  );
-
-  var number = NumberDecimalEditText(
-    onChanged: (v) {
-      sub.packingQty = v;
-      select.call();
-    },
-    controller: sub.controller,
-  );
-  return Column(
-    children: [
-      ListTile(
-        leading: checkbox,
-        title: Text.rich(
-          TextSpan(
-            children: [
-              TextSpan(
-                text: 'maintain_label_dialog_instruction'.tr,
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-              TextSpan(
-                text: sub.mtono,
-                style: TextStyle(
-                  color: Colors.green.shade900,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-        ),
-        subtitle: Text('maintain_label_dialog_surplus_qty'.trArgs([
-          sub.surplusQty.toShowString(),
-        ])),
-        trailing: SizedBox(
-          width: 180,
-          child: Row(
-            children: [
-              Text('maintain_label_dialog_packing_qty'.tr, style: style),
-              Expanded(
-                  child: sub.isSelected ? number : Text('0', style: style)),
-            ],
-          ),
-        ),
-      ),
-      if (isLast) const Divider(indent: 20, endIndent: 20, height: 1),
-    ],
-  );
-}
-
-int _getLabelMax(List<List<PickingBarCodeInfo>> list) {
-  var maxLabelList = <int>[];
-  for (var item in list) {
-    maxLabelList.addAll(
-      item.where((v) => v.isSelected).map((v) => v.maxLabel()).toList(),
-    );
-  }
-  return maxLabelList.isEmpty?0:maxLabelList.reduce((a, b) => a < b ? a : b);
-}
-
-List<CreateCustomLabelsData> createNewDataList(
-    List<List<CreateCustomLabelsData>> dataList) {
-  final cacheList = <CreateCustomLabelsData>[];
-
-  // 将所有指令数据合并到缓存列表中
-  for (var ins in dataList) {
-    cacheList.addAll(ins);
-  }
-
-  // 按尺寸分组并计算汇总数据
-  final grouped =
-      groupBy(cacheList, (CreateCustomLabelsData data) => data.size);
-
-  return grouped.entries.map((entry) {
-    final key = entry.key;
-    final value = entry.value;
-
-    // 计算剩余数量
-    final surplus = value
-        .map((s) => s.goodsTotal.sub(s.createdGoods))
-        .reduce((a, b) => a.add(b));
-
-    return CreateCustomLabelsData(
-      select: true,
-      size: key,
-      createdLabels: value.map((s) => s.createdLabels).reduce((a, b) => a + b),
-      goodsTotal: value.map((s) => s.goodsTotal).reduce((a, b) => a.add(b)),
-      createdGoods: value.map((s) => s.createdGoods).reduce((a, b) => a.add(b)),
-      surplusGoods: value.map((s) => s.surplusGoods).reduce((a, b) => a.add(b)),
-      capacity: surplus.toShowString(),
-      createGoods: surplus.toShowString(),
-      instruct: '',
-    );
-  }).toList();
-}
+// List<CreateCustomLabelsData> createNewDataList(
+//     List<List<CreateCustomLabelsData>> dataList) {
+//   final cacheList = <CreateCustomLabelsData>[];
+//
+//   // 将所有指令数据合并到缓存列表中
+//   for (var ins in dataList) {
+//     cacheList.addAll(ins);
+//   }
+//
+//   // 按尺寸分组并计算汇总数据
+//   final grouped =
+//       groupBy(cacheList, (CreateCustomLabelsData data) => data.size);
+//
+//   return grouped.entries.map((entry) {
+//     final key = entry.key;
+//     final value = entry.value;
+//
+//     // 计算剩余数量
+//     final surplus = value
+//         .map((s) => s.goodsTotal.sub(s.createdGoods))
+//         .reduce((a, b) => a.add(b));
+//
+//     return CreateCustomLabelsData(
+//       isSelect: true,
+//       size: key,
+//       createdLabels: value.map((s) => s.createdLabels).reduce((a, b) => a + b),
+//       goodsTotal: value.map((s) => s.goodsTotal).reduce((a, b) => a.add(b)),
+//       createdGoods: value.map((s) => s.createdGoods).reduce((a, b) => a.add(b)),
+//       surplusGoods: value.map((s) => s.surplusGoods).reduce((a, b) => a.add(b)),
+//       capacity: surplus.toShowString(),
+//       createGoods: surplus.toShowString(),
+//       instruct: '',
+//     );
+//   }).toList();
+// }
 
 //选择指令弹窗
 void selectInstructDialog(
   List<List<CreateCustomLabelsData>> list, {
-  required void Function(List<CreateCustomLabelsData>) allCallback,
+  required void Function() allCallback,
   required void Function(List<CreateCustomLabelsData>) selectCallback,
 }) {
   if (list.isNotEmpty) {
@@ -365,7 +361,7 @@ void selectInstructDialog(
               TextButton(
                   onPressed: () {
                     Get.back();
-                    allCallback.call(createNewDataList(list));
+                    allCallback.call();
                   },
                   child: Text('整单生成'))
             ],
@@ -418,275 +414,275 @@ void selectInstructDialog(
 }
 
 //创建自定义标签
-void createCustomLabelDialog(
-  List<CreateCustomLabelsData> list,
-  int id,
-  int labelType,
-  Function() callback,
-) {
-  var selected = <bool>[].obs;
-  var capacity = <double>[].obs;
-  var createGoods = <double>[].obs;
-  var create = <int>[].obs;
-  for (var v in list) {
-    selected.add(v.select);
-    var surplus = v.goodsTotal.sub(v.createdGoods);
-    if (surplus < 100) {
-      capacity.add(surplus);
-      createGoods.add(surplus);
-      create.add(_createLabel(surplus, surplus));
-    } else {
-      capacity.add(100);
-      createGoods.add(100);
-      create.add(_createLabel(100, 100));
-    }
-  }
-  Get.dialog(
-    PopScope(
-        canPop: false,
-        child: AlertDialog(
-          title: Text('maintain_label_dialog_create_customize_label'.tr),
-          content: SizedBox(
-            width: MediaQuery.of(Get.overlayContext!).size.width * 0.8,
-            height: MediaQuery.of(Get.overlayContext!).size.height * 0.8,
-            child: ListView.builder(
-                padding: const EdgeInsets.all(8),
-                itemCount: list.length,
-                itemBuilder: (context, index) => _createCustomLabelItem(
-                      index,
-                      list,
-                      selected,
-                      capacity,
-                      createGoods,
-                      create,
-                    )),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Get.back(),
-              child: Text(
-                'maintain_label_dialog_back'.tr,
-                style: const TextStyle(color: Colors.grey),
-              ),
-            ),
-            TextButton(
-              onPressed: () => _createCustomLabel(
-                list,
-                selected,
-                capacity,
-                createGoods,
-                id,
-                labelType,
-                () {
-                  Get.back();
-                  callback.call();
-                },
-              ),
-              child: Text('maintain_label_dialog_create'.tr),
-            ),
-          ],
-        )),
-  );
-}
-
-Obx _createCustomLabelItem(
-  int index,
-  List<CreateCustomLabelsData> list,
-  RxList<bool> selected,
-  RxList<double> capacity,
-  RxList<double> createGoods,
-  RxList<int> create,
-) {
-  var surplus = list[index].goodsTotal.sub(list[index].createdGoods);
-
-  return Obx(
-    () => Card(
-      color: selected[index] ? Colors.greenAccent.shade100 : Colors.white,
-      child: ListTile(
-        leading: Checkbox(
-          value: selected[index],
-          onChanged: (c) => selected[index] = c!,
-        ),
-        title: Row(
-          children: [
-            expandedTextSpan(
-              flex: 2,
-              hint: 'maintain_label_dialog_size'.tr,
-              text: list[index].size,
-              textColor: Colors.redAccent,
-            ),
-            expandedTextSpan(
-              flex: 2,
-              hint: 'maintain_label_dialog_generated_label'.tr,
-              text: list[index].createdGoods.toShowString(),
-              textColor: Colors.black45,
-            ),
-            expandedTextSpan(
-              hint: 'maintain_label_dialog_generate'.tr,
-              text: create[index].toString(),
-              textColor: Colors.green,
-            )
-          ],
-        ),
-        subtitle: Column(
-          children: [
-            Row(
-              children: [
-                expandedTextSpan(
-                  flex: 2,
-                  hint: 'maintain_label_dialog_total_qty'.tr,
-                  text: list[index].goodsTotal.toShowString(),
-                ),
-                expandedTextSpan(
-                  flex: 2,
-                  hint: 'maintain_label_dialog_generated_qty'.tr,
-                  text: list[index].createdGoods.toShowString(),
-                ),
-                expandedTextSpan(
-                  hint: 'maintain_label_dialog_surplus_goods_qty'.tr,
-                  text: surplus.toShowString(),
-                )
-              ],
-            ),
-            SizedBox(
-              height: 50,
-              child: Row(
-                children: [
-                  Expanded(
-                    flex: 2,
-                    child: Row(
-                      children: [
-                        Text(
-                          'maintain_label_dialog_box_capacity'.tr,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black45,
-                          ),
-                        ),
-                        SizedBox(
-                          width: 150,
-                          child: NumberDecimalEditText(
-                            initQty: capacity[index],
-                            onChanged: (c) {
-                              capacity[index] = c;
-                              create[index] = _createLabel(
-                                capacity[index],
-                                createGoods[index],
-                              );
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: Row(
-                      children: [
-                        Text(
-                          'maintain_label_dialog_generated_goods_qty'.tr,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black45,
-                          ),
-                        ),
-                        SizedBox(
-                          width: 150,
-                          child: NumberDecimalEditText(
-                            initQty: createGoods[index],
-                            onChanged: (c) {
-                              createGoods[index] = c;
-                              create[index] = _createLabel(
-                                capacity[index],
-                                createGoods[index],
-                              );
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    child: Row(
-                      children: [
-                        CombinationButton(
-                          text: 'maintain_label_dialog_full'.tr,
-                          click: () {
-                            capacity[index] = surplus;
-                            createGoods[index] = surplus;
-                            create[index] = _createLabel(
-                              capacity[index],
-                              createGoods[index],
-                            );
-                          },
-                        )
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            )
-          ],
-        ),
-      ),
-    ),
-  );
-}
-
-//创建物料贴标
-void _createCustomLabel(
-  List<CreateCustomLabelsData> list,
-  RxList<bool> selected,
-  RxList<double> capacity,
-  RxList<double> createGoods,
-  int id,
-  int labelType,
-  Function() callback,
-) {
-  if (!selected.any((v1) => v1)) {
-    showSnackBar(
-      message: 'maintain_label_dialog_select_size_tips'.tr,
-      isWarning: true,
-    );
-    return;
-  }
-  var body = {
-    'InterID': id.toString(),
-    'SeOrderNo': list[0].instruct,
-    'UserID': getUserInfo()!.userID,
-    'SizeList': [
-      for (var i = 0; i < selected.length; ++i)
-        if (selected[i])
-          {
-            'Size': list[i].size,
-            'Capacity': capacity[i].toShowString(),
-            'Qty': createGoods[i].toShowString(),
-          }
-    ],
-    'LabelType': labelType,
-  };
-  Future<BaseData> post;
-  post = httpPost(
-    method: webApiCreateCustomLargeLabel,
-    loading: 'maintain_label_dialog_generating_label'.tr,
-    body: body,
-  );
-  post.then((response) {
-    if (response.resultCode == resultSuccess) {
-      successDialog(content: response.message, back: () => callback.call());
-    } else {
-      errorDialog(content: response.message);
-    }
-  });
-}
-
-int _createLabel(double capacity, double createGoods) {
-  if (capacity > 0.0 && createGoods > 0.0) {
-    return (createGoods.div(capacity).toInt()).ceil();
-  } else {
-    return 0;
-  }
-}
+// void createCustomLabelDialog(
+//   List<CreateCustomLabelsData> list,
+//   int id,
+//   int labelType,
+//   Function() callback,
+// ) {
+//   var selected = <bool>[].obs;
+//   var capacity = <double>[].obs;
+//   var createGoods = <double>[].obs;
+//   var create = <int>[].obs;
+//   for (var v in list) {
+//     selected.add(v.isSelect.value);
+//     var surplus = v.goodsTotal.sub(v.createdGoods);
+//     if (surplus < 100) {
+//       capacity.add(surplus);
+//       createGoods.add(surplus);
+//       create.add(_createLabel(surplus, surplus));
+//     } else {
+//       capacity.add(100);
+//       createGoods.add(100);
+//       create.add(_createLabel(100, 100));
+//     }
+//   }
+//   Get.dialog(
+//     PopScope(
+//         canPop: false,
+//         child: AlertDialog(
+//           title: Text('maintain_label_dialog_create_customize_label'.tr),
+//           content: SizedBox(
+//             width: MediaQuery.of(Get.overlayContext!).size.width * 0.8,
+//             height: MediaQuery.of(Get.overlayContext!).size.height * 0.8,
+//             child: ListView.builder(
+//                 padding: const EdgeInsets.all(8),
+//                 itemCount: list.length,
+//                 itemBuilder: (context, index) => _createCustomLabelItem(
+//                       index,
+//                       list,
+//                       selected,
+//                       capacity,
+//                       createGoods,
+//                       create,
+//                     )),
+//           ),
+//           actions: [
+//             TextButton(
+//               onPressed: () => Get.back(),
+//               child: Text(
+//                 'maintain_label_dialog_back'.tr,
+//                 style: const TextStyle(color: Colors.grey),
+//               ),
+//             ),
+//             TextButton(
+//               onPressed: () => _createCustomLabel(
+//                 list,
+//                 selected,
+//                 capacity,
+//                 createGoods,
+//                 id,
+//                 labelType,
+//                 () {
+//                   Get.back();
+//                   callback.call();
+//                 },
+//               ),
+//               child: Text('maintain_label_dialog_create'.tr),
+//             ),
+//           ],
+//         )),
+//   );
+// }
+//
+// Obx _createCustomLabelItem(
+//   int index,
+//   List<CreateCustomLabelsData> list,
+//   RxList<bool> selected,
+//   RxList<double> capacity,
+//   RxList<double> createGoods,
+//   RxList<int> create,
+// ) {
+//   var surplus = list[index].goodsTotal.sub(list[index].createdGoods);
+//
+//   return Obx(
+//     () => Card(
+//       color: selected[index] ? Colors.greenAccent.shade100 : Colors.white,
+//       child: ListTile(
+//         leading: Checkbox(
+//           value: selected[index],
+//           onChanged: (c) => selected[index] = c!,
+//         ),
+//         title: Row(
+//           children: [
+//             expandedTextSpan(
+//               flex: 2,
+//               hint: 'maintain_label_dialog_size'.tr,
+//               text: list[index].size,
+//               textColor: Colors.redAccent,
+//             ),
+//             expandedTextSpan(
+//               flex: 2,
+//               hint: 'maintain_label_dialog_generated_label'.tr,
+//               text: list[index].createdGoods.toShowString(),
+//               textColor: Colors.black45,
+//             ),
+//             expandedTextSpan(
+//               hint: 'maintain_label_dialog_generate'.tr,
+//               text: create[index].toString(),
+//               textColor: Colors.green,
+//             )
+//           ],
+//         ),
+//         subtitle: Column(
+//           children: [
+//             Row(
+//               children: [
+//                 expandedTextSpan(
+//                   flex: 2,
+//                   hint: 'maintain_label_dialog_total_qty'.tr,
+//                   text: list[index].goodsTotal.toShowString(),
+//                 ),
+//                 expandedTextSpan(
+//                   flex: 2,
+//                   hint: 'maintain_label_dialog_generated_qty'.tr,
+//                   text: list[index].createdGoods.toShowString(),
+//                 ),
+//                 expandedTextSpan(
+//                   hint: 'maintain_label_dialog_surplus_goods_qty'.tr,
+//                   text: surplus.toShowString(),
+//                 )
+//               ],
+//             ),
+//             SizedBox(
+//               height: 50,
+//               child: Row(
+//                 children: [
+//                   Expanded(
+//                     flex: 2,
+//                     child: Row(
+//                       children: [
+//                         Text(
+//                           'maintain_label_dialog_box_capacity'.tr,
+//                           style: const TextStyle(
+//                             fontWeight: FontWeight.bold,
+//                             color: Colors.black45,
+//                           ),
+//                         ),
+//                         SizedBox(
+//                           width: 150,
+//                           child: NumberDecimalEditText(
+//                             initQty: capacity[index],
+//                             onChanged: (c) {
+//                               capacity[index] = c;
+//                               create[index] = _createLabel(
+//                                 capacity[index],
+//                                 createGoods[index],
+//                               );
+//                             },
+//                           ),
+//                         ),
+//                       ],
+//                     ),
+//                   ),
+//                   Expanded(
+//                     flex: 2,
+//                     child: Row(
+//                       children: [
+//                         Text(
+//                           'maintain_label_dialog_generated_goods_qty'.tr,
+//                           style: const TextStyle(
+//                             fontWeight: FontWeight.bold,
+//                             color: Colors.black45,
+//                           ),
+//                         ),
+//                         SizedBox(
+//                           width: 150,
+//                           child: NumberDecimalEditText(
+//                             initQty: createGoods[index],
+//                             onChanged: (c) {
+//                               createGoods[index] = c;
+//                               create[index] = _createLabel(
+//                                 capacity[index],
+//                                 createGoods[index],
+//                               );
+//                             },
+//                           ),
+//                         ),
+//                       ],
+//                     ),
+//                   ),
+//                   Expanded(
+//                     child: Row(
+//                       children: [
+//                         CombinationButton(
+//                           text: 'maintain_label_dialog_full'.tr,
+//                           click: () {
+//                             capacity[index] = surplus;
+//                             createGoods[index] = surplus;
+//                             create[index] = _createLabel(
+//                               capacity[index],
+//                               createGoods[index],
+//                             );
+//                           },
+//                         )
+//                       ],
+//                     ),
+//                   ),
+//                 ],
+//               ),
+//             )
+//           ],
+//         ),
+//       ),
+//     ),
+//   );
+// }
+//
+// //创建物料贴标
+// void _createCustomLabel(
+//   List<CreateCustomLabelsData> list,
+//   RxList<bool> selected,
+//   RxList<double> capacity,
+//   RxList<double> createGoods,
+//   int id,
+//   int labelType,
+//   Function() callback,
+// ) {
+//   if (!selected.any((v1) => v1)) {
+//     showSnackBar(
+//       message: 'maintain_label_dialog_select_size_tips'.tr,
+//       isWarning: true,
+//     );
+//     return;
+//   }
+//   var body = {
+//     'InterID': id.toString(),
+//     'SeOrderNo': list[0].instruct,
+//     'UserID': getUserInfo()!.userID,
+//     'SizeList': [
+//       for (var i = 0; i < selected.length; ++i)
+//         if (selected[i])
+//           {
+//             'Size': list[i].size,
+//             'Capacity': capacity[i].toShowString(),
+//             'Qty': createGoods[i].toShowString(),
+//           }
+//     ],
+//     'LabelType': labelType,
+//   };
+//   Future<BaseData> post;
+//   post = httpPost(
+//     method: webApiCreateCustomLargeLabel,
+//     loading: 'maintain_label_dialog_generating_label'.tr,
+//     body: body,
+//   );
+//   post.then((response) {
+//     if (response.resultCode == resultSuccess) {
+//       successDialog(content: response.message, back: () => callback.call());
+//     } else {
+//       errorDialog(content: response.message);
+//     }
+//   });
+// }
+//
+// int _createLabel(double capacity, double createGoods) {
+//   if (capacity > 0.0 && createGoods > 0.0) {
+//     return (createGoods.div(capacity).toInt()).ceil();
+//   } else {
+//     return 0;
+//   }
+// }
 
 void setLabelPropertyDialog(
   RxList<MaintainMaterialPropertiesInfo> list,
