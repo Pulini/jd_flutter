@@ -3083,7 +3083,7 @@ class Translation extends Translations {
           'quality_inspection_item_color_total': '分色合计',
           'quality_inspection_item_reverse_total': '冲销合计',
           'quality_inspection_different_order': '存在不同的品检单！',
-          'quality_inspection_different_taxCode': '存在不同的税号，无法一起入库！',
+          'quality_inspection_different_taxCode': '存在不同的税码，无法一起入库！',
           'quality_inspection_input_delete_reason': '请输入删除原因!',
           'quality_inspection_deleting': '正在删除品检单...',
           'quality_inspection_success_deleting': '删除成功',
