@@ -2192,7 +2192,7 @@ class Translation extends Translations {
           'device_maintenance_component_specification_empty': '零部件规格为空',
           'device_maintenance_component_unit_empty': '零部件单位为空',
           'device_maintenance_manufacturer_brand': '厂商/品牌：',
-          'device_maintenance_replace_accessory_name': '更换配件名称：',
+          'device_maintenance_replace_accessory_name': '更换配件：',
           'device_maintenance_quantity': '数量：',
           'device_maintenance_specifications': '规格：',
           'device_maintenance_unit': '单位：',
