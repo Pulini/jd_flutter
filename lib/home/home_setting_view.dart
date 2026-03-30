@@ -392,16 +392,6 @@ class _UserSettingState extends State<UserSetting> {
           spSave(spSaveFeishuUserWikiTokenData, '');
           spSave(spSaveFeishuUserCloudDocTokenData, '');
           Get.offAll(() => const LoginPage());
-          // loadingShow('111111...');
-          // Future.delayed(const Duration(seconds: 3), () {
-          //   loadingShow('22222...');
-          //   Future.delayed(const Duration(seconds: 3), () {
-          //     loadingShow('333333...');
-          //   });
-          //   Future.delayed(const Duration(seconds: 3), () {
-          //     loadingDismiss();
-          //   });
-          // });
         },
         child: Text('home_user_setting_logout'.tr,
             style: const TextStyle(fontSize: 20)),
