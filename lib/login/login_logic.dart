@@ -1,3 +1,5 @@
+import 'dart:nativewrappers/_internal/vm/lib/ffi_allocation_patch.dart';
+
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/feishu_info.dart';
 import 'package:jd_flutter/constant.dart';
@@ -214,15 +216,23 @@ class LoginLogic extends GetxController {
     );
   }
 
-  void getFeishuToken(String code) {
+  void getFeishuToken({
+    required String code,
+    required Function() reload,
+  }) {
+    error(String msg) {
+      errorDialog(content: msg);
+      reload.call();
+    }
     state.getFeishuUserAccessToken(
       code: code,
       success: (token) => state.getFeishuUserInfo(
         token: token,
         success: (FeishuUserInfo userInfo) {
+          reload.call();
           state.login(
             jiGuangID: getJPushID(),
-            phone: userInfo.userId??'',
+            phone: userInfo.userId ?? '',
             password: '',
             vCode: '',
             type: 4,
@@ -230,12 +240,12 @@ class LoginLogic extends GetxController {
               spSave(spSaveLoginType, spSaveLoginTypeFeiShu);
               state.isReLogin ? Get.back() : Get.offAll(() => const HomePage());
             },
-            error: (msg) => errorDialog(content: msg),
+            error:error,
           );
         },
-        error: (msg) => errorDialog(content: msg),
+        error: error,
       ),
-      error: (msg) => errorDialog(content: msg),
+      error: error,
     );
   }
 }

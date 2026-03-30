@@ -426,11 +426,11 @@ class _LoginPickState extends State<LoginPick>
             if (url.startsWith(redirectUri)) {
               final code = Uri.parse(url).queryParameters['code'];
               if (code != null) {
-                logic.getFeishuToken(code);
+                logic.getFeishuToken(code:code,reload:()=> _loadAssetUrl());
               } else {
                 errorDialog(
                   content: '获取授权码失败',
-                  back: () => Get.back(),
+                  back: () => _loadAssetUrl(),
                 );
               }
             }
