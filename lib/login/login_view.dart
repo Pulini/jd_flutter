@@ -196,7 +196,13 @@ class _LoginPickState extends State<LoginPick>
                 Positioned(
                   top: 10,
                   left: 5,
-                  child: Text('飞书扫码登录',style: TextStyle(color:Colors.blue,fontWeight: FontWeight.bold,fontSize: 16),),
+                  child: Text(
+                    '飞书扫码登录',
+                    style: TextStyle(
+                        color: Colors.blue,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16),
+                  ),
                 ),
                 Positioned(
                   top: 0,
