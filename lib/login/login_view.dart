@@ -197,7 +197,7 @@ class _LoginPickState extends State<LoginPick>
                   top: 0,
                   right: 0,
                   child: IconButton(
-                    onPressed: () =>_loadAssetUrl(),
+                    onPressed: () => _loadAssetUrl(),
                     icon: Icon(Icons.refresh),
                     color: Colors.blue,
                   ),
@@ -406,7 +406,9 @@ class _LoginPickState extends State<LoginPick>
     isShowLoginButton.value = tabController.index != 0;
   }
 
-  void _loadAssetUrl() =>webViewController.loadFlutterAsset('assets/web/feishu.html');
+  void _loadAssetUrl() =>
+      webViewController.loadFlutterAsset('assets/web/feishu.html');
+
   @override
   void initState() {
     state.isReLogin = widget.isReLogin;
@@ -426,12 +428,9 @@ class _LoginPickState extends State<LoginPick>
             if (url.startsWith(redirectUri)) {
               final code = Uri.parse(url).queryParameters['code'];
               if (code != null) {
-                logic.getFeishuToken(code:code,reload:()=> _loadAssetUrl());
+                logic.getFeishuToken(code: code, reload: () => _loadAssetUrl());
               } else {
-                errorDialog(
-                  content: '获取授权码失败',
-                  back: () => _loadAssetUrl(),
-                );
+                errorDialog(content: '获取授权码失败', back: () => _loadAssetUrl());
               }
             }
           },
@@ -445,7 +444,7 @@ class _LoginPickState extends State<LoginPick>
           },
         ),
       );
-    WidgetsBinding.instance.addPostFrameCallback((_) =>_loadAssetUrl());
+    WidgetsBinding.instance.addPostFrameCallback((_) => _loadAssetUrl());
     super.initState();
   }
 
