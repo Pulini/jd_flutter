@@ -9,6 +9,8 @@ import 'package:jd_flutter/bean/http/response/label_info.dart';
 import 'package:jd_flutter/bean/http/response/maintain_material_info.dart';
 import 'package:jd_flutter/bean/http/response/picking_bar_code_info.dart';
 import 'package:jd_flutter/constant.dart';
+import 'package:jd_flutter/fun/other/maintain_label/maintain_label_create_custom_view.dart';
+import 'package:jd_flutter/fun/other/maintain_label/maintain_label_create_mix_view.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/printer/print_util.dart';
 import 'package:jd_flutter/utils/printer/tsc_util.dart';
@@ -214,47 +216,135 @@ class MaintainLabelLogic extends GetxController {
     );
   }
 
-  void getBarCodeCount(Function(List<List<CreateCustomLabelsData>>) callback) {
+  void toCustomLabelCreate() {
     state.getOrderDetailsForCustom(
       success: (dataList) {
         final List<List<CreateCustomLabelsData>> orderData = [];
-        groupBy(dataList, (item) => item.mtono ?? '').forEach((mtono, items) {
+        groupBy(dataList, (item) => item.mtono ?? '').forEach((ins, items) {
           final List<CreateCustomLabelsData> subList = [];
           for (var item in items) {
             final double surplus = (item.totalQty ?? 0.0) - (item.qty ?? 0.0);
             subList.add(CreateCustomLabelsData(
-              select: dataList.length == 1,
+              isSelect: dataList.length == 1,
               size: item.size ?? '0',
               createdLabels: item.labelCount ?? 0,
               goodsTotal: item.totalQty ?? 0.0,
               createdGoods: item.qty ?? 0.0,
               surplusGoods: surplus,
-              capacity: surplus < 100 ? surplus.toShowString() : "100",
-              createGoods: surplus < 100 ? surplus.toShowString() : "100",
-              instruct: mtono,
+              capacity: surplus < 100 ? surplus : 100,
+              createGoods: surplus < 100 ? surplus : 100,
+              instruct: ins,
             ));
           }
           orderData.add(subList);
         });
-        callback.call(orderData);
+        orderData.sort((a, b) => (a.first.size).compareTo(b.first.size));
+
+        if (orderData.length > 1) {
+          selectInstructDialog(
+            orderData,
+            selectCallback: (list) {
+              state.createCustomLabelsData.value = list;
+              _toCreateCustomLabelPage(
+                  getLabelType(LabelCreateType.customOneOrder));
+            },
+            allCallback: () {
+              state.createCustomLabelsData.value =
+                  _createNewDataList(orderData);
+              _toCreateCustomLabelPage(
+                  getLabelType(LabelCreateType.customOrders));
+            },
+          );
+        } else {
+          state.createCustomLabelsData.value = orderData.first;
+          _toCreateCustomLabelPage(
+              getLabelType(LabelCreateType.customOneOrder));
+        }
       },
       error: (msg) => errorDialog(content: msg),
     );
   }
 
-  void getBarCodeCountMix(Function(List<List<PickingBarCodeInfo>>) callback) {
+  void _toCreateCustomLabelPage(int labelType) {
+    Get.to(
+      () => MaintainLabelCreateCustomPage(labelType: labelType),
+    )?.then((v) {
+      if (v) refreshDataList();
+    });
+  }
+
+  List<CreateCustomLabelsData> _createNewDataList(
+      List<List<CreateCustomLabelsData>> dataList) {
+    final cacheList = <CreateCustomLabelsData>[];
+
+    // 将所有指令数据合并到缓存列表中
+    for (var ins in dataList) {
+      cacheList.addAll(ins);
+    }
+
+    // 按尺寸分组并计算汇总数据
+    final grouped =
+        groupBy(cacheList, (CreateCustomLabelsData data) => data.size);
+
+    return grouped.entries.map((entry) {
+      final key = entry.key;
+      final value = entry.value;
+
+      // 计算剩余数量
+      final surplus = value
+          .map((s) => s.goodsTotal.sub(s.createdGoods))
+          .reduce((a, b) => a.add(b));
+
+      return CreateCustomLabelsData(
+        isSelect: true,
+        size: key,
+        createdLabels:
+            value.map((s) => s.createdLabels).reduce((a, b) => a + b),
+        goodsTotal: value.map((s) => s.goodsTotal).reduce((a, b) => a.add(b)),
+        createdGoods:
+            value.map((s) => s.createdGoods).reduce((a, b) => a.add(b)),
+        surplusGoods:
+            value.map((s) => s.surplusGoods).reduce((a, b) => a.add(b)),
+        capacity: surplus,
+        createGoods: surplus,
+        instruct: '',
+      );
+    }).toList();
+  }
+
+  void toMixLabelCreate() {
     state.getOrderDetailsForMix(
       success: (dataList) {
         final List<List<PickingBarCodeInfo>> orderData = [];
         groupBy(dataList, (item) => item.size ?? '').forEach((size, items) {
-          if (items.map((v) => v.surplusQty).reduce((a, b) => a.add(b)) > 0) {
-            orderData.add(items.where((v) => v.surplusQty > 0).toList());
+          if (items.map((v) => v.surplusQty.value).reduce((a, b) => a.add(b)) >
+              0) {
+            orderData.add(items.where((v) => v.surplusQty.value > 0).toList());
           }
         });
-        callback.call(orderData);
+        orderData
+            .sort((a, b) => (a.first.size ?? '').compareTo(b.first.size ?? ''));
+        state.createMixLabelsData.value = orderData;
+        Get.to(() => MaintainLabelCreateMixPage())?.then((v) {
+          if (v) refreshDataList();
+        });
       },
       error: (msg) => errorDialog(content: msg),
     );
+  }
+
+  void refreshMaxLabel() {
+    var maxLabelList = <int>[];
+    for (var item in state.createMixLabelsData) {
+      maxLabelList.addAll(
+        item
+            .where((v) => v.isSelected.value && v.packingQty.value > 0)
+            .map((v) => v.maxLabel())
+            .toList(),
+      );
+    }
+    state.maxLabel.value =
+        maxLabelList.isEmpty ? 0 : maxLabelList.reduce((a, b) => a < b ? a : b);
   }
 
   void deleteAllLabel() {
@@ -1206,5 +1296,60 @@ class MaintainLabelLogic extends GetxController {
     } else {
       labelCommandPrint.call(labelCommandList);
     }
+  }
+
+  void fillRemainingQty() {
+    for (var v in state.createMixLabelsData) {
+      v
+          .where((v2) => v2.isSelected.value && v2.packingQty.value == 0)
+          .forEach((item) {
+        item.packingQty.value = item.surplusQty.value;
+      });
+    }
+    refreshMaxLabel();
+  }
+
+  void createMixLabel(int maxLabel) {
+    if (state.createMixLabelsData
+        .every((v1) => v1.every((v2) => !v2.isSelected.value))) {
+      showSnackBar(
+        message: 'maintain_label_dialog_select_instruction_and_size'.tr,
+        isWarning: true,
+      );
+      return;
+    }
+    if (maxLabel == 0) {
+      showSnackBar(
+        message: 'maintain_label_dialog_cant_generate'.tr,
+        isWarning: true,
+      );
+      return;
+    }
+
+    var submitList = <PickingBarCodeInfo>[];
+    for (var item in state.createMixLabelsData) {
+      submitList.addAll(item.where((v) => v.isSelected.value).toList());
+    }
+    state.createMixLabel(
+      maxLabel: maxLabel,
+      submitList: submitList,
+      labelType: getLabelType(LabelCreateType.mixed),
+      success: (msg) => successDialog(
+        content: msg,
+        back: () => Get.back(result: true),
+      ),
+    );
+  }
+
+  void createCustomLabels(int labelType) {
+    state.createCustomLabel(
+      selectList: state.createCustomLabelsData.where((v)=>v.isCanCreate()).toList(),
+      labelType: labelType,
+      success: (msg) => successDialog(
+        content: msg,
+        back: () => Get.back(result: true),
+      ),
+      error: (msg)=>errorDialog(content: msg),
+    );
   }
 }

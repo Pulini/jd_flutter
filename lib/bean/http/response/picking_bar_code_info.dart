@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 
 // InterID : 67660
@@ -25,21 +26,21 @@ class PickingBarCodeInfo {
     qty = json['Qty'];
     labelCount = json['LabelCount'];
     totalQty = json['TotalQty'];
-    packingQty = (qty == 0.0) ? 0 : totalQty.sub(qty ?? 0);
-    surplusQty=totalQty.sub(qty??0);
+    packingQty.value = (qty == 0.0) ? 0 : totalQty.sub(qty ?? 0);
+    surplusQty.value = totalQty.sub(qty ?? 0);
   }
 
-  bool isSelected = false;
+  RxBool isSelected = false.obs;
+  RxDouble packingQty = 0.0.obs;
+  RxDouble surplusQty = 0.0.obs;
+
   int? interID;
   String? mtono;
   String? size;
   double? qty;
   int? labelCount;
   double? totalQty;
-  double packingQty = 0.0;
-  double surplusQty = 0.0;
   TextEditingController controller = TextEditingController();
-
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -52,7 +53,7 @@ class PickingBarCodeInfo {
     return map;
   }
 
-  int maxLabel()=> packingQty == 0.0 ? 0 : totalQty.sub(qty?? 0).div(packingQty).ceil();
-
-
+  int maxLabel() => packingQty.value == 0.0
+      ? 0
+      : totalQty.sub(qty ?? 0).div(packingQty.value).ceil();
 }

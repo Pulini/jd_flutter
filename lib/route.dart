@@ -28,6 +28,7 @@ import 'package:jd_flutter/fun/report/worker_production_detail/worker_production
 import 'package:jd_flutter/fun/report/worker_production_report/worker_production_report_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/delivery_order/delivery_order_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/incoming_inspection/incoming_inspection_view.dart';
+import 'package:jd_flutter/fun/warehouse/in/part_cross_docking/part_cross_docking_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/process_report/process_report_store_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/production_scan_warehouse/production_scan_warehouse_view.dart';
 import 'package:jd_flutter/fun/warehouse/in/purchase_order_reversal/purchase_order_reversal_view.dart';
@@ -172,7 +173,7 @@ class RouteConfig {
   //生产派工
   static Routes productionDispatch = Routes(
     '/production_dispatch',
-    221,
+    222,
     const ProductionDispatchPage(),
   );
 
@@ -200,7 +201,7 @@ class RouteConfig {
   //工单列表
   static Routes workOrderList = Routes(
     '/work_order_list',
-    204,
+    205,
     const WorkOrderListPage(),
   );
 
@@ -426,6 +427,13 @@ class RouteConfig {
     '/production_scan_warehouse',
     201,
     const ProductionScanWarehousePage(),
+  );
+
+  //部件越库
+  static Routes partCrossDocking = Routes(
+    '/part_cross_docking',
+    201,
+    const PartCrossDockingPage(),
   );
 
   //来料稽查
@@ -730,6 +738,7 @@ class RouteConfig {
     productionTasks,
     suppliersScanStore,
     productionScanWarehouse,
+    partCrossDocking,
     processReportWarehouse,
     incomingInspection,
     scanPickingMaterial,
@@ -972,6 +981,10 @@ class RouteConfig {
     GetPage(
       name: productionScanWarehouse.name,
       page: () => productionScanWarehouse.page,
+    ),
+    GetPage(
+      name: partCrossDocking.name,
+      page: () => partCrossDocking.page,
     ),
     GetPage(
       name: incomingInspection.name,

@@ -251,63 +251,63 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
     );
   }
 
-  void custom() {
-    logic.getBarCodeCount((list) {
-      if (list.length > 1) {
-        selectInstructDialog(list, selectCallback: (list) {
-          createCustomLabelDialog(
-            list,
-            state.interID,
-            logic.getLabelType(LabelCreateType.customOneOrder),
-            () => logic.refreshDataList(),
-          );
-        }, allCallback: (list) {
-          createCustomLabelDialog(
-            list,
-            state.interID,
-            logic.getLabelType(LabelCreateType.customOrders),
-            () => logic.refreshDataList(),
-          );
-        });
-      } else {
-        //创建自定义标签
-        createCustomLabelDialog(
-          list[0],
-          state.interID,
-          logic.getLabelType(LabelCreateType.customOneOrder),
-          () => logic.refreshDataList(),
-        );
-      }
-    });
-  }
+  // void custom() {
+  //   logic.getBarCodeCount((list) {
+  //     if (list.length > 1) {
+  //       selectInstructDialog(list, selectCallback: (list) {
+  //         createCustomLabelDialog(
+  //           list,
+  //           state.interID,
+  //           logic.getLabelType(LabelCreateType.customOneOrder),
+  //           () => logic.refreshDataList(),
+  //         );
+  //       }, allCallback: (list) {
+  //         createCustomLabelDialog(
+  //           list,
+  //           state.interID,
+  //           logic.getLabelType(LabelCreateType.customOrders),
+  //           () => logic.refreshDataList(),
+  //         );
+  //       });
+  //     } else {
+  //       //创建自定义标签
+  //       createCustomLabelDialog(
+  //         list[0],
+  //         state.interID,
+  //         logic.getLabelType(LabelCreateType.customOneOrder),
+  //         () => logic.refreshDataList(),
+  //       );
+  //     }
+  //   });
+  // }
 
-  void mixed() {
-    logic.getBarCodeCountMix((list) {
-      createMixLabelDialog(
-          list,
-          state.interID,
-          logic.getLabelType(LabelCreateType.mixed),
-          () => logic.refreshDataList());
-    });
-  }
+  // void mixed() {
+  //   logic.getBarCodeCountMix((list) {
+  //     createMixLabelDialog(
+  //         list,
+  //         state.interID,
+  //         logic.getLabelType(LabelCreateType.mixed),
+  //         () => logic.refreshDataList());
+  //   });
+  // }
 
   void labelCreate() {
     if (checkUserPermission('1051105')) {
       if (onlyCustomProcesses.contains(state.sapProcessName)) {
-        custom();
+        logic.toCustomLabelCreate();
       } else if (allTypeProcesses.contains(state.sapProcessName)) {
         createLabelSelect(
           showAll: true,
           single: () => logic.createSingleLabel(),
-          mix: () => mixed(),
-          custom: () => custom(),
+          mix: () => logic.toMixLabelCreate(),
+          custom: () => logic.toCustomLabelCreate(),
         );
       } else if (mixAndCustomProcesses.contains(state.sapProcessName)) {
         createLabelSelect(
           showAll: false,
           single: () {},
-          mix: () => mixed(),
-          custom: () => custom(),
+          mix: () => logic.toMixLabelCreate(),
+          custom: () => logic.toCustomLabelCreate(),
         );
       }
     } else {
@@ -385,11 +385,10 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
           combination: Combination.right,
         ),
         Obx(() => SwitchButton(
-          onChanged: (c) => state.isShowPreview.value = c,
-          value: state.isShowPreview.value,
-          name: 'maintain_label_preview'.tr,
-        ))
-
+              onChanged: (c) => state.isShowPreview.value = c,
+              value: state.isShowPreview.value,
+              name: 'maintain_label_preview'.tr,
+            ))
       ],
       body: Padding(
         padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
@@ -470,7 +469,6 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
               ],
             )),
       ),
-
     );
   }
 }
