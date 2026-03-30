@@ -10,7 +10,6 @@ import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
 import '../bean/http/response/feishu_info.dart';
-import '../utils/extension_util.dart';
 import '../widget/feishu_authorize.dart';
 
 class LoginState {
@@ -157,18 +156,12 @@ class LoginState {
       ).then(
         (response) {
           loadingDismiss();
-          var feishu = FeishuUserInfo.fromJson(response.data);
-          logger.f(feishu);
-          // var feishu = FeishuUserTokenInfo.fromJson(response.data);
-          // if (feishu.code == 0) {
-          //   success.call(feishu.accessToken ?? '');
-          // } else {
-          //   error.call(
-          //     'feishu_authorize_authorize_failed_code'.trArgs([
-          //       feishu.code.toString(),
-          //     ]),
-          //   );
-          // }
+          var code=response.data['code'];
+          if (code == 0) {
+            success.call(FeishuUserInfo.fromJson(response.data['data']));
+          } else {
+            error.call('获取用户信息失败：$code');
+          }
         },
         onError: (e) {
           loadingDismiss();

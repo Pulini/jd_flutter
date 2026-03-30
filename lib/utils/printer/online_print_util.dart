@@ -6,7 +6,6 @@ import 'package:get/get.dart' hide FormData, MultipartFile;
 import 'package:jd_flutter/bean/http/response/base_data.dart';
 import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/utils/dio_manager.dart';
-import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
