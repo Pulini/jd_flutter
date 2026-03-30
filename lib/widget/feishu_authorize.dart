@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/feishu_info.dart';
 import 'package:jd_flutter/constant.dart';
+import 'package:jd_flutter/utils/dio_manager.dart';
 
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
@@ -26,6 +27,9 @@ const String redirectUri =
 
 const String getUserTokenUrl =
     'https://open.feishu.cn/open-apis/authen/v2/oauth/token'; //获取 user_access_token
+
+const String getUserInfoUrl =
+    'https://open.feishu.cn/open-apis/authen/v1/user_info'; //获取用户信息
 
 const String wikiSearchUrl =
     'https://open.feishu.cn/open-apis/wiki/v1/nodes/search'; //wiki搜索
@@ -264,16 +268,7 @@ void feishuWikiSearch({
 }) {
   loadingShow('feishu_authorize_wiki_searching'.tr);
   Dio()
-    ..interceptors.add(InterceptorsWrapper(onRequest: (options, handler) {
-      options.print();
-      handler.next(options);
-    }, onResponse: (response, handler) {
-      loggerF(response.data);
-      handler.next(response);
-    }, onError: (DioException e, handler) {
-      logger.e('error:$e');
-      handler.next(e);
-    }))
+    ..interceptors.add(DioManager.simpleInterceptors)
     ..post(
       wikiSearchUrl,
       queryParameters: {
@@ -327,18 +322,10 @@ void feishuCloudDocSearch({
   required Function(List<FeishuCloudDocSearchItemInfo> list) success,
   required Function(String error) failed,
 }) {
+
   loadingShow('feishu_authorize_cloud_doc_searching'.tr);
   Dio()
-    ..interceptors.add(InterceptorsWrapper(onRequest: (options, handler) {
-      options.print();
-      handler.next(options);
-    }, onResponse: (response, handler) {
-      loggerF(response.data);
-      handler.next(response);
-    }, onError: (DioException e, handler) {
-      logger.e('error:$e');
-      handler.next(e);
-    }))
+    ..interceptors.add(DioManager.simpleInterceptors)
     ..post(
       cloudDocSearch,
       data: {
@@ -389,16 +376,7 @@ void feishuGetCloudDocInfo({
 }) {
   loadingShow('feishu_authorize_getting_file_detail'.tr);
   Dio()
-    ..interceptors.add(InterceptorsWrapper(onRequest: (options, handler) {
-      options.print();
-      handler.next(options);
-    }, onResponse: (response, handler) {
-      loggerF(response.data);
-      handler.next(response);
-    }, onError: (DioException e, handler) {
-      logger.e('error:$e');
-      handler.next(e);
-    }))
+    ..interceptors.add(DioManager.simpleInterceptors)
     ..post(
       cloudDocGetFileInfo,
       data: {
@@ -458,20 +436,7 @@ class FeishuAuthorize extends StatelessWidget {
   void _getUserAccessToken(String code) {
     loadingShow('feishu_authorize_getting_user_token'.tr);
     Dio()
-      ..interceptors.add(InterceptorsWrapper(
-        onRequest: (options, handler) {
-          options.print();
-          handler.next(options);
-        },
-        onResponse: (response, handler) {
-          loggerF(response.data);
-          handler.next(response);
-        },
-        onError: (DioException e, handler) {
-          logger.e('error:$e');
-          handler.next(e);
-        },
-      ))
+      ..interceptors.add(DioManager.simpleInterceptors)
       ..post(
         getUserTokenUrl,
         data: {
@@ -480,8 +445,6 @@ class FeishuAuthorize extends StatelessWidget {
           'client_secret': appSecret,
           'code': code,
           'redirect_uri': redirectUri,
-          'app_id': appID,
-          'app_secret': appSecret,
         },
         options: Options(
           headers: {

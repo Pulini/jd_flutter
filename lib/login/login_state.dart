@@ -1,11 +1,17 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/user_info.dart';
 import 'package:jd_flutter/constant.dart';
+import 'package:jd_flutter/utils/dio_manager.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
+
+import '../bean/http/response/feishu_info.dart';
+import '../utils/extension_util.dart';
+import '../widget/feishu_authorize.dart';
 
 class LoginState {
   var countTimer = 0.obs;
@@ -90,5 +96,85 @@ class LoginState {
         error.call(response.message ?? 'login_failed'.tr);
       }
     });
+  }
+
+  void getFeishuUserAccessToken({
+    required String code,
+    required Function(String accessToken) success,
+    required Function(String msg) error,
+  }) {
+    loadingShow('正在获取用户Token...');
+    Dio()
+      ..interceptors.add(DioManager.simpleInterceptors)
+      ..post(
+        getUserTokenUrl,
+        data: {
+          'grant_type': 'authorization_code',
+          'client_id': appID,
+          'client_secret': appSecret,
+          'code': code,
+          'redirect_uri': redirectUri,
+        },
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json; charset=utf-8',
+          },
+        ),
+      ).then(
+        (response) {
+          loadingDismiss();
+          var feishu = FeishuUserTokenInfo.fromJson(response.data);
+          if (feishu.code == 0) {
+            success.call(feishu.accessToken ?? '');
+          } else {
+            error.call('获取token失败：${feishu.code}');
+          }
+        },
+        onError: (e) {
+          loadingDismiss();
+          error.call(
+              '获取token失败：${(e as DioException).response?.statusCode} ${e.response?.statusMessage}');
+        },
+      );
+  }
+
+  void getFeishuUserInfo({
+    required String token,
+    required Function(FeishuUserInfo userInfo) success,
+    required Function(String msg) error,
+  }) {
+    loadingShow('正在获取用户信息...');
+    Dio()
+      ..interceptors.add(DioManager.simpleInterceptors)
+      ..get(
+        getUserInfoUrl,
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+            'Content-Type': 'application/json; charset=utf-8',
+          },
+        ),
+      ).then(
+        (response) {
+          loadingDismiss();
+          var feishu = FeishuUserInfo.fromJson(response.data);
+          logger.f(feishu);
+          // var feishu = FeishuUserTokenInfo.fromJson(response.data);
+          // if (feishu.code == 0) {
+          //   success.call(feishu.accessToken ?? '');
+          // } else {
+          //   error.call(
+          //     'feishu_authorize_authorize_failed_code'.trArgs([
+          //       feishu.code.toString(),
+          //     ]),
+          //   );
+          // }
+        },
+        onError: (e) {
+          loadingDismiss();
+          error.call(
+              '获取用户信息失败：${(e as DioException).response?.statusCode} ${e.response?.statusMessage}');
+        },
+      );
   }
 }

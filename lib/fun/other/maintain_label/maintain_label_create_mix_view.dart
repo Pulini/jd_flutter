@@ -96,7 +96,7 @@ class _MaintainLabelCreateMixPageState
                   ),
                   expandedFrameText(
                     lineHeight: 40,
-                    text: sub.surplusQty.value.toShowString(),
+                    text: sub.surplusQty.toShowString(),
                     alignment: Alignment.center,
                     flex: 1,
                     backgroundColor: Colors.white,
@@ -114,28 +114,24 @@ class _MaintainLabelCreateMixPageState
                         decoration: BoxDecoration(
                           border: Border.all(color: Colors.black),
                         ),
-                        child: Obx(() => TextField(
-                              textAlign: TextAlign.center,
-                              keyboardType: TextInputType.number,
-                              inputFormatters: [
-                                FilteringTextInputFormatter.digitsOnly
-                              ],
-                              controller: TextEditingController(
-                                text: sub.packingQty.value > 0
-                                    ? sub.packingQty.value.toShowString()
-                                    : '',
-                              ),
-                              decoration: InputDecoration(
-                                contentPadding:
-                                    const EdgeInsets.only(top: 0, bottom: 15),
-                                filled: true,
-                                fillColor: Colors.white,
-                              ),
-                              onChanged: (v) {
-                                sub.packingQty.value = v.toDoubleTry();
-                                logic.refreshMaxLabel();
-                              },
-                            )),
+                        child: TextField(
+                          textAlign: TextAlign.center,
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly
+                          ],
+                          controller: sub.packingQtyController,
+                          decoration: InputDecoration(
+                            contentPadding:
+                                const EdgeInsets.only(top: 0, bottom: 15),
+                            filled: true,
+                            fillColor: Colors.white,
+                          ),
+                          onChanged: (v) {
+                            sub.packingQty.value = v.toDoubleTry();
+                            logic.refreshMaxLabel();
+                          },
+                        ),
                       )),
                   SizedBox(
                     height: 40,

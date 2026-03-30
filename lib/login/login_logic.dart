@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:jd_flutter/bean/http/response/feishu_info.dart';
 import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/home/home_view.dart';
 import 'package:jd_flutter/utils/app_init.dart';
@@ -209,6 +210,20 @@ class LoginLogic extends GetxController {
         spSave(spSaveLoginWork, workNumber);
         state.isReLogin ? Get.back() : Get.offAll(() => const HomePage());
       },
+      error: (msg) => errorDialog(content: msg),
+    );
+  }
+
+  void getFeishuToken(String code) {
+    state.getFeishuUserAccessToken(
+      code: code,
+      success: (token) => state.getFeishuUserInfo(
+        token: token,
+        success: (FeishuUserInfo userInfo) {
+
+        },
+        error: (msg) => errorDialog(content: msg),
+      ),
       error: (msg) => errorDialog(content: msg),
     );
   }

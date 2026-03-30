@@ -27,12 +27,16 @@ class PickingBarCodeInfo {
     labelCount = json['LabelCount'];
     totalQty = json['TotalQty'];
     packingQty.value = (qty == 0.0) ? 0 : totalQty.sub(qty ?? 0);
-    surplusQty.value = totalQty.sub(qty ?? 0);
+    surplusQty = totalQty.sub(qty ?? 0);
+    packingQtyController = TextEditingController(
+      text: packingQty.value > 0 ? packingQty.value.toShowString() : '',
+    );
   }
 
   RxBool isSelected = false.obs;
   RxDouble packingQty = 0.0.obs;
-  RxDouble surplusQty = 0.0.obs;
+  double surplusQty = 0.0;
+  TextEditingController? packingQtyController;
 
   int? interID;
   String? mtono;
@@ -40,7 +44,6 @@ class PickingBarCodeInfo {
   double? qty;
   int? labelCount;
   double? totalQty;
-  TextEditingController controller = TextEditingController();
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};

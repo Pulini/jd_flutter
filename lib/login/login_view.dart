@@ -9,6 +9,8 @@ import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
 import 'package:jd_flutter/widget/number_text_field_widget.dart';
+import 'package:webview_flutter/webview_flutter.dart';
+import '../widget/feishu_authorize.dart';
 import 'login_logic.dart';
 
 class LoginPage extends StatefulWidget {
@@ -105,10 +107,11 @@ class _LoginPickState extends State<LoginPick>
     with SingleTickerProviderStateMixin {
   var logic = Get.put(LoginLogic());
   var state = Get.find<LoginLogic>().state;
+  var isShowLoginButton = false.obs;
 
   //tab控制器
   late TabController tabController = TabController(
-    length: hasFrontCamera() && GetPlatform.isMobile ? 4 : 3,
+    length: hasFrontCamera() && GetPlatform.isMobile ? 5 : 4,
     vsync: this,
   );
 
@@ -140,6 +143,8 @@ class _LoginPickState extends State<LoginPick>
   //工号登录密码输入框控制器
   var workLoginPasswordController = TextEditingController();
 
+  var webViewController = WebViewController();
+
   TextField textField({
     required TextEditingController controller,
     required String hint,
@@ -166,7 +171,7 @@ class _LoginPickState extends State<LoginPick>
         maxLength: maxLength,
       );
 
-  Wrap _box(Widget child) => Wrap(
+  Wrap _box(Widget child, {EdgeInsetsGeometry? padding}) => Wrap(
         children: [
           Container(
             decoration: BoxDecoration(
@@ -174,13 +179,37 @@ class _LoginPickState extends State<LoginPick>
               color: isTestUrl() ? Colors.teal : Colors.blueAccent,
             ),
             margin: const EdgeInsets.all(5),
-            padding: const EdgeInsets.all(20),
+            padding: padding ?? const EdgeInsets.all(20),
             child: child,
           )
         ],
       );
 
-  dynamic _phoneLogin() => _box(
+  Widget feishuLogin() => _box(
+        SizedBox(
+          height: 385,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: Stack(
+              children: [
+                WebViewWidget(controller: webViewController),
+                Positioned(
+                  top: 0,
+                  right: 0,
+                  child: IconButton(
+                    onPressed: () =>_loadAssetUrl(),
+                    icon: Icon(Icons.refresh),
+                    color: Colors.blue,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        padding: EdgeInsets.all(5),
+      );
+
+  Widget _phoneLogin() => _box(
         Column(
           children: [
             textField(
@@ -240,7 +269,7 @@ class _LoginPickState extends State<LoginPick>
         ),
       );
 
-  dynamic _faceLogin() => _box(
+  Widget _faceLogin() => _box(
         textField(
           controller: faceLoginPhoneController,
           hint: 'login_hint_phone'.tr,
@@ -249,7 +278,7 @@ class _LoginPickState extends State<LoginPick>
         ),
       );
 
-  dynamic _machineLogin() => _box(
+  Widget _machineLogin() => _box(
         Column(
           children: [
             textField(
@@ -270,7 +299,7 @@ class _LoginPickState extends State<LoginPick>
         ),
       );
 
-  dynamic _workLogin() => _box(
+  Widget _workLogin() => _box(
         Column(
           children: [
             textField(
@@ -289,6 +318,7 @@ class _LoginPickState extends State<LoginPick>
           ],
         ),
       );
+
   void _changeBaseUrlDialog() {
     var mesList = BaseUrl.values.where((v) => v.type == 'MES').toList();
     var sapList = BaseUrl.values.where((v) => v.type == 'SAP').toList();
@@ -315,7 +345,10 @@ class _LoginPickState extends State<LoginPick>
             height: 400,
             child: ListView(
               children: [
-                EditText(controller: mesInputController,hint: 'MES url',),
+                EditText(
+                  controller: mesInputController,
+                  hint: 'MES url',
+                ),
                 selectView(
                   controller: mesScrollController,
                   list: mesList.map((v) => v.name).toList(),
@@ -324,7 +357,10 @@ class _LoginPickState extends State<LoginPick>
                   hint: 'MES BaseUrl :',
                 ),
                 const SizedBox(height: 40),
-                EditText(controller: sapInputController,hint: 'SAP url',),
+                EditText(
+                  controller: sapInputController,
+                  hint: 'SAP url',
+                ),
                 selectView(
                   controller: sapScrollController,
                   list: sapList.map((v) => v.name).toList(),
@@ -338,15 +374,15 @@ class _LoginPickState extends State<LoginPick>
           actions: [
             TextButton(
               onPressed: () {
-                var mes=mesInputController.text;
-                var sap=sapInputController.text;
-                if(mes.isNotEmpty && sap.isNotEmpty){
-                  mesBaseUrl=mes;
-                  sapBaseUrl=sap;
+                var mes = mesInputController.text;
+                var sap = sapInputController.text;
+                if (mes.isNotEmpty && sap.isNotEmpty) {
+                  mesBaseUrl = mes;
+                  sapBaseUrl = sap;
                   spSave(spSaveMesBaseUrl, mes);
                   spSave(spSaveSapBaseUrl, sap);
                   Get.offAll(() => const LoginPage());
-                }else{
+                } else {
                   errorDialog(content: 'URL 不能为空');
                 }
               },
@@ -365,14 +401,57 @@ class _LoginPickState extends State<LoginPick>
     );
   }
 
+  void _onTabChanged() {
+    if (tabController.indexIsChanging) return; // 避免在切换动画过程中触发
+    isShowLoginButton.value = tabController.index != 0;
+  }
+
+  void _loadAssetUrl() =>webViewController.loadFlutterAsset('assets/web/feishu.html');
   @override
   void initState() {
     state.isReLogin = widget.isReLogin;
+    tabController.addListener(_onTabChanged);
+    webViewController
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setBackgroundColor(Colors.white)
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onPageStarted: (String url) {
+            debugPrint('onPageStarted------$url');
+            loadingShow('加载中...');
+          },
+          onPageFinished: (String url) {
+            debugPrint('onPageFinished------$url');
+            loadingDismiss();
+            if (url.startsWith(redirectUri)) {
+              final code = Uri.parse(url).queryParameters['code'];
+              if (code != null) {
+                logic.getFeishuToken(code);
+              } else {
+                errorDialog(
+                  content: '获取授权码失败',
+                  back: () => Get.back(),
+                );
+              }
+            }
+          },
+          onHttpError: (HttpResponseError error) {
+            debugPrint('onHttpError------${error.response?.statusCode}');
+            loadingDismiss();
+          },
+          onWebResourceError: (WebResourceError error) {
+            debugPrint('onWebResourceError------${error.description}');
+            loadingDismiss();
+          },
+        ),
+      );
+    WidgetsBinding.instance.addPostFrameCallback((_) =>_loadAssetUrl());
     super.initState();
   }
 
   @override
   void dispose() {
+    tabController.removeListener(_onTabChanged);
     Get.delete<LoginLogic>();
     super.dispose();
   }
@@ -381,7 +460,7 @@ class _LoginPickState extends State<LoginPick>
   Widget build(BuildContext context) {
     return SizedBox(
       width: 320,
-      height: 400,
+      height: 450,
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: Colors.transparent,
@@ -393,6 +472,7 @@ class _LoginPickState extends State<LoginPick>
           unselectedLabelColor: Colors.white,
           overlayColor: WidgetStateProperty.all(Colors.transparent),
           tabs: [
+            Tab(icon: Image.asset('assets/images/ic_feishu.png')),
             const Tab(icon: Icon(Icons.phone)),
             if (hasFrontCamera() && GetPlatform.isMobile)
               const Tab(icon: Icon(Icons.account_circle_outlined)),
@@ -406,6 +486,7 @@ class _LoginPickState extends State<LoginPick>
               child: TabBarView(
                 controller: tabController,
                 children: [
+                  feishuLogin(),
                   _phoneLogin(),
                   if (hasFrontCamera() && GetPlatform.isMobile) _faceLogin(),
                   _machineLogin(),
@@ -413,66 +494,69 @@ class _LoginPickState extends State<LoginPick>
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 10, right: 10, bottom: 20),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  minimumSize: const Size(double.infinity, 50),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                ),
-                onLongPress: () => logic.handleLongPressStart(
-                  changeBaseUrl: () => _changeBaseUrlDialog(),
-                ),
-                onPressed: () {
-                  if (tabController.index == 0) {
-                    logic.phoneLogin(
-                      phoneLoginPhoneController.text,
-                      phoneLoginPasswordController.text,
-                      phoneLoginVCodeController.text,
-                    );
-                    return;
-                  }
-                  if (tabController.index == 1) {
-                    if (hasFrontCamera() && GetPlatform.isMobile) {
-                      logic.faceLogin(faceLoginPhoneController.text);
-                    } else {
-                      logic.machineLogin(
-                        machineLoginMachineController.text,
-                        machineLoginPasswordController.text,
-                      );
-                    }
-                    return;
-                  }
-                  if (tabController.index == 2) {
-                    if (hasFrontCamera() && GetPlatform.isMobile) {
-                      logic.machineLogin(
-                        machineLoginMachineController.text,
-                        machineLoginPasswordController.text,
-                      );
-                    } else {
-                      logic.workNumberLogin(
-                        workLoginWorkNumberController.text,
-                        workLoginPasswordController.text,
-                      );
-                    }
-                    return;
-                  }
-                  if (tabController.index == 3) {
-                    logic.workNumberLogin(
-                      workLoginWorkNumberController.text,
-                      workLoginPasswordController.text,
-                    );
-                    return;
-                  }
-                },
-                child: Text(
-                  'login'.tr,
-                  style: const TextStyle(fontSize: 20),
-                ),
-              ),
-            ),
+            Obx(() => isShowLoginButton.value
+                ? Padding(
+                    padding:
+                        const EdgeInsets.only(left: 10, right: 10, bottom: 20),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: const Size(double.infinity, 50),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                      ),
+                      onLongPress: () => logic.handleLongPressStart(
+                        changeBaseUrl: () => _changeBaseUrlDialog(),
+                      ),
+                      onPressed: () {
+                        if (tabController.index == 1) {
+                          logic.phoneLogin(
+                            phoneLoginPhoneController.text,
+                            phoneLoginPasswordController.text,
+                            phoneLoginVCodeController.text,
+                          );
+                          return;
+                        }
+                        if (tabController.index == 2) {
+                          if (hasFrontCamera() && GetPlatform.isMobile) {
+                            logic.faceLogin(faceLoginPhoneController.text);
+                          } else {
+                            logic.machineLogin(
+                              machineLoginMachineController.text,
+                              machineLoginPasswordController.text,
+                            );
+                          }
+                          return;
+                        }
+                        if (tabController.index == 3) {
+                          if (hasFrontCamera() && GetPlatform.isMobile) {
+                            logic.machineLogin(
+                              machineLoginMachineController.text,
+                              machineLoginPasswordController.text,
+                            );
+                          } else {
+                            logic.workNumberLogin(
+                              workLoginWorkNumberController.text,
+                              workLoginPasswordController.text,
+                            );
+                          }
+                          return;
+                        }
+                        if (tabController.index == 4) {
+                          logic.workNumberLogin(
+                            workLoginWorkNumberController.text,
+                            workLoginPasswordController.text,
+                          );
+                          return;
+                        }
+                      },
+                      child: Text(
+                        'login'.tr,
+                        style: const TextStyle(fontSize: 20),
+                      ),
+                    ),
+                  )
+                : Container()),
           ],
         ),
       ),

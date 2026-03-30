@@ -13,6 +13,54 @@ class DioManager {
 
   DioManager._internal();
 
+  static final simpleInterceptors = InterceptorsWrapper(
+    onRequest: (options, handler) {
+      options.print();
+      handler.next(options);
+    },
+    onResponse: (response, handler) {
+      if (response.data is String) {
+        logger.f('Response data: ${response.data}');
+      } else {
+        loggerF(response.data);
+      }
+      handler.next(response);
+    },
+    onError: (DioException e, handler) {
+      logger.e('error:$e');
+      handler.next(e);
+    },
+  );
+
+  static final geInterceptors = InterceptorsWrapper(
+    onRequest: (options, handler) {
+      options.print();
+      handler.next(options);
+    },
+    onResponse: (response, handler) {
+      var baseData = response.getBaseData();
+      if (baseData.resultCode == resultReLogin) {
+        logger.e('需要重新登录');
+        spSave(spSaveUserInfo, '');
+        loadingDismiss();
+        handler.next(response);
+        reLoginPopup();
+      } else if (baseData.resultCode == resultToUpdate) {
+        logger.e('需要更新版本');
+        loadingDismiss();
+        upData();
+      } else {
+        handler.next(response);
+      }
+    },
+    onError: (DioException e, handler) {
+      logger.e('error:$e');
+      handler.next(e);
+    },
+  );
+
+  InterceptorsWrapper getFeiShuInterceptors() => simpleInterceptors;
+
   Dio getDio(String baseUrl) {
     if (_dio == null) {
       _dio = Dio(BaseOptions(
@@ -23,34 +71,7 @@ class DioManager {
       ));
 
       // 添加拦截器
-      _dio!.interceptors.add(
-        InterceptorsWrapper(
-          onRequest: (options, handler) {
-            options.print();
-            handler.next(options);
-          },
-          onResponse: (response, handler) {
-            var baseData = response.getBaseData();
-            if (baseData.resultCode == resultReLogin) {
-              logger.e('需要重新登录');
-              spSave(spSaveUserInfo, '');
-              loadingDismiss();
-              handler.next(response);
-              reLoginPopup();
-            } else if (baseData.resultCode == resultToUpdate) {
-              logger.e('需要更新版本');
-              loadingDismiss();
-              upData();
-            } else {
-              handler.next(response);
-            }
-          },
-          onError: (DioException e, handler) {
-            logger.e('error:$e');
-            handler.next(e);
-          },
-        ),
-      );
+      _dio!.interceptors.add(geInterceptors);
     } else {
       // 确保baseUrl是最新的
       _dio!.options.baseUrl = baseUrl;

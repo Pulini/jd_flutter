@@ -13,9 +13,7 @@ class FeishuUserTokenInfo {
     accessToken = json['access_token'];
     expiresIn = json['expires_in'];
     scope = json['scope'];
-    time = DateTime
-        .now()
-        .millisecondsSinceEpoch;
+    time = DateTime.now().millisecondsSinceEpoch;
   }
 
   FeishuUserTokenInfo.fromSaveJson(Map<String, dynamic> json) {
@@ -28,9 +26,7 @@ class FeishuUserTokenInfo {
   }
 
   bool isTimeout() {
-    var now = DateTime
-        .now()
-        .millisecondsSinceEpoch;
+    var now = DateTime.now().millisecondsSinceEpoch;
     var durationSeconds = Duration(milliseconds: now - time).inSeconds;
     return durationSeconds > (expiresIn ?? 0);
   }
@@ -134,6 +130,7 @@ class FeishuCloudDocSearchInfo {
     total = json['total'];
   }
 }
+
 //{
 //  "docs_token": "shtcnLkpxnlYksumuGNZM1abcef",
 //  "docs_type": "sheet",
@@ -153,6 +150,7 @@ class FeishuCloudDocSearchItemInfo {
     title = json['title'];
   }
 }
+
 //{
 //  "metas": [],
 //  "failed_list": []
@@ -198,6 +196,7 @@ class FeishuCloudDocFileMetasInfo {
   String? latestModifyTime;
   String? url;
   String? secLabelName;
+
   FeishuCloudDocFileMetasInfo.fromJson(dynamic json) {
     docToken = json['doc_token'];
     docType = json['doc_type'];
@@ -210,6 +209,7 @@ class FeishuCloudDocFileMetasInfo {
     secLabelName = json['sec_label_name'];
   }
 }
+
 //{
 //  "token": "boxcnrHpsg1QDqXAAAyachabcef",
 //  "code": 970005
@@ -222,4 +222,69 @@ class FeishuCloudDocFileFailedInfo {
     token = json['token'];
     code = json['code'];
   }
+}
+
+//  "name": "zhangsan",
+//         "en_name": "zhangsan",
+//         "avatar_url": "www.feishu.cn/avatar/icon",
+//         "avatar_thumb": "www.feishu.cn/avatar/icon_thumb",
+//         "avatar_middle": "www.feishu.cn/avatar/icon_middle",
+//         "avatar_big": "www.feishu.cn/avatar/icon_big",
+//         "open_id": "ou-caecc734c2e3328a62489fe0648c4b98779515d3",
+//         "union_id": "on-d89jhsdhjsajkda7828enjdj328ydhhw3u43yjhdj",
+//         "email": "zhangsan@feishu.cn",
+//         "enterprise_email": "demo@mail.com",
+//         "user_id": "5d9bdxxx",
+//         "mobile": "+86130002883xx",
+//         "tenant_key": "736588c92lxf175d",
+// 		"employee_no": "111222333"
+class FeishuUserInfo {
+  String? name;
+  String? enName;
+  String? avatarUrl;
+  String? avatarThumb;
+  String? avatarMiddle;
+  String? avatarBig;
+  String? openId;
+  String? unionId;
+  String? email;
+  String? enterpriseEmail;
+  String? userId;
+  String? mobile;
+  String? tenantKey;
+  String? employeeNo;
+
+  FeishuUserInfo.fromJson(dynamic json) {
+    name = json['name'];
+    enName = json['en_name'];
+    avatarUrl = json['avatar_url'];
+    avatarThumb = json['avatar_thumb'];
+    avatarMiddle = json['avatar_middle'];
+    avatarBig = json['avatar_big'];
+    openId = json['open_id'];
+    unionId = json['union_id'];
+    email = json['email'];
+    enterpriseEmail = json['enterprise_email'];
+    userId = json['user_id'];
+    mobile = json['mobile'];
+    tenantKey = json['tenant_key'];
+    employeeNo = json['employee_no'];
+  }
+
+ Map toJson() => {
+        'name': name,
+        'en_name': enName,
+        'avatar_url': avatarUrl,
+        'avatar_thumb': avatarThumb,
+        'avatar_middle': avatarMiddle,
+        'avatar_big': avatarBig,
+        'open_id': openId,
+        'union_id': unionId,
+        'email': email,
+        'enterprise_email': enterpriseEmail,
+        'user_id': userId,
+        'mobile': mobile,
+        'tenant_key': tenantKey,
+        'employee_no': employeeNo
+      };
 }
