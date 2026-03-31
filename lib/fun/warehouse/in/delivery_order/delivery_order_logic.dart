@@ -690,11 +690,9 @@ class DeliveryOrderLogic extends GetxController {
         .where((v2) => v2.isSelected.value)
         .every((v2) => v2.isExempt == true && v2.isPackingMaterials == false)) {
       //非即入即出 免检 可以入库
-      logger.f('2222');
       isStock = true;
     } else {
       //其他情况不可以
-      logger.f('333');
       isStock = false;
     }
     return isStock;
