@@ -19,6 +19,7 @@ const String spSaveLoginTypePhone = 'login_type_phone';
 const String spSaveLoginTypeFace = 'login_type_face';
 const String spSaveLoginTypeWorkNumber = 'login_type_work_number';
 const String spSaveLoginTypeMachine = 'login_type_machine';
+const String spSaveLoginTypeFeiShu = 'login_type_fei_shu';
 const String spSaveMesBaseUrl = 'mes_base_url';
 const String spSaveSapBaseUrl = 'sap_base_url';
 const String channelBluetoothFlutterToAndroid = 'channel_bluetooth_flutter_to_android';

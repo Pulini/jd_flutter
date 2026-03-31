@@ -67,24 +67,22 @@ class _MaintainLabelCreateCustomPageState
                           right: 3,
                           bottom: 0,
                         ),
-                        child: Obx(() => TextField(
-                              keyboardType: TextInputType.number,
-                              inputFormatters: [
-                                FilteringTextInputFormatter.digitsOnly
-                              ],
-                              controller: TextEditingController(
-                                text: data.capacity.value.toShowString(),
-                              ),
-                              decoration: InputDecoration(
-                                contentPadding:
-                                    const EdgeInsets.only(top: 0, bottom: 15),
-                                filled: true,
-                                fillColor: Colors.transparent,
-                              ),
-                              onChanged: (v) {
-                                data.capacity.value = v.toDoubleTry();
-                              },
-                            )),
+                        child: TextField(
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly
+                          ],
+                          controller: data.capacityController,
+                          decoration: InputDecoration(
+                            contentPadding:
+                                const EdgeInsets.only(top: 0, bottom: 15),
+                            filled: true,
+                            fillColor: Colors.transparent,
+                          ),
+                          onChanged: (v) {
+                            data.capacity.value = v.toDoubleTry();
+                          },
+                        ),
                       ),
                     ],
                   )
@@ -117,24 +115,22 @@ class _MaintainLabelCreateCustomPageState
                           right: 3,
                           bottom: 0,
                         ),
-                        child: Obx(() => TextField(
-                              keyboardType: TextInputType.number,
-                              inputFormatters: [
-                                FilteringTextInputFormatter.digitsOnly
-                              ],
-                              controller: TextEditingController(
-                                text: data.createGoods.value.toShowString(),
-                              ),
-                              decoration: InputDecoration(
-                                contentPadding:
-                                    const EdgeInsets.only(top: 0, bottom: 15),
-                                filled: true,
-                                fillColor: Colors.transparent,
-                              ),
-                              onChanged: (v) {
-                                data.createGoods.value = v.toDoubleTry();
-                              },
-                            )),
+                        child: TextField(
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly
+                          ],
+                          controller: data.createGoodsController,
+                          decoration: InputDecoration(
+                            contentPadding:
+                                const EdgeInsets.only(top: 0, bottom: 15),
+                            filled: true,
+                            fillColor: Colors.transparent,
+                          ),
+                          onChanged: (v) {
+                            data.createGoods.value = v.toDoubleTry();
+                          },
+                        ),
                       ),
                     ],
                   )
@@ -169,10 +165,7 @@ class _MaintainLabelCreateCustomPageState
                       ),
                     ),
                   ),
-                  onTap: () {
-                    data.capacity.value = data.surplusGoods;
-                    data.createGoods.value = data.surplusGoods;
-                  },
+                  onTap: () => data.setMax(),
                 )
               ],
             )
@@ -204,14 +197,10 @@ class _MaintainLabelCreateCustomPageState
                         state.createCustomLabelsData
                             .any((v) => v.isSelect.value),
                     text: '批量设置',
-                    click: () {
-                      for (var item in state.createCustomLabelsData) {
-                        item.capacity.value =
-                            batchBoxCapacityController.text.toDoubleTry();
-                        item.createGoods.value =
-                            batchCreateGoodsController.text.toDoubleTry();
-                      }
-                    },
+                    click: () => logic.customLabelsBatchSet(
+                      batchBoxCapacityController.text.toIntTry(),
+                      batchCreateGoodsController.text.toIntTry(),
+                    ),
                   )),
               Obx(() => CombinationButton(
                     combination: Combination.right,

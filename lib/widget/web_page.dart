@@ -5,7 +5,7 @@ import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide FormData;
-import 'package:jd_flutter/utils/extension_util.dart';
+import 'package:jd_flutter/utils/dio_manager.dart';
 import 'package:jd_flutter/utils/printer/online_print_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
@@ -223,24 +223,7 @@ class _WebPrinterState extends State<WebPrinter> {
   void runTask() {
 
     var dio = Dio()
-      ..interceptors.add(InterceptorsWrapper(
-        onRequest: (options, handler) {
-          options.print();
-          handler.next(options);
-        },
-        onResponse: (response, handler) {
-          if (response.data is String) {
-            logger.f('Response data: ${response.data}');
-          } else {
-            loggerF(response.data);
-          }
-          handler.next(response);
-        },
-        onError: (DioException e, handler) {
-          logger.f('error: $e');
-          handler.next(e);
-        },
-      ));
+      ..interceptors.add(DioManager.simpleInterceptors);
 
     loadingShow('正在生成物料清单预览...');
     ready.value = false;

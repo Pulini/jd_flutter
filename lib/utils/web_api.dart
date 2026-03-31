@@ -197,6 +197,10 @@ Future<BaseData> _doHttp({
   }
   return base;
 }
+
+
+
+
 String badResponseErrorMessage(int? statusCode) {
   switch (statusCode) {
     case 400:

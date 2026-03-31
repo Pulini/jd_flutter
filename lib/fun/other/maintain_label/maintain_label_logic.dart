@@ -317,9 +317,9 @@ class MaintainLabelLogic extends GetxController {
       success: (dataList) {
         final List<List<PickingBarCodeInfo>> orderData = [];
         groupBy(dataList, (item) => item.size ?? '').forEach((size, items) {
-          if (items.map((v) => v.surplusQty.value).reduce((a, b) => a.add(b)) >
+          if (items.map((v) => v.surplusQty).reduce((a, b) => a.add(b)) >
               0) {
-            orderData.add(items.where((v) => v.surplusQty.value > 0).toList());
+            orderData.add(items.where((v) => v.surplusQty > 0).toList());
           }
         });
         orderData
@@ -1303,7 +1303,8 @@ class MaintainLabelLogic extends GetxController {
       v
           .where((v2) => v2.isSelected.value && v2.packingQty.value == 0)
           .forEach((item) {
-        item.packingQty.value = item.surplusQty.value;
+        item.packingQty.value = item.surplusQty;
+        item.packingQtyController!.text = item.packingQty.value.toShowString();
       });
     }
     refreshMaxLabel();
@@ -1343,13 +1344,23 @@ class MaintainLabelLogic extends GetxController {
 
   void createCustomLabels(int labelType) {
     state.createCustomLabel(
-      selectList: state.createCustomLabelsData.where((v)=>v.isCanCreate()).toList(),
+      selectList:
+          state.createCustomLabelsData.where((v) => v.isCanCreate()).toList(),
       labelType: labelType,
       success: (msg) => successDialog(
         content: msg,
         back: () => Get.back(result: true),
       ),
-      error: (msg)=>errorDialog(content: msg),
+      error: (msg) => errorDialog(content: msg),
     );
+  }
+
+  void customLabelsBatchSet(int batchBoxCapacity, int batchCreateGoods) {
+    for (var item in state.createCustomLabelsData.where((v)=>v.isSelect.value)) {
+      item.capacity.value =batchBoxCapacity.toDouble();
+      item.capacityController!.text=batchBoxCapacity.toString();
+      item.createGoods.value =batchCreateGoods.toDouble();
+      item.createGoodsController!.text=batchCreateGoods.toString();
+    }
   }
 }

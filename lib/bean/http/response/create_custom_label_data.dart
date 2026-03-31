@@ -1,10 +1,15 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 
 class CreateCustomLabelsData {
   int type;
   RxBool isSelect = false.obs;
   RxDouble capacity = 0.0.obs;
   RxDouble createGoods = 0.0.obs;
+  TextEditingController? capacityController;
+  TextEditingController? createGoodsController;
+
   String size;
   String instruct;
   int createdLabels;
@@ -27,8 +32,16 @@ class CreateCustomLabelsData {
     this.isSelect = RxBool(isSelect!);
     this.capacity = RxDouble(capacity!);
     this.createGoods = RxDouble(createGoods!);
+    capacityController=TextEditingController(text:this.capacity.value.toShowString());
+    createGoodsController=TextEditingController(text:this.createGoods.value.toShowString());
   }
 
+  void setMax(){
+    capacity.value = surplusGoods;
+    createGoods.value = surplusGoods;
+    createGoodsController!.text=surplusGoods.toShowString();
+    capacityController!.text=surplusGoods.toShowString();
+  }
   // String sizeText() {
   //   return '尺寸: $size';
   // }

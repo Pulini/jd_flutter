@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>飞书二维码登录</title>
+    <script src="https://lf-package-cn.feishucdn.com/obj/feishu-static/lark/passport/qrcode/LarkSSOSDKWebQRCode-1.0.3.js"></script>
+    <style>        * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background-color: transparent;
+    }
+
+    #qrcode-container {
+        width: 300px;
+        height: 300px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    </style>
+</head>
+<body>
+<div id="qrcode-container"></div>
+
+<script>
+    const authorizeUrl = "https://passport.feishu.cn/suite/passport/oauth/authorize";
+    const appId = "cli_a646a42958f2d00b";
+    const redirectUri = "https://geapp.goldemperor.com:1226/Pages/FeiShu/FeiShuCallBack.aspx";
+    const gotoUrl = `${authorizeUrl}?client_id=${appId}&redirect_uri=${redirectUri}&response_type=code&state=GOLD_EMPEROR`;
+
+    // 创建二维码实例
+    const QRLoginObj = QRLogin({
+        id: "qrcode-container",  // 页面中用于展示二维码的 DOM 元素 ID
+        goto: gotoUrl,  // 授权链接
+        width: "250",  // 二维码容器宽度
+        height: "250",   // 二维码容器高度
+        style: "border:none"  // 去除边框
+    });
+
+    const handleMessage = function (event) {
+        // 校验事件来源和数据合法性
+        if (QRLoginObj.matchOrigin(event.origin) && QRLoginObj.matchData(event.data)) {
+            const loginTmpCode = event.data.tmp_code;  // 获取临时授权码
+            window.location.href = `${gotoUrl}&tmp_code=${loginTmpCode}`;
+        }
+    };
+
+    if (typeof window.addEventListener !== 'undefined') {
+        window.addEventListener('message', handleMessage, false);
+    } else if (typeof window.attachEvent !== 'undefined') {
+        window.attachEvent('onmessage', handleMessage);
+    }
+
+
+
+</script>

@@ -212,4 +212,35 @@ class LoginLogic extends GetxController {
       error: (msg) => errorDialog(content: msg),
     );
   }
+
+  void getFeishuToken({
+    required String code,
+    required Function() reload,
+  }) {
+    error(String msg) {
+      errorDialog(content: msg);
+      reload.call();
+    }
+
+    state.getFeishuUserAccessToken(
+      code: code,
+      success: (token) => state.getFeishuUserInfo(
+        token: token,
+        success: (userInfo) => state.login(
+          jiGuangID: getJPushID(),
+          phone: userInfo.userId ?? '',
+          password: '',
+          vCode: '',
+          type: 4,
+          success: (userInfo) {
+            spSave(spSaveLoginType, spSaveLoginTypeFeiShu);
+            state.isReLogin ? Get.back() : Get.offAll(() => const HomePage());
+          },
+          error: error,
+        ),
+        error: error,
+      ),
+      error: error,
+    );
+  }
 }
