@@ -8,7 +8,6 @@ import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
-import '../../../../utils/web_api.dart';
 import 'delivery_order_label_binding_view.dart';
 import 'delivery_order_state.dart';
 
