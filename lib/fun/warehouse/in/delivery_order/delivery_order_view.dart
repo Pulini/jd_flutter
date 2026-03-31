@@ -235,10 +235,7 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
         children: [
           CombinationButton(
               text: 'delivery_order_check'.tr,
-              click: () => {
-                logger.f('11111'),
-                _checkOrder(true, data)
-              }),
+              click: () => {logger.f('11111'), _checkOrder(true, data)}),
           Expanded(child: Container()),
           Text(
             data[0].isExempt == true
@@ -361,12 +358,8 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
         Row(
           children: [
             CombinationButton(
-              text: 'delivery_order_check'.tr,
-              click: () => {
-                logger.f('2222222'),
-                _checkOrder(true, data)
-              }
-            ),
+                text: 'delivery_order_check'.tr,
+                click: () => {logger.f('2222222'), _checkOrder(true, data)}),
             Expanded(child: Container()),
             Text(
               data[0].isExempt == true
@@ -392,10 +385,7 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
       ],
     );
     return GestureDetector(
-      onTap: () => {
-        logger.f('3333333'),
-        _checkOrder(false, data)
-      },
+      onTap: () => {logger.f('3333333'), _checkOrder(false, data)},
       child: Container(
         margin: const EdgeInsets.only(bottom: 10),
         padding: const EdgeInsets.all(10),
@@ -418,7 +408,7 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: Colors.grey,width: 2),
+          border: Border.all(color: Colors.grey, width: 2),
           gradient: LinearGradient(
             colors: [Colors.blue.shade50, Colors.white],
             begin: Alignment.topCenter,
@@ -859,11 +849,17 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
                             (v) => v.any((v2) => v2.isSelected.value),
                           ),
                           text: 'delivery_order_stock_in'.tr,
-                          click: () => stockInDialog(
-                            submitList: logic.getSelectedList(),
-                            workerCenterId: opcWorkCenter.selectedId.value,
-                            refresh: _query,
-                          ),
+                          click: () {
+                            if (logic.checkStockIn()) {
+                              stockInDialog(
+                                submitList: logic.getSelectedList(),
+                                workerCenterId: opcWorkCenter.selectedId.value,
+                                refresh: _query,
+                              );
+                            } else {
+                              showSnackBar(message: '无法直接入库，请点击暂收');
+                            }
+                          },
                         ),
                       ),
                       Expanded(

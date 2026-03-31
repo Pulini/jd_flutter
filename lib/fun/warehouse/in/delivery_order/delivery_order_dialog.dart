@@ -94,37 +94,42 @@ void stockInDialog({
       //     locationList.clear();
       //   },
       // );
-      _checkFaceInfo(
-        billType: '入库单',
-        sapFactoryNumber: location.factoryNumber ?? '',
-        sapStockNumber: location.storageLocationNumber ?? '',
-        faceInfoError: (msg) {
-          faceErrorMsg.value = msg;
-          leaderEnable.value = false;
-          leaderList.value = [];
-        },
-        disableFace: () {
-          faceErrorMsg.value = '';
-          leaderEnable.value = false;
-          leaderList.value = [];
-        },
-        haveLeaderList: (leaders) {
-          faceErrorMsg.value = '';
-          leaderEnable.value = true;
-          leaderList.value = leaders;
-          var saveLeaderIndex = leaderList.indexWhere(
-            (v) => v.liableEmpCode == saveLeaderNumber,
-          );
-          if (saveLeaderIndex != -1) {
-            leaderController.jumpToItem(saveLeaderIndex);
-          }
-        },
-        leaderNull: (msg) {
-          faceErrorMsg.value = msg;
-          leaderEnable.value = true;
-          leaderList.value = [];
-        },
-      );
+      if (submitList.every((v) => v.isNeedBindingLabel())) {
+        faceErrorMsg.value = '';
+        leaderEnable.value = false;
+      } else {
+        _checkFaceInfo(
+          billType: '入库单',
+          sapFactoryNumber: location.factoryNumber ?? '',
+          sapStockNumber: location.storageLocationNumber ?? '',
+          faceInfoError: (msg) {
+            faceErrorMsg.value = msg;
+            leaderEnable.value = false;
+            leaderList.value = [];
+          },
+          disableFace: () {
+            faceErrorMsg.value = '';
+            leaderEnable.value = false;
+            leaderList.value = [];
+          },
+          haveLeaderList: (leaders) {
+            faceErrorMsg.value = '';
+            leaderEnable.value = true;
+            leaderList.value = leaders;
+            var saveLeaderIndex = leaderList.indexWhere(
+              (v) => v.liableEmpCode == saveLeaderNumber,
+            );
+            if (saveLeaderIndex != -1) {
+              leaderController.jumpToItem(saveLeaderIndex);
+            }
+          },
+          leaderNull: (msg) {
+            faceErrorMsg.value = msg;
+            leaderEnable.value = true;
+            leaderList.value = [];
+          },
+        );
+      }
     },
   );
   stockInSuccess(String msg) => successDialog(
@@ -138,11 +143,11 @@ void stockInDialog({
     // String location = submitList.first.isNeedBindingLabel()
     //     ? locationList[locationController.selectedItem].location ?? ''
     //     : '';
-    String location ='';
+    String location = '';
 
     if (leaderEnable.value) {
       var leader = leaderList[leaderController.selectedItem];
-      if(hasFrontCamera()){
+      if (hasFrontCamera()) {
         livenFaceVerification(
           faceUrl: userInfo?.picUrl ?? '',
           verifySuccess: (pickerB64) => livenFaceVerification(
@@ -161,7 +166,7 @@ void stockInDialog({
             ),
           ),
         );
-      }else{
+      } else {
         errorDialog(content: '当前设备没有前置摄像头。无法进行人脸识别！');
       }
       // if (submitList[0].isScanPieces?.isEmpty == true && hasFrontCamera()) {
@@ -388,63 +393,80 @@ void createTemporaryDialog({
     errorDialog(content: 'delivery_order_dialog_different_order_tips'.tr);
     return;
   }
-  _checkFaceInfo(
-    billType: '暂收单',
-    sapFactoryNumber: submitList[0].factoryNO ?? '',
-    sapStockNumber: submitList[0].location ?? '',
-    faceInfoError: (msg) => errorDialog(content: msg),
-    disableFace: () => _createTemporaryOder(
+  if (submitList.every((v) => v.isNeedBindingLabel())) {
+    _createTemporaryOder(
+      pickerNumber: userInfo?.number ?? '',
+      pickerB64: '',
+      leaderNumber: '',
+      leaderB64: '',
       data: submitList,
-      success: (msg) => successDialog(content: msg, back: () => refresh.call()),
-    ),
-    haveLeaderList: (leaders) {
-      var leaderController = FixedExtentScrollController();
-      Get.dialog(
-        PopScope(
-          canPop: false,
-          child: AlertDialog(
-            title: Text('delivery_order_dialog_leader'.tr),
-            content: SizedBox(
-              width: 300,
-              height: 130,
-              child: CupertinoPicker(
-                scrollController: leaderController,
-                diameterRatio: 1.5,
-                magnification: 1.2,
-                squeeze: 1.2,
-                useMagnifier: true,
-                itemExtent: 32,
-                onSelectedItemChanged: (v) {},
-                children: leaders
-                    .map((data) => Center(
-                          child: Text('${data.liableEmpName}'),
-                        ))
-                    .toList(),
+      success: (msg) => successDialog(
+        content: msg,
+        back: () {
+          refresh.call();
+        },
+      ),
+    );
+  } else {
+    _checkFaceInfo(
+      billType: '暂收单',
+      sapFactoryNumber: submitList[0].factoryNO ?? '',
+      sapStockNumber: submitList[0].location ?? '',
+      faceInfoError: (msg) => errorDialog(content: msg),
+      disableFace: () => _createTemporaryOder(
+        data: submitList,
+        success: (msg) =>
+            successDialog(content: msg, back: () => refresh.call()),
+      ),
+      haveLeaderList: (leaders) {
+        var leaderController = FixedExtentScrollController();
+        Get.dialog(
+          PopScope(
+            canPop: false,
+            child: AlertDialog(
+              title: Text('delivery_order_dialog_leader'.tr),
+              content: SizedBox(
+                width: 300,
+                height: 130,
+                child: CupertinoPicker(
+                  scrollController: leaderController,
+                  diameterRatio: 1.5,
+                  magnification: 1.2,
+                  squeeze: 1.2,
+                  useMagnifier: true,
+                  itemExtent: 32,
+                  onSelectedItemChanged: (v) {},
+                  children: leaders
+                      .map((data) => Center(
+                            child: Text('${data.liableEmpName}'),
+                          ))
+                      .toList(),
+                ),
               ),
+              actions: [
+                TextButton(
+                  onPressed: () => _checkLeader(
+                    submitList: submitList,
+                    leader: leaders[leaderController.selectedItem],
+                    refresh: refresh,
+                  ),
+                  child: Text('dialog_default_confirm'.tr),
+                ),
+                TextButton(
+                  onPressed: () => Get.back(),
+                  child: Text(
+                    'dialog_default_cancel'.tr,
+                    style: const TextStyle(color: Colors.grey),
+                  ),
+                ),
+              ],
             ),
-            actions: [
-              TextButton(
-                onPressed: () => _checkLeader(
-                  submitList: submitList,
-                  leader: leaders[leaderController.selectedItem],
-                  refresh: refresh,
-                ),
-                child: Text('dialog_default_confirm'.tr),
-              ),
-              TextButton(
-                onPressed: () => Get.back(),
-                child: Text(
-                  'dialog_default_cancel'.tr,
-                  style: const TextStyle(color: Colors.grey),
-                ),
-              ),
-            ],
           ),
-        ),
-      );
-    },
-    leaderNull: (msg) => errorDialog(content: msg),
-  );
+        );
+      },
+      leaderNull: (msg) => errorDialog(content: msg),
+    );
+  }
 }
 
 Future<void> _checkLeader({
@@ -452,15 +474,16 @@ Future<void> _checkLeader({
   required LeaderInfo leader,
   required Function() refresh,
 }) async {
-  if(hasFrontCamera()){
-    if (submitList.first.isNeedBindingLabel()) {
-      livenFaceVerification(
-        faceUrl: userInfo?.picUrl ?? '',
-        verifySuccess: (pickerB64) => _createTemporaryOder(
+  if (hasFrontCamera()) {
+    livenFaceVerification(
+      faceUrl: userInfo?.picUrl ?? '',
+      verifySuccess: (pickerB64) => livenFaceVerification(
+        faceUrl: leader.liablePicturePath ?? '',
+        verifySuccess: (leaderB64) => _createTemporaryOder(
           pickerNumber: userInfo?.number ?? '',
           pickerB64: pickerB64,
           leaderNumber: leader.liableEmpCode ?? '',
-          leaderB64: '',
+          leaderB64: leaderB64,
           data: submitList,
           success: (msg) => successDialog(
             content: msg,
@@ -470,30 +493,9 @@ Future<void> _checkLeader({
             },
           ),
         ),
-      );
-    }else{
-      livenFaceVerification(
-        faceUrl: userInfo?.picUrl ?? '',
-        verifySuccess: (pickerB64) => livenFaceVerification(
-          faceUrl: leader.liablePicturePath ?? '',
-          verifySuccess: (leaderB64) => _createTemporaryOder(
-            pickerNumber: userInfo?.number ?? '',
-            pickerB64: pickerB64,
-            leaderNumber: leader.liableEmpCode ?? '',
-            leaderB64: leaderB64,
-            data: submitList,
-            success: (msg) => successDialog(
-              content: msg,
-              back: () {
-                Get.back();
-                refresh.call();
-              },
-            ),
-          ),
-        ),
-      );
-    }
-  }else{
+      ),
+    );
+  } else {
     errorDialog(content: '当前设备没有前置摄像头。无法进行人脸识别！');
   }
   //  2026年1月23日，张幸民：所有单据都必须使用人脸识别。

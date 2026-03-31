@@ -8,6 +8,7 @@ import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
+import '../../../../utils/web_api.dart';
 import 'delivery_order_label_binding_view.dart';
 import 'delivery_order_state.dart';
 
@@ -234,7 +235,6 @@ class DeliveryOrderLogic extends GetxController {
     }
     reversal.call();
   }
-
 
   void reversalStockOut({
     required String workCenterID,
@@ -664,7 +664,7 @@ class DeliveryOrderLogic extends GetxController {
   }
 
   void selectAllChecked(bool select) {
-    state.selectAllChecked.value=select;
+    state.selectAllChecked.value = select;
     state.deliveryOrderList
         .where((v) =>
             v.first.isGenerate.isNullOrEmpty() &&
@@ -675,4 +675,30 @@ class DeliveryOrderLogic extends GetxController {
       }
     });
   }
+
+  bool checkStockIn() {
+    var isStock = false;
+    //26 年 3 月 31 张幸民提的修改
+    if (state.deliveryOrderList
+        .expand((v) => v)
+        .where((v2) => v2.isSelected.value)
+        .every((v2) => v2.isPackingMaterials == true)) {
+      //即入即出的可以直接入库
+      isStock = true;
+    } else if (state.deliveryOrderList
+        .expand((v) => v)
+        .where((v2) => v2.isSelected.value)
+        .every((v2) => v2.isExempt == true && v2.isPackingMaterials == false)) {
+      //非即入即出 免检 可以入库
+      logger.f('2222');
+      isStock = true;
+    } else {
+      //其他情况不可以
+      logger.f('333');
+      isStock = false;
+    }
+    return isStock;
+  }
+
+
 }
