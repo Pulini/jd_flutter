@@ -58,7 +58,7 @@ class PartCrossDockingLogic extends GetxController {
     } else {
       BarCodeInfo(
         code: code,
-        type: BarCodeReportType.productionScanInStock.name,
+        type: BarCodeReportType.productionScanInStock.text,
       )
         ..palletNo = state.palletNumber.value
         ..isUsed = state.usedList.contains(code)

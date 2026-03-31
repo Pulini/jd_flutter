@@ -66,6 +66,7 @@ class BarCodeInfo {
         conflictAlgorithm: ConflictAlgorithm.replace,
       ).then(
         (value) {
+          logger.e(value);
           id = value;
           db.close();
           callback.call(this);
@@ -88,6 +89,7 @@ class BarCodeInfo {
         where: 'type = ?',
         whereArgs: [type],
       ).then((value) {
+        logger.e(value);
         db.close();
         callback.call([for (var v in value) BarCodeInfo.fromJson(v)]);
       }, onError: (e) {

@@ -182,7 +182,9 @@ Future<BaseData> _doHttp({
         base.message = '服务器证书错误';
         break;
       case DioExceptionType.unknown:
-        base.message = '未知异常';
+        e.error.toString().startsWith('HandshakeException')
+            ? base.message = 'SSL证书验证失败'
+            : base.message = '未知异常';
         break;
     }
   } on Exception catch (e) {
