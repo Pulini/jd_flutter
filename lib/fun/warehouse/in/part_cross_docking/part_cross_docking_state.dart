@@ -81,7 +81,7 @@ class PartCrossDockingState {
   }) {
     httpPost(
       loading: '正在提交越库...',
-      method: webApiUploadProductionScanning,
+      method: webApiSubmitBarCode2CrossDockingBill,
       body: {
         'BarCodeList': [
           for (var item in barCodeList.where((v) => !v.isUsed))
