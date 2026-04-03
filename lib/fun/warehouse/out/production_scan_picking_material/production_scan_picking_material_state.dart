@@ -31,7 +31,7 @@ class ProductionScanPickingMaterialState {
           for (var item in barCodeList.where((v) => !v.isUsed))
             {'BarCode': item.code}
         ],
-        'Red': reverse.value,
+        'Red': reverse.value? -1 : 1,
         'SAPSupplierNumber': supplier,
         'FDepartmentID': department,
         'EmpCode': worker,
