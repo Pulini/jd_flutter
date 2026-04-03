@@ -182,7 +182,9 @@ Future<BaseData> _doHttp({
         base.message = '服务器证书错误';
         break;
       case DioExceptionType.unknown:
-        base.message = '未知异常';
+        e.error.toString().startsWith('HandshakeException')
+            ? base.message = 'SSL证书验证失败'
+            : base.message = '未知异常';
         break;
     }
   } on Exception catch (e) {
@@ -197,9 +199,6 @@ Future<BaseData> _doHttp({
   }
   return base;
 }
-
-
-
 
 String badResponseErrorMessage(int? statusCode) {
   switch (statusCode) {
@@ -231,6 +230,7 @@ String badResponseErrorMessage(int? statusCode) {
       return '网络请求失败，请检查网络连接';
   }
 }
+
 //post请求
 Future<BaseData> httpPost({
   String? loading,
@@ -443,7 +443,8 @@ const webApiGetMoldingScanBulletinReport = 'api/Package/GetProductionOrderST';
 const webApiSubmitNewSort = 'api/Package/SubmitWorkCardPriority';
 
 //根据时间和部门信息获得生产派工单列表信息
-const webApiGetWorkCardCombinedSizeList = 'api/WorkCard/GetWorkCardCombinedSizeList';
+const webApiGetWorkCardCombinedSizeList =
+    'api/WorkCard/GetWorkCardCombinedSizeList';
 
 //生产派工单下推
 const webApiPushProductionOrder =
@@ -571,7 +572,8 @@ const webApiCreateCustomSizeLabel =
 const webApiCleanLabel = 'api/CompoundDispatching/DelPackingListBarcode';
 
 //根据包装清单ID删除包装清单所有标签
-const webApiCleanLabelFormPackID = 'api/CompoundDispatching/DelPackingListBarcodeByPackInterID';
+const webApiCleanLabelFormPackID =
+    'api/CompoundDispatching/DelPackingListBarcodeByPackInterID';
 
 //删除标签
 const webApiDeleteLabels = 'api/CompoundDispatching/DelBarcode';
@@ -1066,6 +1068,10 @@ const webApiGetUnReportedBarCode = 'api/scanjobbooking/GetUnReportedBarCode';
 const webApiUploadProductionScanning =
     'api/ScanJobBooking/SubmitBarCode2PrdInStockCollectBillNew';
 
+//部件越库入库提交
+const webApiSubmitBarCode2CrossDockingBill =
+    'api/ScanJobBooking/SubmitBarCode2CrossDockingBill';
+
 //根据SAP供应商ID获取待稽查送货单列表
 const webApiGetDeliListBySupplier = 'api/Incoming/GetDeliListBySupplier';
 
@@ -1508,22 +1514,28 @@ const webApiPickGetBarCodeInfo = 'api/PickMat/GetBarCodeInfo';
 const webApiSubmitPickMatDetail = 'api/PickMat/SubmitPickMatDetail';
 
 //获取部件生产派工单
-const webApiGetPartProductionDispatchOrderList = 'api/WorkCard/GetPartWorkCardList';
+const webApiGetPartProductionDispatchOrderList =
+    'api/WorkCard/GetPartWorkCardList';
 
 //获取部件生产派工单明细
-const webApiGetPartProductionDispatchOrdersDetail = 'api/WorkCard/GetMergeWorkCard';
+const webApiGetPartProductionDispatchOrdersDetail =
+    'api/WorkCard/GetMergeWorkCard';
 
 //创建部件派工单贴标
-const webApiCreatePartProductionDispatchLabels = 'api/WorkCard/CreatePackageCardNo';
+const webApiCreatePartProductionDispatchLabels =
+    'api/WorkCard/CreatePackageCardNo';
 
 //获得部件派工贴标
-const webApiGetPartProductionDispatchLabelList = 'api/WorkCard/GetMergeWorkCardCardNo';
+const webApiGetPartProductionDispatchLabelList =
+    'api/WorkCard/GetMergeWorkCardCardNo';
 
 //删除部件派工贴标
-const webApiDeletePartProductionDispatchLabels = 'api/WorkCard/DeleteWorkCardCardNo';
+const webApiDeletePartProductionDispatchLabels =
+    'api/WorkCard/DeleteWorkCardCardNo';
 
 //通过二维码获取型体名称
-const webApiGetProductNameByWorkCardNo = 'api/WorkCard/GetProductNameByWorkCardNo';
+const webApiGetProductNameByWorkCardNo =
+    'api/WorkCard/GetProductNameByWorkCardNo';
 
 //通过型体、派工日期起止获取获取指令单批次信息
 const webApiGetWorkCardMtoNoList = 'api/WorkCard/GetWorkCardMtoNoList';
@@ -1539,5 +1551,3 @@ const webApiGetLargeCardNoList = 'api/WorkCard/GetLargeCardNoList';
 
 //锁定或者解锁标签
 const webApiPackageLabelLockOrUnLock = 'api/WorkCard/PackageLabelLockOrUnLock';
-
-

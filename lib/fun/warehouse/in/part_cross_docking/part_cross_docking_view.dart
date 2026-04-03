@@ -34,7 +34,7 @@ class _PartCrossDockingPageState extends State<PartCrossDockingPage> {
   }
 
   Widget _item(BarCodeInfo item) => Container(
-        margin: const EdgeInsets.only(bottom: 10),
+        margin: const EdgeInsets.only(bottom: 5),
         padding: const EdgeInsets.only(left: 10),
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -137,6 +137,7 @@ class _PartCrossDockingPageState extends State<PartCrossDockingPage> {
                 ),
               ),
             ),
+            SizedBox(height: 5),
             Expanded(
               child: EasyRefresh(
                 controller: refreshController,
@@ -144,10 +145,10 @@ class _PartCrossDockingPageState extends State<PartCrossDockingPage> {
                 onRefresh: () => logic.refreshBarCodeStatus(
                   refresh: () => refreshController.finishRefresh(),
                 ),
-                child: ListView.builder(
+                child: Obx(()=>ListView.builder(
                   itemCount: state.barCodeList.length,
                   itemBuilder: (c, i) => _item(state.barCodeList[i]),
-                ),
+                )),
               ),
             ),
             Obx(() => Padding(
