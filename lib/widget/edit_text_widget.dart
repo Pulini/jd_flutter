@@ -13,8 +13,6 @@ class EditText extends StatefulWidget {
     this.onChanged,
     this.isEnable = true,
     this.hasClose = true,
-    this.allowNewLine = false,
-    this.trimTrailingSpace = true,
   });
 
   final String? initStr;
@@ -24,8 +22,6 @@ class EditText extends StatefulWidget {
   final String? hint;
   final Function(String v)? onChanged;
   final TextEditingController? controller;
-  final bool allowNewLine;
-  final bool trimTrailingSpace;
 
   @override
   State<EditText> createState() => _EditTextState();
@@ -47,7 +43,7 @@ class _EditTextState extends State<EditText> {
 
   @override
   void dispose() {
-    // 只有当我们自己创建 controller 时才需要 dispose
+    // 只有当我们自己创建controller时才需要dispose
     if (widget.controller == null) {
       _controller.dispose();
     }
@@ -59,28 +55,12 @@ class _EditTextState extends State<EditText> {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.all(5),
-      height: widget.allowNewLine ? null : 40,
+      height: 40,
       child: TextField(
         enabled: widget.isEnable,
         controller: _controller,
-        maxLines: widget.allowNewLine ? null : 1,
-        inputFormatters: widget.allowNewLine
-            ? null
-            : [
-          FilteringTextInputFormatter.deny(RegExp(r'[\n\r]')),
-        ],
         onChanged: (v) {
-          String newText = v;
-
-          if (widget.trimTrailingSpace && v.endsWith(' ')) {
-            newText = v.trimRight();
-            _controller.text = newText;
-            _controller.selection = TextSelection.fromPosition(
-              TextPosition(offset: newText.length),
-            );
-          }
-
-          widget.onChanged?.call(newText);
+          widget.onChanged?.call(v);
         },
         focusNode: _focusNode,
         decoration: InputDecoration(
@@ -117,9 +97,6 @@ class _EditTextState extends State<EditText> {
     );
   }
 }
-
-// ... existing code ...
-
 
 //数字小数输入框输入框
 class NumberDecimalEditText extends StatefulWidget {
@@ -250,18 +227,18 @@ class _NumberDecimalEditTextState extends State<NumberDecimalEditText> {
           labelStyle: const TextStyle(color: Colors.black54),
           prefixIcon: widget.resetQty != 0
               ? IconButton(
-                  onPressed: () {
-                    widget.controller == null
-                        ? _controller.text = widget.resetQty.toShowString()
-                        : widget.controller?.text =
-                            widget.resetQty.toShowString();
-                    widget.onChanged?.call(widget.resetQty);
-                  },
-                  icon: const Icon(
-                    Icons.replay_circle_filled,
-                    color: Colors.blue,
-                  ),
-                )
+            onPressed: () {
+              widget.controller == null
+                  ? _controller.text = widget.resetQty.toShowString()
+                  : widget.controller?.text =
+                  widget.resetQty.toShowString();
+              widget.onChanged?.call(widget.resetQty);
+            },
+            icon: const Icon(
+              Icons.replay_circle_filled,
+              color: Colors.blue,
+            ),
+          )
               : null,
           suffixIcon: IconButton(
             icon: const Icon(Icons.close, color: Colors.grey),
@@ -359,12 +336,12 @@ class _NumberEditTextState extends State<NumberEditText> {
           labelStyle: const TextStyle(color: Colors.black54),
           suffixIcon: widget.showClean
               ? IconButton(
-                  icon: const Icon(Icons.close, color: Colors.grey),
-                  onPressed: () {
-                    _controller.clear();
-                    widget.onChanged?.call('');
-                  },
-                )
+            icon: const Icon(Icons.close, color: Colors.grey),
+            onPressed: () {
+              _controller.clear();
+              widget.onChanged?.call('');
+            },
+          )
               : Container(),
         ),
       ),

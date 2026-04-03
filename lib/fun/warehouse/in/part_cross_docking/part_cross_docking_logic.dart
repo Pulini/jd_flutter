@@ -14,7 +14,7 @@ class PartCrossDockingLogic extends GetxController {
 
   void clearBarCodeList() {
     BarCodeInfo.clear(
-      type: BarCodeReportType.productionScanInStock.name,
+      type: BarCodeReportType.productionScanInStock.text,
       callback: (v) {
         if (v == state.barCodeList.length) {
           state.barCodeList.clear();
