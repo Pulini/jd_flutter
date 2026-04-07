@@ -96,7 +96,7 @@ class RouteConfig {
   //扫码日产量报表
   static Routes dailyReport = Routes(
     '/daily_report',
-    200,
+    201,
     const DailyReportPage(),
   );
 
