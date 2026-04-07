@@ -809,6 +809,14 @@ class _MaterialDispatchPageState extends State<MaterialDispatchPage> {
               name: 'material_dispatch_check_new_label'.tr,
               value: state.isBigLabel.value,
             )),
+        Obx(() => CheckBox(
+          onChanged: (c) {
+            state.isSmallLabel.value = c;
+            saveMaterialSmallLabel(c);
+          },
+          name: 'material_dispatch_check_small_label'.tr,
+          value: state.isSmallLabel.value,
+        )),
       ],
       query: () => _query(),
       body: Obx(() => ListView.builder(

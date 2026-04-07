@@ -7,6 +7,7 @@ class DailyReport {
     this.size,
     this.processName,
     this.qty,
+    this.seOrderNo,
   });
 
   DailyReport.fromJson(dynamic json) {
@@ -14,6 +15,7 @@ class DailyReport {
     materialName = json['MaterialName'];
     size = json['Size'];
     processName = json['ProcessName'];
+    seOrderNo = json['SeOrderNo'];
     qty = json['Qty'].toString();
   }
 
@@ -21,6 +23,7 @@ class DailyReport {
   String? materialName;
   String? size;
   String? processName;
+  String? seOrderNo;
   String? qty;
 
   Map<String, dynamic> toJson() {
@@ -30,6 +33,7 @@ class DailyReport {
     map['Size'] = size;
     map['ProcessName'] = processName;
     map['Qty'] = qty;
+    map['SeOrderNo'] = seOrderNo;
     return map;
   }
   Color? getItemColor() {

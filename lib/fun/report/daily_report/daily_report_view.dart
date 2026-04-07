@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/daily_report_info.dart';
+import 'package:jd_flutter/fun/report/daily_report/daily_report_state.dart';
+import 'package:jd_flutter/widget/check_box_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/picker/picker_view.dart';
 
@@ -16,7 +18,6 @@ class DailyReportPage extends StatefulWidget {
 class _DailyReportPageState extends State<DailyReportPage> {
   final logic = Get.put(DailyReportLogic());
   final state = Get.find<DailyReportLogic>().state;
-
 
   Container _item(DailyReport? item) {
     return Container(
@@ -47,6 +48,16 @@ class _DailyReportPageState extends State<DailyReportPage> {
                     : item.materialName ?? '',
               ),
             ),
+            state.isCommand.value
+                ? Expanded(
+                    flex: 2,
+                    child: Text(
+                      item == null
+                          ? 'page_daily_report_table_title_hint5'.tr
+                          : item.seOrderNo ?? '',
+                    ),
+                  )
+                : const SizedBox.shrink(),
             Expanded(
               flex: 2,
               child: Text(
@@ -67,17 +78,29 @@ class _DailyReportPageState extends State<DailyReportPage> {
       queryWidgets: [
         OptionsPicker(pickerController: logic.pickerControllerDepartment),
         DatePicker(pickerController: logic.pickerControllerDate),
+        Obx(() => CheckBox(
+              onChanged: (c) {
+                state.isCommand.value = c;
+                saveDailyReportCommand(c);
+              },
+              name: 'page_title_with_drawer_show_command'.tr,
+              value: state.isCommand.value,
+            )),
       ],
       query: () => logic.query(),
-      body: Obx(
-        () => ListView(
-          padding: const EdgeInsets.all(8),
-          children: [
-            _item(null),
-            for (var data in state.dataList) _item(data),
-          ],
-        ),
-      ),
+      body: Obx(() => SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: SizedBox(
+              width: state.isCommand.value ? 800 : 600,
+              child: ListView(
+                padding: const EdgeInsets.all(8),
+                children: [
+                  _item(null),
+                  for (var data in state.dataList) _item(data),
+                ],
+              ),
+            ),
+          )),
     );
   }
 

@@ -13,6 +13,7 @@ const String spWarehouseLocation = 'MaterialDispatchPickWarehouseLocation';
 const String spPallet = 'MaterialDispatchPickPallet';
 const String spDepart = 'MaterialDispatchDepart';
 const String spBigLabel = 'MaterialDispatchDepartIsBigLabel';
+const String spSmallLabel = 'MaterialDispatchDepartSmallLabel';
 
 int getMaterialDispatchDate() =>
     spGet(spPalletDate) ?? DateTime.now().millisecondsSinceEpoch;
@@ -39,11 +40,16 @@ void saveMaterialIsBigLabel(bool label) => spSave(spBigLabel, label);
 
 bool getMaterialIsBigLabel() => spGet(spBigLabel) ?? false;
 
+void saveMaterialSmallLabel(bool label) => spSave(spSmallLabel, label);
+
+bool getMaterialSmallLabel() => spGet(spSmallLabel) ?? false;
+
 class MaterialDispatchState {
   var lastProcess = false.obs;
   var unStockIn = false.obs;
   var allInstruction = false.obs;
   var isBigLabel = getMaterialIsBigLabel().obs;
+  var isSmallLabel = getMaterialSmallLabel().obs;
   var orderList = <MaterialDispatchInfo>[];
   var showOrderList = <MaterialDispatchInfo>[].obs;
   var allOrderList = <MaterialDispatchInfo>[]; //所有内容
