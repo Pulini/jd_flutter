@@ -26,6 +26,15 @@ class _DailyReportPageState extends State<DailyReportPage> {
         padding: const EdgeInsets.all(8.0),
         child: Row(
           children: [
+            state.isCommand.value
+                ? Expanded(
+              flex: 2,
+              child: Text(
+                item == null
+                    ? 'page_daily_report_table_title_hint5'.tr
+                    : item.seOrderNo ?? '',
+              ),
+            ) : const SizedBox.shrink(),
             Expanded(
               flex: 1,
               child: Text(
@@ -48,16 +57,6 @@ class _DailyReportPageState extends State<DailyReportPage> {
                     : item.materialName ?? '',
               ),
             ),
-            state.isCommand.value
-                ? Expanded(
-                    flex: 2,
-                    child: Text(
-                      item == null
-                          ? 'page_daily_report_table_title_hint5'.tr
-                          : item.seOrderNo ?? '',
-                    ),
-                  )
-                : const SizedBox.shrink(),
             Expanded(
               flex: 2,
               child: Text(
