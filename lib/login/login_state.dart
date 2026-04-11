@@ -102,7 +102,7 @@ class LoginState {
     required Function(String accessToken) success,
     required Function(String msg) error,
   }) {
-    loadingShow('正在获取用户Token...');
+    loadingShow('getting_lark_token'.tr);
     Dio()
       ..interceptors.add(DioManager.simpleInterceptors)
       ..post(
@@ -126,13 +126,19 @@ class LoginState {
           if (feishu.code == 0) {
             success.call(feishu.accessToken ?? '');
           } else {
-            error.call('获取token失败：${feishu.code}');
+            error.call(
+                'getting_lark_token_failed'.trArgs([feishu.code.toString()]));
           }
         },
         onError: (e) {
           loadingDismiss();
           error.call(
-              '获取token失败：${(e as DioException).response?.statusCode} ${e.response?.statusMessage}');
+            'getting_lark_token_failed'.trArgs(
+              [
+                '${(e as DioException).response?.statusCode} ${e.response?.statusMessage}'
+              ],
+            ),
+          );
         },
       );
   }
@@ -142,7 +148,7 @@ class LoginState {
     required Function(FeishuUserInfo userInfo) success,
     required Function(String msg) error,
   }) {
-    loadingShow('正在获取用户信息...');
+    loadingShow('getting_lark_user_info'.tr);
     Dio()
       ..interceptors.add(DioManager.simpleInterceptors)
       ..get(
@@ -156,17 +162,22 @@ class LoginState {
       ).then(
         (response) {
           loadingDismiss();
-          var code=response.data['code'];
+          var code = response.data['code'];
           if (code == 0) {
             success.call(FeishuUserInfo.fromJson(response.data['data']));
           } else {
-            error.call('获取用户信息失败：$code');
+            error.call('getting_lark_user_info_failed'.trArgs([code]));
           }
         },
         onError: (e) {
           loadingDismiss();
           error.call(
-              '获取用户信息失败：${(e as DioException).response?.statusCode} ${e.response?.statusMessage}');
+            'getting_lark_user_info_failed'.trArgs(
+              [
+                '${(e as DioException).response?.statusCode} ${e.response?.statusMessage}'
+              ],
+            ),
+          );
         },
       );
   }

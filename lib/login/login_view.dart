@@ -197,7 +197,7 @@ class _LoginPickState extends State<LoginPick>
                   top: 10,
                   left: 5,
                   child: Text(
-                    '飞书扫码登录',
+                    'login_hint_lark'.tr,
                     style: TextStyle(
                         color: Colors.blue,
                         fontWeight: FontWeight.bold,
@@ -441,7 +441,7 @@ class _LoginPickState extends State<LoginPick>
               if (code != null) {
                 logic.getFeishuToken(code: code, reload: () => _loadAssetUrl());
               } else {
-                errorDialog(content: '获取授权码失败', back: () => _loadAssetUrl());
+                errorDialog(content: 'getting_lark_authorization_code_failed'.tr, back: () => _loadAssetUrl());
               }
             }
           },

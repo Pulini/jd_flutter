@@ -19,9 +19,9 @@ void checkWorkerDialog({
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                textSpan(hint: '提示：', text: msg),
+                textSpan(hint: 'part_cross_docking_tips'.tr, text: msg),
                 WorkerCheck(
-                  hint: '请输入操作员工号',
+                  hint: 'part_cross_docking_worker_number_hint'.tr,
                   onChanged: (v) => worker = v,
                 ),
               ],
@@ -31,12 +31,12 @@ void checkWorkerDialog({
             TextButton(
               onPressed: () {
                 if(worker==null){
-                  showSnackBar(message: '请输入操作员工号');
+                  showSnackBar(message: 'part_cross_docking_worker_number_hint'.tr);
                 }else{
                   success.call(worker!);
                 }
               },
-              child: Text('提交'),
+              child: Text('part_cross_docking_submit'.tr),
             ),
             TextButton(
               onPressed: () => Get.back(),

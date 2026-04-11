@@ -29,7 +29,7 @@ class _PartCrossDockingPageState extends State<PartCrossDockingPage> {
     if (inputController.text.isNotEmpty) {
       logic.scanCode(inputController.text);
     } else {
-      msgDialog(content: '请输入标签号');
+      msgDialog(content: 'part_cross_docking_scan_hint'.tr);
     }
   }
 
@@ -56,7 +56,7 @@ class _PartCrossDockingPageState extends State<PartCrossDockingPage> {
             Expanded(
               child: item.isUsed
                   ? textSpan(
-                      hint: '已提交',
+                      hint: 'part_cross_docking_scan_item_state'.tr,
                       hintColor: Colors.red,
                       text: item.code ?? '',
                       textColor: Colors.grey,
@@ -69,7 +69,7 @@ class _PartCrossDockingPageState extends State<PartCrossDockingPage> {
             ),
             IconButton(
               onPressed: () => askDialog(
-                content: '确定要删除该条码吗?',
+                content: 'part_cross_docking_scan_item_delete_tips'.tr,
                 confirm: () => logic.deleteItem(item),
               ),
               icon: const Icon(
@@ -108,7 +108,7 @@ class _PartCrossDockingPageState extends State<PartCrossDockingPage> {
                   left: 15,
                   right: 10,
                 ),
-                label: Text('请输入标签号'),
+                label: Text('part_cross_docking_scan_hint'.tr),
                 filled: true,
                 fillColor: Colors.grey.shade200,
                 enabledBorder: OutlineInputBorder(
@@ -157,11 +157,11 @@ class _PartCrossDockingPageState extends State<PartCrossDockingPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       textSpan(
-                        hint: '已扫描',
+                        hint: 'part_cross_docking_scanned'.tr,
                         text: state.barCodeList.length.toString(),
                       ),
                       textSpan(
-                        hint: '托盘号',
+                        hint: 'part_cross_docking_pallet_number'.tr,
                         text: state.palletNumber.value,
                       ),
                     ],
@@ -172,10 +172,10 @@ class _PartCrossDockingPageState extends State<PartCrossDockingPage> {
                 Expanded(
                   child: Obx(() => CombinationButton(
                         isEnabled: state.barCodeList.isNotEmpty,
-                        text: '清空',
+                        text: 'part_cross_docking_clear'.tr,
                         combination: Combination.left,
                         click: () => askDialog(
-                          content: '确定要清除所有以扫标签吗？',
+                          content: 'part_cross_docking_clear_tips'.tr,
                           confirm: () => logic.clearBarCodeList(),
                         ),
                       )),
@@ -184,7 +184,7 @@ class _PartCrossDockingPageState extends State<PartCrossDockingPage> {
                   child: Obx(
                     () => CombinationButton(
                       isEnabled: state.barCodeList.isNotEmpty,
-                      text: '提交',
+                      text: 'part_cross_docking_submit'.tr,
                       combination: Combination.right,
                       click: () => logic.submit(
                         (msg) => checkWorkerDialog(

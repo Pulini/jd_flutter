@@ -10,6 +10,7 @@ import 'package:jd_flutter/fun/dispatching/production_dispatch/production_dispat
 import 'package:jd_flutter/fun/dispatching/production_dispatch/production_dispatch_view.dart';
 import 'package:jd_flutter/fun/dispatching/work_order_list/work_order_list_view.dart';
 import 'package:jd_flutter/fun/maintenance/sap_ink_color_matching/sap_ink_color_matching_view.dart';
+import 'package:jd_flutter/fun/management/attendance_dashboard/attendance_dashboard_view.dart';
 import 'package:jd_flutter/fun/management/property/property_view.dart';
 import 'package:jd_flutter/fun/management/visit_register/visit_register_view.dart';
 import 'package:jd_flutter/fun/other/device_maintenance_record/device_maintenance_record_view.dart';
@@ -173,7 +174,7 @@ class RouteConfig {
   //生产派工
   static Routes productionDispatch = Routes(
     '/production_dispatch',
-    222,
+    223,
     const ProductionDispatchPage(),
   );
 
@@ -201,7 +202,7 @@ class RouteConfig {
   //工单列表
   static Routes workOrderList = Routes(
     '/work_order_list',
-    205,
+    206,
     const WorkOrderListPage(),
   );
 
@@ -313,7 +314,7 @@ class RouteConfig {
   //sap生产领料
   static Routes sapProductionPicking = Routes(
     '/sap_production_picking',
-    203,
+    204,
     const SapProductionPickingPage(),
   );
 
@@ -688,6 +689,13 @@ class RouteConfig {
     const PackOrderListPage(),
   );
 
+  //考勤总览
+  static Routes attendanceDashboardPage = Routes(
+    '/attendance_dashboard',
+    200,
+    const AttendanceDashboardPage(),
+  );
+
   //本地功能入口列表
   static List<Routes> routeList = [
     dailyReport,
@@ -774,6 +782,7 @@ class RouteConfig {
     materialLabelScan,
     partDispatchLabelManage,
     packOrderList,
+    attendanceDashboardPage,
   ];
 
   static List<GetPage> appRoutes = [
@@ -1125,6 +1134,10 @@ class RouteConfig {
     GetPage(
       name: packOrderList.name,
       page: () => packOrderList.page,
+    ),
+    GetPage(
+      name: attendanceDashboardPage.name,
+      page: () => attendanceDashboardPage.page,
     ),
   ];
 }

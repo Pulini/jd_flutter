@@ -15,6 +15,7 @@ class SapProductionPickingState {
   var barCodeList = <SapPickingBarCodeInfo>[].obs;
   var pickDetailList = <PickingOrderMaterialInfo>[].obs;
   bool needRefresh = false;
+  String submitFactoryNO='';
 
   void getMaterialPickingOrderList({
     String? noticeNo,
@@ -96,6 +97,7 @@ class SapProductionPickingState {
           list.add(PickingOrderMaterialInfo.fromData(v, isScan));
         });
         pickDetailList.value = list;
+        submitFactoryNO=pickOrderList.firstWhere((v)=>v.select).factoryNO??'';
         if (isScan) {
           getProductionPickingBarCodeList(error: error);
         }
@@ -103,6 +105,7 @@ class SapProductionPickingState {
         dispatch.value = [];
         labels.value = [];
         pickDetailList.value = [];
+        submitFactoryNO='';
         error.call(response.message ?? 'query_default_error'.tr);
       }
     });
@@ -141,7 +144,7 @@ class SapProductionPickingState {
                   'ZNAME_EN': '',
                   'MEINS': pickDetailList[i].materialList[j].basicUnit,
                   'MATNR': pickDetailList[i].materialList[j].materialNumber,
-                  'WERKS': '2000',
+                  'WERKS': submitFactoryNO,
                 }
         ],
         'DISPATCH': isPrint ? dispatch.toList() : [],
@@ -212,8 +215,8 @@ class SapProductionPickingState {
           for (var d in pickDetailList)
             for (var m in d.materialList) m.materialNumber
         ],
-        'SAPNumber': 'BL',
-        'OrganizeID': 3, //金臻组织id=3
+        'SAPNumber': pickOrderList.firstWhere((v)=>v.select).process,
+        'SAPFactoryNumber': pickOrderList.firstWhere((v)=>v.select).factoryNO,
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {

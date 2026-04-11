@@ -146,6 +146,18 @@ class HomeLogic extends GetxController {
             v.description.toUpperCase().contains(state.search.toUpperCase())),
       );
     }
+    // list.add(
+    //   HomeButton(
+    //     name: '考勤总览',
+    //     description: '员工考勤明细总览',
+    //     icon: 'https://geapp.goldemperor.com:8084/AppResourceFile/icon/2025-08-13-10-29-45.jpg',
+    //     classify: '',
+    //     id: 999,
+    //     version: 200,
+    //     route: '/attendance_dashboard',
+    //     hasPermission: true,
+    //   ),
+    // );
     state.buttons.value = list;
   }
 

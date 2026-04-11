@@ -317,8 +317,7 @@ class MaintainLabelLogic extends GetxController {
       success: (dataList) {
         final List<List<PickingBarCodeInfo>> orderData = [];
         groupBy(dataList, (item) => item.size ?? '').forEach((size, items) {
-          if (items.map((v) => v.surplusQty).reduce((a, b) => a.add(b)) >
-              0) {
+          if (items.map((v) => v.surplusQty).reduce((a, b) => a.add(b)) > 0) {
             orderData.add(items.where((v) => v.surplusQty > 0).toList());
           }
         });
@@ -395,6 +394,28 @@ class MaintainLabelLogic extends GetxController {
     );
   }
 
+  void unLockLabel() {
+    var select = <LabelInfo>[];
+    if (state.isMaterialLabel.value) {
+      select = state.labelList.where((v) => v.select).toList();
+    } else {
+      for (var data in state.labelGroupList) {
+        if (data.first.select == true) {
+          select.addAll(data);
+        }
+      }
+    }
+    if (select.isEmpty) {
+      errorDialog(content: 'maintain_label_select_label'.tr);
+      return;
+    }
+    state.setLabelState(
+      isPrint: false,
+      selectLabels: select,
+      success: (msg) => successDialog(content: msg),
+    );
+  }
+
   void checkPrintType() {
     var select = <LabelInfo>[];
     if (state.isMaterialLabel.value) {
@@ -413,13 +434,14 @@ class MaintainLabelLogic extends GetxController {
     if (select.first.labelType == 1002) {
       state.setLabelState(
         selectLabels: select,
-        success: () =>
+        success: (msg) =>
             createIndonesiaLabel(list: select, labels: labelsCallback),
       );
     } else if (select.first.labelType == 1003) {
       state.setLabelState(
         selectLabels: select,
-        success: () => createMyanmarLabel(list: select, labels: labelsCallback),
+        success: (msg) =>
+            createMyanmarLabel(list: select, labels: labelsCallback),
       );
     } else {
       var languageList = <String>[];
@@ -477,7 +499,7 @@ class MaintainLabelLogic extends GetxController {
             list: languageList,
             callback: (s) => state.setLabelState(
               selectLabels: select,
-              success: () => printLabel(
+              success: (msg) => printLabel(
                 select: select,
                 language: s,
                 type: select.first.labelType!,
@@ -487,7 +509,7 @@ class MaintainLabelLogic extends GetxController {
         } else {
           state.setLabelState(
             selectLabels: select,
-            success: () => printLabel(
+            success: (msg) => printLabel(
               select: select,
               language: languageList.isEmpty ? '' : languageList.first,
               type: select.first.labelType!,
@@ -1356,11 +1378,12 @@ class MaintainLabelLogic extends GetxController {
   }
 
   void customLabelsBatchSet(int batchBoxCapacity, int batchCreateGoods) {
-    for (var item in state.createCustomLabelsData.where((v)=>v.isSelect.value)) {
-      item.capacity.value =batchBoxCapacity.toDouble();
-      item.capacityController!.text=batchBoxCapacity.toString();
-      item.createGoods.value =batchCreateGoods.toDouble();
-      item.createGoodsController!.text=batchCreateGoods.toString();
+    for (var item
+        in state.createCustomLabelsData.where((v) => v.isSelect.value)) {
+      item.capacity.value = batchBoxCapacity.toDouble();
+      item.capacityController!.text = batchBoxCapacity.toString();
+      item.createGoods.value = batchCreateGoods.toDouble();
+      item.createGoodsController!.text = batchCreateGoods.toString();
     }
   }
 }
