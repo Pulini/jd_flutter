@@ -395,25 +395,29 @@ class MaintainLabelLogic extends GetxController {
   }
 
   void unLockLabel() {
-    var select = <LabelInfo>[];
-    if (state.isMaterialLabel.value) {
-      select = state.labelList.where((v) => v.select).toList();
+    if (checkUserPermission('601080112')) {
+      errorDialog(content: 'maintain_label_unlock_no_permission'.tr);
     } else {
-      for (var data in state.labelGroupList) {
-        if (data.first.select == true) {
-          select.addAll(data);
+      var select = <LabelInfo>[];
+      if (state.isMaterialLabel.value) {
+        select = state.labelList.where((v) => v.select).toList();
+      } else {
+        for (var data in state.labelGroupList) {
+          if (data.first.select == true) {
+            select.addAll(data);
+          }
         }
       }
+      if (select.isEmpty) {
+        errorDialog(content: 'maintain_label_select_label'.tr);
+        return;
+      }
+      state.setLabelState(
+        isPrint: false,
+        selectLabels: select,
+        success: (msg) => successDialog(content: msg),
+      );
     }
-    if (select.isEmpty) {
-      errorDialog(content: 'maintain_label_select_label'.tr);
-      return;
-    }
-    state.setLabelState(
-      isPrint: false,
-      selectLabels: select,
-      success: (msg) => successDialog(content: msg),
-    );
   }
 
   void checkPrintType() {
