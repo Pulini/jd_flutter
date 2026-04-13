@@ -20,7 +20,7 @@ class PartCrossDockingLogic extends GetxController {
           state.barCodeList.clear();
         } else {
           showSnackBar(
-            message: '本地数据库删除失败',
+            message: 'part_cross_docking_delete_database_failed'.tr,
             isWarning: true,
           );
         }
@@ -41,14 +41,14 @@ class PartCrossDockingLogic extends GetxController {
                   state.palletNumber.value = code;
                   break;
                 case 'X':
-                  showSnackBar(message: '请使用空托盘入库!', isWarning: true);
+                  showSnackBar(message: 'part_cross_docking_pallet_not_empty'.tr, isWarning: true);
                   break;
                 case 'Y':
-                  showSnackBar(message: '此托盘已在其他仓库使用!', isWarning: true);
+                  showSnackBar(message: 'part_cross_docking_pallet_used'.tr, isWarning: true);
                   break;
               }
             } else {
-              showSnackBar(message: '此托盘不存在!', isWarning: true);
+              showSnackBar(message: 'part_cross_docking_pallet_not_exist'.tr, isWarning: true);
             }
           },
           error: (msg) => errorDialog(content: msg),
@@ -84,7 +84,7 @@ class PartCrossDockingLogic extends GetxController {
           message += '${barCode.code},\n';
         }
         if (message.isNotEmpty) {
-          success.call('未汇报的标签有：$message)');
+          success.call('part_cross_docking_not_report_tips'.trArgs([message]));
         } else {
           success.call(msg);
         }

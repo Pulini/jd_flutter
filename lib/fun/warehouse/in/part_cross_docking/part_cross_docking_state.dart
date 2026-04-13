@@ -25,7 +25,7 @@ class PartCrossDockingState {
   }) {
     httpPost(
       method: webApiGetUnReportedBarCode,
-      loading: '正在校验条码...',
+      loading: 'part_cross_docking_checking_barcode'.tr,
       body: barCodeList
           .map((v) => {'BarCode': v.code, 'PalletNo': v.palletNo})
           .toList(),
@@ -45,7 +45,7 @@ class PartCrossDockingState {
     required Function(String) error,
   }) {
     sapPost(
-      loading: 'sap_print_picking_getting_pallet_info'.tr,
+      loading: 'part_cross_docking_getting_pallet_info'.tr,
       method: webApiSapGetPalletList,
       body: {
         'WERKS': '2000',
@@ -80,7 +80,7 @@ class PartCrossDockingState {
     required Function(String) error,
   }) {
     httpPost(
-      loading: '正在提交越库...',
+      loading: 'part_cross_docking_submitting'.tr,
       method: webApiSubmitBarCode2CrossDockingBill,
       body: {
         'BarCodeList': [

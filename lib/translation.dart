@@ -78,6 +78,7 @@ class Translation extends Translations {
           'take_photo_photo_sheet_take_photo': '拍照',
           'take_photo_photo_sheet_select_photo': '相册',
           'language': '语言:',
+          'login_hint_lark': '飞书扫码登录',
           'login_hint_phone': '手机号',
           'login_hint_machine': '机台号',
           'login_hint_work_number': '工号',
@@ -91,6 +92,12 @@ class Translation extends Translations {
           'get_verify_code': '获取验证码',
           'login': '登录',
           'logging': '正在登录...',
+          'web_view_loading': '页面加载中...',
+          'getting_lark_user_info': '正在获取用户信息...',
+          'getting_lark_user_info_failed': '获取用户信息失败：%s',
+          'getting_lark_token': '正在获取用户Token...',
+          'getting_lark_token_failed': '获取用户token失败：%s',
+          'getting_lark_authorization_code_failed': '获取授权码失败',
           'login_failed': '登录失败',
           're_login': '重新登录',
           'query_default_error': '查询失败',
@@ -799,7 +806,8 @@ class Translation extends Translations {
           'material_dispatch_label_generation_amount': '标签生成量(%s)',
           'material_dispatch_material_list': '用料清单',
           'material_dispatch_progress_manual': '工艺说明书',
-          'material_dispatch_request_permission': '请通过OA-[金帝信息管理流程]-[用户权限申请流程]发起权限申请',
+          'material_dispatch_request_permission':
+              '请通过OA-[金帝信息管理流程]-[用户权限申请流程]发起权限申请',
           'material_dispatch_label_list': '贴标列表',
           'material_dispatch_report': '报工',
           'material_dispatch_report_tips': '确定要整组报工吗？',
@@ -1186,6 +1194,8 @@ class Translation extends Translations {
           'maintain_label_delete_packing_tips': '确定要删除包装清单吗？',
           'maintain_label_delete_label_tips': '确定要删除这些标签吗？',
           'maintain_label_print': '打印',
+          'maintain_label_unlock': '解锁',
+          'maintain_label_unlock_no_permission': '解锁锁失败，您没有解锁权限！',
           'maintain_label_set': '设置',
           'maintain_label_filter': '筛选',
           'maintain_label_preview': '是否预览',
@@ -3376,6 +3386,24 @@ class Translation extends Translations {
           'material_label_scan_detail_quick': '请勿太快扫描',
           'material_label_scan_detail_submit_message': '正在提交备料信息...',
           'material_label_scan_detail_input_picker_number': '请输入领料员工号',
+          'part_cross_docking_scan_hint': '请输入标签号',
+          'part_cross_docking_scan_item_state': '已提交',
+          'part_cross_docking_scan_item_delete_tips': '确定要删除该条码吗?',
+          'part_cross_docking_scanned': '已扫描：',
+          'part_cross_docking_pallet_number': '托盘号：',
+          'part_cross_docking_clear': '清空',
+          'part_cross_docking_clear_tips': '确定要清除所有以扫标签吗？',
+          'part_cross_docking_submit': '提交',
+          'part_cross_docking_delete_database_failed': '本地数据库删除失败',
+          'part_cross_docking_pallet_not_empty': '请使用空托盘入库!',
+          'part_cross_docking_pallet_used': '此托盘已在其他仓库使用!',
+          'part_cross_docking_pallet_not_exist': '此托盘不存在!',
+          'part_cross_docking_not_report_tips': '未汇报的标签有：%s',
+          'part_cross_docking_checking_barcode': '正在校验条码...',
+          'part_cross_docking_getting_pallet_info': '正在获取托盘信息...',
+          'part_cross_docking_submitting': '正在提交越库...',
+          'part_cross_docking_tips': '提示：',
+          'part_cross_docking_worker_number_hint': '请输入操作员工号',
         },
         localeEnglish.toString(): {
           'app_name': 'Gold Emperor',
@@ -3444,6 +3472,7 @@ class Translation extends Translations {
           'take_photo_sheet_take_photo': 'Take photo',
           'take_photo_sheet_select_photo': 'Select from album',
           'language': 'Language:',
+          'login_hint_lark': 'Lark scan to login',
           'login_hint_phone': 'Phone number',
           'login_hint_machine': 'Machine number',
           'login_hint_work_number': 'Work number',
@@ -3457,6 +3486,13 @@ class Translation extends Translations {
           'get_verify_code': 'Get verify',
           'login': 'Login',
           'logging': 'Logging...',
+          'web_view_loading': 'View loading...',
+          'getting_lark_user_info': 'Getting Lark user info...',
+          'getting_lark_user_info_failed': 'Get Lark user info failed：%s',
+          'getting_lark_token': 'Getting Lark user token...',
+          'getting_lark_token_failed': 'Get Lark user token failed：%s',
+          'getting_lark_authorization_code_failed':
+              'Failed to obtain authorization code',
           'login_failed': 'Login failed',
           're_login': 'ReLogin',
           'query_default_error': 'Query failed',
@@ -3803,17 +3839,22 @@ class Translation extends Translations {
           'visit_search_name_empty': 'Name is empty！',
           'visit_search_phone_empty': 'The phone number is empty！',
           'visit_search_unit_empty': 'Unit is empty！',
-          'visit_search_visitor_number_empty': 'The number of visitors is empty！',
+          'visit_search_visitor_number_empty':
+              'The number of visitors is empty！',
           'visit_search_personnel_empty': 'The interviewee is empty！',
           'visit_search_area_empty': 'The activity area is empty！',
           'visit_search_credentials_empty': 'The visiting pass is empty！',
-          'visit_search_subjectMatter_empty': 'The reason for visiting is empty！',
+          'visit_search_subjectMatter_empty':
+              'The reason for visiting is empty！',
           'visit_search_car_number_empty': 'The license plate number is empty！',
-          'visit_search_input_wheel_error': 'Please enter the wheel area issue！',
-          'visit_search_input_external_error': 'Please enter external question！',
+          'visit_search_input_wheel_error':
+              'Please enter the wheel area issue！',
+          'visit_search_input_external_error':
+              'Please enter external question！',
           'visit_search_input_rear_error': 'Please enter the tail question！',
           'visit_search_input_cab_error': 'Please enter the cab issue！',
-          'visit_search_input_landingGear_error': 'Please enter landing gear issue！',
+          'visit_search_input_landingGear_error':
+              'Please enter landing gear issue！',
           'visit_item_on_duty_security_guard': 'On duty security guard:',
           'visit_item_license_plate_number': 'License plate number:',
           'visit_item_visiting_time': 'Visiting time:',
@@ -4132,7 +4173,8 @@ class Translation extends Translations {
           'material_dispatch_label_generation_amount': 'Label generation(%s)',
           'material_dispatch_material_list': 'Material list',
           'material_dispatch_progress_manual': 'Progress manual',
-          'material_dispatch_request_permission': 'Please initiate permission application through OA - [Jindi Information Management Process] - [User Permission Application Process]',
+          'material_dispatch_request_permission':
+              'Please initiate permission application through OA - [Jindi Information Management Process] - [User Permission Application Process]',
           'material_dispatch_label_list': 'Label list',
           'material_dispatch_report': 'Report',
           'material_dispatch_report_tips':
@@ -4381,17 +4423,25 @@ class Translation extends Translations {
           'process_dispatch_register_dialog_add_temp_worker':
               'Add temp members',
           'process_dispatch_register_dialog_worker_exists': 'Worker exists',
-          'process_dispatch_register_dialog_no_label_permission':'No labeling operation permission',
-          'process_dispatch_register_dialog_please_fill_total':'Please fill in the total number of creations',
-          'process_dispatch_register_dialog_create_total_limit':'The total number of creations cannot exceed %s',
-          'process_dispatch_register_dialog_box_capacity_limit': 'The box capacity of creations cannot exceed %s',
-          'process_dispatch_register_dialog_please_fill_worker_number':'Please enter the worker number',
-          'process_dispatch_register_dialog_please_fill_box_capacity':'Please fill box capacity',
-          'process_dispatch_register_dialog_create_label':'Create label',
-          'process_dispatch_register_dialog_box_capacity':'Box capacity(upper limit %s)',
-          'process_dispatch_register_dialog_create_total':'Create total',
-          'process_dispatch_register_dialog_add_worker':'Add worker',
-          'process_dispatch_register_dialog_creating_label':'Creating  label...',
+          'process_dispatch_register_dialog_no_label_permission':
+              'No labeling operation permission',
+          'process_dispatch_register_dialog_please_fill_total':
+              'Please fill in the total number of creations',
+          'process_dispatch_register_dialog_create_total_limit':
+              'The total number of creations cannot exceed %s',
+          'process_dispatch_register_dialog_box_capacity_limit':
+              'The box capacity of creations cannot exceed %s',
+          'process_dispatch_register_dialog_please_fill_worker_number':
+              'Please enter the worker number',
+          'process_dispatch_register_dialog_please_fill_box_capacity':
+              'Please fill box capacity',
+          'process_dispatch_register_dialog_create_label': 'Create label',
+          'process_dispatch_register_dialog_box_capacity':
+              'Box capacity(upper limit %s)',
+          'process_dispatch_register_dialog_create_total': 'Create total',
+          'process_dispatch_register_dialog_add_worker': 'Add worker',
+          'process_dispatch_register_dialog_creating_label':
+              'Creating  label...',
           'production_dispatch_print_type_printed': 'Printed',
           'production_dispatch_print_type_unprinted': 'Unprinted',
           'production_dispatch_print_type_partial_printed': 'Partial print',
@@ -4783,6 +4833,8 @@ class Translation extends Translations {
           'maintain_label_delete_label_tips':
               'Are you sure you want to delete these tags ?',
           'maintain_label_print': 'Print',
+          'maintain_label_unlock': 'Unlock',
+          'maintain_label_unlock_no_permission': 'Unlocking failed. You do not have unlock permission!',
           'maintain_label_set': 'Set',
           'maintain_label_filter': 'Filter',
           'maintain_label_preview': 'Preview',
@@ -7390,20 +7442,25 @@ class Translation extends Translations {
           'home_no_route': 'No route',
           'home_this_function_is_not_open':
               'This feature is currently not open',
-          'material_label_scan_title': 'Scan the material label for outbound delivery',
+          'material_label_scan_title':
+              'Scan the material label for outbound delivery',
           'material_label_scan_number': 'Material Preparation Notice Number:',
           'material_label_scan_processed': 'processed materials:',
           'material_label_scan_command': 'command number:',
           'material_label_scan_time': 'Material preparation notification time:',
-          'material_label_scan_input_number': 'Please enter or scan the material preparation number',
+          'material_label_scan_input_number':
+              'Please enter or scan the material preparation number',
           'material_label_scan_start_time': 'Start time',
           'material_label_scan_end_time': 'End time',
           'material_label_scan_factory': 'Factory Warehouse',
           'material_label_scan_material_code': 'Material Code',
-          'material_label_scan_get_material_list': 'Obtaining material preparation task list...',
-          'material_label_scan_get_material_detail': 'Obtaining material preparation task details...',
+          'material_label_scan_get_material_list':
+              'Obtaining material preparation task list...',
+          'material_label_scan_get_material_detail':
+              'Obtaining material preparation task details...',
           'material_label_scan_uncollected_materials': 'Uncollected materials',
-          'material_label_scan_material_detail': 'Production Material Requisition Details',
+          'material_label_scan_material_detail':
+              'Production Material Requisition Details',
           'material_label_scan_detail_order': 'tracking number:',
           'material_label_scan_detail_size': 'Size',
           'material_label_scan_detail_order_qty': 'Order Quantity',
@@ -7415,12 +7472,39 @@ class Translation extends Translations {
           'material_label_scan_detail_command': 'Command:',
           'material_label_scan_detail_quantity': 'Quantity:',
           'material_label_scan_detail_clear_barcode': 'Clear barcode',
-          'material_label_scan_detail_sure_clear_barcode': 'Are you sure you want to clear the barcode?',
+          'material_label_scan_detail_sure_clear_barcode':
+              'Are you sure you want to clear the barcode?',
           'material_label_scan_detail_submit': 'Submit',
-          'material_label_scan_detail_get_barcode_message': 'Obtaining instruction barcode information...',
+          'material_label_scan_detail_get_barcode_message':
+              'Obtaining instruction barcode information...',
           'material_label_scan_detail_quick': 'Please do not scan too quickly',
-          'material_label_scan_detail_submit_message': 'Submitting material preparation information...',
-          'material_label_scan_detail_input_picker_number': 'Please enter the employee ID for material requisition',
+          'material_label_scan_detail_submit_message':
+              'Submitting material preparation information...',
+          'material_label_scan_detail_input_picker_number':
+              'Please enter the employee ID for material requisition',
+          'part_cross_docking_scan_hint': 'Please enter the tag number',
+          'part_cross_docking_scan_item_state': 'Submitted',
+          'part_cross_docking_scan_item_delete_tips':
+              'Are you sure you want to delete this label?',
+          'part_cross_docking_scanned': 'Scanned：',
+          'part_cross_docking_pallet_number': 'Pallet number：',
+          'part_cross_docking_clear': 'Clear',
+          'part_cross_docking_clear_tips':
+              'Are you sure you want to clear all the scanned label？',
+          'part_cross_docking_submit': 'Submit',
+          'part_cross_docking_delete_database_failed':
+              'Local database deletion failed',
+          'part_cross_docking_pallet_not_empty':
+              'Please use an empty tray for storage!',
+          'part_cross_docking_pallet_used':
+              'This pallet has already been used in another warehouse!',
+          'part_cross_docking_pallet_not_exist': 'This tray does not exist!',
+          'part_cross_docking_not_report_tips': 'The unreported tags are: %s',
+          'part_cross_docking_checking_barcode': 'Verifying barcode ...',
+          'part_cross_docking_getting_pallet_info': 'Getting pallet info...',
+          'part_cross_docking_submitting': 'Submitting cross-docking...',
+          'part_cross_docking_tips': 'Tips：',
+          'part_cross_docking_worker_number_hint': 'Enter worker number',
         },
         localeIndonesian.toString(): {
           'app_name': 'Golden Group',
@@ -7486,6 +7570,7 @@ class Translation extends Translations {
           'take_photo_photo_sheet_take_photo': 'Ambil Foto',
           'take_photo_photo_sheet_select_photo': 'Album',
           'language': 'Bahasa:',
+          'login_hint_lark': 'Lark scan untuk login',
           'login_hint_phone': 'Nomor Telepon',
           'login_hint_machine': 'Nomor Mesin',
           'login_hint_work_number': 'Nomor Karyawan',
@@ -7496,9 +7581,19 @@ class Translation extends Translations {
           'login_tips_work_number': 'Masukkan nomor karyawan',
           'login_tips_password': 'Masukkan kata sandi',
           'login_tips_verify_code': 'Masukkan kode verifikasi',
-          'get_verify_code': 'Dapatkan Kode Verifikasi',
+          'get_verify_code': 'Kode Verif',
           'login': 'Login',
           'logging': 'Login...',
+          'web_view_loading': 'Halaman sedang dimuat...',
+          'getting_lark_user_info':
+              'Sedang mendapatkan informasi pengguna Lark...',
+          'getting_lark_user_info_failed':
+              'Gagal mendapatkan informasi pengguna Lark ：%s',
+          'getting_lark_token': 'Sedang mendapatkan Token pengguna Lark...',
+          'getting_lark_token_failed':
+              'Gagal mendapatkan token pengguna Lark ：%s',
+          'getting_lark_authorization_code_failed':
+              'Gagal mendapatkan kode otorisasi Lark',
           'login_failed': 'Login Gagal',
           're_login': 'Login Ulang',
           'query_default_error': 'Kueri Gagal',
@@ -8020,10 +8115,12 @@ class Translation extends Translations {
           'visit_search_subjectMatter_empty': 'Kunjungan kosong！',
           'visit_search_car_number_empty': 'Nomor nomor kosong！',
           'visit_search_input_wheel_error': 'Silakan masukkan masalah roda！',
-          'visit_search_input_external_error': 'Silakan masukkan masalah eksternal！',
+          'visit_search_input_external_error':
+              'Silakan masukkan masalah eksternal！',
           'visit_search_input_rear_error': 'Silakan masukkan pertanyaan akhir！',
           'visit_search_input_cab_error': 'Silakan masukkan pertanyaan taksi！',
-          'visit_search_input_landingGear_error': 'Silakan masukkan masalah pendaratan！',
+          'visit_search_input_landingGear_error':
+              'Silakan masukkan masalah pendaratan！',
           'visit_item_on_duty_security_guard': 'Satpam Bertugas:',
           'visit_item_license_plate_number': 'Nomor Plat Kendaraan:',
           'visit_item_visiting_time': 'Waktu Kunjungan:',
@@ -8375,7 +8472,8 @@ class Translation extends Translations {
               'Jumlah Pembuatan Label (%s)',
           'material_dispatch_material_list': 'Daftar Penggunaan Material',
           'material_dispatch_progress_manual': 'Spesifikasi Proses',
-          'material_dispatch_request_permission': 'Silakan mulai aplikasi izin melalui OA-[Proses Manajemen Informasi Jingdi]-[Proses Permohonan Hak Pengguna]',
+          'material_dispatch_request_permission':
+              'Silakan mulai aplikasi izin melalui OA-[Proses Manajemen Informasi Jingdi]-[Proses Permohonan Hak Pengguna]',
           'material_dispatch_label_list': 'Daftar Label Tempel',
           'material_dispatch_report': 'Laporkan Kerja',
           'material_dispatch_report_tips':
@@ -8636,17 +8734,25 @@ class Translation extends Translations {
               'Tambahkan Anggota Grup Sementara',
           'process_dispatch_register_dialog_worker_exists':
               'Karyawan sudah ada',
-          'process_dispatch_register_dialog_no_label_permission':'Tidak ada izin untuk mengoperasikan label',
-          'process_dispatch_register_dialog_please_fill_total':'Silakan isi jumlah yang dibuat',
-          'process_dispatch_register_dialog_create_total_limit':'Jumlah total yang dibuat tidak dapat lebih dari %s',
-          'process_dispatch_register_dialog_box_capacity_limit': 'Kompatibilitas tidak lebih dari %s',
-          'process_dispatch_register_dialog_please_fill_worker_number':'Masukkan nomor karyawan operasi',
-          'process_dispatch_register_dialog_please_fill_box_capacity':'Silakan isi kotak',
-          'process_dispatch_register_dialog_create_label':'Buat Label',
-          'process_dispatch_register_dialog_box_capacity':'Kapasitas(Batas %s)',
-          'process_dispatch_register_dialog_create_total':'Buat Jumlah Total',
-          'process_dispatch_register_dialog_add_worker':'Tambahkan operator',
-          'process_dispatch_register_dialog_creating_label':'Membuat kode batang...',
+          'process_dispatch_register_dialog_no_label_permission':
+              'Tidak ada izin untuk mengoperasikan label',
+          'process_dispatch_register_dialog_please_fill_total':
+              'Silakan isi jumlah yang dibuat',
+          'process_dispatch_register_dialog_create_total_limit':
+              'Jumlah total yang dibuat tidak dapat lebih dari %s',
+          'process_dispatch_register_dialog_box_capacity_limit':
+              'Kompatibilitas tidak lebih dari %s',
+          'process_dispatch_register_dialog_please_fill_worker_number':
+              'Masukkan nomor karyawan operasi',
+          'process_dispatch_register_dialog_please_fill_box_capacity':
+              'Silakan isi kotak',
+          'process_dispatch_register_dialog_create_label': 'Buat Label',
+          'process_dispatch_register_dialog_box_capacity':
+              'Kapasitas(Batas %s)',
+          'process_dispatch_register_dialog_create_total': 'Buat Jumlah Total',
+          'process_dispatch_register_dialog_add_worker': 'Tambahkan operator',
+          'process_dispatch_register_dialog_creating_label':
+              'Membuat kode batang...',
           'work_order_list_dispatch_order_no': 'Nomor Order Penugasan:',
           'work_order_list_type_body': 'Model:',
           'work_order_list_dispatch_date': 'Tanggal Penugasan:',
@@ -8891,6 +8997,8 @@ class Translation extends Translations {
           'maintain_label_delete_label_tips':
               'Apakah Anda yakin ingin menghapus label-label ini?',
           'maintain_label_print': 'Cetak',
+          'maintain_label_unlock': 'Membuka kunci',
+          'maintain_label_unlock_no_permission': 'Pembukaan kunci gagal, Anda tidak memiliki izin untuk membuka kunci!',
           'maintain_label_set': 'Atur',
           'maintain_label_filter': 'Saring',
           'maintain_label_preview': 'Pratinjau',
@@ -10498,7 +10606,8 @@ class Translation extends Translations {
           'injection_scan_title': 'Pemindaian Laporan Kerja Bengkel Injeksi',
           'injection_scan_label_list_title': 'Daftar Label Tempel',
           'suppliers_scan_clean': 'Kosongkan',
-          'suppliers_scan_delete_code': 'Apakah Anda yakin menghapus kode batang ini？',
+          'suppliers_scan_delete_code':
+              'Apakah Anda yakin menghapus kode batang ini？',
           'suppliers_scan_storage_conditions': 'Syarat penyimpanan',
           'suppliers_scan_input_operator': 'Silakan masukkan nomor operasi',
           'suppliers_scan_sure_clean_code':
@@ -11636,18 +11745,22 @@ class Translation extends Translations {
               'Pilih pesanan yang akan diganti',
           'home_no_route': 'Tidak Ada Rute',
           'home_this_function_is_not_open': 'Fungsi ini belum dibuka',
-          'material_label_scan_title': 'Bahan label pemindaian kode keluar gudang',
+          'material_label_scan_title':
+              'Bahan label pemindaian kode keluar gudang',
           'material_label_scan_number': 'Nomor pemberitahuan cadangan:',
           'material_label_scan_processed': 'Bahan pengolahan:',
           'material_label_scan_command': 'Nomor perintah:',
           'material_label_scan_time': 'Waktu pemberitahuan cadangan:',
-          'material_label_scan_input_number': 'Silakan masukkan atau memindai nomor cadangan',
+          'material_label_scan_input_number':
+              'Silakan masukkan atau memindai nomor cadangan',
           'material_label_scan_start_time': 'Waktu Mulai',
           'material_label_scan_end_time': 'Waktu berakhir',
           'material_label_scan_factory': 'Pabrik - gudang',
           'material_label_scan_material_code': 'Kode Bahan',
-          'material_label_scan_get_material_list': 'Mendapatkan daftar tugas cadangan...',
-          'material_label_scan_get_material_detail': 'Mendapatkan rincian tugas cadangan...',
+          'material_label_scan_get_material_list':
+              'Mendapatkan daftar tugas cadangan...',
+          'material_label_scan_get_material_detail':
+              'Mendapatkan rincian tugas cadangan...',
           'material_label_scan_uncollected_materials': 'Tidak diterima',
           'material_label_scan_material_detail': 'Detail Produksi',
           'material_label_scan_detail_order': 'Nomor tunggal:',
@@ -11661,12 +11774,34 @@ class Translation extends Translations {
           'material_label_scan_detail_command': 'Nomor perintah:',
           'material_label_scan_detail_quantity': 'Jumlah:',
           'material_label_scan_detail_clear_barcode': 'Kosongkan kode batang',
-          'material_label_scan_detail_sure_clear_barcode': 'Kau yakin ingin mengosongkan kode batang?',
+          'material_label_scan_detail_sure_clear_barcode':
+              'Kau yakin ingin mengosongkan kode batang?',
           'material_label_scan_detail_submit': 'Kirimkan',
-          'material_label_scan_detail_get_barcode_message': 'Mendapatkan informasi kode batang perintah...',
+          'material_label_scan_detail_get_barcode_message':
+              'Mendapatkan informasi kode batang perintah...',
           'material_label_scan_detail_quick': 'Jangan memindai terlalu cepat',
-          'material_label_scan_detail_submit_message': 'Kirim informasi cadangan...',
-          'material_label_scan_detail_input_picker_number': 'Silakan masukkan nomor karyawan',
+          'material_label_scan_detail_submit_message':
+              'Kirim informasi cadangan...',
+          'material_label_scan_detail_input_picker_number':
+              'Silakan masukkan nomor karyawan',
+          'part_cross_docking_scan_hint': 'Masukkan No. Label',
+          'part_cross_docking_scan_item_state': 'Telah Dikirim',
+          'part_cross_docking_scan_item_delete_tips': 'Yakin hapus kode ini?',
+          'part_cross_docking_scanned': 'Telah Pindai:',
+          'part_cross_docking_pallet_number': 'No. Palet:',
+          'part_cross_docking_clear': 'Kosongkan',
+          'part_cross_docking_clear_tips': 'Yakin hapus semua label?',
+          'part_cross_docking_submit': 'Kirim',
+          'part_cross_docking_delete_database_failed': 'Hapus DB lokal gagal！',
+          'part_cross_docking_pallet_not_empty': 'Gunakan palet kosong!',
+          'part_cross_docking_pallet_used': 'Palet sudah dipakai di gudang lain!',
+          'part_cross_docking_pallet_not_exist': 'Palet tidak ada!',
+          'part_cross_docking_not_report_tips': 'Label belum laporkan: %s',
+          'part_cross_docking_checking_barcode': 'Memeriksa kode...',
+          'part_cross_docking_getting_pallet_info': 'Mengambil info palet...',
+          'part_cross_docking_submitting': 'Mengirim cross-dock...',
+          'part_cross_docking_tips': 'Peringatan：',
+          'part_cross_docking_worker_number_hint': 'Masukkan No. Karyawan',
         },
       };
 }

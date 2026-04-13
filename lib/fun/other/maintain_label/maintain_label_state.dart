@@ -262,19 +262,21 @@ class MaintainLabelState {
   }
 
   void setLabelState({
+    bool? isPrint = true,
     required List<LabelInfo> selectLabels,
-    required Function() success,
+    required Function(String) success,
   }) {
     httpPost(
       method: webApiSetPrintLabelFlag,
       loading: 'maintain_label_select_label_set_state'.tr,
       body: {
+        'PrintState': isPrint,
         'InterID': selectLabels[0].interID,
         'BarCodes': [for (var code in selectLabels) code.barCode]
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        success.call();
+        success.call(response.message??'');
       } else {
         errorDialog(content: response.message);
       }
@@ -339,7 +341,7 @@ class MaintainLabelState {
       if (response.resultCode == resultSuccess) {
         success.call(response.message ?? '');
       } else {
-        error.call(response.message??'');
+        error.call(response.message ?? '');
       }
     });
   }

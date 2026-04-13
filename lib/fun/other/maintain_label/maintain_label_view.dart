@@ -459,6 +459,13 @@ class _MaintainLabelPageState extends State<MaintainLabelPage> {
                     ),
                     Expanded(
                       child: CombinationButton(
+                        text: 'maintain_label_unlock'.tr,
+                        click: () => logic.unLockLabel(),
+                        combination: Combination.middle,
+                      ),
+                    ),
+                    Expanded(
+                      child: CombinationButton(
                         text: 'maintain_label_set'.tr,
                         click: () => labelSet(),
                         combination: Combination.right,
