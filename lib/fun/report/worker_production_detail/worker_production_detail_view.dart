@@ -227,7 +227,7 @@ class _WorkerProductionDetailPageState
             if (state.showPrice) DataCell(Text(data.price.toShowString())),
             if (state.showAmount) DataCell(Text(data.amount.toShowString())),
             DataCell(Text(data.smallBillSubsidy.toShowString())),
-            if (state.showAmount) DataCell(Text(data.amountSum.toShowString())),
+            if (state.showAmount && state.showPrice) DataCell(Text(data.amountSum.toShowString())),
             DataCell(Text(data.smallBillSubsidyPCT.toShowString()))
           ],
         ));
@@ -249,7 +249,7 @@ class _WorkerProductionDetailPageState
             if (state.showPrice) DataCell(Text(data.price.toShowString())),
             if (state.showAmount) DataCell(Text(data.amount.toShowString())),
             DataCell(Text(data.smallBillSubsidy.toShowString())),
-            if (state.showAmount) DataCell(Text(data.amountSum.toShowString())),
+            if (state.showAmount && state.showPrice) DataCell(Text(data.amountSum.toShowString())),
             DataCell(Text(data.smallBillSubsidyPCT.toShowString()))
           ],
         ));
