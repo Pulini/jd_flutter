@@ -69,6 +69,7 @@ import 'package:jd_flutter/fun/warehouse/out/sale_scan_out_warehouse/sale_scan_o
 import 'package:jd_flutter/fun/warehouse/out/sap_packing_scan/sap_packing_scan_view.dart';
 import 'package:jd_flutter/fun/warehouse/out/sap_packing_scan_cache_list/sap_packing_scan_cache_list_view.dart';
 import 'package:jd_flutter/fun/warehouse/out/sap_packing_scan_reverse/sap_packing_scan_reverse_view.dart';
+import 'package:jd_flutter/fun/warehouse/out/sap_picking_posting/sap_picking_posting_view.dart';
 import 'package:jd_flutter/fun/warehouse/out/sap_print_picking/sap_print_picking_view.dart';
 import 'package:jd_flutter/fun/warehouse/out/sap_production_picking/sap_production_picking_view.dart';
 import 'package:jd_flutter/fun/warehouse/out/sap_relocation_picking/sap_relocation_picking_view.dart';
@@ -696,6 +697,13 @@ class RouteConfig {
     const AttendanceDashboardPage(),
   );
 
+  //sap拣配过账
+  static Routes sapPickingPostingPage = Routes(
+    '/sap_picking_posting',
+    200,
+    const SapPickingPostingPage(),
+  );
+
   //本地功能入口列表
   static List<Routes> routeList = [
     dailyReport,
@@ -783,6 +791,7 @@ class RouteConfig {
     partDispatchLabelManage,
     packOrderList,
     attendanceDashboardPage,
+    sapPickingPostingPage,
   ];
 
   static List<GetPage> appRoutes = [
@@ -1138,6 +1147,10 @@ class RouteConfig {
     GetPage(
       name: attendanceDashboardPage.name,
       page: () => attendanceDashboardPage.page,
+    ),
+    GetPage(
+      name: sapPickingPostingPage.name,
+      page: () => sapPickingPostingPage.page,
     ),
   ];
 }

@@ -17,7 +17,7 @@ Widget _paddingTextLeft({
   required String text,
   required int flex,
   TextStyle? style,
-  EdgeInsetsGeometry? padding,
+  EdgeInsets? padding,
 }) {
   var container = Container(
     decoration: _border,
@@ -53,7 +53,7 @@ IntrinsicHeight _createRowText({
   AlignmentGeometry? titleAlignment,
   int flex = 5,
   TextStyle? style,
-  EdgeInsetsGeometry? padding,
+  EdgeInsets? padding,
   required List<Widget> rw,
 }) =>
     IntrinsicHeight(

@@ -9,4 +9,19 @@
     <domain-config cleartextTrafficPermitted="true">
         <domain includeSubdomains="true">192.168.6.2</domain>
     </domain-config>
+
+    <domain-config>
+        <domain includeSubdomains="true">geapp.goldemperor.com</domain>
+        <domain includeSubdomains="true">geapptest.goldemperor.com</domain>
+        <domain includeSubdomains="true">apptest.goldemperor.com</domain>
+        <domain includeSubdomains="true">webdispatcher.goldemperor.com</domain>
+        <domain includeSubdomains="true">erpdev01.goldemperor.com</domain>
+        <domain includeSubdomains="true">erpqas01.goldemperor.com</domain>
+        <domain includeSubdomains="true">s4devapp01.goldemperor.com</domain>
+        <domain includeSubdomains="true">s4qasapp01.goldemperor.com</domain>
+        <trust-anchors>
+            <certificates src="system" />
+            <certificates src="user" />
+        </trust-anchors>
+    </domain-config>
 </network-security-config>

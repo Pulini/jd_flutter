@@ -79,7 +79,7 @@ class _PartDispatchOrderCreateLabelPageState
                 SizedBox(width: 5),
                 Expanded(
                   child: Padding(
-                    padding: EdgeInsetsGeometry.only(top: 5, bottom: 5),
+                    padding: EdgeInsets.only(top: 5, bottom: 5),
                     child: TextField(
                       keyboardType: TextInputType.number,
                       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
@@ -137,7 +137,7 @@ class _PartDispatchOrderCreateLabelPageState
                   SizedBox(width: 5),
                   Expanded(
                     child: Padding(
-                      padding: EdgeInsetsGeometry.only(top: 5, bottom: 5),
+                      padding: EdgeInsets.only(top: 5, bottom: 5),
                       child: TextField(
                         keyboardType: TextInputType.number,
                         inputFormatters: [
@@ -416,7 +416,7 @@ class _PartDispatchOrderCreateLabelPageState
         )
       ],
       body: Padding(
-        padding: EdgeInsetsGeometry.only(left: 10, right: 10, bottom: 10),
+        padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [

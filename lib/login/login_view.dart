@@ -171,7 +171,7 @@ class _LoginPickState extends State<LoginPick>
         maxLength: maxLength,
       );
 
-  Wrap _box(Widget child, {EdgeInsetsGeometry? padding}) => Wrap(
+  Wrap _box(Widget child, {EdgeInsets? padding}) => Wrap(
         children: [
           Container(
             decoration: BoxDecoration(

@@ -648,7 +648,7 @@ Future<List<Uint8List>> labelMultipurposeFixed({
   if (subContent2.isNotEmpty) {
     list.add(await _tscBitmapText(2 * _dpi, 32 * _dpi, 28, subContent2));
   }
-  bottomLeftText1='金帝贴合机台机台';
+  // bottomLeftText1='金帝贴合机台机台';
 
   if (bottomLeftText1.isNotEmpty) {
     if (bottomLeftText2.isNotEmpty) {

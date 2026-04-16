@@ -227,7 +227,7 @@ class HomeSubItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsetsGeometry.only(left: isGroup ? 40 : 0),
+      padding: EdgeInsets.only(left: isGroup ? 40 : 0),
       child: ListTile(
         onTap: () => item.hasUpdate
             ? upData()

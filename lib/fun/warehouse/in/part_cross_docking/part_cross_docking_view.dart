@@ -91,7 +91,7 @@ class _PartCrossDockingPageState extends State<PartCrossDockingPage> {
   Widget build(BuildContext context) {
     return pageBody(
       body: Padding(
-        padding: EdgeInsetsGeometry.only(left: 10, right: 10),
+        padding: EdgeInsets.only(left: 10, right: 10),
         child: Column(
           children: [
             TextField(

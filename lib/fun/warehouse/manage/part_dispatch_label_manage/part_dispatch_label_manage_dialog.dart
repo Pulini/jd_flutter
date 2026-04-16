@@ -39,7 +39,7 @@ void selectInstructionsDialog({
         border: Border.all(color: bkgColor),
         color: Colors.white,
       ),
-      margin: EdgeInsetsGeometry.only(left: 10, right: 10, bottom: 10),
+      margin: EdgeInsets.only(left: 10, right: 10, bottom: 10),
       child: Column(
         children: [
           Row(children: [
@@ -135,8 +135,8 @@ void selectInstructionsDialog({
   Widget itemWidget(int index) {
     var data = batchGroups[index];
     return Obx(() => Container(
-          padding: EdgeInsetsGeometry.all(5),
-          margin: EdgeInsetsGeometry.only(bottom: 10),
+          padding: EdgeInsets.all(5),
+          margin: EdgeInsets.only(bottom: 10),
           decoration: BoxDecoration(
             border: Border.all(
               color: selectIndex.value == index ? Colors.green : Colors.grey,
@@ -315,9 +315,9 @@ void createLabelDialog({
           .reduce((a, b) => a < b ? a : b);
   var controller = TextEditingController(text: max.toString());
   Get.dialog(AlertDialog(
-    titlePadding: EdgeInsetsGeometry.all(5),
-    contentPadding: EdgeInsetsGeometry.all(10),
-    title: Padding(padding: EdgeInsetsGeometry.all(5), child: Text('创建贴标')),
+    titlePadding: EdgeInsets.all(5),
+    contentPadding: EdgeInsets.all(10),
+    title: Padding(padding: EdgeInsets.all(5), child: Text('创建贴标')),
     content: SizedBox(
       width: 150,
       height: isSingleSize ? 270 : 330,
@@ -352,7 +352,7 @@ void createLabelDialog({
                 ),
                 if (!isSingleSize)
                   Padding(
-                    padding: EdgeInsetsGeometry.only(bottom: 10),
+                    padding: EdgeInsets.only(bottom: 10),
                     child: NumberEditText(
                       controller: controller,
                       hint: '创建标签数',

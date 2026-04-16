@@ -162,7 +162,7 @@ class _DeliveryOrderLabelBindingPageState
               ),
             )
           : Padding(
-              padding: const EdgeInsetsGeometry.only(left: 10, right: 10),
+              padding: const EdgeInsets.only(left: 10, right: 10),
               child: Column(
                 children: [for (var label in labelList) _labelItem(label)],
               ),
@@ -262,7 +262,7 @@ class _DeliveryOrderLabelBindingPageState
           ),
           Padding(
             padding:
-                const EdgeInsetsGeometry.only(left: 10, right: 10, bottom: 5),
+                const EdgeInsets.only(left: 10, right: 10, bottom: 5),
             child: Row(
               children: [
                 Obx(() => textSpan(

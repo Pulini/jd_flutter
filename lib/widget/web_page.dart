@@ -357,10 +357,10 @@ class _PdfPrintReviewState extends State<PdfPrintReview> {
           title: Text('A4打印预览'),
         ),
         body: ListView.builder(
-          padding: EdgeInsetsGeometry.all(10),
+          padding: EdgeInsets.all(10),
           itemCount: widget.paperList.length,
           itemBuilder: (c, i) => Padding(
-            padding: EdgeInsetsGeometry.only(bottom: 20),
+            padding: EdgeInsets.only(bottom: 20),
             child: widget.paperList[i],
           ),
         ),

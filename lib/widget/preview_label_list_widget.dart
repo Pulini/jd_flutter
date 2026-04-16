@@ -141,7 +141,7 @@ class _PreviewLabelListState extends State<PreviewLabelList> {
           body: Column(
             children: [
               Padding(
-                padding: const EdgeInsetsGeometry.only(left: 10, right: 10),
+                padding: const EdgeInsets.only(left: 10, right: 10),
                 child: Row(
                   children: [
                     const Text('打印速度：'),
@@ -164,7 +164,7 @@ class _PreviewLabelListState extends State<PreviewLabelList> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsetsGeometry.only(left: 10, right: 10),
+                padding: const EdgeInsets.only(left: 10, right: 10),
                 child: Row(
                   children: [
                     const Text('打印浓度：'),

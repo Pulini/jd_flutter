@@ -88,7 +88,7 @@ class _PartDispatchLabelManagePageState
       onTap: () => data.isSelected.value = !data.isSelected.value,
       child: Obx(() => Container(
             margin: const EdgeInsets.all(5),
-            padding: EdgeInsetsGeometry.all(5),
+            padding: EdgeInsets.all(5),
             decoration: BoxDecoration(
               border: Border.all(
                 width: 2,
@@ -223,8 +223,8 @@ class _PartDispatchLabelManagePageState
         children: [
           Container(
             height: 100,
-            padding: EdgeInsetsGeometry.all(5),
-            margin: EdgeInsetsGeometry.only(left: 5, right: 5, bottom: 5),
+            padding: EdgeInsets.all(5),
+            margin: EdgeInsets.only(left: 5, right: 5, bottom: 5),
             decoration: BoxDecoration(
               border: Border.all(width: 2, color: Colors.black),
               borderRadius: BorderRadius.circular(10),
