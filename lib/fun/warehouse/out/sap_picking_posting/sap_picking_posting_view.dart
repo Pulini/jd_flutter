@@ -222,7 +222,10 @@ class _SapPickingPostingPageState extends State<SapPickingPostingPage> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      pdaScanner(scan: (code) => logic.getMaterialDetail(code: code));
+      pdaScanner(scan: (code) {
+        logic.getMaterialDetail(code: code);
+        FocusManager.instance.primaryFocus?.unfocus();
+      });
       logic.getNewOrderNumber();
     });
     super.initState();
@@ -234,7 +237,9 @@ class _SapPickingPostingPageState extends State<SapPickingPostingPage> {
       actions: [
         CombinationButton(
           text: '暂存记录',
-          click: () => pickingCacheDialog(refresh: (orderNumber,labels)=>logic.refreshLabels(orderNumber,labels)),
+          click: () => pickingCacheDialog(
+              refresh: (orderNumber, labels) =>
+                  logic.refreshLabels(orderNumber, labels)),
         ),
       ],
       body: Column(

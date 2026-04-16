@@ -12,8 +12,8 @@ void semiFinishedProductDetailsDialog(SapPickingPostingGroup groupData) {
   Get.dialog(AlertDialog(
     title: Text('半成品物料详情'),
     content: SizedBox(
-      width: MediaQuery.of(Get.overlayContext!).size.width * 0.7,
-      height: MediaQuery.of(Get.overlayContext!).size.height * 0.4,
+      width: MediaQuery.of(Get.overlayContext!).size.width * 0.8,
+      height: MediaQuery.of(Get.overlayContext!).size.height * 0.6,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -98,8 +98,8 @@ void addSemiFinishedProductMaterialDialog(
       child: AlertDialog(
         title: Text('添加半成品物料'),
         content: SizedBox(
-          width: MediaQuery.of(Get.overlayContext!).size.width * 0.7,
-          height: 300,
+          width: MediaQuery.of(Get.overlayContext!).size.width * 0.8,
+          height: MediaQuery.of(Get.overlayContext!).size.height * 0.6,
           child: Column(
             children: [
               Expanded(
@@ -341,8 +341,8 @@ void pickingCacheDialog({
       title: Text('暂存记录'),
       contentPadding: EdgeInsets.all(10),
       content: SizedBox(
-        width: MediaQuery.of(Get.overlayContext!).size.width * 0.7,
-        height: MediaQuery.of(Get.overlayContext!).size.height * 0.4,
+        width: MediaQuery.of(Get.overlayContext!).size.width * 0.8,
+        height: MediaQuery.of(Get.overlayContext!).size.height * 0.6,
         child: Column(
           children: [
             Expanded(
