@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
@@ -54,7 +56,15 @@ class DioManager {
       }
     },
     onError: (DioException e, handler) {
-      logger.e('error:$e');
+      logger.e('DioException Type: ${e.type}');
+      logger.e('DioException Message: ${e.message}');
+      logger.e('DioException Error: ${e.error}');
+      if (e.error is SocketException) {
+        var socketError = e.error as SocketException;
+        logger.e('Socket Exception OS Error: ${socketError.osError}');
+        logger.e('Socket Exception Address: ${socketError.address}');
+        logger.e('Socket Exception Port: ${socketError.port}');
+      }
       handler.next(e);
     },
   );

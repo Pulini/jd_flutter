@@ -62,7 +62,7 @@ class _MaintainLabelCreateCustomPageState
                       Container(
                         height: 35,
                         width: 150,
-                        padding: EdgeInsetsGeometry.only(
+                        padding: EdgeInsets.only(
                           left: 3,
                           right: 3,
                           bottom: 0,
@@ -110,7 +110,7 @@ class _MaintainLabelCreateCustomPageState
                       Container(
                         height: 35,
                         width: 150,
-                        padding: EdgeInsetsGeometry.only(
+                        padding: EdgeInsets.only(
                           left: 3,
                           right: 3,
                           bottom: 0,
@@ -151,12 +151,12 @@ class _MaintainLabelCreateCustomPageState
                 ),
                 GestureDetector(
                   child: Container(
-                    margin: EdgeInsetsGeometry.only(top: 20),
+                    margin: EdgeInsets.only(top: 20),
                     decoration: BoxDecoration(
                       border: Border.all(color: Colors.blue, width: 2),
                       borderRadius: BorderRadius.circular(50),
                     ),
-                    padding: EdgeInsetsGeometry.all(5),
+                    padding: EdgeInsets.all(5),
                     child: Text(
                       '最大值',
                       style: TextStyle(
@@ -211,7 +211,7 @@ class _MaintainLabelCreateCustomPageState
                     click: () => logic.createCustomLabels(widget.labelType),
                   )),
               Padding(
-                padding: EdgeInsetsGeometry.only(left: 20, right: 20),
+                padding: EdgeInsets.only(left: 20, right: 20),
                 child: Obx(() => Checkbox(
                       value: state.createCustomLabelsData.isNotEmpty &&
                           state.createCustomLabelsData
@@ -227,7 +227,7 @@ class _MaintainLabelCreateCustomPageState
           ),
           Expanded(
             child: Obx(() => ListView.builder(
-                  padding: EdgeInsetsGeometry.all(10),
+                  padding: EdgeInsets.all(10),
                   itemCount: state.createCustomLabelsData.length,
                   itemBuilder: (c, i) => _item(state.createCustomLabelsData[i]),
                 )),

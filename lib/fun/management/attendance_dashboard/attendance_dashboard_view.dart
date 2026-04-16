@@ -105,7 +105,7 @@ class _AttendanceDashboardItemState extends State<AttendanceDashboardItem>
   }) {
     var percent = (value.div(max).toStringAsFixed(3)).toDoubleTry();
     return Container(
-      padding: EdgeInsetsGeometry.only(left: 5, right: 5),
+      padding: EdgeInsets.only(left: 5, right: 5),
       height: 15,
       child: Stack(
         children: [
@@ -139,8 +139,8 @@ class _AttendanceDashboardItemState extends State<AttendanceDashboardItem>
 
   Widget _itemCard(String text1, String text2) => Expanded(
         child: Container(
-          padding: EdgeInsetsGeometry.all(5),
-          margin: EdgeInsetsGeometry.all(5),
+          padding: EdgeInsets.all(5),
+          margin: EdgeInsets.all(5),
           decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topCenter,

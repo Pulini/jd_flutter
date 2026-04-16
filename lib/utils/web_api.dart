@@ -1551,3 +1551,21 @@ const webApiGetLargeCardNoList = 'api/WorkCard/GetLargeCardNoList';
 
 //锁定或者解锁标签
 const webApiPackageLabelLockOrUnLock = 'api/WorkCard/PackageLabelLockOrUnLock';
+
+//sap创建拣配单号
+const webApiSapCreatePickingOrderNumber = 'sap/zapp/ZFUN_APP_JC01';
+
+//生产拣配清单获取接口
+const webApiSapGetCacheList = 'sap/zapp/ZFUN_APP_JC02';
+
+//生产拣配清单明细获取接口
+const webApiSapGetCacheDetail = 'sap/zapp/ZFUN_APP_JC03';
+
+//生产拣配单提交过账接口
+const webApiSapSubmitPickingOrder = 'sap/zapp/ZFUN_APP_JC04';
+
+//获取物料描述
+const webApiSapGetPickingMaterial = 'sap/zapp/ZFUN_APP_JC05';
+
+//获取条码明细
+const webApiSapGetPickingMaterialDetail = 'sap/zapp/ZFUN_APP_JC06';

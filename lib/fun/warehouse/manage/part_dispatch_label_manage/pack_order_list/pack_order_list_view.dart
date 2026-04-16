@@ -46,7 +46,7 @@ class _PackOrderListPageState extends State<PackOrderListPage> {
   }
 
   Widget _item(PackOrderInfo data) => Container(
-        margin: EdgeInsetsGeometry.only(bottom: 5),
+        margin: EdgeInsets.only(bottom: 5),
         decoration: BoxDecoration(
           border: Border.all(color: Colors.grey, width: 2),
           borderRadius: BorderRadius.circular(10),
@@ -71,7 +71,7 @@ class _PackOrderListPageState extends State<PackOrderListPage> {
                     }
                   },
                   child: Padding(
-                    padding: EdgeInsetsGeometry.all(5),
+                    padding: EdgeInsets.all(5),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
@@ -196,7 +196,7 @@ class _PackOrderListPageState extends State<PackOrderListPage> {
       ],
       query: () => _query(),
       body: Obx(() => ListView.builder(
-            padding: EdgeInsetsGeometry.only(left: 5, right: 5, bottom: 5),
+            padding: EdgeInsets.only(left: 5, right: 5, bottom: 5),
             itemCount: state.packOrderList.length,
             itemBuilder: (c, i) => _item(state.packOrderList[i]),
           )),

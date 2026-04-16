@@ -106,7 +106,7 @@ class _MaintainLabelCreateMixPageState
                       flex: 2,
                       child: Container(
                         height: 40,
-                        padding: EdgeInsetsGeometry.only(
+                        padding: EdgeInsets.only(
                           left: 3,
                           right: 3,
                           bottom: 3,
@@ -165,7 +165,7 @@ class _MaintainLabelCreateMixPageState
         children: [
           Container(
             height: 40,
-            padding: EdgeInsetsGeometry.only(left: 10, right: 10),
+            padding: EdgeInsets.only(left: 10, right: 10),
             child: TextField(
               keyboardType: TextInputType.number,
               inputFormatters: [FilteringTextInputFormatter.digitsOnly],
@@ -216,7 +216,7 @@ class _MaintainLabelCreateMixPageState
           ),
           Expanded(
             child: Obx(() => ListView.builder(
-                  padding: EdgeInsetsGeometry.all(10),
+                  padding: EdgeInsets.all(10),
                   itemCount: state.createMixLabelsData.length,
                   itemBuilder: (c, i) => _item(state.createMixLabelsData[i]),
                 )),

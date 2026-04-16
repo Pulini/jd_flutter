@@ -17,7 +17,7 @@ import 'package:jd_flutter/widget/dialogs.dart';
 //app 背景渐变色
 BoxDecoration backgroundColor() => BoxDecoration(
       gradient: LinearGradient(
-        colors: isTestUrl()
+        colors: !isTestUrl()
             ? [
                 Colors.green,
                 Colors.blue.shade300,
@@ -649,7 +649,7 @@ Widget expandedFrameText({
   Color? textColor,
   int? flex,
   int? lineHeight,
-  EdgeInsetsGeometry? padding,
+  EdgeInsets? padding,
   AlignmentGeometry? alignment,
   bool isBold = false,
   required String text,
@@ -702,7 +702,7 @@ Widget frameText({
   Color? borderColor,
   Color? backgroundColor,
   Color? textColor,
-  EdgeInsetsGeometry? padding,
+  EdgeInsets? padding,
   AlignmentGeometry? alignment,
   bool isBold = false,
   required String text,

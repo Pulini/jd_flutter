@@ -47,7 +47,7 @@ class _PartDispatchLabelListPageState extends State<PartDispatchLabelListPage> {
           var indexWidget = Container(
             width: 30,
             height: 30,
-            margin: EdgeInsetsGeometry.only(right: 10),
+            margin: EdgeInsets.only(right: 10),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(50)),
               border: Border.all(
@@ -88,7 +88,7 @@ class _PartDispatchLabelListPageState extends State<PartDispatchLabelListPage> {
             child: Container(
               height: 80,
               width: 160,
-              margin: EdgeInsetsGeometry.only(left: 10),
+              margin: EdgeInsets.only(left: 10),
               decoration: BoxDecoration(
                 border: Border.all(
                   color: data.isSelected.value ? Colors.green : Colors.grey,
@@ -110,8 +110,8 @@ class _PartDispatchLabelListPageState extends State<PartDispatchLabelListPage> {
             ),
           );
           return Container(
-            margin: EdgeInsetsGeometry.only(bottom: 10),
-            padding: EdgeInsetsGeometry.all(5),
+            margin: EdgeInsets.only(bottom: 10),
+            padding: EdgeInsets.all(5),
             decoration: BoxDecoration(
               border: Border.all(
                 color: data.isSelected.value ? Colors.green : Colors.grey,
@@ -172,7 +172,7 @@ class _PartDispatchLabelListPageState extends State<PartDispatchLabelListPage> {
           Expanded(
             child: Obx(() => ListView.builder(
                   itemCount: state.labelList.length,
-                  padding: EdgeInsetsGeometry.only(
+                  padding: EdgeInsets.only(
                     left: 10,
                     right: 10,
                     bottom: 10,

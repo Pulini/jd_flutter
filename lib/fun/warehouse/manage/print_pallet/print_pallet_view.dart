@@ -28,7 +28,7 @@ class _PrintPalletPageState extends State<PrintPalletPage> {
     var materialList = groupBy(pallet, (v) => v.materialCode).values.toList();
     return Container(
         margin: const EdgeInsets.only(bottom: 10),
-        padding: const EdgeInsetsGeometry.only(left: 10, right: 10),
+        padding: const EdgeInsets.only(left: 10, right: 10),
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [Colors.grey.shade200, Colors.blue.shade200],
@@ -154,7 +154,7 @@ class _PrintPalletPageState extends State<PrintPalletPage> {
       body: Column(
         children: [
           Container(
-            padding: const EdgeInsetsGeometry.only(left: 5, right: 5),
+            padding: const EdgeInsets.only(left: 5, right: 5),
             margin: const EdgeInsets.only(bottom: 10),
             child: Obx(() => TextField(
                   controller: controller,
@@ -206,7 +206,7 @@ class _PrintPalletPageState extends State<PrintPalletPage> {
           ),
           Expanded(
             child: Obx(() => ListView.builder(
-                  padding: const EdgeInsetsGeometry.all(10),
+                  padding: const EdgeInsets.all(10),
                   itemCount: state.palletList.length,
                   itemBuilder: (c, i) => _item(i),
                 )),
