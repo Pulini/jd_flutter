@@ -1177,7 +1177,7 @@ class MaintainLabelLogic extends GetxController {
         netWeight: data.netWeight.toShowString(),
         specifications: data.subList!.first.meas ?? '',
         volume: data.volume ?? '',
-        supplier: '供应商123456',
+        supplier: '',
         manufactureDate: data.manufactureDate ?? '',
         hasNotes: true,
         notes: data.notes ?? '',
