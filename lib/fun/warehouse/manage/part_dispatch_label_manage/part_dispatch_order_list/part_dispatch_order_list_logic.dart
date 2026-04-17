@@ -78,7 +78,7 @@ class PartDispatchLabelManageLogic extends GetxController {
     );
   }
 
-  void toCreateLabel() {
+  void toCreateLabel(Function() refresh) {
     var selectList = state.partList.where((v) => v.isSelected.value);
     if (selectList
         .map((v) => v.packTypeID)
@@ -100,13 +100,18 @@ class PartDispatchLabelManageLogic extends GetxController {
         );
         state.isSingleSize = selectList.first.packTypeID == 478;
         state.hasLastLabel = false;
-        Get.to(() => PartDispatchOrderCreateLabelPage());
+        Get.to(() => PartDispatchOrderCreateLabelPage())?.then((_){
+         if( state.needRefreshPartList){
+           refresh.call();
+         }
+        });
       },
       error: (msg) => errorDialog(content: msg),
     );
   }
 
   void refreshCreateLabel() {
+    state.needRefreshPartList=true;
     state.createSizeList.clear();
     state.getDispatchOrdersSizeDetail(
       orders: state.partList

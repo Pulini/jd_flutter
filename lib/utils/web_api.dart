@@ -88,6 +88,7 @@ Future<BaseData> _doHttp({
   String? loading,
   Map<String, dynamic>? params,
   Object? body,
+  int retryCount = 0,
 }) async {
   // if (baseUrl == baseUrlForSAP || baseUrl == developUrlForSAP) {
   //   params = {
@@ -159,6 +160,30 @@ Future<BaseData> _doHttp({
       base.message = '网络异常';
     }
   } on DioException catch (e) {
+    // 如果是 DNS 或连接错误，且重试次数小于 2，则重试
+    if ((e.type == DioExceptionType.connectionError ||
+        e.type == DioExceptionType.connectionTimeout ||
+        e.type == DioExceptionType.unknown) &&
+        retryCount < 2) {
+      logger.w('🔄 网络请求失败（${e.type}），第 ${retryCount + 1} 次重试...');
+
+      // 清除 DNS 缓存并重置 Dio
+      DioManager.clearDnsCache();
+      DioManager().reset();
+
+      // 等待一小段时间后重试
+      await Future.delayed(Duration(milliseconds: 500 * (retryCount + 1)));
+
+      return _doHttp(
+        isPost: isPost,
+        method: method,
+        baseUrl: baseUrl,
+        loading: loading,
+        params: params,
+        body: body,
+        retryCount: retryCount + 1,
+      );
+    }
     switch (e.type) {
       case DioExceptionType.connectionTimeout:
         base.message = '连接服务器超时';

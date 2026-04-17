@@ -380,6 +380,7 @@ class _PartDispatchOrderCreateLabelPageState
 
   @override
   void initState() {
+    state.needRefreshPartList=false;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       tecBatchSetPackageQty.text =
           logic.getSaveBatchSetItemPackQty().toString();

@@ -1,4 +1,5 @@
 import 'package:easy_refresh/easy_refresh.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/attendance_dashboard_info.dart';
@@ -24,41 +25,167 @@ class _AttendanceDashboardPageState extends State<AttendanceDashboardPage>
   final AttendanceDashboardState state =
       Get.find<AttendanceDashboardLogic>().state;
 
+  late var tabController = TabController(length: 2, vsync: this);
+  var pageController = PageController();
   var refreshController = EasyRefreshController(controlFinishRefresh: true);
   var opcOrganization = OptionsPickerController(PickerType.mesOrganization);
-  var dpAttendanceDay =
-      DatePickerController(PickerType.date, lastDate: DateTime.now());
+  var dpAttendanceDay = DatePickerController(
+    PickerType.date,
+    lastDate: DateTime.now(),
+  );
+  var controller = TextEditingController();
+
+  Widget _teamMemberInfoItem(TeamMemberInfo data) => Container(
+        margin: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
+        padding: const EdgeInsets.all(10),
+        width: double.infinity,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Colors.blue.shade50, Colors.white],
+          ),
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(100),
+            topRight: Radius.circular(10),
+            bottomLeft: Radius.circular(100),
+            bottomRight: Radius.circular(100),
+          ),
+        ),
+        child: Row(
+          children: [
+            Expanded(
+                flex: 2, child: avatarPhoto(data.photo, borderRadius: 100)),
+            Expanded(
+              flex: 5,
+              child: Padding(
+                padding: EdgeInsets.only(left: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '(${data.empNumber}) ${data.empName}',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                    ),
+                    textSpan(
+                      hintColor: Colors.grey,
+                      textColor: Colors.black54,
+                      hint: '部门：',
+                      text: data.deptName ?? '',
+                      isBold: false,
+                    ),
+                    textSpan(
+                      hintColor: Colors.grey,
+                      textColor: Colors.black54,
+                      hint: '职务：',
+                      text: data.dutyName ?? '',
+                      isBold: false,
+                    ),
+                    textSpan(
+                      hintColor: Colors.grey,
+                      textColor: Colors.black54,
+                      hint: '入职日期：',
+                      text: data.beginHireDate ?? '',
+                      isBold: false,
+                    ),
+                    textSpan(
+                      hintColor: Colors.grey,
+                      hint: '联系电话：',
+                      text: data.phone ?? '',
+                      isBold: false,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
 
   @override
   Widget build(BuildContext context) {
     return pageBody(
-        actions: [
-          SizedBox(
-            width: 200,
-            child: DatePicker(pickerController: dpAttendanceDay),
+      body: Column(
+        children: [
+          TabBar(
+            dividerColor: Colors.blueAccent,
+            indicatorColor: Colors.blueAccent,
+            labelColor: Colors.blueAccent,
+            unselectedLabelColor: Colors.grey,
+            overlayColor: WidgetStateProperty.all(Colors.transparent),
+            controller: tabController,
+            tabs: const [Tab(text: '考勤'), Tab(text: '信息')],
+            onTap: (i) => pageController.jumpToPage(i),
           ),
-        ],
-        body: Column(
-          children: [
-            OptionsPicker(pickerController: opcOrganization),
-            Expanded(
-              child: Obx(() => EasyRefresh(
-                    controller: refreshController,
-                    header: const MaterialHeader(),
-                    onRefresh: () => logic.refreshAttendanceData(
-                      refresh: () => refreshController.finishRefresh(),
+          Expanded(
+            child: PageView(
+              controller: pageController,
+              onPageChanged: (i) => tabController.animateTo(i),
+              scrollDirection: Axis.horizontal,
+              children: [
+                Column(
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child:
+                              OptionsPicker(pickerController: opcOrganization),
+                        ),
+                        DatePicker(pickerController: dpAttendanceDay),
+                      ],
                     ),
-                    child: ListView.builder(
-                      padding: const EdgeInsets.all(8),
-                      itemCount: state.attendanceDataList.length,
-                      itemBuilder: (c, i) => AttendanceDashboardItem(
-                        data: state.attendanceDataList[i],
+                    Expanded(
+                      child: Obx(() => EasyRefresh(
+                            controller: refreshController,
+                            header: const MaterialHeader(),
+                            onRefresh: () => logic.refreshAttendanceData(
+                              refresh: () => refreshController.finishRefresh(),
+                            ),
+                            child: ListView.builder(
+                              padding: const EdgeInsets.all(8),
+                              itemCount: state.attendanceDataList.length,
+                              itemBuilder: (c, i) => AttendanceDashboardItem(
+                                data: state.attendanceDataList[i],
+                              ),
+                            ),
+                          )),
+                    )
+                  ],
+                ),
+                Column(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.all(5),
+                      child: CupertinoSearchTextField(
+                        controller: controller,
+                        prefixIcon: const SizedBox.shrink(),
+                        suffixIcon: const Icon(CupertinoIcons.search),
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade300,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        onSuffixTap: () {
+                          // logic.getMoNoReport(commandNumber: controller.text, goPage: false);
+                        },
+                        placeholder: '请输入员工姓名',
                       ),
                     ),
-                  )),
-            )
-          ],
-        ));
+                    Expanded(
+                      child: Obx(() => ListView.builder(
+                            itemCount: state.teamMemberDataList.length,
+                            itemBuilder: (c, i) => _teamMemberInfoItem(
+                                state.teamMemberDataList[i]),
+                          )),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   @override

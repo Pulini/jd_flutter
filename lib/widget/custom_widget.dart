@@ -19,8 +19,8 @@ BoxDecoration backgroundColor() => BoxDecoration(
       gradient: LinearGradient(
         colors: isTestUrl()
             ? [
-                Colors.green,
-                Colors.blue.shade300,
+                Colors.blue.shade200,
+                Colors.green.shade200,
               ]
             : [
                 const Color.fromARGB(0xff, 0xe4, 0xe8, 0xda),
@@ -656,7 +656,7 @@ Widget expandedFrameText({
   int? maxLines = 1,
 }) {
   var widget = Container(
-    height: (maxLines! * (lineHeight??35)).toDouble(),
+    height: (maxLines! * (lineHeight ?? 35)).toDouble(),
     padding: padding ?? const EdgeInsets.all(5),
     decoration: BoxDecoration(
       border: Border.all(color: borderColor ?? Colors.grey),
@@ -747,11 +747,11 @@ Widget frameText({
 }
 
 //固定宽高1比1的头像
-Widget avatarPhoto(String? url) {
+Widget avatarPhoto(String? url, {double? borderRadius}) {
   return AspectRatio(
     aspectRatio: 1 / 1,
     child: ClipRRect(
-      borderRadius: BorderRadius.circular(7),
+      borderRadius: BorderRadius.circular(borderRadius??7),
       child: url == null
           ? Image.asset(
               'assets/images/ic_logo.png',

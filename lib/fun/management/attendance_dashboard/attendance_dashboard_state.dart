@@ -504,10 +504,185 @@ class AttendanceDashboardState {
       "funeralLeave": 0.0
     }
   ];
+
+  var json2=[
+    {
+      "empNumber": "019956",
+      "empID": 152731,
+      "empName": "程胜宣",
+      "beginHireDate": "2020-08-14",
+      "departmentID": 554911,
+      "deptNumber": "01.09.02",
+      "deptName": "软件开发课",
+      "dutyName": "程序员",
+      "photo": "https://geapp.goldemperor.com:8084/金帝集团总部/员工/2020/8/程胜宣/019956.jpg",
+      "phone": "15932940245"
+    },
+    {
+      "empNumber": "031951",
+      "empID": 201331,
+      "empName": "李帆",
+      "beginHireDate": "2023-06-07",
+      "departmentID": 554911,
+      "deptNumber": "01.09.02",
+      "deptName": "软件开发课",
+      "dutyName": "程序员",
+      "photo": "https://geapp.goldemperor.com:8084/金帝集团总部/员工/2023/6/李帆/031951.jpg",
+      "phone": "18079481741"
+    },
+    {
+      "empNumber": "010164",
+      "empID": 132972,
+      "empName": "李治霖",
+      "beginHireDate": "2017-09-04",
+      "departmentID": 554911,
+      "deptNumber": "01.09.02",
+      "deptName": "软件开发课",
+      "dutyName": "主任",
+      "photo": "https://geapp.goldemperor.com:8084/金帝集团总部/员工/2017/9/李治霖/010164.jpg",
+      "phone": "15858757383"
+    },
+    {
+      "empNumber": "000061",
+      "empID": 4677,
+      "empName": "林德勇",
+      "beginHireDate": "2004-04-08",
+      "departmentID": 554911,
+      "deptNumber": "01.09.02",
+      "deptName": "软件开发课",
+      "dutyName": "副总监",
+      "photo": "https://geapp.goldemperor.com:8084/金帝集团总部/员工/2004/4/林德勇/000061.jpg",
+      "phone": "13858881650"
+    },
+    {
+      "empNumber": "002476",
+      "empID": 105494,
+      "empName": "毛维翰",
+      "beginHireDate": "2014-07-04",
+      "departmentID": 554911,
+      "deptNumber": "01.09.02",
+      "deptName": "软件开发课",
+      "dutyName": "副主任",
+      "photo": "https://geapp.goldemperor.com:8084/金帝集团总部/员工/2014/7/毛维翰/002476.jpg",
+      "phone": "15167419616"
+    },
+    {
+      "empNumber": "013600",
+      "empID": 137035,
+      "empName": "潘卓旭",
+      "beginHireDate": "2018-04-20",
+      "departmentID": 554911,
+      "deptNumber": "01.09.02",
+      "deptName": "软件开发课",
+      "dutyName": "程序员",
+      "photo": "https://geapp.goldemperor.com:8084/金帝集团总部/员工/2018/4/潘卓旭/013600.jpg",
+      "phone": "15868587600"
+    },
+    {
+      "empNumber": "044879",
+      "empID": 241368,
+      "empName": "向伟琳",
+      "beginHireDate": "2025-04-01",
+      "departmentID": 554911,
+      "deptNumber": "01.09.02",
+      "deptName": "软件开发课",
+      "dutyName": "程序员",
+      "photo": "https://geapp.goldemperor.com:8084/金帝集团总部/员工/2025/4/向伟琳/044879.jpg",
+      "phone": "13251976250"
+    },
+    {
+      "empNumber": "088888",
+      "empID": 221584,
+      "empName": "许方楼",
+      "beginHireDate": "2024-07-01",
+      "departmentID": 554911,
+      "deptNumber": "01.09.02",
+      "deptName": "软件开发课",
+      "dutyName": "主任",
+      "photo": "https://geapp.goldemperor.com:8084/金帝集团总部/员工/2024/7/许方楼/088888.jpg",
+      "phone": "13958799109"
+    },
+    {
+      "empNumber": "014543",
+      "empID": 138618,
+      "empName": "许选锦",
+      "beginHireDate": "2018-07-28",
+      "departmentID": 554911,
+      "deptNumber": "01.09.02",
+      "deptName": "软件开发课",
+      "dutyName": "程序员",
+      "photo": "https://geapp.goldemperor.com:8084/金帝集团总部/员工/2018/7/许选锦/014543.jpg",
+      "phone": "18867520160"
+    },
+    {
+      "empNumber": "027622",
+      "empID": 182672,
+      "empName": "杨选栋",
+      "beginHireDate": "2022-07-13",
+      "departmentID": 554911,
+      "deptNumber": "01.09.02",
+      "deptName": "软件开发课",
+      "dutyName": "资深软件工程师",
+      "photo": "https://geapp.goldemperor.com:8084/金帝集团总部/员工/2022/7/杨选栋/027622.jpg",
+      "phone": "18867745019"
+    },
+    {
+      "empNumber": "019766",
+      "empID": 151688,
+      "empName": "叶明杰",
+      "beginHireDate": "2020-06-15",
+      "departmentID": 554911,
+      "deptNumber": "01.09.02",
+      "deptName": "软件开发课",
+      "dutyName": "程序员",
+      "photo": "https://geapp.goldemperor.com:8084/金帝集团总部/员工/2020/6/叶明杰/019766.jpg",
+      "phone": "15267733701"
+    },
+    {
+      "empNumber": "009134",
+      "empID": 131140,
+      "empName": "曾乃强",
+      "beginHireDate": "2017-05-12",
+      "departmentID": 554911,
+      "deptNumber": "01.09.02",
+      "deptName": "软件开发课",
+      "dutyName": "程序员",
+      "photo": "https://geapp.goldemperor.com:8084/金帝集团总部/员工/2017/5/曾乃强/009134.jpg",
+      "phone": "15158756652"
+    },
+    {
+      "empNumber": "031925",
+      "empID": 201151,
+      "empName": "朱崇睿",
+      "beginHireDate": "2023-06-05",
+      "departmentID": 554911,
+      "deptNumber": "01.09.02",
+      "deptName": "软件开发课",
+      "dutyName": "程序员",
+      "photo": "https://geapp.goldemperor.com:8084/金帝集团总部/员工/2023/6/朱崇睿/031925.jpg",
+      "phone": "18827861105"
+    },
+    {
+      "empNumber": "030715",
+      "empID": 196110,
+      "empName": "朱则飞",
+      "beginHireDate": "2023-03-06",
+      "departmentID": 554911,
+      "deptNumber": "01.09.02",
+      "deptName": "软件开发课",
+      "dutyName": "程序员",
+      "photo": "https://geapp.goldemperor.com:8084/金帝集团总部/员工/2023/3/朱则飞/030715.jpg",
+      "phone": "13057727996"
+    }
+  ];
+
   var attendanceDataList = <AttendanceDashboardInfo>[].obs;
+  var teamMemberDataList = <TeamMemberInfo>[].obs;
 
   AttendanceDashboardState() {
     attendanceDataList.value =
         json.map((v) => AttendanceDashboardInfo.fromJson(v)).toList();
+    teamMemberDataList.value =
+        json2.map((v) => TeamMemberInfo.fromJson(v)).toList();
   }
 }

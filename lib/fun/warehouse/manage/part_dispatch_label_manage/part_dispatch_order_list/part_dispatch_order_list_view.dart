@@ -170,7 +170,7 @@ class _PartDispatchLabelManagePageState
                     state.partList.where((v) => v.isSelected.value).length == 1
                         ? Combination.right
                         : Combination.intact,
-                click: () => logic.toCreateLabel(),
+                click: () => logic.toCreateLabel(()=>_query()),
               )
             : Container()),
       ],

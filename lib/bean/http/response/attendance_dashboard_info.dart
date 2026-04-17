@@ -1,4 +1,3 @@
-
 class AttendanceDashboardInfo {
   AttendanceDashboardInfo({
     this.factory,
@@ -41,7 +40,6 @@ class AttendanceDashboardInfo {
     marriageLeave = json['marriageLeave'];
     funeralLeave = json['funeralLeave'];
   }
-
 
   /// 工厂名称
   String? factory;
@@ -119,4 +117,54 @@ class AttendanceDashboardInfo {
     map['funeralLeave'] = funeralLeave;
     return map;
   }
+}
+
+//             "empNumber": "019956",
+//             "empID": 152731,
+//             "empName": "程胜宣",
+//             "beginHireDate": "2020-08-14",
+//             "departmentID": 554911,
+//             "deptNumber": "01.09.02",
+//             "deptName": "软件开发课",
+//             "dutyName": "程序员",
+//             "photo": "https://geapp.goldemperor.com:8084/金帝集团总部/员工/2020/8/程胜宣/019956.jpg",
+//             "phone": "15932940245"
+class TeamMemberInfo {
+
+  String? empNumber;
+  int? empID;
+  String? empName;
+  String? beginHireDate;
+  int? departmentID;
+  String? deptNumber;
+  String? deptName;
+  String? dutyName;
+  String? photo;
+  String? phone;
+
+  TeamMemberInfo.fromJson(dynamic json) {
+    empNumber = json['empNumber'];
+    empID = json['empID'];
+    empName = json['empName'];
+    beginHireDate = json['beginHireDate'];
+    departmentID = json['departmentID'];
+    deptNumber = json['deptNumber'];
+    deptName = json['deptName'];
+    dutyName = json['dutyName'];
+    photo = json['photo'];
+    phone = json['phone'];
+  }
+
+  TeamMemberInfo({
+    this.empNumber,
+    this.empID,
+    this.empName,
+    this.beginHireDate,
+    this.departmentID,
+    this.deptNumber,
+    this.deptName,
+    this.dutyName,
+    this.photo,
+    this.phone,
+  });
 }
