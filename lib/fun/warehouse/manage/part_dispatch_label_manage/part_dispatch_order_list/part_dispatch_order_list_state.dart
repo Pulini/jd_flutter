@@ -21,6 +21,7 @@ class PartDispatchLabelManageState {
   var partListId = '';
   var isSingleSize = true;
   var hasLastLabel = false;
+  var needRefreshPartList=false;
 
   PartDispatchLabelManageState() {
     ///Initialize variables
