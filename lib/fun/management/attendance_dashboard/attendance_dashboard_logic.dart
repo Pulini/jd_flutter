@@ -16,7 +16,7 @@ class AttendanceDashboardLogic extends GetxController {
       state.teamMemberShowList.value = state.teamMemberDataList;
     } else {
       state.teamMemberShowList.value = state.teamMemberDataList
-          .where((v) => v.empName!.contains(text))
+          .where((v) => v.empName!.toLowerCase().contains(text.toLowerCase()))
           .toList();
     }
   }
@@ -47,7 +47,8 @@ class AttendanceDashboardLogic extends GetxController {
   }) {
     state.getAttendanceDashboard(
       // empId: userInfo?.empID ?? 0,
-      empId:4677,
+      // empId:4677,
+      empId:256395,
       date: date,
       success: (list) {
         state.attendanceDataList.value = list;
@@ -64,7 +65,8 @@ class AttendanceDashboardLogic extends GetxController {
   void getTeamMemberList() {
     state.getTeamMemberList(
       // empId: userInfo?.empID ?? 0,
-      empId:4677,
+      // empId:4677,
+      empId:256395,
       success: (list) {
         final index =
             list.indexWhere((member) => member.empID == (userInfo?.empID ?? 0));

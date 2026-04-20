@@ -1,6 +1,7 @@
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_auto_size_text/flutter_auto_size_text.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/attendance_dashboard_info.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
@@ -36,7 +37,7 @@ class _AttendanceDashboardPageState extends State<AttendanceDashboardPage>
 
   Widget _teamMemberInfoItem(TeamMemberInfo data) => Container(
         margin: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
-        padding: const EdgeInsets.all(10),
+        padding: EdgeInsets.only(left: 10, top: 10, bottom: 10),
         width: double.infinity,
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -60,23 +61,33 @@ class _AttendanceDashboardPageState extends State<AttendanceDashboardPage>
             Expanded(
               flex: 5,
               child: Padding(
-                padding: EdgeInsets.only(left: 20),
+                padding: EdgeInsets.only(left: 10),
                 child: Stack(
                   children: [
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          '(${data.empNumber}) ${data.empName}',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 18),
+                        Padding(
+                          padding: EdgeInsets.only(right: 35),
+                          child: AutoSizeText(
+                            '(${data.empNumber}) ${data.empName}',
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 18),
+                            maxLines: 1,
+                            minFontSize: 8,
+                            maxFontSize: 18,
+                          ),
                         ),
-                        textSpan(
-                          hintColor: Colors.grey,
-                          textColor: Colors.black54,
-                          hint: 'attendance_dashboard_team_item_dept'.tr,
-                          text: data.deptName ?? '',
-                          isBold: false,
+                        Padding(
+                          padding: EdgeInsets.only(right: 35),
+                          child: textSpan(
+                            hintColor: Colors.grey,
+                            textColor: Colors.black54,
+                            hint: 'attendance_dashboard_team_item_dept'.tr,
+                            text: data.deptName ?? '',
+                            maxLines: 2,
+                            isBold: false,
+                          ),
                         ),
                         textSpan(
                           hintColor: Colors.grey,
@@ -239,6 +250,7 @@ class AttendanceDashboardItem extends StatefulWidget {
 
 class _AttendanceDashboardItemState extends State<AttendanceDashboardItem>
     with SingleTickerProviderStateMixin {
+
   late final AnimationController animationController = AnimationController(
     duration: const Duration(milliseconds: 300),
     vsync: this,
