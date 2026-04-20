@@ -148,8 +148,8 @@ class HomeLogic extends GetxController {
     }
     // list.add(
     //   HomeButton(
-    //     name: '考勤总览',
-    //     description: '员工考勤明细总览',
+    //     name: '我的团队',
+    //     description: '团队及考勤明细总览',
     //     icon: 'https://geapp.goldemperor.com:8084/AppResourceFile/icon/2025-08-13-10-29-45.jpg',
     //     classify: '',
     //     id: 999,

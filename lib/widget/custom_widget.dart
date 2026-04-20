@@ -751,19 +751,34 @@ Widget avatarPhoto(String? url, {double? borderRadius}) {
   return AspectRatio(
     aspectRatio: 1 / 1,
     child: ClipRRect(
-      borderRadius: BorderRadius.circular(borderRadius??7),
+      borderRadius: BorderRadius.circular(borderRadius ?? 7),
       child: url == null
           ? Image.asset(
               'assets/images/ic_logo.png',
               color: Colors.blue,
             )
-          : Image.network(
-              url,
-              fit: BoxFit.fill,
-              errorBuilder: (ctx, err, stackTrace) => Image.asset(
-                'assets/images/ic_logo.png',
-                color: Colors.blue,
-              ),
+          : LayoutBuilder(
+              builder: (context, constraints) {
+                return Image.network(
+                  url,
+                  fit: BoxFit.fill,
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return Container(
+                      color: Colors.grey.shade200,
+                      child: Icon(
+                        Icons.person,
+                        color: Colors.blue.shade300,
+                        size: constraints.maxWidth * 0.6,
+                      ),
+                    );
+                  },
+                  errorBuilder: (ctx, err, stackTrace) => Image.asset(
+                    'assets/images/ic_logo.png',
+                    color: Colors.blue,
+                  ),
+                );
+              },
             ),
     ),
   );

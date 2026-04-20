@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/attendance_dashboard_info.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
+import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/picker/picker_controller.dart';
 import 'package:jd_flutter/widget/picker/picker_view.dart';
@@ -28,12 +29,10 @@ class _AttendanceDashboardPageState extends State<AttendanceDashboardPage>
   late var tabController = TabController(length: 2, vsync: this);
   var pageController = PageController();
   var refreshController = EasyRefreshController(controlFinishRefresh: true);
-  var opcOrganization = OptionsPickerController(PickerType.mesOrganization);
-  var dpAttendanceDay = DatePickerController(
+  var dpcAttendanceDay = DatePickerController(
     PickerType.date,
     lastDate: DateTime.now(),
   );
-  var controller = TextEditingController();
 
   Widget _teamMemberInfoItem(TeamMemberInfo data) => Container(
         margin: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
@@ -55,46 +54,64 @@ class _AttendanceDashboardPageState extends State<AttendanceDashboardPage>
         child: Row(
           children: [
             Expanded(
-                flex: 2, child: avatarPhoto(data.photo, borderRadius: 100)),
+              flex: 2,
+              child: avatarPhoto(data.photo, borderRadius: 100),
+            ),
             Expanded(
               flex: 5,
               child: Padding(
                 padding: EdgeInsets.only(left: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                child: Stack(
                   children: [
-                    Text(
-                      '(${data.empNumber}) ${data.empName}',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '(${data.empNumber}) ${data.empName}',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 18),
+                        ),
+                        textSpan(
+                          hintColor: Colors.grey,
+                          textColor: Colors.black54,
+                          hint: 'attendance_dashboard_team_item_dept'.tr,
+                          text: data.deptName ?? '',
+                          isBold: false,
+                        ),
+                        textSpan(
+                          hintColor: Colors.grey,
+                          textColor: Colors.black54,
+                          hint: 'attendance_dashboard_team_item_duty'.tr,
+                          text: data.dutyName ?? '',
+                          isBold: false,
+                        ),
+                        textSpan(
+                          hintColor: Colors.grey,
+                          textColor: Colors.black54,
+                          hint: 'attendance_dashboard_team_item_begin_data'.tr,
+                          text: data.beginHireDate ?? '',
+                          isBold: false,
+                        ),
+                        textSpan(
+                          hintColor: Colors.grey,
+                          hint: 'attendance_dashboard_team_item_phone'.tr,
+                          text: data.phone ?? '',
+                          isBold: false,
+                        ),
+                      ],
                     ),
-                    textSpan(
-                      hintColor: Colors.grey,
-                      textColor: Colors.black54,
-                      hint: '部门：',
-                      text: data.deptName ?? '',
-                      isBold: false,
-                    ),
-                    textSpan(
-                      hintColor: Colors.grey,
-                      textColor: Colors.black54,
-                      hint: '职务：',
-                      text: data.dutyName ?? '',
-                      isBold: false,
-                    ),
-                    textSpan(
-                      hintColor: Colors.grey,
-                      textColor: Colors.black54,
-                      hint: '入职日期：',
-                      text: data.beginHireDate ?? '',
-                      isBold: false,
-                    ),
-                    textSpan(
-                      hintColor: Colors.grey,
-                      hint: '联系电话：',
-                      text: data.phone ?? '',
-                      isBold: false,
-                    ),
+                    if (!data.phone.isNullOrEmpty())
+                      Positioned(
+                        right: 0,
+                        top: 0,
+                        child: IconButton(
+                          onPressed: () => makePhoneCall(data.phone!),
+                          icon: Icon(
+                            Icons.phone_forwarded_rounded,
+                            color: Colors.blue,
+                          ),
+                        ),
+                      ),
                   ],
                 ),
               ),
@@ -102,6 +119,20 @@ class _AttendanceDashboardPageState extends State<AttendanceDashboardPage>
           ],
         ),
       );
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ever(state.searchTeamMemberText, (v) => logic.searchTeamMember(v));
+      dpcAttendanceDay.onSelected = (v) => logic.getAttendanceDashboard(
+            date: getDateYMD(time: v),
+            success: () => refreshController.finishRefresh(),
+            error: () => refreshController.finishRefresh(),
+          );
+      refreshController.callRefresh();
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -115,32 +146,35 @@ class _AttendanceDashboardPageState extends State<AttendanceDashboardPage>
             unselectedLabelColor: Colors.grey,
             overlayColor: WidgetStateProperty.all(Colors.transparent),
             controller: tabController,
-            tabs: const [Tab(text: '考勤'), Tab(text: '信息')],
+            tabs: [
+              Tab(text: 'attendance_dashboard_tab_attendance'.tr),
+              Tab(text: 'attendance_dashboard_tab_team'.tr),
+            ],
             onTap: (i) => pageController.jumpToPage(i),
           ),
           Expanded(
             child: PageView(
               controller: pageController,
-              onPageChanged: (i) => tabController.animateTo(i),
+              onPageChanged: (i) {
+                tabController.animateTo(i);
+                if (pageController.page == 1 &&
+                    state.teamMemberDataList.isEmpty) {
+                  logic.getTeamMemberList();
+                }
+              },
               scrollDirection: Axis.horizontal,
               children: [
                 Column(
                   children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child:
-                              OptionsPicker(pickerController: opcOrganization),
-                        ),
-                        DatePicker(pickerController: dpAttendanceDay),
-                      ],
-                    ),
+                    DatePicker(pickerController: dpcAttendanceDay),
                     Expanded(
                       child: Obx(() => EasyRefresh(
                             controller: refreshController,
                             header: const MaterialHeader(),
-                            onRefresh: () => logic.refreshAttendanceData(
-                              refresh: () => refreshController.finishRefresh(),
+                            onRefresh: () => logic.getAttendanceDashboard(
+                              date: dpcAttendanceDay.getDateFormatYMD(),
+                              success: () => refreshController.finishRefresh(),
+                              error: () => refreshController.finishRefresh(),
                             ),
                             child: ListView.builder(
                               padding: const EdgeInsets.all(8),
@@ -156,26 +190,24 @@ class _AttendanceDashboardPageState extends State<AttendanceDashboardPage>
                 Column(
                   children: [
                     Padding(
-                      padding: EdgeInsets.all(5),
+                      padding: EdgeInsets.all(10),
                       child: CupertinoSearchTextField(
-                        controller: controller,
                         prefixIcon: const SizedBox.shrink(),
                         suffixIcon: const Icon(CupertinoIcons.search),
                         decoration: BoxDecoration(
-                          color: Colors.grey.shade300,
+                          color: Colors.white,
                           borderRadius: BorderRadius.circular(20),
                         ),
-                        onSuffixTap: () {
-                          // logic.getMoNoReport(commandNumber: controller.text, goPage: false);
-                        },
-                        placeholder: '请输入员工姓名',
+                        onChanged: (text) =>
+                            state.searchTeamMemberText.value = text,
+                        placeholder: 'attendance_dashboard_search_hint'.tr,
                       ),
                     ),
                     Expanded(
                       child: Obx(() => ListView.builder(
-                            itemCount: state.teamMemberDataList.length,
+                            itemCount: state.teamMemberShowList.length,
                             itemBuilder: (c, i) => _teamMemberInfoItem(
-                                state.teamMemberDataList[i]),
+                                state.teamMemberShowList[i]),
                           )),
                     ),
                   ],
@@ -304,15 +336,15 @@ class _AttendanceDashboardItemState extends State<AttendanceDashboardItem>
         children: [
           _itemCard(
             widget.data.lateOrEarlyCount.toString(),
-            '迟到',
+            'attendance_dashboard_late'.tr,
           ),
           _itemCard(
             widget.data.leaveTotal.toShowString(),
-            '请假',
+            'attendance_dashboard_leave'.tr,
           ),
           _itemCard(
             widget.data.publicHoliday.toShowString(),
-            '公休',
+            'attendance_dashboard_day_off'.tr,
           ),
         ],
       ),
@@ -336,27 +368,27 @@ class _AttendanceDashboardItemState extends State<AttendanceDashboardItem>
         children: [
           _itemCard(
             widget.data.casualLeave.toShowString(),
-            '事假',
+            'attendance_dashboard_personal_leave'.tr,
           ),
           _itemCard(
             widget.data.sickLeave.toShowString(),
-            '病假',
+            'attendance_dashboard_sick_leave'.tr,
           ),
           _itemCard(
             widget.data.workInjury.toShowString(),
-            '工伤',
+            'attendance_dashboard_work_injury'.tr,
           ),
           _itemCard(
             widget.data.marriageLeave.toShowString(),
-            '婚假',
+            'attendance_dashboard_marriage_leave'.tr,
           ),
           _itemCard(
             widget.data.maternityLeave.toShowString(),
-            '产假',
+            'attendance_dashboard_maternity_leave'.tr,
           ),
           _itemCard(
             widget.data.funeralLeave.toShowString(),
-            '丧假',
+            'attendance_dashboard_bereavement_leave'.tr,
           ),
         ],
       ),
@@ -399,7 +431,7 @@ class _AttendanceDashboardItemState extends State<AttendanceDashboardItem>
                   style: const TextStyle(
                       fontSize: 24, fontWeight: FontWeight.bold),
                 ),
-                Text('总人数', style: tsSmallLightGrey),
+                Text('attendance_dashboard_total'.tr, style: tsSmallLightGrey),
                 SizedBox(height: 2),
               ]),
               Expanded(
@@ -414,7 +446,8 @@ class _AttendanceDashboardItemState extends State<AttendanceDashboardItem>
                   style: const TextStyle(
                       fontSize: 24, fontWeight: FontWeight.bold),
                 ),
-                Text('出勤数', style: tsSmallLightGrey),
+                Text('attendance_dashboard_attendance'.tr,
+                    style: tsSmallLightGrey),
                 SizedBox(height: 2),
               ])
             ],

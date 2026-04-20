@@ -22,6 +22,7 @@ const String spSaveLoginTypeMachine = 'login_type_machine';
 const String spSaveLoginTypeFeiShu = 'login_type_fei_shu';
 const String spSaveMesBaseUrl = 'mes_base_url';
 const String spSaveSapBaseUrl = 'sap_base_url';
+const String spSaveSpringBootBaseUrl = 'spring_boot_base_url';
 const String channelBluetoothFlutterToAndroid = 'channel_bluetooth_flutter_to_android';
 const String channelBluetoothAndroidToFlutter = 'channel_bluetooth_android_to_flutter';
 const String channelUsbFlutterToAndroid = 'channel_usb_flutter_to_android';
