@@ -1088,8 +1088,9 @@ class StuffQualityInspectionLogic extends GetxController {
             if (pic.typeAdd != '0') {'Photo': pic.photo}
         ],
         //图片
-        'SupplierNumber': state.detailInfo!.supplierNumber
-        //供应商编号
+        'SupplierNumber': state.detailInfo!.supplierNumber,
+        //入库确认人
+        'StockInConfirmer':state.detailInfo!.producerNumber,
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
