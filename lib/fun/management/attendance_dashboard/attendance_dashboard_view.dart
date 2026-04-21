@@ -37,7 +37,7 @@ class _AttendanceDashboardPageState extends State<AttendanceDashboardPage>
 
   Widget _teamMemberInfoItem(TeamMemberInfo data) => Container(
         margin: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
-        padding: EdgeInsets.only(left: 10, top: 10, bottom: 10),
+        padding: EdgeInsets.only(left: 10, top: 5, bottom: 5),
         width: double.infinity,
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -55,11 +55,11 @@ class _AttendanceDashboardPageState extends State<AttendanceDashboardPage>
         child: Row(
           children: [
             Expanded(
-              flex: 2,
+              flex: 1,
               child: avatarPhoto(data.photo, borderRadius: 100),
             ),
             Expanded(
-              flex: 5,
+              flex: 3,
               child: Padding(
                 padding: EdgeInsets.only(left: 10),
                 child: Stack(
@@ -252,7 +252,7 @@ class _AttendanceDashboardItemState extends State<AttendanceDashboardItem>
     with SingleTickerProviderStateMixin {
 
   late final AnimationController animationController = AnimationController(
-    duration: const Duration(milliseconds: 300),
+    duration: const Duration(milliseconds: 200),
     vsync: this,
     value: 0,
   );
@@ -308,104 +308,31 @@ class _AttendanceDashboardItemState extends State<AttendanceDashboardItem>
     );
   }
 
-  Widget _itemCard(String text1, String text2) => Expanded(
-        child: Container(
-          padding: EdgeInsets.all(5),
-          margin: EdgeInsets.all(5),
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [Colors.white, Colors.blue.shade50],
-            ),
-            borderRadius: BorderRadius.circular(7),
+  Widget _itemCard(String text1, String text2) {
+    return Expanded(
+      child: Container(
+        padding: EdgeInsets.all(5),
+        margin: EdgeInsets.all(5),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Colors.white, Colors.blue.shade50],
           ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(text1),
-              Text(text2, style: tsSmallLightGrey),
-            ],
-          ),
+          borderRadius: BorderRadius.circular(7),
         ),
-      );
-  late var cardList1 = SlideTransition(
-    position: Tween<Offset>(
-      begin: const Offset(-1, 0),
-      end: Offset.zero,
-    ).animate(CurvedAnimation(
-      parent: ReverseAnimation(animationController),
-      curve: Curves.easeInOut,
-    )),
-    child: SizeTransition(
-      sizeFactor: CurvedAnimation(
-        parent: ReverseAnimation(animationController),
-        curve: Curves.easeInOut,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(text1),
+            Text(text2, style: tsSmallLightGrey),
+          ],
+        ),
       ),
-      axisAlignment: -1,
-      axis: Axis.horizontal,
-      child: Row(
-        children: [
-          _itemCard(
-            widget.data.lateOrEarlyCount.toString(),
-            'attendance_dashboard_late'.tr,
-          ),
-          _itemCard(
-            widget.data.leaveTotal.toShowString(),
-            'attendance_dashboard_leave'.tr,
-          ),
-          _itemCard(
-            widget.data.publicHoliday.toShowString(),
-            'attendance_dashboard_day_off'.tr,
-          ),
-        ],
-      ),
-    ),
-  );
+    );
+  }
 
-  late var cardList2 = SlideTransition(
-    position: Tween<Offset>(
-      begin: const Offset(1, 0),
-      end: Offset.zero,
-    ).animate(CurvedAnimation(
-      parent: animationController,
-      curve: Curves.easeInOut,
-    )),
-    child: SizeTransition(
-      sizeFactor:
-          animationController.drive(CurveTween(curve: Curves.easeInOut)),
-      axisAlignment: -1,
-      axis: Axis.horizontal,
-      child: Row(
-        children: [
-          _itemCard(
-            widget.data.casualLeave.toShowString(),
-            'attendance_dashboard_personal_leave'.tr,
-          ),
-          _itemCard(
-            widget.data.sickLeave.toShowString(),
-            'attendance_dashboard_sick_leave'.tr,
-          ),
-          _itemCard(
-            widget.data.workInjury.toShowString(),
-            'attendance_dashboard_work_injury'.tr,
-          ),
-          _itemCard(
-            widget.data.marriageLeave.toShowString(),
-            'attendance_dashboard_marriage_leave'.tr,
-          ),
-          _itemCard(
-            widget.data.maternityLeave.toShowString(),
-            'attendance_dashboard_maternity_leave'.tr,
-          ),
-          _itemCard(
-            widget.data.funeralLeave.toShowString(),
-            'attendance_dashboard_bereavement_leave'.tr,
-          ),
-        ],
-      ),
-    ),
-  );
+
 
   @override
   void dispose() {
@@ -415,90 +342,163 @@ class _AttendanceDashboardItemState extends State<AttendanceDashboardItem>
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.all(10),
-      width: double.infinity,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [Colors.blue.shade50, Colors.white],
-        ),
-        borderRadius: BorderRadius.circular(7),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            widget.data.departmentName ?? '',
-            style: const TextStyle(fontWeight: FontWeight.bold),
+    return AnimatedBuilder(
+      animation: animationController,
+      builder: (context, child) {
+        return Container(
+          margin: const EdgeInsets.only(bottom: 10),
+          padding: const EdgeInsets.all(10),
+          width: double.infinity,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [Colors.blue.shade50, Colors.white],
+            ),
+            borderRadius: BorderRadius.circular(7),
           ),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: [
-              Column(children: [
-                Text(
-                  widget.data.totalEmployees.toString(),
-                  style: const TextStyle(
-                      fontSize: 24, fontWeight: FontWeight.bold),
-                ),
-                Text('attendance_dashboard_total'.tr, style: tsSmallLightGrey),
-                SizedBox(height: 2),
-              ]),
-              Expanded(
-                child: _percentProgress(
-                  max: widget.data.totalEmployees!.toDouble(),
-                  value: widget.data.attendanceCount!.toDouble(),
-                ),
+              Text(
+                widget.data.departmentName ?? '',
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
-              Column(children: [
-                Text(
-                  widget.data.attendanceCount.toString(),
-                  style: const TextStyle(
-                      fontSize: 24, fontWeight: FontWeight.bold),
-                ),
-                Text('attendance_dashboard_attendance'.tr,
-                    style: tsSmallLightGrey),
-                SizedBox(height: 2),
-              ])
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Column(children: [
+                    Text(
+                      widget.data.totalEmployees.toString(),
+                      style: const TextStyle(
+                          fontSize: 24, fontWeight: FontWeight.bold),
+                    ),
+                    Text('attendance_dashboard_total'.tr,
+                        style: tsSmallLightGrey),
+                    SizedBox(height: 2),
+                  ]),
+                  Expanded(
+                    child: _percentProgress(
+                      max: widget.data.totalEmployees!.toDouble(),
+                      value: widget.data.attendanceCount!.toDouble(),
+                    ),
+                  ),
+                  Column(children: [
+                    Text(
+                      widget.data.attendanceCount.toString(),
+                      style: const TextStyle(
+                          fontSize: 24, fontWeight: FontWeight.bold),
+                    ),
+                    Text('attendance_dashboard_attendance'.tr,
+                        style: tsSmallLightGrey),
+                    SizedBox(height: 2),
+                  ])
+                ],
+              ),
+              SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Row(
+                          children: [
+                            _itemCard(
+                              widget.data.lateOrEarlyCount.toString(),
+                              'attendance_dashboard_late'.tr,
+                            ),
+                            _itemCard(
+                              widget.data.leaveTotal.toShowString(),
+                              'attendance_dashboard_leave'.tr,
+                            ),
+                            _itemCard(
+                              widget.data.publicHoliday.toShowString(),
+                              'attendance_dashboard_day_off'.tr,
+                            ),
+                          ],
+                        ),
+                        SlideTransition(
+                          position: Tween<Offset>(
+                            begin: const Offset(0, -0.5),
+                            end: Offset.zero,
+                          ).animate(CurvedAnimation(
+                            parent: animationController,
+                            curve: Curves.easeInOut,
+                          )),
+                          child: SizeTransition(
+                            sizeFactor:
+                            animationController.drive(CurveTween(curve: Curves.easeInOut)),
+                            axisAlignment: -1,
+                            axis: Axis.vertical,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Row(
+                                  children: [
+                                    _itemCard(
+                                      widget.data.casualLeave.toShowString(),
+                                      'attendance_dashboard_personal_leave'.tr,
+                                    ),
+                                    _itemCard(
+                                      widget.data.sickLeave.toShowString(),
+                                      'attendance_dashboard_sick_leave'.tr,
+                                    ),
+                                    _itemCard(
+                                      widget.data.workInjury.toShowString(),
+                                      'attendance_dashboard_work_injury'.tr,
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    _itemCard(
+                                      widget.data.marriageLeave.toShowString(),
+                                      'attendance_dashboard_marriage_leave'.tr,
+                                    ),
+                                    _itemCard(
+                                      widget.data.maternityLeave.toShowString(),
+                                      'attendance_dashboard_maternity_leave'.tr,
+                                    ),
+                                    _itemCard(
+                                      widget.data.funeralLeave.toShowString(),
+                                      'attendance_dashboard_bereavement_leave'.tr,
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  RotationTransition(
+                    turns: animation,
+                    child: IconButton(
+                      onPressed: () {
+                        if (animationController.status ==
+                            AnimationStatus.completed) {
+                          animationController.reverse();
+                        } else {
+                          animationController.forward();
+                        }
+                      },
+                      icon: Icon(
+                        Icons.keyboard_arrow_down_rounded,
+                        color: Colors.blue,
+                      ),
+                    ),
+                  ),
+                ],
+              )
             ],
           ),
-          SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Expanded(
-                child: ClipRect(
-                  child: Stack(
-                    children: [
-                      cardList1,
-                      cardList2,
-                    ],
-                  ),
-                ),
-              ),
-              RotationTransition(
-                turns: animation,
-                child: IconButton(
-                  onPressed: () {
-                    if (animationController.status ==
-                        AnimationStatus.completed) {
-                      animationController.reverse();
-                    } else {
-                      animationController.forward();
-                    }
-                  },
-                  icon: Icon(
-                    Icons.arrow_forward_ios_rounded,
-                    color: Colors.blue,
-                  ),
-                ),
-              ),
-            ],
-          )
-        ],
-      ),
+        );
+      },
     );
   }
 }
