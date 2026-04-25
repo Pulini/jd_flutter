@@ -322,7 +322,7 @@ class RouteConfig {
   //sap喷漆领料
   static Routes sapPrintPicking = Routes(
     '/sap_print_picking',
-    201,
+    202,
     const SapPrintPickingPage(),
   );
 
