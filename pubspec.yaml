@@ -64,6 +64,8 @@ dependencies:
   image: ^4.5.4
   #图片预览
   photo_view: ^0.15.0
+  #相机（视频流识别）
+  camera: ^0.11.3
   #获取app基础信息
   package_info_plus: ^9.0.0
   #获取设备信息
@@ -114,8 +116,6 @@ dependencies:
   mqtt_client: ^10.11.1
   #轮播侧滑控件
   card_swiper: ^3.0.1
-  #相机工具
-  camera: ^0.11.3
   #全局返回键监听
   back_button_interceptor: ^8.0.4
   #PDF生成工具
@@ -130,6 +130,8 @@ dependencies:
   wifi_iot: ^0.3.19+2
   #检查wifi连接状态
   connectivity_plus: ^7.0.0
+  #OCR文本识别
+  google_mlkit_text_recognition: ^0.13.0
 
 dev_dependencies:
   flutter_test:

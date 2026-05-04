@@ -7,7 +7,7 @@ import 'package:jd_flutter/widget/worker_check_widget.dart';
 void checkWorkerDialog({
   required String msg,
   required void Function(WorkerInfo) success,
-}){
+}) {
   WorkerInfo? worker;
   Get.dialog(
     PopScope(
@@ -19,7 +19,11 @@ void checkWorkerDialog({
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                textSpan(hint: 'part_cross_docking_tips'.tr, text: msg),
+                textSpan(
+                  hint: 'part_cross_docking_tips'.tr,
+                  text: msg,
+                  maxLines: 10,
+                ),
                 WorkerCheck(
                   hint: 'part_cross_docking_worker_number_hint'.tr,
                   onChanged: (v) => worker = v,
@@ -30,9 +34,10 @@ void checkWorkerDialog({
           actions: [
             TextButton(
               onPressed: () {
-                if(worker==null){
-                  showSnackBar(message: 'part_cross_docking_worker_number_hint'.tr);
-                }else{
+                if (worker == null) {
+                  showSnackBar(
+                      message: 'part_cross_docking_worker_number_hint'.tr);
+                } else {
                   success.call(worker!);
                 }
               },

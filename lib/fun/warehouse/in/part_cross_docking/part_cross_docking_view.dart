@@ -22,7 +22,7 @@ class PartCrossDockingPage extends StatefulWidget {
 class _PartCrossDockingPageState extends State<PartCrossDockingPage> {
   final PartCrossDockingLogic logic = Get.put(PartCrossDockingLogic());
   final PartCrossDockingState state = Get.find<PartCrossDockingLogic>().state;
-  var inputController = TextEditingController();
+  var inputController = TextEditingController(text: '647FCA96-9E24-4791-9236-F1B7C4577F6C');
   var refreshController = EasyRefreshController(controlFinishRefresh: true);
 
   void manuallyAdd() {
