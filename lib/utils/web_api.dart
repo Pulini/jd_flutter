@@ -1636,3 +1636,6 @@ const webApiGetAttendanceRecord = 'api/humanResources/getAttendanceRecord';
 //获取团队成员信息
 const webApiGetTeamMemberInfo = 'api/humanResources/getTeamMemberInfo';
 
+//提交图片进行视觉识别服务
+const webApiArkImageServer = 'api/shared/AI/arkImageServer';
+

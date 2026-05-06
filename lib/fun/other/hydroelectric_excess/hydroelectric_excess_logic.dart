@@ -1,8 +1,10 @@
+import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/device_detail_info.dart';
 import 'package:jd_flutter/bean/http/response/device_list_info.dart';
 import 'package:jd_flutter/fun/other/hydroelectric_excess/hydroelectric_excess_state.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
+import 'package:jd_flutter/widget/camera_crop_page.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 
 class HydroelectricExcessLogic extends GetxController {
@@ -40,11 +42,11 @@ class HydroelectricExcessLogic extends GetxController {
   }
 
   void searchRoom({
-    required String  searchType,
+    required String searchType,
     required DeviceListInfo data,
     required bool isBack,
-     Function(String, String)? refresh,
-     Function()? setRoom,
+    Function(String, String)? refresh,
+    Function()? setRoom,
   }) {
     state.searchRoom(
       type: searchType,
@@ -69,5 +71,21 @@ class HydroelectricExcessLogic extends GetxController {
       deviceNumber: deviceNumber,
       bedNumber: bedNumber,
     );
+  }
+
+  void arkSendImage(Function(String) success) {
+    Get.to(() => CameraCropPage())?.then((image) {
+      if (image != null) {
+        cameraCropResultDialog(
+          imageBytes: image,
+          retake: () => arkSendImage(success),
+          identify: () => state.arkSendImage(
+            base64Image: base64Encode(image),
+            success: success,
+            error: (msg) => errorDialog(content: msg),
+          ),
+        );
+      }
+    });
   }
 }

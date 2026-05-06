@@ -93,4 +93,25 @@ class HydroelectricExcessState {
       });
     }
   }
+
+  void arkSendImage({
+    required String base64Image,
+    required Function(String) success,
+    required Function(String msg) error,
+  }) {
+    springBootPost(
+      method: webApiArkImageServer,
+      loading: '识别中...',
+      body:{
+        'imageBase64': 'data:image/png;base64,$base64Image',
+        'text': '读取图中电表的水电表的度数，只返回数值。',
+      }
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        success.call(response.data);
+      }else {
+        error.call(response.message ?? '');
+      }
+    });
+  }
 }
