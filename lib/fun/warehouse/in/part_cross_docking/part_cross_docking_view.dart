@@ -95,10 +95,13 @@ class _PartCrossDockingPageState extends State<PartCrossDockingPage> {
         child: Column(
           children: [
             TextField(
+              maxLines: 1,
+              minLines: 1,
               onSubmitted: (value) => manuallyAdd(),
-              keyboardType: TextInputType.number,
+              keyboardType: TextInputType.text,
+              textInputAction: TextInputAction.done,
               inputFormatters: [
-                FilteringTextInputFormatter.allow(RegExp("[0-9.]"))
+                FilteringTextInputFormatter.deny(RegExp(r'[\n\r\s]')),
               ],
               controller: inputController,
               decoration: InputDecoration(

@@ -81,7 +81,7 @@ class PartCrossDockingLogic extends GetxController {
             .toList();
         for (var barCode in matchedCodes) {
           barCode.isHave = true;
-          message += '${barCode.code},\n';
+          message += '\n${barCode.code}';
         }
         if (message.isNotEmpty) {
           success.call('part_cross_docking_not_report_tips'.trArgs([message]));
@@ -112,6 +112,7 @@ class PartCrossDockingLogic extends GetxController {
               state.submitBarCode(
                 worker: worker.empCode ?? '',
                 success: (msg) {
+                  Get.back();
                   clearBarCodeList();
                   successDialog(content: msg);
                 },

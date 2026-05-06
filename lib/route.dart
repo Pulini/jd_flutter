@@ -322,7 +322,7 @@ class RouteConfig {
   //sap喷漆领料
   static Routes sapPrintPicking = Routes(
     '/sap_print_picking',
-    201,
+    202,
     const SapPrintPickingPage(),
   );
 
@@ -434,7 +434,7 @@ class RouteConfig {
   //部件越库
   static Routes partCrossDocking = Routes(
     '/part_cross_docking',
-    201,
+    203,
     const PartCrossDockingPage(),
   );
 

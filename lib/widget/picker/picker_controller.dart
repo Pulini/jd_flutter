@@ -1001,8 +1001,8 @@ class DatePickerController extends PickerController {
       DateTime.now().year, DateTime.now().month, DateTime.now().day + 7);
   final String? buttonName;
   int initDate;
-  final Function(DateTime)? onChanged;
-  final Function(DateTime)? onSelected;
+   Function(DateTime)? onChanged;
+   Function(DateTime)? onSelected;
 
   DatePickerController(
     super.pickerType, {

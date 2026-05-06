@@ -876,5 +876,42 @@ BaseUrl getSapBaseUrl(){
     return BaseUrl.values.firstWhere((v) => v.value==save);
   }
 }
+BaseUrl getSpringBootBaseUrl(){
+  var save=spGet(spSaveSpringBootBaseUrl);
+  if(save==null||save==''){
+    return BaseUrl.baseUrlSpringBoot;
+  }else {
+    return BaseUrl.values.firstWhere((v) => v.value==save);
+  }
+}
+
 bool isPad()=> MediaQuery.of(Get.overlayContext!).size.width >= 600;
 
+Future<void> makePhoneCall(String phoneNumber) async {
+  final Uri launchUri = Uri(
+    scheme: 'tel',
+    path: phoneNumber,
+  );
+
+  try {
+    if (await canLaunchUrl(launchUri)) {
+      await launchUrl(launchUri);
+    } else {
+      Get.snackbar(
+        'dialog_default_title_information'.tr,
+        'attendance_dashboard_phone_call_failed'.tr,
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.orange,
+        colorText: Colors.white,
+      );
+    }
+  } catch (e) {
+    Get.snackbar(
+      'dialog_default_title_error'.tr,
+      'attendance_dashboard_phone_call_failed_with_code'.trArgs([e.toString()]),
+      snackPosition: SnackPosition.BOTTOM,
+      backgroundColor: Colors.red,
+      colorText: Colors.white,
+    );
+  }
+}

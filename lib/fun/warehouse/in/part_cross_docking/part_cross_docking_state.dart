@@ -96,7 +96,7 @@ class PartCrossDockingState {
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
-        success.call(response.data);
+        success.call(response.message??'');
       } else {
         error.call(response.message ?? 'query_default_error'.tr);
       }

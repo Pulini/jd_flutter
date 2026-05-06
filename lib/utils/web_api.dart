@@ -33,6 +33,8 @@ enum BaseUrl {
   ///MES正式库
   baseUrlMes('MES正式库', 'https://geapp.goldemperor.com:1226/', 'MES'),
 
+  baseUrlSpringBoot('Spring Boot正式库', 'https://geapp.goldemperor.com:1299/', 'Spring Boot'),
+
   ///SAP正式库
   // baseUrlSap('SAP正式库', 'https://erpprd01.goldemperor.com:8003/', 'SAP'),
   baseUrlSap('SAP正式库', 'https://webdispatcher.goldemperor.com:8007/', 'SAP'),
@@ -318,6 +320,39 @@ Future<BaseData> sapGet({
       isPost: false,
       method: method,
     );
+
+
+//spring boot post请求
+Future<BaseData> springBootPost({
+  String? loading,
+  required String method,
+  Map<String, dynamic>? params,
+  Object? body,
+}) =>
+    _doHttp(
+      loading: loading,
+      params:params,
+      body: body,
+      baseUrl: getSpringBootBaseUrl().value,
+      isPost: true,
+      method: method,
+    );
+//spring boot get请求
+Future<BaseData> springBootGet({
+  String? loading,
+  required String method,
+  Map<String, dynamic>? params,
+  Object? body,
+}) =>
+    _doHttp(
+      loading: loading,
+      params: params,
+      body: body,
+      baseUrl: getSpringBootBaseUrl().value,
+      isPost: false,
+      method: method,
+    );
+
 
 //网络测试接口
 const webApiLNetTest = 'api/Public/NetTest';
@@ -1594,3 +1629,10 @@ const webApiSapGetPickingMaterial = 'sap/zapp/ZFUN_APP_JC05';
 
 //获取条码明细
 const webApiSapGetPickingMaterialDetail = 'sap/zapp/ZFUN_APP_JC06';
+
+//获取考勤记录
+const webApiGetAttendanceRecord = 'api/humanResources/getAttendanceRecord';
+
+//获取团队成员信息
+const webApiGetTeamMemberInfo = 'api/humanResources/getTeamMemberInfo';
+

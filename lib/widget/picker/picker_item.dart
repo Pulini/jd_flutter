@@ -256,7 +256,7 @@ class PickerMesOrganization extends PickerItem {
 
   @override
   String pickerId() {
-    return number ?? '';
+    return itemId.toString();
   }
 
   @override

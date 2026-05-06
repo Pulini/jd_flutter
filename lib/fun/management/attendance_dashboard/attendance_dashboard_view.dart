@@ -1,9 +1,11 @@
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_auto_size_text/flutter_auto_size_text.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/attendance_dashboard_info.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
+import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/picker/picker_controller.dart';
 import 'package:jd_flutter/widget/picker/picker_view.dart';
@@ -28,16 +30,14 @@ class _AttendanceDashboardPageState extends State<AttendanceDashboardPage>
   late var tabController = TabController(length: 2, vsync: this);
   var pageController = PageController();
   var refreshController = EasyRefreshController(controlFinishRefresh: true);
-  var opcOrganization = OptionsPickerController(PickerType.mesOrganization);
-  var dpAttendanceDay = DatePickerController(
+  var dpcAttendanceDay = DatePickerController(
     PickerType.date,
     lastDate: DateTime.now(),
   );
-  var controller = TextEditingController();
 
   Widget _teamMemberInfoItem(TeamMemberInfo data) => Container(
         margin: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
-        padding: const EdgeInsets.all(10),
+        padding: EdgeInsets.only(left: 10, top: 5, bottom: 5),
         width: double.infinity,
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -55,46 +55,74 @@ class _AttendanceDashboardPageState extends State<AttendanceDashboardPage>
         child: Row(
           children: [
             Expanded(
-                flex: 2, child: avatarPhoto(data.photo, borderRadius: 100)),
+              flex: 1,
+              child: avatarPhoto(data.photo, borderRadius: 100),
+            ),
             Expanded(
-              flex: 5,
+              flex: 3,
               child: Padding(
-                padding: EdgeInsets.only(left: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                padding: EdgeInsets.only(left: 10),
+                child: Stack(
                   children: [
-                    Text(
-                      '(${data.empNumber}) ${data.empName}',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(right: 35),
+                          child: AutoSizeText(
+                            '(${data.empNumber}) ${data.empName}',
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 18),
+                            maxLines: 1,
+                            minFontSize: 8,
+                            maxFontSize: 18,
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(right: 35),
+                          child: textSpan(
+                            hintColor: Colors.grey,
+                            textColor: Colors.black54,
+                            hint: 'attendance_dashboard_team_item_dept'.tr,
+                            text: data.deptName ?? '',
+                            maxLines: 2,
+                            isBold: false,
+                          ),
+                        ),
+                        textSpan(
+                          hintColor: Colors.grey,
+                          textColor: Colors.black54,
+                          hint: 'attendance_dashboard_team_item_duty'.tr,
+                          text: data.dutyName ?? '',
+                          isBold: false,
+                        ),
+                        textSpan(
+                          hintColor: Colors.grey,
+                          textColor: Colors.black54,
+                          hint: 'attendance_dashboard_team_item_begin_data'.tr,
+                          text: data.beginHireDate ?? '',
+                          isBold: false,
+                        ),
+                        textSpan(
+                          hintColor: Colors.grey,
+                          hint: 'attendance_dashboard_team_item_phone'.tr,
+                          text: data.phone ?? '',
+                          isBold: false,
+                        ),
+                      ],
                     ),
-                    textSpan(
-                      hintColor: Colors.grey,
-                      textColor: Colors.black54,
-                      hint: '部门：',
-                      text: data.deptName ?? '',
-                      isBold: false,
-                    ),
-                    textSpan(
-                      hintColor: Colors.grey,
-                      textColor: Colors.black54,
-                      hint: '职务：',
-                      text: data.dutyName ?? '',
-                      isBold: false,
-                    ),
-                    textSpan(
-                      hintColor: Colors.grey,
-                      textColor: Colors.black54,
-                      hint: '入职日期：',
-                      text: data.beginHireDate ?? '',
-                      isBold: false,
-                    ),
-                    textSpan(
-                      hintColor: Colors.grey,
-                      hint: '联系电话：',
-                      text: data.phone ?? '',
-                      isBold: false,
-                    ),
+                    if (!data.phone.isNullOrEmpty())
+                      Positioned(
+                        right: 0,
+                        top: 0,
+                        child: IconButton(
+                          onPressed: () => makePhoneCall(data.phone!),
+                          icon: Icon(
+                            Icons.phone_forwarded_rounded,
+                            color: Colors.blue,
+                          ),
+                        ),
+                      ),
                   ],
                 ),
               ),
@@ -102,6 +130,20 @@ class _AttendanceDashboardPageState extends State<AttendanceDashboardPage>
           ],
         ),
       );
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ever(state.searchTeamMemberText, (v) => logic.searchTeamMember(v));
+      dpcAttendanceDay.onSelected = (v) => logic.getAttendanceDashboard(
+            date: getDateYMD(time: v),
+            success: () => refreshController.finishRefresh(),
+            error: () => refreshController.finishRefresh(),
+          );
+      refreshController.callRefresh();
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -115,32 +157,35 @@ class _AttendanceDashboardPageState extends State<AttendanceDashboardPage>
             unselectedLabelColor: Colors.grey,
             overlayColor: WidgetStateProperty.all(Colors.transparent),
             controller: tabController,
-            tabs: const [Tab(text: '考勤'), Tab(text: '信息')],
+            tabs: [
+              Tab(text: 'attendance_dashboard_tab_attendance'.tr),
+              Tab(text: 'attendance_dashboard_tab_team'.tr),
+            ],
             onTap: (i) => pageController.jumpToPage(i),
           ),
           Expanded(
             child: PageView(
               controller: pageController,
-              onPageChanged: (i) => tabController.animateTo(i),
+              onPageChanged: (i) {
+                tabController.animateTo(i);
+                if (pageController.page == 1 &&
+                    state.teamMemberDataList.isEmpty) {
+                  logic.getTeamMemberList();
+                }
+              },
               scrollDirection: Axis.horizontal,
               children: [
                 Column(
                   children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child:
-                              OptionsPicker(pickerController: opcOrganization),
-                        ),
-                        DatePicker(pickerController: dpAttendanceDay),
-                      ],
-                    ),
+                    DatePicker(pickerController: dpcAttendanceDay),
                     Expanded(
                       child: Obx(() => EasyRefresh(
                             controller: refreshController,
                             header: const MaterialHeader(),
-                            onRefresh: () => logic.refreshAttendanceData(
-                              refresh: () => refreshController.finishRefresh(),
+                            onRefresh: () => logic.getAttendanceDashboard(
+                              date: dpcAttendanceDay.getDateFormatYMD(),
+                              success: () => refreshController.finishRefresh(),
+                              error: () => refreshController.finishRefresh(),
                             ),
                             child: ListView.builder(
                               padding: const EdgeInsets.all(8),
@@ -156,26 +201,24 @@ class _AttendanceDashboardPageState extends State<AttendanceDashboardPage>
                 Column(
                   children: [
                     Padding(
-                      padding: EdgeInsets.all(5),
+                      padding: EdgeInsets.all(10),
                       child: CupertinoSearchTextField(
-                        controller: controller,
                         prefixIcon: const SizedBox.shrink(),
                         suffixIcon: const Icon(CupertinoIcons.search),
                         decoration: BoxDecoration(
-                          color: Colors.grey.shade300,
+                          color: Colors.white,
                           borderRadius: BorderRadius.circular(20),
                         ),
-                        onSuffixTap: () {
-                          // logic.getMoNoReport(commandNumber: controller.text, goPage: false);
-                        },
-                        placeholder: '请输入员工姓名',
+                        onChanged: (text) =>
+                            state.searchTeamMemberText.value = text,
+                        placeholder: 'attendance_dashboard_search_hint'.tr,
                       ),
                     ),
                     Expanded(
                       child: Obx(() => ListView.builder(
-                            itemCount: state.teamMemberDataList.length,
+                            itemCount: state.teamMemberShowList.length,
                             itemBuilder: (c, i) => _teamMemberInfoItem(
-                                state.teamMemberDataList[i]),
+                                state.teamMemberShowList[i]),
                           )),
                     ),
                   ],
@@ -207,8 +250,9 @@ class AttendanceDashboardItem extends StatefulWidget {
 
 class _AttendanceDashboardItemState extends State<AttendanceDashboardItem>
     with SingleTickerProviderStateMixin {
+
   late final AnimationController animationController = AnimationController(
-    duration: const Duration(milliseconds: 300),
+    duration: const Duration(milliseconds: 200),
     vsync: this,
     value: 0,
   );
@@ -264,104 +308,31 @@ class _AttendanceDashboardItemState extends State<AttendanceDashboardItem>
     );
   }
 
-  Widget _itemCard(String text1, String text2) => Expanded(
-        child: Container(
-          padding: EdgeInsets.all(5),
-          margin: EdgeInsets.all(5),
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [Colors.white, Colors.blue.shade50],
-            ),
-            borderRadius: BorderRadius.circular(7),
+  Widget _itemCard(String text1, String text2) {
+    return Expanded(
+      child: Container(
+        padding: EdgeInsets.all(5),
+        margin: EdgeInsets.all(5),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Colors.white, Colors.blue.shade50],
           ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(text1),
-              Text(text2, style: tsSmallLightGrey),
-            ],
-          ),
+          borderRadius: BorderRadius.circular(7),
         ),
-      );
-  late var cardList1 = SlideTransition(
-    position: Tween<Offset>(
-      begin: const Offset(-1, 0),
-      end: Offset.zero,
-    ).animate(CurvedAnimation(
-      parent: ReverseAnimation(animationController),
-      curve: Curves.easeInOut,
-    )),
-    child: SizeTransition(
-      sizeFactor: CurvedAnimation(
-        parent: ReverseAnimation(animationController),
-        curve: Curves.easeInOut,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(text1),
+            Text(text2, style: tsSmallLightGrey),
+          ],
+        ),
       ),
-      axisAlignment: -1,
-      axis: Axis.horizontal,
-      child: Row(
-        children: [
-          _itemCard(
-            widget.data.lateOrEarlyCount.toString(),
-            '迟到',
-          ),
-          _itemCard(
-            widget.data.leaveTotal.toShowString(),
-            '请假',
-          ),
-          _itemCard(
-            widget.data.publicHoliday.toShowString(),
-            '公休',
-          ),
-        ],
-      ),
-    ),
-  );
+    );
+  }
 
-  late var cardList2 = SlideTransition(
-    position: Tween<Offset>(
-      begin: const Offset(1, 0),
-      end: Offset.zero,
-    ).animate(CurvedAnimation(
-      parent: animationController,
-      curve: Curves.easeInOut,
-    )),
-    child: SizeTransition(
-      sizeFactor:
-          animationController.drive(CurveTween(curve: Curves.easeInOut)),
-      axisAlignment: -1,
-      axis: Axis.horizontal,
-      child: Row(
-        children: [
-          _itemCard(
-            widget.data.casualLeave.toShowString(),
-            '事假',
-          ),
-          _itemCard(
-            widget.data.sickLeave.toShowString(),
-            '病假',
-          ),
-          _itemCard(
-            widget.data.workInjury.toShowString(),
-            '工伤',
-          ),
-          _itemCard(
-            widget.data.marriageLeave.toShowString(),
-            '婚假',
-          ),
-          _itemCard(
-            widget.data.maternityLeave.toShowString(),
-            '产假',
-          ),
-          _itemCard(
-            widget.data.funeralLeave.toShowString(),
-            '丧假',
-          ),
-        ],
-      ),
-    ),
-  );
+
 
   @override
   void dispose() {
@@ -371,89 +342,163 @@ class _AttendanceDashboardItemState extends State<AttendanceDashboardItem>
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.all(10),
-      width: double.infinity,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [Colors.blue.shade50, Colors.white],
-        ),
-        borderRadius: BorderRadius.circular(7),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            widget.data.departmentName ?? '',
-            style: const TextStyle(fontWeight: FontWeight.bold),
+    return AnimatedBuilder(
+      animation: animationController,
+      builder: (context, child) {
+        return Container(
+          margin: const EdgeInsets.only(bottom: 10),
+          padding: const EdgeInsets.all(10),
+          width: double.infinity,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [Colors.blue.shade50, Colors.white],
+            ),
+            borderRadius: BorderRadius.circular(7),
           ),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: [
-              Column(children: [
-                Text(
-                  widget.data.totalEmployees.toString(),
-                  style: const TextStyle(
-                      fontSize: 24, fontWeight: FontWeight.bold),
-                ),
-                Text('总人数', style: tsSmallLightGrey),
-                SizedBox(height: 2),
-              ]),
-              Expanded(
-                child: _percentProgress(
-                  max: widget.data.totalEmployees!.toDouble(),
-                  value: widget.data.attendanceCount!.toDouble(),
-                ),
+              Text(
+                widget.data.departmentName ?? '',
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
-              Column(children: [
-                Text(
-                  widget.data.attendanceCount.toString(),
-                  style: const TextStyle(
-                      fontSize: 24, fontWeight: FontWeight.bold),
-                ),
-                Text('出勤数', style: tsSmallLightGrey),
-                SizedBox(height: 2),
-              ])
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Column(children: [
+                    Text(
+                      widget.data.totalEmployees.toString(),
+                      style: const TextStyle(
+                          fontSize: 24, fontWeight: FontWeight.bold),
+                    ),
+                    Text('attendance_dashboard_total'.tr,
+                        style: tsSmallLightGrey),
+                    SizedBox(height: 2),
+                  ]),
+                  Expanded(
+                    child: _percentProgress(
+                      max: widget.data.totalEmployees!.toDouble(),
+                      value: widget.data.attendanceCount!.toDouble(),
+                    ),
+                  ),
+                  Column(children: [
+                    Text(
+                      widget.data.attendanceCount.toString(),
+                      style: const TextStyle(
+                          fontSize: 24, fontWeight: FontWeight.bold),
+                    ),
+                    Text('attendance_dashboard_attendance'.tr,
+                        style: tsSmallLightGrey),
+                    SizedBox(height: 2),
+                  ])
+                ],
+              ),
+              SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Row(
+                          children: [
+                            _itemCard(
+                              widget.data.lateOrEarlyCount.toString(),
+                              'attendance_dashboard_late'.tr,
+                            ),
+                            _itemCard(
+                              widget.data.leaveTotal.toShowString(),
+                              'attendance_dashboard_leave'.tr,
+                            ),
+                            _itemCard(
+                              widget.data.publicHoliday.toShowString(),
+                              'attendance_dashboard_day_off'.tr,
+                            ),
+                          ],
+                        ),
+                        SlideTransition(
+                          position: Tween<Offset>(
+                            begin: const Offset(0, -0.5),
+                            end: Offset.zero,
+                          ).animate(CurvedAnimation(
+                            parent: animationController,
+                            curve: Curves.easeInOut,
+                          )),
+                          child: SizeTransition(
+                            sizeFactor:
+                            animationController.drive(CurveTween(curve: Curves.easeInOut)),
+                            axisAlignment: -1,
+                            axis: Axis.vertical,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Row(
+                                  children: [
+                                    _itemCard(
+                                      widget.data.casualLeave.toShowString(),
+                                      'attendance_dashboard_personal_leave'.tr,
+                                    ),
+                                    _itemCard(
+                                      widget.data.sickLeave.toShowString(),
+                                      'attendance_dashboard_sick_leave'.tr,
+                                    ),
+                                    _itemCard(
+                                      widget.data.workInjury.toShowString(),
+                                      'attendance_dashboard_work_injury'.tr,
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    _itemCard(
+                                      widget.data.marriageLeave.toShowString(),
+                                      'attendance_dashboard_marriage_leave'.tr,
+                                    ),
+                                    _itemCard(
+                                      widget.data.maternityLeave.toShowString(),
+                                      'attendance_dashboard_maternity_leave'.tr,
+                                    ),
+                                    _itemCard(
+                                      widget.data.funeralLeave.toShowString(),
+                                      'attendance_dashboard_bereavement_leave'.tr,
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  RotationTransition(
+                    turns: animation,
+                    child: IconButton(
+                      onPressed: () {
+                        if (animationController.status ==
+                            AnimationStatus.completed) {
+                          animationController.reverse();
+                        } else {
+                          animationController.forward();
+                        }
+                      },
+                      icon: Icon(
+                        Icons.keyboard_arrow_down_rounded,
+                        color: Colors.blue,
+                      ),
+                    ),
+                  ),
+                ],
+              )
             ],
           ),
-          SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Expanded(
-                child: ClipRect(
-                  child: Stack(
-                    children: [
-                      cardList1,
-                      cardList2,
-                    ],
-                  ),
-                ),
-              ),
-              RotationTransition(
-                turns: animation,
-                child: IconButton(
-                  onPressed: () {
-                    if (animationController.status ==
-                        AnimationStatus.completed) {
-                      animationController.reverse();
-                    } else {
-                      animationController.forward();
-                    }
-                  },
-                  icon: Icon(
-                    Icons.arrow_forward_ios_rounded,
-                    color: Colors.blue,
-                  ),
-                ),
-              ),
-            ],
-          )
-        ],
-      ),
+        );
+      },
     );
   }
 }
