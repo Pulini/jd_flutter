@@ -1498,17 +1498,30 @@ class StuffQualityInspectionLogic extends GetxController {
     }
   }
 
-  //全部合格或全部不合格
+//全部合格或全部不合格
   void selectAllUnqualified(bool isAll) {
-    state.labelData.where((data) => data.select).forEach((subData) {
-      if (isAll) {
-        subData.unqualified = subData.boxQty;
-        subData.short = 0;
-      } else {
-        subData.unqualified = 0;
-        subData.short = subData.boxQty;
+    var selectedData = state.labelData.where((data) => data.select);
+    if (selectedData.isNotEmpty) {
+      for (var subData in selectedData) {
+        if (isAll) {
+          subData.unqualified = subData.boxQty;
+          subData.short = 0;
+        } else {
+          subData.unqualified = 0;
+          subData.short = subData.boxQty;
+        }
       }
-    });
+    }else{
+      for (var subData in state.labelData) {
+        if (isAll) {
+          subData.unqualified = subData.boxQty;
+          subData.short = 0;
+        } else {
+          subData.unqualified = 0;
+          subData.short = subData.boxQty;
+        }
+      }
+    }
     refreshLabel();
   }
 
