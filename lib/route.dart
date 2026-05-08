@@ -273,7 +273,7 @@ class RouteConfig {
   //水电抄度
   static Routes hydroelectricExcess = Routes(
     '/hydroelectric_excess_page',
-    202,
+    203,
     const HydroelectricExcessPage(),
   );
 
@@ -322,7 +322,7 @@ class RouteConfig {
   //sap喷漆领料
   static Routes sapPrintPicking = Routes(
     '/sap_print_picking',
-    202,
+    203,
     const SapPrintPickingPage(),
   );
 

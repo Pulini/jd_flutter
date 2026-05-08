@@ -181,7 +181,8 @@ class _HydroelectricExcessPageState extends State<HydroelectricExcessPage> {
                                   if (v != null) {
                                     logic.searchRoom(
                                       searchType: '0',
-                                      data: DeviceListInfo(number: v.toString()),
+                                      data:
+                                          DeviceListInfo(number: v.toString()),
                                       isBack: false,
                                       refresh: (number, nowDegree) {
                                         textNumber.text = number;
@@ -201,11 +202,14 @@ class _HydroelectricExcessPageState extends State<HydroelectricExcessPage> {
                                 click: () {
                                   state.isShow.value = false;
                                   Get.to(() =>
-                                      const HydroelectricExcessTreatListPage())?.then((v){
-                                        if(v == true){
-                                          textNumber.text = state.dataDetail.value.roomNumber!;
-                                          textThisTime.text = state.dataDetail.value.nowDegree!;
-                                        }
+                                          const HydroelectricExcessTreatListPage())
+                                      ?.then((v) {
+                                    if (v == true) {
+                                      textNumber.text =
+                                          state.dataDetail.value.roomNumber!;
+                                      textThisTime.text =
+                                          state.dataDetail.value.nowDegree!;
+                                    }
                                   });
                                 },
                               ),
@@ -213,16 +217,33 @@ class _HydroelectricExcessPageState extends State<HydroelectricExcessPage> {
                           ],
                         ),
                       )),
-                  Obx(() => SizedBox(
-                        width: double.infinity,
+                  Row(
+                    children: [
+                      Expanded(
                         child: CombinationButton(
+                          text: '识别表盘',
+                          combination: Combination.left,
+                          click: () => logic.arkSendImage(
+                            (d) {
+                              showSnackBar(message: '识别成功');
+                              textThisTime.text = d;
+                            },
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                          child: Obx(
+                        () => CombinationButton(
+                          combination: Combination.right,
                           text: state.stateToSearch.value == '0'
                               ? 'hydroelectric_submit'.tr
                               : 'hydroelectric_change'.tr,
                           click: () =>
                               state.submit(textThisTime: textThisTime.text),
                         ),
-                      ))
+                      )),
+                    ],
+                  )
                 ],
               )
             ],

@@ -133,7 +133,7 @@ class SapPrintPickingState {
               'ZNAME_EN': '',
               'MEINS': item.order.basicUnit,
               'MATNR': item.order.materialNumber,
-              'WERKS':  '2000',
+              'WERKS':  item.order.factoryNumber,
             }
         ],
         'DISPATCH': orderDetailDispatch.map((v) => v.toJson()).toList(),
