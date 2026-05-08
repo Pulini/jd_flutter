@@ -19,7 +19,7 @@ void checkBarCodeProcessDialog({
     callback: (list) {
       WorkerInfo? worker;
       var processSelect =
-          spGet(spSaveScanPickingMaterialSelectProcess).toString().toIntTry();
+          spGet(spSaveProcessSelectProcess).toString().toIntTry();
       var processList = <BarCodeProcessInfo>[...list];
       var processController = FixedExtentScrollController(
         initialItem: processSelect < processList.length ? processSelect : 0,
@@ -70,7 +70,7 @@ void checkBarCodeProcessDialog({
                         ? processController.selectedItem
                         : 0;
                     spSave(
-                        spSaveScanPickingMaterialSelectProcess, processSelect);
+                        spSaveProcessSelectProcess, processSelect);
                     spSave(spSaveScanPickingMaterial, worker!.empCode ?? '');
                     Get.back();
                     submit.call(worker!, processList[processSelect]);
