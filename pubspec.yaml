@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 2.3.5+235
+version: 2.3.6+236
 
 environment:
   sdk: '>=3.4.3 <4.0.0'
@@ -35,7 +35,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.6
   #极光推送
-  jpush_flutter: 3.4.0
+  jpush_flutter: ^3.4.4
   #轻量架构工具
 #  get: ^4.7.2
   get: #^4.7.2
@@ -59,17 +59,17 @@ dependencies:
   #图片选择器工具
   image_picker: ^1.2.1
   #图片裁剪工具
-  image_cropper: ^11.0.0
+  image_cropper: ^12.2.1
   #Image处理工具集
   image: ^4.5.4
   #图片预览
   photo_view: ^0.15.0
   #相机（视频流识别）
-  camera: ^0.11.3
+  camera: ^0.12.0+1
   #获取app基础信息
-  package_info_plus: ^9.0.0
+  package_info_plus: ^10.1.0
   #获取设备信息
-  device_info_plus: ^12.2.0
+  device_info_plus: ^13.1.0
   #设备方向
   native_device_orientation: ^2.0.4
   #加密工具
@@ -80,7 +80,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   #自适应字体大小
-  flutter_auto_size_text: ^4.1.0
+  flutter_auto_size_text: ^5.0.0
   #UUID
   uuid: ^4.5.2
   #webview控件
@@ -130,6 +130,7 @@ dependencies:
   wifi_iot: ^0.3.19+2
   #检查wifi连接状态
   connectivity_plus: ^7.0.0
+
 
 
 dev_dependencies:

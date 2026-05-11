@@ -145,6 +145,26 @@ class _LoginPickState extends State<LoginPick>
 
   var webViewController = WebViewController();
 
+  // 缓存 WebViewWidget，避免每次 build 重建
+  late final WebViewWidget _feishuWebViewWidget;
+
+  // 是否已经初始化过 WebView
+  bool _isWebViewInitialized = false;
+
+  // 用于触发 IndexedStack 重建
+  int _currentTabIndex = 0;
+
+  void _initFeishuWebView() {
+    _feishuWebViewWidget = WebViewWidget(controller: webViewController);
+  }
+
+  void _ensureWebViewLoaded() {
+    if (!_isWebViewInitialized) {
+      _isWebViewInitialized = true;
+      _loadAssetUrl();
+    }
+  }
+
   TextField textField({
     required TextEditingController controller,
     required String hint,
@@ -185,39 +205,44 @@ class _LoginPickState extends State<LoginPick>
         ],
       );
 
-  Widget feishuLogin() => _box(
-        SizedBox(
-          height: 385,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: Stack(
-              children: [
-                WebViewWidget(controller: webViewController),
-                Positioned(
-                  top: 10,
-                  left: 5,
-                  child: Text(
-                    'login_hint_lark'.tr,
-                    style: TextStyle(
-                        color: Colors.blue,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16),
-                  ),
+  Widget feishuLogin() => Container(
+        decoration: BoxDecoration(
+            borderRadius: const BorderRadius.all(Radius.circular(15)),
+            color: Colors.white,
+            border: Border.all(color: Colors.blueAccent, width: 4)),
+        margin: const EdgeInsets.all(5),
+        padding: const EdgeInsets.all(2),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(10),
+          child: Stack(
+            children: [
+              if (_currentTabIndex == 0) _feishuWebViewWidget,
+              Positioned(
+                top: 10,
+                left: 5,
+                child: Text(
+                  'login_hint_lark'.tr,
+                  style: const TextStyle(
+                      color: Colors.blue,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16),
                 ),
-                Positioned(
-                  top: 0,
-                  right: 0,
-                  child: IconButton(
-                    onPressed: () => _loadAssetUrl(),
-                    icon: Icon(Icons.refresh),
-                    color: Colors.blue,
-                  ),
+              ),
+              Positioned(
+                top: 0,
+                right: 0,
+                child: IconButton(
+                  onPressed: () {
+                    _isWebViewInitialized = false;
+                    _loadAssetUrl();
+                  },
+                  icon: const Icon(Icons.refresh),
+                  color: Colors.blue,
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
-        padding: EdgeInsets.all(5),
       );
 
   Widget _phoneLogin() => _box(
@@ -415,6 +440,12 @@ class _LoginPickState extends State<LoginPick>
   void _onTabChanged() {
     if (tabController.indexIsChanging) return; // 避免在切换动画过程中触发
     isShowLoginButton.value = tabController.index != 0;
+    _currentTabIndex = tabController.index;
+    // 切换到飞书登录 tab 时才加载 WebView
+    if (tabController.index == 0) {
+      _ensureWebViewLoaded();
+    }
+    setState(() {});
   }
 
   void _loadAssetUrl() =>
@@ -424,6 +455,8 @@ class _LoginPickState extends State<LoginPick>
   void initState() {
     state.isReLogin = widget.isReLogin;
     tabController.addListener(_onTabChanged);
+    _initFeishuWebView();
+    _ensureWebViewLoaded();
     webViewController
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setBackgroundColor(Colors.white)
@@ -441,7 +474,10 @@ class _LoginPickState extends State<LoginPick>
               if (code != null) {
                 logic.getFeishuToken(code: code, reload: () => _loadAssetUrl());
               } else {
-                errorDialog(content: 'getting_lark_authorization_code_failed'.tr, back: () => _loadAssetUrl());
+                errorDialog(
+                  content: 'getting_lark_authorization_code_failed'.tr,
+                  back: () => _loadAssetUrl(),
+                );
               }
             }
           },
@@ -493,8 +529,8 @@ class _LoginPickState extends State<LoginPick>
         body: Column(
           children: [
             Expanded(
-              child: TabBarView(
-                controller: tabController,
+              child: IndexedStack(
+                index: _currentTabIndex,
                 children: [
                   feishuLogin(),
                   _phoneLogin(),

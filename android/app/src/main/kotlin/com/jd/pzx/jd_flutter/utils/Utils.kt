@@ -1,8 +1,11 @@
 package com.jd.pzx.jd_flutter.utils
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ApplicationInfo
+import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -32,10 +35,10 @@ const val CHANNEL_USB_ANDROID_TO_FLUTTER = "channel_usb_android_to_flutter"
 const val CHANNEL_SCAN_FLUTTER_TO_ANDROID = "channel_scan_flutter_to_android"
 const val CHANNEL_WEIGHBRIDGE_FLUTTER_TO_ANDROID = "channel_weighbridge_flutter_to_android"
 const val CHANNEL_WEIGHBRIDGE_ANDROID_TO_FLUTTER = "channel_weighbridge_android_to_flutter"
-const val CHANNEL_FACE_VERIFICATION_FLUTTER_TO_ANDROID = "channel_face_verification_flutter_to_android"
-const val CHANNEL_PRINTER_ANDROID_TO_FLUTTER = "channel_printer_android_to_flutter"
+const val CHANNEL_FACE_VERIFICATION_FLUTTER_TO_ANDROID =
+    "channel_face_verification_flutter_to_android"
 const val CHANNEL_PRINTER_FLUTTER_TO_ANDROID = "channel_printer_flutter_to_android"
-const val CHANNEL_DISPLAY_METRICS_FLUTTER_TO_ANDROID = "channel_display_metrics_flutter_to_android"
+const val CHANNEL_DEVICE_INFO_FLUTTER_TO_ANDROID = "channel_device_info_flutter_to_android"
 const val CHANNEL_USB_TSC_FLUTTER_TO_ANDROID = "channel_usb_tsc_flutter_to_android"
 const val FACE_VERIFY_SUCCESS = 1
 const val FACE_VERIFY_FAIL_NOT_LIVE = 2
@@ -522,6 +525,7 @@ val fileIMEI_all = mapOf(
     "zac" to "application/x-zaurus-zac",
     "zip" to "application/zip"
 )
+
 fun bitmapToBase64(bitmap: Bitmap): String = Base64.encodeToString(
     ByteArrayOutputStream().apply {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 70, this)
@@ -535,7 +539,11 @@ fun base64ToBitmap(base64Data: String): Bitmap {
     return BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
 }
 
-fun bitmapToByteArray(bitmap: Bitmap, format: Bitmap.CompressFormat, quality: Int = 100): ByteArray? {
+fun bitmapToByteArray(
+    bitmap: Bitmap,
+    format: Bitmap.CompressFormat,
+    quality: Int = 100
+): ByteArray? {
     val byteArrayOutputStream = ByteArrayOutputStream()
     try {
         bitmap.compress(format, quality, byteArrayOutputStream)
@@ -554,7 +562,7 @@ fun Activity.display() = DisplayMetrics().apply {
 
 fun Context.dp2px(dp: Float) = (dp * resources.displayMetrics.density + 0.5).toInt()
 
-fun Context.isPad()=
+fun Context.isPad() =
     ((resources.configuration.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_LARGE)
 
 infix fun View.setDelayClickListener(clickAction: () -> Unit) {
@@ -575,6 +583,7 @@ infix fun View.setDelayClickListener(clickAction: () -> Unit) {
         }
     }
 }
+
 fun <T> averageAssign(
     source: MutableList<T>?,
     splitItemNum: Int
@@ -663,8 +672,8 @@ fun String.toDoubleTry() = if (isNullOrEmpty()) {
 fun openFile(act: Context, file: File) {
     val intent = Intent()
     val authority = "${act.packageName}.FileProvider"
-    Log.e("Pan","authority:$authority")
-    Log.e("Pan","authority:$authority-----SDK:${Build.VERSION.SDK_INT}-----")
+    Log.e("Pan", "authority:$authority")
+    Log.e("Pan", "authority:$authority-----SDK:${Build.VERSION.SDK_INT}-----")
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
         //  此处注意替换包名，
         val contentUri = FileProvider.getUriForFile(act, authority, file)
@@ -699,7 +708,7 @@ private fun getFileMIME(file: File): String {
             type = fileIMEI_Simple[end].toString()
         }
     }
-    Log.e("Pan","我定义的MIME类型为：$type")
+    Log.e("Pan", "我定义的MIME类型为：$type")
     return type
 }
 
@@ -717,6 +726,7 @@ fun bytesMerger(byteArray: List<ByteArray>) =
             index += bytes.size
         }
     }
+
 private var interceptorText = ""
 fun KeyEvent.keyInterceptor(code: (String) -> Unit) =
     if (deviceId == KeyCharacterMap.VIRTUAL_KEYBOARD) {
@@ -734,3 +744,54 @@ fun KeyEvent.keyInterceptor(code: (String) -> Unit) =
         }
         true
     }
+
+fun getDeviceInfo(context: Context): Map<String, String> {
+    val isHarmony = try {
+        val clz = Class.forName("com.huawei.system.BuildEx")
+        val method = clz.getMethod("getOsBrand")
+        "harmony" == (method.invoke(clz) as? String)?.lowercase()
+    } catch (e: Exception) {
+        false
+    }
+
+    val version = if (isHarmony) {
+        Regex("\\s+([\\d.]+)\\(").find(Build.DISPLAY)?.groupValues[1]?:Build.DISPLAY
+    } else {
+        Build.VERSION.RELEASE
+    }
+
+    return mapOf(
+        "deviceId" to getAndroidId(context),
+        "isHarmonyOS" to isHarmony.toString(),
+        "brand" to Build.BRAND,
+        "model" to Build.MODEL,
+        "version" to version,
+        "sdkInt" to Build.VERSION.SDK_INT.toString()
+    )
+}
+
+fun getInstalledApps(context: Context): List<Map<String, Any>> =
+    context.packageManager.getInstalledApplications(PackageManager.GET_META_DATA)
+        .filter { (it.flags and ApplicationInfo.FLAG_SYSTEM) == 0 && it.packageName != context.packageName }
+        .mapNotNull {
+            try {
+                mapOf(
+                    "packageName" to it.packageName as Any,
+                    "appName" to context.packageManager.getApplicationLabel(it).toString() as Any,
+                )
+            } catch (_: Exception) {
+                null
+            }
+        }
+
+@SuppressLint("HardwareIds")
+private fun getAndroidId(context: Context): String {
+    return try {
+        android.provider.Settings.Secure.getString(
+            context.contentResolver,
+            android.provider.Settings.Secure.ANDROID_ID
+        ) ?: "null"
+    } catch (e: Exception) {
+        "e"
+    }
+}

@@ -1639,3 +1639,6 @@ const webApiGetTeamMemberInfo = 'api/humanResources/getTeamMemberInfo';
 //提交图片进行视觉识别服务
 const webApiArkImageServer = 'api/shared/AI/arkImageServer';
 
+//上传设备信息及安装目录
+const webApiUpsertDeviceInfo = 'api/shared/device/upsertDeviceInfo';
+

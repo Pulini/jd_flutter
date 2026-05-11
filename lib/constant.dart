@@ -38,7 +38,7 @@ const String channelBluetoothFlutterToIos = 'channel_bluetooth_flutter_to_ios';
 const String channelBluetoothIosToFlutter = 'channel_bluetooth_ios_to_flutter';
 const String channelPrinterAndroidToFlutter = 'channel_printer_android_to_flutter';
 const String channelPrinterFlutterToAndroid = 'channel_printer_flutter_to_android';
-const String channelDisplayMetricsFlutterToAndroid = 'channel_display_metrics_flutter_to_android';
+const String channelDeviceInfoFlutterToAndroid = 'channel_device_info_flutter_to_android';
 const String channelUsbTscFlutterToAndroid = 'channel_usb_tsc_flutter_to_android';
 const String spSaveMoldingScanBulletinReportTimeDuration =
     'molding_scan_bulletin_report_time_duration';

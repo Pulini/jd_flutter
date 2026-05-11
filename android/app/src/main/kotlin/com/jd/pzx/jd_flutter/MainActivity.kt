@@ -8,7 +8,7 @@ import android.util.Log
 import com.jd.pzx.jd_flutter.LivenFaceVerificationActivity.Companion.startOneselfFaceVerification
 import com.jd.pzx.jd_flutter.utils.CHANNEL_BLUETOOTH_ANDROID_TO_FLUTTER
 import com.jd.pzx.jd_flutter.utils.CHANNEL_BLUETOOTH_FLUTTER_TO_ANDROID
-import com.jd.pzx.jd_flutter.utils.CHANNEL_DISPLAY_METRICS_FLUTTER_TO_ANDROID
+import com.jd.pzx.jd_flutter.utils.CHANNEL_DEVICE_INFO_FLUTTER_TO_ANDROID
 import com.jd.pzx.jd_flutter.utils.CHANNEL_FACE_VERIFICATION_FLUTTER_TO_ANDROID
 import com.jd.pzx.jd_flutter.utils.CHANNEL_PRINTER_FLUTTER_TO_ANDROID
 import com.jd.pzx.jd_flutter.utils.CHANNEL_SCAN_FLUTTER_TO_ANDROID
@@ -39,16 +39,20 @@ import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 import java.io.File
 import android.content.Context
+import android.content.pm.ApplicationInfo
+import android.content.pm.PackageManager
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkRequest
 import android.net.NetworkCapabilities
 import android.view.KeyEvent
+import com.jd.pzx.jd_flutter.utils.getDeviceInfo
+import com.jd.pzx.jd_flutter.utils.getInstalledApps
 import com.jd.pzx.jd_flutter.utils.keyInterceptor
 
 @SuppressLint("MissingPermission")
 class MainActivity : FlutterActivity() {
-    private  var isStartKeyListener=false
+    private var isStartKeyListener = false
     private val receiverUtil = ReceiverUtil(
         this,
         usbAttached = {
@@ -99,6 +103,7 @@ class MainActivity : FlutterActivity() {
         super.onCreate(savedInstanceState)
         receiverUtil.create()
     }
+
     override fun onDestroy() {
         receiverUtil.destroy()
         super.onDestroy()
@@ -108,7 +113,7 @@ class MainActivity : FlutterActivity() {
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
-        usbUtil= USBUtil(this, 4611)
+        usbUtil = USBUtil(this, 4611)
         //人脸识别通道
         MethodChannel(
             flutterEngine.dartExecutor.binaryMessenger,
@@ -215,7 +220,7 @@ class MainActivity : FlutterActivity() {
         ).setMethodCallHandler { call, _ ->
             if (call.method == "WeighbridgeOpen") receiverUtil.weighbridgeOpen()
             if (call.method == "WeighbridgeDestroy") receiverUtil.weighbridgeDestroy()
-            if (call.method == "isStartKeyListener") isStartKeyListener=call.arguments as Boolean
+            if (call.method == "isStartKeyListener") isStartKeyListener = call.arguments as Boolean
         }
         //打印机通道
         MethodChannel(
@@ -236,13 +241,13 @@ class MainActivity : FlutterActivity() {
         //设备信息通道
         MethodChannel(
             flutterEngine.dartExecutor.binaryMessenger,
-            CHANNEL_DISPLAY_METRICS_FLUTTER_TO_ANDROID
+            CHANNEL_DEVICE_INFO_FLUTTER_TO_ANDROID
         ).setMethodCallHandler { call, result ->
-            if (call.method == "GetXDpi") {
-                val dpi = resources.displayMetrics.xdpi
-                result.success(dpi)
-            } else {
-                result.notImplemented()
+            when (call.method) {
+                "GetXDpi" ->  result.success( resources.displayMetrics.xdpi)
+                "GetDeviceInfo" -> result.success(getDeviceInfo(this))
+                "GetInstalledApps" -> result.success(getInstalledApps(this))
+                else -> result.notImplemented()
             }
         }
 
@@ -283,16 +288,18 @@ class MainActivity : FlutterActivity() {
                         }
                     })
                 }
+
                 "unbind" -> {
                     cm.bindProcessToNetwork(null)
                     result.success(true)
                 }
+
                 else -> result.notImplemented()
             }
         }
 
-
     }
+
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -310,12 +317,12 @@ class MainActivity : FlutterActivity() {
     }
 
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
-        return if(isStartKeyListener){
+        return if (isStartKeyListener) {
             event.keyInterceptor {
                 Log.e("Pan", "dispatchKeyEvent   $it")
                 sendFlutter(CHANNEL_SCAN_FLUTTER_TO_ANDROID, "PdaScanner", it)
             }
-        }else{
+        } else {
             super.dispatchKeyEvent(event)
         }
 

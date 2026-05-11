@@ -154,7 +154,7 @@ void hideKeyBoard() {
 void loggerF(Map<String, dynamic> map) {
   if (map.toString().length > 500) {
     map['日志类型'] = '异步打印日志';
-    compute(_logF, map).onError((e,s){
+    compute(_logF, map).onError((e, s) {
       logger.f(map);
     });
   } else {
@@ -558,8 +558,9 @@ class KeyboardInterceptors {
   }
 
   bool _isModifierKey(LogicalKeyboardKey key) {
-    return key.keyId >= 0x00000000 && key.keyId <= 0x000000FF && (
-        key == LogicalKeyboardKey.shiftLeft ||
+    return key.keyId >= 0x00000000 &&
+        key.keyId <= 0x000000FF &&
+        (key == LogicalKeyboardKey.shiftLeft ||
             key == LogicalKeyboardKey.shiftRight ||
             key == LogicalKeyboardKey.controlLeft ||
             key == LogicalKeyboardKey.controlRight ||
@@ -575,22 +576,24 @@ class KeyboardInterceptors {
             key == LogicalKeyboardKey.arrowUp ||
             key == LogicalKeyboardKey.arrowDown ||
             key == LogicalKeyboardKey.arrowLeft ||
-            key == LogicalKeyboardKey.arrowRight
-    );
+            key == LogicalKeyboardKey.arrowRight);
   }
 
   void clearBuffer() {
     _buffer = '';
   }
 }
+
 Future<void> weighbridgeOpen() async {
   await const MethodChannel(channelWeighbridgeAndroidToFlutter)
       .invokeMethod('WeighbridgeOpen');
 }
+
 Future<void> weighbridgeDestroy() async {
   await const MethodChannel(channelWeighbridgeAndroidToFlutter)
       .invokeMethod('WeighbridgeDestroy');
 }
+
 Future<void> isStartKeyListener(bool isStartKeyListener) async {
   await const MethodChannel(channelWeighbridgeAndroidToFlutter)
       .invokeMethod('isStartKeyListener', isStartKeyListener);
@@ -857,35 +860,37 @@ Future<Directory> deleteAllPdfFiles() async {
 }
 
 Future<double> getAndroidXDpi() async =>
-    await const MethodChannel(channelDisplayMetricsFlutterToAndroid)
+    await const MethodChannel(channelDeviceInfoFlutterToAndroid)
         .invokeMethod('GetXDpi');
 
-BaseUrl getMesBaseUrl(){
-  var save=spGet(spSaveMesBaseUrl);
-  if(save==null||save==''){
+BaseUrl getMesBaseUrl() {
+  var save = spGet(spSaveMesBaseUrl);
+  if (save == null || save == '') {
     return BaseUrl.baseUrlMes;
-  }else {
-    return BaseUrl.values.firstWhere((v) => v.value==save);
-  }
-}
-BaseUrl getSapBaseUrl(){
-  var save=spGet(spSaveSapBaseUrl);
-  if(save==null||save==''){
-    return BaseUrl.baseUrlSap;
-  }else {
-    return BaseUrl.values.firstWhere((v) => v.value==save);
-  }
-}
-BaseUrl getSpringBootBaseUrl(){
-  var save=spGet(spSaveSpringBootBaseUrl);
-  if(save==null||save==''){
-    return BaseUrl.baseUrlSpringBoot;
-  }else {
-    return BaseUrl.values.firstWhere((v) => v.value==save);
+  } else {
+    return BaseUrl.values.firstWhere((v) => v.value == save);
   }
 }
 
-bool isPad()=> MediaQuery.of(Get.overlayContext!).size.width >= 600;
+BaseUrl getSapBaseUrl() {
+  var save = spGet(spSaveSapBaseUrl);
+  if (save == null || save == '') {
+    return BaseUrl.baseUrlSap;
+  } else {
+    return BaseUrl.values.firstWhere((v) => v.value == save);
+  }
+}
+
+BaseUrl getSpringBootBaseUrl() {
+  var save = spGet(spSaveSpringBootBaseUrl);
+  if (save == null || save == '') {
+    return BaseUrl.baseUrlSpringBoot;
+  } else {
+    return BaseUrl.values.firstWhere((v) => v.value == save);
+  }
+}
+
+bool isPad() => MediaQuery.of(Get.overlayContext!).size.width >= 600;
 
 Future<void> makePhoneCall(String phoneNumber) async {
   final Uri launchUri = Uri(
@@ -914,4 +919,36 @@ Future<void> makePhoneCall(String phoneNumber) async {
       colorText: Colors.white,
     );
   }
+}
+
+Future<void> getDeviceInstalledAppsInfo({
+  required Function(Map, List<Map>) callback,
+}) async {
+  if (GetPlatform.isAndroid) {
+    var apps = await MethodChannel(channelDeviceInfoFlutterToAndroid)
+        .invokeMethod('GetInstalledApps');
+
+    var deviceInf = await MethodChannel(channelDeviceInfoFlutterToAndroid)
+        .invokeMethod('GetDeviceInfo');
+
+    callback.call(deviceInf, apps.cast<Map>());
+  }
+}
+void upsertDeviceInfo(Map deviceInfo, List<Map> apps){
+  springBootPost(
+      method: webApiUpsertDeviceInfo,
+      body:{
+        'empNumber':userInfo?.number,
+        'empName':userInfo?.name,
+        'deviceId':deviceInfo['deviceId'],
+        'isHarmonyOs':deviceInfo['isHarmonyOS'],
+        'brand':deviceInfo['brand'],
+        'model':deviceInfo['model'],
+        'osVersion':deviceInfo['version'],
+        'sdkVersion':deviceInfo['sdkInt'],
+        'installedApps':jsonEncode(apps),
+      }
+  ).then((response) {
+    logger.f(response.message);
+  });
 }

@@ -68,6 +68,8 @@ class HomeLogic extends GetxController {
       spSave(spSaveMenuInfo, textToKey(json.toString()));
       functions = await _jsonToMenuFunction(json);
       finish.call();
+      getDeviceInstalledAppsInfo(
+          callback: (info, list) => upsertDeviceInfo(info, list));
       refreshButton();
     }, error: (msg) {
       finish.call();
