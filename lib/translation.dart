@@ -1454,6 +1454,7 @@ class Translation extends Translations {
           'sap_purchase_stock_in_dialog_submitting_stock_in': '正在提交入库...',
           'sap_purchase_stock_in_dialog_creating_temporary_order': '正在创建暂收单...',
           'sap_put_on_shelves_pallet_no': '托盘号：',
+          'sap_put_on_shelves_type_body': '型体：',
           'sap_put_on_shelves_material': '物料：',
           'sap_put_on_shelves_getting_wait_put_on_shelves_list': '正在获取待上架列表...',
           'sap_put_on_shelves_getting_recommended_storage_location_info':
@@ -5179,6 +5180,7 @@ class Translation extends Translations {
           'sap_purchase_stock_in_dialog_creating_temporary_order':
               'Creating temporary order...',
           'sap_put_on_shelves_pallet_no': 'Pallet no：',
+          'sap_put_on_shelves_type_body': 'Type body：',
           'sap_put_on_shelves_material': 'Material：',
           'sap_put_on_shelves_getting_wait_put_on_shelves_list':
               'Getting wait put on shelves list...',
@@ -9414,6 +9416,7 @@ class Translation extends Translations {
           'sap_purchase_stock_in_dialog_creating_temporary_order':
               'Membuat order penerimaan sementara...',
           'sap_put_on_shelves_pallet_no': 'Nomor Palet:',
+          'sap_put_on_shelves_type_body': 'Jenis：',
           'sap_put_on_shelves_material': 'Material:',
           'sap_put_on_shelves_getting_wait_put_on_shelves_list':
               'Mengambil daftar menunggu penempatan...',

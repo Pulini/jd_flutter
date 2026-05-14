@@ -378,7 +378,7 @@ class RouteConfig {
   //sap贴标上架
   static Routes sapPutOnShelves = Routes(
     '/sap_put_on_shelves',
-    201,
+    202,
     const SapPutOnShelvesPage(),
   );
 

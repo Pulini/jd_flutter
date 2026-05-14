@@ -31,7 +31,7 @@ class _SapPutOnShelvesPageState extends State<SapPutOnShelvesPage> {
       onTap: () => logic.scanCode(
         code: pallet[0][0].palletNumber ?? '',
         warehouse: factoryWarehouseController.getPickItem2().pickerId(),
-        goScan: (index, warehouse)=>_goScan(index, warehouse),
+        goScan: (index, warehouse) => _goScan(index, warehouse),
       ),
       child: Container(
         margin: const EdgeInsets.only(bottom: 10),
@@ -43,10 +43,20 @@ class _SapPutOnShelvesPageState extends State<SapPutOnShelvesPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            textSpan(
-              hint: 'sap_put_on_shelves_pallet_no'.tr,
-              text: pallet[0][0].palletNumber ?? '',
-              textColor: Colors.red,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                textSpan(
+                  hint: 'sap_put_on_shelves_pallet_no'.tr,
+                  text: pallet[0][0].palletNumber ?? '',
+                  textColor: Colors.red,
+                ),
+                textSpan(
+                  hint: 'sap_put_on_shelves_type_body'.tr,
+                  text: pallet[0][0].typeBody ?? '',
+                  textColor: Colors.red,
+                )
+              ],
             ),
             const Divider(height: 10, color: Colors.black),
             for (var material in pallet) ...[
@@ -71,29 +81,34 @@ class _SapPutOnShelvesPageState extends State<SapPutOnShelvesPage> {
       ),
     );
   }
+
   void _goScan(int index, String warehouse) {
     Get.to(
-          () => const SapPutOnShelvesScanPage(),
+      () => const SapPutOnShelvesScanPage(),
       arguments: {'index': index, 'warehouse': warehouse},
     )?.then((v) {
       if (v != null && v as bool) {
-        logic.refreshLabelList(warehouse: warehouse, refresh: (){
-          refreshController.finishRefresh();
-          refreshController.resetFooter();
-        });
+        logic.refreshLabelList(
+            warehouse: warehouse,
+            refresh: () {
+              refreshController.finishRefresh();
+              refreshController.resetFooter();
+            });
       }
       initScan();
     });
   }
-  void initScan(){
+
+  void initScan() {
     pdaScanner(
       scan: (code) => logic.scanCode(
         code: code,
         warehouse: factoryWarehouseController.getPickItem2().pickerId(),
-        goScan: (index, warehouse)=>_goScan(index, warehouse),
+        goScan: (index, warehouse) => _goScan(index, warehouse),
       ),
     );
   }
+
   @override
   void initState() {
     initScan();
@@ -118,8 +133,7 @@ class _SapPutOnShelvesPageState extends State<SapPutOnShelvesPage> {
               controller: refreshController,
               header: const MaterialHeader(),
               onRefresh: () => logic.refreshLabelList(
-                warehouse:
-                    factoryWarehouseController.getPickItem2().pickerId(),
+                warehouse: factoryWarehouseController.getPickItem2().pickerId(),
                 refresh: () {
                   refreshController.finishRefresh();
                   refreshController.resetFooter();
