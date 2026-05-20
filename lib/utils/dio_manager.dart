@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
+import 'package:get/get.dart';
 import 'package:jd_flutter/constant.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
@@ -94,6 +95,7 @@ class DioManager {
       handler.next(options);
     },
     onResponse: (response, handler) {
+
       var baseData = response.getBaseData();
       if (baseData.resultCode == resultReLogin) {
         logger.e('需要重新登录');
@@ -113,6 +115,7 @@ class DioManager {
       logger.e('DioException Type: ${e.type}');
       logger.e('DioException Message: ${e.message}');
       logger.e('DioException Error: ${e.error}');
+      logger.e('DioException Error Response: ${e.response?.data}');
       if (e.error is SocketException) {
         var socketError = e.error as SocketException;
         logger.e('Socket Exception OS Error: ${socketError.osError}');

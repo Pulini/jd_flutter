@@ -245,13 +245,14 @@ class _TemporaryOrderPageState extends State<TemporaryOrderPage> {
                     ),
                     Row(
                       children: [
-                        expandedTextSpan(
+                       textSpan(
                           hint: 'temporary_order_type_body'.tr,
                           isBold: false,
                           hintColor: Colors.black54,
                           text: data.model.ifEmpty(data.distributionType ?? ''),
                           textColor: Colors.blue.shade900,
                         ),
+                        SizedBox(width: 30),
                         expandedTextSpan(
                           flex: 2,
                           hint: 'temporary_order_remark'.tr,
