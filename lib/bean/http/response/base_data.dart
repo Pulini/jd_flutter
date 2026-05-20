@@ -13,7 +13,7 @@ class BaseData {
       resultCode = json['ResultCode'];
       data = json['Data'] ?? '';
       message = json['Message'];
-    } on NoSuchMethodError catch (e) {
+    } on NoSuchMethodError catch (_) {
       resultCode=0;
       data='';
       message=json;
