@@ -9,9 +9,15 @@ class BaseData {
 
   BaseData.fromJson(dynamic jsonData) {
     var json = jsonData.runtimeType == String ? jsonDecode(jsonData) : jsonData;
-    resultCode = json['ResultCode'];
-    data = json['Data'] ?? '';
-    message = json['Message'];
+    try {
+      resultCode = json['ResultCode'];
+      data = json['Data'] ?? '';
+      message = json['Message'];
+    } on NoSuchMethodError catch (_) {
+      resultCode=0;
+      data='';
+      message=json;
+    }
   }
 
   int? resultCode;

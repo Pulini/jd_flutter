@@ -536,7 +536,7 @@ class RouteConfig {
     const DeliveryOrderPage(),
   );
 
-  //暂收单
+  //仓库暂收单
   static Routes temporaryOrder = Routes(
     '/temporary_order',
     206,

@@ -77,6 +77,7 @@ class LabelInfo {
     manufactureDate = json['manufactureDate'];
     notes = json['Notes'];
     labelType = json['LabelType'];
+    labelModel = json['LabelModel'];
     departName = json['DepartName'];
     subList = [
       if (json['SubList'] != null)
@@ -103,6 +104,7 @@ class LabelInfo {
   int? interID;
   String? fCustomFactoryID;
   int? labelType;
+  String? labelModel;
   String? departName;
   String? myanmarApprovalDocument;
   String? trackNo;
