@@ -539,7 +539,7 @@ class RouteConfig {
   //仓库暂收单
   static Routes temporaryOrder = Routes(
     '/temporary_order',
-    206,
+    207,
     const TemporaryOrderPage(),
   );
 
