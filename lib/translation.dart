@@ -3136,6 +3136,8 @@ class Translation extends Translations {
           'quality_inspection_color_message': '分色信息(长按删除)',
           'quality_inspection_have_no_color': '还有未分色数量！',
           'quality_inspection_get_color': '正在获取色系信息...',
+          'quality_inspection_get_ng': '正在获取NG类型...',
+          'quality_inspection_handle_type': '正在获取处理类型...',
           'quality_inspection_get_label': '正在获取标签...',
           'quality_inspection_color_scheme': '色系分配',
           'quality_inspection_material_name': '物料名称',
@@ -3169,6 +3171,7 @@ class Translation extends Translations {
           'quality_inspection_method': '检验方式：',
           'quality_inspection_category': '类别：',
           'quality_inspection_accepting_unit': '受理单位：',
+          'quality_inspection_ng_type': 'NG类型',
           'quality_inspection_compromise': '是否让步',
           'quality_inspection_title': '品检',
           'quality_inspection_sure_submit': '确定提交品检吗？',
@@ -7202,6 +7205,8 @@ class Translation extends Translations {
               'There are still unsorted quantities！',
           'quality_inspection_get_color':
               'Obtaining color scheme information...',
+          'quality_inspection_get_ng': 'Getting NG type...',
+          'quality_inspection_handle_type': 'Obtaining processing type...',
           'quality_inspection_get_label': 'Getting tags...',
           'quality_inspection_color_scheme': 'Color scheme allocation',
           'quality_inspection_material_name': 'Material name',
@@ -7241,6 +7246,7 @@ class Translation extends Translations {
           'quality_inspection_method': 'Inspection method：',
           'quality_inspection_category': 'Category：',
           'quality_inspection_accepting_unit': 'Accepting unit：',
+          'quality_inspection_ng_type': 'NG type',
           'quality_inspection_compromise': 'Should we make concessions',
           'quality_inspection_title': 'Quality inspection',
           'quality_inspection_sure_submit':
@@ -11533,6 +11539,8 @@ class Translation extends Translations {
               'Masih ada jumlah yang belum dibagi warna!',
           'quality_inspection_get_color':
               'Mengambil informasi rangkaian warna...',
+          'quality_inspection_get_ng': 'Mendapatkan Jenis NG...',
+          'quality_inspection_handle_type': 'Mendapatkan tipe proses...',
           'quality_inspection_get_label': 'Mengambil label...',
           'quality_inspection_color_scheme': 'Distribusi Rangkaian Warna',
           'quality_inspection_material_name': 'Nama Material',
@@ -11574,6 +11582,7 @@ class Translation extends Translations {
           'quality_inspection_method': 'Metode Pemeriksaan:',
           'quality_inspection_category': 'Kategori:',
           'quality_inspection_accepting_unit': 'Unit Penerima:',
+          'quality_inspection_ng_type': 'Jenis NG',
           'quality_inspection_compromise': 'Apakah Kompromi',
           'quality_inspection_title': 'Pemeriksaan Kualitas',
           'quality_inspection_sure_submit':

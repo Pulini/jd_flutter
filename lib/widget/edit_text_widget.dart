@@ -13,6 +13,9 @@ class EditText extends StatefulWidget {
     this.onChanged,
     this.isEnable = true,
     this.hasClose = true,
+    this.readOnly = false, // 新增：控制是否可输入
+    this.onIconTap, // 新增：清除按钮点击事件
+    this.myIcon,
   });
 
   final String? initStr;
@@ -22,6 +25,9 @@ class EditText extends StatefulWidget {
   final String? hint;
   final Function(String v)? onChanged;
   final TextEditingController? controller;
+  final bool readOnly; // 控制文本不可输入
+  final VoidCallback? onIconTap; // 清除按钮点击回调
+  final Widget? myIcon;       // 自定义后缀图标
 
   @override
   State<EditText> createState() => _EditTextState();
@@ -63,6 +69,7 @@ class _EditTextState extends State<EditText> {
           widget.onChanged?.call(v);
         },
         focusNode: _focusNode,
+        readOnly: widget.readOnly, // 核心：只读模式
         decoration: InputDecoration(
           contentPadding: const EdgeInsets.only(
             top: 0,
@@ -85,10 +92,12 @@ class _EditTextState extends State<EditText> {
           labelStyle: const TextStyle(color: Colors.black54),
           suffixIcon: widget.hasClose
               ? IconButton(
-            icon: const Icon(Icons.close, color: Colors.grey),
+            icon: widget.myIcon ??
+                Icon(Icons.close, color: Colors.grey),
             onPressed: () {
               widget.onChanged?.call('');
               _controller.clear();
+              widget.onIconTap?.call(); // 触发外部回调
             },
           )
               : null,

@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/people_message_info.dart';
+import 'package:jd_flutter/bean/http/response/sap_quality_inspection_type_info.dart';
 import 'package:jd_flutter/bean/http/response/show_color_batch.dart';
 import 'package:jd_flutter/bean/http/response/stuff_quality_inspection_info.dart';
 import 'package:jd_flutter/bean/http/response/stuff_quality_inspection_label_info.dart';
@@ -25,12 +26,17 @@ class StuffQualityInspectionState {
   var shortQuantityEnable = true.obs; //短码数量输入框是否能点击
   var abnormalExplanationEnable = true.obs; //异常说明
   var processingMethodEnable = true.obs; //处理方法
+  var processingMethodId = "";//处理方法id
 
   var peoPleInfo = PeopleMessageInfo().obs; //员工详情
+  var handleList = <String>["无"]; //处理方式
+  var ngList = <String>[]; //ng类型
+
 
   var inspectionType = '无'.obs; //检验类型
   var type = '无'.obs; //类别
   var groupType = '无'.obs; //受理单位
+  var noType = '无'.obs; //处理方法
 
   var isShowTips = false.obs; //是否显示提示
 

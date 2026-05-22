@@ -12,6 +12,7 @@ import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import '../widget/tsc_label_templates/tsc_label_preview.dart';
 import 'home_logic.dart';
 import 'home_setting_view.dart';
 
@@ -124,7 +125,7 @@ class _HomePageState extends State<HomePage>
                 ),
                 onPressed: () {
                   if (isTestUrl()) {
-                    Get.to(() => const MaterialLabelScanPage());
+                    Get.to(() => const TscLabelPreview());
                   } else {
                     Get.to(() => const MessageCenterPage());
                   }

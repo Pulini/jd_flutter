@@ -8,6 +8,7 @@ import 'package:jd_flutter/fun/warehouse/in/stuff_quality_inspection/stuff_quali
 import 'package:jd_flutter/fun/warehouse/in/stuff_quality_inspection/stuff_quality_inspection_state.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
+import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/check_box_widget.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
@@ -408,7 +409,7 @@ class _StuffQualityInspectionPageState
                         })),
                   ),
                   Expanded(
-                    child: NumberDecimalEditText(
+                    child: NumberEditText(
                         hint: 'quality_inspection_reviewer'.tr,
                         controller: logic.reviewerController,
                         onChanged: (d) {}),
@@ -419,17 +420,49 @@ class _StuffQualityInspectionPageState
               Row(
                 children: [
                   Expanded(
+                    child: Obx(
+                      () => state.groupTypeEnable.value
+                          ? EditText(
+                        readOnly: true,
+                        hint: 'quality_inspection_ng_type'.tr,
+                        controller: logic.ngController,
+                        myIcon: const Icon(Icons.search),
+                        onIconTap: () {
+                          if(logic.unqualifiedQualifiedController.text.isNotEmpty || logic.shortQualifiedController.text.isNotEmpty){
+                            logic.getNgType();
+                          }
+                        },
+                      )
+                          : spText(
+                              name: 'quality_inspection_ng_type'.tr,
+                              text: state.groupType.value,
+                            ),
+                    ),
+                  ),
+                  Expanded(
                       child: Obx(() => EditText(
                             isEnable: state.abnormalExplanationEnable.value,
                             hint: 'quality_inspection_exception_description'.tr,
                             controller: logic.exceptionDescriptionController,
                           ))),
                   Expanded(
-                      child: Obx(() => EditText(
-                            isEnable: state.processingMethodEnable.value,
+                    child: state.processingMethodEnable.value
+                        ? EditText(
+                            readOnly: true,
                             hint: 'quality_inspection_processing_method'.tr,
                             controller: logic.processingMethodController,
-                          ))),
+                            myIcon: const Icon(Icons.search),
+                            onIconTap: () {
+                              if(logic.unqualifiedQualifiedController.text.isNotEmpty || logic.shortQualifiedController.text.isNotEmpty){
+                                logic.getHandleType();
+                              }
+                            },
+                          )
+                        : spText(
+                            name: 'quality_inspection_processing_method'.tr,
+                            text: state.noType.value,
+                          ),
+                  ),
                   Expanded(
                       child: NumberDecimalEditText(
                     hint: 'quality_inspection_availability'.tr,
@@ -489,7 +522,6 @@ class _StuffQualityInspectionPageState
   @override
   void initState() {
     super.initState();
-
     if (Get.arguments != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         state.fromInspectionType = Get.arguments['inspectionType'];
@@ -503,6 +535,7 @@ class _StuffQualityInspectionPageState
     spinnerController1 = SpinnerController(dataList: state.list1);
     spinnerController2 = SpinnerController(dataList: state.list2);
     spinnerController3 = SpinnerController(dataList: state.list3);
+
     state.picture.clear();
     state.picture.add(VisitPhotoBean(photo: "", typeAdd: "0"));
     WidgetsBinding.instance.addPostFrameCallback((_) {
