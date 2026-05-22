@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/people_message_info.dart';
-import 'package:jd_flutter/bean/http/response/sap_quality_inspection_type_info.dart';
 import 'package:jd_flutter/bean/http/response/show_color_batch.dart';
 import 'package:jd_flutter/bean/http/response/stuff_quality_inspection_info.dart';
 import 'package:jd_flutter/bean/http/response/stuff_quality_inspection_label_info.dart';

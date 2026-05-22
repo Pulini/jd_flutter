@@ -8,7 +8,6 @@ import 'package:jd_flutter/fun/warehouse/in/stuff_quality_inspection/stuff_quali
 import 'package:jd_flutter/fun/warehouse/in/stuff_quality_inspection/stuff_quality_inspection_state.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
-import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/check_box_widget.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';

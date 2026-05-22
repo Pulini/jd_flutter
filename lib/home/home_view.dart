@@ -12,7 +12,6 @@ import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/tsc_label_templates/tsc_label_preview.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import '../widget/tsc_label_templates/tsc_label_preview.dart';
 import 'home_logic.dart';
 import 'home_setting_view.dart';
 
