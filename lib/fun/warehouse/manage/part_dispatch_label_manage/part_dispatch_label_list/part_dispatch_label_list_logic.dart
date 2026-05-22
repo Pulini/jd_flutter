@@ -112,13 +112,11 @@ class PartDispatchLabelListLogic extends GetxController {
   Future<List<Uint8List>> _createLabelData(
     PartLabelInfo label,
   ) async =>
-      await labelMultipurposeDynamic(
+      await labelMultipurposeDynamic2(
         qrCode: label.largeCardNo ?? '',
-        title: label.getPartsName(),
-        subTitle:
-            '每部件${label.materialList!.first.totalQty()}${label.materialList!.first.unitName}  共${label.partList.length}个部件',
-        tableTitle: label.deptName ?? '',
-        tableSubTitle: label.productName ?? '',
+        qrCodeTips:'${label.materialList!.first.totalQty()}${label.materialList!.first.unitName} Pr/pc',
+        title: label.productName ?? '',
+        subTitleList:label.partList,
         tableFirstLineTitle: '尺码',
         tableLastLineTitle: '合计',
         tableData: {
@@ -130,8 +128,8 @@ class PartDispatchLabelListLogic extends GetxController {
                 [v2.size ?? '', v2.auxQty.toString()]
             ]
         },
-        bottomLeftText1: '序号：${label.pieceNo}',
-        bottomRightText1: '交期：${label.fetchDate}',
+        bottomLeftText: '序号：${label.pieceNo}',
+        bottomRightText: '交期：${label.fetchDate}',
       );
 
   void printLabel(Function(List<List<Uint8List>>) labels) {

@@ -675,10 +675,10 @@ Future<List<Uint8List>> labelMultipurposeFixed({
           }
         }
       } else {
-        if(bottomLeftText1.length<=4){
+        if (bottomLeftText1.length <= 4) {
           list.add(
               await _tscBitmapText(2 * _dpi, 37 * _dpi, 38, bottomLeftText1));
-        }else{
+        } else {
           list.add(
               await _tscBitmapText(2 * _dpi, 38 * _dpi, 28, bottomLeftText1));
         }
@@ -696,7 +696,8 @@ Future<List<Uint8List>> labelMultipurposeFixed({
           isBold: false));
     } else {
       list.add(await _tscBitmapText(
-          23 * _dpi + _halfDpi, 38 * _dpi, 34, bottomMiddleText1,isBold: true));
+          23 * _dpi + _halfDpi, 38 * _dpi, 34, bottomMiddleText1,
+          isBold: true));
     }
   }
   if (bottomRightText1.isNotEmpty) {
@@ -1002,10 +1003,8 @@ Future<List<Uint8List>> labelMultipurposeDynamic({
 
   list.add(_tscCutter());
   list.add(_tscClearBuffer());
-  list.add(_tscSetup(width, height, sensorDistance: 0, density: density.toInt(),speed: speed.toInt()));
-
-
-
+  list.add(_tscSetup(width, height,
+      sensorDistance: 0, density: density.toInt(), speed: speed.toInt()));
 
   if (qrCode.isNotEmpty) {
     list.add(_tscQrCode(qrCodeX, qrCodeY,
@@ -1034,7 +1033,7 @@ Future<List<Uint8List>> labelMultipurposeDynamic({
 
   if (tableTitleTips.isNotEmpty) {
     list.add(await _tscBitmapText(
-        tableTitleTipsX, tableTitleTipsY-2, 30, tableTitleTips));
+        tableTitleTipsX, tableTitleTipsY - 2, 30, tableTitleTips));
   }
 
   if (tableSubTitle.isNotEmpty) {
@@ -1138,6 +1137,330 @@ Future<List<Uint8List>> labelMultipurposeDynamic({
   return list;
 }
 
+
+/// labelMultipurposeDynamic2(
+///   qrCode: Uuid().v1(),
+///   qrCodeTips: '2446 Pr/pc',
+///   title:'PDS26407878-01',
+///   subTitleList: '03000017后套里、03000018后套里补强、03000019前套里、03000017后套里、03000018后套里补强、03000019前套里'.split('、'),
+///   tableFirstLineTitle: '指令╲尺码',
+///   tableLastLineTitle: '合计',
+///   tableData:  {
+///     '1000065698': [
+///       ['35', '55.5'],
+///       ['36', '66.6'],
+///       ['38', '77.7'],
+///       ['39', '77.7'],
+///       ['33', '77.7'],
+///       ['32', '77.7'],
+///     ],
+///     'billNo2': [
+///       ['35', '55.5'],
+///       ['36', '66.6'],
+///       ['37', '77.7'],
+///       ['38', '77.7'],
+///       ['39', '77.7'],
+///     ],
+///     'billNo3': [
+///       ['35', '55.5'],
+///       ['36', '66.6'],
+///       ['34', '66.6'],
+///       ['33', '66.6'],
+///       ['37', '77.7'],
+///     ],
+///   },
+///   bottomLeftText: '序号：111/999',
+///   bottomRightText: '交期：2026-06-30',
+/// ).then((label) {
+///   PrintUtil().printLabelList(
+///     labelList: [label],
+///     start: () {
+///       loadingShow('正在下发标签...');
+///     },
+///     progress: (i, j) {
+///       loadingShow('正在下发标签($i/$j)');
+///     },
+///     finished: (success, fail) {
+///       successDialog(
+///         title: '标签下发结束',
+///         content: '完成${success.length}张, 失败${fail.length}张',
+///       );
+///     },
+///   );
+/// });
+//通用动态标签
+//[qrCode] 二维码内容
+//[qrCodeTips] 二维码提示语
+//[title] 标题
+//[subTitleList] 子标题列表
+//[tableFirstLineTitle] 表格第一行标题文本
+//[tableLastLineTitle] 表格最后一行标题文本
+//[tableData] 表格数据
+//[bottomLeftText1] 左下文本1
+//[bottomRightText1] 右下文本1
+//[speed] 打印速度
+//[density] 打印密度
+Future<List<Uint8List>> labelMultipurposeDynamic2({
+  String qrCode = '',
+  String qrCodeTips = '',
+  String title = '',
+  List<String> subTitleList = const [],
+  String tableFirstLineTitle = '',
+  String tableLastLineTitle = '',
+  Map<String, List<List<String>>> tableData = const {},
+  String bottomLeftText = '',
+  String bottomRightText = '',
+  double speed = 3.0,
+  double density = 10.0,
+}) async {
+  var list = <Uint8List>[];
+
+  //标签宽度 纸张75 左右各缩进1 = 75-2
+  var width = 73;
+
+  //边距
+  var margin = 3;
+
+  //内缩
+  var padding = 1;
+
+  //二维码宽度
+  var qrCodeWidth = 20;
+  var qrCodeShowHeight = 2;
+
+  //二维码底部框高度
+  var qrCodeBottomLineHeight = 4;
+
+  //主标题文本高度
+  var titleTextHeight = 6;
+
+  //表格子标题文本高度
+  var titleViewToTableHeight =
+      subTitleList.length > 4 ? 4 * subTitleList.length - 4 * 4 : 0;
+
+  //表格行高
+  var tableLineHeight = 5;
+  //表格换行 行高
+  var tableLineWrap = 2;
+  //表格上下边距
+  var tableMargin = 4;
+
+  //表格数据
+  var table = tableFormat(tableFirstLineTitle, tableLastLineTitle, tableData);
+  logger.f(table);
+  //表格高度
+  var tableHeight = table.where((e) => e.isEmpty).length * tableLineWrap +
+      table.where((e) => e.isNotEmpty).length * tableLineHeight +
+      tableMargin;
+  //底部文本高度
+  var bottomTextHeight = 4;
+
+  //height:标签高度 = 边距 + 内缩 + 二维码宽度 + 二维码底部框高度 + 头部控件到表格的高度 + 表格高度 + 底部文本高度 + 内缩 + 边距
+  var height = margin +
+      padding +
+      qrCodeWidth +
+      qrCodeBottomLineHeight +
+      titleViewToTableHeight +
+      tableHeight +
+      bottomTextHeight +
+      padding +
+      margin;
+
+  var titleX = (1 + padding) * _dpi;
+  var titleY = (margin + qrCodeShowHeight) * _dpi + _halfDpi;
+  var subTitleX = (1 + padding) * _dpi;
+  var subTitleY =
+      (margin + qrCodeShowHeight + titleTextHeight) * _dpi + _halfDpi;
+  var subTitle2X = (1 + padding) * _dpi;
+  var subTitle2Y =
+      (margin + qrCodeWidth + qrCodeBottomLineHeight + padding) * _dpi +
+          _halfDpi;
+
+  var qrCodeX = (width - qrCodeWidth) * _dpi;
+  var qrCodeY = (margin + padding) * _dpi;
+  var qrCodeShowX = (1 + padding) * _dpi;
+  var qrCodeShowY = margin * _dpi;
+
+  var bLeftTextX = (1 + padding) * _dpi;
+  var bLeftTextY = (margin +
+          padding +
+          qrCodeWidth +
+          qrCodeBottomLineHeight +
+          titleViewToTableHeight +
+          tableHeight) *
+      _dpi;
+
+  var bRightTextX = (1 + padding + 35) * _dpi;
+  var bRightTextY = (margin +
+          padding +
+          qrCodeWidth +
+          qrCodeBottomLineHeight +
+          titleViewToTableHeight +
+          tableHeight) *
+      _dpi;
+
+  list.add(_tscCutter());
+  list.add(_tscClearBuffer());
+  list.add(_tscSetup(
+    width,
+    height,
+    sensorDistance: 0,
+    density: density.toInt(),
+    speed: speed.toInt(),
+  ));
+
+  if (qrCode.isNotEmpty) {
+    list.add(_tscQrCode(
+      qrCodeX,
+      qrCodeY,
+      qrCode.contains('"') ? qrCode.replaceAll('"', '\\["]') : qrCode,
+    ));
+    list.add(await _tscBitmapText(qrCodeShowX, qrCodeShowY, 16, qrCode));
+  }
+
+  if (qrCodeTips.isNotEmpty) {
+    list.add(await _tscBitmapText(
+      (width - qrCodeWidth) * _dpi,
+      (qrCodeWidth + margin + padding) * _dpi,
+      28,
+      qrCodeTips,
+    ));
+  }
+
+  if (title.isNotEmpty) {
+    list.add(await _tscBitmapText(titleX, titleY, 40, title));
+  }
+
+  if (subTitleList.isNotEmpty) {
+    for (var i = 0; i < subTitleList.length; ++i) {
+      //只允许行数为2
+      if (i >= 4) break;
+      //行高
+      var lineHeight = 4;
+      list.add(await _tscBitmapText(
+        subTitleX,
+        subTitleY + lineHeight * i * _dpi,
+        30,
+        subTitleList[i],
+      ));
+    }
+  }
+
+  if (subTitleList.isNotEmpty && subTitleList.length > 4) {
+    for (var i = 4; i < subTitleList.length; ++i) {
+      //行高
+      var lineHeight = 4;
+      list.add(await _tscBitmapText(
+        subTitle2X,
+        subTitle2Y + (lineHeight * i - lineHeight * 4) * _dpi,
+        30,
+        subTitleList[i],
+      ));
+    }
+  }
+
+  if (table.isNotEmpty) {
+    var boxY = (margin +
+            padding +
+            qrCodeWidth +
+            qrCodeBottomLineHeight +
+            titleViewToTableHeight +
+            1) *
+        _dpi;
+    for (var line in table) {
+      var boxX = (1 + padding) * _dpi;
+      var boxH = tableLineHeight * _dpi;
+      if (line.isEmpty) {
+        boxY += tableLineWrap * _dpi;
+        boxH += tableLineWrap * _dpi;
+      } else {
+        int boxW;
+        for (var i = 0; i < line.length; ++i) {
+          boxW = i == 0 ? 22 * _dpi : 8 * _dpi;
+          if (line[i].isNotEmpty) {
+            list.add(
+              await _tscBitmapText(boxX + _dpi, boxY + _dpi, 28, line[i]),
+            );
+          }
+          list.add(_tscBox(
+            boxX,
+            boxY + _halfDpi,
+            boxW + boxX,
+            boxH + boxY + _halfDpi,
+            crude: 2,
+          ));
+          boxX += boxW;
+        }
+        boxY += tableLineHeight * _dpi;
+        boxH += tableLineHeight * _dpi;
+      }
+    }
+  }
+  if (bottomLeftText.isNotEmpty) {
+    list.add(
+      await _tscBitmapText(bLeftTextX, bLeftTextY, 30, bottomLeftText),
+    );
+  }
+
+  if (bottomRightText.isNotEmpty) {
+    list.add(
+      await _tscBitmapText(bRightTextX, bRightTextY, 30, bottomRightText),
+    );
+  }
+
+  list.add(_tscLine(
+    (width - qrCodeWidth - padding) * _dpi,
+    margin * _dpi,
+    2,
+    (qrCodeWidth + qrCodeBottomLineHeight + padding) * _dpi,
+  ));
+
+  list.add(_tscLine(
+    padding * _dpi,
+    (margin + qrCodeShowHeight) * _dpi,
+    (width - qrCodeWidth - padding - padding) * _dpi,
+    2,
+  ));
+
+  list.add(_tscLine(
+    padding * _dpi,
+    (margin + qrCodeShowHeight + titleTextHeight) * _dpi,
+    (width - qrCodeWidth - padding - padding) * _dpi,
+    2,
+  ));
+
+  list.add(_tscLine(
+    (width - qrCodeWidth - padding) * _dpi,
+    (margin + qrCodeWidth) * _dpi,
+    qrCodeWidth * _dpi,
+    2,
+  ));
+
+  list.add(_tscLine(
+    _dpi,
+    (margin + qrCodeWidth + qrCodeBottomLineHeight + padding) * _dpi,
+    (width - padding) * _dpi,
+    2,
+  ));
+
+  list.add(_tscBox(
+    _dpi,
+    margin * _dpi,
+    width * _dpi,
+    (height - margin) * _dpi,
+    crude: 2,
+  ));
+
+  //绘制底部裁切线 x坐标=0 y坐标=上边距 +固定区高度 + 动态物料高度 + 动态指令高度 + 页码高度 + 下边距 - 缩进1 width长度=标签宽度
+  for (int i = 0; i <= width; i += 2) {
+    list.add(_tscLine(i * _dpi, height * _dpi - 2, _dpi, 2));
+  }
+  list.add(_tscCutter());
+  list.add(_tscPrint());
+
+  return list;
+}
+
 Future<Uint8List> labelImageResize(Uint8List image) async {
   var reImage = img.copyResize(
     img.decodeImage(image)!,
@@ -1225,7 +1548,7 @@ Future<List<Uint8List>> _imageResizeToLabel(Map<String, dynamic> image) async {
       sensorDistance: isDynamic ? 0 : 2,
     ),
     await _tscBitmap(1, 1, imageUint8List),
-    isDynamic?_tscCutter(): _tscCutterOff(),
+    isDynamic ? _tscCutter() : _tscCutterOff(),
     _tscPrint(),
   ];
 }

@@ -490,6 +490,31 @@ class MaintainLabelLogic extends GetxController {
         errorDialog(content: 'maintain_label_select_label_not_same'.tr);
         return;
       }
+      if(select.every((v)=>v.labelModel!='')){
+        if (languageList.length > 1) {
+          selectLanguageDialog(
+            list: languageList,
+            callback: (s) => state.setLabelState(
+              selectLabels: select,
+              success: (msg) => printLabel(
+                select: select,
+                language: s,
+                type: select.first.labelType!,
+              ),
+            ),
+          );
+        } else {
+          state.setLabelState(
+            selectLabels: select,
+            success: (msg) => printLabel(
+              select: select,
+              language: languageList.isEmpty ? '' : languageList.first,
+              type: select.first.labelType!,
+            ),
+          );
+        }
+        return;
+      }
       if (select.every((v) =>
           v.labelType != 101 && v.labelType != 102 && v.labelType != 103)) {
         showSnackBar(
@@ -529,6 +554,22 @@ class MaintainLabelLogic extends GetxController {
     required List<LabelInfo> select,
     required String language,
   }) {
+    if (select.first.labelModel == 'multipurpose_dynamic_label_part_dispatch') {
+      createPartDispatchOrderDynamicLabel(
+        language: language,
+        list: select,
+        labelCommandPrint: (labelList) => pu.printLabelList(
+          labelList: labelList,
+          start: () => loadingShow('正在下发标签...'),
+          progress: (i, j) => loadingShow('正在下发标签($i/$j)'),
+          finished: (success, fail) => successDialog(
+            title: '标签下发结束',
+            content: '完成${success.length}张, 失败${fail.length}张',
+          ),
+        ),
+      );
+      return;
+    }
     switch (type) {
       case 101:
         createMaterialLabel(
@@ -1322,6 +1363,60 @@ class MaintainLabelLogic extends GetxController {
     } else {
       labelCommandPrint.call(labelCommandList);
     }
+  }
+
+  void createPartDispatchOrderDynamicLabel({
+    required String language,
+    required List<LabelInfo> list,
+    required Function(List<List<Uint8List>>) labelCommandPrint,
+  }) async {
+    var labelCommandList = <List<Uint8List>>[];
+    for (var data in list) {
+      var languageInfo = data.subList!.first.materialOtherName!
+          .firstWhere((v) => v.languageName == language);
+      var ins = groupBy(data.subList!, (v) => v.billNo ?? '').map(
+        (k, v) => MapEntry(k, v.expand((v2) => v2.items!).toList()),
+      );
+      var map = ins.map((k, v1) => MapEntry(
+            k,
+            v1
+                .map((v2) => [
+                      v2.size ?? '',
+                      v1
+                          .where((v3) => v3.size == v2.size)
+                          .map((v3) => v3.qty ?? 0)
+                          .reduce((a, b) => a.add(b))
+                          .toShowString()
+                    ])
+                .toList(),
+          ));
+      var materialList = data.subList!
+          .map((v) => v.getMaterialLanguage(languageInfo.languageCode ?? ''))
+          .toSet()
+          .toList();
+      var boxCapacity = data.subList?.map((v) => v.totalQty()).reduce((a, b) => a.add(b)) ?? 0;
+      var titleText = languageInfo.languageCode == 'zh'
+          ? '尺码'
+          : languageInfo.languageCode == 'id'
+              ? 'Ukuran'
+              : 'Size';
+      var totalText = languageInfo.languageCode == 'zh' ? '合计' : 'Total';
+
+      labelCommandList.add(await labelMultipurposeDynamic2(
+        qrCode: data.barCode ?? '',
+        qrCodeTips: '$boxCapacity Pr/pc',
+        title: data.subList!.first.factoryType ?? '',
+        subTitleList: materialList,
+        tableFirstLineTitle: titleText,
+        tableLastLineTitle: totalText,
+        tableData: map,
+        bottomLeftText: languageInfo.pageNumber ?? '',
+        bottomRightText: languageInfo.deliveryDate ?? '',
+        speed: spGet(spSavePrintSpeed) ?? 5.0,
+        density: spGet(spSavePrintDensity) ?? 10.0,
+      ));
+    }
+    labelCommandPrint.call(labelCommandList);
   }
 
   void fillRemainingQty() {
