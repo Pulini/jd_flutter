@@ -419,23 +419,16 @@ class _StuffQualityInspectionPageState
               Row(
                 children: [
                   Expanded(
-                    child: Obx(
-                      () => state.groupTypeEnable.value
-                          ? EditText(
-                        readOnly: true,
-                        hint: 'quality_inspection_ng_type'.tr,
-                        controller: logic.ngController,
-                        myIcon: const Icon(Icons.search),
-                        onIconTap: () {
-                          if(logic.unqualifiedQualifiedController.text.isNotEmpty || logic.shortQualifiedController.text.isNotEmpty){
-                            logic.getNgType();
-                          }
-                        },
-                      )
-                          : spText(
-                              name: 'quality_inspection_ng_type'.tr,
-                              text: state.groupType.value,
-                            ),
+                    child: EditText(
+                      readOnly: true,
+                      hint: 'quality_inspection_ng_type'.tr,
+                      controller: logic.ngController,
+                      myIcon: const Icon(Icons.search),
+                      onIconTap: () {
+                        if(logic.unqualifiedQualifiedController.text.isNotEmpty || logic.shortQualifiedController.text.isNotEmpty){
+                          logic.getNgType();
+                        }
+                      },
                     ),
                   ),
                   Expanded(
