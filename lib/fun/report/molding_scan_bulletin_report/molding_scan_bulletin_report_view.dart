@@ -305,7 +305,7 @@ class _MoldingScanBulletinReportPageState
                 child: child,
               ),
               scrollDirection: Axis.horizontal,
-              onReorder: (oldIndex, newIndex) {
+              onReorderItem: (oldIndex, newIndex) {
                 setState(() => logic.changeSort(
                       oldIndex: oldIndex,
                       newIndex: newIndex,

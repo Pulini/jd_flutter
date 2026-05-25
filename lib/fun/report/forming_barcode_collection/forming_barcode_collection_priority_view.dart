@@ -168,13 +168,9 @@ class _FormingBarcodeCollectionPriorityPageState
                           ),
                         );
                       },
-                      onReorder: (oldIndex, newIndex) {
+                      onReorderItem: (oldIndex, newIndex) {
                         // 排序逻辑
                         setState(() {
-                          if (newIndex > oldIndex) {
-                            newIndex -= 1; // 如果目标位置在被拖动项的后面，需要减 1
-                          }
-
                           // 获取被拖动的 Item 和目标位置的 Item
                           final movedItem =
                               state.prioriInfoList.removeAt(oldIndex);

@@ -436,7 +436,7 @@ class _AttendanceDashboardItemState extends State<AttendanceDashboardItem>
                           child: SizeTransition(
                             sizeFactor:
                             animationController.drive(CurveTween(curve: Curves.easeInOut)),
-                            axisAlignment: -1,
+                            alignment: Alignment.topCenter,
                             axis: Axis.vertical,
                             child: Column(
                               mainAxisSize: MainAxisSize.min,

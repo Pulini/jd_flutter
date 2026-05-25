@@ -42,9 +42,6 @@ class MoldingScanBulletinReportLogic extends GetxController {
   }
 
   void changeSort({required int oldIndex, required int newIndex}) {
-    if (oldIndex < newIndex) {
-      newIndex -= 1;
-    }
     state.reportInfo.insert(newIndex, state.reportInfo.removeAt(oldIndex));
     timer?.cancel();
     timer = null;
