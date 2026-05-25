@@ -25,7 +25,6 @@ class StuffQualityInspectionState {
   var shortQuantityEnable = true.obs; //短码数量输入框是否能点击
   var abnormalExplanationEnable = true.obs; //异常说明
   var processingMethodEnable = true.obs; //处理方法
-  var processingMethodId = "";//处理方法id
 
   var peoPleInfo = PeopleMessageInfo().obs; //员工详情
   var handleList = <String>["无"]; //处理方式

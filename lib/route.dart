@@ -539,7 +539,7 @@ class RouteConfig {
   //仓库暂收单
   static Routes temporaryOrder = Routes(
     '/temporary_order',
-    207,
+    209,
     const TemporaryOrderPage(),
   );
 
@@ -581,7 +581,7 @@ class RouteConfig {
   //品检单列表
   static Routes qualityInspectionList = Routes(
     '/quality_inspection_list',
-    210,
+    211,
     const QualityInspectionListPage(),
   );
 
@@ -637,7 +637,7 @@ class RouteConfig {
   //成型条码采集
   static Routes formingBarcodeCollection = Routes(
     '/forming_barcode_collection',
-    205,
+    206,
     const FormingBarcodeCollectionPage(),
   );
 
