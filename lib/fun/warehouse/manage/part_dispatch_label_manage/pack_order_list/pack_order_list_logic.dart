@@ -1,4 +1,3 @@
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/pack_order_list_info.dart';
 import 'package:jd_flutter/utils/utils.dart';
