@@ -425,9 +425,7 @@ class _StuffQualityInspectionPageState
                       controller: logic.ngController,
                       myIcon: const Icon(Icons.search),
                       onIconTap: () {
-                        if(logic.unqualifiedQualifiedController.text.isNotEmpty || logic.shortQualifiedController.text.isNotEmpty){
-                          logic.getNgType();
-                        }
+                        logic.getNgType();
                       },
                     ),
                   ),
@@ -440,21 +438,17 @@ class _StuffQualityInspectionPageState
                   Expanded(
                     child: state.processingMethodEnable.value
                         ? EditText(
-                            readOnly: true,
                             hint: 'quality_inspection_processing_method'.tr,
                             controller: logic.processingMethodController,
-                            myIcon: const Icon(Icons.search),
-                            onIconTap: () {
-                              if(logic.unqualifiedQualifiedController.text.isNotEmpty || logic.shortQualifiedController.text.isNotEmpty){
-                                logic.getHandleType();
-                              }
-                            },
                           )
                         : spText(
                             name: 'quality_inspection_processing_method'.tr,
                             text: state.noType.value,
                           ),
                   ),
+                  IconButton(onPressed: (){
+                    logic.getHandleType();
+                  }, icon: Icon(Icons.search)),
                   Expanded(
                       child: NumberDecimalEditText(
                     hint: 'quality_inspection_availability'.tr,

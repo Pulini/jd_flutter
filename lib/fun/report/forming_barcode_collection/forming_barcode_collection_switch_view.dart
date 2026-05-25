@@ -161,9 +161,18 @@ class _FormingBarcodeCollectionSwitchPageState
 
   @override
   void dispose() {
-    super.dispose();
     state.dataList.clear();
     state.dataList.addAll(state.copyDataList);
+    for (var v in state.dataList) {
+      v.isShow = false;
+    }
+
+    for (var v in state.dataList) {
+      if(v.entryFID == state.switchEntryId){
+        v.isShow =true;
+      }
+    }
+    super.dispose();
   }
 
   @override

@@ -326,6 +326,7 @@ class FormingBarcodeCollectionLogic extends GetxController {
         break;
       }
     }
+    state.switchEntryId = entryId;
     return entryId;
   }
 

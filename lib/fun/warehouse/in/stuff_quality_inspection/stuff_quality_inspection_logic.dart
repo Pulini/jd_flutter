@@ -805,7 +805,7 @@ class StuffQualityInspectionLogic extends GetxController {
               'SourceNumber': state.toCreateOrderMes,
               'AvailAbility': availabilityController.text,
               'ExptypeTxt': ngController.text,
-              'TreatMethod': state.processingMethodId,
+              'TreatMethod': processingMethodController.text,
               'UnqualifiedType': '0'
             }
         ],
@@ -1392,7 +1392,7 @@ class StuffQualityInspectionLogic extends GetxController {
               'SourceNumber': state.toCreateOrderMes,
               'AvailAbility': availabilityController.text,
               'ExptypeTxt': ngController.text,
-              'TreatMethod': state.processingMethodId,
+              'TreatMethod': processingMethodController.text,
               'UnqualifiedType': '0'
             }
         ],
@@ -1562,7 +1562,6 @@ class StuffQualityInspectionLogic extends GetxController {
             Get.back();
             processingMethodController.text =
                 list[controller.selectedItem].name!;
-            state.processingMethodId = list[controller.selectedItem].number!;
           },
           child: Text(
             'dialog_default_confirm'.tr,
