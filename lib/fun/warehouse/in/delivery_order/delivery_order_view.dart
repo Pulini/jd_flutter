@@ -8,7 +8,6 @@ import 'package:jd_flutter/fun/warehouse/in/delivery_order/delivery_order_dialog
 import 'package:jd_flutter/route.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
-import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/check_box_widget.dart';
 import 'package:jd_flutter/widget/combination_button_widget.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
@@ -234,8 +233,9 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
       Row(
         children: [
           CombinationButton(
-              text: 'delivery_order_check'.tr,
-              click: () => {logger.f('11111'), _checkOrder(true, data)}),
+            text: 'delivery_order_check'.tr,
+            click: () => _checkOrder(true, data),
+          ),
           Expanded(child: Container()),
           Text(
             data[0].isExempt == true
@@ -358,8 +358,9 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
         Row(
           children: [
             CombinationButton(
-                text: 'delivery_order_check'.tr,
-                click: () => {logger.f('2222222'), _checkOrder(true, data)}),
+              text: 'delivery_order_check'.tr,
+              click: () => _checkOrder(true, data),
+            ),
             Expanded(child: Container()),
             Text(
               data[0].isExempt == true
@@ -385,7 +386,7 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
       ],
     );
     return GestureDetector(
-      onTap: () => {logger.f('3333333'), _checkOrder(false, data)},
+      onTap: () => _checkOrder(false, data),
       child: Container(
         margin: const EdgeInsets.only(bottom: 10),
         padding: const EdgeInsets.all(10),
@@ -857,7 +858,9 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
                                 refresh: _query,
                               );
                             } else {
-                              showSnackBar(message: 'delivery_order_stock_in_not_allowed'.tr);
+                              showSnackBar(
+                                  message:
+                                      'delivery_order_stock_in_not_allowed'.tr);
                             }
                           },
                         ),

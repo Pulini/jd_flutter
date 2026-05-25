@@ -114,23 +114,62 @@ class DeliveryOrderInfo {
     division = json['Division'];
     trackNo = json['TrackNo'];
     mes = json['Mes'];
-    if (json['DeliSize'] != null) {
-      json['DeliSize'].forEach((v) {
-        deliSize?.add(DeliveryOrderSizeInfo.fromJson(v));
-      });
-    }
-    deliSeqList = [];
-    if (json['DeliSeqList'] != null) {
-      json['DeliSeqList'].forEach((v) {
-        deliSeqList?.add(DeliveryOrderLineInfo.fromJson(v));
-      });
-    }
-    deliJbq = [];
-    if (json['DeliJbq'] != null) {
-      json['DeliJbq'].forEach((v) {
-        deliJbq?.add(DeliveryOrderBindingLabelInfo.fromJson(v));
-      });
-    }
+    deliSize = [
+      if (json['DeliSize'] != null)
+        for (var item in json['DeliSize']) DeliveryOrderSizeInfo.fromJson(item)
+    ];
+
+    deliSeqList = [
+      if (json['DeliSeqList'] != null)
+        for (var item in json['DeliSeqList'])
+          DeliveryOrderLineInfo.fromJson(item)
+    ];
+    deliJbq = [
+      if (json['DeliJbq'] != null)
+        for (var item in json['DeliJbq'])
+          DeliveryOrderBindingLabelInfo.fromJson(item)
+    ];
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'BaseUnit': baseUnit,
+      'BillDate': billDate,
+      'CheckQuantity': checkQuantity,
+      'Inspector': inspector,
+      'Coefficient': coefficient,
+      'CommUnit': commUnit,
+      'CompanyCode': companyCode,
+      'DeliNo': deliNo,
+      'FinalCustomer': finalCustomer,
+      'DeliveryLocation': deliveryLocation,
+      'DistributionType': distributionType,
+      'FactoryNO': factoryNO,
+      'FactoryName': factoryName,
+      'IsExempt': isExempt,
+      'IsGenerate': isGenerate,
+      'IsPackingMaterials': isPackingMaterials,
+      'MaterialCode': materialCode,
+      'MaterialName': materialName,
+      'Model': model,
+      'NumPage': numPage,
+      'Remark': remark,
+      'Remarks': remarks,
+      'SupplierCode': supplierCode,
+      'SupplierName': supplierName,
+      'Location': location,
+      'LocationName': locationName,
+      'MatchCode': matchCode,
+      'ScWorkcardNo': produceOrderNo,
+      'IsScanPieces': isScanPieces,
+      'IsPiece': isPiece,
+      'Division': division,
+      'TrackNo': trackNo,
+      'Mes': mes,
+      'DeliSize': deliSize?.map((v) => v.toJson()).toList(),
+      'DeliSeqList': deliSeqList?.map((v) => v.toJson()).toList(),
+      'DeliJbq': deliJbq?.map((v) => v.toJson()).toList(),
+    };
   }
 
   bool isTemporarilyReceived() => isGenerate?.isNotEmpty == true;
@@ -175,6 +214,14 @@ class DeliveryOrderSizeInfo {
     qty = json['Qty'];
     baseQty = json['BaseQty'];
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'Size': size,
+      'Qty': qty,
+      'BaseQty': baseQty,
+    };
+  }
 }
 
 class DeliveryOrderLineInfo {
@@ -199,6 +246,16 @@ class DeliveryOrderLineInfo {
     purchaseOrderNumber = json['PurchaseOrderNumber'];
     purchaseDocumentItemNumber = json['PurchaseDocumentItemNumber'];
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'DeliSeq': deliSeq,
+      'Remarks': remarks,
+      'VerifyQty': verifyQty,
+      'PurchaseOrderNumber': purchaseOrderNumber,
+      'PurchaseDocumentItemNumber': purchaseDocumentItemNumber,
+    };
+  }
 }
 
 class DeliveryOrderBindingLabelInfo {
@@ -222,6 +279,16 @@ class DeliveryOrderBindingLabelInfo {
     grossWeight = json['Brgew'];
     netWeight = json['Ntgew'];
     quantity = json['Qty'];
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'PieceNo': pieceNo,
+      'Ladevol': volume,
+      'Brgew': grossWeight,
+      'Ntgew': netWeight,
+      'Qty': quantity,
+    };
   }
 }
 
