@@ -160,6 +160,13 @@ class _FormingBarcodeCollectionSwitchPageState
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    state.dataList.clear();
+    state.dataList.addAll(state.copyDataList);
+  }
+
+  @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       logic.copyData();

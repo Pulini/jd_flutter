@@ -1,9 +1,9 @@
 import 'dart:convert';
-
 import 'package:collection/collection.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/people_message_info.dart';
+import 'package:jd_flutter/bean/http/response/sap_quality_inspection_type_info.dart';
 import 'package:jd_flutter/bean/http/response/show_color_batch.dart';
 import 'package:jd_flutter/bean/http/response/stuff_quality_inspection_info.dart';
 import 'package:jd_flutter/bean/http/response/stuff_quality_inspection_label_info.dart';
@@ -16,6 +16,7 @@ import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
+import 'package:jd_flutter/widget/spinner_widget.dart';
 
 class StuffQualityInspectionLogic extends GetxController {
   final StuffQualityInspectionState state = StuffQualityInspectionState();
@@ -28,7 +29,10 @@ class StuffQualityInspectionLogic extends GetxController {
   var reviewerController = TextEditingController(); //审核人控制器
   var exceptionDescriptionController = TextEditingController(); //异常说明
   var processingMethodController = TextEditingController(); //处理方法
+  var ngController = TextEditingController(); //ng类型
   var availabilityController = TextEditingController(); //可利用率
+
+  SpinnerController? spinnerController4;
 
   //添加照片
   void addPicture(String bitmapBase64) {
@@ -162,14 +166,14 @@ class StuffQualityInspectionLogic extends GetxController {
     if (inspectionQuantityController.text.toDoubleTry() > 0 &&
             unqualifiedQualifiedController.text.toDoubleTry() > 0 ||
         shortQualifiedController.text.toDoubleTry() > 0) {
-
       if (state.isSizeCode == false &&
-          (inspectionQuantityController.text.toDoubleTry() != unqualifiedQualifiedController.text.toDoubleTry() &&
-              inspectionQuantityController.text.toDoubleTry() != shortQualifiedController.text.toDoubleTry())) {
+          (inspectionQuantityController.text.toDoubleTry() !=
+                  unqualifiedQualifiedController.text.toDoubleTry() &&
+              inspectionQuantityController.text.toDoubleTry() !=
+                  shortQualifiedController.text.toDoubleTry())) {
         // 不同物料并且不是全部不合格或全部短码
         errorDialog(content: '不允许不同物料进行全部不合格或全部短码以外的操作');
       } else {
-        logger.f('--------------1-------------');
         getLabelsForOrder(
             inspectionType: inspectionType,
             type: type,
@@ -264,16 +268,14 @@ class StuffQualityInspectionLogic extends GetxController {
       }
     }
 
-    if (unqualifiedQualifiedController.text.toDoubleTry() > 0 &&
-        (exceptionDescriptionController.text.isEmpty ||
-            processingMethodController.text.isEmpty)) {
-      showSnackBar(message: '请输入异常说明和处理方法');
+    if (unqualifiedQualifiedController.text.toDoubleTry() > 0 && (exceptionDescriptionController.text.isEmpty || processingMethodController.text.isEmpty || ngController.text.isEmpty)) {
+      showSnackBar(message: '请输入异常说明和处理方法,NG类型');
       return;
     }
     if (shortQualifiedController.text.toDoubleTry() > 0 &&
         (exceptionDescriptionController.text.isEmpty ||
-            processingMethodController.text.isEmpty)) {
-      showSnackBar(message: '请输入异常说明和处理方法');
+            processingMethodController.text.isEmpty || ngController.text.isEmpty)) {
+      showSnackBar(message: '请输入异常说明和处理方法,NG类型');
       return;
     }
     if ((unqualifiedQualifiedController.text.toDoubleTry() > 0 ||
@@ -802,6 +804,8 @@ class StuffQualityInspectionLogic extends GetxController {
               'UnqualifiedReason': reason,
               'SourceNumber': state.toCreateOrderMes,
               'AvailAbility': availabilityController.text,
+              'ExptypeTxt': ngController.text,
+              'TreatMethod': state.processingMethodId,
               'UnqualifiedType': '0'
             }
         ],
@@ -856,7 +860,6 @@ class StuffQualityInspectionLogic extends GetxController {
     if (number.isNotEmpty && number.length == 6) {
       httpGet(
         method: webApiGetEmpAndLiableByEmpCode,
-        loading: 'device_maintenance_personnel_information'.tr,
         params: {
           'EmpCode': number,
         },
@@ -1038,59 +1041,42 @@ class StuffQualityInspectionLogic extends GetxController {
       method: webApiAbnormalMaterialQuality,
       loading: 'quality_inspection_submit_abnormal'.tr,
       body: {
-        'ApplicantNumber': getUserInfo()!.number,
-        //申报人工号
-        'StorageDate': getDateYMD(),
-        //入库日期
-        'DeclarationDate': getDateYMD(),
-        //申报日期
-        'FactoryModel': state.detailInfo!.receipt
+        'ApplicantNumber': getUserInfo()!.number, //申报人工号
+        'StorageDate': getDateYMD(),     //入库日期
+        'DeclarationDate': getDateYMD(),  //申报日期
+        'FactoryModel': state.detailInfo!.receipt  //工厂型体
             ?.where((data) => data.isSelected.value == true)
             .toList()[0]
             .factoryModel,
-        //工厂型体
-        'DistributiveModel': state.detailInfo!.receipt
+        'DistributiveModel': state.detailInfo!.receipt   //分配型体
             ?.where((data) => data.isSelected.value == true)
             .toList()[0]
             .distributiveModel,
-        //分配型体
-        'MaterialName': state.detailInfo!.receipt
+        'MaterialName': state.detailInfo!.receipt //物料名称
             ?.where((data) => data.isSelected.value == true)
             .toList()[0]
             .materialName,
-        //物料名称
-        'MaterialCode': state.detailInfo!.receipt
+        'MaterialCode': state.detailInfo!.receipt  //物料编码
             ?.where((data) => data.isSelected.value == true)
             .toList()[0]
             .materialCode,
-        //物料编码
-        'ExceptionDescription': exceptionDescriptionController.text,
-        //异常说明
-        'ExceptionType': upType,
-        //异常类别
-        'ProcessingMethod': processingMethodController.text,
-        //处理方法
-        'Reviewer': reviewerController.text,
-        //审核人
-        'AcceptanceUnit': upSubmitGroupType,
-        //受理单位
-        'InspectionQuantity': inspectionQuantityController.text,
-        //检验数量
-        'ShortCodesNumber': shortQualifiedController.text,
-        //短码数量
-        'InspectionUnit': state.detailInfo!.receipt
+        'ExceptionDescription': exceptionDescriptionController.text,     //异常说明
+        'ExceptionType': upType,  //异常类别
+        'ProcessingMethod': processingMethodController.text, //处理方法
+        'Reviewer': reviewerController.text, //审核人
+        'AcceptanceUnit': upSubmitGroupType,  //受理单位
+        'InspectionQuantity': inspectionQuantityController.text, //检验数量
+        'ShortCodesNumber': shortQualifiedController.text,  //短码数量
+        'InspectionUnit': state.detailInfo!.receipt //报检单位
             ?.where((data) => data.isSelected.value == true)
             .toList()[0]
             .commonUnits,
-        //报检单位
-        'Photos': [
+        'Photos': [  //图片
           for (var pic in state.picture)
             if (pic.typeAdd != '0') {'Photo': pic.photo}
         ],
-        //图片
         'SupplierNumber': state.detailInfo!.supplierNumber,
-        //入库确认人
-        'StockInConfirmer':state.detailInfo!.producerNumber,
+        'StockInConfirmer': state.detailInfo!.producerNumber,   //入库确认人
       },
     ).then((response) {
       if (response.resultCode == resultSuccess) {
@@ -1173,7 +1159,8 @@ class StuffQualityInspectionLogic extends GetxController {
                 .where((v) => v.barCode == label.barCode)
                 .forEach((subData) {
               if (qty >= subData.quantityTemporarilyReceived!) {
-                subData.unqualifiedQuantity = subData.quantityTemporarilyReceived;
+                subData.unqualifiedQuantity =
+                    subData.quantityTemporarilyReceived;
                 qty = qty.sub(subData.quantityTemporarilyReceived!);
               } else {
                 subData.unqualifiedQuantity = qty;
@@ -1404,6 +1391,8 @@ class StuffQualityInspectionLogic extends GetxController {
               'UnqualifiedReason': reason,
               'SourceNumber': state.toCreateOrderMes,
               'AvailAbility': availabilityController.text,
+              'ExptypeTxt': ngController.text,
+              'TreatMethod': state.processingMethodId,
               'UnqualifiedType': '0'
             }
         ],
@@ -1511,7 +1500,7 @@ class StuffQualityInspectionLogic extends GetxController {
           subData.short = subData.boxQty;
         }
       }
-    }else{
+    } else {
       for (var subData in state.labelData) {
         if (isAll) {
           subData.unqualified = subData.boxQty;
@@ -1537,5 +1526,179 @@ class StuffQualityInspectionLogic extends GetxController {
         .map((v) => v.unqualified ?? 0)
         .reduce((a, b) => a.add(b));
     state.labelData.refresh();
+  }
+
+  void getHandleType() {
+    sapPost(
+      loading: 'quality_inspection_handle_type'.tr,
+      method: webApiForSapGetType,
+      body: {"I_DOMNAME": "ZTREATMETHOD", "I_LANG": "1"},
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        var list = <SapQualityInspectionTypeInfo>[
+          for (var i = 0; i < response.data.length; ++i)
+            SapQualityInspectionTypeInfo.fromJson(response.data[i])
+        ];
+        //创建选择器控制器
+        var controller = FixedExtentScrollController(
+          initialItem: 0,
+        );
+        //创建取消按钮
+        var cancel = TextButton(
+          onPressed: () {
+            Get.back();
+          },
+          child: Text(
+            'dialog_default_cancel'.tr,
+            style: const TextStyle(
+              color: Colors.grey,
+              fontSize: 20,
+            ),
+          ),
+        );
+        //创建确认按钮
+        var confirm = TextButton(
+          onPressed: () {
+            Get.back();
+            processingMethodController.text =
+                list[controller.selectedItem].name!;
+            state.processingMethodId = list[controller.selectedItem].number!;
+          },
+          child: Text(
+            'dialog_default_confirm'.tr,
+            style: const TextStyle(
+              color: Colors.blueAccent,
+              fontSize: 20,
+            ),
+          ),
+        );
+        //创建底部弹窗
+        showPopup(Column(
+          children: <Widget>[
+            //选择器顶部按钮
+            Container(
+              height: 45,
+              color: Colors.grey[200],
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [cancel, confirm],
+              ),
+            ),
+            //选择器主体
+            Expanded(
+              child: getCupertinoPicker(
+                items: list.map((data) {
+                  return Center(child: Text(data.name!));
+                }).toList(),
+                controller: controller,
+              ),
+            )
+          ],
+        ));
+      } else {
+        errorDialog(content: response.message);
+      }
+    });
+  }
+
+  void getNgType() {
+    sapPost(
+      loading: 'quality_inspection_handle_type'.tr,
+      method: webApiForSapGetType,
+      body: {"I_DOMNAME": "ZEXPTYP", "I_LANG": "1"},
+    ).then((response) {
+      if (response.resultCode == resultSuccess) {
+        var list = <SapQualityInspectionTypeInfo>[
+          for (var i = 0; i < response.data.length; ++i)
+            SapQualityInspectionTypeInfo.fromJson(response.data[i])
+        ];
+
+        // 多选核心：记录选中的项
+        final selectedList = <SapQualityInspectionTypeInfo>[];
+
+        // 创建底部多选弹窗
+        Get.bottomSheet(
+          StatefulBuilder( // 必须用 StatefulBuilder 才能在弹窗内刷新选中状态
+            builder: (context, setBottomSheetState) {
+              return Container(
+                height: Get.height * 0.7,
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+                ),
+                child: Column(
+                  children: [
+                    // 顶部取消/确认
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        TextButton(
+                          onPressed: () => Get.back(),
+                          child: Text(
+                            'dialog_default_cancel'.tr,
+                            style: const TextStyle(color: Colors.grey, fontSize: 18),
+                          ),
+                        ),
+                        Text(
+                          '请选择NG类型',
+                          style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w500),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Get.back();
+                            // 多选结果处理
+                            if (selectedList.isNotEmpty) {
+                              // 把多选的名称用逗号拼接显示在输入框
+                              ngController.text = selectedList
+                                  .map((e) => e.name)
+                                  .join(', ');
+                            }
+                          },
+                          child: Text(
+                            'dialog_default_confirm'.tr,
+                            style: const TextStyle(color: Colors.blueAccent, fontSize: 18),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const Divider(height: 1),
+                    // 多选列表主体
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: list.length,
+                        itemBuilder: (context, index) {
+                          final item = list[index];
+                          final isSelected = selectedList.contains(item);
+                          return CheckboxListTile(
+                            title: Text(item.name ?? ''),
+                            value: isSelected,
+                            onChanged: (value) {
+                              setBottomSheetState(() {
+                                if (value == true) {
+                                  selectedList.add(item);
+                                } else {
+                                  selectedList.remove(item);
+                                }
+                              });
+                            },
+                            contentPadding: EdgeInsets.zero,
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+          backgroundColor: Colors.black.withOpacity(0.5),
+          isDismissible: true,
+          enableDrag: true,
+        );
+      } else {
+        errorDialog(content: response.message);
+      }
+    });
   }
 }
