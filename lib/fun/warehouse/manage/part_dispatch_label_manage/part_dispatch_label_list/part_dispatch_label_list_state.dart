@@ -1,4 +1,5 @@
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
+import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:jd_flutter/bean/http/response/pack_order_list_info.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
@@ -14,7 +15,7 @@ class PartDispatchLabelListState {
   }) {
     httpGet(
       method: webApiGetLargeCardNoList,
-      loading: '正在获取标签列表...',
+      loading: 'part_dispatch_label_getting_label_list'.tr,
       body: {
         'WorkCardEntryFIDs': partIds ?? '',
         'OrderPackageID': packOrderId ?? 0,
@@ -39,7 +40,7 @@ class PartDispatchLabelListState {
   }) {
     httpPost(
       method: webApiDeletePartProductionDispatchLabels,
-      loading: '正在删除贴标...',
+      loading: 'part_dispatch_label_deleting_label'.tr,
       body: {'CardNos': labelList},
     ).then((response) {
       if (response.resultCode == resultSuccess) {
@@ -58,7 +59,9 @@ class PartDispatchLabelListState {
   }) {
     httpPost(
       method: webApiPackageLabelLockOrUnLock,
-      loading: isLock? '正在锁定贴标...':'正在解锁贴标...',
+      loading: isLock
+          ? 'part_dispatch_label_print_locking'.tr
+          : 'part_dispatch_label_print_unlocking'.tr,
       body: {
         'UserID': userInfo?.userID,
         'IsLock': isLock,

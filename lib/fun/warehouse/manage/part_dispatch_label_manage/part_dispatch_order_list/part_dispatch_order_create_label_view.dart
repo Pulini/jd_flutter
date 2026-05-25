@@ -39,31 +39,31 @@ class _PartDispatchOrderCreateLabelPageState
             color: Colors.purple.shade100,
           ),
           alignment: Alignment.center,
-          child: Text('尺码'),
+          child: Text('part_dispatch_create_label_size'.tr),
         ),
         expandedFrameText(
           flex: 3,
           lineHeight: 45,
           backgroundColor: Colors.purple.shade100,
-          text: '派工数',
+          text: 'part_dispatch_create_label_dispatch_qty'.tr,
         ),
         expandedFrameText(
           flex: 3,
           lineHeight: 45,
           backgroundColor: Colors.purple.shade100,
-          text: '配套数',
+          text: 'part_dispatch_create_label_accompany_qty'.tr,
         ),
         expandedFrameText(
           flex: 3,
           lineHeight: 45,
           backgroundColor: Colors.purple.shade100,
-          text: '已生成数',
+          text: 'part_dispatch_create_label_generated_qty'.tr,
         ),
         expandedFrameText(
           flex: 3,
           lineHeight: 45,
           backgroundColor: Colors.purple.shade100,
-          text: '剩余数',
+          text: 'part_dispatch_create_label_remaining_qty'.tr,
         ),
         Expanded(
           flex: state.isSingleSize ? 6 : 4,
@@ -88,7 +88,7 @@ class _PartDispatchOrderCreateLabelPageState
                           borderRadius: BorderRadius.circular(3),
                         ),
                         contentPadding: EdgeInsets.only(bottom: 3),
-                        labelText: '装箱数',
+                        labelText: 'part_dispatch_create_label_packing_qty'.tr,
                         labelStyle: TextStyle(fontWeight: FontWeight.bold),
                       ),
                       controller: tecBatchSetPackageQty,
@@ -100,7 +100,7 @@ class _PartDispatchOrderCreateLabelPageState
                 Obx(() => CombinationButton(
                       isEnabled: logic.isCanSet(),
                       combination: Combination.left,
-                      text: '批设置',
+                      text: 'part_dispatch_create_label_batch_setting'.tr,
                       click: () {
                         logic.batchSetItemPackQty(
                           tecBatchSetPackageQty.text.toIntTry(),
@@ -111,7 +111,7 @@ class _PartDispatchOrderCreateLabelPageState
                 Obx(() => CombinationButton(
                       isEnabled: logic.isCanSet(),
                       combination: Combination.right,
-                      text: '最大',
+                      text: 'part_dispatch_create_label_max_number'.tr,
                       click: () {
                         logic.batchSetItemMaxPackQty();
                         logic.refreshMixLabelCount(tecLabelCount);
@@ -148,7 +148,7 @@ class _PartDispatchOrderCreateLabelPageState
                             borderRadius: BorderRadius.circular(3),
                           ),
                           contentPadding: EdgeInsets.only(bottom: 3),
-                          labelText: '标签数',
+                          labelText: 'part_dispatch_create_label_qty'.tr,
                           labelStyle: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         controller: tecBatchSetLabelCount,
@@ -160,7 +160,7 @@ class _PartDispatchOrderCreateLabelPageState
                   Obx(() => CombinationButton(
                         isEnabled: logic.isCanSet(),
                         combination: Combination.left,
-                        text: '批设置',
+                        text: 'part_dispatch_create_label_batch_setting'.tr,
                         click: () => logic.batchSetItemLabelCount(
                           tecBatchSetLabelCount.text.toIntTry(),
                         ),
@@ -168,7 +168,7 @@ class _PartDispatchOrderCreateLabelPageState
                   Obx(() => CombinationButton(
                         isEnabled: logic.isCanSet(),
                         combination: Combination.right,
-                        text: '最大',
+                        text: 'part_dispatch_create_label_max_number'.tr,
                         click: () => logic.batchSetItemMaxLabelCount(),
                       )),
                   SizedBox(width: 5),
@@ -184,7 +184,7 @@ class _PartDispatchOrderCreateLabelPageState
             color: Colors.purple.shade100,
           ),
           alignment: Alignment.center,
-          child: Text('选择'),
+          child: Text('part_dispatch_create_label_select'.tr),
         )
       ],
     );
@@ -323,7 +323,7 @@ class _PartDispatchOrderCreateLabelPageState
                 color: backgroundColor,
               ),
               alignment: Alignment.center,
-              child: Text('合计'),
+              child: Text('part_dispatch_create_label_total'.tr),
             ),
             expandedFrameText(
               flex: 3,
@@ -395,7 +395,7 @@ class _PartDispatchOrderCreateLabelPageState
     return pageBody(
       actions: [
         Obx(() => CombinationButton(
-              text: '创建贴标',
+              text: 'part_dispatch_create_label_create_label'.tr,
               combination: Combination.left,
               isEnabled: logic.canCreateLabel(),
               click: () => createLabelDialog(
@@ -409,7 +409,7 @@ class _PartDispatchOrderCreateLabelPageState
               ),
             )),
         CombinationButton(
-          text: '贴标列表',
+          text: 'part_dispatch_create_label_label_list'.tr,
           combination: Combination.right,
           click: () => Get.to(
             () => PartDispatchLabelListPage(partIds: state.partListId),
@@ -421,9 +421,9 @@ class _PartDispatchOrderCreateLabelPageState
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            textSpan(hint: '型体：', text: state.typeBody.value),
-            textSpan(hint: '部件：', text: state.part.value),
-            textSpan(hint: '指令：', text: state.instructions.value),
+            textSpan(hint: 'part_dispatch_create_label_type_body'.tr, text: state.typeBody.value),
+            textSpan(hint: 'part_dispatch_create_label_part'.tr, text: state.part.value),
+            textSpan(hint: 'part_dispatch_create_label_instruction'.tr, text: state.instructions.value),
             _titleItem(),
             Expanded(
               child: Obx(() => ListView.builder(

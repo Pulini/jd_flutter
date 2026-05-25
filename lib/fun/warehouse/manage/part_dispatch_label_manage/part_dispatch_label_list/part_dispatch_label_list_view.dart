@@ -68,17 +68,27 @@ class _PartDispatchLabelListPageState extends State<PartDispatchLabelListPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    textSpan(hint: '型体：', text: data.productName ?? ''),
+                    textSpan(
+                        hint: 'part_dispatch_label_type_body'.tr,
+                        text: data.productName ?? ''),
                     Text(
-                      '${data.totalQty()}${data.materialList!.first.unitName ?? ''}/部件',
+                      'part_dispatch_label_material'.trArgs([
+                        data.totalQty().toString(),
+                        data.materialList!.first.unitName ?? ''
+                      ]),
                       style: TextStyle(
                           fontWeight: FontWeight.bold, color: Colors.blue),
                     ),
                   ],
                 ),
-                textSpan(hint: '部位：', text: data.getPartsName()),
-                textSpan(hint: '指令：', text: data.billNo ?? ''),
-                textSpan(hint: '尺码：', text: data.getSize()),
+                textSpan(
+                    hint: 'part_dispatch_label_part'.tr,
+                    text: data.getPartsName()),
+                textSpan(
+                    hint: 'part_dispatch_label_instruction'.tr,
+                    text: data.billNo ?? ''),
+                textSpan(
+                    hint: 'part_dispatch_label_size'.tr, text: data.getSize()),
               ],
             ),
           );
@@ -135,7 +145,9 @@ class _PartDispatchLabelListPageState extends State<PartDispatchLabelListPage> {
               badgeCornerRadius: Radius.circular(7),
               badgeSize: Size(50, 50),
               textSpan: TextSpan(
-                text: data.isPrint == true ? '已打印' : '未打印',
+                text: data.isPrint == true
+                    ? 'part_dispatch_label_printed'.tr
+                    : 'part_dispatch_label_not_printed'.tr,
                 style: TextStyle(fontSize: 12),
               ),
             ),
@@ -160,10 +172,10 @@ class _PartDispatchLabelListPageState extends State<PartDispatchLabelListPage> {
   @override
   Widget build(BuildContext context) {
     return pageBody(
-      title: '部件贴标列表',
+      title: 'part_dispatch_label_list'.tr,
       actions: [
         CombinationButton(
-          text: '打印设置',
+          text: 'part_dispatch_label_print_setting'.tr,
           click: () => printSetDialog(),
         ),
       ],
@@ -186,7 +198,7 @@ class _PartDispatchLabelListPageState extends State<PartDispatchLabelListPage> {
                 child: Obx(() => CombinationButton(
                       isEnabled: logic.buttonEnable(),
                       combination: Combination.left,
-                      text: '删除贴标',
+                      text: 'part_dispatch_label_delete_label'.tr,
                       click: () => logic.deleteLabel(refresh: () => _query()),
                     )),
               ),
@@ -194,7 +206,7 @@ class _PartDispatchLabelListPageState extends State<PartDispatchLabelListPage> {
                 child: Obx(() => CombinationButton(
                       isEnabled: logic.buttonEnable(),
                       combination: Combination.middle,
-                      text: '打印锁定',
+                      text: 'part_dispatch_label_print_lock'.tr,
                       click: () => logic.printLockOrUnlock(
                         isPrint: false,
                         isLock: true,
@@ -206,7 +218,7 @@ class _PartDispatchLabelListPageState extends State<PartDispatchLabelListPage> {
                 child: Obx(() => CombinationButton(
                       isEnabled: logic.buttonEnable(),
                       combination: Combination.middle,
-                      text: '打印解锁',
+                      text: 'part_dispatch_label_print_unlock'.tr,
                       click: () => logic.printLockOrUnlock(
                         isPrint: false,
                         isLock: false,
@@ -218,7 +230,7 @@ class _PartDispatchLabelListPageState extends State<PartDispatchLabelListPage> {
                 child: Obx(() => CombinationButton(
                       isEnabled: state.labelList.isNotEmpty,
                       combination: Combination.middle,
-                      text: '全选已印',
+                      text: 'part_dispatch_label_select_all_printed'.tr,
                       click: () => logic.selectAllPrintedItem(),
                     )),
               ),
@@ -226,7 +238,7 @@ class _PartDispatchLabelListPageState extends State<PartDispatchLabelListPage> {
                 child: Obx(() => CombinationButton(
                       isEnabled: state.labelList.isNotEmpty,
                       combination: Combination.middle,
-                      text: '全选未印',
+                      text: 'part_dispatch_label_select_all_not_printed'.tr,
                       click: () => logic.selectAllNotPrintItem(),
                     )),
               ),
@@ -234,7 +246,7 @@ class _PartDispatchLabelListPageState extends State<PartDispatchLabelListPage> {
                 child: Obx(() => CombinationButton(
                       isEnabled: logic.buttonEnable(),
                       combination: Combination.middle,
-                      text: '取消选择',
+                      text: 'part_dispatch_label_cancel_select'.tr,
                       click: () => logic.unSelectAllItem(),
                     )),
               ),
@@ -242,15 +254,19 @@ class _PartDispatchLabelListPageState extends State<PartDispatchLabelListPage> {
                 child: Obx(() => CombinationButton(
                       isEnabled: logic.buttonEnable(),
                       combination: Combination.right,
-                      text: '批量打印',
+                      text: 'part_dispatch_label_batch_print'.tr,
                       click: () => logic.printLabel(
                         (labels) async => pu.printLabelList(
                           labelList: labels,
-                          start: () => loadingShow('正在下发标签...'),
-                          progress: (i, j) => loadingShow('正在下发标签($i/$j)'),
+                          start: () =>
+                              loadingShow('part_dispatch_label_push_label'.tr),
+                          progress: (i, j) => loadingShow(
+                              'part_dispatch_label_pushing_progress'
+                                  .trArgs([i.toString(), j.toString()])),
                           finished: (s, f) => successDialog(
-                            title: '标签下发结束',
-                            content: '完成${s.length}张, 失败${f.length}张',
+                            title: 'part_dispatch_label_push_label_end'.tr,
+                            content: 'part_dispatch_label_push_finished'.trArgs(
+                                [s.length.toString(), f.length.toString()]),
                             back: () => logic.printLockOrUnlock(
                               isPrint: true,
                               isLock: true,

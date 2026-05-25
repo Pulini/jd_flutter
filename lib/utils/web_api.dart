@@ -155,11 +155,11 @@ Future<BaseData> _doHttp({
           : response.data;
       base.resultCode = json['ResultCode'];
       base.data = json['Data'];
-      base.message = '接口提示：${json['Message']}';
+      base.message = '${'http_api_tip_prefix'.tr}${json['Message']}';
     } else {
       if (loading != null && loading.isNotEmpty) Get.back();
       logger.e('网络异常');
-      base.message = '网络异常';
+      base.message = 'http_network_error'.tr;
     }
   } on DioException catch (e) {
     // 如果是 DNS 或连接错误，且重试次数小于 2，则重试
@@ -188,38 +188,38 @@ Future<BaseData> _doHttp({
     }
     switch (e.type) {
       case DioExceptionType.connectionTimeout:
-        base.message = '连接服务器超时';
+        base.message = 'http_connection_timeout'.tr;
         break;
       case DioExceptionType.connectionError:
-        base.message = '连接服务器异常';
+        base.message = 'http_connection_error'.tr;
         break;
       case DioExceptionType.sendTimeout:
-        base.message = '发送数据超时';
+        base.message = 'http_send_timeout'.tr;
         break;
       case DioExceptionType.receiveTimeout:
-        base.message = '接收数据超时';
+        base.message = 'http_receive_timeout'.tr;
         break;
       case DioExceptionType.cancel:
-        base.message = '取消请求';
+        base.message = 'http_request_cancelled'.tr;
         break;
       case DioExceptionType.badResponse:
         base.message = badResponseErrorMessage(e.response?.statusCode);
         break;
       case DioExceptionType.badCertificate:
-        base.message = '服务器证书错误';
+        base.message = 'http_bad_certificate'.tr;
         break;
       case DioExceptionType.unknown:
         e.error.toString().startsWith('HandshakeException')
-            ? base.message = 'SSL证书验证失败'
-            : base.message = '未知异常';
+            ? base.message = 'http_ssl_verification_failed'.tr
+            : base.message = 'http_unknown_error'.tr;
         break;
     }
   } on Exception catch (e) {
     logger.e('error:${e.toString()}');
-    base.message = '发生错误：${e.toString()}';
+    base.message = '${'http_error_prefix'.tr}${e.toString()}';
   } on Error catch (e) {
     logger.e('error:${e.toString()}');
-    base.message = '发生异常：${e.toString()}';
+    base.message = '${'http_exception_prefix'.tr}${e.toString()}';
   } finally {
     if (loading != null && loading.isNotEmpty) loadingDismiss();
     base.baseUrl = baseUrl;
@@ -230,31 +230,31 @@ Future<BaseData> _doHttp({
 String badResponseErrorMessage(int? statusCode) {
   switch (statusCode) {
     case 400:
-      return '400:请求参数错误，请检查输入数据';
+      return 'http_error_400'.tr;
     case 401:
-      return '401:未授权访问，请重新登录';
+      return 'http_error_401'.tr;
     case 403:
-      return '403:权限不足，无法访问该资源';
+      return 'http_error_403'.tr;
     case 404:
-      return '404:请求的资源不存在';
+      return 'http_error_404'.tr;
     case 405:
-      return '405:请求方法不允许';
+      return 'http_error_405'.tr;
     case 408:
-      return '408:请求超时，请稍后重试';
+      return 'http_error_408'.tr;
     case 422:
-      return '422:请求格式错误，实体无法处理';
+      return 'http_error_422'.tr;
     case 429:
-      return '429:请求过于频繁，请稍后再试';
+      return 'http_error_429'.tr;
     case 500:
-      return '500:服务器内部错误，请联系管理员';
+      return 'http_error_500'.tr;
     case 502:
-      return '502:网关错误，服务器暂时不可用';
+      return 'http_error_502'.tr;
     case 503:
-      return '503:服务器繁忙，请稍后再试';
+      return 'http_error_503'.tr;
     case 504:
-      return '504:网关超时，请稍后重试';
+      return 'http_error_504'.tr;
     default:
-      return '网络请求失败，请检查网络连接';
+      return 'http_error_default'.tr;
   }
 }
 
@@ -634,6 +634,9 @@ const webApiCleanLabel = 'api/CompoundDispatching/DelPackingListBarcode';
 //根据包装清单ID删除包装清单所有标签
 const webApiCleanLabelFormPackID =
     'api/CompoundDispatching/DelPackingListBarcodeByPackInterID';
+
+//修改包装方案
+const webApiModifyPackProfile = 'api/Package/ModifyPackProfile';
 
 //删除标签
 const webApiDeleteLabels = 'api/CompoundDispatching/DelBarcode';

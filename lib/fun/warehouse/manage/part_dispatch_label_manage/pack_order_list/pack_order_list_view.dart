@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jd_flutter/bean/http/response/pack_order_list_info.dart';
 import 'package:jd_flutter/fun/warehouse/manage/part_dispatch_label_manage/part_dispatch_label_list/part_dispatch_label_list_view.dart';
+import 'package:jd_flutter/fun/warehouse/manage/part_dispatch_label_manage/part_dispatch_label_manage_dialog.dart';
 import 'package:jd_flutter/route.dart';
+import 'package:jd_flutter/utils/extension_util.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/widget/custom_widget.dart';
 import 'package:jd_flutter/widget/dialogs.dart';
@@ -25,8 +27,10 @@ class _PackOrderListPageState extends State<PackOrderListPage> {
   final PackOrderListLogic logic = Get.put(PackOrderListLogic());
   final PackOrderListState state = Get.find<PackOrderListLogic>().state;
   var tecDispatchOrderNo = TextEditingController();
-  // var tecTypeBody = TextEditingController(text: 'PNS26312586-01');
-  var tecTypeBody = TextEditingController();
+
+  var tecTypeBody = TextEditingController(text: 'PNS26312586-01');
+
+  // var tecTypeBody = TextEditingController();
   var dpcStartDate = DatePickerController(
     PickerType.startDate,
     saveKey: '${RouteConfig.productionDispatch.name}${PickerType.startDate}',
@@ -45,7 +49,7 @@ class _PackOrderListPageState extends State<PackOrderListPage> {
     );
   }
 
-  Widget _item(PackOrderInfo data) => Container(
+  Widget _item(OrderPackageInfo data) => Container(
         margin: EdgeInsets.only(bottom: 5),
         decoration: BoxDecoration(
           border: Border.all(color: Colors.grey, width: 2),
@@ -59,6 +63,38 @@ class _PackOrderListPageState extends State<PackOrderListPage> {
         child: IntrinsicHeight(
           child: Row(
             children: [
+              GestureDetector(
+                onTap: () => selectPackProfileDialog(
+                  orderPackProfileID: data.packProfileID ?? 0,
+                  capacityQty: data.capacityQty ?? 0,
+                  packProfileList: state.packProfileList,
+                  callback: (int packProfileID, double capacityQty) =>
+                      logic.modifyOrderPackProfile(
+                    packOrderID: data.packProfileID ?? 0,
+                    packProfileID: packProfileID,
+                    capacityQty: capacityQty,
+                    refresh: () => _query(),
+                  ),
+                ),
+                child: Container(
+                  width: 40,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(7),
+                      bottomLeft: Radius.circular(7),
+                    ),
+                    color: Colors.green,
+                  ),
+                  child: Center(
+                    child: Image.asset(
+                      'assets/images/ic_box.png',
+                      color: Colors.white,
+                      width: 25,
+                      height: 25,
+                    ),
+                  ),
+                ),
+              ),
               Expanded(
                 child: GestureDetector(
                   onTap: () {
@@ -66,8 +102,11 @@ class _PackOrderListPageState extends State<PackOrderListPage> {
                       Get.to(() => PartDispatchLabelListPage(
                             packOrderId: data.packageId ?? 0,
                           ));
-                    }else{
-                      errorDialog(content: '没有贴标预览和打印权限！');
+                    } else {
+                      errorDialog(
+                          content:
+                              'part_dispatch_pack_order_no_print_permission'
+                                  .tr);
                     }
                   },
                   child: Padding(
@@ -80,43 +119,68 @@ class _PackOrderListPageState extends State<PackOrderListPage> {
                           children: [
                             expandedTextSpan(
                               flex: 5,
-                              hint: '组织：',
+                              hint: 'part_dispatch_pack_order_organization'.tr,
                               text: data.organizeName ?? '',
+                              textColor: Colors.black54,
                             ),
                             expandedTextSpan(
-                              flex:5,
-                              hint: '包装清单号：',
+                              flex: 5,
+                              hint: 'part_dispatch_pack_order_pack_order_no'.tr,
                               text: data.packageNo ?? '',
+                              textColor: Colors.black54,
                             ),
                             expandedTextSpan(
                               flex: 2,
-                              hint: '制单日期：',
+                              hint: 'part_dispatch_pack_order_make_date'.tr,
                               text: data.date ?? '',
+                              textColor: Colors.black54,
                             ),
                           ],
                         ),
-                        textSpan(hint: '派工单号：', text: data.workCardNo ?? ''),
-                        textSpan(hint: '指令：', text: data.billNO ?? ''),
+                        textSpan(
+                          hint: 'part_dispatch_pack_order_dispatch_order_no'.tr,
+                          text: data.workCardNo ?? '',
+                          textColor: Colors.black54,
+                        ),
+                        textSpan(
+                          hint: 'part_dispatch_pack_order_instruction'.tr,
+                          text: data.billNO ?? '',
+                          textColor: Colors.black54,
+                        ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             expandedTextSpan(
                               flex: 5,
-                              hint: '型体：',
+                              hint:
+                                  'part_dispatch_pack_order_type_body_tips'.tr,
                               text: data.productName ?? '',
+                              textColor: Colors.black54,
                             ),
                             expandedTextSpan(
                               flex: 5,
-                              hint: '制程：',
+                              hint: 'part_dispatch_pack_order_process'.tr,
                               text: data.processName ?? '',
+                              textColor: Colors.black54,
                             ),
                             expandedTextSpan(
                               flex: 2,
-                              hint: '制单人：',
+                              hint: 'part_dispatch_pack_order_maker'.tr,
                               text: data.userName ?? '',
+                              textColor: Colors.black54,
                             ),
                           ],
                         ),
+                        Text(
+                          'part_dispatch_pack_order_pack_profile'.trArgs([
+                            logic.getOrderPackProfile(data.packProfileID),
+                            data.capacityQty.toShowString()
+                          ]),
+                          style: TextStyle(
+                            color: Colors.green,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        )
                       ],
                     ),
                   ),
@@ -154,10 +218,7 @@ class _PackOrderListPageState extends State<PackOrderListPage> {
           child: TextField(
             controller: tecDispatchOrderNo,
             decoration: InputDecoration(
-              contentPadding: const EdgeInsets.only(
-                left: 10,
-                right: 10,
-              ),
+              contentPadding: const EdgeInsets.only(left: 10, right: 10),
               filled: true,
               fillColor: Colors.grey[300],
               enabledBorder: OutlineInputBorder(
@@ -169,7 +230,7 @@ class _PackOrderListPageState extends State<PackOrderListPage> {
               border: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(20)),
               ),
-              labelText: '派工单号',
+              labelText: 'part_dispatch_pack_order_input_dispatch_order_no'.tr,
               labelStyle: const TextStyle(color: Colors.black54),
               suffixIcon: IconButton(
                 icon: const Icon(Icons.close, color: Colors.grey),
@@ -189,7 +250,7 @@ class _PackOrderListPageState extends State<PackOrderListPage> {
         ),
         EditText(
           controller: tecTypeBody,
-          hint: '型体',
+          hint: 'part_dispatch_pack_order_input_type_body'.tr,
         ),
         DatePicker(pickerController: dpcStartDate),
         DatePicker(pickerController: dpcEndDate),

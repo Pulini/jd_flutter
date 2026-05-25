@@ -106,7 +106,7 @@ class _PartDispatchLabelManagePageState
               badgeCornerRadius: const Radius.circular(8),
               badgeSize: const Size(45, 45),
               textSpan: TextSpan(
-                text: data.packTypeID == 478 ? '单码' : '混码',
+                text: data.packTypeID == 478 ? 'part_dispatch_order_singe'.tr : 'part_dispatch_order_mix'.tr,
                 style: const TextStyle(fontSize: 14),
               ),
             ),
@@ -150,12 +150,12 @@ class _PartDispatchLabelManagePageState
   @override
   Widget build(BuildContext context) {
     return pageBodyWithDrawer(
-      popTitle: '确定要退出部件标签管理吗？',
+      popTitle: 'part_dispatch_order_exit_tips'.tr,
       actions: [
         Obx(() => state.partList.isNotEmpty &&
                 state.partList.where((v) => v.isSelected.value).length == 1
             ? CombinationButton(
-                text: '查看部件明细',
+                text: 'part_dispatch_order_view_detail'.tr,
                 combination: Combination.left,
                 click: () => viewPartDetailDialog(
                   state.partList.firstWhere((v) => v.isSelected.value),
@@ -165,7 +165,7 @@ class _PartDispatchLabelManagePageState
         Obx(() => state.partList.isNotEmpty &&
                 state.partList.any((v) => v.isSelected.value)
             ? CombinationButton(
-                text: '生成贴标',
+                text: 'part_dispatch_order_generate_label'.tr,
                 combination:
                     state.partList.where((v) => v.isSelected.value).length == 1
                         ? Combination.right
@@ -191,7 +191,7 @@ class _PartDispatchLabelManagePageState
               border: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(20)),
               ),
-              labelText: '型体',
+              labelText: 'part_dispatch_order_input_type_body'.tr,
               labelStyle: const TextStyle(color: Colors.black54),
               prefixIcon: IconButton(
                 onPressed: () => scannerDialog(detect: (c) => _query(code: c)),
@@ -205,7 +205,7 @@ class _PartDispatchLabelManagePageState
           ),
         ),
         Obx(() => EditText(
-              hint: '批次号',
+              hint: 'part_dispatch_order_input_batch_number'.tr,
               onChanged: (v) => state.queryBatchNo.value = v,
               initStr: state.queryBatchNo.value,
             )),
@@ -213,7 +213,7 @@ class _PartDispatchLabelManagePageState
         DatePicker(pickerController: dpcEndDate),
         Obx(() => SwitchButton(
               onChanged: (isSelect) => state.isSelectedClosed.value = isSelect,
-              name: '显示已关闭',
+              name: 'part_dispatch_order_show_closed'.tr,
               value: state.isSelectedClosed.value,
             )),
       ],
@@ -236,14 +236,14 @@ class _PartDispatchLabelManagePageState
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          textSpan(hint: '派工单号：', text: state.orderNo.value),
-                          textSpan(hint: '指令：', text: state.instructions.value),
+                          textSpan(hint: 'part_dispatch_order_dispatch_order_no'.tr, text: state.orderNo.value),
+                          textSpan(hint: 'part_dispatch_order_instruction'.tr, text: state.instructions.value),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              textSpan(hint: '型体：', text: state.typeBody.value),
+                              textSpan(hint: 'part_dispatch_order_type_body'.tr, text: state.typeBody.value),
                               textSpan(
-                                  hint: '派工批次：',
+                                  hint: 'part_dispatch_order_batch_number'.tr,
                                   text: state.dispatchBatchNo.value),
                             ],
                           ),
@@ -251,7 +251,7 @@ class _PartDispatchLabelManagePageState
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               textSpan(
-                                  hint: '尺码：', text: state.sizeListText.value),
+                                  hint: 'part_dispatch_order_size'.tr, text: state.sizeListText.value),
                               Text(
                                 state.total.value,
                                 style: TextStyle(

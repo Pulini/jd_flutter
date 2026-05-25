@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jd_flutter/bean/http/response/pack_order_list_info.dart';
 import 'package:jd_flutter/bean/http/response/part_dispatch_label_manage_info.dart';
 import 'package:jd_flutter/bean/http/response/worker_info.dart';
 import 'package:jd_flutter/utils/extension_util.dart';
@@ -11,6 +12,100 @@ import 'package:jd_flutter/widget/dialogs.dart';
 import 'package:jd_flutter/widget/edit_text_widget.dart';
 import 'package:jd_flutter/widget/worker_check_widget.dart';
 import 'package:photo_view/photo_view_gallery.dart';
+
+void selectPackProfileDialog({
+  required int orderPackProfileID,
+  required double capacityQty,
+  required List<PackProfileInfo> packProfileList,
+  required Function(int, double) callback,
+}) {
+  var selectIndex = (-1).obs;
+  var qty = (0.0).obs;
+  qty.value = capacityQty;
+  selectIndex.value =
+      packProfileList.indexWhere((v) => v.packProfileID == orderPackProfileID);
+
+  item(int i) => Obx(() => GestureDetector(
+        onTap: () => selectIndex.value = i,
+        child: Container(
+          margin: EdgeInsets.only(bottom: 5),
+          padding: EdgeInsets.all(5),
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: selectIndex.value == i ? Colors.green : Colors.grey,
+              width: 2,
+            ),
+            borderRadius: BorderRadius.circular(10),
+            gradient: LinearGradient(
+              colors: [
+                selectIndex.value == i
+                    ? Colors.green.shade100
+                    : Colors.blue.shade50,
+                Colors.white
+              ],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ),
+          ),
+          child: Text(
+            packProfileList[i].packProfileName ?? '',
+            style: TextStyle(
+              color: selectIndex.value == i ? Colors.green : Colors.black54,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ));
+
+  Get.dialog(AlertDialog(
+    title: Row(
+      children: [
+        Text('part_dispatch_select_pack_profile_dialog_title'.tr),
+        Expanded(child: Container()),
+        SizedBox(width: 130,child: NumberDecimalEditText(
+          hint: 'part_dispatch_select_pack_profile_dialog_capacity_qty'.tr,
+          controller: TextEditingController(text: capacityQty.toShowString()),
+          onChanged: (v) => qty.value = v.toDouble(),
+        ),),
+      ],
+    ),
+    content: SizedBox(
+      width: 400,
+      height: 200,
+      child: ListView.builder(
+          itemCount: packProfileList.length, itemBuilder: (c, i) => item(i)),
+    ),
+    actions: [
+      TextButton(
+        onPressed: () {
+          if (packProfileList[selectIndex.value].packProfileID !=
+                  orderPackProfileID ||
+              qty.value != capacityQty) {
+            askDialog(
+                content: 'part_dispatch_select_pack_profile_dialog_modify_tips'.tr,
+                confirm: () {
+                  Get.back();
+                  callback.call(
+                    packProfileList[selectIndex.value].packProfileID,
+                    qty.value,
+                  );
+                });
+          } else {
+            errorDialog(content: 'part_dispatch_select_pack_profile_dialog_no_change'.tr);
+          }
+        },
+        child: Text('dialog_default_confirm'.tr),
+      ),
+      TextButton(
+        onPressed: () => Get.back(),
+        child: Text(
+          'dialog_default_cancel'.tr,
+          style: const TextStyle(color: Colors.grey),
+        ),
+      ),
+    ],
+  ));
+}
 
 void selectInstructionsDialog({
   required List<PartDispatchOrderBatchGroupInfo> batchGroups,
@@ -45,7 +140,7 @@ void selectInstructionsDialog({
           Row(children: [
             expandedFrameText(
               alignment: Alignment.center,
-              text: '指令',
+              text: 'part_dispatch_select_instruction_dialog_instruction'.tr,
               borderColor: bkgColor,
               backgroundColor: Colors.orange.shade100,
               flex: 2,
@@ -54,20 +149,20 @@ void selectInstructionsDialog({
               width: 60,
               child: frameText(
                 alignment: Alignment.center,
-                text: '部件数',
+                text: 'part_dispatch_select_instruction_dialog_part_qty'.tr,
                 borderColor: bkgColor,
                 backgroundColor: Colors.orange.shade100,
               ),
             ),
             expandedFrameText(
               alignment: Alignment.center,
-              text: '部件派工数',
+              text: 'part_dispatch_select_instruction_dialog_dispatch_qty'.tr,
               borderColor: bkgColor,
               backgroundColor: Colors.orange.shade100,
             ),
             expandedFrameText(
               alignment: Alignment.center,
-              text: '合计派工数',
+              text: 'part_dispatch_select_instruction_dialog_total_dispatch_qty'.tr,
               borderColor: bkgColor,
               backgroundColor: Colors.orange.shade100,
             ),
@@ -79,7 +174,7 @@ void selectInstructionsDialog({
                 color: Colors.orange.shade100,
               ),
               alignment: Alignment.center,
-              child: Text('选择'),
+              child: Text('part_dispatch_select_instruction_dialog_select'.tr),
             )
           ]),
           for (int i = 0; i < list.length; i++)
@@ -161,11 +256,11 @@ void selectInstructionsDialog({
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         textSpan(
-                          hint: '批次：',
+                          hint: 'part_dispatch_select_instruction_dialog_batch_qty'.tr,
                           text: data.batchNo,
                         ),
                         textSpan(
-                          hint: '总数：',
+                          hint: 'part_dispatch_select_instruction_dialog_total_qty'.tr,
                           text: data.totalQty.toShowString(),
                         ),
                       ],
@@ -191,7 +286,7 @@ void selectInstructionsDialog({
   }
 
   Get.dialog(AlertDialog(
-    title: Text('型体：${batchGroups.first.typeBody}'),
+    title: Text('part_dispatch_select_instruction_dialog_type_body'.trArgs([batchGroups.first.typeBody])),
     content: SizedBox(
       width: getScreenWidth() * 0.7,
       height: getScreenHeight() * 0.7,
@@ -214,7 +309,7 @@ void selectInstructionsDialog({
                   1,
             );
           } else {
-            errorDialog(content: '请选择指令');
+            errorDialog(content: 'part_dispatch_select_instruction_dialog_no_select_instruction'.tr);
           }
         },
         child: Text('dialog_default_confirm'.tr),
@@ -240,12 +335,12 @@ void viewPartDetailDialog(PartDispatchOrderPartInfo data) {
           children: [
             textSpan(
               fontSize: 24,
-              hint: '部件：',
+              hint: 'part_dispatch_create_label_dialog_part'.tr,
               text: data.materialName ?? '',
             ),
             textSpan(
               fontSize: 20,
-              hint: '数量：',
+              hint: 'part_dispatch_create_label_dialog_qty'.tr,
               text:
                   '${data.remainingQty.toShowString()}/${data.dispatchQty.toShowString()}',
             ),
@@ -299,7 +394,7 @@ void createLabelDialog({
   var errorMsg = '';
   for (var v in selectedList) {
     if (!v.isLegal()) {
-      errorMsg += '尺码：< ${v.size()} >的装箱数不是部件数(${v.partCount})的倍数，请输入正确的装箱数！\n';
+      errorMsg += 'part_dispatch_create_label_dialog_msg'.trArgs([v.size(),v.partCount.toString()]);
     }
   }
   if (errorMsg.isNotEmpty) {
@@ -317,7 +412,7 @@ void createLabelDialog({
   Get.dialog(AlertDialog(
     titlePadding: EdgeInsets.all(5),
     contentPadding: EdgeInsets.all(10),
-    title: Padding(padding: EdgeInsets.all(5), child: Text('创建贴标')),
+    title: Padding(padding: EdgeInsets.all(5), child: Text('part_dispatch_create_label_dialog_create_label'.tr)),
     content: SizedBox(
       width: 150,
       height: isSingleSize ? 270 : 330,
@@ -344,7 +439,7 @@ void createLabelDialog({
                   ),
                 ),
                 WorkerCheck(
-                  hint: '创建人工号',
+                  hint: 'part_dispatch_create_label_dialog_input_create_worker'.tr,
                   onChanged: (w) {
                     worker = w;
                     avatar.value = w?.picUrl ?? '';
@@ -355,7 +450,7 @@ void createLabelDialog({
                     padding: EdgeInsets.only(bottom: 10),
                     child: NumberEditText(
                       controller: controller,
-                      hint: '创建标签数',
+                      hint: 'part_dispatch_create_label_dialog_input_create_qty'.tr,
                       onChanged: (s) {
                         var labelCount = s.toIntTry();
                         if (labelCount > max) {
@@ -371,7 +466,7 @@ void createLabelDialog({
                   children: [
                     Expanded(
                       child: CombinationButton(
-                        text: '取消',
+                        text: 'part_dispatch_create_label_dialog_cancel'.tr,
                         backgroundColor: Colors.grey,
                         combination: Combination.left,
                         click: () => Get.back(),
@@ -379,15 +474,15 @@ void createLabelDialog({
                     ),
                     Expanded(
                       child: CombinationButton(
-                        text: '创建',
+                        text: 'part_dispatch_create_label_dialog_create'.tr,
                         combination: Combination.right,
                         click: () {
                           if (worker == null) {
-                            errorDialog(content: '请输入创建人工号');
+                            errorDialog(content: 'part_dispatch_create_label_dialog_input_create_worker_tips'.tr);
                             return;
                           }
                           if (!isSingleSize && controller.text.isEmpty) {
-                            errorDialog(content: '请输入创建标签数');
+                            errorDialog(content: 'part_dispatch_create_label_dialog_input_create_qty_tips'.tr);
                             return;
                           }
                           _createLabel(
@@ -464,7 +559,7 @@ void _createLabel({
 
   httpPost(
     method: webApiCreatePartProductionDispatchLabels,
-    loading: '正在创建贴标...',
+    loading: 'part_dispatch_create_label_dialog_creating_label'.tr,
     body: {
       'EmpID': worker.empID,
       'CreateCount': count,

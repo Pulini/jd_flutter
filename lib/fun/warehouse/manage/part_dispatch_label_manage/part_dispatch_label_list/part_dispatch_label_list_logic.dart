@@ -38,12 +38,12 @@ class PartDispatchLabelListLogic extends GetxController {
         state.labelList.where((v) => v.isSelected.value && v.isPrint!).toList();
 
     if (selectedUnPrintList.isNotEmpty && selectedPrintedList.isNotEmpty) {
-      errorDialog(content: '取消选择已打印的贴标后或解锁已打印的贴标后再删除！');
+      errorDialog(content: 'part_dispatch_label_delete_error_tips'.tr);
       return;
     }
 
     if (!checkUserPermission('601080103')) {
-      errorDialog(content: '没有删除权限！');
+      errorDialog(content: 'part_dispatch_label_no_delete_permission'.tr);
       return;
     }
 
@@ -75,7 +75,7 @@ class PartDispatchLabelListLogic extends GetxController {
       return;
     }
     if (!isPrint && !checkUserPermission('601080112')) {
-      errorDialog(content: '没有修改锁权限！');
+      errorDialog(content: 'part_dispatch_label_no_modify_lock_permission'.tr);
       return;
     }
     state.lockOrUnLockLabelList(
@@ -117,8 +117,8 @@ class PartDispatchLabelListLogic extends GetxController {
         qrCodeTips:'${label.materialList!.first.totalQty()}${label.materialList!.first.unitName} Pr/pc',
         title: label.productName ?? '',
         subTitleList:label.partList,
-        tableFirstLineTitle: '尺码',
-        tableLastLineTitle: '合计',
+        tableFirstLineTitle: 'part_dispatch_label_print_size'.tr,
+        tableLastLineTitle: 'part_dispatch_label_print_total'.tr,
         tableData: {
           for (var v
               in groupBy(label.instructionList, (v) => v.instruction ?? '')
@@ -128,16 +128,16 @@ class PartDispatchLabelListLogic extends GetxController {
                 [v2.size ?? '', v2.auxQty.toString()]
             ]
         },
-        bottomLeftText: '序号：${label.pieceNo}',
-        bottomRightText: '交期：${label.fetchDate}',
+        bottomLeftText: 'part_dispatch_label_print_piece_no'.trArgs([label.pieceNo.toString()]),
+        bottomRightText: 'part_dispatch_label_print_fetch_date'.trArgs([label.fetchDate??'']),
       );
 
   void printLabel(Function(List<List<Uint8List>>) labels) {
     getLabelListData().then((l) {
       if (l.isNotEmpty) {
-        askDialog(content: '确定要打印吗？', confirm: () => labels.call(l));
+        askDialog(content: 'part_dispatch_label_print_sure_print'.tr, confirm: () => labels.call(l));
       } else {
-        errorDialog(content: '没有未打印标签');
+        errorDialog(content: 'part_dispatch_label_print_no_unprinted_labels'.tr);
       }
     });
   }

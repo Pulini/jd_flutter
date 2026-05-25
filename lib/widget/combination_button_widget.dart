@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_auto_size_text/flutter_auto_size_text.dart';
 
 enum Combination { left, middle, right, intact }
 
@@ -103,7 +104,14 @@ class CombinationButton extends StatelessWidget {
                   ],
                 ),
               )
-            : Text(text, style: textStyle),
+            // : Text(text, style: textStyle),
+            : AutoSizeText(
+                text,
+                style: textStyle,
+                maxLines: 1,
+                minFontSize: 8,
+                maxFontSize: 18,
+              ),
       ),
     );
   }

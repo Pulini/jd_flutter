@@ -13,6 +13,10 @@ import 'package:jd_flutter/widget/picker/picker_view.dart';
 import 'attendance_dashboard_logic.dart';
 import 'attendance_dashboard_state.dart';
 
+
+///1、需要给除厂长及人资和生管外的管理人员发送飞书考勤信息卡片，点击卡片进入考勤明细，展示当天组员出勤情况和月出勤率
+///2、给厂长及人资和生管单独开发网页版考勤界面，查看全厂考勤情况，通过层级依次进入到考勤明细，最终定位到组员出勤明细，且需要展示每个层级的月出勤率
+///3、重新开发当前app端考勤模块，以网页版考勤内容做界面减法，实现厂长及人资和生管的对全长考勤的掌控
 class AttendanceDashboardPage extends StatefulWidget {
   const AttendanceDashboardPage({super.key});
 

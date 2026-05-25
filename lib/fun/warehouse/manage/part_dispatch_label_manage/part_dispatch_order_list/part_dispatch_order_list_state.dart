@@ -1,5 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
+import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:jd_flutter/bean/http/response/part_dispatch_label_manage_info.dart';
 import 'package:jd_flutter/utils/utils.dart';
 import 'package:jd_flutter/utils/web_api.dart';
@@ -23,9 +23,7 @@ class PartDispatchLabelManageState {
   var hasLastLabel = false;
   var needRefreshPartList=false;
 
-  PartDispatchLabelManageState() {
-    ///Initialize variables
-  }
+
 
   void getInstructions({
     String? barCode,
@@ -37,7 +35,7 @@ class PartDispatchLabelManageState {
   }) {
     httpGet(
       method: webApiGetWorkCardMtoNoList,
-      loading: '正在查询指令列表...',
+      loading: 'part_dispatch_order_querying_instruction_list'.tr,
       params: {
         'BarCode': barCode ?? '',
         'BatchNo': queryBatchNo.value,
@@ -64,7 +62,6 @@ class PartDispatchLabelManageState {
     required Function(String msg) error,
   }) {
     this.isSingleInstruction = isSingleInstruction;
-    debugPrint('isSingleInstruction=$isSingleInstruction');
     orderNo.value = '';
     instructions.value = '';
     typeBody.value = '';
@@ -75,7 +72,7 @@ class PartDispatchLabelManageState {
     partList.value = [];
     httpPost(
       method: webApiGetPartWorkCardListNew,
-      loading: '正在查询部件派工单明细...',
+      loading: 'part_dispatch_order_querying_part_dispatch_order_detail'.tr,
       body: list,
     ).then((response) {
       if (response.resultCode == resultSuccess) {
@@ -101,7 +98,7 @@ class PartDispatchLabelManageState {
   }) {
     httpGet(
       method: webApiGetPartProductionDispatchOrdersDetail,
-      loading: '正在获取尺码明细...',
+      loading: 'part_dispatch_order_querying_size_detail'.tr,
       body: {'WorkCardIDs': orders},
     ).then((response) {
       if (response.resultCode == resultSuccess) {
