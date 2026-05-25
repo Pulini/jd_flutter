@@ -43,9 +43,10 @@ void stockInDialog({
   //   return;
   // }
   if (groupBy(submitList, (v) => v.factoryNO ?? '').keys.length > 1) {
-    errorDialog(content: '工厂不同的工单不能同时操作！');
+    errorDialog(content: 'delivery_order_dialog_factory_different'.tr);
     return;
   }
+
   var matchCode = <String>[];
   if (!submitList.every((v) => v.isExempt == true) &&
       !submitList.every((v) => v.isExempt == false)) {
@@ -57,8 +58,15 @@ void stockInDialog({
       matchCode.add(v.matchCode ?? '');
     }
   }
-  if (matchCode.length > 1) {
-    errorDialog(content: 'delivery_order_dialog_match_code_different'.tr);
+
+  if (submitList.every((v) => v.mes == '') ||
+      submitList.every((v) => v.mes == 'X')) {
+    if (matchCode.length > 1 && submitList.every((v) => v.mes == 'X')) {
+      errorDialog(content: 'delivery_order_dialog_match_code_different'.tr);
+      return;
+    }
+  } else {
+    errorDialog(content: 'delivery_order_dialog_model_different'.tr);
     return;
   }
 

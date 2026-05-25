@@ -51,7 +51,7 @@ class PartDispatchLabelManageLogic extends GetxController {
 
     if (code.isNullOrEmpty()) {
       if (productName.isNullOrEmpty()) {
-        errorDialog(content: '请输入完整型体');
+        errorDialog(content: 'part_dispatch_order_input_complete_type_body'.tr);
         return;
       }
       state.getInstructions(
@@ -84,7 +84,7 @@ class PartDispatchLabelManageLogic extends GetxController {
         .map((v) => v.packTypeID)
         .toSet()
         .length > 1) {
-      errorDialog(content: '装箱方式不同，禁止同时操作！');
+      errorDialog(content: 'part_dispatch_order_different_packing_way_tips'.tr);
       return;
     }
     state.partListId=selectList.map((p)=>p.workCardEntryIdList!.toSet().join(',')).toSet().join(',');

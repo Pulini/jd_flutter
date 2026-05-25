@@ -1691,7 +1691,7 @@ class StuffQualityInspectionLogic extends GetxController {
               );
             },
           ),
-          backgroundColor: Colors.black.withOpacity(0.5),
+          backgroundColor: Colors.black.withValues(alpha: 0.5),
           isDismissible: true,
           enableDrag: true,
         );

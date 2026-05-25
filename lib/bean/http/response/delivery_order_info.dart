@@ -36,6 +36,7 @@ class DeliveryOrderInfo {
   String? isPiece; //启用键管理
   String? division; //事业部
   String? trackNo; //跟踪号
+  String? mes; //是否传mes
   List<DeliveryOrderSizeInfo>? deliSize; //
   List<DeliveryOrderLineInfo>? deliSeqList; //
   List<DeliveryOrderBindingLabelInfo>? deliJbq; //
@@ -76,6 +77,7 @@ class DeliveryOrderInfo {
     this.deliSeqList,
     this.deliJbq,
     this.trackNo,
+    this.mes,
   });
 
   DeliveryOrderInfo.fromJson(dynamic json) {
@@ -111,7 +113,7 @@ class DeliveryOrderInfo {
     isPiece = json['IsPiece'];
     division = json['Division'];
     trackNo = json['TrackNo'];
-    deliSize = [];
+    mes = json['Mes'];
     if (json['DeliSize'] != null) {
       json['DeliSize'].forEach((v) {
         deliSize?.add(DeliveryOrderSizeInfo.fromJson(v));

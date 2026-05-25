@@ -13,6 +13,30 @@ import 'package:get/get.dart';
 //   "UserName": "系统"
 // }
 class PackOrderInfo {
+  List<OrderPackageInfo> orderPackageList;
+  List<PackProfileInfo> packageProfileList;
+  PackOrderInfo({
+    required this.orderPackageList,
+    required this.packageProfileList,
+  });
+  factory PackOrderInfo.fromJson(dynamic json) {
+    return PackOrderInfo(
+      orderPackageList: [
+        if (json['OrderPackageList'] != null)
+          for (var item in json['OrderPackageList'])
+            OrderPackageInfo.fromJson(item)
+      ],
+      packageProfileList: [
+        if (json['PackageProfileList'] != null)
+          for (var item in json['PackageProfileList'])
+            PackProfileInfo.fromJson(item)
+      ],
+    );
+  }
+
+}
+
+class OrderPackageInfo {
   int? packageId;
   String? date;
   String? packageNo;
@@ -22,8 +46,10 @@ class PackOrderInfo {
   String? productName;
   String? processName;
   String? userName;
+  double? capacityQty;
+  int? packProfileID;
 
-  PackOrderInfo({
+  OrderPackageInfo({
     this.packageId,
     this.date,
     this.packageNo,
@@ -33,10 +59,12 @@ class PackOrderInfo {
     this.productName,
     this.processName,
     this.userName,
+    this.capacityQty,
+    this.packProfileID,
   });
 
-  factory PackOrderInfo.fromJson(Map<String, dynamic> json) {
-    return PackOrderInfo(
+  factory OrderPackageInfo.fromJson(dynamic json) {
+    return OrderPackageInfo(
       packageId: json['PackageID'],
       date: json['Date'],
       packageNo: json['PackageNo'],
@@ -46,6 +74,25 @@ class PackOrderInfo {
       productName: json['ProductName'],
       processName: json['ProcessName'],
       userName: json['UserName'],
+      capacityQty: json['CapacityQty'],
+      packProfileID: json['PackageProfileID'],
+    );
+  }
+}
+
+class PackProfileInfo {
+  int packProfileID;
+  String? packProfileName;
+
+  PackProfileInfo({
+    required this.packProfileID,
+    this.packProfileName,
+  });
+
+  factory PackProfileInfo.fromJson(dynamic json) {
+    return PackProfileInfo(
+      packProfileID: json['ItemID'],
+      packProfileName: json['Name'],
     );
   }
 }
@@ -122,12 +169,9 @@ class PartLabelInfo {
               auxQty: v.map((v2) => v2.auxQty ?? 0).reduce((a, b) => a + b),
             ))
         .toList();
-    pictureUrlList = materialList!
-        .map((v) =>  v.pictureUrl ?? '')
-        .toList();
-    pictureThumbnailUrlList = materialList!
-        .map((v) =>  v.pictureThumbnailUrl ?? '')
-        .toList();
+    pictureUrlList = materialList!.map((v) => v.pictureUrl ?? '').toList();
+    pictureThumbnailUrlList =
+        materialList!.map((v) => v.pictureThumbnailUrl ?? '').toList();
   }
 
   factory PartLabelInfo.fromJson(dynamic json) {
@@ -158,7 +202,7 @@ class PartLabelInfo {
 
   String getSize() => sizeList.map((v) => '${v.size}/${v.auxQty}').join(',');
 
-  int totalQty() =>(sumQty!/partList.length).toInt();
+  int totalQty() => (sumQty! / partList.length).toInt();
 }
 
 //"MaterialName": "火腿内外加大版",

@@ -44,11 +44,11 @@ class PrintUtil {
       );
     } else {
       if (!await _getBluetoothPermission()) {
-        showSnackBar(title: '蓝牙错误', message: '缺少蓝牙权限');
+        showSnackBar(title: 'bluetooth_error'.tr, message: 'bluetooth_missing_permission'.tr);
         return;
       }
       if (!await _bluetoothIsEnable()) {
-        showSnackBar(title: '蓝牙错误', message: '当前蓝牙不可用');
+        showSnackBar(title: 'bluetooth_error'.tr, message: 'bluetooth_unavailable'.tr);
         return;
       }
       deviceList.value = await _getScannedDevices();
@@ -94,11 +94,11 @@ class PrintUtil {
       );
     } else {
       if (!await _getBluetoothPermission()) {
-        showSnackBar(title: '蓝牙错误', message: '缺少蓝牙权限');
+        showSnackBar(title: 'bluetooth_error'.tr, message: 'bluetooth_missing_permission'.tr);
         return;
       }
       if (!await _bluetoothIsEnable()) {
-        showSnackBar(title: '蓝牙错误', message: '当前蓝牙不可用');
+        showSnackBar(title: 'bluetooth_error'.tr, message: 'bluetooth_unavailable'.tr);
         return;
       }
       deviceList.value = await _getScannedDevices();
@@ -164,12 +164,12 @@ class PrintUtil {
                 }
               case 'Off':
                 {
-                  showSnackBar(title: '蓝牙状态变更', message: '蓝牙关闭');
+                  showSnackBar(title: 'bluetooth_state_changed'.tr, message: 'bluetooth_state_off'.tr);
                   break;
                 }
               case 'On':
                 {
-                  showSnackBar(title: '蓝牙状态变更', message: '蓝牙开启');
+                  showSnackBar(title: 'bluetooth_state_changed'.tr, message: 'bluetooth_state_on'.tr);
                   break;
                 }
               case 'Open':
@@ -209,7 +209,7 @@ class PrintUtil {
               }
             }
             if (disconnectDevice != null) {
-              msgDialog(content: '蓝牙设备:${disconnectDevice.deviceName} 连接断开。');
+              msgDialog(content: 'bluetooth_device_disconnected'.trArgs([disconnectDevice.deviceName]));
             }
             break;
           }
@@ -236,7 +236,7 @@ class PrintUtil {
   ''');
 
     if (!statuses[Permission.location]!.isGranted) {
-      errorDialog(content: '位置信息权限未开启');
+      errorDialog(content: 'bluetooth_location_permission_denied'.tr);
       return false;
     }
 
@@ -244,21 +244,21 @@ class PrintUtil {
     logger.f('isGranted:${!statuses[Permission.bluetoothConnect]!.isGranted}');
     if (GetPlatform.isAndroid &&
         !statuses[Permission.bluetoothConnect]!.isGranted) {
-      errorDialog(content: '蓝牙连接权限未开启');
+      errorDialog(content: 'bluetooth_connect_permission_denied'.tr);
       return false;
     }
     if (GetPlatform.isAndroid &&
         !statuses[Permission.bluetoothScan]!.isGranted) {
-      errorDialog(content: '蓝牙扫描权限未开启');
+      errorDialog(content: 'bluetooth_scan_permission_denied'.tr);
       return false;
     }
     if (!statuses[Permission.bluetooth]!.isGranted) {
-      errorDialog(content: '蓝牙权限未开启');
+      errorDialog(content: 'bluetooth_permission_denied'.tr);
       return false;
     }
     if (GetPlatform.isAndroid &&
         !statuses[Permission.bluetoothAdvertise]!.isGranted) {
-      errorDialog(content: '蓝牙广播权限未开启');
+      errorDialog(content: 'bluetooth_advertise_permission_denied'.tr);
       return false;
     }
 
@@ -469,7 +469,7 @@ class PrintUtil {
     _dialogIsShowing = true;
     Get.dialog(
       Obx(() => pageBody(
-            title: '连接蓝牙',
+            title: 'bluetooth_connect_dialog_title'.tr,
             actions: [
               isScanning.value
                   ? CombinationButton(
@@ -502,7 +502,7 @@ class PrintUtil {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 if (isScanning.value)
-                  const Row(
+                  Row(
                     mainAxisSize: MainAxisSize.max,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -514,7 +514,7 @@ class PrintUtil {
                       ),
                       SizedBox(width: 10),
                       Text(
-                        '正在搜索蓝牙...',
+                        'bluetooth_scanning'.tr,
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ],
@@ -547,7 +547,7 @@ void printSetDialog({Function()? print}) {
     PopScope(
       canPop: false,
       child: AlertDialog(
-        title: Text('设定打印参数'),
+        title: Text('print_param_setting'.tr),
         content: SizedBox(
           width: 300,
           height: 200,
@@ -557,7 +557,7 @@ void printSetDialog({Function()? print}) {
                 padding: const EdgeInsets.only(left: 10, right: 10),
                 child: Row(
                   children: [
-                    const Text('打印速度：'),
+                    Text('print_speed'.tr),
                     Expanded(
                       child: Obx(() => Slider(
                             value: printSpeed.value,
@@ -577,7 +577,7 @@ void printSetDialog({Function()? print}) {
                 padding: const EdgeInsets.only(left: 10, right: 10),
                 child: Row(
                   children: [
-                    const Text('打印浓度：'),
+                    Text('print_density'.tr),
                     Expanded(
                       child: Obx(() => Slider(
                             value: printDensity.value,

@@ -15,7 +15,7 @@ class PackOrderListLogic extends GetxController {
     required String endDate,
   }) {
     if (dispatchOrderNo.isEmpty && typeBody.isEmpty) {
-      errorDialog(content: '请输入派工单号或型体');
+      errorDialog(content: 'part_dispatch_pack_order_no_input_tips'.tr);
       return;
     }
     state.getPackOrderList(
@@ -28,15 +28,13 @@ class PackOrderListLogic extends GetxController {
     );
   }
 
-
-
   void deletePackOrder({
-    required PackOrderInfo data,
+    required OrderPackageInfo data,
     required Function() refresh,
   }) {
     if (checkUserPermission('601080103')) {
       askDialog(
-        content: '确定要删除此包装清单吗？',
+        content: 'part_dispatch_pack_order_delete_order_tips'.tr,
         confirm: () => state.deletePackOrder(
           id: data.packageId!,
           success: (msg) => successDialog(content: msg, back: refresh),
@@ -44,7 +42,28 @@ class PackOrderListLogic extends GetxController {
         ),
       );
     } else {
-      errorDialog(content: '没有包装清单删除权限！');
+      errorDialog(content: 'part_dispatch_pack_order_no_delete_permission'.tr);
     }
+  }
+
+  String getOrderPackProfile(int? orderPackProfileID) =>
+      state.packProfileList
+          .firstWhere((v) => v.packProfileID == orderPackProfileID)
+          .packProfileName ??
+      '';
+
+  void modifyOrderPackProfile({
+    required int packOrderID,
+    required int packProfileID,
+    required double capacityQty,
+    required Function() refresh,
+  }) {
+    state.modifyOrderPackProfile(
+      packOrderID: packOrderID,
+      packProfileID: packProfileID,
+      capacityQty: capacityQty,
+      success: (msg) => successDialog(content: msg,back: refresh),
+      error: (msg) => errorDialog(content: msg),
+    );
   }
 }

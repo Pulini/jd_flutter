@@ -26,7 +26,7 @@ class DatePicker extends StatelessWidget {
 
   void _showOptions() {
     showDatePicker(
-      locale: View.of(Get.overlayContext!).platformDispatcher.locale,
+      locale: Get.locale,
       context: Get.overlayContext!,
       //起始时间
       initialDate: pickerController.pickDate.value,
