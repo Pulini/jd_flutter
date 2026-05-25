@@ -2742,7 +2742,9 @@ class Translation extends Translations {
           'delivery_order_wait_stock_out': '待出库',
           'delivery_order_stock_outed': '已出库',
           'delivery_order_exit_tips': '确定要退出送货单列表吗？',
+          'delivery_order_select_all_checked': '勾选所有已清点',
           'delivery_order_stock_in': '入库',
+          'delivery_order_stock_in_not_allowed': '无法直接入库，请点击暂收',
           'delivery_order_stock_in_reverse': '入库冲销',
           'delivery_order_stock_out': '出库',
           'delivery_order_stock_out_reverse': '出库冲销',
@@ -2799,7 +2801,9 @@ class Translation extends Translations {
           'delivery_order_check_inspector_number': '品检员工号',
           'delivery_order_check_save': '保存',
           'delivery_order_dialog_exempt_type_different': '所选条目包含免检和非免检！',
+          'delivery_order_dialog_factory_different': '工厂不同的工单不能同时操作！',
           'delivery_order_dialog_match_code_different': '不同配码物料不能同时入库！',
+          'delivery_order_dialog_model_different': '模具启用状态不同不能同时入库！',
           'delivery_order_dialog_post_date': '过账日期',
           'delivery_order_dialog_location': '存储位置',
           'delivery_order_dialog_stock_in': '入库',
@@ -2833,6 +2837,12 @@ class Translation extends Translations {
           'delivery_order_label_check_qty_insufficient': '数量不足本次提交下限，请继续扫描标签。',
           'delivery_order_label_check_delete_tips': '确定要删除本条标签吗？',
           'delivery_order_label_check_title': '送货清点',
+        'delivery_order_label_check_material':'物料：',
+        'delivery_order_label_check_pallet':'托盘：',
+        'delivery_order_label_check_piece':'件数：',
+        'delivery_order_label_check_tab_progress':'清点进度',
+        'delivery_order_label_check_tab_pallet_detail':'托盘明细',
+        'delivery_order_label_check_this_pallet':'当前托盘：',
           'delivery_order_label_check_exit_tips': '确定要退出送货清点吗？',
           'delivery_order_label_check_clear_tips': '确定要清空已扫标签吗？',
           'delivery_order_label_check_clear': '清空',
@@ -6907,7 +6917,9 @@ class Translation extends Translations {
           'delivery_order_stock_outed': 'Stock outed',
           'delivery_order_exit_tips':
               'Are you sure you want to exit the delivery list？',
+          'delivery_order_select_all_checked': 'Select all checked',
           'delivery_order_stock_in': 'Stock in',
+          'delivery_order_stock_in_not_allowed': 'Cannot be directly stored, please click on temporary receipt',
           'delivery_order_stock_in_reverse': 'Stock in reverse',
           'delivery_order_stock_out': 'Stock out',
           'delivery_order_stock_out_reverse': 'Stock out reverse',
@@ -6979,6 +6991,9 @@ class Translation extends Translations {
           'delivery_order_check_save': 'Save',
           'delivery_order_dialog_exempt_type_different':
               'Selected contains exempt and not exempt ！',
+          'delivery_order_dialog_factory_different':
+              'Different work orders from the factory cannot be operated simultaneously ！',
+          'delivery_order_dialog_model_different': 'Status aktifitas cetakan yang berbeda tidak dapat dimasukkan ke perpustakaan secara bersamaan！',
           'delivery_order_dialog_match_code_different':
               'Different codes cannot be stored simultaneously！',
           'delivery_order_dialog_post_date': 'Post date',
@@ -7024,6 +7039,12 @@ class Translation extends Translations {
           'delivery_order_label_check_delete_tips':
               'Are you sure you want to delete this label?',
           'delivery_order_label_check_title': 'Delivery check',
+          'delivery_order_label_check_material': 'Material：',
+          'delivery_order_label_check_pallet': 'Pallet：',
+          'delivery_order_label_check_piece': 'Piece：',
+          'delivery_order_label_check_tab_progress': 'Progress：',
+          'delivery_order_label_check_tab_pallet_detail': 'Pallet Detail：',
+          'delivery_order_label_check_this_pallet': 'This Pallet：',
           'delivery_order_label_check_exit_tips':
               'Are you sure you want to exit the delivery inventory？',
           'delivery_order_label_check_clear_tips':
@@ -11401,7 +11422,9 @@ class Translation extends Translations {
           'delivery_order_stock_outed': 'Telah Keluar Gudang',
           'delivery_order_exit_tips':
               'Apakah Anda yakin ingin keluar dari daftar order pengiriman?',
+          'delivery_order_select_all_checked': 'Pilih Semua yang Sudah Dicek',
           'delivery_order_stock_in': 'Masuk Gudang',
+          'delivery_order_stock_in_not_allowed': 'Tidak dapat langsung masuk gudang, silakan pilih terima sementara',
           'delivery_order_stock_in_reverse': 'Pembalikan Masuk Gudang',
           'delivery_order_stock_out': 'Keluar Gudang',
           'delivery_order_stock_out_reverse': 'Pembalikan Keluar Gudang',
@@ -11475,6 +11498,9 @@ class Translation extends Translations {
           'delivery_order_check_save': 'Simpan',
           'delivery_order_dialog_exempt_type_different':
               'Item yang dipilih termasuk bebas inspeksi dan tidak bebas inspeksi!',
+          'delivery_order_dialog_factory_different':
+              'Pabrik yang berbeda tidak dapat beroperasi secara bersamaan ！',
+          'delivery_order_dialog_model_different': 'Mold activation status is different and cannot be stored simultaneously！',
           'delivery_order_dialog_match_code_different':
               'Material dengan kode yang cocok berbeda tidak dapat masuk gudang bersamaan!',
           'delivery_order_dialog_post_date': 'Tanggal Posting',
@@ -11522,6 +11548,12 @@ class Translation extends Translations {
           'delivery_order_label_check_delete_tips':
               'Apakah Anda yakin ingin menghapus label ini?',
           'delivery_order_label_check_title': 'Penghitungan Pengiriman',
+          'delivery_order_label_check_material':'Bahan：',
+          'delivery_order_label_check_pallet':'Pallet：',
+          'delivery_order_label_check_piece':'Jumlah：',
+          'delivery_order_label_check_tab_progress':'Kemajuan daftar',
+          'delivery_order_label_check_tab_pallet_detail':'Rincian Pallet',
+          'delivery_order_label_check_this_pallet':'Pallet saat ini：',
           'delivery_order_label_check_exit_tips':
               'Apakah Anda yakin ingin keluar dari penghitungan pengiriman?',
           'delivery_order_label_check_clear_tips':

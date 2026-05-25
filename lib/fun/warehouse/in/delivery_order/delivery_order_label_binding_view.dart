@@ -44,7 +44,7 @@ class _DeliveryOrderLabelBindingPageState
             children: [
               Row(
                 children: [
-                  textSpan(hint: '物料：', text: materialCode),
+                  textSpan(hint: 'delivery_order_label_check_material'.tr, text: materialCode),
                   const SizedBox(width: 5),
                   Expanded(
                     child: progressIndicator(
@@ -147,9 +147,9 @@ class _DeliveryOrderLabelBindingPageState
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      textSpan(hint: '托盘：', text: palletNo),
+                      textSpan(hint: 'delivery_order_label_check_pallet'.tr, text: palletNo),
                       textSpan(
-                        hint: '件数：',
+                        hint: 'delivery_order_label_check_piece'.tr,
                         hintColor: Colors.black45,
                         text: labelList.length.toString(),
                         textColor: Colors.black87,
@@ -277,9 +277,9 @@ class _DeliveryOrderLabelBindingPageState
                     labelColor: Colors.blueAccent,
                     unselectedLabelColor: Colors.black54,
                     overlayColor: WidgetStateProperty.all(Colors.transparent),
-                    tabs: const [
-                      Tab(text: '清点进度'),
-                      Tab(text: '托盘明细'),
+                    tabs:  [
+                      Tab(text: 'delivery_order_label_check_tab_progress'.tr),
+                      Tab(text: 'delivery_order_label_check_tab_pallet_detail'.tr),
                     ],
                   ),
                 ),
@@ -298,7 +298,7 @@ class _DeliveryOrderLabelBindingPageState
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Obx(() => textSpan(
-                      hint: '当前托盘：',
+                      hint: 'delivery_order_label_check_this_pallet'.tr,
                       text: state.palletNumber.value,
                       textColor: Colors.green.shade700,
                     )),

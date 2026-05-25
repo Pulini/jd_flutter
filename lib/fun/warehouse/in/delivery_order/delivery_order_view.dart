@@ -803,7 +803,7 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
           actions: [
             Obx(() => CheckBox(
                   onChanged: (v) => logic.selectAllChecked(v),
-                  name: '勾选所有已清点',
+                  name: 'delivery_order_select_all_checked'.tr,
                   value: state.selectAllChecked.value,
                 )),
             Builder(
@@ -857,7 +857,7 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
                                 refresh: _query,
                               );
                             } else {
-                              showSnackBar(message: '无法直接入库，请点击暂收');
+                              showSnackBar(message: 'delivery_order_stock_in_not_allowed'.tr);
                             }
                           },
                         ),

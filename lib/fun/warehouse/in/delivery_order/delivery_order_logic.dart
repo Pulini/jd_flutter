@@ -635,33 +635,6 @@ class DeliveryOrderLogic extends GetxController {
       state.scannedLabelList.isNotEmpty &&
       (state.scannedLabelList.every((v) => v.isChecked.value));
 
-  void selectItem(List<DeliveryOrderInfo> data, bool isSelected) {
-    if (state.deliveryOrderList.every((v) => !v.first.isSelected.value)) {
-      for (var v in data) {
-        v.isSelected.value = isSelected;
-      }
-    } else {
-      if (state.deliveryOrderList.first.first.isNeedBindingLabel()) {
-        if (data.first.isNeedBindingLabel() !=
-            state.deliveryOrderList.first.first.isNeedBindingLabel()) {
-          errorDialog(
-            content: '启用标签管理的工单不能与未启用标签管理的工单同时操作！',
-          );
-          return;
-        }
-        if (data.first.factoryNO !=
-            state.deliveryOrderList.first.first.factoryNO) {
-          errorDialog(content: '工厂不同的工单不能同时操作！');
-          return;
-        }
-      } else {
-        for (var v in data) {
-          v.isSelected.value = isSelected;
-        }
-      }
-    }
-  }
-
   void selectAllChecked(bool select) {
     state.selectAllChecked.value = select;
     state.deliveryOrderList
