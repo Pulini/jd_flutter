@@ -142,29 +142,29 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
               children: [
                 textSpan(
                   hint: 'delivery_order_supplier'.tr,
-                  text: data[0].supplierName ?? '',
+                  text: data.first.supplierName ?? '',
                   textColor: Colors.red,
                 ),
                 Row(children: [
                   expandedTextSpan(
                     hint: 'delivery_order_company'.tr,
-                    text: data[0].companyCode ?? '',
+                    text: data.first.companyCode ?? '',
                     textColor: Colors.black45,
                   ),
                   textSpan(
                     hint: 'delivery_order_piece'.tr,
-                    text: data[0].numPage ?? '',
+                    text: data.first.numPage ?? '',
                   ),
                 ]),
                 Row(children: [
                   expandedTextSpan(
                     hint: 'delivery_order_deliver_no'.tr,
-                    text: data[0].deliNo ?? '',
+                    text: data.first.deliNo ?? '',
                     textColor: Colors.black45,
                   ),
                   expandedTextSpan(
                     hint: 'delivery_order_delivery_location'.tr,
-                    text: data[0].deliveryLocation ?? '',
+                    text: data.first.deliveryLocation ?? '',
                     textColor: Colors.black45,
                   ),
                 ]),
@@ -172,12 +172,12 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
                   children: [
                     expandedTextSpan(
                       hint: 'delivery_order_factory'.tr,
-                      text: data[0].factoryName ?? '',
+                      text: data.first.factoryName ?? '',
                       textColor: Colors.black45,
                     ),
                     expandedTextSpan(
                       hint: 'delivery_order_build_date'.tr,
-                      text: data[0].billDate ?? '',
+                      text: data.first.billDate ?? '',
                       textColor: Colors.black45,
                     ),
                   ],
@@ -186,12 +186,12 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
                   children: [
                     expandedTextSpan(
                       hint: 'delivery_order_location_storage'.tr,
-                      text: data[0].locationName ?? '',
+                      text: data.first.locationName ?? '',
                       textColor: Colors.black45,
                     ),
                     expandedTextSpan(
                       hint: 'delivery_order_final_customer'.tr,
-                      text: data[0].finalCustomer ?? '',
+                      text: data.first.finalCustomer ?? '',
                       textColor: Colors.black45,
                     ),
                   ],
@@ -200,19 +200,19 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
                   children: [
                     expandedTextSpan(
                       hint: 'delivery_order_match_code'.tr,
-                      text: data[0].matchCode ?? '',
+                      text: data.first.matchCode ?? '',
                       textColor: Colors.black45,
                     ),
                     expandedTextSpan(
                       hint: 'delivery_order_track_no'.tr,
-                      text: data[0].trackNo ?? '',
+                      text: data.first.trackNo ?? '',
                       textColor: Colors.black45,
                     ),
                   ],
                 ),
                 textSpan(
                   hint: 'delivery_order_remark'.tr,
-                  text: data[0].remark ?? '',
+                  text: data.first.remark ?? '',
                   textColor: Colors.black45,
                 ),
               ],
@@ -238,21 +238,21 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
           ),
           Expanded(child: Container()),
           Text(
-            data[0].isExempt == true
+            data.first.isExempt == true
                 ? 'delivery_order_exempt'.tr
                 : 'delivery_order_not_exempt'.tr,
             style: TextStyle(
-              color: data[0].isExempt == true ? Colors.blue : Colors.red,
+              color: data.first.isExempt == true ? Colors.blue : Colors.red,
             ),
           ),
           const SizedBox(width: 20),
           Text(
-            data[0].isPackingMaterials == true
+            data.first.isPackingMaterials == true
                 ? 'delivery_order_in_and_out'.tr
                 : 'delivery_order_not_in_and_out'.tr,
             style: TextStyle(
               color:
-                  data[0].isPackingMaterials == true ? Colors.blue : Colors.red,
+                  data.first.isPackingMaterials == true ? Colors.blue : Colors.red,
             ),
           ),
         ],
@@ -269,17 +269,17 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
                     children: [
                       expandedTextSpan(
                         hint: 'delivery_order_supplier'.tr,
-                        text: data[0].supplierName ?? '',
+                        text: data.first.supplierName ?? '',
                         textColor: Colors.red,
                       ),
                       expandedTextSpan(
                         hint: 'delivery_order_company'.tr,
-                        text: data[0].companyCode ?? '',
+                        text: data.first.companyCode ?? '',
                         textColor: Colors.black45,
                       ),
                       expandedTextSpan(
                         hint: 'delivery_order_factory'.tr,
-                        text: data[0].factoryName ?? '',
+                        text: data.first.factoryName ?? '',
                         textColor: Colors.black45,
                       ),
                     ],
@@ -288,17 +288,17 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
                     children: [
                       expandedTextSpan(
                         hint: 'delivery_order_deliver_no'.tr,
-                        text: data[0].deliNo ?? '',
+                        text: data.first.deliNo ?? '',
                         textColor: Colors.black45,
                       ),
                       expandedTextSpan(
                         hint: 'delivery_order_delivery_location'.tr,
-                        text: data[0].deliveryLocation ?? '',
+                        text: data.first.deliveryLocation ?? '',
                         textColor: Colors.black45,
                       ),
                       expandedTextSpan(
                         hint: 'delivery_order_build_date'.tr,
-                        text: data[0].billDate ?? '',
+                        text: data.first.billDate ?? '',
                         textColor: Colors.black45,
                       ),
                     ],
@@ -307,16 +307,16 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
                     children: [
                       expandedTextSpan(
                         hint: 'delivery_order_piece'.tr,
-                        text: data[0].numPage ?? '',
+                        text: data.first.numPage ?? '',
                       ),
                       expandedTextSpan(
                         hint: 'delivery_order_location_storage'.tr,
-                        text: data[0].locationName ?? '',
+                        text: data.first.locationName ?? '',
                         textColor: Colors.black45,
                       ),
                       expandedTextSpan(
                         hint: 'delivery_order_match_code'.tr,
-                        text: data[0].matchCode ?? '',
+                        text: data.first.matchCode ?? '',
                         textColor: Colors.black45,
                       ),
                     ],
@@ -325,17 +325,17 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
                     children: [
                       expandedTextSpan(
                         hint: 'delivery_order_final_customer'.tr,
-                        text: data[0].finalCustomer ?? '',
+                        text: data.first.finalCustomer ?? '',
                         textColor: Colors.black45,
                       ),
                       expandedTextSpan(
                         hint: 'delivery_order_track_no'.tr,
-                        text: data[0].trackNo ?? '',
+                        text: data.first.trackNo ?? '',
                         textColor: Colors.black45,
                       ),
                       expandedTextSpan(
                         hint: 'delivery_order_remark'.tr,
-                        text: data[0].remark ?? '',
+                        text: data.first.remark ?? '',
                         textColor: Colors.black45,
                       ),
                     ],
@@ -363,20 +363,20 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
             ),
             Expanded(child: Container()),
             Text(
-              data[0].isExempt == true
+              data.first.isExempt == true
                   ? 'delivery_order_exempt'.tr
                   : 'delivery_order_not_exempt'.tr,
               style: TextStyle(
-                color: data[0].isExempt == true ? Colors.blue : Colors.red,
+                color: data.first.isExempt == true ? Colors.blue : Colors.red,
               ),
             ),
             const SizedBox(width: 20),
             Text(
-              data[0].isPackingMaterials == true
+              data.first.isPackingMaterials == true
                   ? 'delivery_order_in_and_out'.tr
                   : 'delivery_order_not_in_and_out'.tr,
               style: TextStyle(
-                color: data[0].isPackingMaterials == true
+                color: data.first.isPackingMaterials == true
                     ? Colors.blue
                     : Colors.red,
               ),
@@ -390,13 +390,13 @@ class _DeliveryOrderPageState extends State<DeliveryOrderPage> {
       child: Container(
         margin: const EdgeInsets.only(bottom: 10),
         padding: const EdgeInsets.all(10),
-        foregroundDecoration: data[0].hasSubscript()
+        foregroundDecoration: data.first.hasSubscript()
             ? RotatedCornerDecoration.withColor(
-                color: data[0].isInspected() ? Colors.orange : Colors.green,
+                color: data.first.isInspected() ? Colors.orange : Colors.green,
                 badgeCornerRadius: const Radius.circular(8),
                 badgeSize: const Size(45, 45),
                 textSpan: TextSpan(
-                  text: data[0].isInspected()
+                  text: data.first.isInspected()
                       ? 'delivery_order_checked'.tr
                       : 'delivery_order_temporarily_received'.tr,
                   style: const TextStyle(

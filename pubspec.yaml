@@ -35,9 +35,8 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.6
   #极光推送
-  jpush_flutter: ^3.4.4
+  jpush_flutter: ^3.4.5
   #轻量架构工具
-#  get: ^4.7.2
   get: #^4.7.2
     git:
       url: https://github.com/luis901101/getx_fork.git
@@ -121,7 +120,7 @@ dependencies:
   #PDF生成工具
   pdf: ^3.11.3
   #网页转图片
-  webcontent_converter: ^0.0.10+4
+  webcontent_converter: ^0.0.10+6
   #隔离区子线程
 #  flutter_isolate: ^2.0.4
   # 华为官方肢体识别库
