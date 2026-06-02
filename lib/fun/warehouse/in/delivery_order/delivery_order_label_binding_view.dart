@@ -132,13 +132,13 @@ class _DeliveryOrderLabelBindingPageState
             ),
           ),
           Expanded(
-            child: Obx(() => TabBarView(
+            child: TabBarView(
                   controller: tabController,
                   children: [
                     _LabelScanningList(logic: logic),
                     _LabelPalletList(logic: logic),
                   ],
-                )),
+                ),
           ),
           Padding(
             padding: const EdgeInsets.only(left: 10, right: 10),
@@ -190,15 +190,17 @@ class _LabelScanningList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var list = logic.getLabelList();
-    return ListView.builder(
-      itemCount: list.length,
-      itemBuilder: (c, i) => _LabelMaterialItem(
-        map: list[i],
-        logic: logic,
-        deletePiece: (data) => logic.deletePiece(pieceInfo: data),
-      ),
-    );
+    return Obx(() {
+      var list = logic.getLabelList();
+      return ListView.builder(
+        itemCount: list.length,
+        itemBuilder: (c, i) => _LabelMaterialItem(
+          map: list[i],
+          logic: logic,
+          deletePiece: (data) => logic.deletePiece(pieceInfo: data),
+        ),
+      );
+    });
   }
 }
 
@@ -208,14 +210,16 @@ class _LabelPalletList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var list = logic.getPalletList();
-    return ListView.builder(
-      itemCount: list.length,
-      itemBuilder: (c, i) => _LabelPalletItem(
-        map: list[i],
-        deletePiece: (data) => logic.deletePiece(pieceInfo: data),
-      ),
-    );
+    return Obx(() {
+      var list = logic.getPalletList();
+      return ListView.builder(
+        itemCount: list.length,
+        itemBuilder: (c, i) => _LabelPalletItem(
+          map: list[i],
+          deletePiece: (data) => logic.deletePiece(pieceInfo: data),
+        ),
+      );
+    });
   }
 }
 
@@ -328,7 +332,7 @@ class _LabelItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Obx(()=>Container(
       margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.only(left: 10),
       decoration: BoxDecoration(
@@ -359,12 +363,12 @@ class _LabelItem extends StatelessWidget {
           )
         ],
       ),
-    );
+    ));
   }
 }
 
 class _LabelPalletItem extends StatelessWidget {
-  final Map<String, List<DeliveryOrderLabelInfo>> map;
+  final Map<String, RxList<DeliveryOrderLabelInfo>> map;
   final void Function(DeliveryOrderLabelInfo) deletePiece;
 
   const _LabelPalletItem({

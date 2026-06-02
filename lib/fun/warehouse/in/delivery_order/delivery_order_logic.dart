@@ -615,18 +615,17 @@ class DeliveryOrderLogic extends GetxController {
       var sizeList = [];
       groupBy(list, (v) => v.size ?? '').forEach((size, labels) {
         double sizeTotal = state.materialList[materialCode]![size]!;
-        sizeList.add([size, sizeTotal, labels]);
+        sizeList.add([size, sizeTotal, labels.obs]);
       });
       labelList.add({materialCode: sizeList});
     });
     return labelList;
   }
 
-  List<Map<String, List<DeliveryOrderLabelInfo>>> getPalletList() {
-    var labelList = <Map<String, List<DeliveryOrderLabelInfo>>>[];
-    groupBy(state.scannedLabelList, (v) => v.palletNo.value)
-        .forEach((pallet, pList) {
-      labelList.add({pallet: pList});
+  List<Map<String, RxList<DeliveryOrderLabelInfo>>> getPalletList() {
+    var labelList = <Map<String, RxList<DeliveryOrderLabelInfo>>>[];
+    groupBy(state.scannedLabelList, (v) => v.palletNo.value).forEach((pallet, pList) {
+      labelList.add({pallet: pList.obs});
     });
     return labelList;
   }
